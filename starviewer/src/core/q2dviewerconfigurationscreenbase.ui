@@ -293,7 +293,7 @@
         <item row="2" column="0">
          <widget class="QRadioButton" name="m_bodySurfaceAreaRadioButton">
           <property name="text">
-           <string>Body Surface Area (bsa) - cm2/ml</string>
+           <string>Body Surface Area (bsa) - cm²/ml</string>
           </property>
          </widget>
         </item>

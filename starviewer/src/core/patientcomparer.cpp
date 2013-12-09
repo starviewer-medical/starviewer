@@ -54,7 +54,7 @@ bool PatientComparer::areSamePatient(const Patient *patient1, const Patient *pat
 
 bool PatientComparer::askUserIfAreSamePatient(const Patient *patient1, const Patient *patient2) const
 {
-    QString text = QObject::tr("We are not able to determine the similarity of these patients.\n\nDo you consider they are the same?\n\n");
+    QString text = QObject::tr("Cannot determine the similarity of these patients.\n\nDo you consider they are the same?\n\n");
     text += QObject::tr("Patient 1\nID: %1\nName: %2\n\n").arg(patient1->getID()).arg(patient1->getFullName());
     text += QObject::tr("Patient 2\nID: %1\nName: %2").arg(patient2->getID()).arg(patient2->getFullName());
     return QMessageBox::question(0, ApplicationNameString, text, QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes;

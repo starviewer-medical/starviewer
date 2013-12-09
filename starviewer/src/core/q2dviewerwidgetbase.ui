@@ -63,7 +63,7 @@
      <item>
       <widget class="udg::QEnhancedMenuToolButton" name="m_fusionBalanceToolButton">
        <property name="toolTip">
-        <string>Fusion balance</string>
+        <string>Fusion Balance</string>
        </property>
        <property name="text">
         <string>...</string>

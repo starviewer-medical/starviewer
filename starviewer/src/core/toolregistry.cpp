@@ -239,9 +239,9 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     }
     else if (toolName == "ScreenShotTool")
     {
-        toolAction->setText(tr("Screen Shot"));
+        toolAction->setText(tr("Screenshot"));
         toolAction->setIcon(QIcon(":/images/photo.png"));
-        statusTip = tr("Enable/Disable Screen shot tool");
+        statusTip = tr("Enable/Disable Screenshot tool");
         toolTip = tr("Export a viewer screenshot to an image file format");
     }
     else if (toolName == "Rotate3DTool")
@@ -279,7 +279,7 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolAction->setText(tr("Voxel Information"));
         toolAction->setIcon(QIcon(":/images/voxelInformation.png"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::VoxelInformationTool));
-        statusTip = tr("Enable voxel information over cursor");
+        statusTip = tr("Enable voxel information under cursor");
         toolTip = toolAction->text();
     }
     else if (toolName == "SynchronizeTool")

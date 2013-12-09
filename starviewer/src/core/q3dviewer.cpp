@@ -585,7 +585,7 @@ void Q3DViewer::setTransferFunction(const TransferFunction &transferFunction)
         catch (std::bad_alloc &e)
         {
             ERROR_LOG(QString("Excepció al voler aplicar shading en el volum: ") + e.what());
-            QMessageBox::warning(this, tr("Unable to apply rendering style"), tr("The system does not have enough memory to properly apply this rendering style "
+            QMessageBox::warning(this, tr("Unable to Apply Rendering Style"), tr("The system does not have enough memory to properly apply this rendering style "
                                           "with this volume.\nShading will be disabled, it will not render as expected."));
             m_canEnableShading = false;
             this->setShading(false);
@@ -675,7 +675,7 @@ bool Q3DViewer::rescale(Volume *volume)
     catch (std::exception &e)
     {
         ERROR_LOG(QString("Excepció al voler fer rescale(): ") + e.what());
-        QMessageBox::warning(this, tr("Volume too large"),
+        QMessageBox::warning(this, tr("Volume Too Large"),
                              tr("Current volume is too large. Please select another volume or close other extensions and try again."));
         // Mantenim tots els atributs de la classe tal com estaven, per rebutjar el volum netament
         rescaler->Delete();
@@ -1265,7 +1265,7 @@ bool Q3DViewer::checkInputVolume(Volume *volume)
     {
         DEBUG_LOG("El format del volum no està suportat");
         WARN_LOG("El format del volum no està suportat.");
-        QMessageBox::warning(this, tr("Volume not supported"), tr("Current volume cannot be opened because its format is not supported."));
+        QMessageBox::warning(this, tr("Volume Not Supported"), tr("Current volume cannot be opened because its format is not supported."));
         return false;
     }
 

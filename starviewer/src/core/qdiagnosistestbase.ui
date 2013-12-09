@@ -26,7 +26,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Diagnosis test</string>
+   <string>Diagnosis Tests</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_7">
    <property name="margin">

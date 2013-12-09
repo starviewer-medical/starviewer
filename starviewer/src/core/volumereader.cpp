@@ -102,7 +102,7 @@ void VolumeReader::showMessageBoxWithLastError() const
             break;
 
         case VolumePixelDataReader::CannotReadFile:
-            messageBoxTitle = tr("Cannot Read File(s)");
+            messageBoxTitle = tr("Cannot Read Files");
             break;
 
         case VolumePixelDataReader::UnknownError:
@@ -118,17 +118,17 @@ QString VolumeReader::getLastErrorMessageToUser() const
     switch (m_lastError)
     {
         case VolumePixelDataReader::OutOfMemory:
-            return tr("There's not enough memory to load the Series you requested. Try to close all the open %1 windows and restart "
+            return tr("There's not enough memory to load the series you requested. Try to close all the open %1 windows and restart "
                       "the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating "
                       "system may solve the problem.").arg(ApplicationNameString);
         case VolumePixelDataReader::MissingFile:
-            return tr("%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString);
+            return tr("%1 could not find the corresponding files for this series. Maybe they had been removed or are corrupted.").arg(ApplicationNameString);
         case VolumePixelDataReader::CannotReadFile:
-            return tr("%1 could not read the requested file(s) for this Series.").arg(ApplicationNameString);
+            return tr("%1 could not read the requested files for this series.").arg(ApplicationNameString);
         case VolumePixelDataReader::ReadAborted:
             return tr("Loading of data has been aborted.");
         case VolumePixelDataReader::UnknownError:
-            return tr("%1 found an unexpected error reading this Series. No Series data has been loaded.").arg(ApplicationNameString);
+            return tr("%1 found an unexpected error reading this series. No series data has been loaded.").arg(ApplicationNameString);
         case VolumePixelDataReader::NoError:
             return "";
     }

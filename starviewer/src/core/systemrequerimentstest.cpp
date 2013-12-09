@@ -136,8 +136,8 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
-        problem.setDescription(tr("Operating system is not 64 bit architecture"));
-        problem.setSolution(tr("Update operating system to a 64 bit version"));
+        problem.setDescription(tr("Operating system is not 64-bit"));
+        problem.setSolution(tr("Update operating system to a 64-bit version"));
         result.addError(problem);
     }
 
@@ -153,7 +153,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
             {
                 DiagnosisTestProblem problem;
                 problem.setState(DiagnosisTestProblem::Error);
-                problem.setDescription(tr("Current Operative System version is %1, and the minimum required is %2").arg(version).arg(MinimumOSVersion));
+                problem.setDescription(tr("Current operating system version is %1, and the minimum required is %2").arg(version).arg(MinimumOSVersion));
                 problem.setSolution(tr("Update operating system to a newer version"));
                 result.addError(problem);
             }
@@ -176,7 +176,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
                     DiagnosisTestProblem problem;
                     problem.setState(DiagnosisTestProblem::Error);
                     problem.setDescription(tr("Current Service Pack version is %1, and the minimum required is Service Pack %2").arg(servicePack).arg(minimumServicePackVersion));
-                    problem.setSolution(tr("Install a newer service pack"));
+                    problem.setSolution(tr("Install a newer Service Pack"));
                     result.addError(problem);
                 }
             }
@@ -255,7 +255,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Warning);
-        problem.setDescription(tr("The optical drive has not burning capabilities"));
+        problem.setDescription(tr("The optical drive does not have burning capabilities"));
         problem.setSolution(tr("Change the optical drive to a CD-RW/DVD-RW"));
         result.addWarning(problem);
     }

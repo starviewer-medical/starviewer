@@ -14,12 +14,12 @@
         <translation>Previsualización no disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="103"/>
+        <location filename="coresettings.cpp" line="110"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="patientbrowsermenuextendeditem.cpp" line="12"/>
+        <location filename="patientbrowsermenuextendeditem.cpp" line="11"/>
         <source>No Item Selected</source>
         <translation>No se ha seleccionado ningún ítem</translation>
     </message>
@@ -45,7 +45,9 @@
     </message>
     <message>
         <location filename="anatomicalplane.cpp" line="34"/>
+        <location filename="measurementmanager.cpp" line="97"/>
         <location filename="qdicomdumpbrowser.cpp" line="20"/>
+        <location filename="voxel.cpp" line="56"/>
         <source>N/A</source>
         <translatorcomment>No disponible</translatorcomment>
         <translation>N/D</translation>
@@ -120,43 +122,313 @@
     </message>
     <message>
         <location filename="diagnosistestresultwriter.cpp" line="216"/>
+        <source>Desktop composition: </source>
+        <translation>Composición del escritorio: </translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="219"/>
+        <source>Available</source>
+        <translation>Disponible</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="223"/>
+        <source> and enabled</source>
+        <translation> y activada</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="227"/>
+        <source> but disabled</source>
+        <translation> pero desactivada</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="232"/>
+        <source>Not available</source>
+        <translation>No disponible</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="235"/>
         <source>RAM Memory: %1 MB</source>
         <translation>Memoria RAM: %1 MB</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="223"/>
+        <location filename="diagnosistestresultwriter.cpp" line="242"/>
         <source>CPU Clock Speed: %1</source>
-        <translation>Velocidad de los procesadores: %1</translation>
+        <translation>Velocidad de reloj de la CPU: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="224"/>
+        <location filename="diagnosistestresultwriter.cpp" line="243"/>
         <source>Number of cores: %1</source>
-        <translation>Número de procesadores: %1</translation>
+        <translation>Número de núcleos: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="228"/>
+        <location filename="diagnosistestresultwriter.cpp" line="247"/>
         <source>GPU %1: </source>
         <translation>Tarjeta gráfica %1: </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="231"/>
+        <location filename="diagnosistestresultwriter.cpp" line="250"/>
         <source>Driver: %1. </source>
         <translation>Controlador: %1. </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="235"/>
+        <location filename="diagnosistestresultwriter.cpp" line="254"/>
         <source>OpenGL: %1</source>
         <translation>OpenGL: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="242"/>
+        <location filename="diagnosistestresultwriter.cpp" line="262"/>
         <source>Screen %1: %2x%3 </source>
         <translation>Pantalla %1: %2x%3 </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="245"/>
+        <location filename="diagnosistestresultwriter.cpp" line="265"/>
         <source>Primary</source>
         <translation>Principal</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="62"/>
+        <source>Refused: Out of resources</source>
+        <translation>Rechazado: No hay suficientes recursos</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="65"/>
+        <source>Refused: Out of resources - Unable to calculate number of matches</source>
+        <translation>Rechazado: No hay suficientes recursos - No se puede calcular el número de coincidencias</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="68"/>
+        <source>Refused: Out of resources - Unable to perform sub-operations</source>
+        <translation>Rechazado: No hay suficientes recursos - No se pueden realizar las suboperaciones</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="71"/>
+        <source>Refused: Move destination unknown</source>
+        <translation>Rechazado: Destino del movimiento desconocido</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="77"/>
+        <source>Error: Data set does not match SOP Class</source>
+        <translation>Error: Los datos no coinciden con la clase SOP</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="81"/>
+        <source>Identifier does not match SOP Class</source>
+        <oldsource>Identifiers does not match SOP Class</oldsource>
+        <translation>Error: El identificador no coincide con la clase SOP</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="88"/>
+        <source>Error: Cannot understand</source>
+        <translation>Error: No se entiende</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="92"/>
+        <source>Unable to process</source>
+        <translation>No se puede procesar</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="96"/>
+        <source>Terminated due to cancel request</source>
+        <translation>Finalizado debido a cancelación</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="102"/>
+        <source>Warning: Coercion of data elements</source>
+        <translation>Aviso: Coerción de elementos de datos</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="106"/>
+        <source>Warning: Sub-operations complete, one or more failures</source>
+        <translation>Aviso: Se han completado las suboperacions con uno o más errores</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="110"/>
+        <source>Warning: Data set does not match SOP Class</source>
+        <translation>Aviso: Los datos no coinciden con la clase SOP</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="113"/>
+        <source>Warning: Elements discarded</source>
+        <translation>Aviso: Se han descartado elementos</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="116"/>
+        <source>Pending</source>
+        <translation>Pendiente</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="119"/>
+        <source>Pending: Warning - One or more optional keys were not supported</source>
+        <translation>Pendiente: Aviso - Una o más claves opcionales no estan soportadas</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="122"/>
+        <source>Success</source>
+        <translation>Se ha completado con éxito</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="125"/>
+        <source>Unkown status</source>
+        <translation>Estado desconocido</translation>
+    </message>
+    <message>
+        <location filename="dicomserviceresponsestatus.cpp" line="214"/>
+        <source>DIMSE Status: </source>
+        <translation>Estado del DIMSE: </translation>
+    </message>
+    <message>
+        <location filename="imageorientationsyncaction.cpp" line="33"/>
+        <source>image orientation</source>
+        <translation>orientación de la imagen</translation>
+    </message>
+    <message>
+        <location filename="measurementmanager.cpp" line="101"/>
+        <source>px</source>
+        <translation>px</translation>
+    </message>
+    <message>
+        <location filename="measurementmanager.cpp" line="105"/>
+        <source>mm</source>
+        <translation>mm</translation>
+    </message>
+    <message>
+        <location filename="measurementmanager.cpp" line="150"/>
+        <source>detector</source>
+        <translation>detector</translation>
+    </message>
+    <message>
+        <location filename="measurementmanager.cpp" line="154"/>
+        <source>magnified</source>
+        <translation>ampliado</translation>
+    </message>
+    <message>
+        <location filename="measurementmanager.cpp" line="158"/>
+        <source>calibrated</source>
+        <translation>calibrado</translation>
+    </message>
+    <message>
+        <location filename="measurementmanager.cpp" line="165"/>
+        <source>unknown</source>
+        <translation>desconocido</translation>
+    </message>
+    <message>
+        <location filename="pansyncaction.cpp" line="39"/>
+        <source>pan</source>
+        <translation>mover</translation>
+    </message>
+    <message>
+        <location filename="patientcomparer.cpp" line="57"/>
+        <source>Cannot determine the similarity of these patients.
+
+Do you consider they are the same?
+
+</source>
+        <oldsource>We are not able to determine the similarity of these patients.
+
+Do you consider they are the same?
+
+</oldsource>
+        <translation>No se puede determinar la semejanza de estos pacientes.
+
+Considera que son el mismo?
+
+</translation>
+    </message>
+    <message>
+        <location filename="patientcomparer.cpp" line="58"/>
+        <source>Patient 1
+ID: %1
+Name: %2
+
+</source>
+        <translation>Paciente 1
+ID: %1
+Nombre: %2
+
+</translation>
+    </message>
+    <message>
+        <location filename="patientcomparer.cpp" line="59"/>
+        <source>Patient 2
+ID: %1
+Name: %2</source>
+        <translation>Paciente 2
+ID: %1
+Nombre: %2</translation>
+    </message>
+    <message>
+        <location filename="phasesyncaction.cpp" line="40"/>
+        <source>phase</source>
+        <translation>fase</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="100"/>
+        <source>Acc: %1
+</source>
+        <translation>Acc: %1</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="125"/>
+        <source>Fusion: </source>
+        <translation>Fusión: </translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="255"/>
+        <source>Slice: %1</source>
+        <translation>Corte: %1</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="259"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="381"/>
+        <source>-%1</source>
+        <translation>-%1</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="261"/>
+        <source>/%1</source>
+        <translation>/%1</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="266"/>
+        <source> Phase: %1/%2</source>
+        <translation> Fase: %1/%2</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="272"/>
+        <source> Thickness: %1 mm</source>
+        <translation> Grosor: %1 mm</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="344"/>
+        <source>%1 x %2
+WW: %5 WL: %6</source>
+        <translation>%1 x %2
+WW: %5 WL: %6</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="371"/>
+        <source>Loc: %1</source>
+        <translation>Loc: %1</translation>
+    </message>
+    <message>
+        <location filename="thickslabsyncaction.cpp" line="47"/>
+        <source>thick slab</source>
+        <translation>grosor de corte</translation>
+    </message>
+    <message>
+        <location filename="transferfunctionmodelfiller.cpp" line="15"/>
+        <source>None</source>
+        <translation>Ninguna</translation>
+    </message>
+    <message>
+        <location filename="windowlevelsyncaction.cpp" line="56"/>
+        <source>window level</source>
+        <translation>brillo y contraste</translation>
+    </message>
+    <message>
+        <location filename="zoomfactorsyncaction.cpp" line="33"/>
+        <source>zoom</source>
+        <translation>zoom</translation>
     </message>
 </context>
 <context>
@@ -252,11 +524,16 @@
         <source>TIFF (*.tiff)</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="windowlevelpresetstooldata.cpp" line="8"/>
+        <source>Custom</source>
+        <translation>Personalizado</translation>
+    </message>
 </context>
 <context>
     <name>udg::AngleTool</name>
     <message>
-        <location filename="angletool.cpp" line="259"/>
+        <location filename="angletool.cpp" line="253"/>
         <source>%1 degrees</source>
         <translation>%1 grados</translation>
     </message>
@@ -264,25 +541,25 @@
 <context>
     <name>udg::ApplicationUpdateChecker</name>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="141"/>
+        <location filename="applicationupdatechecker.cpp" line="142"/>
         <source>Error connecting to the server. Server response is: %1</source>
         <translation>Error al conectar con el servidor. La respuesta del servidor es: %1</translation>
     </message>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="156"/>
-        <location filename="applicationupdatechecker.cpp" line="187"/>
+        <location filename="applicationupdatechecker.cpp" line="157"/>
+        <location filename="applicationupdatechecker.cpp" line="188"/>
         <source>Error parsing JSON.</source>
         <oldsource>Error parsing json.</oldsource>
         <translation>Error al procesar JSON.</translation>
     </message>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="176"/>
+        <location filename="applicationupdatechecker.cpp" line="177"/>
         <source>Error parsing JSON: version or releaseNotesURL are not strings</source>
         <oldsource>Error parsing JSON: version or releaseNotesUrl are not strings</oldsource>
-        <translation>Error al procesar JSON:version o releaseNotesURL no son cadenas</translation>
+        <translation>Error al procesar JSON: version o releaseNotesURL no son cadenas</translation>
     </message>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="225"/>
+        <location filename="applicationupdatechecker.cpp" line="226"/>
         <source>Error requesting release notes: timeout</source>
         <translation>Error al solicitar las notas de la versión: tiempo excedido</translation>
     </message>
@@ -338,33 +615,20 @@
     </message>
 </context>
 <context>
-    <name>udg::DistanceTool</name>
-    <message>
-        <location filename="distancetool.cpp" line="162"/>
-        <source>%1 mm</source>
-        <translation>%1 mm</translation>
-    </message>
-    <message>
-        <location filename="distancetool.cpp" line="124"/>
-        <source>%1 px</source>
-        <translation>%1 px</translation>
-    </message>
-</context>
-<context>
     <name>udg::FirewallAccessTest</name>
     <message>
-        <location filename="firewallaccesstest.cpp" line="31"/>
+        <location filename="firewallaccesstest.cpp" line="30"/>
         <source>Add %1 to the list of applications that have access through firewall</source>
         <oldsource>Add %1 to the list of applications that have access through firewall on Control Panel &gt; Firewall</oldsource>
         <translation>Añada %1 a la lista de aplicaciones que tienen acceso a través del cortafuegos</translation>
     </message>
     <message>
-        <location filename="firewallaccesstest.cpp" line="39"/>
+        <location filename="firewallaccesstest.cpp" line="38"/>
         <source>Contact technical service to evaluate the problem</source>
         <translation>Póngase en contacto con el servicio técnico para evaluar el problema</translation>
     </message>
     <message>
-        <location filename="firewallaccesstest.cpp" line="50"/>
+        <location filename="firewallaccesstest.cpp" line="49"/>
         <source>%1 has access through firewall</source>
         <translation>%1 tiene acceso a través del cortafuegos</translation>
     </message>
@@ -373,8 +637,9 @@
     <name>udg::HangingProtocolXMLReader</name>
     <message>
         <location filename="hangingprotocolxmlreader.cpp" line="34"/>
-        <source>Hanging protocol XML File</source>
-        <translation>Archivo XML de Hanging Protocol</translation>
+        <source>Hanging Protocol XML File</source>
+        <oldsource>Hanging protocol XML File</oldsource>
+        <translation>Archivo XML de hanging protocol</translation>
     </message>
     <message>
         <location filename="hangingprotocolxmlreader.cpp" line="35"/>
@@ -382,23 +647,24 @@
 %2.</source>
         <oldsource>Cannot read file %1:
 %2.</oldsource>
-        <translation>No se puede leer el archivo %1:%2.</translation>
+        <translation>No se puede leer el archivo %1:
+%2.</translation>
     </message>
 </context>
 <context>
     <name>udg::NonClosedAngleTool</name>
     <message>
-        <location filename="nonclosedangletool.cpp" line="312"/>
+        <location filename="nonclosedangletool.cpp" line="307"/>
         <source>%1 degrees</source>
         <translation>%1 grados</translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="303"/>
+        <location filename="nonclosedangletool.cpp" line="298"/>
         <source>0.0 degrees</source>
         <translation>0.0 grados</translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="308"/>
+        <location filename="nonclosedangletool.cpp" line="303"/>
         <source>Skew lines</source>
         <oldsource>Skew lines.</oldsource>
         <translation>Líneas cruzadas</translation>
@@ -407,95 +673,38 @@
 <context>
     <name>udg::PatientBrowserMenu</name>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="44"/>
+        <location filename="patientbrowsermenu.cpp" line="49"/>
         <source>Study %1 %2 [%3] %4</source>
         <translation>Estudio %1 %2 [%3] %4</translation>
     </message>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="54"/>
+        <location filename="patientbrowsermenu.cpp" line="60"/>
         <source> Series %1: %2 %3 %4 %5</source>
         <translation> Serie %1: %2 %3 %4 %5</translation>
     </message>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="107"/>
-        <source>%1 
-%2 
+        <location filename="patientbrowsermenu.cpp" line="145"/>
+        <location filename="patientbrowsermenu.cpp" line="166"/>
+        <source>%1
+%2
 %3
 %4 Images</source>
-        <translation>%1 
+        <oldsource>%1 
 %2 
-%3 
-%4 Imágenes</translation>
-    </message>
-</context>
-<context>
-    <name>udg::PerpendicularDistanceTool</name>
-    <message>
-        <location filename="perpendiculardistancetool.cpp" line="399"/>
-        <source>%1 px</source>
-        <translation>%1 px</translation>
-    </message>
-    <message>
-        <location filename="perpendiculardistancetool.cpp" line="417"/>
-        <location filename="perpendiculardistancetool.cpp" line="424"/>
-        <source>%1 mm</source>
-        <translation>%1 mm</translation>
+%3
+%4 Images</oldsource>
+        <translation>%1
+%2
+%3
+%4 imágenes</translation>
     </message>
 </context>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="1899"/>
-        <source>Slice: %1/%2 Phase: %3/%4</source>
-        <translation>Corte: %1/%2 Fase: %3/%4</translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="1912"/>
-        <source>Slice: %1/%2</source>
-        <translation>Corte: %1/%2</translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="1894"/>
-        <source>Slice: %1-%2/%3 Phase: %4/%5</source>
-        <translation>Corte: %1-%2/%3 Fase: %4/%5</translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="695"/>
+        <location filename="q2dviewer.cpp" line="496"/>
         <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
-        <translation>No hay memoria suficiente para el procesos de renderización. Intente cerrar todas las ventanas de %1 abiertas, reinicie la aplicación y vuélvalo a intentar. Si el problema persiste, podría solucionarse añadiendo más memoria RAM o cambiando a un sistema operativo de 64 bits.</translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="1657"/>
-        <source>Acc: %1
-</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="1908"/>
-        <source>Slice: %1-%2/%3</source>
-        <translation>Corte: %1-%2/%3</translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="1918"/>
-        <source> Thickness: %1 mm</source>
-        <translation> Grosor: %1 mm</translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="1616"/>
-        <source>%1 x %2
-WW: %5 WL: %6</source>
-        <translation>%1 x %2
-WW: %5 WL: %6</translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="1872"/>
-        <source>Loc: %1</source>
-        <translation>Loc: %1</translation>
-    </message>
-    <message>
-        <location filename="q2dviewer.cpp" line="1880"/>
-        <source>-%1</source>
-        <translation>-%1</translation>
+        <translation>No hay memoria suficiente para el proceso de renderización. Intente cerrar todas las ventanas abiertas de %1, reinicie la aplicación y vuélvalo a intentar. Si el problema persiste, podría solucionarse añadiendo más memoria RAM o cambiando a un sistema operativo de 64 bits.</translation>
     </message>
 </context>
 <context>
@@ -523,14 +732,12 @@ WW: %5 WL: %6</translation>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="67"/>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="93"/>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="285"/>
         <source>MR</source>
         <translation></translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="77"/>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="103"/>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="207"/>
         <source>CT</source>
         <translation></translation>
     </message>
@@ -543,110 +750,188 @@ WW: %5 WL: %6</translation>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="130"/>
         <source>Zoom by default for these modalities</source>
         <oldsource>Zoom tool enabled by default for these modalities</oldsource>
-        <translation>Activar Zoom por defecto para estas modalidades</translation>
+        <translation>Activar zoom por defecto para estas modalidades</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="139"/>
-        <source>CR</source>
-        <translation></translation>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="154"/>
+        <source>Enable propagation by default on these modalities</source>
+        <translation>Activar propagación por defecto en estas modalidades</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="152"/>
-        <source>ES</source>
-        <translation></translation>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="239"/>
+        <source>Measurements description verbosity</source>
+        <translation>Nivel de detalle en la descripción de las medidas</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="165"/>
-        <source>NM</source>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="245"/>
+        <source>Minimal</source>
+        <translation>Mínimo</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="252"/>
+        <source>Minimal Explicit</source>
+        <translation>Mínimo explícito</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="259"/>
+        <source>Verbose</source>
+        <translation>Detallado</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="266"/>
+        <source>Verbose Explicit</source>
+        <translation>Detallado explícito</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="276"/>
+        <source>Preferred SUV measurement normalization type</source>
+        <translation>Tipo preferido de normalización de la medida SUV</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="282"/>
+        <source>Body Weight (bw) - g/ml</source>
+        <translation>Peso corporal (bw) - g/ml</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="289"/>
+        <source>Lean Body Mass (lbm) - g/ml</source>
+        <translation>Masa corporal magra (lbm) - g/ml</translation>
+    </message>
+    <message utf8="true">
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="296"/>
+        <source>Body Surface Area (bsa) - cm²/ml</source>
+        <oldsource>Body Surface Area (bsa) - cm2/ml</oldsource>
+        <translation>Área de superficie corporal (bsa) - cm²/ml</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="191"/>
+        <source>2x</source>
+        <oldsource>XA</oldsource>
         <translation></translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="178"/>
-        <source>RF</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="191"/>
-        <source>XA</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="220"/>
-        <source>MG</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="233"/>
-        <source>OP</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="246"/>
-        <source>SC</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="259"/>
-        <source>XC</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="272"/>
-        <source>DX</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="298"/>
-        <source>PT</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="311"/>
-        <source>US</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="341"/>
         <source>Magnifying Glass tool zoom factor</source>
         <translation>Factor de ampliación de la lupa</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="347"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="184"/>
         <source>1.5x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="354"/>
-        <source>2x</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="361"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="198"/>
         <source>4x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="368"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="205"/>
         <source>6x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="375"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="212"/>
         <source>8x</source>
         <translation></translation>
     </message>
 </context>
 <context>
+    <name>udg::Q2DViewerLayoutConfigurationScreen</name>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreen.cpp" line="35"/>
+        <source>As much as possible</source>
+        <translation>Tantos como sea posible</translation>
+    </message>
+</context>
+<context>
+    <name>udg::Q2DViewerLayoutConfigurationScreenBase</name>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="14"/>
+        <source>2D Viewer Layout Configuration</source>
+        <translation>Configuración de la distribución de los visores 2D</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="24"/>
+        <source>Apply hanging protocols on these modalities as first option</source>
+        <translation>Aplicar hanging protocols en estas modalidades como primera opción</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="31"/>
+        <source>Automatic layout settings when no hanging protocol is available</source>
+        <translation>Preferencias de distribución automática cuando no hay ningún hanging protocol disponible</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="39"/>
+        <source>Modality</source>
+        <translation>Modalidad</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="66"/>
+        <source>Layout by</source>
+        <translation>Distribuir por</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="72"/>
+        <source>Series</source>
+        <translation>Series</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="79"/>
+        <source>Images</source>
+        <translation>Imágenes</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="89"/>
+        <source>Layout direction</source>
+        <translation>Dirección de distribución</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="95"/>
+        <source>Left to right</source>
+        <translation>De izquierda a derecha</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="102"/>
+        <source>Top to bottom</source>
+        <translation>De arriba abajo</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="112"/>
+        <source>Exclude from layout</source>
+        <translation>Excluir de la distribución</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="118"/>
+        <source>CT Localizers</source>
+        <translation>Localizadores CT</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="125"/>
+        <source>MR Surveys</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="139"/>
+        <source>Maximum number of viewers</source>
+        <translation>Número máximo de visores</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="177"/>
+        <source>Restore defaults</source>
+        <translation>Restablecer los valores predeterminados</translation>
+    </message>
+</context>
+<context>
     <name>udg::Q2DViewerWidget</name>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="21"/>
-        <location filename="q2dviewerwidget.cpp" line="188"/>
+        <location filename="q2dviewerwidget.cpp" line="26"/>
+        <location filename="q2dviewerwidget.cpp" line="186"/>
         <source>Enable manual synchronization in this viewer</source>
         <oldsource>Enable manual synchronization on this viewer</oldsource>
         <translation>Activar la sincronización manual en este visor</translation>
     </message>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="194"/>
+        <location filename="q2dviewerwidget.cpp" line="192"/>
         <source>Disable manual synchronization in this viewer</source>
         <oldsource>Disable manual synchronization on this viewer</oldsource>
         <translation>Desactivar la sincronización manual en este visor</translation>
@@ -655,17 +940,24 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::Q2DViewerWidgetBase</name>
     <message>
-        <location filename="q2dviewerwidgetbase.ui" line="13"/>
+        <location filename="q2dviewerwidgetbase.ui" line="14"/>
         <source>ViewerWidget</source>
         <translation>ViewerWidget</translation>
     </message>
     <message>
-        <location filename="q2dviewerwidgetbase.ui" line="42"/>
+        <location filename="q2dviewerwidgetbase.ui" line="43"/>
         <source>XY : Axial</source>
         <translation>XY: Axial</translation>
     </message>
     <message>
-        <location filename="q2dviewerwidgetbase.ui" line="65"/>
+        <location filename="q2dviewerwidgetbase.ui" line="66"/>
+        <source>Fusion Balance</source>
+        <oldsource>Fusion balance</oldsource>
+        <translation>Balance de fusión</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerwidgetbase.ui" line="69"/>
+        <location filename="q2dviewerwidgetbase.ui" line="83"/>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -673,37 +965,37 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::Q3DViewer</name>
     <message>
-        <location filename="q3dviewer.cpp" line="660"/>
-        <source>Unable to apply rendering style</source>
+        <location filename="q3dviewer.cpp" line="588"/>
+        <source>Unable to Apply Rendering Style</source>
+        <oldsource>Unable to apply rendering style</oldsource>
         <translation>No se puede aplicar el estilo de renderización</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="660"/>
+        <location filename="q3dviewer.cpp" line="588"/>
         <source>The system does not have enough memory to properly apply this rendering style with this volume.
 Shading will be disabled, it will not render as expected.</source>
-        <translation>El sistema no tiene suficiente memoria para aplicar adecuadamente este estiol de rendering con este volumen.
-El shading se deshabilitará por lo tanto el renderizado no será el esperado.</translation>
+        <translation>El sistema no tiene suficiente memoria para aplicar adecuadamente este estilo de renderización con este volumen.
+Se deshabilitará el sombreado, de manera que no se visualizará como se esperaba.</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="1356"/>
-        <source>Volume not supported</source>
-        <oldsource>Not supported volume</oldsource>
+        <location filename="q3dviewer.cpp" line="1268"/>
+        <source>Volume Not Supported</source>
+        <oldsource>Volume not supported</oldsource>
         <translation>Volumen no soportado</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="1356"/>
+        <location filename="q3dviewer.cpp" line="1268"/>
         <source>Current volume cannot be opened because its format is not supported.</source>
         <translation>El volumen actual no se puede abrir ya que su formato no está soportado.</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="772"/>
-        <location filename="q3dviewer.cpp" line="1347"/>
-        <source>Volume too large</source>
+        <location filename="q3dviewer.cpp" line="678"/>
+        <source>Volume Too Large</source>
+        <oldsource>Volume too large</oldsource>
         <translation>Volumen demasiado grande</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="773"/>
-        <location filename="q3dviewer.cpp" line="1348"/>
+        <location filename="q3dviewer.cpp" line="679"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
         <translation>El volumen actual es demasiado grande. Seleccione otro volumen o cierre otras extensiones e inténtelo de nuevo.</translation>
     </message>
@@ -724,22 +1016,22 @@ El shading se deshabilitará por lo tanto el renderizado no será el esperado.</
         <translation></translation>
     </message>
     <message>
-        <location filename="qcinecontrollerbase.ui" line="40"/>
+        <location filename="qcinecontrollerbase.ui" line="34"/>
         <source>Play</source>
         <translation>Reproducir</translation>
     </message>
     <message>
-        <location filename="qcinecontrollerbase.ui" line="71"/>
+        <location filename="qcinecontrollerbase.ui" line="65"/>
         <source>Loop</source>
         <translation>Bucle</translation>
     </message>
     <message>
-        <location filename="qcinecontrollerbase.ui" line="85"/>
+        <location filename="qcinecontrollerbase.ui" line="79"/>
         <source>Boomerang</source>
         <translation>Bumerán</translation>
     </message>
     <message>
-        <location filename="qcinecontrollerbase.ui" line="134"/>
+        <location filename="qcinecontrollerbase.ui" line="128"/>
         <source>10 img/sec</source>
         <translation></translation>
     </message>
@@ -769,18 +1061,18 @@ El shading se deshabilitará por lo tanto el renderizado no será el esperado.</
     <message>
         <location filename="qcustomwindowleveldialogbase.ui" line="14"/>
         <source>Custom Window Level Settings</source>
-        <translation>Ajustes personalizados de contraste</translation>
+        <translation>Ajustes personalizados de brillo y contraste</translation>
     </message>
 </context>
 <context>
     <name>udg::QCustomWindowLevelEditWidget</name>
     <message>
-        <location filename="qcustomwindowleveleditwidget.cpp" line="85"/>
+        <location filename="qcustomwindowleveleditwidget.cpp" line="84"/>
         <source>Selected Custom WW/WL will be deleted.</source>
         <translation>Se borrará el WW/WL personalizado seleccionado.</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveleditwidget.cpp" line="86"/>
+        <location filename="qcustomwindowleveleditwidget.cpp" line="85"/>
         <source>Do you want to continue?</source>
         <translatorcomment>No em sona gaire correcte en castellà en software utitlitzar el Quiere Continuar</translatorcomment>
         <translation>¿Desea continuar?</translation>
@@ -837,50 +1129,51 @@ El shading se deshabilitará por lo tanto el renderizado no será el esperado.</
         <translation>Datos del DICOM</translation>
     </message>
     <message>
-        <location filename="qdicomdumpbrowserbase.ui" line="43"/>
+        <location filename="qdicomdumpbrowserbase.ui" line="46"/>
         <source>Meaningful Tags</source>
         <translatorcomment>Altres alternatives Tags importantes, principales,... ? Traduïm tag?</translatorcomment>
         <translation>Tags relevantes</translation>
     </message>
     <message>
-        <location filename="qdicomdumpbrowserbase.ui" line="81"/>
+        <location filename="qdicomdumpbrowserbase.ui" line="84"/>
         <source>All Tags</source>
         <translation>Todos los tags</translation>
     </message>
     <message>
-        <location filename="qdicomdumpbrowserbase.ui" line="87"/>
+        <location filename="qdicomdumpbrowserbase.ui" line="90"/>
         <source>Search</source>
         <translation>Buscar</translation>
     </message>
     <message>
-        <location filename="qdicomdumpbrowserbase.ui" line="99"/>
-        <source>Highlight only</source>
+        <location filename="qdicomdumpbrowserbase.ui" line="102"/>
+        <source>Highlight Only</source>
         <translation>Sólo resaltar</translation>
     </message>
 </context>
 <context>
     <name>udg::QDiagnosisTest</name>
     <message>
-        <location filename="qdiagnosistest.cpp" line="81"/>
+        <location filename="qdiagnosistest.cpp" line="85"/>
         <source>Running test: </source>
         <translation>Ejecutando el test: </translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="133"/>
-        <source>Files (*.txt)</source>
-        <translation>Archivos (*.txt)</translation>
+        <location filename="qdiagnosistest.cpp" line="137"/>
+        <source>Save Diagnosis Tests Results</source>
+        <translation>Guardar los resultados</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="133"/>
-        <source>Save diagnosis test results</source>
-        <translation>Guardar los resultados</translation>
+        <location filename="qdiagnosistest.cpp" line="137"/>
+        <source>Text Files (*.txt)</source>
+        <translation>Archivos de texto (*.txt)</translation>
     </message>
 </context>
 <context>
     <name>udg::QDiagnosisTestBase</name>
     <message>
         <location filename="qdiagnosistestbase.ui" line="29"/>
-        <source>Diagnosis test</source>
+        <source>Diagnosis Tests</source>
+        <oldsource>Diagnosis test</oldsource>
         <translation>Tests de diagnóstico</translation>
     </message>
     <message>
@@ -913,7 +1206,7 @@ El shading se deshabilitará por lo tanto el renderizado no será el esperado.</
     <message>
         <location filename="qdiagnosistestbase.ui" line="116"/>
         <source>Some tests have failed</source>
-        <translation>Algun test ha fallado</translation>
+        <translation>Algunos tests han fallado</translation>
     </message>
     <message>
         <location filename="qdiagnosistestbase.ui" line="269"/>
@@ -926,7 +1219,8 @@ El shading se deshabilitará por lo tanto el renderizado no será el esperado.</
     <name>udg::QLogViewer</name>
     <message>
         <location filename="qlogviewer.cpp" line="57"/>
-        <source>Save as...</source>
+        <source>Save As...</source>
+        <oldsource>Save as...</oldsource>
         <translation>Guardar como...</translation>
     </message>
     <message>
@@ -937,9 +1231,11 @@ El shading se deshabilitará por lo tanto el renderizado no será el esperado.</
     <message>
         <location filename="qlogviewer.cpp" line="38"/>
         <source>ERROR: No Log file found at this path: %1
-Environment variable(logFilePath): %2</source>
+Environment variable (logFilePath): %2</source>
+        <oldsource>ERROR: No Log file found at this path: %1
+Environment variable(logFilePath): %2</oldsource>
         <translation>ERROR: No se ha encontrado el archivo de registro en esta ruta: %1
-Variable de entorno(logFilePath): %2</translation>
+Variable de entorno (logFilePath): %2</translation>
     </message>
 </context>
 <context>
@@ -963,6 +1259,135 @@ Variable de entorno(logFilePath): %2</translation>
         <location filename="qlogviewerbase.ui" line="109"/>
         <source>Close</source>
         <translation>Cerrar</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QModalitiesSelectorGroupBox</name>
+    <message>
+        <location filename="qmodalitiesselectorgroupbox.cpp" line="51"/>
+        <source>All</source>
+        <translation>Todas</translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupbox.cpp" line="51"/>
+        <source>Other</source>
+        <translation>Otras</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QModalitiesSelectorGroupBoxBase</name>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="14"/>
+        <source>GroupBox</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="17"/>
+        <source>Modality</source>
+        <translation>Modalidad</translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="23"/>
+        <source>All</source>
+        <translation>Todas</translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="30"/>
+        <source>CR</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="37"/>
+        <source>ES</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="44"/>
+        <source>NM</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="51"/>
+        <source>RF</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="58"/>
+        <source>XA</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="65"/>
+        <source>CT</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="72"/>
+        <source>MG</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="79"/>
+        <source>OP</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="86"/>
+        <source>SC</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="93"/>
+        <source>XC</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="100"/>
+        <source>DX</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="107"/>
+        <source>MR</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="114"/>
+        <source>PT</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="121"/>
+        <source>US</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qmodalitiesselectorgroupboxbase.ui" line="128"/>
+        <source>Other</source>
+        <translation>Otras</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QNotificationPopupBase</name>
+    <message>
+        <location filename="qnotificationpopupbase.ui" line="105"/>
+        <source>Dialog</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qnotificationpopupbase.ui" line="244"/>
+        <source>Headline</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qnotificationpopupbase.ui" line="262"/>
+        <source>ani</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qnotificationpopupbase.ui" line="298"/>
+        <source>Secondary description</source>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -993,7 +1418,7 @@ Variable de entorno(logFilePath): %2</translation>
     <message>
         <location filename="qthickslabwidget.cpp" line="16"/>
         <location filename="qthickslabwidget.cpp" line="102"/>
-        <location filename="qthickslabwidget.cpp" line="231"/>
+        <location filename="qthickslabwidget.cpp" line="230"/>
         <source>Disabled</source>
         <translation>Desactivado</translation>
     </message>
@@ -1045,32 +1470,22 @@ Variable de entorno(logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="642"/>
-        <source>Default</source>
-        <translation>Predeterminado</translation>
-    </message>
-    <message>
-        <location filename="qviewer.cpp" line="643"/>
-        <source>Auto</source>
-        <translation>Automático</translation>
-    </message>
-    <message>
-        <location filename="qviewer.cpp" line="875"/>
+        <location filename="qviewer.cpp" line="903"/>
         <source>Downloading related study...</source>
         <translation>Descargando estudio relacionado...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="883"/>
+        <location filename="qviewer.cpp" line="911"/>
         <source>Error downloading related study</source>
         <translation>Error al descargar estudio relacionado</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="879"/>
+        <location filename="qviewer.cpp" line="907"/>
         <source>Loading data...</source>
         <translation>Cargando los datos...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="887"/>
+        <location filename="qviewer.cpp" line="916"/>
         <source>Error loading data</source>
         <translatorcomment>No hi faltaria punt a la traducció orginal?</translatorcomment>
         <translation>Error al cargar los datos</translation>
@@ -1080,12 +1495,12 @@ Variable de entorno(logFilePath): %2</translation>
     <name>udg::QViewerCINEController</name>
     <message>
         <location filename="qviewercinecontroller.cpp" line="27"/>
-        <location filename="qviewercinecontroller.cpp" line="129"/>
+        <location filename="qviewercinecontroller.cpp" line="128"/>
         <source>Play</source>
         <translation>Reproducir</translation>
     </message>
     <message>
-        <location filename="qviewercinecontroller.cpp" line="114"/>
+        <location filename="qviewercinecontroller.cpp" line="113"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
@@ -1101,14 +1516,8 @@ Variable de entorno(logFilePath): %2</translation>
 <context>
     <name>udg::QWindowLevelComboBox</name>
     <message>
-        <location filename="qwindowlevelcombobox.cpp" line="135"/>
-        <location filename="qwindowlevelcombobox.cpp" line="159"/>
-        <source>Custom</source>
-        <translation>Personalizado</translation>
-    </message>
-    <message>
-        <location filename="qwindowlevelcombobox.cpp" line="154"/>
-        <location filename="qwindowlevelcombobox.cpp" line="165"/>
+        <location filename="qwindowlevelcombobox.cpp" line="164"/>
+        <location filename="qwindowlevelcombobox.cpp" line="177"/>
         <source>Edit Custom WW/WL</source>
         <translation>Editar los WW/WL personalizados</translation>
     </message>
@@ -1116,39 +1525,77 @@ Variable de entorno(logFilePath): %2</translation>
 <context>
     <name>udg::ROITool</name>
     <message>
-        <location filename="roitool.cpp" line="409"/>
-        <source>Area: %1 %2</source>
-        <translation>Área: %1 %2</translation>
+        <location filename="roitool.cpp" line="54"/>
+        <source>SUV (%1)</source>
+        <translation>SUV (%1)</translation>
     </message>
     <message>
-        <location filename="roitool.cpp" line="419"/>
+        <location filename="roitool.cpp" line="55"/>
+        <source>
+Max: %1 %2</source>
+        <translation>
+Máximo: %1 %2</translation>
+    </message>
+    <message>
+        <location filename="roitool.cpp" line="56"/>
+        <source>
+Mean: %1 %2</source>
+        <translation>
+Media: %1 %2</translation>
+    </message>
+    <message>
+        <location filename="roitool.cpp" line="60"/>
+        <source>SUV (%1) - N/A</source>
+        <translation>SUV (%1) - N/D</translation>
+    </message>
+    <message>
+        <location filename="roitool.cpp" line="61"/>
+        <source>
+Max: --</source>
+        <translation>
+Máximo: --</translation>
+    </message>
+    <message>
+        <location filename="roitool.cpp" line="62"/>
+        <source>
+Mean: --</source>
+        <translation>
+Media: --</translation>
+    </message>
+    <message>
+        <location filename="roitool.cpp" line="305"/>
+        <source>Area: %1</source>
+        <translation>Área: %1</translation>
+    </message>
+    <message>
+        <location filename="roitool.cpp" line="348"/>
         <source>
 Mean: %1
 St.Dev.: %2</source>
         <translation>
 Media: %1
-Desv.Std.:%2</translation>
+Desv.Est.:%2</translation>
     </message>
 </context>
 <context>
     <name>udg::ScreenShotTool</name>
     <message>
-        <location filename="screenshottool.cpp" line="90"/>
+        <location filename="screenshottool.cpp" line="91"/>
         <source>Information</source>
         <translation>Información</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="86"/>
+        <location filename="screenshottool.cpp" line="87"/>
         <source>Save single screenshot as...</source>
         <translation>Guardar una única captura como...</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="92"/>
+        <location filename="screenshottool.cpp" line="93"/>
         <source>Save multiple screenshots as...</source>
         <translation>Guardar múltiples capturas como...</translation>
     </message>
     <message>
-        <location filename="screenshottool.cpp" line="91"/>
+        <location filename="screenshottool.cpp" line="92"/>
         <source>You&apos;re going to save several screenshots at one time.
 It&apos;s recommended you save them in an empty folder.</source>
         <translation>Está a punto de guardar varias capturas de pantalla a la vez.
@@ -1156,161 +1603,154 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     </message>
 </context>
 <context>
-    <name>udg::SynchronizationEditionWidgetBase</name>
-    <message>
-        <location filename="synchronizationeditionwidgetbase.ui" line="20"/>
-        <source>Frame</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>udg::SystemRequerimentsTest</name>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="51"/>
+        <location filename="systemrequerimentstest.cpp" line="50"/>
         <source>The computer has %1 cores, and the minimum required is %2</source>
         <oldsource>The machine currently has %1 cores, and the minimum required is %2</oldsource>
-        <translation>Los núcleos del equipo son %1 pero se requieren un mínimo de %2</translation>
+        <translation>El ordenador tiene %1 núcleos, pero se requiere un mínimo de %2</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="52"/>
-        <location filename="systemrequerimentstest.cpp" line="74"/>
+        <location filename="systemrequerimentstest.cpp" line="51"/>
+        <location filename="systemrequerimentstest.cpp" line="73"/>
         <source>Update computer&apos;s hardware</source>
         <translation>Actualice el hardware de su equipo</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="73"/>
+        <location filename="systemrequerimentstest.cpp" line="72"/>
         <source>The fastest CPU runs at %1 MHz, and the minimum required is %2 MHz</source>
         <oldsource>The fastest CPU runs at %1 and the minimum required is %2</oldsource>
-        <translation>La velocidad de la CPU más rápida es %1 MHz pero la velocidad mínima requerida es %2 MHz</translation>
+        <translation>La velocidad de la CPU más rápida es %1 MHz, pero la velocidad mínima requerida es de %2 MHz</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="87"/>
-        <location filename="systemrequerimentstest.cpp" line="106"/>
+        <location filename="systemrequerimentstest.cpp" line="86"/>
+        <location filename="systemrequerimentstest.cpp" line="105"/>
         <source>Update your graphics card driver</source>
         <translation>Actualice el controlador de la tarjeta gráfica</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="85"/>
+        <location filename="systemrequerimentstest.cpp" line="84"/>
         <source>Current OpenGL version is %1, and the minimum required is %2</source>
         <oldsource>Current OpenGL version is %1 and the minimum required is %2</oldsource>
-        <translation>La versión actual de OpenGL es %1 pero la mínima requerida es %2</translation>
+        <translation>La versión actual de OpenGL es %1, pero la mínima requerida es la %2</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="105"/>
+        <location filename="systemrequerimentstest.cpp" line="104"/>
         <source>Current OpenGL version does not support these extensions: %1</source>
         <translation>La versión actual de OpenGL no soporta las siguientes extensiones: %1</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="119"/>
+        <location filename="systemrequerimentstest.cpp" line="118"/>
         <source>The graphics card %1 has %2 MB of RAM, and the minimum required is %3 MB</source>
         <oldsource>The graphics card %1 has %2 MB of RAM and the minimum required is %3 MB</oldsource>
-        <translation>La tarjeta gráfica %1 tiene %2 MB de memoria RAM pero la mínima requerida es de %3 MB</translation>
+        <translation>La tarjeta gráfica %1 tiene %2 MB de memoria RAM, pero la mínima requerida es de %3 MB</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="120"/>
+        <location filename="systemrequerimentstest.cpp" line="119"/>
         <source>Change the graphics card</source>
         <translation>Cambie la tarjeta gráfica</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="130"/>
+        <location filename="systemrequerimentstest.cpp" line="129"/>
         <source>There is not enough disk space to run %1 properly</source>
         <oldsource>There is not enough disk space to run starviewer properly</oldsource>
         <translation>No hay espacio suficiente en el disco para ejecutar correctamente %1</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="131"/>
+        <location filename="systemrequerimentstest.cpp" line="130"/>
         <source>Free some space in the hard disk</source>
         <translation>Libere espacio en el disco</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="140"/>
-        <source>Operating system is not 64 bit architecture</source>
-        <oldsource>Operating system is not 64 bits architecture</oldsource>
-        <translation>El sistema operativo no es de arquitectura 64 bits</translation>
+        <location filename="systemrequerimentstest.cpp" line="139"/>
+        <source>Operating system is not 64-bit</source>
+        <oldsource>Operating system is not 64 bit architecture</oldsource>
+        <translation>El sistema operativo no es de 64 bits</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="141"/>
-        <source>Update operating system to a 64 bit version</source>
-        <oldsource>Update operating system to a 64 bits version</oldsource>
-        <translation>Actualice el sistema operativo a una versión 64 bits</translation>
+        <location filename="systemrequerimentstest.cpp" line="140"/>
+        <source>Update operating system to a 64-bit version</source>
+        <oldsource>Update operating system to a 64 bit version</oldsource>
+        <translation>Actualice el sistema operativo a una versión de 64 bits</translation>
+    </message>
+    <message>
+        <location filename="systemrequerimentstest.cpp" line="156"/>
+        <source>Current operating system version is %1, and the minimum required is %2</source>
+        <oldsource>Current Operative System version is %1, and the minimum required is %2</oldsource>
+        <translation>La versión actual del sistema operativo es %1, pero la mínima requerida es %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="157"/>
-        <source>Current Operative System version is %1, and the minimum required is %2</source>
-        <oldsource>Current Operative System version is %1 and the minimum required is %2</oldsource>
-        <translation>La versión actual del sistema operativo es %1 pero la mínima requerida es %2</translation>
-    </message>
-    <message>
-        <location filename="systemrequerimentstest.cpp" line="158"/>
         <source>Update operating system to a newer version</source>
         <translation>Actualice el sistema operativo a una versión más reciente</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="179"/>
+        <location filename="systemrequerimentstest.cpp" line="178"/>
         <source>Current Service Pack version is %1, and the minimum required is Service Pack %2</source>
         <oldsource>Current Service Pack version is %1 and the minimum required is Service Pack %2</oldsource>
-        <translation>La versión actual del Service Pack es %1 pero el Service Pack mínimo requerido es el %2</translation>
+        <translation>La versión actual del Service Pack es %1, pero el Service Pack mínimo requerido es el %2</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="180"/>
-        <source>Install a newer service pack</source>
+        <location filename="systemrequerimentstest.cpp" line="179"/>
+        <source>Install a newer Service Pack</source>
+        <oldsource>Install a newer service pack</oldsource>
         <translation>Instale el Service Pack más reciente</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="201"/>
+        <location filename="systemrequerimentstest.cpp" line="200"/>
         <source>The total amount of RAM memory is %1 MB, and the minimum required is %2 MB</source>
         <oldsource>The total amount of RAM memory is %1 and the minimum required is %2</oldsource>
-        <translation>La memoria RAM total es de %1 MB pero la mínima requerida es de %2 MB</translation>
+        <translation>La memoria RAM total es de %1 MB, pero la mínima requerida es de %2 MB</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="202"/>
+        <location filename="systemrequerimentstest.cpp" line="201"/>
         <source>Upgrade computer&apos;s RAM memory</source>
         <oldsource>Add more RAM memory to the computer</oldsource>
         <translation>Añada más memoria RAM</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="230"/>
+        <location filename="systemrequerimentstest.cpp" line="229"/>
         <source>One of the screens is too small. Keep in mind that %1 won&apos;t fit in that screen</source>
         <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</oldsource>
         <translation>Una de las pantallas tiene una resolución demasiado pequeña. %1 no se mostrará bien en esta pantalla</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="231"/>
+        <location filename="systemrequerimentstest.cpp" line="230"/>
         <source>Avoid placing %1 on the screen or screens %2, or increase their resolution if possible</source>
         <oldsource>Don&apos;t move %1 to screen/s %2, or change to a higher resolution</oldsource>
-        <translation>No utilice %1 en la pantalla o pantallas %2, o augmente la resolución de éstas si es posible</translation>
+        <translation>No utilice %1 en la pantalla o pantallas %2, o aumente la resolución de éstas si es posible</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="242"/>
+        <location filename="systemrequerimentstest.cpp" line="241"/>
         <source>Increase screen resolution</source>
         <oldsource>Increase the resolution of the screens</oldsource>
         <translation>Aumente la resolución de pantalla</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="245"/>
+        <location filename="systemrequerimentstest.cpp" line="244"/>
         <source>The screen is too small to fit %1 application</source>
         <oldsource>The screen is too small to fit Starviewer application</oldsource>
         <translation>La resolución de la pantalla es demasiado pequeña para mostrar %1 correctamente</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="249"/>
+        <location filename="systemrequerimentstest.cpp" line="248"/>
         <source>The screens are too small to fit %1 application</source>
         <oldsource>The screens are too small to fit Starviewer application</oldsource>
         <translation>La resolución de las pantallas es demasiado pequeña para mostrar %1 correctamente</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="260"/>
-        <source>The optical drive has not burning capabilities</source>
-        <oldsource>The optical drive is not capable of burning</oldsource>
+        <location filename="systemrequerimentstest.cpp" line="258"/>
+        <source>The optical drive does not have burning capabilities</source>
+        <oldsource>The optical drive has not burning capabilities</oldsource>
         <translation>La unidad de disco óptico no permite grabar</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="261"/>
+        <location filename="systemrequerimentstest.cpp" line="259"/>
         <source>Change the optical drive to a CD-RW/DVD-RW</source>
         <translation>Cambie la unidad de disco óptico por una CD-RW/DVD-RW</translation>
     </message>
     <message>
-        <location filename="systemrequerimentstest.cpp" line="271"/>
+        <location filename="systemrequerimentstest.cpp" line="269"/>
         <source>Hardware meets %1&apos;s minimum system requeriments</source>
         <translation>El equipo cumple los requisitos mínimos de %1</translation>
     </message>
@@ -1325,7 +1765,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="toolregistry.cpp" line="211"/>
         <source>Zoom</source>
-        <translation></translation>
+        <translation>Zoom</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="214"/>
@@ -1345,7 +1785,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="toolregistry.cpp" line="229"/>
         <source>Put Seed tool</source>
-        <translation>Sitúa la herramienta de semilla</translation>
+        <translation>Herramienta para poner la semilla</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="237"/>
@@ -1354,12 +1794,14 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="242"/>
-        <source>Screen Shot</source>
+        <source>Screenshot</source>
+        <oldsource>Screen Shot</oldsource>
         <translation>Captura de pantalla</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="244"/>
-        <source>Enable/Disable Screen shot tool</source>
+        <source>Enable/Disable Screenshot tool</source>
+        <oldsource>Enable/Disable Screen shot tool</oldsource>
         <translation>Activa/desactivar la herramienta de captura de pantalla</translation>
     </message>
     <message>
@@ -1380,13 +1822,13 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="toolregistry.cpp" line="260"/>
         <source>Enable/Disable Distances tool</source>
-        <translation>Activar/desactivar la herramienta de edición de distancias</translation>
+        <translation>Activar/desactivar la herramienta de distancias</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="265"/>
         <source>ROIs</source>
         <oldsource>ROI&apos;s</oldsource>
-        <translation></translation>
+        <translation>ROIs</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="267"/>
@@ -1410,7 +1852,8 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="282"/>
-        <source>Enable voxel information over cursor</source>
+        <source>Enable voxel information under cursor</source>
+        <oldsource>Enable voxel information over cursor</oldsource>
         <translation>Activar la información del vóxel bajo el cursor</translation>
     </message>
     <message>
@@ -1485,7 +1928,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
         <location filename="toolregistry.cpp" line="383"/>
         <source>Auto-Sync</source>
         <oldsource>Auto</oldsource>
-        <translation></translation>
+        <translation>Sinc. Auto.</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="386"/>
@@ -1603,22 +2046,22 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="toolregistry.cpp" line="507"/>
         <source>Rotate Counter Clockwise</source>
-        <translation>Rotar en sentido anti-horario</translation>
+        <translation>Rotar en sentido antihorario</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="510"/>
         <source>Rotate the image in counter clockwise direction</source>
-        <translation>Rotar la imagen en sentido anti-horario</translation>
+        <translation>Rotar la imagen en sentido antihorario</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="511"/>
         <source>Counter-clockwise rotation</source>
-        <translation>Rotación en sentido anti-horario</translation>
+        <translation>Rotación en sentido antihorario</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="517"/>
         <source>Horizontal Flip</source>
-        <translation>Flip horizontal</translation>
+        <translation>Voltear horizontalmente</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="520"/>
@@ -1628,7 +2071,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="toolregistry.cpp" line="527"/>
         <source>Vertical Flip</source>
-        <translation>Flip vertical</translation>
+        <translation>Voltear verticalmente</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="530"/>
@@ -1686,7 +2129,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
         <location filename="toolregistry.cpp" line="303"/>
         <location filename="toolregistry.cpp" line="307"/>
         <source>ROI</source>
-        <translation></translation>
+        <translation>ROI</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="310"/>
@@ -1748,7 +2191,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
         <location filename="toolregistry.cpp" line="354"/>
         <source>Enable/Disable open-angle tool</source>
         <oldsource>Enable/Disable non closed angle tool</oldsource>
-        <translation>Activar/desactivar la herramienta de ángulos abiertos</translation>
+        <translation>Activar/desactivar la herramienta de ángulo abierto</translation>
     </message>
 </context>
 <context>
@@ -1756,102 +2199,102 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="transferfunctioneditor.cpp" line="118"/>
         <source>Move color point from %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover punto de color de %1 a %2</translation>
     </message>
     <message>
         <location filename="transferfunctioneditor.cpp" line="154"/>
         <source>Move %1 color points</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover %1 puntos de color</translation>
     </message>
     <message>
         <location filename="transferfunctioneditor.cpp" line="172"/>
         <source>Change color point at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar punto de color en %1</translation>
     </message>
     <message>
         <location filename="transferfunctioneditor.cpp" line="217"/>
         <source>Move scalar opacity point from %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover punto de opacidad escalar de %1 a %2</translation>
     </message>
     <message>
         <location filename="transferfunctioneditor.cpp" line="228"/>
         <source>Change scalar opacity point at %1 from %2 to %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar punto de opacidad escalar en %1 de %2 a %3</translation>
     </message>
     <message>
         <location filename="transferfunctioneditor.cpp" line="265"/>
         <source>Move and change %1 scalar opacity points</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover y cambiar %1 puntos de opacidad escalar</translation>
     </message>
     <message>
         <location filename="transferfunctioneditor.cpp" line="317"/>
         <source>Move gradient opacity point from %1 to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover punto de opacidad de gradiente de %1 a %2</translation>
     </message>
     <message>
         <location filename="transferfunctioneditor.cpp" line="335"/>
         <source>Change gradient opacity point at %1 from %2 to %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar punto de opacidad de gradiente en %1 de %2 a %3</translation>
     </message>
     <message>
         <location filename="transferfunctioneditor.cpp" line="372"/>
         <source>Move and change %1 gradient opacity points</source>
-        <translation type="unfinished"></translation>
+        <translation>Mover y cambiar %1 puntos de opacidad de gradiente</translation>
     </message>
     <message>
         <location filename="transferfunctioneditorcommands.cpp" line="10"/>
         <source>Set transfer function %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Asignar función de transferencia %1</translation>
     </message>
     <message>
         <location filename="transferfunctioneditorcommands.cpp" line="26"/>
         <source>Set name %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Asignar nombre %1</translation>
     </message>
     <message>
         <location filename="transferfunctioneditorcommands.cpp" line="43"/>
         <source>Set color transfer function %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Asignar función de transferencia de color %1</translation>
     </message>
     <message>
         <location filename="transferfunctioneditorcommands.cpp" line="61"/>
         <source>Set scalar opacity transfer function %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Asignar función de transferencia de opacidad escalar %1</translation>
     </message>
     <message>
         <location filename="transferfunctioneditorcommands.cpp" line="80"/>
         <source>Set gradient opacity transfer function %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Asignar función de transferencia de opacidad de gradiente %1</translation>
     </message>
     <message>
         <location filename="transferfunctioneditorcommands.cpp" line="96"/>
         <source>Add color point at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir punto de color en %1</translation>
     </message>
     <message>
         <location filename="transferfunctioneditorcommands.cpp" line="112"/>
         <source>Remove color point at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar punto de color en %1</translation>
     </message>
     <message>
         <location filename="transferfunctioneditorcommands.cpp" line="128"/>
         <source>Add scalar opacity point at (%1, %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir punto de opacidad escalar en (%1, %2)</translation>
     </message>
     <message>
         <location filename="transferfunctioneditorcommands.cpp" line="144"/>
         <source>Remove scalar opacity point at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar punto de opacidad escalar en %1</translation>
     </message>
     <message>
         <location filename="transferfunctioneditorcommands.cpp" line="160"/>
         <source>Add gradient opacity point at (%1, %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir punto de opacidad de gradiente en (%1, %2)</translation>
     </message>
     <message>
         <location filename="transferfunctioneditorcommands.cpp" line="176"/>
         <source>Remove gradient opacity point at %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar punto de opacidad de gradiente en %1</translation>
     </message>
 </context>
 <context>
@@ -1868,7 +2311,8 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="105"/>
-        <source>Cannot Read File(s)</source>
+        <source>Cannot Read Files</source>
+        <oldsource>Cannot Read File(s)</oldsource>
         <translation>No se han podido leer los archivos</translation>
     </message>
     <message>
@@ -1878,18 +2322,20 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="121"/>
-        <source>There&apos;s not enough memory to load the Series you requested. Try to close all the open %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
-        <oldsource>There&apos;s not enough memory to load the Series you requested. Try to close all the opened %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64 bit operating system may solve the problem.</oldsource>
+        <source>There&apos;s not enough memory to load the series you requested. Try to close all the open %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
+        <oldsource>There&apos;s not enough memory to load the Series you requested. Try to close all the open %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</oldsource>
         <translation>No hay memoria suficiente para cargar la serie solicitada. Intente cerrar todas las ventanas de %1 abiertas, reinicie la aplicación y vuélvalo a intentar. Si el problema persiste, podría solucionarse añadiendo más memoria RAM o cambiando a un sistema operativo de 64 bits.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="125"/>
-        <source>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</source>
+        <source>%1 could not find the corresponding files for this series. Maybe they had been removed or are corrupted.</source>
+        <oldsource>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</oldsource>
         <translation>%1 no puede encontrar los archivos de la serie. Puede ser que se hayan eliminado o sean corruptos.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="127"/>
-        <source>%1 could not read the requested file(s) for this Series.</source>
+        <source>%1 could not read the requested files for this series.</source>
+        <oldsource>%1 could not read the requested file(s) for this Series.</oldsource>
         <translation>%1 no ha podido leer los archivos de la serie solicitada.</translation>
     </message>
     <message>
@@ -1900,91 +2346,76 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="131"/>
-        <source>%1 found an unexpected error reading this Series. No Series data has been loaded.</source>
-        <translation>%1 ha encontrado un error desconocido al leer la serie. No se han cargado los datos de la serie.</translation>
-    </message>
-</context>
-<context>
-    <name>udg::VoxelInformationTool</name>
-    <message>
-        <location filename="voxelinformationtool.cpp" line="146"/>
-        <source>N/A</source>
-        <translation>N/D</translation>
+        <source>%1 found an unexpected error reading this series. No series data has been loaded.</source>
+        <oldsource>%1 found an unexpected error reading this Series. No Series data has been loaded.</oldsource>
+        <translation>%1 ha encontrado un error inesperado al leer la serie. No se han cargado los datos de la serie.</translation>
     </message>
 </context>
 <context>
     <name>udg::WindowLevelPresetsToolData</name>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="14"/>
-        <source>CT Bone</source>
-        <translation>CT Óseo</translation>
-    </message>
-    <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="15"/>
-        <source>CT Lung</source>
-        <translation>CT Pulmonar</translation>
-    </message>
-    <message>
         <location filename="windowlevelpresetstooldata.cpp" line="16"/>
-        <source>CT Soft Tissues</source>
-        <oldsource>CT Soft Tissues, Non Contrast</oldsource>
-        <translation>CT Tejidos Blandos</translation>
+        <source>CT Bone</source>
+        <translation>CT hueso</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="17"/>
+        <source>CT Lung</source>
+        <translation>CT pulmón</translation>
+    </message>
+    <message>
+        <location filename="windowlevelpresetstooldata.cpp" line="18"/>
+        <source>CT Soft Tissues</source>
+        <oldsource>CT Soft Tissues, Non Contrast</oldsource>
+        <translation>CT tejidos blandos</translation>
+    </message>
+    <message>
+        <location filename="windowlevelpresetstooldata.cpp" line="19"/>
         <source>CT Soft Tissues+Contrast</source>
         <oldsource>CT Soft Tissues, Contrast</oldsource>
-        <translation>CT Tejidos Blandos+Contraste</translation>
-    </message>
-    <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="20"/>
-        <source>CT Liver+Contrast</source>
-        <oldsource>CT Liver, Contrast</oldsource>
-        <translation>CT Hígado+Contraste</translation>
-    </message>
-    <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="21"/>
-        <source>CT Liver</source>
-        <translation>CT Hígado</translation>
+        <translation>CT tejidos blandos + contraste</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="22"/>
-        <source>CT Neck+Contrast</source>
-        <oldsource>CT Neck, Contrast</oldsource>
-        <translation>CT Cuello+Contraste</translation>
+        <source>CT Liver+Contrast</source>
+        <oldsource>CT Liver, Contrast</oldsource>
+        <translation>CT hígado + contraste</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="25"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="23"/>
+        <source>CT Liver</source>
+        <translation>CT hígado</translation>
+    </message>
+    <message>
+        <location filename="windowlevelpresetstooldata.cpp" line="24"/>
+        <source>CT Neck+Contrast</source>
+        <oldsource>CT Neck, Contrast</oldsource>
+        <translation>CT cuello + contraste</translation>
+    </message>
+    <message>
+        <location filename="windowlevelpresetstooldata.cpp" line="27"/>
         <source>Angiography</source>
         <translation>Angiografía</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="28"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="30"/>
         <source>Osteoporosis</source>
         <translation>Osteoporosis</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="29"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="31"/>
         <source>Emphysema</source>
         <translation>Enfisema</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="30"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="32"/>
         <source>Petrous Bone</source>
-        <translation></translation>
+        <translation>Hueso petroso</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="31"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="164"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="166"/>
-        <location filename="windowlevelpresetstooldata.cpp" line="167"/>
-        <source>Custom</source>
-        <translation>Personalizado</translation>
-    </message>
-    <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="13"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="15"/>
         <source>CT Head</source>
-        <translation>Cráneo CT</translation>
+        <translation>CT cráneo</translation>
     </message>
 </context>
 </TS>

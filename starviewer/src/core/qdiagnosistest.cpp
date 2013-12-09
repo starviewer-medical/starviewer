@@ -134,7 +134,7 @@ void QDiagnosisTest::updateWidgetToRunDiagnosisTest()
 
 void QDiagnosisTest::saveDiagnosisTestResultsAsFile()
 {
-    QString pathFile = QFileDialog::getSaveFileName(this, tr("Save diagnosis test results"), QDir::homePath(), tr("Files (*.txt)"));
+    QString pathFile = QFileDialog::getSaveFileName(this, tr("Save Diagnosis Tests Results"), QDir::homePath(), tr("Text Files (*.txt)"));
 
     if (!pathFile.isEmpty())
     {
