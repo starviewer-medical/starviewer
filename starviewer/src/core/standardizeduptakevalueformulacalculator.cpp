@@ -54,6 +54,11 @@ bool StandardizedUptakeValueFormulaCalculator::parameterValuesAreValid() const
 
 bool StandardizedUptakeValueFormulaCalculator::commonFormulaComponentParameterValuesAreValid() const
 {
+    if (m_pixelValueUnits != "BQML")
+    {
+        return false;
+    }
+
     if (m_injectedDoseInBq != 0.0 && m_decayCorrectionFactor != 0.0)
     {
         return true;

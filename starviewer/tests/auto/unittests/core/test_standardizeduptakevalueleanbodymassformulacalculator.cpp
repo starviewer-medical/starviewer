@@ -132,18 +132,20 @@ void test_StandardizedUptakeValueLeanBodyMassFormulaCalculator::canCompute_Shoul
     QTest::addColumn<bool>("canComputeLeanBodyMass");
     QTest::addColumn<double>("leanBodyMass");
     QTest::addColumn<double>("activityConcentrationValue");
+    QTest::addColumn<QString>("pixelUnits");
     QTest::addColumn<bool>("expectedResult");
 
     double notUsedDouble;
 
-    QTest::newRow("valid values") <<  true << 34.54 << 7373.22 << true << 873.83 << notUsedDouble << true;
-    QTest::newRow("valid values, negative injectedDoseInBq") <<  true << 34.54 << -348.43 << true << 873.83 << notUsedDouble << true;
-    QTest::newRow("valid values, negative decayFactor") <<  true << -0.54 << 87.3 << true << 0.9 << notUsedDouble << true;
-    QTest::newRow("cannot compute decay factor") <<  false << notUsedDouble << 7373.22 << true << 873.83 << notUsedDouble << false;
-    QTest::newRow("cannot compute lean body mass") <<  true << 34.54 << 48.43 << false << notUsedDouble << notUsedDouble << false;
-    QTest::newRow("invalid injectedDoseInBq") <<  true << 34.54 << 0.0 << true << 873.83 << notUsedDouble << false;
-    QTest::newRow("invalid leanBodyMass") <<  true << 34.54 << 32.11 << true << 0.0 << notUsedDouble << false;
-    QTest::newRow("all invalid values") <<  true << 0.0 << 0.0 << true << -3.90 << notUsedDouble << false;
+    QTest::newRow("valid values") <<  true << 34.54 << 7373.22 << true << 873.83 << notUsedDouble << "BQML" << true;
+    QTest::newRow("valid values, negative injectedDoseInBq") <<  true << 34.54 << -348.43 << true << 873.83 << notUsedDouble << "BQML" << true;
+    QTest::newRow("valid values, negative decayFactor") <<  true << -0.54 << 87.3 << true << 0.9 << notUsedDouble << "BQML" << true;
+    QTest::newRow("cannot compute decay factor") <<  false << notUsedDouble << 7373.22 << true << 873.83 << notUsedDouble << "BQML" << false;
+    QTest::newRow("cannot compute lean body mass") <<  true << 34.54 << 48.43 << false << notUsedDouble << notUsedDouble << "BQML" << false;
+    QTest::newRow("invalid injectedDoseInBq") <<  true << 34.54 << 0.0 << true << 873.83 << notUsedDouble << "BQML" << false;
+    QTest::newRow("invalid leanBodyMass") <<  true << 34.54 << 32.11 << true << 0.0 << notUsedDouble << "BQML" << false;
+    QTest::newRow("invalid units") <<  true << 34.54 << 7373.22 << true << 873.83 << notUsedDouble << "diferent de BQML" << false;
+    QTest::newRow("all invalid values") <<  true << 0.0 << 0.0 << true << -3.90 << notUsedDouble << "CNTS" << false;
 }
 
 void test_StandardizedUptakeValueLeanBodyMassFormulaCalculator::canCompute_ShouldReturnExpectedResult()
@@ -154,10 +156,12 @@ void test_StandardizedUptakeValueLeanBodyMassFormulaCalculator::canCompute_Shoul
     QFETCH(bool, canComputeLeanBodyMass);
     QFETCH(double, leanBodyMass);
     QFETCH(double, activityConcentrationValue);
+    QFETCH(QString, pixelUnits);
     QFETCH(bool, expectedResult);
 
     TestingDICOMTagReader tagReader;
     tagReader.addTag(DICOMRadionuclideTotalDose, radionuclideTotalDose);
+    tagReader.addTag(DICOMUnits, pixelUnits);
 
     DICOMSequenceAttribute *sequence = new DICOMSequenceAttribute();
     sequence->setTag(DICOMRadiopharmaceuticalInformationSequence);
