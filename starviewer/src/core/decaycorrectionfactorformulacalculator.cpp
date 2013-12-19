@@ -109,7 +109,14 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
         }
     }
 
-    m_timeLapseInSeconds = radiopharmaceuticalStartDateTime.secsTo(seriesDateTime);
+    if (seriesDateTime.isValid() && radiopharmaceuticalStartDateTime.isValid())
+    {
+        m_timeLapseInSeconds = radiopharmaceuticalStartDateTime.secsTo(seriesDateTime);
+    }
+    else
+    {
+        m_timeLapseInSeconds = -1;
+    }
 }
 
 int DecayCorrectionFactorFormulaCalculator::computeTimeLapseInSeconds() const
