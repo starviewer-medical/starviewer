@@ -22,12 +22,9 @@ private slots:
 
     void canCompute_ShouldReturnExpectedResult_data();
     void canCompute_ShouldReturnExpectedResult();
-
-private:
-    void prepareComputeData();
 };
 
-void test_DecayCorrectionFactorFormulaCalculator::prepareComputeData()
+void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedResultUsingTagReaderAsDataSource_data()
 {
     QTest::addColumn<QString>("decayCorrection");
     QTest::addColumn<QString>("seriesDate");
@@ -46,11 +43,6 @@ void test_DecayCorrectionFactorFormulaCalculator::prepareComputeData()
     QTest::newRow("decayCorrection START, invalid SeriesDate") <<  "START" << "20131312" << "121000" << "120000" << 156 << qPow(2, -(-1)/(double)156);
     QTest::newRow("decayCorrection START, invalid SeriesTime") <<  "START" << "20131212" << "no valid" << "120000" << 156 << qPow(2, -(-1)/(double)156);
     QTest::newRow("decayCorrection START, invalid radiopharmaceuticalStartTime") <<  "START" << "20131212" << "121000" << "120090" << 156 << qPow(2, -(-1)/(double)156);
-}
-
-void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedResultUsingTagReaderAsDataSource_data()
-{
-    prepareComputeData();
 }
 
 void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedResultUsingTagReaderAsDataSource()
