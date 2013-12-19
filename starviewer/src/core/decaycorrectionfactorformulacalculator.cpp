@@ -29,14 +29,7 @@ double DecayCorrectionFactorFormulaCalculator::compute()
 {
     gatherRequiredParameters();
 
-    if (m_decayFactor.isEmpty())
-    {
-        return DecayCorrectionFactorFormula::compute(m_radionuclideHalfLifeInSeconds, computeTimeLapseInSeconds());
-    }
-    else
-    {
-        return m_decayFactor.toDouble();
-    }
+    return DecayCorrectionFactorFormula::compute(m_radionuclideHalfLifeInSeconds, computeTimeLapseInSeconds());
 }
 
 void DecayCorrectionFactorFormulaCalculator::initializeParameters()
@@ -49,20 +42,13 @@ bool DecayCorrectionFactorFormulaCalculator::parameterValuesAreValid() const
 {
     if (m_decayCorrection == "START" || m_decayCorrection == "ADMIN")
     {
-        if (!m_decayFactor.isEmpty())
+        if (m_radionuclideHalfLifeInSeconds >= 0 && computeTimeLapseInSeconds() >= 0)
         {
             return true;
         }
         else
         {
-            if (m_radionuclideHalfLifeInSeconds >= 0 && computeTimeLapseInSeconds() >= 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
     }
     else if (m_decayCorrection == "NONE")
@@ -90,7 +76,6 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
     }
 
     m_decayCorrection = tagReader->getValueAttributeAsQString(DICOMDecayCorrection);
-    m_decayFactor = tagReader->getValueAttributeAsQString(DICOMDecayFactor);
 
     QTime seriesTime = DICOMValueRepresentationConverter::timeToQTime(tagReader->getValueAttributeAsQString(DICOMSeriesTime));
     QString radioPharmaceuticalStartTimeString;
