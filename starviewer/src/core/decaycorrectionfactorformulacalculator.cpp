@@ -77,8 +77,11 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
 
     m_decayCorrection = tagReader->getValueAttributeAsQString(DICOMDecayCorrection);
 
-    QTime seriesTime = DICOMValueRepresentationConverter::timeToQTime(tagReader->getValueAttributeAsQString(DICOMSeriesTime));
-    QString radioPharmaceuticalStartTimeString;
+    QDateTime seriesDateTime;
+    seriesDateTime.setDate(QDate::fromString(tagReader->getValueAttributeAsQString(DICOMSeriesDate), "yyyyMMdd"));
+    seriesDateTime.setTime(DICOMValueRepresentationConverter::timeToQTime(tagReader->getValueAttributeAsQString(DICOMSeriesTime)));
+
+    QDateTime radiopharmaceuticalStartDateTime;
     DICOMSequenceAttribute *radiopharmaceuticalInfoSequence = tagReader->getSequenceAttribute(DICOMRadiopharmaceuticalInformationSequence);
     if (radiopharmaceuticalInfoSequence)
     {
@@ -86,13 +89,27 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
         {
             // TODO It could be more than one item!
             DICOMSequenceItem *item = radiopharmaceuticalInfoSequence->getItems().first();
-            radioPharmaceuticalStartTimeString = item->getValueAttribute(DICOMRadiopharmaceuticalStartTime)->getValueAsQString();
+            DICOMValueAttribute *radioPharmaceuticalStartDateTimeAttribute = item->getValueAttribute(DICOMRadiopharmaceuticalStartDateTime);
+            if (radioPharmaceuticalStartDateTimeAttribute)
+            {
+                QString radioPharmaceuticalStartDateTimeString = radioPharmaceuticalStartDateTimeAttribute->getValueAsQString();
+                radiopharmaceuticalStartDateTime.setDate(QDate::fromString(radioPharmaceuticalStartDateTimeString.left(8), "yyyyMMdd"));
+                radiopharmaceuticalStartDateTime.setTime(DICOMValueRepresentationConverter::timeToQTime(radioPharmaceuticalStartDateTimeString.remove(0,8)));
+            }
+            else
+            {
+                DICOMValueAttribute *radioPharmaceuticalStartTime = item->getValueAttribute(DICOMRadiopharmaceuticalStartTime);
+                if (radioPharmaceuticalStartTime)
+                {
+                    radiopharmaceuticalStartDateTime.setDate(seriesDateTime.date());
+                    radiopharmaceuticalStartDateTime.setTime(DICOMValueRepresentationConverter::timeToQTime(radioPharmaceuticalStartTime->getValueAsQString()));
+                }
+            }
             m_radionuclideHalfLifeInSeconds = item->getValueAttribute(DICOMRadionuclideHalfLife)->getValueAsInt();
         }
     }
-    QTime radiopharmaceuticalStartTime = DICOMValueRepresentationConverter::timeToQTime(radioPharmaceuticalStartTimeString);
 
-    m_timeLapseInSeconds = radiopharmaceuticalStartTime.secsTo(seriesTime);
+    m_timeLapseInSeconds = radiopharmaceuticalStartDateTime.secsTo(seriesDateTime);
 }
 
 int DecayCorrectionFactorFormulaCalculator::computeTimeLapseInSeconds() const
