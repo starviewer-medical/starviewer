@@ -17,14 +17,14 @@ class test_DecayCorrectionFactorFormulaCalculator : public QObject {
     Q_OBJECT
 
 private slots:
-    void compute_ShouldReturnExpectedResultUsingTagReaderAsDataSource_data();
-    void compute_ShouldReturnExpectedResultUsingTagReaderAsDataSource();
+    void compute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartTimeUsingTagReaderAsDataSource_data();
+    void compute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartTimeUsingTagReaderAsDataSource();
 
-    void canCompute_ShouldReturnExpectedResult_data();
-    void canCompute_ShouldReturnExpectedResult();
+    void canCompute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartTime_data();
+    void canCompute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartTime();
 };
 
-void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedResultUsingTagReaderAsDataSource_data()
+void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartTimeUsingTagReaderAsDataSource_data()
 {
     QTest::addColumn<QString>("decayCorrection");
     QTest::addColumn<QString>("seriesDate");
@@ -45,7 +45,7 @@ void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedRe
     QTest::newRow("decayCorrection START, invalid radiopharmaceuticalStartTime") <<  "START" << "20131212" << "121000" << "120090" << 156 << qPow(2, -(-1)/(double)156);
 }
 
-void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedResultUsingTagReaderAsDataSource()
+void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartTimeUsingTagReaderAsDataSource()
 {
     QFETCH(QString, decayCorrection);
     QFETCH(QString, seriesDate);
@@ -91,7 +91,7 @@ void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedRe
     delete sequence;
 }
 
-void test_DecayCorrectionFactorFormulaCalculator::canCompute_ShouldReturnExpectedResult_data()
+void test_DecayCorrectionFactorFormulaCalculator::canCompute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartTime_data()
 {
     QTest::addColumn<QString>("decayCorrection");
     QTest::addColumn<QString>("seriesDate");
@@ -112,7 +112,7 @@ void test_DecayCorrectionFactorFormulaCalculator::canCompute_ShouldReturnExpecte
     QTest::newRow("valid values") <<  "START" << "20100101" << "000005" << "000000" << 1 << true;
 }
 
-void test_DecayCorrectionFactorFormulaCalculator::canCompute_ShouldReturnExpectedResult()
+void test_DecayCorrectionFactorFormulaCalculator::canCompute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartTime()
 {
     QFETCH(QString, decayCorrection);
     QFETCH(QString, seriesDate);
