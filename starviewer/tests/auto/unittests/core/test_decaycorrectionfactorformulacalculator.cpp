@@ -36,18 +36,18 @@ void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedRe
     QTest::addColumn<QString>("seriesDate");
     QTest::addColumn<QString>("seriesTime");
     QTest::addColumn<QString>("radiopharmaceuticalStartDateTime");
-    QTest::addColumn<int>("radionuclideHalfLifeInSeconds");
+    QTest::addColumn<double>("radionuclideHalfLifeInSeconds");
     QTest::addColumn<double>("expectedResult");
 
     QString notUsedString;
     double zeroDouble = 0.0;
 
-    QTest::newRow("decayCorrection ADMIN") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << 23 << qPow(2, 0/(double)23);
-    QTest::newRow("decayCorrection START") <<  "START" << "20131212" << "120000" << "20131211120000" << 156 << qPow(2, -86400/(double)156);
-    QTest::newRow("decayCorrection ADMIN, radionuclideHalfLifeInSeconds is 0") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << 0 << qPow(2, 0/zeroDouble);
-    QTest::newRow("decayCorrection START, invalid SeriesDate") <<  "START" << "20131312" << "121000" << "20131211120000" << 156 << qPow(2, -(-1)/(double)156);
-    QTest::newRow("decayCorrection START, invalid SeriesTime") <<  "START" << "20131212" << "no valid" << "20131211120000" << 156 << qPow(2, -(-1)/(double)156);
-    QTest::newRow("decayCorrection START, invalid radiopharmaceuticalStartDateTime") <<  "START" << "20131212" << "121000" << "120000" << 156 << qPow(2, -(-1)/(double)156);
+    QTest::newRow("decayCorrection ADMIN") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << 23.2 << qPow(2, 0 / 23.2);
+    QTest::newRow("decayCorrection START") <<  "START" << "20131212" << "120000" << "20131211120000" << 156.0 << qPow(2, -86400 / 156.0);
+    QTest::newRow("decayCorrection ADMIN, radionuclideHalfLifeInSeconds is 0") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << zeroDouble << qPow(2, 0/zeroDouble);
+    QTest::newRow("decayCorrection START, invalid SeriesDate") <<  "START" << "20131312" << "121000" << "20131211120000" << 156.004 << qPow(2, -(-1) / 156.004);
+    QTest::newRow("decayCorrection START, invalid SeriesTime") <<  "START" << "20131212" << "no valid" << "20131211120000" << 156.005 << qPow(2, -(-1) / 156.005);
+    QTest::newRow("decayCorrection START, invalid radiopharmaceuticalStartDateTime") <<  "START" << "20131212" << "121000" << "120000" << 156.293 << qPow(2, -(-1) / 156.293);
 }
 
 void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartDateTimeUsingTagReaderAsDataSource()
@@ -56,7 +56,7 @@ void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedRe
     QFETCH(QString, seriesDate);
     QFETCH(QString, seriesTime);
     QFETCH(QString, radiopharmaceuticalStartDateTime);
-    QFETCH(int, radionuclideHalfLifeInSeconds);
+    QFETCH(double, radionuclideHalfLifeInSeconds);
     QFETCH(double, expectedResult);
 
     TestingDICOMTagReader tagReader;
@@ -102,19 +102,18 @@ void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedRe
     QTest::addColumn<QString>("seriesDate");
     QTest::addColumn<QString>("seriesTime");
     QTest::addColumn<QString>("radiopharmaceuticalStartTime");
-    QTest::addColumn<int>("radionuclideHalfLifeInSeconds");
+    QTest::addColumn<double>("radionuclideHalfLifeInSeconds");
     QTest::addColumn<double>("expectedResult");
 
     QString notUsedString;
-
-    QTest::newRow("decayCorrection ADMIN") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << 23 << qPow(2, 0/(double)23);
-    QTest::newRow("decayCorrection START") <<  "START" << "20131212" << "120200" << "120000" << 156 << qPow(2, -120/(double)156);
     double zeroDouble = 0.0;
 
-    QTest::newRow("decayCorrection ADMIN, radionuclideHalfLifeInSeconds is 0") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << 0 << qPow(2, 0/zeroDouble);
-    QTest::newRow("decayCorrection START, invalid SeriesDate") <<  "START" << "20131312" << "121000" << "120000" << 156 << qPow(2, -(-1)/(double)156);
-    QTest::newRow("decayCorrection START, invalid SeriesTime") <<  "START" << "20131212" << "no valid" << "120000" << 156 << qPow(2, -(-1)/(double)156);
-    QTest::newRow("decayCorrection START, invalid radiopharmaceuticalStartTime") <<  "START" << "20131212" << "121000" << "120090" << 156 << qPow(2, -(-1)/(double)156);
+    QTest::newRow("decayCorrection ADMIN") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << 23.0 << qPow(2, 0 / 23.0);
+    QTest::newRow("decayCorrection START") <<  "START" << "20131212" << "120200" << "120000" << 156.092 << qPow(2, -120 / 156.092);
+    QTest::newRow("decayCorrection ADMIN, radionuclideHalfLifeInSeconds is 0") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << zeroDouble << qPow(2, 0 / zeroDouble);
+    QTest::newRow("decayCorrection START, invalid SeriesDate") <<  "START" << "20131312" << "121000" << "120000" << 156.34 << qPow(2, -(-1) / 156.34);
+    QTest::newRow("decayCorrection START, invalid SeriesTime") <<  "START" << "20131212" << "no valid" << "120000" << 156.023 << qPow(2, -(-1) / 156.023);
+    QTest::newRow("decayCorrection START, invalid radiopharmaceuticalStartTime") <<  "START" << "20131212" << "121000" << "120090" << 156.998 << qPow(2, -(-1) / 156.998);
 }
 
 void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartTimeUsingTagReaderAsDataSource()
@@ -123,7 +122,7 @@ void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedRe
     QFETCH(QString, seriesDate);
     QFETCH(QString, seriesTime);
     QFETCH(QString, radiopharmaceuticalStartTime);
-    QFETCH(int, radionuclideHalfLifeInSeconds);
+    QFETCH(double, radionuclideHalfLifeInSeconds);
     QFETCH(double, expectedResult);
 
     TestingDICOMTagReader tagReader;
@@ -169,19 +168,19 @@ void test_DecayCorrectionFactorFormulaCalculator::canCompute_ShouldReturnExpecte
     QTest::addColumn<QString>("seriesDate");
     QTest::addColumn<QString>("seriesTime");
     QTest::addColumn<QString>("radiopharmaceuticalStartTime");
-    QTest::addColumn<int>("radionuclideHalfLifeInSeconds");
+    QTest::addColumn<double>("radionuclideHalfLifeInSeconds");
     QTest::addColumn<bool>("expectedResult");
 
     QString notUsedString;
-    int notUsedInt = 1;
+    double notUsedDouble = 1.0;
 
-    QTest::newRow("decayCorrection NONE") <<  "NONE" << notUsedString << notUsedString << notUsedString << notUsedInt << false;
-    QTest::newRow("decayCorrection ADMIN") <<  "ADMIN" << "20100101" << notUsedString << notUsedString << 1 << true;
-    QTest::newRow("decayCorrection START") <<  "START" << "20100101" << "221200" << "201200" << 2 << true;
-    QTest::newRow("invalid decayCorrection") <<  "no none, no start, no admin" << notUsedString << notUsedString << notUsedString << notUsedInt << false;
-    QTest::newRow("invalid time lapse") <<  "START" << "20100101" << "000000" << "000001" << 1 << false;
-    QTest::newRow("invalid radionuclide half life") <<  "START" << "20100101" << "000001" << "000000" << -1 << false;
-    QTest::newRow("valid values") <<  "START" << "20100101" << "000005" << "000000" << 1 << true;
+    QTest::newRow("decayCorrection NONE") <<  "NONE" << notUsedString << notUsedString << notUsedString << notUsedDouble << false;
+    QTest::newRow("decayCorrection ADMIN") <<  "ADMIN" << "20100101" << notUsedString << notUsedString << 1.3 << true;
+    QTest::newRow("decayCorrection START") <<  "START" << "20100101" << "221200" << "201200" << 2.1 << true;
+    QTest::newRow("invalid decayCorrection") <<  "no none, no start, no admin" << notUsedString << notUsedString << notUsedString << notUsedDouble << false;
+    QTest::newRow("invalid time lapse") <<  "START" << "20100101" << "000000" << "000001" << 1.0 << false;
+    QTest::newRow("invalid radionuclide half life") <<  "START" << "20100101" << "000001" << "000000" << -1.9 << false;
+    QTest::newRow("valid values") <<  "START" << "20100101" << "000005" << "000000" << 1.003 << true;
 }
 
 void test_DecayCorrectionFactorFormulaCalculator::canCompute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartTime()
@@ -190,7 +189,7 @@ void test_DecayCorrectionFactorFormulaCalculator::canCompute_ShouldReturnExpecte
     QFETCH(QString, seriesDate);
     QFETCH(QString, seriesTime);
     QFETCH(QString, radiopharmaceuticalStartTime);
-    QFETCH(int, radionuclideHalfLifeInSeconds);
+    QFETCH(double, radionuclideHalfLifeInSeconds);
     QFETCH(bool, expectedResult);
 
     TestingDICOMTagReader tagReader;
@@ -225,20 +224,20 @@ void test_DecayCorrectionFactorFormulaCalculator::canCompute_ShouldReturnExpecte
     QTest::addColumn<QString>("seriesDate");
     QTest::addColumn<QString>("seriesTime");
     QTest::addColumn<QString>("radiopharmaceuticalStartDateTime");
-    QTest::addColumn<int>("radionuclideHalfLifeInSeconds");
+    QTest::addColumn<double>("radionuclideHalfLifeInSeconds");
     QTest::addColumn<bool>("expectedResult");
 
     QString notUsedString;
-    int notUsedInt = 1;
+    double notUsedDouble = 1.029;
 
-    QTest::newRow("decayCorrection NONE") <<  "NONE" << notUsedString << notUsedString << notUsedString << notUsedInt << false;
-    QTest::newRow("decayCorrection ADMIN") <<  "ADMIN" << "20100101" << notUsedString << notUsedString << 1 << true;
-    QTest::newRow("decayCorrection START") <<  "START" << "20100101" << "221200" << "20100101201200" << 2 << true;
-    QTest::newRow("invalid decayCorrection") <<  "no none, no start, no admin" << notUsedString << notUsedString << notUsedString << notUsedInt << false;
-    QTest::newRow("invalid radiopharmaceuticalStartDateTime") <<  "START" << "20100101" << "000000" << "" << 1 << false;
-    QTest::newRow("invalid time lapse") <<  "START" << "20100101" << "000000" << "20100102000001" << 1 << false;
-    QTest::newRow("invalid radionuclide half life") <<  "START" << "20100101" << "000001" << "20100101000000" << -1 << false;
-    QTest::newRow("valid values") <<  "START" << "20100101" << "000005" << "20000101000000" << 1 << true;
+    QTest::newRow("decayCorrection NONE") <<  "NONE" << notUsedString << notUsedString << notUsedString << notUsedDouble << false;
+    QTest::newRow("decayCorrection ADMIN") <<  "ADMIN" << "20100101" << notUsedString << notUsedString << 1.043 << true;
+    QTest::newRow("decayCorrection START") <<  "START" << "20100101" << "221200" << "20100101201200" << 2.000 << true;
+    QTest::newRow("invalid decayCorrection") <<  "no none, no start, no admin" << notUsedString << notUsedString << notUsedString << notUsedDouble << false;
+    QTest::newRow("invalid radiopharmaceuticalStartDateTime") <<  "START" << "20100101" << "000000" << "" << 1.83 << false;
+    QTest::newRow("invalid time lapse") <<  "START" << "20100101" << "000000" << "20100102000001" << 1.0 << false;
+    QTest::newRow("invalid radionuclide half life") <<  "START" << "20100101" << "000001" << "20100101000000" << -1.980 << false;
+    QTest::newRow("valid values") <<  "START" << "20100101" << "000005" << "20000101000000" << 1.0 << true;
 }
 
 void test_DecayCorrectionFactorFormulaCalculator::canCompute_ShouldReturnExpectedResultGivenRadiopharmaceuticalStartDateTime()
@@ -247,7 +246,7 @@ void test_DecayCorrectionFactorFormulaCalculator::canCompute_ShouldReturnExpecte
     QFETCH(QString, seriesDate);
     QFETCH(QString, seriesTime);
     QFETCH(QString, radiopharmaceuticalStartDateTime);
-    QFETCH(int, radionuclideHalfLifeInSeconds);
+    QFETCH(double, radionuclideHalfLifeInSeconds);
     QFETCH(bool, expectedResult);
 
     TestingDICOMTagReader tagReader;

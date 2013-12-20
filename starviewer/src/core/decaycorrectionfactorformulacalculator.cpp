@@ -34,7 +34,7 @@ double DecayCorrectionFactorFormulaCalculator::compute()
 
 void DecayCorrectionFactorFormulaCalculator::initializeParameters()
 {
-    m_radionuclideHalfLifeInSeconds = 0;
+    m_radionuclideHalfLifeInSeconds = 0.0;
     m_timeLapseInSeconds = 0;
 }
 
@@ -42,7 +42,7 @@ bool DecayCorrectionFactorFormulaCalculator::parameterValuesAreValid() const
 {
     if (m_decayCorrection == "START" || m_decayCorrection == "ADMIN")
     {
-        if (m_radionuclideHalfLifeInSeconds >= 0 && computeTimeLapseInSeconds() >= 0)
+        if (m_radionuclideHalfLifeInSeconds >= 0.0 && computeTimeLapseInSeconds() >= 0)
         {
             return true;
         }
@@ -105,7 +105,7 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
                     radiopharmaceuticalStartDateTime.setTime(DICOMValueRepresentationConverter::timeToQTime(radioPharmaceuticalStartTime->getValueAsQString()));
                 }
             }
-            m_radionuclideHalfLifeInSeconds = item->getValueAttribute(DICOMRadionuclideHalfLife)->getValueAsInt();
+            m_radionuclideHalfLifeInSeconds = item->getValueAttribute(DICOMRadionuclideHalfLife)->getValueAsDouble();
         }
     }
 
