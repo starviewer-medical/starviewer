@@ -506,7 +506,7 @@ void QViewer::absolutePan(double motionVector[3])
     getCurrentViewPlane().getXYZIndexes(x, y, z);
 
     double relativeMotionVector[3];
-    relativeMotionVector[x] = ((bounds[x] + bounds[x + 1]) / 2 - motionVector[x]) - currentPosition[x];
+    relativeMotionVector[x] = ((bounds[x * 2] + bounds[x * 2 + 1]) / 2 - motionVector[x]) - currentPosition[x];
     relativeMotionVector[y] = ((bounds[y * 2] + bounds[y * 2 + 1]) / 2 - motionVector[y]) - currentPosition[y];
     relativeMotionVector[z] = 0.0;
 
@@ -525,7 +525,7 @@ void QViewer::getCurrentPanFactor(double absoluteMotionVector[3])
 
     camera->GetPosition(absoluteMotionVector);
 
-    absoluteMotionVector[x] = (bounds[x] + bounds[x + 1]) / 2.0 - absoluteMotionVector[x];
+    absoluteMotionVector[x] = (bounds[x * 2] + bounds[x * 2 + 1]) / 2.0 - absoluteMotionVector[x];
     absoluteMotionVector[y] = (bounds[y * 2] + bounds[y * 2 + 1]) / 2.0 - absoluteMotionVector[y];
     absoluteMotionVector[z] = 0.0;
 }
