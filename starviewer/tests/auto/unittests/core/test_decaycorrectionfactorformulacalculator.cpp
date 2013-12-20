@@ -40,10 +40,11 @@ void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedRe
     QTest::addColumn<double>("expectedResult");
 
     QString notUsedString;
+    double zeroDouble = 0.0;
 
     QTest::newRow("decayCorrection ADMIN") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << 23 << qPow(2, 0/(double)23);
     QTest::newRow("decayCorrection START") <<  "START" << "20131212" << "120000" << "20131211120000" << 156 << qPow(2, -86400/(double)156);
-    QTest::newRow("decayCorrection ADMIN, radionuclideHalfLifeInSeconds is 0") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << 0 << qPow(2, 0/(double)0);
+    QTest::newRow("decayCorrection ADMIN, radionuclideHalfLifeInSeconds is 0") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << 0 << qPow(2, 0/zeroDouble);
     QTest::newRow("decayCorrection START, invalid SeriesDate") <<  "START" << "20131312" << "121000" << "20131211120000" << 156 << qPow(2, -(-1)/(double)156);
     QTest::newRow("decayCorrection START, invalid SeriesTime") <<  "START" << "20131212" << "no valid" << "20131211120000" << 156 << qPow(2, -(-1)/(double)156);
     QTest::newRow("decayCorrection START, invalid radiopharmaceuticalStartDateTime") <<  "START" << "20131212" << "121000" << "120000" << 156 << qPow(2, -(-1)/(double)156);
