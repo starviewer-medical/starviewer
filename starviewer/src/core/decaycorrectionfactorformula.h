@@ -13,7 +13,7 @@ public:
     DecayCorrectionFactorFormula();
     ~DecayCorrectionFactorFormula();
 
-    double compute(int radionuclideHalfLifeInSeconds, int timeLapseInSeconds);
+    double compute(double radionuclideHalfLifeInSeconds, int timeLapseInSeconds);
 };
 
 } // End namespace udg
