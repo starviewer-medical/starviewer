@@ -43,7 +43,7 @@ void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedRe
     double zeroDouble = 0.0;
 
     QTest::newRow("decayCorrection ADMIN") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << 23.2 << qPow(2, 0 / 23.2);
-    QTest::newRow("decayCorrection START") <<  "START" << "20131212" << "120000" << "20131211120000" << 156.0 << qPow(2, -86400 / 156.0);
+    QTest::newRow("decayCorrection START") <<  "START" << "20131212" << "120000.400" << "20131210120001.300" << 156.0 << qPow(2, -172799.1 / 156.0);
     QTest::newRow("decayCorrection ADMIN, radionuclideHalfLifeInSeconds is 0") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << zeroDouble << qPow(2, 0/zeroDouble);
     QTest::newRow("decayCorrection START, invalid SeriesDate") <<  "START" << "20131312" << "121000" << "20131211120000" << 156.004 << qPow(2, -(-1) / 156.004);
     QTest::newRow("decayCorrection START, invalid SeriesTime") <<  "START" << "20131212" << "no valid" << "20131211120000" << 156.005 << qPow(2, -(-1) / 156.005);
@@ -109,7 +109,7 @@ void test_DecayCorrectionFactorFormulaCalculator::compute_ShouldReturnExpectedRe
     double zeroDouble = 0.0;
 
     QTest::newRow("decayCorrection ADMIN") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << 23.0 << qPow(2, 0 / 23.0);
-    QTest::newRow("decayCorrection START") <<  "START" << "20131212" << "120200" << "120000" << 156.092 << qPow(2, -120 / 156.092);
+    QTest::newRow("decayCorrection START") <<  "START" << "20131212" << "120200" << "120000.100" << 156.092 << qPow(2, -119.9 / 156.092);
     QTest::newRow("decayCorrection ADMIN, radionuclideHalfLifeInSeconds is 0") <<  "ADMIN" << notUsedString << notUsedString << notUsedString << zeroDouble << qPow(2, 0 / zeroDouble);
     QTest::newRow("decayCorrection START, invalid SeriesDate") <<  "START" << "20131312" << "121000" << "120000" << 156.34 << qPow(2, -(-1) / 156.34);
     QTest::newRow("decayCorrection START, invalid SeriesTime") <<  "START" << "20131212" << "no valid" << "120000" << 156.023 << qPow(2, -(-1) / 156.023);

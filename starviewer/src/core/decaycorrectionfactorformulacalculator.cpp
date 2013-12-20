@@ -111,7 +111,9 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
 
     if (seriesDateTime.isValid() && radiopharmaceuticalStartDateTime.isValid())
     {
-        m_timeLapseInSeconds = radiopharmaceuticalStartDateTime.secsTo(seriesDateTime);
+        int hoursInMsecs = radiopharmaceuticalStartDateTime.time().msecsTo(seriesDateTime.time());
+        int daysInSecs = radiopharmaceuticalStartDateTime.date().daysTo(seriesDateTime.date()) * 86400;
+        m_timeLapseInSeconds = daysInSecs + hoursInMsecs * 0.001;
     }
     else
     {
@@ -119,11 +121,11 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
     }
 }
 
-int DecayCorrectionFactorFormulaCalculator::computeTimeLapseInSeconds() const
+double DecayCorrectionFactorFormulaCalculator::computeTimeLapseInSeconds() const
 {
     if (m_decayCorrection == "ADMIN")
     {
-        return 0;
+        return 0.0;
     }
     else if (m_decayCorrection == "START")
     {
@@ -131,7 +133,7 @@ int DecayCorrectionFactorFormulaCalculator::computeTimeLapseInSeconds() const
     }
     else
     {
-        return -1;
+        return -1.0;
     }
 }
 

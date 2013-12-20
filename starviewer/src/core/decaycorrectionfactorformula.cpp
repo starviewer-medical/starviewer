@@ -12,7 +12,7 @@ DecayCorrectionFactorFormula::~DecayCorrectionFactorFormula()
 {
 }
 
-double DecayCorrectionFactorFormula::compute(double radionuclideHalfLifeInSeconds, int timeLapseInSeconds)
+double DecayCorrectionFactorFormula::compute(double radionuclideHalfLifeInSeconds, double timeLapseInSeconds)
 {
     return qPow(2.0, -timeLapseInSeconds / radionuclideHalfLifeInSeconds);
 }
