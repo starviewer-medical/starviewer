@@ -76,8 +76,9 @@ ul
 
 li 
 {
-    padding: 4px 0 3px 0px;
+    padding: 4px 0 3px 100px;
     margin: 0 0 6px 0;
+    position: relative;
 }
 
 li:before
@@ -92,8 +93,9 @@ li:before
     float: left;
     padding-top: 5px;
     padding-bottom: 2px;
-    position: relative;
-    top: -4px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }
 
 div.new li:before
