@@ -142,7 +142,7 @@ void QWindowLevelComboBox::selectPreset(const QString &preset)
     }
     else
     {
-        this->setCurrentIndex(this->findText(WindowLevelPresetsToolData::CustomPresetName));
+        this->setCurrentIndex(this->findText(WindowLevelPresetsToolData::getCustomPresetName()));
     }
 }
 
@@ -166,7 +166,7 @@ void QWindowLevelComboBox::populateFromPresetsData()
 
 void QWindowLevelComboBox::setActiveWindowLevel(const QString &text)
 {
-    if (text == WindowLevelPresetsToolData::CustomPresetName)
+    if (text == WindowLevelPresetsToolData::getCustomPresetName())
     {
         // Reestablim el valor que hi havia perquè no quedi seleccionat la fila de l'editor.
         this->selectPreset(m_currentSelectedPreset);
