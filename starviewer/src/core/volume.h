@@ -134,7 +134,7 @@ public:
     ImagePlane* getImagePlane(int sliceNumber, const OrthogonalPlane &plane, bool vtkReconstructionHack = false);
     
     /// Returns the pixel units for this volume. If the units cannot be specified, an empty string will be returned
-    const QString getPixelUnits() const;
+    QString getPixelUnits();
     
     /// Returns the slice range of the current volume corresponding to an specified orthogonal plane
     void getSliceRange(int &min, int &max, const OrthogonalPlane &plane);
@@ -209,6 +209,9 @@ private:
 
     virtual VolumeReader* createVolumeReader();
 
+    /// Lazy loading of the units of the pixels of PT series
+    QString getPTPixelUnits(const Image *image);
+
 private:
 
     /// Conjunt d'imatges que composen el volum
@@ -226,6 +229,9 @@ private:
     /// TODO membre temporal per la transició al tractament de fases
     int m_numberOfPhases;
     int m_numberOfSlicesPerPhase;
+
+    /// Stores the units of the pixel values of PT series. getPTPixelUnits should always be used to get this value
+    QString m_PTPixelUnits;
 };
 
 }  // End namespace udg
