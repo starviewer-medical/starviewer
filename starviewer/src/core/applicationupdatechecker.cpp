@@ -2,6 +2,7 @@
 #include "starviewerapplication.h"
 #include "logging.h"
 #include "machineidentifier.h"
+#include "systeminformation.h"
 
 #include <QScriptEngine>
 #include <QScriptValue>
@@ -99,12 +100,16 @@ bool ApplicationUpdateChecker::isChecking() const
 QString ApplicationUpdateChecker::createWebServiceUrl()
 {
     MachineIdentifier machineIdentifier;
+    SystemInformation *systemInformation = SystemInformation::newInstance();
 
     QString machineID = machineIdentifier.getMachineID();
     QString groupID = machineIdentifier.getGroupID();
+    QString operatingSystem = systemInformation->getOperatingSystemAsShortString();
+    
+    delete systemInformation;
 
-    return QString("http://starviewer.udg.edu/checknewversion/?currentVersion=%1&machineID=%2&groupID=%3")
-              .arg(StarviewerVersionString).arg(machineID).arg(groupID);
+    return QString("http://starviewer.udg.edu/checknewversion/?currentVersion=%1&machineID=%2&groupID=%3&os=%4")
+              .arg(StarviewerVersionString).arg(machineID).arg(groupID).arg(operatingSystem);
 }
 
 void ApplicationUpdateChecker::setProxy(const QUrl &url)
