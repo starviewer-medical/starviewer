@@ -40,6 +40,10 @@ QString SystemInformation::getOperatingSystemAsString()
     return "Unknown";
 }
 
+QString SystemInformation::getOperatingSystemAsShortString()
+{
+    return "Unknown";
+}
 
 bool SystemInformation::isOperatingSystem64BitArchitecture()
 {

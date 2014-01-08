@@ -34,7 +34,7 @@ double DecayCorrectionFactorFormulaCalculator::compute()
 
 void DecayCorrectionFactorFormulaCalculator::initializeParameters()
 {
-    m_radionuclideHalfLifeInSeconds = 0;
+    m_radionuclideHalfLifeInSeconds = 0.0;
     m_timeLapseInSeconds = 0;
 }
 
@@ -42,7 +42,7 @@ bool DecayCorrectionFactorFormulaCalculator::parameterValuesAreValid() const
 {
     if (m_decayCorrection == "START" || m_decayCorrection == "ADMIN")
     {
-        if (m_radionuclideHalfLifeInSeconds >= 0 && computeTimeLapseInSeconds() >= 0)
+        if (m_radionuclideHalfLifeInSeconds >= 0.0 && computeTimeLapseInSeconds() >= 0)
         {
             return true;
         }
@@ -105,13 +105,15 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
                     radiopharmaceuticalStartDateTime.setTime(DICOMValueRepresentationConverter::timeToQTime(radioPharmaceuticalStartTime->getValueAsQString()));
                 }
             }
-            m_radionuclideHalfLifeInSeconds = item->getValueAttribute(DICOMRadionuclideHalfLife)->getValueAsInt();
+            m_radionuclideHalfLifeInSeconds = item->getValueAttribute(DICOMRadionuclideHalfLife)->getValueAsDouble();
         }
     }
 
     if (seriesDateTime.isValid() && radiopharmaceuticalStartDateTime.isValid())
     {
-        m_timeLapseInSeconds = radiopharmaceuticalStartDateTime.secsTo(seriesDateTime);
+        int hoursInMsecs = radiopharmaceuticalStartDateTime.time().msecsTo(seriesDateTime.time());
+        int daysInSecs = radiopharmaceuticalStartDateTime.date().daysTo(seriesDateTime.date()) * 86400;
+        m_timeLapseInSeconds = daysInSecs + hoursInMsecs * 0.001;
     }
     else
     {
@@ -119,11 +121,11 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
     }
 }
 
-int DecayCorrectionFactorFormulaCalculator::computeTimeLapseInSeconds() const
+double DecayCorrectionFactorFormulaCalculator::computeTimeLapseInSeconds() const
 {
     if (m_decayCorrection == "ADMIN")
     {
-        return 0;
+        return 0.0;
     }
     else if (m_decayCorrection == "START")
     {
@@ -131,7 +133,7 @@ int DecayCorrectionFactorFormulaCalculator::computeTimeLapseInSeconds() const
     }
     else
     {
-        return -1;
+        return -1.0;
     }
 }
 

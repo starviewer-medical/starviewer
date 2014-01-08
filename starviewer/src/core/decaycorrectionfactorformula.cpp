@@ -12,9 +12,9 @@ DecayCorrectionFactorFormula::~DecayCorrectionFactorFormula()
 {
 }
 
-double DecayCorrectionFactorFormula::compute(int radionuclideHalfLifeInSeconds, int timeLapseInSeconds)
+double DecayCorrectionFactorFormula::compute(double radionuclideHalfLifeInSeconds, double timeLapseInSeconds)
 {
-    return qPow(2.0, -timeLapseInSeconds / (double)radionuclideHalfLifeInSeconds);
+    return qPow(2.0, -timeLapseInSeconds / radionuclideHalfLifeInSeconds);
 }
 
 } // End namespace udg

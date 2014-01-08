@@ -81,7 +81,14 @@ void VoxelInformationTool::updateCaption()
         double xyz[3];
         if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(xyz, i))
         {
-            inputsCaptions << computeVoxelValueOnInput(xyz, i) + " " + m_2DViewer->getInput(i)->getPixelUnits();
+            QString caption = computeVoxelValueOnInput(xyz, i) + " " + m_2DViewer->getInput(i)->getPixelUnits();
+
+            if (m_2DViewer->getNumberOfInputs() > 1)
+            {
+                caption += " (" + m_2DViewer->getInput(i)->getModality() + ")";
+            }
+
+            inputsCaptions << caption;
         }
     }
 

@@ -5,7 +5,7 @@
 
 include(src/compilationtype.inc)
 
-SUBDIRS += src tests
+SUBDIRS += src
 TEMPLATE = subdirs
 CONFIG += warn_on \
           qt \

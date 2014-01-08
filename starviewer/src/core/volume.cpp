@@ -8,6 +8,7 @@
 #include "mathtools.h"
 #include "volumepixeldataiterator.h"
 #include "imageplane.h"
+#include "dicomtagreader.h"
 
 namespace udg {
 
@@ -351,7 +352,7 @@ Image* Volume::getImage(int sliceNumber, int phaseNumber) const
     return image;
 }
 
-const QString Volume::getPixelUnits() const
+QString Volume::getPixelUnits()
 {
     QString units;
     Image *image = getImage(0);
@@ -364,10 +365,101 @@ const QString Volume::getPixelUnits() const
             {
                 units = "HU";
             }
+            else if (modality == "PT")
+            {
+                units = getPTPixelUnits(image);
+            }
         }
     }
 
     return units;
+}
+
+QString Volume::getPTPixelUnits(const Image *image)
+{
+    if (m_PTPixelUnits.isNull())
+    {
+        QString dicomUnits = DICOMTagReader(image->getPath()).getValueAttributeAsQString(DICOMUnits);
+
+        if (dicomUnits == "CNTS")
+        {
+            m_PTPixelUnits = tr("counts");
+        }
+        else if (dicomUnits == "NONE")
+        {
+            m_PTPixelUnits = "";
+        }
+        else if (dicomUnits == "CM2")
+        {
+            m_PTPixelUnits = "cm2";
+        }
+        else if (dicomUnits == "PCNT")
+        {
+            m_PTPixelUnits = tr("percent");
+        }
+        else if (dicomUnits == "CPS")
+        {
+            m_PTPixelUnits = tr("counts/s");
+        }
+        else if (dicomUnits == "BQML")
+        {
+            m_PTPixelUnits = "bq/ml";
+        }
+        else if (dicomUnits == "MGMINML")
+        {
+            m_PTPixelUnits = "mg/min/ml";
+        }
+        else if (dicomUnits == "UMOLMINML")
+        {
+            m_PTPixelUnits = "umol/min/ml";
+        }
+        else if (dicomUnits == "MLMING")
+        {
+            m_PTPixelUnits = "ml/min/g";
+        }
+        else if (dicomUnits == "MLG")
+        {
+            m_PTPixelUnits = "ml/g";
+        }
+        else if (dicomUnits == "1CM")
+        {
+            m_PTPixelUnits = "1/cm";
+        }
+        else if (dicomUnits == "UMOLML")
+        {
+            m_PTPixelUnits = "umol/ml";
+        }
+        else if (dicomUnits == "PROPCNTS")
+        {
+            m_PTPixelUnits = tr("proportional to counts");
+        }
+        else if (dicomUnits == "PROPCPS")
+        {
+            m_PTPixelUnits = "proportional to counts/s";
+        }
+        else if (dicomUnits == "MLMINML")
+        {
+            m_PTPixelUnits = "ml/min/ml";
+        }
+        else if (dicomUnits == "ML/ML")
+        {
+            m_PTPixelUnits = "ml/ml";
+        }
+        else if (dicomUnits == "GML")
+        {
+            m_PTPixelUnits = "g/ml";
+        }
+        else if (dicomUnits == "STDDEV")
+        {
+            m_PTPixelUnits = "std. dev";
+        }
+        else
+        {
+            m_PTPixelUnits = "";
+        }
+    }
+
+    return m_PTPixelUnits;
 }
 
 ImagePlane* Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane, bool vtkReconstructionHack)

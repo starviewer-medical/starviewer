@@ -463,9 +463,14 @@ void Q2DViewer::loadVolumesAsynchronously(const QList<Volume*> &volumes)
     // TODO: De moment no tenim cap més remei que especificar un volume fals. La resta del viewer (i els que en depenen) s'esperen
     // tenir un volum carregat després de cridar a setInput.
     // També tenim el problema de que perquè surti al menú de botó dret com a seleccionat, cal posar-li el mateix id.
-    Volume *dummyVolume = getDummyVolumeFromVolume(volumes.first());
-    dummyVolume->setIdentifier(volumes.first()->getIdentifier());
-    setNewVolumes(QList<Volume*>() << dummyVolume, false);
+    QList<Volume*> dummies;
+    foreach (Volume *volume, volumes) {
+        Volume *dummyVolume = getDummyVolumeFromVolume(volume);
+        dummyVolume->setIdentifier(volume->getIdentifier());
+        dummies << dummyVolume;
+    }
+
+    setNewVolumes(dummies, false);
 }
 
 void Q2DViewer::volumeReaderJobFinished()

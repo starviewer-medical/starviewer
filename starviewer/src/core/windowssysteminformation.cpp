@@ -149,6 +149,77 @@ QString WindowsSystemInformation::getOperatingSystemAsString()
     return getOperatingSystemName() + ", " + architecture + " " + servicePack;
 }
 
+QString WindowsSystemInformation::getOperatingSystemAsShortString()
+{
+    QString output = "win-";
+
+    if (isOperatingSystem64BitArchitecture())
+    {
+        output += "64bit";
+    }
+    else
+    {
+        output += "32bit";
+    }
+
+    output += "-" + getOperatingSystemVersion();
+    output += "-SP" + getOperatingSystemServicePackMajorVersion() + "." + getOperatingSystemServicePackMinorVersion();
+    return output;
+}
+
+QString WindowsSystemInformation::getOperatingSystemServicePackMajorVersion()
+{
+    QString servicePackMajorVersion = "";
+    IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_OperatingSystem");
+
+    IWbemClassObject* object = getNextObject(enumerator);
+    while (object)
+    {
+        VARIANT variantProperty;
+        if (getProperty(object, "ServicePackMajorVersion", &variantProperty))
+        {
+            servicePackMajorVersion = QString::number(variantProperty.uintVal);
+            VariantClear(&variantProperty);
+        }
+
+        object->Release();
+        object = getNextObject(enumerator);
+    }
+
+    if (enumerator)
+    {
+        enumerator->Release();
+    }
+    return servicePackMajorVersion;
+}
+
+QString WindowsSystemInformation::getOperatingSystemServicePackMinorVersion()
+{
+    QString servicePackMajorVersion = "";
+    IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_OperatingSystem");
+
+    IWbemClassObject* object = getNextObject(enumerator);
+    while (object)
+    {
+        VARIANT variantProperty;
+        if (getProperty(object, "ServicePackMinorVersion", &variantProperty))
+        {
+            servicePackMajorVersion = QString::number(variantProperty.uintVal);
+            VariantClear(&variantProperty);
+        }
+
+        object->Release();
+        object = getNextObject(enumerator);
+    }
+
+    if (enumerator)
+    {
+        enumerator->Release();
+    }
+    return servicePackMajorVersion;
+}
+
+
 unsigned int WindowsSystemInformation::getRAMTotalAmount()
 {
     unsigned int RAMTotalAmount = 0;

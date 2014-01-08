@@ -27,7 +27,7 @@ private:
     void gatherRequiredParameters();
     void gatherRequiredParameters(DICOMTagReader *tagReader);
 
-    int computeTimeLapseInSeconds() const;
+    double computeTimeLapseInSeconds() const;
 
 private:
     /// The Decay Correction (0054,1102) is the real-world event to which images in this Series were
@@ -45,12 +45,12 @@ private:
     
     /// (0018,1075) Type 3. The radionuclide half life, in seconds, that was used in the correction of this image.
     /// Contained in Radiopharmaceutical Information Sequence (0054,0016)
-    int m_radionuclideHalfLifeInSeconds;
+    double m_radionuclideHalfLifeInSeconds;
     
     /// Time lapse used in the formula.
     /// If Decay Correction = START, timeLapse = Series Time - Radiopharmaceutical Start Time (0018,1072)
     /// If Decay Correction = ADMIN, timeLapse = 0
-    int m_timeLapseInSeconds;
+    double m_timeLapseInSeconds;
 };
 
 } // End namespace udg
