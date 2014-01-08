@@ -265,20 +265,20 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("windows is 32 bit") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                        << operatingSystem << operatingSystemVersion << servicePackVersion << false << ramTotalAmount << screenResolutions << writeCapability
                                        << DiagnosisTestResult::Error
-                                       << QString("Operating system is not 64 bit architecture")
-                                       << "Update operating system to a 64 bit version";
+                                       << QString("Operating system is not 64-bit")
+                                       << "Update operating system to a 64-bit version";
 
     QTest::newRow("windows version error") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                            << operatingSystem << "4.1" << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                            << DiagnosisTestResult::Error
-                                           << QString("Current Operative System version is %1, and the minimum required is %2").arg("4.1").arg(requeriments.getMinimumOperatingSystemVersion())
+                                           << QString("Current operating system version is %1, and the minimum required is %2").arg("4.1").arg(requeriments.getMinimumOperatingSystemVersion())
                                            << "Update operating system to a newer version";
 
     QTest::newRow("windows service pack version error") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                                         << operatingSystem << operatingSystemVersion << "Service Pack 1" << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                                         << DiagnosisTestResult::Error
                                                         << QString("Current Service Pack version is %1, and the minimum required is Service Pack %2").arg("Service Pack 1").arg(requeriments.getMinimum64bitOperatingSystemServicePackVersion())
-                                                        << "Install a newer service pack";
+                                                        << "Install a newer Service Pack";
 
     QTest::newRow("not enough RAM") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                     << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << zero << screenResolutions << writeCapability
@@ -315,7 +315,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
                          << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                          << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << false
                          << DiagnosisTestResult::Warning
-                         << "The optical drive has not burning capabilities"
+                         << "The optical drive does not have burning capabilities"
                          << "Change the optical drive to a CD-RW/DVD-RW";
 }
 
