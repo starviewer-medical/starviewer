@@ -20,6 +20,7 @@ public:
     QString getOperatingSystemServicePackVersion();
     QString getOperatingSystemName();
     QString getOperatingSystemAsString();
+    QString getOperatingSystemAsShortString();
 
     /// Retorna la quantitat total de memòria RAM en MegaBytes
     unsigned int getRAMTotalAmount();
@@ -55,6 +56,12 @@ public:
 protected:
     /// Mètode alternatiu per si no podem obtenir el nombre de nuclis via WMI
     virtual unsigned int getCPUNumberOfCoresFromEnvironmentVar();
+
+    /// Gets the major version of the service pack
+    QString getOperatingSystemServicePackMajorVersion();
+
+    /// Gets the minor version of the service pack
+    QString getOperatingSystemServicePackMinorVersion();
 
 protected:
     virtual IWbemClassObject* getNextObject(IEnumWbemClassObject *enumerator);

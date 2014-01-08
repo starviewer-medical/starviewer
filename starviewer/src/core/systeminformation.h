@@ -29,6 +29,9 @@ public:
     
     /// Returna el nom complert del Sistema Operatiu (Nom, arquitectura, actualitzacions...)
     virtual QString getOperatingSystemAsString();
+
+    /// Returs the name of operating system in a short form
+    virtual QString getOperatingSystemAsShortString();
     
     /// Retorna la quantitat total de memòria RAM en MegaBytes
     virtual unsigned int getRAMTotalAmount();
