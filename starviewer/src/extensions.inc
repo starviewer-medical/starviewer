@@ -1,12 +1,7 @@
 # Aquí cal afegir les extensions que volem que s'incloguin a l'executable
 #
 
-PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
-                        edemasegmentation \
-                        angiosubstraction \
-                        perfusionmapreconstruction \
-                        rectumsegmentation \
-                        experimental3d
+PLAYGROUND_EXTENSIONS = 
 
 #CONTRIB_EXTENSIONS =
 
