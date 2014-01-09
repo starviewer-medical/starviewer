@@ -524,11 +524,6 @@ WW: %5 WL: %6</translation>
         <source>TIFF (*.tiff)</source>
         <translation></translation>
     </message>
-    <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="8"/>
-        <source>Custom</source>
-        <translation>Personalizado</translation>
-    </message>
 </context>
 <context>
     <name>udg::AngleTool</name>
@@ -541,25 +536,25 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::ApplicationUpdateChecker</name>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="142"/>
+        <location filename="applicationupdatechecker.cpp" line="147"/>
         <source>Error connecting to the server. Server response is: %1</source>
         <translation>Error al conectar con el servidor. La respuesta del servidor es: %1</translation>
     </message>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="157"/>
-        <location filename="applicationupdatechecker.cpp" line="188"/>
+        <location filename="applicationupdatechecker.cpp" line="162"/>
+        <location filename="applicationupdatechecker.cpp" line="193"/>
         <source>Error parsing JSON.</source>
         <oldsource>Error parsing json.</oldsource>
         <translation>Error al procesar JSON.</translation>
     </message>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="177"/>
+        <location filename="applicationupdatechecker.cpp" line="182"/>
         <source>Error parsing JSON: version or releaseNotesURL are not strings</source>
         <oldsource>Error parsing JSON: version or releaseNotesUrl are not strings</oldsource>
         <translation>Error al procesar JSON: version o releaseNotesURL no son cadenas</translation>
     </message>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="226"/>
+        <location filename="applicationupdatechecker.cpp" line="231"/>
         <source>Error requesting release notes: timeout</source>
         <translation>Error al solicitar las notas de la versión: tiempo excedido</translation>
     </message>
@@ -702,7 +697,7 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="496"/>
+        <location filename="q2dviewer.cpp" line="501"/>
         <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
         <translation>No hay memoria suficiente para el proceso de renderización. Intente cerrar todas las ventanas abiertas de %1, reinicie la aplicación y vuélvalo a intentar. Si el problema persiste, podría solucionarse añadiendo más memoria RAM o cambiando a un sistema operativo de 64 bits.</translation>
     </message>
@@ -1574,7 +1569,7 @@ Mean: %1
 St.Dev.: %2</source>
         <translation>
 Media: %1
-Desv.Est.:%2</translation>
+Desv.Est.: %2</translation>
     </message>
 </context>
 <context>
@@ -2298,6 +2293,29 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     </message>
 </context>
 <context>
+    <name>udg::Volume</name>
+    <message>
+        <location filename="volume.cpp" line="386"/>
+        <source>counts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="398"/>
+        <source>percent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="402"/>
+        <source>counts/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="434"/>
+        <source>proportional to counts</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>udg::VolumeReader</name>
     <message>
         <location filename="volumereader.cpp" line="97"/>
@@ -2354,66 +2372,71 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
 <context>
     <name>udg::WindowLevelPresetsToolData</name>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="16"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="14"/>
         <source>CT Bone</source>
         <translation>CT hueso</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="17"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="15"/>
         <source>CT Lung</source>
         <translation>CT pulmón</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="18"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="16"/>
         <source>CT Soft Tissues</source>
         <oldsource>CT Soft Tissues, Non Contrast</oldsource>
         <translation>CT tejidos blandos</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="19"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="17"/>
         <source>CT Soft Tissues+Contrast</source>
         <oldsource>CT Soft Tissues, Contrast</oldsource>
         <translation>CT tejidos blandos + contraste</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="22"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="20"/>
         <source>CT Liver+Contrast</source>
         <oldsource>CT Liver, Contrast</oldsource>
         <translation>CT hígado + contraste</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="23"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="21"/>
         <source>CT Liver</source>
         <translation>CT hígado</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="24"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="22"/>
         <source>CT Neck+Contrast</source>
         <oldsource>CT Neck, Contrast</oldsource>
         <translation>CT cuello + contraste</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="27"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="25"/>
         <source>Angiography</source>
         <translation>Angiografía</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="30"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="28"/>
         <source>Osteoporosis</source>
         <translation>Osteoporosis</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="31"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="29"/>
         <source>Emphysema</source>
         <translation>Enfisema</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="32"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="30"/>
         <source>Petrous Bone</source>
         <translation>Hueso petroso</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="15"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="184"/>
+        <source>Custom</source>
+        <translation>Personalizado</translation>
+    </message>
+    <message>
+        <location filename="windowlevelpresetstooldata.cpp" line="13"/>
         <source>CT Head</source>
         <translation>CT cráneo</translation>
     </message>
