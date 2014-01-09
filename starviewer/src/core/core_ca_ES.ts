@@ -524,11 +524,6 @@ WW: %5 WL: %6</translation>
         <source>TIFF (*.tiff)</source>
         <translation></translation>
     </message>
-    <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="8"/>
-        <source>Custom</source>
-        <translation>Personalitzat</translation>
-    </message>
 </context>
 <context>
     <name>udg::AngleTool</name>
@@ -541,25 +536,25 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::ApplicationUpdateChecker</name>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="142"/>
+        <location filename="applicationupdatechecker.cpp" line="147"/>
         <source>Error connecting to the server. Server response is: %1</source>
         <translation>S&apos;ha produït un error en connectar amb el servidor. La resposta del servidor és: %1</translation>
     </message>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="157"/>
-        <location filename="applicationupdatechecker.cpp" line="188"/>
+        <location filename="applicationupdatechecker.cpp" line="162"/>
+        <location filename="applicationupdatechecker.cpp" line="193"/>
         <source>Error parsing JSON.</source>
         <oldsource>Error parsing json.</oldsource>
         <translation>S&apos;ha produït un error en analitzar el JSON.</translation>
     </message>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="177"/>
+        <location filename="applicationupdatechecker.cpp" line="182"/>
         <source>Error parsing JSON: version or releaseNotesURL are not strings</source>
         <oldsource>Error parsing JSON: version or releaseNotesUrl are not strings</oldsource>
         <translation>S&apos;ha produït un error en analitzar el JSON: version o releaseNotesURL no són cadenes</translation>
     </message>
     <message>
-        <location filename="applicationupdatechecker.cpp" line="226"/>
+        <location filename="applicationupdatechecker.cpp" line="231"/>
         <source>Error requesting release notes: timeout</source>
         <translation>S&apos;ha produït un error en sol·licitar les notes de la versió: temps excedit</translation>
     </message>
@@ -703,7 +698,7 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="496"/>
+        <location filename="q2dviewer.cpp" line="501"/>
         <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
         <translation>No hi ha prou memòria per al procés de renderització. Intenteu tancar totes les finestres obertes de l&apos;%1, reinicieu l&apos;aplicació i torneu-ho a provar. Si el problema es manté, es podria solucionar afegint més memòria RAM o canviant a un sistema operatiu de 64 bits.</translation>
     </message>
@@ -1579,7 +1574,7 @@ St.Dev.: %2</source>
         <translatorcomment>Segons la Viquipèdia s&apos;abrevia Desv, SD o StDev</translatorcomment>
         <translation>
 Mitjana: %1 
-Desv.Est.:%2</translation>
+Desv.Est.: %2</translation>
     </message>
 </context>
 <context>
@@ -2308,6 +2303,29 @@ Es recomana que les deseu en una carpeta buida.</translation>
     </message>
 </context>
 <context>
+    <name>udg::Volume</name>
+    <message>
+        <location filename="volume.cpp" line="386"/>
+        <source>counts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="398"/>
+        <source>percent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="402"/>
+        <source>counts/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="volume.cpp" line="434"/>
+        <source>proportional to counts</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>udg::VolumeReader</name>
     <message>
         <location filename="volumereader.cpp" line="97"/>
@@ -2365,66 +2383,71 @@ Es recomana que les deseu en una carpeta buida.</translation>
 <context>
     <name>udg::WindowLevelPresetsToolData</name>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="16"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="14"/>
         <source>CT Bone</source>
         <translation>CT os</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="17"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="15"/>
         <source>CT Lung</source>
         <translation>CT pulmó</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="18"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="16"/>
         <source>CT Soft Tissues</source>
         <oldsource>CT Soft Tissues, Non Contrast</oldsource>
         <translation>CT teixits tous</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="19"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="17"/>
         <source>CT Soft Tissues+Contrast</source>
         <oldsource>CT Soft Tissues, Contrast</oldsource>
         <translation>CT teixits tous + contrast</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="22"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="20"/>
         <source>CT Liver+Contrast</source>
         <oldsource>CT Liver, Contrast</oldsource>
         <translation>CT fetge + contrast</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="23"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="21"/>
         <source>CT Liver</source>
         <translation>CT fetge</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="24"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="22"/>
         <source>CT Neck+Contrast</source>
         <oldsource>CT Neck, Contrast</oldsource>
         <translation>CT coll + contrast</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="27"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="25"/>
         <source>Angiography</source>
         <translation>Angiografia</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="30"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="28"/>
         <source>Osteoporosis</source>
         <translation>Osteoporosi</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="31"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="29"/>
         <source>Emphysema</source>
         <translation>Emfisema</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="32"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="30"/>
         <source>Petrous Bone</source>
         <translation>Os petrós</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="15"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="184"/>
+        <source>Custom</source>
+        <translation>Personalitzat</translation>
+    </message>
+    <message>
+        <location filename="windowlevelpresetstooldata.cpp" line="13"/>
         <source>CT Head</source>
         <translation>CT crani</translation>
     </message>
