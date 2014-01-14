@@ -35,6 +35,9 @@ protected:
     /// It will be only computed on PT images
     QString getStandardizedUptakeValueMeasureString(ROIData &roiData, int inputIndex, Q2DViewer *viewer) const;
 
+    /// Gets the value properly formatted as a string accompanied by the units
+    QString getFormattedValueString(double value, const QString &units) const;
+
 };
 
 } // End namespace udg
