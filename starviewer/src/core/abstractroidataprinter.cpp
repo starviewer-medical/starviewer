@@ -38,8 +38,8 @@ QString AbstractROIDataPrinter::getStandardizedUptakeValueMeasureString(ROIData 
 
             QString units = suvHandler.getComputedFormulaUnits();
             suvMeasurement = QObject::tr("SUV (%1)").arg(suvHandler.getComputedFormulaLabel());
-            suvMeasurement += QObject::tr("\nMax: %1 %2").arg(maximum, 0, 'f', 2).arg(units);
-            suvMeasurement += QObject::tr("\nMean: %1 %2").arg(mean, 0, 'f', 2).arg(units);
+            suvMeasurement += QObject::tr("\nMax: ") + getFormattedValueString(maximum, units);
+            suvMeasurement += QObject::tr("\nMean: ") + getFormattedValueString(mean, units);
         }
         else
         {
@@ -51,5 +51,18 @@ QString AbstractROIDataPrinter::getStandardizedUptakeValueMeasureString(ROIData 
 
     return suvMeasurement;
 }
+
+QString AbstractROIDataPrinter::getFormattedValueString(double value, const QString &units) const
+{
+    QString valueString;
+
+    valueString = QString("%1").arg(value, 0, 'f', 2);
+    if (!units.isEmpty())
+    {
+        valueString += " " + units;
+    }
+    return valueString;
+}
+
 
 } // End namespace udg

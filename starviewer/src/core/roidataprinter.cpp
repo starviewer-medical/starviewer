@@ -33,16 +33,8 @@ QString ROIDataPrinter::getString() const
             meansString += "; ";
             standardDeviationsString += "; ";
         }
-        meansString += QString("%1").arg(roiData.getMean(), 0, 'f', 2);
-        standardDeviationsString += QString("%1").arg(roiData.getStandardDeviation(), 0, 'f', 2);
-
-        QString units = roiData.getUnits();
-        if (!units.isEmpty())
-        {
-            QString unitsSuffix = " " + units;
-            meansString += unitsSuffix;
-            standardDeviationsString += unitsSuffix;
-        }
+        meansString += getFormattedValueString(roiData.getMean(), roiData.getUnits());
+        standardDeviationsString += getFormattedValueString(roiData.getStandardDeviation(), roiData.getUnits());
 
         QString suvMeasurement = getStandardizedUptakeValueMeasureString(roiData, roiDataIterator.key(), m_2DViewer);
         if (!suvsString.isEmpty() && !suvMeasurement.isEmpty())
