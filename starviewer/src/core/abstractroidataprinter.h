@@ -22,9 +22,17 @@ public:
     ~AbstractROIDataPrinter();
 
     /// Gets the string corresponding to the ROIData
-    virtual QString getString() = 0 const;
+    QString getString();
 
 protected:
+    /// Gathers the required data to build the final string
+    /// Each subclass must implement this method
+    virtual void gatherData() = 0;
+
+    /// Formats the data gathered with gatherData() and returns it as a formatted string
+    /// Each subclass can re-implement this method
+    virtual QString getFormattedDataString() const;
+    
     /// Gets the Standardized Uptake Value measurement from the given ROI data, corresponding to the provided image
     /// It will be only computed on PT images
     QString getStandardizedUptakeValueMeasureString(ROIData &roiData, Image *petImage) const;
@@ -42,6 +50,11 @@ protected:
 
     /// String with the corresponding area of the ROI
     QString m_areaString;
+
+    /// Formatted strings with the values of each quantitative data
+    QString m_meanString;
+    QString m_standardDeviationString;
+    QString m_suvString;
 };
 
 } // End namespace udg

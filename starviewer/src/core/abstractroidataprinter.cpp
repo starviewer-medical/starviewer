@@ -17,6 +17,23 @@ AbstractROIDataPrinter::~AbstractROIDataPrinter()
 {
 }
 
+QString AbstractROIDataPrinter::getString()
+{
+    gatherData();
+    return getFormattedDataString();
+}
+
+QString AbstractROIDataPrinter::getFormattedDataString() const
+{
+    QString dataString;
+
+    dataString = m_suvString;
+    dataString += "\n" + QObject::tr("Area: %1").arg(m_areaString);
+    dataString += QObject::tr("\nMean: %1\nSt.Dev.: %2").arg(m_meanString).arg(m_standardDeviationString);
+
+    return dataString;
+}
+
 QString AbstractROIDataPrinter::getStandardizedUptakeValueMeasureString(ROIData &roiData, Image *petImage) const
 {
     QString suvMeasurement;

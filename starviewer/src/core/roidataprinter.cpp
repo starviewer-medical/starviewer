@@ -18,43 +18,31 @@ ROIDataPrinter::~ROIDataPrinter()
 {
 }
 
-QString ROIDataPrinter::getString() const
+void ROIDataPrinter::gatherData()
 {
-    QString meansString;
-    QString standardDeviationsString;
-    QString suvsString;
     QMapIterator<int, ROIData> roiDataIterator(m_roiDataMap);
     while (roiDataIterator.hasNext())
     {
         roiDataIterator.next();
         ROIData roiData = roiDataIterator.value();
-        if (!meansString.isEmpty())
+        if (!m_meanString.isEmpty())
         {
-            meansString += "; ";
-            standardDeviationsString += "; ";
+            m_meanString += "; ";
+            m_standardDeviationString += "; ";
         }
-        meansString += getFormattedValueString(roiData.getMean(), roiData.getUnits());
-        standardDeviationsString += getFormattedValueString(roiData.getStandardDeviation(), roiData.getUnits());
+        m_meanString += getFormattedValueString(roiData.getMean(), roiData.getUnits());
+        m_standardDeviationString += getFormattedValueString(roiData.getStandardDeviation(), roiData.getUnits());
 
         QString suvMeasurement = getStandardizedUptakeValueMeasureString(roiData, getCurrentImage(m_2DViewer, roiDataIterator.key()));
-        if (!suvsString.isEmpty() && !suvMeasurement.isEmpty())
+        if (!m_suvString.isEmpty() && !suvMeasurement.isEmpty())
         {
             // In case there are more SUV values put them in a new paragraph preceeded by the input index
-            suvsString += QString("\n(%1)").arg(roiDataIterator.key());
+            m_suvString += QString("\n(%1)").arg(roiDataIterator.key());
         }
-        suvsString += suvMeasurement;
+        m_suvString += suvMeasurement;
     }
-
-    QString annotation = QObject::tr("Area: %1").arg(m_areaString);
-    if (!meansString.isEmpty())
-    {
-        annotation += QObject::tr("\nMean: %1\nSt.Dev.: %2").arg(meansString).arg(standardDeviationsString);
-    }
-
-    // Final annotation string with SUV measurement (if any) and statistical data
-    annotation = suvsString + "\n" + annotation;
-
-    return annotation;
 }
+
+
 
 } // End namespace udg
