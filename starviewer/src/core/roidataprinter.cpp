@@ -1,9 +1,5 @@
 #include "roidataprinter.h"
 
-#include <QString>
-#include <QMapIterator>
-#include <QObject>
-
 #include "roidata.h"
 
 namespace udg {
