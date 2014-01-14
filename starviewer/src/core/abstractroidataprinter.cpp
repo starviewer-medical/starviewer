@@ -17,14 +17,12 @@ AbstractROIDataPrinter::~AbstractROIDataPrinter()
 {
 }
 
-QString AbstractROIDataPrinter::getStandardizedUptakeValueMeasureString(ROIData &roiData, int inputIndex, Q2DViewer *viewer) const
+QString AbstractROIDataPrinter::getStandardizedUptakeValueMeasureString(ROIData &roiData, Image *petImage) const
 {
     QString suvMeasurement;
     
     if (roiData.getModality() == "PT")
     {
-        Image *petImage = getCurrentImage(viewer, inputIndex);
-
         StandardUptakeValueMeasureHandler suvHandler;
         suvHandler.setImage(petImage);
         if (suvHandler.canComputePreferredFormula())

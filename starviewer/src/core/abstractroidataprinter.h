@@ -32,9 +32,9 @@ protected:
     QString m_areaString;
 
 protected:
-    /// Gets the Standardized Uptake Value measurement from the given ROI data, corresponding to the provided input number
+    /// Gets the Standardized Uptake Value measurement from the given ROI data, corresponding to the provided image
     /// It will be only computed on PT images
-    QString getStandardizedUptakeValueMeasureString(ROIData &roiData, int inputIndex, Q2DViewer *viewer) const;
+    QString getStandardizedUptakeValueMeasureString(ROIData &roiData, Image *petImage) const;
 
     /// Gets the value properly formatted as a string accompanied by the units
     QString getFormattedValueString(double value, const QString &units) const;
