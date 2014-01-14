@@ -22,14 +22,7 @@ public:
     ~AbstractROIDataPrinter();
 
     /// Gets the string corresponding to the ROIData
-    virtual QString getString() const = 0;
-
-protected:
-    /// The ROI data to make annotation from
-    QMap<int, ROIData> m_roiDataMap;
-
-    /// String with the corresponding area of the ROI
-    QString m_areaString;
+    virtual QString getString() = 0 const;
 
 protected:
     /// Gets the Standardized Uptake Value measurement from the given ROI data, corresponding to the provided image
@@ -42,6 +35,13 @@ protected:
     /// Gets the current image from the given viewer on the given index. If image is null, because 
     /// some reconstruction is applied, the first image of the input is returned
     Image* getCurrentImage(Q2DViewer *viewer, int inputIndex) const;
+
+protected:
+    /// The ROI data to make annotation from
+    QMap<int, ROIData> m_roiDataMap;
+
+    /// String with the corresponding area of the ROI
+    QString m_areaString;
 };
 
 } // End namespace udg
