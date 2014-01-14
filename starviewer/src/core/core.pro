@@ -194,6 +194,8 @@ HEADERS += extensionfactory.h \
     roidata.h \
     abstractroidataprinter.h \
     roidataprinter.h \
+    petroidataprinter.h \
+    petctfusionroidataprinter.h \
     formula.h \
     leanbodymassformula.h \
     bodysurfaceareaformula.h \
@@ -553,6 +555,8 @@ SOURCES += extensionmediator.cpp \
     roidata.cpp \
     abstractroidataprinter.cpp \
     roidataprinter.cpp \
+    petroidataprinter.cpp \
+    petctfusionroidataprinter.cpp \
     formula.cpp \
     leanbodymassformula.cpp \
     bodysurfaceareaformula.cpp \
