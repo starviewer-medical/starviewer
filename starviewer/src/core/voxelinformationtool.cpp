@@ -5,6 +5,7 @@
 #include "drawer.h"
 #include "voxel.h"
 #include "logging.h"
+#include "standarduptakevaluemeasurehandler.h"
 // Vtk
 #include <vtkCommand.h>
 
@@ -81,7 +82,7 @@ void VoxelInformationTool::updateCaption()
         double xyz[3];
         if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(xyz, i))
         {
-            QString caption = computeVoxelValueOnInput(xyz, i) + " " + m_2DViewer->getInput(i)->getPixelUnits();
+            QString caption = computeVoxelValueOnInput(xyz, i);
 
             if (m_2DViewer->getNumberOfInputs() > 1)
             {
@@ -124,7 +125,26 @@ QString VoxelInformationTool::computeVoxelValueOnInput(double worldCoordinate[3]
     }
     
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelDataFromInput(i);
-    return pixelData->getVoxelValue(worldCoordinate, phaseIndex).getAsQString();
+    Voxel voxel = pixelData->getVoxelValue(worldCoordinate, phaseIndex);
+    
+    if (voxel.getNumberOfComponents() == 1 && m_2DViewer->getInput(i)->getModality() == "PT")
+    {
+        Image *petImage = m_2DViewer->getCurrentDisplayedImageOnInput(i);
+        if (!petImage)
+        {
+            petImage = m_2DViewer->getInput(i)->getImage(0);
+        }
+
+        StandardUptakeValueMeasureHandler suvHandler;
+        suvHandler.setImage(petImage);
+        if (suvHandler.canComputePreferredFormula())
+        {
+            double value = suvHandler.computePreferredFormula(voxel.getComponent(0));
+            return QString::number(value) + " " + suvHandler.getComputedFormulaUnits() + " " + tr("SUV (%1)").arg(suvHandler.getComputedFormulaLabel());
+        }
+    }
+
+    return voxel.getAsQString() + " " + m_2DViewer->getInput(i)->getPixelUnits();
 }
 
 void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double attachmentPoint[3], QString &horizontalJustification,
