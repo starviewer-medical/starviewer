@@ -16,7 +16,8 @@ public:
     ROIDataPrinter(const QMap<int, ROIData> &roiDataMap, const QString &areaString, Q2DViewer *viewer);
     ~ROIDataPrinter();
 
-    virtual QString getString() const;
+protected:
+    virtual void gatherData();
 
 protected:
     /// The viewer where the ROI has been drawn
