@@ -44,8 +44,6 @@ QString AbstractROIDataPrinter::getStandardizedUptakeValueMeasureString(ROIData 
         else
         {
             suvMeasurement = QObject::tr("SUV (%1) - N/A").arg(suvHandler.getPreferredFormulaLabel());
-            suvMeasurement += QObject::tr("\nMax: --");
-            suvMeasurement += QObject::tr("\nMean: --");
         }
     }
 
