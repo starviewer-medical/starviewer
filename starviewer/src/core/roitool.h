@@ -11,6 +11,7 @@ namespace udg {
 class DrawerPolygon;
 class DrawerText;
 class ROIData;
+class AbstractROIDataPrinter;
 
 /**
     Tool pare per totes aquelles tools destinades a crear ROIs.
@@ -60,6 +61,9 @@ private:
 
     /// Adds the voxels that are in the path of the intersection points to the given ROIData
     void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, double currentZDepth, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, ROIData &roiData);
+
+    /// Returns the appropiate ROIDataPrinter for the given roi data
+    AbstractROIDataPrinter* getROIDataPrinter(const QMap<int, ROIData> &roiDataMap);
 };
 
 }
