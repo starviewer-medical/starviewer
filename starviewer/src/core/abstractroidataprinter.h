@@ -18,7 +18,7 @@ class Image;
  */
 class AbstractROIDataPrinter {
 public:
-    AbstractROIDataPrinter(const QMap<int, ROIData> &roiDataMap, const QString &areaString);
+    AbstractROIDataPrinter(const QMap<int, ROIData> &roiDataMap, const QString &areaString, Q2DViewer *viewer);
     ~AbstractROIDataPrinter();
 
     /// Gets the string corresponding to the ROIData
@@ -45,6 +45,9 @@ protected:
     Image* getCurrentImage(Q2DViewer *viewer, int inputIndex) const;
 
 protected:
+    /// The viewer where the ROI has been drawn
+    Q2DViewer *m_2DViewer;
+    
     /// The ROI data to make annotation from
     QMap<int, ROIData> m_roiDataMap;
 

@@ -7,10 +7,11 @@
 
 namespace udg {
 
-AbstractROIDataPrinter::AbstractROIDataPrinter(const QMap<int, ROIData> &roiDataMap, const QString &areaString)
+AbstractROIDataPrinter::AbstractROIDataPrinter(const QMap<int, ROIData> &roiDataMap, const QString &areaString, Q2DViewer *viewer)
 {
     m_roiDataMap = roiDataMap;
     m_areaString = areaString;
+    m_2DViewer = viewer;
 }
 
 AbstractROIDataPrinter::~AbstractROIDataPrinter()

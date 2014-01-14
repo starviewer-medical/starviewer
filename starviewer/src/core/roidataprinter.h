@@ -18,10 +18,6 @@ public:
 
 protected:
     virtual void gatherData();
-
-protected:
-    /// The viewer where the ROI has been drawn
-    Q2DViewer *m_2DViewer;
 };
 
 } // End namespace udg

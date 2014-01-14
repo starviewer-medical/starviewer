@@ -5,9 +5,8 @@
 namespace udg {
 
 ROIDataPrinter::ROIDataPrinter(const QMap<int, ROIData> &roiDataMap, const QString &areaString, Q2DViewer *viewer)
- : AbstractROIDataPrinter(roiDataMap, areaString)
+ : AbstractROIDataPrinter(roiDataMap, areaString, viewer)
 {
-    m_2DViewer = viewer;
 }
 
 ROIDataPrinter::~ROIDataPrinter()
