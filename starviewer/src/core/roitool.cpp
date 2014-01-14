@@ -10,6 +10,8 @@
 #include "voxel.h"
 #include "roidata.h"
 #include "roidataprinter.h"
+#include "petctfusionroidataprinter.h"
+#include "petroidataprinter.h"
 
 #include <QApplication>
 
@@ -272,9 +274,48 @@ QString ROITool::getAnnotation()
     QMap<int, ROIData> roiDataMap = computeROIData();
     QApplication::restoreOverrideCursor();
 
-    ROIDataPrinter printer(roiDataMap, getMeasurementString(), m_2DViewer);
+    QString annotation;
+    AbstractROIDataPrinter *roiDataPrinter = getROIDataPrinter(roiDataMap);
+    if (roiDataPrinter)
+    {
+        annotation = roiDataPrinter->getString();
+    }
+    delete roiDataPrinter;
 
-    return printer.getString();
+    return annotation;
+}
+
+AbstractROIDataPrinter* ROITool::getROIDataPrinter(const QMap<int, ROIData> &roiDataMap)
+{
+    AbstractROIDataPrinter *roiDataPrinter = 0;
+
+    switch (roiDataMap.count())
+    {
+        case 1:
+            if (roiDataMap.value(0).getModality() == "PT")
+            {
+                roiDataPrinter = new PETROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
+            }
+            break;
+
+        case 2:
+            {
+                QStringList modalities;
+                modalities << roiDataMap.value(0).getModality() << roiDataMap.value(1).getModality();
+                if (modalities.contains("CT") && modalities.contains("PT"))
+                {
+                    roiDataPrinter = new PETCTFusionROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
+                }
+            }
+            break;
+    }
+
+    if (!roiDataPrinter)
+    {
+        roiDataPrinter = new ROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
+    }
+    
+    return roiDataPrinter;
 }
 
 }
