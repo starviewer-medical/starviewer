@@ -192,6 +192,8 @@ HEADERS += extensionfactory.h \
     abortrendercommand.h \
     roitool.h \
     roidata.h \
+    abstractroidataprinter.h \
+    roidataprinter.h \
     formula.h \
     leanbodymassformula.h \
     bodysurfaceareaformula.h \
@@ -549,6 +551,8 @@ SOURCES += extensionmediator.cpp \
     abortrendercommand.cpp \
     roitool.cpp \
     roidata.cpp \
+    abstractroidataprinter.cpp \
+    roidataprinter.cpp \
     formula.cpp \
     leanbodymassformula.cpp \
     bodysurfaceareaformula.cpp \
