@@ -8,6 +8,7 @@ namespace udg {
 
 class ROIData;
 class Q2DViewer;
+class Image;
 
 /**
     Abstract interface for classes to analyze the ROIData and make the proper outputs depending on the features of the source data.
@@ -38,6 +39,9 @@ protected:
     /// Gets the value properly formatted as a string accompanied by the units
     QString getFormattedValueString(double value, const QString &units) const;
 
+    /// Gets the current image from the given viewer on the given index. If image is null, because 
+    /// some reconstruction is applied, the first image of the input is returned
+    Image* getCurrentImage(Q2DViewer *viewer, int inputIndex) const;
 };
 
 } // End namespace udg
