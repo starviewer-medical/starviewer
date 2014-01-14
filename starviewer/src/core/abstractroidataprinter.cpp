@@ -23,11 +23,7 @@ QString AbstractROIDataPrinter::getStandardizedUptakeValueMeasureString(ROIData 
     
     if (roiData.getModality() == "PT")
     {
-        Image *petImage = viewer->getCurrentDisplayedImageOnInput(inputIndex);
-        if (!petImage)
-        {
-            petImage = viewer->getInput(inputIndex)->getImage(0);
-        }
+        Image *petImage = getCurrentImage(viewer, inputIndex);
 
         StandardUptakeValueMeasureHandler suvHandler;
         suvHandler.setImage(petImage);
@@ -62,5 +58,20 @@ QString AbstractROIDataPrinter::getFormattedValueString(double value, const QStr
     return valueString;
 }
 
+Image* AbstractROIDataPrinter::getCurrentImage(Q2DViewer *viewer, int inputIndex) const
+{
+    if (!viewer)
+    {
+        return 0;
+    }
+    
+    Image *image = viewer->getCurrentDisplayedImageOnInput(inputIndex);
+    if (!image)
+    {
+        image = viewer->getInput(inputIndex)->getImage(0);
+    }
+
+    return image;
+}
 
 } // End namespace udg
