@@ -36,7 +36,7 @@ QString ROIDataPrinter::getString() const
         meansString += getFormattedValueString(roiData.getMean(), roiData.getUnits());
         standardDeviationsString += getFormattedValueString(roiData.getStandardDeviation(), roiData.getUnits());
 
-        QString suvMeasurement = getStandardizedUptakeValueMeasureString(roiData, roiDataIterator.key(), m_2DViewer);
+        QString suvMeasurement = getStandardizedUptakeValueMeasureString(roiData, getCurrentImage(m_2DViewer, roiDataIterator.key()));
         if (!suvsString.isEmpty() && !suvMeasurement.isEmpty())
         {
             // In case there are more SUV values put them in a new paragraph preceeded by the input index
