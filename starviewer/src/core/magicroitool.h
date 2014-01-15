@@ -37,6 +37,9 @@ private:
     /// Crida a la generació de la regió màgica
     void generateRegion();
 
+    /// Gets the index of the input where the magic ROI has to be drawn
+    int getROIInputIndex() const;
+    
     /// Calcula el rang de valors d'intensitat vàlid a partir de \sa #m_magicSize i \see #m_magicFactor
     void computeLevelRange(VolumePixelData *pixelData);
 

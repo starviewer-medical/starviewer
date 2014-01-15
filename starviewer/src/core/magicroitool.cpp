@@ -265,6 +265,31 @@ void MagicROITool::generateRegion()
     m_2DViewer->render();
 }
 
+int MagicROITool::getROIInputIndex() const
+{
+    if (!m_2DViewer)
+    {
+        return 0;
+    }
+    
+    int index = 0;
+    if (m_2DViewer->getNumberOfInputs() == 2)
+    {
+        QStringList modalities;
+        modalities << m_2DViewer->getInput(0)->getModality() << m_2DViewer->getInput(1)->getModality();
+
+        if (modalities.contains("CT") && modalities.contains("PT"))
+        {
+            if (m_2DViewer->getInput(1)->getModality() == "PT")
+            {
+                index = 1;
+            }
+        }
+    }
+    
+    return index;
+}
+
 void MagicROITool::computeLevelRange(VolumePixelData *pixelData)
 {
     if (!pixelData)
