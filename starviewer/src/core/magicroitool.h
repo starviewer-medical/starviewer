@@ -123,6 +123,9 @@ private:
 
     /// Coordenades de pantalla a on s'ha fet el click inicial
     QPoint m_pickedPositionInDisplayCoordinates;
+
+    /// Index of the input to draw the magic ROI on
+    int m_inputIndex;
 };
 
 }

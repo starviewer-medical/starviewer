@@ -29,6 +29,7 @@ MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
     m_maxY = 0;
     m_lowerLevel = 0.0;
     m_upperLevel = 0.0;
+    m_inputIndex = getROIInputIndex();
     m_toolName = "MagicROITool";
 
     m_roiPolygon = NULL;
@@ -78,6 +79,8 @@ void MagicROITool::initialize()
 
     m_roiPolygon = NULL;
     m_filledRoiPolygon = NULL;
+
+    m_inputIndex = getROIInputIndex();
 }
 
 void MagicROITool::handleEvent(unsigned long eventID)
@@ -141,7 +144,7 @@ void MagicROITool::setTextPosition(DrawerText *text)
 void MagicROITool::computeMaskBounds()
 {
     int extent[6];
-    m_2DViewer->getMainInput()->getWholeExtent(extent);
+    m_2DViewer->getInput(m_inputIndex)->getWholeExtent(extent);
 
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
@@ -169,7 +172,7 @@ void MagicROITool::startRegion()
 {
     if (m_2DViewer->hasInput())
     {
-        if (m_2DViewer->getCurrentCursorImageCoordinate(m_pickedPosition))
+        if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(m_pickedPosition, m_inputIndex))
         {
             m_pickedPositionInDisplayCoordinates = m_2DViewer->getEventPosition();
             m_magicFactor = InitialMagicFactor;
@@ -251,8 +254,7 @@ void MagicROITool::modifyRegionByFactor()
 void MagicROITool::generateRegion()
 {
     computeMaskBounds();
-    
-    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelData();
+    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelDataFromInput(m_inputIndex);
 
     this->computeLevelRange(pixelData);
 
@@ -311,7 +313,7 @@ void MagicROITool::computeLevelRange(VolumePixelData *pixelData)
     int z;
     if (m_2DViewer->getView() == OrthogonalPlane::XYPlane && !m_2DViewer->isThickSlabActive())
     {
-        z = m_2DViewer->getMainInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
+        z = m_2DViewer->getInput(m_inputIndex)->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
     }
     else
     {
@@ -343,7 +345,7 @@ void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
     // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
     if (m_2DViewer->getView() == OrthogonalPlane::XYPlane && !m_2DViewer->isThickSlabActive())
     {
-        z = m_2DViewer->getMainInput()->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
+        z = m_2DViewer->getInput(m_inputIndex)->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
     }
     else
     {
@@ -604,8 +606,8 @@ void MagicROITool::addPoint(int direction, int x, int y, double z)
 {
     double origin[3];
     double spacing[3];
-    m_2DViewer->getMainInput()->getSpacing(spacing);
-    m_2DViewer->getMainInput()->getOrigin(origin);
+    m_2DViewer->getInput(m_inputIndex)->getSpacing(spacing);
+    m_2DViewer->getInput(m_inputIndex)->getOrigin(origin);
 
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
