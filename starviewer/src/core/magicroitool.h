@@ -44,7 +44,7 @@ private:
     void getPickedPositionVoxelIndex(VolumePixelData *pixelData, int &x, int &y, int &z);
     
     /// Calcula el rang de valors d'intensitat vàlid a partir de \sa #m_magicSize i \see #m_magicFactor
-    void computeLevelRange(VolumePixelData *pixelData);
+    void computeLevelRange(VolumePixelData *pixelData, int x, int y, int z);
 
     /// Versió iterativa del region Growing
     void computeRegionMask(VolumePixelData *pixelData);
