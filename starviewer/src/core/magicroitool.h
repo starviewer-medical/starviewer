@@ -40,6 +40,9 @@ private:
     /// Gets the index of the input where the magic ROI has to be drawn
     int getROIInputIndex() const;
     
+    /// Gets the index of the current picked position on the given pixel data
+    void getPickedPositionVoxelIndex(VolumePixelData *pixelData, int &x, int &y, int &z);
+    
     /// Calcula el rang de valors d'intensitat vàlid a partir de \sa #m_magicSize i \see #m_magicFactor
     void computeLevelRange(VolumePixelData *pixelData);
 
