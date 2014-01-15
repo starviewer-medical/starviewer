@@ -292,7 +292,7 @@ int MagicROITool::getROIInputIndex() const
     return index;
 }
 
-void MagicROITool::computeLevelRange(VolumePixelData *pixelData)
+void MagicROITool::getPickedPositionVoxelIndex(VolumePixelData *pixelData, int &x, int &y, int &z)
 {
     if (!pixelData)
     {
@@ -305,12 +305,11 @@ void MagicROITool::computeLevelRange(VolumePixelData *pixelData)
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
-    int x = index[xIndex];
-    int y = index[yIndex];
+    x = index[xIndex];
+    y = index[yIndex];
     // HACK Per poder crear les regions correctament quan tenim imatges amb fases
     // Com que els volums no suporten recontruccions, només hem de tractar el cas Axial
     // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
-    int z;
     if (m_2DViewer->getView() == OrthogonalPlane::XYPlane && !m_2DViewer->isThickSlabActive())
     {
         z = m_2DViewer->getInput(m_inputIndex)->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
@@ -319,6 +318,13 @@ void MagicROITool::computeLevelRange(VolumePixelData *pixelData)
     {
         z = index[zIndex];
     }
+}
+
+void MagicROITool::computeLevelRange(VolumePixelData *pixelData)
+{
+    int x, y, z;
+    getPickedPositionVoxelIndex(pixelData, x, y, z);
+    
     // Calculem la desviació estàndard dins la finestra que ens marca la magic size
     double standardDeviation = getStandardDeviation(x, y, z, pixelData);
     
@@ -330,27 +336,8 @@ void MagicROITool::computeLevelRange(VolumePixelData *pixelData)
 
 void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
 {
-    // Busquem el voxel inicial
-    int index[3];
-    pixelData->computeCoordinateIndex(m_pickedPosition, index);
-    
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
-    
-    int x = index[xIndex];
-    int y = index[yIndex];
-    int z;
-    // HACK Per poder crear les regions correctament quan tenim imatges amb fases
-    // Com que els volums no suporten recontruccions, només hem de tractar el cas Axial
-    // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
-    if (m_2DViewer->getView() == OrthogonalPlane::XYPlane && !m_2DViewer->isThickSlabActive())
-    {
-        z = m_2DViewer->getInput(m_inputIndex)->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
-    }
-    else
-    {
-        z = index[zIndex];
-    }
+    int x, y, z;
+    getPickedPositionVoxelIndex(pixelData, x, y, z);
 
     // Creem la màscara
     if (m_minX == 0 && m_minY == 0)
