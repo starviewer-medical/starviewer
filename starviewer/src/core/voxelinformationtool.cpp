@@ -140,7 +140,7 @@ QString VoxelInformationTool::computeVoxelValueOnInput(double worldCoordinate[3]
         if (suvHandler.canComputePreferredFormula())
         {
             double value = suvHandler.computePreferredFormula(voxel.getComponent(0));
-            return QString::number(value) + " " + suvHandler.getComputedFormulaUnits() + " " + tr("SUV (%1)").arg(suvHandler.getComputedFormulaLabel());
+            return QString::number(value, 'f', 2) + " " + suvHandler.getComputedFormulaUnits() + " " + tr("SUV (%1)").arg(suvHandler.getComputedFormulaLabel());
         }
     }
 
