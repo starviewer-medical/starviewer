@@ -256,8 +256,6 @@ void MagicROITool::generateRegion()
     computeMaskBounds();
     VolumePixelData *pixelData = m_2DViewer->getCurrentPixelDataFromInput(m_inputIndex);
 
-    this->computeLevelRange(pixelData);
-
     // Posem a true els punts on la imatge està dins els llindard i connectat amb la llavor (region growing)
     this->computeRegionMask(pixelData);
 
@@ -320,11 +318,8 @@ void MagicROITool::getPickedPositionVoxelIndex(VolumePixelData *pixelData, int &
     }
 }
 
-void MagicROITool::computeLevelRange(VolumePixelData *pixelData)
+void MagicROITool::computeLevelRange(VolumePixelData *pixelData, int x, int y, int z)
 {
-    int x, y, z;
-    getPickedPositionVoxelIndex(pixelData, x, y, z);
-    
     // Calculem la desviació estàndard dins la finestra que ens marca la magic size
     double standardDeviation = getStandardDeviation(x, y, z, pixelData);
     
@@ -338,6 +333,7 @@ void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
 {
     int x, y, z;
     getPickedPositionVoxelIndex(pixelData, x, y, z);
+    this->computeLevelRange(pixelData, x, y, z);
 
     // Creem la màscara
     if (m_minX == 0 && m_minY == 0)
