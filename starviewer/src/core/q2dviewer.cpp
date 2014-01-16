@@ -967,10 +967,8 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
 
         // Then update display (image and associated annotations)
         updateDisplayExtents();
-        updateCurrentImageDefaultPresets();
-        m_annotationsHandler->updateSliceAnnotationInformation();
-        updatePreferredImageOrientation();
-        
+
+        // The display shutter must be updated before the default presets
         if (dimension == SpatialDimension)
         {
             m_annotationsHandler->updatePatientOrientationAnnotation();
@@ -986,6 +984,10 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
                 updateDisplayShutterMask();
             }
         }
+
+        updateCurrentImageDefaultPresets();
+        m_annotationsHandler->updateSliceAnnotationInformation();
+        updatePreferredImageOrientation();
 
         // Finally we emit the signal of the changed value and render the scene
         switch (dimension)
