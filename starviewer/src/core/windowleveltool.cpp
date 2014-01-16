@@ -64,45 +64,43 @@ void WindowLevelTool::doWindowLevel()
     m_windowLevelCurrentPosition = m_viewer->getEventPosition();
 
     QSize size = m_viewer->getRenderWindowSize();
-    double window = m_initialWindow;
-    double level = m_initialLevel;
 
     // Compute normalized delta
     double dx = 4.0 * (m_windowLevelCurrentPosition.x() - m_windowLevelStartPosition.x()) / size.width();
     double dy = 4.0 * (m_windowLevelStartPosition.y() - m_windowLevelCurrentPosition.y()) / size.height();
 
     // Scale by current values
-    if (fabs(window) > 0.01)
+    if (fabs(m_initialWindow) > 0.01)
     {
-        dx = dx * window;
+        dx = dx * m_initialWindow;
     }
     else
     {
-        dx = dx * (window < 0 ? -0.01 : 0.01);
+        dx = dx * (m_initialWindow < 0 ? -0.01 : 0.01);
     }
-    if (fabs(level) > 0.01)
+    if (fabs(m_initialLevel) > 0.01)
     {
-        dy = dy * level;
+        dy = dy * m_initialLevel;
     }
     else
     {
-        dy = dy * (level < 0 ? -0.01 : 0.01);
+        dy = dy * (m_initialLevel < 0 ? -0.01 : 0.01);
     }
 
     // Abs so that direction does not flip
-    if (window < 0.0)
+    if (m_initialWindow < 0.0)
     {
         dx = -1 * dx;
     }
-    if (level < 0.0)
+    if (m_initialLevel < 0.0)
     {
         dy = -1 * dy;
     }
 
     // Compute new window level
-    double newWindow = dx + window;
+    double newWindow = dx + m_initialWindow;
     double newLevel;
-    newLevel = level - dy;
+    newLevel = m_initialLevel - dy;
 
     // Stay away from zero and really
     if (fabs(newWindow) < 0.01)
