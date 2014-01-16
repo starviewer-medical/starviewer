@@ -30,7 +30,10 @@ QString AbstractROIDataPrinter::getFormattedDataString() const
 
     dataString = m_suvString;
     dataString += "\n" + QObject::tr("Area: %1").arg(m_areaString);
-    dataString += QObject::tr("\nMean: %1\nStd.Dev.: %2").arg(m_meanString).arg(m_standardDeviationString);
+    if (!m_meanString.isEmpty())
+    {
+        dataString += QObject::tr("\nMean: %1\nStd.Dev.: %2").arg(m_meanString).arg(m_standardDeviationString);
+    }
 
     return dataString;
 }
