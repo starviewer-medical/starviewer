@@ -7,9 +7,11 @@
 #include "image.h"
 #include "mathtools.h"
 #include "areameasurecomputer.h"
-#include "standarduptakevaluemeasurehandler.h"
 #include "voxel.h"
 #include "roidata.h"
+#include "roidataprinter.h"
+#include "petctfusionroidataprinter.h"
+#include "petroidataprinter.h"
 
 #include <QApplication>
 
@@ -29,41 +31,6 @@ ROITool::~ROITool()
 MeasureComputer* ROITool::getMeasureComputer()
 {
     return new AreaMeasureComputer(m_roiPolygon);
-}
-
-QString ROITool::getStandardizedUptakeValueMeasureString(ROIData &roiData, int inputIndex)
-{
-    QString suvMeasurement;
-    
-    if (roiData.getModality() == "PT")
-    {
-        Image *petImage = m_2DViewer->getCurrentDisplayedImageOnInput(inputIndex);
-        if (!petImage)
-        {
-            petImage = m_2DViewer->getInput(inputIndex)->getImage(0);
-        }
-
-        StandardUptakeValueMeasureHandler suvHandler;
-        suvHandler.setImage(petImage);
-        if (suvHandler.canComputePreferredFormula())
-        {
-            double maximum = suvHandler.computePreferredFormula(roiData.getMaximum());
-            double mean = suvHandler.computePreferredFormula(roiData.getMean());
-
-            QString units = suvHandler.getComputedFormulaUnits();
-            suvMeasurement = tr("SUV (%1)").arg(suvHandler.getComputedFormulaLabel());
-            suvMeasurement += tr("\nMax: %1 %2").arg(maximum, 0, 'f', 2).arg(units);
-            suvMeasurement += tr("\nMean: %1 %2").arg(mean, 0, 'f', 2).arg(units);
-        }
-        else
-        {
-            suvMeasurement = tr("SUV (%1) - N/A").arg(suvHandler.getPreferredFormulaLabel());
-            suvMeasurement += tr("\nMax: --");
-            suvMeasurement += tr("\nMean: --");
-        }
-    }
-
-    return suvMeasurement;
 }
 
 QMap<int, ROIData> ROITool::computeROIData()
@@ -301,57 +268,54 @@ void ROITool::setTextPosition(DrawerText *text)
 QString ROITool::getAnnotation()
 {
     Q_ASSERT(m_roiPolygon);
-    
-    QString annotation = tr("Area: %1").arg(getMeasurementString());
 
     // Calculem les dades estadístiques
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QMap<int, ROIData> roiDataMap = computeROIData();
     QApplication::restoreOverrideCursor();
 
-    // Afegim la informació de les dades estadístiques a l'annotació
-    QString meansString;
-    QString standardDeviationsString;
-    QString suvsString;
-    QMapIterator<int, ROIData> roiDataIterator(roiDataMap);
-    while (roiDataIterator.hasNext())
+    QString annotation;
+    AbstractROIDataPrinter *roiDataPrinter = getROIDataPrinter(roiDataMap);
+    if (roiDataPrinter)
     {
-        roiDataIterator.next();
-        ROIData roiData = roiDataIterator.value();
-        if (!meansString.isEmpty())
-        {
-            meansString += "; ";
-            standardDeviationsString += "; ";
-        }
-        meansString += QString("%1").arg(roiData.getMean(), 0, 'f', 2);
-        standardDeviationsString += QString("%1").arg(roiData.getStandardDeviation(), 0, 'f', 2);
-
-        QString units = roiData.getUnits();
-        if (!units.isEmpty())
-        {
-            QString unitsSuffix = " " + units;
-            meansString += unitsSuffix;
-            standardDeviationsString += unitsSuffix;
-        }
-
-        QString suvMeasurement = getStandardizedUptakeValueMeasureString(roiData, roiDataIterator.key());
-        if (!suvsString.isEmpty() && !suvMeasurement.isEmpty())
-        {
-            // In case there are more SUV values put them in a new paragraph preceeded by the input index
-            suvsString += QString("\n(%1)").arg(roiDataIterator.key());
-        }
-        suvsString += suvMeasurement;
+        annotation = roiDataPrinter->getString();
     }
-    
-    if (!meansString.isEmpty())
-    {
-        annotation += tr("\nMean: %1\nSt.Dev.: %2").arg(meansString).arg(standardDeviationsString);
-    }
-
-    // Final annotation string with SUV measurement (if any) and statistical data
-    annotation = suvsString + "\n" + annotation;
+    delete roiDataPrinter;
 
     return annotation;
+}
+
+AbstractROIDataPrinter* ROITool::getROIDataPrinter(const QMap<int, ROIData> &roiDataMap)
+{
+    AbstractROIDataPrinter *roiDataPrinter = 0;
+
+    switch (roiDataMap.count())
+    {
+        case 1:
+            if (roiDataMap.value(0).getModality() == "PT")
+            {
+                roiDataPrinter = new PETROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
+            }
+            break;
+
+        case 2:
+            {
+                QStringList modalities;
+                modalities << roiDataMap.value(0).getModality() << roiDataMap.value(1).getModality();
+                if (modalities.contains("CT") && modalities.contains("PT"))
+                {
+                    roiDataPrinter = new PETCTFusionROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
+                }
+            }
+            break;
+    }
+
+    if (!roiDataPrinter)
+    {
+        roiDataPrinter = new ROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
+    }
+    
+    return roiDataPrinter;
 }
 
 }

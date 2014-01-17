@@ -139,12 +139,7 @@ bool VolumePixelDataReaderFactory::mustForceReaderLibraryBackdoor(Volume *volume
     if (!forceLibrary)
     {
         // Get modality of current volume
-        QString modality;
-        Image *firstImage = volume->getImage(0);
-        if (firstImage)
-        {
-            modality = firstImage->getParentSeries()->getModality();
-        }
+        QString modality = volume->getModality();
 
         // Check for modalities to force read with ITK-GDCM
         QStringList forceITKForModalities = settings->getValue(CoreSettings::ForceITKImageReaderForSpecifiedModalities).toString().trimmed().split("\\");

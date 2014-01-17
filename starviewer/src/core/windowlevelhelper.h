@@ -4,12 +4,12 @@
 #include "windowlevel.h"
 
 namespace udg {
+
 class WindowLevelPresetsToolData;
 class Volume;
 class Image;
 
-class WindowLevelHelper
-{
+class WindowLevelHelper {
 public:
     WindowLevelHelper();
 
@@ -21,12 +21,19 @@ public:
     /// If index is out of range, a non-valid WindowLevel will be returned
     WindowLevel getDefaultWindowLevelForPresentation(Image *image, int index);
 
+    /// Selects the default preset to apply on the given window level data. File defined presets come first, then automatic.
+    static void selectDefaultPreset(WindowLevelPresetsToolData *windowLevelData);
+
 private:
     /// Computes the automatic window level for the current input
     WindowLevel getCurrentAutomaticWindowLevel(Volume *volume);
 
     /// Gets a default name for the specified n-th window level. Used to give a default name for window levels without description.
     QString getDefaultWindowLevelDescription(int index);
+
+private:
+    /// Default threshold to apply to window width on PET images
+    static const double DefaultPETWindowWidthThreshold;
 };
 
 }

@@ -2,6 +2,7 @@
 #include "q2dviewer.h"
 #include "logging.h"
 #include "windowlevelpresetstooldata.h"
+#include "volumehelper.h"
 
 #include <vtkCommand.h>
 #include <vtkRenderWindowInteractor.h>
@@ -16,6 +17,10 @@ WindowLevelTool::WindowLevelTool(QViewer *viewer, QObject *parent)
     m_toolName = "WindowLevelTool";
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
+
+    updateWindowLevellingBehaviour();
+
+    connect(m_viewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateWindowLevellingBehaviour()));
 }
 
 WindowLevelTool::~WindowLevelTool()
@@ -64,55 +69,43 @@ void WindowLevelTool::doWindowLevel()
     m_windowLevelCurrentPosition = m_viewer->getEventPosition();
 
     QSize size = m_viewer->getRenderWindowSize();
-    double window = m_initialWindow;
-    double level = m_initialLevel;
 
     // Compute normalized delta
     double dx = 4.0 * (m_windowLevelCurrentPosition.x() - m_windowLevelStartPosition.x()) / size.width();
     double dy = 4.0 * (m_windowLevelStartPosition.y() - m_windowLevelCurrentPosition.y()) / size.height();
 
     // Scale by current values
-    if (fabs(window) > 0.01)
+    if (fabs(m_initialWindow) > 0.01)
     {
-        dx = dx * window;
+        dx = dx * m_initialWindow;
     }
     else
     {
-        dx = dx * (window < 0 ? -0.01 : 0.01);
+        dx = dx * (m_initialWindow < 0 ? -0.01 : 0.01);
     }
-    if (fabs(level) > 0.01)
+    if (fabs(m_initialLevel) > 0.01)
     {
-        dy = dy * level;
+        dy = dy * m_initialLevel;
     }
     else
     {
-        dy = dy * (level < 0 ? -0.01 : 0.01);
+        dy = dy * (m_initialLevel < 0 ? -0.01 : 0.01);
     }
 
     // Abs so that direction does not flip
-    if (window < 0.0)
+    if (m_initialWindow < 0.0)
     {
         dx = -1 * dx;
     }
-    if (level < 0.0)
+    if (m_initialLevel < 0.0)
     {
         dy = -1 * dy;
     }
 
     // Compute new window level
-    double newWindow = dx + window;
+    double newWindow;
     double newLevel;
-    newLevel = level - dy;
-
-    // Stay away from zero and really
-    if (fabs(newWindow) < 0.01)
-    {
-        newWindow = 0.01 * (newWindow < 0 ? -1 : 1);
-    }
-    if (fabs(newLevel) < 0.01)
-    {
-        newLevel = 0.01 * (newLevel < 0 ? -1 : 1);
-    }
+    computeWindowLevelValues(dx, dy, newWindow, newLevel);
     m_viewer->getWindowLevelData()->setCustomWindowLevel(newWindow, newLevel);
 }
 
@@ -123,6 +116,82 @@ void WindowLevelTool::endWindowLevel()
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetStillUpdateRate());
     // Necessari perquè es torni a renderitzar a alta resolució en el 3D
     m_viewer->render();
+}
+
+void WindowLevelTool::updateWindowLevellingBehaviour()
+{
+    m_windowLevellingBehaviour = Default;
+    
+    if (!m_viewer)
+    {
+        return;
+    }
+
+    if (!m_viewer->hasInput())
+    {
+        return;
+    }
+
+    if (VolumeHelper::isPrimaryPET(m_viewer->getMainInput()))
+    {
+        m_windowLevellingBehaviour = FixedMinimum;
+    }
+}
+
+void WindowLevelTool::computeWindowLevelValues(double deltaX, double deltaY, double &window, double &level)
+{
+    switch (m_windowLevellingBehaviour)
+    {
+        case FixedMinimum:
+            computeWindowLevelValuesWithFixedMinimumBehaviour(deltaX, window, level);
+            break;
+
+        case Default:
+        default:
+            computeWindowLevelValuesWithDefaultBehaviour(deltaX, deltaY, window, level);
+            break;
+    }
+}
+
+void WindowLevelTool::computeWindowLevelValuesWithFixedMinimumBehaviour(double deltaX, double &window, double &level)
+{
+    window = deltaX + m_initialWindow;
+    level = window * 0.5;
+
+    avoidZeroAndNegative(window, level);
+}
+
+void WindowLevelTool::computeWindowLevelValuesWithDefaultBehaviour(double deltaX, double deltaY, double &window, double &level)
+{
+    window = deltaX + m_initialWindow;
+    level = m_initialLevel - deltaY;
+
+    avoidZero(window, level);
+}
+
+void WindowLevelTool::avoidZero(double &window, double &level)
+{
+    // Stay away from zero and really
+    if (fabs(window) < 0.01)
+    {
+        window = 0.01 * (window < 0 ? -1 : 1);
+    }
+    if (fabs(level) < 0.01)
+    {
+        level = 0.01 * (level < 0 ? -1 : 1);
+    }
+}
+
+void WindowLevelTool::avoidZeroAndNegative(double &window, double &level)
+{
+    if (fabs(window) < 0.01)
+    {
+        window =  1;
+    }
+    if (fabs(level) < 0.01)
+    {
+        level = 1;
+    }
 }
 
 }

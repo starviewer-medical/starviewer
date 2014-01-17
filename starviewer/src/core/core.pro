@@ -41,6 +41,7 @@ HEADERS += extensionfactory.h \
     harddiskinformation.h \
     logging.h \
     volume.h \
+    volumehelper.h \
     volumereader.h \
     volumepixeldatareader.h \
     volumepixeldatareadervtkgdcm.h \
@@ -192,6 +193,10 @@ HEADERS += extensionfactory.h \
     abortrendercommand.h \
     roitool.h \
     roidata.h \
+    abstractroidataprinter.h \
+    roidataprinter.h \
+    petroidataprinter.h \
+    petctfusionroidataprinter.h \
     formula.h \
     leanbodymassformula.h \
     bodysurfaceareaformula.h \
@@ -405,6 +410,7 @@ SOURCES += extensionmediator.cpp \
     mathtools.cpp \
     harddiskinformation.cpp \
     volume.cpp \
+    volumehelper.cpp \
     volumereader.cpp \
     volumepixeldatareader.cpp \
     volumepixeldatareadervtkgdcm.cpp \
@@ -549,6 +555,10 @@ SOURCES += extensionmediator.cpp \
     abortrendercommand.cpp \
     roitool.cpp \
     roidata.cpp \
+    abstractroidataprinter.cpp \
+    roidataprinter.cpp \
+    petroidataprinter.cpp \
+    petctfusionroidataprinter.cpp \
     formula.cpp \
     leanbodymassformula.cpp \
     bodysurfaceareaformula.cpp \

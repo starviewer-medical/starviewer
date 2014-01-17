@@ -11,6 +11,7 @@ namespace udg {
 class DrawerPolygon;
 class DrawerText;
 class ROIData;
+class AbstractROIDataPrinter;
 
 /**
     Tool pare per totes aquelles tools destinades a crear ROIs.
@@ -47,10 +48,6 @@ private:
     /// The key is the index of the input on the viewer corresponding to the mapped ROIData
     QMap<int, ROIData> computeROIData();
     
-    /// Gets the Standardized Uptake Value measurement from the given ROI data, corresponding to the provided input number
-    /// It will be only computed on PT images
-    QString getStandardizedUptakeValueMeasureString(ROIData &roiData, int inputIndex);
-    
     /// Computes the voxel values contained inside polygonSegments corresponding to inputNumber volume. It will use the sweepLine algorithm, 
     /// begining with the line defined with the given points and will end at sweepLineEnd height and returns them in a ROIData object
     ROIData computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd, int inputNumber);
@@ -64,6 +61,9 @@ private:
 
     /// Adds the voxels that are in the path of the intersection points to the given ROIData
     void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, double currentZDepth, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, ROIData &roiData);
+
+    /// Returns the appropiate ROIDataPrinter for the given roi data
+    AbstractROIDataPrinter* getROIDataPrinter(const QMap<int, ROIData> &roiDataMap);
 };
 
 }

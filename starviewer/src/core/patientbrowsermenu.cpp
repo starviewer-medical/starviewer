@@ -84,29 +84,46 @@ void PatientBrowserMenu::setPatient(Patient *patient)
                 // Afegim el parell a la llista
                 itemsList << itemPair;
 
-                //Look for fusion pairs
+                // Look for fusion pairs
                 if (m_showFusionOptions)
                 {
                     if (series->getModality() == "CT" && !series->isCTLocalizer())
                     {
-                        foreach (Series * secondSeries, study->getSeries())
+                        AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = volume->getAcquisitionPlane();
+
+                        if (acquisitionPlane != AnatomicalPlane::NotAvailable)
                         {
-                            if (series->getModality() != secondSeries->getModality() && series->getFrameOfReferenceUID() == secondSeries->getFrameOfReferenceUID())
+                            int zIndex = volume->getCorrespondingOrthogonalPlane(acquisitionPlane).getZIndex();
+                            double margin = series->getImages().first()->getSliceThickness() * 5;
+
+                            double range1[2];
+                            range1[0] = volume->getImages().first()->getImagePositionPatient()[zIndex];
+                            range1[1] = volume->getImages().last()->getImagePositionPatient()[zIndex];
+                            
+                            foreach (Series * secondSeries, study->getViewableSeries())
                             {
-                                double range1[2], range2[2];
-                                range1[0] = series->getImages().first()->getSliceLocation().toDouble();
-                                range1[1] = series->getImages().last()->getSliceLocation().toDouble();
-                                range2[0] = secondSeries->getImages().first()->getSliceLocation().toDouble();
-                                range2[1] = secondSeries->getImages().last()->getSliceLocation().toDouble();
-                                if ((range1[0] > range2[0] && range1[1] < range2[1]) || (range2[0] > range1[0] && range2[1] < range1[1]))
+                                if (secondSeries->getModality() == "PT" && series->getFrameOfReferenceUID() == secondSeries->getFrameOfReferenceUID())
                                 {
-                                    QPair<QString, QString> itemPair;
-                                    // Label
-                                    itemPair.first = QString("%1 + %2").arg(series->getProtocolName().trimmed() + series->getDescription().trimmed()).arg(secondSeries->getProtocolName().trimmed() + secondSeries->getDescription().trimmed());
-                                    // Identifier
-                                    itemPair.second = QString("%1+%2").arg(series->getVolumesList().first()->getIdentifier().getValue()).arg(secondSeries->getVolumesList().first()->getIdentifier().getValue());
-                                    // Afegim el parell a la llista
-                                    fusionItemsList << itemPair;
+                                    foreach (Volume *secondVolume, secondSeries->getVolumesList())
+                                    {
+                                        if (secondVolume->getAcquisitionPlane() == acquisitionPlane)
+                                        {
+                                            double range2[2];
+                                            range2[0] = secondVolume->getImages().first()->getImagePositionPatient()[zIndex];
+                                            range2[1] = secondVolume->getImages().last()->getImagePositionPatient()[zIndex];
+                                            
+                                            if ((range1[0] + margin > range2[0] && range1[1] - margin < range2[1]) || (range2[0] + margin > range1[0] && range2[1] - margin < range1[1]))
+                                            {
+                                                QPair<QString, QString> itemPair;
+                                                // Label
+                                                itemPair.first = QString("%1 + %2").arg(series->getProtocolName().trimmed() + series->getDescription().trimmed()).arg(secondSeries->getProtocolName().trimmed() + secondSeries->getDescription().trimmed());
+                                                // Identifier
+                                                itemPair.second = QString("%1+%2").arg(volume->getIdentifier().getValue()).arg(secondVolume->getIdentifier().getValue());
+                                                // Afegim el parell a la llista
+                                                fusionItemsList << itemPair;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

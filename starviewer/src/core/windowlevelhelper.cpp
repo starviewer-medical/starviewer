@@ -1,11 +1,14 @@
 #include "windowlevelhelper.h"
 
 #include "volume.h"
+#include "volumehelper.h"
 #include "windowlevelpresetstooldata.h"
 #include "image.h"
 #include "logging.h"
 
 namespace udg {
+
+const double WindowLevelHelper::DefaultPETWindowWidthThreshold = 0.5;
 
 WindowLevelHelper::WindowLevelHelper()
 {
@@ -41,7 +44,7 @@ void WindowLevelHelper::initializeWindowLevelData(WindowLevelPresetsToolData *wi
     {
         for (int i = 0; i < windowLevelCount; i++)
         {
-            WindowLevel windowLevel = WindowLevelHelper().getDefaultWindowLevelForPresentation(image, i);
+            WindowLevel windowLevel = getDefaultWindowLevelForPresentation(image, i);
             windowLevelData->addPreset(windowLevel, WindowLevelPresetsToolData::FileDefined);
 
             if (i == 0)
@@ -85,12 +88,35 @@ WindowLevel WindowLevelHelper::getDefaultWindowLevelForPresentation(Image *image
     return windowLevel;
 }
 
+void WindowLevelHelper::selectDefaultPreset(WindowLevelPresetsToolData *windowLevelData)
+{
+    if (!windowLevelData)
+    {
+        return;
+    }
+
+    QList<WindowLevel> filePresets = windowLevelData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined);
+
+    if (!filePresets.isEmpty())
+    {
+        windowLevelData->setCurrentPreset(filePresets.first());
+    }
+    else
+    {
+        QList<WindowLevel> automaticPresets = windowLevelData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
+
+        if (!automaticPresets.isEmpty())
+        {
+            windowLevelData->setCurrentPreset(automaticPresets.first());
+        }
+    }
+}
+
 QString WindowLevelHelper::getDefaultWindowLevelDescription(int index)
 {
     const QString DefaultWindowLevelName = QString("Default");
     return QString("%1 %2").arg(DefaultWindowLevelName).arg(index);
 }
-
 
 WindowLevel WindowLevelHelper::getCurrentAutomaticWindowLevel(Volume *volume)
 {
@@ -101,8 +127,17 @@ WindowLevel WindowLevelHelper::getCurrentAutomaticWindowLevel(Volume *volume)
     {
         double range[2];
         volume->getScalarRange(range);
-        automaticWindowLevel.setWidth(range[1] - range[0]);
-        automaticWindowLevel.setCenter(range[0] + (automaticWindowLevel.getWidth() * 0.5));
+        
+        double windowWidth = range[1] - range[0];
+        if (VolumeHelper::isPrimaryPET(volume))
+        {
+            windowWidth *= DefaultPETWindowWidthThreshold;
+        }
+
+        double windowCenter = range[0] + (windowWidth * 0.5);
+        
+        automaticWindowLevel.setWidth(windowWidth);
+        automaticWindowLevel.setCenter(windowCenter);
     }
     else
     {
@@ -111,6 +146,5 @@ WindowLevel WindowLevelHelper::getCurrentAutomaticWindowLevel(Volume *volume)
 
     return automaticWindowLevel;
 }
-
 
 } // namespace udg

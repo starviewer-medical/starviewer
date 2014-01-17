@@ -7,6 +7,7 @@
 #include "study.h"
 #include "patient.h"
 #include "volume.h"
+#include "volumehelper.h"
 #include "logging.h"
 
 #include <vtkCornerAnnotation.h>
@@ -117,8 +118,8 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
             if (m_2DViewer->getNumberOfInputs() == 2)
             {
                 int balance = m_2DViewer->getFusionBalance();
-                const QString &modality0 = m_2DViewer->getInput(0)->getImage(0)->getParentSeries()->getModality();
-                const QString &modality1 = m_2DViewer->getInput(1)->getImage(0)->getParentSeries()->getModality();
+                const QString &modality0 = m_2DViewer->getInput(0)->getModality();
+                const QString &modality1 = m_2DViewer->getInput(1)->getModality();
                 QString balanceText = QString("%1% %2 + %3% %4").arg(100 - balance).arg(modality0).arg(balance).arg(modality1);
                 QString fusedLabel = getSeriesDescriptiveLabel(m_2DViewer->getInput(1)->getImage(0)->getParentSeries());
 
@@ -341,11 +342,8 @@ void Q2DViewerAnnotationHandler::updateWindowInformationAnnotation()
         m_2DViewer->getMainInput()->getDimensions(dimensions);
         int xIndex = m_2DViewer->getView().getXIndex();
         int yIndex = m_2DViewer->getView().getYIndex();
-        m_upperLeftText = QObject::tr("%1 x %2\nWW: %5 WL: %6")
-            .arg(dimensions[xIndex])
-            .arg(dimensions[yIndex])
-            .arg(MathTools::roundToNearestInteger(windowLevel[0]))
-            .arg(MathTools::roundToNearestInteger(windowLevel[1]));
+        m_upperLeftText = QObject::tr("%1 x %2\n").arg(dimensions[xIndex]).arg(dimensions[yIndex]);
+        m_upperLeftText += getCurrentWindowLevelString();
     }
     else
     {
@@ -464,6 +462,31 @@ void Q2DViewerAnnotationHandler::addActors()
     renderer->AddViewProp(m_patientOrientationTextActor[1]);
     renderer->AddViewProp(m_patientOrientationTextActor[2]);
     renderer->AddViewProp(m_patientOrientationTextActor[3]);
+}
+
+QString Q2DViewerAnnotationHandler::getCurrentWindowLevelString() const
+{
+    QString windowLevelString;
+    
+    double windowLevel[2];
+    m_2DViewer->getCurrentWindowLevel(windowLevel);
+    
+    windowLevelString = QObject::tr("WW: %1 WL: %2")
+        .arg(MathTools::roundToNearestInteger(windowLevel[0]))
+        .arg(MathTools::roundToNearestInteger(windowLevel[1]));
+
+    if (VolumeHelper::isPrimaryPET(m_2DViewer->getMainInput()))
+    {
+        double range[2];
+        m_2DViewer->getMainInput()->getScalarRange(range);
+
+        double percent = (windowLevel[0] / range[1]) * 100;
+
+        windowLevelString += "\n";
+        windowLevelString += QObject::tr("Threshold: %1%").arg(percent, 0, 'f', 2);
+    }
+
+    return windowLevelString;
 }
 
 } // End namespace udg

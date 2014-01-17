@@ -243,8 +243,8 @@ void Q2DViewerWidget::resetFusionBalance()
     if (m_2DView->getNumberOfInputs() == 2)
     {
         m_fusionBalanceWidget->setBalance(50);
-        m_fusionBalanceWidget->setFirstVolumeModality(m_2DView->getInput(0)->getImage(0)->getParentSeries()->getModality());
-        m_fusionBalanceWidget->setSecondVolumeModality(m_2DView->getInput(1)->getImage(0)->getParentSeries()->getModality());
+        m_fusionBalanceWidget->setFirstVolumeModality(m_2DView->getInput(0)->getModality());
+        m_fusionBalanceWidget->setSecondVolumeModality(m_2DView->getInput(1)->getModality());
         m_fusionBalanceToolButton->show();
     }
     else

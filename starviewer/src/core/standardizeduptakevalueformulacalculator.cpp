@@ -11,8 +11,9 @@ namespace udg {
 StandardizedUptakeValueFormulaCalculator::StandardizedUptakeValueFormulaCalculator()
  : StandardizedUptakeValueFormula(), FormulaCalculator()
 {
-    m_activityConcentrationInBqMl = 0.0;
+    m_activityConcentrationInImageUnits = 0.0;
     m_decayCorrectionCalculator = new DecayCorrectionFactorFormulaCalculator();
+    m_philipsConversionFactorToBqMl = 0.0;
 
     initializeCommonFormulaComponentParameters();
 }
@@ -22,9 +23,9 @@ StandardizedUptakeValueFormulaCalculator::~StandardizedUptakeValueFormulaCalcula
     delete m_decayCorrectionCalculator;
 }
 
-void StandardizedUptakeValueFormulaCalculator::setActivityConcentrationInBqMl(double activityConcentration)
+void StandardizedUptakeValueFormulaCalculator::setActivityConcentrationInImageUnits(double activityConcentration)
 {
-    m_activityConcentrationInBqMl = activityConcentration;
+    m_activityConcentrationInImageUnits = activityConcentration;
 }
 
 bool StandardizedUptakeValueFormulaCalculator::canCompute()
@@ -37,7 +38,14 @@ double StandardizedUptakeValueFormulaCalculator::compute()
 {
     gatherRequiredCommonFormulaComponentParameters();
     gatherRequiredParameters();
-    return StandardizedUptakeValueFormula::compute(m_activityConcentrationInBqMl, m_injectedDoseInBq, m_decayCorrectionFactor, getNormalizationFactor());
+
+    double activityConcentrationInBqML = m_activityConcentrationInImageUnits;
+    if (m_pixelValueUnits == "CNTS" && m_philipsConversionFactorToBqMl != 0.0)
+    {
+        activityConcentrationInBqML *= m_philipsConversionFactorToBqMl;
+    }
+
+    return StandardizedUptakeValueFormula::compute(activityConcentrationInBqML, m_injectedDoseInBq, m_decayCorrectionFactor, getNormalizationFactor());
 }
 
 void StandardizedUptakeValueFormulaCalculator::initializeCommonFormulaComponentParameters()
@@ -54,7 +62,7 @@ bool StandardizedUptakeValueFormulaCalculator::parameterValuesAreValid() const
 
 bool StandardizedUptakeValueFormulaCalculator::commonFormulaComponentParameterValuesAreValid() const
 {
-    if (m_pixelValueUnits != "BQML")
+    if (m_pixelValueUnits != "BQML" && m_philipsConversionFactorToBqMl == 0.0)
     {
         return false;
     }
@@ -108,6 +116,15 @@ void StandardizedUptakeValueFormulaCalculator::gatherRequiredCommonFormulaCompon
     }
 
     m_pixelValueUnits = tagReader->getValueAttributeAsQString(DICOMUnits);
+
+    if (m_pixelValueUnits == "CNTS")
+    {
+        DICOMTag philipsActivityConcentrationScaleFactor(0x7053, 0x1009);
+        if (tagReader->tagExists(philipsActivityConcentrationScaleFactor))
+        {
+            m_philipsConversionFactorToBqMl = tagReader->getValueAttributeAsQString(philipsActivityConcentrationScaleFactor).toDouble();
+        }
+    }
 }
 
 } // End namespace udg

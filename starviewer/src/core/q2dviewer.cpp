@@ -29,6 +29,7 @@
 #include "volumedisplayunithandlerfactory.h"
 #include "genericvolumedisplayunithandler.h"
 #include "patientbrowsermenu.h"
+#include "windowlevelhelper.h"
 
 // Qt
 #include <QResizeEvent>
@@ -603,8 +604,6 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
 
     m_annotationsHandler->updatePatientAnnotationInformation();
 
-    // Actualitzem la informació de window level
-    updateWindowLevelData();
     loadOverlays(volumes.first());
 
     // Reset the view to the acquisition plane
@@ -967,10 +966,8 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
 
         // Then update display (image and associated annotations)
         updateDisplayExtents();
-        updateCurrentImageDefaultPresets();
-        m_annotationsHandler->updateSliceAnnotationInformation();
-        updatePreferredImageOrientation();
-        
+
+        // The display shutter must be updated before the default presets
         if (dimension == SpatialDimension)
         {
             m_annotationsHandler->updatePatientOrientationAnnotation();
@@ -986,6 +983,10 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
                 updateDisplayShutterMask();
             }
         }
+
+        updateCurrentImageDefaultPresets();
+        m_annotationsHandler->updateSliceAnnotationInformation();
+        updatePreferredImageOrientation();
 
         // Finally we emit the signal of the changed value and render the scene
         switch (dimension)
@@ -1504,7 +1505,7 @@ void Q2DViewer::restore()
     // defined command to place the image properly by default depending on the input if no one is defined 
     // Take into account this call disables thickslab
     resetViewToAcquisitionPlane();
-    updateWindowLevelData();
+    WindowLevelHelper::selectDefaultPreset(getWindowLevelData());
     
     // HACK Restaurem el rendering
     enableRendering(true);

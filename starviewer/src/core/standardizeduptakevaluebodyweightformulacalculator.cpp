@@ -37,7 +37,7 @@ void StandardizedUptakeValueBodyWeightFormulaCalculator::gatherRequiredNormaliza
         return;
     }
 
-    m_bodyWeightInGr = tagReader->getValueAttributeAsQString(DICOMPatientWeight).toInt() * 1000;
+    m_bodyWeightInGr = tagReader->getValueAttributeAsQString(DICOMPatientWeight).toDouble() * 1000;
 }
 
 double StandardizedUptakeValueBodyWeightFormulaCalculator::getNormalizationFactor()
