@@ -40,11 +40,11 @@ public:
 
     /// Computes the preferred formula upon the given activity concentration value. If canComputePreferredFormula() returns false, the returned value is undefined
     /// \sa compute()
-    double computePreferredFormula(double activityConcentrationValue);
+    double computePreferredFormula(double activityConcentrationValueInImageUnits);
 
     /// Computes the specified formula upon the given activity concentration value. If canComputedFormula() returns false for this formula, the returned value is undefined
     /// \sa computePreferredFormula()
-    double compute(double activityConcentrationValue, FormulaType formula);
+    double compute(double activityConcentrationValueInImageUnits, FormulaType formula);
 
     /// Gets the label corresponding to the last computed formula. It will be updated after a successful call to compute() or computePreferredFormula()
     /// \sa getFormulaLabel(), getPreferredFormulaLabel()

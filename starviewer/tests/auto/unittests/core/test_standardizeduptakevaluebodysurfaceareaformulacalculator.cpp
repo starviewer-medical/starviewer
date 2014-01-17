@@ -106,7 +106,7 @@ void test_StandardizedUptakeValueBodySurfaceAreaFormulaCalculator::compute_Shoul
 
     TestingStandardizedUptakeValueBodySurfaceAreaFormulaCalculator formulaCalculator;
     formulaCalculator.setDataSource(&tagReader);
-    formulaCalculator.setActivityConcentrationInBqMl(activityConcentrationValue);
+    formulaCalculator.setActivityConcentrationInImageUnits(activityConcentrationValue);
     formulaCalculator.setBodySurfaceAreaFormulaCalculator(bodySurfaceAreaFormulaCalculator);
     formulaCalculator.setDecayCorrectionCalculator(decayCorrectionCalculator);
 
@@ -185,7 +185,7 @@ void test_StandardizedUptakeValueBodySurfaceAreaFormulaCalculator::canCompute_Sh
 
     TestingStandardizedUptakeValueBodySurfaceAreaFormulaCalculator formulaCalculator;
     formulaCalculator.setDataSource(&tagReader);
-    formulaCalculator.setActivityConcentrationInBqMl(activityConcentrationValue);
+    formulaCalculator.setActivityConcentrationInImageUnits(activityConcentrationValue);
     formulaCalculator.setBodySurfaceAreaFormulaCalculator(bodySurfaceAreaFormulaCalculator);
     formulaCalculator.setDecayCorrectionCalculator(decayCorrectionCalculator);
 

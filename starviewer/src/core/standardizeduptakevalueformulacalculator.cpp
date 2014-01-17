@@ -11,7 +11,7 @@ namespace udg {
 StandardizedUptakeValueFormulaCalculator::StandardizedUptakeValueFormulaCalculator()
  : StandardizedUptakeValueFormula(), FormulaCalculator()
 {
-    m_activityConcentrationInBqMl = 0.0;
+    m_activityConcentrationInImageUnits = 0.0;
     m_decayCorrectionCalculator = new DecayCorrectionFactorFormulaCalculator();
 
     initializeCommonFormulaComponentParameters();
@@ -22,9 +22,9 @@ StandardizedUptakeValueFormulaCalculator::~StandardizedUptakeValueFormulaCalcula
     delete m_decayCorrectionCalculator;
 }
 
-void StandardizedUptakeValueFormulaCalculator::setActivityConcentrationInBqMl(double activityConcentration)
+void StandardizedUptakeValueFormulaCalculator::setActivityConcentrationInImageUnits(double activityConcentration)
 {
-    m_activityConcentrationInBqMl = activityConcentration;
+    m_activityConcentrationInImageUnits = activityConcentration;
 }
 
 bool StandardizedUptakeValueFormulaCalculator::canCompute()
@@ -37,7 +37,10 @@ double StandardizedUptakeValueFormulaCalculator::compute()
 {
     gatherRequiredCommonFormulaComponentParameters();
     gatherRequiredParameters();
-    return StandardizedUptakeValueFormula::compute(m_activityConcentrationInBqMl, m_injectedDoseInBq, m_decayCorrectionFactor, getNormalizationFactor());
+
+    double activityConcentrationInBqML = m_activityConcentrationInImageUnits;
+
+    return StandardizedUptakeValueFormula::compute(activityConcentrationInBqML, m_injectedDoseInBq, m_decayCorrectionFactor, getNormalizationFactor());
 }
 
 void StandardizedUptakeValueFormulaCalculator::initializeCommonFormulaComponentParameters()

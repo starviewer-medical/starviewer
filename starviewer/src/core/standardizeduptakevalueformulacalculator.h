@@ -18,7 +18,7 @@ public:
     virtual ~StandardizedUptakeValueFormulaCalculator();
 
     /// Value upon the SUV value will be computed
-    void setActivityConcentrationInBqMl(double activityConcentration);
+    void setActivityConcentrationInImageUnits(double activityConcentration);
     
     /// Returns true if it has the proper data and parameters to compute SUV, false otherwise
     bool canCompute();
@@ -59,7 +59,7 @@ protected:
 
 private:
     /// External given value to compute SUV from
-    double m_activityConcentrationInBqMl;
+    double m_activityConcentrationInImageUnits;
 
     /// Radiopharmaceutical dose administered to patient at administration time in becquerels (Bq)
     /// Extracted from Radionuclide Total Dose (0018,1074) tag

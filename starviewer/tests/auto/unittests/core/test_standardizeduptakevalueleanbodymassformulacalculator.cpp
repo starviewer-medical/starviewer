@@ -106,7 +106,7 @@ void test_StandardizedUptakeValueLeanBodyMassFormulaCalculator::compute_ShouldRe
 
     TestingStandardizedUptakeValueLeanBodyMassFormulaCalculator formulaCalculator;
     formulaCalculator.setDataSource(&tagReader);
-    formulaCalculator.setActivityConcentrationInBqMl(activityConcentrationValue);
+    formulaCalculator.setActivityConcentrationInImageUnits(activityConcentrationValue);
     formulaCalculator.setLeanBodyMassCalculator(leanBodyMassFormulaCalculator);
     formulaCalculator.setDecayCorrectionCalculator(decayCorrectionCalculator);
 
@@ -184,7 +184,7 @@ void test_StandardizedUptakeValueLeanBodyMassFormulaCalculator::canCompute_Shoul
 
     TestingStandardizedUptakeValueLeanBodyMassFormulaCalculator formulaCalculator;
     formulaCalculator.setDataSource(&tagReader);
-    formulaCalculator.setActivityConcentrationInBqMl(activityConcentrationValue);
+    formulaCalculator.setActivityConcentrationInImageUnits(activityConcentrationValue);
     formulaCalculator.setLeanBodyMassCalculator(leanBodyMassFormulaCalculator);
     formulaCalculator.setDecayCorrectionCalculator(decayCorrectionCalculator);
 

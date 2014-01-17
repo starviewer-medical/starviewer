@@ -79,7 +79,7 @@ void test_StandardizedUptakeValueBodyWeightFormulaCalculator::compute_ShouldRetu
 
     TestingStandardizedUptakeValueBodyWeightFormulaCalculator formulaCalculator;
     formulaCalculator.setDataSource(&tagReader);
-    formulaCalculator.setActivityConcentrationInBqMl(activityConcentrationValue);
+    formulaCalculator.setActivityConcentrationInImageUnits(activityConcentrationValue);
     formulaCalculator.setDecayCorrectionCalculator(decayCorrectionCalculator);
 
     double computedValue = formulaCalculator.compute();
@@ -151,7 +151,7 @@ void test_StandardizedUptakeValueBodyWeightFormulaCalculator::canCompute_ShouldR
 
     TestingStandardizedUptakeValueBodyWeightFormulaCalculator formulaCalculator;
     formulaCalculator.setDataSource(&tagReader);
-    formulaCalculator.setActivityConcentrationInBqMl(activityConcentrationValue);
+    formulaCalculator.setActivityConcentrationInImageUnits(activityConcentrationValue);
     formulaCalculator.setDecayCorrectionCalculator(decayCorrectionCalculator);
 
     QCOMPARE(formulaCalculator.canCompute(), expectedResult);
