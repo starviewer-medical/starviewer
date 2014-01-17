@@ -115,7 +115,6 @@ QString WindowLevelHelper::getDefaultWindowLevelDescription(int index)
     return QString("%1 %2").arg(DefaultWindowLevelName).arg(index);
 }
 
-
 WindowLevel WindowLevelHelper::getCurrentAutomaticWindowLevel(Volume *volume)
 {
     WindowLevel automaticWindowLevel;
@@ -135,6 +134,5 @@ WindowLevel WindowLevelHelper::getCurrentAutomaticWindowLevel(Volume *volume)
 
     return automaticWindowLevel;
 }
-
 
 } // namespace udg

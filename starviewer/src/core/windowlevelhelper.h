@@ -4,12 +4,12 @@
 #include "windowlevel.h"
 
 namespace udg {
+
 class WindowLevelPresetsToolData;
 class Volume;
 class Image;
 
-class WindowLevelHelper
-{
+class WindowLevelHelper {
 public:
     WindowLevelHelper();
 
