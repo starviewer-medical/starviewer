@@ -341,11 +341,8 @@ void Q2DViewerAnnotationHandler::updateWindowInformationAnnotation()
         m_2DViewer->getMainInput()->getDimensions(dimensions);
         int xIndex = m_2DViewer->getView().getXIndex();
         int yIndex = m_2DViewer->getView().getYIndex();
-        m_upperLeftText = QObject::tr("%1 x %2\nWW: %5 WL: %6")
-            .arg(dimensions[xIndex])
-            .arg(dimensions[yIndex])
-            .arg(MathTools::roundToNearestInteger(windowLevel[0]))
-            .arg(MathTools::roundToNearestInteger(windowLevel[1]));
+        m_upperLeftText = QObject::tr("%1 x %2\n").arg(dimensions[xIndex]).arg(dimensions[yIndex]);
+        m_upperLeftText += getCurrentWindowLevelString();
     }
     else
     {
@@ -464,6 +461,20 @@ void Q2DViewerAnnotationHandler::addActors()
     renderer->AddViewProp(m_patientOrientationTextActor[1]);
     renderer->AddViewProp(m_patientOrientationTextActor[2]);
     renderer->AddViewProp(m_patientOrientationTextActor[3]);
+}
+
+QString Q2DViewerAnnotationHandler::getCurrentWindowLevelString() const
+{
+    QString windowLevelString;
+    
+    double windowLevel[2];
+    m_2DViewer->getCurrentWindowLevel(windowLevel);
+    
+    windowLevelString = QObject::tr("WW: %1 WL: %2")
+        .arg(MathTools::roundToNearestInteger(windowLevel[0]))
+        .arg(MathTools::roundToNearestInteger(windowLevel[1]));
+
+    return windowLevelString;
 }
 
 } // End namespace udg

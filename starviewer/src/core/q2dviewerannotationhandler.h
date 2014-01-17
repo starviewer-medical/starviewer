@@ -62,6 +62,9 @@ private:
     /// Adds the text actors to the viewer
     void addActors();
 
+    /// Gets the current window level string
+    QString getCurrentWindowLevelString() const;
+
 private:
     /// Viewer we are handling
     Q2DViewer *m_2DViewer;
