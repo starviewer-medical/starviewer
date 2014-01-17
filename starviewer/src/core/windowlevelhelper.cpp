@@ -85,6 +85,30 @@ WindowLevel WindowLevelHelper::getDefaultWindowLevelForPresentation(Image *image
     return windowLevel;
 }
 
+void WindowLevelHelper::selectDefaultPreset(WindowLevelPresetsToolData *windowLevelData)
+{
+    if (!windowLevelData)
+    {
+        return;
+    }
+
+    QList<WindowLevel> filePresets = windowLevelData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined);
+
+    if (!filePresets.isEmpty())
+    {
+        windowLevelData->setCurrentPreset(filePresets.first());
+    }
+    else
+    {
+        QList<WindowLevel> automaticPresets = windowLevelData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
+
+        if (!automaticPresets.isEmpty())
+        {
+            windowLevelData->setCurrentPreset(automaticPresets.first());
+        }
+    }
+}
+
 QString WindowLevelHelper::getDefaultWindowLevelDescription(int index)
 {
     const QString DefaultWindowLevelName = QString("Default");
