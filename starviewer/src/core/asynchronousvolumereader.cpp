@@ -130,7 +130,6 @@ bool AsynchronousVolumeReader::checkForResourceRestrictions(bool checkMultiframe
     while (iterator.hasNext() && !foundRestriction)
     {
         Volume *currentVolume = iterator.next();
-        QList<Image*> imageList = currentVolume->getImages();
         // Mirem si és multiframe
         if (checkMultiframeImages)
         {
@@ -143,13 +142,10 @@ bool AsynchronousVolumeReader::checkForResourceRestrictions(bool checkMultiframe
         // Mirem si és una modalitat a la que cal aplicar restricció o no
         if (!modalitiesWithoutRestriction.isEmpty())
         {
-            if (imageList.count() > 0)
+            QString modality = currentVolume->getModality();
+            if (!modalitiesWithoutRestriction.contains(modality))
             {
-                QString modality = imageList.at(0)->getParentSeries()->getModality();
-                if (!modalitiesWithoutRestriction.contains(modality))
-                {
-                    foundRestriction = true;
-                }
+                foundRestriction = true;
             }
         }
     }
