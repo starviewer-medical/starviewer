@@ -104,12 +104,12 @@ bool StandardUptakeValueMeasureHandler::canComputeFormula(FormulaType formula)
     return canCompute;
 }
 
-double StandardUptakeValueMeasureHandler::computePreferredFormula(double activityConcentrationValue)
+double StandardUptakeValueMeasureHandler::computePreferredFormula(double activityConcentrationValueInImageUnits)
 {
-    return compute(activityConcentrationValue, getPreferredFormula());
+    return compute(activityConcentrationValueInImageUnits, getPreferredFormula());
 }
 
-double StandardUptakeValueMeasureHandler::compute(double activityConcentrationValue, FormulaType formula)
+double StandardUptakeValueMeasureHandler::compute(double activityConcentrationValueInImageUnits, FormulaType formula)
 {
     StandardizedUptakeValueFormulaCalculator *suvCalculator = getFormulaCalculator(formula);
     m_computedFormulaLabel = getFormulaLabel(formula);
@@ -119,7 +119,7 @@ double StandardUptakeValueMeasureHandler::compute(double activityConcentrationVa
     double computedValue = 0.0;
     if (suvCalculator)
     {
-        suvCalculator->setActivityConcentrationInBqMl(activityConcentrationValue);
+        suvCalculator->setActivityConcentrationInImageUnits(activityConcentrationValueInImageUnits);
         suvCalculator->setDataSource(&m_tagReader);
         computedValue = suvCalculator->compute();
 
