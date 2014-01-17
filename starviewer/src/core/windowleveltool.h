@@ -30,6 +30,26 @@ private slots:
     /// Atura l'estat de window level
     void endWindowLevel();
 
+    /// Updates the way window level is being modified
+    void updateWindowLevellingBehaviour();
+
+private:
+    /// Computes the corresponding window level values upon the movement factor specified by delta on each axis
+    void computeWindowLevelValues(double deltaX, double deltaY, double &window, double &level);
+    
+    /// Computes the the new window level values having always fixed the minimum value. The window is the only altered value by delta
+    /// The value of level will be always computed from the value of window
+    void computeWindowLevelValuesWithFixedMinimumBehaviour(double deltaX, double &window, double &level);
+    
+    /// Computes the new window level from each delta. deltaX sets the window, and deltaY the level.
+    void computeWindowLevelValuesWithDefaultBehaviour(double deltaX, double deltaY, double &window, double &level);
+
+    /// Avoids zero values for window and level
+    void avoidZero(double &window, double &level);
+    
+    /// Avoids zero and negative values for window and level
+    void avoidZeroAndNegative(double &window, double &level);
+
 private:
     /// Valors per controlar el mapeig del window level
     double m_initialWindow, m_initialLevel, m_currentWindow, m_currentLevel;
@@ -38,6 +58,10 @@ private:
 
     /// Estats d'execució de la tool
     int m_state;
+
+    /// Available behaviours to modify the window level
+    enum WindowLevellingBehaviourType { Default, FixedMinimum };
+    WindowLevellingBehaviourType m_windowLevellingBehaviour;
 };
 
 }
