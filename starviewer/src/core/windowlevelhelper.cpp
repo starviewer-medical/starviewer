@@ -1,11 +1,14 @@
 #include "windowlevelhelper.h"
 
 #include "volume.h"
+#include "volumehelper.h"
 #include "windowlevelpresetstooldata.h"
 #include "image.h"
 #include "logging.h"
 
 namespace udg {
+
+const double WindowLevelHelper::DefaultPETWindowWidthThreshold = 0.5;
 
 WindowLevelHelper::WindowLevelHelper()
 {
@@ -124,8 +127,17 @@ WindowLevel WindowLevelHelper::getCurrentAutomaticWindowLevel(Volume *volume)
     {
         double range[2];
         volume->getScalarRange(range);
-        automaticWindowLevel.setWidth(range[1] - range[0]);
-        automaticWindowLevel.setCenter(range[0] + (automaticWindowLevel.getWidth() * 0.5));
+        
+        double windowWidth = range[1] - range[0];
+        if (VolumeHelper::isPrimaryPET(volume))
+        {
+            windowWidth *= DefaultPETWindowWidthThreshold;
+        }
+
+        double windowCenter = range[0] + (windowWidth * 0.5);
+        
+        automaticWindowLevel.setWidth(windowWidth);
+        automaticWindowLevel.setCenter(windowCenter);
     }
     else
     {

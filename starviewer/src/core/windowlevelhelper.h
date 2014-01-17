@@ -30,6 +30,10 @@ private:
 
     /// Gets a default name for the specified n-th window level. Used to give a default name for window levels without description.
     QString getDefaultWindowLevelDescription(int index);
+
+private:
+    /// Default threshold to apply to window width on PET images
+    static const double DefaultPETWindowWidthThreshold;
 };
 
 }
