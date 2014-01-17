@@ -40,7 +40,7 @@ void PETCTVolumeDisplayUnitHandler::updateMainDisplayUnitIndex()
 {
     if (getNumberOfInputs() == 2)
     {
-        if (m_displayUnits.at(1)->getVolume()->getImage(0)->getParentSeries()->getModality() == "CT")
+        if (m_displayUnits.at(1)->getVolume()->getModality() == "CT")
         {
             m_displayUnits.move(0, 1);
         }
@@ -53,7 +53,7 @@ VolumeDisplayUnit* PETCTVolumeDisplayUnitHandler::getPETDisplayUnit() const
 
     foreach (VolumeDisplayUnit *unit, m_displayUnits)
     {
-        if (unit->getVolume()->getImage(0)->getParentSeries()->getModality() == "PT")
+        if (unit->getVolume()->getModality() == "PT")
         {
             petUnit = unit;
             break;

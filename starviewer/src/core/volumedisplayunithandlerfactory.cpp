@@ -71,7 +71,7 @@ QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory:
 
 QSharedPointer<SingleVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::chooseBestSingleVolumeDisplayUnitHandler(Volume *input)
 {
-    if (input->getImage(0)->getParentSeries()->getModality() == "PT")
+    if (input->getModality() == "PT")
     {
         return QSharedPointer<SingleVolumeDisplayUnitHandler>(new PETVolumeDisplayUnitHandler());
     }
@@ -87,7 +87,7 @@ QSharedPointer<PairedVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::
 
     foreach (Volume *volume, inputs)
     {
-        modalities << volume->getImage(0)->getParentSeries()->getModality();
+        modalities << volume->getModality();
     }
 
     if (modalities.contains("CT") && modalities.contains("PT"))
