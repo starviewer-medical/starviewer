@@ -41,7 +41,7 @@ void WindowLevelHelper::initializeWindowLevelData(WindowLevelPresetsToolData *wi
     {
         for (int i = 0; i < windowLevelCount; i++)
         {
-            WindowLevel windowLevel = WindowLevelHelper().getDefaultWindowLevelForPresentation(image, i);
+            WindowLevel windowLevel = getDefaultWindowLevelForPresentation(image, i);
             windowLevelData->addPreset(windowLevel, WindowLevelPresetsToolData::FileDefined);
 
             if (i == 0)
