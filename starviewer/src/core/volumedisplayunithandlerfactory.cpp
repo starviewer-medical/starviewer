@@ -7,6 +7,7 @@
 #include "petvolumedisplayunithandler.h"
 
 #include "volume.h"
+#include "volumehelper.h"
 #include "image.h"
 #include "series.h"
 
@@ -71,7 +72,7 @@ QSharedPointer<GenericVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory:
 
 QSharedPointer<SingleVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::chooseBestSingleVolumeDisplayUnitHandler(Volume *input)
 {
-    if (input->getModality() == "PT")
+    if (VolumeHelper::isPrimaryPET(input))
     {
         return QSharedPointer<SingleVolumeDisplayUnitHandler>(new PETVolumeDisplayUnitHandler());
     }
