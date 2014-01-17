@@ -71,6 +71,9 @@ private:
 
     /// The decay correction factor. Will be computed with DecayCorrectionFactorFormulaCalculator.
     double m_decayCorrectionFactor;
+
+    /// Philips' private tag for Activity Concentration Scale Factor
+    double m_philipsConversionFactorToBqMl;
 };
 
 } // End namespace udg

@@ -44,9 +44,15 @@ void test_StandardizedUptakeValueBodyWeightFormulaCalculator::compute_ShouldRetu
     QTest::addColumn<double>("radionuclideTotalDose");
     QTest::addColumn<double>("activityConcentrationValue");
     QTest::addColumn<int>("patientWeight");
+    QTest::addColumn<QString>("units");
+    QTest::addColumn<double>("philipsActivityConcentrationScaleFactor");
     QTest::addColumn<double>("expectedResult");
 
-    QTest::newRow("valid values") << true << 34.54 << 7373.22 << 32.987 << 78 << 32.987 / (7373.22 * 34.54) * (78 * 1000);
+    double notUsedDouble = 0.39383;
+
+    QTest::newRow("valid values") << true << 34.54 << 7373.22 << 32.987 << 78 << "not CNTS" << notUsedDouble << 32.987 / (7373.22 * 34.54) * (78 * 1000);
+    QTest::newRow("valid values") << true << 34.54 << 7373.22 << 12345.0 << 78 << "CNTS" << 0.0 << 12345.0 / (7373.22 * 34.54) * (78 * 1000);
+    QTest::newRow("valid values") << true << 34.54 << 7373.22 << 12345.0 << 78 << "CNTS" << 1.232 << (12345.0 * 1.232) / (7373.22 * 34.54) * (78 * 1000);
 }
 
 void test_StandardizedUptakeValueBodyWeightFormulaCalculator::compute_ShouldReturnExpectedResultUsingTagReaderAsDataSource()
@@ -56,11 +62,18 @@ void test_StandardizedUptakeValueBodyWeightFormulaCalculator::compute_ShouldRetu
     QFETCH(double, radionuclideTotalDose);
     QFETCH(double, activityConcentrationValue);
     QFETCH(int, patientWeight);
+    QFETCH(QString, units);
+    QFETCH(double, philipsActivityConcentrationScaleFactor);
     QFETCH(double, expectedResult);
 
     TestingDICOMTagReader tagReader;
     tagReader.addTag(DICOMRadionuclideTotalDose, radionuclideTotalDose);
     tagReader.addTag(DICOMPatientWeight, patientWeight);
+    tagReader.addTag(DICOMUnits, units);
+    if (philipsActivityConcentrationScaleFactor != 0.0)
+    {
+        tagReader.addTag(DICOMTag(0x7053, 0x1009), philipsActivityConcentrationScaleFactor);
+    }
 
     DICOMSequenceAttribute *sequence = new DICOMSequenceAttribute();
     sequence->setTag(DICOMRadiopharmaceuticalInformationSequence);
@@ -104,19 +117,21 @@ void test_StandardizedUptakeValueBodyWeightFormulaCalculator::canCompute_ShouldR
     QTest::addColumn<double>("activityConcentrationValue");
     QTest::addColumn<int>("patientWeight");
     QTest::addColumn<QString>("pixelUnits");
+    QTest::addColumn<double>("philipsActivityConcentrationScaleFactor");
     QTest::addColumn<bool>("expectedResult");
 
-    double notUsedDouble;
+    double notUsedDouble = 1.2928;
 
-    QTest::newRow("valid values") <<  true << 34.54 << 7373.22 << notUsedDouble << 89 << "BQML" << true;
-    QTest::newRow("valid values, negative injectedDoseInBq") <<  true << 34.54 << -348.43 << notUsedDouble << 23 << "BQML" << true;
-    QTest::newRow("valid values, negative decayFactor") <<  true << -0.54 << 87.3 << notUsedDouble << 32 << "BQML" << true;
-    QTest::newRow("cannot compute decay factor") <<  false << notUsedDouble << 7373.22 << notUsedDouble << 71 << "BQML" << false;
-    QTest::newRow("invalid injectedDoseInBq") <<  true << 34.54 << 0.0 << notUsedDouble << 34 << "BQML" << false;
-    QTest::newRow("invalid decayFactor") <<  true << 0.0 << 32.11 << notUsedDouble << 54 << "BQML" << false;
-    QTest::newRow("invalid patientWeight") <<  true << 2.0 << 32.11 << notUsedDouble << 0 << "BQML" << false;
-    QTest::newRow("invalid units") <<  true << 34.54 << 7373.22 << notUsedDouble << 89 << "CNTS" << false;
-    QTest::newRow("all invalid values") <<  true << 0.0 << 0.0 << notUsedDouble << -30 << "diferent de BQML" << false;
+    QTest::newRow("valid values") <<  true << 34.54 << 7373.22 << notUsedDouble << 89 << "BQML" << notUsedDouble << true;
+    QTest::newRow("units in counts but present philips scale factor") <<  true << 34.54 << 7373.22 << notUsedDouble << 89 << "CNTS" << 0.393 << true;
+    QTest::newRow("valid values, negative injectedDoseInBq") <<  true << 34.54 << -348.43 << notUsedDouble << 23 << "BQML" << notUsedDouble << true;
+    QTest::newRow("valid values, negative decayFactor") <<  true << -0.54 << 87.3 << notUsedDouble << 32 << "BQML" << notUsedDouble << true;
+    QTest::newRow("cannot compute decay factor") <<  false << notUsedDouble << 7373.22 << notUsedDouble << 71 << "BQML" << notUsedDouble << false;
+    QTest::newRow("invalid injectedDoseInBq") <<  true << 34.54 << 0.0 << notUsedDouble << 34 << "BQML" << notUsedDouble << false;
+    QTest::newRow("invalid decayFactor") <<  true << 0.0 << 32.11 << notUsedDouble << 54 << "BQML" << notUsedDouble << false;
+    QTest::newRow("invalid patientWeight") <<  true << 2.0 << 32.11 << notUsedDouble << 0 << "BQML" << notUsedDouble << false;
+    QTest::newRow("invalid units") <<  true << 34.54 << 7373.22 << notUsedDouble << 89 << "CNTS" << 0.0 << false;
+    QTest::newRow("all invalid values") <<  true << 0.0 << 0.0 << notUsedDouble << -30 << "diferent de BQML" << notUsedDouble << false;
 }
 
 void test_StandardizedUptakeValueBodyWeightFormulaCalculator::canCompute_ShouldReturnExpectedResult()
@@ -127,12 +142,18 @@ void test_StandardizedUptakeValueBodyWeightFormulaCalculator::canCompute_ShouldR
     QFETCH(double, activityConcentrationValue);
     QFETCH(int, patientWeight);
     QFETCH(QString, pixelUnits);
+    QFETCH(double, philipsActivityConcentrationScaleFactor);
     QFETCH(bool, expectedResult);
 
     TestingDICOMTagReader tagReader;
     tagReader.addTag(DICOMRadionuclideTotalDose, radionuclideTotalDose);
     tagReader.addTag(DICOMPatientWeight, patientWeight);
     tagReader.addTag(DICOMUnits, pixelUnits);
+
+    if (philipsActivityConcentrationScaleFactor != 0.0)
+    {
+        tagReader.addTag(DICOMTag(0x7053, 0x1009), philipsActivityConcentrationScaleFactor);
+    }
 
     DICOMSequenceAttribute *sequence = new DICOMSequenceAttribute();
     sequence->setTag(DICOMRadiopharmaceuticalInformationSequence);

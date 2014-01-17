@@ -13,6 +13,7 @@ StandardizedUptakeValueFormulaCalculator::StandardizedUptakeValueFormulaCalculat
 {
     m_activityConcentrationInImageUnits = 0.0;
     m_decayCorrectionCalculator = new DecayCorrectionFactorFormulaCalculator();
+    m_philipsConversionFactorToBqMl = 0.0;
 
     initializeCommonFormulaComponentParameters();
 }
@@ -39,6 +40,10 @@ double StandardizedUptakeValueFormulaCalculator::compute()
     gatherRequiredParameters();
 
     double activityConcentrationInBqML = m_activityConcentrationInImageUnits;
+    if (m_pixelValueUnits == "CNTS" && m_philipsConversionFactorToBqMl != 0.0)
+    {
+        activityConcentrationInBqML *= m_philipsConversionFactorToBqMl;
+    }
 
     return StandardizedUptakeValueFormula::compute(activityConcentrationInBqML, m_injectedDoseInBq, m_decayCorrectionFactor, getNormalizationFactor());
 }
@@ -57,7 +62,7 @@ bool StandardizedUptakeValueFormulaCalculator::parameterValuesAreValid() const
 
 bool StandardizedUptakeValueFormulaCalculator::commonFormulaComponentParameterValuesAreValid() const
 {
-    if (m_pixelValueUnits != "BQML")
+    if (m_pixelValueUnits != "BQML" && m_philipsConversionFactorToBqMl == 0.0)
     {
         return false;
     }
@@ -111,6 +116,15 @@ void StandardizedUptakeValueFormulaCalculator::gatherRequiredCommonFormulaCompon
     }
 
     m_pixelValueUnits = tagReader->getValueAttributeAsQString(DICOMUnits);
+
+    if (m_pixelValueUnits == "CNTS")
+    {
+        DICOMTag philipsActivityConcentrationScaleFactor(0x7053, 0x1009);
+        if (tagReader->tagExists(philipsActivityConcentrationScaleFactor))
+        {
+            m_philipsConversionFactorToBqMl = tagReader->getValueAttributeAsQString(philipsActivityConcentrationScaleFactor).toDouble();
+        }
+    }
 }
 
 } // End namespace udg
