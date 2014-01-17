@@ -7,6 +7,7 @@
 #include "study.h"
 #include "patient.h"
 #include "volume.h"
+#include "volumehelper.h"
 #include "logging.h"
 
 #include <vtkCornerAnnotation.h>
@@ -473,6 +474,17 @@ QString Q2DViewerAnnotationHandler::getCurrentWindowLevelString() const
     windowLevelString = QObject::tr("WW: %1 WL: %2")
         .arg(MathTools::roundToNearestInteger(windowLevel[0]))
         .arg(MathTools::roundToNearestInteger(windowLevel[1]));
+
+    if (VolumeHelper::isPrimaryPET(m_2DViewer->getMainInput()))
+    {
+        double range[2];
+        m_2DViewer->getMainInput()->getScalarRange(range);
+
+        double percent = (windowLevel[0] / range[1]) * 100;
+
+        windowLevelString += "\n";
+        windowLevelString += QObject::tr("Threshold: %1%").arg(percent, 0, 'f', 2);
+    }
 
     return windowLevelString;
 }
