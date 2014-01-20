@@ -51,6 +51,8 @@ void Volume::setPixelData(VolumePixelData *pixelData)
 {
     Q_ASSERT(pixelData != 0);
     m_volumePixelData = pixelData;
+    // Set the number of phases to the new pixel data
+    m_volumePixelData->setNumberOfPhases(m_numberOfPhases);
 }
 
 VolumePixelData* Volume::getPixelData()
