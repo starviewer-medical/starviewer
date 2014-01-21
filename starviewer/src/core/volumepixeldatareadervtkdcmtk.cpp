@@ -58,6 +58,9 @@ int VolumePixelDataReaderVTKDCMTK::read(const QStringList &filenames)
         m_reader->SetFileName(qPrintable(filenames.first()));
     }
 
+    // Set frame numbers to the reader (needed for multiframe files)
+    m_reader->setFrameNumbers(m_frameNumbers);
+
     try
     {
         m_reader->Update();

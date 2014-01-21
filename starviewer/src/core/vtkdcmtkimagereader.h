@@ -33,6 +33,9 @@ public:
     /// in the hierarchical print process to combine the output of several classes.
     virtual void PrintSelf(std::ostream &os, vtkIndent indent);
 
+    /// Sets the list of frame numbers in the order they must be read from a multiframe file. No need to specify for single-frame files.
+    void setFrameNumbers(const QList<int> &frameNumbers);
+
 protected:
 
     VtkDcmtkImageReader();
@@ -86,6 +89,9 @@ private:
         double intercept;
         double slope;
     };
+
+    /// List of frame numbers in the order they must be read from a multiframe file. Not used for single-frame files.
+    QList<int> m_frameNumbers;
 
     /// True if reading a multiframe volume.
     bool m_isMultiframe;

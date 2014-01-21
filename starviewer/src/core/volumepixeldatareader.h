@@ -23,6 +23,9 @@ public:
     VolumePixelDataReader(QObject *parent = 0);
     ~VolumePixelDataReader();
 
+    /// Sets the list of frame numbers in the order they must be read from a multiframe file.
+    void setFrameNumbers(const QList<int> &frameNumbers);
+
     /// Donada una llista de noms de fitxer, la llegeix i omple
     /// l'estructura d'imatge que fem servir internament.
     /// Ens retorna un enter que ens indicarà si hi ha hagut alguna mena d'error en el
@@ -42,6 +45,9 @@ signals:
     void progress(int progress);
 
 protected:
+    /// List of frame numbers in the order they must be read from a multiframe file. Can be ignored for single-frame files.
+    QList<int> m_frameNumbers;
+
     /// Les dades d'imatge en format vtk
     VolumePixelData *m_volumePixelData;
 
