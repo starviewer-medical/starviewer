@@ -12,7 +12,6 @@
 #include "coresettings.h"
 #include "qviewerworkinprogresswidget.h"
 #include "patientorientation.h"
-#include "anatomicalplane.h"
 #include "starviewerapplication.h"
 #include "imageoverlay.h"
 #include "drawerbitmap.h"
@@ -238,6 +237,11 @@ PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
 QString Q2DViewer::getCurrentAnatomicalPlaneLabel() const
 {
     return AnatomicalPlane::getLabelFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
+}
+
+AnatomicalPlane::AnatomicalPlaneType Q2DViewer::getCurrentAnatomicalPlane() const
+{
+    return AnatomicalPlane::getPlaneTypeFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
 }
 
 void Q2DViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane)
