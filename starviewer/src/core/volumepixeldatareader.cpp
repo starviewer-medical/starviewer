@@ -12,6 +12,11 @@ VolumePixelDataReader::~VolumePixelDataReader()
 {
 }
 
+void VolumePixelDataReader::setFrameNumbers(const QList<int> &frameNumbers)
+{
+    m_frameNumbers = frameNumbers;
+}
+
 VolumePixelData* VolumePixelDataReader::getVolumePixelData()
 {
     return m_volumePixelData;
