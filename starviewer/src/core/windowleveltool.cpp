@@ -184,11 +184,11 @@ void WindowLevelTool::avoidZero(double &window, double &level)
 
 void WindowLevelTool::avoidZeroAndNegative(double &window, double &level)
 {
-    if (fabs(window) < 0.01)
+    if (window < 0.01)
     {
         window =  1;
     }
-    if (fabs(level) < 0.01)
+    if (level < 0.01)
     {
         level = 1;
     }
