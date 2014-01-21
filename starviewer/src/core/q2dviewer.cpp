@@ -988,7 +988,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
             }
         }
 
-        updateCurrentImageDefaultPresets();
+        updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
         m_annotationsHandler->updateSliceAnnotationInformation();
         updatePreferredImageOrientation();
 
@@ -1411,7 +1411,7 @@ void Q2DViewer::setSlabThickness(int thickness)
 
     mainDisplayUnit->setSlabThickness(thickness);
     updateDisplayExtents();
-    updateCurrentImageDefaultPresets();
+    updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
     m_annotationsHandler->updateSliceAnnotationInformation();
     render();
 
@@ -1700,7 +1700,7 @@ void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
     getMainDisplayUnit()->getImageActor()->GetBounds(bounds);
 }
 
-void Q2DViewer::updateCurrentImageDefaultPresets()
+void Q2DViewer::updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane()
 {
     if (getCurrentViewPlane() == OrthogonalPlane::XYPlane)
     {

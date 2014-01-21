@@ -471,7 +471,7 @@ private:
     void executeInputFinishedCommand();
 
     /// Updates the current image default presets values. It only applies to original acquisition plane.
-    void updateCurrentImageDefaultPresets();
+    void updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
 
     /// Calls setNewVolumes and excutes the command while catching any exception that may be thrown.
     void setNewVolumesAndExecuteCommand(const QList<Volume*> &volumes);
