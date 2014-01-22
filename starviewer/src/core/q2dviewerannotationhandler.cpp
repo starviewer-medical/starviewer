@@ -98,12 +98,9 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
         m_upperRightText += QString("%1 %2 %3\n").arg(study->getPatientAge()).arg(patient->getSex()).arg(patient->getID());
         if (!study->getAccessionNumber().isEmpty())
         {
-            m_upperRightText += QObject::tr("Acc: %1\n").arg(study->getAccessionNumber());
+            m_upperRightText += QObject::tr("Acc: %1").arg(study->getAccessionNumber());
         }
-        else
-        {
-            m_upperRightText += "\n";
-        }
+        m_upperRightText += "\n";
         m_upperRightText += study->getDate().toString(Qt::ISODate) + "\n";
         m_upperRightText += seriesTime;
 
