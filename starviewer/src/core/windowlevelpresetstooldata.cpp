@@ -134,9 +134,17 @@ QStringList WindowLevelPresetsToolData::getDescriptionsFromGroup(int group)
     return descriptionList;
 }
 
+bool windowLevelLessThanSortOperator(const WindowLevel &wl1, const WindowLevel &wl2)
+{
+    return wl1.getName() < wl2.getName();
+}
+
 QList<WindowLevel> WindowLevelPresetsToolData::getPresetsFromGroup(int group)
 {
     QList<WindowLevel> windowLevelList = m_presetsByGroup.values(group);
+    // The list has to be sorted to be coherent with the overloaded version wich returns a QStringList
+    qSort(windowLevelList.begin(), windowLevelList.end(), windowLevelLessThanSortOperator);
+    
     return windowLevelList;
 }
 
