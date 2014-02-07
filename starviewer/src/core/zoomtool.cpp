@@ -17,6 +17,15 @@ ZoomTool::ZoomTool(QViewer *viewer, QObject *parent)
     m_toolName = "ZoomTool";
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
+    // TODO This could be done better if we had some method that returns the type of the viewer
+    if (Q3DViewer::castFromQViewer(m_viewer))
+    {
+        m_mustRenderOnEnd = true;
+    }
+    else
+    {
+        m_mustRenderOnEnd = false;
+    }
 }
 
 ZoomTool::~ZoomTool()
@@ -72,8 +81,7 @@ void ZoomTool::endZoom()
         m_state = None;
         m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetStillUpdateRate());
 
-        Q3DViewer *q3DViewer = Q3DViewer::castFromQViewer(m_viewer);
-        if (q3DViewer)
+        if (m_mustRenderOnEnd)
         {
             // Necessari perquè es torni a renderitzar a alta resolució en el 3D
             m_viewer->render();
