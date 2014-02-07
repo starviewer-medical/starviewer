@@ -1403,23 +1403,22 @@ void Q2DViewer::setSlabThickness(int thickness)
     }
     
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
+    
     if (thickness != mainDisplayUnit->getSlabThickness())
     {
+        // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
         getDrawer()->removeAllPrimitives();
+
+        mainDisplayUnit->setSlabThickness(thickness);
+        updateDisplayExtents();
+
+        updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
+        m_annotationsHandler->updateSliceAnnotationInformation();
+        render();
+
+        emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());
+        emit sliceChanged(getCurrentSlice());
     }
-
-    mainDisplayUnit->setSlabThickness(thickness);
-    updateDisplayExtents();
-    updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
-    m_annotationsHandler->updateSliceAnnotationInformation();
-    render();
-
-    // TODO és del tot correcte que vagi aquí aquesta crida?
-    // Tal com està posat se suposa que sempre el valor de thickness ha
-    // canviat i podria ser que no, seria més adequat posar-ho a computerangeAndSlice?
-    emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());
-    emit sliceChanged(getCurrentSlice());
 }
 
 void Q2DViewer::setSlabThicknessInVolume(int index, int thickness)
