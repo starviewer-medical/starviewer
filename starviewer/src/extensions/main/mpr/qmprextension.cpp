@@ -277,9 +277,11 @@ void QMPRExtension::initializeTools()
 
     // Registrem al manager les tools que van als diferents viewers
     m_toolManager->setupRegisteredTools(m_axial2DView);
-    // Als altres visors volem totes les registrades, excepte l'slicing
+    // On the other viewers we want all the registered tools but slicing (mouse and keyboard modes)
     QStringList toolsList = m_toolManager->getRegisteredToolsList();
     toolsList.removeAt(toolsList.indexOf("SlicingTool"));
+    toolsList.removeAt(toolsList.indexOf("SlicingKeyboardTool"));
+    toolsList.removeAt(toolsList.indexOf("SlicingWheelTool"));
     m_toolManager->setViewerTools(m_sagital2DView, toolsList);
     m_toolManager->setViewerTools(m_coronal2DView, toolsList);
 }
