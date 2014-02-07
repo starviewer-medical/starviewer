@@ -29,6 +29,9 @@ private slots:
 
 private:
     int m_state;
+
+    /// Sets if we need to call render or not when zoom action is ended
+    bool m_mustRenderOnEnd;
 };
 
 }
