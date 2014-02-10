@@ -102,18 +102,28 @@ inline int run()
     {
         // Add 1 to length to have room for '\0' at the end
         char *tempArgument = new char[argument.length() + 1];
-        strcpy(tempArgument, argument.toStdString().c_str());
+        qstrcpy(tempArgument, argument.toStdString().c_str());
         modifiedArgv[i] = tempArgument;
         i++;
     }
 
     foreach (QObject *test, selectTestsToExecute(testsToExecuteOptions))
     {
+#ifdef Q_WS_WIN
+        FILE *stream;
+        if (!dirToSaveTests.isEmpty())
+        {
+            freopen_s(&stream, qPrintable(QString("%1/%2.txt").arg(dirToSaveTests).arg(test->objectName())), "w", stdout);
+        }
+        ret += QTest::qExec(test, modifiedArgc, modifiedArgv);
+        fclose( stream );
+#else
         if (!dirToSaveTests.isEmpty())
         {
             freopen(qPrintable(QString("%1/%2.txt").arg(dirToSaveTests).arg(test->objectName())), "w", stdout);
         }
         ret += QTest::qExec(test, modifiedArgc, modifiedArgv);
+ #endif
     }
 
     //Eliminem la llista de paràmetres
