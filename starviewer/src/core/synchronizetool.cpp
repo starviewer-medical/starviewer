@@ -20,7 +20,7 @@ SynchronizeTool::SynchronizeTool(QViewer *viewer, QObject *parent)
 
     setToolData(new SynchronizeToolData());
 
-    m_enabled = true;
+    m_enabled = false;
 }
 
 SynchronizeTool::~SynchronizeTool()
