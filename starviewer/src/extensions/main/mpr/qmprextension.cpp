@@ -311,7 +311,8 @@ void QMPRExtension::createConnections()
     // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
     m_axial2DView->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
     connect(m_axial2DView->getPatientBrowserMenu(), SIGNAL(selectedVolume(Volume*)), SLOT(setInput(Volume*)));
-
+    // HACK To make universal scrolling work properly. Issue #2019. We need to be aware of the volume being changed by another tool.
+    connect(m_axial2DView, SIGNAL(volumeChanged(Volume*)), SLOT(setInput(Volume*)));
     // Mostrar o no la informacio del volum a cada visualitzador
     connect(m_viewerInformationToolButton, SIGNAL(toggled(bool)), SLOT(showViewerInformation(bool)));
 
@@ -968,6 +969,13 @@ void QMPRExtension::pushSagitalViewAxialAxisActor()
 
 void QMPRExtension::setInput(Volume *input)
 {
+    // HACK To make universal scrolling work properly. Issue #2019.
+    if (input->objectName() == "Dummy Volume")
+    {
+        return;
+    }
+    // HACK End
+    
     if (input->getNumberOfPhases() > 1)
     {
         m_phasesAlertLabel->setVisible(true);
@@ -1016,8 +1024,10 @@ void QMPRExtension::setInput(Volume *input)
     m_coronalReslice->SetInput(m_volume->getVtkData());
 
     // Faltaria refrescar l'input dels 3 mpr
+    // HACK To make universal scrolling work properly. Issue #2019. We have to disconnect and reconnect the signal to avoid infinite loops
+    disconnect(m_axial2DView, SIGNAL(volumeChanged(Volume*)), this, SLOT(setInput(Volume*)));
     m_axial2DView->setInput(m_volume);
-
+    connect(m_axial2DView, SIGNAL(volumeChanged(Volume*)), SLOT(setInput(Volume*)));
     int extent[6];
     m_volume->getWholeExtent(extent);
     m_axialSlider->setMaximum(extent[5]);
