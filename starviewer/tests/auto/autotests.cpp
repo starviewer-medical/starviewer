@@ -111,12 +111,20 @@ inline int run()
     {
 #ifdef Q_WS_WIN
         FILE *stream;
+        bool closeStream = false;
+
         if (!dirToSaveTests.isEmpty())
         {
-            freopen_s(&stream, qPrintable(QString("%1/%2.txt").arg(dirToSaveTests).arg(test->objectName())), "w", stdout);
+            errno_t error = freopen_s(&stream, qPrintable(QString("%1/%2.txt").arg(dirToSaveTests).arg(test->objectName())), "w", stdout);
+            closeStream = error == 0;
         }
+
         ret += QTest::qExec(test, modifiedArgc, modifiedArgv);
-        fclose( stream );
+        
+        if (closeStream)
+        {
+            fclose(stream);
+        }
 #else
         if (!dirToSaveTests.isEmpty())
         {
