@@ -21,6 +21,7 @@ VoxelInformationTool::VoxelInformationTool(QViewer *viewer, QObject *parent)
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateCaption()));
     connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(updateCaption()));
     connect(m_2DViewer, SIGNAL(cameraChanged()), SLOT(updateCaption()));
+    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(updateCaption()));
 }
 
 VoxelInformationTool::~VoxelInformationTool()
