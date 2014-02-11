@@ -71,7 +71,8 @@ void VoxelInformationTool::createCaption()
 
 void VoxelInformationTool::updateCaption()
 {
-    if (!m_caption)
+    // Don't update the caption if there is no caption or if the mouse isn't over the viewer (#2014)
+    if (!m_caption || !m_2DViewer->underMouse())
     {
         return;
     }
