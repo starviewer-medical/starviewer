@@ -1368,6 +1368,10 @@ void Q2DViewer::setSlabProjectionMode(int projectionMode)
 
         if (hasInput())
         {
+            // As a measure of precaution we also remove all drawings when projection mode has changed
+            // This could be a potential problem with measures that depend on the underlying data, such as ROIs,
+            // as the data measured could be incoherent with the underlying data when changing the projection mode
+            getDrawer()->removeAllPrimitives();
             getMainDisplayUnit()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
             updateDisplayExtents();
             render();
