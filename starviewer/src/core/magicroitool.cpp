@@ -38,6 +38,7 @@ MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(restartRegion()));
     connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(restartRegion()));
+    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(restartRegion()));
 }
 
 MagicROITool::~MagicROITool()
@@ -228,9 +229,9 @@ void MagicROITool::restartRegion()
     {
         m_roiPolygon->decreaseReferenceCount();
         delete m_roiPolygon;
-        
-        startRegion();
     }
+
+    startRegion();
 }
 
 void MagicROITool::modifyRegionByFactor()
