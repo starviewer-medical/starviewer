@@ -404,7 +404,14 @@ void Q2DViewer::setInputAsynchronously(const QList<Volume *> &volumes, QViewerCo
     setInputFinishedCommand(inputFinishedCommand);
 
     bool allowAsynchronousVolumeLoading = Settings().getValue(CoreSettings::AllowAsynchronousVolumeLoading).toBool();
-    if (allowAsynchronousVolumeLoading)
+    bool thereAreVolumesNotLoaded = false;
+    int i = 0;
+    while (i < volumes.size() && !thereAreVolumesNotLoaded)
+    {
+        thereAreVolumesNotLoaded = !volumes.at(i)->isPixelDataLoaded();
+        i++;
+    }
+    if (thereAreVolumesNotLoaded && allowAsynchronousVolumeLoading)
     {
         loadVolumesAsynchronously(volumes);
     }
