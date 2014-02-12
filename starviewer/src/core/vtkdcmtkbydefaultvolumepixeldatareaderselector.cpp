@@ -1,5 +1,6 @@
 #include "vtkdcmtkbydefaultvolumepixeldatareaderselector.h"
 
+#include "dicomtagreader.h"
 #include "image.h"
 #include "volume.h"
 
@@ -24,6 +25,22 @@ bool hasJPEG2000TransferSyntax(const Volume *volume)
     return false;
 }
 
+// Returns true if the images in the volume have a segmented palette attribute.
+// For speed reasons, it just checks for the presence of the segmented red palette in the first image.
+bool hasSegmentedPalette(const Volume *volume)
+{
+    // We only need to check for the tag if the photometric interpretion is palette color
+    if (volume->getImage(0)->getPhotometricInterpretation() == PhotometricInterpretation::Palette_Color)
+    {
+        DICOMTagReader tagReader(volume->getImage(0)->getPath());
+        return tagReader.tagExists(DICOMSegmentedRedPaletteColorLookupTableData);
+    }
+    else
+    {
+        return false;
+    }
+}
+
 }
 
 VolumePixelDataReaderFactory::PixelDataReaderType VtkDcmtkByDefaultVolumePixelDataReaderSelector::selectVolumePixelDataReader(Volume *volume) const
@@ -33,9 +50,9 @@ VolumePixelDataReaderFactory::PixelDataReaderType VtkDcmtkByDefaultVolumePixelDa
         // MetaImages currently must be read with ITK-GDCM
         return VolumePixelDataReaderFactory::ITKGDCMPixelDataReader;
     }
-    else if (hasJPEG2000TransferSyntax(volume))
+    else if (hasJPEG2000TransferSyntax(volume) || hasSegmentedPalette(volume))
     {
-        // DCMTK doesn't support JPEG2000 for free
+        // DCMTK doesn't support JPEG2000 for free, and doesn't support segmented palettes either
         return VolumePixelDataReaderFactory::VTKGDCMPixelDataReader;
     }
     else
