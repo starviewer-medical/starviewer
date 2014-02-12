@@ -725,17 +725,17 @@ void test_MathTools::infiniteLinesIntersection_ShouldComputeExpectedIntersection
                                  << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
     QTest::newRow("parallel YZ") << QVector3D(+2.5, +8.6, -1.8) << QVector3D(+2.5, +7.8, -1.3) << QVector3D(+2.5, -2.5, -1.0) << QVector3D(+2.5, -0.1, -2.5)
                                  << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
-    QTest::newRow("parallel") << QVector3D(-8.4, -6.2, +2.7) << QVector3D(-0.2, -0.1, -1.0) << QVector3D(+8.1, +3.9, +9.5) << QVector3D(+16.3, +10.0, +5.8)
+    QTest::newRow("parallel") << QVector3D(-8.5, -6.25, +2.75) << QVector3D(-0.25, -0.0, -1.0) << QVector3D(+8.0, +3.9, +9.5) << QVector3D(-0.25, -2.35, +13.25)
                               << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
 
     QTest::newRow("skew XY") << QVector3D(-8.5, -0.8, -2.2) << QVector3D(+9.2, -7.0, -2.2) << QVector3D(+2.4, -9.8, -8.3) << QVector3D(+8.3, -6.5, -8.3)
-                             << MathTools::LinesIntersect << QVector3D(+8.09689, -6.6136, -2.2);
+                             << MathTools::SkewIntersection << QVector3D(0.0, 0.0, 0.0);
     QTest::newRow("skew XZ") << QVector3D(+4.6, -6.4, +0.5) << QVector3D(+7.5, -6.4, +5.5) << QVector3D(-8.8, +10.0, -8.1) << QVector3D(-5.9, +10.0, -1.1)
-                             << MathTools::LinesIntersect << QVector3D(-29.83, -6.4, -58.8621);
+                             << MathTools::SkewIntersection << QVector3D(0.0, 0.0, 0.0);
     QTest::newRow("skew YZ") << QVector3D(-5.6, +8.9, -8.8) << QVector3D(-5.6, -1.5, -6.5) << QVector3D(-7.1, +6.6, -2.3) << QVector3D(-7.1, -1.7, -7.3)
-                             << MathTools::LinesIntersect << QVector3D(-5.6, -0.674905, -6.68247);
+                             << MathTools::SkewIntersection << QVector3D(0.0, 0.0, 0.0);
     QTest::newRow("skew") << QVector3D(+7.6, -3.7, +7.9) << QVector3D(+8.8, -5.6, -8.9) << QVector3D(-1.3, +3.3, -9.7) << QVector3D(-4.3, -9.7, +4.4)
-                          << MathTools::LinesIntersect << QVector3D(+8.27995, -4.77659, -1.6193);
+                          << MathTools::SkewIntersection << QVector3D(0.0, 0.0, 0.0);
 
     QTest::newRow("intersection XY") << QVector3D(+1.0, -1.6, -10.0) << QVector3D(-6.2, -8.2, -10.0) << QVector3D(-8.3, -4.4, -10.0)
                                      << QVector3D(+0.3, -1.4, -10.0) << MathTools::LinesIntersect << QVector3D(+1.78225, -0.882935, -10.0);
@@ -743,8 +743,8 @@ void test_MathTools::infiniteLinesIntersection_ShouldComputeExpectedIntersection
                                      << QVector3D(-2.4, +1.6, -6.1) << MathTools::LinesIntersect << QVector3D(-16.0885, +1.6, +28.2413);
     QTest::newRow("intersection YZ") << QVector3D(+9.9, +3.3, +7.1) << QVector3D(+9.9, +7.6, +5.8) << QVector3D(+9.9, -0.2, -3.7)
                                      << QVector3D(+9.9, +5.9, -2.5) << MathTools::LinesIntersect << QVector3D(+9.9, +23.5616, +0.974408);
-    QTest::newRow("intersection") << QVector3D(+1.8, -3.9, +6.5) << QVector3D(-6.2, +7.3, +8.6) << QVector3D(-9.9, +9.9, +4.0)
-                                  << QVector3D(-340.09, +495.128, +140.259) << MathTools::LinesIntersect << QVector3D(-47.0, +64.42, +19.31);
+    QTest::newRow("intersection") << QVector3D(+2.0, -4.0, +7.0) << QVector3D(-6.0, +7.0, +9.0) << QVector3D(-10.0, +10.0, +4.0)
+                                  << QVector3D(+3.0, -1.0, +17.25) << MathTools::LinesIntersect << QVector3D(-5.2727, +6.0, +8.81818);
 }
 
 void test_MathTools::infiniteLinesIntersection_ShouldComputeExpectedIntersectionAndState()
