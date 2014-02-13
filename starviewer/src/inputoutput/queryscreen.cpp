@@ -245,6 +245,7 @@ void QueryScreen::updateConfiguration(const QString &configuration)
 
 void QueryScreen::bringToFront()
 {
+    this->show();
     if (this->isMinimized())
     {
         this->setWindowState(this->windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
@@ -254,7 +255,6 @@ void QueryScreen::bringToFront()
         this->raise();
         this->activateWindow();
     }
-    this->show();
 }
 
 void QueryScreen::showPACSTab()
