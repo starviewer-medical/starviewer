@@ -155,6 +155,7 @@ void AutomaticSynchronizationTool::updatePosition()
                 }
                 else
                 {
+                    // TODO Check if this code can be actually reached, it seems not. If this code is never reached, it should be removed then
                     double currentSpacingBetweenSlices = m_2DViewer->getCurrentSpacingBetweenSlices();
                     if (currentSpacingBetweenSlices == 0.0)
                     {
