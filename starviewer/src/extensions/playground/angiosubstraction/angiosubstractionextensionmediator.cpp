@@ -31,16 +31,16 @@ bool AngioSubstractionExtensionMediator::initializeExtension(QWidget* extension,
 {
     QAngioSubstractionExtension *angioSubstractionExtension;
 
-    if ( !(angioSubstractionExtension = qobject_cast<QAngioSubstractionExtension*>(extension)) )
+    if (!(angioSubstractionExtension = qobject_cast<QAngioSubstractionExtension*>(extension)))
     {
         return false;
     }
 
     Volume *input = extensionContext.getDefaultVolume();
-    if( !input )
-        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    if(!input)
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image"));
     else
-        angioSubstractionExtension->setInput( input );
+        angioSubstractionExtension->setInput(input);
 
     return true;
 }

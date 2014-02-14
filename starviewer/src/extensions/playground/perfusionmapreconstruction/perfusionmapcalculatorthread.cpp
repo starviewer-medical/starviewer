@@ -22,9 +22,9 @@ const double PerfusionMapCalculatorThread::TE = 25.0;
 const double PerfusionMapCalculatorThread::TR = 1.5;
 
 
-PerfusionMapCalculatorThread::PerfusionMapCalculatorThread( int id, int numberOfThreads, QObject * parent )
+PerfusionMapCalculatorThread::PerfusionMapCalculatorThread(int id, int numberOfThreads, QObject * parent)
     : QThread(parent),
-      m_id( id ), m_numberOfThreads( numberOfThreads ), reg_fact(1.0), reg_exp(2.0)
+      m_id(id), m_numberOfThreads(numberOfThreads), reg_fact(1.0), reg_exp(2.0)
 {
 }
 
@@ -94,7 +94,7 @@ void PerfusionMapCalculatorThread::runCheckImage()
     region.SetIndex(start);
 
     m_checkImage = BoolImageType::New();
-    m_checkImage->SetRegions( region );
+    m_checkImage->SetRegions(region);
     m_checkImage->Allocate();
     */
 
@@ -108,7 +108,7 @@ void PerfusionMapCalculatorThread::runCheckImage()
     //std::ofstream fout("rcbv.dat", ios::out);
 
     typedef itk::ImageRegionIteratorWithIndex<BoolImageType> BoolIterator;
-    BoolIterator boolIter( m_checkImage, m_checkImage->GetBufferedRegion() );
+    BoolIterator boolIter(m_checkImage, m_checkImage->GetBufferedRegion());
     boolIter.GoToBegin();
 
     for (k=0;k<kend;k++)
@@ -181,10 +181,10 @@ void PerfusionMapCalculatorThread::runDeltaRImage()
     double value;
 
     typedef itk::ImageRegionIteratorWithIndex<BoolImageType> BoolIterator;
-    BoolIterator boolIter( m_checkImage, m_checkImage->GetBufferedRegion() );
+    BoolIterator boolIter(m_checkImage, m_checkImage->GetBufferedRegion());
 
     typedef itk::ImageRegionIteratorWithIndex<DoubleTemporalImageType> DoubleTempIterator;
-    DoubleTempIterator imIter( m_deltaRImage, m_deltaRImage->GetBufferedRegion() );
+    DoubleTempIterator imIter(m_deltaRImage, m_deltaRImage->GetBufferedRegion());
 
     boolIter.GoToBegin();
     imIter.GoToBegin();
@@ -209,7 +209,7 @@ void PerfusionMapCalculatorThread::runDeltaRImage()
                 index[0]=i;
                 min=10e6;
                 //if(m_checkImage->GetPixel(indexVoxel))
-                if( boolIter.Get() )
+                if(boolIter.Get())
                 {
                     for (t=0;t<tend;t++)
                     {
@@ -274,21 +274,21 @@ void PerfusionMapCalculatorThread::runPerfusionImage()
     QVector< double > residueFunction(m_sizet);
 
     typedef itk::ImageRegionIteratorWithIndex<BoolImageType> BoolIterator;
-    BoolIterator boolIter( m_checkImage, m_checkImage->GetBufferedRegion() );
+    BoolIterator boolIter(m_checkImage, m_checkImage->GetBufferedRegion());
 
     typedef itk::ImageRegionIteratorWithIndex<DoubleTemporalImageType> DoubleTempIterator;
-    DoubleTempIterator imIter( m_deltaRImage, m_deltaRImage->GetBufferedRegion() );
+    DoubleTempIterator imIter(m_deltaRImage, m_deltaRImage->GetBufferedRegion());
 
     typedef itk::ImageRegionIteratorWithIndex<DoubleImageType> DoubleIterator;
-    DoubleIterator cbvIter( m_cbvImage, m_cbvImage->GetBufferedRegion() );
-    DoubleIterator cbfIter( m_cbfImage, m_cbfImage->GetBufferedRegion() );
-    DoubleIterator mttIter( m_mttImage, m_mttImage->GetBufferedRegion() );
-    DoubleIterator m0Iter( m_m0Image, m_m0Image->GetBufferedRegion() );
+    DoubleIterator cbvIter(m_cbvImage, m_cbvImage->GetBufferedRegion());
+    DoubleIterator cbfIter(m_cbfImage, m_cbfImage->GetBufferedRegion());
+    DoubleIterator mttIter(m_mttImage, m_mttImage->GetBufferedRegion());
+    DoubleIterator m0Iter(m_m0Image, m_m0Image->GetBufferedRegion());
 
     typedef itk::ImageRegionIteratorWithIndex<ImageType> MapIterator;
-    MapIterator cbvMapIter( m_cbvMapImage, m_cbvMapImage->GetBufferedRegion() );
-    MapIterator cbfMapIter( m_cbfMapImage, m_cbfMapImage->GetBufferedRegion() );
-    MapIterator mttMapIter( m_mttMapImage, m_mttMapImage->GetBufferedRegion() );
+    MapIterator cbvMapIter(m_cbvMapImage, m_cbvMapImage->GetBufferedRegion());
+    MapIterator cbfMapIter(m_cbfMapImage, m_cbfMapImage->GetBufferedRegion());
+    MapIterator mttMapIter(m_mttMapImage, m_mttMapImage->GetBufferedRegion());
 
 /*    std::cout<<"Fill "<<m_id<<" inicia recorregut"<<std::endl;
     std::cout<<"Fill "<<m_id<<" mida imatge deltaR: "<<m_deltaRImage->GetBufferedRegion().GetSize()<<std::endl;
@@ -405,7 +405,7 @@ void PerfusionMapCalculatorThread::runPerfusionImage()
 
 }
 
-QVector<double> PerfusionMapCalculatorThread::deconvolve( QVector<double> tissue )
+QVector<double> PerfusionMapCalculatorThread::deconvolve(QVector<double> tissue)
 {
     QVector<double> residuefunc(tissue.size());
     int i;
@@ -479,12 +479,12 @@ QVector<double> PerfusionMapCalculatorThread::deconvolve( QVector<double> tissue
     //std::cout<<"&"<<std::endl;
 
     VectorImageType::Pointer tissueImage = VectorImageType::New();
-    tissueImage->SetRegions( region );
+    tissueImage->SetRegions(region);
     try
         {
         tissueImage->Allocate();
         }
-    catch( itk::ExceptionObject & excp )
+    catch(itk::ExceptionObject & excp)
         {
         std::cerr << "Error: " << std::endl;
         std::cerr << excp << std::endl;
@@ -493,7 +493,7 @@ QVector<double> PerfusionMapCalculatorThread::deconvolve( QVector<double> tissue
     //std::cout<<"$"<<std::endl;
 
     typedef itk::ImageRegionIterator<VectorImageType> VectorIteratorType;
-    VectorIteratorType tissueIter( tissueImage, tissueImage->GetLargestPossibleRegion() );
+    VectorIteratorType tissueIter(tissueImage, tissueImage->GetLargestPossibleRegion());
     //std::cout<<"@"<<tissueImage->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
 
     typedef itk::VnlFFTRealToComplexConjugateImageFilter< double, 1 >  FFTFilterType;
@@ -508,13 +508,13 @@ QVector<double> PerfusionMapCalculatorThread::deconvolve( QVector<double> tissue
         tissueIter.Set(tissue[i]);
         ++tissueIter;
     }
-    fftFilter->SetInput( tissueImage );
+    fftFilter->SetInput(tissueImage);
 
     try
         {
         fftFilter->Update();
         }
-    catch( itk::ExceptionObject & excp )
+    catch(itk::ExceptionObject & excp)
         {
         std::cerr << "Error: " << std::endl;
         std::cerr << excp << std::endl;
@@ -523,14 +523,14 @@ QVector<double> PerfusionMapCalculatorThread::deconvolve( QVector<double> tissue
 
     typedef FFTFilterType::OutputImageType ComplexImageType;
     ComplexImageType::Pointer residualFFTImage = ComplexImageType::New();
-    residualFFTImage->SetRegions( region );
+    residualFFTImage->SetRegions(region);
     residualFFTImage->Allocate();
 
     typedef itk::ImageRegionIterator<ComplexImageType> ComplexIteratorType;
-    ComplexIteratorType fftTissueIter( fftFilter->GetOutput(), fftFilter->GetOutput()->GetLargestPossibleRegion() );
+    ComplexIteratorType fftTissueIter(fftFilter->GetOutput(), fftFilter->GetOutput()->GetLargestPossibleRegion());
     fftTissueIter.GoToBegin();
 
-    ComplexIteratorType fftResidualIter( residualFFTImage, residualFFTImage->GetLargestPossibleRegion() );
+    ComplexIteratorType fftResidualIter(residualFFTImage, residualFFTImage->GetLargestPossibleRegion());
     fftResidualIter.GoToBegin();
 
     //std::cout<<"!"<<fftFilter->GetOutput()->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
@@ -546,7 +546,7 @@ QVector<double> PerfusionMapCalculatorThread::deconvolve( QVector<double> tissue
         }
         else
         {
-            num3 = complexd( 0.0, 0.0 );
+            num3 = complexd(0.0, 0.0);
             fftResidualIter.Set(num3);
         }
         ++fftTissueIter;
@@ -555,13 +555,13 @@ QVector<double> PerfusionMapCalculatorThread::deconvolve( QVector<double> tissue
 
     typedef itk::VnlFFTComplexConjugateToRealImageFilter< double, 1 >  IFFTFilterType;
     IFFTFilterType::Pointer fftInverseFilter = IFFTFilterType::New();
-    fftInverseFilter->SetInput( residualFFTImage );
+    fftInverseFilter->SetInput(residualFFTImage);
 
     try
         {
         fftInverseFilter->Update();
         }
-    catch( itk::ExceptionObject & excp )
+    catch(itk::ExceptionObject & excp)
         {
         std::cerr << "Error: " << std::endl;
         std::cerr << excp << std::endl;
@@ -569,7 +569,7 @@ QVector<double> PerfusionMapCalculatorThread::deconvolve( QVector<double> tissue
         }
 
     //std::cout<<"*"<<fftInverseFilter->GetOutput()->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
-    VectorIteratorType residualIter( fftInverseFilter->GetOutput(), fftInverseFilter->GetOutput()->GetLargestPossibleRegion() );
+    VectorIteratorType residualIter(fftInverseFilter->GetOutput(), fftInverseFilter->GetOutput()->GetLargestPossibleRegion());
     residualIter.GoToBegin();
 
     for(i=0;i<residuefunc.size();i++)

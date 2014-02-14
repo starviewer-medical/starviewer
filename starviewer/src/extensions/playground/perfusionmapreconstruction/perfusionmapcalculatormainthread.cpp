@@ -33,10 +33,10 @@ namespace udg {
 const double PerfusionMapCalculatorMainThread::TE = 25.0;
 const double PerfusionMapCalculatorMainThread::TR = 1.5;
 
-PerfusionMapCalculatorMainThread::PerfusionMapCalculatorMainThread( QObject *parent )
- : QObject( parent ), m_DSCVolume(0), m_map0Volume(0), m_map1Volume(0), m_map2Volume(0), reg_fact(1.0), reg_exp(2.0),m_AIFIsSet(false)
+PerfusionMapCalculatorMainThread::PerfusionMapCalculatorMainThread(QObject *parent)
+ : QObject(parent), m_DSCVolume(0), m_map0Volume(0), m_map1Volume(0), m_map2Volume(0), reg_fact(1.0), reg_exp(2.0),m_AIFIsSet(false)
 {
-    m_aifIndex.resize( 3 );
+    m_aifIndex.resize(3);
 }
 
 
@@ -52,7 +52,7 @@ void PerfusionMapCalculatorMainThread::stop()
 
 void PerfusionMapCalculatorMainThread::run()
 {
-    Q_ASSERT( m_DSCVolume );
+    Q_ASSERT(m_DSCVolume);
 
     QTime time;
     int deltaRtime = 0;
@@ -69,7 +69,7 @@ void PerfusionMapCalculatorMainThread::run()
     this->computeMoments();
     momentstime += time.elapsed();
     time.restart();
-    if( !m_AIFIsSet )
+    if(!m_AIFIsSet)
     {
         DEBUG_LOG("Find AIF");
         this->findAIF();
@@ -87,14 +87,14 @@ void PerfusionMapCalculatorMainThread::run()
     this->computePerfusion();
     DEBUG_LOG("Done!");
     computePerfusiontime += time.elapsed();
-    DEBUG_LOG(QString( "TEMPS COMPUTANT DELTAR : %1ms " ).arg( deltaRtime ) );
-    DEBUG_LOG(QString( "TEMPS COMPUTANT MOMENTS : %1ms " ).arg( momentstime ) );
-    DEBUG_LOG(QString( "TEMPS COMPUTANT FINDING AIF : %1ms " ).arg( findAiftime ) );
-    DEBUG_LOG(QString( "TEMPS COMPUTANT PERFUSION TIME : %1ms " ).arg( computePerfusiontime ) );
+    DEBUG_LOG(QString("TEMPS COMPUTANT DELTAR : %1ms ").arg(deltaRtime));
+    DEBUG_LOG(QString("TEMPS COMPUTANT MOMENTS : %1ms ").arg(momentstime));
+    DEBUG_LOG(QString("TEMPS COMPUTANT FINDING AIF : %1ms ").arg(findAiftime));
+    DEBUG_LOG(QString("TEMPS COMPUTANT PERFUSION TIME : %1ms ").arg(computePerfusiontime));
     emit computed();
 }
 
-void PerfusionMapCalculatorMainThread::computeDeltaR( )
+void PerfusionMapCalculatorMainThread::computeDeltaR()
 {
     //TODO with threads!!! --> pasar a l'altre classe
 
@@ -127,7 +127,7 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
     int time2 = 0;
 
     deltaRImage = DoubleTemporalImageType::New();
-    deltaRImage->SetRegions( regiont );
+    deltaRImage->SetRegions(regiont);
     deltaRImage->Allocate();
 
     Volume::ItkImageType::Pointer  inputImage = m_DSCVolume->getItkData();
@@ -149,11 +149,11 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
     region.SetIndex(start);
 
     checkImage = BoolImageType::New();
-    checkImage->SetRegions( region );
+    checkImage->SetRegions(region);
     checkImage->Allocate();
 
     typedef itk::ImageRegionIterator<DoubleTemporalImageType> DoubleTempIterator;
-    DoubleTempIterator imIter( deltaRImage, deltaRImage->GetBufferedRegion() );
+    DoubleTempIterator imIter(deltaRImage, deltaRImage->GetBufferedRegion());
 
     //Iniciem els Threads per calcular la check image
     time.restart();
@@ -161,29 +161,29 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
     DEBUG_LOG(QString("Number of threads = %1").arg(numberOfThreads));
     QVector<PerfusionMapCalculatorThread*> threads(numberOfThreads);
 
-    for ( int i = 0; i < numberOfThreads; i++ )
+    for (int i = 0; i < numberOfThreads; i++)
     {
-        PerfusionMapCalculatorThread * thread = new PerfusionMapCalculatorThread( i, numberOfThreads );
-        thread->setDSCImage( m_DSCVolume->getItkData() );
+        PerfusionMapCalculatorThread * thread = new PerfusionMapCalculatorThread(i, numberOfThreads);
+        thread->setDSCImage(m_DSCVolume->getItkData());
         thread->setVolumeSize(iend, jend, kend, tend);
-        thread->setCheckImage( checkImage );
+        thread->setCheckImage(checkImage);
         thread->setCheckImageMode();
         threads[i] = thread;
     }
 
     // iniciem els threads
-    for ( int j = 0; j < numberOfThreads; j++ )
+    for (int j = 0; j < numberOfThreads; j++)
     {
         PerfusionMapCalculatorThread * thread = threads[j];
         thread->start();
     }
 
     // esperem que acabin els threads
-    for ( int j = 0; j < numberOfThreads; j++ )
+    for (int j = 0; j < numberOfThreads; j++)
     {
         threads[j]->wait();
     }
-    for ( int j = 0; j < numberOfThreads; j++ )
+    for (int j = 0; j < numberOfThreads; j++)
     {
         delete threads[j];
     }
@@ -256,25 +256,25 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
     time.restart();
 
     // iniciem els threads
-    for ( int i = 0; i < numberOfThreads; i++ )
+    for (int i = 0; i < numberOfThreads; i++)
     {
-        PerfusionMapCalculatorThread * thread = new PerfusionMapCalculatorThread( i, numberOfThreads );
-        thread->setDSCImage( m_DSCVolume->getItkData() );
+        PerfusionMapCalculatorThread * thread = new PerfusionMapCalculatorThread(i, numberOfThreads);
+        thread->setDSCImage(m_DSCVolume->getItkData());
         thread->setVolumeSize(iend, jend, kend, tend);
-        thread->setCheckImage( checkImage );
-        thread->setDeltaRImage( deltaRImage );
+        thread->setCheckImage(checkImage);
+        thread->setDeltaRImage(deltaRImage);
         thread->setDeltaRImageMode();
         threads[i] = thread;
     }
     // iniciem els threads
-    for ( int j = 0; j < numberOfThreads; j++ )
+    for (int j = 0; j < numberOfThreads; j++)
     {
         PerfusionMapCalculatorThread * thread = threads[j];
         thread->start();
     }
 
     // esperem que acabin els threads
-    for ( int j = 0; j < numberOfThreads; j++ )
+    for (int j = 0; j < numberOfThreads; j++)
     {
         threads[j]->wait();
     }
@@ -283,7 +283,7 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
 
 /*    //Init deltaR image ABANS!!
     typedef itk::ImageRegionIterator<BoolImageType> BoolIterator;
-    BoolIterator boolIter( checkImage, checkImage->GetBufferedRegion() );
+    BoolIterator boolIter(checkImage, checkImage->GetBufferedRegion());
 
     boolIter.GoToBegin();
     imIter.GoToBegin();
@@ -339,7 +339,7 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
                         ++imIter;
                     }
                 }
-                if(checkImage->GetPixel(indexVoxel) != boolIter.Get() ) 
+                if(checkImage->GetPixel(indexVoxel) != boolIter.Get()) 
                 {
                     std::cout<<"."<<std::endl;
                 }
@@ -349,11 +349,11 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
     }*/
     time2 += time.elapsed();
 
-    DEBUG_LOG(QString( "-- TEMPS Computant checkImage : %1ms " ).arg( time1 ) );
-    DEBUG_LOG(QString( "-- TEMPS Computant deltaR : %1ms " ).arg( time2 ) );
+    DEBUG_LOG(QString("-- TEMPS Computant checkImage : %1ms ").arg(time1));
+    DEBUG_LOG(QString("-- TEMPS Computant deltaR : %1ms ").arg(time2));
 
     // destruïm els threads
-    for ( int j = 0; j < numberOfThreads; j++ )
+    for (int j = 0; j < numberOfThreads; j++)
     {
         delete threads[j];
     }
@@ -361,7 +361,7 @@ void PerfusionMapCalculatorMainThread::computeDeltaR( )
     this->computeMeanDeltaRPerSlice();
 }
 
-void PerfusionMapCalculatorMainThread::computeMeanDeltaRPerSlice( )
+void PerfusionMapCalculatorMainThread::computeMeanDeltaRPerSlice()
 {
     int i,j,k,t;
     //prenem la i perquè sol ser el valor més gran
@@ -374,10 +374,10 @@ void PerfusionMapCalculatorMainThread::computeMeanDeltaRPerSlice( )
     QVector<signed int > contseries(kend,0);
 
     typedef itk::ImageRegionIteratorWithIndex<BoolImageType> BoolIterator;
-    BoolIterator boolIter( checkImage, checkImage->GetBufferedRegion() );
+    BoolIterator boolIter(checkImage, checkImage->GetBufferedRegion());
 
     typedef itk::ImageRegionIteratorWithIndex<DoubleTemporalImageType> DoubleTempIterator;
-    DoubleTempIterator imIter( deltaRImage, deltaRImage->GetBufferedRegion() );
+    DoubleTempIterator imIter(deltaRImage, deltaRImage->GetBufferedRegion());
 
     boolIter.GoToBegin();
     imIter.GoToBegin();
@@ -388,11 +388,11 @@ void PerfusionMapCalculatorMainThread::computeMeanDeltaRPerSlice( )
         {
             for (i=0;i<iend;i++)
             {
-                if( boolIter.Get() )
+                if(boolIter.Get())
                 {
                     for (t=0;t<tend;t++)
                     {
-                        m_meanseries[k][t] += (double)imIter.Get( );
+                        m_meanseries[k][t] += (double)imIter.Get();
                         ++imIter;
                     }
                     contseries[k]++;
@@ -417,7 +417,7 @@ void PerfusionMapCalculatorMainThread::computeMeanDeltaRPerSlice( )
     }
 }
 
-void PerfusionMapCalculatorMainThread::computeMoments( )
+void PerfusionMapCalculatorMainThread::computeMoments()
 {
     if(!m_DSCVolume)
     {
@@ -434,15 +434,15 @@ void PerfusionMapCalculatorMainThread::computeMoments( )
     region.SetSize(size);
     region.SetIndex(start);
     m0Image = DoubleImageType::New();
-    m0Image->SetRegions( region );
+    m0Image->SetRegions(region);
     m0Image->Allocate();
 
     m1Image = DoubleImageType::New();
-    m1Image->SetRegions( region );
+    m1Image->SetRegions(region);
     m1Image->Allocate();
 
     m2Image = DoubleImageType::New();
-    m2Image->SetRegions( region );
+    m2Image->SetRegions(region);
     m2Image->Allocate();
 
     int i,j,k,t;
@@ -460,7 +460,7 @@ void PerfusionMapCalculatorMainThread::computeMoments( )
 //     std::ofstream fout2("m2.dat", ios::out);
 
     typedef itk::ImageRegionIterator<DoubleTemporalImageType> DoubleTempIterator;
-    DoubleTempIterator imIter( deltaRImage, deltaRImage->GetBufferedRegion() );
+    DoubleTempIterator imIter(deltaRImage, deltaRImage->GetBufferedRegion());
     imIter.GoToBegin();
     int contvalid=0;
     int contm0=0;
@@ -530,7 +530,7 @@ void PerfusionMapCalculatorMainThread::computeMoments( )
     fout2.close();*/
 }
 
-void PerfusionMapCalculatorMainThread::findAIF( )
+void PerfusionMapCalculatorMainThread::findAIF()
 {
     static const int firstSelection = 100;
     static const int secondSelection = 10;
@@ -541,7 +541,7 @@ void PerfusionMapCalculatorMainThread::findAIF( )
     Volume::ItkImageType::IndexType index;
     int indexint;
     double value;//, valuem2;
-    m_aif.resize( m_DSCVolume->getNumberOfPhases() );
+    m_aif.resize(m_DSCVolume->getNumberOfPhases());
 
     QVector< QPair< double, int > > sortedMoment1;
     QVector< QPair< double, int > > sortedMoment0;
@@ -560,16 +560,16 @@ void PerfusionMapCalculatorMainThread::findAIF( )
                     value =  m0Image->GetPixel(index);
                     contm0++;
                     //valuem2 =  m2Image->GetPixel(index);    //excloem els que tenen també una m2 negativa
-                    if(value > 0.000001 )
+                    if(value > 0.000001)
                     {
                         indexint = i + j*iend + k*jend*iend;
-                        sortedMoment0 << qMakePair( value, indexint);
+                        sortedMoment0 << qMakePair(value, indexint);
                     }
                 }
             }
         }
     }
-    qSort( sortedMoment0 );    // sort in ascending order
+    qSort(sortedMoment0);    // sort in ascending order
     DEBUG_LOG(QString("sortedMoment 0 size: %1").arg(sortedMoment0.size()));
     DEBUG_LOG(QString("A sorted moments0 hi ha %1 voxels").arg(contm0));
 
@@ -581,11 +581,11 @@ void PerfusionMapCalculatorMainThread::findAIF( )
         value =  m1Image->GetPixel(index);
         if(value > 2.000001)
         {
-            sortedMoment1 << qMakePair( value, sortedMoment0[i].second);
+            sortedMoment1 << qMakePair(value, sortedMoment0[i].second);
         }
     }
     ///TODO: search if it's possible to sort descending
-    qSort( sortedMoment1 );    // sort in ascending order
+    qSort(sortedMoment1);    // sort in ascending order
     DEBUG_LOG(QString("sortedMoment 1 size: %1").arg(sortedMoment1.size()));
 
 /*    for (i=0;i<sortedMoment1.size();i++)
@@ -650,7 +650,7 @@ void PerfusionMapCalculatorMainThread::findAIF( )
     this->getOmega();
 }
 
-void PerfusionMapCalculatorMainThread::updateAIF( )
+void PerfusionMapCalculatorMainThread::updateAIF()
 {
     //std::cout<<"Init Update!!"<<std::endl;
 
@@ -659,7 +659,7 @@ void PerfusionMapCalculatorMainThread::updateAIF( )
     indexTemp[2] = m_aifIndex[1];
     indexTemp[3] = m_aifIndex[2];
     int t, tend = m_DSCVolume->getNumberOfPhases();
-    m_aif.resize( tend );
+    m_aif.resize(tend);
     DEBUG_LOG(QString("Tend AIF: %1").arg(tend));
     for (t=0;t<tend;t++)
     {
@@ -677,7 +677,7 @@ void PerfusionMapCalculatorMainThread::updateAIF( )
     //std::cout<<"End Update!!"<<std::endl;
 }
 
-void PerfusionMapCalculatorMainThread::computePerfusion( )
+void PerfusionMapCalculatorMainThread::computePerfusion()
 {
     QTime time;
     int time1 = 0;
@@ -693,27 +693,27 @@ void PerfusionMapCalculatorMainThread::computePerfusion( )
     region.SetSize(size);
     region.SetIndex(start);
     cbfImage = DoubleImageType::New();
-    cbfImage->SetRegions( region );
+    cbfImage->SetRegions(region);
     cbfImage->Allocate();
 
     cbvImage = DoubleImageType::New();
-    cbvImage->SetRegions( region );
+    cbvImage->SetRegions(region);
     cbvImage->Allocate();
 
     mttImage = DoubleImageType::New();
-    mttImage->SetRegions( region );
+    mttImage->SetRegions(region);
     mttImage->Allocate();
 
     Volume::ItkImageType::Pointer map0Image = Volume::ItkImageType::New();
-    map0Image->SetRegions( region );
+    map0Image->SetRegions(region);
     map0Image->Allocate();
 
     Volume::ItkImageType::Pointer map1Image = Volume::ItkImageType::New();
-    map1Image->SetRegions( region );
+    map1Image->SetRegions(region);
     map1Image->Allocate();
 
     Volume::ItkImageType::Pointer map2Image = Volume::ItkImageType::New();
-    map2Image->SetRegions( region );
+    map2Image->SetRegions(region);
     map2Image->Allocate();
 
     //With threads!!!
@@ -727,12 +727,12 @@ void PerfusionMapCalculatorMainThread::computePerfusion( )
     int kend = m_DSCVolume->getNumberOfSlicesPerPhase();
     int tend = m_DSCVolume->getNumberOfPhases();
 
-    for ( int i = 0; i < numberOfThreads; i++ )
+    for (int i = 0; i < numberOfThreads; i++)
     {
-        PerfusionMapCalculatorThread * thread = new PerfusionMapCalculatorThread( i, numberOfThreads );
+        PerfusionMapCalculatorThread * thread = new PerfusionMapCalculatorThread(i, numberOfThreads);
         thread->setVolumeSize(iend, jend, kend, tend);
-        thread->setCheckImage( checkImage );
-        thread->setDeltaRImage( deltaRImage );
+        thread->setCheckImage(checkImage);
+        thread->setDeltaRImage(deltaRImage);
         thread->setm0Aif(m_m0aif);
         thread->setFFTAif(fftaifreal,fftaifimag);
         thread->setOmega(omega);
@@ -748,7 +748,7 @@ void PerfusionMapCalculatorMainThread::computePerfusion( )
     }
 
     // iniciem els threads
-    for ( int j = 0; j < numberOfThreads; j++ )
+    for (int j = 0; j < numberOfThreads; j++)
     {
         PerfusionMapCalculatorThread * thread = threads[j];
         thread->start();
@@ -756,11 +756,11 @@ void PerfusionMapCalculatorMainThread::computePerfusion( )
     }
 
     // esperem que acabin els threads
-    for ( int j = 0; j < numberOfThreads; j++ )
+    for (int j = 0; j < numberOfThreads; j++)
     {
         threads[j]->wait();
     }
-    for ( int j = 0; j < numberOfThreads; j++ )
+    for (int j = 0; j < numberOfThreads; j++)
     {
         delete threads[j];
     }
@@ -782,7 +782,7 @@ void PerfusionMapCalculatorMainThread::computePerfusion( )
     QVector<  double > residueFunction(m_aif.size());
 
     typedef itk::ImageRegionIterator<DoubleTemporalImageType> DoubleTempIterator;
-    DoubleTempIterator imIter( deltaRImage, deltaRImage->GetBufferedRegion() );
+    DoubleTempIterator imIter(deltaRImage, deltaRImage->GetBufferedRegion());
     imIter.GoToBegin();
 
     for (k=0;k<kend;k++)
@@ -847,29 +847,29 @@ void PerfusionMapCalculatorMainThread::computePerfusion( )
     if(m_map0Volume==0) 
     {
         m_map0Volume = new Volume();
-        m_map0Volume->setImages( m_DSCVolume->getPhaseImages(0) );
-        //m_map0Volume->setImages( m_DSCVolume->getImages() );
+        m_map0Volume->setImages(m_DSCVolume->getPhaseImages(0));
+        //m_map0Volume->setImages(m_DSCVolume->getImages());
     }
     m_map0Volume->setData(map0Image);
 
     //MTT
     m_map1Volume = new Volume();
-    m_map1Volume->setImages( m_DSCVolume->getPhaseImages(0) );
+    m_map1Volume->setImages(m_DSCVolume->getPhaseImages(0));
     m_map1Volume->setData(map2Image);
 
     //CBF
     m_map2Volume = new Volume();
-    m_map2Volume->setImages( m_DSCVolume->getPhaseImages(0) );
+    m_map2Volume->setImages(m_DSCVolume->getPhaseImages(0));
     m_map2Volume->setData(map1Image);
 
     time2 += time.elapsed();
     DEBUG_LOG(QString("Done!!"));
 
-    DEBUG_LOG(QString( "-- TEMPS COMPUTANT Perfusion : %1ms " ).arg( time1 ) );
-    DEBUG_LOG(QString( "-- TEMPS PINTANT Perfusion : %1ms " ).arg( time2 ) );
+    DEBUG_LOG(QString("-- TEMPS COMPUTANT Perfusion : %1ms ").arg(time1));
+    DEBUG_LOG(QString("-- TEMPS PINTANT Perfusion : %1ms ").arg(time2));
 }
 
-void PerfusionMapCalculatorMainThread::fftAIF( )
+void PerfusionMapCalculatorMainThread::fftAIF()
 {
     fftaifreal = QVector<double>(m_aif.size());
     fftaifimag = QVector<double>(m_aif.size());
@@ -918,11 +918,11 @@ void PerfusionMapCalculatorMainThread::fftAIF( )
     region.SetIndex(start);
 
     VectorImageType::Pointer aifImage = VectorImageType::New();
-    aifImage->SetRegions( region );
+    aifImage->SetRegions(region);
     aifImage->Allocate();
 
     typedef itk::ImageRegionIterator<VectorImageType> VectorIterator;
-    VectorIterator aifIter( aifImage, aifImage->GetBufferedRegion() );
+    VectorIterator aifIter(aifImage, aifImage->GetBufferedRegion());
 
     typedef itk::VnlFFTRealToComplexConjugateImageFilter< double, 1 >  FFTFilterType;
     FFTFilterType::Pointer fftFilter = FFTFilterType::New();
@@ -935,20 +935,20 @@ void PerfusionMapCalculatorMainThread::fftAIF( )
         ++aifIter;
     }
 
-    fftFilter->SetInput( aifImage );
+    fftFilter->SetInput(aifImage);
 
     try
         {
         fftFilter->Update();
         }
-    catch( itk::ExceptionObject & excp )
+    catch(itk::ExceptionObject & excp)
         {
         DEBUG_LOG(QString("Exception caught ! %1").arg(excp.GetDescription()));
         return;
         }
 
     typedef itk::ImageRegionIterator<FFTFilterType::OutputImageType> ComplexIterator;
-    ComplexIterator fftaifIter( fftFilter->GetOutput(), fftFilter->GetOutput()->GetBufferedRegion() );
+    ComplexIterator fftaifIter(fftFilter->GetOutput(), fftFilter->GetOutput()->GetBufferedRegion());
     fftaifIter.GoToBegin();
 
     for(i=0;i<m_aif.size();i++)
@@ -959,7 +959,7 @@ void PerfusionMapCalculatorMainThread::fftAIF( )
     }
 }
 
-void PerfusionMapCalculatorMainThread::deconvolve( QVector<double> tissue, QVector<double>& residuefunc)
+void PerfusionMapCalculatorMainThread::deconvolve(QVector<double> tissue, QVector<double>& residuefunc)
 {
     typedef std::complex<double> complexd;
     complexd num1, num2, num3;
@@ -1024,11 +1024,11 @@ void PerfusionMapCalculatorMainThread::deconvolve( QVector<double> tissue, QVect
     region.SetIndex(start);
 
     VectorImageType::Pointer tissueImage = VectorImageType::New();
-    tissueImage->SetRegions( region );
+    tissueImage->SetRegions(region);
     tissueImage->Allocate();
 
     typedef itk::ImageRegionIterator<VectorImageType> VectorIteratorType;
-    VectorIteratorType tissueIter( tissueImage, tissueImage->GetBufferedRegion() );
+    VectorIteratorType tissueIter(tissueImage, tissueImage->GetBufferedRegion());
 
     typedef itk::VnlFFTRealToComplexConjugateImageFilter< double, 1 >  FFTFilterType;
     FFTFilterType::Pointer fftFilter = FFTFilterType::New();
@@ -1041,13 +1041,13 @@ void PerfusionMapCalculatorMainThread::deconvolve( QVector<double> tissue, QVect
         tissueIter.Set(tissue[i]);
         ++tissueIter;
     }
-    fftFilter->SetInput( tissueImage );
+    fftFilter->SetInput(tissueImage);
 
     try
         {
         fftFilter->Update();
         }
-    catch( itk::ExceptionObject & excp )
+    catch(itk::ExceptionObject & excp)
         {
         DEBUG_LOG(QString("Exception caught ! %1").arg(excp.GetDescription()));
         return;
@@ -1055,14 +1055,14 @@ void PerfusionMapCalculatorMainThread::deconvolve( QVector<double> tissue, QVect
 
     typedef FFTFilterType::OutputImageType ComplexImageType;
     ComplexImageType::Pointer residualFFTImage = ComplexImageType::New();
-    residualFFTImage->SetRegions( region );
+    residualFFTImage->SetRegions(region);
     residualFFTImage->Allocate();
 
     typedef itk::ImageRegionIterator<ComplexImageType> ComplexIteratorType;
-    ComplexIteratorType fftTissueIter( fftFilter->GetOutput(), fftFilter->GetOutput()->GetBufferedRegion() );
+    ComplexIteratorType fftTissueIter(fftFilter->GetOutput(), fftFilter->GetOutput()->GetBufferedRegion());
     fftTissueIter.GoToBegin();
 
-    ComplexIteratorType fftResidualIter( residualFFTImage, residualFFTImage->GetBufferedRegion() );
+    ComplexIteratorType fftResidualIter(residualFFTImage, residualFFTImage->GetBufferedRegion());
     fftResidualIter.GoToBegin();
 
     for(i=0;i<tissue.size();i++)
@@ -1077,7 +1077,7 @@ void PerfusionMapCalculatorMainThread::deconvolve( QVector<double> tissue, QVect
         }
         else
         {
-            num3 = complexd( 0.0, 0.0 );
+            num3 = complexd(0.0, 0.0);
             fftResidualIter.Set(num3);
         }
         ++fftTissueIter;
@@ -1086,19 +1086,19 @@ void PerfusionMapCalculatorMainThread::deconvolve( QVector<double> tissue, QVect
 
     typedef itk::VnlFFTComplexConjugateToRealImageFilter< double, 1 >  IFFTFilterType;
     IFFTFilterType::Pointer fftInverseFilter = IFFTFilterType::New();
-    fftInverseFilter->SetInput( residualFFTImage );
+    fftInverseFilter->SetInput(residualFFTImage);
 
     try
         {
         fftInverseFilter->Update();
         }
-    catch( itk::ExceptionObject & excp )
+    catch(itk::ExceptionObject & excp)
         {
         DEBUG_LOG(QString("Exception caught ! %1").arg(excp.GetDescription()));
         return;
         }
 
-    VectorIteratorType residualIter( fftInverseFilter->GetOutput(), fftInverseFilter->GetOutput()->GetBufferedRegion() );
+    VectorIteratorType residualIter(fftInverseFilter->GetOutput(), fftInverseFilter->GetOutput()->GetBufferedRegion());
     residualIter.GoToBegin();
 
     for(i=0;i<tissue.size();i++)
@@ -1111,7 +1111,7 @@ void PerfusionMapCalculatorMainThread::deconvolve( QVector<double> tissue, QVect
 
 }
 
-void PerfusionMapCalculatorMainThread::computeMomentsVoxel( QVector<double> v, double &m0, double &m1, double &m2)
+void PerfusionMapCalculatorMainThread::computeMomentsVoxel(QVector<double> v, double &m0, double &m1, double &m2)
 {
     int i;
     m0=0.0;
@@ -1165,7 +1165,7 @@ void PerfusionMapCalculatorMainThread::getOmega()
 
     omega_max = MathTools::PiNumber; // divide omega by Delta t for scaling according to sampling
 
-    index = static_cast<int>( ceil(m_aif.size()/2.0) ) + 1;
+    index = static_cast<int>(ceil(m_aif.size()/2.0)) + 1;
 
     for(i=0; i<index; i++)
     {

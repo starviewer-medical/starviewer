@@ -31,16 +31,16 @@ bool PerfusionMapReconstructionExtensionMediator::initializeExtension(QWidget* e
 {
     QPerfusionMapReconstructionExtension *perfusionMapReconstructionExtension;
 
-    if ( !(perfusionMapReconstructionExtension = qobject_cast<QPerfusionMapReconstructionExtension*>(extension)) )
+    if (!(perfusionMapReconstructionExtension = qobject_cast<QPerfusionMapReconstructionExtension*>(extension)))
     {
         return false;
     }
 
     Volume *input = extensionContext.getDefaultVolume();
-    if( !input )
-        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    if(!input)
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image"));
     else
-        perfusionMapReconstructionExtension->setInput( input );
+        perfusionMapReconstructionExtension->setInput(input);
 
     return true;
 }

@@ -31,16 +31,16 @@ bool EdemaSegmentationExtensionMediator::initializeExtension(QWidget* extension,
 {
     QEdemaSegmentationExtension *edemaSegmentationExtension;
 
-    if ( !(edemaSegmentationExtension = qobject_cast<QEdemaSegmentationExtension*>(extension)) )
+    if (!(edemaSegmentationExtension = qobject_cast<QEdemaSegmentationExtension*>(extension)))
     {
         return false;
     }
 
     Volume *input = extensionContext.getDefaultVolume();
-    if( !input )
-        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    if(!input)
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image"));
     else
-        edemaSegmentationExtension->setInput( input );
+        edemaSegmentationExtension->setInput(input);
 
     return true;
 }

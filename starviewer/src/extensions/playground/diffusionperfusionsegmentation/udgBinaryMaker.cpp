@@ -32,34 +32,34 @@ void udgBinaryMaker<TInputImage,TMaskImage>::MascaraDifusio(typename TInputImage
   typename DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
 
 
-  thresholdfilter->SetInput( inImage );
+  thresholdfilter->SetInput(inImage);
 
   (this)->GetMaxImage(inImage, &m_maxImageValue);
 
 
-  thresholdfilter->SetOutsideValue( m_outsideValue );
-  thresholdfilter->SetInsideValue( m_insideValue  );
+  thresholdfilter->SetOutsideValue(m_outsideValue);
+  thresholdfilter->SetInsideValue(m_insideValue );
 
   const InputPixelType lowerThreshold = 20;
   const InputPixelType upperThreshold = m_maxImageValue;
 
-  thresholdfilter->SetLowerThreshold( lowerThreshold );
-  thresholdfilter->SetUpperThreshold( upperThreshold );
+  thresholdfilter->SetLowerThreshold(lowerThreshold);
+  thresholdfilter->SetUpperThreshold(upperThreshold);
   thresholdfilter->Update();
 
 
   StructuringElementType structuringElement;
-  structuringElement.SetRadius( 7 ); // 3x3 structuring element
+  structuringElement.SetRadius(7); // 3x3 structuring element
   structuringElement.CreateStructuringElement();
 
-  binaryErode->SetKernel( structuringElement );
-  binaryDilate->SetKernel( structuringElement );
+  binaryErode->SetKernel(structuringElement);
+  binaryDilate->SetKernel(structuringElement);
 
-  binaryErode->SetErodeValue( m_insideValue );
-  binaryDilate->SetDilateValue( m_insideValue );
+  binaryErode->SetErodeValue(m_insideValue);
+  binaryDilate->SetDilateValue(m_insideValue);
 
-  binaryDilate->SetInput( thresholdfilter->GetOutput() );
-  binaryErode->SetInput( binaryDilate->GetOutput() );
+  binaryDilate->SetInput(thresholdfilter->GetOutput());
+  binaryErode->SetInput(binaryDilate->GetOutput());
   binaryErode->Update();
 
   maskImage = binaryErode->GetOutput();
@@ -77,46 +77,46 @@ void udgBinaryMaker<TInputImage,TMaskImage>::MascaraPerfusio(typename TInputImag
   typename DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
 
 
-  thresholdfilter->SetInput( inImage );
+  thresholdfilter->SetInput(inImage);
 
-  thresholdfilter->SetOutsideValue( m_outsideValue );
-  thresholdfilter->SetInsideValue( m_insideValue  );
+  thresholdfilter->SetOutsideValue(m_outsideValue);
+  thresholdfilter->SetInsideValue(m_insideValue );
 
   const InputPixelType lowerThreshold = 1;
   const InputPixelType upperThreshold = m_maxImageValue;
 
-  thresholdfilter->SetLowerThreshold( lowerThreshold );
-  thresholdfilter->SetUpperThreshold( upperThreshold );
+  thresholdfilter->SetLowerThreshold(lowerThreshold);
+  thresholdfilter->SetUpperThreshold(upperThreshold);
   //thresholdfilter->Update();
 
-  binaryErode1->SetErodeValue( m_insideValue );
-  binaryDilate->SetDilateValue( m_insideValue );
-  binaryErode2->SetErodeValue( m_insideValue );
+  binaryErode1->SetErodeValue(m_insideValue);
+  binaryDilate->SetDilateValue(m_insideValue);
+  binaryErode2->SetErodeValue(m_insideValue);
 
   StructuringElementType structuringElementErode1;
-  structuringElementErode1.SetRadius( 2 ); // 3x3 structuring element
+  structuringElementErode1.SetRadius(2); // 3x3 structuring element
   structuringElementErode1.CreateStructuringElement();
 
-  binaryErode1->SetKernel( structuringElementErode1 );
+  binaryErode1->SetKernel(structuringElementErode1);
 
-  binaryErode1->SetInput( thresholdfilter->GetOutput() );
+  binaryErode1->SetInput(thresholdfilter->GetOutput());
 
   StructuringElementType structuringElementDilate;
-  structuringElementDilate.SetRadius( 5 ); // 3x3 structuring element
+  structuringElementDilate.SetRadius(5); // 3x3 structuring element
   structuringElementDilate.CreateStructuringElement();
 
-  binaryDilate->SetKernel( structuringElementDilate );
+  binaryDilate->SetKernel(structuringElementDilate);
 
-  binaryDilate->SetInput( binaryErode1->GetOutput() );
+  binaryDilate->SetInput(binaryErode1->GetOutput());
 
 
   StructuringElementType structuringElementErode2;
-  structuringElementErode2.SetRadius( 3 ); // 3x3 structuring element
+  structuringElementErode2.SetRadius(3); // 3x3 structuring element
   structuringElementErode2.CreateStructuringElement();
 
-  binaryErode2->SetKernel( structuringElementErode2 );
+  binaryErode2->SetKernel(structuringElementErode2);
 
-  binaryErode2->SetInput( binaryDilate->GetOutput() );
+  binaryErode2->SetInput(binaryDilate->GetOutput());
   binaryErode2->Update();
 
   maskImage = binaryErode2->GetOutput();
@@ -137,33 +137,33 @@ void udgBinaryMaker<TInputImage,TMaskImage>::VentricleSegmentation(typename TInp
 /*  //Allocating memory for the output image
   typename TInputImage::RegionType region;
   region=inImage->GetLargestPossibleRegion();
-  maskImage->SetRegions( region );
+  maskImage->SetRegions(region);
   maskImage->Allocate();
 */
 
-  thresholdfilter->SetInput( inImage );
+  thresholdfilter->SetInput(inImage);
 
-  thresholdfilter->SetOutsideValue( m_outsideValue );
-  thresholdfilter->SetInsideValue( m_insideValue  );
+  thresholdfilter->SetOutsideValue(m_outsideValue);
+  thresholdfilter->SetInsideValue(m_insideValue );
 
   const InputPixelType lowerThreshold = m_minImageValue;
   const InputPixelType upperThreshold = level;
 
-  thresholdfilter->SetLowerThreshold( lowerThreshold );
-  thresholdfilter->SetUpperThreshold( upperThreshold );
+  thresholdfilter->SetLowerThreshold(lowerThreshold);
+  thresholdfilter->SetUpperThreshold(upperThreshold);
 
-/*  binaryErode->SetErodeValue( m_insideValue );
-  binaryDilate->SetDilateValue( m_insideValue );
+/*  binaryErode->SetErodeValue(m_insideValue);
+  binaryDilate->SetDilateValue(m_insideValue);
 
   StructuringElementType structuringElement;
-  structuringElement.SetRadius( 2 ); // 3x3 structuring element
+  structuringElement.SetRadius(2); // 3x3 structuring element
   structuringElement.CreateStructuringElement();
 
-  binaryErode->SetKernel( structuringElement );
-  binaryErode->SetInput( thresholdfilter->GetOutput() );
+  binaryErode->SetKernel(structuringElement);
+  binaryErode->SetInput(thresholdfilter->GetOutput());
 
-  binaryDilate->SetKernel( structuringElement );
-  binaryDilate->SetInput( binaryErode->GetOutput() );
+  binaryDilate->SetKernel(structuringElement);
+  binaryDilate->SetInput(binaryErode->GetOutput());
   binaryDilate->Update();
 
   maskImage = binaryDilate->GetOutput();
@@ -184,48 +184,48 @@ void udgBinaryMaker<TInputImage,TMaskImage>::StrokeSegmentation(typename TInputI
   typename DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
 
 
-  thresholdfilter->SetInput( inImage );
+  thresholdfilter->SetInput(inImage);
 
 
-  thresholdfilter->SetOutsideValue( m_outsideValue );
-  thresholdfilter->SetInsideValue( m_insideValue  );
+  thresholdfilter->SetOutsideValue(m_outsideValue);
+  thresholdfilter->SetInsideValue(m_insideValue );
 
   const InputPixelType lowerThreshold = level;
   //const InputPixelType upperThreshold = m_maxImageValue;
   const InputPixelType upperThreshold = max;
 
-  thresholdfilter->SetLowerThreshold( lowerThreshold );
-  thresholdfilter->SetUpperThreshold( upperThreshold );
+  thresholdfilter->SetLowerThreshold(lowerThreshold);
+  thresholdfilter->SetUpperThreshold(upperThreshold);
 //  thresholdfilter->Update();
 
-/*  binaryErode1->SetErodeValue( m_insideValue );
-  binaryDilate->SetDilateValue( m_insideValue );
-  binaryErode2->SetErodeValue( m_insideValue );
+/*  binaryErode1->SetErodeValue(m_insideValue);
+  binaryDilate->SetDilateValue(m_insideValue);
+  binaryErode2->SetErodeValue(m_insideValue);
 
   StructuringElementType structuringElementErode1;
-  structuringElementErode1.SetRadius( 1 ); // 3x3 structuring element
+  structuringElementErode1.SetRadius(1); // 3x3 structuring element
   structuringElementErode1.CreateStructuringElement();
 
-  binaryErode1->SetKernel( structuringElementErode1 );
+  binaryErode1->SetKernel(structuringElementErode1);
 
-  binaryErode1->SetInput( thresholdfilter->GetOutput() );
+  binaryErode1->SetInput(thresholdfilter->GetOutput());
 
   StructuringElementType structuringElementDilate;
-  structuringElementDilate.SetRadius( 3 ); // 3x3 structuring element
+  structuringElementDilate.SetRadius(3); // 3x3 structuring element
   structuringElementDilate.CreateStructuringElement();
 
-  binaryDilate->SetKernel( structuringElementDilate );
+  binaryDilate->SetKernel(structuringElementDilate);
 
-  binaryDilate->SetInput( binaryErode1->GetOutput() );
+  binaryDilate->SetInput(binaryErode1->GetOutput());
 
 
   StructuringElementType structuringElementErode2;
-  structuringElementErode2.SetRadius( 2 ); // 3x3 structuring element
+  structuringElementErode2.SetRadius(2); // 3x3 structuring element
   structuringElementErode2.CreateStructuringElement();
 
-  binaryErode2->SetKernel( structuringElementErode2 );
+  binaryErode2->SetKernel(structuringElementErode2);
 
-  binaryErode2->SetInput( binaryDilate->GetOutput() );
+  binaryErode2->SetInput(binaryDilate->GetOutput());
   binaryErode2->Update();
 
   maskImage = binaryErode2->GetOutput();
@@ -239,7 +239,7 @@ void udgBinaryMaker<TInputImage,TMaskImage>::StrokeSegmentation(typename TInputI
 
 
 template <typename TInputImage, typename TMaskImage>
-        void udgBinaryMaker<TInputImage,TMaskImage>::PenombraSegmentation(typename TInputImage::Pointer inImage, typename TMaskImage::Pointer &maskImage, unsigned int level, unsigned int max, const typename ConnectedThresholdFilterType::IndexType & seed )
+        void udgBinaryMaker<TInputImage,TMaskImage>::PenombraSegmentation(typename TInputImage::Pointer inImage, typename TMaskImage::Pointer &maskImage, unsigned int level, unsigned int max, const typename ConnectedThresholdFilterType::IndexType & seed)
 {
 
     // farem primer un threshold normal i al final de tot un connected
@@ -252,75 +252,75 @@ template <typename TInputImage, typename TMaskImage>
   typename ErodeFilterType::Pointer binaryDilate = ErodeFilterType::New();
 
 
-  thresholdfilter->SetInput( inImage );
+  thresholdfilter->SetInput(inImage);
 
 
-   thresholdfilter->SetOutsideValue( m_outsideValue );
-   thresholdfilter->SetInsideValue( m_insideValue  );
-//  thresholdfilter->SetReplaceValue( m_insideValue );
+   thresholdfilter->SetOutsideValue(m_outsideValue);
+   thresholdfilter->SetInsideValue(m_insideValue );
+//  thresholdfilter->SetReplaceValue(m_insideValue);
 
   const InputPixelType lowerThreshold = level;
   //const InputPixelType upperThreshold = m_maxImageValue;
   const InputPixelType upperThreshold = max;
 
-   thresholdfilter->SetLowerThreshold( lowerThreshold );
-   thresholdfilter->SetUpperThreshold( upperThreshold );
-//     thresholdfilter->SetLower( lowerThreshold );
-//     thresholdfilter->SetUpper( upperThreshold );
-//     thresholdfilter->SetSeed( seed );
+   thresholdfilter->SetLowerThreshold(lowerThreshold);
+   thresholdfilter->SetUpperThreshold(upperThreshold);
+//     thresholdfilter->SetLower(lowerThreshold);
+//     thresholdfilter->SetUpper(upperThreshold);
+//     thresholdfilter->SetSeed(seed);
     thresholdfilter->Update();
 
-  binaryErode1->SetDilateValue( m_insideValue );
-  binaryDilate->SetErodeValue( m_insideValue );
-  binaryErode2->SetDilateValue( m_insideValue );
+  binaryErode1->SetDilateValue(m_insideValue);
+  binaryDilate->SetErodeValue(m_insideValue);
+  binaryErode2->SetDilateValue(m_insideValue);
 
   StructuringElementType structuringElementErode1;
   typename StructuringElementType::SizeType radiusErode1 = { { 3, 3, 1 } };
-  structuringElementErode1.SetRadius( radiusErode1 ); // 3x3 structuring element
+  structuringElementErode1.SetRadius(radiusErode1); // 3x3 structuring element
   structuringElementErode1.CreateStructuringElement();
 
-  binaryErode1->SetKernel( structuringElementErode1 );
+  binaryErode1->SetKernel(structuringElementErode1);
 
-  binaryErode1->SetInput( thresholdfilter->GetOutput() );
+  binaryErode1->SetInput(thresholdfilter->GetOutput());
 
   StructuringElementType structuringElementDilate;
   typename StructuringElementType::SizeType radiusDilate = { { 7, 7, 2 } };
-//   structuringElementDilate.SetRadius( 3 ); // 3x3 structuring element
-  structuringElementDilate.SetRadius( radiusDilate ); // 3x3 structuring element
+//   structuringElementDilate.SetRadius(3); // 3x3 structuring element
+  structuringElementDilate.SetRadius(radiusDilate); // 3x3 structuring element
   structuringElementDilate.CreateStructuringElement();
 
-  binaryDilate->SetKernel( structuringElementDilate );
-  binaryDilate->SetBackgroundValue( m_outsideValue );
+  binaryDilate->SetKernel(structuringElementDilate);
+  binaryDilate->SetBackgroundValue(m_outsideValue);
 
   binaryErode1->Update();
 //   maskImage = binaryErode1->GetOutput();
 
-  binaryDilate->SetInput( binaryErode1->GetOutput() );
+  binaryDilate->SetInput(binaryErode1->GetOutput());
 
 
   StructuringElementType structuringElementErode2;
   typename StructuringElementType::SizeType radiusErode2 = { { 4, 4, 1 } };
-//   structuringElementErode2.SetRadius( 2 ); // 3x3 structuring element
-  structuringElementErode2.SetRadius( radiusErode2 ); // 3x3 structuring element
+//   structuringElementErode2.SetRadius(2); // 3x3 structuring element
+  structuringElementErode2.SetRadius(radiusErode2); // 3x3 structuring element
   structuringElementErode2.CreateStructuringElement();
 
-  binaryErode2->SetKernel( structuringElementErode2 );
+  binaryErode2->SetKernel(structuringElementErode2);
 
   binaryDilate->Update();
 //   maskImage = binaryDilate->GetOutput();
 
-  binaryErode2->SetInput( binaryDilate->GetOutput() );
+  binaryErode2->SetInput(binaryDilate->GetOutput());
   binaryErode2->Update();
 
 //   maskImage = binaryErode2->GetOutput();
 
 
 
-    connectedthresholdfilter->SetInput( binaryErode2->GetOutput() );
-    connectedthresholdfilter->SetReplaceValue( m_insideValue );
-    connectedthresholdfilter->SetLower( 128 );
-    connectedthresholdfilter->SetUpper( 255 );
-    connectedthresholdfilter->SetSeed( seed );
+    connectedthresholdfilter->SetInput(binaryErode2->GetOutput());
+    connectedthresholdfilter->SetReplaceValue(m_insideValue);
+    connectedthresholdfilter->SetLower(128);
+    connectedthresholdfilter->SetUpper(255);
+    connectedthresholdfilter->SetSeed(seed);
     connectedthresholdfilter->Update();
 
     maskImage = connectedthresholdfilter->GetOutput();
@@ -336,7 +336,7 @@ template <typename TInputImage, typename TMaskImage>
 double udgBinaryMaker<TInputImage,TMaskImage>::VolumeCalculation(typename TMaskImage::Pointer maskImage, bool x)
 {
 
-  if ( maskImage.IsNull() ) return 0.0;
+  if (maskImage.IsNull()) return 0.0;
 
   MaskIteratorType  maskIt(maskImage, maskImage->GetBufferedRegion());	//m�cara de la perfusi�
  const typename TMaskImage::SpacingType& spacing = maskImage->GetSpacing();
@@ -397,8 +397,8 @@ void udgBinaryMaker<TInputImage,TMaskImage>::JoinMask(typename TMaskImage::Point
 
   typename TMaskImage::RegionType region = maskImage1->GetLargestPossibleRegion();
   maskImageOut->SetRegions(region);
-  maskImageOut->SetSpacing( maskImage1->GetSpacing() );
-  maskImageOut->SetOrigin( maskImage1->GetOrigin() );
+  maskImageOut->SetSpacing(maskImage1->GetSpacing());
+  maskImageOut->SetOrigin(maskImage1->GetOrigin());
   maskImageOut->Allocate();
 
   MaskIteratorType  maskItOut(maskImageOut, maskImage2->GetBufferedRegion());	//m�cara de la perfusi�

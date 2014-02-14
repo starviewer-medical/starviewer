@@ -12,7 +12,7 @@
 namespace udg {
 
 /**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.es>
 */
 class rectumSegmentationMethod{
 
@@ -28,9 +28,9 @@ public:
 
     double applyMethod();
 
-    void applyMethodNextSlice( unsigned int slice, int step );
+    void applyMethodNextSlice(unsigned int slice, int step);
 
-    void regionGrowingRecursive( int indexX, int indexY, int prof );
+    void regionGrowingRecursive(int indexX, int indexY, int prof);
 
     void applyFilter(Volume* output);
 

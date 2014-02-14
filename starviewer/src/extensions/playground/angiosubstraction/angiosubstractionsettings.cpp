@@ -4,7 +4,7 @@ namespace udg {
 
 const QString keyPrefix("StarViewer-App-AngioSubstraction/");
 
-//const QString AngioSubstractionSettings::HorizontalSplitterGeometry( keyPrefix + "horizontalSplitter" );
+//const QString AngioSubstractionSettings::HorizontalSplitterGeometry(keyPrefix + "horizontalSplitter");
 
 AngioSubstractionSettings::AngioSubstractionSettings()
 {

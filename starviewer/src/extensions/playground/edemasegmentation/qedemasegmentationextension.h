@@ -25,19 +25,19 @@ class ToolManager;
 /**
 Extensió que segmenta l'hematoma i l'edema
 
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.es>
 */
 class QEdemaSegmentationExtension : public QWidget , private ::Ui::QEdemaSegmentationExtensionBase {
 Q_OBJECT
 public:
-    QEdemaSegmentationExtension( QWidget *parent = 0 );
+    QEdemaSegmentationExtension(QWidget *parent = 0);
 
     ~QEdemaSegmentationExtension();
 
 public slots:
     /// Li assigna el volum principal
     /// És slot pq també ho fem servir en cas de canvi de sèrie
-    void setInput( Volume *input );
+    void setInput(Volume *input);
 
     /// Executa l'algorisme de segmetnació
     void applyMethod();
@@ -63,10 +63,10 @@ private slots:
     void setSeedPosition(double x, double y, double z);
 
     /// actualitza el valor llindar baix
-    void setLowerValue( int x );
+    void setLowerValue(int x);
 
      /// actualitza el valor llindar alt
-    void setUpperValue( int x );
+    void setUpperValue(int x);
 
     /// Canvia la opacitat de la màscara
     void setOpacity(int op);
