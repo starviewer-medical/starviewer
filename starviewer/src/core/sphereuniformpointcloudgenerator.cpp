@@ -156,26 +156,26 @@ void SphereUniformPointCloudGenerator::createIcosahedronVertices()
 
 void SphereUniformPointCloudGenerator::createIcosahedronFaces()
 {
-    m_faces.append( 1); m_faces.append( 4); m_faces.append( 0);
-    m_faces.append( 4); m_faces.append( 9); m_faces.append( 0);
-    m_faces.append( 4); m_faces.append( 5); m_faces.append( 9);
-    m_faces.append( 8); m_faces.append( 5); m_faces.append( 4);
-    m_faces.append( 1); m_faces.append( 8); m_faces.append( 4);
-    m_faces.append( 1); m_faces.append(10); m_faces.append( 8);
-    m_faces.append(10); m_faces.append( 3); m_faces.append( 8);
-    m_faces.append( 8); m_faces.append( 3); m_faces.append( 5);
-    m_faces.append( 3); m_faces.append( 2); m_faces.append( 5);
-    m_faces.append( 3); m_faces.append( 7); m_faces.append( 2);
-    m_faces.append( 3); m_faces.append(10); m_faces.append( 7);
-    m_faces.append(10); m_faces.append( 6); m_faces.append( 7);
-    m_faces.append( 6); m_faces.append(11); m_faces.append( 7);
-    m_faces.append( 6); m_faces.append( 0); m_faces.append(11);
-    m_faces.append( 6); m_faces.append( 1); m_faces.append( 0);
-    m_faces.append(10); m_faces.append( 1); m_faces.append( 6);
-    m_faces.append(11); m_faces.append( 0); m_faces.append( 9);
-    m_faces.append( 2); m_faces.append(11); m_faces.append( 9);
-    m_faces.append( 5); m_faces.append( 2); m_faces.append( 9);
-    m_faces.append(11); m_faces.append( 2); m_faces.append( 7);
+    m_faces.append(1); m_faces.append(4); m_faces.append(0);
+    m_faces.append(4); m_faces.append(9); m_faces.append(0);
+    m_faces.append(4); m_faces.append(5); m_faces.append(9);
+    m_faces.append(8); m_faces.append(5); m_faces.append(4);
+    m_faces.append(1); m_faces.append(8); m_faces.append(4);
+    m_faces.append(1); m_faces.append(10); m_faces.append(8);
+    m_faces.append(10); m_faces.append(3); m_faces.append(8);
+    m_faces.append(8); m_faces.append(3); m_faces.append(5);
+    m_faces.append(3); m_faces.append(2); m_faces.append(5);
+    m_faces.append(3); m_faces.append(7); m_faces.append(2);
+    m_faces.append(3); m_faces.append(10); m_faces.append(7);
+    m_faces.append(10); m_faces.append(6); m_faces.append(7);
+    m_faces.append(6); m_faces.append(11); m_faces.append(7);
+    m_faces.append(6); m_faces.append(0); m_faces.append(11);
+    m_faces.append(6); m_faces.append(1); m_faces.append(0);
+    m_faces.append(10); m_faces.append(1); m_faces.append(6);
+    m_faces.append(11); m_faces.append(0); m_faces.append(9);
+    m_faces.append(2); m_faces.append(11); m_faces.append(9);
+    m_faces.append(5); m_faces.append(2); m_faces.append(9);
+    m_faces.append(11); m_faces.append(2); m_faces.append(7);
 }
 
 inline bool equal(const Vector3 &v1, const Vector3 &v2, float error)

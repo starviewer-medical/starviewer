@@ -432,7 +432,7 @@ QString DicomMask::getSOPInstanceUID() const
 
 bool DicomMask::operator ==(const DicomMask &mask)
 {
-    if (   getStudyInstanceUID() == mask.getStudyInstanceUID()
+    if (getStudyInstanceUID() == mask.getStudyInstanceUID()
         && getPatientID() == mask.getPatientID()
         && getPatientName() == mask.getPatientName()
         && getPatientBirthMinimum() == mask.getPatientBirthMinimum()
