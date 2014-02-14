@@ -156,7 +156,7 @@ bool gdcmAnonymizerStarviewer::Replace(Tag const &t, const char *value, VL const
         // Ok this is a public element
         assert(t.IsPublic());
         const DictEntry &dictentry = dicts.GetDictEntry(t);
-        if ( dictentry.GetVR() == VR::INVALID
+        if (dictentry.GetVR() == VR::INVALID
           || dictentry.GetVR() == VR::UN
           || dictentry.GetVR() == VR::SQ)
         {
@@ -478,7 +478,7 @@ bool gdcmAnonymizerStarviewer::CheckIfSequenceContainsAttributeToAnonymize(File 
 bool gdcmAnonymizerStarviewer::BasicApplicationLevelConfidentialityProfile1()
 {
     DataSet &ds = F->GetDataSet();
-    if ( ds.FindDataElement(Tag(0x0400, 0x0500))
+    if (ds.FindDataElement(Tag(0x0400, 0x0500))
       || ds.FindDataElement(Tag(0x0012, 0x0062))
       || ds.FindDataElement(Tag(0x0012, 0x0063)))
     {

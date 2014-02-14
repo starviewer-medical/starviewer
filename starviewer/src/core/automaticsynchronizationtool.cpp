@@ -63,7 +63,7 @@ void AutomaticSynchronizationTool::initialize()
 
         if (groupOfActualViewer == -1)
         {
-            if (frameOfReferenceUID != "" )
+            if (frameOfReferenceUID != "")
             {
                 m_toolData->setGroupForUID(frameOfReferenceUID, m_toolData->getNumberOfGroups());
             }
