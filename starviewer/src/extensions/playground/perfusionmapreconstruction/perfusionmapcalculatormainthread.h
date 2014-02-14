@@ -28,7 +28,7 @@ public:
     typedef itk::Image<double, 3> DoubleImageType;
     typedef itk::Image<double, 4> DoubleTemporalImageType;
 
-    PerfusionMapCalculatorMainThread( QObject *parent = 0 );
+    PerfusionMapCalculatorMainThread(QObject *parent = 0);
     virtual ~PerfusionMapCalculatorMainThread();
 
     void setDSCVolume(Volume* volume){m_DSCVolume=volume;}
@@ -56,7 +56,7 @@ public slots:
 
 signals:
 
-    void progress( int percent );
+    void progress(int percent);
     void computed();
 
 //protected:
@@ -66,18 +66,18 @@ private:
     static const double TE;
     static const double TR;
 
-    void computeDeltaR( );
-    void computeMeanDeltaRPerSlice( );
-    void computeMoments( );
+    void computeDeltaR();
+    void computeMeanDeltaRPerSlice();
+    void computeMoments();
     //Xapussa: posem directament el tipus dels voxels del Volume
-    void computeMomentsVoxel( QVector<double> v, double &m0, double &m1, double &m2);
-    void findAIF( );
-    void updateAIF( );
-    void fftAIF( );
-    void getOmega( );
-    void computePerfusion( );
-    void deconvolve( QVector<double> tissue, QVector<double>& residuefunc);
-    void changeMap( int value );
+    void computeMomentsVoxel(QVector<double> v, double &m0, double &m1, double &m2);
+    void findAIF();
+    void updateAIF();
+    void fftAIF();
+    void getOmega();
+    void computePerfusion();
+    void deconvolve(QVector<double> tissue, QVector<double>& residuefunc);
+    void changeMap(int value);
 
 
     Volume *m_DSCVolume;

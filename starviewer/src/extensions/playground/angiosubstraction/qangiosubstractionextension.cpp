@@ -27,10 +27,10 @@
 
 namespace udg {
 
-QAngioSubstractionExtension::QAngioSubstractionExtension( QWidget *parent )
- : QWidget( parent ), m_mainVolume(0), m_differenceVolume(0), m_tdToolData(0)
+QAngioSubstractionExtension::QAngioSubstractionExtension(QWidget *parent)
+ : QWidget(parent), m_mainVolume(0), m_differenceVolume(0), m_tdToolData(0)
 {
-    setupUi( this );
+    setupUi(this);
     AngioSubstractionSettings().init();
 
     //De moment amaguem el botó d'autoregistration perquè no acaba de funcionar
@@ -51,13 +51,13 @@ void QAngioSubstractionExtension::initializeTools()
 {
     m_toolManager = new ToolManager(this);
     // Registrem les tools
-    m_zoomToolButton->setDefaultAction( m_toolManager->registerTool("ZoomTool") );
-    m_slicingToolButton->setDefaultAction( m_toolManager->registerTool("SlicingTool") );
-    m_translateToolButton->setDefaultAction( m_toolManager->registerTool("TranslateTool") );
-    m_windowLevelToolButton->setDefaultAction( m_toolManager->registerTool("WindowLevelTool") );
-    m_voxelInformationToolButton->setDefaultAction( m_toolManager->registerTool("VoxelInformationTool") );
-    m_screenShotToolButton->setDefaultAction( m_toolManager->registerTool("ScreenShotTool") );
-    m_transDifferenceToolButton->setDefaultAction( m_toolManager->registerTool("TransDifferenceTool") );
+    m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
+    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
+    m_translateToolButton->setDefaultAction(m_toolManager->registerTool("TranslateTool"));
+    m_windowLevelToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelTool"));
+    m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
+    m_screenShotToolButton->setDefaultAction(m_toolManager->registerTool("ScreenShotTool"));
+    m_transDifferenceToolButton->setDefaultAction(m_toolManager->registerTool("TransDifferenceTool"));
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SynchronizeTool");
     m_toolManager->getRegisteredToolAction("SynchronizeTool")->setChecked(true);
@@ -65,7 +65,7 @@ void QAngioSubstractionExtension::initializeTools()
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
     defaultTools << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "SlicingKeyboardTool";
-    m_toolManager->triggerTools( defaultTools );
+    m_toolManager->triggerTools(defaultTools);
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
@@ -83,18 +83,18 @@ void QAngioSubstractionExtension::initializeTools()
     // Configurem la sincronització dels visors
     // Per defecte només configurem la sincronització a nivell d'scroll
     ToolConfiguration *synchronizeConfiguration = new ToolConfiguration();
-    synchronizeConfiguration->addAttribute( "Slicing", QVariant( true ) );
-    m_toolManager->setViewerTool( m_2DView_1->getViewer(), "SynchronizeTool", synchronizeConfiguration );
-    m_toolManager->setViewerTool( m_2DView_2->getViewer(), "SynchronizeTool", synchronizeConfiguration );
+    synchronizeConfiguration->addAttribute("Slicing", QVariant(true));
+    m_toolManager->setViewerTool(m_2DView_1->getViewer(), "SynchronizeTool", synchronizeConfiguration);
+    m_toolManager->setViewerTool(m_2DView_2->getViewer(), "SynchronizeTool", synchronizeConfiguration);
     
     // posem a punt les tools pels visors
-    m_toolManager->setupRegisteredTools( m_2DView_1->getViewer() );
-    m_toolManager->setupRegisteredTools( m_2DView_2->getViewer() );
+    m_toolManager->setupRegisteredTools(m_2DView_1->getViewer());
+    m_toolManager->setupRegisteredTools(m_2DView_2->getViewer());
 
     // Action Tools
-    m_rotateClockWiseToolButton->setDefaultAction( m_toolManager->registerActionTool("RotateClockWiseActionTool") );
-    m_toolManager->enableRegisteredActionTools( m_2DView_1->getViewer() );
-    m_toolManager->enableRegisteredActionTools( m_2DView_2->getViewer() );
+    m_rotateClockWiseToolButton->setDefaultAction(m_toolManager->registerActionTool("RotateClockWiseActionTool"));
+    m_toolManager->enableRegisteredActionTools(m_2DView_1->getViewer());
+    m_toolManager->enableRegisteredActionTools(m_2DView_2->getViewer());
 }
 
 void QAngioSubstractionExtension::createConnections()
@@ -102,12 +102,12 @@ void QAngioSubstractionExtension::createConnections()
     //Només es pot canviar l'input d'un dels viewers (el de l'input)
     m_2DView_1->getViewer()->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
     m_2DView_2->getViewer()->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
-    connect( m_2DView_1->getViewer()->getPatientBrowserMenu(), SIGNAL( selectedVolume(Volume*) ), SLOT( setInput( Volume* ) ) );
-    connect( m_imageSelectorSpinBox, SIGNAL( valueChanged(int) ), SLOT( computeDifferenceImage( int ) ) );
-    //connect( m_autoRegistrationToolButton, SIGNAL( clicked() ), SLOT( computeAutomateSingleImage( ) ) );
+    connect(m_2DView_1->getViewer()->getPatientBrowserMenu(), SIGNAL(selectedVolume(Volume*)), SLOT(setInput(Volume*)));
+    connect(m_imageSelectorSpinBox, SIGNAL(valueChanged(int)), SLOT(computeDifferenceImage(int)));
+    //connect(m_autoRegistrationToolButton, SIGNAL(clicked()), SLOT(computeAutomateSingleImage()));
 }
 
-void QAngioSubstractionExtension::setInput( Volume *input )
+void QAngioSubstractionExtension::setInput(Volume *input)
 {
     m_mainVolume = input;
 
@@ -128,7 +128,7 @@ void QAngioSubstractionExtension::setInput( Volume *input )
     m_imageSelectorSpinBox->setMaximum(m_mainVolume->getDimensions()[2]);
     m_imageSelectorSpinBox->setValue(1);
 
-    computeDifferenceImage( m_imageSelectorSpinBox->value() );
+    computeDifferenceImage(m_imageSelectorSpinBox->value());
 
     //Només actualitzem l'1 perquè el 2 ja es fa en l'acció computeDifferenceImage
     //Això es fa així perquè l'acció està lligada a un connect
@@ -141,7 +141,7 @@ void QAngioSubstractionExtension::setInput( Volume *input )
 }
 
 
-void QAngioSubstractionExtension::computeDifferenceImage( int imageid )
+void QAngioSubstractionExtension::computeDifferenceImage(int imageid)
 {
     if(m_mainVolume == 0)
     {
@@ -149,28 +149,28 @@ void QAngioSubstractionExtension::computeDifferenceImage( int imageid )
         return;
     }
 
-    QApplication::setOverrideCursor( Qt::WaitCursor );
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     //DEBUG_LOG(QString("Init computeDifferenceImage: %1").arg(imageid));
     
     //Actualitzem les dades de la transdifference tool
     m_toolManager->triggerTool("TransDifferenceTool");
-    TransDifferenceTool* tdTool = static_cast<TransDifferenceTool*> ( m_2DView_2->getViewer()->getToolProxy()->getTool("TransDifferenceTool"));
+    TransDifferenceTool* tdTool = static_cast<TransDifferenceTool*> (m_2DView_2->getViewer()->getToolProxy()->getTool("TransDifferenceTool"));
     if(m_tdToolData == 0){
-        m_tdToolData = static_cast<TransDifferenceToolData*> ( tdTool->getToolData() );
+        m_tdToolData = static_cast<TransDifferenceToolData*> (tdTool->getToolData());
     }
     if(m_tdToolData->getInputVolume() != m_mainVolume){
         m_tdToolData->setInputVolume(m_mainVolume);
     }
-    m_tdToolData->setReferenceSlice( imageid );
+    m_tdToolData->setReferenceSlice(imageid);
     tdTool->initializeDifferenceImage();
     m_toolManager->triggerTool("SlicingTool");
     
     QApplication::restoreOverrideCursor();
 }
 
-void QAngioSubstractionExtension::computeAutomateSingleImage( )
+void QAngioSubstractionExtension::computeAutomateSingleImage()
 {
-    QApplication::setOverrideCursor( Qt::WaitCursor );
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     const    unsigned int          Dimension = 2;
     typedef  Volume::ItkPixelType  PixelType;
 
@@ -196,15 +196,15 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
     InterpolatorType::Pointer   interpolator  = InterpolatorType::New();
     RegistrationType::Pointer   registration  = RegistrationType::New();
 
-    registration->SetOptimizer(     optimizer     );
-    registration->SetTransform(     transform     );
-    registration->SetInterpolator(  interpolator  );
+    registration->SetOptimizer(optimizer);
+    registration->SetTransform(transform);
+    registration->SetInterpolator(interpolator);
 
     MetricType::Pointer         metric        = MetricType::New();
-    registration->SetMetric( metric  );
-    metric->SetFixedImageStandardDeviation(  0.4 );
-    metric->SetMovingImageStandardDeviation( 0.4 );
-    metric->SetNumberOfSpatialSamples( 50 );
+    registration->SetMetric(metric);
+    metric->SetFixedImageStandardDeviation(0.4);
+    metric->SetMovingImageStandardDeviation(0.4);
+    metric->SetNumberOfSpatialSamples(50);
 
     typedef itk::ExtractImageFilter< Volume::ItkImageType, FixedImageType > FilterType;
     
@@ -223,10 +223,10 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
     start[1] = size[1] / 2;
     start[2] = sliceReference;
     Volume::ItkImageType::RegionType desiredRegion;
-    desiredRegion.SetSize(  size  );
-    desiredRegion.SetIndex( start );
-    extractFixedImageFilter->SetExtractionRegion( desiredRegion );
-    extractFixedImageFilter->SetInput( m_mainVolume->getItkData() );
+    desiredRegion.SetSize(size);
+    desiredRegion.SetIndex(start);
+    extractFixedImageFilter->SetExtractionRegion(desiredRegion);
+    extractFixedImageFilter->SetInput(m_mainVolume->getItkData());
     extractFixedImageFilter->Update();
 
     FilterType::Pointer extractMovingImageFilter = FilterType::New();
@@ -236,10 +236,10 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
     startMoving[1] = size[1] / 2;
     startMoving[2] = sliceNumber;
     Volume::ItkImageType::RegionType desiredMovingRegion;
-    desiredMovingRegion.SetSize(  size  );
-    desiredMovingRegion.SetIndex( startMoving );
-    extractMovingImageFilter->SetExtractionRegion( desiredMovingRegion );
-    extractMovingImageFilter->SetInput( m_mainVolume->getItkData() );
+    desiredMovingRegion.SetSize(size);
+    desiredMovingRegion.SetIndex(startMoving);
+    extractMovingImageFilter->SetExtractionRegion(desiredMovingRegion);
+    extractMovingImageFilter->SetInput(m_mainVolume->getItkData());
     extractMovingImageFilter->Update();
 
     typedef itk::NormalizeImageFilter< 
@@ -265,38 +265,38 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
     GaussianFilterType::Pointer fixedSmoother  = GaussianFilterType::New();
     GaussianFilterType::Pointer movingSmoother = GaussianFilterType::New();
 
-    fixedSmoother->SetVariance( 2.0 );
-    movingSmoother->SetVariance( 2.0 );
-    fixedNormalizer->SetInput(  extractFixedImageFilter->GetOutput() );
-    movingNormalizer->SetInput( extractMovingImageFilter->GetOutput() );
+    fixedSmoother->SetVariance(2.0);
+    movingSmoother->SetVariance(2.0);
+    fixedNormalizer->SetInput(extractFixedImageFilter->GetOutput());
+    movingNormalizer->SetInput(extractMovingImageFilter->GetOutput());
 
-    fixedSmoother->SetInput( fixedNormalizer->GetOutput() );
-    movingSmoother->SetInput( movingNormalizer->GetOutput() );
+    fixedSmoother->SetInput(fixedNormalizer->GetOutput());
+    movingSmoother->SetInput(movingNormalizer->GetOutput());
 
-    registration->SetFixedImage(    fixedSmoother->GetOutput()    );
-    registration->SetMovingImage(   movingSmoother->GetOutput()   );
+    registration->SetFixedImage(fixedSmoother->GetOutput());
+    registration->SetMovingImage(movingSmoother->GetOutput());
 
     fixedNormalizer->Update();
-    registration->SetFixedImageRegion( 
-       fixedNormalizer->GetOutput()->GetBufferedRegion() );
+    registration->SetFixedImageRegion(
+       fixedNormalizer->GetOutput()->GetBufferedRegion());
 
     typedef RegistrationType::ParametersType ParametersType;
-    ParametersType initialParameters( transform->GetNumberOfParameters() );
+    ParametersType initialParameters(transform->GetNumberOfParameters());
 
     initialParameters[0] = 0.0;  // Initial offset in mm along X
     initialParameters[1] = 0.0;  // Initial offset in mm along Y
 
-    registration->SetInitialTransformParameters( initialParameters );
+    registration->SetInitialTransformParameters(initialParameters);
 
-    optimizer->SetLearningRate( 20.0 );
-    optimizer->SetNumberOfIterations( 200 );
+    optimizer->SetLearningRate(20.0);
+    optimizer->SetNumberOfIterations(200);
     optimizer->MaximizeOn();
 
     try 
     { 
         registration->StartRegistration(); 
     } 
-    catch( itk::ExceptionObject & err ) 
+    catch(itk::ExceptionObject & err) 
     { 
         std::cout << "ExceptionObject caught !" << std::endl; 
         std::cout << err << std::endl; 
@@ -310,21 +310,21 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
 
     // Print out results
     //
-    DEBUG_LOG(QString( "Result = " ));
-    DEBUG_LOG(QString( " Translation X = %1").arg( TranslationAlongX ) );
-    DEBUG_LOG(QString( " Translation Y = %1").arg( TranslationAlongY ) );
+    DEBUG_LOG(QString("Result = "));
+    DEBUG_LOG(QString(" Translation X = %1").arg(TranslationAlongX));
+    DEBUG_LOG(QString(" Translation Y = %1").arg(TranslationAlongY));
     DEBUG_LOG(QString(" Iterations    = %1").arg(optimizer->GetCurrentIteration()));
     DEBUG_LOG(QString(" Metric value  = %1").arg(optimizer->GetValue()));
     double spacing[3];
-    m_mainVolume->getSpacing( spacing );
-    DEBUG_LOG(QString( " Translation X (in px) = %1").arg( TranslationAlongX / spacing[0] ) );
-    DEBUG_LOG(QString( " Translation Y (in px) = %1").arg( TranslationAlongY / spacing[1] ) );
+    m_mainVolume->getSpacing(spacing);
+    DEBUG_LOG(QString(" Translation X (in px) = %1").arg(TranslationAlongX / spacing[0]));
+    DEBUG_LOG(QString(" Translation Y (in px) = %1").arg(TranslationAlongY / spacing[1]));
 
     //Actualitzem les dades de la transdifference tool
     m_toolManager->triggerTool("TransDifferenceTool");
-    TransDifferenceTool* tdTool = static_cast<TransDifferenceTool*> ( m_2DView_2->getViewer()->getToolProxy()->getTool("TransDifferenceTool"));
+    TransDifferenceTool* tdTool = static_cast<TransDifferenceTool*> (m_2DView_2->getViewer()->getToolProxy()->getTool("TransDifferenceTool"));
     if(m_tdToolData == 0){
-        m_tdToolData = static_cast<TransDifferenceToolData*> ( tdTool->getToolData() );
+        m_tdToolData = static_cast<TransDifferenceToolData*> (tdTool->getToolData());
     }
     if(m_tdToolData->getInputVolume() != m_mainVolume){
         m_tdToolData->setInputVolume(m_mainVolume);
@@ -353,13 +353,13 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
     InterpolatorType::Pointer   interpolator  = InterpolatorType::New();
     RegistrationType::Pointer   registration  = RegistrationType::New();
 
-    registration->SetMetric(        metric        );
-    registration->SetOptimizer(     optimizer     );
-    registration->SetTransform(     transform     );
-    registration->SetInterpolator(  interpolator  );
+    registration->SetMetric(metric);
+    registration->SetOptimizer(optimizer);
+    registration->SetTransform(transform);
+    registration->SetInterpolator(interpolator);
 
-    metric->SetNumberOfHistogramBins( 50 );
-    metric->SetNumberOfSpatialSamples( 10000 );
+    metric->SetNumberOfHistogramBins(50);
+    metric->SetNumberOfSpatialSamples(10000);
 
     typedef itk::ExtractImageFilter< Volume::ItkImageType, FixedImageType > FilterType;
     
@@ -378,10 +378,10 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
     start[1] = size[1] / 2;
     start[2] = sliceReference;
     Volume::ItkImageType::RegionType desiredRegion;
-    desiredRegion.SetSize(  size  );
-    desiredRegion.SetIndex( start );
-    extractFixedImageFilter->SetExtractionRegion( desiredRegion );
-    extractFixedImageFilter->SetInput( m_mainVolume->getItkData() );
+    desiredRegion.SetSize(size);
+    desiredRegion.SetIndex(start);
+    extractFixedImageFilter->SetExtractionRegion(desiredRegion);
+    extractFixedImageFilter->SetInput(m_mainVolume->getItkData());
     extractFixedImageFilter->Update();
 
     FilterType::Pointer extractMovingImageFilter = FilterType::New();
@@ -391,36 +391,36 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
     startMoving[1] = size[1] / 2;
     startMoving[2] = sliceNumber;
     Volume::ItkImageType::RegionType desiredMovingRegion;
-    desiredMovingRegion.SetSize(  size  );
-    desiredMovingRegion.SetIndex( startMoving );
-    extractMovingImageFilter->SetExtractionRegion( desiredMovingRegion );
-    extractMovingImageFilter->SetInput( m_mainVolume->getItkData() );
+    desiredMovingRegion.SetSize(size);
+    desiredMovingRegion.SetIndex(startMoving);
+    extractMovingImageFilter->SetExtractionRegion(desiredMovingRegion);
+    extractMovingImageFilter->SetInput(m_mainVolume->getItkData());
     extractMovingImageFilter->Update();
 
-    registration->SetFixedImage( extractFixedImageFilter->GetOutput() );
-    registration->SetMovingImage( extractMovingImageFilter->GetOutput() );
+    registration->SetFixedImage(extractFixedImageFilter->GetOutput());
+    registration->SetMovingImage(extractMovingImageFilter->GetOutput());
 
     typedef RegistrationType::ParametersType ParametersType;
-    ParametersType initialParameters( transform->GetNumberOfParameters() );
+    ParametersType initialParameters(transform->GetNumberOfParameters());
 
     //Potser seria millor posar la transformada que té actualment
     initialParameters[0] = 0.0;  // Initial offset in mm along X
     initialParameters[1] = 0.0;  // Initial offset in mm along Y
 
-    registration->SetInitialTransformParameters( initialParameters );
+    registration->SetInitialTransformParameters(initialParameters);
 
-    optimizer->SetMaximumStepLength( 4.00 );  
-    optimizer->SetMinimumStepLength( 0.005 );
+    optimizer->SetMaximumStepLength(4.00);  
+    optimizer->SetMinimumStepLength(0.005);
 
-    optimizer->SetNumberOfIterations( 200 );
+    optimizer->SetNumberOfIterations(200);
 
     try 
     { 
         registration->StartRegistration(); 
     } 
-    catch( itk::ExceptionObject & err ) 
+    catch(itk::ExceptionObject & err) 
     { 
-        DEBUG_LOG(QString( "ExceptionObject caught !"));
+        DEBUG_LOG(QString("ExceptionObject caught !"));
         std::cout<<err<<std::endl;
         return;
     } 
@@ -433,11 +433,11 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
 
     const double bestValue = optimizer->GetValue();
 
-    DEBUG_LOG(QString( "Result = " ));
-    DEBUG_LOG(QString( " Translation X = %1").arg( TranslationAlongX ) );
-    DEBUG_LOG(QString( " Translation Y = %1").arg( TranslationAlongY ) );
-    DEBUG_LOG(QString( " Iterations    = %1").arg( numberOfIterations ) );
-    DEBUG_LOG(QString( " Metric value  = %1").arg( bestValue ) );
+    DEBUG_LOG(QString("Result = "));
+    DEBUG_LOG(QString(" Translation X = %1").arg(TranslationAlongX));
+    DEBUG_LOG(QString(" Translation Y = %1").arg(TranslationAlongY));
+    DEBUG_LOG(QString(" Iterations    = %1").arg(numberOfIterations));
+    DEBUG_LOG(QString(" Metric value  = %1").arg(bestValue));
 
     typedef  unsigned char  OutputPixelType;
     typedef itk::Image< OutputPixelType, Dimension > OutputImageType;
@@ -455,23 +455,23 @@ void QAngioSubstractionExtension::computeAutomateSingleImage( )
     ResampleFilterType::Pointer resample = ResampleFilterType::New();
     RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
-    rescaler->SetOutputMinimum(   0 );
-    rescaler->SetOutputMaximum( 255 );
+    rescaler->SetOutputMinimum(0);
+    rescaler->SetOutputMaximum(255);
 
     TransformType::Pointer finalTransform = TransformType::New();
-    finalTransform->SetParameters( finalParameters );
-    resample->SetTransform( finalTransform );
-    resample->SetSize( extractMovingImageFilter->GetOutput()->GetLargestPossibleRegion().GetSize() );
-    resample->SetOutputOrigin(  extractMovingImageFilter->GetOutput()->GetOrigin() );
-    resample->SetOutputSpacing( extractMovingImageFilter->GetOutput()->GetSpacing() );
-    resample->SetDefaultPixelValue( 100 );
+    finalTransform->SetParameters(finalParameters);
+    resample->SetTransform(finalTransform);
+    resample->SetSize(extractMovingImageFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
+    resample->SetOutputOrigin(extractMovingImageFilter->GetOutput()->GetOrigin());
+    resample->SetOutputSpacing(extractMovingImageFilter->GetOutput()->GetSpacing());
+    resample->SetDefaultPixelValue(100);
 
-    writer->SetFileName( "prova.jpg" );
+    writer->SetFileName("prova.jpg");
 
-    rescaler->SetInput( extractMovingImageFilter->GetOutput() );
-    resample->SetInput( rescaler->GetOutput() );
-    caster->SetInput( resample->GetOutput() );
-    writer->SetInput( caster->GetOutput() );
+    rescaler->SetInput(extractMovingImageFilter->GetOutput());
+    resample->SetInput(rescaler->GetOutput());
+    caster->SetInput(resample->GetOutput());
+    writer->SetInput(caster->GetOutput());
     writer->Update();
 */
 

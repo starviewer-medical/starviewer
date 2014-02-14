@@ -12,7 +12,7 @@
 namespace udg {
 
 /**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.es>
 */
 class VolumeCalculator{
 public:
@@ -20,9 +20,9 @@ public:
 
     ~VolumeCalculator();
 
-    void setInput( Volume * mask );
+    void setInput(Volume * mask);
 
-    void setInsideValue( int value );
+    void setInsideValue(int value);
 
     double getVolume();
 

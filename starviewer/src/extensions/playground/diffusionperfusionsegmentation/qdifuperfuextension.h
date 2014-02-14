@@ -43,19 +43,19 @@ class ToolManager;
  * Extensió que permet segmentar una lesió i calcular-ne el volum a partir de les imatges de difusió
  * i perfusió.
  *
- * @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+ * @author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.es>
 */
 class QDifuPerfuSegmentationExtension : public QWidget, private ::Ui::QDifuPerfuExtensionBase {
 Q_OBJECT
 
 public:
-    QDifuPerfuSegmentationExtension( QWidget * parent = 0 );
+    QDifuPerfuSegmentationExtension(QWidget * parent = 0);
     ~QDifuPerfuSegmentationExtension();
 
 public slots:
     /// Li assigna el volum principal
-    void setDiffusionInput( Volume * input );
-    void setPerfusionInput( Volume * input );
+    void setDiffusionInput(Volume * input);
+    void setPerfusionInput(Volume * input);
 
     /// Executa l'algorisme de segmentació
     void applyStrokeSegmentation();
@@ -65,15 +65,15 @@ public slots:
     void applyPenombraSegmentation();
 
 private slots:
-    void setMaxDiffusionImage( int max );
-    void setDiffusionImage( int index );
-    void setMaxPerfusionImage( int max );
-    void setPerfusionImage( int index );
+    void setMaxDiffusionImage(int max);
+    void setDiffusionImage(int index);
+    void setMaxPerfusionImage(int max);
+    void setPerfusionImage(int index);
 
     /// actualitza el valor llindar baix
-    void setStrokeLowerValue( int x );
+    void setStrokeLowerValue(int x);
     /// actualitza el valor llindar alt
-    void setStrokeUpperValue( int x );
+    void setStrokeUpperValue(int x);
 
     /// Visualitza la màscara donats uns thresholds
     void viewThresholds();
@@ -93,34 +93,34 @@ private slots:
     void applyFilterDiffusionImage();
 
     ///Pinta el mapa de colors segons un threshold determinat
-    void setPerfusionLut( int threshold );
+    void setPerfusionLut(int threshold);
 
     /// Canvia la opacitat de la màscara (difusió)
-    void setDiffusionOpacity( int opacity );
+    void setDiffusionOpacity(int opacity);
 
     /// Canvia la opacitat de la màscara (perfusió)
-    void setPerfusionOpacity( int opacity );
+    void setPerfusionOpacity(int opacity);
 
     /// Visualitza els diferents overlays
     void viewLesionOverlay();
     void viewVentriclesOverlay();
 
     // [temporal] el farem servir mentre no s'actualitzi la tècnica d'overlay del Q2DViewer
-    void setPerfusionSlice( int slice );
-    void synchronizeSlices( bool sync );
+    void setPerfusionSlice(int slice);
+    void synchronizeSlices(bool sync);
 
     ///Calcula la diferència de volums
     void computePenombraVolume();
 
     ///Desa la màscara de la difusió
-    void saveDiffusionVolume( );
-    void saveDiffusionMask( );
+    void saveDiffusionVolume();
+    void saveDiffusionMask();
     ///Desa la màscara i diferents volums de la perfusió
-    void savePerfusionVolume( );
-    void saveRegisteredPerfusionVolume( );
-    void savePerfusionMask( );
+    void savePerfusionVolume();
+    void saveRegisteredPerfusionVolume();
+    void savePerfusionMask();
     ///Desa la transformada entre la perfusió i la difusió
-    void saveTransform( );
+    void saveTransform();
 
     ///Actualitza els volums de les màscares de la perfusió i la difusió
     void updateStrokeVolume();

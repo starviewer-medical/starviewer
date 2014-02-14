@@ -18,20 +18,20 @@ class QGraphicPlotWidget : public QWidget, private Ui::QGraphicPlotWidgetBase {
 
 public:
 
-    QGraphicPlotWidget( QWidget *parent = 0 );
+    QGraphicPlotWidget(QWidget *parent = 0);
     ~QGraphicPlotWidget();
 
-    void paintPoints( );
-    void resizeData( );
+    void paintPoints();
+    void resizeData();
     void paintEvent(QPaintEvent *);
 
     void setMaxX(double a);
     void setMinX(double a);
     void setMaxY(double a);
     void setMinY(double a);
-    void setTitle( QString s );
-    void setData( QVector<double> v, int channel = 0 );
-    void setPaintingFeatures( QBrush color = Qt::yellow, qreal width = 2, int channel = 0, Qt::PenStyle style = Qt::SolidLine, Qt::PenCapStyle cap = Qt::SquareCap, Qt::PenJoinStyle join = Qt::BevelJoin );
+    void setTitle(QString s);
+    void setData(QVector<double> v, int channel = 0);
+    void setPaintingFeatures(QBrush color = Qt::yellow, qreal width = 2, int channel = 0, Qt::PenStyle style = Qt::SolidLine, Qt::PenCapStyle cap = Qt::SquareCap, Qt::PenJoinStyle join = Qt::BevelJoin);
     void setHold(bool b){m_hold=b;}
     void setAutoLimits(bool b = true) {m_autoXLimits=b;m_autoYLimits=b;}
     void setAutoXLimits(bool b = true) {m_autoXLimits=b;}

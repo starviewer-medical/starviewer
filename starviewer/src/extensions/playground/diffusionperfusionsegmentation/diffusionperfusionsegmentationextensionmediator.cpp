@@ -31,20 +31,20 @@ bool DiffusionPerfusionSegmentationExtensionMediator::initializeExtension(QWidge
 {
     QDifuPerfuSegmentationExtension *difuPerfuExtension;
 
-    if ( !(difuPerfuExtension = qobject_cast<QDifuPerfuSegmentationExtension*>(extension)) )
+    if (!(difuPerfuExtension = qobject_cast<QDifuPerfuSegmentationExtension*>(extension)))
     {
         return false;
     }
 
     Volume *input = extensionContext.getDefaultVolume();
-    if( !input )
-        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    if(!input)
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image"));
     else
     {
-        difuPerfuExtension->setDiffusionInput( input );
+        difuPerfuExtension->setDiffusionInput(input);
         // TODO per evitar segmentation faults. S'hauria de fer un tracte més intel·ligent a l'hora de
         // donar l'input de difu i perfu, examninar els estudis, etc
-        difuPerfuExtension->setPerfusionInput( input );
+        difuPerfuExtension->setPerfusionInput(input);
     }
 
     return true;

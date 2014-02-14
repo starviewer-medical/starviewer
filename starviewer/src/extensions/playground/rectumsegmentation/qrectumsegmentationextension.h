@@ -26,21 +26,21 @@ class rectumSegmentationMethod;
 class ToolManager;
 
 /**
-    @author Laboratori de Gràfics i Imatge  ( GILab ) <vismed@ima.udg.es>
+    @author Laboratori de Gràfics i Imatge  (GILab) <vismed@ima.udg.es>
 */
 class QRectumSegmentationExtension : public QWidget , private ::Ui::QRectumSegmentationExtensionBase {
 Q_OBJECT
 public:
-    QRectumSegmentationExtension( QWidget *parent = 0 );
+    QRectumSegmentationExtension(QWidget *parent = 0);
     ~QRectumSegmentationExtension();
 
 public slots:
     /// Li assigna el volum principal
-    void setInput( Volume *input );
+    void setInput(Volume *input);
 
     /// Executa l'algorisme de segmetnació
     void ApplyMethod();
-    void ApplyFilterMainImage( );
+    void ApplyFilterMainImage();
 
 private:
     void initializeTools();
@@ -54,32 +54,32 @@ private:
 
 private slots:
      /// gestiona els events del m_2DView
-    void strokeEventHandler( unsigned long id );
+    void strokeEventHandler(unsigned long id);
 
     /// gestiona els events del botó esquerre
-    void leftButtonEventHandler( );
-    void onMouseMoveEventHandler( );
-    void leftButtonReleaseHandler( );
+    void leftButtonEventHandler();
+    void onMouseMoveEventHandler();
+    void leftButtonReleaseHandler();
 
     /// visualitza la informació de la llavor del mètode de segmentació
     void setSeedPosition(double x, double y, double z);
 
     /// actulitza els controls quan es canvia l'input
-    void updateInputFeatures( Volume *input );
+    void updateInputFeatures(Volume *input);
 
-    void setRegionOfInterest( );
-    void setMovingRegionOfInterest( );
-    void setReleaseRegionOfInterest( );
+    void setRegionOfInterest();
+    void setMovingRegionOfInterest();
+    void setReleaseRegionOfInterest();
     void viewRegionState(int st);
 
     /// desactiva el booleà que ens diu si està el botó esquerra apretat
-    void setLeftButtonOff( );
+    void setLeftButtonOff();
 
     /// actualitza el valor llindar baix
-    void setLowerValue( int x );
+    void setLowerValue(int x);
 
      /// actualitza el valor llindar alt
-    void setUpperValue( int x );
+    void setUpperValue(int x);
 
     /// Canvia la opacitat de la màscara
     void setOpacity(int op);
@@ -104,7 +104,7 @@ private slots:
     void saveSegmentation3DVolume();
 
     /// Desactiva les tools en cas que s'activi una tool "externa" (ara només la ROI)
-    void toolChanged( int but );
+    void toolChanged(int but);
 
 private:
     /// El volum principal

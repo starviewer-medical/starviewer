@@ -15,7 +15,7 @@
 namespace udg {
 
 /**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona (GGG) <vismed@ima.udg.es>
 */
 class RectumSegmentationExtensionMediator : public ExtensionMediator
 {
@@ -27,7 +27,7 @@ public:
 
     virtual bool initializeExtension(QWidget* extension, const ExtensionContext &extensionContext);
 
-    virtual DisplayableID getExtensionID() const;
+    virtual DisplayableID getExtensionID()const;
 };
 
 static InstallExtension<QRectumSegmentationExtension, RectumSegmentationExtensionMediator> registerRectumSegmentationExtension;

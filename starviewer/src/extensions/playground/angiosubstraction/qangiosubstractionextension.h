@@ -24,17 +24,17 @@ class ToolManager;
 class TransDifferenceToolData;
 
 /**
-    @author Grup de Gràfics de Girona  ( GGG ) <vismed@ima.udg.es>
+    @author Grup de Gràfics de Girona  (GGG) <vismed@ima.udg.es>
 */
 class QAngioSubstractionExtension : public QWidget , private Ui::QAngioSubstractionExtensionBase {
 Q_OBJECT
 public:
-    QAngioSubstractionExtension( QWidget *parent = 0 );
+    QAngioSubstractionExtension(QWidget *parent = 0);
     ~QAngioSubstractionExtension();
 
 public slots:
     /// Li assigna el volum principal
-    void setInput( Volume *input );
+    void setInput(Volume *input);
 
 private:
     void initializeTools();
@@ -49,10 +49,10 @@ private:
 private slots:
 
     /// Calcula la imatge diferència respecte la imatge imageid
-    void computeDifferenceImage( int imageid );
+    void computeDifferenceImage(int imageid);
 
     /// Calcula automàticament (registre) la imatge diferència respecte la imatge imageid
-    void computeAutomateSingleImage( );
+    void computeAutomateSingleImage();
 
 private:
     /// El volum principal
