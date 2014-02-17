@@ -87,7 +87,7 @@ bool QInputOutputDicomdirWidget::openDicomdir()
     Status state;
     bool ok = false;
     // L'asterisc abans de DICOMDIR i dicomdir hi és per compatibilitat amb Mac.
-    dicomdirPath = QFileDialog::getOpenFileName(0, QFileDialog::tr("Open"), settings.getValue(InputOutputSettings::LastOpenedDICOMDIRPath).toString(),
+    dicomdirPath = QFileDialog::getOpenFileName(0, tr("Open"), settings.getValue(InputOutputSettings::LastOpenedDICOMDIRPath).toString(),
                                                 "DICOMDIR (*DICOMDIR *dicomdir)");
 
     // Si és buit no ens han seleccionat cap fitxer
