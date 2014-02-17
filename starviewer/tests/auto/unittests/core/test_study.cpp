@@ -124,8 +124,8 @@ void test_Study::setDate_ShouldValidatePassedDate_data()
     QDate validPastDate(2011, 1, 1);
     QDate validFutureDate(2012, 12, 24);
 
-    QTest::newRow("set a null Date") << emptyDate << true;
-    QTest::newRow("set a invalid Date") << invalidDate << true;
+    QTest::newRow("set a null Date") << emptyDate << false;
+    QTest::newRow("set a invalid Date") << invalidDate << false;
     QTest::newRow("set a valid past Date") << validPastDate << true;
     QTest::newRow("set a valid future Date") << validFutureDate << true;
 }
@@ -151,9 +151,9 @@ void test_Study::setDate_ShouldValidatePassedDateAsString_data()
     QString validPointDate("2012.01.31");
     QString validDate("20120131");
 
-    QTest::newRow("set a null Date") << emptyDate << true;
-    QTest::newRow("set a invalid Date") << invalidFormatDate << true;
-    QTest::newRow("set a invalid Date") << invalidDate << true;
+    QTest::newRow("set a null Date") << emptyDate << false;
+    QTest::newRow("set a invalid Date") << invalidFormatDate << false;
+    QTest::newRow("set a invalid Date") << invalidDate << false;
     QTest::newRow("set a valid Date with points") << validPointDate << true;
     QTest::newRow("set a valid Date without points") << validDate << true;
 }
@@ -179,8 +179,8 @@ void test_Study::setTime_ShouldValidatePassedTime_data()
     QTime validFutureTime(12, 30, 30, 500);
 
     Series series;
-    QTest::newRow("set a null Time") << emptyTime << true;
-    QTest::newRow("set a invalid Time") << invalidTime << true;
+    QTest::newRow("set a null Time") << emptyTime << false;
+    QTest::newRow("set a invalid Time") << invalidTime << false;
     QTest::newRow("set a valid past Time") << validPastTime << true;
     QTest::newRow("set a valid future Time") << validFutureTime << true;
 }
@@ -206,9 +206,9 @@ void test_Study::setTime_ShouldValidatePassedTimeAsString_data()
     QString validPointsTime("21:10:30.509");
     QString validTime("211030");
 
-    QTest::newRow("set a null Time") << emptyTime << true;
-    QTest::newRow("set a invalid Time with :") << invalidPointsTime << true;
-    QTest::newRow("set a invalid Time without :") << invalidTime << true;
+    QTest::newRow("set a null Time") << emptyTime << false;
+    QTest::newRow("set a invalid Time with :") << invalidPointsTime << true;    // false with Qt5
+    QTest::newRow("set a invalid Time without :") << invalidTime << false;
     QTest::newRow("set a valid past Time with :") << validPointsTime << true;
     QTest::newRow("set a valid future Time without :") << validTime << true;
 }
