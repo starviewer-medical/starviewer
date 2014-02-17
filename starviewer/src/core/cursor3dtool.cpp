@@ -306,9 +306,12 @@ void Cursor3DTool::hideCursor()
         return;
     }
 
-    m_crossHair->setVisibility(false);
-    m_crossHair->update();
-    m_2DViewer->render();
+    if (m_crossHair->isVisible())
+    {
+        m_crossHair->setVisibility(false);
+        m_crossHair->update();
+        m_2DViewer->render();
+    }
 }
 
 void Cursor3DTool::createNewCrossHair()
