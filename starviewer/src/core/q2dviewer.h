@@ -231,6 +231,8 @@ public:
     /// per casos en que el pla "real" no és el que volem i necessitem una petita modificació
     void projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false);
 
+    bool getDicomWorldCoordinates(const double xyz[3], double dicomWorldPosition[4]);
+
     /// Assigna/Retorna el volum solapat
     void setOverlayInput(Volume *volume);
     Volume* getOverlayInput();
