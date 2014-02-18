@@ -522,8 +522,10 @@ void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
 
                 QString message = tr("There has been a database error while preparing the DICOM files to send to PACS %1. The DICOM files won't be sent.")
                     .arg(pacsDevice.getAETitle());
-                message += tr("\nClose all %1 windows and try again."
-                         "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+                message += "\n";
+                message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+                message += "\n\n";
+                message += tr("If the problem persists contact with an administrator.");
                 QMessageBox::critical(this, ApplicationNameString, message);
             }
             else
@@ -592,27 +594,36 @@ bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseMana
             return false;
         case LocalDatabaseManager::DatabaseLocked:
             message += tr("The database is blocked by another process.");
-            message += tr("\nClose all %1 windows and try again."
-                         "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            message += "\n";
+            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += "\n\n";
+            message += tr("If the problem persists contact with an administrator.");
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
             message += tr("Database is corrupted.");
-            message += tr("\nClose all %1 windows and try again."
-                         "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            message += "\n";
+            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += "\n\n";
+            message += tr("If the problem persists contact with an administrator.");
             break;
         case LocalDatabaseManager::SyntaxErrorSQL:
             message += tr("Database syntax error.");
-            message += tr("\nClose all %1 windows and try again."
-                         "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            message += "\n";
+            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += "\n\n";
+            message += tr("If the problem persists contact with an administrator.");
             break;
         case LocalDatabaseManager::DatabaseError:
             message += tr("An internal database error occurred.");
-            message += tr("\nClose all %1 windows and try again."
-                         "\n\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            message += "\n";
+            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += "\n\n";
+            message += tr("If the problem persists contact with an administrator.");
             break;
         case LocalDatabaseManager::DeletingFilesError:
-            message += tr("Some files cannot be deleted."
-                         "\nThese files have to be deleted manually.");
+            message += tr("Some files cannot be deleted.");
+            message += "\n";
+            message += tr("These files have to be deleted manually.");
             break;
         default:
             message = tr("Unknown error.");

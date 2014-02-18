@@ -77,7 +77,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACSJob::getStatus()
 QString SendDICOMFilesToPACSJob::getStatusDescription()
 {
     QString message;
-    QString errorDetails = tr("\n\nDetails:\n") + m_sendDICOMFilesToPACS->getResponseStatus().toString();
+    QString errorDetails = "\n\n" + tr("Details:") + "\n" + m_sendDICOMFilesToPACS->getResponseStatus().toString();
     QString studyID = getStudyOfDICOMFilesToSend()->getID();
     QString patientName = getStudyOfDICOMFilesToSend()->getParentPatient()->getFullName();
     QString pacsAETitle = getPacsDevice().getAETitle();
@@ -90,8 +90,10 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
         case PACSRequestStatus::SendCanNotConnectToPACS:
             message = tr("Unable to send DICOM images from study %1 of patient %2 because cannot connect to PACS %3.\n")
                 .arg(studyID, patientName, pacsAETitle);
-            message += tr("\nMake sure that your computer is connected to the network and the PACS parameters are correct.");
-            message += tr("\nIf the problem persists contact with an administrator.");
+            message += "\n";
+            message += tr("Make sure that your computer is connected to the network and the PACS parameters are correct.");
+            message += "\n";
+            message += tr("If the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::SendAllDICOMFilesFailed:
         case PACSRequestStatus::SendUnknowStatus:
@@ -122,8 +124,10 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
         default:
             message = tr("An unknown error has occurred while sending images from study %1 of patient %2 to PACS %3.").arg(
                 studyID, patientName, pacsAETitle);
-            message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            message += "\n\n";
+            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += "\n";
+            message += tr("If the problem persists contact with an administrator.");
             message += errorDetails;
             break;
     }

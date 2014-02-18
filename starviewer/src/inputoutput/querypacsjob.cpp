@@ -90,7 +90,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacsJob::getStatus()
 QString QueryPacsJob::getStatusDescription()
 {
     QString message;
-    QString errorDetails = tr("\n\nError details:\n") + m_queryPacs->getResponseStatus().toString();
+    QString errorDetails = "\n\n" + tr("Error details:") + "\n" + m_queryPacs->getResponseStatus().toString();
     QString pacsAETitle = getPacsDevice().getAETitle();
 
     switch (getStatus())
@@ -103,22 +103,26 @@ QString QueryPacsJob::getStatusDescription()
             break;
         case PACSRequestStatus::QueryCanNotConnectToPACS:
             message = tr("Query failed: Unable to connect to PACS %1.\n").arg(pacsAETitle);
-            message += tr("\nMake sure your computer is connected to the network and the PACS configuration is correct. ");
+            message += "\n";
+            message += tr("Make sure your computer is connected to the network and the PACS configuration is correct.");
             message += tr("If the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::QueryFailedOrRefused:
-            message = tr("PACS %1 could not process the query.\n\n").arg(pacsAETitle);
+            message = tr("PACS %1 could not process the query.").arg(pacsAETitle);
+            message += "\n\n";
             message += tr("Try with a different query or wait a few minutes. If the problem persists contact with a PACS administrator.");
             message += errorDetails;
             break;
         case PACSRequestStatus::QueryUnknowStatus:
-            message = tr("PACS %1 could not process the query and returned an unknown error.\n\n").arg(pacsAETitle);
+            message = tr("PACS %1 could not process the query and returned an unknown error.").arg(pacsAETitle);
+            message += "\n\n";
             message += tr("Please contact with a PACS administrator to report the issue.");
             message += errorDetails;
             break;
         default:
             message = tr("An unknown error has occurred while querying PACS %2 for %1.").arg(getQueryLevelAsQString(), pacsAETitle);
-            message += tr("\nIf the problem persists contact with an administrator.");
+            message += "\n\n";
+            message += tr("If the problem persists contact with an administrator.");
             message += errorDetails;
             break;
     }
