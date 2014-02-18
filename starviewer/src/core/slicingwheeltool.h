@@ -22,6 +22,7 @@ public:
 private:
     /// Guardem els estadistics dels girs de rodeta.
     QString m_wheelSteps;
+    SlicingTool *m_slicingTool;
 };
 
 }

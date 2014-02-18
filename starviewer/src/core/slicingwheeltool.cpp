@@ -35,6 +35,12 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
         return;
     }
 
+    m_slicingTool = qobject_cast<SlicingTool*>(m_2DViewer->getToolProxy()->getTool("SlicingTool"));
+    if (m_slicingTool)
+    {
+        m_slicingMode = m_slicingTool->getSlicingMode();
+    }
+    
     switch (eventID)
     {
         case vtkCommand::MouseWheelForwardEvent:
