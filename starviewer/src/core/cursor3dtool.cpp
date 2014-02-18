@@ -13,7 +13,6 @@
 #include "slicelocator.h"
 // Vtk
 #include <vtkCommand.h>
-#include <vtkMatrix4x4.h>
 
 namespace udg {
 
@@ -111,69 +110,15 @@ void Cursor3DTool::updatePosition()
     // i que l'estat sigui l'indicat
     if (m_2DViewer->isActive() && m_state == Computing)
     {
-        int index[3];
-        double dicomWorldPosition[4];
         double xyz[3];
-        ImagePlane *currentPlane = NULL;
-        Image *image = NULL;
 
         // Cal fer els càlculs per passar del món VTK al mon que té el DICOM per guardar el punt en dicom a les dades compartides de la tool.
         // 1.- Trobar el punt correcte en el món VTK
         if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
         {
-            // 2.- Trobar l'índex del vòxel en el DICOM
-            m_2DViewer->getMainInput()->computeCoordinateIndex(xyz, index);
-
-            // 3.- Necessitem la imatge la qual pertany el punt per tal de trobar la imatge del dicom que conté la informació del pla.
-            double *spacing = m_2DViewer->getMainInput()->getSpacing();
-            switch (m_2DViewer->getView())
+            double dicomWorldPosition[4];
+            if (m_2DViewer->getDicomWorldCoordinates(xyz, dicomWorldPosition))
             {
-                case OrthogonalPlane::XYPlane:
-                    currentPlane = m_2DViewer->getCurrentImagePlane();
-                    break;
-
-                case OrthogonalPlane::YZPlane:
-                case OrthogonalPlane::XZPlane:
-                    if (index[2] < m_2DViewer->getMainInput()->getImages().count())
-                    {
-                        // La llesca sempre és l'index[2] del DICOM
-                        image = m_2DViewer->getMainInput()->getImage(index[2]);
-                        currentPlane = new ImagePlane();
-                        currentPlane->fillFromImage(image);
-                    }
-                    break;
-            }
-
-            if (currentPlane)
-            {
-                // 3.- Construim la matiu per mapejar l'index del píxel del DICOM a un punt del món real
-                double currentPlaneRowVector[3];
-                double currentPlaneColumnVector[3];
-                double currentPlaneOrigin[3];
-                
-                currentPlane->getRowDirectionVector(currentPlaneRowVector);
-                currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
-                currentPlane->getOrigin(currentPlaneOrigin);
-
-                vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
-                projectionMatrix->Identity();
-                for (int row = 0; row < 3; row++)
-                {
-                    projectionMatrix->SetElement(row, 0, (currentPlaneRowVector[row]) * spacing[0]);
-                    projectionMatrix->SetElement(row, 1, (currentPlaneColumnVector[row]) * spacing[1]);
-                    projectionMatrix->SetElement(row, 2, 0.0);
-                    projectionMatrix->SetElement(row, 3, currentPlaneOrigin[row]);
-                }
-
-                // 3.- Mappeig de l'índex del píxel al món real
-                dicomWorldPosition[0] = (double)index[0];
-                dicomWorldPosition[1] = (double)index[1];
-                dicomWorldPosition[2] = (double)index[2];
-                dicomWorldPosition[3] = 1.0;
-                // Matriu * punt
-                projectionMatrix->MultiplyPoint(dicomWorldPosition, dicomWorldPosition);
-                projectionMatrix->Delete();
-
                 // 4.- Modificar les dades compartides del punt per tal que els altres s'actualitzin i situar el punt origen
                 m_crossHair->setCentrePoint(xyz[0], xyz[1], xyz[2]);
                 m_crossHair->setVisibility(true);
@@ -182,14 +127,8 @@ void Cursor3DTool::updatePosition()
                 // Punt al món real (DICOM)
                 m_myData->setOriginPointPosition(dicomWorldPosition);
             }
-            else
-            {
-                DEBUG_LOG("The requested plane is not available, maybe due to poor multiframe support.");
-                INFO_LOG("No es pot actualitzar la posició del cursor 3D perquè no podem obtenir el pla corresponent.");
-            }
         }
 
-        delete currentPlane;
     }
 }
 
