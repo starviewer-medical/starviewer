@@ -230,7 +230,7 @@ void RetrieveDICOMFilesFromPACSJob::deleteRetrievedDICOMFilesIfStudyNotExistInDa
 QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
 {
     QString message;
-    QString errorDetails = tr("\n\nDetails:\n") + m_retrieveDICOMFilesFromPACS->getResponseStatus().toString();
+    QString errorDetails = "\n\n" + tr("Details:") + "\n" + m_retrieveDICOMFilesFromPACS->getResponseStatus().toString();
     QString studyID = getStudyToRetrieveDICOMFiles()->getID();
     QString patientName = getStudyToRetrieveDICOMFiles()->getParentPatient()->getFullName();
     QString pacsAETitle = getPacsDevice().getAETitle();
@@ -247,8 +247,10 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
         case PACSRequestStatus::RetrieveCanNotConnectToPACS:
             message = tr("Unable to connect to PACS %1 to retrieve images from study %2 of patient %3.\n")
                 .arg(pacsAETitle, studyID, patientName);
-            message += tr("\nMake sure your computer is connected to the network and the PACS parameters are correct.");
-            message += tr("\nIf the problem persists contact with an administrator.");
+            message += "\n";
+            message += tr("Make sure your computer is connected to the network and the PACS parameters are correct.");
+            message += "\n";
+            message += tr("If the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::RetrieveNoEnoughSpace:
             {
@@ -259,29 +261,37 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
                 message = tr("There is not enough space to retrieve images from study %1 of patient %2, please free space or change your local "
                              "database settings.")
                         .arg(studyID, patientName);
-                message += tr("\n\n- Available disk space: %1 MB.").arg(freeSpaceInHardDisk);
-                message += tr("\n- Minimum disk space required to retrieve studies: %1 MB.").arg(minimumSpaceRequired);
+                message += "\n\n";
+                message += tr("- Available disk space: %1 MB.").arg(freeSpaceInHardDisk);
+                message += "\n";
+                message += tr("- Minimum disk space required to retrieve studies: %1 MB.").arg(minimumSpaceRequired);
             }
             break;
         case PACSRequestStatus::RetrieveErrorFreeingSpace:
             message = tr("An error occurred while freeing space on hard disk, images from study %1 of patient %2 won't be retrieved.").arg(studyID, patientName);
-            message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            message += "\n\n";
+            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += "\n";
+            message += tr("If the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::RetrieveDatabaseError:
             message = tr("Cannot retrieve images from study %1 of patient %2 because a database error occurred.").arg(studyID, patientName);
-            message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            message += "\n\n";
+            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += "\n";
+            message += tr("If the problem persists contact with an administrator.");
             break;
         case PACSRequestStatus::RetrievePatientInconsistent:
             message = tr("Cannot retrieve images from study %1 of patient %2 from PACS %3. Unable to correctly read data from images.")
                 .arg(studyID, patientName, pacsAETitle);
-            message += tr("\n\nThe study may be corrupted, if it is not corrupted please contact with %1 team.").arg(ApplicationNameString);
+            message += "\n\n";
+            message += tr("The study may be corrupted, if it is not corrupted please contact with %1 team.").arg(ApplicationNameString);
             break;
         case PACSRequestStatus::RetrieveDestinationAETileUnknown:
             message = tr("Cannot retrieve images from study %1 of patient %2 because PACS %3 does not recognize your computer's AE Title %4.")
                     .arg(studyID, patientName, pacsAETitle, settings.getValue(InputOutputSettings::LocalAETitle).toString());
-            message += tr("\n\nContact with an administrator to register your computer to the PACS.");
+            message += "\n\n";
+            message += tr("Contact with an administrator to register your computer to the PACS.");
             message += errorDetails;
             break;
         case PACSRequestStatus::RetrieveUnknowStatus:
@@ -311,8 +321,10 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
         default:
             message = tr("Cannot retrieve images from study %1 of patient %2 from PACS %3 due to an unknown error.")
                 .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
-            message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            message += "\n\n";
+            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += "\n";
+            message += tr("If the problem persists contact with an administrator.");
             message += errorDetails;
             break;
     }

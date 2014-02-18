@@ -241,12 +241,14 @@ void QCreateDicomdir::addStudies(const QList<Study*> &studies)
         message = tr("The following studies were not added to the DICOMDIR list for the following reasons:");
         if (existingStudies.size() > 0)
         {
-            message += tr("\n\n\t- Already exist in the list.\n");
+            message += "\n\n\t";
+            message += tr("- Already exist in the list.\n");
             message += existingStudies.join("\n");
         }
         if (notAddedStudies.size() > 0)
         {
-            message += tr("\n\n\t- Not enough space on the device.\n");
+            message += "\n\n\t";
+            message += tr("- Not enough space on the device.\n");
             message += notAddedStudies.join("\n");
         }
         QMessageBox::warning(0, ApplicationNameString, message);
@@ -775,7 +777,7 @@ void QCreateDicomdir::showDatabaseErrorMessage(const Status &state)
 {
     if (!state.good())
     {
-        QMessageBox::critical(this, ApplicationNameString, state.text() + tr("\nError Number: %1").arg(state.code()));
+        QMessageBox::critical(this, ApplicationNameString, state.text() + "\n" + tr("Error Number: %1").arg(state.code()));
     }
 }
 

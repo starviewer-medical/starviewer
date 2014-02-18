@@ -447,7 +447,8 @@ void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISR
             break;
         case ListenRISRequests::UnknownNetworkError:
             message = tr("Unable to listen to RIS requests on port %1, an unknown network error has occurred.").arg(risPort);
-            message += tr("\nIf the problem persists contact with an administrator.");
+            message += "\n";
+            message += tr("If the problem persists contact with an administrator.");
             break;
     }
 
