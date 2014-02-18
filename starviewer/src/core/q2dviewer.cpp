@@ -1152,7 +1152,6 @@ bool Q2DViewer::getDicomWorldCoordinates(const double xyz[3], double dicomWorldP
 {
     int index[3];
     ImagePlane *currentPlane = NULL;
-    Image *image = NULL;
     bool result = false;
 
     // 2.- Trobar l'índex del vòxel en el DICOM
@@ -1160,23 +1159,8 @@ bool Q2DViewer::getDicomWorldCoordinates(const double xyz[3], double dicomWorldP
 
     // 3.- Necessitem la imatge la qual pertany el punt per tal de trobar la imatge del dicom que conté la informació del pla.
     double *spacing = this->getMainInput()->getSpacing();
-    switch (this->getView())
-    {
-        case OrthogonalPlane::XYPlane:
-            currentPlane = this->getCurrentImagePlane();
-            break;
 
-        case OrthogonalPlane::YZPlane:
-        case OrthogonalPlane::XZPlane:
-            if (index[2] < this->getMainInput()->getImages().count())
-            {
-                // La llesca sempre és l'index[2] del DICOM
-                image = this->getMainInput()->getImage(index[2]);
-                currentPlane = new ImagePlane();
-                currentPlane->fillFromImage(image);
-            }
-            break;
-    }
+    currentPlane = getCurrentImagePlane();
 
     if (currentPlane)
     {
@@ -1189,13 +1173,16 @@ bool Q2DViewer::getDicomWorldCoordinates(const double xyz[3], double dicomWorldP
         currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
         currentPlane->getOrigin(currentPlaneOrigin);
 
+        int xIndex, yIndex, zIndex;
+        getCurrentViewPlane().getXYZIndexes(xIndex, yIndex, zIndex);
+
         vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
         projectionMatrix->Identity();
         for (int row = 0; row < 3; row++)
         {
-            projectionMatrix->SetElement(row, 0, (currentPlaneRowVector[row]) * spacing[0]);
-            projectionMatrix->SetElement(row, 1, (currentPlaneColumnVector[row]) * spacing[1]);
-            projectionMatrix->SetElement(row, 2, 0.0);
+            projectionMatrix->SetElement(row, xIndex, (currentPlaneRowVector[row]) * spacing[xIndex]);
+            projectionMatrix->SetElement(row, yIndex, (currentPlaneColumnVector[row]) * spacing[yIndex]);
+            projectionMatrix->SetElement(row, zIndex, 0.0);
             projectionMatrix->SetElement(row, 3, currentPlaneOrigin[row]);
         }
 
