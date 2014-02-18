@@ -115,52 +115,6 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
     return 1;
 }
 
-int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3], double intersectionPoint[3])
-{
-
-    // Solució extreta de http://vis.eng.uci.edu/courses/eecs104/current/GraphicsMath.pdf, pàg. 65
-    // pla1 definit per (p,n); p: punt del pla, p.ex. origen, n: normal del pla
-    // pla2 definit per (q,m);
-    // pla3 definit per (r,t);
-    // la intersecció serà un punt w
-    // si w = p + a·n + b·m + c·t
-    // llavors caldria resoldre el sistema lineal
-    // pw · n  = 0, qw · m = 0, rw · t = 0
-    // per a, b i c
-    //
-    // o bé calcular la línia d'intersecció entre dos plans i el punt d'intersecció de la línia amb el pla restant
-    //
-    // Sembla més fàcil la segona opció
-    double point[3], vector[3];
-    planeIntersection(p, n, q, m, point, vector);
-    // Càlcul intersecció línia pla
-    // Línia representada per punt i vector(p,t), pla per punt(origen) i normal (r,n), q és la intersecció
-    // q = p + (pr·n)t / (t·n)
-
-    double tt, point2[3];
-    point2[0] = point[0] + vector[0];
-    point2[1] = point[1] + vector[1];
-    point2[2] = point[2] + vector[2];
-
-    // Li donem una recta definida per dos punts, i el pla definit per la normal i un punt. T és la coordenada paramètrica al llarg de la recta i el punt
-    // de la intersecció queda a intersectPoint
-    if (vtkPlane::IntersectWithLine(point, point2, t, r, tt, intersectionPoint) == 0)
-    {
-        // Si retorna 0 és que o bé línia i pla no intersecten o són paralels entre sí
-        if (tt == MathTools::DoubleMaximumValue)
-        {
-            DEBUG_LOG(QString("No hi ha hagut intersecció! Valor coord paramètrica: %1").arg(tt));
-            return -1;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    return 1;
-}
-
 QVector3D MathTools::directorVector(const QVector3D &point1, const QVector3D &point2)
 {
     return point2 - point1;
