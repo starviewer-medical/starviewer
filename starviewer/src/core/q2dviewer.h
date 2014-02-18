@@ -265,6 +265,9 @@ public:
     /// Returns the fusion balance as a value in the range [0, 100] representing the weight of the second input.
     int getFusionBalance() const;
 
+    /// Moves the camera based on the absolute motion vector
+    void absolutePan(double motionVector[3]);
+
 public slots:
     virtual void setInput(Volume *volume);
 
