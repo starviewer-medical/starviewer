@@ -487,49 +487,6 @@ void QViewer::zoom(double factor)
     }
 }
 
-void QViewer::absolutePan(double motionVector[3])
-{
-    vtkCamera *camera = getActiveCamera();
-    if (!camera)
-    {
-        DEBUG_LOG("No hi ha càmera");
-        return;
-    }
-
-    double bounds[6];
-    getMainInput()->getVtkData()->GetBounds(bounds);
-
-    double currentPosition[3];
-    camera->GetPosition(currentPosition);
-
-    int x, y, z;
-    getCurrentViewPlane().getXYZIndexes(x, y, z);
-
-    double relativeMotionVector[3];
-    relativeMotionVector[x] = ((bounds[x * 2] + bounds[x * 2 + 1]) / 2 - motionVector[x]) - currentPosition[x];
-    relativeMotionVector[y] = ((bounds[y * 2] + bounds[y * 2 + 1]) / 2 - motionVector[y]) - currentPosition[y];
-    relativeMotionVector[z] = 0.0;
-
-    pan(relativeMotionVector);
-}
-
-void QViewer::getCurrentPanFactor(double absoluteMotionVector[3])
-{
-    vtkCamera *camera = getActiveCamera();
-
-    double bounds[6];
-    getMainInput()->getVtkData()->GetBounds(bounds);
-
-    int x, y, z;
-    getCurrentViewPlane().getXYZIndexes(x, y, z);
-
-    camera->GetPosition(absoluteMotionVector);
-
-    absoluteMotionVector[x] = (bounds[x * 2] + bounds[x * 2 + 1]) / 2.0 - absoluteMotionVector[x];
-    absoluteMotionVector[y] = (bounds[y * 2] + bounds[y * 2 + 1]) / 2.0 - absoluteMotionVector[y];
-    absoluteMotionVector[z] = 0.0;
-}
-
 void QViewer::pan(double motionVector[3])
 {
     if (!this->hasInput())
@@ -558,12 +515,26 @@ void QViewer::pan(double motionVector[3])
         renderer->UpdateLightsGeometryToFollowCamera();
     }
 
-    double absoluteMotionVector[3];
-    getCurrentPanFactor(absoluteMotionVector);
+    double xyz[3];
+    getCurrentFocalPoint(xyz);
 
     emit cameraChanged();
-    emit panChanged(absoluteMotionVector);
+    emit panChanged(xyz);
     this->render();
+}
+
+bool QViewer::getCurrentFocalPoint(double focalPoint[3])
+{
+    vtkCamera *camera = getActiveCamera();
+    if (!camera)
+    {
+        DEBUG_LOG("No hi ha càmera");
+        return false;
+    }
+
+    camera->GetFocalPoint(focalPoint);
+
+    return true;
 }
 
 bool QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate)

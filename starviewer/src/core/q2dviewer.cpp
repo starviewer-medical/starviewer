@@ -1248,6 +1248,32 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
     }
 }
 
+void Q2DViewer::absolutePan(double motionVector[3])
+{
+    double projectedPoint[3];
+    this->projectDICOMPointToCurrentDisplayedImage(motionVector, projectedPoint);
+
+    double relativeMotionVector[3];
+    double currentPosition[3];
+
+    vtkCamera *camera = getActiveCamera();
+    if (!camera)
+    {
+        DEBUG_LOG("No hi ha càmera");
+        return;
+    }
+    camera->GetFocalPoint(currentPosition);
+
+    int x, y, z;
+    getCurrentViewPlane().getXYZIndexes(x, y, z);
+
+    relativeMotionVector[x] = projectedPoint[x] - currentPosition[x];
+    relativeMotionVector[y] = projectedPoint[y] - currentPosition[y];
+    relativeMotionVector[z] = 0.0;
+
+    pan(relativeMotionVector);
+}
+
 Drawer* Q2DViewer::getDrawer() const
 {
     return m_drawer;

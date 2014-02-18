@@ -1,6 +1,6 @@
 #include "pansignaltosyncactionmapper.h"
 
-#include "qviewer.h"
+#include "q2dviewer.h"
 
 namespace udg {
 
@@ -15,28 +15,34 @@ PanSignalToSyncActionMapper::~PanSignalToSyncActionMapper()
 
 void PanSignalToSyncActionMapper::mapProperty()
 {
-    if (m_viewer)
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
+    if (viewer2D)
     {
-        double currentPanFactor[3];
-        m_viewer->getCurrentPanFactor(currentPanFactor);
-        mapToSyncAction(currentPanFactor);
+        double centerPoint[3];
+
+        if (viewer2D->getCurrentFocalPoint(centerPoint))
+        {
+            mapToSyncAction(centerPoint);
+        }
     }
 }
 
 
 void PanSignalToSyncActionMapper::mapSignal()
 {
-    if (m_viewer)
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
+    if (viewer2D)
     {
-        connect(m_viewer, SIGNAL(panChanged(double*)), SLOT(mapToSyncAction(double*)));
+        connect(viewer2D, SIGNAL(panChanged(double*)), SLOT(mapToSyncAction(double*)));
     }
 }
 
 void PanSignalToSyncActionMapper::unmapSignal()
 {
-    if (m_viewer)
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
+    if (viewer2D)
     {
-        disconnect(m_viewer, SIGNAL(panChanged(double*)), this, SLOT(mapToSyncAction(double*)));
+        disconnect(viewer2D, SIGNAL(panChanged(double*)), this, SLOT(mapToSyncAction(double*)));
     }
 }
 
@@ -46,7 +52,12 @@ void PanSignalToSyncActionMapper::mapToSyncAction(double *factor)
     {
         m_mappedSyncAction = new PanSyncAction();
     }
-    static_cast<PanSyncAction*>(m_mappedSyncAction)->setMotionVector(factor);
+
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
+    double dicomWorldPosition[4];
+    viewer2D->getDicomWorldCoordinates(factor, dicomWorldPosition);
+
+    static_cast<PanSyncAction*>(m_mappedSyncAction)->setMotionVector(dicomWorldPosition);
     
     emit actionMapped(m_mappedSyncAction);
 }
