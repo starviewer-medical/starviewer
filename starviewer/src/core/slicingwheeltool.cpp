@@ -35,11 +35,8 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
         return;
     }
 
-    m_slicingTool = qobject_cast<SlicingTool*>(m_2DViewer->getToolProxy()->getTool("SlicingTool"));
-    if (m_slicingTool)
-    {
-        m_slicingMode = m_slicingTool->getSlicingMode();
-    }
+    /// We need to have the same slicing mode as slicing tool to prevent slicing mode incongruences
+    updateSlicingModeAccordingToSlicingTool();
     
     switch (eventID)
     {
@@ -104,6 +101,15 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
 
         default:
             break;
+    }
+}
+
+void SlicingWheelTool::updateSlicingModeAccordingToSlicingTool()
+{
+    SlicingTool *slicingTool = qobject_cast<SlicingTool*>(m_2DViewer->getToolProxy()->getTool("SlicingTool"));
+    if (slicingTool)
+    {
+        m_slicingMode = slicingTool->getSlicingMode();
     }
 }
 
