@@ -9,10 +9,10 @@
 namespace udg {
 
 
-QGraphicPlotWidget::QGraphicPlotWidget( QWidget *parent )
- : QWidget( parent ), m_hold(false), m_minX(0.0), m_maxX(1.0), m_minY(0.0), m_maxY(1.0), m_autoXLimits(true), m_autoYLimits(false)
+QGraphicPlotWidget::QGraphicPlotWidget(QWidget *parent)
+ : QWidget(parent), m_hold(false), m_minX(0.0), m_maxX(1.0), m_minY(0.0), m_maxY(1.0), m_autoXLimits(true), m_autoYLimits(false)
 {
-    setupUi( this );
+    setupUi(this);
 
     parent->installEventFilter(this);
 
@@ -29,7 +29,7 @@ void QGraphicPlotWidget::createConnections()
 {
 }
 
-void QGraphicPlotWidget::paintPoints( )
+void QGraphicPlotWidget::paintPoints()
 {
     //DEBUG_LOG("Paint!!");
     if(m_width != m_plotView->size().width() || m_height != m_plotView->size().height())
@@ -49,7 +49,7 @@ void QGraphicPlotWidget::paintPoints( )
     }
 }
 
-void QGraphicPlotWidget::resizeData( )
+void QGraphicPlotWidget::resizeData()
 {
     //DEBUG_LOG("Resize Data");
     int t,i;
@@ -79,9 +79,9 @@ void QGraphicPlotWidget::resizeData( )
                 {
                     py = (double) m_height - (((m_dataSource[i][t]-m_minY) * (double)m_height) / (m_maxY-m_minY));
                 }
-                p << QPointF( px , py);
+                p << QPointF(px , py);
             }
-            //DEBUG_LOG(QString("%1 -> [%2,%3], pos = [%4,%5], size = [%6,%7]" ).arg(t).arg(px).arg(py).arg(m_maxY).arg(m_minY).arg(m_plotView->size().width()).arg(m_plotView->size().height()));
+            //DEBUG_LOG(QString("%1 -> [%2,%3], pos = [%4,%5], size = [%6,%7]").arg(t).arg(px).arg(py).arg(m_maxY).arg(m_minY).arg(m_plotView->size().width()).arg(m_plotView->size().height()));
         }
         m_dataPlot[i]=p;
     }
@@ -100,38 +100,38 @@ void QGraphicPlotWidget::paintEvent(QPaintEvent *)
     //DEBUG_LOG("Paint Event End!!");
 }
 
-void QGraphicPlotWidget::setMaxX( double a )
+void QGraphicPlotWidget::setMaxX(double a)
 {
     m_maxXLabel->setNum(a);
     m_maxX=a;
 }
 
-void QGraphicPlotWidget::setMinX( double a )
+void QGraphicPlotWidget::setMinX(double a)
 {
     m_minXLabel->setNum(a);
     m_minX=a;
 }
 
-void QGraphicPlotWidget::setMaxY( double a )
+void QGraphicPlotWidget::setMaxY(double a)
 {
     QString s(QString::number(a,'e',3));
     m_maxYLabel->setText(s);
     m_maxY=a;
 }
 
-void QGraphicPlotWidget::setMinY( double a )
+void QGraphicPlotWidget::setMinY(double a)
 {
     QString s(QString::number(a,'e',3));
     m_minYLabel->setText(s);
     m_minY=a;
 }
 
-void QGraphicPlotWidget::setTitle( QString s )
+void QGraphicPlotWidget::setTitle(QString s)
 {
-    m_title->setText( s );
+    m_title->setText(s);
 }
 
-void QGraphicPlotWidget::setData( QVector<double> v, int channel )
+void QGraphicPlotWidget::setData(QVector<double> v, int channel)
 {
     int t,k;
     QPolygonF p;
@@ -207,9 +207,9 @@ void QGraphicPlotWidget::setData( QVector<double> v, int channel )
             {
                 py = (double) m_height - (((v[t]-m_minY) * (double)m_height) / (m_maxY-m_minY));
             }
-            p << QPointF( px , py);
+            p << QPointF(px , py);
         }
-        //DEBUG_LOG(QString("%1 -> [%2,%3], pos = [%4,%5], size = [%6,%7]" ).arg(t).arg(px).arg(py).arg(m_maxY).arg(m_minY).arg(m_plotView->size().width()).arg(m_plotView->size().height()));
+        //DEBUG_LOG(QString("%1 -> [%2,%3], pos = [%4,%5], size = [%6,%7]").arg(t).arg(px).arg(py).arg(m_maxY).arg(m_minY).arg(m_plotView->size().width()).arg(m_plotView->size().height()));
     }
     if(m_hold)
     {
@@ -239,11 +239,11 @@ void QGraphicPlotWidget::setData( QVector<double> v, int channel )
     this->update();
 }
 
-void QGraphicPlotWidget::setPaintingFeatures( QBrush color, qreal width, int channel, Qt::PenStyle style, Qt::PenCapStyle cap, Qt::PenJoinStyle join )
+void QGraphicPlotWidget::setPaintingFeatures(QBrush color, qreal width, int channel, Qt::PenStyle style, Qt::PenCapStyle cap, Qt::PenJoinStyle join)
 {
     if(m_dataPlotFeatures.size() > channel)
     {
-        m_dataPlotFeatures[channel] = QPen( color, width, style, cap, join);
+        m_dataPlotFeatures[channel] = QPen(color, width, style, cap, join);
     }
 }
 

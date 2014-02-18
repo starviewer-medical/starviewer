@@ -331,9 +331,8 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 
     if (m_patient)
     {
-        setupDefaultToolsForModalities(m_patient->getModalities());
-
         setupLayoutManager();
+        setupDefaultToolsForModalities(m_patient->getModalities());
     }
 
     setupDefaultLeftButtonTool();

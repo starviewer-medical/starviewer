@@ -22,7 +22,7 @@ RectumSegmentationExtensionMediator::~RectumSegmentationExtensionMediator()
 {
 }
 
-DisplayableID RectumSegmentationExtensionMediator::getExtensionID() const
+DisplayableID RectumSegmentationExtensionMediator::getExtensionID()const
 {
     return DisplayableID("RectumSegmentationExtension",tr("Rectum Segmentation"));
 }
@@ -31,16 +31,16 @@ bool RectumSegmentationExtensionMediator::initializeExtension(QWidget* extension
 {
     QRectumSegmentationExtension *rectumSegmentationExtension;
 
-    if ( !(rectumSegmentationExtension = qobject_cast<QRectumSegmentationExtension*>(extension)) )
+    if (!(rectumSegmentationExtension = qobject_cast<QRectumSegmentationExtension*>(extension)))
     {
         return false;
     }
 
     Volume *input = extensionContext.getDefaultVolume();
-    if( !input )
-        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image") );
+    if(!input)
+        QMessageBox::information(0,tr("Starviewer"), tr("The selected item is not an image"));
     else
-        rectumSegmentationExtension->setInput( input );
+        rectumSegmentationExtension->setInput(input);
 
     return true;
 }

@@ -219,6 +219,11 @@ void VtkDcmtkImageReader::PrintSelf(std::ostream &os, vtkIndent indent)
     os << indent << "Maximum voxel value: " << m_maximumVoxelValue << "\n";
 }
 
+void VtkDcmtkImageReader::setFrameNumbers(const QList<int> &frameNumbers)
+{
+    m_frameNumbers = frameNumbers;
+}
+
 VtkDcmtkImageReader::VtkDcmtkImageReader()
 {
     this->SetNumberOfInputPorts(0);
@@ -615,17 +620,26 @@ void VtkDcmtkImageReader::loadMultiframeFile(const char *filename, void *buffer,
     double total = updateExtent[5] - updateExtent[4] + 1;
     this->UpdateProgress(0.0);
 
+    if (m_frameNumbers.isEmpty())
+    {
+        DEBUG_LOG("Reading multiframe file without frame numbers specified. Frames will be read sequentially.");
+        WARN_LOG("Reading multiframe file without frame numbers specified. Frames will be read sequentially.");
+    }
+
     for (int frameIndex = updateExtent[4]; frameIndex <= updateExtent[5] && !this->AbortExecute; frameIndex++)
     {
+        int frameNumberInFile = m_frameNumbers.isEmpty() ? frameIndex : m_frameNumbers[frameIndex];
+
         if (m_hasPerFrameRescale)
         {
-            const Rescale &rescale = m_perFrameRescale.at(frameIndex);
-            DicomImage image(dataset.data(), dataset->getOriginalXfer(), rescale.slope, rescale.intercept, CIF_UsePartialAccessToPixelData, frameIndex, 1);
+            const Rescale &rescale = m_perFrameRescale.at(frameNumberInFile);
+            DicomImage image(dataset.data(), dataset->getOriginalXfer(), rescale.slope, rescale.intercept,
+                             CIF_UsePartialAccessToPixelData, frameNumberInFile, 1);
             copyDcmtkImageToBuffer(buffer, image);
         }
         else
         {
-            DicomImage image(dataset.data(), dataset->getOriginalXfer(), CIF_UsePartialAccessToPixelData, frameIndex, 1);
+            DicomImage image(dataset.data(), dataset->getOriginalXfer(), CIF_UsePartialAccessToPixelData, frameNumberInFile, 1);
             copyDcmtkImageToBuffer(buffer, image);
         }
 

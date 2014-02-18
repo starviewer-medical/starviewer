@@ -12,7 +12,6 @@
 #include "coresettings.h"
 #include "qviewerworkinprogresswidget.h"
 #include "patientorientation.h"
-#include "anatomicalplane.h"
 #include "starviewerapplication.h"
 #include "imageoverlay.h"
 #include "drawerbitmap.h"
@@ -240,6 +239,11 @@ QString Q2DViewer::getCurrentAnatomicalPlaneLabel() const
     return AnatomicalPlane::getLabelFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
 }
 
+AnatomicalPlane::AnatomicalPlaneType Q2DViewer::getCurrentAnatomicalPlane() const
+{
+    return AnatomicalPlane::getPlaneTypeFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
+}
+
 void Q2DViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane)
 {
     if (!hasInput())
@@ -400,7 +404,14 @@ void Q2DViewer::setInputAsynchronously(const QList<Volume *> &volumes, QViewerCo
     setInputFinishedCommand(inputFinishedCommand);
 
     bool allowAsynchronousVolumeLoading = Settings().getValue(CoreSettings::AllowAsynchronousVolumeLoading).toBool();
-    if (allowAsynchronousVolumeLoading)
+    bool thereAreVolumesNotLoaded = false;
+    int i = 0;
+    while (i < volumes.size() && !thereAreVolumesNotLoaded)
+    {
+        thereAreVolumesNotLoaded = !volumes.at(i)->isPixelDataLoaded();
+        i++;
+    }
+    if (thereAreVolumesNotLoaded && allowAsynchronousVolumeLoading)
     {
         loadVolumesAsynchronously(volumes);
     }
@@ -492,7 +503,6 @@ void Q2DViewer::setNewVolumesAndExecuteCommand(const QList<Volume*> &volumes)
     try
     {
         setNewVolumes(volumes);
-        executeInputFinishedCommand();
         emit newVolumesRendered();
     }
     catch (...)
@@ -613,6 +623,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
 
+    executeInputFinishedCommand();
     // Indiquem el canvi de volum
     emit volumeChanged(getMainInput());
 }
@@ -807,6 +818,9 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         // Adapt the camera to the new view plane in order to make actors visible
         getRenderer()->ResetCamera();
 
+        // Set appropriate zoom level
+        fitRenderingIntoViewport();
+
         // Restore thick Slab
         setSlabThickness(desiredSlabSlices);
     }
@@ -984,7 +998,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
             }
         }
 
-        updateCurrentImageDefaultPresets();
+        updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
         m_annotationsHandler->updateSliceAnnotationInformation();
         updatePreferredImageOrientation();
 
@@ -1361,6 +1375,10 @@ void Q2DViewer::setSlabProjectionMode(int projectionMode)
 
         if (hasInput())
         {
+            // As a measure of precaution we also remove all drawings when projection mode has changed
+            // This could be a potential problem with measures that depend on the underlying data, such as ROIs,
+            // as the data measured could be incoherent with the underlying data when changing the projection mode
+            getDrawer()->removeAllPrimitives();
             getMainDisplayUnit()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
             updateDisplayExtents();
             render();
@@ -1399,23 +1417,22 @@ void Q2DViewer::setSlabThickness(int thickness)
     }
     
     VolumeDisplayUnit *mainDisplayUnit = getMainDisplayUnit();
-    // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
+    
     if (thickness != mainDisplayUnit->getSlabThickness())
     {
+        // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
         getDrawer()->removeAllPrimitives();
+
+        mainDisplayUnit->setSlabThickness(thickness);
+        updateDisplayExtents();
+
+        updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
+        m_annotationsHandler->updateSliceAnnotationInformation();
+        render();
+
+        emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());
+        emit sliceChanged(getCurrentSlice());
     }
-
-    mainDisplayUnit->setSlabThickness(thickness);
-    updateDisplayExtents();
-    updateCurrentImageDefaultPresets();
-    m_annotationsHandler->updateSliceAnnotationInformation();
-    render();
-
-    // TODO és del tot correcte que vagi aquí aquesta crida?
-    // Tal com està posat se suposa que sempre el valor de thickness ha
-    // canviat i podria ser que no, seria més adequat posar-ho a computerangeAndSlice?
-    emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());
-    emit sliceChanged(getCurrentSlice());
 }
 
 void Q2DViewer::setSlabThicknessInVolume(int index, int thickness)
@@ -1696,7 +1713,7 @@ void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
     getMainDisplayUnit()->getImageActor()->GetBounds(bounds);
 }
 
-void Q2DViewer::updateCurrentImageDefaultPresets()
+void Q2DViewer::updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane()
 {
     if (getCurrentViewPlane() == OrthogonalPlane::XYPlane)
     {

@@ -101,15 +101,6 @@ private slots:
     void planeIntersection_2Planes_ShouldComputeIntersectionWithNaNPointAndNullDirectorVector_data();
     void planeIntersection_2Planes_ShouldComputeIntersectionWithNaNPointAndNullDirectorVector();
 
-    void planeIntersection_3Planes_ShouldComputeNaNIntersectionAndReturn0_data();
-    void planeIntersection_3Planes_ShouldComputeNaNIntersectionAndReturn0();
-
-    void planeIntersection_3Planes_ShouldReturnNoIntersection_data();
-    void planeIntersection_3Planes_ShouldReturnNoIntersection();
-
-    void planeIntersection_3Planes_ShouldComputeExpectedIntersection_data();
-    void planeIntersection_3Planes_ShouldComputeExpectedIntersection();
-
     void roundUpToPowerOf2_ShouldReturnExpectedValue_data();
     void roundUpToPowerOf2_ShouldReturnExpectedValue();
 
@@ -725,17 +716,17 @@ void test_MathTools::infiniteLinesIntersection_ShouldComputeExpectedIntersection
                                  << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
     QTest::newRow("parallel YZ") << QVector3D(+2.5, +8.6, -1.8) << QVector3D(+2.5, +7.8, -1.3) << QVector3D(+2.5, -2.5, -1.0) << QVector3D(+2.5, -0.1, -2.5)
                                  << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
-    QTest::newRow("parallel") << QVector3D(-8.4, -6.2, +2.7) << QVector3D(-0.2, -0.1, -1.0) << QVector3D(+8.1, +3.9, +9.5) << QVector3D(+16.3, +10.0, +5.8)
+    QTest::newRow("parallel") << QVector3D(-8.5, -6.25, +2.75) << QVector3D(-0.25, -0.0, -1.0) << QVector3D(+8.0, +3.9, +9.5) << QVector3D(-0.25, -2.35, +13.25)
                               << MathTools::ParallelLines << QVector3D(0.0, 0.0, 0.0);
 
     QTest::newRow("skew XY") << QVector3D(-8.5, -0.8, -2.2) << QVector3D(+9.2, -7.0, -2.2) << QVector3D(+2.4, -9.8, -8.3) << QVector3D(+8.3, -6.5, -8.3)
-                             << MathTools::LinesIntersect << QVector3D(+8.09689, -6.6136, -2.2);
+                             << MathTools::SkewIntersection << QVector3D(0.0, 0.0, 0.0);
     QTest::newRow("skew XZ") << QVector3D(+4.6, -6.4, +0.5) << QVector3D(+7.5, -6.4, +5.5) << QVector3D(-8.8, +10.0, -8.1) << QVector3D(-5.9, +10.0, -1.1)
-                             << MathTools::LinesIntersect << QVector3D(-29.83, -6.4, -58.8621);
+                             << MathTools::SkewIntersection << QVector3D(0.0, 0.0, 0.0);
     QTest::newRow("skew YZ") << QVector3D(-5.6, +8.9, -8.8) << QVector3D(-5.6, -1.5, -6.5) << QVector3D(-7.1, +6.6, -2.3) << QVector3D(-7.1, -1.7, -7.3)
-                             << MathTools::LinesIntersect << QVector3D(-5.6, -0.674905, -6.68247);
+                             << MathTools::SkewIntersection << QVector3D(0.0, 0.0, 0.0);
     QTest::newRow("skew") << QVector3D(+7.6, -3.7, +7.9) << QVector3D(+8.8, -5.6, -8.9) << QVector3D(-1.3, +3.3, -9.7) << QVector3D(-4.3, -9.7, +4.4)
-                          << MathTools::LinesIntersect << QVector3D(+8.27995, -4.77659, -1.6193);
+                          << MathTools::SkewIntersection << QVector3D(0.0, 0.0, 0.0);
 
     QTest::newRow("intersection XY") << QVector3D(+1.0, -1.6, -10.0) << QVector3D(-6.2, -8.2, -10.0) << QVector3D(-8.3, -4.4, -10.0)
                                      << QVector3D(+0.3, -1.4, -10.0) << MathTools::LinesIntersect << QVector3D(+1.78225, -0.882935, -10.0);
@@ -743,8 +734,8 @@ void test_MathTools::infiniteLinesIntersection_ShouldComputeExpectedIntersection
                                      << QVector3D(-2.4, +1.6, -6.1) << MathTools::LinesIntersect << QVector3D(-16.0885, +1.6, +28.2413);
     QTest::newRow("intersection YZ") << QVector3D(+9.9, +3.3, +7.1) << QVector3D(+9.9, +7.6, +5.8) << QVector3D(+9.9, -0.2, -3.7)
                                      << QVector3D(+9.9, +5.9, -2.5) << MathTools::LinesIntersect << QVector3D(+9.9, +23.5616, +0.974408);
-    QTest::newRow("intersection") << QVector3D(+1.8, -3.9, +6.5) << QVector3D(-6.2, +7.3, +8.6) << QVector3D(-9.9, +9.9, +4.0)
-                                  << QVector3D(-340.09, +495.128, +140.259) << MathTools::LinesIntersect << QVector3D(-47.0, +64.42, +19.31);
+    QTest::newRow("intersection") << QVector3D(+2.0, -4.0, +7.0) << QVector3D(-6.0, +7.0, +9.0) << QVector3D(-10.0, +10.0, +4.0)
+                                  << QVector3D(+3.0, -1.0, +17.25) << MathTools::LinesIntersect << QVector3D(-5.2727, +6.0, +8.81818);
 }
 
 void test_MathTools::infiniteLinesIntersection_ShouldComputeExpectedIntersectionAndState()
@@ -875,160 +866,6 @@ void test_MathTools::planeIntersection_2Planes_ShouldComputeIntersectionWithNaNP
     QCOMPARE(idv[0], 0.0);
     QCOMPARE(idv[1], 0.0);
     QCOMPARE(idv[2], 0.0);
-}
-
-void test_MathTools::planeIntersection_3Planes_ShouldComputeNaNIntersectionAndReturn0_data()
-{
-    QTest::addColumn<Vector3>("plane1Point");
-    QTest::addColumn<Vector3>("plane1Normal");
-    QTest::addColumn<Vector3>("plane2Point");
-    QTest::addColumn<Vector3>("plane2Normal");
-    QTest::addColumn<Vector3>("plane3Point");
-    QTest::addColumn<Vector3>("plane3Normal");
-
-    QTest::newRow("null normals 1,2,3") << Vector3() << Vector3() << Vector3() << Vector3() << Vector3() << Vector3();
-    QTest::newRow("null normals 1,2") << Vector3() << Vector3() << Vector3() << Vector3() << Vector3() << Vector3(-31.2, 73.17, -6.12);
-    QTest::newRow("null normals 1,3") << Vector3() << Vector3() << Vector3() << Vector3(-66.86, 64.19, -25.41) << Vector3() << Vector3();
-    QTest::newRow("null normals 2,3") << Vector3() << Vector3(-41.26, -87.19, -22.04) << Vector3() << Vector3() << Vector3() << Vector3();
-    QTest::newRow("null normal 1") << Vector3() << Vector3() << Vector3() << Vector3(-66.86, 64.19, -25.41) << Vector3() << Vector3(-31.2, 73.17, -6.12);
-    QTest::newRow("null normal 2") << Vector3() << Vector3(-41.26, -87.19, -22.04) << Vector3() << Vector3() << Vector3() << Vector3(-31.2, 73.17, -6.12);
-    QTest::newRow("same planes (bug) 1,2,3") << Vector3(7.74, -88.7, 52.07) << Vector3(30.2, -84.56, 64.9) << Vector3(7.74, -88.7, 52.07)
-                                             << Vector3(30.2, -84.56, 64.9) << Vector3(7.74, -88.7, 52.07) << Vector3(30.2, -84.56, 64.9);
-    QTest::newRow("same planes (bug) 1,2") << Vector3(7.74, -88.7, 52.07) << Vector3(30.2, -84.56, 64.9) << Vector3(7.74, -88.7, 52.07)
-                                           << Vector3(30.2, -84.56, 64.9) << Vector3(37.83, -72.12, -38.17) << Vector3(-31.2, 73.17, -6.12);
-    QTest::newRow("parallel planes (bug) 1,2,3") << Vector3(7.74, -88.7, 52.07) << Vector3(30.2, -84.56, 64.9) << Vector3(-29.16, 100.79, 40.64)
-                                                 << Vector3(30.2, -84.56, 64.9) << Vector3(37.83, -72.12, -38.17) << Vector3(30.2, -84.56, 64.9);
-    QTest::newRow("parallel planes (bug) 1,2") << Vector3(7.74, -88.7, 52.07) << Vector3(30.2, -84.56, 64.9) << Vector3(-29.16, 100.79, 40.64)
-                                               << Vector3(30.2, -84.56, 64.9) << Vector3(37.83, -72.12, -38.17) << Vector3(-31.2, 73.17, -6.12);
-}
-
-void test_MathTools::planeIntersection_3Planes_ShouldComputeNaNIntersectionAndReturn0()
-{
-    QFETCH(Vector3, plane1Point);
-    QFETCH(Vector3, plane1Normal);
-    QFETCH(Vector3, plane2Point);
-    QFETCH(Vector3, plane2Normal);
-    QFETCH(Vector3, plane3Point);
-    QFETCH(Vector3, plane3Normal);
-
-    double p1p[3] = { plane1Point.x, plane1Point.y, plane1Point.z };
-    double p1n[3] = { plane1Normal.x, plane1Normal.y, plane1Normal.z };
-    double p2p[3] = { plane2Point.x, plane2Point.y, plane2Point.z };
-    double p2n[3] = { plane2Normal.x, plane2Normal.y, plane2Normal.z };
-    double p3p[3] = { plane3Point.x, plane3Point.y, plane3Point.z };
-    double p3n[3] = { plane3Normal.x, plane3Normal.y, plane3Normal.z };
-    double ip[3];
-
-    QCOMPARE(MathTools::planeIntersection(p1p, p1n, p2p, p2n, p3p, p3n, ip), 0);
-    QVERIFY(MathTools::isNaN(ip[0]));
-    QVERIFY(MathTools::isNaN(ip[1]));
-    QVERIFY(MathTools::isNaN(ip[2]));
-}
-
-void test_MathTools::planeIntersection_3Planes_ShouldReturnNoIntersection_data()
-{
-    QTest::addColumn<Vector3>("plane1Point");
-    QTest::addColumn<Vector3>("plane1Normal");
-    QTest::addColumn<Vector3>("plane2Point");
-    QTest::addColumn<Vector3>("plane2Normal");
-    QTest::addColumn<Vector3>("plane3Point");
-    QTest::addColumn<Vector3>("plane3Normal");
-
-    QTest::newRow("null normal 3") << Vector3() << Vector3(-41.26, -87.19, -22.04) << Vector3() << Vector3(-66.86, 64.19, -25.41) << Vector3() << Vector3();
-    // Bug: aquests casos fan que treballem amb variables no inicialitzades, i per tant pot retornar qualsevol cosa (#1898)
-    //QTest::newRow("same planes 1,2,3") << Vector3(7.74, -88.7, 52.07) << Vector3(-41.26, -87.19, -22.04) << Vector3(7.74, -88.7, 52.07)
-    //                                   << Vector3(-41.26, -87.19, -22.04) << Vector3(7.74, -88.7, 52.07) << Vector3(-41.26, -87.19, -22.04);
-    //QTest::newRow("same planes 1,2") << Vector3(7.74, -88.7, 52.07) << Vector3(-41.26, -87.19, -22.04) << Vector3(7.74, -88.7, 52.07)
-    //                                 << Vector3(-41.26, -87.19, -22.04) << Vector3(37.83, -72.12, -38.17) << Vector3(-31.2, 73.17, -6.12);
-    QTest::newRow("same planes 1,3") << Vector3(7.74, -88.7, 52.07) << Vector3(-41.26, -87.19, -22.04) << Vector3(-29.16, 100.79, 40.64)
-                                     << Vector3(-66.86, 64.19, -25.41) << Vector3(7.74, -88.7, 52.07) << Vector3(-41.26, -87.19, -22.04);
-    QTest::newRow("same planes 2,3") << Vector3(7.74, -88.7, 52.07) << Vector3(-41.26, -87.19, -22.04) << Vector3(-29.16, 100.79, 40.64)
-                                     << Vector3(-66.86, 64.19, -25.41) << Vector3(-29.16, 100.79, 40.64) << Vector3(-66.86, 64.19, -25.41);
-    // Bug: aquests casos fan que treballem amb variables no inicialitzades, i per tant pot retornar qualsevol cosa (#1898)
-    //QTest::newRow("parallel planes 1,2,3") << Vector3(7.74, -88.7, 52.07) << Vector3(-41.26, -87.19, -22.04) << Vector3(-29.16, 100.79, 40.64)
-    //                                       << Vector3(-41.26, -87.19, -22.04) << Vector3(37.83, -72.12, -38.17) << Vector3(-41.26, -87.19, -22.04);
-    //QTest::newRow("parallel planes 1,2") << Vector3(7.74, -88.7, 52.07) << Vector3(-41.26, -87.19, -22.04) << Vector3(-29.16, 100.79, 40.64)
-    //                                     << Vector3(-41.26, -87.19, -22.04) << Vector3(37.83, -72.12, -38.17) << Vector3(-31.2, 73.17, -6.12);
-    QTest::newRow("parallel planes 1,3") << Vector3(7.74, -88.7, 52.07) << Vector3(-41.26, -87.19, -22.04) << Vector3(-29.16, 100.79, 40.64)
-                                         << Vector3(-66.86, 64.19, -25.41) << Vector3(37.83, -72.12, -38.17) << Vector3(-41.26, -87.19, -22.04);
-    QTest::newRow("parallel planes 2,3") << Vector3(7.74, -88.7, 52.07) << Vector3(-41.26, -87.19, -22.04) << Vector3(-29.16, 100.79, 40.64)
-                                         << Vector3(-66.86, 64.19, -25.41) << Vector3(37.83, -72.12, -38.17) << Vector3(-66.86, 64.19, -25.41);
-    // Això passa quan les 3 normals són coplanars
-    QTest::newRow("intersection of 1 and 2 parallel to 3") << Vector3(7.74, -88.7, 52.07) << Vector3(1, 0, 0) << Vector3(-29.16, 100.79, 40.64)
-                                                           << Vector3(0, 1, 0) << Vector3(37.83, -72.12, -38.17) << Vector3(-1, -1, 0);
-}
-
-void test_MathTools::planeIntersection_3Planes_ShouldReturnNoIntersection()
-{
-    QFETCH(Vector3, plane1Point);
-    QFETCH(Vector3, plane1Normal);
-    QFETCH(Vector3, plane2Point);
-    QFETCH(Vector3, plane2Normal);
-    QFETCH(Vector3, plane3Point);
-    QFETCH(Vector3, plane3Normal);
-
-    double p1p[3] = { plane1Point.x, plane1Point.y, plane1Point.z };
-    double p1n[3] = { plane1Normal.x, plane1Normal.y, plane1Normal.z };
-    double p2p[3] = { plane2Point.x, plane2Point.y, plane2Point.z };
-    double p2n[3] = { plane2Normal.x, plane2Normal.y, plane2Normal.z };
-    double p3p[3] = { plane3Point.x, plane3Point.y, plane3Point.z };
-    double p3n[3] = { plane3Normal.x, plane3Normal.y, plane3Normal.z };
-    double ip[3];
-
-    QCOMPARE(MathTools::planeIntersection(p1p, p1n, p2p, p2n, p3p, p3n, ip), -1);
-}
-
-void test_MathTools::planeIntersection_3Planes_ShouldComputeExpectedIntersection_data()
-{
-    QTest::addColumn<Vector3>("plane1Point");
-    QTest::addColumn<Vector3>("plane1Normal");
-    QTest::addColumn<Vector3>("plane2Point");
-    QTest::addColumn<Vector3>("plane2Normal");
-    QTest::addColumn<Vector3>("plane3Point");
-    QTest::addColumn<Vector3>("plane3Normal");
-    QTest::addColumn<Vector3>("expectedIntersectionPoint");
-    QTest::addColumn<int>("expectedReturnValue");
-
-    QTest::newRow("orthogonal planes") << Vector3() << Vector3(1, 0, 0) << Vector3() << Vector3(0, 1, 0) << Vector3() << Vector3(0, 0, 1) << Vector3() << 1;
-    QTest::newRow("random #1") << Vector3(-43.92, -98.9, -76.17) << Vector3(8.47, 95.31, -99.47) << Vector3(23.42, 99.08, -72.42)
-                               << Vector3(-96.84, 52.65, -35.97) << Vector3(-15.85, -29.23, 19.31) << Vector3(-49.11, -79.22, 60.78)
-                               << Vector3(-64.351, -3.956, 13.063) << 1;
-    QTest::newRow("random #2") << Vector3(-53.41, -5.27, 72.72) << Vector3(41.47, -24.49, -41.7) << Vector3(93.19, 34.39, 63.25)
-                               << Vector3(-16.55, -40.44, -49.87) << Vector3(11.72, 98.26, -14.82) << Vector3(-21.24, -89.11, 83.78)
-                               << Vector3(-23.739, 137.775, 18.219) << 1;
-    QTest::newRow("random #3") << Vector3(2.81, 68.19, -4.9) << Vector3(-3.87, -95.32, 40.86) << Vector3(13, 68.37, 76.45)
-                               << Vector3(26.99, -86.86, -73.31) << Vector3(-8.75, 90.78, -23.99) << Vector3(-28.74, 40.7, 76.94)
-                               << Vector3(1176.137, 181.52, 370.61) << 1;
-    QTest::newRow("return 0") << Vector3() << Vector3(1, 0, 0) << Vector3() << Vector3(0, 1, 0) << Vector3(0, 0, -100) << Vector3(0, 0, 1)
-                              << Vector3(0, 0, -100) << 0;
-}
-
-void test_MathTools::planeIntersection_3Planes_ShouldComputeExpectedIntersection()
-{
-    QFETCH(Vector3, plane1Point);
-    QFETCH(Vector3, plane1Normal);
-    QFETCH(Vector3, plane2Point);
-    QFETCH(Vector3, plane2Normal);
-    QFETCH(Vector3, plane3Point);
-    QFETCH(Vector3, plane3Normal);
-    QFETCH(Vector3, expectedIntersectionPoint);
-    QFETCH(int, expectedReturnValue);
-
-    double p1p[3] = { plane1Point.x, plane1Point.y, plane1Point.z };
-    double p1n[3] = { plane1Normal.x, plane1Normal.y, plane1Normal.z };
-    double p2p[3] = { plane2Point.x, plane2Point.y, plane2Point.z };
-    double p2n[3] = { plane2Normal.x, plane2Normal.y, plane2Normal.z };
-    double p3p[3] = { plane3Point.x, plane3Point.y, plane3Point.z };
-    double p3n[3] = { plane3Normal.x, plane3Normal.y, plane3Normal.z };
-    double ip[3];
-
-    int returnValue = MathTools::planeIntersection(p1p, p1n, p2p, p2n, p3p, p3n, ip);
-    Vector3 intersectionPoint(ip[0], ip[1], ip[2]);
-
-    QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(intersectionPoint, expectedIntersectionPoint, 0.001),
-             qPrintable(QString("actual: %1, expected: %2, difference: %3").arg(intersectionPoint).arg(expectedIntersectionPoint)
-                                                                           .arg(intersectionPoint - expectedIntersectionPoint)));
-    QCOMPARE(returnValue, expectedReturnValue);
 }
 
 void test_MathTools::roundUpToPowerOf2_ShouldReturnExpectedValue_data()

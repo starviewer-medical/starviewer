@@ -63,7 +63,7 @@ void AutomaticSynchronizationTool::initialize()
 
         if (groupOfActualViewer == -1)
         {
-            if (frameOfReferenceUID != "" )
+            if (frameOfReferenceUID != "")
             {
                 m_toolData->setGroupForUID(frameOfReferenceUID, m_toolData->getNumberOfGroups());
             }
@@ -155,6 +155,7 @@ void AutomaticSynchronizationTool::updatePosition()
                 }
                 else
                 {
+                    // TODO Check if this code can be actually reached, it seems not. If this code is never reached, it should be removed then
                     double currentSpacingBetweenSlices = m_2DViewer->getCurrentSpacingBetweenSlices();
                     if (currentSpacingBetweenSlices == 0.0)
                     {

@@ -377,6 +377,10 @@ void ReferenceLinesTool::updateDataForCurrentInput()
     {
         updateProjectionLines();
     }
+    else
+    {
+        setAsReferenceViewer();
+    }
 }
 
 void ReferenceLinesTool::setAsReferenceViewer()

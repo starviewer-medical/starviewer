@@ -4,6 +4,7 @@
 #include "qviewer.h"
 #include "annotationflags.h"
 #include "windowlevel.h"
+#include "anatomicalplane.h"
 
 #include <QPointer>
 
@@ -135,6 +136,9 @@ public:
     /// Ens diu quin és el pla de projecció de la imatge que es veu en aquell moment
     /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
     QString getCurrentAnatomicalPlaneLabel() const;
+
+    /// Returns current anatomical plane as AnatomicalPlaneType
+    AnatomicalPlane::AnatomicalPlaneType getCurrentAnatomicalPlane() const;
 
     /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
     double getCurrentSpacingBetweenSlices();
@@ -467,7 +471,7 @@ private:
     void executeInputFinishedCommand();
 
     /// Updates the current image default presets values. It only applies to original acquisition plane.
-    void updateCurrentImageDefaultPresets();
+    void updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
 
     /// Calls setNewVolumes and excutes the command while catching any exception that may be thrown.
     void setNewVolumesAndExecuteCommand(const QList<Volume*> &volumes);

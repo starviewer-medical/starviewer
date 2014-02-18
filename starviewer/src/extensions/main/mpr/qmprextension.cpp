@@ -277,9 +277,11 @@ void QMPRExtension::initializeTools()
 
     // Registrem al manager les tools que van als diferents viewers
     m_toolManager->setupRegisteredTools(m_axial2DView);
-    // Als altres visors volem totes les registrades, excepte l'slicing
+    // On the other viewers we want all the registered tools but slicing (mouse and keyboard modes)
     QStringList toolsList = m_toolManager->getRegisteredToolsList();
     toolsList.removeAt(toolsList.indexOf("SlicingTool"));
+    toolsList.removeAt(toolsList.indexOf("SlicingKeyboardTool"));
+    toolsList.removeAt(toolsList.indexOf("SlicingWheelTool"));
     m_toolManager->setViewerTools(m_sagital2DView, toolsList);
     m_toolManager->setViewerTools(m_coronal2DView, toolsList);
 }
@@ -309,7 +311,8 @@ void QMPRExtension::createConnections()
     // se li vol donar a cada viewer. Capturem la senyal de quin volum s'ha escollit i a partir d'aquí fem el que calgui
     m_axial2DView->setAutomaticallyLoadPatientBrowserMenuSelectedInput(false);
     connect(m_axial2DView->getPatientBrowserMenu(), SIGNAL(selectedVolume(Volume*)), SLOT(setInput(Volume*)));
-
+    // HACK To make universal scrolling work properly. Issue #2019. We need to be aware of the volume being changed by another tool.
+    connect(m_axial2DView, SIGNAL(volumeChanged(Volume*)), SLOT(setInput(Volume*)));
     // Mostrar o no la informacio del volum a cada visualitzador
     connect(m_viewerInformationToolButton, SIGNAL(toggled(bool)), SLOT(showViewerInformation(bool)));
 
@@ -966,6 +969,13 @@ void QMPRExtension::pushSagitalViewAxialAxisActor()
 
 void QMPRExtension::setInput(Volume *input)
 {
+    // HACK To make universal scrolling work properly. Issue #2019.
+    if (input->objectName() == "Dummy Volume")
+    {
+        return;
+    }
+    // HACK End
+    
     if (input->getNumberOfPhases() > 1)
     {
         m_phasesAlertLabel->setVisible(true);
@@ -1014,8 +1024,10 @@ void QMPRExtension::setInput(Volume *input)
     m_coronalReslice->SetInput(m_volume->getVtkData());
 
     // Faltaria refrescar l'input dels 3 mpr
+    // HACK To make universal scrolling work properly. Issue #2019. We have to disconnect and reconnect the signal to avoid infinite loops
+    disconnect(m_axial2DView, SIGNAL(volumeChanged(Volume*)), this, SLOT(setInput(Volume*)));
     m_axial2DView->setInput(m_volume);
-
+    connect(m_axial2DView, SIGNAL(volumeChanged(Volume*)), SLOT(setInput(Volume*)));
     int extent[6];
     m_volume->getWholeExtent(extent);
     m_axialSlider->setMaximum(extent[5]);
@@ -1260,9 +1272,6 @@ void QMPRExtension::axialSliceUpdated(int slice)
 
 void QMPRExtension::updateControls()
 {
-    // Posem la representació dels plans sobre cada vista
-    updateIntersectionPoint();
-
     // Passem a sistema de coordenades de món
     m_sagitalOverAxialAxisActor->GetPositionCoordinate()->SetCoordinateSystemToWorld();
     m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->SetCoordinateSystemToWorld();
@@ -1426,17 +1435,10 @@ void QMPRExtension::updateControls()
     m_coronal2DView->render();
 }
 
-void QMPRExtension::updateIntersectionPoint()
-{
-    MathTools::planeIntersection(m_coronalPlaneSource->GetOrigin(), m_coronalPlaneSource->GetNormal(), m_sagitalPlaneSource->GetOrigin(),
-                                 m_sagitalPlaneSource->GetNormal(), m_axialPlaneSource->GetOrigin(), m_axialPlaneSource->GetNormal(), m_intersectionPoint);
-}
-
 void QMPRExtension::updatePlanes()
 {
     updatePlane(m_sagitalPlaneSource, m_sagitalReslice, m_sagitalExtentLength);
     updatePlane(m_coronalPlaneSource, m_coronalReslice, m_coronalExtentLength);
-    updateIntersectionPoint();
 }
 
 void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *reslice, int extentLength[2])
@@ -1684,62 +1686,6 @@ void QMPRExtension::rotateMiddle(double degrees, double rotationAxis[3], vtkPlan
     plane->SetPoint2(newPoint);
     m_transform->TransformPoint(plane->GetOrigin(), newPoint);
     plane->SetOrigin(newPoint);
-    plane->Update();
-}
-
-void QMPRExtension::rotate(double degrees, double rotationAxis[3], vtkPlaneSource *plane)
-{
-    // Normalitzem l'eix de rotació, serà molt millor per les operacions a fer
-    MathTools::normalize(rotationAxis);
-
-    if (isParallel(rotationAxis))
-    {
-        m_transform->Identity();
-        m_transform->Translate(m_intersectionPoint[0], m_intersectionPoint[1], m_intersectionPoint[2]);
-        m_transform->RotateWXYZ(degrees, rotationAxis);
-        m_transform->Translate(-m_intersectionPoint[0], -m_intersectionPoint[1], -m_intersectionPoint[2]);
-    }
-    else
-    {
-        // (0)
-        m_transform->Identity();
-        // (1)
-        m_transform->Translate(m_intersectionPoint[0], m_intersectionPoint[1], m_intersectionPoint[2]);
-        // (2)
-        double alpha, lp;
-        lp = sqrt(rotationAxis[1] * rotationAxis[1] + rotationAxis[2] * rotationAxis[2]);
-        alpha = asin(rotationAxis[1] / lp);
-//         alpha = acos(rotationAxis[2] / lp);
-        // O RotateWXYZ(alpha, [1,0,0])
-        m_transform->RotateX(-alpha * MathTools::RadiansToDegreesAsDouble);
-        // (3)
-        double beta, l;
-        l = sqrt(rotationAxis[0] * rotationAxis[0] + rotationAxis[1] * rotationAxis[1] + rotationAxis[2] * rotationAxis[2]);
-        beta = asin(rotationAxis[0]);
-        // O RotateWXYZ(beta, [0,1,0])
-        m_transform->RotateY(beta * MathTools::RadiansToDegreesAsDouble);
-        // (4)
-        // O RotateWXYZ(degrees, [0,0,1])
-        m_transform->RotateZ(degrees);
-        // (5)
-        // O RotateWXYZ(-beta, [0,1,0])
-        m_transform->RotateY(-beta * MathTools::RadiansToDegreesAsDouble);
-        // (6)
-        // O RotateWXYZ(-alpha, [1,0,0])
-        m_transform->RotateX(alpha * MathTools::RadiansToDegreesAsDouble);
-        // (7)
-        m_transform->Translate(-m_intersectionPoint[0], -m_intersectionPoint[1], -m_intersectionPoint[2]);
-
-    }
-    // Ara que tenim la transformació, l'apliquem als punts del pla (origen, punt1, punt2)
-    double newPoint[3];
-    m_transform->TransformPoint(plane->GetPoint1(), newPoint);
-    plane->SetPoint1(newPoint);
-    m_transform->TransformPoint(plane->GetPoint2(), newPoint);
-    plane->SetPoint2(newPoint);
-    m_transform->TransformPoint(plane->GetOrigin(), newPoint);
-    plane->SetOrigin(newPoint);
-
     plane->Update();
 }
 

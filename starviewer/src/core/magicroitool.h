@@ -102,6 +102,9 @@ private slots:
     void restartRegion();
 
 private:
+    /// Possible states of the tool.
+    enum State { Ready, Drawing };
+
     /// Mida de la tool
     static const int MagicSize;
     static const double InitialMagicFactor;
@@ -129,6 +132,9 @@ private:
 
     /// Index of the input to draw the magic ROI on
     int m_inputIndex;
+
+    /// Current state of the tool.
+    State m_state;
 };
 
 }

@@ -8,6 +8,7 @@
 #include "mathtools.h"
 #include "voxel.h"
 
+#include <QApplication> // to check pressed mouse buttons
 #include <qmath.h>
 
 // Vtk
@@ -35,9 +36,12 @@ MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
     m_roiPolygon = NULL;
     m_filledRoiPolygon = NULL;
 
+    m_state = Ready;
+
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(restartRegion()));
     connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(restartRegion()));
+    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(restartRegion()));
 }
 
 MagicROITool::~MagicROITool()
@@ -59,6 +63,8 @@ void MagicROITool::deleteTemporalRepresentation()
         delete m_filledRoiPolygon;
         m_2DViewer->render();
     }
+
+    m_state = Ready;
 }
 
 void MagicROITool::initialize()
@@ -81,6 +87,8 @@ void MagicROITool::initialize()
     m_filledRoiPolygon = NULL;
 
     m_inputIndex = getROIInputIndex();
+
+    m_state = Ready;
 }
 
 void MagicROITool::handleEvent(unsigned long eventID)
@@ -170,7 +178,7 @@ double MagicROITool::getVoxelValue(int x, int y, int z, VolumePixelData *pixelDa
 
 void MagicROITool::startRegion()
 {
-    if (m_2DViewer->hasInput())
+    if (m_state == Ready && m_2DViewer->hasInput())
     {
         if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(m_pickedPosition, m_inputIndex))
         {
@@ -184,6 +192,7 @@ void MagicROITool::startRegion()
             m_filledRoiPolygon->setFilled(true);
             m_filledRoiPolygon->setOpacity(0.5);
             m_2DViewer->getDrawer()->draw(m_filledRoiPolygon);
+            m_state = Drawing;
 
             this->generateRegion();
         }
@@ -214,28 +223,35 @@ void MagicROITool::endRegion()
         delete m_filledRoiPolygon;
         m_filledRoiPolygon = NULL;
     }
+
+    m_state = Ready;
 }
 
 void MagicROITool::restartRegion()
 {
-    if (!m_filledRoiPolygon.isNull())
+    // Check that mouse is over the viewer and the left button is pressed
+    if (m_2DViewer->underMouse() && QApplication::mouseButtons().testFlag(Qt::LeftButton))
     {
-        m_filledRoiPolygon->decreaseReferenceCount();
-        delete m_filledRoiPolygon;
-    }
+        if (!m_filledRoiPolygon.isNull())
+        {
+            m_filledRoiPolygon->decreaseReferenceCount();
+            delete m_filledRoiPolygon;
+        }
 
-    if (!m_roiPolygon.isNull())
-    {
-        m_roiPolygon->decreaseReferenceCount();
-        delete m_roiPolygon;
-        
+        if (!m_roiPolygon.isNull())
+        {
+            m_roiPolygon->decreaseReferenceCount();
+            delete m_roiPolygon;
+        }
+
+        m_state = Ready;
         startRegion();
     }
 }
 
 void MagicROITool::modifyRegionByFactor()
 {
-    if (m_roiPolygon)
+    if (m_state == Drawing)
     {
         const double ScaleFactor = 0.05;
 

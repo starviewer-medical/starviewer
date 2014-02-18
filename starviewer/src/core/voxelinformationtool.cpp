@@ -21,6 +21,7 @@ VoxelInformationTool::VoxelInformationTool(QViewer *viewer, QObject *parent)
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateCaption()));
     connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(updateCaption()));
     connect(m_2DViewer, SIGNAL(cameraChanged()), SLOT(updateCaption()));
+    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(updateCaption()));
 }
 
 VoxelInformationTool::~VoxelInformationTool()
@@ -70,7 +71,8 @@ void VoxelInformationTool::createCaption()
 
 void VoxelInformationTool::updateCaption()
 {
-    if (!m_caption)
+    // Don't update the caption if there is no caption or if the mouse isn't over the viewer (#2014)
+    if (!m_caption || !m_2DViewer->underMouse())
     {
         return;
     }

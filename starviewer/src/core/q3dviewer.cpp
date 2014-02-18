@@ -1289,7 +1289,9 @@ bool Q3DViewer::canAllocateMemory(int size)
 
 bool Q3DViewer::isSupportedVolume(Volume *volume)
 {
-    return volume->getNumberOfScalarComponents() == 1;
+    double range[2];
+    volume->getScalarRange(range);
+    return volume->getNumberOfScalarComponents() == 1 && range[1] > range[0];
 }
 
 };  // End namespace udg {

@@ -35,6 +35,9 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
         return;
     }
 
+    /// We need to have the same slicing mode as slicing tool to prevent slicing mode incongruences
+    updateSlicingModeAccordingToSlicingTool();
+    
     switch (eventID)
     {
         case vtkCommand::MouseWheelForwardEvent:
@@ -98,6 +101,15 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
 
         default:
             break;
+    }
+}
+
+void SlicingWheelTool::updateSlicingModeAccordingToSlicingTool()
+{
+    SlicingTool *slicingTool = qobject_cast<SlicingTool*>(m_2DViewer->getToolProxy()->getTool("SlicingTool"));
+    if (slicingTool)
+    {
+        m_slicingMode = slicingTool->getSlicingMode();
     }
 }
 

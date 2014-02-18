@@ -284,11 +284,6 @@ void Cursor3DTool::refreshReferenceViewerData()
 
 void Cursor3DTool::handleSliceChange()
 {
-    if (!m_crossHair)
-    {
-        return;
-    }
-
     if (m_2DViewer->isActive() && m_state == None)
     {
         m_myData->hideCursors();
@@ -306,9 +301,12 @@ void Cursor3DTool::hideCursor()
         return;
     }
 
-    m_crossHair->setVisibility(false);
-    m_crossHair->update();
-    m_2DViewer->render();
+    if (m_crossHair->isVisible())
+    {
+        m_crossHair->setVisibility(false);
+        m_crossHair->update();
+        m_2DViewer->render();
+    }
 }
 
 void Cursor3DTool::createNewCrossHair()

@@ -9,8 +9,19 @@
 #include "volumepixeldatareaderfactory.h"
 
 #include <QMessageBox>
+#include <QtConcurrentMap>
 
 namespace udg {
+
+namespace {
+
+// Returns the frame number of the given image.
+int getFrameNumber(const Image *image)
+{
+    return image->getFrameNumber();
+}
+
+}
 
 VolumeReader::VolumeReader(QObject *parent)
     : QObject(parent), m_volumePixelDataReader(0)
@@ -48,6 +59,10 @@ void VolumeReader::executePixelDataReader(Volume *volume)
     {
         // Posem a punt el reader i llegim les dades
         this->setUpReader(volume);
+
+        // Set the frame numbers to the pixel data reader (needed for multiframe files)
+        QList<int> frameNumbers = QtConcurrent::blockingMapped(volume->getImages(), getFrameNumber);
+        m_volumePixelDataReader->setFrameNumbers(frameNumbers);
 
         m_lastError = m_volumePixelDataReader->read(fileList);
         if (m_lastError == VolumePixelDataReader::NoError)

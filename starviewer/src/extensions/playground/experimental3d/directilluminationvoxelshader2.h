@@ -60,7 +60,7 @@ inline HdrColor DirectIlluminationVoxelShader2::nvShade(const Vector3 &position,
                                                         const HdrColor &baseColor)
 {
     Q_ASSERT(m_data);
-    Q_ASSERT(m_encodedNormals );
+    Q_ASSERT(m_encodedNormals);
     Q_ASSERT(m_redDiffuseShadingTable); Q_ASSERT(m_greenDiffuseShadingTable); Q_ASSERT(m_blueDiffuseShadingTable);
     Q_ASSERT(m_redSpecularShadingTable); Q_ASSERT(m_greenSpecularShadingTable); Q_ASSERT(m_blueSpecularShadingTable);
 

@@ -29,7 +29,7 @@ class PerfusionMapCalculatorThread : public QThread {
 
 public:
 
-    PerfusionMapCalculatorThread( int id, int numberOfThreads, QObject * parent = 0 );
+    PerfusionMapCalculatorThread(int id, int numberOfThreads, QObject * parent = 0);
     ~PerfusionMapCalculatorThread();
 
     typedef Volume::ItkImageType ImageType;
@@ -71,7 +71,7 @@ private:
     void runCheckImage();
     void runDeltaRImage();
 
-    QVector<double> deconvolve( QVector<double> tissue);
+    QVector<double> deconvolve(QVector<double> tissue);
 
     ImageType::Pointer m_DSCImage;
     BoolImageType::Pointer m_checkImage;

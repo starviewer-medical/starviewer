@@ -95,6 +95,9 @@
         </div>
         <div class="fixed">
             <ul>
+                <li>Es corrregeixen els casos en que en obrir un estudi o aplicar un hanging protocol, els reference lines no es mostraven fins que no s'interactuava amb un visor.<span class="ticket">1830, 1888</span></li>
+                <li>Es corregeix cas en que la sincronització manual no funcionava en el primer visor després d'haver-se activat.<span class="ticket">1862</span></li>
+                <li>Es corregeixen comportaments erronis de l'scroll universal en l'extensió d'MPR 2D.<span class="ticket">2018, 2019</span></li>
                 <li>Es corregeix cas que podia provocar que en el càlcul de les dades estadístiques (mitjana i desviació estàndard) d'una ROI feta amb l'eina de Magic ROI no es contemplessin tots els píxels del polígon.<span class="ticket">r9641</span></li>
                 <li>Es corregeix que en sistemes Windows 7 amb AERO desactivat pugui aparèixer un flash blanc en alguns visors quan la finestra de notificació del RIS es tanca.<span class="ticket">1959</span></li>
                 <li>Es corregeix cas en que es tancava l'aplicació esporàdicament quan es canviava de volum amb la tecla - sobre un volum al que s'havia aplicat alguna projecció de thick slab.<span class="ticket">1950</span></li>
@@ -108,6 +111,10 @@
                 <li>Es fa que quan s'envia un estudi multiframe al PACS s'enviï cada fitxer un sol cop, i no una vegada per cada frame com fins ara.<span class="ticket">1973</span></li>
                 <li>Es corregeix un error que es produïa si s'activava l'eina d'exportar captures mentre s'estava carregant un volum.<span class="ticket">1976</span></li>
                 <li>Es corregeix cas en que un rendering 3D podria mostrar-se "pla" en comptes de volumètric.<span class="ticket">1967</span></li>
+                <li>Es corregeixen casos en què l'ordenació de les imatges era diferent segons si un mateix estudi es descarregava des d'un PACS o un altre.<span class="ticket">2001</span></li>
+                <li>Es corregeixen casos en què les línies de referència i el cursor 3D no funcionaven correctament perquè l'ordenació de les imatges no era l'esperada.<span class="ticket">2001</span></li>
+                <li>Es corregeix un error a l'eina de ROI màgica que feia que no es pogués esborrar si s'obria el menú de pacient mentre s'estava fent la ROI.<span class="ticket">2013</span></li>
+                <li>Es corregeix un error a l'eina d'informació del vòxel que feia que pogués aparèixer en un visor encara que no hi hagués el cursor a sobre.<span class="ticket">2014</span></li>
             </ul>
         </div>
         <div class="removed">

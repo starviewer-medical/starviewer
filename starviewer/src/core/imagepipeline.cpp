@@ -60,7 +60,6 @@ void ImagePipeline::setShutterData(vtkImageData *shutterData)
     if (m_shutterData)
     {
         m_displayShutterFilter->setDisplayShutter(m_shutterData);
-        m_displayShutterFilter->update();
         m_outputFilter->SetInputConnection(m_displayShutterFilter->getOutput().getVtkAlgorithmOutput());
     }
     else

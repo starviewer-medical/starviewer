@@ -254,7 +254,7 @@ int VolumePixelDataReaderITKDCMTK::identifyErrorMessage(const QString &errorMess
     {
         return SizeMismatch;
     }
-    else if (errorMessage.contains("Failed to allocate memory for image") || errorMessage.contains("Impossible to allocate") )
+    else if (errorMessage.contains("Failed to allocate memory for image") || errorMessage.contains("Impossible to allocate"))
     {
         return OutOfMemory;
     }

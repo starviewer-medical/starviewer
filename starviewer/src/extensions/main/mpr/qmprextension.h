@@ -31,11 +31,6 @@ public:
     QMPRExtension(QWidget *parent = 0);
     ~QMPRExtension();
 
-    /// Rota els graus definits per 'angle' sobre l'eix i punt de rotació que defineixen la intersecció de dos plans.
-    /// El primer pla es el que volem rotar i l'altre sobre el qual estroba l'eix d'intersecció/rotació
-    /// Caldria resoldre què fer quan els plans son coplanars!!!!
-    void rotate(double degrees, double rotationAxis[3], vtkPlaneSource *plane);
-
     /// Rota el pla especificat pel seu centre
     void rotateMiddle(double degrees, double rotationAxis[3], vtkPlaneSource *plane);
 
@@ -85,9 +80,6 @@ private:
 
     /// Actualitza els valors del pla donat amb el reslice associat
     void updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *reslice, int extentLength[2]);
-
-    /// Actualitza el punt d'intersecció dels 3 plans
-    void updateIntersectionPoint();
 
     /// Inicialitza les orientacions dels plans de tall correctament perquè tinguin un espaiat, dimensions i límits correctes
     void initOrientation();
@@ -212,9 +204,6 @@ private:
 
     /// Aquesta variable ens servirà per controlar on col·loquem la llesca del pla axial
     double m_axialZeroSliceCoordinate;
-
-    /// Punt d'intersecció entre els 3 plans
-    double m_intersectionPoint[3];
 
     /// Els plans de tall per cada vista (més el thickSlab)
     vtkPlaneSource *m_sagitalPlaneSource, *m_coronalPlaneSource, *m_axialPlaneSource, *m_thickSlabPlaneSource;

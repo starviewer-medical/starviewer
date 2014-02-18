@@ -54,7 +54,7 @@ public:
     void MascaraPerfusio(typename TInputImage::Pointer inImage, typename TMaskImage::Pointer &maskImage);
     void VentricleSegmentation(typename TInputImage::Pointer inImage, typename TMaskImage::Pointer &maskImage, unsigned int level = 20);
     void StrokeSegmentation(typename TInputImage::Pointer inImage, typename TMaskImage::Pointer &mask, unsigned int level = 150, unsigned int max = 256);
-    void PenombraSegmentation(typename TInputImage::Pointer inImage, typename TMaskImage::Pointer &maskImage, unsigned int level, unsigned int max, const typename ConnectedThresholdFilterType::IndexType & seed );
+    void PenombraSegmentation(typename TInputImage::Pointer inImage, typename TMaskImage::Pointer &maskImage, unsigned int level, unsigned int max, const typename ConnectedThresholdFilterType::IndexType & seed);
     double VolumeCalculation(typename TMaskImage::Pointer maskImage, bool x = false);
     void JoinMask(typename TMaskImage::Pointer maskImage1,typename TMaskImage::Pointer maskImage2, typename TMaskImage::Pointer maskImageOut);
    
