@@ -125,10 +125,6 @@ static double getPointToFiniteLineDistance(double point[3], double lineFirstPoin
 /// Retorna 0 si els plans no intersecten perquè són paral·lels, altrament >0
 static int planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3]);
 
-/// Calcula la intersecció de tres plans definits per un punt i una normal (p,n), (q,m), (r,t) respectivament
-/// Retorna 0 si ... -1 si ... perquè són paral·lels, altrament >0
-static int planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3], double intersectionPoint[3]);
-
 /// Retorna el punt d'intersecció de dues línies
 /// infinites definides per dos segments
 /// @param p1 Primer punt de la primera recta
