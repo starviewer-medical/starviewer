@@ -96,6 +96,7 @@ HEADERS += databaseconnection.h \
     dicomdirburningapplicationtest.h \
     localdatabasepacsretrievedimagesdal.h \
     cachetest.h \
+    usermessage.h \
     portinusebyanotherapplication.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
@@ -169,6 +170,7 @@ SOURCES += databaseconnection.cpp \
     dicomdirburningapplicationtest.cpp \
     localdatabasepacsretrievedimagesdal.cpp \
     cachetest.cpp \
+    usermessage.cpp \
     portinusebyanotherapplication.cpp
 win32 {
     HEADERS += windowsportinusebyanotherapplication.h
