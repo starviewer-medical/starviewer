@@ -253,22 +253,22 @@
         <translation>Activar/Desactivar la visualización de la capa de los ventrículos</translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="301"/>
+        <location filename="qedemasegmentationextension.cpp" line="298"/>
         <source>StarViewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="594"/>
+        <location filename="qedemasegmentationextension.cpp" line="593"/>
         <source>Save Volume file</source>
         <translation>Guardar fichero de volumen</translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="594"/>
+        <location filename="qedemasegmentationextension.cpp" line="593"/>
         <source>MetaImage Files (*.mhd)</source>
         <translation>Ficheros MetaImage (*.mhd)</translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="301"/>
+        <location filename="qedemasegmentationextension.cpp" line="298"/>
         <source>ERROR: Seed or mask undefined</source>
         <translation>ERROR: Semilla o máscara no definida</translation>
     </message>

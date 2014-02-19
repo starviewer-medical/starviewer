@@ -253,22 +253,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="301"/>
+        <location filename="qedemasegmentationextension.cpp" line="298"/>
         <source>StarViewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="594"/>
+        <location filename="qedemasegmentationextension.cpp" line="593"/>
         <source>Save Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="594"/>
+        <location filename="qedemasegmentationextension.cpp" line="593"/>
         <source>MetaImage Files (*.mhd)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="301"/>
+        <location filename="qedemasegmentationextension.cpp" line="298"/>
         <source>ERROR: Seed or mask undefined</source>
         <translation type="unfinished"></translation>
     </message>

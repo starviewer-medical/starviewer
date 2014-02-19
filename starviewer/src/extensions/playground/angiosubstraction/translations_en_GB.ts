@@ -57,8 +57,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qangiosubstractionextensionbase.ui" line="245"/>
-        <source>Selected image:</source>
+        <location filename="qangiosubstractionextensionbase.ui" line="249"/>
+        <source>Displacement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qangiosubstractionextensionbase.ui" line="278"/>
+        <source>Reference image:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qangiosubstractionextensionbase.ui" line="293"/>
+        <source>Auto Registration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
