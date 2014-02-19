@@ -276,7 +276,7 @@ double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
     double cross[3];
     MathTools::crossProduct(dv1, dv2, cross);
 
-    double dot = MathTools::dotProduct(dv3, cross);
+    double dot = MathTools::dotProduct(dv1, cross);
 
     // Coplanarity check
     if (MathTools::closeEnough(dot, 0.0))
