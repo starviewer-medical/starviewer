@@ -210,7 +210,7 @@ void QInputOutputLocalDatabaseWidget::requestedSeriesOfStudy(Study *study)
 
     if (seriesList.isEmpty())
     {
-        QMessageBox::information(this, ApplicationNameString, tr("No series match for this study.\n"));
+        QMessageBox::information(this, ApplicationNameString, tr("No series match for this study.") + "\n");
         return;
     }
     else

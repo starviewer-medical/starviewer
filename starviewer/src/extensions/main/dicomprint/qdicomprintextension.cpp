@@ -700,11 +700,13 @@ void QDicomPrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error
         switch (error)
         {
             case DicomPrint::CanNotConnectToDicomPrinter:
-                messageError += tr("the printer does not respond.\n\n");
+                messageError += tr("the printer does not respond.");
+                messageError += "\n\n";
                 messageError += tr("Be sure the computer is connected on the network and the printer network parameters are correct.");
                 break;
             case DicomPrint::ErrorSendingDicomPrintJob:
-                messageError += tr("the printer does not respond as expected.\n\n");
+                messageError += tr("the printer does not respond as expected.");
+                messageError += "\n\n";
                 messageError += tr("In most cases this error is produced because the printer does not support some of the print configuration parameters.");
                 messageError += tr("Check printer DICOM Conformance to be sure that it accepts all your print parameters.");
                 break;
@@ -712,7 +714,8 @@ void QDicomPrintExtension::showDicomPrintError(DicomPrint::DicomPrintError error
                 messageError += tr("Unable to create print spool.");
                 break;
             case DicomPrint::ErrorLoadingImagesToPrint:
-                messageError += tr("Unable to load some of the images to print.\n\n");
+                messageError += tr("Unable to load some of the images to print.");
+                messageError += "\n\n";
                 messageError += tr("Close 'DICOM print' tab and try it again.");
                 break;
             case DicomPrint::UnknowError:

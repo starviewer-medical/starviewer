@@ -242,13 +242,13 @@ void QCreateDicomdir::addStudies(const QList<Study*> &studies)
         if (existingStudies.size() > 0)
         {
             message += "\n\n\t";
-            message += tr("- Already exist in the list.\n");
+            message += tr("- Already exist in the list.") + "\n";
             message += existingStudies.join("\n");
         }
         if (notAddedStudies.size() > 0)
         {
             message += "\n\n\t";
-            message += tr("- Not enough space on the device.\n");
+            message += tr("- Not enough space on the device.") + "\n";
             message += notAddedStudies.join("\n");
         }
         QMessageBox::warning(0, ApplicationNameString, message);
@@ -279,13 +279,15 @@ void QCreateDicomdir::createDicomdir()
         {
             if (!qdir.exists())
             {
-                message = tr("The directory '%1' from where to copy the content to DICOMDIR does not exist.\n\n")
+                message = tr("The directory '%1' from where to copy the content to DICOMDIR does not exist.")
                     .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
+                message += "\n\n";
             }
             else
             {
-                message = tr("You don't have read permission on directory '%1' to copy its content to DICOMDIR.\n\n")
+                message = tr("You don't have read permission on directory '%1' to copy its content to DICOMDIR.")
                     .arg(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString());
+                message += "\n\n";
             }
             message += tr("Do you want to create the DICOMDIR without copying its content?");
 
@@ -692,14 +694,14 @@ void QCreateDicomdir::openBurningApplication(bool createIsoResult)
 
         if (!dicomdirBurningApplication.burnIsoImageFile())
         {
-            QMessageBox::critical(this, tr("DICOMDIR Burning Failure"), tr("There was an error during the burning of the DICOMDIR ISO image file.\n") +
+            QMessageBox::critical(this, tr("DICOMDIR Burning Failure"), tr("There was an error during the burning of the DICOMDIR ISO image file.") + "\n" +
                 dicomdirBurningApplication.getLastErrorDescription() + "\n\n" + tr("Please, contact your system administrator to solve this problem."));
             ERROR_LOG("Error al gravar la imatge ISO amb descripció: " + dicomdirBurningApplication.getLastErrorDescription());
         }
     }
     else
     {
-        QMessageBox::critical(this, tr("DICOMDIR creation failure"), tr("There was an error during the creation of the DICOMDIR ISO image file. ") +
+        QMessageBox::critical(this, tr("DICOMDIR creation failure"), tr("There was an error during the creation of the DICOMDIR ISO image file.") + "\n" +
             m_isoImageFileCreator->getLastErrorDescription() + "\n\n" + tr("Please, contact your system administrator to solve this problem."));
         ERROR_LOG("Error al crear ISO amb descripció: " + m_isoImageFileCreator->getLastErrorDescription());
     }

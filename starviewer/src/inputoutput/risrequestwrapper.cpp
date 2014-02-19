@@ -73,8 +73,8 @@ QString RISRequestWrapper::getXmlPier(QString accessionNumber)
 
 void RISRequestWrapper::errorConnecting(int starviewerRisPort, QString errorDescription)
 {
-    QString messageError = QString("Unable to connect with %3 on port %1, be sure %3 is running. Error description: %2.\n")
-                .arg(QString().setNum(starviewerRisPort), errorDescription, ApplicationNameString);
+    QString messageError = QString("Unable to connect with %3 on port %1, be sure %3 is running. Error description: %2.")
+                .arg(QString().setNum(starviewerRisPort), errorDescription, ApplicationNameString) + "\n";
 
     ERROR_LOG(QString("RISRequestWrapper::No s'ha pogut connectar amb l'Starviewer pel port %1, descripcio error: %2")
                  .arg(QString().setNum(starviewerRisPort), errorDescription));
@@ -82,14 +82,14 @@ void RISRequestWrapper::errorConnecting(int starviewerRisPort, QString errorDesc
 
 void RISRequestWrapper::errorWriting(QString errorDescription)
 {
-    QString messageError = QString("Error cannot send the request to %2. Error description:  %1.\n").arg(errorDescription).arg(ApplicationNameString);
+    QString messageError = QString("Error cannot send the request to %2. Error description:  %1.").arg(errorDescription).arg(ApplicationNameString) + "\n";
 
     ERROR_LOG("RISRequestWrapper::No s'ha pogut enviar la peticio al Starviewer, descripcio error: " + errorDescription);
 }
 
 void RISRequestWrapper::errorClosing(QString errorDescription)
 {
-    QString messageError = QString("Error while disconnecting from host. Error description:  %1.\n").arg(errorDescription);
+    QString messageError = QString("Error while disconnecting from host. Error description:  %1.").arg(errorDescription) + "\n";
 
     ERROR_LOG("RISRequestWrapper::S'ha produit un error desconnectant del host, descripcio del error: " + errorDescription);
 }

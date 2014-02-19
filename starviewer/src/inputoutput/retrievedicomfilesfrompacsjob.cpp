@@ -245,9 +245,9 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             message = tr("Retrieval of the images from study %1 of patient %2 from PACS %3 has been canceled.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::RetrieveCanNotConnectToPACS:
-            message = tr("Unable to connect to PACS %1 to retrieve images from study %2 of patient %3.\n")
+            message = tr("Unable to connect to PACS %1 to retrieve images from study %2 of patient %3.")
                 .arg(pacsAETitle, studyID, patientName);
-            message += "\n";
+            message += "\n\n";
             message += tr("Make sure your computer is connected to the network and the PACS parameters are correct.");
             message += "\n";
             message += tr("If the problem persists contact with an administrator.");
@@ -295,14 +295,16 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             message += errorDetails;
             break;
         case PACSRequestStatus::RetrieveUnknowStatus:
-            message = tr("Cannot retrieve images from study %1 of patient %2 due to an unknown error of PACS %3.\n\n")
+            message = tr("Cannot retrieve images from study %1 of patient %2 due to an unknown error of PACS %3.")
                 .arg(studyID, patientName, pacsAETitle);
+            message += "\n\n";
             message += tr("The cause of the error may be that the requested images are corrupted. Please contact with a PACS administrator.");
             message += errorDetails;
             break;
         case PACSRequestStatus::RetrieveFailureOrRefused:
-            message = tr("Cannot retrieve images from study %1 of patient %2 due to an error of PACS %3.\n\n")
+            message = tr("Cannot retrieve images from study %1 of patient %2 due to an error of PACS %3.")
                 .arg(studyID, patientName, pacsAETitle);
+            message += "\n\n";
             message += tr("The cause of the error may be that the requested images are corrupted or the incoming connections port in PACS configuration "
                           "is not correct.");
             message += errorDetails;

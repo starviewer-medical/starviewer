@@ -204,7 +204,7 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(QueryPacsJob *queryPACSJob)
 
         if (seriesList.isEmpty())
         {
-            QMessageBox::information(this, ApplicationNameString, tr("No series match for this study %1.\n").arg(studyInstanceUID));
+            QMessageBox::information(this, ApplicationNameString, tr("No series match for this study %1.").arg(studyInstanceUID) + "\n");
         }
         else
         {
@@ -219,7 +219,7 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(QueryPacsJob *queryPACSJob)
 
         if (imageList.isEmpty())
         {
-            QMessageBox::information(this, ApplicationNameString, tr("No images match series %1.\n").arg(seriesInstanceUID));
+            QMessageBox::information(this, ApplicationNameString, tr("No images match series %1.").arg(seriesInstanceUID) + "\n");
         }
         else
         {
