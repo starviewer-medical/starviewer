@@ -21,7 +21,7 @@ Identifier Repository<ItemType>::addItem(ItemType* item)
 }
 
 template<typename ItemType>
-ItemType* Repository<ItemType>::getItem(const Identifier id)
+ItemType* Repository<ItemType>::getItem(const Identifier &id)
 {
     return m_itemList.value(id);
 }
@@ -33,7 +33,7 @@ QList<ItemType*> Repository<ItemType>::getItems()
 }
 
 template<typename ItemType>
-void Repository<ItemType>::removeItem(const Identifier id)
+void Repository<ItemType>::removeItem(const Identifier &id)
 {
     m_itemList.remove(id);
     emit changed();
