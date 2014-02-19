@@ -86,8 +86,8 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     if (!databaseInstallation.checkStarviewerDatabase())
     {
         QString errorMessage = databaseInstallation.getErrorMessage();
-        QMessageBox::critical(0, ApplicationNameString, tr("There have been some errors:\n").append(errorMessage)
-                                                    .append(tr("\n\nYou can resolve this error at Tools > Configuration > Local Database.")));
+        QMessageBox::critical(0, ApplicationNameString, tr("There have been some errors:") + "\n" + errorMessage + "\n\n" + 
+                                                    tr("You can resolve this error at Tools > Configuration > Local Database."));
     }
 
     m_extensionHandler = new ExtensionHandler(this);

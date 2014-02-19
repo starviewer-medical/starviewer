@@ -171,7 +171,7 @@ void QInputOutputDicomdirWidget::requestedSeriesOfStudy(Study *study)
 
     if (seriesList.isEmpty())
     {
-        QMessageBox::information(this, ApplicationNameString, tr("No series match for this study.\n"));
+        QMessageBox::information(this, ApplicationNameString, tr("No series match for this study.") + "\n");
     }
     else
     {
@@ -190,7 +190,7 @@ void QInputOutputDicomdirWidget::requestedImagesOfSeries(Series *series)
 
     if (imageList.isEmpty())
     {
-        QMessageBox::information(this, ApplicationNameString, tr("No images match for this series.\n"));
+        QMessageBox::information(this, ApplicationNameString, tr("No images match for this series.") + "\n");
         return;
     }
     else
