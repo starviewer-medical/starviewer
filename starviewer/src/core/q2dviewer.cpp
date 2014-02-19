@@ -41,6 +41,7 @@
 #include <QVTKWidget.h>
 #include <vtkWindowToImageFilter.h>
 #include <vtkImageActor.h>
+#include <vtkMatrix4x4.h>
 
 namespace udg {
 
@@ -1147,6 +1148,66 @@ ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
     return getMainInput()->getImagePlane(getCurrentSlice(), getCurrentViewPlane(), vtkReconstructionHack);
 }
 
+bool Q2DViewer::getDicomWorldCoordinates(const double xyz[3], double dicomWorldPosition[4])
+{
+    int index[3];
+    ImagePlane *currentPlane = NULL;
+    bool result = false;
+
+    // 2.- Trobar l'índex del vòxel en el DICOM
+    this->getMainInput()->computeCoordinateIndex(xyz, index);
+
+    // 3.- Necessitem la imatge la qual pertany el punt per tal de trobar la imatge del dicom que conté la informació del pla.
+    double *spacing = this->getMainInput()->getSpacing();
+
+    currentPlane = getCurrentImagePlane();
+
+    if (currentPlane)
+    {
+        // 3.- Construim la matiu per mapejar l'index del píxel del DICOM a un punt del món real
+        double currentPlaneRowVector[3];
+        double currentPlaneColumnVector[3];
+        double currentPlaneOrigin[3];
+
+        currentPlane->getRowDirectionVector(currentPlaneRowVector);
+        currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
+        currentPlane->getOrigin(currentPlaneOrigin);
+
+        int xIndex, yIndex, zIndex;
+        getCurrentViewPlane().getXYZIndexes(xIndex, yIndex, zIndex);
+
+        vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
+        projectionMatrix->Identity();
+        for (int row = 0; row < 3; row++)
+        {
+            projectionMatrix->SetElement(row, xIndex, (currentPlaneRowVector[row]) * spacing[xIndex]);
+            projectionMatrix->SetElement(row, yIndex, (currentPlaneColumnVector[row]) * spacing[yIndex]);
+            projectionMatrix->SetElement(row, zIndex, 0.0);
+            projectionMatrix->SetElement(row, 3, currentPlaneOrigin[row]);
+        }
+
+        // 3.- Mappeig de l'índex del píxel al món real
+        dicomWorldPosition[0] = (double)index[0];
+        dicomWorldPosition[1] = (double)index[1];
+        dicomWorldPosition[2] = (double)index[2];
+        dicomWorldPosition[3] = 1.0;
+        // Matriu * punt
+        projectionMatrix->MultiplyPoint(dicomWorldPosition, dicomWorldPosition);
+        projectionMatrix->Delete();
+
+        result = true;
+    }
+    else
+    {
+        DEBUG_LOG("The requested plane is not available, maybe due to poor multiframe support.");
+        INFO_LOG("No es pot actualitzar la posició del cursor 3D perquè no podem obtenir el pla corresponent.");
+    }
+
+    delete currentPlane;
+
+    return result;
+}
+
 void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack)
 {
     // AQUÍ SUMEM L'origen TAL CUAL + L'ERROR DE DESPLAÇAMENT VTK
@@ -1185,6 +1246,32 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
     {
         DEBUG_LOG("No hi ha cap pla actual valid");
     }
+}
+
+void Q2DViewer::absolutePan(double motionVector[3])
+{
+    double projectedPoint[3];
+    this->projectDICOMPointToCurrentDisplayedImage(motionVector, projectedPoint);
+
+    double relativeMotionVector[3];
+    double currentPosition[3];
+
+    vtkCamera *camera = getActiveCamera();
+    if (!camera)
+    {
+        DEBUG_LOG("No hi ha càmera");
+        return;
+    }
+    camera->GetFocalPoint(currentPosition);
+
+    int x, y, z;
+    getCurrentViewPlane().getXYZIndexes(x, y, z);
+
+    relativeMotionVector[x] = projectedPoint[x] - currentPosition[x];
+    relativeMotionVector[y] = projectedPoint[y] - currentPosition[y];
+    relativeMotionVector[z] = 0.0;
+
+    pan(relativeMotionVector);
 }
 
 Drawer* Q2DViewer::getDrawer() const

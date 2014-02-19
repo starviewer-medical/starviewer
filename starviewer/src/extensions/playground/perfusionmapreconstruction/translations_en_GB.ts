@@ -35,94 +35,89 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="57"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="51"/>
         <source>Scroll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="87"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="81"/>
         <source>WW/WL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="114"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="108"/>
         <source>Pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="141"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="135"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="178"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="172"/>
         <source>AIF Position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="202"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="196"/>
         <source>ROI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="226"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="220"/>
         <source>Rotate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="256"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="250"/>
         <source>voxel information</source>
         <translation type="unfinished">Voxel information</translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="280"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="274"/>
         <source>...</source>
         <translation type="unfinished">...</translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="314"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="308"/>
         <source>DSC Serie:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="337"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="331"/>
         <source>DSC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="346"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="340"/>
         <source>Compute Perfusion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="353"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="347"/>
         <source>Map Filtering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="368"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="362"/>
         <source>Map:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="376"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="370"/>
         <source>CBV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="381"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="375"/>
         <source>CBF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="386"/>
+        <location filename="qperfusionmapreconstructionextensionbase.ui" line="380"/>
         <source>MTT</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qperfusionmapreconstructionextensionbase.ui" line="488"/>
-        <source>Slice:</source>
-        <translation type="unfinished">Slice:</translation>
     </message>
 </context>
 </TS>

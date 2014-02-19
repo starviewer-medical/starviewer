@@ -13,6 +13,7 @@
 #include "directoryutilities.h"
 #include "singleton.h"
 #include "queryscreen.h"
+#include "usermessage.h"
 
 namespace udg {
 
@@ -346,14 +347,21 @@ void QLocalDatabaseConfigurationScreen::clearCache()
 
     if (!successDeletingFiles)
     {
-        QMessageBox::critical(this, ApplicationNameString, tr("Some files cannot be deleted. \nThese files have to be deleted manually."));
+        QString message = tr("Some files cannot be deleted.");
+        message += "\n";
+        message += tr("These files have to be deleted manually.");
+        
+        QMessageBox::critical(this, ApplicationNameString, message);
     }
     if (!successReinstallingDatabase)
     {
-        QMessageBox::critical(this, ApplicationNameString, tr("An error has occurred while deleting studies from the database, make sure you have write "
-                                                              "permission on the database directory.") +
-                                                           tr("\n\nClose all %1 windows and try again. ").arg(ApplicationNameString) +
-                                                           tr("If the problem persists contact with an administrator."));
+        QString message = tr("An error has occurred while deleting studies from the database, make sure you have write permission on the database directory.");
+        message += "\n\n";
+        message += UserMessage::getCloseWindowsAndTryAgainAdvice();
+        message += "\n\n";
+        message += UserMessage::getProblemPersistsAdvice();
+
+        QMessageBox::critical(this, ApplicationNameString, message);
     }
 }
 
@@ -370,8 +378,8 @@ void QLocalDatabaseConfigurationScreen::compactCache()
 
     if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
     {
-        QMessageBox::critical(this, ApplicationNameString, tr("The database cannot be compacted, an unknown error has occurred.\n\n") +
-            tr("Close all %1 windows and try again. ").arg(ApplicationNameString) + tr("If the problem persists contact with an administrator."));
+        QMessageBox::critical(this, ApplicationNameString, tr("The database cannot be compacted, an unknown error has occurred.") + "\n\n" +
+            UserMessage::getCloseWindowsAndTryAgainAdvice() + " " + UserMessage::getProblemPersistsAdvice());
     }
     else
     {

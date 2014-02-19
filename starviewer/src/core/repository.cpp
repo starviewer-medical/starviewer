@@ -21,32 +21,32 @@ Identifier Repository<ItemType>::addItem(ItemType* item)
 }
 
 template<typename ItemType>
-ItemType* Repository<ItemType>::getItem(const Identifier id)
+ItemType* Repository<ItemType>::getItem(const Identifier &id) const
 {
     return m_itemList.value(id);
 }
 
 template<typename ItemType>
-QList<ItemType*> Repository<ItemType>::getItems()
+QList<ItemType*> Repository<ItemType>::getItems() const
 {
     return m_itemList.values();
 }
 
 template<typename ItemType>
-void Repository<ItemType>::removeItem(const Identifier id)
+void Repository<ItemType>::removeItem(const Identifier &id)
 {
     m_itemList.remove(id);
     emit changed();
 }
 
 template<typename ItemType>
-int Repository<ItemType>::getNumberOfItems()
+int Repository<ItemType>::getNumberOfItems() const
 {
    return m_itemList.size();
 }
 
 template<typename ItemType>
-QList<Identifier> Repository<ItemType>::getIdentifiers()
+QList<Identifier> Repository<ItemType>::getIdentifiers() const
 {
     return m_itemList.keys();
 }
@@ -54,7 +54,11 @@ QList<Identifier> Repository<ItemType>::getIdentifiers()
 template<typename ItemType>
 void Repository<ItemType>::cleanUp()
 {
-    // Buida la llista però no elimina els ItemType
+    foreach (ItemType *item, m_itemList)
+    {
+        delete item;
+    }
+
     m_itemList.clear();
     emit changed();
 }

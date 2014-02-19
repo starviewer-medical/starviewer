@@ -95,7 +95,8 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
 
         m_upperRightText = series->getInstitutionName() + "\n";
         m_upperRightText += patient->getFullName() + "\n";
-        m_upperRightText += QString("%1 %2 %3\n").arg(study->getPatientAge()).arg(patient->getSex()).arg(patient->getID());
+        m_upperRightText += QString("%1 %2 %3").arg(study->getPatientAge()).arg(patient->getSex()).arg(patient->getID());
+        m_upperRightText += "\n";
         if (!study->getAccessionNumber().isEmpty())
         {
             m_upperRightText += QObject::tr("Acc: %1").arg(study->getAccessionNumber());
@@ -339,7 +340,8 @@ void Q2DViewerAnnotationHandler::updateWindowInformationAnnotation()
         m_2DViewer->getMainInput()->getDimensions(dimensions);
         int xIndex = m_2DViewer->getView().getXIndex();
         int yIndex = m_2DViewer->getView().getYIndex();
-        m_upperLeftText = QObject::tr("%1 x %2\n").arg(dimensions[xIndex]).arg(dimensions[yIndex]);
+        m_upperLeftText = QObject::tr("%1 x %2").arg(dimensions[xIndex]).arg(dimensions[yIndex]);
+        m_upperLeftText += "\n";
         m_upperLeftText += getCurrentWindowLevelString();
     }
     else

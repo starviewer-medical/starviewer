@@ -386,18 +386,6 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>the printer does not respond.
-
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>the printer does not respond as expected.
-
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>In most cases this error is produced because the printer does not support some of the print configuration parameters.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -414,9 +402,15 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unable to load some of the images to print.
-
-</source>
+        <source>the printer does not respond.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>the printer does not respond as expected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to load some of the images to print.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

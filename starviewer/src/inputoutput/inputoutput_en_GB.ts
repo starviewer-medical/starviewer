@@ -13,8 +13,7 @@
     <name>QFileDialog</name>
     <message>
         <location filename="qdicomdirconfigurationscreen.cpp" line="191"/>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="90"/>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="287"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="288"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22,7 +21,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="655"/>
+        <location filename="qcreatedicomdir.cpp" line="659"/>
         <source>Creating DICOMDIR image...</source>
         <oldsource>Creating DICOMDIR Image...</oldsource>
         <translation type="unfinished"></translation>
@@ -82,6 +81,16 @@
     <message>
         <location filename="portinuse.cpp" line="13"/>
         <source>No port checked yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="usermessage.cpp" line="17"/>
+        <source>If the problem persists contact with an administrator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="usermessage.cpp" line="22"/>
+        <source>Close all %1 windows and try again.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -192,57 +201,42 @@
 <context>
     <name>udg::DatabaseInstallation</name>
     <message>
-        <location filename="databaseinstallation.cpp" line="61"/>
-        <source>
-Unable to upgrade database file, be sure you have write permission on the database directory.</source>
-        <oldsource>
-Unable to upgrade database file, be sure you have write permissions on database directory.</oldsource>
+        <location filename="databaseinstallation.cpp" line="43"/>
+        <source>Unable to create database, be sure you have write permission on the database directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="databaseinstallation.cpp" line="192"/>
+        <location filename="databaseinstallation.cpp" line="56"/>
+        <source>You don&apos;t have write permission on %1 database. Retrieval or importing of new studies will fail.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="63"/>
+        <source>Unable to upgrade database file, be sure you have write permission on the database directory.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="86"/>
+        <source>Unable to create the cache image directory. Please check user permissions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="98"/>
+        <source>You don&apos;t have write permission on cache image directory. Retrieval or importing of new studies will fail.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="196"/>
         <source>Reinstalling database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="databaseinstallation.cpp" line="214"/>
+        <location filename="databaseinstallation.cpp" line="218"/>
         <source>Updating database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="databaseinstallation.cpp" line="42"/>
-        <source>
-Unable to create database, be sure you have write permission on the database directory.</source>
-        <oldsource>
-Unable to create database, be sure you have write permissions on database directory.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="54"/>
-        <source>
-You don&apos;t have write permission on %1 database. Retrieval or importing of new studies will fail.</source>
-        <oldsource>
-You don&apos;t have write permissions on %1 database. Retrieval or importing of new studies will fail.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="83"/>
-        <source>
-Unable to create the cache image directory. Please check user permissions.</source>
-        <oldsource>
-Can&apos;t create the cache image directory. Please check users permissions.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="94"/>
-        <source>
-You don&apos;t have write permission on cache image directory. Retrieval or importing of new studies will fail.</source>
-        <oldsource>
-You don&apos;t have write permissions on cache image directory. Retrieval or importing of new studies will fail.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="440"/>
+        <location filename="databaseinstallation.cpp" line="444"/>
         <source>Current database is of newer version. In order to run %1, local studies must be deleted and the database will be reinstalled. Do you want to continue?</source>
         <oldsource>Current database is of newer version. In order to run %1, local studies must be deleted and database will be reinstalled. Do you want to continue?</oldsource>
         <translation type="unfinished"></translation>
@@ -835,31 +829,31 @@ Be sure its IP and AE Title are correct.</oldsource>
 <context>
     <name>udg::QCreateDicomdir</name>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="376"/>
-        <location filename="qcreatedicomdir.cpp" line="404"/>
+        <location filename="qcreatedicomdir.cpp" line="380"/>
+        <location filename="qcreatedicomdir.cpp" line="408"/>
         <source>&amp;Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="376"/>
-        <location filename="qcreatedicomdir.cpp" line="404"/>
+        <location filename="qcreatedicomdir.cpp" line="380"/>
+        <location filename="qcreatedicomdir.cpp" line="408"/>
         <source>&amp;No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="402"/>
+        <location filename="qcreatedicomdir.cpp" line="406"/>
         <source>Create Directory?</source>
         <oldsource>Create directory?</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="409"/>
+        <location filename="qcreatedicomdir.cpp" line="413"/>
         <source>Unable to create directory. Please check user permissions.</source>
         <oldsource>Unable to create the directory. Please check user permissions.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="627"/>
+        <location filename="qcreatedicomdir.cpp" line="631"/>
         <source>Please select a study to remove it from the list.</source>
         <oldsource>Please select a study to remove of the list.</oldsource>
         <translation type="unfinished"></translation>
@@ -910,99 +904,97 @@ Be sure its IP and AE Title are correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="262"/>
+        <location filename="qcreatedicomdir.cpp" line="245"/>
+        <source>- Already exist in the list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="251"/>
+        <source>- Not enough space on the device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="264"/>
         <source>DICOMDIR creation aborted.
 The selected studies exceed the available space for the current device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="288"/>
+        <location filename="qcreatedicomdir.cpp" line="282"/>
+        <source>The directory &apos;%1&apos; from where to copy the content to DICOMDIR does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="292"/>
         <source>Do you want to create the DICOMDIR without copying its content?</source>
         <oldsource>Do you want to continue creating DICOMDIR without copying its content?</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="285"/>
-        <source>You don&apos;t have read permission on directory &apos;%1&apos; to copy its content to DICOMDIR.
-
-</source>
-        <oldsource>You don&apos;t have read permissions on directory &apos;%1&apos; to copy its content to DICOMDIR.
-
-</oldsource>
+        <location filename="qcreatedicomdir.cpp" line="704"/>
+        <source>There was an error during the creation of the DICOMDIR ISO image file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="342"/>
+        <location filename="qcreatedicomdir.cpp" line="346"/>
         <source>Unable to create the temporary directory to create the DICOMDIR. Please check user permissions.</source>
         <oldsource>Unable to create the temporary directory to create DICOMDIR. Please check user permissions.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="374"/>
+        <location filename="qcreatedicomdir.cpp" line="378"/>
         <source>Create DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="375"/>
+        <location filename="qcreatedicomdir.cpp" line="379"/>
         <source>The directory contains a DICOMDIR. Do you want to overwrite and delete all the files in the directory?</source>
         <oldsource>The directory contains a DICOMDIR, do you want to overwrite and delete all the files in the directory?</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="403"/>
+        <location filename="qcreatedicomdir.cpp" line="407"/>
         <source>The DICOMDIR directory does not exist. Do you want to create it?</source>
         <oldsource>The DICOMDIR directory doesn&apos;t exists. Do you want to create it?</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="439"/>
+        <location filename="qcreatedicomdir.cpp" line="443"/>
         <source>Not enough free space to create DICOMDIR. Please free space.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="363"/>
+        <location filename="qcreatedicomdir.cpp" line="367"/>
         <source>No directory specified to create the DICOMDIR.</source>
         <oldsource>No directory specified to create the DICOMDIR</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="450"/>
+        <location filename="qcreatedicomdir.cpp" line="454"/>
         <source>You haven&apos;t selected any study to create the DICOMDIR. Please select at least one study.</source>
         <oldsource>Please, first select the studies you want to create a DICOMDIR.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="480"/>
+        <location filename="qcreatedicomdir.cpp" line="484"/>
         <source>Some images are not 100% DICOM compliant. Some viewers might have problems to open them.</source>
         <oldsource>Some images are not 100 % DICOM compliant. Some viewers might have problems to open them.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="506"/>
+        <location filename="qcreatedicomdir.cpp" line="510"/>
         <source>Error creating DICOMDIR file, make sure you have read and write permissions on the destination folder.</source>
         <oldsource>Error creating DICOMDIR file, be sure you have read and write permissions on destination folder.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="693"/>
-        <source>There was an error during the burning of the DICOMDIR ISO image file.
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="700"/>
-        <location filename="qcreatedicomdir.cpp" line="744"/>
+        <location filename="qcreatedicomdir.cpp" line="704"/>
+        <location filename="qcreatedicomdir.cpp" line="748"/>
         <source>DICOMDIR creation failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="778"/>
-        <source>
-Error Number: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="716"/>
+        <location filename="qcreatedicomdir.cpp" line="720"/>
         <source>The process [ %1 ] failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1037,49 +1029,13 @@ Error Number: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="244"/>
-        <source>
-
-	- Already exist in the list.
-</source>
-        <oldsource>
-
-*Already exist in the list
-
-</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="249"/>
-        <source>
-
-	- Not enough space on the device.
-</source>
-        <oldsource>
-
-*Exceed the device available space
-
-</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="280"/>
-        <source>The directory &apos;%1&apos; from where to copy the content to DICOMDIR does not exist.
-
-</source>
-        <oldsource>The directory &apos;%1&apos; to copy the content to DICOMDIR does not exist.
-
-</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="485"/>
+        <location filename="qcreatedicomdir.cpp" line="489"/>
         <source>Unable to create DICOMDIR. The content of &apos;%1&apos; cannot be copied. Make sure you have read permission in the directory or uncheck copy folder content option.</source>
         <oldsource>Unable to create the DICOMDIR. The content of &apos;%1&apos; cannot be copied. Make sure you have read permissions in the directory or uncheck copy folder content option.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="490"/>
+        <location filename="qcreatedicomdir.cpp" line="494"/>
         <source>Unable to create DICOMDIR. The folder &apos;%1&apos; that should be copied contains an item called DICOMDIR or DICOM.
 
 Remove the item from the directory or uncheck copy folder content option.</source>
@@ -1089,69 +1045,74 @@ Remove it from the directory or uncheck copy folder content option.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="495"/>
+        <location filename="qcreatedicomdir.cpp" line="499"/>
         <source>Error anonymizing DICOMDIR, make sure you have write permission on %1 or try to create the DICOMDIR without the anonymize option.</source>
         <oldsource>Error anonymizing DICOMDIR, make sure you have write permissions on %1 or try to create the DICOMDIR without anonymize option.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="501"/>
+        <location filename="qcreatedicomdir.cpp" line="505"/>
         <source>Error copying files, make sure you have appropriate permissions on both source and destination folders to copy the files.</source>
         <oldsource>Error copying files, be sure you have appropriate permissions on both source and destination folders to copy the files.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="511"/>
+        <location filename="qcreatedicomdir.cpp" line="515"/>
         <source>Error creating DICOMDIR. Make sure you have appropriate permissions on both source and destination folders and %1 folder is empty.</source>
         <oldsource>Error creating DICOMDIR. Be sure you have appropriate permissions on both source and destination folders and %1 folder is empty.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="693"/>
+        <location filename="qcreatedicomdir.cpp" line="697"/>
         <source>DICOMDIR Burning Failure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="694"/>
-        <location filename="qcreatedicomdir.cpp" line="701"/>
-        <location filename="qcreatedicomdir.cpp" line="745"/>
+        <location filename="qcreatedicomdir.cpp" line="697"/>
+        <source>There was an error during the burning of the DICOMDIR ISO image file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="698"/>
+        <location filename="qcreatedicomdir.cpp" line="705"/>
+        <location filename="qcreatedicomdir.cpp" line="749"/>
         <source>Please, contact your system administrator to solve this problem.</source>
         <oldsource>There was an error during the creation of the ISO image file. </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="700"/>
-        <source>There was an error during the creation of the DICOMDIR ISO image file. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qcreatedicomdir.cpp" line="721"/>
+        <location filename="qcreatedicomdir.cpp" line="725"/>
         <source>The process [ %1 ] crashed some time after starting successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="729"/>
+        <location filename="qcreatedicomdir.cpp" line="733"/>
         <source>An error occurred when attempting to write to the process [ %1 ]. For example, the process may not be running, or it may have closed its input channel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="734"/>
+        <location filename="qcreatedicomdir.cpp" line="738"/>
         <source>An error occurred when attempting to read from the process [ %1 ]. For example, the process may not be running.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="744"/>
+        <location filename="qcreatedicomdir.cpp" line="748"/>
         <source>There was an error during the creation of the DICOMDIR.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="843"/>
+        <location filename="qcreatedicomdir.cpp" line="782"/>
+        <source>Error Number: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qcreatedicomdir.cpp" line="847"/>
         <source>The selected device does not have enough space to create a DICOMDIR with the selected studies, please remove some studies. The capacity of the device is %1 MB.</source>
         <oldsource>The selected device does not have enough space to create a DICOMDIR with all this studies, please remove some studies. The capacity of the device is %1 MB.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="867"/>
+        <location filename="qcreatedicomdir.cpp" line="871"/>
         <source>Invalid configuration of the DICOMDIR burning application.
 Please, provide a valid configuration in Tools -&gt; Configuration -&gt; DICOMDIR.</source>
         <oldsource>Invalid DICOMDIR burning application configuration.
@@ -1159,12 +1120,12 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="392"/>
+        <location filename="qcreatedicomdir.cpp" line="396"/>
         <source>The destination directory is not empty, please choose an empty directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdir.cpp" line="578"/>
+        <location filename="qcreatedicomdir.cpp" line="582"/>
         <source>Choose an empty directory...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1592,187 +1553,152 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</oldsource>
 <context>
     <name>udg::QInputOutputDicomdirWidget</name>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="71"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="72"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="75"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="76"/>
         <source>&amp;Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="102"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="91"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="103"/>
         <source>Error opening DICOMDIR</source>
         <oldsource>Error openning DICOMDIR</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="135"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="136"/>
         <source>You must open a DICOMDIR before searching.</source>
         <oldsource>Before search you have to open a DICOMDIR.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="140"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="141"/>
         <source>Error querying in DICOMDIR</source>
         <oldsource>Error quering in DICOMDIR</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="149"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="150"/>
         <source>No study match found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="174"/>
-        <source>No series match for this study.
-</source>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="175"/>
+        <source>No series match for this study.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="193"/>
-        <source>No images match for this series.
-</source>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="194"/>
+        <source>No images match for this series.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="252"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="295"/>
+        <source>but the DICOMDIR file could not be opened, make sure that its path is correct.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="347"/>
+        <source>The study may be corrupted, if it isn&apos;t please contact with the %1 team.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="354"/>
+        <source>Please contact with the %1 team.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="253"/>
         <source>Select at least one study to view.</source>
         <oldsource>Select at least one study to view</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="282"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="283"/>
         <source>No valid data found. Maybe some files are missing or corrupted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="293"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="294"/>
         <source>Tried to import study with UID %1 </source>
         <oldsource>Trying to import study with UID %1 </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="294"/>
-        <source>but the DICOMDIR file could not be opened, make sure that its path is correct.
-</source>
-        <oldsource>but the DICOMDIR file could not be opened, be sure that its path is correct.
-</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="295"/>
         <location filename="qinputoutputdicomdirwidget.cpp" line="301"/>
-        <source>
-
-If the problem persists contact with an administrator.</source>
-        <oldsource>
-
-If the problem persist contact with an administrator.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="299"/>
         <source>Some files of the study with UID %2 could not be imported. Make sure you have write permission on the %1 cache directory.</source>
         <oldsource>Some files of study with UID %2 could not be imported. Be sure you have write permissions on the %1 cache directory.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="310"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="313"/>
         <source>The study cannot be imported because there is not enough space.</source>
         <oldsource>The study can&apos;t be imported because there isn&apos;t enough space.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="312"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="315"/>
         <source>Try to free hard disk space, delete local studies or change in %1 configuration the size of reserved disk space for system to be able to import the study.</source>
         <oldsource>Try to free hard disk space, delete local studies or change in configuration the size of reserved disk space for system to be able to import the study.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="315"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="318"/>
         <source>Current status:</source>
         <oldsource>Current location resources:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="317"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="320"/>
         <source>* Disk space reserved for the system: %1 GB</source>
         <oldsource>* Reserved disk space for system: %1 GB</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="319"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="322"/>
         <source>* Free disk space: %1 GB</source>
         <oldsource>* Free disk space: %1Gb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="325"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="328"/>
         <source>An error has occurred while freeing space, some studies cannot be imported.</source>
         <oldsource>An error has occurred freeing space, some studies cannot be imported.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="326"/>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="332"/>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="352"/>
-        <source>
-
-Close all %1 windows and try again.
-If the problem persists contact with an administrator.</source>
-        <oldsource>
-
-Close all %1 windows and try again.
-If the problem persist contact with an administrator.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="331"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="336"/>
         <source>A database error has occurred, some studies cannot be imported.</source>
         <oldsource>A database error has occurred, some studies can&apos;t be imported.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="337"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="344"/>
         <source>The study with UID %2 cannot be imported because %1 has not been able to correctly read DICOM information of the study.</source>
         <oldsource>The study with UID %2 cannot be imported, because %1 has not been able to correctly read DICOM information of the study.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="339"/>
-        <source>
-
-The study may be corrupted, if it isn&apos;t please contact with the %1 team.</source>
-        <oldsource>
-
-The study may be corrupted, if it is not corrupted please contact with %1 team.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="343"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="351"/>
         <source>An error has occurred while trying to import study with UID %1. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="344"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="352"/>
         <source>This DICOMDIR is inconsistent.</source>
         <oldsource>This DICOMDIR is inconsistent and thus cannot be imported.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="345"/>
-        <source>
-
-Please contact with the %1 team.</source>
-        <oldsource>
-
-Please contact with %1 team.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qinputoutputdicomdirwidget.cpp" line="351"/>
+        <location filename="qinputoutputdicomdirwidget.cpp" line="360"/>
         <source>An unknown error has occurred while importing DICOMDIR.</source>
         <oldsource>An unknown error has occurred importing DICOMDIR.</oldsource>
         <translation type="unfinished"></translation>
@@ -1804,139 +1730,126 @@ Please contact with %1 team.</oldsource>
 <context>
     <name>udg::QInputOutputLocalDatabaseWidget</name>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="94"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="95"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="98"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="99"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="103"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="104"/>
         <source>Send to DICOMDIR List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="107"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="108"/>
         <source>Send to PACS</source>
         <oldsource>Store to PACS</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="160"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="161"/>
         <source>No study match found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="213"/>
-        <source>No series match for this study.
-</source>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="214"/>
+        <source>No series match for this study.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="272"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="273"/>
         <source>Are you sure you want to delete the selected items?</source>
         <oldsource>Are you sure you want to delete the selected Items?</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="290"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="291"/>
         <source>Study %1 of patient %2 is in use by the DICOMDIR list. If you want to delete this study you must remove it from the DICOMDIR list first.</source>
         <oldsource>The study %1 of patient %2 is in use by the DICOMDIR list. If you want to delete this study you must remove it from the DICOMDIR list first.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="297"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="298"/>
         <source>The series with UID %1 of study %2 of patient %3 is in use by the DICOMDIR list. If you want to delete this series you must remove the study from the DICOMDIR list first.</source>
         <oldsource>The series with UID %1 of study %2 patient %3 is in use by the DICOMDIR List. If you want to delete this series you should remove the study from the DICOMDIR List first.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="336"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="337"/>
         <source>Please select at least one item to delete.</source>
         <oldsource>Please select at least one object to delete.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="359"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="360"/>
         <source>Select at least one study to view.</source>
         <oldsource>Select at least one study to view</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="430"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="431"/>
         <source>Select at least one item to send to PACS.</source>
         <oldsource>Select at least one object to send to PACS.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="497"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="498"/>
         <source>deleting old studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="523"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="524"/>
         <source>There has been a database error while preparing the DICOM files to send to PACS %1. The DICOM files won&apos;t be sent.</source>
         <oldsource>An error occurred with database, preparing the DICOM files to send to PACS %1. The DICOM files won&apos;t be sent.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="586"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="589"/>
         <source>An error has occurred while </source>
         <oldsource>An error has ocurred while </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="594"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="597"/>
         <source>The database is blocked by another process.</source>
         <oldsource>The database is blocked by another %1 window.
 Close all the others %1 windows and try again.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="599"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="604"/>
         <source>Database is corrupted.</source>
         <oldsource>%1 database is corrupted.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="525"/>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="595"/>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="600"/>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="605"/>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="610"/>
-        <source>
-Close all %1 windows and try again.
-
-If the problem persists contact with an administrator.</source>
-        <oldsource>
-Close all %1 windows and try again.
-
-If the problem persist contact with an administrator.</oldsource>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="625"/>
+        <source>Some files cannot be deleted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="604"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="627"/>
+        <source>These files have to be deleted manually.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="611"/>
         <source>Database syntax error.</source>
         <oldsource>%1 database syntax error.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="609"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="618"/>
         <source>An internal database error occurred.</source>
         <oldsource>An internal error occurs with %1 database.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="614"/>
-        <source>Some files cannot be deleted.
-These files have to be deleted manually.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qinputoutputlocaldatabasewidget.cpp" line="618"/>
+        <location filename="qinputoutputlocaldatabasewidget.cpp" line="630"/>
         <source>Unknown error.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2002,14 +1915,16 @@ Do you want continue?</source>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="207"/>
-        <source>No series match for this study %1.
-</source>
+        <source>No series match for this study %1.</source>
+        <oldsource>No series match for this study %1.
+</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="222"/>
-        <source>No images match series %1.
-</source>
+        <source>No images match series %1.</source>
+        <oldsource>No images match series %1.
+</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2086,100 +2001,80 @@ Do you want continue?</source>
 <context>
     <name>udg::QLocalDatabaseConfigurationScreen</name>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="239"/>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="269"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="240"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="270"/>
         <source>Invalid database path.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="373"/>
-        <source>The database cannot be compacted, an unknown error has occurred.
-
-</source>
-        <oldsource>The application has to be restarted to apply the changes.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="305"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="306"/>
         <source>Choose the cache images directory...</source>
         <oldsource>Choose the Cache images path...</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="139"/>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="177"/>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="214"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="140"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="178"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="215"/>
         <source>Please, enter a value.</source>
         <oldsource>Value cannot be empty.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="145"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="146"/>
         <source>At least 1 GB of free space in hard disk is required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="183"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="184"/>
         <source>Must be at least 1 day.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="220"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="221"/>
         <source>At least 1 GB of free space is required.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="317"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="318"/>
         <source>Are you sure you want to delete all studies from the cache?</source>
         <oldsource>Are you sure you want to delete all Studies of the cache?</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="349"/>
-        <source>Some files cannot be deleted. 
-These files have to be deleted manually.</source>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="350"/>
+        <source>Some files cannot be deleted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="353"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="352"/>
+        <source>These files have to be deleted manually.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="381"/>
+        <source>The database cannot be compacted, an unknown error has occurred.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="358"/>
         <source>An error has occurred while deleting studies from the database, make sure you have write permission on the database directory.</source>
         <oldsource>An error has occurred deleting studies from database, be sure you have write permissions on database directory. </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="356"/>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="374"/>
-        <source>If the problem persists contact with an administrator.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="355"/>
-        <source>
-
-Close all %1 windows and try again. </source>
-        <oldsource>
-
-Close all %1 windows and try again.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="334"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="335"/>
         <source>Deleting studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="374"/>
-        <source>Close all %1 windows and try again. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="378"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="386"/>
         <source>Database has been compacted successfully.</source>
         <oldsource>Starviewer database has been compacted successfully.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="249"/>
+        <location filename="qlocaldatabaseconfigurationscreen.cpp" line="250"/>
         <source>The database must have &apos;.sdb&apos; extension</source>
         <oldsource>The extension of the database has to be &apos;.sdb&apos;</oldsource>
         <translation type="unfinished"></translation>
@@ -2757,95 +2652,71 @@ Close all %1 windows and try again.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="106"/>
-        <source>
-Make sure your computer is connected to the network and the PACS configuration is correct. </source>
-        <oldsource>
-Be sure your computer is connected to the network and the PACS configuration is correct. </oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="querypacsjob.cpp" line="107"/>
-        <source>If the problem persists contact with an administrator.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="querypacsjob.cpp" line="105"/>
-        <source>Query failed: Unable to connect to PACS %1.
-</source>
-        <oldsource>Query failed: Unable to connect to PACS %2.
+        <source>Query failed: Unable to connect to PACS %1.</source>
+        <oldsource>Query failed: Unable to connect to PACS %1.
 </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="93"/>
-        <source>
+        <source>Error details:</source>
+        <oldsource>
 
 Error details:
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="querypacsjob.cpp" line="110"/>
-        <source>PACS %1 could not process the query.
-
-</source>
-        <oldsource>PACS %1 has report us that could not process the requested query.
-
 </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="111"/>
+        <location filename="querypacsjob.cpp" line="113"/>
         <source>Try with a different query or wait a few minutes. If the problem persists contact with a PACS administrator.</source>
         <oldsource>Try with a different query or wait a few minutes, if the problem persists contact with PACS administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="115"/>
-        <source>PACS %1 could not process the query and returned an unknown error.
-
-</source>
-        <oldsource>PACS %1 could not process the query returning an unknown error.
-
-</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="querypacsjob.cpp" line="116"/>
+        <location filename="querypacsjob.cpp" line="119"/>
         <source>Please contact with a PACS administrator to report the issue.</source>
         <oldsource>Please contact with the PACS administrator to report the issue.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="120"/>
+        <location filename="querypacsjob.cpp" line="123"/>
         <source>An unknown error has occurred while querying PACS %2 for %1.</source>
         <oldsource>An unknown error has occurred querying %1 to PACS %2.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="121"/>
-        <source>
-If the problem persists contact with an administrator.</source>
+        <location filename="querypacsjob.cpp" line="107"/>
+        <source>Make sure your computer is connected to the network and the PACS configuration is correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="134"/>
-        <source>studies</source>
+        <location filename="querypacsjob.cpp" line="111"/>
+        <source>PACS %1 could not process the query.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="querypacsjob.cpp" line="136"/>
-        <source>series</source>
+        <location filename="querypacsjob.cpp" line="117"/>
+        <source>PACS %1 could not process the query and returned an unknown error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="138"/>
-        <source>images</source>
+        <source>studies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="140"/>
+        <source>series</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="querypacsjob.cpp" line="142"/>
+        <source>images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="querypacsjob.cpp" line="144"/>
         <source>unknown query level</source>
         <oldsource>unkown query level</oldsource>
         <translation type="unfinished"></translation>
@@ -2859,13 +2730,8 @@ If the problem persists contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="194"/>
-        <source>
-
-Unable to retrieve studies from PACS if the port is in use, please close the application that is using port %1 or change the port for incoming connections from PACS in the configuration screen.</source>
-        <oldsource>
-
-Unable to retrieve studies from PACS if the port is in use, please close the application that is using port %1 or change port for incoming connections from PACS in the configuration screen.</oldsource>
+        <location filename="queryscreen.cpp" line="195"/>
+        <source>Unable to retrieve studies from PACS if the port is in use, please close the application that is using port %1 or change the port for incoming connections from PACS in the configuration screen.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2936,24 +2802,24 @@ Unable to retrieve studies from PACS if the port is in use, please close the app
 <context>
     <name>udg::RISRequestManager</name>
     <message>
-        <location filename="risrequestmanager.cpp" line="113"/>
+        <location filename="risrequestmanager.cpp" line="114"/>
         <source>Cannot retrieve the studies requested from RIS because there is no configured default PACS to query.</source>
         <oldsource>Cannot retrive the studies requested from RIS because there is no configured default PACS to query.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="114"/>
+        <location filename="risrequestmanager.cpp" line="115"/>
         <source>Please, check your PACS settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="207"/>
+        <location filename="risrequestmanager.cpp" line="208"/>
         <source>Unable to execute the RIS request. The study with accession number %1 was not found in the default PACS.</source>
         <oldsource>%2 cannot execute the RIS request. The study with accession number %1 was not found in the default PACS.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="224"/>
+        <location filename="risrequestmanager.cpp" line="225"/>
         <source>RIS request error: cannot query PACS %1 from %2.
 Make sure its IP and AE Title are correct.</source>
         <oldsource>Processing the RIS request, cannot query PACS %1 from %2.
@@ -2961,29 +2827,21 @@ Be sure its IP and AE Title are correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="426"/>
+        <location filename="risrequestmanager.cpp" line="427"/>
         <source>Some studies of patient %1 requested from RIS exist in the local database. Do you want to retrieve them again?</source>
         <oldsource>Some studies requested from RIS of patient %1 exists in local database. Do you want to retrieve again?</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="446"/>
+        <location filename="risrequestmanager.cpp" line="447"/>
         <source>Unable to listen to RIS requests on port %1, the port is in use by another application.</source>
         <oldsource>Unable to listen RIS requests on port %1, the port is in use by another application.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="risrequestmanager.cpp" line="449"/>
+        <location filename="risrequestmanager.cpp" line="450"/>
         <source>Unable to listen to RIS requests on port %1, an unknown network error has occurred.</source>
         <oldsource>Unable to listen RIS requests on port %1, an unknown network error has occurred.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="risrequestmanager.cpp" line="450"/>
-        <source>
-If the problem persists contact with an administrator.</source>
-        <oldsource>
-If the problem persist contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2998,172 +2856,121 @@ If the problem persist contact with an administrator.</oldsource>
 <context>
     <name>udg::RetrieveDICOMFilesFromPACSJob</name>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="250"/>
-        <source>
-Make sure your computer is connected to the network and the PACS parameters are correct.</source>
-        <oldsource>
-Be sure your computer is connected to the network and the PACS parameters are correct.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="251"/>
-        <source>
-If the problem persists contact with an administrator.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="259"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="262"/>
         <source>There is not enough space to retrieve images from study %1 of patient %2, please free space or change your local database settings.</source>
         <oldsource>There is not enough space to retrieve images from study %1 from patient %2, please free space or change your local database settings.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="268"/>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="273"/>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="314"/>
-        <source>
-
-Close all %1 windows and try again.
-If the problem persists contact with an administrator.</source>
-        <oldsource>An error ocurred freeing space, the images from study %1 of patient %2 won&apos;t be retrieved.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="272"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="279"/>
         <source>Cannot retrieve images from study %1 of patient %2 because a database error occurred.</source>
         <oldsource>Images from study %1 of patient %2 cannot be retrieved because a database error occurred.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="242"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="243"/>
         <source>Images from study %1 of patient %2 have been successfully retrieved from PACS %3.</source>
         <oldsource>Images from study %1 of patient %2 has been retrieved successfully from PACS %3.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="233"/>
-        <source>
-
-Details:
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="245"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="246"/>
         <source>Retrieval of the images from study %1 of patient %2 from PACS %3 has been canceled.</source>
         <oldsource>Retrieve images from study %1 of patient %2 from PACS %3 has been cancelled.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="248"/>
-        <source>Unable to connect to PACS %1 to retrieve images from study %2 of patient %3.
-</source>
-        <oldsource>%1 cannot connect to PACS %2 to retrieve images from study %3 of patient %4.
-</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="262"/>
-        <source>
-
-- Available disk space: %1 MB.</source>
-        <oldsource>
-
-- Available space in disk: %1 MB.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="263"/>
-        <source>
-- Minimum disk space required to retrieve studies: %1 MB.</source>
-        <oldsource>
-- Minimum space required in disk to retrieve studies: %1 MB.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="267"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="272"/>
         <source>An error occurred while freeing space on hard disk, images from study %1 of patient %2 won&apos;t be retrieved.</source>
         <oldsource>An error occurred freeing space on hard disk, the images from study %1 of patient %2 won&apos;t be retrieved.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="277"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="286"/>
         <source>Cannot retrieve images from study %1 of patient %2 from PACS %3. Unable to correctly read data from images.</source>
         <oldsource>Images from study %1 of patient %2 cannot be retrieved from PACS %3. Unable to correctly read data from images.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="279"/>
-        <source>
-
-The study may be corrupted, if it is not corrupted please contact with %1 team.</source>
+        <source>Cannot retrieve images from study %1 of patient %2 because a database error occurred.</source>
         <oldsource>
 
-The study may be corrupted, if It is not corrupted please contact with %1 team.</oldsource>
+The study may be corrupted, if it is not corrupted please contact with %1 team.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="282"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="234"/>
+        <source>Details:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="249"/>
+        <source>Unable to connect to PACS %1 to retrieve images from study %2 of patient %3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="252"/>
+        <source>Make sure your computer is connected to the network and the PACS parameters are correct.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="266"/>
+        <source>- Available disk space: %1 MB.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="268"/>
+        <source>- Minimum disk space required to retrieve studies: %1 MB.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="289"/>
+        <source>The study may be corrupted, if it is not corrupted please contact with %1 team.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="292"/>
         <source>Cannot retrieve images from study %1 of patient %2 because PACS %3 does not recognize your computer&apos;s AE Title %4.</source>
         <oldsource>Images from study %1 of patient %2 cannot be retrieved because PACS %3 does not recognize your computer&apos;s AE Title %4.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="284"/>
-        <source>
-
-Contact with an administrator to register your computer to the PACS.</source>
-        <oldsource>
-
-Contact with an administrador to register your computer to the PACS.</oldsource>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="295"/>
+        <source>Contact with an administrator to register your computer to the PACS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="288"/>
-        <source>Cannot retrieve images from study %1 of patient %2 due to an unknown error of PACS %3.
-
-</source>
-        <oldsource>Images from study %1 of patient %2 cannot be retrieved due to an unknown error of PACS %3.
-
-</oldsource>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="299"/>
+        <source>Cannot retrieve images from study %1 of patient %2 due to an unknown error of PACS %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="290"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="302"/>
         <source>The cause of the error may be that the requested images are corrupted. Please contact with a PACS administrator.</source>
         <oldsource>The cause of the error can be that the requested images are corrupted. Please contact with a PACS administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="294"/>
-        <source>Cannot retrieve images from study %1 of patient %2 due to an error of PACS %3.
-
-</source>
-        <oldsource>Images from study %1 of patient %2 cannot be retrieved due to an error of PACS %3.
-
-</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="296"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="309"/>
         <source>The cause of the error may be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
         <oldsource>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="301"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="314"/>
         <source>Cannot retrieve images from study %1 of patient %2 because port %3 for incoming connections from PACS is already in use by another application.</source>
         <oldsource>Images from study %1 of patient %2 cannot be retrieved because port %3 for incoming connections from PACS is already in use by another application.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="306"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="319"/>
         <source>Unable to retrieve some images from study %1 of patient %2 from PACS %3. Maybe those images are missing or corrupted in PACS.</source>
         <oldsource>Unable to retrieve all images from study %1 of patient %2 from PACS %3. Maybe those images are missing or corrupted in PACS.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="312"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="325"/>
         <source>Cannot retrieve images from study %1 of patient %2 from PACS %3 due to an unknown error.</source>
         <oldsource>An unknown error has occurred and thus retrieval of images from study %1 of patient %2 from PACS %3 could not be performed.</oldsource>
         <translation type="unfinished"></translation>
@@ -3172,21 +2979,7 @@ Contact with an administrador to register your computer to the PACS.</oldsource>
 <context>
     <name>udg::SendDICOMFilesToPACSJob</name>
     <message>
-        <location filename="senddicomfilestopacsjob.cpp" line="93"/>
-        <source>
-Make sure that your computer is connected to the network and the PACS parameters are correct.</source>
-        <oldsource>
-Be sure your computer is connected to the network and the PACS parameters are correct.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="senddicomfilestopacsjob.cpp" line="94"/>
-        <source>
-If the problem persists contact with an administrator.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="senddicomfilestopacsjob.cpp" line="120"/>
+        <location filename="senddicomfilestopacsjob.cpp" line="125"/>
         <source>Wait a few minutes and try again, if the problem persist contact with an administrator.</source>
         <oldsource> Wait a few minutes and try again, if the problem persist contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
@@ -3199,84 +2992,78 @@ If the problem persists contact with an administrator.</source>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="80"/>
-        <source>
+        <source>Details:</source>
+        <oldsource>
 
 Details:
-</source>
+</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="91"/>
-        <source>Unable to send DICOM images from study %1 of patient %2 because cannot connect to PACS %3.
-</source>
-        <oldsource>%1 cannot send DICOM images from study %2 of patient %3 because cannot connect to PACS %4.
+        <source>Unable to send DICOM images from study %1 of patient %2 because cannot connect to PACS %3.</source>
+        <oldsource>Unable to send DICOM images from study %1 of patient %2 because cannot connect to PACS %3.
 </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="senddicomfilestopacsjob.cpp" line="98"/>
-        <source>Sending of images from study %1 of patient %2 to PACS %3 has failed.
-
-</source>
-        <oldsource>The sent images from study %1 of patient %2 to PACS %3 has failed.
-
-</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="senddicomfilestopacsjob.cpp" line="100"/>
+        <location filename="senddicomfilestopacsjob.cpp" line="103"/>
         <source>Wait a few minutes and try again, if the problem persists contact with an administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="senddicomfilestopacsjob.cpp" line="104"/>
-        <source>%1 images from study %2 of patient %3 cannot be sent because PACS %4 has rejected them.
-
-</source>
-        <oldsource>%1 images from study %2 of patient %3 can&apos;t be sent because PACS %4 has rejected them.
-
-</oldsource>
+        <location filename="senddicomfilestopacsjob.cpp" line="94"/>
+        <source>Make sure that your computer is connected to the network and the PACS parameters are correct.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="senddicomfilestopacsjob.cpp" line="106"/>
-        <source>Please contact with an administrator to solve the problem.</source>
+        <location filename="senddicomfilestopacsjob.cpp" line="100"/>
+        <source>Sending of images from study %1 of patient %2 to PACS %3 has failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="senddicomfilestopacsjob.cpp" line="107"/>
+        <source>%1 images from study %2 of patient %3 cannot be sent because PACS %4 has rejected them.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="110"/>
+        <source>Please contact with an administrator to solve the problem.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="senddicomfilestopacsjob.cpp" line="114"/>
         <source>Images from study %1 of patient %2 have been sent, but it&apos;s possible that PACS %3 has changed some data of them.</source>
         <oldsource>The images from study %1 of patient %2 has been sent, but it&apos;s possible that the PACS %3 has changed some data of them.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="senddicomfilestopacsjob.cpp" line="115"/>
+        <location filename="senddicomfilestopacsjob.cpp" line="119"/>
         <source>Sending of images from study %1 of patient %2 to PACS %3 has been cancelled.</source>
         <oldsource>The sent of images from study %1 from patient %2 to PACS %3 has been cancelled.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="119"/>
-        <source>The connection with PACS %1 has been broken while sending images from study %2 of patient %3.
-
-</source>
-        <oldsource>The connection with PACS %1 has been broken sending images from study %2 of patient %3.
+        <source>Sending of images from study %1 of patient %2 to PACS %3 has been cancelled.</source>
+        <oldsource>The connection with PACS %1 has been broken while sending images from study %2 of patient %3.
 
 </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="senddicomfilestopacsjob.cpp" line="123"/>
+        <location filename="senddicomfilestopacsjob.cpp" line="128"/>
         <source>An unknown error has occurred while sending images from study %1 of patient %2 to PACS %3.</source>
         <oldsource>An unknown error has occurred sending images from study %1 of patient %2 to PACS %3.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="125"/>
-        <source>
+        <source>Wait a few minutes and try again, if the problem persist contact with an administrator.</source>
+        <oldsource>
 
 Close all %1 windows and try again.
-If the problem persists contact with an administrator.</source>
+If the problem persists contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>

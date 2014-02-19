@@ -17,6 +17,7 @@
 #include "retrievedicomfilesfrompacsjob.h"
 #include "localdatabasemanager.h"
 #include "qmessageboxautoclose.h"
+#include "usermessage.h"
 
 namespace udg {
 
@@ -447,7 +448,8 @@ void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISR
             break;
         case ListenRISRequests::UnknownNetworkError:
             message = tr("Unable to listen to RIS requests on port %1, an unknown network error has occurred.").arg(risPort);
-            message += tr("\nIf the problem persists contact with an administrator.");
+            message += "\n";
+            message += UserMessage::getProblemPersistsAdvice();
             break;
     }
 

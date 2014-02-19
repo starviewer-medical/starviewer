@@ -1,7 +1,8 @@
 #include "pansyncaction.h"
 
-#include "qviewer.h"
+#include "q2dviewer.h"
 #include "anatomicalplanesynccriterion.h"
+#include "frameofreferencesynccriterion.h"
 
 namespace udg {
 
@@ -28,9 +29,10 @@ void PanSyncAction::setMotionVector(double vector[3])
 
 void PanSyncAction::run(QViewer *viewer)
 {
-    if (viewer)
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
+    if (viewer2D)
     {
-        viewer->absolutePan(m_motionVector);
+        viewer2D->absolutePan(m_motionVector);
     }
 }
 
@@ -41,7 +43,7 @@ void PanSyncAction::setupMetaData()
 
 void PanSyncAction::setupDefaultSyncCriteria()
 {
-    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion();
+    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new FrameOfReferenceSyncCriterion();
 }
 
 } // End namespace udg

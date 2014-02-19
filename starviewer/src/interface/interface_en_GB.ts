@@ -465,18 +465,17 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="89"/>
-        <source>There have been some errors:
-</source>
+        <source>There have been some errors:</source>
+        <oldsource>There have been some errors:
+</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="90"/>
-        <source>
-
-You can resolve this error at Tools &gt; Configuration &gt; Local Database.</source>
+        <source>You can resolve this error at Tools &gt; Configuration &gt; Local Database.</source>
         <oldsource>
 
-You can resolve this error by Tools&gt;Configuration&gt;Local Database menu.</oldsource>
+You can resolve this error at Tools &gt; Configuration &gt; Local Database.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>

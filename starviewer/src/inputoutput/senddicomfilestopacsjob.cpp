@@ -5,8 +5,8 @@
 #include "study.h"
 #include "series.h"
 #include "image.h"
-#include "starviewerapplication.h"
 #include "senddicomfilestopacs.h"
+#include "usermessage.h"
 
 namespace udg {
 
@@ -77,7 +77,7 @@ PACSRequestStatus::SendRequestStatus SendDICOMFilesToPACSJob::getStatus()
 QString SendDICOMFilesToPACSJob::getStatusDescription()
 {
     QString message;
-    QString errorDetails = tr("\n\nDetails:\n") + m_sendDICOMFilesToPACS->getResponseStatus().toString();
+    QString errorDetails = "\n\n" + tr("Details:") + "\n" + m_sendDICOMFilesToPACS->getResponseStatus().toString();
     QString studyID = getStudyOfDICOMFilesToSend()->getID();
     QString patientName = getStudyOfDICOMFilesToSend()->getParentPatient()->getFullName();
     QString pacsAETitle = getPacsDevice().getAETitle();
@@ -88,21 +88,25 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             message = tr("Images from study %1 of patient %2 have been successfully sent to PACS %3.").arg(studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::SendCanNotConnectToPACS:
-            message = tr("Unable to send DICOM images from study %1 of patient %2 because cannot connect to PACS %3.\n")
+            message = tr("Unable to send DICOM images from study %1 of patient %2 because cannot connect to PACS %3.")
                 .arg(studyID, patientName, pacsAETitle);
-            message += tr("\nMake sure that your computer is connected to the network and the PACS parameters are correct.");
-            message += tr("\nIf the problem persists contact with an administrator.");
+            message += "\n\n";
+            message += tr("Make sure that your computer is connected to the network and the PACS parameters are correct.");
+            message += "\n";
+            message += UserMessage::getProblemPersistsAdvice();
             break;
         case PACSRequestStatus::SendAllDICOMFilesFailed:
         case PACSRequestStatus::SendUnknowStatus:
-            message = tr("Sending of images from study %1 of patient %2 to PACS %3 has failed.\n\n")
+            message = tr("Sending of images from study %1 of patient %2 to PACS %3 has failed.")
                 .arg(studyID, patientName, pacsAETitle);
+            message += "\n\n";
             message += tr("Wait a few minutes and try again, if the problem persists contact with an administrator.");
             message += errorDetails;
             break;
         case PACSRequestStatus::SendSomeDICOMFilesFailed:
-            message = tr("%1 images from study %2 of patient %3 cannot be sent because PACS %4 has rejected them.\n\n").arg(
+            message = tr("%1 images from study %2 of patient %3 cannot be sent because PACS %4 has rejected them.").arg(
                 QString().setNum(m_sendDICOMFilesToPACS->getNumberOfDICOMFilesSentFailed()), studyID, patientName, pacsAETitle);
+            message += "\n\n";
             message += tr("Please contact with an administrator to solve the problem.");
             message += errorDetails;
             break;
@@ -116,14 +120,17 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
                 studyID, patientName, pacsAETitle);
             break;
         case PACSRequestStatus::SendPACSConnectionBroken:
-            message = tr("The connection with PACS %1 has been broken while sending images from study %2 of patient %3.\n\n").arg(pacsAETitle, studyID, patientName);
+            message = tr("The connection with PACS %1 has been broken while sending images from study %2 of patient %3.").arg(pacsAETitle, studyID, patientName);
+            message += "\n\n";
             message += tr("Wait a few minutes and try again, if the problem persist contact with an administrator.");
             break;
         default:
             message = tr("An unknown error has occurred while sending images from study %1 of patient %2 to PACS %3.").arg(
                 studyID, patientName, pacsAETitle);
-            message += tr("\n\nClose all %1 windows and try again."
-                         "\nIf the problem persists contact with an administrator.").arg(ApplicationNameString);
+            message += "\n\n";
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
+            message += "\n";
+            message += UserMessage::getProblemPersistsAdvice();
             message += errorDetails;
             break;
     }

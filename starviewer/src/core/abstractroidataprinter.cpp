@@ -32,7 +32,10 @@ QString AbstractROIDataPrinter::getFormattedDataString() const
     dataString += "\n" + QObject::tr("Area: %1").arg(m_areaString);
     if (!m_meanString.isEmpty())
     {
-        dataString += QObject::tr("\nMean: %1\nStd.Dev.: %2").arg(m_meanString).arg(m_standardDeviationString);
+        dataString += "\n";
+        dataString += QObject::tr("Mean: %1").arg(m_meanString);
+        dataString += "\n";
+        dataString += QObject::tr("Std.Dev.: %1").arg(m_standardDeviationString);
     }
 
     return dataString;
@@ -53,8 +56,10 @@ QString AbstractROIDataPrinter::getStandardizedUptakeValueMeasureString(ROIData 
 
             QString units = suvHandler.getComputedFormulaUnits();
             suvMeasurement = QObject::tr("SUV (%1)").arg(suvHandler.getComputedFormulaLabel());
-            suvMeasurement += QObject::tr("\nMax: ") + getFormattedValueString(maximum, units);
-            suvMeasurement += QObject::tr("\nMean: ") + getFormattedValueString(mean, units);
+            suvMeasurement += "\n";
+            suvMeasurement += QObject::tr("Max: ") + getFormattedValueString(maximum, units);
+            suvMeasurement += "\n";
+            suvMeasurement += QObject::tr("Mean: ") + getFormattedValueString(mean, units);
         }
         else
         {

@@ -90,31 +90,11 @@ DicomMask QBasicSearchWidget::buildDicomMask()
 
     // S'afegeix '*' al patientId i patientName automàticament
     QString patientID = m_patientIDText->text().trimmed();
-    if (!patientID.isEmpty())
-    {
-        if (!patientID.startsWith("*"))
-        {
-            patientID = "*" + patientID;
-        }
-        if (!patientID.endsWith("*"))
-        {
-            patientID = patientID + "*";
-        }
-    }
+    addWildCards(patientID);
     mask.setPatientID(patientID);
 
     QString patientName = m_patientNameText->text().trimmed();
-    if (!patientName.isEmpty())
-    {
-        if (!patientName.startsWith("*"))
-        {
-            patientName = "*" + patientName;
-        }
-        if (!patientName.endsWith("*"))
-        {
-            patientName = patientName + "*";
-        }
-    }
+    addWildCards(patientName);
     mask.setPatientName(patientName);
 
     setStudyDateToDICOMMask(&mask);
@@ -243,6 +223,22 @@ void QBasicSearchWidget::showEvent(QShowEvent *event)
         m_widgetHasBeenShowed = true;
     }
 }
+
+void QBasicSearchWidget::addWildCards(QString &string)
+{
+    if (!string.isEmpty())
+    {
+        if (!string.startsWith("*"))
+        {
+            string = "*" + string;
+        }
+        if (!string.endsWith("*"))
+        {
+            string = string + "*";
+        }
+    }
+}
+
 QBasicSearchWidget::~QBasicSearchWidget()
 {
 }
