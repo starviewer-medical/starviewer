@@ -19,6 +19,7 @@
 #include "dicomtagreader.h"
 #include "portinuse.h"
 #include "dicomsource.h"
+#include "usermessage.h"
 
 namespace udg {
 
@@ -250,7 +251,7 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             message += "\n\n";
             message += tr("Make sure your computer is connected to the network and the PACS parameters are correct.");
             message += "\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             break;
         case PACSRequestStatus::RetrieveNoEnoughSpace:
             {
@@ -270,16 +271,16 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
         case PACSRequestStatus::RetrieveErrorFreeingSpace:
             message = tr("An error occurred while freeing space on hard disk, images from study %1 of patient %2 won't be retrieved.").arg(studyID, patientName);
             message += "\n\n";
-            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
             message += "\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             break;
         case PACSRequestStatus::RetrieveDatabaseError:
             message = tr("Cannot retrieve images from study %1 of patient %2 because a database error occurred.").arg(studyID, patientName);
             message += "\n\n";
-            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
             message += "\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             break;
         case PACSRequestStatus::RetrievePatientInconsistent:
             message = tr("Cannot retrieve images from study %1 of patient %2 from PACS %3. Unable to correctly read data from images.")
@@ -324,9 +325,9 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
             message = tr("Cannot retrieve images from study %1 of patient %2 from PACS %3 due to an unknown error.")
                 .arg(ApplicationNameString, studyID, patientName, pacsAETitle);
             message += "\n\n";
-            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
             message += "\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             message += errorDetails;
             break;
     }

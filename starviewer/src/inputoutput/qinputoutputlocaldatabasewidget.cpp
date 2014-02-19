@@ -15,6 +15,7 @@
 #include "senddicomfilestopacsjob.h"
 #include "retrievedicomfilesfrompacsjob.h"
 #include "shortcutmanager.h"
+#include "usermessage.h"
 
 namespace udg {
 
@@ -523,9 +524,9 @@ void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
                 QString message = tr("There has been a database error while preparing the DICOM files to send to PACS %1. The DICOM files won't be sent.")
                     .arg(pacsDevice.getAETitle());
                 message += "\n";
-                message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+                message += UserMessage::getCloseWindowsAndTryAgainAdvice();
                 message += "\n\n";
-                message += tr("If the problem persists contact with an administrator.");
+                message += UserMessage::getProblemPersistsAdvice();
                 QMessageBox::critical(this, ApplicationNameString, message);
             }
             else
@@ -595,30 +596,30 @@ bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseMana
         case LocalDatabaseManager::DatabaseLocked:
             message += tr("The database is blocked by another process.");
             message += "\n";
-            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
             message += "\n\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             break;
         case LocalDatabaseManager::DatabaseCorrupted:
             message += tr("Database is corrupted.");
             message += "\n";
-            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
             message += "\n\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             break;
         case LocalDatabaseManager::SyntaxErrorSQL:
             message += tr("Database syntax error.");
             message += "\n";
-            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
             message += "\n\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             break;
         case LocalDatabaseManager::DatabaseError:
             message += tr("An internal database error occurred.");
             message += "\n";
-            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
             message += "\n\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             break;
         case LocalDatabaseManager::DeletingFilesError:
             message += tr("Some files cannot be deleted.");

@@ -5,8 +5,8 @@
 #include "study.h"
 #include "series.h"
 #include "image.h"
-#include "starviewerapplication.h"
 #include "senddicomfilestopacs.h"
+#include "usermessage.h"
 
 namespace udg {
 
@@ -93,7 +93,7 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             message += "\n\n";
             message += tr("Make sure that your computer is connected to the network and the PACS parameters are correct.");
             message += "\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             break;
         case PACSRequestStatus::SendAllDICOMFilesFailed:
         case PACSRequestStatus::SendUnknowStatus:
@@ -128,9 +128,9 @@ QString SendDICOMFilesToPACSJob::getStatusDescription()
             message = tr("An unknown error has occurred while sending images from study %1 of patient %2 to PACS %3.").arg(
                 studyID, patientName, pacsAETitle);
             message += "\n\n";
-            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
             message += "\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             message += errorDetails;
             break;
     }

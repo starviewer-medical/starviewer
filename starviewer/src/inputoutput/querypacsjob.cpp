@@ -9,7 +9,7 @@
 #include "series.h"
 #include "image.h"
 #include "inputoutputsettings.h"
-#include "starviewerapplication.h"
+#include "usermessage.h"
 
 namespace udg {
 
@@ -105,7 +105,7 @@ QString QueryPacsJob::getStatusDescription()
             message = tr("Query failed: Unable to connect to PACS %1.").arg(pacsAETitle);
             message += "\n\n";
             message += tr("Make sure your computer is connected to the network and the PACS configuration is correct.");
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             break;
         case PACSRequestStatus::QueryFailedOrRefused:
             message = tr("PACS %1 could not process the query.").arg(pacsAETitle);
@@ -122,7 +122,7 @@ QString QueryPacsJob::getStatusDescription()
         default:
             message = tr("An unknown error has occurred while querying PACS %2 for %1.").arg(getQueryLevelAsQString(), pacsAETitle);
             message += "\n\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             message += errorDetails;
             break;
     }

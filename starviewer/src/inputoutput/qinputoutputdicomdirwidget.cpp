@@ -16,6 +16,7 @@
 #include "localdatabasemanager.h"
 #include "shortcutmanager.h"
 #include "dicomsource.h"
+#include "usermessage.h"
 
 namespace udg {
 
@@ -293,14 +294,14 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
             message = tr("Tried to import study with UID %1 ").arg(studyInstanceUID);
             message += tr("but the DICOMDIR file could not be opened, make sure that its path is correct.");
             message += "\n\n\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case DICOMDIRImporter::ErrorCopyingFiles:
             message = tr("Some files of the study with UID %2 could not be imported. Make sure you have write permission on the %1 cache directory.")
                     .arg(ApplicationNameString, studyInstanceUID);
             message += "\n\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case DICOMDIRImporter::NoEnoughSpace:
@@ -326,17 +327,17 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
         case DICOMDIRImporter::ErrorFreeingSpace:
             message = tr("An error has occurred while freeing space, some studies cannot be imported.");
             message += "\n\n";
-            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
             message += "\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case DICOMDIRImporter::DatabaseError:
             message = tr("A database error has occurred, some studies cannot be imported.");
             message += "\n\n";
-            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
             message += "\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             QMessageBox::critical(this, ApplicationNameString, message);
             break;
         case DICOMDIRImporter::PatientInconsistent:
@@ -358,9 +359,9 @@ void QInputOutputDicomdirWidget::showDICOMDIRImporterError(QString studyInstance
         default:
             message = tr("An unknown error has occurred while importing DICOMDIR.");
             message += "\n\n";
-            message += tr("Close all %1 windows and try again.").arg(ApplicationNameString);
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
             message += "\n";
-            message += tr("If the problem persists contact with an administrator.");
+            message += UserMessage::getProblemPersistsAdvice();
             QMessageBox::critical(this, ApplicationNameString, message);
     }
 }
