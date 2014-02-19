@@ -119,12 +119,12 @@ Series with multiple phases so it won&apos;t work propperly.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="444"/>
+        <location filename="qmprextension.cpp" line="447"/>
         <source>Export to DICOM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="444"/>
+        <location filename="qmprextension.cpp" line="447"/>
         <source>Please, select a viewer and try again.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -386,22 +386,6 @@ border: 1px solid  #680000;
         <translation>Las imágenes no se pueden imprimiri porque </translation>
     </message>
     <message>
-        <source>the printer does not respond.
-
-</source>
-        <translation>la impresora no responde.
-
-</translation>
-    </message>
-    <message>
-        <source>the printer does not respond as expected.
-
-</source>
-        <translation>la impresora no ha respondido como se esperaba.
-
-</translation>
-    </message>
-    <message>
         <source>In most cases this error is produced because the printer does not support some of the print configuration parameters.</source>
         <translation>En la mayoría de casos este error se produce porque la impresora no soporta algunos de los parámetros de configuración.</translation>
     </message>
@@ -418,12 +402,16 @@ border: 1px solid  #680000;
         <translation>No se ha podido crear el trabajo de impresión.</translation>
     </message>
     <message>
-        <source>Unable to load some of the images to print.
-
-</source>
-        <translation>No se han podido cargar algunas de las imágenes para imprimir.
-
-</translation>
+        <source>the printer does not respond.</source>
+        <translation>la impresora no responde.</translation>
+    </message>
+    <message>
+        <source>the printer does not respond as expected.</source>
+        <translation>la impresora no responde como se esperaba.</translation>
+    </message>
+    <message>
+        <source>Unable to load some of the images to print.</source>
+        <translation>No se han podido cargar algunas de las imágenes para imprimir.</translation>
     </message>
 </context>
 <context>

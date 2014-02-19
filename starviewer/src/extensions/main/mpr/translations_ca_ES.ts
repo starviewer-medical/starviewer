@@ -116,12 +116,12 @@ múltiples fases, per tant no funcionarà correctament.</translation>
         <translation>Projecció de màxima intensitat</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="444"/>
+        <location filename="qmprextension.cpp" line="447"/>
         <source>Export to DICOM</source>
         <translation>Exporta a DICOM</translation>
     </message>
     <message>
-        <location filename="qmprextension.cpp" line="444"/>
+        <location filename="qmprextension.cpp" line="447"/>
         <source>Please, select a viewer and try again.</source>
         <translation>Seleccioneu un visor i torneu-ho a provar.</translation>
     </message>
