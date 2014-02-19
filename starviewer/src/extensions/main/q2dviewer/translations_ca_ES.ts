@@ -78,64 +78,64 @@
         <translation>Escull les finestres predeterminades</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="506"/>
+        <location filename="q2dviewerextension.cpp" line="505"/>
         <source>Propagate properties between viewers (%1)</source>
         <translation>Propaga les propietats entre els visors (%1)</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="508"/>
+        <location filename="q2dviewerextension.cpp" line="507"/>
         <source>Propagate</source>
         <translation>Propaga</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="526"/>
+        <location filename="q2dviewerextension.cpp" line="525"/>
         <source>Save current series image...</source>
         <translation>Desa la imatge de la sèrie actual...</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="531"/>
+        <location filename="q2dviewerextension.cpp" line="530"/>
         <source>Save all images of the current series...</source>
         <oldsource>Save all images from current series...</oldsource>
         <translation>Desa totes les imatges de la sèrie actual...</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="479"/>
+        <location filename="q2dviewerextension.cpp" line="478"/>
         <source>All</source>
         <translation>Tots</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="490"/>
+        <location filename="q2dviewerextension.cpp" line="489"/>
         <source>Deactivate manual synchronization in all viewers (%1)</source>
         <translation>Desactiva la sincronització manual a tots els visors (%1)</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="492"/>
+        <location filename="q2dviewerextension.cpp" line="491"/>
         <source>None</source>
         <translation>Cap</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="528"/>
+        <location filename="q2dviewerextension.cpp" line="527"/>
         <source>Save the current image in a standard image format</source>
         <translation>Desa la imatge actual en un format estàndard</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="532"/>
+        <location filename="q2dviewerextension.cpp" line="531"/>
         <source>Save all the images in the selected viewer in a standard image format</source>
         <translation>Desa totes les imatges del visualitzador seleccionat en un format estàndard</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="477"/>
+        <location filename="q2dviewerextension.cpp" line="476"/>
         <source>Activate manual synchronization in all viewers (%1)</source>
         <oldsource>Activate manual synchronization all viewers</oldsource>
         <translation>Activa la sincronització manual a tots els visors (%1)</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="736"/>
+        <location filename="q2dviewerextension.cpp" line="735"/>
         <source>Export to DICOM</source>
         <translation>Exporta a DICOM</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="736"/>
+        <location filename="q2dviewerextension.cpp" line="735"/>
         <source>This action is not allowed because the selected viewer is empty.</source>
         <translation>No es permet aquesta acció perque el visor és buit.</translation>
     </message>

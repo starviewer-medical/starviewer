@@ -312,49 +312,46 @@
         <translation>desconocido</translation>
     </message>
     <message>
-        <location filename="pansyncaction.cpp" line="39"/>
+        <location filename="pansyncaction.cpp" line="41"/>
         <source>pan</source>
         <translation>mover</translation>
     </message>
     <message>
         <location filename="patientcomparer.cpp" line="57"/>
-        <source>Cannot determine the similarity of these patients.
-
-Do you consider they are the same?
-
-</source>
-        <oldsource>We are not able to determine the similarity of these patients.
+        <source>Cannot determine the similarity of these patients.</source>
+        <oldsource>Cannot determine the similarity of these patients.
 
 Do you consider they are the same?
 
 </oldsource>
-        <translation>No se puede determinar la semejanza de estos pacientes.
-
-Considera que son el mismo?
-
-</translation>
-    </message>
-    <message>
-        <location filename="patientcomparer.cpp" line="58"/>
-        <source>Patient 1
-ID: %1
-Name: %2
-
-</source>
-        <translation>Paciente 1
-ID: %1
-Nombre: %2
-
-</translation>
+        <translation>No se puede determinar la semejanza de estos pacientes.</translation>
     </message>
     <message>
         <location filename="patientcomparer.cpp" line="59"/>
-        <source>Patient 2
-ID: %1
-Name: %2</source>
-        <translation>Paciente 2
-ID: %1
-Nombre: %2</translation>
+        <source>Do you consider they are the same?</source>
+        <translation>Considera que son el mismo?</translation>
+    </message>
+    <message>
+        <location filename="patientcomparer.cpp" line="61"/>
+        <source>Patient 1</source>
+        <translation>Paciente 1</translation>
+    </message>
+    <message>
+        <location filename="patientcomparer.cpp" line="63"/>
+        <location filename="patientcomparer.cpp" line="69"/>
+        <source>ID: %1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="patientcomparer.cpp" line="65"/>
+        <location filename="patientcomparer.cpp" line="71"/>
+        <source>Name: %1</source>
+        <translation>Nombre: %1</translation>
+    </message>
+    <message>
+        <location filename="patientcomparer.cpp" line="67"/>
+        <source>Patient 2</source>
+        <translation>Paciente 2</translation>
     </message>
     <message>
         <location filename="phasesyncaction.cpp" line="40"/>
@@ -362,51 +359,58 @@ Nombre: %2</translation>
         <translation>fase</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="100"/>
-        <source>Acc: %1
-</source>
-        <translation>Acc: %1</translation>
+        <location filename="q2dviewerannotationhandler.cpp" line="102"/>
+        <source>Acc: %1</source>
+        <translation>Acc: %1 {1?}</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="125"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="124"/>
         <source>Fusion: </source>
         <translation>Fusión: </translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="255"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="254"/>
         <source>Slice: %1</source>
         <translation>Corte: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="259"/>
-        <location filename="q2dviewerannotationhandler.cpp" line="381"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="258"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="378"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="261"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="260"/>
         <source>/%1</source>
         <translation>/%1</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="266"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="265"/>
         <source> Phase: %1/%2</source>
         <translation> Fase: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="272"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="271"/>
         <source> Thickness: %1 mm</source>
         <translation> Grosor: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="344"/>
-        <source>%1 x %2
-WW: %5 WL: %6</source>
-        <translation>%1 x %2
-WW: %5 WL: %6</translation>
+        <location filename="q2dviewerannotationhandler.cpp" line="343"/>
+        <source>%1 x %2</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="371"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="473"/>
+        <source>WW: %1 WL: %2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="485"/>
+        <source>Threshold: %1%</source>
+        <translation>Umbral: %1%</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="368"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
@@ -429,6 +433,41 @@ WW: %5 WL: %6</translation>
         <location filename="zoomfactorsyncaction.cpp" line="33"/>
         <source>zoom</source>
         <translation>zoom</translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="32"/>
+        <source>Area: %1</source>
+        <translation>Área: %1</translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="36"/>
+        <source>Mean: %1</source>
+        <translation>Media: %1</translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="38"/>
+        <source>Std.Dev.: %1</source>
+        <translation>Desv. Est.: %1</translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="60"/>
+        <source>Max: </source>
+        <translation>Máx.: </translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="62"/>
+        <source>Mean: </source>
+        <translation>Media: </translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="58"/>
+        <source>SUV (%1)</source>
+        <translation>SUV (%1)</translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="66"/>
+        <source>SUV (%1) - N/A</source>
+        <translation>SUV (%1) - N/D</translation>
     </message>
 </context>
 <context>
@@ -678,8 +717,8 @@ WW: %5 WL: %6</translation>
         <translation> Serie %1: %2 %3 %4 %5</translation>
     </message>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="145"/>
-        <location filename="patientbrowsermenu.cpp" line="166"/>
+        <location filename="patientbrowsermenu.cpp" line="162"/>
+        <location filename="patientbrowsermenu.cpp" line="183"/>
         <source>%1
 %2
 %3
@@ -697,7 +736,7 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="501"/>
+        <location filename="q2dviewer.cpp" line="513"/>
         <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
         <translation>No hay memoria suficiente para el proceso de renderización. Intente cerrar todas las ventanas abiertas de %1, reinicie la aplicación y vuélvalo a intentar. Si el problema persiste, podría solucionarse añadiendo más memoria RAM o cambiando a un sistema operativo de 64 bits.</translation>
     </message>
@@ -1465,22 +1504,22 @@ Variable de entorno (logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="903"/>
+        <location filename="qviewer.cpp" line="874"/>
         <source>Downloading related study...</source>
         <translation>Descargando estudio relacionado...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="911"/>
+        <location filename="qviewer.cpp" line="882"/>
         <source>Error downloading related study</source>
         <translation>Error al descargar estudio relacionado</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="907"/>
+        <location filename="qviewer.cpp" line="878"/>
         <source>Loading data...</source>
         <translation>Cargando los datos...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="916"/>
+        <location filename="qviewer.cpp" line="887"/>
         <source>Error loading data</source>
         <translatorcomment>No hi faltaria punt a la traducció orginal?</translatorcomment>
         <translation>Error al cargar los datos</translation>
@@ -1515,61 +1554,6 @@ Variable de entorno (logFilePath): %2</translation>
         <location filename="qwindowlevelcombobox.cpp" line="177"/>
         <source>Edit Custom WW/WL</source>
         <translation>Editar los WW/WL personalizados</translation>
-    </message>
-</context>
-<context>
-    <name>udg::ROITool</name>
-    <message>
-        <location filename="roitool.cpp" line="54"/>
-        <source>SUV (%1)</source>
-        <translation>SUV (%1)</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="55"/>
-        <source>
-Max: %1 %2</source>
-        <translation>
-Máximo: %1 %2</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="56"/>
-        <source>
-Mean: %1 %2</source>
-        <translation>
-Media: %1 %2</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="60"/>
-        <source>SUV (%1) - N/A</source>
-        <translation>SUV (%1) - N/D</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="61"/>
-        <source>
-Max: --</source>
-        <translation>
-Máximo: --</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="62"/>
-        <source>
-Mean: --</source>
-        <translation>
-Media: --</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="305"/>
-        <source>Area: %1</source>
-        <translation>Área: %1</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="348"/>
-        <source>
-Mean: %1
-St.Dev.: %2</source>
-        <translation>
-Media: %1
-Desv.Est.: %2</translation>
     </message>
 </context>
 <context>
@@ -2295,22 +2279,22 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
 <context>
     <name>udg::Volume</name>
     <message>
-        <location filename="volume.cpp" line="386"/>
+        <location filename="volume.cpp" line="388"/>
         <source>counts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="398"/>
+        <location filename="volume.cpp" line="400"/>
         <source>percent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="402"/>
+        <location filename="volume.cpp" line="404"/>
         <source>counts/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="434"/>
+        <location filename="volume.cpp" line="436"/>
         <source>proportional to counts</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2318,55 +2302,63 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
 <context>
     <name>udg::VolumeReader</name>
     <message>
-        <location filename="volumereader.cpp" line="97"/>
+        <location filename="volumereader.cpp" line="112"/>
         <source>Out of memory</source>
         <translation>No hay memoria suficiente</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="101"/>
+        <location filename="volumereader.cpp" line="116"/>
         <source>Missing Files</source>
         <translation>Faltan archivos</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="105"/>
+        <location filename="volumereader.cpp" line="120"/>
         <source>Cannot Read Files</source>
         <oldsource>Cannot Read File(s)</oldsource>
         <translation>No se han podido leer los archivos</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="109"/>
+        <location filename="volumereader.cpp" line="124"/>
         <source>Unknown Error</source>
         <translation>Error desconocido</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="121"/>
+        <location filename="volumereader.cpp" line="136"/>
         <source>There&apos;s not enough memory to load the series you requested. Try to close all the open %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
         <oldsource>There&apos;s not enough memory to load the Series you requested. Try to close all the open %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</oldsource>
         <translation>No hay memoria suficiente para cargar la serie solicitada. Intente cerrar todas las ventanas de %1 abiertas, reinicie la aplicación y vuélvalo a intentar. Si el problema persiste, podría solucionarse añadiendo más memoria RAM o cambiando a un sistema operativo de 64 bits.</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="125"/>
+        <location filename="volumereader.cpp" line="140"/>
         <source>%1 could not find the corresponding files for this series. Maybe they had been removed or are corrupted.</source>
         <oldsource>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</oldsource>
         <translation>%1 no puede encontrar los archivos de la serie. Puede ser que se hayan eliminado o sean corruptos.</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="127"/>
+        <location filename="volumereader.cpp" line="142"/>
         <source>%1 could not read the requested files for this series.</source>
         <oldsource>%1 could not read the requested file(s) for this Series.</oldsource>
         <translation>%1 no ha podido leer los archivos de la serie solicitada.</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="129"/>
+        <location filename="volumereader.cpp" line="144"/>
         <source>Loading of data has been aborted.</source>
         <oldsource>The loading of the data have been aborted.</oldsource>
         <translation>Se ha abortado la carga de los datos.</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="131"/>
+        <location filename="volumereader.cpp" line="146"/>
         <source>%1 found an unexpected error reading this series. No series data has been loaded.</source>
         <oldsource>%1 found an unexpected error reading this Series. No Series data has been loaded.</oldsource>
         <translation>%1 ha encontrado un error inesperado al leer la serie. No se han cargado los datos de la serie.</translation>
+    </message>
+</context>
+<context>
+    <name>udg::VoxelInformationTool</name>
+    <message>
+        <location filename="voxelinformationtool.cpp" line="145"/>
+        <source>SUV (%1)</source>
+        <translation>SUV (%1)</translation>
     </message>
 </context>
 <context>
@@ -2431,7 +2423,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
         <translation>Hueso petroso</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="184"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="192"/>
         <source>Custom</source>
         <translation>Personalizado</translation>
     </message>

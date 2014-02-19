@@ -312,49 +312,46 @@
         <translation>desconegut</translation>
     </message>
     <message>
-        <location filename="pansyncaction.cpp" line="39"/>
+        <location filename="pansyncaction.cpp" line="41"/>
         <source>pan</source>
         <translation>mou</translation>
     </message>
     <message>
         <location filename="patientcomparer.cpp" line="57"/>
-        <source>Cannot determine the similarity of these patients.
-
-Do you consider they are the same?
-
-</source>
-        <oldsource>We are not able to determine the similarity of these patients.
+        <source>Cannot determine the similarity of these patients.</source>
+        <oldsource>Cannot determine the similarity of these patients.
 
 Do you consider they are the same?
 
 </oldsource>
-        <translation>No es pot determinar la semblança d&apos;aquests pacients.
-
-Considereu que són el mateix?
-
-</translation>
-    </message>
-    <message>
-        <location filename="patientcomparer.cpp" line="58"/>
-        <source>Patient 1
-ID: %1
-Name: %2
-
-</source>
-        <translation>Pacient 1
-ID: %1
-Nom: %2
-
-</translation>
+        <translation>No es pot determinar la semblança d&apos;aquests pacients.</translation>
     </message>
     <message>
         <location filename="patientcomparer.cpp" line="59"/>
-        <source>Patient 2
-ID: %1
-Name: %2</source>
-        <translation>Pacient 2
-ID: %1
-Nom: %2</translation>
+        <source>Do you consider they are the same?</source>
+        <translation>Considereu que són el mateix?</translation>
+    </message>
+    <message>
+        <location filename="patientcomparer.cpp" line="61"/>
+        <source>Patient 1</source>
+        <translation>Pacient 1</translation>
+    </message>
+    <message>
+        <location filename="patientcomparer.cpp" line="63"/>
+        <location filename="patientcomparer.cpp" line="69"/>
+        <source>ID: %1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="patientcomparer.cpp" line="65"/>
+        <location filename="patientcomparer.cpp" line="71"/>
+        <source>Name: %1</source>
+        <translation>Nom: %1</translation>
+    </message>
+    <message>
+        <location filename="patientcomparer.cpp" line="67"/>
+        <source>Patient 2</source>
+        <translation>Pacient 2</translation>
     </message>
     <message>
         <location filename="phasesyncaction.cpp" line="40"/>
@@ -362,51 +359,58 @@ Nom: %2</translation>
         <translation>fase</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="100"/>
-        <source>Acc: %1
-</source>
-        <translation>Acc: %1</translation>
+        <location filename="q2dviewerannotationhandler.cpp" line="102"/>
+        <source>Acc: %1</source>
+        <translation>Acc: %1 {1?}</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="125"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="124"/>
         <source>Fusion: </source>
         <translation>Fusió: </translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="255"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="254"/>
         <source>Slice: %1</source>
         <translation>Tall: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="259"/>
-        <location filename="q2dviewerannotationhandler.cpp" line="381"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="258"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="378"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="261"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="260"/>
         <source>/%1</source>
         <translation>/%1</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="266"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="265"/>
         <source> Phase: %1/%2</source>
         <translation> Fase: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="272"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="271"/>
         <source> Thickness: %1 mm</source>
         <translation> Gruix: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="344"/>
-        <source>%1 x %2
-WW: %5 WL: %6</source>
-        <translation>%1 x %2
-WW: %5 WL: %6</translation>
+        <location filename="q2dviewerannotationhandler.cpp" line="343"/>
+        <source>%1 x %2</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="371"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="473"/>
+        <source>WW: %1 WL: %2</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="485"/>
+        <source>Threshold: %1%</source>
+        <translation>Llindar: %1%</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="368"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
@@ -429,6 +433,41 @@ WW: %5 WL: %6</translation>
         <location filename="zoomfactorsyncaction.cpp" line="33"/>
         <source>zoom</source>
         <translation>zoom</translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="32"/>
+        <source>Area: %1</source>
+        <translation>Àrea: %1</translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="36"/>
+        <source>Mean: %1</source>
+        <translation>Mitjana: %1</translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="38"/>
+        <source>Std.Dev.: %1</source>
+        <translation>Desv. Est.: %1</translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="60"/>
+        <source>Max: </source>
+        <translation>Màx.: </translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="62"/>
+        <source>Mean: </source>
+        <translation>Mitjana: </translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="58"/>
+        <source>SUV (%1)</source>
+        <translation>SUV (%1)</translation>
+    </message>
+    <message>
+        <location filename="abstractroidataprinter.cpp" line="66"/>
+        <source>SUV (%1) - N/A</source>
+        <translation>SUV (%1) - N/D</translation>
     </message>
 </context>
 <context>
@@ -679,8 +718,8 @@ WW: %5 WL: %6</translation>
         <translation> Sèrie %1: %2 %3 %4 %5</translation>
     </message>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="145"/>
-        <location filename="patientbrowsermenu.cpp" line="166"/>
+        <location filename="patientbrowsermenu.cpp" line="162"/>
+        <location filename="patientbrowsermenu.cpp" line="183"/>
         <source>%1
 %2
 %3
@@ -698,7 +737,7 @@ WW: %5 WL: %6</translation>
 <context>
     <name>udg::Q2DViewer</name>
     <message>
-        <location filename="q2dviewer.cpp" line="501"/>
+        <location filename="q2dviewer.cpp" line="513"/>
         <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
         <translation>No hi ha prou memòria per al procés de renderització. Intenteu tancar totes les finestres obertes de l&apos;%1, reinicieu l&apos;aplicació i torneu-ho a provar. Si el problema es manté, es podria solucionar afegint més memòria RAM o canviant a un sistema operatiu de 64 bits.</translation>
     </message>
@@ -1468,23 +1507,23 @@ Variable d&apos;entorn (logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="903"/>
+        <location filename="qviewer.cpp" line="874"/>
         <source>Downloading related study...</source>
         <translation>S&apos;està descarregant l&apos;estudi relacionat...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="911"/>
+        <location filename="qviewer.cpp" line="882"/>
         <source>Error downloading related study</source>
         <translation>S&apos;ha produït un error en descarregar l&apos;estudi relacionat</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="907"/>
+        <location filename="qviewer.cpp" line="878"/>
         <source>Loading data...</source>
         <translatorcomment>No hauria de ser igual que lo d&apos;Assynchronous loading ? En allà simplement s&apos;indica Loading... </translatorcomment>
         <translation>S&apos;estan carregant les dades...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="916"/>
+        <location filename="qviewer.cpp" line="887"/>
         <source>Error loading data</source>
         <translation>S&apos;ha produït un error en carregar les dades</translation>
     </message>
@@ -1519,62 +1558,6 @@ Variable d&apos;entorn (logFilePath): %2</translation>
         <source>Edit Custom WW/WL</source>
         <translatorcomment>Aquí parlem de WW/WL, però a altres llocs parlem de brillantor i contrast</translatorcomment>
         <translation>Edita els WW/WL personalitzats</translation>
-    </message>
-</context>
-<context>
-    <name>udg::ROITool</name>
-    <message>
-        <location filename="roitool.cpp" line="54"/>
-        <source>SUV (%1)</source>
-        <translation>SUV (%1)</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="55"/>
-        <source>
-Max: %1 %2</source>
-        <translation>
-Màxim: %1 %2</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="56"/>
-        <source>
-Mean: %1 %2</source>
-        <translation>
-Mitjana: %1 %2</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="60"/>
-        <source>SUV (%1) - N/A</source>
-        <translation>SUV (%1) - N/D</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="61"/>
-        <source>
-Max: --</source>
-        <translation>
-Màxim: --</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="62"/>
-        <source>
-Mean: --</source>
-        <translation>
-Mitjana: --</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="305"/>
-        <source>Area: %1</source>
-        <translation>Àrea: %1</translation>
-    </message>
-    <message>
-        <location filename="roitool.cpp" line="348"/>
-        <source>
-Mean: %1
-St.Dev.: %2</source>
-        <translatorcomment>Segons la Viquipèdia s&apos;abrevia Desv, SD o StDev</translatorcomment>
-        <translation>
-Mitjana: %1 
-Desv.Est.: %2</translation>
     </message>
 </context>
 <context>
@@ -2305,22 +2288,22 @@ Es recomana que les deseu en una carpeta buida.</translation>
 <context>
     <name>udg::Volume</name>
     <message>
-        <location filename="volume.cpp" line="386"/>
+        <location filename="volume.cpp" line="388"/>
         <source>counts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="398"/>
+        <location filename="volume.cpp" line="400"/>
         <source>percent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="402"/>
+        <location filename="volume.cpp" line="404"/>
         <source>counts/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="434"/>
+        <location filename="volume.cpp" line="436"/>
         <source>proportional to counts</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2328,56 +2311,64 @@ Es recomana que les deseu en una carpeta buida.</translation>
 <context>
     <name>udg::VolumeReader</name>
     <message>
-        <location filename="volumereader.cpp" line="97"/>
+        <location filename="volumereader.cpp" line="112"/>
         <source>Out of memory</source>
         <translation>No hi ha prou memòria</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="101"/>
+        <location filename="volumereader.cpp" line="116"/>
         <source>Missing Files</source>
         <translation>Falten fitxers</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="105"/>
+        <location filename="volumereader.cpp" line="120"/>
         <source>Cannot Read Files</source>
         <oldsource>Cannot Read File(s)</oldsource>
         <translation>No s&apos;han pogut llegir els fitxers</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="109"/>
+        <location filename="volumereader.cpp" line="124"/>
         <source>Unknown Error</source>
         <oldsource>Unkwown Error</oldsource>
         <translation>Error desconegut</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="121"/>
+        <location filename="volumereader.cpp" line="136"/>
         <source>There&apos;s not enough memory to load the series you requested. Try to close all the open %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
         <oldsource>There&apos;s not enough memory to load the Series you requested. Try to close all the open %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</oldsource>
         <translation>No hi ha prou memòria per carregar la sèrie demanada. Intenteu tancar totes les finestres de l&apos;%1 obertes, reinicieu l&apos;aplicació i torneu-ho a provar. Si el problema es manté, es podria solucionar afegint més memòria RAM o canviant a un sistema operatiu de 64 bits.</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="125"/>
+        <location filename="volumereader.cpp" line="140"/>
         <source>%1 could not find the corresponding files for this series. Maybe they had been removed or are corrupted.</source>
         <oldsource>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</oldsource>
         <translation>L&apos;%1 no pot trobar els fitxers d&apos;aquesta sèrie. Potser s&apos;han eliminat o són corruptes.</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="127"/>
+        <location filename="volumereader.cpp" line="142"/>
         <source>%1 could not read the requested files for this series.</source>
         <oldsource>%1 could not read the requested file(s) for this Series.</oldsource>
         <translation>L&apos;%1 no ha pogut llegir els fitxers de la sèrie demanada.</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="129"/>
+        <location filename="volumereader.cpp" line="144"/>
         <source>Loading of data has been aborted.</source>
         <oldsource>The loading of the data have been aborted.</oldsource>
         <translation>S&apos;ha avortat la càrrega de les dades.</translation>
     </message>
     <message>
-        <location filename="volumereader.cpp" line="131"/>
+        <location filename="volumereader.cpp" line="146"/>
         <source>%1 found an unexpected error reading this series. No series data has been loaded.</source>
         <oldsource>%1 found an unexpected error reading this Series. No Series data has been loaded.</oldsource>
         <translation>L&apos;%1 ha trobat un error inesperat en llegir aquesta sèrie. No s&apos;han carregat les dades de la sèrie.</translation>
+    </message>
+</context>
+<context>
+    <name>udg::VoxelInformationTool</name>
+    <message>
+        <location filename="voxelinformationtool.cpp" line="145"/>
+        <source>SUV (%1)</source>
+        <translation>SUV (%1)</translation>
     </message>
 </context>
 <context>
@@ -2442,7 +2433,7 @@ Es recomana que les deseu en una carpeta buida.</translation>
         <translation>Os petrós</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="184"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="192"/>
         <source>Custom</source>
         <translation>Personalitzat</translation>
     </message>
