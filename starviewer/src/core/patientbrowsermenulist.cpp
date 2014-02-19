@@ -42,7 +42,7 @@ void PatientBrowserMenuList::addItemsGroup(const QString &caption, const QList<Q
     {
         if (itemPair.second.contains("+"))
         {
-            PatientBrowserMenuFusionItem *item = new PatientBrowserMenuFusionItem;
+            PatientBrowserMenuFusionItem *item = new PatientBrowserMenuFusionItem(this);
             item->setText(itemPair.first);
             item->setIdentifier(itemPair.second);
 
@@ -50,7 +50,7 @@ void PatientBrowserMenuList::addItemsGroup(const QString &caption, const QList<Q
         }
         else
         {
-            PatientBrowserMenuBasicItem *item = new PatientBrowserMenuBasicItem;
+            PatientBrowserMenuBasicItem *item = new PatientBrowserMenuBasicItem(this);
             item->setText(itemPair.first);
             item->setIdentifier(itemPair.second);
 
@@ -58,7 +58,7 @@ void PatientBrowserMenuList::addItemsGroup(const QString &caption, const QList<Q
         }
     }
 
-    PatientBrowserMenuGroup *group = new PatientBrowserMenuGroup();
+    PatientBrowserMenuGroup *group = new PatientBrowserMenuGroup(this);
     group->setCaption(caption);
     group->setElements(elements);
     group->setFusionElements(fusionElements);
