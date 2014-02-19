@@ -24,19 +24,19 @@ public:
     Identifier addItem(ItemType *item);
 
     /// Ens retorna un item del repositori amb l'identificador que especifiquem.
-    ItemType* getItem(const Identifier &id);
+    ItemType* getItem(const Identifier &id) const;
 
     /// Ens retorna tots els items del repositoy.
-    QList<ItemType*> getItems();
+    QList<ItemType*> getItems() const;
 
     /// Elimina un item del repositori
     void removeItem(const Identifier &id);
 
     /// Retorna el nombre d'items que hi ha al repositori
-    int getNumberOfItems();
+    int getNumberOfItems() const;
 
     /// Retorna una llista amb tots els id del repositori
-    QList<Identifier> getIdentifiers();
+    QList<Identifier> getIdentifiers() const;
 
     /// Elimina tots els elements que hi hagi al repositori
     void cleanUp();

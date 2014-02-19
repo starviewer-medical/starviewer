@@ -21,13 +21,13 @@ Identifier Repository<ItemType>::addItem(ItemType* item)
 }
 
 template<typename ItemType>
-ItemType* Repository<ItemType>::getItem(const Identifier &id)
+ItemType* Repository<ItemType>::getItem(const Identifier &id) const
 {
     return m_itemList.value(id);
 }
 
 template<typename ItemType>
-QList<ItemType*> Repository<ItemType>::getItems()
+QList<ItemType*> Repository<ItemType>::getItems() const
 {
     return m_itemList.values();
 }
@@ -40,13 +40,13 @@ void Repository<ItemType>::removeItem(const Identifier &id)
 }
 
 template<typename ItemType>
-int Repository<ItemType>::getNumberOfItems()
+int Repository<ItemType>::getNumberOfItems() const
 {
    return m_itemList.size();
 }
 
 template<typename ItemType>
-QList<Identifier> Repository<ItemType>::getIdentifiers()
+QList<Identifier> Repository<ItemType>::getIdentifiers() const
 {
     return m_itemList.keys();
 }
