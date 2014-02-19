@@ -54,7 +54,11 @@ QList<Identifier> Repository<ItemType>::getIdentifiers()
 template<typename ItemType>
 void Repository<ItemType>::cleanUp()
 {
-    // Buida la llista però no elimina els ItemType
+    foreach (ItemType *item, m_itemList)
+    {
+        delete item;
+    }
+
     m_itemList.clear();
     emit changed();
 }
