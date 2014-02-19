@@ -66,7 +66,7 @@
     </message>
     <message>
         <location filename="qdifuperfuextensionbase.ui" line="442"/>
-        <location filename="qdifuperfuextensionbase.ui" line="978"/>
+        <location filename="qdifuperfuextensionbase.ui" line="954"/>
         <source>Ventricles</source>
         <translation>Ventricles</translation>
     </message>
@@ -107,61 +107,61 @@
     </message>
     <message>
         <location filename="qdifuperfuextensionbase.ui" line="757"/>
-        <location filename="qdifuperfuextensionbase.ui" line="848"/>
-        <location filename="qdifuperfuextensionbase.ui" line="867"/>
-        <location filename="qdifuperfuextensionbase.ui" line="914"/>
+        <location filename="qdifuperfuextensionbase.ui" line="836"/>
+        <location filename="qdifuperfuextensionbase.ui" line="852"/>
+        <location filename="qdifuperfuextensionbase.ui" line="893"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextensionbase.ui" line="782"/>
+        <location filename="qdifuperfuextensionbase.ui" line="779"/>
         <source>window level</source>
         <translation>window level</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextensionbase.ui" line="804"/>
+        <location filename="qdifuperfuextensionbase.ui" line="798"/>
         <source>zoom</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextensionbase.ui" line="826"/>
+        <location filename="qdifuperfuextensionbase.ui" line="817"/>
         <source>move</source>
         <translation>Moure</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextensionbase.ui" line="892"/>
+        <location filename="qdifuperfuextensionbase.ui" line="874"/>
         <source>voxel information</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextensionbase.ui" line="936"/>
+        <location filename="qdifuperfuextensionbase.ui" line="912"/>
         <source>Filter diffusion image</source>
         <translation>Imatge amb filtrat de difusió</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextensionbase.ui" line="964"/>
+        <location filename="qdifuperfuextensionbase.ui" line="940"/>
         <source>View</source>
         <translation>Vista</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextensionbase.ui" line="971"/>
+        <location filename="qdifuperfuextensionbase.ui" line="947"/>
         <source>Lesion</source>
         <translation>Lesió</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextensionbase.ui" line="1048"/>
+        <location filename="qdifuperfuextensionbase.ui" line="1015"/>
         <source>Synchronize slices</source>
         <translation>Sincronitzar llesques</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextensionbase.ui" line="1083"/>
-        <location filename="qdifuperfuextensionbase.ui" line="1174"/>
+        <location filename="qdifuperfuextensionbase.ui" line="1050"/>
+        <location filename="qdifuperfuextensionbase.ui" line="1141"/>
         <source>Opacity</source>
         <translation>Opacitat</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextensionbase.ui" line="1134"/>
-        <location filename="qdifuperfuextensionbase.ui" line="1225"/>
+        <location filename="qdifuperfuextensionbase.ui" line="1101"/>
+        <location filename="qdifuperfuextensionbase.ui" line="1192"/>
         <source>Slice</source>
         <translation>Llesca</translation>
     </message>
@@ -197,67 +197,67 @@
 <context>
     <name>udg::QDifuPerfuSegmentationExtension</name>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="136"/>
+        <location filename="qdifuperfuextension.cpp" line="134"/>
         <source>Lesion Overlay</source>
         <translation>Capa de la lesió</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="137"/>
+        <location filename="qdifuperfuextension.cpp" line="135"/>
         <source>Enable/disable lesion view overlay</source>
         <translation>Activar/Desactivar la visualització de la capa de la lesió</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="143"/>
+        <location filename="qdifuperfuextension.cpp" line="141"/>
         <source>Ventricles Overlay</source>
         <translation>Capa dels ventricles</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="144"/>
+        <location filename="qdifuperfuextension.cpp" line="142"/>
         <source>Enable/disable ventricles view overlay</source>
         <translation>Activar/Desactivar la visualització de la capa dels ventricles</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1028"/>
+        <location filename="qdifuperfuextension.cpp" line="980"/>
         <source>Save Diffusion Mask Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1028"/>
-        <location filename="qdifuperfuextension.cpp" line="1060"/>
+        <location filename="qdifuperfuextension.cpp" line="980"/>
+        <location filename="qdifuperfuextension.cpp" line="1012"/>
+        <location filename="qdifuperfuextension.cpp" line="1044"/>
+        <location filename="qdifuperfuextension.cpp" line="1068"/>
         <location filename="qdifuperfuextension.cpp" line="1092"/>
-        <location filename="qdifuperfuextension.cpp" line="1116"/>
-        <location filename="qdifuperfuextension.cpp" line="1140"/>
         <source>MetaImage Files (*.mhd)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1060"/>
+        <location filename="qdifuperfuextension.cpp" line="1012"/>
         <source>Save Perfusion Mask Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1092"/>
+        <location filename="qdifuperfuextension.cpp" line="1044"/>
         <source>Save Diffusion Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1116"/>
-        <location filename="qdifuperfuextension.cpp" line="1140"/>
+        <location filename="qdifuperfuextension.cpp" line="1068"/>
+        <location filename="qdifuperfuextension.cpp" line="1092"/>
         <source>Save Perfusion Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1164"/>
+        <location filename="qdifuperfuextension.cpp" line="1116"/>
         <source>Save Transform file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1164"/>
+        <location filename="qdifuperfuextension.cpp" line="1116"/>
         <source>Transform Files (*.tf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="746"/>
+        <location filename="qdifuperfuextension.cpp" line="712"/>
         <source>Registration failed!</source>
         <translation>Ha fallat el procés de registre!</translation>
     </message>

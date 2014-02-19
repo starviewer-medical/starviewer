@@ -253,22 +253,22 @@
         <translation>Activar/Desactivar la visualització de la capa dels ventricles</translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="301"/>
+        <location filename="qedemasegmentationextension.cpp" line="298"/>
         <source>StarViewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="594"/>
+        <location filename="qedemasegmentationextension.cpp" line="593"/>
         <source>Save Volume file</source>
         <translation>Desar fitxer de volum</translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="594"/>
+        <location filename="qedemasegmentationextension.cpp" line="593"/>
         <source>MetaImage Files (*.mhd)</source>
         <translation>Fitxers de MetaImatge (*.mhd)</translation>
     </message>
     <message>
-        <location filename="qedemasegmentationextension.cpp" line="301"/>
+        <location filename="qedemasegmentationextension.cpp" line="298"/>
         <source>ERROR: Seed or mask undefined</source>
         <translation>ERROR: llavor o màscara no definida</translation>
     </message>

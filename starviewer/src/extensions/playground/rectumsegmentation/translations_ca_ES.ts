@@ -4,18 +4,18 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="264"/>
-        <location filename="rectumSegmentationMethod.cpp" line="109"/>
+        <location filename="qrectumsegmentationextension.cpp" line="259"/>
+        <location filename="rectumSegmentationMethod.cpp" line="112"/>
         <source>Starviewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="264"/>
+        <location filename="qrectumsegmentationextension.cpp" line="259"/>
         <source>undefined ROI</source>
         <translation>ROI indefinida</translation>
     </message>
     <message>
-        <location filename="rectumSegmentationMethod.cpp" line="109"/>
+        <location filename="rectumSegmentationMethod.cpp" line="112"/>
         <source>No definite ROI</source>
         <translation>No hi ha ROI definida</translation>
     </message>
@@ -74,44 +74,44 @@
     </message>
     <message>
         <location filename="qrectumsegmentationextensionbase.ui" line="447"/>
-        <location filename="qrectumsegmentationextensionbase.ui" line="538"/>
-        <location filename="qrectumsegmentationextensionbase.ui" line="557"/>
-        <location filename="qrectumsegmentationextensionbase.ui" line="626"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="526"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="542"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="602"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="472"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="469"/>
         <source>window level</source>
         <translation>Lluentor</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="494"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="488"/>
         <source>zoom</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="516"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="507"/>
         <source>move</source>
         <translation>moure</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="582"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="564"/>
         <source>voxel information</source>
         <translation>informació de vòxel</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="648"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="621"/>
         <source>Filter Main Image</source>
         <translation>Filtrar la imatge principal</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="697"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="670"/>
         <source>Opacity:</source>
         <translation>Opacitat:</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="763"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="736"/>
         <source>Slice:</source>
         <translation>Llesca:</translation>
     </message>
@@ -126,12 +126,12 @@
         <translation>Guardar la visualització 3D</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="610"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="589"/>
         <source>ROI</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextensionbase.ui" line="682"/>
+        <location filename="qrectumsegmentationextensionbase.ui" line="655"/>
         <source>View ROI</source>
         <translation>Veure la ROI</translation>
     </message>
@@ -149,34 +149,34 @@
 <context>
     <name>udg::QRectumSegmentationExtension</name>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="259"/>
+        <location filename="qrectumsegmentationextension.cpp" line="254"/>
         <source>StarViewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="650"/>
-        <location filename="qrectumsegmentationextension.cpp" line="678"/>
+        <location filename="qrectumsegmentationextension.cpp" line="645"/>
+        <location filename="qrectumsegmentationextension.cpp" line="673"/>
         <source>Save Volume file</source>
         <translation>Desar fitxer de volum</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="650"/>
-        <location filename="qrectumsegmentationextension.cpp" line="678"/>
+        <location filename="qrectumsegmentationextension.cpp" line="645"/>
+        <location filename="qrectumsegmentationextension.cpp" line="673"/>
         <source>MetaImage Files (*.mhd)</source>
         <translation>Fitxers MetaImage (*.mhd)</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="259"/>
+        <location filename="qrectumsegmentationextension.cpp" line="254"/>
         <source>ERROR: seed or mask undefined</source>
         <translation>ERROR: llavor o màscara no definida</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="95"/>
+        <location filename="qrectumsegmentationextension.cpp" line="96"/>
         <source>RegionTool</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="96"/>
+        <location filename="qrectumsegmentationextension.cpp" line="97"/>
         <source>Enable/Disable region tool</source>
         <translation>Activar/Desactivar l&apos;eina de regió</translation>
     </message>
