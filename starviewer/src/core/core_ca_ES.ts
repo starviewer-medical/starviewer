@@ -361,7 +361,7 @@ Do you consider they are the same?
     <message>
         <location filename="q2dviewerannotationhandler.cpp" line="102"/>
         <source>Acc: %1</source>
-        <translation>Acc: %1 {1?}</translation>
+        <translation>Acc: %1</translation>
     </message>
     <message>
         <location filename="q2dviewerannotationhandler.cpp" line="124"/>
