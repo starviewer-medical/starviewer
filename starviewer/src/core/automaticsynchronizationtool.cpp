@@ -26,6 +26,7 @@ AutomaticSynchronizationTool::AutomaticSynchronizationTool(QViewer *viewer, QObj
 
     m_sliceLocator = new SliceLocator;
 
+    connect(m_2DViewer, SIGNAL(selected()), SLOT(changePositionIfActive()));
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(changePositionIfActive()));
     
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
