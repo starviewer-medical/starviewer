@@ -223,9 +223,12 @@ int VolumeDisplayUnit::getSlabThickness() const
 
 void VolumeDisplayUnit::setSlabThickness(int thickness)
 {
-    m_sliceHandler->setSlabThickness(thickness);
+    // Make sure thickness is within valid bounds. Must be between 1 and the maximum number of slices on the curren view.
+    int admittedThickness = qBound(1, thickness, getNumberOfSlices());
+    
+    m_sliceHandler->setSlabThickness(admittedThickness);
     m_imagePipeline->setSlice(m_volume->getImageIndex(getSlice(), getPhase()));
-    m_imagePipeline->setSlabThickness(thickness);
+    m_imagePipeline->setSlabThickness(admittedThickness);
 }
 
 bool VolumeDisplayUnit::isThickSlabActive() const
