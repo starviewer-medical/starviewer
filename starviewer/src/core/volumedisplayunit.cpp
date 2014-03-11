@@ -136,6 +136,7 @@ VolumePixelData* VolumeDisplayUnit::getCurrentPixelData()
         if (!m_currentThickSlabPixelData)
         {
             m_currentThickSlabPixelData = new VolumePixelData;
+            m_currentThickSlabPixelData->setNumberOfPhases(m_volume->getNumberOfPhases());
             m_currentThickSlabPixelData->setData(getImagePipeline()->getSlabProjectionOutput());
         }
 
