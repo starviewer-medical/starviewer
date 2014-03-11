@@ -160,14 +160,10 @@ bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int ind
 
     double *origin = this->getVtkData()->GetOrigin();
     double *spacing = this->getVtkData()->GetSpacing();
-    int *extent = this->getVtkData()->GetExtent();
-    bool inside = true;
 
     for (int i = 0; i < 3; i++)
     {
         index[i] = qRound((coordinate[i] - origin[i]) / spacing[i]);
-        // TODO És sempre correcte això?
-        inside = inside && index[i] >= extent[2 * i] && index[i] <= extent[2 * i + 1];
     }
 
     // Apply phase correction (Safety check, phaseNumber and numberOfPhases must be coherent to apply it)
@@ -178,7 +174,12 @@ bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int ind
         // Calculem l'índex correcte en cas que tinguem fases
         index[2] = index[2] * m_numberOfPhases + phaseNumber;
     }
-    
+
+    int *extent = this->getVtkData()->GetExtent();
+    bool inside = index[0] >= extent[0] && index[0] <= extent[1] &&
+                  index[1] >= extent[2] && index[1] <= extent[3] &&
+                  index[2] >= extent[4] && index[2] <= extent[5];
+
     return inside;
 }
 
