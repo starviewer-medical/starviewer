@@ -321,9 +321,9 @@ void MagicROITool::getPickedPositionVoxelIndex(VolumePixelData *pixelData, int &
 
     x = index[xIndex];
     y = index[yIndex];
-    // HACK Per poder crear les regions correctament quan tenim imatges amb fases
-    // Com que els volums no suporten recontruccions, només hem de tractar el cas Axial
-    // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
+    // HACK To correctly create regions when we have images with phases
+    // Since volumes with phases don't support reconstructions, we only need to handle the Axial (XYPlane) case
+    // TODO Revise when ticket #1247 (Support reconstruction in volumes with phases) is implemented
     if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
     {
         z = m_2DViewer->getInput(m_inputIndex)->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
