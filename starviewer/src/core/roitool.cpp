@@ -107,7 +107,7 @@ ROIData ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3
     double verticalSpacingIncrement = spacing[yIndex];
     
     int phaseIndex = 0;
-    if (!m_2DViewer->isThickSlabActiveOnInput(inputNumber) && currentView == OrthogonalPlane::XYPlane && m_2DViewer->doesInputHavePhases(inputNumber))
+    if (currentView == OrthogonalPlane::XYPlane && m_2DViewer->doesInputHavePhases(inputNumber))
     {
         phaseIndex = m_2DViewer->getCurrentPhaseOnInput(inputNumber);
     }

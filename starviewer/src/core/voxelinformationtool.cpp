@@ -121,7 +121,7 @@ void VoxelInformationTool::updateCaption()
 QString VoxelInformationTool::computeVoxelValueOnInput(double worldCoordinate[3], int i)
 {
     int phaseIndex = 0;
-    if (!m_2DViewer->isThickSlabActiveOnInput(i) && m_2DViewer->getViewOnInput(i) == OrthogonalPlane::XYPlane && m_2DViewer->doesInputHavePhases(i))
+    if (m_2DViewer->getViewOnInput(i) == OrthogonalPlane::XYPlane && m_2DViewer->doesInputHavePhases(i))
     {
         phaseIndex = m_2DViewer->getCurrentPhaseOnInput(i);
     }
