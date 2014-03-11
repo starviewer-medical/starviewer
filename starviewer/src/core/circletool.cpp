@@ -39,7 +39,10 @@ void CircleTool::handleEvent(unsigned long eventId)
     switch (eventId)
     {
         case vtkCommand::LeftButtonPressEvent:
-            startDrawing();
+            if (!m_isDrawing)
+            {
+                startDrawing();
+            }
             break;
         case vtkCommand::MouseMoveEvent:
             if (m_isDrawing)
