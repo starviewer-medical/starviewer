@@ -782,6 +782,8 @@ int Q2DViewer::getNumberOfInputs() const
 
 void Q2DViewer::resetView(const OrthogonalPlane &view)
 {
+    bool viewHasChanged = view != getCurrentViewPlane();
+    
     // First we compute which slab thickness should be applied after the view has been reseted
     int desiredSlabSlices = 1;
     if (isThickSlabActive())
@@ -826,7 +828,10 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         setSlabThickness(desiredSlabSlices);
     }
 
-    emit viewChanged(getCurrentViewPlane());
+    if (viewHasChanged)
+    {
+        emit viewChanged(getCurrentViewPlane());
+    }
 }
 
 void Q2DViewer::updateCamera()
