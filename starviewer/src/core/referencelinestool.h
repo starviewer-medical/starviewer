@@ -67,6 +67,9 @@ private:
     /// línies segons l'offset indicat. Si hi ha intersecció retorna true, fals altrement
     bool computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, const QList<QVector<double> > &referencePlaneBounds, int lineOffset);
 
+    /// Update the projected line according to lineOffset with the given points
+    void updateProjectedLine(int lineOffset, double firstPoint[3], double secondPoint[3]);
+    
     /// Projecta directament el pla donat, sobre el pla actual que s'està visualitzant al viewer
     /// Aquest mètode es fa servir per "debug"
     void projectPlane(ImagePlane *planeToProject);
