@@ -63,9 +63,9 @@ private:
     /// tambe li indiquem quina es la linia a modificar
     void projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane, int drawerLineOffset = 0);
     
-    /// Calcula la intersecció entre el pla localitzador i el pla de referència donats. boundsList indica sobre quins plans implícits volem realitzar les 
-    /// interseccions (superior, inferior, central). Si hi ha intersecció, actualitza les corresponents
-    /// línies segons l'offset indicat. Si hi ha intersecció retorna true, fals altrement
+    /// Computes intersection between given localizer and reference plane. boundsList shows which reference bound planes should be used to
+    /// compute intersections (upper, lower, central). If there is intersection with a bound plane, updates the correspoding lines
+    /// according to the given offset. If there is intersection with all the given bound planes returns true, false otherwise.
     bool computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, ImagePlane *referencePlane, QList<int> boundsList, int lineOffset);
     
     /// Projects the given intersection points and updates the corresponding lines according to lineOffset
