@@ -299,6 +299,7 @@ void ReferenceLinesTool::updateReferenceImagePlanesToProject()
 {
     if (!m_2DViewer->isActive())
     {
+        updateProjectionLines();
         return;
     }
 
