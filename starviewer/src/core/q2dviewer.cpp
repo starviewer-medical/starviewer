@@ -1042,6 +1042,7 @@ void Q2DViewer::updateSecondaryVolumesSlices()
         else
         {
             getDisplayUnit(i)->getImageActor()->VisibilityOff();
+            getDisplayUnit(i)->setSlice(0);
         }
     }
 }
