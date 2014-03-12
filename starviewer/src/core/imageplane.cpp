@@ -267,7 +267,7 @@ QString ImagePlane::toString(bool verbose)
     return result;
 }
 
-int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstIntersectionPoint[3], double secondIntersectionPoint[3])
+int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstIntersectionPoint[3], double secondIntersectionPoint[3], int bounds)
 {
     double t;
     int numberOfIntersections = 0;
@@ -275,12 +275,30 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
     planeToIntersect->getNormalVector(planeToIntersectNormalVector);
     planeToIntersect->getOrigin(planeToIntersectOrigin);
 
-    QList<QVector<double> > upperPlaneBounds = this->getUpperBounds();
+    QList<QVector<double> > planeBounds;
+    switch (bounds)
+    {
+        case 0:
+            planeBounds = this->getUpperBounds();
+            break;
 
-    QVector<double> tlhc = upperPlaneBounds.at(0);
-    QVector<double> trhc = upperPlaneBounds.at(1);
-    QVector<double> brhc = upperPlaneBounds.at(2);
-    QVector<double> blhc = upperPlaneBounds.at(3);
+        case 1:
+            planeBounds = this->getLowerBounds();
+            break;
+
+        case 2:
+            planeBounds = this->getCentralBounds();
+            break;
+
+        default:
+            planeBounds = this->getUpperBounds();
+            break;
+    }
+    
+    QVector<double> tlhc = planeBounds.at(0);
+    QVector<double> trhc = planeBounds.at(1);
+    QVector<double> brhc = planeBounds.at(2);
+    QVector<double> blhc = planeBounds.at(3);
 
     // Primera "paral·lela" (X)
     if (vtkPlane::IntersectWithLine((double*)tlhc.data(), (double*)trhc.data(), planeToIntersectNormalVector, planeToIntersectOrigin, t, firstIntersectionPoint))

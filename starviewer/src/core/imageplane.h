@@ -81,8 +81,9 @@ public:
     /// @param planeToIntersect pla que volem fer intersectar amb el pla
     /// @param firstIntersectionPoint[] primer punt d'intersecció trobat ( si n'hi ha )
     /// @param secondIntersectionPoint[] segon punt d'intersecció trobat ( si n'hi ha )
+    /// @param bounds Which plane bounds to take to make the intersection computing. 0 = upper, 1 = lower, 2 = central, upper by default.
     /// @return el nombre d'interseccions trobades
-    int getIntersections(ImagePlane *planeToIntersect, double firstIntersectionPoint[3], double secondIntersectionPoint[3]);
+    int getIntersections(ImagePlane *planeToIntersect, double firstIntersectionPoint[3], double secondIntersectionPoint[3], int bounds = 0);
 
     /// Returns the distance from the given point to the current plane
     double getDistanceToPoint(double point[3]);
