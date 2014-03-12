@@ -294,18 +294,18 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
             planeBounds = this->getUpperBounds();
             break;
     }
-    
-    QVector<double> tlhc = planeBounds.at(0);
-    QVector<double> trhc = planeBounds.at(1);
-    QVector<double> brhc = planeBounds.at(2);
-    QVector<double> blhc = planeBounds.at(3);
+
+    double *currentPlaneTopLeftPoint = (double*)planeBounds.at(0).data();
+    double *currentPlaneTopRightPoint = (double*)planeBounds.at(1).data();
+    double *currentPlaneBottomRightPoint = (double*)planeBounds.at(2).data();
+    double *currentPlaneBottomLetfPoint = (double*)planeBounds.at(3).data();
 
     // Primera "paral·lela" (X)
-    if (vtkPlane::IntersectWithLine((double*)tlhc.data(), (double*)trhc.data(), planeToIntersectNormalVector, planeToIntersectOrigin, t, firstIntersectionPoint))
+    if (vtkPlane::IntersectWithLine(currentPlaneTopLeftPoint, currentPlaneTopRightPoint, planeToIntersectNormalVector, planeToIntersectOrigin, t, firstIntersectionPoint))
     {
         numberOfIntersections++;
     }
-    if (vtkPlane::IntersectWithLine((double*)brhc.data(), (double*)blhc.data(), planeToIntersectNormalVector, planeToIntersectOrigin, t, secondIntersectionPoint))
+    if (vtkPlane::IntersectWithLine(currentPlaneBottomRightPoint, currentPlaneBottomLetfPoint, planeToIntersectNormalVector, planeToIntersectOrigin, t, secondIntersectionPoint))
     {
         numberOfIntersections++;
     }
@@ -313,12 +313,12 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
     if (numberOfIntersections == 0)
     {
         // Provar amb la segona "paral·lela" (Y)
-        if (vtkPlane::IntersectWithLine((double*)trhc.data(), (double*)brhc.data(), planeToIntersectNormalVector, planeToIntersectOrigin, t, firstIntersectionPoint))
+        if (vtkPlane::IntersectWithLine(currentPlaneTopRightPoint, currentPlaneBottomRightPoint, planeToIntersectNormalVector, planeToIntersectOrigin, t, firstIntersectionPoint))
         {
             numberOfIntersections++;
         }
 
-        if (vtkPlane::IntersectWithLine((double*)blhc.data(), (double*)tlhc.data(), planeToIntersectNormalVector, planeToIntersectOrigin, t, secondIntersectionPoint))
+        if (vtkPlane::IntersectWithLine(currentPlaneBottomLetfPoint, currentPlaneTopLeftPoint, planeToIntersectNormalVector, planeToIntersectOrigin, t, secondIntersectionPoint))
         {
             numberOfIntersections++;
         }
