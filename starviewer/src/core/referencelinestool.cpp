@@ -222,14 +222,19 @@ bool ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane 
         }
     }
 
-    // Linia discontinua
-    m_projectedIntersectionLines[lineOffset]->setFirstPoint(firstIntersectionPoint);
-    m_projectedIntersectionLines[lineOffset]->setSecondPoint(secondIntersectionPoint);
-    // Linia de background
-    m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(firstIntersectionPoint);
-    m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(secondIntersectionPoint);
+    updateProjectedLine(lineOffset, firstIntersectionPoint, secondIntersectionPoint);
 
     return (numberOfIntersections > 0);
+}
+
+void ReferenceLinesTool::updateProjectedLine(int lineOffset, double firstPoint[3], double secondPoint[3])
+{
+    // Linia discontinua
+    m_projectedIntersectionLines[lineOffset]->setFirstPoint(firstPoint);
+    m_projectedIntersectionLines[lineOffset]->setSecondPoint(secondPoint);
+    // Linia de background
+    m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(firstPoint);
+    m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(secondPoint);
 }
 
 void ReferenceLinesTool::projectPlane(ImagePlane *planeToProject)
