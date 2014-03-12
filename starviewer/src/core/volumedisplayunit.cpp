@@ -267,10 +267,13 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
     if (getViewPlane() == OrthogonalPlane::XYPlane)
     {
         Image *image = getVolume()->getImage(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
-        for (int i = 0; i < image->getNumberOfWindowLevels(); ++i)
+        if (image)
         {
-            WindowLevel windowLevel = WindowLevelHelper().getDefaultWindowLevelForPresentation(image, i);
-            m_windowLevelData->updatePreset(windowLevel);
+            for (int i = 0; i < image->getNumberOfWindowLevels(); ++i)
+            {
+                WindowLevel windowLevel = WindowLevelHelper().getDefaultWindowLevelForPresentation(image, i);
+                m_windowLevelData->updatePreset(windowLevel);
+            }
         }
     }
     
