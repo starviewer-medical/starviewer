@@ -212,29 +212,24 @@ bool ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane 
     {
         m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint, firstIntersectionPoint);
         m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint, secondIntersectionPoint);
-
-        // Linia discontinua
-        m_projectedIntersectionLines[lineOffset]->setFirstPoint(firstIntersectionPoint);
-        m_projectedIntersectionLines[lineOffset]->setSecondPoint(secondIntersectionPoint);
-        // Linia de background
-        m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(firstIntersectionPoint);
-        m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(secondIntersectionPoint);
-
-        return true;
     }
     else
     {
         // Per assegurar-nos que no queden dades residuals, matxaquem els punts posant-lis a tots el mateix valor, així no es produeix cap línia
-        double nullPoint[3] = { 0.0, 0.0, 0.0 };
-        // Linia discontinua
-        m_projectedIntersectionLines[lineOffset]->setFirstPoint(nullPoint);
-        m_projectedIntersectionLines[lineOffset]->setSecondPoint(nullPoint);
-        // Linia de background
-        m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(nullPoint);
-        m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(nullPoint);
-        
-        return false;
+        for (int i = 0; i < 3; ++i)
+        {
+            firstIntersectionPoint[i] = secondIntersectionPoint[i] = 0.0;
+        }
     }
+
+    // Linia discontinua
+    m_projectedIntersectionLines[lineOffset]->setFirstPoint(firstIntersectionPoint);
+    m_projectedIntersectionLines[lineOffset]->setSecondPoint(secondIntersectionPoint);
+    // Linia de background
+    m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(firstIntersectionPoint);
+    m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(secondIntersectionPoint);
+
+    return (numberOfIntersections > 0);
 }
 
 void ReferenceLinesTool::projectPlane(ImagePlane *planeToProject)
