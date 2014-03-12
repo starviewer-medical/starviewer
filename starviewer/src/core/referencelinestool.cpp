@@ -229,10 +229,10 @@ bool ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane 
 
 void ReferenceLinesTool::updateProjectedLine(int lineOffset, double firstPoint[3], double secondPoint[3])
 {
-    // Linia discontinua
+    // Dashed line
     m_projectedIntersectionLines[lineOffset]->setFirstPoint(firstPoint);
     m_projectedIntersectionLines[lineOffset]->setSecondPoint(secondPoint);
-    // Linia de background
+    // Background line
     m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(firstPoint);
     m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(secondPoint);
 }
