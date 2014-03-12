@@ -171,11 +171,6 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         // Projecció de la intersecció dels plans
         /// Llegir http://fixunix.com/dicom/51195-scanogram-lines-mr.html
 
-        // Recollim les dades del pla del localitzador sobre el qual volem projectar el de referència
-        double localizerNormalVector[3], localizerOrigin[3];
-        localizerPlane->getNormalVector(localizerNormalVector);
-        localizerPlane->getOrigin(localizerOrigin);
-
         bool showLines = false;
         if (m_showPlaneThickness)
         {
