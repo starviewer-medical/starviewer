@@ -42,6 +42,7 @@ MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(restartRegion()));
     connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(restartRegion()));
     connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(restartRegion()));
+    connect(m_2DViewer, SIGNAL(restored()), SLOT(restartRegion()));
 }
 
 MagicROITool::~MagicROITool()
