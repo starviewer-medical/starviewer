@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSet>
+#include <QMultiHash>
 
 namespace udg {
 
@@ -65,6 +66,8 @@ private:
     /// Returns true if all the criteria from the list are met between the given viewer and the master one
     bool areAllCriteriaSatisfied(QList<SyncCriterion*> criteria, QViewer *viewer);
 
+    void synchronizeAll();
+
 private slots:
     /// Applies the given SyncAction on the registered viewers, but the master viewer
     void applySyncAction(SyncAction *syncAction);
@@ -85,6 +88,10 @@ private:
 
     /// Attribute to hold if appliance of sync actions is enabled or not
     bool m_enabled;
+
+    /// Helper attributes to avoid unnecessary syncronizations when syncronizing all viewers
+    QMultiHash<QString, QViewer*> m_syncActionsAppliedPerViewer;
+    bool m_synchronizingAll;
 };
 
 } // End namespace udg
