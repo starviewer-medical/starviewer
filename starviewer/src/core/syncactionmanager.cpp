@@ -92,6 +92,11 @@ void SyncActionManager::enable(bool enable)
 
 void SyncActionManager::synchronize()
 {
+    if (m_masterViewer->getViewerStatus() != QViewer::VisualizingVolume)
+    {
+        return;
+    }
+
     foreach (SignalToSyncActionMapper *mapper, m_registeredSignalMappers)
     {
         mapper->mapProperty();
