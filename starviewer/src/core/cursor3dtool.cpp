@@ -168,9 +168,6 @@ void Cursor3DTool::updateProjectedPoint()
 
 void Cursor3DTool::projectPoint()
 {
-    double position[3];
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(m_myData->getOriginPointPosition(), position);
-
     m_sliceLocator->setVolume(m_2DViewer->getMainInput());
     m_sliceLocator->setPlane(m_2DViewer->getView());
     int nearestSlice = m_sliceLocator->getNearestSlice(m_myData->getOriginPointPosition());
@@ -178,6 +175,8 @@ void Cursor3DTool::projectPoint()
     if (nearestSlice != -1)
     {
         m_2DViewer->setSlice(nearestSlice);
+        double position[3];
+        m_2DViewer->projectDICOMPointToCurrentDisplayedImage(m_myData->getOriginPointPosition(), position);
         m_crossHair->setCentrePoint(position[0], position[1], position[2]);
         m_crossHair->setVisibility(true);
     }
