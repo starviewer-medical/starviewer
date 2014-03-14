@@ -1029,6 +1029,11 @@ The selected studies exceed the available space for the current device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="qcreatedicomdir.cpp" line="288"/>
+        <source>You don&apos;t have read permission on directory &apos;%1&apos; to copy its content to DICOMDIR.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="qcreatedicomdir.cpp" line="489"/>
         <source>Unable to create DICOMDIR. The content of &apos;%1&apos; cannot be copied. Make sure you have read permission in the directory or uncheck copy folder content option.</source>
         <oldsource>Unable to create the DICOMDIR. The content of &apos;%1&apos; cannot be copied. Make sure you have read permissions in the directory or uncheck copy folder content option.</oldsource>
@@ -2892,14 +2897,6 @@ Be sure its IP and AE Title are correct.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="279"/>
-        <source>Cannot retrieve images from study %1 of patient %2 because a database error occurred.</source>
-        <oldsource>
-
-The study may be corrupted, if it is not corrupted please contact with %1 team.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="234"/>
         <source>Details:</source>
         <translation type="unfinished"></translation>
@@ -2949,6 +2946,11 @@ The study may be corrupted, if it is not corrupted please contact with %1 team.<
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="302"/>
         <source>The cause of the error may be that the requested images are corrupted. Please contact with a PACS administrator.</source>
         <oldsource>The cause of the error can be that the requested images are corrupted. Please contact with a PACS administrator.</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="306"/>
+        <source>Cannot retrieve images from study %1 of patient %2 due to an error of PACS %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3044,26 +3046,14 @@ Details:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="senddicomfilestopacsjob.cpp" line="119"/>
-        <source>Sending of images from study %1 of patient %2 to PACS %3 has been cancelled.</source>
-        <oldsource>The connection with PACS %1 has been broken while sending images from study %2 of patient %3.
-
-</oldsource>
+        <location filename="senddicomfilestopacsjob.cpp" line="123"/>
+        <source>The connection with PACS %1 has been broken while sending images from study %2 of patient %3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="128"/>
         <source>An unknown error has occurred while sending images from study %1 of patient %2 to PACS %3.</source>
         <oldsource>An unknown error has occurred sending images from study %1 of patient %2 to PACS %3.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="senddicomfilestopacsjob.cpp" line="125"/>
-        <source>Wait a few minutes and try again, if the problem persist contact with an administrator.</source>
-        <oldsource>
-
-Close all %1 windows and try again.
-If the problem persists contact with an administrator.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
