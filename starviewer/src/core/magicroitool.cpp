@@ -526,8 +526,7 @@ void MagicROITool::computePolygon()
     while (!loop)
     {
         this->getNextIndex(direction, x, y, nextX, nextY);
-        maskIndex = getMaskVectorIndex(nextX, nextY);
-        next = m_mask[maskIndex];
+        next = getMaskValue(nextX, nextY);
         while (!next && !loop)
         {
             if (MathTools::isOdd(direction) && !next)
@@ -537,8 +536,7 @@ void MagicROITool::computePolygon()
             }
             direction = this->getNextDirection(direction);
             this->getNextIndex(direction, x, y, nextX, nextY);
-            maskIndex = getMaskVectorIndex(nextX, nextY);
-            next = m_mask[maskIndex];
+            next = getMaskValue(nextX, nextY);
         }
         x = nextX;
         y = nextY;
