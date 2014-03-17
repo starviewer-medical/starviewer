@@ -404,7 +404,8 @@ HEADERS += extensionfactory.h \
     thickslabsignaltosyncactionmapper.h \
     qenhancedmenutoolbutton.h \
     qfusionbalancewidget.h \
-    frameofreferencesynccriterion.h
+    frameofreferencesynccriterion.h \
+    anglebetweenplanessynccriterion.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -757,7 +758,8 @@ SOURCES += extensionmediator.cpp \
     thickslabsignaltosyncactionmapper.cpp \
     qenhancedmenutoolbutton.cpp \
     qfusionbalancewidget.cpp \
-    frameofreferencesynccriterion.cpp
+    frameofreferencesynccriterion.cpp \
+    anglebetweenplanessynccriterion.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
