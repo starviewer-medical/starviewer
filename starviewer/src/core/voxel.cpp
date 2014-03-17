@@ -21,7 +21,7 @@ void Voxel::addComponent(double x)
 
 double Voxel::getComponent(int i) const
 {
-    if (i > m_values.size() || i < 0)
+    if (i >= m_values.size() || i < 0)
     {
         return std::numeric_limits<double>::quiet_NaN();
     }

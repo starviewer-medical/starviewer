@@ -14,6 +14,7 @@ SyncActionManager::SyncActionManager(QObject *parent)
 {
     m_masterViewer = 0;
     m_enabled = false;
+    m_synchronizingAll = false;
     
     setupSignalMappers();
     setupDefaultSyncActionsConfiguration();
@@ -28,6 +29,14 @@ void SyncActionManager::addSyncedViewer(QViewer *viewer)
     if (!m_syncedViewersSet.contains(viewer))
     {
         m_syncedViewersSet << viewer;
+
+        Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
+        if (viewer2D)
+        {
+            connect(viewer2D, SIGNAL(restored()), this, SLOT(synchronize()));
+            connect(viewer2D, SIGNAL(anatomicalViewChanged(AnatomicalPlane::AnatomicalPlaneType)), this, SLOT(synchronizeAllViewersButSender()));
+            connect(viewer2D, SIGNAL(newVolumesRendered()), this, SLOT(synchronizeAllViewersButSender()));
+        }
     }
 }
 
@@ -38,6 +47,13 @@ void SyncActionManager::removeSyncedViewer(QViewer *viewer)
         m_masterViewer = 0;
         updateMasterViewerMappers();
     }
+
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
+    if (viewer2D)
+    {
+        disconnect(viewer2D, 0, this, 0);
+    }
+
     m_syncedViewersSet.remove(viewer);
 }
 
@@ -45,27 +61,8 @@ void SyncActionManager::setMasterViewer(QViewer *viewer)
 {
     if (m_syncedViewersSet.contains(viewer))
     {
-        Q2DViewer *masterViewer2D = Q2DViewer::castFromQViewer(m_masterViewer);
-        if (masterViewer2D)
-        {
-            disconnect(masterViewer2D, 0, this, 0);
-        }
-
         m_masterViewer = viewer;
         updateMasterViewerMappers();
-
-        Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
-        if (viewer2D)
-        {
-            connect(viewer2D, SIGNAL(restored()), this, SLOT(synchronize()));
-            connect(viewer2D, SIGNAL(anatomicalViewChanged(AnatomicalPlane::AnatomicalPlaneType)), this, SLOT(synchronize()));
-            connect(viewer2D, SIGNAL(newVolumesRendered()), this, SLOT(synchronize()));
-        }
-
-        if (m_masterViewer->getMainInput())
-        {
-            synchronize();
-        }
     }
 }
 
@@ -88,18 +85,66 @@ void SyncActionManager::enable(bool enable)
 {
     m_enabled = enable;
 
-    if (m_enabled && m_masterViewer && m_masterViewer->getMainInput())
+    if (m_enabled && m_masterViewer)
     {
-        synchronize();
+        synchronizeAll();
     }
 }
 
 void SyncActionManager::synchronize()
 {
+    if (m_masterViewer->getViewerStatus() != QViewer::VisualizingVolume)
+    {
+        return;
+    }
+
     foreach (SignalToSyncActionMapper *mapper, m_registeredSignalMappers)
     {
         mapper->mapProperty();
     }
+}
+
+void SyncActionManager::synchronizeAll()
+{
+    synchronizeAllWithExceptions(QSet<QViewer*>());
+}
+
+void SyncActionManager::synchronizeAllViewersButSender()
+{
+    QViewer *senderViewer = qobject_cast<QViewer*>(sender());
+
+    if (!senderViewer)
+    {
+        return;
+    }
+
+    synchronizeAllWithExceptions(QSet<QViewer*>() << senderViewer);
+}
+
+void SyncActionManager::synchronizeAllWithExceptions(QSet<QViewer*> excludedViewers)
+{
+    QViewer *selectedViewer = m_masterViewer;
+    m_syncActionsAppliedPerViewer.clear();
+    m_synchronizingAll = true;
+
+    // Selected viewer is syncronized first
+    if (selectedViewer->getMainInput() && !excludedViewers.contains(selectedViewer))
+    {
+        this->synchronize();
+    }
+
+    foreach (QViewer *currentViewer, m_syncedViewersSet)
+    {
+        if (currentViewer != selectedViewer && currentViewer->getMainInput() && !excludedViewers.contains(currentViewer))
+        {
+            this->setMasterViewer(currentViewer);
+            this->synchronize();
+        }
+    }
+
+    m_synchronizingAll = false;
+
+    this->setMasterViewer(selectedViewer);
 }
 
 void SyncActionManager::setupSignalMappers()
@@ -144,12 +189,22 @@ void SyncActionManager::applySyncAction(SyncAction *syncAction)
     {
         return;
     }
-    
-    foreach (QViewer *viewer, m_syncedViewersSet.values())
+
+    QString syncActionName = syncAction->getMetaData().getSettingsName();
+
+    if (!m_synchronizingAll || !m_syncActionsAppliedPerViewer.contains(syncActionName, m_masterViewer))
     {
-        if (isSyncActionApplicable(syncAction, viewer))
+        foreach (QViewer *viewer, m_syncedViewersSet.values())
         {
-            syncAction->run(viewer);
+            if (isSyncActionApplicable(syncAction, viewer))
+            {
+                syncAction->run(viewer);
+
+                if (m_synchronizingAll)
+                {
+                    m_syncActionsAppliedPerViewer.insert(syncActionName, viewer);
+                }
+            }
         }
     }
 }

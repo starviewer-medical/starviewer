@@ -1027,6 +1027,11 @@ El dispositiu actual no te prou espai lliure pels estudis seleccionats.</transla
         <translation>Els següents estudis no s&apos;han afegit a llista de DICOMDIR pel següents motius:</translation>
     </message>
     <message>
+        <location filename="qcreatedicomdir.cpp" line="288"/>
+        <source>You don&apos;t have read permission on directory &apos;%1&apos; to copy its content to DICOMDIR.</source>
+        <translation>No teniu permís de lectura en el directori &apos;%1&apos; per copiar el seu contingut al DICOMDIR.</translation>
+    </message>
+    <message>
         <location filename="qcreatedicomdir.cpp" line="489"/>
         <source>Unable to create DICOMDIR. The content of &apos;%1&apos; cannot be copied. Make sure you have read permission in the directory or uncheck copy folder content option.</source>
         <oldsource>Unable to create the DICOMDIR. The content of &apos;%1&apos; cannot be copied. Make sure you have read permissions in the directory or uncheck copy folder content option.</oldsource>
@@ -2580,7 +2585,7 @@ Voleu continuar?</translation>
         <location filename="qstudytreewidgetbase.ui" line="124"/>
         <source>Ref. Physician&apos;s Name</source>
         <oldsource>Ref Physician Name</oldsource>
-        <translation>Nom metge ref.</translation>
+        <translation>Nom metge referència</translation>
     </message>
     <message>
         <location filename="qstudytreewidgetbase.ui" line="129"/>
@@ -2950,6 +2955,11 @@ Assegureu-vos que la IP i l&apos;AE Title siguin correctes.</translation>
         <translation>La causa de l&apos;error pot ser que les imatges demanades són corruptes. Contacteu amb un administrador del PACS.</translation>
     </message>
     <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="306"/>
+        <source>Cannot retrieve images from study %1 of patient %2 due to an error of PACS %3.</source>
+        <translation>No s&apos;han pogut descarregar les imatges de l&apos;estudi %1 del pacient %2 degut at un error del PACS %3.</translation>
+    </message>
+    <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="309"/>
         <source>The cause of the error may be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
         <oldsource>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</oldsource>
@@ -3040,6 +3050,11 @@ Details:
         <source>Sending of images from study %1 of patient %2 to PACS %3 has been cancelled.</source>
         <oldsource>The sent of images from study %1 from patient %2 to PACS %3 has been cancelled.</oldsource>
         <translation>S&apos;ha cancel·lat l&apos;enviament d&apos;imatges de l&apos;estudi %1 del pacient %2 al PACS %3.</translation>
+    </message>
+    <message>
+        <location filename="senddicomfilestopacsjob.cpp" line="123"/>
+        <source>The connection with PACS %1 has been broken while sending images from study %2 of patient %3.</source>
+        <translation>S&apos;ha perdut la connexió amb el PACS %1  mentres s&apos;enviaven imatges de l&apos;estudi %2 del pacient %3.</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="128"/>

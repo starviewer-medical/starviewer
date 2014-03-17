@@ -263,6 +263,12 @@ void ViewersLayout::setGrid(int rows, int columns)
     }
 
     m_isRegular = true;
+
+    // If the current selected viewer gets hidden, then select the first one by default
+    if (m_selectedViewer && m_selectedViewer->isHidden())
+    {
+        setSelectedViewer(getViewerWidget(0));
+    }
 }
 
 Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)

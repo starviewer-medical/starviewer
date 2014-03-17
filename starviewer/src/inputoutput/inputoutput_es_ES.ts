@@ -1032,6 +1032,11 @@ El dispositivo actual no tiene suficiente espaci libre para los estudios selecci
         <translation>Los siguientes estudios no se han añadido a la lista de DICOMDIR por las siguientes razones:</translation>
     </message>
     <message>
+        <location filename="qcreatedicomdir.cpp" line="288"/>
+        <source>You don&apos;t have read permission on directory &apos;%1&apos; to copy its content to DICOMDIR.</source>
+        <translation>No tiene permiso de lectura en el directorio &apos;%1&apos; para copiar su contenido en el DICOMDIR.</translation>
+    </message>
+    <message>
         <location filename="qcreatedicomdir.cpp" line="489"/>
         <source>Unable to create DICOMDIR. The content of &apos;%1&apos; cannot be copied. Make sure you have read permission in the directory or uncheck copy folder content option.</source>
         <oldsource>Unable to create the DICOMDIR. The content of &apos;%1&apos; cannot be copied. Make sure you have read permissions in the directory or uncheck copy folder content option.</oldsource>
@@ -2585,7 +2590,7 @@ Do you want continue?</source>
         <location filename="qstudytreewidgetbase.ui" line="124"/>
         <source>Ref. Physician&apos;s Name</source>
         <oldsource>Ref Physician Name</oldsource>
-        <translation>Nombre méd. ref.</translation>
+        <translation>Nombre médico referencia</translation>
     </message>
     <message>
         <location filename="qstudytreewidgetbase.ui" line="129"/>
@@ -2955,6 +2960,11 @@ Asegúrese que la IP y el AE Title sean correctos.</translation>
         <translation>El error puede ser debido a que las imágenes solicitadas estén corruptas. Contacte con un administrador del PACS.</translation>
     </message>
     <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="306"/>
+        <source>Cannot retrieve images from study %1 of patient %2 due to an error of PACS %3.</source>
+        <translation>No se han podido descargar las imágenes del estudio %1 del paciente %2 debido a un error del PACS %3.</translation>
+    </message>
+    <message>
         <location filename="retrievedicomfilesfrompacsjob.cpp" line="309"/>
         <source>The cause of the error may be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</source>
         <oldsource>The cause of the error can be that the requested images are corrupted or the incoming connections port in PACS configuration is not correct.</oldsource>
@@ -3045,6 +3055,11 @@ Details:
         <source>Sending of images from study %1 of patient %2 to PACS %3 has been cancelled.</source>
         <oldsource>The sent of images from study %1 from patient %2 to PACS %3 has been cancelled.</oldsource>
         <translation>Se ha cancelado el envío de imágenes del estudio %1 del paciente %2 al PACS %3.</translation>
+    </message>
+    <message>
+        <location filename="senddicomfilestopacsjob.cpp" line="123"/>
+        <source>The connection with PACS %1 has been broken while sending images from study %2 of patient %3.</source>
+        <translation>Se ha perdido la conexión con el PACS %1  mientras se enviaban imágenes del estudio %2 del paciente %3.</translation>
     </message>
     <message>
         <location filename="senddicomfilestopacsjob.cpp" line="128"/>

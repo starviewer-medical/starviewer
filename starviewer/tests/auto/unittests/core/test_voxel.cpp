@@ -79,7 +79,7 @@ void test_Voxel::getComponent_ReturnsNaN_data()
     int belowRangeIndex = MathTools::randomInt(std::numeric_limits<int>::min(), -1);
     QTest::newRow("Component index below number of components") << voxel << belowRangeIndex;
 
-    int aboveRangeIndex = MathTools::randomInt(voxel.getNumberOfComponents() + 1, std::numeric_limits<int>::max());
+    int aboveRangeIndex = MathTools::randomInt(voxel.getNumberOfComponents(), std::numeric_limits<int>::max());
     QTest::newRow("Component index above number of components") << voxel << aboveRangeIndex;
 }
 

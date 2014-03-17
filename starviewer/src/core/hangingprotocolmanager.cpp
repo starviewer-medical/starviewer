@@ -230,6 +230,11 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
         HangingProtocolImageSet *hangingProtocolImageSet = displaySet->getImageSet();
         Q2DViewerWidget *viewerWidget = layout->addViewer(displaySet->getPosition());
 
+        if (layout->getNumberOfViewers() == 1)
+        {
+            layout->setSelectedViewer(viewerWidget);
+        }
+        
         if (hangingProtocolImageSet->isDownloaded() == false)
         {
             viewerWidget->getViewer()->setViewerStatus(QViewer::DownloadingVolume);
@@ -255,7 +260,6 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
             setInputToViewer(viewerWidget, hangingProtocolImageSet->getSeriesToDisplay(), displaySet);
         }
     }
-    layout->setSelectedViewer(layout->getViewerWidget(0));
 
     INFO_LOG(QString("Hanging protocol aplicat: %1").arg(hangingProtocol->getName()));
 }

@@ -42,6 +42,7 @@ MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(restartRegion()));
     connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(restartRegion()));
     connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(restartRegion()));
+    connect(m_2DViewer, SIGNAL(restored()), SLOT(restartRegion()));
 }
 
 MagicROITool::~MagicROITool()
@@ -182,6 +183,17 @@ void MagicROITool::startRegion()
     {
         if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(m_pickedPosition, m_inputIndex))
         {
+            // Discard a border of 1 pixel around the image (workaround for #1949)
+            // TODO Implement a better solution, probably reimplementing the whole algorithm
+            int x, y, z;
+            getPickedPositionVoxelIndex(m_2DViewer->getCurrentPixelDataFromInput(m_inputIndex), x, y, z);
+            computeMaskBounds();
+
+            if (x == m_minX || x == m_maxX || y == m_minY || y == m_maxY)
+            {
+                return;
+            }
+
             m_pickedPositionInDisplayCoordinates = m_2DViewer->getEventPosition();
             m_magicFactor = InitialMagicFactor;
             m_roiPolygon = new DrawerPolygon;
@@ -321,10 +333,10 @@ void MagicROITool::getPickedPositionVoxelIndex(VolumePixelData *pixelData, int &
 
     x = index[xIndex];
     y = index[yIndex];
-    // HACK Per poder crear les regions correctament quan tenim imatges amb fases
-    // Com que els volums no suporten recontruccions, només hem de tractar el cas Axial
-    // TODO Revisar això quan s'implementi el ticket #1247 (Suportar reconstruccions per volums amb fases)
-    if (m_2DViewer->getView() == OrthogonalPlane::XYPlane && !m_2DViewer->isThickSlabActive())
+    // HACK To correctly create regions when we have images with phases
+    // Since volumes with phases don't support reconstructions, we only need to handle the Axial (XYPlane) case
+    // TODO Revise when ticket #1247 (Support reconstruction in volumes with phases) is implemented
+    if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
     {
         z = m_2DViewer->getInput(m_inputIndex)->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
     }
@@ -367,7 +379,7 @@ void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
     
     if ((value >= m_lowerLevel) && (value <= m_upperLevel))
     {
-        int maskIndex = computeMaskVectorIndex(x, y, m_maxX);
+        int maskIndex = getMaskVectorIndex(x, y);
         m_mask[maskIndex] = true;
     }
     else
@@ -391,7 +403,7 @@ void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
 
         if ((value >= m_lowerLevel) && (value <= m_upperLevel))
         {
-            maskIndex = computeMaskVectorIndex(x, y, m_maxX);
+            maskIndex = getMaskVectorIndex(x, y);
             m_mask[maskIndex] = true;
             found = true;
             movements.push_back(i);
@@ -416,7 +428,7 @@ void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
                 // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
                 // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
                 value = this->getVoxelValue(x, y, z, pixelData);
-                maskIndex = computeMaskVectorIndex(x, y, m_maxX);
+                maskIndex = getMaskVectorIndex(x, y);
                 if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[maskIndex]))
                 {
                     m_mask[maskIndex] = true;
@@ -495,7 +507,7 @@ void MagicROITool::computePolygon()
         j = m_minY;
         while ((j <= m_maxY) && !found)
         {
-            maskIndex = computeMaskVectorIndex(i, j, m_maxX);
+            maskIndex = getMaskVectorIndex(i, j);
             if (m_mask[maskIndex])
             {
                 found = true;
@@ -525,8 +537,7 @@ void MagicROITool::computePolygon()
     while (!loop)
     {
         this->getNextIndex(direction, x, y, nextX, nextY);
-        maskIndex = computeMaskVectorIndex(nextX, nextY, m_maxX);
-        next = m_mask[maskIndex];
+        next = getMaskValue(nextX, nextY);
         while (!next && !loop)
         {
             if (MathTools::isOdd(direction) && !next)
@@ -536,8 +547,7 @@ void MagicROITool::computePolygon()
             }
             direction = this->getNextDirection(direction);
             this->getNextIndex(direction, x, y, nextX, nextY);
-            maskIndex = computeMaskVectorIndex(nextX, nextY, m_maxX);
-            next = m_mask[maskIndex];
+            next = getMaskValue(nextX, nextY);
         }
         x = nextX;
         y = nextY;
@@ -683,9 +693,22 @@ double MagicROITool::getStandardDeviation(int x, int y, int z, VolumePixelData *
     return deviation;
 }
 
-int MagicROITool::computeMaskVectorIndex(int x, int y, int columns)
+int MagicROITool::getMaskVectorIndex(int x, int y) const
 {
-    return y * columns + x;
+    return y * (m_maxX + 1) + x;
+}
+
+bool MagicROITool::getMaskValue(int x, int y) const
+{
+    if (MathTools::isInsideRange(x, m_minX, m_maxX) && MathTools::isInsideRange(y, m_minY, m_maxY))
+    {
+        int maskIndex = getMaskVectorIndex(x, y);
+        return m_mask[maskIndex];
+    }
+    else
+    {
+        return false;
+    }
 }
 
 }
