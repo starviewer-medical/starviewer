@@ -3,6 +3,7 @@
 #include "q2dviewer.h"
 #include "anatomicalplanesynccriterion.h"
 #include "frameofreferencesynccriterion.h"
+#include "anglebetweenplanessynccriterion.h"
 
 namespace udg {
 
@@ -43,7 +44,7 @@ void PanSyncAction::setupMetaData()
 
 void PanSyncAction::setupDefaultSyncCriteria()
 {
-    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new FrameOfReferenceSyncCriterion();
+    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new FrameOfReferenceSyncCriterion() << new AngleBetweenPlanesSyncCriterion();
 }
 
 } // End namespace udg
