@@ -183,6 +183,17 @@ void MagicROITool::startRegion()
     {
         if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(m_pickedPosition, m_inputIndex))
         {
+            // Discard a border of 1 pixel around the image (workaround for #1949)
+            // TODO Implement a better solution, probably reimplementing the whole algorithm
+            int x, y, z;
+            getPickedPositionVoxelIndex(m_2DViewer->getCurrentPixelDataFromInput(m_inputIndex), x, y, z);
+            computeMaskBounds();
+
+            if (x == m_minX || x == m_maxX || y == m_minY || y == m_maxY)
+            {
+                return;
+            }
+
             m_pickedPositionInDisplayCoordinates = m_2DViewer->getEventPosition();
             m_magicFactor = InitialMagicFactor;
             m_roiPolygon = new DrawerPolygon;
