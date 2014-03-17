@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -13,10 +14,13 @@
    height="297mm"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
-   sodipodi:docname="teclat_shortcuts.svg"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="teclat_shortcuts_2.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   version="1.1">
+   version="1.1"
+   inkscape:export-filename="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\teclat_shortcuts_4.png"
+   inkscape:export-xdpi="400"
+   inkscape:export-ydpi="400">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -977,6 +981,15 @@
          stdDeviation="0.031402933"
          id="feGaussianBlur4417" />
     </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       inkscape:collect="always"
+       id="filter4415-7">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.031402933"
+         id="feGaussianBlur4417-4" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -992,8 +1005,8 @@
      inkscape:current-layer="layer1"
      inkscape:window-width="1680"
      inkscape:window-height="988"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:object-points="true"
      inkscape:object-nodes="true"
      inkscape:object-paths="false"
@@ -1013,7 +1026,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -4583,93 +4596,102 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/zoom.png"
+       xlink:href="../../../src/main/images/zoom.png"
        y="284.40485"
        x="-63.678204"
        id="image17748"
        height="24.124847"
        width="24.124847"
-       xlink:href="../../../src/main/images/zoom.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/angle.png"
+       xlink:href="../../../src/main/images/angle.png"
        y="241.80186"
        x="-75.476326"
        id="image17762"
        height="26.206869"
        width="26.206869"
-       xlink:href="../../../src/main/images/angle.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/windowLevel.png"
+       xlink:href="../../../src/main/images/windowLevel.png"
        y="137.82471"
        x="216.70068"
        id="image17776"
        height="21.348818"
        width="21.348818"
-       xlink:href="../../../src/main/images/windowLevel.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/slicing.png"
+       xlink:href="../../../src/main/images/slicing.png"
        y="240.68239"
        x="-40.775959"
        id="image17790"
        height="25.512863"
        width="25.512863"
-       xlink:href="../../../src/main/images/slicing.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/distance.png"
+       xlink:href="../../../src/main/images/distance.png"
        y="243.45839"
        x="-7.4636669"
        id="image3636"
        height="26.900877"
        width="26.900877"
-       xlink:href="../../../src/main/images/distance.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/flipHorizontal.png"
+       xlink:href="../../../src/main/images/flipHorizontal.png"
        y="243.56091"
        x="104.8381"
        id="image3678"
        height="23.332289"
        width="23.332289"
-       xlink:href="../../../src/main/images/flipHorizontal.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/flipVertical.png"
+       xlink:href="../../../src/main/images/flipVertical.png"
        y="243.0116"
        x="142.56812"
        id="image3692"
        height="22.312557"
        width="22.312557"
-       xlink:href="../../../src/main/images/flipVertical.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/referenceLines.png"
+       xlink:href="../../../src/main/images/referenceLines.png"
        y="242.93895"
        x="213.36678"
        id="image3706"
        height="22.457861"
        width="22.457861"
-       xlink:href="../../../src/main/images/referenceLines.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/windowLevel.png"
+       xlink:href="../../../src/main/images/windowLevel.png"
        style="display:inline"
        y="201.42957"
        x="-47.384724"
        id="image17776-1"
        height="21.348818"
        width="21.348818"
-       xlink:href="../../../src/main/images/windowLevel.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
@@ -4820,83 +4842,91 @@
            sodipodi:role="line">Tall inicial/final</tspan></text>
     </g>
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/rotate3d.png"
+       xlink:href="../../../src/main/images/rotate3d.png"
        y="201.62102"
        x="-82.878181"
        id="image5231"
        height="21.299999"
        width="21.299999"
-       xlink:href="../../../src/main/images/rotate3d.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/eraser2.png"
+       xlink:href="../../../src/main/images/eraser2.png"
        y="198.13155"
        x="-15.4763"
        id="image5245"
        height="26.952589"
        width="26.952589"
-       xlink:href="../../../src/main/images/eraser2.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/rotateClockWise.png"
+       xlink:href="../../../src/main/images/rotateClockWise.png"
        y="244.16609"
        x="69.676971"
        id="image5273"
        height="23.1"
        width="23.1"
-       xlink:href="../../../src/main/images/rotateClockWise.png"
        style="fill:#ffd42a"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/rotateCounterClockWise.png"
+       xlink:href="../../../src/main/images/rotateCounterClockWise.png"
        y="244.36343"
        x="31.229334"
        id="image5287"
        height="23.1"
        width="23.1"
-       xlink:href="../../../src/main/images/rotateCounterClockWise.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/mouse.png"
+       xlink:href="../../../src/main/images/mouse.png"
        y="286.13708"
        x="9.9085035"
        id="image5301"
        height="23"
        width="23"
-       xlink:href="../../../src/main/images/mouse.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/voxelInformation.png"
+       xlink:href="../../../src/main/images/voxelInformation.png"
        y="285.36646"
        x="45.650509"
        id="image5315"
        height="23"
        width="23"
-       xlink:href="../../../src/main/images/voxelInformation.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/clippingBox.png"
+       xlink:href="../../../src/main/images/clippingBox.png"
        y="285.41605"
        x="84.177536"
        id="image5329"
        height="23"
        width="23"
-       xlink:href="../../../src/main/images/clippingBox.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/invertWL.png"
+       xlink:href="../../../src/main/images/invertWL.png"
        y="199.69717"
        x="169.17534"
        id="image5343"
        height="23"
        width="23"
-       xlink:href="../../../src/main/images/invertWL.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
@@ -4934,13 +4964,14 @@
            id="tspan5388">entre sèries</tspan></text>
     </g>
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\../../../src/main/images/ellipticalROITool.png"
+       xlink:href="../../../src/main/images/ellipticalROITool.png"
        style="display:inline"
        y="201.57373"
        x="23.297691"
        id="image3677"
        height="22.626238"
        width="22.626238"
-       xlink:href="../../../src/main/images/ellipticalROITool.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
@@ -4978,35 +5009,24 @@
            id="tspan3709">definides a la imatge actual</tspan></text>
     </g>
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\..\..\..\\src\main\images\magicroitool.png"
+       xlink:href="..\..\..\\src\main\images\magicroitool.png"
        y="286.86005"
        x="159.39368"
        id="image3277"
        height="19.253365"
        width="19.253365"
-       sodipodi:absref="..\..\..\\src\main\images\magicroitool.png"
-       xlink:href="..\..\..\\src\main\images\magicroitool.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\..\..\..\\src\main\images\synchronize.png"
+       xlink:href="..\..\..\\src\main\images\synchronize.png"
        y="195.67305"
        x="206.30133"
        id="image3290"
        height="21.292826"
        width="21.292826"
-       sodipodi:absref="..\..\..\\src\main\images\synchronize.png"
-       xlink:href="..\..\..\\src\main\images\synchronize.png"
-       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
-       inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300" />
-    <image
-       y="196.49532"
-       x="241.9919"
-       id="image3303"
-       height="21.802692"
-       width="21.802692"
-       sodipodi:absref="..\..\..\\src\main\images\linkAll.png"
-       xlink:href="..\..\..\\src\main\images\linkAll.png"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
@@ -5024,19 +5044,43 @@
          y="223.32103"
          style="font-size:6px;fill:#000000;fill-opacity:1;stroke:none;stroke-opacity:1"
          id="tspan3313">Auto-Sincr</tspan></text>
+    <image
+       width="24.036325"
+       height="23.016594"
+       xlink:href="data:image/png;base64,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 YII= "
+       id="image3866"
+       x="239.56096"
+       y="199.79143" />
+    <path
+       style="fill:#c6e9af;fill-opacity:1"
+       d="m 124.51651,223.55959 -1.35566,-1.25638 0.13401,-17.93621 0.13401,-17.93621 1.43998,-1.07456 c 1.3825,-1.03166 1.99776,-1.07456 15.41211,-1.07456 l 13.97212,0 1.41345,1.41372 1.41345,1.41372 0,17.62291 0,17.62292 -1.43056,1.23052 -1.43056,1.23051 -14.17335,0 -14.17335,0 -1.35565,-1.25638 z m 8.32476,-23.71626 c 1.41015,-0.75469 2.05957,-3.27399 2.05957,-7.98976 0,-3.91786 -0.0814,-4.25777 -1.01973,-4.25777 -0.94664,0 -1.01973,0.33991 -1.01973,4.74175 0,5.03839 -0.36961,5.96542 -2.37843,5.96542 -1.70026,0 -2.21036,-1.46308 -2.21036,-6.3398 0,-3.5422 -0.1445,-4.36737 -0.7648,-4.36737 -0.63126,0 -0.7648,0.93475 -0.7648,5.35359 0,4.67376 0.12949,5.48307 1.01973,6.37331 1.09362,1.09362 3.53941,1.34435 5.07855,0.52063 z"
+       id="path3890"
+       inkscape:connector-curvature="0" />
+    <image
+       inkscape:export-ydpi="300"
+       inkscape:export-xdpi="300"
+       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
+       width="21.802692"
+       height="21.802692"
+       id="image3303-1"
+       x="131.01477"
+       y="195.16631"
+       style="display:inline"
+       xlink:href="C:\Users\chus\devel\starviewer-git\src\main\images\..\..\..\\src\main\images\linkAll.png"
+       sodipodi:absref="C:\Users\chus\devel\starviewer-git\src\main\images\..\..\..\\src\main\images\linkAll.png" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;filter:url(#filter4415);font-family:Bitstream Vera Sans"
-       x="235.50484"
-       y="223.34416"
-       id="text4428"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;filter:url(#filter4415-7);font-family:Bitstream Vera Sans"
+       x="126.9401"
+       y="222.95863"
+       id="text4428-0"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"><tspan
          sodipodi:role="line"
-         x="235.50484"
-         y="223.34416"
-         style="font-size:6px;fill:#000000;fill-opacity:1;stroke:none;stroke-opacity:1"
-         id="tspan4430">Sincr-Tots</tspan></text>
+         x="126.9401"
+         y="222.95863"
+         style="font-size:6px;fill:#000000;fill-opacity:1;stroke:none"
+         id="tspan4430-9">Sincr-Tots</tspan></text>
   </g>
 </svg>
