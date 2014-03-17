@@ -94,6 +94,9 @@ private:
     /// Returns the mask index corresponding to the given x and y image indices.
     int getMaskVectorIndex(int x, int y) const;
 
+    /// Returns the mask value at the given x and y image indices. If the indices are out of bounds, returns false.
+    bool getMaskValue(int x, int y) const;
+
 private slots:
     /// Inicialitza la tool
     void initialize();

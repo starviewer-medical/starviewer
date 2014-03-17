@@ -689,4 +689,17 @@ int MagicROITool::getMaskVectorIndex(int x, int y) const
     return y * (m_maxX + 1) + x;
 }
 
+bool MagicROITool::getMaskValue(int x, int y) const
+{
+    if (MathTools::isInsideRange(x, m_minX, m_maxX) && MathTools::isInsideRange(y, m_minY, m_maxY))
+    {
+        int maskIndex = getMaskVectorIndex(x, y);
+        return m_mask[maskIndex];
+    }
+    else
+    {
+        return false;
+    }
+}
+
 }
