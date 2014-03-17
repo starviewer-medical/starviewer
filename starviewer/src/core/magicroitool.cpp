@@ -684,7 +684,7 @@ double MagicROITool::getStandardDeviation(int x, int y, int z, VolumePixelData *
     return deviation;
 }
 
-int MagicROITool::getMaskVectorIndex(int x, int y)
+int MagicROITool::getMaskVectorIndex(int x, int y) const
 {
     return y * m_maxX + x;
 }

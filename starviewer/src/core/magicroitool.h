@@ -92,7 +92,7 @@ private:
     void deleteTemporalRepresentation();
 
     /// Returns the mask index corresponding to the given x and y image indices.
-    int getMaskVectorIndex(int x, int y);
+    int getMaskVectorIndex(int x, int y) const;
 
 private slots:
     /// Inicialitza la tool
