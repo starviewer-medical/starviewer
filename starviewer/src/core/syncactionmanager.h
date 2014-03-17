@@ -66,11 +66,18 @@ private:
     /// Returns true if all the criteria from the list are met between the given viewer and the master one
     bool areAllCriteriaSatisfied(QList<SyncCriterion*> criteria, QViewer *viewer);
 
+    /// Synchronize all viewers. The master viewer is synchronized first.
     void synchronizeAll();
+
+    /// Synchronize all viewers except the set of viewers given as parameter. The master viewer is synchronized first if it is not in the list.
+    void synchronizeAllWithExceptions(QSet<QViewer*> excludedViewers);
 
 private slots:
     /// Applies the given SyncAction on the registered viewers, but the master viewer
     void applySyncAction(SyncAction *syncAction);
+
+    /// Synchronize all viewers except the sender. The master viewer is synchronized first.
+    void synchronizeAllViewersButSender();
 
 private:
     /// The set of viewers to be synced
