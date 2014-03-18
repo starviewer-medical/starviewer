@@ -128,7 +128,7 @@ void SyncActionManager::synchronizeAllWithExceptions(QSet<QViewer*> excludedView
     m_synchronizingAll = true;
 
     // Selected viewer is syncronized first
-    if (selectedViewer->getMainInput() && !excludedViewers.contains(selectedViewer))
+    if (selectedViewer && selectedViewer->getMainInput() && !excludedViewers.contains(selectedViewer))
     {
         this->synchronize();
     }
