@@ -38,7 +38,11 @@ bool AngleBetweenPlanesSyncCriterion::criterionIsMet(Q2DViewer *viewer1, Q2DView
         }
         
         double angle = MathTools::angleInDegrees(imagePlane1->getImageOrientation().getNormalVector(), imagePlane2->getImageOrientation().getNormalVector());
-        return (fabs(angle) <= 45.0 || fabs(angle) >= 135.0);
+        
+        // As reported in ticket #1897, the angle could be NaN when both vectors are equals.
+        // In order to treat NaN like zero, this condition is changed.
+        // When #1897 is solved, this should be equal to (fabs(angle) <= 45.0 || fabs(angle) >= 135.0).
+        return !(fabs(angle) > 45.0 && fabs(angle) < 135.0);
     }
 }
 
