@@ -20,6 +20,7 @@ QWidgetSelectPacsToStoreDicomImage::QWidgetSelectPacsToStoreDicomImage(QWidget *
 
 void QWidgetSelectPacsToStoreDicomImage::createConnections()
 {
+    connect(m_pacsNodeList, SIGNAL(pacsSelectionChanged()), SLOT(updateStoreButton()));
     connect(m_storeButton, SIGNAL(clicked()), SLOT(storeImagesToSelectedPacs()));
     connect(m_cancelButton, SIGNAL(clicked()), SLOT(close()));
 }
@@ -29,19 +30,15 @@ QList<PacsDevice> QWidgetSelectPacsToStoreDicomImage::getSelectedPacsToStoreDico
     return m_pacsNodeList->getSelectedPacs();
 }
 
+void QWidgetSelectPacsToStoreDicomImage::updateStoreButton()
+{
+    m_storeButton->setDisabled(m_pacsNodeList->getSelectedPacs().isEmpty());
+}
+
 void QWidgetSelectPacsToStoreDicomImage::storeImagesToSelectedPacs()
 {
-    if (m_pacsNodeList->getSelectedPacs().count() > 0)
-    {
-        emit selectedPacsToStore();
-
-        close();
-    }
-    else
-    {
-        QMessageBox::warning(this, ApplicationNameString, "You have to select at least one PACS to store the images");
-    }
-
+    emit selectedPacsToStore();
+    close();
 }
 
 void QWidgetSelectPacsToStoreDicomImage::showEvent(QShowEvent *event)

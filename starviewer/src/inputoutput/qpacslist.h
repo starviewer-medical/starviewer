@@ -41,6 +41,10 @@ public slots:
     /// Carrega al ListView la Llista de Pacs disponibles
     void refresh();
 
+signals:
+    /// Emitted when a PACS is selected or deselected.
+    void pacsSelectionChanged();
+
 private slots:
     /// Fa que el PACS que està en l'item del Tree Widget quedi com a un dels PACS per defecte
     /// si aquest element està seleccionat per l'usuari

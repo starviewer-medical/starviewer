@@ -26,6 +26,8 @@ signals:
     void selectedPacsToStore();
 
 private slots:
+    /// Enables the store button if any PACS is selected, and disables it when no PACS is selected.
+    void updateStoreButton();
     /// Slot que respón quan fan click al botó Store, fa signal indicant que ja han seleccionat els PACS
     void storeImagesToSelectedPacs();
 
