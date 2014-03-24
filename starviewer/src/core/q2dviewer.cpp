@@ -1124,6 +1124,11 @@ int Q2DViewer::getCurrentPhase() const
     return getCurrentPhaseOnInput(0);
 }
 
+int Q2DViewer::getCurrentSliceOnInput(int i) const
+{
+    return getDisplayUnit(i)->getSlice();
+}
+
 int Q2DViewer::getCurrentPhaseOnInput(int i) const
 {
     return getDisplayUnit(i)->getPhase();
