@@ -155,10 +155,19 @@ void WindowLevelTool::computeWindowLevelValues(double deltaX, double deltaY, dou
 
 void WindowLevelTool::computeWindowLevelValuesWithFixedMinimumBehaviour(double deltaX, double &window, double &level)
 {
-    window = deltaX + m_initialWindow;
+    // HACK We use absolute window value to properly handle the windowlevelling when 
+    // values have been inverted with the invert tool (window value is negative)
+    window = deltaX + fabs(m_initialWindow);
     level = window * 0.5;
 
     avoidZeroAndNegative(window, level);
+    
+    // HACK We use this little hack to properly handle the windowlevelling when 
+    // values have been inverted with the invert tool (window value is negative)
+    if (m_initialWindow < 0)
+    {
+        window = -window;
+    }
 }
 
 void WindowLevelTool::computeWindowLevelValuesWithDefaultBehaviour(double deltaX, double deltaY, double &window, double &level)
