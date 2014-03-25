@@ -817,7 +817,9 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         }
         setSlice(initialSliceIndex);
         // Adapt the camera to the new view plane in order to make actors visible
-        getRenderer()->ResetCamera();
+        double bounds[6];
+        getCurrentRenderedItemBounds(bounds);
+        getRenderer()->ResetCamera(bounds);
 
         // Set appropriate zoom level
         fitRenderingIntoViewport();
