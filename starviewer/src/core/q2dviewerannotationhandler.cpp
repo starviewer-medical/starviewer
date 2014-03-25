@@ -479,7 +479,12 @@ QString Q2DViewerAnnotationHandler::getCurrentWindowLevelString() const
         double range[2];
         m_2DViewer->getMainInput()->getScalarRange(range);
 
-        double percent = (windowLevel[0] / range[1]) * 100;
+        double percent = 0.0;
+        // Avoid division by zero
+        if (range[1] != 0.0)
+        {
+            percent = (windowLevel[0] / range[1]) * 100;
+        }
 
         windowLevelString += "\n";
         windowLevelString += QObject::tr("Threshold: %1%").arg(percent, 0, 'f', 2);
