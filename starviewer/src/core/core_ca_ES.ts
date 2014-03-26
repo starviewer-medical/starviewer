@@ -312,7 +312,7 @@
         <translation>desconegut</translation>
     </message>
     <message>
-        <location filename="pansyncaction.cpp" line="41"/>
+        <location filename="pansyncaction.cpp" line="42"/>
         <source>pan</source>
         <translation>mou</translation>
     </message>
@@ -405,7 +405,7 @@ Do you consider they are the same?
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="485"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="490"/>
         <source>Threshold: %1%</source>
         <translation>Llindar: %1%</translation>
     </message>
@@ -468,6 +468,16 @@ Do you consider they are the same?
         <location filename="abstractroidataprinter.cpp" line="66"/>
         <source>SUV (%1) - N/A</source>
         <translation>SUV (%1) - N/D</translation>
+    </message>
+    <message>
+        <location filename="windowlevelhelper.cpp" line="117"/>
+        <source>Default %1</source>
+        <translation>Predeterminada %1</translation>
+    </message>
+    <message>
+        <location filename="windowlevelhelper.cpp" line="123"/>
+        <source>Auto</source>
+        <translation>Automàtica</translation>
     </message>
 </context>
 <context>
