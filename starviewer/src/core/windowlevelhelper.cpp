@@ -114,14 +114,13 @@ void WindowLevelHelper::selectDefaultPreset(WindowLevelPresetsToolData *windowLe
 
 QString WindowLevelHelper::getDefaultWindowLevelDescription(int index)
 {
-    const QString DefaultWindowLevelName = QString("Default");
-    return QString("%1 %2").arg(DefaultWindowLevelName).arg(index);
+    return QObject::tr("Default %1").arg(index);
 }
 
 WindowLevel WindowLevelHelper::getCurrentAutomaticWindowLevel(Volume *volume)
 {
     WindowLevel automaticWindowLevel;
-    automaticWindowLevel.setName(QString("Auto"));
+    automaticWindowLevel.setName(QObject::tr("Auto"));
 
     if (volume)
     {
