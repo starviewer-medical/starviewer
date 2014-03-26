@@ -267,7 +267,8 @@
     </message>
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="125"/>
-        <source>Unkown status</source>
+        <source>Unknown status</source>
+        <oldsource>Unkown status</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>

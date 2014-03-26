@@ -268,7 +268,8 @@
     </message>
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="125"/>
-        <source>Unkown status</source>
+        <source>Unknown status</source>
+        <oldsource>Unkown status</oldsource>
         <translation>Estat desconegut</translation>
     </message>
     <message>
@@ -299,17 +300,17 @@
     <message>
         <location filename="measurementmanager.cpp" line="154"/>
         <source>magnified</source>
-        <translation>ampliat</translation>
+        <translation>augmentada</translation>
     </message>
     <message>
         <location filename="measurementmanager.cpp" line="158"/>
         <source>calibrated</source>
-        <translation>calibrat</translation>
+        <translation>calibrada</translation>
     </message>
     <message>
         <location filename="measurementmanager.cpp" line="165"/>
         <source>unknown</source>
-        <translation>desconegut</translation>
+        <translation>desconeguda</translation>
     </message>
     <message>
         <location filename="pansyncaction.cpp" line="42"/>
