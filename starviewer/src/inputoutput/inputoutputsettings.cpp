@@ -33,6 +33,7 @@ const QString InterfaceBase("PACS/interface/");
 const QString InputOutputSettings::LastOpenedDICOMDIRPath(InterfaceBase + "lastOpenedDICOMDIRPath");
 const QString InputOutputSettings::DICOMDIRStudyListColumnsWidth(InterfaceBase + "studyDicomdirList/");
 const QString InputOutputSettings::CreateDICOMDIRStudyListColumnsWidth(InterfaceBase + "qCreateDicomdir/");
+const QString InputOutputSettings::CreateDICOMDIRGeometry(InterfaceBase + "qCreateDicomdir/geometry");
 const QString InputOutputSettings::OperationStateColumnsWidth(InterfaceBase + "qOperationState/");
 const QString InputOutputSettings::PACSStudyListColumnsWidth(InterfaceBase + "studyPacsList/");
 const QString InputOutputSettings::ConfigurationScreenPACSList(InterfaceBase + "qConfigurationPacsDevice/");
