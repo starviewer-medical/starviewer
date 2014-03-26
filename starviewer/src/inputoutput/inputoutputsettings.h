@@ -36,6 +36,7 @@ public:
     /// Geometria de les columnes del llistat d'estudis d'un DICOMDIR/llista d'operacions/PACS
     static const QString DICOMDIRStudyListColumnsWidth;
     static const QString CreateDICOMDIRStudyListColumnsWidth;
+    static const QString CreateDICOMDIRGeometry;
     static const QString OperationStateColumnsWidth;
     static const QString PACSStudyListColumnsWidth;
     static const QString ConfigurationScreenPACSList;

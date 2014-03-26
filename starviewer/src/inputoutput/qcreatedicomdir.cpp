@@ -58,6 +58,8 @@ void QCreateDicomdir::initializeControls()
     Settings settings;
     settings.restoreColumnsWidths(InputOutputSettings::CreateDICOMDIRStudyListColumnsWidth, m_dicomdirStudiesList);
 
+    settings.restoreGeometry(InputOutputSettings::CreateDICOMDIRGeometry, this);
+    
     // Conte l'UID de l'estudi
     m_dicomdirStudiesList->setColumnHidden(7, true);
 
@@ -828,6 +830,8 @@ void QCreateDicomdir::closeEvent(QCloseEvent *ce)
 {
     Settings settings;
     settings.saveColumnsWidths(InputOutputSettings::CreateDICOMDIRStudyListColumnsWidth, m_dicomdirStudiesList);
+    settings.saveGeometry(InputOutputSettings::CreateDICOMDIRGeometry, this);
+    
     ce->accept();
 }
 
