@@ -122,7 +122,7 @@ QString DICOMServiceResponseStatus::getStatusCodeAsString() const
             return QObject::tr("Success");
         
         default:
-            return QObject::tr("Unkown status");
+            return QObject::tr("Unknown status");
     }
 }
 
