@@ -1113,7 +1113,7 @@ Se deshabilitará el sombreado, de manera que no se visualizará como se esperab
     <message>
         <location filename="qcustomwindowleveleditwidget.cpp" line="84"/>
         <source>Selected Custom WW/WL will be deleted.</source>
-        <translation>Se borrará el WW/WL personalizado seleccionado.</translation>
+        <translation>Se borrará la ventana personalizada seleccionada.</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidget.cpp" line="85"/>
@@ -1127,7 +1127,7 @@ Se deshabilitará el sombreado, de manera que no se visualizará como se esperab
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="14"/>
         <source>Edit Custom WW/WL</source>
-        <translation>Editar WW/WL personalizados</translation>
+        <translation>Editar las ventanas personalizadas</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="36"/>
@@ -1563,7 +1563,7 @@ Variable de entorno (logFilePath): %2</translation>
         <location filename="qwindowlevelcombobox.cpp" line="164"/>
         <location filename="qwindowlevelcombobox.cpp" line="177"/>
         <source>Edit Custom WW/WL</source>
-        <translation>Editar los WW/WL personalizados</translation>
+        <translation>Editar las ventanas personalizadas</translation>
     </message>
 </context>
 <context>
@@ -2435,7 +2435,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="192"/>
         <source>Custom</source>
-        <translation>Personalizado</translation>
+        <translation>Personalizada</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="13"/>

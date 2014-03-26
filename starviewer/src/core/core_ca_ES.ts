@@ -1117,7 +1117,7 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
         <location filename="qcustomwindowleveleditwidget.cpp" line="84"/>
         <source>Selected Custom WW/WL will be deleted.</source>
         <translatorcomment>Estem fent servir &quot;WW&quot; i &quot;WL&quot; per referir-nos al que hem traduït com a &quot;contrast&quot; i &quot;brillantor&quot;.</translatorcomment>
-        <translation>S&apos;esborrarà el WW/WL personalitzat seleccionat.</translation>
+        <translation>S&apos;esborrarà la finestra personalitzada seleccionada.</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidget.cpp" line="85"/>
@@ -1130,7 +1130,7 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="14"/>
         <source>Edit Custom WW/WL</source>
-        <translation>Edita els WW/WL personalitzats</translation>
+        <translation>Edita les finestres personalitzades</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="36"/>
@@ -1567,7 +1567,7 @@ Variable d&apos;entorn (logFilePath): %2</translation>
         <location filename="qwindowlevelcombobox.cpp" line="177"/>
         <source>Edit Custom WW/WL</source>
         <translatorcomment>Aquí parlem de WW/WL, però a altres llocs parlem de brillantor i contrast</translatorcomment>
-        <translation>Edita els WW/WL personalitzats</translation>
+        <translation>Edita les finestres personalitzades</translation>
     </message>
 </context>
 <context>
@@ -2445,7 +2445,7 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="192"/>
         <source>Custom</source>
-        <translation>Personalitzat</translation>
+        <translation>Personalitzada</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="13"/>
