@@ -399,9 +399,9 @@ void QApplicationMainWindow::createMenus()
 
     // Menú 'window'
     m_windowMenu = menuBar()->addMenu(tr("&Window"));
-    m_windowMenu->addAction(m_maximizeAction);
     m_moveWindowToDesktopMenu = m_windowMenu->addMenu(tr("Move to Screen"));
     m_moveWindowToDesktopMenu->addAction(m_moveToDesktopAction);
+    m_windowMenu->addAction(m_maximizeAction);
     m_windowMenu->addAction(m_moveToPreviousDesktopAction);
     m_windowMenu->addAction(m_moveToNextDesktopAction);
     
