@@ -176,42 +176,42 @@
         <translation>Obre un o diversos fitxers de volum existents</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="302"/>
+        <location filename="qapplicationmainwindow.cpp" line="303"/>
         <source>&amp;About</source>
         <translation>&amp;Quant a</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="303"/>
+        <location filename="qapplicationmainwindow.cpp" line="304"/>
         <source>Show the application&apos;s About box</source>
         <translation>Mostra el missatge informatiu de l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="315"/>
+        <location filename="qapplicationmainwindow.cpp" line="316"/>
         <source>E&amp;xit</source>
         <translation>&amp;Surt</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="317"/>
+        <location filename="qapplicationmainwindow.cpp" line="318"/>
         <source>Exit the application</source>
         <translation>Surt de l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="308"/>
+        <location filename="qapplicationmainwindow.cpp" line="309"/>
         <source>&amp;Close</source>
         <translation>Tan&amp;ca</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="366"/>
+        <location filename="qapplicationmainwindow.cpp" line="367"/>
         <source>&amp;File</source>
         <translation>&amp;Fitxer</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="408"/>
+        <location filename="qapplicationmainwindow.cpp" line="411"/>
         <source>&amp;Help</source>
         <translation>&amp;Ajuda</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="394"/>
+        <location filename="qapplicationmainwindow.cpp" line="395"/>
         <source>&amp;Language</source>
         <translation>&amp;Idioma</translation>
     </message>
@@ -231,7 +231,7 @@
         <translation>Obre la finestra de consulta del PACS</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="384"/>
+        <location filename="qapplicationmainwindow.cpp" line="385"/>
         <source>&amp;Visualization</source>
         <translation>&amp;Visualització</translation>
     </message>
@@ -241,23 +241,23 @@
         <translation>Obre una carpeta DICOM existent</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="486"/>
+        <location filename="qapplicationmainwindow.cpp" line="489"/>
         <source>Language Switch</source>
         <translation>Canvi d&apos;idioma</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="310"/>
+        <location filename="qapplicationmainwindow.cpp" line="311"/>
         <source>Close current extension page</source>
         <oldsource>Close the current extension page</oldsource>
         <translation>Tanca la pàgina de l&apos;extensió actual</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="291"/>
+        <location filename="qapplicationmainwindow.cpp" line="292"/>
         <source>Show log file</source>
         <translation>Mostra el fitxer de registre</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="400"/>
+        <location filename="qapplicationmainwindow.cpp" line="401"/>
         <source>&amp;Window</source>
         <translation>F&amp;inestra</translation>
     </message>
@@ -309,7 +309,7 @@
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="256"/>
-        <location filename="qapplicationmainwindow.cpp" line="402"/>
+        <location filename="qapplicationmainwindow.cpp" line="403"/>
         <source>Move to Screen</source>
         <oldsource>Move To Screen</oldsource>
         <translation>Mou a la pantalla</translation>
@@ -321,120 +321,140 @@
         <translation>Mou la finestra a la pantalla...</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="275"/>
+        <location filename="qapplicationmainwindow.cpp" line="262"/>
+        <source>Move to previous screen</source>
+        <translation>Desplaça a la pantalla anterior</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="263"/>
+        <source>Move the window to the previous screen</source>
+        <translation>Desplaça la finestra a la pantalla anterior</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="269"/>
+        <source>Move to next screen</source>
+        <translation>Desplaça a la pantalla següent</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="270"/>
+        <source>Move the window to the next screen</source>
+        <translation>Desplaça la finestra a la pantalla següent</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="276"/>
         <source>User Guide</source>
         <oldsource>User guide</oldsource>
         <translation>Guia d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="276"/>
+        <location filename="qapplicationmainwindow.cpp" line="277"/>
         <source>Open user guide</source>
         <oldsource>Open User guide</oldsource>
         <translatorcomment>Potser millor mostra la guia d&apos;usuari?</translatorcomment>
         <translation>Obre la guia d&apos;usuari</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="280"/>
+        <location filename="qapplicationmainwindow.cpp" line="281"/>
         <source>Quick Start Guide</source>
         <oldsource>Quick Start guide</oldsource>
         <translation>Guia ràpida</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="281"/>
+        <location filename="qapplicationmainwindow.cpp" line="282"/>
         <source>Open quick start guide</source>
         <oldsource>Open Quick Start guide</oldsource>
         <translation>Obre la guia ràpida</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="285"/>
+        <location filename="qapplicationmainwindow.cpp" line="286"/>
         <source>Shortcuts Guide</source>
         <oldsource>Shortcuts guide</oldsource>
         <translation>Guia de dreceres</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="286"/>
+        <location filename="qapplicationmainwindow.cpp" line="287"/>
         <source>Open shortcuts guide</source>
         <oldsource>Open Shortcuts guide</oldsource>
         <translation>Obre la guia de dreceres</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="290"/>
+        <location filename="qapplicationmainwindow.cpp" line="291"/>
         <source>Show Log File</source>
         <translation>Mostra el fitxer de registre</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="297"/>
+        <location filename="qapplicationmainwindow.cpp" line="298"/>
         <source>&amp;Release Notes</source>
         <oldsource>&amp;Release notes</oldsource>
         <translation>&amp;Notes de la versió</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="298"/>
+        <location filename="qapplicationmainwindow.cpp" line="299"/>
         <source>Show the application&apos;s release notes for current version</source>
         <translation>Mostra les notes de la versió actual de l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="322"/>
+        <location filename="qapplicationmainwindow.cpp" line="323"/>
         <source>&amp;Configuration...</source>
         <translation>&amp;Configuració...</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="329"/>
+        <location filename="qapplicationmainwindow.cpp" line="330"/>
         <source>&amp;Run Diagnosis Tests</source>
         <oldsource>&amp;Run diagnosis tests</oldsource>
         <translation>&amp;Executa els tests de diagnosi</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="330"/>
+        <location filename="qapplicationmainwindow.cpp" line="331"/>
         <source>Run %1 diagnosis tests</source>
         <oldsource>Run %1 diagnosis test</oldsource>
         <translation>Executa els tests de diagnosi de l&apos;%1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="393"/>
+        <location filename="qapplicationmainwindow.cpp" line="394"/>
         <source>&amp;Tools</source>
         <translation>&amp;Eines</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="423"/>
+        <location filename="qapplicationmainwindow.cpp" line="426"/>
         <source>Catalan</source>
         <translation>Català</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="424"/>
+        <location filename="qapplicationmainwindow.cpp" line="427"/>
         <source>Spanish</source>
         <translation>Castellà</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="425"/>
+        <location filename="qapplicationmainwindow.cpp" line="428"/>
         <source>English</source>
         <translation>Anglès</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="453"/>
+        <location filename="qapplicationmainwindow.cpp" line="456"/>
         <source>Switch to %1 language</source>
         <oldsource>Switch to %1 Language</oldsource>
         <translation>Canvia a l&apos;idioma %1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="486"/>
+        <location filename="qapplicationmainwindow.cpp" line="489"/>
         <source>Changes will take effect the next time you start the application</source>
         <translation>Els canvis tindran efecte la pròxima vegada que inicieu l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="635"/>
+        <location filename="qapplicationmainwindow.cpp" line="638"/>
         <source>Beta Version</source>
         <oldsource>Beta version</oldsource>
         <translation>Versió beta</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="636"/>
+        <location filename="qapplicationmainwindow.cpp" line="639"/>
         <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 used exclusively for testing purposes.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our test-team members. Users of this version should not expect extensions to function properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve %1, please report any found bug or any feature request you may have by sending an e-mail to: &lt;a href=&quot;mailto:%2&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;We really appreciate your feedback!&lt;/h3&gt;</source>
         <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 used exclusively for testing purposes.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our test-team members. Users of this version should not expect the extensions function properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve %1, please report any found bug or any feature request you may have by sending an e-mail to: &lt;a href=&quot;mailto:%2&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;We really appreciate your feedback!&lt;/h3&gt;</oldsource>
         <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;Aquesta és una versió preliminar de l&apos;%1 que s&apos;hauria d&apos;utilitzar exclusivament amb finalitats de verificació.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Aquesta versió està dirigida als radiòlegs i al nostre equip de proves. En aquesta versió és possible que les extensions no funcionin correctament.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Si ens voleu ajudar a millorar l&apos;%1 informeu-nos de qualsevol error o funcionalitat que necessiteu enviant-nos un correu electrònic a: &lt;a href=&quot;mailto:%2&quot;&gt;%2.&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;Us agraïm molt la vostra col·laboració.&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="707"/>
+        <location filename="qapplicationmainwindow.cpp" line="710"/>
         <source>Please activate &quot;Listen to RIS requests&quot; option in %1 configuration to retrieve studies from SAP.</source>
         <oldsource>Please activate &quot;Listen RIS Request&quot; option in %1 configuration to retrieve studies from SAP.</oldsource>
         <translation>Activeu l&apos;opció «Escolta peticions del RIS» a la configuració de l&apos;%1 per poder rebre estudis del SAP.</translation>
@@ -460,7 +480,7 @@
         <translation>Explora estudis</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="324"/>
+        <location filename="qapplicationmainwindow.cpp" line="325"/>
         <source>Modify %1 configuration</source>
         <translation>Modifica la configuració de l&apos;%1</translation>
     </message>
