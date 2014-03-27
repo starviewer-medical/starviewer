@@ -186,6 +186,8 @@ private:
     QAction *m_exitAction;
     QAction *m_aboutAction;
     QAction *m_maximizeAction;
+    QAction *m_moveToPreviousDesktopAction;
+    QAction *m_moveToNextDesktopAction;
     QWidgetAction *m_moveToDesktopAction;
 
     QAction *m_logViewerAction;
@@ -218,10 +220,6 @@ private:
 
     /// Les Release Notes o les notes de la nova versió
     ApplicationVersionChecker *m_applicationVersionChecker;
-
-    /// Els shortcuts per moure la finestra a una altra pantalla
-    QShortcut *m_moveToNextDesktopShortcut;
-    QShortcut *m_moveToPreviousDesktopShortcut;
 };
 
 }; // fi namespace udg
