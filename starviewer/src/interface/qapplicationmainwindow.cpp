@@ -257,19 +257,20 @@ void QApplicationMainWindow::createActions()
     m_moveToDesktopAction->setStatusTip(tr("Move the window to the screen..."));
     m_moveToDesktopAction->setCheckable(false);
     connect(screenDistribution, SIGNAL(screenClicked(int)), this, SLOT(moveToDesktop(int)));
-    // Shortcuts de MoveToDesktop
-    QList<QKeySequence> keySequence = ShortcutManager::getShortcuts(Shortcuts::MoveToPreviousDesktop);
-    if (keySequence.count() > 0)
-    {
-        m_moveToPreviousDesktopShortcut = new QShortcut(keySequence[0], this);
-        connect(m_moveToPreviousDesktopShortcut, SIGNAL(activated()), this, SLOT(moveToPreviousDesktop()));
-    }
-    keySequence = ShortcutManager::getShortcuts(Shortcuts::MoveToNextDesktop);
-    if (keySequence.count() > 0)
-    {
-        m_moveToNextDesktopShortcut = new QShortcut(keySequence[0], this);
-        connect(m_moveToNextDesktopShortcut, SIGNAL(activated()), this, SLOT(moveToNextDesktop()));
-    }
+    
+    m_moveToPreviousDesktopAction = new QAction(this);
+    m_moveToPreviousDesktopAction->setText(tr("Move to previous screen"));
+    m_moveToPreviousDesktopAction->setStatusTip(tr("Move the window to the previous screen"));
+    m_moveToPreviousDesktopAction->setCheckable(false);
+    m_moveToPreviousDesktopAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::MoveToPreviousDesktop));
+    connect(m_moveToPreviousDesktopAction, SIGNAL(triggered(bool)), SLOT(moveToPreviousDesktop()));
+
+    m_moveToNextDesktopAction = new QAction(this);
+    m_moveToNextDesktopAction->setText(tr("Move to next screen"));
+    m_moveToNextDesktopAction->setStatusTip(tr("Move the window to the next screen"));
+    m_moveToNextDesktopAction->setCheckable(false);
+    m_moveToNextDesktopAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::MoveToNextDesktop));
+    connect(m_moveToNextDesktopAction, SIGNAL(triggered(bool)), SLOT(moveToNextDesktop()));
 
     m_openUserGuideAction = new QAction(this);
     m_openUserGuideAction->setText(tr("User Guide"));
@@ -401,7 +402,9 @@ void QApplicationMainWindow::createMenus()
     m_windowMenu->addAction(m_maximizeAction);
     m_moveWindowToDesktopMenu = m_windowMenu->addMenu(tr("Move to Screen"));
     m_moveWindowToDesktopMenu->addAction(m_moveToDesktopAction);
-
+    m_windowMenu->addAction(m_moveToPreviousDesktopAction);
+    m_windowMenu->addAction(m_moveToNextDesktopAction);
+    
     menuBar()->addSeparator();
 
     // Menú d'ajuda i suport
