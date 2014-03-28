@@ -881,6 +881,10 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
         case LoadingError:
             m_workInProgressWidget->setTitle(tr("Error loading data"));
             break;
+
+        case VisualizingError:
+            m_workInProgressWidget->setTitle(tr("Error visualizing data"));
+            break;
     }
 }
 
