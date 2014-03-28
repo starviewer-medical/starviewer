@@ -13,6 +13,7 @@ Rectangle {
 	property int scrollheight
     property string fusionMarkedItem1: "-1"
     property string fusionMarkedItem2: "-1"
+    property string fusionLabelText: qsTr("Fusion")
 
     width: Math.min(computedContentWidth + listview.anchors.leftMargin + listview.anchors.rightMargin, maxWidth);
     height: Math.min(listview.contentHeight + listview.anchors.topMargin + listview.anchors.bottomMargin, maxHeight);
@@ -212,7 +213,7 @@ Rectangle {
                             radius: 4
 
                             Text {
-                                text: " " + qsTr("Fusion") + " "
+                                text: " " + fusionLabelText + " "
                                 color: "#012911"
                                 anchors {
                                     verticalCenter: parent.verticalCenter
