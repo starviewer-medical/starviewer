@@ -745,11 +745,11 @@ Do you consider they are the same?
     </message>
 </context>
 <context>
-    <name>udg::Q2DViewer</name>
+    <name>udg::PatientBrowserMenuList</name>
     <message>
-        <location filename="q2dviewer.cpp" line="513"/>
-        <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
-        <translation>No hay memoria suficiente para el proceso de renderización. Intente cerrar todas las ventanas abiertas de %1, reinicie la aplicación y vuélvalo a intentar. Si el problema persiste, podría solucionarse añadiendo más memoria RAM o cambiando a un sistema operativo de 64 bits.</translation>
+        <location filename="patientbrowsermenulist.cpp" line="27"/>
+        <source>Fusion</source>
+        <translation>Fusión</translation>
     </message>
 </context>
 <context>
@@ -1515,22 +1515,32 @@ Variable de entorno (logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="874"/>
+        <location filename="qviewer.cpp" line="878"/>
         <source>Downloading related study...</source>
         <translation>Descargando estudio relacionado...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="882"/>
+        <location filename="qviewer.cpp" line="886"/>
         <source>Error downloading related study</source>
         <translation>Error al descargar estudio relacionado</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="878"/>
+        <location filename="qviewer.cpp" line="895"/>
+        <source>Error visualizing data</source>
+        <translation>Error visualizando datos</translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="927"/>
+        <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
+        <translation>No hay memoria suficiente para el proceso de renderización. Intente cerrar todas las ventanas abiertas de %1, reinicie la aplicación y vuélvalo a intentar. Si el problema persiste, podría solucionarse añadiendo más memoria RAM o cambiando a un sistema operativo de 64 bits.</translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="882"/>
         <source>Loading data...</source>
         <translation>Cargando los datos...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="887"/>
+        <location filename="qviewer.cpp" line="891"/>
         <source>Error loading data</source>
         <translatorcomment>No hi faltaria punt a la traducció orginal?</translatorcomment>
         <translation>Error al cargar los datos</translation>
