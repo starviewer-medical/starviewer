@@ -48,16 +48,11 @@ QViewer::QViewer(QWidget *parent)
     m_defaultFitIntoViewportMarginRate = 0.0;
     m_vtkWidget = new QVTKWidget(this);
     m_vtkWidget->setFocusPolicy(Qt::WheelFocus);
-    // Creem el renderer i li assignem a la render window
     m_renderer = vtkRenderer::New();
-    getRenderWindow()->AddRenderer(m_renderer);
-    // Forcem 2x buffer
-    getRenderWindow()->DoubleBufferOn();
-    getRenderWindow()->LineSmoothingOn();
 
-    // Posem a punt el filtre per guardar captures de pantalla
     m_windowToImageFilter = vtkWindowToImageFilter::New();
-    m_windowToImageFilter->SetInput(getRenderWindow());
+
+    setupRenderWindow();
 
     this->setCurrentViewPlane(OrthogonalPlane::XYPlane);
 
@@ -911,6 +906,20 @@ OrthogonalPlane QViewer::getCurrentViewPlane() const
 void QViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_currentViewPlane = viewPlane;
+}
+
+void QViewer::setupRenderWindow()
+{
+    vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+    // TODO getInteractor() forces m_vtkWiget to create a render window the first time just to return the interactor, that render window is unused afterwards.
+    //      Could this be improved?
+    renderWindow->SetInteractor(getInteractor());
+    renderWindow->AddRenderer(getRenderer());
+    renderWindow->DoubleBufferOn();
+    renderWindow->LineSmoothingOn();
+
+    m_vtkWidget->SetRenderWindow(renderWindow);
+    m_windowToImageFilter->SetInput(renderWindow);
 }
 
 };  // End namespace udg
