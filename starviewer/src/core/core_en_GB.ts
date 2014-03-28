@@ -740,10 +740,10 @@ Do you consider they are the same?
     </message>
 </context>
 <context>
-    <name>udg::Q2DViewer</name>
+    <name>udg::PatientBrowserMenuList</name>
     <message>
-        <location filename="q2dviewer.cpp" line="513"/>
-        <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
+        <location filename="patientbrowsermenulist.cpp" line="27"/>
+        <source>Fusion</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1506,22 +1506,32 @@ Environment variable(logFilePath): %2</oldsource>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="874"/>
+        <location filename="qviewer.cpp" line="878"/>
         <source>Downloading related study...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="882"/>
+        <location filename="qviewer.cpp" line="886"/>
         <source>Error downloading related study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="878"/>
+        <location filename="qviewer.cpp" line="895"/>
+        <source>Error visualizing data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="927"/>
+        <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="882"/>
         <source>Loading data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="887"/>
+        <location filename="qviewer.cpp" line="891"/>
         <source>Error loading data</source>
         <translation type="unfinished"></translation>
     </message>
