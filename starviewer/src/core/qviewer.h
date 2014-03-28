@@ -294,6 +294,9 @@ private:
     /// Inicialitza el widget QWorkInProgress a partir de l'status
     void initializeWorkInProgressByViewerStatus(ViewerStatus status);
 
+    /// Creates and configures the render window with the desired features.
+    void setupRenderWindow();
+
 protected:
     /// El volum a visualitzar
     Volume *m_mainVolume;
