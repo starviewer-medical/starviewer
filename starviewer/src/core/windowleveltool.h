@@ -21,6 +21,9 @@ public:
     void handleEvent(unsigned long eventID);
 
 private slots:
+    /// Resets the tool to a valid initial state.
+    void reset();
+
     /// Comença el window level
     void startWindowLevel();
 
