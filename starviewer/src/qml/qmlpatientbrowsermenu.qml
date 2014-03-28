@@ -8,6 +8,7 @@ Rectangle {
     property int columns: 2
     property string markedItem: ""
     property int computedContentWidth: calcContentWidth(browserModel, browserMenu)
+    property int computedContentHeight: calcContentHeight(browserModel, browserMenu)
     property int maxHeight: 1500000
     property int maxWidth: computedContentWidth + listview.anchors.leftMargin + listview.anchors.rightMargin;
 	property int scrollheight
@@ -16,7 +17,7 @@ Rectangle {
     property string fusionLabelText: qsTr("Fusion")
 
     width: Math.min(computedContentWidth + listview.anchors.leftMargin + listview.anchors.rightMargin, maxWidth);
-    height: Math.min(listview.contentHeight + listview.anchors.topMargin + listview.anchors.bottomMargin, maxHeight);
+    height: Math.min(computedContentHeight + listview.anchors.topMargin + listview.anchors.bottomMargin, maxHeight);
     color: myPalette.window
 
     signal selectedItem(string identifier)
@@ -50,6 +51,36 @@ Rectangle {
             max = Math.max(captionElement.width + 20, max)
         }
         return max;
+    }
+
+
+    function calcContentHeight(model, parent)
+    {
+        var textElement = Qt.createQmlObject(
+                'import QtQuick 1.0;'
+                + 'Text {'
+                + '   text: "any text"; visible: false;'
+                + '}',
+                parent, "calcContentHeight")
+        var cellHeight = textElement.height + textElement.font.pixelSize;
+
+        var height = 0;
+
+        for (var i = 0; i < model.length; ++i) {
+            var currentModelElement = model[i]
+            var numOfRows = Math.ceil(currentModelElement.elements.length / 2) + currentModelElement.fusionElements.length;
+            height += numOfRows * cellHeight;
+            height += cellHeight; // Caption
+            height += 4; // Margin between caption and grid
+
+            if (currentModelElement.fusionElements.length > 0) {
+                height += 4; // Margin between series and fusion series
+            }
+        }
+
+        height += 5 * model.length // Margin between studies
+
+        return height;
     }
 
 	ListView {
