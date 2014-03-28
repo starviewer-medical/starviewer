@@ -79,7 +79,7 @@ Rectangle {
             Rectangle {
                 id: header
                 width: parent.width
-                height: headerText.height + 10
+                height: headerText.height + headerText.font.pixelSize - 2 // 2 -> border-top
                 radius: 4
                 color: "lightsteelblue"
                 y: 0
