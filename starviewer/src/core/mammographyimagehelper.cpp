@@ -48,7 +48,7 @@ const PatientOrientation MammographyImageHelper::getImageOrientationPresentation
     }
     else
     {
-        DEBUG_LOG("Unkown projection found: " + projection);
+        DEBUG_LOG("Unknown projection found: " + projection);
     }
 
     return desiredOrientation;

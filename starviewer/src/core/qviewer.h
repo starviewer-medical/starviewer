@@ -47,7 +47,7 @@ public:
     enum RecordFileFormatType { MPEG2 };
 
     /// Estat del viewer
-    enum ViewerStatus { NoVolumeInput, DownloadingVolume, DownloadingError, LoadingVolume, LoadingError, VisualizingVolume };
+    enum ViewerStatus { NoVolumeInput, DownloadingVolume, DownloadingError, LoadingVolume, LoadingError, VisualizingVolume, VisualizingError };
 
     /// Retorna l'interactor renderer
     virtual vtkRenderWindowInteractor* getInteractor() const;
@@ -281,6 +281,9 @@ protected:
     /// Sets the current view plane.
     virtual void setCurrentViewPlane(const OrthogonalPlane &viewPlane);
 
+    /// Handles errors produced by lack of memory space for visualization.
+    void handleNotEnoughMemoryForVisualizationError();
+
 private slots:
     /// Slot que s'utilitza quan s'ha seleccionat una sèrie amb el PatientBrowserMenu
     /// Mètode que especifica un input seguit d'una crida al mètode render()
@@ -293,6 +296,9 @@ private:
 
     /// Inicialitza el widget QWorkInProgress a partir de l'status
     void initializeWorkInProgressByViewerStatus(ViewerStatus status);
+
+    /// Creates and configures the render window with the desired features.
+    void setupRenderWindow();
 
 protected:
     /// El volum a visualitzar

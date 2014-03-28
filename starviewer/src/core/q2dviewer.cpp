@@ -12,7 +12,6 @@
 #include "coresettings.h"
 #include "qviewerworkinprogresswidget.h"
 #include "patientorientation.h"
-#include "starviewerapplication.h"
 #include "imageoverlay.h"
 #include "drawerbitmap.h"
 #include "filteroutput.h"
@@ -508,25 +507,7 @@ void Q2DViewer::setNewVolumesAndExecuteCommand(const QList<Volume*> &volumes)
     }
     catch (...)
     {
-        // Si tenim algun problema durant el rendering mostrem l'error i reiniciem l'estat del viewer
-        setViewerStatus(LoadingError);
-        m_workInProgressWidget->showError(tr("There's not enough memory for the rendering process. Try to close all the open %1 windows, restart "
-            "the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.")
-            .arg(ApplicationNameString));
-        
-        // TODO Cal esborrar oldRenderWindow per evitar memory leaks. Ara mateix si fem Delete() ens peta.
-        vtkRenderWindow *oldRenderWindow = getRenderWindow();
-        vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
-        renderWindow->SetInteractor(getInteractor());
-        renderWindow->AddRenderer(getRenderer());
-        oldRenderWindow->RemoveRenderer(getRenderer());
-        oldRenderWindow->SetInteractor(NULL);
-        //Canviem la RenderWindow
-        m_vtkWidget->SetRenderWindow(renderWindow);
-        // Forcem 2x buffer
-        getRenderWindow()->DoubleBufferOn();
-        
-        m_windowToImageFilter->SetInput(getRenderWindow());
+        handleNotEnoughMemoryForVisualizationError();
 
         // Use volumes.first() instead of getMainVolume() because the main volume has probably been deleted
         Volume *dummyVolume = getDummyVolumeFromVolume(volumes.first());
@@ -817,7 +798,9 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         }
         setSlice(initialSliceIndex);
         // Adapt the camera to the new view plane in order to make actors visible
-        getRenderer()->ResetCamera();
+        double bounds[6];
+        getCurrentRenderedItemBounds(bounds);
+        getRenderer()->ResetCamera(bounds);
 
         // Set appropriate zoom level
         fitRenderingIntoViewport();
@@ -1122,6 +1105,11 @@ int Q2DViewer::getCurrentSlice() const
 int Q2DViewer::getCurrentPhase() const
 {
     return getCurrentPhaseOnInput(0);
+}
+
+int Q2DViewer::getCurrentSliceOnInput(int i) const
+{
+    return getDisplayUnit(i)->getSlice();
 }
 
 int Q2DViewer::getCurrentPhaseOnInput(int i) const

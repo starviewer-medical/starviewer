@@ -93,6 +93,9 @@ public:
     int getCurrentSlice() const;
     int getCurrentPhase() const;
 
+    /// Gets the current slice on the specified input. If i is out of range, 0 will be returned
+    int getCurrentSliceOnInput(int i) const;
+    
     /// Gets the current phase on the specified input. If i is out of range, 0 will be returned
     int getCurrentPhaseOnInput(int i) const;
 

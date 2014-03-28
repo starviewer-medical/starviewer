@@ -338,7 +338,7 @@ void MagicROITool::getPickedPositionVoxelIndex(VolumePixelData *pixelData, int &
     // TODO Revise when ticket #1247 (Support reconstruction in volumes with phases) is implemented
     if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
     {
-        z = m_2DViewer->getInput(m_inputIndex)->getImageIndex(m_2DViewer->getCurrentSlice(), m_2DViewer->getCurrentPhase());
+        z = m_2DViewer->getInput(m_inputIndex)->getImageIndex(m_2DViewer->getCurrentSliceOnInput(m_inputIndex), m_2DViewer->getCurrentPhaseOnInput(m_inputIndex));
     }
     else
     {

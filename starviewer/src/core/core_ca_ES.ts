@@ -268,7 +268,8 @@
     </message>
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="125"/>
-        <source>Unkown status</source>
+        <source>Unknown status</source>
+        <oldsource>Unkown status</oldsource>
         <translation>Estat desconegut</translation>
     </message>
     <message>
@@ -299,20 +300,20 @@
     <message>
         <location filename="measurementmanager.cpp" line="154"/>
         <source>magnified</source>
-        <translation>ampliat</translation>
+        <translation>augmentada</translation>
     </message>
     <message>
         <location filename="measurementmanager.cpp" line="158"/>
         <source>calibrated</source>
-        <translation>calibrat</translation>
+        <translation>calibrada</translation>
     </message>
     <message>
         <location filename="measurementmanager.cpp" line="165"/>
         <source>unknown</source>
-        <translation>desconegut</translation>
+        <translation>desconeguda</translation>
     </message>
     <message>
-        <location filename="pansyncaction.cpp" line="41"/>
+        <location filename="pansyncaction.cpp" line="42"/>
         <source>pan</source>
         <translation>mou</translation>
     </message>
@@ -405,7 +406,7 @@ Do you consider they are the same?
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="485"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="490"/>
         <source>Threshold: %1%</source>
         <translation>Llindar: %1%</translation>
     </message>
@@ -468,6 +469,16 @@ Do you consider they are the same?
         <location filename="abstractroidataprinter.cpp" line="66"/>
         <source>SUV (%1) - N/A</source>
         <translation>SUV (%1) - N/D</translation>
+    </message>
+    <message>
+        <location filename="windowlevelhelper.cpp" line="117"/>
+        <source>Default %1</source>
+        <translation>Predeterminada %1</translation>
+    </message>
+    <message>
+        <location filename="windowlevelhelper.cpp" line="123"/>
+        <source>Auto</source>
+        <translation>Automàtica</translation>
     </message>
 </context>
 <context>
@@ -735,11 +746,11 @@ Do you consider they are the same?
     </message>
 </context>
 <context>
-    <name>udg::Q2DViewer</name>
+    <name>udg::PatientBrowserMenuList</name>
     <message>
-        <location filename="q2dviewer.cpp" line="513"/>
-        <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
-        <translation>No hi ha prou memòria per al procés de renderització. Intenteu tancar totes les finestres obertes de l&apos;%1, reinicieu l&apos;aplicació i torneu-ho a provar. Si el problema es manté, es podria solucionar afegint més memòria RAM o canviant a un sistema operatiu de 64 bits.</translation>
+        <location filename="patientbrowsermenulist.cpp" line="27"/>
+        <source>Fusion</source>
+        <translation>Fusió</translation>
     </message>
 </context>
 <context>
@@ -1107,7 +1118,7 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
         <location filename="qcustomwindowleveleditwidget.cpp" line="84"/>
         <source>Selected Custom WW/WL will be deleted.</source>
         <translatorcomment>Estem fent servir &quot;WW&quot; i &quot;WL&quot; per referir-nos al que hem traduït com a &quot;contrast&quot; i &quot;brillantor&quot;.</translatorcomment>
-        <translation>S&apos;esborrarà el WW/WL personalitzat seleccionat.</translation>
+        <translation>S&apos;esborrarà la finestra personalitzada seleccionada.</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidget.cpp" line="85"/>
@@ -1120,7 +1131,7 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="14"/>
         <source>Edit Custom WW/WL</source>
-        <translation>Edita els WW/WL personalitzats</translation>
+        <translation>Edita les finestres personalitzades</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="36"/>
@@ -1507,23 +1518,33 @@ Variable d&apos;entorn (logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="874"/>
+        <location filename="qviewer.cpp" line="878"/>
         <source>Downloading related study...</source>
         <translation>S&apos;està descarregant l&apos;estudi relacionat...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="882"/>
+        <location filename="qviewer.cpp" line="886"/>
         <source>Error downloading related study</source>
         <translation>S&apos;ha produït un error en descarregar l&apos;estudi relacionat</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="878"/>
+        <location filename="qviewer.cpp" line="895"/>
+        <source>Error visualizing data</source>
+        <translation>Error visualitzant dades</translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="927"/>
+        <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
+        <translation>No hi ha prou memòria per al procés de renderització. Intenteu tancar totes les finestres obertes de l&apos;%1, reinicieu l&apos;aplicació i torneu-ho a provar. Si el problema es manté, es podria solucionar afegint més memòria RAM o canviant a un sistema operatiu de 64 bits.</translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="882"/>
         <source>Loading data...</source>
         <translatorcomment>No hauria de ser igual que lo d&apos;Assynchronous loading ? En allà simplement s&apos;indica Loading... </translatorcomment>
         <translation>S&apos;estan carregant les dades...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="887"/>
+        <location filename="qviewer.cpp" line="891"/>
         <source>Error loading data</source>
         <translation>S&apos;ha produït un error en carregar les dades</translation>
     </message>
@@ -1557,7 +1578,7 @@ Variable d&apos;entorn (logFilePath): %2</translation>
         <location filename="qwindowlevelcombobox.cpp" line="177"/>
         <source>Edit Custom WW/WL</source>
         <translatorcomment>Aquí parlem de WW/WL, però a altres llocs parlem de brillantor i contrast</translatorcomment>
-        <translation>Edita els WW/WL personalitzats</translation>
+        <translation>Edita les finestres personalitzades</translation>
     </message>
 </context>
 <context>
@@ -2435,7 +2456,7 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="192"/>
         <source>Custom</source>
-        <translation>Personalitzat</translation>
+        <translation>Personalitzada</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="13"/>

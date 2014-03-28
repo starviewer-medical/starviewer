@@ -268,7 +268,8 @@
     </message>
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="125"/>
-        <source>Unkown status</source>
+        <source>Unknown status</source>
+        <oldsource>Unkown status</oldsource>
         <translation>Estado desconocido</translation>
     </message>
     <message>
@@ -299,20 +300,20 @@
     <message>
         <location filename="measurementmanager.cpp" line="154"/>
         <source>magnified</source>
-        <translation>ampliado</translation>
+        <translation>aumentada</translation>
     </message>
     <message>
         <location filename="measurementmanager.cpp" line="158"/>
         <source>calibrated</source>
-        <translation>calibrado</translation>
+        <translation>calibrada</translation>
     </message>
     <message>
         <location filename="measurementmanager.cpp" line="165"/>
         <source>unknown</source>
-        <translation>desconocido</translation>
+        <translation>desconocida</translation>
     </message>
     <message>
-        <location filename="pansyncaction.cpp" line="41"/>
+        <location filename="pansyncaction.cpp" line="42"/>
         <source>pan</source>
         <translation>mover</translation>
     </message>
@@ -405,7 +406,7 @@ Do you consider they are the same?
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="485"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="490"/>
         <source>Threshold: %1%</source>
         <translation>Umbral: %1%</translation>
     </message>
@@ -468,6 +469,16 @@ Do you consider they are the same?
         <location filename="abstractroidataprinter.cpp" line="66"/>
         <source>SUV (%1) - N/A</source>
         <translation>SUV (%1) - N/D</translation>
+    </message>
+    <message>
+        <location filename="windowlevelhelper.cpp" line="117"/>
+        <source>Default %1</source>
+        <translation>Por defecto %1</translation>
+    </message>
+    <message>
+        <location filename="windowlevelhelper.cpp" line="123"/>
+        <source>Auto</source>
+        <translation>Automática</translation>
     </message>
 </context>
 <context>
@@ -734,11 +745,11 @@ Do you consider they are the same?
     </message>
 </context>
 <context>
-    <name>udg::Q2DViewer</name>
+    <name>udg::PatientBrowserMenuList</name>
     <message>
-        <location filename="q2dviewer.cpp" line="513"/>
-        <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
-        <translation>No hay memoria suficiente para el proceso de renderización. Intente cerrar todas las ventanas abiertas de %1, reinicie la aplicación y vuélvalo a intentar. Si el problema persiste, podría solucionarse añadiendo más memoria RAM o cambiando a un sistema operativo de 64 bits.</translation>
+        <location filename="patientbrowsermenulist.cpp" line="27"/>
+        <source>Fusion</source>
+        <translation>Fusión</translation>
     </message>
 </context>
 <context>
@@ -1103,7 +1114,7 @@ Se deshabilitará el sombreado, de manera que no se visualizará como se esperab
     <message>
         <location filename="qcustomwindowleveleditwidget.cpp" line="84"/>
         <source>Selected Custom WW/WL will be deleted.</source>
-        <translation>Se borrará el WW/WL personalizado seleccionado.</translation>
+        <translation>Se borrará la ventana personalizada seleccionada.</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidget.cpp" line="85"/>
@@ -1117,7 +1128,7 @@ Se deshabilitará el sombreado, de manera que no se visualizará como se esperab
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="14"/>
         <source>Edit Custom WW/WL</source>
-        <translation>Editar WW/WL personalizados</translation>
+        <translation>Editar las ventanas personalizadas</translation>
     </message>
     <message>
         <location filename="qcustomwindowleveleditwidgetbase.ui" line="36"/>
@@ -1504,22 +1515,32 @@ Variable de entorno (logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="874"/>
+        <location filename="qviewer.cpp" line="878"/>
         <source>Downloading related study...</source>
         <translation>Descargando estudio relacionado...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="882"/>
+        <location filename="qviewer.cpp" line="886"/>
         <source>Error downloading related study</source>
         <translation>Error al descargar estudio relacionado</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="878"/>
+        <location filename="qviewer.cpp" line="895"/>
+        <source>Error visualizing data</source>
+        <translation>Error visualizando datos</translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="927"/>
+        <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
+        <translation>No hay memoria suficiente para el proceso de renderización. Intente cerrar todas las ventanas abiertas de %1, reinicie la aplicación y vuélvalo a intentar. Si el problema persiste, podría solucionarse añadiendo más memoria RAM o cambiando a un sistema operativo de 64 bits.</translation>
+    </message>
+    <message>
+        <location filename="qviewer.cpp" line="882"/>
         <source>Loading data...</source>
         <translation>Cargando los datos...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="887"/>
+        <location filename="qviewer.cpp" line="891"/>
         <source>Error loading data</source>
         <translatorcomment>No hi faltaria punt a la traducció orginal?</translatorcomment>
         <translation>Error al cargar los datos</translation>
@@ -1553,7 +1574,7 @@ Variable de entorno (logFilePath): %2</translation>
         <location filename="qwindowlevelcombobox.cpp" line="164"/>
         <location filename="qwindowlevelcombobox.cpp" line="177"/>
         <source>Edit Custom WW/WL</source>
-        <translation>Editar los WW/WL personalizados</translation>
+        <translation>Editar las ventanas personalizadas</translation>
     </message>
 </context>
 <context>
@@ -2425,7 +2446,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="192"/>
         <source>Custom</source>
-        <translation>Personalizado</translation>
+        <translation>Personalizada</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="13"/>

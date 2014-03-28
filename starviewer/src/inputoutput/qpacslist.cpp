@@ -23,6 +23,8 @@ QPacsList::QPacsList(QWidget *parent)
     m_filterPacsByService = PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled;
     m_showQueryPacsDefaultHighlighted = true;
 
+    connect(m_PacsTreeView, SIGNAL(itemSelectionChanged()), SIGNAL(pacsSelectionChanged()));
+
     refresh();
 }
 

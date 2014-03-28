@@ -10,6 +10,7 @@
 #include "windowlevelhelper.h"
 #include "logging.h"
 #include "mathtools.h"
+#include "starviewerapplication.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de
 // interface, pacs, etc.etc.!!
@@ -48,17 +49,11 @@ QViewer::QViewer(QWidget *parent)
     m_defaultFitIntoViewportMarginRate = 0.0;
     m_vtkWidget = new QVTKWidget(this);
     m_vtkWidget->setFocusPolicy(Qt::WheelFocus);
-    // Creem el renderer i li assignem a la render window
     m_renderer = vtkRenderer::New();
-    getRenderWindow()->AddRenderer(m_renderer);
-    m_renderer->Delete();
-    // Forcem 2x buffer
-    getRenderWindow()->DoubleBufferOn();
-    getRenderWindow()->LineSmoothingOn();
 
-    // Posem a punt el filtre per guardar captures de pantalla
     m_windowToImageFilter = vtkWindowToImageFilter::New();
-    m_windowToImageFilter->SetInput(getRenderWindow());
+
+    setupRenderWindow();
 
     this->setCurrentViewPlane(OrthogonalPlane::XYPlane);
 
@@ -100,6 +95,7 @@ QViewer::~QViewer()
     m_windowToImageFilter->Delete();
     delete m_vtkWidget;
     m_vtkQtConnections->Delete();
+    m_renderer->Delete();
 }
 
 vtkRenderWindowInteractor* QViewer::getInteractor() const
@@ -448,7 +444,15 @@ void QViewer::render()
     // al no obtenir-se el context de rendering openGL adequat
     if (m_isRenderingEnabled && getViewerStatus() == VisualizingVolume)
     {
-        this->getRenderWindow()->Render();
+        try
+        {
+            this->getRenderWindow()->Render();
+        }
+        catch (const std::bad_alloc &ba)
+        {
+            WARN_LOG(QString("bad_alloc when trying to render: ").arg(ba.what()));
+            handleNotEnoughMemoryForVisualizationError();
+        }
     }
 }
 
@@ -886,6 +890,10 @@ void QViewer::initializeWorkInProgressByViewerStatus(ViewerStatus status)
         case LoadingError:
             m_workInProgressWidget->setTitle(tr("Error loading data"));
             break;
+
+        case VisualizingError:
+            m_workInProgressWidget->setTitle(tr("Error visualizing data"));
+            break;
     }
 }
 
@@ -911,6 +919,39 @@ OrthogonalPlane QViewer::getCurrentViewPlane() const
 void QViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_currentViewPlane = viewPlane;
+}
+
+void QViewer::handleNotEnoughMemoryForVisualizationError()
+{
+    setViewerStatus(VisualizingError);
+    m_workInProgressWidget->showError(tr("There's not enough memory for the rendering process. Try to close all the open %1 windows, restart the application "
+        "and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.")
+        .arg(ApplicationNameString));
+    // The cursor may have been changed by a tool that hasn't finished its operation and won't receive a mouse button release event,
+    // thus the cursor is reset to its default form here
+    // TODO Tools should be able to handle this situation by themselves
+    unsetCursor();
+    // In case of error during rendering the render window is left unusable, so we must create a new one
+    setupRenderWindow();
+}
+
+void QViewer::setupRenderWindow()
+{
+    vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+    // TODO getInteractor() forces m_vtkWiget to create a render window the first time just to return the interactor, that render window is unused afterwards.
+    //      Could this be improved?
+    renderWindow->SetInteractor(getInteractor());
+    renderWindow->AddRenderer(getRenderer());
+    renderWindow->DoubleBufferOn();
+    renderWindow->LineSmoothingOn();
+
+    // TODO This is needed for the rendering process to work correctly if coming from handleNotEnoughMemoryForVisualizationError().
+    //      Alternatively the rendering process also works correctly after a Q2DViewer::restore().
+    //      Why?
+    getRenderWindow()->RemoveRenderer(getRenderer());
+
+    m_vtkWidget->SetRenderWindow(renderWindow);
+    m_windowToImageFilter->SetInput(renderWindow);
 }
 
 };  // End namespace udg
