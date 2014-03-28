@@ -13,14 +13,13 @@ namespace udg {
 WindowLevelTool::WindowLevelTool(QViewer *viewer, QObject *parent)
 : Tool(viewer, parent)
 {
-    m_state = None;
     m_toolName = "WindowLevelTool";
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
 
-    updateWindowLevellingBehaviour();
+    reset();
 
-    connect(m_viewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateWindowLevellingBehaviour()));
+    connect(m_viewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
 }
 
 WindowLevelTool::~WindowLevelTool()
@@ -50,6 +49,12 @@ void WindowLevelTool::handleEvent(unsigned long eventID)
         default:
             break;
     }
+}
+
+void WindowLevelTool::reset()
+{
+    m_state = None;
+    updateWindowLevellingBehaviour();
 }
 
 void WindowLevelTool::startWindowLevel()
