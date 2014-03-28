@@ -51,7 +51,6 @@ QViewer::QViewer(QWidget *parent)
     // Creem el renderer i li assignem a la render window
     m_renderer = vtkRenderer::New();
     getRenderWindow()->AddRenderer(m_renderer);
-    m_renderer->Delete();
     // Forcem 2x buffer
     getRenderWindow()->DoubleBufferOn();
     getRenderWindow()->LineSmoothingOn();
@@ -100,6 +99,7 @@ QViewer::~QViewer()
     m_windowToImageFilter->Delete();
     delete m_vtkWidget;
     m_vtkQtConnections->Delete();
+    m_renderer->Delete();
 }
 
 vtkRenderWindowInteractor* QViewer::getInteractor() const
