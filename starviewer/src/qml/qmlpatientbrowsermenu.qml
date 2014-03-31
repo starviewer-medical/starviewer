@@ -74,11 +74,11 @@ Rectangle {
             height += 4; // Margin between caption and grid
 
             if (currentModelElement.fusionElements.length > 0) {
-                height += 4; // Margin between series and fusion series
+                height += 5; // Margin between series and fusion series
             }
         }
 
-        height += 5 * model.length // Margin between studies
+        height += 10 * (model.length - 1) // Margin between studies
 
         return height;
     }
@@ -224,7 +224,7 @@ Rectangle {
                 delegate: fusionItemDelegate
 
                 anchors.top: seriesItems.bottom
-                anchors.topMargin: 5
+                anchors.topMargin: modelData.fusionElements.length > 0? 5: 0;
                 width: parent.width
                 height: seriesItems.cellHeight * modelData.fusionElements.length
                 interactive: false
