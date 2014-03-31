@@ -224,7 +224,7 @@ Rectangle {
                 delegate: fusionItemDelegate
 
                 anchors.top: seriesItems.bottom
-                anchors.topMargin: 5
+                anchors.topMargin: modelData.fusionElements.length > 0? 5: 0;
                 width: parent.width
                 height: seriesItems.cellHeight * modelData.fusionElements.length
                 interactive: false
