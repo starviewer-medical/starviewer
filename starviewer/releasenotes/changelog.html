@@ -76,27 +76,27 @@
                 <li>S'habilita un nou comportament de modificació de finestra adaptat a les característiques d'imatges PET.<span class="ticket">1991</span></li>
                 <li>S'afegeix eina de propagació. Permet que una acció realitzada sobre un visor es propagui i es sincronitzi amb la resta (zoom, canvi de finestra, desplaçament, canvi d'orientació...).<span class="ticket">1628</span></li>
                 <li>Distribució automàtica de visors segons modalitat. S'afegeix la possibilitat de que en obrir un estudi s'apliqui una distribució de visors automàtica en la que es puguin veure totes les sèries o imatges, en comptes d'aplicar-se un hanging protocol, podent configurar el nombre de visors màxims i per quines modalitats s'aplica.<span class="ticket">1623, 913</span></li>
+                <li>S'afegeix un nou motor de lectura d'arxius DICOM més robust i eficient.</li>
                 <li>Si es té el thick slab activat, es manté el gruix de llesca aplicat quan es canvia de projecció.<span class="ticket">1965</span></li>
                 <li>S'afegeix suport a la lectura d'imatges de tipus Breast Tomosynthesis Image Storage.<span class="ticket">1980</span></li>
-                <li>S'afegeix un nou motor de lectura d'arxius DICOM més robust i eficient.</li>
                 <li>S'afegeixen les opcions de desplaçament a pantalla anterior i següent al menú Finestra.<span class="ticket">2057</span></li>
             </ul>
         </div>
         <div class="improved">
             <ul>
+                <li>Es millora el menú contextual de selecció de sèries: millor distribució d'elements i disposició d'scroll quan el contingut del menú excedeix la mida de la pantalla.<span class="ticket">1969</span></li>
+                <li>Es millora el tractament de les mesures en imatges de projecció radiogràfica i del nivell de descripció addicional que es pot arribar a mostrar d'aquestes.<span class="ticket">1948, 1171, 1591</span></li>
+                <li>Es mostren les unitats corresponents amb l'eina d'informació de vòxel per imatges de CT, PET i fusió PET-CT.<span class="ticket">1392</span></li>
                 <li>Es redueix el consum de memòria a l'hora d'obrir imatges multiframe, de manera que algunes imatges que abans no es podien obrir, ara sí.<span class="ticket">1516, 1843</span></li>
                 <li>Es mostra el progrés en carregar volums multiframe.<span class="ticket">1511</span></li>
                 <li>Es fa que quan s'envia un estudi multiframe al PACS s'enviï cada fitxer un sol cop, i no una vegada per cada frame com fins ara.<span class="ticket">1973</span></li>
+                <li>Es poden exportar captures a més d'un PACS alhora.<span class="ticket">1972</span></li>
+                <li>Es fa que quan es descarrega un estudi amb el menú d'estudis relacionats aquest es carregui i es mostri conjuntament amb els estudis ja carregats d'acord amb les opcions de layout configurades.<span class="ticket">1960</span></li>
                 <li>Es millora el tractament dels camps de cerca d'estudis en els casos que els espais en blanc extra podien interferir en el resultat.<span class="ticket">1984</span></li>
-                <li>Es millora el menú contextual de selecció de sèries: millor distribució d'elements i disposició d'scroll quan el contingut del menú excedeix la mida de la pantalla.<span class="ticket">1969</span></li>
-                <li>Es mostren les unitats corresponents amb l'eina d'informació de vòxel per imatges de CT, PET i fusió PET-CT.<span class="ticket">1392</span></li>
+                <li>S'eliminen automàticament els espais en blanc inicials i finals en els camps de cerca Nom de pacient i ID de pacient per evitar pèrdues accidentals de resultats.<span class="ticket">r9746</span></li>
                 <li>En desplegar un estudi en la finestra de consulta de PACS, es mostra la informació de descripció i nom de protocol per cada sèrie, sempre i quan aquesta estigui disponible.<span class="ticket">1985</span></li>
                 <li>Es milloren els missatges d'error de les operacions amb el PACS (consulta, descàrrega, enviament) afegint informació més detallada sobre l'error donat.<span class="ticket">1955</span></li>
-                <li>Es millora el tractament de les mesures en imatges de projecció radiogràfica i del nivell de descripció addicional que es pot arribar a mostrar d'aquestes.<span class="ticket">1948, 1171, 1591</span></li>
-                <li>Es fa que quan es descarrega un estudi amb el menú d'estudis relacionats aquest es carregui i es mostri conjuntament amb els estudis ja carregats d'acord amb les opcions de layout configurades.<span class="ticket">1960</span></li>
                 <li>Es millora el sistema de configuració d'opcions d'usuari. Els canvis s'apliquen automàticament sense haver de confirmar-los posteriorment.<span class="ticket">1766</span></li>
-                <li>Es poden exportar captures a més d'un PACS alhora.<span class="ticket">1972</span></li>
-                <li>S'eliminen automàticament els espais en blanc inicials i finals en els camps de cerca Nom de pacient i ID de pacient per evitar pèrdues accidentals de resultats.<span class="ticket">r9746</span></li>
                 <li>S'afegeix informació sobre les característiques de composició d'escriptori en l'informe de propietats del sistema.<span class="ticket">1977</span></li>
                 <li>Es millora la distribució d'espai i d'icones de la barra d'eines en el visor 2D, especialment en amplades de pantalla reduïdes.</li>
                 <li>Es fa que si el visor actiu queda amagat en canviar de distribució, el primer visor de la nova distribució passi a ser l'actiu.<span class="ticket">2030</span></li>
@@ -108,6 +108,7 @@
                 <li>Es corregeix cas en que la projecció de l'eina de línies de referència no s'actualitzava correctament.<span class="ticket">2031</span></li>
                 <li>Es corregeix que l'eina de Magic ROI fes tancar l'aplicació quan s'iniciava una regió en la vora de la imatge.<span class="ticket">1949</span></li>
                 <li>Es corregeix que l'eina de Magic ROI fes tancar l'aplicació quan teníem thick slab en un volum amb fases i la imatge no era la primera.<span class="ticket">2040</span></li>
+                <li>Es corregeixen diversos errors a l'eina d'informació del vòxel i les ROI quan fèiem servir thick slab en imatges amb fases.<span class="ticket">2038,2039,2030</span></li>
                 <li>Es corregeix que l'aplicació es tanqui si no queda prou memòria per realitzar una operació de renderitzat.<span class="ticket">2053</span></li>
                 <li>Es corregeixen els casos en què l'ordenació per imatges de tipus enhanced era errònia.<span class="ticket">1850</span></li>
                 <li>Es corregeixen els casos en què en obrir un estudi o aplicar un hanging protocol, els reference lines no es mostraven fins que no s'interactuava amb un visor.<span class="ticket">1830, 1888</span></li>
@@ -128,7 +129,6 @@
                 <li>Es corregeix un error a l'eina de Magic ROI que feia que no es pogués esborrar si s'obria el menú de pacient mentre s'estava fent la ROI.<span class="ticket">2013</span></li>
                 <li>Es corregeix un error a l'eina de cercle que feia que funcionés malament si s'obria el menú de pacient mentre s'estava fent el cercle.<span class="ticket">2037</span></li>
                 <li>Es corregeix un error a l'eina d'informació del vòxel que feia que pogués aparèixer en un visor encara que no hi hagués el cursor a sobre.<span class="ticket">2014</span></li>
-                <li>Es corregeixen diversos errors a l'eina d'informació del vòxel i les ROI quan fèiem servir thick slab en imatges amb fases.<span class="ticket">2038,2039,2030</span></li>
             </ul>
         </div>
         <div class="removed">
