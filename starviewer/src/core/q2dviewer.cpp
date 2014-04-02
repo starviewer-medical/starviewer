@@ -976,10 +976,8 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
                 // TODO Maybe it should be also applied on TemporalDimension
                 getDrawer()->removeAllPrimitives();
             }
-            else
-            {
-                updateDisplayShutterMask();
-            }
+
+            updateDisplayShutterMask();
         }
 
         updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
