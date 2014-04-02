@@ -881,89 +881,11 @@ Do you consider they are the same?
     </message>
 </context>
 <context>
-    <name>udg::Q2DViewerLayoutConfigurationScreen</name>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreen.cpp" line="35"/>
-        <source>As much as possible</source>
-        <translation>Tantos como sea posible</translation>
-    </message>
-</context>
-<context>
     <name>udg::Q2DViewerLayoutConfigurationScreenBase</name>
     <message>
         <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="14"/>
         <source>2D Viewer Layout Configuration</source>
         <translation>Configuración de la distribución de los visores 2D</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="24"/>
-        <source>Apply hanging protocols on these modalities as first option</source>
-        <translation>Aplicar hanging protocols en estas modalidades como primera opción</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="31"/>
-        <source>Automatic layout settings when no hanging protocol is available</source>
-        <translation>Preferencias de distribución automática cuando no hay ningún hanging protocol disponible</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="39"/>
-        <source>Modality</source>
-        <translation>Modalidad</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="66"/>
-        <source>Layout by</source>
-        <translation>Distribuir por</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="72"/>
-        <source>Series</source>
-        <translation>Series</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="79"/>
-        <source>Images</source>
-        <translation>Imágenes</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="89"/>
-        <source>Layout direction</source>
-        <translation>Dirección de distribución</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="95"/>
-        <source>Left to right</source>
-        <translation>De izquierda a derecha</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="102"/>
-        <source>Top to bottom</source>
-        <translation>De arriba abajo</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="112"/>
-        <source>Exclude from layout</source>
-        <translation>Excluir de la distribución</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="118"/>
-        <source>CT Localizers</source>
-        <translation>Localizadores CT</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="125"/>
-        <source>MR Surveys</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="139"/>
-        <source>Maximum number of viewers</source>
-        <translation>Número máximo de visores</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="177"/>
-        <source>Restore defaults</source>
-        <translation>Restablecer los valores predeterminados</translation>
     </message>
 </context>
 <context>
@@ -1258,6 +1180,82 @@ Se deshabilitará el sombreado, de manera que no se visualizará como se esperab
         <source>OK</source>
         <oldsource>Ok</oldsource>
         <translation>Aceptar</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QLayoutOptionsWidget</name>
+    <message>
+        <location filename="qlayoutoptionswidget.cpp" line="32"/>
+        <source>As many as possible</source>
+        <translation>Tantos como sea posible</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QLayoutOptionsWidgetBase</name>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="26"/>
+        <source>Layout according to these parameters when no Hanging Protocol is applied</source>
+        <translation>Distribuir según estos parámetros cuando no se aplica ningún Hanging Protocol</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="37"/>
+        <source>Layout by</source>
+        <translation>Distribuir por</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="43"/>
+        <source>Series</source>
+        <translation>Series</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="50"/>
+        <source>Images</source>
+        <translation>Imágenes</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="60"/>
+        <source>Layout direction</source>
+        <translation>Dirección de distribución</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="66"/>
+        <source>Left to right</source>
+        <translation>De izquierda a derecha</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="73"/>
+        <source>Top to bottom</source>
+        <translation>De arriba abajo</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="83"/>
+        <source>Exclude from layout</source>
+        <translation>Excluir de la distribución</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="89"/>
+        <source>CT Localizers</source>
+        <translation>Localizadores CT</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="96"/>
+        <source>MR Surveys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="108"/>
+        <source>Restore defaults</source>
+        <translation>Restablecer los valores predeterminados</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="130"/>
+        <source>Maximum number of viewers</source>
+        <translation>Número máximo de visores</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="158"/>
+        <source>Apply Hanging Protocols as preferential layout option</source>
+        <translation>Aplicar Hanging Protocols como opción de distribución preferente</translation>
     </message>
 </context>
 <context>
