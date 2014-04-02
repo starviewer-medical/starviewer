@@ -876,88 +876,10 @@ Do you consider they are the same?
     </message>
 </context>
 <context>
-    <name>udg::Q2DViewerLayoutConfigurationScreen</name>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreen.cpp" line="35"/>
-        <source>As much as possible</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>udg::Q2DViewerLayoutConfigurationScreenBase</name>
     <message>
         <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="14"/>
         <source>2D Viewer Layout Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="24"/>
-        <source>Apply hanging protocols on these modalities as first option</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="31"/>
-        <source>Automatic layout settings when no hanging protocol is available</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="39"/>
-        <source>Modality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="66"/>
-        <source>Layout by</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="72"/>
-        <source>Series</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="79"/>
-        <source>Images</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="89"/>
-        <source>Layout direction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="95"/>
-        <source>Left to right</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="102"/>
-        <source>Top to bottom</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="112"/>
-        <source>Exclude from layout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="118"/>
-        <source>CT Localizers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="125"/>
-        <source>MR Surveys</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="139"/>
-        <source>Maximum number of viewers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="177"/>
-        <source>Restore defaults</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1249,6 +1171,82 @@ Shading will be disabled, it will not render as expected.</source>
         <location filename="qdiagnosistestbase.ui" line="269"/>
         <source>OK</source>
         <oldsource>Ok</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QLayoutOptionsWidget</name>
+    <message>
+        <location filename="qlayoutoptionswidget.cpp" line="32"/>
+        <source>As many as possible</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QLayoutOptionsWidgetBase</name>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="26"/>
+        <source>Layout according to these parameters when no Hanging Protocol is applied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="37"/>
+        <source>Layout by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="43"/>
+        <source>Series</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="50"/>
+        <source>Images</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="60"/>
+        <source>Layout direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="66"/>
+        <source>Left to right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="73"/>
+        <source>Top to bottom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="83"/>
+        <source>Exclude from layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="89"/>
+        <source>CT Localizers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="96"/>
+        <source>MR Surveys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="108"/>
+        <source>Restore defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="130"/>
+        <source>Maximum number of viewers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="158"/>
+        <source>Apply Hanging Protocols as preferential layout option</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
