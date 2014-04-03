@@ -1197,7 +1197,7 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     <message>
         <location filename="qlayoutoptionswidgetbase.ui" line="26"/>
         <source>Layout according to these parameters when no Hanging Protocol is applied</source>
-        <translation>Distribuir segons aquests paràmetres quan no s&apos;aplica cap Hanging Protocol</translation>
+        <translation>Distribueix segons aquests paràmetres quan no s&apos;aplica cap Hanging Protocol</translation>
     </message>
     <message>
         <location filename="qlayoutoptionswidgetbase.ui" line="37"/>
@@ -1257,7 +1257,7 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     <message>
         <location filename="qlayoutoptionswidgetbase.ui" line="158"/>
         <source>Apply Hanging Protocols as preferential layout option</source>
-        <translation>Aplicar Hanging Protocols com a opció de distribució preferent</translation>
+        <translation>Aplica Hanging Protocols com a opció de distribució preferent</translation>
     </message>
 </context>
 <context>
