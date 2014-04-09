@@ -146,6 +146,10 @@ void WindowLevelPresetsTool::setToolData(ToolData *toolData)
     {
         m_standardPresets.clear();
         m_standardPresets = m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets);
+
+        m_defaultPresets.clear();
+        m_defaultPresets = m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined) +
+                           m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
     }
 }
 
