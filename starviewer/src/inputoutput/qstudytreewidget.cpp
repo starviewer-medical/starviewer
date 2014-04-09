@@ -27,6 +27,12 @@ QStudyTreeWidget::QStudyTreeWidget(QWidget *parent)
     //de PatientName en aquesta nova columna se li aplicarà l'amplada que tenia StudyID, a StudyID la de StudyDescription i així successivament, per això el que fem si afegim una nova columna
     //s'afegeix al final del QTreeWidget i llavors la movem al seu lloc natural
     m_studyTreeView->header()->moveSection(PatientBirth, PatientAge);
+    // Reordering the columns. We are using the column identifier just to point out wich column we are moving. We have to add a number to the original index 
+    // because of the prior column moves. The column identifier is not bound to the actual column index.
+    // TODO This should be the default column order in the .ui file. The problem with the saved columns width stated before should be solved in another way.
+    m_studyTreeView->header()->moveSection(Date + 1, 2);
+    m_studyTreeView->header()->moveSection(Description + 2, 3);
+    m_studyTreeView->header()->moveSection(Modality + 2, 4);
 
     // Carreguem les imatges que es mostren el QStudyTreeWidget
     m_openFolder = QIcon(":/images/folderopen.png");
