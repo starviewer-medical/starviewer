@@ -63,6 +63,13 @@ private:
     /// Returns the layout config that best suits for the given candidates and patient
     StudyLayoutConfig getBestLayoutCandidate(const QList<StudyLayoutConfig> &candidates, Patient *patient);
 
+    /// Merges the StudyLayoutConfig items from the list into a single one. Criteria for merge will be as follows
+    /// In case UnfoldType are different, LeftToRightFirst will prevail
+    /// In case UnfoldDirectionType are different, UnfoldSeries will prevail
+    /// If any exclusion criteria is included in one of the configurations, it will be included in the merged as well
+    /// The maximum number of viewers will be the smallest value among all configurations
+    StudyLayoutConfig getMergedStudyLayoutConfig(const QList<StudyLayoutConfig> &configurations);
+
 private slots:
     /// Sets and applies the hanging protocol with the given identifier
     void setHangingProtocol(int hangingProtocolNumber);
