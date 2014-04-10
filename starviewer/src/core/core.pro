@@ -356,6 +356,7 @@ HEADERS += extensionfactory.h \
     synccriterion.h \
     anatomicalplanesynccriterion.h \
     inputsynccriterion.h \
+    modalitysynccriterion.h \
     syncaction.h \
     windowlevelsyncaction.h \
     zoomfactorsyncaction.h \
@@ -715,6 +716,7 @@ SOURCES += extensionmediator.cpp \
     synccriterion.cpp \
     anatomicalplanesynccriterion.cpp \
     inputsynccriterion.cpp \
+    modalitysynccriterion.cpp \
     syncaction.cpp \
     windowlevelsyncaction.cpp \
     zoomfactorsyncaction.cpp \
