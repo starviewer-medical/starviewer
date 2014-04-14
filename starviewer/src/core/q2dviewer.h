@@ -311,9 +311,6 @@ public slots:
     /// Sets the given window and level to the main volume.
     void setWindowLevel(double window, double level);
 
-    /// Selects the window level preset with the given name in the volume at the given index. If there isn't a volume at the given index, it does nothing.
-    void selectWindowLevelPresetInVolume(int index, const QString &presetName);
-
     /// Sets the transfer function of the main volume.
     void setTransferFunction(const TransferFunction &transferFunction);
     /// Clears the transfer function of the main volume.
