@@ -197,20 +197,6 @@ void LayoutManager::addHangingProtocolsWithPrevious(QList<Study*> studies)
 void LayoutManager::onStudyAdded(Study *study)
 {
     addHangingProtocolsWithPrevious(QList<Study*>() << study);
-
-    // If the study added was discarded by the hanging protocol manager we don't have to update the layout
-    if (m_studiesToIgnoreWhenAdded.contains(study->getInstanceUID()))
-    {
-        // Remove from the list, it could be added later by other reason
-        m_studiesToIgnoreWhenAdded.remove(study->getInstanceUID());
-        return;
-    }
-    
-    // Only update the layout again if the study does not correspond to a previously demanded study by a hanging protocol with previous
-    if (!m_hangingProtocolManager->isPreviousStudyForHangingProtocol(study))
-    {
-        applyProperLayoutChoice();
-    }
 }
 
 void LayoutManager::addStudyToIgnore(const QString &uid)
