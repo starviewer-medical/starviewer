@@ -114,7 +114,7 @@ void QRelatedStudiesWidget::initializeSearch()
 void QRelatedStudiesWidget::createConnections()
 {
     connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(insertStudiesToTree(QList<Study*>)));
-    connect(m_signalMapper, SIGNAL(mapped(const QString&)), SLOT(retrieveAndViewStudy(const QString&)));
+    connect(m_signalMapper, SIGNAL(mapped(const QString&)), SLOT(retrieveAndLoadStudy(const QString&)));
     connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStarted(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinished(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFailed(QString)), SLOT(studyRetrieveFailed(QString)));
@@ -279,13 +279,13 @@ void QRelatedStudiesWidget::insertStudiesToTree(const QList<Study*> &studiesList
     this->adjustSize();
 }
 
-void QRelatedStudiesWidget::retrieveAndViewStudy(const QString &studyInstanceUID)
+void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID)
 {
     StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
 
     studyInfo->downloadButton->setEnabled(false);
 
-    m_relatedStudiesManager->retrieveAndView(studyInfo->study, studyInfo->study->getDICOMSource().getRetrievePACS().at(0));
+    m_relatedStudiesManager->retrieveAndLoad(studyInfo->study, studyInfo->study->getDICOMSource().getRetrievePACS().at(0));
 
     studyInfo->status = Pending;
 
