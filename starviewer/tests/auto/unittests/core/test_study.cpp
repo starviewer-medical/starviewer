@@ -572,9 +572,9 @@ void test_Study::getPatientAge_ReturnExpectedValues_data()
     QTest::newRow("Empty Hard Coded Age - invalid date - valid date") << invalidStudyDate << validBirthDate << QString() << QString();
     QTest::newRow("Empty Hard Coded Age - valid date - invalid date") << validStudyDate << invalidBirthDate << QString() << QString();
     
-    QTest::newRow("Empty Hard Coded Age - valid dates") << validStudyDate << validBirthDate << QString() << "56Y";
-    QTest::newRow("Empty Hard Coded Age - valid dates (study day after, same year)") << validStudyDate.addDays(1) << validBirthDate << QString() << "56Y";
-    QTest::newRow("Empty Hard Coded Age - valid dates (study day before, -1 year)") << validStudyDate.addDays(-1) << validBirthDate << QString() << "55Y";
+    QTest::newRow("Empty Hard Coded Age - valid dates") << validStudyDate << validBirthDate << QString() << " 56Y";
+    QTest::newRow("Empty Hard Coded Age - valid dates (study day after, same year)") << validStudyDate.addDays(1) << validBirthDate << QString() << " 56Y";
+    QTest::newRow("Empty Hard Coded Age - valid dates (study day before, -1 year)") << validStudyDate.addDays(-1) << validBirthDate << QString() << " 55Y";
     QTest::newRow("Empty Hard Coded Age - study date is prior to birth date") << validStudyDate << validBirthDate.addYears(200) << QString() << QString();
 
     // Setting hardcoded age

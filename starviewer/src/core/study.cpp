@@ -90,7 +90,7 @@ QString Study::getPatientAge() const
                     QDate dateInDays(1, 1, 1);
                     dateInDays = dateInDays.addDays(ageInDays);
 
-                    age = QString::number(dateInDays.year() - 1) + "Y";
+                    age = QString("%1").arg(dateInDays.year() - 1, 3) + "Y";
                 }
             }
         }
