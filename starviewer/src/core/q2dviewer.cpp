@@ -1414,22 +1414,6 @@ void Q2DViewer::setWindowLevelInVolume(int index, const WindowLevel &windowLevel
     this->render();
 }
 
-void Q2DViewer::selectWindowLevelPresetInVolume(int index, const QString &presetName)
-{
-    VolumeDisplayUnit *unit = this->getDisplayUnit(index);
-
-    if (unit == m_dummyDisplayUnit)
-    {
-        DEBUG_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
-        WARN_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
-        return;
-    }
-
-    unit->getWindowLevelData()->selectCurrentPreset(presetName);
-    unit->updateCurrentImageDefaultPresets();
-    this->render();
-}
-
 void Q2DViewer::printVolumeInformation()
 {
     double range[2];
