@@ -1411,7 +1411,12 @@ void Q2DViewer::setWindowLevelInVolume(int index, const WindowLevel &windowLevel
     }
 
     unit->updateWindowLevel(windowLevel);
-    this->render();
+    // An explicit render is only needed if the unit is not the main one
+    // because the main unit is connected to QViewer::setWindowLevel which is invoked in unit->updateWindowLevel
+    if (unit != getMainDisplayUnit())
+    {
+        this->render();
+    }
 }
 
 void Q2DViewer::printVolumeInformation()
