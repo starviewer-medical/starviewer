@@ -1,5 +1,5 @@
 #ifndef UDGDISPLAYABLE_H
-#define UDGVISIBLEID_H
+#define UDGDISPLAYABLE_H
 
 #include <QList>
 #include <QString>
