@@ -1779,6 +1779,8 @@ void Q2DViewer::updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisition
         {
             unit->updateCurrentImageDefaultPresets();
         }
+
+        m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
     }
 }
 
