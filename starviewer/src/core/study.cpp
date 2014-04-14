@@ -73,7 +73,30 @@ void Study::setPatientAge(const QString &age)
 
 QString Study::getPatientAge() const
 {
-    return m_age;
+    QString age = m_age;
+    
+    if (age.trimmed().isEmpty())
+    {
+        if (getParentPatient())
+        {
+            QDate birthDate = getParentPatient()->getBirthDate();
+
+            if (birthDate.isValid() && m_date.isValid())
+            {
+                int ageInDays = birthDate.daysTo(m_date);
+
+                if (ageInDays > 0)
+                {
+                    QDate dateInDays(1, 1, 1);
+                    dateInDays = dateInDays.addDays(ageInDays);
+
+                    age = QString::number(dateInDays.year() - 1) + "Y";
+                }
+            }
+        }
+    }
+    
+    return age;
 }
 
 void Study::setWeight(double weight)
