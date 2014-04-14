@@ -43,8 +43,10 @@ public:
     void setDescription(QString description);
     QString getDescription() const;
 
-    /// Assignar/Obtenir l'edat del pacient
+    /// Sets the patient age at study date.
     void setPatientAge(const QString &age);
+
+    /// Gets the age of the patient at study date. If it's not set, it will be computed from birth and study date if both are valid.
     QString getPatientAge() const;
 
     /// Assignar/Obtenir el pes del pacient
