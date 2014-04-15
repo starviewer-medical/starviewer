@@ -1,12 +1,15 @@
 #include "autotest.h"
 
+#include "patient.h"
 #include "study.h"
 #include "series.h"
 #include "image.h"
 #include "dicomsource.h"
 #include "studytesthelper.h"
+#include "patienttesthelper.h"
 #include "seriestesthelper.h"
 #include "pacsdevicetesthelper.h"
+#include "mathtools.h"
 
 using namespace udg;
 using namespace testing;
@@ -64,6 +67,10 @@ private slots:
 
     void sortStudies_ReturnExpectedValues_data();
     void sortStudies_ReturnExpectedValues();
+
+    void getPatientAge_ReturnExpectedValues_data();
+    void getPatientAge_ReturnExpectedValues();
+
 private:
     /// Prepara les dades comunes de testing per els operadors > i <.
     void setupUpOperatorsLessThanGreaterThanData();
@@ -546,6 +553,67 @@ void test_Study::sortStudies_ReturnExpectedValues()
     QFETCH(QList<Study*>, expectedSortedStudies);
 
     QCOMPARE(Study::sortStudies(inputStudies, sortCriteria), expectedSortedStudies);
+}
+
+void test_Study::getPatientAge_ReturnExpectedValues_data()
+{
+    QTest::addColumn<QDate>("studyDate");
+    QTest::addColumn<QDate>("birthDate");
+    QTest::addColumn<QString>("hardCodedAge");
+    QTest::addColumn<QString>("expectedAge");
+
+    QDate invalidStudyDate;
+    QDate invalidBirthDate;
+    QTest::newRow("Empty Hard Coded Age - invalid dates") << invalidStudyDate << invalidBirthDate << QString() << QString();
+    
+    QDate validStudyDate(2014, 2, 3);
+    QDate validBirthDate(1958, 2, 3);
+
+    QTest::newRow("Empty Hard Coded Age - invalid date - valid date") << invalidStudyDate << validBirthDate << QString() << QString();
+    QTest::newRow("Empty Hard Coded Age - valid date - invalid date") << validStudyDate << invalidBirthDate << QString() << QString();
+    
+    QTest::newRow("Empty Hard Coded Age - valid dates") << validStudyDate << validBirthDate << QString() << "056Y";
+    QTest::newRow("Empty Hard Coded Age - valid dates (study day after, same year)") << validStudyDate.addDays(1) << validBirthDate << QString() << "056Y";
+    QTest::newRow("Empty Hard Coded Age - valid dates (study day before, -1 year)") << validStudyDate.addDays(-1) << validBirthDate << QString() << "055Y";
+    QTest::newRow("Empty Hard Coded Age - study date is prior to birth date") << validStudyDate << validBirthDate.addYears(200) << QString() << QString();
+
+    QDate validStudyDateMonths(1959, 6, 3);
+    QTest::newRow("Empty Hard Coded Age - valid dates (months result)") << validStudyDateMonths << validBirthDate << QString() << "016M";
+
+    QDate validStudyDateWeeks(1958, 5, 2);
+    QTest::newRow("Empty Hard Coded Age - valid dates (weeks result)") << validStudyDateWeeks << validBirthDate << QString() << "013W";
+
+    QDate validStudyDateDays(1958, 3, 1);
+    QTest::newRow("Empty Hard Coded Age - valid dates (days result)") << validStudyDateDays << validBirthDate << QString() << "026D";
+
+    // Setting hardcoded age
+    QString hardCodedAge = "22Y";
+    QDate randomDate1(MathTools::randomInt(1, 3000), MathTools::randomInt(1, 12), MathTools::randomInt(1, 31));
+    QDate randomDate2(MathTools::randomInt(1, 3000), MathTools::randomInt(1, 12), MathTools::randomInt(1, 31));
+    
+    QTest::newRow("Hard Coded Age set - random dates") << randomDate1 << randomDate2 << hardCodedAge << "22Y";
+    QTest::newRow("Hard Coded Age set - random date - invalid date") << randomDate1 << invalidBirthDate << hardCodedAge << "22Y";
+    QTest::newRow("Hard Coded Age set - invalid date - random date") << invalidStudyDate << randomDate2 << hardCodedAge << "22Y";
+    QTest::newRow("Hard Coded Age set - invalid dates") << invalidStudyDate << invalidBirthDate << hardCodedAge << "22Y";
+}
+
+void test_Study::getPatientAge_ReturnExpectedValues()
+{
+    QFETCH(QDate, studyDate);
+    QFETCH(QDate, birthDate);
+    QFETCH(QString, hardCodedAge);
+    QFETCH(QString, expectedAge);
+
+    Patient *patient = PatientTestHelper::create(1);
+    Study *study = patient->getStudies().first();
+
+    patient->setBirthDate(birthDate.day(), birthDate.month(), birthDate.year());
+    study->setDate(studyDate);
+    study->setPatientAge(hardCodedAge);
+    
+    QCOMPARE(study->getPatientAge(), expectedAge);
+
+    StudyTestHelper::cleanUp(study);
 }
 
 DECLARE_TEST(test_Study)

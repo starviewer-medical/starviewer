@@ -5,8 +5,6 @@
 
 namespace udg {
 
-class StudyLayoutConfig;
-
 /**
     Pantalla de configuració de layouts del visor 2D
  */
@@ -19,20 +17,6 @@ public:
 private:
     /// Inicialitza el widget amb els valors corresponents
     void initialize();
-    void populateMaxViewersComboBox();
-    void initializeModalitiesToApplyHangingProtocolsByDefault();
-    void initializeAutomaticLayoutSettings();
-
-    void setCurrentStudyLayoutConfig(const StudyLayoutConfig &config);
-private slots:
-    /// Updates the modalities to apply hanging protocols settings
-    void updateModalititesToApplyHangingProtocolsSetting(const QStringList &modalities);
-    
-    /// Actualitza el widget on es mostren els settings d'un layout de la modalitat escollida en el combo en aquell moment
-    void updateLayoutSettingsWidgetForModality(const QString &modality);
-
-    void updateSelectedAutomaticLayoutSettings();
-    void restoreDefaultsForSelectedAutomaticLayoutSettings();
 };
 
 } // End namespace udg

@@ -2,6 +2,7 @@
 
 #include "qviewer.h"
 #include "anatomicalplanesynccriterion.h"
+#include "modalitysynccriterion.h"
 
 namespace udg {
 
@@ -35,7 +36,7 @@ void ZoomFactorSyncAction::setupMetaData()
 
 void ZoomFactorSyncAction::setupDefaultSyncCriteria()
 {
-    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion();
+    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new ModalitySyncCriterion();
 }
 
 } // End namespace udg

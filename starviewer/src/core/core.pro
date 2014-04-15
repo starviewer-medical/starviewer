@@ -19,6 +19,7 @@ FORMS += qlogviewerbase.ui \
     qmodalitiesselectorgroupboxbase.ui \
     q2dviewerlayoutconfigurationscreenbase.ui \
     q2dviewerconfigurationscreenbase.ui \
+    qlayoutoptionswidgetbase.ui \
     qnotificationpopupbase.ui
 
 TRANSLATIONS += core_ca_ES.ts \
@@ -312,6 +313,7 @@ HEADERS += extensionfactory.h \
     rundiagnosistest.h \
     q2dviewerconfigurationscreen.h \
     q2dviewerlayoutconfigurationscreen.h \
+    qlayoutoptionswidget.h \
     qmodalitiesselectorgroupbox.h \
     circletool.h \
     diagnosistestresultwriter.h \
@@ -354,6 +356,7 @@ HEADERS += extensionfactory.h \
     synccriterion.h \
     anatomicalplanesynccriterion.h \
     inputsynccriterion.h \
+    modalitysynccriterion.h \
     syncaction.h \
     windowlevelsyncaction.h \
     zoomfactorsyncaction.h \
@@ -671,6 +674,7 @@ SOURCES += extensionmediator.cpp \
     rundiagnosistest.cpp \
     q2dviewerconfigurationscreen.cpp \
     q2dviewerlayoutconfigurationscreen.cpp \
+    qlayoutoptionswidget.cpp \
     qmodalitiesselectorgroupbox.cpp \
     circletool.cpp \
     diagnosistestresultwriter.cpp \
@@ -712,6 +716,7 @@ SOURCES += extensionmediator.cpp \
     synccriterion.cpp \
     anatomicalplanesynccriterion.cpp \
     inputsynccriterion.cpp \
+    modalitysynccriterion.cpp \
     syncaction.cpp \
     windowlevelsyncaction.cpp \
     zoomfactorsyncaction.cpp \

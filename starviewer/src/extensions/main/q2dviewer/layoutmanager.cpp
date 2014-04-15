@@ -123,7 +123,7 @@ StudyLayoutConfig LayoutManager::getBestLayoutCandidate(const QList<StudyLayoutC
         {
             // If we different modalities/candidates we take the simple choice of apply a default generic layout
             // TODO This could be enhanced making smarter decisions, which can include decisions based on user settings i.e.
-            bestLayout = StudyLayoutConfigsLoader::getDefaultConfigForModality("");
+            bestLayout = getMergedStudyLayoutConfig(candidates);
         }
         else
         {
@@ -138,6 +138,47 @@ StudyLayoutConfig LayoutManager::getBestLayoutCandidate(const QList<StudyLayoutC
     }
 
     return bestLayout;
+}
+
+StudyLayoutConfig LayoutManager::getMergedStudyLayoutConfig(const QList<StudyLayoutConfig> &configurations)
+{
+    if (configurations.isEmpty())
+    {
+        return StudyLayoutConfig();
+    }
+
+    StudyLayoutConfig mergedLayout = configurations.first();
+    QStringList modalities;
+    modalities << mergedLayout.getModality();
+    
+    for (int i = 1; i < configurations.count(); ++i)
+    {
+        foreach (const StudyLayoutConfig::ExclusionCriteriaType &criteria, configurations.at(i).getExclusionCriteria())
+        {
+            mergedLayout.addExclusionCriteria(criteria);
+        }
+        
+        if (configurations.at(i).getMaximumNumberOfViewers() < mergedLayout.getMaximumNumberOfViewers() && configurations.at(i).getMaximumNumberOfViewers() > 0)
+        {
+            mergedLayout.setMaximumNumberOfViewers(configurations.at(i).getMaximumNumberOfViewers());
+        }
+
+        if (configurations.at(i).getUnfoldDirection() != mergedLayout.getUnfoldDirection())
+        {
+            mergedLayout.setUnfoldDirection(StudyLayoutConfig::DefaultUnfoldDirection);
+        }
+        
+        if (configurations.at(i).getUnfoldType() != mergedLayout.getUnfoldType())
+        {
+            mergedLayout.setUnfoldType(StudyLayoutConfig::DefaultUnfoldType);
+        }
+        
+        modalities << configurations.at(i).getModality();
+    }
+
+    // This step is needed to apply the configuration whatever the modality of the study
+    mergedLayout.setModality("");
+    return mergedLayout;
 }
 
 void LayoutManager::setHangingProtocol(int hangingProtocolNumber)
@@ -156,20 +197,6 @@ void LayoutManager::addHangingProtocolsWithPrevious(QList<Study*> studies)
 void LayoutManager::onStudyAdded(Study *study)
 {
     addHangingProtocolsWithPrevious(QList<Study*>() << study);
-
-    // If the study added was discarded by the hanging protocol manager we don't have to update the layout
-    if (m_studiesToIgnoreWhenAdded.contains(study->getInstanceUID()))
-    {
-        // Remove from the list, it could be added later by other reason
-        m_studiesToIgnoreWhenAdded.remove(study->getInstanceUID());
-        return;
-    }
-    
-    // Only update the layout again if the study does not correspond to a previously demanded study by a hanging protocol with previous
-    if (!m_hangingProtocolManager->isPreviousStudyForHangingProtocol(study))
-    {
-        applyProperLayoutChoice();
-    }
 }
 
 void LayoutManager::addStudyToIgnore(const QString &uid)

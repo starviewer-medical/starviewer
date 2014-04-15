@@ -882,90 +882,11 @@ Do you consider they are the same?
     </message>
 </context>
 <context>
-    <name>udg::Q2DViewerLayoutConfigurationScreen</name>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreen.cpp" line="35"/>
-        <source>As much as possible</source>
-        <translation>Tants com sigui possible</translation>
-    </message>
-</context>
-<context>
     <name>udg::Q2DViewerLayoutConfigurationScreenBase</name>
     <message>
         <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="14"/>
         <source>2D Viewer Layout Configuration</source>
         <translation>Configuració de la distribució dels visors 2D</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="24"/>
-        <source>Apply hanging protocols on these modalities as first option</source>
-        <translation>Aplica hanging protocols en aquestes modalitats com a primera opció</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="31"/>
-        <source>Automatic layout settings when no hanging protocol is available</source>
-        <translation>Preferències de distribució automàtica quan no hi ha cap hanging protocol disponible</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="39"/>
-        <source>Modality</source>
-        <translation>Modalitat</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="66"/>
-        <source>Layout by</source>
-        <translation>Distribueix per</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="72"/>
-        <source>Series</source>
-        <translation>Sèries</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="79"/>
-        <source>Images</source>
-        <translation>Imatges</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="89"/>
-        <source>Layout direction</source>
-        <translation>Direcció de distribució</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="95"/>
-        <source>Left to right</source>
-        <translation>D&apos;esquerra a dreta</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="102"/>
-        <source>Top to bottom</source>
-        <translation>De dalt a baix</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="112"/>
-        <source>Exclude from layout</source>
-        <translation>Exclou de la distribució</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="118"/>
-        <source>CT Localizers</source>
-        <translation>Localitzadors CT</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="125"/>
-        <source>MR Surveys</source>
-        <translatorcomment>La traducció literal seria &quot;Enquestes MR&quot;, però no em fa el pes</translatorcomment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="139"/>
-        <source>Maximum number of viewers</source>
-        <translation>Nombre màxim de visors</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="177"/>
-        <source>Restore defaults</source>
-        <translation>Restaura els valors predeterminats</translation>
     </message>
 </context>
 <context>
@@ -1261,6 +1182,82 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
         <source>OK</source>
         <oldsource>Ok</oldsource>
         <translation>D&apos;acord</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QLayoutOptionsWidget</name>
+    <message>
+        <location filename="qlayoutoptionswidget.cpp" line="32"/>
+        <source>As many as possible</source>
+        <translation>Tants com sigui possible</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QLayoutOptionsWidgetBase</name>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="26"/>
+        <source>Layout according to these parameters when no Hanging Protocol is applied</source>
+        <translation>Distribueix segons aquests paràmetres quan no s&apos;aplica cap Hanging Protocol</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="37"/>
+        <source>Layout by</source>
+        <translation>Distribueix per</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="43"/>
+        <source>Series</source>
+        <translation>Sèries</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="50"/>
+        <source>Images</source>
+        <translation>Imatges</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="60"/>
+        <source>Layout direction</source>
+        <translation>Direcció de distribució</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="66"/>
+        <source>Left to right</source>
+        <translation>D&apos;esquerra a dreta</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="73"/>
+        <source>Top to bottom</source>
+        <translation>De dalt a baix</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="83"/>
+        <source>Exclude from layout</source>
+        <translation>Exclou de la distribució</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="89"/>
+        <source>CT Localizers</source>
+        <translation>Localitzadors CT</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="96"/>
+        <source>MR Surveys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="108"/>
+        <source>Restore defaults</source>
+        <translation>Restaura els valors predeterminats</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="130"/>
+        <source>Maximum number of viewers</source>
+        <translation>Nombre màxim de visors</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="158"/>
+        <source>Apply Hanging Protocols as preferential layout option</source>
+        <translation>Aplica Hanging Protocols com a opció de distribució preferent</translation>
     </message>
 </context>
 <context>

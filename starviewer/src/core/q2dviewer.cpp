@@ -976,10 +976,8 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
                 // TODO Maybe it should be also applied on TemporalDimension
                 getDrawer()->removeAllPrimitives();
             }
-            else
-            {
-                updateDisplayShutterMask();
-            }
+
+            updateDisplayShutterMask();
         }
 
         updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
@@ -1413,23 +1411,12 @@ void Q2DViewer::setWindowLevelInVolume(int index, const WindowLevel &windowLevel
     }
 
     unit->updateWindowLevel(windowLevel);
-    this->render();
-}
-
-void Q2DViewer::selectWindowLevelPresetInVolume(int index, const QString &presetName)
-{
-    VolumeDisplayUnit *unit = this->getDisplayUnit(index);
-
-    if (unit == m_dummyDisplayUnit)
+    // An explicit render is only needed if the unit is not the main one
+    // because the main unit is connected to QViewer::setWindowLevel which is invoked in unit->updateWindowLevel
+    if (unit != getMainDisplayUnit())
     {
-        DEBUG_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
-        WARN_LOG(QString("No volume at index %1. Doing nothing.").arg(index));
-        return;
+        this->render();
     }
-
-    unit->getWindowLevelData()->selectCurrentPreset(presetName);
-    unit->updateCurrentImageDefaultPresets();
-    this->render();
 }
 
 void Q2DViewer::printVolumeInformation()
@@ -1797,6 +1784,8 @@ void Q2DViewer::updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisition
         {
             unit->updateCurrentImageDefaultPresets();
         }
+
+        m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
     }
 }
 

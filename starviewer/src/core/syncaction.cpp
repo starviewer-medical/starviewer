@@ -1,4 +1,5 @@
 #include "syncaction.h"
+#include "synccriterion.h"
 
 namespace udg {
 
