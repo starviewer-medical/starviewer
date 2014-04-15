@@ -572,10 +572,19 @@ void test_Study::getPatientAge_ReturnExpectedValues_data()
     QTest::newRow("Empty Hard Coded Age - invalid date - valid date") << invalidStudyDate << validBirthDate << QString() << QString();
     QTest::newRow("Empty Hard Coded Age - valid date - invalid date") << validStudyDate << invalidBirthDate << QString() << QString();
     
-    QTest::newRow("Empty Hard Coded Age - valid dates") << validStudyDate << validBirthDate << QString() << " 56Y";
-    QTest::newRow("Empty Hard Coded Age - valid dates (study day after, same year)") << validStudyDate.addDays(1) << validBirthDate << QString() << " 56Y";
-    QTest::newRow("Empty Hard Coded Age - valid dates (study day before, -1 year)") << validStudyDate.addDays(-1) << validBirthDate << QString() << " 55Y";
+    QTest::newRow("Empty Hard Coded Age - valid dates") << validStudyDate << validBirthDate << QString() << "056Y";
+    QTest::newRow("Empty Hard Coded Age - valid dates (study day after, same year)") << validStudyDate.addDays(1) << validBirthDate << QString() << "056Y";
+    QTest::newRow("Empty Hard Coded Age - valid dates (study day before, -1 year)") << validStudyDate.addDays(-1) << validBirthDate << QString() << "055Y";
     QTest::newRow("Empty Hard Coded Age - study date is prior to birth date") << validStudyDate << validBirthDate.addYears(200) << QString() << QString();
+
+    QDate validStudyDateMonths(1959, 6, 3);
+    QTest::newRow("Empty Hard Coded Age - valid dates (months result)") << validStudyDateMonths << validBirthDate << QString() << "016M";
+
+    QDate validStudyDateWeeks(1958, 5, 2);
+    QTest::newRow("Empty Hard Coded Age - valid dates (weeks result)") << validStudyDateWeeks << validBirthDate << QString() << "013W";
+
+    QDate validStudyDateDays(1958, 3, 1);
+    QTest::newRow("Empty Hard Coded Age - valid dates (days result)") << validStudyDateDays << validBirthDate << QString() << "026D";
 
     // Setting hardcoded age
     QString hardCodedAge = "22Y";

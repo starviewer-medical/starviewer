@@ -90,7 +90,46 @@ QString Study::getPatientAge() const
                     QDate dateInDays(1, 1, 1);
                     dateInDays = dateInDays.addDays(ageInDays);
 
-                    age = QString("%1").arg(dateInDays.year() - 1, 3) + "Y";
+                    // If age is > 24 months, age is displayed in years as "xY" where x is the age in years
+                    // If age is between 3 to 24 months it is displayed as "xM" where x is the age in months
+                    // If age is between 1 to 3 months it is displayed as "xW" where x is the age in weeks
+                    // If it is less that 1 month it is displayed as "xD" where x is the age in days. 
+                    int quantity = 0;
+                    QString unit;
+                    if (dateInDays.year() - 1 < 2)
+                    {
+                        if (ageInDays < 31)
+                        {
+                            quantity = ageInDays;
+                            unit = "D";
+                        }
+                        else
+                        {
+                            int months = dateInDays.month() - 1;
+                            if (dateInDays.year() - 1 == 1)
+                            {
+                                months += 12;
+                            }
+                        
+                            if (months < 3)
+                            {
+                                quantity = dateInDays.weekNumber();
+                                unit = "W";
+                            }
+                            else
+                            {
+                                quantity = months;
+                                unit = "M";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        quantity = dateInDays.year() - 1;
+                        unit = "Y";
+                    }
+
+                    age = QString("%1").arg(quantity, 3, 10, QChar('0')) + unit;
                 }
             }
         }
