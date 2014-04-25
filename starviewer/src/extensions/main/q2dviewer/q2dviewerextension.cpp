@@ -30,6 +30,8 @@
 #include "relatedstudiesmanager.h"
 #include "qexportertool.h"
 #include "syncactionmanager.h"
+#include "syncactionsconfiguration.h"
+#include "syncactionsconfigurationmenu.h"
 #include "viewerslayouttosyncactionmanageradapter.h"
 #endif
 
@@ -508,6 +510,10 @@ void Q2DViewerExtension::initializeTools()
     m_propagationAction->setCheckable(true);
     m_propagateToolButton->setDefaultAction(m_propagationAction);
     connect(m_propagationAction, SIGNAL(toggled(bool)), m_syncActionManager, SLOT(enable(bool)));
+
+    SyncActionsConfigurationMenu *menu = new SyncActionsConfigurationMenu(m_syncActionManager->getSyncActionsConfiguration(), this);
+    m_propagateToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    m_propagateToolButton->setMenu(menu);
 
 #endif
 
