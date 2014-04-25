@@ -408,7 +408,8 @@ HEADERS += extensionfactory.h \
     qenhancedmenutoolbutton.h \
     qfusionbalancewidget.h \
     frameofreferencesynccriterion.h \
-    anglebetweenplanessynccriterion.h
+    anglebetweenplanessynccriterion.h \
+    anatomicalregionsynccriterion.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -764,7 +765,8 @@ SOURCES += extensionmediator.cpp \
     qenhancedmenutoolbutton.cpp \
     qfusionbalancewidget.cpp \
     frameofreferencesynccriterion.cpp \
-    anglebetweenplanessynccriterion.cpp
+    anglebetweenplanessynccriterion.cpp \
+    anatomicalregionsynccriterion.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
