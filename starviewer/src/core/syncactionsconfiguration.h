@@ -39,8 +39,8 @@ private:
     void cleanupConfiguredSyncCriteria();
 
 private:
-    /// Set containing the name of the enabled sync actions
-    QSet<QString> m_enabledSyncActions;
+    /// Map containing the enabled sync actions indexed by the identifier name of the SyncAction
+    QMap<QString, SyncActionMetaData> m_enabledSyncActions;
 
     /// This map contains which SyncCriterion corresponds to an specific SyncAction through its metadata
     /// When SyncCriterion are defined for a SyncAction in this map, they'll have priority over own SyncAction default defined criteria

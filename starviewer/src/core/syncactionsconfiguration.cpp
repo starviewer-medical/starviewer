@@ -23,7 +23,7 @@ void SyncActionsConfiguration::enableSyncAction(const SyncActionMetaData &syncAc
     QString syncActionName = syncActionMetaData.getName();
     if (enable)
     {
-        m_enabledSyncActions << syncActionName;
+        m_enabledSyncActions.insert(syncActionName, syncActionMetaData);
     }
     else
     {
