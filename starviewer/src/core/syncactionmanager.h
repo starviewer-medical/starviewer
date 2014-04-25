@@ -41,6 +41,9 @@ public:
     /// Sets the configuration for the registered sync actions
     void setSyncActionsConfiguration(SyncActionsConfiguration *configuration);
 
+    /// Gets the current sync actions configuration
+    SyncActionsConfiguration* getSyncActionsConfiguration();
+
 public slots:
     /// Enables or disables the manager. When disabled, no actions will be applied on the viewers set.
     /// The viewers set will always remain unaltered, wheter the manager is disabled or enabled.
