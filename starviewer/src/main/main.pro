@@ -23,9 +23,10 @@ win32 {
 # End CrashHandler
 
 SOURCES += main.cpp \
+           syncactionsregister.cpp \
            applicationtranslationsloader.cpp
 HEADERS += applicationtranslationsloader.h \
-           syncactions.h \
+           syncactionsregister.h \
            diagnosistests.h
 RESOURCES = main.qrc ../qml/qml.qrc
 

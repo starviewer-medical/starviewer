@@ -1,6 +1,7 @@
 #include "phasesignaltosyncactionmapper.h"
 
 #include "q2dviewer.h"
+#include "phasesyncaction.h"
 
 namespace udg {
 

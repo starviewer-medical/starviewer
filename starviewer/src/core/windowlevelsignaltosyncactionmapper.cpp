@@ -2,6 +2,7 @@
 
 #include "q2dviewer.h"
 #include "windowlevelpresetstooldata.h"
+#include "windowlevelsyncaction.h"
 
 namespace udg {
 

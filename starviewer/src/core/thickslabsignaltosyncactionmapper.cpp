@@ -1,6 +1,7 @@
 #include "thickslabsignaltosyncactionmapper.h"
 
 #include "q2dviewer.h"
+#include "thickslabsyncaction.h"
 
 namespace udg {
 

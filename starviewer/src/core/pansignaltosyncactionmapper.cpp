@@ -1,6 +1,7 @@
 #include "pansignaltosyncactionmapper.h"
 
 #include "q2dviewer.h"
+#include "pansyncaction.h"
 
 namespace udg {
 
