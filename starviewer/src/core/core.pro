@@ -372,6 +372,7 @@ HEADERS += extensionfactory.h \
     syncactionmetadata.h \
     syncactionsconfiguration.h \
     syncactionsconfigurationmenu.h \
+    syncactionsconfigurationhandler.h \
     syncactionmanager.h \
     viewerslayouttosyncactionmanageradapter.h \
     volumepixeldatareaderselector.h \
@@ -732,6 +733,7 @@ SOURCES += extensionmediator.cpp \
     syncactionmetadata.cpp \
     syncactionsconfiguration.cpp \
     syncactionsconfigurationmenu.cpp \
+    syncactionsconfigurationhandler.cpp \
     syncactionmanager.cpp \
     viewerslayouttosyncactionmanageradapter.cpp \
     vtkdcmtkbydefaultvolumepixeldatareaderselector.cpp \
