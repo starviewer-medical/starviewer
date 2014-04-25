@@ -23,7 +23,7 @@ void SyncActionsConfiguration::enableSyncAction(const SyncActionMetaData &syncAc
     QString syncActionName = syncActionMetaData.getName();
     if (enable)
     {
-        m_enabledSyncActions << syncActionName;
+        m_enabledSyncActions.insert(syncActionName, syncActionMetaData);
     }
     else
     {
@@ -34,6 +34,11 @@ void SyncActionsConfiguration::enableSyncAction(const SyncActionMetaData &syncAc
 bool SyncActionsConfiguration::isSyncActionEnabled(const SyncActionMetaData &syncActionMetaData)
 {
     return m_enabledSyncActions.contains(syncActionMetaData.getName());
+}
+
+QList<SyncActionMetaData> SyncActionsConfiguration::getEnabledSyncActions() const
+{
+    return m_enabledSyncActions.values();
 }
 
 QList<SyncCriterion*> SyncActionsConfiguration::getSyncCriteria(SyncAction *syncAction)

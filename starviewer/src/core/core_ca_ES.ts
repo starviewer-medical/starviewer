@@ -14,7 +14,7 @@
         <translation>La previsualització no està disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="110"/>
+        <location filename="coresettings.cpp" line="112"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
@@ -60,13 +60,11 @@
     <message>
         <location filename="windowsfirewallaccess.cpp" line="70"/>
         <source>Application is not in the firewall exceptions list</source>
-        <oldsource>Application is not in the firewall&apos;s exceptions list</oldsource>
         <translation>L&apos;aplicació no és a la llista d&apos;excepcions del tallafocs</translation>
     </message>
     <message>
         <location filename="windowsfirewallaccess.cpp" line="76"/>
         <source>Unable to check if application is in the firewall exceptions list</source>
-        <oldsource>Unable to check if application is in the firewall&apos;s exceptions list</oldsource>
         <translation>No es pot comprovar si l&apos;aplicació és a la llista d&apos;excepcions del tallafocs</translation>
     </message>
     <message>
@@ -92,7 +90,6 @@
     <message>
         <location filename="windowsfirewallaccess.cpp" line="114"/>
         <source>Error initializing firewall library</source>
-        <oldsource>Error initialization firewall&apos;s library</oldsource>
         <translation>S&apos;ha produït un error en inicialitzar la biblioteca del tallafocs</translation>
     </message>
     <message>
@@ -213,7 +210,6 @@
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="81"/>
         <source>Identifier does not match SOP Class</source>
-        <oldsource>Identifiers does not match SOP Class</oldsource>
         <translation>S&apos;ha produït un error: L&apos;identificador no coincideix amb la classe SOP</translation>
     </message>
     <message>
@@ -269,18 +265,12 @@
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="125"/>
         <source>Unknown status</source>
-        <oldsource>Unkown status</oldsource>
         <translation>Estat desconegut</translation>
     </message>
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="214"/>
         <source>DIMSE Status: </source>
         <translation>Estat del DIMSE: </translation>
-    </message>
-    <message>
-        <location filename="imageorientationsyncaction.cpp" line="33"/>
-        <source>image orientation</source>
-        <translation>orientació de la imatge</translation>
     </message>
     <message>
         <location filename="measurementmanager.cpp" line="101"/>
@@ -314,17 +304,12 @@
     </message>
     <message>
         <location filename="pansyncaction.cpp" line="42"/>
-        <source>pan</source>
-        <translation>mou</translation>
+        <source>Pan</source>
+        <translation>Desplaçament</translation>
     </message>
     <message>
         <location filename="patientcomparer.cpp" line="57"/>
         <source>Cannot determine the similarity of these patients.</source>
-        <oldsource>Cannot determine the similarity of these patients.
-
-Do you consider they are the same?
-
-</oldsource>
         <translation>No es pot determinar la semblança d&apos;aquests pacients.</translation>
     </message>
     <message>
@@ -356,8 +341,8 @@ Do you consider they are the same?
     </message>
     <message>
         <location filename="phasesyncaction.cpp" line="40"/>
-        <source>phase</source>
-        <translation>fase</translation>
+        <source>Phase</source>
+        <translation>Fase</translation>
     </message>
     <message>
         <location filename="q2dviewerannotationhandler.cpp" line="102"/>
@@ -417,23 +402,13 @@ Do you consider they are the same?
     </message>
     <message>
         <location filename="thickslabsyncaction.cpp" line="47"/>
-        <source>thick slab</source>
-        <translation>gruix de tall</translation>
+        <source>Thick slab</source>
+        <translation>Gruix de tall</translation>
     </message>
     <message>
         <location filename="transferfunctionmodelfiller.cpp" line="15"/>
         <source>None</source>
         <translation>Cap</translation>
-    </message>
-    <message>
-        <location filename="windowlevelsyncaction.cpp" line="56"/>
-        <source>window level</source>
-        <translation>brillantor i contrast</translation>
-    </message>
-    <message>
-        <location filename="zoomfactorsyncaction.cpp" line="33"/>
-        <source>zoom</source>
-        <translation>zoom</translation>
     </message>
     <message>
         <location filename="abstractroidataprinter.cpp" line="32"/>
@@ -479,6 +454,21 @@ Do you consider they are the same?
         <location filename="windowlevelhelper.cpp" line="123"/>
         <source>Auto</source>
         <translation>Automàtica</translation>
+    </message>
+    <message>
+        <location filename="imageorientationsyncaction.cpp" line="34"/>
+        <source>Image orientation</source>
+        <translation>Orientació d&apos;imatge</translation>
+    </message>
+    <message>
+        <location filename="windowlevelsyncaction.cpp" line="59"/>
+        <source>Window level</source>
+        <translation>Finestra</translation>
+    </message>
+    <message>
+        <location filename="zoomfactorsyncaction.cpp" line="34"/>
+        <source>Zoom</source>
+        <translation>Zoom</translation>
     </message>
 </context>
 <context>
@@ -561,7 +551,6 @@ Do you consider they are the same?
     <message>
         <location filename="screenshottool.cpp" line="23"/>
         <source>JPEG (*.jpg)</source>
-        <oldsource>Jpeg (*.jpg)</oldsource>
         <translation></translation>
     </message>
     <message>
@@ -594,13 +583,11 @@ Do you consider they are the same?
         <location filename="applicationupdatechecker.cpp" line="162"/>
         <location filename="applicationupdatechecker.cpp" line="193"/>
         <source>Error parsing JSON.</source>
-        <oldsource>Error parsing json.</oldsource>
         <translation>S&apos;ha produït un error en analitzar el JSON.</translation>
     </message>
     <message>
         <location filename="applicationupdatechecker.cpp" line="182"/>
         <source>Error parsing JSON: version or releaseNotesURL are not strings</source>
-        <oldsource>Error parsing JSON: version or releaseNotesUrl are not strings</oldsource>
         <translation>S&apos;ha produït un error en analitzar el JSON: version o releaseNotesURL no són cadenes</translation>
     </message>
     <message>
@@ -635,7 +622,6 @@ Do you consider they are the same?
     <message>
         <location filename="applicationversionchecker.cpp" line="147"/>
         <source>OK</source>
-        <oldsource>Ok</oldsource>
         <translation>D&apos;acord</translation>
     </message>
 </context>
@@ -644,13 +630,11 @@ Do you consider they are the same?
     <message>
         <location filename="applicationversiontest.cpp" line="33"/>
         <source>There is a new version available</source>
-        <oldsource>There is a new version available.</oldsource>
         <translation>Hi ha una nova versió disponible</translation>
     </message>
     <message>
         <location filename="applicationversiontest.cpp" line="34"/>
         <source>Contact technical service to request the software update</source>
-        <oldsource>Contact technical service to request the software update.</oldsource>
         <translation>Poseu-vos en contacte amb el servei tècnic per fer l&apos;actualització</translation>
     </message>
     <message>
@@ -664,7 +648,6 @@ Do you consider they are the same?
     <message>
         <location filename="firewallaccesstest.cpp" line="30"/>
         <source>Add %1 to the list of applications that have access through firewall</source>
-        <oldsource>Add %1 to the list of applications that have access through firewall on Control Panel &gt; Firewall</oldsource>
         <translation>Afegiu l&apos;%1 a la llista d&apos;aplicacions que tenen accés a través del tallafocs</translation>
     </message>
     <message>
@@ -683,15 +666,12 @@ Do you consider they are the same?
     <message>
         <location filename="hangingprotocolxmlreader.cpp" line="34"/>
         <source>Hanging Protocol XML File</source>
-        <oldsource>Hanging protocol XML File</oldsource>
         <translation>Fitxer XML de hanging protocol</translation>
     </message>
     <message>
         <location filename="hangingprotocolxmlreader.cpp" line="35"/>
         <source>Unable to read file %1:
 %2.</source>
-        <oldsource>Cannot read file %1:
-%2.</oldsource>
         <translation>No es pot llegir el fitxer %1:
 %2.</translation>
     </message>
@@ -711,7 +691,6 @@ Do you consider they are the same?
     <message>
         <location filename="nonclosedangletool.cpp" line="303"/>
         <source>Skew lines</source>
-        <oldsource>Skew lines.</oldsource>
         <translation>Línies creuades</translation>
     </message>
 </context>
@@ -725,7 +704,6 @@ Do you consider they are the same?
     <message>
         <location filename="patientbrowsermenu.cpp" line="60"/>
         <source> Series %1: %2 %3 %4 %5</source>
-        <oldsource> Serie %1: %2 %3 %4 %5</oldsource>
         <translation> Sèrie %1: %2 %3 %4 %5</translation>
     </message>
     <message>
@@ -735,10 +713,6 @@ Do you consider they are the same?
 %2
 %3
 %4 Images</source>
-        <oldsource>%1 
-%2 
-%3
-%4 Images</oldsource>
         <translation>%1
 %2
 %3
@@ -795,7 +769,6 @@ Do you consider they are the same?
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="130"/>
         <source>Zoom by default for these modalities</source>
-        <oldsource>Zoom tool enabled by default for these modalities</oldsource>
         <translation>Activa el zoom per defecte per aquestes modalitats</translation>
     </message>
     <message>
@@ -846,13 +819,11 @@ Do you consider they are the same?
     <message utf8="true">
         <location filename="q2dviewerconfigurationscreenbase.ui" line="296"/>
         <source>Body Surface Area (bsa) - cm²/ml</source>
-        <oldsource>Body Surface Area (bsa) - cm2/ml</oldsource>
         <translation>Àrea de superfície corporal (bsa) - cm²/ml</translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="191"/>
         <source>2x</source>
-        <oldsource>XA</oldsource>
         <translation></translation>
     </message>
     <message>
@@ -895,13 +866,11 @@ Do you consider they are the same?
         <location filename="q2dviewerwidget.cpp" line="26"/>
         <location filename="q2dviewerwidget.cpp" line="186"/>
         <source>Enable manual synchronization in this viewer</source>
-        <oldsource>Enable manual synchronization on this viewer</oldsource>
         <translation>Activa la sincronització manual en aquest visor</translation>
     </message>
     <message>
         <location filename="q2dviewerwidget.cpp" line="192"/>
         <source>Disable manual synchronization in this viewer</source>
-        <oldsource>Disable manual synchronization on this viewer</oldsource>
         <translation>Desactiva la sincronització manual en aquest visor</translation>
     </message>
 </context>
@@ -920,7 +889,6 @@ Do you consider they are the same?
     <message>
         <location filename="q2dviewerwidgetbase.ui" line="66"/>
         <source>Fusion Balance</source>
-        <oldsource>Fusion balance</oldsource>
         <translatorcomment>Hauria de ser &quot;balanç&quot; o &quot;equilibri&quot;?</translatorcomment>
         <translation>Balanç de fusió</translation>
     </message>
@@ -936,7 +904,6 @@ Do you consider they are the same?
     <message>
         <location filename="q3dviewer.cpp" line="588"/>
         <source>Unable to Apply Rendering Style</source>
-        <oldsource>Unable to apply rendering style</oldsource>
         <translation>No es pot aplicar l&apos;estil de renderització</translation>
     </message>
     <message>
@@ -949,7 +916,6 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     <message>
         <location filename="q3dviewer.cpp" line="1268"/>
         <source>Volume Not Supported</source>
-        <oldsource>Volume not supported</oldsource>
         <translation>El volum no és admès</translation>
     </message>
     <message>
@@ -960,7 +926,6 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     <message>
         <location filename="q3dviewer.cpp" line="678"/>
         <source>Volume Too Large</source>
-        <oldsource>Volume too large</oldsource>
         <translation>El volum és massa gran</translation>
     </message>
     <message>
@@ -1142,7 +1107,6 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     <message>
         <location filename="qdiagnosistestbase.ui" line="29"/>
         <source>Diagnosis Tests</source>
-        <oldsource>Diagnosis test</oldsource>
         <translation>Tests de diagnosi</translation>
     </message>
     <message>
@@ -1154,7 +1118,6 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     <message>
         <location filename="qdiagnosistestbase.ui" line="178"/>
         <source>Tests completed successfully</source>
-        <oldsource>All tests have passed</oldsource>
         <translation>S&apos;han superat els tests satisfactòriament</translation>
     </message>
     <message>
@@ -1180,7 +1143,6 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     <message>
         <location filename="qdiagnosistestbase.ui" line="269"/>
         <source>OK</source>
-        <oldsource>Ok</oldsource>
         <translation>D&apos;acord</translation>
     </message>
 </context>
@@ -1265,7 +1227,6 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     <message>
         <location filename="qlogviewer.cpp" line="57"/>
         <source>Save As...</source>
-        <oldsource>Save as...</oldsource>
         <translation>Anomena i desa...</translation>
     </message>
     <message>
@@ -1277,8 +1238,6 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
         <location filename="qlogviewer.cpp" line="38"/>
         <source>ERROR: No Log file found at this path: %1
 Environment variable (logFilePath): %2</source>
-        <oldsource>ERROR: No Log file found at this path: %1
-Environment variable(logFilePath): %2</oldsource>
         <translation>ERROR: No s&apos;ha trobat el fitxer de registre en aquesta ubicació: %1
 Variable d&apos;entorn (logFilePath): %2</translation>
     </message>
@@ -1286,22 +1245,22 @@ Variable d&apos;entorn (logFilePath): %2</translation>
 <context>
     <name>udg::QLogViewerBase</name>
     <message>
-        <location filename="qlogviewerbase.ui" line="16"/>
+        <location filename="qlogviewerbase.ui" line="14"/>
         <source>Log View</source>
         <translation>Visualització del registre</translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="39"/>
+        <location filename="qlogviewerbase.ui" line="38"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#000000;&quot;&gt;Log View&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#000000;&quot;&gt;Visualització del registre&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="102"/>
+        <location filename="qlogviewerbase.ui" line="101"/>
         <source>Save</source>
         <translation>Desa</translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="109"/>
+        <location filename="qlogviewerbase.ui" line="108"/>
         <source>Close</source>
         <translation>Tanca</translation>
     </message>
@@ -1608,7 +1567,6 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="50"/>
         <source>The computer has %1 cores, and the minimum required is %2</source>
-        <oldsource>The machine currently has %1 cores, and the minimum required is %2</oldsource>
         <translation>L&apos;ordinador té %1 nuclis, però en calen %2 com a mínim</translation>
     </message>
     <message>
@@ -1620,7 +1578,6 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="72"/>
         <source>The fastest CPU runs at %1 MHz, and the minimum required is %2 MHz</source>
-        <oldsource>The fastest CPU runs at %1 and the minimum required is %2</oldsource>
         <translation>La CPU més ràpida va a %1 MHz, quan la velocitat mínima requerida és de %2 MHz</translation>
     </message>
     <message>
@@ -1632,7 +1589,6 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="84"/>
         <source>Current OpenGL version is %1, and the minimum required is %2</source>
-        <oldsource>Current OpenGL version is %1 and the minimum required is %2</oldsource>
         <translation>La versió actual d&apos;OpenGL és %1, quan la mínima requerida és la %2</translation>
     </message>
     <message>
@@ -1643,7 +1599,6 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="118"/>
         <source>The graphics card %1 has %2 MB of RAM, and the minimum required is %3 MB</source>
-        <oldsource>The graphics card %1 has %2 MB of RAM and the minimum required is %3 MB</oldsource>
         <translation>La targeta gràfica %1 té %2 MB de memòria RAM, però en calen %3 MB com a mínim</translation>
     </message>
     <message>
@@ -1654,7 +1609,6 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="129"/>
         <source>There is not enough disk space to run %1 properly</source>
-        <oldsource>There is not enough disk space to run starviewer properly</oldsource>
         <translation>No hi ha prou espai al disc per executar correctament l&apos;%1</translation>
     </message>
     <message>
@@ -1665,19 +1619,16 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="139"/>
         <source>Operating system is not 64-bit</source>
-        <oldsource>Operating system is not 64 bit architecture</oldsource>
         <translation>El sistema operatiu no és de 64 bits</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="140"/>
         <source>Update operating system to a 64-bit version</source>
-        <oldsource>Update operating system to a 64 bit version</oldsource>
         <translation>Actualitzeu el sistema operatiu a una versió de 64 bits</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="156"/>
         <source>Current operating system version is %1, and the minimum required is %2</source>
-        <oldsource>Current Operative System version is %1, and the minimum required is %2</oldsource>
         <translation>La versió actual del sistema operatiu és %1, quan la mínima requerida és %2</translation>
     </message>
     <message>
@@ -1688,61 +1639,51 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="systemrequerimentstest.cpp" line="178"/>
         <source>Current Service Pack version is %1, and the minimum required is Service Pack %2</source>
-        <oldsource>Current Service Pack version is %1 and the minimum required is Service Pack %2</oldsource>
         <translation>La versió actual del Service Pack és %1, quan el Service Pack mínim requerit és el %2</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="179"/>
         <source>Install a newer Service Pack</source>
-        <oldsource>Install a newer service pack</oldsource>
         <translation>Instal·leu el Service Pack més recent</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="200"/>
         <source>The total amount of RAM memory is %1 MB, and the minimum required is %2 MB</source>
-        <oldsource>The total amount of RAM memory is %1 and the minimum required is %2</oldsource>
         <translation>La memòria RAM total és de %1 MB, però en calen %2 MB com a mínim</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="201"/>
         <source>Upgrade computer&apos;s RAM memory</source>
-        <oldsource>Add more RAM memory to the computer</oldsource>
         <translation>Afegiu més memòria RAM</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="229"/>
         <source>One of the screens is too small. Keep in mind that %1 won&apos;t fit in that screen</source>
-        <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</oldsource>
         <translation>Una de les pantalles té una resolució massa petita. L&apos;%1 no es mostrarà bé en aquesta pantalla</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="230"/>
         <source>Avoid placing %1 on the screen or screens %2, or increase their resolution if possible</source>
-        <oldsource>Don&apos;t move %1 to screen/s %2, or change to a higher resolution</oldsource>
         <translation>Eviteu utilitzar l&apos;%1 a la pantalla o pantalles %2, o augmenteu la resolució d&apos;aquestes si és possible</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="241"/>
         <source>Increase screen resolution</source>
-        <oldsource>Increase the resolution of the screens</oldsource>
         <translation>Augmenteu la resolució de pantalla</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="244"/>
         <source>The screen is too small to fit %1 application</source>
-        <oldsource>The screen is too small to fit Starviewer application</oldsource>
         <translation>La resolució de la pantalla és massa petita per mostrar l&apos;%1 correctament</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="248"/>
         <source>The screens are too small to fit %1 application</source>
-        <oldsource>The screens are too small to fit Starviewer application</oldsource>
         <translation>La resolució de les pantalles és massa petita per mostrar l&apos;%1 correctament</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="258"/>
         <source>The optical drive does not have burning capabilities</source>
-        <oldsource>The optical drive has not burning capabilities</oldsource>
         <translation>La unitat de disc òptic no permet enregistrar</translation>
     </message>
     <message>
@@ -1796,13 +1737,11 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="toolregistry.cpp" line="242"/>
         <source>Screenshot</source>
-        <oldsource>Screen Shot</oldsource>
         <translation>Captura de pantalla</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="244"/>
         <source>Enable/Disable Screenshot tool</source>
-        <oldsource>Enable/Disable Screen shot tool</oldsource>
         <translation>Activa/desactiva l&apos;eina de captura de pantalla</translation>
     </message>
     <message>
@@ -1828,7 +1767,6 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="toolregistry.cpp" line="265"/>
         <source>ROIs</source>
-        <oldsource>ROI&apos;s</oldsource>
         <translation>ROIs</translation>
     </message>
     <message>
@@ -1854,7 +1792,6 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="toolregistry.cpp" line="282"/>
         <source>Enable voxel information under cursor</source>
-        <oldsource>Enable voxel information over cursor</oldsource>
         <translation>Activa la informació del vòxel sota el cursor</translation>
     </message>
     <message>
@@ -1929,7 +1866,6 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="toolregistry.cpp" line="383"/>
         <source>Auto-Sync</source>
-        <oldsource>Auto</oldsource>
         <translation>Sinc. Auto.</translation>
     </message>
     <message>
@@ -1965,7 +1901,6 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="toolregistry.cpp" line="408"/>
         <source>Enable/disable TA-GT distance tool</source>
-        <oldsource>Enable/disable perpendicular distance tool</oldsource>
         <translation>Activa/desactiva l&apos;eina de distància TA-GT</translation>
     </message>
     <message>
@@ -2012,13 +1947,11 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="toolregistry.cpp" line="477"/>
         <source>Sagittal</source>
-        <oldsource>Saggital</oldsource>
         <translation>Sagital</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="480"/>
         <source>Switch to Sagittal View</source>
-        <oldsource>Switch to Saggital View</oldsource>
         <translation>Canvia a la vista sagital</translation>
     </message>
     <message>
@@ -2123,7 +2056,6 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="toolregistry.cpp" line="271"/>
         <source>Ref. Lines</source>
-        <oldsource>Ref.Lines</oldsource>
         <translation>Línies de referència</translation>
     </message>
     <message>
@@ -2190,13 +2122,11 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="toolregistry.cpp" line="351"/>
         <source>Open Angle</source>
-        <oldsource>Non Closed Angle</oldsource>
         <translation>Angle obert</translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="354"/>
         <source>Enable/Disable open-angle tool</source>
-        <oldsource>Enable/Disable non closed angle tool</oldsource>
         <translation>Activa/desactiva l&apos;eina d&apos;angle obert</translation>
     </message>
 </context>
@@ -2341,43 +2271,36 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="volumereader.cpp" line="120"/>
         <source>Cannot Read Files</source>
-        <oldsource>Cannot Read File(s)</oldsource>
         <translation>No s&apos;han pogut llegir els fitxers</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="124"/>
         <source>Unknown Error</source>
-        <oldsource>Unkwown Error</oldsource>
         <translation>Error desconegut</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="136"/>
         <source>There&apos;s not enough memory to load the series you requested. Try to close all the open %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
-        <oldsource>There&apos;s not enough memory to load the Series you requested. Try to close all the open %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</oldsource>
         <translation>No hi ha prou memòria per carregar la sèrie demanada. Intenteu tancar totes les finestres de l&apos;%1 obertes, reinicieu l&apos;aplicació i torneu-ho a provar. Si el problema es manté, es podria solucionar afegint més memòria RAM o canviant a un sistema operatiu de 64 bits.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="140"/>
         <source>%1 could not find the corresponding files for this series. Maybe they had been removed or are corrupted.</source>
-        <oldsource>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</oldsource>
         <translation>L&apos;%1 no pot trobar els fitxers d&apos;aquesta sèrie. Potser s&apos;han eliminat o són corruptes.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="142"/>
         <source>%1 could not read the requested files for this series.</source>
-        <oldsource>%1 could not read the requested file(s) for this Series.</oldsource>
         <translation>L&apos;%1 no ha pogut llegir els fitxers de la sèrie demanada.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="144"/>
         <source>Loading of data has been aborted.</source>
-        <oldsource>The loading of the data have been aborted.</oldsource>
         <translation>S&apos;ha avortat la càrrega de les dades.</translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="146"/>
         <source>%1 found an unexpected error reading this series. No series data has been loaded.</source>
-        <oldsource>%1 found an unexpected error reading this Series. No Series data has been loaded.</oldsource>
         <translation>L&apos;%1 ha trobat un error inesperat en llegir aquesta sèrie. No s&apos;han carregat les dades de la sèrie.</translation>
     </message>
 </context>
@@ -2404,19 +2327,16 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="16"/>
         <source>CT Soft Tissues</source>
-        <oldsource>CT Soft Tissues, Non Contrast</oldsource>
         <translation>CT teixits tous</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="17"/>
         <source>CT Soft Tissues+Contrast</source>
-        <oldsource>CT Soft Tissues, Contrast</oldsource>
         <translation>CT teixits tous + contrast</translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="20"/>
         <source>CT Liver+Contrast</source>
-        <oldsource>CT Liver, Contrast</oldsource>
         <translation>CT fetge + contrast</translation>
     </message>
     <message>
@@ -2427,7 +2347,6 @@ Es recomana que les deseu en una carpeta buida.</translation>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="22"/>
         <source>CT Neck+Contrast</source>
-        <oldsource>CT Neck, Contrast</oldsource>
         <translation>CT coll + contrast</translation>
     </message>
     <message>
@@ -2451,7 +2370,7 @@ Es recomana que les deseu en una carpeta buida.</translation>
         <translation>Os petrós</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="192"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="191"/>
         <source>Custom</source>
         <translation>Personalitzada</translation>
     </message>

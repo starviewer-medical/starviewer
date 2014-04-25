@@ -33,6 +33,7 @@ class RelatedStudiesManager;
 class AutomaticSynchronizationManager;
 class SyncActionManager;
 class ViewersLayoutToSyncActionManagerAdapter;
+class SyncActionsConfigurationHandler;
 #endif
 
 /**
@@ -237,6 +238,7 @@ private:
     /// Manager per estudis relacionats
     RelatedStudiesManager *m_relatedStudiesManager;
 
+    SyncActionsConfigurationHandler *m_syncActionsConfigurationHandler;
     SyncActionManager *m_syncActionManager;
     ViewersLayoutToSyncActionManagerAdapter *m_layoutToSyncActionManagerAdapter;
 #endif

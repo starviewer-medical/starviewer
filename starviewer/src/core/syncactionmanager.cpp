@@ -1,6 +1,7 @@
 #include "syncactionmanager.h"
 
 #include "signaltosyncactionmapperfactory.h"
+#include "syncactionsconfigurationhandler.h"
 #include "syncaction.h"
 #include "synccriterion.h"
 #include "syncactionsconfiguration.h"
@@ -9,7 +10,7 @@
 
 namespace udg {
 
-SyncActionManager::SyncActionManager(QObject *parent)
+SyncActionManager::SyncActionManager(SyncActionsConfiguration *configuration, QObject *parent)
  : QObject(parent)
 {
     m_masterViewer = 0;
@@ -17,11 +18,12 @@ SyncActionManager::SyncActionManager(QObject *parent)
     m_synchronizingAll = false;
     
     setupSignalMappers();
-    setupDefaultSyncActionsConfiguration();
+    setupSyncActionsConfiguration(configuration);
 }
 
 SyncActionManager::~SyncActionManager()
 {
+    delete m_syncActionsConfiguration;
 }
 
 void SyncActionManager::addSyncedViewer(QViewer *viewer)
@@ -78,7 +80,14 @@ void SyncActionManager::setSyncActionsConfiguration(SyncActionsConfiguration *co
         return;
     }
 
+    delete m_syncActionsConfiguration;
+    
     m_syncActionsConfiguration = configuration;
+}
+
+SyncActionsConfiguration* SyncActionManager::getSyncActionsConfiguration()
+{
+    return m_syncActionsConfiguration;
 }
 
 void SyncActionManager::enable(bool enable)
@@ -160,13 +169,15 @@ void SyncActionManager::setupSignalMappers()
     }
 }
 
-void SyncActionManager::setupDefaultSyncActionsConfiguration()
+void SyncActionManager::setupSyncActionsConfiguration(SyncActionsConfiguration *configuration)
 {
-    m_syncActionsConfiguration = new SyncActionsConfiguration();
-
-    foreach (const SyncActionMetaData &syncActionMetaData, SignalToSyncActionMapperFactory::instance()->getFactoryIdentifiersList())
+    if (!configuration)
     {
-        m_syncActionsConfiguration->enableSyncAction(syncActionMetaData);
+        m_syncActionsConfiguration = SyncActionsConfigurationHandler::getDefaultSyncActionsConfiguration();
+    }
+    else
+    {
+        m_syncActionsConfiguration = configuration;
     }
 }
 

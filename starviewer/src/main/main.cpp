@@ -5,7 +5,7 @@
 #include "extensions.h"
 #include "extensionmediatorfactory.h"
 #include "diagnosistests.h"
-#include "syncactions.h"
+#include "syncactionsregister.h"
 // Definicions globals d'aplicació
 #include "starviewerapplication.h"
 // Necessaris per suportar la decodificació de jpeg i RLE
@@ -189,6 +189,9 @@ int main(int argc, char *argv[])
 
     initQtPluginsDirectory();
     initializeTranslations(app);
+
+    // Registering the available sync actions
+    udg::SyncActionsRegister::registerSyncActions();
 
     // TODO aixo es necessari per, entre d'altres coses, poder crear thumbnails,
     // dicomdirs, etc de dicoms comprimits i tractar-los correctament amb dcmtk

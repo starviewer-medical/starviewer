@@ -44,7 +44,7 @@ void ThickSlabSyncAction::run(QViewer *viewer)
 
 void ThickSlabSyncAction::setupMetaData()
 {
-    m_metaData = SyncActionMetaData("ThickSlabSyncAction", QObject::tr("thick slab"), "thickSlab");
+    m_metaData = SyncActionMetaData("ThickSlabSyncAction", QObject::tr("Thick slab"), "thickSlab");
 }
 
 void ThickSlabSyncAction::setupDefaultSyncCriteria()

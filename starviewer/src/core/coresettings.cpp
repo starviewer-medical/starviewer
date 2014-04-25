@@ -95,6 +95,8 @@ const QString CoreSettings::ModalitiesWithPropagationEnabledByDefault(Q2DViewerB
 const QString CoreSettings::MeasurementDisplayVerbosity(Q2DViewerBase + "Measurement/measurementDisplayVerbosity");
 const QString CoreSettings::SUVMeasurementNormalizationType(Q2DViewerBase + "Measurement/SUVMeasurementNormalizationType");
 
+const QString CoreSettings::EnabledSyncActionsKey("enabledSyncActions");
+
 CoreSettings::CoreSettings()
 {
 }

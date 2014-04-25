@@ -4,6 +4,7 @@
 #include "anatomicalplanesynccriterion.h"
 #include "frameofreferencesynccriterion.h"
 #include "anglebetweenplanessynccriterion.h"
+#include "anatomicalregionsynccriterion.h"
 
 namespace udg {
 
@@ -39,12 +40,12 @@ void PanSyncAction::run(QViewer *viewer)
 
 void PanSyncAction::setupMetaData()
 {
-    m_metaData = SyncActionMetaData("PanSyncAction", QObject::tr("pan"), "pan");
+    m_metaData = SyncActionMetaData("PanSyncAction", QObject::tr("Pan"), "pan");
 }
 
 void PanSyncAction::setupDefaultSyncCriteria()
 {
-    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new FrameOfReferenceSyncCriterion() << new AngleBetweenPlanesSyncCriterion();
+    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new FrameOfReferenceSyncCriterion() << new AngleBetweenPlanesSyncCriterion() << new AnatomicalRegionSyncCriterion();
 }
 
 } // End namespace udg

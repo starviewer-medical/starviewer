@@ -371,6 +371,8 @@ HEADERS += extensionfactory.h \
     signaltosyncactionmapperfactoryregister.h \
     syncactionmetadata.h \
     syncactionsconfiguration.h \
+    syncactionsconfigurationmenu.h \
+    syncactionsconfigurationhandler.h \
     syncactionmanager.h \
     viewerslayouttosyncactionmanageradapter.h \
     volumepixeldatareaderselector.h \
@@ -408,7 +410,8 @@ HEADERS += extensionfactory.h \
     qenhancedmenutoolbutton.h \
     qfusionbalancewidget.h \
     frameofreferencesynccriterion.h \
-    anglebetweenplanessynccriterion.h
+    anglebetweenplanessynccriterion.h \
+    anatomicalregionsynccriterion.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -729,6 +732,8 @@ SOURCES += extensionmediator.cpp \
     imageorientationsignaltosyncactionmapper.cpp \
     syncactionmetadata.cpp \
     syncactionsconfiguration.cpp \
+    syncactionsconfigurationmenu.cpp \
+    syncactionsconfigurationhandler.cpp \
     syncactionmanager.cpp \
     viewerslayouttosyncactionmanageradapter.cpp \
     vtkdcmtkbydefaultvolumepixeldatareaderselector.cpp \
@@ -764,7 +769,8 @@ SOURCES += extensionmediator.cpp \
     qenhancedmenutoolbutton.cpp \
     qfusionbalancewidget.cpp \
     frameofreferencesynccriterion.cpp \
-    anglebetweenplanessynccriterion.cpp
+    anglebetweenplanessynccriterion.cpp \
+    anatomicalregionsynccriterion.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

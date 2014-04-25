@@ -1,6 +1,7 @@
 #include "zoomfactorsignaltosyncactionmapper.h"
 
 #include "qviewer.h"
+#include "zoomfactorsyncaction.h"
 
 namespace udg {
 

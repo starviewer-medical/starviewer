@@ -3,10 +3,6 @@
 
 #include "signaltosyncactionmapper.h"
 
-// Includes needed to do the factory register
-#include "phasesyncaction.h"
-#include "signaltosyncactionmapperfactoryregister.h"
-
 namespace udg {
 
 /**
@@ -35,9 +31,6 @@ private slots:
     void mapToSyncAction(int phase);
 
 };
-
-// With this line we register this mapper on the factory
-static SignalToSyncActionMapperFactoryRegister<PhaseSignalToSyncActionMapper> registerPhaseSignalToSyncActionMapper(PhaseSyncAction().getMetaData());
 
 }
 

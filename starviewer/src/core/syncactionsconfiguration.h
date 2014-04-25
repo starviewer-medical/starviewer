@@ -24,6 +24,9 @@ public:
     /// Returns true if the given SyncAction is enabled
     bool isSyncActionEnabled(const SyncActionMetaData &syncActionMetaData);
 
+    /// Returns the list of SyncActions that are enabled
+    QList<SyncActionMetaData> getEnabledSyncActions() const;
+
     /// Returns the corresponding list of SyncCriterion defined for a SyncAction.
     /// If current configuration has no SyncCriterion defined for the given SyncAction, default from own SyncAction will be returned.
     QList<SyncCriterion*> getSyncCriteria(SyncAction *syncAction);
@@ -39,8 +42,8 @@ private:
     void cleanupConfiguredSyncCriteria();
 
 private:
-    /// Set containing the name of the enabled sync actions
-    QSet<QString> m_enabledSyncActions;
+    /// Map containing the enabled sync actions indexed by the identifier name of the SyncAction
+    QMap<QString, SyncActionMetaData> m_enabledSyncActions;
 
     /// This map contains which SyncCriterion corresponds to an specific SyncAction through its metadata
     /// When SyncCriterion are defined for a SyncAction in this map, they'll have priority over own SyncAction default defined criteria

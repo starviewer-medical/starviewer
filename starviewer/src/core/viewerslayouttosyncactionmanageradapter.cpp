@@ -14,7 +14,7 @@ ViewersLayoutToSyncActionManagerAdapter::ViewersLayoutToSyncActionManagerAdapter
 
     if (!m_manager)
     {
-        m_manager = new SyncActionManager(this);
+        m_manager = new SyncActionManager(0, this);
     }
 
     createConnections();

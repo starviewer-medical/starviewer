@@ -3,10 +3,6 @@
 
 #include "signaltosyncactionmapper.h"
 
-/// Includes needed to do the factory register
-#include "zoomfactorsyncaction.h"
-#include "signaltosyncactionmapperfactoryregister.h"
-
 namespace udg {
 
 /**
@@ -30,9 +26,6 @@ protected slots:
     /// Should be connected to the corresponding signals on Q*Viewer
     void mapToSyncAction(double factor);
 };
-
-/// With this line we register this mapper on the factory
-static SignalToSyncActionMapperFactoryRegister<ZoomFactorSignalToSyncActionMapper> registerZoomFactorSignalToSyncActionMapper(ZoomFactorSyncAction().getMetaData());
 
 } // End namespace udg
 
