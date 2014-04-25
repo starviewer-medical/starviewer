@@ -126,6 +126,9 @@ public:
 
     /// Defines the preferred SUV measurement normalization type
     static const QString SUVMeasurementNormalizationType;
+
+    /// Corresponding key to the enabled sync actions
+    static const QString EnabledSyncActionsKey;
 };
 
 } // End namespace udg
