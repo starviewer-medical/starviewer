@@ -76,7 +76,8 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_synchronizeAllViewersButton->hide();
     m_desynchronizeAllViewersButton->hide();
 #else
-    m_syncActionManager = new SyncActionManager(SyncActionsConfigurationHandler::getDefaultSyncActionsConfiguration(), this);
+    m_syncActionsConfigurationHandler = new SyncActionsConfigurationHandler;
+    m_syncActionManager = new SyncActionManager(m_syncActionsConfigurationHandler->getConfiguration(Q2DViewerSettings::KeyPrefix), this);
     m_layoutToSyncActionManagerAdapter = new ViewersLayoutToSyncActionManagerAdapter(m_workingArea, m_syncActionManager, this);
     m_relatedStudiesManager = new RelatedStudiesManager();
 #endif
@@ -173,6 +174,7 @@ Q2DViewerExtension::~Q2DViewerExtension()
     writeSettings();
 
 #ifndef STARVIEWER_LITE
+    delete m_syncActionsConfigurationHandler;
     delete m_relatedStudiesWidget;
     delete m_relatedStudiesManager;
 #endif
@@ -835,6 +837,9 @@ void Q2DViewerExtension::readSettings()
 
 void Q2DViewerExtension::writeSettings()
 {
+#ifndef STARVIEWER_LITE
+    m_syncActionsConfigurationHandler->saveConfiguration(m_syncActionManager->getSyncActionsConfiguration(), Q2DViewerSettings::KeyPrefix);
+#endif
 }
 
 void Q2DViewerExtension::disableSynchronization()
