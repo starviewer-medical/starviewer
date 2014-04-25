@@ -14,7 +14,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="110"/>
+        <location filename="coresettings.cpp" line="112"/>
         <source>PNG (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -313,7 +313,7 @@
     </message>
     <message>
         <location filename="pansyncaction.cpp" line="42"/>
-        <source>pan</source>
+        <source>Pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -355,7 +355,7 @@ Do you consider they are the same?
     </message>
     <message>
         <location filename="phasesyncaction.cpp" line="40"/>
-        <source>phase</source>
+        <source>Phase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -416,7 +416,7 @@ Do you consider they are the same?
     </message>
     <message>
         <location filename="thickslabsyncaction.cpp" line="47"/>
-        <source>thick slab</source>
+        <source>Thick slab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -477,6 +477,21 @@ Do you consider they are the same?
     <message>
         <location filename="windowlevelhelper.cpp" line="123"/>
         <source>Auto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="imageorientationsyncaction.cpp" line="34"/>
+        <source>Image orientation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="windowlevelsyncaction.cpp" line="59"/>
+        <source>Window level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="zoomfactorsyncaction.cpp" line="34"/>
+        <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1275,22 +1290,22 @@ Environment variable(logFilePath): %2</oldsource>
 <context>
     <name>udg::QLogViewerBase</name>
     <message>
-        <location filename="qlogviewerbase.ui" line="16"/>
+        <location filename="qlogviewerbase.ui" line="14"/>
         <source>Log View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="39"/>
+        <location filename="qlogviewerbase.ui" line="38"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#000000;&quot;&gt;Log View&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="102"/>
+        <location filename="qlogviewerbase.ui" line="101"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="109"/>
+        <location filename="qlogviewerbase.ui" line="108"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2429,7 +2444,7 @@ It&apos;s recommended you save them in an empty folder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="192"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="191"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>

@@ -37,7 +37,7 @@ void PhaseSyncAction::run(QViewer *viewer)
 
 void PhaseSyncAction::setupMetaData()
 {
-    m_metaData = SyncActionMetaData("PhaseSyncAction", QObject::tr("phase"), "phase");
+    m_metaData = SyncActionMetaData("PhaseSyncAction", QObject::tr("Phase"), "phase");
 }
 
 void PhaseSyncAction::setupDefaultSyncCriteria()
