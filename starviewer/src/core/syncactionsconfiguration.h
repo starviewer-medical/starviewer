@@ -24,6 +24,9 @@ public:
     /// Returns true if the given SyncAction is enabled
     bool isSyncActionEnabled(const SyncActionMetaData &syncActionMetaData);
 
+    /// Returns the list of SyncActions that are enabled
+    QList<SyncActionMetaData> getEnabledSyncActions() const;
+
     /// Returns the corresponding list of SyncCriterion defined for a SyncAction.
     /// If current configuration has no SyncCriterion defined for the given SyncAction, default from own SyncAction will be returned.
     QList<SyncCriterion*> getSyncCriteria(SyncAction *syncAction);
