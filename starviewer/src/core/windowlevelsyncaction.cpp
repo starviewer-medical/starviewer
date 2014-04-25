@@ -56,7 +56,7 @@ void WindowLevelSyncAction::run(QViewer *viewer)
 
 void WindowLevelSyncAction::setupMetaData()
 {
-    m_metaData = SyncActionMetaData("WindowLevelSyncAction", QObject::tr("window level"), "windowLevel");
+    m_metaData = SyncActionMetaData("WindowLevelSyncAction", QObject::tr("Window level"), "windowLevel");
 }
 
 void WindowLevelSyncAction::setupDefaultSyncCriteria()

@@ -40,7 +40,7 @@ void PanSyncAction::run(QViewer *viewer)
 
 void PanSyncAction::setupMetaData()
 {
-    m_metaData = SyncActionMetaData("PanSyncAction", QObject::tr("pan"), "pan");
+    m_metaData = SyncActionMetaData("PanSyncAction", QObject::tr("Pan"), "pan");
 }
 
 void PanSyncAction::setupDefaultSyncCriteria()

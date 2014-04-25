@@ -31,7 +31,7 @@ void ImageOrientationSyncAction::run(QViewer *viewer)
 
 void ImageOrientationSyncAction::setupMetaData()
 {
-    m_metaData = SyncActionMetaData("ImageOrientationSyncAction", QObject::tr("image orientation"), "imageOrientation");
+    m_metaData = SyncActionMetaData("ImageOrientationSyncAction", QObject::tr("Image orientation"), "imageOrientation");
 }
 
 void ImageOrientationSyncAction::setupDefaultSyncCriteria()

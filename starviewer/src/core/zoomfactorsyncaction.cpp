@@ -31,7 +31,7 @@ void ZoomFactorSyncAction::run(QViewer *viewer)
 
 void ZoomFactorSyncAction::setupMetaData()
 {
-    m_metaData = SyncActionMetaData("ZoomFactorSyncAction", QObject::tr("zoom"), "zoom");
+    m_metaData = SyncActionMetaData("ZoomFactorSyncAction", QObject::tr("Zoom"), "zoom");
 }
 
 void ZoomFactorSyncAction::setupDefaultSyncCriteria()

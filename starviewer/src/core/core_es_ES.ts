@@ -14,7 +14,7 @@
         <translation>Previsualización no disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="110"/>
+        <location filename="coresettings.cpp" line="112"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
@@ -278,11 +278,6 @@
         <translation>Estado del DIMSE: </translation>
     </message>
     <message>
-        <location filename="imageorientationsyncaction.cpp" line="33"/>
-        <source>image orientation</source>
-        <translation>orientación de la imagen</translation>
-    </message>
-    <message>
         <location filename="measurementmanager.cpp" line="101"/>
         <source>px</source>
         <translation>px</translation>
@@ -314,8 +309,8 @@
     </message>
     <message>
         <location filename="pansyncaction.cpp" line="42"/>
-        <source>pan</source>
-        <translation>mover</translation>
+        <source>Pan</source>
+        <translation>Desplazamiento</translation>
     </message>
     <message>
         <location filename="patientcomparer.cpp" line="57"/>
@@ -356,8 +351,8 @@ Do you consider they are the same?
     </message>
     <message>
         <location filename="phasesyncaction.cpp" line="40"/>
-        <source>phase</source>
-        <translation>fase</translation>
+        <source>Phase</source>
+        <translation>Fase</translation>
     </message>
     <message>
         <location filename="q2dviewerannotationhandler.cpp" line="102"/>
@@ -417,23 +412,13 @@ Do you consider they are the same?
     </message>
     <message>
         <location filename="thickslabsyncaction.cpp" line="47"/>
-        <source>thick slab</source>
-        <translation>grosor de corte</translation>
+        <source>Thick slab</source>
+        <translation>Grosor de corte</translation>
     </message>
     <message>
         <location filename="transferfunctionmodelfiller.cpp" line="15"/>
         <source>None</source>
         <translation>Ninguna</translation>
-    </message>
-    <message>
-        <location filename="windowlevelsyncaction.cpp" line="56"/>
-        <source>window level</source>
-        <translation>brillo y contraste</translation>
-    </message>
-    <message>
-        <location filename="zoomfactorsyncaction.cpp" line="33"/>
-        <source>zoom</source>
-        <translation>zoom</translation>
     </message>
     <message>
         <location filename="abstractroidataprinter.cpp" line="32"/>
@@ -479,6 +464,21 @@ Do you consider they are the same?
         <location filename="windowlevelhelper.cpp" line="123"/>
         <source>Auto</source>
         <translation>Automática</translation>
+    </message>
+    <message>
+        <location filename="imageorientationsyncaction.cpp" line="34"/>
+        <source>Image orientation</source>
+        <translation>Orientación de imagen</translation>
+    </message>
+    <message>
+        <location filename="windowlevelsyncaction.cpp" line="59"/>
+        <source>Window level</source>
+        <translation>Ventana</translation>
+    </message>
+    <message>
+        <location filename="zoomfactorsyncaction.cpp" line="34"/>
+        <source>Zoom</source>
+        <translation>Zoom</translation>
     </message>
 </context>
 <context>
@@ -1284,22 +1284,22 @@ Variable de entorno (logFilePath): %2</translation>
 <context>
     <name>udg::QLogViewerBase</name>
     <message>
-        <location filename="qlogviewerbase.ui" line="16"/>
+        <location filename="qlogviewerbase.ui" line="14"/>
         <source>Log View</source>
         <translation>Visualización del registro</translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="39"/>
+        <location filename="qlogviewerbase.ui" line="38"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#000000;&quot;&gt;Log View&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#000000;&quot;&gt;Visualización del registro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="102"/>
+        <location filename="qlogviewerbase.ui" line="101"/>
         <source>Save</source>
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="109"/>
+        <location filename="qlogviewerbase.ui" line="108"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -2442,7 +2442,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
         <translation>Hueso petroso</translation>
     </message>
     <message>
-        <location filename="windowlevelpresetstooldata.cpp" line="192"/>
+        <location filename="windowlevelpresetstooldata.cpp" line="191"/>
         <source>Custom</source>
         <translation>Personalizada</translation>
     </message>
