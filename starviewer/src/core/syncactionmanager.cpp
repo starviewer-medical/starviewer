@@ -81,6 +81,11 @@ void SyncActionManager::setSyncActionsConfiguration(SyncActionsConfiguration *co
     m_syncActionsConfiguration = configuration;
 }
 
+SyncActionsConfiguration* SyncActionManager::getSyncActionsConfiguration()
+{
+    return m_syncActionsConfiguration;
+}
+
 void SyncActionManager::enable(bool enable)
 {
     m_enabled = enable;
