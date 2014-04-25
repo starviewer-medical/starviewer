@@ -23,6 +23,7 @@ SyncActionManager::SyncActionManager(SyncActionsConfiguration *configuration, QO
 
 SyncActionManager::~SyncActionManager()
 {
+    delete m_syncActionsConfiguration;
 }
 
 void SyncActionManager::addSyncedViewer(QViewer *viewer)
@@ -79,6 +80,8 @@ void SyncActionManager::setSyncActionsConfiguration(SyncActionsConfiguration *co
         return;
     }
 
+    delete m_syncActionsConfiguration;
+    
     m_syncActionsConfiguration = configuration;
 }
 
