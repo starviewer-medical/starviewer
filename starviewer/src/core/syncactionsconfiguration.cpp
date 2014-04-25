@@ -36,6 +36,11 @@ bool SyncActionsConfiguration::isSyncActionEnabled(const SyncActionMetaData &syn
     return m_enabledSyncActions.contains(syncActionMetaData.getName());
 }
 
+QList<SyncActionMetaData> SyncActionsConfiguration::getEnabledSyncActions() const
+{
+    return m_enabledSyncActions.values();
+}
+
 QList<SyncCriterion*> SyncActionsConfiguration::getSyncCriteria(SyncAction *syncAction)
 {
     if (!syncAction)
