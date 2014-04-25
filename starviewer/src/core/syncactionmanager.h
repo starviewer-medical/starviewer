@@ -23,7 +23,7 @@ class SyncActionsConfiguration;
 class SyncActionManager : public QObject {
 Q_OBJECT
 public:
-    SyncActionManager(QObject *parent = 0);
+    SyncActionManager(SyncActionsConfiguration *configuration, QObject *parent = 0);
     ~SyncActionManager();
 
     /// Adds the given viewer to the set of synced viewers
@@ -57,8 +57,8 @@ private:
     /// Sets up the signal mappers that will generate the SyncActions
     void setupSignalMappers();
     
-    /// Sets up the default configuration for sync actions. It enables all the registered sync actions
-    void setupDefaultSyncActionsConfiguration();
+    /// Sets up the configuration for sync actions upon the given one. It enables all the registered sync actions if null
+    void setupSyncActionsConfiguration(SyncActionsConfiguration *configuration);
     
     /// Sets the current master viewer on the registered signal mappers
     void updateMasterViewerMappers();
