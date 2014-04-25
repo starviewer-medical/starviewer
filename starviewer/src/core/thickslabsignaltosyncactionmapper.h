@@ -3,10 +3,6 @@
 
 #include "signaltosyncactionmapper.h"
 
-// Includes needed to do the factory register
-#include "signaltosyncactionmapperfactoryregister.h"
-#include "thickslabsyncaction.h"
-
 namespace udg {
 
 /**
@@ -37,9 +33,6 @@ private slots:
     void mapThicknessToSyncAction(int slabThickness);
 
 };
-
-// With this line we register this mapper on the factory
-static SignalToSyncActionMapperFactoryRegister<ThickSlabSignalToSyncActionMapper> registerThickSlabSignalToSyncActionMapper(ThickSlabSyncAction().getMetaData());
 
 }
 

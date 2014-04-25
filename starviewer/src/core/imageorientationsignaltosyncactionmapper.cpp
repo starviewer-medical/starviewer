@@ -2,6 +2,7 @@
 
 #include "q2dviewer.h"
 #include "patientorientation.h"
+#include "imageorientationsyncaction.h"
 
 namespace udg {
 
