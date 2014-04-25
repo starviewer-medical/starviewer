@@ -4,6 +4,7 @@
 #include "anatomicalplanesynccriterion.h"
 #include "frameofreferencesynccriterion.h"
 #include "anglebetweenplanessynccriterion.h"
+#include "anatomicalregionsynccriterion.h"
 
 namespace udg {
 
@@ -44,7 +45,7 @@ void PanSyncAction::setupMetaData()
 
 void PanSyncAction::setupDefaultSyncCriteria()
 {
-    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new FrameOfReferenceSyncCriterion() << new AngleBetweenPlanesSyncCriterion();
+    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new FrameOfReferenceSyncCriterion() << new AngleBetweenPlanesSyncCriterion() << new AnatomicalRegionSyncCriterion();
 }
 
 } // End namespace udg
