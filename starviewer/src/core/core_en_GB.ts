@@ -59,13 +59,11 @@
     <message>
         <location filename="windowsfirewallaccess.cpp" line="70"/>
         <source>Application is not in the firewall exceptions list</source>
-        <oldsource>Application is not in the firewall&apos;s exceptions list</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="windowsfirewallaccess.cpp" line="76"/>
         <source>Unable to check if application is in the firewall exceptions list</source>
-        <oldsource>Unable to check if application is in the firewall&apos;s exceptions list</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -91,7 +89,6 @@
     <message>
         <location filename="windowsfirewallaccess.cpp" line="114"/>
         <source>Error initializing firewall library</source>
-        <oldsource>Error initialization firewall&apos;s library</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -212,7 +209,6 @@
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="81"/>
         <source>Identifier does not match SOP Class</source>
-        <oldsource>Identifiers does not match SOP Class</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -268,17 +264,11 @@
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="125"/>
         <source>Unknown status</source>
-        <oldsource>Unkown status</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="214"/>
         <source>DIMSE Status: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="imageorientationsyncaction.cpp" line="33"/>
-        <source>image orientation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -319,11 +309,6 @@
     <message>
         <location filename="patientcomparer.cpp" line="57"/>
         <source>Cannot determine the similarity of these patients.</source>
-        <oldsource>Cannot determine the similarity of these patients.
-
-Do you consider they are the same?
-
-</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -422,16 +407,6 @@ Do you consider they are the same?
     <message>
         <location filename="transferfunctionmodelfiller.cpp" line="15"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="windowlevelsyncaction.cpp" line="56"/>
-        <source>window level</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="zoomfactorsyncaction.cpp" line="33"/>
-        <source>zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -575,7 +550,6 @@ Do you consider they are the same?
     <message>
         <location filename="screenshottool.cpp" line="23"/>
         <source>JPEG (*.jpg)</source>
-        <oldsource>Jpeg (*.jpg)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -608,13 +582,11 @@ Do you consider they are the same?
         <location filename="applicationupdatechecker.cpp" line="162"/>
         <location filename="applicationupdatechecker.cpp" line="193"/>
         <source>Error parsing JSON.</source>
-        <oldsource>Error parsing json.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="applicationupdatechecker.cpp" line="182"/>
         <source>Error parsing JSON: version or releaseNotesURL are not strings</source>
-        <oldsource>Error parsing JSON: version or releaseNotesUrl are not strings</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -649,7 +621,6 @@ Do you consider they are the same?
     <message>
         <location filename="applicationversionchecker.cpp" line="147"/>
         <source>OK</source>
-        <oldsource>Ok</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -658,13 +629,11 @@ Do you consider they are the same?
     <message>
         <location filename="applicationversiontest.cpp" line="33"/>
         <source>There is a new version available</source>
-        <oldsource>There is a new version available.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="applicationversiontest.cpp" line="34"/>
         <source>Contact technical service to request the software update</source>
-        <oldsource>Contact technical service to request the software update.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -678,7 +647,6 @@ Do you consider they are the same?
     <message>
         <location filename="firewallaccesstest.cpp" line="30"/>
         <source>Add %1 to the list of applications that have access through firewall</source>
-        <oldsource>Add %1 to the list of applications that have access through firewall on Control Panel &gt; Firewall</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -697,15 +665,12 @@ Do you consider they are the same?
     <message>
         <location filename="hangingprotocolxmlreader.cpp" line="34"/>
         <source>Hanging Protocol XML File</source>
-        <oldsource>Hanging protocol XML File</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="hangingprotocolxmlreader.cpp" line="35"/>
         <source>Unable to read file %1:
 %2.</source>
-        <oldsource>Cannot read file %1:
-%2.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -724,7 +689,6 @@ Do you consider they are the same?
     <message>
         <location filename="nonclosedangletool.cpp" line="303"/>
         <source>Skew lines</source>
-        <oldsource>Skew lines.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -747,10 +711,6 @@ Do you consider they are the same?
 %2
 %3
 %4 Images</source>
-        <oldsource>%1 
-%2 
-%3
-%4 Images</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -804,7 +764,6 @@ Do you consider they are the same?
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="130"/>
         <source>Zoom by default for these modalities</source>
-        <oldsource>Zoom tool enabled by default for these modalities</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -855,13 +814,11 @@ Do you consider they are the same?
     <message utf8="true">
         <location filename="q2dviewerconfigurationscreenbase.ui" line="296"/>
         <source>Body Surface Area (bsa) - cm²/ml</source>
-        <oldsource>Body Surface Area (bsa) - cm2/ml</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="q2dviewerconfigurationscreenbase.ui" line="191"/>
         <source>2x</source>
-        <oldsource>XA</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -904,13 +861,11 @@ Do you consider they are the same?
         <location filename="q2dviewerwidget.cpp" line="26"/>
         <location filename="q2dviewerwidget.cpp" line="186"/>
         <source>Enable manual synchronization in this viewer</source>
-        <oldsource>Enable manual synchronization on this viewer</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="q2dviewerwidget.cpp" line="192"/>
         <source>Disable manual synchronization in this viewer</source>
-        <oldsource>Disable manual synchronization on this viewer</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -929,7 +884,6 @@ Do you consider they are the same?
     <message>
         <location filename="q2dviewerwidgetbase.ui" line="66"/>
         <source>Fusion Balance</source>
-        <oldsource>Fusion balance</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -944,7 +898,6 @@ Do you consider they are the same?
     <message>
         <location filename="q3dviewer.cpp" line="588"/>
         <source>Unable to Apply Rendering Style</source>
-        <oldsource>Unable to apply rendering style</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -956,7 +909,6 @@ Shading will be disabled, it will not render as expected.</source>
     <message>
         <location filename="q3dviewer.cpp" line="1268"/>
         <source>Volume Not Supported</source>
-        <oldsource>Volume not supported</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -967,7 +919,6 @@ Shading will be disabled, it will not render as expected.</source>
     <message>
         <location filename="q3dviewer.cpp" line="678"/>
         <source>Volume Too Large</source>
-        <oldsource>Volume too large</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1147,7 +1098,6 @@ Shading will be disabled, it will not render as expected.</source>
     <message>
         <location filename="qdiagnosistestbase.ui" line="29"/>
         <source>Diagnosis Tests</source>
-        <oldsource>Diagnosis test</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1159,7 +1109,6 @@ Shading will be disabled, it will not render as expected.</source>
     <message>
         <location filename="qdiagnosistestbase.ui" line="178"/>
         <source>Tests completed successfully</source>
-        <oldsource>All tests have passed</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1185,7 +1134,6 @@ Shading will be disabled, it will not render as expected.</source>
     <message>
         <location filename="qdiagnosistestbase.ui" line="269"/>
         <source>OK</source>
-        <oldsource>Ok</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1270,7 +1218,6 @@ Shading will be disabled, it will not render as expected.</source>
     <message>
         <location filename="qlogviewer.cpp" line="57"/>
         <source>Save As...</source>
-        <oldsource>Save as...</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1282,8 +1229,6 @@ Shading will be disabled, it will not render as expected.</source>
         <location filename="qlogviewer.cpp" line="38"/>
         <source>ERROR: No Log file found at this path: %1
 Environment variable (logFilePath): %2</source>
-        <oldsource>ERROR: No Log file found at this path: %1
-Environment variable(logFilePath): %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1609,7 +1554,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="systemrequerimentstest.cpp" line="50"/>
         <source>The computer has %1 cores, and the minimum required is %2</source>
-        <oldsource>The machine currently has %1 cores, and the minimum required is %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1621,7 +1565,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="systemrequerimentstest.cpp" line="72"/>
         <source>The fastest CPU runs at %1 MHz, and the minimum required is %2 MHz</source>
-        <oldsource>The fastest CPU runs at %1 and the minimum required is %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1633,7 +1576,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="systemrequerimentstest.cpp" line="84"/>
         <source>Current OpenGL version is %1, and the minimum required is %2</source>
-        <oldsource>Current OpenGL version is %1 and the minimum required is %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1644,7 +1586,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="systemrequerimentstest.cpp" line="118"/>
         <source>The graphics card %1 has %2 MB of RAM, and the minimum required is %3 MB</source>
-        <oldsource>The graphics card %1 has %2 MB of RAM and the minimum required is %3 MB</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1655,7 +1596,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="systemrequerimentstest.cpp" line="129"/>
         <source>There is not enough disk space to run %1 properly</source>
-        <oldsource>There is not enough disk space to run starviewer properly</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1666,19 +1606,16 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="systemrequerimentstest.cpp" line="139"/>
         <source>Operating system is not 64-bit</source>
-        <oldsource>Operating system is not 64 bit architecture</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="140"/>
         <source>Update operating system to a 64-bit version</source>
-        <oldsource>Update operating system to a 64 bit version</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="156"/>
         <source>Current operating system version is %1, and the minimum required is %2</source>
-        <oldsource>Current Operative System version is %1, and the minimum required is %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1689,61 +1626,51 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="systemrequerimentstest.cpp" line="178"/>
         <source>Current Service Pack version is %1, and the minimum required is Service Pack %2</source>
-        <oldsource>Current Service Pack version is %1 and the minimum required is Service Pack %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="179"/>
         <source>Install a newer Service Pack</source>
-        <oldsource>Install a newer service pack</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="200"/>
         <source>The total amount of RAM memory is %1 MB, and the minimum required is %2 MB</source>
-        <oldsource>The total amount of RAM memory is %1 and the minimum required is %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="201"/>
         <source>Upgrade computer&apos;s RAM memory</source>
-        <oldsource>Add more RAM memory to the computer</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="229"/>
         <source>One of the screens is too small. Keep in mind that %1 won&apos;t fit in that screen</source>
-        <oldsource>One of the screens is too small. Keep in mind that Starviewer won&apos;t fit in that screen</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="230"/>
         <source>Avoid placing %1 on the screen or screens %2, or increase their resolution if possible</source>
-        <oldsource>Don&apos;t move %1 to screen/s %2, or change to a higher resolution</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="241"/>
         <source>Increase screen resolution</source>
-        <oldsource>Increase the resolution of the screens</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="244"/>
         <source>The screen is too small to fit %1 application</source>
-        <oldsource>The screen is too small to fit Starviewer application</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="248"/>
         <source>The screens are too small to fit %1 application</source>
-        <oldsource>The screens are too small to fit Starviewer application</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="258"/>
         <source>The optical drive does not have burning capabilities</source>
-        <oldsource>The optical drive has not burning capabilities</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1797,13 +1724,11 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="242"/>
         <source>Screenshot</source>
-        <oldsource>Screen Shot</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="244"/>
         <source>Enable/Disable Screenshot tool</source>
-        <oldsource>Enable/Disable Screen shot tool</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1829,7 +1754,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="265"/>
         <source>ROIs</source>
-        <oldsource>ROI&apos;s</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1855,7 +1779,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="282"/>
         <source>Enable voxel information under cursor</source>
-        <oldsource>Enable voxel information over cursor</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1927,7 +1850,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="383"/>
         <source>Auto-Sync</source>
-        <oldsource>Auto</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1963,7 +1885,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="408"/>
         <source>Enable/disable TA-GT distance tool</source>
-        <oldsource>Enable/disable perpendicular distance tool</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2009,13 +1930,11 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="477"/>
         <source>Sagittal</source>
-        <oldsource>Saggital</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="480"/>
         <source>Switch to Sagittal View</source>
-        <oldsource>Switch to Saggital View</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2117,7 +2036,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="271"/>
         <source>Ref. Lines</source>
-        <oldsource>Ref.Lines</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2184,13 +2102,11 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="toolregistry.cpp" line="351"/>
         <source>Open Angle</source>
-        <oldsource>Non Closed Angle</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="toolregistry.cpp" line="354"/>
         <source>Enable/Disable open-angle tool</source>
-        <oldsource>Enable/Disable non closed angle tool</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2335,7 +2251,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volumereader.cpp" line="120"/>
         <source>Cannot Read Files</source>
-        <oldsource>Cannot Read File(s)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2346,31 +2261,26 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="volumereader.cpp" line="136"/>
         <source>There&apos;s not enough memory to load the series you requested. Try to close all the open %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
-        <oldsource>There&apos;s not enough memory to load the Series you requested. Try to close all the open %1 windows and restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="140"/>
         <source>%1 could not find the corresponding files for this series. Maybe they had been removed or are corrupted.</source>
-        <oldsource>%1 could not find the corresponding files for this Series. Maybe they had been removed or are corrupted.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="142"/>
         <source>%1 could not read the requested files for this series.</source>
-        <oldsource>%1 could not read the requested file(s) for this Series.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="144"/>
         <source>Loading of data has been aborted.</source>
-        <oldsource>The loading of the data have been aborted.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="volumereader.cpp" line="146"/>
         <source>%1 found an unexpected error reading this series. No series data has been loaded.</source>
-        <oldsource>%1 found an unexpected error reading this Series. No Series data has been loaded.</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2397,19 +2307,16 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="16"/>
         <source>CT Soft Tissues</source>
-        <oldsource>CT Soft Tissues, Non Contrast</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="17"/>
         <source>CT Soft Tissues+Contrast</source>
-        <oldsource>CT Soft Tissues, Contrast</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="20"/>
         <source>CT Liver+Contrast</source>
-        <oldsource>CT Liver, Contrast</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2420,7 +2327,6 @@ It&apos;s recommended you save them in an empty folder.</source>
     <message>
         <location filename="windowlevelpresetstooldata.cpp" line="22"/>
         <source>CT Neck+Contrast</source>
-        <oldsource>CT Neck, Contrast</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
