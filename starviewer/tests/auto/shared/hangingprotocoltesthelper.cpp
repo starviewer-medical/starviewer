@@ -1,4 +1,4 @@
-﻿#include "hangingprotocoltesthelper.h"
+#include "hangingprotocoltesthelper.h"
 
 #include "hangingprotocol.h"
 #include "hangingprotocoldisplayset.h"
