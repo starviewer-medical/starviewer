@@ -407,7 +407,7 @@ void test_Screen::setup_isTopBottomEtc_data()
     QTest::newRow("right screen, same width & height, different top, within separation limits (2)") << topRightScreen << bottomLeftScreen << false << false << false << false
         << false << true << false << false;
 
-    // Fem que estiguin prou separades com perquè cap mètode doni true
+    // Fem que estiguin prou separades com perquÃ¨ cap mÃ¨tode doni true
     topLeftScreen.setGeometry(QRect(0, 0, 20, 20));
     topRightScreen.setGeometry(QRect(24, 0, 20, 20));
     bottomLeftScreen.setGeometry(QRect(0, 24, 20, 20));

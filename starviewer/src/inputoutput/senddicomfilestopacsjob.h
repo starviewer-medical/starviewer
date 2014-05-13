@@ -19,21 +19,21 @@ class SendDICOMFilesToPACS;
 class SendDICOMFilesToPACSJob : public PACSJob {
 Q_OBJECT
 public:
-    /// Atenció, La llista d'imatges ha de contenir l'estructura Pacient, Estudi, Series, Imatges
+    /// AtenciÃ³, La llista d'imatges ha de contenir l'estructura Pacient, Estudi, Series, Imatges
     SendDICOMFilesToPACSJob(PacsDevice pacsDevice, QList<Image*>);
     ~SendDICOMFilesToPACSJob();
 
-    /// Retorna el tipus de PACSJob que és l'objecte
+    /// Retorna el tipus de PACSJob que Ã©s l'objecte
     PACSJob::PACSJobType getPACSJobType();
 
-    /// Codi que executarà el job
+    /// Codi que executarÃ  el job
     void run();
 
     /// Retorna l'Status del Job
     PACSRequestStatus::SendRequestStatus getStatus();
 
-    /// Retorna l'Status descrit en un QString , aquest QString està pensat per ser mostrat en QMessageBox per informar a l'usuari de l'estat que ha retornat
-    /// el job en el mateixa descripció s'indica de quin és l'estudi afectat
+    /// Retorna l'Status descrit en un QString , aquest QString estÃ  pensat per ser mostrat en QMessageBox per informar a l'usuari de l'estat que ha retornat
+    /// el job en el mateixa descripciÃ³ s'indica de quin Ã©s l'estudi afectat
     QString getStatusDescription();
 
     /// Retorna la llista d'imatges que s'han indicat que s'havien de guardar
@@ -50,11 +50,11 @@ signals:
     void DICOMSeriesSent(PACSJob *, int numberOfSeriesSent);
 
 private:
-    /// Sol·licita que ens cancel·li el job
+    /// SolÂ·licita que ens cancelÂ·li el job
     void requestCancelJob();
 
 private slots:
-    /// Slot que respón al signal de SendDICOMFilesToPACS DICOMFileSent
+    /// Slot que respÃ³n al signal de SendDICOMFilesToPACS DICOMFileSent
     void DICOMFileSent(Image *imageSent, int numberOfDICOMFilesSent);
 
 private:

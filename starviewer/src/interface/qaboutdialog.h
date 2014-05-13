@@ -6,7 +6,7 @@
 namespace udg {
 
 /**
-    Di‡leg d'about de l'aplicaciÛ
+    Di√†leg d'about de l'aplicaci√≥
   */
 class QAboutDialog : public QDialog, private Ui::QAboutDialogBase {
 Q_OBJECT

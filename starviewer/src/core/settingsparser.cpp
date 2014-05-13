@@ -10,7 +10,7 @@
 
 namespace udg {
 
-// Car‡cter delimitador per les paraules clau
+// Car√†cter delimitador per les paraules clau
 const QChar delimiterChar('%');
 
 SettingsParser::SettingsParser()
@@ -24,78 +24,78 @@ SettingsParser::~SettingsParser()
 
 QString SettingsParser::parse(const QString &stringToParse)
 {
-    // Construirem una expressiÛ regular que trobar‡ les claus definides.
-    // TambÈ tindr‡ en compte si la clau va acompanyada d'un sufix de m‡scara
-    // i l'aplicar‡ en el cas que en tingui
+    // Construirem una expressi√≥ regular que trobar√† les claus definides.
+    // Tamb√© tindr√† en compte si la clau va acompanyada d'un sufix de m√†scara
+    // i l'aplicar√† en el cas que en tingui
     QRegExp regExp;
 
-    // Obtenim les claus existents i les juntem en un ˙nic string per formar l'expressiÛ regular %KEY1%|%KEY2%|...|%KEYN%
+    // Obtenim les claus existents i les juntem en un √∫nic string per formar l'expressi√≥ regular %KEY1%|%KEY2%|...|%KEYN%
     QStringList keys = m_parseableStringsTable.uniqueKeys();
     QString keysPattern = "(%" + keys.join("%|%") + "%)";
-    // M‡scara de truncatge [n:c], on 'c' pot ser qualsevol car‡cter o res, excepte un whitespace (\S==non-whitespace character)
+    // M√†scara de truncatge [n:c], on 'c' pot ser qualsevol car√†cter o res, excepte un whitespace (\S==non-whitespace character)
     QString maskPattern = "(\\[\\d+:\\S?\\])?";
-    // TODO l'aplicaciÛ de la m‡scara assumeix que trunquem de "dreta a esquerra" (right Justified) i que fem el padding com a prefix de
-    // la cadena truncada. Aquest comportament es podria fer mÈs flexible afegint mÈs par‡metres a l'expressiÛ de truncatge per indicar
+    // TODO l'aplicaci√≥ de la m√†scara assumeix que trunquem de "dreta a esquerra" (right Justified) i que fem el padding com a prefix de
+    // la cadena truncada. Aquest comportament es podria fer m√©s flexible afegint m√©s par√†metres a l'expressi√≥ de truncatge per indicar
     // si el truncatge i/o el padding es fan per la dreta o l'esquerra
 
-    // ExpressiÛ regular: Qualsevol de les claus, que pot anar acompanyada opcionalment d'una mascara de truncatge
+    // Expressi√≥ regular: Qualsevol de les claus, que pot anar acompanyada opcionalment d'una mascara de truncatge
     regExp.setPattern(keysPattern + maskPattern);
 
     // String on anirem parsejant els resultats
     QString parsedString = stringToParse;
-    // Ìndex de l'string on comenÁa el patrÛ trobat
+    // √≠ndex de l'string on comen√ßa el patr√≥ trobat
     int keyIndex = 0;
     // Clau trobada
     QString capturedKey;
-    // M‡scara trobada
+    // M√†scara trobada
     QString capturedMask;
     // Clau que voldrem substituir
     QString keyToReplace;
-    // String que parseja la m‡scara
+    // String que parseja la m√†scara
     QString maskedString;
-    // Nombre de car‡cters a truncar --->> en comptes de truncate, posar-li width
+    // Nombre de car√†cters a truncar --->> en comptes de truncate, posar-li width
     int truncate = 0;
-    // Car‡cter amb el que farem el padding
+    // Car√†cter amb el que farem el padding
     QChar paddingChar;
 
     // Mentres hi hagi expressions, les capturem i parsejem
     // Els "replace" es fan d'un en un, ja que podem tenir claus repetides i cal fer-ho pas a pas,
-    // tal com anem tractant cada expressiÛ regular
+    // tal com anem tractant cada expressi√≥ regular
     while ((keyIndex = regExp.indexIn(parsedString)) != -1)
     {
-        // La clau trobada, 1a part de l'expressiÛ regular
+        // La clau trobada, 1a part de l'expressi√≥ regular
         capturedKey = regExp.cap(1);
-        // La m‡scara trobada, 2a part de l'expressiÛ regular
+        // La m√†scara trobada, 2a part de l'expressi√≥ regular
         capturedMask = regExp.cap(2);
         // Li eliminem els '%'
         keyToReplace = QString(capturedKey).replace("%", "");
-        // Si s'ha trobat sufix de m‡scara, el parsejem
+        // Si s'ha trobat sufix de m√†scara, el parsejem
         if (!capturedMask.isEmpty())
         {
-            // Obtenim les sub-parts de la m‡scara ([n:c])
+            // Obtenim les sub-parts de la m√†scara ([n:c])
             QRegExp maskRegExp("\\[(\\d+):(\\S)?\\]");
             if (maskRegExp.indexIn(capturedMask) != -1)
             {
-                // Nombre de car‡cters a truncar
+                // Nombre de car√†cters a truncar
                 truncate = maskRegExp.cap(1).toInt();
                 // Trunquem
                 maskedString = QString(m_parseableStringsTable.value(keyToReplace)).right(truncate);
-                // Si hi ha car‡cter de padding, tractem de fer el padding
+                // Si hi ha car√†cter de padding, tractem de fer el padding
                 if (!maskRegExp.cap(2).isEmpty())
                 {
-                    // Car‡cter de padding
+                    // Car√†cter de padding
                     paddingChar = maskRegExp.cap(2).at(0);
                     maskedString = maskedString.rightJustified(truncate, paddingChar);
                 }
-                // Substituim el valor a parsejar i la m‡scara
+                // Substituim el valor a parsejar i la m√†scara
                 parsedString.replace(keyIndex, capturedKey.size() + capturedMask.size(), maskedString);
             }
             else
             {
-                DEBUG_LOG("EP! Hem comÈs algun error de sintaxi amb l'expressiÛ regular!");
+                DEBUG_LOG("EP! Hem com√©s algun error de sintaxi amb l'expressi√≥ regular!");
             }
         }
-        // Altrament, substituim ˙nicament la clau
+        // Altrament, substituim √∫nicament la clau
         else
         {
             parsedString.replace(keyIndex, capturedKey.size(), m_parseableStringsTable.value(keyToReplace));
@@ -111,19 +111,19 @@ void SettingsParser::initializeParseableStringsTable()
     QString localHostName = QHostInfo::localHostName();
     m_parseableStringsTable["HOSTNAME"] = localHostName;
 
-    // ObtenciÛ de la ip
+    // Obtenci√≥ de la ip
     QStringList ipV4Addresses = getLocalHostIPv4Addresses();
     QString ip;
     if (!ipV4Addresses.isEmpty())
     {
-        // Assumim que la primera de la llista Ès la IP bona
+        // Assumim que la primera de la llista √©s la IP bona
         ip = ipV4Addresses.first();
 
         m_parseableStringsTable["IP"] = ip;
 
         // "Partim" els prefixos de la ip
         QStringList ipParts = ip.split(".");
-        // AixÚ no hauria de fallar mai ja que la llista d'IPs ha de contenir valors correctament formatats ja que aquests han estat prËviament validats.
+        // Aix√≤ no hauria de fallar mai ja que la llista d'IPs ha de contenir valors correctament formatats ja que aquests han estat pr√®viament validats.
         if (ipParts.count() == 4)
         {
             m_parseableStringsTable["IP.1"] = ipParts.at(0);
@@ -134,13 +134,13 @@ void SettingsParser::initializeParseableStringsTable()
     }
     else
     {
-        // No tenim cap adreÁa IP
+        // No tenim cap adre√ßa IP
         m_parseableStringsTable["IP"] = "N/A";
         m_parseableStringsTable["IP.1"] = "[N/A]";
         m_parseableStringsTable["IP.2"] = "[N/A]";
         m_parseableStringsTable["IP.3"] = "[N/A]";
         m_parseableStringsTable["IP.4"] = "[N/A]";
-        WARN_LOG("No s'ha recongeut cap adreÁa IPv4 en l'equip.");
+        WARN_LOG("No s'ha recongeut cap adre√ßa IPv4 en l'equip.");
     }
 
     // Home path
@@ -178,7 +178,7 @@ QStringList SettingsParser::getLocalHostIPv4Addresses()
     QStringList ipV4List;
 
     QHostInfo hostInfo = QHostInfo::fromName(QHostInfo::localHostName());
-    // TODO TambÈ es podria optar per fer servir QNetworkInterface::allAddresses(), tot i que ens retorna l'adreÁa 127.0.0.1 a mÈs a mÈs,
+    // TODO Tamb√© es podria optar per fer servir QNetworkInterface::allAddresses(), tot i que ens retorna l'adre√ßa 127.0.0.1 a m√©s a m√©s,
     // en comptes de fer servir hostInfo.addresses()
     foreach (const QHostAddress &ip, hostInfo.addresses())
     {
@@ -186,11 +186,11 @@ QStringList SettingsParser::getLocalHostIPv4Addresses()
         if (isIPv4Address(ipString))
         {
             ipV4List << ipString;
-            DEBUG_LOG(ipString + " -> …s una adreÁa IPv4 v‡lida");
+            DEBUG_LOG(ipString + " -> √âs una adre√ßa IPv4 v√†lida");
         }
         else
         {
-            DEBUG_LOG(ipString + " -> NO Ès una adreÁa IPv4 v‡lida");
+            DEBUG_LOG(ipString + " -> NO √©s una adre√ßa IPv4 v√†lida");
         }
     }
 

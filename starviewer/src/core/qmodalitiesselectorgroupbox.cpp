@@ -146,7 +146,7 @@ void QModalitiesSelectorGroupBox::initialize()
     m_buttonGroup->addButton(m_allCheckBox);
     m_buttonGroup->addButton(m_otherCheckBox);
     
-    // El quadre de text d'altres modalitats només estarà habilitat quan el corresponent check box estigui marcat
+    // El quadre de text d'altres modalitats nomÃ©s estarÃ  habilitat quan el corresponent check box estigui marcat
     m_otherLineEdit->setEnabled(false);
     connect(m_otherCheckBox, SIGNAL(toggled(bool)), m_otherLineEdit, SLOT(setEnabled(bool)));
 

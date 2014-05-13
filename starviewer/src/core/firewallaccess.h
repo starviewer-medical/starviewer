@@ -6,8 +6,8 @@
 namespace udg {
 
 /**
-    Interfície per comprovar si starviewer té access a través del firewall.
-    El mètode \sa newInstance és l'encarregat de crear una instància de les classes d'implementació que es decideix
+    InterfÃ­cie per comprovar si starviewer tÃ© access a travÃ©s del firewall.
+    El mÃ¨tode \sa newInstance Ã©s l'encarregat de crear una instÃ ncia de les classes d'implementaciÃ³ que es decideix
     segons el sistema operatiu, windows o altres. 
   */
 class FirewallAccess {
@@ -16,7 +16,7 @@ public:
 
     virtual ~FirewallAccess();
 
-    /// Crea una nova instància d'alguna de les classes que implementa la interfície
+    /// Crea una nova instÃ ncia d'alguna de les classes que implementa la interfÃ­cie
     static FirewallAccess* newInstance();
 
     virtual bool doesStarviewerHaveAccesThroughFirewall();
@@ -25,13 +25,13 @@ public:
     FirewallStatus getStatus();
 
 protected:
-    /// Per instanciar nous objectes s'ha de fer ús del mètode \sa newInstance
+    /// Per instanciar nous objectes s'ha de fer Ãºs del mÃ¨tode \sa newInstance
     FirewallAccess();
 
 protected:
     /// Guarda l'estat del firewall
     FirewallStatus m_status;
-    /// Si starviewer no té accés a través del firewall, m_errorString guarda la causa
+    /// Si starviewer no tÃ© accÃ©s a travÃ©s del firewall, m_errorString guarda la causa
     QString m_errorString;
 };
 

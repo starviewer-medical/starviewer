@@ -34,7 +34,7 @@ void test_ViewersLayout::isRegular_ReturnsExpectedValues_data()
     layout->addViewer(viewerGeometry);
     QTest::newRow("Newly created layout after addViewer()") << layout << false;
     
-    // TODO En aquests casos en teoria s'hauria de canviar comportament perquè donin el resultat contrari
+    // TODO En aquests casos en teoria s'hauria de canviar comportament perquÃ¨ donin el resultat contrari
     layout = new ViewersLayout(0);
     layout->cleanUp();
     layout->setGrid(0, 0);
@@ -45,13 +45,13 @@ void test_ViewersLayout::isRegular_ReturnsExpectedValues_data()
     layout->setGrid(0, 0);
     QTest::newRow("setGrid(0, 0) after addViewer()") << layout << true;
     
-    // Aquest dóna el resultat correcte
+    // Aquest dÃ³na el resultat correcte
     layout = new ViewersLayout(0);
     layout->cleanUp();
     layout->setGrid(3, 2);
     QTest::newRow("setGrid() after cleanUp()") << layout << true;
 
-    // TODO En aquests casos en teoria s'hauria de canviar comportament perquè donin el resultat contrari
+    // TODO En aquests casos en teoria s'hauria de canviar comportament perquÃ¨ donin el resultat contrari
     layout = new ViewersLayout(0);
     layout->setGrid(0, 0);
     QTest::newRow("Newly created layout after setGrid(0, 0)") << layout << true;
@@ -68,4 +68,3 @@ void test_ViewersLayout::isRegular_ReturnsExpectedValues()
 DECLARE_TEST(test_ViewersLayout)
 
 #include "test_viewerslayout.moc"
-

@@ -10,8 +10,8 @@ typedef QList<QSize> SizeList;
 
 class TestingSystemRequeriments : public SystemRequeriments {
 public:
-    // Els requeriments mÌnims s'especifiquen aquÌ. S'enten que sÛn constants, aixÌ que no s'assignen a cada test, perÚ Ès necessari
-    // tenir-los aquÌ, per si la classe pare canvia, que el test no es vegi afectat.
+    // Els requeriments m√≠nims s'especifiquen aqu√≠. S'enten que s√≥n constants, aix√≠ que no s'assignen a cada test, per√≤ √©s necessari
+    // tenir-los aqu√≠, per si la classe pare canvia, que el test no es vegi afectat.
     void setRequerimentsForTesting()
     {
         m_minimumNumberOfCores = 4;
@@ -22,12 +22,12 @@ public:
         m_minimum32bitServicePackVersion = 3; // XP service pack 3
         m_minimum64bitServicePackVersion = 2; // XP service pack 2
         m_minimumRAM = 4096; // 4Gb
-        m_minimumScreenWidth = 1185; // La mÌnima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
+        m_minimumScreenWidth = 1185; // La m√≠nima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
 
-        // Quan s'estableixin quines sÛn les extensions d'openGL que es necessiten per cada cosa, es poden afegir aquÌ
+        // Quan s'estableixin quines s√≥n les extensions d'openGL que es necessiten per cada cosa, es poden afegir aqu√≠
         m_minimumOpenGLExtensions << "GL_ARB_flux_capacitor" << "GL_ARB_half_float_pixel";
         
-        m_minimumDiskSpace = 5120; // 5 GB (en principi, el mÌnim que es necessita per la cache est‡ en un setting)
+        m_minimumDiskSpace = 5120; // 5 GB (en principi, el m√≠nim que es necessita per la cache est√† en un setting)
 
         m_doesOpticalDriveNeedsToWrite = true;
         m_doesOperatingSystemNeedToBe64BitArchitecutre = true;
@@ -167,7 +167,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::addColumn<QString>("testingDiagnosisTestResultDescription");
     QTest::addColumn<QString>("testingDiagnosisTestResultSolution");
 
-    // Variables per determinar que un par‡metre no s'utilitza
+    // Variables per determinar que un par√†metre no s'utilitza
     QString unusedString = "";
 
     // Requeriments millors que els recomenats. Si canvien els recomenats, cal canviar aquests.
@@ -194,7 +194,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     // per testejar un requeriment unsigned int menor que els recomenats podem fer servir 0
     unsigned int zero = 0;
 
-    // Requeriments mÌnims
+    // Requeriments m√≠nims
     TestingSystemRequeriments requeriments;
     requeriments.setRequerimentsForTesting();
 
@@ -202,11 +202,11 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("ok windows") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                 << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                 << DiagnosisTestResult::Ok << unusedString << unusedString;
-    // TODO Si al final en linux no es comprova la versiÛ mÌnim, aquest test no cal
+    // TODO Si al final en linux no es comprova la versi√≥ m√≠nim, aquest test no cal
     QTest::newRow("ok linux") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                               << SystemInformation::OSLinux << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                               << DiagnosisTestResult::Ok << unusedString << unusedString;
-    // TODO Comprovar la versiÛ de mac
+    // TODO Comprovar la versi√≥ de mac
     QTest::newRow("ok mac") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                             << SystemInformation::OSMac << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                             << DiagnosisTestResult::Ok << unusedString << unusedString;
@@ -227,7 +227,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
 
     QStringList missingOpenGLExtensions;
     missingOpenGLExtensions << "GL_ARB_draw_buffers";
-    // El resultat Ès hard coded, si canvia el requeriment, s'ha de canviar la string
+    // El resultat √©s hard coded, si canvia el requeriment, s'ha de canviar la string
     QTest::newRow("missing openGL extensions") << cpuNumberOfCores << cpuFrequencies << missingOpenGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                                << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                                << DiagnosisTestResult::Error

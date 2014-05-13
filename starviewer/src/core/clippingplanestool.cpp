@@ -25,7 +25,7 @@ ClippingPlanesTool::ClippingPlanesTool(QViewer *viewer, QObject *parent)
     m_boundingBoxClipperWidget->SetInteractor(m_3DViewer->getInteractor());
     m_boundingBoxClipperWidget->InsideOutOn();
 
-    // Posem a punt la observació dels events del widget
+    // Posem a punt la observaciÃ³ dels events del widget
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     m_vtkQtConnections->Connect(m_boundingBoxClipperWidget, vtkCommand::InteractionEvent, this, SLOT(boundingBoxEventHandler(vtkObject*, unsigned long, void*,
                                                                                                                              void*, vtkCommand*)));
@@ -92,7 +92,7 @@ void ClippingPlanesTool::updateInput()
         bounds[0] = bounds[1] = origin[0];
         bounds[2] = bounds[3] = origin[1];
         bounds[4] = bounds[5] = origin[2];
-        // Seguidament calculem els orígens menors i majors de cada eix
+        // Seguidament calculem els orÃ­gens menors i majors de cada eix
         // per obtenir la bounding box dels plans de tall
         for (int i = 0; i < nplanes; i++)
         {
@@ -127,7 +127,7 @@ void ClippingPlanesTool::updateInput()
             }
         }
 
-        // Indiquem els bounds del widget explícitament
+        // Indiquem els bounds del widget explÃ­citament
         m_boundingBoxClipperWidget->PlaceWidget(bounds);
     }
     else

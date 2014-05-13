@@ -19,7 +19,7 @@ ApplicationVersionTest::~ApplicationVersionTest()
 
 DiagnosisTestResult ApplicationVersionTest::run()
 {
-    /// Fer el check online. Després de cridar aquest mètode, les variables m_onlineCheckOk i m_newVersionAvailable prenen valor.
+    /// Fer el check online. DesprÃ©s de cridar aquest mÃ¨tode, les variables m_onlineCheckOk i m_newVersionAvailable prenen valor.
     onlineCheck();
 
     DiagnosisTestResult result;
@@ -37,12 +37,12 @@ DiagnosisTestResult ApplicationVersionTest::run()
     }
     else
     {
-        // En mode Debug retorna error, ja que la caden de text de la versió de l'aplicació que s'envia al webservice conté -devel
+        // En mode Debug retorna error, ja que la caden de text de la versiÃ³ de l'aplicaciÃ³ que s'envia al webservice contÃ© -devel
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
         QRegExp url("http://[\\S]+", Qt::CaseSensitive);
         problem.setDescription(m_olineCheckerErrorDescription.remove(url));
-        // TODO Proposar una solució quan hi ha hagut error en el check online de les release notes
+        // TODO Proposar una soluciÃ³ quan hi ha hagut error en el check online de les release notes
         problem.setSolution("");
         result.addError(problem);
     } 
@@ -61,12 +61,12 @@ void ApplicationVersionTest::onlineCheck()
     QThread onlineCheckerThread;
     // Moure l'onlineChecker a un altre thread
     onlineChecker.moveToThread(&onlineCheckerThread);
-    // La conexió de checkFinished s'ha de fer en mode DirectConnection per tal de què s'executi correctament al thread que toca
+    // La conexiÃ³ de checkFinished s'ha de fer en mode DirectConnection per tal de quÃ¨ s'executi correctament al thread que toca
     connect(&onlineChecker, SIGNAL(checkFinished()), &onlineCheckerThread, SLOT(quit()), Qt::DirectConnection);
-    // Per tal d'executar el mètode check for updates a l'altre thread, el que farem és connectar-lo a un signal, i fer un emit quan sigui el moment
+    // Per tal d'executar el mÃ¨tode check for updates a l'altre thread, el que farem Ã©s connectar-lo a un signal, i fer un emit quan sigui el moment
     connect(this, SIGNAL(startCheckForUpdates()), &onlineChecker, SLOT(checkForUpdates()));
 
-    // Iniciar el thread, cridar el checkForUpdates i esperar síncronament a qué acabi
+    // Iniciar el thread, cridar el checkForUpdates i esperar sÃ­ncronament a quÃ© acabi
     onlineCheckerThread.start();
     emit startCheckForUpdates();
     onlineCheckerThread.wait();

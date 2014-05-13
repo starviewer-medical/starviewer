@@ -79,7 +79,7 @@ void PacsDevice::setDefault(bool isDefault)
     // Afegir
     if (isDefault)
     {
-        // Si no est‡ marcat ja
+        // Si no est√† marcat ja
         if (!pacsList.contains(keyName))
         {
             Settings settings;
@@ -203,18 +203,18 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
 
     if (pacsList.isEmpty())
     {
-        // MigraciÛ de dades. Si encara no tenim definits els PACS per defecte en el nou format, obtenim els PACS per defecte
-        // del format antic, Ès a dir, a partir dels elements amb els valors "default" = "S" de la llista de PACS
+        // Migraci√≥ de dades. Si encara no tenim definits els PACS per defecte en el nou format, obtenim els PACS per defecte
+        // del format antic, √©s a dir, a partir dels elements amb els valors "default" = "S" de la llista de PACS
         // Un cop llegits, els escrivim en el nou format
         Settings::SettingListType list = settings.getList(CoreSettings::PacsListConfigurationSectionName);
         foreach (Settings::SettingsListItemType item, list)
         {
-            // El camp "default" tÈ aquesta clau
+            // El camp "default" t√© aquesta clau
             if (item.contains("."))
             {
                 if (item.value(".").toString() == "S")
                 {
-                    // Hem de fer servir els mateixos camps i format que al mËtode PacsDevice::getKeyName()
+                    // Hem de fer servir els mateixos camps i format que al m√®tode PacsDevice::getKeyName()
                     pacsList << item.value("AETitle").toString() + item.value("PacsHostname").toString() + ":" + item.value("PacsPort").toString();
                 }
             }
@@ -225,7 +225,7 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
         }
         else
         {
-            INFO_LOG("No hi ha PACS per defecte definits en el nou format. Els obtenim del format antic i els migrem al nou format. SÛn aquests: " +
+            INFO_LOG("No hi ha PACS per defecte definits en el nou format. Els obtenim del format antic i els migrem al nou format. S√≥n aquests: " +
                      pacsList.join("//") + "//");
             Settings settings;
             settings.setValue(CoreSettings::DefaultPACSListToQuery, pacsList.join("//") + "//");

@@ -15,7 +15,7 @@ public:
     /// Carrega els valors que corresponen per defecte o que ja estiguin configurats per l'usuari
     void load();
 
-    /// Retorna la configuraciÛ de f‡brica d'un layout corresponent a una modalitat
+    /// Retorna la configuraci√≥ de f√†brica d'un layout corresponent a una modalitat
     static StudyLayoutConfig getDefaultConfigForModality(const QString &modality);
 };
 

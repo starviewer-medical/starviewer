@@ -7,7 +7,7 @@ namespace testing {
 bool FuzzyCompareTestHelper::fuzzyCompare(const double &v1, const double &v2, const double &epsilon)
 {
     const double diff = v1 - v2;
-    // La primera comprovació d'igualtat és imprescindible per comparar infinits, sinó surt NaN
+    // La primera comprovaciÃ³ d'igualtat Ã©s imprescindible per comparar infinits, sinÃ³ surt NaN
     return (v1 == v2) || ((diff < epsilon) && (diff > -epsilon));
 }
 

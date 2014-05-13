@@ -48,7 +48,7 @@ void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHan
     QTest::addColumn<QList<HangingProtocol*> >("expectedHangingProtocols");
 
     // PATIENTS
-    //Pacient MG amb institució
+    //Pacient MG amb instituciÃ³
     Patient *MGPatient = PatientTestHelper::create(1, 4, 1);
     MGPatient->getStudies().at(0)->addModality("MG");
     MGPatient->getStudies().at(0)->getSeries().at(0)->setModality("MG");
@@ -128,7 +128,7 @@ void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHan
 
 QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsRepository()
 {
-    // MG estricte i totes les imatges diferents, amb institució
+    // MG estricte i totes les imatges diferents, amb instituciÃ³
     HangingProtocol *MGhangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("MG", 10, true, true, false, 1, 4, 4);
     MGhangingProtocol->setProtocolsList(QStringList() << "MG");
     MGhangingProtocol->setInstitutionsRegularExpression(QRegExp("GIRONA|SABADELL", Qt::CaseInsensitive));

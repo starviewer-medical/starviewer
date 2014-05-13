@@ -14,10 +14,10 @@ public:
     StudyLayoutConfigSettingsConverter();
     ~StudyLayoutConfigSettingsConverter();
 
-    /// Mètode per obtenir un StudyLayoutConfig d'un item de settings
+    /// MÃ¨tode per obtenir un StudyLayoutConfig d'un item de settings
     StudyLayoutConfig fromSettingsListItem(const Settings::SettingsListItemType &item) const;
 
-    /// Mètode per convertir un StudyLayoutConfig a un item de settings
+    /// MÃ¨tode per convertir un StudyLayoutConfig a un item de settings
     Settings::SettingsListItemType toSettingsListItem(const StudyLayoutConfig &config) const;
 
 private:
@@ -39,12 +39,12 @@ private:
     static const QString Series;
 
 private:
-    /// Mètodes que ens transformen el valor enumerat d'StudyLayoutConfig a un l'string corresponent de settings
+    /// MÃ¨todes que ens transformen el valor enumerat d'StudyLayoutConfig a un l'string corresponent de settings
     QString getAsSettingsStringValue(const StudyLayoutConfig::ExclusionCriteriaType &criteria) const;
     QString getAsSettingsStringValue(const StudyLayoutConfig::UnfoldDirectionType &direction) const;
     QString getAsSettingsStringValue(const StudyLayoutConfig::UnfoldType &unfoldBy) const;
     
-    /// Mètodes que ens transformen el valor de com s'han guardat als settings a l'enum corresponent d'StudyLayoutConfig
+    /// MÃ¨todes que ens transformen el valor de com s'han guardat als settings a l'enum corresponent d'StudyLayoutConfig
     QList<StudyLayoutConfig::ExclusionCriteriaType> getExclusionCriteriaFromSettingsValue(const QString &value) const;
     StudyLayoutConfig::UnfoldDirectionType getUnfoldDirectionFromSettingsValue(const QString &value) const;
     StudyLayoutConfig::UnfoldType getUnfoldTypeFromSettingsValue(const QString &value) const;

@@ -24,7 +24,7 @@ Settings::Settings()
 
 Settings::~Settings()
 {
-    // Alliberem la memòria ocupada pels objectes
+    // Alliberem la memÃ²ria ocupada pels objectes
     foreach (QSettings *setting, m_qsettingsObjectsMap)
     {
         delete setting;
@@ -35,9 +35,9 @@ QVariant Settings::getValue(const QString &key) const
 {
     QVariant value;
     // Primer mirem si tenim valor als settings
-    // Si estigués buit, llavors agafem el valor per defecte que tinguem al registre
-    // TODO hauríem d'obtenir l'objecte de settings amb getSettingsObject(key)
-    // però cal resoldre abans un problema de linkatge produit per projectes externs (crashreporter/sapwrapper)
+    // Si estiguÃ©s buit, llavors agafem el valor per defecte que tinguem al registre
+    // TODO haurÃ­em d'obtenir l'objecte de settings amb getSettingsObject(key)
+    // perÃ² cal resoldre abans un problema de linkatge produit per projectes externs (crashreporter/sapwrapper)
     value = m_qsettingsObjectsMap.value(SettingsRegistry::instance()->getAccessLevel(key))->value(key);
     if (value == QVariant())
     {
@@ -45,8 +45,8 @@ QVariant Settings::getValue(const QString &key) const
     }
 
     // Obtenir les propietats del setting
-    // TODO de moment només tractem "Parseable"
-    // si és Parseable, mirem de parsejar el valor, altrament el retornem tal qual
+    // TODO de moment nomÃ©s tractem "Parseable"
+    // si Ã©s Parseable, mirem de parsejar el valor, altrament el retornem tal qual
     Settings::Properties properties = SettingsRegistry::instance()->getProperties(key);
     if (properties & Settings::Parseable)
     {
@@ -62,8 +62,8 @@ void Settings::setValue(const QString &key, const QVariant &value)
 
 bool Settings::contains(const QString &key) const
 {
-    // TODO hauríem d'obtenir l'objecte de settings amb getSettingsObject(key)
-    // però cal resoldre abans un problema de linkatge produit per projectes externs (crashreporter/sapwrapper)
+    // TODO haurÃ­em d'obtenir l'objecte de settings amb getSettingsObject(key)
+    // perÃ² cal resoldre abans un problema de linkatge produit per projectes externs (crashreporter/sapwrapper)
     return m_qsettingsObjectsMap.value(SettingsRegistry::instance()->getAccessLevel(key))->contains(key);
 }
 
@@ -86,12 +86,12 @@ Settings::SettingsListItemType Settings::getListItem(const QString &key, int ind
     if (index < size && index >= 0)
     {
         qsettings->setArrayIndex(index);
-        // Omplim el conjunt de claus-valor a partir de les claus de l'índex de la llista
+        // Omplim el conjunt de claus-valor a partir de les claus de l'Ã­ndex de la llista
         item = fillSettingsListItemFromKeysList(qsettings->allKeys(), qsettings);
     }
     else
     {
-        DEBUG_LOG("Índex fora de rang. L'element retornat serà buit");
+        DEBUG_LOG("Ãndex fora de rang. L'element retornat serÃ  buit");
     }
     qsettings->endArray();
 
@@ -109,7 +109,7 @@ Settings::SettingListType Settings::getList(const QString &key)
         qsettings->setArrayIndex(i);
 
         SettingsListItemType item;
-        // Omplim el conjunt de claus-valor a partir de les claus de l'índex de la llista
+        // Omplim el conjunt de claus-valor a partir de les claus de l'Ã­ndex de la llista
         item = fillSettingsListItemFromKeysList(qsettings->allKeys(), qsettings);
         // Afegim el nou conjunts de valors a la llista
         list << item;
@@ -144,7 +144,7 @@ void Settings::setListItem(int index, const QString &key, const SettingsListItem
     }
     else
     {
-        DEBUG_LOG("L'index està fora de rang més gran");
+        DEBUG_LOG("L'index estÃ  fora de rang mÃ©s gran");
     }
 }
 
@@ -159,14 +159,14 @@ void Settings::removeListItem(const QString &key, int index)
     }
     else
     {
-        DEBUG_LOG("L'index està fora de rang més gran");
+        DEBUG_LOG("L'index estÃ  fora de rang mÃ©s gran");
     }
 }
 
 void Settings::setList(const QString &key, const SettingListType &list)
 {
     QSettings *qsettings = getSettingsObject(key);
-    // Eliminem tot el que pogués haver d'aquella llista anteriorment
+    // Eliminem tot el que poguÃ©s haver d'aquella llista anteriorment
     remove(key);
     int index = 0;
     // Escrivim la llista

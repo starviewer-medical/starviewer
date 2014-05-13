@@ -370,12 +370,12 @@ bool DisplayShutter::shapeMatchesPointsStringFormat(ShapeType shape, const QStri
             break;
 
         case PolygonalShape:
-            // Com a mÌnim 3 punts separats per ;
+            // Com a m√≠nim 3 punts separats per ;
             expression.setPattern("(" + PointPatternString + ";){2,}" + PointPatternString);
             break;
 
         case UndefinedShape:
-            // Si no hi ha forma definida, no hi ha cap patrÛ v‡lid
+            // Si no hi ha forma definida, no hi ha cap patr√≥ v√†lid
             return false;
             break;
     }

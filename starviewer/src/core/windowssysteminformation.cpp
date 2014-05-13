@@ -35,12 +35,12 @@ WindowsSystemInformation::OperatingSystem WindowsSystemInformation::getOperating
 
 bool WindowsSystemInformation::isOperatingSystem64BitArchitecture()
 {
-    // El WOW64 Ès un pool de processos que contÈ les aplicacions de 32 bits que s'estan executant a un sistema de 64 bits.
-    // …s l'encarregat de gestionar totes les diferËncies d'arquitectures per executar un procÈs de 32 bits en un sistema de 64.
-    // Si un proces est‡ en aquest pool, llavors Ès un proces de 32 bits, executant-se en un systema de 64 bits.
-    // Per tant, si starviewer est‡ compilat a 32 bits poden passar dues coses. O bÈ est‡ en el pool, per tant el sistema Ès de 64 bits,
-    // o bÈ no hi Ès, cosa que indica que el sistema Ès de 32 bits.
-    // En cas de que es compili per 64 bits, com que nomÈs funciona en 64 bits, nomÈs cal dir que sÌ.
+    // El WOW64 √©s un pool de processos que cont√© les aplicacions de 32 bits que s'estan executant a un sistema de 64 bits.
+    // √âs l'encarregat de gestionar totes les difer√®ncies d'arquitectures per executar un proc√©s de 32 bits en un sistema de 64.
+    // Si un proces est√† en aquest pool, llavors √©s un proces de 32 bits, executant-se en un systema de 64 bits.
+    // Per tant, si starviewer est√† compilat a 32 bits poden passar dues coses. O b√© est√† en el pool, per tant el sistema √©s de 64 bits,
+    // o b√© no hi √©s, cosa que indica que el sistema √©s de 32 bits.
+    // En cas de que es compili per 64 bits, com que nom√©s funciona en 64 bits, nom√©s cal dir que s√≠.
 
     BOOL is64Bit = FALSE;
 
@@ -229,7 +229,7 @@ unsigned int WindowsSystemInformation::getRAMTotalAmount()
     while (object)
     {
         VARIANT variantProperty;
-        // Recuperar la memÚria total del sistema en Bytes
+        // Recuperar la mem√≤ria total del sistema en Bytes
         if (getProperty(object, "TotalPhysicalMemory", &variantProperty))
         {
             BSTR TotalPhysicalMemory = variantProperty.bstrVal;
@@ -258,7 +258,7 @@ QList<unsigned int> WindowsSystemInformation::getRAMModulesCapacity()
     while (object)
     {
         VARIANT variantProperty;
-        // Recuperar la memÚria de cada mÚdul de RAM en Bytes
+        // Recuperar la mem√≤ria de cada m√≤dul de RAM en Bytes
         if (getProperty(object, "Capacity", &variantProperty))
         {
             long long LRAMTotalModuleAmount = QString().fromWCharArray(variantProperty.bstrVal).toLongLong();
@@ -286,7 +286,7 @@ QList<unsigned int> WindowsSystemInformation::getRAMModulesFrequency()
     while (object)
     {
         VARIANT variantProperty;
-        // Recuperar la frequËncia de cada mÚdul de RAM
+        // Recuperar la frequ√®ncia de cada m√≤dul de RAM
         if (getProperty(object, "Speed", &variantProperty))
         {
             RAMModulesFrequency.append(variantProperty.uintVal);
@@ -306,7 +306,7 @@ QList<unsigned int> WindowsSystemInformation::getRAMModulesFrequency()
 
 unsigned int WindowsSystemInformation::getCPUNumberOfCores()
 {
-    // Portser caldria canviar el tipus de retorn per una llista d'unsigned ints amb el nombre de cores de cada CPU de la m‡quina
+    // Portser caldria canviar el tipus de retorn per una llista d'unsigned ints amb el nombre de cores de cada CPU de la m√†quina
     unsigned int CPUNumberOfCores = 0;
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_Processor");
 
@@ -353,8 +353,8 @@ QList<unsigned int> WindowsSystemInformation::getCPUFrequencies()
     while (object)
     {
         VARIANT variantProperty;
-        // Recuperar la frequËncia del processador.
-        // S'utilitza el MaxClockSpeed ja que el CurrentClockSpeed retorna la c‡rrega de la CPU actual.
+        // Recuperar la frequ√®ncia del processador.
+        // S'utilitza el MaxClockSpeed ja que el CurrentClockSpeed retorna la c√†rrega de la CPU actual.
         if (getProperty(object, "MaxClockSpeed", &variantProperty))
         {
             CPUFrequencies.append(variantProperty.uintVal);
@@ -381,7 +381,7 @@ unsigned int WindowsSystemInformation::getCPUL2CacheSize()
     while (object)
     {
         VARIANT variantProperty;
-        // Recuperar la frequËncia del processador.
+        // Recuperar la frequ√®ncia del processador.
         if (getProperty(object, "L2CacheSize", &variantProperty))
         {
             cacheSize = variantProperty.uintVal;
@@ -402,7 +402,7 @@ unsigned int WindowsSystemInformation::getCPUL2CacheSize()
 QStringList WindowsSystemInformation::getGPUBrand()
 {
     QStringList GPUBrand;
-    /// Si el hardware Ès incompatible amb WDDM, Win32_VideoController pot no retornar els valors esperats.
+    /// Si el hardware √©s incompatible amb WDDM, Win32_VideoController pot no retornar els valors esperats.
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_VideoController");
 
     IWbemClassObject* object = getNextObject(enumerator);
@@ -429,7 +429,7 @@ QStringList WindowsSystemInformation::getGPUBrand()
 QStringList WindowsSystemInformation::getGPUModel()
 {
     QStringList GPUModel;
-    /// Si el hardware Ès incompatible amb WDDM, Win32_VideoController pot no retornar els valors esperats.
+    /// Si el hardware √©s incompatible amb WDDM, Win32_VideoController pot no retornar els valors esperats.
     IEnumWbemClassObject* enumerator = executeQuery("SELECT * FROM Win32_VideoController");
 
     IWbemClassObject* object = getNextObject(enumerator);
@@ -653,7 +653,7 @@ bool WindowsSystemInformation::doesOpticalDriveHaveWriteCapabilities()
             while (!canWrite && index < elements)
             {
                 unsigned int capability = ((unsigned int*)capabilities->pvData)[index++];
-                // Segons la documentaciÛ, 4, Ès la capacitat de grabar CDs o DVDs
+                // Segons la documentaci√≥, 4, √©s la capacitat de grabar CDs o DVDs
                 if (capability == 4)
                 {
                     canWrite = true;
@@ -680,7 +680,7 @@ unsigned int WindowsSystemInformation::getNetworkAdapterSpeed()
     // I s'utilitzen per la compatibilitat amb els diferents service pack de l'XP
     IEnumWbemClassObject* enumerator = executeQuery(QString("SELECT * FROM Win32_NetworkAdapter WHERE NetConnectionStatus = 2 OR NetConnectionStatus = 9"));
 
-    // TODO Faltar‡ determinar si quan hi ha mÈs d'un adaptador connectat, realment s'agafa el que toca
+    // TODO Faltar√† determinar si quan hi ha m√©s d'un adaptador connectat, realment s'agafa el que toca
 
     IWbemClassObject* object = getNextObject(enumerator);
     while (object)
@@ -753,7 +753,7 @@ bool WindowsSystemInformation::isDesktopCompositionEnabled()
 
 IWbemClassObject* WindowsSystemInformation::getNextObject(IEnumWbemClassObject *enumerator)
 {
-    // PrecondiciÛ: Si l'enumerador Ès nul, retornem nul
+    // Precondici√≥: Si l'enumerador √©s nul, retornem nul
     if (!enumerator)
     {
         return NULL;
@@ -764,7 +764,7 @@ IWbemClassObject* WindowsSystemInformation::getNextObject(IEnumWbemClassObject *
     HRESULT result = enumerator->Next(WBEM_INFINITE, 1, &object, &returned);
     if (FAILED(result) || returned == 0)
     {
-        /// Si no hi ha cap mÈs objecte a l'enumerador, pot retornar brossa, per tant, el posem manualment a nul
+        /// Si no hi ha cap m√©s objecte a l'enumerador, pot retornar brossa, per tant, el posem manualment a nul
         object = NULL;
     }
     return object;
@@ -819,9 +819,9 @@ IWbemServices* WindowsSystemInformation::initializeAPI()
     }
     
     // Pas 2: Obtenir el locator a WMI
-    // Quan es fa aquesta crida es carrega la CLR, cosa que fa augmentar la memÚria 1Mb (+ o -). Aquesta memÚria no es pot alliberar
-    // de cap manera, ja que windows deixa la llibreria carregada per futures consultes. No Ès un memory leak, ja que si es crida 
-    // n vegades, nomÈs es carregar‡ la llibreria un cop (1Mb)
+    // Quan es fa aquesta crida es carrega la CLR, cosa que fa augmentar la mem√≤ria 1Mb (+ o -). Aquesta mem√≤ria no es pot alliberar
+    // de cap manera, ja que windows deixa la llibreria carregada per futures consultes. No √©s un memory leak, ja que si es crida 
+    // n vegades, nom√©s es carregar√† la llibreria un cop (1Mb)
     // Font: http://stackoverflow.com/questions/4736788/memory-leak-when-using-cocreateinstance
     result = CoCreateInstance(CLSID_WbemLocator, 0, CLSCTX_INPROC_SERVER, IID_IWbemLocator, (LPVOID *) &locator);
  
@@ -832,10 +832,10 @@ IWbemServices* WindowsSystemInformation::initializeAPI()
         return services;
     }
 
-    // Pas 3: Connectar a WMI a travÈs del mËtode IWbemLocator::ConnectServer
+    // Pas 3: Connectar a WMI a trav√©s del m√®tode IWbemLocator::ConnectServer
 
     // Connectar al namespace root\cimv2 amb l'usuari actuali obtenir un punter 'services' per fer crides IWbemServices.
-    // Els par‡metres sÛn: el namespace, nom d'usuari (NULL = actual), password (NULL = actual), idioma (locale) (NULL = actual),
+    // Els par√†metres s√≥n: el namespace, nom d'usuari (NULL = actual), password (NULL = actual), idioma (locale) (NULL = actual),
     // flags de seguretat, authority (p.e. Kerberos), objecte de context, (sortida) punter al proxy de IWbemServices.
     result = locator->ConnectServer(_bstr_t(L"ROOT\\CIMV2"), NULL, NULL, NULL, NULL, NULL, NULL, &services); 
     
@@ -853,7 +853,7 @@ IWbemServices* WindowsSystemInformation::initializeAPI()
 
     // Pas 4: Establir els nivells de seguretat del proxy de IWbemServices
 
-    // Els par‡metres sÛn: el proxy de IWbemServices, RPC_C_AUTHN_xxx, RPC_C_AUTHZ_xxx, nom del servidor, RPC_C_AUTHN_LEVEL_xxx,
+    // Els par√†metres s√≥n: el proxy de IWbemServices, RPC_C_AUTHN_xxx, RPC_C_AUTHZ_xxx, nom del servidor, RPC_C_AUTHN_LEVEL_xxx,
     // RPC_C_IMP_LEVEL_xxx, identitat del client, capacitats del proxy de IWbemServices
     result = CoSetProxyBlanket(services, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL, RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE);
 
@@ -884,10 +884,10 @@ void WindowsSystemInformation::uninitializeAPI(IWbemServices *services)
 QString WindowsSystemInformation::createOpenGLContextAndGetExtensions()
 {
     /// Per tal de fer servir el QGLWidget, cal afegir en el core.pro QT += opengl
-    /// TODO: Cal comprovar si aixÚ afecte al rendiment, compilaciÛ, etc.
-    /// La llibreria QtOpenGL semble que quan es carrega, deixa en memÚria uns 4Mb, per poder-la segir utilitzant.
+    /// TODO: Cal comprovar si aix√≤ afecte al rendiment, compilaci√≥, etc.
+    /// La llibreria QtOpenGL semble que quan es carrega, deixa en mem√≤ria uns 4Mb, per poder-la segir utilitzant.
     QGLWidget window;
-    /// ForÁar a carregar el context openGL
+    /// For√ßar a carregar el context openGL
     window.updateGL();
 
     return QString((const char*)glGetString(GL_EXTENSIONS));
@@ -896,10 +896,10 @@ QString WindowsSystemInformation::createOpenGLContextAndGetExtensions()
 QString WindowsSystemInformation::createOpenGLContextAndGetVersion()
 {
     /// Per tal de fer servir el QGLWidget, cal afegir en el core.pro QT += opengl
-    /// TODO: Cal comprovar si aixÚ afecte al rendiment, compilaciÛ, etc.
-    /// La llibreria QtOpenGL semble que quan es carrega, deixa en memÚria uns 4Mb, per poder-la segir utilitzant.
+    /// TODO: Cal comprovar si aix√≤ afecte al rendiment, compilaci√≥, etc.
+    /// La llibreria QtOpenGL semble que quan es carrega, deixa en mem√≤ria uns 4Mb, per poder-la segir utilitzant.
     QGLWidget window;
-    /// ForÁar a carregar el context openGL
+    /// For√ßar a carregar el context openGL
     window.updateGL();
 
     return QString((const char*)glGetString(GL_VERSION));

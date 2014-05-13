@@ -12,7 +12,7 @@ public:
 
     void init();
 
-    /// Declaració de claus
+    /// DeclaraciÃ³ de claus
     static const QString HorizontalSplitterGeometry;
     static const QString VerticalSplitterGeometry;
 };

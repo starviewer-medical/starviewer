@@ -87,7 +87,7 @@ void GluTessellator::registerCallbacks()
 {
     typedef void (GLU_TESS_CALLBACK *GluTessCallbackType)();
     gluTessCallback(m_tessellator, GLU_TESS_VERTEX_DATA, reinterpret_cast<GluTessCallbackType>(&nextVertex));
-    // Aquest ens serveix només perquè registrant-lo forcem GLU a retornar triangles individuals
+    // Aquest ens serveix nomÃ©s perquÃ¨ registrant-lo forcem GLU a retornar triangles individuals
     gluTessCallback(m_tessellator, GLU_TESS_EDGE_FLAG, reinterpret_cast<GluTessCallbackType>(&edgeFlag));
     gluTessCallback(m_tessellator, GLU_TESS_COMBINE_DATA, reinterpret_cast<GluTessCallbackType>(&newVertex));
     gluTessCallback(m_tessellator, GLU_TESS_ERROR, reinterpret_cast<GluTessCallbackType>(&error));

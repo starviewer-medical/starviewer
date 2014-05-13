@@ -273,7 +273,7 @@ void test_ScreenLayout::getNextScreenOf_returnsExpectedValues()
 
 ScreenLayout test_ScreenLayout::getSampleScreenLayout()
 {
-    // Fem un layout de 4 pantalles, distribuïdes uniformement en una matriu 2x2
+    // Fem un layout de 4 pantalles, distribuÃ¯des uniformement en una matriu 2x2
     //  _____ _____
     //  |   | |   |
     //  | 0 | | 1 |

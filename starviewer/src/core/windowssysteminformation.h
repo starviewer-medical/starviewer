@@ -22,14 +22,14 @@ public:
     QString getOperatingSystemAsString();
     QString getOperatingSystemAsShortString();
 
-    /// Retorna la quantitat total de memòria RAM en MegaBytes
+    /// Retorna la quantitat total de memÃ²ria RAM en MegaBytes
     unsigned int getRAMTotalAmount();
     QList<unsigned int> getRAMModulesCapacity();
     QList<unsigned int> getRAMModulesFrequency();
 
     unsigned int getCPUNumberOfCores();
     
-    /// Retorna una llista amb la freqüència de cada processador 
+    /// Retorna una llista amb la freqÃ¼Ã¨ncia de cada processador 
     QList<unsigned int> getCPUFrequencies();
     unsigned int getCPUL2CacheSize();
 
@@ -44,7 +44,7 @@ public:
     QStringList getScreenVendors();
 
     QStringList getHardDiskDevices();
-    unsigned int getHardDiskCapacity(const QString &device); // Del disc dur que conté la carpeta de la cache de Starviewer
+    unsigned int getHardDiskCapacity(const QString &device); // Del disc dur que contÃ© la carpeta de la cache de Starviewer
     unsigned int getHardDiskFreeSpace(const QString &device);
     bool doesOpticalDriveHaveWriteCapabilities();
 
@@ -54,7 +54,7 @@ public:
     bool isDesktopCompositionEnabled();
 
 protected:
-    /// Mètode alternatiu per si no podem obtenir el nombre de nuclis via WMI
+    /// MÃ¨tode alternatiu per si no podem obtenir el nombre de nuclis via WMI
     virtual unsigned int getCPUNumberOfCoresFromEnvironmentVar();
 
     /// Gets the major version of the service pack

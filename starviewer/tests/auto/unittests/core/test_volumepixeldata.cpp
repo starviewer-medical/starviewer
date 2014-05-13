@@ -351,7 +351,7 @@ void test_VolumePixelData::getVoxelValue_IndexVariant_ShouldReturnExpectedSingle
     imageDataVTK->SetScalarTypeToShort();
     imageDataVTK->SetNumberOfScalarComponents(1);
     imageDataVTK->AllocateScalars();
-    // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
+    // Omplim el dataset perquÃ¨ la imatge resultant quedi amb un cert degradat
     signed short *scalarPointer = (signed short*) imageDataVTK->GetScalarPointer();
     signed short value;
     for (int i = 0; i < 10; i++)

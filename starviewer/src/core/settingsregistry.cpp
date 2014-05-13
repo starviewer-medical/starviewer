@@ -46,13 +46,13 @@ Settings::Properties SettingsRegistry::getProperties(const QString &key)
 
 void SettingsRegistry::loadAccesLevelTable()
 {
-    // Al directori on s'instal·la l'aplicació tindrem
-    // un .ini que definirà els nivells d'accés de cada settings
+    // Al directori on s'instalÂ·la l'aplicaciÃ³ tindrem
+    // un .ini que definirÃ  els nivells d'accÃ©s de cada settings
     QString filePath = qApp->applicationDirPath() + "/settingsAccessLevel.ini";
     QFile file(filePath);
     if (!file.exists())
     {
-        DEBUG_LOG("L'arxiu [" + filePath + "] No existeix. No es poden carregar els nivells d'accés");
+        DEBUG_LOG("L'arxiu [" + filePath + "] No existeix. No es poden carregar els nivells d'accÃ©s");
     }
     else
     {

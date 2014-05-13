@@ -20,7 +20,7 @@ public:
     static QList< QList<QRect> > createSubOverlayRegions();
     /// Crea els suboverlays dels overlays creats per createImageOverlays().
     static QList< QList<udg::ImageOverlay> > createSubOverlays();
-    /// Compara dos ImageOverlay i ens diu si són iguals
+    /// Compara dos ImageOverlay i ens diu si sÃ³n iguals
     static bool areEqual(const udg::ImageOverlay &overlay1, const udg::ImageOverlay &overlay2);    
 };
 

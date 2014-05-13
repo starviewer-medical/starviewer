@@ -26,7 +26,7 @@ bool SettingsAccessLevelFileReader::read(const QString &filePath)
         {
             QStringList list = settings.allKeys();
             QString fileVersion = settings.value("settingsAccessLevelVersion").toString();
-            DEBUG_LOG("Versió d'arxiu 'settingsAccessLevel': " + fileVersion);
+            DEBUG_LOG("VersiÃ³ d'arxiu 'settingsAccessLevel': " + fileVersion);
             if (!fileVersion.isEmpty())
             {
                 list.removeAt(list.indexOf("settingsAccessLevelVersion"));
@@ -72,12 +72,12 @@ bool SettingsAccessLevelFileReader::read(const QString &filePath)
 
         case QSettings::FormatError:
             ok = false;
-            DEBUG_LOG("Error de format en l'arxiu: " + filePath + ". Possiblement el format no és el d'un .INI");
+            DEBUG_LOG("Error de format en l'arxiu: " + filePath + ". Possiblement el format no Ã©s el d'un .INI");
             break;
 
         case QSettings::AccessError:
             ok = false;
-            DEBUG_LOG("Error d'accés amb el fitxer: " + filePath);
+            DEBUG_LOG("Error d'accÃ©s amb el fitxer: " + filePath);
             break;
     }
 

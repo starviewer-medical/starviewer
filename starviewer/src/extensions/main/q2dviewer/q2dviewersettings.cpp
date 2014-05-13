@@ -2,7 +2,7 @@
 
 namespace udg {
 
-// Definició de les claus
+// DefiniciÃ³ de les claus
 const QString Q2DViewerSettings::KeyPrefix("Starviewer-App-2DViewer/");
 const QString Q2DViewerSettings::UserProfile(KeyPrefix + "profile");
 

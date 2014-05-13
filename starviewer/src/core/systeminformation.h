@@ -14,7 +14,7 @@ public:
     /// Destructor
     virtual ~SystemInformation();
 
-    /// Crea una nova instància d'alguna de les classes que implementa la interfície
+    /// Crea una nova instÃ ncia d'alguna de les classes que implementa la interfÃ­cie
     static SystemInformation* newInstance();
 
     virtual OperatingSystem getOperatingSystem();
@@ -24,7 +24,7 @@ public:
     
     virtual QString getOperatingSystemVersion();
     
-    /// Retorna la versió de service pack instal·lat, només en windows
+    /// Retorna la versiÃ³ de service pack instalÂ·lat, nomÃ©s en windows
     virtual QString getOperatingSystemServicePackVersion();
     
     /// Returna el nom complert del Sistema Operatiu (Nom, arquitectura, actualitzacions...)
@@ -33,7 +33,7 @@ public:
     /// Returs the name of operating system in a short form
     virtual QString getOperatingSystemAsShortString();
     
-    /// Retorna la quantitat total de memòria RAM en MegaBytes
+    /// Retorna la quantitat total de memÃ²ria RAM en MegaBytes
     virtual unsigned int getRAMTotalAmount();
     
     //En MBytes

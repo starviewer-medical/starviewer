@@ -9,52 +9,52 @@ namespace udg {
 
 /**
     Classe encarregada de parsejar strings de settings que poden
-    contenir un seguit de paraules clau. Només tindrem una sola instància
+    contenir un seguit de paraules clau. NomÃ©s tindrem una sola instÃ ncia
     ja que es tracta d'una classe Singleton.
 
     Les paraules clau disponibles es carreguen inicialment al crear l'objecte
     conjuntament amb els seus corresponents valors.
 
-    El catàleg de paraules clau és el següent:
+    El catÃ leg de paraules clau Ã©s el segÃ¼ent:
 
-    %HOSTNAME%: Nom de la màquina local (aka localHostName)
-    %IP%: Adreça ip de la màquina local en format aaa.bbb.ccc.dddd
-    %IP.1%: Primer prefix de l'adreça ip de la màquina local
-    %IP.2%: Segon prefix de l'adreça ip de la màquina local
-    %IP.3%: Tercer prefix de l'adreça ip de la màquina local
-    %IP.4%: Quart prefix de l'adreça ip de la màquina local
+    %HOSTNAME%: Nom de la mÃ quina local (aka localHostName)
+    %IP%: AdreÃ§a ip de la mÃ quina local en format aaa.bbb.ccc.dddd
+    %IP.1%: Primer prefix de l'adreÃ§a ip de la mÃ quina local
+    %IP.2%: Segon prefix de l'adreÃ§a ip de la mÃ quina local
+    %IP.3%: Tercer prefix de l'adreÃ§a ip de la mÃ quina local
+    %IP.4%: Quart prefix de l'adreÃ§a ip de la mÃ quina local
     %USERNAME%: Nom d'usuari actual
     %HOMEPATH%: Ruta al directori "home" d'usuari
 
-    El seu tractament serà "case sensitive".
+    El seu tractament serÃ  "case sensitive".
 
-    A més a més, a aquestes paraules clau se'ls pot afegir un sufix que els hi apliqui una màscara.
+    A mÃ©s a mÃ©s, a aquestes paraules clau se'ls pot afegir un sufix que els hi apliqui una mÃ scara.
 
-    == Màscara de truncatge ==
+    == MÃ scara de truncatge ==
 
-    Aquesta màscara el que fa és truncar a 'n' caràcters la clau %KEY%. Podem especificar adicionalment
-    un caràcter de padding amb el que s'omplin el nombre de caràcters buits si la longitud de %KEY% és
-    inferior al nombre de caràcters truncats.
+    Aquesta mÃ scara el que fa Ã©s truncar a 'n' carÃ cters la clau %KEY%. Podem especificar adicionalment
+    un carÃ cter de padding amb el que s'omplin el nombre de carÃ cters buits si la longitud de %KEY% Ã©s
+    inferior al nombre de carÃ cters truncats.
 
-    La sintaxi és la següent
+    La sintaxi Ã©s la segÃ¼ent
 
     %KEY%[n:c]
 
     on:
-      * %KEY%: paraula clau del catàleg (HOSTANAME,IP, etc)
-      * n: nombre de caràcters a truncar de %KEY%. Ha de ser un nombre natural > 0
-      * c: caràcter de padding amb el que omplirem els espais buits.
-           El caràcter de padding pot ser qualsevol caràcter, excepte l'espai en blanc
+      * %KEY%: paraula clau del catÃ leg (HOSTANAME,IP, etc)
+      * n: nombre de carÃ cters a truncar de %KEY%. Ha de ser un nombre natural > 0
+      * c: carÃ cter de padding amb el que omplirem els espais buits.
+           El carÃ cter de padding pot ser qualsevol carÃ cter, excepte l'espai en blanc
 
     Exemples:
 
-    Per obtenir els 5 últims dígits de l'adreça IP i omplir els espais buits amb el caràcter 'x', escriuríem
+    Per obtenir els 5 Ãºltims dÃ­gits de l'adreÃ§a IP i omplir els espais buits amb el carÃ cter 'x', escriurÃ­em
     %IP.3%[2:x]%IP.4%[3:x]
-    Si tinguèssim la adreça IP 10.80.9.2 el resultat seria "x9xx2"
+    Si tinguÃ¨ssim la adreÃ§a IP 10.80.9.2 el resultat seria "x9xx2"
 
-    Per obtenir els 4 últims dígits, sense padding escriuríem
+    Per obtenir els 4 Ãºltims dÃ­gits, sense padding escriurÃ­em
     %IP.3%[1:]%IP.4%[3:]
-    i en aquest cas, per la mateixa adreça IP que l'anterior, el resultat seria "92"
+    i en aquest cas, per la mateixa adreÃ§a IP que l'anterior, el resultat seria "92"
   */
 class SettingsParser : public Singleton<SettingsParser> {
 public:
@@ -62,8 +62,8 @@ public:
     QString parse(const QString &stringToParse);
 
 protected:
-    /// Cal declarar-ho friend perquè sinó hauríem de fer públics
-    /// el constructor i destructor i trencaríem així la filosofia d'un Singleton
+    /// Cal declarar-ho friend perquÃ¨ sinÃ³ haurÃ­em de fer pÃºblics
+    /// el constructor i destructor i trencarÃ­em aixÃ­ la filosofia d'un Singleton
     friend class Singleton<SettingsParser>;
     SettingsParser();
     ~SettingsParser();
@@ -72,25 +72,25 @@ private:
     /// Inicialitza la taula amb les paraules clau i els seus corresponents valors
     void initializeParseableStringsTable();
 
-    /// Ens diu si la cadena de texte passada és una adreça IPv4 vàlida.
-    /// Només accepta com a resultats vàlids cadenes de texte que tinguin únicament l'adreça IP
-    /// Si la cadena conté una adreça IP a més d'altres caràcters, aquesta serà donada com a invàlida.
-    /// Es considera una adreça IP vàlida una cadena amb la forma xxx.xxx.xxx.xxx on xxx és un número
-    /// dins del rang 0..255. La cadena 192.168.2.1 seria considerada com a vàlida,
-    /// però la cadena 192.168.002.001 no ho seria pas.
-    /// TODO Aquest mètode hauria de formar part d'una classe amb utilitats de sistema o xarxa
-    /// accessible des de qualsevol altre lloc de l'aplicació per fer aquest tipu de comprovacions.
+    /// Ens diu si la cadena de texte passada Ã©s una adreÃ§a IPv4 vÃ lida.
+    /// NomÃ©s accepta com a resultats vÃ lids cadenes de texte que tinguin Ãºnicament l'adreÃ§a IP
+    /// Si la cadena contÃ© una adreÃ§a IP a mÃ©s d'altres carÃ cters, aquesta serÃ  donada com a invÃ lida.
+    /// Es considera una adreÃ§a IP vÃ lida una cadena amb la forma xxx.xxx.xxx.xxx on xxx Ã©s un nÃºmero
+    /// dins del rang 0..255. La cadena 192.168.2.1 seria considerada com a vÃ lida,
+    /// perÃ² la cadena 192.168.002.001 no ho seria pas.
+    /// TODO Aquest mÃ¨tode hauria de formar part d'una classe amb utilitats de sistema o xarxa
+    /// accessible des de qualsevol altre lloc de l'aplicaciÃ³ per fer aquest tipu de comprovacions.
     bool isIPv4Address(const QString &ipAddress);
 
-    /// Ens retorna una llista amb les adreces IPv4 de la màquina local.
+    /// Ens retorna una llista amb les adreces IPv4 de la mÃ quina local.
     /// Normalment el primer element de la llista hauria de ser la IP corresponent
-    /// a la connexió de xarxa principal.
-    /// TODO Aquest mètode hauria de formar part d'una classe amb utilitats de sistema o xarxa
-    /// accessible des de qualsevol altre lloc de l'aplicació per fer obtenir aquest tipu d'informació.
+    /// a la connexiÃ³ de xarxa principal.
+    /// TODO Aquest mÃ¨tode hauria de formar part d'una classe amb utilitats de sistema o xarxa
+    /// accessible des de qualsevol altre lloc de l'aplicaciÃ³ per fer obtenir aquest tipu d'informaciÃ³.
     QStringList getLocalHostIPv4Addresses();
 
 private:
-    /// Mapa que conté la relació de paraules clau amb el seu valor
+    /// Mapa que contÃ© la relaciÃ³ de paraules clau amb el seu valor
     QMap<QString, QString> m_parseableStringsTable;
 
 };

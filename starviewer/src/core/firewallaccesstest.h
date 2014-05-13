@@ -10,7 +10,7 @@ namespace udg {
 class FirewallAccess;
 
 /**
-    Test de diagnosis de l'aplicació que comprova si Starviewer té accés a través del firewall.
+    Test de diagnosis de l'aplicaciÃ³ que comprova si Starviewer tÃ© accÃ©s a travÃ©s del firewall.
 */
 class FirewallAccessTest : public DiagnosisTest {
 Q_OBJECT
@@ -20,7 +20,7 @@ public:
 
     DiagnosisTestResult run();
 
-    /// Retorna la descripció del test
+    /// Retorna la descripciÃ³ del test
     QString getDescription();
 
 protected:

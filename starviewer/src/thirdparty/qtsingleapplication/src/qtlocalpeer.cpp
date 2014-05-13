@@ -200,15 +200,15 @@ void QtLocalPeer::receiveConnection()
     socket->waitForBytesWritten(1000);
 
     /*********************************************************************************************************************************************/
-    //                                                      ATENCIÓ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //                                                      ATENCIÃ“!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //
-    //LÍNIA DE CODI POSADA PER EQUIP STARVIEWER DEGUT AL TICKET #1498. ALGUNES VEGADES LA INSTÀNCIA PRINCIPAÑ (LA QUE ESTÀ JA EXECUTANT-SE) TANCA EL SOCKET 
-    //ABANS QUE LA INSTÀNCIA SECUNDÀRIA (LA NOVA INSTANCIA) HAGI POGUT LLEGIR L'ACK DE CONFIRMACIÓ, AIXÒ FA QUE LA INSTÀNCIA SECUNDÀRIA NO REBI L'ACK I 
-    //INDIQUI QUE LA INSTÀNCIA PRINCIPAL NO RESPÓN PER EVITAR AIXÒ POSEM socket->waitForDisconnected(3000) FENT QUE SIGUI LA INSTÀNCIA SECUNDÀRIA 
+    //LÃNIA DE CODI POSADA PER EQUIP STARVIEWER DEGUT AL TICKET #1498. ALGUNES VEGADES LA INSTÃ€NCIA PRINCIPAÃ‘ (LA QUE ESTÃ€ JA EXECUTANT-SE) TANCA EL SOCKET 
+    //ABANS QUE LA INSTÃ€NCIA SECUNDÃ€RIA (LA NOVA INSTANCIA) HAGI POGUT LLEGIR L'ACK DE CONFIRMACIÃ“, AIXÃ’ FA QUE LA INSTÃ€NCIA SECUNDÃ€RIA NO REBI L'ACK I 
+    //INDIQUI QUE LA INSTÃ€NCIA PRINCIPAL NO RESPÃ“N PER EVITAR AIXÃ’ POSEM socket->waitForDisconnected(3000) FENT QUE SIGUI LA INSTÃ€NCIA SECUNDÃ€RIA 
     //QUI TANQUI EL SOCKET.
     //
-    //SI S'ACTUALITZA DE VERSIÓ AQUESTA CLASSE SERÀ NECESSARI COMPROVAR SI EL PROBLEMA AQUÍ DESCRIT CONTINUA PASSANT, SI CONTINUA PASSANT
-    //SI HAURÀ DE TORNAR AFEGIR socket->waitForDisconnected(3000)
+    //SI S'ACTUALITZA DE VERSIÃ“ AQUESTA CLASSE SERÃ€ NECESSARI COMPROVAR SI EL PROBLEMA AQUÃ DESCRIT CONTINUA PASSANT, SI CONTINUA PASSANT
+    //SI HAURÃ€ DE TORNAR AFEGIR socket->waitForDisconnected(3000)
     //
     /*********************************************************************************************************************************************/
     socket->waitForDisconnected(3000);

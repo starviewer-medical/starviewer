@@ -22,13 +22,13 @@ protected:
     void showEvent (QShowEvent *event);
 
 signals:
-    /// Es llanÁa signal indicant que s'ha de guardar al pacs passat per par‡metr les imatges de l'estudi indicat que compleixin la DicomMask.
+    /// Es llan√ßa signal indicant que s'ha de guardar al pacs passat per par√†metr les imatges de l'estudi indicat que compleixin la DicomMask.
     void selectedPacsToStore();
 
 private slots:
     /// Enables the store button if any PACS is selected, and disables it when no PACS is selected.
     void updateStoreButton();
-    /// Slot que respÛn quan fan click al botÛ Store, fa signal indicant que ja han seleccionat els PACS
+    /// Slot que resp√≥n quan fan click al bot√≥ Store, fa signal indicant que ja han seleccionat els PACS
     void storeImagesToSelectedPacs();
 
 private:

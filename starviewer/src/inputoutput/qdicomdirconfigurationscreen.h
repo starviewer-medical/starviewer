@@ -8,7 +8,7 @@ namespace udg {
 class Status;
 
 /**
-    Widget en el que es configuren els par‡metres del programa de gravaciÛ
+    Widget en el que es configuren els par√†metres del programa de gravaci√≥
   */
 class QDICOMDIRConfigurationScreen : public QWidget, private Ui::QDICOMDIRConfigurationScreenBase {
 Q_OBJECT
@@ -27,7 +27,7 @@ private:
     /// Creates the connections with widgets to edit settings properly
     void setupSettingsUpdatesConnections();
 
-    /// Carrega les dades de configuraciÛ del programa de gravaciÛ
+    /// Carrega les dades de configuraci√≥ del programa de gravaci√≥
     void loadDICOMDIRDefaults();
 
     /// Enables or disables labels, text box and button related to folder to copy content from
@@ -45,7 +45,7 @@ private:
     bool validateCopyFolderContentPath(const QString &path);
 
 private slots:
-    /// Mostra un QDialog per especificar on es troba el programa de gravaciÛ en el disc dur
+    /// Mostra un QDialog per especificar on es troba el programa de gravaci√≥ en el disc dur
     void examinateDICOMDIRBurningApplicationPath();
 
     /// Mostra QDialog que permet especificar el directori on es troba el contingut que s'ha de copiar al crear un DICOMDIR

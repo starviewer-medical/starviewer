@@ -51,8 +51,8 @@ class TestingIWBemClassObjectTest : public IWbemClassObject {
 class TestingWindowsSystemInformation : public WindowsSystemInformation {
 public:
 
-    // GetNextObject retornarà un dels objectes del vector, i per tant necessita un index per anar-lo recorrent. Quan arribi al final
-    // retornarà NULL. En cas de atributs que no siguin vectors, després de retornar el seu valor, retornarà NULL.
+    // GetNextObject retornarÃ  un dels objectes del vector, i per tant necessita un index per anar-lo recorrent. Quan arribi al final
+    // retornarÃ  NULL. En cas de atributs que no siguin vectors, desprÃ©s de retornar el seu valor, retornarÃ  NULL.
     int m_getNextObjectIndex;
     // Per retornar un vector de forma correcta, necessitem un index de 0 a n
     int m_nextObjectIndex;
@@ -125,7 +125,7 @@ protected:
             m_getNextObjectIndex--;
         }
 
-        // Del mètode getGPUDriverVersion
+        // Del mÃ¨tode getGPUDriverVersion
         else if (propertyName == "DriverVersion")
         {
             propertyVariant->bstrVal = fromQStringToBSTR(m_testingAPIGPUDriverVersion);
@@ -176,7 +176,7 @@ private slots:
 
 void test_WindowsSystemInformation::run_ShouldTestIfWindowsSystemInformationRunsAsExpected_data()
 {
-    /// Es comproven els mètodes de la classe windowsSystemInformation que no són un símple get (o un get de la API)
+    /// Es comproven els mÃ¨todes de la classe windowsSystemInformation que no sÃ³n un sÃ­mple get (o un get de la API)
     // Entrada
     QTest::addColumn<QString>("testingAPIRAMTotalAmount");
     QTest::addColumn<QStringList>("testingAPIRAMModulesCapacity");

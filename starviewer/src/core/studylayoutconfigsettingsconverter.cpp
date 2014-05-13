@@ -148,7 +148,7 @@ StudyLayoutConfig::UnfoldDirectionType StudyLayoutConfigSettingsConverter::getUn
         return StudyLayoutConfig::TopToBottomFirst;
     }
 
-    // Si no hi ha cap valor v‡lid, retornem el valor per defecte
+    // Si no hi ha cap valor v√†lid, retornem el valor per defecte
     return StudyLayoutConfig::DefaultUnfoldDirection;
 }
 
@@ -164,7 +164,7 @@ StudyLayoutConfig::UnfoldType StudyLayoutConfigSettingsConverter::getUnfoldTypeF
         return StudyLayoutConfig::UnfoldSeries;
     }
 
-    // Si no hi ha cap valor v‡lid, retornem el valor per defecte
+    // Si no hi ha cap valor v√†lid, retornem el valor per defecte
     return StudyLayoutConfig::DefaultUnfoldType;
 }
 

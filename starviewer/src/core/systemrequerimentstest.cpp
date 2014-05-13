@@ -22,7 +22,7 @@ SystemRequerimentsTest::~SystemRequerimentsTest()
 
 DiagnosisTestResult SystemRequerimentsTest::run()
 {
-    /// Requeriments mÌnims
+    /// Requeriments m√≠nims
     SystemRequeriments *requeriments = getSystemRequeriments();
     const unsigned int MinimumNumberOfCores = requeriments->getMinimumCPUNumberOfCores();
     const unsigned int MinimumCoreSpeed = requeriments->getMinimumCPUFrequency();
@@ -34,13 +34,13 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     const unsigned int MinimumScreenWidth = requeriments->getMinimumScreenWidth();
     const unsigned int MinimumDiskSpace = requeriments->getMinimumHardDiskFreeSpace();
 
-    // TODO Temporal, s'ha de treure i veure com obtenir la unitat on est‡ starviewer
+    // TODO Temporal, s'ha de treure i veure com obtenir la unitat on est√† starviewer
     const QString whichHardDisk = "C:";
 
     SystemInformation *system = SystemInformation::newInstance();
     DiagnosisTestResult result;
     
-    /// Requeriments mÌnims del sistema:
+    /// Requeriments m√≠nims del sistema:
     // Per exemple: Dual core 1.5Ghz
     unsigned int numberOfCores = getCPUNumberOfCores(system);
     if (numberOfCores < MinimumNumberOfCores)
@@ -53,8 +53,8 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     }
     else
     {
-        // Una m‡quina pot tenir mÈs d'una CPU.
-        // Buscar si alguna tÈ una velocitat superior al mÌnim
+        // Una m√†quina pot tenir m√©s d'una CPU.
+        // Buscar si alguna t√© una velocitat superior al m√≠nim
         QList<unsigned int> cpuFrequencies = getCPUFrequencies(system);
         unsigned int maximumCPUFrequency = 0;
         for (int i = 0; i < cpuFrequencies.count(); i++)
@@ -75,19 +75,19 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         }
     }
 
-    // Comprovar si la versiÛ d'openGL del sistema Ès suficient
+    // Comprovar si la versi√≥ d'openGL del sistema √©s suficient
     QString openGLVersion = getGPUOpenGLVersion(system);
     if (compareVersions(openGLVersion, MinimumGPUOpenGLVersion) == SystemRequerimentsTest::Older)
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
         problem.setDescription(tr("Current OpenGL version is %1, and the minimum required is %2").arg(openGLVersion).arg(MinimumGPUOpenGLVersion));
-        // Normalment la versiÛ d'openGL s'actualitza amb els drivers de la gr‡fica
+        // Normalment la versi√≥ d'openGL s'actualitza amb els drivers de la gr√†fica
         problem.setSolution(tr("Update your graphics card driver"));
         result.addError(problem);
     }
 
-    // Tenir en una llista les compatibilitats openGL que starviewer utilitza i anar-les buscant una a una al retorn del mËtode
+    // Tenir en una llista les compatibilitats openGL que starviewer utilitza i anar-les buscant una a una al retorn del m√®tode
     QStringList openGLExtensions = getGPUOpenGLCompatibilities(system);
     QStringList unsupportedOpenGLExtensions;
     for (int i = 0; i < MinimumGPUOpenGLExtensions.count(); i++)
@@ -106,7 +106,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         result.addError(problem);
     }
 
-    // MemÚria RAM de la GPU
+    // Mem√≤ria RAM de la GPU
     QList<unsigned int> gpuRAM = getGPURAM(system);
     QStringList gpuModel = getGPUModel(system);
     for (int i = 0; i < gpuRAM.count(); i++)
@@ -121,7 +121,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         }
     }
     
-    // TODO Disc dur. S'ha de fer tambÈ del que contÈ el directori de la cache????????
+    // TODO Disc dur. S'ha de fer tamb√© del que cont√© el directori de la cache????????
     if (getHardDiskFreeSpace(system, whichHardDisk) < MinimumDiskSpace)
     {
         DiagnosisTestProblem problem;
@@ -131,7 +131,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         result.addError(problem);
     }
 
-    // Arquitectura de la m‡quina (32 o 64 bits)
+    // Arquitectura de la m√†quina (32 o 64 bits)
     if (requeriments->doesOperatingSystemNeedToBe64BitArchitecutre() && !isOperatingSystem64BitArchitecture(system))
     {
         DiagnosisTestProblem problem;
@@ -141,13 +141,13 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         result.addError(problem);
     }
 
-    // VersiÛ del sistema operatiu
+    // Versi√≥ del sistema operatiu
     QString version;
     QString servicePack;
     switch (getOperatingSystem(system))
     {
         case SystemInformation::OSWindows:
-            // Si el SO Ès windows, quina ha de ser la mÌnima versiÛ??
+            // Si el SO √©s windows, quina ha de ser la m√≠nima versi√≥??
             version = getOperatingSystemVersion(system);
             if (compareVersions(version, MinimumOSVersion) == SystemRequerimentsTest::Older)
             {
@@ -157,7 +157,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
                 problem.setSolution(tr("Update operating system to a newer version"));
                 result.addError(problem);
             }
-            // Si Ès windows XP (versiÛ 5.xx), s'ha de comprovar el service pack
+            // Si √©s windows XP (versi√≥ 5.xx), s'ha de comprovar el service pack
             if (version.split(".").at(0).toInt() == 5)
             {
                 servicePack = getOperatingSystemServicePackVersion(system);
@@ -191,7 +191,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
             break;
     }
 
-    // MemÚria RAM
+    // Mem√≤ria RAM
     unsigned int RAMTotalAmount = getRAMTotalAmount(system);
     if (RAMTotalAmount < MinimumRAM)
     {
@@ -202,7 +202,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         result.addError(problem);
     }
 
-    // Si alguna de les pantalles Ès menor de 1185 pixels d'amplada, poder retornar un warning, ja que starviewer no hi cap.
+    // Si alguna de les pantalles √©s menor de 1185 pixels d'amplada, poder retornar un warning, ja que starviewer no hi cap.
     QList<QSize> resolutions = getScreenResolutions(system);
     QStringList screensInWhichStarviewerWontFit;
     bool starviewerWillFitInOneScreen = false;
@@ -210,7 +210,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     {
         if (resolutions.at(i).width() < (int)MinimumScreenWidth)
         {
-            // i + 1, ja que les pantalles a la interfÌcie es mostren de 1 a n
+            // i + 1, ja que les pantalles a la interf√≠cie es mostren de 1 a n
             screensInWhichStarviewerWontFit << QString::number(i + 1);
         }
         else
@@ -271,7 +271,7 @@ QString SystemRequerimentsTest::getDescription()
 
 SystemRequerimentsTest::VersionComparison SystemRequerimentsTest::compareVersions(QString version1, QString version2)
 {
-    // TODO de moment nomÈs estar pensat per windows. S'ha d'estendre a mÈs S.O.
+    // TODO de moment nom√©s estar pensat per windows. S'ha d'estendre a m√©s S.O.
     
     //5.1.2600 XXX.XXX
     QStringList version1List = (version1.split(" ")[0]).split(".");
@@ -292,7 +292,7 @@ SystemRequerimentsTest::VersionComparison SystemRequerimentsTest::compareVersion
         index++;
     }
 
-    // Si totes les parts sÛn iguals, la versiÛ que en tingui mÈs ser‡ la major, ja que suposarem que la altra Ès .0
+    // Si totes les parts s√≥n iguals, la versi√≥ que en tingui m√©s ser√† la major, ja que suposarem que la altra √©s .0
     if (version1List.count() < version2List.count())
     {
         return SystemRequerimentsTest::Older;

@@ -14,7 +14,7 @@ namespace udg {
 class SystemRequeriments;
 
 /**
-    Test de diagnosis de l'aplicació que comprova si el sistema compleix els requeriments mínims per que Starviewer funcioni correctament.
+    Test de diagnosis de l'aplicaciÃ³ que comprova si el sistema compleix els requeriments mÃ­nims per que Starviewer funcioni correctament.
 */
 class SystemRequerimentsTest : public DiagnosisTest {
 Q_OBJECT
@@ -24,13 +24,13 @@ public:
 
     DiagnosisTestResult run();
 
-    /// Retorna la descripció del test
+    /// Retorna la descripciÃ³ del test
     QString getDescription();
 
 protected:
     enum VersionComparison { Older, Same, Newer };
 
-    /// Retorna 0 sí son iguals, 1 sí la version1 és major que la version2 i -1 si és menor.
+    /// Retorna 0 sÃ­ son iguals, 1 sÃ­ la version1 Ã©s major que la version2 i -1 si Ã©s menor.
     VersionComparison compareVersions(QString version1, QString version2);
 
     virtual unsigned int getCPUNumberOfCores(SystemInformation *system);

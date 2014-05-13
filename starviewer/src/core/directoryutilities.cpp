@@ -63,7 +63,7 @@ bool DirectoryUtilities::copyDirectory(const QString &sourceDirectoryPath, const
 
         if (!QFile::copy(sourceFile, destinationFile))
         {
-            ERROR_LOG(QString("No s'ha pogut copiar l'arxiu %1 al seu destí %2").arg(sourceFile, destinationFile));
+            ERROR_LOG(QString("No s'ha pogut copiar l'arxiu %1 al seu destÃ­ %2").arg(sourceFile, destinationFile));
             return false;
         }
     }

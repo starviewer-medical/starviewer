@@ -3,7 +3,7 @@
 
 namespace udg {
 
-// Definició de les claus
+// DefiniciÃ³ de les claus
 const QString KeyPrefix("Starviewer-App-3DTesting/");
 const QString Q3DViewerExtensionSettings::CustomClutsDirPath(KeyPrefix + "customClutsDir");
 

@@ -6,13 +6,13 @@ namespace udg {
 class Volume;
 
 /**
-    Classe base per tots els postprocessadors que s'executen després de la lectura del volum.
+    Classe base per tots els postprocessadors que s'executen desprÃ©s de la lectura del volum.
  */
 class Postprocessor {
 
 public:
 
-    /// Aplica el postprocés sobre el volum donat.
+    /// Aplica el postprocÃ©s sobre el volum donat.
     virtual void postprocess(Volume *volume) = 0;
 
 };

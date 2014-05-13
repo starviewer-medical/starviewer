@@ -12,7 +12,7 @@
 
 namespace udg {
 
-// Definició de les claus
+// DefiniciÃ³ de les claus
 const QString CacheBase("PACS/cache/");
 const QString InputOutputSettings::DatabaseAbsoluteFilePath(CacheBase + "sdatabasePath");
 const QString InputOutputSettings::CachePath(CacheBase + "imagePath");
@@ -110,7 +110,7 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(LastOpenedDICOMDIRPath, QDir::homePath());
 
     settingsRegistry->addSetting(IncomingDICOMConnectionsPort, 4006);
-    // TODO podríem definir-lo directament amb %HOSTNAME%
+    // TODO podrÃ­em definir-lo directament amb %HOSTNAME%
     settingsRegistry->addSetting(LocalAETitle, QHostInfo::localHostName(), Settings::Parseable);
     settingsRegistry->addSetting(PACSConnectionTimeout, 20);
     settingsRegistry->addSetting(MaximumPACSConnections, 3);

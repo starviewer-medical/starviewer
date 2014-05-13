@@ -14,7 +14,7 @@ public:
     enum ExclusionCriteriaType { Survey, Localizer };
     
     StudyLayoutConfig();
-    /// Constructor amb par‡metres mÈs habituals
+    /// Constructor amb par√†metres m√©s habituals
     StudyLayoutConfig(const QString &modality, UnfoldType unfoldType = DefaultUnfoldType, UnfoldDirectionType unfoldDirection = DefaultUnfoldDirection);
     ~StudyLayoutConfig();
 
@@ -36,19 +36,19 @@ public:
     bool operator ==(const StudyLayoutConfig &config) const;
 
 private:
-    /// Nombre m‡xim de visors a desplegar. Si Ès zero indicaria que s'han de desplegar tants com sigui possible.
+    /// Nombre m√†xim de visors a desplegar. Si √©s zero indicaria que s'han de desplegar tants com sigui possible.
     int m_maxNumberOfViewers;
 
     /// Tipus de desplegament
     UnfoldType m_unfoldType;
 
-    /// DirecciÛ de desplegament
+    /// Direcci√≥ de desplegament
     UnfoldDirectionType m_unfoldDirection;
 
-    /// Conjunt de criteris d'exclusiÛ
+    /// Conjunt de criteris d'exclusi√≥
     QSet<ExclusionCriteriaType> m_exclusionCriteria;
 
-    /// Modalitat a la que aplicar aquesta configuraciÛ
+    /// Modalitat a la que aplicar aquesta configuraci√≥
     QString m_modality;
 };
 

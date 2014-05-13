@@ -56,7 +56,7 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     const QString Rotate270DegreesAndFlip("3,1");
 
     // Mapeig de les operacions per la vista sagital
-    // Definim les etiquetes possibles d'orientació
+    // Definim les etiquetes possibles d'orientaciÃ³
     const QString AnteriorFeet(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::FeetLabel);
     const QString AnteriorHead(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::HeadLabel);
     const QString PosteriorFeet(PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::FeetLabel);
@@ -132,7 +132,7 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(HeadPosterior + "-" + FeetPosterior, Flip);
 
     // Mappeig de les operacions per la vista axial
-    // Definim les etiquetes possibles d'orientació
+    // Definim les etiquetes possibles d'orientaciÃ³
     const QString AnteriorRight(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::RightLabel);
     const QString AnteriorLeft(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::LeftLabel);
     const QString PosteriorRight(PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::RightLabel);
@@ -207,7 +207,7 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(LeftPosterior + "-" + RightPosterior, Flip);
 
     // Mapeig de les operacions per la vista coronal
-    // Definim les etiquetes possibles d'orientació
+    // Definim les etiquetes possibles d'orientaciÃ³
     const QString RightFeet(PatientOrientation::RightLabel + "\\" + PatientOrientation::FeetLabel);
     const QString RightHead(PatientOrientation::RightLabel + "\\" + PatientOrientation::HeadLabel);
     const QString LeftFeet(PatientOrientation::LeftLabel + "\\" + PatientOrientation::FeetLabel);
@@ -284,10 +284,10 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
 
 void ImageOrientationOperationsMapper::updateOperations()
 {
-    // La orientació podria tenir més d'una lletra per row
+    // La orientaciÃ³ podria tenir mÃ©s d'una lletra per row
     // com per exemple RA\AL en un tall que sigui oblicu
-    // Per evitar això i no fer una llista enorme de transformacions,
-    // agafarem només la primera lletra del row i de la columna ja que així ja és suficient
+    // Per evitar aixÃ² i no fer una llista enorme de transformacions,
+    // agafarem nomÃ©s la primera lletra del row i de la columna ja que aixÃ­ ja Ã©s suficient
     QString initialRowLabel = m_initialOrientation.getRowDirectionLabel().left(1);
     QString initialColumnLabel = m_initialOrientation.getColumnDirectionLabel().left(1);
 
@@ -314,7 +314,7 @@ void ImageOrientationOperationsMapper::updateOperations()
     }
     else
     {
-        // Si no es troben combinacions, resetejem les operacions perquè aquesta sigui neutra si s'aplica
+        // Si no es troben combinacions, resetejem les operacions perquÃ¨ aquesta sigui neutra si s'aplica
         m_clockwiseTurns = 0;
         m_horizontalFlip = false;
     }

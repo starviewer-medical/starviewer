@@ -83,11 +83,11 @@ void CircleTool::endDrawing()
 {
     Q_ASSERT(m_isDrawing);
 
-    // Cal comprovar si hi ha un objecte creat ja que podria ser que no s'hagués creat si s'hagués realitzat un doble clic,
-    // per exemple, ja que no s'hauria passat per l'event de mouse move, que és quan es crea la primitiva.
+    // Cal comprovar si hi ha un objecte creat ja que podria ser que no s'haguÃ©s creat si s'haguÃ©s realitzat un doble clic,
+    // per exemple, ja que no s'hauria passat per l'event de mouse move, que Ã©s quan es crea la primitiva.
     if (m_circle)
     {
-        // Alliberem la primitiva perquè pugui ser esborrada
+        // Alliberem la primitiva perquÃ¨ pugui ser esborrada
         m_circle->decreaseReferenceCount();
         // Pintem la primitiva al lloc corresponent
         m_2DViewer->getDrawer()->erasePrimitive(m_circle);
@@ -119,11 +119,11 @@ void CircleTool::updateCircle()
 
     getEndPoint();
 
-    // Si encara no havíem creat el polígon, ho fem
+    // Si encara no havÃ­em creat el polÃ­gon, ho fem
     if (!m_circle)
     {
         m_circle = new DrawerPolygon();
-        // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
+        // AixÃ­ evitem que la primitiva pugui ser esborrada durant l'ediciÃ³ per events externs
         m_circle->increaseReferenceCount();
         m_2DViewer->getDrawer()->draw(m_circle);
     }
@@ -145,7 +145,7 @@ void CircleTool::getEndPoint()
     double width = endPoint[xIndex] - startPoint[xIndex];
     double height = endPoint[yIndex] - startPoint[yIndex];
     
-    // Ens quedem amb la mida més gran
+    // Ens quedem amb la mida mÃ©s gran
     if (qAbs(width) > qAbs(height))
     {
         endPoint[yIndex] = startPoint[yIndex] + MathTools::copySign(width, height);
@@ -219,7 +219,7 @@ void CircleTool::equalizeDepth()
 
 void CircleTool::initialize()
 {
-    // Alliberem les primitives perquè puguin ser esborrades
+    // Alliberem les primitives perquÃ¨ puguin ser esborrades
     if (m_circle)
     {
         m_circle->decreaseReferenceCount();

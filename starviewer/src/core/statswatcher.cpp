@@ -71,19 +71,19 @@ void StatsWatcher::registerClick(bool checked)
         {
             if (checked)
             {
-                statMessage = "S'ha activat amb un click el botó";
+                statMessage = "S'ha activat amb un click el botÃ³";
             }
             else
             {
-                statMessage = "S'ha desactivat amb un click el botó";
+                statMessage = "S'ha desactivat amb un click el botÃ³";
             }
         }
         else
         {
-            statMessage = "Sha fet un click sobre el botó";
+            statMessage = "Sha fet un click sobre el botÃ³";
         }
     }
-    // És un altre tipus d'objecte
+    // Ã‰s un altre tipus d'objecte
     else
     {
         statMessage = "S'ha fet un click sobre l'objecte";
@@ -95,7 +95,7 @@ void StatsWatcher::registerClick(bool checked)
 
 void StatsWatcher::registerActionTrigger(QAction *action)
 {
-    log(QString("[%1] S'ha disparat l'acció [%2], objecte [%3]").arg(m_context).arg(action->text()).arg(action->objectName()));
+    log(QString("[%1] S'ha disparat l'acciÃ³ [%2], objecte [%3]").arg(m_context).arg(action->text()).arg(action->objectName()));
 }
 
 void StatsWatcher::registerSliderAction(int action)
@@ -103,7 +103,7 @@ void StatsWatcher::registerSliderAction(int action)
     QAbstractSlider *slider = qobject_cast<QAbstractSlider*>(sender());
     if (!slider)
     {
-        DEBUG_LOG("Aquest slot només s'hauria de connectar amb sliders. Retornem de la funció");
+        DEBUG_LOG("Aquest slot nomÃ©s s'hauria de connectar amb sliders. Retornem de la funciÃ³");
         return;
     }
     QString statMessage;
@@ -130,30 +130,30 @@ void StatsWatcher::registerSliderAction(int action)
             break;
 
         case QAbstractSlider::SliderToMinimum:
-            statMessage = "A mínim";
+            statMessage = "A mÃ­nim";
             break;
 
         case QAbstractSlider::SliderToMaximum:
-            statMessage = "A màxim";
+            statMessage = "A mÃ xim";
             break;
 
         case QAbstractSlider::SliderMove:
-            // Només registrem quan s'ha fet un move amb rodeta
+            // NomÃ©s registrem quan s'ha fet un move amb rodeta
             if (!slider->isSliderDown())
             {
-                statMessage = "Desplaçar amb rodeta";
+                statMessage = "DesplaÃ§ar amb rodeta";
             }
             break;
 
             // Cas especial. petit hack per connectar amb sliderReleased
         case 10:
-            statMessage = "Desplaçar clickant";
+            statMessage = "DesplaÃ§ar clickant";
             break;
     }
 
     if (!statMessage.isEmpty())
     {
-        log(QString("[%1] S'ha fet l'acció [%2] sobre l'slider [%3]").arg(m_context).arg(statMessage).arg(sender()->objectName()));
+        log(QString("[%1] S'ha fet l'acciÃ³ [%2] sobre l'slider [%3]").arg(m_context).arg(statMessage).arg(sender()->objectName()));
     }
 }
 

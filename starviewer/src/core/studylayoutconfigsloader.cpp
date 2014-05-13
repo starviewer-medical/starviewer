@@ -42,7 +42,7 @@ StudyLayoutConfig StudyLayoutConfigsLoader::getDefaultConfigForModality(const QS
     if (modality == "CR" || modality == "DX" || modality == "ES" || modality == "MG" || modality == "OP" || modality == "RF" || modality == "US" || modality == "XC")
     {
         // TODO De moment RF es posa en la categoria de desplegar per imatges per seguir com estan fets els HP, 
-        // però cal veure si és millor fer que RF tingui un desplegament a nivell de sèries
+        // perÃ² cal veure si Ã©s millor fer que RF tingui un desplegament a nivell de sÃ¨ries
         return StudyLayoutConfig(modality, StudyLayoutConfig::UnfoldImages, StudyLayoutConfig::LeftToRightFirst);
     }
     else if (modality == "CT")

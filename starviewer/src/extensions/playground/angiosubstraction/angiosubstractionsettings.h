@@ -13,7 +13,7 @@ public:
 
     void init();
 
-    /// Declaració de claus
+    /// DeclaraciÃ³ de claus
 };
 
 } // end namespace udg

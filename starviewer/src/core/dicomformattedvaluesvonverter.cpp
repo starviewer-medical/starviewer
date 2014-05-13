@@ -19,7 +19,7 @@ QList<WindowLevel> DICOMFormattedValuesConverter::parseWindowLevelValues(const Q
     QList<WindowLevel> windowLevelList;
 
     // Convertim els valors d'string a vectors de doubles i comprovem que estiguin el format correcte
-    // En cas que no sigui així, retornem una llista buida
+    // En cas que no sigui aixÃ­, retornem una llista buida
     bool ok;
     QVector<double> windowWidthArray = DICOMValueRepresentationConverter::decimalStringToDoubleVector(windowWidthString, &ok);
     if (!ok)
@@ -33,10 +33,10 @@ QList<WindowLevel> DICOMFormattedValuesConverter::parseWindowLevelValues(const Q
         return windowLevelList;
     }
 
-    // Per evitar que hi hagi problemes si les llistes no tenen la mateixa llargada tenim en compte la més curta
+    // Per evitar que hi hagi problemes si les llistes no tenen la mateixa llargada tenim en compte la mÃ©s curta
     int maximumNumberOfWindowLevels = windowWidthArray.size() < windowCenterArray.size() ? windowWidthArray.size(): windowCenterArray.size();
-    // La llista de descripcions pot estar buida ja que és opcional
-    // Només s'afegiran les descripcions que hi hagi dins del rang determinat pels valors trobats de window level
+    // La llista de descripcions pot estar buida ja que Ã©s opcional
+    // NomÃ©s s'afegiran les descripcions que hi hagi dins del rang determinat pels valors trobats de window level
     QStringList explanationsList = explanationString.split(DICOMValueRepresentationConverter::ValuesSeparator);
     
     for (int i = 0; i < maximumNumberOfWindowLevels; ++i)

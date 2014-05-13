@@ -6,7 +6,7 @@
 namespace udg {
 
 /**
-    Guarda els requeriments mínims i recomenats de Starviewer. Conté purament els mètodes per obtenir-los.
+    Guarda els requeriments mÃ­nims i recomenats de Starviewer. ContÃ© purament els mÃ¨todes per obtenir-los.
 */
 class SystemRequeriments {
 public:
@@ -20,8 +20,8 @@ public:
     virtual unsigned int getMinimumGPURAM();
     virtual unsigned int getMinimumHardDiskFreeSpace();
     virtual QString getMinimumOperatingSystemVersion();
-    // TODO S'assumeix que el sistema operatiu al que ens referim pel service pack és Windows XP
-    // Caldria fer un mètode més genèric per contemplar altres sistemes operatius Windows, com 7
+    // TODO S'assumeix que el sistema operatiu al que ens referim pel service pack Ã©s Windows XP
+    // Caldria fer un mÃ¨tode mÃ©s genÃ¨ric per contemplar altres sistemes operatius Windows, com 7
     virtual unsigned int getMinimum32bitOperatingSystemServicePackVersion();
     virtual unsigned int getMinimum64bitOperatingSystemServicePackVersion();
     virtual bool doesOperatingSystemNeedToBe64BitArchitecutre();
