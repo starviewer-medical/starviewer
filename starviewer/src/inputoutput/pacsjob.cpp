@@ -10,7 +10,7 @@ PACSJob::PACSJob(PacsDevice pacsDevice)
     m_jobID = m_jobIDCounter++;
     m_abortIsRequested = false;
 
-    // Ens connectem amb els signals de ThreadWeaver::Job per poder emtre els nostres propis signals quan un PACSJob s'ha començat a executar o ha finalitzat
+    // Ens connectem amb els signals de ThreadWeaver::Job per poder emtre els nostres propis signals quan un PACSJob s'ha comenÃ§at a executar o ha finalitzat
     connect(this, SIGNAL(started(ThreadWeaver::Job*)), SLOT(threadWeaverJobStarted()));
     connect(this, SIGNAL(done(ThreadWeaver::Job*)), SLOT(threadWeaverJobDone()));
 }
@@ -27,8 +27,8 @@ int PACSJob::getPACSJobID()
 
 void PACSJob::aboutToBeDequeued(ThreadWeaver::WeaverInterface *)
 {
-    // Si ens desenqueuen de la cua de jobs pendents d'executar, vol dir que aquest Job no s'executarà, per tant emetem signal indicant que
-    // ens han cancel·lat
+    // Si ens desenqueuen de la cua de jobs pendents d'executar, vol dir que aquest Job no s'executarÃ , per tant emetem signal indicant que
+    // ens han cancelÂ·lat
     emit PACSJobCancelled(this);
 }
 

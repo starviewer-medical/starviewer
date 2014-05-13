@@ -113,16 +113,16 @@ void IsoImageFileCreator::startCreateIsoImageFile()
                 {
                     QStringList processParameters;
 
-                    // Afegim als par‡metres l'etiqueta de la imatge ISO en cas de que tingui valor v‡lid
+                    // Afegim als par√†metres l'etiqueta de la imatge ISO en cas de que tingui valor v√†lid
                     if (!m_isoImageLabel.isEmpty())
                     {
                         processParameters << "-V";
                         processParameters << m_isoImageLabel;
                     }
 
-                    // Per permetre conservar noms llargs de fitxers de mÈs de 8 caracters a part d'ISO 9660 Level 1,
-                    // s'afegeix informaciÛ en Joliet (Windows) i RockRidge (Unix)
-                    // AixÚ donava problemes al afegir visors propis i aquests tinguessin dll's amb noms mÈs llargs, per exemple.
+                    // Per permetre conservar noms llargs de fitxers de m√©s de 8 caracters a part d'ISO 9660 Level 1,
+                    // s'afegeix informaci√≥ en Joliet (Windows) i RockRidge (Unix)
+                    // Aix√≤ donava problemes al afegir visors propis i aquests tinguessin dll's amb noms m√©s llargs, per exemple.
                     processParameters << "-joliet";
                     processParameters << "-r";
 
@@ -169,7 +169,7 @@ void IsoImageFileCreator::startCreateIsoImageFile()
 
 void IsoImageFileCreator::finishCreationProcess(int exitCode)
 {
-    // DesprÈs de que s'emeti el signal finished del QProcess, s'executa aquest Slot on es comprova si el procÈs a finialitzat o no
+    // Despr√©s de que s'emeti el signal finished del QProcess, s'executa aquest Slot on es comprova si el proc√©s a finialitzat o no
     // correctament i s'emet el signal finishedCreateIsoImageFile(bool)
     if (exitCode != 0)
     {

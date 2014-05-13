@@ -12,7 +12,7 @@ QString Utils::generateUID(const QString &prefix)
     char uid[512];
     if (prefix.isEmpty())
     {
-        // Tindr‡ el prefix de dcmtk
+        // Tindr√† el prefix de dcmtk
         dcmGenerateUniqueIdentifier(uid);
     }
     else

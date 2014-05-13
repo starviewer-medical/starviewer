@@ -2,7 +2,7 @@
 
 namespace udg {
 
-// Definició de les claus
+// DefiniciÃ³ de les claus
 const QString KeyPrefix("StarViewer-App-DiffusionPerfusionSegmentation/");
 const QString DiffusionPerfusionSegmentationSettings::HorizontalSplitterGeometry(KeyPrefix + "horizontalSplitter");
 const QString DiffusionPerfusionSegmentationSettings::VerticalSplitterGeometry(KeyPrefix + "verticalSplitter");

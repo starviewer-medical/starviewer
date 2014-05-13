@@ -12,7 +12,7 @@ namespace udg {
 class DiagnosisTest;
 
 /**
-    Executa els DiagnosisTest passats per par‡metre i en retorna el resultat. Aquesta classe est‡ pensada per ser executada de forma assÌncrona per un altre Thread i notificar-nos
+    Executa els DiagnosisTest passats per par√†metre i en retorna el resultat. Aquesta classe est√† pensada per ser executada de forma ass√≠ncrona per un altre Thread i notificar-nos
     quan s'han acabat d'executar tots els threads.
   */
 
@@ -33,7 +33,7 @@ public slots:
     void run();
 
 signals:
-    /// Signal que s'emet per indicar que es comenÁa a executar el DiagnosisTest passat
+    /// Signal que s'emet per indicar que es comen√ßa a executar el DiagnosisTest passat
     void runningDiagnosisTest(DiagnosisTest *);
 
     /// Signal que s'emet quan s'han executat tots els testos

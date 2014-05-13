@@ -1,7 +1,7 @@
 /**
- Observador de widgets per obtenir estadístiques
- TODO cal afegir un setting que ens digui si es permeten les estadístiques o no
- i en funció del seu valor registrar o no les estadístques
+ Observador de widgets per obtenir estadÃ­stiques
+ TODO cal afegir un setting que ens digui si es permeten les estadÃ­stiques o no
+ i en funciÃ³ del seu valor registrar o no les estadÃ­stques
 */
 
 #ifndef UDGSTATSWATCHER_H
@@ -23,37 +23,37 @@ public:
     StatsWatcher(const QString &context, QObject *parent = 0);
     ~StatsWatcher();
 
-    /// Comptador de clicks. Per cada click del botó ens dirà el nom de l'objecte
+    /// Comptador de clicks. Per cada click del botÃ³ ens dirÃ  el nom de l'objecte
     void addClicksCounter(QAbstractButton *button);
 
-    /// Compta quan una acció s'ha disparat
+    /// Compta quan una acciÃ³ s'ha disparat
     // Compta quan es dispara, ja sigui amb un clik o un shortcut
     void addTriggerCounter(QMenu *menu);
 
     /// Registra les accions fetes sobre un slider
     void addSliderObserver(QAbstractSlider *slider);
 
-    /// Mètode per loggejar missatges estadístics en el format corresponent
+    /// MÃ¨tode per loggejar missatges estadÃ­stics en el format corresponent
     static void log(const QString &message);
 
 private slots:
     /// Registra en el log l'objecte sobre el qual s'ha fet el click
-    /// Es comprova si l'objecte és "checkable" (tipus QAbstractButton)
-    /// Segons això es reguistra un missatge diferent per poder diferenciar
-    /// objectes únicament clickables i objectes que es poden activar o desactivar
+    /// Es comprova si l'objecte Ã©s "checkable" (tipus QAbstractButton)
+    /// Segons aixÃ² es reguistra un missatge diferent per poder diferenciar
+    /// objectes Ãºnicament clickables i objectes que es poden activar o desactivar
     void registerClick(bool checked);
 
-    /// Registra l'activació (trigger) d'una QAction
+    /// Registra l'activaciÃ³ (trigger) d'una QAction
     void registerActionTrigger(QAction *action);
 
-    /// Registra l'acció feta sobre un slider
+    /// Registra l'acciÃ³ feta sobre un slider
     void registerSliderAction(int action = 10);
 
 private:
-    /// Afegeix informació adicional sobre el contexte que estem fent l'observació
+    /// Afegeix informaciÃ³ adicional sobre el contexte que estem fent l'observaciÃ³
     QString m_context;
 
-    /// Indica si els logs d'estadístiques es registraran o no
+    /// Indica si els logs d'estadÃ­stiques es registraran o no
     bool m_registerLogs;
 };
 

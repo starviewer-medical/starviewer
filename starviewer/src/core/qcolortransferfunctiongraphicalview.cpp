@@ -113,7 +113,7 @@ void QColorTransferFunctionGraphicalView::wheelEvent(QWheelEvent *event)
 
     foreach (QGraphicsItem *node, nodes)
     {
-        // Si només fem servir escalats es pot fer així, sinó es pot afegir un segon paràmetre a setTransform
+        // Si nomÃ©s fem servir escalats es pot fer aixÃ­, sinÃ³ es pot afegir un segon parÃ metre a setTransform
         node->setTransform(QTransform::fromScale(antiScale, 1.0));
     }
 }
@@ -146,7 +146,7 @@ void QColorTransferFunctionGraphicalView::addNode(double x)
         node->setX(x);
         node->setToolTip(QString("%1").arg(x));
         node->setColor(color);
-        // Si només fem servir escalats es pot fer així, sinó es pot afegir un segon paràmetre a setTransform
+        // Si nomÃ©s fem servir escalats es pot fer aixÃ­, sinÃ³ es pot afegir un segon parÃ metre a setTransform
         node->setTransform(QTransform::fromScale(1.0 / m_zoom, 1.0));
         scene()->addItem(node);
         updateBackground();
@@ -156,7 +156,7 @@ void QColorTransferFunctionGraphicalView::addNode(double x)
 
 void QColorTransferFunctionGraphicalView::removeNode(double x)
 {
-    // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
+    // TODO: es podria refinar agafant tots els que siguin aquÃ­ i triant el mÃ©s proper a x
     QGraphicsItem *item = scene()->itemAt(x, 0.0);
 
     if (item)
@@ -176,7 +176,7 @@ void QColorTransferFunctionGraphicalView::beginMoveNodes()
     {
         QColorTransferFunctionGraphicalViewNode *node = dynamic_cast<QColorTransferFunctionGraphicalViewNode*>(item);
         node->storeOldX();
-        // Amb això fem que a updateBackground() els tinguem en l'ordre que ens interessa (els que s'estan movent seran els últims)
+        // Amb aixÃ² fem que a updateBackground() els tinguem en l'ordre que ens interessa (els que s'estan movent seran els Ãºltims)
         node->setZValue(-1.0);
     }
 }
@@ -212,13 +212,13 @@ void QColorTransferFunctionGraphicalView::endMoveNodes()
         emit nodesMoved(origins, offset);
     }
 
-    // Potser s'hauria de fer un m_scene->setSceneRect(...) aquí, per ajustar el tros visible
-    // o potser seria millor posar una manera de fer-ho manualment, per començar
+    // Potser s'hauria de fer un m_scene->setSceneRect(...) aquÃ­, per ajustar el tros visible
+    // o potser seria millor posar una manera de fer-ho manualment, per comenÃ§ar
 }
 
 void QColorTransferFunctionGraphicalView::changeNodeColor(double x)
 {
-    // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
+    // TODO: es podria refinar agafant tots els que siguin aquÃ­ i triant el mÃ©s proper a x
     QGraphicsItem *item = scene()->itemAt(x, 0.0);
 
     if (item)

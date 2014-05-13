@@ -28,17 +28,17 @@ bool WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall()
 
     comInitializationResult = initializeWindowsFirewallLibrary(0, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
 
-    /// CoInitializeEx inicialitza la llibreria COM per tota la crida de threads. Pot retornar tres valors vàlids:
-    /// S_OK és que la llibreria s'ha inicialitzat correctament.
-    /// S_FALSE és que la llibreria ja estava inicialitzada.
-    /// RPC_E_CHANGED_MODE és que s'ha canviat el model de concurrència, però no ens afecta.
+    /// CoInitializeEx inicialitza la llibreria COM per tota la crida de threads. Pot retornar tres valors vÃ lids:
+    /// S_OK Ã©s que la llibreria s'ha inicialitzat correctament.
+    /// S_FALSE Ã©s que la llibreria ja estava inicialitzada.
+    /// RPC_E_CHANGED_MODE Ã©s que s'ha canviat el model de concurrÃ¨ncia, perÃ² no ens afecta.
     if (comInitializationResult == RPC_E_CHANGED_MODE || comInitializationResult == S_OK || comInitializationResult == S_FALSE)
     {
-        /// Agafar el perfil de firewall en ús
+        /// Agafar el perfil de firewall en Ãºs
         result = initializeWindowsFirewall(&firewallProfile);
         if (SUCCEEDED(result))
         {
-            /// Comprovar si el firewall està activat
+            /// Comprovar si el firewall estÃ  activat
             bool enabled;
             result = windowsFirewallIsOn(firewallProfile, &enabled);
             if (SUCCEEDED(result))
@@ -52,7 +52,7 @@ bool WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall()
                     {
                         if (exceptionsAllowed)
                         {
-                            /// Comprovar si Starviewer està afegit a les excepcions del firewall
+                            /// Comprovar si Starviewer estÃ  afegit a les excepcions del firewall
                             BSTR starviewerExecutablePath = getStarviewerExecutablePath();
                             result = isApplicationEnabledAtFirewall(firewallProfile, starviewerExecutablePath, &enabled);
                             delete[] starviewerExecutablePath;
@@ -60,13 +60,13 @@ bool WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall()
                             {
                                 if (enabled)
                                 {
-                                    // starviewer està habilitat com a excepció a la llista del firewall
+                                    // starviewer estÃ  habilitat com a excepciÃ³ a la llista del firewall
                                     access = true;
                                     m_status = FirewallAccess::FirewallIsAccessible;
                                 }
                                 else
                                 {
-                                    // el firewall no te starviewer com a excepció
+                                    // el firewall no te starviewer com a excepciÃ³
                                     m_errorString = QObject::tr("Application is not in the firewall exceptions list");
                                     m_status = FirewallAccess::FirewallIsBlocking;
                                 }
@@ -79,7 +79,7 @@ bool WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall()
                         }
                         else
                         {
-                            // si no es permeten excepcions, l'aplicació no té accés
+                            // si no es permeten excepcions, l'aplicaciÃ³ no tÃ© accÃ©s
                             m_errorString = QObject::tr("Windows firewall does not allow exceptions");
                             m_status = FirewallAccess::FirewallIsBlocking;
                         }
@@ -92,7 +92,7 @@ bool WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall()
                 }
                 else
                 {
-                    // el firewall està apagat, per tant l'aplicació té acces a través d'ell
+                    // el firewall estÃ  apagat, per tant l'aplicaciÃ³ tÃ© acces a travÃ©s d'ell
                     m_status = FirewallAccess::FirewallIsAccessible;
                     access = true;
                 }
@@ -141,7 +141,7 @@ HRESULT WindowsFirewallAccess::initializeWindowsFirewall(INetFwProfile **firewal
         return result;
     }
 
-    // Agafar la política del firewall.
+    // Agafar la polÃ­tica del firewall.
     result = firewallManager->get_LocalPolicy(&firewallPolicy);
     if (FAILED(result))
     {
@@ -162,7 +162,7 @@ HRESULT WindowsFirewallAccess::initializeWindowsFirewall(INetFwProfile **firewal
     }
 
 
-    // Esborrar la política del firewall.
+    // Esborrar la polÃ­tica del firewall.
     if (firewallPolicy != NULL)
     {
         firewallPolicy->Release();
@@ -189,15 +189,15 @@ HRESULT WindowsFirewallAccess::windowsFirewallIsOn(INetFwProfile *firewallProfil
 
     // Obtenir l'estat actual del firewall.
     // S'utilitza una variable VARIAN_BOOL. Aquestes estan definides per microsoft per tal de mantenir
-    // la idea del Visual Basic on false és 0 i true és -1. Es defineix com un short (2bytes),
-    // per tant no es pot passar directament un bool (1bytes) per paràmetre.
+    // la idea del Visual Basic on false Ã©s 0 i true Ã©s -1. Es defineix com un short (2bytes),
+    // per tant no es pot passar directament un bool (1bytes) per parÃ metre.
     result = firewallProfile->get_FirewallEnabled(&firewallEnabled);
     if (FAILED(result))
     {
         ERROR_LOG(QString("get_FirewallEnabled ha fallat: %1\n").arg(result));
     }
 
-    // Comprovar si el firewall està activat.
+    // Comprovar si el firewall estÃ  activat.
     // VARIANT_BOOL es compara amb VARIANT_TRUE i VARIANT_FALSE, que valen 0x0000 i 0xffff
     // per tant es pot comparar directament com a bool
     if (firewallEnabled != VARIANT_FALSE)
@@ -224,8 +224,8 @@ HRESULT WindowsFirewallAccess::doesWindowsFirewallAllowExceptions(INetFwProfile 
 
     // Comprovar si el firewall permet excepcions
     // S'utilitza una variable VARIAN_BOOL. Aquestes estan definides per microsoft per tal de mantenir
-    // la idea del Visual Basic on false és 0 i true és -1. Es defineix com un short (2bytes),
-    // per tant no es pot passar directament un bool (1bytes) per paràmetre.
+    // la idea del Visual Basic on false Ã©s 0 i true Ã©s -1. Es defineix com un short (2bytes),
+    // per tant no es pot passar directament un bool (1bytes) per parÃ metre.
     result = firewallProfile->get_ExceptionsNotAllowed(&exceptionsNotAllowed);
     if (FAILED(result))
     {
@@ -271,11 +271,11 @@ HRESULT WindowsFirewallAccess::isApplicationEnabledAtFirewall(INetFwProfile *fir
     }
     else
     {
-        // Intentar extreure l'applicació de la llista
+        // Intentar extreure l'applicaciÃ³ de la llista
         result = firewallApplications->Item(firewallProcessImageFileName, &firewallApplication);
         if (SUCCEEDED(result))
         {
-            // Comprovar si l'aplicació està habilitada com a excepció del firewall
+            // Comprovar si l'aplicaciÃ³ estÃ  habilitada com a excepciÃ³ del firewall
             result = firewallApplication->get_Enabled(&firewallEnabled);
             if (FAILED(result))
             {
@@ -283,18 +283,18 @@ HRESULT WindowsFirewallAccess::isApplicationEnabledAtFirewall(INetFwProfile *fir
             }
             else if (firewallEnabled != VARIANT_FALSE)
             {
-                // L'applicació està habilitada
+                // L'applicaciÃ³ estÃ  habilitada
                 *firewallApplicationEnabled = true;
             }
         }
         else
         {
-            // Si el resultat no és success, vol dir que l'aplicació no està a la llista d'excepcions, i per tant no té access.
+            // Si el resultat no Ã©s success, vol dir que l'aplicaciÃ³ no estÃ  a la llista d'excepcions, i per tant no tÃ© access.
             result = S_OK;
         }
     }
 
-    // Esborrar la instància de l'aplicació
+    // Esborrar la instÃ ncia de l'aplicaciÃ³
     if (firewallApplication != NULL)
     {
         firewallApplication->Release();

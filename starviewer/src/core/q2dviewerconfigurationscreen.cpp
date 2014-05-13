@@ -108,7 +108,7 @@ void Q2DViewerConfigurationScreen::initializeMagnifyingGlassToolZoomFactor()
     }
     else
     {
-        // Si no hi ha cap valor v�lid, l'augment ser� 4x per defecte
+        // Si no hi ha cap valor vàlid, l'augment serà 4x per defecte
         m_4XZoomFactorRadioButton->setChecked(true);
     }
 }
@@ -240,7 +240,7 @@ void Q2DViewerConfigurationScreen::updateMagnifyingGlassZoomFactorSetting()
     }
     else
     {
-        // Si no hi ha cap bot� marcat, l'augment ser� 4x per defecte. Tot i aix�, aix� no hauria de passar mai
+        // Si no hi ha cap botó marcat, l'augment serà 4x per defecte. Tot i això, això no hauria de passar mai
         zoomFactor = "4";
     }
 

@@ -27,7 +27,7 @@ public:
     void handleEvent(long unsigned eventID);
 
 private slots:
-    /// Es connectar‡ als events emesos pel widget per saber quan s'ha interactuat i aixÌ aplicar els plans de tall sobre el visor
+    /// Es connectar√† als events emesos pel widget per saber quan s'ha interactuat i aix√≠ aplicar els plans de tall sobre el visor
     void boundingBoxEventHandler(vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command);
 
     /// Cada cop que s'hagi canviat l'input del visor hem de posar a punt
@@ -35,7 +35,7 @@ private slots:
     void updateInput();
 
 private:
-    /// ObtÈ els plans del widget i els aplica com a plans de tall sobre el volum
+    /// Obt√© els plans del widget i els aplica com a plans de tall sobre el volum
     void updateViewerClippingPlanes();
 
 protected:

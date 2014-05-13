@@ -47,7 +47,7 @@ DiagnosisTestResult CacheTest::run()
     }
 
     /// De moment, en el cas de que no hi hagi error, mirarem lo del warning
-    /// Comprovar si la cachÈ est‡, o no, al path per defecte
+    /// Comprovar si la cach√© est√†, o no, al path per defecte
     if (!isCacheOnDefaultPath())
     {
         DiagnosisTestProblem problem;

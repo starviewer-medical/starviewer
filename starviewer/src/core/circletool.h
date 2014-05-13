@@ -24,22 +24,22 @@ public:
     CircleTool(QViewer *viewer, QObject *parent = 0);
     ~CircleTool();
 
-    /// Decideix quË s'ha de fer per cada event rebut.
+    /// Decideix qu√® s'ha de fer per cada event rebut.
     virtual void handleEvent(unsigned long eventId);
 
 private:
 
-    /// ComenÁa a dibuixar el cercle.
+    /// Comen√ßa a dibuixar el cercle.
     void startDrawing();
     /// Acaba de dibuixar el cercle.
     void endDrawing();
     /// Avorta el dibuix del cercle.
     void abortDrawing();
-    /// Actualitza el cercle quan es mou el ratolÌ mentre s'est‡ dibuixant.
+    /// Actualitza el cercle quan es mou el ratol√≠ mentre s'est√† dibuixant.
     void updateCircle();
-    /// ObtÈ el punt on acaba la bounding box del cercle, assegurant-se que entre aquest i l'inicial es forma un quadrat.
+    /// Obt√© el punt on acaba la bounding box del cercle, assegurant-se que entre aquest i l'inicial es forma un quadrat.
     void getEndPoint();
-    /// Actualitza els punts del polÌgon perquË resulti el dibuix del cercle.
+    /// Actualitza els punts del pol√≠gon perqu√® resulti el dibuix del cercle.
     void updatePolygonPoints();
     /// Retorna el centre del cercle.
     Vector3 getCenter() const;
@@ -57,9 +57,9 @@ private:
     Q2DViewer *m_2DViewer;
     /// El cercle.
     QPointer<DrawerPolygon> m_circle;
-    /// Cert mentre s'est‡ dibuixant un cercle.
+    /// Cert mentre s'est√† dibuixant un cercle.
     bool m_isDrawing;
-    /// Punt on comenÁa la bounding box del cercle.
+    /// Punt on comen√ßa la bounding box del cercle.
     Vector3 m_startPoint;
     /// Punt on acaba la bounding box del cercle.
     Vector3 m_endPoint;

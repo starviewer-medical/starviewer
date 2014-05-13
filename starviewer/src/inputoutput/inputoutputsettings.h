@@ -12,26 +12,26 @@ public:
 
     void init();
 
-    /// DeclaraciÛ de claus
+    /// Declaraci√≥ de claus
     /// Path absolut de l'arxiu de base dades
     static const QString DatabaseAbsoluteFilePath;
     /// Path del directori de la cache
     static const QString CachePath;
-    /// PolÌtiques d'autogestiÛ de cache
+    /// Pol√≠tiques d'autogesti√≥ de cache
     static const QString DeleteLeastRecentlyUsedStudiesInDaysCriteria;
     static const QString DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria;
     static const QString MinimumGigaBytesToFreeIfCacheIsFull;
     static const QString MinimumFreeGigaBytesForCache;
     static const QString MinimumDaysUnusedToDeleteStudy;
-    /// Controlar quin estudi est‡ baixant-se
+    /// Controlar quin estudi est√† baixant-se
     static const QString RetrievingStudy;
 
-    /// Par‡metres del RIS
+    /// Par√†metres del RIS
     static const QString RISRequestsPort;
     static const QString ListenToRISRequests;
     static const QString RISRequestViewOnceRetrieved;
 
-    /// ⁄ltim path des del que hem obert un dicomdir
+    /// √öltim path des del que hem obert un dicomdir
     static const QString LastOpenedDICOMDIRPath;
     /// Geometria de les columnes del llistat d'estudis d'un DICOMDIR/llista d'operacions/PACS
     static const QString DICOMDIRStudyListColumnsWidth;
@@ -51,7 +51,7 @@ public:
     static const QString DICOMDIRStudyListSortByColumn;
     static const QString DICOMDIRStudyListSortOrder;
 
-    /// Par‡metres de connexiÛ amb un PACS
+    /// Par√†metres de connexi√≥ amb un PACS
     static const QString LocalAETitle;
     static const QString IncomingDICOMConnectionsPort;
     static const QString PACSConnectionTimeout;
@@ -61,16 +61,16 @@ public:
     //TODO: Clau duplicada a CoreSettings
     static const QString PacsListConfigurationSectionName;
 
-    /// Par‡metres de la configuraciÛ DICOMDIR
-    /// Path del programa de gravaciÛ
+    /// Par√†metres de la configuraci√≥ DICOMDIR
+    /// Path del programa de gravaci√≥
     static const QString DICOMDIRBurningApplicationPathKey;
-    /// Parameters del programa de gravaciÛ
+    /// Parameters del programa de gravaci√≥
     static const QString DICOMDIRBurningApplicationParametersKey;
-    /// Par‡metres de gravaciÛ d'un CD quan sÛn diferents amb els de DVD
+    /// Par√†metres de gravaci√≥ d'un CD quan s√≥n diferents amb els de DVD
     static const QString DICOMDIRBurningApplicationCDParametersKey;
-    /// Par‡metres de gravaciÛ d'un DVD quan sÛn diferents amb els de CD
+    /// Par√†metres de gravaci√≥ d'un DVD quan s√≥n diferents amb els de CD
     static const QString DICOMDIRBurningApplicationDVDParametersKey;
-    /// CheckBox per saber si cal tenir o no en compte els par‡metres de gravaciÛ d'un CD o DVD
+    /// CheckBox per saber si cal tenir o no en compte els par√†metres de gravaci√≥ d'un CD o DVD
     static const QString DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey;
     /// CheckBox per saber si cal convertir les imatges del DICOMDIR a little endian
     static const QString ConvertDICOMDIRImagesToLittleEndianKey;
@@ -81,7 +81,7 @@ public:
     /// Checkbox per saber si cal copiar el contingut del directori que apunta el setting DICOMDIRFolderPathToCopy als Usb/HardDisk DICOMDIR
     static const QString CopyFolderContentToDICOMDIROnUSBOrHardDisk;
 
-    // InformaciÛ InstituciÛ
+    // Informaci√≥ Instituci√≥
     static const QString InstitutionName;
     static const QString InstitutionTown;
     static const QString InstitutionAddress;
@@ -90,7 +90,7 @@ public:
     static const QString InstitutionPhoneNumber;
     static const QString InstitutionEmail;
 
-    // Columna i ordre d'ordenaciÛ de la QOperationStateScreen
+    // Columna i ordre d'ordenaci√≥ de la QOperationStateScreen
     static const QString OperationStateListSortByColumn;
     static const QString OperationStateListSortOrder;
 

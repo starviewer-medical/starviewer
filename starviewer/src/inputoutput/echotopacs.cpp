@@ -18,13 +18,13 @@ bool EchoToPACS::echo(PacsDevice pacsDevice)
 {
     PACSConnection pacsConnection(pacsDevice);
 
-    /// Es fa la connexió connexió
+    /// Es fa la connexiÃ³ connexiÃ³
     if (connectToPACS(&pacsConnection))
     {
         /// Es fa un echo al pacs
         OFCondition condition = echoToPACS(&pacsConnection);
         
-        /// Desconnexió
+        /// DesconnexiÃ³
         disconnectFromPACS(&pacsConnection);
         
         if (condition.good())
@@ -60,7 +60,7 @@ OFCondition EchoToPACS::echoToPACS(PACSConnection *pacsConnection)
 {
     // Generate next message ID
     DIC_US id = pacsConnection->getConnection()->nextMsgID++;
-    // Segons el PS 3.7 apartat 9.1.5.1.4 de DICOM l'status només pot ser 0x0000 si s'ha aconseguit connectar, sinó no hauria de tenir valor
+    // Segons el PS 3.7 apartat 9.1.5.1.4 de DICOM l'status nomÃ©s pot ser 0x0000 si s'ha aconseguit connectar, sinÃ³ no hauria de tenir valor
     DIC_US status;
     DcmDataset *dcmDataset = NULL;
 

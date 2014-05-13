@@ -18,15 +18,15 @@ public:
     /// Ens retorna la llista de configuracions desades a settings
     QList<StudyLayoutConfig> getConfigList() const;
 
-    /// Mètodes per afegir una nova configuració, actualitzar-la o esborrar-la. Retorna cert si l'operació es duu a terme amb èxit, fals altrament.
+    /// MÃ¨todes per afegir una nova configuraciÃ³, actualitzar-la o esborrar-la. Retorna cert si l'operaciÃ³ es duu a terme amb Ã¨xit, fals altrament.
 
-    /// Afegeix una nova configuració si no n'existeix cap per aquella modalitat
+    /// Afegeix una nova configuraciÃ³ si no n'existeix cap per aquella modalitat
     bool addItem(const StudyLayoutConfig &config);
 
-    /// Actualitza la configuració en cas que n'existeixi una de configurada per aquella modalitat
+    /// Actualitza la configuraciÃ³ en cas que n'existeixi una de configurada per aquella modalitat
     bool updateItem(const StudyLayoutConfig &config);
 
-    /// Esborra la configuració en cas que n'existeixi una de configurada per aquella modalitat
+    /// Esborra la configuraciÃ³ en cas que n'existeixi una de configurada per aquella modalitat
     bool deleteItem(const StudyLayoutConfig &config);
 };
 

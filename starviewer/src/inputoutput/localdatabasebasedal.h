@@ -10,17 +10,17 @@ namespace udg {
 class DatabaseConnection;
 
 /**
-    Classe base de les que hereden totes les classes que implementen una DAL per accés a dades
+    Classe base de les que hereden totes les classes que implementen una DAL per accÃ©s a dades
   */
 class LocalDatabaseBaseDAL {
 public:
     LocalDatabaseBaseDAL(DatabaseConnection *dbConnection);
 
-    /// Retorna l'últim error produït
+    /// Retorna l'Ãºltim error produÃ¯t
     int getLastError();
 
 protected:
-    /// Ens fa un ErrorLog d'una sentència sql. No es té en compte l'error és SQL_CONSTRAINT (clau duplicada)
+    /// Ens fa un ErrorLog d'una sentÃ¨ncia sql. No es tÃ© en compte l'error Ã©s SQL_CONSTRAINT (clau duplicada)
     void logError(const QString &sqlSentence);
 
 protected:

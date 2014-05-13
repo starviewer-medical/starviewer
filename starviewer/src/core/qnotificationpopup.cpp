@@ -129,8 +129,8 @@ bool QNotificationPopup::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress)
     {
-        // Parem els rellotges perquè no saltin les animacions amb el PopUp amagat, sinó ens podríem trobar que si rebem una altra petició
-        // aparegués el PopUp movent-se
+        // Parem els rellotges perquÃ¨ no saltin les animacions amb el PopUp amagat, sinÃ³ ens podrÃ­em trobar que si rebem una altra peticiÃ³
+        // apareguÃ©s el PopUp movent-se
         // TODO Replace by cancelTriggeredAnimations()?
         m_hideDelayTimer->stop();
         m_moveAnimationDelayTimer->stop(); 

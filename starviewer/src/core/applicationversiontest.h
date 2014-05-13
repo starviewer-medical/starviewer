@@ -16,11 +16,11 @@ public:
     ApplicationVersionTest(QObject *parent = 0);
     /// Destructor
     ~ApplicationVersionTest();
-    /// MËtode implementat de la interfÌcie DiagnosisTest.
-    /// DiagnosisTestResult valdr‡ OK quan l'aplicaciÛ estigui actualitzada, Warning si hi ha alguna actualitzaciÛ disponible,
+    /// M√®tode implementat de la interf√≠cie DiagnosisTest.
+    /// DiagnosisTestResult valdr√† OK quan l'aplicaci√≥ estigui actualitzada, Warning si hi ha alguna actualitzaci√≥ disponible,
     /// i Error si hi ha hagut algun error.
     DiagnosisTestResult run();
-    /// Retorna la descripciÛ del test
+    /// Retorna la descripci√≥ del test
     QString getDescription();
 
 signals:

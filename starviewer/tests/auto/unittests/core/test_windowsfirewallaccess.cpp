@@ -91,7 +91,7 @@ void test_WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall_ShouldCh
     QTest::addColumn<HRESULT>("testingIsApplicationEnabledAtFirewallResult");
     QTest::addColumn<bool>("testingFirewallApplicationEnabled");
 
-    /// Variables per difinir que el par‡metre no s'utilitza en el test
+    /// Variables per difinir que el par√†metre no s'utilitza en el test
     bool unusedBool = true;
     HRESULT unusedHRESULT = S_OK;
     QString unusedString = "";
@@ -179,7 +179,7 @@ void test_WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall_ShouldFa
     QTest::addColumn<HRESULT>("testingIsApplicationEnabledAtFirewallResult");
     QTest::addColumn<bool>("testingFirewallApplicationEnabled");
 
-    /// Variables per difinir que el par‡metre no s'utilitza en el test
+    /// Variables per difinir que el par√†metre no s'utilitza en el test
     bool unusedBool = true;
     HRESULT unusedHRESULT = S_OK;
 
@@ -256,4 +256,3 @@ void test_WindowsFirewallAccess::doesStarviewerHaveAccesThroughFirewall_ShouldFa
 DECLARE_TEST(test_WindowsFirewallAccess)
 
 #include "test_windowsfirewallaccess.moc"
-

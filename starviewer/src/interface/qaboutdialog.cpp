@@ -13,7 +13,7 @@ QAboutDialog::QAboutDialog(QWidget *parent)
     m_applicationNameLabel->setText("<h2>" + ApplicationNameString + "</h2>");
 
     QString aboutMessage = tr(
-        "<p>Copyright &copy; 2005-%2 Graphics & Imaging Laboratory (GILab) and Institut de Diagnòstic per la Imatge (IDI), Girona."
+        "<p>Copyright &copy; 2005-%2 Graphics & Imaging Laboratory (GILab) and Institut de DiagnÃ²stic per la Imatge (IDI), Girona."
         "<p align='justify'>%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI,"
         " CT, PET, PET-CT, CR, MG, ...) fully compliant with the DICOM standard for image communication and image file formats. It can also read"
         " many other file formats specified by the MetaIO standard (*.mhd files). ").arg(ApplicationNameString).arg(2014);

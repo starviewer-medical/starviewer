@@ -31,7 +31,7 @@ void QTransferFunctionEditor2::init(Features features, View view)
 {
     setupUi(this);
 
-    // Els farem servir en el futur, quan ja estiguin implementades les coses b‡siques
+    // Els farem servir en el futur, quan ja estiguin implementades les coses b√†siques
     Q_UNUSED(features);
     Q_UNUSED(view);
 

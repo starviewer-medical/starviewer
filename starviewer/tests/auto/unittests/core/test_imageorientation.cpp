@@ -121,7 +121,7 @@ void test_ImageOrientation::ImageOrientation_constructorInitialization()
     QCOMPARE(imageOrientation.getRowVector(), memberRowVector);
     QCOMPARE(imageOrientation.getColumnVector(), memberColumnVector);
 
-    // Constructor sense par‡metres
+    // Constructor sense par√†metres
     QVector3D zeroValuedVector(0.0,0.0, 0.0);
     ImageOrientation imageOrientationDefault;
     

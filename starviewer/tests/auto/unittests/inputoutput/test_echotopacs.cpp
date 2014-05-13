@@ -62,7 +62,7 @@ void test_EchoToPACS::echo_ShouldEchoAPacs_data()
     QTest::addColumn<bool>("connectToPacsResult");
     QTest::addColumn<bool>("echoToPacsResult");
 
-    /// Per definir que algun par‡metre no s'utilitza en el test, per tant Ès indiferent que s'hi posi
+    /// Per definir que algun par√†metre no s'utilitza en el test, per tant √©s indiferent que s'hi posi
     bool unusedBool = true;
 
     /// Dades del test
@@ -92,4 +92,3 @@ void test_EchoToPACS::echo_ShouldEchoAPacs()
 DECLARE_TEST(test_EchoToPACS)
 
 #include "test_echotopacs.moc"
-

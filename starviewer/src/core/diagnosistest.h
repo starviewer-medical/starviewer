@@ -8,11 +8,11 @@ namespace udg {
 
 class DiagnosisTest : public QObject {
 public:
-    /// Destructor per defecte. …s virtual per que les subclasses puguin reimplementar-lo
+    /// Destructor per defecte. √âs virtual per que les subclasses puguin reimplementar-lo
     virtual ~DiagnosisTest(){}
-    /// MËtode principal de la interfÌcie. No est‡ implementat, i es forÁa a les subclasses a fer-ho.
+    /// M√®tode principal de la interf√≠cie. No est√† implementat, i es for√ßa a les subclasses a fer-ho.
     virtual DiagnosisTestResult run() = 0;
-    /// Retorna la descripciÛ del test
+    /// Retorna la descripci√≥ del test
     virtual QString getDescription() = 0;
 protected:
     /// Constructor per defecte protected perque no es pugui instanciar objectes DiagnosisTest

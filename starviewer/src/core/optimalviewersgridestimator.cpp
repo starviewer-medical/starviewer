@@ -5,8 +5,8 @@ namespace udg {
 
 OptimalViewersGridEstimator::OptimalViewersGridEstimator()
 {
-    // El n˙mero de columnes haur‡ de ser sempre parell per no tenir problemes de que la imatge quedi partida.
-    // Com a mÌnim el grid ser‡ de 2 columnes x 1 fila
+    // El n√∫mero de columnes haur√† de ser sempre parell per no tenir problemes de que la imatge quedi partida.
+    // Com a m√≠nim el grid ser√† de 2 columnes x 1 fila
     m_gridsMap.insert(2, QPair<int, int>(1, 2));
     m_gridsMap.insert(4, QPair<int, int>(2, 2));
     m_gridsMap.insert(6, QPair<int, int>(3, 2));

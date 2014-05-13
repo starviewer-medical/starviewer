@@ -6,7 +6,7 @@
 namespace udg {
 
 /**
-    Pantalla de configuració de layouts del visor 2D
+    Pantalla de configuraciÃ³ de layouts del visor 2D
  */
 class Q2DViewerLayoutConfigurationScreen : public QWidget, private Ui::Q2DViewerLayoutConfigurationScreenBase {
 Q_OBJECT

@@ -56,7 +56,7 @@ Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles()
 void RetrieveDICOMFilesFromPACSJob::run()
 {
     Settings settings;
-    // TODO: És aquest el lloc per aquest missatge ? no seria potser millor fer-ho a RetrieveDICOMFilesFromPACS
+    // TODO: Ã‰s aquest el lloc per aquest missatge ? no seria potser millor fer-ho a RetrieveDICOMFilesFromPACS
     INFO_LOG(QString("Iniciant descarrega del PACS %1, IP: %2, Port: %3, AE Title Local: %4 Port local: %5, "
                      "l'estudi UID: %6, series UID: %7, SOP Instance UID:%8")
         .arg(getPacsDevice().getAETitle(), getPacsDevice().getAddress(), QString::number(getPacsDevice().getQueryRetrieveServicePort()))
@@ -86,16 +86,16 @@ void RetrieveDICOMFilesFromPACSJob::run()
         patientFiller.moveToThread(&fillersThread);
         LocalDatabaseManager localDatabaseManager;
 
-        // S'ha d'especificar com a DirectConnection, perquè sinó aquest signal l'aten qui ha creat el Job, que és la interfície, per tant
-        // no s'atendria fins que la interfície estigui lliure, provocant comportaments incorrectes
+        // S'ha d'especificar com a DirectConnection, perquÃ¨ sinÃ³ aquest signal l'aten qui ha creat el Job, que Ã©s la interfÃ­cie, per tant
+        // no s'atendria fins que la interfÃ­cie estigui lliure, provocant comportaments incorrectes
         connect(m_retrieveDICOMFilesFromPACS, SIGNAL(DICOMFileRetrieved(DICOMTagReader*, int)), this, SLOT(DICOMFileRetrieved(DICOMTagReader*, int)),
                 Qt::DirectConnection);
         // Connectem amb els signals del patientFiller per processar els fitxers descarregats
         connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader*)), &patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));
         connect(this, SIGNAL(DICOMFilesRetrieveFinished()), &patientFiller, SLOT(finishDICOMFilesProcess()));
-        // Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
-        // el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan surt
-        // d'aquí perquè els fillers ja han acabat ja s'ha inserit el pacient a la base de dades.
+        // ConnexiÃ³ entre el processat dels fitxers DICOM i l'inserciÃ³ al a BD, Ã©s important que aquest signal sigui un Qt:DirectConnection perquÃ¨ aixÃ­ el
+        // el processa els thread dels fillers, d'aquesta manera el thread de descarrega que estÃ  esperant a fillersThread.wait() quan surt
+        // d'aquÃ­ perquÃ¨ els fillers ja han acabat ja s'ha inserit el pacient a la base de dades.
         connect(&patientFiller, SIGNAL(patientProcessed(Patient*)), &localDatabaseManager, SLOT(save(Patient*)), Qt::DirectConnection);
         // Connexions per finalitzar els threads
         connect(&patientFiller, SIGNAL(patientProcessed(Patient*)), &fillersThread, SLOT(quit()), Qt::DirectConnection);
@@ -113,17 +113,17 @@ void RetrieveDICOMFilesFromPACSJob::run()
                 .arg(m_studyToRetrieveDICOMFiles->getInstanceUID(), getPacsDevice().getAETitle())
                 .arg(m_retrieveDICOMFilesFromPACS->getNumberOfDICOMFilesRetrieved()));
 
-            // Indiquem que el procés de descàrrega ha finalitzat
+            // Indiquem que el procÃ©s de descÃ rrega ha finalitzat
             emit DICOMFilesRetrieveFinished();
 
-            // Esperem que el processat i l'insersió a la base de dades acabin
+            // Esperem que el processat i l'insersiÃ³ a la base de dades acabin
             fillersThread.wait();
 
             if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
             {
                 if (localDatabaseManager.getLastError() == LocalDatabaseManager::PatientInconsistent)
                 {
-                    // No s'ha pogut inserir el patient, perquè patientfiller no ha pogut emplenar l'informació de patient correctament
+                    // No s'ha pogut inserir el patient, perquÃ¨ patientfiller no ha pogut emplenar l'informaciÃ³ de patient correctament
                     m_retrieveRequestStatus = PACSRequestStatus::RetrievePatientInconsistent;
                 }
                 else
@@ -135,10 +135,10 @@ void RetrieveDICOMFilesFromPACSJob::run()
         else
         {
             fillersThread.quit();
-            // Esperem que el thread acabi, ja que pel que s'interpreta de la documentació, sembla que el quit del thread no es fa fins que aquest retorna
-            // al eventLoop, això provoca per exemple en els casos que ens han cancel·lat la descàrrega d'un estudi, si no esperem al thread que estigui mort
-            // poguem esborrar imatges que els fillers estan processant en aquell moment mentre encara s'estan executant i peti l'Starviewer, perquè
-            // no s'ha atés el Slot quit del thread, per això esperem que aquest estigui mort a esborrar les imatges descarregades.
+            // Esperem que el thread acabi, ja que pel que s'interpreta de la documentaciÃ³, sembla que el quit del thread no es fa fins que aquest retorna
+            // al eventLoop, aixÃ² provoca per exemple en els casos que ens han cancelÂ·lat la descÃ rrega d'un estudi, si no esperem al thread que estigui mort
+            // poguem esborrar imatges que els fillers estan processant en aquell moment mentre encara s'estan executant i peti l'Starviewer, perquÃ¨
+            // no s'ha atÃ©s el Slot quit del thread, per aixÃ² esperem que aquest estigui mort a esborrar les imatges descarregades.
             fillersThread.wait();
             deleteRetrievedDICOMFilesIfStudyNotExistInDatabase();
         }
@@ -164,7 +164,7 @@ void RetrieveDICOMFilesFromPACSJob::DICOMFileRetrieved(DICOMTagReader *dicomTagR
 {
     emit DICOMFileRetrieved(this, numberOfImagesRetrieved);
 
-    /// Actualitzem el número de sèries processades si ens arriba una nova imatge que pertanyi a una sèrie no descarregada fins al moment
+    /// Actualitzem el nÃºmero de sÃ¨ries processades si ens arriba una nova imatge que pertanyi a una sÃ¨rie no descarregada fins al moment
     QString seriesInstancedUIDRetrievedImage = dicomTagReader->getValueAttributeAsQString(DICOMSeriesInstanceUID);
     if (!m_retrievedSeriesInstanceUIDSet.contains(seriesInstancedUIDRetrievedImage))
     {
@@ -172,10 +172,10 @@ void RetrieveDICOMFilesFromPACSJob::DICOMFileRetrieved(DICOMTagReader *dicomTagR
         emit DICOMSeriesRetrieved(this, m_retrievedSeriesInstanceUIDSet.count());
     }
 
-    // Fem un emit indicat que dicomTagReader està a punt per ser processat per l'Slot processDICOMFile de PatientFiller, no podem fer un connect
-    // directament entre el signal de DICOMFileRetrieved de RetrieveDICOMFileFromPACS i processDICOMFile de PatientFiller, perquè ens podríem trobar
-    // que quan en aquest mètode comprova si hem descarregat una nova sèrie que DICOMTagReader ja no tingui valor, per això primer capturem el signal de
-    // RetrieveDICOMFileFromPACS comprovem si és una sèrie nova la que es descarrega i llavors fem l'emit per que PatientFiller processi el DICOMTagReader
+    // Fem un emit indicat que dicomTagReader estÃ  a punt per ser processat per l'Slot processDICOMFile de PatientFiller, no podem fer un connect
+    // directament entre el signal de DICOMFileRetrieved de RetrieveDICOMFileFromPACS i processDICOMFile de PatientFiller, perquÃ¨ ens podrÃ­em trobar
+    // que quan en aquest mÃ¨tode comprova si hem descarregat una nova sÃ¨rie que DICOMTagReader ja no tingui valor, per aixÃ² primer capturem el signal de
+    // RetrieveDICOMFileFromPACS comprovem si Ã©s una sÃ¨rie nova la que es descarrega i llavors fem l'emit per que PatientFiller processi el DICOMTagReader
 
     emit DICOMTagReaderReadyForProcess(dicomTagReader);
 }
@@ -188,8 +188,8 @@ int RetrieveDICOMFilesFromPACSJob::priority() const
 PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACSJob::thereIsAvailableSpaceOnHardDisk()
 {
     LocalDatabaseManager localDatabaseManager;
-    // TODO: Aquest signal no s'hauria de fer des d'aquesta classe sinó des d'una CacheManager, però com de moment encara no està implementada
-    //       temporalment emetem el signal des d'aquí*/
+    // TODO: Aquest signal no s'hauria de fer des d'aquesta classe sinÃ³ des d'una CacheManager, perÃ² com de moment encara no estÃ  implementada
+    //       temporalment emetem el signal des d'aquÃ­*/
     connect(&localDatabaseManager, SIGNAL(studyWillBeDeleted(QString)), SIGNAL(studyFromCacheWillBeDeleted(QString)));
 
     if (!localDatabaseManager.thereIsAvailableSpaceOnHardDisk())
@@ -210,12 +210,12 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACSJob::thereIsA
 
 void RetrieveDICOMFilesFromPACSJob::deleteRetrievedDICOMFilesIfStudyNotExistInDatabase()
 {
-    // Comprovem si l'estudi està inserit a la base de dades, si és així vol dir que anteriorment s'havia descarregat un part o tot l'estudi,
+    // Comprovem si l'estudi estÃ  inserit a la base de dades, si Ã©s aixÃ­ vol dir que anteriorment s'havia descarregat un part o tot l'estudi,
     // com que ja tenim altres elements d'aquest estudi inserits a la base de dades no esborrem el directori de l'estudi
     if (!LocalDatabaseManager().existsStudy(m_studyToRetrieveDICOMFiles))
     {
         // Si l'estudi no existeix a la base de dades esborrem el contingut del directori, en principi segons la normativa DICO; si rebem un status de
-        // tipus error per part de MoveSCP indicaria s'ha pogut descarregar cap objecte dicom amb èxit
+        // tipus error per part de MoveSCP indicaria s'ha pogut descarregar cap objecte dicom amb Ã¨xit
 
         INFO_LOG("L'estudi " + m_studyToRetrieveDICOMFiles->getInstanceUID() + " no existeix a la base de de dades, esborrem el contingut del seu directori.");
         DirectoryUtilities().deleteDirectory(LocalDatabaseManager().getStudyPath(m_studyToRetrieveDICOMFiles->getInstanceUID()), true);
@@ -226,8 +226,8 @@ void RetrieveDICOMFilesFromPACSJob::deleteRetrievedDICOMFilesIfStudyNotExistInDa
     }
 }
 
-// TODO:Centralitzem la contrucció dels missatges d'error perquè a totes les interfícies en puguin utilitzar un, i no calgui tenir el tractament d'errors
-// duplicat ni traduccions, però és el millor lloc aquí posar aquest codi?
+// TODO:Centralitzem la contrucciÃ³ dels missatges d'error perquÃ¨ a totes les interfÃ­cies en puguin utilitzar un, i no calgui tenir el tractament d'errors
+// duplicat ni traduccions, perÃ² Ã©s el millor lloc aquÃ­ posar aquest codi?
 QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
 {
     QString message;

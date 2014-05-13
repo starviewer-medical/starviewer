@@ -15,7 +15,7 @@ public:
 
 public:
 
-    /// El VolumeReader que retornar‡ createVolumeReader().
+    /// El VolumeReader que retornar√† createVolumeReader().
     VolumeReader *m_volumeReaderToUse;
 
 private:

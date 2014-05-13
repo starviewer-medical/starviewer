@@ -27,7 +27,7 @@ QDICOMDIRConfigurationScreen::~QDICOMDIRConfigurationScreen()
 
 void QDICOMDIRConfigurationScreen::createConnections()
 {
-    // Connecta el boto examinar programa de gravació amb el dialog per escollir el path del programa
+    // Connecta el boto examinar programa de gravaciÃ³ amb el dialog per escollir el path del programa
     connect(m_buttonExaminateBurningApplication, SIGNAL(clicked()), SLOT(examinateDICOMDIRBurningApplicationPath()));
     connect(m_buttonExaminateDICOMDIRFolderPathToCopy, SIGNAL(clicked()), SLOT(examinateDICOMDIRFolderPathToCopy()));
 }
@@ -186,7 +186,7 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
 {
     Settings settings;
 
-    // A la pàgina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mètode que
+    // A la pÃ gina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mÃ¨tode que
     // te retornin directament el fitxer selccionat
     QFileDialog *dialog = new QFileDialog(0, QFileDialog::tr("Open"),
                                           settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString(), "");
@@ -198,11 +198,11 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
         {
             QString burningApplicationPath = dialog->selectedFiles().takeFirst();
             QFileInfo infoBurningApplicationFile(burningApplicationPath);
-            // Es comprova si es tracta d'una aplicació de Mac i en cas afirmatiu es modifica el path per tal d'indicar exactament on és l'executable
+            // Es comprova si es tracta d'una aplicaciÃ³ de Mac i en cas afirmatiu es modifica el path per tal d'indicar exactament on Ã©s l'executable
             if (infoBurningApplicationFile.isBundle())
             {
-                // El path es treu una mica a lo "bruto". Per fer-ho bé s'hauria de llegir el Bundle i extreure'n
-                // la localització de l'executable (CFBundleExecutable):
+                // El path es treu una mica a lo "bruto". Per fer-ho bÃ© s'hauria de llegir el Bundle i extreure'n
+                // la localitzaciÃ³ de l'executable (CFBundleExecutable):
                 // http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html
                 burningApplicationPath = burningApplicationPath + "/Contents/MacOS/" + infoBurningApplicationFile.bundleName();
             }

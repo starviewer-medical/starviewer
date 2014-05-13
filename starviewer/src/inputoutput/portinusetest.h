@@ -25,7 +25,7 @@ protected:
     virtual void checkIfPortIsInUse(PortInUse *portInUse);
 
 protected:
-    /// Port que es comprovarà si està en ús.
+    /// Port que es comprovarÃ  si estÃ  en Ãºs.
     int m_port;
 };
 

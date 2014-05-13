@@ -12,14 +12,14 @@ public:
 
     void init();
 
-    /// DeclaraciÛ de claus
+    /// Declaraci√≥ de claus
     static const QString OpenFileLastPath;
     static const QString OpenDirectoryLastPath;
     static const QString OpenFileLastFileExtension;
     static const QString ApplicationMainWindowGeometry;
-    // Indicar‡ si permetem tenir mÈs d'una inst‡ncia de cada extensiÛ (true) o ˙nicament una (false)
+    // Indicar√† si permetem tenir m√©s d'una inst√†ncia de cada extensi√≥ (true) o √∫nicament una (false)
     static const QString AllowMultipleInstancesPerExtension;
-    // Defineix quina Ès l'extensiÛ que s'obrir‡ per defecte
+    // Defineix quina √©s l'extensi√≥ que s'obrir√† per defecte
     static const QString DefaultExtension;
 };
 

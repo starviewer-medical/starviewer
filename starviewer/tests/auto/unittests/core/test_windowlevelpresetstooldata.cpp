@@ -416,7 +416,7 @@ void test_WindowLevelPresetsToolData::activatePreset_WorksAsExpected()
 WindowLevelPresetsToolData* test_WindowLevelPresetsToolData::getWindowLevelPresetsSample()
 {
     WindowLevelPresetsToolData* wlData = new WindowLevelPresetsToolData();
-    // Eliminem els presets que es posen per defecte al construir l'objecte de cares a tenir més ben controlat el testing del que aquí posem
+    // Eliminem els presets que es posen per defecte al construir l'objecte de cares a tenir mÃ©s ben controlat el testing del que aquÃ­ posem
     wlData->removePresetsFromGroup(WindowLevelPresetsToolData::StandardPresets);
     wlData->removePresetsFromGroup(WindowLevelPresetsToolData::CustomPreset);
     wlData->addPreset(AutoPreset1, WindowLevelPresetsToolData::AutomaticPreset);

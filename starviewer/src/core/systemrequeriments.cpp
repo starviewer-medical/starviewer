@@ -13,12 +13,12 @@ SystemRequeriments::SystemRequeriments()
     m_minimum32bitServicePackVersion = 3; // XP service pack 3
     m_minimum64bitServicePackVersion = 2; // XP service pack 2
     m_minimumRAM = 4000; // 4Gb
-    m_minimumScreenWidth = 1185; // La mínima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
+    m_minimumScreenWidth = 1185; // La mÃ­nima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
 
-    // Quan s'estableixin quines són les extensions d'openGL que es necessiten per cada cosa, es poden afegir aquí
+    // Quan s'estableixin quines sÃ³n les extensions d'openGL que es necessiten per cada cosa, es poden afegir aquÃ­
     //m_minimumOpenGLExtensions << "GL_ARB_flux_capacitor";
     
-    m_minimumDiskSpace = 5120; // 5 GB (en principi, el mínim que es necessita per la cache està en un setting)
+    m_minimumDiskSpace = 5120; // 5 GB (en principi, el mÃ­nim que es necessita per la cache estÃ  en un setting)
 
     m_doesOpticalDriveNeedsToWrite = true;
 }

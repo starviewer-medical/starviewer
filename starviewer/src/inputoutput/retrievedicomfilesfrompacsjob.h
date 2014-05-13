@@ -104,7 +104,7 @@ private:
     PACSRequestStatus::RetrieveRequestStatus m_retrieveRequestStatus;
     RetrievePriorityJob m_retrievePriorityJob;
     
-    /// Conjunt que conté els diferents UIDs de sèrie de les imatges descarregades
+    /// Conjunt que contÃ© els diferents UIDs de sÃ¨rie de les imatges descarregades
     QSet<QString> m_retrievedSeriesInstanceUIDSet;
 };
 

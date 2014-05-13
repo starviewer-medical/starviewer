@@ -214,11 +214,11 @@ void test_ImageOverlay::split_ShouldReturnExpectedResults_data()
     QTest::newRow("empty overlay") << overlay << QList<ImageOverlay>();
 
     QTest::newRow("overlay #1") << overlays[0] << overlaysSubOverlays[0];
-    // overlays[1] és per quan no optimitzem per potències de 2
+    // overlays[1] Ã©s per quan no optimitzem per potÃ¨ncies de 2
     //QTest::newRow("overlay #2") << overlays[1] << overlaysSubOverlays[1];
     QTest::newRow("overlay #3") << overlays[2] << overlaysSubOverlays[2];
     QTest::newRow("overlay #4") << overlays[3] << overlaysSubOverlays[3];
-    // overlays[4] és per quan sí optimitzem per potències de 2
+    // overlays[4] Ã©s per quan sÃ­ optimitzem per potÃ¨ncies de 2
     QTest::newRow("overlay #5") << overlays[4] << overlaysSubOverlays[4];
 }
 

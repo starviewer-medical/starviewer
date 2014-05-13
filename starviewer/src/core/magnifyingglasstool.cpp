@@ -92,7 +92,7 @@ double MagnifyingGlassTool::getZoomFactor()
     double factor = settings.getValue(CoreSettings::MagnifyingGlassZoomFactor).toDouble();
     if (factor == 0.0)
     {
-        // En cas que el setting no tingui un valor vàlid, li assignem un valor per defecte de 4.0
+        // En cas que el setting no tingui un valor vÃ lid, li assignem un valor per defecte de 4.0
         factor = 4.0;
         settings.setValue(CoreSettings::MagnifyingGlassZoomFactor, "4");
     }
@@ -126,7 +126,7 @@ void MagnifyingGlassTool::updateMagnifiedView()
     QRect renderWindowBounds(QPoint(0, 0), renderWindowSize);
     if (!renderWindowBounds.contains(eventPosition))
     {
-        // Si el punt està fora de la render window amaguem i sortim
+        // Si el punt estÃ  fora de la render window amaguem i sortim
         removeMagnifiedRenderer();
         return;
     }
@@ -148,7 +148,7 @@ void MagnifyingGlassTool::updateMagnifiedView()
         addMagnifiedRenderer();
     }
     
-    // Actualitzem la posició que enfoca la càmera
+    // Actualitzem la posiciÃ³ que enfoca la cÃ mera
     setFocalPoint(xyz);
     m_magnifiedRenderer->ResetCameraClippingRange();
     m_2DViewer->render();
@@ -204,8 +204,8 @@ void MagnifyingGlassTool::updateCamera()
     vtkCamera *viewerCamera = m_2DViewer->getRenderer()->GetActiveCamera();
     m_magnifiedCamera->DeepCopy(viewerCamera);
 
-    // Ajustem la càmera a la mateixa proporció que el renderer principal
-    // Cal prendre la proporció del viewport magnificat respecte el viewer en sí
+    // Ajustem la cÃ mera a la mateixa proporciÃ³ que el renderer principal
+    // Cal prendre la proporciÃ³ del viewport magnificat respecte el viewer en sÃ­
     QSize size = m_2DViewer->getRenderWindowSize();
     double viewportsProportion;
     double viewportPoints[4];
@@ -222,7 +222,7 @@ void MagnifyingGlassTool::updateCamera()
         m_magnifiedCamera->SetViewAngle(viewerCamera->GetViewAngle() * viewportsProportion);
     }
     
-    // Apliquem el factor de magnificació
+    // Apliquem el factor de magnificaciÃ³
     m_magnifiedCamera->Zoom(getZoomFactor());
 }
 

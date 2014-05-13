@@ -14,12 +14,12 @@ class QSplitter;
 namespace udg {
 
 /**
-    InterfÌcie per manipular settings.
-    La manera correcta de fer servir la classe Ès declarant-la localment en el mËtode en
-    el que volem accedir o escriure al setting, mai es declarar‡ com a variable membre d'una classe.
-    L'escriptura d'un setting no es far‡ efectiva a disc fins que no es destrueixi la inst‡ncia.
-    Aquest mecanisme funciona d'aquesta manera per raons d'eficiËncia, aixÌ podem assignar diversos
-    settings alhora sense penalitzar un accÈs a disc fins que no es destrueixi l'objecte de Settings.
+    Interf√≠cie per manipular settings.
+    La manera correcta de fer servir la classe √©s declarant-la localment en el m√®tode en
+    el que volem accedir o escriure al setting, mai es declarar√† com a variable membre d'una classe.
+    L'escriptura d'un setting no es far√† efectiva a disc fins que no es destrueixi la inst√†ncia.
+    Aquest mecanisme funciona d'aquesta manera per raons d'efici√®ncia, aix√≠ podem assignar diversos
+    settings alhora sense penalitzar un acc√©s a disc fins que no es destrueixi l'objecte de Settings.
   */
 class Settings : public SettingsInterface {
 public:
@@ -47,30 +47,30 @@ public:
     /// If no separator is used, the default value will be used
     QStringList getValueAsQStringList(const QString &key, const QString &separator = ";") const;
     
-    // MËtodes per la manipulaciÛ de llistes de Settings
+    // M√®todes per la manipulaci√≥ de llistes de Settings
 
-    // TambÈ existeix el tipus QSettings::SettingsMap que Ès QMap<QString, QVariant>
-    // TODO podrÌem fer typedef QSettings::SettingsMap en comptes d'aixÚ
+    // Tamb√© existeix el tipus QSettings::SettingsMap que √©s QMap<QString, QVariant>
+    // TODO podr√≠em fer typedef QSettings::SettingsMap en comptes d'aix√≤
     typedef QMap<QString, QVariant> SettingsListItemType;
     typedef QList<SettingsListItemType> SettingListType;
 
-    // ObtenciÛ d'informaciÛ de llistes de settings
+    // Obtenci√≥ d'informaci√≥ de llistes de settings
 
-    /// Ens retorna l'i-Èssim (index) conjunt de valors de la llista amb clau "key"
+    /// Ens retorna l'i-√©ssim (index) conjunt de valors de la llista amb clau "key"
     SettingsListItemType getListItem(const QString &key, int index);
 
     /// Ens retorna tota la llista de settings que hi hagi sota key
     SettingListType getList(const QString &key);
 
-    // ModificaciÛ de llistes de conjunts de valors
+    // Modificaci√≥ de llistes de conjunts de valors
 
     /// Afegeix a la llista amb clau "key" un conjunt de valors
     void addListItem(const QString &key, const SettingsListItemType &item);
 
-    /// Actualitza les dades del conjunt de valors "item" a l'Ìndex index de la llista amb clau "key"
+    /// Actualitza les dades del conjunt de valors "item" a l'√≠ndex index de la llista amb clau "key"
     void setListItem(int index, const QString &key, const SettingsListItemType &item);
 
-    /// Elimina de la llista amb clau "key" l'element i-Èssim (index)
+    /// Elimina de la llista amb clau "key" l'element i-√©ssim (index)
     void removeListItem(const QString &key, int index);
 
     /// Afegeix una llista sencera de conjunts de valors amb clau "key".
@@ -78,12 +78,12 @@ public:
     /// sobre-escrits per la llista proporcionada
     void setList(const QString &key, const SettingListType &list);
 
-    // MËtodes per facilitar el guardar i/o restaurar la geometria de certs widgets
+    // M√®todes per facilitar el guardar i/o restaurar la geometria de certs widgets
 
     /// Guarda/Restaura els amples de columna del widget dins de la clau donada.
-    /// Sota la clau donada es guardaran els amples de cada columna amb nom columnWidthX on X ser‡ el nombre de columna
-    /// L'unica implementaciÛ de moment Ès per QTreeWidget (i classes que n'hereden).
-    /// Es sobrecarregar‡ el mËtode per tants widgets com calgui.
+    /// Sota la clau donada es guardaran els amples de cada columna amb nom columnWidthX on X ser√† el nombre de columna
+    /// L'unica implementaci√≥ de moment √©s per QTreeWidget (i classes que n'hereden).
+    /// Es sobrecarregar√† el m√®tode per tants widgets com calgui.
     void saveColumnsWidths(const QString &key, QTreeWidget *treeWidget);
     void restoreColumnsWidths(const QString &key, QTreeWidget *treeWidget);
 
@@ -95,15 +95,15 @@ public:
 
 private:
     /// A partir d'una llista de claus, omplim un conjunt clau-valor.
-    /// …s necessari que li passem l'objecte qsettings (user/system) amb el que obtindr‡ els valors
+    /// √âs necessari que li passem l'objecte qsettings (user/system) amb el que obtindr√† els valors
     SettingsListItemType fillSettingsListItemFromKeysList(const QStringList &keysList, QSettings *qsettings);
 
     /// Traspassa el contingut del conjunt clau-valor a m_settings
-    /// …s necessari que li passem l'objecte qsettings (user/system) en el que volcar‡ els valors
+    /// √âs necessari que li passem l'objecte qsettings (user/system) en el que volcar√† els valors
     void dumpSettingsListItem(const SettingsListItemType &item, QSettings *qsettings);
 
     /// Ens retorna l'objecte adient de settings (usuari o sistema)
-    /// segons com estigui configurada la clau en q¸estiÛ
+    /// segons com estigui configurada la clau en q√ºesti√≥
     QSettings* getSettingsObject(const QString &key);
 
 private:

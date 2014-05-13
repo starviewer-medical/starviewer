@@ -12,7 +12,7 @@ public:
 
     void init();
 
-    /// Declaració de claus
+    /// DeclaraciÃ³ de claus
     static const QString KeyPrefix;
     static const QString UserProfile;
 };

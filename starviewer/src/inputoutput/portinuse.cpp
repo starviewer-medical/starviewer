@@ -32,7 +32,7 @@ bool PortInUse::isPortInUse(int port)
     else
     {
         // No s'hauria de donar un error diferent a AddressInUseError, de totes maneres per seguretat el loggagem
-        ERROR_LOG("No s'ha pogut comprovat correctament si el port " + QString().setNum(port) + " està en ús, per error: " + errorString);
+        ERROR_LOG("No s'ha pogut comprovat correctament si el port " + QString().setNum(port) + " estÃ  en Ãºs, per error: " + errorString);
         m_errorString = errorString;
         m_status = PortInUse::PortCheckError;
     }
@@ -45,7 +45,7 @@ PortInUse::PortInUseOwner PortInUse::getOwner()
 {
     PortInUse::PortInUseOwner owner = PortInUse::PortUsedByUnknown;
 
-    // En cas que el port estigui en ús, cal mirar si l'ha obert Starviewer o una altra aplicació
+    // En cas que el port estigui en Ãºs, cal mirar si l'ha obert Starviewer o una altra aplicaciÃ³
     if (m_status == PortInUse::PortIsInUse)
     {
         // S'instancia un objecte de la calsse segons el sistema operatiu
@@ -56,7 +56,7 @@ PortInUse::PortInUseOwner PortInUse::getOwner()
         {
             if (inUse)
             {
-                // Port obert per una altra aplicació
+                // Port obert per una altra aplicaciÃ³
                 owner = PortInUse::PortUsedByOther;
             }
             else
@@ -77,7 +77,7 @@ bool PortInUse::isPortAvailable(int port, QAbstractSocket::SocketError &serverEr
     QTcpServer tcpServer;
     bool result;
 
-    /// Result serà cert si el port està lliure, pertant s'ha de retorna l'oposat
+    /// Result serÃ  cert si el port estÃ  lliure, pertant s'ha de retorna l'oposat
     result = tcpServer.listen(QHostAddress::Any, port);
     serverError = tcpServer.serverError();
     errorString = tcpServer.errorString();

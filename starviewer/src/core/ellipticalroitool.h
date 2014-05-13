@@ -9,7 +9,7 @@ class Q2DViewer;
 class DrawerText;
 
 /**
-    Tool per calcular l'àrea i la mitjana de grisos d'un òval
+    Tool per calcular l'Ã rea i la mitjana de grisos d'un Ã²val
   */
 class EllipticalROITool : public ROITool {
 Q_OBJECT
@@ -26,25 +26,25 @@ private:
     /// Estats de la Tool
     enum { Ready, FirstPointFixed };
 
-    /// Gestiona les accions a realitzar quan es clica el ratolí
+    /// Gestiona les accions a realitzar quan es clica el ratolÃ­
     void handlePointAddition();
 
-    /// Simula la forma de l'el·lipse quan tenim el primer punt i movem el mouse
+    /// Simula la forma de l'elÂ·lipse quan tenim el primer punt i movem el mouse
     void simulateEllipse();
 
-    /// Calcula el centre de l'el·lipse a partir dels punts introduits mitjançant la interacció de l'usuari
+    /// Calcula el centre de l'elÂ·lipse a partir dels punts introduits mitjanÃ§ant la interacciÃ³ de l'usuari
     void computeEllipseCentre(double centre[3]);
 
-    /// Actualitza els punts del polígon perquè resulti el dibuix de l'òval
+    /// Actualitza els punts del polÃ­gon perquÃ¨ resulti el dibuix de l'Ã²val
     void updatePolygonPoints();
 
-    /// Dona el dibuix de l'òval per finalitzat
+    /// Dona el dibuix de l'Ã²val per finalitzat
     void closeForm();
 
     /// Elimina la representacio temporal de la tool
     void deleteTemporalRepresentation();
 
-    /// Equalitza la profunditat dels elements que formen l'el·lipse final.
+    /// Equalitza la profunditat dels elements que formen l'elÂ·lipse final.
     void equalizeDepth();
 
 private slots:
@@ -52,7 +52,7 @@ private slots:
     void initialize();
 
 private:
-    /// Punts que annotem de la interacció de l'usuari per crear l'òval
+    /// Punts que annotem de la interacciÃ³ de l'usuari per crear l'Ã²val
     double m_firstPoint[3];
     double m_secondPoint[3];
 

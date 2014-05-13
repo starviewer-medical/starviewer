@@ -89,7 +89,7 @@ const char* const UIDBlendingSoftcopyPresentationStateStorage               = "1
 const char* const UIDEncapsulatedPDFStorage                                 = "1.2.840.10008.5.1.4.1.1.104.1";
 const char* const UIDRealWorldValueMappingStorage                           = "1.2.840.10008.5.1.4.1.1.67";
 const char* const UIDXRayRadiationDoseSRStorage                             = "1.2.840.10008.5.1.4.1.1.88.67";
-// UIDs Presents a l'edició del 2009
+// UIDs Presents a l'ediciÃ³ del 2009
 const char* const UIDEnhancedUSVolumeStorage                                = "1.2.840.10008.5.1.4.1.1.6.2";
 const char* const UIDEnhancedMRColorImageStorage                            = "1.2.840.10008.5.1.4.1.1.4.3";
 const char* const UIDEnhancedPETImageStorage                                = "1.2.840.10008.5.1.4.1.1.130";

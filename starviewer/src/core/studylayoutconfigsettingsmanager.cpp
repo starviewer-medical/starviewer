@@ -52,7 +52,7 @@ bool StudyLayoutConfigSettingsManager::addItem(const StudyLayoutConfig &config)
     }
     else
     {
-        DEBUG_LOG("Ja existeix una configuraciÛ de layout autom‡tic per aquesta modalitat: " + config.getModality() + ". No s'afegir‡.");
+        DEBUG_LOG("Ja existeix una configuraci√≥ de layout autom√†tic per aquesta modalitat: " + config.getModality() + ". No s'afegir√†.");
     }
 
     return ok;

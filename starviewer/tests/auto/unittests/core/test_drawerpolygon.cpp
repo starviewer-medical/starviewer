@@ -234,7 +234,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         drawerPolygon->addVertix(3.0, 4.0, 0.0);
         drawerPolygon->addVertix(4.0, 3.0, 0.0);
         drawerPolygon->setFilled(true);
-        // Per saber els punts finals hem de passar per GluTessellator. No poden ser hardcoded perquè poden canviar segons la implementació de GLU.
+        // Per saber els punts finals hem de passar per GluTessellator. No poden ser hardcoded perquÃ¨ poden canviar segons la implementaciÃ³ de GLU.
         QList<Vector3> vertices;
         vertices << Vector3(0.0, 0.0, 0.0) << Vector3(1.0, 1.0, 0.0) << Vector3(3.0, 4.0, 0.0) << Vector3(4.0, 3.0, 0.0);
         GluTessellator tessellator;

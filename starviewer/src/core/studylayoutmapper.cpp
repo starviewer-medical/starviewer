@@ -50,7 +50,7 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
     QList<QPair<Volume*, int> > candidateImages = getImagesToPlace(config, matchingStudies);
     int numberOfMinimumViewersRequired = candidateImages.count();
 
-    // Si el nombre màxim de visors per configuració és menor al nombre mínim de visors requerits, haurem d'actualitzar aquest paràmetre abans de crear el grid
+    // Si el nombre mÃ xim de visors per configuraciÃ³ Ã©s menor al nombre mÃ­nim de visors requerits, haurem d'actualitzar aquest parÃ metre abans de crear el grid
     int maxNumbersOfViewersByConfig = config.getMaximumNumberOfViewers();
     if (maxNumbersOfViewersByConfig > 0)
     {
@@ -59,14 +59,14 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
             numberOfMinimumViewersRequired = maxNumbersOfViewersByConfig;
         }
     }
-    // Ara ja sabem el nombre mínim de visors requerits, ara cal calcular quina és la distribució idònia en graella
+    // Ara ja sabem el nombre mÃ­nim de visors requerits, ara cal calcular quina Ã©s la distribuciÃ³ idÃ²nia en graella
     OptimalViewersGridEstimator gridEstimator;
     QPair<int, int> grid = gridEstimator.getOptimalGrid(numberOfMinimumViewersRequired);
     // Assignem el grid al layout
     int rows = grid.first;
     int columns = grid.second;
     layout->setGrid(rows, columns);
-    // Col·loquem les imatges en el layout donat
+    // ColÂ·loquem les imatges en el layout donat
     placeImagesInCurrentLayout(candidateImages, config.getUnfoldDirection(), layout);
     // Make the first viewer selected
     layout->setSelectedViewer(layout->getViewerWidget(0));
@@ -76,7 +76,7 @@ QList<QPair<Volume*, int> > StudyLayoutMapper::getImagesToPlace(const StudyLayou
 {
     QList<StudyLayoutConfig::ExclusionCriteriaType> exclusionCriteria = config.getExclusionCriteria();
     QList<QPair<Volume*, int> > candidateImages;
-    // Primer calculem el nombre total de sèries o imatges
+    // Primer calculem el nombre total de sÃ¨ries o imatges
     foreach (Study *study, matchingStudies)
     {
         foreach (Series *series, study->getViewableSeries())
@@ -112,7 +112,7 @@ QList<QPair<Volume*, int> > StudyLayoutMapper::getImagesToPlace(const StudyLayou
                     Volume *currentVolume = series->getVolumesList().at(i);
                     if (config.getUnfoldType() == StudyLayoutConfig::UnfoldImages)
                     {
-                        // TODO Cal pensar què fer en el cas que tinguem fases. Ara mateix no les estem contemplant.
+                        // TODO Cal pensar quÃ¨ fer en el cas que tinguem fases. Ara mateix no les estem contemplant.
                         for (int slice = 0; slice < currentVolume->getNumberOfSlicesPerPhase(); ++slice)
                         {
                             candidateImages << QPair<Volume*, int>(currentVolume, slice);
@@ -120,7 +120,7 @@ QList<QPair<Volume*, int> > StudyLayoutMapper::getImagesToPlace(const StudyLayou
                     }
                     else
                     {
-                        // StudyLayoutConfig::UnfoldSeries, col·loquem la primera imatge de cada sèrie
+                        // StudyLayoutConfig::UnfoldSeries, colÂ·loquem la primera imatge de cada sÃ¨rie
                         candidateImages << QPair<Volume*, int>(currentVolume, 0);
                     }
                 }
@@ -141,7 +141,7 @@ void StudyLayoutMapper::placeImagesInCurrentLayout(const QList<QPair<Volume*, in
     if (numberOfVolumesToPlace > rows * columns)
     {
         DEBUG_LOG(QString("No hi ha suficients visors pel nombre passat de volums/imatges. #Volums/imatges: %1. Files: %2, Columnes: %3. "
-            "Limitem el nombre de volums a col·locar a files * columnes = %4").arg(numberOfVolumesToPlace).arg(rows).arg(columns).arg(rows * columns));
+            "Limitem el nombre de volums a colÂ·locar a files * columnes = %4").arg(numberOfVolumesToPlace).arg(rows).arg(columns).arg(rows * columns));
         // Limitem el nombre de volums al nombre total de visors disponibles
         numberOfVolumesToPlace = rows * columns;
     }

@@ -41,7 +41,7 @@ protected:
 
     virtual void checkIfStarviewerHaveAccessThroughFirewall(FirewallAccess *firewall)
     {
-        /// Podem fer el cast per que sabem que és un testingFirewallAccess ja que l'hem creat al mètode anterior
+        /// Podem fer el cast per que sabem que Ã©s un testingFirewallAccess ja que l'hem creat al mÃ¨tode anterior
         ((TestingFirewallAccess*)firewall)->setStatus(m_testingStatus);
         ((TestingFirewallAccess*)firewall)->setErrorString(m_testingErrorString);
     }
@@ -115,4 +115,3 @@ void test_FirewallAccessTest::run_ShouldTestIfStarviewerHaveAccessThroughFirewal
 DECLARE_TEST(test_FirewallAccessTest)
 
 #include "test_firewallaccesstest.moc"
-

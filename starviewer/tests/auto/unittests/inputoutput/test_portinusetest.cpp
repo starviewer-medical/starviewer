@@ -23,8 +23,8 @@ protected:
     virtual PortInUse* createPortInUse()
     {
         TestingPortInUse *portInUse = new TestingPortInUse();
-        // El port in use by another application s'esborra dins el mètode getOwner de la classe port in use,
-        // el qual només es crida si l'status és diferent de PortIsAvailable
+        // El port in use by another application s'esborra dins el mÃ¨tode getOwner de la classe port in use,
+        // el qual nomÃ©s es crida si l'status Ã©s diferent de PortIsAvailable
         if (m_testingStatus != PortInUse::PortIsAvailable)
         {
             TestingPortInUseByAnotherApplication *portInUseByAnotherApplication = new TestingPortInUseByAnotherApplication();
@@ -36,8 +36,8 @@ protected:
 
     virtual void checkIfPortIsInUse(PortInUse *portInUse)
     {
-        /// S'ha de fer el cast, ja que els mètodes de setStatus i SetErrorString només els té TestingPortInUse.
-        /// Podem fer el cast per que sabem que és un TestingPortInUse ja que l'hem creat al mètode anterior.
+        /// S'ha de fer el cast, ja que els mÃ¨todes de setStatus i SetErrorString nomÃ©s els tÃ© TestingPortInUse.
+        /// Podem fer el cast per que sabem que Ã©s un TestingPortInUse ja que l'hem creat al mÃ¨tode anterior.
         ((TestingPortInUse*)portInUse)->setStatus(m_testingStatus);
         ((TestingPortInUse*)portInUse)->setErrorString(m_testingErrorString);
     }

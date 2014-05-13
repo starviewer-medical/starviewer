@@ -30,7 +30,7 @@ DICOMAnonymizer::~DICOMAnonymizer()
 
 void DICOMAnonymizer::setPatientNameAnonymized(const QString &patientNameAnonymized)
 {
-    // Segons el DICOM un tag de tipus PN (PersonName) no pot tenir més de 64 caràcters
+    // Segons el DICOM un tag de tipus PN (PersonName) no pot tenir mÃ©s de 64 carÃ cters
     m_patientNameAnonymized = patientNameAnonymized.left(64);
 }
 
@@ -74,7 +74,7 @@ void DICOMAnonymizer::initializeGDCM()
     m_gdcmAnonymizer = new gdcm::gdcmAnonymizerStarviewer();
     gdcm::Global *gdcmGlobalInstance = &gdcm::Global::GetInstance();
 
-    // Indiquem el directori on pot trobar el fitxer part3.xml que és un diccionari DICOM.
+    // Indiquem el directori on pot trobar el fitxer part3.xml que Ã©s un diccionari DICOM.
     // TODO: On posem el fitxer part3.xml
     gdcmGlobalInstance->Prepend(qPrintable(QCoreApplication::applicationDirPath()));
 
@@ -86,10 +86,10 @@ void DICOMAnonymizer::initializeGDCM()
 
     const gdcm::Defs &defs = gdcmGlobalInstance->GetDefs();
     (void)defs;
-    // TODO:utilitzem el UID de dcmtk hauríem de tenir el nostre propi això també passa a VolumeBuilderFromCaptures
+    // TODO:utilitzem el UID de dcmtk haurÃ­em de tenir el nostre propi aixÃ² tambÃ© passa a VolumeBuilderFromCaptures
     if (!gdcm::UIDGenerator::IsValid(SITE_UID_ROOT))
     {
-        ERROR_LOG(QString("No es pot anonimitzar els fitxers DICOM perquè el UID arrel per crear els nous fitxers no es valid %1").arg(SITE_UID_ROOT));
+        ERROR_LOG(QString("No es pot anonimitzar els fitxers DICOM perquÃ¨ el UID arrel per crear els nous fitxers no es valid %1").arg(SITE_UID_ROOT));
     }
 
     gdcm::UIDGenerator::SetRoot(SITE_UID_ROOT);
@@ -175,7 +175,7 @@ bool DICOMAnonymizer::anonymizeDICOMFile(const QString &inputPathFile, const QSt
         }
     }
 
-    // Regenerem la capçalera DICOM amb el nou SOP Instance UID
+    // Regenerem la capÃ§alera DICOM amb el nou SOP Instance UID
     gdcm::FileMetaInformation gdcmFileMetaInformation = gdcmFile.GetHeader();
     gdcmFileMetaInformation.Clear();
 

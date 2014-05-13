@@ -10,7 +10,7 @@ namespace udg {
 
 /**
     Lector de dades d'imatge per Volume.
-    Aquest lector fa ús de la interfície vtkGDCM per llegir les dades.
+    Aquest lector fa Ãºs de la interfÃ­cie vtkGDCM per llegir les dades.
   */
 class VolumePixelDataReaderVTKGDCM : public VolumePixelDataReader {
 Q_OBJECT
@@ -25,14 +25,14 @@ public:
 private:
     /// Un cop llegides les dades, les processa segons l'espai de color
     /// en que estiguin definides i les assigna l'objecte vtkImageData
-    // TODO Potser aquest processament s'hauria de fer al corresponent visor i no aquí?
+    // TODO Potser aquest processament s'hauria de fer al corresponent visor i no aquÃ­?
     void applyColorProcessing();
 
-    /// Fa DEBUG_LOGs de certa informació que pot resultar útil per debuggar un cop s'han llegit les dades
+    /// Fa DEBUG_LOGs de certa informaciÃ³ que pot resultar Ãºtil per debuggar un cop s'han llegit les dades
     void printDebugInfo();
 
 private slots:
-    /// Captura el senyal de vtk perquè poguem notificar el progrés de la lectura
+    /// Captura el senyal de vtk perquÃ¨ poguem notificar el progrÃ©s de la lectura
     void slotProgress();
 
 private:

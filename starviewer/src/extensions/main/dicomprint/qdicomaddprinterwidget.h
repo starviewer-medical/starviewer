@@ -20,24 +20,24 @@ public:
     void clearInputs();
 
 signals:
-    /// Signal que es llanÁa quan una impressora s'ha afegit al sistema.
+    /// Signal que es llan√ßa quan una impressora s'ha afegit al sistema.
     void newPrinterAddedSignal(int);
 
 public slots:
-    /// Posa operatiu el boto d'afegir impressora quan tots els par‡metres estan entrats.
+    /// Posa operatiu el boto d'afegir impressora quan tots els par√†metres estan entrats.
     void enableAddButton();
 
     /// Afegeix una impressora dicom a partir de les dades entrades per l'usuari.
     void addPrinter();
 
 private:
-    /// Es creen els connexions de la interfÌcie
+    /// Es creen els connexions de la interf√≠cie
     void createConnections();
 
     /// Configurem InputValidator per alguns dels QLineEdit
     void configureInputValidator();
 
-    /// Comprova la validesa dels par‡metres entrats. Retorna false si hi ha algun par‡metre erroni.
+    /// Comprova la validesa dels par√†metres entrats. Retorna false si hi ha algun par√†metre erroni.
     bool validateInputSettings();
 
     /// Agafa les dades introduides per l'usuari i les afegeix a un DicomPrinter.
