@@ -6,7 +6,7 @@ unix {
 }
 
 win32 {
-    # Per tenir glew integrada al codi. Només necessari a windows.
+    # Per tenir glew integrada al codi. NomÃ©s necessari a windows.
     DEFINES += GLEW_STATIC
     
     # Volem veure missatges a std::cout en debug
@@ -22,18 +22,14 @@ macx {
     LIBS += -framework Cocoa
 }
 
-# definim que per sistemes de compilació windows basats en visual studio 
-# la compilació es faci en tants cores com sigui possible
+# definim que per sistemes de compilaciÃ³ windows basats en visual studio 
+# la compilaciÃ³ es faci en tants cores com sigui possible
 
 win32-msvc2010:QMAKE_CXXFLAGS += /MP
 
-# Indiquem que per compil·lacions en debug, Runtime Library sigui Multi-threaded DLL (com en release) i no Multi-threaded Debug DLL
+# Indiquem que per compilÂ·lacions en debug, Runtime Library sigui Multi-threaded DLL (com en release) i no Multi-threaded Debug DLL
 win32-msvc2010:QMAKE_CXXFLAGS_DEBUG -= -MDd
 win32-msvc2010:QMAKE_CXXFLAGS_DEBUG += -MD
 
-# Definim variable per construir versió lite en temps de compilació
+# Definim variable per construir versiÃ³ lite en temps de compilaciÃ³
 lite_version:DEFINES += STARVIEWER_LITE
-
-
-
-

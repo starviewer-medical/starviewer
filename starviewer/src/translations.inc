@@ -1,8 +1,8 @@
 # Include on hi ha tota la "lògica" de les traducions. Si es fa un include d'aquest fitxer
 # i es respecta l'ubicació del directori extensions respecte on es fa l'include, en el Makefile
-# que es generi hi apareixer�  2 targets nous: i18n_release i i18n_update per generar els .qm i actualitzar
+# que es generi hi apareixerà 2 targets nous: i18n_release i i18n_update per generar els .qm i actualitzar
 # els .ts respectivament.
-# El i18n_release es crida autom� ticament sempre que es necessita.
+# El i18n_release es crida automàticament sempre que es necessita.
 
 include(extensions.inc)
 

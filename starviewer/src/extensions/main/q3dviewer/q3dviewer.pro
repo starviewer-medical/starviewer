@@ -1,7 +1,7 @@
 # Fitxer generat pel gestor de qmake de kdevelop. 
 # ------------------------------------------- 
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground/volume3dviewtesting
-# L'objectiu �s una aplicaci??:  
+# L'objectiu és una aplicació:  
 
 FORMS += q3dviewerextensionbase.ui 
 HEADERS += q3dviewerextensionmediator.h \
