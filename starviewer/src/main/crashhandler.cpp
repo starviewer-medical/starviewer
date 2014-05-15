@@ -15,6 +15,7 @@
 #ifndef NO_CRASH_REPORTER
 
 #include "crashhandler.h"
+#include "executablesnames.h"
 
 #include <QString>
 #include <QDir>

@@ -10,16 +10,6 @@ macx {
     DESTDIR = $${DESTDIR}/$${TARGET_STARVIEWER}.app/Contents/MacOS
 }
 
-macx {
-    DEFINES += STARVIEWER_EXE=\\\"../../../$${TARGET_STARVIEWER}\\\"
-}
-linux* {
-    DEFINES += STARVIEWER_EXE=\\\"$${TARGET_STARVIEWER}\\\"
-}
-win32 {
-    DEFINES += STARVIEWER_EXE=\"$${TARGET_STARVIEWER}.exe\"
-}
-
 FORMS = qcrashreporterbase.ui
 HEADERS = qcrashreporter.h \
           crashreportersender.h \
