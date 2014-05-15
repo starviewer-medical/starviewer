@@ -18,6 +18,7 @@
 #include "crashreportersender.h"
 #include "../core/starviewerapplication.h"
 #include "logging.h"
+#include "executablesnames.h"
 #include <QMovie>
 #include <QNetworkInterface>
 #include <QProcess>
