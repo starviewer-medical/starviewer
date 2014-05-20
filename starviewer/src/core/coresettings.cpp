@@ -78,6 +78,7 @@ const QString CoreSettings::LastVersionCheckedDate("LastVersionCheckedDate");
 const QString CoreSettings::CheckVersionInterval("CheckVersionInterval");
 const QString CoreSettings::NeverShowNewVersionReleaseNotes("NeverShowNewVersionReleaseNotes");
 const QString CoreSettings::DontCheckNewVersionsOnline("DontCheckNewVersionsOnline");
+const QString CoreSettings::UpdateCheckUrlAdditionalParameters("UpdateCheckUrlAdditionalParameters");
 
 const QString CoreSettings::MammographyAutoOrientationExceptions("MammographyAutoOrientationExceptions");
 

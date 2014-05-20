@@ -17,6 +17,7 @@
 #include "logging.h"
 #include "machineidentifier.h"
 #include "systeminformation.h"
+#include "coresettings.h"
 
 #include <QScriptEngine>
 #include <QScriptValue>
@@ -113,17 +114,34 @@ bool ApplicationUpdateChecker::isChecking() const
 
 QString ApplicationUpdateChecker::createWebServiceUrl()
 {
-    MachineIdentifier machineIdentifier;
     SystemInformation *systemInformation = SystemInformation::newInstance();
-
-    QString machineID = machineIdentifier.getMachineID();
-    QString groupID = machineIdentifier.getGroupID();
     QString operatingSystem = systemInformation->getOperatingSystemAsShortString();
-    
     delete systemInformation;
 
-    return QString("http://starviewer.udg.edu/checknewversion/?currentVersion=%1&machineID=%2&groupID=%3&os=%4")
-              .arg(StarviewerVersionString).arg(machineID).arg(groupID).arg(operatingSystem);
+    QString url = QString("http://starviewer.udg.edu/checknewversion/?currentVersion=%1&os=%2").arg(StarviewerVersionString).arg(operatingSystem);
+
+    QString additionalParametersString = Settings().getValue(CoreSettings::UpdateCheckUrlAdditionalParameters).toString();
+    QStringList additionalParameters = additionalParametersString.split(",", QString::SkipEmptyParts);
+
+    foreach (const QString &parameter, additionalParameters)
+    {
+        QString trimmedParameter = parameter.trimmed();
+
+        if (trimmedParameter == "machineID")
+        {
+            url += "&machineID=" + MachineIdentifier().getMachineID();
+        }
+        else if (trimmedParameter == "groupID")
+        {
+            url += "&groupID=" + MachineIdentifier().getGroupID();
+        }
+        else
+        {
+            url += "&" + trimmedParameter;
+        }
+    }
+
+    return url;
 }
 
 void ApplicationUpdateChecker::setProxy(const QUrl &url)
