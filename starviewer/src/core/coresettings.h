@@ -87,6 +87,9 @@ public:
     /// No permetre que es comprobin versions online
     static const QString DontCheckNewVersionsOnline;
 
+    /// Additional parameters to add to the update check URL.
+    static const QString UpdateCheckUrlAdditionalParameters;
+
     /// Especifica les excepcions en que no ha s'ha d'aplicar la auto orientació en mamografies.
     static const QString MammographyAutoOrientationExceptions;
 
