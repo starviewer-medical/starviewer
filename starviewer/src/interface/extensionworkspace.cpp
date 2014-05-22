@@ -16,6 +16,9 @@
 
 #include "logging.h"
 
+#include <QFile>
+#include <QTextStream>
+
 namespace udg {
 
 ExtensionWorkspace::ExtensionWorkspace(QWidget *parent)
@@ -43,12 +46,14 @@ void ExtensionWorkspace::setDarkBackgroundColorEnabled(bool enabled)
 {
     if (enabled)
     {
-        this->setStyleSheet("QTabWidget QStackedWidget {"
-                        "background: url(:images/idiLogoBackground.png); "
-                        "background-repeat:no-repeat; "
-                        "background-position: right bottom; "
-                        "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #222222, stop: 1 #333333); "
-                        "}");
+        QFile file(":css/mainwindowbackground.css");
+
+        if (file.open(QFile::ReadOnly | QFile::Text))
+        {
+            QTextStream textStream(&file);
+            this->setStyleSheet(textStream.readAll());
+            file.close();
+        }
     }
     else
     {
