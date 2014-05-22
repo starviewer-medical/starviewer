@@ -14,8 +14,6 @@
 
 #include "extensionworkspace.h"
 
-#include <QToolButton>
-#include <iostream>
 #include "logging.h"
 
 namespace udg {
