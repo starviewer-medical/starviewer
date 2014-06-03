@@ -18,6 +18,7 @@
 #include <QObject>
 #include <QList>
 #include <QMultiHash>
+#include <QPointer>
 #include <QProgressDialog>
 
 namespace udg {
@@ -123,7 +124,7 @@ private:
     struct StructPreviousStudyDownloading
     {
         /// Widget a on s'ha de mostrar la informacio
-        Q2DViewerWidget *widgetToDisplay;
+        QPointer<Q2DViewerWidget> widgetToDisplay;
         /// Guardem el display set per poder escollir l'orientacio (útil en mamo) i si cal una eina també
         HangingProtocolDisplaySet *displaySet;
     };
