@@ -678,7 +678,11 @@ void HangingProtocolManager::cancelHangingProtocolDownloading()
         // S'agafa i es treu de la llista l'element que s'està esperant
         // i es treu el label de downloading
         StructPreviousStudyDownloading *element = m_studiesDownloading->take(key);
-        element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
+        // The widget may have been destroyed before calling this method, so we must check that it's still valid
+        if (element->widgetToDisplay)
+        {
+            element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
+        }
         delete element;
     }
 }
