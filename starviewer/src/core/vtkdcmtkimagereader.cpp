@@ -454,13 +454,12 @@ void VtkDcmtkImageReader::readOrigin(const DICOMTagReader &dicomTagReader)
 
 void VtkDcmtkImageReader::readPerFrameRescale(const DICOMTagReader &dicomTagReader)
 {
+    m_hasPerFrameRescale = false;
     DICOMSequenceAttribute *sequence = dicomTagReader.getSequenceAttribute(DICOMPerFrameFunctionalGroupsSequence);
 
     if (sequence)
     {
-        m_hasPerFrameRescale = true;
         m_perFrameRescale.clear();
-
         DICOMSequenceAttribute *pixelValueTransformationSequencInSharedSequence = NULL;
 
         // Checking if the functional group is located in Shared Functional Groups Sequence.
@@ -500,14 +499,11 @@ void VtkDcmtkImageReader::readPerFrameRescale(const DICOMTagReader &dicomTagRead
                     {
                         Rescale rescale = { interceptValue->getValueAsDouble(), slopeValue->getValueAsDouble() };
                         m_perFrameRescale.append(rescale);
+                        m_hasPerFrameRescale = true;
                     }
                 }
             }
         }
-    }
-    else
-    {
-        m_hasPerFrameRescale = false;
     }
 }
 
