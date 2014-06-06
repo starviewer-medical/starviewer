@@ -53,6 +53,10 @@ public:
     ///  <qresource prefix="/extensions/MyExtension" >
     /// i per accedir-hi: QIcon *icon = new QIcon(":/extensions/MyExtension/images/icon.png");
     virtual DisplayableID getExtensionID() const = 0;
+
+    /// Orders the extension to view newly loaded studies from the current patient.
+    virtual void viewNewStudiesFromSamePatient(QWidget *extension);
+
 };
 
 }
