@@ -31,6 +31,10 @@ public:
     virtual bool initializeExtension(QWidget *extension, const ExtensionContext &extensionContext);
 
     virtual DisplayableID getExtensionID() const;
+
+    /// Orders the extension to view newly loaded studies from the current patient.
+    virtual void viewNewStudiesFromSamePatient(QWidget *extension);
+
 };
 
 static InstallExtension<Q2DViewerExtension, Q2DViewerExtensionMediator> registerQ2DViewerExtension;
