@@ -12,4 +12,9 @@ ExtensionMediator::~ExtensionMediator()
 {
 }
 
+void ExtensionMediator::viewNewStudiesFromSamePatient(QWidget *extension)
+{
+    Q_UNUSED(extension)
+}
+
 };

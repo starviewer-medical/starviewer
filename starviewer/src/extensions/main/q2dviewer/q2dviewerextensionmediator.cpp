@@ -46,4 +46,12 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget *extension, const E
     return true;
 }
 
+void Q2DViewerExtensionMediator::viewNewStudiesFromSamePatient(QWidget *extension)
+{
+    if (Q2DViewerExtension *q2dviewerExtension = qobject_cast<Q2DViewerExtension*>(extension))
+    {
+        q2dviewerExtension->setPatient(q2dviewerExtension->getPatient());
+    }
+}
+
 } // End udg namespace

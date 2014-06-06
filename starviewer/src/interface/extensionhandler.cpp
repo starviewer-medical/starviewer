@@ -459,6 +459,19 @@ QApplicationMainWindow* ExtensionHandler::addPatientToWindow(Patient *patient, b
                 openDefaultExtension();
             }
 
+            if (!loadOnly)
+            {
+                QMap<QWidget*, QString> extensions = mainApp->getExtensionWorkspace()->getActiveExtensions();
+                QMapIterator<QWidget*, QString> iterator(extensions);
+
+                while (iterator.hasNext())
+                {
+                    iterator.next();
+                    ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(iterator.value());
+                    mediator->viewNewStudiesFromSamePatient(iterator.key());
+                }
+            }
+
             usedMainApp = mainApp;
         }
         else
