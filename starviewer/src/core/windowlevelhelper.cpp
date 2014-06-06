@@ -148,6 +148,13 @@ WindowLevel WindowLevelHelper::getCurrentAutomaticWindowLevel(Volume *volume)
         }
 
         double windowCenter = range[0] + (windowWidth * 0.5);
+
+        // If MONOCHROME1 image, window/level is inverted
+        Image *image = volume->getImage(0);
+        if (image && image->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
+        {
+            windowWidth = -windowWidth;
+        }
         
         automaticWindowLevel.setWidth(windowWidth);
         automaticWindowLevel.setCenter(windowCenter);
