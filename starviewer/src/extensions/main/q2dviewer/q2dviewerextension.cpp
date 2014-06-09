@@ -353,6 +353,11 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 #endif
 }
 
+void Q2DViewerExtension::layoutAgain()
+{
+    m_layoutManager->applyProperLayoutChoice();
+}
+
 void Q2DViewerExtension::hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()
 {
     m_hangingProtocolsMenu->setSearchingItem(false);

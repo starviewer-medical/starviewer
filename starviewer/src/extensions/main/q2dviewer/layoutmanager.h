@@ -28,6 +28,9 @@ public:
     /// Cancels started operations such as downloading previous studies for an ordered hanging protocol
     void cancelOngoingOperations();
 
+    /// Applies hanging protocols or automatic layouts depending on the user settings and the availability of the former
+    void applyProperLayoutChoice();
+
 public slots:
     /// Searches and adds suitable hanging protocols for the given previous studies
     void addHangingProtocolsWithPrevious(QList<Study*> studies);
@@ -42,9 +45,6 @@ signals:
 private:
     /// True if current patient has at least one modality with hanging protocol priority configured over automatic layouts, false otherwise.
     bool hasCurrentPatientAnyModalityWithHangingProtocolPriority();
-    
-    /// Applies hanging protocols or automatic layouts depending on the user settings and the availability of the former
-    void applyProperLayoutChoice();
     
     /// Hanging Protocols
 

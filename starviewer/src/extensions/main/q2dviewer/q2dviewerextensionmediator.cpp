@@ -50,7 +50,7 @@ void Q2DViewerExtensionMediator::viewNewStudiesFromSamePatient(QWidget *extensio
 {
     if (Q2DViewerExtension *q2dviewerExtension = qobject_cast<Q2DViewerExtension*>(extension))
     {
-        q2dviewerExtension->setPatient(q2dviewerExtension->getPatient());
+        q2dviewerExtension->layoutAgain();
     }
 }
 
