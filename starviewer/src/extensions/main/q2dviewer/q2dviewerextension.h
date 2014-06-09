@@ -70,6 +70,9 @@ public:
     /// Mètode per obtenir el pacient
     Patient* getPatient() const;
 
+    /// Decides and applies a new layout considering the current studies.
+    void layoutAgain();
+
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
