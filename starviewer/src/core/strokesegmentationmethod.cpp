@@ -180,7 +180,7 @@ double StrokeSegmentationMethod::applyMethodVTK()
     int index[3];
     m_cont = 0;
     vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
-    imageThreshold->SetInput(m_Volume->getVtkData());
+    imageThreshold->SetInputData(m_Volume->getVtkData());
     imageThreshold->ThresholdBetween(m_lowerThreshold, m_upperThreshold);
     imageThreshold->SetInValue(m_insideMaskValue - 100);
     imageThreshold->SetOutValue(m_outsideMaskValue);

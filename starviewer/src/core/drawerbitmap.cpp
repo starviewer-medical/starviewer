@@ -100,12 +100,12 @@ vtkProp* DrawerBitmap::getAsVtkProp()
  
             vtkSmartPointer<vtkImageMapToColors> mapTransparency = vtkSmartPointer<vtkImageMapToColors>::New();
             mapTransparency->SetLookupTable(lookupTable);
-            mapTransparency->SetInput(imageData);
+            mapTransparency->SetInputData(imageData);
             mapTransparency->PassAlphaToOutputOn();
  
             // Creem l'actor
             m_imageActor = vtkSmartPointer<vtkImageActor>::New();
-            m_imageActor->SetInput(mapTransparency->GetOutput());
+            m_imageActor->SetInputData(mapTransparency->GetOutput());
             m_imageActor->SetDisplayExtent(0, m_width - 1, 0, m_height - 1, 0, 0);
             m_imageActor->SetVisibility(this->isVisible());
         }

@@ -381,7 +381,7 @@ void QExporterTool::generatePreview()
 {
     QString path = QString("%1/preview.png").arg(QDir::tempPath());
     vtkImageWriter *writer = vtkPNGWriter::New();
-    writer->SetInput(captureCurrentView());
+    writer->SetInputData(captureCurrentView());
     writer->SetFileName(qPrintable(path));
     writer->Write();
     QPixmap pixmap(path);

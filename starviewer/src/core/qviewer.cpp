@@ -356,7 +356,7 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
         if (count == 1)
         {
             // Només grabem una sola imatge
-            writer->SetInput(m_grabList.at(0));
+            writer->SetInputData(m_grabList.at(0));
             writer->SetFileName(qPrintable(QString("%1.%2").arg(baseName).arg(fileExtension)));
             writer->Write();
         }
@@ -368,7 +368,7 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
             int padding = QString::number(count).size();
             foreach (vtkImageData *image, m_grabList)
             {
-                writer->SetInput(image);
+                writer->SetInputData(image);
                 writer->SetFileName(qPrintable(QString("%1-%2.%3").arg(baseName).arg(i, padding, 10, QChar('0')).arg(fileExtension)));
                 writer->Write();
                 i++;
@@ -408,7 +408,7 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
         vtkImageData *data = m_grabList.at(0);
 
         videoWriter->SetFileName(qPrintable(baseName + fileExtension));
-        videoWriter->SetInput(data);
+        videoWriter->SetInputData(data);
         videoWriter->Start();
 
         // TODO falta activar el procés de notificació de procés de gravació
@@ -416,7 +416,7 @@ bool QViewer::record(const QString &baseName, RecordFileFormatType format)
         // int progress = 0;
         for (int i = 0; i < count; i++)
         {
-            videoWriter->SetInput(m_grabList.at(i));
+            videoWriter->SetInputData(m_grabList.at(i));
 
             // TODO Perquè un loop de 3?
             for (int j = 0; j < 3; j++)

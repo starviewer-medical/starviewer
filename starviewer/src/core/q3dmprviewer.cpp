@@ -218,7 +218,7 @@ void Q3DMPRViewer::updatePlanesData()
 {
     if (hasInput())
     {
-        m_axialImagePlaneWidget->SetInput(getMainInput()->getVtkData());
+        m_axialImagePlaneWidget->SetInputData(getMainInput()->getVtkData());
         if (!m_axialResliced)
         {
             m_axialResliced = new Volume();
@@ -231,7 +231,7 @@ void Q3DMPRViewer::updatePlanesData()
         // TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
         m_axialResliced->setImages(getMainInput()->getImages());
 
-        m_sagitalImagePlaneWidget->SetInput(getMainInput()->getVtkData());
+        m_sagitalImagePlaneWidget->SetInputData(getMainInput()->getVtkData());
         if (!m_sagitalResliced)
         {
             m_sagitalResliced = new Volume();
@@ -244,7 +244,7 @@ void Q3DMPRViewer::updatePlanesData()
         // TODO això es necessari perquè tingui la informació de la sèrie, estudis, pacient...
         m_sagitalResliced->setImages(getMainInput()->getImages());
 
-        m_coronalImagePlaneWidget->SetInput(getMainInput()->getVtkData());
+        m_coronalImagePlaneWidget->SetInputData(getMainInput()->getVtkData());
         if (!m_coronalResliced)
         {
             m_coronalResliced = new Volume();
@@ -269,9 +269,9 @@ void Q3DMPRViewer::createOutline()
     {
         // Creem l'outline
         vtkOutlineFilter *outlineFilter = vtkOutlineFilter::New();
-        outlineFilter->SetInput(getMainInput()->getVtkData());
+        outlineFilter->SetInputData(getMainInput()->getVtkData());
         vtkPolyDataMapper *outlineMapper = vtkPolyDataMapper::New();
-        outlineMapper->SetInput(outlineFilter->GetOutput());
+        outlineMapper->SetInputConnection(outlineFilter->GetOutputPort());
         m_outlineActor->SetMapper(outlineMapper);
         outlineFilter->Delete();
         outlineMapper->Delete();

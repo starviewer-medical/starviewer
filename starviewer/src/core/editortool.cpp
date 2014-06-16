@@ -321,7 +321,7 @@ void EditorTool::setPaintCursor()
         m_squareActor->GetProperty()->SetOpacity(0.2);
 
         vtkDataSetMapper *squareMapper = vtkDataSetMapper::New();
-        squareMapper->SetInput(grid);
+        squareMapper->SetInputData(grid);
 
         m_squareActor->SetMapper(squareMapper);
 

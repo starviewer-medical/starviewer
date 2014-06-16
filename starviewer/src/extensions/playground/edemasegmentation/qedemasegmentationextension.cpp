@@ -360,7 +360,7 @@ void QEdemaSegmentationExtension::applyVentriclesMethod()
         m_imageThreshold = vtkImageThreshold::New();
     }
     
-    m_imageThreshold->SetInput(m_mainVolume->getVtkData());
+    m_imageThreshold->SetInputData(m_mainVolume->getVtkData());
     m_lowerVentriclesValue = m_lowerValueVentriclesSlider->value();
     m_upperVentriclesValue = m_upperValueVentriclesSlider->value();
     m_imageThreshold->ThresholdBetween(m_lowerVentriclesValue,  m_upperVentriclesValue);
@@ -493,7 +493,7 @@ void QEdemaSegmentationExtension::viewThresholds()
     DEBUG_LOG(QString("Extent Vol Lesion: %1 %2 %3 %4 %5 %6").arg(m_lesionMaskVolume->getExtent()[0]).arg(m_lesionMaskVolume->getExtent()[1]).arg(m_lesionMaskVolume->getExtent()[2]).arg(m_lesionMaskVolume->getExtent()[3]).arg(m_lesionMaskVolume->getExtent()[4]).arg(m_lesionMaskVolume->getExtent()[5]));
 
     vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
-    imageThreshold->SetInput(m_mainVolume->getVtkData());
+    imageThreshold->SetInputData(m_mainVolume->getVtkData());
     imageThreshold->ThresholdBetween(m_lowerValueSlider->value(),  m_upperValueSlider->value());
     imageThreshold->SetInValue(m_insideValue);
     imageThreshold->SetOutValue(m_outsideValue);
@@ -599,7 +599,7 @@ void QEdemaSegmentationExtension::saveActivedMaskVolume()
         }
         //Forcem que la màscara que gaurdem el dins sigui 255 i el fora 0
         vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
-        imageThreshold->SetInput(m_activedMaskVolume->getVtkData());
+        imageThreshold->SetInputData(m_activedMaskVolume->getVtkData());
         imageThreshold->ThresholdBetween(m_insideValue , m_insideValue); // només els que valen m_insideValue
         imageThreshold->SetInValue(255);
         imageThreshold->SetOutValue(0);
@@ -608,7 +608,7 @@ void QEdemaSegmentationExtension::saveActivedMaskVolume()
         vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
         writer->SetFileName(qPrintable(fileName));
         writer->SetFileDimensionality(3);
-        writer->SetInput(imageThreshold->GetOutput());
+        writer->SetInputConnection(imageThreshold->GetOutputPort());
         writer->Write();
 
         writer->Delete();

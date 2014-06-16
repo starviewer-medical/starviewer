@@ -218,11 +218,11 @@ void test_DrawerBitmap::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 
     vtkImageMapToColors *mapTransparency = vtkImageMapToColors::New();
     mapTransparency->SetLookupTable(lookupTable);
-    mapTransparency->SetInput(imageData);
+    mapTransparency->SetInputData(imageData);
     mapTransparency->PassAlphaToOutputOn();
 
     vtkSmartPointer<vtkImageActor> imageActor = vtkSmartPointer<vtkImageActor>::New();
-    imageActor->SetInput(mapTransparency->GetOutput());
+    imageActor->GetMapper()->SetInputConnection(mapTransparency->GetOutputPort());
     imageActor->SetDisplayExtent(0, width - 1, 0, height - 1, 0, 0);
     imageActor->SetVisibility(true);
 

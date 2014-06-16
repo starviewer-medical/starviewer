@@ -33,12 +33,12 @@ BlendFilter::~BlendFilter()
 
 void BlendFilter::setBase(vtkImageData *base)
 {
-    m_imageBlend->SetInput(0, base);
+    m_imageBlend->SetInputData(0, base);
 }
 
 void BlendFilter::setOverlay(vtkImageData *overlay)
 {
-    m_imageBlend->SetInput(1, overlay);
+    m_imageBlend->SetInputData(1, overlay);
 }
 
 void BlendFilter::setOverlayOpacity(double opacity)

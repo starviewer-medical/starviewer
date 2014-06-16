@@ -1000,7 +1000,7 @@ void QMPRExtension::setInput(Volume *input)
     }
 
     vtkImageChangeInformation *changeInfo = vtkImageChangeInformation::New();
-    changeInfo->SetInput(input->getVtkData());
+    changeInfo->SetInputData(input->getVtkData());
     changeInfo->SetOutputOrigin(.0, .0, .0);
     changeInfo->Update();
 
@@ -1026,7 +1026,7 @@ void QMPRExtension::setInput(Volume *input)
     // Perquè l'extent d'output sigui suficient i no es "mengi" dades
     m_sagitalReslice->AutoCropOutputOn();
     m_sagitalReslice->SetInterpolationModeToCubic();
-    m_sagitalReslice->SetInput(m_volume->getVtkData());
+    m_sagitalReslice->SetInputData(m_volume->getVtkData());
 
     if (m_coronalReslice)
     {
@@ -1035,7 +1035,7 @@ void QMPRExtension::setInput(Volume *input)
     m_coronalReslice = vtkImageReslice::New();
     m_coronalReslice->AutoCropOutputOn();
     m_coronalReslice->SetInterpolationModeToCubic();
-    m_coronalReslice->SetInput(m_volume->getVtkData());
+    m_coronalReslice->SetInputData(m_volume->getVtkData());
 
     // Faltaria refrescar l'input dels 3 mpr
     // HACK To make universal scrolling work properly. Issue #2019. We have to disconnect and reconnect the signal to avoid infinite loops

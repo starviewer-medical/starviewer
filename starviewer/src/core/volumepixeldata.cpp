@@ -297,7 +297,7 @@ void VolumePixelData::setSpacing(double spacing[3])
 void VolumePixelData::setSpacing(double x, double y, double z)
 {
     vtkImageChangeInformation *changeInformation = vtkImageChangeInformation::New();
-    changeInformation->SetInput(m_imageDataVTK);
+    changeInformation->SetInputData(m_imageDataVTK);
     changeInformation->SetOutputSpacing(x, y, z);
     changeInformation->Update();
     this->setData(changeInformation->GetOutput());

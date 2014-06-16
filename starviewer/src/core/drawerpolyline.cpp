@@ -135,7 +135,7 @@ vtkProp* DrawerPolyline::getAsVtkProp()
 
         m_vtkActor->SetMapper(m_vtkMapper);
         m_vtkBackgroundActor->SetMapper(m_vtkMapper);
-        m_vtkMapper->SetInput(m_vtkPolydata);
+        m_vtkMapper->SetInputData(m_vtkPolydata);
         // Li donem els atributs
         updateVtkActorProperties();
 

@@ -47,12 +47,12 @@ void VolumeBuilderFromCaptures::addCapture(vtkImageData *data)
 {
     // \TODO Realitzem alguna comprovació o deixem que el vtkImageAppend es queixi?
     vtkSmartPointer<vtkImageFlip> imageFlip = vtkSmartPointer<vtkImageFlip>::New();
-    imageFlip->SetInput(data);
+    imageFlip->SetInputData(data);
     // Flip horitzontal
     imageFlip->SetFilteredAxis(1);
     imageFlip->Update();
 
-    m_vtkImageAppend->AddInput(imageFlip->GetOutput());
+    m_vtkImageAppend->AddInputData(imageFlip->GetOutput());
 }
 
 void VolumeBuilderFromCaptures::setParentStudy(Study *study)
