@@ -16,4 +16,4 @@ SOURCES += qrectumsegmentationextension.cpp \
 RESOURCES += rectumsegmentation.qrc
 
 EXTENSION_DIR = $$PWD
-include(../../basicconfextensions.inc)
+include(../../basicconfextensions.pri)

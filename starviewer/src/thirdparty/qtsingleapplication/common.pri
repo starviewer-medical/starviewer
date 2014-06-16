@@ -1,4 +1,4 @@
-include(../../compilationtype.inc)
+include(../../compilationtype.pri)
 exists(config.pri):infile(config.pri, SOLUTIONS_LIBRARY, yes): CONFIG += qtsingleapplication-uselib
 TEMPLATE_OLD = $$TEMPLATE
 TEMPLATE = fakelib

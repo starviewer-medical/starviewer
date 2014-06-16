@@ -9,9 +9,9 @@ SUBDIRS += diffusionperfusionsegmentation \
            perfusionmapreconstruction \
            rectumsegmentation \
            experimental3d
-include(../../extensions.inc)
+include(../../extensions.pri)
 TEMPLATE = subdirs
-include(../../compilationtype.inc)
+include(../../compilationtype.pri)
 for(dir, SUBDIRS){
   !exists($$dir){
     SUBDIRS -= $$dir

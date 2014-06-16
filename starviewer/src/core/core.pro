@@ -794,15 +794,15 @@ OTHER_FILES += ../qml/qmlpatientbrowsermenu.qml
 TEMPLATE = lib
 DESTDIR = ./
 CONFIG += staticlib
-include(../corelibsconfiguration.inc)
-include(../itk.inc)
-include(../gdcm.inc)
-include(../vtk.inc)
-include(../dcmtk.inc)
-include(../log4cxx.inc)
-include(../compilationtype.inc)
-include(../translations.inc)
-include(../threadweaver.inc)
+include(../corelibsconfiguration.pri)
+include(../itk.pri)
+include(../gdcm.pri)
+include(../vtk.pri)
+include(../dcmtk.pri)
+include(../log4cxx.pri)
+include(../compilationtype.pri)
+include(../translations.pri)
+include(../threadweaver.pri)
 QT += xml \
     network \
     webkit \

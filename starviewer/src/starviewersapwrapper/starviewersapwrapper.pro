@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-include(../applicationstargetnames.inc)
+include(../applicationstargetnames.pri)
 TARGET = $${TARGET_STARVIEWER_SAP_WRAPPER}
 
 DESTDIR = ../../bin
@@ -15,8 +15,8 @@ SOURCES = starviewersapwrapper.cpp
 
 INCLUDEPATH += ../core
 
-include(../corelibsconfiguration.inc)
-include(../compilationtype.inc)
-include(../log4cxx.inc)
+include(../corelibsconfiguration.pri)
+include(../compilationtype.pri)
+include(../log4cxx.pri)
 
 

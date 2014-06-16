@@ -1,6 +1,6 @@
 # Afegim dependències de les extensions
 
-include(../applicationstargetnames.inc)
+include(../applicationstargetnames.pri)
 
 TARGET = $${TARGET_STARVIEWER}
 DESTDIR = ../../bin
@@ -37,11 +37,11 @@ include(../../sourcelibsdependencies.pri)
 # Thirdparty libraries
 DUMMY = $$addLibraryDependency(../thirdparty, breakpad)
 
-include(../corelibsconfiguration.inc)
+include(../corelibsconfiguration.pri)
 include(../thirdparty/qtsingleapplication/src/qtsingleapplication.pri)
-include(../breakpad.inc)
+include(../breakpad.pri)
 
-include(installextensions.inc)
+include(installextensions.pri)
 
 QT += xml opengl network webkit script xmlpatterns declarative
 

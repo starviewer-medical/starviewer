@@ -15,4 +15,4 @@ SOURCES += q3dviewerextensionmediator.cpp \
 RESOURCES += q3dviewer.qrc
 
 EXTENSION_DIR = $$PWD
-include(../../basicconfextensions.inc)
+include(../../basicconfextensions.pri)

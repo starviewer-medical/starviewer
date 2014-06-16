@@ -28,10 +28,10 @@ CONFIG += release \
           stl
 TEMPLATE = lib
 
-include(../vtk.inc)
-include(../itk.inc)
-include(../gdcm.inc)
-include(../dcmtk.inc)
-include(../log4cxx.inc)
-include(../compilationtype.inc)
+include(../vtk.pri)
+include(../itk.pri)
+include(../gdcm.pri)
+include(../dcmtk.pri)
+include(../log4cxx.pri)
+include(../compilationtype.pri)
 

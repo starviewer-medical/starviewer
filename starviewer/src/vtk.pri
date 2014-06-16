@@ -1,4 +1,4 @@
-include(defaultdirectories.inc)
+include(defaultdirectories.pri)
 
 INCLUDEPATH += $${VTKINCLUDEDIR}
 

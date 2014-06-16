@@ -3,4 +3,4 @@
 TEMPLATE = subdirs 
 SUBDIRS = qtsingleapplication breakpad
 
-include(../compilationtype.inc)
+include(../compilationtype.pri)

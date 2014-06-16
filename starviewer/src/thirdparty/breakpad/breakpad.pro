@@ -1,7 +1,7 @@
 # Compilem llibreries breakpad
 #
 
-include(../../compilationtype.inc)
+include(../../compilationtype.pri)
 
 CONFIG += debug_and_release \
           staticlib \
@@ -23,9 +23,9 @@ UI_DIR = ../../../tmp/ui
 MOC_DIR = ../../../tmp/moc
 RCC_DIR = ../../../tmp/rcc
 
-include(../../breakpad.inc)
+include(../../breakpad.pri)
 
-# Problema de suport de breakpad per linux 64bits (idem a ../../breakpad.inc)
+# Problema de suport de breakpad per linux 64bits (idem a ../../breakpad.pri)
 unix:!linux_x86_64 {
 
     HEADERS += client/minidump_file_writer.h \

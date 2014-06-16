@@ -90,7 +90,7 @@ cuda {
         cudafiltering.cu \
         cudaviewpointintensityinformationchannel.cu
 }
-include(../../basicconfextensions.inc)
-include(../../../cuda.inc)
+include(../../basicconfextensions.pri)
+include(../../../cuda.pri)
 include(../../../thirdparty/glew/glew.pri)
 QT += opengl
