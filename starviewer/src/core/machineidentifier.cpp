@@ -35,7 +35,7 @@ QString MachineIdentifier::getGroupID()
 
 QString MachineIdentifier::encryptBase64Url(const QString &url)
 {
-    return QString(QCryptographicHash::hash(url.toAscii(), QCryptographicHash::Sha1).toBase64().replace("=", "").replace("+", "-").replace("/", "_"));
+    return QString(QCryptographicHash::hash(url.toLatin1(), QCryptographicHash::Sha1).toBase64().replace("=", "").replace("+", "-").replace("/", "_"));
 }
 
 QString MachineIdentifier::getMACAddress()

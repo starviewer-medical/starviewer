@@ -33,7 +33,7 @@
 #define LOGGER_INIT(file) \
     if (true) \
     { \
-        QByteArray logFilePathValue = (QDir::toNativeSeparators(udg::UserLogsFile)).toAscii(); \
+        QByteArray logFilePathValue = (QDir::toNativeSeparators(udg::UserLogsFile)).toLatin1(); \
         qputenv("logFilePath", logFilePathValue); \
         log4cxx::PropertyConfigurator::configure(file); \
     } else (void)0
