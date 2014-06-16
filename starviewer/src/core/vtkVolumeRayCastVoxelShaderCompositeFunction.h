@@ -44,7 +44,7 @@ public:
     enum CompositeMethod { ClassifyInterpolate, InterpolateClassify };
 
     static vtkVolumeRayCastVoxelShaderCompositeFunction* New();
-    vtkTypeRevisionMacro(vtkVolumeRayCastVoxelShaderCompositeFunction, vtkVolumeRayCastFunction);
+    vtkTypeMacro(vtkVolumeRayCastVoxelShaderCompositeFunction, vtkVolumeRayCastFunction)
     void PrintSelf(ostream &os, vtkIndent indent);
 
     void SetCompositeMethod(CompositeMethod compositeMethod) { m_compositeMethod = qBound(ClassifyInterpolate, compositeMethod, InterpolateClassify); }

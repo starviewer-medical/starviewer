@@ -25,7 +25,7 @@ namespace udg {
 class Vtk4DLinearRegressionGradientEstimator : public vtkEncodedGradientEstimator {
 
 public:
-    vtkTypeRevisionMacro(Vtk4DLinearRegressionGradientEstimator, vtkEncodedGradientEstimator);
+    vtkTypeMacro(Vtk4DLinearRegressionGradientEstimator, vtkEncodedGradientEstimator)
 
     /// Construeix un objecte Vtk4DLinearRegressionGradientEstimator.
     static Vtk4DLinearRegressionGradientEstimator* New();
