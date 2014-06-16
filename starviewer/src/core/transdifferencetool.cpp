@@ -181,7 +181,7 @@ void TransDifferenceTool::initializeDifferenceImage()
     Volume *differenceVolume = m_myData->getDifferenceVolume();
 
     int ext[6];
-    mainVolume->getWholeExtent(ext);
+    mainVolume->getExtent(ext);
 
     // Si no hi ha volume diferència
     if (differenceVolume == 0)

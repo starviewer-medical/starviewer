@@ -250,7 +250,7 @@ void VolumePixelData::convertToNeutralPixelData()
     m_imageDataVTK->SetOrigin(.0, .0, .0);
     m_imageDataVTK->SetSpacing(1., 1., 1.);
     m_imageDataVTK->SetDimensions(10, 10, 1);
-    m_imageDataVTK->SetWholeExtent(0, 9, 0, 9, 0, 0);
+    m_imageDataVTK->SetExtent(0, 9, 0, 9, 0, 0);
     m_imageDataVTK->SetScalarTypeToShort();
     m_imageDataVTK->SetNumberOfScalarComponents(1);
     m_imageDataVTK->AllocateScalars();

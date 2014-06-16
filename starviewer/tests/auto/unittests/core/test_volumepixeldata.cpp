@@ -347,7 +347,7 @@ void test_VolumePixelData::getVoxelValue_IndexVariant_ShouldReturnExpectedSingle
     imageDataVTK->SetOrigin(.0, .0, .0);
     imageDataVTK->SetSpacing(1., 1., 1.);
     imageDataVTK->SetDimensions(10, 10, 10);
-    imageDataVTK->SetWholeExtent(0, 9, 0, 9, 0, 9);
+    imageDataVTK->SetExtent(0, 9, 0, 9, 0, 9);
     imageDataVTK->SetScalarTypeToShort();
     imageDataVTK->SetNumberOfScalarComponents(1);
     imageDataVTK->AllocateScalars();

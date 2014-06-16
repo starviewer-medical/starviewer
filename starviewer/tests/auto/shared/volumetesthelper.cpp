@@ -53,7 +53,7 @@ Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int num
     testVtkImageData->SetOrigin(origin);
     testVtkImageData->SetSpacing(spacing);
     testVtkImageData->SetDimensions(dimensions);
-    testVtkImageData->SetWholeExtent(extent);
+    testVtkImageData->SetExtent(extent);
     testVolume->setData(testVtkImageData);
 
     return testVolume;

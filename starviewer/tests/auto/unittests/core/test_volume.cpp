@@ -920,12 +920,12 @@ void test_Volume::getExtent_ShouldReturnExpectedExtent()
     QFETCH(int, z1);
     QFETCH(int, z2);
 
-    QCOMPARE(volume->getWholeExtent()[0], x1);
-    QCOMPARE(volume->getWholeExtent()[1], x2);
-    QCOMPARE(volume->getWholeExtent()[2], y1);
-    QCOMPARE(volume->getWholeExtent()[3], y2);
-    QCOMPARE(volume->getWholeExtent()[4], z1);
-    QCOMPARE(volume->getWholeExtent()[5], z2);
+    QCOMPARE(volume->getExtent()[0], x1);
+    QCOMPARE(volume->getExtent()[1], x2);
+    QCOMPARE(volume->getExtent()[2], y1);
+    QCOMPARE(volume->getExtent()[3], y2);
+    QCOMPARE(volume->getExtent()[4], z1);
+    QCOMPARE(volume->getExtent()[5], z2);
 
     VolumeTestHelper::cleanUp(volume);
 }

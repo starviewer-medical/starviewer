@@ -82,8 +82,8 @@ public:
     double* getSpacing();
 
     /// Retorna la ¿bounding box?
-    void getWholeExtent(int extent[6]);
-    int* getWholeExtent();
+    void getExtent(int extent[6]);
+    int* getExtent();
 
     /// Retorna les dimensions del volum
     int* getDimensions();

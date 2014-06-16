@@ -522,7 +522,7 @@ void QRectumSegmentationExtension::updateVolumeForced()
         int ext[6];
         int i,j,k;
         int cont = 0;
-        m_2DView->getOverlayInput()->getWholeExtent(ext);
+        m_2DView->getOverlayInput()->getExtent(ext);
     
         VolumePixelDataIterator it = m_2DView->getOverlayInput()->getIterator();
         for(i=ext[0];i<=ext[1];i++)

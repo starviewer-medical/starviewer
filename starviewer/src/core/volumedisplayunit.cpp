@@ -184,7 +184,7 @@ void VolumeDisplayUnit::updateDisplayExtent()
     int imageIndex = m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
     int zIndex = this->getViewPlane().getZIndex();
     int displayExtent[6];
-    m_volume->getWholeExtent(displayExtent);
+    m_volume->getExtent(displayExtent);
     displayExtent[zIndex * 2] = displayExtent[zIndex * 2 + 1] = imageIndex;
     m_imageActor->SetDisplayExtent(displayExtent);
 }
