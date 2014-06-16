@@ -774,7 +774,7 @@ void VtkDcmtkImageReader::copyDcmtkImageToBuffer(void *buffer, DicomImage &dicom
             memcpy(temporalImageDataBuffer, dcmtkInternalData->getData(), readSize);
 
             vtkImageCast *imageCast = vtkImageCast::New();
-            imageCast->SetInput(temporalImageData);
+            imageCast->SetInputData(temporalImageData);
             imageCast->SetOutputScalarType(this->DataScalarType);
             imageCast->Update();
             memcpy(buffer, imageCast->GetOutput()->GetScalarPointer(), m_frameSize);

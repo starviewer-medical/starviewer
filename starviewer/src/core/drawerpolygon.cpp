@@ -182,7 +182,7 @@ void DrawerPolygon::buildVtkPipeline()
     m_vtkPoints = vtkPoints::New();
     m_vtkPolyData = vtkPolyData::New();
     m_vtkMapper = vtkPolyDataMapper2D::New();
-    m_vtkMapper->SetInput(m_vtkPolyData);
+    m_vtkMapper->SetInputData(m_vtkPolyData);
     m_vtkActor = vtkActor2D::New();
     m_vtkActor->SetMapper(m_vtkMapper);
     m_vtkBackgroundActor = vtkActor2D::New();

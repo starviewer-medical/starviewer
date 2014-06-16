@@ -33,7 +33,7 @@ ThickSlabFilter::~ThickSlabFilter()
 
 void ThickSlabFilter::setInput(vtkImageData *input)
 {
-    m_filter->SetInput(input);
+    m_filter->SetInputData(input);
 }
 
 void ThickSlabFilter::setInput(FilterOutput input)

@@ -37,7 +37,7 @@ WindowLevelFilter::~WindowLevelFilter()
 
 void WindowLevelFilter::setInput(vtkImageData *input)
 {
-    m_filter->SetInput(input);
+    m_filter->SetInputData(input);
 }
 
 void WindowLevelFilter::setInput(FilterOutput input)

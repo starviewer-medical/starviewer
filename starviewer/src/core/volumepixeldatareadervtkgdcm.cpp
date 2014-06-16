@@ -178,7 +178,7 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
         {
             DEBUG_LOG("Mapejem una LUT de 16 bits");
             vtkImageMapToColors16 *imageColorMapper16 = vtkImageMapToColors16::New();
-            imageColorMapper16->SetInput(m_vtkGDCMReader->GetOutput());
+            imageColorMapper16->SetInputConnection(m_vtkGDCMReader->GetOutputPort());
             imageColorMapper16->SetLookupTable(m_vtkGDCMReader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
             DEBUG_LOG(">> Format RGB");
             imageColorMapper16->SetOutputFormatToRGB();
@@ -191,7 +191,7 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
         {
             DEBUG_LOG("Mapejem una LUT de 8 bits");
             vtkImageMapToColors *imageColorMapper = vtkImageMapToColors::New();
-            imageColorMapper->SetInput(m_vtkGDCMReader->GetOutput());
+            imageColorMapper->SetInputConnection(m_vtkGDCMReader->GetOutputPort());
             imageColorMapper->SetLookupTable(m_vtkGDCMReader->GetOutput()->GetPointData()->GetScalars()->GetLookupTable());
             DEBUG_LOG(">> Format RGB");
             imageColorMapper->SetOutputFormatToRGB();
@@ -205,7 +205,7 @@ void VolumePixelDataReaderVTKGDCM::applyColorProcessing()
     {
         DEBUG_LOG("Mapejem espai de color YBR a RGB");
         vtkImageYBRToRGB *ybrToRGBFilter = vtkImageYBRToRGB::New();
-        ybrToRGBFilter->SetInput(m_vtkGDCMReader->GetOutput());
+        ybrToRGBFilter->SetInputConnection(m_vtkGDCMReader->GetOutputPort());
         ybrToRGBFilter->Update();
         imageData = ybrToRGBFilter->GetOutput();
         ybrToRGBFilter->Register(imageData);

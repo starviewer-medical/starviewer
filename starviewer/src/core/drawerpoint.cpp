@@ -74,7 +74,7 @@ vtkProp* DrawerPoint::getAsVtkProp()
         m_pointActor = vtkActor::New();
         m_pointSphere = vtkSphereSource::New();
         m_pointMapper = vtkPolyDataMapper::New();
-        m_pointMapper->SetInput(m_pointSphere->GetOutput());
+        m_pointMapper->SetInputConnection(m_pointSphere->GetOutputPort());
         m_pointActor->SetMapper(m_pointMapper);
     }
 

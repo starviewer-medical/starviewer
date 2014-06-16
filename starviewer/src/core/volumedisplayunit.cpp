@@ -63,7 +63,7 @@ void VolumeDisplayUnit::setVolume(Volume *volume)
 
     resetThickSlab();
 
-    m_imageActor->SetInput(m_imagePipeline->getOutput().getVtkImageData());
+    m_imageActor->GetMapper()->SetInputConnection(m_imagePipeline->getOutput().getVtkAlgorithmOutput());
 }
 
 void VolumeDisplayUnit::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)

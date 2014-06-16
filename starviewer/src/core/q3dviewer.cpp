@@ -489,8 +489,8 @@ void Q3DViewer::setInput(Volume *volume)
 
     setVolumeTransformation();
 
-    m_volumeMapper->SetInput(m_imageData);
-    m_gpuRayCastMapper->SetInput(m_imageData);
+    m_volumeMapper->SetInputData(m_imageData);
+    m_gpuRayCastMapper->SetInputData(m_imageData);
 
     unsigned short *data = reinterpret_cast<unsigned short*>(m_imageData->GetPointData()->GetScalars()->GetVoidPointer(0));
     m_ambientVoxelShader->setData(data, static_cast<unsigned short>(m_range));
@@ -649,7 +649,7 @@ bool Q3DViewer::rescale(Volume *volume)
     DEBUG_LOG(QString("Q3DViewer: volume scalar range: min = %1, max = %2, range = %3, shift = %4").arg(min).arg(max).arg(rangeLength).arg(shift));
 
     vtkImageShiftScale *rescaler = vtkImageShiftScale::New();
-    rescaler->SetInput(volume->getVtkData());
+    rescaler->SetInputData(volume->getVtkData());
     rescaler->SetShift(shift);
 //    rescaler->SetScale(1.0);    // per defecte
     // Ho psoem en unsigned short per tal de mantenir tota la informació
@@ -911,7 +911,7 @@ void Q3DViewer::renderMIP3D()
 
     m_vtkVolume->SetMapper(m_volumeMapper);
     m_volumeMapper->SetVolumeRayCastFunction(mipFunction);
-//     volumeMapper->SetInput(m_imageCaster->GetOutput() );
+//     volumeMapper->SetInputConnection(m_imageCaster->GetOutputPort() );
 //         volumeMapper->SetGradientEstimator(gradientEstimator);
 
 //     m_vtkVolume->SetMapper(volumeMapper);
@@ -926,11 +926,11 @@ void Q3DViewer::renderContouring()
     if (m_renderer->HasViewProp(m_vtkVolume))
     {
         vtkImageShrink3D *shrink = vtkImageShrink3D::New();
-        shrink->SetInput(getMainInput()->getVtkData());
+        shrink->SetInputData(getMainInput()->getVtkData());
         vtkImageGaussianSmooth *smooth = vtkImageGaussianSmooth::New();
         smooth->SetDimensionality(3);
         smooth->SetRadiusFactor(2);
-        smooth->SetInput(shrink->GetOutput());
+        smooth->SetInputConnection(shrink->GetOutputPort());
 
         vtkContourFilter *contour = vtkContourFilter::New();
         contour->SetInputConnection(smooth->GetOutputPort());
@@ -1053,7 +1053,7 @@ void Q3DViewer::renderTexture2D()
     // 128 és el que té millor relació qualitat/preu amb un model determinat a l'ordinador de la uni
 //     volumeMapper->SetMaximumNumberOfPlanes(128);
 
-    volumeMapper->SetInput(m_imageData);
+    volumeMapper->SetInputData(m_imageData);
     m_vtkVolume->SetMapper(volumeMapper);
     volumeMapper->Delete();
 
@@ -1074,7 +1074,7 @@ void Q3DViewer::renderTexture3D()
     m_volumeProperty->SetInterpolationTypeToLinear();
 
     vtkVolumeTextureMapper3D *volumeMapper = vtkVolumeTextureMapper3D::New();
-    volumeMapper->SetInput(m_imageData);
+    volumeMapper->SetInputData(m_imageData);
     m_vtkVolume->SetMapper(volumeMapper);
     volumeMapper->Delete();
 
@@ -1144,7 +1144,7 @@ void Q3DViewer::computeObscurance(ObscuranceQuality quality)
         // Radi 1 per defecte (-> 3³)
         m_volumeMapper->SetGradientEstimator(m_4DLinearRegressionGradientEstimator);
         /// \TODO hauria de funcionar sense això, però no !?!?!
-        m_4DLinearRegressionGradientEstimator->SetInput(m_volumeMapper->GetInput());
+        m_4DLinearRegressionGradientEstimator->SetInputData(m_volumeMapper->GetInput());
     }
 
     Settings settings;

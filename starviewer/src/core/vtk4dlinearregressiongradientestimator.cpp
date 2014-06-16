@@ -379,7 +379,7 @@ static VTK_THREAD_RETURN_TYPE switchOnDataType(void *arg)
     int threadId = threadInfo->ThreadID;
     int threadCount = threadInfo->NumberOfThreads;
     udg::Vtk4DLinearRegressionGradientEstimator *estimator = reinterpret_cast<udg::Vtk4DLinearRegressionGradientEstimator*>(threadInfo->UserData);
-    vtkDataArray *scalars = estimator->Input->GetPointData()->GetScalars();
+    vtkDataArray *scalars = estimator->InputData->GetPointData()->GetScalars();
 
     if (!scalars)
     {

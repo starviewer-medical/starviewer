@@ -36,12 +36,12 @@ DisplayShutterFilter::~DisplayShutterFilter()
 
 void DisplayShutterFilter::setInput(Volume *input)
 {
-    m_imageMask->SetImageInput(input->getVtkData());
+    m_imageMask->SetImageInputData(input->getVtkData());
 }
 
 void DisplayShutterFilter::setInput(vtkImageData *input)
 {
-    m_imageMask->SetImageInput(input);
+    m_imageMask->SetImageInputData(input);
 }
 
 void DisplayShutterFilter::setInput(FilterOutput input)
@@ -51,7 +51,7 @@ void DisplayShutterFilter::setInput(FilterOutput input)
 
 void DisplayShutterFilter::setDisplayShutter(vtkImageData *displayShutter)
 {
-    m_imageMask->SetMaskInput(displayShutter);
+    m_imageMask->SetMaskInputData(displayShutter);
 }
 
 void DisplayShutterFilter::setDisplayShutter(FilterOutput displayShutter)
