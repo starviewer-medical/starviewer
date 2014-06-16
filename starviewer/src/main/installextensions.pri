@@ -4,7 +4,7 @@
 # Genera el fitxer extensions.h
 #
 
-include(../extensions.inc)
+include(../extensions.pri)
 
 extensionsFileName = extensions.h
 

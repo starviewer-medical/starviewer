@@ -3,7 +3,7 @@
 # Subdirectori relatiu al directori principal del projecte: .
 # L'objectiu és un subdirectori del projecte 
 
-include(src/compilationtype.inc)
+include(src/compilationtype.pri)
 
 SUBDIRS += src tests
 TEMPLATE = subdirs

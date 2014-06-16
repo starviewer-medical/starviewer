@@ -4,7 +4,7 @@
 # els .ts respectivament.
 # El i18n_release es crida automàticament sempre que es necessita.
 
-include(extensions.inc)
+include(extensions.pri)
 
 for(directory, PLAYGROUND_EXTENSIONS) {
     exists(extensions/playground/$$directory) {

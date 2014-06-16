@@ -1,4 +1,4 @@
-include($$PWD/src/extensions.inc)
+include($$PWD/src/extensions.pri)
 
 # Funció per afegir una llibreria estàtica com a dependència
 defineReplace(addLibraryDependency) {
@@ -44,11 +44,11 @@ win32{
           -lIphlpapi
 }
 
-include($$PWD/src/dcmtk.inc)
-include($$PWD/src/vtk.inc)
-include($$PWD/src/itk.inc)
-include($$PWD/src/gdcm.inc)
-include($$PWD/src/log4cxx.inc)
-include($$PWD/src/cuda.inc)
-include($$PWD/src/compilationtype.inc)
-include($$PWD/src/threadweaver.inc)
+include($$PWD/src/dcmtk.pri)
+include($$PWD/src/vtk.pri)
+include($$PWD/src/itk.pri)
+include($$PWD/src/gdcm.pri)
+include($$PWD/src/log4cxx.pri)
+include($$PWD/src/cuda.pri)
+include($$PWD/src/compilationtype.pri)
+include($$PWD/src/threadweaver.pri)

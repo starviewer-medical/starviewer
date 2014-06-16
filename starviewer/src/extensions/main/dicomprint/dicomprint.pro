@@ -39,4 +39,4 @@ SOURCES +=  qdicomprintextension.cpp \
 RESOURCES += dicomprint.qrc
 
 EXTENSION_DIR = $$PWD
-include(../../basicconfextensions.inc)
+include(../../basicconfextensions.pri)

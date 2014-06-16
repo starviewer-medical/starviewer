@@ -5,7 +5,7 @@
 
 TEMPLATE = subdirs 
 
-include(compilationtype.inc)
+include(compilationtype.pri)
 
 
 # addSubdirs(subdirs,deps): Adds directories to the project that depend on
@@ -35,7 +35,7 @@ addSubdirs(main, interface extensions thirdparty)
 addSubdirs(starviewersapwrapper)
 
 # En linux 64bits, de moment, breakpad no està suportat, per tant, no compilem res relacionat.
-include(detectlinux64.inc)
+include(detectlinux64.pri)
 !linux_x86_64 {
   addSubdirs(crashreporter, main core)
 }

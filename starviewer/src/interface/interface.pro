@@ -38,9 +38,9 @@ DESTDIR = ./
 
 CONFIG += staticlib
 
-include(../corelibsconfiguration.inc)
-include(../vtk.inc)
-include(../itk.inc)
-include(../dcmtk.inc)
-include(../log4cxx.inc)
-include(../compilationtype.inc)
+include(../corelibsconfiguration.pri)
+include(../vtk.pri)
+include(../itk.pri)
+include(../dcmtk.pri)
+include(../log4cxx.pri)
+include(../compilationtype.pri)

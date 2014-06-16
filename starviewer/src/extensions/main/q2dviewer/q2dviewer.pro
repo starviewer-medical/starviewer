@@ -29,4 +29,4 @@ DEPENDPATH += ../../../inputoutput
 RESOURCES += q2dviewer.qrc
 
 EXTENSION_DIR = $$PWD
-include(../../basicconfextensions.inc)
+include(../../basicconfextensions.pri)

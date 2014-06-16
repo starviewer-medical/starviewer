@@ -5,4 +5,4 @@ SUBDIRS = main \
           contrib \
           playground
 
-include(../compilationtype.inc)
+include(../compilationtype.pri)

@@ -1,4 +1,4 @@
-include(defaultdirectories.inc)
+include(defaultdirectories.pri)
 
 cuda {
     DEFINES += CUDA_AVAILABLE

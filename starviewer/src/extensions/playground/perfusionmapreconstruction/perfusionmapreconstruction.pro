@@ -20,5 +20,5 @@ SOURCES += qperfusionmapreconstructionextension.cpp \
 RESOURCES += perfusionmapreconstruction.qrc
 
 EXTENSION_DIR = $$PWD
-include(../../basicconfextensions.inc)
+include(../../basicconfextensions.pri)
 

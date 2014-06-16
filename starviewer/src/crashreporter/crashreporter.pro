@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-include(../applicationstargetnames.inc)
+include(../applicationstargetnames.pri)
 TARGET = $${TARGET_STARVIEWER_CRASH_REPORTER}
 
 DESTDIR = ../../bin
@@ -59,8 +59,8 @@ win32 {
 
 RESOURCES = crashreporter.qrc ../main/main.qrc
 
-include(../corelibsconfiguration.inc)
-include(../compilationtype.inc)
-include(../log4cxx.inc)
+include(../corelibsconfiguration.pri)
+include(../compilationtype.pri)
+include(../log4cxx.pri)
 
 QT += network
