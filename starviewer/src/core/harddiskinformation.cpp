@@ -89,7 +89,7 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(const QString &path
 #ifdef _WIN32
     ULARGE_INTEGER totalBytes;
 
-    if (GetDiskFreeSpaceExA(path.toAscii(), NULL, &totalBytes, NULL))
+    if (GetDiskFreeSpaceExA(path.toLatin1(), NULL, &totalBytes, NULL))
     {
         total = static_cast<quint64>(totalBytes.QuadPart);
         existsError = false;
@@ -97,7 +97,7 @@ quint64 HardDiskInformation::getTotalBytesPlataformEspecific(const QString &path
 #else
     struct statvfs fsd;
 
-    if (statvfs(path.toAscii(), &fsd) == 0)
+    if (statvfs(path.toLatin1(), &fsd) == 0)
     {
         total = static_cast<quint64>(fsd.f_blocks) * static_cast<quint64>(fsd.f_frsize);
         existsError = false;
@@ -121,7 +121,7 @@ quint64 HardDiskInformation::getFreeBytesPlataformEspecific(const QString &path)
 #ifdef _WIN32
     ULARGE_INTEGER freeBytes;
 
-    if (GetDiskFreeSpaceExA(path.toAscii(), &freeBytes, NULL, NULL))
+    if (GetDiskFreeSpaceExA(path.toLatin1(), &freeBytes, NULL, NULL))
     {
         total = static_cast<quint64>(freeBytes.QuadPart);
         existsError = false;
