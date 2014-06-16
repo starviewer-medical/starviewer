@@ -45,16 +45,6 @@
 namespace udg {
 
 
-// vtkCxxRevisionMacro( vtkVolumeRayCastSingleVoxelShaderCompositeFunction, "$Revision: 1.0 $" );
-template <class VS>
-void vtkVolumeRayCastSingleVoxelShaderCompositeFunction<VS>::CollectRevisions( ostream& sos )
-{
-    vtkOStreamWrapper os( sos );
-    this->Superclass::CollectRevisions( os );
-    os << "vtkVolumeRayCastSingleVoxelShaderCompositeFunction $Revision: 1.0 $\n";
-}
-
-
 // vtkStandardNewMacro( vtkVolumeRayCastSingleVoxelShaderCompositeFunction );
 template <class VS>
 vtkVolumeRayCastSingleVoxelShaderCompositeFunction<VS>* vtkVolumeRayCastSingleVoxelShaderCompositeFunction<VS>::New()
