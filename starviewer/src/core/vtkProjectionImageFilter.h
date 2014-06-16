@@ -64,7 +64,7 @@ class vtkProjectionImageFilter : public vtkThreadedImageAlgorithm
 {
 public:
     static vtkProjectionImageFilter* New();
-    vtkTypeRevisionMacro(vtkProjectionImageFilter,vtkThreadedImageAlgorithm);
+    vtkTypeMacro(vtkProjectionImageFilter,vtkThreadedImageAlgorithm)
     void PrintSelf(ostream& os, vtkIndent indent);
 
 //     typedef TAccumulator<class T> AccumulatorType;
