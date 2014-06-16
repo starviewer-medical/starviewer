@@ -1090,7 +1090,7 @@ void QPerfusionMapReconstructionExtension::paintAIFSignal()
             QVector<double> signal(tend);
 
             int ext[6];
-            inputVolume->getWholeExtent(ext);
+            inputVolume->getExtent(ext);
             if(index[0]>=ext[0] && index[0]<=ext[1] && index[1]>=ext[2] && index[1]<=ext[3])
             {
                 for (t=0;t<tend;t++)

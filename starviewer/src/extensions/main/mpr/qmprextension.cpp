@@ -1043,7 +1043,7 @@ void QMPRExtension::setInput(Volume *input)
     m_axial2DView->setInput(m_volume);
     connect(m_axial2DView, SIGNAL(volumeChanged(Volume*)), SLOT(setInput(Volume*)));
     int extent[6];
-    m_volume->getWholeExtent(extent);
+    m_volume->getExtent(extent);
     m_axialSlider->setMaximum(extent[5]);
 
     double maxThickSlab = sqrt((m_axialSpacing[0] * extent[1]) * (m_axialSpacing[0] * extent[1]) + (m_axialSpacing[1] * extent[3]) *
@@ -1088,7 +1088,7 @@ void QMPRExtension::initOrientation()
     // En la vista coronal, com que pot tenir qualsevol orientacio tindrà que adaptar els seus extents als màxims
 
     int extent[6];
-    m_volume->getWholeExtent(extent);
+    m_volume->getExtent(extent);
     int extentLength[3] = { extent[1] - extent[0] + 1, extent[3] - extent[2] + 1, extent[5] - extent[4] + 1 };
     double origin[3];
     m_volume->getOrigin(origin);
@@ -1474,7 +1474,7 @@ void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *re
         m_volume->getOrigin(origin);
 
         int extent[6];
-        m_volume->getWholeExtent(extent);
+        m_volume->getExtent(extent);
 
         // L'ordre de les dades és xmin, xmax, ymin, ymax, zmin i zmax
         double bounds[] = { origin[0] + spacing[0] * extent[0],

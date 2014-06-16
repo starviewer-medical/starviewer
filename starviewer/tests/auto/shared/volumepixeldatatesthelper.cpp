@@ -11,7 +11,6 @@ VolumePixelData* VolumePixelDataTestHelper::createVolumePixelData(int dimensions
     vtkImageData *vtkImage = vtkImageData::New();
     vtkImage->SetDimensions(dimensions);
     vtkImage->SetExtent(extent);
-    vtkImage->SetWholeExtent(extent);
     vtkImage->SetSpacing(spacing);
     vtkImage->SetOrigin(origin);
     vtkImage->SetScalarTypeToShort();

@@ -488,9 +488,9 @@ void QEdemaSegmentationExtension::viewThresholds()
         m_lesionMaskVolume = new Volume();
         DEBUG_LOG("*");
     }
-    DEBUG_LOG(QString("Extent Vol: %1 %2 %3 %4 %5 %6").arg(m_mainVolume->getWholeExtent()[0]).arg(m_mainVolume->getWholeExtent()[1]).arg(m_mainVolume->getWholeExtent()[2]).arg(m_mainVolume->getWholeExtent()[3]).arg(m_mainVolume->getWholeExtent()[4]).arg(m_mainVolume->getWholeExtent()[5]));
+    DEBUG_LOG(QString("Extent Vol: %1 %2 %3 %4 %5 %6").arg(m_mainVolume->getExtent()[0]).arg(m_mainVolume->getExtent()[1]).arg(m_mainVolume->getExtent()[2]).arg(m_mainVolume->getExtent()[3]).arg(m_mainVolume->getExtent()[4]).arg(m_mainVolume->getExtent()[5]));
 
-    DEBUG_LOG(QString("Extent Vol Lesion: %1 %2 %3 %4 %5 %6").arg(m_lesionMaskVolume->getWholeExtent()[0]).arg(m_lesionMaskVolume->getWholeExtent()[1]).arg(m_lesionMaskVolume->getWholeExtent()[2]).arg(m_lesionMaskVolume->getWholeExtent()[3]).arg(m_lesionMaskVolume->getWholeExtent()[4]).arg(m_lesionMaskVolume->getWholeExtent()[5]));
+    DEBUG_LOG(QString("Extent Vol Lesion: %1 %2 %3 %4 %5 %6").arg(m_lesionMaskVolume->getExtent()[0]).arg(m_lesionMaskVolume->getExtent()[1]).arg(m_lesionMaskVolume->getExtent()[2]).arg(m_lesionMaskVolume->getExtent()[3]).arg(m_lesionMaskVolume->getExtent()[4]).arg(m_lesionMaskVolume->getExtent()[5]));
 
     vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
     imageThreshold->SetInput(m_mainVolume->getVtkData());
@@ -536,8 +536,8 @@ void QEdemaSegmentationExtension::viewLesionOverlay()
         m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlayInput(m_lesionMaskVolume);
         m_2DView->render();
-        DEBUG_LOG(QString("Extent les: %1 %2 %3 %4 %5 %6").arg(m_lesionMaskVolume->getWholeExtent()[0]).arg(m_lesionMaskVolume->getWholeExtent()[1]).arg(m_lesionMaskVolume->getWholeExtent()[2]).arg(m_lesionMaskVolume->getWholeExtent()[3]).arg(m_lesionMaskVolume->getWholeExtent()[4]).arg(m_lesionMaskVolume->getWholeExtent()[5]));
-        DEBUG_LOG(QString("Extent Vol: %1 %2 %3 %4 %5 %6").arg(m_mainVolume->getWholeExtent()[0]).arg(m_mainVolume->getWholeExtent()[1]).arg(m_mainVolume->getWholeExtent()[2]).arg(m_mainVolume->getWholeExtent()[3]).arg(m_mainVolume->getWholeExtent()[4]).arg(m_mainVolume->getWholeExtent()[5]));
+        DEBUG_LOG(QString("Extent les: %1 %2 %3 %4 %5 %6").arg(m_lesionMaskVolume->getExtent()[0]).arg(m_lesionMaskVolume->getExtent()[1]).arg(m_lesionMaskVolume->getExtent()[2]).arg(m_lesionMaskVolume->getExtent()[3]).arg(m_lesionMaskVolume->getExtent()[4]).arg(m_lesionMaskVolume->getExtent()[5]));
+        DEBUG_LOG(QString("Extent Vol: %1 %2 %3 %4 %5 %6").arg(m_mainVolume->getExtent()[0]).arg(m_mainVolume->getExtent()[1]).arg(m_mainVolume->getExtent()[2]).arg(m_mainVolume->getExtent()[3]).arg(m_mainVolume->getExtent()[4]).arg(m_mainVolume->getExtent()[5]));
     }
 }
 

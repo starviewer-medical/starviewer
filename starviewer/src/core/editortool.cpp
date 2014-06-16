@@ -80,7 +80,7 @@ void EditorTool::initialize()
         int ext[6];
         int i, j, k;
         m_volumeCont = 0;
-        m_2DViewer->getOverlayInput()->getWholeExtent(ext);
+        m_2DViewer->getOverlayInput()->getExtent(ext);
 
         VolumePixelDataIterator it = m_2DViewer->getOverlayInput()->getIterator();
         for (i = ext[0]; i <= ext[1]; i++)
@@ -408,7 +408,7 @@ void EditorTool::eraseSliceMask()
     int i, j;
     int index[3];
     int ext[6];
-    m_2DViewer->getMainInput()->getWholeExtent(ext);
+    m_2DViewer->getMainInput()->getExtent(ext);
     index[2] = m_2DViewer->getCurrentSlice();
     for (i = ext[0]; i <= ext[1]; i++)
     {
@@ -433,7 +433,7 @@ void EditorTool::eraseRegionMask()
     double spacing[3];
     int index[3];
     int ext[6];
-    m_2DViewer->getMainInput()->getWholeExtent(ext);
+    m_2DViewer->getMainInput()->getExtent(ext);
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getMainInput()->getSpacing(spacing);
     m_2DViewer->getMainInput()->getOrigin(origin);
@@ -446,7 +446,7 @@ void EditorTool::eraseRegionMask()
 void EditorTool::eraseRegionMaskRecursive(int a, int b, int c)
 {
     int ext[6];
-    m_2DViewer->getMainInput()->getWholeExtent(ext);
+    m_2DViewer->getMainInput()->getExtent(ext);
     if ((a >= ext[0]) && (a <= ext[1]) && (b >= ext[2]) && (b <= ext[3]) && (c >= ext[4]) && (c <= ext[5]))
     {
         VolumePixelDataIterator it = m_2DViewer->getOverlayInput()->getIterator(a, b, c);

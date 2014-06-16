@@ -111,14 +111,14 @@ double* Volume::getSpacing()
     return getVtkData()->GetSpacing();
 }
 
-void Volume::getWholeExtent(int extent[6])
+void Volume::getExtent(int extent[6])
 {
-    getVtkData()->GetWholeExtent(extent);
+    getVtkData()->GetExtent(extent);
 }
 
-int* Volume::getWholeExtent()
+int* Volume::getExtent()
 {
-    return getVtkData()->GetWholeExtent();
+    return getVtkData()->GetExtent();
 }
 
 int* Volume::getDimensions()
@@ -340,7 +340,7 @@ QString Volume::toString(bool verbose)
         this->getDimensions(dims);
         this->getOrigin(origin);
         this->getSpacing(spacing);
-        this->getWholeExtent(extent);
+        this->getExtent(extent);
         this->getVtkData()->GetBounds(bounds);
 
         result += QString("Dimensions: %1, %2, %3").arg(dims[0]).arg(dims[1]).arg(dims[2]);
@@ -594,7 +594,7 @@ void Volume::getSliceRange(int &min, int &max, const OrthogonalPlane &plane)
     }
     else
     {
-        int *extent = getWholeExtent();
+        int *extent = getExtent();
         min = extent[plane.getZIndex() * 2];
         max = extent[plane.getZIndex() * 2 + 1];
     }

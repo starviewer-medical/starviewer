@@ -167,7 +167,7 @@ void MagicROITool::setTextPosition(DrawerText *text)
 void MagicROITool::computeMaskBounds()
 {
     int extent[6];
-    m_2DViewer->getInput(m_inputIndex)->getWholeExtent(extent);
+    m_2DViewer->getInput(m_inputIndex)->getExtent(extent);
 
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);

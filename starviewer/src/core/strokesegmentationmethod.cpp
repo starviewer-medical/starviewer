@@ -207,8 +207,8 @@ double StrokeSegmentationMethod::applyMethodVTK()
 
 void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int a, int b, int c, int prof)
 {
-    if ((a >= m_Volume->getWholeExtent()[0]) && (a <= m_Volume->getWholeExtent()[1]) && (b >= m_Volume->getWholeExtent()[2]) && (b <=
-        m_Volume->getWholeExtent()[3]) && (c >= m_Volume->getWholeExtent()[4]) && (c <= m_Volume->getWholeExtent()[5]))
+    if ((a >= m_Volume->getExtent()[0]) && (a <= m_Volume->getExtent()[1]) && (b >= m_Volume->getExtent()[2]) && (b <=
+        m_Volume->getExtent()[3]) && (c >= m_Volume->getExtent()[4]) && (c <= m_Volume->getExtent()[5]))
     {
         double maskValue = imMask->GetScalarComponentAsDouble(a, b, c, 0);
         if (maskValue == m_insideMaskValue - 100)
