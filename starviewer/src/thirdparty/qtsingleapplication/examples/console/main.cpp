@@ -38,68 +38,52 @@
 **
 ****************************************************************************/
 
-#ifndef QTSINGLEAPPLICATION_H
-#define QTSINGLEAPPLICATION_H
 
-#include <QApplication>
+#include "qtsinglecoreapplication.h"
+#include <QDebug>
 
-class QtLocalPeer;
 
-#if defined(Q_OS_WIN)
-#  if !defined(QT_QTSINGLEAPPLICATION_EXPORT) && !defined(QT_QTSINGLEAPPLICATION_IMPORT)
-#    define QT_QTSINGLEAPPLICATION_EXPORT
-#  elif defined(QT_QTSINGLEAPPLICATION_IMPORT)
-#    if defined(QT_QTSINGLEAPPLICATION_EXPORT)
-#      undef QT_QTSINGLEAPPLICATION_EXPORT
-#    endif
-#    define QT_QTSINGLEAPPLICATION_EXPORT __declspec(dllimport)
-#  elif defined(QT_QTSINGLEAPPLICATION_EXPORT)
-#    undef QT_QTSINGLEAPPLICATION_EXPORT
-#    define QT_QTSINGLEAPPLICATION_EXPORT __declspec(dllexport)
-#  endif
-#else
-#  define QT_QTSINGLEAPPLICATION_EXPORT
-#endif
+void report(const QString& msg)
+{
+    qDebug("[%i] %s", (int)QCoreApplication::applicationPid(), qPrintable(msg));
+}
 
-class QT_QTSINGLEAPPLICATION_EXPORT QtSingleApplication : public QApplication
+class MainClass : public QObject
 {
     Q_OBJECT
-
 public:
-    QtSingleApplication(int &argc, char **argv, bool GUIenabled = true);
-    QtSingleApplication(const QString &id, int &argc, char **argv);
-#if QT_VERSION < 0x050000
-    QtSingleApplication(int &argc, char **argv, Type type);
-#  if defined(Q_WS_X11)
-    QtSingleApplication(Display* dpy, Qt::HANDLE visual = 0, Qt::HANDLE colormap = 0);
-    QtSingleApplication(Display *dpy, int &argc, char **argv, Qt::HANDLE visual = 0, Qt::HANDLE cmap= 0);
-    QtSingleApplication(Display* dpy, const QString &appId, int argc, char **argv, Qt::HANDLE visual = 0, Qt::HANDLE colormap = 0);
-#  endif // Q_WS_X11
-#endif // QT_VERSION < 0x050000
+    MainClass()
+        : QObject()
+        {}
 
-    bool isRunning();
-    QString id() const;
-
-    void setActivationWindow(QWidget* aw, bool activateOnMessage = true);
-    QWidget* activationWindow() const;
-
-    // Obsolete:
-    void initialize(bool dummy = true)
-        { isRunning(); Q_UNUSED(dummy) }
-
-public Q_SLOTS:
-    bool sendMessage(const QString &message, int timeout = 5000);
-    void activateWindow();
-
-
-Q_SIGNALS:
-    void messageReceived(const QString &message);
-
-
-private:
-    void sysInit(const QString &appId = QString());
-    QtLocalPeer *peer;
-    QWidget *actWin;
+public slots:
+    void handleMessage(const QString& message)
+        {
+            report( "Message received: \"" + message + "\"");
+        }
 };
 
-#endif // QTSINGLEAPPLICATION_H
+int main(int argc, char **argv)
+{
+    report("Starting up");
+
+    QtSingleCoreApplication app(argc, argv);
+
+    if (app.isRunning()) {
+        QString msg(QString("Hi master, I am %1.").arg(QCoreApplication::applicationPid()));
+        bool sentok = app.sendMessage(msg, 2000);
+        QString rep("Another instance is running, so I will exit.");
+        rep += sentok ? " Message sent ok." : " Message sending failed; the other instance may be frozen.";
+        report(rep);
+        return 0;
+    } else {
+        report("No other instance is running; so I will.");
+        MainClass mainObj;
+        QObject::connect(&app, SIGNAL(messageReceived(const QString&)),
+                         &mainObj, SLOT(handleMessage(const QString&)));
+        return app.exec();
+    }
+}
+
+
+#include "main.moc"

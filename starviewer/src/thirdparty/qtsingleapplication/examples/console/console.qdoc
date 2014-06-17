@@ -38,40 +38,28 @@
 **
 ****************************************************************************/
 
-#ifndef QTLOCALPEER_H
-#define QTLOCALPEER_H
+/*! \page qtsinglecoreapplication-example-console.html
+    \title A non-GUI example
 
-#include <QLocalServer>
-#include <QLocalSocket>
-#include <QDir>
+    This example shows how to use the single-application functionality
+    in a console application. It does not require the \c QtGui library
+    at all.
 
-#include "qtlockedfile.h"
+    The only differences from the GUI application usage demonstrated
+    in the other examples are:
 
-class QtLocalPeer : public QObject
-{
-    Q_OBJECT
+    1) The \c.pro file should include \c qtsinglecoreapplication.pri
+       instead of \c qtsingleapplication.pri
 
-public:
-    QtLocalPeer(QObject *parent = 0, const QString &appId = QString());
-    bool isClient();
-    bool sendMessage(const QString &message, int timeout);
-    QString applicationId() const
-        { return id; }
+    2) The class name is \c QtSingleCoreApplication instead of \c
+       QtSingleApplication.
 
-Q_SIGNALS:
-    void messageReceived(const QString &message);
+    3) No calls are made regarding window activation, for obvious reasons.
 
-protected Q_SLOTS:
-    void receiveConnection();
+    console.pro:
+    \quotefile console/console.pro
 
-protected:
-    QString id;
-    QString socketName;
-    QLocalServer* server;
-    QtLP_Private::QtLockedFile lockFile;
+    main.cpp:
+    \quotefile console/main.cpp
 
-private:
-    static const char* ack;
-};
-
-#endif // QTLOCALPEER_H
+*/
