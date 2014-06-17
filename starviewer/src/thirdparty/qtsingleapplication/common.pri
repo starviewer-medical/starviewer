@@ -1,6 +1,8 @@
+include(../../compilationtype.inc)
 exists(config.pri):infile(config.pri, SOLUTIONS_LIBRARY, yes): CONFIG += qtsingleapplication-uselib
-TEMPLATE += fakelib
+TEMPLATE_OLD = $$TEMPLATE
+TEMPLATE = fakelib
 QTSINGLEAPPLICATION_LIBNAME = $$qtLibraryTarget(QtSolutions_SingleApplication-head)
-TEMPLATE -= fakelib
-QTSINGLEAPPLICATION_LIBDIR = $$PWD/lib
+TEMPLATE = $$TEMPLATE_OLD
+QTSINGLEAPPLICATION_LIBDIR = $$PWD/../../../bin
 unix:qtsingleapplication-uselib:!qtsingleapplication-buildlib:QMAKE_RPATHDIR += $$QTSINGLEAPPLICATION_LIBDIR
