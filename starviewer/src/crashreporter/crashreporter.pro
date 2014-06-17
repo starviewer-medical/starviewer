@@ -63,4 +63,4 @@ include(../corelibsconfiguration.pri)
 include(../compilationtype.pri)
 include(../log4cxx.pri)
 
-QT += network
+QT += network widgets

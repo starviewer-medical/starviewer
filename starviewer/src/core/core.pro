@@ -809,4 +809,6 @@ QT += xml \
     script \
     xmlpatterns \
     opengl \
-    declarative
+    declarative \
+    concurrent \
+    webkitwidgets
