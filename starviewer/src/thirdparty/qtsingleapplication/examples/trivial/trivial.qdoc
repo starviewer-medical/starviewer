@@ -38,40 +38,39 @@
 **
 ****************************************************************************/
 
-#ifndef QTLOCALPEER_H
-#define QTLOCALPEER_H
+/*! \page qtsingleapplication-example-trivial.html
+    \title A Trivial Example
 
-#include <QLocalServer>
-#include <QLocalSocket>
-#include <QDir>
+    The application in this example has a log-view that displays
+    messages sent by further instances of the same application.
 
-#include "qtlockedfile.h"
+    The example demonstrates the use of the QtSingleApplication
+    class to detect and communicate with a running instance of
+    the application using the sendMessage() API. The messageReceived()
+    signal is used to display received messages in a QTextEdit log.
 
-class QtLocalPeer : public QObject
-{
-    Q_OBJECT
+    \quotefromfile trivial/main.cpp
+    \printuntil instance
+    The example has only the \c main entry point function.
+    A QtSingleApplication object is created immediately.
 
-public:
-    QtLocalPeer(QObject *parent = 0, const QString &appId = QString());
-    bool isClient();
-    bool sendMessage(const QString &message, int timeout);
-    QString applicationId() const
-        { return id; }
+    \printuntil return 
+    If another instance of this application is already running,
+    sendMessage() will succeed, and this instance just exits
+    immediately.
 
-Q_SIGNALS:
-    void messageReceived(const QString &message);
+    \printuntil show()
+    Otherwise the instance continues as normal and creates the
+    user interface.
 
-protected Q_SLOTS:
-    void receiveConnection();
+    \printuntil return instance.exec();
+    The \c logview object is also set as the application's activation
+    window. Every time a message is received, the window will be raised
+    and activated automatically.
 
-protected:
-    QString id;
-    QString socketName;
-    QLocalServer* server;
-    QtLP_Private::QtLockedFile lockFile;
+    The messageReceived() signal is also connected to the QTextEdit's
+    append() slot. Every message received from further instances of
+    this application will be displayed in the log.
 
-private:
-    static const char* ack;
-};
-
-#endif // QTLOCALPEER_H
+    Finally the event loop is entered.
+*/

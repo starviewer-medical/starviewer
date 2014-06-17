@@ -166,7 +166,7 @@ If you have installed the documentation into Qt Assistant, and want to uninstall
 
 1.  In Assistant, open the Edit->Preferences dialog and choose the
     Documentation tab. In the list of Registered Documentation, select
-    the item com.trolltech.qtsolutions.some-package_version, and click
+    the item com.nokia.qtsolutions.some-package_version, and click
     the Remove button.
 
 For Qt versions prior to 4.4, do instead the following:
