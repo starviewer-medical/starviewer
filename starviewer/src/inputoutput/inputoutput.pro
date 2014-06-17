@@ -190,4 +190,5 @@ include(../log4cxx.pri)
 include(../compilationtype.pri)
 include(../threadweaver.pri)
 QT += xml \
-    network
+    network \
+    widgets

@@ -44,3 +44,5 @@ include(../itk.pri)
 include(../dcmtk.pri)
 include(../log4cxx.pri)
 include(../compilationtype.pri)
+
+QT += widgets

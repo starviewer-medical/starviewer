@@ -93,4 +93,4 @@ cuda {
 include(../../basicconfextensions.pri)
 include(../../../cuda.pri)
 include(../../../thirdparty/glew/glew.pri)
-QT += opengl
+QT += opengl concurrent
