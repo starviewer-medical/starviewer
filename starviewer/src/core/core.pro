@@ -395,7 +395,6 @@ HEADERS += extensionfactory.h \
     pairedvolumedisplayunithandler.h \
     petctvolumedisplayunithandler.h \
     petvolumedisplayunithandler.h \
-    vtkdepthdisabledopenglimageactor.h \
     transferfunctionmodel.h \
     transferfunctionmodelfiller.h \
     defaulttransferfunctionselector.h \
@@ -758,7 +757,6 @@ SOURCES += extensionmediator.cpp \
     pairedvolumedisplayunithandler.cpp \
     petctvolumedisplayunithandler.cpp \
     petvolumedisplayunithandler.cpp \
-    vtkdepthdisabledopenglimageactor.cpp \
     transferfunctionmodel.cpp \
     transferfunctionmodelfiller.cpp \
     defaulttransferfunctionselector.cpp \
