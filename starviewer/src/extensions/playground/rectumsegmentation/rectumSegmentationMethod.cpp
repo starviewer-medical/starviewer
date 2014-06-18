@@ -336,7 +336,6 @@ double rectumSegmentationMethod::applyMethod()
     //std::cout<<"Size: "<<sizeOut<<std::endl;
 
     m_Mask->setData(maskAux);
-    m_Mask->getVtkData()->Update();
 
     if(m_cont!=0 && (sliceNumber>0)){
         this->applyMethodNextSlice(sliceNumber-1, -1);
@@ -522,7 +521,6 @@ void rectumSegmentationMethod::applyMethodNextSlice(unsigned int slice, int step
 
     //std::cout<<"Volume: "<<m_volume<<" ("<<m_cont<<" voxels), (increment de "<<m_cont-contant<<" voxels)"<<std::endl;
 
-    m_Mask->getVtkData()->Update();
     //std::cout<<"End for step "<<step<<" in slice "<<slice<<std::endl;
     unsigned int sliceWithStep = slice + step;
     if (sliceWithStep < m_Mask->getItkData()->GetLargestPossibleRegion().GetSize()[2] && contant != m_cont)
@@ -607,7 +605,6 @@ void rectumSegmentationMethod::applyFilter(Volume* output)
     output->setImages(m_Volume->getImages());
 
     output->setData(outcaster->GetOutput());
-    output->getVtkData()->Update();
 
     return;
 }

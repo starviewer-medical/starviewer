@@ -586,11 +586,7 @@ void test_ImageOverlay::getAsDrawerBitmap_ReturnsExpectedValues()
     }
 
     vtkImageActor *resultingActor = vtkImageActor::SafeDownCast(resultingBitmap->getAsVtkProp());
-    resultingActor->GetInput()->Update();
-
     vtkImageActor *expectedActor = vtkImageActor::SafeDownCast(expectedDrawerBitmap->getAsVtkProp());
-    expectedActor->GetInput()->Update();
-    
     unsigned char *resultingDataPointer = reinterpret_cast<unsigned char*>(resultingActor->GetInput()->GetScalarPointer());
     unsigned char *expectedDataPointer = reinterpret_cast<unsigned char*>(expectedActor->GetInput()->GetScalarPointer());
     

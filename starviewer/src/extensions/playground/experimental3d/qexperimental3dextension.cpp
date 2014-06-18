@@ -5811,7 +5811,6 @@ void QExperimental3DExtension::createClusterizedVolume()
     }
 
     image->Modified();
-    image->Update();
 
     m_clusterizedVolume = new Experimental3DVolume(image);
 
@@ -6355,7 +6354,6 @@ void QExperimental3DExtension::create2DClusterizedVolume()
     }
 
     image->Modified();
-    image->Update();
 
     m_clusterizedVolume = new Experimental3DVolume(image);
     m_clusterizedVolume->setAlternativeImage(m_volume->getImage());
@@ -6562,7 +6560,6 @@ void QExperimental3DExtension::importanceClustering()
     }
 
     image->Modified();
-    image->Update();
 
     m_clusterizedVolume = new Experimental3DVolume(image);
     m_clusterizedVolume->setAlternativeImage(m_volume->getImage());
