@@ -188,8 +188,7 @@ void TransDifferenceTool::initializeDifferenceImage()
     {
         // Allocating memory for the output image
         vtkImageData *imdif = vtkImageData::New();
-        //imdif->CopyInformation(m_mainVolume->getVtkData());
-        imdif->CopyTypeSpecificInformation(mainVolume->getVtkData());
+        imdif->DeepCopy(mainVolume->getVtkData());
         imdif->SetExtent(ext);
 
         // Converting the VTK data to volume
