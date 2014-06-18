@@ -79,8 +79,6 @@ void VolumeReslicer::reslice(bool saveMhd, bool doClip, int maxRange)
     Q_ASSERT(m_input);
     Q_ASSERT(m_resliceAxes);
 
-    m_input->UpdateInformation();
-
     // Reslice the image in the desired orientation
     vtkImageReslice *reslice = vtkImageReslice::New();
     reslice->SetInputData(m_input);

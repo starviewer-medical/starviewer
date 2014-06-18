@@ -167,7 +167,6 @@ double StrokeSegmentationMethod::applyMethod()
 
     //m_Mask->setData(outcaster->GetOutput());
     m_Mask->setData(volumeCalc->GetOutput());
-    m_Mask->getVtkData()->Update();
     // m_Mask  = outcaster->GetOutput();
 
     return m_volume;
@@ -485,7 +484,6 @@ void StrokeSegmentationMethod::applyFilter(Volume *output)
     output->setImages(m_Volume->getImages());
 
     output->setData(outcaster->GetOutput());
-    output->getVtkData()->Update();
 
     return;
 }
@@ -978,7 +976,6 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
         ++hematomaIt;
     }
 
-    lesionMask->getVtkData()->Update();
     std::cout << "Lesion: " << lesionMask->getItkData()->GetOrigin() << " ," << lesionMask->getItkData()->GetSpacing() << " ," <<
                  lesionMask->getItkData()->GetBufferedRegion().GetSize() << std::endl;
     std::cout << "Volume: " << m_Volume->getItkData()->GetOrigin() << " ," << m_Volume->getItkData()->GetSpacing() << " ," <<
@@ -1241,8 +1238,6 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
         ++hematomaIt;
     }
 
-    lesionMask->getVtkData()->Update();
-
     std::cout << "End method!!" << std::endl;
 
     double spacing[3];
@@ -1341,7 +1336,6 @@ double StrokeSegmentationMethod::applyVentriclesMethod()
     m_cont = volumeCalc->GetVolumeCount();
 
     m_Mask->setData(volumeCalc->GetOutput());
-    m_Mask->getVtkData()->Update();
 
     return m_volume;
 }
@@ -1569,7 +1563,6 @@ int StrokeSegmentationMethod::applyMethod3()
     outcaster->Update();
     DEBUG_LOG("Mask Set!!");
     m_Mask->setData(outcaster->GetOutput());
-    m_Mask->getVtkData()->Update();
     // m_Mask  = outcaster->GetOutput();
 
     return this->computeSizeMask();
