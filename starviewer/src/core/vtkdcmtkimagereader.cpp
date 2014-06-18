@@ -651,7 +651,7 @@ bool VtkDcmtkImageReader::loadData(int updateExtent[6])
 {
     vtkImageData *output = this->GetOutput(0);
     output->SetExtent(updateExtent);
-    output->AllocateScalars();
+    output->AllocateScalars(this->GetOutputInformation(0));
     output->GetPointData()->GetScalars()->SetName("DCMTKImage");
 
     void *scalarPointer = output->GetScalarPointerForExtent(updateExtent);
@@ -766,8 +766,7 @@ void VtkDcmtkImageReader::copyDcmtkImageToBuffer(void *buffer, DicomImage &dicom
             this->GetDataExtent(frameExtent);
             frameExtent[4] = frameExtent[5] = 0;
             temporalImageData->SetExtent(frameExtent);
-            temporalImageData->SetScalarType(dcmtkInternalDataScalarType);
-            temporalImageData->AllocateScalars();
+            temporalImageData->AllocateScalars(dcmtkInternalDataScalarType, 1);
             void *temporalImageDataBuffer = temporalImageData->GetScalarPointer();
 
             size_t readSize = dcmtkInternalData->getCount() * voxelSize(dcmtkInternalDataScalarType, 1);

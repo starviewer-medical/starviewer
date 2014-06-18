@@ -39,11 +39,6 @@ public:
 
 private:
 
-    /// Crida el mètode SetScalarTypeTo*() d'imageData amb el tipus adequat.
-    template <class T> static void setImageDataScalarType(vtkImageData *imageData);
-
-private:
-
     double m_origin[3];
     double m_spacing[3];
 

@@ -13,8 +13,7 @@ VolumePixelData* VolumePixelDataTestHelper::createVolumePixelData(int dimensions
     vtkImage->SetExtent(extent);
     vtkImage->SetSpacing(spacing);
     vtkImage->SetOrigin(origin);
-    vtkImage->SetScalarTypeToShort();
-    vtkImage->AllocateScalars();
+    vtkImage->AllocateScalars(VTK_SHORT, 1);
 
     short *vtkPointer = static_cast<short*>(vtkImage->GetScalarPointer());
     int size = vtkImage->GetNumberOfPoints();

@@ -204,9 +204,7 @@ void test_DrawerBitmap::getAsVtkProp_ShouldReturnPropLikeExpected_data()
     imageData->SetOrigin(origin);
     imageData->SetSpacing(spacing);
     imageData->SetExtent(0, width - 1, 0, height - 1, 0, 0);
-    imageData->SetScalarTypeToUnsignedChar();
-    imageData->SetNumberOfScalarComponents(1);
-    imageData->AllocateScalars();
+    imageData->AllocateScalars(VTK_UNSIGNED_CHAR, 1);
     memcpy(imageData->GetScalarPointer(), data, width * height * sizeof(unsigned char));
 
     vtkLookupTable *lookupTable = vtkLookupTable::New();

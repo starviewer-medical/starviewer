@@ -56,8 +56,7 @@ void ItkAndVtkImageTestHelper::createItkAndVtkImages(int dimensions[3], int star
     vtkImage->SetExtent(extent);
     vtkImage->SetSpacing(spacing);
     vtkImage->SetOrigin(origin);
-    vtkImage->SetScalarTypeToShort();
-    vtkImage->AllocateScalars();
+    vtkImage->AllocateScalars(VTK_SHORT, 1);
 
     itk::ImageRegionIterator<VolumePixelData::ItkImageType> itkIterator(itkImage, itkImage->GetLargestPossibleRegion());
     itkIterator.GoToBegin();

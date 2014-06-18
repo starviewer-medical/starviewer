@@ -18,6 +18,67 @@
 
 #include <vtkImageData.h>
 
+namespace {
+
+template <class T> int getDataType();
+
+template <> int getDataType<char>()
+{
+    return VTK_CHAR;
+}
+
+template <> int getDataType<signed char>()
+{
+    return VTK_SIGNED_CHAR;
+}
+
+template <> int getDataType<unsigned char>()
+{
+    return VTK_UNSIGNED_CHAR;
+}
+
+template <> int getDataType<short>()
+{
+    return VTK_SHORT;
+}
+
+template <> int getDataType<unsigned short>()
+{
+    return VTK_UNSIGNED_SHORT;
+}
+
+template <> int getDataType<int>()
+{
+    return VTK_INT;
+}
+
+template <> int getDataType<unsigned int>()
+{
+    return VTK_UNSIGNED_INT;
+}
+
+template <> int getDataType<long>()
+{
+    return VTK_LONG;
+}
+
+template <> int getDataType<unsigned long>()
+{
+    return VTK_UNSIGNED_LONG;
+}
+
+template <> int getDataType<float>()
+{
+    return VTK_FLOAT;
+}
+
+template <> int getDataType<double>()
+{
+    return VTK_DOUBLE;
+}
+
+}
+
 namespace udg {
 
 VtkImageDataCreator::VtkImageDataCreator()
@@ -55,66 +116,9 @@ template <class T> vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkI
     imageData->SetOrigin(m_origin);
     imageData->SetSpacing(m_spacing);
     imageData->SetExtent(0, width - 1, 0, height - 1, 0, depth - 1);
-    setImageDataScalarType<T>(imageData);
-    imageData->SetNumberOfScalarComponents(1);
-    imageData->AllocateScalars();
+    imageData->AllocateScalars(getDataType<T>(), 1);
     memcpy(imageData->GetScalarPointer(), data, width * height * depth * sizeof(T));
     return imageData;
-}
-
-template <> void VtkImageDataCreator::setImageDataScalarType<char>(vtkImageData *imageData)
-{
-    imageData->SetScalarTypeToChar();
-}
-
-template <> void VtkImageDataCreator::setImageDataScalarType<signed char>(vtkImageData *imageData)
-{
-    imageData->SetScalarTypeToSignedChar();
-}
-
-template <> void VtkImageDataCreator::setImageDataScalarType<unsigned char>(vtkImageData *imageData)
-{
-    imageData->SetScalarTypeToUnsignedChar();
-}
-
-template <> void VtkImageDataCreator::setImageDataScalarType<short>(vtkImageData *imageData)
-{
-    imageData->SetScalarTypeToShort();
-}
-
-template <> void VtkImageDataCreator::setImageDataScalarType<unsigned short>(vtkImageData *imageData)
-{
-    imageData->SetScalarTypeToUnsignedShort();
-}
-
-template <> void VtkImageDataCreator::setImageDataScalarType<int>(vtkImageData *imageData)
-{
-    imageData->SetScalarTypeToInt();
-}
-
-template <> void VtkImageDataCreator::setImageDataScalarType<unsigned int>(vtkImageData *imageData)
-{
-    imageData->SetScalarTypeToUnsignedInt();
-}
-
-template <> void VtkImageDataCreator::setImageDataScalarType<long>(vtkImageData *imageData)
-{
-    imageData->SetScalarTypeToLong();
-}
-
-template <> void VtkImageDataCreator::setImageDataScalarType<unsigned long>(vtkImageData *imageData)
-{
-    imageData->SetScalarTypeToUnsignedLong();
-}
-
-template <> void VtkImageDataCreator::setImageDataScalarType<float>(vtkImageData *imageData)
-{
-    imageData->SetScalarTypeToFloat();
-}
-
-template <> void VtkImageDataCreator::setImageDataScalarType<double>(vtkImageData *imageData)
-{
-    imageData->SetScalarTypeToDouble();
 }
 
 // Fem que s'instanciï el mètode per tots aquests tipus. Això evita errors d'undefined reference o unresolved external symbol.

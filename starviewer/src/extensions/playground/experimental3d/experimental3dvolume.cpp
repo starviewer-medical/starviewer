@@ -464,7 +464,6 @@ QVector<float> Experimental3DVolume::computeVomiGradient(const QVector<float> &v
     vomiArray->SetArray(const_cast<float*>(vomi.data()), m_dataSize, 1);
     vtkImageData *vomiData = vtkImageData::New();
     vomiData->CopyStructure(m_image);
-    vomiData->SetScalarTypeToFloat();
     vtkPointData *vomiPointData = vomiData->GetPointData();
     vomiPointData->SetScalars(vomiArray);
 
