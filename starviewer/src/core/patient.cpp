@@ -136,7 +136,7 @@ qlonglong Patient::getDatabaseID()
 
 void Patient::setBirthDate(int day, int month, int year)
 {
-    m_birthDate.setYMD(year, month, day);
+    m_birthDate.setDate(year, month, day);
 }
 
 void Patient::setBirthDate(const QString &date)
