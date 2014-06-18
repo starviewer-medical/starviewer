@@ -44,13 +44,8 @@ public:
     void setCINEDimension(int dimension);
 
     QAction* getPlayAction() const;
-    QAction* getRecordAction() const;
     QAction* getLoopAction() const;
     QAction* getBoomerangAction() const;
-
-    /// Li donem el path absolut de l'arxiu on es gravarà el vídeo
-    /// @param filename Path absolut, amb o sense extensió
-    void setRecordFilename(const QString filename);
 
 signals:
     void playing();
@@ -63,9 +58,6 @@ public slots:
 
     /// Pausa/para la reproducció
     void pause();
-
-    /// Grava en vídeo la seqüència corresponent
-    void record();
 
     /// Li donem la velocitat de reproducció expresada en el nombre d'imatges que volem veure per segon
     void setVelocity(int imagesPerSecond);
@@ -122,12 +114,8 @@ private:
     bool m_boomerangEnabled;
 
     QAction *m_playAction;
-    QAction *m_recordAction;
     QAction *m_loopAction;
     QAction *m_boomerangAction;
-
-    /// Nom de l'arxiu on es guarda la "peli"
-    QString m_recordFilename;
 
 };
 

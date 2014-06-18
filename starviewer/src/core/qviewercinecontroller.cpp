@@ -31,7 +31,7 @@ namespace udg {
 
 QViewerCINEController::QViewerCINEController(QObject *parent)
 : QObject(parent), m_firstSliceInterval(0), m_lastSliceInterval(0), m_nextStep(1), m_velocity(1), m_2DViewer(0), m_playing(false),
-  m_cineDimension(TemporalDimension), m_loopEnabled(false), m_boomerangEnabled(false), m_recordFilename(QDir::homePath() + "/cineMovie")
+  m_cineDimension(TemporalDimension), m_loopEnabled(false), m_boomerangEnabled(false)
 {
     m_timer = new QBasicTimer();
 
@@ -40,10 +40,6 @@ QViewerCINEController::QViewerCINEController(QObject *parent)
     m_playAction->setIcon(QIcon(":/images/play.png"));
     m_playAction->setText(tr("Play"));
     connect(m_playAction, SIGNAL(triggered()), SLOT(play()));
-
-    m_recordAction = new QAction(this);
-    m_recordAction->setIcon(QIcon(":/images/record.png"));
-    connect(m_recordAction, SIGNAL(triggered()), SLOT(record()));
 
     m_boomerangAction = new QAction(this);
     m_boomerangAction->setIcon(QIcon(":/images/boomerang.png"));
@@ -98,11 +94,6 @@ QAction *QViewerCINEController::getPlayAction() const
     return m_playAction;
 }
 
-QAction *QViewerCINEController::getRecordAction() const
-{
-    return m_recordAction;
-}
-
 QAction *QViewerCINEController::getLoopAction() const
 {
     return m_loopAction;
@@ -111,11 +102,6 @@ QAction *QViewerCINEController::getLoopAction() const
 QAction *QViewerCINEController::getBoomerangAction() const
 {
     return m_boomerangAction;
-}
-
-void QViewerCINEController::setRecordFilename(const QString filename)
-{
-    m_recordFilename = filename;
 }
 
 void QViewerCINEController::play()
@@ -141,33 +127,6 @@ void QViewerCINEController::pause()
     m_playAction->setIcon(QIcon(":/images/play.png"));
     m_playAction->setText(tr("Play"));
     emit paused();
-}
-
-void QViewerCINEController::record()
-{
-    // Ens curem en salut
-    if (!m_2DViewer)
-    {
-        return;
-    }
-    if (!m_2DViewer->hasInput())
-    {
-        return;
-    }
-
-    int phases = m_2DViewer->getNumberOfPhases();
-    int currentSlice = m_2DViewer->getCurrentSlice();
-
-    // Guardar els fotogrames
-    for (int i = 0; i < phases; i++)
-    {
-        m_2DViewer->setPhase(i);
-        m_2DViewer->grabCurrentView();
-    }
-    m_2DViewer->setSlice(currentSlice);
-
-    // Fer la gravació
-    m_2DViewer->record(m_recordFilename, QViewer::MPEG2);
 }
 
 void QViewerCINEController::setVelocity(int imagesPerSecond)

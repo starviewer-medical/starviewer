@@ -49,10 +49,6 @@
 #include <vtkEventQtSlotConnect.h>
 // Necessari pel zoom
 #include <vtkCamera.h>
-// Per grabar el vídeo
-#ifndef Q_OS_LINUX
-#include <vtkMPEG2Writer.h>
-#endif
 
 namespace udg {
 
@@ -383,63 +379,6 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
     {
         return false;
     }
-}
-
-bool QViewer::record(const QString &baseName, RecordFileFormatType format)
-{
-    // TODO Restaurar el poder grabar vídeos a Linux.
-#if !defined(Q_OS_LINUX)
-    if (!m_grabList.empty())
-    {
-        vtkGenericMovieWriter *videoWriter;
-        QString fileExtension;
-        // TODO de moment només suportem MPEG2
-        switch (format)
-        {
-            case MPEG2:
-                videoWriter = vtkMPEG2Writer::New();
-                fileExtension = ".mpg";
-                break;
-        }
-
-        int count = m_grabList.count();
-        // TODO fer alguna cosa especial si només hi ha una sola imatge????
-
-        vtkImageData *data = m_grabList.at(0);
-
-        videoWriter->SetFileName(qPrintable(baseName + fileExtension));
-        videoWriter->SetInputData(data);
-        videoWriter->Start();
-
-        // TODO falta activar el procés de notificació de procés de gravació
-        // int progressIncrement = static_cast<int>((1.0/(double)count) * 100);
-        // int progress = 0;
-        for (int i = 0; i < count; i++)
-        {
-            videoWriter->SetInputData(m_grabList.at(i));
-
-            // TODO Perquè un loop de 3?
-            for (int j = 0; j < 3; j++)
-            {
-                videoWriter->Write();
-            }
-            //progress += progressIncrement;
-            //emit recording(progress);
-        }
-        videoWriter->End();
-        videoWriter->Delete();
-        clearGrabbedViews();
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-#else
-    Q_UNUSED(baseName)
-    Q_UNUSED(format)
-    return false;
-#endif
 }
 
 void QViewer::clearGrabbedViews()
