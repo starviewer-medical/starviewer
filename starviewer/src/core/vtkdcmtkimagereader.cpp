@@ -26,6 +26,7 @@
 #include <QSharedPointer>
 #include <QStringList>
 
+#include <vtkDataArray.h>
 #include <vtkImageCast.h>
 #include <vtkImageData.h>
 #include <vtkInformation.h>
