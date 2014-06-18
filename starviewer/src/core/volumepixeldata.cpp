@@ -104,9 +104,7 @@ void VolumePixelData::setData(unsigned char *data, int extent[6], int bytesPerPi
     
     vtkImageData *imageData = vtkImageData::New();
     imageData->SetExtent(extent);
-    imageData->SetScalarTypeToUnsignedChar();
-    imageData->SetNumberOfScalarComponents(bytesPerPixel);
-    imageData->AllocateScalars();
+    imageData->AllocateScalars(VTK_UNSIGNED_CHAR, bytesPerPixel);
     
     int size = (extent[1] - extent[0] + 1) * (extent[3] - extent[2] + 1) * (extent[5] - extent[4] + 1) * bytesPerPixel;
     vtkUnsignedCharArray *ucharArray = vtkUnsignedCharArray::New();
@@ -251,9 +249,7 @@ void VolumePixelData::convertToNeutralPixelData()
     m_imageDataVTK->SetSpacing(1., 1., 1.);
     m_imageDataVTK->SetDimensions(10, 10, 1);
     m_imageDataVTK->SetExtent(0, 9, 0, 9, 0, 0);
-    m_imageDataVTK->SetScalarTypeToShort();
-    m_imageDataVTK->SetNumberOfScalarComponents(1);
-    m_imageDataVTK->AllocateScalars();
+    m_imageDataVTK->AllocateScalars(VTK_SHORT, 1);
     // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
     signed short *scalarPointer = (signed short*) m_imageDataVTK->GetScalarPointer();
     signed short value;

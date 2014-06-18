@@ -348,9 +348,7 @@ void test_VolumePixelData::getVoxelValue_IndexVariant_ShouldReturnExpectedSingle
     imageDataVTK->SetSpacing(1., 1., 1.);
     imageDataVTK->SetDimensions(10, 10, 10);
     imageDataVTK->SetExtent(0, 9, 0, 9, 0, 9);
-    imageDataVTK->SetScalarTypeToShort();
-    imageDataVTK->SetNumberOfScalarComponents(1);
-    imageDataVTK->AllocateScalars();
+    imageDataVTK->AllocateScalars(VTK_SHORT, 1);
     // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
     signed short *scalarPointer = (signed short*) imageDataVTK->GetScalarPointer();
     signed short value;
