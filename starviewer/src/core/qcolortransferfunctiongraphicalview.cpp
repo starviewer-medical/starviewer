@@ -171,7 +171,7 @@ void QColorTransferFunctionGraphicalView::addNode(double x)
 void QColorTransferFunctionGraphicalView::removeNode(double x)
 {
     // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
-    QGraphicsItem *item = scene()->itemAt(x, 0.0);
+    QGraphicsItem *item = scene()->itemAt(x, 0.0, QTransform());
 
     if (item)
     {
@@ -233,7 +233,7 @@ void QColorTransferFunctionGraphicalView::endMoveNodes()
 void QColorTransferFunctionGraphicalView::changeNodeColor(double x)
 {
     // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
-    QGraphicsItem *item = scene()->itemAt(x, 0.0);
+    QGraphicsItem *item = scene()->itemAt(x, 0.0, QTransform());
 
     if (item)
     {
