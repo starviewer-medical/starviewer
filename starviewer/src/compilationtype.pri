@@ -8,6 +8,8 @@ unix {
 win32 {
     # Per tenir glew integrada al codi. Només necessari a windows.
     DEFINES += GLEW_STATIC
+    # Avoid definition of min and max macros by windows.h
+    DEFINES += NOMINMAX
     
     # Volem veure missatges a std::cout en debug
     CONFIG(debug, debug|release) {
