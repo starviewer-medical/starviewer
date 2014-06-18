@@ -17,12 +17,13 @@
 #include "imagepipeline.h"
 #include "slicehandler.h"
 #include "volume.h"
-#include "vtkdepthdisabledopenglimageactor.h"
 #include "windowlevelpresetstooldata.h"
 #include "volumepixeldata.h"
 #include "image.h"
 #include "windowlevelhelper.h"
 
+#include <vtkImageActor.h>
+#include <vtkImageMapper3D.h>
 #include <vtkPropPicker.h>
 
 namespace udg {
@@ -31,7 +32,7 @@ VolumeDisplayUnit::VolumeDisplayUnit()
  : m_volume(0)
 {
     m_imagePipeline = new ImagePipeline();
-    m_imageActor = VtkDepthDisabledOpenGLImageActor::New();
+    m_imageActor = vtkImageActor::New();
     m_sliceHandler = new SliceHandler();
     m_imagePointPicker =  0;
     m_windowLevelData = 0;
