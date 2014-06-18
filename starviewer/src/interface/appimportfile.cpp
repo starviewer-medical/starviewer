@@ -52,8 +52,8 @@ void AppImportFile::open()
     QFileDialog *openDialog = new QFileDialog(0);
     openDialog->setWindowTitle(tr("Select files to open..."));
     openDialog->setDirectory(m_workingDirectory);
-    openDialog->setFilters(imagesFilter);
-    openDialog->selectFilter (m_lastExtension);
+    openDialog->setNameFilters(imagesFilter);
+    openDialog->selectNameFilter (m_lastExtension);
     openDialog->setFileMode(QFileDialog::ExistingFiles);
     openDialog->setAcceptMode(QFileDialog::AcceptOpen);
 
@@ -64,7 +64,7 @@ void AppImportFile::open()
         emit selectedFiles(fileNames);
 
         m_workingDirectory = QFileInfo(fileNames.first()).dir().path();
-        m_lastExtension = openDialog->selectedFilter();
+        m_lastExtension = openDialog->selectedNameFilter();
 
         writeSettings();
     }
