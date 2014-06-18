@@ -151,9 +151,9 @@ void QRelatedStudiesWidget::initializeTree()
     m_relatedStudiesTree->setColumnCount(6);
     m_relatedStudiesTree->setRootIsDecorated(false);
     m_relatedStudiesTree->setItemsExpandable(false);
-    m_relatedStudiesTree->header()->setResizeMode(DownloadingStatus, QHeaderView::Fixed);
-    m_relatedStudiesTree->header()->setResizeMode(DownloadButton, QHeaderView::Fixed);
-    m_relatedStudiesTree->header()->setMovable(false);
+    m_relatedStudiesTree->header()->setSectionResizeMode(DownloadingStatus, QHeaderView::Fixed);
+    m_relatedStudiesTree->header()->setSectionResizeMode(DownloadButton, QHeaderView::Fixed);
+    m_relatedStudiesTree->header()->setSectionsMovable(false);
     m_relatedStudiesTree->setUniformRowHeights(true);
     m_relatedStudiesTree->setSortingEnabled(true);
 
