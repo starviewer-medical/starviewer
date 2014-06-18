@@ -16,6 +16,7 @@
 #define UDGDICOMANONYMIZER_H
 
 #include <QHash>
+#include <QString>
 
 #include "gdcmanonymizerstarviewer.h"
 

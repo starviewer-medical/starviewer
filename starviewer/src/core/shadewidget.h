@@ -55,7 +55,7 @@
 #ifndef UDGSHADEWIDGET_H
 #define UDGSHADEWIDGET_H
 
-#include <QtGui>
+#include <QWidget>
 
 namespace udg {
 

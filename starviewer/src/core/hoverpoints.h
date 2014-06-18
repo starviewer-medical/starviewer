@@ -55,7 +55,11 @@
 #ifndef UDGHOVERPOINTS_H
 #define UDGHOVERPOINTS_H
 
-#include <QtGui>
+#include <QObject>
+
+#include <QPen>
+#include <QPolygonF>
+#include <QWidget>
 
 namespace udg {
 

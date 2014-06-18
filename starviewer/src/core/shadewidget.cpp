@@ -53,7 +53,10 @@
  *************************************************************************************/
 
 #include "shadewidget.h"
+
 #include "hoverpoints.h"
+
+#include <QPainter>
 
 namespace udg {
 
