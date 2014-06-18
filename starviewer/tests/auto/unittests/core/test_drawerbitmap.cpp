@@ -7,6 +7,7 @@
 #include <vtkImageActor.h>
 #include <vtkImageData.h>
 #include <vtkImageMapToColors.h>
+#include <vtkImageMapper3D.h>
 #include <vtkLookupTable.h>
 
 using namespace udg;

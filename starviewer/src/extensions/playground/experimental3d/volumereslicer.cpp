@@ -9,6 +9,7 @@
 #include <QTextStream>
 
 #include <vtkCamera.h>
+#include <vtkDataArray.h>
 #include <vtkImageClip.h>
 #include <vtkImageData.h>
 #include <vtkImageReslice.h>

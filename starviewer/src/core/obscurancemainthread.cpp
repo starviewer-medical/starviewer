@@ -14,6 +14,7 @@
 
 #include "obscurancemainthread.h"
 
+#include <vtkDataArray.h>
 #include <vtkEncodedGradientEstimator.h>
 #include <vtkImageData.h>
 #include <vtkMultiThreader.h>
