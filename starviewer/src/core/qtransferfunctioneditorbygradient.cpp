@@ -52,14 +52,15 @@
     $QT_END_LICENSE$
  *************************************************************************************/
 
-#include <QtGui>
-
 #include "qtransferfunctioneditorbygradient.h"
-#include "shadewidget.h"
-#include "hoverpoints.h"
 
-#include "transferfunction.h"
+#include "hoverpoints.h"
 #include "logging.h"
+#include "shadewidget.h"
+#include "transferfunction.h"
+
+#include <QLabel>
+#include <QVBoxLayout>
 
 namespace udg {
 

@@ -16,8 +16,7 @@
 #define UDGSTUDYLAYOUTCONFIG_H
 
 #include <QSet>
-
-class QString;
+#include <QString>
 
 namespace udg {
 

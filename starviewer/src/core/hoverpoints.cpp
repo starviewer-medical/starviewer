@@ -54,6 +54,11 @@
 
 #include "hoverpoints.h"
 
+#include <QApplication>
+#include <QEvent>
+#include <QMouseEvent>
+#include <QPainter>
+
 #define printf
 
 namespace udg {
