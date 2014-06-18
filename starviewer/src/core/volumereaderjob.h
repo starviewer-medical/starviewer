@@ -16,7 +16,7 @@
 #define UDGVOLUMEREADERJOB_H
 
 #include <ThreadWeaver/Job>
-#include <QWeakPointer>
+#include <QPointer>
 #include <QMutex>
 
 namespace udg {
@@ -87,7 +87,7 @@ private:
     /// Referència al volume reader per poder fer un requestAbort. Només serà vàlid mentre s'estigui executant "run()", a fora d'aquest no ho serà.
     /// Nota: no es pot fer el volumeReader membre de la classe ja que aquest crea objectes de Qt fills de "this" i this apuntaria a threads diferents
     /// (un a apuntaria al de gui, per ser crear al constructor, i els altres al del thread de threadweaver, per ser creats al run()).
-    QWeakPointer<VolumeReader> m_volumeReaderToAbort;
+    QPointer<VolumeReader> m_volumeReaderToAbort;
 
     /// Mutex per protegir els canvis de referència a m_volumeReaderToAbort en escenaris de multithreading.
     QMutex m_volumeReaderToAbortMutex;
