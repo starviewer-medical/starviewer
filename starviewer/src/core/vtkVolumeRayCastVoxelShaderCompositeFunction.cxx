@@ -142,15 +142,15 @@ void vtkVolumeRayCastVoxelShaderCompositeFunction::CastRay( vtkVolumeRayCastDyna
 
     if ( !INTERPOLATION )
     {
-        voxel[0] = vtkRoundFuncMacro( rayPosition.x );
-        voxel[1] = vtkRoundFuncMacro( rayPosition.y );
-        voxel[2] = vtkRoundFuncMacro( rayPosition.z );
+        voxel[0] = qRound( rayPosition.x );
+        voxel[1] = qRound( rayPosition.y );
+        voxel[2] = qRound( rayPosition.z );
     }
     else
     {
-        voxel[0] = vtkFloorFuncMacro( rayPosition.x );
-        voxel[1] = vtkFloorFuncMacro( rayPosition.y );
-        voxel[2] = vtkFloorFuncMacro( rayPosition.z );
+        voxel[0] = floor( rayPosition.x );
+        voxel[1] = floor( rayPosition.y );
+        voxel[2] = floor( rayPosition.z );
     }
 
     // So far we haven't accumulated anything
@@ -212,15 +212,15 @@ void vtkVolumeRayCastVoxelShaderCompositeFunction::CastRay( vtkVolumeRayCastDyna
 
         if ( !INTERPOLATION )
         {
-            voxel[0] = vtkRoundFuncMacro( rayPosition.x );
-            voxel[1] = vtkRoundFuncMacro( rayPosition.y );
-            voxel[2] = vtkRoundFuncMacro( rayPosition.z );
+            voxel[0] = qRound( rayPosition.x );
+            voxel[1] = qRound( rayPosition.y );
+            voxel[2] = qRound( rayPosition.z );
         }
         else
         {
-            voxel[0] = vtkFloorFuncMacro( rayPosition.x );
-            voxel[1] = vtkFloorFuncMacro( rayPosition.y );
-            voxel[2] = vtkFloorFuncMacro( rayPosition.z );
+            voxel[0] = floor( rayPosition.x );
+            voxel[1] = floor( rayPosition.y );
+            voxel[2] = floor( rayPosition.z );
         }
     }
 
