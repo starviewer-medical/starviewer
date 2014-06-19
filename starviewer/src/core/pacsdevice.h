@@ -95,7 +95,7 @@ public:
     /// Ens indica si el PACS passat és el mateix que l'objecte actual. Ho serà quan tinguin el mateix AETitle, Address i QueryPort
     bool isSamePacsDevice(const PacsDevice &pacsDevice) const;
 
-    bool operator ==(const PacsDevice &device);
+    bool operator ==(const PacsDevice &device) const;
 
 private:
     /// Ens retorna el KeyName que identifica el PACS

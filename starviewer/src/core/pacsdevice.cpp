@@ -190,7 +190,7 @@ bool PacsDevice::isSamePacsDevice(const PacsDevice &pacsDevice) const
         && m_queryRetrieveServicePort == pacsDevice.getQueryRetrieveServicePort();
 }
 
-bool PacsDevice::operator ==(const PacsDevice &device)
+bool PacsDevice::operator ==(const PacsDevice &device) const
 {
     return m_AETitle == device.m_AETitle
         && m_address == device.m_address
