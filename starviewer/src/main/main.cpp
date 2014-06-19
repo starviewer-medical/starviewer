@@ -180,10 +180,6 @@ int main(int argc, char *argv[])
     // TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en
     // una classe dedicada a tal efecte
 
-    // Ajustem el codec per els strings pelats (no QString,sinó "bla bla bla").
-    // Amb aquesta crida escollirà el codec més apropiat segons el sistema. En aquest cas ens agafarà utf-8 (Mandriva 2007)
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale());
-
     configureLogging();
 
     // Marquem l'inici de l'aplicació al log
