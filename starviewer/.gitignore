@@ -53,3 +53,7 @@ ipch/*
 vcxproj.*
 fixdebug*
 *.tmp
+
+# Manifests
+bin/*manifest*
+tests/auto/*manifest*
