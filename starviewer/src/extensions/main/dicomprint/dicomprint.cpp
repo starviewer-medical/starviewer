@@ -15,8 +15,8 @@
 #include "dicomprint.h"
 
 #include <QDir>
+#include <QStandardPaths>
 #include <QStringList>
-#include <QDesktopServices>
 
 #include "dicomprinter.h"
 #include "dicomprintjob.h"
@@ -229,7 +229,7 @@ DicomPrint::DicomPrintError DicomPrint::printDicomSpoolErrorToDicomPrintError(Pr
 QString DicomPrint::getSpoolDirectory()
 {
     // Creem Spool al directori tempora del S.O.
-    return QDesktopServices::storageLocation(QDesktopServices::TempLocation) + QDir::separator() + "DICOMSpool";
+    return QStandardPaths::writableLocation(QStandardPaths::TempLocation) + QDir::separator() + "DICOMSpool";
 }
 
 }
