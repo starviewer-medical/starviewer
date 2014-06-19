@@ -9,7 +9,6 @@
 using namespace udg;
 using namespace testing;
 
-Q_DECLARE_METATYPE(QAbstractSocket::SocketError)
 Q_DECLARE_METATYPE(PortInUse::PortInUseStatus)
 Q_DECLARE_METATYPE(PortInUse::PortInUseOwner)
 

@@ -1,6 +1,7 @@
 #include "autotest.h"
 #include "slicehandler.h"
 
+#include "volume.h"
 #include "volumetesthelper.h"
 
 using namespace udg;
