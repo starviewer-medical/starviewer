@@ -22,6 +22,7 @@ VTKLIBS = \
     vtkRenderingAnnotation \
     vtkRenderingCore \
     vtkRenderingFreeType \
+    vtkRenderingOpenGL \
     vtkRenderingVolume \
     vtkRenderingVolumeOpenGL
 
