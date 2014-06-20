@@ -17,7 +17,8 @@ SOURCES += main.cpp \
            applicationtranslationsloader.cpp
 HEADERS += applicationtranslationsloader.h \
            syncactionsregister.h \
-           diagnosistests.h
+           diagnosistests.h \
+           vtkinit.h
 RESOURCES = main.qrc ../qml/qml.qrc
 
 win32{

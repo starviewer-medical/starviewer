@@ -34,6 +34,7 @@
 #include "starviewerapplicationcommandline.h"
 #include "applicationcommandlineoptions.h"
 #include "loggingoutputwindow.h"
+#include "vtkinit.h"
 
 #ifndef NO_CRASH_REPORTER
 #include "crashhandler.h"
