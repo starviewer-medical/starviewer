@@ -18,11 +18,11 @@
 #include <QObject>
 #include <QHash>
 
-#include <threadweaver/ResourceRestrictionPolicy.h>
+#include <ThreadWeaver/ResourceRestrictionPolicy>
 
 namespace ThreadWeaver {
 class Job;
-class Weaver;
+class Queue;
 }
 
 namespace udg {
@@ -44,7 +44,7 @@ public:
 
     /// Llegeix un Volume de manera asíncrona.
     /// Retorna un VolumeReaderJob per tal de poder saber quan és que aquest estarà carregat.
-    VolumeReaderJob* read(Volume *volume);
+    ThreadWeaver::JobPointer read(Volume *volume);
 
     /// Cancel·la la càrrega de volume i, un cop cancel·lada, esborra volume.
     /// Si volume no s'està carregant, l'esborrarà directament.
@@ -52,23 +52,23 @@ public:
 
 private slots:
     /// Marca el volume del job que se li passa conforme ja està carregat
-    void unmarkVolumeFromJobAsLoading(ThreadWeaver::Job *job);
+    void unmarkVolumeFromJobAsLoading(ThreadWeaver::JobPointer job);
 
 private:
     /// Ens indica si el volume que se li passa s'està carregant
     bool isVolumeLoading(Volume *volume) const;
 
     /// Marca el volume que se li passa conforme s'està carregant amb el job volumeReaderJob
-    void markVolumeAsLoadingByJob(Volume *volume, VolumeReaderJob *volumeReaderJob);
+    void markVolumeAsLoadingByJob(Volume *volume, ThreadWeaver::JobPointer volumeReaderJob);
 
     /// Desmarca el volume que se li passa conforme ja no s'està carregant.
     void unmarkVolumeAsLoading(Volume *volume);
 
     /// Ens retorna la instància de Weaver que hem de fer servir per treballar amb els jobs
-    ThreadWeaver::Weaver* getWeaverInstance() const;
+    ThreadWeaver::Queue* getWeaverInstance() const;
 
     /// Ens retorna el VolumeReaderJob del Volume que se li passi, si aquest té un job assignat que l'està llegint. Si no, retornarà null.
-    VolumeReaderJob* getVolumeReaderJob(Volume *volume) const;
+    ThreadWeaver::JobPointer getVolumeReaderJob(Volume *volume) const;
 
     /// Assigna una política restrictiva si tenim el setting MaximumNumberOfVolumesLoadingConcurrently definit o si
     /// estem a windows 32 bits i hi ha possibilitat d'obrir volums que requereixin molta memòria.
@@ -82,7 +82,7 @@ private:
 
 private:
     /// Llista dels volums que s'estan carregant
-    static QHash<int, VolumeReaderJob*> m_volumesLoading;
+    static QHash<int, ThreadWeaver::JobPointer> m_volumesLoading;
     static ThreadWeaver::ResourceRestrictionPolicy m_resourceRestrictionPolicy;
 };
 

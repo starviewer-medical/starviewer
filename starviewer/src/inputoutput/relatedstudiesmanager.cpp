@@ -109,7 +109,7 @@ void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate
         {
             foreach (DicomMask queryDicomMask, queryDicomMasksList)
             {
-                enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, queryDicomMask, QueryPacsJob::study));
+                enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer(new QueryPacsJob(pacsDevice, queryDicomMask, QueryPacsJob::study)));
             }
         }
     }
@@ -124,10 +124,11 @@ void RelatedStudiesManager::initializeQuery()
     m_pacsDeviceIDErrorEmited.clear();
 }
 
-void RelatedStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob)
+void RelatedStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPACSJob)
 {
-    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
-    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
+    connect(queryPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(queryPACSJobFinished(PACSJobPointer)));
+    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(queryPACSJobCancelled(PACSJobPointer)));
+    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
 
     m_pacsManager->enqueuePACSJob(queryPACSJob);
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
@@ -135,7 +136,7 @@ void RelatedStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(Qu
 
 void RelatedStudiesManager::cancelCurrentQuery()
 {
-    foreach (QueryPacsJob *queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
+    foreach (PACSJobPointer queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
     {
         m_pacsManager->requestCancelPACSJob(queryPACSJob);
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
@@ -147,6 +148,11 @@ void RelatedStudiesManager::cancelCurrentQuery()
 bool RelatedStudiesManager::isExecutingQueries()
 {
     return !m_queryPACSJobPendingExecuteOrExecuting.isEmpty();
+}
+
+void RelatedStudiesManager::queryPACSJobCancelled(PACSJobPointer pacsJob)
+{
+    queryPACSJobCancelled(pacsJob.data());
 }
 
 void RelatedStudiesManager::queryPACSJobCancelled(PACSJob *pacsJob)
@@ -162,9 +168,6 @@ void RelatedStudiesManager::queryPACSJobCancelled(PACSJob *pacsJob)
     {
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
 
-        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
-        queryPACSJob->deleteLater();
-
         if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
         {
             queryFinished();
@@ -172,9 +175,9 @@ void RelatedStudiesManager::queryPACSJobCancelled(PACSJob *pacsJob)
     }
 }
 
-void RelatedStudiesManager::queryPACSJobFinished(PACSJob *pacsJob)
+void RelatedStudiesManager::queryPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
+    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
 
     if (queryPACSJob == NULL)
     {
@@ -184,17 +187,14 @@ void RelatedStudiesManager::queryPACSJobFinished(PACSJob *pacsJob)
     {
         if (queryPACSJob->getStatus() == PACSRequestStatus::QueryOk)
         {
-            mergeFoundStudiesInQuery(queryPACSJob);
+            mergeFoundStudiesInQuery(pacsJob);
         }
         else if (queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
         {
-            errorQueringPACS(queryPACSJob);
+            errorQueringPACS(pacsJob);
         }
 
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
-
-        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
-        queryPACSJob->deleteLater();
 
         if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
         {
@@ -203,15 +203,15 @@ void RelatedStudiesManager::queryPACSJobFinished(PACSJob *pacsJob)
     }
 }
 
-void RelatedStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob)
+void RelatedStudiesManager::mergeFoundStudiesInQuery(PACSJobPointer queryPACSJob)
 {
-    if (queryPACSJob->getQueryLevel() != QueryPacsJob::study)
+    if (queryPACSJob.dynamicCast<QueryPacsJob>()->getQueryLevel() != QueryPacsJob::study)
     {
         /// Si la consulta no era d'estudis no ens interessa, només cerquem estudis
         return;
     }
 
-    foreach (Patient *patient, queryPACSJob->getPatientStudyList())
+    foreach (Patient *patient, queryPACSJob.dynamicCast<QueryPacsJob>()->getPatientStudyList())
     {
         foreach (Study *study, patient->getStudies())
         {
@@ -225,9 +225,10 @@ void RelatedStudiesManager::mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob)
     }
 }
 
-void RelatedStudiesManager::errorQueringPACS(QueryPacsJob *queryPACSJob)
+void RelatedStudiesManager::errorQueringPACS(PACSJobPointer queryPACSJob)
 {
-    if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk && queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
+    if (queryPACSJob.dynamicCast<QueryPacsJob>()->getStatus() != PACSRequestStatus::QueryOk &&
+            queryPACSJob.dynamicCast<QueryPacsJob>()->getStatus() != PACSRequestStatus::QueryCancelled)
     {
         // Com que fem dos cerques al mateix pacs si una falla, l'altra segurament també fallarà per evitar enviar
         // dos signals d'error si les dos fallen, ja que per des de fora ha de ser transparent el número de consultes

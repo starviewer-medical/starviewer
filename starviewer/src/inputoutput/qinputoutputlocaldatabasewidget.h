@@ -22,6 +22,7 @@
 #include "qdeleteoldstudiesthread.h"
 #include "dicommask.h"
 #include "pacsdevice.h"
+#include "pacsjob.h"
 
 #include <QMenu>
 
@@ -36,7 +37,6 @@ class StatsWatcher;
 class QCreateDicomdir;
 class Study;
 class QWidgetSelectPacsToStoreDicomImage;
-class PACSJob;
 class SendDICOMFilesToPACSJob;
 class PacsManager;
 
@@ -146,11 +146,11 @@ private slots:
     void sendSelectedStudiesToSelectedPacs();
 
     /// Slot que s'activa quan un SendDICOMFilesToPACSJob acaba
-    void sendDICOMFilesToPACSJobFinished(PACSJob *);
+    void sendDICOMFilesToPACSJobFinished(PACSJobPointer);
 
     /// Cada vegada que encuem un nou Job comprovem si és un RetrieveDICOMFileFromPACSJob i si és així connectem amb el Signal StudyFromCacheWillBeDeleted
     /// per si s'esborren estudis de la caché poder-los treure de la QStudyTreeWidget
-    void newPACSJobEnqueued(PACSJob *);
+    void newPACSJobEnqueued(PACSJobPointer);
 
 private:
     QMenu m_contextMenuQStudyTreeWidget;

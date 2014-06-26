@@ -21,15 +21,12 @@
 namespace udg {
 
 VolumeReaderJob::VolumeReaderJob(Volume *volume, QObject *parent)
-    : Job(parent)
+    : QObject(parent)
 {
     m_volumeToRead = volume;
     m_volumeReadSuccessfully = false;
     m_lastErrorMessageToUser = "";
     m_abortRequested = false;
-    m_autoDelete = true;
-
-    connect(this, SIGNAL(done(ThreadWeaver::Job*)), SLOT(autoDelete()));
 }
 
 VolumeReaderJob::~VolumeReaderJob()
@@ -56,16 +53,6 @@ bool VolumeReaderJob::success() const
     return m_volumeReadSuccessfully && !m_abortRequested;
 }
 
-void VolumeReaderJob::setAutoDelete(bool autoDelete)
-{
-    m_autoDelete = autoDelete;
-}
-
-bool VolumeReaderJob::getAutoDelete() const
-{
-    return m_autoDelete;
-}
-
 QString VolumeReaderJob::getLastErrorMessageToUser() const
 {
     return m_lastErrorMessageToUser;
@@ -76,8 +63,11 @@ Volume* VolumeReaderJob::getVolume() const
     return m_volumeToRead;
 }
 
-void VolumeReaderJob::run()
+void VolumeReaderJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread)
 {
+    Q_UNUSED(self)
+    Q_UNUSED(thread)
+
     Q_ASSERT(m_volumeToRead);
 
     DEBUG_LOG(QString("VolumeReaderJob::run() with Volume: %1").arg(m_volumeToRead->getIdentifier().getValue()));
@@ -109,18 +99,16 @@ void VolumeReaderJob::run()
     }
 }
 
+void VolumeReaderJob::defaultEnd(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread)
+{
+    emit done(job);
+
+    Job::defaultEnd(job, thread);
+}
+
 void VolumeReaderJob::updateProgress(int value)
 {
     emit progress(this, value);
-}
-
-void VolumeReaderJob::autoDelete()
-{
-    DEBUG_LOG(QString("VolumeReaderJob::autoDelete() with Volume: %1").arg(m_volumeToRead->getIdentifier().getValue()));
-    if (m_autoDelete)
-    {
-        this->deleteLater();
-    }
 }
 
 } // End namespace udg

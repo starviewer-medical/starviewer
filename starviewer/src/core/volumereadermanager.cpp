@@ -57,10 +57,10 @@ void VolumeReaderManager::readVolumes(const QList<Volume*> &volumes)
         // TODO Esborrar volumeReader!!
         AsynchronousVolumeReader *volumeReader = new AsynchronousVolumeReader();
         m_volumeReaderJobs << volumeReader->read(volume);
-        m_jobsProgress.insert(m_volumeReaderJobs.last(), 0);
+        m_jobsProgress.insert(m_volumeReaderJobs.last().dynamicCast<VolumeReaderJob>().data(), 0);
         m_volumes << NULL;
-        connect(m_volumeReaderJobs.last(), SIGNAL(done(ThreadWeaver::Job*)), SLOT(jobFinished(ThreadWeaver::Job*)));
-        connect(m_volumeReaderJobs.last(), SIGNAL(progress(ThreadWeaver::Job*, int)), SLOT(updateProgress(ThreadWeaver::Job*, int)));
+        connect(m_volumeReaderJobs.last().dynamicCast<VolumeReaderJob>().data(), SIGNAL(done(ThreadWeaver::JobPointer)), SLOT(jobFinished(ThreadWeaver::JobPointer)));
+        connect(m_volumeReaderJobs.last().dynamicCast<VolumeReaderJob>().data(), SIGNAL(progress(VolumeReaderJob*, int)), SLOT(updateProgress(VolumeReaderJob*, int)));
     }
 }
 
@@ -72,10 +72,10 @@ void VolumeReaderManager::cancelReading()
     {
         if (!m_volumeReaderJobs[i].isNull())
         {
-            disconnect(m_volumeReaderJobs[i], SIGNAL(done(ThreadWeaver::Job*)), this, SIGNAL(jobFinished(ThreadWeaver::Job*)));
-            disconnect(m_volumeReaderJobs[i], SIGNAL(progress(ThreadWeaver::Job*, int)), this, SLOT(updateProgress(ThreadWeaver::Job*, int)));
+            disconnect(m_volumeReaderJobs[i].dynamicCast<VolumeReaderJob>().data(), SIGNAL(done(ThreadWeaver::JobPointer)), this, SLOT(jobFinished(ThreadWeaver::JobPointer)));
+            disconnect(m_volumeReaderJobs[i].dynamicCast<VolumeReaderJob>().data(), SIGNAL(progress(VolumeReaderJob*, int)), this, SLOT(updateProgress(VolumeReaderJob*, int)));
         }
-        m_volumeReaderJobs[i] = NULL;
+        m_volumeReaderJobs[i].clear();
     }
     initialize();
 }
@@ -106,7 +106,7 @@ bool VolumeReaderManager::isReading()
     return m_numberOfFinishedJobs < m_volumeReaderJobs.size();
 }
 
-void VolumeReaderManager::updateProgress(ThreadWeaver::Job *job, int value)
+void VolumeReaderManager::updateProgress(VolumeReaderJob *job, int value)
 {
     m_jobsProgress.insert(job, value);
 
@@ -121,19 +121,18 @@ void VolumeReaderManager::updateProgress(ThreadWeaver::Job *job, int value)
     emit progress(currentProgress);
 }
 
-void VolumeReaderManager::jobFinished(ThreadWeaver::Job *job)
+void VolumeReaderManager::jobFinished(ThreadWeaver::JobPointer job)
 {
-    VolumeReaderJob *readerJob = qobject_cast<VolumeReaderJob*>(job);
-
-    m_volumes[m_volumeReaderJobs.indexOf(readerJob)] = readerJob->getVolume();
+    VolumeReaderJob *volumeReaderJob = job.dynamicCast<VolumeReaderJob>().data();
+    m_volumes[m_volumeReaderJobs.indexOf(job)] = volumeReaderJob->getVolume();
 
     if (m_success)
     {
-        m_success = readerJob->success();
+        m_success = job->success();
 
         if (!m_success)
         {
-            m_lastError = readerJob->getLastErrorMessageToUser();
+            m_lastError = volumeReaderJob->getLastErrorMessageToUser();
         }
     }
 

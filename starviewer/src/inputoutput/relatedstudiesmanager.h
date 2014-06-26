@@ -21,6 +21,7 @@
 #include <QDate>
 
 #include "pacsdevice.h"
+#include "pacsjob.h"
 
 namespace udg {
 
@@ -28,7 +29,6 @@ class Patient;
 class Study;
 class DicomMask;
 class PacsManager;
-class PACSJob;
 class QueryPacsJob;
 
 /**
@@ -104,14 +104,14 @@ private:
 
     /// Ens encua el QueryPACSJob al PACSManager i ens connecta amb els seus signals per poder processar els resultats. També afegeix el Job en una taula
     /// de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
-    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob);
+    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPACSJob);
 
     /// Ens afegeix els estudis trobats en una llista, si algun dels estudis ja existeix a la llista perquè s'ha trobat en algun altre PACS no
     /// se li afegeix
-    void mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob);
+    void mergeFoundStudiesInQuery(PACSJobPointer queryPACSJob);
 
     /// Emet signal indicant que la consulta a un PACS ha fallat
-    void errorQueringPACS(QueryPacsJob *queryPACSJob);
+    void errorQueringPACS(PACSJobPointer queryPACSJob);
 
     /// Emet signal indicant la la consulta ha acabat
     void queryFinished();
@@ -131,9 +131,10 @@ private:
 
 private slots:
     /// Slot que s'activa quan finalitza un job de consulta al PACS
-    void queryPACSJobFinished(PACSJob *pacsJob);
+    void queryPACSJobFinished(PACSJobPointer pacsJob);
 
     /// Slot que s'activa quan un job de consulta al PACS és cancel·lat
+    void queryPACSJobCancelled(PACSJobPointer pacsJob);
     void queryPACSJobCancelled(PACSJob *pacsJob);
 
 private:
@@ -148,7 +149,7 @@ private:
     /// com ja el tindrem aquesta llista ja no en farem signal
     QStringList m_pacsDeviceIDErrorEmited;
     /// Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
-    QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
+    QHash<int, PACSJobPointer> m_queryPACSJobPendingExecuteOrExecuting;
     /// Boolea per saber si s'ha de cercar estudis relacionats a partir del nom del pacient.
     bool m_searchRelatedStudiesByName;
 };

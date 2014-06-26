@@ -19,6 +19,8 @@
 
 #include <QHash>
 
+#include "pacsjob.h"
+
 // Fordward declarations
 class QString;
 
@@ -28,7 +30,6 @@ namespace udg {
 class Status;
 class Operation;
 class PacsManager;
-class PACSJob;
 class RetrieveDICOMFilesFromPACSJob;
 class SendDICOMFilesToPACSJob;
 class Study;
@@ -52,19 +53,26 @@ protected:
 
 private slots:
     /// Slot que s'activa quan s'ha encuat un nou PACSJob insereix al QTreeWidget la informació del nou job i la posa com a Pedent de realitzar
-    void newPACSJobEnqueued(PACSJob *);
+    void newPACSJobEnqueued(PACSJobPointer);
 
     /// Slot que s'activa quan job comença, al QTreeWidget es marca aquell job com començat
-    void PACSJobStarted(PACSJob *);
+    void PACSJobStarted(PACSJobPointer);
 
     /// Slot que s'activa quan el job ha acabat, es marca aquell Job al QTreeWidget amb l'estatus en el que ha finalitzat
-    void PACSJobFinished(PACSJob *);
+    void PACSJobFinished(PACSJobPointer);
 
     /// Slot que s'activa quan el job ha estat cancel·lat, es marca aquell job com ha cancel·lat
+    void PACSJobCancelled(PACSJobPointer pacsJob);
     void PACSJobCancelled(PACSJob *pacsJob);
 
     /// Slot que s'activa quan job ha fet una acció amb una imatge, s'augmenta pel job al QTreeWidget el número de d'imatges
+    void DICOMFileCommit(PACSJobPointer pacsJob, int numberOfImages);
+
+    /// Slot que s'activa quan job ha fet una acció amb una imatge, s'augmenta pel job al QTreeWidget el número de d'imatges
     void DICOMFileCommit(PACSJob *pacsJob, int numberOfImages);
+
+    /// Slot que s'activa quan job ha fer una acció amb una sèrie completa, s'augmenta pel job al QTreeWidget el número de sèries
+    void DICOMSeriesCommit(PACSJobPointer pacsJob, int numberOfSeries);
 
     /// Slot que s'activa quan job ha fer una acció amb una sèrie completa, s'augmenta pel job al QTreeWidget el número de sèries
     void DICOMSeriesCommit(PACSJob *pacsJob, int numberOfSeries);
@@ -79,27 +87,27 @@ private slots:
     void cancelSelectedRequests();
 
     /// Slot que s'activa quan rebem SIGNAL que s'ha demanat cancel·lar un Job
-    void requestedCancelPACSJob(PACSJob *);
+    void requestedCancelPACSJob(PACSJobPointer);
 
 private:
     QString m_currentProcessingStudyUID;
     PacsManager *m_pacsManager;
-    QHash<int, PACSJob*> m_PACSJobPendingToFinish;
+    QHash<int, PACSJobPointer> m_PACSJobPendingToFinish;
 
 private:
     /// Crea les connexions pels signals i slots
     void createConnections();
 
     /// Afegeix al QTreeWidget el nou job encuat, i el mostra
-    void insertNewPACSJob(PACSJob *pacsJob);
+    void insertNewPACSJob(PACSJobPointer pacsJob);
 
     /// Retorna l'objecte Study relatiu a PACSJob, només funciona amb PACSJob de tipus RetrieveDICOMFilesFromPACSJob i SendDICOMFilesToPACSJob
-    Study* getStudyFromPACSJob(PACSJob *pacsJob);
+    Study* getStudyFromPACSJob(PACSJobPointer pacsJob);
 
     /// Retorna un QString per mostrar-lo per la QOperationStateScreen indicant com ha finalitzat un PACSJob
     /// Per RetrieveDICOMFilesFromPACS pot retornar : RETRIEVED, CANCELLED, ERROR
     /// Per SendDICOMFilesToPACS pot retornar : SENT, CANCELLED, ERROR
-    QString getPACSJobStatusResume(PACSJob *pacsJob);
+    QString getPACSJobStatusResume(PACSJobPointer pacsJob);
 
     /// Ens retorna un QTreeWidgetItem a partir del seu pacsJobID si no el trobem es retorna null;
     QTreeWidgetItem* getQTreeWidgetItemByPACSJobId(int pacsJobID);

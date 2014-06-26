@@ -22,6 +22,7 @@
 #include <QHash>
 
 #include "pacsdevice.h"
+#include "pacsjob.h"
 
 // Fordward declarations
 class QString;
@@ -36,7 +37,6 @@ class Status;
 class Study;
 class QOperationStateScreen;
 class PacsManager;
-class PACSJob;
 class QueryPacsJob;
 
 /**
@@ -105,14 +105,14 @@ private:
     DicomMask buildImageDicomMask(QString studyInstanceUID, QString seriesInstanceUID);
 
     /// Mostra per pantalla els resultats de la consulta al PACS d'un Job
-    void showQueryPACSJobResults(QueryPacsJob *queryPACSJob);
+    void showQueryPACSJobResults(PACSJobPointer queryPACSJob);
 
     /// Mostrar un QMessageBox indicant que s'ha produït un error consultant a un PACS
-    void showErrorQueringPACS(QueryPacsJob *queryPACSJob);
+    void showErrorQueringPACS(PACSJobPointer queryPACSJob);
 
     /// Ens encua el QueryPACSJob al PACSManager i ens connecta amb els seus signals per poder processar els resultats. També afegeix el Job en una taula
     /// de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
-    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPacsJob);
+    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPacsJob);
 
 private slots:
     /// Mostra les sèries d'un estudi, les consulta al dicomdir i les mostra al tree widget
@@ -137,18 +137,20 @@ private slots:
     void cancelCurrentQueriesToPACS();
 
     /// Fa signal de studyRetrieveStarted, Important!!! aquest mètode una vegada cada Tool utiltizi la PacsManager ha de desapareixer
-    void retrieveDICOMFilesFromPACSJobStarted(PACSJob *pacsJob);
+    void retrieveDICOMFilesFromPACSJobStarted(PACSJobPointer pacsJob);
 
     /// Slot que s'activa quan finalitza un job de descàrrega d'imatges
-    void retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob);
+    void retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob);
 
     /// Slot que s'activa quan es cancel·la un job de descàrrega d'imatges
+    void retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob);
     void retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob);
     
     /// Slot que s'activa quan finalitza un job de consulta al PACS
-    void queryPACSJobFinished(PACSJob *pacsJob);
+    void queryPACSJobFinished(PACSJobPointer pacsJob);
 
     /// Slot que s'activa quan un job de consulta al PACS és cancel·lat
+    void queryPACSJobCancelled(PACSJobPointer pacsJob);
     void queryPACSJobCancelled(PACSJob *pacsJob);
 
 private:
@@ -158,7 +160,7 @@ private:
     QHash<int, ActionsAfterRetrieve> m_actionsWhenRetrieveJobFinished;
 
     /// Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
-    QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
+    QHash<int, PACSJobPointer> m_queryPACSJobPendingExecuteOrExecuting;
 
     StatsWatcher *m_statsWatcher;
 

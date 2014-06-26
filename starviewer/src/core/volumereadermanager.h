@@ -64,20 +64,20 @@ signals:
 
 private slots:
     /// Updates the progress of the job and emits the global progress
-    void updateProgress(ThreadWeaver::Job*, int);
+    void updateProgress(VolumeReaderJob*, int);
     /// Slot executed when a job finished. It emits the signal readingFinished() if no jobs are reading.
-    void jobFinished(ThreadWeaver::Job *job);
+    void jobFinished(ThreadWeaver::JobPointer job);
 
 private:
     /// Initialize internal helpers
     void initialize();
 
 private:
-    /// List of jobs to read volumes. They don't belong to us, that is why QPointer is used.
-    QList<QPointer<VolumeReaderJob> > m_volumeReaderJobs;
+    /// List of jobs to read volumes.
+    QList<ThreadWeaver::JobPointer> m_volumeReaderJobs;
 
     /// List to control the progress of all jobs
-    QHash<ThreadWeaver::Job*, int> m_jobsProgress;
+    QHash<VolumeReaderJob*, int> m_jobsProgress;
 
     /// List of readed volumes
     QList<Volume*> m_volumes;

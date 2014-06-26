@@ -16,6 +16,12 @@
 
 namespace udg {
 
+namespace {
+
+int PACSJobPointerMetaTypeId = qRegisterMetaType<PACSJobPointer>("PACSJobPointer");
+
+}
+
 int PACSJob::m_jobIDCounter = 0;
 
 PACSJob::PACSJob(PacsDevice pacsDevice)
@@ -23,10 +29,6 @@ PACSJob::PACSJob(PacsDevice pacsDevice)
     m_pacsDevice = pacsDevice;
     m_jobID = m_jobIDCounter++;
     m_abortIsRequested = false;
-
-    // Ens connectem amb els signals de ThreadWeaver::Job per poder emtre els nostres propis signals quan un PACSJob s'ha començat a executar o ha finalitzat
-    connect(this, SIGNAL(started(ThreadWeaver::Job*)), SLOT(threadWeaverJobStarted()));
-    connect(this, SIGNAL(done(ThreadWeaver::Job*)), SLOT(threadWeaverJobDone()));
 }
 
 PacsDevice PACSJob::getPacsDevice()
@@ -39,7 +41,7 @@ int PACSJob::getPACSJobID()
     return m_jobID;
 }
 
-void PACSJob::aboutToBeDequeued(ThreadWeaver::WeaverInterface *)
+void PACSJob::aboutToBeDequeued(ThreadWeaver::QueueAPI *)
 {
     // Si ens desenqueuen de la cua de jobs pendents d'executar, vol dir que aquest Job no s'executarà, per tant emetem signal indicant que
     // ens han cancel·lat
@@ -57,21 +59,24 @@ bool PACSJob::isAbortRequested()
     return m_abortIsRequested;
 }
 
-void PACSJob::threadWeaverJobDone()
+void PACSJob::defaultBegin(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread)
 {
+    Q_UNUSED(thread)
+    emit PACSJobStarted(job.dynamicCast<PACSJob>());
+}
+
+void PACSJob::defaultEnd(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread)
+{
+    Q_UNUSED(thread)
+
     if (!m_abortIsRequested)
     {
-        emit PACSJobFinished(this);
+        emit PACSJobFinished(job.dynamicCast<PACSJob>());
     }
     else
     {
-        emit PACSJobCancelled(this);
+        emit PACSJobCancelled(job.dynamicCast<PACSJob>());
     }
-}
-
-void PACSJob::threadWeaverJobStarted()
-{
-    emit PACSJobStarted(this);
 }
 
 };

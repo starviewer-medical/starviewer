@@ -48,7 +48,7 @@ public:
     ~QueryPacsJob();
 
     /// El codi d'aquest mètode es el que s'executa en un nou thread
-    void run();
+    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread);
 
     /// Retorna el tipus de PACSJob que és l'objecte
     PACSJob::PACSJobType getPACSJobType();

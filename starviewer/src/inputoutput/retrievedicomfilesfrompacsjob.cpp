@@ -67,8 +67,11 @@ Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles()
     return m_studyToRetrieveDICOMFiles;
 }
 
-void RetrieveDICOMFilesFromPACSJob::run()
+void RetrieveDICOMFilesFromPACSJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread)
 {
+    Q_UNUSED(self)
+    Q_UNUSED(thread)
+
     Settings settings;
     // TODO: És aquest el lloc per aquest missatge ? no seria potser millor fer-ho a RetrieveDICOMFilesFromPACS
     INFO_LOG(QString("Iniciant descarrega del PACS %1, IP: %2, Port: %3, AE Title Local: %4 Port local: %5, "

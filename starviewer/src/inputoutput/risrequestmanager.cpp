@@ -139,22 +139,23 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 
     foreach (const PacsDevice &pacsDevice, queryablePACS)
     {
-        enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, maskRISRequest, QueryPacsJob::study));
+        enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer(new QueryPacsJob(pacsDevice, maskRISRequest, QueryPacsJob::study)));
     }
 }
 
-void RISRequestManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob)
+void RISRequestManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPACSJob)
 {
-    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
-    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
+    connect(queryPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(queryPACSJobFinished(PACSJobPointer)));
+    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(queryPACSJobCancelled(PACSJobPointer)));
+    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
 
     m_pacsManager->enqueuePACSJob(queryPACSJob);
 }
 
-void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
+void RISRequestManager::queryPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
+    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
 
     if (queryPACSJob == NULL)
     {
@@ -164,25 +165,27 @@ void RISRequestManager::queryPACSJobFinished(PACSJob *pacsJob)
     {
         if (queryPACSJob->getStatus() == PACSRequestStatus::QueryOk)
         {
-            addFoundStudiesToRetrieveQueue(queryPACSJob);
+            addFoundStudiesToRetrieveQueue(pacsJob);
         }
         else if (queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
         {
             ERROR_LOG(QString("S'ha produit un error al cercar estudis al PACS %1 per la sol.licitud del RIS")
                          .arg(queryPACSJob->getPacsDevice().getAETitle()));
-            errorQueryingStudy(queryPACSJob);
+            errorQueryingStudy(pacsJob);
         }
 
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
-
-        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
-        queryPACSJob->deleteLater();
 
         if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
         {
             queryRequestRISFinished();
         }
     }
+}
+
+void RISRequestManager::queryPACSJobCancelled(PACSJobPointer pacsJob)
+{
+    queryPACSJobCancelled(pacsJob.data());
 }
 
 void RISRequestManager::queryPACSJobCancelled(PACSJob *pacsJob)
@@ -198,9 +201,6 @@ void RISRequestManager::queryPACSJobCancelled(PACSJob *pacsJob)
     else
     {
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
-
-        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
-        queryPACSJob->deleteLater();
 
         if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
         {
@@ -234,7 +234,7 @@ void RISRequestManager::queryRequestRISFinished()
     }
 }
 
-void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
+void RISRequestManager::errorQueryingStudy(PACSJobPointer queryPACSJob)
 {
     QString errorMessage = tr("RIS request error: cannot query PACS %1 from %2.\nMake sure its IP and AE Title are correct.")
         .arg(queryPACSJob->getPacsDevice().getAETitle())
@@ -243,8 +243,10 @@ void RISRequestManager::errorQueryingStudy(QueryPacsJob *queryPACSJob)
     QMessageBox::critical(NULL, ApplicationNameString, errorMessage);
 }
 
-void RISRequestManager::addFoundStudiesToRetrieveQueue(QueryPacsJob *queryPACSJob)
+void RISRequestManager::addFoundStudiesToRetrieveQueue(PACSJobPointer pacsJob)
 {
+    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
+
     foreach (Patient *patient, queryPACSJob->getPatientStudyList())
     {
         foreach (Study *study, patient->getStudies())
@@ -310,15 +312,16 @@ void RISRequestManager::retrieveStudyFoundInQueryPACS(Study *study)
     m_numberOfStudiesAddedToRetrieveForCurrentRisRequest++;
 }
 
-RetrieveDICOMFilesFromPACSJob* RISRequestManager::retrieveStudyFromPACS(Study *study)
+PACSJobPointer RISRequestManager::retrieveStudyFromPACS(Study *study)
 {
     PacsDevice pacsDevice = study->getDICOMSource().getRetrievePACS().at(0);
 
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, RetrieveDICOMFilesFromPACSJob::Medium, study);
+    PACSJobPointer retrieveDICOMFilesFromPACSJob(new RetrieveDICOMFilesFromPACSJob(pacsDevice, RetrieveDICOMFilesFromPACSJob::Medium, study));
 
     m_qpopUpRISRequestsScreen->addStudyToRetrieveFromPACSByAccessionNumber(retrieveDICOMFilesFromPACSJob);
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob*)));
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob*)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob*)));
 
     m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
 
@@ -331,6 +334,11 @@ void RISRequestManager::retrieveStudyFromDatabase(Study *study)
 
     //Ara mateix no cal descarregar un estudi de la base de dades si ja li tenim, per això invoquem directament el mètode doActionsAfterRetrieve
     doActionsAfterRetrieve(study);
+}
+
+void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
+{
+    retrieveDICOMFilesFromPACSJobCancelled(pacsJob.data());
 }
 
 void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)
@@ -350,9 +358,9 @@ void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)
 }
 
 /// Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
-void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
+void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
 {
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data();
 
     if (retrieveDICOMFilesFromPACSJob == NULL)
     {
@@ -374,10 +382,6 @@ void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
     }
 
     doActionsAfterRetrieve(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
-
-    // Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
-    // que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop
-    retrieveDICOMFilesFromPACSJob->deleteLater();
 }
 
 void RISRequestManager::doActionsAfterRetrieve(Study *study)
