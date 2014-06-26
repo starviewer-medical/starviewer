@@ -142,7 +142,7 @@ void QInputOutputLocalDatabaseWidget::clear()
 void QInputOutputLocalDatabaseWidget::setPacsManager(PacsManager *pacsManager)
 {
     m_pacsManager = pacsManager;
-    connect(pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob*)), SLOT(newPACSJobEnqueued(PACSJob*)));
+    connect(pacsManager, SIGNAL(newPACSJobEnqueued(PACSJobPointer)), SLOT(newPACSJobEnqueued(PACSJobPointer)));
 }
 
 void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
@@ -553,14 +553,14 @@ void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
 
 void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACS(PacsDevice pacsDevice, QList<Image*> images)
 {
-    SendDICOMFilesToPACSJob *sendDICOMFilesToPACSJob = new SendDICOMFilesToPACSJob(pacsDevice, images);
-    connect(sendDICOMFilesToPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(sendDICOMFilesToPACSJobFinished(PACSJob*)));
+    PACSJobPointer sendDICOMFilesToPACSJob(new SendDICOMFilesToPACSJob(pacsDevice, images));
+    connect(sendDICOMFilesToPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(sendDICOMFilesToPACSJobFinished(PACSJobPointer)));
     m_pacsManager->enqueuePACSJob(sendDICOMFilesToPACSJob);
 }
 
-void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJob *pacsJob)
+void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJobPointer pacsJob)
 {
-    SendDICOMFilesToPACSJob *sendDICOMFilesToPACSJob = dynamic_cast<SendDICOMFilesToPACSJob*> (pacsJob);
+    SendDICOMFilesToPACSJob *sendDICOMFilesToPACSJob = pacsJob.dynamicCast<SendDICOMFilesToPACSJob>().data();
 
     if (sendDICOMFilesToPACSJob->getStatus() != PACSRequestStatus::SendOk)
     {
@@ -574,13 +574,9 @@ void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJob *p
             QMessageBox::critical(this, ApplicationNameString, sendDICOMFilesToPACSJob->getStatusDescription());
         }
     }
-
-    // Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
-    // que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop
-    pacsJob->deleteLater();
 }
 
-void QInputOutputLocalDatabaseWidget::newPACSJobEnqueued(PACSJob *pacsJob)
+void QInputOutputLocalDatabaseWidget::newPACSJobEnqueued(PACSJobPointer pacsJob)
 {
     // Connectem amb el signal RetrieveDICOMFilesFromPACSJob de que s'esborrarà un estudi de la caché per treure'ls de la QStudyTreeWidget quan se
     // n'esborrin
@@ -589,7 +585,7 @@ void QInputOutputLocalDatabaseWidget::newPACSJobEnqueued(PACSJob *pacsJob)
     //       CacheManager aquest mètode HA DE DESAPAREIXER, quan es tregui aquest mètode recordar a treure l'include a "retrievedicomfilesfrompacsjob.h"
     if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
-        connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob), SIGNAL(studyFromCacheWillBeDeleted(QString)),
+        connect(pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(studyFromCacheWillBeDeleted(QString)),
                 SLOT(removeStudyFromQStudyTreeWidget(QString)));
     }
 }

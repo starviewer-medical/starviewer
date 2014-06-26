@@ -17,9 +17,10 @@
 
 #include "qnotificationpopup.h"
 
+#include "pacsjob.h"
+
 namespace udg {
 
-class PACSJob;
 class RetrieveDICOMFilesFromPACSJob;
 class Patient;
 class Study;
@@ -40,7 +41,7 @@ public:
     void queryStudiesByAccessionNumberStarted();
 
     /// Afegim un estudi per descarregar que s'ha demanat a través del rIS
-    void addStudyToRetrieveFromPACSByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob);
+    void addStudyToRetrieveFromPACSByAccessionNumber(PACSJobPointer retrieveDICOMFilesFromPACSJob);
 
     /// Afegim un estudi que s'ha obtingut de la base de dades del PACS demana't en una petició del RIS
     //HACK: Com ara mateix nom tenim cap manera de fer el seguiment de les peticions d'estudis a la base de dades, afegim aquest mètode que mostarà
@@ -56,9 +57,10 @@ public:
 
 private slots:
     /// S'indica que la descàrrega dels estudis degut a una petició del RIS ha finalitzat
-    void retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob);
+    void retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob);
 
     /// S'indica que ha fallat o s'ha cancel·lat la descàrrega dels estudi demanat pel RIS
+    void retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob);
     void retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob);
 
 private:

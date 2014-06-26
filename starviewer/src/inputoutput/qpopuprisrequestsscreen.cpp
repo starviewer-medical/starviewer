@@ -46,15 +46,16 @@ void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
     m_numberOfStudiesFailedToRetrieve = 0;
 }
 
-void QPopUpRISRequestsScreen::addStudyToRetrieveFromPACSByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob)
+void QPopUpRISRequestsScreen::addStudyToRetrieveFromPACSByAccessionNumber(PACSJobPointer retrieveDICOMFilesFromPACSJob)
 {
     m_numberOfStudiesToRetrieve++;
 
     m_pacsJobIDOfStudiesToRetrieve.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
-    refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
+    refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles());
 
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob*)));
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob*)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob*)));
 }
 
 void QPopUpRISRequestsScreen::addStudyRetrievedFromDatabaseByAccessionNumber(Study *study)
@@ -64,9 +65,9 @@ void QPopUpRISRequestsScreen::addStudyRetrievedFromDatabaseByAccessionNumber(Stu
     refreshScreenRetrieveStatus(study);
 }
 
-void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
+void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
 {
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data();
 
     if (retrieveDICOMFilesFromPACSJob == NULL)
     {
@@ -100,6 +101,11 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
             refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
         }
     }
+}
+
+void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
+{
+    retrieveDICOMFilesFromPACSJobCancelled(pacsJob.data());
 }
 
 void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)

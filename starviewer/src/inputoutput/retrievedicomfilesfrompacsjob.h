@@ -54,7 +54,7 @@ public:
     Study* getStudyToRetrieveDICOMFiles();
 
     /// Codi que executar el job
-    void run();
+    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread);
 
     /// Retorna l'Status del Job
     PACSRequestStatus::RetrieveRequestStatus getStatus();

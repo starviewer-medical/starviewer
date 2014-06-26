@@ -41,7 +41,7 @@ public:
     PACSJob::PACSJobType getPACSJobType();
 
     /// Codi que executarà el job
-    void run();
+    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread);
 
     /// Retorna l'Status del Job
     PACSRequestStatus::SendRequestStatus getStatus();

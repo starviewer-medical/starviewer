@@ -21,9 +21,16 @@
 
 #include "pacsdevice.h"
 
+namespace ThreadWeaver {
+
+class WeaverInterface;
+
+}
+
 namespace udg {
 
-using namespace ThreadWeaver;
+class PACSJob;
+typedef QSharedPointer<PACSJob> PACSJobPointer;
 
 /**
     Classe base de la qual herederan totes les operacions que es facin amb el PACS. Aquesta classe conté els mètodes basics que s'han d'heredar.
@@ -31,7 +38,7 @@ using namespace ThreadWeaver;
     Aquesta classe hereda de ThreadWeaver::Job per així tenir automàticament la gestió de les cues que implementa, i permetre que les operacions
     amb el PACS s'executin en un thread independent.
   */
-class PACSJob : public Job {
+class PACSJob : public QObject, public ThreadWeaver::Job {
 Q_OBJECT
 public:
     enum PACSJobType { SendDICOMFilesToPACSJobType, RetrieveDICOMFilesFromPACSJobType, QueryPACS };
@@ -58,24 +65,22 @@ public:
 
     /// Mètode heredat de Job, s'executa just abans de desencuar el job, si ens densencuen vol dir que el job no s'executarà per tant
     /// des d'aquest mètode emetem el signal PACSJobCancelled
-    void aboutToBeDequeued(WeaverInterface *weaver);
+    void aboutToBeDequeued(ThreadWeaver::QueueAPI *weaver);
 
 signals:
     /// Signal que s'emet quan un PACSJob ha començat a executar-se
-    void PACSJobStarted(PACSJob *);
+    void PACSJobStarted(PACSJobPointer);
 
     /// Signal que s'emet quan un PACSJob ha acabat d'executar-se
-    void PACSJobFinished(PACSJob *);
+    void PACSJobFinished(PACSJobPointer);
 
     /// Signal que s'emet quan un PACSJob s'ha cancel·lat
-    void PACSJobCancelled(PACSJob *);
+    void PACSJobCancelled(PACSJobPointer);
+    void PACSJobCancelled(PACSJob*);
 
-private slots:
-    /// Slot que s'activa quan el job actual de ThreadWeaver comença a executar-se
-    void threadWeaverJobStarted();
-
-    /// Slot que s'activa quan el job actual de ThreadWeaver ha finalitzat
-    void threadWeaverJobDone();
+protected:
+    virtual void defaultBegin(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread);
+    virtual void defaultEnd(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread);
 
 private:
     /// Mètode que han de reimplementar les classes filles per cancel·lar l'execució del job actual
@@ -87,6 +92,8 @@ private:
     PacsDevice m_pacsDevice;
     bool m_abortIsRequested;
 };
+
+Q_DECLARE_METATYPE(QSharedPointer<PACSJob>)
 
 };
 

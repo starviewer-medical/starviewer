@@ -130,15 +130,16 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> p
 
         foreach (const PacsDevice &pacsDeviceToQuery, pacsToQueryList)
         {
-            enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDeviceToQuery, queryMask, QueryPacsJob::study));
+            enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer(new QueryPacsJob(pacsDeviceToQuery, queryMask, QueryPacsJob::study)));
         }
     }
 }
 
-void QInputOutputPacsWidget::enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob)
+void QInputOutputPacsWidget::enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPACSJob)
 {
-    connect(queryPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(queryPACSJobFinished(PACSJob*)));
-    connect(queryPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
+    connect(queryPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(queryPACSJobFinished(PACSJobPointer)));
+    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(queryPACSJobCancelled(PACSJobPointer)));
+    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
 
     m_pacsManager->enqueuePACSJob(queryPACSJob);
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
@@ -147,7 +148,7 @@ void QInputOutputPacsWidget::enqueueQueryPACSJobToPACSManagerAndConnectSignals(Q
 
 void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
 {
-    foreach (QueryPacsJob *queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
+    foreach (PACSJobPointer queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
     {
         m_pacsManager->requestCancelPACSJob(queryPACSJob);
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
@@ -157,6 +158,11 @@ void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
     // envien els resultats que havien trobat fins aquell moment i després tanquen la connexió, per fer transparent això a l'usuari, ja que ell no ho notarà en
     // quin moment es cancel·len, ja amaguem el gif indicant que s'ha cancel·lat la consulta, perquè tingui la sensació que s'han cancel·lat immediatament
     setQueryInProgress(false);
+}
+
+void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJobPointer pacsJob)
+{
+    queryPACSJobCancelled(pacsJob.data());
 }
 
 void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJob *pacsJob)
@@ -172,15 +178,12 @@ void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJob *pacsJob)
     {
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
         setQueryInProgress(!m_queryPACSJobPendingExecuteOrExecuting.isEmpty());
-
-        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
-        queryPACSJob->deleteLater();
     }
 }
 
-void QInputOutputPacsWidget::queryPACSJobFinished(PACSJob *pacsJob)
+void QInputOutputPacsWidget::queryPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
+    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
 
     if (queryPACSJob == NULL)
     {
@@ -190,23 +193,22 @@ void QInputOutputPacsWidget::queryPACSJobFinished(PACSJob *pacsJob)
     {
         if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk)
         {
-            showErrorQueringPACS(queryPACSJob);
+            showErrorQueringPACS(pacsJob);
         }
         else
         {
-            showQueryPACSJobResults(queryPACSJob);
+            showQueryPACSJobResults(pacsJob);
         }
 
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
         setQueryInProgress(!m_queryPACSJobPendingExecuteOrExecuting.isEmpty());
-
-        // Fem un deleteLater per si algú més ha capturat el signal de PACSJobFinished per aquest aquest job no es trobi l'objecte destruït
-        queryPACSJob->deleteLater();
     }
 }
 
-void QInputOutputPacsWidget::showQueryPACSJobResults(QueryPacsJob *queryPACSJob)
+void QInputOutputPacsWidget::showQueryPACSJobResults(PACSJobPointer pacsJob)
 {
+    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
+
     if (queryPACSJob->getQueryLevel() == QueryPacsJob::study)
     {
         m_studyTreeWidget->insertPatientList(queryPACSJob->getPatientStudyList());
@@ -242,8 +244,10 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(QueryPacsJob *queryPACSJob)
     }
 }
 
-void QInputOutputPacsWidget::showErrorQueringPACS(QueryPacsJob *queryPACSJob)
+void QInputOutputPacsWidget::showErrorQueringPACS(PACSJobPointer pacsJob)
 {
+    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
+
     if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk && queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
     {
         switch (queryPACSJob->getQueryLevel())
@@ -277,7 +281,8 @@ void QInputOutputPacsWidget::requestedSeriesOfStudy(Study *study)
 
     INFO_LOG("Cercant informacio de les series de l'estudi" + study->getInstanceUID() + " del PACS " + pacsDescription);
 
-    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildSeriesDicomMask(study->getInstanceUID()), QueryPacsJob::series));
+    enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer(new QueryPacsJob(pacsDevice, buildSeriesDicomMask(study->getInstanceUID()),
+                                                                                      QueryPacsJob::series)));
 }
 
 void QInputOutputPacsWidget::requestedImagesOfSeries(Series *series)
@@ -293,8 +298,8 @@ void QInputOutputPacsWidget::requestedImagesOfSeries(Series *series)
 
     INFO_LOG("Cercant informacio de les imatges de la serie" + series->getInstanceUID() + " de l'estudi" + series->getParentStudy()->getInstanceUID() + " del PACS " + pacsDescription);
 
-    enqueueQueryPACSJobToPACSManagerAndConnectSignals(new QueryPacsJob(pacsDevice, buildImageDicomMask(series->getParentStudy()->getInstanceUID(), series->getInstanceUID()),
-        QueryPacsJob::image));
+    enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer(new QueryPacsJob(pacsDevice, buildImageDicomMask(series->getParentStudy()->getInstanceUID(), series->getInstanceUID()),
+        QueryPacsJob::image)));
 }
 
 void QInputOutputPacsWidget::retrieveSelectedItemsFromQStudyTreeWidget()
@@ -339,14 +344,14 @@ void QInputOutputPacsWidget::retrieveSelectedItemsFromQStudyTreeWidget(ActionsAf
     }
 }
 
-void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobStarted(PACSJob *pacsJob)
+void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobStarted(PACSJobPointer pacsJob)
 {
-    emit studyRetrieveStarted((dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob))->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    emit studyRetrieveStarted(pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
 }
 
-void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
+void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
 {
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob);
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data();
 
     if (retrieveDICOMFilesFromPACSJob->getStatus() != PACSRequestStatus::RetrieveOk)
     {
@@ -375,10 +380,11 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacs
         default:
             break;
     }
+}
 
-    // Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
-    // que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop
-    pacsJob->deleteLater();
+void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
+{
+    retrieveDICOMFilesFromPACSJobCancelled(pacsJob.data());
 }
 
 void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)
@@ -386,10 +392,6 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pac
     RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = dynamic_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
     
     emit studyRetrieveCancelled(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-    
-    // Com que l'objecte és un punter altres classes poden haver capturat el Signal per això li fem un deleteLater() en comptes d'un delete, per evitar
-    // que quan responguin al signal es trobin que l'objecte ja no existeix. L'objecte serà destruït per Qt quan es retorni el eventLoop
-    pacsJob->deleteLater();
 }
 
 void QInputOutputPacsWidget::retrieve(const PacsDevice &pacsDevice, ActionsAfterRetrieve actionAfterRetrieve, Study *studyToRetrieve,
@@ -398,13 +400,14 @@ void QInputOutputPacsWidget::retrieve(const PacsDevice &pacsDevice, ActionsAfter
     RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob retrievePriorityJob = actionAfterRetrieve == View ? RetrieveDICOMFilesFromPACSJob::High
         : RetrieveDICOMFilesFromPACSJob::Medium;
 
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = new RetrieveDICOMFilesFromPACSJob(pacsDevice, retrievePriorityJob, studyToRetrieve,
-        seriesInstanceUIDToRetrieve, sopInstanceUIDToRetrieve);
+    PACSJobPointer retrieveDICOMFilesFromPACSJob(new RetrieveDICOMFilesFromPACSJob(pacsDevice, retrievePriorityJob, studyToRetrieve,
+        seriesInstanceUIDToRetrieve, sopInstanceUIDToRetrieve));
 
     m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobStarted(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobStarted(PACSJob*)));
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob*)));
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob*)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobStarted(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobStarted(PACSJobPointer)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob*)));
 
     m_actionsWhenRetrieveJobFinished.insert(retrieveDICOMFilesFromPACSJob->getPACSJobID(), actionAfterRetrieve);
 }

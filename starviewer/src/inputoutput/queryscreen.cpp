@@ -155,7 +155,7 @@ void QueryScreen::createConnections()
 #ifndef STARVIEWER_LITE
     connect(m_operationListToolButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
     connect(m_showPACSNodesToolButton, SIGNAL(toggled(bool)), SLOT(updatePACSNodesVisibility()));
-    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob*)), SLOT(newPACSJobEnqueued(PACSJob*)));
+    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJobPointer)), SLOT(newPACSJobEnqueued(PACSJobPointer)));
     if (m_risRequestManager != NULL)
     {
         // Potser que no tinguem activat escoltar peticions del RIS
@@ -499,18 +499,23 @@ void QueryScreen::studyRetrieveCancelledSlot(QString studyInstanceUID)
         emit studyRetrieveCancelled(studyInstanceUID);
     }
 }
-void QueryScreen::newPACSJobEnqueued(PACSJob *pacsJob)
+void QueryScreen::newPACSJobEnqueued(PACSJobPointer pacsJob)
 {
     if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
         m_operationAnimation->show();
         m_labelOperation->show();
-        connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
-        connect(pacsJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
+        connect(pacsJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(pacsJobFinishedOrCancelled(PACSJobPointer)));
+        connect(pacsJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(pacsJobFinishedOrCancelled(PACSJobPointer)));
+        connect(pacsJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
 
         // Indiquem que tenim un PACSJob més pendent de finalitzar
         m_PACSJobsPendingToFinish++;
     }
+}
+
+void QueryScreen::pacsJobFinishedOrCancelled(PACSJobPointer pacsJob) {
+    pacsJobFinishedOrCancelled(pacsJob.data());
 }
 
 void QueryScreen::pacsJobFinishedOrCancelled(PACSJob *)

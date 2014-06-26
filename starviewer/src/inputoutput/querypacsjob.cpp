@@ -46,8 +46,11 @@ PACSJob::PACSJobType QueryPacsJob::getPACSJobType()
     return PACSJob::QueryPACS;
 }
 
-void QueryPacsJob::run()
+void QueryPacsJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread)
 {
+    Q_UNUSED(self)
+    Q_UNUSED(thread)
+
     Settings settings;
 
     INFO_LOG("Thread iniciat per cercar al PACS: AELocal= " + settings.getValue(InputOutputSettings::LocalAETitle).toString() + "; AEPACS= " +

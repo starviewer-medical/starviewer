@@ -14,8 +14,9 @@
 
 #include "asynchronousvolumereader.h"
 
-#include <threadweaver/ThreadWeaver.h>
-#include <threadweaver/DebuggingAids.h>
+#include <ThreadWeaver/ThreadWeaver>
+#include <ThreadWeaver/DebuggingAids>
+#include <ThreadWeaver/Queue>
 
 #include "volumereaderjob.h"
 #include "volume.h"
@@ -31,7 +32,7 @@
 
 namespace udg {
 
-QHash<int, VolumeReaderJob*> AsynchronousVolumeReader::m_volumesLoading;
+QHash<int, ThreadWeaver::JobPointer> AsynchronousVolumeReader::m_volumesLoading;
 ThreadWeaver::ResourceRestrictionPolicy AsynchronousVolumeReader::m_resourceRestrictionPolicy;
 
 AsynchronousVolumeReader::AsynchronousVolumeReader(QObject *parent)
@@ -53,7 +54,7 @@ bool is32BitWindows()
 #endif
 }
 
-VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
+ThreadWeaver::JobPointer AsynchronousVolumeReader::read(Volume *volume)
 {
     DEBUG_LOG(QString("AsynchronousVolumeReader::read Begin volume: %1").arg(volume->getIdentifier().getValue()));
 
@@ -65,17 +66,18 @@ VolumeReaderJob* AsynchronousVolumeReader::read(Volume *volume)
     }
 
     VolumeReaderJob *volumeReaderJob = new VolumeReaderJob(volume);
+    ThreadWeaver::JobPointer jobPointer(volumeReaderJob);
     assignResourceRestrictionPolicy(volumeReaderJob);
 
-    connect(volumeReaderJob, SIGNAL(done(ThreadWeaver::Job*)), SLOT(unmarkVolumeFromJobAsLoading(ThreadWeaver::Job*)));
+    connect(volumeReaderJob, SIGNAL(done(ThreadWeaver::JobPointer)), SLOT(unmarkVolumeFromJobAsLoading(ThreadWeaver::JobPointer)));
 
-    this->markVolumeAsLoadingByJob(volume, volumeReaderJob);
+    this->markVolumeAsLoadingByJob(volume, jobPointer);
 
     // TODO Permetre escollir quants jobs alhora volem
-    ThreadWeaver::Weaver *weaver = this->getWeaverInstance();
-    weaver->enqueue(volumeReaderJob);
+    ThreadWeaver::Queue *queue = this->getWeaverInstance();
+    queue->enqueue(jobPointer);
 
-    return volumeReaderJob;
+    return jobPointer;
 }
 
 void AsynchronousVolumeReader::assignResourceRestrictionPolicy(VolumeReaderJob *volumeReaderJob)
@@ -167,12 +169,12 @@ bool AsynchronousVolumeReader::checkForResourceRestrictions(bool checkMultiframe
     return foundRestriction;
 }
 
-void AsynchronousVolumeReader::unmarkVolumeFromJobAsLoading(ThreadWeaver::Job *job)
+void AsynchronousVolumeReader::unmarkVolumeFromJobAsLoading(ThreadWeaver::JobPointer job)
 {
     // TODO Aquí és el lloc més correcte per desmarcar el volume?? Així tenim el problema de que no podem destruïr aquest objecte
     // fins que s'ha finalitzat el job, si no, no es marcaria mai com a carregat. Si no es fa aquí, hem de tenir en compte
     // problemes de concurrència.
-    VolumeReaderJob *volumeReaderJob = dynamic_cast<VolumeReaderJob*>(job);
+    VolumeReaderJob *volumeReaderJob = job.dynamicCast<VolumeReaderJob>().data();
     if (volumeReaderJob)
     {
         this->unmarkVolumeAsLoading(volumeReaderJob->getVolume());
@@ -201,16 +203,15 @@ void AsynchronousVolumeReader::cancelLoadingAndDeleteVolume(Volume *volume)
     if (this->isVolumeLoading(volume))
     {
         DEBUG_LOG(QString("Volume %1 isLoading, trying dequeue").arg(volume->getIdentifier().getValue()));
-        VolumeReaderJob *job = this->getVolumeReaderJob(volume);
-        ThreadWeaver::Weaver *weaver = this->getWeaverInstance();
-        if (weaver->dequeue(job))
+        ThreadWeaver::JobPointer job = this->getVolumeReaderJob(volume);
+        ThreadWeaver::Queue *queue = this->getWeaverInstance();
+        if (queue->dequeue(job))
         {
             delete volume;
         }
         else
         {
             DEBUG_LOG(QString("Volume %1 cannot be dequeued, requesting abort and delete").arg(volume->getIdentifier().getValue()));
-            connect(job, SIGNAL(done(ThreadWeaver::Job*)), volume, SLOT(deleteLater()));
             job->requestAbort();
         }
     }
@@ -220,7 +221,7 @@ void AsynchronousVolumeReader::cancelLoadingAndDeleteVolume(Volume *volume)
     }
 }
 
-void AsynchronousVolumeReader::markVolumeAsLoadingByJob(Volume *volume, VolumeReaderJob *volumeReaderJob)
+void AsynchronousVolumeReader::markVolumeAsLoadingByJob(Volume *volume, ThreadWeaver::JobPointer volumeReaderJob)
 {
     DEBUG_LOG(QString("markVolumeAsLoading: Volume %1").arg(volume->getIdentifier().getValue()));
     m_volumesLoading.insert(volume->getIdentifier().getValue(), volumeReaderJob);
@@ -232,13 +233,13 @@ void AsynchronousVolumeReader::unmarkVolumeAsLoading(Volume *volume)
     m_volumesLoading.remove(volume->getIdentifier().getValue());
 }
 
-ThreadWeaver::Weaver* AsynchronousVolumeReader::getWeaverInstance() const
+ThreadWeaver::Queue *AsynchronousVolumeReader::getWeaverInstance() const
 {
     // TODO De moment es retorna la instància global, caldria permetre passar-la com a paràmetre.
-    return ThreadWeaver::Weaver::instance();
+    return ThreadWeaver::Queue::instance();
 }
 
-VolumeReaderJob* AsynchronousVolumeReader::getVolumeReaderJob(Volume *volume) const
+ThreadWeaver::JobPointer AsynchronousVolumeReader::getVolumeReaderJob(Volume *volume) const
 {
     if (this->isVolumeLoading(volume))
     {
@@ -246,7 +247,7 @@ VolumeReaderJob* AsynchronousVolumeReader::getVolumeReaderJob(Volume *volume) co
     }
     else
     {
-        return NULL;
+        return ThreadWeaver::JobPointer();
     }
 }
 

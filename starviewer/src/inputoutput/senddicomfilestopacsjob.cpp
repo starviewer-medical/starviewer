@@ -48,8 +48,11 @@ PACSJob::PACSJobType SendDICOMFilesToPACSJob::getPACSJobType()
     return PACSJob::SendDICOMFilesToPACSJobType;
 }
 
-void SendDICOMFilesToPACSJob::run()
+void SendDICOMFilesToPACSJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread)
 {
+    Q_UNUSED(self)
+    Q_UNUSED(thread)
+
     m_lastDICOMFileSeriesInstanceUID = "";
     m_numberOfSeriesSent = 0;
 

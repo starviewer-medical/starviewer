@@ -23,6 +23,7 @@
 
 #include "listenrisrequests.h"
 #include "pacsdevice.h"
+#include "pacsjob.h"
 
 class QThread;
 
@@ -34,7 +35,6 @@ class Patient;
 class Study;
 class QPopUpRISRequestsScreen;
 class QueryPacsJob;
-class PACSJob;
 class RetrieveDICOMFilesFromPACSJob;
 
 /**
@@ -68,16 +68,18 @@ private slots:
     void processRISRequest(DicomMask mask);
 
     /// Slot que s'activa quan finalitza un job de consulta al PACS
-    void queryPACSJobFinished(PACSJob *pacsJob);
+    void queryPACSJobFinished(PACSJobPointer pacsJob);
 
     /// Slot que s'activa quan un job de consulta al PACS és cancel·lat
+    void queryPACSJobCancelled(PACSJobPointer pacsJob);
     void queryPACSJobCancelled(PACSJob *pacsJob);
 
     /// Slot que s'activa quan s'ha cancel·lat la descàrre d'una petició del RIS
+    void retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob);
     void retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob);
 
     /// Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
-    void retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob);
+    void retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob);
 
     /// Mostrar un missatge indicant que s'ha produït un error escoltant peticions del RIS
     void showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error);
@@ -97,16 +99,16 @@ private:
 
     /// Ens encua el QueryPACSJob al PACSManager i ens connecta amb els seus signals per poder processar els resultats. També afegeix el Job en una taula
     /// de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
-    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPacsJob);
+    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPacsJob);
 
     /// S'activa quan ha finalitzat la consulta de la cerca del l'estudi sol·licitat pel RIS, comprova si s'han trobat estudis i si és així es descarrega
     void queryRequestRISFinished();
 
     /// Mostra un missatge indicant que s'ha produït un error al fer la consulta a un PACS
-    void errorQueryingStudy(QueryPacsJob *queryPACSJob);
+    void errorQueryingStudy(PACSJobPointer queryPACSJob);
 
     /// Posa els estudis d'un QueryPacsJob a la cua d'estudis trobats per processa
-    void addFoundStudiesToRetrieveQueue(QueryPacsJob *queryPACSJob);
+    void addFoundStudiesToRetrieveQueue(PACSJobPointer queryPACSJob);
 
     /// Descarrega els estudis trobats a partir d'una queryPACSJob
     void retrieveFoundStudiesInQueue();
@@ -116,7 +118,7 @@ private:
     void retrieveStudyFoundInQueryPACS(Study *study);
 
     /// Sol·licita descarregar l'estudi passat utilitzant el PACSManager
-    RetrieveDICOMFilesFromPACSJob* retrieveStudyFromPACS(Study *study);
+    PACSJobPointer retrieveStudyFromPACS(Study *study);
 
     /// Obté l'estudi de la base de dades
     void retrieveStudyFromDatabase(Study *study);
@@ -157,7 +159,7 @@ private:
     QStringList m_studiesInstancesUIDRequestedToRetrieve;
 
     /// Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
-    QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
+    QHash<int, PACSJobPointer> m_queryPACSJobPendingExecuteOrExecuting;
 
     int m_numberOfStudiesAddedToRetrieveForCurrentRisRequest;
 
