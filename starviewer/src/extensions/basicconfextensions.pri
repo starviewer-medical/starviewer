@@ -33,6 +33,7 @@ include(../itk.pri)
 include(../gdcm.pri)
 include(../dcmtk.pri)
 include(../log4cxx.pri)
+include(../threadweaver.pri)
 include(../compilationtype.pri)
 
 QT += widgets
