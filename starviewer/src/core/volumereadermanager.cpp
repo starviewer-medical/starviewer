@@ -56,11 +56,12 @@ void VolumeReaderManager::readVolumes(const QList<Volume*> &volumes)
     {
         // TODO Esborrar volumeReader!!
         AsynchronousVolumeReader *volumeReader = new AsynchronousVolumeReader();
-        m_volumeReaderJobs << volumeReader->read(volume);
-        m_jobsProgress.insert(m_volumeReaderJobs.last().dynamicCast<VolumeReaderJob>().data(), 0);
+        QSharedPointer<VolumeReaderJob> job = volumeReader->read(volume).dynamicCast<VolumeReaderJob>();
+        m_volumeReaderJobs << job;
+        m_jobsProgress.insert(job.data(), 0);
         m_volumes << NULL;
-        connect(m_volumeReaderJobs.last().dynamicCast<VolumeReaderJob>().data(), SIGNAL(done(ThreadWeaver::JobPointer)), SLOT(jobFinished(ThreadWeaver::JobPointer)));
-        connect(m_volumeReaderJobs.last().dynamicCast<VolumeReaderJob>().data(), SIGNAL(progress(VolumeReaderJob*, int)), SLOT(updateProgress(VolumeReaderJob*, int)));
+        connect(job.data(), SIGNAL(done(ThreadWeaver::JobPointer)), SLOT(jobFinished(ThreadWeaver::JobPointer)));
+        connect(job.data(), SIGNAL(progress(VolumeReaderJob*, int)), SLOT(updateProgress(VolumeReaderJob*, int)));
     }
 }
 
@@ -70,10 +71,11 @@ void VolumeReaderManager::cancelReading()
     // Quan es faci bé, tenir en compte què passa si algun altre visor el vol continuar descarregant igualment i nosaltres aquí el cancelem?
     for (int i = 0; i < m_volumeReaderJobs.size(); ++i)
     {
-        if (!m_volumeReaderJobs[i].isNull())
+        QSharedPointer<VolumeReaderJob> job = m_volumeReaderJobs[i].toStrongRef().dynamicCast<VolumeReaderJob>();
+        if (!job.isNull())
         {
-            disconnect(m_volumeReaderJobs[i].dynamicCast<VolumeReaderJob>().data(), SIGNAL(done(ThreadWeaver::JobPointer)), this, SLOT(jobFinished(ThreadWeaver::JobPointer)));
-            disconnect(m_volumeReaderJobs[i].dynamicCast<VolumeReaderJob>().data(), SIGNAL(progress(VolumeReaderJob*, int)), this, SLOT(updateProgress(VolumeReaderJob*, int)));
+            disconnect(job.data(), SIGNAL(done(ThreadWeaver::JobPointer)), this, SLOT(jobFinished(ThreadWeaver::JobPointer)));
+            disconnect(job.data(), SIGNAL(progress(VolumeReaderJob*, int)), this, SLOT(updateProgress(VolumeReaderJob*, int)));
         }
         m_volumeReaderJobs[i].clear();
     }
