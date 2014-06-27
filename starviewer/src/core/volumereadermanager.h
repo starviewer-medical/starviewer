@@ -74,7 +74,7 @@ private:
 
 private:
     /// List of jobs to read volumes.
-    QList<ThreadWeaver::JobPointer> m_volumeReaderJobs;
+    QList<QWeakPointer<ThreadWeaver::JobInterface>> m_volumeReaderJobs;
 
     /// List to control the progress of all jobs
     QHash<VolumeReaderJob*, int> m_jobsProgress;
