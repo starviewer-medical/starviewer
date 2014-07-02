@@ -34,7 +34,37 @@
 #include "logging.h"
 #include "patientfiller.h"
 
+#include <QTextCodec>
+
 namespace udg {
+
+namespace {
+
+/// Returns a text codec suitable for the given directory record.
+QTextCodec* getTextCodec(DcmDirectoryRecord *directoryRecord)
+{
+    QTextCodec *codec = 0;
+
+    if (directoryRecord->tagExists(DCM_SpecificCharacterSet))
+    {
+        OFString value;
+        OFCondition status = directoryRecord->findAndGetOFStringArray(DCM_SpecificCharacterSet, value);
+
+        if (status.good())
+        {
+            codec = QTextCodec::codecForName(value.c_str());
+        }
+    }
+
+    if (!codec)
+    {
+        codec = QTextCodec::codecForLocale();
+    }
+
+    return codec;
+}
+
+}
 
 DICOMDIRReader::DICOMDIRReader()
 {
@@ -518,27 +548,29 @@ bool DICOMDIRReader::matchDicomMaskToPatientName(DicomMask *mask, Patient *patie
 
 Patient* DICOMDIRReader::fillPatient(DcmDirectoryRecord *dcmDirectoryRecordPatient)
 {
+    QTextCodec *codec = getTextCodec(dcmDirectoryRecordPatient);
     OFString tagValue;
     Patient *patient = new Patient();
 
     // Nom pacient
     dcmDirectoryRecordPatient->findAndGetOFStringArray(DCM_PatientName, tagValue);
-    patient->setFullName(QString::fromLatin1(tagValue.c_str()));
+    patient->setFullName(codec->toUnicode(tagValue.c_str()));
     // Id pacient
     dcmDirectoryRecordPatient->findAndGetOFStringArray(DCM_PatientID, tagValue);
-    patient->setID(tagValue.c_str());
+    patient->setID(codec->toUnicode(tagValue.c_str()));
 
     return patient;
 }
 
 Study* DICOMDIRReader::fillStudy(DcmDirectoryRecord *dcmDirectoryRecordStudy)
 {
+    QTextCodec *codec = getTextCodec(dcmDirectoryRecordStudy);
     OFString tagValue;
 
     Study *study = new Study();
     // Id estudi
     dcmDirectoryRecordStudy->findAndGetOFStringArray(DCM_StudyID, tagValue);
-    study->setID(tagValue.c_str());
+    study->setID(codec->toUnicode(tagValue.c_str()));
 
     // Hora estudi
     dcmDirectoryRecordStudy->findAndGetOFStringArray(DCM_StudyTime, tagValue);
@@ -550,11 +582,11 @@ Study* DICOMDIRReader::fillStudy(DcmDirectoryRecord *dcmDirectoryRecordStudy)
 
     // Descripció estudi
     dcmDirectoryRecordStudy->findAndGetOFStringArray(DCM_StudyDescription, tagValue);
-    study->setDescription(QString::fromLatin1(tagValue.c_str()));
+    study->setDescription(codec->toUnicode(tagValue.c_str()));
 
     // Accession number
     dcmDirectoryRecordStudy->findAndGetOFStringArray(DCM_AccessionNumber, tagValue);
-    study->setAccessionNumber(tagValue.c_str());
+    study->setAccessionNumber(codec->toUnicode(tagValue.c_str()));
 
     // Obtenim el UID de l'estudi
     dcmDirectoryRecordStudy->findAndGetOFStringArray(DCM_StudyInstanceUID, tagValue);
@@ -565,6 +597,7 @@ Study* DICOMDIRReader::fillStudy(DcmDirectoryRecord *dcmDirectoryRecordStudy)
 
 Series* DICOMDIRReader::fillSeries(DcmDirectoryRecord *dcmDirectoryRecordSeries)
 {
+    QTextCodec *codec = getTextCodec(dcmDirectoryRecordSeries);
     OFString tagValue;
     Series *series = new Series;
 
@@ -581,7 +614,7 @@ Series* DICOMDIRReader::fillSeries(DcmDirectoryRecord *dcmDirectoryRecordSeries)
 
     // Protocol Name
     dcmDirectoryRecordSeries->findAndGetOFStringArray(DCM_ProtocolName, tagValue);
-    series->setProtocolName(QString::fromLatin1(tagValue.c_str()));
+    series->setProtocolName(codec->toUnicode(tagValue.c_str()));
 
     return series;
 }
