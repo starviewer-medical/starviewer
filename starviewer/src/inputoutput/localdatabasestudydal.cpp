@@ -31,7 +31,7 @@ LocalDatabaseStudyDAL::LocalDatabaseStudyDAL(DatabaseConnection *dbConnection)
 
 void LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newStudy, lastAccessDate)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(newStudy, lastAccessDate).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -41,7 +41,7 @@ void LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
 
 void LocalDatabaseStudyDAL::update(Study *studyToUpdate, const QDate &lastAccessDate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(studyToUpdate, lastAccessDate)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdate(studyToUpdate, lastAccessDate).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -51,7 +51,7 @@ void LocalDatabaseStudyDAL::update(Study *studyToUpdate, const QDate &lastAccess
 
 void LocalDatabaseStudyDAL::del(const DicomMask &studyMaskToDelete)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(studyMaskToDelete)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlDelete(studyMaskToDelete).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -68,7 +68,7 @@ QList<Study*> LocalDatabaseStudyDAL::queryOrderByLastAccessDate(const DicomMask 
     QList<Study*> studyList;
     QString sqlSentence = buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor) + " Order by LastAccessDate";
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(sqlSentence), &reply, &rows, &columns, error);
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), sqlSentence.toUtf8().constData(), &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -96,7 +96,7 @@ QList<Study*> LocalDatabaseStudyDAL::query(const DicomMask &studyMask, QDate las
     QList<Study*> studyList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          qPrintable(buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor)),
+                                          buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor).toUtf8().constData(),
                                           &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
@@ -124,7 +124,7 @@ QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(const DicomMask &patien
     QList<Patient*> patientList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          qPrintable(buildSqlSelectStudyPatient(patientStudyMaskToQuery, lastAccessDateMinor, lastAccessDateEqualOrMajor)),
+                                          buildSqlSelectStudyPatient(patientStudyMaskToQuery, lastAccessDateMinor, lastAccessDateEqualOrMajor).toUtf8().constData(),
                                           &reply, &rows, &columns, error);
     if (getLastError() != SQLITE_OK)
     {
@@ -154,7 +154,7 @@ qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString 
     char **error = NULL;
     qlonglong patientID = -1;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID)),
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID).toUtf8().constData(),
         &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)

@@ -30,7 +30,7 @@ LocalDatabaseDisplayShutterDAL::LocalDatabaseDisplayShutterDAL(DatabaseConnectio
 
 void LocalDatabaseDisplayShutterDAL::insert(const DisplayShutter &shutter, Image *shuttersImage)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSQLInsert(shutter, shuttersImage)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSQLInsert(shutter, shuttersImage).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -54,7 +54,7 @@ void LocalDatabaseDisplayShutterDAL::update(const QList<DisplayShutter> &shutter
 
 void LocalDatabaseDisplayShutterDAL::del(const DicomMask &mask)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSQLDelete(mask)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSQLDelete(mask).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -70,7 +70,7 @@ QList<DisplayShutter> LocalDatabaseDisplayShutterDAL::query(const DicomMask &mas
     char **error = NULL;
     QList<DisplayShutter> shutterList;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(buildSQLSelect(mask)), &reply, &rows, &columns, error);
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), buildSQLSelect(mask).toUtf8().constData(), &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
     {

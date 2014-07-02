@@ -29,7 +29,7 @@ LocalDatabasePatientDAL::LocalDatabasePatientDAL(DatabaseConnection *dbConnectio
 
 void LocalDatabasePatientDAL::insert(Patient *newPatient)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newPatient)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(newPatient).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -47,7 +47,7 @@ void LocalDatabasePatientDAL::insert(Patient *newPatient)
 
 void LocalDatabasePatientDAL::update(Patient *patientToUpdate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(patientToUpdate)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdate(patientToUpdate).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -57,7 +57,7 @@ void LocalDatabasePatientDAL::update(Patient *patientToUpdate)
 
 void LocalDatabasePatientDAL::del(qlonglong patientID)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(patientID)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlDelete(patientID).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -74,7 +74,7 @@ QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
     QList<Patient*> patientList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          qPrintable(buildSqlSelect(patientMask)),
+                                          buildSqlSelect(patientMask).toUtf8().constData(),
                                           &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
