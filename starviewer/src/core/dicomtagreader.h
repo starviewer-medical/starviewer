@@ -103,6 +103,9 @@ public:
 private:
     /// Initializes class attributes on creation
     void initialize();
+
+    /// Initializes the text codec according to the current dataset.
+    void initializeTextCodec();
     
     /// Converteix una seqüència de DCMTK a una seqüència pròpia.
     DICOMSequenceAttribute* convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence, DICOMTagReader::ReturnValueOfTags returnValueOfTags) const;
@@ -132,6 +135,9 @@ private:
 
     /// Holds sequences that have been already retrieved.
     mutable QMap<DICOMTag, DICOMSequenceAttribute*> m_sequencesCache;
+
+    /// Text codec used to convert dataset strings to UTF-8.
+    QTextCodec *m_textCodec;
 
 };
 
