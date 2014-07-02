@@ -33,7 +33,7 @@ void LocalDatabaseUtilDAL::compact()
 
     QString compactSentence = "vacuum";
 
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(compactSentence), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), compactSentence.toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -48,7 +48,7 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
     char **reply = NULL;
     char **error = NULL;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(buildSqlGetDatabaseRevision()),
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), buildSqlGetDatabaseRevision().toUtf8().constData(),
                                           &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
@@ -81,7 +81,7 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
 
 void LocalDatabaseUtilDAL::updateDatabaseRevision(int databaseRevision)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdateDatabaseRevision(databaseRevision)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdateDatabaseRevision(databaseRevision).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {

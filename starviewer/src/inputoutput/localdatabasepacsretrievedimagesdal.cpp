@@ -28,7 +28,7 @@ LocalDatabasePACSRetrievedImagesDAL::LocalDatabasePACSRetrievedImagesDAL(Databas
 
 qlonglong LocalDatabasePACSRetrievedImagesDAL::insert(const PacsDevice &pacsDevice)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(pacsDevice)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(pacsDevice).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -62,7 +62,7 @@ PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString &sqlQuerySen
     char **reply = NULL;
     char **error = NULL;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(sqlQuerySentence), &reply, &rows, &columns, error);
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), sqlQuerySentence.toUtf8().constData(), &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
     {

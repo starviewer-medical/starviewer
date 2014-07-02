@@ -41,7 +41,7 @@ LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection *dbConnection)
 
 void LocalDatabaseImageDAL::insert(Image *newImage)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newImage)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(newImage).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -51,7 +51,7 @@ void LocalDatabaseImageDAL::insert(Image *newImage)
 
 void LocalDatabaseImageDAL::del(const DicomMask &imageMaskToDelete)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(imageMaskToDelete)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlDelete(imageMaskToDelete).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -61,7 +61,7 @@ void LocalDatabaseImageDAL::del(const DicomMask &imageMaskToDelete)
 
 void LocalDatabaseImageDAL::update(Image *imageToUpdate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(imageToUpdate)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdate(imageToUpdate).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -78,7 +78,7 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
     QList<Image*> imageList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          qPrintable(buildSqlSelect(imageMask)),
+                                          buildSqlSelect(imageMask).toUtf8().constData(),
                                           &reply, &rows, &columns, error);
     if (getLastError() != SQLITE_OK)
     {
@@ -114,7 +114,7 @@ int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
     char **error = NULL;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          qPrintable(buildSqlSelectCountImages(imageMaskToCount)),
+                                          buildSqlSelectCountImages(imageMaskToCount).toUtf8().constData(),
                                           &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
