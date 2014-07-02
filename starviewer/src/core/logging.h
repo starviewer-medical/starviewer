@@ -55,28 +55,28 @@
 #define INFO_LOG(msg) \
     if (true) \
     { \
-        LOG4CXX_INFO(log4cxx::Logger::getLogger("info.release"), qPrintable(QString(msg))) \
+        LOG4CXX_INFO(log4cxx::Logger::getLogger("info.release"), QString(msg).toUtf8().constData()) \
     } else (void)0
 
 /// Macro per a missatges de warning
 #define WARN_LOG(msg) \
     if (true) \
     { \
-        LOG4CXX_WARN(log4cxx::Logger::getLogger("info.release"), qPrintable(QString(msg))) \
+        LOG4CXX_WARN(log4cxx::Logger::getLogger("info.release"), QString(msg).toUtf8().constData()) \
     } else (void)0
 
 /// Macro per a missatges d'error
 #define ERROR_LOG(msg) \
     if (true) \
     { \
-        LOG4CXX_ERROR(log4cxx::Logger::getLogger("errors.release"), qPrintable(QString(msg))) \
+        LOG4CXX_ERROR(log4cxx::Logger::getLogger("errors.release"), QString(msg).toUtf8().constData()) \
     } else (void)0
 
 /// Macro per a missatges d'error fatals/crítics
 #define FATAL_LOG(msg) \
     if (true) \
     { \
-        LOG4CXX_FATAL(log4cxx::Logger::getLogger("errors.release"), qPrintable(QString(msg))) \
+        LOG4CXX_FATAL(log4cxx::Logger::getLogger("errors.release"), QString(msg).toUtf8().constData()) \
     } else (void)0
 
 #endif
