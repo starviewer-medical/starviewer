@@ -141,8 +141,8 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
 
         if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
         {
-            m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
-            m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(m_lowerRightText.trimmed()));
+            m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
+            m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
         }
     }
     else
@@ -169,7 +169,7 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotationInformation()
 
         m_lowerRightText = laterality + " " + projection;
         
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(m_lowerRightText.trimmed()));
+        m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
     }
     else
     {
@@ -200,7 +200,7 @@ void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
     {
         if (!m_patientOrientationText[i].isEmpty())
         {
-            m_patientOrientationTextActor[i]->SetInput(qPrintable(m_patientOrientationText[i]));
+            m_patientOrientationTextActor[i]->SetInput(m_patientOrientationText[i].toUtf8().constData());
             m_patientOrientationTextActor[i]->SetVisibility(textActorShouldBeVisible);
         }
         else
@@ -219,8 +219,8 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
 
     if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
     {
-        m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(m_lowerRightText.trimmed()));
+        m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
+        m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
     }
     else
     {
@@ -285,7 +285,7 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
             lowerLeftText += QObject::tr(" Thickness: %1 mm").arg(m_2DViewer->getCurrentSliceThickness(), 0, 'f', 2);
         }
 
-        m_cornerAnnotations->SetText(LowerLeftCornerIndex, qPrintable(lowerLeftText));
+        m_cornerAnnotations->SetText(LowerLeftCornerIndex, lowerLeftText.toUtf8().constData());
     }
     else
     {
@@ -302,16 +302,16 @@ void Q2DViewerAnnotationHandler::updateLateralityAnnotationInformation()
             
         if (m_lowerRightText.trimmed().isEmpty())
         {
-            m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(lateralityAnnotation));
+            m_cornerAnnotations->SetText(LowerRightCornerIndex, lateralityAnnotation.toUtf8().constData());
         }
         else
         {
-            m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(lateralityAnnotation + "\n" + m_lowerRightText.trimmed()));
+            m_cornerAnnotations->SetText(LowerRightCornerIndex, (lateralityAnnotation + "\n" + m_lowerRightText.trimmed()).toUtf8().constData());
         }
     }
     else
     {
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, qPrintable(m_lowerRightText.trimmed()));
+        m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
     }
 }
 
@@ -330,16 +330,16 @@ void Q2DViewerAnnotationHandler::updatePatientInformationAnnotation()
                 {
                     imageTime = "--:--";
                 }
-                m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText + imageTime));
+                m_cornerAnnotations->SetText(UpperRightCornerIndex, (m_upperRightText + imageTime).toUtf8().constData());
             }
             else
             {
-                m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
+                m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
             }
         }
         else
         {
-            m_cornerAnnotations->SetText(UpperRightCornerIndex, qPrintable(m_upperRightText));
+            m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
         }
     }
 }
@@ -363,7 +363,7 @@ void Q2DViewerAnnotationHandler::updateWindowInformationAnnotation()
         m_upperLeftText = "";
     }
     
-    m_cornerAnnotations->SetText(UpperLeftCornerIndex, qPrintable(m_upperLeftText));
+    m_cornerAnnotations->SetText(UpperLeftCornerIndex, m_upperLeftText.toUtf8().constData());
 }
 
 QString Q2DViewerAnnotationHandler::getSliceLocationAnnotation()
