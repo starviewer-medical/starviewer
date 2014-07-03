@@ -74,7 +74,7 @@ vtkProp* DrawerText::getAsVtkProp()
         // Assignem el text
         if (!m_text.isEmpty())
         {
-            m_vtkActor->SetCaption(qPrintable(m_text));
+            m_vtkActor->SetCaption(m_text.toUtf8().constData());
             if (m_isVisible)
             {
                 m_vtkActor->VisibilityOn();
@@ -114,7 +114,7 @@ void DrawerText::updateVtkProp()
         // Assignem el text
         if (!m_text.isEmpty())
         {
-            m_vtkActor->SetCaption(qPrintable(m_text));
+            m_vtkActor->SetCaption(m_text.toUtf8().constData());
             if (m_isVisible)
             {
                 m_vtkActor->VisibilityOn();
