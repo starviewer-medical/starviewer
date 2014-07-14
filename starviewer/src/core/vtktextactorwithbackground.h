@@ -55,8 +55,8 @@ public:
     /// Sets the margin around the text.
     vtkSetMacro(Margin, int)
 
-    /// Returns the bounds of the actor as (Xmin, Xmax, Ymin, Ymax, Zmin, Zmax).
-    vtkGetVector6Macro(Bounds, double)
+    /// Returns the bounds of the actor in world coordinates as (Xmin, Xmax, Ymin, Ymax, Zmin, Zmax).
+    vtkGetVector6Macro(WorldBounds, double)
 
 protected:
     VtkTextActorWithBackground();
@@ -77,7 +77,7 @@ protected:
     int Margin;
 
     /// Bounds of the actor in world coordinates.
-    double Bounds[6];
+    double WorldBounds[6];
 
 private:
     // Not implemented.
@@ -85,8 +85,8 @@ private:
     // Not implemented.
     void operator=(const VtkTextActorWithBackground&);
 
-    /// Updates the bounds of the actor.
-    void updateBounds(vtkViewport *viewport);
+    /// Updates the bounds of the actor in world coordinates.
+    void updateWorldBounds(vtkViewport *viewport);
 
 private:
     /// Image data to represent the background.

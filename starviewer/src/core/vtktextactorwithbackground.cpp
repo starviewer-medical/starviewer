@@ -49,6 +49,7 @@ void VtkTextActorWithBackground::ShallowCopy(vtkProp *prop)
     {
         this->SetBackgroundColor(actor->GetBackgroundColor());
         this->SetBackgroundOpacity(actor->GetBackgroundOpacity());
+        this->SetMargin(actor->GetMargin());
     }
 
     this->Superclass::ShallowCopy(prop);
@@ -60,6 +61,9 @@ void VtkTextActorWithBackground::PrintSelf(ostream &os, vtkIndent indent)
 
     os << indent << "BackgroundColor: (" << this->BackgroundColor[0] << ", " << this->BackgroundColor[1] << ", " << this->BackgroundColor[2] << ")\n";
     os << indent << "BackgroundOpacity: " << this->BackgroundOpacity << "\n";
+    os << indent << "Margin: " << this->Margin << "\n";
+    os << indent << "WorldBounds: (" << this->WorldBounds[0] << ", " << this->WorldBounds[1] << ", " << this->WorldBounds[2] << ", "
+                                     << this->WorldBounds[3] << ", " << this->WorldBounds[4] << ", " << this->WorldBounds[5] << ")\n";
 }
 
 void VtkTextActorWithBackground::GetBoundingBox(vtkViewport *vport, double bbox[4])
@@ -85,7 +89,7 @@ VtkTextActorWithBackground::VtkTextActorWithBackground()
 
     for (int i = 0; i < 6; i++)
     {
-        this->Bounds[i] = 0.0;
+        this->WorldBounds[i] = 0.0;
     }
 
     m_backgroundImage = vtkImageData::New();
@@ -318,7 +322,7 @@ void VtkTextActorWithBackground::ComputeRectangle(vtkViewport *viewport)
     y = yo;
     this->RectanglePoints->InsertNextPoint(cosine * x - sine * y, sine * x + cosine * y, 0.0);
 
-    updateBounds(viewport);
+    updateWorldBounds(viewport);
 }
 
 int VtkTextActorWithBackground::UpdateRectangle(vtkViewport *viewport)
@@ -336,7 +340,7 @@ int VtkTextActorWithBackground::UpdateRectangle(vtkViewport *viewport)
     return returnValue;
 }
 
-void VtkTextActorWithBackground::updateBounds(vtkViewport *viewport)
+void VtkTextActorWithBackground::updateWorldBounds(vtkViewport *viewport)
 {
     double position[3];
     this->PositionCoordinate->GetValue(position);
@@ -356,7 +360,7 @@ void VtkTextActorWithBackground::updateBounds(vtkViewport *viewport)
         boundingPoints->SetPoint(i, point);
     }
 
-    boundingPoints->GetBounds(this->Bounds);
+    boundingPoints->GetBounds(this->WorldBounds);
     boundingPoints->Delete();
 }
 
