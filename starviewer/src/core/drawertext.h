@@ -44,24 +44,6 @@ public:
     /// Retorna el punt d'ancoratge
     double* getAttachmentPoint();
 
-    /// Activa el dibuixat del requadre de la casella de text
-    void borderOn();
-
-    /// Desactiva el dibuixat del requadre de la casella de text
-    void borderOff();
-
-    /// Activa / desactiva el dibuixat del requadre de la casella de text segons el paràmetre que li passem
-    void borderEnabled(bool enabled);
-
-    /// Ens diu si s'ha de dibuixar el requadre o no.
-    bool isBorderEnabled();
-
-    /// Assigna l'espaiat entre el text i la caixa contenidora
-    void setPadding(int padding);
-
-    /// Ens retona l'espaiat entre el text i la caixa contenidora
-    int getPadding();
-
     /// Ens retorna el tipus de font
     QString getFontFamily();
 
@@ -172,9 +154,6 @@ private:
     /// Justificació vertical
     QString m_verticalJustification;
 
-    /// Contorn del text
-    bool m_border;
-
     /// Família de la font
     QString m_fontFamily;
 
@@ -198,9 +177,6 @@ private:
 
     /// Text escalat
     bool m_scaled;
-
-    /// Espaiat
-    int m_padding;
 
     /// Estructures de vtk, per construir el text
     vtkCaptionActor2D *m_vtkActor;
