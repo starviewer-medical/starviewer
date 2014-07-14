@@ -166,6 +166,14 @@ void DrawerText::updateVtkActorProperties()
     m_vtkActor->SetHeight(m_height);
     m_vtkActor->SetWidth(m_width);
 
+    if (m_bold)
+    {
+        properties->BoldOn();
+    }
+    else
+    {
+        properties->BoldOff();
+    }
 
     if (m_shadow)
     {
