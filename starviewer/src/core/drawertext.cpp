@@ -31,7 +31,7 @@ DrawerText::DrawerText(QObject *parent)
     m_fontSize = ApplicationStyleHelper().getToolsFontSize();
     m_shadow = false;
     m_italic = false;
-    m_bold = false;
+    m_bold = true;
     m_height = 0.05;
     m_width = 0.09;
     m_scaled = false;
