@@ -415,7 +415,8 @@ HEADERS += extensionfactory.h \
     nmctvolumedisplayunithandler.h \
     nmroidataprinter.h \
     nmctfusionroidataprinter.h \
-    vtkcorrectimageblend.h
+    vtkcorrectimageblend.h \
+    vtktextactorwithbackground.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -778,7 +779,8 @@ SOURCES += extensionmediator.cpp \
     nmctvolumedisplayunithandler.cpp \
     nmroidataprinter.cpp \
     nmctfusionroidataprinter.cpp \
-    vtkcorrectimageblend.cpp
+    vtkcorrectimageblend.cpp \
+    vtktextactorwithbackground.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
