@@ -224,8 +224,8 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
     }
     else
     {
-        m_cornerAnnotations->SetText(UpperRightCornerIndex, "");
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, "");
+        m_cornerAnnotations->SetText(UpperRightCornerIndex, " ");
+        m_cornerAnnotations->SetText(LowerRightCornerIndex, " ");
     }
 
     if (m_enabledAnnotations.testFlag(PatientOrientationAnnotation))
@@ -289,7 +289,7 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
     }
     else
     {
-        m_cornerAnnotations->SetText(LowerLeftCornerIndex, "");
+        m_cornerAnnotations->SetText(LowerLeftCornerIndex, " ");
     }
 }
 
@@ -360,7 +360,7 @@ void Q2DViewerAnnotationHandler::updateWindowInformationAnnotation()
     }
     else
     {
-        m_upperLeftText = "";
+        m_upperLeftText = " ";
     }
     
     m_cornerAnnotations->SetText(UpperLeftCornerIndex, m_upperLeftText.toUtf8().constData());
