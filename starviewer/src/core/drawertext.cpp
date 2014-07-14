@@ -15,12 +15,10 @@
 #include "drawertext.h"
 #include "logging.h"
 #include "mathtools.h"
-#include "q2dviewer.h"
 #include "applicationstylehelper.h"
+#include "vtktextactorwithbackground.h"
 // Vtk
 #include <vtkTextProperty.h>
-#include <vtkTextActor.h>
-#include <vtkCaptionActor2D.h>
 
 namespace udg {
 
@@ -67,12 +65,13 @@ vtkProp* DrawerText::getAsVtkProp()
     if (!m_vtkActor)
     {
         // Creem el pipeline de l'm_vtkActor
-        m_vtkActor = vtkCaptionActor2D::New();
+        m_vtkActor = VtkTextActorWithBackground::New();
+        m_vtkActor->SetMargin(2);
 
         // Assignem el text
         if (!m_text.isEmpty())
         {
-            m_vtkActor->SetCaption(m_text.toUtf8().constData());
+            m_vtkActor->SetInput(m_text.toUtf8().constData());
             if (m_isVisible)
             {
                 m_vtkActor->VisibilityOn();
@@ -84,7 +83,8 @@ vtkProp* DrawerText::getAsVtkProp()
         }
 
         // Assignem la posició en pantalla
-        m_vtkActor->SetAttachmentPoint(m_attachPoint);
+        m_vtkActor->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+        m_vtkActor->GetPositionCoordinate()->SetValue(m_attachPoint);
 
         // Li donem els atributs
         updateVtkActorProperties();
@@ -112,7 +112,7 @@ void DrawerText::updateVtkProp()
         // Assignem el text
         if (!m_text.isEmpty())
         {
-            m_vtkActor->SetCaption(m_text.toUtf8().constData());
+            m_vtkActor->SetInput(m_text.toUtf8().constData());
             if (m_isVisible)
             {
                 m_vtkActor->VisibilityOn();
@@ -123,7 +123,8 @@ void DrawerText::updateVtkProp()
             m_vtkActor->VisibilityOff();
         }
         // Assignem la posició en pantalla
-        m_vtkActor->SetAttachmentPoint(m_attachPoint);
+        m_vtkActor->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+        m_vtkActor->GetPositionCoordinate()->SetValue(m_attachPoint);
         updateVtkActorProperties();
         this->setModified(false);
     }
@@ -135,19 +136,19 @@ void DrawerText::updateVtkProp()
 
 void DrawerText::updateVtkActorProperties()
 {
-    vtkTextProperty *properties = m_vtkActor->GetCaptionTextProperty();
+    vtkTextProperty *properties = m_vtkActor->GetTextProperty();
 
     // Sistema de coordenades
-    m_vtkActor->GetAttachmentPointCoordinate()->SetReferenceCoordinate(this->getVtkCoordinateObject());
+    m_vtkActor->GetPositionCoordinate()->SetReferenceCoordinate(this->getVtkCoordinateObject());
 
     // Mirem si s'ha d'escalar el text
     if (m_scaled)
     {
-        m_vtkActor->GetTextActor()->SetTextScaleModeToViewport();
+        m_vtkActor->SetTextScaleModeToViewport();
     }
     else
     {
-        m_vtkActor->GetTextActor()->SetTextScaleModeToNone();
+        m_vtkActor->SetTextScaleModeToNone();
     }
 
     // Mirem l'opacitat
@@ -157,18 +158,14 @@ void DrawerText::updateVtkActorProperties()
     properties->SetColor(m_color.redF(), m_color.greenF(), m_color.blueF());
 
     // Mirem l'opacitat
-    properties->SetBackgroundOpacity(m_backgroundOpacity);
+    m_vtkActor->SetBackgroundOpacity(m_backgroundOpacity);
 
     // Assignem color
-    properties->SetBackgroundColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF());
+    m_vtkActor->SetBackgroundColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF());
 
-    m_vtkActor->SetPosition(-1.0, -1.0);
     m_vtkActor->SetHeight(m_height);
     m_vtkActor->SetWidth(m_width);
 
-    // Deshabilitem la línia que va des del punt de situació al text
-    m_vtkActor->LeaderOff();
-    m_vtkActor->ThreeDimensionalLeaderOff();
 
     if (m_shadow)
     {
@@ -431,7 +428,7 @@ void DrawerText::getBounds(double bounds[6])
 {
     if (m_vtkActor)
     {
-        m_vtkActor->GetTextActor()->GetLastBounds(bounds);
+        m_vtkActor->GetWorldBounds(bounds);
     }
 }
 
