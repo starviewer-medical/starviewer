@@ -29,7 +29,6 @@ DrawerText::DrawerText(QObject *parent)
 {
     m_horizontalJustification = "Centered";
     m_verticalJustification = "Centered";
-    m_border = false;
     m_fontFamily = "Arial";
     m_fontSize = ApplicationStyleHelper().getToolsFontSize();
     m_shadow = false;
@@ -38,7 +37,6 @@ DrawerText::DrawerText(QObject *parent)
     m_height = 0.05;
     m_width = 0.09;
     m_scaled = false;
-    m_padding = 0;
     m_vtkActor = 0;
     m_backgroundColor = QColor(0, 0, 0);
     m_backgroundOpacity = 0.85;
@@ -164,7 +162,6 @@ void DrawerText::updateVtkActorProperties()
     // Assignem color
     properties->SetBackgroundColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF());
 
-    m_vtkActor->SetPadding(m_padding);
     m_vtkActor->SetPosition(-1.0, -1.0);
     m_vtkActor->SetHeight(m_height);
     m_vtkActor->SetWidth(m_width);
@@ -248,16 +245,6 @@ void DrawerText::updateVtkActorProperties()
         DEBUG_LOG("Tipus de justificació vertical no reconegut a l'intentar crear text!!");
     }
 
-    // Mirem si el text té fons o no
-    if (m_border)
-    {
-         m_vtkActor->BorderOn();
-    }
-    else
-    {
-        m_vtkActor->BorderOff();
-    }
-
     // Mirem la visibilitat de l'actor
     m_vtkActor->SetVisibility(this->isVisible());
 }
@@ -276,38 +263,6 @@ QString DrawerText::getText()
 double* DrawerText::getAttachmentPoint()
 {
     return m_attachPoint;
-}
-
-void DrawerText::borderOn()
-{
-    borderEnabled(true);
-}
-
-void DrawerText::borderOff()
-{
-    borderEnabled(false);
-}
-
-void DrawerText::borderEnabled(bool enabled)
-{
-    m_border = enabled;
-    emit changed();
-}
-
-bool DrawerText::isBorderEnabled()
-{
-    return m_border;
-}
-
-void DrawerText::setPadding(int padding)
-{
-    m_padding = padding;
-    emit changed();
-}
-
-int DrawerText::getPadding()
-{
-    return m_padding;
 }
 
 QString DrawerText::getFontFamily()
