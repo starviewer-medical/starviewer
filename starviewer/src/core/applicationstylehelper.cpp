@@ -3,6 +3,7 @@
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QMovie>
+#include <QTreeWidget>
 
 #include "coresettings.h"
 #include "mathtools.h"
@@ -61,6 +62,14 @@ void ApplicationStyleHelper::setScaledFontSizeTo(QWidget *widget) const
     int fontSize = this->getScaledFontSize(QApplication::font().pointSizeF(), CoreSettings::ScaledUserInterfaceFontSize);
     QString changeFontSize = QString("QLabel { font-size: %1pt }").arg(fontSize);
     widget->setStyleSheet(changeFontSize);
+}
+
+void ApplicationStyleHelper::setScaledFontSizeTo(QTreeWidget *treeWidget) const
+{
+    QFont font = treeWidget->font();
+    int fontSize = this->getScaledFontSize(font.pointSizeF(), CoreSettings::ScaledUserInterfaceFontSize);
+    font.setPointSize(fontSize);
+    treeWidget->setFont(font);
 }
 
 int ApplicationStyleHelper::getScaledFontSize(double defaultFontSize, const QString &settingsBackdoorKey) const

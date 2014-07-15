@@ -4,6 +4,7 @@
 class QWidget;
 class QString;
 class QMovie;
+class QTreeWidget;
 
 namespace udg {
 
@@ -35,6 +36,8 @@ public:
     /// Escala el tamany de lletra d'un QWidget al adient a la pantalla on s'ha cridat recomputeStyleToScreenOfWidget
     void setScaledFontSizeTo(QWidget *widget) const;
 
+    /// Escala el tamany de lletra d'un QTreeWidget al adient a la pantalla on s'ha cridat recomputeStyleToScreenOfWidget
+    void setScaledFontSizeTo(QTreeWidget *treeWidget) const;
 
     /// Scales application font size taking into account where recomputeStyleToScreenOfWidget was called
     int getApplicationScaledFontSize() const;
