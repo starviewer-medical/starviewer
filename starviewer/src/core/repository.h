@@ -17,7 +17,7 @@
 
 #include "repositorybase.h"
 #include "identifier.h"
-#include <QHash>
+#include <QMap>
 
 namespace udg {
 
@@ -56,7 +56,7 @@ public:
     void cleanUp();
 
 private:
-    typedef QHash<Identifier, ItemType*> ItemListType;
+    typedef QMap<Identifier, ItemType*> ItemListType;
     typedef typename ItemListType::const_iterator ItemListIteratorType;
 
     /// La llista que conté els items amb un ID
