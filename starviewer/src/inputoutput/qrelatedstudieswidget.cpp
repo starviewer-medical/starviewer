@@ -27,6 +27,7 @@
 #include <QMovie>
 #include <QTreeWidgetItem>
 #include <QScrollBar>
+#include "applicationstylehelper.h"
 
 namespace udg {
 
@@ -48,6 +49,9 @@ QRelatedStudiesWidget::QRelatedStudiesWidget(RelatedStudiesManager *relatedStudi
 
     m_noRelatedStudiesLabel = new QLabel(this);
     m_noRelatedStudiesLabel->setText(tr("No related studies found."));
+
+    ApplicationStyleHelper style;
+    style.setScaledFontSizeTo(this);
 
     initializeLookingForStudiesWidget();
     initializeTree();
@@ -279,6 +283,9 @@ void QRelatedStudiesWidget::insertStudiesToTree(const QList<Study*> &studiesList
         updateList();
 
         m_relatedStudiesTree->setVisible(true);
+
+        ApplicationStyleHelper style;
+        style.setScaledFontSizeTo(m_relatedStudiesTree);
 
         updateWidgetWidth();
         updateWidgetHeight();
