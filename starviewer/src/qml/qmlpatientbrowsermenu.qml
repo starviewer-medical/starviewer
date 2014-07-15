@@ -15,6 +15,7 @@ Rectangle {
     property string fusionMarkedItem1: "-1"
     property string fusionMarkedItem2: "-1"
     property string fusionLabelText: qsTr("Fusion")
+    property int computedFontSize
 
     width: Math.min(computedContentWidth + listview.anchors.leftMargin + listview.anchors.rightMargin, maxWidth);
     height: Math.min(computedContentHeight + listview.anchors.topMargin + listview.anchors.bottomMargin, maxHeight);
@@ -36,7 +37,7 @@ Rectangle {
                 var textElement = Qt.createQmlObject(
                         'import QtQuick 1.0;'
                         + 'Text {'
-                        + '   text: "' + item.text + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier)
+                        + '   text: "' + item.text + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier) + '; font.pointSize: ' + computedFontSize
                         + '}',
                         parent, "calcContentWidth")
                 max = Math.max((textElement.width + 10) * 2, max)
@@ -45,7 +46,7 @@ Rectangle {
             var captionElement = Qt.createQmlObject(
                     'import QtQuick 1.0;'
                     + 'Text {'
-                        + '   text: "' + model[i].caption + '"; visible: false;'
+                        + '   text: "' + model[i].caption + '"; visible: false; font.pointSize: ' + computedFontSize
                     + '}',
                     parent, "calcContentWidth")
             max = Math.max(captionElement.width + 20, max)
@@ -59,10 +60,10 @@ Rectangle {
         var textElement = Qt.createQmlObject(
                 'import QtQuick 1.0;'
                 + 'Text {'
-                + '   text: "any text"; visible: false;'
+                + '   text: "any text"; visible: false; font.pointSize: ' + computedFontSize
                 + '}',
                 parent, "calcContentHeight")
-        var cellHeight = textElement.height + textElement.font.pixelSize;
+        var cellHeight = textElement.height + textElement.font.pointSize;
 
         var height = 0;
 
@@ -110,7 +111,7 @@ Rectangle {
             Rectangle {
                 id: header
                 width: parent.width
-                height: headerText.height + headerText.font.pixelSize - 2 // 2 -> border-top
+                height: headerText.height + headerText.font.pointSize - 2 // 2 -> border-top
                 radius: 4
                 color: "lightsteelblue"
                 y: 0
@@ -131,6 +132,7 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     text: caption
                     elide: Text.ElideMiddle
+                    font.pointSize: computedFontSize
                 }
             }
 
@@ -139,7 +141,7 @@ Rectangle {
                 model: modelData.elements
                 delegate: seriesItemsDelegate
                 cellWidth: parent.width / 2
-                cellHeight: headerText.height + headerText.font.pixelSize
+                cellHeight: headerText.height + headerText.font.pointSize
 
                 y: header.height + 5
                 height: cellHeight * (Math.round(elements.length / columns))
@@ -181,6 +183,7 @@ Rectangle {
                             }
                             text: modelData.text
                             elide: Text.ElideMiddle
+                            font.pointSize: computedFontSize
                             font.bold: {
                                 if (browserMenu.markedItem === modelData.identifier) {
                                     return true;
@@ -244,6 +247,7 @@ Rectangle {
                             radius: 4
 
                             Text {
+                                font.pointSize: computedFontSize
                                 text: " " + fusionLabelText + " "
                                 color: "#012911"
                                 anchors {
@@ -274,6 +278,7 @@ Rectangle {
                                 text: modelData.text
                                 elide: Text.ElideMiddle
                                 font.bold: (browserMenu.markedItem === modelData.identifier)
+                                font.pointSize: computedFontSize
                             }
 
                             MouseArea {

@@ -9,6 +9,7 @@
 
 #include <QDeclarativeItem>
 #include <QDeclarativeContext>
+#include "applicationstylehelper.h"
 
 namespace udg {
 
@@ -25,6 +26,7 @@ PatientBrowserMenuList::PatientBrowserMenuList(QWidget *parent)
     m_qmlView->setSource(QUrl("qrc:///qmlpatientbrowsermenu.qml"));
     QDeclarativeItem *object = qobject_cast<QDeclarativeItem*>(m_qmlView->rootObject());
     object->setProperty("fusionLabelText", QVariant::fromValue(tr("Fusion")));
+    object->setProperty("computedFontSize", QVariant::fromValue(ApplicationStyleHelper().getApplicationScaledFontSize()));
 
     connect(object, SIGNAL(isActive(QString)), this, SIGNAL(isActive(QString)));
     connect(object, SIGNAL(selectedItem(QString)), this, SIGNAL(selectedItem(QString)));

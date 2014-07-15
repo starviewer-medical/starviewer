@@ -44,6 +44,11 @@ int ApplicationStyleHelper::getToolsFontSize() const
     return this->getScaledFontSize(14.0, CoreSettings::ToolsFontSize);
 }
 
+int ApplicationStyleHelper::getApplicationScaledFontSize() const
+{
+    return this->getScaledFontSize(QApplication::font().pointSizeF(), CoreSettings::ToolsFontSize);
+}
+
 void ApplicationStyleHelper::setScaledSizeTo(QMovie *movie) const
 {
     QImage image(movie->fileName());
