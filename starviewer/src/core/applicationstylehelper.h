@@ -49,6 +49,10 @@ public:
     /// Escala el tamany de lletra d'un QWidget al adient a la pantalla on s'ha cridat recomputeStyleToScreenOfWidget
     void setScaledFontSizeTo(QWidget *widget) const;
 
+
+    /// Scales application font size taking into account where recomputeStyleToScreenOfWidget was called
+    int getApplicationScaledFontSize() const;
+
 private:
     /// A partir d'un tamany per defecte i una clau de setting que indica si el tamany està canviat per config.
     /// retorna el tamany de lletra adaptat a la pantalla
