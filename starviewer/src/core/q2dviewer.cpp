@@ -372,19 +372,17 @@ void Q2DViewer::initializeDummyDisplayUnit()
 
 void Q2DViewer::addImageActors()
 {
-    vtkRenderer *renderer = getRenderer();
-    foreach (VolumeDisplayUnit* unit, getDisplayUnits())
+    if (m_displayUnitsHandler)
     {
-        renderer->AddViewProp(unit->getImageActor());
+        getRenderer()->AddViewProp(m_displayUnitsHandler->getImageProp());
     }
 }
 
 void Q2DViewer::removeImageActors()
 {
-    vtkRenderer *renderer = getRenderer();
-    foreach (VolumeDisplayUnit* unit, getDisplayUnits())
+    if (m_displayUnitsHandler)
     {
-        renderer->RemoveViewProp(unit->getImageActor());
+        getRenderer()->RemoveViewProp(m_displayUnitsHandler->getImageProp());
     }
 }
 
@@ -1818,16 +1816,9 @@ double Q2DViewer::getCurrentDisplayedImageDepthOnInput(int i) const
     return getDisplayUnit(i)->getCurrentDisplayedImageDepth();
 }
 
-QList<vtkImageActor*> Q2DViewer::getVtkImageActorsList() const
+vtkImageSlice* Q2DViewer::getImageProp() const
 {
-    QList<vtkImageActor*> actorsList;
-
-    for (int i = 0; i < getNumberOfInputs(); ++i)
-    {
-        actorsList << getDisplayUnit(i)->getImageActor();
-    }
-
-    return actorsList;
+    return m_displayUnitsHandler->getImageProp();
 }
 
 Q2DViewer* Q2DViewer::castFromQViewer(QViewer *viewer)

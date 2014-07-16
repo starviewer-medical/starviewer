@@ -29,6 +29,9 @@ public:
     virtual ~SingleVolumeDisplayUnitHandler();
 
     virtual int getMaximumNumberOfInputs() const;
+
+    /// Returns the prop that should be added to the renderer.
+    virtual vtkImageSlice* getImageProp() const;
 };
 
 } // End namespace udg
