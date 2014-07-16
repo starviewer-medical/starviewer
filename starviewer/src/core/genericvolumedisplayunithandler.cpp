@@ -21,18 +21,22 @@
 #include "transferfunctionmodel.h"
 
 #include <vtkImageActor.h>
+#include <vtkImageProperty.h>
+#include <vtkImageStack.h>
 
 namespace udg {
 
 GenericVolumeDisplayUnitHandler::GenericVolumeDisplayUnitHandler()
 {
     m_transferFunctionModel = new TransferFunctionModel();
+    m_imageStack = vtkImageStack::New();
 }
 
 GenericVolumeDisplayUnitHandler::~GenericVolumeDisplayUnitHandler()
 {
     removeDisplayUnits();
     delete m_transferFunctionModel;
+    m_imageStack->Delete();
 }
 
 void GenericVolumeDisplayUnitHandler::setInput(Volume *input)
@@ -98,6 +102,11 @@ int GenericVolumeDisplayUnitHandler::getMaximumNumberOfInputs() const
     return std::numeric_limits<int>::max();
 }
 
+vtkImageSlice* GenericVolumeDisplayUnitHandler::getImageProp() const
+{
+    return m_imageStack;
+}
+
 TransferFunctionModel* GenericVolumeDisplayUnitHandler::getTransferFunctionModel() const
 {
     return m_transferFunctionModel;
@@ -107,6 +116,7 @@ void GenericVolumeDisplayUnitHandler::removeDisplayUnits()
 {
     foreach (VolumeDisplayUnit *unit, m_displayUnits)
     {
+        m_imageStack->RemoveImage(unit->getImageActor());
         delete unit;
     }
     m_displayUnits.clear();
@@ -123,13 +133,23 @@ void GenericVolumeDisplayUnitHandler::addDisplayUnit(Volume *input)
     // Add the vdu to the list before setting the volume to avoid a memory leak if setVolume throws a bad_alloc
     m_displayUnits << displayUnit;
     displayUnit->setVolume(input);
+    m_imageStack->AddImage(displayUnit->getImageActor());
 }
 
 void GenericVolumeDisplayUnitHandler::setupDisplayUnits()
 {
     updateMainDisplayUnitIndex();
+    updateLayerNumbers();
     setupDefaultOpacities();
     initializeTransferFunctions();
+}
+
+void GenericVolumeDisplayUnitHandler::updateLayerNumbers()
+{
+    for (int i = 0; i < m_displayUnits.size(); i++)
+    {
+        m_displayUnits[i]->getImageActor()->GetProperty()->SetLayerNumber(i);
+    }
 }
 
 void GenericVolumeDisplayUnitHandler::setupDefaultOpacities()

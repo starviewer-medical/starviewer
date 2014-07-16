@@ -122,10 +122,7 @@ void MagnifyingGlassTool::addMagnifiedRenderer()
         
         if (m_magnifiedRenderer->GetActors()->GetNumberOfItems() == 0)
         {
-            foreach (vtkImageActor *actor, m_2DViewer->getVtkImageActorsList())
-            {
-                m_magnifiedRenderer->AddViewProp(actor);
-            }
+            m_magnifiedRenderer->AddViewProp(m_2DViewer->getImageProp());
         }
     }
     

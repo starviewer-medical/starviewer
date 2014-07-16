@@ -25,8 +25,8 @@
 // Fordward declarations
 // Vtk
 class vtkCoordinate;
-class vtkImageActor;
 class vtkImageData;
+class vtkImageSlice;
 
 namespace udg {
 
@@ -225,8 +225,8 @@ public:
     /// Clears the transfer function of the volume at the given index.
     void clearVolumeTransferFunction(int index);
 
-    /// Returns all the vtkImageActors in the scene
-    QList<vtkImageActor*> getVtkImageActorsList() const;
+    /// Returns the prop that represents the image in the scene.
+    vtkImageSlice* getImageProp() const;
 
     /// Returns true if this Q2DViewer can show a display shutter in its current state, i.e. if there is a display shutter for the current image and there isn't
     /// any restriction to show display shutters.

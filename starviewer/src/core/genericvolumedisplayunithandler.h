@@ -17,6 +17,9 @@
 
 #include <QList>
 
+class vtkImageSlice;
+class vtkImageStack;
+
 namespace udg {
 
 class TransferFunctionModel;
@@ -58,6 +61,9 @@ public:
     /// Returns the maximum number of inputs supported by the handler
     virtual int getMaximumNumberOfInputs() const;
 
+    /// Returns the prop that should be added to the renderer.
+    virtual vtkImageSlice* getImageProp() const;
+
     /// Returns the transfer function model containing the available transfer functions for the volume display units of this handler.
     TransferFunctionModel* getTransferFunctionModel() const;
 
@@ -79,6 +85,9 @@ private:
     /// Sets up the display units once created
     void setupDisplayUnits();
 
+    /// Updates the layer number of all display units to match their position in the list.
+    void updateLayerNumbers();
+
     /// Sets up the default opacities of the actors
     void setupDefaultOpacities();
 
@@ -88,6 +97,9 @@ private:
 protected:
     /// The list of the created display units
     QList<VolumeDisplayUnit*> m_displayUnits;
+
+    /// Used to merge several volume display units.
+    vtkImageStack *m_imageStack;
 
     /// Holds the transfer functions available to this handler.
     TransferFunctionModel *m_transferFunctionModel;
