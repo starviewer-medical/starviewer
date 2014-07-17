@@ -8,6 +8,7 @@ VTKLIBS = \
     vtkCommonDataModel \
     vtkCommonExecutionModel \
     vtkCommonMath \
+    vtkCommonMisc \
     vtkCommonTransforms \
     vtkFiltersCore \
     vtkFiltersSources \
