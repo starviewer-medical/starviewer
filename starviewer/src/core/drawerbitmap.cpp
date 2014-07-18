@@ -105,6 +105,7 @@ vtkProp* DrawerBitmap::getAsVtkProp()
  
             // Creem l'actor
             m_imageActor = vtkSmartPointer<vtkImageActor>::New();
+            mapTransparency->Update();
             m_imageActor->SetInputData(mapTransparency->GetOutput());
             m_imageActor->SetDisplayExtent(0, m_width - 1, 0, m_height - 1, 0, 0);
             m_imageActor->SetVisibility(this->isVisible());
