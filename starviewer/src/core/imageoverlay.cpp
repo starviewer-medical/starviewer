@@ -155,10 +155,9 @@ ImageOverlay ImageOverlay::fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay)
     {
         try
         {
-            // #1903: degut a la implementació de GetUnpackBuffer, la mida del buffer ha de ser múltiple de 8
-            int bufferSize = MathTools::roundUpToMultipleOfNumber(imageOverlay.getRows() * imageOverlay.getColumns(), 8);
+            size_t bufferSize = gdcmOverlay.GetUnpackBufferLength();
             unsigned char *buffer = new unsigned char[bufferSize];
-            gdcmOverlay.GetUnpackBuffer(buffer);
+            gdcmOverlay.GetUnpackBuffer(reinterpret_cast<char*>(buffer), bufferSize);
             imageOverlay.setData(buffer);
         }
         catch (std::bad_alloc)

@@ -310,10 +310,9 @@ void test_ImageOverlay::fromGDCMOverlay_ReturnsExpectedValues_data()
     overlayWithData.SetOrigin(origin);
     overlayWithData.SetOverlay(gdcmBuffer, rows * columns);
 
-    // #1903: buffer size has to be a multiple of 8 due to GetUnpackBuffer implementation
-    int bufferSize = MathTools::roundUpToMultipleOfNumber(rows * columns, 8);
+    size_t bufferSize = overlayWithData.GetUnpackBufferLength();
     unsigned char *imageOverlayBuffer = new unsigned char[bufferSize];
-    overlayWithData.GetUnpackBuffer(imageOverlayBuffer);
+    overlayWithData.GetUnpackBuffer(reinterpret_cast<char*>(imageOverlayBuffer), bufferSize);
     
     ImageOverlay imageOverlay;
     imageOverlay.setRows(rows);
