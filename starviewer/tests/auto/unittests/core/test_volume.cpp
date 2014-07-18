@@ -760,20 +760,19 @@ void test_Volume::getOrigin_ShouldReturnExpectedOrigin_data()
      QTest::addColumn<double>("yValue");
      QTest::addColumn<double>("zValue");
 
-     int dimensions[3];
      double spacing[3];
      int extent[6];
      double origin[3];
      origin[0] = 10.56;
      origin[1] = -45.185;
      origin[2] = 12;
-     Volume *volumeWithOrigin = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent);
+     Volume *volumeWithOrigin = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent);
 
      double nullOrigin[3];
      nullOrigin[0] = NULL;
      nullOrigin[1] = NULL;
      nullOrigin[2] = NULL;
-     Volume *volumeWithNullOrigin = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, nullOrigin, spacing, dimensions, extent);
+     Volume *volumeWithNullOrigin = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, nullOrigin, spacing, extent);
 
      QTest::newRow("Volume with origin") << volumeWithOrigin << origin[0] << origin[1] << origin[2];
      QTest::newRow("Volume with null origin") << volumeWithNullOrigin << 0.0 << 0.0 << 0.0;
@@ -802,20 +801,13 @@ void test_Volume::getDimensions_ShouldReturnExpectedDimensions_data()
 
     double origin[3];
     double spacing[3];
-    int extent[6];
-    int dimensions[3];
-    dimensions[0] = 128;
-    dimensions[1] = -512;
-    dimensions[2] = 45;
-    Volume *volumeWithDimensions = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent);
+    int extent[6] = { 0, 127, 0, 511, 0, 44 };
+    Volume *volumeWithDimensions = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent);
+    QTest::newRow("Volume with dimensions") << volumeWithDimensions << 128 << 512 << 45;
 
-    int nullDimensions[3];
-    nullDimensions[0] = NULL;
-    nullDimensions[1] = NULL;
-    nullDimensions[2] = NULL;
-    Volume *volumeWithNullDimensions = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, nullDimensions, extent);
-
-    QTest::newRow("Volume with dimensions") << volumeWithDimensions << dimensions[0] << dimensions[1] << dimensions[2];
+    extent[0] = extent[2] = extent[4] = 0;
+    extent[1] = extent[3] = extent[5] = -1;
+    Volume *volumeWithNullDimensions = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent);
     QTest::newRow("Volume with null dimensions") << volumeWithNullDimensions << 0 << 0 << 0;
 }
 
@@ -841,19 +833,18 @@ void test_Volume::getSpacing_ShouldReturnExpectedSpacing_data()
     QTest::addColumn<double>("zValue");
 
     double origin[3];
-    int dimensions[3];
     int extent[6];
     double spacing[3];
     spacing[0] = 3;
     spacing[1] = -2;
     spacing[2] = 2.5;
-    Volume *volumeWithSpacing = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent);
+    Volume *volumeWithSpacing = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent);
 
     double nullSpacing[3];
     nullSpacing[0] = NULL;
     nullSpacing[1] = NULL;
     nullSpacing[2] = NULL;
-    Volume *volumeWithNullSpacing = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, nullSpacing, dimensions, extent);
+    Volume *volumeWithNullSpacing = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, nullSpacing, extent);
 
     QTest::newRow("Volume with spacing") << volumeWithSpacing << spacing[0] << spacing[1] << spacing[2];
     QTest::newRow("Volume with null spacing") << volumeWithNullSpacing << 0.0 << 0.0 << 0.0;
@@ -884,7 +875,6 @@ void test_Volume::getExtent_ShouldReturnExpectedExtent_data()
     QTest::addColumn<int>("z2");
 
     double origin[3];
-    int dimensions[3];
     double spacing[3];
     int extent[6];
     extent[0] = 10;
@@ -894,7 +884,7 @@ void test_Volume::getExtent_ShouldReturnExpectedExtent_data()
     extent[4] = 100;
     extent[5] = -500;
 
-    Volume *volumeWithExtent = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent);
+    Volume *volumeWithExtent = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent);
 
     int nullExtent[6];
     nullExtent[0] = NULL;
@@ -904,7 +894,7 @@ void test_Volume::getExtent_ShouldReturnExpectedExtent_data()
     nullExtent[4] = NULL;
     nullExtent[5] = NULL;
     
-    Volume *volumeWithNullExtent = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, nullExtent);
+    Volume *volumeWithNullExtent = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, nullExtent);
 
     QTest::newRow("Volume with extent") << volumeWithExtent << extent[0] << extent[1] << extent[2] << extent[3] << extent[4] << extent[5];
     QTest::newRow("Volume with null extent") << volumeWithNullExtent << 0 << 0 << 0 << 0 << 0 << 0;
