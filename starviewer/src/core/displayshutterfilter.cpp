@@ -46,7 +46,7 @@ void DisplayShutterFilter::setInput(vtkImageData *input)
 
 void DisplayShutterFilter::setInput(FilterOutput input)
 {
-    this->setInput(input.getVtkImageData());
+    m_imageMask->SetInputConnection(input.getVtkAlgorithmOutput());
 }
 
 void DisplayShutterFilter::setDisplayShutter(vtkImageData *displayShutter)
