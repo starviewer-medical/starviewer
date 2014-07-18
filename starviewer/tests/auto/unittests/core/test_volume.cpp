@@ -177,7 +177,13 @@ void test_Volume::setData_itk_ShouldBehaveAsExpected()
 
     while (!actualIterator.IsAtEnd())
     {
-        QCOMPARE(actualIterator.Get(), expectedIterator.Get());
+        // Optimization: using QCOMPARE in each loop is very slow in Qt5, so we compare values with a simple "if"
+        // and just use QCOMPARE to fail the test and print the error when we know the values are different.
+        if (actualIterator.Get() != expectedIterator.Get())
+        {
+            QCOMPARE(actualIterator.Get(), expectedIterator.Get());
+        }
+
         ++actualIterator;
         ++expectedIterator;
     }

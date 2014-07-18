@@ -113,7 +113,12 @@ void test_VolumePixelData::setData_itk_ShouldCreateExpectedVtkData()
 
     for (int i = 0; i < size; i++)
     {
-        QCOMPARE(data[i], expectedData[i]);
+        // Optimization: using QCOMPARE in each loop is very slow in Qt5, so we compare values with a simple "if"
+        // and just use QCOMPARE to fail the test and print the error when we know the values are different.
+        if (data[i] != expectedData[i])
+        {
+            QCOMPARE(data[i], expectedData[i]);
+        }
     }
 }
 
