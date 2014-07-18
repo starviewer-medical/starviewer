@@ -34,8 +34,13 @@ Volume* VolumeTestHelper::createVolume(int numberOfImages, int numberOfPhases, i
     return testVolume;
 }
 
-Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int numberOfPhases, int numberOfSlicesPerPhase, double origin[3], double spacing[3], int dimensions[3], int extent[6])
+Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int numberOfPhases, int numberOfSlicesPerPhase, double origin[3], double spacing[3], int extent[6])
 {
+    vtkImageData *testVtkImageData = vtkImageData::New();
+    testVtkImageData->SetOrigin(origin);
+    testVtkImageData->SetSpacing(spacing);
+    testVtkImageData->SetExtent(extent);
+
     Volume *testVolume = new Volume();
     testVolume->setNumberOfPhases(numberOfPhases);
     testVolume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
@@ -45,15 +50,10 @@ Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int num
     for (int index = 0; index < numberOfImages; index++)
     {
         testVolume->getImages().at(index)->setPath(QString("C:\\Test\\path\\%1").arg(index));
-        testVolume->getImages().at(index)->setColumns(dimensions[0]);
-        testVolume->getImages().at(index)->setRows(dimensions[1]);
+        testVolume->getImages().at(index)->setColumns(testVtkImageData->GetDimensions()[0]);
+        testVolume->getImages().at(index)->setRows(testVtkImageData->GetDimensions()[1]);
     }
 
-    vtkImageData *testVtkImageData = vtkImageData::New();
-    testVtkImageData->SetOrigin(origin);
-    testVtkImageData->SetSpacing(spacing);
-    testVtkImageData->SetDimensions(dimensions);
-    testVtkImageData->SetExtent(extent);
     testVolume->setData(testVtkImageData);
 
     return testVolume;
