@@ -59,6 +59,7 @@ void test_VolumePixelData::setData_itk_ShouldCreateExpectedVtkData_data()
     {
         VolumePixelData::ItkImageTypePointer itkData = VolumePixelData::ItkImageType::New();
         vtkSmartPointer<vtkImageData> vtkData = vtkSmartPointer<vtkImageData>::New();
+        vtkData->AllocateScalars(VTK_SHORT, 1);
         QTest::newRow("default") << itkData << vtkData;
     }
 
