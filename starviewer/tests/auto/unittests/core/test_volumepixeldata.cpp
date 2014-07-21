@@ -205,7 +205,7 @@ void test_VolumePixelData::setData_ShouldSetDataFromArray()
     QFETCH(int, bytesPerPixel);
     
     VolumePixelData *pixelData = new VolumePixelData();
-    pixelData->setData(data, extent, bytesPerPixel, true);
+    pixelData->setData(data, extent, bytesPerPixel, false);
 
     int vtkExtent[6];
     pixelData->getExtent(vtkExtent);
@@ -218,12 +218,12 @@ void test_VolumePixelData::setData_ShouldSetDataFromArray()
 
     unsigned char* dataPointer = reinterpret_cast<unsigned char*>(pixelData->getScalarPointer());
     
-    for (int i = 0; i < pixelData->getNumberOfPoints(); ++i)
+    for (int i = 0; i < pixelData->getNumberOfPoints() * pixelData->getNumberOfScalarComponents(); ++i)
     {
-        QCOMPARE(*dataPointer, data[i]);
-        ++dataPointer;
+        QCOMPARE(dataPointer[i], data[i]);
     }
 
+    delete[] data;
     delete[] extent;
     delete pixelData;
 }
