@@ -20,10 +20,6 @@
 
 #include <vtkImageChangeInformation.h>
 #include <vtkImageData.h>
-// Voxel information
-#include <vtkPointData.h>
-// Pel setData(unsigned char *...)
-#include <vtkUnsignedCharArray.h>
 
 #include "logging.h"
 
@@ -107,23 +103,12 @@ void VolumePixelData::setData(unsigned char *data, int extent[6], int bytesPerPi
     imageData->AllocateScalars(VTK_UNSIGNED_CHAR, bytesPerPixel);
     
     int size = (extent[1] - extent[0] + 1) * (extent[3] - extent[2] + 1) * (extent[5] - extent[4] + 1) * bytesPerPixel;
-    vtkUnsignedCharArray *ucharArray = vtkUnsignedCharArray::New();
-    ucharArray->SetNumberOfTuples(size);
+    memcpy(imageData->GetScalarPointer(), data, size);
     
-    int save;
     if (deleteData)
     {
-        // save == 0, NO guardar les dades == fer delete, 
-        save = 0;
+        delete[] data;
     }
-    else
-    {
-        // save == 1, guardar les dades == NO fer delete, 
-        save = 1;
-    }
-    ucharArray->SetArray(data, size, save);
-    imageData->GetPointData()->SetScalars(ucharArray);
-    ucharArray->Delete();
 
     this->setData(imageData);
     imageData->Delete();
