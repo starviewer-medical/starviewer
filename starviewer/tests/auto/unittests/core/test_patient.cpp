@@ -83,9 +83,6 @@ void test_Patient::getStudies_ShouldGetThemInTheExpectedOrder_data()
     middleAgedStudy->setDate(QDate(2006, 6, 15));
     middleAgedStudy->setInstanceUID("2");
 
-    QList<Study*> inputStudiesList;
-    inputStudiesList << middleAgedStudy << mostRecentStudy << olderStudy;
-
     QList<Study*> recentFirstSortedResult;
     recentFirstSortedResult << mostRecentStudy << middleAgedStudy << olderStudy;
     QList<Study*> olderFirstSortedResult;
