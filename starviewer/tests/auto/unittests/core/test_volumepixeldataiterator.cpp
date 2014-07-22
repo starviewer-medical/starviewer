@@ -507,34 +507,34 @@ void test_VolumePixelDataIterator::setupTestDataForSubtractOperators()
 
 void test_VolumePixelDataIterator::setupTestDataForComparisonOperators()
 {
-//    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator1");
-//    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator2");
-//    QTest::addColumn<bool>("equal");
-//    QTest::addColumn<bool>("different");
-//    QTest::addColumn<bool>("greaterThan");
-//    QTest::addColumn<bool>("lessThan");
-//    QTest::addColumn<bool>("greaterThanOrEqual");
-//    QTest::addColumn<bool>("lessThanOrEqual");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator1");
+    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator2");
+    QTest::addColumn<bool>("equal");
+    QTest::addColumn<bool>("different");
+    QTest::addColumn<bool>("greaterThan");
+    QTest::addColumn<bool>("lessThan");
+    QTest::addColumn<bool>("greaterThanOrEqual");
+    QTest::addColumn<bool>("lessThanOrEqual");
 
-//    VolumePixelData volumePixelData;
-//    volumePixelData.getVtkData()->SetScalarTypeToChar();
-//    QSharedPointer<VolumePixelDataIterator> iteratorNullChar(new VolumePixelDataIterator(&volumePixelData));
-//    volumePixelData.getVtkData()->SetScalarTypeToDouble();
-//    QSharedPointer<VolumePixelDataIterator> iteratorNullDouble(new VolumePixelDataIterator(&volumePixelData));
-//    volumePixelData.getVtkData()->SetExtent(0, 0, 0, 0, 0, 0);
-//    volumePixelData.getVtkData()->AllocateScalars();
-//    QSharedPointer<VolumePixelDataIterator> iterator000Double(new VolumePixelDataIterator(&volumePixelData));
+    VolumePixelData volumePixelData;
+    volumePixelData.getVtkData()->AllocateScalars(VTK_CHAR, 1);
+    QSharedPointer<VolumePixelDataIterator> iteratorNullChar(new VolumePixelDataIterator(&volumePixelData));
+    volumePixelData.getVtkData()->AllocateScalars(VTK_DOUBLE, 1);
+    QSharedPointer<VolumePixelDataIterator> iteratorNullDouble(new VolumePixelDataIterator(&volumePixelData));
+    volumePixelData.getVtkData()->SetExtent(0, 0, 0, 0, 0, 0);
+    volumePixelData.getVtkData()->AllocateScalars(VTK_DOUBLE, 1);
+    QSharedPointer<VolumePixelDataIterator> iterator000Double(new VolumePixelDataIterator(&volumePixelData));
 
-//    QTest::newRow("same pointer & different scalar type") << iteratorNullChar << iteratorNullDouble << false << true << false << false << false << false;
-//    QTest::newRow("greater pointer & different scalar type") << iterator000Double << iteratorNullChar << false << true << false << false << false << false;
-//    QTest::newRow("lesser pointer & different scalar type") << iteratorNullChar << iterator000Double << false << true << false << false << false << false;
+    QTest::newRow("same pointer & different scalar type") << iteratorNullChar << iteratorNullDouble << false << true << false << false << false << false;
+    QTest::newRow("greater pointer & different scalar type") << iterator000Double << iteratorNullChar << false << true << false << false << false << false;
+    QTest::newRow("lesser pointer & different scalar type") << iteratorNullChar << iterator000Double << false << true << false << false << false << false;
 
-//    QSharedPointer<VolumePixelDataIterator> iterator122 = createIterator(1, 2, 2);
-//    QSharedPointer<VolumePixelDataIterator> iterator123(new VolumePixelDataIterator(*iterator122 + 16));
+    QSharedPointer<VolumePixelDataIterator> iterator122 = createIterator(1, 2, 2);
+    QSharedPointer<VolumePixelDataIterator> iterator123(new VolumePixelDataIterator(*iterator122 + 16));
 
-//    QTest::newRow("same pointer & same scalar type") << iterator122 << iterator122 << true << false << false << false << true << true;
-//    QTest::newRow("greater pointer & same scalar type") << iterator123 << iterator122 << false << true << true << false << true << false;
-//    QTest::newRow("lesser pointer & same scalar type") << iterator122 << iterator123 << false << true << false << true << false << true;
+    QTest::newRow("same pointer & same scalar type") << iterator122 << iterator122 << true << false << false << false << true << true;
+    QTest::newRow("greater pointer & same scalar type") << iterator123 << iterator122 << false << true << true << false << true << false;
+    QTest::newRow("lesser pointer & same scalar type") << iterator122 << iterator123 << false << true << false << true << false << true;
 }
 
 DECLARE_TEST(test_VolumePixelDataIterator)
