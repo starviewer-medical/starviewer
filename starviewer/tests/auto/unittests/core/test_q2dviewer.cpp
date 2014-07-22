@@ -41,20 +41,20 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     QTest::newRow("default viewer (no volume)") << viewer << false << volume;
 
     viewer = new Q2DViewer();
-    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent);
+    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent, true);
     volume->setObjectName("Dummy Volume");
     viewer->setInput(volume);
     QTest::newRow("dummy volume") << viewer << false << volume;
 
     viewer = new Q2DViewer();
-    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent);
+    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent, true);
     viewer->setInput(volume);
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::YZPlane);
     QTest::newRow("no thick slab & no XY plane & no shutter") << viewer << false << volume;
 
     viewer = new Q2DViewer();
-    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent);
+    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent, true);
     viewer->setInput(volume);
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::YZPlane);
@@ -62,14 +62,14 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     QTest::newRow("thick slab & no XY plane & no shutter") << viewer << false << volume;
 
     viewer = new Q2DViewer();
-    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent);
+    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent, true);
     viewer->setInput(volume);
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::XYPlane);
     QTest::newRow("no thick slab & XY plane & no shutter") << viewer << false << volume;
 
     viewer = new Q2DViewer();
-    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent);
+    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent, true);
     viewer->setInput(volume);
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::XYPlane);
@@ -77,7 +77,7 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     QTest::newRow("thick slab & XY plane & no shutter") << viewer << false << volume;
 
     viewer = new Q2DViewer();
-    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent);
+    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent, true);
     viewer->setInput(volume);
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::YZPlane);
@@ -85,7 +85,7 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     QTest::newRow("no thick slab & no XY plane & shutter") << viewer << false << volume;
 
     viewer = new Q2DViewer();
-    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent);
+    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent, true);
     viewer->setInput(volume);
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::YZPlane);
@@ -94,7 +94,7 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     QTest::newRow("thick slab & no XY plane & shutter") << viewer << false << volume;
 
     viewer = new Q2DViewer();
-    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent);
+    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent, true);
     viewer->setInput(volume);
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::XYPlane);
@@ -102,7 +102,7 @@ void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
     QTest::newRow("no thick slab & XY plane & shutter") << viewer << true << volume;
 
     viewer = new Q2DViewer();
-    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent);
+    volume = VolumeTestHelper::createVolumeWithParameters(2, 1, 1, origin, spacing, extent, true);
     viewer->setInput(volume);
     viewer->enableRendering(false);
     viewer->resetView(OrthogonalPlane::XYPlane);

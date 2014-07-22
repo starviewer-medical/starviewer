@@ -34,12 +34,18 @@ Volume* VolumeTestHelper::createVolume(int numberOfImages, int numberOfPhases, i
     return testVolume;
 }
 
-Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int numberOfPhases, int numberOfSlicesPerPhase, double origin[3], double spacing[3], int extent[6])
+Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int numberOfPhases, int numberOfSlicesPerPhase,
+                                                     double origin[3], double spacing[3], int extent[6], bool allocate)
 {
     vtkImageData *testVtkImageData = vtkImageData::New();
     testVtkImageData->SetOrigin(origin);
     testVtkImageData->SetSpacing(spacing);
     testVtkImageData->SetExtent(extent);
+
+    if (allocate)
+    {
+        testVtkImageData->AllocateScalars(VTK_UNSIGNED_CHAR, 1);
+    }
 
     Volume *testVolume = new Volume();
     testVolume->setNumberOfPhases(numberOfPhases);
