@@ -184,7 +184,7 @@ void test_Series::setTime_ShouldValidatePassedTimeAsString_data()
     QString validTime("211030");
 
     QTest::newRow("set a null Time") << emptyTime << false;
-    QTest::newRow("set a invalid Time with :") << invalidPointsTime << true;    // false with Qt5
+    QTest::newRow("set a invalid Time with :") << invalidPointsTime << false;
     QTest::newRow("set a invalid Time without :") << invalidTime << false;
     QTest::newRow("set a valid past Time with :") << validPointsTime << true;
     QTest::newRow("set a valid future Time without :") << validTime << true;
