@@ -223,6 +223,7 @@ void test_DrawerBitmap::getAsVtkProp_ShouldReturnPropLikeExpected_data()
     imageActor->GetMapper()->SetInputConnection(mapTransparency->GetOutputPort());
     imageActor->SetDisplayExtent(0, width - 1, 0, height - 1, 0, 0);
     imageActor->SetVisibility(true);
+    imageActor->Update();
 
     imageData->Delete();
     lookupTable->Delete();
