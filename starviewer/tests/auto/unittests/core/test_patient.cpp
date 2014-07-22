@@ -211,7 +211,7 @@ void test_Patient::getModalities_ShouldReturnExpectedValues_data()
     modalities.clear();
 
     patient->addStudy(MRandPRStudy);
-    modalities << "PR" << "MR";
+    modalities << "MR" << "PR";
     QTest::newRow("1 study 2 modalities") << patient << modalities;
 
     patient = new Patient(0);
@@ -219,7 +219,7 @@ void test_Patient::getModalities_ShouldReturnExpectedValues_data()
 
     patient->addStudy(MRStudy);
     patient->addStudy(CRandRFStudy);
-    modalities << "RF" << "MR" << "CR";
+    modalities << "CR" << "RF" << "MR";
     QTest::newRow("2 studies 3 modalities") << patient << modalities;
 
     patient = new Patient(0);
@@ -228,7 +228,7 @@ void test_Patient::getModalities_ShouldReturnExpectedValues_data()
     patient->addStudy(MRandPRStudy);
     patient->addStudy(CRandRFStudy);
     patient->addStudy(MRStudy);
-    modalities << "PR" << "MR" << "RF" << "CR";
+    modalities << "MR" << "CR" << "RF" << "PR";
     QTest::newRow("3 studies 4 modalities (1 repeated among studies)") << patient << modalities;
 }
 
