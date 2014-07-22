@@ -17,7 +17,6 @@
 
 #include <QStringList>
 #include <QChar>
-#include <QSet>
 
 namespace {
 
@@ -272,14 +271,16 @@ QList<Study*> Patient::getStudiesByModality(const QString &modality)
 
 QStringList Patient::getModalities() const
 {
-    QSet<QString> modalitiesSet;
+    QStringList modalities;
+
     foreach (Study *study, m_studiesList)
     {
-        // This way we remove duplicates if any
-        modalitiesSet += study->getModalities().toSet();
+        modalities.append(study->getModalities());
     }
     
-    return modalitiesSet.toList();
+    modalities.removeDuplicates();
+
+    return modalities;
 }
 
 Series *Patient::getSeries(const QString &uid)
