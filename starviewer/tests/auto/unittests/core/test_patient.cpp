@@ -59,8 +59,8 @@ void test_Patient::compareTo_ShoudReturnExpectedPatientsSimilarity()
     QFETCH(QString, namePatient2);
     QFETCH(Patient::PatientsSimilarity, patientsSimilarity);
 
-    QSharedPointer<Patient> patient1 = QSharedPointer<udg::Patient>(PatientTestHelper::createPatientWithIDAndName(idPatient1, namePatient1));
-    QSharedPointer<Patient> patient2 = QSharedPointer<udg::Patient>(PatientTestHelper::createPatientWithIDAndName(idPatient2, namePatient2));
+    QScopedPointer<Patient> patient1(PatientTestHelper::createPatientWithIDAndName(idPatient1, namePatient1));
+    QScopedPointer<Patient> patient2(PatientTestHelper::createPatientWithIDAndName(idPatient2, namePatient2));
 
     QCOMPARE(patient1->compareTo(patient2.data()), patientsSimilarity);
 }
