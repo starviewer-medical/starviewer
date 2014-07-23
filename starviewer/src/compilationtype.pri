@@ -35,5 +35,3 @@ win32-msvc2010:QMAKE_CXXFLAGS_DEBUG += -MD
 
 # Definim variable per construir versió lite en temps de compilació
 lite_version:DEFINES += STARVIEWER_LITE
-
-include(makefixdebug.pri)

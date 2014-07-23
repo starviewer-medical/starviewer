@@ -15,3 +15,5 @@ win32-msvc2010 {
 UI_DIR = ../../tmp/ui
 MOC_DIR = ../../tmp/moc
 RCC_DIR = ../../tmp/rcc
+
+include(makefixdebug.pri)
