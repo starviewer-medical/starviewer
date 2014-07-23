@@ -1,6 +1,7 @@
 var ForReading = 1;
 var ForWriting = 2;
 
+var WshShell = WScript.CreateObject("WScript.Shell");
 var makefileName = WScript.Arguments(0);
 var fileSystemObject = new ActiveXObject("Scripting.FileSystemObject");
 
@@ -10,7 +11,6 @@ if (fileSystemObject.FileExists(makefileName)) {
     inputTextStream.Close();
 
     var regExp = /(Qt)(5?)([A-Za-z]+)d(4?)(\.lib)/gi;
-    var WshShell = WScript.CreateObject("WScript.Shell");
 
     if (regExp.test(makefile)) {
         WScript.Echo("Fixing " + WshShell.CurrentDirectory + "\\" + makefileName + "...");
