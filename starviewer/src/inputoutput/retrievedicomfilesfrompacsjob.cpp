@@ -179,14 +179,14 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACSJob::getStatu
 
 void RetrieveDICOMFilesFromPACSJob::DICOMFileRetrieved(DICOMTagReader *dicomTagReader, int numberOfImagesRetrieved)
 {
-    emit DICOMFileRetrieved(this, numberOfImagesRetrieved);
+    emit DICOMFileRetrieved(m_selfPointer.toStrongRef(), numberOfImagesRetrieved);
 
     /// Actualitzem el número de sèries processades si ens arriba una nova imatge que pertanyi a una sèrie no descarregada fins al moment
     QString seriesInstancedUIDRetrievedImage = dicomTagReader->getValueAttributeAsQString(DICOMSeriesInstanceUID);
     if (!m_retrievedSeriesInstanceUIDSet.contains(seriesInstancedUIDRetrievedImage))
     {
         m_retrievedSeriesInstanceUIDSet.insert(seriesInstancedUIDRetrievedImage);
-        emit DICOMSeriesRetrieved(this, m_retrievedSeriesInstanceUIDSet.count());
+        emit DICOMSeriesRetrieved(m_selfPointer.toStrongRef(), m_retrievedSeriesInstanceUIDSet.count());
     }
 
     // Fem un emit indicat que dicomTagReader està a punt per ser processat per l'Slot processDICOMFile de PatientFiller, no podem fer un connect

@@ -65,10 +65,10 @@ public:
 
 signals:
     /// Signal que s'emet quan s'ha descarregat un fitxer
-    void DICOMFileRetrieved(PACSJob *pacsJob, int numberOfImagesRetrieved);
+    void DICOMFileRetrieved(PACSJobPointer pacsJob, int numberOfImagesRetrieved);
 
     /// Signal que s'emet quan s'ha descarregat una srie
-    void DICOMSeriesRetrieved(PACSJob *pacsJob, int numberOfSeriesRetrieved);
+    void DICOMSeriesRetrieved(PACSJobPointer pacsJob, int numberOfSeriesRetrieved);
 
     /// Signal que s'emet quan el DICOMTagReader est a punt per ser processats. Aquest signal s d's intern
     void DICOMTagReaderReadyForProcess(DICOMTagReader *dicomTagReader);

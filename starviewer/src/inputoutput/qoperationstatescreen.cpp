@@ -97,10 +97,10 @@ void QOperationStateScreen::newPACSJobEnqueued(PACSJobPointer pacsJob)
                 break;
             case PACSJob::RetrieveDICOMFilesFromPACSJobType:
                 insertNewPACSJob(pacsJob);
-                connect(pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(DICOMFileRetrieved(PACSJob*, int)),
-                        SLOT(DICOMFileCommit(PACSJob*, int)));
-                connect(pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(DICOMSeriesRetrieved(PACSJob*, int)),
-                        SLOT(DICOMSeriesCommit(PACSJob*, int)));
+                connect(pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(DICOMFileRetrieved(PACSJobPointer, int)),
+                        SLOT(DICOMFileCommit(PACSJobPointer, int)));
+                connect(pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(DICOMSeriesRetrieved(PACSJobPointer, int)),
+                        SLOT(DICOMSeriesCommit(PACSJobPointer, int)));
                 break;
             default:
                 break;
@@ -145,11 +145,6 @@ void QOperationStateScreen::PACSJobCancelled(PACSJobPointer pacsJob)
 
 void QOperationStateScreen::DICOMFileCommit(PACSJobPointer pacsJob, int numberOfImages)
 {
-    DICOMFileCommit(pacsJob.data(), numberOfImages);
-}
-
-void QOperationStateScreen::DICOMFileCommit(PACSJob *pacsJob, int numberOfImages)
-{
     QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
     if (qtreeWidgetItem != NULL)
@@ -159,11 +154,6 @@ void QOperationStateScreen::DICOMFileCommit(PACSJob *pacsJob, int numberOfImages
 }
 
 void QOperationStateScreen::DICOMSeriesCommit(PACSJobPointer pacsJob, int numberOfSeries)
-{
-    DICOMSeriesCommit(pacsJob.data(), numberOfSeries);
-}
-
-void QOperationStateScreen::DICOMSeriesCommit(PACSJob *pacsJob, int numberOfSeries)
 {
     QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 

@@ -58,10 +58,10 @@ public:
 
 signals:
     /// Signal que s'emet quan s'enviat una imatge al PACS
-    void DICOMFileSent(PACSJob *, int numberOfDICOMFilesSent);
+    void DICOMFileSent(PACSJobPointer pacsJob, int numberOfDICOMFilesSent);
 
     /// Signal que s'emet quan s'ha enviat un serie completa al PACS
-    void DICOMSeriesSent(PACSJob *, int numberOfSeriesSent);
+    void DICOMSeriesSent(PACSJobPointer pacsJob, int numberOfSeriesSent);
 
 private:
     /// Sol·licita que ens cancel·li el job

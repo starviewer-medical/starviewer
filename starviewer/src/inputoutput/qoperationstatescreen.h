@@ -67,14 +67,8 @@ private slots:
     /// Slot que s'activa quan job ha fet una acció amb una imatge, s'augmenta pel job al QTreeWidget el número de d'imatges
     void DICOMFileCommit(PACSJobPointer pacsJob, int numberOfImages);
 
-    /// Slot que s'activa quan job ha fet una acció amb una imatge, s'augmenta pel job al QTreeWidget el número de d'imatges
-    void DICOMFileCommit(PACSJob *pacsJob, int numberOfImages);
-
     /// Slot que s'activa quan job ha fer una acció amb una sèrie completa, s'augmenta pel job al QTreeWidget el número de sèries
     void DICOMSeriesCommit(PACSJobPointer pacsJob, int numberOfSeries);
-
-    /// Slot que s'activa quan job ha fer una acció amb una sèrie completa, s'augmenta pel job al QTreeWidget el número de sèries
-    void DICOMSeriesCommit(PACSJob *pacsJob, int numberOfSeries);
 
     /// Neteja la llista d'estudis excepte dels que s'estant descarregant en aquells moments
     void clearList();
