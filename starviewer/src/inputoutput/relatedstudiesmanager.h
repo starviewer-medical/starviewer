@@ -135,7 +135,6 @@ private slots:
 
     /// Slot que s'activa quan un job de consulta al PACS és cancel·lat
     void queryPACSJobCancelled(PACSJobPointer pacsJob);
-    void queryPACSJobCancelled(PACSJob *pacsJob);
 
 private:
     PacsManager *m_pacsManager;

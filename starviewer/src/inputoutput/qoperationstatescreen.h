@@ -63,7 +63,6 @@ private slots:
 
     /// Slot que s'activa quan el job ha estat cancel·lat, es marca aquell job com ha cancel·lat
     void PACSJobCancelled(PACSJobPointer pacsJob);
-    void PACSJobCancelled(PACSJob *pacsJob);
 
     /// Slot que s'activa quan job ha fet una acció amb una imatge, s'augmenta pel job al QTreeWidget el número de d'imatges
     void DICOMFileCommit(PACSJobPointer pacsJob, int numberOfImages);

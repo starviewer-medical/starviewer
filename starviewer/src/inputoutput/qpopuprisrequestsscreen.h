@@ -61,7 +61,6 @@ private slots:
 
     /// S'indica que ha fallat o s'ha cancel·lat la descàrrega dels estudi demanat pel RIS
     void retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob);
-    void retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob);
 
 private:
     /// Actualitza per pantalla l'estat de la descàrrege

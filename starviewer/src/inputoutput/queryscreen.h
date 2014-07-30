@@ -147,7 +147,6 @@ private slots:
     /// Slot que s'activa quan un PACSJob ha finalitzat, es comprova si la PacsManager està executant més jobs de descàrrega o enviament
     /// si no n'està executant cap més s'amaga el gif animat que indica que s'està processant una petició
     void pacsJobFinishedOrCancelled(PACSJobPointer pacsJob);
-    void pacsJobFinishedOrCancelled(PACSJob *pacsJob);
 
     /// Actualitza segons el tab en el que ens trobem la visibilitat del llistat de PACS
     /// El llistat només es podrà habilitar o deshabilitar quan estem en la pestanya PACS

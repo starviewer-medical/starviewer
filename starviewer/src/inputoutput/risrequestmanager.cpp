@@ -147,7 +147,6 @@ void RISRequestManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJo
 {
     connect(queryPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(queryPACSJobFinished(PACSJobPointer)));
     connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(queryPACSJobCancelled(PACSJobPointer)));
-    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
 
     m_pacsManager->enqueuePACSJob(queryPACSJob);
@@ -185,14 +184,9 @@ void RISRequestManager::queryPACSJobFinished(PACSJobPointer pacsJob)
 
 void RISRequestManager::queryPACSJobCancelled(PACSJobPointer pacsJob)
 {
-    queryPACSJobCancelled(pacsJob.data());
-}
-
-void RISRequestManager::queryPACSJobCancelled(PACSJob *pacsJob)
-{
     // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
 
-    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
+    QueryPacsJob *queryPACSJob = pacsJob.objectCast<QueryPacsJob>().data();
 
     if (queryPACSJob == NULL)
     {
@@ -321,7 +315,6 @@ PACSJobPointer RISRequestManager::retrieveStudyFromPACS(Study *study)
     m_qpopUpRISRequestsScreen->addStudyToRetrieveFromPACSByAccessionNumber(retrieveDICOMFilesFromPACSJob);
     connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer)));
     connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer)));
-    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob*)));
 
     m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
 
@@ -338,12 +331,7 @@ void RISRequestManager::retrieveStudyFromDatabase(Study *study)
 
 void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
 {
-    retrieveDICOMFilesFromPACSJobCancelled(pacsJob.data());
-}
-
-void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)
-{
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>().data();
 
     if (retrieveDICOMFilesFromPACSJob == NULL)
     {

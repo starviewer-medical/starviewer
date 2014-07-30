@@ -53,6 +53,8 @@ PacsManager::PacsManager()
 
 void PacsManager::enqueuePACSJob(PACSJobPointer pacsJob)
 {
+    pacsJob->setSelfPointer(pacsJob);
+
     switch (pacsJob->getPACSJobType())
     {
         case PACSJob::SendDICOMFilesToPACSJobType:

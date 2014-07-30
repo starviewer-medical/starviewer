@@ -85,7 +85,6 @@ void QOperationStateScreen::newPACSJobEnqueued(PACSJobPointer pacsJob)
         connect(pacsJob.data(), SIGNAL(PACSJobStarted(PACSJobPointer)), SLOT(PACSJobStarted(PACSJobPointer)));
         connect(pacsJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(PACSJobFinished(PACSJobPointer)));
         connect(pacsJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(PACSJobCancelled(PACSJobPointer)));
-        connect(pacsJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(PACSJobCancelled(PACSJob*)));
 
         switch (pacsJob->getPACSJobType())
         {
@@ -133,11 +132,6 @@ void QOperationStateScreen::PACSJobFinished(PACSJobPointer pacsJob)
 }
 
 void QOperationStateScreen::PACSJobCancelled(PACSJobPointer pacsJob)
-{
-    PACSJobCancelled(pacsJob.data());
-}
-
-void QOperationStateScreen::PACSJobCancelled(PACSJob *pacsJob)
 {
     QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 

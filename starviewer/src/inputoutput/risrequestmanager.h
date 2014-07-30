@@ -72,11 +72,9 @@ private slots:
 
     /// Slot que s'activa quan un job de consulta al PACS és cancel·lat
     void queryPACSJobCancelled(PACSJobPointer pacsJob);
-    void queryPACSJobCancelled(PACSJob *pacsJob);
 
     /// Slot que s'activa quan s'ha cancel·lat la descàrre d'una petició del RIS
     void retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob);
-    void retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob);
 
     /// Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
     void retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob);
