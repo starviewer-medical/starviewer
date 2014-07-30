@@ -560,7 +560,7 @@ void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACS(PacsDevice pacsDevice
 
 void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QSharedPointer<SendDICOMFilesToPACSJob> sendDICOMFilesToPACSJob = pacsJob.dynamicCast<SendDICOMFilesToPACSJob>();
+    QSharedPointer<SendDICOMFilesToPACSJob> sendDICOMFilesToPACSJob = pacsJob.objectCast<SendDICOMFilesToPACSJob>();
 
     if (sendDICOMFilesToPACSJob->getStatus() != PACSRequestStatus::SendOk)
     {
@@ -585,7 +585,7 @@ void QInputOutputLocalDatabaseWidget::newPACSJobEnqueued(PACSJobPointer pacsJob)
     //       CacheManager aquest mètode HA DE DESAPAREIXER, quan es tregui aquest mètode recordar a treure l'include a "retrievedicomfilesfrompacsjob.h"
     if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
-        connect(pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(studyFromCacheWillBeDeleted(QString)),
+        connect(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(studyFromCacheWillBeDeleted(QString)),
                 SLOT(removeStudyFromQStudyTreeWidget(QString)));
     }
 }

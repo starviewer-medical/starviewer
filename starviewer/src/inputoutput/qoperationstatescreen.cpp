@@ -90,16 +90,16 @@ void QOperationStateScreen::newPACSJobEnqueued(PACSJobPointer pacsJob)
         {
             case PACSJob::SendDICOMFilesToPACSJobType:
                 insertNewPACSJob(pacsJob);
-                connect(pacsJob.dynamicCast<SendDICOMFilesToPACSJob>().data(), SIGNAL(DICOMFileSent(PACSJobPointer, int)),
+                connect(pacsJob.objectCast<SendDICOMFilesToPACSJob>().data(), SIGNAL(DICOMFileSent(PACSJobPointer, int)),
                         SLOT(DICOMFileCommit(PACSJobPointer, int)));
-                connect(pacsJob.dynamicCast<SendDICOMFilesToPACSJob>().data(), SIGNAL(DICOMSeriesSent(PACSJobPointer, int)),
+                connect(pacsJob.objectCast<SendDICOMFilesToPACSJob>().data(), SIGNAL(DICOMSeriesSent(PACSJobPointer, int)),
                         SLOT(DICOMSeriesCommit(PACSJobPointer, int)));
                 break;
             case PACSJob::RetrieveDICOMFilesFromPACSJobType:
                 insertNewPACSJob(pacsJob);
-                connect(pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(DICOMFileRetrieved(PACSJobPointer, int)),
+                connect(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(DICOMFileRetrieved(PACSJobPointer, int)),
                         SLOT(DICOMFileCommit(PACSJobPointer, int)));
-                connect(pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(DICOMSeriesRetrieved(PACSJobPointer, int)),
+                connect(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(DICOMSeriesRetrieved(PACSJobPointer, int)),
                         SLOT(DICOMSeriesCommit(PACSJobPointer, int)));
                 break;
             default:
@@ -242,11 +242,11 @@ Study* QOperationStateScreen::getStudyFromPACSJob(PACSJobPointer pacsJob)
 
     if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType)
     {
-        study = pacsJob.dynamicCast<SendDICOMFilesToPACSJob>()->getStudyOfDICOMFilesToSend();
+        study = pacsJob.objectCast<SendDICOMFilesToPACSJob>()->getStudyOfDICOMFilesToSend();
     }
     else if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
-        study = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles();
+        study = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles();
     }
 
     return study;
@@ -256,7 +256,7 @@ QString QOperationStateScreen::getPACSJobStatusResume(PACSJobPointer pacsJob)
 {
     if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
-        switch (pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>()->getStatus())
+        switch (pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStatus())
         {
             case PACSRequestStatus::RetrieveOk:
                 return tr("RETRIEVED");
@@ -271,7 +271,7 @@ QString QOperationStateScreen::getPACSJobStatusResume(PACSJobPointer pacsJob)
     }
     else
     {
-        if (pacsJob.dynamicCast<SendDICOMFilesToPACSJob>()->getStatus() == PACSRequestStatus::SendOk)
+        if (pacsJob.objectCast<SendDICOMFilesToPACSJob>()->getStatus() == PACSRequestStatus::SendOk)
         {
             return tr("SENT");
         }

@@ -171,7 +171,7 @@ void RelatedStudiesManager::queryPACSJobCancelled(PACSJobPointer pacsJob)
 
 void RelatedStudiesManager::queryPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
 
     if (queryPACSJob.isNull())
     {
@@ -199,13 +199,13 @@ void RelatedStudiesManager::queryPACSJobFinished(PACSJobPointer pacsJob)
 
 void RelatedStudiesManager::mergeFoundStudiesInQuery(PACSJobPointer queryPACSJob)
 {
-    if (queryPACSJob.dynamicCast<QueryPacsJob>()->getQueryLevel() != QueryPacsJob::study)
+    if (queryPACSJob.objectCast<QueryPacsJob>()->getQueryLevel() != QueryPacsJob::study)
     {
         /// Si la consulta no era d'estudis no ens interessa, només cerquem estudis
         return;
     }
 
-    foreach (Patient *patient, queryPACSJob.dynamicCast<QueryPacsJob>()->getPatientStudyList())
+    foreach (Patient *patient, queryPACSJob.objectCast<QueryPacsJob>()->getPatientStudyList())
     {
         foreach (Study *study, patient->getStudies())
         {
@@ -221,8 +221,8 @@ void RelatedStudiesManager::mergeFoundStudiesInQuery(PACSJobPointer queryPACSJob
 
 void RelatedStudiesManager::errorQueringPACS(PACSJobPointer queryPACSJob)
 {
-    if (queryPACSJob.dynamicCast<QueryPacsJob>()->getStatus() != PACSRequestStatus::QueryOk &&
-            queryPACSJob.dynamicCast<QueryPacsJob>()->getStatus() != PACSRequestStatus::QueryCancelled)
+    if (queryPACSJob.objectCast<QueryPacsJob>()->getStatus() != PACSRequestStatus::QueryOk &&
+            queryPACSJob.objectCast<QueryPacsJob>()->getStatus() != PACSRequestStatus::QueryCancelled)
     {
         // Com que fem dos cerques al mateix pacs si una falla, l'altra segurament també fallarà per evitar enviar
         // dos signals d'error si les dos fallen, ja que per des de fora ha de ser transparent el número de consultes
