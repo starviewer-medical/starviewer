@@ -139,7 +139,6 @@ void QInputOutputPacsWidget::enqueueQueryPACSJobToPACSManagerAndConnectSignals(P
 {
     connect(queryPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(queryPACSJobFinished(PACSJobPointer)));
     connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(queryPACSJobCancelled(PACSJobPointer)));
-    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
 
     m_pacsManager->enqueuePACSJob(queryPACSJob);
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
@@ -162,13 +161,8 @@ void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
 
 void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJobPointer pacsJob)
 {
-    queryPACSJobCancelled(pacsJob.data());
-}
-
-void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJob *pacsJob)
-{
     // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre, d'aquesta manera ens n'assabentem
-    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
+    QueryPacsJob *queryPACSJob = pacsJob.objectCast<QueryPacsJob>().data();
 
     if (queryPACSJob == NULL)
     {
@@ -384,12 +378,7 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointe
 
 void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
 {
-    retrieveDICOMFilesFromPACSJobCancelled(pacsJob.data());
-}
-
-void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)
-{
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = dynamic_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
+    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data();
     
     emit studyRetrieveCancelled(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
 }
@@ -407,7 +396,6 @@ void QInputOutputPacsWidget::retrieve(const PacsDevice &pacsDevice, ActionsAfter
     connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobStarted(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobStarted(PACSJobPointer)));
     connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer)));
     connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer)));
-    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob*)));
 
     m_actionsWhenRetrieveJobFinished.insert(retrieveDICOMFilesFromPACSJob->getPACSJobID(), actionAfterRetrieve);
 }

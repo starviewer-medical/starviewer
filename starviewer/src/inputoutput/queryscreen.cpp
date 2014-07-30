@@ -507,19 +507,13 @@ void QueryScreen::newPACSJobEnqueued(PACSJobPointer pacsJob)
         m_labelOperation->show();
         connect(pacsJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(pacsJobFinishedOrCancelled(PACSJobPointer)));
         connect(pacsJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(pacsJobFinishedOrCancelled(PACSJobPointer)));
-        connect(pacsJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
 
         // Indiquem que tenim un PACSJob més pendent de finalitzar
         m_PACSJobsPendingToFinish++;
     }
 }
 
-void QueryScreen::pacsJobFinishedOrCancelled(PACSJobPointer pacsJob) {
-    pacsJobFinishedOrCancelled(pacsJob.data());
-}
-
-void QueryScreen::pacsJobFinishedOrCancelled(PACSJob *)
-{
+void QueryScreen::pacsJobFinishedOrCancelled(PACSJobPointer) {
     // No podem utilitzar isExecutingPACSJob per controlar si hi ha jobs pendents d'executar, perquè algunes vegades ens
     // hem trobat que tot i no tenir cap job pendent d'executar, el mètode respón que hi ha algun job executant-se.
     // Això passa algunes vegades quan s'aten el signal PACSJobFinished d'un job de seguida i es pregunta al mètode isExecutingPACSJob

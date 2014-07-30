@@ -128,7 +128,6 @@ void RelatedStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(PA
 {
     connect(queryPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(queryPACSJobFinished(PACSJobPointer)));
     connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(queryPACSJobCancelled(PACSJobPointer)));
-    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(queryPACSJobCancelled(PACSJob*)));
 
     m_pacsManager->enqueuePACSJob(queryPACSJob);
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
@@ -152,13 +151,8 @@ bool RelatedStudiesManager::isExecutingQueries()
 
 void RelatedStudiesManager::queryPACSJobCancelled(PACSJobPointer pacsJob)
 {
-    queryPACSJobCancelled(pacsJob.data());
-}
-
-void RelatedStudiesManager::queryPACSJobCancelled(PACSJob *pacsJob)
-{
     // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
-    QueryPacsJob *queryPACSJob = qobject_cast<QueryPacsJob*>(pacsJob);
+    QueryPacsJob *queryPACSJob = pacsJob.objectCast<QueryPacsJob>().data();
 
     if (queryPACSJob == NULL)
     {

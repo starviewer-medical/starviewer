@@ -67,6 +67,9 @@ public:
     /// des d'aquest mètode emetem el signal PACSJobCancelled
     void aboutToBeDequeued(ThreadWeaver::QueueAPI *weaver);
 
+    /// Sets the self pointer reference of this job.
+    void setSelfPointer(const PACSJobPointer &self);
+
 signals:
     /// Signal que s'emet quan un PACSJob ha començat a executar-se
     void PACSJobStarted(PACSJobPointer);
@@ -76,11 +79,16 @@ signals:
 
     /// Signal que s'emet quan un PACSJob s'ha cancel·lat
     void PACSJobCancelled(PACSJobPointer);
-    void PACSJobCancelled(PACSJob*);
 
 protected:
     virtual void defaultBegin(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread);
     virtual void defaultEnd(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread);
+
+protected:
+    /// Weak reference to a shared pointer of the job itself. It is needed to emit the PACSJobCancelled() signal with a shared pointer from aboutToBeDequeued().
+    /// Since it's a weak pointer it won't keep the job alive.
+    /// TODO This should be removed by redesigning the PACS jobs architecture.
+    QWeakPointer<PACSJob> m_selfPointer;
 
 private:
     /// Mètode que han de reimplementar les classes filles per cancel·lar l'execució del job actual
