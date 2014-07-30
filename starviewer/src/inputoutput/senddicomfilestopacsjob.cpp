@@ -72,7 +72,7 @@ void SendDICOMFilesToPACSJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::T
         {
             /// Si s'han envait imatges indiquem que s'ha enviat la última sèrie
             m_numberOfSeriesSent++;
-            emit DICOMSeriesSent(this, m_numberOfSeriesSent);
+            emit DICOMSeriesSent(m_selfPointer.toStrongRef(), m_numberOfSeriesSent);
         }
     }
 }
@@ -169,12 +169,12 @@ void SendDICOMFilesToPACSJob::DICOMFileSent(Image *imageSent, int numberOfDICOMF
 {
     // Pressuposem que les imatges venen agrupades per sèries, sino és així s'ha de modificar aquest codi, perquè sinó es comptabilitzaran més series enviades
     // de les que realment s'han enviat
-    emit DICOMFileSent(this, numberOfDICOMFilesSent);
+    emit DICOMFileSent(m_selfPointer.toStrongRef(), numberOfDICOMFilesSent);
 
     if (imageSent->getParentSeries()->getInstanceUID() != m_lastDICOMFileSeriesInstanceUID && !m_lastDICOMFileSeriesInstanceUID.isEmpty())
     {
         m_numberOfSeriesSent++;
-        emit DICOMSeriesSent(this, m_numberOfSeriesSent);
+        emit DICOMSeriesSent(m_selfPointer.toStrongRef(), m_numberOfSeriesSent);
     }
 
     m_lastDICOMFileSeriesInstanceUID = imageSent->getParentSeries()->getInstanceUID();
