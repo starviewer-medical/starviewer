@@ -162,9 +162,9 @@ void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
 void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJobPointer pacsJob)
 {
     // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre, d'aquesta manera ens n'assabentem
-    QueryPacsJob *queryPACSJob = pacsJob.objectCast<QueryPacsJob>().data();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
 
-    if (queryPACSJob == NULL)
+    if (queryPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que s'ha cancel·lat no és un QueryPACSJob");
     }
@@ -177,9 +177,9 @@ void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJobPointer pacsJob)
 
 void QInputOutputPacsWidget::queryPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
 
-    if (queryPACSJob == NULL)
+    if (queryPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que ha finalitzat no és un QueryPACSJob");
     }
@@ -201,7 +201,7 @@ void QInputOutputPacsWidget::queryPACSJobFinished(PACSJobPointer pacsJob)
 
 void QInputOutputPacsWidget::showQueryPACSJobResults(PACSJobPointer pacsJob)
 {
-    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
 
     if (queryPACSJob->getQueryLevel() == QueryPacsJob::study)
     {
@@ -240,7 +240,7 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(PACSJobPointer pacsJob)
 
 void QInputOutputPacsWidget::showErrorQueringPACS(PACSJobPointer pacsJob)
 {
-    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
 
     if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk && queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
     {
@@ -345,7 +345,7 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobStarted(PACSJobPointer
 
 void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
 {
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data();
+    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>();
 
     if (retrieveDICOMFilesFromPACSJob->getStatus() != PACSRequestStatus::RetrieveOk)
     {
@@ -378,7 +378,7 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointe
 
 void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
 {
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data();
+    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>();
     
     emit studyRetrieveCancelled(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
 }

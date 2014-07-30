@@ -174,7 +174,7 @@ void AsynchronousVolumeReader::unmarkVolumeFromJobAsLoading(ThreadWeaver::JobPoi
     // TODO Aquí és el lloc més correcte per desmarcar el volume?? Així tenim el problema de que no podem destruïr aquest objecte
     // fins que s'ha finalitzat el job, si no, no es marcaria mai com a carregat. Si no es fa aquí, hem de tenir en compte
     // problemes de concurrència.
-    VolumeReaderJob *volumeReaderJob = job.dynamicCast<VolumeReaderJob>().data();
+    QSharedPointer<VolumeReaderJob> volumeReaderJob = job.dynamicCast<VolumeReaderJob>();
     if (volumeReaderJob)
     {
         this->unmarkVolumeAsLoading(volumeReaderJob->getVolume());

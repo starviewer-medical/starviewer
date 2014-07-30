@@ -125,7 +125,7 @@ void VolumeReaderManager::updateProgress(VolumeReaderJob *job, int value)
 
 void VolumeReaderManager::jobFinished(ThreadWeaver::JobPointer job)
 {
-    VolumeReaderJob *volumeReaderJob = job.dynamicCast<VolumeReaderJob>().data();
+    QSharedPointer<VolumeReaderJob> volumeReaderJob = job.dynamicCast<VolumeReaderJob>();
     m_volumes[m_volumeReaderJobs.indexOf(job)] = volumeReaderJob->getVolume();
 
     if (m_success)

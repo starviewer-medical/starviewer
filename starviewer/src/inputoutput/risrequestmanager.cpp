@@ -154,9 +154,9 @@ void RISRequestManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJo
 
 void RISRequestManager::queryPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
 
-    if (queryPACSJob == NULL)
+    if (queryPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que ha finalitzat no és un QueryPACSJob");
     }
@@ -186,9 +186,9 @@ void RISRequestManager::queryPACSJobCancelled(PACSJobPointer pacsJob)
 {
     // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
 
-    QueryPacsJob *queryPACSJob = pacsJob.objectCast<QueryPacsJob>().data();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
 
-    if (queryPACSJob == NULL)
+    if (queryPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que s'ha cancel·lat no és un QueryPACSJob");
     }
@@ -239,7 +239,7 @@ void RISRequestManager::errorQueryingStudy(PACSJobPointer queryPACSJob)
 
 void RISRequestManager::addFoundStudiesToRetrieveQueue(PACSJobPointer pacsJob)
 {
-    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
 
     foreach (Patient *patient, queryPACSJob->getPatientStudyList())
     {
@@ -331,9 +331,9 @@ void RISRequestManager::retrieveStudyFromDatabase(Study *study)
 
 void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
 {
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>().data();
+    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
 
-    if (retrieveDICOMFilesFromPACSJob == NULL)
+    if (retrieveDICOMFilesFromPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
     }
@@ -348,9 +348,9 @@ void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pa
 /// Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
 void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
 {
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data();
+    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>();
 
-    if (retrieveDICOMFilesFromPACSJob == NULL)
+    if (retrieveDICOMFilesFromPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
         return;
