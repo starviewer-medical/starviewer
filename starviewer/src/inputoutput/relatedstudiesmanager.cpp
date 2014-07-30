@@ -152,9 +152,9 @@ bool RelatedStudiesManager::isExecutingQueries()
 void RelatedStudiesManager::queryPACSJobCancelled(PACSJobPointer pacsJob)
 {
     // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
-    QueryPacsJob *queryPACSJob = pacsJob.objectCast<QueryPacsJob>().data();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
 
-    if (queryPACSJob == NULL)
+    if (queryPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que s'ha cancel·lat no es un QueryPACSJob");
     }
@@ -171,9 +171,9 @@ void RelatedStudiesManager::queryPACSJobCancelled(PACSJobPointer pacsJob)
 
 void RelatedStudiesManager::queryPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QueryPacsJob *queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>().data();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
 
-    if (queryPACSJob == NULL)
+    if (queryPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que ha finalitzat no es un QueryPACSJob");
     }

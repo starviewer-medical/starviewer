@@ -560,7 +560,7 @@ void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACS(PacsDevice pacsDevice
 
 void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJobPointer pacsJob)
 {
-    SendDICOMFilesToPACSJob *sendDICOMFilesToPACSJob = pacsJob.dynamicCast<SendDICOMFilesToPACSJob>().data();
+    QSharedPointer<SendDICOMFilesToPACSJob> sendDICOMFilesToPACSJob = pacsJob.dynamicCast<SendDICOMFilesToPACSJob>();
 
     if (sendDICOMFilesToPACSJob->getStatus() != PACSRequestStatus::SendOk)
     {

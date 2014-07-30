@@ -66,9 +66,9 @@ void QPopUpRISRequestsScreen::addStudyRetrievedFromDatabaseByAccessionNumber(Stu
 
 void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
 {
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>().data();
+    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>();
 
-    if (retrieveDICOMFilesFromPACSJob == NULL)
+    if (retrieveDICOMFilesFromPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
     }
@@ -104,9 +104,9 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJobPoint
 
 void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
 {
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>().data();
+    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
 
-    if (retrieveDICOMFilesFromPACSJob == NULL)
+    if (retrieveDICOMFilesFromPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
     }
