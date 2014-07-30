@@ -177,7 +177,7 @@ void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJobPointer pacsJob)
 
 void QInputOutputPacsWidget::queryPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
 
     if (queryPACSJob.isNull())
     {
@@ -201,7 +201,7 @@ void QInputOutputPacsWidget::queryPACSJobFinished(PACSJobPointer pacsJob)
 
 void QInputOutputPacsWidget::showQueryPACSJobResults(PACSJobPointer pacsJob)
 {
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
 
     if (queryPACSJob->getQueryLevel() == QueryPacsJob::study)
     {
@@ -240,7 +240,7 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(PACSJobPointer pacsJob)
 
 void QInputOutputPacsWidget::showErrorQueringPACS(PACSJobPointer pacsJob)
 {
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
 
     if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk && queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
     {
@@ -340,12 +340,12 @@ void QInputOutputPacsWidget::retrieveSelectedItemsFromQStudyTreeWidget(ActionsAf
 
 void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobStarted(PACSJobPointer pacsJob)
 {
-    emit studyRetrieveStarted(pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    emit studyRetrieveStarted(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
 }
 
 void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>();
+    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
 
     if (retrieveDICOMFilesFromPACSJob->getStatus() != PACSRequestStatus::RetrieveOk)
     {
@@ -378,7 +378,7 @@ void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointe
 
 void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
 {
-    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>();
+    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
     
     emit studyRetrieveCancelled(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
 }

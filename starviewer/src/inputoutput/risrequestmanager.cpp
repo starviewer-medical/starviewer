@@ -154,7 +154,7 @@ void RISRequestManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJo
 
 void RISRequestManager::queryPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
 
     if (queryPACSJob.isNull())
     {
@@ -239,7 +239,7 @@ void RISRequestManager::errorQueryingStudy(PACSJobPointer queryPACSJob)
 
 void RISRequestManager::addFoundStudiesToRetrieveQueue(PACSJobPointer pacsJob)
 {
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.dynamicCast<QueryPacsJob>();
+    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
 
     foreach (Patient *patient, queryPACSJob->getPatientStudyList())
     {
@@ -348,7 +348,7 @@ void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pa
 /// Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
 void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
 {
-    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.dynamicCast<RetrieveDICOMFilesFromPACSJob>();
+    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
 
     if (retrieveDICOMFilesFromPACSJob.isNull())
     {
