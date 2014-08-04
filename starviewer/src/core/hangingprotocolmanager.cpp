@@ -192,7 +192,7 @@ int HangingProtocolManager::setInputToHangingProtocolImageSets(HangingProtocol *
     return numberOfFilledImageSets;
 }
 
-void HangingProtocolManager::setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout)
+HangingProtocol* HangingProtocolManager::setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout)
 {
     HangingProtocol *bestHangingProtocol = NULL;
     foreach (HangingProtocol *hangingProtocol, hangingProtocolList)
@@ -208,6 +208,8 @@ void HangingProtocolManager::setBestHangingProtocol(Patient *patient, const QLis
         DEBUG_LOG(QString("Hanging protocol que s'aplica: %1").arg(bestHangingProtocol->getName()));
         applyHangingProtocol(bestHangingProtocol, layout, patient);
     }
+
+    return bestHangingProtocol;
 }
 
 void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient)
