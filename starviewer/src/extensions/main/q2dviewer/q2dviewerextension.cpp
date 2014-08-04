@@ -312,6 +312,21 @@ void Q2DViewerExtension::setupLayoutManager()
     // HACK Should be done in a better way
     connect(m_layoutManager, SIGNAL(previousStudiesSearchEnded()), SLOT(hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()));
     connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), m_layoutManager, SLOT(setHangingProtocol(int)));
+
+    // Actions to show the next o previous hanging protocol of the list. Currently, it can only be carried out through keyboard
+    QAction *nextHangingProtocolAction = new QAction(this);
+    nextHangingProtocolAction->setText("Next Hanging Protocol");
+    nextHangingProtocolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::NextHangingProtocol));
+    connect(nextHangingProtocolAction, SIGNAL(triggered()), m_layoutManager, SLOT(applyNextHangingProtocol()));
+
+    QAction *previousHangingProtocolAction = new QAction(this);
+    previousHangingProtocolAction->setText("Previous Hanging Protocol");
+    previousHangingProtocolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::PreviousHangingProtocol));
+    connect(previousHangingProtocolAction, SIGNAL(triggered()), m_layoutManager, SLOT(applyPreviousHangingProtocol()));
+
+    this->addAction(previousHangingProtocolAction);
+    this->addAction(nextHangingProtocolAction);
+
     m_layoutManager->initialize();
 }
 
