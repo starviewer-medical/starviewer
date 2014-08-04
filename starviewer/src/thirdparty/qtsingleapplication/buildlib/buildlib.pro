@@ -19,3 +19,5 @@ TARGET = $$QTSINGLEAPPLICATION_LIBNAME
 DESTDIR = ../../../../bin
 target.path = $$DESTDIR
 INSTALLS += target
+
+include(../../../makefixdebug.pri)
