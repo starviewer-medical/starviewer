@@ -71,8 +71,9 @@ private:
     StudyLayoutConfig getMergedStudyLayoutConfig(const QList<StudyLayoutConfig> &configurations);
 
 private slots:
-    /// Sets and applies the hanging protocol with the given identifier
+    /// Sets and applies the hanging protocol with the given identifier or object
     void setHangingProtocol(int hangingProtocolNumber);
+    void setHangingProtocol(HangingProtocol *hangingProtocol);
 
     /// Searches for hanging protocols for the current patient
     void searchHangingProtocols();
