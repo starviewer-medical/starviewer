@@ -53,7 +53,7 @@ public:
     void applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient);
 
     /// Aplica el millor hanging protocol de la llista donada
-    void setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
+    HangingProtocol* setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
 
     /// Si hi havia estudis en descàrrega, s'elimina de la llista
     void cancelHangingProtocolDownloading();
