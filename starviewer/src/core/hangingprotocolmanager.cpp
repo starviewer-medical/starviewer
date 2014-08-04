@@ -210,28 +210,6 @@ void HangingProtocolManager::setBestHangingProtocol(Patient *patient, const QLis
     }
 }
 
-void HangingProtocolManager::applyHangingProtocol(int hangingProtocolNumber, ViewersLayout *layout, Patient *patient)
-{
-    HangingProtocol *hangingProtocol = 0;
-    bool found = false;
-    QListIterator<HangingProtocol*> iterator(m_availableHangingProtocols);
-
-    while (!found && iterator.hasNext())
-    {
-        HangingProtocol *candidate = iterator.next();
-        if (candidate->getIdentifier() == hangingProtocolNumber)
-        {
-            found = true;
-            hangingProtocol = candidate;
-        }
-    }
-
-    if (found)
-    {
-        applyHangingProtocol(hangingProtocol, layout, patient);
-    }
-}
-
 void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient)
 {
     // Si hi havia algun estudi descarregant, es treu de la llista d'espera
