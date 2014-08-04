@@ -49,8 +49,7 @@ public:
     QList<HangingProtocol*> searchHangingProtocols(Patient *patient);
     QList<HangingProtocol*> searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies);
 
-    /// Aplica un hanging protocol concret, ja sigui via identificador o per instància
-    void applyHangingProtocol(int hangingProtocolNumber, ViewersLayout *layout, Patient *patient);
+    /// Aplica un hanging protocol concret
     void applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient);
 
     /// Aplica el millor hanging protocol de la llista donada

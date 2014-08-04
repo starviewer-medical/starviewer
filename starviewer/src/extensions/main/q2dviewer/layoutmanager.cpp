@@ -197,7 +197,32 @@ StudyLayoutConfig LayoutManager::getMergedStudyLayoutConfig(const QList<StudyLay
 
 void LayoutManager::setHangingProtocol(int hangingProtocolNumber)
 {
-    m_hangingProtocolManager->applyHangingProtocol(hangingProtocolNumber, m_layout, m_patient);
+    HangingProtocol *hangingProtocol = 0;
+    bool found = false;
+    QListIterator<HangingProtocol*> iterator(m_hangingProtocolCandidates);
+
+    while (!found && iterator.hasNext())
+    {
+        HangingProtocol *candidate = iterator.next();
+        if (candidate->getIdentifier() == hangingProtocolNumber)
+        {
+            found = true;
+            hangingProtocol = candidate;
+        }
+    }
+
+    if (found)
+    {
+        this->setHangingProtocol(hangingProtocol);
+    }
+}
+
+void LayoutManager::setHangingProtocol(HangingProtocol *hangingProtocol)
+{
+    if (hangingProtocol)
+    {
+        m_hangingProtocolManager->applyHangingProtocol(hangingProtocol, m_layout, m_patient);
+    }
 }
 
 void LayoutManager::addHangingProtocolsWithPrevious(QList<Study*> studies)
