@@ -57,6 +57,8 @@ const QString Shortcuts::AutomaticSynchronizationTool(ShortcutsBase + "Automatic
 const QString Shortcuts::SynchronizeAllViewers(ShortcutsBase + "SynchronizeAllViewers");
 const QString Shortcuts::DesynchronizeAllViewers(ShortcutsBase + "SynchronizeNoneViewer");
 const QString Shortcuts::Propagation(ShortcutsBase + "Propagation");
+const QString Shortcuts::NextHangingProtocol(ShortcutsBase + "NextHangingProtocol");
+const QString Shortcuts::PreviousHangingProtocol(ShortcutsBase + "PreviousHangingProtocol");
 
 const QString Shortcuts::SaveSingleScreenShot(ShortcutsBase + "SaveSingleScreenShot");
 const QString Shortcuts::SaveWholeSeriesScreenShot(ShortcutsBase + "SaveWholeSeriesScreenShot");
@@ -331,6 +333,14 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("P"));
     settingsRegistry->addSetting(Propagation, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("F12"));
+    settingsRegistry->addSetting(NextHangingProtocol, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("F11"));
+    settingsRegistry->addSetting(PreviousHangingProtocol, shortcutsList);
     
 }
 
