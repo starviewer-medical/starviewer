@@ -32,8 +32,15 @@ public:
     void applyProperLayoutChoice();
 
 public slots:
+
     /// Searches and adds suitable hanging protocols for the given previous studies
     void addHangingProtocolsWithPrevious(QList<Study*> studies);
+
+    /// Applies the next hanging protocol of the list if any was applied
+    void applyNextHangingProtocol();
+
+    /// Applies the previous hanging protocol of the list if any was applied
+    void applyPreviousHangingProtocol();
 
 signals:
     /// Emits this signal when new hanging protocols are found for the current patient
@@ -99,6 +106,9 @@ private:
 
     /// Set of study UIDs of studies that should be ignored (no action on layout) when they are added
     QSet<QString> m_studiesToIgnoreWhenAdded;
+
+    /// Current hanging protocol applied
+    HangingProtocol *m_currentHangingProtocolApplied;
 };
 
 } // end namespace udg

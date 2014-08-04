@@ -9,6 +9,7 @@
 #include "studylayoutmapper.h"
 #include "studylayoutconfig.h"
 #include "studylayoutconfigsettingsmanager.h"
+#include "hangingprotocol.h"
 
 namespace udg {
 
@@ -18,6 +19,7 @@ LayoutManager::LayoutManager(Patient *patient, ViewersLayout *layout, QObject *p
     m_patient = patient;
     m_layout = layout;
     m_hangingProtocolManager = new HangingProtocolManager(this);
+    m_currentHangingProtocolApplied = 0;
     
     connect(m_patient, SIGNAL(studyAdded(Study*)), SLOT(onStudyAdded(Study*)));
     connect(m_hangingProtocolManager, SIGNAL(discardedStudy(QString)), SLOT(addStudyToIgnore(QString)));
@@ -70,11 +72,41 @@ bool LayoutManager::applyBestHangingProtocol()
     
     if (m_hangingProtocolCandidates.size() > 0)
     {
-        m_hangingProtocolManager->setBestHangingProtocol(m_patient, m_hangingProtocolCandidates, m_layout);
+        m_currentHangingProtocolApplied = m_hangingProtocolManager->setBestHangingProtocol(m_patient, m_hangingProtocolCandidates, m_layout);
         hangingProtocolApplied = true;
+    }
+    else
+    {
+        m_currentHangingProtocolApplied = 0;
     }
 
     return hangingProtocolApplied;
+}
+
+void LayoutManager::applyNextHangingProtocol()
+{
+    if (m_currentHangingProtocolApplied)
+    {
+        int index = m_hangingProtocolCandidates.indexOf(m_currentHangingProtocolApplied);
+
+        if (index + 1 < m_hangingProtocolCandidates.count())
+        {
+            this->setHangingProtocol(m_hangingProtocolCandidates.at(index + 1));
+        }
+    }
+}
+
+void LayoutManager::applyPreviousHangingProtocol()
+{
+    if (m_currentHangingProtocolApplied)
+    {
+        int index = m_hangingProtocolCandidates.indexOf(m_currentHangingProtocolApplied);
+
+        if (index > 0)
+        {
+            this->setHangingProtocol(m_hangingProtocolCandidates.at(index - 1));
+        }
+    }
 }
 
 void LayoutManager::cancelOngoingOperations()
@@ -208,6 +240,7 @@ void LayoutManager::setHangingProtocol(HangingProtocol *hangingProtocol)
     if (hangingProtocol)
     {
         m_hangingProtocolManager->applyHangingProtocol(hangingProtocol, m_layout, m_patient);
+        m_currentHangingProtocolApplied = hangingProtocol;
     }
 }
 
