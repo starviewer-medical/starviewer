@@ -213,6 +213,9 @@ void AsynchronousVolumeReader::cancelLoadingAndDeleteVolume(Volume *volume)
         {
             DEBUG_LOG(QString("Volume %1 cannot be dequeued, requesting abort and delete").arg(volume->getIdentifier().getValue()));
             job->requestAbort();
+            // We need to remove the policy from the job so that the job doesn't try to access the policy,
+            // which may be destroyed before the job, from the job destructor
+            job->removeQueuePolicy(&m_resourceRestrictionPolicy);
         }
     }
     else
