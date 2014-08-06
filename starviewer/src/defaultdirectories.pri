@@ -7,13 +7,13 @@ DCMTKLIBDIR = $$(DCMTKLIBDIR)
 isEmpty(DCMTKLIBDIR){
     unix:DCMTKLIBDIR = /usr/lib/dcmtk
     macx:DCMTKLIBDIR = /usr/local/dcmtk-3.6.1_20120515/lib
-    win32:DCMTKLIBDIR = C:/dcmtk-3.6.1-20120515/lib
+    win32:DCMTKLIBDIR = $$(SystemDrive)/dcmtk/3.6.1_20120515/lib
 }
 DCMTKINCLUDEDIR = $$(DCMTKINCLUDEDIR)
 isEmpty(DCMTKINCLUDEDIR){
     unix:DCMTKINCLUDEDIR = /usr/include/dcmtk
     macx:DCMTKINCLUDEDIR = /usr/local/dcmtk-3.6.1_20120515/include/dcmtk
-    win32:DCMTKINCLUDEDIR = C:/dcmtk-3.6.1-20120515/include/dcmtk
+    win32:DCMTKINCLUDEDIR = $$(SystemDrive)/dcmtk/3.6.1_20120515/include/dcmtk
 }
 
 
@@ -23,13 +23,13 @@ VTKLIBDIR = $$(VTKLIBDIR)
 isEmpty(VTKLIBDIR){
     unix:VTKLIBDIR = /usr/lib
     macx:VTKLIBDIR = /usr/local/lib/vtk-5.6
-    win32:VTKLIBDIR = C:/vtk/6.1/lib
+    win32:VTKLIBDIR = $$(SystemDrive)/VTK/6.1.0/lib
 }
 VTKINCLUDEDIR = $$(VTKINCLUDEDIR)
 isEmpty(VTKINCLUDEDIR){
     unix:VTKINCLUDEDIR = /usr/include/vtk-5.6
     macx:VTKINCLUDEDIR = /usr/local/include/vtk-5.6
-    win32:VTKINCLUDEDIR = C:/vtk/6.1/include/vtk-6.1
+    win32:VTKINCLUDEDIR = $$(SystemDrive)/VTK/6.1.0/include/vtk-6.1
 }
 
 
@@ -39,13 +39,13 @@ ITKLIBDIR = $$(ITKLIBDIR)
 isEmpty(ITKLIBDIR){
     unix:ITKLIBDIR = /usr/lib/InsightToolkit
     macx:ITKLIBDIR = /usr/local/lib/InsightToolkit
-    win32:ITKLIBDIR = C:/InsightToolkit/lib/InsightToolkit
+    win32:ITKLIBDIR = $$(SystemDrive)/InsightToolkit/3.20.1/lib/InsightToolkit
 }
 ITKINCLUDEDIR = $$(ITKINCLUDEDIR)
 isEmpty(ITKINCLUDEDIR){
     unix:ITKINCLUDEDIR = /usr/include/InsightToolkit
     macx:ITKINCLUDEDIR = /usr/local/include/InsightToolkit
-    win32:ITKINCLUDEDIR = C:/InsightToolkit/include/InsightToolkit
+    win32:ITKINCLUDEDIR = $$(SystemDrive)/InsightToolkit/3.20.1/include/InsightToolkit
 }
 
 # GDCM Libraries
@@ -54,13 +54,13 @@ GDCMLIBDIR = $$(GDCMLIBDIR)
 isEmpty(GDCMLIBDIR){
     unix:GDCMLIBDIR = /usr/lib/gdcm
     macx:GDCMLIBDIR = /usr/local/lib/gdcm-2.0
-    win32:GDCMLIBDIR = C:/gdcm/2.4/lib
+    win32:GDCMLIBDIR = $$(SystemDrive)/gdcm/2.4.3/lib
 }
 GDCMINCLUDEDIR = $$(GDCMINCLUDEDIR)
 isEmpty(GDCMINCLUDEDIR){
     unix:GDCMINCLUDEDIR = /usr/include/gdcm
     macx:GDCMINCLUDEDIR = /usr/local/include/gdcm-2.0
-    win32:GDCMINCLUDEDIR = C:/gdcm/2.4/include/gdcm-2.4
+    win32:GDCMINCLUDEDIR = $$(SystemDrive)/gdcm/2.4.3/include/gdcm-2.4
 }
 
 # Log4cxx Libraries
@@ -84,13 +84,13 @@ THREADWEAVERLIBDIR = $$(THREADWEAVERLIBDIR)
 isEmpty(THREADWEAVERLIBDIR){
     unix:THREADWEAVERLIBDIR = /usr/lib
     macx:THREADWEAVERLIBDIR = /usr/local/lib/threadweaver
-    win32:THREADWEAVERLIBDIR = C:/ThreadWeaver/lib
+    win32:THREADWEAVERLIBDIR = $$(SystemDrive)/ThreadWeaver/5.0.0/lib
 }
 THREADWEAVERINCLUDEDIR = $$(THREADWEAVERINCLUDEDIR)
 isEmpty(THREADWEAVERINCLUDEDIR){
     unix:THREADWEAVERINCLUDEDIR = /usr/include
     macx:THREADWEAVERINCLUDEDIR = /usr/local/include
-    win32:THREADWEAVERINCLUDEDIR = C:/ThreadWeaver/include/KF5
+    win32:THREADWEAVERINCLUDEDIR = $$(SystemDrive)/ThreadWeaver/5.0.0/include/KF5
 }
 
 
