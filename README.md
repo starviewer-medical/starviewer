@@ -1,3 +1,5 @@
+![Starviewer Logo](http://starviewer.udg.edu/images/starviewer-logo.png)
+
 # Starviewer
 
 Starviewer is a cross-platform medical imaging software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) fully compliant with the DICOM standard for image communication and image file formats. It can also read many other file formats specified by the MetaIO standard (*.mhd files). 
