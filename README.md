@@ -1,4 +1,4 @@
-![Starviewer Logo](http://starviewer.udg.edu/images/starviewer-logo.png)
+[![Starviewer Logo](http://starviewer.udg.edu/images/starviewer-logo.png)](http://starviewer.udg.edu)
 
 # Starviewer
 
