@@ -55,6 +55,13 @@ VolumeReaderJobFactory::VolumeReaderJobFactory(QObject *parent)
 {
 }
 
+VolumeReaderJobFactory::~VolumeReaderJobFactory()
+{
+    this->getWeaverInstance()->dequeue();
+    this->getWeaverInstance()->requestAbort();
+    this->getWeaverInstance()->shutDown();
+}
+
 QSharedPointer<VolumeReaderJob> VolumeReaderJobFactory::read(Volume *volume)
 {
     DEBUG_LOG(QString("AsynchronousVolumeReader::read Begin volume: %1").arg(volume->getIdentifier().getValue()));
