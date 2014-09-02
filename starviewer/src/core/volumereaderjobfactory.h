@@ -16,6 +16,8 @@
 #define UDGASYNCHRONOUSVOLUMEREADER_H
 
 #include <QObject>
+#include "singleton.h"
+
 #include <QHash>
 
 #include <ThreadWeaver/ResourceRestrictionPolicy>
@@ -37,11 +39,9 @@ class Volume;
     Aquesta classe no es pot cridar de forma concurrent des de diferents threads.
   */
 
-class VolumeReaderJobFactory : public QObject {
+class VolumeReaderJobFactory : public QObject, public SingletonPointer<VolumeReaderJobFactory> {
 Q_OBJECT
 public:
-    explicit VolumeReaderJobFactory(QObject *parent = 0);
-
     /// Llegeix un Volume de manera asíncrona.
     /// Retorna un VolumeReaderJob per tal de poder saber quan és que aquest estarà carregat.
     ThreadWeaver::JobPointer read(Volume *volume);
@@ -49,6 +49,10 @@ public:
     /// Cancel·la la càrrega de volume i, un cop cancel·lada, esborra volume.
     /// Si volume no s'està carregant, l'esborrarà directament.
     void cancelLoadingAndDeleteVolume(Volume *volume);
+
+protected:
+    friend class SingletonPointer<VolumeReaderJobFactory>;
+    explicit VolumeReaderJobFactory(QObject *parent = 0);
 
 private slots:
     /// Marca el volume del job que se li passa conforme ja està carregat
@@ -82,8 +86,8 @@ private:
 
 private:
     /// Llista dels volums que s'estan carregant
-    static QHash<int, ThreadWeaver::JobPointer> m_volumesLoading;
-    static ThreadWeaver::ResourceRestrictionPolicy m_resourceRestrictionPolicy;
+    QHash<int, ThreadWeaver::JobPointer> m_volumesLoading;
+    ThreadWeaver::ResourceRestrictionPolicy m_resourceRestrictionPolicy;
 };
 
 } // End namespace udg

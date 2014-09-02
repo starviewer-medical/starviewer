@@ -52,8 +52,8 @@ void VolumeRepository::deleteVolume(Identifier id)
     this->removeItem(id);
 
     // I l'eliminem
-    VolumeReaderJobFactory volumeReader;
-    volumeReader.cancelLoadingAndDeleteVolume(volume);
+    VolumeReaderJobFactory *volumeReader = VolumeReaderJobFactory::instance();
+    volumeReader->cancelLoadingAndDeleteVolume(volume);
 
     emit itemRemoved(id);
     INFO_LOG("S'ha esborrat del repositori el volum amb id: " + QString::number(id.getValue()));

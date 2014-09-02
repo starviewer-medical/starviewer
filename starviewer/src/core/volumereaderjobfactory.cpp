@@ -32,9 +32,6 @@
 
 namespace udg {
 
-QHash<int, ThreadWeaver::JobPointer> VolumeReaderJobFactory::m_volumesLoading;
-ThreadWeaver::ResourceRestrictionPolicy VolumeReaderJobFactory::m_resourceRestrictionPolicy;
-
 VolumeReaderJobFactory::VolumeReaderJobFactory(QObject *parent)
  : QObject(parent)
 {
