@@ -29,6 +29,7 @@ class Queue;
 
 namespace udg {
 
+class Identifier;
 class VolumeReaderJob;
 class Volume;
 
@@ -66,7 +67,7 @@ private:
     void markVolumeAsLoadingByJob(Volume *volume, QSharedPointer<VolumeReaderJob> volumeReaderJob);
 
     /// Desmarca el volume que se li passa conforme ja no s'està carregant.
-    void unmarkVolumeAsLoading(Volume *volume);
+    void unmarkVolumeAsLoading(const Identifier &volumeIdentifier);
 
     /// Ens retorna la instància de Weaver que hem de fer servir per treballar amb els jobs
     ThreadWeaver::Queue* getWeaverInstance() const;

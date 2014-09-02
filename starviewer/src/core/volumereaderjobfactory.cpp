@@ -185,7 +185,7 @@ void VolumeReaderJobFactory::unmarkVolumeFromJobAsLoading(ThreadWeaver::JobPoint
     QSharedPointer<VolumeReaderJob> volumeReaderJob = job.dynamicCast<VolumeReaderJob>();
     if (volumeReaderJob)
     {
-        this->unmarkVolumeAsLoading(volumeReaderJob->getVolume());
+        this->unmarkVolumeAsLoading(volumeReaderJob->getVolumeIdentifier());
     }
 }
 
@@ -238,10 +238,10 @@ void VolumeReaderJobFactory::markVolumeAsLoadingByJob(Volume *volume, QSharedPoi
     m_volumesLoading.insert(volume->getIdentifier().getValue(), volumeReaderJob);
 }
 
-void VolumeReaderJobFactory::unmarkVolumeAsLoading(Volume *volume)
+void VolumeReaderJobFactory::unmarkVolumeAsLoading(const Identifier &volumeIdentifier)
 {
-    DEBUG_LOG(QString("unmarkVolumeAsLoading: Volume %1").arg(volume->getIdentifier().getValue()));
-    m_volumesLoading.remove(volume->getIdentifier().getValue());
+    DEBUG_LOG(QString("unmarkVolumeAsLoading: Volume %1").arg(volumeIdentifier.getValue()));
+    m_volumesLoading.remove(volumeIdentifier.getValue());
 }
 
 ThreadWeaver::Queue *VolumeReaderJobFactory::getWeaverInstance() const
