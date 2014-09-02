@@ -30,12 +30,7 @@
 #include <windows.h>
 #endif
 
-namespace udg {
-
-VolumeReaderJobFactory::VolumeReaderJobFactory(QObject *parent)
- : QObject(parent)
-{
-}
+namespace {
 
 bool is32BitWindows()
 {
@@ -49,6 +44,15 @@ bool is32BitWindows()
 #else
     return false; // Win64 does not support Win16
 #endif
+}
+
+}
+
+namespace udg {
+
+VolumeReaderJobFactory::VolumeReaderJobFactory(QObject *parent)
+ : QObject(parent)
+{
 }
 
 QSharedPointer<VolumeReaderJob> VolumeReaderJobFactory::read(Volume *volume)
