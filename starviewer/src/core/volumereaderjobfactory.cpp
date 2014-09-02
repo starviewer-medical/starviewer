@@ -51,7 +51,7 @@ bool is32BitWindows()
 #endif
 }
 
-ThreadWeaver::JobPointer VolumeReaderJobFactory::read(Volume *volume)
+QSharedPointer<VolumeReaderJob> VolumeReaderJobFactory::read(Volume *volume)
 {
     DEBUG_LOG(QString("AsynchronousVolumeReader::read Begin volume: %1").arg(volume->getIdentifier().getValue()));
 
@@ -63,7 +63,7 @@ ThreadWeaver::JobPointer VolumeReaderJobFactory::read(Volume *volume)
     }
 
     VolumeReaderJob *volumeReaderJob = new VolumeReaderJob(volume);
-    ThreadWeaver::JobPointer jobPointer(volumeReaderJob);
+    QSharedPointer<VolumeReaderJob> jobPointer(volumeReaderJob);
     assignResourceRestrictionPolicy(volumeReaderJob);
 
     connect(volumeReaderJob, SIGNAL(done(ThreadWeaver::JobPointer)), SLOT(unmarkVolumeFromJobAsLoading(ThreadWeaver::JobPointer)));
@@ -221,7 +221,7 @@ void VolumeReaderJobFactory::cancelLoadingAndDeleteVolume(Volume *volume)
     }
 }
 
-void VolumeReaderJobFactory::markVolumeAsLoadingByJob(Volume *volume, ThreadWeaver::JobPointer volumeReaderJob)
+void VolumeReaderJobFactory::markVolumeAsLoadingByJob(Volume *volume, QSharedPointer<VolumeReaderJob> volumeReaderJob)
 {
     DEBUG_LOG(QString("markVolumeAsLoading: Volume %1").arg(volume->getIdentifier().getValue()));
     m_volumesLoading.insert(volume->getIdentifier().getValue(), volumeReaderJob);
@@ -239,7 +239,7 @@ ThreadWeaver::Queue *VolumeReaderJobFactory::getWeaverInstance() const
     return ThreadWeaver::Queue::instance();
 }
 
-ThreadWeaver::JobPointer VolumeReaderJobFactory::getVolumeReaderJob(Volume *volume) const
+QSharedPointer<VolumeReaderJob> VolumeReaderJobFactory::getVolumeReaderJob(Volume *volume) const
 {
     if (this->isVolumeLoading(volume))
     {
@@ -247,7 +247,7 @@ ThreadWeaver::JobPointer VolumeReaderJobFactory::getVolumeReaderJob(Volume *volu
     }
     else
     {
-        return ThreadWeaver::JobPointer();
+        return QSharedPointer<VolumeReaderJob>();
     }
 }
 
