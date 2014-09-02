@@ -42,9 +42,8 @@ class Volume;
 class VolumeReaderJobFactory : public QObject, public SingletonPointer<VolumeReaderJobFactory> {
 Q_OBJECT
 public:
-    /// Llegeix un Volume de manera asíncrona.
-    /// Retorna un VolumeReaderJob per tal de poder saber quan és que aquest estarà carregat.
-    ThreadWeaver::JobPointer read(Volume *volume);
+    /// Starts reading the given volume asynchronously. Returns the job that performs the reading.
+    QSharedPointer<VolumeReaderJob> read(Volume *volume);
 
     /// Cancel·la la càrrega de volume i, un cop cancel·lada, esborra volume.
     /// Si volume no s'està carregant, l'esborrarà directament.
@@ -63,7 +62,7 @@ private:
     bool isVolumeLoading(Volume *volume) const;
 
     /// Marca el volume que se li passa conforme s'està carregant amb el job volumeReaderJob
-    void markVolumeAsLoadingByJob(Volume *volume, ThreadWeaver::JobPointer volumeReaderJob);
+    void markVolumeAsLoadingByJob(Volume *volume, QSharedPointer<VolumeReaderJob> volumeReaderJob);
 
     /// Desmarca el volume que se li passa conforme ja no s'està carregant.
     void unmarkVolumeAsLoading(Volume *volume);
@@ -72,7 +71,7 @@ private:
     ThreadWeaver::Queue* getWeaverInstance() const;
 
     /// Ens retorna el VolumeReaderJob del Volume que se li passi, si aquest té un job assignat que l'està llegint. Si no, retornarà null.
-    ThreadWeaver::JobPointer getVolumeReaderJob(Volume *volume) const;
+    QSharedPointer<VolumeReaderJob> getVolumeReaderJob(Volume *volume) const;
 
     /// Assigna una política restrictiva si tenim el setting MaximumNumberOfVolumesLoadingConcurrently definit o si
     /// estem a windows 32 bits i hi ha possibilitat d'obrir volums que requereixin molta memòria.
@@ -86,7 +85,7 @@ private:
 
 private:
     /// Llista dels volums que s'estan carregant
-    QHash<int, ThreadWeaver::JobPointer> m_volumesLoading;
+    QHash<int, QSharedPointer<VolumeReaderJob> > m_volumesLoading;
     ThreadWeaver::ResourceRestrictionPolicy m_resourceRestrictionPolicy;
 };
 
