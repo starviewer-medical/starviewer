@@ -14,7 +14,7 @@
 
 #include "volumereadermanager.h"
 
-#include "asynchronousvolumereader.h"
+#include "volumereaderjobfactory.h"
 #include "volumereaderjob.h"
 #include "volume.h"
 
@@ -55,7 +55,7 @@ void VolumeReaderManager::readVolumes(const QList<Volume*> &volumes)
     foreach (Volume *volume, volumes)
     {
         // TODO Esborrar volumeReader!!
-        AsynchronousVolumeReader *volumeReader = new AsynchronousVolumeReader();
+        VolumeReaderJobFactory *volumeReader = new VolumeReaderJobFactory();
         QSharedPointer<VolumeReaderJob> job = volumeReader->read(volume).dynamicCast<VolumeReaderJob>();
         m_volumeReaderJobs << job;
         m_jobsProgress.insert(job.data(), 0);

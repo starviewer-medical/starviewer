@@ -263,7 +263,6 @@ HEADERS += extensionfactory.h \
     customwindowlevelsreader.h \
     customwindowlevelsrepository.h \
     volumereaderjob.h \
-    asynchronousvolumereader.h \
     qviewerworkinprogresswidget.h \
     qviewercommand.h \
     applyhangingprotocolqviewercommand.h \
@@ -416,7 +415,8 @@ HEADERS += extensionfactory.h \
     nmroidataprinter.h \
     nmctfusionroidataprinter.h \
     vtkcorrectimageblend.h \
-    vtktextactorwithbackground.h
+    vtktextactorwithbackground.h \
+    volumereaderjobfactory.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -635,7 +635,6 @@ SOURCES += extensionmediator.cpp \
     customwindowlevelsreader.cpp \
     customwindowlevelsrepository.cpp \
     volumereaderjob.cpp \
-    asynchronousvolumereader.cpp \
     qviewerworkinprogresswidget.cpp \
     qviewercommand.cpp \
     applyhangingprotocolqviewercommand.cpp \
@@ -780,7 +779,8 @@ SOURCES += extensionmediator.cpp \
     nmroidataprinter.cpp \
     nmctfusionroidataprinter.cpp \
     vtkcorrectimageblend.cpp \
-    vtktextactorwithbackground.cpp
+    vtktextactorwithbackground.cpp \
+    volumereaderjobfactory.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
