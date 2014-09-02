@@ -16,6 +16,9 @@
 #define UDGVOLUMEREADERJOB_H
 
 #include <ThreadWeaver/Job>
+
+#include "identifier.h"
+
 #include <QPointer>
 #include <QMutex>
 
@@ -50,6 +53,8 @@ public:
 
     /// Retorna el volume
     Volume* getVolume() const;
+    /// Returns the identifier of the volume, even if the volume is destructed.
+    const Identifier& getVolumeIdentifier() const;
 
 signals:
     /// Signal que s'emet amb el progrés de lectura
@@ -66,6 +71,8 @@ private slots:
     void updateProgress(int value);
 private:
     Volume *m_volumeToRead;
+    /// Keeps the identifier of the volume to have access to it even if the volume is deleted.
+    Identifier m_volumeIdentifier;
     bool m_volumeReadSuccessfully;
     QString m_lastErrorMessageToUser;
 
