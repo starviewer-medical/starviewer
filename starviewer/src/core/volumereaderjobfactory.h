@@ -52,6 +52,7 @@ public:
 protected:
     friend class SingletonPointer<VolumeReaderJobFactory>;
     explicit VolumeReaderJobFactory(QObject *parent = 0);
+    ~VolumeReaderJobFactory();
 
 private slots:
     /// Marca el volume del job que se li passa conforme ja està carregat
