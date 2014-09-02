@@ -15,7 +15,7 @@
 #include "volumerepository.h"
 #include "volume.h"
 #include "logging.h"
-#include "asynchronousvolumereader.h"
+#include "volumereaderjobfactory.h"
 
 namespace udg {
 
@@ -52,7 +52,7 @@ void VolumeRepository::deleteVolume(Identifier id)
     this->removeItem(id);
 
     // I l'eliminem
-    AsynchronousVolumeReader volumeReader;
+    VolumeReaderJobFactory volumeReader;
     volumeReader.cancelLoadingAndDeleteVolume(volume);
 
     emit itemRemoved(id);

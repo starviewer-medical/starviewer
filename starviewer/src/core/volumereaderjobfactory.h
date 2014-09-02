@@ -37,10 +37,10 @@ class Volume;
     Aquesta classe no es pot cridar de forma concurrent des de diferents threads.
   */
 
-class AsynchronousVolumeReader : public QObject {
+class VolumeReaderJobFactory : public QObject {
 Q_OBJECT
 public:
-    explicit AsynchronousVolumeReader(QObject *parent = 0);
+    explicit VolumeReaderJobFactory(QObject *parent = 0);
 
     /// Llegeix un Volume de manera asíncrona.
     /// Retorna un VolumeReaderJob per tal de poder saber quan és que aquest estarà carregat.
