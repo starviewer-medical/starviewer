@@ -24,6 +24,7 @@ VolumeReaderJob::VolumeReaderJob(Volume *volume, QObject *parent)
     : QObject(parent)
 {
     m_volumeToRead = volume;
+    m_volumeIdentifier = volume->getIdentifier();
     m_volumeReadSuccessfully = false;
     m_lastErrorMessageToUser = "";
     m_abortRequested = false;
@@ -31,7 +32,7 @@ VolumeReaderJob::VolumeReaderJob(Volume *volume, QObject *parent)
 
 VolumeReaderJob::~VolumeReaderJob()
 {
-    DEBUG_LOG(QString("Destructor ~VolumeReaderJob pel Volume: %1").arg(m_volumeToRead->getIdentifier().getValue()));
+    DEBUG_LOG(QString("Destructor ~VolumeReaderJob pel Volume: %1").arg(m_volumeIdentifier.getValue()));
 }
 
 void VolumeReaderJob::requestAbort()
@@ -44,7 +45,7 @@ void VolumeReaderJob::requestAbort()
     if (!m_volumeReaderToAbort.isNull())
     {
         m_volumeReaderToAbort.data()->requestAbort();
-        DEBUG_LOG(QString("requestAbort to Volume: %1 done").arg(m_volumeToRead->getIdentifier().getValue()));
+        DEBUG_LOG(QString("requestAbort to Volume: %1 done").arg(m_volumeIdentifier.getValue()));
     }
 }
 
@@ -63,6 +64,11 @@ Volume* VolumeReaderJob::getVolume() const
     return m_volumeToRead;
 }
 
+const Identifier& VolumeReaderJob::getVolumeIdentifier() const
+{
+    return m_volumeIdentifier;
+}
+
 void VolumeReaderJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread)
 {
     Q_UNUSED(self)
@@ -70,7 +76,7 @@ void VolumeReaderJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *t
 
     Q_ASSERT(m_volumeToRead);
 
-    DEBUG_LOG(QString("VolumeReaderJob::run() with Volume: %1").arg(m_volumeToRead->getIdentifier().getValue()));
+    DEBUG_LOG(QString("VolumeReaderJob::run() with Volume: %1").arg(m_volumeIdentifier.getValue()));
 
     VolumeReader *volumeReader = new VolumeReader();
 
@@ -92,10 +98,10 @@ void VolumeReaderJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *t
         delete volumeReader;
     }
 
-    DEBUG_LOG(QString("End VolumeReaderJob::run() with Volume: %1 and result %2").arg(m_volumeToRead->getIdentifier().getValue()).arg(m_volumeReadSuccessfully));
+    DEBUG_LOG(QString("End VolumeReaderJob::run() with Volume: %1 and result %2").arg(m_volumeIdentifier.getValue()).arg(m_volumeReadSuccessfully));
     if (!m_volumeReadSuccessfully)
     {
-        DEBUG_LOG(QString("                          Error Volume: %1: %2").arg(m_volumeToRead->getIdentifier().getValue()).arg(m_lastErrorMessageToUser));
+        DEBUG_LOG(QString("                          Error Volume: %1: %2").arg(m_volumeIdentifier.getValue()).arg(m_lastErrorMessageToUser));
     }
 }
 
