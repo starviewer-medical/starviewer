@@ -26,6 +26,8 @@
 #include "image.h"
 #include "series.h"
 
+#include <QApplication>
+
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -57,9 +59,18 @@ VolumeReaderJobFactory::VolumeReaderJobFactory(QObject *parent)
 
 VolumeReaderJobFactory::~VolumeReaderJobFactory()
 {
+    m_volumesLoading.clear();
+
     this->getWeaverInstance()->dequeue();
     this->getWeaverInstance()->requestAbort();
     this->getWeaverInstance()->shutDown();
+
+    // Since jobs' signals are connected through queued connections and they include shared pointers to the jobs itselfs, we need to make sure that any pending
+    // signals are delivered to the corresponding receivers so that the jobs aren't kept alive in the signals queue after the factory and the resource
+    // restriction policy have been deleted.
+    QApplication::processEvents();
+
+    DEBUG_LOG("VolumeReaderJobFactory is closed");
 }
 
 QSharedPointer<VolumeReaderJob> VolumeReaderJobFactory::read(Volume *volume)
@@ -241,7 +252,7 @@ void VolumeReaderJobFactory::unmarkVolumeAsLoading(const Identifier &volumeIdent
     m_volumesLoading.remove(volumeIdentifier.getValue());
 }
 
-ThreadWeaver::Queue *VolumeReaderJobFactory::getWeaverInstance() const
+ThreadWeaver::Queue* VolumeReaderJobFactory::getWeaverInstance() const
 {
     // TODO De moment es retorna la instància global, caldria permetre passar-la com a paràmetre.
     return ThreadWeaver::Queue::instance();
