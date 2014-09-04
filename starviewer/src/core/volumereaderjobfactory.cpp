@@ -231,6 +231,9 @@ void VolumeReaderJobFactory::cancelLoadingAndDeleteVolume(Volume *volume)
         else
         {
             DEBUG_LOG(QString("Volume %1 cannot be dequeued, requesting abort and delete").arg(volume->getIdentifier().getValue()));
+            // TODO This connection doesn't assure that the volume will be deleted,
+            // because the job could finish and emit the signal before the connection is done.
+            connect(job.staticCast<VolumeReaderJob>().data(), SIGNAL(done(ThreadWeaver::JobPointer)), volume, SLOT(deleteLater()));
             job->requestAbort();
         }
     }
