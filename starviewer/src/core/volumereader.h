@@ -94,6 +94,10 @@ private:
 
     /// Cua on guardarem els postprocessadors que s'han d'executar després de llegir el volum.
     QQueue< QSharedPointer<Postprocessor> > m_postprocessorsQueue;
+
+    /// Used to know that abort has been requested before having the pixel data reader.
+    bool m_abortRequested;
+
 };
 
 } // End namespace udg

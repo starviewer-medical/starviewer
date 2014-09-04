@@ -38,7 +38,7 @@ int getFrameNumber(const Image *image)
 }
 
 VolumeReader::VolumeReader(QObject *parent)
-    : QObject(parent), m_volumePixelDataReader(0)
+    : QObject(parent), m_volumePixelDataReader(0), m_abortRequested(false)
 {
      m_lastError = VolumePixelDataReader::NoError;
 }
@@ -71,6 +71,12 @@ void VolumeReader::executePixelDataReader(Volume *volume)
     QStringList fileList = this->getFilesToRead(volume);
     if (!fileList.isEmpty())
     {
+        if (m_abortRequested)
+        {
+            m_lastError = VolumePixelDataReader::ReadAborted;
+            return;
+        }
+
         // Posem a punt el reader i llegim les dades
         this->setUpReader(volume);
 
@@ -78,18 +84,25 @@ void VolumeReader::executePixelDataReader(Volume *volume)
         QList<int> frameNumbers = QtConcurrent::blockingMapped(volume->getImages(), getFrameNumber);
         m_volumePixelDataReader->setFrameNumbers(frameNumbers);
 
-        m_lastError = m_volumePixelDataReader->read(fileList);
-        if (m_lastError == VolumePixelDataReader::NoError)
+        if (m_abortRequested)
         {
-            // Tot ha anat ok, assignem les dades al volum
-            volume->setPixelData(m_volumePixelDataReader->getVolumePixelData());
-            runPostprocessors(volume);
-            fixSpacingIssues(volume);
+            m_lastError = VolumePixelDataReader::ReadAborted;
         }
         else
         {
-            volume->convertToNeutralVolume();
-            this->logWarningLastError(fileList);
+            m_lastError = m_volumePixelDataReader->read(fileList);
+            if (m_lastError == VolumePixelDataReader::NoError)
+            {
+                // Tot ha anat ok, assignem les dades al volum
+                volume->setPixelData(m_volumePixelDataReader->getVolumePixelData());
+                runPostprocessors(volume);
+                fixSpacingIssues(volume);
+            }
+            else
+            {
+                volume->convertToNeutralVolume();
+                this->logWarningLastError(fileList);
+            }
         }
     }
 }
@@ -113,6 +126,8 @@ void VolumeReader::requestAbort()
     {
         m_volumePixelDataReader->requestAbort();
     }
+
+    m_abortRequested = true;
 }
 
 void VolumeReader::showMessageBoxWithLastError() const
