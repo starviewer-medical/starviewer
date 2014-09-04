@@ -109,7 +109,10 @@ bool VolumeReader::readWithoutShowingError(Volume *volume)
 
 void VolumeReader::requestAbort()
 {
-    m_volumePixelDataReader->requestAbort();
+    if (m_volumePixelDataReader)
+    {
+        m_volumePixelDataReader->requestAbort();
+    }
 }
 
 void VolumeReader::showMessageBoxWithLastError() const
