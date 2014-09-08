@@ -123,7 +123,7 @@ QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
                                 {
                                     QString path = QString("%1/thumbnail%2.png").arg(QFileInfo(lastProcessedImage->getPath()).absolutePath()).arg(
                                                            lastProcessedImage->getVolumeNumberInSeries());
-                                    lastProcessedImage->getThumbnail().save(path, "PNG");
+                                    ThumbnailCreator().getThumbnail(lastProcessedImage).save(path, "PNG");
                                 }
                                 saveThumbnail(dicomReader);
                             }
