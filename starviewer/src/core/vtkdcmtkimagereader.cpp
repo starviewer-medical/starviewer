@@ -14,11 +14,13 @@
 
 #include "vtkdcmtkimagereader.h"
 
-#include "dicomvalueattribute.h"
 #include "dicomsequenceattribute.h"
 #include "dicomsequenceitem.h"
 #include "dicomtagreader.h"
+#include "dicomvalueattribute.h"
 #include "logging.h"
+#include "mathtools.h"
+#include "photometricinterpretation.h"
 
 #include <QSharedPointer>
 #include <QStringList>
@@ -115,6 +117,20 @@ QString getTagValue(const DICOMTagReader &dicomTagReader, int index, const DICOM
 
     // Try to read from the root
     return dicomTagReader.getValueAttributeAsQString(tag);
+}
+
+// Returns the suitable VTK scalar type for the given bits stored and pixel representation.
+int getSuitableScalarType(int bitsStored, int pixelRepresentation)
+{
+    int bytesStored = MathTools::roundUpToPowerOf2(bitsStored) / 8;
+
+    switch (bytesStored)
+    {
+        case 1: return pixelRepresentation == 0 ? VTK_UNSIGNED_CHAR : VTK_SIGNED_CHAR;
+        case 2: return pixelRepresentation == 0 ? VTK_UNSIGNED_SHORT : VTK_SHORT;
+        case 4: return pixelRepresentation == 0 ? VTK_UNSIGNED_INT : VTK_INT;
+        default: throw std::invalid_argument(qPrintable(QString("Unexpected bytes stored: %1").arg(bytesStored)));
+    }
 }
 
 // Converts the given DCMTK representation to the equivalent VTK scalar type constant.
@@ -527,42 +543,35 @@ bool VtkDcmtkImageReader::decideInitialScalarTypeAndNumberOfComponents()
 
     if (this->FileName)
     {
-        if (!m_isMultiframe)
-        {
-            hasDecidedScalarType = decideInitialScalarTypeAndNumberOfComponents(this->FileName, 0);
-        }
-        else
-        {
-            for (int i = this->DataExtent[4]; !hasDecidedScalarType && i <= this->DataExtent[5]; i++)
-            {
-                hasDecidedScalarType = decideInitialScalarTypeAndNumberOfComponents(this->FileName, i);
-            }
-        }
+        hasDecidedScalarType = decideInitialScalarTypeAndNumberOfComponents(this->FileName);
     }
     else if (this->FileNames && this->FileNames->GetNumberOfValues() > 0)
     {
         for (int i = 0; !hasDecidedScalarType && i < this->FileNames->GetNumberOfValues(); i++)
         {
-            hasDecidedScalarType = decideInitialScalarTypeAndNumberOfComponents(this->FileNames->GetValue(i), i);
+            hasDecidedScalarType = decideInitialScalarTypeAndNumberOfComponents(this->FileNames->GetValue(i));
         }
     }
 
     return hasDecidedScalarType;
 }
 
-bool VtkDcmtkImageReader::decideInitialScalarTypeAndNumberOfComponents(const char *filename, int frame)
+bool VtkDcmtkImageReader::decideInitialScalarTypeAndNumberOfComponents(const char *filename)
 {
-    DicomImage image(filename, CIF_UsePartialAccessToPixelData, frame, 1);
+    DICOMTagReader dicomTagReader(filename);
 
-    if (image.getStatus() != EIS_Normal)
+    if (!dicomTagReader.canReadFile())
     {
         return false;
     }
 
-    if (image.isMonochrome())
+    PhotometricInterpretation photometricInterpretation(dicomTagReader.getValueAttributeAsQString(DICOMPhotometricInterpretation));
+
+    if (!photometricInterpretation.isColor())
     {
-        EP_Representation representation = image.getInterData()->getRepresentation();
-        this->DataScalarType = dcmtkRepresentationToVtkScalarType(representation);
+        int bitsStored = dicomTagReader.getValueAttributeAsQString(DICOMBitsStored).toInt();
+        int pixelRepresentation = dicomTagReader.getValueAttributeAsQString(DICOMPixelRepresentation).toInt();
+        this->DataScalarType = getSuitableScalarType(bitsStored, pixelRepresentation);
         this->NumberOfScalarComponents = 1;
         m_isMonochrome = true;
     }
