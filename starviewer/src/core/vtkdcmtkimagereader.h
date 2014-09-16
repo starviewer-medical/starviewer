@@ -82,9 +82,9 @@ private:
     /// of scalar components. The scalar type may change to a bigger one while reading all the data. Returns false in case of error, if it can't decide the
     /// scalar type.
     bool decideInitialScalarTypeAndNumberOfComponents();
-    /// Decides the appropiate initial scalar type for the image data according to the range of values contained in the given frame of the given image file and
-    /// sets the number of scalar components. Returns false in case of error, if it can't decide the scalar type.
-    bool decideInitialScalarTypeAndNumberOfComponents(const char *filename, int frame);
+    /// Decides the appropiate initial scalar type for the image data according to given image file and sets the number of scalar components.
+    /// Returns false in case of error, if it can't decide the scalar type.
+    bool decideInitialScalarTypeAndNumberOfComponents(const char *filename);
 
     /// Loads image data from the file(s) for the given update extent.
     bool loadData(int updateExtent[6]);
