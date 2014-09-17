@@ -1,0 +1,211 @@
+From 89e4474cfec7143e3d65b60520bb0d94aeed61ad Mon Sep 17 00:00:00 2001
+From: Alan Antonuk <aega@med.umich.edu>
+Date: Mon, 13 Aug 2012 15:48:02 -0400
+Subject: [PATCH] Add ability to use floating-point internal representation in
+ dcmimgle
+
+---
+ dcmimgle/include/dcmtk/dcmimgle/dipxrept.h | 10 +++++++
+ dcmimgle/include/dcmtk/dcmimgle/diutils.h  |  7 ++++-
+ dcmimgle/libsrc/dimoimg.cc                 | 43 ++++++++++++++++++++++++++++++
+ dcmimgle/libsrc/dimomod.cc                 |  4 ++-
+ 4 files changed, 62 insertions(+), 2 deletions(-)
+
+diff --git a/dcmimgle/include/dcmtk/dcmimgle/dipxrept.h b/dcmimgle/include/dcmtk/dcmimgle/dipxrept.h
+index 123f799..17d79d5 100644
+--- a/dcmimgle/include/dcmtk/dcmimgle/dipxrept.h
++++ b/dcmimgle/include/dcmtk/dcmimgle/dipxrept.h
+@@ -113,6 +113,11 @@ inline EP_Representation DiPixelRepresentationTemplate<Sint32>::getRepresentatio
+     return EPR_Sint32;
+ }
+ 
++EXPLICIT_SPECIALIZATION
++inline EP_Representation DiPixelRepresentationTemplate<float>::getRepresentation() const
++{
++    return EPR_float32;
++}
+ 
+ EXPLICIT_SPECIALIZATION
+ inline int DiPixelRepresentationTemplate<Uint8>::isSigned() const
+@@ -155,5 +160,10 @@ inline int DiPixelRepresentationTemplate<Sint32>::isSigned() const
+     return 1;
+ }
+ 
++EXPLICIT_SPECIALIZATION
++inline int DiPixelRepresentationTemplate<float>::isSigned() const
++{
++    return 1;
++}
+ 
+ #endif
+diff --git a/dcmimgle/include/dcmtk/dcmimgle/diutils.h b/dcmimgle/include/dcmtk/dcmimgle/diutils.h
+index f24157b..911d3f8 100644
+--- a/dcmimgle/include/dcmtk/dcmimgle/diutils.h
++++ b/dcmimgle/include/dcmtk/dcmimgle/diutils.h
+@@ -91,6 +91,9 @@ const unsigned long CIF_DecompressCompletePixelData  = 0x0000800;
+ 
+ /// never access embedded overlays since this requires to load and uncompress the complete pixel data
+ const unsigned long CIF_NeverAccessEmbeddedOverlays  = 0x0001000;
++
++/// use floating point for the internal representation
++const unsigned long CIF_UseFloatingInternalRepresentation = 0x0002000;
+ //@}
+ 
+ 
+@@ -207,7 +210,9 @@ enum EP_Representation
+     /// unsigned 32 bit integer
+     EPR_Uint32, EPR_MaxUnsigned = EPR_Uint32,
+     /// signed 32 bit integer
+-    EPR_Sint32, EPR_MaxSigned = EPR_Sint32
++    EPR_Sint32, EPR_MaxSigned = EPR_Sint32,
++    /// floating point
++    EPR_float32
+ };
+ 
+ 
+diff --git a/dcmimgle/libsrc/dimoimg.cc b/dcmimgle/libsrc/dimoimg.cc
+index abf617c..22f192a 100644
+--- a/dcmimgle/libsrc/dimoimg.cc
++++ b/dcmimgle/libsrc/dimoimg.cc
+@@ -250,6 +250,9 @@ DiMonoImage::DiMonoImage(const DiMonoImage *image,
+             case EPR_Sint32:
+                 InterData = new DiMonoCopyTemplate<Sint32>(image->InterData, fstart, fcount, fsize);
+                 break;
++            case EPR_float32:
++                InterData = new DiMonoCopyTemplate<float>(image->InterData, fstart, fcount, fsize);
++                break;
+         }
+     }
+     checkInterData();
+@@ -375,6 +378,11 @@ DiMonoImage::DiMonoImage(const DiMonoImage *image,
+                     left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames,
+                     bits, interpolate, pvalue);
+                 break;
++            case EPR_float32:
++                InterData = new DiMonoScaleTemplate<float>(image->InterData, image->Columns, image->Rows,
++                    left_pos, top_pos, src_cols, src_rows, dest_cols, dest_rows, NumberOfFrames,
++                    bits, interpolate, pvalue);
++                break;
+         }
+     }
+     if (checkInterData(0))
+@@ -447,6 +455,9 @@ DiMonoImage::DiMonoImage(const DiMonoImage *image,
+             case EPR_Sint32:
+                 InterData = new DiMonoFlipTemplate<Sint32>(image->InterData, Columns, Rows, NumberOfFrames, horz, vert);
+                 break;
++            case EPR_float32:
++                InterData = new DiMonoFlipTemplate<float>(image->InterData, Columns, Rows, NumberOfFrames, horz, vert);
++                break;
+         }
+     }
+     if (checkInterData(0))
+@@ -520,6 +531,10 @@ DiMonoImage::DiMonoImage(const DiMonoImage *image,
+                 InterData = new DiMonoRotateTemplate<Sint32>(image->InterData, image->Columns, image->Rows, Columns, Rows,
+                     NumberOfFrames, degree);
+                 break;
++            case EPR_float32:
++                InterData = new DiMonoRotateTemplate<float>(image->InterData, image->Columns, image->Rows, Columns, Rows,
++                    NumberOfFrames, degree);
++                break;
+         }
+     }
+     if (checkInterData(0))
+@@ -769,6 +784,9 @@ void DiMonoImage::InitUint8(DiMonoModality *modality)
+             case EPR_Sint32:
+                 InterData = new DiMonoInputPixelTemplate<Uint8, Uint32, Sint32>(InputData, modality);
+                 break;
++            case EPR_float32:
++                InterData = new DiMonoInputPixelTemplate<Uint8, Uint32, float>(InputData, modality);
++                break;
+         }
+     }
+ }
+@@ -798,6 +816,9 @@ void DiMonoImage::InitSint8(DiMonoModality *modality)
+             case EPR_Sint32:
+                 InterData = new DiMonoInputPixelTemplate<Sint8, Sint32, Sint32>(InputData, modality);
+                 break;
++            case EPR_float32:
++                InterData = new DiMonoInputPixelTemplate<Sint8, Sint32, float>(InputData, modality);
++                break;
+         }
+     }
+ }
+@@ -826,6 +847,9 @@ void DiMonoImage::InitUint16(DiMonoModality *modality)
+             case EPR_Sint32:
+                 InterData = new DiMonoInputPixelTemplate<Uint16, Uint32, Sint32>(InputData, modality);
+                 break;
++            case EPR_float32:
++                InterData = new DiMonoInputPixelTemplate<Uint16, Uint32, float>(InputData, modality);
++                break;
+         }
+     }
+ }
+@@ -855,6 +879,9 @@ void DiMonoImage::InitSint16(DiMonoModality *modality)
+             case EPR_Sint32:
+                 InterData = new DiMonoInputPixelTemplate<Sint16, Sint32, Sint32>(InputData, modality);
+                 break;
++            case EPR_float32:
++                InterData = new DiMonoInputPixelTemplate<Sint16, Sint32, float>(InputData, modality);
++                break;
+         }
+     }
+ }
+@@ -884,6 +911,9 @@ void DiMonoImage::InitUint32(DiMonoModality *modality)
+             case EPR_Sint32:
+                 InterData = new DiMonoInputPixelTemplate<Uint32, Uint32, Sint32>(InputData, modality);
+                 break;
++            case EPR_float32:
++                InterData = new DiMonoInputPixelTemplate<Uint32, Uint32, float>(InputData, modality);
++                break;
+         }
+     }
+ }
+@@ -913,6 +943,9 @@ void DiMonoImage::InitSint32(DiMonoModality *modality)
+             case EPR_Sint32:
+                 InterData = new DiMonoInputPixelTemplate<Sint32, Sint32, Sint32>(InputData, modality);
+                 break;
++            case EPR_float32:
++                InterData = new DiMonoInputPixelTemplate<Sint32, Sint32, float>(InputData, modality);
++                break;
+         }
+     }
+ }
+@@ -1412,6 +1445,11 @@ int DiMonoImage::flip(const int horz,
+                 DiFlipTemplate<Sint32> dummy(InterData, Columns, Rows, NumberOfFrames, horz, vert);
+             }
+             break;
++        case EPR_float32:
++            {
++                DiFlipTemplate<float> dummy(InterData, Columns, Rows, NumberOfFrames, horz, vert);
++            }
++            break;
+     }
+     for (int i = 0; i < 2; ++i)
+     {
+@@ -1465,6 +1503,11 @@ int DiMonoImage::rotate(const int degree)
+                     DiRotateTemplate<Sint32> dummy(InterData, old_cols, old_rows, Columns, Rows, NumberOfFrames, degree);
+                 }
+                 break;
++            case EPR_float32:
++                {
++                    DiRotateTemplate<float> dummy(InterData, old_cols, old_rows, Columns, Rows, NumberOfFrames, degree);
++                }
++                break;
+         }
+     }
+     for (int i = 0; i < 2; ++i)
+diff --git a/dcmimgle/libsrc/dimomod.cc b/dcmimgle/libsrc/dimomod.cc
+index ef8f27d..eb3f23e 100644
+--- a/dcmimgle/libsrc/dimomod.cc
++++ b/dcmimgle/libsrc/dimomod.cc
+@@ -283,7 +283,9 @@ void DiMonoModality::checkRescaling(const DiInputPixel *pixel)
+ void DiMonoModality::determineRepresentation(const DiDocument *docu)
+ {
+     UsedBits = DicomImageClass::rangeToBits(MinValue, MaxValue);
+-    if ((docu != NULL) && (docu->getFlags() & CIF_UseAbsolutePixelRange))
++    if ((docu != NULL) && (docu->getFlags() & CIF_UseFloatingInternalRepresentation))
++        Representation = EPR_float32;
++    else if ((docu != NULL) && (docu->getFlags() & CIF_UseAbsolutePixelRange))
+         Representation = DicomImageClass::determineRepresentation(AbsMinimum, AbsMaximum);
+     else
+         Representation = DicomImageClass::determineRepresentation(MinValue, MaxValue);
