@@ -119,6 +119,8 @@ private:
     size_t m_frameSize;
     /// Maximum voxel value found in the image data.
     double m_maximumVoxelValue;
+    /// If it's true, a float scalar type will be used.
+    bool m_needsFloatScalarType;
 
 };
 
