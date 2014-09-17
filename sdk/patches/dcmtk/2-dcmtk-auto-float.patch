@@ -1,0 +1,12 @@
+diff -upr dcmtk-3.6.1_20120515-patched/dcmimgle/libsrc/dimomod.cc dcmtk-3.6.1_20120515-repatched/dcmimgle/libsrc/dimomod.cc
+--- dcmtk-3.6.1_20120515-patched/dcmimgle/libsrc/dimomod.cc	Wed Sep 17 10:34:09 2014
++++ dcmtk-3.6.1_20120515-repatched/dcmimgle/libsrc/dimomod.cc	Wed Sep 17 11:31:30 2014
+@@ -279,6 +279,8 @@ void DiMonoModality::determineRepresenta
+     UsedBits = DicomImageClass::rangeToBits(MinValue, MaxValue);
+     if ((docu != NULL) && (docu->getFlags() & CIF_UseFloatingInternalRepresentation))
+         Representation = EPR_float32;
++    else if ((docu != NULL) && (RescaleSlope > -1.0 && RescaleSlope < 1.0))
++        Representation = EPR_float32;
+     else if ((docu != NULL) && (docu->getFlags() & CIF_UseAbsolutePixelRange))
+         Representation = DicomImageClass::determineRepresentation(AbsMinimum, AbsMaximum);
+     else
