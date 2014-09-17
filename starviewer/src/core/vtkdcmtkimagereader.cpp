@@ -244,6 +244,7 @@ void VtkDcmtkImageReader::PrintSelf(std::ostream &os, vtkIndent indent)
     os << indent << "Is monochrome: " << booleanToString(m_isMonochrome) << "\n";
     os << indent << "Frame size: " << m_frameSize << " bytes\n";
     os << indent << "Maximum voxel value: " << m_maximumVoxelValue << "\n";
+    os << indent << "Needs float scalar type: " << booleanToString(m_needsFloatScalarType) << "\n";
 }
 
 void VtkDcmtkImageReader::setFrameNumbers(const QList<int> &frameNumbers)
@@ -277,6 +278,9 @@ int VtkDcmtkImageReader::RequestInformation(vtkInformation *vtkNotUsed(request),
         ERROR_LOG("No filename given");
         return 0;
     }
+
+    // At the beginning we don't need a float scalar type. This will be set to true by the upcoming methods if needed.
+    m_needsFloatScalarType = false;
 
     if (!readInformation(filename))
     {
@@ -527,6 +531,11 @@ void VtkDcmtkImageReader::readPerFrameRescale(const DICOMTagReader &dicomTagRead
                         Rescale rescale = { interceptValue->getValueAsDouble(), slopeValue->getValueAsDouble() };
                         m_perFrameRescale.append(rescale);
                         m_hasPerFrameRescale = true;
+
+                        if (qAbs(rescale.slope) < 1.0)
+                        {
+                            m_needsFloatScalarType = true;
+                        }
                     }
                 }
             }
@@ -566,9 +575,17 @@ bool VtkDcmtkImageReader::decideInitialScalarTypeAndNumberOfComponents(const cha
 
     if (!photometricInterpretation.isColor())
     {
-        int bitsStored = dicomTagReader.getValueAttributeAsQString(DICOMBitsStored).toInt();
-        int pixelRepresentation = dicomTagReader.getValueAttributeAsQString(DICOMPixelRepresentation).toInt();
-        this->DataScalarType = getSuitableScalarType(bitsStored, pixelRepresentation);
+        if (m_needsFloatScalarType)
+        {
+            this->DataScalarType = VTK_FLOAT;
+        }
+        else
+        {
+            int bitsStored = dicomTagReader.getValueAttributeAsQString(DICOMBitsStored).toInt();
+            int pixelRepresentation = dicomTagReader.getValueAttributeAsQString(DICOMPixelRepresentation).toInt();
+            this->DataScalarType = getSuitableScalarType(bitsStored, pixelRepresentation);
+        }
+
         this->NumberOfScalarComponents = 1;
         m_isMonochrome = true;
     }
@@ -626,13 +643,15 @@ bool VtkDcmtkImageReader::loadData(int updateExtent[6])
 void VtkDcmtkImageReader::loadSingleFrameFile(const char *filename, void *buffer)
 {
     QSharedPointer<DcmDataset> dataset = getDataset(filename);
-    DicomImage image(dataset.data(), dataset->getOriginalXfer());
+    unsigned long flags = m_needsFloatScalarType ? CIF_UseFloatingInternalRepresentation : 0;
+    DicomImage image(dataset.data(), dataset->getOriginalXfer(), flags);
     copyDcmtkImageToBuffer(buffer, image);
 }
 
 void VtkDcmtkImageReader::loadMultiframeFile(const char *filename, void *buffer, int updateExtent[6])
 {
     QSharedPointer<DcmDataset> dataset = getDataset(filename);
+    unsigned long flags = CIF_UsePartialAccessToPixelData | (m_needsFloatScalarType ? CIF_UseFloatingInternalRepresentation : 0);
     double total = updateExtent[5] - updateExtent[4] + 1;
     this->UpdateProgress(0.0);
 
@@ -649,13 +668,12 @@ void VtkDcmtkImageReader::loadMultiframeFile(const char *filename, void *buffer,
         if (m_hasPerFrameRescale)
         {
             const Rescale &rescale = m_perFrameRescale.at(frameNumberInFile);
-            DicomImage image(dataset.data(), dataset->getOriginalXfer(), rescale.slope, rescale.intercept,
-                             CIF_UsePartialAccessToPixelData, frameNumberInFile, 1);
+            DicomImage image(dataset.data(), dataset->getOriginalXfer(), rescale.slope, rescale.intercept, flags, frameNumberInFile, 1);
             copyDcmtkImageToBuffer(buffer, image);
         }
         else
         {
-            DicomImage image(dataset.data(), dataset->getOriginalXfer(), CIF_UsePartialAccessToPixelData, frameNumberInFile, 1);
+            DicomImage image(dataset.data(), dataset->getOriginalXfer(), flags, frameNumberInFile, 1);
             copyDcmtkImageToBuffer(buffer, image);
         }
 
