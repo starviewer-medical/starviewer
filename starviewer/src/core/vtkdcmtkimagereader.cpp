@@ -144,6 +144,7 @@ int dcmtkRepresentationToVtkScalarType(EP_Representation representation)
         case EPR_Sint16: return VTK_SHORT;
         case EPR_Uint32: return VTK_UNSIGNED_INT;
         case EPR_Sint32: return VTK_INT;
+        case EPR_float32: return VTK_FLOAT;
         default: throw std::invalid_argument("Unexpected representation");  // Should not happen
     }
 }
@@ -156,28 +157,35 @@ bool canConvertScalarType(int original, int target, double maximum)
                                               target == VTK_UNSIGNED_SHORT ||
                                               target == VTK_SHORT ||
                                               target == VTK_UNSIGNED_INT ||
-                                              target == VTK_INT))
+                                              target == VTK_INT ||
+                                              target == VTK_FLOAT))
         || (original == VTK_SIGNED_CHAR && (target == VTK_SIGNED_CHAR ||
                                             target == VTK_SHORT ||
-                                            target == VTK_INT))
+                                            target == VTK_INT ||
+                                            target == VTK_FLOAT))
         || (original == VTK_UNSIGNED_SHORT && (target == VTK_UNSIGNED_SHORT ||
                                               (target == VTK_SHORT && maximum <= SHRT_MAX) ||
                                                target == VTK_UNSIGNED_INT ||
-                                               target == VTK_INT))
+                                               target == VTK_INT ||
+                                               target == VTK_FLOAT))
         || (original == VTK_SHORT && (target == VTK_SHORT ||
-                                      target == VTK_INT))
+                                      target == VTK_INT ||
+                                      target == VTK_FLOAT))
         || (original == VTK_UNSIGNED_INT && (target == VTK_UNSIGNED_INT ||
-                                            (target == VTK_INT && maximum <= INT_MAX)))
-        || (original == VTK_INT && target == VTK_INT);
+                                            (target == VTK_INT && maximum <= INT_MAX) ||
+                                             target == VTK_FLOAT))
+        || (original == VTK_INT && (target == VTK_INT ||
+                                    target == VTK_FLOAT))
+        || (original == VTK_FLOAT && target == VTK_FLOAT);
 }
 
 // Given two scalar types and a maximum value, returns the smaller new scalar type that can hold all the existent values.
 int decideNewScalarType(int scalarType1, int scalarType2, double maximum)
 {
     // Try unsigned types first, and from smaller to bigger
-    int scalarTypesToTry[6] = { VTK_UNSIGNED_CHAR, VTK_UNSIGNED_SHORT, VTK_UNSIGNED_INT, VTK_SIGNED_CHAR, VTK_SHORT, VTK_INT };
+    int scalarTypesToTry[7] = { VTK_UNSIGNED_CHAR, VTK_UNSIGNED_SHORT, VTK_UNSIGNED_INT, VTK_SIGNED_CHAR, VTK_SHORT, VTK_INT, VTK_FLOAT };
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 7; i++)
     {
         if (canConvertScalarType(scalarType1, scalarTypesToTry[i], maximum) && canConvertScalarType(scalarType2, scalarTypesToTry[i], maximum))
         {
@@ -208,6 +216,9 @@ size_t voxelSize(int scalarType, int numberOfComponents)
         case VTK_UNSIGNED_INT:
         case VTK_INT:
             componentSize = sizeof(int);
+            break;
+        case VTK_FLOAT:
+            componentSize = sizeof(float);
             break;
     }
 
