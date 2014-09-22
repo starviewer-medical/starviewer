@@ -233,6 +233,10 @@ private:
 
     /// Conjunt d'imatges que composen el volum
     QList<Image*> m_imageSet;
+    /// True if it has been checked that all images are in the same anatomical plane since the last change in the image set.
+    mutable bool m_checkedImagesAnatomicalPlane;
+    /// True if all the images in this volume are in the same anatomical plane.
+    mutable bool m_allImagesAreInTheSameAnatomicalPlane;
 
     /// Identificador de volum
     Identifier m_identifier;
