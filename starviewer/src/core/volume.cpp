@@ -798,4 +798,22 @@ QByteArray Volume::getImageScalarPointer(int imageNumber)
     return QByteArray(scalarPointer,bytesPerImage);
 }
 
+bool Volume::areAllImagesInTheSameAnatomicalPlane() const
+{
+    if (!m_imageSet.isEmpty())
+    {
+        AnatomicalPlane::AnatomicalPlaneType anatomicalPlane = AnatomicalPlane::getPlaneTypeFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
+
+        foreach (Image *image, m_imageSet)
+        {
+            if (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()) != anatomicalPlane)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 };

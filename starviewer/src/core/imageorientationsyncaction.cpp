@@ -17,6 +17,7 @@
 #include "q2dviewer.h"
 #include "anatomicalplanesynccriterion.h"
 #include "modalitysynccriterion.h"
+#include "singlesliceorvolumetricsynccriterion.h"
 
 namespace udg {
 
@@ -50,7 +51,7 @@ void ImageOrientationSyncAction::setupMetaData()
 
 void ImageOrientationSyncAction::setupDefaultSyncCriteria()
 {
-    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new ModalitySyncCriterion();
+    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new ModalitySyncCriterion() << new SingleSliceOrVolumetricSyncCriterion();
 }
 
 } // End namespace udg

@@ -213,6 +213,9 @@ public:
 
     /// Retorna l'scalar pointer de la imatge en forma de QByteArray.
     QByteArray getImageScalarPointer(int imageNumber);
+
+    /// Returns true if all the images in this volume are in the same anatomical plane.
+    bool areAllImagesInTheSameAnatomicalPlane() const;
     
 signals:
     /// Emet l'estat del progrés en el que es troba la càrrega de dades del volum
