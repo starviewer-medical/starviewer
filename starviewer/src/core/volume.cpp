@@ -27,7 +27,7 @@
 namespace udg {
 
 Volume::Volume(QObject *parent)
-: QObject(parent)
+: QObject(parent), m_checkedImagesAnatomicalPlane(false)
 {
     m_numberOfPhases = 1;
     m_numberOfSlicesPerPhase = 1;
@@ -242,6 +242,8 @@ void Volume::addImage(Image *image)
             // sinó per sempre).
             m_volumePixelData = new VolumePixelData(this);
         }
+
+        m_checkedImagesAnatomicalPlane = false;
     }
 }
 
@@ -256,6 +258,8 @@ void Volume::setImages(const QList<Image*> &imageList)
         // per sempre).
         m_volumePixelData = new VolumePixelData(this);
     }
+
+    m_checkedImagesAnatomicalPlane = false;
 }
 
 QList<Image*> Volume::getImages() const
@@ -800,20 +804,27 @@ QByteArray Volume::getImageScalarPointer(int imageNumber)
 
 bool Volume::areAllImagesInTheSameAnatomicalPlane() const
 {
-    if (!m_imageSet.isEmpty())
+    if (!m_checkedImagesAnatomicalPlane)
     {
-        AnatomicalPlane::AnatomicalPlaneType anatomicalPlane = AnatomicalPlane::getPlaneTypeFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
+        m_checkedImagesAnatomicalPlane = true;
+        m_allImagesAreInTheSameAnatomicalPlane = true;
 
-        foreach (Image *image, m_imageSet)
+        if (!m_imageSet.isEmpty())
         {
-            if (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()) != anatomicalPlane)
+            AnatomicalPlane::AnatomicalPlaneType anatomicalPlane = AnatomicalPlane::getPlaneTypeFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
+
+            foreach (Image *image, m_imageSet)
             {
-                return false;
+                if (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()) != anatomicalPlane)
+                {
+                    m_allImagesAreInTheSameAnatomicalPlane = false;
+                    break;
+                }
             }
         }
     }
 
-    return true;
+    return m_allImagesAreInTheSameAnatomicalPlane;
 }
 
 };
