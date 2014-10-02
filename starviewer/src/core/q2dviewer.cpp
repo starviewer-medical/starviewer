@@ -1818,7 +1818,14 @@ double Q2DViewer::getCurrentDisplayedImageDepthOnInput(int i) const
 
 vtkImageSlice* Q2DViewer::getImageProp() const
 {
-    return m_displayUnitsHandler->getImageProp();
+    if (m_displayUnitsHandler)
+    {
+        return m_displayUnitsHandler->getImageProp();
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 Q2DViewer* Q2DViewer::castFromQViewer(QViewer *viewer)
