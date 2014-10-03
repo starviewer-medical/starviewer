@@ -14,13 +14,13 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="bottomMargin">
-    <number>9</number>
+   <property name="sizeConstraint">
+    <enum>QLayout::SetMinimumSize</enum>
    </property>
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <property name="sizeConstraint">
-      <enum>QLayout::SetDefaultConstraint</enum>
+      <enum>QLayout::SetMinimumSize</enum>
      </property>
      <item>
       <widget class="QLabel" name="m_starviewerIcon">
@@ -65,22 +65,10 @@
        <item>
         <widget class="QLabel" name="m_aboutTextLabel">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Expanding">
+          <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="scaledContents">
-          <bool>false</bool>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -168,6 +156,8 @@
   </layout>
  </widget>
  <resources>
+  <include location="../main/main.qrc"/>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
  <connections>
