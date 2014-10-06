@@ -901,8 +901,7 @@ QString WindowsSystemInformation::createOpenGLContextAndGetExtensions()
     /// TODO: Cal comprovar si això afecte al rendiment, compilació, etc.
     /// La llibreria QtOpenGL semble que quan es carrega, deixa en memòria uns 4Mb, per poder-la segir utilitzant.
     QGLWidget window;
-    /// Forçar a carregar el context openGL
-    window.updateGL();
+    window.makeCurrent();
 
     return QString((const char*)glGetString(GL_EXTENSIONS));
 }
@@ -913,8 +912,7 @@ QString WindowsSystemInformation::createOpenGLContextAndGetVersion()
     /// TODO: Cal comprovar si això afecte al rendiment, compilació, etc.
     /// La llibreria QtOpenGL semble que quan es carrega, deixa en memòria uns 4Mb, per poder-la segir utilitzant.
     QGLWidget window;
-    /// Forçar a carregar el context openGL
-    window.updateGL();
+    window.makeCurrent();
 
     return QString((const char*)glGetString(GL_VERSION));
 }
