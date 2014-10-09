@@ -512,7 +512,7 @@ QPair<QAction*, QString> ToolRegistry::getActionToolPair(const QString &actionTo
         action->setIcon(QIcon(":/images/rotateClockWise.png"));
         action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::RotateClockWiseTool));
         statusTip = tr("Rotate the image in clockwise direction");
-        toolTip = tr("Clockwise rotation").toLatin1();
+        toolTip = tr("Clockwise rotation");
 
         slot = SLOT(rotateClockWise());
     }
