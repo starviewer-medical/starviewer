@@ -462,7 +462,8 @@ void VtkDcmtkImageReader::readOrigin(const DICOMTagReader &dicomTagReader)
 {
     this->DataOrigin[0] = this->DataOrigin[1] = this->DataOrigin[2] = 0.0;
 
-    QString imagePositionPatient = getTagValue(dicomTagReader, 0, DICOMPlanePositionSequence, DICOMImagePositionPatient);
+    int firstFrame = m_frameNumbers.isEmpty()? 0 : m_frameNumbers.first();
+    QString imagePositionPatient = getTagValue(dicomTagReader, firstFrame, DICOMPlanePositionSequence, DICOMImagePositionPatient);
 
     if (!imagePositionPatient.isNull())
     {
