@@ -413,7 +413,8 @@ HEADERS += extensionfactory.h \
     anglebetweenplanessynccriterion.h \
     anatomicalregionsynccriterion.h \
     singlesliceorvolumetricsynccriterion.h \
-    nmvolumedisplayunithandler.h
+    nmvolumedisplayunithandler.h \
+    nmctvolumedisplayunithandler.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -774,7 +775,8 @@ SOURCES += extensionmediator.cpp \
     anglebetweenplanessynccriterion.cpp \
     anatomicalregionsynccriterion.cpp \
     singlesliceorvolumetricsynccriterion.cpp \
-    nmvolumedisplayunithandler.cpp
+    nmvolumedisplayunithandler.cpp \
+    nmctvolumedisplayunithandler.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
