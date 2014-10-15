@@ -19,6 +19,7 @@
 #include "pairedvolumedisplayunithandler.h"
 #include "petctvolumedisplayunithandler.h"
 #include "petvolumedisplayunithandler.h"
+#include "nmvolumedisplayunithandler.h"
 
 #include "volume.h"
 #include "volumehelper.h"
@@ -89,6 +90,10 @@ QSharedPointer<SingleVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::
     if (VolumeHelper::isPrimaryPET(input))
     {
         return QSharedPointer<SingleVolumeDisplayUnitHandler>(new PETVolumeDisplayUnitHandler());
+    }
+    else if (VolumeHelper::isPrimaryNM(input))
+    {
+        return QSharedPointer<SingleVolumeDisplayUnitHandler>(new NMVolumeDisplayUnitHandler());
     }
     else
     {
