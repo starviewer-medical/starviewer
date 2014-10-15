@@ -53,7 +53,7 @@ bool ModalitySyncCriterion::criterionIsMet(QViewer *viewer1, QViewer *viewer2)
         
         QSet<QString> coincidentModalities = modalities1.toSet().intersect(modalities2.toSet());
 
-        return !coincidentModalities.isEmpty() || isPETCTCase(modalities1, modalities2);
+        return !coincidentModalities.isEmpty() || isFusionCase(modalities1, modalities2);
     }
     else
     {
@@ -75,9 +75,10 @@ QStringList ModalitySyncCriterion::getModalities(Q2DViewer *viewer) const
     return modalities;
 }
 
-bool ModalitySyncCriterion::isPETCTCase(const QStringList &modalities1, const QStringList &modalities2) const
+bool ModalitySyncCriterion::isFusionCase(const QStringList &modalities1, const QStringList &modalities2) const
 {
-    return (modalities1.contains("CT") && modalities2.contains("PT")) || (modalities1.contains("PT") && modalities2.contains("CT"));
+    return (modalities1.contains("CT") && modalities2.contains("PT")) || (modalities1.contains("PT") && modalities2.contains("CT")) ||
+            (modalities1.contains("CT") && modalities2.contains("NM")) || (modalities1.contains("NM") && modalities2.contains("CT"));
 }
 
 } // End namespace udg

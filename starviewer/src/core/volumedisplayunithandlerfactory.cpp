@@ -20,6 +20,7 @@
 #include "petctvolumedisplayunithandler.h"
 #include "petvolumedisplayunithandler.h"
 #include "nmvolumedisplayunithandler.h"
+#include "nmctvolumedisplayunithandler.h"
 
 #include "volume.h"
 #include "volumehelper.h"
@@ -113,6 +114,10 @@ QSharedPointer<PairedVolumeDisplayUnitHandler> VolumeDisplayUnitHandlerFactory::
     if (modalities.contains("CT") && modalities.contains("PT"))
     {
         return QSharedPointer<PairedVolumeDisplayUnitHandler>(new PETCTVolumeDisplayUnitHandler());
+    }
+    else if (modalities.contains("CT") && modalities.contains("NM"))
+    {
+        return QSharedPointer<PairedVolumeDisplayUnitHandler>(new NMCTVolumeDisplayUnitHandler());
     }
     else
     {
