@@ -7,6 +7,7 @@
 #include "logging.h"
 #include "mathtools.h"
 #include "photometricinterpretation.h"
+#include "imageorientation.h"
 
 #include <QSharedPointer>
 #include <QStringList>
@@ -464,6 +465,37 @@ void VtkDcmtkImageReader::readOrigin(const DICOMTagReader &dicomTagReader)
 
     int firstFrame = m_frameNumbers.isEmpty()? 0 : m_frameNumbers.first();
     QString imagePositionPatient = getTagValue(dicomTagReader, firstFrame, DICOMPlanePositionSequence, DICOMImagePositionPatient);
+
+    if (imagePositionPatient.isEmpty() && dicomTagReader.getValueAttributeAsQString(DICOMModality) == "NM")
+    {
+        QString imageType = dicomTagReader.getValueAttributeAsQString(DICOMImageType);
+
+        if (imageType.contains("PRIMARY\\RECON") && dicomTagReader.tagExists(DICOMDetectorInformationSequence))
+        {
+            DICOMSequenceAttribute *detectorsSequence = dicomTagReader.getSequenceAttribute(DICOMDetectorInformationSequence);
+
+            if (detectorsSequence->getItems().size() == 1)
+            {
+                DICOMSequenceItem *firstDetectorItem = detectorsSequence->getItems().first();
+                QString imageOrientationString = firstDetectorItem->getValueAttribute(DICOMImageOrientationPatient)->getValueAsQString();
+                QString imagePositionPatientString = firstDetectorItem->getValueAttribute(DICOMImagePositionPatient)->getValueAsQString();
+                double spacingBetweenSlices = dicomTagReader.getValueAttributeAsQString(DICOMSpacingBetweenSlices).toDouble();
+
+                if (!imageOrientationString.isEmpty() && !imagePositionPatientString.isEmpty() && spacingBetweenSlices != 0.0)
+                {
+                    ImageOrientation imageOrientation;
+                    imageOrientation.setDICOMFormattedImageOrientation(imageOrientationString);
+
+                    QStringList values = imagePositionPatientString.split("\\");
+                    QVector3D firstFrameImagePositionPatient(values.at(0).toDouble(), values.at(1).toDouble(), values.at(2).toDouble());
+                    QVector3D imagePosition = firstFrameImagePositionPatient + m_frameNumbers.first() * spacingBetweenSlices * imageOrientation.getNormalVector();
+
+                    imagePositionPatient = QString("%1\\%2\\%3").arg(imagePosition.x()).arg(imagePosition.y()).arg(imagePosition.z());
+                    ERROR_LOG("Unexpected image position patient: " + imagePositionPatient);
+                }
+            }
+        }
+    }
 
     if (!imagePositionPatient.isNull())
     {
