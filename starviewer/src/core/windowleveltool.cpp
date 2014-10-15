@@ -151,7 +151,7 @@ void WindowLevelTool::updateWindowLevellingBehaviour()
         return;
     }
 
-    if (VolumeHelper::isPrimaryPET(m_viewer->getMainInput()))
+    if (VolumeHelper::isPrimaryPET(m_viewer->getMainInput()) || VolumeHelper::isPrimaryNM(m_viewer->getMainInput()))
     {
         m_windowLevellingBehaviour = FixedMinimum;
     }
