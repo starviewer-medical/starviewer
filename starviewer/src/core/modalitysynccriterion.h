@@ -27,8 +27,8 @@ private:
     /// Returns the modalities of the viewer inputs
     QStringList getModalities(Q2DViewer *viewer) const;
 
-    /// Checks whether we are in the case of a combination of PET-CT
-    bool isPETCTCase(const QStringList &modalities1, const QStringList &modalities2) const;
+    /// Checks whether we are in the case of a combination of PET-CT or NM-CT
+    bool isFusionCase(const QStringList &modalities1, const QStringList &modalities2) const;
 };
 
 } // End namespace udg
