@@ -15,6 +15,11 @@ int DefaultTransferFunctionSelector::getDefaultTransferFunctionForPETCT(const Tr
     return getTransferFunctionIndexByName("Hot Iron", model);
 }
 
+int DefaultTransferFunctionSelector::getDefaultTransferFunctionForNM(const TransferFunctionModel *model) const
+{
+    return getTransferFunctionIndexByName("Black & White Inverse", model);
+}
+
 int DefaultTransferFunctionSelector::getTransferFunctionIndexByName(const QString &transferFunctionName, const TransferFunctionModel *model) const
 {
     // In case of null or empty model, return -1
