@@ -98,10 +98,12 @@ QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
             for (int frameNumber = 0; frameNumber < numberOfFrames; frameNumber++)
             {
                 Image *image = new Image();
+
+                image->setFrameNumber(frameNumber);
+
                 if (processImage(image, dicomReader))
                 {
-                    // Li assignem el nº de frame i el nº de volum al que pertany
-                    image->setFrameNumber(frameNumber);
+                    // Setting volume number
 
                     // Comprovem si les imatges són de diferents mides per assignar-lis volums diferents
                     // Això només passarà quan les imatges siguin single-frame
@@ -261,58 +263,110 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
             image->setSliceLocation(dicomReader->getValueAttributeAsQString(DICOMSliceLocation));
         }
 
-        //
-        // Obtenim Image Position (Patient), tipus 1
-        //
-        value = dicomReader->getValueAttributeAsQString(DICOMImagePositionPatient);
-        if (!value.isEmpty())
+        // Nuclear medicine modality has to be treated separately because Image Orientation (Patient) and
+        // Image Position (Patient) tags are located in the Detector Infomration Sequence.
+        // This process is only performed when the Image Type(0008,0008), Value 3, is RECON TOMO or RECON GATED TOMO.
+        if (dicomReader->getValueAttributeAsQString(DICOMModality) == "NM" && image->getImageType().contains("PRIMARY\\RECON") && dicomReader->tagExists(DICOMDetectorInformationSequence))
         {
-            QStringList list = value.split("\\");
-            if (list.size() == 3)
-            {
-                double position[3] = { list.at(0).toDouble(), list.at(1).toDouble(), list.at(2).toDouble() };
-                image->setImagePositionPatient(position);
-            }
-        }
+            DICOMSequenceAttribute *detectorsSequence = dicomReader->getSequenceAttribute(DICOMDetectorInformationSequence);
 
-        //
-        // Obtenim Image Orientation (Patient), tipus 1
-        //
-        if (dicomReader->tagExists(DICOMImageOrientationPatient))
-        {
-            value = dicomReader->getValueAttributeAsQString(DICOMImageOrientationPatient);
-            ImageOrientation imageOrientation;
-            imageOrientation.setDICOMFormattedImageOrientation(value);
-            image->setImageOrientationPatient(imageOrientation);
+            // When Image Type(0008,0008), Value 3, is RECON TOMO or RECON GATED TOMO,
+            // then the Number of Detectors (0054,0021) shall be 1.
+            if (detectorsSequence->getItems().size() == 1)
+            {
+                DICOMSequenceItem *firstDetectorItem = detectorsSequence->getItems().first();
+                QString imageOrientationString = firstDetectorItem->getValueAttribute(DICOMImageOrientationPatient)->getValueAsQString();
+                QString imagePositionPatientString = firstDetectorItem->getValueAttribute(DICOMImagePositionPatient)->getValueAsQString();
+                double spacingBetweenSlices = dicomReader->getValueAttributeAsQString(DICOMSpacingBetweenSlices).toDouble();
 
-            // Orientació de pacient
-            // L'obtenim a partir del tag DICOM si existeix, sinó el calculem a partir d'ImageOrientation
-            PatientOrientation patientOrientation;
-            value = dicomReader->getValueAttributeAsQString(DICOMPatientOrientation);
-            if (!value.isEmpty())
-            {
-                patientOrientation.setDICOMFormattedPatientOrientation(value);
+                if (!imageOrientationString.isEmpty())
+                {
+                    ImageOrientation imageOrientation;
+                    imageOrientation.setDICOMFormattedImageOrientation(imageOrientationString);
+                    image->setImageOrientationPatient(imageOrientation);
+
+                    // Orientació de pacient
+                    // L'obtenim a partir del tag DICOM si existeix, sinó el calculem a partir d'ImageOrientation
+                    PatientOrientation patientOrientation;
+                    value = dicomReader->getValueAttributeAsQString(DICOMPatientOrientation);
+                    if (!value.isEmpty())
+                    {
+                        patientOrientation.setDICOMFormattedPatientOrientation(value);
+                    }
+                    else
+                    {
+                        patientOrientation.setPatientOrientationFromImageOrientation(image->getImageOrientationPatient());
+                    }
+                    image->setPatientOrientation(patientOrientation);
+
+                    // Image Position (Patient) of each image has to be computed because only
+                    // the Image Position (Patient) of the first image is provided
+                    if (!imagePositionPatientString.isEmpty() && spacingBetweenSlices != 0.0)
+                    {
+                        QStringList values = imagePositionPatientString.split("\\");
+                        QVector3D firstFrameImagePositionPatient(values.at(0).toDouble(), values.at(1).toDouble(), values.at(2).toDouble());
+                        QVector3D imagePositionPatient = firstFrameImagePositionPatient + image->getFrameNumber() * spacingBetweenSlices * imageOrientation.getNormalVector();
+                        double position[3] = { imagePositionPatient.x(), imagePositionPatient.y(), imagePositionPatient.z() };
+                        image->setImagePositionPatient(position);
+                    }
+                }
             }
-            else
-            {
-                patientOrientation.setPatientOrientationFromImageOrientation(image->getImageOrientationPatient());
-            }
-            image->setPatientOrientation(patientOrientation);
         }
         else
         {
             //
-            // General Image Module (C.7.6.1)
-            // Requerit a pràcticament totes les modalitats no-enhanced, conté el tag Patient Orientation
+            // Obtenim Image Position (Patient), tipus 1
             //
+            value = dicomReader->getValueAttributeAsQString(DICOMImagePositionPatient);
+            if (!value.isEmpty())
+            {
+                QStringList list = value.split("\\");
+                if (list.size() == 3)
+                {
+                    double position[3] = { list.at(0).toDouble(), list.at(1).toDouble(), list.at(2).toDouble() };
+                    image->setImagePositionPatient(position);
+                }
+            }
 
-            // Com que no tenim ImageOrientationPatient no podem generar la informació de Patient Orientation
-            // Per tant, anem a buscar el valor del tag PatientOrientation, de tipus 2C
-            value = dicomReader->getValueAttributeAsQString(DICOMPatientOrientation);
-            
-            PatientOrientation patientOrientation;
-            patientOrientation.setDICOMFormattedPatientOrientation(value);
-            image->setPatientOrientation(patientOrientation);
+            //
+            // Obtenim Image Orientation (Patient), tipus 1
+            //
+            if (dicomReader->tagExists(DICOMImageOrientationPatient))
+            {
+                value = dicomReader->getValueAttributeAsQString(DICOMImageOrientationPatient);
+                ImageOrientation imageOrientation;
+                imageOrientation.setDICOMFormattedImageOrientation(value);
+                image->setImageOrientationPatient(imageOrientation);
+
+                // Orientació de pacient
+                // L'obtenim a partir del tag DICOM si existeix, sinó el calculem a partir d'ImageOrientation
+                PatientOrientation patientOrientation;
+                value = dicomReader->getValueAttributeAsQString(DICOMPatientOrientation);
+                if (!value.isEmpty())
+                {
+                    patientOrientation.setDICOMFormattedPatientOrientation(value);
+                }
+                else
+                {
+                    patientOrientation.setPatientOrientationFromImageOrientation(image->getImageOrientationPatient());
+                }
+                image->setPatientOrientation(patientOrientation);
+            }
+            else
+            {
+                //
+                // General Image Module (C.7.6.1)
+                // Requerit a pràcticament totes les modalitats no-enhanced, conté el tag Patient Orientation
+                //
+
+                // Com que no tenim ImageOrientationPatient no podem generar la informació de Patient Orientation
+                // Per tant, anem a buscar el valor del tag PatientOrientation, de tipus 2C
+                value = dicomReader->getValueAttributeAsQString(DICOMPatientOrientation);
+
+                PatientOrientation patientOrientation;
+                patientOrientation.setDICOMFormattedPatientOrientation(value);
+                image->setPatientOrientation(patientOrientation);
+            }
         }
 
         //
