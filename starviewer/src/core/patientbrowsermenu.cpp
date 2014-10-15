@@ -102,7 +102,7 @@ void PatientBrowserMenu::setPatient(Patient *patient)
                             
                             foreach (Series * secondSeries, study->getViewableSeries())
                             {
-                                if (secondSeries->getModality() == "PT" && series->getFrameOfReferenceUID() == secondSeries->getFrameOfReferenceUID())
+                                if ((secondSeries->getModality() == "PT" || secondSeries->getModality() == "NM") && series->getFrameOfReferenceUID() == secondSeries->getFrameOfReferenceUID())
                                 {
                                     foreach (Volume *secondVolume, secondSeries->getVolumesList())
                                     {
