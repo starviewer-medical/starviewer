@@ -488,7 +488,7 @@ QString Q2DViewerAnnotationHandler::getCurrentWindowLevelString() const
         .arg(MathTools::roundToNearestInteger(windowLevel[0]))
         .arg(MathTools::roundToNearestInteger(windowLevel[1]));
 
-    if (VolumeHelper::isPrimaryPET(m_2DViewer->getMainInput()))
+    if (VolumeHelper::isPrimaryPET(m_2DViewer->getMainInput()) || VolumeHelper::isPrimaryNM(m_2DViewer->getMainInput()))
     {
         double range[2];
         m_2DViewer->getMainInput()->getScalarRange(range);

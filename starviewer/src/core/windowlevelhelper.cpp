@@ -131,7 +131,7 @@ WindowLevel WindowLevelHelper::getCurrentAutomaticWindowLevel(Volume *volume)
         volume->getScalarRange(range);
         
         double windowWidth = range[1] - range[0];
-        if (VolumeHelper::isPrimaryPET(volume))
+        if (VolumeHelper::isPrimaryPET(volume) || VolumeHelper::isPrimaryNM(volume))
         {
             windowWidth *= DefaultPETWindowWidthThreshold;
         }
