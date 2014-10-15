@@ -43,4 +43,20 @@ bool VolumeHelper::isPrimaryPET(Volume *volume)
     return volume->getModality() == "PT" && firstImage->getImageType().contains("PRIMARY");
 }
 
+bool VolumeHelper::isPrimaryNM(Volume *volume)
+{
+    if (!volume)
+    {
+        return false;
+    }
+
+    Image *firstImage = volume->getImage(0);
+    if (!firstImage)
+    {
+        return false;
+    }
+
+    return (volume->getModality() == "NM" && firstImage->getImageType().contains("PRIMARY"));
+}
+
 } // End namespace udg
