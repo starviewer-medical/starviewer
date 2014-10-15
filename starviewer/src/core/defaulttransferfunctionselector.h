@@ -33,6 +33,9 @@ public:
     /// Returns the default transfer function for the PET volume in PET-CT.
     int getDefaultTransferFunctionForPETCT(const TransferFunctionModel *model) const;
 
+    /// Returns the default transfer function for NM.
+    int getDefaultTransferFunctionForNM(const TransferFunctionModel *model) const;
+
 private:
     /// Returns the index of the transfer function by name. Returns -1 if not found.
     int getTransferFunctionIndexByName(const QString &name, const TransferFunctionModel *model) const;
