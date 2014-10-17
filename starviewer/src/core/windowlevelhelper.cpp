@@ -67,7 +67,7 @@ void WindowLevelHelper::initializeWindowLevelData(WindowLevelPresetsToolData *wi
     WindowLevel automaticWindowLevel = getCurrentAutomaticWindowLevel(volume);
     windowLevelData->addPreset(automaticWindowLevel, WindowLevelPresetsToolData::AutomaticPreset);
 
-    selectDefaultPreset(windowLevelData);
+    selectDefaultPreset(windowLevelData, volume);
 }
 
 WindowLevel WindowLevelHelper::getDefaultWindowLevelForPresentation(Image *image, int index)
@@ -94,7 +94,7 @@ WindowLevel WindowLevelHelper::getDefaultWindowLevelForPresentation(Image *image
     return windowLevel;
 }
 
-void WindowLevelHelper::selectDefaultPreset(WindowLevelPresetsToolData *windowLevelData)
+void WindowLevelHelper::selectDefaultPreset(WindowLevelPresetsToolData *windowLevelData, Volume *volume)
 {
     if (!windowLevelData)
     {
@@ -103,18 +103,15 @@ void WindowLevelHelper::selectDefaultPreset(WindowLevelPresetsToolData *windowLe
 
     QList<WindowLevel> filePresets = windowLevelData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined);
 
-    if (!filePresets.isEmpty())
+    // Usually we want the first file preset, if existent, as the default preset, but for primary PET volumes the automatic is preferred
+    if (!filePresets.isEmpty() && !VolumeHelper::isPrimaryPET(volume))
     {
         windowLevelData->setCurrentPreset(filePresets.first());
     }
     else
     {
         QList<WindowLevel> automaticPresets = windowLevelData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
-
-        if (!automaticPresets.isEmpty())
-        {
-            windowLevelData->setCurrentPreset(automaticPresets.first());
-        }
+        windowLevelData->setCurrentPreset(automaticPresets.first());
     }
 }
 
