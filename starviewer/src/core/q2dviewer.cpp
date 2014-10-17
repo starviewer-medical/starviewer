@@ -1585,7 +1585,7 @@ void Q2DViewer::restore()
     // defined command to place the image properly by default depending on the input if no one is defined 
     // Take into account this call disables thickslab
     resetViewToAcquisitionPlane();
-    WindowLevelHelper::selectDefaultPreset(getWindowLevelData());
+    WindowLevelHelper::selectDefaultPreset(getWindowLevelData(), getMainInput());
     
     // HACK Restaurem el rendering
     enableRendering(true);

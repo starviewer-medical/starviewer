@@ -21,8 +21,8 @@ public:
     /// If index is out of range, a non-valid WindowLevel will be returned
     WindowLevel getDefaultWindowLevelForPresentation(Image *image, int index);
 
-    /// Selects the default preset to apply on the given window level data. File defined presets come first, then automatic.
-    static void selectDefaultPreset(WindowLevelPresetsToolData *windowLevelData);
+    /// Selects the default preset to apply on the given window level data corresponding to the given volume.
+    static void selectDefaultPreset(WindowLevelPresetsToolData *windowLevelData, Volume *volume);
 
 private:
     /// Computes the automatic window level for the current input
