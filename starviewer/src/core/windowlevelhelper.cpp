@@ -46,22 +46,14 @@ void WindowLevelHelper::initializeWindowLevelData(WindowLevelPresetsToolData *wi
         {
             WindowLevel windowLevel = getDefaultWindowLevelForPresentation(image, i);
             windowLevelData->addPreset(windowLevel, WindowLevelPresetsToolData::FileDefined);
-
-            if (i == 0)
-            {
-                windowLevelData->selectCurrentPreset(windowLevel.getName());
-            }
         }
     }
 
     // Calculem un window level automàtic que sempre posarem disponible a l'usuari
     WindowLevel automaticWindowLevel = getCurrentAutomaticWindowLevel(volume);
     windowLevelData->addPreset(automaticWindowLevel, WindowLevelPresetsToolData::AutomaticPreset);
-    // Si no hi ha window levels definits per defecte activarem l'automàtic
-    if (windowLevelCount <= 0)
-    {
-        windowLevelData->selectCurrentPreset(automaticWindowLevel.getName());
-    }
+
+    selectDefaultPreset(windowLevelData);
 }
 
 WindowLevel WindowLevelHelper::getDefaultWindowLevelForPresentation(Image *image, int index)
