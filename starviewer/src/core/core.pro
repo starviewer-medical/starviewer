@@ -414,7 +414,9 @@ HEADERS += extensionfactory.h \
     anatomicalregionsynccriterion.h \
     singlesliceorvolumetricsynccriterion.h \
     nmvolumedisplayunithandler.h \
-    nmctvolumedisplayunithandler.h
+    nmctvolumedisplayunithandler.h \
+    nmroidataprinter.h \
+    nmctfusionroidataprinter.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -776,7 +778,9 @@ SOURCES += extensionmediator.cpp \
     anatomicalregionsynccriterion.cpp \
     singlesliceorvolumetricsynccriterion.cpp \
     nmvolumedisplayunithandler.cpp \
-    nmctvolumedisplayunithandler.cpp
+    nmctvolumedisplayunithandler.cpp \
+    nmroidataprinter.cpp \
+    nmctfusionroidataprinter.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
