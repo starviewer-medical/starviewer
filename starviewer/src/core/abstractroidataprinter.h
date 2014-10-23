@@ -33,7 +33,7 @@ class Image;
 class AbstractROIDataPrinter {
 public:
     AbstractROIDataPrinter(const QMap<int, ROIData> &roiDataMap, const QString &areaString, Q2DViewer *viewer);
-    ~AbstractROIDataPrinter();
+    virtual ~AbstractROIDataPrinter();
 
     /// Gets the string corresponding to the ROIData
     QString getString();
