@@ -327,6 +327,13 @@ int MagicROITool::getROIInputIndex() const
                 index = 1;
             }
         }
+        else if (modalities.contains("CT") && modalities.contains("NM"))
+        {
+            if (m_2DViewer->getInput(1)->getModality() == "NM")
+            {
+                index = 1;
+            }
+        }
     }
     
     return index;
