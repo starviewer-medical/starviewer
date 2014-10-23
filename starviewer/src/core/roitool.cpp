@@ -26,6 +26,8 @@
 #include "roidataprinter.h"
 #include "petctfusionroidataprinter.h"
 #include "petroidataprinter.h"
+#include "nmroidataprinter.h"
+#include "nmctfusionroidataprinter.h"
 
 #include <QApplication>
 
@@ -310,6 +312,10 @@ AbstractROIDataPrinter* ROITool::getROIDataPrinter(const QMap<int, ROIData> &roi
             {
                 roiDataPrinter = new PETROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
             }
+            else if (roiDataMap.value(0).getModality() == "NM")
+            {
+                roiDataPrinter = new NMROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
+            }
             break;
 
         case 2:
@@ -319,6 +325,10 @@ AbstractROIDataPrinter* ROITool::getROIDataPrinter(const QMap<int, ROIData> &roi
                 if (modalities.contains("CT") && modalities.contains("PT"))
                 {
                     roiDataPrinter = new PETCTFusionROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
+                }
+                else if (modalities.contains("CT") && modalities.contains("NM"))
+                {
+                    roiDataPrinter = new NMCTFusionROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
                 }
             }
             break;
