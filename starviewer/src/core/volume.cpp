@@ -23,6 +23,7 @@
 #include "volumepixeldataiterator.h"
 #include "imageplane.h"
 #include "dicomtagreader.h"
+#include "volumehelper.h"
 
 namespace udg {
 
@@ -388,6 +389,10 @@ QString Volume::getPixelUnits()
             else if (modality == "PT")
             {
                 units = getPTPixelUnits(image);
+            }
+            else if (VolumeHelper::isPrimaryNM(this))
+            {
+                units = tr("counts");
             }
         }
     }
