@@ -100,15 +100,15 @@ Series* LocalDatabaseSeriesDAL::fillSeries(char **reply, int row, int columns)
     series->setModality(reply[3 + row * columns]);
     series->setDate(reply[4 + row * columns]);
     series->setTime(reply[5 + row * columns]);
-    series->setInstitutionName(reply[6 + row * columns]);
+    series->setInstitutionName(convertToQString(reply[6 + row * columns]));
     series->setPatientPosition(reply[7 + row * columns]);
-    series->setProtocolName(reply[8 + row * columns]);
-    series->setDescription(reply[9 + row * columns]);
+    series->setProtocolName(convertToQString(reply[8 + row * columns]));
+    series->setDescription(convertToQString(reply[9 + row * columns]));
     series->setFrameOfReferenceUID(reply[10 + row * columns]);
-    series->setPositionReferenceIndicator(reply[11 + row * columns]);
+    series->setPositionReferenceIndicator(convertToQString(reply[11 + row * columns]));
     series->setBodyPartExamined(reply[12 + row * columns]);
     series->setViewPosition(reply[13 + row * columns]);
-    series->setManufacturer(reply[14 + row * columns]);
+    series->setManufacturer(convertToQString(reply[14 + row * columns]));
     // Laterality és un char
     series->setLaterality(reply[15 + row * columns][0]);
     series->setRetrievedDate(QDate().fromString(reply[16 + row * columns], "yyyyMMdd"));

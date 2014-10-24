@@ -34,6 +34,9 @@ public:
     int getLastError();
 
 protected:
+    /// Converts the given text to a QString, interpreting the input as either UTF-8 or Latin-1 depending on its content.
+    static QString convertToQString(const char *text);
+
     /// Ens fa un ErrorLog d'una sentència sql. No es té en compte l'error és SQL_CONSTRAINT (clau duplicada)
     void logError(const QString &sqlSentence);
 

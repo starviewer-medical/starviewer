@@ -100,7 +100,7 @@ Patient* LocalDatabasePatientDAL::fillPatient(char **reply, int row, int columns
 
     patient->setDatabaseID(QString(reply[0 + row * columns]).toLongLong());
     patient->setID(reply[1 + row * columns]);
-    patient->setFullName(reply[2 + row * columns]);
+    patient->setFullName(convertToQString(reply[2 + row * columns]));
     patient->setBirthDate(reply[3 + row * columns]);
     patient->setSex(reply[4 + row * columns]);
 
