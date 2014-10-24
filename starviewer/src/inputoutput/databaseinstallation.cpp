@@ -310,7 +310,7 @@ bool DatabaseInstallation::applySqlUpgradeCommandToDatabase(QString sqlUpgradeCo
 {
     DatabaseConnection databaseConnection;
 
-    sqlite3_exec(databaseConnection.getConnection(), qPrintable(sqlUpgradeCommand), 0, 0, 0);
+    sqlite3_exec(databaseConnection.getConnection(), sqlUpgradeCommand.toUtf8().constData(), 0, 0, 0);
 
     if (databaseConnection.getLastErrorCode() != SQLITE_OK)
     {
