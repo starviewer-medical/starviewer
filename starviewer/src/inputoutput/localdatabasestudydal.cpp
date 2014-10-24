@@ -190,8 +190,8 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
     study->setDate(reply[7 + row * columns]);
     study->setTime(reply[8 + row * columns]);
     study->setAccessionNumber(reply[9 + row * columns]);
-    study->setDescription(reply[10 + row * columns]);
-    study->setReferringPhysiciansName(reply[11 + row * columns]);
+    study->setDescription(convertToQString(reply[10 + row * columns]));
+    study->setReferringPhysiciansName(convertToQString(reply[11 + row * columns]));
     study->setRetrievedDate(QDate().fromString(reply[13 + row * columns], "yyyyMMdd"));
     study->setRetrievedTime(QTime().fromString(reply[14 + row * columns], "hhmmss"));
 
@@ -211,7 +211,7 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
 
     patient->setDatabaseID(QString(reply[16 + row * columns]).toLongLong());
     patient->setID(reply[17 + row * columns]);
-    patient->setFullName(reply[18 + row * columns]);
+    patient->setFullName(convertToQString(reply[18 + row * columns]));
     patient->setBirthDate(reply[19 + row * columns]);
     patient->setSex(reply[20 + row * columns]);
 

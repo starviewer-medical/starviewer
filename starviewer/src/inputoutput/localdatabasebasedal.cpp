@@ -33,6 +33,18 @@ int LocalDatabaseBaseDAL::getLastError()
     return m_lastSqliteError;
 }
 
+QString LocalDatabaseBaseDAL::convertToQString(const char *text)
+{
+    QString string = QString::fromUtf8(text);
+
+    if (string.contains(QChar::ReplacementCharacter))
+    {
+        string = QString::fromLatin1(text);
+    }
+
+    return string;
+}
+
 void LocalDatabaseBaseDAL::logError(const QString &sqlSentence)
 {
     // Ingnorem l'error de clau duplicada

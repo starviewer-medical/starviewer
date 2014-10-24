@@ -154,7 +154,8 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setBitsStored(QString(reply[14 + row * columns]).toInt());
     image->setPixelRepresentation(QString(reply[15 + row * columns]).toInt());
     image->setRescaleSlope(QString(reply[16 + row * columns]).toDouble());
-    image->setWindowLevelList(DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns], reply[19 + row * columns]));
+    image->setWindowLevelList(DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns],
+                                                                                    convertToQString(reply[19 + row * columns])));
     image->setSliceLocation(reply[20 + row * columns]);
     image->setRescaleIntercept(QString(reply[21 + row * columns]).toDouble());
     image->setPhotometricInterpretation(reply[22 + row * columns]);
@@ -162,7 +163,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setViewPosition(reply[24 + row * columns]);
     // ImageLaterality sempre és un Char
     image->setImageLaterality(QChar(reply[25 + row * columns][0]));
-    image->setViewCodeMeaning(reply[26 + row * columns]);
+    image->setViewCodeMeaning(convertToQString(reply[26 + row * columns]));
     image->setPhaseNumber(QString(reply[27 + row * columns]).toInt());
     image->setImageTime(reply[28 + row * columns]);
     image->setVolumeNumberInSeries(QString(reply [29 + row * columns]).toInt());
