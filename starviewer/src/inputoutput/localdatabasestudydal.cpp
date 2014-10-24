@@ -178,7 +178,6 @@ qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString 
 
 Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
 {
-    QString studyInstanceUID;
     Study *study = new Study();
     QStringList modalities;
 
