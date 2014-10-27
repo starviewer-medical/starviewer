@@ -12,7 +12,7 @@ int DefaultTransferFunctionSelector::getDefaultTransferFunctionForPET(const Tran
 
 int DefaultTransferFunctionSelector::getDefaultTransferFunctionForPETCT(const TransferFunctionModel *model) const
 {
-    return getTransferFunctionIndexByName("Hot Iron", model);
+    return getTransferFunctionIndexByName("PET Osirix", model);
 }
 
 int DefaultTransferFunctionSelector::getDefaultTransferFunctionForNM(const TransferFunctionModel *model) const
@@ -22,7 +22,7 @@ int DefaultTransferFunctionSelector::getDefaultTransferFunctionForNM(const Trans
 
 int DefaultTransferFunctionSelector::getDefaultTransferFunctionForNMCT(const TransferFunctionModel *model) const
 {
-    return getTransferFunctionIndexByName("Hot Iron", model);
+    return getTransferFunctionIndexByName("PET Osirix", model);
 }
 
 int DefaultTransferFunctionSelector::getTransferFunctionIndexByName(const QString &transferFunctionName, const TransferFunctionModel *model) const
