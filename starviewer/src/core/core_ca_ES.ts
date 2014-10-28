@@ -303,7 +303,7 @@
         <translation>desconeguda</translation>
     </message>
     <message>
-        <location filename="pansyncaction.cpp" line="42"/>
+        <location filename="pansyncaction.cpp" line="43"/>
         <source>Pan</source>
         <translation>Desplaçament</translation>
     </message>
@@ -412,16 +412,22 @@
     </message>
     <message>
         <location filename="abstractroidataprinter.cpp" line="32"/>
+        <location filename="nmctfusionroidataprinter.cpp" line="54"/>
+        <location filename="nmroidataprinter.cpp" line="55"/>
         <source>Area: %1</source>
         <translation>Àrea: %1</translation>
     </message>
     <message>
         <location filename="abstractroidataprinter.cpp" line="36"/>
+        <location filename="nmctfusionroidataprinter.cpp" line="60"/>
+        <location filename="nmroidataprinter.cpp" line="61"/>
         <source>Mean: %1</source>
         <translation>Mitjana: %1</translation>
     </message>
     <message>
         <location filename="abstractroidataprinter.cpp" line="38"/>
+        <location filename="nmctfusionroidataprinter.cpp" line="62"/>
+        <location filename="nmroidataprinter.cpp" line="63"/>
         <source>Std.Dev.: %1</source>
         <translation>Desv. Est.: %1</translation>
     </message>
@@ -446,17 +452,17 @@
         <translation>SUV (%1) - N/D</translation>
     </message>
     <message>
-        <location filename="windowlevelhelper.cpp" line="117"/>
+        <location filename="windowlevelhelper.cpp" line="106"/>
         <source>Default %1</source>
         <translation>Predeterminada %1</translation>
     </message>
     <message>
-        <location filename="windowlevelhelper.cpp" line="123"/>
+        <location filename="windowlevelhelper.cpp" line="112"/>
         <source>Auto</source>
         <translation>Automàtica</translation>
     </message>
     <message>
-        <location filename="imageorientationsyncaction.cpp" line="34"/>
+        <location filename="imageorientationsyncaction.cpp" line="35"/>
         <source>Image orientation</source>
         <translation>Orientació d&apos;imatge</translation>
     </message>
@@ -469,6 +475,12 @@
         <location filename="zoomfactorsyncaction.cpp" line="34"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
+    </message>
+    <message>
+        <location filename="nmctfusionroidataprinter.cpp" line="58"/>
+        <location filename="nmroidataprinter.cpp" line="59"/>
+        <source>Max: %1</source>
+        <translation type="unfinished">Màx.: %1</translation>
     </message>
 </context>
 <context>
@@ -722,7 +734,7 @@
 <context>
     <name>udg::PatientBrowserMenuList</name>
     <message>
-        <location filename="patientbrowsermenulist.cpp" line="27"/>
+        <location filename="patientbrowsermenulist.cpp" line="28"/>
         <source>Fusion</source>
         <translation>Fusió</translation>
     </message>
@@ -2236,24 +2248,25 @@ Es recomana que les deseu en una carpeta buida.</translation>
 <context>
     <name>udg::Volume</name>
     <message>
-        <location filename="volume.cpp" line="388"/>
+        <location filename="volume.cpp" line="381"/>
+        <location filename="volume.cpp" line="397"/>
         <source>counts</source>
-        <translation type="unfinished"></translation>
+        <translation>comptes</translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="400"/>
+        <location filename="volume.cpp" line="409"/>
         <source>percent</source>
-        <translation type="unfinished"></translation>
+        <translation>per cent</translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="404"/>
+        <location filename="volume.cpp" line="413"/>
         <source>counts/s</source>
-        <translation type="unfinished"></translation>
+        <translation>comptes/s</translation>
     </message>
     <message>
-        <location filename="volume.cpp" line="436"/>
+        <location filename="volume.cpp" line="445"/>
         <source>proportional to counts</source>
-        <translation type="unfinished"></translation>
+        <translation>proporcional a comptes</translation>
     </message>
 </context>
 <context>
