@@ -54,13 +54,13 @@ GDCMLIBDIR = $$(GDCMLIBDIR)
 isEmpty(GDCMLIBDIR){
     unix:GDCMLIBDIR = /usr/lib/gdcm
     macx:GDCMLIBDIR = /usr/local/lib/gdcm-2.0
-    win32:GDCMLIBDIR = $$(SystemDrive)/gdcm/2.4.3/lib
+    win32:GDCMLIBDIR = $$(SystemDrive)/gdcm/2.4.4/lib
 }
 GDCMINCLUDEDIR = $$(GDCMINCLUDEDIR)
 isEmpty(GDCMINCLUDEDIR){
     unix:GDCMINCLUDEDIR = /usr/include/gdcm
     macx:GDCMINCLUDEDIR = /usr/local/include/gdcm-2.0
-    win32:GDCMINCLUDEDIR = $$(SystemDrive)/gdcm/2.4.3/include/gdcm-2.4
+    win32:GDCMINCLUDEDIR = $$(SystemDrive)/gdcm/2.4.4/include/gdcm-2.4
 }
 
 # Log4cxx Libraries
@@ -84,13 +84,13 @@ THREADWEAVERLIBDIR = $$(THREADWEAVERLIBDIR)
 isEmpty(THREADWEAVERLIBDIR){
     unix:THREADWEAVERLIBDIR = /usr/lib
     macx:THREADWEAVERLIBDIR = /usr/local/lib/threadweaver
-    win32:THREADWEAVERLIBDIR = $$(SystemDrive)/ThreadWeaver/5.0.0/lib
+    win32:THREADWEAVERLIBDIR = $$(SystemDrive)/ThreadWeaver/5.3.0/lib
 }
 THREADWEAVERINCLUDEDIR = $$(THREADWEAVERINCLUDEDIR)
 isEmpty(THREADWEAVERINCLUDEDIR){
     unix:THREADWEAVERINCLUDEDIR = /usr/include
     macx:THREADWEAVERINCLUDEDIR = /usr/local/include
-    win32:THREADWEAVERINCLUDEDIR = $$(SystemDrive)/ThreadWeaver/5.0.0/include/KF5
+    win32:THREADWEAVERINCLUDEDIR = $$(SystemDrive)/ThreadWeaver/5.3.0/include/KF5
 }
 
 
