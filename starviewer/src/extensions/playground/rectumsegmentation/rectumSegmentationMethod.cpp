@@ -33,8 +33,6 @@
 
 #include <itkVector.h>
 #include <itkListSample.h>
-#include <itkMeanCalculator.h>
-#include <itkCovarianceCalculator.h>
 
 #include <itkErfcLevelSetImageFilter.h>
 #include <itkImageFileWriter.h>

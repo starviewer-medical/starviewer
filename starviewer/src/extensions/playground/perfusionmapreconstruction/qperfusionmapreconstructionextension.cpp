@@ -54,8 +54,6 @@
 #include <itkCurvatureFlowImageFilter.h>
 #include <itkCastImageFilter.h>
 #include "itkMinimumMaximumImageCalculator.h"
-#include <itkVnlFFTRealToComplexConjugateImageFilter.h>
-#include <itkVnlFFTComplexConjugateToRealImageFilter.h>
 //Fourier Transform
 //#include <fftw3.h>
 //#include <complex>
