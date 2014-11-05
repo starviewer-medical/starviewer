@@ -42,7 +42,10 @@ bool is32BitWindows()
     // 32-bit programs run on both 32-bit and 64-bit Windows
     // so must sniff
     BOOL f64 = false;
-    return !(IsWow64Process(GetCurrentProcess(), &f64) && f64);
+    typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
+    LPFN_ISWOW64PROCESS fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
+
+    return !(fnIsWow64Process(GetCurrentProcess(), &f64) && f64);
 #else
     return false; // Win64 does not support Win16
 #endif

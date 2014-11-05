@@ -31,7 +31,7 @@ macx {
 # Definim que per sistemes de compilació windows basats en visual studio 
 # s'activi el flag /LARGEADDRESSAWARE, que permet que es puguin fer servir
 # més de 2Gb de memòria per procés. Això serà efectiu en sistemes de 64 bits
-win32-msvc2010:QMAKE_LFLAGS += /LARGEADDRESSAWARE
+win32-msvc2013:QMAKE_LFLAGS += /LARGEADDRESSAWARE
 
 include(../../sourcelibsdependencies.pri)
 

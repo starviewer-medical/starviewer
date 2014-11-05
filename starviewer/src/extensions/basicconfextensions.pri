@@ -10,7 +10,7 @@ DEPENDPATH += ../../../core \
                ../../../inputoutput
 MOC_DIR = ../../../../tmp/moc
 UI_DIR = ../../../../tmp/ui
-win32-msvc2010 {
+win32-msvc2013 {
     OBJECTS_DIR = ../../../../tmp/obj/$${TARGET}
     }
     else {

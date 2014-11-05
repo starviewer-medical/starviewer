@@ -37,6 +37,8 @@
 #include <vtkTextProperty.h>
 #include <vtkTexture.h>
 
+#include <algorithm>
+
 namespace udg {
 
 vtkStandardNewMacro(VtkTextActorWithBackground)
