@@ -39,13 +39,13 @@ ITKLIBDIR = $$(ITKLIBDIR)
 isEmpty(ITKLIBDIR){
     unix:ITKLIBDIR = /usr/lib/InsightToolkit
     macx:ITKLIBDIR = /usr/local/lib/InsightToolkit
-    win32:ITKLIBDIR = $$(SystemDrive)/InsightToolkit/3.20.1/lib/InsightToolkit
+    win32:ITKLIBDIR = $$(SystemDrive)/InsightToolkit/4.6.1/lib
 }
 ITKINCLUDEDIR = $$(ITKINCLUDEDIR)
 isEmpty(ITKINCLUDEDIR){
     unix:ITKINCLUDEDIR = /usr/include/InsightToolkit
     macx:ITKINCLUDEDIR = /usr/local/include/InsightToolkit
-    win32:ITKINCLUDEDIR = $$(SystemDrive)/InsightToolkit/3.20.1/include/InsightToolkit
+    win32:ITKINCLUDEDIR = $$(SystemDrive)/InsightToolkit/4.6.1/include/ITK-4.6
 }
 
 # GDCM Libraries

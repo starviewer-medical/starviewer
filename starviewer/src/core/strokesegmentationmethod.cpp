@@ -43,8 +43,7 @@
 
 #include <itkVector.h>
 #include <itkListSample.h>
-#include <itkMeanCalculator.h>
-#include <itkCovarianceCalculator.h>
+#include <itkCovarianceSampleFilter.h>
 #include <itkMedianImageFilter.h>
 #include <itkBinaryMedianImageFilter.h>
 
@@ -717,19 +716,18 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     }
     DEBUG_LOG(QString("estimed mean: %1").arg(mean));
 
-    typedef itk::Statistics::CovarianceCalculator<SampleType> CovarianceAlgorithmType;
+    typedef itk::Statistics::CovarianceSampleFilter<SampleType> CovarianceAlgorithmType;
     CovarianceAlgorithmType::Pointer covarianceAlgorithm = CovarianceAlgorithmType::New();
 
-    covarianceAlgorithm->SetInputSample(sample);
-    covarianceAlgorithm->SetMean(0);
+    covarianceAlgorithm->SetInput(sample);
     covarianceAlgorithm->Update();
 
     DEBUG_LOG("Using the one pass algorithm:");
     DEBUG_LOG("Mean = ");
-    std::cout << *(covarianceAlgorithm->GetMean()) << std::endl;
+    std::cout << covarianceAlgorithm->GetMean() << std::endl;
 
     DEBUG_LOG("Covariance = ");
-    std::cout << *(covarianceAlgorithm->GetOutput()) << std::endl;
+    std::cout << covarianceAlgorithm->GetCovarianceMatrix() << std::endl;
 
     // Cas Comas Pey!!!!!!
     // mean = 30;
@@ -737,7 +735,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     // !!!!!!!!!!!!!!!!!!!!!
 
     m_mean = mean;
-    m_variance = sqrt((*covarianceAlgorithm->GetOutput())[0][0]);
+    m_variance = sqrt(covarianceAlgorithm->GetCovarianceMatrix()[0][0]);
     DEBUG_LOG(QString("Mean: %1, Variance: %2").arg(m_mean).arg(m_variance));
     //computeSpeedMap(speedMapVolume);
 
@@ -1068,19 +1066,18 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
     }
     DEBUG_LOG(QString("estimed mean: %1").arg(mean));
 
-    typedef itk::Statistics::CovarianceCalculator<SampleType> CovarianceAlgorithmType;
+    typedef itk::Statistics::CovarianceSampleFilter<SampleType> CovarianceAlgorithmType;
     CovarianceAlgorithmType::Pointer covarianceAlgorithm = CovarianceAlgorithmType::New();
 
-    covarianceAlgorithm->SetInputSample(sample);
-    covarianceAlgorithm->SetMean(0);
+    covarianceAlgorithm->SetInput(sample);
     covarianceAlgorithm->Update();
 
     DEBUG_LOG("Using the one pass algorithm:");
     DEBUG_LOG("Mean = ");
-    std::cout << *(covarianceAlgorithm->GetMean()) << std::endl;
+    std::cout << covarianceAlgorithm->GetMean() << std::endl;
 
     DEBUG_LOG("Covariance = ");
-    std::cout << *(covarianceAlgorithm->GetOutput()) << std::endl;
+    std::cout << covarianceAlgorithm->GetCovarianceMatrix() << std::endl;
     const double sqrt2 = 1.41421356;
     //double mean = (*covarianceAlgorithm->GetMean())[0];
     //double variance = (*covarianceAlgorithm->GetOutput())[0][0];
@@ -1091,7 +1088,7 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
     // !!!!!!!!!!!!!!!!!!!!!
 
     m_mean = mean;
-    m_variance = sqrt((*covarianceAlgorithm->GetOutput())[0][0]);
+    m_variance = sqrt(covarianceAlgorithm->GetCovarianceMatrix()[0][0]);
     DEBUG_LOG(QString("Mean: %1, Variance: %2").arg(m_mean).arg(m_variance));
     //computeSpeedMap(speedMapVolume);
 

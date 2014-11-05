@@ -1,48 +1,45 @@
 include(defaultdirectories.pri)
 
-INCLUDEPATH += $${ITKINCLUDEDIR} \
-              $${ITKINCLUDEDIR}/Algorithms \
-              $${ITKINCLUDEDIR}/BasicFilters \
-              $${ITKINCLUDEDIR}/Common \
-              $${ITKINCLUDEDIR}/Numerics \
-              $${ITKINCLUDEDIR}/IO \
-              $${ITKINCLUDEDIR}/Numerics/FEM \
-              $${ITKINCLUDEDIR}/Numerics/Statistics \
-              $${ITKINCLUDEDIR}/SpatialObject \
-              $${ITKINCLUDEDIR}/Utilities/MetaIO \
-              $${ITKINCLUDEDIR}/Utilities \
-              $${ITKINCLUDEDIR}/Utilities/vxl/vcl \
-              $${ITKINCLUDEDIR}/Utilities/vxl/core \
-              $${ITKINCLUDEDIR}/Utilities/NrrdIO
+INCLUDEPATH += $${ITKINCLUDEDIR}
 
-LIBS += -L$${ITKLIBDIR} \
-        -lITKAlgorithms \
-        -lITKBasicFilters \
-        -lITKCommon \
-        -lITKDICOMParser \
-        -lITKEXPAT \
-        -lITKFEM \
-        -lITKIO \
-        -lITKMetaIO \
-        -lITKNrrdIO \
-        -lITKNumerics \
-        -lITKSpatialObject \
-        -lITKStatistics \
-        -litkjpeg12 \
-        -litkjpeg16 \
-        -litkjpeg8 \
-        -litksys \
-        -litkvcl \
-        -litkvnl \
-        -litkvnl_algo \
-        -litkvnl_inst \
-        -lITKniftiio \
-        -litkopenjpeg \
-        -lITKznz
+ITKLIBSUFFIX = -4.6
+ITKLIBS = \
+        ITKCommon \
+        ITKDICOMParser \
+        ITKEXPAT \
+        ITKFEM \
+        ITKMetaIO \
+        ITKNrrdIO \
+        ITKSpatialObjects \
+        ITKStatistics \
+        itkjpeg \
+        itksys \
+        itkvcl \
+        itkvnl \
+        itkvnl_algo \
+        ITKVNLInstantiation \
+        ITKniftiio \
+        ITKznz \
+        ITKOptimizers \
+        ITKIOImageBase \
+        ITKVTK \
+        ITKIOGDCM \
+        itksys \
+        itkdouble-conversion
 
 win32 {
- LIBS += -litktiff \
-         -litkpng \
-         -litkv3p_netlib \
-         -litkzlib
+ ITKLIBS += itktiff \
+         itkpng \
+         itkv3p_netlib \
+         itkzlib
+
+ LIBS += -lShell32
 }
+
+LIBS += -L$${ITKLIBDIR}
+
+for(lib, ITKLIBS) {
+    LIBS += -l$${lib}$${ITKLIBSUFFIX}
+}
+
+

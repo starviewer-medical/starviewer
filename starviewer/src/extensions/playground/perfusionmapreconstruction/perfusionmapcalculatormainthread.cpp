@@ -20,8 +20,8 @@
 #include <vtkMultiThreader.h>
 // ITK
 #include <itkCastImageFilter.h>
-#include <itkVnlFFTRealToComplexConjugateImageFilter.h>
-#include <itkVnlFFTComplexConjugateToRealImageFilter.h>
+#include <itkVnlForwardFFTImageFilter.h>
+#include <itkVnlInverseFFTImageFilter.h>
 
 //Fourier Transform
 //#include <fftw3.h>
@@ -924,7 +924,7 @@ void PerfusionMapCalculatorMainThread::fftAIF()
     typedef itk::ImageRegionIterator<VectorImageType> VectorIterator;
     VectorIterator aifIter(aifImage, aifImage->GetBufferedRegion());
 
-    typedef itk::VnlFFTRealToComplexConjugateImageFilter< double, 1 >  FFTFilterType;
+    typedef itk::VnlForwardFFTImageFilter< VectorImageType >  FFTFilterType;
     FFTFilterType::Pointer fftFilter = FFTFilterType::New();
 
     int i;
@@ -1030,7 +1030,7 @@ void PerfusionMapCalculatorMainThread::deconvolve(QVector<double> tissue, QVecto
     typedef itk::ImageRegionIterator<VectorImageType> VectorIteratorType;
     VectorIteratorType tissueIter(tissueImage, tissueImage->GetBufferedRegion());
 
-    typedef itk::VnlFFTRealToComplexConjugateImageFilter< double, 1 >  FFTFilterType;
+    typedef itk::VnlForwardFFTImageFilter< VectorImageType >  FFTFilterType;
     FFTFilterType::Pointer fftFilter = FFTFilterType::New();
 
     int i;
@@ -1084,7 +1084,7 @@ void PerfusionMapCalculatorMainThread::deconvolve(QVector<double> tissue, QVecto
         ++fftResidualIter;
     }
 
-    typedef itk::VnlFFTComplexConjugateToRealImageFilter< double, 1 >  IFFTFilterType;
+    typedef itk::VnlInverseFFTImageFilter< ComplexImageType >  IFFTFilterType;
     IFFTFilterType::Pointer fftInverseFilter = IFFTFilterType::New();
     fftInverseFilter->SetInput(residualFFTImage);
 
