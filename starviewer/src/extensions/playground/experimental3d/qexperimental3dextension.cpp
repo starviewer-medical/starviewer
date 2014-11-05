@@ -795,9 +795,9 @@ void QExperimental3DExtension::saveImi(QString fileName)
     saveData(fileName, Experimental3DSettings::IntensityMutualInformationDir, tr("IMI"), FileExtensionsDatAll, "dat", m_imi);
 }
 
-const QString QExperimental3DExtension::FileExtensionsDatAll(tr("Data files (*.dat);;All files (*)"));
-const QString QExperimental3DExtension::FileExtensionsTxtAll(tr("Text files (*.txt);;All files (*)"));
-const QString QExperimental3DExtension::FileExtensionsTxtDatAll(tr("Text files (*.txt);;Data files (*.dat);;All files (*)"));
+const QString QExperimental3DExtension::FileExtensionsDatAll(QObject::tr("Data files (*.dat);;All files (*)"));
+const QString QExperimental3DExtension::FileExtensionsTxtAll(QObject::tr("Text files (*.txt);;All files (*)"));
+const QString QExperimental3DExtension::FileExtensionsTxtDatAll(QObject::tr("Text files (*.txt);;Data files (*.dat);;All files (*)"));
 
 template <class T>
 bool QExperimental3DExtension::loadData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, T &data)

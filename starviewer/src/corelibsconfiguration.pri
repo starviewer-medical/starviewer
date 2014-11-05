@@ -5,7 +5,7 @@ CONFIG += warn_on \
           qt \
           stl
           
-win32-msvc2010 {
+win32-msvc2013 {
     OBJECTS_DIR = ../../tmp/obj/$${TARGET}
     }
     else {
