@@ -416,7 +416,8 @@ HEADERS += extensionfactory.h \
     nmctfusionroidataprinter.h \
     vtkcorrectimageblend.h \
     vtktextactorwithbackground.h \
-    volumereaderjobfactory.h
+    volumereaderjobfactory.h \
+    relativegeometrylayout.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -780,7 +781,8 @@ SOURCES += extensionmediator.cpp \
     nmctfusionroidataprinter.cpp \
     vtkcorrectimageblend.cpp \
     vtktextactorwithbackground.cpp \
-    volumereaderjobfactory.cpp
+    volumereaderjobfactory.cpp \
+    relativegeometrylayout.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
