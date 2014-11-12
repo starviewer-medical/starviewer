@@ -20,6 +20,7 @@
 #include "volume.h"
 #include "changesliceqviewercommand.h"
 #include "logging.h"
+#include "q2dviewerwidget.h"
 
 namespace udg {
 
