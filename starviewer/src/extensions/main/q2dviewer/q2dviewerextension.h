@@ -28,6 +28,7 @@ class Volume;
 class ToolManager;
 class ToolConfiguration;
 class HangingProtocol;
+class TransferFunctionModel;
 // Estructura pacient
 class Patient;
 class Study;

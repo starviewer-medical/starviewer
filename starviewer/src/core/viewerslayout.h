@@ -15,14 +15,13 @@
 #ifndef UDGVIEWERSLAYOUT_H
 #define UDGVIEWERSLAYOUT_H
 
-#include "q2dviewerwidget.h"
-
 #include <QWidget>
 
 class QResizeEvent;
 
 namespace udg {
 
+class Q2DViewerWidget;
 /**
     Classe que permet distribuir sobre un widget una sèrie Q2DViewerWidgets
     amb diferents layouts i geometries de forma versàtil.

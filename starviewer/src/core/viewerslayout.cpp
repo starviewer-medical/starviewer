@@ -15,8 +15,8 @@
 #include "viewerslayout.h"
 
 #include "logging.h"
-
 #include "patientbrowsermenu.h"
+#include "q2dviewerwidget.h"
 
 namespace udg {
 
