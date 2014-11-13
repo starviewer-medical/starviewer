@@ -40,7 +40,8 @@ private:
     QList<QPair<Volume*, int> > getImagesToPlace(const StudyLayoutConfig &config, const QList<Study*> &matchingStudies);
     
     /// Donada una llista de volums amb la corresponent llesca, els col·loca al layout segons la configuració donada
-    void placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, StudyLayoutConfig::UnfoldDirectionType unfoldDirection, ViewersLayout *layout);
+    void placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, StudyLayoutConfig::UnfoldDirectionType unfoldDirection,
+                                    ViewersLayout *layout, int rows, int columns);
 };
 
 } // End namespace udg

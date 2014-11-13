@@ -17,11 +17,13 @@
 
 #include <QWidget>
 
-class QResizeEvent;
+#include <QStack>
 
 namespace udg {
 
 class Q2DViewerWidget;
+class RelativeGeometryLayout;
+
 /**
     Classe que permet distribuir sobre un widget una sèrie Q2DViewerWidgets
     amb diferents layouts i geometries de forma versàtil.
@@ -42,13 +44,6 @@ public:
     /// Ens retorna el visor amb índex "number". Si number està fora de rang,
     /// ens retornarà un punter nul.
     Q2DViewerWidget* getViewerWidget(int number);
-
-    /// Ens diu si el layout és regular o no
-    bool isRegular() const;
-
-    /// Retorna el nombre de columnes/files visibles
-    int getVisibleColumns() const;
-    int getVisibleRows() const;
 
     /// Fa un layout regular amb les files i columnes indicades
     void setGrid(int rows, int columns);
@@ -83,22 +78,6 @@ signals:
 
     void manualSynchronizationStateChanged(bool enable);
 
-protected:
-    /// Tractament de l'event de canvi de tamany de la finestra
-    /// Quan rebem aquest event, redimensionem els viewers amb la geometria adequada
-    void resizeEvent(QResizeEvent *event);
-
-private:
-    /// Canviar el nombre de files i columnes
-    void addColumns(int columns = 1);
-    void addRows(int rows = 1);
-    void removeColumns(int columns = 1);
-    void removeRows(int rows = 1);
-    void showRows(int rows);
-    void hideRows(int rows);
-    void showColumns(int columns);
-    void hideColumns(int columns);
-
 private:
     /// Crea i retorna un nou visor configurat adequadament
     Q2DViewerWidget* getNewQ2DViewerWidget();
@@ -114,10 +93,6 @@ private:
     /// Per exemple, un viewer que ocupa la meitat de la pantalla s'expressaria amb un string "0\\0\\0.5\\1.0"
     void setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry);
 
-    /// Inicialitza els objectes que fem servir per distribuir els visors
-    /// Només cal cridar-lo al constructor
-    void initLayouts();
-
     /// Fa les accions necessàries per amagar el viewer indicat del layout actual
     void hideViewer(Q2DViewerWidget *viewer);
 
@@ -125,29 +100,14 @@ private:
     void showViewer(Q2DViewerWidget *viewer);
 
 private:
-    /// Grid per gestionar les distribucions regulars de visors
-    QGridLayout *m_regularViewersGridLayout;
+    RelativeGeometryLayout *m_layout;
 
     /// Visualitzador selecciona. Sempre en tindrem un.
     Q2DViewerWidget *m_selectedViewer;
 
-    /// Nombre de files i columnes pels layouts
-    int m_visibleRows;
-    int m_visibleColumns;
-    int m_totalRows;
-    int m_totalColumns;
+    /// Stores hidden viewers for later reuse.
+    QStack<Q2DViewerWidget*> m_hiddenViewers;
 
-    /// Array amb tots els viewers que podem manipular
-    /// Visors dins del grid regular (distribuits dins del gridLayout)
-    QVector<Q2DViewerWidget*> m_regularViewersGridVector;
-    /// Visors definits amb geometries lliures (distribuits fora del gridLayout)
-    QList<Q2DViewerWidget*> m_freeLayoutViewersList;
-
-    /// Llistat de geometries que cada viewer visible té assignada
-    QStringList m_geometriesList;
-
-    /// Indica si el layout s'ha definit de forma regular (setGrid(rows, columns)) o no
-    bool m_isRegular;
 };
 
 }

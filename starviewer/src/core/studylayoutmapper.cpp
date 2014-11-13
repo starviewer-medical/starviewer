@@ -82,7 +82,7 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
     int columns = grid.second;
     layout->setGrid(rows, columns);
     // Col·loquem les imatges en el layout donat
-    placeImagesInCurrentLayout(candidateImages, config.getUnfoldDirection(), layout);
+    placeImagesInCurrentLayout(candidateImages, config.getUnfoldDirection(), layout, rows, columns);
     // Make the first viewer selected
     layout->setSelectedViewer(layout->getViewerWidget(0));
 }
@@ -146,10 +146,9 @@ QList<QPair<Volume*, int> > StudyLayoutMapper::getImagesToPlace(const StudyLayou
     return candidateImages;
 }
 
-void StudyLayoutMapper::placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, StudyLayoutConfig::UnfoldDirectionType unfoldDirection, ViewersLayout *layout)
+void StudyLayoutMapper::placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, StudyLayoutConfig::UnfoldDirectionType unfoldDirection,
+                                                   ViewersLayout *layout, int rows, int columns)
 {
-    int rows = layout->getVisibleRows();
-    int columns = layout->getVisibleColumns();
     int numberOfVolumesToPlace = volumesToPlace.count();
 
     // Comprovem que tinguem el nombre suficient de files i columnes pel nombre de volums
