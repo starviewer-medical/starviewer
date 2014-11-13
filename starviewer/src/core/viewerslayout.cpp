@@ -114,7 +114,7 @@ ViewersLayout::~ViewersLayout()
 {
 }
 
-Q2DViewerWidget* ViewersLayout::getSelectedViewer()
+Q2DViewerWidget* ViewersLayout::getSelectedViewer() const
 {
     return m_selectedViewer;
 }
@@ -252,7 +252,7 @@ int ViewersLayout::getNumberOfViewers() const
     return m_layout->count();
 }
 
-Q2DViewerWidget* ViewersLayout::getViewerWidget(int number)
+Q2DViewerWidget* ViewersLayout::getViewerWidget(int number) const
 {
     return qobject_cast<Q2DViewerWidget*>(m_layout->itemAt(number)->widget());
 }
