@@ -35,7 +35,7 @@ public:
     ~ViewersLayout();
 
     /// Obtenir el visualitzador seleccionat
-    Q2DViewerWidget* getSelectedViewer();
+    Q2DViewerWidget* getSelectedViewer() const;
 
     /// Ens retorna en nombre de viewers totals que conté el gestor de layouts,
     /// independentment de si són visibles o no.
@@ -43,7 +43,7 @@ public:
 
     /// Ens retorna el visor amb índex "number". Si number està fora de rang,
     /// ens retornarà un punter nul.
-    Q2DViewerWidget* getViewerWidget(int number);
+    Q2DViewerWidget* getViewerWidget(int number) const;
 
     /// Fa un layout regular amb les files i columnes indicades
     void setGrid(int rows, int columns);
