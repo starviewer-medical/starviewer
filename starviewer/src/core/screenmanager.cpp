@@ -372,7 +372,10 @@ QPoint ScreenManager::getBottomRight(const DynamicMatrix &dynamicMatrix) const
         y = std::min(y, m_screenLayout.getScreen(screens[i]).getAvailableGeometry().bottom());
     }
 
-    return QPoint(x, y);
+    // Add 1 to compensate for the fact that right() and bottom() don't return the true right and the true bottom. From QRect documentation:
+    // "Note that for historical reasons the values returned by the bottom() and right() functions deviate from the true bottom-right corner of the rectangle:
+    // The right() function returns left() + width() - 1 and the bottom() function returns top() + height() - 1."
+    return QPoint(x + 1, y + 1);
 }
 
 QRect ScreenManager::getGeometryToMaximizeToMulipleScreens(QWidget *window)
