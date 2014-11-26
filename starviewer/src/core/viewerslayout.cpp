@@ -18,6 +18,9 @@
 #include "patientbrowsermenu.h"
 #include "q2dviewerwidget.h"
 #include "relativegeometrylayout.h"
+#include "screenmanager.h"
+
+namespace udg {
 
 namespace {
 
@@ -99,9 +102,39 @@ public:
 
 };
 
+/// This struct holds information about the screen layout of a window and the position of a viewer in it.
+struct ScreenLayoutInfo {
+    int horizontalNumberOfScreens;
+    int verticalNumberOfScreens;
+    int horizontalPosition;
+    int verticalPosition;
+};
+
+/// Given a window and a viewer, returns a struct with information on the number of screns occupied by the window and on which screen is the viewer.
+ScreenLayoutInfo getScreenLayoutInfo(QWidget *window, QWidget *viewer)
+{
+    ScreenManager screenManager;
+    ScreenLayoutInfo screenLayoutInfo = { 1, 1, 0, 0 };
+
+    if (screenManager.isMaximizedToMultipleScreens(window))
+    {
+        DynamicMatrix dynamicMatrix = screenManager.computeScreenMatrix(window);
+        int screenId = screenManager.getScreenID(viewer);
+        int row, column;
+
+        if (dynamicMatrix.getPosition(screenId, row, column))
+        {
+            screenLayoutInfo.horizontalNumberOfScreens = dynamicMatrix.getNumberOfColumns();
+            screenLayoutInfo.verticalNumberOfScreens = dynamicMatrix.getNumberOfRows();
+            screenLayoutInfo.horizontalPosition = column - dynamicMatrix.getColumnBase();
+            screenLayoutInfo.verticalPosition = row - dynamicMatrix.getRowBase();
+        }
+    }
+
+    return screenLayoutInfo;
 }
 
-namespace udg {
+}
 
 ViewersLayout::ViewersLayout(QWidget *parent)
  : QWidget(parent), m_selectedViewer(0)
@@ -145,6 +178,9 @@ void ViewersLayout::deleteQ2DViewerWidget(Q2DViewerWidget *viewer)
 
 void ViewersLayout::setGrid(int rows, int columns)
 {
+    // Clean maximization data
+    m_maximizedViewers.clear();
+
     int requestedViewers = rows * columns;
 
     // Hide viewers in excess
@@ -162,8 +198,16 @@ void ViewersLayout::setGrid(int rows, int columns)
     // Resize current viewers
     for (int i = 0; i < m_layout->count(); i++)
     {
-        QLayoutItem *item = m_layout->takeAt(0);
-        m_layout->addItem(item, iterator.getRelativeGeometryForCurrentCell());
+        m_layout->setGeometryAt(i, iterator.getRelativeGeometryForCurrentCell());
+
+        // A viewer may be hidden due to maximization of another viewer; make sure it's shown again
+        QLayoutItem *item = m_layout->itemAt(i);
+        Q2DViewerWidget *viewer = qobject_cast<Q2DViewerWidget*>(item->widget());
+        if (viewer->isHidden())
+        {
+            showViewer(viewer);
+        }
+
         iterator.next();
     }
 
@@ -225,6 +269,50 @@ void ViewersLayout::setSelectedViewer(Q2DViewerWidget *viewer)
     }
 }
 
+void ViewersLayout::toggleMaximization(Q2DViewerWidget *viewer)
+{
+    if (m_maximizedViewers.contains(viewer))
+    {
+        // Demaximize
+        foreach (Q2DViewerWidget *occludedViewer, m_maximizedViewers[viewer].occludedViewers)
+        {
+            showViewer(occludedViewer);
+        }
+
+        m_layout->setGeometry(viewer, m_maximizedViewers[viewer].normalGeometry);
+        m_maximizedViewers.remove(viewer);
+        m_layout->invalidate();
+    }
+    else
+    {
+        // Maximize
+        ScreenLayoutInfo screenLayoutInfo = getScreenLayoutInfo(window(), viewer);
+
+        QRectF geometry;
+        geometry.setX(static_cast<double>(screenLayoutInfo.horizontalPosition) / screenLayoutInfo.horizontalNumberOfScreens);
+        geometry.setY(static_cast<double>(screenLayoutInfo.verticalPosition) / screenLayoutInfo.verticalNumberOfScreens);
+        geometry.setWidth(1.0 / screenLayoutInfo.horizontalNumberOfScreens);
+        geometry.setHeight(1.0 / screenLayoutInfo.verticalNumberOfScreens);
+
+        m_maximizedViewers[viewer].normalGeometry = m_layout->geometry(viewer);
+        m_layout->setGeometry(viewer, geometry);
+        viewer->raise();
+        m_layout->invalidate();
+
+        for (int i = 0; i < m_layout->count(); i++)
+        {
+            Q2DViewerWidget *occludedViewer = qobject_cast<Q2DViewerWidget*>(m_layout->itemAt(i)->widget());
+            QRectF occludedGeometry = m_layout->geometryAt(i);
+
+            if (occludedViewer != viewer && geometry.contains(occludedGeometry))
+            {
+                hideViewer(occludedViewer);
+                m_maximizedViewers[viewer].occludedViewers.insert(occludedViewer);
+            }
+        }
+    }
+}
+
 void ViewersLayout::cleanUp()
 {
     // No hi ha cap visor seleccionat
@@ -245,6 +333,9 @@ void ViewersLayout::cleanUp()
     {
         deleteQ2DViewerWidget(m_hiddenViewers.pop());
     }
+
+    // Clean maximization data
+    m_maximizedViewers.clear();
 }
 
 int ViewersLayout::getNumberOfViewers() const
