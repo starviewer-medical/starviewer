@@ -17,6 +17,8 @@
 
 #include <QWidget>
 
+#include <QMap>
+#include <QSet>
 #include <QStack>
 
 namespace udg {
@@ -58,6 +60,9 @@ public:
 public slots:
     /// Marquem com a seleccionat el viewer passat per paràmetre
     void setSelectedViewer(Q2DViewerWidget *viewer);
+
+    /// Resizes the given viewer to change between normal (demaximized) and maximized states.
+    void toggleMaximization(Q2DViewerWidget *viewer);
 
 signals:
     /// Senyal que s'emet quan s'afegeix un visualitzador
@@ -107,6 +112,16 @@ private:
 
     /// Stores hidden viewers for later reuse.
     QStack<Q2DViewerWidget*> m_hiddenViewers;
+
+    /// This struct holds the information needed to demaximize a maximized viewer.
+    struct MaximizationData
+    {
+        QRectF normalGeometry;
+        QSet<Q2DViewerWidget*> occludedViewers;
+    };
+
+    /// Maps each maximized viewer to its maximization data.
+    QMap<Q2DViewerWidget*, MaximizationData> m_maximizedViewers;
 
 };
 
