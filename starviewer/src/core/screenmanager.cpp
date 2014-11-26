@@ -136,7 +136,7 @@ int ScreenManager::getScreenID(const QPoint &point) const
     return m_applicationDesktop->screenNumber(point);
 }
 
-DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
+DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window) const
 {
     int desktopIAm = getScreenID(window);
 

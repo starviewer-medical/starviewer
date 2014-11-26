@@ -56,14 +56,15 @@ public:
     int getScreenID(QWidget *window) const;
     int getScreenID(const QPoint &point) const;
 
+    /// Calcula la matriu de distribució de les pantalles.
+    /// Utilitza la classe DynamicMatrix per crear-se l'estructura de dades per representar la distribució de
+    /// les pantalles a l'espai.
+    DynamicMatrix computeScreenMatrix(QWidget *window) const;
+
 private:
     /// Prepara l'screen layout segons la configuració actual
     void setupCurrentScreenLayout();
     
-    /// Calcula la matriu de distribució de les pantalles.
-    /// Utilitza la classe DynamicMatrix per crear-se l'estructura de dades per representar la distribució de
-    /// les pantalles a l'espai.
-    DynamicMatrix computeScreenMatrix(QWidget *window);
     /// Retorna si la finestra passada per paràmetre cap dins la pantalla.
     bool doesItFitInto(QWidget *window, int IdDesktop);
     /// Modifica el tamany de la finestra passada per paràmtre per tal de que càpiga a la pantalla amb id IdDesktop.
