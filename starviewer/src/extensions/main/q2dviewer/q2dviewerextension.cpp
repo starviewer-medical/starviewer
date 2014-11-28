@@ -587,6 +587,8 @@ void Q2DViewerExtension::initializeTools()
 
 void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
 {
+    connect(newViewerWidget, SIGNAL(doubleClicked(Q2DViewerWidget*)), SLOT(handleViewerDoubleClick(Q2DViewerWidget*)));
+
     // Activem/Desactivem les capes d'annotacions segons l'estat del botó
     // Informació de l'estudi
     newViewerWidget->getViewer()->enableAnnotation(AllAnnotation, m_showViewersTextualInformationAction->isChecked());
@@ -1034,6 +1036,23 @@ void Q2DViewerExtension::setTransferFunctionToCurrentViewer(int transferFunction
     // For now, always set the transfer function to the last volume
     viewer->setVolumeTransferFunction(viewer->getNumberOfInputs() - 1, viewer->getTransferFunctionModel()->getTransferFunction(transferFunctionIndex));
     viewer->render();
+}
+
+void Q2DViewerExtension::handleViewerDoubleClick(Q2DViewerWidget *viewerWidget)
+{
+    QSet<QString> toolsIncompatibleWithDoubleClickMaximization;
+    toolsIncompatibleWithDoubleClickMaximization << "AngleTool" << "NonClosedAngleTool" << "DistanceTool" << "PerpendicularDistanceTool"
+                                                 << "MagicROITool" << "PolylineROITool";
+
+    foreach (const QString &tool, toolsIncompatibleWithDoubleClickMaximization)
+    {
+        if (viewerWidget->getViewer()->getToolProxy()->isToolActive(tool))
+        {
+            return;
+        }
+    }
+
+    m_workingArea->toggleMaximization(viewerWidget);
 }
 
 }

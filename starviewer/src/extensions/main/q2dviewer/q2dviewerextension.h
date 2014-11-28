@@ -202,6 +202,10 @@ private slots:
     /// Sets the transfer function at the given index in the current model to the current viewer.
     void setTransferFunctionToCurrentViewer(int transferFunctionIndex);
 
+    /// When a viewer receives a double click, this method checks which tools are active and
+    /// if none of them processes single or double clicks then maximizes or demaximizes the viewer.
+    void handleViewerDoubleClick(Q2DViewerWidget *viewerWidget);
+
 private:
     /// Accions
     QAction *m_singleShotAction;

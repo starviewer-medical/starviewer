@@ -65,6 +65,9 @@ signals:
 
     void manualSynchronizationStateChanged(bool enable);
 
+    /// Emitted when the underlying viewer is double-clicked.
+    void doubleClicked(Q2DViewerWidget *viewer);
+
 protected:
     /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
     void mousePressEvent(QMouseEvent *mouseEvent);
@@ -106,6 +109,9 @@ private slots:
 
     /// If the viewer has 2 inputs shows the fusion balance tool button and resets the fusion balance to 50% for each input. Otherwise hides the button.
     void resetFusionBalance();
+
+    /// Emits the doubleClicked() signal.
+    void emitDoubleClicked();
 
 private:
     /// Acció del boto de sincronitzar
