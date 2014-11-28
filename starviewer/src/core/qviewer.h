@@ -244,6 +244,9 @@ signals:
     /// Signal emitted when the anatomical view has changed
     void anatomicalViewChanged(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
 
+    /// Emitted when this viewer receives a double click event.
+    void doubleClicked();
+
 protected:
     /// Gets the bounds of the rendered item
     virtual void getCurrentRenderedItemBounds(double bounds[6]) = 0;
