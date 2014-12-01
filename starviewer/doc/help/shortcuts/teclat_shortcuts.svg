@@ -999,10 +999,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.9613019"
-     inkscape:cx="160.13481"
+     inkscape:cx="330.88439"
      inkscape:cy="782.70003"
      inkscape:document-units="px"
-     inkscape:current-layer="g5074-2-8"
+     inkscape:current-layer="layer1"
      inkscape:window-width="1680"
      inkscape:window-height="988"
      inkscape:window-x="-8"
@@ -1014,7 +1014,7 @@
      showguides="true"
      inkscape:guide-bbox="true"
      showgrid="false"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:snap-nodes="true"
      inkscape:snap-global="false"
      inkscape:snap-page="false" />
@@ -1056,8 +1056,8 @@
          id="rect5999"
          width="7947.0723"
          height="2687.5476"
-         x="-485.45352"
-         y="-5058.3765"
+         x="-541.18848"
+         y="-5095.604"
          rx="99.186195"
          ry="92.006477" />
       <rect
@@ -1069,17 +1069,18 @@
          width="7894.9946"
          id="rect5020"
          style="fill:#e6e6e6;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:7.5;marker:none;visibility:visible;display:inline;overflow:visible;filter:url(#filter5995);enable-background:accumulate"
-         transform="matrix(1,0,0,0.9526606,0,-246.18746)" />
+         transform="matrix(1,0,0,0.9526606,-55.73499,-283.41518)"
+         inkscape:export-xdpi="400"
+         inkscape:export-ydpi="400" />
       <rect
          style="opacity:0;fill:#aaaaff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.94488591;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          id="rect3633"
-         width="68.321968"
-         height="14.786097"
-         x="363.53403"
-         y="273.7977"
-         transform="matrix(9.222266,0,0,9.222266,1144.3007,-5782.0663)"
-         rx="45.072746"
-         ry="14.786097" />
+         width="630.08337"
+         height="136.36131"
+         x="4441.1738"
+         y="-3294.2585"
+         rx="415.67285"
+         ry="136.36131" />
     </g>
     <rect
        style="fill:#333333;fill-opacity:1;stroke:none;display:inline;filter:url(#filter8650)"
