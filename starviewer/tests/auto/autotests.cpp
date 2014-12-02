@@ -109,7 +109,7 @@ inline int run()
 
     foreach (QObject *test, selectTestsToExecute(testsToExecuteOptions))
     {
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
         FILE *stream;
         bool closeStream = false;
 
@@ -131,7 +131,7 @@ inline int run()
             freopen(qPrintable(QString("%1/%2.txt").arg(dirToSaveTests).arg(test->objectName())), "w", stdout);
         }
         ret += QTest::qExec(test, modifiedArgc, modifiedArgv);
- #endif
+#endif
     }
 
     //Eliminem la llista de paràmetres
