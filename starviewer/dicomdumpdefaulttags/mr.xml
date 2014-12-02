@@ -33,7 +33,10 @@
             <group>0020</group>
             <element>0013</element>
         </tag>
-
+		<tag>
+            <group>0020</group>
+            <element>4000</element>
+        </tag>
         <tag>
             <group>0018</group>
             <element>1100</element>
