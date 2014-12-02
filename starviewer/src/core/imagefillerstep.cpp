@@ -1081,7 +1081,8 @@ void ImageFillerStep::fillDisplayShutterInformation(Image *image, DICOMSequenceI
             {
                 for (int i = 0; i < vertices.count() - 1; i += 2 )
                 {
-                    polygonVertices << QPoint(vertices.at(i).toInt(), vertices.at(i + 1).toInt());
+                    // Pairs are defined as row and column
+                    polygonVertices << QPoint(vertices.at(i + 1).toInt(), vertices.at(i).toInt());
                 }
             }
         }
