@@ -417,7 +417,8 @@ HEADERS += extensionfactory.h \
     vtkcorrectimageblend.h \
     vtktextactorwithbackground.h \
     volumereaderjobfactory.h \
-    relativegeometrylayout.h
+    relativegeometrylayout.h \
+    griditerator.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -782,7 +783,8 @@ SOURCES += extensionmediator.cpp \
     vtkcorrectimageblend.cpp \
     vtktextactorwithbackground.cpp \
     volumereaderjobfactory.cpp \
-    relativegeometrylayout.cpp
+    relativegeometrylayout.cpp \
+    griditerator.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

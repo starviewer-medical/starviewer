@@ -14,6 +14,7 @@
 
 #include "viewerslayout.h"
 
+#include "griditerator.h"
 #include "logging.h"
 #include "patientbrowsermenu.h"
 #include "q2dviewerwidget.h"
@@ -23,65 +24,6 @@
 namespace udg {
 
 namespace {
-
-/**
- * @brief The GridIterator class allows easy iteration over the cells of a grid.
- *
- * Given the grid size in rows and columns, it starts at the first cell (0,0) and iterates from left to right and from top to bottom.
- */
-class GridIterator {
-
-public:
-    GridIterator(int rows, int columns) :
-        m_rows(rows), m_columns(columns), m_rowIndex(0), m_columnIndex(0)
-    {
-    }
-
-    int rows() const
-    {
-        return m_rows;
-    }
-
-    int columns() const
-    {
-        return m_columns;
-    }
-
-    int row() const
-    {
-        return m_rowIndex;
-    }
-
-    int column() const
-    {
-        return m_columnIndex;
-    }
-
-    /// Advances the iterator to the next cell.
-    void next()
-    {
-        m_columnIndex++;
-
-        if (m_columnIndex == m_columns)
-        {
-            m_rowIndex++;
-            m_columnIndex = 0;
-        }
-    }
-
-    /// Returns true if the iterator has reached the end, i.e. if it is pointing to an invalid cell.
-    bool isAtEnd() const
-    {
-        return m_rowIndex >= m_rows;
-    }
-
-private:
-    int m_rows;
-    int m_columns;
-    int m_rowIndex;
-    int m_columnIndex;
-
-};
 
 /**
  * @brief The ExtendedGridIterator class extends the regular GridIterator with a method that returns the relative geometry corresponding to the current cell.
