@@ -82,7 +82,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_standardizeduptakevaluebodyweightformulacalculator.cpp \
            $$PWD/test_standardizeduptakevaluebodysurfaceareaformulacalculator.cpp \
            $$PWD/test_relativegeometrylayout.cpp \
-           $$PWD/test_griditerator.cpp
+           $$PWD/test_griditerator.cpp \
+           $$PWD/test_voilut.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \
