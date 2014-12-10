@@ -31,7 +31,7 @@
 #include "q2dviewer.h"
 #include "starviewerapplication.h"
 #include "toolmanager.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències
 // de interface, pacs, etc.etc.!!
@@ -144,7 +144,7 @@ void QDicomPrintExtension::updateInput()
 
     updateVolumeSupport();
 
-    WindowLevelPresetsToolData *windowLevelData = m_2DView->getWindowLevelData();
+    VoiLutPresetsToolData *windowLevelData = m_2DView->getWindowLevelData();
     m_windowLevelComboBox->setPresetsData(windowLevelData);
     windowLevelData->selectCurrentPreset(windowLevelData->getCurrentPreset().getName());
 }

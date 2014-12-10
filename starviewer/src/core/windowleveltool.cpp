@@ -15,7 +15,7 @@
 #include "windowleveltool.h"
 #include "q2dviewer.h"
 #include "logging.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "volumehelper.h"
 
 #include <vtkCommand.h>

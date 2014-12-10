@@ -30,7 +30,7 @@ class ImagePipeline;
 class OrthogonalPlane;
 class SliceHandler;
 class Volume;
-class WindowLevelPresetsToolData;
+class VoiLutPresetsToolData;
 class VolumePixelData;
 
 /**
@@ -50,9 +50,9 @@ public:
     void setVolume(Volume *volume);
 
     /// Returns the window level data
-    WindowLevelPresetsToolData* getWindowLevelData();
+    VoiLutPresetsToolData* getWindowLevelData();
     /// Sets a new window level data
-    void setWindowLevelData(WindowLevelPresetsToolData *windowLevelData);
+    void setWindowLevelData(VoiLutPresetsToolData *windowLevelData);
 
     /// Returns the image pipeline.
     ImagePipeline* getImagePipeline() const;
@@ -165,7 +165,7 @@ private:
     vtkPropPicker *m_imagePointPicker;
 
     /// Window and level data
-    WindowLevelPresetsToolData *m_windowLevelData;
+    VoiLutPresetsToolData *m_windowLevelData;
 
     /// The current transfer function.
     TransferFunction m_transferFunction;

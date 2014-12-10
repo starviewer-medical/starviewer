@@ -22,7 +22,7 @@
 #include "mathtools.h"
 #include "imageorientationoperationsmapper.h"
 #include "transferfunction.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "coresettings.h"
 #include "qviewerworkinprogresswidget.h"
 #include "patientorientation.h"
@@ -590,7 +590,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     getDisplayUnit(0)->setWindowLevelData(getWindowLevelData());
     for (int i = 1; i < getNumberOfInputs(); i++)
     {
-        getDisplayUnit(i)->setWindowLevelData(new WindowLevelPresetsToolData(this));
+        getDisplayUnit(i)->setWindowLevelData(new VoiLutPresetsToolData(this));
     }
 
     addImageActors();
@@ -1961,7 +1961,7 @@ int Q2DViewer::indexOfVolume(const Volume *volume) const
     return -1;
 }
 
-WindowLevelPresetsToolData* Q2DViewer::getWindowLevelDataForVolume(int index) const
+VoiLutPresetsToolData* Q2DViewer::getWindowLevelDataForVolume(int index) const
 {
     return getDisplayUnit(index)->getWindowLevelData();
 }

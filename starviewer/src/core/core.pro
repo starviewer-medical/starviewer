@@ -130,7 +130,6 @@ HEADERS += extensionfactory.h \
     distancetool.h \
     editortool.h \
     editortooldata.h \
-    windowlevelpresetstooldata.h \
     qviewercinecontroller.h \
     qcinecontroller.h \
     hoverpoints.h \
@@ -419,7 +418,8 @@ HEADERS += extensionfactory.h \
     volumereaderjobfactory.h \
     relativegeometrylayout.h \
     griditerator.h \
-    voilut.h
+    voilut.h \
+    voilutpresetstooldata.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -514,7 +514,6 @@ SOURCES += extensionmediator.cpp \
     polylinetemporalroitool.cpp \
     polylinetemporalroitooldata.cpp \
     distancetool.cpp \
-    windowlevelpresetstooldata.cpp \
     qviewercinecontroller.cpp \
     qcinecontroller.cpp \
     hoverpoints.cpp \
@@ -786,7 +785,8 @@ SOURCES += extensionmediator.cpp \
     volumereaderjobfactory.cpp \
     relativegeometrylayout.cpp \
     griditerator.cpp \
-    voilut.cpp
+    voilut.cpp \
+    voilutpresetstooldata.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

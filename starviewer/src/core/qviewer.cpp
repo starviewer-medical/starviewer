@@ -19,7 +19,7 @@
 #include "toolproxy.h"
 #include "patientbrowsermenu.h"
 // Per poder afegir i modificar els presets que visualitzem
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "qviewerworkinprogresswidget.h"
 #include "windowlevelhelper.h"
 #include "logging.h"
@@ -74,7 +74,7 @@ QViewer::QViewer(QWidget *parent)
     connect(this, SIGNAL(eventReceived(unsigned long)), m_toolProxy, SLOT(forwardEvent(unsigned long)));
 
     // Inicialitzem el window level data
-    setWindowLevelData(new WindowLevelPresetsToolData(this));
+    setWindowLevelData(new VoiLutPresetsToolData(this));
 
     m_workInProgressWidget = new QViewerWorkInProgressWidget(this);
 
@@ -545,12 +545,12 @@ void QViewer::fitRenderingIntoViewport()
     }
 }
 
-WindowLevelPresetsToolData* QViewer::getWindowLevelData() const
+VoiLutPresetsToolData* QViewer::getWindowLevelData() const
 {
     return m_windowLevelData;
 }
 
-void QViewer::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
+void QViewer::setWindowLevelData(VoiLutPresetsToolData *windowLevelData)
 {
     if (m_windowLevelData)
     {

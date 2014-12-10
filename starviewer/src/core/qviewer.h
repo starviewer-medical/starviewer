@@ -40,7 +40,7 @@ class Volume;
 class Series;
 class Image;
 class ToolProxy;
-class WindowLevelPresetsToolData;
+class VoiLutPresetsToolData;
 class PatientBrowserMenu;
 class QViewerWorkInProgressWidget;
 class WindowLevel;
@@ -140,11 +140,11 @@ public:
     /// Ens retorna l'objecte que conté tota la informació referent al window level
     /// que es pot aplicar sobre aquest visor
     /// @return L'objecte WindowLevelPresetsToolData
-    WindowLevelPresetsToolData* getWindowLevelData() const;
+    VoiLutPresetsToolData* getWindowLevelData() const;
 
     /// Li assignem el window level data externament
     /// @param windowLevelData
-    void setWindowLevelData(WindowLevelPresetsToolData *windowLevelData);
+    void setWindowLevelData(VoiLutPresetsToolData *windowLevelData);
 
     /// Habilita/deshabilita que els renderings es facin efectius
     /// Útil en els casos en que necessitem fer diverses operacions de
@@ -338,7 +338,7 @@ protected:
     bool m_mouseHasMoved;
 
     /// Dades de valors predeterminats de window level i dels valors actuals que s'apliquen
-    WindowLevelPresetsToolData *m_windowLevelData;
+    VoiLutPresetsToolData *m_windowLevelData;
 
     /// Indica si hem de fer l'acció de renderitzar o no
     bool m_isRenderingEnabled;

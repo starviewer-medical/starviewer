@@ -14,7 +14,7 @@
 
 #include "q3dmprviewer.h"
 
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "transferfunction.h"
 
 // Includes vtk

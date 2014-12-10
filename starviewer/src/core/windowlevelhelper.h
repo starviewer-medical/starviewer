@@ -19,7 +19,7 @@
 
 namespace udg {
 
-class WindowLevelPresetsToolData;
+class VoiLutPresetsToolData;
 class Volume;
 class Image;
 
@@ -28,7 +28,7 @@ public:
     WindowLevelHelper();
 
     /// Initialize the window level data according to the given volume
-    void initializeWindowLevelData(WindowLevelPresetsToolData *windowLevelData, Volume *volume);
+    void initializeWindowLevelData(VoiLutPresetsToolData *windowLevelData, Volume *volume);
 
     /// Gets the n-th default window level from the given image and index, prepared for display,
     /// i.e. if image is MONOCHROME1, it will invert values and give a proper name if no description is available
@@ -36,7 +36,7 @@ public:
     WindowLevel getDefaultWindowLevelForPresentation(Image *image, int index);
 
     /// Selects the default preset to apply on the given window level data corresponding to the given volume.
-    static void selectDefaultPreset(WindowLevelPresetsToolData *windowLevelData, Volume *volume);
+    static void selectDefaultPreset(VoiLutPresetsToolData *windowLevelData, Volume *volume);
 
 private:
     /// Computes the automatic window level for the current input

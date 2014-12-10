@@ -12,14 +12,16 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "customwindowlevelsrepository.h"
 #include "logging.h"
+#include "windowlevel.h"
+
 #include <QStringList>
 
 namespace udg {
 
-WindowLevelPresetsToolData::WindowLevelPresetsToolData(QObject *parent)
+VoiLutPresetsToolData::VoiLutPresetsToolData(QObject *parent)
  : ToolData(parent)
 {
     // Per defecte afegirem els window levels predeterminats estàndar.
@@ -48,19 +50,19 @@ WindowLevelPresetsToolData::WindowLevelPresetsToolData(QObject *parent)
     connect(CustomWindowLevelsRepository::getRepository(), SIGNAL(changed()), this, SLOT(updateCustomWindowLevels()));
 }
 
-WindowLevelPresetsToolData::~WindowLevelPresetsToolData()
+VoiLutPresetsToolData::~VoiLutPresetsToolData()
 {
 }
 
-void WindowLevelPresetsToolData::addPreset(const WindowLevel &preset, int group)
+void VoiLutPresetsToolData::addPreset(const WindowLevel &preset, int group)
 {
     QString presetName = preset.getName();
-    QMapIterator<int, WindowLevel> iterator(m_presetsByGroup);
+    QMapIterator<int, VoiLut> iterator(m_presetsByGroup);
     bool found = false;
     while (iterator.hasNext() && !found)
     {
         iterator.next();
-        if (iterator.value().getName() == presetName)
+        if (iterator.value().getExplanation() == presetName)
         {
             found = true;
         }
@@ -73,13 +75,13 @@ void WindowLevelPresetsToolData::addPreset(const WindowLevel &preset, int group)
     emit presetAdded(preset);
 }
 
-void WindowLevelPresetsToolData::removePreset(const WindowLevel &preset)
+void VoiLutPresetsToolData::removePreset(const WindowLevel &preset)
 {
-    QMutableMapIterator<int, WindowLevel> iterator(m_presetsByGroup);
+    QMutableMapIterator<int, VoiLut> iterator(m_presetsByGroup);
     while (iterator.hasNext())
     {
         iterator.next();
-        if (iterator.value().getName() == preset.getName())
+        if (iterator.value().getExplanation() == preset.getName())
         {
             emit presetRemoved(preset);
             iterator.remove();
@@ -87,25 +89,25 @@ void WindowLevelPresetsToolData::removePreset(const WindowLevel &preset)
     }
 }
 
-void WindowLevelPresetsToolData::removePresetsFromGroup(int group)
+void VoiLutPresetsToolData::removePresetsFromGroup(int group)
 {
-    foreach (const WindowLevel &preset, m_presetsByGroup.values(group))
+    foreach (const VoiLut &preset, m_presetsByGroup.values(group))
     {
-        emit presetRemoved(preset);
+        emit presetRemoved(preset.getWindowLevel());
     }
     m_presetsByGroup.remove(group);
 }
 
-bool WindowLevelPresetsToolData::getFromDescription(const QString &description, WindowLevel &preset)
+bool VoiLutPresetsToolData::getFromDescription(const QString &description, WindowLevel &preset)
 {
     bool found = false;
-    QMapIterator<int, WindowLevel> iterator(m_presetsByGroup);
+    QMapIterator<int, VoiLut> iterator(m_presetsByGroup);
     while (iterator.hasNext() && !found)
     {
         iterator.next();
-        if (iterator.value().getName() == description)
+        if (iterator.value().getExplanation() == description)
         {
-            preset = iterator.value();
+            preset = iterator.value().getWindowLevel();
             found = true;
         }
     }
@@ -113,7 +115,7 @@ bool WindowLevelPresetsToolData::getFromDescription(const QString &description, 
     return found;
 }
 
-bool WindowLevelPresetsToolData::getGroup(const WindowLevel &preset, int &group)
+bool VoiLutPresetsToolData::getGroup(const WindowLevel &preset, int &group)
 {
     bool found = false;
     foreach (int key, m_presetsByGroup.keys())
@@ -135,7 +137,7 @@ bool WindowLevelPresetsToolData::getGroup(const WindowLevel &preset, int &group)
     return found;
 }
 
-QStringList WindowLevelPresetsToolData::getDescriptionsFromGroup(int group)
+QStringList VoiLutPresetsToolData::getDescriptionsFromGroup(int group)
 {
     QStringList descriptionList;
     QList<WindowLevel> windowLevelList = getPresetsFromGroup(group);
@@ -148,43 +150,54 @@ QStringList WindowLevelPresetsToolData::getDescriptionsFromGroup(int group)
     return descriptionList;
 }
 
+namespace {
+
 bool windowLevelLessThanSortOperator(const WindowLevel &wl1, const WindowLevel &wl2)
 {
     return wl1.getName() < wl2.getName();
 }
 
-QList<WindowLevel> WindowLevelPresetsToolData::getPresetsFromGroup(int group)
+}
+
+QList<WindowLevel> VoiLutPresetsToolData::getPresetsFromGroup(int group)
 {
-    QList<WindowLevel> windowLevelList = m_presetsByGroup.values(group);
+    QList<VoiLut> voiLutList = m_presetsByGroup.values(group);
+    QList<WindowLevel> windowLevelList;
+
+    foreach (const VoiLut &voiLut, voiLutList)
+    {
+        windowLevelList.append(voiLut.getWindowLevel());
+    }
+
     // The list has to be sorted to be coherent with the overloaded version wich returns a QStringList
     qSort(windowLevelList.begin(), windowLevelList.end(), windowLevelLessThanSortOperator);
     
     return windowLevelList;
 }
 
-QString WindowLevelPresetsToolData::getCurrentPresetName() const
+QString VoiLutPresetsToolData::getCurrentPresetName() const
 {
-    return m_currentPreset.getName();
+    return m_currentPreset.getExplanation();
 }
 
-WindowLevel WindowLevelPresetsToolData::getCurrentPreset() const
+WindowLevel VoiLutPresetsToolData::getCurrentPreset() const
 {
-    return m_currentPreset;
+    return m_currentPreset.getWindowLevel();
 }
 
-bool WindowLevelPresetsToolData::updatePreset(const WindowLevel &preset)
+bool VoiLutPresetsToolData::updatePreset(const WindowLevel &preset)
 {
     bool found = false;
-    QMutableMapIterator<int, WindowLevel> iterator(m_presetsByGroup);
+    QMutableMapIterator<int, VoiLut> iterator(m_presetsByGroup);
     while (iterator.hasNext() && !found)
     {
         iterator.next();
-        if (iterator.value().getName() == preset.getName())
+        if (iterator.value().getExplanation() == preset.getName())
         {
             iterator.value() = preset;
             found = true;
 
-            if (m_currentPreset.getName() == preset.getName())
+            if (m_currentPreset.getExplanation() == preset.getName())
             {
                 m_currentPreset = preset;
             }
@@ -200,16 +213,16 @@ bool WindowLevelPresetsToolData::updatePreset(const WindowLevel &preset)
     return found;
 }
 
-QString WindowLevelPresetsToolData::getCustomPresetName()
+QString VoiLutPresetsToolData::getCustomPresetName()
 {
     return tr("Custom");
 }
 
-void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double level)
+void VoiLutPresetsToolData::setCustomWindowLevel(double window, double level)
 {
     WindowLevel customPreset(window, level, getCustomPresetName());
     updatePreset(customPreset);
-    if (m_currentPreset.getName() != customPreset.getName())
+    if (m_currentPreset.getExplanation() != customPreset.getName())
     {
         selectCurrentPreset(customPreset.getName());
     }
@@ -219,7 +232,7 @@ void WindowLevelPresetsToolData::setCustomWindowLevel(double window, double leve
     }
 }
 
-void WindowLevelPresetsToolData::selectCurrentPreset(const QString &presetName)
+void VoiLutPresetsToolData::selectCurrentPreset(const QString &presetName)
 {
     WindowLevel preset;
     if (getFromDescription(presetName, preset))
@@ -229,7 +242,7 @@ void WindowLevelPresetsToolData::selectCurrentPreset(const QString &presetName)
     }
 }
 
-void WindowLevelPresetsToolData::setCurrentPreset(const WindowLevel &preset)
+void VoiLutPresetsToolData::setCurrentPreset(const WindowLevel &preset)
 {
     WindowLevel internalPreset;
     if (getFromDescription(preset.getName(), internalPreset))
@@ -251,7 +264,7 @@ void WindowLevelPresetsToolData::setCurrentPreset(const WindowLevel &preset)
     selectCurrentPreset(preset.getName());
 }
 
-void WindowLevelPresetsToolData::loadCustomWindowLevelPresets()
+void VoiLutPresetsToolData::loadCustomWindowLevelPresets()
 {
     foreach (WindowLevel *customWindowLevel, CustomWindowLevelsRepository::getRepository()->getItems())
     {
@@ -259,7 +272,7 @@ void WindowLevelPresetsToolData::loadCustomWindowLevelPresets()
     }
 }
 
-void WindowLevelPresetsToolData::updateCustomWindowLevels()
+void VoiLutPresetsToolData::updateCustomWindowLevels()
 {
     this->removePresetsFromGroup(UserDefined);
     this->loadCustomWindowLevelPresets();

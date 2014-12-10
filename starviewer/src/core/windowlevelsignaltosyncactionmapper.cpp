@@ -15,7 +15,7 @@
 #include "windowlevelsignaltosyncactionmapper.h"
 
 #include "q2dviewer.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "windowlevelsyncaction.h"
 
 namespace udg {

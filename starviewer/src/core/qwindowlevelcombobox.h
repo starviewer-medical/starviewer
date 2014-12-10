@@ -21,7 +21,7 @@ namespace udg {
 
 // FWD declarations
 class QCustomWindowLevelDialog;
-class WindowLevelPresetsToolData;
+class VoiLutPresetsToolData;
 class WindowLevel;
 
 /**
@@ -35,7 +35,7 @@ public:
 
     /// Li assignem la font de dades a partir de la qual obté els valors de window level
     /// @param windowLevelData Les dades en sí
-    void setPresetsData(WindowLevelPresetsToolData *windowLevelData);
+    void setPresetsData(VoiLutPresetsToolData *windowLevelData);
 
     /// Neteja el contingut del combo box i elimina qualsevol referència a un WindowLevelPresetsToolData
     void clearPresets();
@@ -70,7 +70,7 @@ private:
     QCustomWindowLevelDialog *m_customWindowLevelDialog;
 
     /// Les dades dels valors pre-establerts
-    WindowLevelPresetsToolData *m_presetsData;
+    VoiLutPresetsToolData *m_presetsData;
 
     /// Ens guardem el preset actual per reestablir-lo si l'usuari clica l'editor de WW/WL ja que sinó quedaria la fila de l'editor seleccionada.
     QString m_currentSelectedPreset;

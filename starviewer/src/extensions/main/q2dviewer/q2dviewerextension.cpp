@@ -25,7 +25,7 @@
 #include "study.h"
 #include "toolmanager.h"
 #include "toolconfiguration.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "qdicomdumpbrowser.h"
 #include "statswatcher.h"
 #include "automaticsynchronizationtool.h"
@@ -657,7 +657,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
 
             // TODO Potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
             // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
-            WindowLevelPresetsToolData *windowLevelData = selected2DViewer->getWindowLevelData();
+            VoiLutPresetsToolData *windowLevelData = selected2DViewer->getWindowLevelData();
             m_windowLevelComboBox->setPresetsData(windowLevelData);
             windowLevelData->selectCurrentPreset(windowLevelData->getCurrentPreset().getName());
 
