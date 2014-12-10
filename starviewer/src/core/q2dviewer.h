@@ -277,7 +277,7 @@ public:
     int indexOfVolume(const Volume *volume) const;
 
     /// Returns window level data corresponding to the volume at the given index.
-    WindowLevelPresetsToolData* getWindowLevelDataForVolume(int index) const;
+    VoiLutPresetsToolData* getWindowLevelDataForVolume(int index) const;
 
     /// Returns the fusion balance as a value in the range [0, 100] representing the weight of the second input.
     int getFusionBalance() const;

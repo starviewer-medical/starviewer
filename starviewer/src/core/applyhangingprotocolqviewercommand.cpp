@@ -17,7 +17,7 @@
 #include "q2dviewerwidget.h"
 #include "hangingprotocoldisplayset.h"
 #include "hangingprotocolimageset.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "q2dviewer.h"
 #include "logging.h"
 

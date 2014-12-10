@@ -15,7 +15,7 @@
 #include "qwindowlevelcombobox.h"
 #include "qcustomwindowleveldialog.h"
 #include "logging.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "qcustomwindowleveleditwidget.h"
 #include "coresettings.h"
 #include "windowlevel.h"
@@ -37,7 +37,7 @@ QWindowLevelComboBox::~QWindowLevelComboBox()
     delete m_customWindowLevelDialog;
 }
 
-void QWindowLevelComboBox::setPresetsData(WindowLevelPresetsToolData *windowLevelData)
+void QWindowLevelComboBox::setPresetsData(VoiLutPresetsToolData *windowLevelData)
 {
     if (m_presetsData)
     {
@@ -78,43 +78,43 @@ void QWindowLevelComboBox::addPreset(const WindowLevel &preset)
         int index;
         switch (group)
         {
-            case WindowLevelPresetsToolData::AutomaticPreset:
-                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() - 1;
+            case VoiLutPresetsToolData::AutomaticPreset:
+                index = m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset).count() - 1;
                 break;
 
-            case WindowLevelPresetsToolData::FileDefined:
-                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined).count() - 1;
+            case VoiLutPresetsToolData::FileDefined:
+                index = m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::FileDefined).count() - 1;
                 break;
 
-            case WindowLevelPresetsToolData::StandardPresets:
-                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() - 1;
+            case VoiLutPresetsToolData::StandardPresets:
+                index = m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::FileDefined).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::StandardPresets).count() - 1;
                 break;
 
-            case WindowLevelPresetsToolData::UserDefined:
-                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::UserDefined).count() - 1;
+            case VoiLutPresetsToolData::UserDefined:
+                index = m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::FileDefined).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::StandardPresets).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::UserDefined).count() - 1;
                 break;
 
-            case WindowLevelPresetsToolData::Other:
-                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::UserDefined).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::Other).count() - 1;
+            case VoiLutPresetsToolData::Other:
+                index = m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::FileDefined).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::StandardPresets).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::UserDefined).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::Other).count() - 1;
                 break;
 
-            case WindowLevelPresetsToolData::CustomPreset:
-                index = m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::StandardPresets).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::UserDefined).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::Other).count() +
-                        m_presetsData->getPresetsFromGroup(WindowLevelPresetsToolData::CustomPreset).count() - 1;
+            case VoiLutPresetsToolData::CustomPreset:
+                index = m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::FileDefined).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::StandardPresets).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::UserDefined).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::Other).count() +
+                        m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::CustomPreset).count() - 1;
                 break;
         }
         this->insertItem(index, preset.getName());
@@ -156,7 +156,7 @@ void QWindowLevelComboBox::selectPreset(const QString &preset)
     }
     else
     {
-        this->setCurrentIndex(this->findText(WindowLevelPresetsToolData::getCustomPresetName()));
+        this->setCurrentIndex(this->findText(VoiLutPresetsToolData::getCustomPresetName()));
     }
 }
 
@@ -168,19 +168,19 @@ void QWindowLevelComboBox::populateFromPresetsData()
     }
 
     this->clear();
-    this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset));
-    this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined));
-    this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets));
-    this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::UserDefined));
-    this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::Other));
+    this->addItems(m_presetsData->getDescriptionsFromGroup(VoiLutPresetsToolData::AutomaticPreset));
+    this->addItems(m_presetsData->getDescriptionsFromGroup(VoiLutPresetsToolData::FileDefined));
+    this->addItems(m_presetsData->getDescriptionsFromGroup(VoiLutPresetsToolData::StandardPresets));
+    this->addItems(m_presetsData->getDescriptionsFromGroup(VoiLutPresetsToolData::UserDefined));
+    this->addItems(m_presetsData->getDescriptionsFromGroup(VoiLutPresetsToolData::Other));
     this->insertSeparator(this->count());
-    this->addItems(m_presetsData->getDescriptionsFromGroup(WindowLevelPresetsToolData::CustomPreset));
+    this->addItems(m_presetsData->getDescriptionsFromGroup(VoiLutPresetsToolData::CustomPreset));
     this->addItem(tr("Edit Custom WW/WL"));
 }
 
 void QWindowLevelComboBox::setActiveWindowLevel(const QString &text)
 {
-    if (text == WindowLevelPresetsToolData::getCustomPresetName())
+    if (text == VoiLutPresetsToolData::getCustomPresetName())
     {
         // Reestablim el valor que hi havia perquè no quedi seleccionat la fila de l'editor.
         this->selectPreset(m_currentSelectedPreset);

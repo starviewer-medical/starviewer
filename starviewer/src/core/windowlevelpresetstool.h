@@ -23,7 +23,7 @@
 namespace udg {
 
 class Q2DViewer;
-class WindowLevelPresetsToolData;
+class VoiLutPresetsToolData;
 
 /**
     Tool per canviar window levels predefinits
@@ -52,7 +52,7 @@ private slots:
 
 private:
     /// Dades de window level amb tots els presets
-    WindowLevelPresetsToolData *m_myToolData;
+    VoiLutPresetsToolData *m_myToolData;
 
     /// Llista de presets predefinits
     QStringList m_standardPresets;

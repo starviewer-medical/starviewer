@@ -15,7 +15,7 @@
 #include "windowlevelpresetstool.h"
 #include "q2dviewer.h"
 #include "logging.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 
 // Vtk
 #include <vtkCommand.h>
@@ -143,15 +143,15 @@ void WindowLevelPresetsTool::updateWindowLevelData()
     else
     {
         m_defaultPresets.clear();
-        m_defaultPresets = m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined) +
-                           m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
+        m_defaultPresets = m_myToolData->getDescriptionsFromGroup(VoiLutPresetsToolData::FileDefined) +
+                           m_myToolData->getDescriptionsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
     }
 }
 
 void WindowLevelPresetsTool::setToolData(ToolData *toolData)
 {
     m_toolData = toolData;
-    m_myToolData = qobject_cast<WindowLevelPresetsToolData*>(toolData);
+    m_myToolData = qobject_cast<VoiLutPresetsToolData*>(toolData);
     if (!m_myToolData)
     {
         DEBUG_LOG("El tooldata proporcionat no és un WindwoLevelPresetsToolData que és l'esperat");
@@ -159,11 +159,11 @@ void WindowLevelPresetsTool::setToolData(ToolData *toolData)
     else
     {
         m_standardPresets.clear();
-        m_standardPresets = m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets);
+        m_standardPresets = m_myToolData->getDescriptionsFromGroup(VoiLutPresetsToolData::StandardPresets);
 
         m_defaultPresets.clear();
-        m_defaultPresets = m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined) +
-                           m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
+        m_defaultPresets = m_myToolData->getDescriptionsFromGroup(VoiLutPresetsToolData::FileDefined) +
+                           m_myToolData->getDescriptionsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
     }
 }
 

@@ -12,15 +12,15 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGWINDOWLEVELPRESETSTOOLDATA_H
-#define UDGWINDOWLEVELPRESETSTOOLDATA_H
+#ifndef UDGVOILUTPRESETSTOOLDATA_H
+#define UDGVOILUTPRESETSTOOLDATA_H
 
 #include "tooldata.h"
 
 #include <QMultiMap>
 #include <QStringList>
 
-#include "windowlevel.h"
+#include "voilut.h"
 
 namespace udg {
 
@@ -40,11 +40,11 @@ namespace udg {
 
     Per poder fer una diferenciació de la procedència de cada valor, es poden crear certs grups com ja s'ha anomenat abans.
   */
-class WindowLevelPresetsToolData : public ToolData {
+class VoiLutPresetsToolData : public ToolData {
 Q_OBJECT
 public:
-    WindowLevelPresetsToolData(QObject *parent = 0);
-    ~WindowLevelPresetsToolData();
+    VoiLutPresetsToolData(QObject *parent = 0);
+    ~VoiLutPresetsToolData();
 
     /// Etiquetes per cada agrupació de presets
     enum GroupsLabel { AutomaticPreset, FileDefined, StandardPresets, UserDefined, CustomPreset, Other };
@@ -133,10 +133,10 @@ private slots:
 
 private:
     /// Últim preset activat
-    WindowLevel m_currentPreset;
+    VoiLut m_currentPreset;
 
     /// Map grouping presets by its group
-    QMultiMap<int, WindowLevel> m_presetsByGroup;
+    QMultiMap<int, VoiLut> m_presetsByGroup;
 };
 
 }

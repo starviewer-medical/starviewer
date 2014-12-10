@@ -16,7 +16,7 @@
 
 #include "volume.h"
 #include "volumehelper.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "image.h"
 #include "logging.h"
 
@@ -28,15 +28,15 @@ WindowLevelHelper::WindowLevelHelper()
 {
 }
 
-void WindowLevelHelper::initializeWindowLevelData(WindowLevelPresetsToolData *windowLevelData, Volume *volume)
+void WindowLevelHelper::initializeWindowLevelData(VoiLutPresetsToolData *windowLevelData, Volume *volume)
 {
     if (!volume)
     {
         return;
     }
 
-    windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::FileDefined);
-    windowLevelData->removePresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
+    windowLevelData->removePresetsFromGroup(VoiLutPresetsToolData::FileDefined);
+    windowLevelData->removePresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
 
     // Agafem el window level de la imatge central per evitar problemes
     // de que tinguem diferents windows levels a cada imatge i el de la
@@ -59,13 +59,13 @@ void WindowLevelHelper::initializeWindowLevelData(WindowLevelPresetsToolData *wi
         for (int i = 0; i < windowLevelCount; i++)
         {
             WindowLevel windowLevel = getDefaultWindowLevelForPresentation(image, i);
-            windowLevelData->addPreset(windowLevel, WindowLevelPresetsToolData::FileDefined);
+            windowLevelData->addPreset(windowLevel, VoiLutPresetsToolData::FileDefined);
         }
     }
 
     // Calculem un window level automàtic que sempre posarem disponible a l'usuari
     WindowLevel automaticWindowLevel = getCurrentAutomaticWindowLevel(volume);
-    windowLevelData->addPreset(automaticWindowLevel, WindowLevelPresetsToolData::AutomaticPreset);
+    windowLevelData->addPreset(automaticWindowLevel, VoiLutPresetsToolData::AutomaticPreset);
 
     selectDefaultPreset(windowLevelData, volume);
 }
@@ -94,14 +94,14 @@ WindowLevel WindowLevelHelper::getDefaultWindowLevelForPresentation(Image *image
     return windowLevel;
 }
 
-void WindowLevelHelper::selectDefaultPreset(WindowLevelPresetsToolData *windowLevelData, Volume *volume)
+void WindowLevelHelper::selectDefaultPreset(VoiLutPresetsToolData *windowLevelData, Volume *volume)
 {
     if (!windowLevelData)
     {
         return;
     }
 
-    QList<WindowLevel> filePresets = windowLevelData->getPresetsFromGroup(WindowLevelPresetsToolData::FileDefined);
+    QList<WindowLevel> filePresets = windowLevelData->getPresetsFromGroup(VoiLutPresetsToolData::FileDefined);
 
     // Usually we want the first file preset, if existent, as the default preset, but for primary PET volumes the automatic is preferred
     if (!filePresets.isEmpty() && !VolumeHelper::isPrimaryPET(volume))
@@ -110,7 +110,7 @@ void WindowLevelHelper::selectDefaultPreset(WindowLevelPresetsToolData *windowLe
     }
     else
     {
-        QList<WindowLevel> automaticPresets = windowLevelData->getPresetsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
+        QList<WindowLevel> automaticPresets = windowLevelData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
         windowLevelData->setCurrentPreset(automaticPresets.first());
     }
 }

@@ -17,7 +17,7 @@
 #include "imagepipeline.h"
 #include "slicehandler.h"
 #include "volume.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "volumepixeldata.h"
 #include "image.h"
 #include "windowlevelhelper.h"
@@ -69,13 +69,13 @@ void VolumeDisplayUnit::setVolume(Volume *volume)
     m_imageActor->GetMapper()->SetInputConnection(m_imagePipeline->getOutput().getVtkAlgorithmOutput());
 }
 
-void VolumeDisplayUnit::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
+void VolumeDisplayUnit::setWindowLevelData(VoiLutPresetsToolData *windowLevelData)
 {
     m_windowLevelData = windowLevelData;
     WindowLevelHelper().initializeWindowLevelData(m_windowLevelData, m_volume);
 }
 
-WindowLevelPresetsToolData *VolumeDisplayUnit::getWindowLevelData()
+VoiLutPresetsToolData *VolumeDisplayUnit::getWindowLevelData()
 {
     return m_windowLevelData;
 }
