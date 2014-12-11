@@ -53,7 +53,7 @@
 namespace udg {
 
 QViewer::QViewer(QWidget *parent)
- : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0),
+ : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_voiLutData(0),
    m_isRenderingEnabled(true), m_isActive(false)
 {
     m_defaultFitIntoViewportMarginRate = 0.0;
@@ -74,7 +74,7 @@ QViewer::QViewer(QWidget *parent)
     connect(this, SIGNAL(eventReceived(unsigned long)), m_toolProxy, SLOT(forwardEvent(unsigned long)));
 
     // Inicialitzem el window level data
-    setWindowLevelData(new VoiLutPresetsToolData(this));
+    setVoiLutData(new VoiLutPresetsToolData(this));
 
     m_workInProgressWidget = new QViewerWorkInProgressWidget(this);
 
@@ -545,22 +545,22 @@ void QViewer::fitRenderingIntoViewport()
     }
 }
 
-VoiLutPresetsToolData* QViewer::getWindowLevelData() const
+VoiLutPresetsToolData* QViewer::getVoiLutData() const
 {
-    return m_windowLevelData;
+    return m_voiLutData;
 }
 
-void QViewer::setWindowLevelData(VoiLutPresetsToolData *windowLevelData)
+void QViewer::setVoiLutData(VoiLutPresetsToolData *voiLutData)
 {
-    if (m_windowLevelData)
+    if (m_voiLutData)
     {
-        disconnect(m_windowLevelData, 0, this, 0);
-        delete m_windowLevelData;
+        disconnect(m_voiLutData, 0, this, 0);
+        delete m_voiLutData;
     }
 
-    m_windowLevelData = windowLevelData;
-    connect(m_windowLevelData, SIGNAL(currentPresetChanged(VoiLut)), SLOT(setWindowLevelPreset(VoiLut)));
-    connect(m_windowLevelData, SIGNAL(presetSelected(VoiLut)), SLOT(setWindowLevelPreset(VoiLut)));
+    m_voiLutData = voiLutData;
+    connect(m_voiLutData, SIGNAL(currentPresetChanged(VoiLut)), SLOT(setWindowLevelPreset(VoiLut)));
+    connect(m_voiLutData, SIGNAL(presetSelected(VoiLut)), SLOT(setWindowLevelPreset(VoiLut)));
 }
 
 void QViewer::grabCurrentView()
@@ -650,14 +650,14 @@ void QViewer::contextMenuRelease()
     this->contextMenuEvent(&contextMenuEvent);
 }
 
-void QViewer::updateWindowLevelData()
+void QViewer::updateVoiLutData()
 {
     if (!hasInput())
     {
         return;
     }
 
-    WindowLevelHelper().initializeWindowLevelData(m_windowLevelData, getMainInput());
+    WindowLevelHelper().initializeWindowLevelData(m_voiLutData, getMainInput());
 }
 
 void QViewer::setCameraOrientation(const OrthogonalPlane &orientation)

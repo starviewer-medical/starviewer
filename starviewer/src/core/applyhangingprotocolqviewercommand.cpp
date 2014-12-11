@@ -112,7 +112,7 @@ void ApplyHangingProtocolQViewerCommand::applyDisplayTransformations(Q2DViewer *
 
     if (displaySet->getWindowCenter() != -1 && displaySet->getWindowWidth() != -1)
     {
-        viewer->getWindowLevelData()->setCustomWindowLevel(displaySet->getWindowWidth(), displaySet->getWindowCenter());
+        viewer->getVoiLutData()->setCustomWindowLevel(displaySet->getWindowWidth(), displaySet->getWindowCenter());
     }
 
     viewer->enableRendering(true);

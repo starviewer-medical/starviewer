@@ -587,7 +587,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     removeImageActors();
     m_displayUnitsHandler = m_displayUnitsFactory->createVolumeDisplayUnitHandler(volumes);
 
-    getDisplayUnit(0)->setWindowLevelData(getWindowLevelData());
+    getDisplayUnit(0)->setWindowLevelData(getVoiLutData());
     for (int i = 1; i < getNumberOfInputs(); i++)
     {
         getDisplayUnit(i)->setWindowLevelData(new VoiLutPresetsToolData(this));
@@ -1597,7 +1597,7 @@ void Q2DViewer::restore()
     // defined command to place the image properly by default depending on the input if no one is defined 
     // Take into account this call disables thickslab
     resetViewToAcquisitionPlane();
-    WindowLevelHelper::selectDefaultPreset(getWindowLevelData(), getMainInput());
+    WindowLevelHelper::selectDefaultPreset(getVoiLutData(), getMainInput());
     
     // HACK Restaurem el rendering
     enableRendering(true);
@@ -1621,7 +1621,7 @@ void Q2DViewer::invertWindowLevel()
     // Això és necessari fer-ho així i no amb setWindowLevel perquè si invertim el color de la imatge sense haver modificat abans el window/level
     // i després seleccionem un altre visor, al tornar a aquest visor, es tornaria aplicar el "default" i no el "custom"
     // Es podria arribar a fer d'una altre manera també, atacant directament als filtres del pipeline, tal com es diu al ticket #1275
-    getWindowLevelData()->setCustomWindowLevel(-windowLevel[0], windowLevel[1]);
+    getVoiLutData()->setCustomWindowLevel(-windowLevel[0], windowLevel[1]);
 }
 
 void Q2DViewer::alignLeft()
