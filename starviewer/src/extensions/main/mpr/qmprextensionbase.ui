@@ -375,7 +375,7 @@ Series with multiple phases so it won't work properly.</string>
         </widget>
        </item>
        <item>
-        <widget class="udg::QWindowLevelComboBox" name="m_windowLevelComboBox"/>
+        <widget class="udg::QVoiLutComboBox" name="m_windowLevelComboBox"/>
        </item>
       </layout>
      </item>
@@ -482,9 +482,9 @@ Series with multiple phases so it won't work properly.</string>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>udg::QWindowLevelComboBox</class>
+   <class>udg::QVoiLutComboBox</class>
    <extends>QComboBox</extends>
-   <header>qwindowlevelcombobox.h</header>
+   <header>qvoilutcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>udg::Q2DViewer</class>

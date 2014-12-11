@@ -12,8 +12,8 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGQWINDOWLEVELCOMBOBOX_H
-#define UDGQWINDOWLEVELCOMBOBOX_H
+#ifndef UDGQVOILUTCOMBOBOX_H
+#define UDGQVOILUTCOMBOBOX_H
 
 #include <QComboBox>
 
@@ -27,11 +27,11 @@ class WindowLevel;
 /**
     Combo box personalitzat per a escollir valors de window level predeterminats i personalitzats
   */
-class QWindowLevelComboBox : public QComboBox {
+class QVoiLutComboBox : public QComboBox {
 Q_OBJECT
 public:
-    QWindowLevelComboBox(QWidget *parent = 0);
-    ~QWindowLevelComboBox();
+    QVoiLutComboBox(QWidget *parent = 0);
+    ~QVoiLutComboBox();
 
     /// Li assignem la font de dades a partir de la qual obté els valors de window level
     /// @param windowLevelData Les dades en sí

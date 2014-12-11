@@ -17,7 +17,7 @@
 #include "volume.h"
 #include "image.h"
 #include "logging.h"
-#include "qwindowlevelcombobox.h"
+#include "qvoilutcombobox.h"
 #include "q2dviewerwidget.h"
 #include "menugridwidget.h"
 #include "tablemenu.h"

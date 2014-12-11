@@ -87,7 +87,6 @@ HEADERS += extensionfactory.h \
     patientbrowsermenuextendedinfo.h \
     patientbrowsermenulist.h \
     qcustomwindowleveldialog.h \
-    qwindowlevelcombobox.h \
     mhdfileclassifierstep.h \
     orderimagesfillerstep.h \
     toolregistry.h \
@@ -419,7 +418,8 @@ HEADERS += extensionfactory.h \
     relativegeometrylayout.h \
     griditerator.h \
     voilut.h \
-    voilutpresetstooldata.h
+    voilutpresetstooldata.h \
+    qvoilutcombobox.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -473,7 +473,6 @@ SOURCES += extensionmediator.cpp \
     patientbrowsermenuextendedinfo.cpp \
     patientbrowsermenulist.cpp \
     qcustomwindowleveldialog.cpp \
-    qwindowlevelcombobox.cpp \
     mhdfileclassifierstep.cpp \
     orderimagesfillerstep.cpp \
     toolregistry.cpp \
@@ -786,7 +785,8 @@ SOURCES += extensionmediator.cpp \
     relativegeometrylayout.cpp \
     griditerator.cpp \
     voilut.cpp \
-    voilutpresetstooldata.cpp
+    voilutpresetstooldata.cpp \
+    qvoilutcombobox.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
