@@ -52,11 +52,11 @@ public:
     /// Afegeix un nou preset. Si la operació es fa amb èxit s'emet un senyal donant la informació del preset.
     /// @param preset WindowLevel object. Its description has to be unique.
     /// @param group Grup al que volem que pertanyi, que serà "Other" si no s'especifica
-    void addPreset(const WindowLevel &preset, int group = Other);
+    void addPreset(const VoiLut &preset, int group = Other);
 
     /// Eliminem el preset que tingui la descripció donada
     /// @param description Descripció del preset que volem eliminar
-    void removePreset(const WindowLevel &preset);
+    void removePreset(const VoiLut &preset);
 
     /// Elimina els presets d'un grup
     /// @param group Grup que volem buidar
@@ -68,14 +68,14 @@ public:
     /// @param window variable on es retornarà el valor de window
     /// @param level variable on es retornarà el valor de level
     /// @return Cert si existeix aquest preset, fals altrament
-    bool getFromDescription(const QString &description, WindowLevel &preset);
+    bool getFromDescription(const QString &description, VoiLut &preset);
 
     /// Ens diu a quin grup pertany el preset indicat. Si no existeix la descripció,
     /// el valor retornat en group és indeterminat
     /// @param description Descripció del preset que busquem
     /// @param group variable on se'ns tornarà el grup al que pertany la descripció donada
     /// @return Cert si la descripció donada existeix, fals altrement
-    bool getGroup(const WindowLevel &preset, int &group);
+    bool getGroup(const VoiLut &preset, int &group);
 
     /// Ens retorna una llista de presets que conté un grup
     /// @param group grup de presets
@@ -83,17 +83,17 @@ public:
     /// Si no hi ha cap preset dins del grup demanat la llista serà buida.
     QStringList getDescriptionsFromGroup(int group);
 
-    QList<WindowLevel> getPresetsFromGroup(int group);
+    QList<VoiLut> getPresetsFromGroup(int group);
     
     /// Returns the current activated preset
-    WindowLevel getCurrentPreset() const;
+    const VoiLut& getCurrentPreset() const;
 
     /// Shortcut for getCurrentPreset().getName()
     QString getCurrentPresetName() const;
 
     /// Updates the given preset with the new values of window/level. A preset with the same name has to be present in order to update it.
     /// Returns true in case the preset could be updated, false otherwise (i.e. no preset with such name exists)
-    bool updatePreset(const WindowLevel &preset);
+    bool updatePreset(const VoiLut &preset);
 
     /// Returns the name for the custom preset.
     static QString getCustomPresetName();
@@ -111,17 +111,17 @@ public slots:
     /// If it already exists with the same name and values, it behaves exactly as selectCurrentPreset().
     /// If it already exists, and it is the Custom one, but has different values, it updates its values and then selects it.
     /// If it does not exist, it adds the preset, then selects it
-    void setCurrentPreset(const WindowLevel &preset);
+    void setCurrentPreset(const VoiLut &preset);
 
 signals:
-    void presetAdded(WindowLevel preset);
-    void presetRemoved(WindowLevel preset);
+    void presetAdded(VoiLut preset);
+    void presetRemoved(VoiLut preset);
 
     /// Emitted when the current preset values have changed
-    void currentPresetChanged(WindowLevel preset);
+    void currentPresetChanged(VoiLut preset);
 
     /// Emitted when a preset is selected
-    void presetSelected(WindowLevel preset);
+    void presetSelected(VoiLut preset);
 
 private:
     /// Afegeix els CustomWindowLevels que hi ha al repository

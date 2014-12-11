@@ -48,9 +48,9 @@ void QVoiLutComboBox::setPresetsData(VoiLutPresetsToolData *windowLevelData)
     }
     m_presetsData = windowLevelData;
     populateFromPresetsData();
-    connect(m_presetsData, SIGNAL(presetAdded(WindowLevel)), SLOT(addPreset(WindowLevel)));
-    connect(m_presetsData, SIGNAL(presetRemoved(WindowLevel)), SLOT(removePreset(WindowLevel)));
-    connect(m_presetsData, SIGNAL(presetSelected(WindowLevel)), SLOT(selectPreset(WindowLevel)));
+    connect(m_presetsData, SIGNAL(presetAdded(VoiLut)), SLOT(addPreset(VoiLut)));
+    connect(m_presetsData, SIGNAL(presetRemoved(VoiLut)), SLOT(removePreset(VoiLut)));
+    connect(m_presetsData, SIGNAL(presetSelected(VoiLut)), SLOT(selectPreset(VoiLut)));
 
     // TODO Això es podria substituir fent que el CustomWindowLevelDialog també contingués les dades
     // de window level i directament li fes un setCustomWindowLevel() a WindowLevelPresetsToolData
@@ -70,7 +70,7 @@ void QVoiLutComboBox::clearPresets()
     m_presetsData = 0;
 }
 
-void QVoiLutComboBox::addPreset(const WindowLevel &preset)
+void QVoiLutComboBox::addPreset(const VoiLut &preset)
 {
     int group;
     if (m_presetsData->getGroup(preset, group))
@@ -117,19 +117,19 @@ void QVoiLutComboBox::addPreset(const WindowLevel &preset)
                         m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::CustomPreset).count() - 1;
                 break;
         }
-        this->insertItem(index, preset.getName());
+        this->insertItem(index, preset.getExplanation());
     }
     else
     {
-        DEBUG_LOG("El preset " + preset.getName() + " no està present en les dades de window level proporcionades");
+        DEBUG_LOG("El preset " + preset.getExplanation() + " no està present en les dades de window level proporcionades");
     }
 
     this->selectPreset(m_currentSelectedPreset);
 }
 
-void QVoiLutComboBox::removePreset(const WindowLevel &preset)
+void QVoiLutComboBox::removePreset(const VoiLut &preset)
 {
-    removePreset(preset.getName());
+    removePreset(preset.getExplanation());
 }
 
 void QVoiLutComboBox::removePreset(const QString &preset)
@@ -141,9 +141,9 @@ void QVoiLutComboBox::removePreset(const QString &preset)
     }
 }
 
-void QVoiLutComboBox::selectPreset(const WindowLevel &preset)
+void QVoiLutComboBox::selectPreset(const VoiLut &preset)
 {
-    selectPreset(preset.getName());
+    selectPreset(preset.getExplanation());
 }
 
 void QVoiLutComboBox::selectPreset(const QString &preset)
@@ -184,7 +184,7 @@ void QVoiLutComboBox::setActiveWindowLevel(const QString &text)
     {
         // Reestablim el valor que hi havia perquè no quedi seleccionat la fila de l'editor.
         this->selectPreset(m_currentSelectedPreset);
-        WindowLevel preset = m_presetsData->getCurrentPreset();
+        WindowLevel preset = m_presetsData->getCurrentPreset().getWindowLevel();
         m_customWindowLevelDialog->setDefaultWindowLevel(preset.getWidth(), preset.getCenter());
         m_customWindowLevelDialog->exec();
     }
@@ -192,7 +192,7 @@ void QVoiLutComboBox::setActiveWindowLevel(const QString &text)
     {
         // Reestablim el valor que hi havia perquè no quedi seleccionat la fila de l'editor.
         this->selectPreset(m_currentSelectedPreset);
-        WindowLevel preset = m_presetsData->getCurrentPreset();
+        WindowLevel preset = m_presetsData->getCurrentPreset().getWindowLevel();
 
         QCustomWindowLevelEditWidget customWindowLevelEditWidget;
         customWindowLevelEditWidget.setDefaultWindowLevel(preset);

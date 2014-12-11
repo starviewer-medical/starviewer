@@ -294,7 +294,7 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
         }
     }
     
-    WindowLevel wl = m_windowLevelData->getCurrentPreset();
+    WindowLevel wl = m_windowLevelData->getCurrentPreset().getWindowLevel();
     m_imagePipeline->setWindowLevel(wl.getWidth(), wl.getCenter());
 }
 

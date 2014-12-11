@@ -101,7 +101,7 @@ void WindowLevelHelper::selectDefaultPreset(VoiLutPresetsToolData *windowLevelDa
         return;
     }
 
-    QList<WindowLevel> filePresets = windowLevelData->getPresetsFromGroup(VoiLutPresetsToolData::FileDefined);
+    QList<VoiLut> filePresets = windowLevelData->getPresetsFromGroup(VoiLutPresetsToolData::FileDefined);
 
     // Usually we want the first file preset, if existent, as the default preset, but for primary PET volumes the automatic is preferred
     if (!filePresets.isEmpty() && !VolumeHelper::isPrimaryPET(volume))
@@ -110,7 +110,7 @@ void WindowLevelHelper::selectDefaultPreset(VoiLutPresetsToolData *windowLevelDa
     }
     else
     {
-        QList<WindowLevel> automaticPresets = windowLevelData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
+        QList<VoiLut> automaticPresets = windowLevelData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
         windowLevelData->setCurrentPreset(automaticPresets.first());
     }
 }

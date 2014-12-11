@@ -54,9 +54,9 @@ VoiLutPresetsToolData::~VoiLutPresetsToolData()
 {
 }
 
-void VoiLutPresetsToolData::addPreset(const WindowLevel &preset, int group)
+void VoiLutPresetsToolData::addPreset(const VoiLut &preset, int group)
 {
-    QString presetName = preset.getName();
+    QString presetName = preset.getExplanation();
     QMapIterator<int, VoiLut> iterator(m_presetsByGroup);
     bool found = false;
     while (iterator.hasNext() && !found)
@@ -75,13 +75,13 @@ void VoiLutPresetsToolData::addPreset(const WindowLevel &preset, int group)
     emit presetAdded(preset);
 }
 
-void VoiLutPresetsToolData::removePreset(const WindowLevel &preset)
+void VoiLutPresetsToolData::removePreset(const VoiLut &preset)
 {
     QMutableMapIterator<int, VoiLut> iterator(m_presetsByGroup);
     while (iterator.hasNext())
     {
         iterator.next();
-        if (iterator.value().getExplanation() == preset.getName())
+        if (iterator.value().getExplanation() == preset.getExplanation())
         {
             emit presetRemoved(preset);
             iterator.remove();
@@ -93,12 +93,12 @@ void VoiLutPresetsToolData::removePresetsFromGroup(int group)
 {
     foreach (const VoiLut &preset, m_presetsByGroup.values(group))
     {
-        emit presetRemoved(preset.getWindowLevel());
+        emit presetRemoved(preset);
     }
     m_presetsByGroup.remove(group);
 }
 
-bool VoiLutPresetsToolData::getFromDescription(const QString &description, WindowLevel &preset)
+bool VoiLutPresetsToolData::getFromDescription(const QString &description, VoiLut &preset)
 {
     bool found = false;
     QMapIterator<int, VoiLut> iterator(m_presetsByGroup);
@@ -107,7 +107,7 @@ bool VoiLutPresetsToolData::getFromDescription(const QString &description, Windo
         iterator.next();
         if (iterator.value().getExplanation() == description)
         {
-            preset = iterator.value().getWindowLevel();
+            preset = iterator.value();
             found = true;
         }
     }
@@ -115,13 +115,13 @@ bool VoiLutPresetsToolData::getFromDescription(const QString &description, Windo
     return found;
 }
 
-bool VoiLutPresetsToolData::getGroup(const WindowLevel &preset, int &group)
+bool VoiLutPresetsToolData::getGroup(const VoiLut &preset, int &group)
 {
     bool found = false;
     foreach (int key, m_presetsByGroup.keys())
     {
         QStringList presetsNames = getDescriptionsFromGroup(key);
-        if (presetsNames.contains(preset.getName()))
+        if (presetsNames.contains(preset.getExplanation()))
         {
             found = true;
             group = key;
@@ -140,10 +140,10 @@ bool VoiLutPresetsToolData::getGroup(const WindowLevel &preset, int &group)
 QStringList VoiLutPresetsToolData::getDescriptionsFromGroup(int group)
 {
     QStringList descriptionList;
-    QList<WindowLevel> windowLevelList = getPresetsFromGroup(group);
-    foreach (const WindowLevel &preset, windowLevelList)
+    QList<VoiLut> windowLevelList = getPresetsFromGroup(group);
+    foreach (const VoiLut &preset, windowLevelList)
     {
-        descriptionList << preset.getName();
+        descriptionList << preset.getExplanation();
     }
     descriptionList.sort();
     
@@ -152,27 +152,21 @@ QStringList VoiLutPresetsToolData::getDescriptionsFromGroup(int group)
 
 namespace {
 
-bool windowLevelLessThanSortOperator(const WindowLevel &wl1, const WindowLevel &wl2)
+bool voiLutLessThanSortOperator(const VoiLut &voiLut1, const VoiLut &voiLut2)
 {
-    return wl1.getName() < wl2.getName();
+    return voiLut1.getExplanation() < voiLut2.getExplanation();
 }
 
 }
 
-QList<WindowLevel> VoiLutPresetsToolData::getPresetsFromGroup(int group)
+QList<VoiLut> VoiLutPresetsToolData::getPresetsFromGroup(int group)
 {
     QList<VoiLut> voiLutList = m_presetsByGroup.values(group);
-    QList<WindowLevel> windowLevelList;
-
-    foreach (const VoiLut &voiLut, voiLutList)
-    {
-        windowLevelList.append(voiLut.getWindowLevel());
-    }
 
     // The list has to be sorted to be coherent with the overloaded version wich returns a QStringList
-    qSort(windowLevelList.begin(), windowLevelList.end(), windowLevelLessThanSortOperator);
+    qSort(voiLutList.begin(), voiLutList.end(), voiLutLessThanSortOperator);
     
-    return windowLevelList;
+    return voiLutList;
 }
 
 QString VoiLutPresetsToolData::getCurrentPresetName() const
@@ -180,24 +174,24 @@ QString VoiLutPresetsToolData::getCurrentPresetName() const
     return m_currentPreset.getExplanation();
 }
 
-WindowLevel VoiLutPresetsToolData::getCurrentPreset() const
+const VoiLut& VoiLutPresetsToolData::getCurrentPreset() const
 {
-    return m_currentPreset.getWindowLevel();
+    return m_currentPreset;
 }
 
-bool VoiLutPresetsToolData::updatePreset(const WindowLevel &preset)
+bool VoiLutPresetsToolData::updatePreset(const VoiLut &preset)
 {
     bool found = false;
     QMutableMapIterator<int, VoiLut> iterator(m_presetsByGroup);
     while (iterator.hasNext() && !found)
     {
         iterator.next();
-        if (iterator.value().getExplanation() == preset.getName())
+        if (iterator.value().getExplanation() == preset.getExplanation())
         {
             iterator.value() = preset;
             found = true;
 
-            if (m_currentPreset.getExplanation() == preset.getName())
+            if (m_currentPreset.getExplanation() == preset.getExplanation())
             {
                 m_currentPreset = preset;
             }
@@ -206,8 +200,8 @@ bool VoiLutPresetsToolData::updatePreset(const WindowLevel &preset)
 
     if (!found)
     {
-        DEBUG_LOG(QString("The given preset [%1: %2, %3] does not exist in the presets container. Nothing will be done.")
-            .arg(preset.getName()).arg(preset.getWidth()).arg(preset.getCenter()));
+        DEBUG_LOG(QString("The given preset [%1] does not exist in the presets container. Nothing will be done.")
+            .arg(preset.getExplanation()));
     }
     
     return found;
@@ -234,7 +228,7 @@ void VoiLutPresetsToolData::setCustomWindowLevel(double window, double level)
 
 void VoiLutPresetsToolData::selectCurrentPreset(const QString &presetName)
 {
-    WindowLevel preset;
+    VoiLut preset;
     if (getFromDescription(presetName, preset))
     {
         m_currentPreset = preset;
@@ -242,10 +236,10 @@ void VoiLutPresetsToolData::selectCurrentPreset(const QString &presetName)
     }
 }
 
-void VoiLutPresetsToolData::setCurrentPreset(const WindowLevel &preset)
+void VoiLutPresetsToolData::setCurrentPreset(const VoiLut &preset)
 {
-    WindowLevel internalPreset;
-    if (getFromDescription(preset.getName(), internalPreset))
+    VoiLut internalPreset;
+    if (getFromDescription(preset.getExplanation(), internalPreset))
     {
         int group;
         if (getGroup(preset, group))
@@ -261,7 +255,7 @@ void VoiLutPresetsToolData::setCurrentPreset(const WindowLevel &preset)
         addPreset(preset, Other);
     }
 
-    selectCurrentPreset(preset.getName());
+    selectCurrentPreset(preset.getExplanation());
 }
 
 void VoiLutPresetsToolData::loadCustomWindowLevelPresets()
