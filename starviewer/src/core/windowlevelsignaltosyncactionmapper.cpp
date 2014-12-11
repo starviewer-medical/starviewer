@@ -43,8 +43,8 @@ void WindowLevelSignalToSyncActionMapper::mapSignal()
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     if (viewer2D)
     {
-        connect(viewer2D->getWindowLevelData(), SIGNAL(currentPresetChanged(WindowLevel)), SLOT(mapToSyncAction(WindowLevel)));
-        connect(viewer2D->getWindowLevelData(), SIGNAL(presetSelected(WindowLevel)), SLOT(mapToSyncAction(WindowLevel)));
+        connect(viewer2D->getWindowLevelData(), SIGNAL(currentPresetChanged(VoiLut)), SLOT(mapToSyncAction(VoiLut)));
+        connect(viewer2D->getWindowLevelData(), SIGNAL(presetSelected(VoiLut)), SLOT(mapToSyncAction(VoiLut)));
     }
 }
 
@@ -53,19 +53,19 @@ void WindowLevelSignalToSyncActionMapper::unmapSignal()
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     if (viewer2D)
     {
-        disconnect(viewer2D->getWindowLevelData(), SIGNAL(currentPresetChanged(WindowLevel)), this, SLOT(mapToSyncAction(WindowLevel)));
-        disconnect(viewer2D->getWindowLevelData(), SIGNAL(presetSelected(WindowLevel)), this, SLOT(mapToSyncAction(WindowLevel)));
+        disconnect(viewer2D->getWindowLevelData(), SIGNAL(currentPresetChanged(VoiLut)), this, SLOT(mapToSyncAction(VoiLut)));
+        disconnect(viewer2D->getWindowLevelData(), SIGNAL(presetSelected(VoiLut)), this, SLOT(mapToSyncAction(VoiLut)));
     }
 }
 
-void WindowLevelSignalToSyncActionMapper::mapToSyncAction(const WindowLevel &windowLevel)
+void WindowLevelSignalToSyncActionMapper::mapToSyncAction(const VoiLut &voiLut)
 {
     if (!m_mappedSyncAction)
     {
         m_mappedSyncAction = new WindowLevelSyncAction();
     }
     static_cast<WindowLevelSyncAction*>(m_mappedSyncAction)->setVolume(m_viewer->getMainInput());
-    static_cast<WindowLevelSyncAction*>(m_mappedSyncAction)->setWindowLevel(windowLevel);
+    static_cast<WindowLevelSyncAction*>(m_mappedSyncAction)->setWindowLevel(voiLut.getWindowLevel());
     
     emit actionMapped(m_mappedSyncAction);
 }

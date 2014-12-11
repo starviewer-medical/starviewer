@@ -659,7 +659,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
             VoiLutPresetsToolData *windowLevelData = selected2DViewer->getWindowLevelData();
             m_windowLevelComboBox->setPresetsData(windowLevelData);
-            windowLevelData->selectCurrentPreset(windowLevelData->getCurrentPreset().getName());
+            windowLevelData->selectCurrentPreset(windowLevelData->getCurrentPreset().getExplanation());
 
             updateTransferFunctionComboBox(selected2DViewer->getTransferFunctionModel());
 

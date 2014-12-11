@@ -43,7 +43,7 @@ class ToolProxy;
 class VoiLutPresetsToolData;
 class PatientBrowserMenu;
 class QViewerWorkInProgressWidget;
-class WindowLevel;
+class VoiLut;
 
 /**
     Classe base per a totes les finestres de visualització
@@ -214,7 +214,7 @@ public slots:
     /// Ajusta el window/level
     virtual void setWindowLevel(double window, double level) = 0;
     /// Ajusta el window/level a partir del preset. La implementació per defecte acaba cridant setWindowLevel sempre.
-    virtual void setWindowLevelPreset(const WindowLevel &preset);
+    virtual void setWindowLevelPreset(const VoiLut &preset);
 
     /// Fits the current rendered item into the viewport size
     void fitRenderingIntoViewport();

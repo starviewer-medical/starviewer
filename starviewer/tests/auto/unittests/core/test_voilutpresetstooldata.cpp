@@ -118,7 +118,7 @@ void test_VoiLutPresetsToolData::addPreset_AddsGivenPreset()
     VoiLutPresetsToolData wlData;
     wlData.addPreset(windowLevel, group);
 
-    WindowLevel dummyWindowLevel;
+    VoiLut dummyWindowLevel;
     QVERIFY(wlData.getFromDescription(presetDescription, dummyWindowLevel));
 }
 
@@ -142,7 +142,7 @@ void test_VoiLutPresetsToolData::removePreset_WorksAsExpected()
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
     wlData->removePreset(presetToRemove);
 
-    WindowLevel dummyWindowLevel;
+    VoiLut dummyWindowLevel;
     QVERIFY(!wlData->getFromDescription(presetToRemove.getName(), dummyWindowLevel));
 
     delete wlData;
@@ -196,9 +196,9 @@ void test_VoiLutPresetsToolData::getFromDescription_ReturnsExpectedValues()
 
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
     
-    WindowLevel returnedWindowLevel;
+    VoiLut returnedWindowLevel;
     QCOMPARE(wlData->getFromDescription(presetName, returnedWindowLevel), returnValue);
-    QCOMPARE(preset, returnedWindowLevel);
+    QCOMPARE(preset, returnedWindowLevel.getWindowLevel());
 
     delete wlData;
 }
@@ -305,7 +305,7 @@ void test_VoiLutPresetsToolData::getCurrentPreset_IsEmptyAfterCreation()
 {
     VoiLutPresetsToolData wlData;
 
-    QCOMPARE(wlData.getCurrentPreset(), WindowLevel());
+    QCOMPARE(wlData.getCurrentPreset().getWindowLevel(), WindowLevel());
 }
 
 void test_VoiLutPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaActivatePreset_data()
@@ -325,7 +325,7 @@ void test_VoiLutPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaActiva
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
     wlData->selectCurrentPreset(presetNameToActivate);
     
-    QCOMPARE(wlData->getCurrentPreset().getName(), expectedCurrentPresetName);
+    QCOMPARE(wlData->getCurrentPreset().getExplanation(), expectedCurrentPresetName);
 
     delete wlData;
 }
@@ -335,7 +335,7 @@ void test_VoiLutPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaSetCus
     VoiLutPresetsToolData wlData;
 
     wlData.setCustomWindowLevel(1024.0, 512.0);
-    QCOMPARE(wlData.getCurrentPreset(), WindowLevel(1024.0, 512.0, tr("Custom")));
+    QCOMPARE(wlData.getCurrentPreset().getWindowLevel(), WindowLevel(1024.0, 512.0, tr("Custom")));
 }
 
 void test_VoiLutPresetsToolData::updatePreset_WorksAsExpected_data()
@@ -356,10 +356,10 @@ void test_VoiLutPresetsToolData::updatePreset_WorksAsExpected()
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
     wlData->updatePreset(windowLevelToUpdate);
     
-    WindowLevel obtainedWindowLevel;
+    VoiLut obtainedWindowLevel;
     wlData->getFromDescription(windowLevelToUpdate.getName(), obtainedWindowLevel);
     
-    QCOMPARE(obtainedWindowLevel, windowLevelAfterUpdate);
+    QCOMPARE(obtainedWindowLevel.getWindowLevel(), windowLevelAfterUpdate);
     
     delete wlData;
 }
@@ -380,10 +380,10 @@ void test_VoiLutPresetsToolData::setCustomWindowLevel_UpdatesValues()
 
     VoiLutPresetsToolData wlData;
     wlData.setCustomWindowLevel(customWindowLevel.getWidth(), customWindowLevel.getCenter());
-    WindowLevel returnedWindowLevel;
+    VoiLut returnedWindowLevel;
     wlData.getFromDescription(tr("Custom"), returnedWindowLevel);
 
-    QCOMPARE(returnedWindowLevel, customWindowLevel);
+    QCOMPARE(returnedWindowLevel.getWindowLevel(), customWindowLevel);
 }
 
 void test_VoiLutPresetsToolData::activatePreset_WorksAsExpected_data()
@@ -408,7 +408,7 @@ void test_VoiLutPresetsToolData::activatePreset_WorksAsExpected()
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
 
     wlData->selectCurrentPreset(presetNameToActivate);
-    QCOMPARE(wlData->getCurrentPreset().getName(), currentActivatedPreset);
+    QCOMPARE(wlData->getCurrentPreset().getExplanation(), currentActivatedPreset);
     
     delete wlData;
 }
