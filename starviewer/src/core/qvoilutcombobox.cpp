@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "qwindowlevelcombobox.h"
+#include "qvoilutcombobox.h"
 #include "qcustomwindowleveldialog.h"
 #include "logging.h"
 #include "voilutpresetstooldata.h"
@@ -22,7 +22,7 @@
 
 namespace udg {
 
-QWindowLevelComboBox::QWindowLevelComboBox(QWidget *parent)
+QVoiLutComboBox::QVoiLutComboBox(QWidget *parent)
  : QComboBox(parent), m_presetsData(0)
 {
     m_customWindowLevelDialog = new QCustomWindowLevelDialog();
@@ -32,12 +32,12 @@ QWindowLevelComboBox::QWindowLevelComboBox(QWidget *parent)
     this->setMaxVisibleItems(settings.getValue(CoreSettings::MaximumNumberOfVisibleWindowLevelComboItems).toInt());
 }
 
-QWindowLevelComboBox::~QWindowLevelComboBox()
+QVoiLutComboBox::~QVoiLutComboBox()
 {
     delete m_customWindowLevelDialog;
 }
 
-void QWindowLevelComboBox::setPresetsData(VoiLutPresetsToolData *windowLevelData)
+void QVoiLutComboBox::setPresetsData(VoiLutPresetsToolData *windowLevelData)
 {
     if (m_presetsData)
     {
@@ -57,7 +57,7 @@ void QWindowLevelComboBox::setPresetsData(VoiLutPresetsToolData *windowLevelData
     connect(m_customWindowLevelDialog, SIGNAL(windowLevel(double, double)), m_presetsData, SLOT(setCustomWindowLevel(double, double)));
 }
 
-void QWindowLevelComboBox::clearPresets()
+void QVoiLutComboBox::clearPresets()
 {
     if (m_presetsData)
     {
@@ -70,7 +70,7 @@ void QWindowLevelComboBox::clearPresets()
     m_presetsData = 0;
 }
 
-void QWindowLevelComboBox::addPreset(const WindowLevel &preset)
+void QVoiLutComboBox::addPreset(const WindowLevel &preset)
 {
     int group;
     if (m_presetsData->getGroup(preset, group))
@@ -127,12 +127,12 @@ void QWindowLevelComboBox::addPreset(const WindowLevel &preset)
     this->selectPreset(m_currentSelectedPreset);
 }
 
-void QWindowLevelComboBox::removePreset(const WindowLevel &preset)
+void QVoiLutComboBox::removePreset(const WindowLevel &preset)
 {
     removePreset(preset.getName());
 }
 
-void QWindowLevelComboBox::removePreset(const QString &preset)
+void QVoiLutComboBox::removePreset(const QString &preset)
 {
     int index = this->findText(preset);
     if (index > -1)
@@ -141,12 +141,12 @@ void QWindowLevelComboBox::removePreset(const QString &preset)
     }
 }
 
-void QWindowLevelComboBox::selectPreset(const WindowLevel &preset)
+void QVoiLutComboBox::selectPreset(const WindowLevel &preset)
 {
     selectPreset(preset.getName());
 }
 
-void QWindowLevelComboBox::selectPreset(const QString &preset)
+void QVoiLutComboBox::selectPreset(const QString &preset)
 {
     int index = this->findText(preset);
     if (index > -1)
@@ -160,7 +160,7 @@ void QWindowLevelComboBox::selectPreset(const QString &preset)
     }
 }
 
-void QWindowLevelComboBox::populateFromPresetsData()
+void QVoiLutComboBox::populateFromPresetsData()
 {
     if (!m_presetsData)
     {
@@ -178,7 +178,7 @@ void QWindowLevelComboBox::populateFromPresetsData()
     this->addItem(tr("Edit Custom WW/WL"));
 }
 
-void QWindowLevelComboBox::setActiveWindowLevel(const QString &text)
+void QVoiLutComboBox::setActiveWindowLevel(const QString &text)
 {
     if (text == VoiLutPresetsToolData::getCustomPresetName())
     {

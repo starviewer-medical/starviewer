@@ -827,7 +827,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QWindowLevelComboBox" name="m_windowLevelComboBox">
+          <widget class="QVoiLutComboBox" name="m_windowLevelComboBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -1020,9 +1020,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QWindowLevelComboBox</class>
+   <class>QVoiLutComboBox</class>
    <extends>QComboBox</extends>
-   <header>qwindowlevelcombobox.h</header>
+   <header>qvoilutcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>QCINEController</class>
