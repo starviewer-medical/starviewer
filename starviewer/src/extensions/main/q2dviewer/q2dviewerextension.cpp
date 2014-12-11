@@ -657,7 +657,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
 
             // TODO Potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
             // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
-            VoiLutPresetsToolData *windowLevelData = selected2DViewer->getWindowLevelData();
+            VoiLutPresetsToolData *windowLevelData = selected2DViewer->getVoiLutData();
             m_windowLevelComboBox->setPresetsData(windowLevelData);
             windowLevelData->selectCurrentPreset(windowLevelData->getCurrentPreset().getExplanation());
 

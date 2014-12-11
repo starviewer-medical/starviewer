@@ -28,7 +28,7 @@ WindowLevelPresetsTool::WindowLevelPresetsTool(QViewer *viewer, QObject *parent)
 {
     m_toolName = "WindowLevelPresetsTool";
 
-    setToolData(m_viewer->getWindowLevelData());
+    setToolData(m_viewer->getVoiLutData());
     m_characterIndexMap.insert('1', 0);
     m_characterIndexMap.insert('2', 1);
     m_characterIndexMap.insert('3', 2);

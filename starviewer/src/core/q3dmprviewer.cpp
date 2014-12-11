@@ -70,7 +70,7 @@ public:
                     m_viewer->getCurrentWindowLevel(wl);
                     if (wl[0] != lastWindowLevel[0] || wl[1] != lastWindowLevel[1])
                     {
-                        m_viewer->getWindowLevelData()->setCustomWindowLevel(wl[0], wl[1]);
+                        m_viewer->getVoiLutData()->setCustomWindowLevel(wl[0], wl[1]);
                     }
                     break;
             }
@@ -117,7 +117,7 @@ void Q3DMPRViewer::setInput(Volume *volume)
     // Li proporcionem les dades als plans
     this->updatePlanesData();
     // Ajustem els valors del window Level per defecte
-    this->updateWindowLevelData();
+    this->updateVoiLutData();
     // Li donem la orientació per defecte
     this->resetViewToAcquisitionPlane();
     render();

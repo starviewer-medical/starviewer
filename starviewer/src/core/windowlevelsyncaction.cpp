@@ -64,7 +64,7 @@ void WindowLevelSyncAction::run(QViewer *viewer)
     }
     else
     {
-        viewer->getWindowLevelData()->setCurrentPreset(m_windowLevel);
+        viewer->getVoiLutData()->setCurrentPreset(m_windowLevel);
     }
 }
 
