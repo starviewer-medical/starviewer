@@ -154,8 +154,14 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setBitsStored(QString(reply[14 + row * columns]).toInt());
     image->setPixelRepresentation(QString(reply[15 + row * columns]).toInt());
     image->setRescaleSlope(QString(reply[16 + row * columns]).toDouble());
-    image->setWindowLevelList(DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns],
-                                                                                    convertToQString(reply[19 + row * columns])));
+    QList<WindowLevel> windowLevelList = DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns],
+                                                                                               convertToQString(reply[19 + row * columns]));
+    QList<VoiLut> voiLutList;
+    foreach (const WindowLevel &windowLevel, windowLevelList)
+    {
+        voiLutList.append(windowLevel);
+    }
+    image->setVoiLutList(voiLutList);
     image->setSliceLocation(reply[20 + row * columns]);
     image->setRescaleIntercept(QString(reply[21 + row * columns]).toDouble());
     image->setPhotometricInterpretation(reply[22 + row * columns]);
@@ -485,9 +491,9 @@ void LocalDatabaseImageDAL::getWindowLevelInformationAsQString(Image *newImage, 
     
     QString value;
     WindowLevel windowLevel;
-    for (int index = 0; index < newImage->getNumberOfWindowLevels(); ++index)
+    for (int index = 0; index < newImage->getNumberOfVoiLuts(); ++index)
     {
-        windowLevel = newImage->getWindowLevel(index);
+        windowLevel = newImage->getVoiLut(index).getWindowLevel();
         
         windowWidth += value.setNum(windowLevel.getWidth(), 'g', 10) + "\\";
         windowCenter += value.setNum(windowLevel.getCenter(), 'g', 10) + "\\";

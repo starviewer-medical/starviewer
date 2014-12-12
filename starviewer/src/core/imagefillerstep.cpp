@@ -395,7 +395,14 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
         QString windowWidthString = dicomReader->getValueAttributeAsQString(DICOMWindowWidth);
         QString windowCenterString = dicomReader->getValueAttributeAsQString(DICOMWindowCenter);
         QString windowLevelExplanationString = dicomReader->getValueAttributeAsQString(DICOMWindowCenterWidthExplanation);
-        image->setWindowLevelList(DICOMFormattedValuesConverter::parseWindowLevelValues(windowWidthString, windowCenterString, windowLevelExplanationString));
+        QList<WindowLevel> windowLevelList =
+                DICOMFormattedValuesConverter::parseWindowLevelValues(windowWidthString, windowCenterString, windowLevelExplanationString);
+        QList<VoiLut> voiLutList;
+        foreach (const WindowLevel &windowLevel, windowLevelList)
+        {
+            voiLutList.append(windowLevel);
+        }
+        image->setVoiLutList(voiLutList);
 
         // Propietats útils pels hanging protocols
         value = dicomReader->getValueAttributeAsQString(DICOMImageLaterality);
@@ -881,7 +888,14 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
             }
             
             // Afegim els valors de window level a la imatge
-            image->setWindowLevelList(DICOMFormattedValuesConverter::parseWindowLevelValues(windowWidthString, windowCenterString, windowLevelExplanationString));
+            QList<WindowLevel> windowLevelList =
+                    DICOMFormattedValuesConverter::parseWindowLevelValues(windowWidthString, windowCenterString, windowLevelExplanationString);
+            QList<VoiLut> voiLutList;
+            foreach (const WindowLevel &windowLevel, windowLevelList)
+            {
+                voiLutList.append(windowLevel);
+            }
+            image->setVoiLutList(voiLutList);
         }
     }
 

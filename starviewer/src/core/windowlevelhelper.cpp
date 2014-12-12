@@ -47,7 +47,7 @@ void WindowLevelHelper::initializeWindowLevelData(VoiLutPresetsToolData *windowL
     Image *image = volume->getImage(index);
     if (image)
     {
-        windowLevelCount = image->getNumberOfWindowLevels();
+        windowLevelCount = image->getNumberOfVoiLuts();
     }
     else
     {
@@ -77,7 +77,7 @@ WindowLevel WindowLevelHelper::getDefaultWindowLevelForPresentation(Image *image
         return WindowLevel();
     }
 
-    WindowLevel windowLevel = image->getWindowLevel(index);
+    WindowLevel windowLevel = image->getVoiLut(index).getWindowLevel();
     if (windowLevel.isValid())
     {
         if (image->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
