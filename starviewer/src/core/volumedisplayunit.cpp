@@ -286,7 +286,7 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
         Image *image = getVolume()->getImage(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
         if (image)
         {
-            for (int i = 0; i < image->getNumberOfWindowLevels(); ++i)
+            for (int i = 0; i < image->getNumberOfVoiLuts(); ++i)
             {
                 WindowLevel windowLevel = WindowLevelHelper().getDefaultWindowLevelForPresentation(image, i);
                 m_windowLevelData->updatePreset(windowLevel);
