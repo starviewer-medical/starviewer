@@ -17,7 +17,6 @@
 
 #include "qviewer.h"
 #include "annotationflags.h"
-#include "windowlevel.h"
 #include "anatomicalplane.h"
 
 #include <QPointer>
@@ -277,7 +276,7 @@ public:
     int indexOfVolume(const Volume *volume) const;
 
     /// Returns window level data corresponding to the volume at the given index.
-    VoiLutPresetsToolData* getWindowLevelDataForVolume(int index) const;
+    VoiLutPresetsToolData* getVoiLutDataForVolume(int index) const;
 
     /// Returns the fusion balance as a value in the range [0, 100] representing the weight of the second input.
     int getFusionBalance() const;
@@ -321,7 +320,7 @@ public slots:
     void removeAnnotation(AnnotationFlags annotation);
 
     /// Sets the given window level to the volume at the given index. If there isn't a volume at the given index, it does nothing.
-    void setWindowLevelInVolume(int index, const WindowLevel &windowLevel);
+    void setVoiLutInVolume(int index, const VoiLut &voiLut);
     /// Sets the given window and level to the main volume.
     void setWindowLevel(double window, double level);
 
