@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "windowlevelhelper.h"
+#include "voiluthelper.h"
 
 #include "volume.h"
 #include "volumehelper.h"
@@ -22,105 +22,107 @@
 
 namespace udg {
 
-const double WindowLevelHelper::DefaultPETWindowWidthThreshold = 0.5;
+const double VoiLutHelper::DefaultPETWindowWidthThreshold = 0.5;
 
-WindowLevelHelper::WindowLevelHelper()
+VoiLutHelper::VoiLutHelper()
 {
 }
 
-void WindowLevelHelper::initializeWindowLevelData(VoiLutPresetsToolData *windowLevelData, Volume *volume)
+void VoiLutHelper::initializeVoiLutData(VoiLutPresetsToolData *voiLutData, Volume *volume)
 {
     if (!volume)
     {
         return;
     }
 
-    windowLevelData->removePresetsFromGroup(VoiLutPresetsToolData::FileDefined);
-    windowLevelData->removePresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
+    voiLutData->removePresetsFromGroup(VoiLutPresetsToolData::FileDefined);
+    voiLutData->removePresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
 
     // Agafem el window level de la imatge central per evitar problemes
     // de que tinguem diferents windows levels a cada imatge i el de la
     // primera imatge sigui massa diferent a la resta. No deixa de ser un hack cutre.
     int index = volume->getNumberOfSlicesPerPhase() / 2;
 
-    int windowLevelCount = 0;
+    int voiLutCount = 0;
     Image *image = volume->getImage(index);
     if (image)
     {
-        windowLevelCount = image->getNumberOfVoiLuts();
+        voiLutCount = image->getNumberOfVoiLuts();
     }
     else
     {
         DEBUG_LOG(QString("Índex [%1] fora de rang. No s'ha pogut obtenir la imatge indicada del volum actual.").arg(index));
     }
 
-    if (windowLevelCount > 0)
+    if (voiLutCount > 0)
     {
-        for (int i = 0; i < windowLevelCount; i++)
+        for (int i = 0; i < voiLutCount; i++)
         {
-            WindowLevel windowLevel = getDefaultWindowLevelForPresentation(image, i);
-            windowLevelData->addPreset(windowLevel, VoiLutPresetsToolData::FileDefined);
+            VoiLut voiLut = getDefaultVoiLutForPresentation(image, i);
+            voiLutData->addPreset(voiLut, VoiLutPresetsToolData::FileDefined);
         }
     }
 
     // Calculem un window level automàtic que sempre posarem disponible a l'usuari
     WindowLevel automaticWindowLevel = getCurrentAutomaticWindowLevel(volume);
-    windowLevelData->addPreset(automaticWindowLevel, VoiLutPresetsToolData::AutomaticPreset);
+    voiLutData->addPreset(automaticWindowLevel, VoiLutPresetsToolData::AutomaticPreset);
 
-    selectDefaultPreset(windowLevelData, volume);
+    selectDefaultPreset(voiLutData, volume);
 }
 
-WindowLevel WindowLevelHelper::getDefaultWindowLevelForPresentation(Image *image, int index)
+VoiLut VoiLutHelper::getDefaultVoiLutForPresentation(Image *image, int index)
 {
     if (!image)
     {
-        return WindowLevel();
+        return VoiLut();
     }
 
-    WindowLevel windowLevel = image->getVoiLut(index).getWindowLevel();
-    if (windowLevel.isValid())
+    VoiLut voiLut = image->getVoiLut(index);
+    if (voiLut.isLut() || voiLut.getWindowLevel().isValid())
     {
-        if (image->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
+        if (voiLut.isWindowLevel() && image->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
         {
+            WindowLevel windowLevel = voiLut.getWindowLevel();
             windowLevel.setWidth(-windowLevel.getWidth());
+            voiLut.setWindowLevel(windowLevel);
         }
 
-        if (windowLevel.getName().isEmpty())
+        if (voiLut.getExplanation().isEmpty())
         {
-            windowLevel.setName(getDefaultWindowLevelDescription(index));
+            voiLut.setExplanation(getDefaultVoiLutDescription(index));
         }
     }
 
-    return windowLevel;
+    return voiLut;
 }
 
-void WindowLevelHelper::selectDefaultPreset(VoiLutPresetsToolData *windowLevelData, Volume *volume)
+void VoiLutHelper::selectDefaultPreset(VoiLutPresetsToolData *voiLutData, Volume *volume)
 {
-    if (!windowLevelData)
+    if (!voiLutData)
     {
         return;
     }
 
-    QList<VoiLut> filePresets = windowLevelData->getPresetsFromGroup(VoiLutPresetsToolData::FileDefined);
+    QList<VoiLut> filePresets = voiLutData->getPresetsFromGroup(VoiLutPresetsToolData::FileDefined);
 
     // Usually we want the first file preset, if existent, as the default preset, but for primary PET volumes the automatic is preferred
     if (!filePresets.isEmpty() && !VolumeHelper::isPrimaryPET(volume))
     {
-        windowLevelData->setCurrentPreset(filePresets.first());
+        voiLutData->setCurrentPreset(filePresets.first());
     }
     else
     {
-        QList<VoiLut> automaticPresets = windowLevelData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
-        windowLevelData->setCurrentPreset(automaticPresets.first());
+        QList<VoiLut> automaticPresets = voiLutData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
+        voiLutData->setCurrentPreset(automaticPresets.first());
     }
 }
 
-QString WindowLevelHelper::getDefaultWindowLevelDescription(int index)
+QString VoiLutHelper::getDefaultVoiLutDescription(int index)
 {
     return QObject::tr("Default %1").arg(index);
 }
 
-WindowLevel WindowLevelHelper::getCurrentAutomaticWindowLevel(Volume *volume)
+WindowLevel VoiLutHelper::getCurrentAutomaticWindowLevel(Volume *volume)
 {
     WindowLevel automaticWindowLevel;
     automaticWindowLevel.setName(QObject::tr("Auto"));

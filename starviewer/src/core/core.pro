@@ -395,7 +395,6 @@ HEADERS += extensionfactory.h \
     transferfunctionmodel.h \
     transferfunctionmodelfiller.h \
     defaulttransferfunctionselector.h \
-    windowlevelhelper.h \
     patientbrowsermenugroup.h \
     patientbrowsermenufusionitem.h \
     phasesyncaction.h \
@@ -419,7 +418,8 @@ HEADERS += extensionfactory.h \
     griditerator.h \
     voilut.h \
     voilutpresetstooldata.h \
-    qvoilutcombobox.h
+    qvoilutcombobox.h \
+    voiluthelper.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -762,7 +762,6 @@ SOURCES += extensionmediator.cpp \
     transferfunctionmodel.cpp \
     transferfunctionmodelfiller.cpp \
     defaulttransferfunctionselector.cpp \
-    windowlevelhelper.cpp \
     patientbrowsermenugroup.cpp \
     patientbrowsermenufusionitem.cpp \
     phasesyncaction.cpp \
@@ -786,7 +785,8 @@ SOURCES += extensionmediator.cpp \
     griditerator.cpp \
     voilut.cpp \
     voilutpresetstooldata.cpp \
-    qvoilutcombobox.cpp
+    qvoilutcombobox.cpp \
+    voiluthelper.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

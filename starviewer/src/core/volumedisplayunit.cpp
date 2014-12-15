@@ -20,7 +20,7 @@
 #include "voilutpresetstooldata.h"
 #include "volumepixeldata.h"
 #include "image.h"
-#include "windowlevelhelper.h"
+#include "voiluthelper.h"
 
 #include <vtkImageActor.h>
 #include <vtkImageMapper3D.h>
@@ -72,7 +72,7 @@ void VolumeDisplayUnit::setVolume(Volume *volume)
 void VolumeDisplayUnit::setWindowLevelData(VoiLutPresetsToolData *windowLevelData)
 {
     m_windowLevelData = windowLevelData;
-    WindowLevelHelper().initializeWindowLevelData(m_windowLevelData, m_volume);
+    VoiLutHelper().initializeVoiLutData(m_windowLevelData, m_volume);
 }
 
 VoiLutPresetsToolData *VolumeDisplayUnit::getWindowLevelData()
@@ -288,7 +288,7 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
         {
             for (int i = 0; i < image->getNumberOfVoiLuts(); ++i)
             {
-                WindowLevel windowLevel = WindowLevelHelper().getDefaultWindowLevelForPresentation(image, i);
+                WindowLevel windowLevel = VoiLutHelper().getDefaultVoiLutForPresentation(image, i).getWindowLevel();
                 m_windowLevelData->updatePreset(windowLevel);
             }
         }

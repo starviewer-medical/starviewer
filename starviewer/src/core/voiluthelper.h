@@ -12,38 +12,40 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef WINDOWLEVELHELPER_H
-#define WINDOWLEVELHELPER_H
+#ifndef VOILUTHELPER_H
+#define VOILUTHELPER_H
 
-#include "windowlevel.h"
+class QString;
 
 namespace udg {
 
+class Image;
+class VoiLut;
 class VoiLutPresetsToolData;
 class Volume;
-class Image;
+class WindowLevel;
 
-class WindowLevelHelper {
+class VoiLutHelper {
 public:
-    WindowLevelHelper();
+    VoiLutHelper();
 
     /// Initialize the window level data according to the given volume
-    void initializeWindowLevelData(VoiLutPresetsToolData *windowLevelData, Volume *volume);
+    void initializeVoiLutData(VoiLutPresetsToolData *voiLutData, Volume *volume);
 
     /// Gets the n-th default window level from the given image and index, prepared for display,
     /// i.e. if image is MONOCHROME1, it will invert values and give a proper name if no description is available
     /// If index is out of range, a non-valid WindowLevel will be returned
-    WindowLevel getDefaultWindowLevelForPresentation(Image *image, int index);
+    VoiLut getDefaultVoiLutForPresentation(Image *image, int index);
 
     /// Selects the default preset to apply on the given window level data corresponding to the given volume.
-    static void selectDefaultPreset(VoiLutPresetsToolData *windowLevelData, Volume *volume);
+    static void selectDefaultPreset(VoiLutPresetsToolData *voiLutData, Volume *volume);
 
 private:
     /// Computes the automatic window level for the current input
     WindowLevel getCurrentAutomaticWindowLevel(Volume *volume);
 
     /// Gets a default name for the specified n-th window level. Used to give a default name for window levels without description.
-    QString getDefaultWindowLevelDescription(int index);
+    QString getDefaultVoiLutDescription(int index);
 
 private:
     /// Default threshold to apply to window width on PET images
@@ -52,4 +54,4 @@ private:
 
 }
 
-#endif // WINDOWLEVELHELPER_H
+#endif // VOILUTHELPER_H

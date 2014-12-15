@@ -21,7 +21,7 @@
 // Per poder afegir i modificar els presets que visualitzem
 #include "voilutpresetstooldata.h"
 #include "qviewerworkinprogresswidget.h"
-#include "windowlevelhelper.h"
+#include "voiluthelper.h"
 #include "logging.h"
 #include "mathtools.h"
 #include "starviewerapplication.h"
@@ -657,7 +657,7 @@ void QViewer::updateVoiLutData()
         return;
     }
 
-    WindowLevelHelper().initializeWindowLevelData(m_voiLutData, getMainInput());
+    VoiLutHelper().initializeVoiLutData(m_voiLutData, getMainInput());
 }
 
 void QViewer::setCameraOrientation(const OrthogonalPlane &orientation)

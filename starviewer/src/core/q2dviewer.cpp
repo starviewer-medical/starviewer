@@ -41,7 +41,7 @@
 #include "volumedisplayunithandlerfactory.h"
 #include "genericvolumedisplayunithandler.h"
 #include "patientbrowsermenu.h"
-#include "windowlevelhelper.h"
+#include "voiluthelper.h"
 
 // Qt
 #include <QResizeEvent>
@@ -1597,7 +1597,7 @@ void Q2DViewer::restore()
     // defined command to place the image properly by default depending on the input if no one is defined 
     // Take into account this call disables thickslab
     resetViewToAcquisitionPlane();
-    WindowLevelHelper::selectDefaultPreset(getVoiLutData(), getMainInput());
+    VoiLutHelper::selectDefaultPreset(getVoiLutData(), getMainInput());
     
     // HACK Restaurem el rendering
     enableRendering(true);
