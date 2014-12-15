@@ -17,6 +17,7 @@
 #include "thickslabfilter.h"
 #include "displayshutterfilter.h"
 #include "transferfunction.h"
+#include "voilut.h"
 
 #include "vtkImageData.h"
 #include "vtkRunThroughFilter.h"
@@ -123,17 +124,18 @@ vtkImageData* ImagePipeline::getSlabProjectionOutput()
     return m_thickSlabProjectionFilter->getOutput().getVtkImageData();
 }
 
-bool ImagePipeline::setWindowLevel(double window, double level)
+void ImagePipeline::setVoiLut(const VoiLut &voiLut)
 {
-    if ((m_windowLevelLUTFilter->getWindow() != window) || (m_windowLevelLUTFilter->getLevel() != level))
+    m_windowLevelLUTFilter->setWindowLevel(voiLut.getWindowLevel());
+
+    if (voiLut.isLut())
     {
-        m_windowLevelLUTFilter->setWindow(window);
-        m_windowLevelLUTFilter->setLevel(level);
-
-        return true;
+        m_windowLevelLUTFilter->setTransferFunction(voiLut.getLut());
     }
-
-    return false;
+    else
+    {
+        m_windowLevelLUTFilter->clearTransferFunction();
+    }
 }
 
 void ImagePipeline::getCurrentWindowLevel(double wl[2])
