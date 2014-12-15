@@ -587,10 +587,10 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     removeImageActors();
     m_displayUnitsHandler = m_displayUnitsFactory->createVolumeDisplayUnitHandler(volumes);
 
-    getDisplayUnit(0)->setWindowLevelData(getVoiLutData());
+    getDisplayUnit(0)->setVoiLutData(getVoiLutData());
     for (int i = 1; i < getNumberOfInputs(); i++)
     {
-        getDisplayUnit(i)->setWindowLevelData(new VoiLutPresetsToolData(this));
+        getDisplayUnit(i)->setVoiLutData(new VoiLutPresetsToolData(this));
     }
 
     addImageActors();
@@ -1422,7 +1422,7 @@ void Q2DViewer::setWindowLevelInVolume(int index, const WindowLevel &windowLevel
         return;
     }
 
-    unit->updateWindowLevel(windowLevel);
+    unit->updateVoiLut(windowLevel);
     // An explicit render is only needed if the unit is not the main one
     // because the main unit is connected to QViewer::setWindowLevel which is invoked in unit->updateWindowLevel
     if (unit != getMainDisplayUnit())
@@ -1963,7 +1963,7 @@ int Q2DViewer::indexOfVolume(const Volume *volume) const
 
 VoiLutPresetsToolData* Q2DViewer::getWindowLevelDataForVolume(int index) const
 {
-    return getDisplayUnit(index)->getWindowLevelData();
+    return getDisplayUnit(index)->getVoiLutData();
 }
 
 int Q2DViewer::getFusionBalance() const
