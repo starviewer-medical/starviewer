@@ -295,13 +295,13 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
     }
     
     WindowLevel wl = m_windowLevelData->getCurrentPreset().getWindowLevel();
-    m_imagePipeline->setWindowLevel(wl.getWidth(), wl.getCenter());
+    m_imagePipeline->setVoiLut(wl);
 }
 
 void VolumeDisplayUnit::updateWindowLevel(const WindowLevel &windowLevel)
 {
     m_windowLevelData->setCurrentPreset(windowLevel);
-    m_imagePipeline->setWindowLevel(windowLevel.getWidth(), windowLevel.getCenter());
+    m_imagePipeline->setVoiLut(windowLevel);
 }
 
 void VolumeDisplayUnit::getWindowLevel(double windowLevel[2]) const
@@ -311,7 +311,7 @@ void VolumeDisplayUnit::getWindowLevel(double windowLevel[2]) const
 
 void VolumeDisplayUnit::setWindowLevel(double window, double level)
 {
-    m_imagePipeline->setWindowLevel(window, level);
+    m_imagePipeline->setVoiLut(WindowLevel(window, level));
 }
 
 void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunction)

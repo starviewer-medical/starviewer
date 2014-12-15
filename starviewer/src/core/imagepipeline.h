@@ -28,6 +28,7 @@ class WindowLevelFilter;
 class ThickSlabFilter;
 class DisplayShutterFilter;
 class TransferFunction;
+class VoiLut;
 
 /// Pipeline that applies the filters required to generate the image to be used in Q2DViewer
 class ImagePipeline : public Filter {
@@ -42,7 +43,7 @@ public:
     void setInput(FilterOutput input);
 
     /// Sets the window window and window level
-    bool setWindowLevel(double window, double level);
+    void setVoiLut(const VoiLut &voiLut);
     /// Gets the window window and window level
     void getCurrentWindowLevel(double wl[]);
     /// Sets the transfer function
