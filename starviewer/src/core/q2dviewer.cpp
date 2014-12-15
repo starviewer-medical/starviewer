@@ -1411,7 +1411,7 @@ void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
     enableAnnotation(annotation, false);
 }
 
-void Q2DViewer::setWindowLevelInVolume(int index, const WindowLevel &windowLevel)
+void Q2DViewer::setVoiLutInVolume(int index, const VoiLut &voiLut)
 {
     VolumeDisplayUnit *unit = this->getDisplayUnit(index);
 
@@ -1422,7 +1422,7 @@ void Q2DViewer::setWindowLevelInVolume(int index, const WindowLevel &windowLevel
         return;
     }
 
-    unit->updateVoiLut(windowLevel);
+    unit->updateVoiLut(voiLut);
     // An explicit render is only needed if the unit is not the main one
     // because the main unit is connected to QViewer::setWindowLevel which is invoked in unit->updateWindowLevel
     if (unit != getMainDisplayUnit())
@@ -1961,7 +1961,7 @@ int Q2DViewer::indexOfVolume(const Volume *volume) const
     return -1;
 }
 
-VoiLutPresetsToolData* Q2DViewer::getWindowLevelDataForVolume(int index) const
+VoiLutPresetsToolData* Q2DViewer::getVoiLutDataForVolume(int index) const
 {
     return getDisplayUnit(index)->getVoiLutData();
 }
