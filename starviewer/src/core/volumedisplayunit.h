@@ -17,7 +17,6 @@
 
 #include "accumulator.h"
 #include "transferfunction.h"
-#include "windowlevel.h"
 
 class vtkImageActor;
 class vtkImageData;
@@ -30,6 +29,7 @@ class ImagePipeline;
 class OrthogonalPlane;
 class SliceHandler;
 class Volume;
+class VoiLut;
 class VoiLutPresetsToolData;
 class VolumePixelData;
 
@@ -50,9 +50,9 @@ public:
     void setVolume(Volume *volume);
 
     /// Returns the window level data
-    VoiLutPresetsToolData* getWindowLevelData();
+    VoiLutPresetsToolData* getVoiLutData() const;
     /// Sets a new window level data
-    void setWindowLevelData(VoiLutPresetsToolData *windowLevelData);
+    void setVoiLutData(VoiLutPresetsToolData *voiLutData);
 
     /// Returns the image pipeline.
     ImagePipeline* getImagePipeline() const;
@@ -88,7 +88,7 @@ public:
     void updateCurrentImageDefaultPresets();
 
     /// Updates the current window level
-    void updateWindowLevel(const WindowLevel &windowLevel);
+    void updateVoiLut(const VoiLut &voiLut);
 
     /// Returns the current window level on the given array.
     void getWindowLevel(double windowLevel[2]) const;
@@ -165,7 +165,7 @@ private:
     vtkPropPicker *m_imagePointPicker;
 
     /// Window and level data
-    VoiLutPresetsToolData *m_windowLevelData;
+    VoiLutPresetsToolData *m_voiLutData;
 
     /// The current transfer function.
     TransferFunction m_transferFunction;
