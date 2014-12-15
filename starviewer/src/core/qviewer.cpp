@@ -559,8 +559,8 @@ void QViewer::setVoiLutData(VoiLutPresetsToolData *voiLutData)
     }
 
     m_voiLutData = voiLutData;
-    connect(m_voiLutData, SIGNAL(currentPresetChanged(VoiLut)), SLOT(setWindowLevelPreset(VoiLut)));
-    connect(m_voiLutData, SIGNAL(presetSelected(VoiLut)), SLOT(setWindowLevelPreset(VoiLut)));
+    connect(m_voiLutData, SIGNAL(currentPresetChanged(VoiLut)), SLOT(setVoiLut(VoiLut)));
+    connect(m_voiLutData, SIGNAL(presetSelected(VoiLut)), SLOT(setVoiLut(VoiLut)));
 }
 
 void QViewer::grabCurrentView()
@@ -860,11 +860,11 @@ void QViewer::setInputAndRender(Volume *volume)
     this->render();
 }
 
-void QViewer::setWindowLevelPreset(const VoiLut &preset)
+void QViewer::setVoiLut(const VoiLut &voiLut)
 {
-    if (preset.getWindowLevel().isValid())
+    if (voiLut.isWindowLevel() && voiLut.getWindowLevel().isValid())
     {
-        setWindowLevel(preset.getWindowLevel().getWidth(), preset.getWindowLevel().getCenter());
+        setWindowLevel(voiLut.getWindowLevel().getWidth(), voiLut.getWindowLevel().getCenter());
     }
 }
 
