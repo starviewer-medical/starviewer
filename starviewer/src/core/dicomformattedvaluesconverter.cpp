@@ -15,7 +15,65 @@
 #include "dicomformattedvaluesconverter.h"
 
 #include "dicomvaluerepresentationconverter.h"
-#include <QStringList>
+#include "logging.h"
+#include "mathtools.h"
+#include "voilut.h"
+
+#include <QColor>
+#include <QRegularExpression>
+
+namespace {
+
+/// Returns the base used to represent the data values contained in the given data string. The base may only be 16 or 10.
+int getBase(const QString &data)
+{
+    if (data.contains(QRegularExpression("[a-f]", QRegularExpression::CaseInsensitiveOption)))
+    {
+        return 16;
+    }
+    else
+    {
+        return 10;
+    }
+}
+
+/// Parses the given data string and returns a list of the integers represented in it.
+QList<int> getValues(const QString &lutData)
+{
+    QStringList lutStringValues = lutData.split("\\");
+    int base = getBase(lutData);
+    QList<int> lutValues;
+
+    foreach (const QString &stringValue, lutStringValues)
+    {
+        bool ok;
+        int value = stringValue.toInt(&ok, base);
+        lutValues.append(value);
+
+        if (!ok)
+        {
+            DEBUG_LOG(QString("Error while parsing %1 as an int in base %2. Result: %3").arg(stringValue).arg(base).arg(value));
+            WARN_LOG(QString("Error while parsing %1 as an int in base %2. Result: %3").arg(stringValue).arg(base).arg(value));
+        }
+    }
+
+    return lutValues;
+}
+
+/// Returns the maximum value in the given list.
+int getMaximum(const QList<int> &values)
+{
+    int maximum = 0;
+
+    foreach (int value, values)
+    {
+        maximum = qMax(value, maximum);
+    }
+
+    return maximum;
+}
+
+}
 
 namespace udg {
 
@@ -69,6 +127,33 @@ QList<WindowLevel> DICOMFormattedValuesConverter::parseWindowLevelValues(const Q
     }
     
     return windowLevelList;
+}
+
+VoiLut DICOMFormattedValuesConverter::parseVoiLut(const QString &lutDescriptor, const QString &lutExplanation, const QString &lutData)
+{
+    TransferFunction lut;
+    lut.setName(lutExplanation);
+
+    QList<int> lutValues = getValues(lutData);
+    int dataMaximum = getMaximum(lutValues);
+    // The maximum value of the LUT should be a power of two minus one
+    double lutMaximum = MathTools::roundUpToPowerOf2(dataMaximum) - 1;
+    int firstValueMapped = lutDescriptor.split("\\").at(1).toInt();
+    int inputValue = firstValueMapped;
+
+    foreach (int value, lutValues)
+    {
+        double outputValue = value / lutMaximum;
+        lut.setColor(inputValue, outputValue, outputValue, outputValue);
+        inputValue++;
+    }
+
+    // Explicitly set first and last points
+    lut.setColor(0.0, lut.getColor(firstValueMapped));
+    lut.setColor(lutMaximum, lut.getColor(inputValue - 1));
+    lut.setOpacity(0.0, 1.0);
+
+    return lut;
 }
 
 }
