@@ -15,12 +15,13 @@
 #ifndef UDG_DICOMFORMATTEDVALUESCONVERTER_H
 #define UDG_DICOMFORMATTEDVALUESCONVERTER_H
 
-#include "windowlevel.h"
 #include <QList>
-
-class QString;
+#include <QString>
 
 namespace udg {
+
+class VoiLut;
+class WindowLevel;
 
 /** 
     Classe helper per convertir dades en format DICOM a estructures de dades i classes pròpies
@@ -37,6 +38,9 @@ public:
     /// explanationString no cal que tingui el mateix nombre d'elements que windowWidthString i windowCenterString, ja que es considera opcional.
     /// En cas que el nombre d'elements d'explanationString difereixi, només s'afegiran aquells que estiguin dins del rang del nombre de window levels
     static QList<WindowLevel> parseWindowLevelValues(const QString &windowWidthString, const QString &windowCenterString, const QString &explanationString = QString());
+
+    /// Given the values of the DICOM tags LUTDescriptor, LUTExplanation and LUTData, constructs and returns a VoiLut object matching these values.
+    static VoiLut parseVoiLut(const QString &lutDescriptor, const QString &lutExplanation, const QString &lutData);
 };
 
 }
