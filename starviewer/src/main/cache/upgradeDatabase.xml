@@ -37,4 +37,16 @@
     <upgradeDatabaseToRevision updateToRevision="9591">
       <upgradeCommand>ALTER TABLE IMAGE ADD COLUMN TransferSyntaxUID TEXT</upgradeCommand>
     </upgradeDatabaseToRevision>
+    <upgradeDatabaseToRevision updateToRevision="9592">
+        <upgradeCommand>
+            CREATE TABLE VoiLut
+            (
+                ID                  INTEGER PRIMARY KEY AUTOINCREMENT,
+                Lut                 BLOB,
+                ImageInstanceUID    TEXT,
+                ImageFrameNumber    INTEGER,
+                FOREIGN KEY (ImageInstanceUID, ImageFrameNumber) REFERENCES Image (SOPInstanceUID, FrameNumber)
+            );
+        </upgradeCommand>
+    </upgradeDatabaseToRevision>
 </upgradeDatabase>
