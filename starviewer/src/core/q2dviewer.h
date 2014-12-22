@@ -319,6 +319,8 @@ public slots:
     void enableAnnotation(AnnotationFlags annotation, bool enable = true);
     void removeAnnotation(AnnotationFlags annotation);
 
+    /// Sets the VOI LUT for this viewer.
+    virtual void setVoiLut(const VoiLut &voiLut);
     /// Sets the given window level to the volume at the given index. If there isn't a volume at the given index, it does nothing.
     void setVoiLutInVolume(int index, const VoiLut &voiLut);
     /// Sets the given window and level to the main volume.
@@ -393,6 +395,8 @@ signals:
 
     /// Indica el nou window level
     void windowLevelChanged(double window, double level);
+    /// Emitted to inform of the new VOI LUT.
+    void voiLutChanged(const VoiLut &voiLut);
 
     /// Emitted when a new patient orientation has been set
     void imageOrientationChanged(const PatientOrientation &orientation);

@@ -295,13 +295,25 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
     }
     
     VoiLut voiLut = m_voiLutData->getCurrentPreset();
-    m_imagePipeline->setVoiLut(voiLut);
+    setVoiLut(voiLut);
+}
+
+void VolumeDisplayUnit::setVoiLut(const VoiLut &voiLut)
+{
+    if (m_volume->getImage(0) && m_volume->getImage(0)->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
+    {
+        m_imagePipeline->setVoiLut(voiLut.inverse());
+    }
+    else
+    {
+        m_imagePipeline->setVoiLut(voiLut);
+    }
 }
 
 void VolumeDisplayUnit::updateVoiLut(const VoiLut &voiLut)
 {
     m_voiLutData->setCurrentPreset(voiLut);
-    m_imagePipeline->setVoiLut(voiLut);
+    setVoiLut(voiLut);
 }
 
 void VolumeDisplayUnit::getWindowLevel(double windowLevel[2]) const

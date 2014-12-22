@@ -1411,6 +1411,19 @@ void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
     enableAnnotation(annotation, false);
 }
 
+void Q2DViewer::setVoiLut(const VoiLut &voiLut)
+{
+    if (!hasInput())
+    {
+        return;
+    }
+
+    getMainDisplayUnit()->setVoiLut(voiLut);
+    m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
+    render();
+    emit voiLutChanged(voiLut);
+}
+
 void Q2DViewer::setVoiLutInVolume(int index, const VoiLut &voiLut)
 {
     VolumeDisplayUnit *unit = this->getDisplayUnit(index);
