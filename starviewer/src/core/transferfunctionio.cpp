@@ -162,7 +162,7 @@ TransferFunction* TransferFunctionIO::fromXmlFile(QFile &file)
         QDomElement colorElement = colorNode.toElement();
         QDomNodeList colorPoints = colorElement.elementsByTagName("point");
 
-        for (uint i = 0; i < colorPoints.length(); i++)
+        for (int i = 0; i < colorPoints.length(); i++)
         {
             QDomElement colorPointElement = colorPoints.item(i).toElement();
             transferFunction->setColor(colorPointElement.attribute("value").toDouble(),
@@ -179,7 +179,7 @@ TransferFunction* TransferFunctionIO::fromXmlFile(QFile &file)
         QDomElement opacityElement = opacityNode.toElement();
         QDomNodeList opacityPoints = opacityElement.elementsByTagName("point");
 
-        for (uint i = 0; i < opacityPoints.length(); i++)
+        for (int i = 0; i < opacityPoints.length(); i++)
         {
             QDomElement opacityPointElement = opacityPoints.item(i).toElement();
             transferFunction->setOpacity(opacityPointElement.attribute("value").toDouble(),
@@ -194,7 +194,7 @@ TransferFunction* TransferFunctionIO::fromXmlFile(QFile &file)
         QDomElement gradientOpacityElement = gradientOpacityNode.toElement();
         QDomNodeList gradientOpacityPoints = gradientOpacityElement.elementsByTagName("point");
 
-        for (uint i = 0; i < gradientOpacityPoints.length(); i++)
+        for (int i = 0; i < gradientOpacityPoints.length(); i++)
         {
             QDomElement gradientOpacityPointElement = gradientOpacityPoints.item(i).toElement();
             transferFunction->setGradientOpacity(gradientOpacityPointElement.attribute("gradient").toDouble(),
