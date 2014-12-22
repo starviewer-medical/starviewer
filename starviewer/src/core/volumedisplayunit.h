@@ -87,6 +87,8 @@ public:
     /// Updates the current image default presets values. It only applies to original acquisition plane.
     void updateCurrentImageDefaultPresets();
 
+    /// Sets the VOI LUT.
+    void setVoiLut(const VoiLut &voiLut);
     /// Updates the current window level
     void updateVoiLut(const VoiLut &voiLut);
 
