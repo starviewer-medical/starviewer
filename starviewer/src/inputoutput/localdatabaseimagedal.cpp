@@ -31,6 +31,7 @@
 #include "localdatabasepacsretrievedimagesdal.h"
 #include "dicomformattedvaluesconverter.h"
 #include "dicomvaluerepresentationconverter.h"
+#include "localdatabasevoilutdal.h"
 
 namespace udg {
 
@@ -87,16 +88,26 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
     }
 
     LocalDatabaseDisplayShutterDAL shutterDAL(m_dbConnection);
+    LocalDatabaseVoiLutDAL voiLutDal(m_dbConnection);
+
     // index = 1 ignorem les capçaleres
     for (int index = 1; index <= rows; index++)
     {
         Image *newImage = fillImage(reply, index, columns);
             
         // Obtenim els shutters de l'imatge actual
-        DicomMask shuttersMask;
-        shuttersMask.setSOPInstanceUID(newImage->getSOPInstanceUID());
-        shuttersMask.setImageNumber(QString::number(newImage->getFrameNumber()));
-        newImage->setDisplayShutters(shutterDAL.query(shuttersMask));
+        DicomMask mask;
+        mask.setSOPInstanceUID(newImage->getSOPInstanceUID());
+        mask.setImageNumber(QString::number(newImage->getFrameNumber()));
+        newImage->setDisplayShutters(shutterDAL.query(mask));
+
+        // Get VOI LUTs
+        QList<VoiLut> voiLuts = voiLutDal.query(mask);
+
+        foreach (const VoiLut &voiLut, voiLuts)
+        {
+            newImage->addVoiLut(voiLut);
+        }
         
         imageList << newImage;
     }
@@ -493,11 +504,15 @@ void LocalDatabaseImageDAL::getWindowLevelInformationAsQString(Image *newImage, 
     WindowLevel windowLevel;
     for (int index = 0; index < newImage->getNumberOfVoiLuts(); ++index)
     {
-        windowLevel = newImage->getVoiLut(index).getWindowLevel();
-        
-        windowWidth += value.setNum(windowLevel.getWidth(), 'g', 10) + "\\";
-        windowCenter += value.setNum(windowLevel.getCenter(), 'g', 10) + "\\";
-        explanation += windowLevel.getName() + "\\";
+        const VoiLut &voiLut = newImage->getVoiLut(index);
+
+        if (voiLut.isWindowLevel())
+        {
+            windowLevel = voiLut.getWindowLevel();
+            windowWidth += value.setNum(windowLevel.getWidth(), 'g', 10) + "\\";
+            windowCenter += value.setNum(windowLevel.getCenter(), 'g', 10) + "\\";
+            explanation += windowLevel.getName() + "\\";
+        }
     }
 
     // Treiem l'últim "\\" afegit
