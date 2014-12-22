@@ -496,6 +496,16 @@ TransferFunction TransferFunction::fromVariant(const QVariant &variant)
     return transferFunction;
 }
 
+QDataStream& operator <<(QDataStream &stream, const TransferFunction &transferFunction)
+{
+    return stream << transferFunction.m_color << transferFunction.m_scalarOpacity << transferFunction.m_gradientOpacity;
+}
+
+QDataStream& operator >>(QDataStream &stream, TransferFunction &transferFunction)
+{
+    return stream >> transferFunction.m_color >> transferFunction.m_scalarOpacity >> transferFunction.m_gradientOpacity;
+}
+
 void TransferFunction::updateKeys() const
 {
     if (!m_changed)
