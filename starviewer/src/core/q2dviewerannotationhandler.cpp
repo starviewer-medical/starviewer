@@ -348,8 +348,6 @@ void Q2DViewerAnnotationHandler::updateWindowInformationAnnotation()
 {
     if (m_enabledAnnotations.testFlag(WindowInformationAnnotation))
     {
-        double windowLevel[2];
-        m_2DViewer->getCurrentWindowLevel(windowLevel);
         int dimensions[3];
         m_2DViewer->getMainInput()->getDimensions(dimensions);
         int xIndex = m_2DViewer->getView().getXIndex();
