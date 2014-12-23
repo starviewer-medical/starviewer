@@ -14,9 +14,6 @@
 
 #include "qcustomwindowleveldialog.h"
 #include "logging.h"
-// Pel UserDataRootPath
-#include "starviewerapplication.h"
-#include "voilutpresetstooldata.h"
 
 namespace udg {
 
