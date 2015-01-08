@@ -72,7 +72,7 @@ void QVoiLutComboBox::clearPresets()
 
 void QVoiLutComboBox::addPreset(const VoiLut &preset)
 {
-    int group;
+    VoiLutPresetsToolData::GroupsLabel group;
     if (m_presetsData->getGroup(preset, group))
     {
         int index;

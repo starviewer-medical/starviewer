@@ -47,7 +47,7 @@ void WindowLevelSyncAction::run(QViewer *viewer)
     if (viewer2D)
     {
         int index = viewer2D->indexOfVolume(m_volume);
-        int group;
+        VoiLutPresetsToolData::GroupsLabel group;
         VoiLutPresetsToolData *currentWindowLevelPresetsToolData = viewer2D->getVoiLutDataForVolume(index);
 
         // If the stored window level is in a group and isn't custom, then select it; otherwise, just set it

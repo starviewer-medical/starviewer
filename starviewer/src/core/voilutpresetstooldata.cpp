@@ -13,9 +13,8 @@
  *************************************************************************************/
 
 #include "voilutpresetstooldata.h"
+
 #include "customwindowlevelsrepository.h"
-#include "logging.h"
-#include "windowlevel.h"
 
 #include <QStringList>
 
@@ -54,119 +53,88 @@ VoiLutPresetsToolData::~VoiLutPresetsToolData()
 {
 }
 
-void VoiLutPresetsToolData::addPreset(const VoiLut &preset, int group)
+void VoiLutPresetsToolData::addPreset(const VoiLut &preset, GroupsLabel group)
 {
-    QString presetName = preset.getExplanation();
-    QMapIterator<int, VoiLut> iterator(m_presetsByGroup);
-    bool found = false;
-    while (iterator.hasNext() && !found)
+    if (!m_presetsByDescription.contains(preset.getExplanation()))
     {
-        iterator.next();
-        if (iterator.value().getExplanation() == presetName)
-        {
-            found = true;
-        }
+        m_presetsByDescription.insert(preset.getExplanation(), preset);
+        m_groupsByDescription.insert(preset.getExplanation(), group);
+        emit presetAdded(preset);
     }
-    
-    if (!found)
-    {
-        m_presetsByGroup.insert(group, preset);
-    }
-    emit presetAdded(preset);
 }
 
 void VoiLutPresetsToolData::removePreset(const VoiLut &preset)
 {
-    QMutableMapIterator<int, VoiLut> iterator(m_presetsByGroup);
-    while (iterator.hasNext())
-    {
-        iterator.next();
-        if (iterator.value().getExplanation() == preset.getExplanation())
-        {
-            emit presetRemoved(preset);
-            iterator.remove();
-        }
-    }
-}
-
-void VoiLutPresetsToolData::removePresetsFromGroup(int group)
-{
-    foreach (const VoiLut &preset, m_presetsByGroup.values(group))
+    if (m_presetsByDescription.contains(preset.getExplanation()))
     {
         emit presetRemoved(preset);
+        m_presetsByDescription.remove(preset.getExplanation());
+        m_groupsByDescription.remove(preset.getExplanation());
     }
-    m_presetsByGroup.remove(group);
 }
 
-bool VoiLutPresetsToolData::getFromDescription(const QString &description, VoiLut &preset)
+void VoiLutPresetsToolData::removePresetsFromGroup(GroupsLabel group)
 {
-    bool found = false;
-    QMapIterator<int, VoiLut> iterator(m_presetsByGroup);
-    while (iterator.hasNext() && !found)
-    {
-        iterator.next();
-        if (iterator.value().getExplanation() == description)
-        {
-            preset = iterator.value();
-            found = true;
-        }
-    }
+    QList<VoiLut> presetsFromGroup = getPresetsFromGroup(group);
 
-    return found;
+    foreach (const VoiLut &preset, presetsFromGroup)
+    {
+        removePreset(preset);
+    }
 }
 
-bool VoiLutPresetsToolData::getGroup(const VoiLut &preset, int &group)
+bool VoiLutPresetsToolData::getFromDescription(const QString &description, VoiLut &preset) const
 {
-    bool found = false;
-    foreach (int key, m_presetsByGroup.keys())
+    if (m_presetsByDescription.contains(description))
     {
-        QStringList presetsNames = getDescriptionsFromGroup(key);
-        if (presetsNames.contains(preset.getExplanation()))
-        {
-            found = true;
-            group = key;
-            break;
-        }
+        preset = m_presetsByDescription[description];
+        return true;
     }
-    
-    if (!found)
+    else
     {
-        group = Other;
+        return false;
     }
-
-    return found;
 }
 
-QStringList VoiLutPresetsToolData::getDescriptionsFromGroup(int group)
+bool VoiLutPresetsToolData::getGroup(const VoiLut &preset, GroupsLabel &group) const
+{
+    if (m_groupsByDescription.contains(preset.getExplanation()))
+    {
+        group = m_groupsByDescription[preset.getExplanation()];
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+QStringList VoiLutPresetsToolData::getDescriptionsFromGroup(GroupsLabel group) const
 {
     QStringList descriptionList;
-    QList<VoiLut> windowLevelList = getPresetsFromGroup(group);
-    foreach (const VoiLut &preset, windowLevelList)
+
+    foreach (const QString &description, m_groupsByDescription.keys())
     {
-        descriptionList << preset.getExplanation();
+        if (m_groupsByDescription[description] == group)
+        {
+            descriptionList.append(description);
+        }
     }
-    descriptionList.sort();
     
     return descriptionList;
 }
 
-namespace {
-
-bool voiLutLessThanSortOperator(const VoiLut &voiLut1, const VoiLut &voiLut2)
+QList<VoiLut> VoiLutPresetsToolData::getPresetsFromGroup(GroupsLabel group) const
 {
-    return voiLut1.getExplanation() < voiLut2.getExplanation();
-}
+    QStringList descriptionsFromGroup = getDescriptionsFromGroup(group);
+    QList<VoiLut> presetsFromGroup;
 
-}
+    foreach (const QString &description, descriptionsFromGroup)
+    {
+        presetsFromGroup.append(m_presetsByDescription[description]);
+    }
 
-QList<VoiLut> VoiLutPresetsToolData::getPresetsFromGroup(int group)
-{
-    QList<VoiLut> voiLutList = m_presetsByGroup.values(group);
-
-    // The list has to be sorted to be coherent with the overloaded version wich returns a QStringList
-    qSort(voiLutList.begin(), voiLutList.end(), voiLutLessThanSortOperator);
-    
-    return voiLutList;
+    return presetsFromGroup;
 }
 
 QString VoiLutPresetsToolData::getCurrentPresetName() const
@@ -181,30 +149,22 @@ const VoiLut& VoiLutPresetsToolData::getCurrentPreset() const
 
 bool VoiLutPresetsToolData::updatePreset(const VoiLut &preset)
 {
-    bool found = false;
-    QMutableMapIterator<int, VoiLut> iterator(m_presetsByGroup);
-    while (iterator.hasNext() && !found)
+    if (m_presetsByDescription.contains(preset.getExplanation()))
     {
-        iterator.next();
-        if (iterator.value().getExplanation() == preset.getExplanation())
+        m_presetsByDescription[preset.getExplanation()] = preset;
+
+        if (m_currentPreset.getExplanation() == preset.getExplanation())
         {
-            iterator.value() = preset;
-            found = true;
-
-            if (m_currentPreset.getExplanation() == preset.getExplanation())
-            {
-                m_currentPreset = preset;
-            }
+            m_currentPreset = preset;
         }
-    }
 
-    if (!found)
-    {
-        DEBUG_LOG(QString("The given preset [%1] does not exist in the presets container. Nothing will be done.")
-            .arg(preset.getExplanation()));
+        return true;
     }
-    
-    return found;
+    else
+    {
+        DEBUG_LOG(QString("The given preset [%1] does not exist in the presets container. Nothing will be done.").arg(preset.getExplanation()));
+        return false;
+    }
 }
 
 QString VoiLutPresetsToolData::getCustomPresetName()
@@ -216,6 +176,7 @@ void VoiLutPresetsToolData::setCustomWindowLevel(double window, double level)
 {
     WindowLevel customPreset(window, level, getCustomPresetName());
     updatePreset(customPreset);
+
     if (m_currentPreset.getExplanation() != customPreset.getName())
     {
         selectCurrentPreset(customPreset.getName());
@@ -228,26 +189,20 @@ void VoiLutPresetsToolData::setCustomWindowLevel(double window, double level)
 
 void VoiLutPresetsToolData::selectCurrentPreset(const QString &presetName)
 {
-    VoiLut preset;
-    if (getFromDescription(presetName, preset))
+    if (m_presetsByDescription.contains(presetName))
     {
-        m_currentPreset = preset;
-        emit presetSelected(preset);
+        m_currentPreset = m_presetsByDescription[presetName];
+        emit presetSelected(m_currentPreset);
     }
 }
 
 void VoiLutPresetsToolData::setCurrentPreset(const VoiLut &preset)
 {
-    VoiLut internalPreset;
-    if (getFromDescription(preset.getExplanation(), internalPreset))
+    if (m_presetsByDescription.contains(preset.getExplanation()))
     {
-        int group;
-        if (getGroup(preset, group))
+        if (m_groupsByDescription[preset.getExplanation()] == CustomPreset)
         {
-            if (group == CustomPreset)
-            {
-                updatePreset(preset);
-            }
+            updatePreset(preset);
         }
     }
     else

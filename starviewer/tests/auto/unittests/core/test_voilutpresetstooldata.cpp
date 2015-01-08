@@ -75,6 +75,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(WindowLevel)
+Q_DECLARE_METATYPE(VoiLutPresetsToolData::GroupsLabel)
 
 const QString test_VoiLutPresetsToolData::AutoPreset1Name("Preset 1 - Auto");
 const QString test_VoiLutPresetsToolData::AutoPreset2Name("Preset 2 - Auto");
@@ -102,18 +103,18 @@ void test_VoiLutPresetsToolData::addPreset_AddsGivenPreset_data()
 {
     QTest::addColumn<QString>("presetDescription");
     QTest::addColumn<WindowLevel>("windowLevel");
-    QTest::addColumn<int>("group");
+    QTest::addColumn<VoiLutPresetsToolData::GroupsLabel>("group");
 
-    QTest::newRow("Preset 1") << "Preset name 1" << WindowLevel(0.0, 0.0, "Preset name 1") << 0;
-    QTest::newRow("Preset 2") << "Preset name 2" << WindowLevel(128.0, 256.0, "Preset name 2") << 100;
-    QTest::newRow("Preset 3 in 'FileDefined' group") << "Preset 3" << WindowLevel(1.0, 1.0, "Preset 3") << static_cast<int>(VoiLutPresetsToolData::FileDefined);
+    QTest::newRow("Preset 1") << "Preset name 1" << WindowLevel(0.0, 0.0, "Preset name 1") << static_cast<VoiLutPresetsToolData::GroupsLabel>(0);
+    QTest::newRow("Preset 2") << "Preset name 2" << WindowLevel(128.0, 256.0, "Preset name 2") << static_cast<VoiLutPresetsToolData::GroupsLabel>(100);
+    QTest::newRow("Preset 3 in 'FileDefined' group") << "Preset 3" << WindowLevel(1.0, 1.0, "Preset 3") << VoiLutPresetsToolData::FileDefined;
 }
 
 void test_VoiLutPresetsToolData::addPreset_AddsGivenPreset()
 {
     QFETCH(QString, presetDescription);
     QFETCH(WindowLevel, windowLevel);
-    QFETCH(int, group);
+    QFETCH(VoiLutPresetsToolData::GroupsLabel, group);
 
     VoiLutPresetsToolData wlData;
     wlData.addPreset(windowLevel, group);
@@ -150,20 +151,20 @@ void test_VoiLutPresetsToolData::removePreset_WorksAsExpected()
 
 void test_VoiLutPresetsToolData::removePresetsFromGroup_WorksAsExpected_data()
 {
-    QTest::addColumn<int>("groupToDelete");
+    QTest::addColumn<VoiLutPresetsToolData::GroupsLabel>("groupToDelete");
 
-    QTest::newRow("Remove 'auto' presets") << static_cast<int>(VoiLutPresetsToolData::AutomaticPreset);
-    QTest::newRow("Remove 'file defined' presets") << static_cast<int>(VoiLutPresetsToolData::FileDefined);
-    QTest::newRow("Remove 'standard' presets") << static_cast<int>(VoiLutPresetsToolData::StandardPresets);
-    QTest::newRow("Remove 'user defined' presets") << static_cast<int>(VoiLutPresetsToolData::UserDefined);
-    QTest::newRow("Remove 'custom' presets") << static_cast<int>(VoiLutPresetsToolData::CustomPreset);
-    QTest::newRow("Remove 'other' presets") << static_cast<int>(VoiLutPresetsToolData::Other);
-    QTest::newRow("Remove non-existing presets group") << -1;
+    QTest::newRow("Remove 'auto' presets") << VoiLutPresetsToolData::AutomaticPreset;
+    QTest::newRow("Remove 'file defined' presets") << VoiLutPresetsToolData::FileDefined;
+    QTest::newRow("Remove 'standard' presets") << VoiLutPresetsToolData::StandardPresets;
+    QTest::newRow("Remove 'user defined' presets") << VoiLutPresetsToolData::UserDefined;
+    QTest::newRow("Remove 'custom' presets") << VoiLutPresetsToolData::CustomPreset;
+    QTest::newRow("Remove 'other' presets") << VoiLutPresetsToolData::Other;
+    QTest::newRow("Remove non-existing presets group") << static_cast<VoiLutPresetsToolData::GroupsLabel>(-1);
 }
 
 void test_VoiLutPresetsToolData::removePresetsFromGroup_WorksAsExpected()
 {
-    QFETCH(int, groupToDelete);
+    QFETCH(VoiLutPresetsToolData::GroupsLabel, groupToDelete);
 
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
     wlData->removePresetsFromGroup(groupToDelete);
@@ -206,24 +207,24 @@ void test_VoiLutPresetsToolData::getFromDescription_ReturnsExpectedValues()
 void test_VoiLutPresetsToolData::getGroup_ReturnsExpectedValuesFromExistingPresets_data()
 {
     QTest::addColumn<WindowLevel>("preset");
-    QTest::addColumn<int>("expectedGroup");
+    QTest::addColumn<VoiLutPresetsToolData::GroupsLabel>("expectedGroup");
 
-    QTest::newRow("Auto preset") << AutoPreset1 << static_cast<int>(VoiLutPresetsToolData::AutomaticPreset);
-    QTest::newRow("File preset") << FilePreset1 << static_cast<int>(VoiLutPresetsToolData::FileDefined);
-    QTest::newRow("Standard preset") << StandardPreset1 << static_cast<int>(VoiLutPresetsToolData::StandardPresets);
-    QTest::newRow("Custom preset") << CustomPreset1 << static_cast<int>(VoiLutPresetsToolData::CustomPreset);
-    QTest::newRow("User preset") << UserPreset1 << static_cast<int>(VoiLutPresetsToolData::UserDefined);
-    QTest::newRow("Other preset") << OtherPreset1 << static_cast<int>(VoiLutPresetsToolData::Other);
+    QTest::newRow("Auto preset") << AutoPreset1 << VoiLutPresetsToolData::AutomaticPreset;
+    QTest::newRow("File preset") << FilePreset1 << VoiLutPresetsToolData::FileDefined;
+    QTest::newRow("Standard preset") << StandardPreset1 << VoiLutPresetsToolData::StandardPresets;
+    QTest::newRow("Custom preset") << CustomPreset1 << VoiLutPresetsToolData::CustomPreset;
+    QTest::newRow("User preset") << UserPreset1 << VoiLutPresetsToolData::UserDefined;
+    QTest::newRow("Other preset") << OtherPreset1 << VoiLutPresetsToolData::Other;
 }
 
 void test_VoiLutPresetsToolData::getGroup_ReturnsExpectedValuesFromExistingPresets()
 {
     QFETCH(WindowLevel, preset);
-    QFETCH(int, expectedGroup);
+    QFETCH(VoiLutPresetsToolData::GroupsLabel, expectedGroup);
 
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
 
-    int returnedGroup;
+    VoiLutPresetsToolData::GroupsLabel returnedGroup;
     QVERIFY(wlData->getGroup(preset, returnedGroup));
     QCOMPARE(returnedGroup, expectedGroup); 
 
@@ -246,7 +247,7 @@ void test_VoiLutPresetsToolData::getGroup_ReturnsExpectedValuesFromNonExistingPr
     
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
 
-    int returnedDummyGroup;
+    VoiLutPresetsToolData::GroupsLabel returnedDummyGroup;
     QVERIFY(!wlData->getGroup(preset, returnedDummyGroup));
 
     delete wlData;
@@ -254,38 +255,38 @@ void test_VoiLutPresetsToolData::getGroup_ReturnsExpectedValuesFromNonExistingPr
 
 void test_VoiLutPresetsToolData::getDescriptionsFromGroup_ReturnsExpectedValues_data()
 {
-    QTest::addColumn<int>("group");
+    QTest::addColumn<VoiLutPresetsToolData::GroupsLabel>("group");
     QTest::addColumn<QStringList>("expectedPresetsNames");
 
     QStringList presetList;
 
     presetList << AutoPreset1Name << AutoPreset2Name;
-    QTest::newRow("Auto presets") << static_cast<int>(VoiLutPresetsToolData::AutomaticPreset) << presetList;
+    QTest::newRow("Auto presets") << VoiLutPresetsToolData::AutomaticPreset << presetList;
     
     presetList.clear();
     presetList << FilePreset1Name << FilePreset2Name;
-    QTest::newRow("File presets") << static_cast<int>(VoiLutPresetsToolData::FileDefined) << presetList;
+    QTest::newRow("File presets") << VoiLutPresetsToolData::FileDefined << presetList;
     
     presetList.clear();
     presetList << StandardPreset1Name << StandardPreset2Name;
-    QTest::newRow("Standard presets") << static_cast<int>(VoiLutPresetsToolData::StandardPresets) << presetList;
+    QTest::newRow("Standard presets") << VoiLutPresetsToolData::StandardPresets << presetList;
     
     presetList.clear();
     presetList << CustomPreset1Name;
-    QTest::newRow("Custom presets") << static_cast<int>(VoiLutPresetsToolData::CustomPreset) << presetList;
+    QTest::newRow("Custom presets") << VoiLutPresetsToolData::CustomPreset << presetList;
     
     presetList.clear();
     presetList << UserPreset1Name;
-    QTest::newRow("User presets") << static_cast<int>(VoiLutPresetsToolData::UserDefined) << presetList;
+    QTest::newRow("User presets") << VoiLutPresetsToolData::UserDefined << presetList;
     
     presetList.clear();
     presetList << OtherPreset1Name;
-    QTest::newRow("Other presets") << static_cast<int>(VoiLutPresetsToolData::Other) << presetList;
+    QTest::newRow("Other presets") << VoiLutPresetsToolData::Other << presetList;
 }
 
 void test_VoiLutPresetsToolData::getDescriptionsFromGroup_ReturnsExpectedValues()
 {
-    QFETCH(int, group);
+    QFETCH(VoiLutPresetsToolData::GroupsLabel, group);
     QFETCH(QStringList, expectedPresetsNames);
 
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
