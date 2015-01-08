@@ -61,6 +61,9 @@ public:
     /// @param group Grup que volem buidar
     void removePresetsFromGroup(GroupsLabel group);
 
+    /// Returns true if this VOI LUT data contains a preset with the given description.
+    bool containsPreset(const QString &description) const;
+
     /// Ens retorna els valors de window level del preset amb la descripció donada
     /// Si el preset no existeix els valor retornat serà 0 per tots dos
     /// @param description Descripció del preset
