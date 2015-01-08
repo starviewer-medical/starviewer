@@ -83,6 +83,11 @@ void VoiLutPresetsToolData::removePresetsFromGroup(GroupsLabel group)
     }
 }
 
+bool VoiLutPresetsToolData::containsPreset(const QString &description) const
+{
+    return m_presetsByDescription.contains(description);
+}
+
 bool VoiLutPresetsToolData::getFromDescription(const QString &description, VoiLut &preset) const
 {
     if (m_presetsByDescription.contains(description))

@@ -19,6 +19,8 @@ private slots:
     void removePresetsFromGroup_WorksAsExpected_data();
     void removePresetsFromGroup_WorksAsExpected();
 
+    void containsPreset_ReturnsExpectedValue();
+
     void getFromDescription_ReturnsExpectedValues_data();
     void getFromDescription_ReturnsExpectedValues();
 
@@ -172,6 +174,18 @@ void test_VoiLutPresetsToolData::removePresetsFromGroup_WorksAsExpected()
     QVERIFY(wlData->getDescriptionsFromGroup(groupToDelete).isEmpty());
 
     delete wlData;
+}
+
+void test_VoiLutPresetsToolData::containsPreset_ReturnsExpectedValue()
+{
+    VoiLut voiLut;
+    voiLut.setExplanation("foo");
+    VoiLutPresetsToolData voiLutData;
+    QVERIFY(!voiLutData.containsPreset(voiLut.getExplanation()));
+    voiLutData.addPreset(voiLut);
+    QVERIFY(voiLutData.containsPreset(voiLut.getExplanation()));
+    voiLutData.removePreset(voiLut);
+    QVERIFY(!voiLutData.containsPreset(voiLut.getExplanation()));
 }
 
 void test_VoiLutPresetsToolData::getFromDescription_ReturnsExpectedValues_data()
