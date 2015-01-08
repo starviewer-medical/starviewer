@@ -88,17 +88,9 @@ bool VoiLutPresetsToolData::containsPreset(const QString &description) const
     return m_presetsByDescription.contains(description);
 }
 
-bool VoiLutPresetsToolData::getFromDescription(const QString &description, VoiLut &preset) const
+VoiLut VoiLutPresetsToolData::getFromDescription(const QString &description) const
 {
-    if (m_presetsByDescription.contains(description))
-    {
-        preset = m_presetsByDescription[description];
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return m_presetsByDescription[description];
 }
 
 bool VoiLutPresetsToolData::getGroup(const VoiLut &preset, GroupsLabel &group) const
