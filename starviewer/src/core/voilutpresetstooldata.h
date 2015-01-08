@@ -17,10 +17,9 @@
 
 #include "tooldata.h"
 
-#include <QMultiMap>
-#include <QStringList>
-
 #include "voilut.h"
+
+#include <QMap>
 
 namespace udg {
 
@@ -52,7 +51,7 @@ public:
     /// Afegeix un nou preset. Si la operació es fa amb èxit s'emet un senyal donant la informació del preset.
     /// @param preset WindowLevel object. Its description has to be unique.
     /// @param group Grup al que volem que pertanyi, que serà "Other" si no s'especifica
-    void addPreset(const VoiLut &preset, int group = Other);
+    void addPreset(const VoiLut &preset, GroupsLabel group = Other);
 
     /// Eliminem el preset que tingui la descripció donada
     /// @param description Descripció del preset que volem eliminar
@@ -60,7 +59,7 @@ public:
 
     /// Elimina els presets d'un grup
     /// @param group Grup que volem buidar
-    void removePresetsFromGroup(int group);
+    void removePresetsFromGroup(GroupsLabel group);
 
     /// Ens retorna els valors de window level del preset amb la descripció donada
     /// Si el preset no existeix els valor retornat serà 0 per tots dos
@@ -68,22 +67,22 @@ public:
     /// @param window variable on es retornarà el valor de window
     /// @param level variable on es retornarà el valor de level
     /// @return Cert si existeix aquest preset, fals altrament
-    bool getFromDescription(const QString &description, VoiLut &preset);
+    bool getFromDescription(const QString &description, VoiLut &preset) const;
 
     /// Ens diu a quin grup pertany el preset indicat. Si no existeix la descripció,
     /// el valor retornat en group és indeterminat
     /// @param description Descripció del preset que busquem
     /// @param group variable on se'ns tornarà el grup al que pertany la descripció donada
     /// @return Cert si la descripció donada existeix, fals altrement
-    bool getGroup(const VoiLut &preset, int &group);
+    bool getGroup(const VoiLut &preset, GroupsLabel &group) const;
 
     /// Ens retorna una llista de presets que conté un grup
     /// @param group grup de presets
     /// @return Retorna llista de descripcions de presets del grup donat.
     /// Si no hi ha cap preset dins del grup demanat la llista serà buida.
-    QStringList getDescriptionsFromGroup(int group);
+    QStringList getDescriptionsFromGroup(GroupsLabel group) const;
 
-    QList<VoiLut> getPresetsFromGroup(int group);
+    QList<VoiLut> getPresetsFromGroup(GroupsLabel group) const;
     
     /// Returns the current activated preset
     const VoiLut& getCurrentPreset() const;
@@ -135,8 +134,12 @@ private:
     /// Últim preset activat
     VoiLut m_currentPreset;
 
-    /// Map grouping presets by its group
-    QMultiMap<int, VoiLut> m_presetsByGroup;
+    /// Map from each description to its corresponding preset.
+    QMap<QString, VoiLut> m_presetsByDescription;
+
+    /// Map from each description to the groups it belongs to.
+    QMap<QString, GroupsLabel> m_groupsByDescription;
+
 };
 
 }
