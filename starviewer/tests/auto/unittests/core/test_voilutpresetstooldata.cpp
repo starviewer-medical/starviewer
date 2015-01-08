@@ -121,8 +121,7 @@ void test_VoiLutPresetsToolData::addPreset_AddsGivenPreset()
     VoiLutPresetsToolData wlData;
     wlData.addPreset(windowLevel, group);
 
-    VoiLut dummyWindowLevel;
-    QVERIFY(wlData.getFromDescription(presetDescription, dummyWindowLevel));
+    QCOMPARE(wlData.getFromDescription(presetDescription).getWindowLevel(), windowLevel);
 }
 
 void test_VoiLutPresetsToolData::removePreset_WorksAsExpected_data()
@@ -145,8 +144,7 @@ void test_VoiLutPresetsToolData::removePreset_WorksAsExpected()
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
     wlData->removePreset(presetToRemove);
 
-    VoiLut dummyWindowLevel;
-    QVERIFY(!wlData->getFromDescription(presetToRemove.getName(), dummyWindowLevel));
+    QVERIFY(!wlData->containsPreset(presetToRemove.getName()));
 
     delete wlData;
 }
@@ -192,28 +190,24 @@ void test_VoiLutPresetsToolData::getFromDescription_ReturnsExpectedValues_data()
 {
     QTest::addColumn<QString>("presetName");
     QTest::addColumn<WindowLevel>("preset");
-    QTest::addColumn<bool>("returnValue");
 
-    QTest::newRow("Existing auto preset") << AutoPreset2Name << AutoPreset2 << true;
-    QTest::newRow("Existing file preset") << FilePreset1Name << FilePreset1 << true;
-    QTest::newRow("Existing standard preset") << StandardPreset1Name << StandardPreset1 << true;
-    QTest::newRow("Existing user preset") << UserPreset1Name << UserPreset1 << true;
-    QTest::newRow("Existing custom preset") << CustomPreset1Name << CustomPreset1 << true;
-    QTest::newRow("Existing other preset") << OtherPreset1Name << OtherPreset1 << true;
-    QTest::newRow("NON-Existing preset") << NonExistingPresetName << WindowLevel() << false;
+    QTest::newRow("Existing auto preset") << AutoPreset2Name << AutoPreset2;
+    QTest::newRow("Existing file preset") << FilePreset1Name << FilePreset1;
+    QTest::newRow("Existing standard preset") << StandardPreset1Name << StandardPreset1;
+    QTest::newRow("Existing user preset") << UserPreset1Name << UserPreset1;
+    QTest::newRow("Existing custom preset") << CustomPreset1Name << CustomPreset1;
+    QTest::newRow("Existing other preset") << OtherPreset1Name << OtherPreset1;
+    QTest::newRow("NON-Existing preset") << NonExistingPresetName << WindowLevel();
 }
 
 void test_VoiLutPresetsToolData::getFromDescription_ReturnsExpectedValues()
 {
     QFETCH(QString, presetName);
     QFETCH(WindowLevel, preset);
-    QFETCH(bool, returnValue);
 
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
     
-    VoiLut returnedWindowLevel;
-    QCOMPARE(wlData->getFromDescription(presetName, returnedWindowLevel), returnValue);
-    QCOMPARE(preset, returnedWindowLevel.getWindowLevel());
+    QCOMPARE(wlData->getFromDescription(presetName).getWindowLevel(), preset);
 
     delete wlData;
 }
@@ -371,10 +365,7 @@ void test_VoiLutPresetsToolData::updatePreset_WorksAsExpected()
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
     wlData->updatePreset(windowLevelToUpdate);
     
-    VoiLut obtainedWindowLevel;
-    wlData->getFromDescription(windowLevelToUpdate.getName(), obtainedWindowLevel);
-    
-    QCOMPARE(obtainedWindowLevel.getWindowLevel(), windowLevelAfterUpdate);
+    QCOMPARE(wlData->getFromDescription(windowLevelToUpdate.getName()).getWindowLevel(), windowLevelAfterUpdate);
     
     delete wlData;
 }
@@ -395,10 +386,8 @@ void test_VoiLutPresetsToolData::setCustomWindowLevel_UpdatesValues()
 
     VoiLutPresetsToolData wlData;
     wlData.setCustomWindowLevel(customWindowLevel.getWidth(), customWindowLevel.getCenter());
-    VoiLut returnedWindowLevel;
-    wlData.getFromDescription(tr("Custom"), returnedWindowLevel);
 
-    QCOMPARE(returnedWindowLevel.getWindowLevel(), customWindowLevel);
+    QCOMPARE(wlData.getFromDescription(tr("Custom")).getWindowLevel(), customWindowLevel);
 }
 
 void test_VoiLutPresetsToolData::activatePreset_WorksAsExpected_data()

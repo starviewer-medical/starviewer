@@ -64,13 +64,9 @@ public:
     /// Returns true if this VOI LUT data contains a preset with the given description.
     bool containsPreset(const QString &description) const;
 
-    /// Ens retorna els valors de window level del preset amb la descripció donada
-    /// Si el preset no existeix els valor retornat serà 0 per tots dos
-    /// @param description Descripció del preset
-    /// @param window variable on es retornarà el valor de window
-    /// @param level variable on es retornarà el valor de level
-    /// @return Cert si existeix aquest preset, fals altrament
-    bool getFromDescription(const QString &description, VoiLut &preset) const;
+    /// Returns the VOI LUT preset with the given description.
+    /// If there isn't any VOI LUT preset matching the given description, a default-constructed VoiLut is returned.
+    VoiLut getFromDescription(const QString &description) const;
 
     /// Ens diu a quin grup pertany el preset indicat. Si no existeix la descripció,
     /// el valor retornat en group és indeterminat
