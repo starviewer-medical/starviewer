@@ -72,11 +72,10 @@ void QVoiLutComboBox::clearPresets()
 
 void QVoiLutComboBox::addPreset(const VoiLut &preset)
 {
-    VoiLutPresetsToolData::GroupsLabel group;
-    if (m_presetsData->getGroup(preset, group))
+    if (m_presetsData->containsPreset(preset.getExplanation()))
     {
         int index;
-        switch (group)
+        switch (m_presetsData->getGroup(preset))
         {
             case VoiLutPresetsToolData::AutomaticPreset:
                 index = m_presetsData->getPresetsFromGroup(VoiLutPresetsToolData::AutomaticPreset).count() - 1;
