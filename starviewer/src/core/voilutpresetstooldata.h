@@ -68,9 +68,9 @@ public:
     /// If there isn't any VOI LUT preset matching the given description, a default-constructed VoiLut is returned.
     VoiLut getFromDescription(const QString &description) const;
 
-    /// Returns the group to which the given preset belongs. If the given preset doesn't belong to any group, a default value is returned.
-    /// Note: only the preset name is used to check if the preset belongs to a group.
-    GroupsLabel getGroup(const VoiLut &preset) const;
+    /// Returns the group to which the preset with the given description belongs.
+    /// If there isn't any VOI LUT preset matching the given description, a default-constructed GroupsLabel is returned.
+    GroupsLabel getGroup(const QString &description) const;
 
     /// Ens retorna una llista de presets que conté un grup
     /// @param group grup de presets
