@@ -232,9 +232,7 @@ void test_VoiLutPresetsToolData::getGroup_ReturnsExpectedValuesFromExistingPrese
 
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
 
-    VoiLutPresetsToolData::GroupsLabel returnedGroup;
-    QVERIFY(wlData->getGroup(preset, returnedGroup));
-    QCOMPARE(returnedGroup, expectedGroup); 
+    QCOMPARE(wlData->getGroup(preset), expectedGroup);
 
     delete wlData;
 }
@@ -255,8 +253,7 @@ void test_VoiLutPresetsToolData::getGroup_ReturnsExpectedValuesFromNonExistingPr
     
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
 
-    VoiLutPresetsToolData::GroupsLabel returnedDummyGroup;
-    QVERIFY(!wlData->getGroup(preset, returnedDummyGroup));
+    QCOMPARE(wlData->getGroup(preset), VoiLutPresetsToolData::AutomaticPreset);
 
     delete wlData;
 }
