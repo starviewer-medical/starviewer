@@ -84,7 +84,7 @@ public:
     const VoiLut& getCurrentPreset() const;
 
     /// Shortcut for getCurrentPreset().getName()
-    QString getCurrentPresetName() const;
+    const QString& getCurrentPresetName() const;
 
     /// Updates the given preset with the new values of window/level. A preset with the same name has to be present in order to update it.
     /// Returns true in case the preset could be updated, false otherwise (i.e. no preset with such name exists)

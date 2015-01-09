@@ -126,14 +126,14 @@ QList<VoiLut> VoiLutPresetsToolData::getPresetsFromGroup(GroupsLabel group) cons
     return presetsFromGroup;
 }
 
-QString VoiLutPresetsToolData::getCurrentPresetName() const
-{
-    return m_currentPreset.getExplanation();
-}
-
 const VoiLut& VoiLutPresetsToolData::getCurrentPreset() const
 {
     return m_currentPreset;
+}
+
+const QString& VoiLutPresetsToolData::getCurrentPresetName() const
+{
+    return m_currentPreset.getExplanation();
 }
 
 bool VoiLutPresetsToolData::updatePreset(const VoiLut &preset)
