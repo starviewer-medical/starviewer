@@ -93,9 +93,9 @@ VoiLut VoiLutPresetsToolData::getFromDescription(const QString &description) con
     return m_presetsByDescription[description];
 }
 
-VoiLutPresetsToolData::GroupsLabel VoiLutPresetsToolData::getGroup(const VoiLut &preset) const
+VoiLutPresetsToolData::GroupsLabel VoiLutPresetsToolData::getGroup(const QString &description) const
 {
-    return m_groupsByDescription[preset.getExplanation()];
+    return m_groupsByDescription[description];
 }
 
 QStringList VoiLutPresetsToolData::getDescriptionsFromGroup(GroupsLabel group) const

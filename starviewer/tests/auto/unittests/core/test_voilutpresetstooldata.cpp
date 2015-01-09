@@ -232,7 +232,7 @@ void test_VoiLutPresetsToolData::getGroup_ReturnsExpectedValuesFromExistingPrese
 
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
 
-    QCOMPARE(wlData->getGroup(preset), expectedGroup);
+    QCOMPARE(wlData->getGroup(preset.getName()), expectedGroup);
 
     delete wlData;
 }
@@ -253,7 +253,7 @@ void test_VoiLutPresetsToolData::getGroup_ReturnsExpectedValuesFromNonExistingPr
     
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
 
-    QCOMPARE(wlData->getGroup(preset), VoiLutPresetsToolData::AutomaticPreset);
+    QCOMPARE(wlData->getGroup(preset.getName()), VoiLutPresetsToolData::AutomaticPreset);
 
     delete wlData;
 }
