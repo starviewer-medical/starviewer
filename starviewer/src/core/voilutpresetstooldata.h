@@ -87,8 +87,7 @@ public:
     const QString& getCurrentPresetName() const;
 
     /// Updates the given preset with the new values of window/level. A preset with the same name has to be present in order to update it.
-    /// Returns true in case the preset could be updated, false otherwise (i.e. no preset with such name exists)
-    bool updatePreset(const VoiLut &preset);
+    void updatePreset(const VoiLut &preset);
 
     /// Returns the name for the custom preset.
     static QString getCustomPresetName();

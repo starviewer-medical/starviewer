@@ -136,7 +136,7 @@ const QString& VoiLutPresetsToolData::getCurrentPresetName() const
     return m_currentPreset.getExplanation();
 }
 
-bool VoiLutPresetsToolData::updatePreset(const VoiLut &preset)
+void VoiLutPresetsToolData::updatePreset(const VoiLut &preset)
 {
     if (m_presetsByDescription.contains(preset.getExplanation()))
     {
@@ -146,13 +146,10 @@ bool VoiLutPresetsToolData::updatePreset(const VoiLut &preset)
         {
             m_currentPreset = preset;
         }
-
-        return true;
     }
     else
     {
         DEBUG_LOG(QString("The given preset [%1] does not exist in the presets container. Nothing will be done.").arg(preset.getExplanation()));
-        return false;
     }
 }
 
