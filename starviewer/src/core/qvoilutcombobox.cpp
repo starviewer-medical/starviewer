@@ -175,6 +175,8 @@ void QVoiLutComboBox::populateFromPresetsData()
     this->insertSeparator(this->count());
     this->addItems(m_presetsData->getDescriptionsFromGroup(VoiLutPresetsToolData::CustomPreset));
     this->addItem(tr("Edit Custom WW/WL"));
+
+    selectPreset(m_presetsData->getCurrentPresetName());
 }
 
 void QVoiLutComboBox::setActiveWindowLevel(const QString &text)
