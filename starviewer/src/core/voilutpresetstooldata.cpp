@@ -142,9 +142,10 @@ void VoiLutPresetsToolData::updatePreset(const VoiLut &preset)
     {
         m_presetsByDescription[preset.getExplanation()] = preset;
 
-        if (m_currentPreset.getExplanation() == preset.getExplanation())
+        if (m_currentPreset.getExplanation() == preset.getExplanation() && m_currentPreset != preset)
         {
             m_currentPreset = preset;
+            emit currentPresetChanged(preset);
         }
     }
     else
@@ -166,10 +167,6 @@ void VoiLutPresetsToolData::setCustomWindowLevel(double window, double level)
     if (m_currentPreset.getExplanation() != customPreset.getName())
     {
         selectCurrentPreset(customPreset.getName());
-    }
-    else
-    {
-        emit currentPresetChanged(customPreset);
     }
 }
 
