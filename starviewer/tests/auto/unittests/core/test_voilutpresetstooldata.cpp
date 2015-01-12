@@ -329,7 +329,7 @@ void test_VoiLutPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaActiva
     QFETCH(QString, expectedCurrentPresetName);
 
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
-    wlData->selectCurrentPreset(presetNameToActivate);
+    wlData->selectPreset(presetNameToActivate);
     
     QCOMPARE(wlData->getCurrentPreset().getExplanation(), expectedCurrentPresetName);
 
@@ -408,7 +408,7 @@ void test_VoiLutPresetsToolData::activatePreset_WorksAsExpected()
 
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
 
-    wlData->selectCurrentPreset(presetNameToActivate);
+    wlData->selectPreset(presetNameToActivate);
     QCOMPARE(wlData->getCurrentPreset().getExplanation(), currentActivatedPreset);
     
     delete wlData;

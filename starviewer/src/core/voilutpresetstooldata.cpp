@@ -166,11 +166,11 @@ void VoiLutPresetsToolData::setCustomWindowLevel(double window, double level)
 
     if (m_currentPreset.getExplanation() != customPreset.getName())
     {
-        selectCurrentPreset(customPreset.getName());
+        selectPreset(customPreset.getName());
     }
 }
 
-void VoiLutPresetsToolData::selectCurrentPreset(const QString &presetName)
+void VoiLutPresetsToolData::selectPreset(const QString &presetName)
 {
     if (m_presetsByDescription.contains(presetName) && m_currentPreset.getExplanation() != presetName)
     {
@@ -193,7 +193,7 @@ void VoiLutPresetsToolData::setCurrentPreset(const VoiLut &preset)
         addPreset(preset, Other);
     }
 
-    selectCurrentPreset(preset.getExplanation());
+    selectPreset(preset.getExplanation());
 }
 
 void VoiLutPresetsToolData::loadCustomWindowLevelPresets()

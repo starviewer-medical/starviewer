@@ -201,7 +201,7 @@ void QVoiLutComboBox::setActiveWindowLevel(const QString &text)
     }
     else
     {
-        m_presetsData->selectCurrentPreset(text);
+        m_presetsData->selectPreset(text);
     }
 }
 

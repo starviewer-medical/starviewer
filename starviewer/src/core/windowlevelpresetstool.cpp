@@ -130,7 +130,7 @@ void WindowLevelPresetsTool::applyPreset(char key)
         }
     }
 
-    m_myToolData->selectCurrentPreset(preset);
+    m_myToolData->selectPreset(preset);
 }
 
 void WindowLevelPresetsTool::updateWindowLevelData()
