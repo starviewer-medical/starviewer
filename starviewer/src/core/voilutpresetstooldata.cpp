@@ -172,7 +172,7 @@ void VoiLutPresetsToolData::setCustomWindowLevel(double window, double level)
 
 void VoiLutPresetsToolData::selectCurrentPreset(const QString &presetName)
 {
-    if (m_presetsByDescription.contains(presetName))
+    if (m_presetsByDescription.contains(presetName) && m_currentPreset.getExplanation() != presetName)
     {
         m_currentPreset = m_presetsByDescription[presetName];
         emit presetSelected(m_currentPreset);
