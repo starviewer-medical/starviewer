@@ -125,7 +125,7 @@ void WindowLevelTool::doWindowLevel()
     double newWindow;
     double newLevel;
     computeWindowLevelValues(dx, dy, newWindow, newLevel);
-    m_viewer->getVoiLutData()->setCustomWindowLevel(newWindow, newLevel);
+    m_viewer->getVoiLutData()->setCustomVoiLut(WindowLevel(newWindow, newLevel));
 }
 
 void WindowLevelTool::endWindowLevel()

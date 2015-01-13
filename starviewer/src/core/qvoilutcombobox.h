@@ -54,6 +54,9 @@ private slots:
     /// Seleccionem el window level que volem aplicar com a actiu
     void setActiveWindowLevel(const QString &text);
 
+    /// Sets a custom window level to the VOI LUT data.
+    void setCustomWindowLevel(double width, double center);
+
 private:
     /// Afegeix o elimina un preset de la llista
     /// @param preset Preset a afegir o eliminar
