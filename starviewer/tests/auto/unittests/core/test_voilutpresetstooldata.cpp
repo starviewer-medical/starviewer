@@ -122,7 +122,7 @@ void test_VoiLutPresetsToolData::addPreset_AddsGivenPreset()
     VoiLutPresetsToolData wlData;
     wlData.addPreset(windowLevel, group);
 
-    QCOMPARE(wlData.getFromDescription(presetDescription).getWindowLevel(), windowLevel);
+    QCOMPARE(wlData.getFromDescription(presetDescription), VoiLut(windowLevel));
 }
 
 void test_VoiLutPresetsToolData::removePreset_WorksAsExpected_data()
@@ -208,7 +208,7 @@ void test_VoiLutPresetsToolData::getFromDescription_ReturnsExpectedValues()
 
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
     
-    QCOMPARE(wlData->getFromDescription(presetName).getWindowLevel(), preset);
+    QCOMPARE(wlData->getFromDescription(presetName), VoiLut(preset));
 
     delete wlData;
 }
@@ -312,7 +312,7 @@ void test_VoiLutPresetsToolData::getCurrentPreset_IsEmptyAfterCreation()
 {
     VoiLutPresetsToolData wlData;
 
-    QCOMPARE(wlData.getCurrentPreset().getWindowLevel(), WindowLevel());
+    QCOMPARE(wlData.getCurrentPreset(), VoiLut());
 }
 
 void test_VoiLutPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaActivatePreset_data()
@@ -340,9 +340,11 @@ void test_VoiLutPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaActiva
 void test_VoiLutPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaSetCustomWindowLevel()
 {
     VoiLutPresetsToolData wlData;
-
     wlData.setCustomVoiLut(WindowLevel(1024.0, 512.0));
-    QCOMPARE(wlData.getCurrentPreset().getWindowLevel(), WindowLevel(1024.0, 512.0, tr("Custom")));
+    VoiLut expectedPreset(WindowLevel(1024.0, 512.0));
+    expectedPreset.setExplanation(VoiLutPresetsToolData::getCustomPresetName());
+
+    QCOMPARE(wlData.getCurrentPreset(), expectedPreset);
 }
 
 void test_VoiLutPresetsToolData::updatePreset_WorksAsExpected_data()
@@ -363,7 +365,7 @@ void test_VoiLutPresetsToolData::updatePreset_WorksAsExpected()
     VoiLutPresetsToolData* wlData = getWindowLevelPresetsSample();
     wlData->updatePreset(windowLevelToUpdate);
     
-    QCOMPARE(wlData->getFromDescription(windowLevelToUpdate.getName()).getWindowLevel(), windowLevelAfterUpdate);
+    QCOMPARE(wlData->getFromDescription(windowLevelToUpdate.getName()), VoiLut(windowLevelAfterUpdate));
     
     delete wlData;
 }
