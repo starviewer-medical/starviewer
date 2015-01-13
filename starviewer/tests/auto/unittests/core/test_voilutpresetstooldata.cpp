@@ -43,9 +43,6 @@ private slots:
     void updatePreset_WorksAsExpected_data();
     void updatePreset_WorksAsExpected();
 
-    void setCustomWindowLevel_UpdatesValues_data();
-    void setCustomWindowLevel_UpdatesValues();
-
     void setCustomVoiLut_WorksAsExpected_data();
     void setCustomVoiLut_WorksAsExpected();
 
@@ -369,26 +366,6 @@ void test_VoiLutPresetsToolData::updatePreset_WorksAsExpected()
     QCOMPARE(wlData->getFromDescription(windowLevelToUpdate.getName()).getWindowLevel(), windowLevelAfterUpdate);
     
     delete wlData;
-}
-
-void test_VoiLutPresetsToolData::setCustomWindowLevel_UpdatesValues_data()
-{
-    QTest::addColumn<WindowLevel>("customWindowLevel");
-
-    QTest::newRow("Some values 1") << WindowLevel(0.0, 0.0, tr("Custom"));
-    QTest::newRow("Some values 2") << WindowLevel(1.0, 0.0, tr("Custom"));
-    QTest::newRow("Some values 3") << WindowLevel(0.0, 1.0, tr("Custom"));
-    QTest::newRow("Some values 4") << WindowLevel(1.0, 1.0, tr("Custom"));
-}
-
-void test_VoiLutPresetsToolData::setCustomWindowLevel_UpdatesValues()
-{
-    QFETCH(WindowLevel, customWindowLevel);
-
-    VoiLutPresetsToolData wlData;
-    wlData.setCustomWindowLevel(customWindowLevel.getWidth(), customWindowLevel.getCenter());
-
-    QCOMPARE(wlData.getFromDescription(tr("Custom")).getWindowLevel(), customWindowLevel);
 }
 
 void test_VoiLutPresetsToolData::setCustomVoiLut_WorksAsExpected_data()

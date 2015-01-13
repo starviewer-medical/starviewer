@@ -159,17 +159,6 @@ QString VoiLutPresetsToolData::getCustomPresetName()
     return tr("Custom");
 }
 
-void VoiLutPresetsToolData::setCustomWindowLevel(double window, double level)
-{
-    WindowLevel customPreset(window, level, getCustomPresetName());
-    updatePreset(customPreset);
-
-    if (m_currentPreset.getExplanation() != customPreset.getName())
-    {
-        selectPreset(customPreset.getName());
-    }
-}
-
 void VoiLutPresetsToolData::setCustomVoiLut(VoiLut voiLut)
 {
     voiLut.setExplanation(getCustomPresetName());
