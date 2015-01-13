@@ -1634,7 +1634,7 @@ void Q2DViewer::invertWindowLevel()
     // Això és necessari fer-ho així i no amb setWindowLevel perquè si invertim el color de la imatge sense haver modificat abans el window/level
     // i després seleccionem un altre visor, al tornar a aquest visor, es tornaria aplicar el "default" i no el "custom"
     // Es podria arribar a fer d'una altre manera també, atacant directament als filtres del pipeline, tal com es diu al ticket #1275
-    getVoiLutData()->setCustomWindowLevel(-windowLevel[0], windowLevel[1]);
+    getVoiLutData()->setCustomVoiLut(WindowLevel(-windowLevel[0], windowLevel[1]));
 }
 
 void Q2DViewer::alignLeft()

@@ -344,7 +344,7 @@ void test_VoiLutPresetsToolData::getCurrentPreset_ReturnsExpectedPresetViaSetCus
 {
     VoiLutPresetsToolData wlData;
 
-    wlData.setCustomWindowLevel(1024.0, 512.0);
+    wlData.setCustomVoiLut(WindowLevel(1024.0, 512.0));
     QCOMPARE(wlData.getCurrentPreset().getWindowLevel(), WindowLevel(1024.0, 512.0, tr("Custom")));
 }
 

@@ -52,9 +52,7 @@ void QVoiLutComboBox::setPresetsData(VoiLutPresetsToolData *windowLevelData)
     connect(m_presetsData, SIGNAL(presetRemoved(VoiLut)), SLOT(removePreset(VoiLut)));
     connect(m_presetsData, SIGNAL(presetSelected(VoiLut)), SLOT(selectPreset(VoiLut)));
 
-    // TODO Això es podria substituir fent que el CustomWindowLevelDialog també contingués les dades
-    // de window level i directament li fes un setCustomWindowLevel() a WindowLevelPresetsToolData
-    connect(m_customWindowLevelDialog, SIGNAL(windowLevel(double, double)), m_presetsData, SLOT(setCustomWindowLevel(double, double)));
+    connect(m_customWindowLevelDialog, SIGNAL(windowLevel(double, double)), this, SLOT(setCustomWindowLevel(double, double)));
 }
 
 void QVoiLutComboBox::clearPresets()
@@ -205,4 +203,9 @@ void QVoiLutComboBox::setActiveWindowLevel(const QString &text)
     }
 }
 
-};
+void QVoiLutComboBox::setCustomWindowLevel(double width, double center)
+{
+    m_presetsData->setCustomVoiLut(WindowLevel(width, center));
+}
+
+}
