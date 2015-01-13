@@ -170,6 +170,12 @@ void VoiLutPresetsToolData::setCustomWindowLevel(double window, double level)
     }
 }
 
+void VoiLutPresetsToolData::setCustomVoiLut(VoiLut voiLut)
+{
+    voiLut.setExplanation(getCustomPresetName());
+    setCurrentPreset(voiLut);
+}
+
 void VoiLutPresetsToolData::selectPreset(const QString &presetName)
 {
     if (m_presetsByDescription.contains(presetName) && m_currentPreset.getExplanation() != presetName)

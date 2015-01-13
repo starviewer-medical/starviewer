@@ -46,6 +46,9 @@ private slots:
     void setCustomWindowLevel_UpdatesValues_data();
     void setCustomWindowLevel_UpdatesValues();
 
+    void setCustomVoiLut_WorksAsExpected_data();
+    void setCustomVoiLut_WorksAsExpected();
+
     void activatePreset_WorksAsExpected_data();
     void activatePreset_WorksAsExpected();
 
@@ -77,6 +80,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(WindowLevel)
+Q_DECLARE_METATYPE(VoiLut)
 Q_DECLARE_METATYPE(VoiLutPresetsToolData::GroupsLabel)
 
 const QString test_VoiLutPresetsToolData::AutoPreset1Name("Preset 1 - Auto");
@@ -385,6 +389,35 @@ void test_VoiLutPresetsToolData::setCustomWindowLevel_UpdatesValues()
     wlData.setCustomWindowLevel(customWindowLevel.getWidth(), customWindowLevel.getCenter());
 
     QCOMPARE(wlData.getFromDescription(tr("Custom")).getWindowLevel(), customWindowLevel);
+}
+
+void test_VoiLutPresetsToolData::setCustomVoiLut_WorksAsExpected_data()
+{
+    QTest::addColumn<VoiLut>("customVoiLut");
+
+    QTest::newRow("default voi lut") << VoiLut();
+    QTest::newRow("window level") << VoiLut(WindowLevel(35, 11, "wl"));
+    TransferFunction transferFunction;
+    transferFunction.setName("tf");
+    transferFunction.setColor(0.0, 0.0, 0.0, 0.0);
+    transferFunction.setColor(50.0, 0.2, 0.2, 0.2);
+    transferFunction.setColor(80.0, 0.5, 0.5, 0.5);
+    transferFunction.setColor(200.0, 1.0, 1.0, 1.0);
+    transferFunction.setOpacity(0.0, 1.0);
+    QTest::newRow("transfer function") << VoiLut(transferFunction);
+}
+
+void test_VoiLutPresetsToolData::setCustomVoiLut_WorksAsExpected()
+{
+    QFETCH(VoiLut, customVoiLut);
+
+    VoiLutPresetsToolData voiLutData;
+    voiLutData.setCustomVoiLut(customVoiLut);
+    VoiLut expectedVoiLut = customVoiLut;
+    expectedVoiLut.setExplanation(VoiLutPresetsToolData::getCustomPresetName());
+
+    QCOMPARE(voiLutData.getCurrentPreset(), expectedVoiLut);
+    QCOMPARE(voiLutData.getGroup(voiLutData.getCurrentPresetName()), VoiLutPresetsToolData::CustomPreset);
 }
 
 void test_VoiLutPresetsToolData::activatePreset_WorksAsExpected_data()
