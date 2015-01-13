@@ -93,10 +93,6 @@ public:
     static QString getCustomPresetName();
 
 public slots:
-    /// Donem el valor del preset "A mida"
-    /// @param window valor de window
-    /// @param level valor de level
-    void setCustomWindowLevel(double window, double level);
     /// Sets the given VOI LUT as the custom and current VOI LUT. Its name is ignored and the one given by getCustomPresetName() is used instead.
     void setCustomVoiLut(VoiLut voiLut);
 
