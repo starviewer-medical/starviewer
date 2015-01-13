@@ -97,6 +97,8 @@ public slots:
     /// @param window valor de window
     /// @param level valor de level
     void setCustomWindowLevel(double window, double level);
+    /// Sets the given VOI LUT as the custom and current VOI LUT. Its name is ignored and the one given by getCustomPresetName() is used instead.
+    void setCustomVoiLut(VoiLut voiLut);
 
     /// Selects the current present by name from the available presets. If there's no preset with such name, it does nothing
     void selectPreset(const QString &presetName);
