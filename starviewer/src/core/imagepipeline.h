@@ -44,8 +44,6 @@ public:
 
     /// Sets the window window and window level
     void setVoiLut(const VoiLut &voiLut);
-    /// Gets the window window and window level
-    void getCurrentWindowLevel(double wl[]);
     /// Sets the transfer function
     void setTransferFunction(const TransferFunction &transferFunction);
     /// Clears the transfer function.
