@@ -80,13 +80,6 @@ VoiLut VoiLutHelper::getDefaultVoiLutForPresentation(Image *image, int index)
     VoiLut voiLut = image->getVoiLut(index);
     if (voiLut.isLut() || voiLut.getWindowLevel().isValid())
     {
-        if (voiLut.isWindowLevel() && image->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
-        {
-            WindowLevel windowLevel = voiLut.getWindowLevel();
-            windowLevel.setWidth(-windowLevel.getWidth());
-            voiLut.setWindowLevel(windowLevel);
-        }
-
         if (voiLut.getExplanation().isEmpty())
         {
             voiLut.setExplanation(getDefaultVoiLutDescription(index));
@@ -140,13 +133,6 @@ WindowLevel VoiLutHelper::getCurrentAutomaticWindowLevel(Volume *volume)
 
         double windowCenter = range[0] + (windowWidth * 0.5);
 
-        // If MONOCHROME1 image, window/level is inverted
-        Image *image = volume->getImage(0);
-        if (image && image->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
-        {
-            windowWidth = -windowWidth;
-        }
-        
         automaticWindowLevel.setWidth(windowWidth);
         automaticWindowLevel.setCenter(windowCenter);
     }
