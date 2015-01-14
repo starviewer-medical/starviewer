@@ -477,7 +477,7 @@ void Q2DViewerExtension::initializeTools()
     m_flipHorizontalToolButton->setDefaultAction(m_toolManager->registerActionTool("HorizontalFlipActionTool"));
     m_flipVerticalToolButton->setDefaultAction(m_toolManager->registerActionTool("VerticalFlipActionTool"));
     m_restoreToolButton->setDefaultAction(m_toolManager->registerActionTool("RestoreActionTool"));
-    m_invertToolButton->setDefaultAction(m_toolManager->registerActionTool("InvertWindowLevelActionTool"));
+    m_invertToolButton->setDefaultAction(m_toolManager->registerActionTool("InvertVoiLutActionTool"));
     // Afegim un menú al botó d'erase per incorporar l'acció d'esborrar tot el que hi ha al visor
     m_eraserToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     QMenu *eraserToolMenu = new QMenu(this);
