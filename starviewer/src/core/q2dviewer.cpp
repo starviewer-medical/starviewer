@@ -1640,7 +1640,7 @@ void Q2DViewer::clearViewer()
     m_drawer->clearViewer();
 }
 
-void Q2DViewer::invertWindowLevel()
+void Q2DViewer::invertVoiLut()
 {
     // Passa el window level a negatiu o positiu, per invertir els colors
     double windowLevel[2];

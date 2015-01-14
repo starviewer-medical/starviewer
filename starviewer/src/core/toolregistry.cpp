@@ -466,15 +466,15 @@ QPair<QAction*, QString> ToolRegistry::getActionToolPair(const QString &actionTo
 
         slot = SLOT(clearViewer());
     }
-    else if (actionToolName == "InvertWindowLevelActionTool")
+    else if (actionToolName == "InvertVoiLutActionTool")
     {
-        action->setText(tr("Invert WL"));
+        action->setText(tr("Invert VOI LUT"));
         action->setIcon(QIcon(":/images/invertWL.png"));
-        action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::InvertWindowLevelTool));
-        statusTip = tr("Invert window level");
+        action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::InvertVoiLutTool));
+        statusTip = tr("Invert VOI LUT");
         toolTip = statusTip;
 
-        slot = SLOT(invertWindowLevel());
+        slot = SLOT(invertVoiLut());
     }
     else if (actionToolName == "AxialViewActionTool")
     {
