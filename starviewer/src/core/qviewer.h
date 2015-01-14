@@ -171,6 +171,9 @@ public:
     /// Returns the current focal point of the active camera
     bool getCurrentFocalPoint(double focalPoint[3]);
 
+    /// Returns the VOI LUT that is currently applied to the image in this viewer. The default implementation returns a default VoiLut.
+    virtual VoiLut getCurrentVoiLut() const;
+
 public slots:
     /// Indiquem les dades d'entrada
     virtual void setInput(Volume *volume) = 0;
