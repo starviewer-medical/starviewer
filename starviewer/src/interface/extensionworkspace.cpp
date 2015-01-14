@@ -27,6 +27,9 @@ ExtensionWorkspace::ExtensionWorkspace(QWidget *parent)
     // Fem que cada pestanya tingui el seu botonet de tancar
     setTabsClosable(true);
 
+    // QTabWidget takes much less time to be painted when DocumentMode is enabled
+    setDocumentMode(true);
+
     this->setTabPosition(QTabWidget::South);
     this->setDarkBackgroundColorEnabled(true);
 
