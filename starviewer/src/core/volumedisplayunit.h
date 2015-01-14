@@ -92,8 +92,6 @@ public:
     /// Updates the current window level
     void updateVoiLut(const VoiLut &voiLut);
 
-    /// Returns the current window level on the given array.
-    void getWindowLevel(double windowLevel[2]) const;
     /// Sets the window level.
     void setWindowLevel(double window, double level);
 

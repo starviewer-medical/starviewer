@@ -138,12 +138,6 @@ void ImagePipeline::setVoiLut(const VoiLut &voiLut)
     }
 }
 
-void ImagePipeline::getCurrentWindowLevel(double wl[2])
-{
-    wl[0] = m_windowLevelLUTFilter->getWindow();
-    wl[1] = m_windowLevelLUTFilter->getLevel();
-}
-
 void ImagePipeline::setTransferFunction(const TransferFunction &transferFunction)
 {
     m_windowLevelLUTFilter->setTransferFunction(transferFunction);

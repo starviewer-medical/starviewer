@@ -316,11 +316,6 @@ void VolumeDisplayUnit::updateVoiLut(const VoiLut &voiLut)
     setVoiLut(voiLut);
 }
 
-void VolumeDisplayUnit::getWindowLevel(double windowLevel[2]) const
-{
-    m_imagePipeline->getCurrentWindowLevel(windowLevel);
-}
-
 void VolumeDisplayUnit::setWindowLevel(double window, double level)
 {
     m_imagePipeline->setVoiLut(WindowLevel(window, level));
