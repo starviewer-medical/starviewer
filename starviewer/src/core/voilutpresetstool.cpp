@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "windowlevelpresetstool.h"
+#include "voilutpresetstool.h"
 #include "q2dviewer.h"
 #include "logging.h"
 #include "voilutpresetstooldata.h"
@@ -23,10 +23,10 @@
 
 namespace udg {
 
-WindowLevelPresetsTool::WindowLevelPresetsTool(QViewer *viewer, QObject *parent)
+VoiLutPresetsTool::VoiLutPresetsTool(QViewer *viewer, QObject *parent)
  : Tool(viewer, parent), m_myToolData(0), m_defaultPresetsIndex(0)
 {
-    m_toolName = "WindowLevelPresetsTool";
+    m_toolName = "VoiLutPresetsTool";
 
     setToolData(m_viewer->getVoiLutData());
     m_characterIndexMap.insert('1', 0);
@@ -67,11 +67,11 @@ WindowLevelPresetsTool::WindowLevelPresetsTool(QViewer *viewer, QObject *parent)
     connect(viewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateWindowLevelData()));
 }
 
-WindowLevelPresetsTool::~WindowLevelPresetsTool()
+VoiLutPresetsTool::~VoiLutPresetsTool()
 {
 }
 
-void WindowLevelPresetsTool::handleEvent(unsigned long eventID)
+void VoiLutPresetsTool::handleEvent(unsigned long eventID)
 {
     switch (eventID)
     {
@@ -89,7 +89,7 @@ void WindowLevelPresetsTool::handleEvent(unsigned long eventID)
     }
 }
 
-void WindowLevelPresetsTool::applyPreset(char key)
+void VoiLutPresetsTool::applyPreset(char key)
 {
     if (m_standardPresets.isEmpty())
     {
@@ -133,7 +133,7 @@ void WindowLevelPresetsTool::applyPreset(char key)
     m_myToolData->selectPreset(preset);
 }
 
-void WindowLevelPresetsTool::updateWindowLevelData()
+void VoiLutPresetsTool::updateWindowLevelData()
 {
     m_defaultPresetsIndex = 0;
     if (!m_myToolData)
@@ -148,7 +148,7 @@ void WindowLevelPresetsTool::updateWindowLevelData()
     }
 }
 
-void WindowLevelPresetsTool::setToolData(ToolData *toolData)
+void VoiLutPresetsTool::setToolData(ToolData *toolData)
 {
     m_toolData = toolData;
     m_myToolData = qobject_cast<VoiLutPresetsToolData*>(toolData);

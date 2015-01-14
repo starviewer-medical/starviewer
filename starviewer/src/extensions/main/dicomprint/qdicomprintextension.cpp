@@ -113,7 +113,7 @@ void QDicomPrintExtension::initializeViewerTools()
     // Obtenim les accions de cada tool que volem
     m_toolManager->registerTool("SlicingTool");
     m_toolManager->registerTool("WindowLevelTool");
-    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("VoiLutPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SlicingWheelTool");
 
@@ -122,7 +122,7 @@ void QDicomPrintExtension::initializeViewerTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool";
     m_toolManager->triggerTools(defaultTools);
     m_toolManager->setupRegisteredTools(m_2DView);
 }

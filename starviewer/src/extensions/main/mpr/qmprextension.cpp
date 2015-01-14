@@ -274,7 +274,7 @@ void QMPRExtension::initializeTools()
     m_screenShotToolButton->setToolTip(m_toolManager->getRegisteredToolAction("ScreenShotTool")->toolTip());
     
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
-    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("VoiLutPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SlicingWheelTool");
 
@@ -286,7 +286,7 @@ void QMPRExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "WindowLevelPresetsTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool" << "ScreenShotTool" << "SlicingKeyboardTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool" << "ScreenShotTool" << "SlicingKeyboardTool";
     m_toolManager->triggerTools(defaultTools);
 
     // Registrem al manager les tools que van als diferents viewers
