@@ -1423,10 +1423,20 @@ void Q2DViewer::setVoiLut(const VoiLut &voiLut)
         return;
     }
 
-    getMainDisplayUnit()->setVoiLut(voiLut);
-    m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
-    render();
-    emit voiLutChanged(voiLut);
+    // If the new VOI LUT is not the currently selected one, it means that someone is calling this method to set a custom VOI LUT
+    if (voiLut != getCurrentVoiLut())
+    {
+        // This will cause another call to this method that will follow the other branch
+        getVoiLutData()->setCustomVoiLut(voiLut);
+    }
+    // Otherwise, it means that it has been called from the signal/slot connection from the VOI LUT data
+    else
+    {
+        getMainDisplayUnit()->setVoiLut(voiLut);
+        m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
+        render();
+        emit voiLutChanged(voiLut);
+    }
 }
 
 void Q2DViewer::setVoiLutInVolume(int index, const VoiLut &voiLut)
