@@ -498,6 +498,11 @@ bool QViewer::getCurrentFocalPoint(double focalPoint[3])
     return true;
 }
 
+VoiLut QViewer::getCurrentVoiLut() const
+{
+    return VoiLut();
+}
+
 bool QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate)
 {
     if (!hasInput())

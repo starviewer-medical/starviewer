@@ -1107,6 +1107,11 @@ void Q2DViewer::getCurrentWindowLevel(double wl[2])
     getMainDisplayUnit()->getWindowLevel(wl);
 }
 
+VoiLut Q2DViewer::getCurrentVoiLut() const
+{
+    return getVoiLutData()->getCurrentPreset();
+}
+
 int Q2DViewer::getCurrentSlice() const
 {
     return getMainDisplayUnit()->getSlice();
