@@ -455,7 +455,7 @@ void Q2DViewerExtension::initializeTools()
 
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
     // Registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
-    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("VoiLutPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SlicingWheelTool");
     m_toolManager->registerTool("SynchronizeTool");
@@ -498,7 +498,7 @@ void Q2DViewerExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";
     m_toolManager->triggerTools(defaultTools);
 
     //

@@ -109,7 +109,6 @@ HEADERS += extensionfactory.h \
     screenshottool.h \
     synchronizetool.h \
     synchronizetooldata.h \
-    windowlevelpresetstool.h \
     transdifferencetool.h \
     transdifferencetooldata.h \
     point3d.h \
@@ -418,7 +417,8 @@ HEADERS += extensionfactory.h \
     voilut.h \
     voilutpresetstooldata.h \
     qvoilutcombobox.h \
-    voiluthelper.h
+    voiluthelper.h \
+    voilutpresetstool.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -494,7 +494,6 @@ SOURCES += extensionmediator.cpp \
     screenshottool.cpp \
     synchronizetool.cpp \
     synchronizetooldata.cpp \
-    windowlevelpresetstool.cpp \
     transdifferencetool.cpp \
     transdifferencetooldata.cpp \
     point3d.cpp \
@@ -784,7 +783,8 @@ SOURCES += extensionmediator.cpp \
     voilut.cpp \
     voilutpresetstooldata.cpp \
     qvoilutcombobox.cpp \
-    voiluthelper.cpp
+    voiluthelper.cpp \
+    voilutpresetstool.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
