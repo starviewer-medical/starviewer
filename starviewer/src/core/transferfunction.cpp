@@ -331,10 +331,8 @@ TransferFunction TransferFunction::toNewRange(double oldX1, double oldX2, double
 {
     Q_ASSERT(!MathTools::isNaN(oldX1));
     Q_ASSERT(!MathTools::isNaN(oldX2));
-    Q_ASSERT(oldX1 < oldX2);
     Q_ASSERT(!MathTools::isNaN(newX1));
     Q_ASSERT(!MathTools::isNaN(newX2));
-    Q_ASSERT(newX1 < newX2);
 
     updateKeys();
 
