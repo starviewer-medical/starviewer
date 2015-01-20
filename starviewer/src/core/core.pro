@@ -352,12 +352,10 @@ HEADERS += extensionfactory.h \
     inputsynccriterion.h \
     modalitysynccriterion.h \
     syncaction.h \
-    windowlevelsyncaction.h \
     zoomfactorsyncaction.h \
     pansyncaction.h \
     imageorientationsyncaction.h \
     signaltosyncactionmapper.h \
-    windowlevelsignaltosyncactionmapper.h \
     zoomfactorsignaltosyncactionmapper.h \
     pansignaltosyncactionmapper.h \
     imageorientationsignaltosyncactionmapper.h \
@@ -418,7 +416,9 @@ HEADERS += extensionfactory.h \
     voilutpresetstooldata.h \
     qvoilutcombobox.h \
     voiluthelper.h \
-    voilutpresetstool.h
+    voilutpresetstool.h \
+    voilutsyncaction.h \
+    voilutsignaltosyncactionmapper.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -722,12 +722,10 @@ SOURCES += extensionmediator.cpp \
     inputsynccriterion.cpp \
     modalitysynccriterion.cpp \
     syncaction.cpp \
-    windowlevelsyncaction.cpp \
     zoomfactorsyncaction.cpp \
     pansyncaction.cpp \
     imageorientationsyncaction.cpp \
     signaltosyncactionmapper.cpp \
-    windowlevelsignaltosyncactionmapper.cpp \
     zoomfactorsignaltosyncactionmapper.cpp \
     pansignaltosyncactionmapper.cpp \
     imageorientationsignaltosyncactionmapper.cpp \
@@ -784,7 +782,9 @@ SOURCES += extensionmediator.cpp \
     voilutpresetstooldata.cpp \
     qvoilutcombobox.cpp \
     voiluthelper.cpp \
-    voilutpresetstool.cpp
+    voilutpresetstool.cpp \
+    voilutsyncaction.cpp \
+    voilutsignaltosyncactionmapper.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

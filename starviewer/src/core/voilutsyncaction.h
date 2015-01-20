@@ -12,35 +12,39 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGWINDOWLEVELSIGNALTOSYNCACTIONMAPPER_H
-#define UDGWINDOWLEVELSIGNALTOSYNCACTIONMAPPER_H
+#ifndef UDGVOILUTSYNCACTION_H
+#define UDGVOILUTSYNCACTION_H
 
-#include "signaltosyncactionmapper.h"
+#include "syncaction.h"
+#include "voilut.h"
 
 namespace udg {
 
-class VoiLut;
+class Volume;
 
 /**
-    Implementation of SignalToSyncActionMapper to map window level changes to WindowLevelSyncAction
+    Implementation of a SyncAction for a VOI LUT
+    The set VOI LUT on setVoiLut() will be applied when run() is called
  */
-class WindowLevelSignalToSyncActionMapper : public SignalToSyncActionMapper {
-Q_OBJECT
+class VoiLutSyncAction : public SyncAction {
 public:
-    WindowLevelSignalToSyncActionMapper(QObject *parent = 0);
-    ~WindowLevelSignalToSyncActionMapper();
+    VoiLutSyncAction();
+    ~VoiLutSyncAction();
 
-    /// Maps current WW/WL of the viewer
-    virtual void mapProperty();
+    /// Sets the VOI LUT to be synched
+    void setVoiLut(const VoiLut &voiLut);
+    void setVolume(Volume *volume);
+    
+    void run(QViewer *viewer);
 
 protected:
-    void mapSignal();
-    void unmapSignal();
+    void setupMetaData();
+    void setupDefaultSyncCriteria();
 
-protected slots:
-    /// Maps given WindowLevel to a WindowLevelSyncAction with the corresponding values
-    /// Should be connected to the corresponding signals on Q*Viewer
-    void mapToSyncAction(const VoiLut &voiLut);
+protected:
+    /// VOI LUT that will be applied on run()
+    VoiLut m_voiLut;
+    Volume *m_volume;
 };
 
 } // End namespace udg
