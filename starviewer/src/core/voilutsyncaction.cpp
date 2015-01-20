@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "windowlevelsyncaction.h"
+#include "voilutsyncaction.h"
 
 #include "qviewer.h"
 #include "q2dviewer.h"
@@ -21,58 +21,58 @@
 
 namespace udg {
 
-WindowLevelSyncAction::WindowLevelSyncAction()
+VoiLutSyncAction::VoiLutSyncAction()
  : SyncAction()
 {
 }
 
-WindowLevelSyncAction::~WindowLevelSyncAction()
+VoiLutSyncAction::~VoiLutSyncAction()
 {
 }
 
-void WindowLevelSyncAction::setWindowLevel(const WindowLevel &windowLevel)
+void VoiLutSyncAction::setVoiLut(const VoiLut &voiLut)
 {
-    m_windowLevel = windowLevel;
+    m_voiLut = voiLut;
 }
 
-void WindowLevelSyncAction::setVolume(Volume *volume)
+void VoiLutSyncAction::setVolume(Volume *volume)
 {
     m_volume = volume;
 }
 
-void WindowLevelSyncAction::run(QViewer *viewer)
+void VoiLutSyncAction::run(QViewer *viewer)
 {
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
 
     if (viewer2D)
     {
         int index = viewer2D->indexOfVolume(m_volume);
-        VoiLutPresetsToolData *currentWindowLevelPresetsToolData = viewer2D->getVoiLutDataForVolume(index);
+        VoiLutPresetsToolData *currentVoiLutPresetsToolData = viewer2D->getVoiLutDataForVolume(index);
 
-        // If the stored window level is in a group and isn't custom, then select it; otherwise, just set it
-        if (currentWindowLevelPresetsToolData->containsPreset(m_windowLevel.getName()) &&
-                currentWindowLevelPresetsToolData->getGroup(m_windowLevel.getName()) != VoiLutPresetsToolData::CustomPreset)
+        // If the stored VOI LUT is in a group and isn't custom, then select it; otherwise, just set it
+        if (currentVoiLutPresetsToolData->containsPreset(m_voiLut.getExplanation()) &&
+                currentVoiLutPresetsToolData->getGroup(m_voiLut.getExplanation()) != VoiLutPresetsToolData::CustomPreset)
         {
-            VoiLut voiLut = currentWindowLevelPresetsToolData->getFromDescription(m_windowLevel.getName());
-            viewer2D->setVoiLutInVolume(index, voiLut.getWindowLevel());
+            VoiLut voiLut = currentVoiLutPresetsToolData->getFromDescription(m_voiLut.getExplanation());
+            viewer2D->setVoiLutInVolume(index, voiLut);
         }
         else
         {
-            viewer2D->setVoiLutInVolume(index, m_windowLevel);
+            viewer2D->setVoiLutInVolume(index, m_voiLut);
         }
     }
     else
     {
-        viewer->getVoiLutData()->setCurrentPreset(m_windowLevel);
+        viewer->getVoiLutData()->setCurrentPreset(m_voiLut);
     }
 }
 
-void WindowLevelSyncAction::setupMetaData()
+void VoiLutSyncAction::setupMetaData()
 {
-    m_metaData = SyncActionMetaData("WindowLevelSyncAction", QObject::tr("Window level"), "windowLevel");
+    m_metaData = SyncActionMetaData("VoiLutSyncAction", QObject::tr("VOI LUT"), "voiLut");
 }
 
-void WindowLevelSyncAction::setupDefaultSyncCriteria()
+void VoiLutSyncAction::setupDefaultSyncCriteria()
 {
     m_defaultSyncCriteria << new InputSyncCriterion();
 }

@@ -12,24 +12,24 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "windowlevelsignaltosyncactionmapper.h"
+#include "voilutsignaltosyncactionmapper.h"
 
 #include "q2dviewer.h"
 #include "voilutpresetstooldata.h"
-#include "windowlevelsyncaction.h"
+#include "voilutsyncaction.h"
 
 namespace udg {
 
-WindowLevelSignalToSyncActionMapper::WindowLevelSignalToSyncActionMapper(QObject *parent)
+VoiLutSignalToSyncActionMapper::VoiLutSignalToSyncActionMapper(QObject *parent)
  : SignalToSyncActionMapper(parent)
 {
 }
 
-WindowLevelSignalToSyncActionMapper::~WindowLevelSignalToSyncActionMapper()
+VoiLutSignalToSyncActionMapper::~VoiLutSignalToSyncActionMapper()
 {
 }
 
-void WindowLevelSignalToSyncActionMapper::mapProperty()
+void VoiLutSignalToSyncActionMapper::mapProperty()
 {
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     if (viewer2D)
@@ -38,7 +38,7 @@ void WindowLevelSignalToSyncActionMapper::mapProperty()
     }
 }
 
-void WindowLevelSignalToSyncActionMapper::mapSignal()
+void VoiLutSignalToSyncActionMapper::mapSignal()
 {
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     if (viewer2D)
@@ -48,7 +48,7 @@ void WindowLevelSignalToSyncActionMapper::mapSignal()
     }
 }
 
-void WindowLevelSignalToSyncActionMapper::unmapSignal()
+void VoiLutSignalToSyncActionMapper::unmapSignal()
 {
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     if (viewer2D)
@@ -58,14 +58,14 @@ void WindowLevelSignalToSyncActionMapper::unmapSignal()
     }
 }
 
-void WindowLevelSignalToSyncActionMapper::mapToSyncAction(const VoiLut &voiLut)
+void VoiLutSignalToSyncActionMapper::mapToSyncAction(const VoiLut &voiLut)
 {
     if (!m_mappedSyncAction)
     {
-        m_mappedSyncAction = new WindowLevelSyncAction();
+        m_mappedSyncAction = new VoiLutSyncAction();
     }
-    static_cast<WindowLevelSyncAction*>(m_mappedSyncAction)->setVolume(m_viewer->getMainInput());
-    static_cast<WindowLevelSyncAction*>(m_mappedSyncAction)->setWindowLevel(voiLut.getWindowLevel());
+    static_cast<VoiLutSyncAction*>(m_mappedSyncAction)->setVolume(m_viewer->getMainInput());
+    static_cast<VoiLutSyncAction*>(m_mappedSyncAction)->setVoiLut(voiLut);
     
     emit actionMapped(m_mappedSyncAction);
 }
