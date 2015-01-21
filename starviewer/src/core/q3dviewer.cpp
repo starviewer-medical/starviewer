@@ -526,9 +526,6 @@ void Q3DViewer::setInput(Volume *volume)
 
     applyCurrentRenderingMethod();
 
-    // Apliquem el window/level actual
-    setWindowLevel(m_window, m_level);
-
     // Indiquem el canvi de volum
     emit volumeChanged(getMainInput());
 
