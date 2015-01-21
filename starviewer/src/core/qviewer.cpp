@@ -867,10 +867,7 @@ void QViewer::setInputAndRender(Volume *volume)
 
 void QViewer::setVoiLut(const VoiLut &voiLut)
 {
-    if (voiLut.isWindowLevel() && voiLut.getWindowLevel().isValid())
-    {
-        setWindowLevel(voiLut.getWindowLevel().getWidth(), voiLut.getWindowLevel().getCenter());
-    }
+    Q_UNUSED(voiLut)
 }
 
 OrthogonalPlane QViewer::getCurrentViewPlane() const
