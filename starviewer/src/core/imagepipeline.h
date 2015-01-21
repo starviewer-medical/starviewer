@@ -82,6 +82,9 @@ private:
     /// The shutter data to be applied
     vtkImageData *m_shutterData;
 
+    /// Used to keep track of whether there's a currently active transfer function when applying a VOI LUT.
+    bool m_hasTransferFunction;
+
 };
 
 }
