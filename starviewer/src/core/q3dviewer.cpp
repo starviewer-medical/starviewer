@@ -340,6 +340,18 @@ void Q3DViewer::setWindowLevel(double window, double level)
     }
 }
 
+VoiLut Q3DViewer::getCurrentVoiLut() const
+{
+    return m_transferFunction;
+}
+
+void Q3DViewer::setVoiLut(const VoiLut &voiLut)
+{
+    setTransferFunction(voiLut.getLut());
+    this->applyCurrentRenderingMethod();
+    emit transferFunctionChanged();
+}
+
 void Q3DViewer::setClippingPlanes(vtkPlanes *clippingPlanes)
 {
     if (clippingPlanes)

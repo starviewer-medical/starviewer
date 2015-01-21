@@ -69,6 +69,9 @@ public:
     /// Obté el window level actual de la imatge
     void getCurrentWindowLevel(double wl[2]);
 
+    /// Returns the VOI LUT that is currently applied to the image in this viewer.
+    virtual VoiLut getCurrentVoiLut() const;
+
     /// Determina la bounding box que definex els plans de tall del volum
     void setClippingPlanes(vtkPlanes *clippingPlanes);
     /// Obté els plans de tall que s'han definit sobre el volum
@@ -110,6 +113,9 @@ public slots:
     void setTransferFunction(const TransferFunction &transferFunction);
     void setWindowLevel(double window, double level);
     void setNewTransferFunction();
+
+    /// Sets the VOI LUT for this viewer.
+    virtual void setVoiLut(const VoiLut &voiLut);
 
     /// Paràmetres d'il·luminació.
     void setShading(bool on);
