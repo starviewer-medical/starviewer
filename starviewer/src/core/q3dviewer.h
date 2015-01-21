@@ -66,9 +66,6 @@ public:
     /// Retorna el tipus de visualització que es té assignat com a un string
     QString getRenderFunctionAsString();
 
-    /// Obté el window level actual de la imatge
-    void getCurrentWindowLevel(double wl[2]);
-
     /// Returns the VOI LUT that is currently applied to the image in this viewer.
     virtual VoiLut getCurrentVoiLut() const;
 
@@ -111,7 +108,6 @@ public slots:
 
     /// Sets the current transfer function.
     void setTransferFunction(const TransferFunction &transferFunction);
-    void setWindowLevel(double window, double level);
     void setNewTransferFunction();
 
     /// Sets the VOI LUT for this viewer.

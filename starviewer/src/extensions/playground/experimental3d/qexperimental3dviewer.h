@@ -48,12 +48,6 @@ public slots:
     /// Crida que reinicia a l'estat inicial el visor.
     virtual void reset();
 
-    /// Obté el window level actual de la imatge.
-    virtual void getCurrentWindowLevel(double wl[2]);
-    
-    /// Ajusta el window level.
-    virtual void setWindowLevel(double window, double level);
-
     /// Li indiquem quina vista volem del volum: XYPlane, YZPlane o XZPlane.
     virtual void resetView(const OrthogonalPlane &view);
 
