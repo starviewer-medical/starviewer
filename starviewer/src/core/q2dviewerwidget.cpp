@@ -104,6 +104,8 @@ void Q2DViewerWidget::createConnections()
 
     connect(m_fusionBalanceWidget, SIGNAL(balanceChanged(int)), m_2DView, SLOT(setFusionBalance(int)));
     connect(m_2DView, SIGNAL(volumeChanged(Volume*)), SLOT(resetFusionBalance()));
+
+    connect(m_2DView, SIGNAL(doubleClicked()), SLOT(emitDoubleClicked()));
 }
 
 void Q2DViewerWidget::updateProjectionLabel()
@@ -265,6 +267,11 @@ void Q2DViewerWidget::resetFusionBalance()
     {
         m_fusionBalanceToolButton->hide();
     }
+}
+
+void Q2DViewerWidget::emitDoubleClicked()
+{
+    emit doubleClicked(this);
 }
 
 }

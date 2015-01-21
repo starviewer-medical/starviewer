@@ -196,6 +196,10 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
         case vtkCommand::MouseWheelBackwardEvent:
             m_mouseHasMoved = false;
             setActive(true);
+            if (vtkEvent == vtkCommand::LeftButtonPressEvent && getInteractor()->GetRepeatCount() == 1)
+            {
+                emit doubleClicked();
+            }
             break;
 
         case vtkCommand::MouseMoveEvent:

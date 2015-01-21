@@ -28,6 +28,7 @@ class Volume;
 class ToolManager;
 class ToolConfiguration;
 class HangingProtocol;
+class TransferFunctionModel;
 // Estructura pacient
 class Patient;
 class Study;
@@ -200,6 +201,10 @@ private slots:
 
     /// Sets the transfer function at the given index in the current model to the current viewer.
     void setTransferFunctionToCurrentViewer(int transferFunctionIndex);
+
+    /// When a viewer receives a double click, this method checks which tools are active and
+    /// if none of them processes single or double clicks then maximizes or demaximizes the viewer.
+    void handleViewerDoubleClick(Q2DViewerWidget *viewerWidget);
 
 private:
     /// Accions

@@ -50,44 +50,28 @@ ScreenLayout ScreenManager::getScreenLayout() const
 
 void ScreenManager::maximize(QWidget *window)
 {
-    DynamicMatrix dynamicMatrix = computeScreenMatrix(window);
+    QRect geometryToMaximizeToMultipleScreens = getGeometryToMaximizeToMulipleScreens(window);
 
-    // Agafa el top left i el bottomright per determinar les dimensions de la finestra
-    QPoint topLeft = getTopLeft(dynamicMatrix);
-    QPoint bottomRight = getBottomRight(dynamicMatrix);
-
-    if (dynamicMatrix.isMaximizable())
+    if (!geometryToMaximizeToMultipleScreens.isNull())
     {
-        if (window->isMaximized())
-        {
-            window->showNormal();
-        }
-
-        // Buscar la mida del frame i de la finestra
-        QRect frameSize = window->frameGeometry();
-        QRect windowSize = window->geometry();
-
-        // Trobar el tamany real de les cantonades i la title bar
-        int topBorder = windowSize.top() - frameSize.top();
-        int bottomBorder = frameSize.bottom() - windowSize.bottom();
-        int leftBorder = windowSize.left() - frameSize.left();
-        int rightBorder = frameSize.right() - windowSize.right();
-
-        // Calcular quin és el tamany que ha de tenir.
-        // Se li ha de passar la geometria de la finestra, sense cantonades.
-        int x = topLeft.x() + leftBorder;
-        int y = topLeft.y() + topBorder;
-        // x val x + leftBorder
-        int width = bottomRight.x() - x - rightBorder;
-        // y val y + topBorder
-        int height = bottomRight.y() - y - bottomBorder;
-
-        window->setGeometry(x, y, width, height);
+        window->setGeometry(geometryToMaximizeToMultipleScreens);
     }
     else
     {
         window->showMaximized();
     }
+}
+
+bool ScreenManager::isMaximizedToMultipleScreens(QWidget *window)
+{
+    if (window->isMinimized() || window->isMaximized() || window->isFullScreen())
+    {
+        return false;
+    }
+
+    QRect geometryToMaximizeToMultipleScreens = getGeometryToMaximizeToMulipleScreens(window);
+
+    return window->geometry() == geometryToMaximizeToMultipleScreens;
 }
 
 void ScreenManager::moveToDesktop(QWidget *window, int idDesktop)
@@ -152,7 +136,7 @@ int ScreenManager::getScreenID(const QPoint &point) const
     return m_applicationDesktop->screenNumber(point);
 }
 
-DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window)
+DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window) const
 {
     int desktopIAm = getScreenID(window);
 
@@ -388,7 +372,52 @@ QPoint ScreenManager::getBottomRight(const DynamicMatrix &dynamicMatrix) const
         y = std::min(y, m_screenLayout.getScreen(screens[i]).getAvailableGeometry().bottom());
     }
 
-    return QPoint(x, y);
+    // Add 1 to compensate for the fact that right() and bottom() don't return the true right and the true bottom. From QRect documentation:
+    // "Note that for historical reasons the values returned by the bottom() and right() functions deviate from the true bottom-right corner of the rectangle:
+    // The right() function returns left() + width() - 1 and the bottom() function returns top() + height() - 1."
+    return QPoint(x + 1, y + 1);
+}
+
+QRect ScreenManager::getGeometryToMaximizeToMulipleScreens(QWidget *window)
+{
+    DynamicMatrix dynamicMatrix = computeScreenMatrix(window);
+
+    if (dynamicMatrix.isMaximizable())
+    {
+        if (window->isMaximized())
+        {
+            window->showNormal();
+        }
+
+        // Buscar la mida del frame i de la finestra
+        QRect frameSize = window->frameGeometry();
+        QRect windowSize = window->geometry();
+
+        // Trobar el tamany real de les cantonades i la title bar
+        int topBorder = windowSize.top() - frameSize.top();
+        int bottomBorder = frameSize.bottom() - windowSize.bottom();
+        int leftBorder = windowSize.left() - frameSize.left();
+        int rightBorder = frameSize.right() - windowSize.right();
+
+        // Agafa el top left i el bottomright per determinar les dimensions de la finestra
+        QPoint topLeft = getTopLeft(dynamicMatrix);
+        QPoint bottomRight = getBottomRight(dynamicMatrix);
+
+        // Calcular quin és el tamany que ha de tenir.
+        // Se li ha de passar la geometria de la finestra, sense cantonades.
+        int x = topLeft.x() + leftBorder;
+        int y = topLeft.y() + topBorder;
+        // x val x + leftBorder
+        int width = bottomRight.x() - x - rightBorder;
+        // y val y + topBorder
+        int height = bottomRight.y() - y - bottomBorder;
+
+        return QRect(x, y, width, height);
+    }
+    else
+    {
+        return QRect();
+    }
 }
 
 } // End namespace udg

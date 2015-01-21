@@ -43,7 +43,6 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_dicomformattedvaluesconverter.cpp \
            $$PWD/test_screen.cpp \
            $$PWD/test_screenlayout.cpp \
-           $$PWD/test_viewerslayout.cpp \
            $$PWD/test_studylayoutconfigsettingsconverter.cpp \
            $$PWD/test_optimalviewersgridestimator.cpp \
            $$PWD/test_vtkimagedatacreator.cpp \
@@ -81,7 +80,9 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_decaycorrectionfactorformulacalculator.cpp \
            $$PWD/test_standardizeduptakevalueleanbodymassformulacalculator.cpp \
            $$PWD/test_standardizeduptakevaluebodyweightformulacalculator.cpp \
-           $$PWD/test_standardizeduptakevaluebodysurfaceareaformulacalculator.cpp
+           $$PWD/test_standardizeduptakevaluebodysurfaceareaformulacalculator.cpp \
+           $$PWD/test_relativegeometrylayout.cpp \
+           $$PWD/test_griditerator.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \
