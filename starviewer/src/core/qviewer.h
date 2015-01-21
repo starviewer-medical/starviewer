@@ -191,9 +191,6 @@ public slots:
     /// Elimina totes les captures de pantalla
     void clearGrabbedViews();
 
-    /// Obté el window level actual de la imatge
-    virtual void getCurrentWindowLevel(double wl[2]) = 0;
-
     /// Resets the view to a determined orthogonal plane
     virtual void resetView(const OrthogonalPlane &view);
     
@@ -210,8 +207,6 @@ public slots:
     void enableContextMenu();
     void disableContextMenu();
 
-    /// Ajusta el window/level
-    virtual void setWindowLevel(double window, double level) = 0;
     /// Sets the VOI LUT for this viewer. The default implementation does nothing.
     virtual void setVoiLut(const VoiLut &voiLut);
 
