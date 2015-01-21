@@ -80,7 +80,7 @@
 namespace udg {
 
 Q3DViewer::Q3DViewer(QWidget *parent)
- : QViewer(parent), m_imageData(0), m_vtkVolume(0), m_volumeProperty(0), m_newTransferFunction(0), m_clippingPlanes(0)
+ : QViewer(parent), m_imageData(0), m_vtkVolume(0), m_volumeProperty(0), m_clippingPlanes(0)
 {
     m_defaultFitIntoViewportMarginRate = 0.4;
     m_vtkWidget->setAutomaticImageCacheEnabled(true);
@@ -166,8 +166,6 @@ Q3DViewer::Q3DViewer(QWidget *parent)
     m_obscuranceOn = false;
 
     m_4DLinearRegressionGradientEstimator = 0;
-    m_window = 80;
-    m_level = 40;
 
     // Workaround: desactivem l'orientation marker perquè amb VTK 5.6 es renderitza cada vegada que movem el ratolí per sobre el visor.
     // TODO: buscar una solució real al problema, que no hi hagi un mouse tracking o quelcom per l'estil.
@@ -195,7 +193,7 @@ Q3DViewer::~Q3DViewer()
     delete m_directIlluminationObscuranceVoxelShader;
     delete m_ambientContourObscuranceVoxelShader;
     delete m_directIlluminationContourObscuranceVoxelShader;
-    delete m_newTransferFunction;
+
     // Eliminem tots els elements vtk creats
     if (m_4DLinearRegressionGradientEstimator)
     {
@@ -534,18 +532,6 @@ void Q3DViewer::setTransferFunction(const TransferFunction &transferFunction)
     }
 }
 
-void Q3DViewer::setNewTransferFunction()
-{
-    if (m_newTransferFunction)
-    {
-        delete m_newTransferFunction;
-    }
-
-    m_newTransferFunction = new TransferFunction(m_transferFunction);
-    m_window = m_range;
-    m_level = m_range/2.0;
-}
-
 void Q3DViewer::setDefaultViewForCurrentInput()
 {
     // De moment, sempre serà coronal
@@ -568,9 +554,6 @@ bool Q3DViewer::rescale(Volume *volume)
     double max = range[1];
     double rangeLength = max - min;
     double shift = -min;
-    double window = rangeLength;
-    // Sabem que el mínim és 0
-    double level = (rangeLength / 2.0);
     DEBUG_LOG(QString("Q3DViewer: volume scalar range: min = %1, max = %2, range = %3, shift = %4").arg(min).arg(max).arg(rangeLength).arg(shift));
 
     vtkImageShiftScale *rescaler = vtkImageShiftScale::New();
@@ -600,9 +583,6 @@ bool Q3DViewer::rescale(Volume *volume)
         rescaler->Delete();
 
         m_range = rangeLength;
-        m_shift = shift;
-        m_window = window;
-        m_level = level;
 
         emit scalarRange(0, m_range);
 

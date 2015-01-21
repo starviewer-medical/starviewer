@@ -108,7 +108,6 @@ public slots:
 
     /// Sets the current transfer function.
     void setTransferFunction(const TransferFunction &transferFunction);
-    void setNewTransferFunction();
 
     /// Sets the VOI LUT for this viewer.
     virtual void setVoiLut(const VoiLut &voiLut);
@@ -252,9 +251,6 @@ private:
     /// Current transfer function.
     TransferFunction m_transferFunction;
 
-    /// La funció de transferència que s'aplica
-    TransferFunction *m_newTransferFunction;
-
     /// Booleà per saber si estem fent el primer render (per reiniciar l'orientació).
     bool m_firstRender;
 
@@ -272,11 +268,8 @@ private:
     /// Booleà que indica si les obscurances estan activades.
     bool m_obscuranceOn;
 
-    /// Valors de window i level
-    double m_window;
-    double m_level;
+    /// Range length of the viewed volume.
     double m_range;
-    double m_shift;
 
     /// Estimador de gradient que farem servir per les obscurances (i per la resta després de calcular les obscurances).
     Vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;
