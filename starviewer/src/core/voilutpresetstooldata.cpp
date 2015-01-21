@@ -178,10 +178,7 @@ void VoiLutPresetsToolData::setCurrentPreset(const VoiLut &preset)
 {
     if (m_presetsByDescription.contains(preset.getExplanation()))
     {
-        if (m_groupsByDescription[preset.getExplanation()] == CustomPreset)
-        {
-            updatePreset(preset);
-        }
+        updatePreset(preset);
     }
     else
     {
