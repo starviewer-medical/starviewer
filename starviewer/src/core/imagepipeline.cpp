@@ -25,6 +25,7 @@
 namespace udg {
 
 ImagePipeline::ImagePipeline()
+    : m_hasTransferFunction(false)
 {
     // Filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = new ThickSlabFilter();
@@ -128,24 +129,29 @@ void ImagePipeline::setVoiLut(const VoiLut &voiLut)
 {
     m_windowLevelLUTFilter->setWindowLevel(voiLut.getWindowLevel());
 
-    if (voiLut.isLut())
+    if (!m_hasTransferFunction)
     {
-        m_windowLevelLUTFilter->setTransferFunction(voiLut.getLut());
-    }
-    else
-    {
-        m_windowLevelLUTFilter->clearTransferFunction();
+        if (voiLut.isLut())
+        {
+            m_windowLevelLUTFilter->setTransferFunction(voiLut.getLut());
+        }
+        else
+        {
+            m_windowLevelLUTFilter->clearTransferFunction();
+        }
     }
 }
 
 void ImagePipeline::setTransferFunction(const TransferFunction &transferFunction)
 {
     m_windowLevelLUTFilter->setTransferFunction(transferFunction);
+    m_hasTransferFunction = true;
 }
 
 void ImagePipeline::clearTransferFunction()
 {
     m_windowLevelLUTFilter->clearTransferFunction();
+    m_hasTransferFunction = false;
 }
 
 vtkAlgorithm* ImagePipeline::getVtkAlgorithm() const
