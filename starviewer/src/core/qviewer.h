@@ -212,9 +212,7 @@ public slots:
 
     /// Ajusta el window/level
     virtual void setWindowLevel(double window, double level) = 0;
-    /// Sets the VOI LUT for this viewer. The default implementation just extracts the window level from the VOI LUT and calls setWindowLevel in order to
-    /// emulate the previous version of the method and maintain and don't force yet all subclasses to implement this method. Should be overridden in subclasses
-    /// to provide true support for VOI LUTs.
+    /// Sets the VOI LUT for this viewer. The default implementation does nothing.
     virtual void setVoiLut(const VoiLut &voiLut);
 
     /// Fits the current rendered item into the viewport size
