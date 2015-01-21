@@ -122,6 +122,7 @@ void QExperimental3DViewer::resetView(const OrthogonalPlane &view)
 void QExperimental3DViewer::getCurrentRenderedItemBounds(double bounds[6])
 {
     // TODO Implement me!
+    Q_UNUSED(bounds)
 }
 
 } // namespace udg
