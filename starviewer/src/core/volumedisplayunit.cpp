@@ -25,6 +25,7 @@
 #include <vtkImageActor.h>
 #include <vtkImageMapper3D.h>
 #include <vtkPropPicker.h>
+#include <vtkImageProperty.h>
 
 namespace udg {
 
@@ -33,6 +34,7 @@ VolumeDisplayUnit::VolumeDisplayUnit()
 {
     m_imagePipeline = new ImagePipeline();
     m_imageActor = vtkImageActor::New();
+    m_imageActor->GetProperty()->SetInterpolationTypeToCubic();
     m_sliceHandler = new SliceHandler();
     m_imagePointPicker =  0;
     m_windowLevelData = 0;
