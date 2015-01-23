@@ -1079,7 +1079,6 @@ void Q2DViewer::setWindowLevel(double window, double level)
         getMainDisplayUnit()->setWindowLevel(window,level);
         m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
         render();
-        emit windowLevelChanged(window, level);
     }
     else
     {
@@ -1437,7 +1436,6 @@ void Q2DViewer::setVoiLut(const VoiLut &voiLut)
         getMainDisplayUnit()->setVoiLut(voiLut);
         m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
         render();
-        emit voiLutChanged(voiLut);
     }
 }
 
