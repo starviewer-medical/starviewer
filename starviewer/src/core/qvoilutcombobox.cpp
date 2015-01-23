@@ -29,7 +29,7 @@ QVoiLutComboBox::QVoiLutComboBox(QWidget *parent)
     m_currentSelectedPreset = "";
     connect(this, SIGNAL(activated(const QString&)), SLOT(setActiveWindowLevel(const QString&)));
     Settings settings;
-    this->setMaxVisibleItems(settings.getValue(CoreSettings::MaximumNumberOfVisibleWindowLevelComboItems).toInt());
+    this->setMaxVisibleItems(settings.getValue(CoreSettings::MaximumNumberOfVisibleVoiLutComboItems).toInt());
 }
 
 QVoiLutComboBox::~QVoiLutComboBox()

@@ -85,7 +85,7 @@ const QString CoreSettings::MammographyAutoOrientationExceptions("MammographyAut
 const QString CoreSettings::AllowAsynchronousVolumeLoading("AllowAsynchronousVolumeLoading");
 const QString CoreSettings::MaximumNumberOfVolumesLoadingConcurrently("MaximumNumberOfVolumesLoadingConcurrently");
 
-const QString CoreSettings::MaximumNumberOfVisibleWindowLevelComboItems("MaximumNumberOfVisibleWindowLevelComboItems");
+const QString CoreSettings::MaximumNumberOfVisibleVoiLutComboItems("MaximumNumberOfVisibleVoiLutComboItems");
 
 // Geometria de la finestra del QDICOMDumpBrowser
 const QString CoreSettings::QDICOMDumpBrowserGeometry("QDICOMDumpBrowserGeometry");
@@ -140,7 +140,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(MammographyAutoOrientationExceptions, (QStringList() << "BAV" << "BAG" << "estereot"));
     settingsRegistry->addSetting(AllowAsynchronousVolumeLoading, true);
     settingsRegistry->addSetting(MaximumNumberOfVolumesLoadingConcurrently, 1);
-    settingsRegistry->addSetting(MaximumNumberOfVisibleWindowLevelComboItems, 50);
+    settingsRegistry->addSetting(MaximumNumberOfVisibleVoiLutComboItems, 50);
     settingsRegistry->addSetting(EnableQ2DViewerSliceScrollLoop, false);
     settingsRegistry->addSetting(EnableQ2DViewerPhaseScrollLoop, false);
     settingsRegistry->addSetting(EnableQ2DViewerReferenceLinesForMR, true);
