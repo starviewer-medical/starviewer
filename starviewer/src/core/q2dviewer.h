@@ -395,11 +395,6 @@ signals:
     /// Envia la nova vista en la que ens trobem
     void viewChanged(int);
 
-    /// Indica el nou window level
-    void windowLevelChanged(double window, double level);
-    /// Emitted to inform of the new VOI LUT.
-    void voiLutChanged(const VoiLut &voiLut);
-
     /// Emitted when a new patient orientation has been set
     void imageOrientationChanged(const PatientOrientation &orientation);
     

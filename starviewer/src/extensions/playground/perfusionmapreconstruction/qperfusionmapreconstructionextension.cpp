@@ -149,7 +149,6 @@ void QPerfusionMapReconstructionExtension::createConnections()
   //connect(m_filterPushButton, SIGNAL(clicked()), SLOT(applyFilterMapImage()));
   connect(m_mapViewComboBox, SIGNAL(currentIndexChanged (int)), SLOT(changeMap(int)));
   connect(m_mapCalculator, SIGNAL(computed()), SLOT(paintMap()));
-  //connect(m_2DView, SIGNAL(windowLevelChanged(double,double)), SLOT(createColorMap(double, double)));
 }
 
 void QPerfusionMapReconstructionExtension::setInput(Volume *input)

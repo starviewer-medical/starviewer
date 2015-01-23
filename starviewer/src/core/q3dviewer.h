@@ -142,8 +142,6 @@ signals:
     void obscuranceCancelledByProgram();
     /// Informa del rang de valors del volum quan aquest canvia.
     void scalarRange(double min, double max);
-    /// Indica el nou window level
-    void windowLevelChanged(double window, double level);
     void transferFunctionChanged();
 
 protected:
