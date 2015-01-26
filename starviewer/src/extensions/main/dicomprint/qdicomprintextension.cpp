@@ -475,19 +475,19 @@ QList<QPair<Image*, DICOMPrintPresentationStateImage> > QDicomPrintExtension::ge
 
 DICOMPrintPresentationStateImage QDicomPrintExtension::getDICOMPrintPresentationStateImageForCurrentSelectedImages() const
 {
+    // TODO support VOI LUTs
     DICOMPrintPresentationStateImage dicomPrintPresentationStateImage;
-    double windowLevelFromViewer[2];
-    m_2DView->getCurrentWindowLevel(windowLevelFromViewer);
+    WindowLevel windowLevelFromViewer = m_2DView->getCurrentVoiLut().getWindowLevel();
 
     // Tenir en compte que imatges dins un mateixa sèrie poden tenir WL
     Image *currentImageInViewer = m_2DView->getMainInput()->getImage(m_2DView->getCurrentSlice(), m_2DView->getCurrentPhase());
-    bool windowLevelHasBeenModifiedInViewer = currentImageInViewer->getVoiLut().getWindowLevel().getWidth() != windowLevelFromViewer[0] ||
-            currentImageInViewer->getVoiLut().getWindowLevel().getCenter() != windowLevelFromViewer[1];
+    bool windowLevelHasBeenModifiedInViewer = currentImageInViewer->getVoiLut().getWindowLevel().getWidth() != windowLevelFromViewer.getWidth() ||
+            currentImageInViewer->getVoiLut().getWindowLevel().getCenter() != windowLevelFromViewer.getCenter();
 
     //Si el WL no ha estat modificat per defecte s'aplicarà el que té cada imatge
     if (windowLevelHasBeenModifiedInViewer)
     {
-        dicomPrintPresentationStateImage.setWindowLevel(windowLevelFromViewer[0], windowLevelFromViewer[1]);
+        dicomPrintPresentationStateImage.setWindowLevel(windowLevelFromViewer.getWidth(), windowLevelFromViewer.getCenter());
     }
 
     return dicomPrintPresentationStateImage;

@@ -1101,13 +1101,6 @@ void Q2DViewer::clearTransferFunction()
     getMainDisplayUnit()->clearTransferFunction();
 }
 
-void Q2DViewer::getCurrentWindowLevel(double wl[2])
-{
-    VoiLut currentVoiLut = getCurrentVoiLut();
-    wl[0] = currentVoiLut.getWindowLevel().getWidth();
-    wl[1] = currentVoiLut.getWindowLevel().getCenter();
-}
-
 VoiLut Q2DViewer::getCurrentVoiLut() const
 {
     return getVoiLutData()->getCurrentPreset();
