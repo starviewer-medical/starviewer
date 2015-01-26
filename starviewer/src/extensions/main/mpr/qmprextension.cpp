@@ -464,10 +464,10 @@ void QMPRExtension::showScreenshotsExporterDialog()
 
 void QMPRExtension::showViewerInformation(bool show)
 {
-    m_axial2DView->enableAnnotation(WindowInformationAnnotation | PatientOrientationAnnotation | SliceAnnotation | PatientInformationAnnotation |
+    m_axial2DView->enableAnnotation(VoiLutInformationAnnotation | PatientOrientationAnnotation | SliceAnnotation | PatientInformationAnnotation |
                                     AcquisitionInformationAnnotation, show);
-    m_sagital2DView->enableAnnotation(WindowInformationAnnotation | AcquisitionInformationAnnotation, show);
-    m_coronal2DView->enableAnnotation(WindowInformationAnnotation | AcquisitionInformationAnnotation, show);
+    m_sagital2DView->enableAnnotation(VoiLutInformationAnnotation | AcquisitionInformationAnnotation, show);
+    m_coronal2DView->enableAnnotation(VoiLutInformationAnnotation | AcquisitionInformationAnnotation, show);
 }
 
 void QMPRExtension::updateProjectionLabel()

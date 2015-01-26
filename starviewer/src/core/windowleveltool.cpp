@@ -78,6 +78,7 @@ void WindowLevelTool::startWindowLevel()
     m_initialWindow = voiLut.getWindowLevel().getWidth();
     m_initialLevel = voiLut.getWindowLevel().getCenter();
     m_initialLut = voiLut.getLut();
+    m_initialLut.setName(voiLut.getOriginalLutExplanation());
     m_windowLevelStartPosition = m_viewer->getEventPosition();
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetDesiredUpdateRate());
 }
@@ -136,7 +137,7 @@ void WindowLevelTool::doWindowLevel()
         double oldX2 = m_initialLut.keys().last();
         double newX1 = newLevel - newWindow / 2.0;
         double newX2 = newLevel + newWindow / 2.0;
-        m_viewer->setVoiLut(m_initialLut.toNewRange(oldX1, oldX2, newX1, newX2));
+        m_viewer->setVoiLut(VoiLut(m_initialLut.toNewRange(oldX1, oldX2, newX1, newX2), m_initialLut.name()));
     }
 }
 

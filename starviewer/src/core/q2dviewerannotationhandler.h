@@ -59,7 +59,7 @@ private:
 
     void updateLateralityAnnotationInformation();
     void updatePatientInformationAnnotation();
-    void updateWindowInformationAnnotation();
+    void updateVoiLutInformationAnnotation();
     
     /// Returns the current slice location information, if any
     QString getSliceLocationAnnotation();
@@ -76,8 +76,8 @@ private:
     /// Adds the text actors to the viewer
     void addActors();
 
-    /// Gets the current window level string
-    QString getCurrentWindowLevelString() const;
+    /// Returns the current VOI LUT string.
+    QString getVoiLutString() const;
 
 private:
     /// Viewer we are handling

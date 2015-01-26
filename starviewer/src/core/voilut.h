@@ -32,6 +32,9 @@ public:
     VoiLut(const WindowLevel &windowLevel);
     /// Creates a VOI LUT that represents the given LUT.
     VoiLut(const TransferFunction &lut);
+    /// Creates a VOI LUT that represents the given LUT that was obtained from a window level operation to another LUT,
+    /// whose explanation (or name) is given in the second parameter.
+    VoiLut(const TransferFunction &lut, const QString &originalExplanation);
 
     /// Returns the window level contained in this VOI LUT. If this VOI LUT is indeed a LUT the returned window level is defined as explained in setLut().
     const WindowLevel& getWindowLevel() const;
@@ -48,6 +51,9 @@ public:
     const QString& getExplanation() const;
     /// Sets the explanation (or name) of this VOI LUT.
     void setExplanation(const QString &explanation);
+
+    /// Returns the explanation (or name) of the LUT that was window-leveled to create this LUT. If this LUT is original, returns the same as getExplanation().
+    const QString& getOriginalLutExplanation() const;
 
     /// Returns true if this VOI LUT represents a window level.
     bool isWindowLevel() const;
@@ -67,6 +73,9 @@ private:
     WindowLevel m_windowLevel;
     /// The LUT contained in this VOI LUT. If this VOI LUT represents a window level the LUT is empty.
     TransferFunction m_lut;
+    /// When a new LUT is created by applying a window level operation to another one, this will store the explanation (or name) of the original LUT.
+    /// Otherwise, it will store the same explation (or name).
+    QString m_originalLutExplanation;
 
 };
 
