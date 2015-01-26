@@ -64,7 +64,7 @@ VoiLutPresetsTool::VoiLutPresetsTool(QViewer *viewer, QObject *parent)
     m_characterIndexMap.insert(61, 19);
 
     // Cada cop que es canvïi el volum cal actualitzar la llista de ww/wl per defecte d'aquell volum (definits al DICOM)
-    connect(viewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateWindowLevelData()));
+    connect(viewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateVoiLutData()));
 }
 
 VoiLutPresetsTool::~VoiLutPresetsTool()
@@ -133,7 +133,7 @@ void VoiLutPresetsTool::applyPreset(char key)
     m_myToolData->selectPreset(preset);
 }
 
-void VoiLutPresetsTool::updateWindowLevelData()
+void VoiLutPresetsTool::updateVoiLutData()
 {
     m_defaultPresetsIndex = 0;
     if (!m_myToolData)

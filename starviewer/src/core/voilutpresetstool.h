@@ -48,7 +48,7 @@ private:
 
 private slots:
     /// Actualitza la llista de window/level definits per defecte
-    void updateWindowLevelData();
+    void updateVoiLutData();
 
 private:
     /// Dades de window level amb tots els presets
