@@ -92,9 +92,6 @@ public:
     /// Updates the current window level
     void updateVoiLut(const VoiLut &voiLut);
 
-    /// Sets the window level.
-    void setWindowLevel(double window, double level);
-
     /// Sets the transfer function.
     void setTransferFunction(const TransferFunction &transferFunction);
     /// Returns the transfer function.
