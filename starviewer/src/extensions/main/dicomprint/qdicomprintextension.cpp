@@ -146,7 +146,6 @@ void QDicomPrintExtension::updateInput()
 
     VoiLutPresetsToolData *voiLutData = m_2DView->getVoiLutData();
     m_voiLutComboBox->setPresetsData(voiLutData);
-    voiLutData->selectPreset(voiLutData->getCurrentPreset().getExplanation());
 }
 
 void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()

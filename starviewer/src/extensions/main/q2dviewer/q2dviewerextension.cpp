@@ -655,11 +655,8 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
                 connect(m_multipleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(completeCapture()));
             }
 
-            // TODO Potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
-            // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
             VoiLutPresetsToolData *voiLutData = selected2DViewer->getVoiLutData();
             m_voiLutComboBox->setPresetsData(voiLutData);
-            voiLutData->selectPreset(voiLutData->getCurrentPreset().getExplanation());
 
             updateTransferFunctionComboBox(selected2DViewer->getTransferFunctionModel());
 
