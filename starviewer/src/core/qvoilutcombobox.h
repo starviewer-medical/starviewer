@@ -35,7 +35,7 @@ public:
 
     /// Li assignem la font de dades a partir de la qual obté els valors de window level
     /// @param windowLevelData Les dades en sí
-    void setPresetsData(VoiLutPresetsToolData *windowLevelData);
+    void setPresetsData(VoiLutPresetsToolData *voiLutData);
 
     /// Neteja el contingut del combo box i elimina qualsevol referència a un WindowLevelPresetsToolData
     void clearPresets();
@@ -52,7 +52,7 @@ private slots:
     void removePreset(const VoiLut &preset);
     
     /// Seleccionem el window level que volem aplicar com a actiu
-    void setActiveWindowLevel(const QString &text);
+    void setActiveVoiLut(const QString &text);
 
     /// Sets a custom window level to the VOI LUT data.
     void setCustomWindowLevel(double width, double center);
