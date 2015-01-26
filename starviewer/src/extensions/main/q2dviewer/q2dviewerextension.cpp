@@ -144,7 +144,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_viewerLayersToolButton->setMenu(viewerInformationMenu);
     
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
-    m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
+    m_voiLutComboBox->setToolTip(tr("Choose VOI LUT Presets"));
 
     readSettings();
     createConnections();
@@ -177,8 +177,8 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 
     m_emptyTransferFunctionModel = new TransferFunctionModel(this);
 
-    m_windowLevelComboBox->view()->setTextElideMode(Qt::ElideRight);
-    m_windowLevelComboBox->view()->setMinimumWidth(MinimumComboBoxViewWidth);
+    m_voiLutComboBox->view()->setTextElideMode(Qt::ElideRight);
+    m_voiLutComboBox->view()->setMinimumWidth(MinimumComboBoxViewWidth);
     m_transferFunctionComboBox->view()->setTextElideMode(Qt::ElideRight);
     m_transferFunctionComboBox->view()->setMinimumWidth(MinimumComboBoxViewWidth);
 }
@@ -658,7 +658,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             // TODO Potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
             // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
             VoiLutPresetsToolData *windowLevelData = selected2DViewer->getVoiLutData();
-            m_windowLevelComboBox->setPresetsData(windowLevelData);
+            m_voiLutComboBox->setPresetsData(windowLevelData);
             windowLevelData->selectPreset(windowLevelData->getCurrentPreset().getExplanation());
 
             updateTransferFunctionComboBox(selected2DViewer->getTransferFunctionModel());
@@ -676,7 +676,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             // Si és nul vol dir que en aquell moment o bé no tenim cap
             // visor seleccionat o bé no n'existeix cap. És per això que
             // cal desvincular els widgets adients de qualsevol visor.
-            m_windowLevelComboBox->clearPresets();
+            m_voiLutComboBox->clearPresets();
             m_cineController->setQViewer(0);
             m_thickSlabWidget->unlink();
             updateTransferFunctionComboBox(0);

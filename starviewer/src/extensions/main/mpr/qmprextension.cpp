@@ -61,10 +61,10 @@ QMPRExtension::QMPRExtension(QWidget *parent)
     createActors();
     readSettings();
     // Ajustaments de window level pel combo box
-    m_windowLevelComboBox->setPresetsData(m_axial2DView->getVoiLutData());
+    m_voiLutComboBox->setPresetsData(m_axial2DView->getVoiLutData());
     m_sagital2DView->setVoiLutData(m_axial2DView->getVoiLutData());
     m_coronal2DView->setVoiLutData(m_axial2DView->getVoiLutData());
-    m_windowLevelComboBox->selectPreset(m_axial2DView->getVoiLutData()->getCurrentPresetName());
+    m_voiLutComboBox->selectPreset(m_axial2DView->getVoiLutData()->getCurrentPresetName());
 
     initializeTools();
 
@@ -80,7 +80,7 @@ QMPRExtension::QMPRExtension(QWidget *parent)
 
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
     m_viewerInformationToolButton->setToolTip(tr("Show/Hide viewer's textual information"));
-    m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
+    m_voiLutComboBox->setToolTip(tr("Choose VOI LUT Presets"));
 }
 
 QMPRExtension::~QMPRExtension()
