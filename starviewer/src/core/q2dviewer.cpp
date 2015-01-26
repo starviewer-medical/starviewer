@@ -1072,20 +1072,6 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
     }
 }
 
-void Q2DViewer::setWindowLevel(double window, double level)
-{
-    if (hasInput())
-    {
-        getMainDisplayUnit()->setWindowLevel(window,level);
-        m_annotationsHandler->updateAnnotationsInformation(VoiLutInformationAnnotation);
-        render();
-    }
-    else
-    {
-        DEBUG_LOG("::setWindowLevel() : No tenim input ");
-    }
-}
-
 const TransferFunction& Q2DViewer::getTransferFunction() const
 {
     return getMainDisplayUnit()->getTransferFunction();

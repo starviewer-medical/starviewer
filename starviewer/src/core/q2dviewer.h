@@ -323,8 +323,6 @@ public slots:
     virtual void setVoiLut(const VoiLut &voiLut);
     /// Sets the given window level to the volume at the given index. If there isn't a volume at the given index, it does nothing.
     void setVoiLutInVolume(int index, const VoiLut &voiLut);
-    /// Sets the given window and level to the main volume.
-    void setWindowLevel(double window, double level);
 
     /// Sets the transfer function of the main volume.
     void setTransferFunction(const TransferFunction &transferFunction);

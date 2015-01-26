@@ -375,9 +375,9 @@ void QPerfusionMapReconstructionExtension::createColorMap()
     TransferFunction hueTransferFunction(mapHueLut);
     m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
 
-    m_2DView->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
+    m_2DView->getViewer()->setVoiLut(WindowLevel(1.0, m_mapMin - 1.0));
     //Potser això fa que es recalculi dues vegades??
-    //m_2DView->setWindowLevel(m_mapMax - m_mapMin, (m_mapMax + m_mapMin)/2);
+    //m_2DView->setVoiLut(WindowLevel(m_mapMax - m_mapMin, (m_mapMax + m_mapMin)/2));
 }
 
 void QPerfusionMapReconstructionExtension::createColorMap2()
@@ -418,9 +418,9 @@ void QPerfusionMapReconstructionExtension::createColorMap2()
     TransferFunction hueTransferFunction(mapHueLut);
     m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
 
-    m_2DView->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
+    m_2DView->getViewer()->setVoiLut(WindowLevel(1.0, m_mapMin - 1.0));
     //Potser això fa que es recalculi dues vegades??
-    //m_2DView_4->setWindowLevel(m_mapMax - m_mapMin, (m_mapMax + m_mapMin)/2);
+    //m_2DView_4->setVoiLut(WindowLevel(m_mapMax - m_mapMin, (m_mapMax + m_mapMin)/2));
 }
 
 void QPerfusionMapReconstructionExtension::createColorMap(double window, double level)
@@ -528,7 +528,7 @@ void QPerfusionMapReconstructionExtension::createColorMap(DoubleImageType::Point
     TransferFunction hueTransferFunction(mapHueLut);
     viewer->setTransferFunction(hueTransferFunction);
     
-    viewer->setWindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0);
+    viewer->setVoiLut(WindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0));
 }
 
 void QPerfusionMapReconstructionExtension::createColorMap(Volume::ItkImageType::Pointer image, Q2DViewer* viewer)
@@ -604,7 +604,7 @@ void QPerfusionMapReconstructionExtension::createColorMap(Volume::ItkImageType::
     TransferFunction hueTransferFunction(mapHueLut);
     viewer->setTransferFunction(hueTransferFunction);
     
-    viewer->setWindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0);
+    viewer->setVoiLut(WindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0));
 }
 
 void QPerfusionMapReconstructionExtension::getPerfusionColormapTable(vtkUnsignedCharArray * table)
