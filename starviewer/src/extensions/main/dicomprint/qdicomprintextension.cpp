@@ -64,7 +64,7 @@ QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
     m_lastIDGroupedDICOMImagesToPrint = 0;
     m_thumbnailsPreviewWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
+    m_voiLutComboBox->setToolTip(tr("Choose VOI LUT Presets"));
 }
 
 void QDicomPrintExtension::createConnections()
@@ -145,7 +145,7 @@ void QDicomPrintExtension::updateInput()
     updateVolumeSupport();
 
     VoiLutPresetsToolData *windowLevelData = m_2DView->getVoiLutData();
-    m_windowLevelComboBox->setPresetsData(windowLevelData);
+    m_voiLutComboBox->setPresetsData(windowLevelData);
     windowLevelData->selectPreset(windowLevelData->getCurrentPreset().getExplanation());
 }
 
