@@ -316,11 +316,6 @@ void VolumeDisplayUnit::updateVoiLut(const VoiLut &voiLut)
     setVoiLut(voiLut);
 }
 
-void VolumeDisplayUnit::setWindowLevel(double window, double level)
-{
-    m_imagePipeline->setVoiLut(WindowLevel(window, level));
-}
-
 void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunction)
 {
     if (transferFunction.isEmpty())
