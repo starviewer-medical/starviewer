@@ -16,6 +16,7 @@
 #include "q2dviewer.h"
 #include "logging.h"
 #include "transdifferencetooldata.h"
+#include "voilut.h"
 #include "volume.h"
 #include "volumepixeldataiterator.h"
 
@@ -218,7 +219,7 @@ void TransDifferenceTool::initializeDifferenceImage()
     }
 
     m_2DViewer->setInput(differenceVolume);
-    m_2DViewer->setWindowLevel((double)2 * max, 0.0);
+    m_2DViewer->setVoiLut(WindowLevel(2 * max, 0.0));
 
     m_2DViewer->render();
 }
