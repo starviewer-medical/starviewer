@@ -15,6 +15,7 @@
 #include "editortool.h"
 #include "editortooldata.h"
 #include "q2dviewer.h"
+#include "voilut.h"
 #include "volume.h"
 #include "volumepixeldataiterator.h"
 
@@ -73,9 +74,8 @@ void EditorTool::initialize()
         else
         {
             // En cas que siguin iguals
-            double wl[2];
-            m_2DViewer->getCurrentWindowLevel(wl);
-            m_insideValue = (int)(range[0] + wl[0]);
+            double windowWidth = m_2DViewer->getCurrentVoiLut().getWindowLevel().getWidth();
+            m_insideValue = (int)(range[0] + windowWidth);
         }
         int ext[6];
         int i, j, k;

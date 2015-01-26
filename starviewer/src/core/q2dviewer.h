@@ -99,8 +99,6 @@ public:
     /// @return Objecte drawer del viewer
     Drawer* getDrawer() const;
 
-    /// Obté el window level actual de la imatge
-    void getCurrentWindowLevel(double wl[2]);
     /// Returns the VOI LUT that is currently applied to the image in this viewer.
     virtual VoiLut getCurrentVoiLut() const;
 
