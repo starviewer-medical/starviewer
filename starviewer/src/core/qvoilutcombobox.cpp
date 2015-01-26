@@ -27,7 +27,7 @@ QVoiLutComboBox::QVoiLutComboBox(QWidget *parent)
 {
     m_customWindowLevelDialog = new QCustomWindowLevelDialog();
     m_currentSelectedPreset = "";
-    connect(this, SIGNAL(activated(const QString&)), SLOT(setActiveWindowLevel(const QString&)));
+    connect(this, SIGNAL(activated(const QString&)), SLOT(setActiveVoiLut(const QString&)));
     Settings settings;
     this->setMaxVisibleItems(settings.getValue(CoreSettings::MaximumNumberOfVisibleVoiLutComboItems).toInt());
 }
@@ -37,7 +37,7 @@ QVoiLutComboBox::~QVoiLutComboBox()
     delete m_customWindowLevelDialog;
 }
 
-void QVoiLutComboBox::setPresetsData(VoiLutPresetsToolData *windowLevelData)
+void QVoiLutComboBox::setPresetsData(VoiLutPresetsToolData *voiLutData)
 {
     if (m_presetsData)
     {
@@ -46,7 +46,7 @@ void QVoiLutComboBox::setPresetsData(VoiLutPresetsToolData *windowLevelData)
         disconnect(m_presetsData, 0, m_customWindowLevelDialog, 0);
         disconnect(m_customWindowLevelDialog, 0, m_presetsData, 0);
     }
-    m_presetsData = windowLevelData;
+    m_presetsData = voiLutData;
     populateFromPresetsData();
     connect(m_presetsData, SIGNAL(presetAdded(VoiLut)), SLOT(addPreset(VoiLut)));
     connect(m_presetsData, SIGNAL(presetRemoved(VoiLut)), SLOT(removePreset(VoiLut)));
@@ -177,7 +177,7 @@ void QVoiLutComboBox::populateFromPresetsData()
     selectPreset(m_presetsData->getCurrentPresetName());
 }
 
-void QVoiLutComboBox::setActiveWindowLevel(const QString &text)
+void QVoiLutComboBox::setActiveVoiLut(const QString &text)
 {
     if (text == VoiLutPresetsToolData::getCustomPresetName())
     {
