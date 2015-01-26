@@ -790,7 +790,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     // Important, cal desactivar el thickslab abans de fer m_currentViewPlane = view, sinó falla amb l'update extent
     disableThickSlab();
     setCurrentViewPlane(view);
-    m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
+    m_annotationsHandler->updateAnnotationsInformation(VoiLutInformationAnnotation);
     
     // Reiniciem valors per defecte de la càmera
     m_rotateFactor = 0;
@@ -1077,7 +1077,7 @@ void Q2DViewer::setWindowLevel(double window, double level)
     if (hasInput())
     {
         getMainDisplayUnit()->setWindowLevel(window,level);
-        m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
+        m_annotationsHandler->updateAnnotationsInformation(VoiLutInformationAnnotation);
         render();
     }
     else
@@ -1434,7 +1434,7 @@ void Q2DViewer::setVoiLut(const VoiLut &voiLut)
     else
     {
         getMainDisplayUnit()->setVoiLut(voiLut);
-        m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
+        m_annotationsHandler->updateAnnotationsInformation(VoiLutInformationAnnotation);
         render();
     }
 }

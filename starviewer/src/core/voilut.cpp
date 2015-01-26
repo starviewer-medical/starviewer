@@ -28,6 +28,13 @@ VoiLut::VoiLut(const WindowLevel &windowLevel)
 }
 
 VoiLut::VoiLut(const TransferFunction &lut)
+    : m_originalLutExplanation(lut.name())
+{
+    setLut(lut);
+}
+
+VoiLut::VoiLut(const TransferFunction &lut, const QString &originalExplanation)
+    : m_originalLutExplanation(originalExplanation)
 {
     setLut(lut);
 }
@@ -66,6 +73,11 @@ void VoiLut::setExplanation(const QString &explanation)
 {
     m_windowLevel.setName(explanation);
     m_lut.setName(explanation);
+}
+
+const QString& VoiLut::getOriginalLutExplanation() const
+{
+    return m_originalLutExplanation;
 }
 
 bool VoiLut::isWindowLevel() const
