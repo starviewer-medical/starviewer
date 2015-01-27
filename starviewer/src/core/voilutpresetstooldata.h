@@ -86,7 +86,7 @@ public:
     /// Shortcut for getCurrentPreset().getName()
     const QString& getCurrentPresetName() const;
 
-    /// Updates the given preset with the new values of window/level. A preset with the same name has to be present in order to update it.
+    /// Updates the given preset with the new values of VOI LUT. A preset with the same name has to be present in order to update it.
     void updatePreset(const VoiLut &preset);
 
     /// Returns the name for the custom preset.
