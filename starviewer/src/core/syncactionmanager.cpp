@@ -38,6 +38,11 @@ SyncActionManager::SyncActionManager(SyncActionsConfiguration *configuration, QO
 SyncActionManager::~SyncActionManager()
 {
     delete m_syncActionsConfiguration;
+
+    foreach (SignalToSyncActionMapper *mapper, m_registeredSignalMappers)
+    {
+        delete mapper;
+    }
 }
 
 void SyncActionManager::addSyncedViewer(QViewer *viewer)
