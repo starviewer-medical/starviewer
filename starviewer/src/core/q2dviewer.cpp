@@ -1429,9 +1429,10 @@ void Q2DViewer::setVoiLutInVolume(int index, const VoiLut &voiLut)
         return;
     }
 
-    unit->updateVoiLut(voiLut);
-    // An explicit render is only needed if the unit is not the main one
-    // because the main unit is connected to QViewer::setWindowLevel which is invoked in unit->updateWindowLevel
+    unit->setCurrentVoiLutPreset(voiLut);
+
+    // An explicit render is only needed when it isn't the main unit one because if it's the main unit then
+    // setVoiLut() is called eventually through signal-slot connection when setCurrentVoiLutPreset() is called.
     if (unit != getMainDisplayUnit())
     {
         this->render();

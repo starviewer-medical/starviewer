@@ -310,7 +310,7 @@ void VolumeDisplayUnit::setVoiLut(const VoiLut &voiLut)
     }
 }
 
-void VolumeDisplayUnit::updateVoiLut(const VoiLut &voiLut)
+void VolumeDisplayUnit::setCurrentVoiLutPreset(const VoiLut &voiLut)
 {
     m_voiLutData->setCurrentPreset(voiLut);
     setVoiLut(voiLut);
