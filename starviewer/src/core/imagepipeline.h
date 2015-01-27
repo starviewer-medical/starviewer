@@ -42,7 +42,7 @@ public:
     /// Sets the given filter output as input of the filter
     void setInput(FilterOutput input);
 
-    /// Sets the window window and window level
+    /// Sets the VOI LUT.
     void setVoiLut(const VoiLut &voiLut);
     /// Sets the transfer function
     void setTransferFunction(const TransferFunction &transferFunction);

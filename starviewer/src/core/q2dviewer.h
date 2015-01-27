@@ -275,7 +275,7 @@ public:
     /// Returns the index of the given volume in this viewer. If this viewer doesn't contain the given volume, returns -1.
     int indexOfVolume(const Volume *volume) const;
 
-    /// Returns window level data corresponding to the volume at the given index.
+    /// Returns VOI LUT data corresponding to the volume at the given index.
     VoiLutPresetsToolData* getVoiLutDataForVolume(int index) const;
 
     /// Returns the fusion balance as a value in the range [0, 100] representing the weight of the second input.
@@ -321,7 +321,7 @@ public slots:
 
     /// Sets the VOI LUT for this viewer.
     virtual void setVoiLut(const VoiLut &voiLut);
-    /// Sets the given window level to the volume at the given index. If there isn't a volume at the given index, it does nothing.
+    /// Sets the given VOI LUT to the volume at the given index. If there isn't a volume at the given index, it does nothing.
     void setVoiLutInVolume(int index, const VoiLut &voiLut);
 
     /// Sets the transfer function of the main volume.
