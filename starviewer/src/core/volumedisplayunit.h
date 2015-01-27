@@ -89,8 +89,8 @@ public:
 
     /// Sets the VOI LUT.
     void setVoiLut(const VoiLut &voiLut);
-    /// Updates the current window level
-    void updateVoiLut(const VoiLut &voiLut);
+    /// Sets the given VOI LUT to the VOI LUT data and to the pipeline.
+    void setCurrentVoiLutPreset(const VoiLut &voiLut);
 
     /// Sets the transfer function.
     void setTransferFunction(const TransferFunction &transferFunction);
