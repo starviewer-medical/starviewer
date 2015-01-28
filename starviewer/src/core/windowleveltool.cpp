@@ -15,7 +15,7 @@
 #include "windowleveltool.h"
 #include "q2dviewer.h"
 #include "logging.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "volumehelper.h"
 
 #include <vtkCommand.h>
@@ -74,10 +74,11 @@ void WindowLevelTool::reset()
 void WindowLevelTool::startWindowLevel()
 {
     m_state = WindowLevelling;
-    double wl[2];
-    m_viewer->getCurrentWindowLevel(wl);
-    m_initialWindow = wl[0];
-    m_initialLevel = wl[1];
+    VoiLut voiLut = m_viewer->getCurrentVoiLut();
+    m_initialWindow = voiLut.getWindowLevel().getWidth();
+    m_initialLevel = voiLut.getWindowLevel().getCenter();
+    m_initialLut = voiLut.getLut();
+    m_initialLut.setName(voiLut.getOriginalLutExplanation());
     m_windowLevelStartPosition = m_viewer->getEventPosition();
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetDesiredUpdateRate());
 }
@@ -125,7 +126,19 @@ void WindowLevelTool::doWindowLevel()
     double newWindow;
     double newLevel;
     computeWindowLevelValues(dx, dy, newWindow, newLevel);
-    m_viewer->getWindowLevelData()->setCustomWindowLevel(newWindow, newLevel);
+
+    if (m_viewer->getCurrentVoiLut().isWindowLevel())
+    {
+        m_viewer->setVoiLut(WindowLevel(newWindow, newLevel));
+    }
+    else
+    {
+        double oldX1 = m_initialLut.keys().first();
+        double oldX2 = m_initialLut.keys().last();
+        double newX1 = newLevel - newWindow / 2.0;
+        double newX2 = newLevel + newWindow / 2.0;
+        m_viewer->setVoiLut(VoiLut(m_initialLut.toNewRange(oldX1, oldX2, newX1, newX2), m_initialLut.name()));
+    }
 }
 
 void WindowLevelTool::endWindowLevel()

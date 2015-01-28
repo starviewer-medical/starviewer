@@ -17,7 +17,7 @@
 #include "volume.h"
 #include "image.h"
 #include "logging.h"
-#include "qwindowlevelcombobox.h"
+#include "qvoilutcombobox.h"
 #include "q2dviewerwidget.h"
 #include "menugridwidget.h"
 #include "tablemenu.h"
@@ -25,7 +25,7 @@
 #include "study.h"
 #include "toolmanager.h"
 #include "toolconfiguration.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "qdicomdumpbrowser.h"
 #include "statswatcher.h"
 #include "automaticsynchronizationtool.h"
@@ -144,7 +144,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_viewerLayersToolButton->setMenu(viewerInformationMenu);
     
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
-    m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
+    m_voiLutComboBox->setToolTip(tr("Choose VOI LUT Presets"));
 
     readSettings();
     createConnections();
@@ -177,8 +177,8 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 
     m_emptyTransferFunctionModel = new TransferFunctionModel(this);
 
-    m_windowLevelComboBox->view()->setTextElideMode(Qt::ElideRight);
-    m_windowLevelComboBox->view()->setMinimumWidth(MinimumComboBoxViewWidth);
+    m_voiLutComboBox->view()->setTextElideMode(Qt::ElideRight);
+    m_voiLutComboBox->view()->setMinimumWidth(MinimumComboBoxViewWidth);
     m_transferFunctionComboBox->view()->setTextElideMode(Qt::ElideRight);
     m_transferFunctionComboBox->view()->setMinimumWidth(MinimumComboBoxViewWidth);
 }
@@ -455,7 +455,7 @@ void Q2DViewerExtension::initializeTools()
 
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
     // Registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
-    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("VoiLutPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SlicingWheelTool");
     m_toolManager->registerTool("SynchronizeTool");
@@ -477,7 +477,7 @@ void Q2DViewerExtension::initializeTools()
     m_flipHorizontalToolButton->setDefaultAction(m_toolManager->registerActionTool("HorizontalFlipActionTool"));
     m_flipVerticalToolButton->setDefaultAction(m_toolManager->registerActionTool("VerticalFlipActionTool"));
     m_restoreToolButton->setDefaultAction(m_toolManager->registerActionTool("RestoreActionTool"));
-    m_invertToolButton->setDefaultAction(m_toolManager->registerActionTool("InvertWindowLevelActionTool"));
+    m_invertToolButton->setDefaultAction(m_toolManager->registerActionTool("InvertVoiLutActionTool"));
     // Afegim un menú al botó d'erase per incorporar l'acció d'esborrar tot el que hi ha al visor
     m_eraserToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     QMenu *eraserToolMenu = new QMenu(this);
@@ -498,7 +498,7 @@ void Q2DViewerExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";
     m_toolManager->triggerTools(defaultTools);
 
     //
@@ -655,11 +655,8 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
                 connect(m_multipleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(completeCapture()));
             }
 
-            // TODO Potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
-            // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
-            WindowLevelPresetsToolData *windowLevelData = selected2DViewer->getWindowLevelData();
-            m_windowLevelComboBox->setPresetsData(windowLevelData);
-            windowLevelData->selectCurrentPreset(windowLevelData->getCurrentPreset().getName());
+            VoiLutPresetsToolData *voiLutData = selected2DViewer->getVoiLutData();
+            m_voiLutComboBox->setPresetsData(voiLutData);
 
             updateTransferFunctionComboBox(selected2DViewer->getTransferFunctionModel());
 
@@ -676,7 +673,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             // Si és nul vol dir que en aquell moment o bé no tenim cap
             // visor seleccionat o bé no n'existeix cap. És per això que
             // cal desvincular els widgets adients de qualsevol visor.
-            m_windowLevelComboBox->clearPresets();
+            m_voiLutComboBox->clearPresets();
             m_cineController->setQViewer(0);
             m_thickSlabWidget->unlink();
             updateTransferFunctionComboBox(0);

@@ -23,7 +23,7 @@ const QString StarviewerVersionString("0.13.0-devel");
 const QString StarviewerBuildID("2014062600");
 
 // Indica per aquesta versió d'starviewer quina és la revisió de bd necessària
-const int StarviewerDatabaseRevisionRequired(9591);
+const int StarviewerDatabaseRevisionRequired(9592);
 
 const QString OrganizationNameString("GILab");
 const QString OrganizationDomainString("starviewer.udg.edu");

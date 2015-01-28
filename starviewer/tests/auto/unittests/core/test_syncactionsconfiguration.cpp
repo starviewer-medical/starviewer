@@ -2,7 +2,7 @@
 #include "syncactionsconfiguration.h"
 
 #include "zoomfactorsyncaction.h"
-#include "windowlevelsyncaction.h"
+#include "voilutsyncaction.h"
 #include "anatomicalplanesynccriterion.h"
 #include "inputsynccriterion.h"
 
@@ -98,7 +98,7 @@ void test_SyncActionsConfiguration::getSyncCriteria_ReturnsExpectedSyncCriteriaL
     QList<SyncCriterion*> criteria;
     criteria << new AnatomicalPlaneSyncCriterion();
 
-    SyncAction *windowLevelAction = new WindowLevelSyncAction();
+    SyncAction *windowLevelAction = new VoiLutSyncAction();
     QTest::newRow("Criteria added to configuration, configured criteria returned") << windowLevelAction << criteria << criteria;
 }
 
@@ -125,7 +125,7 @@ void test_SyncActionsConfiguration::removeSyncCriteria_RemovesCriteriaCorrectly_
     QList<SyncCriterion*> criteria;
     criteria << new AnatomicalPlaneSyncCriterion() << new InputSyncCriterion();
 
-    SyncAction *windowLevelAction = new WindowLevelSyncAction();
+    SyncAction *windowLevelAction = new VoiLutSyncAction();
     QTest::newRow("Configuration with added criteria for a particular sync action") << windowLevelAction << criteria;
 }
 

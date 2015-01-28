@@ -19,9 +19,9 @@
 #include "toolproxy.h"
 #include "patientbrowsermenu.h"
 // Per poder afegir i modificar els presets que visualitzem
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "qviewerworkinprogresswidget.h"
-#include "windowlevelhelper.h"
+#include "voiluthelper.h"
 #include "logging.h"
 #include "mathtools.h"
 #include "starviewerapplication.h"
@@ -53,7 +53,7 @@
 namespace udg {
 
 QViewer::QViewer(QWidget *parent)
- : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0),
+ : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_voiLutData(0),
    m_isRenderingEnabled(true), m_isActive(false)
 {
     m_defaultFitIntoViewportMarginRate = 0.0;
@@ -74,7 +74,7 @@ QViewer::QViewer(QWidget *parent)
     connect(this, SIGNAL(eventReceived(unsigned long)), m_toolProxy, SLOT(forwardEvent(unsigned long)));
 
     // Inicialitzem el window level data
-    setWindowLevelData(new WindowLevelPresetsToolData(this));
+    setVoiLutData(new VoiLutPresetsToolData(this));
 
     m_workInProgressWidget = new QViewerWorkInProgressWidget(this);
 
@@ -498,6 +498,11 @@ bool QViewer::getCurrentFocalPoint(double focalPoint[3])
     return true;
 }
 
+VoiLut QViewer::getCurrentVoiLut() const
+{
+    return VoiLut();
+}
+
 bool QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate)
 {
     if (!hasInput())
@@ -545,22 +550,22 @@ void QViewer::fitRenderingIntoViewport()
     }
 }
 
-WindowLevelPresetsToolData* QViewer::getWindowLevelData() const
+VoiLutPresetsToolData* QViewer::getVoiLutData() const
 {
-    return m_windowLevelData;
+    return m_voiLutData;
 }
 
-void QViewer::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
+void QViewer::setVoiLutData(VoiLutPresetsToolData *voiLutData)
 {
-    if (m_windowLevelData)
+    if (m_voiLutData)
     {
-        disconnect(m_windowLevelData, 0, this, 0);
-        delete m_windowLevelData;
+        disconnect(m_voiLutData, 0, this, 0);
+        delete m_voiLutData;
     }
 
-    m_windowLevelData = windowLevelData;
-    connect(m_windowLevelData, SIGNAL(currentPresetChanged(WindowLevel)), SLOT(setWindowLevelPreset(WindowLevel)));
-    connect(m_windowLevelData, SIGNAL(presetSelected(WindowLevel)), SLOT(setWindowLevelPreset(WindowLevel)));
+    m_voiLutData = voiLutData;
+    connect(m_voiLutData, SIGNAL(currentPresetChanged(VoiLut)), SLOT(setVoiLut(VoiLut)));
+    connect(m_voiLutData, SIGNAL(presetSelected(VoiLut)), SLOT(setVoiLut(VoiLut)));
 }
 
 void QViewer::grabCurrentView()
@@ -650,14 +655,14 @@ void QViewer::contextMenuRelease()
     this->contextMenuEvent(&contextMenuEvent);
 }
 
-void QViewer::updateWindowLevelData()
+void QViewer::updateVoiLutData()
 {
     if (!hasInput())
     {
         return;
     }
 
-    WindowLevelHelper().initializeWindowLevelData(m_windowLevelData, getMainInput());
+    VoiLutHelper().initializeVoiLutData(m_voiLutData, getMainInput());
 }
 
 void QViewer::setCameraOrientation(const OrthogonalPlane &orientation)
@@ -860,12 +865,9 @@ void QViewer::setInputAndRender(Volume *volume)
     this->render();
 }
 
-void QViewer::setWindowLevelPreset(const WindowLevel &preset)
+void QViewer::setVoiLut(const VoiLut &voiLut)
 {
-    if (preset.isValid())
-    {
-        setWindowLevel(preset.getWidth(), preset.getCenter());
-    }
+    Q_UNUSED(voiLut)
 }
 
 OrthogonalPlane QViewer::getCurrentViewPlane() const

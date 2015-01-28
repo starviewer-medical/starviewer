@@ -196,6 +196,12 @@ public:
 
     /// Gets the transfer function as vtkLookupTable
     vtkLookupTable* toVtkLookupTable() const;
+
+    /// Writes the given transfer function to the given stream.
+    friend QDataStream& operator <<(QDataStream &stream, const TransferFunction &transferFunction);
+    /// Fills the given transfer function from the given stream.
+    friend QDataStream& operator >>(QDataStream &stream, TransferFunction &transferFunction);
+
 private:
     /// Actualitza m_keys si hi ha hagut canvis a la funció.
     void updateKeys() const;

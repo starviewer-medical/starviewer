@@ -40,10 +40,10 @@ class Volume;
 class Series;
 class Image;
 class ToolProxy;
-class WindowLevelPresetsToolData;
+class VoiLutPresetsToolData;
 class PatientBrowserMenu;
 class QViewerWorkInProgressWidget;
-class WindowLevel;
+class VoiLut;
 
 /**
     Classe base per a totes les finestres de visualització
@@ -137,14 +137,10 @@ public:
     /// @return True if scale could be performed, false otherwise
     bool scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate = 0.0);
 
-    /// Ens retorna l'objecte que conté tota la informació referent al window level
-    /// que es pot aplicar sobre aquest visor
-    /// @return L'objecte WindowLevelPresetsToolData
-    WindowLevelPresetsToolData* getWindowLevelData() const;
-
-    /// Li assignem el window level data externament
-    /// @param windowLevelData
-    void setWindowLevelData(WindowLevelPresetsToolData *windowLevelData);
+    /// Returns the VOI LUT presets data for this viewer.
+    VoiLutPresetsToolData* getVoiLutData() const;
+    /// Sets the VOI LUT presets data for this viewer.
+    void setVoiLutData(VoiLutPresetsToolData *voiLutData);
 
     /// Habilita/deshabilita que els renderings es facin efectius
     /// Útil en els casos en que necessitem fer diverses operacions de
@@ -175,6 +171,9 @@ public:
     /// Returns the current focal point of the active camera
     bool getCurrentFocalPoint(double focalPoint[3]);
 
+    /// Returns the VOI LUT that is currently applied to the image in this viewer. The default implementation returns a default VoiLut.
+    virtual VoiLut getCurrentVoiLut() const;
+
 public slots:
     /// Indiquem les dades d'entrada
     virtual void setInput(Volume *volume) = 0;
@@ -192,9 +191,6 @@ public slots:
     /// Elimina totes les captures de pantalla
     void clearGrabbedViews();
 
-    /// Obté el window level actual de la imatge
-    virtual void getCurrentWindowLevel(double wl[2]) = 0;
-
     /// Resets the view to a determined orthogonal plane
     virtual void resetView(const OrthogonalPlane &view);
     
@@ -211,10 +207,8 @@ public slots:
     void enableContextMenu();
     void disableContextMenu();
 
-    /// Ajusta el window/level
-    virtual void setWindowLevel(double window, double level) = 0;
-    /// Ajusta el window/level a partir del preset. La implementació per defecte acaba cridant setWindowLevel sempre.
-    virtual void setWindowLevelPreset(const WindowLevel &preset);
+    /// Sets the VOI LUT for this viewer. The default implementation does nothing.
+    virtual void setVoiLut(const VoiLut &voiLut);
 
     /// Fits the current rendered item into the viewport size
     void fitRenderingIntoViewport();
@@ -255,8 +249,8 @@ protected:
 
     void contextMenuRelease();
 
-    /// Actualitza les dades contingudes a m_windowLevelData
-    void updateWindowLevelData();
+    /// Updates the VOI LUT data.
+    void updateVoiLutData();
 
     /// Fixem la orientació de la càmera del renderer principal
     /// Si el paràmetre donat no és un dels valors enumerats vàlids, no farà res
@@ -337,8 +331,8 @@ protected:
     /// Ens servirà per controlar si entre event o event s'ha mogut el mouse
     bool m_mouseHasMoved;
 
-    /// Dades de valors predeterminats de window level i dels valors actuals que s'apliquen
-    WindowLevelPresetsToolData *m_windowLevelData;
+    /// VOI LUT presets data for this viewer.
+    VoiLutPresetsToolData *m_voiLutData;
 
     /// Indica si hem de fer l'acció de renderitzar o no
     bool m_isRenderingEnabled;

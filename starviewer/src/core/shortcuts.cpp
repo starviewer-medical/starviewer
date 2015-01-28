@@ -41,7 +41,7 @@ const QString Shortcuts::NonClosedAngleTool(ShortcutsBase + "NonClosedAngleTool"
 const QString Shortcuts::EditorTool(ShortcutsBase + "EditorTool");
 const QString Shortcuts::ClippingPlanesTool(ShortcutsBase + "ClippingPlanesTool");
 const QString Shortcuts::RestoreTool(ShortcutsBase + "RestoreTool");
-const QString Shortcuts::InvertWindowLevelTool(ShortcutsBase + "InvertWindowLevelTool");
+const QString Shortcuts::InvertVoiLutTool(ShortcutsBase + "InvertVoiLutTool");
 const QString Shortcuts::AxialViewTool(ShortcutsBase + "AxialViewTool");
 const QString Shortcuts::SagitalViewTool(ShortcutsBase + "SagitalViewTool");
 const QString Shortcuts::CoronalViewTool(ShortcutsBase + "CoronalViewTool");
@@ -182,7 +182,7 @@ void Shortcuts::init()
 
     shortcutsList.clear();
     shortcutsList.append(QString("I"));
-    settingsRegistry->addSetting(InvertWindowLevelTool, shortcutsList);
+    settingsRegistry->addSetting(InvertVoiLutTool, shortcutsList);
 
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+1"));

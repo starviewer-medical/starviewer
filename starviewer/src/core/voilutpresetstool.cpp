@@ -12,10 +12,10 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "windowlevelpresetstool.h"
+#include "voilutpresetstool.h"
 #include "q2dviewer.h"
 #include "logging.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 
 // Vtk
 #include <vtkCommand.h>
@@ -23,12 +23,12 @@
 
 namespace udg {
 
-WindowLevelPresetsTool::WindowLevelPresetsTool(QViewer *viewer, QObject *parent)
+VoiLutPresetsTool::VoiLutPresetsTool(QViewer *viewer, QObject *parent)
  : Tool(viewer, parent), m_myToolData(0), m_defaultPresetsIndex(0)
 {
-    m_toolName = "WindowLevelPresetsTool";
+    m_toolName = "VoiLutPresetsTool";
 
-    setToolData(m_viewer->getWindowLevelData());
+    setToolData(m_viewer->getVoiLutData());
     m_characterIndexMap.insert('1', 0);
     m_characterIndexMap.insert('2', 1);
     m_characterIndexMap.insert('3', 2);
@@ -64,14 +64,14 @@ WindowLevelPresetsTool::WindowLevelPresetsTool(QViewer *viewer, QObject *parent)
     m_characterIndexMap.insert(61, 19);
 
     // Cada cop que es canvïi el volum cal actualitzar la llista de ww/wl per defecte d'aquell volum (definits al DICOM)
-    connect(viewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateWindowLevelData()));
+    connect(viewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateVoiLutData()));
 }
 
-WindowLevelPresetsTool::~WindowLevelPresetsTool()
+VoiLutPresetsTool::~VoiLutPresetsTool()
 {
 }
 
-void WindowLevelPresetsTool::handleEvent(unsigned long eventID)
+void VoiLutPresetsTool::handleEvent(unsigned long eventID)
 {
     switch (eventID)
     {
@@ -89,7 +89,7 @@ void WindowLevelPresetsTool::handleEvent(unsigned long eventID)
     }
 }
 
-void WindowLevelPresetsTool::applyPreset(char key)
+void VoiLutPresetsTool::applyPreset(char key)
 {
     if (m_standardPresets.isEmpty())
     {
@@ -130,10 +130,10 @@ void WindowLevelPresetsTool::applyPreset(char key)
         }
     }
 
-    m_myToolData->selectCurrentPreset(preset);
+    m_myToolData->selectPreset(preset);
 }
 
-void WindowLevelPresetsTool::updateWindowLevelData()
+void VoiLutPresetsTool::updateVoiLutData()
 {
     m_defaultPresetsIndex = 0;
     if (!m_myToolData)
@@ -143,15 +143,15 @@ void WindowLevelPresetsTool::updateWindowLevelData()
     else
     {
         m_defaultPresets.clear();
-        m_defaultPresets = m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined) +
-                           m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
+        m_defaultPresets = m_myToolData->getDescriptionsFromGroup(VoiLutPresetsToolData::FileDefined) +
+                           m_myToolData->getDescriptionsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
     }
 }
 
-void WindowLevelPresetsTool::setToolData(ToolData *toolData)
+void VoiLutPresetsTool::setToolData(ToolData *toolData)
 {
     m_toolData = toolData;
-    m_myToolData = qobject_cast<WindowLevelPresetsToolData*>(toolData);
+    m_myToolData = qobject_cast<VoiLutPresetsToolData*>(toolData);
     if (!m_myToolData)
     {
         DEBUG_LOG("El tooldata proporcionat no és un WindwoLevelPresetsToolData que és l'esperat");
@@ -159,11 +159,11 @@ void WindowLevelPresetsTool::setToolData(ToolData *toolData)
     else
     {
         m_standardPresets.clear();
-        m_standardPresets = m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::StandardPresets);
+        m_standardPresets = m_myToolData->getDescriptionsFromGroup(VoiLutPresetsToolData::StandardPresets);
 
         m_defaultPresets.clear();
-        m_defaultPresets = m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::FileDefined) +
-                           m_myToolData->getDescriptionsFromGroup(WindowLevelPresetsToolData::AutomaticPreset);
+        m_defaultPresets = m_myToolData->getDescriptionsFromGroup(VoiLutPresetsToolData::FileDefined) +
+                           m_myToolData->getDescriptionsFromGroup(VoiLutPresetsToolData::AutomaticPreset);
     }
 }
 

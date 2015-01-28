@@ -31,7 +31,7 @@ public:
 
     /// Defineix/obté la descripció window level
     void setName(const QString &name);
-    QString getName() const;
+    const QString& getName() const;
     
     /// Defineix/obté el width del window level
     void setWidth(double width);

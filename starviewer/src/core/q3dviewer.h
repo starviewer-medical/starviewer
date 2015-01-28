@@ -66,8 +66,8 @@ public:
     /// Retorna el tipus de visualització que es té assignat com a un string
     QString getRenderFunctionAsString();
 
-    /// Obté el window level actual de la imatge
-    void getCurrentWindowLevel(double wl[2]);
+    /// Returns the VOI LUT that is currently applied to the image in this viewer.
+    virtual VoiLut getCurrentVoiLut() const;
 
     /// Determina la bounding box que definex els plans de tall del volum
     void setClippingPlanes(vtkPlanes *clippingPlanes);
@@ -108,8 +108,9 @@ public slots:
 
     /// Sets the current transfer function.
     void setTransferFunction(const TransferFunction &transferFunction);
-    void setWindowLevel(double window, double level);
-    void setNewTransferFunction();
+
+    /// Sets the VOI LUT for this viewer.
+    virtual void setVoiLut(const VoiLut &voiLut);
 
     /// Paràmetres d'il·luminació.
     void setShading(bool on);
@@ -141,8 +142,6 @@ signals:
     void obscuranceCancelledByProgram();
     /// Informa del rang de valors del volum quan aquest canvia.
     void scalarRange(double min, double max);
-    /// Indica el nou window level
-    void windowLevelChanged(double window, double level);
     void transferFunctionChanged();
 
 protected:
@@ -250,9 +249,6 @@ private:
     /// Current transfer function.
     TransferFunction m_transferFunction;
 
-    /// La funció de transferència que s'aplica
-    TransferFunction *m_newTransferFunction;
-
     /// Booleà per saber si estem fent el primer render (per reiniciar l'orientació).
     bool m_firstRender;
 
@@ -270,11 +266,8 @@ private:
     /// Booleà que indica si les obscurances estan activades.
     bool m_obscuranceOn;
 
-    /// Valors de window i level
-    double m_window;
-    double m_level;
+    /// Range length of the viewed volume.
     double m_range;
-    double m_shift;
 
     /// Estimador de gradient que farem servir per les obscurances (i per la resta després de calcular les obscurances).
     Vtk4DLinearRegressionGradientEstimator *m_4DLinearRegressionGradientEstimator;

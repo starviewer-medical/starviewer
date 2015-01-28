@@ -31,6 +31,7 @@
 #include "localdatabasepacsretrievedimagesdal.h"
 #include "dicomformattedvaluesconverter.h"
 #include "dicomvaluerepresentationconverter.h"
+#include "localdatabasevoilutdal.h"
 
 namespace udg {
 
@@ -87,16 +88,26 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
     }
 
     LocalDatabaseDisplayShutterDAL shutterDAL(m_dbConnection);
+    LocalDatabaseVoiLutDAL voiLutDal(m_dbConnection);
+
     // index = 1 ignorem les capçaleres
     for (int index = 1; index <= rows; index++)
     {
         Image *newImage = fillImage(reply, index, columns);
             
         // Obtenim els shutters de l'imatge actual
-        DicomMask shuttersMask;
-        shuttersMask.setSOPInstanceUID(newImage->getSOPInstanceUID());
-        shuttersMask.setImageNumber(QString::number(newImage->getFrameNumber()));
-        newImage->setDisplayShutters(shutterDAL.query(shuttersMask));
+        DicomMask mask;
+        mask.setSOPInstanceUID(newImage->getSOPInstanceUID());
+        mask.setImageNumber(QString::number(newImage->getFrameNumber()));
+        newImage->setDisplayShutters(shutterDAL.query(mask));
+
+        // Get VOI LUTs
+        QList<VoiLut> voiLuts = voiLutDal.query(mask);
+
+        foreach (const VoiLut &voiLut, voiLuts)
+        {
+            newImage->addVoiLut(voiLut);
+        }
         
         imageList << newImage;
     }
@@ -154,8 +165,14 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setBitsStored(QString(reply[14 + row * columns]).toInt());
     image->setPixelRepresentation(QString(reply[15 + row * columns]).toInt());
     image->setRescaleSlope(QString(reply[16 + row * columns]).toDouble());
-    image->setWindowLevelList(DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns],
-                                                                                    convertToQString(reply[19 + row * columns])));
+    QList<WindowLevel> windowLevelList = DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns],
+                                                                                               convertToQString(reply[19 + row * columns]));
+    QList<VoiLut> voiLutList;
+    foreach (const WindowLevel &windowLevel, windowLevelList)
+    {
+        voiLutList.append(windowLevel);
+    }
+    image->setVoiLutList(voiLutList);
     image->setSliceLocation(reply[20 + row * columns]);
     image->setRescaleIntercept(QString(reply[21 + row * columns]).toDouble());
     image->setPhotometricInterpretation(reply[22 + row * columns]);
@@ -485,13 +502,17 @@ void LocalDatabaseImageDAL::getWindowLevelInformationAsQString(Image *newImage, 
     
     QString value;
     WindowLevel windowLevel;
-    for (int index = 0; index < newImage->getNumberOfWindowLevels(); ++index)
+    for (int index = 0; index < newImage->getNumberOfVoiLuts(); ++index)
     {
-        windowLevel = newImage->getWindowLevel(index);
-        
-        windowWidth += value.setNum(windowLevel.getWidth(), 'g', 10) + "\\";
-        windowCenter += value.setNum(windowLevel.getCenter(), 'g', 10) + "\\";
-        explanation += windowLevel.getName() + "\\";
+        const VoiLut &voiLut = newImage->getVoiLut(index);
+
+        if (voiLut.isWindowLevel())
+        {
+            windowLevel = voiLut.getWindowLevel();
+            windowWidth += value.setNum(windowLevel.getWidth(), 'g', 10) + "\\";
+            windowCenter += value.setNum(windowLevel.getCenter(), 'g', 10) + "\\";
+            explanation += windowLevel.getName() + "\\";
+        }
     }
 
     // Treiem l'últim "\\" afegit

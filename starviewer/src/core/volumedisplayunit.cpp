@@ -17,10 +17,10 @@
 #include "imagepipeline.h"
 #include "slicehandler.h"
 #include "volume.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "volumepixeldata.h"
 #include "image.h"
-#include "windowlevelhelper.h"
+#include "voiluthelper.h"
 
 #include <vtkImageActor.h>
 #include <vtkImageMapper3D.h>
@@ -37,7 +37,7 @@ VolumeDisplayUnit::VolumeDisplayUnit()
     m_imageActor->GetProperty()->SetInterpolationTypeToCubic();
     m_sliceHandler = new SliceHandler();
     m_imagePointPicker =  0;
-    m_windowLevelData = 0;
+    m_voiLutData = 0;
     m_currentThickSlabPixelData = 0;
 }
 
@@ -69,15 +69,15 @@ void VolumeDisplayUnit::setVolume(Volume *volume)
     m_imageActor->GetMapper()->SetInputConnection(m_imagePipeline->getOutput().getVtkAlgorithmOutput());
 }
 
-void VolumeDisplayUnit::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
+void VolumeDisplayUnit::setVoiLutData(VoiLutPresetsToolData *voiLutData)
 {
-    m_windowLevelData = windowLevelData;
-    WindowLevelHelper().initializeWindowLevelData(m_windowLevelData, m_volume);
+    m_voiLutData = voiLutData;
+    VoiLutHelper().initializeVoiLutData(m_voiLutData, m_volume);
 }
 
-WindowLevelPresetsToolData *VolumeDisplayUnit::getWindowLevelData()
+VoiLutPresetsToolData *VolumeDisplayUnit::getVoiLutData() const
 {
-    return m_windowLevelData;
+    return m_voiLutData;
 }
 
 ImagePipeline* VolumeDisplayUnit::getImagePipeline() const
@@ -286,32 +286,34 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
         Image *image = getVolume()->getImage(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
         if (image)
         {
-            for (int i = 0; i < image->getNumberOfWindowLevels(); ++i)
+            for (int i = 0; i < image->getNumberOfVoiLuts(); ++i)
             {
-                WindowLevel windowLevel = WindowLevelHelper().getDefaultWindowLevelForPresentation(image, i);
-                m_windowLevelData->updatePreset(windowLevel);
+                VoiLut voiLut = VoiLutHelper().getDefaultVoiLutForPresentation(image, i);
+                m_voiLutData->updatePreset(voiLut);
             }
         }
     }
     
-    WindowLevel wl = m_windowLevelData->getCurrentPreset();
-    m_imagePipeline->setWindowLevel(wl.getWidth(), wl.getCenter());
+    VoiLut voiLut = m_voiLutData->getCurrentPreset();
+    setVoiLut(voiLut);
 }
 
-void VolumeDisplayUnit::updateWindowLevel(const WindowLevel &windowLevel)
+void VolumeDisplayUnit::setVoiLut(const VoiLut &voiLut)
 {
-    m_windowLevelData->setCurrentPreset(windowLevel);
-    m_imagePipeline->setWindowLevel(windowLevel.getWidth(), windowLevel.getCenter());
+    if (m_volume->getImage(0) && m_volume->getImage(0)->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
+    {
+        m_imagePipeline->setVoiLut(voiLut.inverse());
+    }
+    else
+    {
+        m_imagePipeline->setVoiLut(voiLut);
+    }
 }
 
-void VolumeDisplayUnit::getWindowLevel(double windowLevel[2]) const
+void VolumeDisplayUnit::setCurrentVoiLutPreset(const VoiLut &voiLut)
 {
-    m_imagePipeline->getCurrentWindowLevel(windowLevel);
-}
-
-void VolumeDisplayUnit::setWindowLevel(double window, double level)
-{
-    m_imagePipeline->setWindowLevel(window, level);
+    m_voiLutData->setCurrentPreset(voiLut);
+    setVoiLut(voiLut);
 }
 
 void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunction)

@@ -39,7 +39,7 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_vector3float.cpp \
            $$PWD/test_vector3double.cpp \
            $$PWD/test_windowlevel.cpp \
-           $$PWD/test_windowlevelpresetstooldata.cpp \
+           $$PWD/test_voilutpresetstooldata.cpp \
            $$PWD/test_dicomformattedvaluesconverter.cpp \
            $$PWD/test_screen.cpp \
            $$PWD/test_screenlayout.cpp \
@@ -82,7 +82,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_standardizeduptakevaluebodyweightformulacalculator.cpp \
            $$PWD/test_standardizeduptakevaluebodysurfaceareaformulacalculator.cpp \
            $$PWD/test_relativegeometrylayout.cpp \
-           $$PWD/test_griditerator.cpp
+           $$PWD/test_griditerator.cpp \
+           $$PWD/test_voilut.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \

@@ -112,19 +112,6 @@ void QExperimental3DViewer::reset()
     render();
 }
 
-void QExperimental3DViewer::getCurrentWindowLevel(double wl[2])
-{
-    // TODO estem obligats a implementar-lo. De moment retornem 0,0
-    wl[0] = wl[1] = 0.0;
-}
-
-void QExperimental3DViewer::setWindowLevel(double window, double level)
-{
-    // TODO estem obligats a implementar-lo.
-    Q_UNUSED(window);
-    Q_UNUSED(level);
-}
-
 void QExperimental3DViewer::resetView(const OrthogonalPlane &view)
 {
     // TODO estem obligats a implementar-lo. De moment només assignem variable
@@ -135,6 +122,7 @@ void QExperimental3DViewer::resetView(const OrthogonalPlane &view)
 void QExperimental3DViewer::getCurrentRenderedItemBounds(double bounds[6])
 {
     // TODO Implement me!
+    Q_UNUSED(bounds)
 }
 
 } // namespace udg

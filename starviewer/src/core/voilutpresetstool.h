@@ -12,8 +12,8 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGWINDOWLEVELPRESETSTOOL_H
-#define UDGWINDOWLEVELPRESETSTOOL_H
+#ifndef UDGVOILUTPRESETSTOOL_H
+#define UDGVOILUTPRESETSTOOL_H
 
 #include "tool.h"
 
@@ -23,16 +23,16 @@
 namespace udg {
 
 class Q2DViewer;
-class WindowLevelPresetsToolData;
+class VoiLutPresetsToolData;
 
 /**
     Tool per canviar window levels predefinits
   */
-class WindowLevelPresetsTool : public Tool {
+class VoiLutPresetsTool : public Tool {
 Q_OBJECT
 public:
-    WindowLevelPresetsTool(QViewer *viewer, QObject *parent = 0);
-    ~WindowLevelPresetsTool();
+    VoiLutPresetsTool(QViewer *viewer, QObject *parent = 0);
+    ~VoiLutPresetsTool();
 
     void handleEvent(unsigned long eventID);
 
@@ -48,11 +48,11 @@ private:
 
 private slots:
     /// Actualitza la llista de window/level definits per defecte
-    void updateWindowLevelData();
+    void updateVoiLutData();
 
 private:
     /// Dades de window level amb tots els presets
-    WindowLevelPresetsToolData *m_myToolData;
+    VoiLutPresetsToolData *m_myToolData;
 
     /// Llista de presets predefinits
     QStringList m_standardPresets;

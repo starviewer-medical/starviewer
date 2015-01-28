@@ -17,6 +17,7 @@
 #include "thickslabfilter.h"
 #include "displayshutterfilter.h"
 #include "transferfunction.h"
+#include "voilut.h"
 
 #include "vtkImageData.h"
 #include "vtkRunThroughFilter.h"
@@ -24,6 +25,7 @@
 namespace udg {
 
 ImagePipeline::ImagePipeline()
+    : m_hasTransferFunction(false)
 {
     // Filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = new ThickSlabFilter();
@@ -123,33 +125,33 @@ vtkImageData* ImagePipeline::getSlabProjectionOutput()
     return m_thickSlabProjectionFilter->getOutput().getVtkImageData();
 }
 
-bool ImagePipeline::setWindowLevel(double window, double level)
+void ImagePipeline::setVoiLut(const VoiLut &voiLut)
 {
-    if ((m_windowLevelLUTFilter->getWindow() != window) || (m_windowLevelLUTFilter->getLevel() != level))
+    m_windowLevelLUTFilter->setWindowLevel(voiLut.getWindowLevel());
+
+    if (!m_hasTransferFunction)
     {
-        m_windowLevelLUTFilter->setWindow(window);
-        m_windowLevelLUTFilter->setLevel(level);
-
-        return true;
+        if (voiLut.isLut())
+        {
+            m_windowLevelLUTFilter->setTransferFunction(voiLut.getLut());
+        }
+        else
+        {
+            m_windowLevelLUTFilter->clearTransferFunction();
+        }
     }
-
-    return false;
-}
-
-void ImagePipeline::getCurrentWindowLevel(double wl[2])
-{
-    wl[0] = m_windowLevelLUTFilter->getWindow();
-    wl[1] = m_windowLevelLUTFilter->getLevel();
 }
 
 void ImagePipeline::setTransferFunction(const TransferFunction &transferFunction)
 {
     m_windowLevelLUTFilter->setTransferFunction(transferFunction);
+    m_hasTransferFunction = true;
 }
 
 void ImagePipeline::clearTransferFunction()
 {
     m_windowLevelLUTFilter->clearTransferFunction();
+    m_hasTransferFunction = false;
 }
 
 vtkAlgorithm* ImagePipeline::getVtkAlgorithm() const

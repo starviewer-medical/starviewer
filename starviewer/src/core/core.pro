@@ -52,7 +52,6 @@ HEADERS += extensionfactory.h \
     repositorybase.h \
     repository.h \
     q2dviewer.h \
-    q3dmprviewer.h \
     q3dviewer.h \
     qviewer.h \
     patient.h \
@@ -87,7 +86,6 @@ HEADERS += extensionfactory.h \
     patientbrowsermenuextendedinfo.h \
     patientbrowsermenulist.h \
     qcustomwindowleveldialog.h \
-    qwindowlevelcombobox.h \
     mhdfileclassifierstep.h \
     orderimagesfillerstep.h \
     toolregistry.h \
@@ -111,7 +109,6 @@ HEADERS += extensionfactory.h \
     screenshottool.h \
     synchronizetool.h \
     synchronizetooldata.h \
-    windowlevelpresetstool.h \
     transdifferencetool.h \
     transdifferencetooldata.h \
     point3d.h \
@@ -130,7 +127,6 @@ HEADERS += extensionfactory.h \
     distancetool.h \
     editortool.h \
     editortooldata.h \
-    windowlevelpresetstooldata.h \
     qviewercinecontroller.h \
     qcinecontroller.h \
     hoverpoints.h \
@@ -356,12 +352,10 @@ HEADERS += extensionfactory.h \
     inputsynccriterion.h \
     modalitysynccriterion.h \
     syncaction.h \
-    windowlevelsyncaction.h \
     zoomfactorsyncaction.h \
     pansyncaction.h \
     imageorientationsyncaction.h \
     signaltosyncactionmapper.h \
-    windowlevelsignaltosyncactionmapper.h \
     zoomfactorsignaltosyncactionmapper.h \
     pansignaltosyncactionmapper.h \
     imageorientationsignaltosyncactionmapper.h \
@@ -397,7 +391,6 @@ HEADERS += extensionfactory.h \
     transferfunctionmodel.h \
     transferfunctionmodelfiller.h \
     defaulttransferfunctionselector.h \
-    windowlevelhelper.h \
     patientbrowsermenugroup.h \
     patientbrowsermenufusionitem.h \
     phasesyncaction.h \
@@ -418,7 +411,14 @@ HEADERS += extensionfactory.h \
     vtktextactorwithbackground.h \
     volumereaderjobfactory.h \
     relativegeometrylayout.h \
-    griditerator.h
+    griditerator.h \
+    voilut.h \
+    voilutpresetstooldata.h \
+    qvoilutcombobox.h \
+    voiluthelper.h \
+    voilutpresetstool.h \
+    voilutsyncaction.h \
+    voilutsignaltosyncactionmapper.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -435,7 +435,6 @@ SOURCES += extensionmediator.cpp \
     repositorybase.cpp \
     repository.cpp \
     q2dviewer.cpp \
-    q3dmprviewer.cpp \
     q3dviewer.cpp \
     qviewer.cpp \
     patient.cpp \
@@ -472,7 +471,6 @@ SOURCES += extensionmediator.cpp \
     patientbrowsermenuextendedinfo.cpp \
     patientbrowsermenulist.cpp \
     qcustomwindowleveldialog.cpp \
-    qwindowlevelcombobox.cpp \
     mhdfileclassifierstep.cpp \
     orderimagesfillerstep.cpp \
     toolregistry.cpp \
@@ -496,7 +494,6 @@ SOURCES += extensionmediator.cpp \
     screenshottool.cpp \
     synchronizetool.cpp \
     synchronizetooldata.cpp \
-    windowlevelpresetstool.cpp \
     transdifferencetool.cpp \
     transdifferencetooldata.cpp \
     point3d.cpp \
@@ -513,7 +510,6 @@ SOURCES += extensionmediator.cpp \
     polylinetemporalroitool.cpp \
     polylinetemporalroitooldata.cpp \
     distancetool.cpp \
-    windowlevelpresetstooldata.cpp \
     qviewercinecontroller.cpp \
     qcinecontroller.cpp \
     hoverpoints.cpp \
@@ -726,12 +722,10 @@ SOURCES += extensionmediator.cpp \
     inputsynccriterion.cpp \
     modalitysynccriterion.cpp \
     syncaction.cpp \
-    windowlevelsyncaction.cpp \
     zoomfactorsyncaction.cpp \
     pansyncaction.cpp \
     imageorientationsyncaction.cpp \
     signaltosyncactionmapper.cpp \
-    windowlevelsignaltosyncactionmapper.cpp \
     zoomfactorsignaltosyncactionmapper.cpp \
     pansignaltosyncactionmapper.cpp \
     imageorientationsignaltosyncactionmapper.cpp \
@@ -763,7 +757,6 @@ SOURCES += extensionmediator.cpp \
     transferfunctionmodel.cpp \
     transferfunctionmodelfiller.cpp \
     defaulttransferfunctionselector.cpp \
-    windowlevelhelper.cpp \
     patientbrowsermenugroup.cpp \
     patientbrowsermenufusionitem.cpp \
     phasesyncaction.cpp \
@@ -784,7 +777,14 @@ SOURCES += extensionmediator.cpp \
     vtktextactorwithbackground.cpp \
     volumereaderjobfactory.cpp \
     relativegeometrylayout.cpp \
-    griditerator.cpp
+    griditerator.cpp \
+    voilut.cpp \
+    voilutpresetstooldata.cpp \
+    qvoilutcombobox.cpp \
+    voiluthelper.cpp \
+    voilutpresetstool.cpp \
+    voilutsyncaction.cpp \
+    voilutsignaltosyncactionmapper.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
