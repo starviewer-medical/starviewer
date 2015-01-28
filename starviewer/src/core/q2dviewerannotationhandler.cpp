@@ -79,9 +79,9 @@ void Q2DViewerAnnotationHandler::updateAnnotationsInformation(AnnotationFlags an
         return;
     }
 
-    if (annotation.testFlag(WindowInformationAnnotation))
+    if (annotation.testFlag(VoiLutInformationAnnotation))
     {
-        updateWindowInformationAnnotation();
+        updateVoiLutInformationAnnotation();
     }
 
     if (annotation.testFlag(SliceAnnotation))
@@ -251,7 +251,7 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
         }
     }
 
-    updateAnnotationsInformation(WindowInformationAnnotation | SliceAnnotation);
+    updateAnnotationsInformation(VoiLutInformationAnnotation | SliceAnnotation);
 }
 
 void Q2DViewerAnnotationHandler::updateSliceAnnotation()
@@ -344,19 +344,17 @@ void Q2DViewerAnnotationHandler::updatePatientInformationAnnotation()
     }
 }
 
-void Q2DViewerAnnotationHandler::updateWindowInformationAnnotation()
+void Q2DViewerAnnotationHandler::updateVoiLutInformationAnnotation()
 {
-    if (m_enabledAnnotations.testFlag(WindowInformationAnnotation))
+    if (m_enabledAnnotations.testFlag(VoiLutInformationAnnotation))
     {
-        double windowLevel[2];
-        m_2DViewer->getCurrentWindowLevel(windowLevel);
         int dimensions[3];
         m_2DViewer->getMainInput()->getDimensions(dimensions);
         int xIndex = m_2DViewer->getView().getXIndex();
         int yIndex = m_2DViewer->getView().getYIndex();
         m_upperLeftText = QObject::tr("%1 x %2").arg(dimensions[xIndex]).arg(dimensions[yIndex]);
         m_upperLeftText += "\n";
-        m_upperLeftText += getCurrentWindowLevelString();
+        m_upperLeftText += getVoiLutString();
     }
     else
     {
@@ -477,16 +475,21 @@ void Q2DViewerAnnotationHandler::addActors()
     renderer->AddViewProp(m_patientOrientationTextActor[3]);
 }
 
-QString Q2DViewerAnnotationHandler::getCurrentWindowLevelString() const
+QString Q2DViewerAnnotationHandler::getVoiLutString() const
 {
-    QString windowLevelString;
-    
-    double windowLevel[2];
-    m_2DViewer->getCurrentWindowLevel(windowLevel);
-    
-    windowLevelString = QObject::tr("WW: %1 WL: %2")
-        .arg(MathTools::roundToNearestInteger(windowLevel[0]))
-        .arg(MathTools::roundToNearestInteger(windowLevel[1]));
+    VoiLut voiLut = m_2DViewer->getCurrentVoiLut();
+    QString lutPart;
+
+    if (voiLut.isLut())
+    {
+        lutPart = voiLut.getOriginalLutExplanation() + " ";
+    }
+
+    WindowLevel windowLevel = voiLut.getWindowLevel();
+    QString windowLevelPart = QObject::tr("WW: %1 WL: %2").arg(MathTools::roundToNearestInteger(windowLevel.getWidth()))
+                                                          .arg(MathTools::roundToNearestInteger(windowLevel.getCenter()));
+
+    QString thresholdPart;
 
     if (VolumeHelper::isPrimaryPET(m_2DViewer->getMainInput()) || VolumeHelper::isPrimaryNM(m_2DViewer->getMainInput()))
     {
@@ -497,14 +500,13 @@ QString Q2DViewerAnnotationHandler::getCurrentWindowLevelString() const
         // Avoid division by zero
         if (range[1] != 0.0)
         {
-            percent = (windowLevel[0] / range[1]) * 100;
+            percent = (windowLevel.getWidth() / range[1]) * 100;
         }
 
-        windowLevelString += "\n";
-        windowLevelString += QObject::tr("Threshold: %1%").arg(percent, 0, 'f', 2);
+        thresholdPart = "\n" + QObject::tr("Threshold: %1%").arg(percent, 0, 'f', 2);
     }
 
-    return windowLevelString;
+    return lutPart + windowLevelPart + thresholdPart;
 }
 
 } // End namespace udg

@@ -28,6 +28,7 @@ class WindowLevelFilter;
 class ThickSlabFilter;
 class DisplayShutterFilter;
 class TransferFunction;
+class VoiLut;
 
 /// Pipeline that applies the filters required to generate the image to be used in Q2DViewer
 class ImagePipeline : public Filter {
@@ -41,10 +42,8 @@ public:
     /// Sets the given filter output as input of the filter
     void setInput(FilterOutput input);
 
-    /// Sets the window window and window level
-    bool setWindowLevel(double window, double level);
-    /// Gets the window window and window level
-    void getCurrentWindowLevel(double wl[]);
+    /// Sets the VOI LUT.
+    void setVoiLut(const VoiLut &voiLut);
     /// Sets the transfer function
     void setTransferFunction(const TransferFunction &transferFunction);
     /// Clears the transfer function.
@@ -82,6 +81,9 @@ private:
     vtkImageData *m_input;
     /// The shutter data to be applied
     vtkImageData *m_shutterData;
+
+    /// Used to keep track of whether there's a currently active transfer function when applying a VOI LUT.
+    bool m_hasTransferFunction;
 
 };
 

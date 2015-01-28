@@ -47,7 +47,7 @@ public:
     static const QString EditorTool;
     static const QString ClippingPlanesTool;
     static const QString RestoreTool;
-    static const QString InvertWindowLevelTool;
+    static const QString InvertVoiLutTool;
     static const QString AxialViewTool;
     static const QString SagitalViewTool;
     static const QString CoronalViewTool;

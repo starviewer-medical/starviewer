@@ -22,7 +22,7 @@
 #include "mathtools.h"
 #include "imageorientationoperationsmapper.h"
 #include "transferfunction.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "coresettings.h"
 #include "qviewerworkinprogresswidget.h"
 #include "patientorientation.h"
@@ -41,7 +41,7 @@
 #include "volumedisplayunithandlerfactory.h"
 #include "genericvolumedisplayunithandler.h"
 #include "patientbrowsermenu.h"
-#include "windowlevelhelper.h"
+#include "voiluthelper.h"
 
 // Qt
 #include <QResizeEvent>
@@ -587,10 +587,10 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     removeImageActors();
     m_displayUnitsHandler = m_displayUnitsFactory->createVolumeDisplayUnitHandler(volumes);
 
-    getDisplayUnit(0)->setWindowLevelData(getWindowLevelData());
+    getDisplayUnit(0)->setVoiLutData(getVoiLutData());
     for (int i = 1; i < getNumberOfInputs(); i++)
     {
-        getDisplayUnit(i)->setWindowLevelData(new WindowLevelPresetsToolData(this));
+        getDisplayUnit(i)->setVoiLutData(new VoiLutPresetsToolData(this));
     }
 
     addImageActors();
@@ -790,7 +790,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     // Important, cal desactivar el thickslab abans de fer m_currentViewPlane = view, sinó falla amb l'update extent
     disableThickSlab();
     setCurrentViewPlane(view);
-    m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
+    m_annotationsHandler->updateAnnotationsInformation(VoiLutInformationAnnotation);
     
     // Reiniciem valors per defecte de la càmera
     m_rotateFactor = 0;
@@ -1072,21 +1072,6 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
     }
 }
 
-void Q2DViewer::setWindowLevel(double window, double level)
-{
-    if (hasInput())
-    {
-        getMainDisplayUnit()->setWindowLevel(window,level);
-        m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
-        render();
-        emit windowLevelChanged(window, level);
-    }
-    else
-    {
-        DEBUG_LOG("::setWindowLevel() : No tenim input ");
-    }
-}
-
 const TransferFunction& Q2DViewer::getTransferFunction() const
 {
     return getMainDisplayUnit()->getTransferFunction();
@@ -1102,9 +1087,9 @@ void Q2DViewer::clearTransferFunction()
     getMainDisplayUnit()->clearTransferFunction();
 }
 
-void Q2DViewer::getCurrentWindowLevel(double wl[2])
+VoiLut Q2DViewer::getCurrentVoiLut() const
 {
-    getMainDisplayUnit()->getWindowLevel(wl);
+    return getVoiLutData()->getCurrentPreset();
 }
 
 int Q2DViewer::getCurrentSlice() const
@@ -1411,7 +1396,29 @@ void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
     enableAnnotation(annotation, false);
 }
 
-void Q2DViewer::setWindowLevelInVolume(int index, const WindowLevel &windowLevel)
+void Q2DViewer::setVoiLut(const VoiLut &voiLut)
+{
+    if (!hasInput())
+    {
+        return;
+    }
+
+    // If the new VOI LUT is not the currently selected one, it means that someone is calling this method to set a custom VOI LUT
+    if (voiLut != getCurrentVoiLut())
+    {
+        // This will cause another call to this method that will follow the other branch
+        getVoiLutData()->setCustomVoiLut(voiLut);
+    }
+    // Otherwise, it means that it has been called from the signal/slot connection from the VOI LUT data
+    else
+    {
+        getMainDisplayUnit()->setVoiLut(voiLut);
+        m_annotationsHandler->updateAnnotationsInformation(VoiLutInformationAnnotation);
+        render();
+    }
+}
+
+void Q2DViewer::setVoiLutInVolume(int index, const VoiLut &voiLut)
 {
     VolumeDisplayUnit *unit = this->getDisplayUnit(index);
 
@@ -1422,9 +1429,10 @@ void Q2DViewer::setWindowLevelInVolume(int index, const WindowLevel &windowLevel
         return;
     }
 
-    unit->updateWindowLevel(windowLevel);
-    // An explicit render is only needed if the unit is not the main one
-    // because the main unit is connected to QViewer::setWindowLevel which is invoked in unit->updateWindowLevel
+    unit->setCurrentVoiLutPreset(voiLut);
+
+    // An explicit render is only needed when it isn't the main unit one because if it's the main unit then
+    // setVoiLut() is called eventually through signal-slot connection when setCurrentVoiLutPreset() is called.
     if (unit != getMainDisplayUnit())
     {
         this->render();
@@ -1597,7 +1605,7 @@ void Q2DViewer::restore()
     // defined command to place the image properly by default depending on the input if no one is defined 
     // Take into account this call disables thickslab
     resetViewToAcquisitionPlane();
-    WindowLevelHelper::selectDefaultPreset(getWindowLevelData(), getMainInput());
+    VoiLutHelper::selectDefaultPreset(getVoiLutData(), getMainInput());
     
     // HACK Restaurem el rendering
     enableRendering(true);
@@ -1612,16 +1620,9 @@ void Q2DViewer::clearViewer()
     m_drawer->clearViewer();
 }
 
-void Q2DViewer::invertWindowLevel()
+void Q2DViewer::invertVoiLut()
 {
-    // Passa el window level a negatiu o positiu, per invertir els colors
-    double windowLevel[2];
-    getCurrentWindowLevel(windowLevel);
-
-    // Això és necessari fer-ho així i no amb setWindowLevel perquè si invertim el color de la imatge sense haver modificat abans el window/level
-    // i després seleccionem un altre visor, al tornar a aquest visor, es tornaria aplicar el "default" i no el "custom"
-    // Es podria arribar a fer d'una altre manera també, atacant directament als filtres del pipeline, tal com es diu al ticket #1275
-    getWindowLevelData()->setCustomWindowLevel(-windowLevel[0], windowLevel[1]);
+    setVoiLut(getCurrentVoiLut().inverse());
 }
 
 void Q2DViewer::alignLeft()
@@ -1796,8 +1797,6 @@ void Q2DViewer::updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisition
         {
             unit->updateCurrentImageDefaultPresets();
         }
-
-        m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
     }
 }
 
@@ -1961,9 +1960,9 @@ int Q2DViewer::indexOfVolume(const Volume *volume) const
     return -1;
 }
 
-WindowLevelPresetsToolData* Q2DViewer::getWindowLevelDataForVolume(int index) const
+VoiLutPresetsToolData* Q2DViewer::getVoiLutDataForVolume(int index) const
 {
-    return getDisplayUnit(index)->getWindowLevelData();
+    return getDisplayUnit(index)->getVoiLutData();
 }
 
 int Q2DViewer::getFusionBalance() const

@@ -16,6 +16,7 @@
 #include "diffusionperfusionsegmentationsettings.h"
 #include "patientbrowsermenu.h"
 #include "transferfunction.h"
+#include "voilut.h"
 // Qt
 #include <QMessageBox>
 #include <QFileDialog>
@@ -92,12 +93,12 @@ void QDifuPerfuSegmentationExtension::initializeTools()
     m_seedToolButton->setDefaultAction(m_toolManager->registerTool("SeedTool"));
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
     m_editorToolButton->setDefaultAction(m_toolManager->registerTool("EditorTool"));
-    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("VoiLutPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool";
     m_toolManager->triggerTools(defaultTools);
 
     // definim els grups exclusius
@@ -414,8 +415,8 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage(int index)
     m_perfusion2DView->setInput(m_perfusionMainVolume);
 
     //Ho fem per tal de que es vegi tot "blanc" i per tant en color "vius"
-    m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
-    //m_perfusion2DView->setWindowLevel(m_perfusionMaxValue - m_perfusionMinValue, 0.0);
+    m_perfusion2DView->setVoiLut(WindowLevel(1.0, m_perfusionMinValue - 1.0));
+    //m_perfusion2DView->setVoiLut(WindowLevel(m_perfusionMaxValue - m_perfusionMinValue, 0.0));
     setPerfusionLut(m_perfusionThresholdViewerSlider->value());
 }
 
@@ -692,8 +693,8 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         if (!m_perfusion2DView->getRenderer()->HasViewProp(m_perfusionOverlay))
             m_perfusion2DView->getRenderer()->AddViewProp(m_perfusionOverlay);
 
-        //m_perfusion2DView->setWindowLevel(m_diffusion2DView->getCurrentColorWindow(), m_diffusion2DView->getCurrentColorLevel());
-        m_perfusion2DView->setWindowLevel(255.0, 0.0);
+        //m_perfusion2DView->setVoiLut(WindowLevel(m_diffusion2DView->getCurrentColorWindow(), m_diffusion2DView->getCurrentColorLevel()));
+        m_perfusion2DView->setVoiLut(WindowLevel(255.0, 0.0));
 
         m_perfusionSliceSlider->setValue(m_diffusionSliceSlider->value());
         m_perfusion2DView->setSlice(m_perfusionSliceSlider->value());
@@ -828,7 +829,7 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
 
     //m_perfusion2DView->setInput(m_perfusionRescaledVolume);
     //m_perfusion2DView->setInput(m_diffusionMainVolume);
-    m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
+    m_perfusion2DView->setVoiLut(WindowLevel(1.0, m_perfusionMinValue - 1.0));
     m_perfusion2DView->setSlice(m_perfusionSliceSlider->value());
     m_perfusion2DView->setOverlapMethod(Q2DViewer::None);
     m_perfusion2DView->setOverlayInput(m_penombraMaskVolume);
@@ -1238,7 +1239,7 @@ void QDifuPerfuSegmentationExtension::updatePenombraVolume()
         m_perfusionOverlay->SetInputData(imageCast->GetOutput());
         imageCast->Delete();
 
-        m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
+        m_perfusion2DView->setVoiLut(WindowLevel(1.0, m_perfusionMinValue - 1.0));
         m_perfusion2DView->setOverlapMethod(Q2DViewer::None);
         m_perfusion2DView->setOverlayInput(m_penombraMaskVolume);
         m_perfusion2DView->render();

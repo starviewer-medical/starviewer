@@ -18,7 +18,7 @@
 
 // For each *SignalToSyncActionMapper we want to be registered globally, we should add its include here
 // and register it on registerSyncActions()
-#include "windowlevelsignaltosyncactionmapper.h"
+#include "voilutsignaltosyncactionmapper.h"
 #include "zoomfactorsignaltosyncactionmapper.h"
 #include "pansignaltosyncactionmapper.h"
 #include "imageorientationsignaltosyncactionmapper.h"
@@ -26,7 +26,7 @@
 #include "thickslabsignaltosyncactionmapper.h"
 
 // Include each sync action
-#include "windowlevelsyncaction.h"
+#include "voilutsyncaction.h"
 #include "zoomfactorsyncaction.h"
 #include "pansyncaction.h"
 #include "imageorientationsyncaction.h"
@@ -38,7 +38,7 @@ namespace udg {
 void SyncActionsRegister::registerSyncActions()
 {
     // With each line we register each mapper on the factory
-    static SignalToSyncActionMapperFactoryRegister<WindowLevelSignalToSyncActionMapper> registerWindowLevelSignalToSyncActionMapper(WindowLevelSyncAction().getMetaData());
+    static SignalToSyncActionMapperFactoryRegister<VoiLutSignalToSyncActionMapper> registerVoiLutSignalToSyncActionMapper(VoiLutSyncAction().getMetaData());
     static SignalToSyncActionMapperFactoryRegister<ZoomFactorSignalToSyncActionMapper> registerZoomFactorSignalToSyncActionMapper(ZoomFactorSyncAction().getMetaData());
     static SignalToSyncActionMapperFactoryRegister<PanSignalToSyncActionMapper> registerPanSignalToSyncActionMapper(PanSyncAction().getMetaData());
     static SignalToSyncActionMapperFactoryRegister<ImageOrientationSignalToSyncActionMapper> registerImageOrientationSignalToSyncActionMapper(ImageOrientationSyncAction().getMetaData());

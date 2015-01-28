@@ -80,7 +80,7 @@
 namespace udg {
 
 Q3DViewer::Q3DViewer(QWidget *parent)
- : QViewer(parent), m_imageData(0), m_vtkVolume(0), m_volumeProperty(0), m_newTransferFunction(0), m_clippingPlanes(0)
+ : QViewer(parent), m_imageData(0), m_vtkVolume(0), m_volumeProperty(0), m_clippingPlanes(0)
 {
     m_defaultFitIntoViewportMarginRate = 0.4;
     m_vtkWidget->setAutomaticImageCacheEnabled(true);
@@ -166,8 +166,6 @@ Q3DViewer::Q3DViewer(QWidget *parent)
     m_obscuranceOn = false;
 
     m_4DLinearRegressionGradientEstimator = 0;
-    m_window = 80;
-    m_level = 40;
 
     // Workaround: desactivem l'orientation marker perquè amb VTK 5.6 es renderitza cada vegada que movem el ratolí per sobre el visor.
     // TODO: buscar una solució real al problema, que no hi hagi un mouse tracking o quelcom per l'estil.
@@ -195,7 +193,7 @@ Q3DViewer::~Q3DViewer()
     delete m_directIlluminationObscuranceVoxelShader;
     delete m_ambientContourObscuranceVoxelShader;
     delete m_directIlluminationContourObscuranceVoxelShader;
-    delete m_newTransferFunction;
+
     // Eliminem tots els elements vtk creats
     if (m_4DLinearRegressionGradientEstimator)
     {
@@ -256,88 +254,16 @@ Q3DViewer::~Q3DViewer()
     }
 }
 
-void Q3DViewer::getCurrentWindowLevel(double wl[2])
+VoiLut Q3DViewer::getCurrentVoiLut() const
 {
-    wl[0] = m_window;
-    wl[1] = m_level;
+    return m_transferFunction;
 }
 
-void Q3DViewer::setWindowLevel(double window, double level)
+void Q3DViewer::setVoiLut(const VoiLut &voiLut)
 {
-    if (hasInput())
-    {
-        m_window = window;
-        m_level = level;
-//         double lowLevel  = level - (window/2.0);
-//         double highLevel = level + (window/2.0);
-        //DEBUG_LOG(QString("Q3DViewer: new ww = %1, new wl = %2, shift = %3, lowlev = %4, highlev = %5").arg(window).arg(level).arg(m_shift).arg(lowLevel).arg(highLevel));
-
-        double newScale = m_window / m_range;
-        double newShift = m_level - (m_window / 2.0);
-        bool pointInZero = false;
-        bool pointInRange = false;
-
-        m_transferFunction.clear();
-
-        QList<double> colorPoints = m_newTransferFunction->colorKeys();
-
-        foreach (double x, colorPoints)
-        {
-            double newX = newScale * x + newShift;
-
-            if (newX <= 0.0)
-            {
-                newX = 0.0;
-                pointInZero = true;
-            }
-            else if (newX > m_range)
-            {
-                newX = m_range;
-                pointInRange = true;
-            }
-
-            m_transferFunction.setColor(newX, m_newTransferFunction->getColor(x));
-        }
-
-        QList<double> opacityPoints = m_newTransferFunction->opacityKeys();
-
-        foreach (double x, opacityPoints)
-        {
-            double newX = newScale * x + newShift;
-
-            if (newX <= 0.0)
-            {
-                newX = 0.0;
-                pointInZero = true;
-            }
-            else if (newX >= m_range)
-            {
-                newX = m_range;
-                pointInRange = true;
-            }
-
-            m_transferFunction.setOpacity(newX, m_newTransferFunction->getOpacity(x));
-        }
-
-        m_transferFunction.trim(0, m_range);
-
-        if (!pointInZero)
-        {
-            m_transferFunction.setOpacity(0.0, 0.0);
-        }
-        if (!pointInRange)
-        {
-            m_transferFunction.setOpacity(m_range, 0.0);
-        }
-
-        this->applyCurrentRenderingMethod();
-        emit windowLevelChanged(window, level);
-        emit transferFunctionChanged();
-    }
-    else
-    {
-        DEBUG_LOG("::setWindowLevel(): No tenim input");
-    }
+    setTransferFunction(voiLut.getLut());
+    this->applyCurrentRenderingMethod();
+    emit transferFunctionChanged();
 }
 
 void Q3DViewer::setClippingPlanes(vtkPlanes *clippingPlanes)
@@ -514,9 +440,6 @@ void Q3DViewer::setInput(Volume *volume)
 
     applyCurrentRenderingMethod();
 
-    // Apliquem el window/level actual
-    setWindowLevel(m_window, m_level);
-
     // Indiquem el canvi de volum
     emit volumeChanged(getMainInput());
 
@@ -609,18 +532,6 @@ void Q3DViewer::setTransferFunction(const TransferFunction &transferFunction)
     }
 }
 
-void Q3DViewer::setNewTransferFunction()
-{
-    if (m_newTransferFunction)
-    {
-        delete m_newTransferFunction;
-    }
-
-    m_newTransferFunction = new TransferFunction(m_transferFunction);
-    m_window = m_range;
-    m_level = m_range/2.0;
-}
-
 void Q3DViewer::setDefaultViewForCurrentInput()
 {
     // De moment, sempre serà coronal
@@ -643,9 +554,6 @@ bool Q3DViewer::rescale(Volume *volume)
     double max = range[1];
     double rangeLength = max - min;
     double shift = -min;
-    double window = rangeLength;
-    // Sabem que el mínim és 0
-    double level = (rangeLength / 2.0);
     DEBUG_LOG(QString("Q3DViewer: volume scalar range: min = %1, max = %2, range = %3, shift = %4").arg(min).arg(max).arg(rangeLength).arg(shift));
 
     vtkImageShiftScale *rescaler = vtkImageShiftScale::New();
@@ -675,9 +583,6 @@ bool Q3DViewer::rescale(Volume *volume)
         rescaler->Delete();
 
         m_range = rangeLength;
-        m_shift = shift;
-        m_window = window;
-        m_level = level;
 
         emit scalarRange(0, m_range);
 

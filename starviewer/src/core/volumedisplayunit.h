@@ -17,7 +17,6 @@
 
 #include "accumulator.h"
 #include "transferfunction.h"
-#include "windowlevel.h"
 
 class vtkImageActor;
 class vtkImageData;
@@ -30,7 +29,8 @@ class ImagePipeline;
 class OrthogonalPlane;
 class SliceHandler;
 class Volume;
-class WindowLevelPresetsToolData;
+class VoiLut;
+class VoiLutPresetsToolData;
 class VolumePixelData;
 
 /**
@@ -49,10 +49,10 @@ public:
     /// Sets a new volume and resets display properties (pipeline and slice handler).
     void setVolume(Volume *volume);
 
-    /// Returns the window level data
-    WindowLevelPresetsToolData* getWindowLevelData();
-    /// Sets a new window level data
-    void setWindowLevelData(WindowLevelPresetsToolData *windowLevelData);
+    /// Returns the VOI LUT data.
+    VoiLutPresetsToolData* getVoiLutData() const;
+    /// Sets a new VOI LUT data.
+    void setVoiLutData(VoiLutPresetsToolData *voiLutData);
 
     /// Returns the image pipeline.
     ImagePipeline* getImagePipeline() const;
@@ -87,13 +87,10 @@ public:
     /// Updates the current image default presets values. It only applies to original acquisition plane.
     void updateCurrentImageDefaultPresets();
 
-    /// Updates the current window level
-    void updateWindowLevel(const WindowLevel &windowLevel);
-
-    /// Returns the current window level on the given array.
-    void getWindowLevel(double windowLevel[2]) const;
-    /// Sets the window level.
-    void setWindowLevel(double window, double level);
+    /// Sets the given VOI LUT to the pipeline.
+    void setVoiLut(const VoiLut &voiLut);
+    /// Sets the given VOI LUT to the VOI LUT data and to the pipeline.
+    void setCurrentVoiLutPreset(const VoiLut &voiLut);
 
     /// Sets the transfer function.
     void setTransferFunction(const TransferFunction &transferFunction);
@@ -164,8 +161,8 @@ private:
     /// Point picker to probe pixels from the image to display
     vtkPropPicker *m_imagePointPicker;
 
-    /// Window and level data
-    WindowLevelPresetsToolData *m_windowLevelData;
+    /// VOI LUT data.
+    VoiLutPresetsToolData *m_voiLutData;
 
     /// The current transfer function.
     TransferFunction m_transferFunction;

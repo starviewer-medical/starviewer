@@ -12,27 +12,27 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGWINDOWLEVELSYNCACTION_H
-#define UDGWINDOWLEVELSYNCACTION_H
+#ifndef UDGVOILUTSYNCACTION_H
+#define UDGVOILUTSYNCACTION_H
 
 #include "syncaction.h"
-#include "windowlevel.h"
+#include "voilut.h"
 
 namespace udg {
 
 class Volume;
 
 /**
-    Implementation of a SyncAction for a window level
-    The set window level on setWindowLevel() will be applied when run() is called
+    Implementation of a SyncAction for a VOI LUT
+    The set VOI LUT on setVoiLut() will be applied when run() is called
  */
-class WindowLevelSyncAction : public SyncAction {
+class VoiLutSyncAction : public SyncAction {
 public:
-    WindowLevelSyncAction();
-    ~WindowLevelSyncAction();
+    VoiLutSyncAction();
+    ~VoiLutSyncAction();
 
-    /// Sets the window level to be synched
-    void setWindowLevel(const WindowLevel &windowLevel);
+    /// Sets the VOI LUT to be synched
+    void setVoiLut(const VoiLut &voiLut);
     void setVolume(Volume *volume);
     
     void run(QViewer *viewer);
@@ -42,8 +42,8 @@ protected:
     void setupDefaultSyncCriteria();
 
 protected:
-    /// Window level that will be applied on run()
-    WindowLevel m_windowLevel;
+    /// VOI LUT that will be applied on run()
+    VoiLut m_voiLut;
     Volume *m_volume;
 };
 

@@ -30,7 +30,7 @@
 #include "rotate3dtool.h"
 #include "screenshottool.h"
 #include "synchronizetool.h"
-#include "windowlevelpresetstool.h"
+#include "voilutpresetstool.h"
 #include "polylineroitool.h"
 #include "polylinetemporalroitool.h"
 #include "distancetool.h"
@@ -114,9 +114,9 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     {
         tool = new SynchronizeTool(viewer);
     }
-    else if (toolName == "WindowLevelPresetsTool")
+    else if (toolName == "VoiLutPresetsTool")
     {
-        tool = new WindowLevelPresetsTool(viewer);
+        tool = new VoiLutPresetsTool(viewer);
     }
     else if (toolName == "PolylineROITool")
     {
@@ -303,10 +303,10 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         statusTip = tr("Enable/Disable Synchronize tool");
         toolTip = tr("Synchronize");
     }
-    else if (toolName == "WindowLevelPresetsTool")
+    else if (toolName == "VoiLutPresetsTool")
     {
-        toolAction->setText(tr("Window Level Presets tool"));
-        statusTip = tr("Enable/Disable Window Level Presets tool");
+        toolAction->setText(tr("VOI LUT Presets tool"));
+        statusTip = tr("Enable/Disable VOI LUT Presets tool");
     }
     else if (toolName == "PolylineROITool")
     {
@@ -466,15 +466,15 @@ QPair<QAction*, QString> ToolRegistry::getActionToolPair(const QString &actionTo
 
         slot = SLOT(clearViewer());
     }
-    else if (actionToolName == "InvertWindowLevelActionTool")
+    else if (actionToolName == "InvertVoiLutActionTool")
     {
-        action->setText(tr("Invert WL"));
+        action->setText(tr("Invert VOI LUT"));
         action->setIcon(QIcon(":/images/invertWL.png"));
-        action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::InvertWindowLevelTool));
-        statusTip = tr("Invert window level");
+        action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::InvertVoiLutTool));
+        statusTip = tr("Invert VOI LUT");
         toolTip = statusTip;
 
-        slot = SLOT(invertWindowLevel());
+        slot = SLOT(invertVoiLut());
     }
     else if (actionToolName == "AxialViewActionTool")
     {

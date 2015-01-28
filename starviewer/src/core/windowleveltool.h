@@ -18,6 +18,7 @@
 #include <QPoint>
 
 #include "tool.h"
+#include "transferfunction.h"
 
 namespace udg {
 
@@ -70,6 +71,8 @@ private:
 private:
     /// Valors per controlar el mapeig del window level
     double m_initialWindow, m_initialLevel, m_currentWindow, m_currentLevel;
+    /// Initial VOI LUT.
+    TransferFunction m_initialLut;
     QPoint m_windowLevelStartPosition;
     QPoint m_windowLevelCurrentPosition;
 

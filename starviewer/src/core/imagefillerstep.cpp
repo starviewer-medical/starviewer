@@ -395,7 +395,32 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
         QString windowWidthString = dicomReader->getValueAttributeAsQString(DICOMWindowWidth);
         QString windowCenterString = dicomReader->getValueAttributeAsQString(DICOMWindowCenter);
         QString windowLevelExplanationString = dicomReader->getValueAttributeAsQString(DICOMWindowCenterWidthExplanation);
-        image->setWindowLevelList(DICOMFormattedValuesConverter::parseWindowLevelValues(windowWidthString, windowCenterString, windowLevelExplanationString));
+        QList<WindowLevel> windowLevelList =
+                DICOMFormattedValuesConverter::parseWindowLevelValues(windowWidthString, windowCenterString, windowLevelExplanationString);
+        QList<VoiLut> voiLutList;
+        foreach (const WindowLevel &windowLevel, windowLevelList)
+        {
+            voiLutList.append(windowLevel);
+        }
+
+        //
+        // Read VOI LUTs from the VOI LUT Sequence
+        //
+        if (dicomReader->tagExists(DICOMVOILUTSequence))
+        {
+            DICOMSequenceAttribute *sequence = dicomReader->getSequenceAttribute(DICOMVOILUTSequence);
+            QList<DICOMSequenceItem*> items = sequence->getItems();
+
+            foreach (DICOMSequenceItem *item, items)
+            {
+                QString lutDescriptor = item->getValueAttribute(DICOMLUTDescriptor)->getValueAsQString();
+                QString lutExplanation = item->getValueAttribute(DICOMLUTExplanation)->getValueAsQString();
+                QString lutData = item->getValueAttribute(DICOMLUTData)->getValueAsQString();
+                voiLutList.append(DICOMFormattedValuesConverter::parseVoiLut(lutDescriptor, lutExplanation, lutData));
+            }
+        }
+
+        image->setVoiLutList(voiLutList);
 
         // Propietats útils pels hanging protocols
         value = dicomReader->getValueAttributeAsQString(DICOMImageLaterality);
@@ -830,7 +855,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
     //
 
     //
-    // Frame VOI LUT Macro (C.7.6.16.2.10)
+    // Frame VOI LUT Macro (C.7.6.16.2.10) or Frame VOI LUT With LUT Macro (C.7.6.16.2.10b)
     //
     DICOMSequenceAttribute *frameVOILUTSequence = frameItem->getSequenceAttribute(DICOMFrameVOILUTSequence);
     if (frameVOILUTSequence)
@@ -839,49 +864,78 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
         QList<DICOMSequenceItem*> frameVOILUTItems = frameVOILUTSequence->getItems();
         if (!frameVOILUTItems.empty())
         {
+            QList<VoiLut> voiLutList;
             DICOMSequenceItem *item = frameVOILUTItems.at(0);
-            //
-            // Obtenim Window Center (1)
-            //
-            DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMWindowCenter);
-            QString windowCenterString;
-            if (dicomValue)
+
+            // Frame VOI LUT Macro (C.7.6.16.2.10)
+            if (item->getAttribute(DICOMWindowCenter))
             {
-                windowCenterString = dicomValue->getValueAsQString();
-            }
-            else
-            {
-                DEBUG_LOG("No s'ha trobat el tag Window Center en un arxiu que se suposa que l'ha de tenir!");
-                ERROR_LOG("No s'ha trobat el tag Window Center en un arxiu que se suposa que l'ha de tenir!");
+                //
+                // Obtenim Window Center (1)
+                //
+                DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMWindowCenter);
+                QString windowCenterString;
+                if (dicomValue)
+                {
+                    windowCenterString = dicomValue->getValueAsQString();
+                }
+                else
+                {
+                    DEBUG_LOG("No s'ha trobat el tag Window Center en un arxiu que se suposa que l'ha de tenir!");
+                    ERROR_LOG("No s'ha trobat el tag Window Center en un arxiu que se suposa que l'ha de tenir!");
+                }
+
+                //
+                // Obtenim Window Width (1)
+                //
+                dicomValue = item->getValueAttribute(DICOMWindowWidth);
+                QString windowWidthString;
+                if (dicomValue)
+                {
+                    windowWidthString = dicomValue->getValueAsQString();
+                }
+                else
+                {
+                    DEBUG_LOG("No s'ha trobat el tag Window Width en un arxiu que se suposa que l'ha de tenir!");
+                    ERROR_LOG("No s'ha trobat el tag Window Width en un arxiu que se suposa que l'ha de tenir!");
+                }
+
+                //
+                // Obtenim Window Explanations (3)
+                //
+                dicomValue = item->getValueAttribute(DICOMWindowCenterWidthExplanation);
+                QString windowLevelExplanationString;
+                if (dicomValue)
+                {
+                    windowLevelExplanationString = dicomValue->getValueAsQString();
+                }
+
+                // Afegim els valors de window level a la imatge
+                QList<WindowLevel> windowLevelList =
+                        DICOMFormattedValuesConverter::parseWindowLevelValues(windowWidthString, windowCenterString, windowLevelExplanationString);
+
+                foreach (const WindowLevel &windowLevel, windowLevelList)
+                {
+                    voiLutList.append(windowLevel);
+                }
             }
 
-            //
-            // Obtenim Window Width (1)
-            //
-            dicomValue = item->getValueAttribute(DICOMWindowWidth);
-            QString windowWidthString;
-            if (dicomValue)
+            // Frame VOI LUT With LUT Macro (C.7.6.16.2.10b)
+            if (item->getAttribute(DICOMVOILUTSequence))
             {
-                windowWidthString = dicomValue->getValueAsQString();
-            }
-            else
-            {
-                DEBUG_LOG("No s'ha trobat el tag Window Width en un arxiu que se suposa que l'ha de tenir!");
-                ERROR_LOG("No s'ha trobat el tag Window Width en un arxiu que se suposa que l'ha de tenir!");
+                DICOMSequenceAttribute *voiLutSequence = item->getSequenceAttribute(DICOMVOILUTSequence);
+                QList<DICOMSequenceItem*> voiLutSequenceItems = voiLutSequence->getItems();
+
+                foreach (DICOMSequenceItem *voiLutSequenceItem, voiLutSequenceItems)
+                {
+                    QString lutDescriptor = voiLutSequenceItem->getValueAttribute(DICOMLUTDescriptor)->getValueAsQString();
+                    QString lutExplanation = voiLutSequenceItem->getValueAttribute(DICOMLUTExplanation)->getValueAsQString();
+                    QString lutData = voiLutSequenceItem->getValueAttribute(DICOMLUTData)->getValueAsQString();
+                    voiLutList.append(DICOMFormattedValuesConverter::parseVoiLut(lutDescriptor, lutExplanation, lutData));
+                }
             }
 
-            //
-            // Obtenim Window Explanations (3)
-            //
-            dicomValue = item->getValueAttribute(DICOMWindowCenterWidthExplanation);
-            QString windowLevelExplanationString;
-            if (dicomValue)
-            {
-                windowLevelExplanationString = dicomValue->getValueAsQString();
-            }
-            
-            // Afegim els valors de window level a la imatge
-            image->setWindowLevelList(DICOMFormattedValuesConverter::parseWindowLevelValues(windowWidthString, windowCenterString, windowLevelExplanationString));
+            image->setVoiLutList(voiLutList);
         }
     }
 

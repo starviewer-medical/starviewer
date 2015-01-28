@@ -19,9 +19,6 @@
 
 namespace udg {
 
-// FWD declarations
-class WindowLevelPresetsToolData;
-
 /**
     Diàleg per escollir manualment els ajustaments pel window level
   */

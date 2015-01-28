@@ -17,7 +17,6 @@
 
 #include "qviewer.h"
 #include "annotationflags.h"
-#include "windowlevel.h"
 #include "anatomicalplane.h"
 
 #include <QPointer>
@@ -100,8 +99,8 @@ public:
     /// @return Objecte drawer del viewer
     Drawer* getDrawer() const;
 
-    /// Obté el window level actual de la imatge
-    void getCurrentWindowLevel(double wl[2]);
+    /// Returns the VOI LUT that is currently applied to the image in this viewer.
+    virtual VoiLut getCurrentVoiLut() const;
 
     /// Retorna la llesca/fase actual
     int getCurrentSlice() const;
@@ -276,8 +275,8 @@ public:
     /// Returns the index of the given volume in this viewer. If this viewer doesn't contain the given volume, returns -1.
     int indexOfVolume(const Volume *volume) const;
 
-    /// Returns window level data corresponding to the volume at the given index.
-    WindowLevelPresetsToolData* getWindowLevelDataForVolume(int index) const;
+    /// Returns VOI LUT data corresponding to the volume at the given index.
+    VoiLutPresetsToolData* getVoiLutDataForVolume(int index) const;
 
     /// Returns the fusion balance as a value in the range [0, 100] representing the weight of the second input.
     int getFusionBalance() const;
@@ -303,7 +302,7 @@ public slots:
     void clearViewer();
 
     /// Canvia el WW del visualitzador, per tal de canviar els blancs per negres, i el negres per blancs
-    void invertWindowLevel();
+    void invertVoiLut();
 
     /// Canvia la llesca que veiem de la vista actual
     void setSlice(int value);
@@ -320,10 +319,10 @@ public slots:
     void enableAnnotation(AnnotationFlags annotation, bool enable = true);
     void removeAnnotation(AnnotationFlags annotation);
 
-    /// Sets the given window level to the volume at the given index. If there isn't a volume at the given index, it does nothing.
-    void setWindowLevelInVolume(int index, const WindowLevel &windowLevel);
-    /// Sets the given window and level to the main volume.
-    void setWindowLevel(double window, double level);
+    /// Sets the VOI LUT for this viewer.
+    virtual void setVoiLut(const VoiLut &voiLut);
+    /// Sets the given VOI LUT to the volume at the given index. If there isn't a volume at the given index, it does nothing.
+    void setVoiLutInVolume(int index, const VoiLut &voiLut);
 
     /// Sets the transfer function of the main volume.
     void setTransferFunction(const TransferFunction &transferFunction);
@@ -391,9 +390,6 @@ signals:
 
     /// Envia la nova vista en la que ens trobem
     void viewChanged(int);
-
-    /// Indica el nou window level
-    void windowLevelChanged(double window, double level);
 
     /// Emitted when a new patient orientation has been set
     void imageOrientationChanged(const PatientOrientation &orientation);

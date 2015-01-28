@@ -331,10 +331,8 @@ TransferFunction TransferFunction::toNewRange(double oldX1, double oldX2, double
 {
     Q_ASSERT(!MathTools::isNaN(oldX1));
     Q_ASSERT(!MathTools::isNaN(oldX2));
-    Q_ASSERT(oldX1 < oldX2);
     Q_ASSERT(!MathTools::isNaN(newX1));
     Q_ASSERT(!MathTools::isNaN(newX2));
-    Q_ASSERT(newX1 < newX2);
 
     updateKeys();
 
@@ -494,6 +492,16 @@ TransferFunction TransferFunction::fromVariant(const QVariant &variant)
     transferFunction.m_scalarOpacity = OpacityTransferFunction::fromVariant(variantMap.value("scalarOpacity"));
     transferFunction.m_gradientOpacity = OpacityTransferFunction::fromVariant(variantMap.value("gradientOpacity"));
     return transferFunction;
+}
+
+QDataStream& operator <<(QDataStream &stream, const TransferFunction &transferFunction)
+{
+    return stream << transferFunction.m_color << transferFunction.m_scalarOpacity << transferFunction.m_gradientOpacity;
+}
+
+QDataStream& operator >>(QDataStream &stream, TransferFunction &transferFunction)
+{
+    return stream >> transferFunction.m_color >> transferFunction.m_scalarOpacity >> transferFunction.m_gradientOpacity;
 }
 
 void TransferFunction::updateKeys() const

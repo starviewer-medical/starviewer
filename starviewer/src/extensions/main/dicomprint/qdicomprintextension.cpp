@@ -31,7 +31,7 @@
 #include "q2dviewer.h"
 #include "starviewerapplication.h"
 #include "toolmanager.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències
 // de interface, pacs, etc.etc.!!
@@ -58,13 +58,13 @@ QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
     initializeViewerTools();
     // Posem a punt les annotacions que volem veure al viewer
     m_2DView->removeAnnotation(AllAnnotation);
-    m_2DView->enableAnnotation(WindowInformationAnnotation | PatientOrientationAnnotation | SliceAnnotation | PatientInformationAnnotation |
+    m_2DView->enableAnnotation(VoiLutInformationAnnotation | PatientOrientationAnnotation | SliceAnnotation | PatientInformationAnnotation |
                                 AcquisitionInformationAnnotation, true);
 
     m_lastIDGroupedDICOMImagesToPrint = 0;
     m_thumbnailsPreviewWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
+    m_voiLutComboBox->setToolTip(tr("Choose VOI LUT Presets"));
 }
 
 void QDicomPrintExtension::createConnections()
@@ -113,7 +113,7 @@ void QDicomPrintExtension::initializeViewerTools()
     // Obtenim les accions de cada tool que volem
     m_toolManager->registerTool("SlicingTool");
     m_toolManager->registerTool("WindowLevelTool");
-    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("VoiLutPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SlicingWheelTool");
 
@@ -122,7 +122,7 @@ void QDicomPrintExtension::initializeViewerTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool";
     m_toolManager->triggerTools(defaultTools);
     m_toolManager->setupRegisteredTools(m_2DView);
 }
@@ -144,9 +144,8 @@ void QDicomPrintExtension::updateInput()
 
     updateVolumeSupport();
 
-    WindowLevelPresetsToolData *windowLevelData = m_2DView->getWindowLevelData();
-    m_windowLevelComboBox->setPresetsData(windowLevelData);
-    windowLevelData->selectCurrentPreset(windowLevelData->getCurrentPreset().getName());
+    VoiLutPresetsToolData *voiLutData = m_2DView->getVoiLutData();
+    m_voiLutComboBox->setPresetsData(voiLutData);
 }
 
 void QDicomPrintExtension::fillSelectedDicomPrinterComboBox()
@@ -475,19 +474,19 @@ QList<QPair<Image*, DICOMPrintPresentationStateImage> > QDicomPrintExtension::ge
 
 DICOMPrintPresentationStateImage QDicomPrintExtension::getDICOMPrintPresentationStateImageForCurrentSelectedImages() const
 {
+    // TODO support VOI LUTs
     DICOMPrintPresentationStateImage dicomPrintPresentationStateImage;
-    double windowLevelFromViewer[2];
-    m_2DView->getCurrentWindowLevel(windowLevelFromViewer);
+    WindowLevel windowLevelFromViewer = m_2DView->getCurrentVoiLut().getWindowLevel();
 
     // Tenir en compte que imatges dins un mateixa sèrie poden tenir WL
     Image *currentImageInViewer = m_2DView->getMainInput()->getImage(m_2DView->getCurrentSlice(), m_2DView->getCurrentPhase());
-    bool windowLevelHasBeenModifiedInViewer = currentImageInViewer->getWindowLevel().getWidth() != windowLevelFromViewer[0] ||
-            currentImageInViewer->getWindowLevel().getCenter() != windowLevelFromViewer[1];
+    bool windowLevelHasBeenModifiedInViewer = currentImageInViewer->getVoiLut().getWindowLevel().getWidth() != windowLevelFromViewer.getWidth() ||
+            currentImageInViewer->getVoiLut().getWindowLevel().getCenter() != windowLevelFromViewer.getCenter();
 
     //Si el WL no ha estat modificat per defecte s'aplicarà el que té cada imatge
     if (windowLevelHasBeenModifiedInViewer)
     {
-        dicomPrintPresentationStateImage.setWindowLevel(windowLevelFromViewer[0], windowLevelFromViewer[1]);
+        dicomPrintPresentationStateImage.setWindowLevel(windowLevelFromViewer.getWidth(), windowLevelFromViewer.getCenter());
     }
 
     return dicomPrintPresentationStateImage;

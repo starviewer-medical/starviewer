@@ -49,7 +49,7 @@ void WindowLevel::setCenter(double center)
     m_center = center;
 }
 
-QString WindowLevel::getName() const
+const QString& WindowLevel::getName() const
 {
     return m_name;
 }

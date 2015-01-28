@@ -23,6 +23,16 @@
 
 namespace udg {
 
+// Forward declare the class template
+template <typename T>
+class TransferFunctionTemplate;
+
+// Forward declare the stream operators (see http://web.mst.edu/~nmjxv3/articles/templates.html and http://en.cppreference.com/w/cpp/language/friend)
+template <typename T>
+QDataStream& operator <<(QDataStream &stream, const TransferFunctionTemplate<T> &transferFunction);
+template <typename T>
+QDataStream& operator >>(QDataStream &stream, TransferFunctionTemplate<T> &transferFunction);
+
 /**
     Representa una funció de transferència bàsica f: X -> Y, on X és un conjunt de valors reals (valors de propietat o magnitud del gradient)
     i Y un conjunt de valors de tipus T.
@@ -68,6 +78,11 @@ public:
     void trim(double x1, double x2);
     /// Simplifica la funció esborrant els punts (x,y) que es poden obtenir per interpolació o extrapolació.
     void simplify();
+
+    /// Writes the given transfer function to the given stream.
+    friend QDataStream& operator << <>(QDataStream &stream, const TransferFunctionTemplate &transferFunction);
+    /// Fills the given transfer function from the given stream.
+    friend QDataStream& operator >> <>(QDataStream &stream, TransferFunctionTemplate &transferFunction);
 
 protected:
     /// Crea una funció de transferència buida, sense cap punt i sense nom.
@@ -249,6 +264,18 @@ void TransferFunctionTemplate<T>::simplify()
             set(x, y);
         }
     }
+}
+
+template <typename T>
+QDataStream& operator <<(QDataStream &stream, const TransferFunctionTemplate<T> &transferFunction)
+{
+    return stream << transferFunction.m_name << transferFunction.m_map;
+}
+
+template <typename T>
+QDataStream& operator >>(QDataStream &stream, TransferFunctionTemplate<T> &transferFunction)
+{
+    return stream >> transferFunction.m_name >> transferFunction.m_map;
 }
 
 template <typename T>
