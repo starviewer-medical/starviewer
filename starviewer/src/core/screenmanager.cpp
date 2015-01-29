@@ -69,9 +69,13 @@ bool ScreenManager::isMaximizedToMultipleScreens(QWidget *window)
         return false;
     }
 
-    QRect geometryToMaximizeToMultipleScreens = getGeometryToMaximizeToMulipleScreens(window);
+    int left1, top1, right1, bottom1, left2, top2, right2, bottom2;
+    window->geometry().getCoords(&left1, &top1, &right1, &bottom1);
+    getGeometryToMaximizeToMulipleScreens(window).getCoords(&left2, &top2, &right2, &bottom2);
 
-    return window->geometry() == geometryToMaximizeToMultipleScreens;
+    const int Tolerance = 32;
+
+    return qAbs(left1 - left2) <= Tolerance && qAbs(top1 - top2) <= Tolerance && qAbs(right1 - right2) <= Tolerance && qAbs(bottom1 - bottom2) <= Tolerance;
 }
 
 void ScreenManager::moveToDesktop(QWidget *window, int idDesktop)
