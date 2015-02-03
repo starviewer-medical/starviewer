@@ -198,7 +198,7 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
         }
         else
         {
-            setInputToViewer(viewerWidget, hangingProtocolImageSet->getSeriesToDisplay(), displaySet);
+            setInputToViewer(viewerWidget, displaySet);
         }
     }
 
@@ -276,8 +276,7 @@ void HangingProtocolManager::previousStudyDownloaded(Study *study)
 
         viewerWidget->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
 
-        setInputToViewer(viewerWidget, structPreviousStudyDownloading->displaySet->getImageSet()->getSeriesToDisplay(),
-                         structPreviousStudyDownloading->displaySet);
+        setInputToViewer(viewerWidget, structPreviousStudyDownloading->displaySet);
 
         delete structPreviousStudyDownloading;
     }
@@ -326,8 +325,10 @@ bool HangingProtocolManager::isPreviousStudyForHangingProtocol(Study *study)
     return m_studiesDownloading->contains(study->getInstanceUID());
 }
 
-void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet)
+void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, HangingProtocolDisplaySet *displaySet)
 {
+    Series *series = displaySet->getImageSet()->getSeriesToDisplay();
+
     if (series)
     {
         if (series->isViewable() && series->getFirstVolume())

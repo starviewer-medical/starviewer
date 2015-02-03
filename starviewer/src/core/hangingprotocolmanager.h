@@ -97,7 +97,7 @@ private:
     bool isValidInstitution(HangingProtocol *protocol, const QString &institutionName);
 
     /// Mètode encarregat d'assignar l'input al viewer a partir de les especificacions del displaySet+imageSet.
-    void setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet);
+    void setInputToViewer(Q2DViewerWidget *viewerWidget, HangingProtocolDisplaySet *displaySet);
 
 private:
     /// Estructura per guardar les dades que es necessiten quan es rep que s'ha fusionat un pacient amb un nou estudi
