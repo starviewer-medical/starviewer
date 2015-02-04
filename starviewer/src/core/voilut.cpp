@@ -118,7 +118,7 @@ VoiLut VoiLut::inverse() const
             inverseLut.setColor(key, 1.0 - color.redF(), 1.0 - color.greenF(), 1.0 - color.blueF());
         }
 
-        return inverseLut;
+        return VoiLut(inverseLut, m_originalLutExplanation);
     }
 }
 
