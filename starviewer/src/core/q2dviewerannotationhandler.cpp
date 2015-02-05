@@ -52,22 +52,12 @@ void Q2DViewerAnnotationHandler::enableAnnotations(AnnotationFlags annotations)
 {
     m_enabledAnnotations |= annotations;
     refreshAnnotations();
-
-    if (m_2DViewer->hasInput())
-    {
-        m_2DViewer->render();
-    }
 }
 
 void Q2DViewerAnnotationHandler::disableAnnotations(AnnotationFlags annotations)
 {
     m_enabledAnnotations &= ~annotations;
     refreshAnnotations();
-
-    if (m_2DViewer->hasInput())
-    {
-        m_2DViewer->render();
-    }
 }
 
 void Q2DViewerAnnotationHandler::updateAnnotationsInformation(AnnotationFlags annotation)
