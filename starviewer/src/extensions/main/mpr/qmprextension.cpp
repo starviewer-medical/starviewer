@@ -154,8 +154,8 @@ void QMPRExtension::init()
     m_coronalReslice = 0;
 
     // Configurem les annotacions que volem veure
-    m_sagital2DView->removeAnnotation(PatientOrientationAnnotation | PatientInformationAnnotation | SliceAnnotation);
-    m_coronal2DView->removeAnnotation(PatientOrientationAnnotation | PatientInformationAnnotation | SliceAnnotation);
+    m_sagital2DView->removeAnnotation(PatientOrientationAnnotation | MainInformationAnnotation | SliceAnnotation);
+    m_coronal2DView->removeAnnotation(PatientOrientationAnnotation | MainInformationAnnotation | SliceAnnotation);
     showViewerInformation(m_viewerInformationToolButton->isChecked());
 
     m_sagital2DView->disableContextMenu();
@@ -464,10 +464,9 @@ void QMPRExtension::showScreenshotsExporterDialog()
 
 void QMPRExtension::showViewerInformation(bool show)
 {
-    m_axial2DView->enableAnnotation(VoiLutInformationAnnotation | PatientOrientationAnnotation | SliceAnnotation | PatientInformationAnnotation |
-                                    AcquisitionInformationAnnotation, show);
-    m_sagital2DView->enableAnnotation(VoiLutInformationAnnotation | AcquisitionInformationAnnotation, show);
-    m_coronal2DView->enableAnnotation(VoiLutInformationAnnotation | AcquisitionInformationAnnotation, show);
+    m_axial2DView->enableAnnotation(VoiLutAnnotation | PatientOrientationAnnotation | SliceAnnotation | MainInformationAnnotation, show);
+    m_sagital2DView->enableAnnotation(VoiLutAnnotation, show);
+    m_coronal2DView->enableAnnotation(VoiLutAnnotation, show);
 }
 
 void QMPRExtension::updateProjectionLabel()

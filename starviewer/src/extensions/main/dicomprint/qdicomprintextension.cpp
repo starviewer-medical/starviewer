@@ -57,9 +57,8 @@ QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
     configureInputValidator();
     initializeViewerTools();
     // Posem a punt les annotacions que volem veure al viewer
-    m_2DView->removeAnnotation(AllAnnotation);
-    m_2DView->enableAnnotation(VoiLutInformationAnnotation | PatientOrientationAnnotation | SliceAnnotation | PatientInformationAnnotation |
-                                AcquisitionInformationAnnotation, true);
+    m_2DView->removeAnnotation(AllAnnotations);
+    m_2DView->enableAnnotation(VoiLutAnnotation | PatientOrientationAnnotation | SliceAnnotation | MainInformationAnnotation, true);
 
     m_lastIDGroupedDICOMImagesToPrint = 0;
     m_thumbnailsPreviewWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
