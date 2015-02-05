@@ -1396,6 +1396,11 @@ void Q2DViewer::enableAnnotation(AnnotationFlags annotation, bool enable)
     {
         m_annotationsHandler->disableAnnotations(annotation);
     }
+
+    if (hasInput())
+    {
+        render();
+    }
 }
 
 void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
