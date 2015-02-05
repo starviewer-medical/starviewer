@@ -15,10 +15,20 @@
 #ifndef UDGANNOTATIONFLAGS_H
 #define UDGANNOTATIONFLAGS_H
 
+#include <QFlags>
+
 namespace udg {
 
-enum AnnotationFlag { NoAnnotation = 0x0, VoiLutInformationAnnotation = 0x1, PatientOrientationAnnotation = 0x2, SliceAnnotation = 0x8,
-                        PatientInformationAnnotation = 0x10, AcquisitionInformationAnnotation = 0x20, AllAnnotation = 0x7F };
+enum AnnotationFlag {
+    NoAnnotation = 0x0,
+    MainInformationAnnotation = 0x1,
+    AdditionalInformationAnnotation = 0x2,
+    VoiLutAnnotation = 0x4,
+    SliceAnnotation = 0x8,
+    PatientOrientationAnnotation = 0x10,
+    AllAnnotations = MainInformationAnnotation | AdditionalInformationAnnotation | VoiLutAnnotation | SliceAnnotation | PatientOrientationAnnotation
+};
+
 Q_DECLARE_FLAGS(AnnotationFlags, AnnotationFlag)
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AnnotationFlags)

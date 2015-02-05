@@ -42,7 +42,7 @@ public:
     void disableAnnotations(AnnotationFlags annotations);
 
     /// Updates annotations data, all by default, otherwise only the specified ones
-    void updateAnnotationsInformation(AnnotationFlags annotation = AllAnnotation);
+    void updateAnnotationsInformation(AnnotationFlags annotation = AllAnnotations);
 
     /// Methods to update different kind of annotations
     void updatePatientAnnotationInformation();

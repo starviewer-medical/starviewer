@@ -67,7 +67,7 @@ void Q2DViewerAnnotationHandler::updateAnnotationsInformation(AnnotationFlags an
         return;
     }
 
-    if (annotation.testFlag(VoiLutInformationAnnotation))
+    if (annotation.testFlag(VoiLutAnnotation))
     {
         updateVoiLutInformationAnnotation();
     }
@@ -127,7 +127,7 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
             }
         }
 
-        if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
+        if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
         {
             m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
             m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
@@ -161,7 +161,7 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotationInformation()
     }
     else
     {
-        if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
+        if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
         {
             updateLateralityAnnotationInformation();
         }
@@ -205,7 +205,7 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
         return;
     }
 
-    if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
+    if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
     {
         m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
         m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
@@ -239,7 +239,7 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
         }
     }
 
-    updateAnnotationsInformation(VoiLutInformationAnnotation | SliceAnnotation);
+    updateAnnotationsInformation(VoiLutAnnotation | SliceAnnotation);
 }
 
 void Q2DViewerAnnotationHandler::updateSliceAnnotation()
@@ -305,7 +305,7 @@ void Q2DViewerAnnotationHandler::updateLateralityAnnotationInformation()
 
 void Q2DViewerAnnotationHandler::updatePatientInformationAnnotation()
 {
-    if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
+    if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
     {
         // If we are viewing the original acquisition and acquisition time is present, show it as well
         if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
@@ -334,7 +334,7 @@ void Q2DViewerAnnotationHandler::updatePatientInformationAnnotation()
 
 void Q2DViewerAnnotationHandler::updateVoiLutInformationAnnotation()
 {
-    if (m_enabledAnnotations.testFlag(VoiLutInformationAnnotation))
+    if (m_enabledAnnotations.testFlag(VoiLutAnnotation))
     {
         int dimensions[3];
         m_2DViewer->getMainInput()->getDimensions(dimensions);

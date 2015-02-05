@@ -100,7 +100,7 @@ Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
     connect(newViewer, SIGNAL(selected(Q2DViewerWidget*)), SLOT(setSelectedViewer(Q2DViewerWidget*)));
     connect(newViewer, SIGNAL(manualSynchronizationStateChanged(bool)), SIGNAL(manualSynchronizationStateChanged(bool)));
     // Per defecte no li posem cap annotació
-    newViewer->getViewer()->removeAnnotation(AllAnnotation);
+    newViewer->getViewer()->removeAnnotation(AllAnnotations);
     newViewer->getViewer()->getPatientBrowserMenu()->setShowFusionOptions(true);
 
     emit viewerAdded(newViewer);
