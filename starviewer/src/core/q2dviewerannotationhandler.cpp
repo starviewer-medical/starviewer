@@ -48,17 +48,9 @@ Q2DViewerAnnotationHandler::~Q2DViewerAnnotationHandler()
     m_cornerAnnotations->Delete();
 }
 
-void Q2DViewerAnnotationHandler::enableAnnotation(AnnotationFlags annotation, bool enable)
+void Q2DViewerAnnotationHandler::enableAnnotations(AnnotationFlags annotations)
 {
-    if (enable)
-    {
-        m_enabledAnnotations = m_enabledAnnotations | annotation;
-    }
-    else
-    {
-        m_enabledAnnotations = m_enabledAnnotations & ~annotation;
-    }
-
+    m_enabledAnnotations |= annotations;
     refreshAnnotations();
 
     if (m_2DViewer->hasInput())
@@ -67,9 +59,15 @@ void Q2DViewerAnnotationHandler::enableAnnotation(AnnotationFlags annotation, bo
     }
 }
 
-void Q2DViewerAnnotationHandler::removeAnnotation(AnnotationFlags annotation)
+void Q2DViewerAnnotationHandler::disableAnnotations(AnnotationFlags annotations)
 {
-    enableAnnotation(annotation, false);
+    m_enabledAnnotations &= ~annotations;
+    refreshAnnotations();
+
+    if (m_2DViewer->hasInput())
+    {
+        m_2DViewer->render();
+    }
 }
 
 void Q2DViewerAnnotationHandler::updateAnnotationsInformation(AnnotationFlags annotation)

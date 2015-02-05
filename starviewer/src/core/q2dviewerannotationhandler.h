@@ -36,9 +36,10 @@ public:
     Q2DViewerAnnotationHandler(Q2DViewer *viewer);
     ~Q2DViewerAnnotationHandler();
 
-    /// Enables/disables visibility of the indicated annotations
-    void enableAnnotation(AnnotationFlags annotation, bool enable = true);
-    void removeAnnotation(AnnotationFlags annotation);
+    /// Enables the specified annotations. Unspecified annotations keep their current state.
+    void enableAnnotations(AnnotationFlags annotations);
+    /// Disables the specified annotations. Unspecified annotations keep their current state.
+    void disableAnnotations(AnnotationFlags annotations);
 
     /// Updates annotations data, all by default, otherwise only the specified ones
     void updateAnnotationsInformation(AnnotationFlags annotation = AllAnnotation);

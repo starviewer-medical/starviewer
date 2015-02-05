@@ -1388,7 +1388,14 @@ void Q2DViewer::updateDisplayExtents()
 
 void Q2DViewer::enableAnnotation(AnnotationFlags annotation, bool enable)
 {
-    m_annotationsHandler->enableAnnotation(annotation, enable);
+    if (enable)
+    {
+        m_annotationsHandler->enableAnnotations(annotation);
+    }
+    else
+    {
+        m_annotationsHandler->disableAnnotations(annotation);
+    }
 }
 
 void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
