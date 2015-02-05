@@ -60,19 +60,19 @@ void Q2DViewerAnnotationHandler::disableAnnotations(AnnotationFlags annotations)
     refreshAnnotations();
 }
 
-void Q2DViewerAnnotationHandler::updateAnnotationsInformation(AnnotationFlags annotation)
+void Q2DViewerAnnotationHandler::updateAnnotations(AnnotationFlags annotations)
 {
     if (!m_2DViewer->hasInput())
     {
         return;
     }
 
-    if (annotation.testFlag(VoiLutAnnotation))
+    if (annotations.testFlag(VoiLutAnnotation))
     {
         updateVoiLutInformationAnnotation();
     }
 
-    if (annotation.testFlag(SliceAnnotation))
+    if (annotations.testFlag(SliceAnnotation))
     {
         updateSliceAnnotationInformation();
     }
@@ -239,7 +239,7 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
         }
     }
 
-    updateAnnotationsInformation(VoiLutAnnotation | SliceAnnotation);
+    updateAnnotations(VoiLutAnnotation | SliceAnnotation);
 }
 
 void Q2DViewerAnnotationHandler::updateSliceAnnotation()

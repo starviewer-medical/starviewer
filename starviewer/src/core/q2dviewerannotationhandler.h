@@ -41,8 +41,8 @@ public:
     /// Disables the specified annotations. Unspecified annotations keep their current state.
     void disableAnnotations(AnnotationFlags annotations);
 
-    /// Updates annotations data, all by default, otherwise only the specified ones
-    void updateAnnotationsInformation(AnnotationFlags annotation = AllAnnotations);
+    /// Updates the specified annotations.
+    void updateAnnotations(AnnotationFlags annotations = AllAnnotations);
 
     /// Methods to update different kind of annotations
     void updatePatientAnnotationInformation();
