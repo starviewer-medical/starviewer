@@ -54,12 +54,14 @@ public:
 private:
     /// Refreshes the visibility of the annotations regarding the enabled flags
     void refreshAnnotations();
+
+    /// Updates the main information annotation.
+    void updateMainInformationAnnotation();
     
     /// Updates the slice annotations. It takes into account phases and slab thickness too
     void updateSliceAnnotation();
 
     void updateLateralityAnnotationInformation();
-    void updatePatientInformationAnnotation();
     void updateVoiLutInformationAnnotation();
     
     /// Returns the current slice location information, if any
@@ -91,7 +93,6 @@ private:
     QString m_lowerLeftText;
     QString m_lowerRightText;
     QString m_upperLeftText;
-    QString m_upperRightText;
 
     /// Image orientation labels (Right,Left,Posterior,Anterior,Inferior,Superior)
     QString m_patientOrientationText[4];
