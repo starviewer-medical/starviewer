@@ -1,17 +1,17 @@
 REM Call ecm configuration script to make sure EcmDir is set
 call "%ScriptsRoot%\config\ecm.cmd"
 
-set SourceDir=%UserProfile%\Downloads\threadweaver-5.0.0
+set SourceDir=%SystemDrive%\buildLibs-vs2013\threadweaver-5.3.0\threadweaver-5.3.0
 
 if %BuildType% == debug (
     set CMakeBuildType=Debug
     set BuildDir=%SourceDir%-build-debug
-    set InstallPrefix=%SystemDrive%/ThreadWeaver/5.0.0d
+    set InstallPrefix=%SystemDrive%/ThreadWeaver/5.3.0d
 )
 if %BuildType% == release (
     set CMakeBuildType=RelWithDebInfo
     set BuildDir=%SourceDir%-build-release
-    set InstallPrefix=%SystemDrive%/ThreadWeaver/5.0.0
+    set InstallPrefix=%SystemDrive%/ThreadWeaver/5.3.0
 )
 
 REM ============== Nothing should need to be changed below this line ==============

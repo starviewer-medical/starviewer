@@ -1,17 +1,17 @@
 REM Call vtk configuration script to make sure VtkDir is set
 call "%ScriptsRoot%\config\vtk.cmd"
 
-set SourceDir=%UserProfile%\Downloads\gdcm-2.4.3
+set SourceDir=%SystemDrive%\buildLibs-vs2013\gdcm-2.4.4\gdcm-2.4.4
 
 if %BuildType% == debug (
     set CMakeBuildType=Debug
     set BuildDir=%SourceDir%-build-debug
-    set InstallPrefix=%SystemDrive%/gdcm/2.4.3d
+    set InstallPrefix=%SystemDrive%/gdcm/2.4.4d
 )
 if %BuildType% == release (
     set CMakeBuildType=RelWithDebInfo
     set BuildDir=%SourceDir%-build-release
-    set InstallPrefix=%SystemDrive%/gdcm/2.4.3
+    set InstallPrefix=%SystemDrive%/gdcm/2.4.4
 )
 
 REM ============== Nothing should need to be changed below this line ==============
