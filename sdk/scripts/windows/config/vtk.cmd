@@ -1,4 +1,4 @@
-set SourceDir=%UserProfile%\Downloads\VTK-6.1.0
+set SourceDir=%SystemDrive%\buildLibs-vs2013\VTK-6.1.0\VTK-6.1.0
 
 if %BuildType% == debug (
     set CMakeBuildType=Debug

@@ -1,7 +1,7 @@
-set SourceDir=%UserProfile%\Downloads\extra-cmake-modules-1.0.0
+set SourceDir=%SystemDrive%\buildLibs-vs2013\threadweaver-5.3.0\extra-cmake-modules-1.3.0
 
 set BuildDir=%SourceDir%
-set InstallPrefix=%SystemDrive%/extra-cmake-modules/1.0.0
+set InstallPrefix=%SystemDrive%/extra-cmake-modules/1.3.0
 
 REM ============== Nothing should need to be changed below this line ==============
 
