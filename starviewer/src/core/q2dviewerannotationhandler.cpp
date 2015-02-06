@@ -67,6 +67,11 @@ void Q2DViewerAnnotationHandler::updateAnnotations(AnnotationFlags annotations)
         return;
     }
 
+    if (annotations.testFlag(MainInformationAnnotation))
+    {
+        updateMainInformationAnnotation();
+    }
+
     if (annotations.testFlag(VoiLutAnnotation))
     {
         updateVoiLutInformationAnnotation();
@@ -85,27 +90,6 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
         // TODO We only take the first image for the moment because we assume all belong to the same series
         Image *image = m_2DViewer->getMainInput()->getImage(0);
         Series *series = image->getParentSeries();
-        Study *study = series->getParentStudy();
-        Patient *patient = study->getParentPatient();
-
-        // Permanent information
-        QString seriesTime = series->getTimeAsString();
-        if (seriesTime.isEmpty())
-        {
-            seriesTime = "--:--";
-        }
-
-        m_upperRightText = series->getInstitutionName() + "\n";
-        m_upperRightText += patient->getFullName() + "\n";
-        m_upperRightText += QString("%1 %2 %3").arg(study->getPatientAge()).arg(patient->getSex()).arg(patient->getID());
-        m_upperRightText += "\n";
-        if (!study->getAccessionNumber().isEmpty())
-        {
-            m_upperRightText += QObject::tr("Acc: %1").arg(study->getAccessionNumber());
-        }
-        m_upperRightText += "\n";
-        m_upperRightText += study->getDate().toString(Qt::ISODate) + "\n";
-        m_upperRightText += seriesTime;
 
         if (series->getModality() == "MG")
         {
@@ -129,7 +113,6 @@ void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
 
         if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
         {
-            m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
             m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
         }
     }
@@ -168,7 +151,7 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotationInformation()
     }
 
     updateSliceAnnotation();
-    updatePatientInformationAnnotation();
+    updateMainInformationAnnotation();
 }
 
 void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
@@ -205,14 +188,14 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
         return;
     }
 
+    updateMainInformationAnnotation();
+
     if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
     {
-        m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
         m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
     }
     else
     {
-        m_cornerAnnotations->SetText(UpperRightCornerIndex, " ");
         m_cornerAnnotations->SetText(LowerRightCornerIndex, " ");
     }
 
@@ -240,6 +223,75 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
     }
 
     updateAnnotations(VoiLutAnnotation | SliceAnnotation);
+}
+
+void Q2DViewerAnnotationHandler::updateMainInformationAnnotation()
+{
+    Q_ASSERT(m_2DViewer->hasInput());
+
+    QString annotation;
+
+    if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
+    {
+        Image *image = m_2DViewer->getCurrentDisplayedImage();
+        Series *series = m_2DViewer->getMainInput()->getSeries();
+        Study *study = series->getParentStudy();
+        Patient *patient = study->getParentPatient();
+
+        QString institutionName = series->getInstitutionName();
+        QString patientName = patient->getFullName();
+        QString age = study->getPatientAge();
+        QString sex = patient->getSex();
+        QString patientId = patient->getID();
+        QString accessionNumber = study->getAccessionNumber();
+
+        if (!accessionNumber.isEmpty())
+        {
+            accessionNumber = QObject::tr("Acc: %1").arg(accessionNumber);
+        }
+
+        QString studyDate = study->getDate().toString(Qt::ISODate);
+        QString seriesTime = series->getTimeAsString();
+
+        if (seriesTime.isEmpty())
+        {
+            seriesTime = "--:--";
+        }
+
+        QString imageTime;
+
+        if (image)
+        {
+            imageTime = image->getFormattedImageTime();
+
+            if (imageTime.isEmpty())
+            {
+                imageTime = "--:--";
+            }
+        }
+
+        annotation = QString("%1\n"
+                             "%2\n"
+                             "%3 %4 %5\n"
+                             "%6\n"
+                             "%7\n"
+                             "%8\n"
+                             "%9")
+                .arg(institutionName)
+                .arg(patientName)
+                .arg(age).arg(sex).arg(patientId)
+                .arg(accessionNumber)
+                .arg(studyDate)
+                .arg(seriesTime)
+                .arg(imageTime)
+                .trimmed();
+    }
+    else
+    {
+        annotation = " ";
+    }
+
+    m_cornerAnnotations->SetText(UpperRightCornerIndex, annotation.toUtf8().constData());
 }
 
 void Q2DViewerAnnotationHandler::updateSliceAnnotation()
@@ -300,35 +352,6 @@ void Q2DViewerAnnotationHandler::updateLateralityAnnotationInformation()
     else
     {
         m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
-    }
-}
-
-void Q2DViewerAnnotationHandler::updatePatientInformationAnnotation()
-{
-    if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
-    {
-        // If we are viewing the original acquisition and acquisition time is present, show it as well
-        if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
-        {
-            Image *currentImage = m_2DViewer->getCurrentDisplayedImage();
-            if (currentImage)
-            {
-                QString imageTime = "\n" + currentImage->getFormattedImageTime();
-                if (imageTime.isEmpty())
-                {
-                    imageTime = "--:--";
-                }
-                m_cornerAnnotations->SetText(UpperRightCornerIndex, (m_upperRightText + imageTime).toUtf8().constData());
-            }
-            else
-            {
-                m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
-            }
-        }
-        else
-        {
-            m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
-        }
     }
 }
 
