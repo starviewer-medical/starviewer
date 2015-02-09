@@ -86,32 +86,10 @@ void Q2DViewerAnnotationHandler::updateAnnotations(AnnotationFlags annotations)
     {
         updateSliceAnnotation();
     }
-}
 
-void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
-{
-    // Get the current image orientation
-    PatientOrientation currentPatientOrientation = m_2DViewer->getCurrentDisplayedImagePatientOrientation();
-
-    // Indices relationship: 0:Left, 1:Bottom, 2:Right, 3:Top
-    m_patientOrientationText[LeftOrientationLabelIndex] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getRowDirectionLabel());
-    m_patientOrientationText[BottomOrientationLabelIndex] = currentPatientOrientation.getColumnDirectionLabel();
-    m_patientOrientationText[RightOrientationLabelIndex] = currentPatientOrientation.getRowDirectionLabel();
-    m_patientOrientationText[TopOrientationLabelIndex] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getColumnDirectionLabel());
-    
-    bool textActorShouldBeVisible = m_enabledAnnotations.testFlag(PatientOrientationAnnotation);
-
-    for (int i = 0; i < 4; ++i)
+    if (annotations.testFlag(PatientOrientationAnnotation))
     {
-        if (!m_patientOrientationText[i].isEmpty())
-        {
-            m_patientOrientationTextActor[i]->SetInput(m_patientOrientationText[i].toUtf8().constData());
-            m_patientOrientationTextActor[i]->SetVisibility(textActorShouldBeVisible);
-        }
-        else
-        {
-            m_patientOrientationTextActor[i]->SetVisibility(false);
-        }
+        updatePatientOrientationAnnotation();
     }
 }
 
@@ -126,29 +104,7 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
     updateAdditionalInformationAnnotation();
     updateVoiLutAnnotation();
     updateSliceAnnotation();
-
-    if (m_enabledAnnotations.testFlag(PatientOrientationAnnotation))
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            if (!m_patientOrientationText[j].isEmpty())
-            {
-                m_patientOrientationTextActor[j]->VisibilityOn();
-            }
-            else
-            {
-                // If label is empty, disable visibility as we don't have nothing to show
-                m_patientOrientationTextActor[j]->VisibilityOff();
-            }
-        }
-    }
-    else
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            m_patientOrientationTextActor[j]->VisibilityOff();
-        }
-    }
+    updatePatientOrientationAnnotation();
 }
 
 void Q2DViewerAnnotationHandler::updateMainInformationAnnotation()
@@ -321,6 +277,34 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
 
     m_cornerAnnotations->SetText(LowerLeftCornerIndex, annotation.toUtf8().constData());
 }
+
+void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
+{
+    // Get the current image orientation
+    PatientOrientation currentPatientOrientation = m_2DViewer->getCurrentDisplayedImagePatientOrientation();
+
+    QString patientOrientationText[4];
+    patientOrientationText[LeftOrientationLabelIndex] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getRowDirectionLabel());
+    patientOrientationText[BottomOrientationLabelIndex] = currentPatientOrientation.getColumnDirectionLabel();
+    patientOrientationText[RightOrientationLabelIndex] = currentPatientOrientation.getRowDirectionLabel();
+    patientOrientationText[TopOrientationLabelIndex] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getColumnDirectionLabel());
+
+    bool enabled = m_enabledAnnotations.testFlag(PatientOrientationAnnotation);
+
+    for (int i = 0; i < 4; ++i)
+    {
+        if (enabled && !patientOrientationText[i].isEmpty())
+        {
+            m_patientOrientationTextActor[i]->SetInput(patientOrientationText[i].toUtf8().constData());
+            m_patientOrientationTextActor[i]->VisibilityOn();
+        }
+        else
+        {
+            m_patientOrientationTextActor[i]->VisibilityOff();
+        }
+    }
+}
+
 
 QString Q2DViewerAnnotationHandler::getStandardAdditionalInformation() const
 {

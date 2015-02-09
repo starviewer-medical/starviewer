@@ -44,9 +44,6 @@ public:
     /// Updates the specified annotations.
     void updateAnnotations(AnnotationFlags annotations = AllAnnotations);
 
-    /// Updates image orientation labels
-    void updatePatientOrientationAnnotation();
-
 private:
     /// Refreshes the visibility of the annotations regarding the enabled flags
     void refreshAnnotations();
@@ -59,6 +56,8 @@ private:
     void updateVoiLutAnnotation();
     /// Updates the slice annotation.
     void updateSliceAnnotation();
+    /// Updates the image orientation labels.
+    void updatePatientOrientationAnnotation();
 
     /// Returns the additional information in the general case.
     QString getStandardAdditionalInformation() const;
@@ -86,9 +85,6 @@ private:
     
     /// Actor to handle the corner annotations
     vtkCornerAnnotation *m_cornerAnnotations;
-
-    /// Image orientation labels (Right,Left,Posterior,Anterior,Inferior,Superior)
-    QString m_patientOrientationText[4];
 
     /// Image orientation text actors
     vtkTextActor *m_patientOrientationTextActor[4];
