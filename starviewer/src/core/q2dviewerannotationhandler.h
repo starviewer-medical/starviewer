@@ -45,9 +45,6 @@ public:
     void updateAnnotations(AnnotationFlags annotations = AllAnnotations);
 
 private:
-    /// Refreshes the visibility of the annotations regarding the enabled flags
-    void refreshAnnotations();
-
     /// Updates the main information annotation.
     void updateMainInformationAnnotation();
     /// Updates the additional information annotation.
