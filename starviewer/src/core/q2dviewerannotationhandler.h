@@ -58,11 +58,11 @@ private:
     void updateMainInformationAnnotation();
     /// Updates the additional information annotation.
     void updateAdditionalInformationAnnotation();
+    /// Updates the VOI LUT annotation.
+    void updateVoiLutAnnotation();
     
     /// Updates the slice annotations. It takes into account phases and slab thickness too
     void updateSliceAnnotation();
-
-    void updateVoiLutInformationAnnotation();
 
     /// Returns the additional information in the general case.
     QString getStandardAdditionalInformation() const;
@@ -70,6 +70,8 @@ private:
     QString getMammographyAdditionalInformation() const;
     /// Returns a label that describes the given series. Protocol and description information is used.
     QString getSeriesDescriptiveLabel(Series *series) const;
+    /// Returns the current VOI LUT string.
+    QString getVoiLutString() const;
     
     /// Returns the current slice location information, if any
     QString getSliceLocationAnnotation();
@@ -83,9 +85,6 @@ private:
     /// Adds the text actors to the viewer
     void addActors();
 
-    /// Returns the current VOI LUT string.
-    QString getVoiLutString() const;
-
 private:
     /// Viewer we are handling
     Q2DViewer *m_2DViewer;
@@ -95,7 +94,6 @@ private:
 
     /// The strings for each corner annotation
     QString m_lowerLeftText;
-    QString m_upperLeftText;
 
     /// Image orientation labels (Right,Left,Posterior,Anterior,Inferior,Superior)
     QString m_patientOrientationText[4];
