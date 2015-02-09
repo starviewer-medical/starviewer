@@ -241,18 +241,33 @@ void ViewersLayout::toggleMaximization(Q2DViewerWidget *viewer)
         viewer->raise();
         m_layout->invalidate();
 
-        for (int i = 0; i < m_layout->count(); i++)
+        foreach (Q2DViewerWidget *occludedViewer, getViewersInsideGeometry(geometry))
         {
-            Q2DViewerWidget *occludedViewer = qobject_cast<Q2DViewerWidget*>(m_layout->itemAt(i)->widget());
-            QRectF occludedGeometry = m_layout->geometryAt(i);
-
-            if (occludedViewer != viewer && geometry.contains(occludedGeometry))
+            if (occludedViewer != viewer)
             {
                 hideViewer(occludedViewer);
                 m_maximizedViewers[viewer].occludedViewers.insert(occludedViewer);
             }
         }
     }
+}
+
+QList<Q2DViewerWidget*> ViewersLayout::getViewersInsideGeometry(const QRectF &geometry)
+{
+    QList<Q2DViewerWidget*> viewers;
+
+    for (int i = 0; i < m_layout->count(); i++)
+    {
+        Q2DViewerWidget *occludedViewer = qobject_cast<Q2DViewerWidget*>(m_layout->itemAt(i)->widget());
+        QRectF occludedGeometry = m_layout->geometryAt(i);
+
+        if (geometry.contains(occludedGeometry))
+        {
+            viewers.append(occludedViewer);
+        }
+    }
+
+    return viewers;
 }
 
 void ViewersLayout::cleanUp()

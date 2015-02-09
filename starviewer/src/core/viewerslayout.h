@@ -104,6 +104,8 @@ private:
     /// Performs the needed actions to show the given viewer of the current layout
     void showViewer(Q2DViewerWidget *viewer);
 
+    QList<Q2DViewerWidget *> getViewersInsideGeometry(const QRectF &geometry);
+
 private:
     RelativeGeometryLayout *m_layout;
 
