@@ -51,13 +51,13 @@ Q2DViewerAnnotationHandler::~Q2DViewerAnnotationHandler()
 void Q2DViewerAnnotationHandler::enableAnnotations(AnnotationFlags annotations)
 {
     m_enabledAnnotations |= annotations;
-    refreshAnnotations();
+    updateAnnotations();
 }
 
 void Q2DViewerAnnotationHandler::disableAnnotations(AnnotationFlags annotations)
 {
     m_enabledAnnotations &= ~annotations;
-    refreshAnnotations();
+    updateAnnotations();
 }
 
 void Q2DViewerAnnotationHandler::updateAnnotations(AnnotationFlags annotations)
@@ -91,20 +91,6 @@ void Q2DViewerAnnotationHandler::updateAnnotations(AnnotationFlags annotations)
     {
         updatePatientOrientationAnnotation();
     }
-}
-
-void Q2DViewerAnnotationHandler::refreshAnnotations()
-{
-    if (!m_2DViewer->hasInput())
-    {
-        return;
-    }
-
-    updateMainInformationAnnotation();
-    updateAdditionalInformationAnnotation();
-    updateVoiLutAnnotation();
-    updateSliceAnnotation();
-    updatePatientOrientationAnnotation();
 }
 
 void Q2DViewerAnnotationHandler::updateMainInformationAnnotation()
