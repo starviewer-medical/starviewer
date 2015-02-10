@@ -49,6 +49,7 @@ public:
 
     /// Fa un layout regular amb les files i columnes indicades
     void setGrid(int rows, int columns);
+    void setGridInArea(int rows, int columns, const QRectF &geometry);
 
     /// Afegeix un nou visualitzador amb la geometria indicada
     Q2DViewerWidget* addViewer(const QString &geometry);
@@ -57,6 +58,7 @@ public:
     /// deixant-lo en l'estat inicial, com si acabéssim de crear l'objecte
     void cleanUp();
 
+    QRectF convertGeometry(const QRectF &viewerGeometry, const QRectF &newGeometry);
 public slots:
     /// Marquem com a seleccionat el viewer passat per paràmetre
     void setSelectedViewer(Q2DViewerWidget *viewer);
