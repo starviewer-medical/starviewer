@@ -72,6 +72,11 @@ void Q2DViewerAnnotationHandler::updateAnnotations(AnnotationFlags annotations)
         updateMainInformationAnnotation();
     }
 
+    if (annotations.testFlag(AdditionalInformationAnnotation))
+    {
+        updateAdditionalInformationAnnotation();
+    }
+
     if (annotations.testFlag(VoiLutAnnotation))
     {
         updateVoiLutInformationAnnotation();
@@ -80,45 +85,6 @@ void Q2DViewerAnnotationHandler::updateAnnotations(AnnotationFlags annotations)
     if (annotations.testFlag(SliceAnnotation))
     {
         updateSliceAnnotationInformation();
-    }
-}
-
-void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
-{
-    if (m_2DViewer->hasInput())
-    {
-        // TODO We only take the first image for the moment because we assume all belong to the same series
-        Image *image = m_2DViewer->getMainInput()->getImage(0);
-        Series *series = image->getParentSeries();
-
-        if (series->getModality() == "MG")
-        {
-            m_lowerRightText.clear();
-        }
-        else
-        {
-            m_lowerRightText = getSeriesDescriptiveLabel(series);
-            
-            if (m_2DViewer->getNumberOfInputs() == 2)
-            {
-                int balance = m_2DViewer->getFusionBalance();
-                const QString &modality0 = m_2DViewer->getInput(0)->getModality();
-                const QString &modality1 = m_2DViewer->getInput(1)->getModality();
-                QString balanceText = QString("%1% %2 + %3% %4").arg(100 - balance).arg(modality0).arg(balance).arg(modality1);
-                QString fusedLabel = getSeriesDescriptiveLabel(m_2DViewer->getInput(1)->getImage(0)->getParentSeries());
-
-                m_lowerRightText = QObject::tr("Fusion: ") + balanceText + "\n" + m_lowerRightText + " +\n" + fusedLabel;
-            }
-        }
-
-        if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
-        {
-            m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
-        }
-    }
-    else
-    {
-        DEBUG_LOG("There's no input. Patient information cannot be initialized.");
     }
 }
 
@@ -134,24 +100,11 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotationInformation()
     {
         // Specific mammography annotations should be displayed
         m_enabledAnnotations = m_enabledAnnotations & ~SliceAnnotation;
-        
-        QString laterality = image->getImageLaterality();
-        QString projection = mammographyImageHelper.getMammographyProjectionLabel(image);
-
-        m_lowerRightText = laterality + " " + projection;
-        
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
-    }
-    else
-    {
-        if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
-        {
-            updateLateralityAnnotationInformation();
-        }
     }
 
     updateSliceAnnotation();
     updateMainInformationAnnotation();
+    updateAdditionalInformationAnnotation();
 }
 
 void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
@@ -189,15 +142,7 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
     }
 
     updateMainInformationAnnotation();
-
-    if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
-    {
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
-    }
-    else
-    {
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, " ");
-    }
+    updateAdditionalInformationAnnotation();
 
     if (m_enabledAnnotations.testFlag(PatientOrientationAnnotation))
     {
@@ -294,6 +239,26 @@ void Q2DViewerAnnotationHandler::updateMainInformationAnnotation()
     m_cornerAnnotations->SetText(UpperRightCornerIndex, annotation.toUtf8().constData());
 }
 
+void Q2DViewerAnnotationHandler::updateAdditionalInformationAnnotation()
+{
+    Q_ASSERT(m_2DViewer->hasInput());
+
+    MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
+    QString annotation;
+
+    if (mammographyImageHelper.isStandardMammographyImage(image))
+    {
+        annotation = getMammographyAdditionalInformation();
+    }
+    else
+    {
+        annotation = getStandardAdditionalInformation();
+    }
+
+    m_cornerAnnotations->SetText(LowerRightCornerIndex, annotation.toUtf8().constData());
+}
+
 void Q2DViewerAnnotationHandler::updateSliceAnnotation()
 {
     Q_ASSERT(m_cornerAnnotations);
@@ -333,28 +298,6 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
     }
 }
 
-void Q2DViewerAnnotationHandler::updateLateralityAnnotationInformation()
-{
-    QChar laterality = m_2DViewer->getCurrentDisplayedImageLaterality();
-    if (!laterality.isNull() && !laterality.isSpace())
-    {
-        QString lateralityAnnotation = "Lat: " + QString(laterality);
-            
-        if (m_lowerRightText.trimmed().isEmpty())
-        {
-            m_cornerAnnotations->SetText(LowerRightCornerIndex, lateralityAnnotation.toUtf8().constData());
-        }
-        else
-        {
-            m_cornerAnnotations->SetText(LowerRightCornerIndex, (lateralityAnnotation + "\n" + m_lowerRightText.trimmed()).toUtf8().constData());
-        }
-    }
-    else
-    {
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
-    }
-}
-
 void Q2DViewerAnnotationHandler::updateVoiLutInformationAnnotation()
 {
     if (m_enabledAnnotations.testFlag(VoiLutAnnotation))
@@ -373,6 +316,73 @@ void Q2DViewerAnnotationHandler::updateVoiLutInformationAnnotation()
     }
     
     m_cornerAnnotations->SetText(UpperLeftCornerIndex, m_upperLeftText.toUtf8().constData());
+}
+
+QString Q2DViewerAnnotationHandler::getStandardAdditionalInformation() const
+{
+    if (m_enabledAnnotations.testFlag(AdditionalInformationAnnotation))
+    {
+        QString lateralityString;
+        QChar laterality = m_2DViewer->getCurrentDisplayedImageLaterality();
+
+        if (!laterality.isNull() && !laterality.isSpace())
+        {
+            lateralityString = QString("Lat: %1").arg(laterality);
+        }
+
+        QString seriesLabel = getSeriesDescriptiveLabel(m_2DViewer->getMainInput()->getSeries());
+        QString fusionBalance;
+
+        if (m_2DViewer->getNumberOfInputs() == 2)
+        {
+            int balance = m_2DViewer->getFusionBalance();
+            const QString &modality0 = m_2DViewer->getInput(0)->getModality();
+            const QString &modality1 = m_2DViewer->getInput(1)->getModality();
+            fusionBalance = QObject::tr("Fusion: ") + QString("%1% %2 + %3% %4").arg(100 - balance).arg(modality0).arg(balance).arg(modality1);
+            seriesLabel += " +\n" + getSeriesDescriptiveLabel(m_2DViewer->getInput(1)->getSeries());
+        }
+
+        return QString("%1\n"
+                       "%2\n"
+                       "%3")
+                .arg(lateralityString)
+                .arg(fusionBalance)
+                .arg(seriesLabel)
+                .trimmed();
+    }
+    else
+    {
+        return " ";
+    }
+}
+
+QString Q2DViewerAnnotationHandler::getMammographyAdditionalInformation() const
+{
+    MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
+
+    return QString("%1 %2").arg(image->getImageLaterality()).arg(mammographyImageHelper.getMammographyProjectionLabel(image));
+}
+
+QString Q2DViewerAnnotationHandler::getSeriesDescriptiveLabel(Series *series) const
+{
+    if (!series)
+    {
+        return QString();
+    }
+
+    // If protocol and description are equal, protocol will be set, otherwise they will be merged
+    QString protocolName = series->getProtocolName();
+    QString description = series->getDescription();
+
+    QString label = protocolName;
+
+    if (description != protocolName)
+    {
+        label += "\n" + description;
+    }
+
+    return label;
 }
 
 QString Q2DViewerAnnotationHandler::getSliceLocationAnnotation()
@@ -407,27 +417,6 @@ QString Q2DViewerAnnotationHandler::getSliceLocationAnnotation()
     }
 
     return sliceLocation;
-}
-
-QString Q2DViewerAnnotationHandler::getSeriesDescriptiveLabel(Series *series) const
-{
-    if (!series)
-    {
-        return QString();
-    }
-    
-    // If protocol and description are equal, protocol will be set, otherwise they will be merged
-    QString protocolName = series->getProtocolName();
-    QString description = series->getDescription();
-    
-    QString label = protocolName;
-    
-    if (description != protocolName)
-    {
-        label += "\n" + description;
-    }
-
-    return label;
 }
 
 void Q2DViewerAnnotationHandler::createAnnotations()
