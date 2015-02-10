@@ -159,7 +159,7 @@ void Q2DViewerAnnotationHandler::updateMainInformationAnnotation()
         annotation = " ";
     }
 
-    m_cornerAnnotations->SetText(UpperRightCornerIndex, annotation.toUtf8().constData());
+    m_cornerAnnotations->SetText(getCornerForAnnotationType(MainInformationAnnotation), annotation.toUtf8().constData());
 }
 
 void Q2DViewerAnnotationHandler::updateAdditionalInformationAnnotation()
@@ -179,7 +179,7 @@ void Q2DViewerAnnotationHandler::updateAdditionalInformationAnnotation()
         annotation = getStandardAdditionalInformation();
     }
 
-    m_cornerAnnotations->SetText(LowerRightCornerIndex, annotation.toUtf8().constData());
+    m_cornerAnnotations->SetText(getCornerForAnnotationType(AdditionalInformationAnnotation), annotation.toUtf8().constData());
 }
 
 void Q2DViewerAnnotationHandler::updateVoiLutAnnotation()
@@ -208,7 +208,7 @@ void Q2DViewerAnnotationHandler::updateVoiLutAnnotation()
         annotation = " ";
     }
 
-    m_cornerAnnotations->SetText(UpperLeftCornerIndex, annotation.toUtf8().constData());
+    m_cornerAnnotations->SetText(getCornerForAnnotationType(VoiLutAnnotation), annotation.toUtf8().constData());
 }
 
 void Q2DViewerAnnotationHandler::updateSliceAnnotation()
@@ -261,7 +261,7 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
         annotation = " ";
     }
 
-    m_cornerAnnotations->SetText(LowerLeftCornerIndex, annotation.toUtf8().constData());
+    m_cornerAnnotations->SetText(getCornerForAnnotationType(SliceAnnotation), annotation.toUtf8().constData());
 }
 
 void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
@@ -434,6 +434,40 @@ QString Q2DViewerAnnotationHandler::getSliceLocationString() const
     }
 
     return sliceLocation;
+}
+
+Q2DViewerAnnotationHandler::CornerAnnotationIndexType Q2DViewerAnnotationHandler::getCornerForAnnotationType(AnnotationFlag annotation) const
+{
+    MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
+
+    // #1349: If displaying a mammography and the posterior side is at the right, then swap annotation sides so that patient information doesn't cover the image
+    if (mammographyImageHelper.isStandardMammographyImage(image) &&
+            m_2DViewer->getCurrentDisplayedImagePatientOrientation().getRowDirectionLabel() == PatientOrientation::PosteriorLabel)
+    {
+        switch (annotation)
+        {
+            case MainInformationAnnotation: return UpperLeftCornerIndex;
+            case AdditionalInformationAnnotation: return LowerLeftCornerIndex;
+            case VoiLutAnnotation: return UpperRightCornerIndex;
+            case SliceAnnotation: return LowerRightCornerIndex;
+        }
+    }
+    else
+    {
+        switch (annotation)
+        {
+            case MainInformationAnnotation: return UpperRightCornerIndex;
+            case AdditionalInformationAnnotation: return LowerRightCornerIndex;
+            case VoiLutAnnotation: return UpperLeftCornerIndex;
+            case SliceAnnotation: return LowerLeftCornerIndex;
+        }
+    }
+
+    // Default case that should not be reached
+    DEBUG_LOG(QString("Asked for the corner of an unexpected annotation flag: %1. Returning default value.").arg(annotation));
+    WARN_LOG(QString("Asked for the corner of an unexpected annotation flag: %1. Returning default value.").arg(annotation));
+    return LowerLeftCornerIndex;
 }
 
 void Q2DViewerAnnotationHandler::createAnnotations()
