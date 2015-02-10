@@ -896,7 +896,7 @@ void Q2DViewer::updateCamera()
             m_isImageFlipped = !m_isImageFlipped;
         }
         emit cameraChanged();
-        m_annotationsHandler->updateAnnotations(PatientOrientationAnnotation);
+        m_annotationsHandler->updateAnnotations();
     }
     else
     {
@@ -980,7 +980,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         // The display shutter must be updated before the default presets
         if (dimension == SpatialDimension)
         {
-            m_annotationsHandler->updateAnnotations(PatientOrientationAnnotation);
+            m_annotationsHandler->updateAnnotations();
 
             if (isThickSlabActive())
             {

@@ -45,6 +45,11 @@ public:
     void updateAnnotations(AnnotationFlags annotations = AllAnnotations);
 
 private:
+    /// Enumerated values to distinguish the corresponding index of each annotation
+    enum CornerAnnotationIndexType { LowerLeftCornerIndex = 0, LowerRightCornerIndex = 1, UpperLeftCornerIndex = 2, UpperRightCornerIndex = 3 };
+    enum OrientationLabelIndexType { LeftOrientationLabelIndex = 0, BottomOrientationLabelIndex = 1, RightOrientationLabelIndex = 2, TopOrientationLabelIndex = 3 };
+
+private:
     /// Updates the main information annotation.
     void updateMainInformationAnnotation();
     /// Updates the additional information annotation.
@@ -67,6 +72,9 @@ private:
     /// Returns the current slice location string, if any.
     QString getSliceLocationString() const;
 
+    /// Returns the corner where the annotation should go, depending on the annotation type and the current image.
+    CornerAnnotationIndexType getCornerForAnnotationType(AnnotationFlag annotation) const;
+
     /// Creates all the annotation actors
     void createAnnotations();
     
@@ -86,10 +94,6 @@ private:
     /// Image orientation text actors
     vtkTextActor *m_patientOrientationTextActor[4];
 
-    /// Enumerated values to distinguish the corresponding index of each annotation
-    enum CornerAnnotationIndexType { LowerLeftCornerIndex = 0, LowerRightCornerIndex = 1, UpperLeftCornerIndex = 2, UpperRightCornerIndex = 3 };
-    enum OrienationLabelIndexType { LeftOrientationLabelIndex = 0, BottomOrientationLabelIndex = 1, RightOrientationLabelIndex = 2, TopOrientationLabelIndex = 3 }; 
-    
     /// Flags to keep which annotations are enabled
     AnnotationFlags m_enabledAnnotations;
 };
