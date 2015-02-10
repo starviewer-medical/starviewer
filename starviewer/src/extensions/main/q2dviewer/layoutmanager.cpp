@@ -70,7 +70,8 @@ void LayoutManager::applyProperLayoutChoice()
 
     if (!layoutApplied)
     {
-        applyLayoutCandidates(getLayoutCandidates(m_patient), m_patient);
+        Study *mostRecentStudy = m_patient->getStudies().first();
+        applyLayoutCandidates(getLayoutCandidates(mostRecentStudy), mostRecentStudy);
     }
 }
 
@@ -128,21 +129,21 @@ void LayoutManager::cancelOngoingOperations()
     m_hangingProtocolManager->cancelHangingProtocolDownloading();
 }
 
-QList<StudyLayoutConfig> LayoutManager::getLayoutCandidates(Patient *patient)
+QList<StudyLayoutConfig> LayoutManager::getLayoutCandidates(Study *study)
 {
     QList<StudyLayoutConfig> configurationCandidates;
     
-    if (!patient)
+    if (!study)
     {
         return configurationCandidates;
     }
     
-    QStringList patientModalities = patient->getModalities();
+    QStringList studyModalities = study->getModalities();
     StudyLayoutConfigSettingsManager settingsManager;
     
     foreach (const StudyLayoutConfig &currentConfig, settingsManager.getConfigList())
     {
-        if (patientModalities.contains(currentConfig.getModality(), Qt::CaseInsensitive))
+        if (studyModalities.contains(currentConfig.getModality(), Qt::CaseInsensitive))
         {
             configurationCandidates << currentConfig;
         }
@@ -151,15 +152,15 @@ QList<StudyLayoutConfig> LayoutManager::getLayoutCandidates(Patient *patient)
     return configurationCandidates;
 }
 
-void LayoutManager::applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient)
+void LayoutManager::applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Study *study)
 {
-    StudyLayoutConfig layoutToApply = getBestLayoutCandidate(candidates, patient);
+    StudyLayoutConfig layoutToApply = getBestLayoutCandidate(candidates, study);
 
     StudyLayoutMapper mapper;
-    mapper.applyConfig(layoutToApply, m_layout, patient);
+    mapper.applyConfig(layoutToApply, m_layout, study);
 }
 
-StudyLayoutConfig LayoutManager::getBestLayoutCandidate(const QList<StudyLayoutConfig> &candidates, Patient *patient)
+StudyLayoutConfig LayoutManager::getBestLayoutCandidate(const QList<StudyLayoutConfig> &candidates, Study *study)
 {
     StudyLayoutConfig bestLayout;
 
@@ -180,7 +181,7 @@ StudyLayoutConfig LayoutManager::getBestLayoutCandidate(const QList<StudyLayoutC
     {
         // If no candidate found, we choose a default configuration.
         // This default configuration is not yet configurable through settings, could be done in a future enhancement.
-        bestLayout = StudyLayoutConfigsLoader::getDefaultConfigForModality(patient->getModalities().first());
+        bestLayout = StudyLayoutConfigsLoader::getDefaultConfigForModality(study->getModalities().first());
     }
 
     return bestLayout;

@@ -75,14 +75,14 @@ private:
 
     /// Auto Layouts
 
-    /// Returns a list of StudyLayoutConfig corresponding to the given Patient
-    QList<StudyLayoutConfig> getLayoutCandidates(Patient *patient);
+    /// Returns a list of StudyLayoutConfig corresponding to the given Study
+    QList<StudyLayoutConfig> getLayoutCandidates(Study *study);
 
-    /// Applies the proper layout candidate from the list for the given Patient
-    void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient);
+    /// Applies the proper layout candidate from the list for the given Study
+    void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Study *study);
 
-    /// Returns the layout config that best suits for the given candidates and patient
-    StudyLayoutConfig getBestLayoutCandidate(const QList<StudyLayoutConfig> &candidates, Patient *patient);
+    /// Returns the layout config that best suits for the given candidates and Study
+    StudyLayoutConfig getBestLayoutCandidate(const QList<StudyLayoutConfig> &candidates, Study *study);
 
     /// Merges the StudyLayoutConfig items from the list into a single one. Criteria for merge will be as follows
     /// In case UnfoldType are different, LeftToRightFirst will prevail

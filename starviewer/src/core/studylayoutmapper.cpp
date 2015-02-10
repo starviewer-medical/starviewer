@@ -32,9 +32,9 @@ StudyLayoutMapper::~StudyLayoutMapper()
 {
 }
 
-void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Patient *patient)
+void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study)
 {
-    if (!layout || !patient)
+    if (!layout || !study)
     {
         return;
     }
@@ -42,15 +42,10 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
     // Primer trobem els estudis que compleixin amb els requisits
     QString configModality = config.getModality();
     QList<Study*> matchingStudies;
-    if (configModality.isEmpty())
+    if (configModality.isEmpty() || study->getModalities().contains(configModality))
     {
         // If modality is empty it means "any modality", so we'll apply the layout to all the studies
-        matchingStudies = patient->getStudies();
-    }
-    else
-    {
-        // Applying only to studies where configuration's modality matches
-        matchingStudies = patient->getStudiesByModality(configModality);
+        matchingStudies << study;
     }
     
     if (matchingStudies.isEmpty())

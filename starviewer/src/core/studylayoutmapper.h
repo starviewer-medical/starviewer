@@ -33,7 +33,7 @@ public:
     ~StudyLayoutMapper();
 
     /// Aplica la configuració sobre el layout amb els estudis del pacient donats
-    void applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Patient *patient);
+    void applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study);
 
 private:
     /// Ens retorna la llista de volums amb la corresponent imatge que hem de col·locar segons la configuració i els estudis obtinguts a getMatchingStudies()
