@@ -606,8 +606,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
 
     printVolumeInformation();
 
-    m_annotationsHandler->updateAnnotations(MainInformationAnnotation);
-    m_annotationsHandler->updatePatientAnnotationInformation();
+    m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation);
 
     loadOverlays(volumes.first());
 
@@ -2004,8 +2003,7 @@ void Q2DViewer::setFusionBalance(int balance)
         this->setVolumeOpacity(1, 1.0);
     }
 
-    m_annotationsHandler->updateAnnotations(MainInformationAnnotation);
-    m_annotationsHandler->updatePatientAnnotationInformation();
+    m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation);
     this->render();
 }
 

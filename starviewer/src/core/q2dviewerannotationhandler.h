@@ -45,7 +45,6 @@ public:
     void updateAnnotations(AnnotationFlags annotations = AllAnnotations);
 
     /// Methods to update different kind of annotations
-    void updatePatientAnnotationInformation();
     void updateSliceAnnotationInformation();
 
     /// Updates image orientation labels
@@ -57,18 +56,23 @@ private:
 
     /// Updates the main information annotation.
     void updateMainInformationAnnotation();
+    /// Updates the additional information annotation.
+    void updateAdditionalInformationAnnotation();
     
     /// Updates the slice annotations. It takes into account phases and slab thickness too
     void updateSliceAnnotation();
 
-    void updateLateralityAnnotationInformation();
     void updateVoiLutInformationAnnotation();
+
+    /// Returns the additional information in the general case.
+    QString getStandardAdditionalInformation() const;
+    /// Returns the additional information in the specific case of a MG image.
+    QString getMammographyAdditionalInformation() const;
+    /// Returns a label that describes the given series. Protocol and description information is used.
+    QString getSeriesDescriptiveLabel(Series *series) const;
     
     /// Returns the current slice location information, if any
     QString getSliceLocationAnnotation();
-    
-    /// Gets a label that describes the given series. Protocol and description information is being used.
-    QString getSeriesDescriptiveLabel(Series *series) const;
     
     /// Creates all the annotation actors
     void createAnnotations();
@@ -91,7 +95,6 @@ private:
 
     /// The strings for each corner annotation
     QString m_lowerLeftText;
-    QString m_lowerRightText;
     QString m_upperLeftText;
 
     /// Image orientation labels (Right,Left,Posterior,Anterior,Inferior,Superior)
