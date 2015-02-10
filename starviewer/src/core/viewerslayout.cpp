@@ -281,17 +281,23 @@ QList<Q2DViewerWidget*> ViewersLayout::getViewersInsideGeometry(const QRectF &ge
 
 void ViewersLayout::cleanUp()
 {
+    cleanUp(QRectF(0.0, 0.0, 1.0, 1.0));
+}
+
+void ViewersLayout::cleanUp(const QRectF &geometry)
+{
     // No hi ha cap visor seleccionat
     setSelectedViewer(0);
 
+    QList<Q2DViewerWidget*> viewers = getViewersInsideGeometry(geometry);
+
     // Eliminem tots els widgets que contingui viewers layout
     // i els propis widgets
-    while (m_layout->count() > 0)
+    while (viewers.size() > 0)
     {
-        QLayoutItem *item = m_layout->takeAt(0);
-        Q2DViewerWidget *viewer = qobject_cast<Q2DViewerWidget*>(item->widget());
+        Q2DViewerWidget *viewer = viewers.takeFirst();
+        m_layout->removeWidget(viewer);
         deleteQ2DViewerWidget(viewer);
-        delete item;
     }
 
     // Clean maximization data

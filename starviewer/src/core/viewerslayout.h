@@ -57,6 +57,7 @@ public:
     /// Neteja el layout, eliminant tots els visors i geometries,
     /// deixant-lo en l'estat inicial, com si acabéssim de crear l'objecte
     void cleanUp();
+    void cleanUp(const QRectF &geometry);
 
     QRectF convertGeometry(const QRectF &viewerGeometry, const QRectF &newGeometry);
 public slots:
