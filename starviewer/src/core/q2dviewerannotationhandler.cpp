@@ -186,9 +186,12 @@ void Q2DViewerAnnotationHandler::updateVoiLutAnnotation()
 {
     Q_ASSERT(m_2DViewer->hasInput());
 
+    MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
     QString annotation;
 
-    if (m_enabledAnnotations.testFlag(VoiLutAnnotation))
+    // #1349: Disable the VOI LUT annotation when displaying a mammography
+    if (m_enabledAnnotations.testFlag(VoiLutAnnotation) && !mammographyImageHelper.isStandardMammographyImage(image))
     {
         int dimensions[3];
         m_2DViewer->getMainInput()->getDimensions(dimensions);
