@@ -17,6 +17,8 @@
 
 #include "patientorientation.h"
 
+class QRectF;
+
 namespace udg {
 
 class HangingProtocol;
@@ -67,6 +69,9 @@ public:
 
     /// Obtenir la posició del visualitzador
     QString getPosition() const;
+
+    /// Return geometry of the display set as QRectF
+    QRectF getGeometry() const;
 
     /// Obtenir la posició del pacient
     PatientOrientation getPatientOrientation() const;
