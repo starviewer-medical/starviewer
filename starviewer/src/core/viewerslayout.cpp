@@ -200,22 +200,19 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QRectF &geometry)
 
 void ViewersLayout::setSelectedViewer(Q2DViewerWidget *viewer)
 {
-    if (!viewer)
-    {
-        // Si "viewer" és nul, llavors entenem que no volem cap de seleccionat
-        m_selectedViewer = 0;
-        emit selectedViewerChanged(m_selectedViewer);
-        return;
-    }
-
     if (viewer != m_selectedViewer)
     {
         if (m_selectedViewer)
         {
             m_selectedViewer->setSelected(false);
         }
+
         m_selectedViewer = viewer;
-        m_selectedViewer->setSelected(true);
+
+        if (m_selectedViewer)
+        {
+            m_selectedViewer->setSelected(true);
+        }
         emit selectedViewerChanged(m_selectedViewer);
     }
 }
