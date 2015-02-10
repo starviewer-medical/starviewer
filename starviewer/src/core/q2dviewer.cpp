@@ -993,7 +993,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         }
 
         updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
-        m_annotationsHandler->updateSliceAnnotationInformation();
+        m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation | SliceAnnotation);
         updatePreferredImageOrientation();
 
         // Finally we emit the signal of the changed value and render the scene
@@ -1522,7 +1522,7 @@ void Q2DViewer::setSlabThickness(int thickness)
         updateDisplayExtents();
 
         updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
-        m_annotationsHandler->updateSliceAnnotationInformation();
+        m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation | SliceAnnotation);
         render();
 
         emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());

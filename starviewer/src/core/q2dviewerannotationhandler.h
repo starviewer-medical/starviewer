@@ -44,9 +44,6 @@ public:
     /// Updates the specified annotations.
     void updateAnnotations(AnnotationFlags annotations = AllAnnotations);
 
-    /// Methods to update different kind of annotations
-    void updateSliceAnnotationInformation();
-
     /// Updates image orientation labels
     void updatePatientOrientationAnnotation();
 
@@ -60,8 +57,7 @@ private:
     void updateAdditionalInformationAnnotation();
     /// Updates the VOI LUT annotation.
     void updateVoiLutAnnotation();
-    
-    /// Updates the slice annotations. It takes into account phases and slab thickness too
+    /// Updates the slice annotation.
     void updateSliceAnnotation();
 
     /// Returns the additional information in the general case.
@@ -72,10 +68,9 @@ private:
     QString getSeriesDescriptiveLabel(Series *series) const;
     /// Returns the current VOI LUT string.
     QString getVoiLutString() const;
-    
-    /// Returns the current slice location information, if any
-    QString getSliceLocationAnnotation();
-    
+    /// Returns the current slice location string, if any.
+    QString getSliceLocationString() const;
+
     /// Creates all the annotation actors
     void createAnnotations();
     
@@ -91,9 +86,6 @@ private:
     
     /// Actor to handle the corner annotations
     vtkCornerAnnotation *m_cornerAnnotations;
-
-    /// The strings for each corner annotation
-    QString m_lowerLeftText;
 
     /// Image orientation labels (Right,Left,Posterior,Anterior,Inferior,Superior)
     QString m_patientOrientationText[4];

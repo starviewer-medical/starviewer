@@ -84,27 +84,8 @@ void Q2DViewerAnnotationHandler::updateAnnotations(AnnotationFlags annotations)
 
     if (annotations.testFlag(SliceAnnotation))
     {
-        updateSliceAnnotationInformation();
+        updateSliceAnnotation();
     }
-}
-
-void Q2DViewerAnnotationHandler::updateSliceAnnotationInformation()
-{
-    Q_ASSERT(m_cornerAnnotations);
-    Q_ASSERT(m_2DViewer->hasInput());
-    
-    Image *image = m_2DViewer->getCurrentDisplayedImage();
-    
-    MammographyImageHelper mammographyImageHelper;
-    if (mammographyImageHelper.isStandardMammographyImage(image))
-    {
-        // Specific mammography annotations should be displayed
-        m_enabledAnnotations = m_enabledAnnotations & ~SliceAnnotation;
-    }
-
-    updateSliceAnnotation();
-    updateMainInformationAnnotation();
-    updateAdditionalInformationAnnotation();
 }
 
 void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
@@ -144,6 +125,7 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
     updateMainInformationAnnotation();
     updateAdditionalInformationAnnotation();
     updateVoiLutAnnotation();
+    updateSliceAnnotation();
 
     if (m_enabledAnnotations.testFlag(PatientOrientationAnnotation))
     {
@@ -167,8 +149,6 @@ void Q2DViewerAnnotationHandler::refreshAnnotations()
             m_patientOrientationTextActor[j]->VisibilityOff();
         }
     }
-
-    updateAnnotations(SliceAnnotation);
 }
 
 void Q2DViewerAnnotationHandler::updateMainInformationAnnotation()
@@ -291,41 +271,55 @@ void Q2DViewerAnnotationHandler::updateVoiLutAnnotation()
 
 void Q2DViewerAnnotationHandler::updateSliceAnnotation()
 {
-    Q_ASSERT(m_cornerAnnotations);
+    Q_ASSERT(m_2DViewer->hasInput());
 
-    if (m_enabledAnnotations.testFlag(SliceAnnotation))
+    MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
+    QString annotation;
+
+    if (m_enabledAnnotations.testFlag(SliceAnnotation) && !mammographyImageHelper.isStandardMammographyImage(image))
     {
-        QString lowerLeftText;
-        
-        lowerLeftText = getSliceLocationAnnotation();
-        
+        QString locationInfo = getSliceLocationString();
+
         // Setup the slice/slab annotation
-        lowerLeftText += QObject::tr("Slice: %1").arg(m_2DViewer->getCurrentSlice() + 1);
+        QString sliceInfo = QObject::tr("Slice: %1").arg(m_2DViewer->getCurrentSlice() + 1);
+
         if (m_2DViewer->isThickSlabActive())
         {
             // TODO We need a getLastSlabSlice() method on Q2Dviewer to avoid doing this computing
-            lowerLeftText += QObject::tr("-%1").arg(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness());
+            sliceInfo += QString("-%1").arg(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness());
         }
-        lowerLeftText += QObject::tr("/%1").arg(m_2DViewer->getNumberOfSlices());
+
+        sliceInfo += QString("/%1").arg(m_2DViewer->getNumberOfSlices());
         
+        QString phaseInfo;
+
         // If we have phases
         if (m_2DViewer->hasPhases())
         {
-            lowerLeftText += QObject::tr(" Phase: %1/%2").arg(m_2DViewer->getCurrentPhase() + 1).arg(m_2DViewer->getNumberOfPhases());
+            phaseInfo = QObject::tr(" Phase: %1/%2").arg(m_2DViewer->getCurrentPhase() + 1).arg(m_2DViewer->getNumberOfPhases());
         }
+
+        QString thicknessInfo;
         
         // Add slice thickness only if it is > 0.0mm
         if (m_2DViewer->getCurrentSliceThickness() > 0.0)
         {
-            lowerLeftText += QObject::tr(" Thickness: %1 mm").arg(m_2DViewer->getCurrentSliceThickness(), 0, 'f', 2);
+            thicknessInfo = QObject::tr(" Thickness: %1 mm").arg(m_2DViewer->getCurrentSliceThickness(), 0, 'f', 2);
         }
 
-        m_cornerAnnotations->SetText(LowerLeftCornerIndex, lowerLeftText.toUtf8().constData());
+        annotation = QString("%1\n"
+                             "%2%3%4")
+                .arg(locationInfo)
+                .arg(sliceInfo).arg(phaseInfo).arg(thicknessInfo)
+                .trimmed();
     }
     else
     {
-        m_cornerAnnotations->SetText(LowerLeftCornerIndex, " ");
+        annotation = " ";
     }
+
+    m_cornerAnnotations->SetText(LowerLeftCornerIndex, annotation.toUtf8().constData());
 }
 
 QString Q2DViewerAnnotationHandler::getStandardAdditionalInformation() const
@@ -429,7 +423,7 @@ QString Q2DViewerAnnotationHandler::getVoiLutString() const
     return lutPart + windowLevelPart + thresholdPart;
 }
 
-QString Q2DViewerAnnotationHandler::getSliceLocationAnnotation()
+QString Q2DViewerAnnotationHandler::getSliceLocationString() const
 {
     QString sliceLocation;
     
@@ -455,7 +449,6 @@ QString Q2DViewerAnnotationHandler::getSliceLocationAnnotation()
                         sliceLocation += QObject::tr("-%1").arg(secondImage->getSliceLocation().toDouble(), 0, 'f', 2);
                     }
                 }
-                sliceLocation += "\n";
             }
         }
     }
