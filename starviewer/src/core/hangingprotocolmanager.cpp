@@ -169,7 +169,7 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
     foreach (HangingProtocolDisplaySet *displaySet, hangingProtocol->getDisplaySets())
     {
         HangingProtocolImageSet *hangingProtocolImageSet = displaySet->getImageSet();
-        Q2DViewerWidget *viewerWidget = layout->addViewer(displaySet->getPosition());
+        Q2DViewerWidget *viewerWidget = layout->addViewer(displaySet->getGeometry());
 
         if (layout->getNumberOfViewers() == 1)
         {

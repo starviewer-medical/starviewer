@@ -52,7 +52,7 @@ public:
     void setGridInArea(int rows, int columns, const QRectF &geometry);
 
     /// Afegeix un nou visualitzador amb la geometria indicada
-    Q2DViewerWidget* addViewer(const QString &geometry);
+    Q2DViewerWidget* addViewer(const QRectF &geometry);
 
     /// Neteja el layout, eliminant tots els visors i geometries,
     /// deixant-lo en l'estat inicial, com si acabéssim de crear l'objecte
@@ -94,11 +94,8 @@ private:
 
     /// Coloca el viewer donat en la posició i mides proporcionats
     /// @param viewer Visor que volem posicionar i ajustar dins del layout
-    /// @param geometry String amb les posicions i mides realitives corresponents al viewer
-    /// El format de geometry seran les coordenades x,y de la cantonada esquerra superior i
-    /// ample i alçada del visor, expresats com a valors dins del rang 0.0..1.0. Cada valor anirà separat per '\\'
-    /// Per exemple, un viewer que ocupa la meitat de la pantalla s'expressaria amb un string "0\\0\\0.5\\1.0"
-    void setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry);
+    /// @param geometry amb les posicions i mides realitives corresponents al viewer
+    void setViewerGeometry(Q2DViewerWidget *viewer, const QRectF &geometry);
 
     /// Fa les accions necessàries per amagar el viewer indicat del layout actual
     void hideViewer(Q2DViewerWidget *viewer);
