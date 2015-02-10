@@ -197,7 +197,7 @@ QRectF ViewersLayout::convertGeometry(const QRectF &viewerGeometry, const QRectF
     return QRectF(viewerGeometry.x() * incWidth + incX, viewerGeometry.y() * incHeight + incY, viewerGeometry.width() * incWidth, viewerGeometry.height() * incHeight);
 }
 
-Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
+Q2DViewerWidget* ViewersLayout::addViewer(const QRectF &geometry)
 {
     Q2DViewerWidget *newViewer = getNewQ2DViewerWidget();
     setViewerGeometry(newViewer, geometry);
@@ -321,7 +321,7 @@ Q2DViewerWidget* ViewersLayout::getViewerWidget(int number) const
     return qobject_cast<Q2DViewerWidget*>(m_layout->itemAt(number)->widget());
 }
 
-void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry)
+void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QRectF &geometry)
 {
     if (!viewer)
     {
@@ -329,30 +329,7 @@ void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &ge
         return;
     }
 
-    QStringList splittedGeometryList = geometry.split("\\");
-    if (splittedGeometryList.count() < 4)
-    {
-        DEBUG_LOG("La geometria proporcionada no conté el nombre d'elements necessaris o està mal formada. Geometry dump: [" +
-                  geometry + "]. No s'aplicarà cap geometria al viewer proporcinat.");
-        WARN_LOG("La geometria proporcionada no conté el nombre d'elements necessaris o està mal formada. Geometry dump: [" +
-                 geometry + "]. No s'aplicarà cap geometria al viewer proporcinat.");
-        return;
-    }
-
-    double x1;
-    double y1;
-    double x2;
-    double y2;
-    x1 = splittedGeometryList.at(0).toDouble();
-    y1 = splittedGeometryList.at(1).toDouble();
-    x2 = splittedGeometryList.at(2).toDouble();
-    y2 = splittedGeometryList.at(3).toDouble();
-
-    // Invert Y axis
-    y1 = 1.0 - y1;
-    y2 = 1.0 - y2;
-
-    m_layout->addWidget(viewer, QRectF(x1, y1, x2 - x1, y2 - y1));
+    m_layout->addWidget(viewer, geometry);
 }
 
 void ViewersLayout::hideViewer(Q2DViewerWidget *viewer)
