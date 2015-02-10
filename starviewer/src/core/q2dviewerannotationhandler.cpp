@@ -275,6 +275,16 @@ void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
     patientOrientationText[RightOrientationLabelIndex] = currentPatientOrientation.getRowDirectionLabel();
     patientOrientationText[TopOrientationLabelIndex] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getColumnDirectionLabel());
 
+    // #1349: Hide the posterior label in mammographies so it doesn't cover the image
+    MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
+
+    if (mammographyImageHelper.isStandardMammographyImage(image))
+    {
+        patientOrientationText[LeftOrientationLabelIndex].remove(PatientOrientation::PosteriorLabel);
+        patientOrientationText[RightOrientationLabelIndex].remove(PatientOrientation::PosteriorLabel);
+    }
+
     bool enabled = m_enabledAnnotations.testFlag(PatientOrientationAnnotation);
 
     for (int i = 0; i < 4; ++i)
