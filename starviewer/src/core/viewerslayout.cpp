@@ -132,13 +132,16 @@ void ViewersLayout::setGridInArea(int rows, int columns, const QRectF &geometry)
 
     int requestedViewers = rows * columns;
 
-    // Hide viewers in excess
+    // Remove viewers in excess
     while (viewers.size() > requestedViewers)
     {
         Q2DViewerWidget *viewer = viewers.takeLast();
+        if (m_selectedViewer == viewer)
+        {
+            setSelectedViewer(0);
+        }
         m_layout->removeWidget(viewer);
-        m_hiddenViewers.push(viewer);
-        hideViewer(viewer);
+        deleteQ2DViewerWidget(viewer);
     }
 
     ExtendedGridIterator iterator(rows, columns);
@@ -157,16 +160,6 @@ void ViewersLayout::setGridInArea(int rows, int columns, const QRectF &geometry)
         iterator.next();
     }
 
-    // Show hidden viewers
-    while (viewers.size() < requestedViewers && !m_hiddenViewers.isEmpty())
-    {
-        Q2DViewerWidget *viewer = m_hiddenViewers.pop();
-        m_layout->addWidget(viewer, convertGeometry(iterator.getRelativeGeometryForCurrentCell(), geometry));
-        viewers.append(viewer);
-        showViewer(viewer);
-        iterator.next();
-    }
-
     // Add new viewers
     while (viewers.size() < requestedViewers)
     {
@@ -178,7 +171,7 @@ void ViewersLayout::setGridInArea(int rows, int columns, const QRectF &geometry)
     }
 
     // If the current selected viewer gets hidden, then select the first one by default
-    if (m_selectedViewer && m_selectedViewer->isHidden())
+    if (!m_selectedViewer)
     {
         setSelectedViewer(viewers.first());
     }
@@ -299,12 +292,6 @@ void ViewersLayout::cleanUp()
         Q2DViewerWidget *viewer = qobject_cast<Q2DViewerWidget*>(item->widget());
         deleteQ2DViewerWidget(viewer);
         delete item;
-    }
-
-    // Delete hidden viewers
-    while (!m_hiddenViewers.isEmpty())
-    {
-        deleteQ2DViewerWidget(m_hiddenViewers.pop());
     }
 
     // Clean maximization data

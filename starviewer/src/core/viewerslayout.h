@@ -111,9 +111,6 @@ private:
     /// Visualitzador selecciona. Sempre en tindrem un.
     Q2DViewerWidget *m_selectedViewer;
 
-    /// Stores hidden viewers for later reuse.
-    QStack<Q2DViewerWidget*> m_hiddenViewers;
-
     /// This struct holds the information needed to demaximize a maximized viewer.
     struct MaximizationData
     {
