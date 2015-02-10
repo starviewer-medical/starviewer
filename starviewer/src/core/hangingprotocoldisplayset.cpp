@@ -17,6 +17,9 @@
 #include "hangingprotocol.h"
 #include "hangingprotocolimageset.h"
 
+#include <QRectF>
+#include <QStringList>
+
 namespace udg {
 
 HangingProtocolDisplaySet::HangingProtocolDisplaySet()
@@ -87,6 +90,36 @@ QString HangingProtocolDisplaySet::getDescription() const
 QString HangingProtocolDisplaySet::getPosition() const
 {
     return m_position;
+}
+
+QRectF HangingProtocolDisplaySet::getGeometry() const
+{
+    QString geometry = getPosition();
+    QStringList splittedGeometryList = geometry.split("\\");
+
+    if (splittedGeometryList.count() < 4)
+    {
+        DEBUG_LOG("La geometria proporcionada no conté el nombre d'elements necessaris o està mal formada. Geometry dump: [" +
+                  geometry + "]. No s'aplicarà cap geometria al viewer proporcinat.");
+        WARN_LOG("La geometria proporcionada no conté el nombre d'elements necessaris o està mal formada. Geometry dump: [" +
+                 geometry + "]. No s'aplicarà cap geometria al viewer proporcinat.");
+        return QRectF();
+    }
+
+    double x1;
+    double y1;
+    double x2;
+    double y2;
+    x1 = splittedGeometryList.at(0).toDouble();
+    y1 = splittedGeometryList.at(1).toDouble();
+    x2 = splittedGeometryList.at(2).toDouble();
+    y2 = splittedGeometryList.at(3).toDouble();
+
+    // Invert Y axis
+    y1 = 1.0 - y1;
+    y2 = 1.0 - y2;
+
+    return QRectF(x1, y1, x2 - x1, y2 - y1);
 }
 
 PatientOrientation HangingProtocolDisplaySet::getPatientOrientation() const
