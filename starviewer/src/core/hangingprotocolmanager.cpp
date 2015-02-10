@@ -166,12 +166,14 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
 
     // Abans d'aplicar un nou hanging protocol, fem neteja del layout i eliminem tot el que hi havia anteriorment
     layout->cleanUp();
-    foreach (HangingProtocolDisplaySet *displaySet, hangingProtocol->getDisplaySets())
+    QList<HangingProtocolDisplaySet*> displaySets = hangingProtocol->getDisplaySets();
+    for(int i = 0; i < displaySets.size(); ++i)
     {
+        HangingProtocolDisplaySet *displaySet = displaySets[i];
         HangingProtocolImageSet *hangingProtocolImageSet = displaySet->getImageSet();
         Q2DViewerWidget *viewerWidget = layout->addViewer(displaySet->getGeometry());
 
-        if (layout->getNumberOfViewers() == 1)
+        if (i == 0)
         {
             layout->setSelectedViewer(viewerWidget);
         }
