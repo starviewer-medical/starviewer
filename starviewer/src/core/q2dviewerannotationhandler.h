@@ -75,6 +75,9 @@ private:
     /// Returns the corner where the annotation should go, depending on the annotation type and the current image.
     CornerAnnotationIndexType getCornerForAnnotationType(AnnotationFlag annotation) const;
 
+    /// Sets the given text to the given annotation. The given annotation must be one of the defined corner annotations.
+    void setCornerAnnotation(AnnotationFlag annotation, QString text);
+
     /// Creates all the annotation actors
     void createAnnotations();
     
