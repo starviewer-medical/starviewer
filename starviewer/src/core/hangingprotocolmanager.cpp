@@ -161,17 +161,23 @@ HangingProtocol* HangingProtocolManager::setBestHangingProtocol(Patient *patient
 
 void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient)
 {
+    applyHangingProtocol(hangingProtocol, layout, patient, QRectF(0.0, 0.0, 1.0, 1.0));
+}
+
+void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient, const QRectF &geometry)
+{
     // Si hi havia algun estudi descarregant, es treu de la llista d'espera
     cancelHangingProtocolDownloading();
 
-    // Abans d'aplicar un nou hanging protocol, fem neteja del layout i eliminem tot el que hi havia anteriorment
-    layout->cleanUp();
+    // Clean up viewer of the working area
+    layout->cleanUp(geometry);
+
     QList<HangingProtocolDisplaySet*> displaySets = hangingProtocol->getDisplaySets();
     for(int i = 0; i < displaySets.size(); ++i)
     {
         HangingProtocolDisplaySet *displaySet = displaySets[i];
         HangingProtocolImageSet *hangingProtocolImageSet = displaySet->getImageSet();
-        Q2DViewerWidget *viewerWidget = layout->addViewer(displaySet->getGeometry());
+        Q2DViewerWidget *viewerWidget = layout->addViewer(layout->convertGeometry(displaySet->getGeometry(), geometry));
 
         if (i == 0)
         {
