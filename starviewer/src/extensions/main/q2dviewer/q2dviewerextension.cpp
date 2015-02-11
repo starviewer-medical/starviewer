@@ -591,7 +591,7 @@ void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
 
     // Activem/Desactivem les capes d'annotacions segons l'estat del botó
     // Informació de l'estudi
-    newViewerWidget->getViewer()->enableAnnotation(AllAnnotation, m_showViewersTextualInformationAction->isChecked());
+    newViewerWidget->getViewer()->enableAnnotation(AllAnnotations, m_showViewersTextualInformationAction->isChecked());
     // Overlays
     newViewerWidget->getViewer()->showImageOverlays(m_showOverlaysAction->isChecked());
     // Shutters
@@ -728,7 +728,7 @@ void Q2DViewerExtension::showViewersTextualInformation(bool show)
 
     for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
     {
-        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotation(AllAnnotation, show);
+        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotation(AllAnnotations, show);
     }
 }
 

@@ -24,6 +24,8 @@
 #include "volumehelper.h"
 #include "logging.h"
 
+#include <QRegularExpression>
+
 #include <vtkCornerAnnotation.h>
 #include <vtkTextActor.h>
 #include <vtkTextProperty.h>
@@ -48,139 +50,211 @@ Q2DViewerAnnotationHandler::~Q2DViewerAnnotationHandler()
     m_cornerAnnotations->Delete();
 }
 
-void Q2DViewerAnnotationHandler::enableAnnotation(AnnotationFlags annotation, bool enable)
+void Q2DViewerAnnotationHandler::enableAnnotations(AnnotationFlags annotations)
 {
-    if (enable)
-    {
-        m_enabledAnnotations = m_enabledAnnotations | annotation;
-    }
-    else
-    {
-        m_enabledAnnotations = m_enabledAnnotations & ~annotation;
-    }
-
-    refreshAnnotations();
-
-    if (m_2DViewer->hasInput())
-    {
-        m_2DViewer->render();
-    }
+    m_enabledAnnotations |= annotations;
+    updateAnnotations();
 }
 
-void Q2DViewerAnnotationHandler::removeAnnotation(AnnotationFlags annotation)
+void Q2DViewerAnnotationHandler::disableAnnotations(AnnotationFlags annotations)
 {
-    enableAnnotation(annotation, false);
+    m_enabledAnnotations &= ~annotations;
+    updateAnnotations();
 }
 
-void Q2DViewerAnnotationHandler::updateAnnotationsInformation(AnnotationFlags annotation)
+void Q2DViewerAnnotationHandler::updateAnnotations(AnnotationFlags annotations)
 {
     if (!m_2DViewer->hasInput())
     {
         return;
     }
 
-    if (annotation.testFlag(VoiLutInformationAnnotation))
+    if (annotations.testFlag(MainInformationAnnotation))
     {
-        updateVoiLutInformationAnnotation();
+        updateMainInformationAnnotation();
     }
 
-    if (annotation.testFlag(SliceAnnotation))
+    if (annotations.testFlag(AdditionalInformationAnnotation))
     {
-        updateSliceAnnotationInformation();
+        updateAdditionalInformationAnnotation();
+    }
+
+    if (annotations.testFlag(VoiLutAnnotation))
+    {
+        updateVoiLutAnnotation();
+    }
+
+    if (annotations.testFlag(SliceAnnotation))
+    {
+        updateSliceAnnotation();
+    }
+
+    if (annotations.testFlag(PatientOrientationAnnotation))
+    {
+        updatePatientOrientationAnnotation();
     }
 }
 
-void Q2DViewerAnnotationHandler::updatePatientAnnotationInformation()
+void Q2DViewerAnnotationHandler::updateMainInformationAnnotation()
 {
-    if (m_2DViewer->hasInput())
+    Q_ASSERT(m_2DViewer->hasInput());
+
+    QString annotation;
+
+    if (m_enabledAnnotations.testFlag(MainInformationAnnotation))
     {
-        // TODO We only take the first image for the moment because we assume all belong to the same series
-        Image *image = m_2DViewer->getMainInput()->getImage(0);
-        Series *series = image->getParentSeries();
+        Image *image = m_2DViewer->getCurrentDisplayedImage();
+        Series *series = m_2DViewer->getMainInput()->getSeries();
         Study *study = series->getParentStudy();
         Patient *patient = study->getParentPatient();
 
-        // Permanent information
+        QString institutionName = series->getInstitutionName();
+        QString patientName = patient->getFullName();
+        QString age = study->getPatientAge();
+        QString sex = patient->getSex();
+        QString patientId = patient->getID();
+        QString accessionNumber = study->getAccessionNumber();
+
+        if (!accessionNumber.isEmpty())
+        {
+            accessionNumber = QObject::tr("Acc: %1").arg(accessionNumber);
+        }
+
+        QString studyDate = study->getDate().toString(Qt::ISODate);
         QString seriesTime = series->getTimeAsString();
+
         if (seriesTime.isEmpty())
         {
             seriesTime = "--:--";
         }
 
-        m_upperRightText = series->getInstitutionName() + "\n";
-        m_upperRightText += patient->getFullName() + "\n";
-        m_upperRightText += QString("%1 %2 %3").arg(study->getPatientAge()).arg(patient->getSex()).arg(patient->getID());
-        m_upperRightText += "\n";
-        if (!study->getAccessionNumber().isEmpty())
-        {
-            m_upperRightText += QObject::tr("Acc: %1").arg(study->getAccessionNumber());
-        }
-        m_upperRightText += "\n";
-        m_upperRightText += study->getDate().toString(Qt::ISODate) + "\n";
-        m_upperRightText += seriesTime;
+        QString imageTime;
 
-        if (series->getModality() == "MG")
+        if (image)
         {
-            m_lowerRightText.clear();
-        }
-        else
-        {
-            m_lowerRightText = getSeriesDescriptiveLabel(series);
-            
-            if (m_2DViewer->getNumberOfInputs() == 2)
+            imageTime = image->getFormattedImageTime();
+
+            if (imageTime.isEmpty())
             {
-                int balance = m_2DViewer->getFusionBalance();
-                const QString &modality0 = m_2DViewer->getInput(0)->getModality();
-                const QString &modality1 = m_2DViewer->getInput(1)->getModality();
-                QString balanceText = QString("%1% %2 + %3% %4").arg(100 - balance).arg(modality0).arg(balance).arg(modality1);
-                QString fusedLabel = getSeriesDescriptiveLabel(m_2DViewer->getInput(1)->getImage(0)->getParentSeries());
-
-                m_lowerRightText = QObject::tr("Fusion: ") + balanceText + "\n" + m_lowerRightText + " +\n" + fusedLabel;
+                imageTime = "--:--";
             }
         }
 
-        if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
-        {
-            m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
-            m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
-        }
+        annotation = QString("%1\n"
+                             "%2\n"
+                             "%3 %4 %5\n"
+                             "%6\n"
+                             "%7\n"
+                             "%8\n"
+                             "%9")
+                .arg(institutionName)
+                .arg(patientName)
+                .arg(age).arg(sex).arg(patientId)
+                .arg(accessionNumber)
+                .arg(studyDate)
+                .arg(seriesTime)
+                .arg(imageTime)
+                .trimmed();
     }
-    else
-    {
-        DEBUG_LOG("There's no input. Patient information cannot be initialized.");
-    }
+
+    setCornerAnnotation(MainInformationAnnotation, annotation);
 }
 
-void Q2DViewerAnnotationHandler::updateSliceAnnotationInformation()
+void Q2DViewerAnnotationHandler::updateAdditionalInformationAnnotation()
 {
-    Q_ASSERT(m_cornerAnnotations);
     Q_ASSERT(m_2DViewer->hasInput());
-    
-    Image *image = m_2DViewer->getCurrentDisplayedImage();
-    
+
     MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
+    QString annotation;
+
     if (mammographyImageHelper.isStandardMammographyImage(image))
     {
-        // Specific mammography annotations should be displayed
-        m_enabledAnnotations = m_enabledAnnotations & ~SliceAnnotation;
-        
-        QString laterality = image->getImageLaterality();
-        QString projection = mammographyImageHelper.getMammographyProjectionLabel(image);
-
-        m_lowerRightText = laterality + " " + projection;
-        
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
+        annotation = getMammographyAdditionalInformation();
     }
     else
     {
-        if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
-        {
-            updateLateralityAnnotationInformation();
-        }
+        annotation = getStandardAdditionalInformation();
     }
 
-    updateSliceAnnotation();
-    updatePatientInformationAnnotation();
+    setCornerAnnotation(AdditionalInformationAnnotation, annotation);
+}
+
+void Q2DViewerAnnotationHandler::updateVoiLutAnnotation()
+{
+    Q_ASSERT(m_2DViewer->hasInput());
+
+    MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
+    QString annotation;
+
+    // #1349: Disable the VOI LUT annotation when displaying a mammography
+    if (m_enabledAnnotations.testFlag(VoiLutAnnotation) && !mammographyImageHelper.isStandardMammographyImage(image))
+    {
+        int dimensions[3];
+        m_2DViewer->getMainInput()->getDimensions(dimensions);
+        int xIndex = m_2DViewer->getView().getXIndex();
+        int yIndex = m_2DViewer->getView().getYIndex();
+        QString imageSize = QObject::tr("%1 x %2").arg(dimensions[xIndex]).arg(dimensions[yIndex]);
+        QString voiLut = getVoiLutString();
+
+        annotation = QString("%1\n"
+                             "%2")
+                .arg(imageSize)
+                .arg(voiLut)
+                .trimmed();
+    }
+
+    setCornerAnnotation(VoiLutAnnotation, annotation);
+}
+
+void Q2DViewerAnnotationHandler::updateSliceAnnotation()
+{
+    Q_ASSERT(m_2DViewer->hasInput());
+
+    MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
+    QString annotation;
+
+    if (m_enabledAnnotations.testFlag(SliceAnnotation) && !mammographyImageHelper.isStandardMammographyImage(image))
+    {
+        QString locationInfo = getSliceLocationString();
+
+        // Setup the slice/slab annotation
+        QString sliceInfo = QObject::tr("Slice: %1").arg(m_2DViewer->getCurrentSlice() + 1);
+
+        if (m_2DViewer->isThickSlabActive())
+        {
+            // TODO We need a getLastSlabSlice() method on Q2Dviewer to avoid doing this computing
+            sliceInfo += QString("-%1").arg(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness());
+        }
+
+        sliceInfo += QString("/%1").arg(m_2DViewer->getNumberOfSlices());
+        
+        QString phaseInfo;
+
+        // If we have phases
+        if (m_2DViewer->hasPhases())
+        {
+            phaseInfo = QObject::tr(" Phase: %1/%2").arg(m_2DViewer->getCurrentPhase() + 1).arg(m_2DViewer->getNumberOfPhases());
+        }
+
+        QString thicknessInfo;
+        
+        // Add slice thickness only if it is > 0.0mm
+        if (m_2DViewer->getCurrentSliceThickness() > 0.0)
+        {
+            thicknessInfo = QObject::tr(" Thickness: %1 mm").arg(m_2DViewer->getCurrentSliceThickness(), 0, 'f', 2);
+        }
+
+        annotation = QString("%1\n"
+                             "%2%3%4")
+                .arg(locationInfo)
+                .arg(sliceInfo).arg(phaseInfo).arg(thicknessInfo)
+                .trimmed();
+    }
+
+    setCornerAnnotation(SliceAnnotation, annotation);
 }
 
 void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
@@ -188,183 +262,141 @@ void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
     // Get the current image orientation
     PatientOrientation currentPatientOrientation = m_2DViewer->getCurrentDisplayedImagePatientOrientation();
 
-    // Indices relationship: 0:Left, 1:Bottom, 2:Right, 3:Top
-    m_patientOrientationText[LeftOrientationLabelIndex] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getRowDirectionLabel());
-    m_patientOrientationText[BottomOrientationLabelIndex] = currentPatientOrientation.getColumnDirectionLabel();
-    m_patientOrientationText[RightOrientationLabelIndex] = currentPatientOrientation.getRowDirectionLabel();
-    m_patientOrientationText[TopOrientationLabelIndex] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getColumnDirectionLabel());
-    
-    bool textActorShouldBeVisible = m_enabledAnnotations.testFlag(PatientOrientationAnnotation);
+    QString patientOrientationText[4];
+    patientOrientationText[LeftOrientationLabelIndex] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getRowDirectionLabel());
+    patientOrientationText[BottomOrientationLabelIndex] = currentPatientOrientation.getColumnDirectionLabel();
+    patientOrientationText[RightOrientationLabelIndex] = currentPatientOrientation.getRowDirectionLabel();
+    patientOrientationText[TopOrientationLabelIndex] = PatientOrientation::getOppositeOrientationLabel(currentPatientOrientation.getColumnDirectionLabel());
+
+    // #1349: Hide the posterior label in mammographies so it doesn't cover the image
+    MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
+
+    if (mammographyImageHelper.isStandardMammographyImage(image))
+    {
+        patientOrientationText[LeftOrientationLabelIndex].remove(PatientOrientation::PosteriorLabel);
+        patientOrientationText[RightOrientationLabelIndex].remove(PatientOrientation::PosteriorLabel);
+    }
+
+    bool enabled = m_enabledAnnotations.testFlag(PatientOrientationAnnotation);
 
     for (int i = 0; i < 4; ++i)
     {
-        if (!m_patientOrientationText[i].isEmpty())
+        if (enabled && !patientOrientationText[i].isEmpty())
         {
-            m_patientOrientationTextActor[i]->SetInput(m_patientOrientationText[i].toUtf8().constData());
-            m_patientOrientationTextActor[i]->SetVisibility(textActorShouldBeVisible);
+            m_patientOrientationTextActor[i]->SetInput(patientOrientationText[i].toUtf8().constData());
+            m_patientOrientationTextActor[i]->VisibilityOn();
         }
         else
         {
-            m_patientOrientationTextActor[i]->SetVisibility(false);
+            m_patientOrientationTextActor[i]->VisibilityOff();
         }
     }
 }
 
-void Q2DViewerAnnotationHandler::refreshAnnotations()
-{
-    if (!m_2DViewer->hasInput())
-    {
-        return;
-    }
 
-    if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
+QString Q2DViewerAnnotationHandler::getStandardAdditionalInformation() const
+{
+    if (m_enabledAnnotations.testFlag(AdditionalInformationAnnotation))
     {
-        m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
+        QString lateralityString;
+        QChar laterality = m_2DViewer->getCurrentDisplayedImageLaterality();
+
+        if (!laterality.isNull() && !laterality.isSpace())
+        {
+            lateralityString = QString("Lat: %1").arg(laterality);
+        }
+
+        QString seriesLabel = getSeriesDescriptiveLabel(m_2DViewer->getMainInput()->getSeries());
+        QString fusionBalance;
+
+        if (m_2DViewer->getNumberOfInputs() == 2)
+        {
+            int balance = m_2DViewer->getFusionBalance();
+            const QString &modality0 = m_2DViewer->getInput(0)->getModality();
+            const QString &modality1 = m_2DViewer->getInput(1)->getModality();
+            fusionBalance = QObject::tr("Fusion: ") + QString("%1% %2 + %3% %4").arg(100 - balance).arg(modality0).arg(balance).arg(modality1);
+            seriesLabel += " +\n" + getSeriesDescriptiveLabel(m_2DViewer->getInput(1)->getSeries());
+        }
+
+        return QString("%1\n"
+                       "%2\n"
+                       "%3")
+                .arg(lateralityString)
+                .arg(fusionBalance)
+                .arg(seriesLabel)
+                .trimmed();
     }
     else
     {
-        m_cornerAnnotations->SetText(UpperRightCornerIndex, " ");
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, " ");
+        return QString();
     }
-
-    if (m_enabledAnnotations.testFlag(PatientOrientationAnnotation))
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            if (!m_patientOrientationText[j].isEmpty())
-            {
-                m_patientOrientationTextActor[j]->VisibilityOn();
-            }
-            else
-            {
-                // If label is empty, disable visibility as we don't have nothing to show
-                m_patientOrientationTextActor[j]->VisibilityOff();
-            }
-        }
-    }
-    else
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            m_patientOrientationTextActor[j]->VisibilityOff();
-        }
-    }
-
-    updateAnnotationsInformation(VoiLutInformationAnnotation | SliceAnnotation);
 }
 
-void Q2DViewerAnnotationHandler::updateSliceAnnotation()
+QString Q2DViewerAnnotationHandler::getMammographyAdditionalInformation() const
 {
-    Q_ASSERT(m_cornerAnnotations);
+    MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
 
-    if (m_enabledAnnotations.testFlag(SliceAnnotation))
-    {
-        QString lowerLeftText;
-        
-        lowerLeftText = getSliceLocationAnnotation();
-        
-        // Setup the slice/slab annotation
-        lowerLeftText += QObject::tr("Slice: %1").arg(m_2DViewer->getCurrentSlice() + 1);
-        if (m_2DViewer->isThickSlabActive())
-        {
-            // TODO We need a getLastSlabSlice() method on Q2Dviewer to avoid doing this computing
-            lowerLeftText += QObject::tr("-%1").arg(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness());
-        }
-        lowerLeftText += QObject::tr("/%1").arg(m_2DViewer->getNumberOfSlices());
-        
-        // If we have phases
-        if (m_2DViewer->hasPhases())
-        {
-            lowerLeftText += QObject::tr(" Phase: %1/%2").arg(m_2DViewer->getCurrentPhase() + 1).arg(m_2DViewer->getNumberOfPhases());
-        }
-        
-        // Add slice thickness only if it is > 0.0mm
-        if (m_2DViewer->getCurrentSliceThickness() > 0.0)
-        {
-            lowerLeftText += QObject::tr(" Thickness: %1 mm").arg(m_2DViewer->getCurrentSliceThickness(), 0, 'f', 2);
-        }
-
-        m_cornerAnnotations->SetText(LowerLeftCornerIndex, lowerLeftText.toUtf8().constData());
-    }
-    else
-    {
-        m_cornerAnnotations->SetText(LowerLeftCornerIndex, " ");
-    }
+    return QString("%1 %2").arg(image->getImageLaterality()).arg(mammographyImageHelper.getMammographyProjectionLabel(image));
 }
 
-void Q2DViewerAnnotationHandler::updateLateralityAnnotationInformation()
+QString Q2DViewerAnnotationHandler::getSeriesDescriptiveLabel(Series *series) const
 {
-    QChar laterality = m_2DViewer->getCurrentDisplayedImageLaterality();
-    if (!laterality.isNull() && !laterality.isSpace())
+    if (!series)
     {
-        QString lateralityAnnotation = "Lat: " + QString(laterality);
-            
-        if (m_lowerRightText.trimmed().isEmpty())
-        {
-            m_cornerAnnotations->SetText(LowerRightCornerIndex, lateralityAnnotation.toUtf8().constData());
-        }
-        else
-        {
-            m_cornerAnnotations->SetText(LowerRightCornerIndex, (lateralityAnnotation + "\n" + m_lowerRightText.trimmed()).toUtf8().constData());
-        }
+        return QString();
     }
-    else
+
+    // If protocol and description are equal, protocol will be set, otherwise they will be merged
+    QString protocolName = series->getProtocolName();
+    QString description = series->getDescription();
+
+    QString label = protocolName;
+
+    if (description != protocolName)
     {
-        m_cornerAnnotations->SetText(LowerRightCornerIndex, m_lowerRightText.trimmed().toUtf8().constData());
+        label += "\n" + description;
     }
+
+    return label;
 }
 
-void Q2DViewerAnnotationHandler::updatePatientInformationAnnotation()
+QString Q2DViewerAnnotationHandler::getVoiLutString() const
 {
-    if (m_enabledAnnotations.testFlag(PatientInformationAnnotation))
+    VoiLut voiLut = m_2DViewer->getCurrentVoiLut();
+    QString lutPart;
+
+    if (voiLut.isLut())
     {
-        // If we are viewing the original acquisition and acquisition time is present, show it as well
-        if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
-        {
-            Image *currentImage = m_2DViewer->getCurrentDisplayedImage();
-            if (currentImage)
-            {
-                QString imageTime = "\n" + currentImage->getFormattedImageTime();
-                if (imageTime.isEmpty())
-                {
-                    imageTime = "--:--";
-                }
-                m_cornerAnnotations->SetText(UpperRightCornerIndex, (m_upperRightText + imageTime).toUtf8().constData());
-            }
-            else
-            {
-                m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
-            }
-        }
-        else
-        {
-            m_cornerAnnotations->SetText(UpperRightCornerIndex, m_upperRightText.toUtf8().constData());
-        }
+        lutPart = voiLut.getOriginalLutExplanation() + " ";
     }
+
+    WindowLevel windowLevel = voiLut.getWindowLevel();
+    QString windowLevelPart = QObject::tr("WW: %1 WL: %2").arg(MathTools::roundToNearestInteger(windowLevel.getWidth()))
+                                                          .arg(MathTools::roundToNearestInteger(windowLevel.getCenter()));
+
+    QString thresholdPart;
+
+    if (VolumeHelper::isPrimaryPET(m_2DViewer->getMainInput()) || VolumeHelper::isPrimaryNM(m_2DViewer->getMainInput()))
+    {
+        double range[2];
+        m_2DViewer->getMainInput()->getScalarRange(range);
+
+        double percent = 0.0;
+        // Avoid division by zero
+        if (range[1] != 0.0)
+        {
+            percent = (windowLevel.getWidth() / range[1]) * 100;
+        }
+
+        thresholdPart = "\n" + QObject::tr("Threshold: %1%").arg(percent, 0, 'f', 2);
+    }
+
+    return lutPart + windowLevelPart + thresholdPart;
 }
 
-void Q2DViewerAnnotationHandler::updateVoiLutInformationAnnotation()
-{
-    if (m_enabledAnnotations.testFlag(VoiLutInformationAnnotation))
-    {
-        int dimensions[3];
-        m_2DViewer->getMainInput()->getDimensions(dimensions);
-        int xIndex = m_2DViewer->getView().getXIndex();
-        int yIndex = m_2DViewer->getView().getYIndex();
-        m_upperLeftText = QObject::tr("%1 x %2").arg(dimensions[xIndex]).arg(dimensions[yIndex]);
-        m_upperLeftText += "\n";
-        m_upperLeftText += getVoiLutString();
-    }
-    else
-    {
-        m_upperLeftText = " ";
-    }
-    
-    m_cornerAnnotations->SetText(UpperLeftCornerIndex, m_upperLeftText.toUtf8().constData());
-}
-
-QString Q2DViewerAnnotationHandler::getSliceLocationAnnotation()
+QString Q2DViewerAnnotationHandler::getSliceLocationString() const
 {
     QString sliceLocation;
     
@@ -390,7 +422,6 @@ QString Q2DViewerAnnotationHandler::getSliceLocationAnnotation()
                         sliceLocation += QObject::tr("-%1").arg(secondImage->getSliceLocation().toDouble(), 0, 'f', 2);
                     }
                 }
-                sliceLocation += "\n";
             }
         }
     }
@@ -398,25 +429,64 @@ QString Q2DViewerAnnotationHandler::getSliceLocationAnnotation()
     return sliceLocation;
 }
 
-QString Q2DViewerAnnotationHandler::getSeriesDescriptiveLabel(Series *series) const
+Q2DViewerAnnotationHandler::CornerAnnotationIndexType Q2DViewerAnnotationHandler::getCornerForAnnotationType(AnnotationFlag annotation) const
 {
-    if (!series)
+    MammographyImageHelper mammographyImageHelper;
+    Image *image = m_2DViewer->getCurrentDisplayedImage();
+
+    // #1349: If displaying a mammography and the posterior side is at the right, then swap annotation sides so that patient information doesn't cover the image
+    if (mammographyImageHelper.isStandardMammographyImage(image) &&
+            m_2DViewer->getCurrentDisplayedImagePatientOrientation().getRowDirectionLabel() == PatientOrientation::PosteriorLabel)
     {
-        return QString();
+        switch (annotation)
+        {
+            case MainInformationAnnotation: return UpperLeftCornerIndex;
+            case AdditionalInformationAnnotation: return LowerLeftCornerIndex;
+            case VoiLutAnnotation: return UpperRightCornerIndex;
+            case SliceAnnotation: return LowerRightCornerIndex;
+        }
     }
-    
-    // If protocol and description are equal, protocol will be set, otherwise they will be merged
-    QString protocolName = series->getProtocolName();
-    QString description = series->getDescription();
-    
-    QString label = protocolName;
-    
-    if (description != protocolName)
+    else
     {
-        label += "\n" + description;
+        switch (annotation)
+        {
+            case MainInformationAnnotation: return UpperRightCornerIndex;
+            case AdditionalInformationAnnotation: return LowerRightCornerIndex;
+            case VoiLutAnnotation: return UpperLeftCornerIndex;
+            case SliceAnnotation: return LowerLeftCornerIndex;
+        }
     }
 
-    return label;
+    // Default case that should not be reached
+    DEBUG_LOG(QString("Asked for the corner of an unexpected annotation flag: %1. Returning default value.").arg(annotation));
+    WARN_LOG(QString("Asked for the corner of an unexpected annotation flag: %1. Returning default value.").arg(annotation));
+    return LowerLeftCornerIndex;
+}
+
+void Q2DViewerAnnotationHandler::setCornerAnnotation(AnnotationFlag annotation, QString text)
+{
+    // If the given annotation is not one of the expected values, then do nothing
+    if (annotation != MainInformationAnnotation && annotation != AdditionalInformationAnnotation
+            && annotation != VoiLutAnnotation && annotation != SliceAnnotation)
+    {
+        return;
+    }
+
+    // Clean whitespace at both sides of the string
+    text = text.trimmed();
+
+    if (text.isEmpty())
+    {
+        // Use a space instead of an empty string to avoid graphical problems with vtkCornerAnnotation
+        text = " ";
+    }
+    else
+    {
+        // Remove empty lines
+        text = text.replace(QRegularExpression("\n+"), "\n");
+    }
+
+    m_cornerAnnotations->SetText(getCornerForAnnotationType(annotation), text.toUtf8().constData());
 }
 
 void Q2DViewerAnnotationHandler::createAnnotations()
@@ -473,40 +543,6 @@ void Q2DViewerAnnotationHandler::addActors()
     renderer->AddViewProp(m_patientOrientationTextActor[1]);
     renderer->AddViewProp(m_patientOrientationTextActor[2]);
     renderer->AddViewProp(m_patientOrientationTextActor[3]);
-}
-
-QString Q2DViewerAnnotationHandler::getVoiLutString() const
-{
-    VoiLut voiLut = m_2DViewer->getCurrentVoiLut();
-    QString lutPart;
-
-    if (voiLut.isLut())
-    {
-        lutPart = voiLut.getOriginalLutExplanation() + " ";
-    }
-
-    WindowLevel windowLevel = voiLut.getWindowLevel();
-    QString windowLevelPart = QObject::tr("WW: %1 WL: %2").arg(MathTools::roundToNearestInteger(windowLevel.getWidth()))
-                                                          .arg(MathTools::roundToNearestInteger(windowLevel.getCenter()));
-
-    QString thresholdPart;
-
-    if (VolumeHelper::isPrimaryPET(m_2DViewer->getMainInput()) || VolumeHelper::isPrimaryNM(m_2DViewer->getMainInput()))
-    {
-        double range[2];
-        m_2DViewer->getMainInput()->getScalarRange(range);
-
-        double percent = 0.0;
-        // Avoid division by zero
-        if (range[1] != 0.0)
-        {
-            percent = (windowLevel.getWidth() / range[1]) * 100;
-        }
-
-        thresholdPart = "\n" + QObject::tr("Threshold: %1%").arg(percent, 0, 'f', 2);
-    }
-
-    return lutPart + windowLevelPart + thresholdPart;
 }
 
 } // End namespace udg
