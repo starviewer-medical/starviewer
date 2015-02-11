@@ -36,7 +36,6 @@ LayoutManager::LayoutManager(Patient *patient, ViewersLayout *layout, QObject *p
     m_currentHangingProtocolApplied = 0;
     
     connect(m_patient, SIGNAL(studyAdded(Study*)), SLOT(onStudyAdded(Study*)));
-    connect(m_hangingProtocolManager, SIGNAL(discardedStudy(QString)), SLOT(addStudyToIgnore(QString)));
 }
 
 LayoutManager::~LayoutManager()
@@ -270,11 +269,6 @@ void LayoutManager::addHangingProtocolsWithPrevious(QList<Study*> studies)
 void LayoutManager::onStudyAdded(Study *study)
 {
     addHangingProtocolsWithPrevious(QList<Study*>() << study);
-}
-
-void LayoutManager::addStudyToIgnore(const QString &uid)
-{
-    m_studiesToIgnoreWhenAdded << uid;
 }
 
 } // end namespace udg
