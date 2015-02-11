@@ -82,19 +82,16 @@ void LayoutManager::searchHangingProtocols()
 
 bool LayoutManager::applyBestHangingProtocol()
 {
-    bool hangingProtocolApplied = false;
-    
     if (m_hangingProtocolCandidates.size() > 0)
     {
         m_currentHangingProtocolApplied = m_hangingProtocolManager->setBestHangingProtocol(m_patient, m_hangingProtocolCandidates, m_layout);
-        hangingProtocolApplied = true;
+        return true;
     }
     else
     {
         m_currentHangingProtocolApplied = 0;
+        return false;
     }
-
-    return hangingProtocolApplied;
 }
 
 void LayoutManager::applyNextHangingProtocol()
