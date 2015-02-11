@@ -24,6 +24,8 @@
 #include "volumehelper.h"
 #include "logging.h"
 
+#include <QRegularExpression>
+
 #include <vtkCornerAnnotation.h>
 #include <vtkTextActor.h>
 #include <vtkTextProperty.h>
@@ -154,12 +156,8 @@ void Q2DViewerAnnotationHandler::updateMainInformationAnnotation()
                 .arg(imageTime)
                 .trimmed();
     }
-    else
-    {
-        annotation = " ";
-    }
 
-    m_cornerAnnotations->SetText(getCornerForAnnotationType(MainInformationAnnotation), annotation.toUtf8().constData());
+    setCornerAnnotation(MainInformationAnnotation, annotation);
 }
 
 void Q2DViewerAnnotationHandler::updateAdditionalInformationAnnotation()
@@ -179,7 +177,7 @@ void Q2DViewerAnnotationHandler::updateAdditionalInformationAnnotation()
         annotation = getStandardAdditionalInformation();
     }
 
-    m_cornerAnnotations->SetText(getCornerForAnnotationType(AdditionalInformationAnnotation), annotation.toUtf8().constData());
+    setCornerAnnotation(AdditionalInformationAnnotation, annotation);
 }
 
 void Q2DViewerAnnotationHandler::updateVoiLutAnnotation()
@@ -206,12 +204,8 @@ void Q2DViewerAnnotationHandler::updateVoiLutAnnotation()
                 .arg(voiLut)
                 .trimmed();
     }
-    else
-    {
-        annotation = " ";
-    }
 
-    m_cornerAnnotations->SetText(getCornerForAnnotationType(VoiLutAnnotation), annotation.toUtf8().constData());
+    setCornerAnnotation(VoiLutAnnotation, annotation);
 }
 
 void Q2DViewerAnnotationHandler::updateSliceAnnotation()
@@ -259,12 +253,8 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
                 .arg(sliceInfo).arg(phaseInfo).arg(thicknessInfo)
                 .trimmed();
     }
-    else
-    {
-        annotation = " ";
-    }
 
-    m_cornerAnnotations->SetText(getCornerForAnnotationType(SliceAnnotation), annotation.toUtf8().constData());
+    setCornerAnnotation(SliceAnnotation, annotation);
 }
 
 void Q2DViewerAnnotationHandler::updatePatientOrientationAnnotation()
@@ -339,7 +329,7 @@ QString Q2DViewerAnnotationHandler::getStandardAdditionalInformation() const
     }
     else
     {
-        return " ";
+        return QString();
     }
 }
 
@@ -471,6 +461,32 @@ Q2DViewerAnnotationHandler::CornerAnnotationIndexType Q2DViewerAnnotationHandler
     DEBUG_LOG(QString("Asked for the corner of an unexpected annotation flag: %1. Returning default value.").arg(annotation));
     WARN_LOG(QString("Asked for the corner of an unexpected annotation flag: %1. Returning default value.").arg(annotation));
     return LowerLeftCornerIndex;
+}
+
+void Q2DViewerAnnotationHandler::setCornerAnnotation(AnnotationFlag annotation, QString text)
+{
+    // If the given annotation is not one of the expected values, then do nothing
+    if (annotation != MainInformationAnnotation && annotation != AdditionalInformationAnnotation
+            && annotation != VoiLutAnnotation && annotation != SliceAnnotation)
+    {
+        return;
+    }
+
+    // Clean whitespace at both sides of the string
+    text = text.trimmed();
+
+    if (text.isEmpty())
+    {
+        // Use a space instead of an empty string to avoid graphical problems with vtkCornerAnnotation
+        text = " ";
+    }
+    else
+    {
+        // Remove empty lines
+        text = text.replace(QRegularExpression("\n+"), "\n");
+    }
+
+    m_cornerAnnotations->SetText(getCornerForAnnotationType(annotation), text.toUtf8().constData());
 }
 
 void Q2DViewerAnnotationHandler::createAnnotations()
