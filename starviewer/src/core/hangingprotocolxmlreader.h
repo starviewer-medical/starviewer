@@ -36,6 +36,8 @@ public:
 
     /// Reads and returns a HangingProtocol from the file with the given path. If the hanging protocol can't be read, returns null.
     HangingProtocol* readFile(const QString &path);
+    /// Reads and returns a HangingProtocol from the given device. If the hanging protocol can't be read, returns null.
+    HangingProtocol* read(QIODevice *device);
 
 private:
     /// Reads and returns a restriction from the XML reader.

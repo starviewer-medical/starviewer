@@ -40,7 +40,6 @@ HangingProtocolXMLReader::~HangingProtocolXMLReader()
 HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
 {
     QFile file(path);
-    HangingProtocol *hangingProtocolLoaded = NULL;
 
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
@@ -51,7 +50,13 @@ HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
         return NULL;
     }
 
-    QXmlStreamReader *reader = new QXmlStreamReader(&file);
+    return read(&file);
+}
+
+HangingProtocol* HangingProtocolXMLReader::read(QIODevice *device)
+{
+    QXmlStreamReader *reader = new QXmlStreamReader(device);
+    HangingProtocol *hangingProtocolLoaded = NULL;
 
     if (reader->readNextStartElement())
     {
@@ -133,10 +138,22 @@ HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
 
     if (reader->hasError())
     {
-        DEBUG_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg(reader->lineNumber()).arg(reader->columnNumber()).arg(
-                  path).arg(reader->errorString()).arg(reader->error()));
-        ERROR_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg(reader->lineNumber()).arg(reader->columnNumber()).arg(
-                  path).arg(reader->errorString()).arg(reader->error()));
+        QFileDevice *fileDevice = qobject_cast<QFileDevice*>(device);
+
+        if (fileDevice)
+        {
+            DEBUG_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg(reader->lineNumber()).arg(reader->columnNumber())
+                      .arg(fileDevice->fileName()).arg(reader->errorString()).arg(reader->error()));
+            ERROR_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg(reader->lineNumber()).arg(reader->columnNumber())
+                      .arg(fileDevice->fileName()).arg(reader->errorString()).arg(reader->error()));
+        }
+        else
+        {
+            DEBUG_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol: %3, error: %4").arg(reader->lineNumber()).arg(reader->columnNumber())
+                      .arg(reader->errorString()).arg(reader->error()));
+            ERROR_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol: %3, error: %4").arg(reader->lineNumber()).arg(reader->columnNumber())
+                      .arg(reader->errorString()).arg(reader->error()));
+        }
     }
 
     delete reader;
