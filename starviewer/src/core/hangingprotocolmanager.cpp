@@ -39,7 +39,7 @@ namespace udg {
 HangingProtocolManager::HangingProtocolManager(QObject *parent)
  : QObject(parent)
 {
-    m_studiesDownloading = new QMultiHash<QString, StructPreviousStudyDownloading*>();
+    m_hangingProtocolsDownloading = new QHash<HangingProtocol*, QMultiHash<QString, StructPreviousStudyDownloading*>*>();
     m_relatedStudiesManager = new RelatedStudiesManager();
 
     copyHangingProtocolRepository();
@@ -49,8 +49,8 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
 
 HangingProtocolManager::~HangingProtocolManager()
 {
-    cancelHangingProtocolDownloading();
-    delete m_studiesDownloading;
+    cancelAllHangingProtocolsDownloading();
+    delete m_hangingProtocolsDownloading;
     delete m_relatedStudiesManager;
 
     foreach (HangingProtocol *hangingProtocol, m_availableHangingProtocols)
@@ -167,10 +167,22 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
 void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient, const QRectF &geometry)
 {
     // Si hi havia algun estudi descarregant, es treu de la llista d'espera
-    cancelHangingProtocolDownloading();
+    cancelAllHangingProtocolsDownloading();
 
     // Clean up viewer of the working area
     layout->cleanUp(geometry);
+
+    QMultiHash<QString, StructPreviousStudyDownloading*> *studiesDownloading;
+
+    if (m_hangingProtocolsDownloading->contains(hangingProtocol))
+    {
+        studiesDownloading = m_hangingProtocolsDownloading->value(hangingProtocol);
+    }
+    else
+    {
+        studiesDownloading = new QMultiHash<QString, StructPreviousStudyDownloading*>();
+        m_hangingProtocolsDownloading->insert(hangingProtocol, studiesDownloading);
+    }
 
     QList<HangingProtocolDisplaySet*> displaySets = hangingProtocol->getDisplaySets();
     for(int i = 0; i < displaySets.size(); ++i)
@@ -192,9 +204,9 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
             structPreviousStudyDownloading->widgetToDisplay = viewerWidget;
             structPreviousStudyDownloading->displaySet = displaySet;
 
-            bool isDownloading = m_studiesDownloading->contains(hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID());
+            bool isDownloading = studiesDownloading->contains(hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID());
 
-            m_studiesDownloading->insert(hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading);
+            studiesDownloading->insert(hangingProtocolImageSet->getPreviousStudyToDisplay()->getInstanceUID(), structPreviousStudyDownloading);
 
             if (!isDownloading && hangingProtocolImageSet->getPreviousStudyToDisplay()->getDICOMSource().getRetrievePACS().count() > 0)
             {
@@ -259,66 +271,87 @@ bool HangingProtocolManager::isValidInstitution(HangingProtocol *protocol, const
 
 void HangingProtocolManager::previousStudyDownloaded(Study *study)
 {
-    if (m_studiesDownloading->isEmpty())
+    foreach (HangingProtocol *hangingProtocol, m_hangingProtocolsDownloading->keys())
     {
-        return;
-    }
+        QMultiHash<QString, StructPreviousStudyDownloading*> *studiesDownloading = m_hangingProtocolsDownloading->value(hangingProtocol);
 
-    // Es busca quins estudis nous hi ha
-    // List is sorted in reverse insertion order
-    QList<StructPreviousStudyDownloading*> previousDownloadingList = m_studiesDownloading->values(study->getInstanceUID());
-    m_studiesDownloading->remove(study->getInstanceUID());
+        // Es busca quins estudis nous hi ha
+        // List is sorted in reverse insertion order
+        QList<StructPreviousStudyDownloading*> previousDownloadingList = studiesDownloading->values(study->getInstanceUID());
+        studiesDownloading->remove(study->getInstanceUID());
 
-    for (int i = previousDownloadingList.size() - 1; i >= 0; --i)
-    {
-        // Per cada estudi que esperàvem que es descarregués
-        // Agafem l'estructura amb les dades que s'havien guardat per poder aplicar-ho
-        StructPreviousStudyDownloading *structPreviousStudyDownloading = previousDownloadingList[i];
+        for (int i = previousDownloadingList.size() - 1; i >= 0; --i)
+        {
+            // Per cada estudi que esperàvem que es descarregués
+            // Agafem l'estructura amb les dades que s'havien guardat per poder aplicar-ho
+            StructPreviousStudyDownloading *structPreviousStudyDownloading = previousDownloadingList[i];
 
-        // Busquem la millor serie de l'estudi que ho satisfa
-        HangingProtocolFiller hangingProtocolFiller;
-        hangingProtocolFiller.fillImageSetWithStudy(structPreviousStudyDownloading->displaySet->getImageSet(), study);
+            // Busquem la millor serie de l'estudi que ho satisfa
+            HangingProtocolFiller hangingProtocolFiller;
+            hangingProtocolFiller.fillImageSetWithStudy(structPreviousStudyDownloading->displaySet->getImageSet(), study);
 
-        Q2DViewerWidget *viewerWidget = structPreviousStudyDownloading->widgetToDisplay;
-        structPreviousStudyDownloading->displaySet->getImageSet()->setDownloaded(true);
+            Q2DViewerWidget *viewerWidget = structPreviousStudyDownloading->widgetToDisplay;
+            structPreviousStudyDownloading->displaySet->getImageSet()->setDownloaded(true);
 
-        viewerWidget->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
+            viewerWidget->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
 
-        setInputToViewer(viewerWidget, structPreviousStudyDownloading->displaySet);
+            setInputToViewer(viewerWidget, structPreviousStudyDownloading->displaySet);
 
-        delete structPreviousStudyDownloading;
+            delete structPreviousStudyDownloading;
+        }
+
+        if (studiesDownloading->isEmpty())
+        {
+            m_hangingProtocolsDownloading->remove(hangingProtocol);
+            delete studiesDownloading;
+        }
     }
 }
 
 void HangingProtocolManager::errorDownloadingPreviousStudies(const QString &studyUID)
 {
-    if (m_studiesDownloading->contains(studyUID))
+    foreach (HangingProtocol *hangingProtocol, m_hangingProtocolsDownloading->keys())
     {
-        // Si és un element que estavem esperant
-        int count = m_studiesDownloading->count(studyUID);
-        for (int i = 0; i < count; ++i)
+        QMultiHash<QString, StructPreviousStudyDownloading*> *studiesDownloading = m_hangingProtocolsDownloading->value(hangingProtocol);
+        if (studiesDownloading->contains(studyUID))
         {
-            // S'agafa i es treu de la llista
-            StructPreviousStudyDownloading *element = m_studiesDownloading->take(studyUID);
-            element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::DownloadingError);
-            delete element;
+            // Si és un element que estavem esperant
+            int count = studiesDownloading->count(studyUID);
+            for (int i = 0; i < count; ++i)
+            {
+                // S'agafa i es treu de la llista
+                StructPreviousStudyDownloading *element = studiesDownloading->take(studyUID);
+                element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::DownloadingError);
+                delete element;
+            }
+
+            if (studiesDownloading->isEmpty())
+            {
+                m_hangingProtocolsDownloading->remove(hangingProtocol);
+                delete studiesDownloading;
+            }
         }
     }
 }
 
-void HangingProtocolManager::cancelHangingProtocolDownloading()
+void HangingProtocolManager::cancelAllHangingProtocolsDownloading()
 {
-    foreach (const QString &key, m_studiesDownloading->keys())
+    foreach (HangingProtocol *hangingProtocol, m_hangingProtocolsDownloading->keys())
     {
-        // S'agafa i es treu de la llista l'element que s'està esperant
-        // i es treu el label de downloading
-        StructPreviousStudyDownloading *element = m_studiesDownloading->take(key);
-        // The widget may have been destroyed before calling this method, so we must check that it's still valid
-        if (element->widgetToDisplay)
+        QMultiHash<QString, StructPreviousStudyDownloading*> *studiesDownloading = m_hangingProtocolsDownloading->take(hangingProtocol);
+        foreach (const QString &key, studiesDownloading->keys())
         {
-            element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
+            // S'agafa i es treu de la llista l'element que s'està esperant
+            // i es treu el label de downloading
+            StructPreviousStudyDownloading *element = studiesDownloading->take(key);
+            // The widget may have been destroyed before calling this method, so we must check that it's still valid
+            if (element->widgetToDisplay)
+            {
+                element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
+            }
+            delete element;
         }
-        delete element;
+        delete studiesDownloading;
     }
 }
 

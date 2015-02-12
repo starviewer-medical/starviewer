@@ -57,7 +57,7 @@ public:
     HangingProtocol* setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
 
     /// Si hi havia estudis en descàrrega, s'elimina de la llista
-    void cancelHangingProtocolDownloading();
+    void cancelAllHangingProtocolsDownloading();
 
 protected:
 
@@ -102,7 +102,7 @@ private:
         HangingProtocolDisplaySet *displaySet;
     };
 
-    QMultiHash<QString, StructPreviousStudyDownloading*> *m_studiesDownloading;
+    QHash<HangingProtocol*, QMultiHash<QString, StructPreviousStudyDownloading*>*> *m_hangingProtocolsDownloading;
 
     /// Objecte utilitzat per descarregar estudis relacionats. No es fa servir QueryScreen per problemes de dependències entre carpetes.
     RelatedStudiesManager *m_relatedStudiesManager;
