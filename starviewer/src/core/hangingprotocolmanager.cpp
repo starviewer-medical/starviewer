@@ -322,16 +322,6 @@ void HangingProtocolManager::cancelHangingProtocolDownloading()
     }
 }
 
-bool HangingProtocolManager::isPreviousStudyForHangingProtocol(Study *study)
-{
-    if (!study)
-    {
-        return false;
-    }
-    
-    return m_studiesDownloading->contains(study->getInstanceUID());
-}
-
 void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, HangingProtocolDisplaySet *displaySet)
 {
     Series *series = displaySet->getImageSet()->getSeriesToDisplay();
