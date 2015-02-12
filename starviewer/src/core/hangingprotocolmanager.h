@@ -58,6 +58,7 @@ public:
 
     /// Si hi havia estudis en descàrrega, s'elimina de la llista
     void cancelAllHangingProtocolsDownloading();
+    void cancelHangingProtocolDownloading(HangingProtocol *hangingProtocol);
 
 protected:
 

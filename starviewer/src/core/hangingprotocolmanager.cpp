@@ -338,21 +338,26 @@ void HangingProtocolManager::cancelAllHangingProtocolsDownloading()
 {
     foreach (HangingProtocol *hangingProtocol, m_hangingProtocolsDownloading->keys())
     {
-        QMultiHash<QString, StructPreviousStudyDownloading*> *studiesDownloading = m_hangingProtocolsDownloading->take(hangingProtocol);
-        foreach (const QString &key, studiesDownloading->keys())
-        {
-            // S'agafa i es treu de la llista l'element que s'està esperant
-            // i es treu el label de downloading
-            StructPreviousStudyDownloading *element = studiesDownloading->take(key);
-            // The widget may have been destroyed before calling this method, so we must check that it's still valid
-            if (element->widgetToDisplay)
-            {
-                element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
-            }
-            delete element;
-        }
-        delete studiesDownloading;
+        cancelHangingProtocolDownloading(hangingProtocol);
     }
+}
+
+void HangingProtocolManager::cancelHangingProtocolDownloading(HangingProtocol *hangingProtocol)
+{
+    QMultiHash<QString, StructPreviousStudyDownloading*> *studiesDownloading = m_hangingProtocolsDownloading->take(hangingProtocol);
+    foreach (const QString &key, studiesDownloading->keys())
+    {
+        // S'agafa i es treu de la llista l'element que s'està esperant
+        // i es treu el label de downloading
+        StructPreviousStudyDownloading *element = studiesDownloading->take(key);
+        // The widget may have been destroyed before calling this method, so we must check that it's still valid
+        if (element->widgetToDisplay)
+        {
+            element->widgetToDisplay->getViewer()->setViewerStatus(QViewer::NoVolumeInput);
+        }
+        delete element;
+    }
+    delete studiesDownloading;
 }
 
 void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, HangingProtocolDisplaySet *displaySet)
