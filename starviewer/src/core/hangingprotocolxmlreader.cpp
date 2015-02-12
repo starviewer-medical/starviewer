@@ -60,9 +60,13 @@ HangingProtocol* HangingProtocolXMLReader::read(QIODevice *device)
 
     if (m_xmlReader.readNextStartElement())
     {
-        if (m_xmlReader.name() == "hangingProtocol")
+        if (m_xmlReader.name() == "hangingProtocol" && m_xmlReader.attributes().value("version") == "2")
         {
             hangingProtocolLoaded = readHangingProtocol();
+        }
+        else
+        {
+            m_xmlReader.raiseError(QObject::tr("Unsupported hanging protocol version: %1").arg(m_xmlReader.attributes().value("version").toString()));
         }
     }
 
