@@ -62,77 +62,7 @@ HangingProtocol* HangingProtocolXMLReader::read(QIODevice *device)
     {
         if (m_xmlReader.name() == "hangingProtocol")
         {
-            HangingProtocol *hangingProtocol = new HangingProtocol();
-            QStringList protocols;
-            QList<HangingProtocolImageSet::Restriction> restrictionList;
-
-            while (m_xmlReader.readNextStartElement())
-            {
-                if (m_xmlReader.name() == "hangingProtocolName")
-                {
-                    hangingProtocol->setName(m_xmlReader.readElementText());
-                }
-                else if (m_xmlReader.name() == "numberScreens")
-                {
-                    hangingProtocol->setNumberOfScreens(m_xmlReader.readElementText().toInt());
-                }
-                else if (m_xmlReader.name() == "protocol")
-                {
-                    protocols << m_xmlReader.readElementText();
-                }
-                else if (m_xmlReader.name() == "institutions")
-                {
-                    hangingProtocol->setInstitutionsRegularExpression(QRegExp(m_xmlReader.readElementText(), Qt::CaseInsensitive));
-                }
-                else if (m_xmlReader.name() == "restriction")
-                {
-                    restrictionList << readRestriction();
-                }
-                else if (m_xmlReader.name() == "imageSet")
-                {
-                    HangingProtocolImageSet *imageSet = readImageSet(restrictionList);
-                    hangingProtocol->addImageSet(imageSet);
-                }
-                else if (m_xmlReader.name() == "displaySet")
-                {
-                    HangingProtocolDisplaySet *displaySet = readDisplaySet(hangingProtocol);
-                    hangingProtocol->addDisplaySet(displaySet);
-                }
-                else if (m_xmlReader.name() == "strictness")
-                {
-                    hangingProtocol->setStrictness(m_xmlReader.readElementText().contains("yes"));
-                }
-                else if (m_xmlReader.name() == "allDifferent")
-                {
-                    hangingProtocol->setAllDiferent(m_xmlReader.readElementText().contains("yes"));
-                }
-                else if (m_xmlReader.name() == "iconType")
-                {
-                    hangingProtocol->setIconType(m_xmlReader.readElementText());
-                }
-                else if (m_xmlReader.name() == "hasPrevious")
-                {
-                    hangingProtocol->setPrevious(m_xmlReader.readElementText().contains("yes"));
-                }
-                else if (m_xmlReader.name() == "priority")
-                {
-                    hangingProtocol->setPriority(m_xmlReader.readElementText().toDouble());
-                }
-                else
-                {
-                    m_xmlReader.skipCurrentElement();
-                }
-            }
-
-            if (!m_xmlReader.hasError())
-            {
-                hangingProtocol->setProtocolsList(protocols);
-                hangingProtocolLoaded = hangingProtocol;
-            }
-            else
-            {
-                delete hangingProtocol;
-            }
+            hangingProtocolLoaded = readHangingProtocol();
         }
     }
 
@@ -157,6 +87,82 @@ HangingProtocol* HangingProtocolXMLReader::read(QIODevice *device)
     }
 
     return hangingProtocolLoaded;
+}
+
+HangingProtocol* HangingProtocolXMLReader::readHangingProtocol()
+{
+    HangingProtocol *hangingProtocol = new HangingProtocol();
+    QStringList protocols;
+    QList<HangingProtocolImageSet::Restriction> restrictionList;
+
+    while (m_xmlReader.readNextStartElement())
+    {
+        if (m_xmlReader.name() == "hangingProtocolName")
+        {
+            hangingProtocol->setName(m_xmlReader.readElementText());
+        }
+        else if (m_xmlReader.name() == "numberScreens")
+        {
+            hangingProtocol->setNumberOfScreens(m_xmlReader.readElementText().toInt());
+        }
+        else if (m_xmlReader.name() == "protocol")
+        {
+            protocols << m_xmlReader.readElementText();
+        }
+        else if (m_xmlReader.name() == "institutions")
+        {
+            hangingProtocol->setInstitutionsRegularExpression(QRegExp(m_xmlReader.readElementText(), Qt::CaseInsensitive));
+        }
+        else if (m_xmlReader.name() == "restriction")
+        {
+            restrictionList << readRestriction();
+        }
+        else if (m_xmlReader.name() == "imageSet")
+        {
+            HangingProtocolImageSet *imageSet = readImageSet(restrictionList);
+            hangingProtocol->addImageSet(imageSet);
+        }
+        else if (m_xmlReader.name() == "displaySet")
+        {
+            HangingProtocolDisplaySet *displaySet = readDisplaySet(hangingProtocol);
+            hangingProtocol->addDisplaySet(displaySet);
+        }
+        else if (m_xmlReader.name() == "strictness")
+        {
+            hangingProtocol->setStrictness(m_xmlReader.readElementText().contains("yes"));
+        }
+        else if (m_xmlReader.name() == "allDifferent")
+        {
+            hangingProtocol->setAllDiferent(m_xmlReader.readElementText().contains("yes"));
+        }
+        else if (m_xmlReader.name() == "iconType")
+        {
+            hangingProtocol->setIconType(m_xmlReader.readElementText());
+        }
+        else if (m_xmlReader.name() == "hasPrevious")
+        {
+            hangingProtocol->setPrevious(m_xmlReader.readElementText().contains("yes"));
+        }
+        else if (m_xmlReader.name() == "priority")
+        {
+            hangingProtocol->setPriority(m_xmlReader.readElementText().toDouble());
+        }
+        else
+        {
+            m_xmlReader.skipCurrentElement();
+        }
+    }
+
+    if (!m_xmlReader.hasError())
+    {
+        hangingProtocol->setProtocolsList(protocols);
+        return hangingProtocol;
+    }
+    else
+    {
+        delete hangingProtocol;
+        return 0;
+    }
 }
 
 HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction()

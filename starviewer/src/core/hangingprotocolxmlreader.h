@@ -40,6 +40,8 @@ public:
     HangingProtocol* read(QIODevice *device);
 
 private:
+    /// Reads and returns a hanging protocol from the XML reader.
+    HangingProtocol* readHangingProtocol();
     /// Reads and returns a restriction from the XML reader.
     HangingProtocolImageSet::Restriction readRestriction();
     /// Reads and returns a HangingProtocolImageSet from the XML reader.
