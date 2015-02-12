@@ -44,7 +44,7 @@ HangingProtocolManager::HangingProtocolManager(QObject *parent)
 
     copyHangingProtocolRepository();
 
-    connect(m_relatedStudiesManager, SIGNAL(errorDownloadingStudy(QString)), SLOT(errorDowlonadingPreviousStudies(QString)));
+    connect(m_relatedStudiesManager, SIGNAL(errorDownloadingStudy(QString)), SLOT(errorDownloadingPreviousStudies(QString)));
 }
 
 HangingProtocolManager::~HangingProtocolManager()
@@ -290,7 +290,7 @@ void HangingProtocolManager::previousStudyDownloaded(Study *study)
     }
 }
 
-void HangingProtocolManager::errorDowlonadingPreviousStudies(const QString &studyUID)
+void HangingProtocolManager::errorDownloadingPreviousStudies(const QString &studyUID)
 {
     if (m_studiesDownloading->contains(studyUID))
     {
