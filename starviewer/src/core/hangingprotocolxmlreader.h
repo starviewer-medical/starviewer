@@ -15,7 +15,6 @@
 #ifndef UDGHANGINGPROTOCOLXMLREADER_H
 #define UDGHANGINGPROTOCOLXMLREADER_H
 
-#include <QObject>
 #include <QList>
 #include <QXmlStreamReader>
 
@@ -26,11 +25,10 @@ namespace udg {
 class HangingProtocol;
 class HangingProtocolDisplaySet;
 
-class HangingProtocolXMLReader : public QObject {
-Q_OBJECT
-public:
-    HangingProtocolXMLReader(QObject *parent = 0);
+class HangingProtocolXMLReader {
 
+public:
+    HangingProtocolXMLReader();
     ~HangingProtocolXMLReader();
 
     /// Llegeix el hanging protocol del fitxer. Retrona NULL si s'han pogut carregar

@@ -29,8 +29,7 @@
 
 namespace udg {
 
-HangingProtocolXMLReader::HangingProtocolXMLReader(QObject *parent)
- : QObject(parent)
+HangingProtocolXMLReader::HangingProtocolXMLReader()
 {
 }
 
@@ -45,8 +44,8 @@ HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
 
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
-        QMessageBox::warning(0, tr("Hanging Protocol XML File"),
-                             tr("Unable to read file %1:\n%2.")
+        QMessageBox::warning(0, QObject::tr("Hanging Protocol XML File"),
+                             QObject::tr("Unable to read file %1:\n%2.")
                              .arg(path)
                              .arg(file.errorString()));
         return NULL;
