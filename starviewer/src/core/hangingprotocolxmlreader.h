@@ -25,23 +25,24 @@ namespace udg {
 class HangingProtocol;
 class HangingProtocolDisplaySet;
 
+/**
+ * @brief The HangingProtocolXMLReader class can read a HangingProtocol from a XML file.
+ */
 class HangingProtocolXMLReader {
 
 public:
     HangingProtocolXMLReader();
     ~HangingProtocolXMLReader();
 
-    /// Llegeix el hanging protocol del fitxer. Retrona NULL si s'han pogut carregar
+    /// Reads and returns a HangingProtocol from the file with the given path. If the hanging protocol can't be read, returns null.
     HangingProtocol* readFile(const QString &path);
 
 private:
-    /// Llegeix una restriccio
+    /// Reads and returns a restriction from the XML reader.
     HangingProtocolImageSet::Restriction readRestriction(QXmlStreamReader *reader);
-
-    /// Llegeix un image set
+    /// Reads and returns a HangingProtocolImageSet from the XML reader.
     HangingProtocolImageSet* readImageSet(QXmlStreamReader *reader, const QList<HangingProtocolImageSet::Restriction> &restrictionList);
-
-    /// Llegeix un display set
+    /// Reads and returns a HangingProtocolDisplaySet from the XML reader.
     HangingProtocolDisplaySet* readDisplaySet(QXmlStreamReader *reader, HangingProtocol *hangingProtocol);
 
 };
