@@ -122,7 +122,7 @@ void LayoutManager::applyPreviousHangingProtocol()
 
 void LayoutManager::cancelOngoingOperations()
 {
-    m_hangingProtocolManager->cancelHangingProtocolDownloading();
+    m_hangingProtocolManager->cancelAllHangingProtocolsDownloading();
 }
 
 QList<StudyLayoutConfig> LayoutManager::getLayoutCandidates(Study *study)
