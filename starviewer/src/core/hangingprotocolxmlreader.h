@@ -41,11 +41,15 @@ public:
 
 private:
     /// Reads and returns a restriction from the XML reader.
-    HangingProtocolImageSet::Restriction readRestriction(QXmlStreamReader *reader);
+    HangingProtocolImageSet::Restriction readRestriction();
     /// Reads and returns a HangingProtocolImageSet from the XML reader.
-    HangingProtocolImageSet* readImageSet(QXmlStreamReader *reader, const QList<HangingProtocolImageSet::Restriction> &restrictionList);
+    HangingProtocolImageSet* readImageSet(const QList<HangingProtocolImageSet::Restriction> &restrictionList);
     /// Reads and returns a HangingProtocolDisplaySet from the XML reader.
-    HangingProtocolDisplaySet* readDisplaySet(QXmlStreamReader *reader, HangingProtocol *hangingProtocol);
+    HangingProtocolDisplaySet* readDisplaySet(HangingProtocol *hangingProtocol);
+
+private:
+    /// The reader that is used to read XML files.
+    QXmlStreamReader m_xmlReader;
 
 };
 
