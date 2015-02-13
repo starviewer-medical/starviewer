@@ -29,7 +29,7 @@ HangingProtocol::HangingProtocol()
     m_mask = new HangingProtocolMask();
     m_strictness = false;
     m_allDiferent = false;
-    m_hasPrevious = false;
+    m_numberOfPriors = 0;
     m_priority = 1;
 }
 
@@ -41,7 +41,7 @@ HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
     m_strictness = hangingProtocol->m_strictness;
     m_allDiferent = hangingProtocol->m_allDiferent;
     m_iconType = hangingProtocol->m_iconType;
-    m_hasPrevious = hangingProtocol->m_hasPrevious;
+    m_numberOfPriors = hangingProtocol->m_numberOfPriors;
     m_priority = hangingProtocol->m_priority;
     m_institutionsRegularExpression = hangingProtocol->getInstitutionsRegularExpression();
 
@@ -348,14 +348,14 @@ QString HangingProtocol::getIconType() const
     return m_iconType;
 }
 
-void HangingProtocol::setPrevious(bool isPrevious)
+void HangingProtocol::setNumberOfPriors(int numberOfPriors)
 {
-    m_hasPrevious = isPrevious;
+    m_numberOfPriors = numberOfPriors;
 }
 
-bool HangingProtocol::isPrevious() const
+int HangingProtocol::getNumberOfPriors() const
 {
-    return m_hasPrevious;
+    return m_numberOfPriors;
 }
 
 void HangingProtocol::setPriority(double priority)
@@ -376,7 +376,7 @@ bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol) const
         && m_strictness == hangingProtocol.isStrict()
         && m_allDiferent == hangingProtocol.getAllDiferent()
         && m_iconType == hangingProtocol.getIconType()
-        && m_hasPrevious == hangingProtocol.isPrevious()
+        && m_numberOfPriors == hangingProtocol.getNumberOfPriors()
         && m_priority == hangingProtocol.getPriority()
         && m_layout->getDisplayEnvironmentSpatialPositionList() == hangingProtocol.m_layout->getDisplayEnvironmentSpatialPositionList()
         && m_layout->getHorizontalPixelsList() == hangingProtocol.m_layout->getHorizontalPixelsList()

@@ -17,7 +17,8 @@ public:
     static udg::HangingProtocol* createEmptyHangingProtocol();
     static udg::HangingProtocol* createHangingProtocolWithoutImageSetAndDisplaySet();
     static udg::HangingProtocol* createHangingProtocolWithOneImageSetAndOneDisplaySet();
-    static udg::HangingProtocol* createHangingProtocolWithAttributes(QString name, int priority, bool strictness, bool allDifferent, bool previous, int identifier, int imageSets, int displaySets);
+    static udg::HangingProtocol* createHangingProtocolWithAttributes(QString name, int priority, bool strictness, bool allDifferent, int numberOfPriors,
+                                                                     int identifier, int imageSets, int displaySets);
 };
 
 }
