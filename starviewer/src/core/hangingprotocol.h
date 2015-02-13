@@ -117,11 +117,11 @@ public:
     /// Obté el tipus d'icona per representar-lo
     QString getIconType() const;
 
-    /// Posa si el hanging protocol és de previes o no
-    void setPrevious(bool isPrevious);
+    /// Sets the number of priors.
+    void setNumberOfPriors(int numberOfPriors);
 
-    /// Retorna si el hanging protocol te previes o no
-    bool isPrevious() const;
+    /// Returns the number of priors.
+    int getNumberOfPriors() const;
 
     /// Assigna una prioritat al hanging protocol
     void setPriority(double priority);
@@ -172,8 +172,8 @@ private:
     /// Indica el tipus d'icona per representar el hanging protocol
     QString m_iconType;
 
-    /// Informa si es un hanging protocol amb previes o no
-    bool m_hasPrevious;
+    /// The number of priors in this hanging protocol (based on DICOM Number of Priors Referenced (0072,0014)).
+    int m_numberOfPriors;
 
     /// Priority of this hanging protocol (default: 1).
     double m_priority;

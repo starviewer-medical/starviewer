@@ -20,7 +20,7 @@ HangingProtocol* HangingProtocolTestHelper::createHangingProtocolWithoutImageSet
     HangingProtocol *testHangingProtocol = createEmptyHangingProtocol();
     testHangingProtocol->setStrictness(true);
     testHangingProtocol->setAllDiferent(true);
-    testHangingProtocol->setPrevious(true);
+    testHangingProtocol->setNumberOfPriors(1);
     testHangingProtocol->setPriority(10.0);
     testHangingProtocol->setName(QString("HangingProtocolName"));
     testHangingProtocol->setIdentifier(1);
@@ -41,7 +41,8 @@ HangingProtocol* HangingProtocolTestHelper::createHangingProtocolWithOneImageSet
     return testHangingProtocol;
 }
 
-HangingProtocol* HangingProtocolTestHelper::createHangingProtocolWithAttributes(QString name, int priority, bool strictness, bool allDifferent, bool previous, int identifier, int imageSets, int displaySets)
+HangingProtocol* HangingProtocolTestHelper::createHangingProtocolWithAttributes(QString name, int priority, bool strictness, bool allDifferent,
+                                                                                int numberOfPriors, int identifier, int imageSets, int displaySets)
 {
     HangingProtocol *testHangingProtocol = createEmptyHangingProtocol();
     testHangingProtocol->setName(name);
@@ -49,7 +50,7 @@ HangingProtocol* HangingProtocolTestHelper::createHangingProtocolWithAttributes(
     testHangingProtocol->setPriority(priority);
     testHangingProtocol->setStrictness(strictness);
     testHangingProtocol->setAllDiferent(allDifferent);
-    testHangingProtocol->setPrevious(previous);
+    testHangingProtocol->setNumberOfPriors(numberOfPriors);
 
     for(int i = 0; i < imageSets; i++)
     {

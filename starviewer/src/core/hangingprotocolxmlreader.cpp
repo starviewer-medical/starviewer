@@ -146,9 +146,9 @@ HangingProtocol* HangingProtocolXMLReader::readHangingProtocol()
         {
             hangingProtocol->setIconType(m_xmlReader.readElementText());
         }
-        else if (m_xmlReader.name() == "hasPrevious")
+        else if (m_xmlReader.name() == "numberOfPriors")
         {
-            hangingProtocol->setPrevious(m_xmlReader.readElementText().contains("yes"));
+            hangingProtocol->setNumberOfPriors(m_xmlReader.readElementText().toInt());
         }
         else if (m_xmlReader.name() == "priority")
         {
