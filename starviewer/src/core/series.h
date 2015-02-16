@@ -195,12 +195,12 @@ public:
 
     /// Retorna el Volume amb identificador id
     /// Retorna NULL en cas que no hi hagi cap volum amb aquest id.
-    Volume* getVolume(Identifier id);
+    Volume* getVolume(Identifier id) const;
 
     /// Mètode per conveniència que serveix per retornar el "primer" volum. En el 90% dels casos (de moment el 100%)
     /// tindrem que per cada sèrie només hi haurà un sol volum. Aquest mètode retorna aquest o, en cas de més d'un, el primer.
     /// Retorna NULL en cas que no hi hagi cap volum.
-    Volume* getFirstVolume();
+    Volume* getFirstVolume() const;
 
     /// Mètode per afegir un sol volum a la llista de volums de la serie. Retorna l'id amb el que s'ha guardat al repositori
     /// de volums.

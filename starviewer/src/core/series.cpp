@@ -420,13 +420,13 @@ DICOMSource Series::getDICOMSource() const
     return resultDICOMSource;
 }
 
-Volume* Series::getVolume(Identifier id)
+Volume* Series::getVolume(Identifier id) const
 {
     int index = m_volumesList.indexOf(id);
     return index != -1 ? VolumeRepository::getRepository()->getVolume(m_volumesList[index]) : NULL;
 }
 
-Volume* Series::getFirstVolume()
+Volume* Series::getFirstVolume() const
 {
     return m_volumesList.isEmpty() ? NULL : this->getVolume(m_volumesList[0]);
 }

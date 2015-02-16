@@ -430,61 +430,7 @@ bool HangingProtocolManager::isValidSerie(Series *serie, HangingProtocolImageSet
     while (valid && i < numberRestrictions)
     {
         restriction = listOfRestrictions.value(i);
-
-        if (restriction.getSelectorAttribute() == "BodyPartExamined")
-        {
-            if (serie->getBodyPartExamined() != restriction.getValueRepresentation())
-            {
-                valid = false;
-            }
-        }
-        else if (restriction.getSelectorAttribute() == "ProtocolName")
-        {
-            if (! serie->getProtocolName().contains(restriction.getValueRepresentation()))
-            {
-                valid = false;
-            }
-        }
-        else if (restriction.getSelectorAttribute() == "ViewPosition")
-        {
-            if (serie->getViewPosition() != restriction.getValueRepresentation())
-            {
-                valid = false;
-            }
-        }
-        else if (restriction.getSelectorAttribute() == "SeriesDescription")
-        {
-            bool contains = serie->getDescription().contains(restriction.getValueRepresentation(), Qt::CaseInsensitive);
-            bool match = (restriction.getUsageFlag() == HangingProtocolImageSetRestriction::NoMatch);
-            valid = contains ^ match;
-        }
-        else if (restriction.getSelectorAttribute() == "StudyDescription")
-        {
-            bool contains = serie->getParentStudy()->getDescription().contains(restriction.getValueRepresentation(), Qt::CaseInsensitive);
-            bool match = (restriction.getUsageFlag() == HangingProtocolImageSetRestriction::NoMatch);
-            valid = contains ^ match;
-        }
-        else if (restriction.getSelectorAttribute() == "PatientName")
-        {
-            if (serie->getParentStudy()->getParentPatient()->getFullName() != restriction.getValueRepresentation())
-            {
-                valid = false;
-            }
-        }
-        else if (restriction.getSelectorAttribute() == "SeriesNumber")
-        {
-            if (serie->getSeriesNumber() != restriction.getValueRepresentation())
-            {
-                valid = false;
-            }
-        }
-        else if (restriction.getSelectorAttribute() == "MinimumNumberOfImages")
-        {
-            if (serie->getFirstVolume()->getImages().size() < restriction.getValueRepresentation().toInt())
-            {
-                valid = false;
-            }
-        }
+        valid = restriction.test(serie);
         ++i;
     }
 
@@ -508,64 +454,7 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
     while (valid && i < numberRestrictions)
     {
         restriction = listOfRestrictions.value(i);
-        if (restriction.getSelectorAttribute() == "ViewPosition")
-        {
-            bool contains = image->getViewPosition().contains(restriction.getValueRepresentation(), Qt::CaseInsensitive);
-            bool match = (restriction.getUsageFlag() == HangingProtocolImageSetRestriction::NoMatch);
-            valid = contains ^ match;
-        }
-        else if (restriction.getSelectorAttribute() == "ImageLaterality")
-        {
-            if (QString(image->getImageLaterality()) != restriction.getValueRepresentation().at(0))
-            {
-                valid = false;
-            }
-        }
-        else if (restriction.getSelectorAttribute() == "Laterality")
-        {
-            // Atenció! Aquest atribut està definit a nivell de sèries
-            if (QString(image->getParentSeries()->getLaterality()) != restriction.getValueRepresentation())
-            {
-                valid = false;
-            }
-        }
-        else if (restriction.getSelectorAttribute() == "PatientOrientation")
-        {
-            if (!image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(restriction.getValueRepresentation()))
-            {
-                valid = false;
-            }
-        }
-         // TODO Es podria canviar el nom, ja que és massa genèric. Seria més adequat ViewCodeMeaning per exemple
-        else if (restriction.getSelectorAttribute() == "CodeMeaning")
-        {
-            bool match = (restriction.getUsageFlag() == HangingProtocolImageSetRestriction::Match);
-
-            if (!(image->getViewCodeMeaning().contains(restriction.getValueRepresentation())))
-            {
-                valid = false;
-            }
-
-            if (!match)
-            {
-                // Just el cas contrari
-                valid = !valid;
-            }
-        }
-        else if (restriction.getSelectorAttribute() == "ImageType")
-        {
-            bool isLocalyzer = image->getImageType().contains(restriction.getValueRepresentation(), Qt::CaseInsensitive);
-            bool match = (restriction.getUsageFlag() == HangingProtocolImageSetRestriction::NoMatch);
-            valid = isLocalyzer ^ match;
-        }
-        else if (restriction.getSelectorAttribute() == "MinimumNumberOfImages")
-        {
-            Series *serie = image->getParentSeries();
-            if (serie->getFirstVolume()->getImages().size() < restriction.getValueRepresentation().toInt())
-            {
-                valid = false;
-            }
-        }
+        valid = restriction.test(image);
         ++i;
     }
 
