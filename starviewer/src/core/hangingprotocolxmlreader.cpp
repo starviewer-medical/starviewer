@@ -97,7 +97,7 @@ HangingProtocol* HangingProtocolXMLReader::readHangingProtocol()
 {
     HangingProtocol *hangingProtocol = new HangingProtocol();
     QStringList protocols;
-    QList<HangingProtocolImageSet::Restriction> restrictionList;
+    QList<HangingProtocolImageSetRestriction> restrictionList;
 
     while (m_xmlReader.readNextStartElement())
     {
@@ -169,9 +169,9 @@ HangingProtocol* HangingProtocolXMLReader::readHangingProtocol()
     }
 }
 
-HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction()
+HangingProtocolImageSetRestriction HangingProtocolXMLReader::readRestriction()
 {
-    HangingProtocolImageSet::Restriction restriction;
+    HangingProtocolImageSetRestriction restriction;
 
     while (m_xmlReader.readNextStartElement())
     {
@@ -180,20 +180,20 @@ HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction()
             QString text = m_xmlReader.readElementText();
             if (text == "MATCH")
             {
-                restriction.usageFlag = HangingProtocolImageSet::Match;
+                restriction.setUsageFlag(HangingProtocolImageSetRestriction::Match);
             }
             else if (text == "NO_MATCH")
             {
-                restriction.usageFlag = HangingProtocolImageSet::NoMatch;
+                restriction.setUsageFlag(HangingProtocolImageSetRestriction::NoMatch);
             }
         }
         else if (m_xmlReader.name() == "selectorAttribute")
         {
-            restriction.selectorAttribute = m_xmlReader.readElementText();
+            restriction.setSelectorAttribute(m_xmlReader.readElementText());
         }
         else if (m_xmlReader.name() == "valueRepresentation")
         {
-            restriction.valueRepresentation = m_xmlReader.readElementText();
+            restriction.setValueRepresentation(m_xmlReader.readElementText());
         }
         else
         {
@@ -205,7 +205,7 @@ HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction()
     return restriction;
 }
 
-HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QList<HangingProtocolImageSet::Restriction> &restrictionList)
+HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QList<HangingProtocolImageSetRestriction> &restrictionList)
 {
     HangingProtocolImageSet *imageSet = new HangingProtocolImageSet();
     imageSet->setIdentifier(m_xmlReader.attributes().value("identifier").toString().toInt());
@@ -214,7 +214,7 @@ HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QList<Hang
     {
         if (m_xmlReader.name() == "restriction")
         {
-            HangingProtocolImageSet::Restriction restriction = restrictionList.value(m_xmlReader.readElementText().toInt()-1);
+            HangingProtocolImageSetRestriction restriction = restrictionList.value(m_xmlReader.readElementText().toInt()-1);
             imageSet->addRestriction(restriction);
         }
         else if (m_xmlReader.name() == "type")

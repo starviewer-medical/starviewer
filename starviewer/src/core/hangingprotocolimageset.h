@@ -17,6 +17,8 @@
 
 #include <QObject>
 
+#include "hangingprotocolimagesetrestriction.h"
+
 namespace udg {
 
 class Series;
@@ -28,20 +30,6 @@ Q_OBJECT
 public:
     HangingProtocolImageSet(QObject *parent = 0);
     ~HangingProtocolImageSet();
-
-    enum SelectorUsageFlag { Match, NoMatch };
-
-    struct Restriction
-    {
-        // Match o NoMatch
-        SelectorUsageFlag usageFlag;
-        // TAG
-        QString selectorAttribute;
-        // Valor del TAG
-        QString valueRepresentation;
-        // Només si el TAG és multivalor
-        int selectorValueNumber;
-    };
 
     /// Identificador de l'Image Set
     void setIdentifier(int identifier);
@@ -56,13 +44,13 @@ public:
     HangingProtocol* getHangingProtocol() const;
 
     /// Afegir una restricció
-    void addRestriction(Restriction restriction);
+    void addRestriction(HangingProtocolImageSetRestriction restriction);
 
     /// Assignar la llista de restriccions
-    void setRestrictions(const QList<Restriction> &restrictions);
+    void setRestrictions(const QList<HangingProtocolImageSetRestriction> &restrictions);
 
     /// Obtenir les restriccions
-    QList<Restriction> getRestrictions() const;
+    QList<HangingProtocolImageSetRestriction> getRestrictions() const;
 
     /// Posar el tipus d'element
     void setTypeOfItem(QString);
@@ -117,7 +105,7 @@ public:
 
 private:
     /// Llista de restriccions que ha de complir l'Image Set
-    QList<Restriction> m_listOfRestrictions;
+    QList<HangingProtocolImageSetRestriction> m_listOfRestrictions;
 
     /// Identificador únic de l'Image Set
     int m_identifier;

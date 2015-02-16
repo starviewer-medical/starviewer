@@ -35,7 +35,8 @@ private slots:
 
 private:
     QList<HangingProtocol*> getHangingProtocolsRepository();
-    HangingProtocolImageSet::Restriction createRestriction(HangingProtocolImageSet::SelectorUsageFlag flag, QString selectorAttribute, QString valueRepresentation);
+    HangingProtocolImageSetRestriction createRestriction(HangingProtocolImageSetRestriction::SelectorUsageFlag flag, QString selectorAttribute,
+                                                         QString valueRepresentation);
 };
 
 Q_DECLARE_METATYPE(QList<HangingProtocol*>)
@@ -133,11 +134,11 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
     MGhangingProtocol->setProtocolsList(QStringList() << "MG");
     MGhangingProtocol->setInstitutionsRegularExpression(QRegExp("GIRONA|SABADELL", Qt::CaseInsensitive));
     //Restrictions MG
-    HangingProtocolImageSet::Restriction restrictionMG_1 = createRestriction(HangingProtocolImageSet::Match, "ImageLaterality", "R");
-    HangingProtocolImageSet::Restriction restrictionMG_2 = createRestriction(HangingProtocolImageSet::Match, "ImageLaterality", "L");
-    HangingProtocolImageSet::Restriction restrictionMG_3 = createRestriction(HangingProtocolImageSet::Match, "CodeMeaning", "cranio-caudal");
-    HangingProtocolImageSet::Restriction restrictionMG_4 = createRestriction(HangingProtocolImageSet::NoMatch, "CodeMeaning", "cranio-caudal");
-    HangingProtocolImageSet::Restriction restrictionMG_5 = createRestriction(HangingProtocolImageSet::Match, "CodeMeaning", "later");
+    HangingProtocolImageSetRestriction restrictionMG_1 = createRestriction(HangingProtocolImageSetRestriction::Match, "ImageLaterality", "R");
+    HangingProtocolImageSetRestriction restrictionMG_2 = createRestriction(HangingProtocolImageSetRestriction::Match, "ImageLaterality", "L");
+    HangingProtocolImageSetRestriction restrictionMG_3 = createRestriction(HangingProtocolImageSetRestriction::Match, "CodeMeaning", "cranio-caudal");
+    HangingProtocolImageSetRestriction restrictionMG_4 = createRestriction(HangingProtocolImageSetRestriction::NoMatch, "CodeMeaning", "cranio-caudal");
+    HangingProtocolImageSetRestriction restrictionMG_5 = createRestriction(HangingProtocolImageSetRestriction::Match, "CodeMeaning", "later");
     // ImageSets MG
     HangingProtocolImageSet *imageSetMG_1 = MGhangingProtocol->getImageSet(1);
     imageSetMG_1->addRestriction(restrictionMG_1);
@@ -183,8 +184,8 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
     HangingProtocol *MRhangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("MR", 10, true, true, false, 3, 2, 2);
     MRhangingProtocol->setProtocolsList(QStringList() << "MR");
     //Restrictions MR
-    HangingProtocolImageSet::Restriction restrictionMR_1 = createRestriction(HangingProtocolImageSet::Match, "SeriesDescription", "description");
-    HangingProtocolImageSet::Restriction restrictionMR_2 = createRestriction(HangingProtocolImageSet::NoMatch, "SeriesDescription", "description");
+    HangingProtocolImageSetRestriction restrictionMR_1 = createRestriction(HangingProtocolImageSetRestriction::Match, "SeriesDescription", "description");
+    HangingProtocolImageSetRestriction restrictionMR_2 = createRestriction(HangingProtocolImageSetRestriction::NoMatch, "SeriesDescription", "description");
     // ImageSets MR
     HangingProtocolImageSet *imageSetMR_1 = MRhangingProtocol->getImageSet(1);
     imageSetMR_1->addRestriction(restrictionMR_1);
@@ -218,12 +219,13 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
     return hangingProtocolRepository;
 }
 
-HangingProtocolImageSet::Restriction test_HangingProtocolManager::createRestriction(HangingProtocolImageSet::SelectorUsageFlag flag, QString selectorAttribute, QString valueRepresentation )
+HangingProtocolImageSetRestriction test_HangingProtocolManager::createRestriction(HangingProtocolImageSetRestriction::SelectorUsageFlag flag,
+                                                                                  QString selectorAttribute, QString valueRepresentation)
 {
-    HangingProtocolImageSet::Restriction restriction;
-    restriction.usageFlag = flag;
-    restriction.selectorAttribute = selectorAttribute;
-    restriction.valueRepresentation = valueRepresentation;
+    HangingProtocolImageSetRestriction restriction;
+    restriction.setUsageFlag(flag);
+    restriction.setSelectorAttribute(selectorAttribute);
+    restriction.setValueRepresentation(valueRepresentation);
     return restriction;
 }
 
