@@ -68,32 +68,25 @@ void HangingProtocolManager::copyHangingProtocolRepository()
     }
 }
 
-QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *patient)
+QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Study *study)
 {
     QList<Study*> previousStudies;
 
-    return searchHangingProtocols(patient, previousStudies);
+    return searchHangingProtocols(study, previousStudies);
 }
 
-QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies)
+QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Study *study, const QList<Study*> &previousStudies)
 {
     QList<HangingProtocol*> outputHangingProtocolList;
-
-    QList<Series*> allSeries;
-
-    foreach (Study *study, patient->getStudies())
-    {
-        allSeries += study->getViewableSeries();
-    }
 
     // Buscar el hangingProtocol que s'ajusta millor a l'estudi del pacient
     // Aprofitem per assignar ja les series, per millorar el rendiment
     foreach (HangingProtocol *hangingProtocol, m_availableHangingProtocols)
     {
-        if (isModalityCompatible(hangingProtocol, patient) && isInstitutionCompatible(hangingProtocol, patient))
+        if (isModalityCompatible(hangingProtocol, study) && isInstitutionCompatible(hangingProtocol, study))
         {
             HangingProtocolFiller hangingProtocolFiller;
-            hangingProtocolFiller.fill(hangingProtocol, patient->getStudies().first(), previousStudies);
+            hangingProtocolFiller.fill(hangingProtocol, study, previousStudies);
 
             int numberOfFilledImageSets = hangingProtocol->countFilledImageSets();
 
@@ -225,9 +218,9 @@ void HangingProtocolManager::applyHangingProtocol(HangingProtocol *hangingProtoc
     INFO_LOG(QString("Hanging protocol aplicat: %1").arg(hangingProtocol->getName()));
 }
 
-bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, Patient *patient)
+bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, Study *study)
 {
-    foreach (const QString &modality, patient->getModalities())
+    foreach (const QString &modality, study->getModalities())
     {
         if (isModalityCompatible(protocol, modality))
         {
@@ -243,16 +236,13 @@ bool HangingProtocolManager::isModalityCompatible(HangingProtocol *protocol, con
     return protocol->getHangingProtocolMask()->getProtocolList().contains(modality);
 }
 
-bool HangingProtocolManager::isInstitutionCompatible(HangingProtocol *protocol, Patient *patient)
+bool HangingProtocolManager::isInstitutionCompatible(HangingProtocol *protocol, Study *study)
 {
-    foreach(Study *study, patient->getStudies())
+    foreach(Series *series, study->getSeries())
     {
-        foreach(Series *series, study->getSeries())
+        if (isValidInstitution(protocol, series->getInstitutionName()))
         {
-            if (isValidInstitution(protocol, series->getInstitutionName()))
-            {
-                return true;
-            }
+            return true;
         }
     }
 

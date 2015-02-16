@@ -118,7 +118,7 @@ void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHan
         testHangingProtocolManager.addHangingProtocolToRepository(hangingProtocol);
     }
 
-    QList<HangingProtocol *> hangingProtocolsCandidates = testHangingProtocolManager.searchHangingProtocols(patient);
+    QList<HangingProtocol *> hangingProtocolsCandidates = testHangingProtocolManager.searchHangingProtocols(patient->getStudies().first());
     QCOMPARE(hangingProtocolsCandidates.count(), expectedHangingProtocols.count());
 
     foreach(HangingProtocol *hangingProtocol, expectedHangingProtocols)
