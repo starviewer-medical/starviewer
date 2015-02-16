@@ -19,6 +19,9 @@
 
 namespace udg {
 
+class Image;
+class Series;
+
 /**
  * @brief The HangingProtocolImageSetRestriction class represents a criterion that an image or series must satisfy to be selected for an image set.
  *
@@ -46,6 +49,11 @@ public:
 
     int getSelectorValueNumber() const;
     void setSelectorValueNumber(int selectorValueNumber);
+
+    /// Returns true if the given series satisfies this restriction, and false otherwise.
+    bool test(const Series *series) const;
+    /// Returns true if the given image satisfies this restriction, and false otherwise.
+    bool test(const Image *image) const;
 
 private:
     /// Flag indicating whether the attribute value must match or not match the value representation.
