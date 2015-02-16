@@ -46,8 +46,8 @@ public:
     ~HangingProtocolManager();
 
     /// Buscar els hanging protocols disponibles
-    QList<HangingProtocol*> searchHangingProtocols(Patient *patient);
-    QList<HangingProtocol*> searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies);
+    QList<HangingProtocol*> searchHangingProtocols(Study *study);
+    QList<HangingProtocol*> searchHangingProtocols(Study *study, const QList<Study*> &previousStudies);
 
     /// Aplica un hanging protocol concret
     void applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient);
@@ -78,13 +78,13 @@ private slots:
 
 private:
     /// Mira si el protocol es pot aplicar al pacient
-    bool isModalityCompatible(HangingProtocol *protocol, Patient *patient);
+    bool isModalityCompatible(HangingProtocol *protocol, Study *study);
 
     /// Mira si la modalitat és compatible amb el protocol
     bool isModalityCompatible(HangingProtocol *protocol, const QString &modality);
 
     /// Mira si la institució és compatible amb el protocol
-    bool isInstitutionCompatible(HangingProtocol *protocol, Patient *patient);
+    bool isInstitutionCompatible(HangingProtocol *protocol, Study *study);
 
     /// Comprova si el protocol és aplicable a la institució. Si el protocol no té expressió regular per institució és aplicable
     bool isValidInstitution(HangingProtocol *protocol, const QString &institutionName);

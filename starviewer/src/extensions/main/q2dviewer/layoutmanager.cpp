@@ -76,7 +76,7 @@ void LayoutManager::applyProperLayoutChoice()
 
 void LayoutManager::searchHangingProtocols()
 {
-    m_hangingProtocolCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient);
+    m_hangingProtocolCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient->getStudies().first());
     emit hangingProtocolCandidatesFound(m_hangingProtocolCandidates);
 }
 
@@ -257,7 +257,7 @@ void LayoutManager::setHangingProtocol(HangingProtocol *hangingProtocol)
 
 void LayoutManager::addHangingProtocolsWithPrevious(QList<Study*> studies)
 {
-    m_hangingProtocolCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient, studies);
+    m_hangingProtocolCandidates = m_hangingProtocolManager->searchHangingProtocols(m_patient->getStudies().first(), studies);
     emit hangingProtocolCandidatesFound(m_hangingProtocolCandidates);
     // HACK To notify we ended searching related studies and thus we have all the hanging protocols available
     emit previousStudiesSearchEnded();
