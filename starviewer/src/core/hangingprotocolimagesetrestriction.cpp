@@ -75,57 +75,41 @@ bool HangingProtocolImageSetRestriction::test(const Series *series) const
 {
     if (getSelectorAttribute() == "BodyPartExamined")
     {
-        if (series->getBodyPartExamined() != getValueRepresentation())
-        {
-            return false;
-        }
+        return series->getBodyPartExamined() == getValueRepresentation();
     }
     else if (getSelectorAttribute() == "ProtocolName")
     {
-        if (!series->getProtocolName().contains(getValueRepresentation()))
-        {
-            return false;
-        }
+        return series->getProtocolName().contains(getValueRepresentation());
     }
     else if (getSelectorAttribute() == "ViewPosition")
     {
-        if (series->getViewPosition() != getValueRepresentation())
-        {
-            return false;
-        }
+        return series->getViewPosition() == getValueRepresentation();
     }
     else if (getSelectorAttribute() == "SeriesDescription")
     {
         bool contains = series->getDescription().contains(getValueRepresentation(), Qt::CaseInsensitive);
-        bool match = (getUsageFlag() == HangingProtocolImageSetRestriction::NoMatch);
-        return contains ^ match;
+        bool match = getUsageFlag() == Match;
+        // True if contains and match or no contains and no match
+        return contains == match;
     }
     else if (getSelectorAttribute() == "StudyDescription")
     {
         bool contains = series->getParentStudy()->getDescription().contains(getValueRepresentation(), Qt::CaseInsensitive);
-        bool match = (getUsageFlag() == HangingProtocolImageSetRestriction::NoMatch);
-        return contains ^ match;
+        bool match = getUsageFlag() == Match;
+        // True if contains and match or no contains and no match
+        return contains == match;
     }
     else if (getSelectorAttribute() == "PatientName")
     {
-        if (series->getParentStudy()->getParentPatient()->getFullName() != getValueRepresentation())
-        {
-            return false;
-        }
+        return series->getParentStudy()->getParentPatient()->getFullName() == getValueRepresentation();
     }
     else if (getSelectorAttribute() == "SeriesNumber")
     {
-        if (series->getSeriesNumber() != getValueRepresentation())
-        {
-            return false;
-        }
+        return series->getSeriesNumber() == getValueRepresentation();
     }
     else if (getSelectorAttribute() == "MinimumNumberOfImages")
     {
-        if (series->getFirstVolume()->getImages().size() < getValueRepresentation().toInt())
-        {
-            return false;
-        }
+        return series->getFirstVolume()->getImages().size() >= getValueRepresentation().toInt();
     }
 
     return true;
@@ -136,63 +120,41 @@ bool HangingProtocolImageSetRestriction::test(const Image *image) const
     if (getSelectorAttribute() == "ViewPosition")
     {
         bool contains = image->getViewPosition().contains(getValueRepresentation(), Qt::CaseInsensitive);
-        bool match = (getUsageFlag() == HangingProtocolImageSetRestriction::NoMatch);
-        return contains ^ match;
+        bool match = getUsageFlag() == Match;
+        // True if contains and match or no contains and no match
+        return contains == match;
     }
     else if (getSelectorAttribute() == "ImageLaterality")
     {
-        if (QString(image->getImageLaterality()) != getValueRepresentation().at(0))
-        {
-            return false;
-        }
+        return image->getImageLaterality() == getValueRepresentation().at(0);
     }
     else if (getSelectorAttribute() == "Laterality")
     {
         // Atenció! Aquest atribut està definit a nivell de sèries
-        if (QString(image->getParentSeries()->getLaterality()) != getValueRepresentation())
-        {
-            return false;
-        }
+        return QString(image->getParentSeries()->getLaterality()) == getValueRepresentation();
     }
     else if (getSelectorAttribute() == "PatientOrientation")
     {
-        if (!image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(getValueRepresentation()))
-        {
-            return false;
-        }
+        return image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(getValueRepresentation());
     }
-     // TODO Es podria canviar el nom, ja que és massa genèric. Seria més adequat ViewCodeMeaning per exemple
+    // TODO Es podria canviar el nom, ja que és massa genèric. Seria més adequat ViewCodeMeaning per exemple
     else if (getSelectorAttribute() == "CodeMeaning")
     {
-        bool match = (getUsageFlag() == HangingProtocolImageSetRestriction::Match);
-        bool valid = true;
-
-        if (!(image->getViewCodeMeaning().contains(getValueRepresentation())))
-        {
-            valid = false;
-        }
-
-        if (!match)
-        {
-            // Just el cas contrari
-            valid = !valid;
-        }
-
-        return valid;
+        bool contains = image->getViewCodeMeaning().contains(getValueRepresentation());
+        bool match = getUsageFlag() == Match;
+        // True if contains and match or no contains and no match
+        return contains == match;
     }
     else if (getSelectorAttribute() == "ImageType")
     {
-        bool isLocalyzer = image->getImageType().contains(getValueRepresentation(), Qt::CaseInsensitive);
-        bool match = (getUsageFlag() == HangingProtocolImageSetRestriction::NoMatch);
-        return isLocalyzer ^ match;
+        bool contains = image->getImageType().contains(getValueRepresentation(), Qt::CaseInsensitive);
+        bool match = getUsageFlag() == Match;
+        // True if contains and match or no contains and no match
+        return contains == match;
     }
     else if (getSelectorAttribute() == "MinimumNumberOfImages")
     {
-        Series *serie = image->getParentSeries();
-        if (serie->getFirstVolume()->getImages().size() < getValueRepresentation().toInt())
-        {
-            return false;
-        }
+        return image->getParentSeries()->getFirstVolume()->getImages().size() >= getValueRepresentation().toInt();
     }
 
     return true;
