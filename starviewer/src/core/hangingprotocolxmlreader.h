@@ -43,9 +43,9 @@ private:
     /// Reads and returns a hanging protocol from the XML reader.
     HangingProtocol* readHangingProtocol();
     /// Reads and returns a restriction from the XML reader.
-    HangingProtocolImageSet::Restriction readRestriction();
+    HangingProtocolImageSetRestriction readRestriction();
     /// Reads and returns a HangingProtocolImageSet from the XML reader.
-    HangingProtocolImageSet* readImageSet(const QList<HangingProtocolImageSet::Restriction> &restrictionList);
+    HangingProtocolImageSet* readImageSet(const QList<HangingProtocolImageSetRestriction> &restrictionList);
     /// Reads and returns a HangingProtocolDisplaySet from the XML reader.
     HangingProtocolDisplaySet* readDisplaySet(HangingProtocol *hangingProtocol);
 

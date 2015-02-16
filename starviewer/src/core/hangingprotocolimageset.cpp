@@ -55,17 +55,17 @@ HangingProtocol* HangingProtocolImageSet::getHangingProtocol() const
     return m_hangingProtocol;
 }
 
-void HangingProtocolImageSet::addRestriction(Restriction restriction)
+void HangingProtocolImageSet::addRestriction(HangingProtocolImageSetRestriction restriction)
 {
     m_listOfRestrictions << restriction;
 }
 
-void HangingProtocolImageSet::setRestrictions(const QList<Restriction> &restrictions)
+void HangingProtocolImageSet::setRestrictions(const QList<HangingProtocolImageSetRestriction> &restrictions)
 {
     m_listOfRestrictions = restrictions;
 }
 
-QList<HangingProtocolImageSet::Restriction> HangingProtocolImageSet::getRestrictions() const
+QList<HangingProtocolImageSetRestriction> HangingProtocolImageSet::getRestrictions() const
 {
     return m_listOfRestrictions;
 }
@@ -106,9 +106,10 @@ void HangingProtocolImageSet::show()
 
     for (int i = 0; i < m_listOfRestrictions.size(); i ++)
     {
-        HangingProtocolImageSet::Restriction restriction = m_listOfRestrictions.value(i);
-        DEBUG_LOG(QString("        Usage flag: %1\n        Selector attribute: %2\n        Value representation: %3\n        selectorValueNumber: %4\n").arg(
-                  restriction.usageFlag).arg(restriction.selectorAttribute).arg(restriction.valueRepresentation).arg(restriction.selectorValueNumber));
+        HangingProtocolImageSetRestriction restriction = m_listOfRestrictions.value(i);
+        DEBUG_LOG(QString("        Usage flag: %1\n        Selector attribute: %2\n        Value representation: %3\n        selectorValueNumber: %4\n")
+                  .arg(restriction.getUsageFlag()).arg(restriction.getSelectorAttribute()).arg(restriction.getValueRepresentation())
+                  .arg(restriction.getSelectorValueNumber()));
     }
 }
 
