@@ -218,7 +218,7 @@ QUrl ApplicationVersionChecker::createLocalUrl()
             versionList[2] = versionList[2].split("-")[0];
         }
         QString version(versionList[0] + "." + versionList[1] + "." + versionList[2]);
-        result = defaultPath + "releasenotes" + version + ".html";
+        result = QUrl::fromLocalFile(defaultPath + "releasenotes" + version + ".html");
     }
 
     return result;
@@ -227,7 +227,7 @@ QUrl ApplicationVersionChecker::createLocalUrl()
 bool ApplicationVersionChecker::checkLocalUrl(const QUrl &url)
 {
     // Comprobar si existeix localment el fitxer
-    return QFile::exists(QString(url.toString()));
+    return QFile::exists(url.toLocalFile());
 }
 
 bool ApplicationVersionChecker::checkTimeInterval()
