@@ -29,8 +29,8 @@ HangingProtocolImageSetRestrictionExpression::HangingProtocolImageSetRestriction
 }
 
 HangingProtocolImageSetRestrictionExpression::HangingProtocolImageSetRestrictionExpression(const QString &expression,
-                                                                                           const QList<HangingProtocolImageSetRestriction> &restrictionList)
-    : m_expression(expression), m_restrictionList(restrictionList)
+                                                                                           const QMap<int, HangingProtocolImageSetRestriction> &restrictions)
+    : m_expression(expression), m_restrictions(restrictions)
 {
     sanitize();
     filterUsedRestrictions();
@@ -45,7 +45,7 @@ bool HangingProtocolImageSetRestrictionExpression::test(const Series *series) co
 {
     QList<bool> results;
 
-    foreach (const HangingProtocolImageSetRestriction &restriction, m_restrictionList)
+    foreach (const HangingProtocolImageSetRestriction &restriction, m_restrictions)
     {
         results.append(restriction.test(series));
     }
@@ -57,7 +57,7 @@ bool HangingProtocolImageSetRestrictionExpression::test(const Image *image) cons
 {
     QList<bool> results;
 
-    foreach (const HangingProtocolImageSetRestriction &restriction, m_restrictionList)
+    foreach (const HangingProtocolImageSetRestriction &restriction, m_restrictions)
     {
         results.append(restriction.test(image));
     }
@@ -87,11 +87,11 @@ void HangingProtocolImageSetRestrictionExpression::filterUsedRestrictions()
         identifiers << match.captured().toInt();
     }
 
-    for (int i = m_restrictionList.size() - 1; i >= 0; i--)
+    foreach (int i, m_restrictions.keys())
     {
-        if (!identifiers.contains(i + 1))
+        if (!identifiers.contains(i))
         {
-            m_restrictionList.removeAt(i);
+            m_restrictions.remove(i);
         }
     }
 }

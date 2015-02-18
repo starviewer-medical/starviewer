@@ -15,7 +15,7 @@
 #ifndef UDG_HANGINGPROTOCOLIMAGESETRESTRICTIONEXPRESSION_H
 #define UDG_HANGINGPROTOCOLIMAGESETRESTRICTIONEXPRESSION_H
 
-#include <QList>
+#include <QMap>
 #include <QString>
 
 namespace udg {
@@ -33,7 +33,7 @@ class HangingProtocolImageSetRestrictionExpression
 public:
     /// Creates an expression that always evaluates to true.
     HangingProtocolImageSetRestrictionExpression();
-    HangingProtocolImageSetRestrictionExpression(const QString &expression, const QList<HangingProtocolImageSetRestriction> &restrictionList);
+    HangingProtocolImageSetRestrictionExpression(const QString &expression, const QMap<int, HangingProtocolImageSetRestriction> &restrictions);
     ~HangingProtocolImageSetRestrictionExpression();
 
     /// Evaluates the expression for the given series and returns the result.
@@ -55,7 +55,7 @@ private:
     /// Boolean expression that is evaluated.
     QString m_expression;
     /// Restrictions used in the expression.
-    QList<HangingProtocolImageSetRestriction> m_restrictionList;
+    QMap<int, HangingProtocolImageSetRestriction> m_restrictions;
 
 };
 

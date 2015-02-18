@@ -15,15 +15,15 @@
 #ifndef UDGHANGINGPROTOCOLXMLREADER_H
 #define UDGHANGINGPROTOCOLXMLREADER_H
 
-#include <QList>
 #include <QXmlStreamReader>
-
-#include "hangingprotocolimageset.h"
+#include <QtContainerFwd>
 
 namespace udg {
 
 class HangingProtocol;
 class HangingProtocolDisplaySet;
+class HangingProtocolImageSet;
+class HangingProtocolImageSetRestriction;
 
 /**
  * @brief The HangingProtocolXMLReader class can read a HangingProtocol from a XML file.
@@ -45,7 +45,7 @@ private:
     /// Reads and returns a restriction from the XML reader.
     HangingProtocolImageSetRestriction readRestriction();
     /// Reads and returns a HangingProtocolImageSet from the XML reader.
-    HangingProtocolImageSet* readImageSet(const QList<HangingProtocolImageSetRestriction> &restrictionList);
+    HangingProtocolImageSet* readImageSet(const QMap<int, HangingProtocolImageSetRestriction> &restrictions);
     /// Reads and returns a HangingProtocolDisplaySet from the XML reader.
     HangingProtocolDisplaySet* readDisplaySet(HangingProtocol *hangingProtocol);
 
