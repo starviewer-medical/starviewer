@@ -17,7 +17,7 @@
 
 #include <QObject>
 
-#include "hangingprotocolimagesetrestriction.h"
+#include "hangingprotocolimagesetrestrictionexpression.h"
 
 namespace udg {
 
@@ -43,14 +43,10 @@ public:
     /// Obtenir el hanging protocol al que pertany
     HangingProtocol* getHangingProtocol() const;
 
-    /// Afegir una restricció
-    void addRestriction(HangingProtocolImageSetRestriction restriction);
-
-    /// Assignar la llista de restriccions
-    void setRestrictions(const QList<HangingProtocolImageSetRestriction> &restrictions);
-
-    /// Obtenir les restriccions
-    QList<HangingProtocolImageSetRestriction> getRestrictions() const;
+    /// Returns the restriction expression of this image set.
+    const HangingProtocolImageSetRestrictionExpression& getRestrictionExpression() const;
+    /// Sets the restrction expression of this image set.
+    void setRestrictionExpression(const HangingProtocolImageSetRestrictionExpression &restrictionExpression);
 
     /// Posar el tipus d'element
     void setTypeOfItem(QString);
@@ -104,8 +100,8 @@ public:
     void setImageNumberInPatientModality(int imageNumberInPatientModality);
 
 private:
-    /// Llista de restriccions que ha de complir l'Image Set
-    QList<HangingProtocolImageSetRestriction> m_listOfRestrictions;
+    /// The restriction expression that this image set must satisfy.
+    HangingProtocolImageSetRestrictionExpression m_restrictionExpression;
 
     /// Identificador únic de l'Image Set
     int m_identifier;

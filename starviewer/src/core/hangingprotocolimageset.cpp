@@ -17,6 +17,7 @@
 #include "series.h"
 #include "study.h"
 #include "hangingprotocol.h"
+#include "hangingprotocolimagesetrestriction.h"
 
 namespace udg {
 
@@ -55,19 +56,14 @@ HangingProtocol* HangingProtocolImageSet::getHangingProtocol() const
     return m_hangingProtocol;
 }
 
-void HangingProtocolImageSet::addRestriction(HangingProtocolImageSetRestriction restriction)
+const HangingProtocolImageSetRestrictionExpression& HangingProtocolImageSet::getRestrictionExpression() const
 {
-    m_listOfRestrictions << restriction;
+    return m_restrictionExpression;
 }
 
-void HangingProtocolImageSet::setRestrictions(const QList<HangingProtocolImageSetRestriction> &restrictions)
+void HangingProtocolImageSet::setRestrictionExpression(const HangingProtocolImageSetRestrictionExpression &restrictionExpression)
 {
-    m_listOfRestrictions = restrictions;
-}
-
-QList<HangingProtocolImageSetRestriction> HangingProtocolImageSet::getRestrictions() const
-{
-    return m_listOfRestrictions;
+    m_restrictionExpression = restrictionExpression;
 }
 
 void HangingProtocolImageSet::setTypeOfItem(QString type)
@@ -102,15 +98,7 @@ Series* HangingProtocolImageSet::getSeriesToDisplay() const
 
 void HangingProtocolImageSet::show()
 {
-    DEBUG_LOG(QString("    Identifier %1\n    List of restrictions:\n").arg(m_identifier));
-
-    for (int i = 0; i < m_listOfRestrictions.size(); i ++)
-    {
-        HangingProtocolImageSetRestriction restriction = m_listOfRestrictions.value(i);
-        DEBUG_LOG(QString("        Usage flag: %1\n        Selector attribute: %2\n        Value representation: %3\n        selectorValueNumber: %4\n")
-                  .arg(restriction.getUsageFlag()).arg(restriction.getSelectorAttribute()).arg(restriction.getValueRepresentation())
-                  .arg(restriction.getSelectorValueNumber()));
-    }
+    DEBUG_LOG(QString("    Identifier %1\n").arg(m_identifier));
 }
 
 void HangingProtocolImageSet::setIsPreviousStudy(bool hasPreviousStudy)
