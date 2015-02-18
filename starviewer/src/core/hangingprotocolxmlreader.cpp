@@ -16,6 +16,7 @@
 
 #include "hangingprotocol.h"
 #include "hangingprotocoldisplayset.h"
+#include "hangingprotocolimagesetrestriction.h"
 #include "logging.h"
 #include "patientorientation.h"
 // Qt's
@@ -212,10 +213,10 @@ HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QList<Hang
 
     while (m_xmlReader.readNextStartElement())
     {
-        if (m_xmlReader.name() == "restriction")
+        if (m_xmlReader.name() == "restrictionExpression")
         {
-            HangingProtocolImageSetRestriction restriction = restrictionList.value(m_xmlReader.readElementText().toInt()-1);
-            imageSet->addRestriction(restriction);
+            HangingProtocolImageSetRestrictionExpression restrictionExpression(m_xmlReader.readElementText(), restrictionList);
+            imageSet->setRestrictionExpression(restrictionExpression);
         }
         else if (m_xmlReader.name() == "type")
         {

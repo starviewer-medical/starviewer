@@ -418,23 +418,13 @@ Series* HangingProtocolManager::searchSerie(QList<Series*> &listOfSeries, Hangin
 
 bool HangingProtocolManager::isValidSerie(Series *serie, HangingProtocolImageSet *imageSet)
 {
-    bool valid = true;
-    int i = 0;
-    QList<HangingProtocolImageSetRestriction> listOfRestrictions = imageSet->getRestrictions();
-    int numberRestrictions = listOfRestrictions.size();
-    HangingProtocolImageSetRestriction restriction;
-
     // Els presentation states per defecte no es mostren
-    valid = (serie->getModality() != "PR");
-
-    while (valid && i < numberRestrictions)
+    if (serie->getModality() == "PR")
     {
-        restriction = listOfRestrictions.value(i);
-        valid = restriction.test(serie);
-        ++i;
+        return false;
     }
 
-    return valid;
+    return imageSet->getRestrictionExpression().test(serie);
 }
 
 bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet *imageSet)
@@ -445,20 +435,7 @@ bool HangingProtocolManager::isValidImage(Image *image, HangingProtocolImageSet 
         return false;
     }
 
-    bool valid = true;
-    int i = 0;
-    QList<HangingProtocolImageSetRestriction> listOfRestrictions = imageSet->getRestrictions();
-    int numberRestrictions = listOfRestrictions.size();
-    HangingProtocolImageSetRestriction restriction;
-
-    while (valid && i < numberRestrictions)
-    {
-        restriction = listOfRestrictions.value(i);
-        valid = restriction.test(image);
-        ++i;
-    }
-
-    return valid;
+    return imageSet->getRestrictionExpression().test(image);
 }
 
 bool HangingProtocolManager::isValidInstitution(HangingProtocol *protocol, const QString &institutionName)

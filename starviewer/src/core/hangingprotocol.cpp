@@ -60,7 +60,7 @@ HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
     foreach (HangingProtocolImageSet *imageSet, hangingProtocol->m_listOfImageSets)
     {
         HangingProtocolImageSet *copiedImageSet = new HangingProtocolImageSet();
-        copiedImageSet->setRestrictions(imageSet->getRestrictions());
+        copiedImageSet->setRestrictionExpression(imageSet->getRestrictionExpression());
         copiedImageSet->setIdentifier(imageSet->getIdentifier());
         copiedImageSet->setTypeOfItem(imageSet->getTypeOfItem());
         copiedImageSet->setSeriesToDisplay(imageSet->getSeriesToDisplay());
