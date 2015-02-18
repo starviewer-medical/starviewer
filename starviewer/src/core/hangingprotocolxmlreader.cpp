@@ -16,6 +16,7 @@
 
 #include "hangingprotocol.h"
 #include "hangingprotocoldisplayset.h"
+#include "hangingprotocolimageset.h"
 #include "hangingprotocolimagesetrestriction.h"
 #include "logging.h"
 #include "patientorientation.h"
@@ -24,7 +25,7 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QDir>
-#include <QList>
+#include <QMap>
 #include <QFileInfoList>
 #include <QRegExp>
 
@@ -98,7 +99,7 @@ HangingProtocol* HangingProtocolXMLReader::readHangingProtocol()
 {
     HangingProtocol *hangingProtocol = new HangingProtocol();
     QStringList protocols;
-    QList<HangingProtocolImageSetRestriction> restrictionList;
+    QMap<int, HangingProtocolImageSetRestriction> restrictions;
 
     while (m_xmlReader.readNextStartElement())
     {
@@ -120,11 +121,12 @@ HangingProtocol* HangingProtocolXMLReader::readHangingProtocol()
         }
         else if (m_xmlReader.name() == "restriction")
         {
-            restrictionList << readRestriction();
+            HangingProtocolImageSetRestriction restriction = readRestriction();
+            restrictions[restriction.getIdentifier()] = restriction;
         }
         else if (m_xmlReader.name() == "imageSet")
         {
-            HangingProtocolImageSet *imageSet = readImageSet(restrictionList);
+            HangingProtocolImageSet *imageSet = readImageSet(restrictions);
             hangingProtocol->addImageSet(imageSet);
         }
         else if (m_xmlReader.name() == "displaySet")
@@ -173,6 +175,7 @@ HangingProtocol* HangingProtocolXMLReader::readHangingProtocol()
 HangingProtocolImageSetRestriction HangingProtocolXMLReader::readRestriction()
 {
     HangingProtocolImageSetRestriction restriction;
+    restriction.setIdentifier(m_xmlReader.attributes().value("identifier").toInt());
 
     while (m_xmlReader.readNextStartElement())
     {
@@ -206,7 +209,7 @@ HangingProtocolImageSetRestriction HangingProtocolXMLReader::readRestriction()
     return restriction;
 }
 
-HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QList<HangingProtocolImageSetRestriction> &restrictionList)
+HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QMap<int, HangingProtocolImageSetRestriction> &restrictions)
 {
     HangingProtocolImageSet *imageSet = new HangingProtocolImageSet();
     imageSet->setIdentifier(m_xmlReader.attributes().value("identifier").toString().toInt());
@@ -215,7 +218,7 @@ HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QList<Hang
     {
         if (m_xmlReader.name() == "restrictionExpression")
         {
-            HangingProtocolImageSetRestrictionExpression restrictionExpression(m_xmlReader.readElementText(), restrictionList);
+            HangingProtocolImageSetRestrictionExpression restrictionExpression(m_xmlReader.readElementText(), restrictions);
             imageSet->setRestrictionExpression(restrictionExpression);
         }
         else if (m_xmlReader.name() == "type")

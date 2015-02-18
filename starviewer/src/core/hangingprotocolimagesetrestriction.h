@@ -38,6 +38,9 @@ public:
     HangingProtocolImageSetRestriction();
     ~HangingProtocolImageSetRestriction();
 
+    int getIdentifier() const;
+    void setIdentifier(int identifier);
+
     SelectorUsageFlag getUsageFlag() const;
     void setUsageFlag(SelectorUsageFlag usageFlag);
 
@@ -56,6 +59,8 @@ public:
     bool test(const Image *image) const;
 
 private:
+    /// Identifier of this restriction. Must be unique in a hanging protocol.
+    int m_identifier;
     /// Flag indicating whether the attribute value must match or not match the value representation.
     /// \warning This is used differently than the DICOM Image Set Selector Usage Flag (0072,0024).
     SelectorUsageFlag m_usageFlag;

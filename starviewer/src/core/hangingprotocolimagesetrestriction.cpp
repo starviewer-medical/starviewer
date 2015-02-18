@@ -23,12 +23,22 @@
 namespace udg {
 
 HangingProtocolImageSetRestriction::HangingProtocolImageSetRestriction()
-    : m_usageFlag(Match), m_selectorValueNumber(0)
+    : m_identifier(0), m_usageFlag(Match), m_selectorValueNumber(0)
 {
 }
 
 HangingProtocolImageSetRestriction::~HangingProtocolImageSetRestriction()
 {
+}
+
+int HangingProtocolImageSetRestriction::getIdentifier() const
+{
+    return m_identifier;
+}
+
+void HangingProtocolImageSetRestriction::setIdentifier(int identifier)
+{
+    m_identifier = identifier;
 }
 
 HangingProtocolImageSetRestriction::SelectorUsageFlag HangingProtocolImageSetRestriction::getUsageFlag() const
