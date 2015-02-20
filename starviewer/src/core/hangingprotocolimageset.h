@@ -15,8 +15,6 @@
 #ifndef UDGHANGINGPROTOCOLIMAGESET_H
 #define UDGHANGINGPROTOCOLIMAGESET_H
 
-#include <QObject>
-
 #include "hangingprotocolimagesetrestrictionexpression.h"
 
 namespace udg {
@@ -25,10 +23,10 @@ class Series;
 class Study;
 class HangingProtocol;
 
-class HangingProtocolImageSet : public QObject {
-Q_OBJECT
+class HangingProtocolImageSet {
+
 public:
-    HangingProtocolImageSet(QObject *parent = 0);
+    HangingProtocolImageSet();
     ~HangingProtocolImageSet();
 
     /// Identificador de l'Image Set

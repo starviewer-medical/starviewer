@@ -16,8 +16,7 @@
 
 namespace udg {
 
-HangingProtocolLayout::HangingProtocolLayout(QObject *parent)
-: QObject(parent)
+HangingProtocolLayout::HangingProtocolLayout()
 {
 }
 

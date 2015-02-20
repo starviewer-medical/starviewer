@@ -16,8 +16,7 @@
 
 namespace udg {
 
-HangingProtocolMask::HangingProtocolMask(QObject *parent)
- : QObject(parent)
+HangingProtocolMask::HangingProtocolMask()
 {
 }
 

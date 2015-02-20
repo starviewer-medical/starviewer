@@ -19,8 +19,7 @@
 
 namespace udg {
 
-HangingProtocolDisplaySet::HangingProtocolDisplaySet(QObject *parent)
- : QObject(parent)
+HangingProtocolDisplaySet::HangingProtocolDisplaySet()
 {
     m_hangingProtocol = NULL;
     m_imageSet = NULL;

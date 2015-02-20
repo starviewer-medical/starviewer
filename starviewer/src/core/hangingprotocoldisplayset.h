@@ -15,8 +15,6 @@
 #ifndef UDGHANGINGPROTOCOLDISPLAYSET_H
 #define UDGHANGINGPROTOCOLDISPLAYSET_H
 
-#include <QObject>
-
 #include "patientorientation.h"
 
 namespace udg {
@@ -24,10 +22,10 @@ namespace udg {
 class HangingProtocol;
 class HangingProtocolImageSet;
 
-class HangingProtocolDisplaySet : public QObject {
-Q_OBJECT
+class HangingProtocolDisplaySet {
+
 public:
-    HangingProtocolDisplaySet(QObject *parent = 0);
+    HangingProtocolDisplaySet();
 
     ~HangingProtocolDisplaySet();
 
