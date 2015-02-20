@@ -15,7 +15,7 @@
 #ifndef UDGHANGINGPROTOCOL_H
 #define UDGHANGINGPROTOCOL_H
 
-#include <QList>
+#include <QMap>
 #include <QRegExp>
 
 namespace udg {
@@ -78,7 +78,7 @@ public:
     QList<HangingProtocolDisplaySet*> getDisplaySets() const;
 
     /// Obté l'image set amb identificador "identifier"
-    HangingProtocolImageSet* getImageSet(int identifier);
+    HangingProtocolImageSet* getImageSet(int identifier) const;
 
     /// Obté el display set amb identificador "identifier"
     HangingProtocolDisplaySet* getDisplaySet(int identifier) const;
@@ -157,11 +157,11 @@ private:
 
     QRegExp m_institutionsRegularExpression;
 
-    /// Llista d'image sets
-    QList<HangingProtocolImageSet*> m_listOfImageSets;
+    /// Map from identifier to image set.
+    QMap<int, HangingProtocolImageSet*> m_imageSets;
 
-    /// Llista de displays sets
-    QList<HangingProtocolDisplaySet*> m_listOfDisplaySets;
+    /// Map from identifier to display set.
+    QMap<int, HangingProtocolDisplaySet*> m_displaySets;
 
     /// Boolea que indica si és estricte o no. Si és estricte vol dir que per ser correcte tots els image sets han d'estar assignats.
     bool m_strictness;
