@@ -23,8 +23,7 @@
 
 namespace udg {
 
-HangingProtocol::HangingProtocol(QObject *parent)
- : QObject(parent)
+HangingProtocol::HangingProtocol()
 {
     m_layout = new HangingProtocolLayout();
     m_mask = new HangingProtocolMask();

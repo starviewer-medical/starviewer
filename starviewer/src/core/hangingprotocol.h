@@ -15,7 +15,6 @@
 #ifndef UDGHANGINGPROTOCOL_H
 #define UDGHANGINGPROTOCOL_H
 
-#include <QObject>
 #include <QList>
 #include <QRegExp>
 
@@ -26,10 +25,10 @@ class HangingProtocolMask;
 class HangingProtocolImageSet;
 class HangingProtocolDisplaySet;
 
-class HangingProtocol : public QObject {
-Q_OBJECT
+class HangingProtocol {
+
 public:
-    HangingProtocol(QObject *parent = 0);
+    HangingProtocol();
 
     /// Constructor còpia. Fa una còpia de tot, inclòs image i display sets.
     HangingProtocol(const HangingProtocol *hangingProtocol);
