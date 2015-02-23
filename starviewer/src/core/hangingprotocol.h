@@ -42,10 +42,10 @@ public:
     enum HangingProtocolLevel { Manufacturer, Site, UserGroup, SingleUser };
 
     /// Obtenir el layout
-    HangingProtocolLayout* getHangingProtocolLayout();
+    HangingProtocolLayout* getHangingProtocolLayout() const;
 
     /// Obtenir la mascara
-    HangingProtocolMask* getHangingProtocolMask();
+    HangingProtocolMask* getHangingProtocolMask() const;
 
     /// Assigna el nombre de screens
     void setNumberOfScreens(int screens);
@@ -88,7 +88,7 @@ public:
     QRegExp getInstitutionsRegularExpression() const;
 
     /// Mètode per mostrar els valors
-    void show();
+    void show() const;
 
     /// Posar l'identificador al hanging protocol
     void setIdentifier(int id);
@@ -97,7 +97,7 @@ public:
     int getIdentifier() const;
 
     /// Mètode per comparar hanging protocols
-    bool isBetterThan(HangingProtocol *hangingToCompare);
+    bool isBetterThan(const HangingProtocol *hangingToCompare) const;
 
     /// Retorna si el mètode és estricte o no ho hes
     bool isStrict() const;
@@ -130,7 +130,7 @@ public:
     double getPriority() const;
 
     /// Compara si dos hanging protocols son iguals
-    bool compareTo(const HangingProtocol &hangingProtocol);
+    bool compareTo(const HangingProtocol &hangingProtocol) const;
 
 private:
     /// Retorna el número de ImageSets que tenen una sèrie assignada

@@ -123,12 +123,12 @@ QString HangingProtocol::getName() const
     return m_name;
 }
 
-HangingProtocolLayout* HangingProtocol::getHangingProtocolLayout()
+HangingProtocolLayout* HangingProtocol::getHangingProtocolLayout() const
 {
     return m_layout;
 }
 
-HangingProtocolMask* HangingProtocol::getHangingProtocolMask()
+HangingProtocolMask* HangingProtocol::getHangingProtocolMask() const
 {
     return m_mask;
 }
@@ -200,7 +200,7 @@ QRegExp HangingProtocol::getInstitutionsRegularExpression() const
     return m_institutionsRegularExpression;
 }
 
-void HangingProtocol::show()
+void HangingProtocol::show() const
 {
     DEBUG_LOG(QString("\n---- HANGING PROTOCOL ----\n Name: %1\nDescription: %2\n").arg(m_name).arg(
               m_description));
@@ -238,7 +238,7 @@ int HangingProtocol::getIdentifier() const
     return m_identifier;
 }
 
-bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
+bool HangingProtocol::isBetterThan(const HangingProtocol *hangingToCompare) const
 {
     if (hangingToCompare == NULL)
     {
@@ -380,7 +380,7 @@ double HangingProtocol::getPriority() const
     return m_priority;
 }
 
-bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol)
+bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol) const
 {
     bool hasSameAttributes = m_identifier == hangingProtocol.getIdentifier()
         && m_name == hangingProtocol.getName()
