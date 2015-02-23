@@ -99,19 +99,13 @@ HangingProtocol::~HangingProtocol()
 {
     foreach (HangingProtocolImageSet *imageSet, m_imageSets)
     {
-        if (imageSet)
-        {
-            delete imageSet;
-        }
+        delete imageSet;
     }
     m_imageSets.clear();
 
     foreach (HangingProtocolDisplaySet *displaySet, m_displaySets)
     {
-        if (displaySet)
-        {
-            delete displaySet;
-        }
+        delete displaySet;
     }
     m_displaySets.clear();
 
