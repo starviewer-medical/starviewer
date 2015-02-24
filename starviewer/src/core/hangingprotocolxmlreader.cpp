@@ -183,9 +183,9 @@ HangingProtocolImageSetRestriction HangingProtocolXMLReader::readRestriction()
         {
             restriction.setSelectorAttribute(m_xmlReader.readElementText());
         }
-        else if (m_xmlReader.name() == "valueRepresentation")
+        else if (m_xmlReader.name() == "selectorValue")
         {
-            restriction.setValueRepresentation(m_xmlReader.readElementText());
+            restriction.setSelectorValue(m_xmlReader.readElementText());
         }
         else
         {
