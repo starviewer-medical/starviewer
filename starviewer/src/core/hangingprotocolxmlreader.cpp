@@ -179,19 +179,7 @@ HangingProtocolImageSetRestriction HangingProtocolXMLReader::readRestriction()
 
     while (m_xmlReader.readNextStartElement())
     {
-        if (m_xmlReader.name() == "usageFlag")
-        {
-            QString text = m_xmlReader.readElementText();
-            if (text == "MATCH")
-            {
-                restriction.setUsageFlag(HangingProtocolImageSetRestriction::Match);
-            }
-            else if (text == "NO_MATCH")
-            {
-                restriction.setUsageFlag(HangingProtocolImageSetRestriction::NoMatch);
-            }
-        }
-        else if (m_xmlReader.name() == "selectorAttribute")
+        if (m_xmlReader.name() == "selectorAttribute")
         {
             restriction.setSelectorAttribute(m_xmlReader.readElementText());
         }
