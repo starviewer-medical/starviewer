@@ -51,14 +51,14 @@ void HangingProtocolImageSetRestriction::setSelectorAttribute(const QString &sel
     m_selectorAttribute = selectorAttribute;
 }
 
-const QString& HangingProtocolImageSetRestriction::getValueRepresentation() const
+const QString& HangingProtocolImageSetRestriction::getSelectorValue() const
 {
-    return m_valueRepresentation;
+    return m_selectorValue;
 }
 
-void HangingProtocolImageSetRestriction::setValueRepresentation(const QString &valueRepresentation)
+void HangingProtocolImageSetRestriction::setSelectorValue(const QString &selectorValue)
 {
-    m_valueRepresentation = valueRepresentation;
+    m_selectorValue = selectorValue;
 }
 
 int HangingProtocolImageSetRestriction::getSelectorValueNumber() const
@@ -75,35 +75,35 @@ bool HangingProtocolImageSetRestriction::test(const Series *series) const
 {
     if (getSelectorAttribute() == "BodyPartExamined")
     {
-        return series->getBodyPartExamined() == getValueRepresentation();
+        return series->getBodyPartExamined() == getSelectorValue();
     }
     else if (getSelectorAttribute() == "ProtocolName")
     {
-        return series->getProtocolName().contains(getValueRepresentation());
+        return series->getProtocolName().contains(getSelectorValue());
     }
     else if (getSelectorAttribute() == "ViewPosition")
     {
-        return series->getViewPosition() == getValueRepresentation();
+        return series->getViewPosition() == getSelectorValue();
     }
     else if (getSelectorAttribute() == "SeriesDescription")
     {
-        return series->getDescription().contains(getValueRepresentation(), Qt::CaseInsensitive);
+        return series->getDescription().contains(getSelectorValue(), Qt::CaseInsensitive);
     }
     else if (getSelectorAttribute() == "StudyDescription")
     {
-        return series->getParentStudy()->getDescription().contains(getValueRepresentation(), Qt::CaseInsensitive);
+        return series->getParentStudy()->getDescription().contains(getSelectorValue(), Qt::CaseInsensitive);
     }
     else if (getSelectorAttribute() == "PatientName")
     {
-        return series->getParentStudy()->getParentPatient()->getFullName() == getValueRepresentation();
+        return series->getParentStudy()->getParentPatient()->getFullName() == getSelectorValue();
     }
     else if (getSelectorAttribute() == "SeriesNumber")
     {
-        return series->getSeriesNumber() == getValueRepresentation();
+        return series->getSeriesNumber() == getSelectorValue();
     }
     else if (getSelectorAttribute() == "MinimumNumberOfImages")
     {
-        return series->getFirstVolume()->getImages().size() >= getValueRepresentation().toInt();
+        return series->getFirstVolume()->getImages().size() >= getSelectorValue().toInt();
     }
 
     return true;
@@ -113,33 +113,33 @@ bool HangingProtocolImageSetRestriction::test(const Image *image) const
 {
     if (getSelectorAttribute() == "ViewPosition")
     {
-        return image->getViewPosition().contains(getValueRepresentation(), Qt::CaseInsensitive);
+        return image->getViewPosition().contains(getSelectorValue(), Qt::CaseInsensitive);
     }
     else if (getSelectorAttribute() == "ImageLaterality")
     {
-        return image->getImageLaterality() == getValueRepresentation().at(0);
+        return image->getImageLaterality() == getSelectorValue().at(0);
     }
     else if (getSelectorAttribute() == "Laterality")
     {
         // Atenció! Aquest atribut està definit a nivell de sèries
-        return QString(image->getParentSeries()->getLaterality()) == getValueRepresentation();
+        return QString(image->getParentSeries()->getLaterality()) == getSelectorValue();
     }
     else if (getSelectorAttribute() == "PatientOrientation")
     {
-        return image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(getValueRepresentation());
+        return image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(getSelectorValue());
     }
     // TODO Es podria canviar el nom, ja que és massa genèric. Seria més adequat ViewCodeMeaning per exemple
     else if (getSelectorAttribute() == "CodeMeaning")
     {
-        return image->getViewCodeMeaning().contains(getValueRepresentation());
+        return image->getViewCodeMeaning().contains(getSelectorValue());
     }
     else if (getSelectorAttribute() == "ImageType")
     {
-        return image->getImageType().contains(getValueRepresentation(), Qt::CaseInsensitive);
+        return image->getImageType().contains(getSelectorValue(), Qt::CaseInsensitive);
     }
     else if (getSelectorAttribute() == "MinimumNumberOfImages")
     {
-        return image->getParentSeries()->getFirstVolume()->getImages().size() >= getValueRepresentation().toInt();
+        return image->getParentSeries()->getFirstVolume()->getImages().size() >= getSelectorValue().toInt();
     }
 
     return true;

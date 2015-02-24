@@ -226,7 +226,7 @@ HangingProtocolImageSetRestriction test_HangingProtocolManager::createRestrictio
 {
     HangingProtocolImageSetRestriction restriction;
     restriction.setSelectorAttribute(selectorAttribute);
-    restriction.setValueRepresentation(valueRepresentation);
+    restriction.setSelectorValue(valueRepresentation);
     return restriction;
 }
 
