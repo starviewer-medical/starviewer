@@ -23,7 +23,7 @@
 namespace udg {
 
 HangingProtocolImageSetRestriction::HangingProtocolImageSetRestriction()
-    : m_identifier(0), m_usageFlag(Match), m_selectorValueNumber(0)
+    : m_identifier(0), m_selectorValueNumber(0)
 {
 }
 
@@ -39,16 +39,6 @@ int HangingProtocolImageSetRestriction::getIdentifier() const
 void HangingProtocolImageSetRestriction::setIdentifier(int identifier)
 {
     m_identifier = identifier;
-}
-
-HangingProtocolImageSetRestriction::SelectorUsageFlag HangingProtocolImageSetRestriction::getUsageFlag() const
-{
-    return m_usageFlag;
-}
-
-void HangingProtocolImageSetRestriction::setUsageFlag(SelectorUsageFlag usageFlag)
-{
-    m_usageFlag = usageFlag;
 }
 
 const QString &HangingProtocolImageSetRestriction::getSelectorAttribute() const
@@ -97,17 +87,11 @@ bool HangingProtocolImageSetRestriction::test(const Series *series) const
     }
     else if (getSelectorAttribute() == "SeriesDescription")
     {
-        bool contains = series->getDescription().contains(getValueRepresentation(), Qt::CaseInsensitive);
-        bool match = getUsageFlag() == Match;
-        // True if contains and match or no contains and no match
-        return contains == match;
+        return series->getDescription().contains(getValueRepresentation(), Qt::CaseInsensitive);
     }
     else if (getSelectorAttribute() == "StudyDescription")
     {
-        bool contains = series->getParentStudy()->getDescription().contains(getValueRepresentation(), Qt::CaseInsensitive);
-        bool match = getUsageFlag() == Match;
-        // True if contains and match or no contains and no match
-        return contains == match;
+        return series->getParentStudy()->getDescription().contains(getValueRepresentation(), Qt::CaseInsensitive);
     }
     else if (getSelectorAttribute() == "PatientName")
     {
@@ -129,10 +113,7 @@ bool HangingProtocolImageSetRestriction::test(const Image *image) const
 {
     if (getSelectorAttribute() == "ViewPosition")
     {
-        bool contains = image->getViewPosition().contains(getValueRepresentation(), Qt::CaseInsensitive);
-        bool match = getUsageFlag() == Match;
-        // True if contains and match or no contains and no match
-        return contains == match;
+        return image->getViewPosition().contains(getValueRepresentation(), Qt::CaseInsensitive);
     }
     else if (getSelectorAttribute() == "ImageLaterality")
     {
@@ -150,17 +131,11 @@ bool HangingProtocolImageSetRestriction::test(const Image *image) const
     // TODO Es podria canviar el nom, ja que és massa genèric. Seria més adequat ViewCodeMeaning per exemple
     else if (getSelectorAttribute() == "CodeMeaning")
     {
-        bool contains = image->getViewCodeMeaning().contains(getValueRepresentation());
-        bool match = getUsageFlag() == Match;
-        // True if contains and match or no contains and no match
-        return contains == match;
+        return image->getViewCodeMeaning().contains(getValueRepresentation());
     }
     else if (getSelectorAttribute() == "ImageType")
     {
-        bool contains = image->getImageType().contains(getValueRepresentation(), Qt::CaseInsensitive);
-        bool match = getUsageFlag() == Match;
-        // True if contains and match or no contains and no match
-        return contains == match;
+        return image->getImageType().contains(getValueRepresentation(), Qt::CaseInsensitive);
     }
     else if (getSelectorAttribute() == "MinimumNumberOfImages")
     {
