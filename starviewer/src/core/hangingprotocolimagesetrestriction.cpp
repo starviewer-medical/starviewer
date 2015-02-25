@@ -20,6 +20,8 @@
 #include "study.h"
 #include "volume.h"
 
+#include <QRegularExpression>
+
 namespace udg {
 
 HangingProtocolImageSetRestriction::HangingProtocolImageSetRestriction()
@@ -79,7 +81,7 @@ bool HangingProtocolImageSetRestriction::test(const Series *series) const
     }
     else if (getSelectorAttribute() == "ProtocolName")
     {
-        return series->getProtocolName().contains(getSelectorValue());
+        return series->getProtocolName().contains(QRegularExpression(getSelectorValue()));
     }
     else if (getSelectorAttribute() == "ViewPosition")
     {
@@ -87,11 +89,11 @@ bool HangingProtocolImageSetRestriction::test(const Series *series) const
     }
     else if (getSelectorAttribute() == "SeriesDescription")
     {
-        return series->getDescription().contains(getSelectorValue(), Qt::CaseInsensitive);
+        return series->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
     }
     else if (getSelectorAttribute() == "StudyDescription")
     {
-        return series->getParentStudy()->getDescription().contains(getSelectorValue(), Qt::CaseInsensitive);
+        return series->getParentStudy()->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
     }
     else if (getSelectorAttribute() == "PatientName")
     {
@@ -113,7 +115,7 @@ bool HangingProtocolImageSetRestriction::test(const Image *image) const
 {
     if (getSelectorAttribute() == "ViewPosition")
     {
-        return image->getViewPosition().contains(getSelectorValue(), Qt::CaseInsensitive);
+        return image->getViewPosition().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
     }
     else if (getSelectorAttribute() == "ImageLaterality")
     {
@@ -126,16 +128,16 @@ bool HangingProtocolImageSetRestriction::test(const Image *image) const
     }
     else if (getSelectorAttribute() == "PatientOrientation")
     {
-        return image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(getSelectorValue());
+        return image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(QRegularExpression(getSelectorValue()));
     }
     // TODO Es podria canviar el nom, ja que és massa genèric. Seria més adequat ViewCodeMeaning per exemple
     else if (getSelectorAttribute() == "CodeMeaning")
     {
-        return image->getViewCodeMeaning().contains(getSelectorValue());
+        return image->getViewCodeMeaning().contains(QRegularExpression(getSelectorValue()));
     }
     else if (getSelectorAttribute() == "ImageType")
     {
-        return image->getImageType().contains(getSelectorValue(), Qt::CaseInsensitive);
+        return image->getImageType().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
     }
     else if (getSelectorAttribute() == "MinimumNumberOfImages")
     {
