@@ -175,7 +175,7 @@ private:
     /// Informa si es un hanging protocol amb previes o no
     bool m_hasPrevious;
 
-    /// Prioritat del hanging protocol (per defecte -1)
+    /// Priority of this hanging protocol (default: 1).
     double m_priority;
 };
 

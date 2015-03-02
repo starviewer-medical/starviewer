@@ -30,7 +30,7 @@ HangingProtocol::HangingProtocol()
     m_strictness = false;
     m_allDiferent = false;
     m_hasPrevious = false;
-    m_priority = -1;
+    m_priority = 1;
 }
 
 HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
@@ -247,25 +247,7 @@ bool HangingProtocol::isBetterThan(const HangingProtocol *hangingToCompare) cons
 
     if (this->getPriority() != hangingToCompare->getPriority())
     {
-        if (this->getPriority() != -1 && hangingToCompare->getPriority() != -1)
-        {
-            // Si tots 2 tenen prioritat definida els fem competir
-            return this->getPriority() > hangingToCompare->getPriority();
-        }
-        else
-        {
-            // Si un des 2 hangings no té la prioritat definida, la prioritat només serveix
-            // per dir si un hanging ha de ser el més o el menys aconsellat.
-            if (this->getPriority() == 10 || hangingToCompare->getPriority() == 0)
-            {
-                return true;
-            }
-
-            if (this->getPriority() == 0 || hangingToCompare->getPriority() == 10)
-            {
-                return false;
-            }
-        }
+        return this->getPriority() > hangingToCompare->getPriority();
     }
 
     if (this->countFilledDisplaySets() == hangingToCompare->countFilledDisplaySets())
