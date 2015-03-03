@@ -251,26 +251,29 @@ bool HangingProtocol::isBetterThan(const HangingProtocol *hangingToCompare) cons
         return this->getPriority() > hangingToCompare->getPriority();
     }
 
+    int thisFilledImageSets = this->countFilledImageSets();
+    int thatFilledImageSets = hangingToCompare->countFilledImageSets();
+
+    // 2. Choose greatest number of image sets with image
+    if (thisFilledImageSets != thatFilledImageSets)
+    {
+        return thisFilledImageSets > thatFilledImageSets;
+    }
+
     int thisFilledDisplaySets = this->countFilledDisplaySets();
     int thatFilledDisplaySets = hangingToCompare->countFilledDisplaySets();
 
-    // 2. Choose greatest number of display sets with image
+    // 3. Choose greatest number of display sets with image
     if (thisFilledDisplaySets != thatFilledDisplaySets)
     {
         return thisFilledDisplaySets > thatFilledDisplaySets;
     }
 
-    // 3. Choose greatest ratio of display sets with image, i.e. least number of empty display sets
+    // 4. Choose greatest ratio of display sets with image, i.e. least number of empty display sets
     //    Since the number of display sets with image is the same, this is equivalent to least number of display sets
     if (this->getNumberOfDisplaySets() != hangingToCompare->getNumberOfDisplaySets())
     {
         return this->getNumberOfDisplaySets() < hangingToCompare->getNumberOfDisplaySets();
-    }
-
-    // 4. Choose greatest number of image sets
-    if (this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets())
-    {
-        return this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets();
     }
 
     // 5. Choose the other
