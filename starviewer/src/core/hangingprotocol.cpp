@@ -245,32 +245,35 @@ bool HangingProtocol::isBetterThan(const HangingProtocol *hangingToCompare) cons
         return true;
     }
 
+    // 1. Choose greatest priority
     if (this->getPriority() != hangingToCompare->getPriority())
     {
         return this->getPriority() > hangingToCompare->getPriority();
     }
 
-    if (this->countFilledDisplaySets() == hangingToCompare->countFilledDisplaySets())
+    int thisFilledDisplaySets = this->countFilledDisplaySets();
+    int thatFilledDisplaySets = hangingToCompare->countFilledDisplaySets();
+
+    // 2. Choose greatest number of display sets with image
+    if (thisFilledDisplaySets != thatFilledDisplaySets)
     {
-        if (this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() == hangingToCompare->countFilledDisplaySets() /
-           (double)hangingToCompare->getNumberOfDisplaySets())
-        {
-            if (this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets())
-            {
-                return (this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets());
-            }
-        }
-        else
-        {
-            return this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() > hangingToCompare->countFilledDisplaySets() /
-                   (double)hangingToCompare->getNumberOfDisplaySets();
-        }
-    }
-    else
-    {
-        return (this->countFilledDisplaySets() > hangingToCompare->countFilledDisplaySets());
+        return thisFilledDisplaySets > thatFilledDisplaySets;
     }
 
+    // 3. Choose greatest ratio of display sets with image, i.e. least number of empty display sets
+    //    Since the number of display sets with image is the same, this is equivalent to least number of display sets
+    if (this->getNumberOfDisplaySets() != hangingToCompare->getNumberOfDisplaySets())
+    {
+        return this->getNumberOfDisplaySets() < hangingToCompare->getNumberOfDisplaySets();
+    }
+
+    // 4. Choose greatest number of image sets
+    if (this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets())
+    {
+        return this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets();
+    }
+
+    // 5. Choose the other
     return false;
 }
 
