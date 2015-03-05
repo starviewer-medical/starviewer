@@ -22,6 +22,7 @@
 namespace udg {
 
 HangingProtocolImageSet::HangingProtocolImageSet()
+ : m_abstractPriorValue(0)
 {
     m_hangingProtocol = NULL;
     m_previousStudyToDisplay = NULL;
@@ -138,6 +139,16 @@ void HangingProtocolImageSet::setPreviousImageSetReference(int imageSetNumber)
 int HangingProtocolImageSet::getPreviousImageSetReference()
 {
     return m_previousImageSetReference;
+}
+
+int HangingProtocolImageSet::getAbstractPriorValue() const
+{
+    return m_abstractPriorValue;
+}
+
+void HangingProtocolImageSet::setAbstractPriorValue(int value)
+{
+    m_abstractPriorValue = value;
 }
 
 int HangingProtocolImageSet::getImageNumberInPatientModality()
