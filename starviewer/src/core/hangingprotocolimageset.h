@@ -91,6 +91,11 @@ public:
     /// Obté l'ImageSet del qual és previ
     int getPreviousImageSetReference();
 
+    /// Returns the abstract prior value of this image set.
+    int getAbstractPriorValue() const;
+    /// Sets the abstract prior value of this image set.
+    void setAbstractPriorValue(int value);
+
     /// Obté l'índex de la imatge a mostrar dins la serie
     int getImageNumberInPatientModality();
 
@@ -132,6 +137,11 @@ private:
 
     /// Posa l'image set que té de referencia i del qual ha de ser previ
     int m_previousImageSetReference;
+
+    /// Identifies a prior image set in abstract terms. The value 0 shall indicate a current image set, 1 indicates the most recent prior and higher values
+    /// indicate successively older priors. The special value -1 shall indicate the oldest prior.
+    /// It's loosely based on the DICOM Abstract Prior Value (0072,003C).
+    int m_abstractPriorValue;
 
 };
 
