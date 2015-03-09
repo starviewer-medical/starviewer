@@ -17,8 +17,7 @@ win32-msvc2013 {
     OBJECTS_DIR = ../../../../tmp/obj
     }
 RCC_DIR = ../../../../tmp/rcc
-CONFIG += release \
-          warn_on \
+CONFIG += warn_on \
           qt \
           opengl \
           thread \
