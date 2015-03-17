@@ -33,66 +33,29 @@ HangingProtocol::HangingProtocol()
     m_priority = 1;
 }
 
-HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
+HangingProtocol::HangingProtocol(const HangingProtocol &hangingProtocol)
+    : m_identifier(hangingProtocol.m_identifier), m_name(hangingProtocol.m_name), m_description(hangingProtocol.m_description),
+      m_institutionsRegularExpression(hangingProtocol.m_institutionsRegularExpression), m_strictness(hangingProtocol.m_strictness),
+      m_allDiferent(hangingProtocol.m_allDiferent), m_iconType(hangingProtocol.m_iconType), m_numberOfPriors(hangingProtocol.m_numberOfPriors),
+      m_priority(hangingProtocol.m_priority)
 {
-    m_identifier = hangingProtocol->m_identifier;
-    m_name = hangingProtocol->m_name;
-    m_description = hangingProtocol->m_description;
-    m_strictness = hangingProtocol->m_strictness;
-    m_allDiferent = hangingProtocol->m_allDiferent;
-    m_iconType = hangingProtocol->m_iconType;
-    m_numberOfPriors = hangingProtocol->m_numberOfPriors;
-    m_priority = hangingProtocol->m_priority;
-    m_institutionsRegularExpression = hangingProtocol->getInstitutionsRegularExpression();
+    m_layout = new HangingProtocolLayout(*hangingProtocol.m_layout);
+    m_mask = new HangingProtocolMask(*hangingProtocol.m_mask);
 
-    // Copia del layout
-    m_layout = new HangingProtocolLayout();
-    m_layout->setDisplayEnvironmentSpatialPositionList(hangingProtocol->m_layout->getDisplayEnvironmentSpatialPositionList());
-    m_layout->setHorizontalPixelsList(hangingProtocol->m_layout->getHorizontalPixelsList());
-    m_layout->setNumberOfScreens(hangingProtocol->m_layout->getNumberOfScreens());
-    m_layout->setVerticalPixelsList(hangingProtocol->m_layout->getVerticalPixelsList());
-
-    // Copia de la mascara
-    m_mask = new HangingProtocolMask();
-    m_mask->setProtocolsList(hangingProtocol->m_mask->getProtocolList());
-
-    foreach (HangingProtocolImageSet *imageSet, hangingProtocol->m_imageSets)
+    foreach (HangingProtocolImageSet *imageSet, hangingProtocol.m_imageSets)
     {
-        HangingProtocolImageSet *copiedImageSet = new HangingProtocolImageSet();
-        copiedImageSet->setRestrictionExpression(imageSet->getRestrictionExpression());
-        copiedImageSet->setIdentifier(imageSet->getIdentifier());
-        copiedImageSet->setTypeOfItem(imageSet->getTypeOfItem());
-        copiedImageSet->setSeriesToDisplay(imageSet->getSeriesToDisplay());
-        copiedImageSet->setImageToDisplay(imageSet->getImageToDisplay());
-        copiedImageSet->setIsPreviousStudy(imageSet->isPreviousStudy());
-        copiedImageSet->setDownloaded(imageSet->isDownloaded());
-        copiedImageSet->setPreviousStudyToDisplay(imageSet->getPreviousStudyToDisplay());
-        copiedImageSet->setPreviousImageSetReference(imageSet->getPreviousImageSetReference());
-        copiedImageSet->setImageNumberInPatientModality(imageSet->getImageNumberInPatientModality());
+        HangingProtocolImageSet *copiedImageSet = new HangingProtocolImageSet(*imageSet);
         copiedImageSet->setHangingProtocol(this);
         m_imageSets[copiedImageSet->getIdentifier()] = copiedImageSet;
     }
 
-    foreach (HangingProtocolDisplaySet *displaySet, hangingProtocol->m_displaySets)
+    foreach (HangingProtocolDisplaySet *displaySet, hangingProtocol.m_displaySets)
     {
-        HangingProtocolDisplaySet *copiedDisplaySet = new HangingProtocolDisplaySet();
-        copiedDisplaySet->setIdentifier(displaySet->getIdentifier());
-        copiedDisplaySet->setDescription(displaySet->getDescription());
-        copiedDisplaySet->setPosition(displaySet->getPosition());
-        copiedDisplaySet->setPatientOrientation(displaySet->getPatientOrientation());
-        copiedDisplaySet->setReconstruction(displaySet->getReconstruction());
-        copiedDisplaySet->setPhase(displaySet->getPhase());
-        copiedDisplaySet->setSlice(displaySet->getSlice());
-        copiedDisplaySet->setIconType(displaySet->getIconType());
-        copiedDisplaySet->setAlignment(displaySet->getAlignment());
-        copiedDisplaySet->setToolActivation(displaySet->getToolActivation());
+        HangingProtocolDisplaySet *copiedDisplaySet = new HangingProtocolDisplaySet(*displaySet);
         copiedDisplaySet->setHangingProtocol(this);
         copiedDisplaySet->setImageSet(this->getImageSet(displaySet->getImageSet()->getIdentifier()));
-        copiedDisplaySet->setWindowWidth(displaySet->getWindowWidth());
-        copiedDisplaySet->setWindowCenter(displaySet->getWindowCenter());
         m_displaySets[copiedDisplaySet->getIdentifier()] = copiedDisplaySet;
     }
-
 }
 
 HangingProtocol::~HangingProtocol()

@@ -63,7 +63,7 @@ void HangingProtocolManager::copyHangingProtocolRepository()
 {
     foreach (HangingProtocol *hangingProtocol, HangingProtocolsRepository::getRepository()->getItems())
     {
-        m_availableHangingProtocols << new HangingProtocol(hangingProtocol);
+        m_availableHangingProtocols << new HangingProtocol(*hangingProtocol);
     }
 }
 

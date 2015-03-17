@@ -24,13 +24,13 @@ Q_DECLARE_METATYPE(QSharedPointer<HangingProtocol>)
 void test_HangingProtocol::copy_ShouldReturnExactHangingProtocolAndDifferentObjects_data()
 {
     QSharedPointer<HangingProtocol> emptyHangingProtocol(HangingProtocolTestHelper::createEmptyHangingProtocol());
-    QSharedPointer<HangingProtocol> emptyHangingProtocolCopied(new HangingProtocol(emptyHangingProtocol.data()));
+    QSharedPointer<HangingProtocol> emptyHangingProtocolCopied(new HangingProtocol(*emptyHangingProtocol));
 
     QSharedPointer<HangingProtocol> basicHangingProtocol(HangingProtocolTestHelper::createHangingProtocolWithoutImageSetAndDisplaySet());
-    QSharedPointer<HangingProtocol> basicHangingProtocolCopied(new HangingProtocol(basicHangingProtocol.data()));
+    QSharedPointer<HangingProtocol> basicHangingProtocolCopied(new HangingProtocol(*basicHangingProtocol));
 
     QSharedPointer<HangingProtocol> advancedHangingProtocol(HangingProtocolTestHelper::createHangingProtocolWithOneImageSetAndOneDisplaySet());
-    QSharedPointer<HangingProtocol> advancedHangingProtocolCopied(new HangingProtocol(advancedHangingProtocol.data()));
+    QSharedPointer<HangingProtocol> advancedHangingProtocolCopied(new HangingProtocol(*advancedHangingProtocol));
 
     QTest::addColumn<QSharedPointer<HangingProtocol> >("hangingProtocol1");
     QTest::addColumn<QSharedPointer<HangingProtocol> >("hangingProtocol2");
@@ -45,7 +45,7 @@ void test_HangingProtocol::copy_ShouldReturnExactHangingProtocolAndDifferentObje
     QFETCH(QSharedPointer<HangingProtocol>, hangingProtocol1);
     QFETCH(QSharedPointer<HangingProtocol>, hangingProtocol2);
 
-    QCOMPARE(hangingProtocol1->compareTo(hangingProtocol2.data()), true);
+    QCOMPARE(hangingProtocol1->compareTo(*hangingProtocol2), true);
     QCOMPARE(hangingProtocol1.data() == hangingProtocol2.data(), false); //Compara adreces
     QCOMPARE(hangingProtocol1->getHangingProtocolMask() == hangingProtocol2->getHangingProtocolMask(), false); //Compara adreces
 
@@ -65,19 +65,19 @@ void test_HangingProtocol::copy_ShouldReturnExactHangingProtocolAndDifferentObje
 void test_HangingProtocol::compareTo_WorksWithDifferentTypesOfHangingProtocols_data()
 {
     QSharedPointer<HangingProtocol> emptyHangingProtocol_1(HangingProtocolTestHelper::createEmptyHangingProtocol());
-    QSharedPointer<HangingProtocol> emptyHangingProtocol_2(new HangingProtocol(emptyHangingProtocol_1.data()));
-    QSharedPointer<HangingProtocol> emptyHangingProtocol_3(new HangingProtocol(emptyHangingProtocol_1.data()));
+    QSharedPointer<HangingProtocol> emptyHangingProtocol_2(new HangingProtocol(*emptyHangingProtocol_1));
+    QSharedPointer<HangingProtocol> emptyHangingProtocol_3(new HangingProtocol(*emptyHangingProtocol_1));
     emptyHangingProtocol_3->setPriority(10);
 
     QSharedPointer<HangingProtocol> basicHangingProtocol_1(HangingProtocolTestHelper::createHangingProtocolWithoutImageSetAndDisplaySet());
-    QSharedPointer<HangingProtocol> basicHangingProtocol_2(new HangingProtocol(basicHangingProtocol_1.data()));
-    QSharedPointer<HangingProtocol> basicHangingProtocol_3(new HangingProtocol(basicHangingProtocol_1.data()));
+    QSharedPointer<HangingProtocol> basicHangingProtocol_2(new HangingProtocol(*basicHangingProtocol_1));
+    QSharedPointer<HangingProtocol> basicHangingProtocol_3(new HangingProtocol(*basicHangingProtocol_1));
     basicHangingProtocol_3->setIdentifier(5);
 
     QSharedPointer<HangingProtocol> advancedHangingProtocol_1(HangingProtocolTestHelper::createHangingProtocolWithOneImageSetAndOneDisplaySet());
-    QSharedPointer<HangingProtocol> advancedHangingProtocol_2(new HangingProtocol(advancedHangingProtocol_1.data()));
-    QSharedPointer<HangingProtocol> advancedHangingProtocol_3(new HangingProtocol(advancedHangingProtocol_1.data()));
-    QSharedPointer<HangingProtocol> advancedHangingProtocol_4(new HangingProtocol(advancedHangingProtocol_1.data()));
+    QSharedPointer<HangingProtocol> advancedHangingProtocol_2(new HangingProtocol(*advancedHangingProtocol_1));
+    QSharedPointer<HangingProtocol> advancedHangingProtocol_3(new HangingProtocol(*advancedHangingProtocol_1));
+    QSharedPointer<HangingProtocol> advancedHangingProtocol_4(new HangingProtocol(*advancedHangingProtocol_1));
     advancedHangingProtocol_3->getImageSet(1)->setImageNumberInPatientModality(10);
     advancedHangingProtocol_4->getDisplaySet(1)->setSlice(10);
 
@@ -100,7 +100,7 @@ void test_HangingProtocol::compareTo_WorksWithDifferentTypesOfHangingProtocols()
     QFETCH(QSharedPointer<HangingProtocol>, hangingProtocol2);
     QFETCH(bool, expectedResult);
 
-    QCOMPARE(hangingProtocol1->compareTo(hangingProtocol2.data()), expectedResult);
+    QCOMPARE(hangingProtocol1->compareTo(*hangingProtocol2), expectedResult);
 }
 
 DECLARE_TEST(test_HangingProtocol)

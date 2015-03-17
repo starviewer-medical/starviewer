@@ -30,8 +30,8 @@ class HangingProtocol {
 public:
     HangingProtocol();
 
-    /// Constructor còpia. Fa una còpia de tot, inclòs image i display sets.
-    HangingProtocol(const HangingProtocol *hangingProtocol);
+    /// Creates a deep copy of the given hanging protocol.
+    HangingProtocol(const HangingProtocol &hangingProtocol);
 
     ~HangingProtocol();
 
@@ -138,6 +138,9 @@ private:
 
     /// Retorna el número de DisplaySets que tenen una sèrie o imatge assignada
     int countFilledDisplaySets() const;
+private:
+    // Private copy assignment operator so it can't be used accidentally
+    HangingProtocol& operator=(const HangingProtocol&);
 
 private:
     /// Identificador
