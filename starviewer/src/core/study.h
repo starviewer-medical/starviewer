@@ -134,7 +134,7 @@ public:
     int getNumberOfSeries();
 
     /// Mètode per obtenir la llista de series de l'estudi
-    QList<Series*> getSeries();
+    QList<Series*> getSeries() const;
 
     /// Ens retorna la llista de Series que es poden visualitzar en un viewer
     QList<Series*> getViewableSeries();
