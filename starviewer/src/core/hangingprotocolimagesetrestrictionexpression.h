@@ -15,12 +15,13 @@
 #ifndef UDG_HANGINGPROTOCOLIMAGESETRESTRICTIONEXPRESSION_H
 #define UDG_HANGINGPROTOCOLIMAGESETRESTRICTIONEXPRESSION_H
 
+#include "hangingprotocolimagesetrestriction.h"
+
 #include <QMap>
 #include <QString>
 
 namespace udg {
 
-class HangingProtocolImageSetRestriction;
 class Image;
 class Series;
 
