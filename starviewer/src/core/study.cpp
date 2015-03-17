@@ -402,7 +402,7 @@ int Study::getNumberOfSeries()
     return m_seriesSet.size();
 }
 
-QList<Series*> Study::getSeries()
+QList<Series*> Study::getSeries() const
 {
     return m_seriesSet;
 }

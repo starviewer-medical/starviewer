@@ -420,7 +420,8 @@ HEADERS += extensionfactory.h \
     voilutsyncaction.h \
     voilutsignaltosyncactionmapper.h \
     hangingprotocolimagesetrestriction.h \
-    hangingprotocolimagesetrestrictionexpression.h
+    hangingprotocolimagesetrestrictionexpression.h \
+    hangingprotocolfiller.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -788,7 +789,8 @@ SOURCES += extensionmediator.cpp \
     voilutsyncaction.cpp \
     voilutsignaltosyncactionmapper.cpp \
     hangingprotocolimagesetrestriction.cpp \
-    hangingprotocolimagesetrestrictionexpression.cpp
+    hangingprotocolimagesetrestrictionexpression.cpp \
+    hangingprotocolfiller.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

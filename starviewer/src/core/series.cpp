@@ -103,7 +103,7 @@ void Series::setImages(QList<Image*> imageSet)
     m_numberOfImages = m_imageSet.count();
 }
 
-int Series::getNumberOfImages()
+int Series::getNumberOfImages() const
 {
     return m_numberOfImages;
 }

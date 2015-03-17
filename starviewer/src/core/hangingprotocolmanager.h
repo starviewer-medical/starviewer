@@ -93,29 +93,11 @@ private:
     /// Mira si la institució és compatible amb el protocol
     bool isInstitutionCompatible(HangingProtocol *protocol, Patient *patient);
 
-    /// Busca la sèrie corresponent dins un grup de sèries. Si el booleà quitStudy és cert, a més, l'eliminarà del conjunt
-    Series* searchSerie(QList<Series*> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy);
-
-    /// Cert si la imatge compleix les restriccions
-    bool isValidImage(Image *image, HangingProtocolImageSet *imageSet);
-
-    /// Cert si la sèrie compleix les restriccions de l'imageSet, fals altrament
-    bool isValidSerie(Series *serie, HangingProtocolImageSet *imageSet);
-
     /// Comprova si el protocol és aplicable a la institució. Si el protocol no té expressió regular per institució és aplicable
     bool isValidInstitution(HangingProtocol *protocol, const QString &institutionName);
 
     /// Mètode encarregat d'assignar l'input al viewer a partir de les especificacions del displaySet+imageSet.
     void setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet);
-
-    /// Buscar els estudis previs
-    Study* searchPreviousStudy(HangingProtocol *protocol, Study *referenceStudy, const QList<Study*> &previousStudies);
-
-    /// Assigna una sèrie (i una imatge) vàlida a cada ImageSet. Retorna el número d'ImageSets que tenen input assignat.
-    int setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries, const QList<Study*> &previousStudies);
-
-    /// Busca la imatge número index dins tots els estudis de la modalitat del hanging protocol
-    Image* getImageByIndexInPatientModality(Patient *patient, int index, QStringList hangingProtocolModalities);
 
 private:
     /// Estructura per guardar les dades que es necessiten quan es rep que s'ha fusionat un pacient amb un nou estudi

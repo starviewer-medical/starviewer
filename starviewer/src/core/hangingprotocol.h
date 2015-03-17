@@ -132,7 +132,6 @@ public:
     /// Compara si dos hanging protocols son iguals
     bool compareTo(const HangingProtocol &hangingProtocol) const;
 
-private:
     /// Retorna el número de ImageSets que tenen una sèrie assignada
     int countFilledImageSets() const;
 

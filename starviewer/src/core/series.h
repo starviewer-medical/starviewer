@@ -149,7 +149,7 @@ public:
 
     /// Ens diu quantes imatges té aquesta sèrie
     /// @return El nombre d'imatges. 0 en cas que no sigui una sèrie d'imatges o no en contingui
-    int getNumberOfImages();
+    int getNumberOfImages() const;
 
     /// Ens retorna el nombre d'ítems que té la sèrie, sense diferenciar si són imatges o no.
     /// Equival al nombre d'arxius que conté la sèrie
