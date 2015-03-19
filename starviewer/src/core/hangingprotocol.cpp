@@ -247,7 +247,7 @@ int HangingProtocol::countFilledImageSets() const
     int count = 0;
     foreach (HangingProtocolImageSet *imageSet, this->getImageSets())
     {
-        if (imageSet->getSeriesToDisplay())
+        if (imageSet->getSeriesToDisplay() || imageSet->getPreviousStudyToDisplay())
         {
             count++;
         }
