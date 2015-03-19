@@ -95,7 +95,6 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Patient *
             HangingProtocolFiller hangingProtocolFiller;
             hangingProtocolFiller.fill(hangingProtocol, patient->getStudies().first(), previousStudies);
 
-            // TODO modify to count filled priors
             int numberOfFilledImageSets = hangingProtocol->countFilledImageSets();
 
             bool isValidHangingProtocol = false;
