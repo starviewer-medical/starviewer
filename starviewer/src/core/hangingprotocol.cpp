@@ -28,7 +28,7 @@ HangingProtocol::HangingProtocol()
     m_layout = new HangingProtocolLayout();
     m_mask = new HangingProtocolMask();
     m_strictness = false;
-    m_allDiferent = false;
+    m_allDifferent = false;
     m_numberOfPriors = 0;
     m_priority = 1;
 }
@@ -36,7 +36,7 @@ HangingProtocol::HangingProtocol()
 HangingProtocol::HangingProtocol(const HangingProtocol &hangingProtocol)
     : m_identifier(hangingProtocol.m_identifier), m_name(hangingProtocol.m_name), m_description(hangingProtocol.m_description),
       m_institutionsRegularExpression(hangingProtocol.m_institutionsRegularExpression), m_strictness(hangingProtocol.m_strictness),
-      m_allDiferent(hangingProtocol.m_allDiferent), m_iconType(hangingProtocol.m_iconType), m_numberOfPriors(hangingProtocol.m_numberOfPriors),
+      m_allDifferent(hangingProtocol.m_allDifferent), m_iconType(hangingProtocol.m_iconType), m_numberOfPriors(hangingProtocol.m_numberOfPriors),
       m_priority(hangingProtocol.m_priority)
 {
     m_layout = new HangingProtocolLayout(*hangingProtocol.m_layout);
@@ -291,14 +291,14 @@ void HangingProtocol::setStrictness(bool strictness)
     m_strictness = strictness;
 }
 
-void HangingProtocol::setAllDiferent(bool allDiferent)
+void HangingProtocol::setAllDifferent(bool allDifferent)
 {
-    m_allDiferent = allDiferent;
+    m_allDifferent = allDifferent;
 }
 
-bool HangingProtocol::getAllDiferent() const
+bool HangingProtocol::getAllDifferent() const
 {
-    return m_allDiferent;
+    return m_allDifferent;
 }
 
 void HangingProtocol::setIconType(const QString &iconType)
@@ -337,7 +337,7 @@ bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol) const
         && m_name == hangingProtocol.getName()
         && m_description == hangingProtocol.m_description
         && m_strictness == hangingProtocol.isStrict()
-        && m_allDiferent == hangingProtocol.getAllDiferent()
+        && m_allDifferent == hangingProtocol.getAllDifferent()
         && m_iconType == hangingProtocol.getIconType()
         && m_numberOfPriors == hangingProtocol.getNumberOfPriors()
         && m_priority == hangingProtocol.getPriority()

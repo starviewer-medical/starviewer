@@ -140,7 +140,7 @@ HangingProtocol* HangingProtocolXMLReader::readHangingProtocol()
         }
         else if (m_xmlReader.name() == "allDifferent")
         {
-            hangingProtocol->setAllDiferent(m_xmlReader.readElementText().contains("yes"));
+            hangingProtocol->setAllDifferent(m_xmlReader.readElementText().contains("yes"));
         }
         else if (m_xmlReader.name() == "iconType")
         {
