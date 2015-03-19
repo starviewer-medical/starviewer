@@ -149,9 +149,6 @@ private:
     /// Nom del hanging protocol
     QString m_name;
 
-    /// Descripció del hanging protocol
-    QString m_description;
-
     /// Definició de layouts
     HangingProtocolLayout *m_layout;
 

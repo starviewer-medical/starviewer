@@ -34,7 +34,7 @@ HangingProtocol::HangingProtocol()
 }
 
 HangingProtocol::HangingProtocol(const HangingProtocol &hangingProtocol)
-    : m_identifier(hangingProtocol.m_identifier), m_name(hangingProtocol.m_name), m_description(hangingProtocol.m_description),
+    : m_identifier(hangingProtocol.m_identifier), m_name(hangingProtocol.m_name),
       m_institutionsRegularExpression(hangingProtocol.m_institutionsRegularExpression), m_strictness(hangingProtocol.m_strictness),
       m_allDifferent(hangingProtocol.m_allDifferent), m_iconType(hangingProtocol.m_iconType), m_numberOfPriors(hangingProtocol.m_numberOfPriors),
       m_priority(hangingProtocol.m_priority)
@@ -165,8 +165,7 @@ QRegExp HangingProtocol::getInstitutionsRegularExpression() const
 
 void HangingProtocol::show() const
 {
-    DEBUG_LOG(QString("\n---- HANGING PROTOCOL ----\n Name: %1\nDescription: %2\n").arg(m_name).arg(
-              m_description));
+    DEBUG_LOG(QString("\n---- HANGING PROTOCOL ----\n Name: %1\n").arg(m_name));
 
     DEBUG_LOG("List of protocols: \n");
     for (int i = 0; i < m_mask->getProtocolList().size(); i++)
@@ -335,7 +334,6 @@ bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol) const
 {
     bool hasSameAttributes = m_identifier == hangingProtocol.getIdentifier()
         && m_name == hangingProtocol.getName()
-        && m_description == hangingProtocol.m_description
         && m_strictness == hangingProtocol.isStrict()
         && m_allDifferent == hangingProtocol.getAllDifferent()
         && m_iconType == hangingProtocol.getIconType()
