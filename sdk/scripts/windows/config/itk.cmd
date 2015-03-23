@@ -2,17 +2,17 @@ REM Call gdcm configuration script to make sure GdcmDir is set
 REM This script in turn calls vtk configuration script, so VtkDir will also be set
 call "%ScriptsRoot%\config\gdcm.cmd"
 
-set SourceDir=%SystemDrive%\buildLibs-vs2013\ITK-4.6.1\ITK
+set SourceDir=%SourceDirBase%\ITK-4.7.1\ITK
 
 if %BuildType% == debug (
     set CMakeBuildType=Debug
     set BuildDir=%SourceDir%-build-debug
-    set InstallPrefix=%SystemDrive%/InsightToolkit/4.6.1d
+    set InstallPrefix=%SystemDrive%/InsightToolkit/4.7.1d-%Arch%
 )
 if %BuildType% == release (
     set CMakeBuildType=RelWithDebInfo
     set BuildDir=%SourceDir%-build-release
-    set InstallPrefix=%SystemDrive%/InsightToolkit/4.6.1
+    set InstallPrefix=%SystemDrive%/InsightToolkit/4.7.1-%Arch%
 )
 
 REM ============== Nothing should need to be changed below this line ==============
