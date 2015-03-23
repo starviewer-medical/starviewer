@@ -49,8 +49,14 @@ win32 {
     INCLUDEPATH += $${DCMTKINCLUDEDIR}/../
     LIBS += -lNetAPI32 -lWSock32 -lSnmpAPI
 
-    INCLUDEPATH += C:/sqlite3
-    LIBS += -LC:/sqlite3
+    !contains(QMAKE_TARGET.arch, x86_64)) {
+        INCLUDEPATH += C:/sqlite3
+        LIBS += -LC:/sqlite3
+    }
+    else {
+        INCLUDEPATH += C:/sqlite3-64
+        LIBS += -LC:/sqlite3-64
+    }
     LIBS -= -lxml2
 }
 
