@@ -23,13 +23,13 @@ VTKLIBDIR = $$(VTKLIBDIR)
 isEmpty(VTKLIBDIR){
     unix:VTKLIBDIR = /usr/lib
     macx:VTKLIBDIR = /usr/local/lib/vtk-5.6
-    win32:VTKLIBDIR = $$(SystemDrive)/VTK/6.1.0/lib
+    win32:VTKLIBDIR = $$(SystemDrive)/VTK/6.2.0/lib
 }
 VTKINCLUDEDIR = $$(VTKINCLUDEDIR)
 isEmpty(VTKINCLUDEDIR){
     unix:VTKINCLUDEDIR = /usr/include/vtk-5.6
     macx:VTKINCLUDEDIR = /usr/local/include/vtk-5.6
-    win32:VTKINCLUDEDIR = $$(SystemDrive)/VTK/6.1.0/include/vtk-6.1
+    win32:VTKINCLUDEDIR = $$(SystemDrive)/VTK/6.2.0/include/vtk-6.2
 }
 
 
@@ -39,13 +39,13 @@ ITKLIBDIR = $$(ITKLIBDIR)
 isEmpty(ITKLIBDIR){
     unix:ITKLIBDIR = /usr/lib/InsightToolkit
     macx:ITKLIBDIR = /usr/local/lib/InsightToolkit
-    win32:ITKLIBDIR = $$(SystemDrive)/InsightToolkit/4.6.1/lib
+    win32:ITKLIBDIR = $$(SystemDrive)/InsightToolkit/4.7.1/lib
 }
 ITKINCLUDEDIR = $$(ITKINCLUDEDIR)
 isEmpty(ITKINCLUDEDIR){
     unix:ITKINCLUDEDIR = /usr/include/InsightToolkit
     macx:ITKINCLUDEDIR = /usr/local/include/InsightToolkit
-    win32:ITKINCLUDEDIR = $$(SystemDrive)/InsightToolkit/4.6.1/include/ITK-4.6
+    win32:ITKINCLUDEDIR = $$(SystemDrive)/InsightToolkit/4.7.1/include/ITK-4.7
 }
 
 # GDCM Libraries

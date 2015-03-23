@@ -2,7 +2,7 @@ include(defaultdirectories.pri)
 
 INCLUDEPATH += $${ITKINCLUDEDIR}
 
-ITKLIBSUFFIX = -4.6
+ITKLIBSUFFIX = -4.7
 ITKLIBS = \
         ITKCommon \
         ITKDICOMParser \
