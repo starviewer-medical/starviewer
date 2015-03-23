@@ -2,7 +2,7 @@ REM List of build types to use. Possible values: debug, release.
 set BuildTypes=release
 
 REM List of libs to build. Possible values: dcmtk, vtk, gdcm, itk, ecm, threadweaver.
-set Libs=zlib dcmtk vtk gdcm itk ecm threadweaver
+set Libs=zlib dcmtk vtk gdcm itk ecm threadweaver sqlite3
 
 set SourceDirBase=D:\buildLibs-vs2013-%Arch%
 
