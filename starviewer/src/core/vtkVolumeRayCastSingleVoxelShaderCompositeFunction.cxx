@@ -134,7 +134,7 @@ void vtkVolumeRayCastSingleVoxelShaderCompositeFunction<VS>::CastRay( vtkVolumeR
     const bool CLASSIFY_INTERPOLATE = m_compositeMethod == ClassifyInterpolate;
 
     // Move the increments into local variables
-    const int * const INCREMENTS = staticInfo->DataIncrement;
+    const vtkIdType * const INCREMENTS = staticInfo->DataIncrement;
     const int X_INC = INCREMENTS[0], Y_INC = INCREMENTS[1], Z_INC = INCREMENTS[2];
 
     // Get the gradient opacity constant. If this number is greater than or equal to 0.0, then the gradient opacity transfer function is a constant at that
