@@ -17,7 +17,7 @@ robocopy "%SystemDrive%\InsightToolkit\4.7.1-64" "InsightToolkit\4.7.1-64" /MIR
 robocopy "%SystemDrive%\log4cxx-64" "log4cxx-64" /MIR
 robocopy "%SystemDrive%\sqlite3-64" "sqlite3-64" /MIR
 robocopy "%SystemDrive%\ThreadWeaver\5.3.0-64" "ThreadWeaver\5.3.0-64" /MIR
-robocopy "%SystemDrive%\vtk\6.2.0-64" "vtk\6.2.0-64" /MIR
+robocopy "%SystemDrive%\vtk\6.1.0-64" "vtk\6.1.0-64" /MIR
 
 popd
 

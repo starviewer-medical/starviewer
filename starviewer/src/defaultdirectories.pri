@@ -25,15 +25,15 @@ VTKLIBDIR = $$(VTKLIBDIR)
 isEmpty(VTKLIBDIR){
     unix:VTKLIBDIR = /usr/lib
     macx:VTKLIBDIR = /usr/local/lib/vtk-5.6
-    win32:VTKLIBDIR = $$(SystemDrive)/VTK/6.2.0/lib
-    win32:contains(QMAKE_TARGET.arch, x86_64):VTKLIBDIR = $$(SystemDrive)/VTK/6.2.0-64/lib
+    win32:VTKLIBDIR = $$(SystemDrive)/VTK/6.1.0/lib
+    win32:contains(QMAKE_TARGET.arch, x86_64):VTKLIBDIR = $$(SystemDrive)/VTK/6.1.0-64/lib
 }
 VTKINCLUDEDIR = $$(VTKINCLUDEDIR)
 isEmpty(VTKINCLUDEDIR){
     unix:VTKINCLUDEDIR = /usr/include/vtk-5.6
     macx:VTKINCLUDEDIR = /usr/local/include/vtk-5.6
-    win32:VTKINCLUDEDIR = $$(SystemDrive)/VTK/6.2.0/include/vtk-6.2
-    win32:contains(QMAKE_TARGET.arch, x86_64):VTKINCLUDEDIR = $$(SystemDrive)/VTK/6.2.0-64/include/vtk-6.2
+    win32:VTKINCLUDEDIR = $$(SystemDrive)/VTK/6.1.0/include/vtk-6.1
+    win32:contains(QMAKE_TARGET.arch, x86_64):VTKINCLUDEDIR = $$(SystemDrive)/VTK/6.1.0-64/include/vtk-6.1
 }
 
 
