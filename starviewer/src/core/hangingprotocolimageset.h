@@ -67,12 +67,6 @@ public:
     /// Mètode per mostrar els valors
     void show();
 
-    /// Metode per indicar si es un estudi previ o no
-    void setIsPreviousStudy(bool hasPreviousStudy);
-
-    /// Mètode per saber si te previs o no
-    bool isPreviousStudy();
-
     /// Mètode per posar si esta descarregat o no
     void setDownloaded(bool option);
 
@@ -84,12 +78,6 @@ public:
 
     /// Obte l'estudi previ a mostrar. Pot estar descarregat o no.
     Study* getPreviousStudyToDisplay();
-
-    /// Posa l'ImageSet del qual és previ
-    void setPreviousImageSetReference(int imageSetNumber);
-
-    /// Obté l'ImageSet del qual és previ
-    int getPreviousImageSetReference();
 
     /// Returns the abstract prior value of this image set.
     int getAbstractPriorValue() const;
@@ -126,17 +114,11 @@ private:
     /// ja quan es crea el hanging protocol
     int m_imageNumberInPatientModality;
 
-    /// Indica si conte un estudi previ
-    bool m_isPreviousStudy;
-
     /// Indica si esta o no descarregat
     bool m_downloaded;
 
     /// Estudi previ a l'image set, sense descarregar
     Study *m_previousStudyToDisplay;
-
-    /// Posa l'image set que té de referencia i del qual ha de ser previ
-    int m_previousImageSetReference;
 
     /// Identifies a prior image set in abstract terms. The value 0 shall indicate a current image set, 1 indicates the most recent prior and higher values
     /// indicate successively older priors. The special value -1 shall indicate the oldest prior.

@@ -213,17 +213,6 @@ HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QMap<int, 
         {
             imageSet->setTypeOfItem(m_xmlReader.readElementText());
         }
-        else if (m_xmlReader.name() == "previous")
-        {
-            QString previousText = m_xmlReader.readElementText();
-            bool isPrevious = !(previousText.contains("no"));
-            imageSet->setIsPreviousStudy(isPrevious);
-
-            if (isPrevious)
-            {
-                imageSet->setPreviousImageSetReference(previousText.toInt());
-            }
-        }
         else if (m_xmlReader.name() == "abstractPriorValue")
         {
             imageSet->setAbstractPriorValue(m_xmlReader.readElementText().toInt());
