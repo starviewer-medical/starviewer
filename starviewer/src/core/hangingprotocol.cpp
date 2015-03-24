@@ -360,7 +360,6 @@ bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol) const
             && imageSet->getTypeOfItem() == imageSetToCompare->getTypeOfItem()
             && imageSet->getSeriesToDisplay() == imageSetToCompare->getSeriesToDisplay()
             && imageSet->getImageToDisplay() == imageSetToCompare->getImageToDisplay()
-            && imageSet->isPreviousStudy() == imageSetToCompare->isPreviousStudy()
             && imageSet->isDownloaded() == imageSetToCompare->isDownloaded()
             && imageSet->getPreviousStudyToDisplay() == imageSetToCompare->getPreviousStudyToDisplay()
             && imageSet->getImageNumberInPatientModality() == imageSetToCompare->getImageNumberInPatientModality();

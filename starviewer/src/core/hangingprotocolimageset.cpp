@@ -27,7 +27,6 @@ HangingProtocolImageSet::HangingProtocolImageSet()
     m_hangingProtocol = NULL;
     m_previousStudyToDisplay = NULL;
     m_serieToDisplay = NULL;
-    m_isPreviousStudy = false;
     m_downloaded = true;
     m_imageNumberInPatientModality = -1;
 }
@@ -101,16 +100,6 @@ void HangingProtocolImageSet::show()
     DEBUG_LOG(QString("    Identifier %1\n").arg(m_identifier));
 }
 
-void HangingProtocolImageSet::setIsPreviousStudy(bool hasPreviousStudy)
-{
-    m_isPreviousStudy = hasPreviousStudy;
-}
-
-bool HangingProtocolImageSet::isPreviousStudy()
-{
-    return m_isPreviousStudy;
-}
-
 void HangingProtocolImageSet::setDownloaded(bool option)
 {
     m_downloaded = option;
@@ -129,16 +118,6 @@ void HangingProtocolImageSet::setPreviousStudyToDisplay(Study *study)
 Study* HangingProtocolImageSet::getPreviousStudyToDisplay()
 {
     return m_previousStudyToDisplay;
-}
-
-void HangingProtocolImageSet::setPreviousImageSetReference(int imageSetNumber)
-{
-    m_previousImageSetReference = imageSetNumber;
-}
-
-int HangingProtocolImageSet::getPreviousImageSetReference()
-{
-    return m_previousImageSetReference;
 }
 
 int HangingProtocolImageSet::getAbstractPriorValue() const
