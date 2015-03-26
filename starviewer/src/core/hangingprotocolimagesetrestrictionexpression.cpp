@@ -17,8 +17,8 @@
 #include "hangingprotocolimagesetrestriction.h"
 #include "logging.h"
 
+#include <QJSEngine>
 #include <QRegularExpression>
-#include <QScriptEngine>
 #include <QSet>
 
 namespace udg {
@@ -110,8 +110,8 @@ bool HangingProtocolImageSetRestrictionExpression::evaluate(const QList<bool> &r
         expression = expression.arg(result);
     }
 
-    QScriptEngine scriptEngine;
-    QScriptValue result = scriptEngine.evaluate(expression);
+    QJSEngine scriptEngine;
+    QJSValue result = scriptEngine.evaluate(expression);
 
     if (!result.isError())
     {
