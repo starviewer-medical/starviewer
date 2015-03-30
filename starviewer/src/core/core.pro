@@ -810,7 +810,6 @@ include(../threadweaver.pri)
 QT += xml \
     network \
     webkit \
-    script \
     xmlpatterns \
     opengl \
     quickwidgets \

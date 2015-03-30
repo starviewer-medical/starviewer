@@ -19,8 +19,8 @@
 #include "systeminformation.h"
 #include "coresettings.h"
 
-#include <QScriptEngine>
-#include <QScriptValue>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QUrl>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -182,29 +182,29 @@ void ApplicationUpdateChecker::parseWebServiceReply(QNetworkReply *reply)
 
 void ApplicationUpdateChecker::parseJSON(const QString &json)
 {
-    QScriptValue scriptValue;
-    QScriptEngine engine;
-    scriptValue = engine.evaluate("(" + json + ")");
+    QJsonParseError parseError;
+    QJsonObject result = QJsonDocument::fromJson(json.toUtf8(), &parseError).object();
 
-    if (scriptValue.property("error").isObject())
+    if (result.value("error").isObject())
     {
+        QJsonObject errorObject = result.value("error").toObject();
         ERROR_LOG(QString("Error llegint la resposta del servidor (error en el json) ") + 
-                  scriptValue.property("error").property("code").toString() +
-                  QString(": ") + scriptValue.property("error").property("message").toString());
+                  errorObject.value("code").toString() +
+                  QString(": ") + errorObject.value("message").toString());
         m_errorDescription = tr("Error parsing JSON.");
     }
     else
     {
-        if (scriptValue.property("updateAvailable").isBool())
+        if (result.value("updateAvailable").isBool())
         {
-            m_updateAvailable = scriptValue.property("updateAvailable").toBool();
+            m_updateAvailable = result.value("updateAvailable").toBool();
             m_checkOk = true;
             if (m_updateAvailable == true)
             {
-                if (scriptValue.property("version").isString() && scriptValue.property("releaseNotesURL").isString())
+                if (result.value("version").isString() && result.value("releaseNotesURL").isString())
                 {
-                    m_checkedVersion = scriptValue.property("version").toString();
-                    m_releaseNotesURL = scriptValue.property("releaseNotesURL").toString();
+                    m_checkedVersion = result.value("version").toString();
+                    m_releaseNotesURL = result.value("releaseNotesURL").toString();
 
                     INFO_LOG(QString("S'ha trobat una nova versió en el servidor, %1.").arg(m_checkedVersion));
                 }
