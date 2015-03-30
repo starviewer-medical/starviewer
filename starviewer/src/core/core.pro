@@ -813,6 +813,6 @@ QT += xml \
     script \
     xmlpatterns \
     opengl \
-    declarative \
+    quickwidgets \
     concurrent \
     webkitwidgets
