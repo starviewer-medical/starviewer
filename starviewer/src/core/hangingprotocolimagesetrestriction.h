@@ -31,6 +31,7 @@ class HangingProtocolImageSetRestriction
 {
 public:
     HangingProtocolImageSetRestriction();
+    HangingProtocolImageSetRestriction(int identifier, const QString &selectorAttribute, const QString &selectorValue, int selectorValueNumber);
     ~HangingProtocolImageSetRestriction();
 
     int getIdentifier() const;
