@@ -28,9 +28,6 @@
 #include "patientbrowsermenugroup.h"
 
 #include <QPainter>
-#include <QDeclarativeView>
-#include <QDeclarativeContext>
-#include <QDeclarativeItem>
 #include <QVBoxLayout>
 
 namespace udg {
