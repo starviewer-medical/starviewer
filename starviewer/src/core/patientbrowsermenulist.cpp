@@ -34,14 +34,15 @@ PatientBrowserMenuList::PatientBrowserMenuList(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(10);
     m_qmlView = new QQuickWidget(this);
-    m_qmlView->rootContext()->setContextProperty("browserModel", QVariant::fromValue(m_groups));
+    QQmlContext *context = m_qmlView->rootContext();
+    context->setContextProperty("browserModel", QVariant::fromValue(m_groups));
+    context->setContextProperty("applicationFontSize", QVariant::fromValue(ApplicationStyleHelper().getApplicationScaledFontSize()));
 
     layout->addWidget(m_qmlView);
 
     m_qmlView->setSource(QUrl("qrc:///qmlpatientbrowsermenu.qml"));
     QQuickItem *rootItem = m_qmlView->rootObject();
     rootItem->setProperty("fusionLabelText", QVariant::fromValue(tr("Fusion")));
-    rootItem->setProperty("computedFontSize", QVariant::fromValue(ApplicationStyleHelper().getApplicationScaledFontSize()));
 
     connect(rootItem, SIGNAL(isActive(QString)), this, SIGNAL(isActive(QString)));
     connect(rootItem, SIGNAL(selectedItem(QString)), this, SIGNAL(selectedItem(QString)));
