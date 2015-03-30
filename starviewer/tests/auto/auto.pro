@@ -12,7 +12,7 @@ SOURCES += autotests.cpp
 
 QT += testlib
 
-QT += xml opengl network webkit script xmlpatterns gui quickwidgets concurrent webkitwidgets
+QT += xml opengl network webkit xmlpatterns gui quickwidgets concurrent webkitwidgets
 
 OBJECTS_DIR = ../../tmp/obj
 UI_DIR = ../../tmp/ui
