@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-import QtQuick 1.0
+import QtQuick 2.4
 
 Rectangle {
     id: browserMenu
@@ -29,7 +29,7 @@ Rectangle {
     property string fusionMarkedItem1: "-1"
     property string fusionMarkedItem2: "-1"
     property string fusionLabelText: qsTr("Fusion")
-    property int computedFontSize
+    property int textRenderType: Text.NativeRendering
 
     width: Math.min(computedContentWidth + listview.anchors.leftMargin + listview.anchors.rightMargin, maxWidth);
     height: Math.min(computedContentHeight + listview.anchors.topMargin + listview.anchors.bottomMargin, maxHeight);
@@ -49,18 +49,18 @@ Rectangle {
             {
                 var item = group[j];
                 var textElement = Qt.createQmlObject(
-                        'import QtQuick 1.0;'
+                        'import QtQuick 2.4;'
                         + 'Text {'
-                        + '   text: "' + item.text + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier) + '; font.pointSize: ' + computedFontSize
+                        + '   text: "' + item.text + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier) + '; font.pointSize: ' + applicationFontSize
                         + '}',
                         parent, "calcContentWidth")
                 max = Math.max((textElement.width + 10) * 2, max)
                 textElement.destroy()
             }
             var captionElement = Qt.createQmlObject(
-                    'import QtQuick 1.0;'
+                    'import QtQuick 2.4;'
                     + 'Text {'
-                        + '   text: "' + model[i].caption + '"; visible: false; font.pointSize: ' + computedFontSize
+                        + '   text: "' + model[i].caption + '"; visible: false; font.pointSize: ' + applicationFontSize
                     + '}',
                     parent, "calcContentWidth")
             max = Math.max(captionElement.width + 20, max)
@@ -72,9 +72,9 @@ Rectangle {
     function calcContentHeight(model, parent)
     {
         var textElement = Qt.createQmlObject(
-                'import QtQuick 1.0;'
+                'import QtQuick 2.4;'
                 + 'Text {'
-                + '   text: "any text"; visible: false; font.pointSize: ' + computedFontSize
+                + '   text: "any text"; visible: false; font.pointSize: ' + applicationFontSize
                 + '}',
                 parent, "calcContentHeight")
         var cellHeight = textElement.height + textElement.font.pointSize;
@@ -145,8 +145,9 @@ Rectangle {
                     }
                     horizontalAlignment: Text.AlignHCenter
                     text: caption
+                    renderType: textRenderType
                     elide: Text.ElideMiddle
-                    font.pointSize: computedFontSize
+                    font.pointSize: applicationFontSize
                 }
             }
 
@@ -196,8 +197,9 @@ Rectangle {
 								leftMargin: 5
                             }
                             text: modelData.text
+                            renderType: textRenderType
                             elide: Text.ElideMiddle
-                            font.pointSize: computedFontSize
+                            font.pointSize: applicationFontSize
                             font.bold: {
                                 if (browserMenu.markedItem === modelData.identifier) {
                                     return true;
@@ -261,8 +263,9 @@ Rectangle {
                             radius: 4
 
                             Text {
-                                font.pointSize: computedFontSize
+                                font.pointSize: applicationFontSize
                                 text: " " + fusionLabelText + " "
+                                renderType: textRenderType
                                 color: "#012911"
                                 anchors {
                                     verticalCenter: parent.verticalCenter
@@ -290,9 +293,10 @@ Rectangle {
                                     rightMargin: 5
                                 }
                                 text: modelData.text
+                                renderType: textRenderType
                                 elide: Text.ElideMiddle
                                 font.bold: (browserMenu.markedItem === modelData.identifier)
-                                font.pointSize: computedFontSize
+                                font.pointSize: applicationFontSize
                             }
 
                             MouseArea {
