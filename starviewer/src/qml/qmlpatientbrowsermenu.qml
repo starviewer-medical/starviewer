@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-import QtQuick 1.0
+import QtQuick 2.4
 
 Rectangle {
     id: browserMenu
@@ -49,7 +49,7 @@ Rectangle {
             {
                 var item = group[j];
                 var textElement = Qt.createQmlObject(
-                        'import QtQuick 1.0;'
+                        'import QtQuick 2.4;'
                         + 'Text {'
                         + '   text: "' + item.text + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier) + '; font.pointSize: ' + computedFontSize
                         + '}',
@@ -58,7 +58,7 @@ Rectangle {
                 textElement.destroy()
             }
             var captionElement = Qt.createQmlObject(
-                    'import QtQuick 1.0;'
+                    'import QtQuick 2.4;'
                     + 'Text {'
                         + '   text: "' + model[i].caption + '"; visible: false; font.pointSize: ' + computedFontSize
                     + '}',
@@ -72,7 +72,7 @@ Rectangle {
     function calcContentHeight(model, parent)
     {
         var textElement = Qt.createQmlObject(
-                'import QtQuick 1.0;'
+                'import QtQuick 2.4;'
                 + 'Text {'
                 + '   text: "any text"; visible: false; font.pointSize: ' + computedFontSize
                 + '}',
