@@ -44,7 +44,7 @@ include(../breakpad.pri)
 
 include(installextensions.pri)
 
-QT += xml opengl network webkit script xmlpatterns declarative concurrent webkitwidgets
+QT += xml opengl network webkit script xmlpatterns quickwidgets concurrent webkitwidgets
 
 #TODO: Qt 4.5.3 no afegeix la informacio de UI_DIR com a include a l'hora de compilar el main.cpp
 INCLUDEPATH += ../../tmp/ui
