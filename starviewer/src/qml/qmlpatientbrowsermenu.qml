@@ -29,6 +29,7 @@ Rectangle {
     property string fusionMarkedItem1: "-1"
     property string fusionMarkedItem2: "-1"
     property string fusionLabelText: qsTr("Fusion")
+    property int textRenderType: Text.NativeRendering
 
     width: Math.min(computedContentWidth + listview.anchors.leftMargin + listview.anchors.rightMargin, maxWidth);
     height: Math.min(computedContentHeight + listview.anchors.topMargin + listview.anchors.bottomMargin, maxHeight);
@@ -144,6 +145,7 @@ Rectangle {
                     }
                     horizontalAlignment: Text.AlignHCenter
                     text: caption
+                    renderType: textRenderType
                     elide: Text.ElideMiddle
                     font.pointSize: applicationFontSize
                 }
@@ -195,6 +197,7 @@ Rectangle {
 								leftMargin: 5
                             }
                             text: modelData.text
+                            renderType: textRenderType
                             elide: Text.ElideMiddle
                             font.pointSize: applicationFontSize
                             font.bold: {
@@ -262,6 +265,7 @@ Rectangle {
                             Text {
                                 font.pointSize: applicationFontSize
                                 text: " " + fusionLabelText + " "
+                                renderType: textRenderType
                                 color: "#012911"
                                 anchors {
                                     verticalCenter: parent.verticalCenter
@@ -289,6 +293,7 @@ Rectangle {
                                     rightMargin: 5
                                 }
                                 text: modelData.text
+                                renderType: textRenderType
                                 elide: Text.ElideMiddle
                                 font.bold: (browserMenu.markedItem === modelData.identifier)
                                 font.pointSize: applicationFontSize
