@@ -51,6 +51,18 @@ bool is32BitWindows()
 #endif
 }
 
+bool is32BitProgramOnWindows()
+{
+#if defined(_WIN64)
+    return false;  // 64-bit programs run only on Win64
+#elif defined(_WIN32)
+    // 32-bit programs run on both 32-bit and 64-bit Windows
+    return true;
+#else
+    return false; // Win64 does not support Win16
+#endif
+}
+
 }
 
 namespace udg {
@@ -122,15 +134,21 @@ void VolumeReaderJobFactory::assignResourceRestrictionPolicy(VolumeReaderJob *vo
     else 
     {
         QStringList allowedModalities;
-        if (is32BitWindows())
+        bool checkMultiframeImages = false;
+
+        // If it's a 32 bit build, concurrence is disabled on multiframe volumes.
+        // Moreover, if it's running on a 32bit Win, concurrence is only allowed for CT and MR volumes.
+        if (is32BitProgramOnWindows())
         {
-            // Si és 32 bits a més de limitar la concurrència si tenim volums multiframe ho fem també amb els que no siguin CT o MR
-            allowedModalities << QString("CT") << QString("MR");
+            checkMultiframeImages = true;
+
+            if (is32BitWindows())
+            {
+                allowedModalities << QString("CT") << QString("MR");
+            }
         }
-        // Si és 64 bits, només limitarem la concurrència si tenim volums multiframe, ja que les gdcm necessiten molta memòria per carregar-les
-        // i es poden produir pics de memòria considerables que impedeixen obrir les imatges
         
-        bool foundRestrictions = checkForResourceRestrictions(true, allowedModalities);
+        bool foundRestrictions = checkForResourceRestrictions(checkMultiframeImages, allowedModalities);
         
         int numberOfVolumesLoadingConcurrently;
         if (foundRestrictions)
