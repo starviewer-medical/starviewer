@@ -29,6 +29,12 @@ HangingProtocolImageSetRestriction::HangingProtocolImageSetRestriction()
 {
 }
 
+HangingProtocolImageSetRestriction::HangingProtocolImageSetRestriction(int identifier, const QString &selectorAttribute, const QString &selectorValue,
+                                                                       int selectorValueNumber)
+    : m_identifier(identifier), m_selectorAttribute(selectorAttribute), m_selectorValue(selectorValue), m_selectorValueNumber(selectorValueNumber)
+{
+}
+
 HangingProtocolImageSetRestriction::~HangingProtocolImageSetRestriction()
 {
 }
