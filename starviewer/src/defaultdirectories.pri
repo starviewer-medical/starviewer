@@ -6,14 +6,14 @@
 DCMTKLIBDIR = $$(DCMTKLIBDIR)
 isEmpty(DCMTKLIBDIR){
     unix:DCMTKLIBDIR = /usr/lib/dcmtk
-    macx:DCMTKLIBDIR = /usr/local/dcmtk-3.6.1_20120515/lib
+    macx:DCMTKLIBDIR = /usr/local/lib
     win32:DCMTKLIBDIR = $$(SystemDrive)/dcmtk/3.6.1_20120515/lib
     win32:contains(QMAKE_TARGET.arch, x86_64):DCMTKLIBDIR = $$(SystemDrive)/dcmtk/3.6.1_20120515-64/lib
 }
 DCMTKINCLUDEDIR = $$(DCMTKINCLUDEDIR)
 isEmpty(DCMTKINCLUDEDIR){
     unix:DCMTKINCLUDEDIR = /usr/include/dcmtk
-    macx:DCMTKINCLUDEDIR = /usr/local/dcmtk-3.6.1_20120515/include/dcmtk
+    macx:DCMTKINCLUDEDIR = /usr/local/include/dcmtk
     win32:DCMTKINCLUDEDIR = $$(SystemDrive)/dcmtk/3.6.1_20120515/include/dcmtk
     win32:contains(QMAKE_TARGET.arch, x86_64):DCMTKINCLUDEDIR = $$(SystemDrive)/dcmtk/3.6.1_20120515-64/include/dcmtk
 }
@@ -24,14 +24,14 @@ isEmpty(DCMTKINCLUDEDIR){
 VTKLIBDIR = $$(VTKLIBDIR)
 isEmpty(VTKLIBDIR){
     unix:VTKLIBDIR = /usr/lib
-    macx:VTKLIBDIR = /usr/local/lib/vtk-5.6
+    macx:VTKLIBDIR = /usr/local/lib
     win32:VTKLIBDIR = $$(SystemDrive)/VTK/6.1.0/lib
     win32:contains(QMAKE_TARGET.arch, x86_64):VTKLIBDIR = $$(SystemDrive)/VTK/6.1.0-64/lib
 }
 VTKINCLUDEDIR = $$(VTKINCLUDEDIR)
 isEmpty(VTKINCLUDEDIR){
     unix:VTKINCLUDEDIR = /usr/include/vtk-5.6
-    macx:VTKINCLUDEDIR = /usr/local/include/vtk-5.6
+    macx:VTKINCLUDEDIR = /usr/local/include/vtk-6.1
     win32:VTKINCLUDEDIR = $$(SystemDrive)/VTK/6.1.0/include/vtk-6.1
     win32:contains(QMAKE_TARGET.arch, x86_64):VTKINCLUDEDIR = $$(SystemDrive)/VTK/6.1.0-64/include/vtk-6.1
 }
@@ -42,14 +42,14 @@ isEmpty(VTKINCLUDEDIR){
 ITKLIBDIR = $$(ITKLIBDIR)
 isEmpty(ITKLIBDIR){
     unix:ITKLIBDIR = /usr/lib/InsightToolkit
-    macx:ITKLIBDIR = /usr/local/lib/InsightToolkit
+    macx:ITKLIBDIR = /usr/local/lib
     win32:ITKLIBDIR = $$(SystemDrive)/InsightToolkit/4.7.1/lib
     win32:contains(QMAKE_TARGET.arch, x86_64):ITKLIBDIR = $$(SystemDrive)/InsightToolkit/4.7.1-64/lib
 }
 ITKINCLUDEDIR = $$(ITKINCLUDEDIR)
 isEmpty(ITKINCLUDEDIR){
     unix:ITKINCLUDEDIR = /usr/include/InsightToolkit
-    macx:ITKINCLUDEDIR = /usr/local/include/InsightToolkit
+    macx:ITKINCLUDEDIR = /usr/local/include/ITK-4.7
     win32:ITKINCLUDEDIR = $$(SystemDrive)/InsightToolkit/4.7.1/include/ITK-4.7
     win32:contains(QMAKE_TARGET.arch, x86_64):ITKINCLUDEDIR = $$(SystemDrive)/InsightToolkit/4.7.1-64/include/ITK-4.7
 }
@@ -59,14 +59,14 @@ isEmpty(ITKINCLUDEDIR){
 GDCMLIBDIR = $$(GDCMLIBDIR)
 isEmpty(GDCMLIBDIR){
     unix:GDCMLIBDIR = /usr/lib/gdcm
-    macx:GDCMLIBDIR = /usr/local/lib/gdcm-2.0
+    macx:GDCMLIBDIR = /usr/local/lib
     win32:GDCMLIBDIR = $$(SystemDrive)/gdcm/2.4.4/lib
     win32:contains(QMAKE_TARGET.arch, x86_64):GDCMLIBDIR = $$(SystemDrive)/gdcm/2.4.4-64/lib
 }
 GDCMINCLUDEDIR = $$(GDCMINCLUDEDIR)
 isEmpty(GDCMINCLUDEDIR){
     unix:GDCMINCLUDEDIR = /usr/include/gdcm
-    macx:GDCMINCLUDEDIR = /usr/local/include/gdcm-2.0
+    macx:GDCMINCLUDEDIR = /usr/local/include/gdcm-2.4
     win32:GDCMINCLUDEDIR = $$(SystemDrive)/gdcm/2.4.4/include/gdcm-2.4
     win32:contains(QMAKE_TARGET.arch, x86_64):GDCMINCLUDEDIR = $$(SystemDrive)/gdcm/2.4.4-64/include/gdcm-2.4
 }
@@ -76,7 +76,7 @@ isEmpty(GDCMINCLUDEDIR){
 LOG4CXXLIBDIR = $$(LOG4CXXLIBDIR)
 isEmpty(LOG4CXXLIBDIR){
     unix:LOG4CXXLIBDIR = /usr/lib
-    macx:LOG4CXXLIBDIR = /usr/local/lib/log4cxx
+    macx:LOG4CXXLIBDIR = /usr/local/lib/
     win32:LOG4CXXLIBDIR = C:/log4cxx
     win32:contains(QMAKE_TARGET.arch, x86_64):LOG4CXXLIBDIR = C:/log4cxx-64
 }
@@ -93,14 +93,14 @@ isEmpty(LOG4CXXINCLUDEDIR){
 THREADWEAVERLIBDIR = $$(THREADWEAVERLIBDIR)
 isEmpty(THREADWEAVERLIBDIR){
     unix:THREADWEAVERLIBDIR = /usr/lib
-    macx:THREADWEAVERLIBDIR = /usr/local/lib/threadweaver
+    macx:THREADWEAVERLIBDIR = /usr/local/lib/
     win32:THREADWEAVERLIBDIR = $$(SystemDrive)/ThreadWeaver/5.3.0/lib
     win32:contains(QMAKE_TARGET.arch, x86_64):THREADWEAVERLIBDIR = $$(SystemDrive)/ThreadWeaver/5.3.0-64/lib
 }
 THREADWEAVERINCLUDEDIR = $$(THREADWEAVERINCLUDEDIR)
 isEmpty(THREADWEAVERINCLUDEDIR){
     unix:THREADWEAVERINCLUDEDIR = /usr/include
-    macx:THREADWEAVERINCLUDEDIR = /usr/local/include
+    macx:THREADWEAVERINCLUDEDIR = /usr/local/include/KF5
     win32:THREADWEAVERINCLUDEDIR = $$(SystemDrive)/ThreadWeaver/5.3.0/include/KF5
     win32:contains(QMAKE_TARGET.arch, x86_64):THREADWEAVERINCLUDEDIR = $$(SystemDrive)/ThreadWeaver/5.3.0-64/include/KF5
 }

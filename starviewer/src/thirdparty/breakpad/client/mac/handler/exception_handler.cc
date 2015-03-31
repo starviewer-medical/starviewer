@@ -301,7 +301,7 @@ bool ExceptionHandler::WriteMinidumpWithException(int exception_type,
                         exception_code,
                         thread_name) ) {
       if (exception_type && exception_code)
-        _exit(exception_type);
+        _Exit(exception_type);
     }
   } else {
     string minidump_id;
@@ -330,7 +330,7 @@ bool ExceptionHandler::WriteMinidumpWithException(int exception_type,
       if (callback_(dump_path_c_, next_minidump_id_c_, callback_context_, 
                     result)) {
         if (exception_type && exception_code)
-          _exit(exception_type);
+          _Exit(exception_type);
       }
     }
   }

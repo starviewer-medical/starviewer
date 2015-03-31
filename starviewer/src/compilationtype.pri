@@ -21,6 +21,8 @@ win32 {
 }
 
 macx {
+    QMAKE_CXXFLAGS += -stdlib=libc++
+    QMAKE_LFLAGS += -stdlib=libc++
     LIBS += -framework Cocoa
 }
 
