@@ -139,7 +139,7 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, false);
 #elif defined(Q_OS_MAC)
     // MAC
-    settingsRegistry->addSetting(DICOMDIRBurningApplicationPathKey, QDesktopServices::storageLocation(QDesktopServices::ApplicationsLocation) +
+    settingsRegistry->addSetting(DICOMDIRBurningApplicationPathKey, QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation).at(0) +
                                  "/Burn.app/Contents/MacOS/Burn");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationParametersKey, "%1");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationCDParametersKey, "");

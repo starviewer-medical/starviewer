@@ -101,8 +101,8 @@ private:
     bool m_abortIsRequested;
 };
 
-Q_DECLARE_METATYPE(QSharedPointer<PACSJob>)
-
 };
+
+Q_DECLARE_METATYPE(QSharedPointer<udg::PACSJob>)
 
 #endif

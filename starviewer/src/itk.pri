@@ -36,6 +36,10 @@ win32 {
  LIBS += -lShell32
 }
 
+macx {
+ ITKLIBS += itkv3p_netlib
+}
+
 LIBS += -L$${ITKLIBDIR}
 
 for(lib, ITKLIBS) {
