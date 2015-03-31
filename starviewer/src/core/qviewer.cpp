@@ -184,6 +184,26 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
     Q_UNUSED(callData);
     Q_UNUSED(command);
 
+#ifdef Q_OS_OSX
+    // MouseWheel doesn't work as expected when using a trackpad on Mac because a MouseWheel event is emitted for both vertical and horizontal
+    // orientation movements. Only vertical events with a delta different to 0 are captured.
+    switch (vtkEvent)
+    {
+        case vtkCommand::MouseWheelForwardEvent:
+        case vtkCommand::MouseWheelBackwardEvent:
+        {
+            QWheelEvent *e = (QWheelEvent*)callData;
+            if (e)
+            {
+                if (e->delta() == 0 || e->orientation() == Qt::Horizontal)
+                {
+                    return;
+                }
+            }
+        }
+    }
+#endif
+
     // Quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor.
     // TODO Ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
     switch (vtkEvent)
