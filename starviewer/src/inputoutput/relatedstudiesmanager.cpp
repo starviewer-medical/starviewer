@@ -73,21 +73,7 @@ void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate
         return;
     }
 
-    QList<DicomMask> queryDicomMasksList;
-
-    if (!patient->getID().isEmpty())
-    {
-        DicomMask maskQueryByID = getBasicDicomMask();
-        maskQueryByID.setPatientID(patient->getID());
-        queryDicomMasksList << maskQueryByID;
-    }
-
-    if (m_searchRelatedStudiesByName && !patient->getFullName().isEmpty())
-    {
-        DicomMask maskQueryByName = getBasicDicomMask();
-        maskQueryByName.setPatientName(patient->getFullName());
-        queryDicomMasksList << maskQueryByName;
-    }
+    QList<DicomMask> queryDicomMasksList = getDicomMasks(patient);
 
     if (queryDicomMasksList.count() == 0)
     {
@@ -113,6 +99,27 @@ void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate
             }
         }
     }
+}
+
+QList<DicomMask> RelatedStudiesManager::getDicomMasks(Patient *patient)
+{
+    QList<DicomMask> queryDicomMasksList;
+
+    if (!patient->getID().isEmpty())
+    {
+        DicomMask maskQueryByID = getBasicDicomMask();
+        maskQueryByID.setPatientID(patient->getID());
+        queryDicomMasksList << maskQueryByID;
+    }
+
+    if (m_searchRelatedStudiesByName && !patient->getFullName().isEmpty())
+    {
+        DicomMask maskQueryByName = getBasicDicomMask();
+        maskQueryByName.setPatientName(patient->getFullName());
+        queryDicomMasksList << maskQueryByName;
+    }
+
+    return queryDicomMasksList;
 }
 
 void RelatedStudiesManager::initializeQuery()
