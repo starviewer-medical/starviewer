@@ -288,6 +288,25 @@ DicomMask RelatedStudiesManager::getBasicDicomMask()
     return dicomMask;
 }
 
+RelatedStudiesManager::LoadStatus RelatedStudiesManager::loadStudy(Study *study)
+{
+    if (LocalDatabaseManager().existsStudy(study))
+    {
+        SingletonPointer<QueryScreen>::instance()->loadStudyFromDatabase(study->getInstanceUID());
+        return Loaded;
+    }
+    else if (study->getDICOMSource().getRetrievePACS().count() > 0)
+    {
+        retrieveAndLoad(study, study->getDICOMSource().getRetrievePACS().at(0));
+
+        return Retrieving;
+    }
+    else
+    {
+        return Failed;
+    }
+}
+
 void RelatedStudiesManager::retrieve(Study *study, const PacsDevice &pacsDevice)
 {
     retrieveAndApplyAction(study, pacsDevice, None);
