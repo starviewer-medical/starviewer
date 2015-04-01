@@ -101,6 +101,25 @@ void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate
     }
 }
 
+QList<Study*> RelatedStudiesManager::getStudiesFromDatabase(Patient *patient)
+{
+    QList<DicomMask> queryDicomMasksList = getDicomMasks(patient);
+    LocalDatabaseManager database;
+    QHash<QString, Study*> studies;
+
+    foreach (const DicomMask &dicomMask, queryDicomMasksList)
+    {
+        foreach(Patient *p, database.queryPatientStudy(dicomMask))
+        {
+            foreach (Study *study, p->getStudies())
+            {
+                studies.insert(study->getInstanceUID(), study);
+            }
+        }
+    }
+    return studies.values();
+}
+
 QList<DicomMask> RelatedStudiesManager::getDicomMasks(Patient *patient)
 {
     QList<DicomMask> queryDicomMasksList;

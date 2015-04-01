@@ -78,6 +78,9 @@ public:
     /// Load study from the database. If it is not in the database it is retrieved from PACS before being loaded.
     RelatedStudiesManager::LoadStatus loadStudy(Study *study);
 
+    /// Return the list of studies of the given patient stored in the database
+    QList<Study*> getStudiesFromDatabase(Patient *patient);
+
 signals:
     /// Signal que s'emet quan ha finalitzat la consulta d'estudis. La llista amb els resultats s'esborrarà quan es demani una altra cerca.
     void queryStudiesFinished(QList<Study*>);
