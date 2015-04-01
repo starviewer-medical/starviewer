@@ -129,6 +129,10 @@ private:
     /// Retrieves the given study from the specified PACS and applies the given action upon retrieval
     void retrieveAndApplyAction(Study *study, const PacsDevice &pacsDevice, ActionsAfterRetrieve action);
 
+    /// Return DICOM Masks to know what to query. It takes into accound
+    /// the PatientID and PatientName properties of the patient and the value of m_searchRelatedStudiesByName
+    QList<DicomMask> getDicomMasks(Patient *patient);
+
 private slots:
     /// Slot que s'activa quan finalitza un job de consulta al PACS
     void queryPACSJobFinished(PACSJobPointer pacsJob);
