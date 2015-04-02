@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <!-- 
     Aquest hanging protocol està pensat perquè s'apliqui sobre
     estudis DX amb més d'una sèrie, on la sèrie primera i segona
     ocupen el primer i segon visor
 -->
-<hangingProtocol name="DX">
+<hangingProtocol version="2" name="DX">
     <hangingProtocolName>DX</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>DX</protocol>

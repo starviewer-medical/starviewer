@@ -1,26 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="DXPrevious">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol version="2" name="DXPrevious">
     <hangingProtocolName>DX Prev</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <allDifferent>yes</allDifferent>
     <protocol>DX</protocol>
     <iconType>CR</iconType>
     <restriction identifier="1">
-        <usageFlag>MATCH</usageFlag>
         <selectorAttribute>Anterior</selectorAttribute>
-        <valueRepresentation>1</valueRepresentation>
+        <selectorValue>1</selectorValue>
     </restriction>
-    <imageSet identifier="1">
-    </imageSet>
-    <imageSet identifier="2">
-    </imageSet>
+    <imageSet identifier="1"/>
+    <imageSet identifier="2"/>
     <imageSet identifier="3">
-        <restriction>1</restriction>
-        <previous>1</previous>
+        <abstractPriorValue>1</abstractPriorValue>
+        <restrictionExpression>1</restrictionExpression>
     </imageSet>
     <imageSet identifier="4">
-        <restriction>1</restriction>
-        <previous>1</previous>
+        <abstractPriorValue>1</abstractPriorValue>
+        <restrictionExpression>1</restrictionExpression>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>
