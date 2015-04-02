@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="Ecography">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol version="2" name="Ecography">
     <hangingProtocolName>ECO 1</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <iconType>eco</iconType>
     <protocol>US</protocol>
-    <imageSet identifier="1">
-    </imageSet>
+    <imageSet identifier="1"/>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>
         <position>0.0\1.0\1.0\0.0</position>

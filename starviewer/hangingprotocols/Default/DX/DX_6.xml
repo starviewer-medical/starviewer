@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="DX_6">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol version="2" name="DX_6">
     <hangingProtocolName>DX 6</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>DX</protocol>

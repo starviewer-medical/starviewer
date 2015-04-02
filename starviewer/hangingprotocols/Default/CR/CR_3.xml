@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="CR_3">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol name="CR_3" version="2">
     <hangingProtocolName>CR 3</hangingProtocolName>
     <priority>0</priority>
     <protocol>CR</protocol>

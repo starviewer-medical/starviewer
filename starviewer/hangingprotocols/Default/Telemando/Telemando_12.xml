@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="Telemando">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol name="Telemando" version="2">
     <hangingProtocolName>RF 12</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>RF</protocol>

@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="CR">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol version="2" name="CR">
     <hangingProtocolName>CR</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>CR</protocol>

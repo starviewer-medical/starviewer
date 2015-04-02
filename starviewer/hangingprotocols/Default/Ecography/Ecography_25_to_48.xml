@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="Ecography_24_to_48">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol name="Ecography_24_to_48" version="2">
     <hangingProtocolName>25 to 48</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <priority>0</priority>

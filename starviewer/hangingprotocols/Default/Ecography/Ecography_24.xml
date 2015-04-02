@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="Ecography_24">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol name="Ecography_24" version="2">
     <hangingProtocolName>ECO 24</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>US</protocol>
