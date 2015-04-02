@@ -47,24 +47,18 @@ QRelatedStudiesWidget::QRelatedStudiesWidget(RelatedStudiesManager *relatedStudi
     m_queryScreen = SingletonPointer<QueryScreen>::instance();
     m_numberOfDownloadingStudies = 0;
 
-    m_noRelatedStudiesLabel = new QLabel(this);
-    m_noRelatedStudiesLabel->setText(tr("No related studies found."));
-
     ApplicationStyleHelper style;
     style.setScaledFontSizeTo(this);
 
     initializeLookingForStudiesWidget();
     initializeTree();
 
-    verticalLayout->addWidget(m_lookingForStudiesWidget);
-    verticalLayout->addWidget(m_noRelatedStudiesLabel);
     verticalLayout->addWidget(m_relatedStudiesTree);
+    verticalLayout->addWidget(m_lookingForStudiesWidget);
 
     createConnections();
 
     m_lookingForStudiesWidget->setVisible(false);
-    m_noRelatedStudiesLabel->setVisible(false);
-    m_relatedStudiesTree->setVisible(false);
 }
 
 QRelatedStudiesWidget::~QRelatedStudiesWidget()
@@ -76,7 +70,6 @@ QRelatedStudiesWidget::~QRelatedStudiesWidget()
     }
     delete m_lookingForStudiesWidget;
     delete m_signalMapper;
-    delete m_noRelatedStudiesLabel;
 }
 
 void QRelatedStudiesWidget::updateList()
@@ -107,16 +100,20 @@ void QRelatedStudiesWidget::searchStudiesOf(Patient *patient)
 
     initializeSearch();
     m_patient = patient;
-    m_relatedStudiesManager->queryMergedStudies(patient);
-
     m_modalitiesOfStudiesToHighlight.append(patient->getModalities());
+
+    // Insert already loaded studies
+    insertStudiesToTree(patient->getStudies());
+
+    //Insert studies from the database
+    insertStudiesToTree(m_relatedStudiesManager->getStudiesFromDatabase(patient));
+
+    m_relatedStudiesManager->queryMergedStudies(patient);
 }
 
 void QRelatedStudiesWidget::initializeSearch()
 {
     m_lookingForStudiesWidget->setVisible(true);
-    m_noRelatedStudiesLabel->setVisible(false);
-    m_relatedStudiesTree->setVisible(false);
 
     int items = m_relatedStudiesTree->topLevelItemCount();
     for (int i = 0; i < items; i++)
@@ -131,7 +128,7 @@ void QRelatedStudiesWidget::initializeSearch()
 
 void QRelatedStudiesWidget::createConnections()
 {
-    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(insertStudiesToTree(QList<Study*>)));
+    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(queryStudiesFinished(QList<Study*>)));
     connect(m_signalMapper, SIGNAL(mapped(const QString&)), SLOT(retrieveAndLoadStudy(const QString&)));
     connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStarted(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinished(QString)));
@@ -176,6 +173,7 @@ void QRelatedStudiesWidget::initializeLookingForStudiesWidget()
 
     horizontalLayout->addWidget(downloadigAnimation);
     horizontalLayout->addWidget(new QLabel(tr("Looking for related studies...")));
+    horizontalLayout->addStretch();
 
 }
 
@@ -273,10 +271,18 @@ void QRelatedStudiesWidget::insertStudiesToTree(const QList<Study*> &studiesList
     {
         foreach (Study *study, studiesList)
         {
-            if (study->getDICOMSource().getRetrievePACS().count() > 0)
+            if (m_infomationPerStudy[study->getInstanceUID()] == NULL)
             {
                 //Sempre hauria de ser més gran de 0
                 insertStudyToTree(study);
+            }
+            else
+            {
+                StudyInfo *studyInfo = m_infomationPerStudy[study->getInstanceUID()];
+                if (studyInfo->study->getDICOMSource().getRetrievePACS().count() == 0)
+                {
+                    studyInfo->study->setDICOMSource(study->getDICOMSource());
+                }
             }
         }
 
@@ -290,14 +296,14 @@ void QRelatedStudiesWidget::insertStudiesToTree(const QList<Study*> &studiesList
         updateWidgetWidth();
         updateWidgetHeight();
     }
-    else
-    {
-        m_noRelatedStudiesLabel->setVisible(true);
-    }
-
-    m_lookingForStudiesWidget->setVisible(false);
 
     this->adjustSize();
+}
+
+void QRelatedStudiesWidget::queryStudiesFinished(const QList<Study *> &studiesList)
+{
+    m_lookingForStudiesWidget->setVisible(false);
+    insertStudiesToTree(studiesList);
 }
 
 void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID)
@@ -306,16 +312,30 @@ void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID
 
     studyInfo->downloadButton->setEnabled(false);
 
-    m_relatedStudiesManager->retrieveAndLoad(studyInfo->study, studyInfo->study->getDICOMSource().getRetrievePACS().at(0));
+    switch (m_relatedStudiesManager->loadStudy(studyInfo->study))
+    {
+        case RelatedStudiesManager::Loaded:
+            studyInfo->status = Finished;
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/button_ok.png"));
+            break;
 
-    studyInfo->status = Pending;
+        case RelatedStudiesManager::Failed:
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/cancel.png"));
+            studyInfo->downloadButton->setEnabled(true);
+            break;
 
-    QMovie *statusAnimation = new QMovie();
-    studyInfo->statusIcon->setMovie(statusAnimation);
-    statusAnimation->setFileName(":/images/loader.gif");
-    statusAnimation->start();
+        case RelatedStudiesManager::Retrieving:
+        {
+            studyInfo->status = Pending;
 
-    this->increaseNumberOfDownladingStudies();
+            QMovie *statusAnimation = new QMovie();
+            studyInfo->statusIcon->setMovie(statusAnimation);
+            statusAnimation->setFileName(":/images/loader.gif");
+            statusAnimation->start();
+
+            this->increaseNumberOfDownladingStudies();
+        }
+    }
 }
 
 void QRelatedStudiesWidget::studyRetrieveStarted(QString studyInstanceUID)
