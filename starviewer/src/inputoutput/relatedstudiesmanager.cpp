@@ -73,21 +73,7 @@ void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate
         return;
     }
 
-    QList<DicomMask> queryDicomMasksList;
-
-    if (!patient->getID().isEmpty())
-    {
-        DicomMask maskQueryByID = getBasicDicomMask();
-        maskQueryByID.setPatientID(patient->getID());
-        queryDicomMasksList << maskQueryByID;
-    }
-
-    if (m_searchRelatedStudiesByName && !patient->getFullName().isEmpty())
-    {
-        DicomMask maskQueryByName = getBasicDicomMask();
-        maskQueryByName.setPatientName(patient->getFullName());
-        queryDicomMasksList << maskQueryByName;
-    }
+    QList<DicomMask> queryDicomMasksList = getDicomMasks(patient);
 
     if (queryDicomMasksList.count() == 0)
     {
@@ -113,6 +99,46 @@ void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate
             }
         }
     }
+}
+
+QList<Study*> RelatedStudiesManager::getStudiesFromDatabase(Patient *patient)
+{
+    QList<DicomMask> queryDicomMasksList = getDicomMasks(patient);
+    LocalDatabaseManager database;
+    QHash<QString, Study*> studies;
+
+    foreach (const DicomMask &dicomMask, queryDicomMasksList)
+    {
+        foreach(Patient *p, database.queryPatientStudy(dicomMask))
+        {
+            foreach (Study *study, p->getStudies())
+            {
+                studies.insert(study->getInstanceUID(), study);
+            }
+        }
+    }
+    return studies.values();
+}
+
+QList<DicomMask> RelatedStudiesManager::getDicomMasks(Patient *patient)
+{
+    QList<DicomMask> queryDicomMasksList;
+
+    if (!patient->getID().isEmpty())
+    {
+        DicomMask maskQueryByID = getBasicDicomMask();
+        maskQueryByID.setPatientID(patient->getID());
+        queryDicomMasksList << maskQueryByID;
+    }
+
+    if (m_searchRelatedStudiesByName && !patient->getFullName().isEmpty())
+    {
+        DicomMask maskQueryByName = getBasicDicomMask();
+        maskQueryByName.setPatientName(patient->getFullName());
+        queryDicomMasksList << maskQueryByName;
+    }
+
+    return queryDicomMasksList;
 }
 
 void RelatedStudiesManager::initializeQuery()
@@ -279,6 +305,25 @@ DicomMask RelatedStudiesManager::getBasicDicomMask()
     dicomMask.setStudyInstanceUID("");
 
     return dicomMask;
+}
+
+RelatedStudiesManager::LoadStatus RelatedStudiesManager::loadStudy(Study *study)
+{
+    if (LocalDatabaseManager().existsStudy(study))
+    {
+        SingletonPointer<QueryScreen>::instance()->loadStudyFromDatabase(study->getInstanceUID());
+        return Loaded;
+    }
+    else if (study->getDICOMSource().getRetrievePACS().count() > 0)
+    {
+        retrieveAndLoad(study, study->getDICOMSource().getRetrievePACS().at(0));
+
+        return Retrieving;
+    }
+    else
+    {
+        return Failed;
+    }
 }
 
 void RelatedStudiesManager::retrieve(Study *study, const PacsDevice &pacsDevice)

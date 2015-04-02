@@ -159,8 +159,8 @@ void QueryScreen::createConnections()
     if (m_risRequestManager != NULL)
     {
         // Potser que no tinguem activat escoltar peticions del RIS
-        connect(m_risRequestManager, SIGNAL(viewStudyRetrievedFromRISRequest(QString)), SLOT(viewRetrievedStudyFromPacs(QString)));
-        connect(m_risRequestManager, SIGNAL(loadStudyRetrievedFromRISRequest(QString)), SLOT(loadRetrievedStudyFromPacs(QString)));
+        connect(m_risRequestManager, SIGNAL(viewStudyRetrievedFromRISRequest(QString)), SLOT(viewStudyFromDatabase(QString)));
+        connect(m_risRequestManager, SIGNAL(loadStudyRetrievedFromRISRequest(QString)), SLOT(loadStudyFromDatabase(QString)));
     }
 #endif
     connect(m_createDICOMDIRToolButton, SIGNAL(clicked()), m_qcreateDicomdir, SLOT(show()));
@@ -177,8 +177,8 @@ void QueryScreen::createConnections()
 
     connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>, bool)), SLOT(viewPatients(QList<Patient*>, bool)));
 
-    connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewRetrievedStudyFromPacs(QString)));
-    connect(m_qInputOutputPacsWidget, SIGNAL(loadRetrievedStudy(QString)), SLOT(loadRetrievedStudyFromPacs(QString)));
+    connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewStudyFromDatabase(QString)));
+    connect(m_qInputOutputPacsWidget, SIGNAL(loadRetrievedStudy(QString)), SLOT(loadStudyFromDatabase(QString)));
 
     /// Ens informa quan hi hagut un canvi d'estat en alguna de les operacions
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
@@ -306,13 +306,13 @@ void QueryScreen::searchStudy()
     }
 }
 
-void QueryScreen::viewRetrievedStudyFromPacs(QString studyInstanceUID)
+void QueryScreen::viewStudyFromDatabase(QString studyInstanceUID)
 {
     // Indiquem que volem veure un estudi que està guardat a la base de dades
     m_qInputOutputLocalDatabaseWidget->view(studyInstanceUID);
 }
 
-void QueryScreen::loadRetrievedStudyFromPacs(QString studyInstanceUID)
+void QueryScreen::loadStudyFromDatabase(QString studyInstanceUID)
 {
     // Indiquem que volem veure un estudi que està guardat a la base de dades
     m_qInputOutputLocalDatabaseWidget->view(studyInstanceUID, true);
