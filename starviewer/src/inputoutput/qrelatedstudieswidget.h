@@ -87,6 +87,8 @@ private slots:
     /// Insereix els estudis a l'arbre.
     void insertStudiesToTree(const QList<Study*> &studiesList);
 
+    void queryStudiesFinished(const QList<Study*> &studiesList);
+
     /// Invoca la descàrrega i càrrega de l'estudi identificat amb l'uid proporcionat.
     void retrieveAndLoadStudy(const QString &studyInstanceUID);
 
@@ -117,8 +119,6 @@ private:
     QTreeWidgetWithSeparatorLine *m_relatedStudiesTree;
     /// Widget que apareix quan s'està fent la consulta dels possibles estudis relacionats.
     QWidget *m_lookingForStudiesWidget;
-    /// Label per mostrar que no hi ha estudis relacionats.
-    QLabel *m_noRelatedStudiesLabel;
     /// Objecte encarregat de cercar estudis relacionats
     RelatedStudiesManager *m_relatedStudiesManager;
     /// Mapper utilitzat per saber cada botó de descàrrega a quin estudi està associat.

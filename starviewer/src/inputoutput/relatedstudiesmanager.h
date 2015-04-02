@@ -47,6 +47,9 @@ public:
     RelatedStudiesManager();
     ~RelatedStudiesManager();
 
+    /// Enum to know if loadStudy method was able to load the study from database, it's being retrieved or failed.
+    enum LoadStatus { Loaded, Retrieving, Failed };
+
     /// Fa una consulta d'estudis previs assíncrona als PACS que estiguin marcats per defecte, si dos del PACS retornen el mateix estudi només es tindrà en compte
     /// el del primer PACS que ha respós
     /// Si ja s'estigués executant una consulta la cancel·laria i faria la nova consulta
@@ -71,6 +74,12 @@ public:
 
     /// Retrieves and views the given study from the specified PACS
     void retrieveAndView(Study *study, const PacsDevice &pacsDevice);
+
+    /// Load study from the database. If it is not in the database it is retrieved from PACS before being loaded.
+    RelatedStudiesManager::LoadStatus loadStudy(Study *study);
+
+    /// Return the list of studies of the given patient stored in the database
+    QList<Study*> getStudiesFromDatabase(Patient *patient);
 
 signals:
     /// Signal que s'emet quan ha finalitzat la consulta d'estudis. La llista amb els resultats s'esborrarà quan es demani una altra cerca.
@@ -128,6 +137,10 @@ private:
     
     /// Retrieves the given study from the specified PACS and applies the given action upon retrieval
     void retrieveAndApplyAction(Study *study, const PacsDevice &pacsDevice, ActionsAfterRetrieve action);
+
+    /// Return DICOM Masks to know what to query. It takes into accound
+    /// the PatientID and PatientName properties of the patient and the value of m_searchRelatedStudiesByName
+    QList<DicomMask> getDicomMasks(Patient *patient);
 
 private slots:
     /// Slot que s'activa quan finalitza un job de consulta al PACS

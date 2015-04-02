@@ -77,6 +77,12 @@ public slots:
     /// passat per paràmetre al primer PACS que es troba com a PACS per defecte
     void sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image*> images);
 
+    /// Es comunica amb el widget de la base de dades i visualitzar un estudi descarregat del PACS
+    void viewStudyFromDatabase(QString studyInstanceUID);
+
+    /// Demana que es carregui un estudi descarregat. Útil per casos com el de carregar prèvies, per exemple.
+    void loadStudyFromDatabase(QString studyInstanceUID);
+
 signals:
     /// Signal que ens indica quins pacients s'han seleccionat per visualitzar
     /// Afegim un segon paràmetre per indicar si aquests pacients s'han de carregar únicament i si s'han de visualitzar
@@ -121,12 +127,6 @@ private slots:
     /// Notifica quins estudis s'han escollit per carregar i/o veure
     /// Afegim un segon paràmetre per indicar si volem fer view o únicament carregar les dades.
     void viewPatients(QList<Patient*>, bool loadOnly = false);
-
-    /// Es comunica amb el widget de la base de dades i visualitzar un estudi descarregat del PACS
-    void viewRetrievedStudyFromPacs(QString studyInstanceUID);
-
-    /// Demana que es carregui un estudi descarregat. Útil per casos com el de carregar prèvies, per exemple.
-    void loadRetrievedStudyFromPacs(QString studyInstanceUID);
 
     /// Slot que s'activa quan s'ha produït un error al descarregar un estudi
     void studyRetrieveFailedSlot(QString studyInstanceUID);
