@@ -36,7 +36,7 @@ class Study;
 class Q2DViewerWidget;
 class Q2DViewer;
 // Menus
-class MenuGridWidget;
+class QHangingProtocolsWidget;
 class TableMenu;
 class QDICOMDumpBrowser;
 class StatsWatcher;
@@ -233,7 +233,7 @@ private:
     Patient *m_patient;
 
     /// Menú per seleccionar es hanging protocols
-    MenuGridWidget *m_hangingProtocolsMenu;
+    QHangingProtocolsWidget *m_hangingProtocolsMenu;
 
     /// Widget per escollir una distribució de visors definida per l'usuari
     TableMenu *m_viewersLayoutGrid;

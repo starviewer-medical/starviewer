@@ -12,7 +12,7 @@ HEADERS += q2dviewerextensionmediator.h \
         gridicon.h \
         tablemenu.h \
         itemmenu.h \
-        menugridwidget.h
+        qhangingprotocolswidget.h
 
 SOURCES += q2dviewerextensionmediator.cpp \
         q2dviewerextension.cpp \
@@ -21,7 +21,7 @@ SOURCES += q2dviewerextensionmediator.cpp \
         gridicon.cpp \
         tablemenu.cpp \
         itemmenu.cpp \
-        menugridwidget.cpp
+        qhangingprotocolswidget.cpp
 
 INCLUDEPATH += ../../../inputoutput
 DEPENDPATH += ../../../inputoutput

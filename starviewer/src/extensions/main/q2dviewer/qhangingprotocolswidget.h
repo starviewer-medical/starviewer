@@ -32,11 +32,11 @@ class HangingProtocol;
 /**
     Classe que representa el menu desplegable per seleccionar el grid, amb opcions de grids predefinides.
   */
-class MenuGridWidget : public QWidget {
+class QHangingProtocolsWidget : public QWidget {
 Q_OBJECT
 public:
-    MenuGridWidget(QWidget *parent = 0);
-    ~MenuGridWidget();
+    QHangingProtocolsWidget(QWidget *parent = 0);
+    ~QHangingProtocolsWidget();
 
     /// Elimina tot el contingut del widget
     void dropContent();
