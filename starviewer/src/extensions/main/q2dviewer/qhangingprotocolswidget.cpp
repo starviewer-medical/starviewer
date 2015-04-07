@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "menugridwidget.h"
+#include "qhangingprotocolswidget.h"
 
 #include "gridicon.h"
 #include "itemmenu.h"
@@ -25,9 +25,9 @@
 
 namespace udg {
 
-const int MenuGridWidget::MaximumNumberOfColumns = 5;
+const int QHangingProtocolsWidget::MaximumNumberOfColumns = 5;
 
-MenuGridWidget::MenuGridWidget(QWidget *parent)
+QHangingProtocolsWidget::QHangingProtocolsWidget(QWidget *parent)
  : QWidget(parent), m_searchingWidget(0), m_caption(0), m_noHangingProtocolsAvailableLabel(0)
 {
     setWindowFlags(Qt::Popup);
@@ -38,11 +38,11 @@ MenuGridWidget::MenuGridWidget(QWidget *parent)
     createSearchingWidget();
 }
 
-MenuGridWidget::~MenuGridWidget()
+QHangingProtocolsWidget::~QHangingProtocolsWidget()
 {
 }
 
-void MenuGridWidget::initializeWidget()
+void QHangingProtocolsWidget::initializeWidget()
 {
     m_gridLayout = new QGridLayout(this);
     m_gridLayout->setSpacing(6);
@@ -76,7 +76,7 @@ void MenuGridWidget::initializeWidget()
     m_gridLayout->addLayout(m_gridLayoutHanging, 3, 0, 1, 1);
 }
 
-ItemMenu* MenuGridWidget::createIcon(const HangingProtocol *hangingProtocol)
+ItemMenu* QHangingProtocolsWidget::createIcon(const HangingProtocol *hangingProtocol)
 {
     ItemMenu *icon = new ItemMenu(this);
     icon->setData(QString(tr("%1").arg(hangingProtocol->getIdentifier())));
@@ -118,13 +118,13 @@ ItemMenu* MenuGridWidget::createIcon(const HangingProtocol *hangingProtocol)
     return icon;
 }
 
-void MenuGridWidget::emitSelected(ItemMenu *selected)
+void QHangingProtocolsWidget::emitSelected(ItemMenu *selected)
 {
     hide();
     emit selectedGrid(selected->getData().toInt());
 }
 
-void MenuGridWidget::dropContent()
+void QHangingProtocolsWidget::dropContent()
 {
     foreach (ItemMenu *item, m_itemList)
     {
@@ -134,7 +134,7 @@ void MenuGridWidget::dropContent()
     m_itemList.clear();
 }
 
-void MenuGridWidget::setHangingItems(const QList<HangingProtocol*> &listOfCandidates)
+void QHangingProtocolsWidget::setHangingItems(const QList<HangingProtocol*> &listOfCandidates)
 {
     dropContent();
     if (listOfCandidates.isEmpty())
@@ -148,7 +148,7 @@ void MenuGridWidget::setHangingItems(const QList<HangingProtocol*> &listOfCandid
     }
 }
 
-void MenuGridWidget::addHangingItems(const QList<HangingProtocol*> &items)
+void QHangingProtocolsWidget::addHangingItems(const QList<HangingProtocol*> &items)
 {
     int positionRow = 0;
     int positionColumn = 0;
@@ -183,7 +183,7 @@ void MenuGridWidget::addHangingItems(const QList<HangingProtocol*> &items)
     }
 }
 
-void MenuGridWidget::setSearchingItem(bool state)
+void QHangingProtocolsWidget::setSearchingItem(bool state)
 {
     m_putLoadingItem = state;
 
@@ -197,7 +197,7 @@ void MenuGridWidget::setSearchingItem(bool state)
     }
 }
 
-void MenuGridWidget::addSearchingItem()
+void QHangingProtocolsWidget::addSearchingItem()
 {
     // S'assumeix que el widget ha d'estar creat
     Q_ASSERT(m_searchingWidget);
@@ -215,7 +215,7 @@ void MenuGridWidget::addSearchingItem()
     m_loadingRow = m_nextHangingProtocolRow;
 }
 
-void MenuGridWidget::createSearchingWidget()
+void QHangingProtocolsWidget::createSearchingWidget()
 {
     if (!m_searchingWidget)
     {

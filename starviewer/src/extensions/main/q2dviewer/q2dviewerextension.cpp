@@ -19,7 +19,7 @@
 #include "logging.h"
 #include "qvoilutcombobox.h"
 #include "q2dviewerwidget.h"
-#include "menugridwidget.h"
+#include "qhangingprotocolswidget.h"
 #include "tablemenu.h"
 #include "patient.h"
 #include "study.h"
@@ -96,7 +96,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_relatedStudiesManager = new RelatedStudiesManager();
 #endif
 
-    m_hangingProtocolsMenu = new MenuGridWidget(this);
+    m_hangingProtocolsMenu = new QHangingProtocolsWidget(this);
     m_viewersLayoutGrid = new TableMenu(this);
 
     m_dicomDumpCurrentDisplayedImage = new QDICOMDumpBrowser(this);
