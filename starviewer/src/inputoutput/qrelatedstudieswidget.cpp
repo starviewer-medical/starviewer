@@ -44,6 +44,8 @@ QRelatedStudiesWidget::QRelatedStudiesWidget(RelatedStudiesManager *relatedStudi
     m_lookingForStudiesWidget = new QWidget(this);
     m_relatedStudiesTree = new QTreeWidgetWithSeparatorLine(this);
     m_signalMapper = new QSignalMapper(this);
+    m_currentStudySignalMapper = new QSignalMapper(this);
+    m_priorStudySignalMapper = new QSignalMapper(this);
     m_queryScreen = SingletonPointer<QueryScreen>::instance();
     m_numberOfDownloadingStudies = 0;
 
@@ -91,6 +93,9 @@ void QRelatedStudiesWidget::updateList()
                 studyInfo->downloadButton->setEnabled(false);
             }
         }
+
+        updateVisibleCurrentRadioButtons();
+        updateVisiblePriorRadioButtons();
     }
 }
 
@@ -100,10 +105,23 @@ void QRelatedStudiesWidget::searchStudiesOf(Patient *patient)
 
     initializeSearch();
     m_patient = patient;
+
+    connect(m_patient, SIGNAL(studyAdded(Study*)), SLOT(onStudyAdded(Study*)));
+
     m_modalitiesOfStudiesToHighlight.append(patient->getModalities());
 
     // Insert already loaded studies
     insertStudiesToTree(patient->getStudies());
+
+    // Initially check most recent study as the CurrentStudy
+    if (m_patient->getStudies().size() > 0)
+    {
+        Study *study = m_patient->getStudies().first();
+        m_studyInstanceUIDOfCurrentStudy = study->getInstanceUID();
+        m_infomationPerStudy[m_studyInstanceUIDOfCurrentStudy]->currentRadioButton->setChecked(true);
+
+        updateVisiblePriorRadioButtons();
+    }
 
     //Insert studies from the database
     insertStudiesToTree(m_relatedStudiesManager->getStudiesFromDatabase(patient));
@@ -130,6 +148,8 @@ void QRelatedStudiesWidget::createConnections()
 {
     connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(queryStudiesFinished(QList<Study*>)));
     connect(m_signalMapper, SIGNAL(mapped(const QString&)), SLOT(retrieveAndLoadStudy(const QString&)));
+    connect(m_currentStudySignalMapper, SIGNAL(mapped(const QString&)), SLOT(currentStudyRadioButtonClicked(const QString&)));
+    connect(m_priorStudySignalMapper, SIGNAL(mapped(const QString&)), SLOT(priorStudyRadioButtonClicked(const QString&)));
     connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStarted(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinished(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFailed(QString)), SLOT(studyRetrieveFailed(QString)));
@@ -141,15 +161,17 @@ void QRelatedStudiesWidget::initializeTree()
 
     // Inicialitzem la capçalera
     QStringList labels;
-    labels << "" << "" << tr("Modality") << tr("Description") << tr("Date") << tr("Name");
+    labels << "Current" << "Prior" << "" << "" << tr("Modality") << tr("Description") << tr("Date") << tr("Name");
     m_relatedStudiesTree->setHeaderLabels(labels);
 
     // Fem 8 columnes perquè la primera l'amagarem
-    m_relatedStudiesTree->setColumnCount(6);
+    m_relatedStudiesTree->setColumnCount(8);
     m_relatedStudiesTree->setRootIsDecorated(false);
     m_relatedStudiesTree->setItemsExpandable(false);
     m_relatedStudiesTree->header()->setSectionResizeMode(DownloadingStatus, QHeaderView::Fixed);
     m_relatedStudiesTree->header()->setSectionResizeMode(DownloadButton, QHeaderView::Fixed);
+    m_relatedStudiesTree->header()->setSectionResizeMode(CurrentStudy, QHeaderView::Fixed);
+    m_relatedStudiesTree->header()->setSectionResizeMode(PriorStudy, QHeaderView::Fixed);
     m_relatedStudiesTree->header()->setSectionsMovable(false);
     m_relatedStudiesTree->setUniformRowHeights(true);
     m_relatedStudiesTree->setSortingEnabled(true);
@@ -190,6 +212,32 @@ void QRelatedStudiesWidget::insertStudyToTree(Study *study)
     item->setText(Modality, study->getModalitiesAsSingleString());
     item->setText(Description, study->getDescription());
 
+    // Add Radio Button to select current study
+    QWidget *currentStudyWidget = new QWidget(m_relatedStudiesTree);
+    QRadioButton *currentRadioButton = new QRadioButton(m_relatedStudiesTree);
+    QHBoxLayout *currentStudyLayout = new QHBoxLayout(currentStudyWidget);
+    currentStudyLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    currentStudyLayout->addWidget(currentRadioButton);
+    currentStudyLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    currentStudyLayout->setMargin(0);
+    m_currentStudyRadioGroup.addButton(currentRadioButton);
+    m_relatedStudiesTree->setItemWidget(item, CurrentStudy, currentStudyWidget);
+    connect(currentRadioButton, SIGNAL(clicked()), m_currentStudySignalMapper, SLOT(map()));
+    m_currentStudySignalMapper->setMapping(currentRadioButton, study->getInstanceUID());
+
+    // Add Radio Button to select prior study
+    QWidget *priorStudyWidget = new QWidget(m_relatedStudiesTree);
+    QRadioButton *priorRadioButton = new QRadioButton(m_relatedStudiesTree);
+    QHBoxLayout *priorStudyLayout = new QHBoxLayout(priorStudyWidget);
+    priorStudyLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    priorStudyLayout->addWidget(priorRadioButton);
+    priorStudyLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+    priorStudyLayout->setMargin(0);
+    m_priorStudyRadioGroup.addButton(priorRadioButton);
+    m_relatedStudiesTree->setItemWidget(item, PriorStudy, priorStudyWidget);
+    connect(priorRadioButton, SIGNAL(clicked()), m_priorStudySignalMapper, SLOT(map()));
+    m_priorStudySignalMapper->setMapping(priorRadioButton, study->getInstanceUID());
+
     QWidget *statusWidget = new QWidget(m_relatedStudiesTree);
     QHBoxLayout *statusLayout = new QHBoxLayout(statusWidget);
     QLabel *status = new QLabel(statusWidget);
@@ -224,6 +272,8 @@ void QRelatedStudiesWidget::insertStudyToTree(Study *study)
     relatedStudyInfo->item = item;
     relatedStudyInfo->study = study;
     relatedStudyInfo->downloadButton = downloadButton;
+    relatedStudyInfo->currentRadioButton = currentRadioButton;
+    relatedStudyInfo->priorRadioButton = priorRadioButton;
     relatedStudyInfo->statusIcon = status;
     relatedStudyInfo->status = Initialized;
     m_infomationPerStudy.insert(study->getInstanceUID(), relatedStudyInfo);
@@ -317,9 +367,11 @@ void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID
         case RelatedStudiesManager::Loaded:
             studyInfo->status = Finished;
             studyInfo->statusIcon->setPixmap(QPixmap(":/images/button_ok.png"));
+            notifyWorkingStudiesChangedIfReady();
             break;
 
         case RelatedStudiesManager::Failed:
+            studyInfo->status = Failed;
             studyInfo->statusIcon->setPixmap(QPixmap(":/images/cancel.png"));
             studyInfo->downloadButton->setEnabled(true);
             break;
@@ -403,6 +455,148 @@ void QRelatedStudiesWidget::studyRetrieveCancelled(QString studyInstanceUID)
 
             this->decreaseNumberOfDownladingStudies();
         }
+    }
+}
+
+void QRelatedStudiesWidget::currentStudyRadioButtonClicked(const QString &studyInstanceUID)
+{
+    if (m_studyInstanceUIDOfCurrentStudy == studyInstanceUID)
+    {
+        return;
+    }
+
+    m_studyInstanceUIDOfCurrentStudy = studyInstanceUID;
+    updateVisiblePriorRadioButtons();
+
+    StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
+
+    if (studyInfo->status == Initialized)
+    {
+        retrieveAndLoadStudy(studyInstanceUID);
+    }
+    else if (studyInfo->status == Finished)
+    {
+        notifyWorkingStudiesChangedIfReady();
+    }
+}
+
+void QRelatedStudiesWidget::notifyWorkingStudiesChangedIfReady()
+{
+    StudyInfo *currentStudyInfo = m_infomationPerStudy[m_studyInstanceUIDOfCurrentStudy];
+
+    if (currentStudyInfo && currentStudyInfo->status == Finished)
+    {
+        if (m_studyInstanceUIDOfPriorStudy.isEmpty() || m_infomationPerStudy[m_studyInstanceUIDOfPriorStudy]->status == Finished)
+        {
+            emit workingStudiesChanged(m_studyInstanceUIDOfCurrentStudy, m_studyInstanceUIDOfPriorStudy);
+        }
+    }
+}
+
+void QRelatedStudiesWidget::priorStudyRadioButtonClicked(const QString &studyInstanceUID)
+{
+    StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
+
+    if (m_studyInstanceUIDOfPriorStudy == studyInstanceUID)
+    {
+        m_studyInstanceUIDOfPriorStudy = "";
+
+        QAbstractButton* checked = m_priorStudyRadioGroup.checkedButton();
+        m_priorStudyRadioGroup.setExclusive(false);
+        checked->setChecked(false);
+        m_priorStudyRadioGroup.setExclusive(true);
+
+        updateVisibleCurrentRadioButtons();
+
+        if (studyInfo->status == Finished)
+        {
+            notifyWorkingStudiesChangedIfReady();
+        }
+    }
+    else
+    {
+        m_studyInstanceUIDOfPriorStudy = studyInstanceUID;
+
+        updateVisibleCurrentRadioButtons();
+
+        if (studyInfo->status == Initialized)
+        {
+            retrieveAndLoadStudy(studyInstanceUID);
+        }
+        else if (studyInfo->status == Finished)
+        {
+            notifyWorkingStudiesChangedIfReady();
+        }
+    }
+
+}
+
+void QRelatedStudiesWidget::updateVisibleCurrentRadioButtons()
+{
+    if (m_studyInstanceUIDOfPriorStudy.isEmpty())
+    {
+        foreach (StudyInfo *studyInfo, m_infomationPerStudy.values())
+        {
+            studyInfo->currentRadioButton->setVisible(true);
+        }
+    }
+    else
+    {
+        StudyInfo *studyInfo = m_infomationPerStudy[m_studyInstanceUIDOfPriorStudy];
+
+        if (studyInfo != NULL)
+        {
+            QDateTime dateTime = studyInfo->study->getDateTime();
+
+            foreach (StudyInfo *studyInfo, m_infomationPerStudy.values())
+            {
+                if (studyInfo->study->getDateTime() > dateTime)
+                {
+                    studyInfo->currentRadioButton->setVisible(true);
+                }
+                else
+                {
+                    studyInfo->currentRadioButton->setVisible(false);
+                }
+            }
+        }
+    }
+    QCoreApplication::processEvents();
+}
+
+void QRelatedStudiesWidget::updateVisiblePriorRadioButtons()
+{
+    if (m_studyInstanceUIDOfCurrentStudy.isEmpty())
+    {
+        return;
+    }
+
+    StudyInfo *studyInfo = m_infomationPerStudy[m_studyInstanceUIDOfCurrentStudy];
+
+    if (studyInfo != NULL)
+    {
+        QDateTime dateTime = studyInfo->study->getDateTime();
+
+        foreach (StudyInfo *studyInfo, m_infomationPerStudy.values())
+        {
+            if (studyInfo->study->getDateTime() < dateTime)
+            {
+                studyInfo->priorRadioButton->setVisible(true);
+            }
+            else
+            {
+                studyInfo->priorRadioButton->setVisible(false);
+            }
+        }
+    }
+    QCoreApplication::processEvents();
+}
+
+void QRelatedStudiesWidget::onStudyAdded(Study *study)
+{
+    if (study->getInstanceUID() == m_studyInstanceUIDOfCurrentStudy || study->getInstanceUID() == m_studyInstanceUIDOfPriorStudy)
+    {
+        notifyWorkingStudiesChangedIfReady();
     }
 }
 
