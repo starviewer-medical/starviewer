@@ -20,6 +20,8 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QHash>
+#include <QButtonGroup>
+#include <QRadioButton>
 
 class QTreeWidgetItem;
 
@@ -53,6 +55,9 @@ signals:
     /// S'emet quan s'han acabat de descarregar tots els estudis demanats.
     void studiesDownloaded();
 
+    /// Emit the StudyInstanceUID of the studies selected as the current and prior study.
+    void workingStudiesChanged(const QString&, const QString&);
+
 private:
     /// Creació de connexions
     void createConnections();
@@ -83,10 +88,19 @@ private:
     /// Indica si s'ha de ressaltar l'estudi en el QTreeWidget
     bool hasToHighlightStudy(Study *study);
 
-private slots:
+    /// Make visible only those radio buttons that can be clicked taking into account
+    /// the studies selected as the current and the prior at this time
+    void updateVisibleCurrentRadioButtons();
+    void updateVisiblePriorRadioButtons();
+
+    /// Evaluate if both current and prior studies are loaded to notify the user has changed the working studies
+    void notifyWorkingStudiesChangedIfReady();
+
     /// Insereix els estudis a l'arbre.
     void insertStudiesToTree(const QList<Study*> &studiesList);
 
+private slots:
+    /// Slot executed when the query is finished
     void queryStudiesFinished(const QList<Study*> &studiesList);
 
     /// Invoca la descàrrega i càrrega de l'estudi identificat amb l'uid proporcionat.
@@ -98,10 +112,18 @@ private slots:
     void studyRetrieveFailed(QString studyInstanceUID);
     void studyRetrieveCancelled(QString studyInstanceUID);
 
+    /// Slot executed when a radio button is clicked.
+    /// It will proceed to load the selected study an notify the working studies has changed.
+    void currentStudyRadioButtonClicked(const QString &studyInstanceUID);
+    void priorStudyRadioButtonClicked(const QString &studyInstanceUID);
+
+    /// Slot executed when an study has added.
+    void onStudyAdded(Study *study);
+
 private:
     /// Enumeració creada per tal de saber si els signals que emet QueryScreen pertanyen a alguna de les peticions d'aquesta classe
-    enum Status { Initialized, Pending, Downloading, Finished, Failed, Cancelled };
-    enum Columns { DownloadingStatus = 0, DownloadButton = 1, Modality = 2, Description = 3, Date = 4, Name = 5 };
+    enum Status { Initialized = 0, Pending = 1, Downloading = 2, Finished = 3, Failed = 4, Cancelled = 5 };
+    enum Columns { CurrentStudy = 0, PriorStudy = 1, DownloadingStatus = 2, DownloadButton = 3, Modality = 4, Description = 5, Date = 6, Name = 7 };
 
     /// Contenidor d'objectes associats a l'estudi que serveix per facilitar la intercomunicació
     struct StudyInfo
@@ -111,6 +133,8 @@ private:
         Status status;
         QLabel *statusIcon;
         QPushButton *downloadButton;
+        QRadioButton *currentRadioButton;
+        QRadioButton *priorRadioButton;
     };
 
     /// Estructura que s'encarrega de guardar els contenidors associats a cada Study
@@ -123,12 +147,24 @@ private:
     RelatedStudiesManager *m_relatedStudiesManager;
     /// Mapper utilitzat per saber cada botó de descàrrega a quin estudi està associat.
     QSignalMapper *m_signalMapper;
+    /// Mapper utilitzat per saber cada botó de descàrrega a quin estudi està associat.
+    QSignalMapper *m_currentStudySignalMapper;
+    /// Mapper utilitzat per saber cada botó de descàrrega a quin estudi està associat.
+    QSignalMapper *m_priorStudySignalMapper;
     /// Objecte utilitzat per invocar la descàrrega d'estudis.
     QueryScreen *m_queryScreen;
     /// Ens permet saber els estudis que s'estan descarregant.
     int m_numberOfDownloadingStudies;
     /// Pacient associat a la última cerca feta.
     Patient *m_patient;
+
+    /// Button groups for current and prior radio buttons
+    QButtonGroup m_currentStudyRadioGroup;
+    QButtonGroup m_priorStudyRadioGroup;
+
+    /// Working studies selected at a time
+    QString m_studyInstanceUIDOfCurrentStudy;
+    QString m_studyInstanceUIDOfPriorStudy;
 
     ///Llistat amb les modalitats dels estudis que hem de ressalar
     QStringList m_modalitiesOfStudiesToHighlight;
