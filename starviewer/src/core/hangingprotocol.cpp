@@ -256,6 +256,20 @@ int HangingProtocol::countFilledImageSets() const
     return count;
 }
 
+int HangingProtocol::countFilledImageSetsWithPriors() const
+{
+    int count = 0;
+    foreach (HangingProtocolImageSet *imageSet, this->getImageSets())
+    {
+        if (imageSet->getAbstractPriorValue() != 0 && (imageSet->getSeriesToDisplay() || imageSet->getPreviousStudyToDisplay()))
+        {
+            count++;
+        }
+    }
+
+    return count;
+}
+
 int HangingProtocol::countFilledDisplaySets() const
 {
     int count = 0;
