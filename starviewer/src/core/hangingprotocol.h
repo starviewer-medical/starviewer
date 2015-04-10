@@ -134,6 +134,8 @@ public:
 
     /// Retorna el número de ImageSets que tenen una sèrie assignada
     int countFilledImageSets() const;
+    /// Return the number of filled ImageSets that its AbstractPriorValue is different to 0
+    int countFilledImageSetsWithPriors() const;
 
     /// Retorna el número de DisplaySets que tenen una sèrie o imatge assignada
     int countFilledDisplaySets() const;
