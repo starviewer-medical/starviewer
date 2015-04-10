@@ -84,6 +84,7 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Study *st
     foreach (HangingProtocol *hangingProtocol, m_availableHangingProtocols)
     {
         if (isModalityCompatible(hangingProtocol, study) && isInstitutionCompatible(hangingProtocol, study))
+        if (isModalityCompatible(hangingProtocol, study) && isInstitutionCompatible(hangingProtocol, study) && hangingProtocol->getNumberOfPriors() <= previousStudies.size())
         {
             HangingProtocolFiller hangingProtocolFiller;
             hangingProtocolFiller.fill(hangingProtocol, study, previousStudies);
