@@ -14,59 +14,47 @@
 
 #include "qhangingprotocolswidget.h"
 
-#include "qhangingprotocolsgroupwidget.h"
-
 namespace udg {
 
-const int QHangingProtocolsWidget::MaximumNumberOfColumns = 5;
-
 QHangingProtocolsWidget::QHangingProtocolsWidget(QWidget *parent)
- : QWidget(parent), m_noHangingProtocolsAvailableLabel(0)
+ : QWidget(parent, Qt::Popup)
 {
-    setWindowFlags(Qt::Popup);
+    setupUi(this);
 
-    initializeWidget();
+    // This is needed to make the widget use the minimum possible size
+    resize(1, 1);
+
+    // Set initial status
+    setItems(QList<HangingProtocol*>(), QList<HangingProtocol*>(), QList<HangingProtocol*>());
+
+    connect(m_combinedGroupWidget, &QHangingProtocolsGroupWidget::selected, this, &QHangingProtocolsWidget::hide);
+    connect(m_combinedGroupWidget, &QHangingProtocolsGroupWidget::selected, this, &QHangingProtocolsWidget::selectedCombined);
+    connect(m_currentGroupWidget, &QHangingProtocolsGroupWidget::selected, this, &QHangingProtocolsWidget::hide);
+    connect(m_currentGroupWidget, &QHangingProtocolsGroupWidget::selected, this, &QHangingProtocolsWidget::selectedCurrent);
+    connect(m_currentGroupWidget, &QHangingProtocolsGroupWidget::selected, this, &QHangingProtocolsWidget::selectedGrid);
+    connect(m_priorGroupWidget, &QHangingProtocolsGroupWidget::selected, this, &QHangingProtocolsWidget::hide);
+    connect(m_priorGroupWidget, &QHangingProtocolsGroupWidget::selected, this, &QHangingProtocolsWidget::selectedPrior);
 }
 
 QHangingProtocolsWidget::~QHangingProtocolsWidget()
 {
 }
 
-void QHangingProtocolsWidget::initializeWidget()
+void QHangingProtocolsWidget::setItems(const QList<HangingProtocol *> &combined, const QList<HangingProtocol *> &current, const QList<HangingProtocol *> &prior)
 {
-    QVBoxLayout *vBoxLayoutHanging = new QVBoxLayout(this);
-    vBoxLayoutHanging->setMargin(6);
-    vBoxLayoutHanging->setSpacing(6);
+    m_combinedGroupWidget->setItems(combined);
+    m_currentGroupWidget->setItems(current);
+    m_priorGroupWidget->setItems(prior);
 
-    m_hangingProtocolsGroupWidget = new QHangingProtocolsGroupWidget(this);
-    m_hangingProtocolsGroupWidget->setCaption(tr("Hanging protocols"));
-    m_hangingProtocolsGroupWidget->setNumberOfColumns(MaximumNumberOfColumns);
-    connect(m_hangingProtocolsGroupWidget, &QHangingProtocolsGroupWidget::selected, this, &QHangingProtocolsWidget::hide);
-    connect(m_hangingProtocolsGroupWidget, &QHangingProtocolsGroupWidget::selected, this, &QHangingProtocolsWidget::selectedGrid);
-    vBoxLayoutHanging->addWidget(m_hangingProtocolsGroupWidget);
-
-    m_noHangingProtocolsAvailableLabel = new QLabel(this);
-    m_noHangingProtocolsAvailableLabel->setText(tr("No hanging protocols available"));
-    m_noHangingProtocolsAvailableLabel->setAlignment(Qt::AlignHCenter);
-    m_noHangingProtocolsAvailableLabel->setGeometry(0, 64, 64, 80);
-    m_noHangingProtocolsAvailableLabel->setMargin(6);
-    vBoxLayoutHanging->addWidget(m_noHangingProtocolsAvailableLabel);
+    m_combinedGroupWidget->setVisible(!combined.isEmpty());
+    m_currentGroupWidget->setVisible(!current.isEmpty());
+    m_priorGroupWidget->setVisible(!prior.isEmpty());
+    m_noHangingProtocolsAvailableLabel->setVisible(combined.isEmpty() && current.isEmpty() && prior.isEmpty());
 }
 
 void QHangingProtocolsWidget::setHangingItems(const QList<HangingProtocol*> &listOfCandidates)
 {
-    m_hangingProtocolsGroupWidget->setItems(listOfCandidates);
-
-    if (listOfCandidates.isEmpty())
-    {
-        m_hangingProtocolsGroupWidget->hide();
-        m_noHangingProtocolsAvailableLabel->show();
-    }
-    else
-    {
-        m_hangingProtocolsGroupWidget->show();
-        m_noHangingProtocolsAvailableLabel->hide();
-    }
+    setItems(QList<HangingProtocol*>(), listOfCandidates, QList<HangingProtocol*>());
 }
 
 }
