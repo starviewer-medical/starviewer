@@ -3,7 +3,8 @@
 # Subdirectori relatiu al directori principal del projecte: ./src/extensions/playground/q2dviewer
 # L'objectiu �s una biblioteca:
 
-FORMS += q2dviewerextensionbase.ui 
+FORMS += q2dviewerextensionbase.ui \
+         qhangingprotocolsgroupwidgetbase.ui
 
 HEADERS += q2dviewerextensionmediator.h \
         q2dviewerextension.h \
@@ -12,7 +13,8 @@ HEADERS += q2dviewerextensionmediator.h \
         gridicon.h \
         tablemenu.h \
         itemmenu.h \
-        qhangingprotocolswidget.h
+        qhangingprotocolswidget.h \
+        qhangingprotocolsgroupwidget.h
 
 SOURCES += q2dviewerextensionmediator.cpp \
         q2dviewerextension.cpp \
@@ -21,7 +23,8 @@ SOURCES += q2dviewerextensionmediator.cpp \
         gridicon.cpp \
         tablemenu.cpp \
         itemmenu.cpp \
-        qhangingprotocolswidget.cpp
+        qhangingprotocolswidget.cpp \
+        qhangingprotocolsgroupwidget.cpp
 
 INCLUDEPATH += ../../../inputoutput
 DEPENDPATH += ../../../inputoutput
