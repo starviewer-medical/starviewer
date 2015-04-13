@@ -60,6 +60,10 @@ public:
     void cleanUp(const QRectF &geometry);
 
     QRectF convertGeometry(const QRectF &viewerGeometry, const QRectF &newGeometry);
+
+    /// Return viewers located inside the given geometry.
+    QList<Q2DViewerWidget *> getViewersInsideGeometry(const QRectF &geometry);
+
 public slots:
     /// Marquem com a seleccionat el viewer passat per paràmetre
     void setSelectedViewer(Q2DViewerWidget *viewer);
@@ -103,8 +107,6 @@ private:
 
     /// Performs the needed actions to show the given viewer of the current layout
     void showViewer(Q2DViewerWidget *viewer);
-
-    QList<Q2DViewerWidget *> getViewersInsideGeometry(const QRectF &geometry);
 
 private:
     RelativeGeometryLayout *m_layout;
