@@ -44,12 +44,6 @@ public:
     /// Afegeix hanging protocols al menú
     void addHangingItems(const QList<HangingProtocol*> &items);
 
-    /// Posa una element que informa que s'estan carregant
-    void addSearchingItem();
-
-    /// Informa de si ha de posar un element que informi que s'està carregant o no
-    void setSearchingItem(bool state);
-
 public slots:
     /// Posa els hanging protocols que ha de representar el menú
     void setHangingItems(const QList<HangingProtocol*> &listOfCandidates);
@@ -64,10 +58,6 @@ signals:
 protected:
     /// Mètode que crea una icona segons un hanging protocol
     ItemMenu* createIcon(const HangingProtocol *hangingProtocol);
-
-    /// Crea el widget que conté una animació i un label que es mostrarà quan estem buscant estudis previs
-    /// per trobar hanging protocols potencials a aplicar sobre l'estudi
-    void createSearchingWidget();
 
 private:
     /// Inicialitza el widget i el deixa apunt per afegir-hi hanging protocols.
@@ -91,18 +81,6 @@ protected:
 
     /// Distribució regular a la zona dels hanging protocols
     QGridLayout *m_gridLayoutHanging;
-
-    /// Indicador de si cal posar l'element de carregant o no
-    bool m_putLoadingItem;
-
-    /// Columna a on s'ha col·locat l'element de carregant
-    int m_loadingColumn;
-
-    /// Fila a on s'ha col·locat l'element de carregant
-    int m_loadingRow;
-
-    /// Widget que informa que s'esta carregant (buscant)
-    QWidget *m_searchingWidget;
 
     /// Etiqueta que posarem com a títol del widget
     QLabel *m_caption;

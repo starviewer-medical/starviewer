@@ -309,8 +309,6 @@ void Q2DViewerExtension::setupLayoutManager()
 {
     m_layoutManager = new LayoutManager(m_patient, m_workingArea, this);
     connect(m_layoutManager, SIGNAL(hangingProtocolCandidatesFound(QList<HangingProtocol*>)), m_hangingProtocolsMenu, SLOT(setHangingItems(QList<HangingProtocol*>)));
-    // HACK Should be done in a better way
-    connect(m_layoutManager, SIGNAL(previousStudiesSearchEnded()), SLOT(hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()));
     connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), m_layoutManager, SLOT(setHangingProtocol(int)));
 
     // Actions to show the next o previous hanging protocol of the list. Currently, it can only be carried out through keyboard
@@ -376,7 +374,6 @@ void Q2DViewerExtension::setPatient(Patient *patient)
     // Habilitem la possibilitat de buscar estudis relacionats.
     m_relatedStudiesToolButton->setEnabled(true);
     connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), m_layoutManager, SLOT(addHangingProtocolsWithPrevious(QList<Study*>)));
-    m_hangingProtocolsMenu->setSearchingItem(true);
     m_relatedStudiesWidget->searchStudiesOf(m_patient);
     connect(m_patient, SIGNAL(studyAdded(Study*)), m_relatedStudiesWidget, SLOT(updateList()));
 #endif
@@ -385,11 +382,6 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 void Q2DViewerExtension::layoutAgain()
 {
     m_layoutManager->applyProperLayoutChoice();
-}
-
-void Q2DViewerExtension::hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()
-{
-    m_hangingProtocolsMenu->setSearchingItem(false);
 }
 
 void Q2DViewerExtension::initializeTools()
