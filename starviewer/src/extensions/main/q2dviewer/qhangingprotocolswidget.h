@@ -17,17 +17,12 @@
 
 #include <QWidget>
 
-// FWD declarations
-class QWidget;
-class QGridLayout;
-class QGroupBox;
 class QLabel;
 
 namespace udg {
 
-// FWD declarations
-class ItemMenu;
 class HangingProtocol;
+class QHangingProtocolsGroupWidget;
 
 /**
     Classe que representa el menu desplegable per seleccionar el grid, amb opcions de grids predefinides.
@@ -38,26 +33,13 @@ public:
     QHangingProtocolsWidget(QWidget *parent = 0);
     ~QHangingProtocolsWidget();
 
-    /// Elimina tot el contingut del widget
-    void dropContent();
-
-    /// Afegeix hanging protocols al menú
-    void addHangingItems(const QList<HangingProtocol*> &items);
-
 public slots:
     /// Posa els hanging protocols que ha de representar el menú
     void setHangingItems(const QList<HangingProtocol*> &listOfCandidates);
-    
-    /// Mètode que cada vegada que es seleccioni un dels items emet el grid resultat
-    void emitSelected(ItemMenu *selected);
 
 signals:
     /// Emet que s'ha escollit un grid
     void selectedGrid(int);
-
-protected:
-    /// Mètode que crea una icona segons un hanging protocol
-    ItemMenu* createIcon(const HangingProtocol *hangingProtocol);
 
 private:
     /// Inicialitza el widget i el deixa apunt per afegir-hi hanging protocols.
@@ -67,23 +49,8 @@ protected:
     /// Nombre de columnes a mostrar
     static const int MaximumNumberOfColumns;
 
-    /// Grid per mostrar els elements predefinits
-    QGridLayout *m_gridLayout;
-
-    /// Llista dels items
-    QList<ItemMenu*> m_itemList;
-
-    /// Fila a on col·locar el següent element a la zona de hangings
-    int m_nextHangingProtocolRow;
-
-    /// Columna a on col·locar el següent element a la zona de hangings
-    int m_nextHangingProtocolColumn;
-
-    /// Distribució regular a la zona dels hanging protocols
-    QGridLayout *m_gridLayoutHanging;
-
-    /// Etiqueta que posarem com a títol del widget
-    QLabel *m_caption;
+    /// The widget that shows the hanging protocol items.
+    QHangingProtocolsGroupWidget *m_hangingProtocolsGroupWidget;
 
     /// Etiqueta per mostrar quan no hi ha cap hanging protocol disponible per aplicar
     QLabel *m_noHangingProtocolsAvailableLabel;
