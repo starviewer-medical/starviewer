@@ -81,9 +81,9 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Study *st
 
     // Buscar el hangingProtocol que s'ajusta millor a l'estudi del pacient
     // Aprofitem per assignar ja les series, per millorar el rendiment
-    foreach (HangingProtocol *hangingProtocol, m_availableHangingProtocols)
+    foreach (HangingProtocol *hangingProtocolBase, m_availableHangingProtocols)
     {
-        if (isModalityCompatible(hangingProtocol, study) && isInstitutionCompatible(hangingProtocol, study))
+        HangingProtocol *hangingProtocol = new HangingProtocol(*hangingProtocolBase);
         if (isModalityCompatible(hangingProtocol, study) && isInstitutionCompatible(hangingProtocol, study) && hangingProtocol->getNumberOfPriors() <= previousStudies.size())
         {
             HangingProtocolFiller hangingProtocolFiller;
@@ -140,7 +140,7 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Study *st
     return outputHangingProtocolList;
 }
 
-HangingProtocol* HangingProtocolManager::setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout)
+HangingProtocol* HangingProtocolManager::setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout, const QRectF &geometry)
 {
     HangingProtocol *bestHangingProtocol = NULL;
     foreach (HangingProtocol *hangingProtocol, hangingProtocolList)
@@ -154,7 +154,7 @@ HangingProtocol* HangingProtocolManager::setBestHangingProtocol(Patient *patient
     if (bestHangingProtocol)
     {
         DEBUG_LOG(QString("Hanging protocol que s'aplica: %1").arg(bestHangingProtocol->getName()));
-        applyHangingProtocol(bestHangingProtocol, layout, patient);
+        applyHangingProtocol(bestHangingProtocol, layout, patient, geometry);
     }
 
     return bestHangingProtocol;

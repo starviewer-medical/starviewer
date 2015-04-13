@@ -176,20 +176,7 @@ void HangingProtocolFiller::fillImageSet(HangingProtocolImageSet *imageSet, Stud
         return;
     }
 
-    // TODO This weird condition checks that the study is complete and not the result of a query of related studies.
-    //      The current study is assumed to be a full study.
-    //      Alternately if the study is set as the previous study to display, it means that it's been downloaded from the manager
-    //      Otherwise the study has to be downloaded
-    if (study == currentStudy || study == imageSet->getPreviousStudyToDisplay())
-    {
-        fillImageSetWithStudyPrivate(imageSet, study);
-    }
-    else
-    {
-        // TODO Compatibility with current handling if prior studies: we assume that they're not downloaded
-        imageSet->setPreviousStudyToDisplay(study);
-        imageSet->setDownloaded(false);
-    }
+    fillImageSetWithStudyPrivate(imageSet, study);
 }
 
 void HangingProtocolFiller::fillImageSetWithStudyPrivate(HangingProtocolImageSet *imageSet, const Study *study)

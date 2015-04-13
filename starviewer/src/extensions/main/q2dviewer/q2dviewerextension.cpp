@@ -38,6 +38,7 @@
 #include "shortcutmanager.h"
 #include "transferfunctionmodel.h"
 #include "transferfunctionmodelfiller.h"
+#include "hangingprotocol.h"
 
 #ifndef STARVIEWER_LITE
 #include "qrelatedstudieswidget.h"
@@ -308,8 +309,11 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
 void Q2DViewerExtension::setupLayoutManager()
 {
     m_layoutManager = new LayoutManager(m_patient, m_workingArea, this);
-    connect(m_layoutManager, SIGNAL(hangingProtocolCandidatesFound(QList<HangingProtocol*>)), m_hangingProtocolsMenu, SLOT(setHangingItems(QList<HangingProtocol*>)));
-    connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), m_layoutManager, SLOT(setHangingProtocol(int)));
+    connect(m_layoutManager, &LayoutManager::hangingProtocolCandidatesFound, m_hangingProtocolsMenu, &QHangingProtocolsWidget::setItems);
+    connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedCurrent, m_layoutManager, &LayoutManager::setCurrentHangingProtocol);
+    connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedPrior, m_layoutManager, &LayoutManager::setPriorHangingProtocol);
+    connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedCombined, m_layoutManager, &LayoutManager::setCombinedHangingProtocol);
+    connect(m_relatedStudiesWidget, SIGNAL(workingStudiesChanged(QString, QString)), m_layoutManager, SLOT(setWorkingStudies(QString, QString)));
 
     // Actions to show the next o previous hanging protocol of the list. Currently, it can only be carried out through keyboard
     QAction *nextHangingProtocolAction = new QAction(this);
@@ -373,7 +377,6 @@ void Q2DViewerExtension::setPatient(Patient *patient)
     setupPropagation();
     // Habilitem la possibilitat de buscar estudis relacionats.
     m_relatedStudiesToolButton->setEnabled(true);
-    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), m_layoutManager, SLOT(addHangingProtocolsWithPrevious(QList<Study*>)));
     m_relatedStudiesWidget->searchStudiesOf(m_patient);
     connect(m_patient, SIGNAL(studyAdded(Study*)), m_relatedStudiesWidget, SLOT(updateList()));
 #endif

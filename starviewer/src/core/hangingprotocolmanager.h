@@ -54,7 +54,7 @@ public:
     void applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient, const QRectF &geometry);
 
     /// Aplica el millor hanging protocol de la llista donada
-    HangingProtocol* setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
+    HangingProtocol* setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout, const QRectF &geometry);
 
     /// Si hi havia estudis en descàrrega, s'elimina de la llista
     void cancelAllHangingProtocolsDownloading();
