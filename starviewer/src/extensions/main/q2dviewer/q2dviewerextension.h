@@ -104,9 +104,6 @@ private:
     void updateTransferFunctionComboBox(TransferFunctionModel *transferFunctionModel);
 
 private slots:
-    // HACK to be replaced by a proper solution
-    void hideHangingProtocolsWithPreviousAreBeingSearchedInMenu();
-
 #ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();
