@@ -16,44 +16,38 @@
 #define UDGMENUGRIDWIDGET_H
 
 #include <QWidget>
-
-class QLabel;
+#include "ui_qhangingprotocolswidgetbase.h"
 
 namespace udg {
 
 class HangingProtocol;
-class QHangingProtocolsGroupWidget;
 
 /**
-    Classe que representa el menu desplegable per seleccionar el grid, amb opcions de grids predefinides.
-  */
-class QHangingProtocolsWidget : public QWidget {
+ * @brief The QHangingProtocolsWidget class is a widget that shows three groups of hanging protocols consisting of a grid of icons and a caption for each group.
+ *        The three groups are the hanging protocols for the current study, the ones for the prior study and the combined ones.
+ */
+class QHangingProtocolsWidget : public QWidget, private ::Ui::QHangingProtocolsWidgetBase {
 Q_OBJECT
 public:
-    QHangingProtocolsWidget(QWidget *parent = 0);
-    ~QHangingProtocolsWidget();
+    explicit QHangingProtocolsWidget(QWidget *parent = 0);
+    virtual ~QHangingProtocolsWidget();
 
 public slots:
+    /// Sets the hanging protocol items to be displayed in each group. Previous items of each group are deleted.
+    void setItems(const QList<HangingProtocol*> &combined, const QList<HangingProtocol*> &current, const QList<HangingProtocol*> &prior);
     /// Posa els hanging protocols que ha de representar el menú
     void setHangingItems(const QList<HangingProtocol*> &listOfCandidates);
 
 signals:
+    /// Emitted when a combined hanging protocol has been selected.
+    void selectedCombined(int);
+    /// Emitted when a hanging protocol for the current study has been selected.
+    void selectedCurrent(int);
+    /// Emitted when a hanging protocol for the prior study has been selected.
+    void selectedPrior(int);
     /// Emet que s'ha escollit un grid
     void selectedGrid(int);
 
-private:
-    /// Inicialitza el widget i el deixa apunt per afegir-hi hanging protocols.
-    void initializeWidget();
-
-protected:
-    /// Nombre de columnes a mostrar
-    static const int MaximumNumberOfColumns;
-
-    /// The widget that shows the hanging protocol items.
-    QHangingProtocolsGroupWidget *m_hangingProtocolsGroupWidget;
-
-    /// Etiqueta per mostrar quan no hi ha cap hanging protocol disponible per aplicar
-    QLabel *m_noHangingProtocolsAvailableLabel;
 };
 
 }

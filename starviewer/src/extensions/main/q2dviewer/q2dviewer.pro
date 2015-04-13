@@ -4,7 +4,8 @@
 # L'objectiu �s una biblioteca:
 
 FORMS += q2dviewerextensionbase.ui \
-         qhangingprotocolsgroupwidgetbase.ui
+         qhangingprotocolsgroupwidgetbase.ui \
+         qhangingprotocolswidgetbase.ui
 
 HEADERS += q2dviewerextensionmediator.h \
         q2dviewerextension.h \
