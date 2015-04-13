@@ -17,6 +17,7 @@
 
 #include <QList>
 #include <QPair>
+#include <QRectF>
 
 #include "studylayoutconfig.h"
 
@@ -34,6 +35,7 @@ public:
 
     /// Aplica la configuració sobre el layout amb els estudis del pacient donats
     void applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study);
+    void applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study, const QRectF &geometry);
 
 private:
     /// Ens retorna la llista de volums amb la corresponent imatge que hem de col·locar segons la configuració i els estudis obtinguts a getMatchingStudies()
@@ -41,7 +43,7 @@ private:
     
     /// Donada una llista de volums amb la corresponent llesca, els col·loca al layout segons la configuració donada
     void placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, StudyLayoutConfig::UnfoldDirectionType unfoldDirection,
-                                    ViewersLayout *layout, int rows, int columns);
+                                    ViewersLayout *layout, int rows, int columns, const QRectF &geometry);
 };
 
 } // End namespace udg
