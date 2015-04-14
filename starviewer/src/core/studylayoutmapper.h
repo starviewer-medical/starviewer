@@ -33,8 +33,10 @@ public:
     StudyLayoutMapper();
     ~StudyLayoutMapper();
 
-    /// Aplica la configuració sobre el layout amb els estudis del pacient donats
+    /// Apply the configuration to the layout using the given study. If rows and columns are not defined or are invalid,
+    /// the grid size will be estimated by OptimalViewersGridEstimator
     void applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study, const QRectF &geometry);
+    void applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study, const QRectF &geometry, int rows, int columns);
 
 private:
     /// Ens retorna la llista de volums amb la corresponent imatge que hem de col·locar segons la configuració i els estudis obtinguts a getMatchingStudies()
