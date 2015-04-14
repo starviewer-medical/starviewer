@@ -27,7 +27,14 @@
     <number>6</number>
    </property>
    <item>
-    <widget class="QLabel" name="m_caption"/>
+    <widget class="QLabel" name="m_caption">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
