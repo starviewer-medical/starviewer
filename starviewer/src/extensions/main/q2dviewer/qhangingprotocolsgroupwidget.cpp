@@ -65,6 +65,9 @@ void QHangingProtocolsGroupWidget::setItems(const QList<HangingProtocol*> &hangi
         m_itemList.append(item);
         iterator.next();
     }
+
+    // This is needed to make the widget use the minimum possible size
+    adjustSize();
 }
 
 ItemMenu* QHangingProtocolsGroupWidget::createItem(const HangingProtocol *hangingProtocol)
