@@ -34,6 +34,11 @@ StudyLayoutMapper::~StudyLayoutMapper()
 
 void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study, const QRectF &geometry)
 {
+    applyConfig(config, layout, study, geometry, -1, -1);
+}
+
+void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study, const QRectF &geometry, int rows, int columns)
+{
     if (!layout || !study)
     {
         return;
@@ -58,23 +63,27 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
     
     // Un cop tenim els estudis, ara necessitem filtrar a nivell dels volums/imatges que necessitem
     QList<QPair<Volume*, int> > candidateImages = getImagesToPlace(config, matchingStudies);
-    int numberOfMinimumViewersRequired = candidateImages.count();
 
-    // Si el nombre màxim de visors per configuració és menor al nombre mínim de visors requerits, haurem d'actualitzar aquest paràmetre abans de crear el grid
-    int maxNumbersOfViewersByConfig = config.getMaximumNumberOfViewers();
-    if (maxNumbersOfViewersByConfig > 0)
+    if (rows < 1 || columns < 1)
     {
-        if (maxNumbersOfViewersByConfig < numberOfMinimumViewersRequired)
+        int numberOfMinimumViewersRequired = candidateImages.count();
+
+        // Si el nombre màxim de visors per configuració és menor al nombre mínim de visors requerits, haurem d'actualitzar aquest paràmetre abans de crear el grid
+        int maxNumbersOfViewersByConfig = config.getMaximumNumberOfViewers();
+        if (maxNumbersOfViewersByConfig > 0)
         {
-            numberOfMinimumViewersRequired = maxNumbersOfViewersByConfig;
+            if (maxNumbersOfViewersByConfig < numberOfMinimumViewersRequired)
+            {
+                numberOfMinimumViewersRequired = maxNumbersOfViewersByConfig;
+            }
         }
+        // Ara ja sabem el nombre mínim de visors requerits, ara cal calcular quina és la distribució idònia en graella
+        OptimalViewersGridEstimator gridEstimator;
+        QPair<int, int> grid = gridEstimator.getOptimalGrid(numberOfMinimumViewersRequired);
+        // Assignem el grid al layout
+        rows = grid.first;
+        columns = grid.second;
     }
-    // Ara ja sabem el nombre mínim de visors requerits, ara cal calcular quina és la distribució idònia en graella
-    OptimalViewersGridEstimator gridEstimator;
-    QPair<int, int> grid = gridEstimator.getOptimalGrid(numberOfMinimumViewersRequired);
-    // Assignem el grid al layout
-    int rows = grid.first;
-    int columns = grid.second;
     layout->setGridInArea(rows, columns, geometry);
     // Col·loquem les imatges en el layout donat
     placeImagesInCurrentLayout(candidateImages, config.getUnfoldDirection(), layout, rows, columns, geometry);
