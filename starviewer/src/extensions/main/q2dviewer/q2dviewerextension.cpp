@@ -975,7 +975,7 @@ void Q2DViewerExtension::setGrid(int rows, int columns)
 #ifndef STARVIEWER_LITE
     m_layoutManager->cancelOngoingOperations();
 #endif
-    m_workingArea->setGrid(rows, columns);
+    m_layoutManager->setGrid(rows, columns);
 }
 
 void Q2DViewerExtension::updateTransferFunctionComboBoxWithCurrentViewerModel()
