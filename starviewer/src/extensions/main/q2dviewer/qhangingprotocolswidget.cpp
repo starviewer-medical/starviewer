@@ -21,9 +21,6 @@ QHangingProtocolsWidget::QHangingProtocolsWidget(QWidget *parent)
 {
     setupUi(this);
 
-    // This is needed to make the widget use the minimum possible size
-    resize(1, 1);
-
     // Set initial status
     setItems(QList<HangingProtocol*>(), QList<HangingProtocol*>(), QList<HangingProtocol*>());
 
@@ -50,6 +47,9 @@ void QHangingProtocolsWidget::setItems(const QList<HangingProtocol *> &combined,
     m_currentGroupWidget->setVisible(!current.isEmpty());
     m_priorGroupWidget->setVisible(!prior.isEmpty());
     m_noHangingProtocolsAvailableLabel->setVisible(combined.isEmpty() && current.isEmpty() && prior.isEmpty());
+
+    // This is needed to make the widget use the minimum possible size
+    adjustSize();
 }
 
 void QHangingProtocolsWidget::setHangingItems(const QList<HangingProtocol*> &listOfCandidates)
