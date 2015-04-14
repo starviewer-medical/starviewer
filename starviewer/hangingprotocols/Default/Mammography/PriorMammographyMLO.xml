@@ -4,6 +4,7 @@
     <numberScreens>1</numberScreens>
     <strictness>yes</strictness>
     <protocol>MG</protocol>
+    <numberOfPriors>1</numberOfPriors>
     <restriction identifier="1">
         <selectorAttribute>ImageLaterality</selectorAttribute>
         <selectorValue>R</selectorValue>

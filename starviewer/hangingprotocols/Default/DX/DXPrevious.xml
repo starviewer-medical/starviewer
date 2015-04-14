@@ -4,6 +4,7 @@
     <numberScreens>1</numberScreens>
     <allDifferent>yes</allDifferent>
     <protocol>DX</protocol>
+    <numberOfPriors>1</numberOfPriors>
     <iconType>CR</iconType>
     <restriction identifier="1">
         <selectorAttribute>Anterior</selectorAttribute>
