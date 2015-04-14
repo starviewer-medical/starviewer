@@ -45,6 +45,9 @@ private:
     /// Donada una llista de volums amb la corresponent llesca, els col·loca al layout segons la configuració donada
     void placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, StudyLayoutConfig::UnfoldDirectionType unfoldDirection,
                                     ViewersLayout *layout, int rows, int columns, const QRectF &geometry);
+
+    /// Estimate the grid size considering the layout config and the available candidates.
+    QPair<int, int> getOptimalViewersGrid(const StudyLayoutConfig &config, const QList<QPair<Volume *, int> > &candidateImages);
 };
 
 } // End namespace udg
