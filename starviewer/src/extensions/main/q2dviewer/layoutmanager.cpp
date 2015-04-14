@@ -224,10 +224,15 @@ QList<StudyLayoutConfig> LayoutManager::getLayoutCandidates(Study *study)
 
 void LayoutManager::applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Study *study, const QRectF &geometry)
 {
+    applyLayoutCandidates(candidates, study, geometry, -1, -1);
+}
+
+void LayoutManager::applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Study *study, const QRectF &geometry, int rows, int columns)
+{
     StudyLayoutConfig layoutToApply = getBestLayoutCandidate(candidates, study);
 
     StudyLayoutMapper mapper;
-    mapper.applyConfig(layoutToApply, m_layout, study, geometry);
+    mapper.applyConfig(layoutToApply, m_layout, study, geometry, rows, columns);
 }
 
 StudyLayoutConfig LayoutManager::getBestLayoutCandidate(const QList<StudyLayoutConfig> &candidates, Study *study)

@@ -89,6 +89,7 @@ private:
 
     /// Applies the proper layout candidate from the list for the given Study
     void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Study *study, const QRectF &geometry);
+    void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Study *study, const QRectF &geometry, int rows, int columns);
 
     /// Returns the layout config that best suits for the given candidates and Study
     StudyLayoutConfig getBestLayoutCandidate(const QList<StudyLayoutConfig> &candidates, Study *study);
