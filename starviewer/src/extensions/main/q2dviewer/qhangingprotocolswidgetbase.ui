@@ -39,7 +39,7 @@
    <item>
     <widget class="udg::QHangingProtocolsGroupWidget" name="m_currentGroupWidget" native="true">
      <property name="caption" stdset="0">
-      <string>Current hanging protocols</string>
+      <string>Hanging protocols for the current study</string>
      </property>
      <property name="numberOfColumns" stdset="0">
       <number>5</number>
@@ -49,7 +49,7 @@
    <item>
     <widget class="udg::QHangingProtocolsGroupWidget" name="m_priorGroupWidget" native="true">
      <property name="caption" stdset="0">
-      <string>Prior hanging protocols</string>
+      <string>Hanging protocols for the prior study</string>
      </property>
      <property name="numberOfColumns" stdset="0">
       <number>5</number>
