@@ -3,6 +3,7 @@
     <hangingProtocolName>MLO CC Previous</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>MG</protocol>
+    <numberOfPriors>1</numberOfPriors>
     <restriction identifier="1">
         <selectorAttribute>ImageLaterality</selectorAttribute>
         <selectorValue>R</selectorValue>

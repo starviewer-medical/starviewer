@@ -4,6 +4,7 @@
     <numberScreens>1</numberScreens>
     <allDifferent>yes</allDifferent>
     <protocol>CR</protocol>
+    <numberOfPriors>1</numberOfPriors>
     <iconType>CR</iconType>
     <imageSet identifier="1"/>
     <imageSet identifier="2"/>
