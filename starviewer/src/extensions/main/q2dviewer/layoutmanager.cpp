@@ -24,6 +24,7 @@
 #include "studylayoutconfig.h"
 #include "studylayoutconfigsettingsmanager.h"
 #include "hangingprotocol.h"
+#include "q2dviewerwidget.h"
 
 namespace udg {
 
@@ -89,6 +90,50 @@ bool LayoutManager::hasStudyAnyModalityWithHangingProtocolPriority(Study *study)
 void LayoutManager::applyProperLayoutChoice()
 {
     applyProperLayoutChoice(true, true);
+}
+
+void LayoutManager::setGrid(int rows, int columns)
+{
+    if (!m_priorStudy)
+    {
+        m_currentHangingProtocolApplied = 0;
+        applyLayoutCandidates(getLayoutCandidates(m_currentStudy), m_currentStudy, QRectF(0.0, 0.0, 1.0, 1.0), rows, columns);
+    }
+    else
+    {
+        QRectF selectedViewerGeometry = m_layout->getSelectedViewer()->geometry();
+
+        if (QRectF(0.0, 0.0, 0.5, 1.0).contains(selectedViewerGeometry.topLeft()))
+        {
+            m_currentHangingProtocolApplied = 0;
+            applyLayoutCandidates(getLayoutCandidates(m_currentStudy), m_currentStudy, QRectF(0.0, 0.0, 0.5, 1.0), rows, columns);
+
+            if (m_combinedHangingProtocolApplied)
+            {
+                m_combinedHangingProtocolApplied = 0;
+
+                QRectF priorStudyLayoutGeometry(0.5, 0.0, 0.5, 1.0);
+
+                m_priorHangingProtocolApplied = applyProperLayoutChoice(m_priorStudy, m_priorStudyHangingProtocolCandidates, priorStudyLayoutGeometry);
+            }
+
+        }
+        else
+        {
+            m_priorHangingProtocolApplied = 0;
+            applyLayoutCandidates(getLayoutCandidates(m_priorStudy), m_priorStudy, QRectF(0.5, 0.0, 0.5, 1.0), rows, columns);
+
+            if (m_combinedHangingProtocolApplied)
+            {
+                m_combinedHangingProtocolApplied = 0;
+
+                QRectF currentStudyLayoutGeometry = QRectF(0.0, 0.0, 0.5, 1.0);
+
+                // Set hanging or auto layout for current study
+                m_currentHangingProtocolApplied = applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, currentStudyLayoutGeometry);
+            }
+        }
+    }
 }
 
 void LayoutManager::applyProperLayoutChoice(bool changeCurrentStudyLayout, bool changePriorStudyLayout)

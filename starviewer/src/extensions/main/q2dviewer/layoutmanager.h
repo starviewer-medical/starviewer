@@ -45,6 +45,11 @@ public:
     /// Applies hanging protocols or automatic layouts depending on the user settings and the availability of the former
     void applyProperLayoutChoice();
 
+    /// Applies a regular grid in a region of the layout depending on the current working situation.
+    /// If no prior study is selected, the grid will occupy whole extent.
+    /// Otherwise, it will occupy the current or prior study area depending on the position of the selected viewer.
+    void setGrid(int rows, int columns);
+
 public slots:
 
     /// Applies the next hanging protocol of the list if any was applied
