@@ -34,7 +34,6 @@ public:
     ~StudyLayoutMapper();
 
     /// Aplica la configuració sobre el layout amb els estudis del pacient donats
-    void applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study);
     void applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study, const QRectF &geometry);
 
 private:
