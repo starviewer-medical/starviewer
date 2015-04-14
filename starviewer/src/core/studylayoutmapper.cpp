@@ -32,11 +32,6 @@ StudyLayoutMapper::~StudyLayoutMapper()
 {
 }
 
-void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study)
-{
-    applyConfig(config, layout, study, QRectF(0.0, 0.0, 1.0, 1.0));
-}
-
 void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study, const QRectF &geometry)
 {
     if (!layout || !study)
