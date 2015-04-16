@@ -7,11 +7,11 @@
     <iconType>RF</iconType>
     <imageSet identifier="1">
         <type>image</type>
-        <imageNumberInPatientModality>0</imageNumberInPatientModality>
+        <imageNumberInStudyModality>0</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="2">
         <type>image</type>
-        <imageNumberInPatientModality>1</imageNumberInPatientModality>
+        <imageNumberInStudyModality>1</imageNumberInStudyModality>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>

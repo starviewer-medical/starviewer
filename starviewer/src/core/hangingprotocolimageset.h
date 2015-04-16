@@ -85,10 +85,10 @@ public:
     void setAbstractPriorValue(int value);
 
     /// Obté l'índex de la imatge a mostrar dins la serie
-    int getImageNumberInPatientModality();
+    int getImageNumberInStudyModality();
 
     /// Posa l'índex de la imatge a mostar del pacient
-    void setImageNumberInPatientModality(int imageNumberInPatientModality);
+    void setImageNumberInStudyModality(int imageNumberInStudyModality);
 
 private:
     /// The restriction expression that this image set must satisfy.
@@ -112,7 +112,7 @@ private:
 
     /// Índex de la imatge dins l'estudi. Es coneix aquest número
     /// ja quan es crea el hanging protocol
-    int m_imageNumberInPatientModality;
+    int m_imageNumberInStudyModality;
 
     /// Indica si esta o no descarregat
     bool m_downloaded;

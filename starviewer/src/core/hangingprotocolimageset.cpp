@@ -28,7 +28,7 @@ HangingProtocolImageSet::HangingProtocolImageSet()
     m_previousStudyToDisplay = NULL;
     m_serieToDisplay = NULL;
     m_downloaded = true;
-    m_imageNumberInPatientModality = -1;
+    m_imageNumberInStudyModality = -1;
 }
 
 HangingProtocolImageSet::~HangingProtocolImageSet()
@@ -130,14 +130,14 @@ void HangingProtocolImageSet::setAbstractPriorValue(int value)
     m_abstractPriorValue = value;
 }
 
-int HangingProtocolImageSet::getImageNumberInPatientModality()
+int HangingProtocolImageSet::getImageNumberInStudyModality()
 {
-    return m_imageNumberInPatientModality;
+    return m_imageNumberInStudyModality;
 }
 
-void HangingProtocolImageSet::setImageNumberInPatientModality(int imageNumberInPatientModality)
+void HangingProtocolImageSet::setImageNumberInStudyModality(int imageNumberInStudyModality)
 {
-    m_imageNumberInPatientModality = imageNumberInPatientModality;
+    m_imageNumberInStudyModality = imageNumberInStudyModality;
 }
 
 }

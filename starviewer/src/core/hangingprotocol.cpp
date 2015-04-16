@@ -376,7 +376,7 @@ bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol) const
             && imageSet->getImageToDisplay() == imageSetToCompare->getImageToDisplay()
             && imageSet->isDownloaded() == imageSetToCompare->isDownloaded()
             && imageSet->getPreviousStudyToDisplay() == imageSetToCompare->getPreviousStudyToDisplay()
-            && imageSet->getImageNumberInPatientModality() == imageSetToCompare->getImageNumberInPatientModality();
+            && imageSet->getImageNumberInStudyModality() == imageSetToCompare->getImageNumberInStudyModality();
 
         imageSetNumber++;
     }

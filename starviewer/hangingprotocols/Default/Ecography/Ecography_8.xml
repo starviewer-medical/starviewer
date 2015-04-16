@@ -6,35 +6,35 @@
     <protocol>US</protocol>
     <imageSet identifier="1">
         <type>image</type>
-        <imageNumberInPatientModality>0</imageNumberInPatientModality>
+        <imageNumberInStudyModality>0</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="2">
         <type>image</type>
-        <imageNumberInPatientModality>1</imageNumberInPatientModality>
+        <imageNumberInStudyModality>1</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="3">
         <type>image</type>
-        <imageNumberInPatientModality>2</imageNumberInPatientModality>
+        <imageNumberInStudyModality>2</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="4">
         <type>image</type>
-        <imageNumberInPatientModality>3</imageNumberInPatientModality>
+        <imageNumberInStudyModality>3</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="5">
         <type>image</type>
-        <imageNumberInPatientModality>4</imageNumberInPatientModality>
+        <imageNumberInStudyModality>4</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="6">
         <type>image</type>
-        <imageNumberInPatientModality>5</imageNumberInPatientModality>
+        <imageNumberInStudyModality>5</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="7">
         <type>image</type>
-        <imageNumberInPatientModality>6</imageNumberInPatientModality>
+        <imageNumberInStudyModality>6</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="8">
         <type>image</type>
-        <imageNumberInPatientModality>7</imageNumberInPatientModality>
+        <imageNumberInStudyModality>7</imageNumberInStudyModality>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>
