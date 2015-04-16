@@ -26,21 +26,18 @@ namespace udg {
 
 namespace {
 
-// Busca la imatge número index dins tots els estudis de la modalitat del hanging protocol
-Image* getImageByIndexInPatientModality(const Patient *patient, int index, const QStringList &hangingProtocolModalities)
+// Search the image by index from the list of images of the study that match the given modalities
+Image* getImageByIndexInStudyModality(const Study *study, int index, const QStringList &hangingProtocolModalities)
 {
     QList<Image*> allImagesInStudy;
 
     // TODO Es podria millorar amb una cerca fins a la imatge que està a l'índex, envers d'un recorregut agafant-les totes
 
-    foreach (Study *study, patient->getStudies())
+    foreach (Series *series, study->getSeries())
     {
-        foreach (Series *series, study->getSeries())
+        if (hangingProtocolModalities.contains(series->getModality()))
         {
-            if (hangingProtocolModalities.contains(series->getModality()))
-            {
-                allImagesInStudy.append(series->getImages());
-            }
+            allImagesInStudy.append(series->getImages());
         }
     }
 
@@ -66,12 +63,11 @@ bool isValidImage(const Image *image, const HangingProtocolImageSet *imageSet)
     return imageSet->getRestrictionExpression().test(image);
 }
 
-// This method is to temporally preserve backwards compatibility with the imageNumberInPatientModality tag. Should be removed when it isn't needed anymore.
-void fillImageSetWithImageNumberInPatientModality(HangingProtocolImageSet *imageSet, const Study *currentStudy)
+// This method is to temporally preserve backwards compatibility with the imageNumberInStudyModality tag. Should be removed when it isn't needed anymore.
+void fillImageSetWithImageNumberInStudyModality(HangingProtocolImageSet *imageSet, const Study *currentStudy)
 {
-    Patient *patient = currentStudy->getParentPatient();
     QStringList modalities = imageSet->getHangingProtocol()->getHangingProtocolMask()->getProtocolList();
-    Image *image = getImageByIndexInPatientModality(patient, imageSet->getImageNumberInPatientModality(), modalities);
+    Image *image = getImageByIndexInStudyModality(currentStudy, imageSet->getImageNumberInStudyModality(), modalities);
 
     if (isValidImage(image, imageSet))
     {
@@ -162,10 +158,10 @@ void HangingProtocolFiller::fillImageSet(HangingProtocolImageSet *imageSet, Stud
 {
     // Pot ser que busquem una imatge en concret, llavors no cal examinar totes les sèries i/o totes les imatges
     // Només pot ser vàlida una imatge
-    if (imageSet->getImageNumberInPatientModality() != -1)
+    if (imageSet->getImageNumberInStudyModality() != -1)
     {
         // HACK! This shall be removed in the future.
-        fillImageSetWithImageNumberInPatientModality(imageSet, currentStudy);
+        fillImageSetWithImageNumberInStudyModality(imageSet, currentStudy);
         return;
     }
 

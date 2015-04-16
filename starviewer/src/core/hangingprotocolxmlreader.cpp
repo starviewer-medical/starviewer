@@ -217,9 +217,9 @@ HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QMap<int, 
         {
             imageSet->setAbstractPriorValue(m_xmlReader.readElementText().toInt());
         }
-        else if (m_xmlReader.name() == "imageNumberInPatientModality")
+        else if (m_xmlReader.name() == "imageNumberInStudyModality")
         {
-            imageSet->setImageNumberInPatientModality(m_xmlReader.readElementText().toInt());
+            imageSet->setImageNumberInStudyModality(m_xmlReader.readElementText().toInt());
         }
         else
         {

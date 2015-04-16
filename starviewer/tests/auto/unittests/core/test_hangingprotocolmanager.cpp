@@ -206,10 +206,10 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
     // ImageSets US
     HangingProtocolImageSet *imageSetUS_1 = UShangingProtocol->getImageSet(1);
     imageSetUS_1->setTypeOfItem("image");
-    imageSetUS_1->setImageNumberInPatientModality(0);
+    imageSetUS_1->setImageNumberInStudyModality(0);
     HangingProtocolImageSet *imageSetUS_2 = UShangingProtocol->getImageSet(2);
     imageSetUS_2->setTypeOfItem("image");
-    imageSetUS_2->setImageNumberInPatientModality(1);
+    imageSetUS_2->setImageNumberInStudyModality(1);
     //DisplaySets US
     HangingProtocolDisplaySet *displaySetUS_1 = UShangingProtocol->getDisplaySet(1);
     displaySetUS_1->setImageSet(imageSetUS_1);

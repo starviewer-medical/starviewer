@@ -78,7 +78,7 @@ void test_HangingProtocol::compareTo_WorksWithDifferentTypesOfHangingProtocols_d
     QSharedPointer<HangingProtocol> advancedHangingProtocol_2(new HangingProtocol(*advancedHangingProtocol_1));
     QSharedPointer<HangingProtocol> advancedHangingProtocol_3(new HangingProtocol(*advancedHangingProtocol_1));
     QSharedPointer<HangingProtocol> advancedHangingProtocol_4(new HangingProtocol(*advancedHangingProtocol_1));
-    advancedHangingProtocol_3->getImageSet(1)->setImageNumberInPatientModality(10);
+    advancedHangingProtocol_3->getImageSet(1)->setImageNumberInStudyModality(10);
     advancedHangingProtocol_4->getDisplaySet(1)->setSlice(10);
 
     QTest::addColumn<QSharedPointer<HangingProtocol> >("hangingProtocol1");
