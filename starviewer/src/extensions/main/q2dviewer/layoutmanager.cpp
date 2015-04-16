@@ -28,6 +28,12 @@
 
 namespace udg {
 
+namespace {
+
+const QRectF WholeGeometry(0.0, 0.0, 1.0, 1.0);
+const QRectF LeftHalfGeometry(0.0, 0.0, 0.5, 1.0);
+const QRectF RightHalfGeometry(0.5, 0.0, 0.5, 1.0);
+
 void deleteHangingProtocolList(QList<HangingProtocol*> &list)
 {
     foreach (HangingProtocol *hangingProtocol, list)
@@ -35,6 +41,8 @@ void deleteHangingProtocolList(QList<HangingProtocol*> &list)
         delete hangingProtocol;
     }
     list.clear();
+}
+
 }
 
 LayoutManager::LayoutManager(Patient *patient, ViewersLayout *layout, QObject *parent)
@@ -97,40 +105,33 @@ void LayoutManager::setGrid(int rows, int columns)
     if (!m_priorStudy)
     {
         m_currentHangingProtocolApplied = 0;
-        applyLayoutCandidates(getLayoutCandidates(m_currentStudy), m_currentStudy, QRectF(0.0, 0.0, 1.0, 1.0), rows, columns);
+        applyLayoutCandidates(getLayoutCandidates(m_currentStudy), m_currentStudy, WholeGeometry, rows, columns);
     }
     else
     {
         QRectF selectedViewerGeometry = m_layout->getSelectedViewer()->geometry();
 
-        if (QRectF(0.0, 0.0, 0.5, 1.0).contains(selectedViewerGeometry.topLeft()))
+        if (LeftHalfGeometry.contains(selectedViewerGeometry.topLeft()))
         {
             m_currentHangingProtocolApplied = 0;
-            applyLayoutCandidates(getLayoutCandidates(m_currentStudy), m_currentStudy, QRectF(0.0, 0.0, 0.5, 1.0), rows, columns);
+            applyLayoutCandidates(getLayoutCandidates(m_currentStudy), m_currentStudy, LeftHalfGeometry, rows, columns);
 
             if (m_combinedHangingProtocolApplied)
             {
                 m_combinedHangingProtocolApplied = 0;
-
-                QRectF priorStudyLayoutGeometry(0.5, 0.0, 0.5, 1.0);
-
-                m_priorHangingProtocolApplied = applyProperLayoutChoice(m_priorStudy, m_priorStudyHangingProtocolCandidates, priorStudyLayoutGeometry);
+                m_priorHangingProtocolApplied = applyProperLayoutChoice(m_priorStudy, m_priorStudyHangingProtocolCandidates, RightHalfGeometry);
             }
 
         }
         else
         {
             m_priorHangingProtocolApplied = 0;
-            applyLayoutCandidates(getLayoutCandidates(m_priorStudy), m_priorStudy, QRectF(0.5, 0.0, 0.5, 1.0), rows, columns);
+            applyLayoutCandidates(getLayoutCandidates(m_priorStudy), m_priorStudy, RightHalfGeometry, rows, columns);
 
             if (m_combinedHangingProtocolApplied)
             {
                 m_combinedHangingProtocolApplied = 0;
-
-                QRectF currentStudyLayoutGeometry = QRectF(0.0, 0.0, 0.5, 1.0);
-
-                // Set hanging or auto layout for current study
-                m_currentHangingProtocolApplied = applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, currentStudyLayoutGeometry);
+                m_currentHangingProtocolApplied = applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, LeftHalfGeometry);
             }
         }
     }
@@ -150,7 +151,8 @@ void LayoutManager::applyProperLayoutChoice(bool changeCurrentStudyLayout, bool 
     if (m_combinedHangingProtocolCandidates.size() > 0)
     {
         //apply best hanging protocol
-        m_combinedHangingProtocolApplied = m_hangingProtocolManager->setBestHangingProtocol(m_patient, m_combinedHangingProtocolCandidates, m_layout, QRectF(0.0, 0.0, 1.0, 1.0));
+        m_combinedHangingProtocolApplied = m_hangingProtocolManager->setBestHangingProtocol(m_patient, m_combinedHangingProtocolCandidates, m_layout,
+                                                                                            WholeGeometry);
         m_currentHangingProtocolApplied = 0;
         m_priorHangingProtocolApplied = 0;
     }
@@ -161,25 +163,19 @@ void LayoutManager::applyProperLayoutChoice(bool changeCurrentStudyLayout, bool 
         // We only change current study layout if there is no hanging protocol applied
         if (changeCurrentStudyLayout)
         {
-            QRectF currentStudyLayoutGeometry;
             if (m_priorStudy)
             {
-                currentStudyLayoutGeometry = QRectF(0.0, 0.0, 0.5, 1.0);
+                m_currentHangingProtocolApplied = applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, LeftHalfGeometry);
             }
             else
             {
-                currentStudyLayoutGeometry = QRectF(0.0, 0.0, 1.0, 1.0);
+                m_currentHangingProtocolApplied = applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, WholeGeometry);
             }
-
-            // Set hanging or auto layout for current study
-            m_currentHangingProtocolApplied = applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, currentStudyLayoutGeometry);
         }
 
         if (m_priorStudy && changePriorStudyLayout)
         {
-            QRectF priorStudyLayoutGeometry(0.5, 0.0, 0.5, 1.0);
-
-            m_priorHangingProtocolApplied = applyProperLayoutChoice(m_priorStudy, m_priorStudyHangingProtocolCandidates, priorStudyLayoutGeometry);
+            m_priorHangingProtocolApplied = applyProperLayoutChoice(m_priorStudy, m_priorStudyHangingProtocolCandidates, RightHalfGeometry);
         }
     }
 }
@@ -446,39 +442,32 @@ HangingProtocol* LayoutManager::setHangingProtocol(int hangingProtocolNumber, co
 
 void LayoutManager::setCombinedHangingProtocol(int hangingProtocolNumber)
 {
-    m_combinedHangingProtocolApplied = setHangingProtocol(hangingProtocolNumber, m_combinedHangingProtocolCandidates, QRectF(0.0, 0.0, 1.0, 1.0));
+    m_combinedHangingProtocolApplied = setHangingProtocol(hangingProtocolNumber, m_combinedHangingProtocolCandidates, WholeGeometry);
     m_currentHangingProtocolApplied = 0;
     m_priorHangingProtocolApplied = 0;
 }
 
 void LayoutManager::setCurrentHangingProtocol(int hangingProtocolNumber)
 {
-    QRectF geometry = (!m_priorStudy)? QRectF(0.0, 0.0, 1.0, 1.0) : QRectF(0.0, 0.0, 0.5, 1.0);
+    QRectF geometry = (!m_priorStudy)? WholeGeometry : LeftHalfGeometry;
 
     m_currentHangingProtocolApplied = setHangingProtocol(hangingProtocolNumber, m_currentStudyHangingProtocolCandidates, geometry);
 
     if (m_combinedHangingProtocolApplied)
     {
         m_combinedHangingProtocolApplied = 0;
-
-        QRectF priorStudyLayoutGeometry(0.5, 0.0, 0.5, 1.0);
-
-        m_priorHangingProtocolApplied = applyProperLayoutChoice(m_priorStudy, m_priorStudyHangingProtocolCandidates, priorStudyLayoutGeometry);
+        m_priorHangingProtocolApplied = applyProperLayoutChoice(m_priorStudy, m_priorStudyHangingProtocolCandidates, RightHalfGeometry);
     }
 }
 
 void LayoutManager::setPriorHangingProtocol(int hangingProtocolNumber)
 {
-    m_priorHangingProtocolApplied = setHangingProtocol(hangingProtocolNumber, m_priorStudyHangingProtocolCandidates, QRectF(0.5, 0.0, 0.5, 1.0));
+    m_priorHangingProtocolApplied = setHangingProtocol(hangingProtocolNumber, m_priorStudyHangingProtocolCandidates, RightHalfGeometry);
 
     if (m_combinedHangingProtocolApplied)
     {
         m_combinedHangingProtocolApplied = 0;
-
-        QRectF currentStudyLayoutGeometry = QRectF(0.0, 0.0, 0.5, 1.0);
-
-        // Set hanging or auto layout for current study
-        m_currentHangingProtocolApplied = applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, currentStudyLayoutGeometry);
+        m_currentHangingProtocolApplied = applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, LeftHalfGeometry);
     }
 }
 
