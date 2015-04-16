@@ -189,6 +189,18 @@ QRectF ViewersLayout::convertGeometry(const QRectF &viewerGeometry, const QRectF
     return QRectF(viewerGeometry.x() * incWidth + incX, viewerGeometry.y() * incHeight + incY, viewerGeometry.width() * incWidth, viewerGeometry.height() * incHeight);
 }
 
+QRectF ViewersLayout::getGeometryOfViewer(Q2DViewerWidget *viewer) const
+{
+    if (m_maximizedViewers.contains(viewer))
+    {
+        return m_maximizedViewers[viewer].normalGeometry;
+    }
+    else
+    {
+        return m_layout->geometry(viewer);
+    }
+}
+
 Q2DViewerWidget* ViewersLayout::addViewer(const QRectF &geometry)
 {
     Q2DViewerWidget *newViewer = getNewQ2DViewerWidget();
