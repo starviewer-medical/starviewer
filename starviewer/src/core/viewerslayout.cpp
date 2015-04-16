@@ -125,8 +125,7 @@ void ViewersLayout::setGrid(int rows, int columns)
 
 void ViewersLayout::setGridInArea(int rows, int columns, const QRectF &geometry)
 {
-    // Clean maximization data
-    m_maximizedViewers.clear();
+    demaximizeViewersIntersectingGeometry(geometry);
 
     QList<Q2DViewerWidget*> viewers = getViewersInsideGeometry(geometry);
 
@@ -283,6 +282,8 @@ void ViewersLayout::cleanUp()
 
 void ViewersLayout::cleanUp(const QRectF &geometry)
 {
+    demaximizeViewersIntersectingGeometry(geometry);
+
     // No hi ha cap visor seleccionat
     setSelectedViewer(0);
 
@@ -296,9 +297,6 @@ void ViewersLayout::cleanUp(const QRectF &geometry)
         m_layout->removeWidget(viewer);
         deleteQ2DViewerWidget(viewer);
     }
-
-    // Clean maximization data
-    m_maximizedViewers.clear();
 }
 
 int ViewersLayout::getNumberOfViewers() const
@@ -337,6 +335,17 @@ void ViewersLayout::showViewer(Q2DViewerWidget *viewer)
     {
         viewer->show();
         emit viewerShown(viewer);
+    }
+}
+
+void ViewersLayout::demaximizeViewersIntersectingGeometry(const QRectF &geometry)
+{
+    foreach (Q2DViewerWidget *viewer, m_maximizedViewers.keys())
+    {
+        if (m_layout->geometry(viewer).intersects(geometry))
+        {
+            toggleMaximization(viewer);
+        }
     }
 }
 

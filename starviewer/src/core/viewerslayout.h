@@ -108,6 +108,9 @@ private:
     /// Performs the needed actions to show the given viewer of the current layout
     void showViewer(Q2DViewerWidget *viewer);
 
+    /// Demaximized maximized viewers that overlap with the given geometry.
+    void demaximizeViewersIntersectingGeometry(const QRectF &geometry);
+
 private:
     RelativeGeometryLayout *m_layout;
 
