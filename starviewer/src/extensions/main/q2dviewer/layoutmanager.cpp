@@ -109,9 +109,9 @@ void LayoutManager::setGrid(int rows, int columns)
     }
     else
     {
-        QRectF selectedViewerGeometry = m_layout->getSelectedViewer()->geometry();
+        QRectF selectedViewerGeometry = m_layout->getGeometryOfViewer(m_layout->getSelectedViewer());
 
-        if (LeftHalfGeometry.contains(selectedViewerGeometry.topLeft()))
+        if (LeftHalfGeometry.contains(selectedViewerGeometry))
         {
             m_currentHangingProtocolApplied = 0;
             applyLayoutCandidates(getLayoutCandidates(m_currentStudy), m_currentStudy, LeftHalfGeometry, rows, columns);

@@ -61,6 +61,10 @@ public:
 
     QRectF convertGeometry(const QRectF &viewerGeometry, const QRectF &newGeometry);
 
+    /// Returns the relative geometry of the given viewer in its normal (i.e. not maximized) state.
+    /// If the given viewer is not in this ViewersLayout, returns a null QRectF.
+    QRectF getGeometryOfViewer(Q2DViewerWidget *viewer) const;
+
     /// Return viewers located inside the given geometry.
     QList<Q2DViewerWidget *> getViewersInsideGeometry(const QRectF &geometry);
 
