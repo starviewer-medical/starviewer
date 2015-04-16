@@ -161,7 +161,7 @@ void QRelatedStudiesWidget::initializeTree()
 
     // Inicialitzem la capçalera
     QStringList labels;
-    labels << "Current" << "Prior" << "" << "" << tr("Modality") << tr("Description") << tr("Date") << tr("Name");
+    labels << tr("Current") << tr("Prior") << "" << "" << tr("Modality") << tr("Description") << tr("Date") << tr("Name");
     m_relatedStudiesTree->setHeaderLabels(labels);
 
     // Fem 8 columnes perquè la primera l'amagarem
