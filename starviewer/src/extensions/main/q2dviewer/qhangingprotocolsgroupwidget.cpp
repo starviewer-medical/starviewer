@@ -70,6 +70,21 @@ void QHangingProtocolsGroupWidget::setItems(const QList<HangingProtocol*> &hangi
     adjustSize();
 }
 
+void QHangingProtocolsGroupWidget::setActiveItem(HangingProtocol *activeHangingProtocol)
+{
+    foreach (ItemMenu *item, m_itemList)
+    {
+        if (activeHangingProtocol && activeHangingProtocol->getIdentifier() == item->getData().toInt())
+        {
+            item->setSelected(true);
+        }
+        else
+        {
+            item->setSelected(false);
+        }
+    }
+}
+
 ItemMenu* QHangingProtocolsGroupWidget::createItem(const HangingProtocol *hangingProtocol)
 {
     ItemMenu *item = new ItemMenu(this);

@@ -38,6 +38,16 @@ public slots:
     /// Posa els hanging protocols que ha de representar el menú
     void setHangingItems(const QList<HangingProtocol*> &listOfCandidates);
 
+    /// Marks the item corresponding to the given combined hanging protocol as active and the other combined items as inactive.
+    /// If the parameter is null all combined items are marked as inactive.
+    void setActiveCombinedHangingProtocol(HangingProtocol *HangingProtocol);
+    /// Marks the item corresponding to the given current hanging protocol as active and the other current items as inactive.
+    /// If the parameter is null all current items are marked as inactive.
+    void setActiveCurrentHangingProtocol(HangingProtocol *hangingProtocol);
+    /// Marks the item corresponding to the given prior hanging protocol as active and the other prior items as inactive.
+    /// If the parameter is null all prior items are marked as inactive.
+    void setActivePriorHangingProtocol(HangingProtocol *hangingProtocol);
+
 signals:
     /// Emitted when a combined hanging protocol has been selected.
     void selectedCombined(int);

@@ -73,6 +73,13 @@ signals:
     /// Emits this signal when new hanging protocols are found for the current patient
     void hangingProtocolCandidatesFound(const QList<HangingProtocol*> &combined, const QList<HangingProtocol*> &current, const QList<HangingProtocol*> &prior);
 
+    /// Emitted when the active combined hanging protocol has changed.
+    void activeCombinedHangingProtocolChanged(HangingProtocol*);
+    /// Emitted when the active current hanging protocol has changed.
+    void activeCurrentHangingProtocolChanged(HangingProtocol*);
+    /// Emitted when the active prior hanging protocol has changed.
+    void activePriorHangingProtocolChanged(HangingProtocol*);
+
 private:
     /// True if current study has at least one modality with hanging protocol priority configured over automatic layouts, false otherwise.
     bool hasStudyAnyModalityWithHangingProtocolPriority(Study *study);
@@ -117,6 +124,13 @@ private:
                                                                        QList<HangingProtocol*> &hangingProtocolCandidates,
                                                                        void (LayoutManager::* &setHangingProtocol)(int)) const;
 
+    /// Private setter for m_combinedHangingProtocolApplied. Use this instead of changing its value directly.
+    void setCombinedHangingProtocolApplied(HangingProtocol *activeCombinedHangingProtocolChanged);
+    /// Private setter for m_currentHangingProtocolApplied. Use this instead of changing its value directly.
+    void setCurrentHangingProtocolApplied(HangingProtocol *activeCurrentHangingProtocolChanged);
+    /// Private setter for m_priorHangingProtocolApplied. Use this instead of changing its value directly.
+    void setPriorHangingProtocolApplied(HangingProtocol *activePriorHangingProtocolChanged);
+
 private:
     /// Patient for the layout
     Patient *m_patient;
@@ -136,11 +150,11 @@ private:
     QList<HangingProtocol*> m_priorStudyHangingProtocolCandidates;
     QList<HangingProtocol*> m_combinedHangingProtocolCandidates;
 
-    /// Current hanging protocol applied
+    /// Current hanging protocol applied. Don't change its value directly, use setCurrentHangingProtocolApplied() instead.
     HangingProtocol *m_currentHangingProtocolApplied;
-    /// Prior hanging protocol applied
+    /// Prior hanging protocol applied. Don't change its value directly, use setPriorHangingProtocolApplied() instead.
     HangingProtocol *m_priorHangingProtocolApplied;
-    /// Combined hanging protocol applied
+    /// Combined hanging protocol applied. Don't change its value directly, use setCombinedHangingProtocolApplied() instead.
     HangingProtocol *m_combinedHangingProtocolApplied;
 
 };

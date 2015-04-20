@@ -64,6 +64,9 @@ protected:
     /// Atribut que informa si s'ha de quedar seleccionat o s'ha de deseleccionar
     bool m_fixed;
 
+    /// True if the item is selected and false otherwise.
+    bool m_selected;
+
 };
 
 }
