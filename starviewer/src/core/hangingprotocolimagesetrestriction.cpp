@@ -149,6 +149,10 @@ bool HangingProtocolImageSetRestriction::test(const Image *image) const
     {
         return image->getParentSeries()->getFirstVolume()->getImages().size() >= getSelectorValue().toInt();
     }
+    else if (getSelectorAttribute() == "SeriesDescription")
+    {
+        return image->getParentSeries()->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
+    }
 
     return true;
 }
