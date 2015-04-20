@@ -1,29 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="GeneralCT_4">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol version="2" name="GeneralCT_4">
     <hangingProtocolName>CT</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <allDifferent>yes</allDifferent>
     <protocol>CT</protocol>
     <restriction identifier="1">
-        <usageFlag>NO_MATCH</usageFlag>
         <selectorAttribute>ImageType</selectorAttribute>
-        <valueRepresentation>LOCALIZER</valueRepresentation>
+        <selectorValue>LOCALIZER</selectorValue>
     </restriction>
     <imageSet identifier="1">
-        <restriction>1</restriction>
         <type>image</type>
+        <restrictionExpression>not 1</restrictionExpression>
     </imageSet>
     <imageSet identifier="2">
-        <restriction>1</restriction>
         <type>image</type>
+        <restrictionExpression>not 1</restrictionExpression>
     </imageSet>
     <imageSet identifier="3">
-        <restriction>1</restriction>
         <type>image</type>
+        <restrictionExpression>not 1</restrictionExpression>
     </imageSet>
     <imageSet identifier="4">
-        <restriction>1</restriction>
         <type>image</type>
+        <restrictionExpression>not 1</restrictionExpression>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>

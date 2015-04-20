@@ -49,13 +49,24 @@ public:
 
     /// Fa un layout regular amb les files i columnes indicades
     void setGrid(int rows, int columns);
+    void setGridInArea(int rows, int columns, const QRectF &geometry);
 
     /// Afegeix un nou visualitzador amb la geometria indicada
-    Q2DViewerWidget* addViewer(const QString &geometry);
+    Q2DViewerWidget* addViewer(const QRectF &geometry);
 
     /// Neteja el layout, eliminant tots els visors i geometries,
     /// deixant-lo en l'estat inicial, com si acabéssim de crear l'objecte
     void cleanUp();
+    void cleanUp(const QRectF &geometry);
+
+    QRectF convertGeometry(const QRectF &viewerGeometry, const QRectF &newGeometry);
+
+    /// Returns the relative geometry of the given viewer in its normal (i.e. not maximized) state.
+    /// If the given viewer is not in this ViewersLayout, returns a null QRectF.
+    QRectF getGeometryOfViewer(Q2DViewerWidget *viewer) const;
+
+    /// Return viewers located inside the given geometry.
+    QList<Q2DViewerWidget *> getViewersInsideGeometry(const QRectF &geometry);
 
 public slots:
     /// Marquem com a seleccionat el viewer passat per paràmetre
@@ -92,11 +103,8 @@ private:
 
     /// Coloca el viewer donat en la posició i mides proporcionats
     /// @param viewer Visor que volem posicionar i ajustar dins del layout
-    /// @param geometry String amb les posicions i mides realitives corresponents al viewer
-    /// El format de geometry seran les coordenades x,y de la cantonada esquerra superior i
-    /// ample i alçada del visor, expresats com a valors dins del rang 0.0..1.0. Cada valor anirà separat per '\\'
-    /// Per exemple, un viewer que ocupa la meitat de la pantalla s'expressaria amb un string "0\\0\\0.5\\1.0"
-    void setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry);
+    /// @param geometry amb les posicions i mides realitives corresponents al viewer
+    void setViewerGeometry(Q2DViewerWidget *viewer, const QRectF &geometry);
 
     /// Fa les accions necessàries per amagar el viewer indicat del layout actual
     void hideViewer(Q2DViewerWidget *viewer);
@@ -104,14 +112,14 @@ private:
     /// Performs the needed actions to show the given viewer of the current layout
     void showViewer(Q2DViewerWidget *viewer);
 
+    /// Demaximized maximized viewers that overlap with the given geometry.
+    void demaximizeViewersIntersectingGeometry(const QRectF &geometry);
+
 private:
     RelativeGeometryLayout *m_layout;
 
     /// Visualitzador selecciona. Sempre en tindrem un.
     Q2DViewerWidget *m_selectedViewer;
-
-    /// Stores hidden viewers for later reuse.
-    QStack<Q2DViewerWidget*> m_hiddenViewers;
 
     /// This struct holds the information needed to demaximize a maximized viewer.
     struct MaximizationData

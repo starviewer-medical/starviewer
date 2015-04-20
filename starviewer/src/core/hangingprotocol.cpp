@@ -23,98 +23,54 @@
 
 namespace udg {
 
-HangingProtocol::HangingProtocol(QObject *parent)
- : QObject(parent)
+HangingProtocol::HangingProtocol()
 {
     m_layout = new HangingProtocolLayout();
     m_mask = new HangingProtocolMask();
     m_strictness = false;
-    m_allDiferent = false;
-    m_hasPrevious = false;
-    m_priority = -1;
+    m_allDifferent = false;
+    m_numberOfPriors = 0;
+    m_priority = 1;
 }
 
-HangingProtocol::HangingProtocol(const HangingProtocol *hangingProtocol)
+HangingProtocol::HangingProtocol(const HangingProtocol &hangingProtocol)
+    : m_identifier(hangingProtocol.m_identifier), m_name(hangingProtocol.m_name),
+      m_institutionsRegularExpression(hangingProtocol.m_institutionsRegularExpression), m_strictness(hangingProtocol.m_strictness),
+      m_allDifferent(hangingProtocol.m_allDifferent), m_iconType(hangingProtocol.m_iconType), m_numberOfPriors(hangingProtocol.m_numberOfPriors),
+      m_priority(hangingProtocol.m_priority)
 {
-    m_identifier = hangingProtocol->m_identifier;
-    m_name = hangingProtocol->m_name;
-    m_description = hangingProtocol->m_description;
-    m_strictness = hangingProtocol->m_strictness;
-    m_allDiferent = hangingProtocol->m_allDiferent;
-    m_iconType = hangingProtocol->m_iconType;
-    m_hasPrevious = hangingProtocol->m_hasPrevious;
-    m_priority = hangingProtocol->m_priority;
-    m_institutionsRegularExpression = hangingProtocol->getInstitutionsRegularExpression();
+    m_layout = new HangingProtocolLayout(*hangingProtocol.m_layout);
+    m_mask = new HangingProtocolMask(*hangingProtocol.m_mask);
 
-    // Copia del layout
-    m_layout = new HangingProtocolLayout();
-    m_layout->setDisplayEnvironmentSpatialPositionList(hangingProtocol->m_layout->getDisplayEnvironmentSpatialPositionList());
-    m_layout->setHorizontalPixelsList(hangingProtocol->m_layout->getHorizontalPixelsList());
-    m_layout->setNumberOfScreens(hangingProtocol->m_layout->getNumberOfScreens());
-    m_layout->setVerticalPixelsList(hangingProtocol->m_layout->getVerticalPixelsList());
-
-    // Copia de la mascara
-    m_mask = new HangingProtocolMask();
-    m_mask->setProtocolsList(hangingProtocol->m_mask->getProtocolList());
-
-    foreach (HangingProtocolImageSet *imageSet, hangingProtocol->m_listOfImageSets)
+    foreach (HangingProtocolImageSet *imageSet, hangingProtocol.m_imageSets)
     {
-        HangingProtocolImageSet *copiedImageSet = new HangingProtocolImageSet();
-        copiedImageSet->setRestrictions(imageSet->getRestrictions());
-        copiedImageSet->setIdentifier(imageSet->getIdentifier());
-        copiedImageSet->setTypeOfItem(imageSet->getTypeOfItem());
-        copiedImageSet->setSeriesToDisplay(imageSet->getSeriesToDisplay());
-        copiedImageSet->setImageToDisplay(imageSet->getImageToDisplay());
-        copiedImageSet->setIsPreviousStudy(imageSet->isPreviousStudy());
-        copiedImageSet->setDownloaded(imageSet->isDownloaded());
-        copiedImageSet->setPreviousStudyToDisplay(imageSet->getPreviousStudyToDisplay());
-        copiedImageSet->setPreviousImageSetReference(imageSet->getPreviousImageSetReference());
-        copiedImageSet->setImageNumberInPatientModality(imageSet->getImageNumberInPatientModality());
+        HangingProtocolImageSet *copiedImageSet = new HangingProtocolImageSet(*imageSet);
         copiedImageSet->setHangingProtocol(this);
-        m_listOfImageSets.append(copiedImageSet);
+        m_imageSets[copiedImageSet->getIdentifier()] = copiedImageSet;
     }
 
-    foreach (HangingProtocolDisplaySet *displaySet, hangingProtocol->m_listOfDisplaySets)
+    foreach (HangingProtocolDisplaySet *displaySet, hangingProtocol.m_displaySets)
     {
-        HangingProtocolDisplaySet *copiedDisplaySet = new HangingProtocolDisplaySet();
-        copiedDisplaySet->setIdentifier(displaySet->getIdentifier());
-        copiedDisplaySet->setDescription(displaySet->getDescription());
-        copiedDisplaySet->setPosition(displaySet->getPosition());
-        copiedDisplaySet->setPatientOrientation(displaySet->getPatientOrientation());
-        copiedDisplaySet->setReconstruction(displaySet->getReconstruction());
-        copiedDisplaySet->setPhase(displaySet->getPhase());
-        copiedDisplaySet->setSlice(displaySet->getSlice());
-        copiedDisplaySet->setIconType(displaySet->getIconType());
-        copiedDisplaySet->setAlignment(displaySet->getAlignment());
-        copiedDisplaySet->setToolActivation(displaySet->getToolActivation());
+        HangingProtocolDisplaySet *copiedDisplaySet = new HangingProtocolDisplaySet(*displaySet);
         copiedDisplaySet->setHangingProtocol(this);
         copiedDisplaySet->setImageSet(this->getImageSet(displaySet->getImageSet()->getIdentifier()));
-        copiedDisplaySet->setWindowWidth(displaySet->getWindowWidth());
-        copiedDisplaySet->setWindowCenter(displaySet->getWindowCenter());
-        m_listOfDisplaySets.append(copiedDisplaySet);
+        m_displaySets[copiedDisplaySet->getIdentifier()] = copiedDisplaySet;
     }
-
 }
 
 HangingProtocol::~HangingProtocol()
 {
-    foreach (HangingProtocolImageSet *imageSet, m_listOfImageSets)
+    foreach (HangingProtocolImageSet *imageSet, m_imageSets)
     {
-        if (imageSet)
-        {
-            delete imageSet;
-        }
+        delete imageSet;
     }
-    m_listOfImageSets.clear();
+    m_imageSets.clear();
 
-    foreach (HangingProtocolDisplaySet *displaySet, m_listOfDisplaySets)
+    foreach (HangingProtocolDisplaySet *displaySet, m_displaySets)
     {
-        if (displaySet)
-        {
-            delete displaySet;
-        }
+        delete displaySet;
     }
-    m_listOfDisplaySets.clear();
+    m_displaySets.clear();
 
     delete m_layout;
     delete m_mask;
@@ -130,12 +86,12 @@ QString HangingProtocol::getName() const
     return m_name;
 }
 
-HangingProtocolLayout* HangingProtocol::getHangingProtocolLayout()
+HangingProtocolLayout* HangingProtocol::getHangingProtocolLayout() const
 {
     return m_layout;
 }
 
-HangingProtocolMask* HangingProtocol::getHangingProtocolMask()
+HangingProtocolMask* HangingProtocol::getHangingProtocolMask() const
 {
     return m_mask;
 }
@@ -157,74 +113,44 @@ void HangingProtocol::setProtocolsList(const QStringList &protocols)
 
 void HangingProtocol::addImageSet(HangingProtocolImageSet *imageSet)
 {
-    m_listOfImageSets.push_back(imageSet);
+    m_imageSets[imageSet->getIdentifier()] = imageSet;
     imageSet->setHangingProtocol(this);
 }
 
 void HangingProtocol::addDisplaySet(HangingProtocolDisplaySet *displaySet)
 {
-    m_listOfDisplaySets.push_back(displaySet);
+    m_displaySets[displaySet->getIdentifier()] = displaySet;
     displaySet->setHangingProtocol(this);
 }
 
 int HangingProtocol::getNumberOfImageSets() const
 {
-    return m_listOfImageSets.size();
+    return m_imageSets.size();
 }
 
 int HangingProtocol::getNumberOfDisplaySets() const
 {
-    return m_listOfDisplaySets.size();
+    return m_displaySets.size();
 }
 
 QList<HangingProtocolImageSet*> HangingProtocol::getImageSets() const
 {
-    return m_listOfImageSets;
+    return m_imageSets.values();
 }
 
 QList<HangingProtocolDisplaySet*> HangingProtocol::getDisplaySets() const
 {
-    return m_listOfDisplaySets;
+    return m_displaySets.values();
 }
 
-HangingProtocolImageSet* HangingProtocol::getImageSet(int identifier)
+HangingProtocolImageSet* HangingProtocol::getImageSet(int identifier) const
 {
-    HangingProtocolImageSet *imageSet = 0;
-    bool found = false;
-    int i = 0;
-    int numberOfImageSets = m_listOfImageSets.size();
-
-    while (!found && i < numberOfImageSets)
-    {
-        if (m_listOfImageSets.value(i)->getIdentifier() == identifier)
-        {
-            found = true;
-            imageSet = m_listOfImageSets.value(i);
-        }
-        i++;
-    }
-
-    return imageSet;
+    return m_imageSets[identifier];
 }
 
 HangingProtocolDisplaySet* HangingProtocol::getDisplaySet(int identifier) const
 {
-    HangingProtocolDisplaySet *displaySet = 0;
-    bool found = false;
-    int i = 0;
-    int numberOfDisplaySets = m_listOfDisplaySets.size();
-
-    while (!found && i < numberOfDisplaySets)
-    {
-        if (m_listOfDisplaySets.value(i)->getIdentifier() == identifier)
-        {
-            found = true;
-            displaySet = m_listOfDisplaySets.value(i);
-        }
-        i++;
-    }
-
-    return displaySet;
+    return m_displaySets[identifier];
 }
 
 void HangingProtocol::setInstitutionsRegularExpression(const QRegExp &institutionRegularExpression)
@@ -237,10 +163,9 @@ QRegExp HangingProtocol::getInstitutionsRegularExpression() const
     return m_institutionsRegularExpression;
 }
 
-void HangingProtocol::show()
+void HangingProtocol::show() const
 {
-    DEBUG_LOG(QString("\n---- HANGING PROTOCOL ----\n Name: %1\nDescription: %2\n").arg(m_name).arg(
-              m_description));
+    DEBUG_LOG(QString("\n---- HANGING PROTOCOL ----\n Name: %1\n").arg(m_name));
 
     DEBUG_LOG("List of protocols: \n");
     for (int i = 0; i < m_mask->getProtocolList().size(); i++)
@@ -252,16 +177,16 @@ void HangingProtocol::show()
 
     DEBUG_LOG("List of image sets: \n");
 
-    for (int i = 0; i < m_listOfImageSets.size(); i++)
+    foreach (HangingProtocolImageSet *imageSet, m_imageSets)
     {
-        m_listOfImageSets.value(i)->show();
+        imageSet->show();
     }
 
     DEBUG_LOG("List of display sets: \n");
 
-    for (int i = 0; i < m_listOfDisplaySets.size(); i++)
+    foreach (HangingProtocolDisplaySet *displaySet, m_displaySets)
     {
-        m_listOfDisplaySets.value(i)->show();
+        displaySet->show();
     }
 }
 
@@ -275,57 +200,45 @@ int HangingProtocol::getIdentifier() const
     return m_identifier;
 }
 
-bool HangingProtocol::isBetterThan(HangingProtocol *hangingToCompare)
+bool HangingProtocol::isBetterThan(const HangingProtocol *hangingToCompare) const
 {
     if (hangingToCompare == NULL)
     {
         return true;
     }
 
+    // 1. Choose greatest priority
     if (this->getPriority() != hangingToCompare->getPriority())
     {
-        if (this->getPriority() != -1 && hangingToCompare->getPriority() != -1)
-        {
-            // Si tots 2 tenen prioritat definida els fem competir
-            return this->getPriority() > hangingToCompare->getPriority();
-        }
-        else
-        {
-            // Si un des 2 hangings no té la prioritat definida, la prioritat només serveix
-            // per dir si un hanging ha de ser el més o el menys aconsellat.
-            if (this->getPriority() == 10 || hangingToCompare->getPriority() == 0)
-            {
-                return true;
-            }
-
-            if (this->getPriority() == 0 || hangingToCompare->getPriority() == 10)
-            {
-                return false;
-            }
-        }
+        return this->getPriority() > hangingToCompare->getPriority();
     }
 
-    if (this->countFilledDisplaySets() == hangingToCompare->countFilledDisplaySets())
+    int thisFilledImageSets = this->countFilledImageSets();
+    int thatFilledImageSets = hangingToCompare->countFilledImageSets();
+
+    // 2. Choose greatest number of image sets with image
+    if (thisFilledImageSets != thatFilledImageSets)
     {
-        if (this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() == hangingToCompare->countFilledDisplaySets() /
-           (double)hangingToCompare->getNumberOfDisplaySets())
-        {
-            if (this->getNumberOfImageSets() != hangingToCompare->getNumberOfImageSets())
-            {
-                return (this->getNumberOfImageSets() > hangingToCompare->getNumberOfImageSets());
-            }
-        }
-        else
-        {
-            return this->countFilledDisplaySets() / (double)this->getNumberOfDisplaySets() > hangingToCompare->countFilledDisplaySets() /
-                   (double)hangingToCompare->getNumberOfDisplaySets();
-        }
-    }
-    else
-    {
-        return (this->countFilledDisplaySets() > hangingToCompare->countFilledDisplaySets());
+        return thisFilledImageSets > thatFilledImageSets;
     }
 
+    int thisFilledDisplaySets = this->countFilledDisplaySets();
+    int thatFilledDisplaySets = hangingToCompare->countFilledDisplaySets();
+
+    // 3. Choose greatest number of display sets with image
+    if (thisFilledDisplaySets != thatFilledDisplaySets)
+    {
+        return thisFilledDisplaySets > thatFilledDisplaySets;
+    }
+
+    // 4. Choose greatest ratio of display sets with image, i.e. least number of empty display sets
+    //    Since the number of display sets with image is the same, this is equivalent to least number of display sets
+    if (this->getNumberOfDisplaySets() != hangingToCompare->getNumberOfDisplaySets())
+    {
+        return this->getNumberOfDisplaySets() < hangingToCompare->getNumberOfDisplaySets();
+    }
+
+    // 5. Choose the other
     return false;
 }
 
@@ -334,7 +247,21 @@ int HangingProtocol::countFilledImageSets() const
     int count = 0;
     foreach (HangingProtocolImageSet *imageSet, this->getImageSets())
     {
-        if (imageSet->getSeriesToDisplay())
+        if (imageSet->getSeriesToDisplay() || imageSet->getPreviousStudyToDisplay())
+        {
+            count++;
+        }
+    }
+
+    return count;
+}
+
+int HangingProtocol::countFilledImageSetsWithPriors() const
+{
+    int count = 0;
+    foreach (HangingProtocolImageSet *imageSet, this->getImageSets())
+    {
+        if (imageSet->getAbstractPriorValue() != 0 && (imageSet->getSeriesToDisplay() || imageSet->getPreviousStudyToDisplay()))
         {
             count++;
         }
@@ -377,14 +304,14 @@ void HangingProtocol::setStrictness(bool strictness)
     m_strictness = strictness;
 }
 
-void HangingProtocol::setAllDiferent(bool allDiferent)
+void HangingProtocol::setAllDifferent(bool allDifferent)
 {
-    m_allDiferent = allDiferent;
+    m_allDifferent = allDifferent;
 }
 
-bool HangingProtocol::getAllDiferent() const
+bool HangingProtocol::getAllDifferent() const
 {
-    return m_allDiferent;
+    return m_allDifferent;
 }
 
 void HangingProtocol::setIconType(const QString &iconType)
@@ -397,14 +324,14 @@ QString HangingProtocol::getIconType() const
     return m_iconType;
 }
 
-void HangingProtocol::setPrevious(bool isPrevious)
+void HangingProtocol::setNumberOfPriors(int numberOfPriors)
 {
-    m_hasPrevious = isPrevious;
+    m_numberOfPriors = numberOfPriors;
 }
 
-bool HangingProtocol::isPrevious() const
+int HangingProtocol::getNumberOfPriors() const
 {
-    return m_hasPrevious;
+    return m_numberOfPriors;
 }
 
 void HangingProtocol::setPriority(double priority)
@@ -417,15 +344,14 @@ double HangingProtocol::getPriority() const
     return m_priority;
 }
 
-bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol)
+bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol) const
 {
     bool hasSameAttributes = m_identifier == hangingProtocol.getIdentifier()
         && m_name == hangingProtocol.getName()
-        && m_description == hangingProtocol.m_description
         && m_strictness == hangingProtocol.isStrict()
-        && m_allDiferent == hangingProtocol.getAllDiferent()
+        && m_allDifferent == hangingProtocol.getAllDifferent()
         && m_iconType == hangingProtocol.getIconType()
-        && m_hasPrevious == hangingProtocol.isPrevious()
+        && m_numberOfPriors == hangingProtocol.getNumberOfPriors()
         && m_priority == hangingProtocol.getPriority()
         && m_layout->getDisplayEnvironmentSpatialPositionList() == hangingProtocol.m_layout->getDisplayEnvironmentSpatialPositionList()
         && m_layout->getHorizontalPixelsList() == hangingProtocol.m_layout->getHorizontalPixelsList()
@@ -448,10 +374,9 @@ bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol)
             && imageSet->getTypeOfItem() == imageSetToCompare->getTypeOfItem()
             && imageSet->getSeriesToDisplay() == imageSetToCompare->getSeriesToDisplay()
             && imageSet->getImageToDisplay() == imageSetToCompare->getImageToDisplay()
-            && imageSet->isPreviousStudy() == imageSetToCompare->isPreviousStudy()
             && imageSet->isDownloaded() == imageSetToCompare->isDownloaded()
             && imageSet->getPreviousStudyToDisplay() == imageSetToCompare->getPreviousStudyToDisplay()
-            && imageSet->getImageNumberInPatientModality() == imageSetToCompare->getImageNumberInPatientModality();
+            && imageSet->getImageNumberInStudyModality() == imageSetToCompare->getImageNumberInStudyModality();
 
         imageSetNumber++;
     }

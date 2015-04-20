@@ -46,26 +46,19 @@ public:
     ~HangingProtocolManager();
 
     /// Buscar els hanging protocols disponibles
-    QList<HangingProtocol*> searchHangingProtocols(Patient *patient);
-    QList<HangingProtocol*> searchHangingProtocols(Patient *patient, const QList<Study*> &previousStudies);
+    QList<HangingProtocol*> searchHangingProtocols(Study *study);
+    QList<HangingProtocol*> searchHangingProtocols(Study *study, const QList<Study*> &previousStudies);
 
     /// Aplica un hanging protocol concret
     void applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient);
+    void applyHangingProtocol(HangingProtocol *hangingProtocol, ViewersLayout *layout, Patient *patient, const QRectF &geometry);
 
     /// Aplica el millor hanging protocol de la llista donada
-    HangingProtocol* setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout);
+    HangingProtocol* setBestHangingProtocol(Patient *patient, const QList<HangingProtocol*> &hangingProtocolList, ViewersLayout *layout, const QRectF &geometry);
 
     /// Si hi havia estudis en descàrrega, s'elimina de la llista
-    void cancelHangingProtocolDownloading();
-
-    /// Returns true if the given study corresponds to a previous study fetched by a hanging protocol with previous, false otherwise
-    bool isPreviousStudyForHangingProtocol(Study *study);
-
-signals:
-    /// Emits the study UID of a study requested by a hanging protocol which no longer needs it because it's not going to be applied for some reason
-    /// This will happen when a hanging protocol requests to download a previous study and before it is applied
-    /// another hanging protocol is applied or it is explicitly cancelled
-    void discardedStudy(QString);
+    void cancelAllHangingProtocolsDownloading();
+    void cancelHangingProtocolDownloading(HangingProtocol *hangingProtocol);
 
 protected:
 
@@ -81,41 +74,23 @@ private slots:
     void previousStudyDownloaded(Study *study);
 
     /// Slot que comprova si l'error a la descarrega d'un estudi és un dels que s'estava esperan
-    void errorDowlonadingPreviousStudies(const QString &studyUID);
+    void errorDownloadingPreviousStudies(const QString &studyUID);
 
 private:
     /// Mira si el protocol es pot aplicar al pacient
-    bool isModalityCompatible(HangingProtocol *protocol, Patient *patient);
+    bool isModalityCompatible(HangingProtocol *protocol, Study *study);
 
     /// Mira si la modalitat és compatible amb el protocol
     bool isModalityCompatible(HangingProtocol *protocol, const QString &modality);
 
     /// Mira si la institució és compatible amb el protocol
-    bool isInstitutionCompatible(HangingProtocol *protocol, Patient *patient);
-
-    /// Busca la sèrie corresponent dins un grup de sèries. Si el booleà quitStudy és cert, a més, l'eliminarà del conjunt
-    Series* searchSerie(QList<Series*> &seriesList, HangingProtocolImageSet *imageSet, bool quitStudy);
-
-    /// Cert si la imatge compleix les restriccions
-    bool isValidImage(Image *image, HangingProtocolImageSet *imageSet);
-
-    /// Cert si la sèrie compleix les restriccions de l'imageSet, fals altrament
-    bool isValidSerie(Series *serie, HangingProtocolImageSet *imageSet);
+    bool isInstitutionCompatible(HangingProtocol *protocol, Study *study);
 
     /// Comprova si el protocol és aplicable a la institució. Si el protocol no té expressió regular per institució és aplicable
     bool isValidInstitution(HangingProtocol *protocol, const QString &institutionName);
 
     /// Mètode encarregat d'assignar l'input al viewer a partir de les especificacions del displaySet+imageSet.
-    void setInputToViewer(Q2DViewerWidget *viewerWidget, Series *series, HangingProtocolDisplaySet *displaySet);
-
-    /// Buscar els estudis previs
-    Study* searchPreviousStudy(HangingProtocol *protocol, Study *referenceStudy, const QList<Study*> &previousStudies);
-
-    /// Assigna una sèrie (i una imatge) vàlida a cada ImageSet. Retorna el número d'ImageSets que tenen input assignat.
-    int setInputToHangingProtocolImageSets(HangingProtocol *hangingProtocol, const QList<Series*> &inputSeries, const QList<Study*> &previousStudies);
-
-    /// Busca la imatge número index dins tots els estudis de la modalitat del hanging protocol
-    Image* getImageByIndexInPatientModality(Patient *patient, int index, QStringList hangingProtocolModalities);
+    void setInputToViewer(Q2DViewerWidget *viewerWidget, HangingProtocolDisplaySet *displaySet);
 
 private:
     /// Estructura per guardar les dades que es necessiten quan es rep que s'ha fusionat un pacient amb un nou estudi
@@ -128,7 +103,7 @@ private:
         HangingProtocolDisplaySet *displaySet;
     };
 
-    QMultiHash<QString, StructPreviousStudyDownloading*> *m_studiesDownloading;
+    QHash<HangingProtocol*, QMultiHash<QString, StructPreviousStudyDownloading*>*> *m_hangingProtocolsDownloading;
 
     /// Objecte utilitzat per descarregar estudis relacionats. No es fa servir QueryScreen per problemes de dependències entre carpetes.
     RelatedStudiesManager *m_relatedStudiesManager;

@@ -15,7 +15,7 @@
 #ifndef UDGHANGINGPROTOCOLIMAGESET_H
 #define UDGHANGINGPROTOCOLIMAGESET_H
 
-#include <QObject>
+#include "hangingprotocolimagesetrestrictionexpression.h"
 
 namespace udg {
 
@@ -23,25 +23,11 @@ class Series;
 class Study;
 class HangingProtocol;
 
-class HangingProtocolImageSet : public QObject {
-Q_OBJECT
+class HangingProtocolImageSet {
+
 public:
-    HangingProtocolImageSet(QObject *parent = 0);
+    HangingProtocolImageSet();
     ~HangingProtocolImageSet();
-
-    enum SelectorUsageFlag { Match, NoMatch };
-
-    struct Restriction
-    {
-        // Match o NoMatch
-        SelectorUsageFlag usageFlag;
-        // TAG
-        QString selectorAttribute;
-        // Valor del TAG
-        QString valueRepresentation;
-        // Només si el TAG és multivalor
-        int selectorValueNumber;
-    };
 
     /// Identificador de l'Image Set
     void setIdentifier(int identifier);
@@ -55,14 +41,10 @@ public:
     /// Obtenir el hanging protocol al que pertany
     HangingProtocol* getHangingProtocol() const;
 
-    /// Afegir una restricció
-    void addRestriction(Restriction restriction);
-
-    /// Assignar la llista de restriccions
-    void setRestrictions(const QList<Restriction> &restrictions);
-
-    /// Obtenir les restriccions
-    QList<Restriction> getRestrictions() const;
+    /// Returns the restriction expression of this image set.
+    const HangingProtocolImageSetRestrictionExpression& getRestrictionExpression() const;
+    /// Sets the restrction expression of this image set.
+    void setRestrictionExpression(const HangingProtocolImageSetRestrictionExpression &restrictionExpression);
 
     /// Posar el tipus d'element
     void setTypeOfItem(QString);
@@ -85,12 +67,6 @@ public:
     /// Mètode per mostrar els valors
     void show();
 
-    /// Metode per indicar si es un estudi previ o no
-    void setIsPreviousStudy(bool hasPreviousStudy);
-
-    /// Mètode per saber si te previs o no
-    bool isPreviousStudy();
-
     /// Mètode per posar si esta descarregat o no
     void setDownloaded(bool option);
 
@@ -103,21 +79,20 @@ public:
     /// Obte l'estudi previ a mostrar. Pot estar descarregat o no.
     Study* getPreviousStudyToDisplay();
 
-    /// Posa l'ImageSet del qual és previ
-    void setPreviousImageSetReference(int imageSetNumber);
-
-    /// Obté l'ImageSet del qual és previ
-    int getPreviousImageSetReference();
+    /// Returns the abstract prior value of this image set.
+    int getAbstractPriorValue() const;
+    /// Sets the abstract prior value of this image set.
+    void setAbstractPriorValue(int value);
 
     /// Obté l'índex de la imatge a mostrar dins la serie
-    int getImageNumberInPatientModality();
+    int getImageNumberInStudyModality();
 
     /// Posa l'índex de la imatge a mostar del pacient
-    void setImageNumberInPatientModality(int imageNumberInPatientModality);
+    void setImageNumberInStudyModality(int imageNumberInStudyModality);
 
 private:
-    /// Llista de restriccions que ha de complir l'Image Set
-    QList<Restriction> m_listOfRestrictions;
+    /// The restriction expression that this image set must satisfy.
+    HangingProtocolImageSetRestrictionExpression m_restrictionExpression;
 
     /// Identificador únic de l'Image Set
     int m_identifier;
@@ -137,10 +112,7 @@ private:
 
     /// Índex de la imatge dins l'estudi. Es coneix aquest número
     /// ja quan es crea el hanging protocol
-    int m_imageNumberInPatientModality;
-
-    /// Indica si conte un estudi previ
-    bool m_isPreviousStudy;
+    int m_imageNumberInStudyModality;
 
     /// Indica si esta o no descarregat
     bool m_downloaded;
@@ -148,8 +120,10 @@ private:
     /// Estudi previ a l'image set, sense descarregar
     Study *m_previousStudyToDisplay;
 
-    /// Posa l'image set que té de referencia i del qual ha de ser previ
-    int m_previousImageSetReference;
+    /// Identifies a prior image set in abstract terms. The value 0 shall indicate a current image set, 1 indicates the most recent prior and higher values
+    /// indicate successively older priors. The special value -1 shall indicate the oldest prior.
+    /// It's loosely based on the DICOM Abstract Prior Value (0072,003C).
+    int m_abstractPriorValue;
 
 };
 

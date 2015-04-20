@@ -32,37 +32,13 @@ StudyLayoutMapper::~StudyLayoutMapper()
 {
 }
 
-void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Patient *patient)
+void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study, const QRectF &geometry)
 {
-    if (!layout || !patient)
-    {
-        return;
-    }
+    applyConfig(config, layout, study, geometry, -1, -1);
+}
 
-    // Primer trobem els estudis que compleixin amb els requisits
-    QString configModality = config.getModality();
-    QList<Study*> matchingStudies;
-    if (configModality.isEmpty())
-    {
-        // If modality is empty it means "any modality", so we'll apply the layout to all the studies
-        matchingStudies = patient->getStudies();
-    }
-    else
-    {
-        // Applying only to studies where configuration's modality matches
-        matchingStudies = patient->getStudiesByModality(configModality);
-    }
-    
-    if (matchingStudies.isEmpty())
-    {
-        return;
-    }
-
-    // Procedim a aplicar el layout sobre els estudis que han coincidit
-    layout->cleanUp();
-    
-    // Un cop tenim els estudis, ara necessitem filtrar a nivell dels volums/imatges que necessitem
-    QList<QPair<Volume*, int> > candidateImages = getImagesToPlace(config, matchingStudies);
+QPair<int, int> StudyLayoutMapper::getOptimalViewersGrid(const StudyLayoutConfig &config, const QList<QPair<Volume *, int> > &candidateImages)
+{
     int numberOfMinimumViewersRequired = candidateImages.count();
 
     // Si el nombre màxim de visors per configuració és menor al nombre mínim de visors requerits, haurem d'actualitzar aquest paràmetre abans de crear el grid
@@ -77,14 +53,49 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
     // Ara ja sabem el nombre mínim de visors requerits, ara cal calcular quina és la distribució idònia en graella
     OptimalViewersGridEstimator gridEstimator;
     QPair<int, int> grid = gridEstimator.getOptimalGrid(numberOfMinimumViewersRequired);
-    // Assignem el grid al layout
-    int rows = grid.first;
-    int columns = grid.second;
-    layout->setGrid(rows, columns);
+
+    return grid;
+}
+
+void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study, const QRectF &geometry, int rows, int columns)
+{
+    if (!layout || !study)
+    {
+        return;
+    }
+
+    // Primer trobem els estudis que compleixin amb els requisits
+    QString configModality = config.getModality();
+    QList<Study*> matchingStudies;
+    if (configModality.isEmpty() || study->getModalities().contains(configModality))
+    {
+        // If modality is empty it means "any modality", so we'll apply the layout to all the studies
+        matchingStudies << study;
+    }
+    
+    if (matchingStudies.isEmpty())
+    {
+        return;
+    }
+
+    // Procedim a aplicar el layout sobre els estudis que han coincidit
+    layout->cleanUp(geometry);
+    
+    // Un cop tenim els estudis, ara necessitem filtrar a nivell dels volums/imatges que necessitem
+    QList<QPair<Volume*, int> > candidateImages = getImagesToPlace(config, matchingStudies);
+
+    if (rows < 1 || columns < 1)
+    {
+        QPair<int, int> grid = getOptimalViewersGrid(config, candidateImages);
+        // Assignem el grid al layout
+        rows = grid.first;
+        columns = grid.second;
+    }
+    layout->setGridInArea(rows, columns, geometry);
     // Col·loquem les imatges en el layout donat
-    placeImagesInCurrentLayout(candidateImages, config.getUnfoldDirection(), layout, rows, columns);
+    placeImagesInCurrentLayout(candidateImages, config.getUnfoldDirection(), layout, rows, columns, geometry);
     // Make the first viewer selected
-    layout->setSelectedViewer(layout->getViewerWidget(0));
+    layout->setSelectedViewer(layout->getViewersInsideGeometry(geometry).at(0));
 }
 
 QList<QPair<Volume*, int> > StudyLayoutMapper::getImagesToPlace(const StudyLayoutConfig &config, const QList<Study*> &matchingStudies)
@@ -147,7 +158,7 @@ QList<QPair<Volume*, int> > StudyLayoutMapper::getImagesToPlace(const StudyLayou
 }
 
 void StudyLayoutMapper::placeImagesInCurrentLayout(const QList<QPair<Volume*, int> > &volumesToPlace, StudyLayoutConfig::UnfoldDirectionType unfoldDirection,
-                                                   ViewersLayout *layout, int rows, int columns)
+                                                   ViewersLayout *layout, int rows, int columns, const QRectF &geometry)
 {
     int numberOfVolumesToPlace = volumesToPlace.count();
 
@@ -161,7 +172,8 @@ void StudyLayoutMapper::placeImagesInCurrentLayout(const QList<QPair<Volume*, in
     }
     // Ara toca assignar els inputs
     int numberOfPlacedVolumes = 0;
-    
+
+    QList<Q2DViewerWidget*> viewerWidgetList = layout->getViewersInsideGeometry(geometry);
     if (unfoldDirection == StudyLayoutConfig::LeftToRightFirst)
     {
         for (int i = 0; i < rows; ++i)
@@ -170,7 +182,7 @@ void StudyLayoutMapper::placeImagesInCurrentLayout(const QList<QPair<Volume*, in
             {
                 if (numberOfPlacedVolumes < numberOfVolumesToPlace)
                 {
-                    Q2DViewer *viewer = layout->getViewerWidget(i * columns + j)->getViewer();
+                    Q2DViewer *viewer = viewerWidgetList[i * columns + j]->getViewer();
                     Volume * volume = volumesToPlace.at(numberOfPlacedVolumes).first;
                     ChangeSliceQViewerCommand *command = new ChangeSliceQViewerCommand(viewer, volumesToPlace.at(numberOfPlacedVolumes).second);
                     viewer->setInputAsynchronously(volume, command);
@@ -187,7 +199,7 @@ void StudyLayoutMapper::placeImagesInCurrentLayout(const QList<QPair<Volume*, in
             {
                 if (numberOfPlacedVolumes < numberOfVolumesToPlace)
                 {
-                    Q2DViewer *viewer = layout->getViewerWidget(j * columns + i)->getViewer();
+                    Q2DViewer *viewer = viewerWidgetList[j * columns + i]->getViewer();
                     Volume * volume = volumesToPlace.at(numberOfPlacedVolumes).first;
                     ChangeSliceQViewerCommand *command = new ChangeSliceQViewerCommand(viewer, volumesToPlace.at(numberOfPlacedVolumes).second);
                     viewer->setInputAsynchronously(volume, command);

@@ -45,10 +45,12 @@ public:
     /// Applies hanging protocols or automatic layouts depending on the user settings and the availability of the former
     void applyProperLayoutChoice();
 
-public slots:
+    /// Applies a regular grid in a region of the layout depending on the current working situation.
+    /// If no prior study is selected, the grid will occupy whole extent.
+    /// Otherwise, it will occupy the current or prior study area depending on the position of the selected viewer.
+    void setGrid(int rows, int columns);
 
-    /// Searches and adds suitable hanging protocols for the given previous studies
-    void addHangingProtocolsWithPrevious(QList<Study*> studies);
+public slots:
 
     /// Applies the next hanging protocol of the list if any was applied
     void applyNextHangingProtocol();
@@ -56,33 +58,53 @@ public slots:
     /// Applies the previous hanging protocol of the list if any was applied
     void applyPreviousHangingProtocol();
 
+    /// Set the working studies (current and prior studies).
+    /// This will change the layout and the available hanging protocols.
+    void setWorkingStudies(const QString &currentStudyUID, const QString &priorStudyUID);
+
+    /// Set and applies the hanging protocol with the given identifier or object from the proper hanging protocol list
+    /// In case a combined hanging protocol was applied, when a hanging protocol for the current or prior study is
+    /// requested to be applied it implies that a new layout for the other study needs to be chosen as well.
+    void setCurrentHangingProtocol(int hangingProtocolNumber);
+    void setPriorHangingProtocol(int hangingProtocolNumber);
+    void setCombinedHangingProtocol(int hangingProtocolNumber);
+
 signals:
     /// Emits this signal when new hanging protocols are found for the current patient
-    void hangingProtocolCandidatesFound(QList<HangingProtocol*> candidates);
+    void hangingProtocolCandidatesFound(const QList<HangingProtocol*> &combined, const QList<HangingProtocol*> &current, const QList<HangingProtocol*> &prior);
 
-    /// Emitted when previous studies search is ended. This signal is a hack and should be replaced by a proper solution.
-    void previousStudiesSearchEnded();
+    /// Emitted when the active combined hanging protocol has changed.
+    void activeCombinedHangingProtocolChanged(HangingProtocol*);
+    /// Emitted when the active current hanging protocol has changed.
+    void activeCurrentHangingProtocolChanged(HangingProtocol*);
+    /// Emitted when the active prior hanging protocol has changed.
+    void activePriorHangingProtocolChanged(HangingProtocol*);
 
 private:
-    /// True if current patient has at least one modality with hanging protocol priority configured over automatic layouts, false otherwise.
-    bool hasCurrentPatientAnyModalityWithHangingProtocolPriority();
+    /// True if current study has at least one modality with hanging protocol priority configured over automatic layouts, false otherwise.
+    bool hasStudyAnyModalityWithHangingProtocolPriority(Study *study);
+
+    /// Applies hanging protocols or automatic layouts depending on the user settings and the availability of the former
+    void applyProperLayoutChoice(bool changeCurrentStudyLayout, bool changePriorStudyLayout);
+    HangingProtocol *applyProperLayoutChoice(Study *study, const QList<HangingProtocol*> &hangingProtocols, const QRectF &studyLayoutGeometry);
     
     /// Hanging Protocols
 
     /// Applies the best matching hanging protocol from the available candidates found with searchHangingProtocols
-    /// If there are no candidates to apply, false is returned, true otherwise.
-    bool applyBestHangingProtocol();
+    /// If there are no candidates to apply it returns NULL.
+    HangingProtocol* applyBestHangingProtocol(const QList<HangingProtocol *> hangingProtocols, const QRectF &geometry);
 
     /// Auto Layouts
 
-    /// Returns a list of StudyLayoutConfig corresponding to the given Patient
-    QList<StudyLayoutConfig> getLayoutCandidates(Patient *patient);
+    /// Returns a list of StudyLayoutConfig corresponding to the given Study
+    QList<StudyLayoutConfig> getLayoutCandidates(Study *study);
 
-    /// Applies the proper layout candidate from the list for the given Patient
-    void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Patient *patient);
+    /// Applies the proper layout candidate from the list for the given Study
+    void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Study *study, const QRectF &geometry);
+    void applyLayoutCandidates(const QList<StudyLayoutConfig> &candidates, Study *study, const QRectF &geometry, int rows, int columns);
 
-    /// Returns the layout config that best suits for the given candidates and patient
-    StudyLayoutConfig getBestLayoutCandidate(const QList<StudyLayoutConfig> &candidates, Patient *patient);
+    /// Returns the layout config that best suits for the given candidates and Study
+    StudyLayoutConfig getBestLayoutCandidate(const QList<StudyLayoutConfig> &candidates, Study *study);
 
     /// Merges the StudyLayoutConfig items from the list into a single one. Criteria for merge will be as follows
     /// In case UnfoldType are different, LeftToRightFirst will prevail
@@ -91,23 +113,31 @@ private:
     /// The maximum number of viewers will be the smallest value among all configurations
     StudyLayoutConfig getMergedStudyLayoutConfig(const QList<StudyLayoutConfig> &configurations);
 
-private slots:
     /// Sets and applies the hanging protocol with the given identifier or object
-    void setHangingProtocol(int hangingProtocolNumber);
-    void setHangingProtocol(HangingProtocol *hangingProtocol);
+    HangingProtocol* setHangingProtocol(int hangingProtocolNumber, const QList<HangingProtocol*> &hangingProtocols, const QRectF &geometry);
 
-    /// Searches for hanging protocols for the current patient
-    void searchHangingProtocols();
+    /// Fills the given parameters with the corresponding members depending on the selected viewer and the currently applied hanging protocol(s).
+    /// The first parameter corresponds with m_*HangingProtocolApplied.
+    /// The second parameter corresponds with m_*HangingProtocolCandidates.
+    /// The third parameter is a reference to a pointer to a method and corresponds with set*HangingProtocol(int).
+    void getHangingProtocolAppliedCandidatesAndSetterForSelectedViewer(HangingProtocol* &hangingProtocolApplied,
+                                                                       QList<HangingProtocol*> &hangingProtocolCandidates,
+                                                                       void (LayoutManager::* &setHangingProtocol)(int)) const;
 
-    /// Called when a new study has been added to the current patient applying the corresponding layout actions
-    void onStudyAdded(Study *study);
-
-    /// Adds the study UID to the ignore set when added
-    void addStudyToIgnore(const QString &uid);
+    /// Private setter for m_combinedHangingProtocolApplied. Use this instead of changing its value directly.
+    void setCombinedHangingProtocolApplied(HangingProtocol *activeCombinedHangingProtocolChanged);
+    /// Private setter for m_currentHangingProtocolApplied. Use this instead of changing its value directly.
+    void setCurrentHangingProtocolApplied(HangingProtocol *activeCurrentHangingProtocolChanged);
+    /// Private setter for m_priorHangingProtocolApplied. Use this instead of changing its value directly.
+    void setPriorHangingProtocolApplied(HangingProtocol *activePriorHangingProtocolChanged);
 
 private:
     /// Patient for the layout
     Patient *m_patient;
+
+    /// Current and prior studies selected as working studies
+    Study *m_currentStudy;
+    Study *m_priorStudy;
 
     /// Layout object
     ViewersLayout *m_layout;
@@ -115,14 +145,18 @@ private:
     /// Hanging Protocols manager
     HangingProtocolManager *m_hangingProtocolManager;
 
-    /// Hanging protocol candidates for the current input
-    QList<HangingProtocol*> m_hangingProtocolCandidates;
+    /// Hanging protocol candidates for the current study, prior study and combined studies.
+    QList<HangingProtocol*> m_currentStudyHangingProtocolCandidates;
+    QList<HangingProtocol*> m_priorStudyHangingProtocolCandidates;
+    QList<HangingProtocol*> m_combinedHangingProtocolCandidates;
 
-    /// Set of study UIDs of studies that should be ignored (no action on layout) when they are added
-    QSet<QString> m_studiesToIgnoreWhenAdded;
-
-    /// Current hanging protocol applied
+    /// Current hanging protocol applied. Don't change its value directly, use setCurrentHangingProtocolApplied() instead.
     HangingProtocol *m_currentHangingProtocolApplied;
+    /// Prior hanging protocol applied. Don't change its value directly, use setPriorHangingProtocolApplied() instead.
+    HangingProtocol *m_priorHangingProtocolApplied;
+    /// Combined hanging protocol applied. Don't change its value directly, use setCombinedHangingProtocolApplied() instead.
+    HangingProtocol *m_combinedHangingProtocolApplied;
+
 };
 
 } // end namespace udg

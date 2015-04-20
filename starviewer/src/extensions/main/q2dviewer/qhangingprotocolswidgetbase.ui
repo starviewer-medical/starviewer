@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QHangingProtocolsWidgetBase</class>
+ <widget class="QWidget" name="QHangingProtocolsWidgetBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>6</number>
+   </property>
+   <property name="topMargin">
+    <number>6</number>
+   </property>
+   <property name="rightMargin">
+    <number>6</number>
+   </property>
+   <property name="bottomMargin">
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="udg::QHangingProtocolsGroupWidget" name="m_combinedGroupWidget" native="true">
+     <property name="caption" stdset="0">
+      <string>Combined hanging protocols</string>
+     </property>
+     <property name="numberOfColumns" stdset="0">
+      <number>5</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="udg::QHangingProtocolsGroupWidget" name="m_currentGroupWidget" native="true">
+     <property name="caption" stdset="0">
+      <string>Hanging protocols for the current study</string>
+     </property>
+     <property name="numberOfColumns" stdset="0">
+      <number>5</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="udg::QHangingProtocolsGroupWidget" name="m_priorGroupWidget" native="true">
+     <property name="caption" stdset="0">
+      <string>Hanging protocols for the prior study</string>
+     </property>
+     <property name="numberOfColumns" stdset="0">
+      <number>5</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="m_noHangingProtocolsAvailableLabel">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>No hanging protocols available</string>
+     </property>
+     <property name="margin">
+      <number>6</number>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>udg::QHangingProtocolsGroupWidget</class>
+   <extends>QWidget</extends>
+   <header>qhangingprotocolsgroupwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

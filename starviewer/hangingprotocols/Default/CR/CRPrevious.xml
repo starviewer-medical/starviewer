@@ -1,19 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="CRPrevious">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol name="CRPrevious" version="2">
     <hangingProtocolName>CR Prev</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <allDifferent>yes</allDifferent>
     <protocol>CR</protocol>
+    <numberOfPriors>1</numberOfPriors>
     <iconType>CR</iconType>
-    <imageSet identifier="1">
-    </imageSet>
-    <imageSet identifier="2">
-    </imageSet>
+    <imageSet identifier="1"/>
+    <imageSet identifier="2"/>
     <imageSet identifier="3">
-        <previous>1</previous>
+        <abstractPriorValue>1</abstractPriorValue>
     </imageSet>
     <imageSet identifier="4">
-        <previous>1</previous>
+        <abstractPriorValue>1</abstractPriorValue>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>

@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="Ecography_24_to_48">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol name="Ecography_24_to_48" version="2">
     <hangingProtocolName>25 to 48</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <priority>0</priority>
@@ -7,99 +7,99 @@
     <iconType>eco</iconType>
     <imageSet identifier="1">
         <type>image</type>
-        <imageNumberInPatientModality>24</imageNumberInPatientModality>
+        <imageNumberInStudyModality>24</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="2">
         <type>image</type>
-        <imageNumberInPatientModality>25</imageNumberInPatientModality>
+        <imageNumberInStudyModality>25</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="3">
         <type>image</type>
-        <imageNumberInPatientModality>26</imageNumberInPatientModality>
+        <imageNumberInStudyModality>26</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="4">
         <type>image</type>
-        <imageNumberInPatientModality>27</imageNumberInPatientModality>
+        <imageNumberInStudyModality>27</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="5">
         <type>image</type>
-        <imageNumberInPatientModality>28</imageNumberInPatientModality>
+        <imageNumberInStudyModality>28</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="6">
         <type>image</type>
-        <imageNumberInPatientModality>29</imageNumberInPatientModality>
+        <imageNumberInStudyModality>29</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="7">
         <type>image</type>
-        <imageNumberInPatientModality>30</imageNumberInPatientModality>
+        <imageNumberInStudyModality>30</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="8">
         <type>image</type>
-        <imageNumberInPatientModality>31</imageNumberInPatientModality>
+        <imageNumberInStudyModality>31</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="9">
         <type>image</type>
-        <imageNumberInPatientModality>32</imageNumberInPatientModality>
+        <imageNumberInStudyModality>32</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="10">
         <type>image</type>
-        <imageNumberInPatientModality>33</imageNumberInPatientModality>
+        <imageNumberInStudyModality>33</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="11">
         <type>image</type>
-        <imageNumberInPatientModality>34</imageNumberInPatientModality>
+        <imageNumberInStudyModality>34</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="12">
         <type>image</type>
-        <imageNumberInPatientModality>35</imageNumberInPatientModality>
+        <imageNumberInStudyModality>35</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="13">
         <type>image</type>
-        <imageNumberInPatientModality>36</imageNumberInPatientModality>
+        <imageNumberInStudyModality>36</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="14">
         <type>image</type>
-        <imageNumberInPatientModality>37</imageNumberInPatientModality>
+        <imageNumberInStudyModality>37</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="15">
         <type>image</type>
-        <imageNumberInPatientModality>38</imageNumberInPatientModality>
+        <imageNumberInStudyModality>38</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="16">
         <type>image</type>
-        <imageNumberInPatientModality>39</imageNumberInPatientModality>
+        <imageNumberInStudyModality>39</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="17">
         <type>image</type>
-        <imageNumberInPatientModality>40</imageNumberInPatientModality>
+        <imageNumberInStudyModality>40</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="18">
         <type>image</type>
-        <imageNumberInPatientModality>41</imageNumberInPatientModality>
+        <imageNumberInStudyModality>41</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="19">
         <type>image</type>
-        <imageNumberInPatientModality>42</imageNumberInPatientModality>
+        <imageNumberInStudyModality>42</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="20">
         <type>image</type>
-        <imageNumberInPatientModality>43</imageNumberInPatientModality>
+        <imageNumberInStudyModality>43</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="21">
         <type>image</type>
-        <imageNumberInPatientModality>44</imageNumberInPatientModality>
+        <imageNumberInStudyModality>44</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="22">
         <type>image</type>
-        <imageNumberInPatientModality>45</imageNumberInPatientModality>
+        <imageNumberInStudyModality>45</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="23">
         <type>image</type>
-        <imageNumberInPatientModality>46</imageNumberInPatientModality>
+        <imageNumberInStudyModality>46</imageNumberInStudyModality>
     </imageSet>
     <imageSet identifier="24">
         <type>image</type>
-        <imageNumberInPatientModality>47</imageNumberInPatientModality>
+        <imageNumberInStudyModality>47</imageNumberInStudyModality>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>

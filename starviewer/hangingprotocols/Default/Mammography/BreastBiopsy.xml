@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="BreastBiopsy">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol version="2" name="BreastBiopsy">
     <hangingProtocolName>BAV</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <strictness>yes</strictness>
     <protocol>MG</protocol>
     <priority>10</priority>
     <restriction identifier="1">
-        <usageFlag>MATCH</usageFlag>
         <selectorAttribute>StudyDescription</selectorAttribute>
-        <valueRepresentation>Estereot</valueRepresentation>
+        <selectorValue>Estereot</selectorValue>
     </restriction>
     <imageSet identifier="1">
-        <restriction>1</restriction>
+        <restrictionExpression>1</restrictionExpression>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>

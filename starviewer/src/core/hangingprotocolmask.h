@@ -15,15 +15,14 @@
 #ifndef UDGHANGINGPROTOCOLMASK_H
 #define UDGHANGINGPROTOCOLMASK_H
 
-#include <QObject>
 #include <QStringList>
 
 namespace udg {
 
-class HangingProtocolMask : public QObject {
-Q_OBJECT
+class HangingProtocolMask {
+
 public:
-    HangingProtocolMask(QObject *parent = 0);
+    HangingProtocolMask();
 
     ~HangingProtocolMask();
 

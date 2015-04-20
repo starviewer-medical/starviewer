@@ -120,31 +120,37 @@ void ViewersLayout::deleteQ2DViewerWidget(Q2DViewerWidget *viewer)
 
 void ViewersLayout::setGrid(int rows, int columns)
 {
-    // Clean maximization data
-    m_maximizedViewers.clear();
+    setGridInArea(rows, columns, QRectF(0.0, 0.0, 1.0, 1.0));
+}
+
+void ViewersLayout::setGridInArea(int rows, int columns, const QRectF &geometry)
+{
+    demaximizeViewersIntersectingGeometry(geometry);
+
+    QList<Q2DViewerWidget*> viewers = getViewersInsideGeometry(geometry);
 
     int requestedViewers = rows * columns;
 
-    // Hide viewers in excess
-    while (m_layout->count() > requestedViewers)
+    // Remove viewers in excess
+    while (viewers.size() > requestedViewers)
     {
-        QLayoutItem *item = m_layout->takeAt(m_layout->count() - 1);
-        Q2DViewerWidget *viewer = qobject_cast<Q2DViewerWidget*>(item->widget());
-        m_hiddenViewers.push(viewer);
-        hideViewer(viewer);
-        delete item;
+        Q2DViewerWidget *viewer = viewers.takeLast();
+        if (m_selectedViewer == viewer)
+        {
+            setSelectedViewer(0);
+        }
+        m_layout->removeWidget(viewer);
+        deleteQ2DViewerWidget(viewer);
     }
 
     ExtendedGridIterator iterator(rows, columns);
 
     // Resize current viewers
-    for (int i = 0; i < m_layout->count(); i++)
+    foreach (Q2DViewerWidget *viewer, viewers)
     {
-        m_layout->setGeometryAt(i, iterator.getRelativeGeometryForCurrentCell());
+        m_layout->setGeometryAt(m_layout->indexOf(viewer), convertGeometry(iterator.getRelativeGeometryForCurrentCell(), geometry));
 
         // A viewer may be hidden due to maximization of another viewer; make sure it's shown again
-        QLayoutItem *item = m_layout->itemAt(i);
-        Q2DViewerWidget *viewer = qobject_cast<Q2DViewerWidget*>(item->widget());
         if (viewer->isHidden())
         {
             showViewer(viewer);
@@ -153,35 +159,49 @@ void ViewersLayout::setGrid(int rows, int columns)
         iterator.next();
     }
 
-    // Show hidden viewers
-    while (m_layout->count() < requestedViewers && !m_hiddenViewers.isEmpty())
-    {
-        Q2DViewerWidget *viewer = m_hiddenViewers.pop();
-        m_layout->addWidget(viewer, iterator.getRelativeGeometryForCurrentCell());
-        showViewer(viewer);
-        iterator.next();
-    }
-
     // Add new viewers
-    while (m_layout->count() < requestedViewers)
+    while (viewers.size() < requestedViewers)
     {
         Q2DViewerWidget *viewer = this->getNewQ2DViewerWidget();
-        m_layout->addWidget(viewer, iterator.getRelativeGeometryForCurrentCell());
+        m_layout->addWidget(viewer, convertGeometry(iterator.getRelativeGeometryForCurrentCell(), geometry));
+        viewers.append(viewer);
         showViewer(viewer);
         iterator.next();
     }
 
     // If the current selected viewer gets hidden, then select the first one by default
-    if (m_selectedViewer && m_selectedViewer->isHidden())
+    if (!m_selectedViewer)
     {
-        setSelectedViewer(getViewerWidget(0));
+        setSelectedViewer(viewers.first());
     }
 
     // Invalidate the layout. This is needed when the distribution has changed but not the number of viewers.
     m_layout->invalidate();
 }
 
-Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
+QRectF ViewersLayout::convertGeometry(const QRectF &viewerGeometry, const QRectF &newGeometry)
+{
+    double incWidth = newGeometry.width() / 1.0;
+    double incHeight = newGeometry.height() / 1.0;
+    double incX = newGeometry.x() - 0.0;
+    double incY = newGeometry.y() - 0.0;
+
+    return QRectF(viewerGeometry.x() * incWidth + incX, viewerGeometry.y() * incHeight + incY, viewerGeometry.width() * incWidth, viewerGeometry.height() * incHeight);
+}
+
+QRectF ViewersLayout::getGeometryOfViewer(Q2DViewerWidget *viewer) const
+{
+    if (m_maximizedViewers.contains(viewer))
+    {
+        return m_maximizedViewers[viewer].normalGeometry;
+    }
+    else
+    {
+        return m_layout->geometry(viewer);
+    }
+}
+
+Q2DViewerWidget* ViewersLayout::addViewer(const QRectF &geometry)
 {
     Q2DViewerWidget *newViewer = getNewQ2DViewerWidget();
     setViewerGeometry(newViewer, geometry);
@@ -191,22 +211,19 @@ Q2DViewerWidget* ViewersLayout::addViewer(const QString &geometry)
 
 void ViewersLayout::setSelectedViewer(Q2DViewerWidget *viewer)
 {
-    if (!viewer)
-    {
-        // Si "viewer" és nul, llavors entenem que no volem cap de seleccionat
-        m_selectedViewer = 0;
-        emit selectedViewerChanged(m_selectedViewer);
-        return;
-    }
-
     if (viewer != m_selectedViewer)
     {
         if (m_selectedViewer)
         {
             m_selectedViewer->setSelected(false);
         }
+
         m_selectedViewer = viewer;
-        m_selectedViewer->setSelected(true);
+
+        if (m_selectedViewer)
+        {
+            m_selectedViewer->setSelected(true);
+        }
         emit selectedViewerChanged(m_selectedViewer);
     }
 }
@@ -241,12 +258,9 @@ void ViewersLayout::toggleMaximization(Q2DViewerWidget *viewer)
         viewer->raise();
         m_layout->invalidate();
 
-        for (int i = 0; i < m_layout->count(); i++)
+        foreach (Q2DViewerWidget *occludedViewer, getViewersInsideGeometry(geometry))
         {
-            Q2DViewerWidget *occludedViewer = qobject_cast<Q2DViewerWidget*>(m_layout->itemAt(i)->widget());
-            QRectF occludedGeometry = m_layout->geometryAt(i);
-
-            if (occludedViewer != viewer && geometry.contains(occludedGeometry))
+            if (occludedViewer != viewer)
             {
                 hideViewer(occludedViewer);
                 m_maximizedViewers[viewer].occludedViewers.insert(occludedViewer);
@@ -255,29 +269,46 @@ void ViewersLayout::toggleMaximization(Q2DViewerWidget *viewer)
     }
 }
 
+QList<Q2DViewerWidget*> ViewersLayout::getViewersInsideGeometry(const QRectF &geometry)
+{
+    QList<Q2DViewerWidget*> viewers;
+
+    for (int i = 0; i < m_layout->count(); i++)
+    {
+        Q2DViewerWidget *occludedViewer = qobject_cast<Q2DViewerWidget*>(m_layout->itemAt(i)->widget());
+        QRectF occludedGeometry = m_layout->geometryAt(i);
+
+        if (geometry.contains(occludedGeometry))
+        {
+            viewers.append(occludedViewer);
+        }
+    }
+
+    return viewers;
+}
+
 void ViewersLayout::cleanUp()
 {
+    cleanUp(QRectF(0.0, 0.0, 1.0, 1.0));
+}
+
+void ViewersLayout::cleanUp(const QRectF &geometry)
+{
+    demaximizeViewersIntersectingGeometry(geometry);
+
     // No hi ha cap visor seleccionat
     setSelectedViewer(0);
 
+    QList<Q2DViewerWidget*> viewers = getViewersInsideGeometry(geometry);
+
     // Eliminem tots els widgets que contingui viewers layout
     // i els propis widgets
-    while (m_layout->count() > 0)
+    while (viewers.size() > 0)
     {
-        QLayoutItem *item = m_layout->takeAt(0);
-        Q2DViewerWidget *viewer = qobject_cast<Q2DViewerWidget*>(item->widget());
+        Q2DViewerWidget *viewer = viewers.takeFirst();
+        m_layout->removeWidget(viewer);
         deleteQ2DViewerWidget(viewer);
-        delete item;
     }
-
-    // Delete hidden viewers
-    while (!m_hiddenViewers.isEmpty())
-    {
-        deleteQ2DViewerWidget(m_hiddenViewers.pop());
-    }
-
-    // Clean maximization data
-    m_maximizedViewers.clear();
 }
 
 int ViewersLayout::getNumberOfViewers() const
@@ -290,7 +321,7 @@ Q2DViewerWidget* ViewersLayout::getViewerWidget(int number) const
     return qobject_cast<Q2DViewerWidget*>(m_layout->itemAt(number)->widget());
 }
 
-void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &geometry)
+void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QRectF &geometry)
 {
     if (!viewer)
     {
@@ -298,30 +329,7 @@ void ViewersLayout::setViewerGeometry(Q2DViewerWidget *viewer, const QString &ge
         return;
     }
 
-    QStringList splittedGeometryList = geometry.split("\\");
-    if (splittedGeometryList.count() < 4)
-    {
-        DEBUG_LOG("La geometria proporcionada no conté el nombre d'elements necessaris o està mal formada. Geometry dump: [" +
-                  geometry + "]. No s'aplicarà cap geometria al viewer proporcinat.");
-        WARN_LOG("La geometria proporcionada no conté el nombre d'elements necessaris o està mal formada. Geometry dump: [" +
-                 geometry + "]. No s'aplicarà cap geometria al viewer proporcinat.");
-        return;
-    }
-
-    double x1;
-    double y1;
-    double x2;
-    double y2;
-    x1 = splittedGeometryList.at(0).toDouble();
-    y1 = splittedGeometryList.at(1).toDouble();
-    x2 = splittedGeometryList.at(2).toDouble();
-    y2 = splittedGeometryList.at(3).toDouble();
-
-    // Invert Y axis
-    y1 = 1.0 - y1;
-    y2 = 1.0 - y2;
-
-    m_layout->addWidget(viewer, QRectF(x1, y1, x2 - x1, y2 - y1));
+    m_layout->addWidget(viewer, geometry);
 }
 
 void ViewersLayout::hideViewer(Q2DViewerWidget *viewer)
@@ -339,6 +347,17 @@ void ViewersLayout::showViewer(Q2DViewerWidget *viewer)
     {
         viewer->show();
         emit viewerShown(viewer);
+    }
+}
+
+void ViewersLayout::demaximizeViewersIntersectingGeometry(const QRectF &geometry)
+{
+    foreach (Q2DViewerWidget *viewer, m_maximizedViewers.keys())
+    {
+        if (m_layout->geometry(viewer).intersects(geometry))
+        {
+            toggleMaximization(viewer);
+        }
     }
 }
 

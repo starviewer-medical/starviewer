@@ -1,55 +1,44 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="MammographyHorizontal">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol version="2" name="MammographyHorizontal">
     <hangingProtocolName>Horizontal</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>MG</protocol>
     <priority>0</priority>
     <restriction identifier="1">
-        <usageFlag>MATCH</usageFlag>
         <selectorAttribute>ImageLaterality</selectorAttribute>
-        <valueRepresentation>R</valueRepresentation>
+        <selectorValue>R</selectorValue>
     </restriction>
     <restriction identifier="2">
-        <usageFlag>MATCH</usageFlag>
         <selectorAttribute>ImageLaterality</selectorAttribute>
-        <valueRepresentation>L</valueRepresentation>
+        <selectorValue>L</selectorValue>
     </restriction>
     <restriction identifier="3">
-        <usageFlag>MATCH</usageFlag>
         <selectorAttribute>CodeMeaning</selectorAttribute>
-        <valueRepresentation>cranio-caudal</valueRepresentation>
+        <selectorValue>cranio-caudal</selectorValue>
     </restriction>
     <restriction identifier="4">
-        <usageFlag>MATCH</usageFlag>
         <selectorAttribute>CodeMeaning</selectorAttribute>
-        <valueRepresentation>later</valueRepresentation>
+        <selectorValue>later</selectorValue>
     </restriction>
     <restriction identifier="5">
-      <usageFlag>NO_MATCH</usageFlag>
-      <selectorAttribute>CodeMeaning</selectorAttribute>
-    <valueRepresentation>cranio-caudal</valueRepresentation>
+        <selectorAttribute>CodeMeaning</selectorAttribute>
+        <selectorValue>cranio-caudal</selectorValue>
     </restriction>
-  <imageSet identifier="1">
-        <restriction>1</restriction>
-        <restriction>4</restriction>
-        <restriction>5</restriction>
+    <imageSet identifier="1">
         <type>image</type>
+        <restrictionExpression>1 and 4 and not 5</restrictionExpression>
     </imageSet>
     <imageSet identifier="2">
-        <restriction>1</restriction>
-        <restriction>3</restriction>
         <type>image</type>
+        <restrictionExpression>1 and 3</restrictionExpression>
     </imageSet>
     <imageSet identifier="3">
-        <restriction>2</restriction>
-        <restriction>4</restriction>
-        <restriction>5</restriction>
         <type>image</type>
+        <restrictionExpression>2 and 4 and not 5</restrictionExpression>
     </imageSet>
     <imageSet identifier="4">
-        <restriction>2</restriction>
-        <restriction>3</restriction>
         <type>image</type>
+        <restrictionExpression>2 and 3</restrictionExpression>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>
@@ -80,7 +69,7 @@
     </displaySet>
 </hangingProtocol>
 <!--
-Hanging Protocol amb visualitzaci de les 4 imatges en horitzontal.
+Hanging Protocol amb visualització de les 4 imatges en horitzontal.
 Per definir-ho a nivell d'usuari i que surti sempre, cal posar el priority a 10!
-Altrament, deixar-ho tal com est�.
+Altrament, deixar-ho tal com està.
 -->
