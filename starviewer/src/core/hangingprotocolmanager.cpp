@@ -104,9 +104,17 @@ QList<HangingProtocol*> HangingProtocolManager::searchHangingProtocols(Study *st
             {
                 if (numberOfFilledImageSets > 0)
                 {
-                    if (hangingProtocol->getNumberOfPriors() > 0 && hangingProtocol->countFilledImageSetsWithPriors() == 0)
+                    if (hangingProtocol->getNumberOfPriors() > 0)
                     {
-                        isValidHangingProtocol = false;
+                        int filledImageSetsWithPriors = hangingProtocol->countFilledImageSetsWithPriors();
+                        if (filledImageSetsWithPriors == 0 || numberOfFilledImageSets == filledImageSetsWithPriors)
+                        {
+                            isValidHangingProtocol = false;
+                        }
+                        else
+                        {
+                            isValidHangingProtocol = true;
+                        }
                     }
                     else
                     {
