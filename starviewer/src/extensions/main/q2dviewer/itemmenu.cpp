@@ -19,8 +19,28 @@
 
 namespace udg {
 
+namespace {
+
+// Returns the default application palette.
+QPalette getDefaultPalette()
+{
+    return qApp->palette();
+}
+
+// Returns the palette to mark the item as selected.
+QPalette getSelectedPalette()
+{
+    QPalette palette = getDefaultPalette();
+    QBrush selected(QColor(85, 160, 255, 128));
+    selected.setStyle(Qt::SolidPattern);
+    palette.setBrush(QPalette::Active, QPalette::Window, selected);
+    return palette;
+}
+
+}
+
 ItemMenu::ItemMenu(QWidget *parent)
- : QFrame(parent)
+ : QFrame(parent), m_selected(false)
 {
     setAutoFillBackground(true);
     m_fixed = false;
@@ -38,28 +58,19 @@ bool ItemMenu::event(QEvent *event)
 {
     if (event->type() == QEvent::Enter)
     {
-        QPalette palette = this->palette();
-        QBrush selected(QColor(85, 160, 255, 128));
-        selected.setStyle(Qt::SolidPattern);
-        palette.setBrush(QPalette::Active, QPalette::Window, selected);
-        setPalette(palette);
+        setPalette(getSelectedPalette());
         emit isActive(this);
         return true;
     }
     else if (event->type() == QEvent::MouseButtonPress)
     {
-        QPalette palette = this->palette();
-        QBrush selected(QColor(85, 160, 255, 128));
-        selected.setStyle(Qt::SolidPattern);
-        palette.setBrush(QPalette::Active, QPalette::Window, selected);
-        setPalette(palette);
+        setPalette(getSelectedPalette());
         emit isSelected(this);
         return true;
     }
-    else if (event->type() == QEvent::Leave && !m_fixed)
+    else if (event->type() == QEvent::Leave && !m_fixed && !m_selected)
     {
-        QPalette systemPalette(qApp->palette());
-        setPalette(systemPalette);
+        setPalette(getDefaultPalette());
         return true;
     }
     else
@@ -75,18 +86,15 @@ void ItemMenu::setFixed(bool option)
 
 void ItemMenu::setSelected(bool option)
 {
+    m_selected = option;
+
     if (option)
     {
-        QPalette palette = this->palette();
-        QBrush selected(QColor(85, 160, 255, 128));
-        selected.setStyle(Qt::SolidPattern);
-        palette.setBrush(QPalette::Active, QPalette::Window, selected);
-        setPalette(palette);
+        setPalette(getSelectedPalette());
     }
     else
     {
-        QPalette systemPalette(qApp->palette());
-        setPalette(systemPalette);
+        setPalette(getDefaultPalette());
     }
 }
 

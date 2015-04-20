@@ -50,6 +50,11 @@ public:
     /// Sets the items to be displayed in the widget and arranges them in a grid with the set number of columns. Previous items are deleted.
     void setItems(const QList<HangingProtocol*> &hangingProtocols);
 
+public slots:
+    /// Marks the item corresponding to the given hanging protocol as active and the other items as inactive.
+    /// If the parameter is null all items are marked as inactive.
+    void setActiveItem(HangingProtocol *activeHangingProtocol);
+
 signals:
     /// Emitted when an item has been selected. The parameter is the identifier of the hanging protocol.
     void selected(int id);

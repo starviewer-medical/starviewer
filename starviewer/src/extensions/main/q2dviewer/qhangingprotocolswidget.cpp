@@ -57,4 +57,19 @@ void QHangingProtocolsWidget::setHangingItems(const QList<HangingProtocol*> &lis
     setItems(QList<HangingProtocol*>(), listOfCandidates, QList<HangingProtocol*>());
 }
 
+void QHangingProtocolsWidget::setActiveCombinedHangingProtocol(HangingProtocol *hangingProtocol)
+{
+    m_combinedGroupWidget->setActiveItem(hangingProtocol);
+}
+
+void QHangingProtocolsWidget::setActiveCurrentHangingProtocol(HangingProtocol *hangingProtocol)
+{
+    m_currentGroupWidget->setActiveItem(hangingProtocol);
+}
+
+void QHangingProtocolsWidget::setActivePriorHangingProtocol(HangingProtocol *hangingProtocol)
+{
+    m_priorGroupWidget->setActiveItem(hangingProtocol);
+}
+
 }

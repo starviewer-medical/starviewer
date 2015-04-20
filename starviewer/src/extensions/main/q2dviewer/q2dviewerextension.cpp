@@ -310,6 +310,12 @@ void Q2DViewerExtension::setupLayoutManager()
 {
     m_layoutManager = new LayoutManager(m_patient, m_workingArea, this);
     connect(m_layoutManager, &LayoutManager::hangingProtocolCandidatesFound, m_hangingProtocolsMenu, &QHangingProtocolsWidget::setItems);
+    connect(m_layoutManager, &LayoutManager::activeCombinedHangingProtocolChanged,
+            m_hangingProtocolsMenu, &QHangingProtocolsWidget::setActiveCombinedHangingProtocol);
+    connect(m_layoutManager, &LayoutManager::activeCurrentHangingProtocolChanged,
+            m_hangingProtocolsMenu, &QHangingProtocolsWidget::setActiveCurrentHangingProtocol);
+    connect(m_layoutManager, &LayoutManager::activePriorHangingProtocolChanged,
+            m_hangingProtocolsMenu, &QHangingProtocolsWidget::setActivePriorHangingProtocol);
     connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedCurrent, m_layoutManager, &LayoutManager::setCurrentHangingProtocol);
     connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedPrior, m_layoutManager, &LayoutManager::setPriorHangingProtocol);
     connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedCombined, m_layoutManager, &LayoutManager::setCombinedHangingProtocol);
