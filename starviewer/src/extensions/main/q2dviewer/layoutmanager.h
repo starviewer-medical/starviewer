@@ -109,6 +109,14 @@ private:
     /// Sets and applies the hanging protocol with the given identifier or object
     HangingProtocol* setHangingProtocol(int hangingProtocolNumber, const QList<HangingProtocol*> &hangingProtocols, const QRectF &geometry);
 
+    /// Fills the given parameters with the corresponding members depending on the selected viewer and the currently applied hanging protocol(s).
+    /// The first parameter corresponds with m_*HangingProtocolApplied.
+    /// The second parameter corresponds with m_*HangingProtocolCandidates.
+    /// The third parameter is a reference to a pointer to a method and corresponds with set*HangingProtocol(int).
+    void getHangingProtocolAppliedCandidatesAndSetterForSelectedViewer(HangingProtocol* &hangingProtocolApplied,
+                                                                       QList<HangingProtocol*> &hangingProtocolCandidates,
+                                                                       void (LayoutManager::* &setHangingProtocol)(int)) const;
+
 private:
     /// Patient for the layout
     Patient *m_patient;

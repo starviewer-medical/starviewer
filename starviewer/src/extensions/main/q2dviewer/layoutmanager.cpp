@@ -211,26 +211,42 @@ HangingProtocol* LayoutManager::applyBestHangingProtocol(const QList<HangingProt
 
 void LayoutManager::applyNextHangingProtocol()
 {
-    if (m_currentHangingProtocolApplied)
-    {
-        int index = m_currentStudyHangingProtocolCandidates.indexOf(m_currentHangingProtocolApplied);
+    HangingProtocol *hangingProtocolApplied;
+    QList<HangingProtocol*> hangingProtocolCandidates;
+    // This is a pointer to a method
+    void (LayoutManager::*setHangingProtocol)(int);
 
-        if (index + 1 < m_currentStudyHangingProtocolCandidates.count())
+    getHangingProtocolAppliedCandidatesAndSetterForSelectedViewer(hangingProtocolApplied, hangingProtocolCandidates, setHangingProtocol);
+
+    if (hangingProtocolApplied)
+    {
+        int index = hangingProtocolCandidates.indexOf(hangingProtocolApplied);
+
+        if (index + 1 < hangingProtocolCandidates.count())
         {
-            this->setCurrentHangingProtocol(m_currentStudyHangingProtocolCandidates.at(index + 1)->getIdentifier());
+            // This is the way to use a pointer to a method to call the method
+            (this->*setHangingProtocol)(hangingProtocolCandidates.at(index + 1)->getIdentifier());
         }
     }
 }
 
 void LayoutManager::applyPreviousHangingProtocol()
 {
-    if (m_currentHangingProtocolApplied)
+    HangingProtocol *hangingProtocolApplied;
+    QList<HangingProtocol*> hangingProtocolCandidates;
+    // This is a pointer to a method
+    void (LayoutManager::*setHangingProtocol)(int);
+
+    getHangingProtocolAppliedCandidatesAndSetterForSelectedViewer(hangingProtocolApplied, hangingProtocolCandidates, setHangingProtocol);
+
+    if (hangingProtocolApplied)
     {
-        int index = m_currentStudyHangingProtocolCandidates.indexOf(m_currentHangingProtocolApplied);
+        int index = hangingProtocolCandidates.indexOf(hangingProtocolApplied);
 
         if (index > 0)
         {
-            this->setCurrentHangingProtocol(m_currentStudyHangingProtocolCandidates.at(index - 1)->getIdentifier());
+            // This is the way to use a pointer to a method to call the method
+            (this->*setHangingProtocol)(hangingProtocolCandidates.at(index - 1)->getIdentifier());
         }
     }
 }
@@ -468,6 +484,42 @@ void LayoutManager::setPriorHangingProtocol(int hangingProtocolNumber)
     {
         m_combinedHangingProtocolApplied = 0;
         m_currentHangingProtocolApplied = applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, LeftHalfGeometry);
+    }
+}
+
+void LayoutManager::getHangingProtocolAppliedCandidatesAndSetterForSelectedViewer(HangingProtocol* &hangingProtocolApplied,
+                                                                                  QList<HangingProtocol*> &hangingProtocolCandidates,
+                                                                                  void (LayoutManager::* &setHangingProtocol)(int)) const
+{
+    if (m_combinedHangingProtocolApplied)
+    {
+        hangingProtocolApplied = m_combinedHangingProtocolApplied;
+        hangingProtocolCandidates = m_combinedHangingProtocolCandidates;
+        setHangingProtocol = &LayoutManager::setCombinedHangingProtocol;
+    }
+
+    if (m_currentHangingProtocolApplied)
+    {
+        QRectF selectedViewerGeometry = m_layout->getGeometryOfViewer(m_layout->getSelectedViewer());
+
+        if (!m_priorStudy || LeftHalfGeometry.contains(selectedViewerGeometry))
+        {
+            hangingProtocolApplied = m_currentHangingProtocolApplied;
+            hangingProtocolCandidates = m_currentStudyHangingProtocolCandidates;
+            setHangingProtocol = &LayoutManager::setCurrentHangingProtocol;
+        }
+    }
+
+    if (m_priorHangingProtocolApplied)
+    {
+        QRectF selectedViewerGeometry = m_layout->getGeometryOfViewer(m_layout->getSelectedViewer());
+
+        if (RightHalfGeometry.contains(selectedViewerGeometry))
+        {
+            hangingProtocolApplied = m_priorHangingProtocolApplied;
+            hangingProtocolCandidates = m_priorStudyHangingProtocolCandidates;
+            setHangingProtocol = &LayoutManager::setPriorHangingProtocol;
+        }
     }
 }
 
