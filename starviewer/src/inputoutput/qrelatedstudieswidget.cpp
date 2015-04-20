@@ -113,12 +113,19 @@ void QRelatedStudiesWidget::searchStudiesOf(Patient *patient)
     // Insert already loaded studies
     insertStudiesToTree(patient->getStudies());
 
-    // Initially check most recent study as the CurrentStudy
+    // Initially check most recent study as the CurrentStudy and the second one as the PriorStudy
     if (m_patient->getStudies().size() > 0)
     {
         Study *study = m_patient->getStudies().first();
         m_studyInstanceUIDOfCurrentStudy = study->getInstanceUID();
         m_infomationPerStudy[m_studyInstanceUIDOfCurrentStudy]->currentRadioButton->setChecked(true);
+
+        if (m_patient->getStudies().size() > 1)
+        {
+            Study *prior = m_patient->getStudies().at(1);
+            m_studyInstanceUIDOfPriorStudy = prior->getInstanceUID();
+            m_infomationPerStudy[m_studyInstanceUIDOfPriorStudy]->priorRadioButton->setChecked(true);
+        }
 
         updateVisiblePriorRadioButtons();
     }
