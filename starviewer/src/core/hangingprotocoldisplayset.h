@@ -15,19 +15,19 @@
 #ifndef UDGHANGINGPROTOCOLDISPLAYSET_H
 #define UDGHANGINGPROTOCOLDISPLAYSET_H
 
-#include <QObject>
-
 #include "patientorientation.h"
+
+class QRectF;
 
 namespace udg {
 
 class HangingProtocol;
 class HangingProtocolImageSet;
 
-class HangingProtocolDisplaySet : public QObject {
-Q_OBJECT
+class HangingProtocolDisplaySet {
+
 public:
-    HangingProtocolDisplaySet(QObject *parent = 0);
+    HangingProtocolDisplaySet();
 
     ~HangingProtocolDisplaySet();
 
@@ -69,6 +69,9 @@ public:
 
     /// Obtenir la posició del visualitzador
     QString getPosition() const;
+
+    /// Return geometry of the display set as QRectF
+    QRectF getGeometry() const;
 
     /// Obtenir la posició del pacient
     PatientOrientation getPatientOrientation() const;

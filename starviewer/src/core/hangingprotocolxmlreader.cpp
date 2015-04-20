@@ -16,6 +16,8 @@
 
 #include "hangingprotocol.h"
 #include "hangingprotocoldisplayset.h"
+#include "hangingprotocolimageset.h"
+#include "hangingprotocolimagesetrestriction.h"
 #include "logging.h"
 #include "patientorientation.h"
 // Qt's
@@ -23,14 +25,13 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QDir>
-#include <QList>
+#include <QMap>
 #include <QFileInfoList>
 #include <QRegExp>
 
 namespace udg {
 
-HangingProtocolXMLReader::HangingProtocolXMLReader(QObject *parent)
- : QObject(parent)
+HangingProtocolXMLReader::HangingProtocolXMLReader()
 {
 }
 
@@ -41,197 +42,205 @@ HangingProtocolXMLReader::~HangingProtocolXMLReader()
 HangingProtocol* HangingProtocolXMLReader::readFile(const QString &path)
 {
     QFile file(path);
-    HangingProtocol *hangingProtocolLoaded = NULL;
 
     if (!file.open(QFile::ReadOnly | QFile::Text))
     {
-        QMessageBox::warning(0, tr("Hanging Protocol XML File"),
-                             tr("Unable to read file %1:\n%2.")
+        QMessageBox::warning(0, QObject::tr("Hanging Protocol XML File"),
+                             QObject::tr("Unable to read file %1:\n%2.")
                              .arg(path)
                              .arg(file.errorString()));
         return NULL;
     }
 
-    QXmlStreamReader *reader = new QXmlStreamReader(&file);
+    return read(&file);
+}
 
-    if (reader->readNextStartElement())
+HangingProtocol* HangingProtocolXMLReader::read(QIODevice *device)
+{
+    m_xmlReader.setDevice(device);
+    HangingProtocol *hangingProtocolLoaded = NULL;
+
+    if (m_xmlReader.readNextStartElement())
     {
-        if (reader->name() == "hangingProtocol")
+        if (m_xmlReader.name() == "hangingProtocol" && m_xmlReader.attributes().value("version") == "2")
         {
-            HangingProtocol *hangingProtocol = new HangingProtocol();
-            QStringList protocols;
-            QList<HangingProtocolImageSet::Restriction> restrictionList;
-
-            while (reader->readNextStartElement())
-            {
-                if (reader->name() == "hangingProtocolName")
-                {
-                    hangingProtocol->setName(reader->readElementText());
-                }
-                else if (reader->name() == "numberScreens")
-                {
-                    hangingProtocol->setNumberOfScreens(reader->readElementText().toInt());
-                }
-                else if (reader->name() == "protocol")
-                {
-                    protocols << reader->readElementText();
-                }
-                else if (reader->name() == "institutions")
-                {
-                    hangingProtocol->setInstitutionsRegularExpression(QRegExp(reader->readElementText(), Qt::CaseInsensitive));
-                }
-                else if (reader->name() == "restriction")
-                {
-                    restrictionList << readRestriction(reader);
-                }
-                else if (reader->name() == "imageSet")
-                {
-                    HangingProtocolImageSet *imageSet = readImageSet(reader, restrictionList);
-                    hangingProtocol->addImageSet(imageSet);
-                }
-                else if (reader->name() == "displaySet")
-                {
-                    HangingProtocolDisplaySet *displaySet = readDisplaySet(reader, hangingProtocol);
-                    hangingProtocol->addDisplaySet(displaySet);
-                }
-                else if (reader->name() == "strictness")
-                {
-                    hangingProtocol->setStrictness(reader->readElementText().contains("yes"));
-                }
-                else if (reader->name() == "allDifferent")
-                {
-                    hangingProtocol->setAllDiferent(reader->readElementText().contains("yes"));
-                }
-                else if (reader->name() == "iconType")
-                {
-                    hangingProtocol->setIconType(reader->readElementText());
-                }
-                else if (reader->name() == "hasPrevious")
-                {
-                    hangingProtocol->setPrevious(reader->readElementText().contains("yes"));
-                }
-                else if (reader->name() == "priority")
-                {
-                    hangingProtocol->setPriority(reader->readElementText().toDouble());
-                }
-                else
-                {
-                    reader->skipCurrentElement();
-                }
-            }
-
-            if (!reader->hasError())
-            {
-                hangingProtocol->setProtocolsList(protocols);
-                hangingProtocolLoaded = hangingProtocol;
-            }
-            else
-            {
-                delete hangingProtocol;
-            }
+            hangingProtocolLoaded = readHangingProtocol();
+        }
+        else
+        {
+            m_xmlReader.raiseError(QObject::tr("Unsupported hanging protocol version: %1").arg(m_xmlReader.attributes().value("version").toString()));
         }
     }
 
-    if (reader->hasError())
+    if (m_xmlReader.hasError())
     {
-        DEBUG_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg(reader->lineNumber()).arg(reader->columnNumber()).arg(
-                  path).arg(reader->errorString()).arg(reader->error()));
-        ERROR_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg(reader->lineNumber()).arg(reader->columnNumber()).arg(
-                  path).arg(reader->errorString()).arg(reader->error()));
-    }
+        QFileDevice *fileDevice = qobject_cast<QFileDevice*>(device);
 
-    delete reader;
+        if (fileDevice)
+        {
+            DEBUG_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg(m_xmlReader.lineNumber())
+                      .arg(m_xmlReader.columnNumber()).arg(fileDevice->fileName()).arg(m_xmlReader.errorString()).arg(m_xmlReader.error()));
+            ERROR_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol file %3: %4, error: %5").arg(m_xmlReader.lineNumber())
+                      .arg(m_xmlReader.columnNumber()).arg(fileDevice->fileName()).arg(m_xmlReader.errorString()).arg(m_xmlReader.error()));
+        }
+        else
+        {
+            DEBUG_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol: %3, error: %4").arg(m_xmlReader.lineNumber())
+                      .arg(m_xmlReader.columnNumber()).arg(m_xmlReader.errorString()).arg(m_xmlReader.error()));
+            ERROR_LOG(QString("[Line: %1, Column:%2] Error in hanging protocol: %3, error: %4").arg(m_xmlReader.lineNumber())
+                      .arg(m_xmlReader.columnNumber()).arg(m_xmlReader.errorString()).arg(m_xmlReader.error()));
+        }
+    }
 
     return hangingProtocolLoaded;
 }
 
-HangingProtocolImageSet::Restriction HangingProtocolXMLReader::readRestriction(QXmlStreamReader *reader)
+HangingProtocol* HangingProtocolXMLReader::readHangingProtocol()
 {
-    HangingProtocolImageSet::Restriction restriction;
+    HangingProtocol *hangingProtocol = new HangingProtocol();
+    QStringList protocols;
+    QMap<int, HangingProtocolImageSetRestriction> restrictions;
 
-    while (reader->readNextStartElement())
+    while (m_xmlReader.readNextStartElement())
     {
-        if (reader->name() == "usageFlag")
+        if (m_xmlReader.name() == "hangingProtocolName")
         {
-            QString text = reader->readElementText();
-            if (text == "MATCH")
-            {
-                restriction.usageFlag = HangingProtocolImageSet::Match;
-            }
-            else if (text == "NO_MATCH")
-            {
-                restriction.usageFlag = HangingProtocolImageSet::NoMatch;
-            }
+            hangingProtocol->setName(m_xmlReader.readElementText());
         }
-        else if (reader->name() == "selectorAttribute")
+        else if (m_xmlReader.name() == "numberScreens")
         {
-            restriction.selectorAttribute = reader->readElementText();
+            hangingProtocol->setNumberOfScreens(m_xmlReader.readElementText().toInt());
         }
-        else if (reader->name() == "valueRepresentation")
+        else if (m_xmlReader.name() == "protocol")
         {
-            restriction.valueRepresentation = reader->readElementText();
+            protocols << m_xmlReader.readElementText();
+        }
+        else if (m_xmlReader.name() == "institutions")
+        {
+            hangingProtocol->setInstitutionsRegularExpression(QRegExp(m_xmlReader.readElementText(), Qt::CaseInsensitive));
+        }
+        else if (m_xmlReader.name() == "restriction")
+        {
+            HangingProtocolImageSetRestriction restriction = readRestriction();
+            restrictions[restriction.getIdentifier()] = restriction;
+        }
+        else if (m_xmlReader.name() == "imageSet")
+        {
+            HangingProtocolImageSet *imageSet = readImageSet(restrictions);
+            hangingProtocol->addImageSet(imageSet);
+        }
+        else if (m_xmlReader.name() == "displaySet")
+        {
+            HangingProtocolDisplaySet *displaySet = readDisplaySet(hangingProtocol);
+            hangingProtocol->addDisplaySet(displaySet);
+        }
+        else if (m_xmlReader.name() == "strictness")
+        {
+            hangingProtocol->setStrictness(m_xmlReader.readElementText().contains("yes"));
+        }
+        else if (m_xmlReader.name() == "allDifferent")
+        {
+            hangingProtocol->setAllDifferent(m_xmlReader.readElementText().contains("yes"));
+        }
+        else if (m_xmlReader.name() == "iconType")
+        {
+            hangingProtocol->setIconType(m_xmlReader.readElementText());
+        }
+        else if (m_xmlReader.name() == "numberOfPriors")
+        {
+            hangingProtocol->setNumberOfPriors(m_xmlReader.readElementText().toInt());
+        }
+        else if (m_xmlReader.name() == "priority")
+        {
+            hangingProtocol->setPriority(m_xmlReader.readElementText().toDouble());
+        }
+        else
+        {
+            m_xmlReader.skipCurrentElement();
+        }
+    }
+
+    if (!m_xmlReader.hasError())
+    {
+        hangingProtocol->setProtocolsList(protocols);
+        return hangingProtocol;
+    }
+    else
+    {
+        delete hangingProtocol;
+        return 0;
+    }
+}
+
+HangingProtocolImageSetRestriction HangingProtocolXMLReader::readRestriction()
+{
+    HangingProtocolImageSetRestriction restriction;
+    restriction.setIdentifier(m_xmlReader.attributes().value("identifier").toInt());
+
+    while (m_xmlReader.readNextStartElement())
+    {
+        if (m_xmlReader.name() == "selectorAttribute")
+        {
+            restriction.setSelectorAttribute(m_xmlReader.readElementText());
+        }
+        else if (m_xmlReader.name() == "selectorValue")
+        {
+            restriction.setSelectorValue(m_xmlReader.readElementText());
         }
         else
         {
             // Saltem l'element perquè no és conegut.
-            reader->skipCurrentElement();
+            m_xmlReader.skipCurrentElement();
         }
 
     }
     return restriction;
 }
 
-HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(QXmlStreamReader *reader, const QList<HangingProtocolImageSet::Restriction> &restrictionList)
+HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QMap<int, HangingProtocolImageSetRestriction> &restrictions)
 {
     HangingProtocolImageSet *imageSet = new HangingProtocolImageSet();
-    imageSet->setIdentifier(reader->attributes().value("identifier").toString().toInt());
+    imageSet->setIdentifier(m_xmlReader.attributes().value("identifier").toString().toInt());
 
-    while (reader->readNextStartElement())
+    while (m_xmlReader.readNextStartElement())
     {
-        if (reader->name() == "restriction")
+        if (m_xmlReader.name() == "restrictionExpression")
         {
-            HangingProtocolImageSet::Restriction restriction = restrictionList.value(reader->readElementText().toInt()-1);
-            imageSet->addRestriction(restriction);
+            HangingProtocolImageSetRestrictionExpression restrictionExpression(m_xmlReader.readElementText(), restrictions);
+            imageSet->setRestrictionExpression(restrictionExpression);
         }
-        else if (reader->name() == "type")
+        else if (m_xmlReader.name() == "type")
         {
-            imageSet->setTypeOfItem(reader->readElementText());
+            imageSet->setTypeOfItem(m_xmlReader.readElementText());
         }
-        else if (reader->name() == "previous")
+        else if (m_xmlReader.name() == "abstractPriorValue")
         {
-            QString previousText = reader->readElementText();
-            bool isPrevious = !(previousText.contains("no"));
-            imageSet->setIsPreviousStudy(isPrevious);
-
-            if (isPrevious)
-            {
-                imageSet->setPreviousImageSetReference(previousText.toInt());
-            }
+            imageSet->setAbstractPriorValue(m_xmlReader.readElementText().toInt());
         }
-        else if (reader->name() == "imageNumberInPatientModality")
+        else if (m_xmlReader.name() == "imageNumberInStudyModality")
         {
-            imageSet->setImageNumberInPatientModality(reader->readElementText().toInt());
+            imageSet->setImageNumberInStudyModality(m_xmlReader.readElementText().toInt());
         }
         else
         {
             // Saltem l'element perquè no és conegut.
-            reader->skipCurrentElement();
+            m_xmlReader.skipCurrentElement();
         }
     }
     return imageSet;
 }
 
-HangingProtocolDisplaySet* HangingProtocolXMLReader::readDisplaySet(QXmlStreamReader *reader, HangingProtocol *hangingProtocol)
+HangingProtocolDisplaySet* HangingProtocolXMLReader::readDisplaySet(HangingProtocol *hangingProtocol)
 {
 
     HangingProtocolDisplaySet *displaySet = new HangingProtocolDisplaySet();
-    displaySet->setIdentifier(reader->attributes().value("identifier").toString().toInt());
+    displaySet->setIdentifier(m_xmlReader.attributes().value("identifier").toString().toInt());
 
-    while (reader->readNextStartElement())
+    while (m_xmlReader.readNextStartElement())
     {
-        if (reader->name() == "imageSetNumber")
+        if (m_xmlReader.name() == "imageSetNumber")
         {
-            HangingProtocolImageSet *imageSet = hangingProtocol->getImageSet(reader->readElementText().toInt());
+            HangingProtocolImageSet *imageSet = hangingProtocol->getImageSet(m_xmlReader.readElementText().toInt());
             if (imageSet)
             {
                 displaySet->setImageSet(imageSet);
@@ -241,58 +250,58 @@ HangingProtocolDisplaySet* HangingProtocolXMLReader::readDisplaySet(QXmlStreamRe
                 ERROR_LOG(QString("No s'ha trobat l'image set requerit pel display set %1.").arg(displaySet->getIdentifier()));
             }
         }
-        else if (reader->name() == "position")
+        else if (m_xmlReader.name() == "position")
         {
-            displaySet->setPosition(reader->readElementText());
+            displaySet->setPosition(m_xmlReader.readElementText());
         }
-        else if (reader->name() == "patientOrientation")
+        else if (m_xmlReader.name() == "patientOrientation")
         {
             PatientOrientation patientOrientation;
-            patientOrientation.setDICOMFormattedPatientOrientation(reader->readElementText());
+            patientOrientation.setDICOMFormattedPatientOrientation(m_xmlReader.readElementText());
             displaySet->setPatientOrientation(patientOrientation);
         }
-        else if (reader->name() == "reconstruction")
+        else if (m_xmlReader.name() == "reconstruction")
         {
-            displaySet->setReconstruction(reader->readElementText());
+            displaySet->setReconstruction(m_xmlReader.readElementText());
         }
-        else if (reader->name() == "phase")
+        else if (m_xmlReader.name() == "phase")
         {
-            displaySet->setPhase(reader->readElementText().toInt());
+            displaySet->setPhase(m_xmlReader.readElementText().toInt());
         }
-        else if (reader->name() == "imageNumber")
+        else if (m_xmlReader.name() == "imageNumber")
         {
-            displaySet->setSlice(reader->readElementText().toInt());
+            displaySet->setSlice(m_xmlReader.readElementText().toInt());
         }
-        else if (reader->name() == "iconType")
+        else if (m_xmlReader.name() == "iconType")
         {
-            displaySet->setIconType(reader->readElementText());
+            displaySet->setIconType(m_xmlReader.readElementText());
         }
-        else if (reader->name() == "alignment")
+        else if (m_xmlReader.name() == "alignment")
         {
-            displaySet->setAlignment(reader->readElementText());
+            displaySet->setAlignment(m_xmlReader.readElementText());
         }
-        else if (reader->name() == "toolActivation")
+        else if (m_xmlReader.name() == "toolActivation")
         {
-            displaySet->setToolActivation(reader->readElementText());
+            displaySet->setToolActivation(m_xmlReader.readElementText());
         }
-        else if (reader->name() == "windowLevel")
+        else if (m_xmlReader.name() == "windowLevel")
         {
-            while (reader->readNextStartElement())
+            while (m_xmlReader.readNextStartElement())
             {
-                if (reader->name() == "width")
+                if (m_xmlReader.name() == "width")
                 {
-                    displaySet->setWindowWidth(reader->readElementText().toDouble());
+                    displaySet->setWindowWidth(m_xmlReader.readElementText().toDouble());
                 }
-                else if (reader->name() == "center")
+                else if (m_xmlReader.name() == "center")
                 {
-                    displaySet->setWindowCenter(reader->readElementText().toDouble());
+                    displaySet->setWindowCenter(m_xmlReader.readElementText().toDouble());
                 }
             }
         }
         else
         {
             // Saltem l'element perquè no és conegut.
-            reader->skipCurrentElement();
+            m_xmlReader.skipCurrentElement();
         }
     }
     return displaySet;

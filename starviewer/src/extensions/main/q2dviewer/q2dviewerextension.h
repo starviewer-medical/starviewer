@@ -36,7 +36,7 @@ class Study;
 class Q2DViewerWidget;
 class Q2DViewer;
 // Menus
-class MenuGridWidget;
+class QHangingProtocolsWidget;
 class TableMenu;
 class QDICOMDumpBrowser;
 class StatsWatcher;
@@ -104,9 +104,6 @@ private:
     void updateTransferFunctionComboBox(TransferFunctionModel *transferFunctionModel);
 
 private slots:
-    // HACK to be replaced by a proper solution
-    void hideHangingProtocolsWithPreviousAreBeingSearchedInMenu();
-
 #ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();
@@ -233,7 +230,7 @@ private:
     Patient *m_patient;
 
     /// Menú per seleccionar es hanging protocols
-    MenuGridWidget *m_hangingProtocolsMenu;
+    QHangingProtocolsWidget *m_hangingProtocolsMenu;
 
     /// Widget per escollir una distribució de visors definida per l'usuari
     TableMenu *m_viewersLayoutGrid;

@@ -17,18 +17,18 @@
 #include "series.h"
 #include "study.h"
 #include "hangingprotocol.h"
+#include "hangingprotocolimagesetrestriction.h"
 
 namespace udg {
 
-HangingProtocolImageSet::HangingProtocolImageSet(QObject *parent)
- : QObject(parent)
+HangingProtocolImageSet::HangingProtocolImageSet()
+ : m_abstractPriorValue(0)
 {
     m_hangingProtocol = NULL;
     m_previousStudyToDisplay = NULL;
     m_serieToDisplay = NULL;
-    m_isPreviousStudy = false;
     m_downloaded = true;
-    m_imageNumberInPatientModality = -1;
+    m_imageNumberInStudyModality = -1;
 }
 
 HangingProtocolImageSet::~HangingProtocolImageSet()
@@ -55,19 +55,14 @@ HangingProtocol* HangingProtocolImageSet::getHangingProtocol() const
     return m_hangingProtocol;
 }
 
-void HangingProtocolImageSet::addRestriction(Restriction restriction)
+const HangingProtocolImageSetRestrictionExpression& HangingProtocolImageSet::getRestrictionExpression() const
 {
-    m_listOfRestrictions << restriction;
+    return m_restrictionExpression;
 }
 
-void HangingProtocolImageSet::setRestrictions(const QList<Restriction> &restrictions)
+void HangingProtocolImageSet::setRestrictionExpression(const HangingProtocolImageSetRestrictionExpression &restrictionExpression)
 {
-    m_listOfRestrictions = restrictions;
-}
-
-QList<HangingProtocolImageSet::Restriction> HangingProtocolImageSet::getRestrictions() const
-{
-    return m_listOfRestrictions;
+    m_restrictionExpression = restrictionExpression;
 }
 
 void HangingProtocolImageSet::setTypeOfItem(QString type)
@@ -102,24 +97,7 @@ Series* HangingProtocolImageSet::getSeriesToDisplay() const
 
 void HangingProtocolImageSet::show()
 {
-    DEBUG_LOG(QString("    Identifier %1\n    List of restrictions:\n").arg(m_identifier));
-
-    for (int i = 0; i < m_listOfRestrictions.size(); i ++)
-    {
-        HangingProtocolImageSet::Restriction restriction = m_listOfRestrictions.value(i);
-        DEBUG_LOG(QString("        Usage flag: %1\n        Selector attribute: %2\n        Value representation: %3\n        selectorValueNumber: %4\n").arg(
-                  restriction.usageFlag).arg(restriction.selectorAttribute).arg(restriction.valueRepresentation).arg(restriction.selectorValueNumber));
-    }
-}
-
-void HangingProtocolImageSet::setIsPreviousStudy(bool hasPreviousStudy)
-{
-    m_isPreviousStudy = hasPreviousStudy;
-}
-
-bool HangingProtocolImageSet::isPreviousStudy()
-{
-    return m_isPreviousStudy;
+    DEBUG_LOG(QString("    Identifier %1\n").arg(m_identifier));
 }
 
 void HangingProtocolImageSet::setDownloaded(bool option)
@@ -142,24 +120,24 @@ Study* HangingProtocolImageSet::getPreviousStudyToDisplay()
     return m_previousStudyToDisplay;
 }
 
-void HangingProtocolImageSet::setPreviousImageSetReference(int imageSetNumber)
+int HangingProtocolImageSet::getAbstractPriorValue() const
 {
-    m_previousImageSetReference = imageSetNumber;
+    return m_abstractPriorValue;
 }
 
-int HangingProtocolImageSet::getPreviousImageSetReference()
+void HangingProtocolImageSet::setAbstractPriorValue(int value)
 {
-    return m_previousImageSetReference;
+    m_abstractPriorValue = value;
 }
 
-int HangingProtocolImageSet::getImageNumberInPatientModality()
+int HangingProtocolImageSet::getImageNumberInStudyModality()
 {
-    return m_imageNumberInPatientModality;
+    return m_imageNumberInStudyModality;
 }
 
-void HangingProtocolImageSet::setImageNumberInPatientModality(int imageNumberInPatientModality)
+void HangingProtocolImageSet::setImageNumberInStudyModality(int imageNumberInStudyModality)
 {
-    m_imageNumberInPatientModality = imageNumberInPatientModality;
+    m_imageNumberInStudyModality = imageNumberInStudyModality;
 }
 
 }

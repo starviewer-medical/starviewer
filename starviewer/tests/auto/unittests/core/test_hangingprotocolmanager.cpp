@@ -13,6 +13,7 @@
 #include "hangingprotocol.h"
 #include "hangingprotocolimageset.h"
 #include "hangingprotocoldisplayset.h"
+#include "hangingprotocolimagesetrestriction.h"
 
 using namespace udg;
 using namespace testing;
@@ -35,7 +36,7 @@ private slots:
 
 private:
     QList<HangingProtocol*> getHangingProtocolsRepository();
-    HangingProtocolImageSet::Restriction createRestriction(HangingProtocolImageSet::SelectorUsageFlag flag, QString selectorAttribute, QString valueRepresentation);
+    HangingProtocolImageSetRestriction createRestriction(QString selectorAttribute, QString valueRepresentation);
 };
 
 Q_DECLARE_METATYPE(QList<HangingProtocol*>)
@@ -117,7 +118,7 @@ void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHan
         testHangingProtocolManager.addHangingProtocolToRepository(hangingProtocol);
     }
 
-    QList<HangingProtocol *> hangingProtocolsCandidates = testHangingProtocolManager.searchHangingProtocols(patient);
+    QList<HangingProtocol *> hangingProtocolsCandidates = testHangingProtocolManager.searchHangingProtocols(patient->getStudies().first());
     QCOMPARE(hangingProtocolsCandidates.count(), expectedHangingProtocols.count());
 
     foreach(HangingProtocol *hangingProtocol, expectedHangingProtocols)
@@ -129,33 +130,33 @@ void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHan
 QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsRepository()
 {
     // MG estricte i totes les imatges diferents, amb institució
-    HangingProtocol *MGhangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("MG", 10, true, true, false, 1, 4, 4);
+    HangingProtocol *MGhangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("MG", 10, true, true, 0, 1, 4, 4);
     MGhangingProtocol->setProtocolsList(QStringList() << "MG");
     MGhangingProtocol->setInstitutionsRegularExpression(QRegExp("GIRONA|SABADELL", Qt::CaseInsensitive));
     //Restrictions MG
-    HangingProtocolImageSet::Restriction restrictionMG_1 = createRestriction(HangingProtocolImageSet::Match, "ImageLaterality", "R");
-    HangingProtocolImageSet::Restriction restrictionMG_2 = createRestriction(HangingProtocolImageSet::Match, "ImageLaterality", "L");
-    HangingProtocolImageSet::Restriction restrictionMG_3 = createRestriction(HangingProtocolImageSet::Match, "CodeMeaning", "cranio-caudal");
-    HangingProtocolImageSet::Restriction restrictionMG_4 = createRestriction(HangingProtocolImageSet::NoMatch, "CodeMeaning", "cranio-caudal");
-    HangingProtocolImageSet::Restriction restrictionMG_5 = createRestriction(HangingProtocolImageSet::Match, "CodeMeaning", "later");
+    HangingProtocolImageSetRestriction restrictionMG_1 = createRestriction("ImageLaterality", "R");
+    HangingProtocolImageSetRestriction restrictionMG_2 = createRestriction("ImageLaterality", "L");
+    HangingProtocolImageSetRestriction restrictionMG_3 = createRestriction("CodeMeaning", "cranio-caudal");
+    HangingProtocolImageSetRestriction restrictionMG_4 = createRestriction("CodeMeaning", "cranio-caudal");
+    HangingProtocolImageSetRestriction restrictionMG_5 = createRestriction("CodeMeaning", "later");
+    QMap<int, HangingProtocolImageSetRestriction> restrictions;
+    restrictions[1] = restrictionMG_1;
+    restrictions[2] = restrictionMG_2;
+    restrictions[3] = restrictionMG_3;
+    restrictions[4] = restrictionMG_4;
+    restrictions[5] = restrictionMG_5;
     // ImageSets MG
     HangingProtocolImageSet *imageSetMG_1 = MGhangingProtocol->getImageSet(1);
-    imageSetMG_1->addRestriction(restrictionMG_1);
-    imageSetMG_1->addRestriction(restrictionMG_4);
-    imageSetMG_1->addRestriction(restrictionMG_5);
+    imageSetMG_1->setRestrictionExpression(HangingProtocolImageSetRestrictionExpression("1 and not 4 and 5", restrictions));
     imageSetMG_1->setTypeOfItem("image");
     HangingProtocolImageSet *imageSetMG_2 = MGhangingProtocol->getImageSet(2);
-    imageSetMG_2->addRestriction(restrictionMG_2);
-    imageSetMG_2->addRestriction(restrictionMG_4);
-    imageSetMG_2->addRestriction(restrictionMG_5);
+    imageSetMG_2->setRestrictionExpression(HangingProtocolImageSetRestrictionExpression("2 and not 4 and 5", restrictions));
     imageSetMG_2->setTypeOfItem("image");
     HangingProtocolImageSet *imageSetMG_3 = MGhangingProtocol->getImageSet(3);
-    imageSetMG_3->addRestriction(restrictionMG_1);
-    imageSetMG_3->addRestriction(restrictionMG_3);
+    imageSetMG_3->setRestrictionExpression(HangingProtocolImageSetRestrictionExpression("1 and 3", restrictions));
     imageSetMG_3->setTypeOfItem("image");
     HangingProtocolImageSet *imageSetMG_4 = MGhangingProtocol->getImageSet(4);
-    imageSetMG_4->addRestriction(restrictionMG_2);
-    imageSetMG_4->addRestriction(restrictionMG_3);
+    imageSetMG_4->setRestrictionExpression(HangingProtocolImageSetRestrictionExpression("2 and 3", restrictions));
     imageSetMG_4->setTypeOfItem("image");
     //DisplaySets MG
     HangingProtocolDisplaySet *displaySetMG_1 = MGhangingProtocol->getDisplaySet(1);
@@ -168,7 +169,7 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
     displaySetMG_4->setImageSet(imageSetMG_4);
 
     // CT general no estricte i no cal que les series siguin diferents
-    HangingProtocol *CThangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("CT", 10, false, false, false, 2, 2, 2);
+    HangingProtocol *CThangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("CT", 10, false, false, 0, 2, 2, 2);
     CThangingProtocol->setProtocolsList(QStringList() << "CT");
     // ImageSets CT
     HangingProtocolImageSet *imageSetCT_1 = CThangingProtocol->getImageSet(1);
@@ -180,16 +181,19 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
     displaySetCT_2->setImageSet(imageSetCT_2);
 
     // MR no aplicable
-    HangingProtocol *MRhangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("MR", 10, true, true, false, 3, 2, 2);
+    HangingProtocol *MRhangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("MR", 10, true, true, 0, 3, 2, 2);
     MRhangingProtocol->setProtocolsList(QStringList() << "MR");
     //Restrictions MR
-    HangingProtocolImageSet::Restriction restrictionMR_1 = createRestriction(HangingProtocolImageSet::Match, "SeriesDescription", "description");
-    HangingProtocolImageSet::Restriction restrictionMR_2 = createRestriction(HangingProtocolImageSet::NoMatch, "SeriesDescription", "description");
+    HangingProtocolImageSetRestriction restrictionMR_1 = createRestriction("SeriesDescription", "description");
+    HangingProtocolImageSetRestriction restrictionMR_2 = createRestriction("SeriesDescription", "description");
+    restrictions.clear();
+    restrictions[1] = restrictionMR_1;
+    restrictions[2] = restrictionMR_2;
     // ImageSets MR
     HangingProtocolImageSet *imageSetMR_1 = MRhangingProtocol->getImageSet(1);
-    imageSetMR_1->addRestriction(restrictionMR_1);
+    imageSetMR_1->setRestrictionExpression(HangingProtocolImageSetRestrictionExpression("1", restrictions));
     HangingProtocolImageSet *imageSetMR_2 = MRhangingProtocol->getImageSet(2);
-    imageSetMR_2->addRestriction(restrictionMR_2);
+    imageSetMR_2->setRestrictionExpression(HangingProtocolImageSetRestrictionExpression("not 2", restrictions));
     //DisplaySets MR
     HangingProtocolDisplaySet *displaySetMR_1 = MRhangingProtocol->getDisplaySet(1);
     displaySetMR_1->setImageSet(imageSetMR_1);
@@ -197,15 +201,15 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
     displaySetMR_2->setImageSet(imageSetMR_2);
 
     // US general amb numero d'imatge
-    HangingProtocol *UShangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("US", 5, false, false, false, 4, 2, 2);
+    HangingProtocol *UShangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("US", 5, false, false, 0, 4, 2, 2);
     UShangingProtocol->setProtocolsList(QStringList() << "US");
     // ImageSets US
     HangingProtocolImageSet *imageSetUS_1 = UShangingProtocol->getImageSet(1);
     imageSetUS_1->setTypeOfItem("image");
-    imageSetUS_1->setImageNumberInPatientModality(0);
+    imageSetUS_1->setImageNumberInStudyModality(0);
     HangingProtocolImageSet *imageSetUS_2 = UShangingProtocol->getImageSet(2);
     imageSetUS_2->setTypeOfItem("image");
-    imageSetUS_2->setImageNumberInPatientModality(1);
+    imageSetUS_2->setImageNumberInStudyModality(1);
     //DisplaySets US
     HangingProtocolDisplaySet *displaySetUS_1 = UShangingProtocol->getDisplaySet(1);
     displaySetUS_1->setImageSet(imageSetUS_1);
@@ -218,12 +222,11 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
     return hangingProtocolRepository;
 }
 
-HangingProtocolImageSet::Restriction test_HangingProtocolManager::createRestriction(HangingProtocolImageSet::SelectorUsageFlag flag, QString selectorAttribute, QString valueRepresentation )
+HangingProtocolImageSetRestriction test_HangingProtocolManager::createRestriction(QString selectorAttribute, QString valueRepresentation)
 {
-    HangingProtocolImageSet::Restriction restriction;
-    restriction.usageFlag = flag;
-    restriction.selectorAttribute = selectorAttribute;
-    restriction.valueRepresentation = valueRepresentation;
+    HangingProtocolImageSetRestriction restriction;
+    restriction.setSelectorAttribute(selectorAttribute);
+    restriction.setSelectorValue(valueRepresentation);
     return restriction;
 }
 

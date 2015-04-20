@@ -19,7 +19,7 @@
 #include "logging.h"
 #include "qvoilutcombobox.h"
 #include "q2dviewerwidget.h"
-#include "menugridwidget.h"
+#include "qhangingprotocolswidget.h"
 #include "tablemenu.h"
 #include "patient.h"
 #include "study.h"
@@ -38,6 +38,7 @@
 #include "shortcutmanager.h"
 #include "transferfunctionmodel.h"
 #include "transferfunctionmodelfiller.h"
+#include "hangingprotocol.h"
 
 #ifndef STARVIEWER_LITE
 #include "qrelatedstudieswidget.h"
@@ -96,7 +97,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_relatedStudiesManager = new RelatedStudiesManager();
 #endif
 
-    m_hangingProtocolsMenu = new MenuGridWidget(this);
+    m_hangingProtocolsMenu = new QHangingProtocolsWidget(this);
     m_viewersLayoutGrid = new TableMenu(this);
 
     m_dicomDumpCurrentDisplayedImage = new QDICOMDumpBrowser(this);
@@ -308,10 +309,17 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
 void Q2DViewerExtension::setupLayoutManager()
 {
     m_layoutManager = new LayoutManager(m_patient, m_workingArea, this);
-    connect(m_layoutManager, SIGNAL(hangingProtocolCandidatesFound(QList<HangingProtocol*>)), m_hangingProtocolsMenu, SLOT(setHangingItems(QList<HangingProtocol*>)));
-    // HACK Should be done in a better way
-    connect(m_layoutManager, SIGNAL(previousStudiesSearchEnded()), SLOT(hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()));
-    connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), m_layoutManager, SLOT(setHangingProtocol(int)));
+    connect(m_layoutManager, &LayoutManager::hangingProtocolCandidatesFound, m_hangingProtocolsMenu, &QHangingProtocolsWidget::setItems);
+    connect(m_layoutManager, &LayoutManager::activeCombinedHangingProtocolChanged,
+            m_hangingProtocolsMenu, &QHangingProtocolsWidget::setActiveCombinedHangingProtocol);
+    connect(m_layoutManager, &LayoutManager::activeCurrentHangingProtocolChanged,
+            m_hangingProtocolsMenu, &QHangingProtocolsWidget::setActiveCurrentHangingProtocol);
+    connect(m_layoutManager, &LayoutManager::activePriorHangingProtocolChanged,
+            m_hangingProtocolsMenu, &QHangingProtocolsWidget::setActivePriorHangingProtocol);
+    connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedCurrent, m_layoutManager, &LayoutManager::setCurrentHangingProtocol);
+    connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedPrior, m_layoutManager, &LayoutManager::setPriorHangingProtocol);
+    connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedCombined, m_layoutManager, &LayoutManager::setCombinedHangingProtocol);
+    connect(m_relatedStudiesWidget, SIGNAL(workingStudiesChanged(QString, QString)), m_layoutManager, SLOT(setWorkingStudies(QString, QString)));
 
     // Actions to show the next o previous hanging protocol of the list. Currently, it can only be carried out through keyboard
     QAction *nextHangingProtocolAction = new QAction(this);
@@ -375,8 +383,6 @@ void Q2DViewerExtension::setPatient(Patient *patient)
     setupPropagation();
     // Habilitem la possibilitat de buscar estudis relacionats.
     m_relatedStudiesToolButton->setEnabled(true);
-    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), m_layoutManager, SLOT(addHangingProtocolsWithPrevious(QList<Study*>)));
-    m_hangingProtocolsMenu->setSearchingItem(true);
     m_relatedStudiesWidget->searchStudiesOf(m_patient);
     connect(m_patient, SIGNAL(studyAdded(Study*)), m_relatedStudiesWidget, SLOT(updateList()));
 #endif
@@ -385,11 +391,6 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 void Q2DViewerExtension::layoutAgain()
 {
     m_layoutManager->applyProperLayoutChoice();
-}
-
-void Q2DViewerExtension::hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()
-{
-    m_hangingProtocolsMenu->setSearchingItem(false);
 }
 
 void Q2DViewerExtension::initializeTools()
@@ -980,7 +981,7 @@ void Q2DViewerExtension::setGrid(int rows, int columns)
 #ifndef STARVIEWER_LITE
     m_layoutManager->cancelOngoingOperations();
 #endif
-    m_workingArea->setGrid(rows, columns);
+    m_layoutManager->setGrid(rows, columns);
 }
 
 void Q2DViewerExtension::updateTransferFunctionComboBoxWithCurrentViewerModel()

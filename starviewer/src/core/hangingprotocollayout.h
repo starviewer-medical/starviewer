@@ -15,15 +15,14 @@
 #ifndef UDGHANGINGPROTOCOLLAYOUT_H
 #define UDGHANGINGPROTOCOLLAYOUT_H
 
-#include <QObject>
 #include <QStringList>
 
 namespace udg {
 
-class HangingProtocolLayout : public QObject {
-Q_OBJECT
+class HangingProtocolLayout {
+
 public:
-    HangingProtocolLayout(QObject *parent = 0);
+    HangingProtocolLayout();
 
     ~HangingProtocolLayout();
 
