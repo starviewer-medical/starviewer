@@ -1254,8 +1254,8 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
                     double physicalDeltaX = items.at(0)->getValueAttribute(DICOMPhysicalDeltaX)->getValueAsDouble();
                     double physicalDeltaY = items.at(0)->getValueAttribute(DICOMPhysicalDeltaY)->getValueAsDouble();
 
-                    physicalDeltaX = std::abs(physicalDeltaX) * 10.;
-                    physicalDeltaY = std::abs(physicalDeltaY) * 10.;
+                    physicalDeltaX = qAbs(physicalDeltaX) * 10.;
+                    physicalDeltaY = qAbs(physicalDeltaY) * 10.;
 
                     pixelSpacing = QString("%1").arg(physicalDeltaX);
                     pixelSpacing += "\\";
