@@ -64,6 +64,10 @@ public slots:
     void showMenu();
 
 private:
+    /// Creates the connection to show the menu when this button is pressed.
+    Q_INVOKABLE void connectButtonToMenu();
+
+private:
     /// The current menu.
     /// \note The current menu must be set using this class's setMenu(), not QToolButton::setMenu().
     QMenu *m_menu;
