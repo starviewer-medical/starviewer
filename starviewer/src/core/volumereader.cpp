@@ -214,7 +214,7 @@ void VolumeReader::fixSpacingIssues(Volume *volume)
 
     if (volume->getNumberOfPhases() > 1 && volume->getNumberOfSlicesPerPhase() > 1)
     {
-        double zSpacing = abs(Image::distance(volume->getImage(0)) - Image::distance(volume->getImage(1)));
+        double zSpacing = qAbs(Image::distance(volume->getImage(0)) - Image::distance(volume->getImage(1)));
         DEBUG_LOG(QString("Arreglem el z-spacing per volum amb fases. z-spacing llegit (mal calculat): %1  - Nou z-spacing ben calculat: %2")
             .arg(volume->getSpacing()[2]).arg(zSpacing));
         
