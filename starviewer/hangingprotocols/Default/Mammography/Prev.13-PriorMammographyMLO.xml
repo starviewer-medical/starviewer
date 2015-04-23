@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol name="PriorMammographyMLO" version="2">
+    <hangingProtocolName>PREVI MLO</hangingProtocolName>
+    <numberScreens>1</numberScreens>
+    <strictness>yes</strictness>
+    <protocol>MG</protocol>
+    <numberOfPriors>1</numberOfPriors>
+    <restriction identifier="1">
+        <selectorAttribute>ImageLaterality</selectorAttribute>
+        <selectorValue>R</selectorValue>
+    </restriction>
+    <restriction identifier="2">
+        <selectorAttribute>ImageLaterality</selectorAttribute>
+        <selectorValue>L</selectorValue>
+    </restriction>
+    <restriction identifier="3">
+        <selectorAttribute>CodeMeaning</selectorAttribute>
+        <selectorValue>later</selectorValue>
+    </restriction>
+    <restriction identifier="4">
+        <selectorAttribute>CodeMeaning</selectorAttribute>
+        <selectorValue>cranio-caudal</selectorValue>
+    </restriction>
+    <imageSet identifier="1">
+        <type>image</type>
+        <restrictionExpression>1 and 3 and not 4</restrictionExpression>
+    </imageSet>
+    <imageSet identifier="2">
+        <type>image</type>
+        <restrictionExpression>2 and 3 and not 4</restrictionExpression>
+    </imageSet>
+    <imageSet identifier="3">
+        <type>image</type>
+        <abstractPriorValue>1</abstractPriorValue>
+        <restrictionExpression>1 and 3 and not 4</restrictionExpression>
+    </imageSet>
+    <imageSet identifier="4">
+        <type>image</type>
+        <abstractPriorValue>1</abstractPriorValue>
+        <restrictionExpression>2 and 3 and not 4</restrictionExpression>
+    </imageSet>
+    <displaySet identifier="1">
+        <imageSetNumber>1</imageSetNumber>
+        <position>0.0\1.0\0.5\0.5</position>
+        <iconType>MLO_R</iconType>
+        <alignment>right</alignment>
+    </displaySet>
+    <displaySet identifier="2">
+        <imageSetNumber>2</imageSetNumber>
+        <position>0.5\1.0\1.0\0.5</position>
+        <patientOrientation>A\F</patientOrientation>
+        <iconType>MLO_L</iconType>
+        <alignment>left</alignment>
+    </displaySet>
+    <displaySet identifier="3">
+        <imageSetNumber>3</imageSetNumber>
+        <position>0.0\0.5\0.5\0.0</position>
+        <iconType>MLO_R</iconType>
+        <alignment>right</alignment>
+    </displaySet>
+    <displaySet identifier="4">
+        <imageSetNumber>4</imageSetNumber>
+        <position>0.5\0.5\1.0\0.0</position>
+        <patientOrientation>A\F</patientOrientation>
+        <iconType>MLO_L</iconType>
+        <alignment>left</alignment>
+    </displaySet>
+</hangingProtocol>
