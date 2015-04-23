@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol version="2" name="MammoPreviousMLOL">
+    <hangingProtocolName>MLO-L Prev</hangingProtocolName>
+    <numberScreens>1</numberScreens>
+    <allDifferent>yes</allDifferent>
+    <strictness>yes</strictness>
+    <protocol>MG</protocol>
+    <numberOfPriors>1</numberOfPriors>
+    <restriction identifier="1">
+        <selectorAttribute>ImageLaterality</selectorAttribute>
+        <selectorValue>L</selectorValue>
+    </restriction>
+    <restriction identifier="2">
+        <selectorAttribute>CodeMeaning</selectorAttribute>
+        <selectorValue>later</selectorValue>
+    </restriction>
+    <restriction identifier="3">
+        <selectorAttribute>CodeMeaning</selectorAttribute>
+        <selectorValue>cranio-caudal</selectorValue>
+    </restriction>
+    <imageSet identifier="1">
+        <type>image</type>
+        <restrictionExpression>1 and 2 and not 3</restrictionExpression>
+    </imageSet>
+    <imageSet identifier="2">
+        <type>image</type>
+        <abstractPriorValue>1</abstractPriorValue>
+        <restrictionExpression>1 and 2 and not 3</restrictionExpression>
+    </imageSet>
+    <displaySet identifier="1">
+        <imageSetNumber>1</imageSetNumber>
+        <position>0.0\1.0\0.5\0.0</position>
+        <iconType>MLO_R</iconType>
+        <patientOrientation>P\F</patientOrientation>
+        <alignment>right</alignment>
+    </displaySet>
+    <displaySet identifier="2">
+        <imageSetNumber>2</imageSetNumber>
+        <position>0.5\1.0\1.0\0.0</position>
+        <iconType>MLO_L</iconType>
+        <alignment>left</alignment>
+    </displaySet>
+</hangingProtocol>
