@@ -20,6 +20,7 @@
 #include "toolproxy.h"
 #include "image.h"
 #include "qfusionbalancewidget.h"
+#include "qfusionlayoutwidget.h"
 #include "series.h"
 
 #include <QAction>
@@ -53,6 +54,21 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     m_fusionBalanceToolButton->setMenuPosition(QEnhancedMenuToolButton::Above);
     m_fusionBalanceToolButton->setMenuAlignment(QEnhancedMenuToolButton::AlignRight);
     m_fusionBalanceToolButton->hide();
+
+    // Set up fusion layout widget
+    QFusionLayoutWidget *fusionLayoutWidget = new QFusionLayoutWidget(this);
+    connect(fusionLayoutWidget, SIGNAL(layout3x1Requested()), SLOT(requestFusionLayout3x1()));
+    connect(fusionLayoutWidget, SIGNAL(layout3x3Requested()), SLOT(requestFusionLayout3x3()));
+    widgetAction = new QWidgetAction(this);
+    widgetAction->setDefaultWidget(fusionLayoutWidget);
+    menu = new QMenu(this);
+    menu->addAction(widgetAction);
+    connect(fusionLayoutWidget, SIGNAL(layout3x1Requested()), menu, SLOT(close()));
+    connect(fusionLayoutWidget, SIGNAL(layout3x3Requested()), menu, SLOT(close()));
+    m_fusionLayoutToolButton->setMenu(menu);
+    m_fusionLayoutToolButton->setMenuPosition(QEnhancedMenuToolButton::Above);
+    m_fusionLayoutToolButton->setMenuAlignment(QEnhancedMenuToolButton::AlignRight);
+    m_fusionLayoutToolButton->hide();
 
     createConnections();
     m_viewText->setText(QString());
@@ -103,7 +119,7 @@ void Q2DViewerWidget::createConnections()
     connect(m_2DView, SIGNAL(viewerStatusChanged()), SLOT(setSliderBarWidgetsEnabledFromViewerStatus()));
 
     connect(m_fusionBalanceWidget, SIGNAL(balanceChanged(int)), m_2DView, SLOT(setFusionBalance(int)));
-    connect(m_2DView, SIGNAL(volumeChanged(Volume*)), SLOT(resetFusionBalance()));
+    connect(m_2DView, SIGNAL(volumeChanged(Volume*)), SLOT(resetFusionOptions()));
 
     connect(m_2DView, SIGNAL(doubleClicked()), SLOT(emitDoubleClicked()));
 }
@@ -255,7 +271,7 @@ void Q2DViewerWidget::setSliderBarWidgetsEnabled(bool enabled)
     m_viewText->setEnabled(enabled);
 }
 
-void Q2DViewerWidget::resetFusionBalance()
+void Q2DViewerWidget::resetFusionOptions()
 {
     if (m_2DView->getNumberOfInputs() == 2)
     {
@@ -263,16 +279,34 @@ void Q2DViewerWidget::resetFusionBalance()
         m_fusionBalanceWidget->setFirstVolumeModality(m_2DView->getInput(0)->getModality());
         m_fusionBalanceWidget->setSecondVolumeModality(m_2DView->getInput(1)->getModality());
         m_fusionBalanceToolButton->show();
+        m_fusionLayoutToolButton->show();
     }
     else
     {
         m_fusionBalanceToolButton->hide();
+        m_fusionLayoutToolButton->hide();
     }
 }
 
 void Q2DViewerWidget::emitDoubleClicked()
 {
     emit doubleClicked(this);
+}
+
+void Q2DViewerWidget::requestFusionLayout3x1()
+{
+    if (m_2DView->getNumberOfInputs() == 2)
+    {
+        emit fusionLayout3x1Requested(m_2DView->getInputs());
+    }
+}
+
+void Q2DViewerWidget::requestFusionLayout3x3()
+{
+    if (m_2DView->getNumberOfInputs() == 2)
+    {
+        emit fusionLayout3x3Requested(m_2DView->getInputs());
+    }
 }
 
 }

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QFusionLayoutWidgetBase</class>
+ <widget class="QWidget" name="QFusionLayoutWidgetBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>152</width>
+    <height>98</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="udg::ItemMenu" name="m_item3x1">
+     <property name="minimumSize">
+      <size>
+       <width>64</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>64</width>
+       <height>80</height>
+      </size>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="udg::GridIcon" name="frame"/>
+        </item>
+        <item row="0" column="1">
+         <widget class="udg::GridIcon" name="frame_2"/>
+        </item>
+        <item row="0" column="2">
+         <widget class="udg::GridIcon" name="frame_3"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>3x1</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="udg::ItemMenu" name="m_item3x3">
+     <property name="minimumSize">
+      <size>
+       <width>64</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>64</width>
+       <height>80</height>
+      </size>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="udg::GridIcon" name="frame_4"/>
+        </item>
+        <item row="0" column="1">
+         <widget class="udg::GridIcon" name="frame_5"/>
+        </item>
+        <item row="0" column="2">
+         <widget class="udg::GridIcon" name="frame_6"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="udg::GridIcon" name="frame_7"/>
+        </item>
+        <item row="1" column="1">
+         <widget class="udg::GridIcon" name="frame_8"/>
+        </item>
+        <item row="1" column="2">
+         <widget class="udg::GridIcon" name="frame_9"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="udg::GridIcon" name="frame_10"/>
+        </item>
+        <item row="2" column="1">
+         <widget class="udg::GridIcon" name="frame_11"/>
+        </item>
+        <item row="2" column="2">
+         <widget class="udg::GridIcon" name="frame_12"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>3x3</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>udg::ItemMenu</class>
+   <extends>QFrame</extends>
+   <header>itemmenu.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>udg::GridIcon</class>
+   <extends>QFrame</extends>
+   <header>gridicon.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
