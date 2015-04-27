@@ -26,6 +26,7 @@ class ViewersLayout;
 class HangingProtocolManager;
 class StudyLayoutConfig;
 class HangingProtocol;
+class Volume;
 
 /**
     Manages hanging prootocols and automatic layouts for a given patient in a viewer's layout object
@@ -68,6 +69,11 @@ public slots:
     void setCurrentHangingProtocol(int hangingProtocolNumber);
     void setPriorHangingProtocol(int hangingProtocolNumber);
     void setCombinedHangingProtocol(int hangingProtocolNumber);
+
+    /// Sets a 3x1 fusion layout with the given volumes.
+    void setFusionLayout3x1(const QList<Volume*> &volumes);
+    /// Sets a 3x3 fusion layout with the given volumes.
+    void setFusionLayout3x3(const QList<Volume*> &volumes);
 
 signals:
     /// Emits this signal when new hanging protocols are found for the current patient

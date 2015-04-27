@@ -56,6 +56,9 @@ LayoutManager::LayoutManager(Patient *patient, ViewersLayout *layout, QObject *p
     m_currentHangingProtocolApplied = 0;
     m_priorHangingProtocolApplied = 0;
     m_combinedHangingProtocolApplied = 0;
+
+    connect(m_layout, SIGNAL(fusionLayout3x1Requested(QList<Volume*>)), SLOT(setFusionLayout3x1(QList<Volume*>)));
+    connect(m_layout, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SLOT(setFusionLayout3x3(QList<Volume*>)));
 }
 
 LayoutManager::~LayoutManager()
@@ -484,6 +487,59 @@ void LayoutManager::setPriorHangingProtocol(int hangingProtocolNumber)
     {
         setCombinedHangingProtocolApplied(0);
         setCurrentHangingProtocolApplied(applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, LeftHalfGeometry));
+    }
+}
+
+void LayoutManager::setFusionLayout3x1(const QList<Volume*> &volumes)
+{
+    if (volumes.size() != 2)
+    {
+        return;
+    }
+
+    setCombinedHangingProtocolApplied(0);
+    setCurrentHangingProtocolApplied(0);
+    setPriorHangingProtocolApplied(0);
+
+    m_layout->setGrid(1, 3);
+
+    QList<Volume*> inputs[3];
+    inputs[0] << volumes[0];
+    inputs[1] << volumes;
+    inputs[2] << volumes[1];
+
+    for (int i = 0; i < 3; i++)
+    {
+        m_layout->getViewerWidget(i)->getViewer()->setInputAsynchronously(inputs[i]);
+    }
+}
+
+void LayoutManager::setFusionLayout3x3(const QList<Volume*> &volumes)
+{
+    if (volumes.size() != 2)
+    {
+        return;
+    }
+
+    setCombinedHangingProtocolApplied(0);
+    setCurrentHangingProtocolApplied(0);
+    setPriorHangingProtocolApplied(0);
+
+    m_layout->setGrid(3, 3);
+
+    QList<Volume*> inputs[3];
+    inputs[0] << volumes[0];
+    inputs[1] << volumes;
+    inputs[2] << volumes[1];
+
+    AnatomicalPlane views[3] = { AnatomicalPlane::Axial, AnatomicalPlane::Coronal, AnatomicalPlane::Sagittal };
+
+    for (int i = 0; i < 9; i++)
+    {
+        m_layout->getViewerWidget(i)->getViewer()->enableRendering(false);
+        m_layout->getViewerWidget(i)->getViewer()->setInputAsynchronously(inputs[i % 3]);
+        m_layout->getViewerWidget(i)->getViewer()->resetView(views[i / 3]);
+        m_layout->getViewerWidget(i)->getViewer()->enableRendering(true);
     }
 }
 

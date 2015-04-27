@@ -20,7 +20,8 @@ FORMS += qlogviewerbase.ui \
     q2dviewerlayoutconfigurationscreenbase.ui \
     q2dviewerconfigurationscreenbase.ui \
     qlayoutoptionswidgetbase.ui \
-    qnotificationpopupbase.ui
+    qnotificationpopupbase.ui \
+    qfusionlayoutwidgetbase.ui
 
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
@@ -421,7 +422,10 @@ HEADERS += extensionfactory.h \
     voilutsignaltosyncactionmapper.h \
     hangingprotocolimagesetrestriction.h \
     hangingprotocolimagesetrestrictionexpression.h \
-    hangingprotocolfiller.h
+    hangingprotocolfiller.h \
+    qfusionlayoutwidget.h \
+    gridicon.h \
+    itemmenu.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -790,7 +794,10 @@ SOURCES += extensionmediator.cpp \
     voilutsignaltosyncactionmapper.cpp \
     hangingprotocolimagesetrestriction.cpp \
     hangingprotocolimagesetrestrictionexpression.cpp \
-    hangingprotocolfiller.cpp
+    hangingprotocolfiller.cpp \
+    qfusionlayoutwidget.cpp \
+    gridicon.cpp \
+    itemmenu.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
