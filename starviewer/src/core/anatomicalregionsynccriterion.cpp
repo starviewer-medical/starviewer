@@ -109,7 +109,7 @@ bool AnatomicalRegionSyncCriterion::criterionIsMet(Q2DViewer *viewer1, Q2DViewer
     }
 }
 
-int AnatomicalRegionSyncCriterion::getYIndex(AnatomicalPlane::AnatomicalPlaneType originalPlane, AnatomicalPlane::AnatomicalPlaneType currentPlane)
+int AnatomicalRegionSyncCriterion::getYIndex(const AnatomicalPlane &originalPlane, const AnatomicalPlane &currentPlane)
 {
     if (originalPlane == AnatomicalPlane::Axial)
     {

@@ -154,7 +154,7 @@ public:
     QString getCurrentAnatomicalPlaneLabel() const;
 
     /// Returns current anatomical plane as AnatomicalPlaneType
-    AnatomicalPlane::AnatomicalPlaneType getCurrentAnatomicalPlane() const;
+    AnatomicalPlane getCurrentAnatomicalPlane() const;
 
     /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
     double getCurrentSpacingBetweenSlices();
@@ -421,7 +421,7 @@ protected:
 
     void getCurrentRenderedItemBounds(double bounds[6]);
 
-    void setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
+    void setDefaultOrientation(const AnatomicalPlane &anatomicalPlane);
 
     /// Returns the current view plane.
     virtual OrthogonalPlane getCurrentViewPlane() const;

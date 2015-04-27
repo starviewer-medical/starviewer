@@ -603,7 +603,7 @@ void QViewer::resetView(const OrthogonalPlane &view)
     setCameraOrientation(view);
 }
 
-void QViewer::resetView(AnatomicalPlane::AnatomicalPlaneType desiredAnatomicalPlane)
+void QViewer::resetView(const AnatomicalPlane &desiredAnatomicalPlane)
 {
     if (!hasInput())
     {
@@ -752,7 +752,7 @@ bool QViewer::adjustCameraScaleFactor(double factor)
     return true;
 }
 
-void QViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane)
+void QViewer::setDefaultOrientation(const AnatomicalPlane &anatomicalPlane)
 {
     Q_UNUSED(anatomicalPlane);
 }

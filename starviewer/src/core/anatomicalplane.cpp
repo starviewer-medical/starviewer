@@ -14,52 +14,48 @@
 
 #include "anatomicalplane.h"
 
-#include <QObject>
-#include <QStringList>
-
 #include "patientorientation.h"
-#include "dicomvaluerepresentationconverter.h"
+
+#include <QObject>
 
 namespace udg {
 
-const QString AnatomicalPlane::getLabel(AnatomicalPlaneType orientation)
+AnatomicalPlane::AnatomicalPlane(Plane plane)
+    : m_plane(plane)
 {
-    QString label;
+}
 
-    switch (orientation)
+QString AnatomicalPlane::getLabel() const
+{
+    switch (m_plane)
     {
         case Axial:
-            label = QObject::tr("AXIAL");
-            break;
+            return QObject::tr("AXIAL");
 
         case Sagittal:
-            label = QObject::tr("SAGITTAL");
-            break;
+            return QObject::tr("SAGITTAL");
 
         case Coronal:
-            label = QObject::tr("CORONAL");
-            break;
+            return QObject::tr("CORONAL");
 
         case Oblique:
-            label = QObject::tr("OBLIQUE");
-            break;
+            return QObject::tr("OBLIQUE");
 
         case NotAvailable:
-            label = QObject::tr("N/A");
-            break;
+            return QObject::tr("N/A");
+
+        default:
+            return QString();
     }
-
-    return label;
 }
 
-const QString AnatomicalPlane::getLabelFromPatientOrientation(const PatientOrientation &orientation)
+QString AnatomicalPlane::getLabelFromPatientOrientation(const PatientOrientation &orientation)
 {
-    return AnatomicalPlane::getLabel(getPlaneTypeFromPatientOrientation(orientation));
+    return getPlaneFromPatientOrientation(orientation).getLabel();
 }
 
-const AnatomicalPlane::AnatomicalPlaneType AnatomicalPlane::getPlaneTypeFromPatientOrientation(const PatientOrientation &orientation)
+AnatomicalPlane AnatomicalPlane::getPlaneFromPatientOrientation(const PatientOrientation &orientation)
 {
-    AnatomicalPlaneType planeType;
     QString rowAxis = orientation.getRowDirectionLabel();
     QString columnAxis = orientation.getColumnDirectionLabel();
 
@@ -68,51 +64,49 @@ const AnatomicalPlane::AnatomicalPlaneType AnatomicalPlane::getPlaneTypeFromPati
         if ((rowAxis.startsWith(PatientOrientation::RightLabel) || rowAxis.startsWith(PatientOrientation::LeftLabel)) &&
             (columnAxis.startsWith(PatientOrientation::AnteriorLabel) || columnAxis.startsWith(PatientOrientation::PosteriorLabel)))
         {
-            planeType = AnatomicalPlane::Axial;
+            return Axial;
         }
         else if ((columnAxis.startsWith(PatientOrientation::RightLabel) || columnAxis.startsWith(PatientOrientation::LeftLabel)) &&
             (rowAxis.startsWith(PatientOrientation::AnteriorLabel) || rowAxis.startsWith(PatientOrientation::PosteriorLabel)))
         {
-            planeType = AnatomicalPlane::Axial;
+            return Axial;
         }
         else if ((rowAxis.startsWith(PatientOrientation::RightLabel) || rowAxis.startsWith(PatientOrientation::LeftLabel)) &&
             (columnAxis.startsWith(PatientOrientation::HeadLabel) || columnAxis.startsWith(PatientOrientation::FeetLabel)))
         {
-            planeType = AnatomicalPlane::Coronal;
+            return Coronal;
         }
         else if ((columnAxis.startsWith(PatientOrientation::RightLabel) || columnAxis.startsWith(PatientOrientation::LeftLabel)) &&
             (rowAxis.startsWith(PatientOrientation::HeadLabel) || rowAxis.startsWith(PatientOrientation::FeetLabel)))
         {
-            planeType = AnatomicalPlane::Coronal;
+            return Coronal;
         }
         else if ((rowAxis.startsWith(PatientOrientation::AnteriorLabel) || rowAxis.startsWith(PatientOrientation::PosteriorLabel)) &&
             (columnAxis.startsWith(PatientOrientation::HeadLabel) || columnAxis.startsWith(PatientOrientation::FeetLabel)))
         {
-            planeType = AnatomicalPlane::Sagittal;
+            return Sagittal;
         }
         else if ((columnAxis.startsWith(PatientOrientation::AnteriorLabel) || columnAxis.startsWith(PatientOrientation::PosteriorLabel)) &&
             (rowAxis.startsWith(PatientOrientation::HeadLabel) || rowAxis.startsWith(PatientOrientation::FeetLabel)))
         {
-            planeType = AnatomicalPlane::Sagittal;
+            return Sagittal;
         }
         else
         {
-            planeType = AnatomicalPlane::Oblique;
+            return Oblique;
         }
     }
     else
     {
-        planeType = AnatomicalPlane::NotAvailable;
+        return NotAvailable;
     }
-
-    return planeType;
 }
 
-const PatientOrientation AnatomicalPlane::getDefaultRadiologicalOrienation(AnatomicalPlaneType plane)
+PatientOrientation AnatomicalPlane::getDefaultRadiologicalOrienation() const
 {
     PatientOrientation orientation;
 
-    switch (plane)
+    switch (m_plane)
     {
         case Axial:
             orientation.setLabels(PatientOrientation::LeftLabel, PatientOrientation::PosteriorLabel);
@@ -134,6 +128,11 @@ const PatientOrientation AnatomicalPlane::getDefaultRadiologicalOrienation(Anato
     }
 
     return orientation;
+}
+
+AnatomicalPlane::operator Plane() const
+{
+    return m_plane;
 }
 
 } // End namespace udg

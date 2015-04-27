@@ -253,12 +253,12 @@ QString Q2DViewer::getCurrentAnatomicalPlaneLabel() const
     return AnatomicalPlane::getLabelFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
 }
 
-AnatomicalPlane::AnatomicalPlaneType Q2DViewer::getCurrentAnatomicalPlane() const
+AnatomicalPlane Q2DViewer::getCurrentAnatomicalPlane() const
 {
-    return AnatomicalPlane::getPlaneTypeFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
+    return AnatomicalPlane::getPlaneFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
 }
 
-void Q2DViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane)
+void Q2DViewer::setDefaultOrientation(const AnatomicalPlane &anatomicalPlane)
 {
     if (!hasInput())
     {
@@ -267,10 +267,10 @@ void Q2DViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anato
 
     // We apply the standard orientation for the desired projection unless original acquisition is axial and is the same as the desired one
     // because when the patient is acquired in prono position we don't want to change the acquisition orientation and thus respect the acquired one
-    AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = getMainInput()->getAcquisitionPlane();
+    AnatomicalPlane acquisitionPlane = getMainInput()->getAcquisitionPlane();
     if (acquisitionPlane != AnatomicalPlane::Axial || acquisitionPlane != anatomicalPlane)
     {
-        PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(anatomicalPlane);
+        PatientOrientation desiredOrientation = anatomicalPlane.getDefaultRadiologicalOrienation();
         setImageOrientation(desiredOrientation);
     }
 }
