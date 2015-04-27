@@ -55,7 +55,7 @@ void SyncActionManager::addSyncedViewer(QViewer *viewer)
         if (viewer2D)
         {
             connect(viewer2D, SIGNAL(restored()), this, SLOT(synchronize()));
-            connect(viewer2D, SIGNAL(anatomicalViewChanged(AnatomicalPlane::AnatomicalPlaneType)), this, SLOT(synchronizeAllViewersButSender()));
+            connect(viewer2D, SIGNAL(anatomicalViewChanged(AnatomicalPlane)), this, SLOT(synchronizeAllViewersButSender()));
             connect(viewer2D, SIGNAL(newVolumesRendered()), this, SLOT(synchronizeAllViewersButSender()));
         }
     }
