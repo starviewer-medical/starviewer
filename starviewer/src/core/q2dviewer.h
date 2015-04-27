@@ -295,6 +295,8 @@ public slots:
 
     void resetView(const OrthogonalPlane &view);
 
+    void resetView(const AnatomicalPlane &anatomicalPlane);
+
     /// Restaura el visualitzador a l'estat inicial
     void restore();
 

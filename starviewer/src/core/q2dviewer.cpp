@@ -824,6 +824,13 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     emit viewChanged(getCurrentViewPlane());
 }
 
+// This method needs to be redefined in Q2DViewer because the OrthogonalPlane version is redefined and it would hide this version otherwise
+// (see https://isocpp.org/wiki/faq/strange-inheritance#hiding-rule)
+void Q2DViewer::resetView(const AnatomicalPlane &anatomicalPlane)
+{
+    QViewer::resetView(anatomicalPlane);
+}
+
 void Q2DViewer::updateCamera()
 {
     if (hasInput())
