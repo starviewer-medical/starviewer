@@ -16,13 +16,13 @@
         <selectorAttribute>CodeMeaning</selectorAttribute>
         <selectorValue>cranio-caudal</selectorValue>
     </restriction>
-	<restriction identifier="4">
+    <restriction identifier="4">
         <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>D CC</selectorValue>
+        <selectorValue>D CC|CC DCHA|r-cc re-cc</selectorValue>
     </restriction>
     <restriction identifier="5">
         <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>I CC</selectorValue>
+        <selectorValue>I CC|CC IZQ|l-cc li-cc</selectorValue>
     </restriction>
 	<restriction identifier="6">
         <selectorAttribute>Laterality</selectorAttribute>
@@ -36,21 +36,13 @@
         <selectorAttribute>ViewPosition</selectorAttribute>
         <selectorValue>CC</selectorValue>
     </restriction>
-	<restriction identifier="9">
-        <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>r-cc re-cc</selectorValue>
-    </restriction>
-    <restriction identifier="10">
-        <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>l-cc li-cc</selectorValue>
-    </restriction>
     <imageSet identifier="1">
         <type>image</type>
-        <restrictionExpression>(1 and 3) or 4 or (6 and 8) or 9</restrictionExpression>
+        <restrictionExpression>(1 and 3) or 4 or (6 and 8)</restrictionExpression>
     </imageSet>
     <imageSet identifier="2">
         <type>image</type>
-        <restrictionExpression>(2 and 3) or 5 or (7 and 8) or 10</restrictionExpression>
+        <restrictionExpression>(2 and 3) or 5 or (7 and 8)</restrictionExpression>
     </imageSet>
 	
     <displaySet identifier="1">

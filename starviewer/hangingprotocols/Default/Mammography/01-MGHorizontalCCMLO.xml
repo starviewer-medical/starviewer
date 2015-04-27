@@ -27,19 +27,19 @@
     </restriction>
 	<restriction identifier="6">
         <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>D OBL</selectorValue>
+        <selectorValue>D OBL|OBL DCHA|r-mlo re-obl</selectorValue>
     </restriction>
     <restriction identifier="7">
         <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>I OBL</selectorValue>
+        <selectorValue>I OBL|OBL IZQ|l-mlo li-obl</selectorValue>
     </restriction>
     <restriction identifier="8">
         <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>D CC</selectorValue>
+        <selectorValue>D CC|CC DCHA|r-cc re-cc</selectorValue>
     </restriction>
     <restriction identifier="9">
         <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>I CC</selectorValue>
+        <selectorValue>I CC|CC IZQ|l-cc li-cc</selectorValue>
     </restriction>
 	<restriction identifier="10">
         <selectorAttribute>Laterality</selectorAttribute>
@@ -57,37 +57,21 @@
         <selectorAttribute>ViewPosition</selectorAttribute>
         <selectorValue>CC</selectorValue>
     </restriction>
-	<restriction identifier="14">
-        <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>r-mlo re-obl</selectorValue>
-    </restriction>
-    <restriction identifier="15">
-        <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>l-mlo li-obl</selectorValue>
-    </restriction>
-    <restriction identifier="16">
-        <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>r-cc re-cc</selectorValue>
-    </restriction>
-    <restriction identifier="17">
-        <selectorAttribute>SeriesDescription</selectorAttribute>
-        <selectorValue>l-cc li-cc</selectorValue>
-    </restriction>
     <imageSet identifier="1">
         <type>image</type>
-        <restrictionExpression>(1 and 4 and not 5) or 6 or (10 and 12) or 14</restrictionExpression>
+        <restrictionExpression>(1 and 4 and not 5) or 6 or (10 and 12)</restrictionExpression>
     </imageSet>
     <imageSet identifier="2">
         <type>image</type>
-        <restrictionExpression>(2 and 4 and not 5) or 7 or (11 and 12) or 15</restrictionExpression>
+        <restrictionExpression>(2 and 4 and not 5) or 7 or (11 and 12)</restrictionExpression>
     </imageSet>
     <imageSet identifier="3">
         <type>image</type>
-        <restrictionExpression>(1 and 3) or 8 or (10 and 13) or 16</restrictionExpression>
+        <restrictionExpression>(1 and 3) or 8 or (10 and 13)</restrictionExpression>
     </imageSet>
     <imageSet identifier="4">
         <type>image</type>
-        <restrictionExpression>(2 and 3) or 9 or (11 and 13) or 17</restrictionExpression>
+        <restrictionExpression>(2 and 3) or 9 or (11 and 13)</restrictionExpression>
     </imageSet>
     <displaySet identifier="1">
         <position>0.0\1.0\0.25\0.0</position>
