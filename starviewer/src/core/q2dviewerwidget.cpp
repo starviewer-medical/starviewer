@@ -142,6 +142,7 @@ void Q2DViewerWidget::setInputAsynchronously(Volume *input, QViewerCommand *comm
 
 void Q2DViewerWidget::updateInput(Volume *input)
 {
+    Q_UNUSED(input)
     m_synchronizeButton->setEnabled(true);
     m_slider->setMaximum(m_2DView->getMaximumSlice());
 }
