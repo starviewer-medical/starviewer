@@ -22,8 +22,31 @@
 
 namespace udg {
 
-GridIcon::GridIcon(QWidget *parent, const QString &iconType)
- : QFrame(parent)
+GridIcon::GridIcon(QWidget *parent)
+    : QFrame(parent)
+{
+    initialize();
+}
+
+GridIcon::GridIcon(const QString &iconType, QWidget *parent)
+    : QFrame(parent)
+{
+    initialize(iconType);
+}
+
+GridIcon::~GridIcon()
+{
+}
+
+void GridIcon::resizeEvent(QResizeEvent *event)
+{
+    QFrame::resizeEvent(event);
+
+    m_label->setPixmap(m_label->pixmap()->scaled(event->size().width() - 2, event->size().height() - 2, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_label->setAlignment(Qt::AlignCenter);
+}
+
+void GridIcon::initialize(const QString &iconType)
 {
     QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setSpacing(0);
@@ -41,23 +64,11 @@ GridIcon::GridIcon(QWidget *parent, const QString &iconType)
     {
         path = QString::fromUtf8(":/images/axial.png");
     }
-    
+
     pixmap.load(path);
 
     m_label->setPixmap(pixmap);
     gridLayout->addWidget(m_label, 0, 0, 1, 1);
-}
-
-GridIcon::~GridIcon()
-{
-}
-
-void GridIcon::resizeEvent(QResizeEvent *event)
-{
-    QFrame::resizeEvent(event);
-
-    m_label->setPixmap(m_label->pixmap()->scaled(event->size().width() - 2, event->size().height() - 2, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    m_label->setAlignment(Qt::AlignCenter);
 }
 
 }
