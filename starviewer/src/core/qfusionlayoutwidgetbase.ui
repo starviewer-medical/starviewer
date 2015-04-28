@@ -50,13 +50,13 @@
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="udg::GridIcon" name="frame"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x1_1"/>
         </item>
         <item row="0" column="1">
-         <widget class="udg::GridIcon" name="frame_2"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x1_2"/>
         </item>
         <item row="0" column="2">
-         <widget class="udg::GridIcon" name="frame_3"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x1_3"/>
         </item>
        </layout>
       </item>
@@ -121,31 +121,31 @@
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="udg::GridIcon" name="frame_4"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x3_1"/>
         </item>
         <item row="0" column="1">
-         <widget class="udg::GridIcon" name="frame_5"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x3_2"/>
         </item>
         <item row="0" column="2">
-         <widget class="udg::GridIcon" name="frame_6"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x3_3"/>
         </item>
         <item row="1" column="0">
-         <widget class="udg::GridIcon" name="frame_7"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x3_4"/>
         </item>
         <item row="1" column="1">
-         <widget class="udg::GridIcon" name="frame_8"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x3_5"/>
         </item>
         <item row="1" column="2">
-         <widget class="udg::GridIcon" name="frame_9"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x3_6"/>
         </item>
         <item row="2" column="0">
-         <widget class="udg::GridIcon" name="frame_10"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x3_7"/>
         </item>
         <item row="2" column="1">
-         <widget class="udg::GridIcon" name="frame_11"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x3_8"/>
         </item>
         <item row="2" column="2">
-         <widget class="udg::GridIcon" name="frame_12"/>
+         <widget class="udg::GridIcon" name="m_gridIcon3x3_9"/>
         </item>
        </layout>
       </item>
