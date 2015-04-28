@@ -27,12 +27,16 @@ namespace udg {
 class GridIcon : public QFrame {
 Q_OBJECT
 public:
-    GridIcon(QWidget *parent = 0, const QString &iconType = QString());
+    explicit GridIcon(QWidget *parent = 0);
+    explicit GridIcon(const QString &iconType, QWidget *parent = 0);
     ~GridIcon();
 
 protected:
     /// Tractament del resize per mantenir els tamanys de les icones
     void resizeEvent(QResizeEvent *event);
+
+private:
+    void initialize(const QString &iconType = QString());
 
 private:
     /// Label on posarem la icona
