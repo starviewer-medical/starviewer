@@ -17,9 +17,7 @@
 
 #include <QFrame>
 
-// FWD declarations
 class QLabel;
-class QResizeEvent;
 
 namespace udg {
 
