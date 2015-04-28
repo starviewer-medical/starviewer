@@ -25,6 +25,7 @@
 #include "studylayoutconfigsettingsmanager.h"
 #include "hangingprotocol.h"
 #include "q2dviewerwidget.h"
+#include "resetviewtoanatomicalplaneqviewercommand.h"
 
 namespace udg {
 
@@ -510,10 +511,8 @@ void LayoutManager::setFusionLayout3x1(const QList<Volume*> &volumes, const Anat
 
     for (int i = 0; i < 3; i++)
     {
-        m_layout->getViewerWidget(i)->getViewer()->enableRendering(false);
-        m_layout->getViewerWidget(i)->getViewer()->setInputAsynchronously(inputs[i]);
-        m_layout->getViewerWidget(i)->getViewer()->resetView(anatomicalPlane);
-        m_layout->getViewerWidget(i)->getViewer()->enableRendering(true);
+        m_layout->getViewerWidget(i)->getViewer()->setInputAsynchronously(inputs[i],
+            new ResetViewToAnatomicalPlaneQViewerCommand(m_layout->getViewerWidget(i)->getViewer(), anatomicalPlane, m_layout->getViewerWidget(i)));
     }
 }
 
@@ -539,10 +538,8 @@ void LayoutManager::setFusionLayout3x3(const QList<Volume*> &volumes)
 
     for (int i = 0; i < 9; i++)
     {
-        m_layout->getViewerWidget(i)->getViewer()->enableRendering(false);
-        m_layout->getViewerWidget(i)->getViewer()->setInputAsynchronously(inputs[i % 3]);
-        m_layout->getViewerWidget(i)->getViewer()->resetView(views[i / 3]);
-        m_layout->getViewerWidget(i)->getViewer()->enableRendering(true);
+        m_layout->getViewerWidget(i)->getViewer()->setInputAsynchronously(inputs[i % 3],
+            new ResetViewToAnatomicalPlaneQViewerCommand(m_layout->getViewerWidget(i)->getViewer(), views[i / 3], m_layout->getViewerWidget(i)));
     }
 }
 
