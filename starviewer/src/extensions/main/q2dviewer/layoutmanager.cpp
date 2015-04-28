@@ -57,7 +57,7 @@ LayoutManager::LayoutManager(Patient *patient, ViewersLayout *layout, QObject *p
     m_priorHangingProtocolApplied = 0;
     m_combinedHangingProtocolApplied = 0;
 
-    connect(m_layout, SIGNAL(fusionLayout3x1Requested(QList<Volume*>)), SLOT(setFusionLayout3x1(QList<Volume*>)));
+    connect(m_layout, SIGNAL(fusionLayout3x1Requested(QList<Volume*>, AnatomicalPlane)), SLOT(setFusionLayout3x1(QList<Volume*>, AnatomicalPlane)));
     connect(m_layout, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SLOT(setFusionLayout3x3(QList<Volume*>)));
 }
 
@@ -490,7 +490,7 @@ void LayoutManager::setPriorHangingProtocol(int hangingProtocolNumber)
     }
 }
 
-void LayoutManager::setFusionLayout3x1(const QList<Volume*> &volumes)
+void LayoutManager::setFusionLayout3x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
 {
     if (volumes.size() != 2)
     {
@@ -510,7 +510,10 @@ void LayoutManager::setFusionLayout3x1(const QList<Volume*> &volumes)
 
     for (int i = 0; i < 3; i++)
     {
+        m_layout->getViewerWidget(i)->getViewer()->enableRendering(false);
         m_layout->getViewerWidget(i)->getViewer()->setInputAsynchronously(inputs[i]);
+        m_layout->getViewerWidget(i)->getViewer()->resetView(anatomicalPlane);
+        m_layout->getViewerWidget(i)->getViewer()->enableRendering(true);
     }
 }
 
