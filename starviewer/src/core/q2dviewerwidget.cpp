@@ -57,6 +57,7 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
 
     // Set up fusion layout widget
     QFusionLayoutWidget *fusionLayoutWidget = new QFusionLayoutWidget(this);
+    connect(m_2DView, SIGNAL(anatomicalViewChanged(AnatomicalPlane)), fusionLayoutWidget, SLOT(setCurrentAnatomicalPlane(AnatomicalPlane)));
     connect(fusionLayoutWidget, SIGNAL(layout3x1Requested()), SLOT(requestFusionLayout3x1()));
     connect(fusionLayoutWidget, SIGNAL(layout3x3Requested()), SLOT(requestFusionLayout3x3()));
     widgetAction = new QWidgetAction(this);

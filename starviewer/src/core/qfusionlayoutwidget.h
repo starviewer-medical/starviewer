@@ -20,6 +20,8 @@
 
 namespace udg {
 
+class AnatomicalPlane;
+
 /**
  * @brief The QFusionLayoutWidget class allows to request one of a few different standard layouts for fusion visualization.
  */
@@ -30,6 +32,10 @@ class QFusionLayoutWidget : public QWidget, private ::Ui::QFusionLayoutWidgetBas
 public:
     explicit QFusionLayoutWidget(QWidget *parent = 0);
     virtual ~QFusionLayoutWidget();
+
+public slots:
+    /// Updates the icons of the 3x1 layout to match the given anatomical plane.
+    void setCurrentAnatomicalPlane(const AnatomicalPlane &anatomicalPlane);
 
 signals:
     /// Emitted when a 3x1 layout is requested.
