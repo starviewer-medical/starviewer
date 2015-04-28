@@ -19,7 +19,6 @@
 
 #include <QMap>
 #include <QSet>
-#include <QStack>
 
 namespace udg {
 
