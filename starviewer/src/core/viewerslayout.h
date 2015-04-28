@@ -22,6 +22,7 @@
 
 namespace udg {
 
+class AnatomicalPlane;
 class Q2DViewerWidget;
 class RelativeGeometryLayout;
 class Volume;
@@ -95,7 +96,7 @@ signals:
     void manualSynchronizationStateChanged(bool enable);
 
     /// Propagation of the matching signal in Q2DViewerWidget.
-    void fusionLayout3x1Requested(const QList<Volume*> &volumes);
+    void fusionLayout3x1Requested(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
     /// Propagation of the matching signal in Q2DViewerWidget.
     void fusionLayout3x3Requested(const QList<Volume*> &volumes);
 

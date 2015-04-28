@@ -297,7 +297,7 @@ void Q2DViewerWidget::requestFusionLayout3x1()
 {
     if (m_2DView->getNumberOfInputs() == 2)
     {
-        emit fusionLayout3x1Requested(m_2DView->getInputs());
+        emit fusionLayout3x1Requested(m_2DView->getInputs(), m_2DView->getCurrentAnatomicalPlane());
     }
 }
 
