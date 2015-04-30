@@ -24,6 +24,7 @@ namespace udg {
 
 class StatsWatcher;
 class QFusionBalanceWidget;
+class QFusionLayoutWidget;
 class QViewerCommand;
 
 /**
@@ -134,6 +135,10 @@ private:
 
     /// Widget to adjust the fusion balance. Will be shown as the menu of the fusion balance tool button.
     QFusionBalanceWidget *m_fusionBalanceWidget;
+
+    /// Widget to select and apply a fusion layout. Will be shown as the menu of the fusion layout tool button.
+    QFusionLayoutWidget *m_fusionLayoutWidget;
+
 };
 
 };

@@ -56,16 +56,16 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     m_fusionBalanceToolButton->hide();
 
     // Set up fusion layout widget
-    QFusionLayoutWidget *fusionLayoutWidget = new QFusionLayoutWidget(this);
-    connect(m_2DView, SIGNAL(anatomicalViewChanged(AnatomicalPlane)), fusionLayoutWidget, SLOT(setCurrentAnatomicalPlane(AnatomicalPlane)));
-    connect(fusionLayoutWidget, SIGNAL(layout3x1Requested()), SLOT(requestFusionLayout3x1()));
-    connect(fusionLayoutWidget, SIGNAL(layout3x3Requested()), SLOT(requestFusionLayout3x3()));
+    m_fusionLayoutWidget = new QFusionLayoutWidget(this);
+    connect(m_2DView, SIGNAL(anatomicalViewChanged(AnatomicalPlane)), m_fusionLayoutWidget, SLOT(setCurrentAnatomicalPlane(AnatomicalPlane)));
+    connect(m_fusionLayoutWidget, SIGNAL(layout3x1Requested()), SLOT(requestFusionLayout3x1()));
+    connect(m_fusionLayoutWidget, SIGNAL(layout3x3Requested()), SLOT(requestFusionLayout3x3()));
     widgetAction = new QWidgetAction(this);
-    widgetAction->setDefaultWidget(fusionLayoutWidget);
+    widgetAction->setDefaultWidget(m_fusionLayoutWidget);
     menu = new QMenu(this);
     menu->addAction(widgetAction);
-    connect(fusionLayoutWidget, SIGNAL(layout3x1Requested()), menu, SLOT(close()));
-    connect(fusionLayoutWidget, SIGNAL(layout3x3Requested()), menu, SLOT(close()));
+    connect(m_fusionLayoutWidget, SIGNAL(layout3x1Requested()), menu, SLOT(close()));
+    connect(m_fusionLayoutWidget, SIGNAL(layout3x3Requested()), menu, SLOT(close()));
     m_fusionLayoutToolButton->setMenu(menu);
     m_fusionLayoutToolButton->setMenuPosition(QEnhancedMenuToolButton::Above);
     m_fusionLayoutToolButton->setMenuAlignment(QEnhancedMenuToolButton::AlignRight);
@@ -279,6 +279,7 @@ void Q2DViewerWidget::resetFusionOptions()
         m_fusionBalanceWidget->setBalance(50);
         m_fusionBalanceWidget->setFirstVolumeModality(m_2DView->getInput(0)->getModality());
         m_fusionBalanceWidget->setSecondVolumeModality(m_2DView->getInput(1)->getModality());
+        m_fusionLayoutWidget->setCurrentAnatomicalPlane(m_2DView->getCurrentAnatomicalPlane());
         m_fusionBalanceToolButton->show();
         m_fusionLayoutToolButton->show();
     }
