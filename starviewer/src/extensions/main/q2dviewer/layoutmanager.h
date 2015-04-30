@@ -138,6 +138,11 @@ private:
     /// Private setter for m_priorHangingProtocolApplied. Use this instead of changing its value directly.
     void setPriorHangingProtocolApplied(HangingProtocol *activePriorHangingProtocolChanged);
 
+    /// Performs the necessary actions before applying a new layout for the given study (which must be the current or the prior study) and returns the geometry
+    /// where that must be occupied by the new layout. The necessary actions include breaking a combined hanging protocol and applying the proper layout choice
+    /// for the other study, or clearing the hanging protocol of the given study.
+    QRectF prepareToChangeLayoutOfStudy(Study *study);
+
 private:
     /// Patient for the layout
     Patient *m_patient;

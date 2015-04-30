@@ -26,6 +26,7 @@
 #include "hangingprotocol.h"
 #include "q2dviewerwidget.h"
 #include "resetviewtoanatomicalplaneqviewercommand.h"
+#include "volume.h"
 
 namespace udg {
 
@@ -498,11 +499,10 @@ void LayoutManager::setFusionLayout3x1(const QList<Volume*> &volumes, const Anat
         return;
     }
 
-    setCombinedHangingProtocolApplied(0);
-    setCurrentHangingProtocolApplied(0);
-    setPriorHangingProtocolApplied(0);
-
-    m_layout->setGrid(1, 3);
+    QRectF geometry = prepareToChangeLayoutOfStudy(volumes[0]->getStudy());
+    m_layout->cleanUp(geometry);
+    m_layout->setGridInArea(1, 3, geometry);
+    QList<Q2DViewerWidget*> viewers = m_layout->getViewersInsideGeometry(geometry);
 
     QList<Volume*> inputs[3];
     inputs[0] << volumes[0];
@@ -511,8 +511,8 @@ void LayoutManager::setFusionLayout3x1(const QList<Volume*> &volumes, const Anat
 
     for (int i = 0; i < 3; i++)
     {
-        m_layout->getViewerWidget(i)->getViewer()->setInputAsynchronously(inputs[i],
-            new ResetViewToAnatomicalPlaneQViewerCommand(m_layout->getViewerWidget(i)->getViewer(), anatomicalPlane, m_layout->getViewerWidget(i)));
+        viewers[i]->getViewer()->setInputAsynchronously(inputs[i],
+            new ResetViewToAnatomicalPlaneQViewerCommand(viewers[i]->getViewer(), anatomicalPlane, viewers[i]));
     }
 }
 
@@ -523,11 +523,10 @@ void LayoutManager::setFusionLayout3x3(const QList<Volume*> &volumes)
         return;
     }
 
-    setCombinedHangingProtocolApplied(0);
-    setCurrentHangingProtocolApplied(0);
-    setPriorHangingProtocolApplied(0);
-
-    m_layout->setGrid(3, 3);
+    QRectF geometry = prepareToChangeLayoutOfStudy(volumes[0]->getStudy());
+    m_layout->cleanUp(geometry);
+    m_layout->setGridInArea(3, 3, geometry);
+    QList<Q2DViewerWidget*> viewers = m_layout->getViewersInsideGeometry(geometry);
 
     QList<Volume*> inputs[3];
     inputs[0] << volumes[0];
@@ -538,8 +537,8 @@ void LayoutManager::setFusionLayout3x3(const QList<Volume*> &volumes)
 
     for (int i = 0; i < 9; i++)
     {
-        m_layout->getViewerWidget(i)->getViewer()->setInputAsynchronously(inputs[i % 3],
-            new ResetViewToAnatomicalPlaneQViewerCommand(m_layout->getViewerWidget(i)->getViewer(), views[i / 3], m_layout->getViewerWidget(i)));
+        viewers[i]->getViewer()->setInputAsynchronously(inputs[i % 3],
+            new ResetViewToAnatomicalPlaneQViewerCommand(viewers[i]->getViewer(), views[i / 3], viewers[i]));
     }
 }
 
@@ -603,6 +602,42 @@ void LayoutManager::setPriorHangingProtocolApplied(HangingProtocol *priorHanging
     {
         m_priorHangingProtocolApplied = priorHangingProtocolApplied;
         emit activePriorHangingProtocolChanged(priorHangingProtocolApplied);
+    }
+}
+
+QRectF LayoutManager::prepareToChangeLayoutOfStudy(Study *study)
+{
+    if (m_priorStudy)
+    {
+        if (study == m_currentStudy)
+        {
+            setCurrentHangingProtocolApplied(0);
+
+            if (m_combinedHangingProtocolApplied)
+            {
+                setCombinedHangingProtocolApplied(0);
+                setPriorHangingProtocolApplied(applyProperLayoutChoice(m_priorStudy, m_priorStudyHangingProtocolCandidates, RightHalfGeometry));
+            }
+
+            return LeftHalfGeometry;
+        }
+        else // study == m_priorStudy
+        {
+            setPriorHangingProtocolApplied(0);
+
+            if (m_combinedHangingProtocolApplied)
+            {
+                setCombinedHangingProtocolApplied(0);
+                setCurrentHangingProtocolApplied(applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, LeftHalfGeometry));
+            }
+
+            return RightHalfGeometry;
+        }
+    }
+    else
+    {
+        setCurrentHangingProtocolApplied(0);
+        return WholeGeometry;
     }
 }
 
