@@ -51,7 +51,7 @@ Rectangle {
                 var textElement = Qt.createQmlObject(
                         'import QtQuick 2.4;'
                         + 'Text {'
-                        + '   text: "' + item.text + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier) + '; font.pointSize: ' + applicationFontSize
+                        + '   text: "' + item.text.replace('"', '\\"') + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier) + '; font.pointSize: ' + applicationFontSize
                         + '}',
                         parent, "calcContentWidth")
                 max = Math.max((textElement.width + 10) * 2, max)
@@ -60,7 +60,7 @@ Rectangle {
             var captionElement = Qt.createQmlObject(
                     'import QtQuick 2.4;'
                     + 'Text {'
-                        + '   text: "' + model[i].caption + '"; visible: false; font.pointSize: ' + applicationFontSize
+                        + '   text: "' + model[i].caption.replace('"', '\\"') + '"; visible: false; font.pointSize: ' + applicationFontSize
                     + '}',
                     parent, "calcContentWidth")
             max = Math.max(captionElement.width + 20, max)
