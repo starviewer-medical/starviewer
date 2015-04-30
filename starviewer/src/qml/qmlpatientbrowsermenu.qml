@@ -54,7 +54,7 @@ Rectangle {
                         + '   text: "' + item.text.replace('"', '\\"') + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier) + '; font.pointSize: ' + applicationFontSize
                         + '}',
                         parent, "calcContentWidth")
-                max = Math.max((textElement.width + 10) * 2, max)
+                max = Math.max((textElement.width + 15) * 2, max)
                 textElement.destroy()
             }
             var captionElement = Qt.createQmlObject(
