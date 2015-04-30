@@ -107,39 +107,15 @@ void LayoutManager::applyProperLayoutChoice()
 
 void LayoutManager::setGrid(int rows, int columns)
 {
-    if (!m_priorStudy)
+    Study *study = m_currentStudy;
+
+    if (m_priorStudy && RightHalfGeometry.contains(m_layout->getGeometryOfViewer(m_layout->getSelectedViewer())))
     {
-        setCurrentHangingProtocolApplied(0);
-        applyLayoutCandidates(getLayoutCandidates(m_currentStudy), m_currentStudy, WholeGeometry, rows, columns);
+        study = m_priorStudy;
     }
-    else
-    {
-        QRectF selectedViewerGeometry = m_layout->getGeometryOfViewer(m_layout->getSelectedViewer());
 
-        if (LeftHalfGeometry.contains(selectedViewerGeometry))
-        {
-            setCurrentHangingProtocolApplied(0);
-            applyLayoutCandidates(getLayoutCandidates(m_currentStudy), m_currentStudy, LeftHalfGeometry, rows, columns);
-
-            if (m_combinedHangingProtocolApplied)
-            {
-                setCombinedHangingProtocolApplied(0);
-                setPriorHangingProtocolApplied(applyProperLayoutChoice(m_priorStudy, m_priorStudyHangingProtocolCandidates, RightHalfGeometry));
-            }
-
-        }
-        else
-        {
-            setPriorHangingProtocolApplied(0);
-            applyLayoutCandidates(getLayoutCandidates(m_priorStudy), m_priorStudy, RightHalfGeometry, rows, columns);
-
-            if (m_combinedHangingProtocolApplied)
-            {
-                setCombinedHangingProtocolApplied(0);
-                setCurrentHangingProtocolApplied(applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, LeftHalfGeometry));
-            }
-        }
-    }
+    QRectF geometry = prepareToChangeLayoutOfStudy(study);
+    applyLayoutCandidates(getLayoutCandidates(study), study, geometry, rows, columns);
 }
 
 void LayoutManager::applyProperLayoutChoice(bool changeCurrentStudyLayout, bool changePriorStudyLayout)
