@@ -20,12 +20,14 @@
 
 namespace udg {
 
+class AnatomicalPlane;
 class Patient;
 class Study;
 class ViewersLayout;
 class HangingProtocolManager;
 class StudyLayoutConfig;
 class HangingProtocol;
+class Volume;
 
 /**
     Manages hanging prootocols and automatic layouts for a given patient in a viewer's layout object
@@ -68,6 +70,11 @@ public slots:
     void setCurrentHangingProtocol(int hangingProtocolNumber);
     void setPriorHangingProtocol(int hangingProtocolNumber);
     void setCombinedHangingProtocol(int hangingProtocolNumber);
+
+    /// Sets a 3x1 fusion layout with the given volumes and anatomical plane.
+    void setFusionLayout3x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
+    /// Sets a 3x3 fusion layout with the given volumes.
+    void setFusionLayout3x3(const QList<Volume*> &volumes);
 
 signals:
     /// Emits this signal when new hanging protocols are found for the current patient
@@ -130,6 +137,11 @@ private:
     void setCurrentHangingProtocolApplied(HangingProtocol *activeCurrentHangingProtocolChanged);
     /// Private setter for m_priorHangingProtocolApplied. Use this instead of changing its value directly.
     void setPriorHangingProtocolApplied(HangingProtocol *activePriorHangingProtocolChanged);
+
+    /// Performs the necessary actions before applying a new layout for the given study (which must be the current or the prior study) and returns the geometry
+    /// where that must be occupied by the new layout. The necessary actions include breaking a combined hanging protocol and applying the proper layout choice
+    /// for the other study, or clearing the hanging protocol of the given study.
+    QRectF prepareToChangeLayoutOfStudy(Study *study);
 
 private:
     /// Patient for the layout

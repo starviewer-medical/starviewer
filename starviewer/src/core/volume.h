@@ -192,10 +192,10 @@ public:
     /// En el cas que no tinguem imatges retornarà NotAvailable.
     /// TODO Com que el volum pot estar format per imatges de diferents plans, el pla d'adquisició 
     /// es calcula en base a la primera imatge i prou
-    AnatomicalPlane::AnatomicalPlaneType getAcquisitionPlane() const;
+    AnatomicalPlane getAcquisitionPlane() const;
 
     /// Returns which orthogonal plane of the current volume corresponds to the given anatomical plane
-    OrthogonalPlane getCorrespondingOrthogonalPlane(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane) const;
+    OrthogonalPlane getCorrespondingOrthogonalPlane(const AnatomicalPlane &anatomicalPlane) const;
 
     /// Ens retorna l'índex intern d'imatge corresponent a la llesca i fase indicats
     int getImageIndex(int sliceNumber, int phaseNumber) const;

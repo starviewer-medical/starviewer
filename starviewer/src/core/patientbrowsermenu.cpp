@@ -100,7 +100,7 @@ void PatientBrowserMenu::setPatient(Patient *patient)
                 {
                     if (series->getModality() == "CT" && !series->isCTLocalizer())
                     {
-                        AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = volume->getAcquisitionPlane();
+                        AnatomicalPlane acquisitionPlane = volume->getAcquisitionPlane();
 
                         if (acquisitionPlane != AnatomicalPlane::NotAvailable)
                         {

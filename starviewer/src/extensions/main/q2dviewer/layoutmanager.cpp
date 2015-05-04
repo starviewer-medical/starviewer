@@ -25,6 +25,8 @@
 #include "studylayoutconfigsettingsmanager.h"
 #include "hangingprotocol.h"
 #include "q2dviewerwidget.h"
+#include "resetviewtoanatomicalplaneqviewercommand.h"
+#include "volume.h"
 
 namespace udg {
 
@@ -56,6 +58,9 @@ LayoutManager::LayoutManager(Patient *patient, ViewersLayout *layout, QObject *p
     m_currentHangingProtocolApplied = 0;
     m_priorHangingProtocolApplied = 0;
     m_combinedHangingProtocolApplied = 0;
+
+    connect(m_layout, SIGNAL(fusionLayout3x1Requested(QList<Volume*>, AnatomicalPlane)), SLOT(setFusionLayout3x1(QList<Volume*>, AnatomicalPlane)));
+    connect(m_layout, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SLOT(setFusionLayout3x3(QList<Volume*>)));
 }
 
 LayoutManager::~LayoutManager()
@@ -102,39 +107,15 @@ void LayoutManager::applyProperLayoutChoice()
 
 void LayoutManager::setGrid(int rows, int columns)
 {
-    if (!m_priorStudy)
+    Study *study = m_currentStudy;
+
+    if (m_priorStudy && RightHalfGeometry.contains(m_layout->getGeometryOfViewer(m_layout->getSelectedViewer())))
     {
-        setCurrentHangingProtocolApplied(0);
-        applyLayoutCandidates(getLayoutCandidates(m_currentStudy), m_currentStudy, WholeGeometry, rows, columns);
+        study = m_priorStudy;
     }
-    else
-    {
-        QRectF selectedViewerGeometry = m_layout->getGeometryOfViewer(m_layout->getSelectedViewer());
 
-        if (LeftHalfGeometry.contains(selectedViewerGeometry))
-        {
-            setCurrentHangingProtocolApplied(0);
-            applyLayoutCandidates(getLayoutCandidates(m_currentStudy), m_currentStudy, LeftHalfGeometry, rows, columns);
-
-            if (m_combinedHangingProtocolApplied)
-            {
-                setCombinedHangingProtocolApplied(0);
-                setPriorHangingProtocolApplied(applyProperLayoutChoice(m_priorStudy, m_priorStudyHangingProtocolCandidates, RightHalfGeometry));
-            }
-
-        }
-        else
-        {
-            setPriorHangingProtocolApplied(0);
-            applyLayoutCandidates(getLayoutCandidates(m_priorStudy), m_priorStudy, RightHalfGeometry, rows, columns);
-
-            if (m_combinedHangingProtocolApplied)
-            {
-                setCombinedHangingProtocolApplied(0);
-                setCurrentHangingProtocolApplied(applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, LeftHalfGeometry));
-            }
-        }
-    }
+    QRectF geometry = prepareToChangeLayoutOfStudy(study);
+    applyLayoutCandidates(getLayoutCandidates(study), study, geometry, rows, columns);
 }
 
 void LayoutManager::applyProperLayoutChoice(bool changeCurrentStudyLayout, bool changePriorStudyLayout)
@@ -487,6 +468,56 @@ void LayoutManager::setPriorHangingProtocol(int hangingProtocolNumber)
     }
 }
 
+void LayoutManager::setFusionLayout3x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
+{
+    if (volumes.size() != 2)
+    {
+        return;
+    }
+
+    QRectF geometry = prepareToChangeLayoutOfStudy(volumes[0]->getStudy());
+    m_layout->cleanUp(geometry);
+    m_layout->setGridInArea(1, 3, geometry);
+    QList<Q2DViewerWidget*> viewers = m_layout->getViewersInsideGeometry(geometry);
+
+    QList<Volume*> inputs[3];
+    inputs[0] << volumes[0];
+    inputs[1] << volumes;
+    inputs[2] << volumes[1];
+
+    for (int i = 0; i < 3; i++)
+    {
+        viewers[i]->getViewer()->setInputAsynchronously(inputs[i],
+            new ResetViewToAnatomicalPlaneQViewerCommand(viewers[i]->getViewer(), anatomicalPlane, viewers[i]));
+    }
+}
+
+void LayoutManager::setFusionLayout3x3(const QList<Volume*> &volumes)
+{
+    if (volumes.size() != 2)
+    {
+        return;
+    }
+
+    QRectF geometry = prepareToChangeLayoutOfStudy(volumes[0]->getStudy());
+    m_layout->cleanUp(geometry);
+    m_layout->setGridInArea(3, 3, geometry);
+    QList<Q2DViewerWidget*> viewers = m_layout->getViewersInsideGeometry(geometry);
+
+    QList<Volume*> inputs[3];
+    inputs[0] << volumes[0];
+    inputs[1] << volumes;
+    inputs[2] << volumes[1];
+
+    AnatomicalPlane views[3] = { AnatomicalPlane::Axial, AnatomicalPlane::Coronal, AnatomicalPlane::Sagittal };
+
+    for (int i = 0; i < 9; i++)
+    {
+        viewers[i]->getViewer()->setInputAsynchronously(inputs[i % 3],
+            new ResetViewToAnatomicalPlaneQViewerCommand(viewers[i]->getViewer(), views[i / 3], viewers[i]));
+    }
+}
+
 void LayoutManager::getHangingProtocolAppliedCandidatesAndSetterForSelectedViewer(HangingProtocol* &hangingProtocolApplied,
                                                                                   QList<HangingProtocol*> &hangingProtocolCandidates,
                                                                                   void (LayoutManager::* &setHangingProtocol)(int)) const
@@ -547,6 +578,42 @@ void LayoutManager::setPriorHangingProtocolApplied(HangingProtocol *priorHanging
     {
         m_priorHangingProtocolApplied = priorHangingProtocolApplied;
         emit activePriorHangingProtocolChanged(priorHangingProtocolApplied);
+    }
+}
+
+QRectF LayoutManager::prepareToChangeLayoutOfStudy(Study *study)
+{
+    if (m_priorStudy)
+    {
+        if (study == m_currentStudy)
+        {
+            setCurrentHangingProtocolApplied(0);
+
+            if (m_combinedHangingProtocolApplied)
+            {
+                setCombinedHangingProtocolApplied(0);
+                setPriorHangingProtocolApplied(applyProperLayoutChoice(m_priorStudy, m_priorStudyHangingProtocolCandidates, RightHalfGeometry));
+            }
+
+            return LeftHalfGeometry;
+        }
+        else // study == m_priorStudy
+        {
+            setPriorHangingProtocolApplied(0);
+
+            if (m_combinedHangingProtocolApplied)
+            {
+                setCombinedHangingProtocolApplied(0);
+                setCurrentHangingProtocolApplied(applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, LeftHalfGeometry));
+            }
+
+            return RightHalfGeometry;
+        }
+    }
+    else
+    {
+        setCurrentHangingProtocolApplied(0);
+        return WholeGeometry;
     }
 }
 

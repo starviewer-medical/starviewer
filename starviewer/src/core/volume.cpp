@@ -683,7 +683,7 @@ void Volume::convertToNeutralVolume()
     this->setNumberOfPhases(1);
 }
 
-AnatomicalPlane::AnatomicalPlaneType Volume::getAcquisitionPlane() const
+AnatomicalPlane Volume::getAcquisitionPlane() const
 {
     if (m_imageSet.isEmpty())
     {
@@ -691,14 +691,14 @@ AnatomicalPlane::AnatomicalPlaneType Volume::getAcquisitionPlane() const
     }
     else
     {
-        return AnatomicalPlane::getPlaneTypeFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
+        return AnatomicalPlane::getPlaneFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
     }
 }
 
-OrthogonalPlane Volume::getCorrespondingOrthogonalPlane(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane) const
+OrthogonalPlane Volume::getCorrespondingOrthogonalPlane(const AnatomicalPlane &anatomicalPlane) const
 {
     OrthogonalPlane orthogonalPlane;
-    AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = getAcquisitionPlane();
+    AnatomicalPlane acquisitionPlane = getAcquisitionPlane();
     switch (acquisitionPlane)
     {
         case AnatomicalPlane::Axial:
@@ -816,11 +816,11 @@ bool Volume::areAllImagesInTheSameAnatomicalPlane() const
 
         if (!m_imageSet.isEmpty())
         {
-            AnatomicalPlane::AnatomicalPlaneType anatomicalPlane = AnatomicalPlane::getPlaneTypeFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
+            AnatomicalPlane anatomicalPlane = AnatomicalPlane::getPlaneFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
 
             foreach (Image *image, m_imageSet)
             {
-                if (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()) != anatomicalPlane)
+                if (AnatomicalPlane::getPlaneFromPatientOrientation(image->getPatientOrientation()) != anatomicalPlane)
                 {
                     m_allImagesAreInTheSameAnatomicalPlane = false;
                     break;

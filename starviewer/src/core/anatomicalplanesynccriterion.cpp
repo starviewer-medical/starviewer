@@ -40,7 +40,7 @@ bool AnatomicalPlaneSyncCriterion::criterionIsMet(Q2DViewer *viewer1, Q2DViewer 
     }
     else
     {
-        AnatomicalPlane::AnatomicalPlaneType anatomicalPlane = viewer1->getCurrentAnatomicalPlane();
+        AnatomicalPlane anatomicalPlane = viewer1->getCurrentAnatomicalPlane();
         if (anatomicalPlane != AnatomicalPlane::Axial && anatomicalPlane != AnatomicalPlane::Sagittal && anatomicalPlane != AnatomicalPlane::Coronal)
         {
             return false;

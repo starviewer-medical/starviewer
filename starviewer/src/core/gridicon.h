@@ -17,9 +17,7 @@
 
 #include <QFrame>
 
-// FWD declarations
 class QLabel;
-class QResizeEvent;
 
 namespace udg {
 
@@ -29,12 +27,21 @@ namespace udg {
 class GridIcon : public QFrame {
 Q_OBJECT
 public:
-    GridIcon(QWidget *parent = 0, const QString &iconType = QString());
+    explicit GridIcon(QWidget *parent = 0);
+    explicit GridIcon(const QString &iconType, QWidget *parent = 0);
     ~GridIcon();
+
+    /// Updates the current icon to match the given iconType.
+    void setIconType(QString iconType);
 
 protected:
     /// Tractament del resize per mantenir els tamanys de les icones
     void resizeEvent(QResizeEvent *event);
+
+private:
+    void initialize(const QString &iconType = QString());
+    /// Scales the given pixmap to fit this GridIcon and sets it to the label.
+    void setScaledPixmap(const QPixmap &pixmap);
 
 private:
     /// Label on posarem la icona
