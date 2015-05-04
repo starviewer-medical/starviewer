@@ -23,7 +23,16 @@
    <number>2</number>
   </property>
   <layout class="QGridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>3</number>
+   </property>
+   <property name="topMargin">
+    <number>3</number>
+   </property>
+   <property name="rightMargin">
+    <number>3</number>
+   </property>
+   <property name="bottomMargin">
     <number>3</number>
    </property>
    <property name="spacing">
@@ -34,7 +43,16 @@
      <property name="spacing">
       <number>2</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>2</number>
+     </property>
+     <property name="topMargin">
+      <number>2</number>
+     </property>
+     <property name="rightMargin">
+      <number>2</number>
+     </property>
+     <property name="bottomMargin">
       <number>2</number>
      </property>
      <item>
@@ -57,6 +75,17 @@
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="udg::QEnhancedMenuToolButton" name="m_fusionLayoutToolButton">
+       <property name="toolTip">
+        <string>Fusion Layout</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/grid.png</normaloff>:/images/grid.png</iconset>
        </property>
       </widget>
      </item>
@@ -107,7 +136,8 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../extensions/main/q2dviewer/q2dviewer.qrc"/>
+  <include location="../main/main.qrc"/>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
  <connections/>

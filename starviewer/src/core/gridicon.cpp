@@ -22,42 +22,54 @@
 
 namespace udg {
 
-GridIcon::GridIcon(QWidget *parent, const QString &iconType)
- : QFrame(parent)
+GridIcon::GridIcon(QWidget *parent)
+    : QFrame(parent)
 {
-    QGridLayout *gridLayout = new QGridLayout(this);
-    gridLayout->setSpacing(0);
-    gridLayout->setMargin(1);
-    m_label = new QLabel(this);
-    m_label->setFrameShape(QFrame::StyledPanel);
-    QPixmap pixmap;
+    initialize();
+}
 
-    QString path;
-    if (!iconType.isEmpty())
-    {
-        path = QString::fromUtf8(":/images/") + iconType + ".png";
-    }
-    else
-    {
-        path = QString::fromUtf8(":/images/axial.png");
-    }
-    
-    pixmap.load(path);
-
-    m_label->setPixmap(pixmap);
-    gridLayout->addWidget(m_label, 0, 0, 1, 1);
+GridIcon::GridIcon(const QString &iconType, QWidget *parent)
+    : QFrame(parent)
+{
+    initialize(iconType);
 }
 
 GridIcon::~GridIcon()
 {
 }
 
+void GridIcon::setIconType(QString iconType)
+{
+    if (iconType.isEmpty())
+    {
+        iconType = "axial";
+    }
+
+    setScaledPixmap(QPixmap(QString(":/images/%1.png").arg(iconType)));
+}
+
 void GridIcon::resizeEvent(QResizeEvent *event)
 {
     QFrame::resizeEvent(event);
 
-    m_label->setPixmap(m_label->pixmap()->scaled(event->size().width() - 2, event->size().height() - 2, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    setScaledPixmap(*m_label->pixmap());
+}
+
+void GridIcon::initialize(const QString &iconType)
+{
+    QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->setSpacing(0);
+    gridLayout->setMargin(1);
+    m_label = new QLabel(this);
+    m_label->setFrameShape(QFrame::StyledPanel);
     m_label->setAlignment(Qt::AlignCenter);
+    setIconType(iconType);
+    gridLayout->addWidget(m_label, 0, 0, 1, 1);
+}
+
+void GridIcon::setScaledPixmap(const QPixmap &pixmap)
+{
+    m_label->setPixmap(pixmap.scaled(this->width() - 2, this->height() - 2, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 }

@@ -43,6 +43,7 @@ void alignRight(QPoint &menuPoint, const QEnhancedMenuToolButton *button)
 QEnhancedMenuToolButton::QEnhancedMenuToolButton(QWidget *parent)
  : QToolButton(parent), m_menu(0), m_menuPosition(Below), m_menuAlignment(AlignLeft)
 {
+    connectButtonToMenu();
 }
 
 QEnhancedMenuToolButton::~QEnhancedMenuToolButton()
@@ -57,7 +58,6 @@ QMenu* QEnhancedMenuToolButton::menu() const
 void QEnhancedMenuToolButton::setMenu(QMenu *menu)
 {
     m_menu = menu;
-    connect(this, SIGNAL(pressed()), this, SLOT(showMenu()), Qt::UniqueConnection);
 }
 
 void QEnhancedMenuToolButton::setMenuPosition(MenuPosition position)
@@ -103,8 +103,19 @@ void QEnhancedMenuToolButton::showMenu()
             break;
     }
 
+    // Remove the connection so that the menu is closed on the next click
+    disconnect(this, SIGNAL(pressed()), this, SLOT(showMenu()));
+
     menu()->exec(menuPoint);
     this->setDown(false);
+
+    // Create the connection again on the next event loop iteration (not immediately)
+    QMetaObject::invokeMethod(this, "connectButtonToMenu", Qt::QueuedConnection);
+}
+
+void QEnhancedMenuToolButton::connectButtonToMenu()
+{
+    connect(this, SIGNAL(pressed()), SLOT(showMenu()));
 }
 
 }

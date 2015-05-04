@@ -24,6 +24,7 @@ namespace udg {
 
 class StatsWatcher;
 class QFusionBalanceWidget;
+class QFusionLayoutWidget;
 class QViewerCommand;
 
 /**
@@ -68,6 +69,12 @@ signals:
     /// Emitted when the underlying viewer is double-clicked.
     void doubleClicked(Q2DViewerWidget *viewer);
 
+    /// Emitted when one of the options of the fusion layout tool button has been selected
+    /// to request a 3x1 fusion layout with the given volumes and anatomical plane.
+    void fusionLayout3x1Requested(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
+    /// Emitted when one of the options of the fusion layout tool button has been selected to request a 3x3 fusion layout with the given volumes.
+    void fusionLayout3x3Requested(const QList<Volume*> &volumes);
+
 protected:
     /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
     void mousePressEvent(QMouseEvent *mouseEvent);
@@ -107,11 +114,17 @@ private slots:
     /// Actualitza l'estat d'habilitat dels widgets de la barra amb l'slider a partir de l'estat del viewer
     void setSliderBarWidgetsEnabledFromViewerStatus();
 
-    /// If the viewer has 2 inputs shows the fusion balance tool button and resets the fusion balance to 50% for each input. Otherwise hides the button.
-    void resetFusionBalance();
+    /// If the viewer has 2 inputs shows the fusion balance and fusion layout tool buttons and resets the fusion balance to 50% for each input.
+    /// Otherwise hides the buttons.
+    void resetFusionOptions();
 
     /// Emits the doubleClicked() signal.
     void emitDoubleClicked();
+
+    /// Emits the fusionLayout3x1Requested() signal if the contained viewer has 2 volumes.
+    void requestFusionLayout3x1();
+    /// Emits the fusionLayout3x3Requested() signal if the contained viewer has 2 volumes.
+    void requestFusionLayout3x3();
 
 private:
     /// Acció del boto de sincronitzar
@@ -122,6 +135,10 @@ private:
 
     /// Widget to adjust the fusion balance. Will be shown as the menu of the fusion balance tool button.
     QFusionBalanceWidget *m_fusionBalanceWidget;
+
+    /// Widget to select and apply a fusion layout. Will be shown as the menu of the fusion layout tool button.
+    QFusionLayoutWidget *m_fusionLayoutWidget;
+
 };
 
 };

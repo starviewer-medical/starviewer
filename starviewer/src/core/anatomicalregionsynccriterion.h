@@ -36,7 +36,7 @@ protected:
 
 private:
     bool criterionIsMet(Q2DViewer *viewer1, Q2DViewer *viewer2);
-    int getYIndex(AnatomicalPlane::AnatomicalPlaneType originalPlane, AnatomicalPlane::AnatomicalPlaneType currentPlane);
+    int getYIndex(const AnatomicalPlane &originalPlane, const AnatomicalPlane &currentPlane);
 };
 
 } // namespace udg

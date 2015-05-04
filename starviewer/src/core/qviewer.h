@@ -195,7 +195,7 @@ public slots:
     virtual void resetView(const OrthogonalPlane &view);
     
     /// Resets the view to the specified anatomical plane
-    void resetView(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
+    void resetView(const AnatomicalPlane &anatomicalPlane);
     virtual void resetViewToAxial();
     virtual void resetViewToSagital();
     virtual void resetViewToCoronal();
@@ -236,7 +236,7 @@ signals:
     void viewerStatusChanged();
 
     /// Signal emitted when the anatomical view has changed
-    void anatomicalViewChanged(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
+    void anatomicalViewChanged(const AnatomicalPlane &anatomicalPlane);
 
     /// Emitted when this viewer receives a double click event.
     void doubleClicked();
@@ -265,7 +265,7 @@ protected:
     bool adjustCameraScaleFactor(double factor);
     
     /// Sets the default rendered item orientation for the given anatomical plane
-    virtual void setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
+    virtual void setDefaultOrientation(const AnatomicalPlane &anatomicalPlane);
     
     /// Ens retorna la càmera activa pel renderer principal, si n'hi ha, NUL altrament.
     vtkCamera* getActiveCamera();

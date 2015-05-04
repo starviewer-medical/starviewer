@@ -19,12 +19,13 @@
 
 #include <QMap>
 #include <QSet>
-#include <QStack>
 
 namespace udg {
 
+class AnatomicalPlane;
 class Q2DViewerWidget;
 class RelativeGeometryLayout;
+class Volume;
 
 /**
     Classe que permet distribuir sobre un widget una sèrie Q2DViewerWidgets
@@ -93,6 +94,11 @@ signals:
     void selectedViewerChanged(Q2DViewerWidget *viewer);
 
     void manualSynchronizationStateChanged(bool enable);
+
+    /// Propagation of the matching signal in Q2DViewerWidget.
+    void fusionLayout3x1Requested(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
+    /// Propagation of the matching signal in Q2DViewerWidget.
+    void fusionLayout3x3Requested(const QList<Volume*> &volumes);
 
 private:
     /// Crea i retorna un nou visor configurat adequadament

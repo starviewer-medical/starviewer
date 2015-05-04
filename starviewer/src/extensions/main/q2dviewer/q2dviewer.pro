@@ -11,21 +11,19 @@ HEADERS += q2dviewerextensionmediator.h \
         q2dviewerextension.h \
         q2dviewersettings.h \
         layoutmanager.h \
-        gridicon.h \
         tablemenu.h \
-        itemmenu.h \
         qhangingprotocolswidget.h \
-        qhangingprotocolsgroupwidget.h
+        qhangingprotocolsgroupwidget.h \
+        resetviewtoanatomicalplaneqviewercommand.h
 
 SOURCES += q2dviewerextensionmediator.cpp \
         q2dviewerextension.cpp \
         q2dviewersettings.cpp \
         layoutmanager.cpp \
-        gridicon.cpp \
         tablemenu.cpp \
-        itemmenu.cpp \
         qhangingprotocolswidget.cpp \
-        qhangingprotocolsgroupwidget.cpp
+        qhangingprotocolsgroupwidget.cpp \
+        resetviewtoanatomicalplaneqviewercommand.cpp
 
 INCLUDEPATH += ../../../inputoutput
 DEPENDPATH += ../../../inputoutput

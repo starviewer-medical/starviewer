@@ -105,7 +105,7 @@ ItemMenu* QHangingProtocolsGroupWidget::createItem(const HangingProtocol *hangin
             iconType = hangingProtocol->getIconType();
         }
 
-        GridIcon *newIcon = new GridIcon(item, iconType);
+        GridIcon *newIcon = new GridIcon(iconType, item);
 
         QStringList listOfPositions = displaySet->getPosition().split("\\");
         double x1 = listOfPositions.value(0).toDouble();
