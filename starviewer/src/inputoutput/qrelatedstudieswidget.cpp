@@ -568,7 +568,8 @@ void QRelatedStudiesWidget::updateVisibleCurrentRadioButtons()
             }
         }
     }
-    QCoreApplication::processEvents();
+    // Don't use processEvents() here because it can cause a crash if the application is closed while studies are being inserted:
+    // the close event is processed and this object is deleted, but then the execution continues with an invalid 'this' pointer
 }
 
 void QRelatedStudiesWidget::updateVisiblePriorRadioButtons()
@@ -596,7 +597,8 @@ void QRelatedStudiesWidget::updateVisiblePriorRadioButtons()
             }
         }
     }
-    QCoreApplication::processEvents();
+    // Don't use processEvents() here because it can cause a crash if the application is closed while studies are being inserted:
+    // the close event is processed and this object is deleted, but then the execution continues with an invalid 'this' pointer
 }
 
 void QRelatedStudiesWidget::onStudyAdded(Study *study)
