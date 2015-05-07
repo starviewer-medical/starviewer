@@ -968,6 +968,9 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
 {
     if (hasInput())
     {
+        int oldSlice = getCurrentSlice();
+        int oldPhase = getCurrentPhase();
+
         // First update the index of the corresponding dimension
         switch (dimension)
         {
@@ -1007,11 +1010,17 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         switch (dimension)
         {
             case SpatialDimension:
-                emit sliceChanged(getCurrentSlice());
+                if (getCurrentSlice() != oldSlice)
+                {
+                    emit sliceChanged(getCurrentSlice());
+                }
                 break;
 
             case TemporalDimension:
-                emit phaseChanged(getCurrentPhase());
+                if (getCurrentPhase() != oldPhase)
+                {
+                    emit phaseChanged(getCurrentPhase());
+                }
                 break;
         }
         
@@ -1522,6 +1531,9 @@ void Q2DViewer::setSlabThickness(int thickness)
     
     if (thickness != mainDisplayUnit->getSlabThickness())
     {
+        int oldThickness = mainDisplayUnit->getSlabThickness();
+        int oldSlice = getCurrentSlice();
+
         // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
         getDrawer()->removeAllPrimitives();
 
@@ -1532,8 +1544,14 @@ void Q2DViewer::setSlabThickness(int thickness)
         m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation | SliceAnnotation);
         render();
 
-        emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());
-        emit sliceChanged(getCurrentSlice());
+        if (mainDisplayUnit->getSlabThickness() != oldThickness)
+        {
+            emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());
+        }
+        if (getCurrentSlice() != oldSlice)
+        {
+            emit sliceChanged(getCurrentSlice());
+        }
     }
 }
 
