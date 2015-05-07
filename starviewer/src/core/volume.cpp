@@ -382,7 +382,7 @@ QString Volume::getPixelUnits()
         if (image->getParentSeries())
         {
             QString modality = image->getParentSeries()->getModality();
-            if (modality == "CT")
+            if (VolumeHelper::isPrimaryCT(this))
             {
                 units = "HU";
             }
