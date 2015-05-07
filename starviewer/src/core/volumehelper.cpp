@@ -27,6 +27,22 @@ VolumeHelper::~VolumeHelper()
 {
 }
 
+bool VolumeHelper::isPrimaryCT(Volume *volume)
+{
+    if (!volume)
+    {
+        return false;
+    }
+
+    Image *firstImage = volume->getImage(0);
+    if (!firstImage)
+    {
+        return false;
+    }
+
+    return volume->getModality() == "CT" && firstImage->getImageType().contains("PRIMARY");
+}
+
 bool VolumeHelper::isPrimaryPET(Volume *volume)
 {
     if (!volume)

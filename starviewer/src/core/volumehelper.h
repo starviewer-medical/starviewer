@@ -27,6 +27,9 @@ public:
     VolumeHelper();
     ~VolumeHelper();
 
+    /// Returns true if the volume is a primary CT acquisition.
+    static bool isPrimaryCT(Volume *volume);
+
     /// Returns true if the volume is a primary PET acquisition
     static bool isPrimaryPET(Volume *volume);
 
