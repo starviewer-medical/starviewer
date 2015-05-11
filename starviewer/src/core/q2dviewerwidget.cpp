@@ -274,7 +274,7 @@ void Q2DViewerWidget::setSliderBarWidgetsEnabled(bool enabled)
 
 void Q2DViewerWidget::resetFusionOptions()
 {
-    if (m_2DView->getNumberOfInputs() == 2)
+    if (m_2DView->getNumberOfInputs() == 2 && m_2DView->getViewerStatus() == QViewer::VisualizingVolume)
     {
         m_fusionBalanceWidget->setBalance(50);
         m_fusionBalanceWidget->setFirstVolumeModality(m_2DView->getInput(0)->getModality());
