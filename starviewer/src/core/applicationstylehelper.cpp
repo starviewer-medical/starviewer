@@ -70,6 +70,12 @@ void ApplicationStyleHelper::setScaledSizeTo(QMovie *movie) const
     movie->setScaledSize(image.size() * m_scaleFactor);
 }
 
+void ApplicationStyleHelper::setScaledSizeToRadioButtons(QWidget *widget) const
+{
+    int fontSize = this->getScaledFontSize(QApplication::font().pointSizeF(), CoreSettings::ScaledUserInterfaceFontSize);
+    widget->setStyleSheet(QString("QRadioButton::indicator {font-size: %1pt; margin: 0.35em 0;  width: 0.98em; height: 0.98em; image: none; border-radius: 0.62em; border: 0.12em solid; background-color: #FAFAFA;  border-color:#777;} QRadioButton::indicator::checked { background-color:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0.609 #36a3d9, stop:0.7 white, stop:1 white)}").arg(fontSize));
+}
+
 void ApplicationStyleHelper::setScaledFontSizeTo(QWidget *widget) const
 {
     // Al ser text de Qt, agafem el tamany de font del sistema com a predeterminat
