@@ -4,6 +4,7 @@
 #include "imagetesthelper.h"
 #include "series.h"
 #include "mathtools.h"
+#include "image.h"
 
 using namespace udg;
 
@@ -32,6 +33,11 @@ Series *SeriesTestHelper::createSeriesByModality(QString modality, int numberOfI
 {
     Series *series = createSeriesByUID("1", numberOfImages);
     series->setModality(modality);
+
+    if (numberOfImages > 0)
+    {
+        series->getImageByIndex(0)->setImageType("PRIMARY");
+    }
 
     return series;
 }
