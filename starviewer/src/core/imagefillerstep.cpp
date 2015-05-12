@@ -88,7 +88,7 @@ QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
             {
                 numberOfFrames = dicomReader->getValueAttributeAsQString(DICOMNumberOfFrames).toInt();
                 // Si és la segona imatge multiframe que ens trobem, augmentarem el número que identifica l'actual volum
-                if (m_input->getCurrentSeries()->getImages().count() > 1)
+                if (m_input->currentSeriesContainsAMultiframeVolume())
                 {
                     m_input->increaseCurrentMultiframeVolumeNumber();
                 }
@@ -476,7 +476,7 @@ QList<Image*> ImageFillerStep::processEnhancedDICOMFile(DICOMTagReader *dicomRea
     {
         int numberOfFrames = dicomReader->getValueAttributeAsQString(DICOMNumberOfFrames).toInt();
         // Si és la segona imatge enhanced que ens trobem, augmentarem el número que identifica l'actual volum
-        if (m_input->getCurrentSeries()->getImages().count() > 1)
+        if (m_input->currentSeriesContainsAMultiframeVolume())
         {
             m_input->increaseCurrentMultiframeVolumeNumber();
         }

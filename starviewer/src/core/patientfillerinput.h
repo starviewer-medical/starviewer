@@ -94,6 +94,9 @@ public:
     /// Retorna el número de volum (multiframe) actual
     int getCurrentMultiframeVolumeNumber();
 
+    /// Returns true if the current series already contains at least one multiframe volume.
+    bool currentSeriesContainsAMultiframeVolume() const;
+
     /// Incrementa el número de volum (single frame) actual
     void increaseCurrentSingleFrameVolumeNumber();
 
