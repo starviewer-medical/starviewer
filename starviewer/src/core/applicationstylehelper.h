@@ -53,6 +53,9 @@ public:
     /// Escala el tamany de lletra d'un QTreeWidget al adient a la pantalla on s'ha cridat recomputeStyleToScreenOfWidget
     void setScaledFontSizeTo(QTreeWidget *treeWidget) const;
 
+    /// Scale radio buttons according to the screen size. A custom design is needed to be able to enlarge radio buttons.
+    void setScaledSizeToRadioButtons(QWidget *widget) const;
+
     /// Scales application font size taking into account where recomputeStyleToScreenOfWidget was called
     int getApplicationScaledFontSize() const;
 
