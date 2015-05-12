@@ -86,10 +86,9 @@ void ApplicationStyleHelper::setScaledFontSizeTo(QWidget *widget) const
 
 void ApplicationStyleHelper::setScaledFontSizeTo(QTreeWidget *treeWidget) const
 {
-    QFont font = treeWidget->font();
-    int fontSize = this->getScaledFontSize(font.pointSizeF(), CoreSettings::ScaledUserInterfaceFontSize);
-    font.setPointSize(fontSize);
-    treeWidget->setFont(font);
+    int fontSize = this->getScaledFontSize(std::ceil(QApplication::font().pointSizeF()), CoreSettings::ScaledUserInterfaceFontSize);
+    QString changeFontSize = QString("QTreeView { font-size: %1pt } QHeaderView { font-size: %1pt }").arg(fontSize);
+    treeWidget->setStyleSheet(changeFontSize);
 }
 
 int ApplicationStyleHelper::getScaledFontSize(double defaultFontSize, const QString &settingsBackdoorKey) const
