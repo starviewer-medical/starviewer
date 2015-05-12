@@ -230,6 +230,11 @@ int PatientFillerInput::getCurrentMultiframeVolumeNumber()
     }
 }
 
+bool PatientFillerInput::currentSeriesContainsAMultiframeVolume() const
+{
+    return m_currentMultiframeVolumeNumber.contains(m_currentSeries);
+}
+
 void PatientFillerInput::increaseCurrentSingleFrameVolumeNumber()
 {
     if (m_currentSeries)
