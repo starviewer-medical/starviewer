@@ -409,10 +409,10 @@ void LayoutManager::setWorkingStudies(const QString &currentStudyUID, const QStr
 
     emit hangingProtocolCandidatesFound(m_combinedHangingProtocolCandidates, m_currentStudyHangingProtocolCandidates, m_priorStudyHangingProtocolCandidates);
 
-    // Set all applied hanging protocols to null to ensure the new selected ones are correctly marked in the hanging protocols widget
-    setCombinedHangingProtocolApplied(0);
-    setCurrentHangingProtocolApplied(0);
-    setPriorHangingProtocolApplied(0);
+    // Re-emit the signals of the currently applied hanging protocols to ensure that they are marked as active in the hanging protocols widget
+    emit activeCombinedHangingProtocolChanged(m_combinedHangingProtocolApplied);
+    emit activeCurrentHangingProtocolChanged(m_currentHangingProtocolApplied);
+    emit activePriorHangingProtocolChanged(m_priorHangingProtocolApplied);
 
     applyProperLayoutChoice(changeCurrentStudyLayout, changePriorStudyLayout);
 }
