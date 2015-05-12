@@ -51,6 +51,7 @@ QRelatedStudiesWidget::QRelatedStudiesWidget(RelatedStudiesManager *relatedStudi
 
     ApplicationStyleHelper style;
     style.setScaledFontSizeTo(this);
+    style.setScaledSizeToRadioButtons(this);
 
     initializeLookingForStudiesWidget();
     initializeTree();
