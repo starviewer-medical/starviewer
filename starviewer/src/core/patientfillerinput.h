@@ -92,13 +92,13 @@ public:
     void increaseCurrentMultiframeVolumeNumber();
 
     /// Retorna el número de volum (multiframe) actual
-    int getCurrentMultiframeVolumeNumber() const;
+    int getCurrentMultiframeVolumeNumber();
 
     /// Incrementa el número de volum (single frame) actual
     void increaseCurrentSingleFrameVolumeNumber();
 
     /// Retorna el corresponent número de volum pel conjunt d'imatges single frame actual
-    int getCurrentSingleFrameVolumeNumber() const;
+    int getCurrentSingleFrameVolumeNumber();
 
     /// Assigna/Retorna el número de volum actual que estem tractant, necessari pels
     /// passos posteriors a l'ImageFillerStep
