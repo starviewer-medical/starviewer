@@ -145,7 +145,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_viewerLayersToolButton->setMenu(viewerInformationMenu);
     
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
-    m_voiLutComboBox->setToolTip(tr("Choose VOI LUT Presets"));
+    m_voiLutComboBox->setToolTip(tr("Choose a VOI LUT preset"));
 
     readSettings();
     createConnections();

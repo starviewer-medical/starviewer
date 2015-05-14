@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ca">
+<TS version="2.1" language="ca">
 <context>
     <name>Q3DViewerExtensionBase</name>
     <message>
@@ -232,90 +232,90 @@
 <context>
     <name>udg::Q3DViewerExtension</name>
     <message>
-        <location filename="q3dviewerextension.cpp" line="49"/>
+        <location filename="q3dviewerextension.cpp" line="63"/>
         <source>Export viewer image to DICOM and send it to a PACS server</source>
         <translation>Exporta les imatges del visor a DICOM i envia-les a un servidor PACS</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="50"/>
+        <location filename="q3dviewerextension.cpp" line="64"/>
         <source>Show/Hide advanced colour options</source>
         <translation>Mostra/amaga les opcions avançades de color</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="147"/>
+        <location filename="q3dviewerextension.cpp" line="161"/>
         <source>Spine</source>
         <translation>Columna</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="162"/>
+        <location filename="q3dviewerextension.cpp" line="176"/>
         <source>Thorax</source>
         <translation>Tòrax</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="177"/>
+        <location filename="q3dviewerextension.cpp" line="191"/>
         <source>Pelvis</source>
         <translation>Pelvis</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="192"/>
+        <location filename="q3dviewerextension.cpp" line="206"/>
         <source>Circle of Willis</source>
         <translation>Cercle de Willis</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="206"/>
+        <location filename="q3dviewerextension.cpp" line="220"/>
         <source>Carotids</source>
         <translation>Caròtides</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="221"/>
+        <location filename="q3dviewerextension.cpp" line="235"/>
         <source>Bones</source>
         <translation>Ossos</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="236"/>
+        <location filename="q3dviewerextension.cpp" line="250"/>
         <source>Bones 2</source>
         <translation>Ossos 2</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="250"/>
+        <location filename="q3dviewerextension.cpp" line="264"/>
         <source>Abdomen bones</source>
         <translation>Ossos abdominals</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="265"/>
+        <location filename="q3dviewerextension.cpp" line="279"/>
         <source>Abdomen run-off</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="280"/>
+        <location filename="q3dviewerextension.cpp" line="294"/>
         <source>Abdomen slab</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="423"/>
+        <location filename="q3dviewerextension.cpp" line="437"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="446"/>
         <location filename="q3dviewerextension.cpp" line="460"/>
-        <location filename="q3dviewerextension.cpp" line="467"/>
+        <location filename="q3dviewerextension.cpp" line="474"/>
+        <location filename="q3dviewerextension.cpp" line="481"/>
         <source>Compute</source>
         <translation>Calcula</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="501"/>
+        <location filename="q3dviewerextension.cpp" line="515"/>
         <source>Load CLUT</source>
         <translation>Carrega una CLUT</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="502"/>
-        <location filename="q3dviewerextension.cpp" line="523"/>
+        <location filename="q3dviewerextension.cpp" line="516"/>
+        <location filename="q3dviewerextension.cpp" line="537"/>
         <source>Transfer function files (*.tf);;All files (*)</source>
         <translation>Fitxers de funcions de transferència (*.tf);;Tots els fitxers(*)</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="523"/>
+        <location filename="q3dviewerextension.cpp" line="537"/>
         <source>Save CLUT</source>
         <translation>Desa la CLUT</translation>
     </message>
@@ -323,17 +323,17 @@
 <context>
     <name>udg::Q3DViewerExtensionMediator</name>
     <message>
-        <location filename="q3dviewerextensionmediator.cpp" line="21"/>
+        <location filename="q3dviewerextensionmediator.cpp" line="35"/>
         <source>3D Viewer</source>
         <translation>Visor 3D</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionmediator.cpp" line="36"/>
+        <location filename="q3dviewerextensionmediator.cpp" line="50"/>
         <source>Starviewer</source>
         <translation>Starviewer</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionmediator.cpp" line="36"/>
+        <location filename="q3dviewerextensionmediator.cpp" line="50"/>
         <source>The selected item is not an image</source>
         <translation>L&apos;element seleccionat no és una imatge</translation>
     </message>

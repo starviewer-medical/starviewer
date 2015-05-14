@@ -63,7 +63,7 @@ QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
     m_lastIDGroupedDICOMImagesToPrint = 0;
     m_thumbnailsPreviewWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-    m_voiLutComboBox->setToolTip(tr("Choose VOI LUT Presets"));
+    m_voiLutComboBox->setToolTip(tr("Choose a VOI LUT preset"));
 }
 
 void QDicomPrintExtension::createConnections()

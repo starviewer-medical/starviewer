@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="en">
+<TS version="2.1" language="en">
 <context>
     <name>QCrashReporterBase</name>
     <message>
@@ -57,7 +57,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../core/coresettings.cpp" line="110"/>
+        <location filename="../core/coresettings.cpp" line="127"/>
         <source>PNG (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -65,42 +65,42 @@
 <context>
     <name>udg::QCrashReporter</name>
     <message>
-        <location filename="qcrashreporter.cpp" line="20"/>
+        <location filename="qcrashreporter.cpp" line="35"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="21"/>
+        <location filename="qcrashreporter.cpp" line="36"/>
         <source>Quit %1</source>
         <translation>Quit %1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="22"/>
+        <location filename="qcrashreporter.cpp" line="37"/>
         <source>Restart %1</source>
         <translation>Restart %1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="23"/>
+        <location filename="qcrashreporter.cpp" line="38"/>
         <source>Tell %1 about this crash</source>
         <translation>Tell %1 about this crash</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="24"/>
+        <location filename="qcrashreporter.cpp" line="39"/>
         <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
         <translation>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="60"/>
+        <location filename="qcrashreporter.cpp" line="75"/>
         <source>IP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="67"/>
+        <location filename="qcrashreporter.cpp" line="82"/>
         <source>User Domain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="124"/>
+        <location filename="qcrashreporter.cpp" line="139"/>
         <source>Host information</source>
         <translation type="unfinished"></translation>
     </message>

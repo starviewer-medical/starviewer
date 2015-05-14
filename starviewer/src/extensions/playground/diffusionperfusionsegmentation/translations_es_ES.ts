@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="es">
+<TS version="2.1" language="es">
 <context>
     <name>QDifuPerfuExtensionBase</name>
     <message>
@@ -197,67 +197,67 @@
 <context>
     <name>udg::QDifuPerfuSegmentationExtension</name>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="134"/>
+        <location filename="qdifuperfuextension.cpp" line="135"/>
         <source>Lesion Overlay</source>
         <translation>Capa de la lesión</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="135"/>
+        <location filename="qdifuperfuextension.cpp" line="136"/>
         <source>Enable/disable lesion view overlay</source>
         <translation>activar/Desactivar la visualización de la capa de la lesión</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="141"/>
+        <location filename="qdifuperfuextension.cpp" line="142"/>
         <source>Ventricles Overlay</source>
         <translation>Capa de los ventrículos</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="142"/>
+        <location filename="qdifuperfuextension.cpp" line="143"/>
         <source>Enable/disable ventricles view overlay</source>
         <translation>activar/Desactivar la visualitzación de la capa de los ventrículos</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="980"/>
+        <location filename="qdifuperfuextension.cpp" line="981"/>
         <source>Save Diffusion Mask Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="980"/>
-        <location filename="qdifuperfuextension.cpp" line="1012"/>
-        <location filename="qdifuperfuextension.cpp" line="1044"/>
-        <location filename="qdifuperfuextension.cpp" line="1068"/>
-        <location filename="qdifuperfuextension.cpp" line="1092"/>
+        <location filename="qdifuperfuextension.cpp" line="981"/>
+        <location filename="qdifuperfuextension.cpp" line="1013"/>
+        <location filename="qdifuperfuextension.cpp" line="1045"/>
+        <location filename="qdifuperfuextension.cpp" line="1069"/>
+        <location filename="qdifuperfuextension.cpp" line="1093"/>
         <source>MetaImage Files (*.mhd)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1012"/>
+        <location filename="qdifuperfuextension.cpp" line="1013"/>
         <source>Save Perfusion Mask Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1044"/>
+        <location filename="qdifuperfuextension.cpp" line="1045"/>
         <source>Save Diffusion Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1068"/>
-        <location filename="qdifuperfuextension.cpp" line="1092"/>
+        <location filename="qdifuperfuextension.cpp" line="1069"/>
+        <location filename="qdifuperfuextension.cpp" line="1093"/>
         <source>Save Perfusion Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1116"/>
+        <location filename="qdifuperfuextension.cpp" line="1117"/>
         <source>Save Transform file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1116"/>
+        <location filename="qdifuperfuextension.cpp" line="1117"/>
         <source>Transform Files (*.tf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="712"/>
+        <location filename="qdifuperfuextension.cpp" line="713"/>
         <source>Registration failed!</source>
         <translation>¡El proceso de registro ha fallado!</translation>
     </message>
