@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="en_GB" sourcelanguage="ca_ES">
+<TS version="2.1" language="en_GB" sourcelanguage="ca_ES">
 <context>
     <name>QDicomAddPrinterWidgetBase</name>
     <message>
@@ -346,10 +346,6 @@ border: 1px solid  #680000;
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Choose Window/Level Presets</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Series </source>
         <translation type="unfinished"></translation>
     </message>
@@ -411,6 +407,10 @@ border: 1px solid  #680000;
     </message>
     <message>
         <source>Unable to load some of the images to print.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a VOI LUT preset</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

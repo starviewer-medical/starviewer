@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="es">
+<TS version="2.1" language="es">
 <context>
     <name>QCrashReporterBase</name>
     <message>
@@ -57,7 +57,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../core/coresettings.cpp" line="110"/>
+        <location filename="../core/coresettings.cpp" line="127"/>
         <source>PNG (*.png)</source>
         <translation>PNG (*.png)</translation>
     </message>
@@ -65,43 +65,43 @@
 <context>
     <name>udg::QCrashReporter</name>
     <message>
-        <location filename="qcrashreporter.cpp" line="20"/>
+        <location filename="qcrashreporter.cpp" line="35"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="21"/>
+        <location filename="qcrashreporter.cpp" line="36"/>
         <source>Quit %1</source>
         <translation>Salir de %1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="22"/>
+        <location filename="qcrashreporter.cpp" line="37"/>
         <source>Restart %1</source>
         <translation>Reiniciar %1</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="23"/>
+        <location filename="qcrashreporter.cpp" line="38"/>
         <source>Tell %1 about this crash</source>
         <translation>Informar a %1 sobre el problema</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="24"/>
+        <location filename="qcrashreporter.cpp" line="39"/>
         <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
         <translation>%1 tuvo algun problema y terminó inesperadamente. Dedique un momento para enviar un informe de incidencias que ayudará al equipo de desarrollo a diagnosticar y arreglar el problema. Su información personal no se enviará con el informe.</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="60"/>
+        <location filename="qcrashreporter.cpp" line="75"/>
         <source>IP</source>
         <translation>IP</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="67"/>
+        <location filename="qcrashreporter.cpp" line="82"/>
         <source>User Domain</source>
         <translatorcomment>No s&apos;ha de traduir</translatorcomment>
         <translation>User Domain</translation>
     </message>
     <message>
-        <location filename="qcrashreporter.cpp" line="124"/>
+        <location filename="qcrashreporter.cpp" line="139"/>
         <source>Host information</source>
         <translatorcomment>No s&apos;ha de traduir</translatorcomment>
         <translation>Host information</translation>

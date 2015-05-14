@@ -80,7 +80,7 @@ QMPRExtension::QMPRExtension(QWidget *parent)
 
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
     m_viewerInformationToolButton->setToolTip(tr("Show/Hide viewer's textual information"));
-    m_voiLutComboBox->setToolTip(tr("Choose VOI LUT Presets"));
+    m_voiLutComboBox->setToolTip(tr("Choose a VOI LUT preset"));
 }
 
 QMPRExtension::~QMPRExtension()

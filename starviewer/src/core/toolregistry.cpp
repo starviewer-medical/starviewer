@@ -419,7 +419,7 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     {
         toolAction->setText(tr("TA-GT"));
         toolAction->setIcon(QIcon(":/images/perpendicularDistance.png"));
-        statusTip = tr("Enable/disable TA-GT distance tool");
+        statusTip = tr("Enable/Disable TA-GT distance tool");
         toolTip = toolAction->text();
     }
     else
