@@ -48,6 +48,10 @@ public slots:
     /// Actualitza la llista marcant aquells estudis que ja estan en memòria perquè sigui fàcil identificar-los i no es puguin tornar a descarregar.
     void updateList();
 
+    /// If no prior study is selected, it tries to select one taking into account the properties of the current study.
+    /// It is currently only available for mammography and CR Thorax.
+    void toggleComparativeMode();
+
 signals:
     /// S'emet només quan no hi ha altres estudis ja descarregant-se.
     void downloadingStudies();
