@@ -65,6 +65,7 @@ public:
     static const QString Propagation;
     static const QString NextHangingProtocol;
     static const QString PreviousHangingProtocol;
+    static const QString ToggleComparativeStudiesMode;
 
     static const QString SaveSingleScreenShot;
     static const QString SaveWholeSeriesScreenShot;
