@@ -137,6 +137,91 @@ void QRelatedStudiesWidget::searchStudiesOf(Patient *patient)
     m_relatedStudiesManager->queryMergedStudies(patient);
 }
 
+void QRelatedStudiesWidget::toggleComparativeMode()
+{
+    if (!m_studyInstanceUIDOfPriorStudy.isEmpty())
+    {
+        StudyInfo *studyInfo = m_infomationPerStudy[m_studyInstanceUIDOfPriorStudy];
+        studyInfo->priorRadioButton->click();
+    }
+    else
+    {
+        StudyInfo *studyInfo = m_infomationPerStudy[m_studyInstanceUIDOfCurrentStudy];
+        if (studyInfo)
+        {
+            Study *currentStudy = studyInfo->study;
+            QList<QPair<QString, QString> > searchPriorExpressions;
+
+            if (currentStudy->getDescription().contains(QRegularExpression("T[oòó]rax", QRegularExpression::CaseInsensitiveOption)))
+            {
+                if (currentStudy->getModalitiesAsSingleString().contains(QRegularExpression("CR|DX")))
+                {
+                    QString descriptionExpression = "T[oòó]rax";
+
+                    searchPriorExpressions << QPair<QString, QString>("CR", descriptionExpression);
+                    searchPriorExpressions << QPair<QString, QString>("DX", descriptionExpression);
+                }
+            }
+            else if (currentStudy->getModalitiesAsSingleString().contains(QRegularExpression("MG|CR")))
+            {
+                bool match = false;
+
+                if (currentStudy->getModalitiesAsSingleString().contains("MG"))
+                {
+                    match = true;
+                }
+                else if (currentStudy->getDescription().contains(QRegularExpression("Mamograf[ií]a", QRegularExpression::CaseInsensitiveOption)))
+                {
+                    match = true;
+                }
+
+                if (match)
+                {
+                    searchPriorExpressions << QPair<QString, QString>("CR", "Mamograf[ií]a");
+                    searchPriorExpressions << QPair<QString, QString>("MG", "");
+                }
+            }
+
+            if (!searchPriorExpressions.isEmpty())
+            {
+                QList<Study*> studies;
+                foreach (StudyInfo *info, m_infomationPerStudy.values())
+                {
+                    if (*currentStudy > *(info->study))
+                    {
+                        studies << info->study;
+                    }
+                }
+                studies = Study::sortStudies(studies, Study::RecentStudiesFirst);
+
+                foreach (Study *study, studies)
+                {
+                    bool match = false;
+                    int i = 0;
+                    while (!match && i < searchPriorExpressions.length())
+                    {
+                        const QPair<QString, QString> ex = searchPriorExpressions.at(i);
+                        QRegularExpression modalityRegEx = QRegularExpression(ex.first);
+                        QRegularExpression descriptionRegEx = QRegularExpression(ex.second, QRegularExpression::CaseInsensitiveOption);
+                        if (study->getModalitiesAsSingleString().contains(modalityRegEx) && study->getDescription().contains(descriptionRegEx))
+                        {
+                            match = true;
+                        }
+                        i++;
+                    }
+                    if (match)
+                    {
+                        StudyInfo *studyInfo = m_infomationPerStudy[study->getInstanceUID()];
+                        studyInfo->priorRadioButton->click();
+
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 void QRelatedStudiesWidget::initializeSearch()
 {
     m_lookingForStudiesWidget->setVisible(true);
