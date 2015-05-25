@@ -59,6 +59,7 @@ const QString Shortcuts::DesynchronizeAllViewers(ShortcutsBase + "SynchronizeNon
 const QString Shortcuts::Propagation(ShortcutsBase + "Propagation");
 const QString Shortcuts::NextHangingProtocol(ShortcutsBase + "NextHangingProtocol");
 const QString Shortcuts::PreviousHangingProtocol(ShortcutsBase + "PreviousHangingProtocol");
+const QString Shortcuts::ToggleComparativeStudiesMode(ShortcutsBase + "ToggleComparativeStudiesMode");
 
 const QString Shortcuts::SaveSingleScreenShot(ShortcutsBase + "SaveSingleScreenShot");
 const QString Shortcuts::SaveWholeSeriesScreenShot(ShortcutsBase + "SaveWholeSeriesScreenShot");
@@ -342,6 +343,9 @@ void Shortcuts::init()
     shortcutsList.append(QString("F11"));
     settingsRegistry->addSetting(PreviousHangingProtocol, shortcutsList);
     
+    shortcutsList.clear();
+    shortcutsList.append(QString("F10"));
+    settingsRegistry->addSetting(ToggleComparativeStudiesMode, shortcutsList);
 }
 
 } // End namespace udg
