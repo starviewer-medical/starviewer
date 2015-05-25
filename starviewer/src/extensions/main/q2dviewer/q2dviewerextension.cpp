@@ -332,8 +332,14 @@ void Q2DViewerExtension::setupLayoutManager()
     previousHangingProtocolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::PreviousHangingProtocol));
     connect(previousHangingProtocolAction, SIGNAL(triggered()), m_layoutManager, SLOT(applyPreviousHangingProtocol()));
 
+    QAction *toggleComparativeModeAction = new QAction(this);
+    toggleComparativeModeAction->setText("Comparative Mode");
+    toggleComparativeModeAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ToggleComparativeStudiesMode));
+    connect(toggleComparativeModeAction, SIGNAL(triggered()), m_relatedStudiesWidget, SLOT(toggleComparativeMode()));
+
     this->addAction(previousHangingProtocolAction);
     this->addAction(nextHangingProtocolAction);
+    this->addAction(toggleComparativeModeAction);
 
     m_layoutManager->initialize();
 }
