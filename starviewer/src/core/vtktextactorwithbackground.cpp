@@ -252,32 +252,32 @@ void VtkTextActorWithBackground::ComputeRectangle(vtkViewport *viewport)
             case 0:
                 break;
             case 1:
-                xo = (maxWidth - textDimensions[0]) * 0.5;
+                xo = (maxWidth - textDimensionsWithMargin[0]) * 0.5;
                 break;
             case 2:
-                xo = (maxWidth - textDimensions[0]);
+                xo = (maxWidth - textDimensionsWithMargin[0]);
                 break;
             case 3:
-                yo = (maxHeight - textDimensions[1]) * 0.5;
+                yo = (maxHeight - textDimensionsWithMargin[1]) * 0.5;
                 break;
             case 4:
-                xo = (maxWidth - textDimensions[0]) * 0.5;
-                yo = (maxHeight - textDimensions[1]) * 0.5;
+                xo = (maxWidth - textDimensionsWithMargin[0]) * 0.5;
+                yo = (maxHeight - textDimensionsWithMargin[1]) * 0.5;
             break;
             case 5:
-                xo = (maxWidth - textDimensions[0]);
-                yo = (maxHeight - textDimensions[1]) * 0.5;
+                xo = (maxWidth - textDimensionsWithMargin[0]);
+                yo = (maxHeight - textDimensionsWithMargin[1]) * 0.5;
                 break;
             case 6:
-                yo = (maxHeight - textDimensions[1]);
+                yo = (maxHeight - textDimensionsWithMargin[1]);
                 break;
             case 7:
-                xo = (maxWidth - textDimensions[0]) * 0.5;
-                yo = (maxHeight - textDimensions[1]);
+                xo = (maxWidth - textDimensionsWithMargin[0]) * 0.5;
+                yo = (maxHeight - textDimensionsWithMargin[1]);
                 break;
             case 8:
-                xo = (maxWidth - textDimensions[0]);
-                yo = (maxHeight - textDimensions[1]);
+                xo = (maxWidth - textDimensionsWithMargin[0]);
+                yo = (maxHeight - textDimensionsWithMargin[1]);
                 break;
             default:
                 vtkErrorMacro(<< "Bad alignment point value.");
@@ -287,9 +287,9 @@ void VtkTextActorWithBackground::ComputeRectangle(vtkViewport *viewport)
         //position1 & position2
         double offset = this->TextProperty->GetLineOffset();
 
-        if ((yo + offset + textDimensions[1]) > maxHeight)
+        if ((yo + offset + textDimensionsWithMargin[1]) > maxHeight)
         {
-            yo = maxHeight - textDimensions[1];
+            yo = maxHeight - textDimensionsWithMargin[1];
         }
         else if ((yo + offset) < 0)
         {
@@ -308,32 +308,32 @@ void VtkTextActorWithBackground::ComputeRectangle(vtkViewport *viewport)
             case 0:
                 break;
             case 1:
-                xo = -textDimensions[0] * 0.5;
+                xo = -textDimensionsWithMargin[0] * 0.5;
                 break;
             case 2:
-                xo = -textDimensions[0];
+                xo = -textDimensionsWithMargin[0];
                 break;
             case 3:
-                yo = -textDimensions[1] * 0.5;
+                yo = -textDimensionsWithMargin[1] * 0.5;
                 break;
             case 4:
-                yo = -textDimensions[1] * 0.5;
-                xo = -textDimensions[0] * 0.5;
+                yo = -textDimensionsWithMargin[1] * 0.5;
+                xo = -textDimensionsWithMargin[0] * 0.5;
                 break;
             case 5:
-                yo = -textDimensions[1] * 0.5;
-                xo = -textDimensions[0];
+                yo = -textDimensionsWithMargin[1] * 0.5;
+                xo = -textDimensionsWithMargin[0];
                 break;
             case 6:
-                yo = -textDimensions[1];
+                yo = -textDimensionsWithMargin[1];
                 break;
             case 7:
-                yo = -textDimensions[1];
-                xo = -textDimensions[0] * 0.5;
+                yo = -textDimensionsWithMargin[1];
+                xo = -textDimensionsWithMargin[0] * 0.5;
                 break;
             case 8:
-                yo = -textDimensions[1];
-                xo = -textDimensions[0];
+                yo = -textDimensionsWithMargin[1];
+                xo = -textDimensionsWithMargin[0];
                 break;
             default:
                 vtkErrorMacro(<< "Bad alignment point value.");
@@ -342,9 +342,6 @@ void VtkTextActorWithBackground::ComputeRectangle(vtkViewport *viewport)
         // handle line offset
         yo += this->TextProperty->GetLineOffset();
     } //end unscaled text case
-
-    xo -= this->Margin;
-    yo -= this->Margin;
 
     // I could do this with a transform, but it is simple enough
     // to rotate the four corners in 2D ...
