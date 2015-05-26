@@ -25,10 +25,13 @@
 
 #include "vtktextactorwithbackground.h"
 
+#include "mathtools.h"
 #include "vtkcorrectimageblend.h"
 
 #include <vtkFloatArray.h>
+#include <vtkImageClip.h>
 #include <vtkImageData.h>
+#include <vtkImageTranslateExtent.h>
 #include <vtkMath.h>
 #include <vtkObjectFactory.h>
 #include <vtkPointData.h>
@@ -113,12 +116,50 @@ bool VtkTextActorWithBackground::RenderImage(vtkTextProperty *tprop, vtkViewport
 
     if (returnValue)
     {
+        // 1. Clip and translate the image data to just have the minimum size to fit the text
+
+        int textBoundingBox[4];
+
+        if (!this->GetImageBoundingBox(this->ScaledTextProperty, viewport, textBoundingBox))
+        {
+            vtkErrorMacro("Cannot compute bounding box.")
+            return false;
+        }
+
         int extent[6];
         this->ImageData->GetExtent(extent);
-        extent[0] -= this->Margin;
-        extent[1] += this->Margin;
-        extent[2] -= this->Margin;
-        extent[3] += this->Margin;
+        extent[0] = textBoundingBox[0];
+        extent[1] = textBoundingBox[1];
+        extent[2] = textBoundingBox[2];
+        extent[3] = textBoundingBox[3];
+
+        vtkImageClip *imageClip = vtkImageClip::New();
+        imageClip->SetInputData(this->ImageData);
+        imageClip->SetOutputWholeExtent(extent);
+        imageClip->ClipDataOn();
+
+        vtkImageTranslateExtent *imageTranslateExtent = vtkImageTranslateExtent::New();
+        imageTranslateExtent->SetInputConnection(imageClip->GetOutputPort());
+        imageTranslateExtent->SetTranslation(this->Margin, this->Margin, 0);
+        imageTranslateExtent->Update();
+
+        this->ImageData->ShallowCopy(imageTranslateExtent->GetOutput());
+
+        imageClip->Delete();
+        imageTranslateExtent->Delete();
+
+        // 2. Create a background image with the necessary texture size: big enough for the text and the margins and with dimensions that are powers of 2
+
+        int textDimensions[3];
+        int textDimensionsWithMargin[3];
+        textDimensions[0] = (textBoundingBox[1] - textBoundingBox[0] + 1);
+        textDimensions[1] = (textBoundingBox[3] - textBoundingBox[2] + 1);
+        textDimensionsWithMargin[0] = textDimensions[0] + 2 * this->Margin;
+        textDimensionsWithMargin[1] = textDimensions[1] + 2 * this->Margin;
+
+        extent[1] = extent[0] + MathTools::roundUpToPowerOf2(textDimensionsWithMargin[0]) - 1;
+        extent[3] = extent[2] + MathTools::roundUpToPowerOf2(textDimensionsWithMargin[1]) - 1;
+
         m_backgroundImage->SetSpacing(this->ImageData->GetSpacing());
         m_backgroundImage->SetExtent(extent);
         m_backgroundImage->AllocateScalars(VTK_UNSIGNED_CHAR, 4);
@@ -161,17 +202,17 @@ void VtkTextActorWithBackground::ComputeRectangle(vtkViewport *viewport)
         textDimensionsWithMargin[0] = textDimensions[0] + 2 * this->Margin;
         textDimensionsWithMargin[1] = textDimensions[1] + 2 * this->Margin;
 
-        int imageDataDimensions[3];
-        this->ImageData->GetDimensions(imageDataDimensions);
-        float imageDataDimensionsWithMargin[2] = { imageDataDimensions[0] + 2 * this->Margin, imageDataDimensions[1] + 2 * this->Margin };
+        int textureDimensions[3];
+        m_backgroundImage->GetDimensions(textureDimensions);
 
         // compute TCoords.
         vtkFloatArray *textureCoordinates = vtkFloatArray::SafeDownCast(this->Rectangle->GetPointData()->GetTCoords());
         // Add a fudge factor to the texture coordinates to prevent the top
         // row of pixels from being truncated on some systems.
+        // If there is a margin the fudge factor is not needed.
         float fudgeFactor = this->Margin == 0 ? 0.001f : 0;
-        float tcXMax = std::min(1.0f, (textDimensionsWithMargin[0] + fudgeFactor) / imageDataDimensionsWithMargin[0]);
-        float tcYMax = std::min(1.0f, (textDimensionsWithMargin[1] + fudgeFactor) / imageDataDimensionsWithMargin[1]);
+        float tcXMax = std::min(1.0f, (textDimensionsWithMargin[0] + fudgeFactor) / textureDimensions[0]);
+        float tcYMax = std::min(1.0f, (textDimensionsWithMargin[1] + fudgeFactor) / textureDimensions[1]);
 
         textureCoordinates->InsertComponent(0, 0, 0.0);
         textureCoordinates->InsertComponent(0, 1, 0.0);
