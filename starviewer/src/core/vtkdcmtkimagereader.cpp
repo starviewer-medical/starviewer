@@ -454,9 +454,18 @@ void VtkDcmtkImageReader::readPixelSpacing(const DICOMTagReader &dicomTagReader)
 
         if (pixelSpacingStrings.size() == 2)
         {
+            double rowSpacing = pixelSpacingStrings.at(0).toDouble();
+            double columnSpacing = pixelSpacingStrings.at(1).toDouble();
+
             // Pixel spacing is rowSpacing\columnSpacing -> ySpacing\xSpacing
-            this->DataSpacing[0] = pixelSpacingStrings.at(1).toDouble();
-            this->DataSpacing[1] = pixelSpacingStrings.at(0).toDouble();
+            if (columnSpacing != 0.0)
+            {
+                this->DataSpacing[0] = columnSpacing;
+            }
+            if (rowSpacing != 0.0)
+            {
+                this->DataSpacing[1] = rowSpacing;
+            }
         }
         else
         {
