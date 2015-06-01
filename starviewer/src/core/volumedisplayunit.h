@@ -18,8 +18,9 @@
 #include "accumulator.h"
 #include "transferfunction.h"
 
-class vtkImageActor;
+class vtkCamera;
 class vtkImageData;
+class vtkImageSlice;
 class vtkPropPicker;
 
 namespace udg {
@@ -35,7 +36,7 @@ class VolumePixelData;
 
 /**
     This class groups together a Volume and the associated objects that a Q2DViewer needs to display a volume.
-    The ImagePipeline, the vtkImageActor and the SliceHandler are created internally in the constructor and destroyed in the destructor, so only the Volume has
+    The ImagePipeline, the vtkImageSlice and the SliceHandler are created internally in the constructor and destroyed in the destructor, so only the Volume has
     to be supplied externally.
  */
 class VolumeDisplayUnit {
@@ -57,8 +58,8 @@ public:
     /// Returns the image pipeline.
     ImagePipeline* getImagePipeline() const;
 
-    /// Returns the image actor.
-    vtkImageActor* getImageActor() const;
+    /// Returns the vtkImageSlice.
+    vtkImageSlice* getImageSlice() const;
 
     /// Returns the configured point picker for this unit.
     vtkPropPicker* getImagePointPicker();
@@ -81,8 +82,8 @@ public:
     /// If some orthogonal reconstruction different from original acquisition is applied, returns null
     Image* getCurrentDisplayedImage() const;
 
-    /// Updates the display extent of the image actor.
-    void updateDisplayExtent();
+    /// Updates the displayed image in the image slice.
+    void updateImageSlice(vtkCamera *camera);
 
     /// Updates the current image default presets values. It only applies to original acquisition plane.
     void updateCurrentImageDefaultPresets();
@@ -153,7 +154,7 @@ private:
     ImagePipeline *m_imagePipeline;
 
     /// The image actor where the slices are rendered.
-    vtkImageActor *m_imageActor;
+    vtkImageSlice *m_imageSlice;
 
     /// The slice handler that controls slices, phases and slabs.
     SliceHandler *m_sliceHandler;
