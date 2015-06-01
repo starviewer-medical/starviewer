@@ -22,8 +22,9 @@
 #include "image.h"
 #include "voiluthelper.h"
 
-#include <vtkImageActor.h>
-#include <vtkImageMapper3D.h>
+#include <vtkCamera.h>
+#include <vtkImageResliceMapper.h>
+#include <vtkImageSlice.h>
 #include <vtkPropPicker.h>
 #include <vtkImageProperty.h>
 
@@ -33,8 +34,14 @@ VolumeDisplayUnit::VolumeDisplayUnit()
  : m_volume(0)
 {
     m_imagePipeline = new ImagePipeline();
-    m_imageActor = vtkImageActor::New();
-    m_imageActor->GetProperty()->SetInterpolationTypeToCubic();
+    m_imageSlice = vtkImageSlice::New();
+    vtkImageResliceMapper *mapper = vtkImageResliceMapper::New();
+    mapper->SliceAtFocalPointOn();
+    mapper->SliceFacesCameraOn();
+    mapper->JumpToNearestSliceOn();
+    m_imageSlice->SetMapper(mapper);
+    mapper->Delete();
+    m_imageSlice->GetProperty()->SetInterpolationTypeToCubic();
     m_sliceHandler = new SliceHandler();
     m_imagePointPicker =  0;
     m_voiLutData = 0;
@@ -44,7 +51,7 @@ VolumeDisplayUnit::VolumeDisplayUnit()
 VolumeDisplayUnit::~VolumeDisplayUnit()
 {
     delete m_imagePipeline;
-    m_imageActor->Delete();
+    m_imageSlice->Delete();
     delete m_sliceHandler;
     
     if (m_imagePointPicker)
@@ -66,7 +73,7 @@ void VolumeDisplayUnit::setVolume(Volume *volume)
 
     resetThickSlab();
 
-    m_imageActor->GetMapper()->SetInputConnection(m_imagePipeline->getOutput().getVtkAlgorithmOutput());
+    m_imageSlice->GetMapper()->SetInputConnection(m_imagePipeline->getOutput().getVtkAlgorithmOutput());
 }
 
 void VolumeDisplayUnit::setVoiLutData(VoiLutPresetsToolData *voiLutData)
@@ -85,9 +92,9 @@ ImagePipeline* VolumeDisplayUnit::getImagePipeline() const
     return m_imagePipeline;
 }
 
-vtkImageActor* VolumeDisplayUnit::getImageActor() const
+vtkImageSlice* VolumeDisplayUnit::getImageSlice() const
 {
-    return m_imageActor;
+    return m_imageSlice;
 }
 
 vtkPropPicker* VolumeDisplayUnit::getImagePointPicker()
@@ -177,7 +184,7 @@ Image* VolumeDisplayUnit::getCurrentDisplayedImage() const
     }
 }
 
-void VolumeDisplayUnit::updateDisplayExtent()
+void VolumeDisplayUnit::updateImageSlice(vtkCamera *camera)
 {
     if (!m_volume || !m_volume->isPixelDataLoaded())
     {
@@ -186,10 +193,14 @@ void VolumeDisplayUnit::updateDisplayExtent()
 
     int imageIndex = m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
     int zIndex = this->getViewPlane().getZIndex();
-    int displayExtent[6];
-    m_volume->getExtent(displayExtent);
-    displayExtent[zIndex * 2] = displayExtent[zIndex * 2 + 1] = imageIndex;
-    m_imageActor->SetDisplayExtent(displayExtent);
+    double origin[3];
+    m_volume->getOrigin(origin);
+    double spacing[3];
+    m_volume->getSpacing(spacing);
+    double focalPoint[3];
+    camera->GetFocalPoint(focalPoint);
+    focalPoint[zIndex] = origin[zIndex] + imageIndex * spacing[zIndex];
+    camera->SetFocalPoint(focalPoint);
 }
 
 int VolumeDisplayUnit::getSlice() const
@@ -275,7 +286,7 @@ void VolumeDisplayUnit::setupPicker()
 {
     m_imagePointPicker = vtkPropPicker::New();
     m_imagePointPicker->InitializePickList();
-    m_imagePointPicker->AddPickList(getImageActor());
+    m_imagePointPicker->AddPickList(getImageSlice());
     m_imagePointPicker->PickFromListOn();
 }
 

@@ -446,8 +446,8 @@ private:
     void addImageActors();
     void removeImageActors();
     
-    /// Updates the display extents of the image actors.
-    void updateDisplayExtents();
+    /// Updates the displayed images in the image slices.
+    void updateImageSlices();
 
     /// Print some information related to the volume
     void printVolumeInformation();

@@ -20,8 +20,8 @@
 #include "imagepipeline.h"
 #include "transferfunctionmodel.h"
 
-#include <vtkImageActor.h>
 #include <vtkImageProperty.h>
+#include <vtkImageSlice.h>
 #include <vtkImageStack.h>
 
 namespace udg {
@@ -116,7 +116,7 @@ void GenericVolumeDisplayUnitHandler::removeDisplayUnits()
 {
     foreach (VolumeDisplayUnit *unit, m_displayUnits)
     {
-        m_imageStack->RemoveImage(unit->getImageActor());
+        m_imageStack->RemoveImage(unit->getImageSlice());
         delete unit;
     }
     m_displayUnits.clear();
@@ -133,7 +133,7 @@ void GenericVolumeDisplayUnitHandler::addDisplayUnit(Volume *input)
     // Add the vdu to the list before setting the volume to avoid a memory leak if setVolume throws a bad_alloc
     m_displayUnits << displayUnit;
     displayUnit->setVolume(input);
-    m_imageStack->AddImage(displayUnit->getImageActor());
+    m_imageStack->AddImage(displayUnit->getImageSlice());
 }
 
 void GenericVolumeDisplayUnitHandler::setupDisplayUnits()
@@ -148,7 +148,7 @@ void GenericVolumeDisplayUnitHandler::updateLayerNumbers()
 {
     for (int i = 0; i < m_displayUnits.size(); i++)
     {
-        m_displayUnits[i]->getImageActor()->GetProperty()->SetLayerNumber(i);
+        m_displayUnits[i]->getImageSlice()->GetProperty()->SetLayerNumber(i);
     }
 }
 
@@ -157,8 +157,8 @@ void GenericVolumeDisplayUnitHandler::setupDefaultOpacities()
     // The default opacities will be 1 for the main volume and 0.5 for the others
     for (int i = 0; i < getNumberOfInputs(); i++)
     {
-        vtkImageActor *actor = m_displayUnits.at(i)->getImageActor();
-        actor->SetOpacity(1.0);
+        vtkImageSlice *imageSlice = m_displayUnits.at(i)->getImageSlice();
+        imageSlice->GetProperty()->SetOpacity(1.0);
     }
 }
 
