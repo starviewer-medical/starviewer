@@ -19,6 +19,7 @@
 #include "volumedisplayunit.h"
 #include "imagepipeline.h"
 #include "transferfunctionmodel.h"
+#include "secondaryvolumedisplayunit.h"
 
 #include <vtkImageProperty.h>
 #include <vtkImageSlice.h>
@@ -129,7 +130,17 @@ void GenericVolumeDisplayUnitHandler::addDisplayUnit(Volume *input)
         return;
     }
 
-    VolumeDisplayUnit *displayUnit = new VolumeDisplayUnit();
+    VolumeDisplayUnit *displayUnit;
+
+    if (m_displayUnits.isEmpty())
+    {
+        displayUnit = new VolumeDisplayUnit();
+    }
+    else
+    {
+        displayUnit = new SecondaryVolumeDisplayUnit();
+    }
+
     // Add the vdu to the list before setting the volume to avoid a memory leak if setVolume throws a bad_alloc
     m_displayUnits << displayUnit;
     displayUnit->setVolume(input);

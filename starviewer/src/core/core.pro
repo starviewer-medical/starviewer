@@ -383,6 +383,7 @@ HEADERS += extensionfactory.h \
     imagepipeline.h \
     volumereadermanager.h \
     volumedisplayunit.h \
+    secondaryvolumedisplayunit.h \
     volumedisplayunithandlerfactory.h \
     genericvolumedisplayunithandler.h \
     singlevolumedisplayunithandler.h \
@@ -755,6 +756,7 @@ SOURCES += extensionmediator.cpp \
     imagepipeline.cpp \
     volumereadermanager.cpp \
     volumedisplayunit.cpp \
+    secondaryvolumedisplayunit.cpp \
     volumedisplayunithandlerfactory.cpp \
     genericvolumedisplayunithandler.cpp \
     singlevolumedisplayunithandler.cpp \
