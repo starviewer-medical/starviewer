@@ -43,7 +43,7 @@ class VolumeDisplayUnit {
 
 public:
     VolumeDisplayUnit();
-    ~VolumeDisplayUnit();
+    virtual ~VolumeDisplayUnit();
 
     /// Returns the volume.
     Volume* getVolume() const;
@@ -83,7 +83,7 @@ public:
     Image* getCurrentDisplayedImage() const;
 
     /// Updates the displayed image in the image slice.
-    void updateImageSlice(vtkCamera *camera);
+    virtual void updateImageSlice(vtkCamera *camera);
 
     /// Updates the current image default presets values. It only applies to original acquisition plane.
     void updateCurrentImageDefaultPresets();
@@ -140,6 +140,16 @@ public:
     /// Sets the display shutter image data.
     void setShutterData(vtkImageData *shutterData);
 
+protected:
+    /// The volume.
+    Volume *m_volume;
+
+    /// The image actor where the slices are rendered.
+    vtkImageSlice *m_imageSlice;
+
+    /// The slice handler that controls slices, phases and slabs.
+    SliceHandler *m_sliceHandler;
+
 private:
     /// Called when setting a new volume to reset the thick slab filter.
     void resetThickSlab();
@@ -147,17 +157,8 @@ private:
     void setupPicker();
 
 private:
-    /// The volume.
-    Volume *m_volume;
-
     /// The image pipeline that processes the volume.
     ImagePipeline *m_imagePipeline;
-
-    /// The image actor where the slices are rendered.
-    vtkImageSlice *m_imageSlice;
-
-    /// The slice handler that controls slices, phases and slabs.
-    SliceHandler *m_sliceHandler;
 
     /// Point picker to probe pixels from the image to display
     vtkPropPicker *m_imagePointPicker;
