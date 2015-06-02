@@ -803,6 +803,11 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     
     if (hasInput())
     {
+        // Adapt the camera to the new view plane in order to make actors visible
+        double bounds[6];
+        getCurrentRenderedItemBounds(bounds);
+        getRenderer()->ResetCamera(bounds);
+
         // Calculem la llesca que cal mostrar segons la vista escollida
         int initialSliceIndex = 0;
         if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
@@ -810,10 +815,6 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
             initialSliceIndex = getMaximumSlice() / 2;
         }
         setSlice(initialSliceIndex);
-        // Adapt the camera to the new view plane in order to make actors visible
-        double bounds[6];
-        getCurrentRenderedItemBounds(bounds);
-        getRenderer()->ResetCamera(bounds);
 
         // Set appropriate zoom level
         fitRenderingIntoViewport();
