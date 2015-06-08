@@ -1,7 +1,7 @@
-diff --git a/VTK-6.1.0-base/GUISupport/Qt/QVTKWidget.cxx b/VTK-6.1.0/GUISupport/Qt/QVTKWidget.cxx
+diff --git a/GUISupport/Qt/QVTKWidget.cxx b/GUISupport/Qt/QVTKWidget.cxx
 index abd24e7..07369eb 100644
---- a/VTK-6.1.0-base/GUISupport/Qt/QVTKWidget.cxx
-+++ b/VTK-6.1.0/GUISupport/Qt/QVTKWidget.cxx
+--- a/GUISupport/Qt/QVTKWidget.cxx
++++ b/GUISupport/Qt/QVTKWidget.cxx
 @@ -48,7 +48,7 @@
  #include "qx11info_x11.h"
  #endif
@@ -37,10 +37,10 @@ index abd24e7..07369eb 100644
      }
    return false;
  }
-diff --git a/VTK-6.1.0-base/GUISupport/Qt/QVTKWidget.h b/VTK-6.1.0/GUISupport/Qt/QVTKWidget.h
+diff --git a/GUISupport/Qt/QVTKWidget.h b/GUISupport/Qt/QVTKWidget.h
 index 631d300..f396e73 100644
---- a/VTK-6.1.0-base/GUISupport/Qt/QVTKWidget.h
-+++ b/VTK-6.1.0/GUISupport/Qt/QVTKWidget.h
+--- a/GUISupport/Qt/QVTKWidget.h
++++ b/GUISupport/Qt/QVTKWidget.h
 @@ -248,8 +248,8 @@ protected:
    // that VTK chooses
    void x11_setup_window();
