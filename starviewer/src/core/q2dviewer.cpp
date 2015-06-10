@@ -53,7 +53,8 @@
 #include <vtkPropPicker.h>
 #include <QVTKWidget.h>
 #include <vtkWindowToImageFilter.h>
-#include <vtkImageActor.h>
+#include <vtkImageProperty.h>
+#include <vtkImageSlice.h>
 #include <vtkMatrix4x4.h>
 
 namespace udg {
@@ -354,7 +355,7 @@ bool Q2DViewer::doesInputHavePhases(int i) const
 
 bool Q2DViewer::isInputVisible(int i) const
 {
-    return getDisplayUnit(i)->getImageActor()->GetVisibility();
+    return getDisplayUnit(i)->getImageSlice()->GetVisibility();
 }
 
 void Q2DViewer::initializeCamera()
@@ -367,7 +368,7 @@ void Q2DViewer::initializeCamera()
 void Q2DViewer::initializeDummyDisplayUnit()
 {
     m_dummyDisplayUnit = new VolumeDisplayUnit;
-    m_dummyDisplayUnit->getImageActor()->VisibilityOff();
+    m_dummyDisplayUnit->getImageSlice()->VisibilityOff();
 }
 
 void Q2DViewer::addImageActors()
@@ -802,6 +803,11 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     
     if (hasInput())
     {
+        // Adapt the camera to the new view plane in order to make actors visible
+        double bounds[6];
+        getCurrentRenderedItemBounds(bounds);
+        getRenderer()->ResetCamera(bounds);
+
         // Calculem la llesca que cal mostrar segons la vista escollida
         int initialSliceIndex = 0;
         if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
@@ -809,10 +815,6 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
             initialSliceIndex = getMaximumSlice() / 2;
         }
         setSlice(initialSliceIndex);
-        // Adapt the camera to the new view plane in order to make actors visible
-        double bounds[6];
-        getCurrentRenderedItemBounds(bounds);
-        getRenderer()->ResetCamera(bounds);
 
         // Set appropriate zoom level
         fitRenderingIntoViewport();
@@ -960,7 +962,7 @@ void Q2DViewer::setPhaseInVolume(int index, int phase)
 
     unit->setPhase(phase);
     // This also resets the camera clipping range (needed)
-    this->updateDisplayExtents();
+    this->updateImageSlices();
     this->render();
 }
 
@@ -985,7 +987,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         }
 
         // Then update display (image and associated annotations)
-        updateDisplayExtents();
+        updateImageSlices();
 
         // The display shutter must be updated before the default presets
         if (dimension == SpatialDimension)
@@ -1045,12 +1047,12 @@ void Q2DViewer::updateSecondaryVolumesSlices()
 
         if (nearestSlice >= 0)
         {
-            getDisplayUnit(i)->getImageActor()->VisibilityOn();
+            getDisplayUnit(i)->getImageSlice()->VisibilityOn();
             getDisplayUnit(i)->setSlice(nearestSlice);
         }
         else
         {
-            getDisplayUnit(i)->getImageActor()->VisibilityOff();
+            getDisplayUnit(i)->getImageSlice()->VisibilityOff();
             getDisplayUnit(i)->setSlice(0);
         }
     }
@@ -1385,7 +1387,7 @@ QChar Q2DViewer::getCurrentDisplayedImageLaterality() const
     return laterality;
 }
 
-void Q2DViewer::updateDisplayExtents()
+void Q2DViewer::updateImageSlices()
 {
     // Ens assegurem que tenim dades vàlides
     if (!getMainInput()->isPixelDataLoaded())
@@ -1395,7 +1397,7 @@ void Q2DViewer::updateDisplayExtents()
 
     foreach (VolumeDisplayUnit *volumeDisplayUnit, getDisplayUnits())
     {
-        volumeDisplayUnit->updateDisplayExtent();
+        volumeDisplayUnit->updateImageSlice(m_renderer->GetActiveCamera());
     }
 
     // TODO Si separem els renderers potser caldria aplicar-ho a cada renderer?
@@ -1491,7 +1493,7 @@ void Q2DViewer::setSlabProjectionMode(int projectionMode)
             // as the data measured could be incoherent with the underlying data when changing the projection mode
             getDrawer()->removeAllPrimitives();
             getMainDisplayUnit()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
-            updateDisplayExtents();
+            updateImageSlices();
             render();
         }
 
@@ -1511,7 +1513,7 @@ void Q2DViewer::setSlabProjectionModeInVolume(int index, int slabProjectionMode)
     }
 
     unit->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(slabProjectionMode));
-    this->updateDisplayExtents();
+    this->updateImageSlices();
     this->render();
 }
 
@@ -1538,7 +1540,7 @@ void Q2DViewer::setSlabThickness(int thickness)
         getDrawer()->removeAllPrimitives();
 
         mainDisplayUnit->setSlabThickness(thickness);
-        updateDisplayExtents();
+        updateImageSlices();
 
         updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
         m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation | SliceAnnotation);
@@ -1567,7 +1569,7 @@ void Q2DViewer::setSlabThicknessInVolume(int index, int thickness)
     }
 
     unit->setSlabThickness(thickness);
-    this->updateDisplayExtents();
+    this->updateImageSlices();
     this->render();
 }
 
@@ -1823,7 +1825,7 @@ void Q2DViewer::applyImageOrientationChanges()
 
 void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
 {
-    getMainDisplayUnit()->getImageActor()->GetBounds(bounds);
+    getMainDisplayUnit()->getImageSlice()->GetBounds(bounds);
 }
 
 void Q2DViewer::updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane()
@@ -1924,7 +1926,7 @@ void Q2DViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
 
 void Q2DViewer::setVolumeOpacity(int index, double opacity)
 {
-    getDisplayUnit(index)->getImageActor()->SetOpacity(opacity);
+    getDisplayUnit(index)->getImageSlice()->GetProperty()->SetOpacity(opacity);
 }
 
 const TransferFunction& Q2DViewer::getVolumeTransferFunction(int index) const

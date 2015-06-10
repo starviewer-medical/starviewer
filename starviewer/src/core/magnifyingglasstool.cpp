@@ -22,7 +22,7 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
 #include <vtkCamera.h>
-#include <vtkImageActor.h>
+#include <vtkImageSlice.h>
 
 namespace udg {
 
