@@ -46,6 +46,11 @@ QList<DICOMAttribute*> DICOMSequenceItem::getAttributes()
     return m_attributeList.values();
 }
 
+bool DICOMSequenceItem::hasAttribute(const DICOMTag &tag) const
+{
+    return m_attributeList.contains(tag.getKeyAsQString());
+}
+
 DICOMAttribute* DICOMSequenceItem::getAttribute(const DICOMTag &tag)
 {
     return m_attributeList.value(tag.getKeyAsQString());
