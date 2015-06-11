@@ -40,6 +40,9 @@ public:
     /// Obté tota la llista de DICOMAttribute
     QList<DICOMAttribute*> getAttributes();
 
+    /// Returns true if this sequence item contains the given tag and false otherwise.
+    bool hasAttribute(const DICOMTag &tag) const;
+
     /// Retorna l'atribut associat al tag passat per parametre. Si no disposa d'ell retorna null.
     DICOMAttribute* getAttribute(const DICOMTag &tag);
 

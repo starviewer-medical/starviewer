@@ -413,8 +413,18 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
 
             foreach (DICOMSequenceItem *item, items)
             {
+                if (!item->hasAttribute(DICOMLUTDescriptor) || !item->hasAttribute(DICOMLUTData))
+                {
+                    DEBUG_LOG("Missing type 1 attributes in a VOI LUT sequence item");
+                    continue;
+                }
+
                 QString lutDescriptor = item->getValueAttribute(DICOMLUTDescriptor)->getValueAsQString();
-                QString lutExplanation = item->getValueAttribute(DICOMLUTExplanation)->getValueAsQString();
+                QString lutExplanation;
+                if (item->hasAttribute(DICOMLUTExplanation))
+                {
+                    lutExplanation = item->getValueAttribute(DICOMLUTExplanation)->getValueAsQString();
+                }
                 QString lutData = item->getValueAttribute(DICOMLUTData)->getValueAsQString();
                 voiLutList.append(DICOMFormattedValuesConverter::parseVoiLut(lutDescriptor, lutExplanation, lutData));
             }
