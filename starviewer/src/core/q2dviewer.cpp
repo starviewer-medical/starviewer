@@ -1073,6 +1073,8 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
     Q_UNUSED(resize);
     if (hasInput())
     {
+        enableRendering(false);
+        fitRenderingIntoViewport();
         switch (m_alignPosition)
         {
             case AlignRight:
@@ -1082,11 +1084,9 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
             case AlignLeft:
                 alignLeft();
                 break;
-
-            case AlignCenter:
-                fitRenderingIntoViewport();
-                break;
         }
+        enableRendering(true);
+        this->render();
     }
 }
 
