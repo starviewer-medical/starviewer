@@ -81,7 +81,7 @@ void QRelatedStudiesWidget::updateList()
     {
         foreach (Study *study, m_patient->getStudies())
         {
-            StudyInfo *studyInfo = m_infomationPerStudy[study->getInstanceUID()];
+            StudyInfo *studyInfo = m_infomationPerStudy.value(study->getInstanceUID());
 
             if (studyInfo != NULL)
             {
@@ -119,13 +119,13 @@ void QRelatedStudiesWidget::searchStudiesOf(Patient *patient)
     {
         Study *study = m_patient->getStudies().first();
         m_studyInstanceUIDOfCurrentStudy = study->getInstanceUID();
-        m_infomationPerStudy[m_studyInstanceUIDOfCurrentStudy]->currentRadioButton->setChecked(true);
+        m_infomationPerStudy.value(m_studyInstanceUIDOfCurrentStudy)->currentRadioButton->setChecked(true);
 
         if (m_patient->getStudies().size() > 1)
         {
             Study *prior = m_patient->getStudies().at(1);
             m_studyInstanceUIDOfPriorStudy = prior->getInstanceUID();
-            m_infomationPerStudy[m_studyInstanceUIDOfPriorStudy]->priorRadioButton->setChecked(true);
+            m_infomationPerStudy.value(m_studyInstanceUIDOfPriorStudy)->priorRadioButton->setChecked(true);
         }
 
         updateVisiblePriorRadioButtons();
@@ -141,12 +141,12 @@ void QRelatedStudiesWidget::toggleComparativeMode()
 {
     if (!m_studyInstanceUIDOfPriorStudy.isEmpty())
     {
-        StudyInfo *studyInfo = m_infomationPerStudy[m_studyInstanceUIDOfPriorStudy];
+        StudyInfo *studyInfo = m_infomationPerStudy.value(m_studyInstanceUIDOfPriorStudy);
         studyInfo->priorRadioButton->click();
     }
     else
     {
-        StudyInfo *studyInfo = m_infomationPerStudy[m_studyInstanceUIDOfCurrentStudy];
+        StudyInfo *studyInfo = m_infomationPerStudy.value(m_studyInstanceUIDOfCurrentStudy);
         if (studyInfo)
         {
             Study *currentStudy = studyInfo->study;
@@ -211,7 +211,7 @@ void QRelatedStudiesWidget::toggleComparativeMode()
                     }
                     if (match)
                     {
-                        StudyInfo *studyInfo = m_infomationPerStudy[study->getInstanceUID()];
+                        StudyInfo *studyInfo = m_infomationPerStudy.value(study->getInstanceUID());
                         studyInfo->priorRadioButton->click();
 
                         break;
@@ -414,14 +414,14 @@ void QRelatedStudiesWidget::insertStudiesToTree(const QList<Study*> &studiesList
     {
         foreach (Study *study, studiesList)
         {
-            if (m_infomationPerStudy[study->getInstanceUID()] == NULL)
+            StudyInfo *studyInfo = m_infomationPerStudy.value(study->getInstanceUID());
+            if (studyInfo == NULL)
             {
                 //Sempre hauria de ser més gran de 0
                 insertStudyToTree(study);
             }
             else
             {
-                StudyInfo *studyInfo = m_infomationPerStudy[study->getInstanceUID()];
                 if (studyInfo->study->getDICOMSource().getRetrievePACS().count() == 0)
                 {
                     studyInfo->study->setDICOMSource(study->getDICOMSource());
@@ -451,7 +451,7 @@ void QRelatedStudiesWidget::queryStudiesFinished(const QList<Study *> &studiesLi
 
 void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID)
 {
-    StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
+    StudyInfo *studyInfo = m_infomationPerStudy.value(studyInstanceUID);
 
     studyInfo->downloadButton->setEnabled(false);
 
@@ -485,7 +485,7 @@ void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID
 
 void QRelatedStudiesWidget::studyRetrieveStarted(QString studyInstanceUID)
 {
-    StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
+    StudyInfo *studyInfo = m_infomationPerStudy.value(studyInstanceUID);
 
     // Comprovem que el signal capturat de QueryScreen sigui nostre
     if (studyInfo != NULL)
@@ -499,7 +499,7 @@ void QRelatedStudiesWidget::studyRetrieveStarted(QString studyInstanceUID)
 
 void QRelatedStudiesWidget::studyRetrieveFinished(QString studyInstanceUID)
 {
-    StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
+    StudyInfo *studyInfo = m_infomationPerStudy.value(studyInstanceUID);
 
     // Comprovem que el signal capturat de QueryScreen sigui nostre
     if (studyInfo != NULL)
@@ -517,7 +517,7 @@ void QRelatedStudiesWidget::studyRetrieveFinished(QString studyInstanceUID)
 
 void QRelatedStudiesWidget::studyRetrieveFailed(QString studyInstanceUID)
 {
-    StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
+    StudyInfo *studyInfo = m_infomationPerStudy.value(studyInstanceUID);
 
     // Comprovem que el signal capturat de QueryScreen sigui nostre
     if (studyInfo != NULL)
@@ -535,7 +535,7 @@ void QRelatedStudiesWidget::studyRetrieveFailed(QString studyInstanceUID)
 
 void QRelatedStudiesWidget::studyRetrieveCancelled(QString studyInstanceUID)
 {
-    StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
+    StudyInfo *studyInfo = m_infomationPerStudy.value(studyInstanceUID);
 
     // Comprovem que el signal capturat de QueryScreen sigui nostre
     if (studyInfo != NULL)
@@ -561,7 +561,7 @@ void QRelatedStudiesWidget::currentStudyRadioButtonClicked(const QString &studyI
     m_studyInstanceUIDOfCurrentStudy = studyInstanceUID;
     updateVisiblePriorRadioButtons();
 
-    StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
+    StudyInfo *studyInfo = m_infomationPerStudy.value(studyInstanceUID);
 
     if (studyInfo->status == Initialized)
     {
@@ -575,11 +575,11 @@ void QRelatedStudiesWidget::currentStudyRadioButtonClicked(const QString &studyI
 
 void QRelatedStudiesWidget::notifyWorkingStudiesChangedIfReady()
 {
-    StudyInfo *currentStudyInfo = m_infomationPerStudy[m_studyInstanceUIDOfCurrentStudy];
+    StudyInfo *currentStudyInfo = m_infomationPerStudy.value(m_studyInstanceUIDOfCurrentStudy);
 
     if (currentStudyInfo && currentStudyInfo->status == Finished)
     {
-        if (m_studyInstanceUIDOfPriorStudy.isEmpty() || m_infomationPerStudy[m_studyInstanceUIDOfPriorStudy]->status == Finished)
+        if (m_studyInstanceUIDOfPriorStudy.isEmpty() || m_infomationPerStudy.value(m_studyInstanceUIDOfPriorStudy)->status == Finished)
         {
             emit workingStudiesChanged(m_studyInstanceUIDOfCurrentStudy, m_studyInstanceUIDOfPriorStudy);
         }
@@ -588,7 +588,7 @@ void QRelatedStudiesWidget::notifyWorkingStudiesChangedIfReady()
 
 void QRelatedStudiesWidget::priorStudyRadioButtonClicked(const QString &studyInstanceUID)
 {
-    StudyInfo *studyInfo = m_infomationPerStudy[studyInstanceUID];
+    StudyInfo *studyInfo = m_infomationPerStudy.value(studyInstanceUID);
 
     if (m_studyInstanceUIDOfPriorStudy == studyInstanceUID)
     {
@@ -635,7 +635,7 @@ void QRelatedStudiesWidget::updateVisibleCurrentRadioButtons()
     }
     else
     {
-        StudyInfo *studyInfo = m_infomationPerStudy[m_studyInstanceUIDOfPriorStudy];
+        StudyInfo *studyInfo = m_infomationPerStudy.value(m_studyInstanceUIDOfPriorStudy);
 
         if (studyInfo != NULL)
         {
@@ -665,7 +665,7 @@ void QRelatedStudiesWidget::updateVisiblePriorRadioButtons()
         return;
     }
 
-    StudyInfo *studyInfo = m_infomationPerStudy[m_studyInstanceUIDOfCurrentStudy];
+    StudyInfo *studyInfo = m_infomationPerStudy.value(m_studyInstanceUIDOfCurrentStudy);
 
     if (studyInfo != NULL)
     {
