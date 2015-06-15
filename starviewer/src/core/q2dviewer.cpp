@@ -1706,7 +1706,7 @@ void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
         case OrthogonalPlane::XYPlane:
             // Si es dóna el cas que o bé està rotada 180º o bé està voltejada, cal agafar l'altre extrem
             // L'operació realitzada és un XOR (!=)
-            if (m_isImageFlipped != (m_rotateFactor == 2))
+            if (m_isImageFlipped != (qAbs(m_rotateFactor) == 2))
             {
                 if (alignPosition == AlignLeft)
                 {
