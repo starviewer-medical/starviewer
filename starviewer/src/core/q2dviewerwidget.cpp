@@ -30,7 +30,7 @@
 namespace udg {
 
 Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
- : QFrame(parent)
+ : QStackedWidget(parent)
 {
     setupUi(this);
     setAutoFillBackground(true);

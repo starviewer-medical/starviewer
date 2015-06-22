@@ -126,6 +126,11 @@ void ViewersLayout::deleteQ2DViewerWidget(Q2DViewerWidget *viewer)
     emit viewerRemoved(viewer);
     delete viewer->getViewer();
     viewer->deleteLater();
+
+    // Visual clean up
+    // TODO This can go into the Q2DViewerWidget destructor if viewer is deleted directly instead of with deleteLater()
+    viewer->setCurrentIndex(1);
+    viewer->repaint();
 }
 
 void ViewersLayout::setGrid(int rows, int columns)
