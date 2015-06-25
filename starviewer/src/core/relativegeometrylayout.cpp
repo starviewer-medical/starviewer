@@ -125,8 +125,8 @@ void RelativeGeometryLayout::setGeometry(const QRect &rect)
     {
         int x = rect.x() + rect.width() * wrapper->geometry.x();
         int y = rect.y() + rect.height() * wrapper->geometry.y();
-        int width = rect.width() * wrapper->geometry.width();
-        int height = rect.height() * wrapper->geometry.height();
+        int width = ceil(rect.width() * wrapper->geometry.width());
+        int height = ceil(rect.height() * wrapper->geometry.height());
         wrapper->item->setGeometry(QRect(x, y, width, height));
     }
 }

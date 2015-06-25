@@ -81,6 +81,12 @@ ScreenLayoutInfo getScreenLayoutInfo(QWidget *window, QWidget *viewer)
 ViewersLayout::ViewersLayout(QWidget *parent)
  : QWidget(parent), m_selectedViewer(0)
 {
+    // Set a palette with a dark background to avoid flashes in mammography displays
+    QPalette darkPalette;
+    darkPalette.setColor(QPalette::Window, Qt::black);
+    this->setPalette(darkPalette);
+    this->setAutoFillBackground(true);
+
     m_layout = new RelativeGeometryLayout();
     this->setLayout(m_layout);
 }
@@ -97,6 +103,8 @@ Q2DViewerWidget* ViewersLayout::getSelectedViewer() const
 Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
 {
     Q2DViewerWidget *newViewer = new Q2DViewerWidget(this);
+    // Set the default application palette to the viewer
+    newViewer->setPalette(QGuiApplication::palette());
     connect(newViewer, SIGNAL(selected(Q2DViewerWidget*)), SLOT(setSelectedViewer(Q2DViewerWidget*)));
     connect(newViewer, SIGNAL(manualSynchronizationStateChanged(bool)), SIGNAL(manualSynchronizationStateChanged(bool)));
     connect(newViewer, SIGNAL(fusionLayout3x1Requested(QList<Volume*>, AnatomicalPlane)), SIGNAL(fusionLayout3x1Requested(QList<Volume*>, AnatomicalPlane)));
@@ -118,6 +126,11 @@ void ViewersLayout::deleteQ2DViewerWidget(Q2DViewerWidget *viewer)
     emit viewerRemoved(viewer);
     delete viewer->getViewer();
     viewer->deleteLater();
+
+    // Visual clean up
+    // TODO This can go into the Q2DViewerWidget destructor if viewer is deleted directly instead of with deleteLater()
+    viewer->setCurrentIndex(1);
+    viewer->repaint();
 }
 
 void ViewersLayout::setGrid(int rows, int columns)
