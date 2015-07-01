@@ -57,7 +57,7 @@ private slots:
     void updatePosition();
 
     /// Gestiona les accions a fer amb el crossHair al canviar de llesca
-    void handleSliceChange();
+    void handleImageChange();
 
     /// Amaga el cursor 3D
     void hideCursor();
