@@ -827,6 +827,7 @@ QT += xml \
     webkit \
     xmlpatterns \
     opengl \
-    quickwidgets \
+    qml \
+    declarative \
     concurrent \
     webkitwidgets
