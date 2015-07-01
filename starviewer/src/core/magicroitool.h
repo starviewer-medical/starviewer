@@ -80,7 +80,7 @@ private:
     void getNextIndex(int direction, int x, int y, int &nextX, int &nextY);
     int getNextDirection(int direction);
     int getInverseDirection(int direction);
-    void addPoint(int direction, int x, int y, double z);
+    void addPoint(int direction, int x, int y);
     bool isLoopReached();
 
     /// Retorna la desviació estàndard dins la regió marcada per la magicSize

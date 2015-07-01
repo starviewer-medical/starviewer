@@ -541,12 +541,11 @@ void MagicROITool::computePolygon()
     // L'índex és -1 pq els hem incrementat una vegada més    
     int x = i - 1;
     int y = j - 1;
-    int z = m_2DViewer->getCurrentSlice();
     m_roiPolygon->removeVertices();
     m_filledRoiPolygon->removeVertices();
     
-    this->addPoint(7, x, y, z);
-    this->addPoint(1, x, y, z);
+    this->addPoint(7, x, y);
+    this->addPoint(1, x, y);
     
     int nextX;
     int nextY;
@@ -563,7 +562,7 @@ void MagicROITool::computePolygon()
         {
             if (MathTools::isOdd(direction) && !next)
             {
-                this->addPoint(direction, x, y, z);
+                this->addPoint(direction, x, y);
                 loop = this->isLoopReached();
             }
             direction = this->getNextDirection(direction);
@@ -632,7 +631,7 @@ int MagicROITool::getInverseDirection(int direction)
     return (direction + 4) % 8;
 }
 
-void MagicROITool::addPoint(int direction, int x, int y, double z)
+void MagicROITool::addPoint(int direction, int x, int y)
 {
     double origin[3];
     double spacing[3];
@@ -664,7 +663,10 @@ void MagicROITool::addPoint(int direction, int x, int y, double z)
         default:
             DEBUG_LOG("ERROR: This direction doesn't exist");
     }
-    point[zIndex] = z * spacing[zIndex] + origin[zIndex];
+
+    double eventWorldCoordinate[3];
+    m_2DViewer->getEventWorldCoordinate(eventWorldCoordinate);
+    point[zIndex] = eventWorldCoordinate[zIndex];
 
     m_roiPolygon->addVertix(point);
     m_filledRoiPolygon->addVertix(point);
