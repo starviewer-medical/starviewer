@@ -105,6 +105,7 @@ void Q2DViewerWidget::createConnections()
     connect(m_slider, SIGNAL(actionTriggered(int)), SLOT(updateViewerSliceAccordingToSliderAction(int)));
     connect(m_2DView, SIGNAL(sliceChanged(int)), m_slider, SLOT(setValue(int)));
     connect(m_2DView, SIGNAL(sliceChanged(int)), SLOT(updateProjectionLabel()));
+    connect(m_2DView, SIGNAL(anatomicalViewChanged(AnatomicalPlane)), SLOT(updateProjectionLabel()));
     connect(m_2DView, SIGNAL(viewChanged(int)), SLOT(resetSliderRangeAndValue()));
     connect(m_2DView, SIGNAL(slabThicknessChanged(int)), SLOT(resetSliderRangeAndValue()));
 
