@@ -3,7 +3,7 @@
     <hangingProtocolName>MPR R</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>CT</protocol>
-    <priority>5</priority>
+    <priority>6</priority>
     <restriction identifier="1">
         <selectorAttribute>ImageType</selectorAttribute>
         <selectorValue>LOCALIZER</selectorValue>
