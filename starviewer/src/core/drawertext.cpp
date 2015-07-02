@@ -410,8 +410,26 @@ double DrawerText::getDistanceToPoint(double *point3D, double closestPoint[3])
     }
     else
     {
-        //TODO: S'hauria de fer que quan està fora calculés la distància a l'aresta més propera.
-        return MathTools::DoubleMaximumValue;
+        double bounds[6];
+        getBounds(bounds);
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (point3D[i] < bounds[2*i])
+            {
+                closestPoint[i] = bounds[2*i];
+            }
+            else if (point3D[i] > bounds[2*i+1])
+            {
+                closestPoint[i] = bounds[2*i+1];
+            }
+            else
+            {
+                closestPoint[i] = point3D[i];
+            }
+        }
+
+        return MathTools::getDistance3D(point3D, closestPoint);
     }
 }
 
