@@ -361,8 +361,6 @@ void VtkTextActorWithBackground::ComputeRectangle(vtkViewport *viewport)
     x = xo + textDimensionsWithMargin[0];
     y = yo;
     this->RectanglePoints->InsertNextPoint(cosine * x - sine * y, sine * x + cosine * y, 0.0);
-
-    updateWorldBounds(viewport);
 }
 
 int VtkTextActorWithBackground::UpdateRectangle(vtkViewport *viewport)
@@ -376,6 +374,8 @@ int VtkTextActorWithBackground::UpdateRectangle(vtkViewport *viewport)
         this->Texture->Modified();
         this->BuildTime.Modified();
     }
+
+    updateWorldBounds(viewport);
 
     return returnValue;
 }
