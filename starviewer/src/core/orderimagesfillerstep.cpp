@@ -212,6 +212,9 @@ void OrderImagesFillerStep::processImage(Image *image)
     // Cada key és la normal de cada pla guardat com a string.
     // En cas que tinguem diferents normals, indicaria que tenim per exemple, diferents stacks en el mateix volum
 
+    // TODO WARN BUG: We are doing insertMulti() in another place, so there may be keys with multiple values,
+    //                but we are getting only the last value for each key, so some plane normals can be missed.
+    //                We should iterate over the values instead of the unique keys and use a QSet for planeNormals.
     QStringList planeNormals;
     foreach (double key, m_orderedNormalsSet->uniqueKeys())
     {
@@ -302,6 +305,9 @@ void OrderImagesFillerStep::processImage(Image *image)
     // La normal ja existia [m_orderedImageSet->contains(keyPlaneNormal) == true], per tant només cal actualitzar l'estructura
     else
     {
+        // TODO WARN BUG: We are doing insertMulti() in another place, so there may be keys with multiple values,
+        //                but we are getting only the last value for each key, so some plane normals can be missed.
+        //                We should iterate over the values instead of the unique keys.
         foreach (double key, m_orderedNormalsSet->keys())
         {
             if (m_orderedNormalsSet->value(key)->contains(keyPlaneNormal))
