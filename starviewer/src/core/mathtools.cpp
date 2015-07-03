@@ -76,7 +76,8 @@ double MathTools::angleInDegrees(const QVector2D &vector)
 
 double MathTools::angleInRadians(const QVector3D &vec1, const QVector3D &vec2)
 {
-    return acos(QVector3D::dotProduct(vec1, vec2) / (vec1.length() * vec2.length()));
+    // Cast all values to double to operate with maximum precision (the returned values are floats in Qt5)
+    return acos(static_cast<double>(QVector3D::dotProduct(vec1, vec2)) / (static_cast<double>(vec1.length()) * static_cast<double>(vec2.length())));
 }
 
 double MathTools::angleInDegrees(const QVector3D &vec1, const QVector3D &vec2)
