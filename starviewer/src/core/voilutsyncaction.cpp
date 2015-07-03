@@ -69,7 +69,8 @@ void VoiLutSyncAction::run(QViewer *viewer)
 
 void VoiLutSyncAction::setupMetaData()
 {
-    m_metaData = SyncActionMetaData("VoiLutSyncAction", QObject::tr("VOI LUT"), "voiLut");
+    // Keeping "windowLevel" settings name for backward compatibility.
+    m_metaData = SyncActionMetaData("VoiLutSyncAction", QObject::tr("VOI LUT"), "windowLevel");
 }
 
 void VoiLutSyncAction::setupDefaultSyncCriteria()
