@@ -130,35 +130,6 @@ void initQtPluginsDirectory()
 #endif
 }
 
-/// Performs the necessary adjustments to the registered VTK factories.
-void configureVtkFactories()
-{
-    // Problem:
-    // The corner annotations in the 2D viewer don't properly handle UTF-8 text.
-    // Cause:
-    // Text in the corner annotations is rendered by vtkTextMapper or a subclass of it. vtkTextMapper itself delegates on vtkTextRender, which supports UTF-8,
-    // to render text. On the other hand, vtkOpenGLFreeTypeTextMapper, a subclass of vtkTextMapper, renders text using the ftgl library, but it only supports
-    // Latin-1. vtkOpenGLFreeTypeTextMapper is in the vtkRenderingFreeTypeOpenGL module and will override the vtkTextMapper instantiator (i.e.
-    // vtkTextMapper::New()) when this module is linked in the executable. The module is not linked directly from Starviewer, but it's linked from vtkgdcm, so
-    // that vtkOpenGLFreeTypeTextMapper is used in the end.
-    // Solution:
-    // Remove any override to the vtkTextMapper to ensure that the actual vtkTextMapper class is being used.
-    // Solution taken from
-    // https://www.gitorious.org/kitware/vtk/commit/8707ec0ce0e5adabf1091ff9b755aea7d78deaae#Rendering/FreeType/Testing/Cxx/TestFreeTypeTextMapper.cxx
-
-    vtkNew<vtkOverrideInformationCollection> overrides;
-    vtkObjectFactory::GetOverrideInformation("vtkTextMapper", overrides.GetPointer());
-    overrides->InitTraversal();
-
-    while (vtkOverrideInformation *override = overrides->GetNextItem())
-    {
-        if (vtkObjectFactory *factory = override->GetObjectFactory())
-        {
-            vtkObjectFactory::UnRegisterFactory(factory);
-        }
-    }
-}
-
 void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
 {
     QString errorInvalidCommanLineArguments;
@@ -242,8 +213,6 @@ int main(int argc, char *argv[])
     // registrem els codecs decompressors JPEG i RLE
     DJDecoderRegistration::registerCodecs();
     DcmRLEDecoderRegistration::registerCodecs();
-
-    configureVtkFactories();
 
     // Seguint les recomanacions de la documentació de Qt, guardem la llista d'arguments en una variable, ja que aquesta operació és costosa
     // http://doc.trolltech.com/4.7/qcoreapplication.html#arguments
