@@ -203,6 +203,9 @@ private slots:
     /// if none of them processes single or double clicks then maximizes or demaximizes the viewer.
     void handleViewerDoubleClick(Q2DViewerWidget *viewerWidget);
 
+    /// Set the working studies (current and prior studies).
+    void setWorkingStudies(const QString &currentStudyUID, const QString &priorStudyUID);
+
 private:
     /// Accions
     QAction *m_singleShotAction;
@@ -264,6 +267,9 @@ private:
 
     /// Transfer function model to use when a viewer returns a null model or an empty viewer is selected.
     TransferFunctionModel *m_emptyTransferFunctionModel;
+
+    /// Study Instance UID of current study.
+    QString m_currentStudyUID;
 
 };
 
