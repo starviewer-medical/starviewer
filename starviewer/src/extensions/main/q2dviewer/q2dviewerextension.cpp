@@ -277,8 +277,7 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
         return;
     }
 
-    // Ara és super txapussa i només mirarà el primer estudi
-    Study *study = m_patient->getStudies().first();
+    Study *study = m_patient->getStudy(m_currentStudyUID);
     if (study)
     {
         Settings settings;
@@ -319,7 +318,7 @@ void Q2DViewerExtension::setupLayoutManager()
     connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedCurrent, m_layoutManager, &LayoutManager::setCurrentHangingProtocol);
     connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedPrior, m_layoutManager, &LayoutManager::setPriorHangingProtocol);
     connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedCombined, m_layoutManager, &LayoutManager::setCombinedHangingProtocol);
-    connect(m_relatedStudiesWidget, SIGNAL(workingStudiesChanged(QString, QString)), m_layoutManager, SLOT(setWorkingStudies(QString, QString)));
+    connect(m_relatedStudiesWidget, SIGNAL(workingStudiesChanged(QString, QString)), this, SLOT(setWorkingStudies(QString, QString)));
 
     // Actions to show the next o previous hanging protocol of the list. Currently, it can only be carried out through keyboard
     QAction *nextHangingProtocolAction = new QAction(this);
@@ -379,6 +378,7 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 
     if (m_patient)
     {
+        m_currentStudyUID = m_patient->getStudies().first()->getInstanceUID();
         setupLayoutManager();
         setupDefaultToolsForModalities(m_patient->getModalities());
     }
@@ -970,13 +970,18 @@ void Q2DViewerExtension::setupPropagation()
 {
     if (m_patient)
     {
-        Settings settings;
-        QSet<QString> modalitiesWithPropagation = settings.getValueAsQStringList(CoreSettings::ModalitiesWithPropagationEnabledByDefault).toSet();
+        Study *study = m_patient->getStudy(m_currentStudyUID);
 
-        // Propagation will be enabled if any of the configured modalities is present in the current patient modalities
-        if (!modalitiesWithPropagation.intersect(m_patient->getModalities().toSet()).isEmpty())
+        if (study)
         {
-            m_propagateToolButton->defaultAction()->setChecked(true);
+            Settings settings;
+            QSet<QString> modalitiesWithPropagation = settings.getValueAsQStringList(CoreSettings::ModalitiesWithPropagationEnabledByDefault).toSet();
+
+            // Propagation will be enabled if any of the configured modalities is present in the current patient modalities
+            if (!modalitiesWithPropagation.intersect(study->getModalities().toSet()).isEmpty())
+            {
+                m_propagateToolButton->defaultAction()->setChecked(true);
+            }
         }
     }
 }
@@ -1057,6 +1062,25 @@ void Q2DViewerExtension::handleViewerDoubleClick(Q2DViewerWidget *viewerWidget)
     }
 
     m_workingArea->toggleMaximization(viewerWidget);
+}
+
+void Q2DViewerExtension::setWorkingStudies(const QString &currentStudyUID, const QString &priorStudyUID)
+{
+    m_layoutManager->setWorkingStudies(currentStudyUID, priorStudyUID);
+
+    if (m_currentStudyUID != currentStudyUID)
+    {
+        m_currentStudyUID = currentStudyUID;
+        Study *currentStudy = m_patient->getStudy(currentStudyUID);
+
+        if (currentStudy)
+        {
+            setupDefaultToolsForModalities(currentStudy->getModalities());
+            setupDefaultLeftButtonTool();
+            setupPropagation();
+        }
+
+    }
 }
 
 }
