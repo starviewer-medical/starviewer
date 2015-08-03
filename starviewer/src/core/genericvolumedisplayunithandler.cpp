@@ -20,6 +20,7 @@
 #include "imagepipeline.h"
 #include "transferfunctionmodel.h"
 #include "secondaryvolumedisplayunit.h"
+#include "volume.h"
 
 #include <vtkImageProperty.h>
 #include <vtkImageSlice.h>
@@ -130,9 +131,12 @@ void GenericVolumeDisplayUnitHandler::addDisplayUnit(Volume *input)
         return;
     }
 
+    const int LargeDimension = 1000;
+    int *dimensions = input->getDimensions();
     VolumeDisplayUnit *displayUnit;
 
-    if (m_displayUnits.isEmpty())
+    // Use VolumeDisplayUnit for the primary volume if it has large dimensions, and SecondaryVolumeDisplayUnit otherwise
+    if (m_displayUnits.isEmpty() && (dimensions[0] > LargeDimension || dimensions[1] > LargeDimension || dimensions[2] > LargeDimension))
     {
         displayUnit = new VolumeDisplayUnit();
     }
