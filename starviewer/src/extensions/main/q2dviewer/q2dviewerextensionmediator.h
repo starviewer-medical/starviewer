@@ -33,7 +33,7 @@ public:
     virtual DisplayableID getExtensionID() const;
 
     /// Orders the extension to view newly loaded studies from the current patient.
-    virtual void viewNewStudiesFromSamePatient(QWidget *extension);
+    virtual void viewNewStudiesFromSamePatient(QWidget *extension, const QString &newStudyUID);
 
 };
 

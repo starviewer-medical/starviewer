@@ -26,9 +26,10 @@ ExtensionMediator::~ExtensionMediator()
 {
 }
 
-void ExtensionMediator::viewNewStudiesFromSamePatient(QWidget *extension)
+void ExtensionMediator::viewNewStudiesFromSamePatient(QWidget *extension, const QString &newStudyUID)
 {
     Q_UNUSED(extension)
+    Q_UNUSED(newStudyUID)
 }
 
 };

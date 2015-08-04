@@ -60,11 +60,11 @@ bool Q2DViewerExtensionMediator::initializeExtension(QWidget *extension, const E
     return true;
 }
 
-void Q2DViewerExtensionMediator::viewNewStudiesFromSamePatient(QWidget *extension)
+void Q2DViewerExtensionMediator::viewNewStudiesFromSamePatient(QWidget *extension, const QString &newStudyUID)
 {
     if (Q2DViewerExtension *q2dviewerExtension = qobject_cast<Q2DViewerExtension*>(extension))
     {
-        q2dviewerExtension->layoutAgain();
+        q2dviewerExtension->setCurrentStudy(newStudyUID);
     }
 }
 

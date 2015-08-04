@@ -482,7 +482,7 @@ QApplicationMainWindow* ExtensionHandler::addPatientToWindow(Patient *patient, b
                 {
                     iterator.next();
                     ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(iterator.value());
-                    mediator->viewNewStudiesFromSamePatient(iterator.key());
+                    mediator->viewNewStudiesFromSamePatient(iterator.key(), patient->getStudies().first()->getInstanceUID());
                 }
             }
 

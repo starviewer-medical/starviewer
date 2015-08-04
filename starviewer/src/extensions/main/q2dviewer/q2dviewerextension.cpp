@@ -394,9 +394,9 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 #endif
 }
 
-void Q2DViewerExtension::layoutAgain()
+void Q2DViewerExtension::setCurrentStudy(const QString &studyUID)
 {
-    m_layoutManager->applyProperLayoutChoice();
+    m_relatedStudiesWidget->setCurrentStudy(studyUID);
 }
 
 void Q2DViewerExtension::initializeTools()
