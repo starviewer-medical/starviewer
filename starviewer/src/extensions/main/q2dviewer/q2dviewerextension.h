@@ -71,8 +71,8 @@ public:
     /// Mètode per obtenir el pacient
     Patient* getPatient() const;
 
-    /// Decides and applies a new layout considering the current studies.
-    void layoutAgain();
+    /// Sets the study from the current patient with the given studyUID as the current patient.
+    void setCurrentStudy(const QString &studyUID);
 
 private:
     /// Crea les connexions entre signals i slots

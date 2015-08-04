@@ -137,6 +137,27 @@ void QRelatedStudiesWidget::searchStudiesOf(Patient *patient)
     m_relatedStudiesManager->queryMergedStudies(patient);
 }
 
+void QRelatedStudiesWidget::setCurrentStudy(const QString &studyUID)
+{
+    StudyInfo *studyInfo = m_infomationPerStudy.value(studyUID);
+
+    if (studyInfo)
+    {
+        // If the necessary radio button is not visible, unselect the prior study
+        if (!studyInfo->currentRadioButton->isVisible())
+        {
+            StudyInfo *priorStudyInfo = m_infomationPerStudy.value(m_studyInstanceUIDOfPriorStudy);
+
+            if (priorStudyInfo)
+            {
+                priorStudyInfo->priorRadioButton->click();
+            }
+        }
+
+        studyInfo->currentRadioButton->click();
+    }
+}
+
 void QRelatedStudiesWidget::toggleComparativeMode()
 {
     if (!m_studyInstanceUIDOfPriorStudy.isEmpty())

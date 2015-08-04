@@ -42,6 +42,9 @@ public:
     /// Mètode per buscar els estudis relacionat amb el pacient.
     void searchStudiesOf(Patient *patient);
 
+    /// Sets the study with the given studyUID as the current study. If the selected prior study is newer than this one, it is deselected.
+    void setCurrentStudy(const QString &studyUID);
+
 public slots:
     virtual void setVisible(bool visible);
 
