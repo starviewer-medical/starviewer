@@ -58,13 +58,17 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     // Set up fusion layout widget
     m_fusionLayoutWidget = new QFusionLayoutWidget(this);
     connect(m_2DView, SIGNAL(anatomicalViewChanged(AnatomicalPlane)), m_fusionLayoutWidget, SLOT(setCurrentAnatomicalPlane(AnatomicalPlane)));
+    connect(m_fusionLayoutWidget, SIGNAL(layout2x1Requested()), SLOT(requestFusionLayout2x1()));
     connect(m_fusionLayoutWidget, SIGNAL(layout3x1Requested()), SLOT(requestFusionLayout3x1()));
+    connect(m_fusionLayoutWidget, SIGNAL(layout2x3Requested()), SLOT(requestFusionLayout2x3()));
     connect(m_fusionLayoutWidget, SIGNAL(layout3x3Requested()), SLOT(requestFusionLayout3x3()));
     widgetAction = new QWidgetAction(this);
     widgetAction->setDefaultWidget(m_fusionLayoutWidget);
     menu = new QMenu(this);
     menu->addAction(widgetAction);
+    connect(m_fusionLayoutWidget, SIGNAL(layout2x1Requested()), menu, SLOT(close()));
     connect(m_fusionLayoutWidget, SIGNAL(layout3x1Requested()), menu, SLOT(close()));
+    connect(m_fusionLayoutWidget, SIGNAL(layout2x3Requested()), menu, SLOT(close()));
     connect(m_fusionLayoutWidget, SIGNAL(layout3x3Requested()), menu, SLOT(close()));
     m_fusionLayoutToolButton->setMenu(menu);
     m_fusionLayoutToolButton->setMenuPosition(QEnhancedMenuToolButton::Above);
@@ -297,11 +301,27 @@ void Q2DViewerWidget::emitDoubleClicked()
     emit doubleClicked(this);
 }
 
+void Q2DViewerWidget::requestFusionLayout2x1()
+{
+    if (m_2DView->getNumberOfInputs() == 2)
+    {
+        emit fusionLayout2x1Requested(m_2DView->getInputs(), m_2DView->getCurrentAnatomicalPlane());
+    }
+}
+
 void Q2DViewerWidget::requestFusionLayout3x1()
 {
     if (m_2DView->getNumberOfInputs() == 2)
     {
         emit fusionLayout3x1Requested(m_2DView->getInputs(), m_2DView->getCurrentAnatomicalPlane());
+    }
+}
+
+void Q2DViewerWidget::requestFusionLayout2x3()
+{
+    if (m_2DView->getNumberOfInputs() == 2)
+    {
+        emit fusionLayout2x3Requested(m_2DView->getInputs());
     }
 }
 

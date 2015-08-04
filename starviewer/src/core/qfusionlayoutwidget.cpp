@@ -23,6 +23,13 @@ QFusionLayoutWidget::QFusionLayoutWidget(QWidget *parent)
 {
     setupUi(this);
 
+    m_gridIcon2x3_1->setIconType("axial");
+    m_gridIcon2x3_2->setIconType("axial");
+    m_gridIcon2x3_3->setIconType("coronal");
+    m_gridIcon2x3_4->setIconType("coronal");
+    m_gridIcon2x3_5->setIconType("sagital");
+    m_gridIcon2x3_6->setIconType("sagital");
+
     m_gridIcon3x3_1->setIconType("axial");
     m_gridIcon3x3_2->setIconType("axial");
     m_gridIcon3x3_3->setIconType("axial");
@@ -33,7 +40,9 @@ QFusionLayoutWidget::QFusionLayoutWidget(QWidget *parent)
     m_gridIcon3x3_8->setIconType("sagital");
     m_gridIcon3x3_9->setIconType("sagital");
 
+    connect(m_item2x1, &ItemMenu::isSelected, this, &QFusionLayoutWidget::layout2x1Requested);
     connect(m_item3x1, &ItemMenu::isSelected, this, &QFusionLayoutWidget::layout3x1Requested);
+    connect(m_item2x3, &ItemMenu::isSelected, this, &QFusionLayoutWidget::layout2x3Requested);
     connect(m_item3x3, &ItemMenu::isSelected, this, &QFusionLayoutWidget::layout3x3Requested);
 }
 
@@ -60,6 +69,9 @@ void QFusionLayoutWidget::setCurrentAnatomicalPlane(const AnatomicalPlane &anato
             // Unsupported plane: get out of here
             return;
     }
+
+    m_gridIcon2x1_1->setIconType(iconType);
+    m_gridIcon2x1_2->setIconType(iconType);
 
     m_gridIcon3x1_1->setIconType(iconType);
     m_gridIcon3x1_2->setIconType(iconType);

@@ -71,8 +71,12 @@ public slots:
     void setPriorHangingProtocol(int hangingProtocolNumber);
     void setCombinedHangingProtocol(int hangingProtocolNumber);
 
+    /// Sets a 2x1 fusion layout with the given volumes and anatomical plane.
+    void setFusionLayout2x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
     /// Sets a 3x1 fusion layout with the given volumes and anatomical plane.
     void setFusionLayout3x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
+    /// Sets a 2x3 fusion layout with the given volumes.
+    void setFusionLayout2x3(const QList<Volume*> &volumes);
     /// Sets a 3x3 fusion layout with the given volumes.
     void setFusionLayout3x3(const QList<Volume*> &volumes);
 
