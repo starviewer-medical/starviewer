@@ -96,7 +96,11 @@ signals:
     void manualSynchronizationStateChanged(bool enable);
 
     /// Propagation of the matching signal in Q2DViewerWidget.
+    void fusionLayout2x1Requested(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
+    /// Propagation of the matching signal in Q2DViewerWidget.
     void fusionLayout3x1Requested(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
+    /// Propagation of the matching signal in Q2DViewerWidget.
+    void fusionLayout2x3Requested(const QList<Volume*> &volumes);
     /// Propagation of the matching signal in Q2DViewerWidget.
     void fusionLayout3x3Requested(const QList<Volume*> &volumes);
 

@@ -38,8 +38,12 @@ public slots:
     void setCurrentAnatomicalPlane(const AnatomicalPlane &anatomicalPlane);
 
 signals:
+    /// Emitted when a 2x1 layout is requested.
+    void layout2x1Requested();
     /// Emitted when a 3x1 layout is requested.
     void layout3x1Requested();
+    /// Emitted when a 2x3 layout is requested.
+    void layout2x3Requested();
     /// Emitted when a 3x3 layout is requested.
     void layout3x3Requested();
 

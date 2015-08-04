@@ -59,7 +59,9 @@ LayoutManager::LayoutManager(Patient *patient, ViewersLayout *layout, QObject *p
     m_priorHangingProtocolApplied = 0;
     m_combinedHangingProtocolApplied = 0;
 
+    connect(m_layout, SIGNAL(fusionLayout2x1Requested(QList<Volume*>, AnatomicalPlane)), SLOT(setFusionLayout2x1(QList<Volume*>, AnatomicalPlane)));
     connect(m_layout, SIGNAL(fusionLayout3x1Requested(QList<Volume*>, AnatomicalPlane)), SLOT(setFusionLayout3x1(QList<Volume*>, AnatomicalPlane)));
+    connect(m_layout, SIGNAL(fusionLayout2x3Requested(QList<Volume*>)), SLOT(setFusionLayout2x3(QList<Volume*>)));
     connect(m_layout, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SLOT(setFusionLayout3x3(QList<Volume*>)));
 }
 
@@ -473,6 +475,29 @@ void LayoutManager::setPriorHangingProtocol(int hangingProtocolNumber)
     }
 }
 
+void LayoutManager::setFusionLayout2x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
+{
+    if (volumes.size() != 2)
+    {
+        return;
+    }
+
+    QRectF geometry = prepareToChangeLayoutOfStudy(volumes[0]->getStudy());
+    m_layout->cleanUp(geometry);
+    m_layout->setGridInArea(1, 2, geometry);
+    QList<Q2DViewerWidget*> viewers = m_layout->getViewersInsideGeometry(geometry);
+
+    QList<Volume*> inputs[2];
+    inputs[0] << volumes;
+    inputs[1] << volumes[1];
+
+    for (int i = 0; i < 2; i++)
+    {
+        viewers[i]->getViewer()->setInputAsynchronously(inputs[i],
+            new ResetViewToAnatomicalPlaneQViewerCommand(viewers[i]->getViewer(), anatomicalPlane, viewers[i]));
+    }
+}
+
 void LayoutManager::setFusionLayout3x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
 {
     if (volumes.size() != 2)
@@ -494,6 +519,31 @@ void LayoutManager::setFusionLayout3x1(const QList<Volume*> &volumes, const Anat
     {
         viewers[i]->getViewer()->setInputAsynchronously(inputs[i],
             new ResetViewToAnatomicalPlaneQViewerCommand(viewers[i]->getViewer(), anatomicalPlane, viewers[i]));
+    }
+}
+
+void LayoutManager::setFusionLayout2x3(const QList<Volume*> &volumes)
+{
+    if (volumes.size() != 2)
+    {
+        return;
+    }
+
+    QRectF geometry = prepareToChangeLayoutOfStudy(volumes[0]->getStudy());
+    m_layout->cleanUp(geometry);
+    m_layout->setGridInArea(3, 2, geometry);
+    QList<Q2DViewerWidget*> viewers = m_layout->getViewersInsideGeometry(geometry);
+
+    QList<Volume*> inputs[2];
+    inputs[0] << volumes;
+    inputs[1] << volumes[1];
+
+    AnatomicalPlane views[3] = { AnatomicalPlane::Axial, AnatomicalPlane::Coronal, AnatomicalPlane::Sagittal };
+
+    for (int i = 0; i < 6; i++)
+    {
+        viewers[i]->getViewer()->setInputAsynchronously(inputs[i % 2],
+            new ResetViewToAnatomicalPlaneQViewerCommand(viewers[i]->getViewer(), views[i / 2], viewers[i]));
     }
 }
 
