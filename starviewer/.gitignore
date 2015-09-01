@@ -37,6 +37,10 @@ src/main/Info.plist
 *.dll
 # Application executables
 bin/*.exe
+bin/starviewer
+bin/starviewer_crashreporter
+bin/starviewer_sapwrapper
+bin/*.so*
 
 # Testing outputs
 tests/auto/*.log
