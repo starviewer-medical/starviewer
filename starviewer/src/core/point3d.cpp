@@ -14,6 +14,8 @@
 
 #include "point3d.h"
 
+#include <limits>
+
 #include "mathtools.h"
 
 #include <QString>

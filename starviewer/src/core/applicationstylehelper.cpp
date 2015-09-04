@@ -14,6 +14,8 @@
 
 #include "applicationstylehelper.h"
 
+#include <cmath>
+
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QMovie>
