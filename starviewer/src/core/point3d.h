@@ -33,7 +33,7 @@ public:
     void set(int i, double value);
 
     /// Returns the i-th value of the point. i must be between 0 and 2, returns NaN if out of range.
-    const double at(int i) const;
+    double at(int i) const;
 
     /// Array subscript operators to access point values
     double& operator[](int index);
