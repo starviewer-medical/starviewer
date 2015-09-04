@@ -83,7 +83,7 @@ namespace udg {
 Patient::Patient(QObject *parent)
  : QObject(parent)
 {
-    m_databaseID = NULL;
+    m_databaseID = 0;
 }
 
 Patient::Patient(const Patient &patient, QObject *parent)
