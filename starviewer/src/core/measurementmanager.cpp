@@ -178,6 +178,9 @@ QString MeasurementManager::getMeasurementTypeInformationString(MeasurementType 
         case UnknownMeaning:
             information = QObject::tr("unknown");
             break;
+
+        default:
+            break;
     }
 
     return information;
@@ -318,6 +321,8 @@ bool MeasurementManager::hasToAddDetectorMeasurementInformation(Image *image, Me
                 }
             }
             break;
+        default:
+            break;
     }
 
     return addDetectorInformation;
@@ -339,6 +344,8 @@ bool MeasurementManager::hasToBeExplicitAboutMeasurementType(MeasurementType mea
             {
                 verbose = true;
             }
+            break;
+        default:
             break;
     }
 
