@@ -14,6 +14,8 @@
 
 #include "relativegeometrylayout.h"
 
+#include <cmath>
+
 namespace udg {
 
 RelativeGeometryLayout::RelativeGeometryLayout(QWidget *parent) :
