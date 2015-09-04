@@ -16,7 +16,7 @@
 #define UDG_QFUSIONLAYOUTWIDGET_H
 
 #include <QWidget>
-#include "ui_qfusionlayoutWidgetbase.h"
+#include "ui_qfusionlayoutwidgetbase.h"
 
 namespace udg {
 
