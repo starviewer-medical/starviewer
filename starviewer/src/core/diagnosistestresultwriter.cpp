@@ -55,10 +55,6 @@ void DiagnosisTestResultWriter::write(const QString &pathFile)
         generateData();
     }
 
-    // Per tal de poder utilitzar el Q_FOREACH, hem de redefinir el tipus QPair,
-    // ja que conté '<' i '>', i a les macros no els agrada.
-    typedef QPair<DiagnosisTest*, DiagnosisTestResult> PairTestResult;
-
     QFile *file = createFile(pathFile);
     if (!file)
     {
