@@ -226,7 +226,6 @@ void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int
 double StrokeSegmentationMethod::applyCleanSkullMethod()
 {
     DEBUG_LOG("Clean Skull!!");
-    typedef itk::BinaryThresholdImageFilter<Volume::ItkImageType, Volume::ItkImageType> ThresholdFilterType;
     typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType, Volume::VDimension> StructuringElementType;
     typedef itk::BinaryErodeImageFilter<Volume::ItkImageType, Volume::ItkImageType, StructuringElementType> ErodeFilterType;
     typedef itk::BinaryDilateImageFilter<Volume::ItkImageType, Volume::ItkImageType, StructuringElementType> DilateFilterType;
@@ -456,7 +455,6 @@ void StrokeSegmentationMethod::applyFilter(Volume *output)
     typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
 
     typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType> CurvatureFlowImageFilterType;
-    typedef itk::ConnectedThresholdImageFilter<InternalImageType, InternalImageType> ConnectedFilterType;
 
     InputCastingFilterType::Pointer incaster = InputCastingFilterType::New();
     OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
@@ -537,7 +535,6 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     typedef float InternalPixelType;
     typedef itk::Image<InternalPixelType, 3> InternalImageType;
 
-    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
     typedef itk::BinaryThresholdImageFilter<InternalImageType, Volume::ItkImageType> ThresholdingFilterType;
     typedef itk::FastMarchingImageFilter<InternalImageType, InternalImageType> FastMarchingFilterType;
 
@@ -1003,10 +1000,9 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
     typedef float InternalPixelType;
     typedef itk::Image<InternalPixelType, 3> InternalImageType;
 
-    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
+//    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
     typedef itk::BinaryThresholdImageFilter<InternalImageType, Volume::ItkImageType> ThresholdingFilterType;
     typedef itk::FastMarchingImageFilter<InternalImageType, InternalImageType> FastMarchingFilterType;
-    typedef itk::ThresholdSegmentationLevelSetImageFilter<InternalImageType, InternalImageType> ThresholdSegmentationLevelSetImageFilterType;
 
     typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType, Volume::VDimension> StructuringElementType;
     typedef itk::BinaryDilateImageFilter<Volume::ItkImageType, Volume::ItkImageType, StructuringElementType> DilateFilterType;
@@ -1344,7 +1340,7 @@ void StrokeSegmentationMethod::applyMethod2()
     typedef itk::Image<InternalPixelType, 3> InternalImageType;
 
     typedef itk::CastImageFilter<Volume::ItkImageType, InternalImageType> InputCastingFilterType;
-    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
+//    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
 
     typedef itk::BinaryThresholdImageFilter<InternalImageType, Volume::ItkImageType> ThresholdingFilterType;
     typedef itk::CurvatureAnisotropicDiffusionImageFilter<InternalImageType, InternalImageType> CurvatureAnisotropicFilterType;
@@ -1478,9 +1474,6 @@ int StrokeSegmentationMethod::applyMethod3()
     typedef itk::CastImageFilter<Volume::ItkImageType, InternalImageType> InputCastingFilterType;
     typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
 
-    typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType> CurvatureFlowImageFilterType;
-    typedef itk::ConnectedThresholdImageFilter<InternalImageType, InternalImageType> ConnectedFilterType;
-
     typedef itk::BinaryThresholdImageFilter<InternalImageType, Volume::ItkImageType> ThresholdingFilterType;
     typedef itk::FastMarchingImageFilter<InternalImageType, InternalImageType> FastMarchingFilterType;
     typedef itk::ThresholdSegmentationLevelSetImageFilter<InternalImageType, InternalImageType> ThresholdSegmentationLevelSetImageFilterType;
@@ -1583,7 +1576,6 @@ int StrokeSegmentationMethod::applyMethod4()
     thresholder->SetOutsideValue(0);
     thresholder->SetInsideValue(255);
 
-    typedef itk::RescaleIntensityImageFilter<InternalImageType, Volume::ItkImageType> CastFilterType;
     typedef itk::CurvatureAnisotropicDiffusionImageFilter<InternalImageType, InternalImageType> SmoothingFilterType;
     typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<InternalImageType, InternalImageType> GradientFilterType;
     typedef itk::SigmoidImageFilter<InternalImageType, InternalImageType> SigmoidFilterType;
