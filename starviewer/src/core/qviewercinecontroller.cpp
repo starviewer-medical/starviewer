@@ -278,6 +278,8 @@ void QViewerCINEController::resetCINEInformation(Volume *input)
 
 void QViewerCINEController::updateThickness(int thickness)
 {
+    Q_UNUSED(thickness)
+
     if (!m_2DViewer->hasInput())
     {
         return;
