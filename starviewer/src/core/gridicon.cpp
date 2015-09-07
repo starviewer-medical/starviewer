@@ -61,7 +61,7 @@ void GridIcon::initialize(const QString &iconType)
     gridLayout->setSpacing(0);
     gridLayout->setMargin(1);
     m_label = new QLabel(this);
-    m_label->setFrameShape(QFrame::StyledPanel);
+    m_label->setStyleSheet("QLabel { border: 1px solid #909090; }");
     m_label->setAlignment(Qt::AlignCenter);
     setIconType(iconType);
     gridLayout->addWidget(m_label, 0, 0, 1, 1);
