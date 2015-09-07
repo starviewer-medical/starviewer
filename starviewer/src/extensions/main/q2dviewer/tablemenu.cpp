@@ -49,7 +49,7 @@ void TableMenu::initializeTable()
     m_rows = 0;
 
     ItemMenu *firstItem = new ItemMenu(this);
-    firstItem->setFrameShape(QFrame::StyledPanel);
+    firstItem->setBorder(true);
     firstItem->setMinimumSize(30, 30);
     firstItem->setMaximumSize(30, 30);
     firstItem->setData(QString(tr("%1,%2").arg(m_rows).arg(m_columns)));
@@ -78,7 +78,7 @@ void TableMenu::addColumn()
     for (numRow = 0; numRow <= m_rows; numRow++)
     {
         newItem = new ItemMenu(this);
-        newItem->setFrameShape(QFrame::StyledPanel);
+        newItem->setBorder(true);
         newItem->setData(QString(tr("%1,%2").arg(numRow).arg(m_columns)));
         newItem->setMinimumSize(30, 30);
         newItem->setMaximumSize(30, 30);
@@ -102,7 +102,7 @@ void TableMenu::addRow()
     for (numColumn = 0; numColumn <= m_columns; numColumn++)
     {
         newItem = new ItemMenu(this);
-        newItem->setFrameShape(QFrame::StyledPanel);
+        newItem->setBorder(true);
         newItem->setData(QString(tr("%1,%2").arg(m_rows).arg(numColumn)));
         newItem->setMinimumSize(30, 30);
         newItem->setMaximumSize(30, 30);
