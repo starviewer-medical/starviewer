@@ -36,6 +36,7 @@ public:
     /// Constuctor de la classe. Se li ha de passar un objecte PacsDevice, amb els paràmetres del pacs correctament especificats
     /// @param Parametres del Pacs a connectar
     PACSConnection(PacsDevice pacsDevice);
+    virtual ~PACSConnection();
 
     /// Aquesta funció ens intenta connectar al PACS
     /// @param Especifica en quina modalitat ens volem connectar, fer echo, busca informació o descarregar imatges

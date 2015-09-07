@@ -27,6 +27,10 @@ PortInUse::PortInUse()
     m_errorString = QObject::tr("No port checked yet");
 }
 
+PortInUse::~PortInUse()
+{
+}
+
 bool PortInUse::isPortInUse(int port)
 {
     bool portInUse;
