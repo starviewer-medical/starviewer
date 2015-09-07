@@ -718,6 +718,7 @@ SOURCES += extensionmediator.cpp \
     itkDCMTKImageIOFactory.cxx \
     itkDCMTKSeriesFileNames.cxx \
     volumepixeldatareaderitkdcmtk.cpp \
+    postprocessor.cpp \
     computezspacingpostprocessor.cpp \
     pixelspacingamenderpostprocessor.cpp \
     volumepixeldatareaderfactory.cpp \

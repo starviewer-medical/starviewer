@@ -37,6 +37,10 @@ PACSConnection::PACSConnection(PacsDevice pacsDevice)
     m_dicomAssociation = NULL;
 }
 
+PACSConnection::~PACSConnection()
+{
+}
+
 OFCondition PACSConnection::configureEcho()
 {
     const char *transferSyntaxes[] = { UID_LittleEndianImplicitTransferSyntax };

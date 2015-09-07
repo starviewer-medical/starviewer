@@ -31,6 +31,7 @@ public:
     enum PortInUseOwner { PortUsedByUnknown, PortUsedByStarviewer, PortUsedByOther };
 
     PortInUse();
+    virtual ~PortInUse();
 
     /// Indica si el port passat per paràmetre està en ús (cert) o lliure (fals)
     bool isPortInUse(int port);
