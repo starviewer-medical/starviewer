@@ -295,7 +295,8 @@ void DICOMTagReader::initializeTextCodec()
     }
     else
     {
-        m_textCodec = QTextCodec::codecForLocale();
+        // Default to Latin-1 if Specific Character Set is not present
+        m_textCodec = QTextCodec::codecForName("ISO 8859-1");
     }
 }
 
