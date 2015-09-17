@@ -58,7 +58,8 @@ QTextCodec* getTextCodec(DcmDirectoryRecord *directoryRecord)
 
     if (!codec)
     {
-        codec = QTextCodec::codecForLocale();
+        // Default to Latin-1 if Specific Character Set is not present
+        codec = QTextCodec::codecForName("ISO 8859-1");
     }
 
     return codec;

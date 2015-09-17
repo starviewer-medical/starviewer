@@ -257,6 +257,9 @@ void DICOMServiceResponseStatus::dumpLog()
         case DICOMServiceResponseStatus::WarningStatus:
             WARN_LOG(getServiceTypeAsString() + " operation has failed partially and could not be performed completely. Error: " + getStatusCodeAsString());
             break;
+
+        default:
+            break;
     }
 
     if (getServiceStatus() != DICOMServiceResponseStatus::SuccessStatus)

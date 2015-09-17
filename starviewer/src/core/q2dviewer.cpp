@@ -1084,6 +1084,9 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
             case AlignLeft:
                 alignLeft();
                 break;
+
+            default:
+                break;
         }
         enableRendering(true);
         this->render();

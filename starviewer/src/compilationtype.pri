@@ -3,6 +3,8 @@ CONFIG += debug_and_release
 unix {
     QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
     QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
+
+    !macx:LIBS += -lGLU
 }
 
 win32 {

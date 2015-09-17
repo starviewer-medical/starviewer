@@ -15,22 +15,21 @@ INCLUDEPATH += $${DCMTKINCLUDEDIR} \
 
 LIBS += -L$${DCMTKLIBDIR} \
     -lsqlite3 \
+    -ldcmpstat \
     -ldcmnet \
     -ldcmdata \
-    -lofstd \
-    -loflog \
     -ldcmimgle \
     -ldcmimage \
     -ldcmsr \
     -ldcmqrdb \
     -ldcmtls \
     -ldcmdsig \
-    -ldcmpstat \
     -ldcmjpeg \
     -lijg8 \ 
     -lijg12 \ 
     -lijg16 \
-    -lxml2
+    -loflog \
+    -lofstd
 
 unix {
     DEFINES += HAVE_CONFIG_H

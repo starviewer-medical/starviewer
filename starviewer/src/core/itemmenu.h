@@ -46,6 +46,11 @@ public:
     /// Mètode per fixar l'element com a seleccionat o no seleccionat
     void setSelected(bool option);
 
+    /// Returns true if this item has the border enabled and false otherwise.
+    bool hasBorder() const;
+    /// Enables or disables the border of this item according to the given value.
+    void setBorder(bool on);
+
 signals:
     /// Signal que s'emet al entrar el mouse al widget
     void isActive(ItemMenu *);
@@ -66,6 +71,9 @@ protected:
 
     /// True if the item is selected and false otherwise.
     bool m_selected;
+
+    /// True if this item has the border enabled and false otherwise.
+    bool m_border;
 
 };
 

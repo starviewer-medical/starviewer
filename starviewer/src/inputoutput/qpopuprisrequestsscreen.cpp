@@ -125,6 +125,8 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPoin
 
 void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus(Study *study)
 {
+    Q_UNUSED(study)
+
     if (m_numberOfStudiesRetrieved + m_numberOfStudiesFailedToRetrieve < m_numberOfStudiesToRetrieve)
     {
         setOngoingOperationText(tr("Retrieving study %1 of %2.").arg(m_numberOfStudiesRetrieved + m_numberOfStudiesFailedToRetrieve + 1).arg(m_numberOfStudiesToRetrieve));
