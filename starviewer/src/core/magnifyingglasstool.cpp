@@ -217,7 +217,6 @@ void MagnifyingGlassTool::updateCamera()
 
     // Ajustem la càmera a la mateixa proporció que el renderer principal
     // Cal prendre la proporció del viewport magnificat respecte el viewer en sí
-    QSize size = m_2DViewer->getRenderWindowSize();
     double viewportsProportion;
     double viewportPoints[4];
     m_magnifiedRenderer->GetViewport(viewportPoints);

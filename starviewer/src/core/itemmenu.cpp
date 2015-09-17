@@ -13,64 +13,67 @@
  *************************************************************************************/
 
 #include "itemmenu.h"
+
 #include <QEvent>
-#include <QApplication>
-#include <QPalette>
 
 namespace udg {
 
 namespace {
 
-// Returns the default application palette.
-QPalette getDefaultPalette()
+// Returns the appropriate stylesheet according to whether the item is selected and it has border.
+QString getStyleSheet(bool selected, bool border)
 {
-    return qApp->palette();
-}
+    if (!selected && !border)
+    {
+        return "";
+    }
 
-// Returns the palette to mark the item as selected.
-QPalette getSelectedPalette()
-{
-    QPalette palette = getDefaultPalette();
-    QBrush selected(QColor(85, 160, 255, 128));
-    selected.setStyle(Qt::SolidPattern);
-    palette.setBrush(QPalette::Active, QPalette::Window, selected);
-    return palette;
+    QString styleSheet = "udg--ItemMenu { ";
+
+    if (selected)
+    {
+        styleSheet += "background-color: #8055a0ff; ";
+    }
+
+    if (border)
+    {
+        styleSheet += "border: 1px solid #909090; ";
+    }
+
+    styleSheet += "}";
+
+    return styleSheet;
 }
 
 }
 
 ItemMenu::ItemMenu(QWidget *parent)
- : QFrame(parent), m_selected(false)
+ : QFrame(parent), m_selected(false), m_border(false)
 {
-    setAutoFillBackground(true);
     m_fixed = false;
-
-    QPalette systemPalette(qApp->palette());
-    setPalette(systemPalette);
 }
 
 ItemMenu::~ItemMenu()
 {
-
 }
 
 bool ItemMenu::event(QEvent *event)
 {
     if (event->type() == QEvent::Enter)
     {
-        setPalette(getSelectedPalette());
+        setStyleSheet(getStyleSheet(true, m_border));
         emit isActive(this);
         return true;
     }
     else if (event->type() == QEvent::MouseButtonPress)
     {
-        setPalette(getSelectedPalette());
+        setStyleSheet(getStyleSheet(true, m_border));
         emit isSelected(this);
         return true;
     }
     else if (event->type() == QEvent::Leave && !m_fixed && !m_selected)
     {
-        setPalette(getDefaultPalette());
+        setStyleSheet(getStyleSheet(false, m_border));
         return true;
     }
     else
@@ -87,15 +90,7 @@ void ItemMenu::setFixed(bool option)
 void ItemMenu::setSelected(bool option)
 {
     m_selected = option;
-
-    if (option)
-    {
-        setPalette(getSelectedPalette());
-    }
-    else
-    {
-        setPalette(getDefaultPalette());
-    }
+    setStyleSheet(getStyleSheet(m_selected, m_border));
 }
 
 void ItemMenu::setData(QString data)
@@ -106,6 +101,17 @@ void ItemMenu::setData(QString data)
 QString ItemMenu::getData()
 {
     return m_data;
+}
+
+bool ItemMenu::hasBorder() const
+{
+    return m_border;
+}
+
+void ItemMenu::setBorder(bool on)
+{
+    m_border = on;
+    setStyleSheet(getStyleSheet(m_selected, m_border));
 }
 
 }

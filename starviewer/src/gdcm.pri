@@ -17,6 +17,6 @@ LIBS += -L$${GDCMLIBDIR} \
         -lgdcmzlib \
         -lvtkgdcm
 
-!macx {
+win32 {
     LIBS += -lgdcmgetopt
 }

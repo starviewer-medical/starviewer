@@ -12,26 +12,12 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef POSTPROCESSOR_H
-#define POSTPROCESSOR_H
+#include "postprocessor.h"
 
 namespace udg {
 
-class Volume;
+Postprocessor::~Postprocessor()
+{
+}
 
-/**
-    Classe base per tots els postprocessadors que s'executen després de la lectura del volum.
- */
-class Postprocessor {
-
-public:
-    virtual ~Postprocessor();
-
-    /// Aplica el postprocés sobre el volum donat.
-    virtual void postprocess(Volume *volume) = 0;
-
-};
-
-} // namespace udg
-
-#endif // POSTPROCESSOR_H
+}

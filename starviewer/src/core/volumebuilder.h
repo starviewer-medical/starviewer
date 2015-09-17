@@ -31,7 +31,7 @@ class VolumeBuilder {
 public:
     VolumeBuilder();
 
-    ~VolumeBuilder();
+    virtual ~VolumeBuilder();
 
     /// Mètode encarregat de generar el nou Volume.
     virtual Volume* build() = 0;

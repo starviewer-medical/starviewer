@@ -444,6 +444,7 @@ Q2DViewerAnnotationHandler::CornerAnnotationIndexType Q2DViewerAnnotationHandler
             case AdditionalInformationAnnotation: return LowerLeftCornerIndex;
             case VoiLutAnnotation: return UpperRightCornerIndex;
             case SliceAnnotation: return LowerRightCornerIndex;
+            default: break;
         }
     }
     else
@@ -454,6 +455,7 @@ Q2DViewerAnnotationHandler::CornerAnnotationIndexType Q2DViewerAnnotationHandler
             case AdditionalInformationAnnotation: return LowerRightCornerIndex;
             case VoiLutAnnotation: return UpperLeftCornerIndex;
             case SliceAnnotation: return LowerLeftCornerIndex;
+            default: break;
         }
     }
 

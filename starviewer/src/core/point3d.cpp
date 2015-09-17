@@ -14,6 +14,8 @@
 
 #include "point3d.h"
 
+#include <limits>
+
 #include "mathtools.h"
 
 #include <QString>
@@ -55,7 +57,7 @@ void Point3D::set(int i, double value)
     }
 }
 
-const double Point3D::at(int i) const
+double Point3D::at(int i) const
 {
     if (MathTools::isInsideRange(i, 0, 2))
     {

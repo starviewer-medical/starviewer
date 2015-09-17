@@ -18,6 +18,7 @@ tmp
 bin/starviewer.app/
 src/main/starviewer.xcodeproj
 src/main/Info.plist
+linuxpackage
 
 # QtCreator generated files
 *.pro.user*
@@ -37,6 +38,10 @@ src/main/Info.plist
 *.dll
 # Application executables
 bin/*.exe
+bin/starviewer
+bin/starviewer_crashreporter
+bin/starviewer_sapwrapper
+bin/*.so*
 
 # Testing outputs
 tests/auto/*.log

@@ -16,6 +16,7 @@
 #include "logging.h"
 
 #include <cmath>
+#include <ctime>
 #include <vtkMath.h>
 #include <vtkPlane.h>
 #include <vtkLine.h>
