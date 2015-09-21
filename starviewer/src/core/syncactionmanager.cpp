@@ -109,6 +109,11 @@ SyncActionsConfiguration* SyncActionManager::getSyncActionsConfiguration()
     return m_syncActionsConfiguration;
 }
 
+bool SyncActionManager::isEnabled() const
+{
+    return m_enabled;
+}
+
 void SyncActionManager::enable(bool enable)
 {
     m_enabled = enable;

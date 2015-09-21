@@ -58,11 +58,6 @@ LayoutManager::LayoutManager(Patient *patient, ViewersLayout *layout, QObject *p
     m_currentHangingProtocolApplied = 0;
     m_priorHangingProtocolApplied = 0;
     m_combinedHangingProtocolApplied = 0;
-
-    connect(m_layout, SIGNAL(fusionLayout2x1Requested(QList<Volume*>, AnatomicalPlane)), SLOT(setFusionLayout2x1(QList<Volume*>, AnatomicalPlane)));
-    connect(m_layout, SIGNAL(fusionLayout3x1Requested(QList<Volume*>, AnatomicalPlane)), SLOT(setFusionLayout3x1(QList<Volume*>, AnatomicalPlane)));
-    connect(m_layout, SIGNAL(fusionLayout2x3Requested(QList<Volume*>)), SLOT(setFusionLayout2x3(QList<Volume*>)));
-    connect(m_layout, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SLOT(setFusionLayout3x3(QList<Volume*>)));
 }
 
 LayoutManager::~LayoutManager()
