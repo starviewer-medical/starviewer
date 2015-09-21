@@ -58,6 +58,9 @@ public:
     /// Gets the current sync actions configuration
     SyncActionsConfiguration* getSyncActionsConfiguration();
 
+    /// Returns true if the manager is enabled and false otherwise.
+    bool isEnabled() const;
+
 public slots:
     /// Enables or disables the manager. When disabled, no actions will be applied on the viewers set.
     /// The viewers set will always remain unaltered, wheter the manager is disabled or enabled.

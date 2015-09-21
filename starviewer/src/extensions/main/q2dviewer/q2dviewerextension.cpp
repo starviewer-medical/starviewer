@@ -226,6 +226,11 @@ void Q2DViewerExtension::createConnections()
 #endif
 
     connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
+
+    connect(m_workingArea, SIGNAL(fusionLayout2x1Requested(QList<Volume*>,AnatomicalPlane)), SLOT(setFusionLayout2x1(QList<Volume*>,AnatomicalPlane)));
+    connect(m_workingArea, SIGNAL(fusionLayout3x1Requested(QList<Volume*>,AnatomicalPlane)), SLOT(setFusionLayout3x1(QList<Volume*>,AnatomicalPlane)));
+    connect(m_workingArea, SIGNAL(fusionLayout2x3Requested(QList<Volume*>)), SLOT(setFusionLayout2x3(QList<Volume*>)));
+    connect(m_workingArea, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SLOT(setFusionLayout3x3(QList<Volume*>)));
 }
 
 #ifdef STARVIEWER_LITE
@@ -1080,6 +1085,74 @@ void Q2DViewerExtension::setWorkingStudies(const QString &currentStudyUID, const
             setupPropagation();
         }
 
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout2x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout2x1(volumes, anatomicalPlane);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout3x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout3x1(volumes, anatomicalPlane);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout2x3(const QList<Volume*> &volumes)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout2x3(volumes);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout3x3(const QList<Volume*> &volumes)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout3x3(volumes);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
     }
 }
 
