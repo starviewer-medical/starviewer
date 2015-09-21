@@ -16,7 +16,7 @@
 #define UDGSYNCACTIONMANAGER_H
 
 #include <QObject>
-#include <QSet>
+#include <QList>
 #include <QMultiHash>
 
 namespace udg {
@@ -100,8 +100,8 @@ private slots:
     void synchronizeAllViewersButSender();
 
 private:
-    /// The set of viewers to be synced
-    QSet<QViewer*> m_syncedViewersSet;
+    /// The list of viewers to be synced
+    QList<QViewer*> m_syncedViewersList;
     
     /// The list of registered signal mappers that could be used to propagate the SyncActions
     QList<SignalToSyncActionMapper*> m_registeredSignalMappers;

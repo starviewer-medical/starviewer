@@ -47,9 +47,9 @@ SyncActionManager::~SyncActionManager()
 
 void SyncActionManager::addSyncedViewer(QViewer *viewer)
 {
-    if (!m_syncedViewersSet.contains(viewer))
+    if (!m_syncedViewersList.contains(viewer))
     {
-        m_syncedViewersSet << viewer;
+        m_syncedViewersList << viewer;
 
         Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
         if (viewer2D)
@@ -75,12 +75,12 @@ void SyncActionManager::removeSyncedViewer(QViewer *viewer)
         disconnect(viewer2D, 0, this, 0);
     }
 
-    m_syncedViewersSet.remove(viewer);
+    m_syncedViewersList.removeOne(viewer);
 }
 
 void SyncActionManager::setMasterViewer(QViewer *viewer)
 {
-    if (m_syncedViewersSet.contains(viewer))
+    if (m_syncedViewersList.contains(viewer))
     {
         m_masterViewer = viewer;
         updateMasterViewerMappers();
@@ -89,7 +89,7 @@ void SyncActionManager::setMasterViewer(QViewer *viewer)
 
 void SyncActionManager::clearSyncedViewersSet()
 {
-    m_syncedViewersSet.clear();
+    m_syncedViewersList.clear();
 }
 
 void SyncActionManager::setSyncActionsConfiguration(SyncActionsConfiguration *configuration)
@@ -166,7 +166,7 @@ void SyncActionManager::synchronizeAllWithExceptions(QSet<QViewer*> excludedView
         this->synchronize();
     }
 
-    foreach (QViewer *currentViewer, m_syncedViewersSet)
+    foreach (QViewer *currentViewer, m_syncedViewersList)
     {
         if (currentViewer != selectedViewer && currentViewer->getMainInput() && !excludedViewers.contains(currentViewer))
         {
@@ -229,7 +229,7 @@ void SyncActionManager::applySyncAction(SyncAction *syncAction)
 
     if (!m_synchronizingAll || !m_syncActionsAppliedPerViewer.contains(syncActionName, m_masterViewer))
     {
-        foreach (QViewer *viewer, m_syncedViewersSet.values())
+        foreach (QViewer *viewer, m_syncedViewersList)
         {
             if (isSyncActionApplicable(syncAction, viewer))
             {
