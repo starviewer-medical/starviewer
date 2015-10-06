@@ -6,6 +6,7 @@
 include(src/compilationtype.pri)
 
 SUBDIRS += src
+!official_release:SUBDIRS += tests
 TEMPLATE = subdirs
 CONFIG += warn_on \
           qt \
