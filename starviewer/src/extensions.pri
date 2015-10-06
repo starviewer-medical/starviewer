@@ -1,6 +1,16 @@
 # Aquí cal afegir les extensions que volem que s'incloguin a l'executable
 #
 
+# Exclude playground extensions from official releases
+!official_release {
+    PLAYGROUND_EXTENSIONS = diffusionperfusionsegmentation \
+                            edemasegmentation \
+                            angiosubstraction \
+                            perfusionmapreconstruction \
+                            rectumsegmentation \
+                            experimental3d
+}
+
 #CONTRIB_EXTENSIONS =
 
 MAIN_EXTENSIONS = mpr \
