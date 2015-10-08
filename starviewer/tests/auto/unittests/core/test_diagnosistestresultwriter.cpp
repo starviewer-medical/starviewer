@@ -1,5 +1,5 @@
 #include "autotest.h"
-#include "diagnosisTest.h"
+#include "diagnosistest.h"
 #include "diagnosistestresult.h"
 #include "diagnosistestresultwriter.h"
 
