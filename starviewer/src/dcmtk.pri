@@ -1,6 +1,7 @@
 include(defaultdirectories.pri)
 
 INCLUDEPATH += $${DCMTKINCLUDEDIR} \
+    $${DCMTKINCLUDEDIR}/../ \
     $${DCMTKINCLUDEDIR}/dcmdata/ \
     $${DCMTKINCLUDEDIR}/dcmimgle/ \
     $${DCMTKINCLUDEDIR}/dcmnet/ \
@@ -40,12 +41,7 @@ unix:!macx {
     LIBS += -lwrap
 }
 
-macx {
-    INCLUDEPATH += $${DCMTKINCLUDEDIR}/../
-}
-
 win32 {
-    INCLUDEPATH += $${DCMTKINCLUDEDIR}/../
     LIBS += -lNetAPI32 -lWSock32 -lSnmpAPI
 
     contains(QMAKE_TARGET.arch, x86_64) {
