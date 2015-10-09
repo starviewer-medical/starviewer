@@ -47,6 +47,7 @@
 #include <QTextCodec>
 #include <QDir>
 #include <QMessageBox>
+#include <QLibraryInfo>
 #include <qtsingleapplication.h>
 
 #include <vtkNew.h>
@@ -94,6 +95,7 @@ void initializeTranslations(QApplication &app)
     QLocale defaultLocale = translationsLoader.getDefaultLocale();
     QLocale::setDefault(defaultLocale);
 
+    translationsLoader.loadTranslation("qt_" + defaultLocale.name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     translationsLoader.loadTranslation(":/core/core_" + defaultLocale.name());
     translationsLoader.loadTranslation(":/interface/interface_" + defaultLocale.name());
     translationsLoader.loadTranslation(":/inputoutput/inputoutput_" + defaultLocale.name());
