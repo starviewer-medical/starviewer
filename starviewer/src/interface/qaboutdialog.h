@@ -27,6 +27,11 @@ Q_OBJECT
 public:
     QAboutDialog(QWidget *parent = 0);
     ~QAboutDialog();
+
+private slots:
+    /// Shows a dialog with the license information.
+    void showLicenseInformation();
+
 };
 
 }

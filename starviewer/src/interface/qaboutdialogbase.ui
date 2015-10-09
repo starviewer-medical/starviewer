@@ -141,7 +141,7 @@
     </layout>
    </item>
    <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
+    <widget class="QDialogButtonBox" name="m_buttonBox">
      <property name="autoFillBackground">
       <bool>false</bool>
      </property>
@@ -162,7 +162,7 @@
  </resources>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>m_buttonBox</sender>
    <signal>accepted()</signal>
    <receiver>udg::QAboutDialogBase</receiver>
    <slot>accept()</slot>
@@ -178,7 +178,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>m_buttonBox</sender>
    <signal>rejected()</signal>
    <receiver>udg::QAboutDialogBase</receiver>
    <slot>reject()</slot>
