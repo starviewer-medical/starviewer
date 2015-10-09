@@ -14,7 +14,10 @@
 
 #include "qaboutdialog.h"
 
+#include "qlicensedialog.h"
 #include "starviewerapplication.h"
+
+#include <QPushButton>
 
 namespace udg {
 
@@ -54,10 +57,19 @@ QAboutDialog::QAboutDialog(QWidget *parent)
     aboutMessage += tr("<p>Web: <a href=\"%1\">%1</a></p>").arg(OrganizationWebURL);
     m_aboutTextLabel->setText(aboutMessage);
     m_aboutTextLabel->setOpenExternalLinks(true);
+
+    QPushButton *licenseButton = m_buttonBox->addButton(tr("License information"), QDialogButtonBox::ActionRole);
+    connect(licenseButton, &QPushButton::clicked, this, &QAboutDialog::showLicenseInformation);
 }
 
 QAboutDialog::~QAboutDialog()
 {
+}
+
+void QAboutDialog::showLicenseInformation()
+{
+    QLicenseDialog *licenseDialog = new QLicenseDialog(this);
+    licenseDialog->open();
 }
 
 }

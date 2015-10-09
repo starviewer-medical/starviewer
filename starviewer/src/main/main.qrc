@@ -162,5 +162,8 @@
         <file>cluts/2d/rainbow.xml</file>
         <file>cluts/2d/petosirix.xml</file>
         <file>css/mainwindowbackground.css</file>
+        <file>../../COPYRIGHT</file>
+        <file>../../LICENSE</file>
+        <file>../../NOTICE</file>
     </qresource>
 </RCC>
