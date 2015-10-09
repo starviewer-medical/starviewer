@@ -77,10 +77,10 @@ QLocale ApplicationTranslationsLoader::getDefaultLocale()
     return QLocale(language, country);
 }
 
-bool ApplicationTranslationsLoader::loadTranslation(QString translationFilePath)
+bool ApplicationTranslationsLoader::loadTranslation(QString translationFilePath, const QString &directory)
 {
     QTranslator *translator = new QTranslator(m_application);
-    if (translator->load(translationFilePath))
+    if (translator->load(translationFilePath, directory))
     {
         m_application->installTranslator(translator);
         return true;

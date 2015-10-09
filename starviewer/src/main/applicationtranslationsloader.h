@@ -37,7 +37,7 @@ public:
 
     /// Carrega una traducció de Qt (*.qm) que es trobi a translationFilePath. Aquest path pot ser d'un resource.
     /// Retorna true si s'ha carregat correctament, altrament, false.
-    bool loadTranslation(QString translationFilePath);
+    bool loadTranslation(QString translationFilePath, const QString &directory = QString());
 
 private:
     QApplication *m_application;
