@@ -97,11 +97,6 @@ bool LayoutManager::hasStudyAnyModalityWithHangingProtocolPriority(Study *study)
     return !matchingModalities.isEmpty();
 }
 
-void LayoutManager::applyProperLayoutChoice()
-{
-    applyProperLayoutChoice(true, true);
-}
-
 void LayoutManager::setGrid(int rows, int columns)
 {
     Study *study = m_currentStudy;
