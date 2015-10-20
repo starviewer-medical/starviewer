@@ -196,16 +196,6 @@ void ViewersLayout::setGridInArea(int rows, int columns, const QRectF &geometry)
     m_layout->invalidate();
 }
 
-QRectF ViewersLayout::convertGeometry(const QRectF &viewerGeometry, const QRectF &newGeometry)
-{
-    double incWidth = newGeometry.width() / 1.0;
-    double incHeight = newGeometry.height() / 1.0;
-    double incX = newGeometry.x() - 0.0;
-    double incY = newGeometry.y() - 0.0;
-
-    return QRectF(viewerGeometry.x() * incWidth + incX, viewerGeometry.y() * incHeight + incY, viewerGeometry.width() * incWidth, viewerGeometry.height() * incHeight);
-}
-
 namespace {
 
 // Returns viewerGeometry remapped from its position and size relative to oldGeometry to the equivalent relative to newGeometry.
@@ -220,6 +210,11 @@ QRectF remapGeometry(const QRectF &viewerGeometry, const QRectF &oldGeometry, co
                   viewerGeometry.width() * incWidth, viewerGeometry.height() * incHeight);
 }
 
+}
+
+QRectF ViewersLayout::convertGeometry(const QRectF &viewerGeometry, const QRectF &newGeometry)
+{
+    return remapGeometry(viewerGeometry, QRectF(0.0, 0.0, 1.0, 1.0), newGeometry);
 }
 
 void ViewersLayout::mapViewersToNewGeometry(const QRectF &oldGeometry, const QRectF &newGeometry)
