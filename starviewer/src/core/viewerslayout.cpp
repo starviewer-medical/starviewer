@@ -206,6 +206,33 @@ QRectF ViewersLayout::convertGeometry(const QRectF &viewerGeometry, const QRectF
     return QRectF(viewerGeometry.x() * incWidth + incX, viewerGeometry.y() * incHeight + incY, viewerGeometry.width() * incWidth, viewerGeometry.height() * incHeight);
 }
 
+namespace {
+
+// Returns viewerGeometry remapped from its position and size relative to oldGeometry to the equivalent relative to newGeometry.
+QRectF remapGeometry(const QRectF &viewerGeometry, const QRectF &oldGeometry, const QRectF &newGeometry)
+{
+    double incWidth = newGeometry.width() / oldGeometry.width();
+    double incHeight = newGeometry.height() / newGeometry.height();
+    double incX = newGeometry.x() - oldGeometry.x();
+    double incY = newGeometry.y() - oldGeometry.y();
+
+    return QRectF(viewerGeometry.x() * incWidth + incX, viewerGeometry.y() * incHeight + incY,
+                  viewerGeometry.width() * incWidth, viewerGeometry.height() * incHeight);
+}
+
+}
+
+void ViewersLayout::mapViewersToNewGeometry(const QRectF &oldGeometry, const QRectF &newGeometry)
+{
+    QList<Q2DViewerWidget*> viewersInRegion = getViewersInsideGeometry(oldGeometry);
+
+    foreach (Q2DViewerWidget *viewer, viewersInRegion)
+    {
+        QRectF changedGeometry = remapGeometry(this->getGeometryOfViewer(viewer), oldGeometry, newGeometry);
+        this->setViewerGeometry(viewer, changedGeometry);
+    }
+}
+
 QRectF ViewersLayout::getGeometryOfViewer(Q2DViewerWidget *viewer) const
 {
     if (m_maximizedViewers.contains(viewer))

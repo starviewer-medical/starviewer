@@ -93,7 +93,7 @@ private:
     bool hasStudyAnyModalityWithHangingProtocolPriority(Study *study);
 
     /// Applies hanging protocols or automatic layouts depending on the user settings and the availability of the former
-    void applyProperLayoutChoice(bool changeCurrentStudyLayout, bool changePriorStudyLayout);
+    void applyProperLayoutChoice(bool changeCurrentStudyLayout, bool changePriorStudyLayout, bool comparativeModeToggled);
     HangingProtocol *applyProperLayoutChoice(Study *study, const QList<HangingProtocol*> &hangingProtocols, const QRectF &studyLayoutGeometry);
     
     /// Hanging Protocols

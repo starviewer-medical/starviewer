@@ -110,7 +110,7 @@ void LayoutManager::setGrid(int rows, int columns)
     applyLayoutCandidates(getLayoutCandidates(study), study, geometry, rows, columns);
 }
 
-void LayoutManager::applyProperLayoutChoice(bool changeCurrentStudyLayout, bool changePriorStudyLayout)
+void LayoutManager::applyProperLayoutChoice(bool changeCurrentStudyLayout, bool changePriorStudyLayout, bool comparativeModeToggled)
 {
     if (!m_currentStudy)
     {
@@ -143,6 +143,18 @@ void LayoutManager::applyProperLayoutChoice(bool changeCurrentStudyLayout, bool 
             else
             {
                 setCurrentHangingProtocolApplied(applyProperLayoutChoice(m_currentStudy, m_currentStudyHangingProtocolCandidates, WholeGeometry));
+            }
+        }
+        else if (comparativeModeToggled)
+        {
+            if (m_priorStudy)
+            {
+                m_layout->mapViewersToNewGeometry(WholeGeometry, LeftHalfGeometry);
+            }
+            else
+            {
+                m_layout->cleanUp(RightHalfGeometry);
+                m_layout->mapViewersToNewGeometry(LeftHalfGeometry, WholeGeometry);
             }
         }
 
@@ -392,9 +404,11 @@ void LayoutManager::setWorkingStudies(const QString &currentStudyUID, const QStr
     }
     else
     {
-        changeCurrentStudyLayout = (m_currentStudy != newCurrentStudy || newPriorStudy == NULL || m_priorStudy == NULL);
-        changePriorStudyLayout = (m_priorStudy != newPriorStudy);
+        changeCurrentStudyLayout = m_currentStudy != newCurrentStudy;
+        changePriorStudyLayout = m_priorStudy != newPriorStudy;
     }
+
+    bool comparativeModeToggled = (newPriorStudy == NULL) ^ (m_priorStudy == NULL);
 
     m_currentStudy = newCurrentStudy;
     m_priorStudy = newPriorStudy;
@@ -406,7 +420,7 @@ void LayoutManager::setWorkingStudies(const QString &currentStudyUID, const QStr
     emit activeCurrentHangingProtocolChanged(m_currentHangingProtocolApplied);
     emit activePriorHangingProtocolChanged(m_priorHangingProtocolApplied);
 
-    applyProperLayoutChoice(changeCurrentStudyLayout, changePriorStudyLayout);
+    applyProperLayoutChoice(changeCurrentStudyLayout, changePriorStudyLayout, comparativeModeToggled);
 }
 
 
