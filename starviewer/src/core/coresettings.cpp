@@ -137,6 +137,9 @@ void CoreSettings::init()
     settingsRegistry->addSetting(LastVersionCheckedDate, "");
     settingsRegistry->addSetting(CheckVersionInterval, "1");
     settingsRegistry->addSetting(DontCheckNewVersionsOnline, false);
+#ifdef CORPORATE_VERSION
+    settingsRegistry->addSetting(UpdateCheckUrlAdditionalParameters, "machineID,groupID");
+#endif
     settingsRegistry->addSetting(MammographyAutoOrientationExceptions, (QStringList() << "BAV" << "BAG" << "estereot"));
     settingsRegistry->addSetting(AllowAsynchronousVolumeLoading, true);
     settingsRegistry->addSetting(MaximumNumberOfVolumesLoadingConcurrently, 1);
