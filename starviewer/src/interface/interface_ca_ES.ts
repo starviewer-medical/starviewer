@@ -20,6 +20,29 @@
     </message>
 </context>
 <context>
+    <name>QLicenseDialogBase</name>
+    <message>
+        <location filename="qlicensedialogbase.ui" line="14"/>
+        <source>Starviewer license information</source>
+        <translation>Informació de la llicència de l&apos;Starviewer</translation>
+    </message>
+    <message>
+        <location filename="qlicensedialogbase.ui" line="24"/>
+        <source>Copyright</source>
+        <translation>Copyright</translation>
+    </message>
+    <message>
+        <location filename="qlicensedialogbase.ui" line="34"/>
+        <source>License</source>
+        <translation>Llicència</translation>
+    </message>
+    <message>
+        <location filename="qlicensedialogbase.ui" line="44"/>
+        <source>Third party licenses</source>
+        <translation>Llicències de tercers</translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <location filename="applicationcommandlineoptions.cpp" line="92"/>
@@ -106,45 +129,50 @@
 <context>
     <name>udg::QAboutDialog</name>
     <message>
-        <location filename="qaboutdialog.cpp" line="26"/>
+        <location filename="qaboutdialog.cpp" line="29"/>
         <source>About %1</source>
         <translation>Quant a l&apos;%1</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="29"/>
+        <location filename="qaboutdialog.cpp" line="32"/>
         <source>&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab) and Institut de Diagnòstic per la Imatge (IDI), Girona.&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG, ...) fully compliant with the DICOM standard for image communication and image file formats. It can also read many other file formats specified by the MetaIO standard (*.mhd files). </source>
         <oldsource>&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab) and Institut de Diagnòstic per la Imatge (IDI), Girona.&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) fully compliant with the DICOM standard for image communication and image file formats. It can also read many other file formats specified by the MetaIO standard (*.mhd files). </oldsource>
         <translation>&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab) i Institut de Diagnòstic per la Imatge (IDI), Girona.&lt;p align=&apos;justify&apos;&gt;L&apos;%1 és un programari de revisió d&apos;imatge bàsic però complet dedicat a imatges DICOM produïdes per equipament mèdic (MRI, CT, PET, PET-CT, CR, MG, ...) totalment compatible amb l&apos;estàndard DICOM per a la comunicació d&apos;imatge i formats de fitxer d&apos;imatge. També pot llegir altres formats establerts per l&apos;estàndard MetaIO (fitxers *.mhd). </translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="36"/>
+        <location filename="qaboutdialog.cpp" line="39"/>
         <source>&lt;p align=&apos;justify&apos;&gt;%1 has been specifically designed for navigation and visualization of multimodality and multidimensional images</source>
         <translation>&lt;p align=&apos;justify&apos;&gt;L&apos;%1 ha estat dissenyat específicament per a la navegació i visualització d&apos;imatges multimodals i multidimensionals</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="39"/>
+        <location filename="qaboutdialog.cpp" line="42"/>
         <source>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 enables navigation and visualization of multimodality and multidimensional images through a complete 2D Viewer which integrates advanced reconstruction techniques such as Thick Slab (including Maximum Intensity Projection (MIP), Minimum Intensity Projection (MinIP) and average projection), fast orthogonal reconstruction and 3D navigation tools such as 3D-Cursor. It also incorporates Multi-Planar Reconstruction (MPR) and 3D Viewer for volume rendering.&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</source>
         <translation>L&apos;%1 pot rebre imatges transferides seguint el protocol de comunicació DICOM des de qualsevol PACS o equipament d&apos;imatge mèdica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, i Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;L&apos;%1 permet l&apos;exploració i visualització d&apos;imatges multimodalitat i multidimensionals a través d&apos;un complet visor 2D que integra tècniques avançades de reconstrucció tals com Thick Slab (incloent Projecció de Màxima Intensitat (MIP), Projecció de Mínima Intensitat (MinIP) i projecció de la mitjana), reconstrucció ortogonal ràpida i eines de navegació tridimensionals com el Cursor 3D. També incorpora Reconstrucció Multi-Planar (MPR) i un visor 3D per a renderització de volums.&lt;p align=&apos;justify&apos;&gt;L&apos;%1 és una estació de treball DICOM per imatge mèdica i alhora un programari de processament d&apos;imatges per realitzar recerca mèdica (radiologia i medicina nuclear), imatge funcional i imatge 3D.</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="50"/>
+        <location filename="qaboutdialog.cpp" line="53"/>
         <source>&lt;p align=&apos;justify&apos;&gt;%1 is the result of the close collaboration between IDI and GiLab and experience of both entities in the fields of radiology, medical imaging and image processing.</source>
         <translation>&lt;p align=&apos;justify&apos;&gt;L&apos;%1 és fruit de l&apos;estreta col·laboració entre IDI i GiLab i la experiència d&apos;ambdues entitats en els àmbits de la radiologia, imatge mèdica i processament d&apos;imatge.</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="52"/>
+        <location filename="qaboutdialog.cpp" line="55"/>
         <source>&lt;p&gt;Version: %1 &lt;/p&gt;</source>
         <translation>&lt;p&gt;Versió: %1 &lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="53"/>
+        <location filename="qaboutdialog.cpp" line="56"/>
         <source>&lt;p&gt;Support email: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;Adreça electrònica de suport: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="54"/>
+        <location filename="qaboutdialog.cpp" line="57"/>
         <source>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="qaboutdialog.cpp" line="61"/>
+        <source>License information</source>
+        <translation>Informació de la llicència</translation>
     </message>
 </context>
 <context>

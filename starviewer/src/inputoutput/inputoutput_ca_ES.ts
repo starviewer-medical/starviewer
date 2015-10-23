@@ -2389,34 +2389,34 @@ Voleu continuar?</translation>
         <translation>S&apos;està cercant al PACS...</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="130"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="132"/>
         <source>Retrieving study %1 of %2.</source>
         <translation>S&apos;està descarregant l&apos;estudi %1 de %2.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="146"/>
-        <location filename="qpopuprisrequestsscreen.cpp" line="159"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="148"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="161"/>
         <source>No studies found.</source>
         <translation>No s&apos;han trobat estudis.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="163"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="165"/>
         <source>Unable to retrieve requested studies.</source>
         <oldsource>Couldn&apos;t retrieve requested studies.</oldsource>
         <translation>No s&apos;han pogut descarregar els estudis demanats.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="170"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="172"/>
         <source>%1 study retrieved.</source>
         <translation>S&apos;ha descarregat %1 estudi.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="174"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="176"/>
         <source>%1 studies retrieved.</source>
         <translation>S&apos;han descarregat %1 estudis.</translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="179"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="181"/>
         <source>%1 studies retrieved, %2 failed.</source>
         <translation>S&apos;han descarregat %1 estudis i n&apos;han fallat %2.</translation>
     </message>
@@ -2424,37 +2424,37 @@ Voleu continuar?</translation>
 <context>
     <name>udg::QRelatedStudiesWidget</name>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Modality</source>
         <translation>Modalitat</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Description</source>
         <translation>Descripció</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Current</source>
         <translation>Actual</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Prior</source>
         <translation>Previ</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="205"/>
+        <location filename="qrelatedstudieswidget.cpp" line="311"/>
         <source>Looking for related studies...</source>
         <translation>S&apos;estan cercant estudis relacionats...</translation>
     </message>
