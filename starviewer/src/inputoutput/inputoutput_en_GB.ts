@@ -2385,34 +2385,34 @@ Do you want continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="130"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="132"/>
         <source>Retrieving study %1 of %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="146"/>
-        <location filename="qpopuprisrequestsscreen.cpp" line="159"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="148"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="161"/>
         <source>No studies found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="163"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="165"/>
         <source>Unable to retrieve requested studies.</source>
         <oldsource>Couldn&apos;t retrieve requested studies.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="170"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="172"/>
         <source>%1 study retrieved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="174"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="176"/>
         <source>%1 studies retrieved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qpopuprisrequestsscreen.cpp" line="179"/>
+        <location filename="qpopuprisrequestsscreen.cpp" line="181"/>
         <source>%1 studies retrieved, %2 failed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2420,37 +2420,37 @@ Do you want continue?</source>
 <context>
     <name>udg::QRelatedStudiesWidget</name>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Modality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="172"/>
+        <location filename="qrelatedstudieswidget.cpp" line="278"/>
         <source>Prior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="205"/>
+        <location filename="qrelatedstudieswidget.cpp" line="311"/>
         <source>Looking for related studies...</source>
         <translation type="unfinished"></translation>
     </message>

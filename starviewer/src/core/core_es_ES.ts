@@ -2,6 +2,35 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="es">
 <context>
+    <name>Q2DViewerWidgetBase</name>
+    <message>
+        <location filename="q2dviewerwidgetbase.ui" line="14"/>
+        <source>StackedWidget</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="q2dviewerwidgetbase.ui" line="59"/>
+        <source>XY : Axial</source>
+        <translation>XY: Axial</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerwidgetbase.ui" line="82"/>
+        <source>Fusion Layout</source>
+        <translation>Distribución de fusión</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerwidgetbase.ui" line="93"/>
+        <source>Fusion Balance</source>
+        <translation>Balance de fusión</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerwidgetbase.ui" line="96"/>
+        <location filename="q2dviewerwidgetbase.ui" line="110"/>
+        <source>...</source>
+        <translation>...</translation>
+    </message>
+</context>
+<context>
     <name>QFusionLayoutWidgetBase</name>
     <message>
         <location filename="qfusionlayoutwidgetbase.ui" line="14"/>
@@ -9,12 +38,22 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="qfusionlayoutwidgetbase.ui" line="78"/>
+        <location filename="qfusionlayoutwidgetbase.ui" line="75"/>
+        <source>2x1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qfusionlayoutwidgetbase.ui" line="146"/>
         <source>3x1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qfusionlayoutwidgetbase.ui" line="167"/>
+        <location filename="qfusionlayoutwidgetbase.ui" line="226"/>
+        <source>2x3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="qfusionlayoutwidgetbase.ui" line="315"/>
         <source>3x3</source>
         <translation></translation>
     </message>
@@ -111,92 +150,92 @@
         <translation>Error al inicializar la biblioteca del cortafuegos</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="173"/>
+        <location filename="diagnosistestresultwriter.cpp" line="169"/>
         <source>%1 succeeded</source>
         <translation>%1 correctos</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="174"/>
+        <location filename="diagnosistestresultwriter.cpp" line="170"/>
         <source>%1 errors</source>
         <translation>%1 errores</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="175"/>
+        <location filename="diagnosistestresultwriter.cpp" line="171"/>
         <source>%1 warnings</source>
         <translation>%1 avisos</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="223"/>
+        <location filename="diagnosistestresultwriter.cpp" line="219"/>
         <source>System Information</source>
         <translation>Información del sistema</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="229"/>
+        <location filename="diagnosistestresultwriter.cpp" line="225"/>
         <source>Operating System: %1</source>
         <translation>Sistema operativo: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="230"/>
+        <location filename="diagnosistestresultwriter.cpp" line="226"/>
         <source>Desktop composition: </source>
         <translation>Composición del escritorio: </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="233"/>
+        <location filename="diagnosistestresultwriter.cpp" line="229"/>
         <source>Available</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="237"/>
+        <location filename="diagnosistestresultwriter.cpp" line="233"/>
         <source> and enabled</source>
         <translation> y activada</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="241"/>
+        <location filename="diagnosistestresultwriter.cpp" line="237"/>
         <source> but disabled</source>
         <translation> pero desactivada</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="246"/>
+        <location filename="diagnosistestresultwriter.cpp" line="242"/>
         <source>Not available</source>
         <translation>No disponible</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="249"/>
+        <location filename="diagnosistestresultwriter.cpp" line="245"/>
         <source>RAM Memory: %1 MB</source>
         <translation>Memoria RAM: %1 MB</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="256"/>
+        <location filename="diagnosistestresultwriter.cpp" line="252"/>
         <source>CPU Clock Speed: %1</source>
         <translation>Velocidad de reloj de la CPU: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="257"/>
+        <location filename="diagnosistestresultwriter.cpp" line="253"/>
         <source>Number of cores: %1</source>
         <translation>Número de núcleos: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="261"/>
+        <location filename="diagnosistestresultwriter.cpp" line="257"/>
         <source>GPU %1: </source>
         <translation>Tarjeta gráfica %1: </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="264"/>
+        <location filename="diagnosistestresultwriter.cpp" line="260"/>
         <source>Driver: %1. </source>
         <translation>Controlador: %1. </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="268"/>
+        <location filename="diagnosistestresultwriter.cpp" line="264"/>
         <source>OpenGL: %1</source>
         <translation>OpenGL: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="276"/>
+        <location filename="diagnosistestresultwriter.cpp" line="272"/>
         <source>Screen %1: %2x%3 </source>
         <translation>Pantalla %1: %2x%3 </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="279"/>
+        <location filename="diagnosistestresultwriter.cpp" line="275"/>
         <source>Primary</source>
         <translation>Principal</translation>
     </message>
@@ -507,7 +546,7 @@
         <translation>Versión de hanging protocol no compatible: %1</translation>
     </message>
     <message>
-        <location filename="voilutsyncaction.cpp" line="72"/>
+        <location filename="voilutsyncaction.cpp" line="73"/>
         <source>VOI LUT</source>
         <translation></translation>
     </message>
@@ -867,43 +906,14 @@
     <name>udg::Q2DViewerWidget</name>
     <message>
         <location filename="q2dviewerwidget.cpp" line="41"/>
-        <location filename="q2dviewerwidget.cpp" line="220"/>
+        <location filename="q2dviewerwidget.cpp" line="226"/>
         <source>Enable manual synchronization in this viewer</source>
         <translation>Activar la sincronización manual en este visor</translation>
     </message>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="226"/>
+        <location filename="q2dviewerwidget.cpp" line="232"/>
         <source>Disable manual synchronization in this viewer</source>
         <translation>Desactivar la sincronización manual en este visor</translation>
-    </message>
-</context>
-<context>
-    <name>udg::Q2DViewerWidgetBase</name>
-    <message>
-        <location filename="q2dviewerwidgetbase.ui" line="14"/>
-        <source>ViewerWidget</source>
-        <translation>ViewerWidget</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerwidgetbase.ui" line="61"/>
-        <source>XY : Axial</source>
-        <translation>XY: Axial</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerwidgetbase.ui" line="84"/>
-        <source>Fusion Layout</source>
-        <translation>Distribución de fusión</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerwidgetbase.ui" line="95"/>
-        <source>Fusion Balance</source>
-        <translation>Balance de fusión</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerwidgetbase.ui" line="98"/>
-        <location filename="q2dviewerwidgetbase.ui" line="112"/>
-        <source>...</source>
-        <translation>...</translation>
     </message>
 </context>
 <context>
