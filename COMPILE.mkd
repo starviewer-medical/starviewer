@@ -1,5 +1,5 @@
-Starviewer 0.13
-===============
+Building on GNU/Linux
+=====================
 
 This guide explains how to compile Starviewer 0.13 from scratch on a Debian
 GNU/Linux 8.2 amd64. (With 4GiB of RAM)
@@ -33,6 +33,21 @@ Getting started: the quick way
 Running Starviewer
 ------------------
 
+Unless you have compiled and installed the SDK system-wide, Starviewer binary
+will be unable to find your compiled SDK libraries.
+
+You must run the binary with the LD_LIBRARY_PATH environment variable set.
+
+For the sake of convenience, on the compiled binary folder 'starviewer/bin/' 
+create a file named starviewer.sh with the following contents:
+
+    #!/bin/bash
+    DIR=$(readlink -f $(dirname $BASH_SOURCE))
+    LD_LIBRARY_PATH=~/uroot/usr/local/lib:~/uroot/usr/local/lib/x86_64-linux-gnu:~/uroot/usr/local/lib/Qt5.4.1/5.4/gcc_64/lib/ $DIR/starviewer "$@"
+
+Then make this file executable
+
+    chmod u+x starviewer.sh
 
 Libraries
 ---------
@@ -264,4 +279,3 @@ Troubleshooting
 -   I get errors with missing translations. Run this on your project directory.
 
         find  -name '*.pro' -exec lrelease {} \;
-        
