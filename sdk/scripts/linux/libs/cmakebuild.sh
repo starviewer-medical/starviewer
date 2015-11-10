@@ -19,8 +19,24 @@ then
 fi
 
 cmake $CMAKE_OPTIONS $SOURCE_DIR
+if [ $? -ne 0 ]
+then
+    echo "ERROR: CMake of $LIB failed"
+    exit
+fi
+
 make -j4
-sudo make install
+if [ $? -ne 0 ]
+then
+    echo "ERROR: Compilation of $LIB failed"
+    exit
+fi
+
+make install
+if [ $? -ne 0 ]
+then
+    echo "ERROR: Installation phase of $LIB failed"
+    exit
+fi
 
 popd
-
