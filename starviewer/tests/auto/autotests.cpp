@@ -1,5 +1,4 @@
 #include "autotest.h"
-#include "gtest/gtest.h"
 
 #include <QDir>
 
