@@ -1,5 +1,7 @@
 #include "autotest.h"
 
+#include <iostream>
+
 #include <QDir>
 
 /// A part dels paràmetres que QTest defineix de cada test, se n'han afegint més:
