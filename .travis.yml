@@ -65,4 +65,4 @@ script:
   - qmake
   - make -j3
   - cd tests/auto
-  - ./autotests
+  - ./autotests -silent
