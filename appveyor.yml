@@ -40,7 +40,7 @@ build_script:
     call "%ProgramFiles(x86)%\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %ARCH%
     cd starviewer
     qmake
-    jom
+    jom -j2
 
 test_script:
 - ps: |
