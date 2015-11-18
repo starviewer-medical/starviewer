@@ -101,7 +101,7 @@ private:
     bool upgradeDatabase();
 
     /// Ens aplica la comanda d'actualització a la base de dades
-    bool applySqlUpgradeCommandToDatabase(QString sqlUpgradeCommand);
+    bool applySqlUpgradeCommandToDatabase(const QString &sqlUpgradeCommand);
 
     /// Retorna el XML a aplicar per actualitzar la base de dades
     QString getUpgradeDatabaseRevisionXmlData();

@@ -18,7 +18,7 @@
 #include <QString>
 
 class QSemaphore;
-struct sqlite3;
+class QSqlError;
 
 namespace udg {
 
@@ -37,19 +37,22 @@ public:
     /// Destructor de la classe
     ~DatabaseConnection();
 
+    /// Connecta amb la base de dades segons el path
+    void open();
+
      /// Establei el path de la base de dades, per defecte, si no s'estableix, el va a buscar a la classe StarviewerSettings
      /// @param path de la base de dades
     void setDatabasePath(const QString &databasePath);
 
     /// Retorna la connexió a la base de dades
     // @return connexio a la base de dades, si el punter és nul, és que hi hagut error alhora de connectar, o que el path no és correcte
-    sqlite3* getConnection();
+//    sqlite3* getConnection();
 
     /// Retorna l'últim missatge d'error produït a la base de dades
     QString getLastErrorMessage();
 
     /// Retorna l'últim codi d'error produït a la base de dades
-    int getLastErrorCode();
+    QSqlError getLastError();
 
     /// Comença/finalitza/Fa rollback una transacció a la base de dades. Només pot haver una transacció a la vegada amb
     /// la mateixa connexió, per això aquests mètodes tenen implantat un semàfor, qeu control l'accés a les transaccions. Si es fa una transacció
@@ -67,9 +70,6 @@ public:
     static QString formatTextToValidSQLSyntax(QChar qchar);
 
 private:
-    /// Connecta amb la base de dades segons el path
-    void open();
-
     /// Tanca la connexió de la base de dades
     void close();
 
@@ -78,13 +78,14 @@ private:
     bool isConnected();
 
 private:
-    sqlite3 *m_databaseConnection;
+//    sqlite3 *m_databaseConnection;
     /// Sqlite només permet una transacció a la vegada amb la mateixa connexió, en un futur tenen previst permetre-ho però ara mateix
     /// no per tant per assegurar que no tenim dos transaccions a la vegada implantem aquests semàfor
     QSemaphore *m_transactionLock;
 
     QString m_databasePath;
 };
-}; // End namespace
+
+} // End namespace
 
 #endif

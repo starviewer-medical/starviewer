@@ -20,6 +20,8 @@
 #include "localdatabasebasedal.h"
 #include "study.h"
 
+class QSqlQuery;
+
 namespace udg {
 
 class DicomMask;
@@ -34,13 +36,13 @@ public:
     LocalDatabaseStudyDAL(DatabaseConnection *dbConnection);
 
     /// Insereix el nou estudi, i insereix com LastAccessDate la data actual
-    void insert(Study *newStudy, const QDate &lastAccessData);
+    bool insert(Study *newStudy, const QDate &lastAccessData);
 
     /// Updata l'estudi
-    void update(Study *studyToUpdate, const QDate &LastAcessDate);
+    bool update(Study *studyToUpdate, const QDate &LastAcessDate);
 
     /// Esborra els estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
-    void del(const DicomMask &studyMaskToDelete);
+    bool del(const DicomMask &studyMaskToDelete);
 
     /// Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID, retorna els estudis ordenats per
     /// LastAccessDate de manera creixent
@@ -80,10 +82,10 @@ private:
     QString buildSqlGetPatientIDFromStudyInstanceUID(const QString &studyInstanceUID);
 
     /// Emplena un l'objecte Study de la fila passada per paràmetre
-    Study* fillStudy(char **reply, int row, int columns);
+    Study* fillStudy(const QSqlQuery &query);
 
     /// Emplena un objecte Patient a partir de la fila passada per paràmetre
-    Patient* fillPatient(char **reply, int row, int columns);
+    Patient* fillPatient(const QSqlQuery &query);
 };
 }
 

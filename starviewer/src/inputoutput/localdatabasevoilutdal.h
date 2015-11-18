@@ -34,10 +34,10 @@ public:
     LocalDatabaseVoiLutDAL(DatabaseConnection *dbConnection);
 
     /// Inserts a new VoiLut from the given Image in the database.
-    void insert(const VoiLut &voiLut, Image *image);
+    bool insert(const VoiLut &voiLut, Image *image);
 
     /// Deletes all VoiLuts in the database that match the given mask.
-    void del(const DicomMask &mask);
+    bool del(const DicomMask &mask);
 
     /// Returns all VoiLuts in the database that match the given mask.
     QList<VoiLut> query(const DicomMask &mask);

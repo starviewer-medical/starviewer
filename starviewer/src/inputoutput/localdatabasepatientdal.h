@@ -20,6 +20,8 @@
 #include "localdatabasebasedal.h"
 #include "patient.h"
 
+class QSqlQuery;
+
 namespace udg {
 
 class DicomMask;
@@ -32,13 +34,13 @@ public:
     LocalDatabasePatientDAL(DatabaseConnection *dbConnection);
 
     /// Insereix el nou pacient, i emplena el camp DatabaseID de Patient amb el ID de Pacient de la BD.
-    void insert(Patient *newPatient);
+    bool insert(Patient *newPatient);
 
     /// Updata el pacient
-    void update(Patient *patientToUpdate);
+    bool update(Patient *patientToUpdate);
 
     /// Esborra els estudis pacients que compleixen amb els criteris de la màscara, només té en compte el Patient Id
-    void del(qlonglong patientID);
+    bool del(qlonglong patientID);
 
     /// Cerca els pacients que compleixen amb els criteris de la màscara de cerca, només té en compte el Patient Id
     QList<Patient*> query(const DicomMask &patientMaskToQuery);
@@ -57,7 +59,7 @@ private:
     QString buildSqlDelete(qlonglong patientID);
 
     /// Emplena un l'objecte series de la fila passada per paràmetre
-    Patient* fillPatient(char **reply, int row, int columns);
+    Patient* fillPatient(const QSqlQuery &query);
 };
 }
 

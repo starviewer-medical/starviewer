@@ -12,13 +12,15 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include <sqlite3.h>
-#include <QString>
-
 #include "localdatabasepatientdal.h"
+
 #include "databaseconnection.h"
 #include "logging.h"
 #include "dicommask.h"
+
+#include <QSqlQuery>
+#include <QString>
+#include <QVariant>
 
 namespace udg {
 
@@ -27,82 +29,76 @@ LocalDatabasePatientDAL::LocalDatabasePatientDAL(DatabaseConnection *dbConnectio
 {
 }
 
-void LocalDatabasePatientDAL::insert(Patient *newPatient)
+bool LocalDatabasePatientDAL::insert(Patient *newPatient)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(newPatient).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlInsert(newPatient)))
     {
-        logError(buildSqlInsert(newPatient));
+        logError(query.lastQuery());
+        return false;
     }
     else
     {
-        // El mètode retorna un tipus sqlite3_int64 aquest en funció de l'entorn de compilació equival a un determinat tipus
-        // http://www.sqlite.org/c3ref/int64.html __int64 per windows i long long int per la resta, qlonglong de qt
-        // http://doc.qt.nokia.com/4.1/qtglobal.html#qlonglong-typedef equival als mateixos tipus pel mateix entorn de compilació per això retornem el
-        // ID com un qlonglong.
-        newPatient->setDatabaseID(sqlite3_last_insert_rowid(m_dbConnection->getConnection()));
+        newPatient->setDatabaseID(query.lastInsertId().toLongLong());
+        return true;
     }
 }
 
-void LocalDatabasePatientDAL::update(Patient *patientToUpdate)
+bool LocalDatabasePatientDAL::update(Patient *patientToUpdate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdate(patientToUpdate).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlUpdate(patientToUpdate)))
     {
-        logError(buildSqlUpdate(patientToUpdate));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
-void LocalDatabasePatientDAL::del(qlonglong patientID)
+bool LocalDatabasePatientDAL::del(qlonglong patientID)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlDelete(patientID).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlDelete(patientID)))
     {
-        logError(buildSqlDelete(patientID));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
 QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
 {
-    int columns;
-    int rows;
-    char **reply = NULL;
-    char **error = NULL;
     QList<Patient*> patientList;
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          buildSqlSelect(patientMask).toUtf8().constData(),
-                                          &reply, &rows, &columns, error);
-
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlSelect(patientMask)))
     {
-        logError (buildSqlSelect(patientMask));
+        logError(query.lastQuery());
         return patientList;
     }
 
-    // index = 1 ignorem les capçaleres
-    for (int index = 1; index <= rows; index++)
+    while (query.next())
     {
-        patientList.append(fillPatient(reply, index, columns));
+        patientList.append(fillPatient(query));
     }
-
-    sqlite3_free_table(reply);
 
     return patientList;
 }
 
-Patient* LocalDatabasePatientDAL::fillPatient(char **reply, int row, int columns)
+Patient* LocalDatabasePatientDAL::fillPatient(const QSqlQuery &query)
 {
     Patient *patient = new Patient();
 
-    patient->setDatabaseID(QString(reply[0 + row * columns]).toLongLong());
-    patient->setID(reply[1 + row * columns]);
-    patient->setFullName(convertToQString(reply[2 + row * columns]));
-    patient->setBirthDate(reply[3 + row * columns]);
-    patient->setSex(reply[4 + row * columns]);
+    patient->setDatabaseID(query.value("ID").toLongLong());
+    patient->setID(query.value("DICOMPatientId").toString());
+    patient->setFullName(convertToQString(query.value("Name")));
+    patient->setBirthDate(query.value("BirthDate").toString());
+    patient->setSex(query.value("Sex").toString());
 
     return patient;
 }

@@ -18,7 +18,8 @@
 #include <QFile>
 #include <QString>
 #include <QMessageBox>
-#include <sqlite3.h>
+#include <QSqlError>
+#include <QSqlQuery>
 
 #include "databaseconnection.h"
 #include "logging.h"
@@ -306,15 +307,16 @@ bool DatabaseInstallation::upgradeDatabase()
     return true;
 }
 
-bool DatabaseInstallation::applySqlUpgradeCommandToDatabase(QString sqlUpgradeCommand)
+bool DatabaseInstallation::applySqlUpgradeCommandToDatabase(const QString &sqlUpgradeCommand)
 {
     DatabaseConnection databaseConnection;
+    databaseConnection.open();
 
-    sqlite3_exec(databaseConnection.getConnection(), sqlUpgradeCommand.toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (databaseConnection.getLastErrorCode() != SQLITE_OK)
+    if (!query.exec(sqlUpgradeCommand))
     {
-        ERROR_LOG(QString("No s'ha pogut aplicar la comanda d'actualitzacio %1, Descripcio error: %2") .arg(sqlUpgradeCommand, databaseConnection.getLastErrorMessage()));
+        ERROR_LOG(QString("No s'ha pogut aplicar la comanda d'actualitzacio %1, Descripcio error: %2") .arg(sqlUpgradeCommand).arg(query.lastError().text()));
         return false;
     }
 
@@ -385,7 +387,7 @@ bool DatabaseInstallation::createDatabaseFile()
     QByteArray sqlTablesScript;
     // Obrim la bdd
     DatabaseConnection DBConnect;
-    int status;
+    DBConnect.open();
 
     // Comprovem que existeixi el path on s'ha de crear la base de dades, sinó el crea
     if (!checkDatabasePath())
@@ -400,12 +402,13 @@ bool DatabaseInstallation::createDatabaseFile()
     sqlTablesScript = sqlTablesScriptFile.read(sqlTablesScriptFile.size());
 
     // Creem les taules i els registres
-    status = sqlite3_exec(DBConnect.getConnection(), sqlTablesScript.constData(), 0, 0, 0);
+    QSqlQuery query;
+    bool success = query.exec(sqlTablesScript);
 
     // Tanquem el fitxer
     sqlTablesScriptFile.close();
 
-    if (status == 0)
+    if (success)
     {
         INFO_LOG("S'ha creat correctament la base de dades");
         return true;

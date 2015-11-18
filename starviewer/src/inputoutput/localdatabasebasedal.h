@@ -17,7 +17,9 @@
 #ifndef UDGLOCALDATABASEBASEDAL_H
 #define UDGLOCALDATABASEBASEDAL_H
 
+class QSqlError;
 class QString;
+class QVariant;
 
 namespace udg {
 
@@ -31,17 +33,16 @@ public:
     LocalDatabaseBaseDAL(DatabaseConnection *dbConnection);
 
     /// Retorna l'últim error produït
-    int getLastError();
+    QSqlError getLastError();
 
 protected:
     /// Converts the given text to a QString, interpreting the input as either UTF-8 or Latin-1 depending on its content.
-    static QString convertToQString(const char *text);
+    static QString convertToQString(const QVariant &text);
 
     /// Ens fa un ErrorLog d'una sentència sql. No es té en compte l'error és SQL_CONSTRAINT (clau duplicada)
     void logError(const QString &sqlSentence);
 
 protected:
-    int m_lastSqliteError;
     DatabaseConnection *m_dbConnection;
 
 };

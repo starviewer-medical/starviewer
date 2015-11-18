@@ -14,11 +14,13 @@
 
 #include "localdatabasepacsretrievedimagesdal.h"
 
-#include <sqlite3.h>
-#include <QString>
 #include "databaseconnection.h"
 #include "pacsdevice.h"
 #include "logging.h"
+
+#include <QSqlQuery>
+#include <QString>
+#include <QVariant>
 
 namespace udg {
 
@@ -28,20 +30,16 @@ LocalDatabasePACSRetrievedImagesDAL::LocalDatabasePACSRetrievedImagesDAL(Databas
 
 qlonglong LocalDatabasePACSRetrievedImagesDAL::insert(const PacsDevice &pacsDevice)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(pacsDevice).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlInsert(pacsDevice)))
     {
-        logError(buildSqlInsert(pacsDevice));
+        logError(query.lastQuery());
         return -1;
     }
     else
     {
-        // El mètode retorna un tipus sqlite3_int64 aquest en funció de l'entorn de compilació equival a un determinat tipus
-        // http://www.sqlite.org/c3ref/int64.html __int64 per windows i long long int per la resta, qlonglong de qt
-        // http://doc.qt.nokia.com/4.1/qtglobal.html#qlonglong-typedef equival als mateixos tipus pel mateix entorn de compilació per això retornem el
-        // ID com un qlonglong.
-        return sqlite3_last_insert_rowid(m_dbConnection->getConnection());
+        return query.lastInsertId().toLongLong();
     }
 }
 
@@ -57,40 +55,32 @@ PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString AETitle, con
 
 PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString &sqlQuerySentence)
 {
-    int columns;
-    int rows;
-    char **reply = NULL;
-    char **error = NULL;
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), sqlQuerySentence.toUtf8().constData(), &reply, &rows, &columns, error);
-
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(sqlQuerySentence))
     {
-        logError (sqlQuerySentence);
+        logError(query.lastQuery());
         return PacsDevice();
     }
 
     PacsDevice pacsDevice;
 
-    if (rows >= 1)
+    if (query.next())
     {
-        // la primera columna és la capçalera
-        pacsDevice = fillPACSDevice(reply, 1, columns);
+        pacsDevice = fillPACSDevice(query);
     }
-
-    sqlite3_free_table(reply);
 
     return pacsDevice;
 }
 
-PacsDevice LocalDatabasePACSRetrievedImagesDAL::fillPACSDevice(char **reply, int row, int columns)
+PacsDevice LocalDatabasePACSRetrievedImagesDAL::fillPACSDevice(const QSqlQuery &query)
 {
     PacsDevice pacsDevice;
 
-    pacsDevice.setID(reply[0 + row * columns]);
-    pacsDevice.setAETitle(reply[1 + row * columns]);
-    pacsDevice.setAddress(reply[2 + row * columns]);
-    pacsDevice.setQueryRetrieveServicePort(QString(reply[3 + row * columns]).toInt());
+    pacsDevice.setID(query.value("ID").toString());
+    pacsDevice.setAETitle(query.value("AETitle").toString());
+    pacsDevice.setAddress(query.value("Address").toString());
+    pacsDevice.setQueryRetrieveServicePort(query.value("QueryPort").toInt());
 
     return pacsDevice;
 }

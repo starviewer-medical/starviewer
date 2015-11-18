@@ -14,10 +14,10 @@
 
 #include "localdatabaseimagedal.h"
 
+#include <QSqlQuery>
 #include <QString>
+#include <QVariant>
 #include <QVector2D>
-
-#include <sqlite3.h>
 
 #include "study.h"
 #include "series.h"
@@ -40,60 +40,59 @@ LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection *dbConnection)
 {
 }
 
-void LocalDatabaseImageDAL::insert(Image *newImage)
+bool LocalDatabaseImageDAL::insert(Image *newImage)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(newImage).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlInsert(newImage)))
     {
-        logError(buildSqlInsert(newImage));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
-void LocalDatabaseImageDAL::del(const DicomMask &imageMaskToDelete)
+bool LocalDatabaseImageDAL::del(const DicomMask &imageMaskToDelete)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlDelete(imageMaskToDelete).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlDelete(imageMaskToDelete)))
     {
-        logError(buildSqlDelete(imageMaskToDelete));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
 void LocalDatabaseImageDAL::update(Image *imageToUpdate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdate(imageToUpdate).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlUpdate(imageToUpdate)))
     {
-        logError(buildSqlUpdate(imageToUpdate));
+        logError(query.lastQuery());
     }
 }
 
 QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
 {
-    int columns;
-    int rows;
-    char **reply = NULL;
-    char **error = NULL;
     QList<Image*> imageList;
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          buildSqlSelect(imageMask).toUtf8().constData(),
-                                          &reply, &rows, &columns, error);
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlSelect(imageMask)))
     {
-        logError (buildSqlSelect(imageMask));
+        logError(query.lastQuery());
         return imageList;
     }
 
     LocalDatabaseDisplayShutterDAL shutterDAL(m_dbConnection);
     LocalDatabaseVoiLutDAL voiLutDal(m_dbConnection);
 
-    // index = 1 ignorem les capçaleres
-    for (int index = 1; index <= rows; index++)
+    while (query.next())
     {
-        Image *newImage = fillImage(reply, index, columns);
+        Image *newImage = fillImage(query);
             
         // Obtenim els shutters de l'imatge actual
         DicomMask mask;
@@ -112,90 +111,83 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
         imageList << newImage;
     }
 
-    sqlite3_free_table(reply);
-
     return imageList;
 }
 
 int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
 {
-    int columns;
-    int rows;
-    char **reply = NULL;
-    char **error = NULL;
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          buildSqlSelectCountImages(imageMaskToCount).toUtf8().constData(),
-                                          &reply, &rows, &columns, error);
-
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlSelectCountImages(imageMaskToCount)))
     {
-        logError (buildSqlSelectCountImages(imageMaskToCount));
+        logError(query.lastQuery());
         return -1;
     }
 
-    int numberOfImages = QString(reply[1]).toInt();
-    sqlite3_free_table(reply);
+    query.next();
 
-    return numberOfImages;
+    return query.value(0).toInt();
 }
 
-Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
+Image* LocalDatabaseImageDAL::fillImage(const QSqlQuery &query)
 {
     Image *image = new Image();
 
-    image->setSOPInstanceUID(reply[0 + row * columns]);
-    image->setFrameNumber(QString(reply[1 + row * columns]).toInt());
-    image->setInstanceNumber(reply[4 + row * columns]);
+    image->setSOPInstanceUID(query.value("SOPInstanceUID").toString());
+    image->setFrameNumber(query.value("FrameNumber").toInt());
+    image->setInstanceNumber(query.value("InstanceNumber").toString());
     ImageOrientation imageOrientation;
-    imageOrientation.setDICOMFormattedImageOrientation((reply[5 + row * columns]));
+    imageOrientation.setDICOMFormattedImageOrientation(query.value("ImageOrientationPatient").toString());
     image->setImageOrientationPatient(imageOrientation);
     
     PatientOrientation patientOrientation;
-    patientOrientation.setDICOMFormattedPatientOrientation(reply[6 + row * columns]);
+    patientOrientation.setDICOMFormattedPatientOrientation(query.value("PatientOrientation").toString());
     image->setPatientOrientation(patientOrientation);
     
-    image->setPixelSpacing(getPixelSpacingAsDouble(reply[7 + row * columns])[0], getPixelSpacingAsDouble(reply[7 + row * columns])[1]);
-    image->setSliceThickness(QString(reply[8 + row * columns]).toDouble());
-    image->setImagePositionPatient(getPatientPositionAsDouble(reply[9 + row * columns]));
-    image->setSamplesPerPixel(QString(reply[10 + row * columns]).toInt());
-    image->setRows(QString(reply[11 + row * columns]).toInt());
-    image->setColumns(QString(reply[12 + row * columns]).toInt());
-    image->setBitsAllocated(QString(reply[13 + row * columns]).toInt());
-    image->setBitsStored(QString(reply[14 + row * columns]).toInt());
-    image->setPixelRepresentation(QString(reply[15 + row * columns]).toInt());
-    image->setRescaleSlope(QString(reply[16 + row * columns]).toDouble());
-    QList<WindowLevel> windowLevelList = DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns],
-                                                                                               convertToQString(reply[19 + row * columns]));
+    image->setPixelSpacing(getPixelSpacingAsDouble(query.value("PixelSpacing").toString())[0],
+                           getPixelSpacingAsDouble(query.value("PixelSpacing").toString())[1]);
+    image->setSliceThickness(query.value("SliceThickness").toString().toDouble());
+    image->setImagePositionPatient(getPatientPositionAsDouble(query.value("PatientPosition").toString()));
+    image->setSamplesPerPixel(query.value("SamplesPerPixel").toInt());
+    image->setRows(query.value("Rows").toInt());
+    image->setColumns(query.value("Columns").toInt());
+    image->setBitsAllocated(query.value("BitsAllocated").toInt());
+    image->setBitsStored(query.value("BitsStored").toInt());
+    image->setPixelRepresentation(query.value("PixelRepresentation").toInt());
+    image->setRescaleSlope(query.value("RescaleSlope").toString().toDouble());
+    QList<WindowLevel> windowLevelList = DICOMFormattedValuesConverter::parseWindowLevelValues(query.value("WindowLevelWidth").toString(),
+                                                                                               query.value("WindowLevelCenter").toString(),
+                                                                                               convertToQString(query.value("WindowLevelExplanations")));
     QList<VoiLut> voiLutList;
     foreach (const WindowLevel &windowLevel, windowLevelList)
     {
         voiLutList.append(windowLevel);
     }
     image->setVoiLutList(voiLutList);
-    image->setSliceLocation(reply[20 + row * columns]);
-    image->setRescaleIntercept(QString(reply[21 + row * columns]).toDouble());
-    image->setPhotometricInterpretation(reply[22 + row * columns]);
-    image->setImageType(reply[23 + row * columns]);
-    image->setViewPosition(reply[24 + row * columns]);
+    image->setSliceLocation(query.value("SliceLocation").toString());
+    image->setRescaleIntercept(query.value("RescaleIntercept").toString().toDouble());
+    image->setPhotometricInterpretation(query.value("PhotometricInterpretation").toString());
+    image->setImageType(query.value("ImageType").toString());
+    image->setViewPosition(query.value("ViewPosition").toString());
     // ImageLaterality sempre és un Char
-    image->setImageLaterality(QChar(reply[25 + row * columns][0]));
-    image->setViewCodeMeaning(convertToQString(reply[26 + row * columns]));
-    image->setPhaseNumber(QString(reply[27 + row * columns]).toInt());
-    image->setImageTime(reply[28 + row * columns]);
-    image->setVolumeNumberInSeries(QString(reply [29 + row * columns]).toInt());
-    image->setOrderNumberInVolume(QString(reply [30 + row * columns]).toInt());
-    image->setRetrievedDate(QDate().fromString(reply[31 + row * columns], "yyyyMMdd"));
-    image->setRetrievedTime(QTime().fromString(reply[32 + row * columns], "hhmmss"));
-    image->setNumberOfOverlays(QString(reply[34 + row * columns]).toUShort());
-    image->setDICOMSource(getImageDICOMSourceByIDPACSInDatabase(reply[35 + row * columns]));
-    QVector2D imagerPixelSpacing = getImagerPixelSpacingAs2DVector(reply[36 + row * columns]);
+    image->setImageLaterality(query.value("ImageLaterality").toString()[0]);
+    image->setViewCodeMeaning(convertToQString(query.value("ViewCodeMeaning")));
+    image->setPhaseNumber(query.value("PhaseNumber").toInt());
+    image->setImageTime(query.value("ImageTime").toString());
+    image->setVolumeNumberInSeries(query.value("VolumeNumberInSeries").toInt());
+    image->setOrderNumberInVolume(query.value("OrderNumberInVolume").toInt());
+    image->setRetrievedDate(QDate().fromString(query.value("RetrievedDate").toString(), "yyyyMMdd"));
+    image->setRetrievedTime(QTime().fromString(query.value("RetrievedTime").toString(), "hhmmss"));
+    image->setNumberOfOverlays(query.value("NumberOfOverlays").toUInt());
+    image->setDICOMSource(getImageDICOMSourceByIDPACSInDatabase(query.value("RetrievedPACSID")));
+    QVector2D imagerPixelSpacing = getImagerPixelSpacingAs2DVector(query.value("ImagerPixelSpacing").toString());
     image->setImagerPixelSpacing(imagerPixelSpacing.x(), imagerPixelSpacing.y());
-    image->setEstimatedRadiographicMagnificationFactor(QString(reply[37 + row * columns]).toDouble());
-    image->setTransferSyntaxUID(reply[38 + row * columns]);
+    image->setEstimatedRadiographicMagnificationFactor(query.value("EstimatedRadiographicMagnificationFactor").toString().toDouble());
+    image->setTransferSyntaxUID(query.value("TransferSyntaxUID").toString());
 
     // TODO argghh!!! Això només hauria d'estar en un únic lloc, no aquí i en retrieveimages.cpp
-    image->setPath(LocalDatabaseManager::getCachePath() + reply[2 + row * columns] + "/" + reply[3 + row * columns] + "/" + reply[0 + row * columns]);
+    image->setPath(LocalDatabaseManager::getCachePath() + query.value("StudyInstanceUID").toString() + "/" + query.value("SeriesInstanceUID").toString() + "/" +
+                   query.value("SOPInstanceUID").toString());
 
     return image;
 }
@@ -553,7 +545,7 @@ QString LocalDatabaseImageDAL::getIDPACSInDatabase(PacsDevice pacsDevice)
     //No hem trobat el PACS l'inserir a la base de dades
     qlonglong PACSDInDatabase = localDatabasePACSRetrievedImagesDAL.insert(pacsDevice);
 
-    if (localDatabasePACSRetrievedImagesDAL.getLastError() == SQLITE_OK)
+    if (PACSDInDatabase >= 0)
     {
         m_PACSIDCache[keyPacsDevice] = QString().setNum(PACSDInDatabase);
         return m_PACSIDCache[keyPacsDevice];
@@ -562,11 +554,11 @@ QString LocalDatabaseImageDAL::getIDPACSInDatabase(PacsDevice pacsDevice)
     return "null";
 }
 
-DICOMSource LocalDatabaseImageDAL::getImageDICOMSourceByIDPACSInDatabase(const QString &retrievedPACSID)
+DICOMSource LocalDatabaseImageDAL::getImageDICOMSourceByIDPACSInDatabase(const QVariant &retrievedPACSID)
 {
     DICOMSource imageDICOMSource;
 
-    if (retrievedPACSID == "null")
+    if (retrievedPACSID.isNull())
     {
         // La imatge no té de quin PACS s'ha descarregat
         return imageDICOMSource;
