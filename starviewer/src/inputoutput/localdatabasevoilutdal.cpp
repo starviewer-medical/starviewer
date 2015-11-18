@@ -19,8 +19,8 @@
 #include "image.h"
 
 #include <QDataStream>
-
-#include <sqlite3.h>
+#include <QSqlQuery>
+#include <QVariant>
 
 namespace udg {
 
@@ -87,10 +87,9 @@ QByteArray getByteArray(const VoiLut &voiLut)
 }
 
 /// Returns a VOI LUT constructed from the blob in column 0 of the given prepared statement read using a QDataStream.
-VoiLut getVoiLut(sqlite3_stmt *preparedStatement)
+VoiLut getVoiLut(const QSqlQuery &query)
 {
-    int blobSize = sqlite3_column_bytes(preparedStatement, 0);
-    QByteArray byteArray(static_cast<const char*>(sqlite3_column_blob(preparedStatement, 0)), blobSize);
+    QByteArray byteArray = query.value("Lut").toByteArray();
     QDataStream stream(byteArray);
     stream.setVersion(QDataStream::Qt_5_3);
     TransferFunction voiLut;
@@ -105,80 +104,58 @@ LocalDatabaseVoiLutDAL::LocalDatabaseVoiLutDAL(DatabaseConnection *dbConnection)
 {
 }
 
-void LocalDatabaseVoiLutDAL::insert(const VoiLut &voiLut, Image *image)
+bool LocalDatabaseVoiLutDAL::insert(const VoiLut &voiLut, Image *image)
 {
     QString insertStatement = buildSqlInsert(image);
-    sqlite3_stmt *preparedStatement;
-    m_lastSqliteError = sqlite3_prepare_v2(m_dbConnection->getConnection(), insertStatement.toUtf8().constData(), -1, &preparedStatement, 0);
+    QSqlQuery query;
 
-    if (m_lastSqliteError != SQLITE_OK)
+    if (!query.prepare(insertStatement))
     {
-        logError("prepare(" + insertStatement + ")");
-        return;
+        logError("prepare(" + query.lastQuery() + ")");
+        return false;
     }
 
     QByteArray blob = getByteArray(voiLut);
-    m_lastSqliteError = sqlite3_bind_blob(preparedStatement, 1, blob.constData(), blob.size(), SQLITE_TRANSIENT);
+    query.bindValue(0, blob);
 
-    if (m_lastSqliteError != SQLITE_OK)
+    if (!query.exec())
     {
-        logError("bind_blob(" + insertStatement + ")");
+        logError("exec(" + query.lastQuery() + ")");
+        return false;
     }
 
-    m_lastSqliteError = sqlite3_step(preparedStatement);
-
-    if (m_lastSqliteError != SQLITE_DONE)
-    {
-        logError("step(" + insertStatement + ")");
-    }
-
-    m_lastSqliteError = sqlite3_finalize(preparedStatement);
-
-    if (m_lastSqliteError != SQLITE_OK)
-    {
-        logError("finalize(" + insertStatement + ")");
-    }
+    return true;
 }
 
-void LocalDatabaseVoiLutDAL::del(const DicomMask &mask)
+bool LocalDatabaseVoiLutDAL::del(const DicomMask &mask)
 {
     QString deleteStatement = buildSqlDelete(mask);
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), deleteStatement.toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (m_lastSqliteError != SQLITE_OK)
+    if (!query.exec(deleteStatement))
     {
-        logError(deleteStatement);
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
 QList<VoiLut> LocalDatabaseVoiLutDAL::query(const DicomMask &mask)
 {
     QList<VoiLut> voiLuts;
     QString selectStatement = buildSqlSelect(mask);
-    sqlite3_stmt *preparedStatement;
-    m_lastSqliteError = sqlite3_prepare_v2(m_dbConnection->getConnection(), selectStatement.toUtf8().constData(), -1, &preparedStatement, 0);
+    QSqlQuery query;
 
-    if (m_lastSqliteError != SQLITE_OK)
+    if (!query.exec(selectStatement))
     {
-        logError("prepare(" + selectStatement + ")");
+        logError(query.lastQuery());
         return voiLuts;
     }
 
-    while ((m_lastSqliteError = sqlite3_step(preparedStatement)) == SQLITE_ROW)
+    while (query.next())
     {
-        voiLuts.append(getVoiLut(preparedStatement));
-    }
-
-    if (m_lastSqliteError != SQLITE_DONE)
-    {
-        logError("step(" + selectStatement + ")");
-    }
-
-    m_lastSqliteError = sqlite3_finalize(preparedStatement);
-
-    if (m_lastSqliteError != SQLITE_OK)
-    {
-        logError("finalize(" + selectStatement + ")");
+        voiLuts.append(getVoiLut(query));
     }
 
     return voiLuts;

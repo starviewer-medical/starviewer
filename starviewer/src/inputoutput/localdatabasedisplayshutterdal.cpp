@@ -14,12 +14,13 @@
 
 #include "localdatabasedisplayshutterdal.h"
 
-#include <sqlite3.h>
-
 #include "displayshutter.h"
 #include "dicommask.h"
 #include "databaseconnection.h"
 #include "image.h"
+
+#include <QSqlQuery>
+#include <QVariant>
 
 namespace udg {
 
@@ -28,14 +29,17 @@ LocalDatabaseDisplayShutterDAL::LocalDatabaseDisplayShutterDAL(DatabaseConnectio
 {
 }
 
-void LocalDatabaseDisplayShutterDAL::insert(const DisplayShutter &shutter, Image *shuttersImage)
+bool LocalDatabaseDisplayShutterDAL::insert(const DisplayShutter &shutter, Image *shuttersImage)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSQLInsert(shutter, shuttersImage).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSQLInsert(shutter, shuttersImage)))
     {
-        logError(buildSQLInsert(shutter, shuttersImage));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
 void LocalDatabaseDisplayShutterDAL::update(const QList<DisplayShutter> &shuttersList, Image *shuttersImage)
@@ -52,48 +56,43 @@ void LocalDatabaseDisplayShutterDAL::update(const QList<DisplayShutter> &shutter
     }
 }
 
-void LocalDatabaseDisplayShutterDAL::del(const DicomMask &mask)
+bool LocalDatabaseDisplayShutterDAL::del(const DicomMask &mask)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSQLDelete(mask).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSQLDelete(mask)))
     {
-        logError(buildSQLDelete(mask));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
 QList<DisplayShutter> LocalDatabaseDisplayShutterDAL::query(const DicomMask &mask)
 {
-    int columns;
-    int rows;
-    char **reply = NULL;
-    char **error = NULL;
     QList<DisplayShutter> shutterList;
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), buildSQLSelect(mask).toUtf8().constData(), &reply, &rows, &columns, error);
-
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSQLSelect(mask)))
     {
-        logError(buildSQLSelect(mask));
+        logError(query.lastQuery());
         return shutterList;
     }
 
-    // index = 1 ignorem les capçaleres
-    for (int index = 1; index <= rows; index++)
+    while (query.next())
     {
-        shutterList << fillDisplayShutter(reply, index, columns);
+        shutterList << fillDisplayShutter(query);
     }
-
-    sqlite3_free_table(reply);
 
     return shutterList;
 }
 
-DisplayShutter LocalDatabaseDisplayShutterDAL::fillDisplayShutter(char **reply, int row, int columns)
+DisplayShutter LocalDatabaseDisplayShutterDAL::fillDisplayShutter(const QSqlQuery &query)
 {
     DisplayShutter shutter;
 
-    QString shape = reply[0 + row * columns];
+    QString shape = query.value("Shape").toString();
     if (shape == "RECTANGULAR")
     {
         shutter.setShape(DisplayShutter::RectangularShape);
@@ -111,10 +110,10 @@ DisplayShutter LocalDatabaseDisplayShutterDAL::fillDisplayShutter(char **reply, 
         shutter.setShape(DisplayShutter::UndefinedShape);
     }
 
-    QString shutterPoints = reply[2 + row * columns];
+    QString shutterPoints = query.value("PointsList").toString();
     shutter.setPoints(shutterPoints);
 
-    shutter.setShutterValue(QString("%1").arg(reply[1 + row * columns]).toUShort());
+    shutter.setShutterValue(query.value("ShutterValue").toUInt());
 
     return shutter;
 }

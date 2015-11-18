@@ -19,6 +19,8 @@
 
 #include <QList>
 
+class QSqlQuery;
+
 namespace udg {
 
 class DicomMask;
@@ -33,13 +35,13 @@ public:
     LocalDatabaseDisplayShutterDAL(DatabaseConnection *dbConnection);
 
     /// Insereix un nou DisplayShutter corresponent a la imatge donada
-    void insert(const DisplayShutter &shutter, Image *shuttersImage);
+    bool insert(const DisplayShutter &shutter, Image *shuttersImage);
 
     /// Actualitza la llista de DisplayShutters corresponents a la imatge donada
     void update(const QList<DisplayShutter> &shuttersList, Image *shuttersImage);
 
     /// Esborra els DisplayShutters que coincideixin amb els criteris de la màscara
-    void del(const DicomMask &mask);
+    bool del(const DicomMask &mask);
 
     /// Cerca els DisplayShutters que coincideixin amb els criteris de la màscara i ens torna els resultats en una llista
     QList<DisplayShutter> query(const DicomMask &mask);
@@ -58,7 +60,7 @@ private:
     QString buildWhereSentence(const DicomMask &mask);
 
     /// Omple un objecte DisplayShutter a partir del resultat SQL (reply) segons la fila i columna indicades
-    DisplayShutter fillDisplayShutter(char **reply, int row, int columns);
+    DisplayShutter fillDisplayShutter(const QSqlQuery &query);
 };
 
 } // End namespace udg

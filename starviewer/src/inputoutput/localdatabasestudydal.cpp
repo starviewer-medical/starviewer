@@ -12,9 +12,10 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include <sqlite3.h>
 #include <QString>
 #include <QDate>
+#include <QSqlQuery>
+#include <QVariant>
 
 #include "patient.h"
 #include "localdatabasestudydal.h"
@@ -29,173 +30,147 @@ LocalDatabaseStudyDAL::LocalDatabaseStudyDAL(DatabaseConnection *dbConnection)
 {
 }
 
-void LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
+bool LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(newStudy, lastAccessDate).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlInsert(newStudy, lastAccessDate)))
     {
-        logError(buildSqlInsert(newStudy, lastAccessDate));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
-void LocalDatabaseStudyDAL::update(Study *studyToUpdate, const QDate &lastAccessDate)
+bool LocalDatabaseStudyDAL::update(Study *studyToUpdate, const QDate &lastAccessDate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdate(studyToUpdate, lastAccessDate).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlUpdate(studyToUpdate, lastAccessDate)))
     {
-        logError(buildSqlUpdate(studyToUpdate, lastAccessDate));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
-void LocalDatabaseStudyDAL::del(const DicomMask &studyMaskToDelete)
+bool LocalDatabaseStudyDAL::del(const DicomMask &studyMaskToDelete)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlDelete(studyMaskToDelete).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlDelete(studyMaskToDelete)))
     {
-        logError(buildSqlDelete(studyMaskToDelete));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
 QList<Study*> LocalDatabaseStudyDAL::queryOrderByLastAccessDate(const DicomMask &studyMask, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
-    int columns;
-    int rows;
-    char **reply = NULL;
-    char **error = NULL;
     QList<Study*> studyList;
     QString sqlSentence = buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor) + " Order by LastAccessDate";
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), sqlSentence.toUtf8().constData(), &reply, &rows, &columns, error);
-
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(sqlSentence))
     {
-        logError (sqlSentence);
+        logError(query.lastQuery());
         return studyList;
     }
 
-    // index = 1 ignorem les capçaleres
-    for (int index = 1; index <= rows; index++)
+    while (query.next())
     {
-        studyList.append(fillStudy(reply, index, columns));
+        studyList.append(fillStudy(query));
     }
-
-    sqlite3_free_table(reply);
 
     return studyList;
 }
 
 QList<Study*> LocalDatabaseStudyDAL::query(const DicomMask &studyMask, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
-    int columns;
-    int rows;
-    char **reply = NULL;
-    char **error = NULL;
     QList<Study*> studyList;
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor).toUtf8().constData(),
-                                          &reply, &rows, &columns, error);
-
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor)))
     {
-        logError (buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor));
+        logError(query.lastQuery());
         return studyList;
     }
 
-    // index = 1 ignorem les capçaleres
-    for (int index = 1; index <= rows; index++)
+    while (query.next())
     {
-        studyList.append(fillStudy(reply, index, columns));
+        studyList.append(fillStudy(query));
     }
-
-    sqlite3_free_table(reply);
 
     return studyList;
 }
 
 QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(const DicomMask &patientStudyMaskToQuery, QDate lastAccessDateMinor, QDate lastAccessDateEqualOrMajor)
 {
-    int columns, rows;
-    char **reply = NULL;
-    char **error = NULL;
     QList<Patient*> patientList;
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          buildSqlSelectStudyPatient(patientStudyMaskToQuery, lastAccessDateMinor, lastAccessDateEqualOrMajor).toUtf8().constData(),
-                                          &reply, &rows, &columns, error);
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlSelectStudyPatient(patientStudyMaskToQuery, lastAccessDateMinor, lastAccessDateEqualOrMajor)))
     {
-        logError (buildSqlSelectStudyPatient(patientStudyMaskToQuery, lastAccessDateMinor, lastAccessDateEqualOrMajor));
+        logError(query.lastQuery());
         return patientList;
     }
 
-    // index = 1 ignorem les capçaleres
-    for (int index = 1; index <= rows; index++)
+    while (query.next())
     {
-        Patient *patient = fillPatient(reply, index, columns);
-        patient->addStudy(fillStudy(reply, index, columns));
+        Patient *patient = fillPatient(query);
+        patient->addStudy(fillStudy(query));
 
         patientList.append(patient);
     }
-
-    sqlite3_free_table(reply);
 
     return patientList;
 }
 
 qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString &studyInstanceUID)
 {
-    int columns;
-    int rows;
-    char **reply = NULL;
-    char **error = NULL;
     qlonglong patientID = -1;
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID).toUtf8().constData(),
-        &reply, &rows, &columns, error);
-
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID)))
     {
-        logError(buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID));
+        logError(query.lastQuery());
     }
     else
     {
-        // A la row 0 hi ha el header
-        if (rows >= 1)
+        if (query.next())
         {
             // Si cerquem per UID només podem tenir un resultat, ja que UID és camp clau al a taula Study
-            patientID = QString(reply[1]).toLongLong();
+            patientID = query.value("PatientID").toString().toLongLong();
         }
     }
-
-    sqlite3_free_table(reply);
 
     return patientID;
 }
 
-Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
+Study* LocalDatabaseStudyDAL::fillStudy(const QSqlQuery &query)
 {
     Study *study = new Study();
     QStringList modalities;
 
-    study->setInstanceUID(reply[0 + row * columns]);
-    study->setID(reply[2 + row * columns]);
-    study->setPatientAge(QString(reply[3 + row * columns]));
-    study->setWeight(QString(reply[4 + row * columns]).toDouble());
-    study->setHeight(QString(reply[5 + row * columns]).toDouble());
-    study->setDate(reply[7 + row * columns]);
-    study->setTime(reply[8 + row * columns]);
-    study->setAccessionNumber(reply[9 + row * columns]);
-    study->setDescription(convertToQString(reply[10 + row * columns]));
-    study->setReferringPhysiciansName(convertToQString(reply[11 + row * columns]));
-    study->setRetrievedDate(QDate().fromString(reply[13 + row * columns], "yyyyMMdd"));
-    study->setRetrievedTime(QTime().fromString(reply[14 + row * columns], "hhmmss"));
+    study->setInstanceUID(query.value("InstanceUID").toString());
+    study->setID(query.value(2).toString());
+    study->setPatientAge(query.value("PatientAge").toString());
+    study->setWeight(query.value("PatientWeigth").toString().toDouble());
+    study->setHeight(query.value("PatientHeigth").toString().toDouble());
+    study->setDate(query.value("Date").toString());
+    study->setTime(query.value("Time").toString());
+    study->setAccessionNumber(query.value("AccessionNumber").toString());
+    study->setDescription(convertToQString(query.value("Description")));
+    study->setReferringPhysiciansName(convertToQString(query.value("ReferringPhysicianName")));
+    study->setRetrievedDate(QDate().fromString(query.value("RetrievedDate").toString(), "yyyyMMdd"));
+    study->setRetrievedTime(QTime().fromString(query.value("RetrievedTime").toString(), "hhmmss"));
 
     // Afegim la modalitat que estan separades per "/"
-    modalities = QString(reply[6 + row * columns]).split("/");
+    modalities = query.value("Modalities").toString().split("/");
     foreach (const QString &modality, modalities)
     {
         study->addModality(modality);
@@ -204,15 +179,15 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
     return study;
 }
 
-Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
+Patient* LocalDatabaseStudyDAL::fillPatient(const QSqlQuery &query)
 {
     Patient *patient = new Patient();
 
-    patient->setDatabaseID(QString(reply[16 + row * columns]).toLongLong());
-    patient->setID(reply[17 + row * columns]);
-    patient->setFullName(convertToQString(reply[18 + row * columns]));
-    patient->setBirthDate(reply[19 + row * columns]);
-    patient->setSex(reply[20 + row * columns]);
+    patient->setDatabaseID(query.value(16).toLongLong());
+    patient->setID(query.value(17).toString());
+    patient->setFullName(convertToQString(query.value(18)));
+    patient->setBirthDate(query.value(19).toString());
+    patient->setSex(query.value(20).toString());
 
     return patient;
 }

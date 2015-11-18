@@ -14,13 +14,14 @@
 
 #include "localdatabaseseriesdal.h"
 
-#include <sqlite3.h>
-
 #include "study.h"
 #include "dicommask.h"
 #include "logging.h"
 #include "databaseconnection.h"
 #include "localdatabasemanager.h"
+
+#include <QSqlQuery>
+#include <QVariant>
 
 namespace udg {
 
@@ -29,90 +30,89 @@ LocalDatabaseSeriesDAL::LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection)
 {
 }
 
-void LocalDatabaseSeriesDAL::insert(Series *newSeries)
+bool LocalDatabaseSeriesDAL::insert(Series *newSeries)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(newSeries).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlInsert(newSeries)))
     {
-        logError(buildSqlInsert(newSeries));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
-void LocalDatabaseSeriesDAL::update(Series *seriesToUpdate)
+bool LocalDatabaseSeriesDAL::update(Series *seriesToUpdate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdate(seriesToUpdate).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlUpdate(seriesToUpdate)))
     {
-        logError(buildSqlUpdate(seriesToUpdate));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
-void LocalDatabaseSeriesDAL::del(const DicomMask &seriesMaskToDelete)
+bool LocalDatabaseSeriesDAL::del(const DicomMask &seriesMaskToDelete)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlDelete(seriesMaskToDelete).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlDelete(seriesMaskToDelete)))
     {
-        logError(buildSqlDelete(seriesMaskToDelete));
+        logError(query.lastQuery());
+        return false;
     }
+
+    return true;
 }
 
 QList<Series*> LocalDatabaseSeriesDAL::query(const DicomMask &seriesMask)
 {
-    int columns;
-    int rows;
-    char **reply = NULL;
-    char **error = NULL;
     QList<Series*> seriesList;
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          buildSqlSelect(seriesMask).toUtf8().constData(),
-                                          &reply, &rows, &columns, error);
-
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlSelect(seriesMask)))
     {
-        logError (buildSqlSelect(seriesMask));
+        logError(query.lastQuery());
         return seriesList;
     }
 
-    // index = 1 ignorem les capçaleres
-    for (int index = 1; index <= rows; index++)
+    while (query.next())
     {
-        seriesList.append(fillSeries(reply, index, columns));
+        seriesList.append(fillSeries(query));
     }
-
-    sqlite3_free_table(reply);
 
     return seriesList;
 }
 
-Series* LocalDatabaseSeriesDAL::fillSeries(char **reply, int row, int columns)
+Series* LocalDatabaseSeriesDAL::fillSeries(const QSqlQuery &query)
 {
     QString studyInstanceUID;
     Series *series = new Series();
 
-    studyInstanceUID = reply[1 + row * columns];
+    studyInstanceUID = query.value("StudyInstanceUID").toString();
 
-    series->setInstanceUID(reply[0 + row * columns]);
-    series->setSeriesNumber(reply[2 + row * columns]);
-    series->setModality(reply[3 + row * columns]);
-    series->setDate(reply[4 + row * columns]);
-    series->setTime(reply[5 + row * columns]);
-    series->setInstitutionName(convertToQString(reply[6 + row * columns]));
-    series->setPatientPosition(reply[7 + row * columns]);
-    series->setProtocolName(convertToQString(reply[8 + row * columns]));
-    series->setDescription(convertToQString(reply[9 + row * columns]));
-    series->setFrameOfReferenceUID(reply[10 + row * columns]);
-    series->setPositionReferenceIndicator(convertToQString(reply[11 + row * columns]));
-    series->setBodyPartExamined(reply[12 + row * columns]);
-    series->setViewPosition(reply[13 + row * columns]);
-    series->setManufacturer(convertToQString(reply[14 + row * columns]));
+    series->setInstanceUID(query.value("InstanceUID").toString());
+    series->setSeriesNumber(query.value("Number").toString());
+    series->setModality(query.value("Modality").toString());
+    series->setDate(query.value("Date").toString());
+    series->setTime(query.value("Time").toString());
+    series->setInstitutionName(convertToQString(query.value("InstitutionName")));
+    series->setPatientPosition(query.value("PatientPosition").toString());
+    series->setProtocolName(convertToQString(query.value("ProtocolName")));
+    series->setDescription(convertToQString(query.value("Description")));
+    series->setFrameOfReferenceUID(query.value("FrameOfReferenceUID").toString());
+    series->setPositionReferenceIndicator(convertToQString(query.value("PositionReferenceIndicator")));
+    series->setBodyPartExamined(query.value("BodyPartExaminated").toString());
+    series->setViewPosition(query.value("ViewPosition").toString());
+    series->setManufacturer(convertToQString(query.value("Manufacturer")));
     // Laterality és un char
-    series->setLaterality(reply[15 + row * columns][0]);
-    series->setRetrievedDate(QDate().fromString(reply[16 + row * columns], "yyyyMMdd"));
-    series->setRetrievedTime(QTime().fromString(reply[17 + row * columns], "hhmmss"));
+    series->setLaterality(query.value("Laterality").toString()[0]);
+    series->setRetrievedDate(QDate().fromString(query.value("RetrievedDate").toString(), "yyyyMMdd"));
+    series->setRetrievedTime(QTime().fromString(query.value("RetrievedTime").toString(), "hhmmss"));
     series->setImagesPath(LocalDatabaseManager::getCachePath() + "/" + studyInstanceUID + "/" + series->getInstanceUID());
 
     return series;

@@ -22,6 +22,8 @@
 #include "localdatabasebasedal.h"
 #include "image.h"
 
+class QSqlQuery;
+
 namespace udg {
 
 class DicomMask;
@@ -41,10 +43,10 @@ public:
     /// la imatge i updatar la pool i quedessin incloses dins la tx
     /// @param dades de la imatge
     /// @return retorna estat del mètode
-    void insert(Image *newImage);
+    bool insert(Image *newImage);
 
     /// Esborra les imatges que compleixin el filtre de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
-    void del(const DicomMask &imageMaskToDelete);
+    bool del(const DicomMask &imageMaskToDelete);
 
     /// Actualitza la imatge passada per paràmetre
     void update(Image *imageToUpdate);
@@ -67,7 +69,7 @@ private:
     QHash<int, PacsDevice> m_PACSDeviceCacheByIDPACSInDatabase;
 
     /// Emplena un l'objecte imatge de la fila passada per paràmetre
-    Image* fillImage(char **reply, int row, int columns);
+    Image* fillImage(const QSqlQuery &query);
 
     /// Genera la sentència sql per fer selectes d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID
     QString buildSqlSelect(const DicomMask &imageMaskToSelect);
@@ -117,7 +119,7 @@ private:
     QString getIDPACSInDatabase(PacsDevice pacsDevice);
 
     /// A partir del camp retrievedPACSID de la base de dades ens omple el DICOMSource de la imatge
-    DICOMSource getImageDICOMSourceByIDPACSInDatabase(const QString &retrievedPACSID);
+    DICOMSource getImageDICOMSourceByIDPACSInDatabase(const QVariant &retrievedPACSID);
 
     /// Retorna un PACSDevice a partir del seu ID a la base de dades, sinó el troba retorna un pacs buit
     /// Guarda en una caché el PACS consultats de manere que si es torna demana un PACS ja consultat anteriorment l'obté directament de la caché

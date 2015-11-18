@@ -12,9 +12,10 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include <sqlite3.h>
 #include <QString>
 #include <QRegExp>
+#include <QSqlQuery>
+#include <QVariant>
 
 #include "localdatabaseutildal.h"
 #include "databaseconnection.h"
@@ -32,36 +33,28 @@ void LocalDatabaseUtilDAL::compact()
     Q_ASSERT(m_dbConnection);
 
     QString compactSentence = "vacuum";
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), compactSentence.toUtf8().constData(), 0, 0, 0);
-
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(compactSentence))
     {
-        logError(compactSentence);
+        logError(query.lastQuery());
     }
 }
 
 int LocalDatabaseUtilDAL::getDatabaseRevision()
 {
-    int columns;
-    int rows;
-    char **reply = NULL;
-    char **error = NULL;
+    QSqlQuery query;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), buildSqlGetDatabaseRevision().toUtf8().constData(),
-                                          &reply, &rows, &columns, error);
-
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlGetDatabaseRevision()))
     {
-        logError (buildSqlGetDatabaseRevision());
+        logError(query.lastQuery());
         return -1;
     }
 
-    if (rows > 0)
+    if (query.next())
     {
         QRegExp rexRevisionDatabase("\\d+");//La Revisió es guarda en el format $Revision \d+ $, nosaltres només volem el número per això busquem el \d+
-        int pos = rexRevisionDatabase.indexIn(reply[1]);
-        sqlite3_free_table(reply);
+        int pos = rexRevisionDatabase.indexIn(query.value("Revision").toString());
 
         if (pos > -1)
         {
@@ -81,11 +74,11 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
 
 void LocalDatabaseUtilDAL::updateDatabaseRevision(int databaseRevision)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdateDatabaseRevision(databaseRevision).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query;
 
-    if (getLastError() != SQLITE_OK)
+    if (!query.exec(buildSqlUpdateDatabaseRevision(databaseRevision)))
     {
-        logError(buildSqlUpdateDatabaseRevision(databaseRevision));
+        logError(query.lastQuery());
     }
 }
 

@@ -19,6 +19,8 @@
 
 #include <QtGlobal>
 
+class QSqlQuery;
+
 namespace udg {
 
 class DatabaseConnection;
@@ -50,7 +52,7 @@ private:
     PacsDevice query(const QString &sqlQuerySentence);
 
     /// A partir de les dades retornades d'una consulta s'emplena un objecte PACSDevice
-    PacsDevice fillPACSDevice(char **reply, int row, int columns);
+    PacsDevice fillPACSDevice(const QSqlQuery &query);
 
     /// Construeix sentència per inserir el PACS passat per paràmetre
     QString buildSqlInsert(const PacsDevice &pacsDevice);

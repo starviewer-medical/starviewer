@@ -20,6 +20,8 @@
 #include "localdatabasebasedal.h"
 #include "series.h"
 
+class QSqlQuery;
+
 namespace udg {
 
 class DicomMask;
@@ -33,13 +35,13 @@ public:
     LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection);
 
     /// Insereix la nova sèrie
-    void insert(Series *newSeries);
+    bool insert(Series *newSeries);
 
     /// Updata la nova serie
-    void update(Series *seriesToUpdate);
+    bool update(Series *seriesToUpdate);
 
     /// Esborra les sèries que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID i el SeriesUID
-    void del(const DicomMask &seriesMaskToDelete);
+    bool del(const DicomMask &seriesMaskToDelete);
 
     /// Cerca les sèries que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID i el SeriesUID
     QList<Series*> query(const DicomMask &seriesMaskToQuery);
@@ -61,7 +63,7 @@ private:
     QString buildWhereSentence(const DicomMask &seriesMask);
 
     /// Emplena un l'objecte series de la fila passada per paràmetre
-    Series* fillSeries(char **reply, int row, int columns);
+    Series* fillSeries(const QSqlQuery &query);
 };
 
 }

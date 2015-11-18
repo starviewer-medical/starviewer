@@ -14,8 +14,9 @@
 
 #include "localdatabasebasedal.h"
 
+#include <QSqlError>
 #include <QString>
-#include <sqlite3.h>
+#include <QVariant>
 
 #include "databaseconnection.h"
 #include "logging.h"
@@ -25,21 +26,20 @@ namespace udg {
 LocalDatabaseBaseDAL::LocalDatabaseBaseDAL(DatabaseConnection *dbConnection)
 {
     m_dbConnection = dbConnection;
-    m_lastSqliteError = SQLITE_OK;
 }
 
-int LocalDatabaseBaseDAL::getLastError()
+QSqlError LocalDatabaseBaseDAL::getLastError()
 {
-    return m_lastSqliteError;
+    return m_dbConnection->getLastError();
 }
 
-QString LocalDatabaseBaseDAL::convertToQString(const char *text)
+QString LocalDatabaseBaseDAL::convertToQString(const QVariant &text)
 {
-    QString string = QString::fromUtf8(text);
+    QString string = text.toString();
 
     if (string.contains(QChar::ReplacementCharacter))
     {
-        string = QString::fromLatin1(text);
+        string = QString::fromLatin1(string.toUtf8().constData());
     }
 
     return string;
@@ -47,10 +47,12 @@ QString LocalDatabaseBaseDAL::convertToQString(const char *text)
 
 void LocalDatabaseBaseDAL::logError(const QString &sqlSentence)
 {
+    #define SQLITE_CONSTRAINT  19   /* Abort due to constraint violation */
+
     // Ingnorem l'error de clau duplicada
-    if (getLastError() != SQLITE_CONSTRAINT)
+    if (getLastError().nativeErrorCode().toInt() != SQLITE_CONSTRAINT)
     {
-        ERROR_LOG("S'ha produit l'error: " + QString().setNum(getLastError()) + ", " + m_dbConnection->getLastErrorMessage() +
+        ERROR_LOG("S'ha produit l'error: " + getLastError().nativeErrorCode() + ", " + m_dbConnection->getLastErrorMessage() +
                   ", al executar la seguent sentencia sql " + sqlSentence);
     }
 }

@@ -15,6 +15,7 @@
 #include "localdatabasemanager.h"
 
 #include <QDir>
+#include <QSqlError>
 
 #include "patient.h"
 #include "study.h"
@@ -27,7 +28,6 @@
 #include "localdatabasevoilutdal.h"
 #include "databaseconnection.h"
 #include "dicommask.h"
-#include "sqlite3.h"
 #include "logging.h"
 #include "directoryutilities.h"
 #include "inputoutputsettings.h"
@@ -35,14 +35,24 @@
 #include "harddiskinformation.h"
 #include "thumbnailcreator.h"
 
+#define SQLITE_OK           0   /* Successful result */
+#define SQLITE_ERROR        1   /* SQL error or missing database */
+#define SQLITE_BUSY         5   /* The database file is locked */
+#define SQLITE_LOCKED       6   /* A table in the database is locked */
+#define SQLITE_CORRUPT     11   /* The database disk image is malformed */
+#define SQLITE_EMPTY       16   /* Database is empty */
+#define SQLITE_SCHEMA      17   /* The database schema changed */
+#define SQLITE_CONSTRAINT  19   /* Abort due to constraint violation */
+#define SQLITE_MISMATCH    20   /* Data type mismatch */
+#define SQLITE_NOTADB      26   /* File opened that is not a database file */
+
 namespace udg {
 
 namespace {
 
 /// Inserts in the database all the VOI LUTs that are LUTs in the given image.
-int insertVoiLuts(DatabaseConnection *dbConnect, Image *image)
+bool insertVoiLuts(DatabaseConnection *dbConnect, Image *image)
 {
-    int status = SQLITE_OK;
     LocalDatabaseVoiLutDAL voiLutDal(dbConnect);
 
     for (int i = 0; i < image->getNumberOfVoiLuts(); i++)
@@ -51,29 +61,25 @@ int insertVoiLuts(DatabaseConnection *dbConnect, Image *image)
 
         if (voiLut.isLut())
         {
-            voiLutDal.insert(voiLut, image);
-            status = voiLutDal.getLastError();
-
-            if (status != SQLITE_OK)
+            if (!voiLutDal.insert(voiLut, image))
             {
-                return status;
+                return false;
             }
         }
     }
 
-    return status;
+    return true;
 }
 
 /// Deletes from the database all the VOI LUTs that match the given mask.
-int deleteVoiLuts(DatabaseConnection *dbConnect, const DicomMask &mask)
+bool deleteVoiLuts(DatabaseConnection *dbConnect, const DicomMask &mask)
 {
     LocalDatabaseVoiLutDAL voiLutDal(dbConnect);
-    voiLutDal.del(mask);
-    return voiLutDal.getLastError();
+    return voiLutDal.del(mask);
 }
 
 /// Deletes from the database all the VOI LUTs from the given image.
-int deleteVoiLuts(DatabaseConnection *dbConnect, Image *image)
+bool deleteVoiLuts(DatabaseConnection *dbConnect, Image *image)
 {
     DicomMask mask;
     mask.setSOPInstanceUID(image->getSOPInstanceUID());
@@ -116,7 +122,8 @@ void LocalDatabaseManager::save(Patient *newPatient)
     else
     {
         DatabaseConnection dbConnect;
-        int status = SQLITE_OK;
+        dbConnect.open();
+        bool status = true;
 
         dbConnect.beginTransaction();
         /// Guardem primer els estudis
@@ -124,10 +131,10 @@ void LocalDatabaseManager::save(Patient *newPatient)
         {
             status = saveStudies(&dbConnect, newPatient->getStudies(), QDate::currentDate(), QTime::currentTime());
 
-            if (status != SQLITE_OK)
+            if (!status)
             {
                 deleteRetrievedObjects(newPatient);
-                setLastError(status);
+                setLastError(dbConnect.getLastError());
                 return;
             }
         }
@@ -136,7 +143,7 @@ void LocalDatabaseManager::save(Patient *newPatient)
             ERROR_LOG("El pacient que s'intenta inserir a la base de dades, no te cap estudi.");
         }
 
-        if (status != SQLITE_OK)
+        if (!status)
         {
             deleteRetrievedObjects(newPatient);
         }
@@ -150,7 +157,7 @@ void LocalDatabaseManager::save(Patient *newPatient)
             createStudyThumbnails(study);
         }
 
-        setLastError(status);
+        setLastError(dbConnect.getLastError());
     }
 }
 
@@ -166,14 +173,15 @@ void LocalDatabaseManager::save(Series *seriesToSave)
         QDate currentDate = QDate::currentDate();
         QTime currentTime = QTime::currentTime();
         DatabaseConnection dbConnect;
+        dbConnect.open();
 
         dbConnect.beginTransaction();
-        int status = savePatientOfStudy(&dbConnect, seriesToSave->getParentStudy());
+        bool status = savePatientOfStudy(&dbConnect, seriesToSave->getParentStudy());
 
-        if (status != SQLITE_OK)
+        if (!status)
         {
             deleteRetrievedObjects(seriesToSave);
-            setLastError(status);
+            setLastError(dbConnect.getLastError());
             return;
         }
 
@@ -183,22 +191,22 @@ void LocalDatabaseManager::save(Series *seriesToSave)
 
         status = saveStudy(&dbConnect, studyParent);
 
-        if (status != SQLITE_OK)
+        if (!status)
         {
             deleteRetrievedObjects(seriesToSave);
-            setLastError(status);
+            setLastError(dbConnect.getLastError());
             return;
         }
 
         QList<Series*> seriesList;
         seriesList.append(seriesToSave);
 
-        saveSeries(&dbConnect, seriesList, currentDate, currentTime);
+        status = saveSeries(&dbConnect, seriesList, currentDate, currentTime);
 
-        if (status != SQLITE_OK)
+        if (!status)
         {
             deleteRetrievedObjects(seriesToSave);
-            setLastError(status);
+            setLastError(dbConnect.getLastError());
             return;
         }
         else
@@ -208,13 +216,14 @@ void LocalDatabaseManager::save(Series *seriesToSave)
 
         createSeriesThumbnail(seriesToSave);
 
-        setLastError(status);
+        setLastError(dbConnect.getLastError());
     }
 }
 
 QList<Patient*> LocalDatabaseManager::queryPatient(const DicomMask &patientMaskToQuery)
 {
     DatabaseConnection dbConnect;
+    dbConnect.open();
     LocalDatabasePatientDAL patientDAL(&dbConnect);
     QList<Patient*> queryResult;
 
@@ -227,6 +236,7 @@ QList<Patient*> LocalDatabaseManager::queryPatient(const DicomMask &patientMaskT
 QList<Patient*> LocalDatabaseManager::queryPatientStudy(const DicomMask &patientStudyMaskToQuery)
 {
     DatabaseConnection dbConnect;
+    dbConnect.open();
     LocalDatabaseStudyDAL studyDAL(&dbConnect);
     QList<Patient*> queryResult;
 
@@ -239,6 +249,7 @@ QList<Patient*> LocalDatabaseManager::queryPatientStudy(const DicomMask &patient
 QList<Study*> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuery)
 {
     DatabaseConnection dbConnect;
+    dbConnect.open();
     LocalDatabaseStudyDAL studyDAL(&dbConnect);
     QList<Study*> queryResult;
 
@@ -251,6 +262,7 @@ QList<Study*> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuery
 QList<Study*> LocalDatabaseManager::queryStudyOrderByLastAccessDate(const DicomMask &studyMaskToQuery)
 {
     DatabaseConnection dbConnect;
+    dbConnect.open();
     LocalDatabaseStudyDAL studyDAL(&dbConnect);
     QList<Study*> queryResult;
 
@@ -263,6 +275,7 @@ QList<Study*> LocalDatabaseManager::queryStudyOrderByLastAccessDate(const DicomM
 QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQuery)
 {
     DatabaseConnection dbConnect;
+    dbConnect.open();
     LocalDatabaseSeriesDAL seriesDAL(&dbConnect);
     LocalDatabaseImageDAL imageDAL(&dbConnect);
     QList<Series*> queryResult;
@@ -270,7 +283,7 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
 
     queryResult = seriesDAL.query(seriesMaskToQuery);
 
-    if (seriesDAL.getLastError() != SQLITE_OK)
+    if (seriesDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
     {
         setLastError(seriesDAL.getLastError());
         return queryResult;
@@ -282,7 +295,7 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
         maskToCountNumberOfImage.setSeriesInstanceUID(series->getInstanceUID());
         series->setNumberOfImages(imageDAL.count(maskToCountNumberOfImage));
 
-        if (imageDAL.getLastError() != SQLITE_OK)
+        if (imageDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
         {
             break;
         }
@@ -298,6 +311,7 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
 QList<Image*> LocalDatabaseManager::queryImage(const DicomMask &imageMaskToQuery)
 {
     DatabaseConnection dbConnect;
+    dbConnect.open();
     LocalDatabaseImageDAL imageDAL(&dbConnect);
     QList<Image*> queryResult;
 
@@ -318,6 +332,7 @@ bool LocalDatabaseManager::existsStudy(Study *study)
 Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
 {
     DatabaseConnection dbConnect;
+    dbConnect.open();
     LocalDatabaseStudyDAL studyDAL(&dbConnect);
     Patient *retrievedPatient = NULL;
 
@@ -338,7 +353,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     LocalDatabaseSeriesDAL seriesDAL(&dbConnect);
     QList<Series*> seriesList = seriesDAL.query(maskToRetrieve);
 
-    if (seriesDAL.getLastError() != SQLITE_OK)
+    if (seriesDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
     {
         setLastError(seriesDAL.getLastError());
         return NULL;
@@ -357,7 +372,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
         maskImagesToRetrieve.setSeriesInstanceUID(series->getInstanceUID());
 
         QList<Image*> images = imageDAL.query(maskImagesToRetrieve);
-        if (imageDAL.getLastError() != SQLITE_OK)
+        if (imageDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
         {
             break;
         }
@@ -370,7 +385,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
         retrievedPatient->getStudy(maskToRetrieve.getStudyInstanceUID())->addSeries(series);
     }
 
-    if (imageDAL.getLastError() != SQLITE_OK)
+    if (imageDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
     {
         setLastError(imageDAL.getLastError());
         return new Patient();
@@ -391,13 +406,13 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceUIDToDelete)
     if (!studyInstanceUIDToDelete.isEmpty())
     {
         DatabaseConnection dbConnect;
-
+        dbConnect.open();
         dbConnect.beginTransaction();
 
-        int status = deleteStudyStructureFromDatabase(&dbConnect, studyInstanceUIDToDelete);
-        if (status != SQLITE_OK)
+        bool status = deleteStudyStructureFromDatabase(&dbConnect, studyInstanceUIDToDelete);
+        if (!status)
         {
-            setLastError(status);
+            setLastError(dbConnect.getLastError());
             return;
         }
 
@@ -424,14 +439,14 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
         else
         {
             DatabaseConnection dbConnect;
-
+            dbConnect.open();
             dbConnect.beginTransaction();
 
-            int status = deleteSeriesStructureFromDatabase(&dbConnect, studyInstanceUID, seriesInstanceUID);
+            bool status = deleteSeriesStructureFromDatabase(&dbConnect, studyInstanceUID, seriesInstanceUID);
 
-            if (status != SQLITE_OK)
+            if (!status)
             {
-                setLastError(status);
+                setLastError(dbConnect.getLastError());
             }
             else
             {
@@ -448,6 +463,7 @@ void LocalDatabaseManager::deleteOldStudies()
     if (Settings().getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool())
     {
         DatabaseConnection dbConnect;
+        dbConnect.open();
         LocalDatabaseStudyDAL studyDAL(&dbConnect);
 
         INFO_LOG("S'esborraran els estudis vells no visualitzats des del dia " + LocalDatabaseManager::LastAccessDateSelectedStudies.addDays(-1)
@@ -457,7 +473,7 @@ void LocalDatabaseManager::deleteOldStudies()
 
         setLastError(studyDAL.getLastError());
 
-        if (studyDAL.getLastError() != SQLITE_OK)
+        if (studyDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
         {
             return;
         }
@@ -484,6 +500,7 @@ void LocalDatabaseManager::deleteOldStudies()
 void LocalDatabaseManager::compact()
 {
     DatabaseConnection dbConnect;
+    dbConnect.open();
     LocalDatabaseUtilDAL utilDAL(&dbConnect);
 
     utilDAL.compact();
@@ -493,6 +510,7 @@ void LocalDatabaseManager::compact()
 int LocalDatabaseManager::getDatabaseRevision()
 {
     DatabaseConnection dbConnect;
+    dbConnect.open();
     LocalDatabaseUtilDAL utilDAL(&dbConnect);
 
     int databaseRevision = utilDAL.getDatabaseRevision();
@@ -504,6 +522,7 @@ int LocalDatabaseManager::getDatabaseRevision()
 void LocalDatabaseManager::setDatabaseRevision(int databaseRevision)
 {
     DatabaseConnection dbConnect;
+    dbConnect.open();
     LocalDatabaseUtilDAL utilDAL(&dbConnect);
 
     utilDAL.updateDatabaseRevision(databaseRevision);
@@ -635,9 +654,9 @@ bool LocalDatabaseManager::isStudyRetrieving()
     return Settings().contains(InputOutputSettings::RetrievingStudy);
 }
 
-int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime)
+bool LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime)
 {
-    int status = SQLITE_OK;
+    bool status = true;
 
     foreach (Study *studyToSave, listStudyToSave)
     {
@@ -648,7 +667,7 @@ int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study
         // Primer guardem les sèries
         status = saveSeries(dbConnect, studyToSave->getSeries(), currentDate, currentTime);
 
-        if (status != SQLITE_OK)
+        if (!status)
         {
             break;
         }
@@ -658,7 +677,7 @@ int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study
 
         status = savePatientOfStudy(dbConnect, studyToSave);
 
-        if (status != SQLITE_OK)
+        if (!status)
         {
             break;
         }
@@ -666,7 +685,7 @@ int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study
         // Guardem la sèrie si no s'ha produït cap error
         status = saveStudy(dbConnect, studyToSave);
 
-        if (status != SQLITE_OK)
+        if (!status)
         {
             break;
         }
@@ -675,16 +694,16 @@ int LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study
     return status;
 }
 
-int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime)
+bool LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime)
 {
-    int status = SQLITE_OK;
+    bool status = true;
 
     foreach (Series *seriesToSave, listSeriesToSave)
     {
         /// Primer guardem les imatges
         status = saveImages(dbConnect, seriesToSave->getImages(), currentDate, currentTime);
 
-        if (status != SQLITE_OK)
+        if (!status)
         {
             break;
         }
@@ -695,7 +714,7 @@ int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series
 
         status = saveSeries(dbConnect, seriesToSave);
 
-        if (status != SQLITE_OK)
+        if (!status)
         {
             break;
         }
@@ -704,49 +723,37 @@ int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series
     return status;
 }
 
-int LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime)
+bool LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime)
 {
-    int status = SQLITE_OK;
-
     foreach (Image *imageToSave, listImageToSave)
     {
         imageToSave->setRetrievedDate(currentDate);
         imageToSave->setRetrievedTime(currentTime);
 
-        status = saveImage(dbConnect, imageToSave);
-
-
-        if (status != SQLITE_OK)
+        if (!saveImage(dbConnect, imageToSave))
         {
-            return status;
+            return false;
         }
-
-        
     }
 
-    return status;
+    return true;
 }
 
-int LocalDatabaseManager::saveDisplayShutters(DatabaseConnection *dbConnect, QList<DisplayShutter> shuttersList, Image *relatedImage)
+bool LocalDatabaseManager::saveDisplayShutters(DatabaseConnection *dbConnect, QList<DisplayShutter> shuttersList, Image *relatedImage)
 {
-    int status = SQLITE_OK;
-
     LocalDatabaseDisplayShutterDAL displayShutterDAL(dbConnect);
     foreach (const DisplayShutter &shutter, shuttersList)
     {
-        displayShutterDAL.insert(shutter, relatedImage);
-        status = displayShutterDAL.getLastError();
-        
-        if (status != SQLITE_OK)
+        if (!displayShutterDAL.insert(shutter, relatedImage))
         {
-            return status;
+            return false;
         }
     }
 
-    return status;
+    return true;
 }
 
-int LocalDatabaseManager::savePatientOfStudy(DatabaseConnection *dbConnect, Study *study)
+bool LocalDatabaseManager::savePatientOfStudy(DatabaseConnection *dbConnect, Study *study)
 {
     LocalDatabasePatientDAL patientDAL(dbConnect);
     LocalDatabaseStudyDAL studyDAL(dbConnect);
@@ -755,55 +762,53 @@ int LocalDatabaseManager::savePatientOfStudy(DatabaseConnection *dbConnect, Stud
     if (patientID == -1)
     {
         // Si no existeix l'inserim a la BD
-        patientDAL.insert(study->getParentPatient());
+        return patientDAL.insert(study->getParentPatient());
     }
     else
     {
         study->getParentPatient()->setDatabaseID(patientID);
-        patientDAL.update(study->getParentPatient());
+        return patientDAL.update(study->getParentPatient());
     }
-
-    return patientDAL.getLastError();
 }
 
-int LocalDatabaseManager::saveStudy(DatabaseConnection *dbConnect, Study *studyToSave)
+bool LocalDatabaseManager::saveStudy(DatabaseConnection *dbConnect, Study *studyToSave)
 {
     LocalDatabaseStudyDAL studyDAL(dbConnect);
 
-    studyDAL.insert(studyToSave, QDate::currentDate());
+    bool status = studyDAL.insert(studyToSave, QDate::currentDate());
 
     /// Si l'estudi ja existia actualitzem la seva informació
-    if (studyDAL.getLastError() == SQLITE_CONSTRAINT)
+    if (!status && studyDAL.getLastError().nativeErrorCode().toInt() == SQLITE_CONSTRAINT)
     {
-        studyDAL.update(studyToSave, QDate::currentDate());
+        status = studyDAL.update(studyToSave, QDate::currentDate());
     }
 
-    return studyDAL.getLastError();
+    return status;
 }
 
-int LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, Series *seriesToSave)
+bool LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, Series *seriesToSave)
 {
     LocalDatabaseSeriesDAL seriesDAL(dbConnect);
 
-    seriesDAL.insert(seriesToSave);
+    bool status = seriesDAL.insert(seriesToSave);
 
     /// Si la serie ja existia actualitzem la seva informació
-    if (seriesDAL.getLastError() == SQLITE_CONSTRAINT)
+    if (!status && seriesDAL.getLastError().nativeErrorCode().toInt() == SQLITE_CONSTRAINT)
     {
-        seriesDAL.update(seriesToSave);
+        status = seriesDAL.update(seriesToSave);
     }
 
-    return seriesDAL.getLastError();
+    return status;
 }
 
-int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageToSave)
+bool LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageToSave)
 {
     LocalDatabaseImageDAL imageDAL(dbConnect);
 
-    imageDAL.insert(imageToSave);
+    bool status = imageDAL.insert(imageToSave);
 
     /// Si el pacient ja existia actualitzem la seva informació
-    if (imageDAL.getLastError() == SQLITE_CONSTRAINT)
+    if (!status && imageDAL.getLastError().nativeErrorCode().toInt() == SQLITE_CONSTRAINT)
     {
         imageDAL.update(imageToSave);
         // Un cop actualitzades les imatges, actualitzem els corresponents shutters
@@ -811,70 +816,57 @@ int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageT
         shutterDAL.update(imageToSave->getDisplayShutters(), imageToSave);
 
         // Delete existing VOI LUTs from the image. The new ones (or the same ones) are inserted below.
-        int status = deleteVoiLuts(dbConnect, imageToSave);
+        status = deleteVoiLuts(dbConnect, imageToSave);
 
-        if (status != SQLITE_OK)
+        if (!status)
         {
             return status;
         }
     }
     else
     {
-        int status = saveDisplayShutters(dbConnect, imageToSave->getDisplayShutters(), imageToSave);
-        if (status != SQLITE_OK)
+        status = saveDisplayShutters(dbConnect, imageToSave->getDisplayShutters(), imageToSave);
+        if (!status)
         {
             return status;
         }
     }
 
     // Insert VOI LUTs in the database
-    int status = insertVoiLuts(dbConnect, imageToSave);
-
-    if (status != SQLITE_OK)
-    {
-        return status;
-    }
-    
-    return imageDAL.getLastError();
+    return insertVoiLuts(dbConnect, imageToSave);
 }
 
-int LocalDatabaseManager::deleteStudyStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete)
+bool LocalDatabaseManager::deleteStudyStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete)
 {
     DicomMask maskToDelete;
-    int status;
-
     maskToDelete.setStudyInstanceUID(studyInstanceUIDToDelete);
 
-    status = deletePatientOfStudyFromDatabase(dbConnect, maskToDelete);
-    if (status != SQLITE_OK)
+    if (!deletePatientOfStudyFromDatabase(dbConnect, maskToDelete))
     {
-        return status;
+        return false;
     }
 
     // Esborrem tots els estudis
-    status = deleteStudyFromDatabase(dbConnect, maskToDelete);
-    if (status != SQLITE_OK)
+    if (!deleteStudyFromDatabase(dbConnect, maskToDelete))
     {
-        return status;
+        return false;
     }
 
     return deleteSeriesStructureFromDatabase(dbConnect, studyInstanceUIDToDelete, "");
 }
 
-int LocalDatabaseManager::deleteSeriesStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete,
+bool LocalDatabaseManager::deleteSeriesStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete,
                                                             const QString &seriesIntanceUIDToDelete)
 {
     DicomMask maskToDelete;
-    int status;
 
     maskToDelete.setStudyInstanceUID(studyInstanceUIDToDelete);
     maskToDelete.setSeriesInstanceUID(seriesIntanceUIDToDelete);
 
     // Esborrem totes les series
-    status = deleteSeriesFromDatabase(dbConnect, maskToDelete);
-    if (status != SQLITE_OK)
+    if (!deleteSeriesFromDatabase(dbConnect, maskToDelete))
     {
-        return status;
+        return false;
     }
 
     // Esborrem totes les imatges
@@ -909,21 +901,21 @@ void LocalDatabaseManager::deleteRetrievedObjects(Series *failedSeries)
     }
 }
 
-int LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+bool LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseStudyDAL localDatabaseStudyDAL(dbConnect);
 
     // Busquem el ID de pacient
     qlonglong patientID = localDatabaseStudyDAL.getPatientIDFromStudyInstanceUID(maskToDelete.getStudyInstanceUID());
 
-    if (localDatabaseStudyDAL.getLastError() != SQLITE_OK)
+    if (localDatabaseStudyDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
     {
-        return localDatabaseStudyDAL.getLastError();
+        return false;
     }
     else if (patientID == -1)
     {
         ERROR_LOG(QString("No hem trobat el pacient a esborrar de l'estudi amb UID %1").arg(maskToDelete.getStudyInstanceUID()));
-        return localDatabaseStudyDAL.getLastError();
+        return true;
     }
     else
     {
@@ -931,57 +923,46 @@ int LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *d
     }
 }
 
-int LocalDatabaseManager::deletePatientFromDatabase(DatabaseConnection *dbConnect, qlonglong patientID)
+bool LocalDatabaseManager::deletePatientFromDatabase(DatabaseConnection *dbConnect, qlonglong patientID)
 {
     LocalDatabasePatientDAL localDatabasePatientDAL(dbConnect);
 
-    localDatabasePatientDAL.del(patientID);
-
-    return localDatabasePatientDAL.getLastError();
+    return localDatabasePatientDAL.del(patientID);
 }
 
-int LocalDatabaseManager::deleteStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+bool LocalDatabaseManager::deleteStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseStudyDAL localDatabaseStudyDAL(dbConnect);
 
-    localDatabaseStudyDAL.del(maskToDelete);
-
-    return localDatabaseStudyDAL.getLastError();
+    return localDatabaseStudyDAL.del(maskToDelete);
 }
 
-int LocalDatabaseManager::deleteSeriesFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+bool LocalDatabaseManager::deleteSeriesFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseSeriesDAL localDatabaseSeriesDAL(dbConnect);
 
-    localDatabaseSeriesDAL.del(maskToDelete);
-
-    return localDatabaseSeriesDAL.getLastError();
+    return localDatabaseSeriesDAL.del(maskToDelete);
 }
 
-int LocalDatabaseManager::deleteImageFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+bool LocalDatabaseManager::deleteImageFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
 {
     // Primer esborrem els shutters que té aquesta imatge -> DELETE CASCADE
     LocalDatabaseDisplayShutterDAL shutterDAL(dbConnect);
-    shutterDAL.del(maskToDelete);
 
-    if (shutterDAL.getLastError() != SQLITE_OK)
+    if (!shutterDAL.del(maskToDelete))
     {
-        return shutterDAL.getLastError();
+        return false;
     }
 
     // Delete VOI LUTs from this image
-    int status = deleteVoiLuts(dbConnect, maskToDelete);
-
-    if (status != SQLITE_OK)
+    if (!deleteVoiLuts(dbConnect, maskToDelete))
     {
-        return status;
+        return false;
     }
     
     // Si no hi ha cap error en esborrar els shutters, esborrem les corresponents imatges
     LocalDatabaseImageDAL localDatabaseImageDAL(dbConnect);
-    localDatabaseImageDAL.del(maskToDelete);
-
-    return localDatabaseImageDAL.getLastError();
+    return localDatabaseImageDAL.del(maskToDelete);
 }
 
 void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
@@ -1082,8 +1063,10 @@ void LocalDatabaseManager::loadSeriesThumbnail(QString studyInstanceUID, QList<S
     }
 }
 
-void LocalDatabaseManager::setLastError(int sqliteLastError)
+void LocalDatabaseManager::setLastError(const QSqlError &error)
 {
+    int sqliteLastError = error.nativeErrorCode().toInt();
+
     // Es tradueixen els errors de Sqlite a errors nostres, per consulta codi d'errors Sqlite http://www.sqlite.org/c3ref/c_abort.html
     if (sqliteLastError == SQLITE_OK)
     {

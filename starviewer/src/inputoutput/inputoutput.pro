@@ -192,4 +192,5 @@ include(../compilationtype.pri)
 include(../threadweaver.pri)
 QT += xml \
     network \
-    widgets
+    widgets \
+    sql
