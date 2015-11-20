@@ -14,28 +14,66 @@
 
 #include "databaseconnection.h"
 
-#include <QSqlDatabase>
-#include <QSqlError>
-
-// Per les traduccions: tr()
-#include <QObject>
-#include <QSemaphore>
-#include <QDir>
-#include <QString>
 #include "localdatabasemanager.h"
 #include "logging.h"
+
+#include <QSqlDatabase>
+#include <QSqlError>
 
 namespace udg {
 
 DatabaseConnection::DatabaseConnection()
 {
     m_databasePath = LocalDatabaseManager::getDatabaseFilePath();
-    m_transactionLock = new QSemaphore(1);
+}
+
+DatabaseConnection::~DatabaseConnection()
+{
+    close();
 }
 
 void DatabaseConnection::setDatabasePath(const QString &path)
 {
     m_databasePath = path;
+}
+
+QSqlDatabase DatabaseConnection::getConnection()
+{
+    if (!isConnected())
+    {
+        open();
+    }
+
+    return QSqlDatabase::database();
+}
+
+QSqlError DatabaseConnection::getLastError()
+{
+    return getConnection().lastError();
+}
+
+QString DatabaseConnection::getLastErrorMessage()
+{
+    return getLastError().text();
+}
+
+void DatabaseConnection::beginTransaction()
+{
+    m_mutex.lock();
+    getConnection().transaction();
+}
+
+void DatabaseConnection::commitTransaction()
+{
+    getConnection().commit();
+    m_mutex.unlock();
+}
+
+void DatabaseConnection::rollbackTransaction()
+{
+    getConnection().rollback();
+    m_mutex.unlock();
+    INFO_LOG("Transaction in the database rolled back.");
 }
 
 void DatabaseConnection::open()
@@ -55,84 +93,25 @@ void DatabaseConnection::open()
     }
 }
 
-void DatabaseConnection::beginTransaction()
-{
-    if (!isConnected())
-    {
-        open();
-    }
-
-    m_transactionLock->acquire();
-    QSqlDatabase::database().transaction();
-}
-
-void DatabaseConnection::commitTransaction()
-{
-    QSqlDatabase::database().commit();
-    m_transactionLock->release();
-}
-
-void DatabaseConnection::rollbackTransaction()
-{
-    QSqlDatabase::database().rollback();
-    m_transactionLock->release();
-    INFO_LOG("S'ha cancel.lat transaccio de la BD");
-}
-
-QString DatabaseConnection::formatTextToValidSQLSyntax(QString string)
-{
-    return string.isNull() ? "" : string.replace("'", "''");
-}
-
-QString DatabaseConnection::formatTextToValidSQLSyntax(QChar qchar)
-{
-    // Retornem un QString perquè si retornem QChar('') si qchar és null al converti-lo a QString(QChar('')) el QString s'inicialitza incorrectament agafant
-    // com a valor un caràcter estrany en comptes de QString("")
-    return qchar.isNull() ? "" : QString(qchar);
-}
-
-//sqlite3* DatabaseConnection::getConnection()
-//{
-//    if (!isConnected())
-//    {
-//        open();
-//    }
-
-//    return m_databaseConnection;
-//}
-
-bool DatabaseConnection::isConnected()
-{
-    return QSqlDatabase::database().isOpen();
-}
-
 void DatabaseConnection::close()
 {
     if (isConnected())
     {
         QString name;
+
         {
             QSqlDatabase database = QSqlDatabase::database();
             name = database.connectionName();
             database.close();
         }
+
         QSqlDatabase::removeDatabase(name);
     }
 }
 
-QString DatabaseConnection::getLastErrorMessage()
+bool DatabaseConnection::isConnected()
 {
-    return QSqlDatabase::database().lastError().text();
-}
-
-QSqlError DatabaseConnection::getLastError()
-{
-    return QSqlDatabase::database().lastError();
-}
-
-DatabaseConnection::~DatabaseConnection()
-{
-    close();
+    return QSqlDatabase::database().isOpen();
 }
 
 }

@@ -17,6 +17,7 @@
 #ifndef UDGLOCALDATABASEBASEDAL_H
 #define UDGLOCALDATABASEBASEDAL_H
 
+class QChar;
 class QSqlError;
 class QString;
 class QVariant;
@@ -35,7 +36,15 @@ public:
     /// Retorna l'últim error produït
     QSqlError getLastError();
 
+    /// Formata l'string de forma que no contingui caràcters extranys que puguin fer
+    /// que l'execució d'una comanda SQL sigui incorrecta
+    static QString formatTextToValidSQLSyntax(QString string);
+
+    /// Formata un qchar perquè no contingui caràcters estranys o Nulls que pugin fer que la sentència sql sigui incorrecte
+    static QString formatTextToValidSQLSyntax(QChar qchar);
+
 protected:
+
     /// Converts the given text to a QString, interpreting the input as either UTF-8 or Latin-1 depending on its content.
     static QString convertToQString(const QVariant &text);
 

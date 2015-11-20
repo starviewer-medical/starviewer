@@ -33,6 +33,18 @@ QSqlError LocalDatabaseBaseDAL::getLastError()
     return m_dbConnection->getLastError();
 }
 
+QString LocalDatabaseBaseDAL::formatTextToValidSQLSyntax(QString string)
+{
+    return string.isNull() ? "" : string.replace("'", "''");
+}
+
+QString LocalDatabaseBaseDAL::formatTextToValidSQLSyntax(QChar qchar)
+{
+    // Retornem un QString perquè si retornem QChar('') si qchar és null al converti-lo a QString(QChar('')) el QString s'inicialitza incorrectament agafant
+    // com a valor un caràcter estrany en comptes de QString("")
+    return qchar.isNull() ? "" : QString(qchar);
+}
+
 QString LocalDatabaseBaseDAL::convertToQString(const QVariant &text)
 {
     QString string = text.toString();
