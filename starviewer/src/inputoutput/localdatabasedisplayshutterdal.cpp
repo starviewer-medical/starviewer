@@ -130,10 +130,10 @@ QString LocalDatabaseDisplayShutterDAL::buildSQLInsert(const DisplayShutter &shu
     QString insertSentence = "INSERT INTO DisplayShutter ";
     insertSentence += "(Shape, ShutterValue, PointsList, ImageInstanceUID, ImageFrameNumber) ";
     insertSentence += QString("VALUES ('%1', %2, '%3', '%4', %5)")
-        .arg(DatabaseConnection::formatTextToValidSQLSyntax(shutter.getShapeAsDICOMString()))
+        .arg(formatTextToValidSQLSyntax(shutter.getShapeAsDICOMString()))
         .arg(shutter.getShutterValue())
-        .arg(DatabaseConnection::formatTextToValidSQLSyntax(shutter.getPointsAsString()))
-        .arg(DatabaseConnection::formatTextToValidSQLSyntax(shuttersImage->getSOPInstanceUID()))
+        .arg(formatTextToValidSQLSyntax(shutter.getPointsAsString()))
+        .arg(formatTextToValidSQLSyntax(shuttersImage->getSOPInstanceUID()))
         .arg(shuttersImage->getFrameNumber());
 
     return insertSentence;
@@ -148,7 +148,7 @@ QString LocalDatabaseDisplayShutterDAL::buildWhereSentence(const DicomMask &mask
 {
     if (!mask.getSOPInstanceUID().isEmpty())
     {
-        QString whereSentence = QString("WHERE ImageInstanceUID = '%1' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(mask.getSOPInstanceUID()));
+        QString whereSentence = QString("WHERE ImageInstanceUID = '%1' ").arg(formatTextToValidSQLSyntax(mask.getSOPInstanceUID()));
         if (!mask.getImageNumber().isEmpty())
         {
             whereSentence += QString("AND ImageFrameNumber = %1").arg(mask.getImageNumber());
@@ -160,13 +160,13 @@ QString LocalDatabaseDisplayShutterDAL::buildWhereSentence(const DicomMask &mask
     if (!mask.getSeriesInstanceUID().isEmpty())
     {
         return QString("WHERE ImageInstanceUID IN (SELECT SOPInstanceUID FROM Image WHERE SeriesInstanceUID = '%1')")
-            .arg(DatabaseConnection::formatTextToValidSQLSyntax(mask.getSeriesInstanceUID()));
+            .arg(formatTextToValidSQLSyntax(mask.getSeriesInstanceUID()));
     }
     
     if (!mask.getStudyInstanceUID().isEmpty())
     {
         return QString("WHERE ImageInstanceUID IN (SELECT SOPInstanceUID FROM Image WHERE StudyInstanceUID = '%1')")
-            .arg(DatabaseConnection::formatTextToValidSQLSyntax(mask.getStudyInstanceUID()));
+            .arg(formatTextToValidSQLSyntax(mask.getStudyInstanceUID()));
     }
     
     return QString();

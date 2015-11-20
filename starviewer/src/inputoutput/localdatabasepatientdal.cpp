@@ -111,7 +111,7 @@ QString LocalDatabasePatientDAL::buildSqlSelect(const DicomMask &patientMaskToSe
     QString whereSentence;
     if (!patientMaskToSelect.getPatientID().isEmpty())
     {
-        whereSentence = QString(" Where DICOMPatientID = '%1' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(patientMaskToSelect.getPatientID()));
+        whereSentence = QString(" Where DICOMPatientID = '%1' ").arg(formatTextToValidSQLSyntax(patientMaskToSelect.getPatientID()));
     }
 
     return selectSentence + whereSentence;
@@ -121,10 +121,10 @@ QString LocalDatabasePatientDAL::buildSqlInsert(Patient *newPatient)
 {
     QString insertSentence = QString ("Insert into Patient  (DICOMPatientID, Name, Birthdate, Sex) "
                                                    "values ('%1', '%2', '%3', '%4')")
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newPatient->getID()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newPatient->getFullName()))
+                                    .arg(formatTextToValidSQLSyntax(newPatient->getID()))
+                                    .arg(formatTextToValidSQLSyntax(newPatient->getFullName()))
                                     .arg(newPatient->getBirthDate().toString("yyyyMMdd"))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newPatient->getSex()));
+                                    .arg(formatTextToValidSQLSyntax(newPatient->getSex()));
 
     return insertSentence;
 }
@@ -136,10 +136,10 @@ QString LocalDatabasePatientDAL::buildSqlUpdate(Patient *patientToUpdate)
                                                            "Birthdate = '%3', "
                                                            "Sex = '%4' "
                                                     " Where ID = %5")
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(patientToUpdate->getID()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(patientToUpdate->getFullName()))
+                                    .arg(formatTextToValidSQLSyntax(patientToUpdate->getID()))
+                                    .arg(formatTextToValidSQLSyntax(patientToUpdate->getFullName()))
                                     .arg(patientToUpdate->getBirthDate().toString("yyyyMMdd"))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(patientToUpdate->getSex()))
+                                    .arg(formatTextToValidSQLSyntax(patientToUpdate->getSex()))
                                     .arg(patientToUpdate->getDatabaseID());
     return updateSentence;
 }

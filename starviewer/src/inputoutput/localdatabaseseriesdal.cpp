@@ -139,22 +139,22 @@ QString LocalDatabaseSeriesDAL::buildSqlInsert(Series *newSeries)
                                                             "'%7', '%8', '%9', '%10', "
                                                             "'%11', '%12', '%13', '%14', "
                                                             "'%15', '%16', '%17', '%18', %19)")
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getInstanceUID()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getParentStudy()->getInstanceUID()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getSeriesNumber()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getModality()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getInstanceUID()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getParentStudy()->getInstanceUID()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getSeriesNumber()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getModality()))
                                     .arg(newSeries->getDate().toString("yyyyMMdd"))
                                     .arg(newSeries->getTime().toString("hhmmss"))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getInstitutionName()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getPatientPosition()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getProtocolName()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getDescription()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getFrameOfReferenceUID()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getPositionReferenceIndicator()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getBodyPartExamined()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getViewPosition()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getManufacturer()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(newSeries->getLaterality()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getInstitutionName()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getPatientPosition()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getProtocolName()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getDescription()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getFrameOfReferenceUID()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getPositionReferenceIndicator()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getBodyPartExamined()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getViewPosition()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getManufacturer()))
+                                    .arg(formatTextToValidSQLSyntax(newSeries->getLaterality()))
                                     .arg(newSeries->getRetrievedDate().toString("yyyyMMdd"))
                                     .arg(newSeries->getRetrievedTime().toString("hhmmss"))
                                     .arg("0");
@@ -183,25 +183,25 @@ QString LocalDatabaseSeriesDAL::buildSqlUpdate(Series *seriesToUpdate)
                                                         "RetrievedTime = '%17', "
                                                         "State = %18 "
                                                  "Where InstanceUID = '%19'")
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getParentStudy()->getInstanceUID()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getSeriesNumber()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getModality()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getParentStudy()->getInstanceUID()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getSeriesNumber()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getModality()))
                                     .arg(seriesToUpdate->getDate().toString("yyyyMMdd"))
                                     .arg(seriesToUpdate->getTime().toString("hhmmss"))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getInstitutionName()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getPatientPosition()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getProtocolName()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getDescription()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getFrameOfReferenceUID()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getPositionReferenceIndicator()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getBodyPartExamined()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getViewPosition()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getManufacturer()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getLaterality()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getInstitutionName()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getPatientPosition()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getProtocolName()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getDescription()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getFrameOfReferenceUID()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getPositionReferenceIndicator()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getBodyPartExamined()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getViewPosition()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getManufacturer()))
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getLaterality()))
                                     .arg(seriesToUpdate->getRetrievedDate().toString("yyyyMMdd"))
                                     .arg(seriesToUpdate->getRetrievedTime().toString("hhmmss"))
                                     .arg("0")
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesToUpdate->getInstanceUID()));
+                                    .arg(formatTextToValidSQLSyntax(seriesToUpdate->getInstanceUID()));
 
     return updateSentence;
 }
@@ -217,7 +217,7 @@ QString LocalDatabaseSeriesDAL::buildWhereSentence(const DicomMask &seriesMask)
 
     if (!seriesMask.getStudyInstanceUID().isEmpty())
     {
-        whereSentence = QString("where StudyInstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesMask.getStudyInstanceUID()));
+        whereSentence = QString("where StudyInstanceUID = '%1'").arg(formatTextToValidSQLSyntax(seriesMask.getStudyInstanceUID()));
     }
 
     if (!seriesMask.getSeriesInstanceUID().isEmpty())
@@ -231,7 +231,7 @@ QString LocalDatabaseSeriesDAL::buildWhereSentence(const DicomMask &seriesMask)
             whereSentence += " and ";
         }
 
-        whereSentence += QString(" InstanceUID = '%1'").arg(DatabaseConnection::formatTextToValidSQLSyntax(seriesMask.getSeriesInstanceUID()));
+        whereSentence += QString(" InstanceUID = '%1'").arg(formatTextToValidSQLSyntax(seriesMask.getSeriesInstanceUID()));
     }
 
     return whereSentence;

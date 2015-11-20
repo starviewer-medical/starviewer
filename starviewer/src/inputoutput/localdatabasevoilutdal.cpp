@@ -30,7 +30,7 @@ namespace {
 QString buildSqlInsert(Image *image)
 {
     return QString("INSERT INTO VoiLut (Lut, ImageInstanceUID, ImageFrameNumber) VALUES (?, '%1', %2)")
-            .arg(DatabaseConnection::formatTextToValidSQLSyntax(image->getSOPInstanceUID()))
+            .arg(LocalDatabaseBaseDAL::formatTextToValidSQLSyntax(image->getSOPInstanceUID()))
             .arg(image->getFrameNumber());
 }
 
@@ -39,7 +39,7 @@ QString buildSqlWhere(const DicomMask &mask)
 {
     if (!mask.getSOPInstanceUID().isEmpty())
     {
-        QString where = QString("WHERE ImageInstanceUID = '%1' ").arg(DatabaseConnection::formatTextToValidSQLSyntax(mask.getSOPInstanceUID()));
+        QString where = QString("WHERE ImageInstanceUID = '%1' ").arg(LocalDatabaseBaseDAL::formatTextToValidSQLSyntax(mask.getSOPInstanceUID()));
 
         if (!mask.getImageNumber().isEmpty())
         {
@@ -52,13 +52,13 @@ QString buildSqlWhere(const DicomMask &mask)
     if (!mask.getSeriesInstanceUID().isEmpty())
     {
         return QString("WHERE ImageInstanceUID IN (SELECT SOPInstanceUID FROM Image WHERE SeriesInstanceUID = '%1')")
-                .arg(DatabaseConnection::formatTextToValidSQLSyntax(mask.getSeriesInstanceUID()));
+                .arg(LocalDatabaseBaseDAL::formatTextToValidSQLSyntax(mask.getSeriesInstanceUID()));
     }
 
     if (!mask.getStudyInstanceUID().isEmpty())
     {
         return QString("WHERE ImageInstanceUID IN (SELECT SOPInstanceUID FROM Image WHERE StudyInstanceUID = '%1')")
-                .arg(DatabaseConnection::formatTextToValidSQLSyntax(mask.getStudyInstanceUID()));
+                .arg(LocalDatabaseBaseDAL::formatTextToValidSQLSyntax(mask.getStudyInstanceUID()));
     }
 
     return QString();

@@ -89,8 +89,8 @@ QString LocalDatabasePACSRetrievedImagesDAL::buildSqlInsert(const PacsDevice &pa
 {
     QString insertSentence = QString ("Insert into PACSRetrievedImages  (AETitle, Address, QueryPort) "
                                                    "values ('%1', '%2', %3)")
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(pacsDevice.getAETitle()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(pacsDevice.getAddress()))
+                                    .arg(formatTextToValidSQLSyntax(pacsDevice.getAETitle()))
+                                    .arg(formatTextToValidSQLSyntax(pacsDevice.getAddress()))
                                     .arg(pacsDevice.getQueryRetrieveServicePort());
     return insertSentence;
 }
@@ -116,8 +116,8 @@ QString LocalDatabasePACSRetrievedImagesDAL::buildSqlSelect(const QString AETitl
     QString whereSentence = QString(" Where AETitle = '%1' and "
                                    "Address = '%2' and "
                                    "QueryPort = %3")
-            .arg(DatabaseConnection::formatTextToValidSQLSyntax(AETitle))
-            .arg(DatabaseConnection::formatTextToValidSQLSyntax(address))
+            .arg(formatTextToValidSQLSyntax(AETitle))
+            .arg(formatTextToValidSQLSyntax(address))
             .arg(queryPort);
 
     return buildSqlSelect() + whereSentence;
