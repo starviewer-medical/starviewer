@@ -35,23 +35,23 @@ public:
     UpgradeDatabaseXMLParser(const QString &xmlData);
 
     /// Retorna les comandes per actualitzar la base de dades des de la revisió passada per paràmetre
-    UpgradeDatabaseRevisionCommands getUpgradeDatabaseRevisionCommands(int fromDatabaseRevision);
+    UpgradeDatabaseRevisionCommands getUpgradeDatabaseRevisionCommands(int fromDatabaseRevision) const;
 
     /// Indica quina ha de ser la revisió mínima de la base de dades per poder-se actualitzar
-    int getMinimumDatabaseRevisionRequiredToUpgrade();
+    int getMinimumDatabaseRevisionRequiredToUpgrade() const;
 
 private:
 
     /// Parseja el UpgradeDatabaseTag i ens retorna UpgradeDatabaseRevisionCommands amb les comandes que s'han d'aplicar per actualitzar la revisió actual de la BD
-    UpgradeDatabaseRevisionCommands parseUpgradeDatabaseTag(QXmlStreamReader *reader, int fromDatabaseRevision);
+    UpgradeDatabaseRevisionCommands parseUpgradeDatabaseTag(QXmlStreamReader *reader, int fromDatabaseRevision) const;
 
     /// Parseja tag UpgradeDatabaseRevision del XML
     QStringList parseUpgradeDatabaseToRevisionChildrenTags(QXmlStreamReader *reader) const;
 
     /// Transforma el QMap amb els resultats obtinguts de parserjar el XML
-    UpgradeDatabaseRevisionCommands fromQMapToUpgradeDatabaseRevisionCommands(QMap<int, QStringList> m_sqlUpgradeCommandsGroupedByDatabaseRevision);
+    UpgradeDatabaseRevisionCommands fromQMapToUpgradeDatabaseRevisionCommands(QMap<int, QStringList> m_sqlUpgradeCommandsGroupedByDatabaseRevision) const;
 
-    QXmlStreamReader* getXmlReader();
+    QXmlStreamReader* getXmlReader() const;
     QString m_xmlData;
 };
 

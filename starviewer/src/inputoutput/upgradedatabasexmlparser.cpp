@@ -30,7 +30,7 @@ UpgradeDatabaseXMLParser::UpgradeDatabaseXMLParser(const QString &xmlData)
     m_xmlData = xmlData;
 }
 
-int UpgradeDatabaseXMLParser::getMinimumDatabaseRevisionRequiredToUpgrade()
+int UpgradeDatabaseXMLParser::getMinimumDatabaseRevisionRequiredToUpgrade() const
 {
     QScopedPointer<QXmlStreamReader> reader(getXmlReader());
 
@@ -53,7 +53,7 @@ int UpgradeDatabaseXMLParser::getMinimumDatabaseRevisionRequiredToUpgrade()
     return reader->attributes().value("minimumDatabaseRevisionRequired").toString().toInt();
 }
 
-UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::getUpgradeDatabaseRevisionCommands(int fromDatabaseRevision)
+UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::getUpgradeDatabaseRevisionCommands(int fromDatabaseRevision) const
 {
     QScopedPointer<QXmlStreamReader> reader(getXmlReader());
 
@@ -76,7 +76,7 @@ UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::getUpgradeDatabaseRevi
     return parseUpgradeDatabaseTag(reader.data(), fromDatabaseRevision);
 }
 
-UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::parseUpgradeDatabaseTag(QXmlStreamReader *reader, int fromDatabaseRevision)
+UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::parseUpgradeDatabaseTag(QXmlStreamReader *reader, int fromDatabaseRevision) const
 {
     //Guardem les sentències per actualitzar la base de dade en un QMap, per així si el XML d'actualització no té les comandes
     //ordenades per revisió en ordre ascendent, amb el QMap les podem tornar ordenades correctament
@@ -126,7 +126,7 @@ QStringList UpgradeDatabaseXMLParser::parseUpgradeDatabaseToRevisionChildrenTags
     return sqlUpgradeCommands;
 }
 
-UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::fromQMapToUpgradeDatabaseRevisionCommands(QMap<int, QStringList> m_sqlUpgradeCommandsGroupedByDatabaseRevision)
+UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::fromQMapToUpgradeDatabaseRevisionCommands(QMap<int, QStringList> m_sqlUpgradeCommandsGroupedByDatabaseRevision) const
 {
     if (m_sqlUpgradeCommandsGroupedByDatabaseRevision.count() == 0)
     {
@@ -152,7 +152,7 @@ UpgradeDatabaseRevisionCommands UpgradeDatabaseXMLParser::fromQMapToUpgradeDatab
 
 }
 
-QXmlStreamReader* UpgradeDatabaseXMLParser::getXmlReader()
+QXmlStreamReader* UpgradeDatabaseXMLParser::getXmlReader() const
 {
     return new QXmlStreamReader(m_xmlData);
 }

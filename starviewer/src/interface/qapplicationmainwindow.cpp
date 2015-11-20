@@ -97,7 +97,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     this->setCentralWidget(m_extensionWorkspace);
 
     DatabaseInstallation databaseInstallation;
-    if (!databaseInstallation.checkStarviewerDatabase())
+    if (!databaseInstallation.checkDatabase())
     {
         QString errorMessage = databaseInstallation.getErrorMessage();
         QMessageBox::critical(0, ApplicationNameString, tr("There have been some errors:") + "\n" + errorMessage + "\n\n" + 
