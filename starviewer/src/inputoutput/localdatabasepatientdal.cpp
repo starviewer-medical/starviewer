@@ -24,7 +24,7 @@
 
 namespace udg {
 
-LocalDatabasePatientDAL::LocalDatabasePatientDAL(DatabaseConnection *dbConnection)
+LocalDatabasePatientDAL::LocalDatabasePatientDAL(DatabaseConnection &dbConnection)
  : LocalDatabaseBaseDAL(dbConnection)
 {
 }
@@ -35,7 +35,7 @@ bool LocalDatabasePatientDAL::insert(Patient *newPatient)
 
     if (!query.exec(buildSqlInsert(newPatient)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
     else
@@ -51,7 +51,7 @@ bool LocalDatabasePatientDAL::update(Patient *patientToUpdate)
 
     if (!query.exec(buildSqlUpdate(patientToUpdate)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -64,7 +64,7 @@ bool LocalDatabasePatientDAL::del(qlonglong patientID)
 
     if (!query.exec(buildSqlDelete(patientID)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -78,7 +78,7 @@ QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
 
     if (!query.exec(buildSqlSelect(patientMask)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return patientList;
     }
 

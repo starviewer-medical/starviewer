@@ -141,52 +141,52 @@ private:
     QList<Study*> queryStudyOrderByLastAccessDate(const DicomMask &studyMaskToQuery);
 
     /// Guarda a la base de dades la llista d'estudis passada per paràmetre, si algun dels estudis ja existeix actualitza la info
-    bool saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime);
+    bool saveStudies(DatabaseConnection &dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime);
 
     /// Guarda a la base de dades la llista de series passada per paràmetre, si alguna de les series ja existeix actualitza la info
-    bool saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime);
+    bool saveSeries(DatabaseConnection &dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime);
 
     /// Guarda a la base de dades la llista d'imatges passada per paràmetre, si alguna de les imatges ja existeix actualitza la info
-    bool saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime);
+    bool saveImages(DatabaseConnection &dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime);
 
     /// Guarda a la base de dades la llista de display shutters relacionades amb la imatge passada per paràmetre
-    bool saveDisplayShutters(DatabaseConnection *dbConnect, QList<DisplayShutter> shuttersList, Image *relatedImage);
+    bool saveDisplayShutters(DatabaseConnection &dbConnect, QList<DisplayShutter> shuttersList, Image *relatedImage);
     
     /// Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
-    bool savePatientOfStudy(DatabaseConnection *dbConnect, Study *study);
+    bool savePatientOfStudy(DatabaseConnection &dbConnect, Study *study);
 
     /// Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
-    bool saveStudy(DatabaseConnection *dbConnect, Study *studyToSave);
+    bool saveStudy(DatabaseConnection &dbConnect, Study *studyToSave);
 
     /// Guarda el pacient a la base de dades, si ja existeix li actualitza la informació
-    bool saveSeries(DatabaseConnection *dbConnect, Series *seriesToSave);
+    bool saveSeries(DatabaseConnection &dbConnect, Series *seriesToSave);
 
     /// Guarda la imatge a la base de dades, si ja existeix li actualitza la informació
-    bool saveImage(DatabaseConnection *dbConnect, Image *imageToSave);
+    bool saveImage(DatabaseConnection &dbConnect, Image *imageToSave);
 
     /// Esborra a base la jerarquia pacient/estudi/series/imatge de l'estudi passat per paràmetre, si es passar un valor buit no esborra res.
-    bool deleteStudyStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete);
+    bool deleteStudyStructureFromDatabase(DatabaseConnection &dbConnect, const QString &studyInstanceUIDToDelete);
 
     /// Esborra a base la jerarquia /series/imatge de l'estudi passat per paràmetre. Si només es passa el studyInstaceUIDToDelete esborra totes
     /// les sèries d'aquell estudi.
-    bool deleteSeriesStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete, const QString &seriesIntanceUID);
+    bool deleteSeriesStructureFromDatabase(DatabaseConnection &dbConnect, const QString &studyInstanceUIDToDelete, const QString &seriesIntanceUID);
 
     /// Esborra el pacient que compleixi amb la màscara a esborrar.
     /// A la màscara hem d'indicar el UID de l'estudi a esborrar i comprova si el pacient
     /// el qual pertany l'estudi té més d'un estudi, si és així no l'esborrar, si només en té un l'esborra
-    bool deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    bool deletePatientOfStudyFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete);
 
     /// Esborra el pacient que compleix la màscara passada per paràmetre, només es té en compte el patientID
-    bool deletePatientFromDatabase(DatabaseConnection *dbConnect, qlonglong patientID);
+    bool deletePatientFromDatabase(DatabaseConnection &dbConnect, qlonglong patientID);
 
     /// Esborra el l'estudi que compleixi amb la màscara a esborrar
-    bool deleteStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    bool deleteStudyFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete);
 
     /// Esborra la serie que compleixi amb la màscara a esborrar
-    bool deleteSeriesFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    bool deleteSeriesFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete);
 
     /// Esborra la imatge que compleixi amb la màscara a esborrar
-    bool deleteImageFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete);
+    bool deleteImageFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete);
 
     /// Aquesta classe s'encarrega d'esborrar les objectes descarregats si es produeix un error mentre s'insereixen els nous objectes a la base de dades
     void deleteRetrievedObjects(Patient *failedPatient);

@@ -23,21 +23,19 @@
 
 namespace udg {
 
-LocalDatabaseUtilDAL::LocalDatabaseUtilDAL(DatabaseConnection *dbConnection)
+LocalDatabaseUtilDAL::LocalDatabaseUtilDAL(DatabaseConnection &dbConnection)
  : LocalDatabaseBaseDAL(dbConnection)
 {
 }
 
 void LocalDatabaseUtilDAL::compact()
 {
-    Q_ASSERT(m_dbConnection);
-
     QString compactSentence = "vacuum";
     QSqlQuery query;
 
     if (!query.exec(compactSentence))
     {
-        logError(query.lastQuery());
+        logError(query);
     }
 }
 
@@ -47,7 +45,7 @@ int LocalDatabaseUtilDAL::getDatabaseRevision()
 
     if (!query.exec(buildSqlGetDatabaseRevision()))
     {
-        logError(query.lastQuery());
+        logError(query);
         return -1;
     }
 
@@ -78,7 +76,7 @@ void LocalDatabaseUtilDAL::updateDatabaseRevision(int databaseRevision)
 
     if (!query.exec(buildSqlUpdateDatabaseRevision(databaseRevision)))
     {
-        logError(query.lastQuery());
+        logError(query);
     }
 }
 

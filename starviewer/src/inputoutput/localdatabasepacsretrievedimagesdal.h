@@ -35,7 +35,7 @@ class LocalDatabasePACSRetrievedImagesDAL : public LocalDatabaseBaseDAL
 public:
 
     /// Constructor de la classe
-    LocalDatabasePACSRetrievedImagesDAL(DatabaseConnection *dbConnection);
+    LocalDatabasePACSRetrievedImagesDAL(DatabaseConnection &dbConnection);
 
     /// Retorna un PacsDevice a partir del seu ID a la base de dades
     PacsDevice query(const qlonglong &IDPacsInDatabase);

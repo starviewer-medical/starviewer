@@ -31,7 +31,7 @@ class DicomMask;
   */
 class LocalDatabasePatientDAL : public LocalDatabaseBaseDAL {
 public:
-    LocalDatabasePatientDAL(DatabaseConnection *dbConnection);
+    LocalDatabasePatientDAL(DatabaseConnection &dbConnection);
 
     /// Insereix el nou pacient, i emplena el camp DatabaseID de Patient amb el ID de Pacient de la BD.
     bool insert(Patient *newPatient);

@@ -40,7 +40,7 @@ namespace udg {
 namespace {
 
 /// Inserts in the database all the VOI LUTs that are LUTs in the given image.
-bool insertVoiLuts(DatabaseConnection *dbConnect, Image *image)
+bool insertVoiLuts(DatabaseConnection &dbConnect, Image *image)
 {
     LocalDatabaseVoiLutDAL voiLutDal(dbConnect);
 
@@ -61,14 +61,14 @@ bool insertVoiLuts(DatabaseConnection *dbConnect, Image *image)
 }
 
 /// Deletes from the database all the VOI LUTs that match the given mask.
-bool deleteVoiLuts(DatabaseConnection *dbConnect, const DicomMask &mask)
+bool deleteVoiLuts(DatabaseConnection &dbConnect, const DicomMask &mask)
 {
     LocalDatabaseVoiLutDAL voiLutDal(dbConnect);
     return voiLutDal.del(mask);
 }
 
 /// Deletes from the database all the VOI LUTs from the given image.
-bool deleteVoiLuts(DatabaseConnection *dbConnect, Image *image)
+bool deleteVoiLuts(DatabaseConnection &dbConnect, Image *image)
 {
     DicomMask mask;
     mask.setSOPInstanceUID(image->getSOPInstanceUID());
@@ -118,7 +118,7 @@ void LocalDatabaseManager::save(Patient *newPatient)
         /// Guardem primer els estudis
         if (newPatient->getStudies().count() > 0)
         {
-            status = saveStudies(&dbConnect, newPatient->getStudies(), QDate::currentDate(), QTime::currentTime());
+            status = saveStudies(dbConnect, newPatient->getStudies(), QDate::currentDate(), QTime::currentTime());
 
             if (!status)
             {
@@ -165,7 +165,7 @@ void LocalDatabaseManager::save(Series *seriesToSave)
         dbConnect.open();
 
         dbConnect.beginTransaction();
-        bool status = savePatientOfStudy(&dbConnect, seriesToSave->getParentStudy());
+        bool status = savePatientOfStudy(dbConnect, seriesToSave->getParentStudy());
 
         if (!status)
         {
@@ -178,7 +178,7 @@ void LocalDatabaseManager::save(Series *seriesToSave)
         studyParent->setRetrievedDate(currentDate);
         studyParent->setRetrievedTime(currentTime);
 
-        status = saveStudy(&dbConnect, studyParent);
+        status = saveStudy(dbConnect, studyParent);
 
         if (!status)
         {
@@ -190,7 +190,7 @@ void LocalDatabaseManager::save(Series *seriesToSave)
         QList<Series*> seriesList;
         seriesList.append(seriesToSave);
 
-        status = saveSeries(&dbConnect, seriesList, currentDate, currentTime);
+        status = saveSeries(dbConnect, seriesList, currentDate, currentTime);
 
         if (!status)
         {
@@ -213,7 +213,7 @@ QList<Patient*> LocalDatabaseManager::queryPatient(const DicomMask &patientMaskT
 {
     DatabaseConnection dbConnect;
     dbConnect.open();
-    LocalDatabasePatientDAL patientDAL(&dbConnect);
+    LocalDatabasePatientDAL patientDAL(dbConnect);
     QList<Patient*> queryResult;
 
     queryResult = patientDAL.query(patientMaskToQuery);
@@ -226,7 +226,7 @@ QList<Patient*> LocalDatabaseManager::queryPatientStudy(const DicomMask &patient
 {
     DatabaseConnection dbConnect;
     dbConnect.open();
-    LocalDatabaseStudyDAL studyDAL(&dbConnect);
+    LocalDatabaseStudyDAL studyDAL(dbConnect);
     QList<Patient*> queryResult;
 
     queryResult = studyDAL.queryPatientStudy(patientStudyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
@@ -239,7 +239,7 @@ QList<Study*> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuery
 {
     DatabaseConnection dbConnect;
     dbConnect.open();
-    LocalDatabaseStudyDAL studyDAL(&dbConnect);
+    LocalDatabaseStudyDAL studyDAL(dbConnect);
     QList<Study*> queryResult;
 
     queryResult = studyDAL.query(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
@@ -252,7 +252,7 @@ QList<Study*> LocalDatabaseManager::queryStudyOrderByLastAccessDate(const DicomM
 {
     DatabaseConnection dbConnect;
     dbConnect.open();
-    LocalDatabaseStudyDAL studyDAL(&dbConnect);
+    LocalDatabaseStudyDAL studyDAL(dbConnect);
     QList<Study*> queryResult;
 
     queryResult = studyDAL.queryOrderByLastAccessDate(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
@@ -265,8 +265,8 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
 {
     DatabaseConnection dbConnect;
     dbConnect.open();
-    LocalDatabaseSeriesDAL seriesDAL(&dbConnect);
-    LocalDatabaseImageDAL imageDAL(&dbConnect);
+    LocalDatabaseSeriesDAL seriesDAL(dbConnect);
+    LocalDatabaseImageDAL imageDAL(dbConnect);
     QList<Series*> queryResult;
     DicomMask maskToCountNumberOfImage = seriesMaskToQuery;
 
@@ -301,7 +301,7 @@ QList<Image*> LocalDatabaseManager::queryImage(const DicomMask &imageMaskToQuery
 {
     DatabaseConnection dbConnect;
     dbConnect.open();
-    LocalDatabaseImageDAL imageDAL(&dbConnect);
+    LocalDatabaseImageDAL imageDAL(dbConnect);
     QList<Image*> queryResult;
 
     queryResult = imageDAL.query(imageMaskToQuery);
@@ -322,7 +322,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
 {
     DatabaseConnection dbConnect;
     dbConnect.open();
-    LocalDatabaseStudyDAL studyDAL(&dbConnect);
+    LocalDatabaseStudyDAL studyDAL(dbConnect);
     Patient *retrievedPatient = NULL;
 
     // Busquem l'estudi i pacient
@@ -339,7 +339,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     }
 
     // Busquem les series de l'estudi
-    LocalDatabaseSeriesDAL seriesDAL(&dbConnect);
+    LocalDatabaseSeriesDAL seriesDAL(dbConnect);
     QList<Series*> seriesList = seriesDAL.query(maskToRetrieve);
 
     if (seriesDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
@@ -349,7 +349,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     }
 
     DicomMask maskImagesToRetrieve;
-    LocalDatabaseImageDAL imageDAL(&dbConnect);
+    LocalDatabaseImageDAL imageDAL(dbConnect);
 
     // Busquem les imatges per cada sèrie
     // Estudi del que s'han de cercar les imatges
@@ -398,7 +398,7 @@ void LocalDatabaseManager::deleteStudy(const QString &studyInstanceUIDToDelete)
         dbConnect.open();
         dbConnect.beginTransaction();
 
-        bool status = deleteStudyStructureFromDatabase(&dbConnect, studyInstanceUIDToDelete);
+        bool status = deleteStudyStructureFromDatabase(dbConnect, studyInstanceUIDToDelete);
         if (!status)
         {
             setLastError(dbConnect.getLastError());
@@ -431,7 +431,7 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
             dbConnect.open();
             dbConnect.beginTransaction();
 
-            bool status = deleteSeriesStructureFromDatabase(&dbConnect, studyInstanceUID, seriesInstanceUID);
+            bool status = deleteSeriesStructureFromDatabase(dbConnect, studyInstanceUID, seriesInstanceUID);
 
             if (!status)
             {
@@ -453,7 +453,7 @@ void LocalDatabaseManager::deleteOldStudies()
     {
         DatabaseConnection dbConnect;
         dbConnect.open();
-        LocalDatabaseStudyDAL studyDAL(&dbConnect);
+        LocalDatabaseStudyDAL studyDAL(dbConnect);
 
         INFO_LOG("S'esborraran els estudis vells no visualitzats des del dia " + LocalDatabaseManager::LastAccessDateSelectedStudies.addDays(-1)
                  .toString("dd/MM/yyyy"));
@@ -490,7 +490,7 @@ void LocalDatabaseManager::compact()
 {
     DatabaseConnection dbConnect;
     dbConnect.open();
-    LocalDatabaseUtilDAL utilDAL(&dbConnect);
+    LocalDatabaseUtilDAL utilDAL(dbConnect);
 
     utilDAL.compact();
     setLastError(utilDAL.getLastError());
@@ -500,7 +500,7 @@ int LocalDatabaseManager::getDatabaseRevision()
 {
     DatabaseConnection dbConnect;
     dbConnect.open();
-    LocalDatabaseUtilDAL utilDAL(&dbConnect);
+    LocalDatabaseUtilDAL utilDAL(dbConnect);
 
     int databaseRevision = utilDAL.getDatabaseRevision();
     setLastError(utilDAL.getLastError());
@@ -512,7 +512,7 @@ void LocalDatabaseManager::setDatabaseRevision(int databaseRevision)
 {
     DatabaseConnection dbConnect;
     dbConnect.open();
-    LocalDatabaseUtilDAL utilDAL(&dbConnect);
+    LocalDatabaseUtilDAL utilDAL(dbConnect);
 
     utilDAL.updateDatabaseRevision(databaseRevision);
     setLastError(utilDAL.getLastError());
@@ -643,7 +643,7 @@ bool LocalDatabaseManager::isStudyRetrieving()
     return Settings().contains(InputOutputSettings::RetrievingStudy);
 }
 
-bool LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime)
+bool LocalDatabaseManager::saveStudies(DatabaseConnection &dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime)
 {
     bool status = true;
 
@@ -683,7 +683,7 @@ bool LocalDatabaseManager::saveStudies(DatabaseConnection *dbConnect, QList<Stud
     return status;
 }
 
-bool LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime)
+bool LocalDatabaseManager::saveSeries(DatabaseConnection &dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime)
 {
     bool status = true;
 
@@ -712,7 +712,7 @@ bool LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, QList<Serie
     return status;
 }
 
-bool LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime)
+bool LocalDatabaseManager::saveImages(DatabaseConnection &dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime)
 {
     foreach (Image *imageToSave, listImageToSave)
     {
@@ -728,7 +728,7 @@ bool LocalDatabaseManager::saveImages(DatabaseConnection *dbConnect, QList<Image
     return true;
 }
 
-bool LocalDatabaseManager::saveDisplayShutters(DatabaseConnection *dbConnect, QList<DisplayShutter> shuttersList, Image *relatedImage)
+bool LocalDatabaseManager::saveDisplayShutters(DatabaseConnection &dbConnect, QList<DisplayShutter> shuttersList, Image *relatedImage)
 {
     LocalDatabaseDisplayShutterDAL displayShutterDAL(dbConnect);
     foreach (const DisplayShutter &shutter, shuttersList)
@@ -742,7 +742,7 @@ bool LocalDatabaseManager::saveDisplayShutters(DatabaseConnection *dbConnect, QL
     return true;
 }
 
-bool LocalDatabaseManager::savePatientOfStudy(DatabaseConnection *dbConnect, Study *study)
+bool LocalDatabaseManager::savePatientOfStudy(DatabaseConnection &dbConnect, Study *study)
 {
     LocalDatabasePatientDAL patientDAL(dbConnect);
     LocalDatabaseStudyDAL studyDAL(dbConnect);
@@ -760,7 +760,7 @@ bool LocalDatabaseManager::savePatientOfStudy(DatabaseConnection *dbConnect, Stu
     }
 }
 
-bool LocalDatabaseManager::saveStudy(DatabaseConnection *dbConnect, Study *studyToSave)
+bool LocalDatabaseManager::saveStudy(DatabaseConnection &dbConnect, Study *studyToSave)
 {
     LocalDatabaseStudyDAL studyDAL(dbConnect);
 
@@ -775,7 +775,7 @@ bool LocalDatabaseManager::saveStudy(DatabaseConnection *dbConnect, Study *study
     return status;
 }
 
-bool LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, Series *seriesToSave)
+bool LocalDatabaseManager::saveSeries(DatabaseConnection &dbConnect, Series *seriesToSave)
 {
     LocalDatabaseSeriesDAL seriesDAL(dbConnect);
 
@@ -790,7 +790,7 @@ bool LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, Series *ser
     return status;
 }
 
-bool LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageToSave)
+bool LocalDatabaseManager::saveImage(DatabaseConnection &dbConnect, Image *imageToSave)
 {
     LocalDatabaseImageDAL imageDAL(dbConnect);
 
@@ -825,7 +825,7 @@ bool LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *image
     return insertVoiLuts(dbConnect, imageToSave);
 }
 
-bool LocalDatabaseManager::deleteStudyStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete)
+bool LocalDatabaseManager::deleteStudyStructureFromDatabase(DatabaseConnection &dbConnect, const QString &studyInstanceUIDToDelete)
 {
     DicomMask maskToDelete;
     maskToDelete.setStudyInstanceUID(studyInstanceUIDToDelete);
@@ -844,7 +844,7 @@ bool LocalDatabaseManager::deleteStudyStructureFromDatabase(DatabaseConnection *
     return deleteSeriesStructureFromDatabase(dbConnect, studyInstanceUIDToDelete, "");
 }
 
-bool LocalDatabaseManager::deleteSeriesStructureFromDatabase(DatabaseConnection *dbConnect, const QString &studyInstanceUIDToDelete,
+bool LocalDatabaseManager::deleteSeriesStructureFromDatabase(DatabaseConnection &dbConnect, const QString &studyInstanceUIDToDelete,
                                                             const QString &seriesIntanceUIDToDelete)
 {
     DicomMask maskToDelete;
@@ -890,7 +890,7 @@ void LocalDatabaseManager::deleteRetrievedObjects(Series *failedSeries)
     }
 }
 
-bool LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+bool LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseStudyDAL localDatabaseStudyDAL(dbConnect);
 
@@ -912,28 +912,28 @@ bool LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *
     }
 }
 
-bool LocalDatabaseManager::deletePatientFromDatabase(DatabaseConnection *dbConnect, qlonglong patientID)
+bool LocalDatabaseManager::deletePatientFromDatabase(DatabaseConnection &dbConnect, qlonglong patientID)
 {
     LocalDatabasePatientDAL localDatabasePatientDAL(dbConnect);
 
     return localDatabasePatientDAL.del(patientID);
 }
 
-bool LocalDatabaseManager::deleteStudyFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+bool LocalDatabaseManager::deleteStudyFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseStudyDAL localDatabaseStudyDAL(dbConnect);
 
     return localDatabaseStudyDAL.del(maskToDelete);
 }
 
-bool LocalDatabaseManager::deleteSeriesFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+bool LocalDatabaseManager::deleteSeriesFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete)
 {
     LocalDatabaseSeriesDAL localDatabaseSeriesDAL(dbConnect);
 
     return localDatabaseSeriesDAL.del(maskToDelete);
 }
 
-bool LocalDatabaseManager::deleteImageFromDatabase(DatabaseConnection *dbConnect, const DicomMask &maskToDelete)
+bool LocalDatabaseManager::deleteImageFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete)
 {
     // Primer esborrem els shutters que té aquesta imatge -> DELETE CASCADE
     LocalDatabaseDisplayShutterDAL shutterDAL(dbConnect);

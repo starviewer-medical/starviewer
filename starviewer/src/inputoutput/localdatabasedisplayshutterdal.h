@@ -32,7 +32,7 @@ class DisplayShutter;
   */
 class LocalDatabaseDisplayShutterDAL : public LocalDatabaseBaseDAL {
 public:
-    LocalDatabaseDisplayShutterDAL(DatabaseConnection *dbConnection);
+    LocalDatabaseDisplayShutterDAL(DatabaseConnection &dbConnection);
 
     /// Insereix un nou DisplayShutter corresponent a la imatge donada
     bool insert(const DisplayShutter &shutter, Image *shuttersImage);

@@ -33,7 +33,7 @@ class DICOMSource;
   */
 class LocalDatabaseStudyDAL : public LocalDatabaseBaseDAL {
 public:
-    LocalDatabaseStudyDAL(DatabaseConnection *dbConnection);
+    LocalDatabaseStudyDAL(DatabaseConnection &dbConnection);
 
     /// Insereix el nou estudi, i insereix com LastAccessDate la data actual
     bool insert(Study *newStudy, const QDate &lastAccessData);

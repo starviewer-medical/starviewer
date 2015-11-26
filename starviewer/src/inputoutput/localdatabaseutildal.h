@@ -27,7 +27,7 @@ namespace udg {
   */
 class LocalDatabaseUtilDAL : public LocalDatabaseBaseDAL {
 public:
-    LocalDatabaseUtilDAL(DatabaseConnection *dbConnection);
+    LocalDatabaseUtilDAL(DatabaseConnection &dbConnection);
 
     /// Compacta la BD
     void compact();

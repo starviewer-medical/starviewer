@@ -25,7 +25,7 @@
 
 namespace udg {
 
-LocalDatabaseSeriesDAL::LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection)
+LocalDatabaseSeriesDAL::LocalDatabaseSeriesDAL(DatabaseConnection &dbConnection)
  : LocalDatabaseBaseDAL(dbConnection)
 {
 }
@@ -36,7 +36,7 @@ bool LocalDatabaseSeriesDAL::insert(Series *newSeries)
 
     if (!query.exec(buildSqlInsert(newSeries)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -49,7 +49,7 @@ bool LocalDatabaseSeriesDAL::update(Series *seriesToUpdate)
 
     if (!query.exec(buildSqlUpdate(seriesToUpdate)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -62,7 +62,7 @@ bool LocalDatabaseSeriesDAL::del(const DicomMask &seriesMaskToDelete)
 
     if (!query.exec(buildSqlDelete(seriesMaskToDelete)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -76,7 +76,7 @@ QList<Series*> LocalDatabaseSeriesDAL::query(const DicomMask &seriesMask)
 
     if (!query.exec(buildSqlSelect(seriesMask)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return seriesList;
     }
 
