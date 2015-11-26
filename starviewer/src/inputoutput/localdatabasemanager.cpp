@@ -35,17 +35,6 @@
 #include "harddiskinformation.h"
 #include "thumbnailcreator.h"
 
-#define SQLITE_OK           0   /* Successful result */
-#define SQLITE_ERROR        1   /* SQL error or missing database */
-#define SQLITE_BUSY         5   /* The database file is locked */
-#define SQLITE_LOCKED       6   /* A table in the database is locked */
-#define SQLITE_CORRUPT     11   /* The database disk image is malformed */
-#define SQLITE_EMPTY       16   /* Database is empty */
-#define SQLITE_SCHEMA      17   /* The database schema changed */
-#define SQLITE_CONSTRAINT  19   /* Abort due to constraint violation */
-#define SQLITE_MISMATCH    20   /* Data type mismatch */
-#define SQLITE_NOTADB      26   /* File opened that is not a database file */
-
 namespace udg {
 
 namespace {
@@ -283,7 +272,7 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
 
     queryResult = seriesDAL.query(seriesMaskToQuery);
 
-    if (seriesDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
+    if (seriesDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
     {
         setLastError(seriesDAL.getLastError());
         return queryResult;
@@ -295,7 +284,7 @@ QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQu
         maskToCountNumberOfImage.setSeriesInstanceUID(series->getInstanceUID());
         series->setNumberOfImages(imageDAL.count(maskToCountNumberOfImage));
 
-        if (imageDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
+        if (imageDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
         {
             break;
         }
@@ -353,7 +342,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
     LocalDatabaseSeriesDAL seriesDAL(&dbConnect);
     QList<Series*> seriesList = seriesDAL.query(maskToRetrieve);
 
-    if (seriesDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
+    if (seriesDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
     {
         setLastError(seriesDAL.getLastError());
         return NULL;
@@ -372,7 +361,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
         maskImagesToRetrieve.setSeriesInstanceUID(series->getInstanceUID());
 
         QList<Image*> images = imageDAL.query(maskImagesToRetrieve);
-        if (imageDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
+        if (imageDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
         {
             break;
         }
@@ -385,7 +374,7 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
         retrievedPatient->getStudy(maskToRetrieve.getStudyInstanceUID())->addSeries(series);
     }
 
-    if (imageDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
+    if (imageDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
     {
         setLastError(imageDAL.getLastError());
         return new Patient();
@@ -473,7 +462,7 @@ void LocalDatabaseManager::deleteOldStudies()
 
         setLastError(studyDAL.getLastError());
 
-        if (studyDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
+        if (studyDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
         {
             return;
         }
@@ -778,7 +767,7 @@ bool LocalDatabaseManager::saveStudy(DatabaseConnection *dbConnect, Study *study
     bool status = studyDAL.insert(studyToSave, QDate::currentDate());
 
     /// Si l'estudi ja existia actualitzem la seva informació
-    if (!status && studyDAL.getLastError().nativeErrorCode().toInt() == SQLITE_CONSTRAINT)
+    if (!status && studyDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
     {
         status = studyDAL.update(studyToSave, QDate::currentDate());
     }
@@ -793,7 +782,7 @@ bool LocalDatabaseManager::saveSeries(DatabaseConnection *dbConnect, Series *ser
     bool status = seriesDAL.insert(seriesToSave);
 
     /// Si la serie ja existia actualitzem la seva informació
-    if (!status && seriesDAL.getLastError().nativeErrorCode().toInt() == SQLITE_CONSTRAINT)
+    if (!status && seriesDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
     {
         status = seriesDAL.update(seriesToSave);
     }
@@ -808,7 +797,7 @@ bool LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *image
     bool status = imageDAL.insert(imageToSave);
 
     /// Si el pacient ja existia actualitzem la seva informació
-    if (!status && imageDAL.getLastError().nativeErrorCode().toInt() == SQLITE_CONSTRAINT)
+    if (!status && imageDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
     {
         imageDAL.update(imageToSave);
         // Un cop actualitzades les imatges, actualitzem els corresponents shutters
@@ -908,7 +897,7 @@ bool LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection *
     // Busquem el ID de pacient
     qlonglong patientID = localDatabaseStudyDAL.getPatientIDFromStudyInstanceUID(maskToDelete.getStudyInstanceUID());
 
-    if (localDatabaseStudyDAL.getLastError().nativeErrorCode().toInt() != SQLITE_OK)
+    if (localDatabaseStudyDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
     {
         return false;
     }
@@ -1068,20 +1057,21 @@ void LocalDatabaseManager::setLastError(const QSqlError &error)
     int sqliteLastError = error.nativeErrorCode().toInt();
 
     // Es tradueixen els errors de Sqlite a errors nostres, per consulta codi d'errors Sqlite http://www.sqlite.org/c3ref/c_abort.html
-    if (sqliteLastError == SQLITE_OK)
+    if (sqliteLastError == DatabaseConnection::SqliteOk)
     {
         m_lastError = Ok;
     }
-    else if (sqliteLastError == SQLITE_ERROR)
+    else if (sqliteLastError == DatabaseConnection::SqliteError)
     {
         m_lastError = SyntaxErrorSQL;
     }
-    else if (sqliteLastError == SQLITE_LOCKED || sqliteLastError == SQLITE_BUSY)
+    else if (sqliteLastError == DatabaseConnection::SqliteLocked || sqliteLastError == DatabaseConnection::SqliteBusy)
     {
         m_lastError = DatabaseLocked;
     }
-    else if (sqliteLastError == SQLITE_CORRUPT || sqliteLastError == SQLITE_EMPTY || sqliteLastError == SQLITE_SCHEMA || sqliteLastError == SQLITE_MISMATCH
-             || sqliteLastError == SQLITE_NOTADB)
+    else if (sqliteLastError == DatabaseConnection::SqliteCorrupt || sqliteLastError == DatabaseConnection::SqliteEmpty ||
+             sqliteLastError == DatabaseConnection::SqliteSchema || sqliteLastError == DatabaseConnection::SqliteMismatch ||
+             sqliteLastError == DatabaseConnection::SqliteNotADb)
     {
         m_lastError = DatabaseCorrupted;
     }
@@ -1091,7 +1081,7 @@ void LocalDatabaseManager::setLastError(const QSqlError &error)
     }
 
     // El valor dels errors es pot consultar a http://www.sqlite.org/c3ref/c_abort.html
-    if (sqliteLastError != SQLITE_OK)
+    if (sqliteLastError != DatabaseConnection::SqliteOk)
     {
         ERROR_LOG("Codi error base de dades " + QString().setNum(sqliteLastError));
     }

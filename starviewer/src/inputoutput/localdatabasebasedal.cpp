@@ -59,10 +59,8 @@ QString LocalDatabaseBaseDAL::convertToQString(const QVariant &text)
 
 void LocalDatabaseBaseDAL::logError(const QString &sqlSentence)
 {
-    #define SQLITE_CONSTRAINT  19   /* Abort due to constraint violation */
-
     // Ingnorem l'error de clau duplicada
-    if (getLastError().nativeErrorCode().toInt() != SQLITE_CONSTRAINT)
+    if (getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteConstraint)
     {
         ERROR_LOG("S'ha produit l'error: " + getLastError().nativeErrorCode() + ", " + m_dbConnection->getLastErrorMessage() +
                   ", al executar la seguent sentencia sql " + sqlSentence);

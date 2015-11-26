@@ -31,6 +31,10 @@ namespace udg {
 class DatabaseConnection {
 
 public:
+    /// SQLite error codes.
+    enum SqliteError { SqliteOk = 0, SqliteError = 1, SqliteBusy = 5, SqliteLocked = 6, SqliteCorrupt = 11, SqliteEmpty = 16, SqliteSchema = 17,
+                       SqliteConstraint = 19, SqliteMismatch = 20, SqliteNotADb = 26 };
+
     DatabaseConnection();
     ~DatabaseConnection();
 
