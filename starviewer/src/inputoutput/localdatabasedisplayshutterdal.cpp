@@ -14,9 +14,8 @@
 
 #include "localdatabasedisplayshutterdal.h"
 
-#include "displayshutter.h"
 #include "dicommask.h"
-#include "databaseconnection.h"
+#include "displayshutter.h"
 #include "image.h"
 
 #include <QSqlQuery>
@@ -24,75 +23,56 @@
 
 namespace udg {
 
-LocalDatabaseDisplayShutterDAL::LocalDatabaseDisplayShutterDAL(DatabaseConnection &dbConnection)
- : LocalDatabaseBaseDAL(dbConnection)
-{
-}
+namespace {
 
-bool LocalDatabaseDisplayShutterDAL::insert(const DisplayShutter &shutter, Image *shuttersImage)
+// Prepares the given query with the given SQL base command followed by the appropriate where clause according to the given mask.
+void prepareQueryWithMask(QSqlQuery &query, const DicomMask &mask, const QString &sqlCommand)
 {
-    QSqlQuery query;
-
-    if (!query.exec(buildSQLInsert(shutter, shuttersImage)))
+    if (!mask.getSOPInstanceUID().isEmpty() && !mask.getImageNumber().isEmpty())
     {
-        logError(query);
-        return false;
+        query.prepare(sqlCommand + " WHERE ImageInstanceUID = :imageInstanceUID AND ImageFrameNumber = :imageFrameNumber");
+    }
+    else if (!mask.getSOPInstanceUID().isEmpty())
+    {
+        query.prepare(sqlCommand + " WHERE ImageInstanceUID = :imageInstanceUID");
+    }
+    else if (!mask.getSeriesInstanceUID().isEmpty())
+    {
+        query.prepare(sqlCommand + " WHERE ImageInstanceUID IN (SELECT SOPInstanceUID FROM Image WHERE SeriesInstanceUID = :seriesInstanceUID)");
+    }
+    else if (!mask.getStudyInstanceUID().isEmpty())
+    {
+        query.prepare(sqlCommand + " WHERE ImageInstanceUID IN (SELECT SOPInstanceUID FROM Image WHERE StudyInstanceUID = :studyInstanceUID)");
+    }
+    else
+    {
+        query.prepare(sqlCommand);
     }
 
-    return true;
-}
-
-void LocalDatabaseDisplayShutterDAL::update(const QList<DisplayShutter> &shuttersList, Image *shuttersImage)
-{
-    // Fem un delete de tots els shutters existents i fem un insert de nou,
-    // ja que la classe DisplayShuter no té l'ID de la taula DisplayShutter de la BdD
-    DicomMask mask;
-    mask.setImageNumber(QString::number(shuttersImage->getFrameNumber()));
-    mask.setSOPInstanceUID(shuttersImage->getSOPInstanceUID());
-    del(mask);
-    foreach (const DisplayShutter &shutter, shuttersList)
+    if (!mask.getSOPInstanceUID().isEmpty())
     {
-        insert(shutter, shuttersImage);
+        query.bindValue(":imageInstanceUID", mask.getSOPInstanceUID());
+    }
+    if (!mask.getImageNumber().isEmpty())
+    {
+        query.bindValue(":imageFrameNumber", mask.getImageNumber().toInt());
+    }
+    if (!mask.getSeriesInstanceUID().isEmpty())
+    {
+        query.bindValue(":seriesInstanceUID", mask.getSeriesInstanceUID());
+    }
+    if (!mask.getStudyInstanceUID().isEmpty())
+    {
+        query.bindValue(":studyInstanceUID", mask.getStudyInstanceUID());
     }
 }
 
-bool LocalDatabaseDisplayShutterDAL::del(const DicomMask &mask)
-{
-    QSqlQuery query;
-
-    if (!query.exec(buildSQLDelete(mask)))
-    {
-        logError(query);
-        return false;
-    }
-
-    return true;
-}
-
-QList<DisplayShutter> LocalDatabaseDisplayShutterDAL::query(const DicomMask &mask)
-{
-    QList<DisplayShutter> shutterList;
-    QSqlQuery query;
-
-    if (!query.exec(buildSQLSelect(mask)))
-    {
-        logError(query);
-        return shutterList;
-    }
-
-    while (query.next())
-    {
-        shutterList << fillDisplayShutter(query);
-    }
-
-    return shutterList;
-}
-
-DisplayShutter LocalDatabaseDisplayShutterDAL::fillDisplayShutter(const QSqlQuery &query)
+// Creates and returns a display shutter with the information of the current row of the given query.
+DisplayShutter getDisplayShutter(const QSqlQuery &query)
 {
     DisplayShutter shutter;
-
     QString shape = query.value("Shape").toString();
+
     if (shape == "RECTANGULAR")
     {
         shutter.setShape(DisplayShutter::RectangularShape);
@@ -110,66 +90,79 @@ DisplayShutter LocalDatabaseDisplayShutterDAL::fillDisplayShutter(const QSqlQuer
         shutter.setShape(DisplayShutter::UndefinedShape);
     }
 
-    QString shutterPoints = query.value("PointsList").toString();
-    shutter.setPoints(shutterPoints);
-
+    shutter.setPoints(query.value("PointsList").toString());
     shutter.setShutterValue(query.value("ShutterValue").toUInt());
 
     return shutter;
 }
 
-QString LocalDatabaseDisplayShutterDAL::buildSQLSelect(const DicomMask &mask)
-{
-    QString selectSentence = "SELECT Shape, ShutterValue, PointsList FROM DisplayShutter ";
-
-    return selectSentence + buildWhereSentence(mask);
 }
 
-QString LocalDatabaseDisplayShutterDAL::buildSQLInsert(const DisplayShutter &shutter, Image *shuttersImage)
+LocalDatabaseDisplayShutterDAL::LocalDatabaseDisplayShutterDAL(DatabaseConnection &databaseConnection)
+ : LocalDatabaseBaseDAL(databaseConnection)
 {
-    QString insertSentence = "INSERT INTO DisplayShutter ";
-    insertSentence += "(Shape, ShutterValue, PointsList, ImageInstanceUID, ImageFrameNumber) ";
-    insertSentence += QString("VALUES ('%1', %2, '%3', '%4', %5)")
-        .arg(formatTextToValidSQLSyntax(shutter.getShapeAsDICOMString()))
-        .arg(shutter.getShutterValue())
-        .arg(formatTextToValidSQLSyntax(shutter.getPointsAsString()))
-        .arg(formatTextToValidSQLSyntax(shuttersImage->getSOPInstanceUID()))
-        .arg(shuttersImage->getFrameNumber());
-
-    return insertSentence;
 }
 
-QString LocalDatabaseDisplayShutterDAL::buildSQLDelete(const DicomMask &mask)
+bool LocalDatabaseDisplayShutterDAL::insert(const DisplayShutter &shutter, const Image *shuttersImage)
 {
-    return "DELETE FROM DisplayShutter " + buildWhereSentence(mask);
+    QSqlQuery query = getNewQuery();
+    query.prepare("INSERT INTO DisplayShutter (Shape, ShutterValue, PointsList, ImageInstanceUID, ImageFrameNumber) "
+                  "VALUES (:shape, :shutterValue, :pointsList, :imageInstanceUID, :imageFrameNumber)");
+    query.bindValue(":shape", shutter.getShapeAsDICOMString());
+    query.bindValue(":shutterValue", shutter.getShutterValue());
+    query.bindValue(":pointsList", shutter.getPointsAsString());
+    query.bindValue(":imageInstanceUID", shuttersImage->getSOPInstanceUID());
+    query.bindValue(":imageFrameNumber", shuttersImage->getFrameNumber());
+
+    return executeQueryAndLogError(query);
 }
 
-QString LocalDatabaseDisplayShutterDAL::buildWhereSentence(const DicomMask &mask)
+bool LocalDatabaseDisplayShutterDAL::update(const QList<DisplayShutter> &shuttersList, const Image *shuttersImage)
 {
-    if (!mask.getSOPInstanceUID().isEmpty())
+    // We have to delete existing shutters and insert the new ones because the
+    // DisplayShutter class doesn't have the ID of the DisplayShutter record in the database
+    DicomMask mask;
+    mask.setImageNumber(QString::number(shuttersImage->getFrameNumber()));
+    mask.setSOPInstanceUID(shuttersImage->getSOPInstanceUID());
+
+    if (!del(mask))
     {
-        QString whereSentence = QString("WHERE ImageInstanceUID = '%1' ").arg(formatTextToValidSQLSyntax(mask.getSOPInstanceUID()));
-        if (!mask.getImageNumber().isEmpty())
+        return false;
+    }
+
+    foreach (const DisplayShutter &shutter, shuttersList)
+    {
+        if (!insert(shutter, shuttersImage))
         {
-            whereSentence += QString("AND ImageFrameNumber = %1").arg(mask.getImageNumber());
+            return false;
         }
+    }
 
-        return whereSentence;
-    }
-    
-    if (!mask.getSeriesInstanceUID().isEmpty())
+    return true;
+}
+
+bool LocalDatabaseDisplayShutterDAL::del(const DicomMask &mask)
+{
+    QSqlQuery query = getNewQuery();
+    prepareQueryWithMask(query, mask, "DELETE FROM DisplayShutter");
+    return executeQueryAndLogError(query);
+}
+
+QList<DisplayShutter> LocalDatabaseDisplayShutterDAL::query(const DicomMask &mask)
+{
+    QSqlQuery query = getNewQuery();
+    prepareQueryWithMask(query, mask, "SELECT Shape, ShutterValue, PointsList FROM DisplayShutter");
+    QList<DisplayShutter> shutterList;
+
+    if (executeQueryAndLogError(query))
     {
-        return QString("WHERE ImageInstanceUID IN (SELECT SOPInstanceUID FROM Image WHERE SeriesInstanceUID = '%1')")
-            .arg(formatTextToValidSQLSyntax(mask.getSeriesInstanceUID()));
+        while (query.next())
+        {
+            shutterList << getDisplayShutter(query);
+        }
     }
-    
-    if (!mask.getStudyInstanceUID().isEmpty())
-    {
-        return QString("WHERE ImageInstanceUID IN (SELECT SOPInstanceUID FROM Image WHERE StudyInstanceUID = '%1')")
-            .arg(formatTextToValidSQLSyntax(mask.getStudyInstanceUID()));
-    }
-    
-    return QString();
+
+    return shutterList;
 }
 
 }
