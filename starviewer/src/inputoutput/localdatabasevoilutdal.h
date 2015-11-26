@@ -31,7 +31,7 @@ class VoiLut;
 class LocalDatabaseVoiLutDAL : public LocalDatabaseBaseDAL
 {
 public:
-    LocalDatabaseVoiLutDAL(DatabaseConnection *dbConnection);
+    LocalDatabaseVoiLutDAL(DatabaseConnection &dbConnection);
 
     /// Inserts a new VoiLut from the given Image in the database.
     bool insert(const VoiLut &voiLut, Image *image);

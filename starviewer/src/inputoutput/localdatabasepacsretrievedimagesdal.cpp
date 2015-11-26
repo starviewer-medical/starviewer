@@ -24,7 +24,7 @@
 
 namespace udg {
 
-LocalDatabasePACSRetrievedImagesDAL::LocalDatabasePACSRetrievedImagesDAL(DatabaseConnection *dbConnect):LocalDatabaseBaseDAL(dbConnect)
+LocalDatabasePACSRetrievedImagesDAL::LocalDatabasePACSRetrievedImagesDAL(DatabaseConnection &dbConnect):LocalDatabaseBaseDAL(dbConnect)
 {
 }
 
@@ -34,7 +34,7 @@ qlonglong LocalDatabasePACSRetrievedImagesDAL::insert(const PacsDevice &pacsDevi
 
     if (!query.exec(buildSqlInsert(pacsDevice)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return -1;
     }
     else
@@ -59,7 +59,7 @@ PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString &sqlQuerySen
 
     if (!query.exec(sqlQuerySentence))
     {
-        logError(query.lastQuery());
+        logError(query);
         return PacsDevice();
     }
 

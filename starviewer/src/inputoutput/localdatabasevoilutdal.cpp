@@ -99,7 +99,7 @@ VoiLut getVoiLut(const QSqlQuery &query)
 
 }
 
-LocalDatabaseVoiLutDAL::LocalDatabaseVoiLutDAL(DatabaseConnection *dbConnection)
+LocalDatabaseVoiLutDAL::LocalDatabaseVoiLutDAL(DatabaseConnection &dbConnection)
     : LocalDatabaseBaseDAL(dbConnection)
 {
 }
@@ -111,7 +111,7 @@ bool LocalDatabaseVoiLutDAL::insert(const VoiLut &voiLut, Image *image)
 
     if (!query.prepare(insertStatement))
     {
-        logError("prepare(" + query.lastQuery() + ")");
+//        logError("prepare(" + query.lastQuery() + ")");
         return false;
     }
 
@@ -120,7 +120,7 @@ bool LocalDatabaseVoiLutDAL::insert(const VoiLut &voiLut, Image *image)
 
     if (!query.exec())
     {
-        logError("exec(" + query.lastQuery() + ")");
+//        logError("exec(" + query.lastQuery() + ")");
         return false;
     }
 
@@ -134,7 +134,7 @@ bool LocalDatabaseVoiLutDAL::del(const DicomMask &mask)
 
     if (!query.exec(deleteStatement))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -149,7 +149,7 @@ QList<VoiLut> LocalDatabaseVoiLutDAL::query(const DicomMask &mask)
 
     if (!query.exec(selectStatement))
     {
-        logError(query.lastQuery());
+        logError(query);
         return voiLuts;
     }
 

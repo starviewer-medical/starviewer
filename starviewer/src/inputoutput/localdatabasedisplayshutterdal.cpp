@@ -24,7 +24,7 @@
 
 namespace udg {
 
-LocalDatabaseDisplayShutterDAL::LocalDatabaseDisplayShutterDAL(DatabaseConnection *dbConnection)
+LocalDatabaseDisplayShutterDAL::LocalDatabaseDisplayShutterDAL(DatabaseConnection &dbConnection)
  : LocalDatabaseBaseDAL(dbConnection)
 {
 }
@@ -35,7 +35,7 @@ bool LocalDatabaseDisplayShutterDAL::insert(const DisplayShutter &shutter, Image
 
     if (!query.exec(buildSQLInsert(shutter, shuttersImage)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -62,7 +62,7 @@ bool LocalDatabaseDisplayShutterDAL::del(const DicomMask &mask)
 
     if (!query.exec(buildSQLDelete(mask)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -76,7 +76,7 @@ QList<DisplayShutter> LocalDatabaseDisplayShutterDAL::query(const DicomMask &mas
 
     if (!query.exec(buildSQLSelect(mask)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return shutterList;
     }
 

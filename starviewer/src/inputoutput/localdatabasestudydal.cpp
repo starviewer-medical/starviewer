@@ -25,7 +25,7 @@
 
 namespace udg {
 
-LocalDatabaseStudyDAL::LocalDatabaseStudyDAL(DatabaseConnection *dbConnection)
+LocalDatabaseStudyDAL::LocalDatabaseStudyDAL(DatabaseConnection &dbConnection)
  : LocalDatabaseBaseDAL(dbConnection)
 {
 }
@@ -36,7 +36,7 @@ bool LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
 
     if (!query.exec(buildSqlInsert(newStudy, lastAccessDate)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -49,7 +49,7 @@ bool LocalDatabaseStudyDAL::update(Study *studyToUpdate, const QDate &lastAccess
 
     if (!query.exec(buildSqlUpdate(studyToUpdate, lastAccessDate)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -62,7 +62,7 @@ bool LocalDatabaseStudyDAL::del(const DicomMask &studyMaskToDelete)
 
     if (!query.exec(buildSqlDelete(studyMaskToDelete)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -77,7 +77,7 @@ QList<Study*> LocalDatabaseStudyDAL::queryOrderByLastAccessDate(const DicomMask 
 
     if (!query.exec(sqlSentence))
     {
-        logError(query.lastQuery());
+        logError(query);
         return studyList;
     }
 
@@ -96,7 +96,7 @@ QList<Study*> LocalDatabaseStudyDAL::query(const DicomMask &studyMask, QDate las
 
     if (!query.exec(buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return studyList;
     }
 
@@ -115,7 +115,7 @@ QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(const DicomMask &patien
 
     if (!query.exec(buildSqlSelectStudyPatient(patientStudyMaskToQuery, lastAccessDateMinor, lastAccessDateEqualOrMajor)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return patientList;
     }
 
@@ -137,7 +137,7 @@ qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString 
 
     if (!query.exec(buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID)))
     {
-        logError(query.lastQuery());
+        logError(query);
     }
     else
     {

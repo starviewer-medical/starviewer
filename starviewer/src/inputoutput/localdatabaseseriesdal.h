@@ -32,7 +32,7 @@ class Series;
   */
 class LocalDatabaseSeriesDAL : public LocalDatabaseBaseDAL {
 public:
-    LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection);
+    LocalDatabaseSeriesDAL(DatabaseConnection &dbConnection);
 
     /// Insereix la nova sèrie
     bool insert(Series *newSeries);

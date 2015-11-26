@@ -35,7 +35,7 @@
 
 namespace udg {
 
-LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection *dbConnection)
+LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection &dbConnection)
  : LocalDatabaseBaseDAL(dbConnection)
 {
 }
@@ -46,7 +46,7 @@ bool LocalDatabaseImageDAL::insert(Image *newImage)
 
     if (!query.exec(buildSqlInsert(newImage)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -59,7 +59,7 @@ bool LocalDatabaseImageDAL::del(const DicomMask &imageMaskToDelete)
 
     if (!query.exec(buildSqlDelete(imageMaskToDelete)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return false;
     }
 
@@ -72,7 +72,7 @@ void LocalDatabaseImageDAL::update(Image *imageToUpdate)
 
     if (!query.exec(buildSqlUpdate(imageToUpdate)))
     {
-        logError(query.lastQuery());
+        logError(query);
     }
 }
 
@@ -83,12 +83,12 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
 
     if (!query.exec(buildSqlSelect(imageMask)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return imageList;
     }
 
-    LocalDatabaseDisplayShutterDAL shutterDAL(m_dbConnection);
-    LocalDatabaseVoiLutDAL voiLutDal(m_dbConnection);
+    LocalDatabaseDisplayShutterDAL shutterDAL(m_databaseConnection);
+    LocalDatabaseVoiLutDAL voiLutDal(m_databaseConnection);
 
     while (query.next())
     {
@@ -120,7 +120,7 @@ int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
 
     if (!query.exec(buildSqlSelectCountImages(imageMaskToCount)))
     {
-        logError(query.lastQuery());
+        logError(query);
         return -1;
     }
 
@@ -532,7 +532,7 @@ QString LocalDatabaseImageDAL::getIDPACSInDatabase(PacsDevice pacsDevice)
         return m_PACSIDCache[keyPacsDevice];
     }
 
-    LocalDatabasePACSRetrievedImagesDAL localDatabasePACSRetrievedImagesDAL(m_dbConnection);
+    LocalDatabasePACSRetrievedImagesDAL localDatabasePACSRetrievedImagesDAL(m_databaseConnection);
     PacsDevice pacsDeviceRetrievedFromDatabase = localDatabasePACSRetrievedImagesDAL.query(pacsDevice.getAETitle(), pacsDevice.getAddress(),
                                                                                 pacsDevice.getQueryRetrieveServicePort());
     if (!pacsDeviceRetrievedFromDatabase.getID().isEmpty())
@@ -582,7 +582,7 @@ PacsDevice LocalDatabaseImageDAL::getPACSDeviceByIDPACSInDatabase(int IDPACSInDa
     }
 
     //Sinó el trobem a la caché el recuperem de la base de dades
-    LocalDatabasePACSRetrievedImagesDAL localDatabasePACSRetrievedImagesDAL(m_dbConnection);
+    LocalDatabasePACSRetrievedImagesDAL localDatabasePACSRetrievedImagesDAL(m_databaseConnection);
     PacsDevice pacsDevice = localDatabasePACSRetrievedImagesDAL.query(IDPACSInDatabase);
 
     if (!pacsDevice.getID().isEmpty())

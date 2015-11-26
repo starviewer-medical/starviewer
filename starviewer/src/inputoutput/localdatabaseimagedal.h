@@ -35,7 +35,7 @@ class DICOMSource;
   */
 class LocalDatabaseImageDAL : public LocalDatabaseBaseDAL {
 public:
-    LocalDatabaseImageDAL(DatabaseConnection *dbConnection);
+    LocalDatabaseImageDAL(DatabaseConnection &dbConnection);
 
     /// Insereix la informació d'una imatge a la caché, actualitzamt l'espai ocupat de la pool, com s'ha de fer un insert i un update aquests dos operacion
     /// es fan dins el marc d'una transaccio, per mantenir coherent l'espai de la pool ocupat. Per això tot i que accedim a dos taules, al haver-se de fer
