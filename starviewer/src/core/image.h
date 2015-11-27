@@ -137,7 +137,7 @@ public:
     void setVoiLutList(const QList<VoiLut> &voiLutList);
     
     /// Ens retorna el nombre de window levels que tenim
-    int getNumberOfVoiLuts();
+    int getNumberOfVoiLuts() const;
 
     /// Li indiquem quina és la sèrie pare a la qual pertany
     void setParentSeries(Series *series);
@@ -154,8 +154,8 @@ public:
     /// Assignar/Obtenir la data i hora en que la sèrie s'ha descarregat a la base de dades Local
     void setRetrievedDate(QDate date);
     void setRetrievedTime(QTime time);
-    QDate getRetrievedDate();
-    QTime getRetrievedTime();
+    QDate getRetrievedDate() const;
+    QTime getRetrievedTime() const;
 
     /// Assignar/Obtenir la descripció del tipus d'imatge
     void setImageType(const QString &imageType);

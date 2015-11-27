@@ -14,140 +14,319 @@
 
 #include "localdatabaseimagedal.h"
 
+#include "dicomformattedvaluesconverter.h"
+#include "dicommask.h"
+#include "image.h"
+#include "localdatabasedisplayshutterdal.h"
+#include "localdatabasemanager.h"
+#include "localdatabasepacsretrievedimagesdal.h"
+#include "localdatabasevoilutdal.h"
+#include "series.h"
+#include "study.h"
+
+#include <array>
+
+#include <QDate>
 #include <QSqlQuery>
-#include <QString>
 #include <QVariant>
 #include <QVector2D>
 
-#include "study.h"
-#include "series.h"
-#include "image.h"
-#include "databaseconnection.h"
-#include "dicommask.h"
-#include "localdatabasemanager.h"
-#include "imageorientation.h"
-#include "localdatabasedisplayshutterdal.h"
-#include "dicomsource.h"
-#include "localdatabasepacsretrievedimagesdal.h"
-#include "dicomformattedvaluesconverter.h"
-#include "dicomvaluerepresentationconverter.h"
-#include "localdatabasevoilutdal.h"
-
 namespace udg {
 
-LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection &dbConnection)
- : LocalDatabaseBaseDAL(dbConnection)
+namespace {
+
+// Returns pixel spacing formatted as a DICOM string, with values separated by "\\".
+QString pixelSpacingToDicomString(const PixelSpacing2D &pixelSpacing)
 {
+    return QString("%1\\%2").arg(pixelSpacing.x(), 0, 'g', 10).arg(pixelSpacing.y(), 0, 'g', 10);
 }
 
-bool LocalDatabaseImageDAL::insert(Image *newImage)
+// Returns pixel spacing constructed from a formatted DICOM string, with values separated by "\\".
+PixelSpacing2D pixelSpacingFromDicomString(const QString &pixelSpacingString)
 {
-    QSqlQuery query;
+    QStringList values = pixelSpacingString.split("\\");
 
-    if (!query.exec(buildSqlInsert(newImage)))
+    if (values.size() == 2)
     {
-        logError(query);
-        return false;
+        return PixelSpacing2D(values.at(0).toDouble(), values.at(1).toDouble());
     }
-
-    return true;
-}
-
-bool LocalDatabaseImageDAL::del(const DicomMask &imageMaskToDelete)
-{
-    QSqlQuery query;
-
-    if (!query.exec(buildSqlDelete(imageMaskToDelete)))
+    else
     {
-        logError(query);
-        return false;
-    }
-
-    return true;
-}
-
-void LocalDatabaseImageDAL::update(Image *imageToUpdate)
-{
-    QSqlQuery query;
-
-    if (!query.exec(buildSqlUpdate(imageToUpdate)))
-    {
-        logError(query);
+        return PixelSpacing2D();
     }
 }
 
-QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
+// Returns image position patient as a DICOM string, with values separated by "\\".
+QString imagePositionPatientToDicomString(const double imagePositionPatient[3])
 {
-    QList<Image*> imageList;
-    QSqlQuery query;
+    return QString("%1\\%2\\%3").arg(imagePositionPatient[0], 0, 'g', 10).arg(imagePositionPatient[1], 0, 'g', 10).arg(imagePositionPatient[2], 0, 'g', 10);
+}
 
-    if (!query.exec(buildSqlSelect(imageMask)))
+// Returns image position patient constructed from a formatted DICOM string, with values separated by "\\".
+std::array<double, 3> imagePositionPatientFromDicomString(const QString &imagePositionPatientString)
+{
+    QStringList values = imagePositionPatientString.split("\\");
+    std::array<double, 3> imagePositionPatient = { 0, 0, 0 };
+
+    for (int i = 0; i < 3; i++)
     {
-        logError(query);
-        return imageList;
-    }
-
-    LocalDatabaseDisplayShutterDAL shutterDAL(m_databaseConnection);
-    LocalDatabaseVoiLutDAL voiLutDal(m_databaseConnection);
-
-    while (query.next())
-    {
-        Image *newImage = fillImage(query);
-            
-        // Obtenim els shutters de l'imatge actual
-        DicomMask mask;
-        mask.setSOPInstanceUID(newImage->getSOPInstanceUID());
-        mask.setImageNumber(QString::number(newImage->getFrameNumber()));
-        newImage->setDisplayShutters(shutterDAL.query(mask));
-
-        // Get VOI LUTs
-        QList<VoiLut> voiLuts = voiLutDal.query(mask);
-
-        foreach (const VoiLut &voiLut, voiLuts)
+        if (values.size() == 3)
         {
-            newImage->addVoiLut(voiLut);
+            imagePositionPatient[i] = values.at(i).toDouble();
         }
-        
-        imageList << newImage;
+    }
+
+    return imagePositionPatient;
+}
+
+// Returns window widths, window centers and explanations formatted as DICOM strings, with values separated by "\\".
+void windowLevelInformationToDicomStrings(const Image *image, QString &windowWidth, QString &windowCenter, QString &explanation)
+{
+    windowWidth.clear();
+    windowCenter.clear();
+    explanation.clear();
+
+    for (int i = 0; i < image->getNumberOfVoiLuts(); ++i)
+    {
+        const VoiLut &voiLut = image->getVoiLut(i);
+
+        if (voiLut.isWindowLevel())
+        {
+            if (!windowWidth.isEmpty())
+            {
+                windowWidth += "\\";
+                windowCenter += "\\";
+                explanation += "\\";
+            }
+
+            const WindowLevel &windowLevel = voiLut.getWindowLevel();
+            windowWidth += QString::number(windowLevel.getWidth(), 'g', 10);
+            windowCenter += QString::number(windowLevel.getCenter(), 'g', 10);
+            explanation += windowLevel.getName();
+        }
+    }
+}
+
+// Prepares the given query with the given SQL base command followed by the appropriate where clause according to the given mask
+// followed by the given SQL continuation (order by, group by, etc.).
+void prepareQueryWithMask(QSqlQuery &query, const DicomMask &mask, const QString &sqlCommand, const QString &sqlContinuation = QString())
+{
+    QString where;
+
+    if (!mask.getStudyInstanceUID().isEmpty())
+    {
+        where += "StudyInstanceUID = :studyInstanceUID";
+    }
+    if (!mask.getSeriesInstanceUID().isEmpty())
+    {
+        if (!where.isEmpty())
+        {
+            where += " AND ";
+        }
+        where += "SeriesInstanceUID = :seriesInstanceUID";
+    }
+    if (!mask.getSOPInstanceUID().isEmpty())
+    {
+        if (!where.isEmpty())
+        {
+            where += " AND ";
+        }
+        where += "SOPInstanceUID = :sopInstanceUID";
+    }
+    if (!where.isEmpty())
+    {
+        where = " WHERE " + where;
+    }
+
+    query.prepare(sqlCommand + where + sqlContinuation);
+
+    if (!mask.getStudyInstanceUID().isEmpty())
+    {
+        query.bindValue(":studyInstanceUID", mask.getStudyInstanceUID());
+    }
+    if (!mask.getSeriesInstanceUID().isEmpty())
+    {
+        query.bindValue(":seriesInstanceUID", mask.getSeriesInstanceUID());
+    }
+    if (!mask.getSOPInstanceUID().isEmpty())
+    {
+        query.bindValue(":sopInstanceUID", mask.getSOPInstanceUID());
+    }
+}
+
+}
+
+LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection &databaseConnection)
+ : LocalDatabaseBaseDAL(databaseConnection)
+{
+}
+
+bool LocalDatabaseImageDAL::insert(const Image *image)
+{
+    QSqlQuery query = getNewQuery();
+    query.prepare("INSERT INTO Image (SOPInstanceUID, FrameNumber, StudyInstanceUID, SeriesInstanceUID, InstanceNumber, ImageOrientationPatient, "
+                                     "PatientOrientation, PixelSpacing, SliceThickness, PatientPosition, SamplesPerPixel, Rows, Columns, BitsAllocated, "
+                                     "BitsStored, PixelRepresentation, RescaleSlope, WindowLevelWidth, WindowLevelCenter, WindowLevelExplanations, "
+                                     "SliceLocation, RescaleIntercept, PhotometricInterpretation, ImageType, ViewPosition, ImageLaterality, ViewCodeMeaning, "
+                                     "PhaseNumber, ImageTime, VolumeNumberInSeries, OrderNumberInVolume, RetrievedDate, RetrievedTime, State, "
+                                     "NumberOfOverlays, RetrievedPACSID, ImagerPixelSpacing, EstimatedRadiographicMagnificationFactor, TransferSyntaxUID) "
+                  "VALUES (:sopInstanceUID, :frameNumber, :studyInstanceUID, :seriesInstanceUID, :instanceNumber, :imageOrientationPatient, "
+                          ":patientOrientation, :pixelSpacing, :sliceThickness, :patientPosition, :samplesPerPixel, :rows, :columns, :bitsAllocated, "
+                          ":bitsStored, :pixelRepresentation, :rescaleSlope, :windowLevelWidth, :windowLevelCenter, :windowLevelExplanations, "
+                          ":sliceLocation, :rescaleIntercept, :photometricInterpretation, :imageType, :viewPosition, :imageLaterality, :viewCodeMeaning, "
+                          ":phaseNumber, :imageTime, :volumeNumberInSeries, :orderNumberInVolume, :retrievedDate, :retrievedTime, :state, "
+                          ":numberOfOverlays, :retrievedPacsId, :imagerPixelSpacing, :estimatedRadiographicMagnificationFactor, :transferSyntaxUID)");
+    bindValues(query, image);
+    return executeQueryAndLogError(query);
+}
+
+bool LocalDatabaseImageDAL::update(const Image *image)
+{
+    QSqlQuery query = getNewQuery();
+    query.prepare("UPDATE Image SET StudyInstanceUID = :studyInstanceUID, SeriesInstanceUID = :seriesInstanceUID, InstanceNumber = :instanceNumber, "
+                                   "ImageOrientationPatient = :imageOrientationPatient, PatientOrientation = :patientOrientation, "
+                                   "PixelSpacing = :pixelSpacing, SliceThickness = :sliceThickness, PatientPosition = :patientPosition, "
+                                   "SamplesPerPixel = :samplesPerPixel, Rows = :rows, Columns = :columns, BitsAllocated = :bitsAllocated, "
+                                   "BitsStored = :bitsStored, PixelRepresentation = :pixelRepresentation, RescaleSlope = :rescaleSlope, "
+                                   "WindowLevelWidth = :windowLevelWidth, WindowLevelCenter = :windowLevelCenter, "
+                                   "WindowLevelExplanations = :windowLevelExplanations, SliceLocation = :sliceLocation, RescaleIntercept = :rescaleIntercept, "
+                                   "PhotometricInterpretation = :photometricInterpretation, ImageType = :imageType, ViewPosition = :viewPosition, "
+                                   "ImageLaterality = :imageLaterality, ViewCodeMeaning = :viewCodeMeaning, PhaseNumber = :phaseNumber, "
+                                   "ImageTime = :imageTime, VolumeNumberInSeries = :volumeNumberInSeries, OrderNumberInVolume = :orderNumberInVolume, "
+                                   "RetrievedDate = :retrievedDate, RetrievedTime = :retrievedTime, State = :state, NumberOfOverlays = :numberOfOverlays, "
+                                   "RetrievedPACSID = :retrievedPacsId, ImagerPixelSpacing = :imagerPixelSpacing, "
+                                   "EstimatedRadiographicMagnificationFactor = :estimatedRadiographicMagnificationFactor, "
+                                   "TransferSyntaxUID = :transferSyntaxUID "
+                  "WHERE SOPInstanceUID = :sopInstanceUID AND FrameNumber = :frameNumber");
+    bindValues(query, image);
+    return executeQueryAndLogError(query);
+}
+
+bool LocalDatabaseImageDAL::del(const DicomMask &mask)
+{
+    QSqlQuery query = getNewQuery();
+    prepareQueryWithMask(query, mask, "DELETE FROM Image");
+    return executeQueryAndLogError(query);
+}
+
+QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &mask)
+{
+    QSqlQuery query = getNewQuery();
+    QString select("SELECT SOPInstanceUID, FrameNumber, StudyInstanceUID, SeriesInstanceUID, InstanceNumber, ImageOrientationPatient, PatientOrientation, "
+                          "PixelSpacing, SliceThickness, PatientPosition, SamplesPerPixel, Rows, Columns, BitsAllocated, BitsStored, PixelRepresentation, "
+                          "RescaleSlope, WindowLevelWidth, WindowLevelCenter, WindowLevelExplanations, SliceLocation, RescaleIntercept, "
+                          "PhotometricInterpretation, ImageType, ViewPosition, ImageLaterality, ViewCodeMeaning, PhaseNumber, ImageTime, VolumeNumberInSeries, "
+                          "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays, RetrievedPACSID, ImagerPixelSpacing, "
+                          "EstimatedRadiographicMagnificationFactor, TransferSyntaxUID "
+                   "FROM Image");
+    QString orderBy(" ORDER BY VolumeNumberInSeries, OrderNumberInVolume");
+    prepareQueryWithMask(query, mask, select, orderBy);
+    QList<Image*> imageList;
+
+    if (executeQueryAndLogError(query))
+    {
+        LocalDatabaseDisplayShutterDAL shutterDAL(m_databaseConnection);
+        LocalDatabaseVoiLutDAL voiLutDAL(m_databaseConnection);
+
+        while (query.next())
+        {
+            Image *image = getImage(query);
+
+            // Get display shutters
+            DicomMask mask;
+            mask.setSOPInstanceUID(image->getSOPInstanceUID());
+            mask.setImageNumber(QString::number(image->getFrameNumber()));
+            image->setDisplayShutters(shutterDAL.query(mask));
+
+            // Get VOI LUTs
+            QList<VoiLut> voiLuts = voiLutDAL.query(mask);
+            foreach (const VoiLut &voiLut, voiLuts)
+            {
+                image->addVoiLut(voiLut);
+            }
+
+            imageList << image;
+        }
     }
 
     return imageList;
 }
 
-int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
+int LocalDatabaseImageDAL::count(const DicomMask &mask)
 {
-    QSqlQuery query;
+    QSqlQuery query = getNewQuery();
+    prepareQueryWithMask(query, mask, "SELECT count(*) FROM Image");
 
-    if (!query.exec(buildSqlSelectCountImages(imageMaskToCount)))
+    if (executeQueryAndLogError(query) && query.next())
     {
-        logError(query);
+        return query.value(0).toInt();
+    }
+    else
+    {
         return -1;
     }
-
-    query.next();
-
-    return query.value(0).toInt();
 }
 
-Image* LocalDatabaseImageDAL::fillImage(const QSqlQuery &query)
+void LocalDatabaseImageDAL::bindValues(QSqlQuery &query, const Image *image)
+{
+    query.bindValue(":sopInstanceUID", image->getSOPInstanceUID());
+    query.bindValue(":frameNumber", image->getFrameNumber());
+    query.bindValue(":studyInstanceUID", image->getParentSeries()->getParentStudy()->getInstanceUID());
+    query.bindValue(":seriesInstanceUID", image->getParentSeries()->getInstanceUID());
+    query.bindValue(":instanceNumber", image->getInstanceNumber());
+    query.bindValue(":imageOrientationPatient", image->getImageOrientationPatient().getDICOMFormattedImageOrientation());
+    query.bindValue(":patientOrientation", image->getPatientOrientation().getDICOMFormattedPatientOrientation());
+    query.bindValue(":pixelSpacing", pixelSpacingToDicomString(image->getPixelSpacing()));
+    query.bindValue(":sliceThickness", image->getSliceThickness());
+    query.bindValue(":patientPosition", imagePositionPatientToDicomString(image->getImagePositionPatient()));
+    query.bindValue(":samplesPerPixel", image->getSamplesPerPixel());
+    query.bindValue(":rows", image->getRows());
+    query.bindValue(":columns", image->getColumns());
+    query.bindValue(":bitsAllocated", image->getBitsAllocated());
+    query.bindValue(":bitsStored", image->getBitsStored());
+    query.bindValue(":pixelRepresentation", image->getPixelRepresentation());
+    query.bindValue(":rescaleSlope", image->getRescaleSlope());
+    QString windowWidth, windowCenter, windowExplanation;
+    windowLevelInformationToDicomStrings(image, windowWidth, windowCenter, windowExplanation);
+    query.bindValue(":windowLevelWidth", windowWidth);
+    query.bindValue(":windowLevelCenter", windowCenter);
+    query.bindValue(":windowLevelExplanations", windowExplanation);
+    query.bindValue(":sliceLocation", image->getSliceLocation());
+    query.bindValue(":rescaleIntercept", image->getRescaleIntercept());
+    query.bindValue(":photometricInterpretation", image->getPhotometricInterpretation().getAsQString());
+    query.bindValue(":imageType", image->getImageType());
+    query.bindValue(":viewPosition", image->getViewPosition());
+    query.bindValue(":imageLaterality", image->getImageLaterality());
+    query.bindValue(":viewCodeMeaning", image->getViewCodeMeaning());
+    query.bindValue(":phaseNumber", image->getPhaseNumber());
+    query.bindValue(":imageTime", image->getImageTime());
+    query.bindValue(":volumeNumberInSeries", image->getVolumeNumberInSeries());
+    query.bindValue(":orderNumberInVolume", image->getOrderNumberInVolume());
+    query.bindValue(":retrievedDate", image->getRetrievedDate().toString("yyyyMMdd"));
+    query.bindValue(":retrievedTime", image->getRetrievedTime().toString("hhmmss"));
+    query.bindValue(":state", 0);
+    query.bindValue(":numberOfOverlays", image->getNumberOfOverlays());
+    query.bindValue(":retrievedPacsId", getDatabasePacsId(image->getDICOMSource()));
+    query.bindValue(":imagerPixelSpacing", pixelSpacingToDicomString(image->getImagerPixelSpacing()));
+    query.bindValue(":estimatedRadiographicMagnificationFactor", QString::number(image->getEstimatedRadiographicMagnificationFactor()));
+    query.bindValue(":transferSyntaxUID", image->getTransferSyntaxUID());
+}
+
+Image* LocalDatabaseImageDAL::getImage(const QSqlQuery &query)
 {
     Image *image = new Image();
-
     image->setSOPInstanceUID(query.value("SOPInstanceUID").toString());
     image->setFrameNumber(query.value("FrameNumber").toInt());
     image->setInstanceNumber(query.value("InstanceNumber").toString());
     ImageOrientation imageOrientation;
     imageOrientation.setDICOMFormattedImageOrientation(query.value("ImageOrientationPatient").toString());
     image->setImageOrientationPatient(imageOrientation);
-    
     PatientOrientation patientOrientation;
     patientOrientation.setDICOMFormattedPatientOrientation(query.value("PatientOrientation").toString());
     image->setPatientOrientation(patientOrientation);
-    
-    image->setPixelSpacing(getPixelSpacingAsDouble(query.value("PixelSpacing").toString())[0],
-                           getPixelSpacingAsDouble(query.value("PixelSpacing").toString())[1]);
+    image->setPixelSpacing(pixelSpacingFromDicomString(query.value("PixelSpacing").toString()));
     image->setSliceThickness(query.value("SliceThickness").toString().toDouble());
-    image->setImagePositionPatient(getPatientPositionAsDouble(query.value("PatientPosition").toString()));
+    image->setImagePositionPatient(imagePositionPatientFromDicomString(query.value("PatientPosition").toString()).data());
     image->setSamplesPerPixel(query.value("SamplesPerPixel").toInt());
     image->setRows(query.value("Rows").toInt());
     image->setColumns(query.value("Columns").toInt());
@@ -169,19 +348,18 @@ Image* LocalDatabaseImageDAL::fillImage(const QSqlQuery &query)
     image->setPhotometricInterpretation(query.value("PhotometricInterpretation").toString());
     image->setImageType(query.value("ImageType").toString());
     image->setViewPosition(query.value("ViewPosition").toString());
-    // ImageLaterality sempre és un Char
+    // ImageLaterality is a char
     image->setImageLaterality(query.value("ImageLaterality").toString()[0]);
     image->setViewCodeMeaning(convertToQString(query.value("ViewCodeMeaning")));
     image->setPhaseNumber(query.value("PhaseNumber").toInt());
     image->setImageTime(query.value("ImageTime").toString());
     image->setVolumeNumberInSeries(query.value("VolumeNumberInSeries").toInt());
     image->setOrderNumberInVolume(query.value("OrderNumberInVolume").toInt());
-    image->setRetrievedDate(QDate().fromString(query.value("RetrievedDate").toString(), "yyyyMMdd"));
-    image->setRetrievedTime(QTime().fromString(query.value("RetrievedTime").toString(), "hhmmss"));
+    image->setRetrievedDate(QDate::fromString(query.value("RetrievedDate").toString(), "yyyyMMdd"));
+    image->setRetrievedTime(QTime::fromString(query.value("RetrievedTime").toString(), "hhmmss"));
     image->setNumberOfOverlays(query.value("NumberOfOverlays").toUInt());
-    image->setDICOMSource(getImageDICOMSourceByIDPACSInDatabase(query.value("RetrievedPACSID")));
-    QVector2D imagerPixelSpacing = getImagerPixelSpacingAs2DVector(query.value("ImagerPixelSpacing").toString());
-    image->setImagerPixelSpacing(imagerPixelSpacing.x(), imagerPixelSpacing.y());
+    image->setDICOMSource(getDicomSource(query.value("RetrievedPACSID")));
+    image->setImagerPixelSpacing(pixelSpacingFromDicomString(query.value("ImagerPixelSpacing").toString()));
     image->setEstimatedRadiographicMagnificationFactor(query.value("EstimatedRadiographicMagnificationFactor").toString().toDouble());
     image->setTransferSyntaxUID(query.value("TransferSyntaxUID").toString());
 
@@ -192,402 +370,82 @@ Image* LocalDatabaseImageDAL::fillImage(const QSqlQuery &query)
     return image;
 }
 
-QString LocalDatabaseImageDAL::buildSqlSelect(const DicomMask &imageMaskToSelect)
+QVariant LocalDatabaseImageDAL::getDatabasePacsId(const DICOMSource &dicomSource)
 {
-    QString selectSentence = "Select SOPInstanceUID, FrameNumber, StudyInstanceUID, SeriesInstanceUID, InstanceNumber,"
-                                    "ImageOrientationPatient, PatientOrientation, PixelSpacing, SliceThickness,"
-                                    "PatientPosition, SamplesPerPixel, Rows, Columns, BitsAllocated, BitsStored,"
-                                    "PixelRepresentation, RescaleSlope, WindowLevelWidth, WindowLevelCenter,"
-                                    "WindowLevelExplanations, SliceLocation, RescaleIntercept,"
-                                    "PhotometricInterpretation, ImageType, ViewPosition,"
-                                    "ImageLaterality, ViewCodeMeaning , PhaseNumber, ImageTime,  VolumeNumberInSeries,"
-                                    "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays, RetrievedPACSID,"
-                                    "ImagerPixelSpacing, EstimatedRadiographicMagnificationFactor, TransferSyntaxUID "
-                            "from Image ";
-
-    QString orderSentence = " order by VolumeNumberInSeries, OrderNumberInVolume";
-
-    return selectSentence + buildWhereSentence(imageMaskToSelect) + orderSentence;
-}
-
-QString LocalDatabaseImageDAL::buildSqlSelectCountImages(const DicomMask &imageMaskToSelect)
-{
-    QString selectSentence = "Select count(*) from Image ";
-
-    return selectSentence + buildWhereSentence(imageMaskToSelect);
-}
-
-QString LocalDatabaseImageDAL::buildSqlInsert(Image *newImage)
-{
-    QString windowWidth, windowCenter, windowExplanation;
-    getWindowLevelInformationAsQString(newImage, windowWidth, windowCenter, windowExplanation);
-    
-    QString insertSentence = QString("Insert into Image (SOPInstanceUID, FrameNumber, StudyInstanceUID, SeriesInstanceUID, InstanceNumber,"
-                                             "ImageOrientationPatient, PatientOrientation, PixelSpacing, SliceThickness,"
-                                             "PatientPosition, SamplesPerPixel, Rows, Columns, BitsAllocated, BitsStored,"
-                                             "PixelRepresentation, RescaleSlope, WindowLevelWidth, WindowLevelCenter,"
-                                             "WindowLevelExplanations, SliceLocation,"
-                                             "RescaleIntercept, PhotometricInterpretation, ImageType, ViewPosition,"
-                                             "ImageLaterality, ViewCodeMeaning, PhaseNumber, ImageTime, VolumeNumberInSeries,"
-                                             "OrderNumberInVolume, RetrievedDate, RetrievedTime, State, NumberOfOverlays, RetrievedPACSID,"
-                                             "ImagerPixelSpacing, EstimatedRadiographicMagnificationFactor, TransferSyntaxUID) "
-                                     "values ('%1', %2, '%3', '%4', '%5', "
-                                             "'%6', '%7', '%8', %9,"
-                                             "'%10', %11, %12, %13, %14, %15, "
-                                             "%16, %17,'%18', '%19', "
-                                             "'%20', '%21', "
-                                             "%22, '%23', '%24', '%25',"
-                                             "'%26',  '%27', %28, '%29', %30,"
-                                             "%31, '%32', '%33', %34, %35, %36, '%37', %38, '%39')")
-                            .arg(formatTextToValidSQLSyntax(newImage->getSOPInstanceUID()))
-                            .arg(newImage->getFrameNumber())
-                            .arg(formatTextToValidSQLSyntax(newImage->getParentSeries()->getParentStudy()->getInstanceUID()))
-                            .arg(formatTextToValidSQLSyntax(newImage->getParentSeries()->getInstanceUID()))
-                            .arg(formatTextToValidSQLSyntax(newImage->getInstanceNumber()))
-                            .arg(formatTextToValidSQLSyntax(newImage->getImageOrientationPatient().getDICOMFormattedImageOrientation()))
-                            .arg(formatTextToValidSQLSyntax(newImage->getPatientOrientation().getDICOMFormattedPatientOrientation()))
-                            .arg(formatTextToValidSQLSyntax(getPixelSpacingAsQString(newImage)))
-                            .arg(newImage->getSliceThickness())
-                            .arg(formatTextToValidSQLSyntax(getPatientPositionAsQString(newImage)))
-                            .arg(newImage->getSamplesPerPixel())
-                            .arg(newImage->getRows())
-                            .arg(newImage->getColumns())
-                            .arg(newImage->getBitsAllocated())
-                            .arg(newImage->getBitsStored())
-                            .arg(newImage->getPixelRepresentation())
-                            .arg(newImage->getRescaleSlope())
-                            .arg(formatTextToValidSQLSyntax(windowWidth))
-                            .arg(formatTextToValidSQLSyntax(windowCenter))
-                            .arg(formatTextToValidSQLSyntax(windowExplanation))
-                            .arg(formatTextToValidSQLSyntax(newImage->getSliceLocation()))
-                            .arg(newImage->getRescaleIntercept())
-                            .arg(formatTextToValidSQLSyntax(newImage->getPhotometricInterpretation().getAsQString()))
-                            .arg(formatTextToValidSQLSyntax(newImage->getImageType()))
-                            .arg(formatTextToValidSQLSyntax(newImage->getViewPosition()))
-                            .arg(formatTextToValidSQLSyntax(newImage->getImageLaterality()))
-                            .arg(formatTextToValidSQLSyntax(newImage->getViewCodeMeaning()))
-                            .arg(newImage->getPhaseNumber())
-                            .arg(formatTextToValidSQLSyntax(newImage->getImageTime()))
-                            .arg (newImage->getVolumeNumberInSeries())
-                            .arg(newImage->getOrderNumberInVolume())
-                            .arg(newImage->getRetrievedDate().toString("yyyyMMdd"))
-                            .arg(newImage->getRetrievedTime().toString("hhmmss"))
-                            .arg(0)
-                            .arg(newImage->getNumberOfOverlays())
-                            .arg(getIDPACSInDatabaseFromDICOMSource(newImage->getDICOMSource()))
-                            .arg(formatTextToValidSQLSyntax(getImagerPixelSpacingAsQString(newImage)))
-                            .arg(newImage->getEstimatedRadiographicMagnificationFactor())
-                            .arg(formatTextToValidSQLSyntax(newImage->getTransferSyntaxUID()));
-
-    return insertSentence;
-}
-
-QString LocalDatabaseImageDAL::buildSqlUpdate(Image *imageToUpdate)
-{
-    QString windowWidth, windowCenter, windowExplanation;
-    getWindowLevelInformationAsQString(imageToUpdate, windowWidth, windowCenter, windowExplanation);
-    
-    QString updateSentence = QString("Update Image set StudyInstanceUID = '%1',"
-                                              "SeriesInstanceUID = '%2',"
-                                              "InstanceNumber = '%3',"
-                                              "ImageOrientationPatient = '%4',"
-                                              "PatientOrientation = '%5',"
-                                              "PixelSpacing = '%6',"
-                                              "SliceThickness = '%7',"
-                                              "PatientPosition = '%8',"
-                                              "SamplesPerPixel = '%9',"
-                                              "Rows = '%10',"
-                                              "Columns = '%11',"
-                                              "BitsAllocated = '%12',"
-                                              "BitsStored = '%13',"
-                                              "PixelRepresentation = '%14',"
-                                              "RescaleSlope = '%15',"
-                                              "WindowLevelWidth = '%16',"
-                                              "WindowLevelCenter = '%17',"
-                                              "WindowLevelExplanations = '%18',"
-                                              "SliceLocation = '%19',"
-                                              "RescaleIntercept = '%20', "
-                                              "PhotometricInterpretation = '%21', "
-                                              "ImageType = '%22', "
-                                              "ViewPosition = '%23', "
-                                              "ImageLaterality = '%24', "
-                                              "ViewCodeMeaning = '%25', "
-                                              "PhaseNumber = %26, "
-                                              "ImageTime = '%27', "
-                                              "VolumeNumberInSeries = %28, "
-                                              "OrderNumberInVolume = '%29', "
-                                              "RetrievedDate = '%30', "
-                                              "RetrievedTime = '%31', "
-                                              "State = %32, "
-                                              "NumberOfOverlays = %33, "
-                                              "RetrievedPACSID = %34, "
-                                              "ImagerPixelSpacing = '%37', "
-                                              "EstimatedRadiographicMagnificationFactor = %38, "
-                                              "TransferSyntaxUID = '%39' "
-                                     "Where SOPInstanceUID = '%35' And "
-                                           "FrameNumber = %36")
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getParentSeries()->getParentStudy()->getInstanceUID()))
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getParentSeries()->getInstanceUID()))
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getInstanceNumber()))
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getImageOrientationPatient().getDICOMFormattedImageOrientation()))
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getPatientOrientation().getDICOMFormattedPatientOrientation()))
-                            .arg(formatTextToValidSQLSyntax(getPixelSpacingAsQString(imageToUpdate)))
-                            .arg(imageToUpdate->getSliceThickness())
-                            .arg(formatTextToValidSQLSyntax(getPatientPositionAsQString(imageToUpdate)))
-                            .arg(imageToUpdate->getSamplesPerPixel())
-                            .arg(imageToUpdate->getRows())
-                            .arg(imageToUpdate->getColumns())
-                            .arg(imageToUpdate->getBitsAllocated())
-                            .arg(imageToUpdate->getBitsStored())
-                            .arg(imageToUpdate->getPixelRepresentation())
-                            .arg(imageToUpdate->getRescaleSlope())
-                            .arg(formatTextToValidSQLSyntax(windowWidth))
-                            .arg(formatTextToValidSQLSyntax(windowCenter))
-                            .arg(formatTextToValidSQLSyntax(windowExplanation))
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getSliceLocation()))
-                            .arg(imageToUpdate->getRescaleIntercept())
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getPhotometricInterpretation().getAsQString()))
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getImageType()))
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getViewPosition()))
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getImageLaterality()))
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getViewCodeMeaning()))
-                            .arg (imageToUpdate->getPhaseNumber())
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getImageTime()))
-                            .arg (imageToUpdate->getVolumeNumberInSeries())
-                            .arg(imageToUpdate->getOrderNumberInVolume())
-                            .arg(imageToUpdate->getRetrievedDate().toString("yyyyMMdd"))
-                            .arg(imageToUpdate->getRetrievedTime().toString("hhmmss"))
-                            .arg(0)
-                            .arg(imageToUpdate->getNumberOfOverlays())
-                            .arg(getIDPACSInDatabaseFromDICOMSource(imageToUpdate->getDICOMSource()))
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getSOPInstanceUID()))
-                            .arg(imageToUpdate->getFrameNumber())
-                            .arg(formatTextToValidSQLSyntax(getImagerPixelSpacingAsQString(imageToUpdate)))
-                            .arg(imageToUpdate->getEstimatedRadiographicMagnificationFactor())
-                            .arg(formatTextToValidSQLSyntax(imageToUpdate->getTransferSyntaxUID()));
-
-    return updateSentence;
-}
-
-QString LocalDatabaseImageDAL::buildSqlDelete(const DicomMask &imageMaskToDelete)
-{
-    return "delete from Image " + buildWhereSentence(imageMaskToDelete);
-}
-
-QString LocalDatabaseImageDAL::buildWhereSentence(const DicomMask &imageMask)
-{
-    QString whereSentence = "";
-
-    if (!imageMask.getStudyInstanceUID().isEmpty())
+    if (dicomSource.getRetrievePACS().isEmpty())
     {
-        whereSentence = QString("where StudyInstanceUID = '%1'").arg(formatTextToValidSQLSyntax(imageMask.getStudyInstanceUID()));
+        return QVariant(QVariant::LongLong);
     }
 
-    if (!imageMask.getSeriesInstanceUID().isEmpty())
+    return getDatabasePacsId(dicomSource.getRetrievePACS().first());
+}
+
+QVariant LocalDatabaseImageDAL::getDatabasePacsId(const PacsDevice &pacsDevice)
+{
+    QString key = pacsDevice.getAddress() + QString::number(pacsDevice.getQueryRetrieveServicePort());
+
+    if (m_databasePacsIdCache.contains(key))
     {
-        if (whereSentence.isEmpty())
-        {
-            whereSentence = "where";
-        }
-        else
-        {
-            whereSentence += " and ";
-        }
-
-        whereSentence += QString(" SeriesInstanceUID = '%1'").arg(formatTextToValidSQLSyntax(imageMask.getSeriesInstanceUID()));
-    }
-
-    if (!imageMask.getSOPInstanceUID().isEmpty())
-    {
-        if (whereSentence.isEmpty())
-        {
-            whereSentence = "where";
-        }
-        else
-        {
-            whereSentence += " and ";
-        }
-
-        whereSentence += QString(" SOPInstanceUID = '%1'").arg(formatTextToValidSQLSyntax(imageMask.getSOPInstanceUID()));
-    }
-
-    return whereSentence;
-}
-
-QString LocalDatabaseImageDAL::getPixelSpacingAsQString(Image *newImage)
-{
-    QString imagePixelSpacing = "";
-    QString value;
-    // TODO Add method to PixelSpacing2D getAsDICOMString? or maybe in a helper class
-    imagePixelSpacing += value.setNum(newImage->getPixelSpacing().x(), 'g', 10) + "\\";
-    imagePixelSpacing += value.setNum(newImage->getPixelSpacing().y(), 'g', 10);
-
-    return imagePixelSpacing;
-}
-
-double* LocalDatabaseImageDAL::getPixelSpacingAsDouble(const QString &pixelSpacing)
-{
-    QStringList list = pixelSpacing.split("\\");
-
-    if (list.size() == 2)
-    {
-        m_pixelSpacing[0] = list.at(0).toDouble();
-        m_pixelSpacing[1] = list.at(1).toDouble();
-    }
-    else
-    {
-        m_pixelSpacing[0] = 0;
-        m_pixelSpacing[1] = 0;
-    }
-
-    return m_pixelSpacing;
-}
-
-QString LocalDatabaseImageDAL::getImagerPixelSpacingAsQString(Image *newImage) const
-{
-    PixelSpacing2D imagerPixelSpacing = newImage->getImagerPixelSpacing();
-    // TODO Add method to PixelSpacing2D getAsDICOMString? or maybe in a helper class
-    return QString("%1\\%2").arg(imagerPixelSpacing.x(), 0, 'g', 10).arg(imagerPixelSpacing.y(), 0, 'g', 10);
-}
-
-QVector2D LocalDatabaseImageDAL::getImagerPixelSpacingAs2DVector(const QString &imagerPixelSpacing) const
-{
-    return DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector(imagerPixelSpacing);
-}
-
-double* LocalDatabaseImageDAL::getPatientPositionAsDouble(const QString &patientPosition)
-{
-    QStringList list = patientPosition.split("\\");
-
-    for (int index = 0; index < 3; index++)
-    {
-        if (list.size() == 3)
-        {
-            m_patientPosition[index] = list.at(index).toDouble();
-        }
-        else
-        {
-            m_patientPosition[index] = 0;
-        }
-    }
-
-    return m_patientPosition;
-}
-
-QString LocalDatabaseImageDAL::getPatientPositionAsQString(Image *newImage)
-{
-    QString patientPosition = "";
-    QString value;
-
-    patientPosition += value.setNum(newImage->getImagePositionPatient()[0], 'g', 10) + "\\";
-    patientPosition += value.setNum(newImage->getImagePositionPatient()[1], 'g', 10) + "\\";
-    patientPosition += value.setNum(newImage->getImagePositionPatient()[2], 'g', 10);
-
-    return patientPosition;
-}
-
-void LocalDatabaseImageDAL::getWindowLevelInformationAsQString(Image *newImage, QString &windowWidth, QString &windowCenter, QString &explanation)
-{
-    windowWidth.clear();
-    windowCenter.clear();
-    explanation.clear();
-    
-    QString value;
-    WindowLevel windowLevel;
-    for (int index = 0; index < newImage->getNumberOfVoiLuts(); ++index)
-    {
-        const VoiLut &voiLut = newImage->getVoiLut(index);
-
-        if (voiLut.isWindowLevel())
-        {
-            windowLevel = voiLut.getWindowLevel();
-            windowWidth += value.setNum(windowLevel.getWidth(), 'g', 10) + "\\";
-            windowCenter += value.setNum(windowLevel.getCenter(), 'g', 10) + "\\";
-            explanation += windowLevel.getName() + "\\";
-        }
-    }
-
-    // Treiem l'últim "\\" afegit
-    windowWidth = windowWidth.left(windowWidth.length() - 1);
-    windowCenter = windowCenter.left(windowCenter.length() - 1);
-    explanation = explanation.left(explanation.length() - 1);
-}
-
-QString LocalDatabaseImageDAL::getIDPACSInDatabaseFromDICOMSource(DICOMSource DICOMSourceRetrievedImage)
-{
-    if (DICOMSourceRetrievedImage.getRetrievePACS().count() == 0)
-    {
-        return "null";
-    }
-
-    return getIDPACSInDatabase(DICOMSourceRetrievedImage.getRetrievePACS().at(0));
-}
-
-QString LocalDatabaseImageDAL::getIDPACSInDatabase(PacsDevice pacsDevice)
-{
-    QString keyPacsDevice = pacsDevice.getAddress() + QString().setNum(pacsDevice.getQueryRetrieveServicePort());
-
-    if (m_PACSIDCache.contains(keyPacsDevice))
-    {
-        return m_PACSIDCache[keyPacsDevice];
+        return m_databasePacsIdCache[key];
     }
 
     LocalDatabasePACSRetrievedImagesDAL localDatabasePACSRetrievedImagesDAL(m_databaseConnection);
     PacsDevice pacsDeviceRetrievedFromDatabase = localDatabasePACSRetrievedImagesDAL.query(pacsDevice.getAETitle(), pacsDevice.getAddress(),
-                                                                                pacsDevice.getQueryRetrieveServicePort());
+                                                                                           pacsDevice.getQueryRetrieveServicePort());
+
     if (!pacsDeviceRetrievedFromDatabase.getID().isEmpty())
     {
-        //El pacs ja està inserit a la base de dades
-        m_PACSIDCache[keyPacsDevice] = pacsDeviceRetrievedFromDatabase.getID();
+        // PACS is in the database
+        m_databasePacsIdCache[key] = pacsDeviceRetrievedFromDatabase.getID().toLongLong();
         return pacsDeviceRetrievedFromDatabase.getID();
     }
-
-    //No hem trobat el PACS l'inserir a la base de dades
-    qlonglong PACSDInDatabase = localDatabasePACSRetrievedImagesDAL.insert(pacsDevice);
-
-    if (PACSDInDatabase >= 0)
+    else
     {
-        m_PACSIDCache[keyPacsDevice] = QString().setNum(PACSDInDatabase);
-        return m_PACSIDCache[keyPacsDevice];
-    }
+        // PACS is not in the database. Let's insert it
+        qlonglong databasePacsId = localDatabasePACSRetrievedImagesDAL.insert(pacsDevice);
 
-    return "null";
+        if (databasePacsId >= 0)
+        {
+            m_databasePacsIdCache[key] = databasePacsId;
+            return m_databasePacsIdCache[key];
+        }
+        else
+        {
+            return QVariant(QVariant::LongLong);
+        }
+    }
 }
 
-DICOMSource LocalDatabaseImageDAL::getImageDICOMSourceByIDPACSInDatabase(const QVariant &retrievedPACSID)
+DICOMSource LocalDatabaseImageDAL::getDicomSource(const QVariant &retrievedPacsId)
 {
-    DICOMSource imageDICOMSource;
+    DICOMSource dicomSource;
 
-    if (retrievedPACSID.isNull())
+    if (!retrievedPacsId.isNull())
     {
-        // La imatge no té de quin PACS s'ha descarregat
-        return imageDICOMSource;
+        PacsDevice pacsDevice = getPacsDevice(retrievedPacsId.toLongLong());
+
+        if (!pacsDevice.getID().isEmpty())
+        {
+            dicomSource.addRetrievePACS(pacsDevice);
+        }
     }
 
-    PacsDevice pacsDevice = getPACSDeviceByIDPACSInDatabase(retrievedPACSID.toInt());
-
-    if (!pacsDevice.getID().isEmpty())
-    {
-        imageDICOMSource.addRetrievePACS(pacsDevice);
-    }
-
-    return imageDICOMSource;
+    return dicomSource;
 }
 
-PacsDevice LocalDatabaseImageDAL::getPACSDeviceByIDPACSInDatabase(int IDPACSInDatabase)
+PacsDevice LocalDatabaseImageDAL::getPacsDevice(qlonglong retrievedPacsId)
 {
-    if (m_PACSDeviceCacheByIDPACSInDatabase.contains(IDPACSInDatabase))
+    if (m_pacsDeviceCache.contains(retrievedPacsId))
     {
-        return m_PACSDeviceCacheByIDPACSInDatabase[IDPACSInDatabase];
+        return m_pacsDeviceCache[retrievedPacsId];
     }
 
-    //Sinó el trobem a la caché el recuperem de la base de dades
     LocalDatabasePACSRetrievedImagesDAL localDatabasePACSRetrievedImagesDAL(m_databaseConnection);
-    PacsDevice pacsDevice = localDatabasePACSRetrievedImagesDAL.query(IDPACSInDatabase);
+    PacsDevice pacsDevice = localDatabasePACSRetrievedImagesDAL.query(retrievedPacsId);
 
     if (!pacsDevice.getID().isEmpty())
     {
-        m_PACSDeviceCacheByIDPACSInDatabase[IDPACSInDatabase] = pacsDevice;
+        m_pacsDeviceCache[retrievedPacsId] = pacsDevice;
     }
 
     return pacsDevice;
