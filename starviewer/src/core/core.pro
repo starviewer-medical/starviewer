@@ -426,7 +426,8 @@ HEADERS += extensionfactory.h \
     hangingprotocolfiller.h \
     qfusionlayoutwidget.h \
     gridicon.h \
-    itemmenu.h
+    itemmenu.h \
+    easylogging++.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \

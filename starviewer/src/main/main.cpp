@@ -15,6 +15,8 @@
 #include "qapplicationmainwindow.h"
 
 #include "logging.h"
+LOGGER_INIT
+
 #include "statswatcher.h"
 #include "extensions.h"
 #include "extensionmediatorfactory.h"
@@ -59,6 +61,7 @@ typedef udg::SingletonPointer<udg::StarviewerApplicationCommandLine> StarviewerS
 
 void configureLogging()
 {
+
     // Primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
     QDir logDir = udg::UserLogsPath;
     if (!logDir.exists())
@@ -79,8 +82,9 @@ void configureLogging()
         configurationFile = qApp->applicationDirPath() + "/../../../log.conf";
     }
 
-    LOGGER_INIT(configurationFile.toStdString());
-    DEBUG_LOG("Arxiu de configuració del log: " + configurationFile);
+    QString logFilePath = QDir::toNativeSeparators(udg::UserLogsFile);
+
+    LOGGER_CONF(configurationFile, logFilePath);
 
     // Redirigim els missatges de VTK cap al log.
     udg::LoggingOutputWindow *loggingOutputWindow = udg::LoggingOutputWindow::New();

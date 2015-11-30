@@ -37,7 +37,7 @@ void configureLogging()
         configurationFile = qApp->applicationDirPath() + "/log.conf";
     }
 
-    LOGGER_INIT(configurationFile.toStdString());
+    LOGGER_CONF(configurationFile.toStdString());
     DEBUG_LOG("Arxiu de configuració del log: " + configurationFile);
 }
 
