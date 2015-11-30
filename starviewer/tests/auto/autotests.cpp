@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include "../../src/core/logging.h"
+LOGGER_INIT
+
 #include <QDir>
 
 /// A part dels paràmetres que QTest defineix de cada test, se n'han afegint més:

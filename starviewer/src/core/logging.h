@@ -27,56 +27,96 @@
 #include <log4cxx/propertyconfigurator.h>
 #include <log4cxx/helpers/exception.h>
 
-/// Macro per a inicialitzar els logger
+#include "easylogging++.h"
+
+/// Macro per a inicialitzar els loggers
+/// Assegurar que només es crida una sola vegada, preferiblement crideu-la
+/// just després d'incloure el fitxer logging.h al main.cpp.
+
+#define LOGGER_INIT INITIALIZE_EASYLOGGINGPP
+
+/// Macro per a configurar els logger
 /// Definim la variable d'entorn que indica la localització
 /// dels fitxers de log i llavors llegim la configuració dels logs
-#define LOGGER_INIT(file) \
-    if (true) \
+#define LOGGER_CONF(confFile, logFile) \
+    do \
     { \
-        QByteArray logFilePathValue = (QDir::toNativeSeparators(udg::UserLogsFile)).toLatin1(); \
-        qputenv("logFilePath", logFilePathValue); \
-        log4cxx::PropertyConfigurator::configure(file); \
-    } else (void)0
+        el::Configurations logConfig(confFile.toStdString()); \
+        logConfig.setGlobally(el::ConfigurationType::Filename, logFile.toStdString()); \
+        el::Loggers::reconfigureAllLoggers(logConfig); \
+        DEBUG_LOG("Logging configuration file: " + configurationFile); \
+        DEBUG_LOG("Logging output file: " + logFilePath); \
+    } while(false)
+
+/*
+#define DEBUG_LOG(msg)
+#define INFO_LOG(msg)
+#define WARN_LOG(msg)
+#define ERROR_LOG(msg)
+#define FATAL_LOG(msg)
+#define VERBOSE_LOG(msg)
+#define QA_LOG(msg)
+*/
 
 /// Macro per a missatges de debug. \TODO de moment fem servir aquesta variable de qmake i funciona bé, però podria ser més adequat troba la forma d'afegir
 /// una variable pròpia, com per exemple DEBUG
 #ifdef QT_NO_DEBUG
-#define DEBUG_LOG(msg) (void)0
+#define DEBUG_LOG(msg) while (false)
 #else
 #define DEBUG_LOG(msg) \
-    if (true) \
+    do \
     { \
-        LOG4CXX_DEBUG(log4cxx::Logger::getLogger("development"), qPrintable(QString(msg))) \
-    } else (void)0
-
+        LOG(DEBUG) << qPrintable(QString(msg)); \
+    } while (false)
 #endif
 
 /// Macro per a missatges d'informació general
 #define INFO_LOG(msg) \
-    if (true) \
+    do \
     { \
-        LOG4CXX_INFO(log4cxx::Logger::getLogger("info.release"), QString(msg).toUtf8().constData()) \
-    } else (void)0
+        LOG(INFO) << qUtf8Printable(QString(msg)); \
+    } while (false)
 
 /// Macro per a missatges de warning
 #define WARN_LOG(msg) \
-    if (true) \
+    do \
     { \
-        LOG4CXX_WARN(log4cxx::Logger::getLogger("info.release"), QString(msg).toUtf8().constData()) \
-    } else (void)0
+        LOG(WARNING) << qUtf8Printable(QString(msg)); \
+    } while (false)
 
 /// Macro per a missatges d'error
 #define ERROR_LOG(msg) \
-    if (true) \
+    do \
     { \
-        LOG4CXX_ERROR(log4cxx::Logger::getLogger("errors.release"), QString(msg).toUtf8().constData()) \
-    } else (void)0
+        LOG(ERROR) << qUtf8Printable(QString(msg)); \
+    } while (false)
 
 /// Macro per a missatges d'error fatals/crítics
 #define FATAL_LOG(msg) \
-    if (true) \
+    do \
     { \
-        LOG4CXX_FATAL(log4cxx::Logger::getLogger("errors.release"), QString(msg).toUtf8().constData()) \
-    } else (void)0
+        LOG(FATAL) << qUtf8Printable(QString(msg)); \
+    } while (false)
+
+/// Macro per a missatges verbose
+#define VERBOSE_LOG(msg) \
+    do \
+    { \
+        LOG(VERBOSE) << qUtf8Printable(QString(msg)); \
+    } while (false)
+
+/// Macro per a missatges d'assegurament de la qualitat
+#define QA_LOG(msg) \
+    do \
+    { \
+        LOG(QA) << qUtf8Printable(QString(msg)); \
+    } while (false)
+
+/// Macro per a missatges de traca
+#define TRACE_LOG(msg) \
+    do \
+    { \
+        LOG(TRACE) << qUtf8Printable(QString(msg)); \
+    } while (false)
 
 #endif

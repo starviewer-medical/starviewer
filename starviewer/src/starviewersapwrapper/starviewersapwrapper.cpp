@@ -4,6 +4,7 @@
 // Definicions globals d'aplicació
 #include "../core/starviewerapplication.h"
 #include "../core/logging.h"
+LOGGER_INIT
 #include <QProcess>
 
 /// Configurem el logging
@@ -24,8 +25,10 @@ void configureLogging()
     {
         configurationFile = QCoreApplication::applicationDirPath() + "/log.conf";
     }
-    LOGGER_INIT(configurationFile.toStdString());
-    DEBUG_LOG("Arxiu de configuració del log: " + configurationFile);
+
+    QString logFilePath = QDir::toNativeSeparators(udg::UserLogsFile);
+
+    LOGGER_CONF(configurationFile, logFilePath);
 }
 
 /// Imprimim l'ajuda del programa
