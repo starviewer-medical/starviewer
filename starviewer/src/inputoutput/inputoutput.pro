@@ -188,7 +188,6 @@ include(../vtk.pri)
 include(../gdcm.pri)
 include(../itk.pri)
 include(../dcmtk.pri)
-include(../log4cxx.pri)
 include(../compilationtype.pri)
 include(../threadweaver.pri)
 QT += xml \

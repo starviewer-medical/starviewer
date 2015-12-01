@@ -45,7 +45,6 @@ include(../corelibsconfiguration.pri)
 include(../vtk.pri)
 include(../itk.pri)
 include(../dcmtk.pri)
-include(../log4cxx.pri)
 include(../threadweaver.pri)
 include(../compilationtype.pri)
 

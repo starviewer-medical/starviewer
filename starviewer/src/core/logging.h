@@ -15,19 +15,15 @@
 #ifndef _LOGGING_
 #define _LOGGING_
 
+
 #include <QString>
 #include <QtGlobal> // Pel qpuntenv()
+
+#include "easylogging++.h"
+
 /*!
     Aquest arxiu conté totes les macros per a fer logs en l'aplicació.
 */
-
-// Include log4cxx header files.
-#include <log4cxx/logger.h>
-#include <log4cxx/basicconfigurator.h>
-#include <log4cxx/propertyconfigurator.h>
-#include <log4cxx/helpers/exception.h>
-
-#include "easylogging++.h"
 
 /// Macro per a inicialitzar els loggers
 /// Assegurar que només es crida una sola vegada, preferiblement crideu-la
@@ -47,16 +43,6 @@
         DEBUG_LOG("Logging configuration file: " + configurationFile); \
         DEBUG_LOG("Logging output file: " + logFilePath); \
     } while(false)
-
-/*
-#define DEBUG_LOG(msg)
-#define INFO_LOG(msg)
-#define WARN_LOG(msg)
-#define ERROR_LOG(msg)
-#define FATAL_LOG(msg)
-#define VERBOSE_LOG(msg)
-#define QA_LOG(msg)
-*/
 
 /// Macro per a missatges de debug. \TODO de moment fem servir aquesta variable de qmake i funciona bé, però podria ser més adequat troba la forma d'afegir
 /// una variable pròpia, com per exemple DEBUG
