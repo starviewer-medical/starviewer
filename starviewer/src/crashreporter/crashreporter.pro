@@ -61,6 +61,5 @@ RESOURCES = crashreporter.qrc ../main/main.qrc
 
 include(../corelibsconfiguration.pri)
 include(../compilationtype.pri)
-include(../log4cxx.pri)
 
 QT += network widgets
