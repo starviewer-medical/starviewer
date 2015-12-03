@@ -14,112 +14,67 @@
 
 #include "localdatabasepacsretrievedimagesdal.h"
 
-#include "databaseconnection.h"
 #include "pacsdevice.h"
-#include "logging.h"
 
 #include <QSqlQuery>
-#include <QString>
 #include <QVariant>
 
 namespace udg {
 
-LocalDatabasePACSRetrievedImagesDAL::LocalDatabasePACSRetrievedImagesDAL(DatabaseConnection &dbConnect):LocalDatabaseBaseDAL(dbConnect)
+LocalDatabasePACSRetrievedImagesDAL::LocalDatabasePACSRetrievedImagesDAL(DatabaseConnection &databaseConnection)
+    : LocalDatabaseBaseDAL(databaseConnection)
 {
 }
 
 qlonglong LocalDatabasePACSRetrievedImagesDAL::insert(const PacsDevice &pacsDevice)
 {
-    QSqlQuery query;
+    QSqlQuery query = getNewQuery();
+    query.prepare("INSERT INTO PACSRetrievedImages (AETitle, Address, QueryPort) VALUES (:aeTitle, :address, :queryPort)");
+    query.bindValue(":aeTitle", pacsDevice.getAETitle());
+    query.bindValue(":address", pacsDevice.getAddress());
+    query.bindValue(":queryPort", pacsDevice.getQueryRetrieveServicePort());
 
-    if (!query.exec(buildSqlInsert(pacsDevice)))
-    {
-        logError(query);
-        return -1;
-    }
-    else
+    if (executeQueryAndLogError(query))
     {
         return query.lastInsertId().toLongLong();
     }
-}
-
-PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const qlonglong &IDPacsInDatabase)
-{
-    return query(buildSqlSelect(IDPacsInDatabase));
-}
-
-PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString AETitle, const QString address, int queryPort)
-{
-    return query(buildSqlSelect(AETitle, address, queryPort));
-}
-
-PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString &sqlQuerySentence)
-{
-    QSqlQuery query;
-
-    if (!query.exec(sqlQuerySentence))
+    else
     {
-        logError(query);
-        return PacsDevice();
+        return -1;
     }
+}
 
+PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(qlonglong pacsId)
+{
+    QSqlQuery query = getNewQuery();
+    query.prepare("SELECT ID, AETitle, Address, QueryPort FROM PACSRetrievedImages WHERE ID = :id");
+    query.bindValue(":id", pacsId);
+    return this->query(query);
+}
+
+PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString &aeTitle, const QString &address, int queryPort)
+{
+    QSqlQuery query = getNewQuery();
+    query.prepare("SELECT ID, AETitle, Address, QueryPort FROM PACSRetrievedImages WHERE AETitle = :aeTitle AND Address = :address AND QueryPort = :queryPort");
+    query.bindValue(":aeTitle", aeTitle);
+    query.bindValue(":address", address);
+    query.bindValue(":queryPort", queryPort);
+    return this->query(query);
+}
+
+PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(QSqlQuery &query)
+{
     PacsDevice pacsDevice;
 
-    if (query.next())
+    if (executeQueryAndLogError(query) && query.next())
     {
-        pacsDevice = fillPACSDevice(query);
+        pacsDevice.setID(query.value("ID").toString());
+        pacsDevice.setAETitle(query.value("AETitle").toString());
+        pacsDevice.setAddress(query.value("Address").toString());
+        pacsDevice.setQueryRetrieveServicePort(query.value("QueryPort").toInt());
     }
 
     return pacsDevice;
 }
 
-PacsDevice LocalDatabasePACSRetrievedImagesDAL::fillPACSDevice(const QSqlQuery &query)
-{
-    PacsDevice pacsDevice;
-
-    pacsDevice.setID(query.value("ID").toString());
-    pacsDevice.setAETitle(query.value("AETitle").toString());
-    pacsDevice.setAddress(query.value("Address").toString());
-    pacsDevice.setQueryRetrieveServicePort(query.value("QueryPort").toInt());
-
-    return pacsDevice;
-}
-
-QString LocalDatabasePACSRetrievedImagesDAL::buildSqlInsert(const PacsDevice &pacsDevice)
-{
-    QString insertSentence = QString ("Insert into PACSRetrievedImages  (AETitle, Address, QueryPort) "
-                                                   "values ('%1', '%2', %3)")
-                                    .arg(formatTextToValidSQLSyntax(pacsDevice.getAETitle()))
-                                    .arg(formatTextToValidSQLSyntax(pacsDevice.getAddress()))
-                                    .arg(pacsDevice.getQueryRetrieveServicePort());
-    return insertSentence;
-}
-
-QString LocalDatabasePACSRetrievedImagesDAL::buildSqlSelect()
-{
-    QString selectSentence = "Select ID, AETitle, Address, QueryPort "
-                             "From PACSRetrievedImages ";
-
-    return selectSentence;
-}
-
-QString LocalDatabasePACSRetrievedImagesDAL::buildSqlSelect(const qlonglong &IDPACSInDatabase)
-{
-    QString whereSentence = QString(" Where ID = %1 ").arg(IDPACSInDatabase);
-
-    return buildSqlSelect() + whereSentence;
-
-}
-
-QString LocalDatabasePACSRetrievedImagesDAL::buildSqlSelect(const QString AETitle, const QString address, int queryPort)
-{
-    QString whereSentence = QString(" Where AETitle = '%1' and "
-                                   "Address = '%2' and "
-                                   "QueryPort = %3")
-            .arg(formatTextToValidSQLSyntax(AETitle))
-            .arg(formatTextToValidSQLSyntax(address))
-            .arg(queryPort);
-
-    return buildSqlSelect() + whereSentence;
-}
 }
