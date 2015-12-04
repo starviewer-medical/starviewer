@@ -296,7 +296,7 @@ bool Series::setTime(QTime time)
     }
 }
 
-QDate Series::getDate()
+QDate Series::getDate() const
 {
     return m_date;
 }
@@ -306,7 +306,7 @@ QString Series::getDateAsString()
     return m_date.toString(Qt::LocaleDate);
 }
 
-QTime Series::getTime()
+QTime Series::getTime() const
 {
     return m_time;
 }
@@ -618,12 +618,12 @@ void Series::setRetrievedTime(QTime retrievedTime)
     m_retrieveTime = retrievedTime;
 }
 
-QDate Series::getRetrievedDate()
+QDate Series::getRetrievedDate() const
 {
     return m_retrievedDate;
 }
 
-QTime Series::getRetrievedTime()
+QTime Series::getRetrievedTime() const
 {
     return m_retrieveTime;
 }
