@@ -15,12 +15,7 @@
 #ifndef UDGLOCALDATABASESERIESDAL_H
 #define UDGLOCALDATABASESERIESDAL_H
 
-#include <QList>
-
 #include "localdatabasebasedal.h"
-#include "series.h"
-
-class QSqlQuery;
 
 namespace udg {
 
@@ -28,42 +23,30 @@ class DicomMask;
 class Series;
 
 /**
-    Classe que conté els mètodes d'accés a la Taula series
-  */
+ * @brief The LocalDatabaseSeriesDAL class is the Data Access Layer class for series.
+ */
 class LocalDatabaseSeriesDAL : public LocalDatabaseBaseDAL {
+
 public:
-    LocalDatabaseSeriesDAL(DatabaseConnection &dbConnection);
+    LocalDatabaseSeriesDAL(DatabaseConnection &databaseConnection);
 
-    /// Insereix la nova sèrie
-    bool insert(Series *newSeries);
+    /// Inserts to the database the given series. Returns true if successful and false otherwise.
+    bool insert(const Series *series);
 
-    /// Updata la nova serie
-    bool update(Series *seriesToUpdate);
+    /// Updates in the database the given series. Returns true if successful and false otherwise.
+    bool update(const Series *series);
 
-    /// Esborra les sèries que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID i el SeriesUID
-    bool del(const DicomMask &seriesMaskToDelete);
+    /// Deletes from the database the series that match the given mask (only StudyUID and SeriesUID are considered).
+    /// Returns true if successful and false otherwise.
+    bool del(const DicomMask &mask);
 
-    /// Cerca les sèries que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID i el SeriesUID
-    QList<Series*> query(const DicomMask &seriesMaskToQuery);
+    /// Retrieves from the database the series that match the given mask (only StudyUID and SeriesUID are considered) and returns them in a list.
+    QList<Series*> query(const DicomMask &mask);
 
 private:
-    /// Construeix la sentència sql per inserir la nova sèrie
-    QString buildSqlInsert(Series *newSeries);
+    /// Creates and returns a series with the information of the current row of the given query.
+    static Series* getSeries(const QSqlQuery &query);
 
-    /// Construeix la sentència updata la sèrie
-    QString buildSqlUpdate(Series *seriesToUpdate);
-
-    /// Construeix la setència per fer select de sèries a partir de la màscara, només té en compte el StudyUID, i SeriesUID
-    QString buildSqlSelect(const DicomMask &seriesMaskToSelect);
-
-    /// Construeix la setència per esborrar sèries a partir de la màscara, només té en compte el StudyUID, i SeriesUID
-    QString buildSqlDelete(const DicomMask &seriesMaskToDelete);
-
-    /// Construeix la sentència del where tenint en compte la màscara, només té en compte el StudyUID, i SeriesUID
-    QString buildWhereSentence(const DicomMask &seriesMask);
-
-    /// Emplena un l'objecte series de la fila passada per paràmetre
-    Series* fillSeries(const QSqlQuery &query);
 };
 
 }
