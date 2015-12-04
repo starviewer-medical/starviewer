@@ -128,7 +128,7 @@ void Patient::setDatabaseID(qlonglong databaseID)
     m_databaseID = databaseID;
 }
 
-qlonglong Patient::getDatabaseID()
+qlonglong Patient::getDatabaseID() const
 {
     return m_databaseID;
 }
@@ -148,7 +148,7 @@ QString Patient::getBirthDateAsString()
     return m_birthDate.toString(Qt::LocaleDate);
 }
 
-QDate Patient::getBirthDate()
+QDate Patient::getBirthDate() const
 {
     return m_birthDate;
 }

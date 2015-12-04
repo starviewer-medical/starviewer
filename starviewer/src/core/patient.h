@@ -48,13 +48,13 @@ public:
 
     /// Assigna/Obté el ID de pacient a la BD d'Starviewer
     void setDatabaseID(qlonglong databaseID);
-    qlonglong getDatabaseID();
+    qlonglong getDatabaseID() const;
 
     /// Assigna/Obté data de naixement
     void setBirthDate(int day, int month, int year);
     void setBirthDate(const QString &date);
     QString getBirthDateAsString();
-    QDate getBirthDate();
+    QDate getBirthDate() const;
     int getDayOfBirth();
     int getMonthOfBirth();
     int getYearOfBirth();
