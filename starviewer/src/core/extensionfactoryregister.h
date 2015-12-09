@@ -40,7 +40,7 @@ public:
     ExtensionFactoryRegister(const QString &identifier)
         :GenericSingletonFactoryRegister<QWidget, FactoryType, QString, ExtensionFactory, QWidget>(identifier)
     {
-        DEBUG_LOG("ExtensionFactoryRegister" + identifier);
+
     }
 };
 
