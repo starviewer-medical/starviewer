@@ -433,6 +433,7 @@ SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
     harddiskinformation.cpp \
+    logging.cpp \
     volume.cpp \
     volumehelper.cpp \
     volumereader.cpp \

@@ -1,35 +1,13 @@
+#include "logging.h"
+LOGGER_INIT
+
 #include <QDir>
 #include <QApplication>
 
 // Definicions globals d'aplicació
-#include "../core/starviewerapplication.h"
-#include "../core/logging.h"
-LOGGER_INIT
+#include "starviewerapplication.h"
 #include <QProcess>
 
-/// Configurem el logging
-// \TODO Còpia exacta del main.cpp de l'starviewer. Caldria refactoritzar-ho.
-void configureLogging()
-{
-    // Primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
-    QDir logDir = udg::UserLogsPath;
-    if (!logDir.exists())
-    {
-        // Creem el directori
-        logDir.mkpath(udg::UserLogsPath);
-    }
-    // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
-    // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
-    QString configurationFile = "/etc/starviewer/log.conf";
-    if (!QFile::exists(configurationFile))
-    {
-        configurationFile = QCoreApplication::applicationDirPath() + "/log.conf";
-    }
-
-    QString logFilePath = QDir::toNativeSeparators(udg::UserLogsFile);
-
-    LOGGER_CONF(configurationFile, logFilePath);
-}
 
 /// Imprimim l'ajuda del programa
 void printHelp()
@@ -67,13 +45,14 @@ void retrieveStudy(QString accessionNumber)
 int main(int argc, char *argv[])
 {
     QApplication application(argc, argv);
+    udg::beginLogging();
+
     QStringList parametersList = application.arguments();
 
     application.setOrganizationName(udg::OrganizationNameString);
     application.setOrganizationDomain(udg::OrganizationDomainString);
     application.setApplicationName(udg::ApplicationNameString);
 
-    configureLogging();
 
     if (parametersList.count() == 2)
     {
@@ -85,4 +64,6 @@ int main(int argc, char *argv[])
         INFO_LOG(QString("StarviewerSAPWrapper::Número de parametres incorrecte, s'han passat %1 parametres").arg(QString().setNum(argc - 1)));
         printHelp();
     }
+
+    udg::endLogging(0);
 }
