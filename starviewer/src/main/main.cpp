@@ -11,11 +11,10 @@
   may be copied, modified, propagated, or distributed except according to the
   terms contained in the LICENSE file.
  *************************************************************************************/
-
-#include "qapplicationmainwindow.h"
-
 #include "logging.h"
 LOGGER_INIT
+
+#include "qapplicationmainwindow.h"
 
 #include "statswatcher.h"
 #include "extensions.h"
@@ -58,39 +57,6 @@ LOGGER_INIT
 #include <vtkOverrideInformationCollection.h>
 
 typedef udg::SingletonPointer<udg::StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
-
-void configureLogging()
-{
-
-    // Primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
-    QDir logDir = udg::UserLogsPath;
-    if (!logDir.exists())
-    {
-        // Creem el directori
-        logDir.mkpath(udg::UserLogsPath);
-    }
-    // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
-    // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
-    QString configurationFile = "/etc/starviewer/log.conf";
-    if (!QFile::exists(configurationFile))
-    {
-        configurationFile = qApp->applicationDirPath() + "/log.conf";
-    }
-    // Afegim localització per Mac OS X en desenvolupament
-    if (!QFile::exists(configurationFile))
-    {
-        configurationFile = qApp->applicationDirPath() + "/../../../log.conf";
-    }
-
-    QString logFilePath = QDir::toNativeSeparators(udg::UserLogsFile);
-
-    LOGGER_CONF(configurationFile, logFilePath);
-
-    // Redirigim els missatges de VTK cap al log.
-    udg::LoggingOutputWindow *loggingOutputWindow = udg::LoggingOutputWindow::New();
-    vtkOutputWindow::SetInstance(loggingOutputWindow);
-    loggingOutputWindow->Delete();
-}
 
 void initializeTranslations(QApplication &app)
 {
@@ -158,6 +124,14 @@ int main(int argc, char *argv[])
     // una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
 
     QtSingleApplication app(argc, argv);
+    // TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en una classe dedicada a tal efecte
+
+    udg::beginLogging();
+    // Redirigim els missatges de VTK cap al log.
+    udg::LoggingOutputWindow *loggingOutputWindow = udg::LoggingOutputWindow::New();
+    vtkOutputWindow::SetInstance(loggingOutputWindow);
+    loggingOutputWindow->Delete();
+
 
     QPixmap splashPixmap;
     #ifdef STARVIEWER_LITE
@@ -187,14 +161,7 @@ int main(int argc, char *argv[])
     Q_UNUSED(crashHandler);
 #endif
 
-    // TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en
-    // una classe dedicada a tal efecte
 
-    configureLogging();
-
-    // Marquem l'inici de l'aplicació al log
-    INFO_LOG("==================================================== BEGIN ====================================================");
-    INFO_LOG(QString("%1 Version %2 BuildID %3").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString).arg(udg::StarviewerBuildID));
 
     // Inicialitzem els settings
     udg::CoreSettings coreSettings;
@@ -286,10 +253,10 @@ int main(int argc, char *argv[])
         returnValue = app.exec();
     }
 
+
     // Marquem el final de l'aplicació al log
-    INFO_LOG(QString("%1 Version %2 BuildID %3, returnValue %4").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString)
-             .arg(udg::StarviewerBuildID).arg(returnValue));
-    INFO_LOG("===================================================== END =====================================================");
+    udg::endLogging(returnValue);
+
 
     return returnValue;
 }

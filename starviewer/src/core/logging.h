@@ -15,15 +15,8 @@
 #ifndef _LOGGING_
 #define _LOGGING_
 
-
 #include <QString>
-#include <QtGlobal> // Pel qpuntenv()
-
 #include "easylogging++.h"
-
-/*!
-    Aquest arxiu conté totes les macros per a fer logs en l'aplicació.
-*/
 
 /// Macro per a inicialitzar els loggers
 /// Assegurar que només es crida una sola vegada, preferiblement crideu-la
@@ -31,18 +24,11 @@
 
 #define LOGGER_INIT INITIALIZE_EASYLOGGINGPP
 
-/// Macro per a configurar els logger
-/// Definim la variable d'entorn que indica la localització
-/// dels fitxers de log i llavors llegim la configuració dels logs
-#define LOGGER_CONF(confFile, logFile) \
-    do \
-    { \
-        el::Configurations logConfig(confFile.toStdString()); \
-        logConfig.setGlobally(el::ConfigurationType::Filename, logFile.toStdString()); \
-        el::Loggers::reconfigureAllLoggers(logConfig); \
-        DEBUG_LOG("Logging configuration file: " + configurationFile); \
-        DEBUG_LOG("Logging output file: " + logFilePath); \
-    } while(false)
+namespace udg {
+    void beginLogging();
+    void endLogging(int returnValue);
+}
+
 
 /// Macro per a missatges de debug. \TODO de moment fem servir aquesta variable de qmake i funciona bé, però podria ser més adequat troba la forma d'afegir
 /// una variable pròpia, com per exemple DEBUG
@@ -105,4 +91,4 @@
         LOG(TRACE) << qUtf8Printable(QString(msg)); \
     } while (false)
 
-#endif
+#endif //_LOGGING_

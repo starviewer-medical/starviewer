@@ -31,6 +31,7 @@ SOURCES = crashreporter.cpp \
           ../core/coresettings.cpp \
           ../core/settingsaccesslevelfilereader.cpp \
           ../main/applicationtranslationsloader.cpp \
+          ../core/logging.cpp
 
 TRANSLATIONS += crashreporter_ca_ES.ts \
                 crashreporter_es_ES.ts \
