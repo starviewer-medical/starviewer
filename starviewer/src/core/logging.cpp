@@ -28,6 +28,12 @@ void udg::beginLogging() {
 
     el::Configurations logConfig(configurationFile.toStdString());
     logConfig.setGlobally(el::ConfigurationType::Filename, logFilePath.toStdString());
+
+    //Disable logging to the standard output when compiled on release
+    #ifdef QT_NO_DEBUG
+    logConfig.setGlobally(el::ConfigurationType::ToStandardOutput, "false");
+    #endif
+
     el::Loggers::reconfigureAllLoggers(logConfig);
 
     // Marquem l'inici de l'aplicació al log
