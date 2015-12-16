@@ -107,9 +107,13 @@ Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
     newViewer->setPalette(QGuiApplication::palette());
     connect(newViewer, SIGNAL(selected(Q2DViewerWidget*)), SLOT(setSelectedViewer(Q2DViewerWidget*)));
     connect(newViewer, SIGNAL(manualSynchronizationStateChanged(bool)), SIGNAL(manualSynchronizationStateChanged(bool)));
-    connect(newViewer, SIGNAL(fusionLayout2x1Requested(QList<Volume*>, AnatomicalPlane)), SIGNAL(fusionLayout2x1Requested(QList<Volume*>, AnatomicalPlane)));
+    connect(newViewer, SIGNAL(fusionLayout2x1FirstRequested(QList<Volume*>, AnatomicalPlane)),
+            SIGNAL(fusionLayout2x1FirstRequested(QList<Volume*>, AnatomicalPlane)));
+    connect(newViewer, SIGNAL(fusionLayout2x1SecondRequested(QList<Volume*>, AnatomicalPlane)),
+            SIGNAL(fusionLayout2x1SecondRequested(QList<Volume*>, AnatomicalPlane)));
     connect(newViewer, SIGNAL(fusionLayout3x1Requested(QList<Volume*>, AnatomicalPlane)), SIGNAL(fusionLayout3x1Requested(QList<Volume*>, AnatomicalPlane)));
-    connect(newViewer, SIGNAL(fusionLayout2x3Requested(QList<Volume*>)), SIGNAL(fusionLayout2x3Requested(QList<Volume*>)));
+    connect(newViewer, SIGNAL(fusionLayout2x3FirstRequested(QList<Volume*>)), SIGNAL(fusionLayout2x3FirstRequested(QList<Volume*>)));
+    connect(newViewer, SIGNAL(fusionLayout2x3SecondRequested(QList<Volume*>)), SIGNAL(fusionLayout2x3SecondRequested(QList<Volume*>)));
     connect(newViewer, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SIGNAL(fusionLayout3x3Requested(QList<Volume*>)));
     // Per defecte no li posem cap annotació
     newViewer->getViewer()->removeAnnotation(AllAnnotations);

@@ -227,9 +227,13 @@ void Q2DViewerExtension::createConnections()
 
     connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
 
-    connect(m_workingArea, SIGNAL(fusionLayout2x1Requested(QList<Volume*>,AnatomicalPlane)), SLOT(setFusionLayout2x1(QList<Volume*>,AnatomicalPlane)));
+    connect(m_workingArea, SIGNAL(fusionLayout2x1FirstRequested(QList<Volume*>,AnatomicalPlane)),
+            SLOT(setFusionLayout2x1First(QList<Volume*>,AnatomicalPlane)));
+    connect(m_workingArea, SIGNAL(fusionLayout2x1SecondRequested(QList<Volume*>,AnatomicalPlane)),
+            SLOT(setFusionLayout2x1Second(QList<Volume*>,AnatomicalPlane)));
     connect(m_workingArea, SIGNAL(fusionLayout3x1Requested(QList<Volume*>,AnatomicalPlane)), SLOT(setFusionLayout3x1(QList<Volume*>,AnatomicalPlane)));
-    connect(m_workingArea, SIGNAL(fusionLayout2x3Requested(QList<Volume*>)), SLOT(setFusionLayout2x3(QList<Volume*>)));
+    connect(m_workingArea, SIGNAL(fusionLayout2x3FirstRequested(QList<Volume*>)), SLOT(setFusionLayout2x3First(QList<Volume*>)));
+    connect(m_workingArea, SIGNAL(fusionLayout2x3SecondRequested(QList<Volume*>)), SLOT(setFusionLayout2x3Second(QList<Volume*>)));
     connect(m_workingArea, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SLOT(setFusionLayout3x3(QList<Volume*>)));
 }
 
@@ -1088,7 +1092,7 @@ void Q2DViewerExtension::setWorkingStudies(const QString &currentStudyUID, const
     }
 }
 
-void Q2DViewerExtension::setFusionLayout2x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
+void Q2DViewerExtension::setFusionLayout2x1First(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
 {
     bool propagationEnabled = m_syncActionManager->isEnabled();
 
@@ -1097,7 +1101,24 @@ void Q2DViewerExtension::setFusionLayout2x1(const QList<Volume*> &volumes, const
         m_syncActionManager->enable(false);
     }
 
-    m_layoutManager->setFusionLayout2x1(volumes, anatomicalPlane);
+    m_layoutManager->setFusionLayout2x1First(volumes, anatomicalPlane);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout2x1Second(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout2x1Second(volumes, anatomicalPlane);
 
     if (propagationEnabled)
     {
@@ -1122,7 +1143,7 @@ void Q2DViewerExtension::setFusionLayout3x1(const QList<Volume*> &volumes, const
     }
 }
 
-void Q2DViewerExtension::setFusionLayout2x3(const QList<Volume*> &volumes)
+void Q2DViewerExtension::setFusionLayout2x3First(const QList<Volume*> &volumes)
 {
     bool propagationEnabled = m_syncActionManager->isEnabled();
 
@@ -1131,7 +1152,24 @@ void Q2DViewerExtension::setFusionLayout2x3(const QList<Volume*> &volumes)
         m_syncActionManager->enable(false);
     }
 
-    m_layoutManager->setFusionLayout2x3(volumes);
+    m_layoutManager->setFusionLayout2x3First(volumes);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout2x3Second(const QList<Volume*> &volumes)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout2x3Second(volumes);
 
     if (propagationEnabled)
     {

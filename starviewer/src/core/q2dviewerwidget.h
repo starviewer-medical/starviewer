@@ -70,13 +70,18 @@ signals:
     void doubleClicked(Q2DViewerWidget *viewer);
 
     /// Emitted when one of the options of the fusion layout tool button has been selected
-    /// to request a 2x1 fusion layout with the given volumes and anatomical plane.
-    void fusionLayout2x1Requested(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
+    /// to request a 2x1 CT+fused fusion layout with the given volumes and anatomical plane.
+    void fusionLayout2x1FirstRequested(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
+    /// Emitted when one of the options of the fusion layout tool button has been selected
+    /// to request a 2x1 fused+PT/NM fusion layout with the given volumes and anatomical plane.
+    void fusionLayout2x1SecondRequested(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
     /// Emitted when one of the options of the fusion layout tool button has been selected
     /// to request a 3x1 fusion layout with the given volumes and anatomical plane.
     void fusionLayout3x1Requested(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
-    /// Emitted when one of the options of the fusion layout tool button has been selected to request a 2x3 fusion layout with the given volumes.
-    void fusionLayout2x3Requested(const QList<Volume*> &volumes);
+    /// Emitted when one of the options of the fusion layout tool button has been selected to request a 2x3 CT+fused fusion layout with given volumes.
+    void fusionLayout2x3FirstRequested(const QList<Volume*> &volumes);
+    /// Emitted when one of the options of the fusion layout tool button has been selected to request a 2x3 fused+PT/NM fusion layout with the given volumes.
+    void fusionLayout2x3SecondRequested(const QList<Volume*> &volumes);
     /// Emitted when one of the options of the fusion layout tool button has been selected to request a 3x3 fusion layout with the given volumes.
     void fusionLayout3x3Requested(const QList<Volume*> &volumes);
 
@@ -126,12 +131,16 @@ private slots:
     /// Emits the doubleClicked() signal.
     void emitDoubleClicked();
 
-    /// Emits the fusionLayout2x1Requested() signal if the contained viewer has 2 volumes.
-    void requestFusionLayout2x1();
+    /// Emits the fusionLayout2x1Requested() signal with CT and fused if the contained viewer has 2 volumes.
+    void requestFusionLayout2x1First();
+    /// Emits the fusionLayout2x1Requested() signal with fused and PT/NM if the contained viewer has 2 volumes.
+    void requestFusionLayout2x1Second();
     /// Emits the fusionLayout3x1Requested() signal if the contained viewer has 2 volumes.
     void requestFusionLayout3x1();
-    /// Emits the fusionLayout2x3Requested() signal if the contained viewer has 2 volumes.
-    void requestFusionLayout2x3();
+    /// Emits the fusionLayout2x3Requested() signal with CT and fused if the contained viewer has 2 volumes.
+    void requestFusionLayout2x3First();
+    /// Emits the fusionLayout2x3Requested() signal with fused and PT/NM if the contained viewer has 2 volumes.
+    void requestFusionLayout2x3Second();
     /// Emits the fusionLayout3x3Requested() signal if the contained viewer has 2 volumes.
     void requestFusionLayout3x3();
 
