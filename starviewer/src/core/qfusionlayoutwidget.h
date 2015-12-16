@@ -33,17 +33,24 @@ public:
     explicit QFusionLayoutWidget(QWidget *parent = 0);
     virtual ~QFusionLayoutWidget();
 
+    /// Updates the text of the 2x layouts with the given modalities.
+    void setModalities(const QString &modality1, const QString &modality2);
+
 public slots:
     /// Updates the icons of the 3x1 layout to match the given anatomical plane.
     void setCurrentAnatomicalPlane(const AnatomicalPlane &anatomicalPlane);
 
 signals:
-    /// Emitted when a 2x1 layout is requested.
-    void layout2x1Requested();
+    /// Emitted when a 2x1 CT layout is requested.
+    void layout2x1FirstRequested();
+    /// Emitted when a 2x1 PT/NM layout is requested.
+    void layout2x1SecondRequested();
     /// Emitted when a 3x1 layout is requested.
     void layout3x1Requested();
-    /// Emitted when a 2x3 layout is requested.
-    void layout2x3Requested();
+    /// Emitted when a 2x3 CT layout is requested.
+    void layout2x3FirstRequested();
+    /// Emitted when a 2x3 PT/NM layout is requested.
+    void layout2x3SecondRequested();
     /// Emitted when a 3x3 layout is requested.
     void layout3x3Requested();
 

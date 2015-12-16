@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>292</width>
+    <width>432</width>
     <height>98</height>
    </rect>
   </property>
@@ -15,7 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="udg::ItemMenu" name="m_item2x1">
+    <widget class="udg::ItemMenu" name="m_item2x1First">
      <property name="minimumSize">
       <size>
        <width>64</width>
@@ -50,15 +50,15 @@
          <number>0</number>
         </property>
         <item row="0" column="1">
-         <widget class="udg::GridIcon" name="m_gridIcon2x1_2"/>
+         <widget class="udg::GridIcon" name="m_gridIcon2x1_1_2"/>
         </item>
         <item row="0" column="0">
-         <widget class="udg::GridIcon" name="m_gridIcon2x1_1"/>
+         <widget class="udg::GridIcon" name="m_gridIcon2x1_1_1"/>
         </item>
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="m_label2x1First">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -72,7 +72,75 @@
          </size>
         </property>
         <property name="text">
-         <string>2x1</string>
+         <string>2x1 CT</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="udg::ItemMenu" name="m_item2x1Second">
+     <property name="minimumSize">
+      <size>
+       <width>64</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>64</width>
+       <height>80</height>
+      </size>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="1">
+         <widget class="udg::GridIcon" name="m_gridIcon2x1_2_1"/>
+        </item>
+        <item row="0" column="0">
+         <widget class="udg::GridIcon" name="m_gridIcon2x1_2_2"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="m_label2x1Second">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>2x1 PT/NM</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -129,7 +197,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="m_label3x1">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -154,7 +222,7 @@
     </widget>
    </item>
    <item>
-    <widget class="udg::ItemMenu" name="m_item2x3">
+    <widget class="udg::ItemMenu" name="m_item2x3First">
      <property name="minimumSize">
       <size>
        <width>64</width>
@@ -189,27 +257,27 @@
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="udg::GridIcon" name="m_gridIcon2x3_1"/>
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_1_1"/>
         </item>
         <item row="0" column="1">
-         <widget class="udg::GridIcon" name="m_gridIcon2x3_2"/>
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_1_2"/>
         </item>
         <item row="1" column="0">
-         <widget class="udg::GridIcon" name="m_gridIcon2x3_3"/>
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_1_3"/>
         </item>
         <item row="1" column="1">
-         <widget class="udg::GridIcon" name="m_gridIcon2x3_4"/>
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_1_4"/>
         </item>
         <item row="2" column="0">
-         <widget class="udg::GridIcon" name="m_gridIcon2x3_5"/>
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_1_5"/>
         </item>
         <item row="2" column="1">
-         <widget class="udg::GridIcon" name="m_gridIcon2x3_6"/>
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_1_6"/>
         </item>
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="m_label2x3First">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -223,7 +291,87 @@
          </size>
         </property>
         <property name="text">
-         <string>2x3</string>
+         <string>2x3 CT</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="udg::ItemMenu" name="m_item2x3Second">
+     <property name="minimumSize">
+      <size>
+       <width>64</width>
+       <height>80</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>64</width>
+       <height>80</height>
+      </size>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_2_1"/>
+        </item>
+        <item row="0" column="1">
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_2_2"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_2_3"/>
+        </item>
+        <item row="1" column="1">
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_2_4"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_2_5"/>
+        </item>
+        <item row="2" column="1">
+         <widget class="udg::GridIcon" name="m_gridIcon2x3_2_6"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="m_label2x3Second">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>2x3 PT/NM</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -298,7 +446,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="m_label3x3">
         <property name="minimumSize">
          <size>
           <width>0</width>

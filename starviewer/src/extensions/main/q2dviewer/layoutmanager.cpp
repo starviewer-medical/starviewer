@@ -479,7 +479,30 @@ void LayoutManager::setPriorHangingProtocol(int hangingProtocolNumber)
     }
 }
 
-void LayoutManager::setFusionLayout2x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
+void LayoutManager::setFusionLayout2x1First(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
+{
+    if (volumes.size() != 2)
+    {
+        return;
+    }
+
+    QRectF geometry = prepareToChangeLayoutOfStudy(volumes[0]->getStudy());
+    m_layout->cleanUp(geometry);
+    m_layout->setGridInArea(1, 2, geometry);
+    QList<Q2DViewerWidget*> viewers = m_layout->getViewersInsideGeometry(geometry);
+
+    QList<Volume*> inputs[2];
+    inputs[0] << volumes[0];
+    inputs[1] << volumes;
+
+    for (int i = 0; i < 2; i++)
+    {
+        viewers[i]->getViewer()->setInputAsynchronously(inputs[i],
+            new ResetViewToAnatomicalPlaneQViewerCommand(viewers[i]->getViewer(), anatomicalPlane, viewers[i]));
+    }
+}
+
+void LayoutManager::setFusionLayout2x1Second(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
 {
     if (volumes.size() != 2)
     {
@@ -526,7 +549,32 @@ void LayoutManager::setFusionLayout3x1(const QList<Volume*> &volumes, const Anat
     }
 }
 
-void LayoutManager::setFusionLayout2x3(const QList<Volume*> &volumes)
+void LayoutManager::setFusionLayout2x3First(const QList<Volume*> &volumes)
+{
+    if (volumes.size() != 2)
+    {
+        return;
+    }
+
+    QRectF geometry = prepareToChangeLayoutOfStudy(volumes[0]->getStudy());
+    m_layout->cleanUp(geometry);
+    m_layout->setGridInArea(3, 2, geometry);
+    QList<Q2DViewerWidget*> viewers = m_layout->getViewersInsideGeometry(geometry);
+
+    QList<Volume*> inputs[2];
+    inputs[0] << volumes[0];
+    inputs[1] << volumes;
+
+    AnatomicalPlane views[3] = { AnatomicalPlane::Axial, AnatomicalPlane::Coronal, AnatomicalPlane::Sagittal };
+
+    for (int i = 0; i < 6; i++)
+    {
+        viewers[i]->getViewer()->setInputAsynchronously(inputs[i % 2],
+            new ResetViewToAnatomicalPlaneQViewerCommand(viewers[i]->getViewer(), views[i / 2], viewers[i]));
+    }
+}
+
+void LayoutManager::setFusionLayout2x3Second(const QList<Volume*> &volumes)
 {
     if (volumes.size() != 2)
     {
