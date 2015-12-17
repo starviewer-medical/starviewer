@@ -32,6 +32,8 @@
 #include "interfacesettings.h"
 #include "screenmanager.h"
 #include "patientcomparer.h"
+#include "patient.h"
+#include "image.h"
 
 // PACS --------------------------------------------
 #include "queryscreen.h"

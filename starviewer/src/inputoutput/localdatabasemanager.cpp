@@ -14,35 +14,46 @@
 
 #include "localdatabasemanager.h"
 
-#include <QDir>
-#include <QSqlError>
-
-#include "patient.h"
-#include "study.h"
-#include "localdatabasedisplayshutterdal.h"
-#include "localdatabaseimagedal.h"
-#include "localdatabaseseriesdal.h"
-#include "localdatabasestudydal.h"
-#include "localdatabasepatientdal.h"
-#include "localdatabaseutildal.h"
-#include "localdatabasevoilutdal.h"
 #include "databaseconnection.h"
 #include "dicommask.h"
-#include "logging.h"
 #include "directoryutilities.h"
-#include "inputoutputsettings.h"
-#include "starviewerapplication.h"
 #include "harddiskinformation.h"
+#include "image.h"
+#include "inputoutputsettings.h"
+#include "localdatabasedisplayshutterdal.h"
+#include "localdatabaseimagedal.h"
+#include "localdatabasepatientdal.h"
+#include "localdatabaseseriesdal.h"
+#include "localdatabasestudydal.h"
+#include "localdatabaseutildal.h"
+#include "localdatabasevoilutdal.h"
+#include "patient.h"
 #include "thumbnailcreator.h"
+
+#include <QDir>
 
 namespace udg {
 
 namespace {
 
-/// Inserts in the database all the VOI LUTs that are LUTs in the given image.
-bool insertVoiLuts(DatabaseConnection &dbConnect, Image *image)
+// Saves all the display shutters in the given list from the given image to the database.
+void insertDisplayShutters(DatabaseConnection &databaseConnection, const QList<DisplayShutter> &shuttersList, const Image *image)
 {
-    LocalDatabaseVoiLutDAL voiLutDal(dbConnect);
+    LocalDatabaseDisplayShutterDAL displayShutterDAL(databaseConnection);
+
+    foreach (const DisplayShutter &shutter, shuttersList)
+    {
+        if (!displayShutterDAL.insert(shutter, image))
+        {
+            throw displayShutterDAL.getLastError();
+        }
+    }
+}
+
+// Inserts to the database all the VOI LUTs that are LUTs in the given image.
+void insertVoiLuts(DatabaseConnection &databaseConnection, const Image *image)
+{
+    LocalDatabaseVoiLutDAL voiLutDAL(databaseConnection);
 
     for (int i = 0; i < image->getNumberOfVoiLuts(); i++)
     {
@@ -50,995 +61,333 @@ bool insertVoiLuts(DatabaseConnection &dbConnect, Image *image)
 
         if (voiLut.isLut())
         {
-            if (!voiLutDal.insert(voiLut, image))
+            if (!voiLutDAL.insert(voiLut, image))
             {
-                return false;
+                throw voiLutDAL.getLastError();
             }
         }
     }
-
-    return true;
 }
 
-/// Deletes from the database all the VOI LUTs that match the given mask.
-bool deleteVoiLuts(DatabaseConnection &dbConnect, const DicomMask &mask)
+// Deletes from the database all the VOI LUTs that match the given mask.
+void deleteVoiLuts(DatabaseConnection &databaseConnection, const DicomMask &mask)
 {
-    LocalDatabaseVoiLutDAL voiLutDal(dbConnect);
-    return voiLutDal.del(mask);
+    LocalDatabaseVoiLutDAL voiLutDAL(databaseConnection);
+
+    if (!voiLutDAL.del(mask))
+    {
+        throw voiLutDAL.getLastError();
+    }
 }
 
-/// Deletes from the database all the VOI LUTs from the given image.
-bool deleteVoiLuts(DatabaseConnection &dbConnect, Image *image)
+// Deletes from the database all the VOI LUTs from the given image.
+void deleteVoiLuts(DatabaseConnection &databaseConnection, const Image *image)
 {
     DicomMask mask;
     mask.setSOPInstanceUID(image->getSOPInstanceUID());
     mask.setImageNumber(QString::number(image->getFrameNumber()));
-    return deleteVoiLuts(dbConnect, mask);
+    deleteVoiLuts(databaseConnection, mask);
 }
 
-}
-
-// Nom de la llista de Settings que guardarà els estudis que tenim en aquell moment descarregant
-QDate LocalDatabaseManager::LastAccessDateSelectedStudies;
-
-LocalDatabaseManager::LocalDatabaseManager()
+// Saves to the database the given image and its display shutters and VOI LUTs, doing an insert or an update as necessary.
+void saveImage(DatabaseConnection &databaseConnection, const Image *image)
 {
-    Settings settings;
+    LocalDatabaseImageDAL imageDAL(databaseConnection);
 
-    /// Comprovem si està activada la opció de configuració que indica si s'ha d'esborrar automàticament els estudis vells,
-    /// sinó està activada, construim una data nul·la perquè no s'ha de tenir en compte alhora de fer las cerques
-    if (settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool())
+    if (!imageDAL.insert(image))
     {
-        if (!LocalDatabaseManager::LastAccessDateSelectedStudies.isValid())
+        if (imageDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
         {
-            LocalDatabaseManager::LastAccessDateSelectedStudies =
-                QDate::currentDate().addDays(-settings.getValue(InputOutputSettings::MinimumDaysUnusedToDeleteStudy).toInt());
+            // The image already exists, let's update it
+            if (!imageDAL.update(image))
+            {
+                throw imageDAL.getLastError();
+            }
+
+            // Update shutters
+            LocalDatabaseDisplayShutterDAL shutterDAL(databaseConnection);
+
+            if (!shutterDAL.update(image->getDisplayShutters(), image))
+            {
+                throw shutterDAL.getLastError();
+            }
+
+            // Delete existing VOI LUTs from the image. The new ones (or the same ones) are inserted below.
+            deleteVoiLuts(databaseConnection, image);
+        }
+        else
+        {
+            throw imageDAL.getLastError();
         }
     }
-    else
+
+    insertDisplayShutters(databaseConnection, image->getDisplayShutters(), image);
+    insertVoiLuts(databaseConnection, image);
+}
+
+// Saves the images in the given list to the database, inserting or updating them as necessary.
+void saveImages(DatabaseConnection &databaseConnection, const QList<Image*> &imageList, const QDate &currentDate, const QTime &currentTime)
+{
+    foreach (Image *image, imageList)
     {
-        LocalDatabaseManager::LastAccessDateSelectedStudies = QDate();
+        image->setRetrievedDate(currentDate);
+        image->setRetrievedTime(currentTime);
+        saveImage(databaseConnection, image);
     }
 }
 
-void LocalDatabaseManager::save(Patient *newPatient)
+// Saves the given series to the database, doing an insert or an update as necessary.
+void saveSeries(DatabaseConnection &databaseConnection, const Series *series)
 {
-    if (newPatient == NULL)
-    {
-        ERROR_LOG("No es pot inserir a la base de dades l'estudi perque el patient es null");
-        m_lastError = PatientInconsistent;
-    }
-    else
-    {
-        DatabaseConnection dbConnect;
-        dbConnect.open();
-        bool status = true;
+    LocalDatabaseSeriesDAL seriesDAL(databaseConnection);
 
-        dbConnect.beginTransaction();
-        /// Guardem primer els estudis
-        if (newPatient->getStudies().count() > 0)
+    if (!seriesDAL.insert(series))
+    {
+        if (seriesDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
         {
-            status = saveStudies(dbConnect, newPatient->getStudies(), QDate::currentDate(), QTime::currentTime());
-
-            if (!status)
+            // The image already exists, let's update it
+            if (!seriesDAL.update(series))
             {
-                deleteRetrievedObjects(newPatient);
-                setLastError(dbConnect.getLastError());
-                return;
+                throw seriesDAL.getLastError();
             }
         }
         else
         {
-            ERROR_LOG("El pacient que s'intenta inserir a la base de dades, no te cap estudi.");
-        }
-
-        if (!status)
-        {
-            deleteRetrievedObjects(newPatient);
-        }
-        else
-        {
-            dbConnect.commitTransaction();
-        }
-
-        foreach (Study *study, newPatient->getStudies())
-        {
-            createStudyThumbnails(study);
-        }
-
-        setLastError(dbConnect.getLastError());
-    }
-}
-
-void LocalDatabaseManager::save(Series *seriesToSave)
-{
-    if (seriesToSave == NULL)
-    {
-        ERROR_LOG("No es pot inserir a la base de dades la serie perque te valor null");
-        m_lastError = PatientInconsistent;
-    }
-    else
-    {
-        QDate currentDate = QDate::currentDate();
-        QTime currentTime = QTime::currentTime();
-        DatabaseConnection dbConnect;
-        dbConnect.open();
-
-        dbConnect.beginTransaction();
-        bool status = savePatientOfStudy(dbConnect, seriesToSave->getParentStudy());
-
-        if (!status)
-        {
-            deleteRetrievedObjects(seriesToSave);
-            setLastError(dbConnect.getLastError());
-            return;
-        }
-
-        Study *studyParent = seriesToSave->getParentStudy();
-        studyParent->setRetrievedDate(currentDate);
-        studyParent->setRetrievedTime(currentTime);
-
-        status = saveStudy(dbConnect, studyParent);
-
-        if (!status)
-        {
-            deleteRetrievedObjects(seriesToSave);
-            setLastError(dbConnect.getLastError());
-            return;
-        }
-
-        QList<Series*> seriesList;
-        seriesList.append(seriesToSave);
-
-        status = saveSeries(dbConnect, seriesList, currentDate, currentTime);
-
-        if (!status)
-        {
-            deleteRetrievedObjects(seriesToSave);
-            setLastError(dbConnect.getLastError());
-            return;
-        }
-        else
-        {
-            dbConnect.commitTransaction();
-        }
-
-        createSeriesThumbnail(seriesToSave);
-
-        setLastError(dbConnect.getLastError());
-    }
-}
-
-QList<Patient*> LocalDatabaseManager::queryPatient(const DicomMask &patientMaskToQuery)
-{
-    DatabaseConnection dbConnect;
-    dbConnect.open();
-    LocalDatabasePatientDAL patientDAL(dbConnect);
-    QList<Patient*> queryResult;
-
-    queryResult = patientDAL.query(patientMaskToQuery);
-    setLastError(patientDAL.getLastError());
-
-    return queryResult;
-}
-
-QList<Patient*> LocalDatabaseManager::queryPatientStudy(const DicomMask &patientStudyMaskToQuery)
-{
-    DatabaseConnection dbConnect;
-    dbConnect.open();
-    LocalDatabaseStudyDAL studyDAL(dbConnect);
-    QList<Patient*> queryResult;
-
-    queryResult = studyDAL.queryPatientStudy(patientStudyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
-    setLastError(studyDAL.getLastError());
-
-    return queryResult;
-}
-
-QList<Study*> LocalDatabaseManager::queryStudy(const DicomMask &studyMaskToQuery)
-{
-    DatabaseConnection dbConnect;
-    dbConnect.open();
-    LocalDatabaseStudyDAL studyDAL(dbConnect);
-    QList<Study*> queryResult;
-
-    queryResult = studyDAL.query(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
-    setLastError(studyDAL.getLastError());
-
-    return queryResult;
-}
-
-QList<Study*> LocalDatabaseManager::queryStudyOrderByLastAccessDate(const DicomMask &studyMaskToQuery)
-{
-    DatabaseConnection dbConnect;
-    dbConnect.open();
-    LocalDatabaseStudyDAL studyDAL(dbConnect);
-    QList<Study*> queryResult;
-
-    queryResult = studyDAL.queryOrderByLastAccessDate(studyMaskToQuery, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
-    setLastError(studyDAL.getLastError());
-
-    return queryResult;
-}
-
-QList<Series*> LocalDatabaseManager::querySeries(const DicomMask &seriesMaskToQuery)
-{
-    DatabaseConnection dbConnect;
-    dbConnect.open();
-    LocalDatabaseSeriesDAL seriesDAL(dbConnect);
-    LocalDatabaseImageDAL imageDAL(dbConnect);
-    QList<Series*> queryResult;
-    DicomMask maskToCountNumberOfImage = seriesMaskToQuery;
-
-    queryResult = seriesDAL.query(seriesMaskToQuery);
-
-    if (seriesDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
-    {
-        setLastError(seriesDAL.getLastError());
-        return queryResult;
-    }
-
-    // Consultem el número d'imatges de la Sèrie
-    foreach (Series *series, queryResult)
-    {
-        maskToCountNumberOfImage.setSeriesInstanceUID(series->getInstanceUID());
-        series->setNumberOfImages(imageDAL.count(maskToCountNumberOfImage));
-
-        if (imageDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
-        {
-            break;
+            throw seriesDAL.getLastError();
         }
     }
-    setLastError(imageDAL.getLastError());
-
-    // Carreguem els thumbnails de les series consultades
-    loadSeriesThumbnail(seriesMaskToQuery.getStudyInstanceUID(), queryResult);
-
-    return queryResult;
 }
 
-QList<Image*> LocalDatabaseManager::queryImage(const DicomMask &imageMaskToQuery)
+// Saves the series in the given list to the database, inserting or updating them as necessary.
+void saveSeries(DatabaseConnection &databaseConnection, const QList<Series*> &seriesList, const QDate &currentDate, const QTime &currentTime)
 {
-    DatabaseConnection dbConnect;
-    dbConnect.open();
-    LocalDatabaseImageDAL imageDAL(dbConnect);
-    QList<Image*> queryResult;
-
-    queryResult = imageDAL.query(imageMaskToQuery);
-    setLastError(imageDAL.getLastError());
-
-    return queryResult;
-}
-
-bool LocalDatabaseManager::existsStudy(Study *study)
-{
-    DicomMask dicomMask;
-    dicomMask.setStudyInstanceUID(study->getInstanceUID());
-
-    return queryStudy(dicomMask).count() > 0;
-}
-
-Patient* LocalDatabaseManager::retrieve(const DicomMask &maskToRetrieve)
-{
-    DatabaseConnection dbConnect;
-    dbConnect.open();
-    LocalDatabaseStudyDAL studyDAL(dbConnect);
-    Patient *retrievedPatient = NULL;
-
-    // Busquem l'estudi i pacient
-    QList<Patient*> patientList = studyDAL.queryPatientStudy(maskToRetrieve, QDate(), LocalDatabaseManager::LastAccessDateSelectedStudies);
-
-    if (patientList.count() != 1)
-    {
-        setLastError(studyDAL.getLastError());
-        return retrievedPatient;
-    }
-    else
-    {
-        retrievedPatient = patientList.at(0);
-    }
-
-    // Busquem les series de l'estudi
-    LocalDatabaseSeriesDAL seriesDAL(dbConnect);
-    QList<Series*> seriesList = seriesDAL.query(maskToRetrieve);
-
-    if (seriesDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
-    {
-        setLastError(seriesDAL.getLastError());
-        return NULL;
-    }
-
-    DicomMask maskImagesToRetrieve;
-    LocalDatabaseImageDAL imageDAL(dbConnect);
-
-    // Busquem les imatges per cada sèrie
-    // Estudi del que s'han de cercar les imatges
-    maskImagesToRetrieve.setStudyInstanceUID(maskToRetrieve.getStudyInstanceUID());
-
     foreach (Series *series, seriesList)
     {
-        // Específiquem de quina sèrie de l'estudi hem de buscar les imatges
-        maskImagesToRetrieve.setSeriesInstanceUID(series->getInstanceUID());
+        saveImages(databaseConnection, series->getImages(), currentDate, currentTime);
 
-        QList<Image*> images = imageDAL.query(maskImagesToRetrieve);
-        if (imageDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
-        {
-            break;
-        }
-
-        foreach (Image *image, images)
-        {
-            series->addImage(image);
-        }
-
-        retrievedPatient->getStudy(maskToRetrieve.getStudyInstanceUID())->addSeries(series);
-    }
-
-    if (imageDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
-    {
-        setLastError(imageDAL.getLastError());
-        return new Patient();
-    }
-
-    // Actulitzem la última data d'acces de l'estudi
-    Study *retrievedStudy = retrievedPatient->getStudy(maskToRetrieve.getStudyInstanceUID());
-    studyDAL.update(retrievedStudy, QDate::currentDate());
-    setLastError(studyDAL.getLastError());
-
-    return retrievedPatient;
-}
-
-void LocalDatabaseManager::deleteStudy(const QString &studyInstanceUIDToDelete)
-{
-    INFO_LOG("S'esborrara de la base de dades l'estudi: " + studyInstanceUIDToDelete);
-
-    if (!studyInstanceUIDToDelete.isEmpty())
-    {
-        DatabaseConnection dbConnect;
-        dbConnect.open();
-        dbConnect.beginTransaction();
-
-        bool status = deleteStudyStructureFromDatabase(dbConnect, studyInstanceUIDToDelete);
-        if (!status)
-        {
-            setLastError(dbConnect.getLastError());
-            return;
-        }
-
-        dbConnect.commitTransaction();
-        deleteStudyFromHardDisk(studyInstanceUIDToDelete);
+        series->setRetrievedDate(currentDate);
+        series->setRetrievedTime(currentTime);
+        saveSeries(databaseConnection, series);
     }
 }
 
-void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID)
+// Saves the patient of the given study to the database, doing an insert or an update as necessary.
+void savePatientOfStudy(DatabaseConnection &databaseConnection, const Study *study)
 {
-    INFO_LOG("S'esborrara de la base de dades la serie : " + seriesInstanceUID + " de l'estudi " + studyInstanceUID);
-
-    if (!studyInstanceUID.isEmpty() && !seriesInstanceUID.isEmpty())
-    {
-        DicomMask studyMask;
-        studyMask.setStudyInstanceUID(studyInstanceUID);
-
-        if (querySeries(studyMask).count() == 1)
-        {
-            // Si només té una sèrie esborrem tot l'estudi
-            INFO_LOG("L'estudi de la serie a esborrar nomes te aquesta serie, per tant s'esborrara l'estudi sencer.");
-            deleteStudy(studyInstanceUID);
-        }
-        else
-        {
-            DatabaseConnection dbConnect;
-            dbConnect.open();
-            dbConnect.beginTransaction();
-
-            bool status = deleteSeriesStructureFromDatabase(dbConnect, studyInstanceUID, seriesInstanceUID);
-
-            if (!status)
-            {
-                setLastError(dbConnect.getLastError());
-            }
-            else
-            {
-                dbConnect.commitTransaction();
-                deleteSeriesFromHardDisk(studyInstanceUID, seriesInstanceUID);
-            }
-        }
-    }
-}
-
-void LocalDatabaseManager::deleteOldStudies()
-{
-    // Comprovem si tenim activada la opció d'esborra estudis vells, sino es així no fem res
-    if (Settings().getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool())
-    {
-        DatabaseConnection dbConnect;
-        dbConnect.open();
-        LocalDatabaseStudyDAL studyDAL(dbConnect);
-
-        INFO_LOG("S'esborraran els estudis vells no visualitzats des del dia " + LocalDatabaseManager::LastAccessDateSelectedStudies.addDays(-1)
-                 .toString("dd/MM/yyyy"));
-
-        QList<Study*> studyListToDelete = studyDAL.query(DicomMask(), LocalDatabaseManager::LastAccessDateSelectedStudies);
-
-        setLastError(studyDAL.getLastError());
-
-        if (studyDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
-        {
-            return;
-        }
-
-        if (studyListToDelete.count() == 0)
-        {
-            INFO_LOG("No hi ha estudis vells per esborrar");
-        }
-
-        foreach (Study *study, studyListToDelete)
-        {
-            deleteStudy(study->getInstanceUID());
-            if (getLastError() != LocalDatabaseManager::Ok)
-            {
-                break;
-            }
-
-            // Esborrem el punter a study
-            delete study;
-        }
-    }
-}
-
-void LocalDatabaseManager::compact()
-{
-    DatabaseConnection dbConnect;
-    dbConnect.open();
-    LocalDatabaseUtilDAL utilDAL(dbConnect);
-
-    utilDAL.compact();
-    setLastError(utilDAL.getLastError());
-}
-
-int LocalDatabaseManager::getDatabaseRevision()
-{
-    DatabaseConnection dbConnect;
-    dbConnect.open();
-    LocalDatabaseUtilDAL utilDAL(dbConnect);
-
-    int databaseRevision = utilDAL.getDatabaseRevision();
-    setLastError(utilDAL.getLastError());
-
-    return databaseRevision;
-}
-
-void LocalDatabaseManager::setDatabaseRevision(int databaseRevision)
-{
-    DatabaseConnection dbConnect;
-    dbConnect.open();
-    LocalDatabaseUtilDAL utilDAL(dbConnect);
-
-    utilDAL.updateDatabaseRevision(databaseRevision);
-    setLastError(utilDAL.getLastError());
-}
-
-bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
-{
-    HardDiskInformation hardDiskInformation;
-    Settings settings;
-    quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath());
-    quint64 minimumSpaceRequired = quint64(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toULongLong() * 1024);
-    quint64 MbytesToFree;
-    quint64 MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk =
-        settings.getValue(InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull).toULongLong() * 1024;
-
-    m_lastError = Ok;
-
-    if (freeSpaceInHardDisk < minimumSpaceRequired)
-    {
-        INFO_LOG(QString("No hi ha suficient espai lliure per descarregar fitxers. Espai lliure: %1 MB, espai minim necessari: %2 MB")
-                    .arg(QString::number(freeSpaceInHardDisk), QString::number(minimumSpaceRequired)));
-
-        if (settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria).toBool())
-        {
-            INFO_LOG("s'intentara esborrar estudis vells per alliberar suficient espai");
-
-            // No hi ha suficient espai indiquem quina és la quantitat de MB d'estudis vells que intentem alliberar. Aquest és el número de Mbytes fins arribar
-            // l'espai míninm necessari (minimumSpaceRequired - freeSpaceInHardDisk), més una quantitat fixa, per assegurar que disposem de prou espai per
-            // descarregar estudis grans, i no haver d'estar en cada descarrega alliberant espai
-            MbytesToFree = (minimumSpaceRequired - freeSpaceInHardDisk) + MbytesToEraseWhereNotEnoughSpaceAvailableInHardDisk;
-
-            freeSpaceDeletingStudies(MbytesToFree);
-            if (getLastError() != LocalDatabaseManager::Ok)
-            {
-                ERROR_LOG("S'ha produit un error intentant alliberar espai");
-                return false;
-            }
-
-            // Tornem a consultar l'espai lliure
-            if (hardDiskInformation.getNumberOfFreeMBytes(LocalDatabaseManager::getCachePath()) < minimumSpaceRequired)
-            {
-                INFO_LOG("No hi ha suficient espai lliure per descarregar (" + QString().setNum(freeSpaceInHardDisk) + " MB)");
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-QString LocalDatabaseManager::getStudyPath(const QString &studyInstanceUID)
-{
-    return LocalDatabaseManager::getCachePath() + studyInstanceUID;
-}
-
-LocalDatabaseManager::LastError LocalDatabaseManager::getLastError()
-{
-    return m_lastError;
-}
-
-bool LocalDatabaseManager::setStudyRetrieving(const QString &studyInstanceUID)
-{
-    Settings settings;
-
-    if (!settings.contains(InputOutputSettings::RetrievingStudy) && !studyInstanceUID.isEmpty())
-    {
-        settings.setValue(InputOutputSettings::RetrievingStudy, studyInstanceUID);
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void LocalDatabaseManager::setStudyRetrieveFinished()
-{
-    Settings().remove(InputOutputSettings::RetrievingStudy);
-}
-
-void LocalDatabaseManager::checkNoStudiesRetrieving()
-{
-    if (isStudyRetrieving())
-    {
-        Settings settings;
-        QString studyNotFullRetrieved = settings.getValue(InputOutputSettings::RetrievingStudy).toString();
-
-        INFO_LOG("L'estudi " + studyNotFullRetrieved + " s'estava descarregant al tancar-se la ultima execucio de l'Starviewer, per mantenir la " +
-                 "integritat s'esborraran les imatges que se n'havien descarregat fins al moment");
-
-        // Es pot donar el cas que s'hagués arribat a inserir l'estudi i just abans d'indicar que la descàrrega de l'estudi havia finalitzat a través del
-        // mètode setStudyRetrieveFinished, s'hagués tancat l'starviewer per tant el mètode el detectaria que l'estudi estés a mig descarregar quan realment
-        // està descarregat, per això comprovem si l'estudi existeix i si és el cas l'esborrem per deixar la base de dades en un estat consistent
-        DicomMask studyMask;
-        studyMask.setStudyInstanceUID(studyNotFullRetrieved);
-
-        if (queryStudy(studyMask).count() > 0)
-        {
-            deleteStudy(studyNotFullRetrieved);
-        }// No s'ha arribat a inserir a la bd
-        else
-        {
-            // Comprovem si el directori existeix de l'estudi, per si no s'hagués arribat a baixar cap imatge, el
-            if (QDir().exists(getStudyPath(studyNotFullRetrieved)))
-            {
-                deleteStudyFromHardDisk(studyNotFullRetrieved);
-            }
-        }
-
-        settings.remove(InputOutputSettings::RetrievingStudy);
-    }
-    else
-    {
-        m_lastError = Ok;
-    }
-}
-
-bool LocalDatabaseManager::isStudyRetrieving()
-{
-    return Settings().contains(InputOutputSettings::RetrievingStudy);
-}
-
-bool LocalDatabaseManager::saveStudies(DatabaseConnection &dbConnect, QList<Study*> listStudyToSave, const QDate &currentDate, const QTime &currentTime)
-{
-    bool status = true;
-
-    foreach (Study *studyToSave, listStudyToSave)
-    {
-        INFO_LOG(QString("S'inserira a la base de dades l'estudi del pacient %1, modalitat %2, data estudi %3, UID estudi %4")
-            .arg(studyToSave->getParentPatient()->getFullName(), studyToSave->getModalitiesAsSingleString())
-            .arg(studyToSave->getDateTime().toString("dd/MM/yyyy hh:mm:ss"), studyToSave->getInstanceUID()));
-
-        // Primer guardem les sèries
-        status = saveSeries(dbConnect, studyToSave->getSeries(), currentDate, currentTime);
-
-        if (!status)
-        {
-            break;
-        }
-
-        studyToSave->setRetrievedDate(currentDate);
-        studyToSave->setRetrievedTime(currentTime);
-
-        status = savePatientOfStudy(dbConnect, studyToSave);
-
-        if (!status)
-        {
-            break;
-        }
-
-        // Guardem la sèrie si no s'ha produït cap error
-        status = saveStudy(dbConnect, studyToSave);
-
-        if (!status)
-        {
-            break;
-        }
-    }
-
-    return status;
-}
-
-bool LocalDatabaseManager::saveSeries(DatabaseConnection &dbConnect, QList<Series*> listSeriesToSave, const QDate &currentDate, const QTime &currentTime)
-{
-    bool status = true;
-
-    foreach (Series *seriesToSave, listSeriesToSave)
-    {
-        /// Primer guardem les imatges
-        status = saveImages(dbConnect, seriesToSave->getImages(), currentDate, currentTime);
-
-        if (!status)
-        {
-            break;
-        }
-
-        // Guardem la sèrie si no s'ha produït cap error
-        seriesToSave->setRetrievedDate(currentDate);
-        seriesToSave->setRetrievedTime(currentTime);
-
-        status = saveSeries(dbConnect, seriesToSave);
-
-        if (!status)
-        {
-            break;
-        }
-    }
-
-    return status;
-}
-
-bool LocalDatabaseManager::saveImages(DatabaseConnection &dbConnect, QList<Image*> listImageToSave, const QDate &currentDate, const QTime &currentTime)
-{
-    foreach (Image *imageToSave, listImageToSave)
-    {
-        imageToSave->setRetrievedDate(currentDate);
-        imageToSave->setRetrievedTime(currentTime);
-
-        if (!saveImage(dbConnect, imageToSave))
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool LocalDatabaseManager::saveDisplayShutters(DatabaseConnection &dbConnect, QList<DisplayShutter> shuttersList, Image *relatedImage)
-{
-    LocalDatabaseDisplayShutterDAL displayShutterDAL(dbConnect);
-    foreach (const DisplayShutter &shutter, shuttersList)
-    {
-        if (!displayShutterDAL.insert(shutter, relatedImage))
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool LocalDatabaseManager::savePatientOfStudy(DatabaseConnection &dbConnect, Study *study)
-{
-    LocalDatabasePatientDAL patientDAL(dbConnect);
-    LocalDatabaseStudyDAL studyDAL(dbConnect);
+    LocalDatabasePatientDAL patientDAL(databaseConnection);
+    LocalDatabaseStudyDAL studyDAL(databaseConnection);
     qlonglong patientID = studyDAL.getPatientIDFromStudyInstanceUID(study->getInstanceUID());
+    bool ok;
 
     if (patientID == -1)
     {
-        // Si no existeix l'inserim a la BD
-        return patientDAL.insert(study->getParentPatient());
+        // The patient doesn't exist, insert it
+        ok = !patientDAL.insert(study->getParentPatient());
     }
     else
     {
+        // The patient already exists, update it
         study->getParentPatient()->setDatabaseID(patientID);
-        return patientDAL.update(study->getParentPatient());
+
+        ok = patientDAL.update(study->getParentPatient());
+    }
+
+    if (!ok)
+    {
+        throw patientDAL.getLastError();
     }
 }
 
-bool LocalDatabaseManager::saveStudy(DatabaseConnection &dbConnect, Study *studyToSave)
+// Saves the given study to the database, doing an insert or an update as necessary.
+void saveStudy(DatabaseConnection &databaseConnection, const Study *study)
 {
-    LocalDatabaseStudyDAL studyDAL(dbConnect);
+    LocalDatabaseStudyDAL studyDAL(databaseConnection);
 
-    bool status = studyDAL.insert(studyToSave, QDate::currentDate());
+    bool ok = studyDAL.insert(study, QDate::currentDate());
 
-    /// Si l'estudi ja existia actualitzem la seva informació
-    if (!status && studyDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
+    // If the study already exists, update it
+    if (!ok && studyDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
     {
-        status = studyDAL.update(studyToSave, QDate::currentDate());
+        ok = studyDAL.update(study, QDate::currentDate());
     }
 
-    return status;
-}
-
-bool LocalDatabaseManager::saveSeries(DatabaseConnection &dbConnect, Series *seriesToSave)
-{
-    LocalDatabaseSeriesDAL seriesDAL(dbConnect);
-
-    bool status = seriesDAL.insert(seriesToSave);
-
-    /// Si la serie ja existia actualitzem la seva informació
-    if (!status && seriesDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
+    if (!ok)
     {
-        status = seriesDAL.update(seriesToSave);
-    }
-
-    return status;
-}
-
-bool LocalDatabaseManager::saveImage(DatabaseConnection &dbConnect, Image *imageToSave)
-{
-    LocalDatabaseImageDAL imageDAL(dbConnect);
-
-    bool status = imageDAL.insert(imageToSave);
-
-    /// Si el pacient ja existia actualitzem la seva informació
-    if (!status && imageDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
-    {
-        imageDAL.update(imageToSave);
-        // Un cop actualitzades les imatges, actualitzem els corresponents shutters
-        LocalDatabaseDisplayShutterDAL shutterDAL(dbConnect);
-        shutterDAL.update(imageToSave->getDisplayShutters(), imageToSave);
-
-        // Delete existing VOI LUTs from the image. The new ones (or the same ones) are inserted below.
-        status = deleteVoiLuts(dbConnect, imageToSave);
-
-        if (!status)
-        {
-            return status;
-        }
-    }
-    else
-    {
-        status = saveDisplayShutters(dbConnect, imageToSave->getDisplayShutters(), imageToSave);
-        if (!status)
-        {
-            return status;
-        }
-    }
-
-    // Insert VOI LUTs in the database
-    return insertVoiLuts(dbConnect, imageToSave);
-}
-
-bool LocalDatabaseManager::deleteStudyStructureFromDatabase(DatabaseConnection &dbConnect, const QString &studyInstanceUIDToDelete)
-{
-    DicomMask maskToDelete;
-    maskToDelete.setStudyInstanceUID(studyInstanceUIDToDelete);
-
-    if (!deletePatientOfStudyFromDatabase(dbConnect, maskToDelete))
-    {
-        return false;
-    }
-
-    // Esborrem tots els estudis
-    if (!deleteStudyFromDatabase(dbConnect, maskToDelete))
-    {
-        return false;
-    }
-
-    return deleteSeriesStructureFromDatabase(dbConnect, studyInstanceUIDToDelete, "");
-}
-
-bool LocalDatabaseManager::deleteSeriesStructureFromDatabase(DatabaseConnection &dbConnect, const QString &studyInstanceUIDToDelete,
-                                                            const QString &seriesIntanceUIDToDelete)
-{
-    DicomMask maskToDelete;
-
-    maskToDelete.setStudyInstanceUID(studyInstanceUIDToDelete);
-    maskToDelete.setSeriesInstanceUID(seriesIntanceUIDToDelete);
-
-    // Esborrem totes les series
-    if (!deleteSeriesFromDatabase(dbConnect, maskToDelete))
-    {
-        return false;
-    }
-
-    // Esborrem totes les imatges
-    return deleteImageFromDatabase(dbConnect, maskToDelete);
-}
-
-void LocalDatabaseManager::deleteRetrievedObjects(Patient *failedPatient)
-{
-    DirectoryUtilities delDirectory;
-
-    foreach (Study *failedStudy, failedPatient->getStudies())
-    {
-        delDirectory.deleteDirectory(LocalDatabaseManager::getCachePath() + failedStudy->getInstanceUID(), true);
+        throw studyDAL.getLastError();
     }
 }
 
-void LocalDatabaseManager::deleteRetrievedObjects(Series *failedSeries)
+// Saves the studies in the given list to the database, inserting or updating them as necessary.
+void saveStudies(DatabaseConnection &databaseConnection, const QList<Study*> &studyList, const QDate &currentDate, const QTime &currentTime)
 {
-    DirectoryUtilities delDirectory;
-    QString studyPath = LocalDatabaseManager::getCachePath() + failedSeries->getParentStudy()->getInstanceUID();
-    QString seriesDirectory = studyPath + QDir::separator() + failedSeries->getInstanceUID();
-
-    delDirectory.deleteDirectory(seriesDirectory, true);
-
-    if (delDirectory.isDirectoryEmpty(studyPath))
+    foreach (Study *study, studyList)
     {
-        // Si el directori de l'estudi està buit, vol dir que només s'havia descarregat
-        // la sèrie que ha fallat al guardar la base de dades, per tant si només esborrèssim el
-        // directori de la sèrie, quedaria el directori pare de l'estudi buit, per això comprovem si aquest
-        // directori és buit, i si és així també s'esborra aquest, perquè no ens quedi un directori d'un estudi buit
-        delDirectory.deleteDirectory(studyPath, true);
+        INFO_LOG(QString("Inserting to the database study %1 of modality %2 from %3 of patient %4").arg(study->getInstanceUID())
+                 .arg(study->getModalitiesAsSingleString()).arg(study->getDateTime().toString("dd/MM/yyyy hh:mm:ss"))
+                 .arg(study->getParentPatient()->getFullName()));
+
+        saveSeries(databaseConnection, study->getSeries(), currentDate, currentTime);
+
+        savePatientOfStudy(databaseConnection, study);
+
+        study->setRetrievedDate(currentDate);
+        study->setRetrievedTime(currentTime);
+        saveStudy(databaseConnection, study);
     }
 }
 
-bool LocalDatabaseManager::deletePatientOfStudyFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete)
+// Deletes the patient with the given id from the database.
+void deletePatientFromDatabase(DatabaseConnection &databaseConnection, qlonglong patientID)
 {
-    LocalDatabaseStudyDAL localDatabaseStudyDAL(dbConnect);
+    LocalDatabasePatientDAL patientDAL(databaseConnection);
 
-    // Busquem el ID de pacient
-    qlonglong patientID = localDatabaseStudyDAL.getPatientIDFromStudyInstanceUID(maskToDelete.getStudyInstanceUID());
-
-    if (localDatabaseStudyDAL.getLastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteOk)
+    if (!patientDAL.del(patientID))
     {
-        return false;
+        throw patientDAL.getLastError();
+    }
+}
+
+// Deletes from the database the patient and the study that match the given mask. (Note that each study has its own patient row.)
+void deletePatientOfStudyFromDatabase(DatabaseConnection &databaseConnection, const DicomMask &mask)
+{
+    LocalDatabaseStudyDAL studyDAL(databaseConnection);
+    qlonglong patientID = studyDAL.getPatientIDFromStudyInstanceUID(mask.getStudyInstanceUID());
+
+    if (studyDAL.getLastError().isValid())
+    {
+        throw studyDAL.getLastError();
     }
     else if (patientID == -1)
     {
-        ERROR_LOG(QString("No hem trobat el pacient a esborrar de l'estudi amb UID %1").arg(maskToDelete.getStudyInstanceUID()));
-        return true;
+        ERROR_LOG(QString("Can't find patient to be deleted from study %1.").arg(mask.getStudyInstanceUID()));
     }
     else
     {
-        return deletePatientFromDatabase(dbConnect, patientID);
+        deletePatientFromDatabase(databaseConnection, patientID);
     }
 }
 
-bool LocalDatabaseManager::deletePatientFromDatabase(DatabaseConnection &dbConnect, qlonglong patientID)
+// Deletes the study that matches the given mask from the database.
+void deleteStudyFromDatabase(DatabaseConnection &databaseConnection, const DicomMask &mask)
 {
-    LocalDatabasePatientDAL localDatabasePatientDAL(dbConnect);
+    LocalDatabaseStudyDAL studyDAL(databaseConnection);
 
-    return localDatabasePatientDAL.del(patientID);
-}
-
-bool LocalDatabaseManager::deleteStudyFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete)
-{
-    LocalDatabaseStudyDAL localDatabaseStudyDAL(dbConnect);
-
-    return localDatabaseStudyDAL.del(maskToDelete);
-}
-
-bool LocalDatabaseManager::deleteSeriesFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete)
-{
-    LocalDatabaseSeriesDAL localDatabaseSeriesDAL(dbConnect);
-
-    return localDatabaseSeriesDAL.del(maskToDelete);
-}
-
-bool LocalDatabaseManager::deleteImageFromDatabase(DatabaseConnection &dbConnect, const DicomMask &maskToDelete)
-{
-    // Primer esborrem els shutters que té aquesta imatge -> DELETE CASCADE
-    LocalDatabaseDisplayShutterDAL shutterDAL(dbConnect);
-
-    if (!shutterDAL.del(maskToDelete))
+    if (!studyDAL.del(mask))
     {
-        return false;
-    }
-
-    // Delete VOI LUTs from this image
-    if (!deleteVoiLuts(dbConnect, maskToDelete))
-    {
-        return false;
-    }
-    
-    // Si no hi ha cap error en esborrar els shutters, esborrem les corresponents imatges
-    LocalDatabaseImageDAL localDatabaseImageDAL(dbConnect);
-    return localDatabaseImageDAL.del(maskToDelete);
-}
-
-void LocalDatabaseManager::freeSpaceDeletingStudies(quint64 MbytesToErase)
-{
-    QList<Study*> studyListToDelete = queryStudyOrderByLastAccessDate(DicomMask());
-
-    if (getLastError() == LocalDatabaseManager::Ok)
-    {
-        quint64 MbytesErased = 0;
-        int index = 0;
-
-        while (index < studyListToDelete.count() && MbytesErased < MbytesToErase)
-        {
-            Study *studyToDelete = studyListToDelete.at(index);
-
-            emit studyWillBeDeleted(studyToDelete->getInstanceUID());
-            MbytesErased += HardDiskInformation::getDirectorySizeInBytes(LocalDatabaseManager::getCachePath() + studyToDelete->getInstanceUID()) / 1024 / 1024;
-
-            deleteStudy(studyToDelete->getInstanceUID());
-            if (getLastError() != LocalDatabaseManager::Ok)
-            {
-                break;
-            }
-
-            index++;
-        }
-
-        // Esborrem els estudis de la memòria
-        foreach (Study *study, studyListToDelete)
-        {
-            delete study;
-        }
+        throw studyDAL.getLastError();
     }
 }
 
-void LocalDatabaseManager::deleteStudyFromHardDisk(const QString &studyInstanceToDelete)
+// Deletes the series that match the given mask from the database.
+void deleteSeriesFromDatabase(DatabaseConnection &databaseConnection, const DicomMask &mask)
 {
-    DirectoryUtilities deleteDirectory;
+    LocalDatabaseSeriesDAL seriesDAL(databaseConnection);
 
-    // TODO El Path del directori no s'hauria de calcular aquí
-    if (!deleteDirectory.deleteDirectory(getStudyPath(studyInstanceToDelete), true))
+    if (!seriesDAL.del(mask))
     {
-        m_lastError = LocalDatabaseManager::DeletingFilesError;
-    }
-    else
-    {
-        m_lastError = LocalDatabaseManager::Ok;
+        throw seriesDAL.getLastError();
     }
 }
 
-void LocalDatabaseManager::deleteSeriesFromHardDisk(const QString &studyInstanceUID, const QString &seriesInstanceUID)
+// Deletes the images that match the given mask and its shutters and VOI LUTs from the database.
+void deleteImagesFromDatabase(DatabaseConnection &databaseConnection, const DicomMask &mask)
 {
-    DirectoryUtilities deleteDirectory;
+    // Delete shutters first
+    LocalDatabaseDisplayShutterDAL shutterDAL(databaseConnection);
 
-    // TODO El Path del directori no s'hauria de calcular aquí
-    if (!deleteDirectory.deleteDirectory(getStudyPath(studyInstanceUID) + QDir::separator() + seriesInstanceUID, true))
+    if (!shutterDAL.del(mask))
     {
-        m_lastError = LocalDatabaseManager::DeletingFilesError;
+        throw shutterDAL.getLastError();
     }
-    else
+
+    // Then delete VOI LUTs
+    deleteVoiLuts(databaseConnection, mask);
+
+    // Finally delete the image
+    LocalDatabaseImageDAL imageDAL(databaseConnection);
+
+    if (!imageDAL.del(mask))
     {
-        m_lastError = LocalDatabaseManager::Ok;
+        throw imageDAL.getLastError();
     }
 }
 
-void LocalDatabaseManager::createStudyThumbnails(Study *studyToGenerateSeriesThumbnails)
+// Deletes from the database the series with the given SeriesInstanceUID from the study with the given StudyInstanceUID.
+// If SeriesInstanceUID is empty, deletes all series from the study with the given StudyInstanceUID, but not the study itself.
+void deleteSeriesStructureFromDatabase(DatabaseConnection &databaseConnection, const QString &studyInstanceUID, const QString &seriesIntanceUID)
 {
-    foreach (Series *series, studyToGenerateSeriesThumbnails->getSeries())
+    DicomMask mask;
+    mask.setStudyInstanceUID(studyInstanceUID);
+    mask.setSeriesInstanceUID(seriesIntanceUID);
+    deleteSeriesFromDatabase(databaseConnection, mask);
+    deleteImagesFromDatabase(databaseConnection, mask);
+}
+
+// Deletes from the database the patient, study, series and images from the study with the given UID.
+void deleteStudyStructureFromDatabase(DatabaseConnection &databaseConnection, const QString &studyInstanceUID)
+{
+    DicomMask mask;
+    mask.setStudyInstanceUID(studyInstanceUID);
+    deletePatientOfStudyFromDatabase(databaseConnection, mask);
+    deleteStudyFromDatabase(databaseConnection, mask);
+    deleteSeriesStructureFromDatabase(databaseConnection, studyInstanceUID, QString());
+}
+
+// Deletes all the studies from the given patient from the disk.
+void deleteRetrievedObjects(const Patient *patient)
+{
+    DirectoryUtilities directoryUtilities;
+
+    foreach (Study *study, patient->getStudies())
+    {
+        directoryUtilities.deleteDirectory(LocalDatabaseManager::getCachePath() + study->getInstanceUID(), true);
+    }
+}
+
+// Deletes the given series from the disk.
+void deleteRetrievedObjects(const Series *series)
+{
+    QString studyPath = LocalDatabaseManager::getCachePath() + series->getParentStudy()->getInstanceUID();
+    QString seriesDirectory = studyPath + QDir::separator() + series->getInstanceUID();
+
+    DirectoryUtilities directoryUtilities;
+    directoryUtilities.deleteDirectory(seriesDirectory, true);
+
+    if (directoryUtilities.isDirectoryEmpty(studyPath))
+    {
+        directoryUtilities.deleteDirectory(studyPath, true);
+    }
+}
+
+// Returns the full path of the thumbnail file for the given series and study instance UID.
+QString getSeriesThumbnailPath(const QString &studyInstanceUID, const Series *series)
+{
+    return LocalDatabaseManager::getStudyPath(studyInstanceUID) + "/" + series->getInstanceUID() + "/thumbnail.png";
+}
+
+// Creates and saves a thumbnail for the given series in the directory of the series' images.
+void createSeriesThumbnail(const Series *series)
+{
+    QString thumbnailFilePath = getSeriesThumbnailPath(series->getParentStudy()->getInstanceUID(), series);
+
+    // Create thumbnail only if it doesn't already exist
+    if (!QFileInfo(thumbnailFilePath).exists())
+    {
+        ThumbnailCreator().getThumbnail(series).save(thumbnailFilePath, "PNG");
+    }
+}
+
+// Creates and saves a thumbnail for each series in the given study.
+void createStudyThumbnails(const Study *study)
+{
+    foreach (Series *series, study->getSeries())
     {
         createSeriesThumbnail(series);
     }
 }
 
-void LocalDatabaseManager::createSeriesThumbnail(Series *seriesToGenerateThumbnail)
-{
-    ThumbnailCreator thumbnailCreator;
-    QString thumbnailFilePath;
-
-    // Només crearem el thumbnail si aquest no s'ha creat encara
-    thumbnailFilePath = getSeriesThumbnailPath(seriesToGenerateThumbnail->getParentStudy()->getInstanceUID(), seriesToGenerateThumbnail);
-    if (!QFileInfo(thumbnailFilePath).exists())
-    {
-        thumbnailCreator.getThumbnail(seriesToGenerateThumbnail).save(thumbnailFilePath, "PNG");
-    }
-}
-
-void LocalDatabaseManager::loadSeriesThumbnail(QString studyInstanceUID, QList<Series*> seriesList)
+// Loads and sets the thumbnails of the given series from the study with the given UID.
+void loadSeriesThumbnails(const QString &studyInstanceUID, const QList<Series*> &seriesList)
 {
     foreach (Series *series, seriesList)
     {
@@ -1052,11 +401,553 @@ void LocalDatabaseManager::loadSeriesThumbnail(QString studyInstanceUID, QList<S
     }
 }
 
+}
+
+// Initialize static member
+QDate LocalDatabaseManager::LastAccessDateSelectedStudies;
+
+QString LocalDatabaseManager::getDatabaseFilePath()
+{
+    return QDir::toNativeSeparators(Settings().getValue(InputOutputSettings::DatabaseAbsoluteFilePath).toString());
+}
+
+QString LocalDatabaseManager::getCachePath()
+{
+    return QDir::toNativeSeparators(Settings().getValue(InputOutputSettings::CachePath).toString());
+}
+
+QString LocalDatabaseManager::getStudyPath(const QString &studyInstanceUID)
+{
+    return getCachePath() + studyInstanceUID;
+}
+
+LocalDatabaseManager::LocalDatabaseManager()
+{
+    Settings settings;
+
+    // Check if we should delete old studies and set the appropriate date to compare
+    if (settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool())
+    {
+        if (!LastAccessDateSelectedStudies.isValid())
+        {
+            LastAccessDateSelectedStudies = QDate::currentDate().addDays(-settings.getValue(InputOutputSettings::MinimumDaysUnusedToDeleteStudy).toInt());
+        }
+    }
+}
+
+void LocalDatabaseManager::save(Series *series)
+{
+    if (!series)
+    {
+        ERROR_LOG("Can't save a null series");
+        m_lastError = PatientInconsistent;
+        return;
+    }
+
+    try
+    {
+        DatabaseConnection databaseConnection;
+        databaseConnection.beginTransaction();
+
+        Study *study = series->getParentStudy();
+        savePatientOfStudy(databaseConnection, study);
+
+        QDate currentDate = QDate::currentDate();
+        QTime currentTime = QTime::currentTime();
+        study->setRetrievedDate(currentDate);
+        study->setRetrievedTime(currentTime);
+        saveStudy(databaseConnection, study);
+
+        QList<Series*> seriesList;
+        seriesList.append(series);
+        saveSeries(databaseConnection, seriesList, currentDate, currentTime);
+
+        databaseConnection.commitTransaction();
+
+        createSeriesThumbnail(series);
+
+        m_lastError = Ok;
+    }
+    catch (const QSqlError &error)
+    {
+        deleteRetrievedObjects(series);
+        setLastError(error);
+    }
+}
+
+QList<Patient*> LocalDatabaseManager::queryPatients(const DicomMask &mask)
+{
+    DatabaseConnection databaseConnection;
+    LocalDatabasePatientDAL patientDAL(databaseConnection);
+    QList<Patient*> patientList = patientDAL.query(mask);
+    setLastError(patientDAL.getLastError());
+    return patientList;
+}
+
+QList<Patient*> LocalDatabaseManager::queryPatientsAndStudies(const DicomMask &mask)
+{
+    DatabaseConnection databaseConnection;
+    LocalDatabaseStudyDAL studyDAL(databaseConnection);
+    QList<Patient*> patientList = studyDAL.queryPatientStudy(mask, QDate(), LastAccessDateSelectedStudies);
+    setLastError(studyDAL.getLastError());
+    return patientList;
+}
+
+QList<Study*> LocalDatabaseManager::queryStudies(const DicomMask &mask)
+{
+    DatabaseConnection databaseConnection;
+    LocalDatabaseStudyDAL studyDAL(databaseConnection);
+    QList<Study*> studyList = studyDAL.query(mask, QDate(), LastAccessDateSelectedStudies);
+    setLastError(studyDAL.getLastError());
+    return studyList;
+}
+
+QList<Series*> LocalDatabaseManager::querySeries(DicomMask mask)
+{
+    DatabaseConnection databaseConnection;
+    LocalDatabaseSeriesDAL seriesDAL(databaseConnection);
+    QList<Series*> seriesList = seriesDAL.query(mask);
+
+    if (seriesDAL.getLastError().isValid())
+    {
+        setLastError(seriesDAL.getLastError());
+        return seriesList;
+    }
+
+    // Fill number of images of each series
+    LocalDatabaseImageDAL imageDAL(databaseConnection);
+
+    foreach (Series *series, seriesList)
+    {
+        mask.setSeriesInstanceUID(series->getInstanceUID());
+        series->setNumberOfImages(imageDAL.count(mask));
+
+        if (imageDAL.getLastError().isValid())
+        {
+            setLastError(imageDAL.getLastError());
+            return seriesList;
+        }
+    }
+
+    loadSeriesThumbnails(mask.getStudyInstanceUID(), seriesList);
+
+    m_lastError = Ok;
+
+    return seriesList;
+}
+
+QList<Image*> LocalDatabaseManager::queryImages(const DicomMask &mask)
+{
+    DatabaseConnection databaseConnection;
+    LocalDatabaseImageDAL imageDAL(databaseConnection);
+    QList<Image*> imageList = imageDAL.query(mask);
+    setLastError(imageDAL.getLastError());
+    return imageList;
+}
+
+// TODO Possible memory leaks in this method: patients, and images
+Patient* LocalDatabaseManager::retrieve(const DicomMask &mask)
+{
+    DatabaseConnection databaseConnection;
+
+    // Get patient and studies
+    LocalDatabaseStudyDAL studyDAL(databaseConnection);
+    QList<Patient*> patientList = studyDAL.queryPatientStudy(mask, QDate(), LastAccessDateSelectedStudies);
+
+    if (patientList.isEmpty())
+    {
+        setLastError(studyDAL.getLastError());
+        return 0;
+    }
+
+    Patient *patient = patientList.first();
+
+    // Get series
+    LocalDatabaseSeriesDAL seriesDAL(databaseConnection);
+    QList<Series*> seriesList = seriesDAL.query(mask);
+
+    if (seriesDAL.getLastError().isValid())
+    {
+        setLastError(seriesDAL.getLastError());
+        return 0;
+    }
+
+    // Get images
+    LocalDatabaseImageDAL imageDAL(databaseConnection);
+    DicomMask imagesMask;
+    imagesMask.setStudyInstanceUID(mask.getStudyInstanceUID());
+
+    foreach (Series *series, seriesList)
+    {
+        imagesMask.setSeriesInstanceUID(series->getInstanceUID());
+
+        QList<Image*> imageList = imageDAL.query(imagesMask);
+
+        if (imageDAL.getLastError().isValid())
+        {
+            return 0;
+        }
+
+        foreach (Image *image, imageList)
+        {
+            series->addImage(image);
+        }
+
+        patient->getStudy(mask.getStudyInstanceUID())->addSeries(series);
+    }
+
+    // Update last access date in study
+    Study *study = patient->getStudy(mask.getStudyInstanceUID());
+    studyDAL.update(study, QDate::currentDate());
+    setLastError(studyDAL.getLastError());
+
+    return patient;
+}
+
+// TODO Memory leak when the study exists: the study returned by queryStudies()
+bool LocalDatabaseManager::studyExists(const Study *study)
+{
+    DicomMask mask;
+    mask.setStudyInstanceUID(study->getInstanceUID());
+    return !queryStudies(mask).isEmpty();
+}
+
+void LocalDatabaseManager::deleteStudy(const QString &studyInstanceUID)
+{
+    if (studyInstanceUID.isEmpty())
+    {
+        return;
+    }
+
+    INFO_LOG(QString("Deleting study %1 from local database.").arg(studyInstanceUID));
+
+    try
+    {
+        DatabaseConnection databaseConnection;
+        databaseConnection.beginTransaction();
+        deleteStudyStructureFromDatabase(databaseConnection, studyInstanceUID);
+        databaseConnection.commitTransaction();
+
+        deleteStudyFromHardDisk(studyInstanceUID);
+
+        m_lastError = Ok;
+    }
+    catch (const QSqlError &error)
+    {
+        setLastError(error);
+    }
+}
+
+void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const QString &seriesInstanceUID)
+{
+    if (studyInstanceUID.isEmpty() || seriesInstanceUID.isEmpty())
+    {
+        return;
+    }
+
+    INFO_LOG(QString("Deleting series %1 from study %2 from local database.").arg(seriesInstanceUID).arg(studyInstanceUID));
+
+    DicomMask mask;
+    mask.setStudyInstanceUID(studyInstanceUID);
+
+    // TODO Memory leak: the series
+    if (querySeries(mask).count() == 1)
+    {
+        INFO_LOG("The study contains only this series, so the study will be also deleted.");
+        deleteStudy(studyInstanceUID);
+    }
+    else
+    {
+        try
+        {
+            DatabaseConnection databaseConnection;
+            databaseConnection.beginTransaction();
+            deleteSeriesStructureFromDatabase(databaseConnection, studyInstanceUID, seriesInstanceUID);
+            databaseConnection.commitTransaction();
+
+            deleteSeriesFromHardDisk(studyInstanceUID, seriesInstanceUID);
+
+            m_lastError = Ok;
+        }
+        catch (const QSqlError &error)
+        {
+            setLastError(error);
+        }
+    }
+}
+
+void LocalDatabaseManager::deleteOldStudies()
+{
+    // If the setting is false don't do anything
+    if (!Settings().getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool())
+    {
+        return;
+    }
+
+    DatabaseConnection databaseConnection;
+    LocalDatabaseStudyDAL studyDAL(databaseConnection);
+
+    INFO_LOG(QString("Deleting studies that haven't been open since %1").arg(LastAccessDateSelectedStudies.addDays(-1).toString("dd/MM/yyyy")));
+
+    QList<Study*> studiesToDelete = studyDAL.query(DicomMask(), LastAccessDateSelectedStudies);
+
+    if (studyDAL.getLastError().isValid())
+    {
+        setLastError(studyDAL.getLastError());
+        return;
+    }
+
+    if (studiesToDelete.isEmpty())
+    {
+        INFO_LOG("No studies to delete.");
+    }
+
+    foreach (Study *study, studiesToDelete)
+    {
+        deleteStudy(study->getInstanceUID());
+        delete study;
+    }
+}
+
+void LocalDatabaseManager::compact()
+{
+    DatabaseConnection databaseConnection;
+    LocalDatabaseUtilDAL utilDAL(databaseConnection);
+    utilDAL.compact();
+    setLastError(utilDAL.getLastError());
+}
+
+int LocalDatabaseManager::getDatabaseRevision()
+{
+    DatabaseConnection databaseConnection;
+    LocalDatabaseUtilDAL utilDAL(databaseConnection);
+    int databaseRevision = utilDAL.getDatabaseRevision();
+    setLastError(utilDAL.getLastError());
+    return databaseRevision;
+}
+
+void LocalDatabaseManager::setDatabaseRevision(int databaseRevision)
+{
+    DatabaseConnection databaseConnection;
+    LocalDatabaseUtilDAL utilDAL(databaseConnection);
+    utilDAL.updateDatabaseRevision(databaseRevision);
+    setLastError(utilDAL.getLastError());
+}
+
+bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
+{
+    m_lastError = Ok;
+
+    HardDiskInformation hardDiskInformation;
+    quint64 freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(getCachePath());
+    Settings settings;
+    quint64 minimumSpaceRequired = quint64(settings.getValue(InputOutputSettings::MinimumFreeGigaBytesForCache).toULongLong() * 1024);
+
+    if (freeSpaceInHardDisk >= minimumSpaceRequired)
+    {
+        return true;
+    }
+
+    INFO_LOG(QString("Not enough free space in disk to download studies. Free space: %1 MiB. Required: %2 MiB.").arg(freeSpaceInHardDisk)
+                                                                                                                .arg(minimumSpaceRequired));
+
+    // Check if we should try to free up space. If not, return false
+    if (!settings.getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesNoFreeSpaceCriteria).toBool())
+    {
+        return false;
+    }
+
+    INFO_LOG("Old studies will be deleted to free up space.");
+
+    // Delete studies until we have the needed space (minimumSpaceRequired - freeSpaceInHardDisk)
+    // plus a constant quantity to ensure that we don't have to free up space too often
+    quint64 additionalMegabytesToErase = settings.getValue(InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull).toULongLong() * 1024;
+    quint64 megabytesToFreeUp = minimumSpaceRequired - freeSpaceInHardDisk + additionalMegabytesToErase;
+    freeUpSpaceDeletingStudies(megabytesToFreeUp);
+
+    if (getLastError() != Ok)
+    {
+        ERROR_LOG("Error while freeing up space.");
+        return false;
+    }
+
+    // Finally check free space again
+    freeSpaceInHardDisk = hardDiskInformation.getNumberOfFreeMBytes(getCachePath());
+
+    if (freeSpaceInHardDisk >= minimumSpaceRequired)
+    {
+        return true;
+    }
+    else
+    {
+        INFO_LOG(QString("Not enough free space in disk to download studies. Free space: %1 MiB. Required: %2 MiB.").arg(freeSpaceInHardDisk)
+                                                                                                                    .arg(minimumSpaceRequired));
+        return false;
+    }
+}
+
+void LocalDatabaseManager::setStudyBeingRetrieved(const QString &studyInstanceUID)
+{
+    Settings().setValue(InputOutputSettings::RetrievingStudy, studyInstanceUID);
+}
+
+void LocalDatabaseManager::setNoStudyBeingRetrieved()
+{
+    Settings().remove(InputOutputSettings::RetrievingStudy);
+}
+
+bool LocalDatabaseManager::isAStudyBeingRetrieved() const
+{
+    return Settings().contains(InputOutputSettings::RetrievingStudy);
+}
+
+void LocalDatabaseManager::deleteStudyBeingRetrieved()
+{
+    m_lastError = Ok;
+
+    if (isAStudyBeingRetrieved())
+    {
+        Settings settings;
+        QString studyInstanceUID = settings.getValue(InputOutputSettings::RetrievingStudy).toString();
+
+        INFO_LOG(QString("Study %1 was being downloaded when Starviewer finished. Its images will be deleted to maintain local cache integrity.")
+                 .arg(studyInstanceUID));
+
+        // The study could have really been fully downloaded and the application have finished just before clearing the setting,
+        // so we must delete the study if it exists in the database.
+        DicomMask mask;
+        mask.setStudyInstanceUID(studyInstanceUID);
+
+        // TODO Memory leak if the study exists
+        if (!queryStudies(mask).isEmpty())
+        {
+            deleteStudy(studyInstanceUID);
+        }
+        else
+        {
+            // Check if the directory really exists. It might not exist if not a single image was downloaded.
+            if (QDir().exists(getStudyPath(studyInstanceUID)))
+            {
+                deleteStudyFromHardDisk(studyInstanceUID);
+            }
+        }
+
+        setNoStudyBeingRetrieved();
+    }
+}
+
+LocalDatabaseManager::LastError LocalDatabaseManager::getLastError() const
+{
+    return m_lastError;
+}
+
+void LocalDatabaseManager::save(Patient *patient)
+{
+    if (!patient)
+    {
+        ERROR_LOG("Can't save a null patient");
+        m_lastError = PatientInconsistent;
+        return;
+    }
+
+    if (patient->getNumberOfStudies() == 0)
+    {
+        ERROR_LOG("Won't save a patient without studies");
+        m_lastError = PatientInconsistent;
+        return;
+    }
+
+    try {
+        DatabaseConnection databaseConnection;
+        databaseConnection.beginTransaction();
+
+        saveStudies(databaseConnection, patient->getStudies(), QDate::currentDate(), QTime::currentTime());
+
+        databaseConnection.commitTransaction();
+
+        foreach (Study *study, patient->getStudies())
+        {
+            createStudyThumbnails(study);
+        }
+
+        m_lastError = Ok;
+    }
+    catch (const QSqlError &error)
+    {
+        deleteRetrievedObjects(patient);
+        setLastError(error);
+    }
+}
+
+void LocalDatabaseManager::freeUpSpaceDeletingStudies(quint64 megabytesToFreeUp)
+{
+    QList<Study*> studyList = getAllStudiesOrderedByLastAccessDate();
+
+    if (getLastError() != Ok)
+    {
+        return;
+    }
+
+    quint64 megabytesErased = 0;
+
+    while (!studyList.isEmpty() && megabytesErased < megabytesToFreeUp)
+    {
+        Study *study = studyList.takeFirst();
+        emit studyWillBeDeleted(study->getInstanceUID());
+        megabytesErased += HardDiskInformation::getDirectorySizeInBytes(getCachePath() + study->getInstanceUID()) / 1024 / 1024;
+        deleteStudy(study->getInstanceUID());
+        delete study;
+
+        if (getLastError() != Ok)
+        {
+            break;
+        }
+    }
+
+    // Delete remaining studies (in case of error)
+    foreach (Study *study, studyList)
+    {
+        delete study;
+    }
+}
+
+QList<Study*> LocalDatabaseManager::getAllStudiesOrderedByLastAccessDate()
+{
+    DatabaseConnection databaseConnection;
+    LocalDatabaseStudyDAL studyDAL(databaseConnection);
+    QList<Study*> studyList = studyDAL.queryOrderByLastAccessDate(DicomMask(), QDate(), LastAccessDateSelectedStudies);
+    setLastError(studyDAL.getLastError());
+    return studyList;
+}
+
+void LocalDatabaseManager::deleteStudyFromHardDisk(const QString &studyInstanceUID)
+{
+    if (DirectoryUtilities().deleteDirectory(getStudyPath(studyInstanceUID), true))
+    {
+        m_lastError = Ok;
+    }
+    else
+    {
+        m_lastError = DeletingFilesError;
+    }
+}
+
+void LocalDatabaseManager::deleteSeriesFromHardDisk(const QString &studyInstanceUID, const QString &seriesInstanceUID)
+{
+    if (DirectoryUtilities().deleteDirectory(getStudyPath(studyInstanceUID) + QDir::separator() + seriesInstanceUID, true))
+    {
+        m_lastError = Ok;
+    }
+    else
+    {
+        m_lastError = DeletingFilesError;
+    }
+}
+
 void LocalDatabaseManager::setLastError(const QSqlError &error)
 {
     int sqliteLastError = error.nativeErrorCode().toInt();
 
-    // Es tradueixen els errors de Sqlite a errors nostres, per consulta codi d'errors Sqlite http://www.sqlite.org/c3ref/c_abort.html
     if (sqliteLastError == DatabaseConnection::SqliteOk)
     {
         m_lastError = Ok;
@@ -1080,26 +971,10 @@ void LocalDatabaseManager::setLastError(const QSqlError &error)
         m_lastError = DatabaseError;
     }
 
-    // El valor dels errors es pot consultar a http://www.sqlite.org/c3ref/c_abort.html
     if (sqliteLastError != DatabaseConnection::SqliteOk)
     {
-        ERROR_LOG("Codi error base de dades " + QString().setNum(sqliteLastError));
+        ERROR_LOG(QString("Database error code: %1").arg(sqliteLastError));
     }
-}
-
-QString LocalDatabaseManager::getSeriesThumbnailPath(QString studyInstanceUID, Series *series)
-{
-    return getStudyPath(studyInstanceUID) + "/" + series->getInstanceUID() + "/thumbnail.png";
-}
-
-QString LocalDatabaseManager::getDatabaseFilePath()
-{
-    return QDir::toNativeSeparators(Settings().getValue(InputOutputSettings::DatabaseAbsoluteFilePath).toString());
-}
-
-QString LocalDatabaseManager::getCachePath()
-{
-    return QDir::toNativeSeparators(Settings().getValue(InputOutputSettings::CachePath).toString());
 }
 
 }

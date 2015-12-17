@@ -217,7 +217,7 @@ void QueryScreen::checkDatabaseImageIntegrity()
 {
     LocalDatabaseManager localDatabaseManager;
 
-    localDatabaseManager.checkNoStudiesRetrieving();
+    localDatabaseManager.deleteStudyBeingRetrieved();
 
     if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
     {
