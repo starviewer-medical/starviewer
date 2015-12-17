@@ -39,21 +39,32 @@
     </message>
     <message>
         <location filename="qfusionlayoutwidgetbase.ui" line="75"/>
-        <source>2x1</source>
+        <source>2x1 CT</source>
+        <oldsource>2x1</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qfusionlayoutwidgetbase.ui" line="146"/>
+        <location filename="qfusionlayoutwidgetbase.ui" line="143"/>
+        <source>2x1 PT/NM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qfusionlayoutwidgetbase.ui" line="214"/>
         <source>3x1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qfusionlayoutwidgetbase.ui" line="226"/>
-        <source>2x3</source>
+        <location filename="qfusionlayoutwidgetbase.ui" line="294"/>
+        <source>2x3 CT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qfusionlayoutwidgetbase.ui" line="315"/>
+        <location filename="qfusionlayoutwidgetbase.ui" line="374"/>
+        <source>2x3 PT/NM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qfusionlayoutwidgetbase.ui" line="463"/>
         <source>3x3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -901,12 +912,12 @@
     <name>udg::Q2DViewerWidget</name>
     <message>
         <location filename="q2dviewerwidget.cpp" line="41"/>
-        <location filename="q2dviewerwidget.cpp" line="226"/>
+        <location filename="q2dviewerwidget.cpp" line="230"/>
         <source>Enable manual synchronization in this viewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="232"/>
+        <location filename="q2dviewerwidget.cpp" line="236"/>
         <source>Disable manual synchronization in this viewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1152,6 +1163,21 @@ Shading will be disabled, it will not render as expected.</source>
     <message>
         <location filename="qdiagnosistestbase.ui" line="269"/>
         <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QFusionLayoutWidget</name>
+    <message>
+        <location filename="qfusionlayoutwidget.cpp" line="64"/>
+        <location filename="qfusionlayoutwidget.cpp" line="65"/>
+        <source>2x1 %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qfusionlayoutwidget.cpp" line="66"/>
+        <location filename="qfusionlayoutwidget.cpp" line="67"/>
+        <source>2x3 %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
