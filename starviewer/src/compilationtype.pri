@@ -1,4 +1,7 @@
-CONFIG += debug_and_release
+CONFIG += debug_and_release c++11
+
+# TODO: remove once ITK is compiled with c++11
+linux-g++:QMAKE_CXXFLAGS += -fpermissive
 
 unix {
     QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
