@@ -34,10 +34,10 @@ for(dir, MAIN_EXTENSIONS) {
 
 # Dependències de llibreries core
 DUMMY = $$addLibraryDependency($$PWD/src, interface)
-linux-g++:LIBS += -Wl,--start-group
+linux:LIBS += -Wl,--start-group
 DUMMY = $$addLibraryDependency($$PWD/src, inputoutput)
 DUMMY = $$addLibraryDependency($$PWD/src, core)
-linux-g++:LIBS += -Wl,--end-group
+linux:LIBS += -Wl,--end-group
 
 win32{
   LIBS += -ladvapi32 \
