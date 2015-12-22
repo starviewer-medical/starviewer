@@ -62,7 +62,11 @@ before_script:
 
 script:
   - cd starviewer
-  - qmake
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${CC}" = "clang" ]; then
+      qmake -spec linux-clang ;
+    else
+      qmake ;
+    fi
   - make -j3
   - cd tests/auto
   - ./autotests -silent
