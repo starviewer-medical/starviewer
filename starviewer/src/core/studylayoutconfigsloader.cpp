@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "studylayoutconfigsloader.h"
 
 #include "studylayoutconfig.h"
@@ -42,7 +56,7 @@ StudyLayoutConfig StudyLayoutConfigsLoader::getDefaultConfigForModality(const QS
     if (modality == "CR" || modality == "DX" || modality == "ES" || modality == "MG" || modality == "OP" || modality == "RF" || modality == "US" || modality == "XC")
     {
         // TODO De moment RF es posa en la categoria de desplegar per imatges per seguir com estan fets els HP, 
-        // perÚ cal veure si Ès millor fer que RF tingui un desplegament a nivell de sËries
+        // per√≤ cal veure si √©s millor fer que RF tingui un desplegament a nivell de s√®ries
         return StudyLayoutConfig(modality, StudyLayoutConfig::UnfoldImages, StudyLayoutConfig::LeftToRightFirst);
     }
     else if (modality == "CT")

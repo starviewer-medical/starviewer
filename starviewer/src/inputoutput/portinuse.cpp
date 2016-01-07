@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "portinuse.h"
 #include "portinusebyanotherapplication.h"
 
@@ -11,6 +25,10 @@ PortInUse::PortInUse()
 {
     m_status = PortInUse::PortUnknownStatus;
     m_errorString = QObject::tr("No port checked yet");
+}
+
+PortInUse::~PortInUse()
+{
 }
 
 bool PortInUse::isPortInUse(int port)
@@ -32,7 +50,7 @@ bool PortInUse::isPortInUse(int port)
     else
     {
         // No s'hauria de donar un error diferent a AddressInUseError, de totes maneres per seguretat el loggagem
-        ERROR_LOG("No s'ha pogut comprovat correctament si el port " + QString().setNum(port) + " est‡ en ˙s, per error: " + errorString);
+        ERROR_LOG("No s'ha pogut comprovat correctament si el port " + QString().setNum(port) + " est√† en √∫s, per error: " + errorString);
         m_errorString = errorString;
         m_status = PortInUse::PortCheckError;
     }
@@ -45,7 +63,7 @@ PortInUse::PortInUseOwner PortInUse::getOwner()
 {
     PortInUse::PortInUseOwner owner = PortInUse::PortUsedByUnknown;
 
-    // En cas que el port estigui en ˙s, cal mirar si l'ha obert Starviewer o una altra aplicaciÛ
+    // En cas que el port estigui en √∫s, cal mirar si l'ha obert Starviewer o una altra aplicaci√≥
     if (m_status == PortInUse::PortIsInUse)
     {
         // S'instancia un objecte de la calsse segons el sistema operatiu
@@ -56,7 +74,7 @@ PortInUse::PortInUseOwner PortInUse::getOwner()
         {
             if (inUse)
             {
-                // Port obert per una altra aplicaciÛ
+                // Port obert per una altra aplicaci√≥
                 owner = PortInUse::PortUsedByOther;
             }
             else
@@ -77,7 +95,7 @@ bool PortInUse::isPortAvailable(int port, QAbstractSocket::SocketError &serverEr
     QTcpServer tcpServer;
     bool result;
 
-    /// Result ser‡ cert si el port est‡ lliure, pertant s'ha de retorna l'oposat
+    /// Result ser√† cert si el port est√† lliure, pertant s'ha de retorna l'oposat
     result = tcpServer.listen(QHostAddress::Any, port);
     serverError = tcpServer.serverError();
     errorString = tcpServer.errorString();

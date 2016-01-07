@@ -58,7 +58,7 @@
       </widget>
      </item>
      <item>
-      <widget class="udg::QWindowLevelComboBox" name="m_windowLevelComboBox">
+      <widget class="udg::QVoiLutComboBox" name="m_voiLutComboBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -92,7 +92,16 @@
         <number>0</number>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
          <number>6</number>
         </property>
         <item>
@@ -734,7 +743,16 @@ border: 1px solid  #680000;
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
-             <property name="margin">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <property name="spacing">
@@ -877,13 +895,12 @@ border: 1px solid  #680000;
    <header>qthumbnailspreviewwidget.h</header>
   </customwidget>
   <customwidget>
-   <class>udg::QWindowLevelComboBox</class>
+   <class>udg::QVoiLutComboBox</class>
    <extends>QComboBox</extends>
-   <header>qwindowlevelcombobox.h</header>
+   <header>qvoilutcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>

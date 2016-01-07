@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGCLIPPINGPLANESTOOL_H
 #define UDGCLIPPINGPLANESTOOL_H
 
@@ -27,7 +41,7 @@ public:
     void handleEvent(long unsigned eventID);
 
 private slots:
-    /// Es connectar‡ als events emesos pel widget per saber quan s'ha interactuat i aixÌ aplicar els plans de tall sobre el visor
+    /// Es connectar√† als events emesos pel widget per saber quan s'ha interactuat i aix√≠ aplicar els plans de tall sobre el visor
     void boundingBoxEventHandler(vtkObject *obj, unsigned long event, void *client_data, void *call_data, vtkCommand *command);
 
     /// Cada cop que s'hagi canviat l'input del visor hem de posar a punt
@@ -35,7 +49,7 @@ private slots:
     void updateInput();
 
 private:
-    /// ObtÈ els plans del widget i els aplica com a plans de tall sobre el volum
+    /// Obt√© els plans del widget i els aplica com a plans de tall sobre el volum
     void updateViewerClippingPlanes();
 
 protected:

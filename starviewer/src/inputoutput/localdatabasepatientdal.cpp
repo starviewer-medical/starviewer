@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include <sqlite3.h>
 #include <QString>
 
@@ -15,7 +29,7 @@ LocalDatabasePatientDAL::LocalDatabasePatientDAL(DatabaseConnection *dbConnectio
 
 void LocalDatabasePatientDAL::insert(Patient *newPatient)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newPatient)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(newPatient).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -33,7 +47,7 @@ void LocalDatabasePatientDAL::insert(Patient *newPatient)
 
 void LocalDatabasePatientDAL::update(Patient *patientToUpdate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(patientToUpdate)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdate(patientToUpdate).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -43,7 +57,7 @@ void LocalDatabasePatientDAL::update(Patient *patientToUpdate)
 
 void LocalDatabasePatientDAL::del(qlonglong patientID)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(patientID)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlDelete(patientID).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -60,7 +74,7 @@ QList<Patient*> LocalDatabasePatientDAL::query(const DicomMask &patientMask)
     QList<Patient*> patientList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          qPrintable(buildSqlSelect(patientMask)),
+                                          buildSqlSelect(patientMask).toUtf8().constData(),
                                           &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
@@ -86,7 +100,7 @@ Patient* LocalDatabasePatientDAL::fillPatient(char **reply, int row, int columns
 
     patient->setDatabaseID(QString(reply[0 + row * columns]).toLongLong());
     patient->setID(reply[1 + row * columns]);
-    patient->setFullName(reply[2 + row * columns]);
+    patient->setFullName(convertToQString(reply[2 + row * columns]));
     patient->setBirthDate(reply[3 + row * columns]);
     patient->setSex(reply[4 + row * columns]);
 

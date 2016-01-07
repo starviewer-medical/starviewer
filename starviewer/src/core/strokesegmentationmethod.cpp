@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "strokesegmentationmethod.h"
 
 #include "itkErfcLevelSetImageFilter.h"
@@ -29,8 +43,7 @@
 
 #include <itkVector.h>
 #include <itkListSample.h>
-#include <itkMeanCalculator.h>
-#include <itkCovarianceCalculator.h>
+#include <itkCovarianceSampleFilter.h>
 #include <itkMedianImageFilter.h>
 #include <itkBinaryMedianImageFilter.h>
 
@@ -153,7 +166,6 @@ double StrokeSegmentationMethod::applyMethod()
 
     //m_Mask->setData(outcaster->GetOutput());
     m_Mask->setData(volumeCalc->GetOutput());
-    m_Mask->getVtkData()->Update();
     // m_Mask  = outcaster->GetOutput();
 
     return m_volume;
@@ -166,7 +178,7 @@ double StrokeSegmentationMethod::applyMethodVTK()
     int index[3];
     m_cont = 0;
     vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
-    imageThreshold->SetInput(m_Volume->getVtkData());
+    imageThreshold->SetInputData(m_Volume->getVtkData());
     imageThreshold->ThresholdBetween(m_lowerThreshold, m_upperThreshold);
     imageThreshold->SetInValue(m_insideMaskValue - 100);
     imageThreshold->SetOutValue(m_outsideMaskValue);
@@ -193,8 +205,8 @@ double StrokeSegmentationMethod::applyMethodVTK()
 
 void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int a, int b, int c, int prof)
 {
-    if ((a >= m_Volume->getWholeExtent()[0]) && (a <= m_Volume->getWholeExtent()[1]) && (b >= m_Volume->getWholeExtent()[2]) && (b <=
-        m_Volume->getWholeExtent()[3]) && (c >= m_Volume->getWholeExtent()[4]) && (c <= m_Volume->getWholeExtent()[5]))
+    if ((a >= m_Volume->getExtent()[0]) && (a <= m_Volume->getExtent()[1]) && (b >= m_Volume->getExtent()[2]) && (b <=
+        m_Volume->getExtent()[3]) && (c >= m_Volume->getExtent()[4]) && (c <= m_Volume->getExtent()[5]))
     {
         double maskValue = imMask->GetScalarComponentAsDouble(a, b, c, 0);
         if (maskValue == m_insideMaskValue - 100)
@@ -214,7 +226,6 @@ void StrokeSegmentationMethod::applyMethodVTKRecursive(vtkImageData* imMask, int
 double StrokeSegmentationMethod::applyCleanSkullMethod()
 {
     DEBUG_LOG("Clean Skull!!");
-    typedef itk::BinaryThresholdImageFilter<Volume::ItkImageType, Volume::ItkImageType> ThresholdFilterType;
     typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType, Volume::VDimension> StructuringElementType;
     typedef itk::BinaryErodeImageFilter<Volume::ItkImageType, Volume::ItkImageType, StructuringElementType> ErodeFilterType;
     typedef itk::BinaryDilateImageFilter<Volume::ItkImageType, Volume::ItkImageType, StructuringElementType> DilateFilterType;
@@ -444,7 +455,6 @@ void StrokeSegmentationMethod::applyFilter(Volume *output)
     typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
 
     typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType> CurvatureFlowImageFilterType;
-    typedef itk::ConnectedThresholdImageFilter<InternalImageType, InternalImageType> ConnectedFilterType;
 
     InputCastingFilterType::Pointer incaster = InputCastingFilterType::New();
     OutputCastingFilterType::Pointer outcaster = OutputCastingFilterType::New();
@@ -471,7 +481,6 @@ void StrokeSegmentationMethod::applyFilter(Volume *output)
     output->setImages(m_Volume->getImages());
 
     output->setData(outcaster->GetOutput());
-    output->getVtkData()->Update();
 
     return;
 }
@@ -526,7 +535,6 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     typedef float InternalPixelType;
     typedef itk::Image<InternalPixelType, 3> InternalImageType;
 
-    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
     typedef itk::BinaryThresholdImageFilter<InternalImageType, Volume::ItkImageType> ThresholdingFilterType;
     typedef itk::FastMarchingImageFilter<InternalImageType, InternalImageType> FastMarchingFilterType;
 
@@ -705,19 +713,18 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     }
     DEBUG_LOG(QString("estimed mean: %1").arg(mean));
 
-    typedef itk::Statistics::CovarianceCalculator<SampleType> CovarianceAlgorithmType;
+    typedef itk::Statistics::CovarianceSampleFilter<SampleType> CovarianceAlgorithmType;
     CovarianceAlgorithmType::Pointer covarianceAlgorithm = CovarianceAlgorithmType::New();
 
-    covarianceAlgorithm->SetInputSample(sample);
-    covarianceAlgorithm->SetMean(0);
+    covarianceAlgorithm->SetInput(sample);
     covarianceAlgorithm->Update();
 
     DEBUG_LOG("Using the one pass algorithm:");
     DEBUG_LOG("Mean = ");
-    std::cout << *(covarianceAlgorithm->GetMean()) << std::endl;
+    std::cout << covarianceAlgorithm->GetMean() << std::endl;
 
     DEBUG_LOG("Covariance = ");
-    std::cout << *(covarianceAlgorithm->GetOutput()) << std::endl;
+    std::cout << covarianceAlgorithm->GetCovarianceMatrix() << std::endl;
 
     // Cas Comas Pey!!!!!!
     // mean = 30;
@@ -725,7 +732,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
     // !!!!!!!!!!!!!!!!!!!!!
 
     m_mean = mean;
-    m_variance = sqrt((*covarianceAlgorithm->GetOutput())[0][0]);
+    m_variance = sqrt(covarianceAlgorithm->GetCovarianceMatrix()[0][0]);
     DEBUG_LOG(QString("Mean: %1, Variance: %2").arg(m_mean).arg(m_variance));
     //computeSpeedMap(speedMapVolume);
 
@@ -964,7 +971,6 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
         ++hematomaIt;
     }
 
-    lesionMask->getVtkData()->Update();
     std::cout << "Lesion: " << lesionMask->getItkData()->GetOrigin() << " ," << lesionMask->getItkData()->GetSpacing() << " ," <<
                  lesionMask->getItkData()->GetBufferedRegion().GetSize() << std::endl;
     std::cout << "Volume: " << m_Volume->getItkData()->GetOrigin() << " ," << m_Volume->getItkData()->GetSpacing() << " ," <<
@@ -994,10 +1000,9 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
     typedef float InternalPixelType;
     typedef itk::Image<InternalPixelType, 3> InternalImageType;
 
-    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
+//    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
     typedef itk::BinaryThresholdImageFilter<InternalImageType, Volume::ItkImageType> ThresholdingFilterType;
     typedef itk::FastMarchingImageFilter<InternalImageType, InternalImageType> FastMarchingFilterType;
-    typedef itk::ThresholdSegmentationLevelSetImageFilter<InternalImageType, InternalImageType> ThresholdSegmentationLevelSetImageFilterType;
 
     typedef itk::BinaryBallStructuringElement<Volume::ItkPixelType, Volume::VDimension> StructuringElementType;
     typedef itk::BinaryDilateImageFilter<Volume::ItkImageType, Volume::ItkImageType, StructuringElementType> DilateFilterType;
@@ -1057,19 +1062,18 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
     }
     DEBUG_LOG(QString("estimed mean: %1").arg(mean));
 
-    typedef itk::Statistics::CovarianceCalculator<SampleType> CovarianceAlgorithmType;
+    typedef itk::Statistics::CovarianceSampleFilter<SampleType> CovarianceAlgorithmType;
     CovarianceAlgorithmType::Pointer covarianceAlgorithm = CovarianceAlgorithmType::New();
 
-    covarianceAlgorithm->SetInputSample(sample);
-    covarianceAlgorithm->SetMean(0);
+    covarianceAlgorithm->SetInput(sample);
     covarianceAlgorithm->Update();
 
     DEBUG_LOG("Using the one pass algorithm:");
     DEBUG_LOG("Mean = ");
-    std::cout << *(covarianceAlgorithm->GetMean()) << std::endl;
+    std::cout << covarianceAlgorithm->GetMean() << std::endl;
 
     DEBUG_LOG("Covariance = ");
-    std::cout << *(covarianceAlgorithm->GetOutput()) << std::endl;
+    std::cout << covarianceAlgorithm->GetCovarianceMatrix() << std::endl;
     const double sqrt2 = 1.41421356;
     //double mean = (*covarianceAlgorithm->GetMean())[0];
     //double variance = (*covarianceAlgorithm->GetOutput())[0][0];
@@ -1080,7 +1084,7 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
     // !!!!!!!!!!!!!!!!!!!!!
 
     m_mean = mean;
-    m_variance = sqrt((*covarianceAlgorithm->GetOutput())[0][0]);
+    m_variance = sqrt(covarianceAlgorithm->GetCovarianceMatrix()[0][0]);
     DEBUG_LOG(QString("Mean: %1, Variance: %2").arg(m_mean).arg(m_variance));
     //computeSpeedMap(speedMapVolume);
 
@@ -1227,8 +1231,6 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
         ++hematomaIt;
     }
 
-    lesionMask->getVtkData()->Update();
-
     std::cout << "End method!!" << std::endl;
 
     double spacing[3];
@@ -1327,7 +1329,6 @@ double StrokeSegmentationMethod::applyVentriclesMethod()
     m_cont = volumeCalc->GetVolumeCount();
 
     m_Mask->setData(volumeCalc->GetOutput());
-    m_Mask->getVtkData()->Update();
 
     return m_volume;
 }
@@ -1339,7 +1340,7 @@ void StrokeSegmentationMethod::applyMethod2()
     typedef itk::Image<InternalPixelType, 3> InternalImageType;
 
     typedef itk::CastImageFilter<Volume::ItkImageType, InternalImageType> InputCastingFilterType;
-    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
+//    typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
 
     typedef itk::BinaryThresholdImageFilter<InternalImageType, Volume::ItkImageType> ThresholdingFilterType;
     typedef itk::CurvatureAnisotropicDiffusionImageFilter<InternalImageType, InternalImageType> CurvatureAnisotropicFilterType;
@@ -1473,9 +1474,6 @@ int StrokeSegmentationMethod::applyMethod3()
     typedef itk::CastImageFilter<Volume::ItkImageType, InternalImageType> InputCastingFilterType;
     typedef itk::CastImageFilter<InternalImageType, Volume::ItkImageType> OutputCastingFilterType;
 
-    typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType> CurvatureFlowImageFilterType;
-    typedef itk::ConnectedThresholdImageFilter<InternalImageType, InternalImageType> ConnectedFilterType;
-
     typedef itk::BinaryThresholdImageFilter<InternalImageType, Volume::ItkImageType> ThresholdingFilterType;
     typedef itk::FastMarchingImageFilter<InternalImageType, InternalImageType> FastMarchingFilterType;
     typedef itk::ThresholdSegmentationLevelSetImageFilter<InternalImageType, InternalImageType> ThresholdSegmentationLevelSetImageFilterType;
@@ -1555,7 +1553,6 @@ int StrokeSegmentationMethod::applyMethod3()
     outcaster->Update();
     DEBUG_LOG("Mask Set!!");
     m_Mask->setData(outcaster->GetOutput());
-    m_Mask->getVtkData()->Update();
     // m_Mask  = outcaster->GetOutput();
 
     return this->computeSizeMask();
@@ -1579,7 +1576,6 @@ int StrokeSegmentationMethod::applyMethod4()
     thresholder->SetOutsideValue(0);
     thresholder->SetInsideValue(255);
 
-    typedef itk::RescaleIntensityImageFilter<InternalImageType, Volume::ItkImageType> CastFilterType;
     typedef itk::CurvatureAnisotropicDiffusionImageFilter<InternalImageType, InternalImageType> SmoothingFilterType;
     typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<InternalImageType, InternalImageType> GradientFilterType;
     typedef itk::SigmoidImageFilter<InternalImageType, InternalImageType> SigmoidFilterType;

@@ -1,7 +1,22 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "mathtools.h"
 #include "logging.h"
 
 #include <cmath>
+#include <ctime>
 #include <vtkMath.h>
 #include <vtkPlane.h>
 #include <vtkLine.h>
@@ -62,7 +77,8 @@ double MathTools::angleInDegrees(const QVector2D &vector)
 
 double MathTools::angleInRadians(const QVector3D &vec1, const QVector3D &vec2)
 {
-    return acos(QVector3D::dotProduct(vec1, vec2) / (vec1.length() * vec2.length()));
+    // Cast all values to double to operate with maximum precision (the returned values are floats in Qt5)
+    return acos(static_cast<double>(QVector3D::dotProduct(vec1, vec2)) / (static_cast<double>(vec1.length()) * static_cast<double>(vec2.length())));
 }
 
 double MathTools::angleInDegrees(const QVector3D &vec1, const QVector3D &vec2)

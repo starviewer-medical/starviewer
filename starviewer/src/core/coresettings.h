@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGCORESETTINGS_H
 #define UDGCORESETTINGS_H
 
@@ -73,6 +87,9 @@ public:
     /// No permetre que es comprobin versions online
     static const QString DontCheckNewVersionsOnline;
 
+    /// Additional parameters to add to the update check URL.
+    static const QString UpdateCheckUrlAdditionalParameters;
+
     /// Especifica les excepcions en que no ha s'ha d'aplicar la auto orientació en mamografies.
     static const QString MammographyAutoOrientationExceptions;
 
@@ -84,7 +101,7 @@ public:
     /// Defineix el nombre màxim d'ítems visibles al desplegar-se el combo de window/levels per defecte.
     /// Si tenim més presets que els que indiqui aquest setting, apareixerà un scroll vertical.
     /// Aquest comportament serà així per totes les plataformes excepte Mac, que sempre mostrarà tots els elements.
-    static const QString MaximumNumberOfVisibleWindowLevelComboItems;
+    static const QString MaximumNumberOfVisibleVoiLutComboItems;
 
     /// Defineix la geometria de la finestra del DICOMDumpBrowser
     static const QString QDICOMDumpBrowserGeometry;

@@ -1,22 +1,27 @@
---- E:/gdcm/source/gdcm-2.0.19/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx.original	dt. juny 12 14:16:13 2012
-+++ E:/gdcm/source/gdcm-2.0.19/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx	dt. set 18 10:42:31 2012
-@@ -406,30 +406,50 @@
-       nmask = nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 );
+diff -upr gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx
+--- gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx	2014-07-26 17:19:49.000000000 +0200
++++ gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx	2014-08-06 12:22:31.626422000 +0200
+@@ -406,30 +406,50 @@ bool ImageCodec::DoOverlayCleanup(std::i
+       nmask = (int16_t)(nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 ));
  
        uint16_t c;
 -      while( is.read((char*)&c,2) )
 -        {
--        c = c >> (PF.GetBitsStored() - PF.GetHighBit() - 1);
+-        c = (uint16_t)(c >> (PF.GetBitsStored() - PF.GetHighBit() - 1));
 -        if ( c & smask )
+-          {
+-          c = (uint16_t)(c | nmask);
+-          }
+-        else
 +      try
 +      {
 +        while( is.read((char*)&c,2) )
            {
--          c = c | nmask;
-+          c = c >> (PF.GetBitsStored() - PF.GetHighBit() - 1);
+-          c = c & pmask;
++          c = (uint16_t)(c >> (PF.GetBitsStored() - PF.GetHighBit() - 1));
 +          if ( c & smask )
 +            {
-+            c = c | nmask;
++            c = (uint16_t)(c | nmask);
 +            }
 +          else
 +            {
@@ -24,17 +29,14 @@
 +            }
 +          os.write((char*)&c, 2 );
            }
--        else
+-        os.write((char*)&c, 2 );
 +      }
 +      catch (std::ios_base::failure &f)
 +      {
-+          if (!is.eof())
-           {
--          c = c & pmask;
-+              throw f;
-           }
--        os.write((char*)&c, 2 );
--        }
++        if (!is.eof())
++        {
++          throw f;
+         }
        }
 +      }
      else // Pixel are unsigned
@@ -42,26 +44,24 @@
  #if 1
        uint16_t c;
 -      while( is.read((char*)&c,2) )
--        {
--        c =
--          (c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask;
--        os.write((char*)&c, 2 );
--        }
 +      try
 +      {
 +        while( is.read((char*)&c,2) )
 +          {
-+          c =
-+            (c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask;
++          c = (uint16_t)(
++            (c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask);
 +          os.write((char*)&c, 2 );
 +          }
 +      }
 +      catch (std::ios_base::failure &f)
 +      {
-+          if (!is.eof())
-+          {
-+              throw f;
-+          }
++        if (!is.eof())
+         {
+-        c = (uint16_t)(
+-          (c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask);
+-        os.write((char*)&c, 2 );
++          throw f;
+         }
 +      }
        //os.rdbuf( is.rdbuf() );
  #else

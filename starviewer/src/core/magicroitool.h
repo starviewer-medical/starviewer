@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGMAGICROITOOL_H
 #define UDGMAGICROITOOL_H
 
@@ -66,7 +80,7 @@ private:
     void getNextIndex(int direction, int x, int y, int &nextX, int &nextY);
     int getNextDirection(int direction);
     int getInverseDirection(int direction);
-    void addPoint(int direction, int x, int y, double z);
+    void addPoint(int direction, int x, int y);
     bool isLoopReached();
 
     /// Retorna la desviació estàndard dins la regió marcada per la magicSize

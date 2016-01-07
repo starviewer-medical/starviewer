@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "optimalviewersgridestimator.h"
 #include "mathtools.h"
 
@@ -5,8 +19,8 @@ namespace udg {
 
 OptimalViewersGridEstimator::OptimalViewersGridEstimator()
 {
-    // El n˙mero de columnes haur‡ de ser sempre parell per no tenir problemes de que la imatge quedi partida.
-    // Com a mÌnim el grid ser‡ de 2 columnes x 1 fila
+    // El n√∫mero de columnes haur√† de ser sempre parell per no tenir problemes de que la imatge quedi partida.
+    // Com a m√≠nim el grid ser√† de 2 columnes x 1 fila
     m_gridsMap.insert(2, QPair<int, int>(1, 2));
     m_gridsMap.insert(4, QPair<int, int>(2, 2));
     m_gridsMap.insert(6, QPair<int, int>(3, 2));

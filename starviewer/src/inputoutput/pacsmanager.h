@@ -1,10 +1,24 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 
 #ifndef UDGPACSMANAGER_H
 #define UDGPACSMANAGER_H
 
 #include <QList>
 #include <QHash>
-#include <ThreadWeaver/Weaver>
+#include <ThreadWeaver/Queue>
 
 #include "patient.h"
 #include "pacsdevice.h"
@@ -34,7 +48,7 @@ public:
     //~PacsManager();
 
     /// Encua un PACSJob per a que es processi
-    void enqueuePACSJob(PACSJob *pacsJob);
+    void enqueuePACSJob(PACSJobPointer pacsJob);
 
     /// Indica si s'estan executant PACSJob
     bool isExecutingPACSJob();
@@ -44,7 +58,7 @@ public:
 
     /// Demana que es cancel·li l'execució dels PACSJob d'un tipus. Al invocar aquests mètodes es desencua els jobs pendents d'executar i
     /// i demana abortar els jobs que s'estan executant. Els jobs que s'estan executant no s'aborten immeditament, el mètode és assíncron.
-    void requestCancelPACSJob(PACSJob *pacsJob);
+    void requestCancelPACSJob(PACSJobPointer pacsJob);
 
     /// Demana cancel·lar tots els jobs. Els PACSJob pendents d'executar no s'executen i els que s'estan executant s'aborten. Els PACSJob
     /// que s'estan executant no s'aborten immeditament, el mètode és assíncron.
@@ -58,15 +72,15 @@ public:
 
 signals:
     /// Signal que s'emet per indicar que s'ha encuat un nou PACSJob
-    void newPACSJobEnqueued(PACSJob *pacsJob);
+    void newPACSJobEnqueued(PACSJobPointer pacsJob);
 
     /// Signal que indica que ens han demanat cancel·lar un PACSJob
-    void requestedCancelPACSJob(PACSJob *pacsJob);
+    void requestedCancelPACSJob(PACSJobPointer pacsJob);
 
 private:
-    ThreadWeaver::Weaver *m_queryWeaver;
-    ThreadWeaver::Weaver *m_sendDICOMFilesToPACSWeaver;
-    ThreadWeaver::Weaver *m_retrieveDICOMFilesFromPACSWeaver;
+    ThreadWeaver::Queue *m_queryQueue;
+    ThreadWeaver::Queue *m_sendDICOMFilesToPACSQueue;
+    ThreadWeaver::Queue *m_retrieveDICOMFilesFromPACSQueue;
 };
 
 };  //  end  namespace udg

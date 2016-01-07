@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGANATOMICALPLANE_H
 #define UDGANATOMICALPLANE_H
 
@@ -8,22 +22,33 @@ namespace udg {
 class PatientOrientation;
 
 /**
-    Classe que encapsularà les orientacions anatòmiques del pacient
-  */
+ * @brief The AnatomicalPlane class defines the anatomical orientations of a patient.
+ */
 class AnatomicalPlane {
 public:
-    /// Tipus d'orientacions anatòmiques
-    enum AnatomicalPlaneType { Axial, Sagittal, Coronal, Oblique, NotAvailable };
+    /// Anatomical orientation types.
+    enum Plane { Axial, Sagittal, Coronal, Oblique, NotAvailable };
 
-    /// Donada una orientació anatòmica, ens retorna la corresponent etiqueta per mostrar a l'interfície
-    static const QString getLabel(AnatomicalPlaneType orientation);
+    AnatomicalPlane(Plane plane = Axial);
 
-    /// Ens retorna l'etiqueta/tipus del pla anatòmic que es correspon amb el PatientOrientation donat
-    static const QString getLabelFromPatientOrientation(const PatientOrientation &orientation);
-    static const AnatomicalPlaneType getPlaneTypeFromPatientOrientation(const PatientOrientation &orientation);
+    /// Returns the label corresponding to this anatomical plane to display it in the UI.
+    QString getLabel() const;
 
-    /// Returns the default patient orientation for an specific anatomical plane
-    static const PatientOrientation getDefaultRadiologicalOrienation(AnatomicalPlaneType plane);
+    /// Returns the label corresponding to the anatomical plane corresponding to the given patient orientation.
+    static QString getLabelFromPatientOrientation(const PatientOrientation &orientation);
+
+    /// Returns the anatomical plane corresponding to the given patient orientation.
+    static AnatomicalPlane getPlaneFromPatientOrientation(const PatientOrientation &orientation);
+
+    /// Returns the default patient orientation for this anatomical plane.
+    PatientOrientation getDefaultRadiologicalOrienation() const;
+
+    /// Conversion operator: allows to use an AnatomicalPlane in a switch.
+    operator Plane() const;
+
+private:
+    Plane m_plane;
+
 };
 
 } // End namespace udg

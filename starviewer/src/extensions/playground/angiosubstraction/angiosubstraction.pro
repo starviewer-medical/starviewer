@@ -14,4 +14,4 @@ SOURCES += angiosubstractionsettings.cpp \
 RESOURCES += angiosubstraction.qrc
 
 EXTENSION_DIR = $$PWD
-include(../../basicconfextensions.inc)
+include(../../basicconfextensions.pri)

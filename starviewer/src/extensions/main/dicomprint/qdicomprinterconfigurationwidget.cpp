@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qdicomprinterconfigurationwidget.h"
 #include "dicomprinter.h"
 #include "dicomprintermanager.h"
@@ -48,8 +62,8 @@ void QDicomPrinterConfigurationWidget::printerSelectionChanged()
         m_printerSettingsGroupBox->setEnabled(true);
         m_qdicomPrinterBasicSettingsWidget->setEnabled(true);
         m_advancedSettingsGroupBox->setEnabled(true);
-        // Perquè així comprovi si el AnnotationBox ha d'estar activat si aquest no ha canviat de valor respecte l'anterior impressora seleccionada
-        // TODO: S'hauria d'intentar solventar qeu no fes falta invocar el mètode
+        // PerquÃ¨ aixÃ­ comprovi si el AnnotationBox ha d'estar activat si aquest no ha canviat de valor respecte l'anterior impressora seleccionada
+        // TODO: S'hauria d'intentar solventar qeu no fes falta invocar el mÃ¨tode
         m_supportsAnnotationBoxYesRadioButtonToogled();
     }
     else
@@ -65,8 +79,8 @@ void QDicomPrinterConfigurationWidget::addPrinter()
 {
     m_addPrinterWidget->clearInputs();
     m_addPrinterWidget->setVisible(true);
-    // TODO:Després d'afegir una impressora s'hauria de fer signal printerSettingsChanged(), ara aprofitem el fet de que quan s'afegeix una impressora
-    // com només han d'entrar AETitle, Hostname, port i descripció, llavors s'han d'acabar de complimentar les dades de la impressora per triar els
+    // TODO:DesprÃ©s d'afegir una impressora s'hauria de fer signal printerSettingsChanged(), ara aprofitem el fet de que quan s'afegeix una impressora
+    // com nomÃ©s han d'entrar AETitle, Hostname, port i descripciÃ³, llavors s'han d'acabar de complimentar les dades de la impressora per triar els
     // altres settings, fent un modificar, al fer el modificar llavors es fa l'emit del signal printerSettingsChanged()
 }
 
@@ -85,7 +99,7 @@ bool QDicomPrinterConfigurationWidget::modifyPrinter()
 
             if (!dicomPrinterManager.updatePrinter(m_selectedPrinterId, dicomPrinter))
             {
-                // Si rebem un error és que no ha trobat la impressora amb el ID passat per paràmetre
+                // Si rebem un error Ã©s que no ha trobat la impressora amb el ID passat per parÃ metre
                 QMessageBox::critical(this, ApplicationNameString, tr("An error has occurred. Unable to apply changes to the printer."));
             }
             else
@@ -130,7 +144,7 @@ void QDicomPrinterConfigurationWidget::testPrinter()
 
         if (testIsCorrect)
         {
-            // El test s'ha fet correctament i la impressora ha respós
+            // El test s'ha fet correctament i la impressora ha respÃ³s
             QMessageBox::information(this, ApplicationNameString, tr("Test of printer %1 is correct.").arg(selectedDicomPrinter.getAETitle()));
         }
         else
@@ -168,7 +182,7 @@ void QDicomPrinterConfigurationWidget::showNewPrinterAdded(int printerID)
 
 void QDicomPrinterConfigurationWidget::m_magnitifacationTypeComboBoxIndexChanged(const QString &magnificationTypecomboBoxValue)
 {
-    // Smoothing Type només es pot escollir si el paràmetre de configuració Magnification Type té com a valor cubic
+    // Smoothing Type nomÃ©s es pot escollir si el parÃ metre de configuraciÃ³ Magnification Type tÃ© com a valor cubic
     if (magnificationTypecomboBoxValue.toUpper() == "CUBIC")
     {
         m_smoothingTypeComboBox->setEnabled(true);
@@ -368,7 +382,7 @@ DicomPrinter QDicomPrinterConfigurationWidget::getSelectedDicomPrinter()
 
     if (m_listPrintersTreeWidget->selectedItems().count() > 0)
     {
-        // Seleccionem només la primera impressora seleccionada. El QTreeWidget està configurat com SingleSelection, per tant només es pot seleccionar
+        // Seleccionem nomÃ©s la primera impressora seleccionada. El QTreeWidget estÃ  configurat com SingleSelection, per tant nomÃ©s es pot seleccionar
         // una impressora a la vegada
         selectedItem = m_listPrintersTreeWidget->selectedItems().first();
         m_selectedPrinterId = selectedItem->text(0).toInt();
@@ -381,9 +395,9 @@ DicomPrinter QDicomPrinterConfigurationWidget::getSelectedDicomPrinter()
 
 void QDicomPrinterConfigurationWidget::cancel()
 {
-    // Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfície de configuració,
+    // Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfÃ­cie de configuraciÃ³,
     // com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera
-    // sempre la mostrem no té cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial
+    // sempre la mostrem no tÃ© cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial
     m_listPrintersTreeWidget->clearSelection();
     clearPrinterSettings();
 
@@ -410,9 +424,9 @@ void QDicomPrinterConfigurationWidget::accept()
 
     if (closeWindow)
     {
-        // Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfície de configuració,
+        // Deseleccionem l'impressora si tenim alguna seleccionada i netegem els controls, per si tornen a obrir la interfÃ­cie de configuraciÃ³,
         // com que no es crea i es destrueix cada vegada que es fa un show, es mostraria tal com estava abans de fer el cancel d'aquesta manera
-        // sempre la mostrem no té cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial
+        // sempre la mostrem no tÃ© cap impressora seleccionada i els controls no tenen valor, es mostra en el seu estat inicial
 
         m_listPrintersTreeWidget->clearSelection();
         clearPrinterSettings();

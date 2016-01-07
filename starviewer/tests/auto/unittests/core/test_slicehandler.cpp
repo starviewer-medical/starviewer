@@ -1,6 +1,7 @@
 #include "autotest.h"
 #include "slicehandler.h"
 
+#include "volume.h"
 #include "volumetesthelper.h"
 
 using namespace udg;
@@ -121,14 +122,13 @@ void test_SliceHandler::setViewPlane_UpdatesViewPlaneAndSliceRange_data()
 
     double origin[3] = { 0.0, 0.0, 0.0 };
     double spacing[3] = { 1.0, 1.0, 1.0 };
-    int dimensions[3] = { 12, 16, 42 };
     int extent[6] = { 0, 11, 5, 20, 1, 42 };
 
-    QTest::newRow("XY") << VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent)
+    QTest::newRow("XY") << VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent)
                         << OrthogonalPlane(OrthogonalPlane::XYPlane) << 1 << 42;
-    QTest::newRow("YZ") << VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent)
+    QTest::newRow("YZ") << VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent)
                         << OrthogonalPlane(OrthogonalPlane::YZPlane) << 0 << 11;
-    QTest::newRow("XZ") << VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, dimensions, extent)
+    QTest::newRow("XZ") << VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent)
                         << OrthogonalPlane(OrthogonalPlane::XZPlane) << 5 << 20;
 }
 

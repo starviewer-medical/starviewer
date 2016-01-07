@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "toolregistry.h"
 #include "tool.h"
 #include "qviewer.h"
@@ -16,7 +30,7 @@
 #include "rotate3dtool.h"
 #include "screenshottool.h"
 #include "synchronizetool.h"
-#include "windowlevelpresetstool.h"
+#include "voilutpresetstool.h"
 #include "polylineroitool.h"
 #include "polylinetemporalroitool.h"
 #include "distancetool.h"
@@ -100,9 +114,9 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     {
         tool = new SynchronizeTool(viewer);
     }
-    else if (toolName == "WindowLevelPresetsTool")
+    else if (toolName == "VoiLutPresetsTool")
     {
-        tool = new WindowLevelPresetsTool(viewer);
+        tool = new VoiLutPresetsTool(viewer);
     }
     else if (toolName == "PolylineROITool")
     {
@@ -289,10 +303,10 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         statusTip = tr("Enable/Disable Synchronize tool");
         toolTip = tr("Synchronize");
     }
-    else if (toolName == "WindowLevelPresetsTool")
+    else if (toolName == "VoiLutPresetsTool")
     {
-        toolAction->setText(tr("Window Level Presets tool"));
-        statusTip = tr("Enable/Disable Window Level Presets tool");
+        toolAction->setText(tr("VOI LUT Presets tool"));
+        statusTip = tr("Enable/Disable VOI LUT Presets tool");
     }
     else if (toolName == "PolylineROITool")
     {
@@ -405,7 +419,7 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     {
         toolAction->setText(tr("TA-GT"));
         toolAction->setIcon(QIcon(":/images/perpendicularDistance.png"));
-        statusTip = tr("Enable/disable TA-GT distance tool");
+        statusTip = tr("Enable/Disable TA-GT distance tool");
         toolTip = toolAction->text();
     }
     else
@@ -452,15 +466,15 @@ QPair<QAction*, QString> ToolRegistry::getActionToolPair(const QString &actionTo
 
         slot = SLOT(clearViewer());
     }
-    else if (actionToolName == "InvertWindowLevelActionTool")
+    else if (actionToolName == "InvertVoiLutActionTool")
     {
-        action->setText(tr("Invert WL"));
+        action->setText(tr("Invert VOI LUT"));
         action->setIcon(QIcon(":/images/invertWL.png"));
-        action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::InvertWindowLevelTool));
-        statusTip = tr("Invert window level");
+        action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::InvertVoiLutTool));
+        statusTip = tr("Invert VOI LUT");
         toolTip = statusTip;
 
-        slot = SLOT(invertWindowLevel());
+        slot = SLOT(invertVoiLut());
     }
     else if (actionToolName == "AxialViewActionTool")
     {
@@ -498,7 +512,7 @@ QPair<QAction*, QString> ToolRegistry::getActionToolPair(const QString &actionTo
         action->setIcon(QIcon(":/images/rotateClockWise.png"));
         action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::RotateClockWiseTool));
         statusTip = tr("Rotate the image in clockwise direction");
-        toolTip = tr("Clockwise rotation").toLatin1();
+        toolTip = tr("Clockwise rotation");
 
         slot = SLOT(rotateClockWise());
     }

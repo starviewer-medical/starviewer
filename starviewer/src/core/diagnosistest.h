@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGDIAGNOSISTEST_H
 #define UDGDIAGNOSISTEST_H
 
@@ -8,11 +22,11 @@ namespace udg {
 
 class DiagnosisTest : public QObject {
 public:
-    /// Destructor per defecte. …s virtual per que les subclasses puguin reimplementar-lo
+    /// Destructor per defecte. √âs virtual per que les subclasses puguin reimplementar-lo
     virtual ~DiagnosisTest(){}
-    /// MËtode principal de la interfÌcie. No est‡ implementat, i es forÁa a les subclasses a fer-ho.
+    /// M√®tode principal de la interf√≠cie. No est√† implementat, i es for√ßa a les subclasses a fer-ho.
     virtual DiagnosisTestResult run() = 0;
-    /// Retorna la descripciÛ del test
+    /// Retorna la descripci√≥ del test
     virtual QString getDescription() = 0;
 protected:
     /// Constructor per defecte protected perque no es pugui instanciar objectes DiagnosisTest

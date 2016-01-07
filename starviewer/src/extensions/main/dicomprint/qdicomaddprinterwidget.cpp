@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include <QMessageBox>
 #include "qdicomaddprinterwidget.h"
 #include "starviewerapplication.h"
@@ -87,8 +101,8 @@ void QDicomAddPrinterWidget::getPrinterSettingsFromControls(DicomPrinter &printe
     printer.setDescription(m_printerDescriptionLineEdit->text());
     printer.setIsDefault(m_printerDefaultPrinterCheckBox->isChecked());
 
-    // Indiquem un valor de FilmLayout per la impressora perquË Ès un camp "Mandatory" segons DICOM, escollim el primer valor
-    // dels disponibles. A part d'aquest camp dels par‡metres configurables d'impressiÛ no n'hi cap mÈs d'obligatori
+    // Indiquem un valor de FilmLayout per la impressora perqu√® √©s un camp "Mandatory" segons DICOM, escollim el primer valor
+    // dels disponibles. A part d'aquest camp dels par√†metres configurables d'impressi√≥ no n'hi cap m√©s d'obligatori
     printer.setDefaultFilmLayout(printer.getAvailableFilmLayoutValues().at(0));
 }
 }

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "imageplane.h"
 #include "image.h"
 #include "mathtools.h"
@@ -267,27 +281,45 @@ QString ImagePlane::toString(bool verbose)
     return result;
 }
 
-int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstIntersectionPoint[3], double secondIntersectionPoint[3])
+int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstIntersectionPoint[3], double secondIntersectionPoint[3], int bounds)
 {
     double t;
     int numberOfIntersections = 0;
-    double localizerNormalVector[3], localizerOrigin[3];
-    planeToIntersect->getNormalVector(localizerNormalVector);
-    planeToIntersect->getOrigin(localizerOrigin);
+    double planeToIntersectNormalVector[3], planeToIntersectOrigin[3];
+    planeToIntersect->getNormalVector(planeToIntersectNormalVector);
+    planeToIntersect->getOrigin(planeToIntersectOrigin);
 
-    QList<QVector<double> > upperPlaneBounds = this->getUpperBounds();
+    QList<QVector<double> > planeBounds;
+    switch (bounds)
+    {
+        case 0:
+            planeBounds = this->getUpperBounds();
+            break;
 
-    QVector<double> tlhc = upperPlaneBounds.at(0);
-    QVector<double> trhc = upperPlaneBounds.at(1);
-    QVector<double> brhc = upperPlaneBounds.at(2);
-    QVector<double> blhc = upperPlaneBounds.at(3);
+        case 1:
+            planeBounds = this->getLowerBounds();
+            break;
+
+        case 2:
+            planeBounds = this->getCentralBounds();
+            break;
+
+        default:
+            planeBounds = this->getUpperBounds();
+            break;
+    }
+
+    double *currentPlaneTopLeftPoint = (double*)planeBounds.at(0).data();
+    double *currentPlaneTopRightPoint = (double*)planeBounds.at(1).data();
+    double *currentPlaneBottomRightPoint = (double*)planeBounds.at(2).data();
+    double *currentPlaneBottomLetfPoint = (double*)planeBounds.at(3).data();
 
     // Primera "paral·lela" (X)
-    if (vtkPlane::IntersectWithLine((double*)tlhc.data(), (double*)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+    if (vtkPlane::IntersectWithLine(currentPlaneTopLeftPoint, currentPlaneTopRightPoint, planeToIntersectNormalVector, planeToIntersectOrigin, t, firstIntersectionPoint))
     {
         numberOfIntersections++;
     }
-    if (vtkPlane::IntersectWithLine((double*)brhc.data(), (double*)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+    if (vtkPlane::IntersectWithLine(currentPlaneBottomRightPoint, currentPlaneBottomLetfPoint, planeToIntersectNormalVector, planeToIntersectOrigin, t, secondIntersectionPoint))
     {
         numberOfIntersections++;
     }
@@ -295,12 +327,12 @@ int ImagePlane::getIntersections(ImagePlane *planeToIntersect, double firstInter
     if (numberOfIntersections == 0)
     {
         // Provar amb la segona "paral·lela" (Y)
-        if (vtkPlane::IntersectWithLine((double*)trhc.data(), (double*)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
+        if (vtkPlane::IntersectWithLine(currentPlaneTopRightPoint, currentPlaneBottomRightPoint, planeToIntersectNormalVector, planeToIntersectOrigin, t, firstIntersectionPoint))
         {
             numberOfIntersections++;
         }
 
-        if (vtkPlane::IntersectWithLine((double*)blhc.data(), (double*)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
+        if (vtkPlane::IntersectWithLine(currentPlaneBottomLetfPoint, currentPlaneTopLeftPoint, planeToIntersectNormalVector, planeToIntersectOrigin, t, secondIntersectionPoint))
         {
             numberOfIntersections++;
         }

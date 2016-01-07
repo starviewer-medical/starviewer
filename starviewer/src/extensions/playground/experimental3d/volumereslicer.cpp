@@ -9,6 +9,7 @@
 #include <QTextStream>
 
 #include <vtkCamera.h>
+#include <vtkDataArray.h>
 #include <vtkImageClip.h>
 #include <vtkImageData.h>
 #include <vtkImageReslice.h>
@@ -78,11 +79,9 @@ void VolumeReslicer::reslice(bool saveMhd, bool doClip, int maxRange)
     Q_ASSERT(m_input);
     Q_ASSERT(m_resliceAxes);
 
-    m_input->UpdateInformation();
-
     // Reslice the image in the desired orientation
     vtkImageReslice *reslice = vtkImageReslice::New();
-    reslice->SetInput(m_input);
+    reslice->SetInputData(m_input);
     reslice->SetOutputDimensionality(3);
     reslice->SetResliceAxes(m_resliceAxes);
     reslice->AutoCropOutputOn();
@@ -107,7 +106,7 @@ void VolumeReslicer::reslice(bool saveMhd, bool doClip, int maxRange)
 
     // Clip image to minimum extent
     vtkImageClip *clip = vtkImageClip::New();
-    clip->SetInput(resliced);
+    clip->SetInputData(resliced);
     clip->SetOutputWholeExtent(minX, maxX, minY, maxY, minZ, maxZ);
     if (doClip)
     {

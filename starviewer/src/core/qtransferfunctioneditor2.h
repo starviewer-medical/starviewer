@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef QTRANSFERFUNCTIONEDITOR2_H
 #define QTRANSFERFUNCTIONEDITOR2_H
 
@@ -10,18 +24,18 @@ class TransferFunction;
 class TransferFunctionEditor;
 
 /**
-    Nou widget d'ediciÛ de funcions de transferËncia que ha de substituir els antics.
-    Permet editar totalment una funciÛ de transferËncia: nom, color, opacitat scalar i opacitat del gradient.
-    Permet desfer i refer els canvis, carregar i desar funcions, tÈ una llista de funcions recents, etc.
-    TÈ una modalitat gr‡fica i una de taula. Es pot crear amb nomÈs un subconjunt de les caracterÌstiques, si no es volen les altres.
-    Per exemple, es pot tenir un editor nomÈs gr‡fic i nomÈs per opacitats scalars, sense res mÈs.
+    Nou widget d'edici√≥ de funcions de transfer√®ncia que ha de substituir els antics.
+    Permet editar totalment una funci√≥ de transfer√®ncia: nom, color, opacitat scalar i opacitat del gradient.
+    Permet desfer i refer els canvis, carregar i desar funcions, t√© una llista de funcions recents, etc.
+    T√© una modalitat gr√†fica i una de taula. Es pot crear amb nom√©s un subconjunt de les caracter√≠stiques, si no es volen les altres.
+    Per exemple, es pot tenir un editor nom√©s gr√†fic i nom√©s per opacitats scalars, sense res m√©s.
   */
 class QTransferFunctionEditor2 : public QWidget, private ::Ui::QTransferFunctionEditor2Base {
 Q_OBJECT
 Q_ENUMS(View)
 
 public:
-    /// CaracterÌstiques de l'editor.
+    /// Caracter√≠stiques de l'editor.
     enum Feature {
         Name = 0x01,
         Color = 0x02,
@@ -38,24 +52,24 @@ public:
     enum View { Graphical, Table, Both };
 
 public:
-    /// Crea l'editor amb totes les caracterÌstiques i tots els tipus de vistes.
+    /// Crea l'editor amb totes les caracter√≠stiques i tots els tipus de vistes.
     explicit QTransferFunctionEditor2(QWidget *parent = 0);
-    /// Crea l'editor amb les caracterÌstiques i les vistes passades per par‡metre.
+    /// Crea l'editor amb les caracter√≠stiques i les vistes passades per par√†metre.
     explicit QTransferFunctionEditor2(Features features, View view, QWidget *parent = 0);
 
-    /// Retorna la funciÛ de transferËncia representada actualment.
+    /// Retorna la funci√≥ de transfer√®ncia representada actualment.
     const TransferFunction& transferFunction() const;
-    /// Assigna la funciÛ de transferËncia.
+    /// Assigna la funci√≥ de transfer√®ncia.
     void setTransferFunction(const TransferFunction &transferFunction);
 
 signals:
-    /// S'emet quan canvia la funciÛ de transferËncia.
+    /// S'emet quan canvia la funci√≥ de transfer√®ncia.
     void transferFunctionChanged(const TransferFunction &transferFunction);
 
 private:
     Q_DISABLE_COPY(QTransferFunctionEditor2)
 
-    /// Inicialitza l'editor amb els par‡metres donats.
+    /// Inicialitza l'editor amb els par√†metres donats.
     void init(Features features, View view);
     /// Fa les connexions pertinents de signals i slots.
     void makeConnections();
@@ -65,9 +79,9 @@ private slots:
     void emitTransferFunctionChanged();
 
 private:
-    /// L'autËntic editor.
+    /// L'aut√®ntic editor.
     TransferFunctionEditor *m_editor;
-    /// Vista de la funciÛ de transferËncia.
+    /// Vista de la funci√≥ de transfer√®ncia.
     QTransferFunctionView *m_view;
 
 };

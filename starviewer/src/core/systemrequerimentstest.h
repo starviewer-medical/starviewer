@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGSYSTEMREQUERIMENTSTEST_H
 #define UDGSYSTEMREQUERIMENTSTEST_H
 
@@ -14,7 +28,7 @@ namespace udg {
 class SystemRequeriments;
 
 /**
-    Test de diagnosis de l'aplicaciÛ que comprova si el sistema compleix els requeriments mÌnims per que Starviewer funcioni correctament.
+    Test de diagnosis de l'aplicaci√≥ que comprova si el sistema compleix els requeriments m√≠nims per que Starviewer funcioni correctament.
 */
 class SystemRequerimentsTest : public DiagnosisTest {
 Q_OBJECT
@@ -24,13 +38,13 @@ public:
 
     DiagnosisTestResult run();
 
-    /// Retorna la descripciÛ del test
+    /// Retorna la descripci√≥ del test
     QString getDescription();
 
 protected:
     enum VersionComparison { Older, Same, Newer };
 
-    /// Retorna 0 sÌ son iguals, 1 sÌ la version1 Ès major que la version2 i -1 si Ès menor.
+    /// Retorna 0 s√≠ son iguals, 1 s√≠ la version1 √©s major que la version2 i -1 si √©s menor.
     VersionComparison compareVersions(QString version1, QString version2);
 
     virtual unsigned int getCPUNumberOfCores(SystemInformation *system);

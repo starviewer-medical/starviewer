@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef QCOLORTRANSFERFUNCTIONGRAPHICALVIEWNODE_H
 #define QCOLORTRANSFERFUNCTIONGRAPHICALVIEWNODE_H
 
@@ -8,12 +22,12 @@ namespace udg {
 class QColorTransferFunctionGraphicalView;
 
 /**
-    Node de la vista de funcions de transferËncia de color. Guarda el color i la x inicial d'un moviment.
+    Node de la vista de funcions de transfer√®ncia de color. Guarda el color i la x inicial d'un moviment.
   */
 class QColorTransferFunctionGraphicalViewNode : public QGraphicsRectItem {
 
 public:
-    /// Crea el node i li passa la vista que el contÈ.
+    /// Crea el node i li passa la vista que el cont√©.
     QColorTransferFunctionGraphicalViewNode(QColorTransferFunctionGraphicalView *view);
 
     /// Retorna el color.
@@ -26,11 +40,11 @@ public:
     double oldX() const;
 
 protected:
-    /// GestiÛ de les interaccions de l'usuari amb el node.
+    /// Gesti√≥ de les interaccions de l'usuari amb el node.
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 private:
-    /// Vista que contÈ el node.
+    /// Vista que cont√© el node.
     QColorTransferFunctionGraphicalView *m_view;
     /// x vella.
     double m_oldX;

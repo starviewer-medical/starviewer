@@ -1,7 +1,24 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGGENERICVOLUMEDISPLAYUNITHANDLER_H
 #define UDGGENERICVOLUMEDISPLAYUNITHANDLER_H
 
 #include <QList>
+
+class vtkImageSlice;
+class vtkImageStack;
 
 namespace udg {
 
@@ -44,6 +61,9 @@ public:
     /// Returns the maximum number of inputs supported by the handler
     virtual int getMaximumNumberOfInputs() const;
 
+    /// Returns the prop that should be added to the renderer.
+    virtual vtkImageSlice* getImageProp() const;
+
     /// Returns the transfer function model containing the available transfer functions for the volume display units of this handler.
     TransferFunctionModel* getTransferFunctionModel() const;
 
@@ -65,6 +85,9 @@ private:
     /// Sets up the display units once created
     void setupDisplayUnits();
 
+    /// Updates the layer number of all display units to match their position in the list.
+    void updateLayerNumbers();
+
     /// Sets up the default opacities of the actors
     void setupDefaultOpacities();
 
@@ -74,6 +97,9 @@ private:
 protected:
     /// The list of the created display units
     QList<VolumeDisplayUnit*> m_displayUnits;
+
+    /// Used to merge several volume display units.
+    vtkImageStack *m_imageStack;
 
     /// Holds the transfer functions available to this handler.
     TransferFunctionModel *m_transferFunctionModel;

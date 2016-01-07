@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qviewer.h"
 #include "volume.h"
 #include "series.h"
@@ -5,9 +19,9 @@
 #include "toolproxy.h"
 #include "patientbrowsermenu.h"
 // Per poder afegir i modificar els presets que visualitzem
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "qviewerworkinprogresswidget.h"
-#include "windowlevelhelper.h"
+#include "voiluthelper.h"
 #include "logging.h"
 #include "mathtools.h"
 #include "starviewerapplication.h"
@@ -35,15 +49,11 @@
 #include <vtkEventQtSlotConnect.h>
 // Necessari pel zoom
 #include <vtkCamera.h>
-// Per grabar el vídeo
-#ifndef Q_OS_LINUX
-#include <vtkMPEG2Writer.h>
-#endif
 
 namespace udg {
 
 QViewer::QViewer(QWidget *parent)
- : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_windowLevelData(0),
+ : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_voiLutData(0),
    m_isRenderingEnabled(true), m_isActive(false)
 {
     m_defaultFitIntoViewportMarginRate = 0.0;
@@ -64,7 +74,7 @@ QViewer::QViewer(QWidget *parent)
     connect(this, SIGNAL(eventReceived(unsigned long)), m_toolProxy, SLOT(forwardEvent(unsigned long)));
 
     // Inicialitzem el window level data
-    setWindowLevelData(new WindowLevelPresetsToolData(this));
+    setVoiLutData(new VoiLutPresetsToolData(this));
 
     m_workInProgressWidget = new QViewerWorkInProgressWidget(this);
 
@@ -174,6 +184,26 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
     Q_UNUSED(callData);
     Q_UNUSED(command);
 
+#ifdef Q_OS_OSX
+    // MouseWheel doesn't work as expected when using a trackpad on Mac because a MouseWheel event is emitted for both vertical and horizontal
+    // orientation movements. Only vertical events with a delta different to 0 are captured.
+    switch (vtkEvent)
+    {
+        case vtkCommand::MouseWheelForwardEvent:
+        case vtkCommand::MouseWheelBackwardEvent:
+        {
+            QWheelEvent *e = (QWheelEvent*)callData;
+            if (e)
+            {
+                if (e->delta() == 0 || e->orientation() == Qt::Horizontal)
+                {
+                    return;
+                }
+            }
+        }
+    }
+#endif
+
     // Quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor.
     // TODO Ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
     switch (vtkEvent)
@@ -186,6 +216,10 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
         case vtkCommand::MouseWheelBackwardEvent:
             m_mouseHasMoved = false;
             setActive(true);
+            if (vtkEvent == vtkCommand::LeftButtonPressEvent && getInteractor()->GetRepeatCount() == 1)
+            {
+                emit doubleClicked();
+            }
             break;
 
         case vtkCommand::MouseMoveEvent:
@@ -342,7 +376,7 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
         if (count == 1)
         {
             // Només grabem una sola imatge
-            writer->SetInput(m_grabList.at(0));
+            writer->SetInputData(m_grabList.at(0));
             writer->SetFileName(qPrintable(QString("%1.%2").arg(baseName).arg(fileExtension)));
             writer->Write();
         }
@@ -354,7 +388,7 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
             int padding = QString::number(count).size();
             foreach (vtkImageData *image, m_grabList)
             {
-                writer->SetInput(image);
+                writer->SetInputData(image);
                 writer->SetFileName(qPrintable(QString("%1-%2.%3").arg(baseName).arg(i, padding, 10, QChar('0')).arg(fileExtension)));
                 writer->Write();
                 i++;
@@ -369,63 +403,6 @@ bool QViewer::saveGrabbedViews(const QString &baseName, FileType extension)
     {
         return false;
     }
-}
-
-bool QViewer::record(const QString &baseName, RecordFileFormatType format)
-{
-    // TODO Restaurar el poder grabar vídeos a Linux.
-#if !defined(Q_OS_LINUX)
-    if (!m_grabList.empty())
-    {
-        vtkGenericMovieWriter *videoWriter;
-        QString fileExtension;
-        // TODO de moment només suportem MPEG2
-        switch (format)
-        {
-            case MPEG2:
-                videoWriter = vtkMPEG2Writer::New();
-                fileExtension = ".mpg";
-                break;
-        }
-
-        int count = m_grabList.count();
-        // TODO fer alguna cosa especial si només hi ha una sola imatge????
-
-        vtkImageData *data = m_grabList.at(0);
-
-        videoWriter->SetFileName(qPrintable(baseName + fileExtension));
-        videoWriter->SetInput(data);
-        videoWriter->Start();
-
-        // TODO falta activar el procés de notificació de procés de gravació
-        // int progressIncrement = static_cast<int>((1.0/(double)count) * 100);
-        // int progress = 0;
-        for (int i = 0; i < count; i++)
-        {
-            videoWriter->SetInput(m_grabList.at(i));
-
-            // TODO Perquè un loop de 3?
-            for (int j = 0; j < 3; j++)
-            {
-                videoWriter->Write();
-            }
-            //progress += progressIncrement;
-            //emit recording(progress);
-        }
-        videoWriter->End();
-        videoWriter->Delete();
-        clearGrabbedViews();
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-#else
-    Q_UNUSED(baseName)
-    Q_UNUSED(format)
-    return false;
-#endif
 }
 
 void QViewer::clearGrabbedViews()
@@ -541,6 +518,11 @@ bool QViewer::getCurrentFocalPoint(double focalPoint[3])
     return true;
 }
 
+VoiLut QViewer::getCurrentVoiLut() const
+{
+    return VoiLut();
+}
+
 bool QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate)
 {
     if (!hasInput())
@@ -588,22 +570,22 @@ void QViewer::fitRenderingIntoViewport()
     }
 }
 
-WindowLevelPresetsToolData* QViewer::getWindowLevelData() const
+VoiLutPresetsToolData* QViewer::getVoiLutData() const
 {
-    return m_windowLevelData;
+    return m_voiLutData;
 }
 
-void QViewer::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
+void QViewer::setVoiLutData(VoiLutPresetsToolData *voiLutData)
 {
-    if (m_windowLevelData)
+    if (m_voiLutData)
     {
-        disconnect(m_windowLevelData, 0, this, 0);
-        delete m_windowLevelData;
+        disconnect(m_voiLutData, 0, this, 0);
+        delete m_voiLutData;
     }
 
-    m_windowLevelData = windowLevelData;
-    connect(m_windowLevelData, SIGNAL(currentPresetChanged(WindowLevel)), SLOT(setWindowLevelPreset(WindowLevel)));
-    connect(m_windowLevelData, SIGNAL(presetSelected(WindowLevel)), SLOT(setWindowLevelPreset(WindowLevel)));
+    m_voiLutData = voiLutData;
+    connect(m_voiLutData, SIGNAL(currentPresetChanged(VoiLut)), SLOT(setVoiLut(VoiLut)));
+    connect(m_voiLutData, SIGNAL(presetSelected(VoiLut)), SLOT(setVoiLut(VoiLut)));
 }
 
 void QViewer::grabCurrentView()
@@ -621,7 +603,7 @@ void QViewer::resetView(const OrthogonalPlane &view)
     setCameraOrientation(view);
 }
 
-void QViewer::resetView(AnatomicalPlane::AnatomicalPlaneType desiredAnatomicalPlane)
+void QViewer::resetView(const AnatomicalPlane &desiredAnatomicalPlane)
 {
     if (!hasInput())
     {
@@ -693,14 +675,14 @@ void QViewer::contextMenuRelease()
     this->contextMenuEvent(&contextMenuEvent);
 }
 
-void QViewer::updateWindowLevelData()
+void QViewer::updateVoiLutData()
 {
     if (!hasInput())
     {
         return;
     }
 
-    WindowLevelHelper().initializeWindowLevelData(m_windowLevelData, getMainInput());
+    VoiLutHelper().initializeVoiLutData(m_voiLutData, getMainInput());
 }
 
 void QViewer::setCameraOrientation(const OrthogonalPlane &orientation)
@@ -770,7 +752,7 @@ bool QViewer::adjustCameraScaleFactor(double factor)
     return true;
 }
 
-void QViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane)
+void QViewer::setDefaultOrientation(const AnatomicalPlane &anatomicalPlane)
 {
     Q_UNUSED(anatomicalPlane);
 }
@@ -903,12 +885,9 @@ void QViewer::setInputAndRender(Volume *volume)
     this->render();
 }
 
-void QViewer::setWindowLevelPreset(const WindowLevel &preset)
+void QViewer::setVoiLut(const VoiLut &voiLut)
 {
-    if (preset.isValid())
-    {
-        setWindowLevel(preset.getWidth(), preset.getCenter());
-    }
+    Q_UNUSED(voiLut)
 }
 
 OrthogonalPlane QViewer::getCurrentViewPlane() const

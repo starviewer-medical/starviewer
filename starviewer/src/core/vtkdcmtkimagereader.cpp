@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "vtkdcmtkimagereader.h"
 
 #include "dicomsequenceattribute.h"
@@ -12,6 +26,7 @@
 #include <QSharedPointer>
 #include <QStringList>
 
+#include <vtkDataArray.h>
 #include <vtkImageCast.h>
 #include <vtkImageData.h>
 #include <vtkInformation.h>
@@ -439,9 +454,18 @@ void VtkDcmtkImageReader::readPixelSpacing(const DICOMTagReader &dicomTagReader)
 
         if (pixelSpacingStrings.size() == 2)
         {
+            double rowSpacing = pixelSpacingStrings.at(0).toDouble();
+            double columnSpacing = pixelSpacingStrings.at(1).toDouble();
+
             // Pixel spacing is rowSpacing\columnSpacing -> ySpacing\xSpacing
-            this->DataSpacing[0] = pixelSpacingStrings.at(1).toDouble();
-            this->DataSpacing[1] = pixelSpacingStrings.at(0).toDouble();
+            if (columnSpacing != 0.0)
+            {
+                this->DataSpacing[0] = columnSpacing;
+            }
+            if (rowSpacing != 0.0)
+            {
+                this->DataSpacing[1] = rowSpacing;
+            }
         }
         else
         {
@@ -636,7 +660,7 @@ bool VtkDcmtkImageReader::loadData(int updateExtent[6])
 {
     vtkImageData *output = this->GetOutput(0);
     output->SetExtent(updateExtent);
-    output->AllocateScalars();
+    output->AllocateScalars(this->GetOutputInformation(0));
     output->GetPointData()->GetScalars()->SetName("DCMTKImage");
 
     void *scalarPointer = output->GetScalarPointerForExtent(updateExtent);
@@ -751,15 +775,14 @@ void VtkDcmtkImageReader::copyDcmtkImageToBuffer(void *buffer, DicomImage &dicom
             this->GetDataExtent(frameExtent);
             frameExtent[4] = frameExtent[5] = 0;
             temporalImageData->SetExtent(frameExtent);
-            temporalImageData->SetScalarType(dcmtkInternalDataScalarType);
-            temporalImageData->AllocateScalars();
+            temporalImageData->AllocateScalars(dcmtkInternalDataScalarType, 1);
             void *temporalImageDataBuffer = temporalImageData->GetScalarPointer();
 
             size_t readSize = dcmtkInternalData->getCount() * voxelSize(dcmtkInternalDataScalarType, 1);
             memcpy(temporalImageDataBuffer, dcmtkInternalData->getData(), readSize);
 
             vtkImageCast *imageCast = vtkImageCast::New();
-            imageCast->SetInput(temporalImageData);
+            imageCast->SetInputData(temporalImageData);
             imageCast->SetOutputScalarType(this->DataScalarType);
             imageCast->Update();
             memcpy(buffer, imageCast->GetOutput()->GetScalarPointer(), m_frameSize);

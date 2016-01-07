@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "imageoverlayregionfinder.h"
 
 #include "imageoverlay.h"
@@ -9,13 +23,13 @@
 
 namespace {
 
-// Retorna la mida de la textura necess‡ria per guardar les dades de la regiÛ, on l'amplada i l'alÁada sÛn potËncies de 2.
+// Retorna la mida de la textura necess√†ria per guardar les dades de la regi√≥, on l'amplada i l'al√ßada s√≥n pot√®ncies de 2.
 QSize textureSize(const QRect &region)
 {
     return QSize(udg::MathTools::roundUpToPowerOf2(region.width()), udg::MathTools::roundUpToPowerOf2(region.height()));
 }
 
-// Retorna l'‡rea d'un rectangle amb la mida donada.
+// Retorna l'√†rea d'un rectangle amb la mida donada.
 int area(const QSize &size)
 {
     return size.width() * size.height();
@@ -43,7 +57,7 @@ void ImageOverlayRegionFinder::findRegions(bool optimizeForPowersOf2)
     int columns = m_overlay.getColumns();
     unsigned char *data = m_overlay.getData();
 
-    // M‡scara que indica els pÌxels visitats
+    // M√†scara que indica els p√≠xels visitats
     QBitArray mask(rows * columns);
 
     for (int row = 0, i = 0; row < rows; row++)
@@ -70,24 +84,24 @@ const QList<QRect>& ImageOverlayRegionFinder::regions() const
 
 int ImageOverlayRegionFinder::distanceBetweenRegions(const QRect &region1, const QRect &region2)
 {
-    // MËtode inspirat en http://stackoverflow.com/questions/7286832/how-to-find-the-minimum-taxicab-manhattan-distance-between-two-parallel-rectangl
+    // M√®tode inspirat en http://stackoverflow.com/questions/7286832/how-to-find-the-minimum-taxicab-manhattan-distance-between-two-parallel-rectangl
 
     // Consideracions:
-    // - No hem d'oblidar que treballem amb pÌxels.
-    // - La dist‡ncia sÛn els pÌxels de separaciÛ entre els rectangles (el m‡xim entre l'horitzontal i la vertical).
-    // - Si hi ha intersecciÛ entre els rectangles, la dist‡ncia Ès 0.
-    // - Si no hi ha intersecciÛ perÚ els rectangles es toquen, la dist‡ncia Ès 0 (perquË no hi ha cap pÌxel de separaciÛ).
-    //   - AixÚ fa que haguem de restar 1 a tots els c‡lculs.
+    // - No hem d'oblidar que treballem amb p√≠xels.
+    // - La dist√†ncia s√≥n els p√≠xels de separaci√≥ entre els rectangles (el m√†xim entre l'horitzontal i la vertical).
+    // - Si hi ha intersecci√≥ entre els rectangles, la dist√†ncia √©s 0.
+    // - Si no hi ha intersecci√≥ per√≤ els rectangles es toquen, la dist√†ncia √©s 0 (perqu√® no hi ha cap p√≠xel de separaci√≥).
+    //   - Aix√≤ fa que haguem de restar 1 a tots els c√†lculs.
     // - Les coordenades avancen cap a la dreta i cap avall.
-    // - Mantenim region1 com a referËncia.
+    // - Mantenim region1 com a refer√®ncia.
 
-    // Si hi ha intersecciÛ, la dist‡ncia Ès 0
+    // Si hi ha intersecci√≥, la dist√†ncia √©s 0
     if (region1.intersects(region2))
     {
         return 0;
     }
 
-    // Comprovem si region2 Ès en una cantonada
+    // Comprovem si region2 √©s en una cantonada
     if (region1.top() > region2.bottom() && region1.right() < region2.left())
     {
         //  2
@@ -113,7 +127,7 @@ int ImageOverlayRegionFinder::distanceBetweenRegions(const QRect &region1, const
         return qMax(region1.top() - region2.bottom(), region1.left() - region2.right()) - 1;
     }
 
-    // Ara ja sabem que region2 no Ès en una cantonada, per tant nomÈs hem de mesurar la dist‡ncia en una direcciÛ
+    // Ara ja sabem que region2 no √©s en una cantonada, per tant nom√©s hem de mesurar la dist√†ncia en una direcci√≥
     if (region1.top() > region2.bottom())
     {
         // 2
@@ -137,7 +151,7 @@ int ImageOverlayRegionFinder::distanceBetweenRegions(const QRect &region1, const
         return region1.left() - region2.right() - 1;
     }
 
-    // No hem d'arribar mai aquÌ.
+    // No hem d'arribar mai aqu√≠.
     Q_ASSERT(false);
     return -1;
 }

@@ -39,11 +39,10 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_vector3float.cpp \
            $$PWD/test_vector3double.cpp \
            $$PWD/test_windowlevel.cpp \
-           $$PWD/test_windowlevelpresetstooldata.cpp \
+           $$PWD/test_voilutpresetstooldata.cpp \
            $$PWD/test_dicomformattedvaluesconverter.cpp \
            $$PWD/test_screen.cpp \
            $$PWD/test_screenlayout.cpp \
-           $$PWD/test_viewerslayout.cpp \
            $$PWD/test_studylayoutconfigsettingsconverter.cpp \
            $$PWD/test_optimalviewersgridestimator.cpp \
            $$PWD/test_vtkimagedatacreator.cpp \
@@ -81,7 +80,12 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_decaycorrectionfactorformulacalculator.cpp \
            $$PWD/test_standardizeduptakevalueleanbodymassformulacalculator.cpp \
            $$PWD/test_standardizeduptakevaluebodyweightformulacalculator.cpp \
-           $$PWD/test_standardizeduptakevaluebodysurfaceareaformulacalculator.cpp
+           $$PWD/test_standardizeduptakevaluebodysurfaceareaformulacalculator.cpp \
+           $$PWD/test_relativegeometrylayout.cpp \
+           $$PWD/test_griditerator.cpp \
+           $$PWD/test_voilut.cpp \
+           $$PWD/test_hangingprotocolimagesetrestriction.cpp \
+           $$PWD/test_hangingprotocolimagesetrestrictionexpression.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \

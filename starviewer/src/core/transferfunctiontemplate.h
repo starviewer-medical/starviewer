@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef TRANSFERFUNCTIONTEMPLATE_H
 #define TRANSFERFUNCTIONTEMPLATE_H
 
@@ -8,6 +22,16 @@
 #include <QString>
 
 namespace udg {
+
+// Forward declare the class template
+template <typename T>
+class TransferFunctionTemplate;
+
+// Forward declare the stream operators (see http://web.mst.edu/~nmjxv3/articles/templates.html and http://en.cppreference.com/w/cpp/language/friend)
+template <typename T>
+QDataStream& operator <<(QDataStream &stream, const TransferFunctionTemplate<T> &transferFunction);
+template <typename T>
+QDataStream& operator >>(QDataStream &stream, TransferFunctionTemplate<T> &transferFunction);
 
 /**
     Representa una funció de transferència bàsica f: X -> Y, on X és un conjunt de valors reals (valors de propietat o magnitud del gradient)
@@ -54,6 +78,11 @@ public:
     void trim(double x1, double x2);
     /// Simplifica la funció esborrant els punts (x,y) que es poden obtenir per interpolació o extrapolació.
     void simplify();
+
+    /// Writes the given transfer function to the given stream.
+    friend QDataStream& operator << <>(QDataStream &stream, const TransferFunctionTemplate &transferFunction);
+    /// Fills the given transfer function from the given stream.
+    friend QDataStream& operator >> <>(QDataStream &stream, TransferFunctionTemplate &transferFunction);
 
 protected:
     /// Crea una funció de transferència buida, sense cap punt i sense nom.
@@ -235,6 +264,18 @@ void TransferFunctionTemplate<T>::simplify()
             set(x, y);
         }
     }
+}
+
+template <typename T>
+QDataStream& operator <<(QDataStream &stream, const TransferFunctionTemplate<T> &transferFunction)
+{
+    return stream << transferFunction.m_name << transferFunction.m_map;
+}
+
+template <typename T>
+QDataStream& operator >>(QDataStream &stream, TransferFunctionTemplate<T> &transferFunction)
+{
+    return stream >> transferFunction.m_name >> transferFunction.m_map;
 }
 
 template <typename T>

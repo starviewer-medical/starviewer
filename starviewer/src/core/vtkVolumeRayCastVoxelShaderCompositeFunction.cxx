@@ -1,3 +1,28 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+
+  This file incorporates work covered by the following copyright and
+  permission notice:
+
+    Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+    All rights reserved.
+    See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
+
+       This software is distributed WITHOUT ANY WARRANTY; without even
+       the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+       PURPOSE.  See the above copyright notice for more information.
+ *************************************************************************************/
+
 #include "vtkVolumeRayCastVoxelShaderCompositeFunction.h"
 
 #include <vtkObjectFactory.h>
@@ -89,7 +114,7 @@ void vtkVolumeRayCastVoxelShaderCompositeFunction::CastRay( vtkVolumeRayCastDyna
     const bool CLASSIFY_INTERPOLATE = m_compositeMethod == ClassifyInterpolate;
 
     // Move the increments into local variables
-    const int * const INCREMENTS = staticInfo->DataIncrement;
+    const vtkIdType * const INCREMENTS = staticInfo->DataIncrement;
     const int X_INC = INCREMENTS[0], Y_INC = INCREMENTS[1], Z_INC = INCREMENTS[2];
 
     // Get the gradient opacity constant. If this number is greater than or equal to 0.0, then the gradient opacity transfer function is a constant at that
@@ -117,15 +142,15 @@ void vtkVolumeRayCastVoxelShaderCompositeFunction::CastRay( vtkVolumeRayCastDyna
 
     if ( !INTERPOLATION )
     {
-        voxel[0] = vtkRoundFuncMacro( rayPosition.x );
-        voxel[1] = vtkRoundFuncMacro( rayPosition.y );
-        voxel[2] = vtkRoundFuncMacro( rayPosition.z );
+        voxel[0] = qRound( rayPosition.x );
+        voxel[1] = qRound( rayPosition.y );
+        voxel[2] = qRound( rayPosition.z );
     }
     else
     {
-        voxel[0] = vtkFloorFuncMacro( rayPosition.x );
-        voxel[1] = vtkFloorFuncMacro( rayPosition.y );
-        voxel[2] = vtkFloorFuncMacro( rayPosition.z );
+        voxel[0] = floor( rayPosition.x );
+        voxel[1] = floor( rayPosition.y );
+        voxel[2] = floor( rayPosition.z );
     }
 
     // So far we haven't accumulated anything
@@ -187,15 +212,15 @@ void vtkVolumeRayCastVoxelShaderCompositeFunction::CastRay( vtkVolumeRayCastDyna
 
         if ( !INTERPOLATION )
         {
-            voxel[0] = vtkRoundFuncMacro( rayPosition.x );
-            voxel[1] = vtkRoundFuncMacro( rayPosition.y );
-            voxel[2] = vtkRoundFuncMacro( rayPosition.z );
+            voxel[0] = qRound( rayPosition.x );
+            voxel[1] = qRound( rayPosition.y );
+            voxel[2] = qRound( rayPosition.z );
         }
         else
         {
-            voxel[0] = vtkFloorFuncMacro( rayPosition.x );
-            voxel[1] = vtkFloorFuncMacro( rayPosition.y );
-            voxel[2] = vtkFloorFuncMacro( rayPosition.z );
+            voxel[0] = floor( rayPosition.x );
+            voxel[1] = floor( rayPosition.y );
+            voxel[2] = floor( rayPosition.z );
         }
     }
 

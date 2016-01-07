@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGQ2DVIEWEREXTENSION_H
 #define UDGQ2DVIEWEREXTENSION_H
 
@@ -14,6 +28,7 @@ class Volume;
 class ToolManager;
 class ToolConfiguration;
 class HangingProtocol;
+class TransferFunctionModel;
 // Estructura pacient
 class Patient;
 class Study;
@@ -21,7 +36,7 @@ class Study;
 class Q2DViewerWidget;
 class Q2DViewer;
 // Menus
-class MenuGridWidget;
+class QHangingProtocolsWidget;
 class TableMenu;
 class QDICOMDumpBrowser;
 class StatsWatcher;
@@ -56,8 +71,8 @@ public:
     /// Mètode per obtenir el pacient
     Patient* getPatient() const;
 
-    /// Decides and applies a new layout considering the current studies.
-    void layoutAgain();
+    /// Sets the study from the current patient with the given studyUID as the current patient.
+    void setCurrentStudy(const QString &studyUID);
 
 private:
     /// Crea les connexions entre signals i slots
@@ -89,9 +104,6 @@ private:
     void updateTransferFunctionComboBox(TransferFunctionModel *transferFunctionModel);
 
 private slots:
-    // HACK to be replaced by a proper solution
-    void hideHangingProtocolsWithPreviousAreBeingSearchedInMenu();
-
 #ifndef STARVIEWER_LITE
     /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
     void validePhases();
@@ -187,6 +199,26 @@ private slots:
     /// Sets the transfer function at the given index in the current model to the current viewer.
     void setTransferFunctionToCurrentViewer(int transferFunctionIndex);
 
+    /// When a viewer receives a double click, this method checks which tools are active and
+    /// if none of them processes single or double clicks then maximizes or demaximizes the viewer.
+    void handleViewerDoubleClick(Q2DViewerWidget *viewerWidget);
+
+    /// Set the working studies (current and prior studies).
+    void setWorkingStudies(const QString &currentStudyUID, const QString &priorStudyUID);
+
+    /// Sets a 2x1 CT+fused fusion layout with the given volumes and anatomical plane.
+    void setFusionLayout2x1First(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
+    /// Sets a 2x1 fused+PT/NM fusion layout with the given volumes and anatomical plane.
+    void setFusionLayout2x1Second(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
+    /// Sets a 3x1 fusion layout with the given volumes and anatomical plane.
+    void setFusionLayout3x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane);
+    /// Sets a 2x3 CT+fused fusion layout with the given volumes.
+    void setFusionLayout2x3First(const QList<Volume*> &volumes);
+    /// Sets a 2x3 fused+PT/NM fusion layout with the given volumes.
+    void setFusionLayout2x3Second(const QList<Volume*> &volumes);
+    /// Sets a 3x3 fusion layout with the given volumes.
+    void setFusionLayout3x3(const QList<Volume*> &volumes);
+
 private:
     /// Accions
     QAction *m_singleShotAction;
@@ -214,7 +246,7 @@ private:
     Patient *m_patient;
 
     /// Menú per seleccionar es hanging protocols
-    MenuGridWidget *m_hangingProtocolsMenu;
+    QHangingProtocolsWidget *m_hangingProtocolsMenu;
 
     /// Widget per escollir una distribució de visors definida per l'usuari
     TableMenu *m_viewersLayoutGrid;
@@ -248,6 +280,9 @@ private:
 
     /// Transfer function model to use when a viewer returns a null model or an empty viewer is selected.
     TransferFunctionModel *m_emptyTransferFunctionModel;
+
+    /// Study Instance UID of current study.
+    QString m_currentStudyUID;
 
 };
 

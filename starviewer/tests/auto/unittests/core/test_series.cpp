@@ -19,19 +19,19 @@ private slots:
     void getDICOMSource_ShouldReturnMergedPACSDeviceList_data();
     void getDICOMSource_ShouldReturnMergedPACSDeviceList();
 
-    /// Test que comprova si la data introduida Ès v‡lida o no
+    /// Test que comprova si la data introduida √©s v√†lida o no
     void setDate_ShouldValidatePassedDate_data();
     void setDate_ShouldValidatePassedDate();
 
-    /// Test que comprova si la data passada com a String Ès v‡lida o no
+    /// Test que comprova si la data passada com a String √©s v√†lida o no
     void setDate_ShouldValidatePassedDateAsString_data();
     void setDate_ShouldValidatePassedDateAsString();
 
-    /// Test que comprova si el temps introduit Ès v‡lid o no
+    /// Test que comprova si el temps introduit √©s v√†lid o no
     void setTime_ShouldValidatePassedTime_data();
     void setTime_ShouldValidatePassedTime();
 
-    /// Test que comprova si el temps introduit com a String Ès v‡lid o no
+    /// Test que comprova si el temps introduit com a String √©s v√†lid o no
     void setTime_ShouldValidatePassedTimeAsString_data();
     void setTime_ShouldValidatePassedTimeAsString();
 
@@ -184,7 +184,7 @@ void test_Series::setTime_ShouldValidatePassedTimeAsString_data()
     QString validTime("211030");
 
     QTest::newRow("set a null Time") << emptyTime << false;
-    QTest::newRow("set a invalid Time with :") << invalidPointsTime << true;    // false with Qt5
+    QTest::newRow("set a invalid Time with :") << invalidPointsTime << false;
     QTest::newRow("set a invalid Time without :") << invalidTime << false;
     QTest::newRow("set a valid past Time with :") << validPointsTime << true;
     QTest::newRow("set a valid future Time without :") << validTime << true;
@@ -432,4 +432,3 @@ void test_Series::isMRSurvey_ReturnsExpectedValues()
 DECLARE_TEST(test_Series)
 
 #include "test_series.moc"
-

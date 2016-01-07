@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "syncactionmanager.h"
 
 #include "signaltosyncactionmapperfactory.h"
@@ -24,19 +38,24 @@ SyncActionManager::SyncActionManager(SyncActionsConfiguration *configuration, QO
 SyncActionManager::~SyncActionManager()
 {
     delete m_syncActionsConfiguration;
+
+    foreach (SignalToSyncActionMapper *mapper, m_registeredSignalMappers)
+    {
+        delete mapper;
+    }
 }
 
 void SyncActionManager::addSyncedViewer(QViewer *viewer)
 {
-    if (!m_syncedViewersSet.contains(viewer))
+    if (!m_syncedViewersList.contains(viewer))
     {
-        m_syncedViewersSet << viewer;
+        m_syncedViewersList << viewer;
 
         Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
         if (viewer2D)
         {
             connect(viewer2D, SIGNAL(restored()), this, SLOT(synchronize()));
-            connect(viewer2D, SIGNAL(anatomicalViewChanged(AnatomicalPlane::AnatomicalPlaneType)), this, SLOT(synchronizeAllViewersButSender()));
+            connect(viewer2D, SIGNAL(anatomicalViewChanged(AnatomicalPlane)), this, SLOT(synchronizeAllViewersButSender()));
             connect(viewer2D, SIGNAL(newVolumesRendered()), this, SLOT(synchronizeAllViewersButSender()));
         }
     }
@@ -56,12 +75,12 @@ void SyncActionManager::removeSyncedViewer(QViewer *viewer)
         disconnect(viewer2D, 0, this, 0);
     }
 
-    m_syncedViewersSet.remove(viewer);
+    m_syncedViewersList.removeOne(viewer);
 }
 
 void SyncActionManager::setMasterViewer(QViewer *viewer)
 {
-    if (m_syncedViewersSet.contains(viewer))
+    if (m_syncedViewersList.contains(viewer))
     {
         m_masterViewer = viewer;
         updateMasterViewerMappers();
@@ -70,7 +89,7 @@ void SyncActionManager::setMasterViewer(QViewer *viewer)
 
 void SyncActionManager::clearSyncedViewersSet()
 {
-    m_syncedViewersSet.clear();
+    m_syncedViewersList.clear();
 }
 
 void SyncActionManager::setSyncActionsConfiguration(SyncActionsConfiguration *configuration)
@@ -88,6 +107,11 @@ void SyncActionManager::setSyncActionsConfiguration(SyncActionsConfiguration *co
 SyncActionsConfiguration* SyncActionManager::getSyncActionsConfiguration()
 {
     return m_syncActionsConfiguration;
+}
+
+bool SyncActionManager::isEnabled() const
+{
+    return m_enabled;
 }
 
 void SyncActionManager::enable(bool enable)
@@ -142,7 +166,7 @@ void SyncActionManager::synchronizeAllWithExceptions(QSet<QViewer*> excludedView
         this->synchronize();
     }
 
-    foreach (QViewer *currentViewer, m_syncedViewersSet)
+    foreach (QViewer *currentViewer, m_syncedViewersList)
     {
         if (currentViewer != selectedViewer && currentViewer->getMainInput() && !excludedViewers.contains(currentViewer))
         {
@@ -205,7 +229,7 @@ void SyncActionManager::applySyncAction(SyncAction *syncAction)
 
     if (!m_synchronizingAll || !m_syncActionsAppliedPerViewer.contains(syncActionName, m_masterViewer))
     {
-        foreach (QViewer *viewer, m_syncedViewersSet.values())
+        foreach (QViewer *viewer, m_syncedViewersList)
         {
             if (isSyncActionApplicable(syncAction, viewer))
             {

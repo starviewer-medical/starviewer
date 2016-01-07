@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "localdatabasedisplayshutterdal.h"
 
 #include <sqlite3.h>
@@ -16,7 +30,7 @@ LocalDatabaseDisplayShutterDAL::LocalDatabaseDisplayShutterDAL(DatabaseConnectio
 
 void LocalDatabaseDisplayShutterDAL::insert(const DisplayShutter &shutter, Image *shuttersImage)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSQLInsert(shutter, shuttersImage)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSQLInsert(shutter, shuttersImage).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -40,7 +54,7 @@ void LocalDatabaseDisplayShutterDAL::update(const QList<DisplayShutter> &shutter
 
 void LocalDatabaseDisplayShutterDAL::del(const DicomMask &mask)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSQLDelete(mask)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSQLDelete(mask).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -56,7 +70,7 @@ QList<DisplayShutter> LocalDatabaseDisplayShutterDAL::query(const DicomMask &mas
     char **error = NULL;
     QList<DisplayShutter> shutterList;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(buildSQLSelect(mask)), &reply, &rows, &columns, error);
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), buildSQLSelect(mask).toUtf8().constData(), &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
     {

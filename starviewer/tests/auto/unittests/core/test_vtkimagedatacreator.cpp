@@ -63,18 +63,14 @@ void test_VtkImageDataCreator::createVtkImageData_ShouldReturnExpectedVtkImageDa
     expectedUcharVtkImageData->SetOrigin(origin);
     expectedUcharVtkImageData->SetSpacing(spacing);
     expectedUcharVtkImageData->SetExtent(0, width - 1, 0, height - 1, 0, depth - 1);
-    expectedUcharVtkImageData->SetScalarTypeToUnsignedChar();
-    expectedUcharVtkImageData->SetNumberOfScalarComponents(1);
-    expectedUcharVtkImageData->AllocateScalars();
+    expectedUcharVtkImageData->AllocateScalars(VTK_UNSIGNED_CHAR, 1);
     memcpy(expectedUcharVtkImageData->GetScalarPointer(), ucharData.constData(), size * sizeof(unsigned char));
 
     vtkSmartPointer<vtkImageData> expectedUshortVtkImageData = vtkSmartPointer<vtkImageData>::New();
     expectedUshortVtkImageData->SetOrigin(origin);
     expectedUshortVtkImageData->SetSpacing(spacing);
     expectedUshortVtkImageData->SetExtent(0, width - 1, 0, height - 1, 0, depth - 1);
-    expectedUshortVtkImageData->SetScalarTypeToUnsignedShort();
-    expectedUshortVtkImageData->SetNumberOfScalarComponents(1);
-    expectedUshortVtkImageData->AllocateScalars();
+    expectedUshortVtkImageData->AllocateScalars(VTK_UNSIGNED_SHORT, 1);
     memcpy(expectedUshortVtkImageData->GetScalarPointer(), ushortData.constData(), size * sizeof(unsigned short));
 
     QTest::newRow("non-null data") << imageDataCreator << width << height << depth << ucharData << ushortData << expectedUcharVtkImageData

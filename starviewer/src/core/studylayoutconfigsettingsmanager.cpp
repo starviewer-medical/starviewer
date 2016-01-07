@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "studylayoutconfigsettingsmanager.h"
 
 #include "studylayoutconfigsettingsconverter.h"
@@ -52,7 +66,7 @@ bool StudyLayoutConfigSettingsManager::addItem(const StudyLayoutConfig &config)
     }
     else
     {
-        DEBUG_LOG("Ja existeix una configuraciÛ de layout autom‡tic per aquesta modalitat: " + config.getModality() + ". No s'afegir‡.");
+        DEBUG_LOG("Ja existeix una configuraci√≥ de layout autom√†tic per aquesta modalitat: " + config.getModality() + ". No s'afegir√†.");
     }
 
     return ok;

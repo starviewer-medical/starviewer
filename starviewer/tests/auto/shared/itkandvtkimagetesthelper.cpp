@@ -54,11 +54,9 @@ void ItkAndVtkImageTestHelper::createItkAndVtkImages(int dimensions[3], int star
     int extent[6] = { startIndex[0], startIndex[0] + dimensions[0] - 1, startIndex[1], startIndex[1] + dimensions[1] - 1, startIndex[2],
                       startIndex[2] + dimensions[2] - 1 };
     vtkImage->SetExtent(extent);
-    vtkImage->SetWholeExtent(extent);
     vtkImage->SetSpacing(spacing);
     vtkImage->SetOrigin(origin);
-    vtkImage->SetScalarTypeToShort();
-    vtkImage->AllocateScalars();
+    vtkImage->AllocateScalars(VTK_SHORT, 1);
 
     itk::ImageRegionIterator<VolumePixelData::ItkImageType> itkIterator(itkImage, itkImage->GetLargestPossibleRegion());
     itkIterator.GoToBegin();
@@ -102,7 +100,6 @@ void ItkAndVtkImageTestHelper::compareVtkImageData(vtkImageData *actualImageData
     for (int i = 0; i < 6; i++)
     {
         QCOMPARE(actualImageData->GetExtent()[i], expectedImageData->GetExtent()[i]);
-        QCOMPARE(actualImageData->GetWholeExtent()[i], expectedImageData->GetWholeExtent()[i]);
     }
 
     QCOMPARE(actualImageData->GetScalarType(), expectedImageData->GetScalarType());

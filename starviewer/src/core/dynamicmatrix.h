@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGDYNAMICMATRIX_H
 #define UDGDYNAMICMATRIX_H
 
@@ -41,8 +55,20 @@ public:
 
     /// Mètode que indica si es pot maximitzar la finestra a més d'una pantalla (el crida ScreenManager).
     bool isMaximizable() const;
+    /// Returns the number of rows.
+    int getNumberOfRows() const;
     /// Retorna el nombre de columnes que te la fila més llarga.
     int getNumberOfColumns() const;
+
+    /// Returns the index of the first row.
+    int getRowBase() const;
+    /// Returns the index of the first column.
+    int getColumnBase() const;
+
+    /// Searches the matrix for the given value.
+    /// If found, it returns true and fills the row and column parameters with the row and column indices of the first instance of the value.
+    /// If the value is not found, it returns false.
+    bool getPosition(int value, int &row, int &column) const;
 
 private:
     /// La llista de llistes que guarda l'estructura de la matriu.

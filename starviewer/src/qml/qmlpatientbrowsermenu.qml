@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 import QtQuick 1.0
 
 Rectangle {
@@ -15,7 +29,6 @@ Rectangle {
     property string fusionMarkedItem1: "-1"
     property string fusionMarkedItem2: "-1"
     property string fusionLabelText: qsTr("Fusion")
-    property int computedFontSize
 
     width: Math.min(computedContentWidth + listview.anchors.leftMargin + listview.anchors.rightMargin, maxWidth);
     height: Math.min(computedContentHeight + listview.anchors.topMargin + listview.anchors.bottomMargin, maxHeight);
@@ -37,16 +50,16 @@ Rectangle {
                 var textElement = Qt.createQmlObject(
                         'import QtQuick 1.0;'
                         + 'Text {'
-                        + '   text: "' + item.text + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier) + '; font.pointSize: ' + computedFontSize
+                        + '   text: "' + item.text.replace(/"/g, '\\"') + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier) + '; font.pointSize: ' + applicationFontSize
                         + '}',
                         parent, "calcContentWidth")
-                max = Math.max((textElement.width + 10) * 2, max)
+                max = Math.max((textElement.width + 15) * 2, max)
                 textElement.destroy()
             }
             var captionElement = Qt.createQmlObject(
                     'import QtQuick 1.0;'
                     + 'Text {'
-                        + '   text: "' + model[i].caption + '"; visible: false; font.pointSize: ' + computedFontSize
+                        + '   text: "' + model[i].caption.replace(/"/g, '\\"') + '"; visible: false; font.pointSize: ' + applicationFontSize
                     + '}',
                     parent, "calcContentWidth")
             max = Math.max(captionElement.width + 20, max)
@@ -60,7 +73,7 @@ Rectangle {
         var textElement = Qt.createQmlObject(
                 'import QtQuick 1.0;'
                 + 'Text {'
-                + '   text: "any text"; visible: false; font.pointSize: ' + computedFontSize
+                + '   text: "any text"; visible: false; font.pointSize: ' + applicationFontSize
                 + '}',
                 parent, "calcContentHeight")
         var cellHeight = textElement.height + textElement.font.pointSize;
@@ -132,7 +145,7 @@ Rectangle {
                     horizontalAlignment: Text.AlignHCenter
                     text: caption
                     elide: Text.ElideMiddle
-                    font.pointSize: computedFontSize
+                    font.pointSize: applicationFontSize
                 }
             }
 
@@ -183,7 +196,7 @@ Rectangle {
                             }
                             text: modelData.text
                             elide: Text.ElideMiddle
-                            font.pointSize: computedFontSize
+                            font.pointSize: applicationFontSize
                             font.bold: {
                                 if (browserMenu.markedItem === modelData.identifier) {
                                     return true;
@@ -247,7 +260,7 @@ Rectangle {
                             radius: 4
 
                             Text {
-                                font.pointSize: computedFontSize
+                                font.pointSize: applicationFontSize
                                 text: " " + fusionLabelText + " "
                                 color: "#012911"
                                 anchors {
@@ -278,7 +291,7 @@ Rectangle {
                                 text: modelData.text
                                 elide: Text.ElideMiddle
                                 font.bold: (browserMenu.markedItem === modelData.identifier)
-                                font.pointSize: computedFontSize
+                                font.pointSize: applicationFontSize
                             }
 
                             MouseArea {

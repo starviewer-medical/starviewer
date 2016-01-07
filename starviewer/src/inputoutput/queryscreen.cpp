@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "queryscreen.h"
 
 #include <QMessageBox>
@@ -141,12 +155,12 @@ void QueryScreen::createConnections()
 #ifndef STARVIEWER_LITE
     connect(m_operationListToolButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
     connect(m_showPACSNodesToolButton, SIGNAL(toggled(bool)), SLOT(updatePACSNodesVisibility()));
-    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob*)), SLOT(newPACSJobEnqueued(PACSJob*)));
+    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJobPointer)), SLOT(newPACSJobEnqueued(PACSJobPointer)));
     if (m_risRequestManager != NULL)
     {
         // Potser que no tinguem activat escoltar peticions del RIS
-        connect(m_risRequestManager, SIGNAL(viewStudyRetrievedFromRISRequest(QString)), SLOT(viewRetrievedStudyFromPacs(QString)));
-        connect(m_risRequestManager, SIGNAL(loadStudyRetrievedFromRISRequest(QString)), SLOT(loadRetrievedStudyFromPacs(QString)));
+        connect(m_risRequestManager, SIGNAL(viewStudyRetrievedFromRISRequest(QString)), SLOT(viewStudyFromDatabase(QString)));
+        connect(m_risRequestManager, SIGNAL(loadStudyRetrievedFromRISRequest(QString)), SLOT(loadStudyFromDatabase(QString)));
     }
 #endif
     connect(m_createDICOMDIRToolButton, SIGNAL(clicked()), m_qcreateDicomdir, SLOT(show()));
@@ -163,8 +177,8 @@ void QueryScreen::createConnections()
 
     connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>, bool)), SLOT(viewPatients(QList<Patient*>, bool)));
 
-    connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewRetrievedStudyFromPacs(QString)));
-    connect(m_qInputOutputPacsWidget, SIGNAL(loadRetrievedStudy(QString)), SLOT(loadRetrievedStudyFromPacs(QString)));
+    connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewStudyFromDatabase(QString)));
+    connect(m_qInputOutputPacsWidget, SIGNAL(loadRetrievedStudy(QString)), SLOT(loadStudyFromDatabase(QString)));
 
     /// Ens informa quan hi hagut un canvi d'estat en alguna de les operacions
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
@@ -292,13 +306,13 @@ void QueryScreen::searchStudy()
     }
 }
 
-void QueryScreen::viewRetrievedStudyFromPacs(QString studyInstanceUID)
+void QueryScreen::viewStudyFromDatabase(QString studyInstanceUID)
 {
     // Indiquem que volem veure un estudi que està guardat a la base de dades
     m_qInputOutputLocalDatabaseWidget->view(studyInstanceUID);
 }
 
-void QueryScreen::loadRetrievedStudyFromPacs(QString studyInstanceUID)
+void QueryScreen::loadStudyFromDatabase(QString studyInstanceUID)
 {
     // Indiquem que volem veure un estudi que està guardat a la base de dades
     m_qInputOutputLocalDatabaseWidget->view(studyInstanceUID, true);
@@ -485,22 +499,21 @@ void QueryScreen::studyRetrieveCancelledSlot(QString studyInstanceUID)
         emit studyRetrieveCancelled(studyInstanceUID);
     }
 }
-void QueryScreen::newPACSJobEnqueued(PACSJob *pacsJob)
+void QueryScreen::newPACSJobEnqueued(PACSJobPointer pacsJob)
 {
     if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
         m_operationAnimation->show();
         m_labelOperation->show();
-        connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
-        connect(pacsJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(pacsJobFinishedOrCancelled(PACSJob*)));
+        connect(pacsJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(pacsJobFinishedOrCancelled(PACSJobPointer)));
+        connect(pacsJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(pacsJobFinishedOrCancelled(PACSJobPointer)));
 
         // Indiquem que tenim un PACSJob més pendent de finalitzar
         m_PACSJobsPendingToFinish++;
     }
 }
 
-void QueryScreen::pacsJobFinishedOrCancelled(PACSJob *)
-{
+void QueryScreen::pacsJobFinishedOrCancelled(PACSJobPointer) {
     // No podem utilitzar isExecutingPACSJob per controlar si hi ha jobs pendents d'executar, perquè algunes vegades ens
     // hem trobat que tot i no tenir cap job pendent d'executar, el mètode respón que hi ha algun job executant-se.
     // Això passa algunes vegades quan s'aten el signal PACSJobFinished d'un job de seguida i es pregunta al mètode isExecutingPACSJob

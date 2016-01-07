@@ -180,7 +180,7 @@ void QRectumSegmentationExtension::setInput(Volume *input)
     m_mainVolume = input;
     m_2DView->setInput(input);
     this->updateInputFeatures(input);
-    m_2DView->removeAnnotation(AllAnnotation);
+    m_2DView->removeAnnotation(AllAnnotations);
     m_2DView->setOverlapMethod(Q2DViewer::Blend);
 }
 
@@ -431,7 +431,7 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest()
         squareRegionActor->GetProperty()->SetOpacity(0.2);
 
         vtkDataSetMapper *squareMapper = vtkDataSetMapper::New();
-        squareMapper->SetInput(grid);
+        squareMapper->SetInputData(grid);
 
         squareRegionActor->SetMapper(squareMapper);
 
@@ -522,7 +522,7 @@ void QRectumSegmentationExtension::updateVolumeForced()
         int ext[6];
         int i,j,k;
         int cont = 0;
-        m_2DView->getOverlayInput()->getWholeExtent(ext);
+        m_2DView->getOverlayInput()->getExtent(ext);
     
         VolumePixelDataIterator it = m_2DView->getOverlayInput()->getIterator();
         for(i=ext[0];i<=ext[1];i++)
@@ -571,7 +571,7 @@ void QRectumSegmentationExtension::viewThresholds()
         m_lesionMaskVolume = new Volume();
     }
     vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
-    imageThreshold->SetInput(m_mainVolume->getVtkData());
+    imageThreshold->SetInputData(m_mainVolume->getVtkData());
     imageThreshold->ThresholdBetween(m_lowerValueSlider->value(),  m_upperValueSlider->value());
     imageThreshold->SetInValue(m_insideValue);
     imageThreshold->SetOutValue(m_outsideValue);
@@ -651,7 +651,7 @@ void QRectumSegmentationExtension::saveActivedMaskVolume()
         }
         //Forcem que la màscara que gaurdem el dins sigui 255 i el fora 0
         vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
-        imageThreshold->SetInput(m_lesionMaskVolume->getVtkData());
+        imageThreshold->SetInputData(m_lesionMaskVolume->getVtkData());
         imageThreshold->ThresholdBetween(m_insideValue , m_insideValue); // només els que valen m_insideValue
         imageThreshold->SetInValue(255);
         imageThreshold->SetOutValue(0);
@@ -660,7 +660,7 @@ void QRectumSegmentationExtension::saveActivedMaskVolume()
         vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
         writer->SetFileName(qPrintable(fileName));
         writer->SetFileDimensionality(3);
-        writer->SetInput(imageThreshold->GetOutput());
+        writer->SetInputConnection(imageThreshold->GetOutputPort());
         writer->Write();
 
         writer->Delete();

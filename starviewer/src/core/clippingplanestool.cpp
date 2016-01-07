@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "clippingplanestool.h"
 #include "q3dviewer.h"
 #include "logging.h"
@@ -25,7 +39,7 @@ ClippingPlanesTool::ClippingPlanesTool(QViewer *viewer, QObject *parent)
     m_boundingBoxClipperWidget->SetInteractor(m_3DViewer->getInteractor());
     m_boundingBoxClipperWidget->InsideOutOn();
 
-    // Posem a punt la observació dels events del widget
+    // Posem a punt la observaciÃ³ dels events del widget
     m_vtkQtConnections = vtkEventQtSlotConnect::New();
     m_vtkQtConnections->Connect(m_boundingBoxClipperWidget, vtkCommand::InteractionEvent, this, SLOT(boundingBoxEventHandler(vtkObject*, unsigned long, void*,
                                                                                                                              void*, vtkCommand*)));
@@ -92,7 +106,7 @@ void ClippingPlanesTool::updateInput()
         bounds[0] = bounds[1] = origin[0];
         bounds[2] = bounds[3] = origin[1];
         bounds[4] = bounds[5] = origin[2];
-        // Seguidament calculem els orígens menors i majors de cada eix
+        // Seguidament calculem els orÃ­gens menors i majors de cada eix
         // per obtenir la bounding box dels plans de tall
         for (int i = 0; i < nplanes; i++)
         {
@@ -127,7 +141,7 @@ void ClippingPlanesTool::updateInput()
             }
         }
 
-        // Indiquem els bounds del widget explícitament
+        // Indiquem els bounds del widget explÃ­citament
         m_boundingBoxClipperWidget->PlaceWidget(bounds);
     }
     else

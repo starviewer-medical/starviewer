@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGSTUDYLAYOUTCONFIGSETTINGSCONVERTER_H
 #define UDGSTUDYLAYOUTCONFIGSETTINGSCONVERTER_H
 
@@ -14,10 +28,10 @@ public:
     StudyLayoutConfigSettingsConverter();
     ~StudyLayoutConfigSettingsConverter();
 
-    /// MËtode per obtenir un StudyLayoutConfig d'un item de settings
+    /// M√®tode per obtenir un StudyLayoutConfig d'un item de settings
     StudyLayoutConfig fromSettingsListItem(const Settings::SettingsListItemType &item) const;
 
-    /// MËtode per convertir un StudyLayoutConfig a un item de settings
+    /// M√®tode per convertir un StudyLayoutConfig a un item de settings
     Settings::SettingsListItemType toSettingsListItem(const StudyLayoutConfig &config) const;
 
 private:
@@ -39,12 +53,12 @@ private:
     static const QString Series;
 
 private:
-    /// MËtodes que ens transformen el valor enumerat d'StudyLayoutConfig a un l'string corresponent de settings
+    /// M√®todes que ens transformen el valor enumerat d'StudyLayoutConfig a un l'string corresponent de settings
     QString getAsSettingsStringValue(const StudyLayoutConfig::ExclusionCriteriaType &criteria) const;
     QString getAsSettingsStringValue(const StudyLayoutConfig::UnfoldDirectionType &direction) const;
     QString getAsSettingsStringValue(const StudyLayoutConfig::UnfoldType &unfoldBy) const;
     
-    /// MËtodes que ens transformen el valor de com s'han guardat als settings a l'enum corresponent d'StudyLayoutConfig
+    /// M√®todes que ens transformen el valor de com s'han guardat als settings a l'enum corresponent d'StudyLayoutConfig
     QList<StudyLayoutConfig::ExclusionCriteriaType> getExclusionCriteriaFromSettingsValue(const QString &value) const;
     StudyLayoutConfig::UnfoldDirectionType getUnfoldDirectionFromSettingsValue(const QString &value) const;
     StudyLayoutConfig::UnfoldType getUnfoldTypeFromSettingsValue(const QString &value) const;

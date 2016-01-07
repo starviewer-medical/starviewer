@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "pacsmanager.h"
 
 #include <QThread>
@@ -25,30 +39,32 @@ PacsManager::PacsManager()
 {
     Settings settings;
 
-    m_queryWeaver = NULL;
-    m_queryWeaver = new ThreadWeaver::Weaver();
-    m_queryWeaver->setMaximumNumberOfThreads(settings.getValue(InputOutputSettings::MaximumPACSConnections).toInt());
+    m_queryQueue = NULL;
+    m_queryQueue = new ThreadWeaver::Queue();
+    m_queryQueue->setMaximumNumberOfThreads(settings.getValue(InputOutputSettings::MaximumPACSConnections).toInt());
 
-    m_sendDICOMFilesToPACSWeaver = new ThreadWeaver::Weaver();
-    m_sendDICOMFilesToPACSWeaver->setMaximumNumberOfThreads(settings.getValue(InputOutputSettings::MaximumPACSConnections).toInt());
+    m_sendDICOMFilesToPACSQueue = new ThreadWeaver::Queue();
+    m_sendDICOMFilesToPACSQueue->setMaximumNumberOfThreads(settings.getValue(InputOutputSettings::MaximumPACSConnections).toInt());
 
-    m_retrieveDICOMFilesFromPACSWeaver = new ThreadWeaver::Weaver();
+    m_retrieveDICOMFilesFromPACSQueue = new ThreadWeaver::Queue();
     // Només podem descarregar un estudi a la vegada del PACS, per això com a número màxim de threads especifiquem 1
-    m_retrieveDICOMFilesFromPACSWeaver ->setMaximumNumberOfThreads(1);
+    m_retrieveDICOMFilesFromPACSQueue ->setMaximumNumberOfThreads(1);
 }
 
-void PacsManager::enqueuePACSJob(PACSJob *pacsJob)
+void PacsManager::enqueuePACSJob(PACSJobPointer pacsJob)
 {
+    pacsJob->setSelfPointer(pacsJob);
+
     switch (pacsJob->getPACSJobType())
     {
         case PACSJob::SendDICOMFilesToPACSJobType:
-            m_sendDICOMFilesToPACSWeaver->enqueue(pacsJob);
+            m_sendDICOMFilesToPACSQueue->enqueue(pacsJob);
             break;
         case PACSJob::RetrieveDICOMFilesFromPACSJobType:
-            m_retrieveDICOMFilesFromPACSWeaver->enqueue(pacsJob);
+            m_retrieveDICOMFilesFromPACSQueue->enqueue(pacsJob);
             break;
         case PACSJob::QueryPACS:
-            m_queryWeaver->enqueue(pacsJob);
+            m_queryQueue->enqueue(pacsJob);
             break;
         default:
             ERROR_LOG("Tipus de job invalid");
@@ -61,7 +77,7 @@ void PacsManager::enqueuePACSJob(PACSJob *pacsJob)
 // TODO: S'hauria de convertir al plural
 bool PacsManager::isExecutingPACSJob()
 {
-    return !m_sendDICOMFilesToPACSWeaver->isIdle() || !m_retrieveDICOMFilesFromPACSWeaver->isIdle() || !m_queryWeaver->isIdle();
+    return !m_sendDICOMFilesToPACSQueue->isIdle() || !m_retrieveDICOMFilesFromPACSQueue->isIdle() || !m_queryQueue->isIdle();
 }
 
 bool PacsManager::isExecutingPACSJob(PACSJob::PACSJobType pacsJobType)
@@ -69,13 +85,13 @@ bool PacsManager::isExecutingPACSJob(PACSJob::PACSJobType pacsJobType)
     switch (pacsJobType)
     {
         case PACSJob::SendDICOMFilesToPACSJobType:
-            return !m_sendDICOMFilesToPACSWeaver->isIdle();
+            return !m_sendDICOMFilesToPACSQueue->isIdle();
             break;
         case PACSJob::RetrieveDICOMFilesFromPACSJobType:
-            return !m_retrieveDICOMFilesFromPACSWeaver->isIdle();
+            return !m_retrieveDICOMFilesFromPACSQueue->isIdle();
             break;
         case PACSJob::QueryPACS:
-            return !m_queryWeaver->isIdle();
+            return !m_queryQueue->isIdle();
             break;
         default:
             ERROR_LOG("Metode isExecutingPACS ha rebut un Tipus de job invalid");
@@ -83,7 +99,7 @@ bool PacsManager::isExecutingPACSJob(PACSJob::PACSJobType pacsJobType)
     }
 }
 
-void PacsManager::requestCancelPACSJob(PACSJob *pacsJob)
+void PacsManager::requestCancelPACSJob(PACSJobPointer pacsJob)
 {
     // El emit de requestedCancelPACSJob s'ha de fer abans de desencuar i requestAbort perquè sinó ens podem trobar que primer rebem el signal del PACSJob
     // PACSJobCancelledi llavors el requestedCancelPACSJob
@@ -95,13 +111,13 @@ void PacsManager::requestCancelPACSJob(PACSJob *pacsJob)
     switch (pacsJob->getPACSJobType())
     {
         case PACSJob::SendDICOMFilesToPACSJobType:
-            pacsJobIsExecuting = !m_sendDICOMFilesToPACSWeaver->dequeue(pacsJob);
+            pacsJobIsExecuting = !m_sendDICOMFilesToPACSQueue->dequeue(pacsJob);
             break;
         case PACSJob::RetrieveDICOMFilesFromPACSJobType:
-            pacsJobIsExecuting = !m_retrieveDICOMFilesFromPACSWeaver->dequeue(pacsJob);
+            pacsJobIsExecuting = !m_retrieveDICOMFilesFromPACSQueue->dequeue(pacsJob);
             break;
         case PACSJob::QueryPACS:
-            pacsJobIsExecuting = !m_queryWeaver->dequeue(pacsJob);
+            pacsJobIsExecuting = !m_queryQueue->dequeue(pacsJob);
             break;
         default:
             ERROR_LOG("Metode requestCancel ha rebut un Tipus de job invalid");
@@ -117,12 +133,12 @@ void PacsManager::requestCancelPACSJob(PACSJob *pacsJob)
 
 void PacsManager::requestCancelAllPACSJobs()
 {
-    m_sendDICOMFilesToPACSWeaver->dequeue();
-    m_sendDICOMFilesToPACSWeaver->requestAbort();
-    m_retrieveDICOMFilesFromPACSWeaver->dequeue();
-    m_retrieveDICOMFilesFromPACSWeaver->requestAbort();
-    m_queryWeaver->dequeue();
-    m_queryWeaver->requestAbort();
+    m_sendDICOMFilesToPACSQueue->dequeue();
+    m_sendDICOMFilesToPACSQueue->requestAbort();
+    m_retrieveDICOMFilesFromPACSQueue->dequeue();
+    m_retrieveDICOMFilesFromPACSQueue->requestAbort();
+    m_queryQueue->dequeue();
+    m_queryQueue->requestAbort();
 }
 
 bool PacsManager::waitForAllPACSJobsFinished(int msec)

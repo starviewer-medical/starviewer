@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol version="2" name="MGHorizontalCCMLO">
+    <hangingProtocolName>CC MLO</hangingProtocolName>
+    <numberScreens>1</numberScreens>
+    <protocol>MG</protocol>
+    <protocol>CR</protocol>
+    <priority>10</priority>
+    <restriction identifier="1">
+        <selectorAttribute>ImageLaterality</selectorAttribute>
+        <selectorValue>R</selectorValue>
+    </restriction>
+    <restriction identifier="2">
+        <selectorAttribute>ImageLaterality</selectorAttribute>
+        <selectorValue>L</selectorValue>
+    </restriction>
+    <restriction identifier="3">
+        <selectorAttribute>CodeMeaning</selectorAttribute>
+        <selectorValue>cranio-caudal</selectorValue>
+    </restriction>
+    <restriction identifier="4">
+        <selectorAttribute>CodeMeaning</selectorAttribute>
+        <selectorValue>later</selectorValue>
+    </restriction>
+    <restriction identifier="5">
+        <selectorAttribute>CodeMeaning</selectorAttribute>
+        <selectorValue>cranio-caudal</selectorValue>
+    </restriction>
+	<restriction identifier="6">
+        <selectorAttribute>SeriesDescription</selectorAttribute>
+        <selectorValue>D OBL|OBL DCHA|r-mlo re-obl</selectorValue>
+    </restriction>
+    <restriction identifier="7">
+        <selectorAttribute>SeriesDescription</selectorAttribute>
+        <selectorValue>I OBL|OBL IZQ|l-mlo li-obl</selectorValue>
+    </restriction>
+    <restriction identifier="8">
+        <selectorAttribute>SeriesDescription</selectorAttribute>
+        <selectorValue>D CC|CC DCHA|r-cc re-cc</selectorValue>
+    </restriction>
+    <restriction identifier="9">
+        <selectorAttribute>SeriesDescription</selectorAttribute>
+        <selectorValue>I CC|CC IZQ|l-cc li-cc</selectorValue>
+    </restriction>
+	<restriction identifier="10">
+        <selectorAttribute>Laterality</selectorAttribute>
+        <selectorValue>R</selectorValue>
+    </restriction>
+    <restriction identifier="11">
+        <selectorAttribute>Laterality</selectorAttribute>
+        <selectorValue>L</selectorValue>
+    </restriction>
+	<restriction identifier="12">
+        <selectorAttribute>ViewPosition</selectorAttribute>
+        <selectorValue>MLO</selectorValue>
+    </restriction>
+    <restriction identifier="13">
+        <selectorAttribute>ViewPosition</selectorAttribute>
+        <selectorValue>CC</selectorValue>
+    </restriction>
+    <imageSet identifier="1">
+        <type>image</type>
+        <restrictionExpression>(1 and 4 and not 5) or 6 or (10 and 12)</restrictionExpression>
+    </imageSet>
+    <imageSet identifier="2">
+        <type>image</type>
+        <restrictionExpression>(2 and 4 and not 5) or 7 or (11 and 12)</restrictionExpression>
+    </imageSet>
+    <imageSet identifier="3">
+        <type>image</type>
+        <restrictionExpression>(1 and 3) or 8 or (10 and 13)</restrictionExpression>
+    </imageSet>
+    <imageSet identifier="4">
+        <type>image</type>
+        <restrictionExpression>(2 and 3) or 9 or (11 and 13)</restrictionExpression>
+    </imageSet>
+    <displaySet identifier="1">
+        <position>0.0\1.0\0.25\0.0</position>
+        <imageSetNumber>3</imageSetNumber>
+        <patientOrientation>P\F</patientOrientation>
+        <iconType>CC_R</iconType>
+        <alignment>right</alignment>
+    </displaySet>
+    <displaySet identifier="2">
+        <position>0.25\1.0\0.5\0.0</position>
+        <imageSetNumber>4</imageSetNumber>
+        <patientOrientation>A\R</patientOrientation>
+        <iconType>CC_L</iconType>
+        <alignment>left</alignment>
+    </displaySet>
+    <displaySet identifier="3">
+        <position>0.5\1.0\0.75\0.0</position>
+        <imageSetNumber>1</imageSetNumber>
+        <iconType>MLO_R</iconType>
+        <alignment>right</alignment>
+    </displaySet>
+    <displaySet identifier="4">
+        <position>0.75\1.0\1.0\0.0</position>
+        <imageSetNumber>2</imageSetNumber>
+        <patientOrientation>A\F</patientOrientation>
+        <iconType>MLO_L</iconType>
+        <alignment>left</alignment>
+    </displaySet>
+</hangingProtocol>

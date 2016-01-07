@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "directoryutilities.h"
 
 #include "logging.h"
@@ -63,7 +77,7 @@ bool DirectoryUtilities::copyDirectory(const QString &sourceDirectoryPath, const
 
         if (!QFile::copy(sourceFile, destinationFile))
         {
-            ERROR_LOG(QString("No s'ha pogut copiar l'arxiu %1 al seu dest� %2").arg(sourceFile, destinationFile));
+            ERROR_LOG(QString("No s'ha pogut copiar l'arxiu %1 al seu destí %2").arg(sourceFile, destinationFile));
             return false;
         }
     }

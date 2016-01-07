@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "imageoverlay.h"
 
 #include "logging.h"
@@ -141,19 +155,18 @@ ImageOverlay ImageOverlay::fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay)
     {
         try
         {
-            // #1903: degut a la implementació de GetUnpackBuffer, la mida del buffer ha de ser múltiple de 8
-            int bufferSize = MathTools::roundUpToMultipleOfNumber(imageOverlay.getRows() * imageOverlay.getColumns(), 8);
+            size_t bufferSize = gdcmOverlay.GetUnpackBufferLength();
             unsigned char *buffer = new unsigned char[bufferSize];
-            gdcmOverlay.GetUnpackBuffer(buffer);
+            gdcmOverlay.GetUnpackBuffer(reinterpret_cast<char*>(buffer), bufferSize);
             imageOverlay.setData(buffer);
         }
         catch (std::bad_alloc)
         {
             imageOverlay.setData(0);
             
-            ERROR_LOG(QString("No hi ha memòria suficient per carregar l'overlay [%1*%2] = %3 bytes")
+            ERROR_LOG(QString("No hi ha memÃ²ria suficient per carregar l'overlay [%1*%2] = %3 bytes")
                 .arg(imageOverlay.getRows()).arg(imageOverlay.getColumns()).arg((unsigned long)imageOverlay.getRows() * imageOverlay.getColumns()));
-            DEBUG_LOG(QString("No hi ha memòria suficient per carregar l'overlay [%1*%2] = %3 bytes")
+            DEBUG_LOG(QString("No hi ha memÃ²ria suficient per carregar l'overlay [%1*%2] = %3 bytes")
                 .arg(imageOverlay.getRows()).arg(imageOverlay.getColumns()).arg((unsigned long)imageOverlay.getRows() * imageOverlay.getColumns()));
         }
     }
@@ -163,7 +176,7 @@ ImageOverlay ImageOverlay::fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay)
 
 ImageOverlay ImageOverlay::mergeOverlays(const QList<ImageOverlay> &overlaysList, bool &ok)
 {
-    // Fem tria dels overlays que es puguin considerar vàlids
+    // Fem tria dels overlays que es puguin considerar vÃ lids
     QList<ImageOverlay> validOverlaysList;
     foreach (const ImageOverlay &overlay, overlaysList)
     {
@@ -187,7 +200,7 @@ ImageOverlay ImageOverlay::mergeOverlays(const QList<ImageOverlay> &overlaysList
         return validOverlaysList.at(0);
     }
     
-    // Tenim 2 o més overlays, per tant caldrà fer fusió
+    // Tenim 2 o mÃ©s overlays, per tant caldrÃ  fer fusiÃ³
     
     // Primer calculem l'origen
     int outOriginX = 1;
@@ -221,7 +234,7 @@ ImageOverlay ImageOverlay::mergeOverlays(const QList<ImageOverlay> &overlaysList
         }
     }
     
-    // Ara creem el nou buffer únic i en fusionem les dades dels diferents overlays existents
+    // Ara creem el nou buffer Ãºnic i en fusionem les dades dels diferents overlays existents
     unsigned char *data = 0;
     try
     {
@@ -229,9 +242,9 @@ ImageOverlay ImageOverlay::mergeOverlays(const QList<ImageOverlay> &overlaysList
     }
     catch (std::bad_alloc)
     {
-        ERROR_LOG(QString("No hi ha memòria suficient per crear el buffer per l'overlay fusionat [%1*%2] = %3 bytes")
+        ERROR_LOG(QString("No hi ha memÃ²ria suficient per crear el buffer per l'overlay fusionat [%1*%2] = %3 bytes")
             .arg(outRows).arg(outColumns).arg((unsigned long)outRows * outColumns));
-        DEBUG_LOG(QString("No hi ha memòria suficient per crear el buffer per l'overlay fusionat [%1*%2] = %3 bytes")
+        DEBUG_LOG(QString("No hi ha memÃ²ria suficient per crear el buffer per l'overlay fusionat [%1*%2] = %3 bytes")
             .arg(outRows).arg(outColumns).arg((unsigned long)outRows * outColumns));
 
         ok = false;

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "localdatabaseimagedal.h"
 
 #include <QString>
@@ -17,6 +31,7 @@
 #include "localdatabasepacsretrievedimagesdal.h"
 #include "dicomformattedvaluesconverter.h"
 #include "dicomvaluerepresentationconverter.h"
+#include "localdatabasevoilutdal.h"
 
 namespace udg {
 
@@ -27,7 +42,7 @@ LocalDatabaseImageDAL::LocalDatabaseImageDAL(DatabaseConnection *dbConnection)
 
 void LocalDatabaseImageDAL::insert(Image *newImage)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newImage)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(newImage).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -37,7 +52,7 @@ void LocalDatabaseImageDAL::insert(Image *newImage)
 
 void LocalDatabaseImageDAL::del(const DicomMask &imageMaskToDelete)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(imageMaskToDelete)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlDelete(imageMaskToDelete).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -47,7 +62,7 @@ void LocalDatabaseImageDAL::del(const DicomMask &imageMaskToDelete)
 
 void LocalDatabaseImageDAL::update(Image *imageToUpdate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(imageToUpdate)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdate(imageToUpdate).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -64,7 +79,7 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
     QList<Image*> imageList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          qPrintable(buildSqlSelect(imageMask)),
+                                          buildSqlSelect(imageMask).toUtf8().constData(),
                                           &reply, &rows, &columns, error);
     if (getLastError() != SQLITE_OK)
     {
@@ -73,16 +88,26 @@ QList<Image*> LocalDatabaseImageDAL::query(const DicomMask &imageMask)
     }
 
     LocalDatabaseDisplayShutterDAL shutterDAL(m_dbConnection);
+    LocalDatabaseVoiLutDAL voiLutDal(m_dbConnection);
+
     // index = 1 ignorem les capçaleres
     for (int index = 1; index <= rows; index++)
     {
         Image *newImage = fillImage(reply, index, columns);
             
         // Obtenim els shutters de l'imatge actual
-        DicomMask shuttersMask;
-        shuttersMask.setSOPInstanceUID(newImage->getSOPInstanceUID());
-        shuttersMask.setImageNumber(QString::number(newImage->getFrameNumber()));
-        newImage->setDisplayShutters(shutterDAL.query(shuttersMask));
+        DicomMask mask;
+        mask.setSOPInstanceUID(newImage->getSOPInstanceUID());
+        mask.setImageNumber(QString::number(newImage->getFrameNumber()));
+        newImage->setDisplayShutters(shutterDAL.query(mask));
+
+        // Get VOI LUTs
+        QList<VoiLut> voiLuts = voiLutDal.query(mask);
+
+        foreach (const VoiLut &voiLut, voiLuts)
+        {
+            newImage->addVoiLut(voiLut);
+        }
         
         imageList << newImage;
     }
@@ -100,7 +125,7 @@ int LocalDatabaseImageDAL::count(const DicomMask &imageMaskToCount)
     char **error = NULL;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          qPrintable(buildSqlSelectCountImages(imageMaskToCount)),
+                                          buildSqlSelectCountImages(imageMaskToCount).toUtf8().constData(),
                                           &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
@@ -140,7 +165,14 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setBitsStored(QString(reply[14 + row * columns]).toInt());
     image->setPixelRepresentation(QString(reply[15 + row * columns]).toInt());
     image->setRescaleSlope(QString(reply[16 + row * columns]).toDouble());
-    image->setWindowLevelList(DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns], reply[19 + row * columns]));
+    QList<WindowLevel> windowLevelList = DICOMFormattedValuesConverter::parseWindowLevelValues(reply[17 + row * columns], reply[18 + row * columns],
+                                                                                               convertToQString(reply[19 + row * columns]));
+    QList<VoiLut> voiLutList;
+    foreach (const WindowLevel &windowLevel, windowLevelList)
+    {
+        voiLutList.append(windowLevel);
+    }
+    image->setVoiLutList(voiLutList);
     image->setSliceLocation(reply[20 + row * columns]);
     image->setRescaleIntercept(QString(reply[21 + row * columns]).toDouble());
     image->setPhotometricInterpretation(reply[22 + row * columns]);
@@ -148,7 +180,7 @@ Image* LocalDatabaseImageDAL::fillImage(char **reply, int row, int columns)
     image->setViewPosition(reply[24 + row * columns]);
     // ImageLaterality sempre és un Char
     image->setImageLaterality(QChar(reply[25 + row * columns][0]));
-    image->setViewCodeMeaning(reply[26 + row * columns]);
+    image->setViewCodeMeaning(convertToQString(reply[26 + row * columns]));
     image->setPhaseNumber(QString(reply[27 + row * columns]).toInt());
     image->setImageTime(reply[28 + row * columns]);
     image->setVolumeNumberInSeries(QString(reply [29 + row * columns]).toInt());
@@ -470,13 +502,17 @@ void LocalDatabaseImageDAL::getWindowLevelInformationAsQString(Image *newImage, 
     
     QString value;
     WindowLevel windowLevel;
-    for (int index = 0; index < newImage->getNumberOfWindowLevels(); ++index)
+    for (int index = 0; index < newImage->getNumberOfVoiLuts(); ++index)
     {
-        windowLevel = newImage->getWindowLevel(index);
-        
-        windowWidth += value.setNum(windowLevel.getWidth(), 'g', 10) + "\\";
-        windowCenter += value.setNum(windowLevel.getCenter(), 'g', 10) + "\\";
-        explanation += windowLevel.getName() + "\\";
+        const VoiLut &voiLut = newImage->getVoiLut(index);
+
+        if (voiLut.isWindowLevel())
+        {
+            windowLevel = voiLut.getWindowLevel();
+            windowWidth += value.setNum(windowLevel.getWidth(), 'g', 10) + "\\";
+            windowCenter += value.setNum(windowLevel.getCenter(), 'g', 10) + "\\";
+            explanation += windowLevel.getName() + "\\";
+        }
     }
 
     // Treiem l'últim "\\" afegit

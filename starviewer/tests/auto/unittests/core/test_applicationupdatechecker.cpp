@@ -61,8 +61,6 @@ protected:
     }
 };
 
-Q_DECLARE_METATYPE(QNetworkReply::NetworkError)
-
 class test_ApplicationUpdateChecker : public QObject {
 Q_OBJECT
 

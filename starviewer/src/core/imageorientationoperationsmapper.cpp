@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "imageorientationoperationsmapper.h"
 
 #include <QStringList>
@@ -56,7 +70,7 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     const QString Rotate270DegreesAndFlip("3,1");
 
     // Mapeig de les operacions per la vista sagital
-    // Definim les etiquetes possibles d'orientaciÛ
+    // Definim les etiquetes possibles d'orientaci√≥
     const QString AnteriorFeet(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::FeetLabel);
     const QString AnteriorHead(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::HeadLabel);
     const QString PosteriorFeet(PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::FeetLabel);
@@ -132,7 +146,7 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(HeadPosterior + "-" + FeetPosterior, Flip);
 
     // Mappeig de les operacions per la vista axial
-    // Definim les etiquetes possibles d'orientaciÛ
+    // Definim les etiquetes possibles d'orientaci√≥
     const QString AnteriorRight(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::RightLabel);
     const QString AnteriorLeft(PatientOrientation::AnteriorLabel + "\\" + PatientOrientation::LeftLabel);
     const QString PosteriorRight(PatientOrientation::PosteriorLabel + "\\" + PatientOrientation::RightLabel);
@@ -207,7 +221,7 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
     m_orientationMappingTable.insert(LeftPosterior + "-" + RightPosterior, Flip);
 
     // Mapeig de les operacions per la vista coronal
-    // Definim les etiquetes possibles d'orientaciÛ
+    // Definim les etiquetes possibles d'orientaci√≥
     const QString RightFeet(PatientOrientation::RightLabel + "\\" + PatientOrientation::FeetLabel);
     const QString RightHead(PatientOrientation::RightLabel + "\\" + PatientOrientation::HeadLabel);
     const QString LeftFeet(PatientOrientation::LeftLabel + "\\" + PatientOrientation::FeetLabel);
@@ -284,10 +298,10 @@ void ImageOrientationOperationsMapper::initializeOrientationTable()
 
 void ImageOrientationOperationsMapper::updateOperations()
 {
-    // La orientaciÛ podria tenir mÈs d'una lletra per row
+    // La orientaci√≥ podria tenir m√©s d'una lletra per row
     // com per exemple RA\AL en un tall que sigui oblicu
-    // Per evitar aixÚ i no fer una llista enorme de transformacions,
-    // agafarem nomÈs la primera lletra del row i de la columna ja que aixÌ ja Ès suficient
+    // Per evitar aix√≤ i no fer una llista enorme de transformacions,
+    // agafarem nom√©s la primera lletra del row i de la columna ja que aix√≠ ja √©s suficient
     QString initialRowLabel = m_initialOrientation.getRowDirectionLabel().left(1);
     QString initialColumnLabel = m_initialOrientation.getColumnDirectionLabel().left(1);
 
@@ -314,7 +328,7 @@ void ImageOrientationOperationsMapper::updateOperations()
     }
     else
     {
-        // Si no es troben combinacions, resetejem les operacions perquË aquesta sigui neutra si s'aplica
+        // Si no es troben combinacions, resetejem les operacions perqu√® aquesta sigui neutra si s'aplica
         m_clockwiseTurns = 0;
         m_horizontalFlip = false;
     }

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "q2dviewerconfigurationscreen.h"
 
 #include "coresettings.h"
@@ -108,7 +122,7 @@ void Q2DViewerConfigurationScreen::initializeMagnifyingGlassToolZoomFactor()
     }
     else
     {
-        // Si no hi ha cap valor v�lid, l'augment ser� 4x per defecte
+        // Si no hi ha cap valor vàlid, l'augment serà 4x per defecte
         m_4XZoomFactorRadioButton->setChecked(true);
     }
 }
@@ -240,7 +254,7 @@ void Q2DViewerConfigurationScreen::updateMagnifyingGlassZoomFactorSetting()
     }
     else
     {
-        // Si no hi ha cap bot� marcat, l'augment ser� 4x per defecte. Tot i aix�, aix� no hauria de passar mai
+        // Si no hi ha cap botó marcat, l'augment serà 4x per defecte. Tot i això, això no hauria de passar mai
         zoomFactor = "4";
     }
 

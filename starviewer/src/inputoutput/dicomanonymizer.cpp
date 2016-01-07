@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "dicomanonymizer.h"
 
 #include <gdcmGlobal.h>
@@ -30,7 +44,7 @@ DICOMAnonymizer::~DICOMAnonymizer()
 
 void DICOMAnonymizer::setPatientNameAnonymized(const QString &patientNameAnonymized)
 {
-    // Segons el DICOM un tag de tipus PN (PersonName) no pot tenir mÈs de 64 car‡cters
+    // Segons el DICOM un tag de tipus PN (PersonName) no pot tenir m√©s de 64 car√†cters
     m_patientNameAnonymized = patientNameAnonymized.left(64);
 }
 
@@ -74,7 +88,7 @@ void DICOMAnonymizer::initializeGDCM()
     m_gdcmAnonymizer = new gdcm::gdcmAnonymizerStarviewer();
     gdcm::Global *gdcmGlobalInstance = &gdcm::Global::GetInstance();
 
-    // Indiquem el directori on pot trobar el fitxer part3.xml que Ès un diccionari DICOM.
+    // Indiquem el directori on pot trobar el fitxer part3.xml que √©s un diccionari DICOM.
     // TODO: On posem el fitxer part3.xml
     gdcmGlobalInstance->Prepend(qPrintable(QCoreApplication::applicationDirPath()));
 
@@ -86,10 +100,10 @@ void DICOMAnonymizer::initializeGDCM()
 
     const gdcm::Defs &defs = gdcmGlobalInstance->GetDefs();
     (void)defs;
-    // TODO:utilitzem el UID de dcmtk haurÌem de tenir el nostre propi aixÚ tambÈ passa a VolumeBuilderFromCaptures
+    // TODO:utilitzem el UID de dcmtk haur√≠em de tenir el nostre propi aix√≤ tamb√© passa a VolumeBuilderFromCaptures
     if (!gdcm::UIDGenerator::IsValid(SITE_UID_ROOT))
     {
-        ERROR_LOG(QString("No es pot anonimitzar els fitxers DICOM perquË el UID arrel per crear els nous fitxers no es valid %1").arg(SITE_UID_ROOT));
+        ERROR_LOG(QString("No es pot anonimitzar els fitxers DICOM perqu√® el UID arrel per crear els nous fitxers no es valid %1").arg(SITE_UID_ROOT));
     }
 
     gdcm::UIDGenerator::SetRoot(SITE_UID_ROOT);
@@ -175,7 +189,7 @@ bool DICOMAnonymizer::anonymizeDICOMFile(const QString &inputPathFile, const QSt
         }
     }
 
-    // Regenerem la capÁalera DICOM amb el nou SOP Instance UID
+    // Regenerem la cap√ßalera DICOM amb el nou SOP Instance UID
     gdcm::FileMetaInformation gdcmFileMetaInformation = gdcmFile.GetHeader();
     gdcmFileMetaInformation.Clear();
 

@@ -59,6 +59,7 @@ void test_VolumePixelData::setData_itk_ShouldCreateExpectedVtkData_data()
     {
         VolumePixelData::ItkImageTypePointer itkData = VolumePixelData::ItkImageType::New();
         vtkSmartPointer<vtkImageData> vtkData = vtkSmartPointer<vtkImageData>::New();
+        vtkData->AllocateScalars(VTK_SHORT, 1);
         QTest::newRow("default") << itkData << vtkData;
     }
 
@@ -112,7 +113,12 @@ void test_VolumePixelData::setData_itk_ShouldCreateExpectedVtkData()
 
     for (int i = 0; i < size; i++)
     {
-        QCOMPARE(data[i], expectedData[i]);
+        // Optimization: using QCOMPARE in each loop is very slow in Qt5, so we compare values with a simple "if"
+        // and just use QCOMPARE to fail the test and print the error when we know the values are different.
+        if (data[i] != expectedData[i])
+        {
+            QCOMPARE(data[i], expectedData[i]);
+        }
     }
 }
 
@@ -199,7 +205,7 @@ void test_VolumePixelData::setData_ShouldSetDataFromArray()
     QFETCH(int, bytesPerPixel);
     
     VolumePixelData *pixelData = new VolumePixelData();
-    pixelData->setData(data, extent, bytesPerPixel, true);
+    pixelData->setData(data, extent, bytesPerPixel, false);
 
     int vtkExtent[6];
     pixelData->getExtent(vtkExtent);
@@ -212,12 +218,12 @@ void test_VolumePixelData::setData_ShouldSetDataFromArray()
 
     unsigned char* dataPointer = reinterpret_cast<unsigned char*>(pixelData->getScalarPointer());
     
-    for (int i = 0; i < pixelData->getNumberOfPoints(); ++i)
+    for (int i = 0; i < pixelData->getNumberOfPoints() * pixelData->getNumberOfScalarComponents(); ++i)
     {
-        QCOMPARE(*dataPointer, data[i]);
-        ++dataPointer;
+        QCOMPARE(dataPointer[i], data[i]);
     }
 
+    delete[] data;
     delete[] extent;
     delete pixelData;
 }
@@ -347,11 +353,9 @@ void test_VolumePixelData::getVoxelValue_IndexVariant_ShouldReturnExpectedSingle
     imageDataVTK->SetOrigin(.0, .0, .0);
     imageDataVTK->SetSpacing(1., 1., 1.);
     imageDataVTK->SetDimensions(10, 10, 10);
-    imageDataVTK->SetWholeExtent(0, 9, 0, 9, 0, 9);
-    imageDataVTK->SetScalarTypeToShort();
-    imageDataVTK->SetNumberOfScalarComponents(1);
-    imageDataVTK->AllocateScalars();
-    // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
+    imageDataVTK->SetExtent(0, 9, 0, 9, 0, 9);
+    imageDataVTK->AllocateScalars(VTK_SHORT, 1);
+    // Omplim el dataset perquÃ¨ la imatge resultant quedi amb un cert degradat
     signed short *scalarPointer = (signed short*) imageDataVTK->GetScalarPointer();
     signed short value;
     for (int i = 0; i < 10; i++)

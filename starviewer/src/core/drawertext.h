@@ -1,11 +1,25 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGDRAWERTEXT_H
 #define UDGDRAWERTEXT_H
 
 #include "drawerprimitive.h"
 
-class vtkCaptionActor2D;
-
 namespace udg {
+
+class VtkTextActorWithBackground;
 
 /**
     Primitiva de text per al Drawer
@@ -29,24 +43,6 @@ public:
 
     /// Retorna el punt d'ancoratge
     double* getAttachmentPoint();
-
-    /// Activa el dibuixat del requadre de la casella de text
-    void borderOn();
-
-    /// Desactiva el dibuixat del requadre de la casella de text
-    void borderOff();
-
-    /// Activa / desactiva el dibuixat del requadre de la casella de text segons el paràmetre que li passem
-    void borderEnabled(bool enabled);
-
-    /// Ens diu si s'ha de dibuixar el requadre o no.
-    bool isBorderEnabled();
-
-    /// Assigna l'espaiat entre el text i la caixa contenidora
-    void setPadding(int padding);
-
-    /// Ens retona l'espaiat entre el text i la caixa contenidora
-    int getPadding();
 
     /// Ens retorna el tipus de font
     QString getFontFamily();
@@ -158,9 +154,6 @@ private:
     /// Justificació vertical
     QString m_verticalJustification;
 
-    /// Contorn del text
-    bool m_border;
-
     /// Família de la font
     QString m_fontFamily;
 
@@ -185,11 +178,8 @@ private:
     /// Text escalat
     bool m_scaled;
 
-    /// Espaiat
-    int m_padding;
-
     /// Estructures de vtk, per construir el text
-    vtkCaptionActor2D *m_vtkActor;
+    VtkTextActorWithBackground *m_vtkActor;
 
     /// Punt on es mostrarà el text
     double m_attachPoint[3];

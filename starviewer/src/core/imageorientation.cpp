@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "imageorientation.h"
 
 #include <QStringList>
@@ -33,29 +47,29 @@ bool ImageOrientation::setDICOMFormattedImageOrientation(const QString &imageOri
         return true;
     }
 
-    // A partir d'aquÌ comprovem que hi hagi el n˙mero correcte d'elements
+    // A partir d'aqu√≠ comprovem que hi hagi el n√∫mero correcte d'elements
     QStringList list = imageOrientation.split(DICOMValueRepresentationConverter::ValuesSeparator);
     if (list.size() != 6)
     {
-        DEBUG_LOG("Image Orientation (Patient) no tÈ els 6 elements esperats. InconsistËncia DICOM.");
-        ERROR_LOG("Image Orientation (Patient) no tÈ els 6 elements esperats. InconsistËncia DICOM.");
+        DEBUG_LOG("Image Orientation (Patient) no t√© els 6 elements esperats. Inconsist√®ncia DICOM.");
+        ERROR_LOG("Image Orientation (Patient) no t√© els 6 elements esperats. Inconsist√®ncia DICOM.");
 
         return false;
     }
 
-    // Tenim 6 elements, cal comprovar que siguin valors v‡lids
+    // Tenim 6 elements, cal comprovar que siguin valors v√†lids
     bool validValues;
     QVector<double> convertedValues = DICOMValueRepresentationConverter::decimalStringToDoubleVector(imageOrientation, &validValues);
 
     if (!validValues)
     {
-        DEBUG_LOG("Els valors d'Image Orientation (Patient) no sÛn v‡lids. InconsistËncia DICOM.");
-        ERROR_LOG("Els valors d'Image Orientation (Patient) no sÛn v‡lids. InconsistËncia DICOM.");
+        DEBUG_LOG("Els valors d'Image Orientation (Patient) no s√≥n v√†lids. Inconsist√®ncia DICOM.");
+        ERROR_LOG("Els valors d'Image Orientation (Patient) no s√≥n v√†lids. Inconsist√®ncia DICOM.");
         
         return false;
     }
 
-    // Arribats a aquest punt, tenim 6 valors i sÛn v‡lids
+    // Arribats a aquest punt, tenim 6 valors i s√≥n v√†lids
     // Assignem els valors convertits als corresponents vectors
     QVector3D row(convertedValues.at(0), convertedValues.at(1), convertedValues.at(2));
     QVector3D column(convertedValues.at(3), convertedValues.at(4), convertedValues.at(5));

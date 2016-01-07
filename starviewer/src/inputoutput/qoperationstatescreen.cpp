@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qoperationstatescreen.h"
 
 #include <QCloseEvent>
@@ -50,8 +64,8 @@ void QOperationStateScreen::setPacsManager(PacsManager *pacsManager)
 {
     m_pacsManager = pacsManager;
 
-    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJob*)), SLOT(newPACSJobEnqueued(PACSJob*)));
-    connect(m_pacsManager, SIGNAL(requestedCancelPACSJob(PACSJob*)), SLOT(requestedCancelPACSJob(PACSJob*)));
+    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJobPointer)), SLOT(newPACSJobEnqueued(PACSJobPointer)));
+    connect(m_pacsManager, SIGNAL(requestedCancelPACSJob(PACSJobPointer)), SLOT(requestedCancelPACSJob(PACSJobPointer)));
 }
 
 void QOperationStateScreen::createConnections()
@@ -61,30 +75,32 @@ void QOperationStateScreen::createConnections()
     connect(m_cancelSelectedRequestsButton, SIGNAL(clicked()), this, SLOT(cancelSelectedRequests()));
 }
 
-void QOperationStateScreen::newPACSJobEnqueued(PACSJob *pacsJob)
+void QOperationStateScreen::newPACSJobEnqueued(PACSJobPointer pacsJob)
 {
     // Els altres tipus de PACSJob no es interessen
     if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
         m_PACSJobPendingToFinish.insert(pacsJob->getPACSJobID(), pacsJob);
 
-        connect(pacsJob, SIGNAL(PACSJobStarted(PACSJob*)), SLOT(PACSJobStarted(PACSJob*)));
-        connect(pacsJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(PACSJobFinished(PACSJob*)));
-        connect(pacsJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(PACSJobCancelled(PACSJob*)));
+        connect(pacsJob.data(), SIGNAL(PACSJobStarted(PACSJobPointer)), SLOT(PACSJobStarted(PACSJobPointer)));
+        connect(pacsJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(PACSJobFinished(PACSJobPointer)));
+        connect(pacsJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(PACSJobCancelled(PACSJobPointer)));
 
         switch (pacsJob->getPACSJobType())
         {
             case PACSJob::SendDICOMFilesToPACSJobType:
                 insertNewPACSJob(pacsJob);
-                connect(dynamic_cast<SendDICOMFilesToPACSJob*> (pacsJob), SIGNAL(DICOMFileSent(PACSJob*, int)), SLOT(DICOMFileCommit(PACSJob*, int)));
-                connect(dynamic_cast<SendDICOMFilesToPACSJob*> (pacsJob), SIGNAL(DICOMSeriesSent(PACSJob*, int)), SLOT(DICOMSeriesCommit(PACSJob*, int)));
+                connect(pacsJob.objectCast<SendDICOMFilesToPACSJob>().data(), SIGNAL(DICOMFileSent(PACSJobPointer, int)),
+                        SLOT(DICOMFileCommit(PACSJobPointer, int)));
+                connect(pacsJob.objectCast<SendDICOMFilesToPACSJob>().data(), SIGNAL(DICOMSeriesSent(PACSJobPointer, int)),
+                        SLOT(DICOMSeriesCommit(PACSJobPointer, int)));
                 break;
             case PACSJob::RetrieveDICOMFilesFromPACSJobType:
                 insertNewPACSJob(pacsJob);
-                connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob), SIGNAL(DICOMFileRetrieved(PACSJob*, int)),
-                        SLOT(DICOMFileCommit(PACSJob*, int)));
-                connect(dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob), SIGNAL(DICOMSeriesRetrieved(PACSJob*, int)),
-                        SLOT(DICOMSeriesCommit(PACSJob*, int)));
+                connect(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(DICOMFileRetrieved(PACSJobPointer, int)),
+                        SLOT(DICOMFileCommit(PACSJobPointer, int)));
+                connect(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(DICOMSeriesRetrieved(PACSJobPointer, int)),
+                        SLOT(DICOMSeriesCommit(PACSJobPointer, int)));
                 break;
             default:
                 break;
@@ -92,7 +108,7 @@ void QOperationStateScreen::newPACSJobEnqueued(PACSJob *pacsJob)
     }
 }
 
-void QOperationStateScreen::PACSJobStarted(PACSJob *pacsJob)
+void QOperationStateScreen::PACSJobStarted(PACSJobPointer pacsJob)
 {
     QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
@@ -103,7 +119,7 @@ void QOperationStateScreen::PACSJobStarted(PACSJob *pacsJob)
     }
 }
 
-void QOperationStateScreen::PACSJobFinished(PACSJob *pacsJob)
+void QOperationStateScreen::PACSJobFinished(PACSJobPointer pacsJob)
 {
     QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
@@ -115,7 +131,7 @@ void QOperationStateScreen::PACSJobFinished(PACSJob *pacsJob)
     m_PACSJobPendingToFinish.remove(pacsJob->getPACSJobID());
 }
 
-void QOperationStateScreen::PACSJobCancelled(PACSJob *pacsJob)
+void QOperationStateScreen::PACSJobCancelled(PACSJobPointer pacsJob)
 {
     QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
@@ -127,7 +143,7 @@ void QOperationStateScreen::PACSJobCancelled(PACSJob *pacsJob)
     m_PACSJobPendingToFinish.remove(pacsJob->getPACSJobID());
 }
 
-void QOperationStateScreen::DICOMFileCommit(PACSJob *pacsJob, int numberOfImages)
+void QOperationStateScreen::DICOMFileCommit(PACSJobPointer pacsJob, int numberOfImages)
 {
     QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
@@ -137,7 +153,7 @@ void QOperationStateScreen::DICOMFileCommit(PACSJob *pacsJob, int numberOfImages
     }
 }
 
-void QOperationStateScreen::DICOMSeriesCommit(PACSJob *pacsJob, int numberOfSeries)
+void QOperationStateScreen::DICOMSeriesCommit(PACSJobPointer pacsJob, int numberOfSeries)
 {
     QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
@@ -164,7 +180,7 @@ void QOperationStateScreen::clearList()
 
 void QOperationStateScreen::cancelAllRequests()
 {
-    foreach (PACSJob *pacsJob, m_PACSJobPendingToFinish.values())
+    foreach (PACSJobPointer pacsJob, m_PACSJobPendingToFinish.values())
     {
         m_pacsManager->requestCancelPACSJob(pacsJob);
     }
@@ -188,7 +204,7 @@ void QOperationStateScreen::cancelSelectedRequests()
     }
 }
 
-void QOperationStateScreen::requestedCancelPACSJob(PACSJob *pacsJob)
+void QOperationStateScreen::requestedCancelPACSJob(PACSJobPointer pacsJob)
 {
     QTreeWidgetItem *qtreeWidgetItem = getQTreeWidgetItemByPACSJobId(pacsJob->getPACSJobID());
 
@@ -198,7 +214,7 @@ void QOperationStateScreen::requestedCancelPACSJob(PACSJob *pacsJob)
     }
 }
 
-void QOperationStateScreen::insertNewPACSJob(PACSJob *pacsJob)
+void QOperationStateScreen::insertNewPACSJob(PACSJobPointer pacsJob)
 {
     Q_ASSERT(pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType);
 
@@ -220,27 +236,27 @@ void QOperationStateScreen::insertNewPACSJob(PACSJob *pacsJob)
     m_treeRetrieveStudy->addTopLevelItem(item);
 }
 
-Study* QOperationStateScreen::getStudyFromPACSJob(PACSJob *pacsJob)
+Study* QOperationStateScreen::getStudyFromPACSJob(PACSJobPointer pacsJob)
 {
     Study *study = NULL;
 
     if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType)
     {
-        study = (dynamic_cast<SendDICOMFilesToPACSJob*> (pacsJob))->getStudyOfDICOMFilesToSend();
+        study = pacsJob.objectCast<SendDICOMFilesToPACSJob>()->getStudyOfDICOMFilesToSend();
     }
     else if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
-        study = (dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob))->getStudyToRetrieveDICOMFiles();
+        study = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles();
     }
 
     return study;
 }
 
-QString QOperationStateScreen::getPACSJobStatusResume(PACSJob *pacsJob)
+QString QOperationStateScreen::getPACSJobStatusResume(PACSJobPointer pacsJob)
 {
     if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
     {
-        switch ((dynamic_cast<RetrieveDICOMFilesFromPACSJob*> (pacsJob))->getStatus())
+        switch (pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStatus())
         {
             case PACSRequestStatus::RetrieveOk:
                 return tr("RETRIEVED");
@@ -255,7 +271,7 @@ QString QOperationStateScreen::getPACSJobStatusResume(PACSJob *pacsJob)
     }
     else
     {
-        if ((dynamic_cast<SendDICOMFilesToPACSJob*> (pacsJob))->getStatus() == PACSRequestStatus::SendOk)
+        if (pacsJob.objectCast<SendDICOMFilesToPACSJob>()->getStatus() == PACSRequestStatus::SendOk)
         {
             return tr("SENT");
         }

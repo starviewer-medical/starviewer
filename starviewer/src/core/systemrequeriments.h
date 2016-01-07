@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGSYSTEMREQUERIMENTS_H
 #define UDGSYSTEMREQUERIMENTS_H
 
@@ -6,7 +20,7 @@
 namespace udg {
 
 /**
-    Guarda els requeriments mÌnims i recomenats de Starviewer. ContÈ purament els mËtodes per obtenir-los.
+    Guarda els requeriments m√≠nims i recomenats de Starviewer. Cont√© purament els m√®todes per obtenir-los.
 */
 class SystemRequeriments {
 public:
@@ -20,8 +34,8 @@ public:
     virtual unsigned int getMinimumGPURAM();
     virtual unsigned int getMinimumHardDiskFreeSpace();
     virtual QString getMinimumOperatingSystemVersion();
-    // TODO S'assumeix que el sistema operatiu al que ens referim pel service pack Ès Windows XP
-    // Caldria fer un mËtode mÈs genËric per contemplar altres sistemes operatius Windows, com 7
+    // TODO S'assumeix que el sistema operatiu al que ens referim pel service pack √©s Windows XP
+    // Caldria fer un m√®tode m√©s gen√®ric per contemplar altres sistemes operatius Windows, com 7
     virtual unsigned int getMinimum32bitOperatingSystemServicePackVersion();
     virtual unsigned int getMinimum64bitOperatingSystemServicePackVersion();
     virtual bool doesOperatingSystemNeedToBe64BitArchitecutre();

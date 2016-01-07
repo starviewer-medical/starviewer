@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "shortcuts.h"
 #include "settingsregistry.h"
 #include <QList>
@@ -27,7 +41,7 @@ const QString Shortcuts::NonClosedAngleTool(ShortcutsBase + "NonClosedAngleTool"
 const QString Shortcuts::EditorTool(ShortcutsBase + "EditorTool");
 const QString Shortcuts::ClippingPlanesTool(ShortcutsBase + "ClippingPlanesTool");
 const QString Shortcuts::RestoreTool(ShortcutsBase + "RestoreTool");
-const QString Shortcuts::InvertWindowLevelTool(ShortcutsBase + "InvertWindowLevelTool");
+const QString Shortcuts::InvertVoiLutTool(ShortcutsBase + "InvertVoiLutTool");
 const QString Shortcuts::AxialViewTool(ShortcutsBase + "AxialViewTool");
 const QString Shortcuts::SagitalViewTool(ShortcutsBase + "SagitalViewTool");
 const QString Shortcuts::CoronalViewTool(ShortcutsBase + "CoronalViewTool");
@@ -45,6 +59,7 @@ const QString Shortcuts::DesynchronizeAllViewers(ShortcutsBase + "SynchronizeNon
 const QString Shortcuts::Propagation(ShortcutsBase + "Propagation");
 const QString Shortcuts::NextHangingProtocol(ShortcutsBase + "NextHangingProtocol");
 const QString Shortcuts::PreviousHangingProtocol(ShortcutsBase + "PreviousHangingProtocol");
+const QString Shortcuts::ToggleComparativeStudiesMode(ShortcutsBase + "ToggleComparativeStudiesMode");
 
 const QString Shortcuts::SaveSingleScreenShot(ShortcutsBase + "SaveSingleScreenShot");
 const QString Shortcuts::SaveWholeSeriesScreenShot(ShortcutsBase + "SaveWholeSeriesScreenShot");
@@ -168,7 +183,7 @@ void Shortcuts::init()
 
     shortcutsList.clear();
     shortcutsList.append(QString("I"));
-    settingsRegistry->addSetting(InvertWindowLevelTool, shortcutsList);
+    settingsRegistry->addSetting(InvertVoiLutTool, shortcutsList);
 
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+1"));
@@ -328,6 +343,9 @@ void Shortcuts::init()
     shortcutsList.append(QString("F11"));
     settingsRegistry->addSetting(PreviousHangingProtocol, shortcutsList);
     
+    shortcutsList.clear();
+    shortcutsList.append(QString("F10"));
+    settingsRegistry->addSetting(ToggleComparativeStudiesMode, shortcutsList);
 }
 
 } // End namespace udg

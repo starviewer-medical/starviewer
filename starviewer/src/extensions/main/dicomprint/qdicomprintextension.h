@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 
 #ifndef UDGQDICOMPRINTEXTENSION_H
 #define UDGQDICOMPRINTEXTENSION_H
@@ -33,26 +47,26 @@ public slots:
     void updateInput();
 
 private slots:
-    // Actualitza la informaciÛ que mostrem de la impressora
+    // Actualitza la informaci√≥ que mostrem de la impressora
     void selectedDicomPrinterChanged(int indexOfSelectedDicomPrinter);
     /// Omple el combobox amb les impressores i mostra com a seleccionada la que esta marca com a impressora per defecte
     void fillSelectedDicomPrinterComboBox();
-    /// Activa/desactiva el fram que contÈ poder escollir el interval i des de quina imatge fins quina imprimir en funciÛ del mode de selecciÛ
+    /// Activa/desactiva el fram que cont√© poder escollir el interval i des de quina imatge fins quina imprimir en funci√≥ del mode de selecci√≥
     /// d'imatges escollit
     void imageSelectionModeChanged();
-    /// Slot que s'executa quan canviem de valor a travÈs del Slider l'interval d'imatges a imprimir
+    /// Slot que s'executa quan canviem de valor a trav√©s del Slider l'interval d'imatges a imprimir
     void m_intervalImagesSliderValueChanged(int value);
-    /// Slot que s'executa quan canviem de valor a travÈs del Slider a partir de quina imatge imprimir
+    /// Slot que s'executa quan canviem de valor a trav√©s del Slider a partir de quina imatge imprimir
     void m_fromImageSliderValueChanged();
-    /// Slot que s'executa quan canviem de valor a travÈs del Slider fins quina imatge imprimir
+    /// Slot que s'executa quan canviem de valor a trav√©s del Slider fins quina imatge imprimir
     void m_toImageSliderValueChanged();
-    /// Slot que s'exectua quan el LineEdit per especificar el valor del interval d'imatges a imprimir Ès editat, per traspassar el seu valor al Slider
+    /// Slot que s'exectua quan el LineEdit per especificar el valor del interval d'imatges a imprimir √©s editat, per traspassar el seu valor al Slider
     void m_intervalImagesLineEditTextEdited(const QString &text);
-    /// Slot que s'exectua quan el LineEdit per especificar a partir de quina imatges s'haa imprimir Ès editat, per traspassar el seu valor al Slider
+    /// Slot que s'exectua quan el LineEdit per especificar a partir de quina imatges s'haa imprimir √©s editat, per traspassar el seu valor al Slider
     void m_fromImageLineEditTextEdited(const QString &text);
-    /// Slot que s'exectua quan el LineEdit per especificar fins quina imatge s'ha d'imprimir Ès editat, per traspassar el seu valor al Slider
+    /// Slot que s'exectua quan el LineEdit per especificar fins quina imatge s'ha d'imprimir √©s editat, per traspassar el seu valor al Slider
     void m_toImageLineEditTextEdited(const QString &text);
-    /// Actualitza label indicant el n˙mero de p‡gines dicom print que s'imprimiran
+    /// Actualitza label indicant el n√∫mero de p√†gines dicom print que s'imprimiran
     void updateNumberOfDicomPrintPagesToPrint();
 
     /// Envia a imprimir les imatges seleccionades a la impressora seleccionada
@@ -74,50 +88,50 @@ private:
     /// Crea les connexions
     void createConnections();
 
-    /// Crea inputValidators pels lineEdit de la selecciÛ d'imatges
+    /// Crea inputValidators pels lineEdit de la selecci√≥ d'imatges
     void configureInputValidator();
 
     /// Inicialitza les tools que volem tenir activades al viewer
     void initializeViewerTools();
 
-    /// Reinicia i configura els controls de selecciÛ d'imatges en funciÛ dels nombre d'imatges
+    /// Reinicia i configura els controls de selecci√≥ d'imatges en funci√≥ dels nombre d'imatges
     void resetAndUpdateSelectionImagesValue();
 
-    /// Retorna el DicomPrintJob que s'ha d'enviar a imprimir en funciÛ de la impressora i imatges seleccionades
+    /// Retorna el DicomPrintJob que s'ha d'enviar a imprimir en funci√≥ de la impressora i imatges seleccionades
     DicomPrintJob getDicomPrintJobToPrint();
 
-    /// Retorna una llista de p‡gines per imprimir
+    /// Retorna una llista de p√†gines per imprimir
     QList<DicomPrintPage> getDicomPrintPageListToPrint();
 
-    /// Retorna les imatges s'han d'enviar a imprimir en funciÛ de lo definit a la selecciÛ d'imatges
+    /// Retorna les imatges s'han d'enviar a imprimir en funci√≥ de lo definit a la selecci√≥ d'imatges
     QList<Image*> getSelectedImagesToAddToPrint() const;
 
     /// Retorna la impressora seleccionada
     DicomPrinter getSelectedDicomPrinter() const;
 
-    /// Indica amb la selecciÛ actua el n˙mero de p‡gines a imprimir, sinÛ l'ha pogut calcu∑lar correctament retorna 0
+    /// Indica amb la selecci√≥ actua el n√∫mero de p√†gines a imprimir, sin√≥ l'ha pogut calcu¬∑lar correctament retorna 0
     int getNumberOfPagesToPrint() const;
 
-    /// Ens retorna un DicomPrintPage amb els par‡metres d'impressiÛ omplerts a partir d'una impressora. No afegeix les imatges ni n˙mero de p‡gina
+    /// Ens retorna un DicomPrintPage amb els par√†metres d'impressi√≥ omplerts a partir d'una impressora. No afegeix les imatges ni n√∫mero de p√†gina
     DicomPrintPage fillDicomPrintPagePrintSettings(const DicomPrinter &dicomPrinter) const;
 
-    /// Mostra per pantalla els errors que s'han produÔt alhora d'imprimir
-    /// Degut a nomÈs podem tenir una p‡gina per FilmSession degut a limitacions de dcmtk fa que haguem d'imprimir p‡gina per p‡gina
-    /// per aixÚ ens podem trobar que la primera p‡gina s'imprimeixi bÈ, i les restants no, per aixÚ passem el par‡metre printedSomePage per indica que nomÈs
-    /// algunes de les p‡gines han fallat
+    /// Mostra per pantalla els errors que s'han produ√Øt alhora d'imprimir
+    /// Degut a nom√©s podem tenir una p√†gina per FilmSession degut a limitacions de dcmtk fa que haguem d'imprimir p√†gina per p√†gina
+    /// per aix√≤ ens podem trobar que la primera p√†gina s'imprimeixi b√©, i les restants no, per aix√≤ passem el par√†metre printedSomePage per indica que nom√©s
+    /// algunes de les p√†gines han fallat
     void showDicomPrintError(DicomPrint::DicomPrintError error, bool printedSomePage);
 
-    /// Comprova si se suporta el format de la sËrie i actualitza la interfÌcie segons convingui.
+    /// Comprova si se suporta el format de la s√®rie i actualitza la interf√≠cie segons convingui.
     void updateVolumeSupport();
 
-    /// Activa/desactiva els controls de configuraciÛ d'impressiÛ i el botÛ d'impressiÛ
+    /// Activa/desactiva els controls de configuraci√≥ d'impressi√≥ i el bot√≥ d'impressi√≥
     void setEnabledPrintControls(bool enabled);
 
     ///Activa/desactiva els controls per afegir imatges a imprimir
     void setEnabledAddImagesToPrintControls(bool enabled);
 
-    /// Ens afegeix anotacions a la p‡gina a imprimir amb informaciÛ de l'estudi, com nom de pacient,
-    /// Data i hora estudi, InstituciÛ, ID Estudi i descripciÛ,...
+    /// Ens afegeix anotacions a la p√†gina a imprimir amb informaci√≥ de l'estudi, com nom de pacient,
+    /// Data i hora estudi, Instituci√≥, ID Estudi i descripci√≥,...
     void addAnnotationsToDicomPrintPage(DicomPrintPage *dicomPrintPage, Image *imageToPrint);
 
     /// Retorna la descripcio pel thumbnail que mostra un rang d'imatges seleccionades per imprimir
@@ -133,7 +147,7 @@ private:
     DICOMPrintPresentationStateImage getDICOMPrintPresentationStateImageForCurrentSelectedImages() const;
 
 private:
-    /// Contenidor d'objectes associats a l'estudi que serveix per facilitar la intercomunicaciÛ
+    /// Contenidor d'objectes associats a l'estudi que serveix per facilitar la intercomunicaci√≥
     struct GroupedDICOMImagesToPrint
     {
         QList<Image*> imagesToPrint;

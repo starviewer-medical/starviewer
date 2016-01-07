@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "magicroitool.h"
 #include "logging.h"
 #include "q2dviewer.h"
@@ -153,7 +167,7 @@ void MagicROITool::setTextPosition(DrawerText *text)
 void MagicROITool::computeMaskBounds()
 {
     int extent[6];
-    m_2DViewer->getInput(m_inputIndex)->getWholeExtent(extent);
+    m_2DViewer->getInput(m_inputIndex)->getExtent(extent);
 
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
@@ -527,12 +541,11 @@ void MagicROITool::computePolygon()
     // L'índex és -1 pq els hem incrementat una vegada més    
     int x = i - 1;
     int y = j - 1;
-    int z = m_2DViewer->getCurrentSlice();
     m_roiPolygon->removeVertices();
     m_filledRoiPolygon->removeVertices();
     
-    this->addPoint(7, x, y, z);
-    this->addPoint(1, x, y, z);
+    this->addPoint(7, x, y);
+    this->addPoint(1, x, y);
     
     int nextX;
     int nextY;
@@ -549,7 +562,7 @@ void MagicROITool::computePolygon()
         {
             if (MathTools::isOdd(direction) && !next)
             {
-                this->addPoint(direction, x, y, z);
+                this->addPoint(direction, x, y);
                 loop = this->isLoopReached();
             }
             direction = this->getNextDirection(direction);
@@ -618,7 +631,7 @@ int MagicROITool::getInverseDirection(int direction)
     return (direction + 4) % 8;
 }
 
-void MagicROITool::addPoint(int direction, int x, int y, double z)
+void MagicROITool::addPoint(int direction, int x, int y)
 {
     double origin[3];
     double spacing[3];
@@ -650,7 +663,10 @@ void MagicROITool::addPoint(int direction, int x, int y, double z)
         default:
             DEBUG_LOG("ERROR: This direction doesn't exist");
     }
-    point[zIndex] = z * spacing[zIndex] + origin[zIndex];
+
+    double eventWorldCoordinate[3];
+    m_2DViewer->getEventWorldCoordinate(eventWorldCoordinate);
+    point[zIndex] = eventWorldCoordinate[zIndex];
 
     m_roiPolygon->addVertix(point);
     m_filledRoiPolygon->addVertix(point);

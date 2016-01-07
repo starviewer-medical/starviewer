@@ -1,12 +1,24 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "drawertext.h"
 #include "logging.h"
 #include "mathtools.h"
-#include "q2dviewer.h"
 #include "applicationstylehelper.h"
+#include "vtktextactorwithbackground.h"
 // Vtk
 #include <vtkTextProperty.h>
-#include <vtkTextActor.h>
-#include <vtkCaptionActor2D.h>
 
 namespace udg {
 
@@ -15,16 +27,14 @@ DrawerText::DrawerText(QObject *parent)
 {
     m_horizontalJustification = "Centered";
     m_verticalJustification = "Centered";
-    m_border = false;
     m_fontFamily = "Arial";
     m_fontSize = ApplicationStyleHelper().getToolsFontSize();
     m_shadow = false;
     m_italic = false;
-    m_bold = false;
+    m_bold = true;
     m_height = 0.05;
     m_width = 0.09;
     m_scaled = false;
-    m_padding = 0;
     m_vtkActor = 0;
     m_backgroundColor = QColor(0, 0, 0);
     m_backgroundOpacity = 0.85;
@@ -55,12 +65,13 @@ vtkProp* DrawerText::getAsVtkProp()
     if (!m_vtkActor)
     {
         // Creem el pipeline de l'm_vtkActor
-        m_vtkActor = vtkCaptionActor2D::New();
+        m_vtkActor = VtkTextActorWithBackground::New();
+        m_vtkActor->SetMargin(2);
 
         // Assignem el text
         if (!m_text.isEmpty())
         {
-            m_vtkActor->SetCaption(qPrintable(m_text));
+            m_vtkActor->SetInput(m_text.toUtf8().constData());
             if (m_isVisible)
             {
                 m_vtkActor->VisibilityOn();
@@ -72,7 +83,8 @@ vtkProp* DrawerText::getAsVtkProp()
         }
 
         // Assignem la posició en pantalla
-        m_vtkActor->SetAttachmentPoint(m_attachPoint);
+        m_vtkActor->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+        m_vtkActor->GetPositionCoordinate()->SetValue(m_attachPoint);
 
         // Li donem els atributs
         updateVtkActorProperties();
@@ -100,7 +112,7 @@ void DrawerText::updateVtkProp()
         // Assignem el text
         if (!m_text.isEmpty())
         {
-            m_vtkActor->SetCaption(qPrintable(m_text));
+            m_vtkActor->SetInput(m_text.toUtf8().constData());
             if (m_isVisible)
             {
                 m_vtkActor->VisibilityOn();
@@ -111,7 +123,8 @@ void DrawerText::updateVtkProp()
             m_vtkActor->VisibilityOff();
         }
         // Assignem la posició en pantalla
-        m_vtkActor->SetAttachmentPoint(m_attachPoint);
+        m_vtkActor->GetPositionCoordinate()->SetCoordinateSystemToWorld();
+        m_vtkActor->GetPositionCoordinate()->SetValue(m_attachPoint);
         updateVtkActorProperties();
         this->setModified(false);
     }
@@ -123,19 +136,19 @@ void DrawerText::updateVtkProp()
 
 void DrawerText::updateVtkActorProperties()
 {
-    vtkTextProperty *properties = m_vtkActor->GetCaptionTextProperty();
+    vtkTextProperty *properties = m_vtkActor->GetTextProperty();
 
     // Sistema de coordenades
-    m_vtkActor->GetAttachmentPointCoordinate()->SetReferenceCoordinate(this->getVtkCoordinateObject());
+    m_vtkActor->GetPositionCoordinate()->SetReferenceCoordinate(this->getVtkCoordinateObject());
 
     // Mirem si s'ha d'escalar el text
     if (m_scaled)
     {
-        m_vtkActor->GetTextActor()->SetTextScaleModeToViewport();
+        m_vtkActor->SetTextScaleModeToViewport();
     }
     else
     {
-        m_vtkActor->GetTextActor()->SetTextScaleModeToNone();
+        m_vtkActor->SetTextScaleModeToNone();
     }
 
     // Mirem l'opacitat
@@ -145,19 +158,22 @@ void DrawerText::updateVtkActorProperties()
     properties->SetColor(m_color.redF(), m_color.greenF(), m_color.blueF());
 
     // Mirem l'opacitat
-    properties->SetBackgroundOpacity(m_backgroundOpacity);
+    m_vtkActor->SetBackgroundOpacity(m_backgroundOpacity);
 
     // Assignem color
-    properties->SetBackgroundColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF());
+    m_vtkActor->SetBackgroundColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF());
 
-    m_vtkActor->SetPadding(m_padding);
-    m_vtkActor->SetPosition(-1.0, -1.0);
     m_vtkActor->SetHeight(m_height);
     m_vtkActor->SetWidth(m_width);
 
-    // Deshabilitem la línia que va des del punt de situació al text
-    m_vtkActor->LeaderOff();
-    m_vtkActor->ThreeDimensionalLeaderOff();
+    if (m_bold)
+    {
+        properties->BoldOn();
+    }
+    else
+    {
+        properties->BoldOff();
+    }
 
     if (m_shadow)
     {
@@ -234,16 +250,6 @@ void DrawerText::updateVtkActorProperties()
         DEBUG_LOG("Tipus de justificació vertical no reconegut a l'intentar crear text!!");
     }
 
-    // Mirem si el text té fons o no
-    if (m_border)
-    {
-         m_vtkActor->BorderOn();
-    }
-    else
-    {
-        m_vtkActor->BorderOff();
-    }
-
     // Mirem la visibilitat de l'actor
     m_vtkActor->SetVisibility(this->isVisible());
 }
@@ -262,38 +268,6 @@ QString DrawerText::getText()
 double* DrawerText::getAttachmentPoint()
 {
     return m_attachPoint;
-}
-
-void DrawerText::borderOn()
-{
-    borderEnabled(true);
-}
-
-void DrawerText::borderOff()
-{
-    borderEnabled(false);
-}
-
-void DrawerText::borderEnabled(bool enabled)
-{
-    m_border = enabled;
-    emit changed();
-}
-
-bool DrawerText::isBorderEnabled()
-{
-    return m_border;
-}
-
-void DrawerText::setPadding(int padding)
-{
-    m_padding = padding;
-    emit changed();
-}
-
-int DrawerText::getPadding()
-{
-    return m_padding;
 }
 
 QString DrawerText::getFontFamily()
@@ -436,8 +410,26 @@ double DrawerText::getDistanceToPoint(double *point3D, double closestPoint[3])
     }
     else
     {
-        //TODO: S'hauria de fer que quan està fora calculés la distància a l'aresta més propera.
-        return MathTools::DoubleMaximumValue;
+        double bounds[6];
+        getBounds(bounds);
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (point3D[i] < bounds[2*i])
+            {
+                closestPoint[i] = bounds[2*i];
+            }
+            else if (point3D[i] > bounds[2*i+1])
+            {
+                closestPoint[i] = bounds[2*i+1];
+            }
+            else
+            {
+                closestPoint[i] = point3D[i];
+            }
+        }
+
+        return MathTools::getDistance3D(point3D, closestPoint);
     }
 }
 
@@ -462,7 +454,7 @@ void DrawerText::getBounds(double bounds[6])
 {
     if (m_vtkActor)
     {
-        m_vtkActor->GetTextActor()->GetLastBounds(bounds);
+        m_vtkActor->GetWorldBounds(bounds);
     }
 }
 

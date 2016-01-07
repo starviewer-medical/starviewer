@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGGLUTESSELLATOR_H
 #define UDGGLUTESSELLATOR_H
 
@@ -21,13 +35,13 @@
 namespace udg {
 
 /**
-    Tessel∑lador basat en GLU per triangular un polÌgon donat. De moment nomÈs accepta polÌgons sense forats.
+    Tessel¬∑lador basat en GLU per triangular un pol√≠gon donat. De moment nom√©s accepta pol√≠gons sense forats.
  */
 class GluTessellator {
 
 public:
 
-    /// Estructura triangle amb els Ìndexs dels vËrtexs que formen el triangle.
+    /// Estructura triangle amb els √≠ndexs dels v√®rtexs que formen el triangle.
     struct Triangle
     {
         int indices[3];
@@ -38,9 +52,9 @@ public:
     GluTessellator();
     ~GluTessellator();
 
-    /// Triangula el polÌgon donat.
+    /// Triangula el pol√≠gon donat.
     void tessellate(const QList<Vector3> &vertices);
-    /// Retorna els vËrtexs dels triangles.
+    /// Retorna els v√®rtexs dels triangles.
     const QList<Vector3>& getVertices() const;
     /// Retorna els triangles.
     const QList<Triangle>& getTriangles() const;
@@ -48,7 +62,7 @@ public:
 private:
 
     ///@{
-    /// Callbacks per anar rebent els triangles i vËrtexs generats.
+    /// Callbacks per anar rebent els triangles i v√®rtexs generats.
     static void GLU_TESS_CALLBACK nextVertex(int index, GluTessellator *tessellator);
     static void GLU_TESS_CALLBACK edgeFlag(GLboolean flag);
     static void GLU_TESS_CALLBACK newVertex(GLdouble coordinates[3], int neighbourIndices[4], GLfloat neighbourWeights[4], int *newIndex, GluTessellator *tessellator);
@@ -63,14 +77,14 @@ private:
     /// El tesselador de GLU que fa la feina.
     GLUtesselator *m_tessellator;
 
-    /// VËrtexs dels triangles.
+    /// V√®rtexs dels triangles.
     QList<Vector3> m_vertices;
     /// Triangles generats.
     QList<Triangle> m_triangles;
 
     /// Triangle generat actual.
     Triangle m_currentTriangle;
-    /// Õndex actual del triangle generat actual.
+    /// √çndex actual del triangle generat actual.
     int m_currentTriangleCurrentIndex;
 
 };

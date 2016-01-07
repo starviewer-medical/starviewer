@@ -214,11 +214,11 @@ void test_ImageOverlay::split_ShouldReturnExpectedResults_data()
     QTest::newRow("empty overlay") << overlay << QList<ImageOverlay>();
 
     QTest::newRow("overlay #1") << overlays[0] << overlaysSubOverlays[0];
-    // overlays[1] és per quan no optimitzem per potències de 2
+    // overlays[1] Ã©s per quan no optimitzem per potÃ¨ncies de 2
     //QTest::newRow("overlay #2") << overlays[1] << overlaysSubOverlays[1];
     QTest::newRow("overlay #3") << overlays[2] << overlaysSubOverlays[2];
     QTest::newRow("overlay #4") << overlays[3] << overlaysSubOverlays[3];
-    // overlays[4] és per quan sí optimitzem per potències de 2
+    // overlays[4] Ã©s per quan sÃ­ optimitzem per potÃ¨ncies de 2
     QTest::newRow("overlay #5") << overlays[4] << overlaysSubOverlays[4];
 }
 
@@ -310,10 +310,9 @@ void test_ImageOverlay::fromGDCMOverlay_ReturnsExpectedValues_data()
     overlayWithData.SetOrigin(origin);
     overlayWithData.SetOverlay(gdcmBuffer, rows * columns);
 
-    // #1903: buffer size has to be a multiple of 8 due to GetUnpackBuffer implementation
-    int bufferSize = MathTools::roundUpToMultipleOfNumber(rows * columns, 8);
+    size_t bufferSize = overlayWithData.GetUnpackBufferLength();
     unsigned char *imageOverlayBuffer = new unsigned char[bufferSize];
-    overlayWithData.GetUnpackBuffer(imageOverlayBuffer);
+    overlayWithData.GetUnpackBuffer(reinterpret_cast<char*>(imageOverlayBuffer), bufferSize);
     
     ImageOverlay imageOverlay;
     imageOverlay.setRows(rows);
@@ -586,11 +585,7 @@ void test_ImageOverlay::getAsDrawerBitmap_ReturnsExpectedValues()
     }
 
     vtkImageActor *resultingActor = vtkImageActor::SafeDownCast(resultingBitmap->getAsVtkProp());
-    resultingActor->GetInput()->Update();
-
     vtkImageActor *expectedActor = vtkImageActor::SafeDownCast(expectedDrawerBitmap->getAsVtkProp());
-    expectedActor->GetInput()->Update();
-    
     unsigned char *resultingDataPointer = reinterpret_cast<unsigned char*>(resultingActor->GetInput()->GetScalarPointer());
     unsigned char *expectedDataPointer = reinterpret_cast<unsigned char*>(expectedActor->GetInput()->GetScalarPointer());
     

@@ -16,6 +16,7 @@
 #include "diffusionperfusionsegmentationsettings.h"
 #include "patientbrowsermenu.h"
 #include "transferfunction.h"
+#include "voilut.h"
 // Qt
 #include <QMessageBox>
 #include <QFileDialog>
@@ -92,12 +93,12 @@ void QDifuPerfuSegmentationExtension::initializeTools()
     m_seedToolButton->setDefaultAction(m_toolManager->registerTool("SeedTool"));
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
     m_editorToolButton->setDefaultAction(m_toolManager->registerTool("EditorTool"));
-    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("VoiLutPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool";
     m_toolManager->triggerTools(defaultTools);
 
     // definim els grups exclusius
@@ -414,8 +415,8 @@ void QDifuPerfuSegmentationExtension::setPerfusionImage(int index)
     m_perfusion2DView->setInput(m_perfusionMainVolume);
 
     //Ho fem per tal de que es vegi tot "blanc" i per tant en color "vius"
-    m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
-    //m_perfusion2DView->setWindowLevel(m_perfusionMaxValue - m_perfusionMinValue, 0.0);
+    m_perfusion2DView->setVoiLut(WindowLevel(1.0, m_perfusionMinValue - 1.0));
+    //m_perfusion2DView->setVoiLut(WindowLevel(m_perfusionMaxValue - m_perfusionMinValue, 0.0));
     setPerfusionLut(m_perfusionThresholdViewerSlider->value());
 }
 
@@ -436,8 +437,8 @@ void QDifuPerfuSegmentationExtension::viewThresholds()
     m_activedMaskVolume = m_strokeMaskVolume;
 
     vtkImageThreshold * imageThreshold = vtkImageThreshold::New();
-    imageThreshold->SetInput(m_diffusionMainVolume->getVtkData());
-    //imageThreshold->SetInput(m_diffusionInputVolume->getVtkData());
+    imageThreshold->SetInputData(m_diffusionMainVolume->getVtkData());
+    //imageThreshold->SetInputData(m_diffusionInputVolume->getVtkData());
     imageThreshold->ThresholdBetween(m_strokeLowerValueSlider->value(),
                                       m_strokeUpperValueSlider->value());
     imageThreshold->SetInValue(m_diffusionMaxValue);
@@ -462,8 +463,8 @@ void QDifuPerfuSegmentationExtension::viewThresholds2()
     if (!m_penombraMaskVolume) m_penombraMaskVolume = new Volume();
 
     vtkImageThreshold * imageThreshold = vtkImageThreshold::New();
-    imageThreshold->SetInput(m_blackpointEstimatedVolume->getVtkData());
-    //imageThreshold->SetInput(m_diffusionInputVolume->getVtkData());
+    imageThreshold->SetInputData(m_blackpointEstimatedVolume->getVtkData());
+    //imageThreshold->SetInputData(m_diffusionInputVolume->getVtkData());
     imageThreshold->ThresholdBetween(m_penombraLowerValueSlider->value(), 1000000);
     imageThreshold->SetInValue(m_penombraMaskMaxValue);
     imageThreshold->SetOutValue(m_penombraMaskMinValue);
@@ -473,9 +474,9 @@ void QDifuPerfuSegmentationExtension::viewThresholds2()
     m_penombraMaskVolume->setData(imageThreshold->GetOutput());
 
     vtkImageCast * imageCast = vtkImageCast::New();
-    imageCast->SetInput(m_penombraMaskVolume->getVtkData());
+    imageCast->SetInputData(m_penombraMaskVolume->getVtkData());
     imageCast->SetOutputScalarTypeToUnsignedChar();
-    m_perfusionOverlay->SetInput(imageCast->GetOutput());
+    m_perfusionOverlay->SetInputData(imageCast->GetOutput());
     imageCast->Delete();
 
 
@@ -541,7 +542,7 @@ void QDifuPerfuSegmentationExtension::applyVentriclesMethod()
     if (!m_ventriclesMaskVolume) m_ventriclesMaskVolume = new Volume();
 
     vtkImageThreshold * imageThreshold = vtkImageThreshold::New();
-    imageThreshold->SetInput(m_diffusionMainVolume->getVtkData());
+    imageThreshold->SetInputData(m_diffusionMainVolume->getVtkData());
     imageThreshold->ThresholdBetween(m_ventriclesLowerValueSlider->value(), m_diffusionMaxValue);
     // Inverse mask --> we want < lower or > upper
     imageThreshold->SetInValue(m_diffusionMinValue);
@@ -679,11 +680,11 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         m_perfusion2DView->setTransferFunction(hueTransferFunction);
 
         vtkImageCast * imageCast = vtkImageCast::New();
-        imageCast->SetInput(m_diffusionRescaledVolume->getVtkData());
+        imageCast->SetInputData(m_diffusionRescaledVolume->getVtkData());
         imageCast->SetOutputScalarTypeToUnsignedChar();
 
         if (!m_perfusionOverlay) m_perfusionOverlay = vtkImageActor::New();
-        m_perfusionOverlay->SetInput(imageCast->GetOutput());
+        m_perfusionOverlay->SetInputData(imageCast->GetOutput());
         m_perfusionOverlay->SetOpacity(m_perfusionOpacitySlider->value() / 100.0);
         m_perfusionOverlay->SetZSlice(m_perfusionSliceSlider->value());
         // el posem una mica més endavant per assegurar que es vegi
@@ -692,8 +693,8 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         if (!m_perfusion2DView->getRenderer()->HasViewProp(m_perfusionOverlay))
             m_perfusion2DView->getRenderer()->AddViewProp(m_perfusionOverlay);
 
-        //m_perfusion2DView->setWindowLevel(m_diffusion2DView->getCurrentColorWindow(), m_diffusion2DView->getCurrentColorLevel());
-        m_perfusion2DView->setWindowLevel(255.0, 0.0);
+        //m_perfusion2DView->setVoiLut(WindowLevel(m_diffusion2DView->getCurrentColorWindow(), m_diffusion2DView->getCurrentColorLevel()));
+        m_perfusion2DView->setVoiLut(WindowLevel(255.0, 0.0));
 
         m_perfusionSliceSlider->setValue(m_diffusionSliceSlider->value());
         m_perfusion2DView->setSlice(m_perfusionSliceSlider->value());
@@ -772,7 +773,7 @@ void QDifuPerfuSegmentationExtension::computeBlackpointEstimation()
 
 
 //     vtkImageCast * imageCast = vtkImageCast::New();
-//     imageCast->SetInput(m_blackpointEstimatedVolume->getVtkData());
+//     imageCast->SetInputData(m_blackpointEstimatedVolume->getVtkData());
 //     imageCast->SetOutputScalarTypeToUnsignedChar();
 //     m_perfusionOverlay->SetInput(imageCast->GetOutput());
 //     m_perfusion2DView->setWindowLevel(255.0, 0.0);
@@ -821,14 +822,14 @@ void QDifuPerfuSegmentationExtension::applyPenombraSegmentation()
     m_penombraMaskVolume->setData(penombraMask);
 
     vtkImageCast * imageCast = vtkImageCast::New();
-    imageCast->SetInput(m_penombraMaskVolume->getVtkData());
+    imageCast->SetInputData(m_penombraMaskVolume->getVtkData());
     imageCast->SetOutputScalarTypeToUnsignedChar();
-    m_perfusionOverlay->SetInput(imageCast->GetOutput());
+    m_perfusionOverlay->SetInputData(imageCast->GetOutput());
     imageCast->Delete();
 
     //m_perfusion2DView->setInput(m_perfusionRescaledVolume);
     //m_perfusion2DView->setInput(m_diffusionMainVolume);
-    m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
+    m_perfusion2DView->setVoiLut(WindowLevel(1.0, m_perfusionMinValue - 1.0));
     m_perfusion2DView->setSlice(m_perfusionSliceSlider->value());
     m_perfusion2DView->setOverlapMethod(Q2DViewer::None);
     m_perfusion2DView->setOverlayInput(m_penombraMaskVolume);
@@ -986,7 +987,7 @@ void QDifuPerfuSegmentationExtension::saveDiffusionMask()
             }
             //Forcem que la màscara que gaurdem el dins sigui 255 i el fora 0
             vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
-            imageThreshold->SetInput(m_strokeMaskVolume->getVtkData());
+            imageThreshold->SetInputData(m_strokeMaskVolume->getVtkData());
             // només els que valen m_diffusionMaxValue
             imageThreshold->ThresholdBetween(m_diffusionMaxValue, m_diffusionMaxValue); 
             imageThreshold->SetInValue(255);
@@ -996,7 +997,7 @@ void QDifuPerfuSegmentationExtension::saveDiffusionMask()
             vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
             writer->SetFileName(qPrintable(fileName));
             writer->SetFileDimensionality(3);
-            writer->SetInput(imageThreshold->GetOutput());
+            writer->SetInputConnection(imageThreshold->GetOutputPort());
             writer->Write();
     
             writer->Delete();
@@ -1018,7 +1019,7 @@ void QDifuPerfuSegmentationExtension::savePerfusionMask()
             }
             //Forcem que la màscara que gaurdem el dins sigui 255 i el fora 0
             vtkImageThreshold *imageThreshold = vtkImageThreshold::New();
-            imageThreshold->SetInput(m_penombraMaskVolume->getVtkData());
+            imageThreshold->SetInputData(m_penombraMaskVolume->getVtkData());
             // només els que valen m_penombraMaskMaxValue
             imageThreshold->ThresholdBetween(m_penombraMaskMaxValue, m_penombraMaskMaxValue); 
             imageThreshold->SetInValue(255);
@@ -1028,7 +1029,7 @@ void QDifuPerfuSegmentationExtension::savePerfusionMask()
             vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
             writer->SetFileName(qPrintable(fileName));
             writer->SetFileDimensionality(3);
-            writer->SetInput(imageThreshold->GetOutput());
+            writer->SetInputConnection(imageThreshold->GetOutputPort());
             writer->Write();
     
             writer->Delete();
@@ -1053,7 +1054,7 @@ void QDifuPerfuSegmentationExtension::saveDiffusionVolume()
             vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
             writer->SetFileName(qPrintable(fileName));
             writer->SetFileDimensionality(3);
-            writer->SetInput(m_diffusionMainVolume->getVtkData());
+            writer->SetInputData(m_diffusionMainVolume->getVtkData());
             writer->Write();
     
             writer->Delete();
@@ -1077,7 +1078,7 @@ void QDifuPerfuSegmentationExtension::savePerfusionVolume()
             vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
             writer->SetFileName(qPrintable(fileName));
             writer->SetFileDimensionality(3);
-            writer->SetInput(m_perfusionMainVolume->getVtkData());
+            writer->SetInputData(m_perfusionMainVolume->getVtkData());
             writer->Write();
     
             writer->Delete();
@@ -1101,7 +1102,7 @@ void QDifuPerfuSegmentationExtension::saveRegisteredPerfusionVolume()
             vtkMetaImageWriter *writer = vtkMetaImageWriter::New();
             writer->SetFileName(qPrintable(fileName));
             writer->SetFileDimensionality(3);
-            writer->SetInput(m_perfusionRescaledVolume->getVtkData());
+            writer->SetInputData(m_perfusionRescaledVolume->getVtkData());
             writer->Write();
     
             writer->Delete();
@@ -1233,12 +1234,12 @@ void QDifuPerfuSegmentationExtension::updatePenombraVolume()
         m_penombraLineEdit->insert(QString("%1").arg(m_penombraVolume - m_strokeVolume, 0, 'f', 2));
 
         vtkImageCast * imageCast = vtkImageCast::New();
-        imageCast->SetInput(m_penombraMaskVolume->getVtkData());
+        imageCast->SetInputData(m_penombraMaskVolume->getVtkData());
         imageCast->SetOutputScalarTypeToUnsignedChar();
-        m_perfusionOverlay->SetInput(imageCast->GetOutput());
+        m_perfusionOverlay->SetInputData(imageCast->GetOutput());
         imageCast->Delete();
 
-        m_perfusion2DView->setWindowLevel(1.0, m_perfusionMinValue - 1.0);
+        m_perfusion2DView->setVoiLut(WindowLevel(1.0, m_perfusionMinValue - 1.0));
         m_perfusion2DView->setOverlapMethod(Q2DViewer::None);
         m_perfusion2DView->setOverlayInput(m_penombraMaskVolume);
         m_perfusion2DView->render();

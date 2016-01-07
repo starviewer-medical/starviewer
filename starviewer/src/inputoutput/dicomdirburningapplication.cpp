@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "dicomdirburningapplication.h"
 
 #include <QProcess>
@@ -66,7 +80,7 @@ bool DICOMDIRBurningApplication::burnIsoImageFile()
     Settings settings;
     QString burningApplicationPath = (settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey)).toString();
 
-    // Es comprova que el path de l'aplicaciÛ de gravar sigui correcte, tot i que en principi s'ha validat en la configuraciÛ del DICOMDIR
+    // Es comprova que el path de l'aplicaci√≥ de gravar sigui correcte, tot i que en principi s'ha validat en la configuraci√≥ del DICOMDIR
     if (!QFile::exists(burningApplicationPath))
     {
         m_lastErrorDescription = QObject::tr("The burn application path \"%1\" does not exist.").arg(burningApplicationPath);
@@ -77,7 +91,7 @@ bool DICOMDIRBurningApplication::burnIsoImageFile()
     QProcess process;
     QStringList processParameters;
 
-    // Si est‡ activada la opciÛ d'entrar diferents par‡metres segons si es vol gravar un CD o un DVD caldr‡ afegir-los al processParameters
+    // Si est√† activada la opci√≥ d'entrar diferents par√†metres segons si es vol gravar un CD o un DVD caldr√† afegir-los al processParameters
     if ((settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey)).toBool())
     {
         switch (m_currentDevice)
@@ -108,7 +122,7 @@ bool DICOMDIRBurningApplication::burnIsoImageFile()
         m_lastErrorDescription = QObject::tr("An error occurred during the ISO image file burn process.");
         m_lastError = InternalError;
 
-        ERROR_LOG("Error al gravar la imatge ISO amb comanda: " + burningApplicationPath + "; Amb par‡metres: " + processParameters.join(" ") +
+        ERROR_LOG("Error al gravar la imatge ISO amb comanda: " + burningApplicationPath + "; Amb par√†metres: " + processParameters.join(" ") +
                   "; Exit code qprocess: " + process.exitCode());
         return false;
     }

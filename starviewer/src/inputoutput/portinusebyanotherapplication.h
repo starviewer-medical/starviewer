@@ -1,23 +1,37 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGPORTINUSEBYANOTHERAPPLICATION_H
 #define UDGPORTINUSEBYANOTHERAPPLICATION_H
 
 namespace udg {
 
 /**
-    Classe que s'encarrega de comprovar si un port est‡ en ˙s per una aplicaciÛ que no sigui starviewer.
+    Classe que s'encarrega de comprovar si un port est√† en √∫s per una aplicaci√≥ que no sigui starviewer.
   */
 class PortInUseByAnotherApplication {
 public:
     virtual ~PortInUseByAnotherApplication();
 
-    /// Crea una nova inst‡ncia d'alguna de les subclasses que implementa la interfÌcie
+    /// Crea una nova inst√†ncia d'alguna de les subclasses que implementa la interf√≠cie
     static PortInUseByAnotherApplication* newInstance();
 
-    /// Comprova si el port est‡ en ˙s per una aplicaciÛ que no sigui Starviewer
+    /// Comprova si el port est√† en √∫s per una aplicaci√≥ que no sigui Starviewer
     virtual bool isPortInUseByAnotherApplication(int port, bool &error);
 
 protected:
-    // Constructor privat per obligar a utilitzar el mËtode newInstance
+    // Constructor privat per obligar a utilitzar el m√®tode newInstance
     PortInUseByAnotherApplication();
 };
 

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "decaycorrectionfactorformulacalculator.h"
 
 #include <QTime>
@@ -78,8 +92,13 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
     m_decayCorrection = tagReader->getValueAttributeAsQString(DICOMDecayCorrection);
 
     QDateTime seriesDateTime;
-    seriesDateTime.setDate(QDate::fromString(tagReader->getValueAttributeAsQString(DICOMSeriesDate), "yyyyMMdd"));
+    // Set first the time and then the date if the time is valid to mimic the behaviour of QDateTime in Qt4.
+    // TODO This could be encapsulated for this and subsequent cases below.
     seriesDateTime.setTime(DICOMValueRepresentationConverter::timeToQTime(tagReader->getValueAttributeAsQString(DICOMSeriesTime)));
+    if (seriesDateTime.time().isValid())
+    {
+        seriesDateTime.setDate(QDate::fromString(tagReader->getValueAttributeAsQString(DICOMSeriesDate), "yyyyMMdd"));
+    }
 
     QDateTime radiopharmaceuticalStartDateTime;
     DICOMSequenceAttribute *radiopharmaceuticalInfoSequence = tagReader->getSequenceAttribute(DICOMRadiopharmaceuticalInformationSequence);
@@ -93,16 +112,22 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
             if (radioPharmaceuticalStartDateTimeAttribute)
             {
                 QString radioPharmaceuticalStartDateTimeString = radioPharmaceuticalStartDateTimeAttribute->getValueAsQString();
-                radiopharmaceuticalStartDateTime.setDate(QDate::fromString(radioPharmaceuticalStartDateTimeString.left(8), "yyyyMMdd"));
-                radiopharmaceuticalStartDateTime.setTime(DICOMValueRepresentationConverter::timeToQTime(radioPharmaceuticalStartDateTimeString.remove(0,8)));
+                radiopharmaceuticalStartDateTime.setTime(DICOMValueRepresentationConverter::timeToQTime(radioPharmaceuticalStartDateTimeString.mid(8)));
+                if (radiopharmaceuticalStartDateTime.time().isValid())
+                {
+                    radiopharmaceuticalStartDateTime.setDate(QDate::fromString(radioPharmaceuticalStartDateTimeString.left(8), "yyyyMMdd"));
+                }
             }
             else
             {
                 DICOMValueAttribute *radioPharmaceuticalStartTime = item->getValueAttribute(DICOMRadiopharmaceuticalStartTime);
                 if (radioPharmaceuticalStartTime)
                 {
-                    radiopharmaceuticalStartDateTime.setDate(seriesDateTime.date());
                     radiopharmaceuticalStartDateTime.setTime(DICOMValueRepresentationConverter::timeToQTime(radioPharmaceuticalStartTime->getValueAsQString()));
+                    if (radiopharmaceuticalStartDateTime.time().isValid())
+                    {
+                        radiopharmaceuticalStartDateTime.setDate(seriesDateTime.date());
+                    }
                 }
             }
             m_radionuclideHalfLifeInSeconds = item->getValueAttribute(DICOMRadionuclideHalfLife)->getValueAsDouble();

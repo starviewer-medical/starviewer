@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "q2dviewer.h"
 #include "drawer.h"
 #include "volume.h"
@@ -8,7 +22,7 @@
 #include "mathtools.h"
 #include "imageorientationoperationsmapper.h"
 #include "transferfunction.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "coresettings.h"
 #include "qviewerworkinprogresswidget.h"
 #include "patientorientation.h"
@@ -27,7 +41,7 @@
 #include "volumedisplayunithandlerfactory.h"
 #include "genericvolumedisplayunithandler.h"
 #include "patientbrowsermenu.h"
-#include "windowlevelhelper.h"
+#include "voiluthelper.h"
 
 // Qt
 #include <QResizeEvent>
@@ -39,7 +53,8 @@
 #include <vtkPropPicker.h>
 #include <QVTKWidget.h>
 #include <vtkWindowToImageFilter.h>
-#include <vtkImageActor.h>
+#include <vtkImageProperty.h>
+#include <vtkImageSlice.h>
 #include <vtkMatrix4x4.h>
 
 namespace udg {
@@ -239,12 +254,12 @@ QString Q2DViewer::getCurrentAnatomicalPlaneLabel() const
     return AnatomicalPlane::getLabelFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
 }
 
-AnatomicalPlane::AnatomicalPlaneType Q2DViewer::getCurrentAnatomicalPlane() const
+AnatomicalPlane Q2DViewer::getCurrentAnatomicalPlane() const
 {
-    return AnatomicalPlane::getPlaneTypeFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
+    return AnatomicalPlane::getPlaneFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
 }
 
-void Q2DViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane)
+void Q2DViewer::setDefaultOrientation(const AnatomicalPlane &anatomicalPlane)
 {
     if (!hasInput())
     {
@@ -253,10 +268,10 @@ void Q2DViewer::setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anato
 
     // We apply the standard orientation for the desired projection unless original acquisition is axial and is the same as the desired one
     // because when the patient is acquired in prono position we don't want to change the acquisition orientation and thus respect the acquired one
-    AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = getMainInput()->getAcquisitionPlane();
+    AnatomicalPlane acquisitionPlane = getMainInput()->getAcquisitionPlane();
     if (acquisitionPlane != AnatomicalPlane::Axial || acquisitionPlane != anatomicalPlane)
     {
-        PatientOrientation desiredOrientation = AnatomicalPlane::getDefaultRadiologicalOrienation(anatomicalPlane);
+        PatientOrientation desiredOrientation = anatomicalPlane.getDefaultRadiologicalOrienation();
         setImageOrientation(desiredOrientation);
     }
 }
@@ -340,7 +355,7 @@ bool Q2DViewer::doesInputHavePhases(int i) const
 
 bool Q2DViewer::isInputVisible(int i) const
 {
-    return getDisplayUnit(i)->getImageActor()->GetVisibility();
+    return getDisplayUnit(i)->getImageSlice()->GetVisibility();
 }
 
 void Q2DViewer::initializeCamera()
@@ -353,24 +368,22 @@ void Q2DViewer::initializeCamera()
 void Q2DViewer::initializeDummyDisplayUnit()
 {
     m_dummyDisplayUnit = new VolumeDisplayUnit;
-    m_dummyDisplayUnit->getImageActor()->VisibilityOff();
+    m_dummyDisplayUnit->getImageSlice()->VisibilityOff();
 }
 
 void Q2DViewer::addImageActors()
 {
-    vtkRenderer *renderer = getRenderer();
-    foreach (VolumeDisplayUnit* unit, getDisplayUnits())
+    if (m_displayUnitsHandler)
     {
-        renderer->AddViewProp(unit->getImageActor());
+        getRenderer()->AddViewProp(m_displayUnitsHandler->getImageProp());
     }
 }
 
 void Q2DViewer::removeImageActors()
 {
-    vtkRenderer *renderer = getRenderer();
-    foreach (VolumeDisplayUnit* unit, getDisplayUnits())
+    if (m_displayUnitsHandler)
     {
-        renderer->RemoveViewProp(unit->getImageActor());
+        getRenderer()->RemoveViewProp(m_displayUnitsHandler->getImageProp());
     }
 }
 
@@ -575,10 +588,10 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     removeImageActors();
     m_displayUnitsHandler = m_displayUnitsFactory->createVolumeDisplayUnitHandler(volumes);
 
-    getDisplayUnit(0)->setWindowLevelData(getWindowLevelData());
+    getDisplayUnit(0)->setVoiLutData(getVoiLutData());
     for (int i = 1; i < getNumberOfInputs(); i++)
     {
-        getDisplayUnit(i)->setWindowLevelData(new WindowLevelPresetsToolData(this));
+        getDisplayUnit(i)->setVoiLutData(new VoiLutPresetsToolData(this));
     }
 
     addImageActors();
@@ -594,7 +607,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
 
     printVolumeInformation();
 
-    m_annotationsHandler->updatePatientAnnotationInformation();
+    m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation);
 
     loadOverlays(volumes.first());
 
@@ -778,7 +791,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     // Important, cal desactivar el thickslab abans de fer m_currentViewPlane = view, sinó falla amb l'update extent
     disableThickSlab();
     setCurrentViewPlane(view);
-    m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
+    m_annotationsHandler->updateAnnotations(VoiLutAnnotation);
     
     // Reiniciem valors per defecte de la càmera
     m_rotateFactor = 0;
@@ -790,6 +803,11 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     
     if (hasInput())
     {
+        // Adapt the camera to the new view plane in order to make actors visible
+        double bounds[6];
+        getCurrentRenderedItemBounds(bounds);
+        getRenderer()->ResetCamera(bounds);
+
         // Calculem la llesca que cal mostrar segons la vista escollida
         int initialSliceIndex = 0;
         if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
@@ -797,10 +815,6 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
             initialSliceIndex = getMaximumSlice() / 2;
         }
         setSlice(initialSliceIndex);
-        // Adapt the camera to the new view plane in order to make actors visible
-        double bounds[6];
-        getCurrentRenderedItemBounds(bounds);
-        getRenderer()->ResetCamera(bounds);
 
         // Set appropriate zoom level
         fitRenderingIntoViewport();
@@ -810,6 +824,13 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     }
 
     emit viewChanged(getCurrentViewPlane());
+}
+
+// This method needs to be redefined in Q2DViewer because the OrthogonalPlane version is redefined and it would hide this version otherwise
+// (see https://isocpp.org/wiki/faq/strange-inheritance#hiding-rule)
+void Q2DViewer::resetView(const AnatomicalPlane &anatomicalPlane)
+{
+    QViewer::resetView(anatomicalPlane);
 }
 
 void Q2DViewer::updateCamera()
@@ -884,7 +905,7 @@ void Q2DViewer::updateCamera()
             m_isImageFlipped = !m_isImageFlipped;
         }
         emit cameraChanged();
-        m_annotationsHandler->updatePatientOrientationAnnotation();
+        m_annotationsHandler->updateAnnotations();
     }
     else
     {
@@ -941,7 +962,7 @@ void Q2DViewer::setPhaseInVolume(int index, int phase)
 
     unit->setPhase(phase);
     // This also resets the camera clipping range (needed)
-    this->updateDisplayExtents();
+    this->updateImageSlices();
     this->render();
 }
 
@@ -949,6 +970,9 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
 {
     if (hasInput())
     {
+        int oldSlice = getCurrentSlice();
+        int oldPhase = getCurrentPhase();
+
         // First update the index of the corresponding dimension
         switch (dimension)
         {
@@ -963,12 +987,12 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         }
 
         // Then update display (image and associated annotations)
-        updateDisplayExtents();
+        updateImageSlices();
 
         // The display shutter must be updated before the default presets
         if (dimension == SpatialDimension)
         {
-            m_annotationsHandler->updatePatientOrientationAnnotation();
+            m_annotationsHandler->updateAnnotations();
 
             if (isThickSlabActive())
             {
@@ -981,18 +1005,24 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         }
 
         updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
-        m_annotationsHandler->updateSliceAnnotationInformation();
+        m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation | SliceAnnotation);
         updatePreferredImageOrientation();
 
         // Finally we emit the signal of the changed value and render the scene
         switch (dimension)
         {
             case SpatialDimension:
-                emit sliceChanged(getCurrentSlice());
+                if (getCurrentSlice() != oldSlice)
+                {
+                    emit sliceChanged(getCurrentSlice());
+                }
                 break;
 
             case TemporalDimension:
-                emit phaseChanged(getCurrentPhase());
+                if (getCurrentPhase() != oldPhase)
+                {
+                    emit phaseChanged(getCurrentPhase());
+                }
                 break;
         }
         
@@ -1017,12 +1047,12 @@ void Q2DViewer::updateSecondaryVolumesSlices()
 
         if (nearestSlice >= 0)
         {
-            getDisplayUnit(i)->getImageActor()->VisibilityOn();
+            getDisplayUnit(i)->getImageSlice()->VisibilityOn();
             getDisplayUnit(i)->setSlice(nearestSlice);
         }
         else
         {
-            getDisplayUnit(i)->getImageActor()->VisibilityOff();
+            getDisplayUnit(i)->getImageSlice()->VisibilityOff();
             getDisplayUnit(i)->setSlice(0);
         }
     }
@@ -1043,6 +1073,8 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
     Q_UNUSED(resize);
     if (hasInput())
     {
+        enableRendering(false);
+        fitRenderingIntoViewport();
         switch (m_alignPosition)
         {
             case AlignRight:
@@ -1053,25 +1085,11 @@ void Q2DViewer::resizeEvent(QResizeEvent *resize)
                 alignLeft();
                 break;
 
-            case AlignCenter:
-                fitRenderingIntoViewport();
+            default:
                 break;
         }
-    }
-}
-
-void Q2DViewer::setWindowLevel(double window, double level)
-{
-    if (hasInput())
-    {
-        getMainDisplayUnit()->setWindowLevel(window,level);
-        m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
-        render();
-        emit windowLevelChanged(window, level);
-    }
-    else
-    {
-        DEBUG_LOG("::setWindowLevel() : No tenim input ");
+        enableRendering(true);
+        this->render();
     }
 }
 
@@ -1090,9 +1108,9 @@ void Q2DViewer::clearTransferFunction()
     getMainDisplayUnit()->clearTransferFunction();
 }
 
-void Q2DViewer::getCurrentWindowLevel(double wl[2])
+VoiLut Q2DViewer::getCurrentVoiLut() const
 {
-    getMainDisplayUnit()->getWindowLevel(wl);
+    return getVoiLutData()->getCurrentPreset();
 }
 
 int Q2DViewer::getCurrentSlice() const
@@ -1372,7 +1390,7 @@ QChar Q2DViewer::getCurrentDisplayedImageLaterality() const
     return laterality;
 }
 
-void Q2DViewer::updateDisplayExtents()
+void Q2DViewer::updateImageSlices()
 {
     // Ens assegurem que tenim dades vàlides
     if (!getMainInput()->isPixelDataLoaded())
@@ -1382,7 +1400,7 @@ void Q2DViewer::updateDisplayExtents()
 
     foreach (VolumeDisplayUnit *volumeDisplayUnit, getDisplayUnits())
     {
-        volumeDisplayUnit->updateDisplayExtent();
+        volumeDisplayUnit->updateImageSlice(m_renderer->GetActiveCamera());
     }
 
     // TODO Si separem els renderers potser caldria aplicar-ho a cada renderer?
@@ -1391,7 +1409,19 @@ void Q2DViewer::updateDisplayExtents()
 
 void Q2DViewer::enableAnnotation(AnnotationFlags annotation, bool enable)
 {
-    m_annotationsHandler->enableAnnotation(annotation, enable);
+    if (enable)
+    {
+        m_annotationsHandler->enableAnnotations(annotation);
+    }
+    else
+    {
+        m_annotationsHandler->disableAnnotations(annotation);
+    }
+
+    if (hasInput())
+    {
+        render();
+    }
 }
 
 void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
@@ -1399,7 +1429,29 @@ void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
     enableAnnotation(annotation, false);
 }
 
-void Q2DViewer::setWindowLevelInVolume(int index, const WindowLevel &windowLevel)
+void Q2DViewer::setVoiLut(const VoiLut &voiLut)
+{
+    if (!hasInput())
+    {
+        return;
+    }
+
+    // If the new VOI LUT is not the currently selected one, it means that someone is calling this method to set a custom VOI LUT
+    if (voiLut != getCurrentVoiLut())
+    {
+        // This will cause another call to this method that will follow the other branch
+        getVoiLutData()->setCustomVoiLut(voiLut);
+    }
+    // Otherwise, it means that it has been called from the signal/slot connection from the VOI LUT data
+    else
+    {
+        getMainDisplayUnit()->setVoiLut(voiLut);
+        m_annotationsHandler->updateAnnotations(VoiLutAnnotation);
+        render();
+    }
+}
+
+void Q2DViewer::setVoiLutInVolume(int index, const VoiLut &voiLut)
 {
     VolumeDisplayUnit *unit = this->getDisplayUnit(index);
 
@@ -1410,9 +1462,10 @@ void Q2DViewer::setWindowLevelInVolume(int index, const WindowLevel &windowLevel
         return;
     }
 
-    unit->updateWindowLevel(windowLevel);
-    // An explicit render is only needed if the unit is not the main one
-    // because the main unit is connected to QViewer::setWindowLevel which is invoked in unit->updateWindowLevel
+    unit->setCurrentVoiLutPreset(voiLut);
+
+    // An explicit render is only needed when it isn't the main unit one because if it's the main unit then
+    // setVoiLut() is called eventually through signal-slot connection when setCurrentVoiLutPreset() is called.
     if (unit != getMainDisplayUnit())
     {
         this->render();
@@ -1443,7 +1496,7 @@ void Q2DViewer::setSlabProjectionMode(int projectionMode)
             // as the data measured could be incoherent with the underlying data when changing the projection mode
             getDrawer()->removeAllPrimitives();
             getMainDisplayUnit()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
-            updateDisplayExtents();
+            updateImageSlices();
             render();
         }
 
@@ -1463,7 +1516,7 @@ void Q2DViewer::setSlabProjectionModeInVolume(int index, int slabProjectionMode)
     }
 
     unit->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(slabProjectionMode));
-    this->updateDisplayExtents();
+    this->updateImageSlices();
     this->render();
 }
 
@@ -1483,18 +1536,27 @@ void Q2DViewer::setSlabThickness(int thickness)
     
     if (thickness != mainDisplayUnit->getSlabThickness())
     {
+        int oldThickness = mainDisplayUnit->getSlabThickness();
+        int oldSlice = getCurrentSlice();
+
         // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
         getDrawer()->removeAllPrimitives();
 
         mainDisplayUnit->setSlabThickness(thickness);
-        updateDisplayExtents();
+        updateImageSlices();
 
         updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
-        m_annotationsHandler->updateSliceAnnotationInformation();
+        m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation | SliceAnnotation);
         render();
 
-        emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());
-        emit sliceChanged(getCurrentSlice());
+        if (mainDisplayUnit->getSlabThickness() != oldThickness)
+        {
+            emit slabThicknessChanged(mainDisplayUnit->getSlabThickness());
+        }
+        if (getCurrentSlice() != oldSlice)
+        {
+            emit sliceChanged(getCurrentSlice());
+        }
     }
 }
 
@@ -1510,7 +1572,7 @@ void Q2DViewer::setSlabThicknessInVolume(int index, int thickness)
     }
 
     unit->setSlabThickness(thickness);
-    this->updateDisplayExtents();
+    this->updateImageSlices();
     this->render();
 }
 
@@ -1585,7 +1647,7 @@ void Q2DViewer::restore()
     // defined command to place the image properly by default depending on the input if no one is defined 
     // Take into account this call disables thickslab
     resetViewToAcquisitionPlane();
-    WindowLevelHelper::selectDefaultPreset(getWindowLevelData(), getMainInput());
+    VoiLutHelper::selectDefaultPreset(getVoiLutData(), getMainInput());
     
     // HACK Restaurem el rendering
     enableRendering(true);
@@ -1600,16 +1662,9 @@ void Q2DViewer::clearViewer()
     m_drawer->clearViewer();
 }
 
-void Q2DViewer::invertWindowLevel()
+void Q2DViewer::invertVoiLut()
 {
-    // Passa el window level a negatiu o positiu, per invertir els colors
-    double windowLevel[2];
-    getCurrentWindowLevel(windowLevel);
-
-    // Això és necessari fer-ho així i no amb setWindowLevel perquè si invertim el color de la imatge sense haver modificat abans el window/level
-    // i després seleccionem un altre visor, al tornar a aquest visor, es tornaria aplicar el "default" i no el "custom"
-    // Es podria arribar a fer d'una altre manera també, atacant directament als filtres del pipeline, tal com es diu al ticket #1275
-    getWindowLevelData()->setCustomWindowLevel(-windowLevel[0], windowLevel[1]);
+    setVoiLut(getCurrentVoiLut().inverse());
 }
 
 void Q2DViewer::alignLeft()
@@ -1654,7 +1709,7 @@ void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
         case OrthogonalPlane::XYPlane:
             // Si es dóna el cas que o bé està rotada 180º o bé està voltejada, cal agafar l'altre extrem
             // L'operació realitzada és un XOR (!=)
-            if (m_isImageFlipped != (m_rotateFactor == 2))
+            if (m_isImageFlipped != (qAbs(m_rotateFactor) == 2))
             {
                 if (alignPosition == AlignLeft)
                 {
@@ -1773,7 +1828,7 @@ void Q2DViewer::applyImageOrientationChanges()
 
 void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
 {
-    getMainDisplayUnit()->getImageActor()->GetBounds(bounds);
+    getMainDisplayUnit()->getImageSlice()->GetBounds(bounds);
 }
 
 void Q2DViewer::updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane()
@@ -1784,8 +1839,6 @@ void Q2DViewer::updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisition
         {
             unit->updateCurrentImageDefaultPresets();
         }
-
-        m_annotationsHandler->updateAnnotationsInformation(WindowInformationAnnotation);
     }
 }
 
@@ -1804,16 +1857,16 @@ double Q2DViewer::getCurrentDisplayedImageDepthOnInput(int i) const
     return getDisplayUnit(i)->getCurrentDisplayedImageDepth();
 }
 
-QList<vtkImageActor*> Q2DViewer::getVtkImageActorsList() const
+vtkImageSlice* Q2DViewer::getImageProp() const
 {
-    QList<vtkImageActor*> actorsList;
-
-    for (int i = 0; i < getNumberOfInputs(); ++i)
+    if (m_displayUnitsHandler)
     {
-        actorsList << getDisplayUnit(i)->getImageActor();
+        return m_displayUnitsHandler->getImageProp();
     }
-
-    return actorsList;
+    else
+    {
+        return 0;
+    }
 }
 
 Q2DViewer* Q2DViewer::castFromQViewer(QViewer *viewer)
@@ -1876,7 +1929,7 @@ void Q2DViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
 
 void Q2DViewer::setVolumeOpacity(int index, double opacity)
 {
-    getDisplayUnit(index)->getImageActor()->SetOpacity(opacity);
+    getDisplayUnit(index)->getImageSlice()->GetProperty()->SetOpacity(opacity);
 }
 
 const TransferFunction& Q2DViewer::getVolumeTransferFunction(int index) const
@@ -1949,9 +2002,9 @@ int Q2DViewer::indexOfVolume(const Volume *volume) const
     return -1;
 }
 
-WindowLevelPresetsToolData* Q2DViewer::getWindowLevelDataForVolume(int index) const
+VoiLutPresetsToolData* Q2DViewer::getVoiLutDataForVolume(int index) const
 {
-    return getDisplayUnit(index)->getWindowLevelData();
+    return getDisplayUnit(index)->getVoiLutData();
 }
 
 int Q2DViewer::getFusionBalance() const
@@ -1980,7 +2033,7 @@ void Q2DViewer::setFusionBalance(int balance)
         this->setVolumeOpacity(1, 1.0);
     }
 
-    m_annotationsHandler->updatePatientAnnotationInformation();
+    m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation);
     this->render();
 }
 

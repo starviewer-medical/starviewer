@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "volumepixeldata.h"
 
 #include "volumepixeldataiterator.h"
@@ -6,10 +20,6 @@
 
 #include <vtkImageChangeInformation.h>
 #include <vtkImageData.h>
-// Voxel information
-#include <vtkPointData.h>
-// Pel setData(unsigned char *...)
-#include <vtkUnsignedCharArray.h>
 
 #include "logging.h"
 
@@ -90,28 +100,15 @@ void VolumePixelData::setData(unsigned char *data, int extent[6], int bytesPerPi
     
     vtkImageData *imageData = vtkImageData::New();
     imageData->SetExtent(extent);
-    imageData->SetScalarTypeToUnsignedChar();
-    imageData->SetNumberOfScalarComponents(bytesPerPixel);
-    imageData->AllocateScalars();
+    imageData->AllocateScalars(VTK_UNSIGNED_CHAR, bytesPerPixel);
     
     int size = (extent[1] - extent[0] + 1) * (extent[3] - extent[2] + 1) * (extent[5] - extent[4] + 1) * bytesPerPixel;
-    vtkUnsignedCharArray *ucharArray = vtkUnsignedCharArray::New();
-    ucharArray->SetNumberOfTuples(size);
+    memcpy(imageData->GetScalarPointer(), data, size);
     
-    int save;
     if (deleteData)
     {
-        // save == 0, NO guardar les dades == fer delete, 
-        save = 0;
+        delete[] data;
     }
-    else
-    {
-        // save == 1, guardar les dades == NO fer delete, 
-        save = 1;
-    }
-    ucharArray->SetArray(data, size, save);
-    imageData->GetPointData()->SetScalars(ucharArray);
-    ucharArray->Delete();
 
     this->setData(imageData);
     imageData->Delete();
@@ -236,10 +233,8 @@ void VolumePixelData::convertToNeutralPixelData()
     m_imageDataVTK->SetOrigin(.0, .0, .0);
     m_imageDataVTK->SetSpacing(1., 1., 1.);
     m_imageDataVTK->SetDimensions(10, 10, 1);
-    m_imageDataVTK->SetWholeExtent(0, 9, 0, 9, 0, 0);
-    m_imageDataVTK->SetScalarTypeToShort();
-    m_imageDataVTK->SetNumberOfScalarComponents(1);
-    m_imageDataVTK->AllocateScalars();
+    m_imageDataVTK->SetExtent(0, 9, 0, 9, 0, 0);
+    m_imageDataVTK->AllocateScalars(VTK_SHORT, 1);
     // Omplim el dataset perquè la imatge resultant quedi amb un cert degradat
     signed short *scalarPointer = (signed short*) m_imageDataVTK->GetScalarPointer();
     signed short value;
@@ -283,7 +278,7 @@ void VolumePixelData::setSpacing(double spacing[3])
 void VolumePixelData::setSpacing(double x, double y, double z)
 {
     vtkImageChangeInformation *changeInformation = vtkImageChangeInformation::New();
-    changeInformation->SetInput(m_imageDataVTK);
+    changeInformation->SetInputData(m_imageDataVTK);
     changeInformation->SetOutputSpacing(x, y, z);
     changeInformation->Update();
     this->setData(changeInformation->GetOutput());

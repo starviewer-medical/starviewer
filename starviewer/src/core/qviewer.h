@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGQVIEWER_H
 #define UDGQVIEWER_H
 
@@ -26,10 +40,10 @@ class Volume;
 class Series;
 class Image;
 class ToolProxy;
-class WindowLevelPresetsToolData;
+class VoiLutPresetsToolData;
 class PatientBrowserMenu;
 class QViewerWorkInProgressWidget;
-class WindowLevel;
+class VoiLut;
 
 /**
     Classe base per a totes les finestres de visualització
@@ -42,9 +56,6 @@ public:
 
     /// Tipus de fitxer que pot desar
     enum FileType { PNG, JPEG, TIFF, DICOM, PNM, META, BMP };
-
-    /// Tipus de format de gravació de vídeo suportats
-    enum RecordFileFormatType { MPEG2 };
 
     /// Estat del viewer
     enum ViewerStatus { NoVolumeInput, DownloadingVolume, DownloadingError, LoadingVolume, LoadingError, VisualizingVolume, VisualizingError };
@@ -105,11 +116,6 @@ public:
         return m_grabList.size();
     }
 
-    /// Grava en format de vídeo els frames que s'hagin capturat amb grabCurrentView.
-    /// Un cop gravat, esborra la llista de frames.
-    /// TODO de moment només accepta format MPEG
-    bool record(const QString &baseName, RecordFileFormatType format = MPEG2);
-
     /// Fa zoom sobre l'escena amb el factor donat
     /// @param factor Factor de zoom que volem aplicar a la càmera
     void zoom(double factor);
@@ -131,14 +137,10 @@ public:
     /// @return True if scale could be performed, false otherwise
     bool scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate = 0.0);
 
-    /// Ens retorna l'objecte que conté tota la informació referent al window level
-    /// que es pot aplicar sobre aquest visor
-    /// @return L'objecte WindowLevelPresetsToolData
-    WindowLevelPresetsToolData* getWindowLevelData() const;
-
-    /// Li assignem el window level data externament
-    /// @param windowLevelData
-    void setWindowLevelData(WindowLevelPresetsToolData *windowLevelData);
+    /// Returns the VOI LUT presets data for this viewer.
+    VoiLutPresetsToolData* getVoiLutData() const;
+    /// Sets the VOI LUT presets data for this viewer.
+    void setVoiLutData(VoiLutPresetsToolData *voiLutData);
 
     /// Habilita/deshabilita que els renderings es facin efectius
     /// Útil en els casos en que necessitem fer diverses operacions de
@@ -169,6 +171,9 @@ public:
     /// Returns the current focal point of the active camera
     bool getCurrentFocalPoint(double focalPoint[3]);
 
+    /// Returns the VOI LUT that is currently applied to the image in this viewer. The default implementation returns a default VoiLut.
+    virtual VoiLut getCurrentVoiLut() const;
+
 public slots:
     /// Indiquem les dades d'entrada
     virtual void setInput(Volume *volume) = 0;
@@ -186,14 +191,11 @@ public slots:
     /// Elimina totes les captures de pantalla
     void clearGrabbedViews();
 
-    /// Obté el window level actual de la imatge
-    virtual void getCurrentWindowLevel(double wl[2]) = 0;
-
     /// Resets the view to a determined orthogonal plane
     virtual void resetView(const OrthogonalPlane &view);
     
     /// Resets the view to the specified anatomical plane
-    void resetView(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
+    void resetView(const AnatomicalPlane &anatomicalPlane);
     virtual void resetViewToAxial();
     virtual void resetViewToSagital();
     virtual void resetViewToCoronal();
@@ -205,10 +207,8 @@ public slots:
     void enableContextMenu();
     void disableContextMenu();
 
-    /// Ajusta el window/level
-    virtual void setWindowLevel(double window, double level) = 0;
-    /// Ajusta el window/level a partir del preset. La implementació per defecte acaba cridant setWindowLevel sempre.
-    virtual void setWindowLevelPreset(const WindowLevel &preset);
+    /// Sets the VOI LUT for this viewer. The default implementation does nothing.
+    virtual void setVoiLut(const VoiLut &voiLut);
 
     /// Fits the current rendered item into the viewport size
     void fitRenderingIntoViewport();
@@ -236,7 +236,10 @@ signals:
     void viewerStatusChanged();
 
     /// Signal emitted when the anatomical view has changed
-    void anatomicalViewChanged(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
+    void anatomicalViewChanged(const AnatomicalPlane &anatomicalPlane);
+
+    /// Emitted when this viewer receives a double click event.
+    void doubleClicked();
 
 protected:
     /// Gets the bounds of the rendered item
@@ -246,8 +249,8 @@ protected:
 
     void contextMenuRelease();
 
-    /// Actualitza les dades contingudes a m_windowLevelData
-    void updateWindowLevelData();
+    /// Updates the VOI LUT data.
+    void updateVoiLutData();
 
     /// Fixem la orientació de la càmera del renderer principal
     /// Si el paràmetre donat no és un dels valors enumerats vàlids, no farà res
@@ -262,7 +265,7 @@ protected:
     bool adjustCameraScaleFactor(double factor);
     
     /// Sets the default rendered item orientation for the given anatomical plane
-    virtual void setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
+    virtual void setDefaultOrientation(const AnatomicalPlane &anatomicalPlane);
     
     /// Ens retorna la càmera activa pel renderer principal, si n'hi ha, NUL altrament.
     vtkCamera* getActiveCamera();
@@ -328,8 +331,8 @@ protected:
     /// Ens servirà per controlar si entre event o event s'ha mogut el mouse
     bool m_mouseHasMoved;
 
-    /// Dades de valors predeterminats de window level i dels valors actuals que s'apliquen
-    WindowLevelPresetsToolData *m_windowLevelData;
+    /// VOI LUT presets data for this viewer.
+    VoiLutPresetsToolData *m_voiLutData;
 
     /// Indica si hem de fer l'acció de renderitzar o no
     bool m_isRenderingEnabled;

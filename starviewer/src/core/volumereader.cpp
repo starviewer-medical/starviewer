@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "volumereader.h"
 
 #include "image.h"
@@ -24,7 +38,7 @@ int getFrameNumber(const Image *image)
 }
 
 VolumeReader::VolumeReader(QObject *parent)
-    : QObject(parent), m_volumePixelDataReader(0)
+    : QObject(parent), m_volumePixelDataReader(0), m_abortRequested(false)
 {
      m_lastError = VolumePixelDataReader::NoError;
 }
@@ -57,6 +71,12 @@ void VolumeReader::executePixelDataReader(Volume *volume)
     QStringList fileList = this->getFilesToRead(volume);
     if (!fileList.isEmpty())
     {
+        if (m_abortRequested)
+        {
+            m_lastError = VolumePixelDataReader::ReadAborted;
+            return;
+        }
+
         // Posem a punt el reader i llegim les dades
         this->setUpReader(volume);
 
@@ -64,18 +84,25 @@ void VolumeReader::executePixelDataReader(Volume *volume)
         QList<int> frameNumbers = QtConcurrent::blockingMapped(volume->getImages(), getFrameNumber);
         m_volumePixelDataReader->setFrameNumbers(frameNumbers);
 
-        m_lastError = m_volumePixelDataReader->read(fileList);
-        if (m_lastError == VolumePixelDataReader::NoError)
+        if (m_abortRequested)
         {
-            // Tot ha anat ok, assignem les dades al volum
-            volume->setPixelData(m_volumePixelDataReader->getVolumePixelData());
-            runPostprocessors(volume);
-            fixSpacingIssues(volume);
+            m_lastError = VolumePixelDataReader::ReadAborted;
         }
         else
         {
-            volume->convertToNeutralVolume();
-            this->logWarningLastError(fileList);
+            m_lastError = m_volumePixelDataReader->read(fileList);
+            if (m_lastError == VolumePixelDataReader::NoError)
+            {
+                // Tot ha anat ok, assignem les dades al volum
+                volume->setPixelData(m_volumePixelDataReader->getVolumePixelData());
+                runPostprocessors(volume);
+                fixSpacingIssues(volume);
+            }
+            else
+            {
+                volume->convertToNeutralVolume();
+                this->logWarningLastError(fileList);
+            }
         }
     }
 }
@@ -95,7 +122,12 @@ bool VolumeReader::readWithoutShowingError(Volume *volume)
 
 void VolumeReader::requestAbort()
 {
-    m_volumePixelDataReader->requestAbort();
+    if (m_volumePixelDataReader)
+    {
+        m_volumePixelDataReader->requestAbort();
+    }
+
+    m_abortRequested = true;
 }
 
 void VolumeReader::showMessageBoxWithLastError() const
@@ -182,7 +214,7 @@ void VolumeReader::fixSpacingIssues(Volume *volume)
 
     if (volume->getNumberOfPhases() > 1 && volume->getNumberOfSlicesPerPhase() > 1)
     {
-        double zSpacing = abs(Image::distance(volume->getImage(0)) - Image::distance(volume->getImage(1)));
+        double zSpacing = qAbs(Image::distance(volume->getImage(0)) - Image::distance(volume->getImage(1)));
         DEBUG_LOG(QString("Arreglem el z-spacing per volum amb fases. z-spacing llegit (mal calculat): %1  - Nou z-spacing ben calculat: %2")
             .arg(volume->getSpacing()[2]).arg(zSpacing));
         

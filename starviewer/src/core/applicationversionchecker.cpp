@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "applicationversionchecker.h"
 #include "applicationupdatechecker.h"
 #include "coresettings.h"
@@ -204,7 +218,7 @@ QUrl ApplicationVersionChecker::createLocalUrl()
             versionList[2] = versionList[2].split("-")[0];
         }
         QString version(versionList[0] + "." + versionList[1] + "." + versionList[2]);
-        result = defaultPath + "releasenotes" + version + ".html";
+        result = QUrl::fromLocalFile(defaultPath + "releasenotes" + version + ".html");
     }
 
     return result;
@@ -213,7 +227,7 @@ QUrl ApplicationVersionChecker::createLocalUrl()
 bool ApplicationVersionChecker::checkLocalUrl(const QUrl &url)
 {
     // Comprobar si existeix localment el fitxer
-    return QFile::exists(QString(url.toString()));
+    return QFile::exists(url.toLocalFile());
 }
 
 bool ApplicationVersionChecker::checkTimeInterval()

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qapplicationmainwindow.h"
 
 #include "logging.h"
@@ -20,6 +34,7 @@
 #include "starviewerapplicationcommandline.h"
 #include "applicationcommandlineoptions.h"
 #include "loggingoutputwindow.h"
+#include "vtkinit.h"
 
 #ifndef NO_CRASH_REPORTER
 #include "crashhandler.h"
@@ -32,9 +47,13 @@
 #include <QTextCodec>
 #include <QDir>
 #include <QMessageBox>
+#include <QLibraryInfo>
 #include <qtsingleapplication.h>
 
+#include <vtkNew.h>
 #include <vtkOutputWindow.h>
+#include <vtkOverrideInformation.h>
+#include <vtkOverrideInformationCollection.h>
 
 typedef udg::SingletonPointer<udg::StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
 
@@ -76,6 +95,7 @@ void initializeTranslations(QApplication &app)
     QLocale defaultLocale = translationsLoader.getDefaultLocale();
     QLocale::setDefault(defaultLocale);
 
+    translationsLoader.loadTranslation("qt_" + defaultLocale.name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     translationsLoader.loadTranslation(":/core/core_" + defaultLocale.name());
     translationsLoader.loadTranslation(":/interface/interface_" + defaultLocale.name());
     translationsLoader.loadTranslation(":/inputoutput/inputoutput_" + defaultLocale.name());
@@ -165,10 +185,6 @@ int main(int argc, char *argv[])
 
     // TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en
     // una classe dedicada a tal efecte
-
-    // Ajustem el codec per els strings pelats (no QString,sinó "bla bla bla").
-    // Amb aquesta crida escollirà el codec més apropiat segons el sistema. En aquest cas ens agafarà utf-8 (Mandriva 2007)
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale());
 
     configureLogging();
 

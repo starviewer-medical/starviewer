@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "orderimagesfillerstep.h"
 #include "logging.h"
 #include "patientfillerinput.h"
@@ -198,6 +212,9 @@ void OrderImagesFillerStep::processImage(Image *image)
     // Cada key és la normal de cada pla guardat com a string.
     // En cas que tinguem diferents normals, indicaria que tenim per exemple, diferents stacks en el mateix volum
 
+    // TODO WARN BUG: We are doing insertMulti() in another place, so there may be keys with multiple values,
+    //                but we are getting only the last value for each key, so some plane normals can be missed.
+    //                We should iterate over the values instead of the unique keys and use a QSet for planeNormals.
     QStringList planeNormals;
     foreach (double key, m_orderedNormalsSet->uniqueKeys())
     {
@@ -288,6 +305,9 @@ void OrderImagesFillerStep::processImage(Image *image)
     // La normal ja existia [m_orderedImageSet->contains(keyPlaneNormal) == true], per tant només cal actualitzar l'estructura
     else
     {
+        // TODO WARN BUG: We are doing insertMulti() in another place, so there may be keys with multiple values,
+        //                but we are getting only the last value for each key, so some plane normals can be missed.
+        //                We should iterate over the values instead of the unique keys.
         foreach (double key, m_orderedNormalsSet->keys())
         {
             if (m_orderedNormalsSet->value(key)->contains(keyPlaneNormal))

@@ -323,7 +323,7 @@ void test_PatientOrientation::setDICOMFormattedPatientOrientation_ShouldReturnFa
     QTest::newRow("Extra separators at the beggining and the end with 3 valid labels") << "\\A\\R\\L\\";
 
     QTest::newRow("4 items (valid chars)") << "R\\A\\F\\H";
-    QTest::newRow("4 items (mixed with valid chars)") << "aR\\Q\\RAHF\\doqndJOEOM=·eH";
+    QTest::newRow("4 items (mixed with valid chars)") << "aR\\Q\\RAHF\\doqndJOEOM=Â·eH";
 }
 
 void test_PatientOrientation::setDICOMFormattedPatientOrientation_ShouldReturnFalseAndSetEmptyOrientationString()

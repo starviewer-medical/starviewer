@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDG_VOLUMEREADERMANAGER_H
 #define UDG_VOLUMEREADERMANAGER_H
 
@@ -50,20 +64,20 @@ signals:
 
 private slots:
     /// Updates the progress of the job and emits the global progress
-    void updateProgress(ThreadWeaver::Job*, int);
+    void updateProgress(VolumeReaderJob*, int);
     /// Slot executed when a job finished. It emits the signal readingFinished() if no jobs are reading.
-    void jobFinished(ThreadWeaver::Job *job);
+    void jobFinished(ThreadWeaver::JobPointer job);
 
 private:
     /// Initialize internal helpers
     void initialize();
 
 private:
-    /// List of jobs to read volumes. They don't belong to us, that is why QPointer is used.
-    QList<QPointer<VolumeReaderJob> > m_volumeReaderJobs;
+    /// List of jobs to read volumes.
+    QList<QWeakPointer<ThreadWeaver::JobInterface> > m_volumeReaderJobs;
 
     /// List to control the progress of all jobs
-    QHash<ThreadWeaver::Job*, int> m_jobsProgress;
+    QHash<VolumeReaderJob*, int> m_jobsProgress;
 
     /// List of readed volumes
     QList<Volume*> m_volumes;

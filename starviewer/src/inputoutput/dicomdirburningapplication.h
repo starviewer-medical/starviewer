@@ -1,9 +1,23 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGDICOMDIRBURNINGAPPLICATION_H
 #define UDGDICOMDIRBURNINGAPPLICATION_H
 
 #include <QString>
 
-// Per utilitzar CreateDicomdir::recordDeviceDicomDir, per tal de conèixer si es vol gravar en CD o DVD
+// Per utilitzar CreateDicomdir::recordDeviceDicomDir, per tal de conÃ¨ixer si es vol gravar en CD o DVD
 #include "createdicomdir.h"
 
 namespace udg {
@@ -32,10 +46,10 @@ public:
     /// Retorna si es vol gravar en CD o DVD
     CreateDicomdir::recordDeviceDicomDir getCurrentDevice() const;
 
-    /// Retorna la descripció de l'últim error que s'ha produit
+    /// Retorna la descripciÃ³ de l'Ãºltim error que s'ha produit
     QString getLastErrorDescription() const;
 
-    /// Retorna l'últim error que s'ha produit
+    /// Retorna l'Ãºltim error que s'ha produit
     DICOMDIRBurningApplicationError getLastError() const;
 
     /// Grava el fitxer iso que es troba al path especificat a l'atribut m_isoPath en un CD o DVD
@@ -49,10 +63,10 @@ private:
     /// Variable que ens permet diferenciar si es vol gravar en CD o DVD
     CreateDicomdir::recordDeviceDicomDir m_currentDevice;
 
-    /// Descripció de l'últim error que s'ha produit
+    /// DescripciÃ³ de l'Ãºltim error que s'ha produit
     QString m_lastErrorDescription;
 
-    /// Últim error que s'ha produit
+    /// Ãšltim error que s'ha produit
     DICOMDIRBurningApplicationError m_lastError;
 };
 

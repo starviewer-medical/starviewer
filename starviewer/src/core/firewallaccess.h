@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGFIREWALLACCESS_H
 #define UDGFIREWALLACCESS_H
 
@@ -6,8 +20,8 @@
 namespace udg {
 
 /**
-    InterfÌcie per comprovar si starviewer tÈ access a travÈs del firewall.
-    El mËtode \sa newInstance Ès l'encarregat de crear una inst‡ncia de les classes d'implementaciÛ que es decideix
+    Interf√≠cie per comprovar si starviewer t√© access a trav√©s del firewall.
+    El m√®tode \sa newInstance √©s l'encarregat de crear una inst√†ncia de les classes d'implementaci√≥ que es decideix
     segons el sistema operatiu, windows o altres. 
   */
 class FirewallAccess {
@@ -16,7 +30,7 @@ public:
 
     virtual ~FirewallAccess();
 
-    /// Crea una nova inst‡ncia d'alguna de les classes que implementa la interfÌcie
+    /// Crea una nova inst√†ncia d'alguna de les classes que implementa la interf√≠cie
     static FirewallAccess* newInstance();
 
     virtual bool doesStarviewerHaveAccesThroughFirewall();
@@ -25,13 +39,13 @@ public:
     FirewallStatus getStatus();
 
 protected:
-    /// Per instanciar nous objectes s'ha de fer ˙s del mËtode \sa newInstance
+    /// Per instanciar nous objectes s'ha de fer √∫s del m√®tode \sa newInstance
     FirewallAccess();
 
 protected:
     /// Guarda l'estat del firewall
     FirewallStatus m_status;
-    /// Si starviewer no tÈ accÈs a travÈs del firewall, m_errorString guarda la causa
+    /// Si starviewer no t√© acc√©s a trav√©s del firewall, m_errorString guarda la causa
     QString m_errorString;
 };
 

@@ -1,0 +1,281 @@
+Building on GNU/Linux
+=====================
+
+This guide explains how to compile Starviewer 0.13 from scratch on a Debian
+GNU/Linux 8.2 amd64. (With 4GiB of RAM)
+
+This guide avoids splattering files everywhere of your system, the only system
+wide changes will be a few 'apt-get install libsomething-dev'. We promise it :)
+
+Installation can be made system wide, but *optionally* we show how to compile
+using a local directory in your home. On the example this directory is located
+on '~/uroot'.
+
+'~/uroot' is just a prefix, if you replace it by '/' and run it as root then it 
+will become a system wide setup.
+
+Getting started: the quick way
+------------------------------
+
+1.  Use the script 'buildall.sh' to do the explained steps automatically.
+    Remember to install Qt on the proper location (the script will tell you).
+
+2.  To customize the default paths edit 'sdk/config/setup.sh'
+
+3.  Install dependencies if necessary (see 'system dependencies') section.
+
+4.  Once the SDK is compiled it will build Starviewer, however you may want to
+    set up the QtCreator IDE. Then copy the environment variables and follow
+    the instructions of the section 'Setting up QtCreator'.
+
+5.  Run Starviewer.
+
+Running Starviewer
+------------------
+
+Unless you have compiled and installed the SDK system-wide, Starviewer binary
+will be unable to find your compiled SDK libraries.
+
+You must run the binary with the LD_LIBRARY_PATH environment variable set.
+
+For the sake of convenience, on the compiled binary folder 'starviewer/bin/' 
+create a file named starviewer.sh with the following contents:
+
+    #!/bin/bash
+    DIR=$(readlink -f $(dirname $BASH_SOURCE))
+    LD_LIBRARY_PATH=~/uroot/usr/local/lib:~/uroot/usr/local/lib/x86_64-linux-gnu:~/uroot/usr/local/lib/Qt5.4.1/5.4/gcc_64/lib/ $DIR/starviewer "$@"
+
+Then make this file executable
+
+    chmod u+x starviewer.sh
+
+Libraries
+---------
+
+### System dependencies
+
+Can be installed with your package manager.
+
+    apt-get install cmake build-essential 
+    apt-get install libgl1-mesa-dev libxt-dev
+    apt-get install liblog4cxx10-dev liblog4cxx10
+    apt-get install freeglut3 freeglut3-dev
+    apt-get install libsqlite3-0 libsqlite3-dev
+    apt-get install libssl1.0.0 libssl-dev
+    apt-get install libwrap0 libwrap0-dev
+    apt-get install libpng12-0 libpng12-dev
+    apt-get install libtiff5 libtiff5-dev
+    apt-get install libxml2 libxml2-dev    
+
+### SDK libraries
+
+-   Qt 5.4.1
+-   dcmtk-3.6.1_20120515
+-   extra-cmake-modules-1.3.0
+-   gdcm-2.4.4
+-   InsightToolkit-4.7.1
+-   threadweaver-5.3.0
+-   VTK-6.1.0
+
+Download sources and save them in '~/uroot/downloads'.
+
+### Direct download links
+
+With SHA256 sums.
+
+    497ece6ac3d8dfad70a92990b01f98a313c2189e5a0fad6c9f8cd5c4e408558e
+    
+    http://download.qt.io/official_releases/qt/5.4/5.4.1/qt-opensource-linux-x64-5.4.1.run
+                            
+    09a97e82cf43672a4b16b162651f5bc0d86b9d7b8cfff58c345e5c97d6200937
+    
+    http://support.dcmtk.org/redmine/attachments/download/8/dcmtk-3.6.1_20120515.tar.gz
+    
+    bd7df10a479606d529a8b71f466c44a2bdd11fd534c62ce0aa44fad91883fa34
+    
+    http://www.vtk.org/files/release/6.1/VTK-6.1.0.tar.gz
+    
+    3328145e79e693078be01c2ca96764e364d7ce399ccf92f9e9f45ec780dfb23d
+    
+    http://skylink.dl.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.4.4/gdcm-2.4.4.tar.gz
+    
+    9f7b45ec57e01ca9ad89a05411752914f810fd70b7038fc48abd59e3ec13c6ee
+    
+    http://vorboss.dl.sourceforge.net/project/itk/itk/4.7/InsightToolkit-4.7.1.tar.xz
+    
+    ea8b6a648b7b2dc313df709940813c22ed5b68d2f7bef30acbaf2a83a6e4c723
+    
+    http://download.kde.org/stable/frameworks/5.3.0/extra-cmake-modules-1.3.0.tar.xz
+    
+    c15818ec6e6320bea79a0d44e29cb4fc19a0e0d428cccb979d6c3104ec65a838
+    
+    http://download.kde.org/stable/frameworks/5.3.0/threadweaver-5.3.0.tar.xz
+
+
+Building the SDK
+----------------
+
+### Libraries directory
+
+1. Run the Qt setup and set the installation path to '~/uroot/usr/lib/Qt5.4.1/'.
+
+2. Extract the downloaded library sources on (discarding Qt):
+   '~/uroot/usr/local/src/'
+
+3. Copy 'extra-cmake-modules-1.3.0' inside 'threadweaver-5.3.0 directory'.
+
+### Configure
+
+Edit the '/scripts/linux/config/setup.sh'
+
+
+-   DOWNLOAD_PREFIX=~/uroot/downloads
+
+    Where buildall.sh downloads the libraries
+
+-   SDK_INSTALL_PREFIX=~/uroot/usr/local
+
+    Where to install the SDK libraries once compiled
+
+-   INSTALL_QTDIR=$SDK_INSTALL_PREFIX/lib/Qt5.4.1
+
+    Only used to tell the user where to install Qt on buildall.sh
+
+-   QTDIR=$SDK_INSTALL_PREFIX/lib/Qt5.4.1/5.4/gcc_64
+    
+    If you use a local Qt installaton, the path where it is installed
+    
+-   STARVIEWER_SOURCE_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer
+    
+    Starviewer source code location
+
+-   SOURCE_DIR_BASE=$SDK_INSTALL_PREFIX/src
+    
+    Location of SDK sources to build
+
+-   PATCHES_ROOT=$SCRIPTS_ROOT/../../patches
+
+    Location of the pathes to apply on SDK libraries
+
+-   LD_LIBRARY_PATH=$SDK_INSTALL_PREFIX/lib
+
+    Because SDK libraries binares are not on a standard location.
+    This environment variable has to be set when starting starviewer binary or
+    when you compile it. (if not the linker will fail).
+
+
+
+Building Starviewer
+-------------------
+In this contained installation we use several environment variables to
+configure the paths of the libraries and include files.
+During the build of the SDK the build script outputted a list of environment
+variables, which are read by the Starviewer .pro files.
+
+If you paste the variables into the console, then you can just run QMake on
+Starviewer source directory and compilation will begin.
+
+Most important variables are:
+
+-   LD_LIBRARY_PATH
+
+    Has to be set during linking and when running Starviewer binary, because
+    library binares are not in a system path, we must tell where are they.
+  
+-   QTDIR
+  
+    Path to the custom Qt installation prefix.
+  
+-   SDK_INSTALL_PREFIX
+
+    Used on defaultdirectories.pri and is used to tell where are the library
+    binaries and include files.
+    
+The project main file is located in 'starviewer/starviewer.pro'
+
+If you want to customize where the SDK libraries are placed or use the system
+ones edit 'starviewer/starviewer/src/defaultdirectories.pri'
+
+
+### Step by step build
+
+1.  Export this environment variables. You should have copied them on your
+    clipboard.
+    
+        export SDK_INSTALL_PREFIX
+        export LD_LIBRARY_PAYH
+        export QTDIR
+
+2.  Run QMake on Starviewer directory (do not use the absolute path $QTDIR if
+    you want to use the Qt libraries installed on your system).
+
+        $QTDIR/bin/qmake starviewer.pro -r -spec linux-g++
+        
+3.  Compile 
+        
+        make -j4
+        
+4.  Make a launch script on 'starviewer/starviewer/bin/starviewer.sh' with:
+
+        #!/bin/bash
+        DIR=$(readlink -f $(dirname $BASH_SOURCE))
+        LD_LIBRARY_PATH=[PUT YOUR LD PATH HERE]  $DIR/starviewer "$@"
+    
+    Replace [PUT YOUR LD PATH HERE] with the real LD path, outputted by the
+    build script, you should have it in your clipboard.
+
+
+
+Setting up QtCreator
+--------------------
+
+1.  Open the starviewer project (starviewer.pro).
+
+2.  Tools > Options > Build & run > Qt Versions
+
+    Check that the local Qt installation is autodetected, if not add it 
+    manually.
+    
+3.  Tools > Options > Build & run > Kits
+
+    Add the kit for the installed Qt version if it's not autodetected.
+
+4.  Switch to 'Projects' section (Ctrl+5).
+
+5.  Add kit > Desktop Qt 5.4.1 GCC 64bit
+
+6.  Disable 'shadow build'
+    
+7.  Build Steps > Make > Make arguments
+        
+    Add -j4 to increase the compilation speed.
+        
+8.  Build environment > Batch edit...
+    
+    Paste the variables you were told to copy after building the SDK.
+    
+    You must at least have SDK_INSTALL_PREFIX and LD_LIBRARY_PATH. Optionally
+    you can skip the others, as they are not currently used.
+
+9.  Build the project (Ctrl+B)
+
+10. Run Starviewer (Ctrl+R)
+
+
+Troubleshooting
+---------------
+
+### SDK compilation failure
+
+-   If an SDK library fails to compile, re-run the build.sh or buildall.sh 
+    script again without deleting or cleaning the SDK building directories.
+
+-   Check that you have the system libraries installed (apt-get install...)
+
+-   Check that you do not have paths with spaces.
+
+### Starviewer compilation failure
+
+-   I get errors with missing translations. Run this on your project directory.
+
+        find  -name '*.pro' -exec lrelease {} \;

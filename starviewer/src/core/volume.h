@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGVOLUME_H
 #define UDGVOLUME_H
 
@@ -68,8 +82,8 @@ public:
     double* getSpacing();
 
     /// Retorna la ¿bounding box?
-    void getWholeExtent(int extent[6]);
-    int* getWholeExtent();
+    void getExtent(int extent[6]);
+    int* getExtent();
 
     /// Retorna les dimensions del volum
     int* getDimensions();
@@ -178,10 +192,10 @@ public:
     /// En el cas que no tinguem imatges retornarà NotAvailable.
     /// TODO Com que el volum pot estar format per imatges de diferents plans, el pla d'adquisició 
     /// es calcula en base a la primera imatge i prou
-    AnatomicalPlane::AnatomicalPlaneType getAcquisitionPlane() const;
+    AnatomicalPlane getAcquisitionPlane() const;
 
     /// Returns which orthogonal plane of the current volume corresponds to the given anatomical plane
-    OrthogonalPlane getCorrespondingOrthogonalPlane(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane) const;
+    OrthogonalPlane getCorrespondingOrthogonalPlane(const AnatomicalPlane &anatomicalPlane) const;
 
     /// Ens retorna l'índex intern d'imatge corresponent a la llesca i fase indicats
     int getImageIndex(int sliceNumber, int phaseNumber) const;

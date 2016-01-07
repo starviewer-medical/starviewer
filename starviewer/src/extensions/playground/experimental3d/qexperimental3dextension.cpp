@@ -795,9 +795,9 @@ void QExperimental3DExtension::saveImi(QString fileName)
     saveData(fileName, Experimental3DSettings::IntensityMutualInformationDir, tr("IMI"), FileExtensionsDatAll, "dat", m_imi);
 }
 
-const QString QExperimental3DExtension::FileExtensionsDatAll(tr("Data files (*.dat);;All files (*)"));
-const QString QExperimental3DExtension::FileExtensionsTxtAll(tr("Text files (*.txt);;All files (*)"));
-const QString QExperimental3DExtension::FileExtensionsTxtDatAll(tr("Text files (*.txt);;Data files (*.dat);;All files (*)"));
+const QString QExperimental3DExtension::FileExtensionsDatAll(QObject::tr("Data files (*.dat);;All files (*)"));
+const QString QExperimental3DExtension::FileExtensionsTxtAll(QObject::tr("Text files (*.txt);;All files (*)"));
+const QString QExperimental3DExtension::FileExtensionsTxtDatAll(QObject::tr("Text files (*.txt);;Data files (*.dat);;All files (*)"));
 
 template <class T>
 bool QExperimental3DExtension::loadData(QString &fileName, const QString &setting, const QString &name, const QString &extensions, T &data)
@@ -3914,21 +3914,21 @@ void QExperimental3DExtension::getFileNameToSaveTour()
 void QExperimental3DExtension::gaussianFilter()
 {
     vtkImageCast *cast = vtkImageCast::New();
-    cast->SetInput(m_volume->getImage());
+    cast->SetInputData(m_volume->getImage());
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
 #ifndef CUDA_AVAILABLE
     vtkImageGaussianSmooth *gaussian = vtkImageGaussianSmooth::New();
-    gaussian->SetInput(cast->GetOutput());
+    gaussian->SetInputConnection(cast->GetOutputPort());
     gaussian->SetDimensionality(3);
     gaussian->SetRadiusFactor(m_filteringRadiusSpinBox->value());
     gaussian->SetStandardDeviation(1.0);
     gaussian->Update();
 
     vtkImageMathematics *substract = vtkImageMathematics::New();
-    substract->SetInput1(gaussian->GetOutput());
-    substract->SetInput2(cast->GetOutput());
+    substract->SetInput1Data(gaussian->GetOutput());
+    substract->SetInput2Data(cast->GetOutput());
     substract->SetOperationToSubtract();
     substract->Update();
 
@@ -3966,7 +3966,7 @@ void QExperimental3DExtension::gaussianFilter()
 void QExperimental3DExtension::boxMeanFilter()
 {
     vtkImageCast *cast = vtkImageCast::New();
-    cast->SetInput(m_volume->getImage());
+    cast->SetInputData(m_volume->getImage());
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
@@ -3998,7 +3998,7 @@ void QExperimental3DExtension::boxMeanFilter()
 void QExperimental3DExtension::probabilisticAmbientOcclusionGaussianChebychev()
 {
     vtkImageCast *cast = vtkImageCast::New();
-    cast->SetInput(m_volume->getImage());
+    cast->SetInputData(m_volume->getImage());
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
@@ -4029,7 +4029,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionGaussianChebychev()
 void QExperimental3DExtension::probabilisticAmbientOcclusionBoxMeanChebychev()
 {
     vtkImageCast *cast = vtkImageCast::New();
-    cast->SetInput(m_volume->getImage());
+    cast->SetInputData(m_volume->getImage());
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
@@ -4059,7 +4059,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionBoxMeanChebychev()
 void QExperimental3DExtension::probabilisticAmbientOcclusionGaussian()
 {
     vtkImageCast *cast = vtkImageCast::New();
-    cast->SetInput(m_volume->getImage());
+    cast->SetInputData(m_volume->getImage());
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
@@ -4089,7 +4089,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionGaussian()
 void QExperimental3DExtension::probabilisticAmbientOcclusionCube()
 {
     vtkImageCast *cast = vtkImageCast::New();
-    cast->SetInput(m_volume->getImage());
+    cast->SetInputData(m_volume->getImage());
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
@@ -4119,7 +4119,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionCube()
 void QExperimental3DExtension::probabilisticAmbientOcclusionSphere()
 {
     vtkImageCast *cast = vtkImageCast::New();
-    cast->SetInput(m_volume->getImage());
+    cast->SetInputData(m_volume->getImage());
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
@@ -4149,7 +4149,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionSphere()
 void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereVariance()
 {
     vtkImageCast *cast = vtkImageCast::New();
-    cast->SetInput(m_volume->getImage());
+    cast->SetInputData(m_volume->getImage());
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
@@ -4180,7 +4180,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereVarianc
 void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereCdf()
 {
     vtkImageCast *cast = vtkImageCast::New();
-    cast->SetInput(m_volume->getImage());
+    cast->SetInputData(m_volume->getImage());
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
@@ -4210,7 +4210,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereCdf()
 void QExperimental3DExtension::probabilisticAmbientOcclusionTangentSphereGaussian()
 {
     vtkImageCast *cast = vtkImageCast::New();
-    cast->SetInput(m_volume->getImage());
+    cast->SetInputData(m_volume->getImage());
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
@@ -4250,7 +4250,7 @@ void QExperimental3DExtension::probabilisticAmbientOcclusionGradient()
 void QExperimental3DExtension::volumeVariance()
 {
     vtkImageCast *cast = vtkImageCast::New();
-    cast->SetInput(m_volume->getImage());
+    cast->SetInputData(m_volume->getImage());
     cast->SetOutputScalarTypeToFloat();
     cast->Update();
 
@@ -5811,7 +5811,6 @@ void QExperimental3DExtension::createClusterizedVolume()
     }
 
     image->Modified();
-    image->Update();
 
     m_clusterizedVolume = new Experimental3DVolume(image);
 
@@ -6355,7 +6354,6 @@ void QExperimental3DExtension::create2DClusterizedVolume()
     }
 
     image->Modified();
-    image->Update();
 
     m_clusterizedVolume = new Experimental3DVolume(image);
     m_clusterizedVolume->setAlternativeImage(m_volume->getImage());
@@ -6562,7 +6560,6 @@ void QExperimental3DExtension::importanceClustering()
     }
 
     image->Modified();
-    image->Update();
 
     m_clusterizedVolume = new Experimental3DVolume(image);
     m_clusterizedVolume->setAlternativeImage(m_volume->getImage());

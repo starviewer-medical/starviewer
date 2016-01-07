@@ -475,8 +475,7 @@ QSharedPointer<VolumePixelDataIterator> test_VolumePixelDataIterator::createIter
 
     vtkImageData *imageData = vtkImageData::New();
     imageData->SetExtent(0, 3, 0, 3, 0, 3);
-    imageData->SetScalarTypeToUnsignedInt();
-    imageData->AllocateScalars();
+    imageData->AllocateScalars(VTK_UNSIGNED_INT, 1);
     memcpy(imageData->GetScalarPointer(), data, sizeof(data));
     VolumePixelData *volumePixelData = new VolumePixelData(this);
     volumePixelData->setData(imageData);
@@ -518,12 +517,12 @@ void test_VolumePixelDataIterator::setupTestDataForComparisonOperators()
     QTest::addColumn<bool>("lessThanOrEqual");
 
     VolumePixelData volumePixelData;
-    volumePixelData.getVtkData()->SetScalarTypeToChar();
+    volumePixelData.getVtkData()->AllocateScalars(VTK_CHAR, 1);
     QSharedPointer<VolumePixelDataIterator> iteratorNullChar(new VolumePixelDataIterator(&volumePixelData));
-    volumePixelData.getVtkData()->SetScalarTypeToDouble();
+    volumePixelData.getVtkData()->AllocateScalars(VTK_DOUBLE, 1);
     QSharedPointer<VolumePixelDataIterator> iteratorNullDouble(new VolumePixelDataIterator(&volumePixelData));
     volumePixelData.getVtkData()->SetExtent(0, 0, 0, 0, 0, 0);
-    volumePixelData.getVtkData()->AllocateScalars();
+    volumePixelData.getVtkData()->AllocateScalars(VTK_DOUBLE, 1);
     QSharedPointer<VolumePixelDataIterator> iterator000Double(new VolumePixelDataIterator(&volumePixelData));
 
     QTest::newRow("same pointer & different scalar type") << iteratorNullChar << iteratorNullDouble << false << true << false << false << false << false;

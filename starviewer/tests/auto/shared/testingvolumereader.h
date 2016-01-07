@@ -13,7 +13,7 @@ class VolumePixelData;
 
 namespace testing {
 
-/// De moment nomÈs serveix per comprovar si es crida read() o no i per simular que llegeix correctament.
+/// De moment nom√©s serveix per comprovar si es crida read() o no i per simular que llegeix correctament.
 class TestingVolumeReader : public udg::VolumeReader {
 
 public:
@@ -24,12 +24,12 @@ public:
 
 public:
 
-    /// Pixel data que el read() assigna al volum. Si Ès nul no fa l'assignaciÛ.
+    /// Pixel data que el read() assigna al volum. Si √©s nul no fa l'assignaci√≥.
     VolumePixelData *m_readPixelData;
 
 private:
 
-    /// Es posar‡ a cert si es crida read().
+    /// Es posar√† a cert si es crida read().
     bool &m_readHasBeenCalled;
 
 };

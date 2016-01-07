@@ -1,7 +1,21 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 /**
- Observador de widgets per obtenir estadÌstiques
- TODO cal afegir un setting que ens digui si es permeten les estadÌstiques o no
- i en funciÛ del seu valor registrar o no les estadÌstques
+ Observador de widgets per obtenir estad√≠stiques
+ TODO cal afegir un setting que ens digui si es permeten les estad√≠stiques o no
+ i en funci√≥ del seu valor registrar o no les estad√≠stques
 */
 
 #ifndef UDGSTATSWATCHER_H
@@ -23,37 +37,37 @@ public:
     StatsWatcher(const QString &context, QObject *parent = 0);
     ~StatsWatcher();
 
-    /// Comptador de clicks. Per cada click del botÛ ens dir‡ el nom de l'objecte
+    /// Comptador de clicks. Per cada click del bot√≥ ens dir√† el nom de l'objecte
     void addClicksCounter(QAbstractButton *button);
 
-    /// Compta quan una acciÛ s'ha disparat
+    /// Compta quan una acci√≥ s'ha disparat
     // Compta quan es dispara, ja sigui amb un clik o un shortcut
     void addTriggerCounter(QMenu *menu);
 
     /// Registra les accions fetes sobre un slider
     void addSliderObserver(QAbstractSlider *slider);
 
-    /// MËtode per loggejar missatges estadÌstics en el format corresponent
+    /// M√®tode per loggejar missatges estad√≠stics en el format corresponent
     static void log(const QString &message);
 
 private slots:
     /// Registra en el log l'objecte sobre el qual s'ha fet el click
-    /// Es comprova si l'objecte Ès "checkable" (tipus QAbstractButton)
-    /// Segons aixÚ es reguistra un missatge diferent per poder diferenciar
-    /// objectes ˙nicament clickables i objectes que es poden activar o desactivar
+    /// Es comprova si l'objecte √©s "checkable" (tipus QAbstractButton)
+    /// Segons aix√≤ es reguistra un missatge diferent per poder diferenciar
+    /// objectes √∫nicament clickables i objectes que es poden activar o desactivar
     void registerClick(bool checked);
 
-    /// Registra l'activaciÛ (trigger) d'una QAction
+    /// Registra l'activaci√≥ (trigger) d'una QAction
     void registerActionTrigger(QAction *action);
 
-    /// Registra l'acciÛ feta sobre un slider
+    /// Registra l'acci√≥ feta sobre un slider
     void registerSliderAction(int action = 10);
 
 private:
-    /// Afegeix informaciÛ adicional sobre el contexte que estem fent l'observaciÛ
+    /// Afegeix informaci√≥ adicional sobre el contexte que estem fent l'observaci√≥
     QString m_context;
 
-    /// Indica si els logs d'estadÌstiques es registraran o no
+    /// Indica si els logs d'estad√≠stiques es registraran o no
     bool m_registerLogs;
 };
 

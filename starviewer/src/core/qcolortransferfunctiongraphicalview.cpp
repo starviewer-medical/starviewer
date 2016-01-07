@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qcolortransferfunctiongraphicalview.h"
 
 #include "colortransferfunction.h"
@@ -113,7 +127,7 @@ void QColorTransferFunctionGraphicalView::wheelEvent(QWheelEvent *event)
 
     foreach (QGraphicsItem *node, nodes)
     {
-        // Si només fem servir escalats es pot fer així, sinó es pot afegir un segon paràmetre a setTransform
+        // Si nomÃ©s fem servir escalats es pot fer aixÃ­, sinÃ³ es pot afegir un segon parÃ metre a setTransform
         node->setTransform(QTransform::fromScale(antiScale, 1.0));
     }
 }
@@ -146,7 +160,7 @@ void QColorTransferFunctionGraphicalView::addNode(double x)
         node->setX(x);
         node->setToolTip(QString("%1").arg(x));
         node->setColor(color);
-        // Si només fem servir escalats es pot fer així, sinó es pot afegir un segon paràmetre a setTransform
+        // Si nomÃ©s fem servir escalats es pot fer aixÃ­, sinÃ³ es pot afegir un segon parÃ metre a setTransform
         node->setTransform(QTransform::fromScale(1.0 / m_zoom, 1.0));
         scene()->addItem(node);
         updateBackground();
@@ -156,8 +170,8 @@ void QColorTransferFunctionGraphicalView::addNode(double x)
 
 void QColorTransferFunctionGraphicalView::removeNode(double x)
 {
-    // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
-    QGraphicsItem *item = scene()->itemAt(x, 0.0);
+    // TODO: es podria refinar agafant tots els que siguin aquÃ­ i triant el mÃ©s proper a x
+    QGraphicsItem *item = scene()->itemAt(x, 0.0, QTransform());
 
     if (item)
     {
@@ -176,7 +190,7 @@ void QColorTransferFunctionGraphicalView::beginMoveNodes()
     {
         QColorTransferFunctionGraphicalViewNode *node = dynamic_cast<QColorTransferFunctionGraphicalViewNode*>(item);
         node->storeOldX();
-        // Amb això fem que a updateBackground() els tinguem en l'ordre que ens interessa (els que s'estan movent seran els últims)
+        // Amb aixÃ² fem que a updateBackground() els tinguem en l'ordre que ens interessa (els que s'estan movent seran els Ãºltims)
         node->setZValue(-1.0);
     }
 }
@@ -212,14 +226,14 @@ void QColorTransferFunctionGraphicalView::endMoveNodes()
         emit nodesMoved(origins, offset);
     }
 
-    // Potser s'hauria de fer un m_scene->setSceneRect(...) aquí, per ajustar el tros visible
-    // o potser seria millor posar una manera de fer-ho manualment, per començar
+    // Potser s'hauria de fer un m_scene->setSceneRect(...) aquÃ­, per ajustar el tros visible
+    // o potser seria millor posar una manera de fer-ho manualment, per comenÃ§ar
 }
 
 void QColorTransferFunctionGraphicalView::changeNodeColor(double x)
 {
-    // TODO: es podria refinar agafant tots els que siguin aquí i triant el més proper a x
-    QGraphicsItem *item = scene()->itemAt(x, 0.0);
+    // TODO: es podria refinar agafant tots els que siguin aquÃ­ i triant el mÃ©s proper a x
+    QGraphicsItem *item = scene()->itemAt(x, 0.0, QTransform());
 
     if (item)
     {

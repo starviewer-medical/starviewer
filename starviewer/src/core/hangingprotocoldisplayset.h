@@ -1,19 +1,33 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGHANGINGPROTOCOLDISPLAYSET_H
 #define UDGHANGINGPROTOCOLDISPLAYSET_H
 
-#include <QObject>
-
 #include "patientorientation.h"
+
+class QRectF;
 
 namespace udg {
 
 class HangingProtocol;
 class HangingProtocolImageSet;
 
-class HangingProtocolDisplaySet : public QObject {
-Q_OBJECT
+class HangingProtocolDisplaySet {
+
 public:
-    HangingProtocolDisplaySet(QObject *parent = 0);
+    HangingProtocolDisplaySet();
 
     ~HangingProtocolDisplaySet();
 
@@ -55,6 +69,9 @@ public:
 
     /// Obtenir la posició del visualitzador
     QString getPosition() const;
+
+    /// Return geometry of the display set as QRectF
+    QRectF getGeometry() const;
 
     /// Obtenir la posició del pacient
     PatientOrientation getPatientOrientation() const;

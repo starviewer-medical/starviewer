@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qenhancedmenutoolbutton.h"
 
 #include <QMenu>
@@ -29,6 +43,7 @@ void alignRight(QPoint &menuPoint, const QEnhancedMenuToolButton *button)
 QEnhancedMenuToolButton::QEnhancedMenuToolButton(QWidget *parent)
  : QToolButton(parent), m_menu(0), m_menuPosition(Below), m_menuAlignment(AlignLeft)
 {
+    connectButtonToMenu();
 }
 
 QEnhancedMenuToolButton::~QEnhancedMenuToolButton()
@@ -43,7 +58,6 @@ QMenu* QEnhancedMenuToolButton::menu() const
 void QEnhancedMenuToolButton::setMenu(QMenu *menu)
 {
     m_menu = menu;
-    connect(this, SIGNAL(pressed()), this, SLOT(showMenu()), Qt::UniqueConnection);
 }
 
 void QEnhancedMenuToolButton::setMenuPosition(MenuPosition position)
@@ -89,8 +103,19 @@ void QEnhancedMenuToolButton::showMenu()
             break;
     }
 
+    // Remove the connection so that the menu is closed on the next click
+    disconnect(this, SIGNAL(pressed()), this, SLOT(showMenu()));
+
     menu()->exec(menuPoint);
     this->setDown(false);
+
+    // Create the connection again on the next event loop iteration (not immediately)
+    QMetaObject::invokeMethod(this, "connectButtonToMenu", Qt::QueuedConnection);
+}
+
+void QEnhancedMenuToolButton::connectButtonToMenu()
+{
+    connect(this, SIGNAL(pressed()), SLOT(showMenu()));
 }
 
 }

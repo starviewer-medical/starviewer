@@ -210,7 +210,7 @@ void test_MathTools::roundToNearestInteger_ShouldReturnRoundedValue_data()
     QTest::newRow("positive < .5") << 92.22 << 92;
     QTest::newRow("negative > .5") << -15.99 << -16;
     QTest::newRow("positive > .5") << 34.57 << 35;
-    // Quan és .5 s'han de comprovar diferents casos (http://en.wikipedia.org/wiki/IEEE_floating_point#Roundings_to_nearest)
+    // Quan Ã©s .5 s'han de comprovar diferents casos (http://en.wikipedia.org/wiki/IEEE_floating_point#Roundings_to_nearest)
     QTest::newRow("negative odd .5") << -23.5 << -24;
     QTest::newRow("negative even .5") << -22.5 << -23;
     QTest::newRow("positive odd .5") << 23.5 << 24;
@@ -1150,7 +1150,7 @@ void test_MathTools::copySign_ShouldReturnZeroWithExpectedSign()
     QFETCH(double, sign);
     QFETCH(double, zeroWithExpectedSign);
 
-    // Hem de distingir +0 de -0. Una de les maneres, d'acord amb la Wikipedia (http://en.wikipedia.org/wiki/Signed_zero#Comparisons) és comprovar el el patró
+    // Hem de distingir +0 de -0. Una de les maneres, d'acord amb la Wikipedia (http://en.wikipedia.org/wiki/Signed_zero#Comparisons) Ã©s comprovar el el patrÃ³
     // de bits. Per tant, agafem punters a les dues variables i comparem que siguin exactament els mateixos bits.
     double zero = MathTools::copySign(inputZero, sign);
     void *pZero = &zero;
@@ -1208,11 +1208,11 @@ void test_MathTools::copySign_ShouldReturnNaNWithExpectedSign()
     double NaN = MathTools::copySign(inputNaN, sign);
     QVERIFY2(MathTools::isNaN(NaN), qPrintable(QString("actual: %1, expected: nan").arg(NaN)));
 
-    // Hem de distingir +NaN de -NaN. Aquest cop no podem comparar tot el patró de bits com amb els zeros, perquè hi ha bits que poden tenir diferents valors
-    // que representen NaN (http://en.wikipedia.org/wiki/NaN). El que sí podem fer és comprovar el bit més significatiu, el de més a l'esquerra, que és el del
-    // signe. Si el bit és zero vol dir positiu, i si és 1 vol dir negatiu (http://en.wikipedia.org/wiki/Sign_bit). Per fer-ho, llegim aquest float com si fos
-    // un unsigned long long per crear un bitset. D'aquest bitset n'hem de consultar l'últim bit, perquè estan ordenats de dreta a esquerra. Abans de tot
-    // comprovem que el format dels doubles sigui IEC 559 / IEEE 754. Sinó, tota la resta no té sentit.
+    // Hem de distingir +NaN de -NaN. Aquest cop no podem comparar tot el patrÃ³ de bits com amb els zeros, perquÃ¨ hi ha bits que poden tenir diferents valors
+    // que representen NaN (http://en.wikipedia.org/wiki/NaN). El que sÃ­ podem fer Ã©s comprovar el bit mÃ©s significatiu, el de mÃ©s a l'esquerra, que Ã©s el del
+    // signe. Si el bit Ã©s zero vol dir positiu, i si Ã©s 1 vol dir negatiu (http://en.wikipedia.org/wiki/Sign_bit). Per fer-ho, llegim aquest float com si fos
+    // un unsigned long long per crear un bitset. D'aquest bitset n'hem de consultar l'Ãºltim bit, perquÃ¨ estan ordenats de dreta a esquerra. Abans de tot
+    // comprovem que el format dels doubles sigui IEC 559 / IEEE 754. SinÃ³, tota la resta no tÃ© sentit.
     QVERIFY(std::numeric_limits<double>::is_iec559);
     unsigned long long *pNaN = reinterpret_cast<unsigned long long*>(&NaN);
     std::bitset<8*sizeof(unsigned long long)> fNaNBits(*pNaN);
@@ -1266,14 +1266,14 @@ void test_MathTools::setupComputeAngleOfAVectorData()
     QTest::addColumn<QVector2D>("vector");
     QTest::addColumn<double>("angleInRadians");
 
-    QTest::newRow("-X-Y / -3pi/4 rad / -135º") << QVector2D(-1.0, -1.0) << -3.0 * MathTools::PiNumber / 4.0;
-    QTest::newRow("-Y / -pi/2 rad / -90º") << QVector2D(0.0, -1.0) << -MathTools::PiNumber / 2.0;
-    QTest::newRow("+X-Y / -pi/4 rad / -45º") << QVector2D(1.0, -1.0) << -MathTools::PiNumber / 4.0;
-    QTest::newRow("+X / 0 rad / 0º") << QVector2D(1.0, 0.0) << 0.0;
-    QTest::newRow("+X+Y / pi/4 rad / 45º") << QVector2D(1.0, 1.0) << MathTools::PiNumber / 4.0;
-    QTest::newRow("+Y / pi/2 rad / 90º") << QVector2D(0.0, 1.0) << MathTools::PiNumber / 2.0;
-    QTest::newRow("-X+Y / 3pi/4 rad / 135º") << QVector2D(-1.0, 1.0) << 3.0 * MathTools::PiNumber / 4.0;
-    QTest::newRow("-X / pi rad / 180º") << QVector2D(-1.0, 0.0) << MathTools::PiNumber;
+    QTest::newRow("-X-Y / -3pi/4 rad / -135Âº") << QVector2D(-1.0, -1.0) << -3.0 * MathTools::PiNumber / 4.0;
+    QTest::newRow("-Y / -pi/2 rad / -90Âº") << QVector2D(0.0, -1.0) << -MathTools::PiNumber / 2.0;
+    QTest::newRow("+X-Y / -pi/4 rad / -45Âº") << QVector2D(1.0, -1.0) << -MathTools::PiNumber / 4.0;
+    QTest::newRow("+X / 0 rad / 0Âº") << QVector2D(1.0, 0.0) << 0.0;
+    QTest::newRow("+X+Y / pi/4 rad / 45Âº") << QVector2D(1.0, 1.0) << MathTools::PiNumber / 4.0;
+    QTest::newRow("+Y / pi/2 rad / 90Âº") << QVector2D(0.0, 1.0) << MathTools::PiNumber / 2.0;
+    QTest::newRow("-X+Y / 3pi/4 rad / 135Âº") << QVector2D(-1.0, 1.0) << 3.0 * MathTools::PiNumber / 4.0;
+    QTest::newRow("-X / pi rad / 180Âº") << QVector2D(-1.0, 0.0) << MathTools::PiNumber;
 
     QTest::newRow("random Q1") << QVector2D(1.1, 4.0) << 1.30243;
     QTest::newRow("random Q2") << QVector2D(-9.7, 4.2) << 2.73297;
@@ -1308,44 +1308,44 @@ void test_MathTools::setupComputeAngleBetweenTwoVectorsData()
     QTest::newRow("Two equal non-zero-valued vectors (-Y, -Y)") << yMinusVector << yMinusVector << 0.0;
     QTest::newRow("Two equal non-zero-valued vectors (-Z, -Z)") << zMinusVector << zMinusVector << 0.0;
     
-    QTest::newRow("X Y vectors (90º)") << xVector << QVector3D(0, 1, 0) << 1.5708;
-    QTest::newRow("X -Y vectors (90º)") << xVector << QVector3D(0, -1, 0) << 1.5708;
-    QTest::newRow("-X Y vectors (90º)") << xMinusVector << QVector3D(0, 1, 0) << 1.5708;
-    QTest::newRow("-X -Y vectors (90º)") << xMinusVector << QVector3D(0, -1, 0) << 1.5708;
+    QTest::newRow("X Y vectors (90Âº)") << xVector << QVector3D(0, 1, 0) << 1.5708;
+    QTest::newRow("X -Y vectors (90Âº)") << xVector << QVector3D(0, -1, 0) << 1.5708;
+    QTest::newRow("-X Y vectors (90Âº)") << xMinusVector << QVector3D(0, 1, 0) << 1.5708;
+    QTest::newRow("-X -Y vectors (90Âº)") << xMinusVector << QVector3D(0, -1, 0) << 1.5708;
 
-    QTest::newRow("X Z vectors (90º)") << xVector << zVector << 1.5708;
-    QTest::newRow("X -Z vectors (90º)") << xVector << zMinusVector << 1.5708;
-    QTest::newRow("-X Z vectors (90º)") << xMinusVector << zVector << 1.5708;
-    QTest::newRow("-X -Z vectors (90º)") << xMinusVector << zMinusVector << 1.5708;
+    QTest::newRow("X Z vectors (90Âº)") << xVector << zVector << 1.5708;
+    QTest::newRow("X -Z vectors (90Âº)") << xVector << zMinusVector << 1.5708;
+    QTest::newRow("-X Z vectors (90Âº)") << xMinusVector << zVector << 1.5708;
+    QTest::newRow("-X -Z vectors (90Âº)") << xMinusVector << zMinusVector << 1.5708;
 
-    QTest::newRow("Y Z vectors (90º)") << yVector << zVector << 1.5708;
-    QTest::newRow("Y -Z vectors (90º)") << yVector << zMinusVector << 1.5708;
-    QTest::newRow("-Y Z vectors (90º)") << yMinusVector << zVector << 1.5708;
-    QTest::newRow("-Y -Z vectors (90º)") << yMinusVector << zMinusVector << 1.5708;
+    QTest::newRow("Y Z vectors (90Âº)") << yVector << zVector << 1.5708;
+    QTest::newRow("Y -Z vectors (90Âº)") << yVector << zMinusVector << 1.5708;
+    QTest::newRow("-Y Z vectors (90Âº)") << yMinusVector << zVector << 1.5708;
+    QTest::newRow("-Y -Z vectors (90Âº)") << yMinusVector << zMinusVector << 1.5708;
 
-    QTest::newRow("-XY Z vectors (90º)") << xMinusYVector << zVector << 1.5708;
-    QTest::newRow("Z -XY vectors (90º)") << zVector << xMinusYVector << 1.5708;
-    QTest::newRow("XY Z vectors (90º)") << xyVector << zVector << 1.5708;
-    QTest::newRow("Z XY vectors (90º)") << zVector << xyVector << 1.5708;
+    QTest::newRow("-XY Z vectors (90Âº)") << xMinusYVector << zVector << 1.5708;
+    QTest::newRow("Z -XY vectors (90Âº)") << zVector << xMinusYVector << 1.5708;
+    QTest::newRow("XY Z vectors (90Âº)") << xyVector << zVector << 1.5708;
+    QTest::newRow("Z XY vectors (90Âº)") << zVector << xyVector << 1.5708;
 
-    QTest::newRow("X -X vectors (180º)") << xVector << xMinusVector << 3.1416;
-    QTest::newRow("-X X vectors (180º)") << xMinusVector << xVector << 3.1416;
-    QTest::newRow("Y -Y vectors (180º)") << yVector << yMinusVector << 3.1416;
-    QTest::newRow("-Y Y vectors (180º)") << yMinusVector << yVector << 3.1416;
-    QTest::newRow("Z -Z vectors (180º)") << zVector << zMinusVector << 3.1416;
-    QTest::newRow("-Z Z vectors (180º)") << zMinusVector << zVector << 3.1416;
+    QTest::newRow("X -X vectors (180Âº)") << xVector << xMinusVector << 3.1416;
+    QTest::newRow("-X X vectors (180Âº)") << xMinusVector << xVector << 3.1416;
+    QTest::newRow("Y -Y vectors (180Âº)") << yVector << yMinusVector << 3.1416;
+    QTest::newRow("-Y Y vectors (180Âº)") << yMinusVector << yVector << 3.1416;
+    QTest::newRow("Z -Z vectors (180Âº)") << zVector << zMinusVector << 3.1416;
+    QTest::newRow("-Z Z vectors (180Âº)") << zMinusVector << zVector << 3.1416;
 
-    QTest::newRow("-XY Y vectors (45º)") << xMinusYVector << yVector << 0.7854;
-    QTest::newRow("Y -XY vectors (45º)") << yVector << xMinusYVector << 0.7854;
-    QTest::newRow("XY X vectors (45º)") << xyVector << xVector << 0.7854;
-    QTest::newRow("X XY vectors (45º)") << xVector << xyVector << 0.7854;
+    QTest::newRow("-XY Y vectors (45Âº)") << xMinusYVector << yVector << 0.7854;
+    QTest::newRow("Y -XY vectors (45Âº)") << yVector << xMinusYVector << 0.7854;
+    QTest::newRow("XY X vectors (45Âº)") << xyVector << xVector << 0.7854;
+    QTest::newRow("X XY vectors (45Âº)") << xVector << xyVector << 0.7854;
     
-    QTest::newRow("-XY -Y vectors (135º)") << xMinusYVector << yMinusVector << 2.3562;
-    QTest::newRow("-Y -XY vectors (135º)") << yMinusVector << xMinusYVector << 2.3562;
-    QTest::newRow("-XY X vectors (135º)") << xMinusYVector << xVector << 2.3562;
-    QTest::newRow("X -XY vectors (135º)") << xVector << xMinusYVector << 2.3562;
+    QTest::newRow("-XY -Y vectors (135Âº)") << xMinusYVector << yMinusVector << 2.3562;
+    QTest::newRow("-Y -XY vectors (135Âº)") << yMinusVector << xMinusYVector << 2.3562;
+    QTest::newRow("-XY X vectors (135Âº)") << xMinusYVector << xVector << 2.3562;
+    QTest::newRow("X -XY vectors (135Âº)") << xVector << xMinusYVector << 2.3562;
 
-    QTest::newRow("Two random vectors (73.9º)") << QVector3D(7.2, 1.0, -2) << QVector3D(0.3, 0.0003, -24.3) << 1.29007;
+    QTest::newRow("Two random vectors (73.9Âº)") << QVector3D(7.2, 1.0, -2) << QVector3D(0.3, 0.0003, -24.3) << 1.29007;
 }
 
 void test_MathTools::setupComputeAngleBetweenTwoVectorsNaNData()

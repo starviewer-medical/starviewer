@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qmprextension.h"
 
 #include "drawer.h"
@@ -13,7 +27,7 @@
 #include "toolmanager.h"
 #include "toolproxy.h"
 #include "volume.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 // Qt
 #include <QMessageBox>
 #include <QMenu>
@@ -47,10 +61,10 @@ QMPRExtension::QMPRExtension(QWidget *parent)
     createActors();
     readSettings();
     // Ajustaments de window level pel combo box
-    m_windowLevelComboBox->setPresetsData(m_axial2DView->getWindowLevelData());
-    m_sagital2DView->setWindowLevelData(m_axial2DView->getWindowLevelData());
-    m_coronal2DView->setWindowLevelData(m_axial2DView->getWindowLevelData());
-    m_windowLevelComboBox->selectPreset(m_axial2DView->getWindowLevelData()->getCurrentPresetName());
+    m_voiLutComboBox->setPresetsData(m_axial2DView->getVoiLutData());
+    m_sagital2DView->setVoiLutData(m_axial2DView->getVoiLutData());
+    m_coronal2DView->setVoiLutData(m_axial2DView->getVoiLutData());
+    m_voiLutComboBox->selectPreset(m_axial2DView->getVoiLutData()->getCurrentPresetName());
 
     initializeTools();
 
@@ -66,7 +80,7 @@ QMPRExtension::QMPRExtension(QWidget *parent)
 
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
     m_viewerInformationToolButton->setToolTip(tr("Show/Hide viewer's textual information"));
-    m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
+    m_voiLutComboBox->setToolTip(tr("Choose a VOI LUT preset"));
 }
 
 QMPRExtension::~QMPRExtension()
@@ -140,8 +154,8 @@ void QMPRExtension::init()
     m_coronalReslice = 0;
 
     // Configurem les annotacions que volem veure
-    m_sagital2DView->removeAnnotation(PatientOrientationAnnotation | PatientInformationAnnotation | SliceAnnotation);
-    m_coronal2DView->removeAnnotation(PatientOrientationAnnotation | PatientInformationAnnotation | SliceAnnotation);
+    m_sagital2DView->removeAnnotation(PatientOrientationAnnotation | MainInformationAnnotation | SliceAnnotation);
+    m_coronal2DView->removeAnnotation(PatientOrientationAnnotation | MainInformationAnnotation | SliceAnnotation);
     showViewerInformation(m_viewerInformationToolButton->isChecked());
 
     m_sagital2DView->disableContextMenu();
@@ -260,7 +274,7 @@ void QMPRExtension::initializeTools()
     m_screenShotToolButton->setToolTip(m_toolManager->getRegisteredToolAction("ScreenShotTool")->toolTip());
     
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
-    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("VoiLutPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SlicingWheelTool");
 
@@ -272,7 +286,7 @@ void QMPRExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "WindowLevelPresetsTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool" << "ScreenShotTool" << "SlicingKeyboardTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool" << "ScreenShotTool" << "SlicingKeyboardTool";
     m_toolManager->triggerTools(defaultTools);
 
     // Registrem al manager les tools que van als diferents viewers
@@ -450,10 +464,9 @@ void QMPRExtension::showScreenshotsExporterDialog()
 
 void QMPRExtension::showViewerInformation(bool show)
 {
-    m_axial2DView->enableAnnotation(WindowInformationAnnotation | PatientOrientationAnnotation | SliceAnnotation | PatientInformationAnnotation |
-                                    AcquisitionInformationAnnotation, show);
-    m_sagital2DView->enableAnnotation(WindowInformationAnnotation | AcquisitionInformationAnnotation, show);
-    m_coronal2DView->enableAnnotation(WindowInformationAnnotation | AcquisitionInformationAnnotation, show);
+    m_axial2DView->enableAnnotation(VoiLutAnnotation | PatientOrientationAnnotation | SliceAnnotation | MainInformationAnnotation, show);
+    m_sagital2DView->enableAnnotation(VoiLutAnnotation, show);
+    m_coronal2DView->enableAnnotation(VoiLutAnnotation, show);
 }
 
 void QMPRExtension::updateProjectionLabel()
@@ -986,7 +999,7 @@ void QMPRExtension::setInput(Volume *input)
     }
 
     vtkImageChangeInformation *changeInfo = vtkImageChangeInformation::New();
-    changeInfo->SetInput(input->getVtkData());
+    changeInfo->SetInputData(input->getVtkData());
     changeInfo->SetOutputOrigin(.0, .0, .0);
     changeInfo->Update();
 
@@ -1012,7 +1025,7 @@ void QMPRExtension::setInput(Volume *input)
     // Perquè l'extent d'output sigui suficient i no es "mengi" dades
     m_sagitalReslice->AutoCropOutputOn();
     m_sagitalReslice->SetInterpolationModeToCubic();
-    m_sagitalReslice->SetInput(m_volume->getVtkData());
+    m_sagitalReslice->SetInputData(m_volume->getVtkData());
 
     if (m_coronalReslice)
     {
@@ -1021,7 +1034,7 @@ void QMPRExtension::setInput(Volume *input)
     m_coronalReslice = vtkImageReslice::New();
     m_coronalReslice->AutoCropOutputOn();
     m_coronalReslice->SetInterpolationModeToCubic();
-    m_coronalReslice->SetInput(m_volume->getVtkData());
+    m_coronalReslice->SetInputData(m_volume->getVtkData());
 
     // Faltaria refrescar l'input dels 3 mpr
     // HACK To make universal scrolling work properly. Issue #2019. We have to disconnect and reconnect the signal to avoid infinite loops
@@ -1029,7 +1042,7 @@ void QMPRExtension::setInput(Volume *input)
     m_axial2DView->setInput(m_volume);
     connect(m_axial2DView, SIGNAL(volumeChanged(Volume*)), SLOT(setInput(Volume*)));
     int extent[6];
-    m_volume->getWholeExtent(extent);
+    m_volume->getExtent(extent);
     m_axialSlider->setMaximum(extent[5]);
 
     double maxThickSlab = sqrt((m_axialSpacing[0] * extent[1]) * (m_axialSpacing[0] * extent[1]) + (m_axialSpacing[1] * extent[3]) *
@@ -1074,7 +1087,7 @@ void QMPRExtension::initOrientation()
     // En la vista coronal, com que pot tenir qualsevol orientacio tindrà que adaptar els seus extents als màxims
 
     int extent[6];
-    m_volume->getWholeExtent(extent);
+    m_volume->getExtent(extent);
     int extentLength[3] = { extent[1] - extent[0] + 1, extent[3] - extent[2] + 1, extent[5] - extent[4] + 1 };
     double origin[3];
     m_volume->getOrigin(origin);
@@ -1460,7 +1473,7 @@ void QMPRExtension::updatePlane(vtkPlaneSource *planeSource, vtkImageReslice *re
         m_volume->getOrigin(origin);
 
         int extent[6];
-        m_volume->getWholeExtent(extent);
+        m_volume->getExtent(extent);
 
         // L'ordre de les dades és xmin, xmax, ymin, ymax, zmin i zmax
         double bounds[] = { origin[0] + spacing[0] * extent[0],

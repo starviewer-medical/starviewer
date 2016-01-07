@@ -1,4 +1,20 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "applicationstylehelper.h"
+
+#include <cmath>
 
 #include <QDesktopWidget>
 #include <QApplication>
@@ -56,6 +72,12 @@ void ApplicationStyleHelper::setScaledSizeTo(QMovie *movie) const
     movie->setScaledSize(image.size() * m_scaleFactor);
 }
 
+void ApplicationStyleHelper::setScaledSizeToRadioButtons(QWidget *widget) const
+{
+    int fontSize = this->getScaledFontSize(QApplication::font().pointSizeF(), CoreSettings::ScaledUserInterfaceFontSize);
+    widget->setStyleSheet(QString("QRadioButton::indicator {font-size: %1pt; margin: 0.35em 0;  width: 0.98em; height: 0.98em; image: none; border-radius: 0.62em; border: 0.12em solid; background-color: #FAFAFA;  border-color:#777;} QRadioButton::indicator::checked { background-color:qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0.609 #36a3d9, stop:0.7 white, stop:1 white)}").arg(fontSize));
+}
+
 void ApplicationStyleHelper::setScaledFontSizeTo(QWidget *widget) const
 {
     // Al ser text de Qt, agafem el tamany de font del sistema com a predeterminat
@@ -66,10 +88,9 @@ void ApplicationStyleHelper::setScaledFontSizeTo(QWidget *widget) const
 
 void ApplicationStyleHelper::setScaledFontSizeTo(QTreeWidget *treeWidget) const
 {
-    QFont font = treeWidget->font();
-    int fontSize = this->getScaledFontSize(font.pointSizeF(), CoreSettings::ScaledUserInterfaceFontSize);
-    font.setPointSize(fontSize);
-    treeWidget->setFont(font);
+    int fontSize = this->getScaledFontSize(std::ceil(QApplication::font().pointSizeF()), CoreSettings::ScaledUserInterfaceFontSize);
+    QString changeFontSize = QString("QTreeView { font-size: %1pt } QHeaderView { font-size: %1pt }").arg(fontSize);
+    treeWidget->setStyleSheet(changeFontSize);
 }
 
 int ApplicationStyleHelper::getScaledFontSize(double defaultFontSize, const QString &settingsBackdoorKey) const

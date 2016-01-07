@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "patientfillerinput.h"
 #include "logging.h"
 #include "patient.h"
@@ -198,17 +212,27 @@ void PatientFillerInput::increaseCurrentMultiframeVolumeNumber()
     }
 }
 
-int PatientFillerInput::getCurrentMultiframeVolumeNumber() const
+int PatientFillerInput::getCurrentMultiframeVolumeNumber()
 {
     if (m_currentSeries)
     {
-        // Si no existeix en el hash retorna el número per defecte
-        return m_currentMultiframeVolumeNumber.value(m_currentSeries, 1);
+        // Insert default value if it doesn't exist
+        if (!m_currentMultiframeVolumeNumber.contains(m_currentSeries))
+        {
+            m_currentMultiframeVolumeNumber[m_currentSeries] = 1;
+        }
+
+        return m_currentMultiframeVolumeNumber[m_currentSeries];
     }
     else
     {
         return -1;
     }
+}
+
+bool PatientFillerInput::currentSeriesContainsAMultiframeVolume() const
+{
+    return m_currentMultiframeVolumeNumber.contains(m_currentSeries);
 }
 
 void PatientFillerInput::increaseCurrentSingleFrameVolumeNumber()
@@ -219,12 +243,17 @@ void PatientFillerInput::increaseCurrentSingleFrameVolumeNumber()
     }
 }
 
-int PatientFillerInput::getCurrentSingleFrameVolumeNumber() const
+int PatientFillerInput::getCurrentSingleFrameVolumeNumber()
 {
     if (m_currentSeries)
     {
-        // Si no existeix en el hash retorna el número per defecte
-        return m_currentSingleFrameVolumeNumber.value(m_currentSeries, 100);
+        // Insert default value if it doesn't exist
+        if (!m_currentSingleFrameVolumeNumber.contains(m_currentSeries))
+        {
+            m_currentSingleFrameVolumeNumber[m_currentSeries] = 100;
+        }
+
+        return m_currentSingleFrameVolumeNumber[m_currentSeries];
     }
     else
     {

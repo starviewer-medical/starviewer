@@ -97,7 +97,8 @@ HEADERS += databaseconnection.h \
     localdatabasepacsretrievedimagesdal.h \
     cachetest.h \
     usermessage.h \
-    portinusebyanotherapplication.h
+    portinusebyanotherapplication.h \
+    localdatabasevoilutdal.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsconnection.cpp \
@@ -171,7 +172,8 @@ SOURCES += databaseconnection.cpp \
     localdatabasepacsretrievedimagesdal.cpp \
     cachetest.cpp \
     usermessage.cpp \
-    portinusebyanotherapplication.cpp
+    portinusebyanotherapplication.cpp \
+    localdatabasevoilutdal.cpp
 win32 {
     HEADERS += windowsportinusebyanotherapplication.h
     SOURCES += windowsportinusebyanotherapplication.cpp
@@ -181,13 +183,14 @@ DEPENDPATH += ../core
 TEMPLATE = lib
 DESTDIR = ./
 CONFIG += staticlib
-include(../corelibsconfiguration.inc)
-include(../vtk.inc)
-include(../gdcm.inc)
-include(../itk.inc)
-include(../dcmtk.inc)
-include(../log4cxx.inc)
-include(../compilationtype.inc)
-include(../threadweaver.inc)
+include(../corelibsconfiguration.pri)
+include(../vtk.pri)
+include(../gdcm.pri)
+include(../itk.pri)
+include(../dcmtk.pri)
+include(../log4cxx.pri)
+include(../compilationtype.pri)
+include(../threadweaver.pri)
 QT += xml \
-    network
+    network \
+    widgets

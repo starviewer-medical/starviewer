@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ca">
+<TS version="2.1" language="ca">
 <context>
     <name>QObject</name>
     <message>
         <location filename="qrectumsegmentationextension.cpp" line="259"/>
-        <location filename="rectumSegmentationMethod.cpp" line="112"/>
+        <location filename="rectumSegmentationMethod.cpp" line="110"/>
         <source>Starviewer</source>
         <translation></translation>
     </message>
@@ -15,7 +15,7 @@
         <translation>ROI indefinida</translation>
     </message>
     <message>
-        <location filename="rectumSegmentationMethod.cpp" line="112"/>
+        <location filename="rectumSegmentationMethod.cpp" line="110"/>
         <source>No definite ROI</source>
         <translation>No hi ha ROI definida</translation>
     </message>

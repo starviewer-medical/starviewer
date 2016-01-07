@@ -1,23 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="ExploreCT">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol name="ExploreCT" version="2">
     <hangingProtocolName>Explore</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <protocol>CT</protocol>
     <priority>0</priority>
     <restriction identifier="1">
-        <usageFlag>NO_MATCH</usageFlag>
         <selectorAttribute>ImageType</selectorAttribute>
-        <valueRepresentation>LOCALIZER</valueRepresentation>
+        <selectorValue>LOCALIZER</selectorValue>
     </restriction>
     <restriction identifier="2">
-        <usageFlag>MATCH</usageFlag>
         <selectorAttribute>MinimumNumberOfImages</selectorAttribute>
-        <valueRepresentation>9</valueRepresentation>
+        <selectorValue>9</selectorValue>
     </restriction>
     <imageSet identifier="1">
-        <restriction>1</restriction>
-        <restriction>2</restriction>
         <type>image</type>
+        <restrictionExpression>not 1 and 2</restrictionExpression>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>

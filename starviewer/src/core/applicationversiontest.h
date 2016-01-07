@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGAPPLICATIONVERSIONTEST_H
 #define UDGAPPLICATIONVERSIONTEST_H
 
@@ -16,11 +30,11 @@ public:
     ApplicationVersionTest(QObject *parent = 0);
     /// Destructor
     ~ApplicationVersionTest();
-    /// MËtode implementat de la interfÌcie DiagnosisTest.
-    /// DiagnosisTestResult valdr‡ OK quan l'aplicaciÛ estigui actualitzada, Warning si hi ha alguna actualitzaciÛ disponible,
+    /// M√®tode implementat de la interf√≠cie DiagnosisTest.
+    /// DiagnosisTestResult valdr√† OK quan l'aplicaci√≥ estigui actualitzada, Warning si hi ha alguna actualitzaci√≥ disponible,
     /// i Error si hi ha hagut algun error.
     DiagnosisTestResult run();
-    /// Retorna la descripciÛ del test
+    /// Retorna la descripci√≥ del test
     QString getDescription();
 
 signals:

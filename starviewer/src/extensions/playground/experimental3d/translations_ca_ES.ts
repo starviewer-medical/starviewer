@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.1">
 <context>
     <name>QExperimental3DExtensionBase</name>
     <message>
@@ -381,7 +381,7 @@
         <source>White</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="420"/>
         <location filename="qexperimental3dextensionbase.ui" line="914"/>
         <source>I₁</source>
@@ -394,13 +394,13 @@
         <source>buttonGroup_4</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="433"/>
         <location filename="qexperimental3dextensionbase.ui" line="927"/>
         <source>I₂</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="446"/>
         <location filename="qexperimental3dextensionbase.ui" line="940"/>
         <source>I₃</source>
@@ -522,7 +522,7 @@
         <source>High factor</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="1391"/>
         <source>λ</source>
         <translation type="unfinished"></translation>
@@ -532,7 +532,7 @@
         <source>Probabilistic AO (PAO)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="1431"/>
         <source>γ</source>
         <translation type="unfinished"></translation>
@@ -792,32 +792,32 @@
         <source>H(Z|V)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="2575"/>
         <source>VMI I₁(v;Z)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="2609"/>
         <source>VMI2 I₂(v;Z)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="2643"/>
         <source>VMI3 I₃(v;Z)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="2745"/>
         <source>VoMI I₁(z;V)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="2779"/>
         <source>VoMI2 I₂(z;V)</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="2813"/>
         <source>VoMI3 I₃(z;V)</source>
         <translation type="unfinished"></translation>
@@ -1030,12 +1030,12 @@
         <source> iteration/s</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="4010"/>
         <source>Δ1</source>
         <translation type="unfinished"></translation>
     </message>
-    <message utf8="true">
+    <message>
         <location filename="qexperimental3dextensionbase.ui" line="4033"/>
         <source>Δ2</source>
         <translation type="unfinished"></translation>
@@ -1314,6 +1314,24 @@
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="qexperimental3dextension.cpp" line="798"/>
+        <source>Data files (*.dat);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexperimental3dextension.cpp" line="799"/>
+        <source>Text files (*.txt);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexperimental3dextension.cpp" line="800"/>
+        <source>Text files (*.txt);;Data files (*.dat);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QViewpointDistributionWidgetBase</name>
     <message>
         <location filename="qviewpointdistributionwidgetbase.ui" line="19"/>
@@ -1363,24 +1381,6 @@
     <message>
         <location filename="qviewpointdistributionwidgetbase.ui" line="105"/>
         <source>12 viewpoints</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg</name>
-    <message>
-        <location filename="qexperimental3dextension.cpp" line="798"/>
-        <source>Data files (*.dat);;All files (*)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qexperimental3dextension.cpp" line="799"/>
-        <source>Text files (*.txt);;All files (*)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qexperimental3dextension.cpp" line="800"/>
-        <source>Text files (*.txt);;Data files (*.dat);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1520,19 +1520,22 @@
     <message>
         <location filename="qexperimental3dextension.cpp" line="188"/>
         <location filename="qexperimental3dextension.cpp" line="196"/>
-        <source>VMI Iâ(v;Z)</source>
+        <source>VMI I₁(v;Z)</source>
+        <oldsource>VMI Iâ(v;Z)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qexperimental3dextension.cpp" line="201"/>
         <location filename="qexperimental3dextension.cpp" line="209"/>
-        <source>VMI2 Iâ(v;Z)</source>
+        <source>VMI2 I₂(v;Z)</source>
+        <oldsource>VMI2 Iâ(v;Z)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qexperimental3dextension.cpp" line="214"/>
         <location filename="qexperimental3dextension.cpp" line="222"/>
-        <source>VMI3 Iâ(v;Z)</source>
+        <source>VMI3 I₃(v;Z)</source>
+        <oldsource>VMI3 Iâ(v;Z)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1544,19 +1547,22 @@
     <message>
         <location filename="qexperimental3dextension.cpp" line="254"/>
         <location filename="qexperimental3dextension.cpp" line="278"/>
-        <source>VoMI Iâ(z;V)</source>
+        <source>VoMI I₁(z;V)</source>
+        <oldsource>VoMI Iâ(z;V)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qexperimental3dextension.cpp" line="283"/>
         <location filename="qexperimental3dextension.cpp" line="307"/>
-        <source>VoMI2 Iâ(z;V)</source>
+        <source>VoMI2 I₂(z;V)</source>
+        <oldsource>VoMI2 Iâ(z;V)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qexperimental3dextension.cpp" line="312"/>
         <location filename="qexperimental3dextension.cpp" line="336"/>
-        <source>VoMI3 Iâ(z;V)</source>
+        <source>VoMI3 I₃(z;V)</source>
+        <oldsource>VoMI3 Iâ(z;V)</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1908,12 +1914,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qexperimental3dextension.cpp" line="6263"/>
+        <location filename="qexperimental3dextension.cpp" line="6262"/>
         <source>Total %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qexperimental3dextension.cpp" line="6573"/>
+        <location filename="qexperimental3dextension.cpp" line="6570"/>
         <source>%1 clusters</source>
         <translation type="unfinished"></translation>
     </message>

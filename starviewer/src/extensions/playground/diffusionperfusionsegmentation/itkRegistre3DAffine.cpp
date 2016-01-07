@@ -333,7 +333,7 @@ bool itkRegistre3DAffine<TFixedImage,TMovingImage>::applyMethod()
   std::cout<<"Abans registre"<<std::endl;
   try
   {
-      registration->StartRegistration();
+      registration->Update();
   }
   catch (itk::ExceptionObject & e)
   {

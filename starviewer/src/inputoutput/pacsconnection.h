@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef PACSCONNECTION
 #define PACSCONNECTION
 
@@ -22,6 +36,7 @@ public:
     /// Constuctor de la classe. Se li ha de passar un objecte PacsDevice, amb els paràmetres del pacs correctament especificats
     /// @param Parametres del Pacs a connectar
     PACSConnection(PacsDevice pacsDevice);
+    virtual ~PACSConnection();
 
     /// Aquesta funció ens intenta connectar al PACS
     /// @param Especifica en quina modalitat ens volem connectar, fer echo, busca informació o descarregar imatges

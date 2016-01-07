@@ -80,7 +80,7 @@ void test_ImageOrientationOperationsMapper::setupClockWiseAndFlipData()
     QTest::addColumn<bool>("hasToFlip");
 
     // Casos en que no s'ha de fer res
-    // La orientació inicial i la desitjada són la mateixa
+    // La orientaciÃ³ inicial i la desitjada sÃ³n la mateixa
     QTest::newRow("AF->AF") << "A" << "F" << "A" << "F" << 0 << false;
     QTest::newRow("AH->AH") << "A" << "H" << "A" << "H" << 0 << false;
     QTest::newRow("AR->AR") << "A" << "R" << "A" << "R" << 0 << false;
@@ -111,8 +111,8 @@ void test_ImageOrientationOperationsMapper::setupClockWiseAndFlipData()
     QTest::newRow("LF->LF") << "L" << "F" << "L" << "F" << 0 << false;
     QTest::newRow("LH->LH") << "L" << "H" << "L" << "H" << 0 << false;
     
-    // Casos en que hem d'aplicar alguna transformació
-    // Casos d'orientació sagital
+    // Casos en que hem d'aplicar alguna transformaciÃ³
+    // Casos d'orientaciÃ³ sagital
     QTest::newRow("AF->AH") << "A" << "F" << "A" << "H" << 2 << true;
     QTest::newRow("AF->PF") << "A" << "F" << "P" << "F" << 0 << true;
     QTest::newRow("AF->PH") << "A" << "F" << "P" << "H" << 2 << false;
@@ -177,7 +177,7 @@ void test_ImageOrientationOperationsMapper::setupClockWiseAndFlipData()
     QTest::newRow("HP->HA") << "H" << "P" << "H" << "A" << 2 << true;
     QTest::newRow("HP->FP") << "H" << "P" << "F" << "P" << 0 << true;
 
-    // Casos d'orientació axial
+    // Casos d'orientaciÃ³ axial
     QTest::newRow("AR->AL") << "A" << "R" << "A" << "L" << 2 << true;
     QTest::newRow("AR->PR") << "A" << "R" << "P" << "R" << 0 << true;
     QTest::newRow("AR->PL") << "A" << "R" << "P" << "L" << 2 << false;
@@ -242,7 +242,7 @@ void test_ImageOrientationOperationsMapper::setupClockWiseAndFlipData()
     QTest::newRow("LP->LA") << "L" << "P" << "L" << "A" << 2 << true;
     QTest::newRow("LP->RP") << "L" << "P" << "R" << "P" << 0 << true;
 
-    // Casos d'orientació coronal
+    // Casos d'orientaciÃ³ coronal
     QTest::newRow("RF->RH") << "R" << "F" << "R" << "H" << 2 << true;
     QTest::newRow("RF->LF") << "R" << "F" << "L" << "F" << 0 << true;
     QTest::newRow("RF->LH") << "R" << "F" << "L" << "H" << 2 << false;

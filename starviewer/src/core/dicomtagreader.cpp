@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "dicomtagreader.h"
 
 #include "logging.h"
@@ -7,10 +21,34 @@
 #include "dicomsequenceitem.h"
 // Qt
 #include <QStringList>
+#include <QTextCodec>
 // Dcmtk
 #include <dcfilefo.h>
 #include <dcdeftag.h>
 #include <dcmetinf.h>
+
+namespace {
+
+/// Returns true if the given tag contains text that is encoded with the Specific Character Set (0008,0005). See http://www.dabsoft.ch/dicom/3/C.12.1.1.2/.
+bool isEncodedText(const DcmTag &tag)
+{
+    DcmEVR vr = tag.getVR().getEVR();
+
+    switch (vr)
+    {
+        case EVR_SH:
+        case EVR_LO:
+        case EVR_ST:
+        case EVR_PN:
+        case EVR_LT:
+        case EVR_UT:
+            return true;
+        default:
+            return false;
+    }
+}
+
+}
 
 namespace udg {
 
@@ -71,6 +109,7 @@ bool DICOMTagReader::setFile(const QString &filename)
 
         m_dicomHeader = new DcmMetaInfo(*dicomFile.getMetaInfo());
         m_dicomData = dicomFile.getAndRemoveDataset();
+        initializeTextCodec();
     }
     else
     {
@@ -110,6 +149,7 @@ void DICOMTagReader::setDcmDataset(const QString &filename, DcmDataset *dcmDatas
     deleteDataLastLoadedFile();
 
     m_dicomData = dcmDataset;
+    initializeTextCodec();
 }
 
 DcmDataset* DICOMTagReader::getDcmDataset() const
@@ -152,7 +192,14 @@ QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
 
             if (status.good())
             {
-                result = value.c_str();
+                if (m_textCodec && isEncodedText(DcmTag(tag.getGroup(), tag.getElement())))
+                {
+                    result = m_textCodec->toUnicode(value.c_str());
+                }
+                else
+                {
+                    result = value.c_str();
+                }
                 break;
             }
             else
@@ -236,6 +283,21 @@ void DICOMTagReader::initialize()
     m_dicomData = 0;
     m_dicomHeader = 0;
     m_hasValidFile = false;
+    m_textCodec = 0;
+}
+
+void DICOMTagReader::initializeTextCodec()
+{
+    if (tagExists(DICOMSpecificCharacterSet))
+    {
+        QString encoding = getValueAttributeAsQString(DICOMSpecificCharacterSet);
+        m_textCodec = QTextCodec::codecForName(encoding.toLatin1());
+    }
+    else
+    {
+        // Default to Latin-1 if Specific Character Set is not present
+        m_textCodec = QTextCodec::codecForName("ISO 8859-1");
+    }
 }
 
 DICOMSequenceAttribute* DICOMTagReader::convertToDICOMSequenceAttribute(DcmSequenceOfItems *dcmtkSequence,
@@ -302,7 +364,18 @@ DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dc
 
         if (status.good())
         {
-            dicomValueAttribute->setValue(QString(value.c_str()));
+            QString string;
+
+            if (m_textCodec && isEncodedText(dcmtkDICOMElement->getTag()))
+            {
+                string = m_textCodec->toUnicode(value.c_str());
+            }
+            else
+            {
+                string = value.c_str();
+            }
+
+            dicomValueAttribute->setValue(string);
         }
         else
         {

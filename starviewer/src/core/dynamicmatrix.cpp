@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "dynamicmatrix.h"
 #include "logging.h"
 
@@ -178,9 +192,41 @@ bool DynamicMatrix::isMaximizable() const
     return m_columnCount > 1 || m_matrix.count() > 1;
 }
 
+int DynamicMatrix::getNumberOfRows() const
+{
+    return m_matrix.count();
+}
+
 int DynamicMatrix::getNumberOfColumns() const
 {
     return m_columnCount;
+}
+
+int DynamicMatrix::getRowBase() const
+{
+    return -m_indexRow;
+}
+
+int DynamicMatrix::getColumnBase() const
+{
+    return -m_indexColumn;
+}
+
+bool DynamicMatrix::getPosition(int value, int &row, int &column) const
+{
+    for (int r = 0; r < m_matrix.count(); r++)
+    {
+        int c = m_matrix[r].indexOf(value);
+
+        if (c != -1)
+        {
+            row = r - m_indexRow;
+            column = c - m_indexColumn;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 } // End namespace udg

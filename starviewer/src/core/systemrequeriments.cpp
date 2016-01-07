@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 // Starviewer
 #include "systemrequeriments.h"
 
@@ -13,12 +27,12 @@ SystemRequeriments::SystemRequeriments()
     m_minimum32bitServicePackVersion = 3; // XP service pack 3
     m_minimum64bitServicePackVersion = 2; // XP service pack 2
     m_minimumRAM = 4000; // 4Gb
-    m_minimumScreenWidth = 1185; // La mÌnima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
+    m_minimumScreenWidth = 1185; // La m√≠nima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
 
-    // Quan s'estableixin quines sÛn les extensions d'openGL que es necessiten per cada cosa, es poden afegir aquÌ
+    // Quan s'estableixin quines s√≥n les extensions d'openGL que es necessiten per cada cosa, es poden afegir aqu√≠
     //m_minimumOpenGLExtensions << "GL_ARB_flux_capacitor";
     
-    m_minimumDiskSpace = 5120; // 5 GB (en principi, el mÌnim que es necessita per la cache est‡ en un setting)
+    m_minimumDiskSpace = 5120; // 5 GB (en principi, el m√≠nim que es necessita per la cache est√† en un setting)
 
     m_doesOpticalDriveNeedsToWrite = true;
 }

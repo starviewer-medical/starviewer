@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGQVIEWERCINECONTROLLER_H
 #define UDGQVIEWERCINECONTROLLER_H
 
@@ -30,13 +44,8 @@ public:
     void setCINEDimension(int dimension);
 
     QAction* getPlayAction() const;
-    QAction* getRecordAction() const;
     QAction* getLoopAction() const;
     QAction* getBoomerangAction() const;
-
-    /// Li donem el path absolut de l'arxiu on es gravarà el vídeo
-    /// @param filename Path absolut, amb o sense extensió
-    void setRecordFilename(const QString filename);
 
 signals:
     void playing();
@@ -49,9 +58,6 @@ public slots:
 
     /// Pausa/para la reproducció
     void pause();
-
-    /// Grava en vídeo la seqüència corresponent
-    void record();
 
     /// Li donem la velocitat de reproducció expresada en el nombre d'imatges que volem veure per segon
     void setVelocity(int imagesPerSecond);
@@ -108,12 +114,8 @@ private:
     bool m_boomerangEnabled;
 
     QAction *m_playAction;
-    QAction *m_recordAction;
     QAction *m_loopAction;
     QAction *m_boomerangAction;
-
-    /// Nom de l'arxiu on es guarda la "peli"
-    QString m_recordFilename;
 
 };
 

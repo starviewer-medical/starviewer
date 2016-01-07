@@ -1,7 +1,22 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "transdifferencetool.h"
 #include "q2dviewer.h"
 #include "logging.h"
 #include "transdifferencetooldata.h"
+#include "voilut.h"
 #include "volume.h"
 #include "volumepixeldataiterator.h"
 
@@ -167,15 +182,14 @@ void TransDifferenceTool::initializeDifferenceImage()
     Volume *differenceVolume = m_myData->getDifferenceVolume();
 
     int ext[6];
-    mainVolume->getWholeExtent(ext);
+    mainVolume->getExtent(ext);
 
     // Si no hi ha volume diferència
     if (differenceVolume == 0)
     {
         // Allocating memory for the output image
         vtkImageData *imdif = vtkImageData::New();
-        //imdif->CopyInformation(m_mainVolume->getVtkData());
-        imdif->CopyTypeSpecificInformation(mainVolume->getVtkData());
+        imdif->DeepCopy(mainVolume->getVtkData());
         imdif->SetExtent(ext);
 
         // Converting the VTK data to volume
@@ -205,7 +219,7 @@ void TransDifferenceTool::initializeDifferenceImage()
     }
 
     m_2DViewer->setInput(differenceVolume);
-    m_2DViewer->setWindowLevel((double)2 * max, 0.0);
+    m_2DViewer->setVoiLut(WindowLevel(2 * max, 0.0));
 
     m_2DViewer->render();
 }

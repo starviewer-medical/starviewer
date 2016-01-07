@@ -1,9 +1,22 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGQ2DVIEWER_H
 #define UDGQ2DVIEWER_H
 
 #include "qviewer.h"
 #include "annotationflags.h"
-#include "windowlevel.h"
 #include "anatomicalplane.h"
 
 #include <QPointer>
@@ -11,8 +24,8 @@
 // Fordward declarations
 // Vtk
 class vtkCoordinate;
-class vtkImageActor;
 class vtkImageData;
+class vtkImageSlice;
 
 namespace udg {
 
@@ -86,8 +99,8 @@ public:
     /// @return Objecte drawer del viewer
     Drawer* getDrawer() const;
 
-    /// Obté el window level actual de la imatge
-    void getCurrentWindowLevel(double wl[2]);
+    /// Returns the VOI LUT that is currently applied to the image in this viewer.
+    virtual VoiLut getCurrentVoiLut() const;
 
     /// Retorna la llesca/fase actual
     int getCurrentSlice() const;
@@ -141,7 +154,7 @@ public:
     QString getCurrentAnatomicalPlaneLabel() const;
 
     /// Returns current anatomical plane as AnatomicalPlaneType
-    AnatomicalPlane::AnatomicalPlaneType getCurrentAnatomicalPlane() const;
+    AnatomicalPlane getCurrentAnatomicalPlane() const;
 
     /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
     double getCurrentSpacingBetweenSlices();
@@ -211,8 +224,8 @@ public:
     /// Clears the transfer function of the volume at the given index.
     void clearVolumeTransferFunction(int index);
 
-    /// Returns all the vtkImageActors in the scene
-    QList<vtkImageActor*> getVtkImageActorsList() const;
+    /// Returns the prop that represents the image in the scene.
+    vtkImageSlice* getImageProp() const;
 
     /// Returns true if this Q2DViewer can show a display shutter in its current state, i.e. if there is a display shutter for the current image and there isn't
     /// any restriction to show display shutters.
@@ -262,8 +275,8 @@ public:
     /// Returns the index of the given volume in this viewer. If this viewer doesn't contain the given volume, returns -1.
     int indexOfVolume(const Volume *volume) const;
 
-    /// Returns window level data corresponding to the volume at the given index.
-    WindowLevelPresetsToolData* getWindowLevelDataForVolume(int index) const;
+    /// Returns VOI LUT data corresponding to the volume at the given index.
+    VoiLutPresetsToolData* getVoiLutDataForVolume(int index) const;
 
     /// Returns the fusion balance as a value in the range [0, 100] representing the weight of the second input.
     int getFusionBalance() const;
@@ -282,6 +295,8 @@ public slots:
 
     void resetView(const OrthogonalPlane &view);
 
+    void resetView(const AnatomicalPlane &anatomicalPlane);
+
     /// Restaura el visualitzador a l'estat inicial
     void restore();
 
@@ -289,7 +304,7 @@ public slots:
     void clearViewer();
 
     /// Canvia el WW del visualitzador, per tal de canviar els blancs per negres, i el negres per blancs
-    void invertWindowLevel();
+    void invertVoiLut();
 
     /// Canvia la llesca que veiem de la vista actual
     void setSlice(int value);
@@ -306,10 +321,10 @@ public slots:
     void enableAnnotation(AnnotationFlags annotation, bool enable = true);
     void removeAnnotation(AnnotationFlags annotation);
 
-    /// Sets the given window level to the volume at the given index. If there isn't a volume at the given index, it does nothing.
-    void setWindowLevelInVolume(int index, const WindowLevel &windowLevel);
-    /// Sets the given window and level to the main volume.
-    void setWindowLevel(double window, double level);
+    /// Sets the VOI LUT for this viewer.
+    virtual void setVoiLut(const VoiLut &voiLut);
+    /// Sets the given VOI LUT to the volume at the given index. If there isn't a volume at the given index, it does nothing.
+    void setVoiLutInVolume(int index, const VoiLut &voiLut);
 
     /// Sets the transfer function of the main volume.
     void setTransferFunction(const TransferFunction &transferFunction);
@@ -378,9 +393,6 @@ signals:
     /// Envia la nova vista en la que ens trobem
     void viewChanged(int);
 
-    /// Indica el nou window level
-    void windowLevelChanged(double window, double level);
-
     /// Emitted when a new patient orientation has been set
     void imageOrientationChanged(const PatientOrientation &orientation);
     
@@ -411,7 +423,7 @@ protected:
 
     void getCurrentRenderedItemBounds(double bounds[6]);
 
-    void setDefaultOrientation(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane);
+    void setDefaultOrientation(const AnatomicalPlane &anatomicalPlane);
 
     /// Returns the current view plane.
     virtual OrthogonalPlane getCurrentViewPlane() const;
@@ -434,8 +446,8 @@ private:
     void addImageActors();
     void removeImageActors();
     
-    /// Updates the display extents of the image actors.
-    void updateDisplayExtents();
+    /// Updates the displayed images in the image slices.
+    void updateImageSlices();
 
     /// Print some information related to the volume
     void printVolumeInformation();

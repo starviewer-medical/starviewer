@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "settingsaccesslevelfilereader.h"
 
 #include "logging.h"
@@ -26,7 +40,7 @@ bool SettingsAccessLevelFileReader::read(const QString &filePath)
         {
             QStringList list = settings.allKeys();
             QString fileVersion = settings.value("settingsAccessLevelVersion").toString();
-            DEBUG_LOG("VersiÛ d'arxiu 'settingsAccessLevel': " + fileVersion);
+            DEBUG_LOG("Versi√≥ d'arxiu 'settingsAccessLevel': " + fileVersion);
             if (!fileVersion.isEmpty())
             {
                 list.removeAt(list.indexOf("settingsAccessLevelVersion"));
@@ -72,12 +86,12 @@ bool SettingsAccessLevelFileReader::read(const QString &filePath)
 
         case QSettings::FormatError:
             ok = false;
-            DEBUG_LOG("Error de format en l'arxiu: " + filePath + ". Possiblement el format no Ès el d'un .INI");
+            DEBUG_LOG("Error de format en l'arxiu: " + filePath + ". Possiblement el format no √©s el d'un .INI");
             break;
 
         case QSettings::AccessError:
             ok = false;
-            DEBUG_LOG("Error d'accÈs amb el fitxer: " + filePath);
+            DEBUG_LOG("Error d'acc√©s amb el fitxer: " + filePath);
             break;
     }
 

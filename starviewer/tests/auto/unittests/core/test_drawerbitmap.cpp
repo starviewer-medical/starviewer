@@ -7,6 +7,7 @@
 #include <vtkImageActor.h>
 #include <vtkImageData.h>
 #include <vtkImageMapToColors.h>
+#include <vtkImageMapper3D.h>
 #include <vtkLookupTable.h>
 
 using namespace udg;
@@ -203,9 +204,7 @@ void test_DrawerBitmap::getAsVtkProp_ShouldReturnPropLikeExpected_data()
     imageData->SetOrigin(origin);
     imageData->SetSpacing(spacing);
     imageData->SetExtent(0, width - 1, 0, height - 1, 0, 0);
-    imageData->SetScalarTypeToUnsignedChar();
-    imageData->SetNumberOfScalarComponents(1);
-    imageData->AllocateScalars();
+    imageData->AllocateScalars(VTK_UNSIGNED_CHAR, 1);
     memcpy(imageData->GetScalarPointer(), data, width * height * sizeof(unsigned char));
 
     vtkLookupTable *lookupTable = vtkLookupTable::New();
@@ -217,13 +216,14 @@ void test_DrawerBitmap::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 
     vtkImageMapToColors *mapTransparency = vtkImageMapToColors::New();
     mapTransparency->SetLookupTable(lookupTable);
-    mapTransparency->SetInput(imageData);
+    mapTransparency->SetInputData(imageData);
     mapTransparency->PassAlphaToOutputOn();
 
     vtkSmartPointer<vtkImageActor> imageActor = vtkSmartPointer<vtkImageActor>::New();
-    imageActor->SetInput(mapTransparency->GetOutput());
+    imageActor->GetMapper()->SetInputConnection(mapTransparency->GetOutputPort());
     imageActor->SetDisplayExtent(0, width - 1, 0, height - 1, 0, 0);
     imageActor->SetVisibility(true);
+    imageActor->Update();
 
     imageData->Delete();
     lookupTable->Delete();

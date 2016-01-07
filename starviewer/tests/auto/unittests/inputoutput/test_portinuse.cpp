@@ -9,7 +9,6 @@
 using namespace udg;
 using namespace testing;
 
-Q_DECLARE_METATYPE(QAbstractSocket::SocketError)
 Q_DECLARE_METATYPE(PortInUse::PortInUseStatus)
 Q_DECLARE_METATYPE(PortInUse::PortInUseOwner)
 
@@ -113,10 +112,10 @@ void test_PortInUse::isPortInUse_ShouldCheckIfPortIsInUseByAnotherApplication()
     portInUse.m_testingResult = testingResult;
     if (!testingResult)
     {
-        // Si la crida isPortInUse retorna que sí (available = fals), cal que l'error sigui AddressInUseError
+        // Si la crida isPortInUse retorna que sÃ­ (available = fals), cal que l'error sigui AddressInUseError
         portInUse.m_testingServerError = QAbstractSocket::AddressInUseError;
-        // Aquest port in use by another application que es crea aquí, es destrueix dins el mètode getOwner de la classe port in use,
-        // i el mètode només es crida si l'status és diferent de PortIsAvailable
+        // Aquest port in use by another application que es crea aquÃ­, es destrueix dins el mÃ¨tode getOwner de la classe port in use,
+        // i el mÃ¨tode nomÃ©s es crida si l'status Ã©s diferent de PortIsAvailable
         TestingPortInUseByAnotherApplication *portInUseByAnotherApplication = new TestingPortInUseByAnotherApplication();
         portInUseByAnotherApplication->m_testingInUseByAnotherApplication = testingInUseByAnotherApplication;
         portInUse.m_testingPortInUseByAnotherApplication = portInUseByAnotherApplication;
@@ -130,4 +129,3 @@ void test_PortInUse::isPortInUse_ShouldCheckIfPortIsInUseByAnotherApplication()
 DECLARE_TEST(test_PortInUse)
 
 #include "test_portinuse.moc"
-

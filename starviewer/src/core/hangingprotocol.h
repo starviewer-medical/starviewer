@@ -1,8 +1,21 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGHANGINGPROTOCOL_H
 #define UDGHANGINGPROTOCOL_H
 
-#include <QObject>
-#include <QList>
+#include <QMap>
 #include <QRegExp>
 
 namespace udg {
@@ -12,13 +25,13 @@ class HangingProtocolMask;
 class HangingProtocolImageSet;
 class HangingProtocolDisplaySet;
 
-class HangingProtocol : public QObject {
-Q_OBJECT
-public:
-    HangingProtocol(QObject *parent = 0);
+class HangingProtocol {
 
-    /// Constructor còpia. Fa una còpia de tot, inclòs image i display sets.
-    HangingProtocol(const HangingProtocol *hangingProtocol);
+public:
+    HangingProtocol();
+
+    /// Creates a deep copy of the given hanging protocol.
+    HangingProtocol(const HangingProtocol &hangingProtocol);
 
     ~HangingProtocol();
 
@@ -29,10 +42,10 @@ public:
     enum HangingProtocolLevel { Manufacturer, Site, UserGroup, SingleUser };
 
     /// Obtenir el layout
-    HangingProtocolLayout* getHangingProtocolLayout();
+    HangingProtocolLayout* getHangingProtocolLayout() const;
 
     /// Obtenir la mascara
-    HangingProtocolMask* getHangingProtocolMask();
+    HangingProtocolMask* getHangingProtocolMask() const;
 
     /// Assigna el nombre de screens
     void setNumberOfScreens(int screens);
@@ -65,7 +78,7 @@ public:
     QList<HangingProtocolDisplaySet*> getDisplaySets() const;
 
     /// Obté l'image set amb identificador "identifier"
-    HangingProtocolImageSet* getImageSet(int identifier);
+    HangingProtocolImageSet* getImageSet(int identifier) const;
 
     /// Obté el display set amb identificador "identifier"
     HangingProtocolDisplaySet* getDisplaySet(int identifier) const;
@@ -75,7 +88,7 @@ public:
     QRegExp getInstitutionsRegularExpression() const;
 
     /// Mètode per mostrar els valors
-    void show();
+    void show() const;
 
     /// Posar l'identificador al hanging protocol
     void setIdentifier(int id);
@@ -84,7 +97,7 @@ public:
     int getIdentifier() const;
 
     /// Mètode per comparar hanging protocols
-    bool isBetterThan(HangingProtocol *hangingToCompare);
+    bool isBetterThan(const HangingProtocol *hangingToCompare) const;
 
     /// Retorna si el mètode és estricte o no ho hes
     bool isStrict() const;
@@ -93,10 +106,10 @@ public:
     void setStrictness(bool strictness);
 
     /// Retorna si el hanging protocol ha de tenir totes les series diferents
-    bool getAllDiferent() const;
+    bool getAllDifferent() const;
 
     /// Assigna si el hanging protocol ha de tenir totes les series diferents
-    void setAllDiferent(bool allDiferent);
+    void setAllDifferent(bool allDifferent);
 
     /// Assigna el tipus d'icona per representar-lo
     void setIconType(const QString &iconType);
@@ -104,11 +117,11 @@ public:
     /// Obté el tipus d'icona per representar-lo
     QString getIconType() const;
 
-    /// Posa si el hanging protocol és de previes o no
-    void setPrevious(bool isPrevious);
+    /// Sets the number of priors.
+    void setNumberOfPriors(int numberOfPriors);
 
-    /// Retorna si el hanging protocol te previes o no
-    bool isPrevious() const;
+    /// Returns the number of priors.
+    int getNumberOfPriors() const;
 
     /// Assigna una prioritat al hanging protocol
     void setPriority(double priority);
@@ -117,14 +130,18 @@ public:
     double getPriority() const;
 
     /// Compara si dos hanging protocols son iguals
-    bool compareTo(const HangingProtocol &hangingProtocol);
+    bool compareTo(const HangingProtocol &hangingProtocol) const;
 
-private:
     /// Retorna el número de ImageSets que tenen una sèrie assignada
     int countFilledImageSets() const;
+    /// Return the number of filled ImageSets that its AbstractPriorValue is different to 0
+    int countFilledImageSetsWithPriors() const;
 
     /// Retorna el número de DisplaySets que tenen una sèrie o imatge assignada
     int countFilledDisplaySets() const;
+private:
+    // Private copy assignment operator so it can't be used accidentally
+    HangingProtocol& operator=(const HangingProtocol&);
 
 private:
     /// Identificador
@@ -132,9 +149,6 @@ private:
 
     /// Nom del hanging protocol
     QString m_name;
-
-    /// Descripció del hanging protocol
-    QString m_description;
 
     /// Definició de layouts
     HangingProtocolLayout *m_layout;
@@ -144,25 +158,25 @@ private:
 
     QRegExp m_institutionsRegularExpression;
 
-    /// Llista d'image sets
-    QList<HangingProtocolImageSet*> m_listOfImageSets;
+    /// Map from identifier to image set.
+    QMap<int, HangingProtocolImageSet*> m_imageSets;
 
-    /// Llista de displays sets
-    QList<HangingProtocolDisplaySet*> m_listOfDisplaySets;
+    /// Map from identifier to display set.
+    QMap<int, HangingProtocolDisplaySet*> m_displaySets;
 
     /// Boolea que indica si és estricte o no. Si és estricte vol dir que per ser correcte tots els image sets han d'estar assignats.
     bool m_strictness;
 
     /// Boolea que indica si les sèries han de ser totes diferents entre elles.
-    bool m_allDiferent;
+    bool m_allDifferent;
 
     /// Indica el tipus d'icona per representar el hanging protocol
     QString m_iconType;
 
-    /// Informa si es un hanging protocol amb previes o no
-    bool m_hasPrevious;
+    /// The number of priors in this hanging protocol (based on DICOM Number of Priors Referenced (0072,0014)).
+    int m_numberOfPriors;
 
-    /// Prioritat del hanging protocol (per defecte -1)
+    /// Priority of this hanging protocol (default: 1).
     double m_priority;
 };
 

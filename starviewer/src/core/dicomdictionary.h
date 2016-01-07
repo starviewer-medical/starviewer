@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGDICOMDICTIONARYH
 #define UDGDICOMDICTIONARYH
 
@@ -89,7 +103,7 @@ const char* const UIDBlendingSoftcopyPresentationStateStorage               = "1
 const char* const UIDEncapsulatedPDFStorage                                 = "1.2.840.10008.5.1.4.1.1.104.1";
 const char* const UIDRealWorldValueMappingStorage                           = "1.2.840.10008.5.1.4.1.1.67";
 const char* const UIDXRayRadiationDoseSRStorage                             = "1.2.840.10008.5.1.4.1.1.88.67";
-// UIDs Presents a l'edici� del 2009
+// UIDs Presents a l'edició del 2009
 const char* const UIDEnhancedUSVolumeStorage                                = "1.2.840.10008.5.1.4.1.1.6.2";
 const char* const UIDEnhancedMRColorImageStorage                            = "1.2.840.10008.5.1.4.1.1.4.3";
 const char* const UIDEnhancedPETImageStorage                                = "1.2.840.10008.5.1.4.1.1.130";

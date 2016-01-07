@@ -1,6 +1,23 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qaboutdialog.h"
 
+#include "qlicensedialog.h"
 #include "starviewerapplication.h"
+
+#include <QPushButton>
 
 namespace udg {
 
@@ -13,7 +30,7 @@ QAboutDialog::QAboutDialog(QWidget *parent)
     m_applicationNameLabel->setText("<h2>" + ApplicationNameString + "</h2>");
 
     QString aboutMessage = tr(
-        "<p>Copyright &copy; 2005-%2 Graphics & Imaging Laboratory (GILab) and Institut de Diagn�stic per la Imatge (IDI), Girona."
+        "<p>Copyright &copy; 2005-%2 Graphics & Imaging Laboratory (GILab) and Institut de Diagnòstic per la Imatge (IDI), Girona."
         "<p align='justify'>%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI,"
         " CT, PET, PET-CT, CR, MG, ...) fully compliant with the DICOM standard for image communication and image file formats. It can also read"
         " many other file formats specified by the MetaIO standard (*.mhd files). ").arg(ApplicationNameString).arg(2014);
@@ -40,10 +57,19 @@ QAboutDialog::QAboutDialog(QWidget *parent)
     aboutMessage += tr("<p>Web: <a href=\"%1\">%1</a></p>").arg(OrganizationWebURL);
     m_aboutTextLabel->setText(aboutMessage);
     m_aboutTextLabel->setOpenExternalLinks(true);
+
+    QPushButton *licenseButton = m_buttonBox->addButton(tr("License information"), QDialogButtonBox::ActionRole);
+    connect(licenseButton, &QPushButton::clicked, this, &QAboutDialog::showLicenseInformation);
 }
 
 QAboutDialog::~QAboutDialog()
 {
+}
+
+void QAboutDialog::showLicenseInformation()
+{
+    QLicenseDialog *licenseDialog = new QLicenseDialog(this);
+    licenseDialog->open();
 }
 
 }

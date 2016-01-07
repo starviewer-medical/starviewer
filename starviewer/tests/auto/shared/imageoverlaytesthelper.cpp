@@ -1064,7 +1064,7 @@ bool ImageOverlayTestHelper::areEqual(const ImageOverlay &overlay1, const ImageO
         return false;
     }
     
-    // Tots els atributs són iguals, comparem els buffers
+    // Tots els atributs sÃ³n iguals, comparem els buffers
     unsigned char *buffer1 = overlay1.getData();
     unsigned char *buffer2 = overlay2.getData();
     

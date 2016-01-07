@@ -54,8 +54,6 @@
 #include <itkCurvatureFlowImageFilter.h>
 #include <itkCastImageFilter.h>
 #include "itkMinimumMaximumImageCalculator.h"
-#include <itkVnlFFTRealToComplexConjugateImageFilter.h>
-#include <itkVnlFFTComplexConjugateToRealImageFilter.h>
 //Fourier Transform
 //#include <fftw3.h>
 //#include <complex>
@@ -151,7 +149,6 @@ void QPerfusionMapReconstructionExtension::createConnections()
   //connect(m_filterPushButton, SIGNAL(clicked()), SLOT(applyFilterMapImage()));
   connect(m_mapViewComboBox, SIGNAL(currentIndexChanged (int)), SLOT(changeMap(int)));
   connect(m_mapCalculator, SIGNAL(computed()), SLOT(paintMap()));
-  //connect(m_2DView, SIGNAL(windowLevelChanged(double,double)), SLOT(createColorMap(double, double)));
 }
 
 void QPerfusionMapReconstructionExtension::setInput(Volume *input)
@@ -378,9 +375,9 @@ void QPerfusionMapReconstructionExtension::createColorMap()
     TransferFunction hueTransferFunction(mapHueLut);
     m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
 
-    m_2DView->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
+    m_2DView->getViewer()->setVoiLut(WindowLevel(1.0, m_mapMin - 1.0));
     //Potser això fa que es recalculi dues vegades??
-    //m_2DView->setWindowLevel(m_mapMax - m_mapMin, (m_mapMax + m_mapMin)/2);
+    //m_2DView->setVoiLut(WindowLevel(m_mapMax - m_mapMin, (m_mapMax + m_mapMin)/2));
 }
 
 void QPerfusionMapReconstructionExtension::createColorMap2()
@@ -421,9 +418,9 @@ void QPerfusionMapReconstructionExtension::createColorMap2()
     TransferFunction hueTransferFunction(mapHueLut);
     m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
 
-    m_2DView->getViewer()->setWindowLevel(1.0, m_mapMin - 1.0);
+    m_2DView->getViewer()->setVoiLut(WindowLevel(1.0, m_mapMin - 1.0));
     //Potser això fa que es recalculi dues vegades??
-    //m_2DView_4->setWindowLevel(m_mapMax - m_mapMin, (m_mapMax + m_mapMin)/2);
+    //m_2DView_4->setVoiLut(WindowLevel(m_mapMax - m_mapMin, (m_mapMax + m_mapMin)/2));
 }
 
 void QPerfusionMapReconstructionExtension::createColorMap(double window, double level)
@@ -531,7 +528,7 @@ void QPerfusionMapReconstructionExtension::createColorMap(DoubleImageType::Point
     TransferFunction hueTransferFunction(mapHueLut);
     viewer->setTransferFunction(hueTransferFunction);
     
-    viewer->setWindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0);
+    viewer->setVoiLut(WindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0));
 }
 
 void QPerfusionMapReconstructionExtension::createColorMap(Volume::ItkImageType::Pointer image, Q2DViewer* viewer)
@@ -607,7 +604,7 @@ void QPerfusionMapReconstructionExtension::createColorMap(Volume::ItkImageType::
     TransferFunction hueTransferFunction(mapHueLut);
     viewer->setTransferFunction(hueTransferFunction);
     
-    viewer->setWindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0);
+    viewer->setVoiLut(WindowLevel(1.0,minmaxCalc->GetMinimum() - 1.0));
 }
 
 void QPerfusionMapReconstructionExtension::getPerfusionColormapTable(vtkUnsignedCharArray * table)
@@ -1090,7 +1087,7 @@ void QPerfusionMapReconstructionExtension::paintAIFSignal()
             QVector<double> signal(tend);
 
             int ext[6];
-            inputVolume->getWholeExtent(ext);
+            inputVolume->getExtent(ext);
             if(index[0]>=ext[0] && index[0]<=ext[1] && index[1]>=ext[2] && index[1]<=ext[3])
             {
                 for (t=0;t<tend;t++)

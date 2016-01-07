@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGSERIES_H
 #define UDGSERIES_H
 
@@ -135,7 +149,7 @@ public:
 
     /// Ens diu quantes imatges té aquesta sèrie
     /// @return El nombre d'imatges. 0 en cas que no sigui una sèrie d'imatges o no en contingui
-    int getNumberOfImages();
+    int getNumberOfImages() const;
 
     /// Ens retorna el nombre d'ítems que té la sèrie, sense diferenciar si són imatges o no.
     /// Equival al nombre d'arxius que conté la sèrie
@@ -181,12 +195,12 @@ public:
 
     /// Retorna el Volume amb identificador id
     /// Retorna NULL en cas que no hi hagi cap volum amb aquest id.
-    Volume* getVolume(Identifier id);
+    Volume* getVolume(Identifier id) const;
 
     /// Mètode per conveniència que serveix per retornar el "primer" volum. En el 90% dels casos (de moment el 100%)
     /// tindrem que per cada sèrie només hi haurà un sol volum. Aquest mètode retorna aquest o, en cas de més d'un, el primer.
     /// Retorna NULL en cas que no hi hagi cap volum.
-    Volume* getFirstVolume();
+    Volume* getFirstVolume() const;
 
     /// Mètode per afegir un sol volum a la llista de volums de la serie. Retorna l'id amb el que s'ha guardat al repositori
     /// de volums.

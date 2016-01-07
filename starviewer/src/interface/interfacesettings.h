@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGINTERFACESETTINGS_H
 #define UDGINTERFACESETTINGS_H
 
@@ -12,14 +26,14 @@ public:
 
     void init();
 
-    /// DeclaraciÛ de claus
+    /// Declaraci√≥ de claus
     static const QString OpenFileLastPath;
     static const QString OpenDirectoryLastPath;
     static const QString OpenFileLastFileExtension;
     static const QString ApplicationMainWindowGeometry;
-    // Indicar‡ si permetem tenir mÈs d'una inst‡ncia de cada extensiÛ (true) o ˙nicament una (false)
+    // Indicar√† si permetem tenir m√©s d'una inst√†ncia de cada extensi√≥ (true) o √∫nicament una (false)
     static const QString AllowMultipleInstancesPerExtension;
-    // Defineix quina Ès l'extensiÛ que s'obrir‡ per defecte
+    // Defineix quina √©s l'extensi√≥ que s'obrir√† per defecte
     static const QString DefaultExtension;
 };
 

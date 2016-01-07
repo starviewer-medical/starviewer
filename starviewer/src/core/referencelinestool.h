@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGREFERENCELINESTOOL_H
 #define UDGREFERENCELINESTOOL_H
 
@@ -63,25 +77,23 @@ private:
     /// tambe li indiquem quina es la linia a modificar
     void projectIntersection(ImagePlane *referencePlane, ImagePlane *localizerPlane, int drawerLineOffset = 0);
     
-    /// Calcula la intersecció entre el pla localitzador i el pla de referència donats. Si hi ha intersecció, actualitza les corresponents
-    /// línies segons l'offset indicat. Si hi ha intersecció retorna true, fals altrement
-    bool computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, const QList<QVector<double> > &referencePlaneBounds, int lineOffset);
+    /// Computes intersection between given localizer and reference plane. boundsList shows which reference bound planes should be used to
+    /// compute intersections (upper, lower, central). If there is intersection with a bound plane, updates the correspoding lines
+    /// according to the given offset. If there is intersection with all the given bound planes returns true, false otherwise.
+    bool computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, ImagePlane *referencePlane, QList<int> boundsList, int lineOffset);
+    
+    /// Projects the given intersection points and updates the corresponding lines according to lineOffset
+    void updateProjectionLinesFromIntersections(double firstIntersectionPoint[3], double secondIntersectionPoint[3], int lineOffset);
+    
+    /// Update the projected line according to lineOffset with the given points
+    void updateProjectedLine(int lineOffset, double firstPoint[3], double secondPoint[3]);
 
+    /// Resets the projected line according to lineOffset so all points are the same and nothing can be viewed
+    void resetProjectedLine(int lineOffset);
+    
     /// Projecta directament el pla donat, sobre el pla actual que s'està visualitzant al viewer
     /// Aquest mètode es fa servir per "debug"
     void projectPlane(ImagePlane *planeToProject);
-
-    /// Donats quatre punts d'un pla (referència) i el pla localitzador, ens dóna els punts d'intersecció
-    /// @param tlhc top left hand corner (origen)
-    /// @param trhc top right hand corner
-    /// @param brhc bottom right hand corner
-    /// @param blhc bottom left hand corner
-    /// @param localizerPlane pla localitzador que volem fer intersectar
-    /// @param firstIntersectionPoint[] primer punt d'intersecció trobat (si n'hi ha)
-    /// @param secondIntersectionPoint[] segon punt d'intersecció trobat (si n'hi ha)
-    /// @return el nombre d'interseccions trobades
-    int getIntersections(QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane,
-                         double firstIntersectionPoint[3], double secondIntersectionPoint[3]);
 
     /// Ens crea una DrawerLine, ja sigui de les principals o de background
     DrawerLine* createNewLine(bool isBackgroundLine = false);

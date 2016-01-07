@@ -20,7 +20,8 @@ FORMS += qlogviewerbase.ui \
     q2dviewerlayoutconfigurationscreenbase.ui \
     q2dviewerconfigurationscreenbase.ui \
     qlayoutoptionswidgetbase.ui \
-    qnotificationpopupbase.ui
+    qnotificationpopupbase.ui \
+    qfusionlayoutwidgetbase.ui
 
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
@@ -52,7 +53,6 @@ HEADERS += extensionfactory.h \
     repositorybase.h \
     repository.h \
     q2dviewer.h \
-    q3dmprviewer.h \
     q3dviewer.h \
     qviewer.h \
     patient.h \
@@ -65,7 +65,6 @@ HEADERS += extensionfactory.h \
     itkErfcLevelSetFunction.h \
     itkErfcLevelSetImageFilter.h \
     itkVolumeCalculatorImageFilter.h \
-    vtkAtamaiPolyDataToImageStencil2.h \
     vtkImageMapToWindowLevelColors3.h \
     displayshutter.h \
     image.h \
@@ -88,7 +87,6 @@ HEADERS += extensionfactory.h \
     patientbrowsermenuextendedinfo.h \
     patientbrowsermenulist.h \
     qcustomwindowleveldialog.h \
-    qwindowlevelcombobox.h \
     mhdfileclassifierstep.h \
     orderimagesfillerstep.h \
     toolregistry.h \
@@ -112,7 +110,6 @@ HEADERS += extensionfactory.h \
     screenshottool.h \
     synchronizetool.h \
     synchronizetooldata.h \
-    windowlevelpresetstool.h \
     transdifferencetool.h \
     transdifferencetooldata.h \
     point3d.h \
@@ -131,7 +128,6 @@ HEADERS += extensionfactory.h \
     distancetool.h \
     editortool.h \
     editortooldata.h \
-    windowlevelpresetstooldata.h \
     qviewercinecontroller.h \
     qcinecontroller.h \
     hoverpoints.h \
@@ -264,7 +260,6 @@ HEADERS += extensionfactory.h \
     customwindowlevelsreader.h \
     customwindowlevelsrepository.h \
     volumereaderjob.h \
-    asynchronousvolumereader.h \
     qviewerworkinprogresswidget.h \
     qviewercommand.h \
     applyhangingprotocolqviewercommand.h \
@@ -358,12 +353,10 @@ HEADERS += extensionfactory.h \
     inputsynccriterion.h \
     modalitysynccriterion.h \
     syncaction.h \
-    windowlevelsyncaction.h \
     zoomfactorsyncaction.h \
     pansyncaction.h \
     imageorientationsyncaction.h \
     signaltosyncactionmapper.h \
-    windowlevelsignaltosyncactionmapper.h \
     zoomfactorsignaltosyncactionmapper.h \
     pansignaltosyncactionmapper.h \
     imageorientationsignaltosyncactionmapper.h \
@@ -390,17 +383,16 @@ HEADERS += extensionfactory.h \
     imagepipeline.h \
     volumereadermanager.h \
     volumedisplayunit.h \
+    secondaryvolumedisplayunit.h \
     volumedisplayunithandlerfactory.h \
     genericvolumedisplayunithandler.h \
     singlevolumedisplayunithandler.h \
     pairedvolumedisplayunithandler.h \
     petctvolumedisplayunithandler.h \
     petvolumedisplayunithandler.h \
-    vtkdepthdisabledopenglimageactor.h \
     transferfunctionmodel.h \
     transferfunctionmodelfiller.h \
     defaulttransferfunctionselector.h \
-    windowlevelhelper.h \
     patientbrowsermenugroup.h \
     patientbrowsermenufusionitem.h \
     phasesyncaction.h \
@@ -416,7 +408,25 @@ HEADERS += extensionfactory.h \
     nmvolumedisplayunithandler.h \
     nmctvolumedisplayunithandler.h \
     nmroidataprinter.h \
-    nmctfusionroidataprinter.h
+    nmctfusionroidataprinter.h \
+    vtkcorrectimageblend.h \
+    vtktextactorwithbackground.h \
+    volumereaderjobfactory.h \
+    relativegeometrylayout.h \
+    griditerator.h \
+    voilut.h \
+    voilutpresetstooldata.h \
+    qvoilutcombobox.h \
+    voiluthelper.h \
+    voilutpresetstool.h \
+    voilutsyncaction.h \
+    voilutsignaltosyncactionmapper.h \
+    hangingprotocolimagesetrestriction.h \
+    hangingprotocolimagesetrestrictionexpression.h \
+    hangingprotocolfiller.h \
+    qfusionlayoutwidget.h \
+    gridicon.h \
+    itemmenu.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -433,7 +443,6 @@ SOURCES += extensionmediator.cpp \
     repositorybase.cpp \
     repository.cpp \
     q2dviewer.cpp \
-    q3dmprviewer.cpp \
     q3dviewer.cpp \
     qviewer.cpp \
     patient.cpp \
@@ -448,7 +457,6 @@ SOURCES += extensionmediator.cpp \
     itkErfcLevelSetFunction.cpp \
     itkErfcLevelSetImageFilter.cpp \
     itkVolumeCalculatorImageFilter.cpp \
-    vtkAtamaiPolyDataToImageStencil2.cxx \
     vtkImageMapToWindowLevelColors3.cxx \
     displayshutter.cpp \
     image.cpp \
@@ -471,7 +479,6 @@ SOURCES += extensionmediator.cpp \
     patientbrowsermenuextendedinfo.cpp \
     patientbrowsermenulist.cpp \
     qcustomwindowleveldialog.cpp \
-    qwindowlevelcombobox.cpp \
     mhdfileclassifierstep.cpp \
     orderimagesfillerstep.cpp \
     toolregistry.cpp \
@@ -495,7 +502,6 @@ SOURCES += extensionmediator.cpp \
     screenshottool.cpp \
     synchronizetool.cpp \
     synchronizetooldata.cpp \
-    windowlevelpresetstool.cpp \
     transdifferencetool.cpp \
     transdifferencetooldata.cpp \
     point3d.cpp \
@@ -512,7 +518,6 @@ SOURCES += extensionmediator.cpp \
     polylinetemporalroitool.cpp \
     polylinetemporalroitooldata.cpp \
     distancetool.cpp \
-    windowlevelpresetstooldata.cpp \
     qviewercinecontroller.cpp \
     qcinecontroller.cpp \
     hoverpoints.cpp \
@@ -636,7 +641,6 @@ SOURCES += extensionmediator.cpp \
     customwindowlevelsreader.cpp \
     customwindowlevelsrepository.cpp \
     volumereaderjob.cpp \
-    asynchronousvolumereader.cpp \
     qviewerworkinprogresswidget.cpp \
     qviewercommand.cpp \
     applyhangingprotocolqviewercommand.cpp \
@@ -714,6 +718,7 @@ SOURCES += extensionmediator.cpp \
     itkDCMTKImageIOFactory.cxx \
     itkDCMTKSeriesFileNames.cxx \
     volumepixeldatareaderitkdcmtk.cpp \
+    postprocessor.cpp \
     computezspacingpostprocessor.cpp \
     pixelspacingamenderpostprocessor.cpp \
     volumepixeldatareaderfactory.cpp \
@@ -726,12 +731,10 @@ SOURCES += extensionmediator.cpp \
     inputsynccriterion.cpp \
     modalitysynccriterion.cpp \
     syncaction.cpp \
-    windowlevelsyncaction.cpp \
     zoomfactorsyncaction.cpp \
     pansyncaction.cpp \
     imageorientationsyncaction.cpp \
     signaltosyncactionmapper.cpp \
-    windowlevelsignaltosyncactionmapper.cpp \
     zoomfactorsignaltosyncactionmapper.cpp \
     pansignaltosyncactionmapper.cpp \
     imageorientationsignaltosyncactionmapper.cpp \
@@ -754,17 +757,16 @@ SOURCES += extensionmediator.cpp \
     imagepipeline.cpp \
     volumereadermanager.cpp \
     volumedisplayunit.cpp \
+    secondaryvolumedisplayunit.cpp \
     volumedisplayunithandlerfactory.cpp \
     genericvolumedisplayunithandler.cpp \
     singlevolumedisplayunithandler.cpp \
     pairedvolumedisplayunithandler.cpp \
     petctvolumedisplayunithandler.cpp \
     petvolumedisplayunithandler.cpp \
-    vtkdepthdisabledopenglimageactor.cpp \
     transferfunctionmodel.cpp \
     transferfunctionmodelfiller.cpp \
     defaulttransferfunctionselector.cpp \
-    windowlevelhelper.cpp \
     patientbrowsermenugroup.cpp \
     patientbrowsermenufusionitem.cpp \
     phasesyncaction.cpp \
@@ -780,7 +782,25 @@ SOURCES += extensionmediator.cpp \
     nmvolumedisplayunithandler.cpp \
     nmctvolumedisplayunithandler.cpp \
     nmroidataprinter.cpp \
-    nmctfusionroidataprinter.cpp
+    nmctfusionroidataprinter.cpp \
+    vtkcorrectimageblend.cpp \
+    vtktextactorwithbackground.cpp \
+    volumereaderjobfactory.cpp \
+    relativegeometrylayout.cpp \
+    griditerator.cpp \
+    voilut.cpp \
+    voilutpresetstooldata.cpp \
+    qvoilutcombobox.cpp \
+    voiluthelper.cpp \
+    voilutpresetstool.cpp \
+    voilutsyncaction.cpp \
+    voilutsignaltosyncactionmapper.cpp \
+    hangingprotocolimagesetrestriction.cpp \
+    hangingprotocolimagesetrestrictionexpression.cpp \
+    hangingprotocolfiller.cpp \
+    qfusionlayoutwidget.cpp \
+    gridicon.cpp \
+    itemmenu.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
@@ -794,19 +814,21 @@ OTHER_FILES += ../qml/qmlpatientbrowsermenu.qml
 TEMPLATE = lib
 DESTDIR = ./
 CONFIG += staticlib
-include(../corelibsconfiguration.inc)
-include(../itk.inc)
-include(../gdcm.inc)
-include(../vtk.inc)
-include(../dcmtk.inc)
-include(../log4cxx.inc)
-include(../compilationtype.inc)
-include(../translations.inc)
-include(../threadweaver.inc)
+include(../corelibsconfiguration.pri)
+include(../itk.pri)
+include(../gdcm.pri)
+include(../vtk.pri)
+include(../dcmtk.pri)
+include(../log4cxx.pri)
+include(../compilationtype.pri)
+include(../translations.pri)
+include(../threadweaver.pri)
 QT += xml \
     network \
     webkit \
-    script \
     xmlpatterns \
     opengl \
-    declarative
+    qml \
+    declarative \
+    concurrent \
+    webkitwidgets

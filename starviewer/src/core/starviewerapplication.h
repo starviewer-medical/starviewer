@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDG_STARVIEWER_APPLICATION
 #define UDG_STARVIEWER_APPLICATION
 
@@ -5,11 +19,11 @@
 
 namespace udg {
 
-const QString StarviewerVersionString("0.12.2");
-const QString StarviewerBuildID("2014120200");
+const QString StarviewerVersionString("0.13.0");
+const QString StarviewerBuildID("2015122300");
 
 // Indica per aquesta versió d'starviewer quina és la revisió de bd necessària
-const int StarviewerDatabaseRevisionRequired(9591);
+const int StarviewerDatabaseRevisionRequired(9592);
 
 const QString OrganizationNameString("GILab");
 const QString OrganizationDomainString("starviewer.udg.edu");

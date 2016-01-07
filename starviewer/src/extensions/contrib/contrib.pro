@@ -3,7 +3,7 @@
 
 SUBDIRS =
 
-include(../../extensions.inc)
+include(../../extensions.pri)
 
 TEMPLATE = subdirs
 
@@ -16,4 +16,4 @@ for(dir, SUBDIRS) {
     }
 }
 
-include(../../compilationtype.inc)
+include(../../compilationtype.pri)

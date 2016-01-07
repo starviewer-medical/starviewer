@@ -1,5 +1,0 @@
-include(defaultdirectories.inc)
-
-LIBS += -L$${THREADWEAVERLIBDIR} -lthreadweaver
-
-INCLUDEPATH += $${THREADWEAVERINCLUDEDIR} $${THREADWEAVERINCLUDEDIR}/KDE

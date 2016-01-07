@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "glutessellator.h"
 
 #include "logging.h"
@@ -87,7 +101,7 @@ void GluTessellator::registerCallbacks()
 {
     typedef void (GLU_TESS_CALLBACK *GluTessCallbackType)();
     gluTessCallback(m_tessellator, GLU_TESS_VERTEX_DATA, reinterpret_cast<GluTessCallbackType>(&nextVertex));
-    // Aquest ens serveix nom�s perqu� registrant-lo forcem GLU a retornar triangles individuals
+    // Aquest ens serveix només perquè registrant-lo forcem GLU a retornar triangles individuals
     gluTessCallback(m_tessellator, GLU_TESS_EDGE_FLAG, reinterpret_cast<GluTessCallbackType>(&edgeFlag));
     gluTessCallback(m_tessellator, GLU_TESS_COMBINE_DATA, reinterpret_cast<GluTessCallbackType>(&newVertex));
     gluTessCallback(m_tessellator, GLU_TESS_ERROR, reinterpret_cast<GluTessCallbackType>(&error));

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "localdatabasepacsretrievedimagesdal.h"
 
 #include <sqlite3.h>
@@ -14,7 +28,7 @@ LocalDatabasePACSRetrievedImagesDAL::LocalDatabasePACSRetrievedImagesDAL(Databas
 
 qlonglong LocalDatabasePACSRetrievedImagesDAL::insert(const PacsDevice &pacsDevice)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(pacsDevice)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(pacsDevice).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -48,7 +62,7 @@ PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString &sqlQuerySen
     char **reply = NULL;
     char **error = NULL;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(sqlQuerySentence), &reply, &rows, &columns, error);
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), sqlQuerySentence.toUtf8().constData(), &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
     {

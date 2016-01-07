@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGWINDOWSFIREWALLACCESS_H
 #define UDGWINDOWSFIREWALLACCESS_H
 
@@ -9,7 +23,7 @@
 namespace udg {
 
 /**
-    Classe que comprova si starviewer tÈ accÈs a travÈs del firewall de windows.
+    Classe que comprova si starviewer t√© acc√©s a trav√©s del firewall de windows.
   */
 class WindowsFirewallAccess : public FirewallAccess {
 public:
@@ -20,35 +34,35 @@ public:
 
 protected:
     /// Inicialitza el Firewall de windows per tal de poder-lo utilitzar.
-    /// @param firewallProfile Ès de sortida i contÈ el perfil del firewall.
+    /// @param firewallProfile √©s de sortida i cont√© el perfil del firewall.
     virtual HRESULT initializeWindowsFirewall(INetFwProfile **firewallProfile);
 
-    /// Comprova si el firewall est‡ engegat.
+    /// Comprova si el firewall est√† engegat.
     virtual HRESULT windowsFirewallIsOn(INetFwProfile *firewallProfile, bool *firewallOn);
 
     /// Comprova si el firewall permet excepcions.
     virtual HRESULT doesWindowsFirewallAllowExceptions(INetFwProfile *firewallProfile, bool *exceptionsAllowed);
 
-    /// Donat un perfil de firewall i un path a un executable d'una aplicaciÛ, comprova si aquesta est‡ a la llista d'excepcions del firewall.
-    /// El resultat que retorna Ès de si ha anat bÈ o no.
-    /// @param firewallApplicationEnabled Ès de sortida i guarda si l'aplicaciÛ est‡ a la llista d'excepcions o no.
+    /// Donat un perfil de firewall i un path a un executable d'una aplicaci√≥, comprova si aquesta est√† a la llista d'excepcions del firewall.
+    /// El resultat que retorna √©s de si ha anat b√© o no.
+    /// @param firewallApplicationEnabled √©s de sortida i guarda si l'aplicaci√≥ est√† a la llista d'excepcions o no.
     virtual HRESULT isApplicationEnabledAtFirewall(INetFwProfile *firewallProfile, BSTR firewallProcessImageFileName, bool *firewallApplicationEnabled);
 
     /// Retorna el path des d'on s'executa starviewer
     virtual BSTR getStarviewerExecutablePath();
 
-    /// Transforma un QString a una cadena de text 'Basic String' de Visual Basic. …s responsabilitat de l'usuari alliberar la cadena
-    /// quan ja no la necessiti mÈs, utilitzant la funciÛ SysFreeString.
+    /// Transforma un QString a una cadena de text 'Basic String' de Visual Basic. √âs responsabilitat de l'usuari alliberar la cadena
+    /// quan ja no la necessiti m√©s, utilitzant la funci√≥ SysFreeString.
     virtual BSTR fromQStringToBSTR(const QString &string);
 
     /// Inicialitza la llibreria del Firewall de windows.
-    /// Retorna cert si tot ha anat bÈ.
+    /// Retorna cert si tot ha anat b√©.
     virtual HRESULT initializeWindowsFirewallLibrary(LPVOID pvReserved, DWORD dwCoInit);
 
     /// Finalitza la llibreria del firewall de windows.
     virtual void UninitializeWindowsFirewallLibrary();
 
-    /// Esborra el firewall profile si no Ès nul
+    /// Esborra el firewall profile si no √©s nul
     virtual void CleanupWindowsFirewall(INetFwProfile *firewallProfile);
 
 };

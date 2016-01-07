@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "slicingwheeltool.h"
 #include "q2dviewer.h"
 #include "statswatcher.h"
@@ -14,13 +28,13 @@ SlicingWheelTool::SlicingWheelTool(QViewer *viewer, QObject *parent)
 {
     m_toolName = "SlicingWheelTool";
     m_2DViewer = Q2DViewer::castFromQViewer(viewer);
-    // Ens assegurem que desde la creació tenim un viewer vàlid
+    // Ens assegurem que desde la creaciÃ³ tenim un viewer vÃ lid
     Q_ASSERT(m_2DViewer);
 }
 
 SlicingWheelTool::~SlicingWheelTool()
 {
-    // Estadístiques
+    // EstadÃ­stiques
     if (!m_wheelSteps.isEmpty())
     {
         StatsWatcher::log("Slicing Wheel Tool: Wheel Record: " + m_wheelSteps);
@@ -45,7 +59,7 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
             m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
             SlicingTool::updateIncrement(1);
             m_viewer->unsetCursor();
-            // Estadístiques
+            // EstadÃ­stiques
             m_wheelSteps += QString::number(1) + " ";
             break;
 
@@ -54,11 +68,11 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
             m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
             SlicingTool::updateIncrement(-1);
             m_viewer->unsetCursor();
-            // Estadístiques
+            // EstadÃ­stiques
             m_wheelSteps += QString::number(-1) + " ";
             break;
 
-        //Per tenir constancia de les estadístiques
+        //Per tenir constancia de les estadÃ­stiques
         case vtkCommand::LeftButtonPressEvent:
             if (!m_wheelSteps.isEmpty())
             {
@@ -76,8 +90,8 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
             break;
 
         case vtkCommand::MiddleButtonReleaseEvent:
-            // TODO aquest comportament de fer switch es podria eliminar ja que no és gaire usable
-            // de moment es manté perquè ja tenim un conjunt d'usuaris acostumats a aquest comportament
+            // TODO aquest comportament de fer switch es podria eliminar ja que no Ã©s gaire usable
+            // de moment es mantÃ© perquÃ¨ ja tenim un conjunt d'usuaris acostumats a aquest comportament
             if (!m_mouseMovement)
             {
                 switchSlicingMode();

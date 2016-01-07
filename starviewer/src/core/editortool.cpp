@@ -1,6 +1,21 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "editortool.h"
 #include "editortooldata.h"
 #include "q2dviewer.h"
+#include "voilut.h"
 #include "volume.h"
 #include "volumepixeldataiterator.h"
 
@@ -59,14 +74,13 @@ void EditorTool::initialize()
         else
         {
             // En cas que siguin iguals
-            double wl[2];
-            m_2DViewer->getCurrentWindowLevel(wl);
-            m_insideValue = (int)(range[0] + wl[0]);
+            double windowWidth = m_2DViewer->getCurrentVoiLut().getWindowLevel().getWidth();
+            m_insideValue = (int)(range[0] + windowWidth);
         }
         int ext[6];
         int i, j, k;
         m_volumeCont = 0;
-        m_2DViewer->getOverlayInput()->getWholeExtent(ext);
+        m_2DViewer->getOverlayInput()->getExtent(ext);
 
         VolumePixelDataIterator it = m_2DViewer->getOverlayInput()->getIterator();
         for (i = ext[0]; i <= ext[1]; i++)
@@ -307,7 +321,7 @@ void EditorTool::setPaintCursor()
         m_squareActor->GetProperty()->SetOpacity(0.2);
 
         vtkDataSetMapper *squareMapper = vtkDataSetMapper::New();
-        squareMapper->SetInput(grid);
+        squareMapper->SetInputData(grid);
 
         m_squareActor->SetMapper(squareMapper);
 
@@ -394,7 +408,7 @@ void EditorTool::eraseSliceMask()
     int i, j;
     int index[3];
     int ext[6];
-    m_2DViewer->getMainInput()->getWholeExtent(ext);
+    m_2DViewer->getMainInput()->getExtent(ext);
     index[2] = m_2DViewer->getCurrentSlice();
     for (i = ext[0]; i <= ext[1]; i++)
     {
@@ -419,7 +433,7 @@ void EditorTool::eraseRegionMask()
     double spacing[3];
     int index[3];
     int ext[6];
-    m_2DViewer->getMainInput()->getWholeExtent(ext);
+    m_2DViewer->getMainInput()->getExtent(ext);
     m_2DViewer->getCurrentCursorImageCoordinate(pos);
     m_2DViewer->getMainInput()->getSpacing(spacing);
     m_2DViewer->getMainInput()->getOrigin(origin);
@@ -432,7 +446,7 @@ void EditorTool::eraseRegionMask()
 void EditorTool::eraseRegionMaskRecursive(int a, int b, int c)
 {
     int ext[6];
-    m_2DViewer->getMainInput()->getWholeExtent(ext);
+    m_2DViewer->getMainInput()->getExtent(ext);
     if ((a >= ext[0]) && (a <= ext[1]) && (b >= ext[2]) && (b <= ext[3]) && (c >= ext[4]) && (c <= ext[5]))
     {
         VolumePixelDataIterator it = m_2DViewer->getOverlayInput()->getIterator(a, b, c);

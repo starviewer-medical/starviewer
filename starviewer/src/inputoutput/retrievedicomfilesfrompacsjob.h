@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef RETRIEVEDICOMFILESFROMPACSJOB_H
 #define RETRIEVEDICOMFILESFROMPACSJOB_H
 
@@ -40,7 +54,7 @@ public:
     Study* getStudyToRetrieveDICOMFiles();
 
     /// Codi que executar el job
-    void run();
+    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread);
 
     /// Retorna l'Status del Job
     PACSRequestStatus::RetrieveRequestStatus getStatus();
@@ -51,10 +65,10 @@ public:
 
 signals:
     /// Signal que s'emet quan s'ha descarregat un fitxer
-    void DICOMFileRetrieved(PACSJob *pacsJob, int numberOfImagesRetrieved);
+    void DICOMFileRetrieved(PACSJobPointer pacsJob, int numberOfImagesRetrieved);
 
     /// Signal que s'emet quan s'ha descarregat una srie
-    void DICOMSeriesRetrieved(PACSJob *pacsJob, int numberOfSeriesRetrieved);
+    void DICOMSeriesRetrieved(PACSJobPointer pacsJob, int numberOfSeriesRetrieved);
 
     /// Signal que s'emet quan el DICOMTagReader est a punt per ser processats. Aquest signal s d's intern
     void DICOMTagReaderReadyForProcess(DICOMTagReader *dicomTagReader);
@@ -104,7 +118,7 @@ private:
     PACSRequestStatus::RetrieveRequestStatus m_retrieveRequestStatus;
     RetrievePriorityJob m_retrievePriorityJob;
     
-    /// Conjunt que cont� els diferents UIDs de s�rie de les imatges descarregades
+    /// Conjunt que conté els diferents UIDs de sèrie de les imatges descarregades
     QSet<QString> m_retrievedSeriesInstanceUIDSet;
 };
 

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include <QString>
 #include <QMap>
 
@@ -6,19 +20,19 @@
 namespace udg {
 
 /**
-    Aquesta classe s'encarrega de dir-nos quines operacions de rotació i flip hem d'aplicar
-    sobre una imatge 2D donades la orientació inicial i la orientació desitjada.
+    Aquesta classe s'encarrega de dir-nos quines operacions de rotaciÃ³ i flip hem d'aplicar
+    sobre una imatge 2D donades la orientaciÃ³ inicial i la orientaciÃ³ desitjada.
 
-    Per fer-ho indicarem la orientació inicial i la desitjada a través dels mètodes setInitialOrientation()
+    Per fer-ho indicarem la orientaciÃ³ inicial i la desitjada a travÃ©s dels mÃ¨todes setInitialOrientation()
     i setDesiredOrientation(). Un cop assignades les orientacions preguntarem les operacions que cal
-    aplicar sobre la imatge 2D per obtenir la orientació que es desitji.
+    aplicar sobre la imatge 2D per obtenir la orientaciÃ³ que es desitji.
 
-    L'ordre en que s'apliquin les operacions indicades *és únic* i ha de ser estrictament el següent:
+    L'ordre en que s'apliquin les operacions indicades *Ã©s Ãºnic* i ha de ser estrictament el segÃ¼ent:
        1. Aplicar rotacions
        2. Aplicar flips
 
-    Aquesta classe només contempla operacions possibles dins d'un mateix pla 2D, per tant no ens pot donar
-    una fòrmula que passi una imatge adquirida en axial a sagital, per exemple.
+    Aquesta classe nomÃ©s contempla operacions possibles dins d'un mateix pla 2D, per tant no ens pot donar
+    una fÃ²rmula que passi una imatge adquirida en axial a sagital, per exemple.
     En aquests casos, getNumberOfClockwiseTurnsToApply() i requiresHorizontalFlip() retornaran 0 i fals respectivament.
   */
 class ImageOrientationOperationsMapper {
@@ -26,14 +40,14 @@ public:
     ImageOrientationOperationsMapper();
     ~ImageOrientationOperationsMapper();
 
-    /// Indica la orientació inicial
+    /// Indica la orientaciÃ³ inicial
     void setInitialOrientation(const PatientOrientation &initialOrientation);
 
-    /// Indica la orientació desitjada
+    /// Indica la orientaciÃ³ desitjada
     void setDesiredOrientation(const PatientOrientation &desiredOrientation);
 
-    /// Ens retorna el número de girs a aplicar en el sentit de les agulles del rellotge
-    /// Els valors possibles són 0, 1, 2 ó 3
+    /// Ens retorna el nÃºmero de girs a aplicar en el sentit de les agulles del rellotge
+    /// Els valors possibles sÃ³n 0, 1, 2 Ã³ 3
     int getNumberOfClockwiseTurnsToApply();
 
     /// Ens indica si cal aplicar un flip horitzontal o no
@@ -58,13 +72,13 @@ private:
     /// Indica si cal aplicar flip o no
     bool m_horizontalFlip;
 
-    /// Ens indicarà si cal trobar les rotacions i flips necessaris per la combinació actual d'orientacions
+    /// Ens indicarÃ  si cal trobar les rotacions i flips necessaris per la combinaciÃ³ actual d'orientacions
     bool m_hasToUpdateOperations;
 
-    /// QMap per guardar les operacions de rotació i flip corresponents segons les orientacions donades.
-    /// La clau és una QString en la que guardarem la orientació inicial i desitjada en el següent format:
+    /// QMap per guardar les operacions de rotaciÃ³ i flip corresponents segons les orientacions donades.
+    /// La clau Ã©s una QString en la que guardarem la orientaciÃ³ inicial i desitjada en el segÃ¼ent format:
     /// "initialRowDirectionLabel\\initialColumnDirectionLabel-desiredRowDirectionLabel\\desiredColumnDirectionLabel"
-    /// El valor de cada clau serà una QString amb el número de rotacions seguida de un valor que indica
+    /// El valor de cada clau serÃ  una QString amb el nÃºmero de rotacions seguida de un valor que indica
     /// si es fa flip o no, separats per una coma, com per exemple "3,false"
     QMap<QString, QString> m_orientationMappingTable;
 };

@@ -2,7 +2,7 @@
 
 namespace udg {
 
-// Definició de les claus
+// DefiniciÃ³ de les claus
 const QString KeyPrefix("StarViewer-App-RectumSegmentation/");
 const QString RectumSegmentationSettings::HorizontalSplitterGeometry(KeyPrefix + "horizontalSplitter");
 const QString RectumSegmentationSettings::VerticalSplitterGeometry(KeyPrefix + "verticalSplitter");
@@ -21,4 +21,3 @@ void RectumSegmentationSettings::init()
 }
 
 } // end namespace udg 
-

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGMAGNIFYINGGLASSTOOL_H
 #define UDGMAGNIFYINGGLASSTOOL_H
 
@@ -16,7 +30,7 @@ class Q2DViewer;
 
 /**
     Tool per mostrar una vista magnificada de la imatge que hi hagi per sota del cursor.
-    L'efecte seria com si posÈssim una lupa al cim de la imatge i la poguÈssim moure per dins del visor.
+    L'efecte seria com si pos√©ssim una lupa al cim de la imatge i la pogu√©ssim moure per dins del visor.
  */
 class MagnifyingGlassTool : public Tool {
 Q_OBJECT
@@ -31,13 +45,13 @@ protected:
     Q2DViewer *m_2DViewer;
 
 private slots:
-    /// Actualitza la c‡mera i la posiciÛ del viewport
+    /// Actualitza la c√†mera i la posici√≥ del viewport
     void update();
 
     /// Actualitza la vista magnificada
     void updateMagnifiedView();
     
-    /// Actualitza els par‡metres de la c‡mera de magnificaciÛ
+    /// Actualitza els par√†metres de la c√†mera de magnificaci√≥
     void updateCamera();
 
     /// Elimina el renderer magnificat del render window del Q2DViewer
@@ -47,7 +61,7 @@ private:
     /// Habilita o deshabilita les connexions
     void enableConnections(bool enable = true);
 
-    /// Afegeix el renderer magnificat amb els par‡metres adequats
+    /// Afegeix el renderer magnificat amb els par√†metres adequats
     void addMagnifiedRenderer();
 
     /// Calcula les mides del viewport magnificat segons el punt a magnificar i la mida del viewer donada
@@ -63,10 +77,10 @@ private:
     /// Renderer on tindrem la vista magnificada
     vtkRenderer *m_magnifiedRenderer;
     
-    /// Indica si s'ha mostrat o no el renderer de magnificaciÛ
+    /// Indica si s'ha mostrat o no el renderer de magnificaci√≥
     bool m_magnifyingRendererIsVisible;
     
-    /// C‡mera de la vista magnificada
+    /// C√†mera de la vista magnificada
     vtkSmartPointer<vtkCamera> m_magnifiedCamera;
 };
 

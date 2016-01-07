@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "echotopacs.h"
 
 #include <dimse.h>
@@ -18,13 +32,13 @@ bool EchoToPACS::echo(PacsDevice pacsDevice)
 {
     PACSConnection pacsConnection(pacsDevice);
 
-    /// Es fa la connexiÛ connexiÛ
+    /// Es fa la connexi√≥ connexi√≥
     if (connectToPACS(&pacsConnection))
     {
         /// Es fa un echo al pacs
         OFCondition condition = echoToPACS(&pacsConnection);
         
-        /// DesconnexiÛ
+        /// Desconnexi√≥
         disconnectFromPACS(&pacsConnection);
         
         if (condition.good())
@@ -60,7 +74,7 @@ OFCondition EchoToPACS::echoToPACS(PACSConnection *pacsConnection)
 {
     // Generate next message ID
     DIC_US id = pacsConnection->getConnection()->nextMsgID++;
-    // Segons el PS 3.7 apartat 9.1.5.1.4 de DICOM l'status nomÈs pot ser 0x0000 si s'ha aconseguit connectar, sinÛ no hauria de tenir valor
+    // Segons el PS 3.7 apartat 9.1.5.1.4 de DICOM l'status nom√©s pot ser 0x0000 si s'ha aconseguit connectar, sin√≥ no hauria de tenir valor
     DIC_US status;
     DcmDataset *dcmDataset = NULL;
 

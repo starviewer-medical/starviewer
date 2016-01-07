@@ -1,15 +1,32 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "volumedisplayunit.h"
 
 #include "imagepipeline.h"
 #include "slicehandler.h"
 #include "volume.h"
-#include "vtkdepthdisabledopenglimageactor.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "volumepixeldata.h"
 #include "image.h"
-#include "windowlevelhelper.h"
+#include "voiluthelper.h"
 
+#include <vtkCamera.h>
+#include <vtkImageResliceMapper.h>
+#include <vtkImageSlice.h>
 #include <vtkPropPicker.h>
+#include <vtkImageProperty.h>
 
 namespace udg {
 
@@ -17,17 +34,24 @@ VolumeDisplayUnit::VolumeDisplayUnit()
  : m_volume(0)
 {
     m_imagePipeline = new ImagePipeline();
-    m_imageActor = VtkDepthDisabledOpenGLImageActor::New();
+    m_imageSlice = vtkImageSlice::New();
+    vtkImageResliceMapper *mapper = vtkImageResliceMapper::New();
+    mapper->SliceAtFocalPointOn();
+    mapper->SliceFacesCameraOn();
+    mapper->JumpToNearestSliceOn();
+    m_imageSlice->SetMapper(mapper);
+    mapper->Delete();
+    m_imageSlice->GetProperty()->SetInterpolationTypeToCubic();
     m_sliceHandler = new SliceHandler();
     m_imagePointPicker =  0;
-    m_windowLevelData = 0;
+    m_voiLutData = 0;
     m_currentThickSlabPixelData = 0;
 }
 
 VolumeDisplayUnit::~VolumeDisplayUnit()
 {
     delete m_imagePipeline;
-    m_imageActor->Delete();
+    m_imageSlice->Delete();
     delete m_sliceHandler;
     
     if (m_imagePointPicker)
@@ -49,18 +73,18 @@ void VolumeDisplayUnit::setVolume(Volume *volume)
 
     resetThickSlab();
 
-    m_imageActor->SetInput(m_imagePipeline->getOutput().getVtkImageData());
+    m_imageSlice->GetMapper()->SetInputConnection(m_imagePipeline->getOutput().getVtkAlgorithmOutput());
 }
 
-void VolumeDisplayUnit::setWindowLevelData(WindowLevelPresetsToolData *windowLevelData)
+void VolumeDisplayUnit::setVoiLutData(VoiLutPresetsToolData *voiLutData)
 {
-    m_windowLevelData = windowLevelData;
-    WindowLevelHelper().initializeWindowLevelData(m_windowLevelData, m_volume);
+    m_voiLutData = voiLutData;
+    VoiLutHelper().initializeVoiLutData(m_voiLutData, m_volume);
 }
 
-WindowLevelPresetsToolData *VolumeDisplayUnit::getWindowLevelData()
+VoiLutPresetsToolData *VolumeDisplayUnit::getVoiLutData() const
 {
-    return m_windowLevelData;
+    return m_voiLutData;
 }
 
 ImagePipeline* VolumeDisplayUnit::getImagePipeline() const
@@ -68,9 +92,9 @@ ImagePipeline* VolumeDisplayUnit::getImagePipeline() const
     return m_imagePipeline;
 }
 
-vtkImageActor* VolumeDisplayUnit::getImageActor() const
+vtkImageSlice* VolumeDisplayUnit::getImageSlice() const
 {
-    return m_imageActor;
+    return m_imageSlice;
 }
 
 vtkPropPicker* VolumeDisplayUnit::getImagePointPicker()
@@ -160,7 +184,7 @@ Image* VolumeDisplayUnit::getCurrentDisplayedImage() const
     }
 }
 
-void VolumeDisplayUnit::updateDisplayExtent()
+void VolumeDisplayUnit::updateImageSlice(vtkCamera *camera)
 {
     if (!m_volume || !m_volume->isPixelDataLoaded())
     {
@@ -169,10 +193,14 @@ void VolumeDisplayUnit::updateDisplayExtent()
 
     int imageIndex = m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
     int zIndex = this->getViewPlane().getZIndex();
-    int displayExtent[6];
-    m_volume->getWholeExtent(displayExtent);
-    displayExtent[zIndex * 2] = displayExtent[zIndex * 2 + 1] = imageIndex;
-    m_imageActor->SetDisplayExtent(displayExtent);
+    double origin[3];
+    m_volume->getOrigin(origin);
+    double spacing[3];
+    m_volume->getSpacing(spacing);
+    double focalPoint[3];
+    camera->GetFocalPoint(focalPoint);
+    focalPoint[zIndex] = origin[zIndex] + imageIndex * spacing[zIndex];
+    camera->SetFocalPoint(focalPoint);
 }
 
 int VolumeDisplayUnit::getSlice() const
@@ -258,7 +286,7 @@ void VolumeDisplayUnit::setupPicker()
 {
     m_imagePointPicker = vtkPropPicker::New();
     m_imagePointPicker->InitializePickList();
-    m_imagePointPicker->AddPickList(getImageActor());
+    m_imagePointPicker->AddPickList(getImageSlice());
     m_imagePointPicker->PickFromListOn();
 }
 
@@ -269,32 +297,34 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
         Image *image = getVolume()->getImage(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
         if (image)
         {
-            for (int i = 0; i < image->getNumberOfWindowLevels(); ++i)
+            for (int i = 0; i < image->getNumberOfVoiLuts(); ++i)
             {
-                WindowLevel windowLevel = WindowLevelHelper().getDefaultWindowLevelForPresentation(image, i);
-                m_windowLevelData->updatePreset(windowLevel);
+                VoiLut voiLut = VoiLutHelper().getDefaultVoiLutForPresentation(image, i);
+                m_voiLutData->updatePreset(voiLut);
             }
         }
     }
     
-    WindowLevel wl = m_windowLevelData->getCurrentPreset();
-    m_imagePipeline->setWindowLevel(wl.getWidth(), wl.getCenter());
+    VoiLut voiLut = m_voiLutData->getCurrentPreset();
+    setVoiLut(voiLut);
 }
 
-void VolumeDisplayUnit::updateWindowLevel(const WindowLevel &windowLevel)
+void VolumeDisplayUnit::setVoiLut(const VoiLut &voiLut)
 {
-    m_windowLevelData->setCurrentPreset(windowLevel);
-    m_imagePipeline->setWindowLevel(windowLevel.getWidth(), windowLevel.getCenter());
+    if (m_volume->getImage(0) && m_volume->getImage(0)->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
+    {
+        m_imagePipeline->setVoiLut(voiLut.inverse());
+    }
+    else
+    {
+        m_imagePipeline->setVoiLut(voiLut);
+    }
 }
 
-void VolumeDisplayUnit::getWindowLevel(double windowLevel[2]) const
+void VolumeDisplayUnit::setCurrentVoiLutPreset(const VoiLut &voiLut)
 {
-    m_imagePipeline->getCurrentWindowLevel(windowLevel);
-}
-
-void VolumeDisplayUnit::setWindowLevel(double window, double level)
-{
-    m_imagePipeline->setWindowLevel(window, level);
+    m_voiLutData->setCurrentPreset(voiLut);
+    setVoiLut(voiLut);
 }
 
 void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunction)

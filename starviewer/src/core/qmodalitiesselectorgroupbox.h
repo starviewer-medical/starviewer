@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGQMODALITIESSELECTORGROUPBOX_H
 #define UDGQMODALITIESSELECTORGROUPBOX_H
 
@@ -23,19 +37,19 @@ public:
     /// Desmarca tots els check box
     void clear();
     
-    /// Indica si podem seleccionar una sola modalitat o m˙ltiples
+    /// Indica si podem seleccionar una sola modalitat o m√∫ltiples
     void setExclusive(bool exlusive);
 
     /// Ens retorna una llista amb les modalitats seleccionades
     QStringList getCheckedModalities();
 
-    /// Selecciona les modalitats de la llista. Si la modalitat no Ès v‡lida no marca res.
+    /// Selecciona les modalitats de la llista. Si la modalitat no √©s v√†lida no marca res.
     void checkModalities(const QStringList &modalities);
 
     /// Fa que el check box especial "All" es marqui o desmarqui
     void setAllModalitiesCheckBoxChecked(bool checked);
 
-    /// Ens indica si el check box de "All" est‡ marcat o no, independentment de si est‡ habilitat o no
+    /// Ens indica si el check box de "All" est√† marcat o no, independentment de si est√† habilitat o no
     bool isAllModalitiesCheckBoxChecked() const;
 
 signals:

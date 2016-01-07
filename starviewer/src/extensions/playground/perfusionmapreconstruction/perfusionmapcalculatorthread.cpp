@@ -12,8 +12,8 @@
 
 #include <itkImageRegionIteratorWithIndex.h>
 #include <itkImageRegionIterator.h>
-#include <itkVnlFFTRealToComplexConjugateImageFilter.h>
-#include <itkVnlFFTComplexConjugateToRealImageFilter.h>
+#include <itkVnlForwardFFTImageFilter.h>
+#include <itkVnlInverseFFTImageFilter.h>
 
 
 namespace udg {
@@ -496,7 +496,7 @@ QVector<double> PerfusionMapCalculatorThread::deconvolve(QVector<double> tissue)
     VectorIteratorType tissueIter(tissueImage, tissueImage->GetLargestPossibleRegion());
     //std::cout<<"@"<<tissueImage->GetLargestPossibleRegion().GetSize()[0]<<std::endl;
 
-    typedef itk::VnlFFTRealToComplexConjugateImageFilter< double, 1 >  FFTFilterType;
+    typedef itk::VnlForwardFFTImageFilter< VectorImageType >  FFTFilterType;
     FFTFilterType::Pointer fftFilter = FFTFilterType::New();
     //std::cout<<"#"<<std::endl;
 
@@ -553,7 +553,7 @@ QVector<double> PerfusionMapCalculatorThread::deconvolve(QVector<double> tissue)
         ++fftResidualIter;
     }
 
-    typedef itk::VnlFFTComplexConjugateToRealImageFilter< double, 1 >  IFFTFilterType;
+    typedef itk::VnlInverseFFTImageFilter< ComplexImageType >  IFFTFilterType;
     IFFTFilterType::Pointer fftInverseFilter = IFFTFilterType::New();
     fftInverseFilter->SetInput(residualFFTImage);
 

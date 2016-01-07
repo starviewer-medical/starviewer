@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGSYSTEMINFORMATION_H
 #define UDGSYSTEMINFORMATION_H
 
@@ -14,7 +28,7 @@ public:
     /// Destructor
     virtual ~SystemInformation();
 
-    /// Crea una nova inst‡ncia d'alguna de les classes que implementa la interfÌcie
+    /// Crea una nova inst√†ncia d'alguna de les classes que implementa la interf√≠cie
     static SystemInformation* newInstance();
 
     virtual OperatingSystem getOperatingSystem();
@@ -24,7 +38,7 @@ public:
     
     virtual QString getOperatingSystemVersion();
     
-    /// Retorna la versiÛ de service pack instal∑lat, nomÈs en windows
+    /// Retorna la versi√≥ de service pack instal¬∑lat, nom√©s en windows
     virtual QString getOperatingSystemServicePackVersion();
     
     /// Returna el nom complert del Sistema Operatiu (Nom, arquitectura, actualitzacions...)
@@ -33,7 +47,7 @@ public:
     /// Returs the name of operating system in a short form
     virtual QString getOperatingSystemAsShortString();
     
-    /// Retorna la quantitat total de memÚria RAM en MegaBytes
+    /// Retorna la quantitat total de mem√≤ria RAM en MegaBytes
     virtual unsigned int getRAMTotalAmount();
     
     //En MBytes

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "settingsregistry.h"
 
 #include "logging.h"
@@ -46,13 +60,13 @@ Settings::Properties SettingsRegistry::getProperties(const QString &key)
 
 void SettingsRegistry::loadAccesLevelTable()
 {
-    // Al directori on s'instal·la l'aplicació tindrem
-    // un .ini que definirà els nivells d'accés de cada settings
+    // Al directori on s'instalÂ·la l'aplicaciÃ³ tindrem
+    // un .ini que definirÃ  els nivells d'accÃ©s de cada settings
     QString filePath = qApp->applicationDirPath() + "/settingsAccessLevel.ini";
     QFile file(filePath);
     if (!file.exists())
     {
-        DEBUG_LOG("L'arxiu [" + filePath + "] No existeix. No es poden carregar els nivells d'accés");
+        DEBUG_LOG("L'arxiu [" + filePath + "] No existeix. No es poden carregar els nivells d'accÃ©s");
     }
     else
     {

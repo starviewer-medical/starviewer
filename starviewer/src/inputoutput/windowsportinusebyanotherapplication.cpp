@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "windowsportinusebyanotherapplication.h"
 #include "logging.h"
 
@@ -41,7 +55,7 @@ bool WindowsPortInUseByAnotherApplication::isPortInUseByAnotherApplication(int p
         MIB_TCPROW_OWNER_MODULE module = tcpTable->table[index++];
         int pId = module.dwOwningPid;
         int localPort = htons((short)module.dwLocalPort);
-        // Només es comprova que el port sigui el mateix. No es comprova si està en ús o no, ja que ja es mira abans de cridar aquest mètode
+        // NomÃ©s es comprova que el port sigui el mateix. No es comprova si estÃ  en Ãºs o no, ja que ja es mira abans de cridar aquest mÃ¨tode
         if (localPort == port)
         {
             found = true;
@@ -66,9 +80,9 @@ PMIB_TCPTABLE_OWNER_MODULE WindowsPortInUseByAnotherApplication::getTCPTables()
     DWORD size = 0;
     DWORD result = 0;
     // Primer de tot, hem de trobar el tamany de la taula TCP i guardar-lo a size, un cop el tenim, podem fer el malloc i tornar
-    // a cridar la funció per recuperar de forma correcta la taula.
-    // El problema ve perqué la funció no retorna el tamany de forma acurada (sempre retorna un valor diferent), 
-    // per tant, podem buscar-lo amb un while i quan es compleixi la variable pTCPTable estarà instanciada de forma correcta.
+    // a cridar la funciÃ³ per recuperar de forma correcta la taula.
+    // El problema ve perquÃ© la funciÃ³ no retorna el tamany de forma acurada (sempre retorna un valor diferent), 
+    // per tant, podem buscar-lo amb un while i quan es compleixi la variable pTCPTable estarÃ  instanciada de forma correcta.
     bool found = false;
     while (!found)
     {
@@ -76,7 +90,7 @@ PMIB_TCPTABLE_OWNER_MODULE WindowsPortInUseByAnotherApplication::getTCPTables()
         GetExtendedTcpTable(NULL, &size, true, AF_INET, TCP_TABLE_OWNER_MODULE_ALL, 0);
         // Es reserva l'espai per la taula TCP ara que sabem el tamany
         tcpTable = malloc(size);
-        // S'obté la taula TCP
+        // S'obtÃ© la taula TCP
         result = GetExtendedTcpTable(tcpTable, &size, true, AF_INET, TCP_TABLE_OWNER_MODULE_ALL, 0);
         // Si ens dona error de tamany, ho tornem a probar
         if (result == ERROR_INSUFFICIENT_BUFFER)

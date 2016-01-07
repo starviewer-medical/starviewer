@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "inputoutputsettings.h"
 #include "settingsregistry.h"
 
@@ -12,7 +26,7 @@
 
 namespace udg {
 
-// Definici� de les claus
+// Definició de les claus
 const QString CacheBase("PACS/cache/");
 const QString InputOutputSettings::DatabaseAbsoluteFilePath(CacheBase + "sdatabasePath");
 const QString InputOutputSettings::CachePath(CacheBase + "imagePath");
@@ -110,7 +124,7 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(LastOpenedDICOMDIRPath, QDir::homePath());
 
     settingsRegistry->addSetting(IncomingDICOMConnectionsPort, 4006);
-    // TODO podr�em definir-lo directament amb %HOSTNAME%
+    // TODO podríem definir-lo directament amb %HOSTNAME%
     settingsRegistry->addSetting(LocalAETitle, QHostInfo::localHostName(), Settings::Parseable);
     settingsRegistry->addSetting(PACSConnectionTimeout, 20);
     settingsRegistry->addSetting(MaximumPACSConnections, 3);
@@ -125,7 +139,7 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(DICOMDIRBurningApplicationHasDifferentCDDVDParametersKey, false);
 #elif defined(Q_OS_MAC)
     // MAC
-    settingsRegistry->addSetting(DICOMDIRBurningApplicationPathKey, QDesktopServices::storageLocation(QDesktopServices::ApplicationsLocation) +
+    settingsRegistry->addSetting(DICOMDIRBurningApplicationPathKey, QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation).at(0) +
                                  "/Burn.app/Contents/MacOS/Burn");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationParametersKey, "%1");
     settingsRegistry->addSetting(DICOMDIRBurningApplicationCDParametersKey, "");

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "cursor3dtool.h"
 
 #include "cursor3dtool.h"
@@ -36,7 +50,9 @@ Cursor3DTool::Cursor3DTool(QViewer *viewer, QObject *parent)
     // Cada cop que el viewer canvïi d'input, hem d'actualitzar el frame of reference
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(refreshReferenceViewerData()));
     connect(m_2DViewer, SIGNAL(selected()), SLOT(refreshReferenceViewerData()));
-    connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(handleSliceChange()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(handleImageChange()));
+    connect(m_2DViewer, SIGNAL(anatomicalViewChanged(AnatomicalPlane)), SLOT(handleImageChange()));
+    connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(handleImageChange()));
 
     refreshReferenceViewerData();
 
@@ -220,7 +236,7 @@ void Cursor3DTool::refreshReferenceViewerData()
     }
 }
 
-void Cursor3DTool::handleSliceChange()
+void Cursor3DTool::handleImageChange()
 {
     if (m_2DViewer->isActive() && m_state == None)
     {

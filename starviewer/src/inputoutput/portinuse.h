@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGPORTINUSE_H
 #define UDGPORTINUSE_H
 
@@ -9,7 +23,7 @@ namespace udg {
 class PortInUseByAnotherApplication;
 
 /**
-    Classe que s'encarrega de comprovar si un port està en ús.
+    Classe que s'encarrega de comprovar si un port estÃ  en Ãºs.
   */
 class PortInUse {
 public:
@@ -17,33 +31,34 @@ public:
     enum PortInUseOwner { PortUsedByUnknown, PortUsedByStarviewer, PortUsedByOther };
 
     PortInUse();
+    virtual ~PortInUse();
 
-    /// Indica si el port passat per paràmetre està en ús (cert) o lliure (fals)
+    /// Indica si el port passat per parÃ metre estÃ  en Ãºs (cert) o lliure (fals)
     bool isPortInUse(int port);
 
-    /// Indica si el port passat per paràmetre està en ús per una aplicació diferent de starviewer
+    /// Indica si el port passat per parÃ metre estÃ  en Ãºs per una aplicaciÃ³ diferent de starviewer
     PortInUse::PortInUseOwner getOwner();
 
-    /// Retorna l'estat de l'últim port que s'ha comprovat
+    /// Retorna l'estat de l'Ãºltim port que s'ha comprovat
     PortInUse::PortInUseStatus getStatus();
 
-    /// Retorna l'string corresponent a l'error. El seu valor només serà vàlid quan m_status valgui PortCheckError.
+    /// Retorna l'string corresponent a l'error. El seu valor nomÃ©s serÃ  vÃ lid quan m_status valgui PortCheckError.
     QString getErrorString();
 
 protected:
-    /// Retorna si el port passat per paràmetre està lliure (cert) o en ús (fals)
+    /// Retorna si el port passat per parÃ metre estÃ  lliure (cert) o en Ãºs (fals)
     /// @param serverError: indica l'error del servidor
     /// @param errorString: descripcio de l'error.
     virtual bool isPortAvailable(int port, QAbstractSocket::SocketError &serverError, QString &errorString);
-    /// Mètode per aplicar testing, crea un objecte portInUseByAnotherApplication
+    /// MÃ¨tode per aplicar testing, crea un objecte portInUseByAnotherApplication
     virtual PortInUseByAnotherApplication* createPortInUseByAnotherApplication();
 
 protected:
-    /// Últim port que s'ha comprovat, quan fem un getOwner, es farà d'aquest port
+    /// Ãšltim port que s'ha comprovat, quan fem un getOwner, es farÃ  d'aquest port
     int m_lastPortChecked;
     /// Estat del port
     PortInUse::PortInUseStatus m_status;
-    /// String amb la descripció de l'error en cas que se n'hagi produït algun
+    /// String amb la descripciÃ³ de l'error en cas que se n'hagi produÃ¯t algun
     QString m_errorString;
 
 };

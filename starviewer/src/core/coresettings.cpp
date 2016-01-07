@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "coresettings.h"
 #include "settingsregistry.h"
 
@@ -64,13 +78,14 @@ const QString CoreSettings::LastVersionCheckedDate("LastVersionCheckedDate");
 const QString CoreSettings::CheckVersionInterval("CheckVersionInterval");
 const QString CoreSettings::NeverShowNewVersionReleaseNotes("NeverShowNewVersionReleaseNotes");
 const QString CoreSettings::DontCheckNewVersionsOnline("DontCheckNewVersionsOnline");
+const QString CoreSettings::UpdateCheckUrlAdditionalParameters("UpdateCheckUrlAdditionalParameters");
 
 const QString CoreSettings::MammographyAutoOrientationExceptions("MammographyAutoOrientationExceptions");
 
 const QString CoreSettings::AllowAsynchronousVolumeLoading("AllowAsynchronousVolumeLoading");
 const QString CoreSettings::MaximumNumberOfVolumesLoadingConcurrently("MaximumNumberOfVolumesLoadingConcurrently");
 
-const QString CoreSettings::MaximumNumberOfVisibleWindowLevelComboItems("MaximumNumberOfVisibleWindowLevelComboItems");
+const QString CoreSettings::MaximumNumberOfVisibleVoiLutComboItems("MaximumNumberOfVisibleVoiLutComboItems");
 
 // Geometria de la finestra del QDICOMDumpBrowser
 const QString CoreSettings::QDICOMDumpBrowserGeometry("QDICOMDumpBrowserGeometry");
@@ -122,10 +137,13 @@ void CoreSettings::init()
     settingsRegistry->addSetting(LastVersionCheckedDate, "");
     settingsRegistry->addSetting(CheckVersionInterval, "1");
     settingsRegistry->addSetting(DontCheckNewVersionsOnline, false);
+#ifdef CORPORATE_VERSION
+    settingsRegistry->addSetting(UpdateCheckUrlAdditionalParameters, "machineID,groupID");
+#endif
     settingsRegistry->addSetting(MammographyAutoOrientationExceptions, (QStringList() << "BAV" << "BAG" << "estereot"));
     settingsRegistry->addSetting(AllowAsynchronousVolumeLoading, true);
     settingsRegistry->addSetting(MaximumNumberOfVolumesLoadingConcurrently, 1);
-    settingsRegistry->addSetting(MaximumNumberOfVisibleWindowLevelComboItems, 50);
+    settingsRegistry->addSetting(MaximumNumberOfVisibleVoiLutComboItems, 50);
     settingsRegistry->addSetting(EnableQ2DViewerSliceScrollLoop, false);
     settingsRegistry->addSetting(EnableQ2DViewerPhaseScrollLoop, false);
     settingsRegistry->addSetting(EnableQ2DViewerReferenceLinesForMR, true);

@@ -21,17 +21,17 @@ private slots:
     void getDisplayShutterForDisplay_ShouldReturnExpectedValues_data();
     void getDisplayShutterForDisplay_ShouldReturnExpectedValues();
 
-    void addWindowLevel_ShouldAddWindowLevel_data();
-    void addWindowLevel_ShouldAddWindowLevel();
-    void addWindowLevel_ShouldNotAddWindowLevel_data();
-    void addWindowLevel_ShouldNotAddWindowLevel();
-    void addWindowLevel_ShouldAddSameWindowLevelTwoTimes();
+    void addVoiLut_ShouldAddWindowLevel_data();
+    void addVoiLut_ShouldAddWindowLevel();
+    void addVoiLut_ShouldNotAddWindowLevel_data();
+    void addVoiLut_ShouldNotAddWindowLevel();
+    void addVoiLut_ShouldAddSameWindowLevelTwoTimes();
     
-    void setWindowLevelList_SetsValuesAsExpected_data();
-    void setWindowLevelList_SetsValuesAsExpected();
+    void setVoiLutList_SetsValuesAsExpected_data();
+    void setVoiLutList_SetsValuesAsExpected();
     
-    void getWindowLevel_ShouldReturnExpectedValues_data();
-    void getWindowLevel_ShouldReturnExpectedValues();
+    void getVoiLut_ShouldReturnExpectedValues_data();
+    void getVoiLut_ShouldReturnExpectedValues();
 
     void getDisplayShutterForDisplayAsVtkImageData_ShouldReturnNull_data();
     void getDisplayShutterForDisplayAsVtkImageData_ShouldReturnNull();
@@ -49,8 +49,8 @@ Q_DECLARE_METATYPE(QList<DisplayShutter>)
 Q_DECLARE_METATYPE(DisplayShutter)
 Q_DECLARE_METATYPE(double*)
 Q_DECLARE_METATYPE(Image*)
-Q_DECLARE_METATYPE(WindowLevel)
-Q_DECLARE_METATYPE(QList<WindowLevel>)
+Q_DECLARE_METATYPE(VoiLut)
+Q_DECLARE_METATYPE(QList<VoiLut>)
 Q_DECLARE_METATYPE(PixelSpacing2D)
 
 void test_Image::hasOverlays_ReturnExpectedValues_data()
@@ -152,126 +152,126 @@ void test_Image::getDisplayShutterForDisplay_ShouldReturnExpectedValues()
     QCOMPARE(shutterForDisplay.getAsQPolygon(), expectedShutterForDisplay.getAsQPolygon());
 }
 
-void test_Image::addWindowLevel_ShouldAddWindowLevel_data()
+void test_Image::addVoiLut_ShouldAddWindowLevel_data()
 {
-    QTest::addColumn<WindowLevel>("windowLevel");
+    QTest::addColumn<VoiLut>("windowLevel");
     
-    QTest::newRow("both positive") << WindowLevel(100.0, 200.0);
-    QTest::newRow("both negative") << WindowLevel(-101.0, -201.0);
-    QTest::newRow("window positive, level negative") << WindowLevel(102.0, -202.0);
-    QTest::newRow("window negative, level positive") << WindowLevel(-103.0, 203.0);
-    QTest::newRow("level zero") << WindowLevel(100.0, 0.0);
+    QTest::newRow("both positive") << VoiLut(WindowLevel(100.0, 200.0));
+    QTest::newRow("both negative") << VoiLut(WindowLevel(-101.0, -201.0));
+    QTest::newRow("window positive, level negative") << VoiLut(WindowLevel(102.0, -202.0));
+    QTest::newRow("window negative, level positive") << VoiLut(WindowLevel(-103.0, 203.0));
+    QTest::newRow("level zero") << VoiLut(WindowLevel(100.0, 0.0));
 }
 
-void test_Image::addWindowLevel_ShouldAddWindowLevel()
+void test_Image::addVoiLut_ShouldAddWindowLevel()
 {
-    QFETCH(WindowLevel, windowLevel);
+    QFETCH(VoiLut, windowLevel);
 
     Image image;
-    image.addWindowLevel(windowLevel);
+    image.addVoiLut(windowLevel);
 
-    QCOMPARE(image.getNumberOfWindowLevels(), 1);
-    QCOMPARE(image.getWindowLevel(0), windowLevel);
+    QCOMPARE(image.getNumberOfVoiLuts(), 1);
+    QCOMPARE(image.getVoiLut(0), windowLevel);
 }
 
-void test_Image::addWindowLevel_ShouldNotAddWindowLevel_data()
+void test_Image::addVoiLut_ShouldNotAddWindowLevel_data()
 {
-    QTest::addColumn<WindowLevel>("windowLevel");
+    QTest::addColumn<VoiLut>("windowLevel");
 
-    QTest::newRow("window zero") << WindowLevel(0.0, 200.0);
+    QTest::newRow("window zero") << VoiLut(WindowLevel(0.0, 200.0));
 }
 
-void test_Image::addWindowLevel_ShouldNotAddWindowLevel()
+void test_Image::addVoiLut_ShouldNotAddWindowLevel()
 {
-    QFETCH(WindowLevel, windowLevel);
+    QFETCH(VoiLut, windowLevel);
 
     Image image;
-    image.addWindowLevel(windowLevel);
+    image.addVoiLut(windowLevel);
 
-    QCOMPARE(image.getNumberOfWindowLevels(), 0);
+    QCOMPARE(image.getNumberOfVoiLuts(), 0);
 }
 
-void test_Image::addWindowLevel_ShouldAddSameWindowLevelTwoTimes()
+void test_Image::addVoiLut_ShouldAddSameWindowLevelTwoTimes()
 {
-    WindowLevel windowLevel(100.0, 300.0);
+    VoiLut windowLevel(WindowLevel(100.0, 300.0));
     Image image;
-    image.addWindowLevel(windowLevel);
-    image.addWindowLevel(windowLevel);
+    image.addVoiLut(windowLevel);
+    image.addVoiLut(windowLevel);
 
-    QCOMPARE(image.getNumberOfWindowLevels(), 2);
-    QCOMPARE(image.getWindowLevel(0), windowLevel);
-    QCOMPARE(image.getWindowLevel(1), windowLevel);
+    QCOMPARE(image.getNumberOfVoiLuts(), 2);
+    QCOMPARE(image.getVoiLut(0), windowLevel);
+    QCOMPARE(image.getVoiLut(1), windowLevel);
 }
 
-void test_Image::setWindowLevelList_SetsValuesAsExpected_data()
+void test_Image::setVoiLutList_SetsValuesAsExpected_data()
 {
-    QTest::addColumn<QList<WindowLevel> >("inputList");
-    QTest::addColumn<QList<WindowLevel> >("expectedSetList");
+    QTest::addColumn<QList<VoiLut> >("inputList");
+    QTest::addColumn<QList<VoiLut> >("expectedSetList");
 
-    QTest::newRow("Input list is empty") << QList<WindowLevel>() << QList<WindowLevel>();
+    QTest::newRow("Input list is empty") << QList<VoiLut>() << QList<VoiLut>();
 
     WindowLevel validWL(1.0, 2.0, "VALID WINDOW");
     WindowLevel invalidWL(0.0, 2.0, "INVALID WINDOW");
     
-    QList<WindowLevel> validItemsList;
+    QList<VoiLut> validItemsList;
     validItemsList << validWL << validWL;
     QTest::newRow("Input list has only valid items") << validItemsList << validItemsList;
 
     validItemsList.clear();
     validItemsList << validWL << invalidWL << validWL;
 
-    QList<WindowLevel> expectedResultList;
+    QList<VoiLut> expectedResultList;
     expectedResultList << validWL << validWL;
     QTest::newRow("Input list has invalid items") << validItemsList << expectedResultList;
 }
 
-void test_Image::setWindowLevelList_SetsValuesAsExpected()
+void test_Image::setVoiLutList_SetsValuesAsExpected()
 {
-    QFETCH(QList<WindowLevel>, inputList);
-    QFETCH(QList<WindowLevel>, expectedSetList);
+    QFETCH(QList<VoiLut>, inputList);
+    QFETCH(QList<VoiLut>, expectedSetList);
 
     Image image;
-    image.setWindowLevelList(inputList);
+    image.setVoiLutList(inputList);
 
-    QCOMPARE(image.getNumberOfWindowLevels(), expectedSetList.count());
+    QCOMPARE(image.getNumberOfVoiLuts(), expectedSetList.count());
     
-    for (int i = 0; i < image.getNumberOfWindowLevels(); ++i)
+    for (int i = 0; i < image.getNumberOfVoiLuts(); ++i)
     {
-        QCOMPARE(image.getWindowLevel(i), expectedSetList.at(i));
+        QCOMPARE(image.getVoiLut(i), expectedSetList.at(i));
     }
 }
 
-void test_Image::getWindowLevel_ShouldReturnExpectedValues_data()
+void test_Image::getVoiLut_ShouldReturnExpectedValues_data()
 {
-    QTest::addColumn<QList<WindowLevel> >("windowLevelList");
+    QTest::addColumn<QList<VoiLut> >("windowLevelList");
     QTest::addColumn<int>("index");
-    QTest::addColumn<WindowLevel>("expectedWindowLevel");
+    QTest::addColumn<VoiLut>("expectedWindowLevel");
 
     
-    WindowLevel wl1(10.0, 20.0, "WINDOW 1");
-    WindowLevel wl2(11.0, 21.0, "WINDOW 2");
-    WindowLevel wl3(12.0, 22.0, "WINDOW 3");
+    VoiLut wl1(WindowLevel(10.0, 20.0, "WINDOW 1"));
+    VoiLut wl2(WindowLevel(11.0, 21.0, "WINDOW 2"));
+    VoiLut wl3(WindowLevel(12.0, 22.0, "WINDOW 3"));
 
-    QList<WindowLevel> windowLevelsList;
+    QList<VoiLut> windowLevelsList;
     windowLevelsList << wl1 << wl2 << wl3;
     
-    QTest::newRow("index out of range: below 0") << windowLevelsList << -1 << WindowLevel();
-    QTest::newRow("index out of range: greater than list size") << windowLevelsList << windowLevelsList.size() << WindowLevel();
+    QTest::newRow("index out of range: below 0") << windowLevelsList << -1 << VoiLut();
+    QTest::newRow("index out of range: greater than list size") << windowLevelsList << windowLevelsList.size() << VoiLut();
     QTest::newRow("index in bounds [0]") << windowLevelsList << 0 << wl1;
     QTest::newRow("index in bounds [1]") << windowLevelsList << 1 << wl2;
     QTest::newRow("index in bounds [2]") << windowLevelsList << 2 << wl3;
 }
 
-void test_Image::getWindowLevel_ShouldReturnExpectedValues()
+void test_Image::getVoiLut_ShouldReturnExpectedValues()
 {
-    QFETCH(QList<WindowLevel>, windowLevelList);
+    QFETCH(QList<VoiLut>, windowLevelList);
     QFETCH(int, index);
-    QFETCH(WindowLevel, expectedWindowLevel);
+    QFETCH(VoiLut, expectedWindowLevel);
 
     Image image;
-    image.setWindowLevelList(windowLevelList);
+    image.setVoiLutList(windowLevelList);
     
-    QCOMPARE(image.getWindowLevel(index), expectedWindowLevel);
+    QCOMPARE(image.getVoiLut(index), expectedWindowLevel);
 }
 
 void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnNull_data()

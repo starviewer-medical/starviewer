@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qnotificationpopup.h"
 
 #include <QTimer>
@@ -129,8 +143,8 @@ bool QNotificationPopup::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress)
     {
-        // Parem els rellotges perquË no saltin les animacions amb el PopUp amagat, sinÛ ens podrÌem trobar que si rebem una altra peticiÛ
-        // apareguÈs el PopUp movent-se
+        // Parem els rellotges perqu√® no saltin les animacions amb el PopUp amagat, sin√≥ ens podr√≠em trobar que si rebem una altra petici√≥
+        // aparegu√©s el PopUp movent-se
         // TODO Replace by cancelTriggeredAnimations()?
         m_hideDelayTimer->stop();
         m_moveAnimationDelayTimer->stop(); 

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qdicomdirconfigurationscreen.h"
 
 #include <QFileDialog>
@@ -27,7 +41,7 @@ QDICOMDIRConfigurationScreen::~QDICOMDIRConfigurationScreen()
 
 void QDICOMDIRConfigurationScreen::createConnections()
 {
-    // Connecta el boto examinar programa de gravaciÛ amb el dialog per escollir el path del programa
+    // Connecta el boto examinar programa de gravaci√≥ amb el dialog per escollir el path del programa
     connect(m_buttonExaminateBurningApplication, SIGNAL(clicked()), SLOT(examinateDICOMDIRBurningApplicationPath()));
     connect(m_buttonExaminateDICOMDIRFolderPathToCopy, SIGNAL(clicked()), SLOT(examinateDICOMDIRFolderPathToCopy()));
 }
@@ -186,7 +200,7 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
 {
     Settings settings;
 
-    // A la p‡gina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap mËtode que
+    // A la p√†gina de QT indica que en el cas que nomes deixem seleccionar un fitxer, agafar el primer element de la llista i punt, no hi ha cap m√®tode que
     // te retornin directament el fitxer selccionat
     QFileDialog *dialog = new QFileDialog(0, QFileDialog::tr("Open"),
                                           settings.getValue(InputOutputSettings::DICOMDIRBurningApplicationPathKey).toString(), "");
@@ -198,11 +212,11 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
         {
             QString burningApplicationPath = dialog->selectedFiles().takeFirst();
             QFileInfo infoBurningApplicationFile(burningApplicationPath);
-            // Es comprova si es tracta d'una aplicaciÛ de Mac i en cas afirmatiu es modifica el path per tal d'indicar exactament on Ès l'executable
+            // Es comprova si es tracta d'una aplicaci√≥ de Mac i en cas afirmatiu es modifica el path per tal d'indicar exactament on √©s l'executable
             if (infoBurningApplicationFile.isBundle())
             {
-                // El path es treu una mica a lo "bruto". Per fer-ho bÈ s'hauria de llegir el Bundle i extreure'n
-                // la localitzaciÛ de l'executable (CFBundleExecutable):
+                // El path es treu una mica a lo "bruto". Per fer-ho b√© s'hauria de llegir el Bundle i extreure'n
+                // la localitzaci√≥ de l'executable (CFBundleExecutable):
                 // http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFBundles/BundleTypes/BundleTypes.html
                 burningApplicationPath = burningApplicationPath + "/Contents/MacOS/" + infoBurningApplicationFile.bundleName();
             }

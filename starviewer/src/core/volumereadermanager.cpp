@@ -1,6 +1,20 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "volumereadermanager.h"
 
-#include "asynchronousvolumereader.h"
+#include "volumereaderjobfactory.h"
 #include "volumereaderjob.h"
 #include "volume.h"
 
@@ -40,13 +54,13 @@ void VolumeReaderManager::readVolumes(const QList<Volume*> &volumes)
 
     foreach (Volume *volume, volumes)
     {
-        // TODO Esborrar volumeReader!!
-        AsynchronousVolumeReader *volumeReader = new AsynchronousVolumeReader();
-        m_volumeReaderJobs << volumeReader->read(volume);
-        m_jobsProgress.insert(m_volumeReaderJobs.last(), 0);
+        VolumeReaderJobFactory *volumeReader = VolumeReaderJobFactory::instance();
+        QSharedPointer<VolumeReaderJob> job = volumeReader->read(volume);
+        m_volumeReaderJobs << job;
+        m_jobsProgress.insert(job.data(), 0);
         m_volumes << NULL;
-        connect(m_volumeReaderJobs.last(), SIGNAL(done(ThreadWeaver::Job*)), SLOT(jobFinished(ThreadWeaver::Job*)));
-        connect(m_volumeReaderJobs.last(), SIGNAL(progress(ThreadWeaver::Job*, int)), SLOT(updateProgress(ThreadWeaver::Job*, int)));
+        connect(job.data(), SIGNAL(done(ThreadWeaver::JobPointer)), SLOT(jobFinished(ThreadWeaver::JobPointer)));
+        connect(job.data(), SIGNAL(progress(VolumeReaderJob*, int)), SLOT(updateProgress(VolumeReaderJob*, int)));
     }
 }
 
@@ -56,12 +70,13 @@ void VolumeReaderManager::cancelReading()
     // Quan es faci bé, tenir en compte què passa si algun altre visor el vol continuar descarregant igualment i nosaltres aquí el cancelem?
     for (int i = 0; i < m_volumeReaderJobs.size(); ++i)
     {
-        if (!m_volumeReaderJobs[i].isNull())
+        QSharedPointer<VolumeReaderJob> job = m_volumeReaderJobs[i].toStrongRef().dynamicCast<VolumeReaderJob>();
+        if (!job.isNull())
         {
-            disconnect(m_volumeReaderJobs[i], SIGNAL(done(ThreadWeaver::Job*)), this, SIGNAL(jobFinished(ThreadWeaver::Job*)));
-            disconnect(m_volumeReaderJobs[i], SIGNAL(progress(ThreadWeaver::Job*, int)), this, SLOT(updateProgress(ThreadWeaver::Job*, int)));
+            disconnect(job.data(), SIGNAL(done(ThreadWeaver::JobPointer)), this, SLOT(jobFinished(ThreadWeaver::JobPointer)));
+            disconnect(job.data(), SIGNAL(progress(VolumeReaderJob*, int)), this, SLOT(updateProgress(VolumeReaderJob*, int)));
         }
-        m_volumeReaderJobs[i] = NULL;
+        m_volumeReaderJobs[i].clear();
     }
     initialize();
 }
@@ -92,7 +107,7 @@ bool VolumeReaderManager::isReading()
     return m_numberOfFinishedJobs < m_volumeReaderJobs.size();
 }
 
-void VolumeReaderManager::updateProgress(ThreadWeaver::Job *job, int value)
+void VolumeReaderManager::updateProgress(VolumeReaderJob *job, int value)
 {
     m_jobsProgress.insert(job, value);
 
@@ -107,19 +122,18 @@ void VolumeReaderManager::updateProgress(ThreadWeaver::Job *job, int value)
     emit progress(currentProgress);
 }
 
-void VolumeReaderManager::jobFinished(ThreadWeaver::Job *job)
+void VolumeReaderManager::jobFinished(ThreadWeaver::JobPointer job)
 {
-    VolumeReaderJob *readerJob = qobject_cast<VolumeReaderJob*>(job);
-
-    m_volumes[m_volumeReaderJobs.indexOf(readerJob)] = readerJob->getVolume();
+    QSharedPointer<VolumeReaderJob> volumeReaderJob = job.dynamicCast<VolumeReaderJob>();
+    m_volumes[m_volumeReaderJobs.indexOf(job)] = volumeReaderJob->getVolume();
 
     if (m_success)
     {
-        m_success = readerJob->success();
+        m_success = job->success();
 
         if (!m_success)
         {
-            m_lastError = readerJob->getLastErrorMessageToUser();
+            m_lastError = volumeReaderJob->getLastErrorMessageToUser();
         }
     }
 

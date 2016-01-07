@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGDIRECTORYUTILITIES_H
 #define UDGDIRECTORYUTILITIES_H
 
@@ -17,17 +31,17 @@ public:
     DirectoryUtilities();
     ~DirectoryUtilities();
 
-    /// Esborra el contingut del directori i el directori passat per par‡metres
+    /// Esborra el contingut del directori i el directori passat per par√†metres
     /// @param directoryPath Path del directori a esborrar
-    /// @param deleteRootDirectory Indica si s'ha d'esborrar nomÈs el contingu del directori o tambÈ el directori arrel passat per par‡metre. Si fals nomÈs
-    /// s'esborra el contingut, si Ès cert s'esborra el contingut i el directori passat per par‡metre
-    /// @return Indica si l'operacio s'ha realitzat amb Ëxit
+    /// @param deleteRootDirectory Indica si s'ha d'esborrar nom√©s el contingu del directori o tamb√© el directori arrel passat per par√†metre. Si fals nom√©s
+    /// s'esborra el contingut, si √©s cert s'esborra el contingut i el directori passat per par√†metre
+    /// @return Indica si l'operacio s'ha realitzat amb √®xit
     bool deleteDirectory(const QString &directoryPath, bool deleteRootDirectory);
 
-    /// Copia el directori origen al directori destÌ
+    /// Copia el directori origen al directori dest√≠
     static bool copyDirectory(const QString &sourceDirectory, const QString &sourceDestination);
     
-    /// Ens indica si un directori est‡ buit
+    /// Ens indica si un directori est√† buit
     bool isDirectoryEmpty(const QString &directoryPath);
 
 signals:

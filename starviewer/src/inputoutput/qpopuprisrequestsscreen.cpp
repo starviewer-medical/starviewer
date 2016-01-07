@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qpopuprisrequestsscreen.h"
 
 #include "qpopuprisrequestsscreen.h"
@@ -32,15 +46,15 @@ void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
     m_numberOfStudiesFailedToRetrieve = 0;
 }
 
-void QPopUpRISRequestsScreen::addStudyToRetrieveFromPACSByAccessionNumber(RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob)
+void QPopUpRISRequestsScreen::addStudyToRetrieveFromPACSByAccessionNumber(PACSJobPointer retrieveDICOMFilesFromPACSJob)
 {
     m_numberOfStudiesToRetrieve++;
 
     m_pacsJobIDOfStudiesToRetrieve.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
-    refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
+    refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles());
 
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobFinished(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJob*)));
-    connect(retrieveDICOMFilesFromPACSJob, SIGNAL(PACSJobCancelled(PACSJob*)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJob*)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer)));
+    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer)));
 }
 
 void QPopUpRISRequestsScreen::addStudyRetrievedFromDatabaseByAccessionNumber(Study *study)
@@ -50,11 +64,11 @@ void QPopUpRISRequestsScreen::addStudyRetrievedFromDatabaseByAccessionNumber(Stu
     refreshScreenRetrieveStatus(study);
 }
 
-void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pacsJob)
+void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
 {
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
+    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
 
-    if (retrieveDICOMFilesFromPACSJob == NULL)
+    if (retrieveDICOMFilesFromPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
     }
@@ -88,11 +102,11 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJob *pac
     }
 }
 
-void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pacsJob)
+void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
 {
-    RetrieveDICOMFilesFromPACSJob *retrieveDICOMFilesFromPACSJob = qobject_cast<RetrieveDICOMFilesFromPACSJob*>(pacsJob);
+    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
 
-    if (retrieveDICOMFilesFromPACSJob == NULL)
+    if (retrieveDICOMFilesFromPACSJob.isNull())
     {
         ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
     }
@@ -111,6 +125,8 @@ void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelled(PACSJob *pa
 
 void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus(Study *study)
 {
+    Q_UNUSED(study)
+
     if (m_numberOfStudiesRetrieved + m_numberOfStudiesFailedToRetrieve < m_numberOfStudiesToRetrieve)
     {
         setOngoingOperationText(tr("Retrieving study %1 of %2.").arg(m_numberOfStudiesRetrieved + m_numberOfStudiesFailedToRetrieve + 1).arg(m_numberOfStudiesToRetrieve));

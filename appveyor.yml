@@ -1,0 +1,66 @@
+version: 0.13-{build}-{branch}
+
+environment:
+  matrix:
+  - BITS: 32
+    QTDIR: C:\Qt\5.4\msvc2013_opengl
+    ARCH: x86
+  - BITS: 64
+    QTDIR: C:\Qt\5.4\msvc2013_64_opengl
+    ARCH: amd64
+
+install:
+- ps: |
+    # Setup precompiled SDK
+
+    $source = "http://trueta.udg.edu/apt/windows/devel/0.13/Starviewer-sdk-win$env:BITS-0.13-0.7z"
+    $destination = "c:\Starviewer-sdk-win$env:BITS-0.13-0.7z"
+    Invoke-WebRequest $source -OutFile $destination
+
+    7z x $destination -oc:\ > 7z-output.txt
+
+    if ($env:BITS -eq 32) { $env:LOG4CXXDIR="c:\log4cxx" }
+    else { $env:LOG4CXXDIR="c:\log4cxx-64" }
+
+    $env:PATH = "$env:PATH;$env:QTDIR\bin;c:\vtk\6.1.0-$env:BITS\bin;c:\gdcm\2.4.4-$env:BITS\bin;c:\ThreadWeaver\5.3.0-$env:BITS\bin;$env:LOG4CXXDIR;c:\sqlite3-$env:BITS"
+
+
+    # Setup jom
+
+    $source = "http://download.qt.io/official_releases/jom/jom.zip"
+    $destination = "c:\jom.zip"
+    Invoke-WebRequest $source -OutFile $destination
+
+    7z x $destination -oc:\jom\
+
+    $env:PATH = "$env:PATH;c:\jom"
+
+build_script:
+- cmd: |
+    call "%ProgramFiles(x86)%\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %ARCH%
+    cd starviewer
+    qmake
+    jom -j2
+
+test_script:
+- ps: |
+    cd tests\auto
+    .\autotests -saveOutputToDir results -xunitxml
+
+    cd results
+    $wc = New-Object 'System.Net.WebClient'
+    ls | % {
+        $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $_.Name))
+        $content = cat $_
+        if ($content -Match 'result="fail"') {
+            echo $content "------------"
+        }
+    }
+
+    if ($LASTEXITCODE -ne 0) {
+        Add-AppveyorMessage "$LASTEXITCODE test(s) failed" -Category Error
+        throw "$LASTEXITCODE test(s) failed"
+    }
+    else {
+        Add-AppveyorMessage "All tests OK"
+    }

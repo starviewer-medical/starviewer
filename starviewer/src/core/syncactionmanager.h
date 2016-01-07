@@ -1,8 +1,22 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGSYNCACTIONMANAGER_H
 #define UDGSYNCACTIONMANAGER_H
 
 #include <QObject>
-#include <QSet>
+#include <QList>
 #include <QMultiHash>
 
 namespace udg {
@@ -44,6 +58,9 @@ public:
     /// Gets the current sync actions configuration
     SyncActionsConfiguration* getSyncActionsConfiguration();
 
+    /// Returns true if the manager is enabled and false otherwise.
+    bool isEnabled() const;
+
 public slots:
     /// Enables or disables the manager. When disabled, no actions will be applied on the viewers set.
     /// The viewers set will always remain unaltered, wheter the manager is disabled or enabled.
@@ -83,8 +100,8 @@ private slots:
     void synchronizeAllViewersButSender();
 
 private:
-    /// The set of viewers to be synced
-    QSet<QViewer*> m_syncedViewersSet;
+    /// The list of viewers to be synced
+    QList<QViewer*> m_syncedViewersList;
     
     /// The list of registered signal mappers that could be used to propagate the SyncActions
     QList<SignalToSyncActionMapper*> m_registeredSignalMappers;

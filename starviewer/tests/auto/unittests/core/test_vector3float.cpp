@@ -552,7 +552,7 @@ void test_Vector3Float::operatorDivisionByScalarEqual_ShouldModifyVectorAndRetur
 
 void test_Vector3Float::operatorQDataStreamIn_ShouldFillVectorAndReturnStream_data()
 {
-    // La primera serveix perquè no ens esborri el byte array
+    // La primera serveix perquÃ¨ no ens esborri el byte array
     QTest::addColumn< QSharedPointer<QByteArray> >("byteArray");
     QTest::addColumn< QSharedPointer<QDataStream> >("stream");
     QTest::addColumn<Vector3Float>("filledVector");
@@ -619,7 +619,7 @@ void test_Vector3Float::operatorQDataStreamIn_ShouldFillVectorAndReturnStream()
 void test_Vector3Float::operatorQDataStreamOut_ShouldWriteToStreamAndReturnIt_data()
 {
     QTest::addColumn<Vector3Float>("vector");
-    // Aquesta serveix perquè no ens esborri el byte array
+    // Aquesta serveix perquÃ¨ no ens esborri el byte array
     QTest::addColumn< QSharedPointer<QByteArray> >("byteArray");
     QTest::addColumn< QSharedPointer<QDataStream> >("filledStream");
 
@@ -687,9 +687,9 @@ void test_Vector3Float::setupDotProductData()
     QTest::addColumn<Vector3Float>("vector2");
     QTest::addColumn<float>("expectedResult");
 
-    QTest::newRow("zero · zero") << Vector3Float() << Vector3Float() << 0.0f;
-    QTest::newRow("zero · non-zero") << Vector3Float() << Vector3Float(1, 1, 1) << 0.0f;
-    QTest::newRow("non-zero · zero") << Vector3Float(1, 1, 1) << Vector3Float() << 0.0f;
+    QTest::newRow("zero Â· zero") << Vector3Float() << Vector3Float() << 0.0f;
+    QTest::newRow("zero Â· non-zero") << Vector3Float() << Vector3Float(1, 1, 1) << 0.0f;
+    QTest::newRow("non-zero Â· zero") << Vector3Float(1, 1, 1) << Vector3Float() << 0.0f;
     QTest::newRow("same vectors") << Vector3Float(-2, -3, -3) << Vector3Float(-2, -3, -3) << 22.0f;
     QTest::newRow("parallel") << Vector3Float(-3, -5, -2) << Vector3Float(-1.5, -2.5, -1) << 19.0f;
     QTest::newRow("perpendicular") << Vector3Float(1, 0, 0) << Vector3Float(0, 1, 0) << 0.0f;
@@ -705,9 +705,9 @@ void test_Vector3Float::setupCrossProductData()
     QTest::addColumn<Vector3Float>("vector2");
     QTest::addColumn<Vector3Float>("expectedResult");
 
-    QTest::newRow("zero × zero") << Vector3Float() << Vector3Float() << Vector3Float();
-    QTest::newRow("zero × non-zero") << Vector3Float() << Vector3Float(1, 1, 1) << Vector3Float();
-    QTest::newRow("non-zero × zero") << Vector3Float(1, 1, 1) << Vector3Float() << Vector3Float();
+    QTest::newRow("zero Ã— zero") << Vector3Float() << Vector3Float() << Vector3Float();
+    QTest::newRow("zero Ã— non-zero") << Vector3Float() << Vector3Float(1, 1, 1) << Vector3Float();
+    QTest::newRow("non-zero Ã— zero") << Vector3Float(1, 1, 1) << Vector3Float() << Vector3Float();
     QTest::newRow("same vectors") << Vector3Float(-2, -3, -3) << Vector3Float(-2, -3, -3) << Vector3Float();
     QTest::newRow("parallel") << Vector3Float(-3, -5, -2) << Vector3Float(-1.5, -2.5, -1) << Vector3Float();
     QTest::newRow("perpendicular") << Vector3Float(1, 0, 0) << Vector3Float(0, 1, 0) << Vector3Float(0, 0, 1);

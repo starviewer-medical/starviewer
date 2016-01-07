@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 
 #ifndef UDGQQWIDGETSELECTPACSTOSTOREDICOMIMAGE_H
 #define UDGQQWIDGETSELECTPACSTOSTOREDICOMIMAGE_H
@@ -22,13 +36,13 @@ protected:
     void showEvent (QShowEvent *event);
 
 signals:
-    /// Es llanÁa signal indicant que s'ha de guardar al pacs passat per par‡metr les imatges de l'estudi indicat que compleixin la DicomMask.
+    /// Es llan√ßa signal indicant que s'ha de guardar al pacs passat per par√†metr les imatges de l'estudi indicat que compleixin la DicomMask.
     void selectedPacsToStore();
 
 private slots:
     /// Enables the store button if any PACS is selected, and disables it when no PACS is selected.
     void updateStoreButton();
-    /// Slot que respÛn quan fan click al botÛ Store, fa signal indicant que ja han seleccionat els PACS
+    /// Slot que resp√≥n quan fan click al bot√≥ Store, fa signal indicant que ja han seleccionat els PACS
     void storeImagesToSelectedPacs();
 
 private:

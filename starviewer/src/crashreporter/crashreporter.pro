@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-include(../applicationstargetnames.inc)
+include(../applicationstargetnames.pri)
 TARGET = $${TARGET_STARVIEWER_CRASH_REPORTER}
 
 DESTDIR = ../../bin
@@ -8,16 +8,6 @@ DESTDIR = ../../bin
 macx {
     CONFIG += no_keywords
     DESTDIR = $${DESTDIR}/$${TARGET_STARVIEWER}.app/Contents/MacOS
-}
-
-macx {
-    DEFINES += STARVIEWER_EXE=\\\"../../../$${TARGET_STARVIEWER}\\\"
-}
-linux* {
-    DEFINES += STARVIEWER_EXE=\\\"$${TARGET_STARVIEWER}\\\"
-}
-win32 {
-    DEFINES += STARVIEWER_EXE=\"$${TARGET_STARVIEWER}.exe\"
 }
 
 FORMS = qcrashreporterbase.ui
@@ -69,8 +59,8 @@ win32 {
 
 RESOURCES = crashreporter.qrc ../main/main.qrc
 
-include(../corelibsconfiguration.inc)
-include(../compilationtype.inc)
-include(../log4cxx.inc)
+include(../corelibsconfiguration.pri)
+include(../compilationtype.pri)
+include(../log4cxx.pri)
 
-QT += network
+QT += network widgets

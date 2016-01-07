@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef QCOLORTRANSFERFUNCTIONGRAPHICALVIEW_H
 #define QCOLORTRANSFERFUNCTIONGRAPHICALVIEW_H
 
@@ -8,7 +22,7 @@ namespace udg {
 class ColorTransferFunction;
 
 /**
-    Vista gr‡fica d'una funciÛ de transferËncia de color.
+    Vista gr√†fica d'una funci√≥ de transfer√®ncia de color.
   */
 class QColorTransferFunctionGraphicalView : public QGraphicsView {
 Q_OBJECT
@@ -17,12 +31,12 @@ public:
     /// Constructor.
     explicit QColorTransferFunctionGraphicalView(QWidget *parent = 0);
 
-    /// Assigna la funciÛ de transferËncia de color.
+    /// Assigna la funci√≥ de transfer√®ncia de color.
     void setColorTransferFunction(const ColorTransferFunction &colorTransferFunction);
-    /// Demana que s'actualitzi el fons desprÈs de moure el ratolÌ
+    /// Demana que s'actualitzi el fons despr√©s de moure el ratol√≠
     /// \TODO Es podria fer privat i el node com a classe aniuada privada.
     void requestBackgroundUpdate();
-    // void fitInView();    // per ajustar el zoom autom‡ticament
+    // void fitInView();    // per ajustar el zoom autom√†ticament
 
 signals:
     /// S'emet quan s'afegeix un node.
@@ -31,14 +45,14 @@ signals:
     void nodeRemoved(double x);
     /// S'emet quan es mou un node.
     void nodeMoved(double origin, double destination);
-    /// S'emet quan es mou mÈs d'un node.
+    /// S'emet quan es mou m√©s d'un node.
     void nodesMoved(const QList<double> &origins, double offset);
     /// S'emet quan es canvia el color d'un node.
     void nodeChangedColor(double x, const QColor &color);
 
 protected:
     ///@{
-    /// GestiÛ d'esdeveniments. \todo Explicar una mica quË fem a cadascun.
+    /// Gesti√≥ d'esdeveniments. \todo Explicar una mica qu√® fem a cadascun.
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);
@@ -55,7 +69,7 @@ private:
     void addNode(double x);
     /// Esborra un node a x si existeix.
     void removeNode(double x);
-    /// Fa els preparatius per comenÁar a moure nodes.
+    /// Fa els preparatius per comen√ßar a moure nodes.
     void beginMoveNodes();
     /// Finalitza el moviment de nodes.
     void endMoveNodes();
@@ -65,7 +79,7 @@ private:
 private:
     /// Nivell de zoom actual.
     double m_zoom;
-    /// Indica si s'ha d'actualitzar el fons desprÈs de moure el ratolÌ.
+    /// Indica si s'ha d'actualitzar el fons despr√©s de moure el ratol√≠.
     bool m_backgroundUpdateRequested;
 
 };

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGQUERYSCREEN_H
 #define UDGQUERYSCREEN_H
 
@@ -63,6 +77,12 @@ public slots:
     /// passat per paràmetre al primer PACS que es troba com a PACS per defecte
     void sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image*> images);
 
+    /// Es comunica amb el widget de la base de dades i visualitzar un estudi descarregat del PACS
+    void viewStudyFromDatabase(QString studyInstanceUID);
+
+    /// Demana que es carregui un estudi descarregat. Útil per casos com el de carregar prèvies, per exemple.
+    void loadStudyFromDatabase(QString studyInstanceUID);
+
 signals:
     /// Signal que ens indica quins pacients s'han seleccionat per visualitzar
     /// Afegim un segon paràmetre per indicar si aquests pacients s'han de carregar únicament i si s'han de visualitzar
@@ -108,12 +128,6 @@ private slots:
     /// Afegim un segon paràmetre per indicar si volem fer view o únicament carregar les dades.
     void viewPatients(QList<Patient*>, bool loadOnly = false);
 
-    /// Es comunica amb el widget de la base de dades i visualitzar un estudi descarregat del PACS
-    void viewRetrievedStudyFromPacs(QString studyInstanceUID);
-
-    /// Demana que es carregui un estudi descarregat. Útil per casos com el de carregar prèvies, per exemple.
-    void loadRetrievedStudyFromPacs(QString studyInstanceUID);
-
     /// Slot que s'activa quan s'ha produït un error al descarregar un estudi
     void studyRetrieveFailedSlot(QString studyInstanceUID);
 
@@ -128,11 +142,11 @@ private slots:
 
     /// Slot que s'activa quan s'ha encuat un nou PACSJob si aquest és d'enviament o descarrega de fitxers es mostra el gif animat que indica que
     /// s'estan processant peticions
-    void newPACSJobEnqueued(PACSJob *pacsJob);
+    void newPACSJobEnqueued(PACSJobPointer pacsJob);
 
     /// Slot que s'activa quan un PACSJob ha finalitzat, es comprova si la PacsManager està executant més jobs de descàrrega o enviament
     /// si no n'està executant cap més s'amaga el gif animat que indica que s'està processant una petició
-    void pacsJobFinishedOrCancelled(PACSJob *pacsJob);
+    void pacsJobFinishedOrCancelled(PACSJobPointer pacsJob);
 
     /// Actualitza segons el tab en el que ens trobem la visibilitat del llistat de PACS
     /// El llistat només es podrà habilitar o deshabilitar quan estem en la pestanya PACS

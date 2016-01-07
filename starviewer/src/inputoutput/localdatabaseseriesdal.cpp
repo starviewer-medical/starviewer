@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "localdatabaseseriesdal.h"
 
 #include <sqlite3.h>
@@ -17,7 +31,7 @@ LocalDatabaseSeriesDAL::LocalDatabaseSeriesDAL(DatabaseConnection *dbConnection)
 
 void LocalDatabaseSeriesDAL::insert(Series *newSeries)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newSeries)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(newSeries).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -27,7 +41,7 @@ void LocalDatabaseSeriesDAL::insert(Series *newSeries)
 
 void LocalDatabaseSeriesDAL::update(Series *seriesToUpdate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(seriesToUpdate)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdate(seriesToUpdate).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -37,7 +51,7 @@ void LocalDatabaseSeriesDAL::update(Series *seriesToUpdate)
 
 void LocalDatabaseSeriesDAL::del(const DicomMask &seriesMaskToDelete)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(seriesMaskToDelete)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlDelete(seriesMaskToDelete).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -54,7 +68,7 @@ QList<Series*> LocalDatabaseSeriesDAL::query(const DicomMask &seriesMask)
     QList<Series*> seriesList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          qPrintable(buildSqlSelect(seriesMask)),
+                                          buildSqlSelect(seriesMask).toUtf8().constData(),
                                           &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
@@ -86,15 +100,15 @@ Series* LocalDatabaseSeriesDAL::fillSeries(char **reply, int row, int columns)
     series->setModality(reply[3 + row * columns]);
     series->setDate(reply[4 + row * columns]);
     series->setTime(reply[5 + row * columns]);
-    series->setInstitutionName(reply[6 + row * columns]);
+    series->setInstitutionName(convertToQString(reply[6 + row * columns]));
     series->setPatientPosition(reply[7 + row * columns]);
-    series->setProtocolName(reply[8 + row * columns]);
-    series->setDescription(reply[9 + row * columns]);
+    series->setProtocolName(convertToQString(reply[8 + row * columns]));
+    series->setDescription(convertToQString(reply[9 + row * columns]));
     series->setFrameOfReferenceUID(reply[10 + row * columns]);
-    series->setPositionReferenceIndicator(reply[11 + row * columns]);
+    series->setPositionReferenceIndicator(convertToQString(reply[11 + row * columns]));
     series->setBodyPartExamined(reply[12 + row * columns]);
     series->setViewPosition(reply[13 + row * columns]);
-    series->setManufacturer(reply[14 + row * columns]);
+    series->setManufacturer(convertToQString(reply[14 + row * columns]));
     // Laterality és un char
     series->setLaterality(reply[15 + row * columns][0]);
     series->setRetrievedDate(QDate().fromString(reply[16 + row * columns], "yyyyMMdd"));

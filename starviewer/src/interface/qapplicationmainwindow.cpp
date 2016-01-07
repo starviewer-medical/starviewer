@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "qapplicationmainwindow.h"
 
 #include "extensionhandler.h"
@@ -28,7 +42,7 @@
 #include "applicationstylehelper.h"
 #include "qdiagnosistest.h"
 
-// Amb starviewer lite no hi haur‡ hanging protocols, per tant no els carregarem
+// Amb starviewer lite no hi haur√† hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE
 #include "hangingprotocolsloader.h"
 #include "customwindowlevelsloader.h"
@@ -54,22 +68,22 @@
 
 namespace udg {
 
-// Per processar les opcions entrades per lÌnia de comandes hem d'utilitzar un Singleton de StarviewerApplicationCommandLine, aixÚ ve degut a que
-// d'inst‡ncies de QApplicationMainWindow en tenim tantes com finestres obertes d'Starviewer tinguem. Inst‡ncies deQApplicationMainWindow es crees
+// Per processar les opcions entrades per l√≠nia de comandes hem d'utilitzar un Singleton de StarviewerApplicationCommandLine, aix√≤ ve degut a que
+// d'inst√†ncies de QApplicationMainWindow en tenim tantes com finestres obertes d'Starviewer tinguem. Inst√†ncies deQApplicationMainWindow es crees
 // i es destrueixen a mesura que s'obre una nova finestra o es tanca una finestra d'Starviewer per tant no podem responsabilitzar a cap
-// QApplicationMainWindow que s'encarregui de antendre les peticions rebudes via arguments o rebudes d'altres inst‡ncies d'Starviewer a travÈs
-// de QtSingleApplication, perquË no podem garantir que cap QApplicationMainWindow estigui viva durant tota l'execuciÛ d'Starviewer, per encarregar-se
-// de processar els arugments de lÌnia de comandes.
+// QApplicationMainWindow que s'encarregui de antendre les peticions rebudes via arguments o rebudes d'altres inst√†ncies d'Starviewer a trav√©s
+// de QtSingleApplication, perqu√® no podem garantir que cap QApplicationMainWindow estigui viva durant tota l'execuci√≥ d'Starviewer, per encarregar-se
+// de processar els arugments de l√≠nia de comandes.
 
-// Per aixÚ el que s'ha fet Ès que totes les QApplicationMainWindow es connectin a un signal de la mateixa inst‡ncia de
-// StarviewerSingleApplicationCommandLineSingleton, aquest signal Ès newOptionsToRun() que s'emet cada vegada que es reben nous arguments ja
-// procedeixin de la mateixa inst‡ncia al iniciar-la o d'altres inst‡ncies via QtSingleApplication. Una vegada s'ha emÈs el signal les inst‡ncies
-// de QApplicationMainWindow a mesura que responen al signal amb el mËtode takeOptionToRun() van processan tots els arguments fins que no en
+// Per aix√≤ el que s'ha fet √©s que totes les QApplicationMainWindow es connectin a un signal de la mateixa inst√†ncia de
+// StarviewerSingleApplicationCommandLineSingleton, aquest signal √©s newOptionsToRun() que s'emet cada vegada que es reben nous arguments ja
+// procedeixin de la mateixa inst√†ncia al iniciar-la o d'altres inst√†ncies via QtSingleApplication. Una vegada s'ha em√©s el signal les inst√†ncies
+// de QApplicationMainWindow a mesura que responen al signal amb el m√®tode takeOptionToRun() van processan tots els arguments fins que no en
 // queda cap per processar.
 
-// L'opciÛ que processa una inst‡ncia de QApplicationMainWindow obtinguda a travÈs del mËtode takeOptionToRun() desapereix de la llista d'opcions
-// per processar de StarviewerApplicationCommandLine, de manera que tot i que totes les inst‡ncies de QApplicationMainWindow poden processar
-// opcions rebuts, cada opciÛ nomÈs ser‡ processat per la primera inst‡ncia que l'agafi a travÈs del mËtode takeOptionToRun().
+// L'opci√≥ que processa una inst√†ncia de QApplicationMainWindow obtinguda a trav√©s del m√®tode takeOptionToRun() desapereix de la llista d'opcions
+// per processar de StarviewerApplicationCommandLine, de manera que tot i que totes les inst√†ncies de QApplicationMainWindow poden processar
+// opcions rebuts, cada opci√≥ nom√©s ser√† processat per la primera inst√†ncia que l'agafi a trav√©s del m√®tode takeOptionToRun().
 
 typedef SingletonPointer<StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
 
@@ -100,16 +114,16 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     m_applicationVersionChecker = new ApplicationVersionChecker(this);
     m_applicationVersionChecker->checkReleaseNotes();
 
-    // Llegim les configuracions de l'aplicaciÛ, estat de la finestra, posicio,etc
+    // Llegim les configuracions de l'aplicaci√≥, estat de la finestra, posicio,etc
     readSettings();
-    // Icona de l'aplicaciÛ
+    // Icona de l'aplicaci√≥
     this->setWindowIcon(QIcon(":/images/starviewer.png"));
     this->setWindowTitle(ApplicationNameString);
 
-// Amb starviewer lite no hi haur‡ hanging protocols, per tant no els carregarem
+// Amb starviewer lite no hi haur√† hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE
-    // C‡rrega dels repositoris que necessitem tenir carregats durant tota l'aplicaciÛ
-    // NomÈs carregarem un cop per sessiÛ/inst‡ncia d'starviewer
+    // C√†rrega dels repositoris que necessitem tenir carregats durant tota l'aplicaci√≥
+    // Nom√©s carregarem un cop per sessi√≥/inst√†ncia d'starviewer
     static bool repositoriesLoaded = false;
     if (!repositoriesLoaded)
     {
@@ -126,7 +140,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     }
 #endif
 
-    // Creem el progress dialog que notificar‡ la c‡rrega de volums
+    // Creem el progress dialog que notificar√† la c√†rrega de volums
     m_progressDialog = new QProgressDialog(this);
     m_progressDialog->setModal(true);
     m_progressDialog->setRange(0, 100);
@@ -190,7 +204,7 @@ void QApplicationMainWindow::createActions()
 
     m_pacsAction = new QAction(this);
 #ifdef STARVIEWER_LITE
-    // El men˙ "PACS" es dir‡ "Exams"
+    // El men√∫ "PACS" es dir√† "Exams"
     m_pacsAction->setText(tr("&Exams..."));
     m_pacsAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenExams));
     m_pacsAction->setStatusTip(tr("Browse exams"));
@@ -207,7 +221,7 @@ void QApplicationMainWindow::createActions()
     m_signalMapper->setMapping(m_localDatabaseAction, 10);
     connect(m_localDatabaseAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
 #endif
-    // TODO potser almenys per la versiÛ Lite caldria canviar la icona
+    // TODO potser almenys per la versi√≥ Lite caldria canviar la icona
     m_pacsAction->setIcon(QIcon(":/images/pacsQuery.png"));
     m_signalMapper->setMapping(m_pacsAction, 7);
     connect(m_pacsAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
@@ -363,7 +377,7 @@ void QApplicationMainWindow::showConfigurationDialog()
 
 void QApplicationMainWindow::createMenus()
 {
-    // Men˙ d'arxiu
+    // Men√∫ d'arxiu
     m_fileMenu = menuBar()->addMenu(tr("&File"));
     m_fileMenu->addAction(m_newAction);
 #ifndef STARVIEWER_LITE
@@ -379,9 +393,9 @@ void QApplicationMainWindow::createMenus()
     m_fileMenu->addAction(m_exitAction);
 
 #ifdef STARVIEWER_LITE
-    // No afegim els men˙s de visualitzaciÛ
+    // No afegim els men√∫s de visualitzaci√≥
 #else
-    // Accions relacionades amb la visualitzaciÛ
+    // Accions relacionades amb la visualitzaci√≥
     m_visualizationMenu = menuBar()->addMenu(tr("&Visualization"));
 
     foreach (QAction *action, m_actionsList)
@@ -390,14 +404,14 @@ void QApplicationMainWindow::createMenus()
     }
 #endif
 
-    // Men˙ tools
+    // Men√∫ tools
     m_toolsMenu = menuBar()->addMenu(tr("&Tools"));
     m_languageMenu = m_toolsMenu->addMenu(tr("&Language"));
     createLanguageMenu();
     m_toolsMenu->addAction(m_configurationAction);
     m_toolsMenu->addAction(m_runDiagnosisTestsAction);
 
-    // Men˙ 'window'
+    // Men√∫ 'window'
     m_windowMenu = menuBar()->addMenu(tr("&Window"));
     m_moveWindowToDesktopMenu = m_windowMenu->addMenu(tr("Move to Screen"));
     m_moveWindowToDesktopMenu->addAction(m_moveToDesktopAction);
@@ -407,7 +421,7 @@ void QApplicationMainWindow::createMenus()
     
     menuBar()->addSeparator();
 
-    // Men˙ d'ajuda i suport
+    // Men√∫ d'ajuda i suport
     m_helpMenu = menuBar()->addMenu(tr("&Help"));
     m_helpMenu->addAction(m_openUserGuideAction);
     m_helpMenu->addAction(m_openQuickStartGuideAction);
@@ -465,7 +479,7 @@ void QApplicationMainWindow::killBill()
     // Eliminem totes les extensions
     this->getExtensionWorkspace()->killThemAll();
     // TODO descarregar tots els volums que tingui el pacient en aquesta finestra
-    // quan ens destruim alliberem tots els volums que hi hagi a memÚria
+    // quan ens destruim alliberem tots els volums que hi hagi a mem√≤ria
     if (this->getCurrentPatient() != NULL)
     {
         foreach (Study *study, this->getCurrentPatient()->getStudies())
@@ -507,7 +521,7 @@ QApplicationMainWindow* QApplicationMainWindow::openBlankWindow()
 
 void QApplicationMainWindow::setPatient(Patient *patient)
 {
-    // Si les dades de pacient sÛn nules, no fem res
+    // Si les dades de pacient s√≥n nules, no fem res
     if (!patient)
     {
         DEBUG_LOG("NULL Patient, maybe creating a blank new window");
@@ -520,7 +534,7 @@ void QApplicationMainWindow::setPatient(Patient *patient)
         this->killBill();
         delete m_patient;
         m_patient = NULL;
-        DEBUG_LOG("Ja tenÌem un pacient, l'esborrem.");
+        DEBUG_LOG("Ja ten√≠em un pacient, l'esborrem.");
     }
 
     m_patient = patient;
@@ -577,8 +591,8 @@ ExtensionWorkspace* QApplicationMainWindow::getExtensionWorkspace()
 
 void QApplicationMainWindow::closeEvent(QCloseEvent *event)
 {
-    // \TODO aquÌ haurÌem de controlar si l'aplicaciÛ est‡ fent altres tasques pendents que s'haurien de finalitzar abans de tancar
-    // l'aplicaciÛ com per exemple imatges en desc‡rrega del PACS o similar.
+    // \TODO aqu√≠ haur√≠em de controlar si l'aplicaci√≥ est√† fent altres tasques pendents que s'haurien de finalitzar abans de tancar
+    // l'aplicaci√≥ com per exemple imatges en desc√†rrega del PACS o similar.
     // Caldria fer-ho de manera centralitzada.
     event->accept();
 }
@@ -705,7 +719,7 @@ void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalS
     }
     else
     {
-        // TODO:S'hauria de fer un missatge mÈs genËric
+        // TODO:S'hauria de fer un missatge m√©s gen√®ric
         QMessageBox::information(this, ApplicationNameString,
                                  tr("Please activate \"Listen to RIS requests\" option in %1 configuration to retrieve studies from SAP.")
                                .arg(ApplicationNameString));

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "patientbrowsermenulist.h"
 
 #include <QLabel>
@@ -19,14 +33,16 @@ PatientBrowserMenuList::PatientBrowserMenuList(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(10);
     m_qmlView = new QDeclarativeView(this);
-    m_qmlView->rootContext()->setContextProperty("browserModel", QVariant::fromValue(m_groups));
+    QDeclarativeContext *context = m_qmlView->rootContext();
+    context->setContextProperty("browserModel", QVariant::fromValue(m_groups));
+    context->setContextProperty("applicationFontSize", QVariant::fromValue(ApplicationStyleHelper().getApplicationScaledFontSize()));
 
     layout->addWidget(m_qmlView);
 
     m_qmlView->setSource(QUrl("qrc:///qmlpatientbrowsermenu.qml"));
+
     QDeclarativeItem *object = qobject_cast<QDeclarativeItem*>(m_qmlView->rootObject());
     object->setProperty("fusionLabelText", QVariant::fromValue(tr("Fusion")));
-    object->setProperty("computedFontSize", QVariant::fromValue(ApplicationStyleHelper().getApplicationScaledFontSize()));
 
     connect(object, SIGNAL(isActive(QString)), this, SIGNAL(isActive(QString)));
     connect(object, SIGNAL(selectedItem(QString)), this, SIGNAL(selectedItem(QString)));

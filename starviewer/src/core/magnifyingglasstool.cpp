@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "magnifyingglasstool.h"
 
 #include "q2dviewer.h"
@@ -8,7 +22,7 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
 #include <vtkCamera.h>
-#include <vtkImageActor.h>
+#include <vtkImageSlice.h>
 
 namespace udg {
 
@@ -92,7 +106,7 @@ double MagnifyingGlassTool::getZoomFactor()
     double factor = settings.getValue(CoreSettings::MagnifyingGlassZoomFactor).toDouble();
     if (factor == 0.0)
     {
-        // En cas que el setting no tingui un valor v‡lid, li assignem un valor per defecte de 4.0
+        // En cas que el setting no tingui un valor v√†lid, li assignem un valor per defecte de 4.0
         factor = 4.0;
         settings.setValue(CoreSettings::MagnifyingGlassZoomFactor, "4");
     }
@@ -108,10 +122,7 @@ void MagnifyingGlassTool::addMagnifiedRenderer()
         
         if (m_magnifiedRenderer->GetActors()->GetNumberOfItems() == 0)
         {
-            foreach (vtkImageActor *actor, m_2DViewer->getVtkImageActorsList())
-            {
-                m_magnifiedRenderer->AddViewProp(actor);
-            }
+            m_magnifiedRenderer->AddViewProp(m_2DViewer->getImageProp());
         }
     }
     
@@ -126,7 +137,7 @@ void MagnifyingGlassTool::updateMagnifiedView()
     QRect renderWindowBounds(QPoint(0, 0), renderWindowSize);
     if (!renderWindowBounds.contains(eventPosition))
     {
-        // Si el punt est‡ fora de la render window amaguem i sortim
+        // Si el punt est√† fora de la render window amaguem i sortim
         removeMagnifiedRenderer();
         return;
     }
@@ -148,7 +159,7 @@ void MagnifyingGlassTool::updateMagnifiedView()
         addMagnifiedRenderer();
     }
     
-    // Actualitzem la posiciÛ que enfoca la c‡mera
+    // Actualitzem la posici√≥ que enfoca la c√†mera
     setFocalPoint(xyz);
     m_magnifiedRenderer->ResetCameraClippingRange();
     m_2DViewer->render();
@@ -204,9 +215,8 @@ void MagnifyingGlassTool::updateCamera()
     vtkCamera *viewerCamera = m_2DViewer->getRenderer()->GetActiveCamera();
     m_magnifiedCamera->DeepCopy(viewerCamera);
 
-    // Ajustem la c‡mera a la mateixa proporciÛ que el renderer principal
-    // Cal prendre la proporciÛ del viewport magnificat respecte el viewer en sÌ
-    QSize size = m_2DViewer->getRenderWindowSize();
+    // Ajustem la c√†mera a la mateixa proporci√≥ que el renderer principal
+    // Cal prendre la proporci√≥ del viewport magnificat respecte el viewer en s√≠
     double viewportsProportion;
     double viewportPoints[4];
     m_magnifiedRenderer->GetViewport(viewportPoints);
@@ -222,7 +232,7 @@ void MagnifyingGlassTool::updateCamera()
         m_magnifiedCamera->SetViewAngle(viewerCamera->GetViewAngle() * viewportsProportion);
     }
     
-    // Apliquem el factor de magnificaciÛ
+    // Apliquem el factor de magnificaci√≥
     m_magnifiedCamera->Zoom(getZoomFactor());
 }
 

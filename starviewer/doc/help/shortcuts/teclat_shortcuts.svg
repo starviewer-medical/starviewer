@@ -14,11 +14,11 @@
    height="297mm"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.48.2 r9819"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="teclat_shortcuts.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.1"
-   inkscape:export-filename="C:\Users\chus\devel\starviewer-git\doc\help\shortcuts\teclat_shortcuts_5.png"
+   inkscape:export-filename="C:\Users\Marc\Documents\shortcuts-starviewer.png"
    inkscape:export-xdpi="400"
    inkscape:export-ydpi="400">
   <defs
@@ -998,13 +998,13 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.9613019"
-     inkscape:cx="330.88439"
-     inkscape:cy="782.70003"
+     inkscape:zoom="0.79"
+     inkscape:cx="345.13253"
+     inkscape:cy="823.84239"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     inkscape:window-width="1680"
-     inkscape:window-height="988"
+     inkscape:window-width="1280"
+     inkscape:window-height="962"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:object-points="true"
@@ -1194,7 +1194,7 @@
          id="text10745"
          y="222.10814"
          x="83.755753"
-         style="font-size:9.82343102px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:9.82343102px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="222.10814"
            x="83.755753"
@@ -1222,7 +1222,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:9.82343102px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:9.82343102px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="177.58554"
          y="222.10814"
          id="text10767"
@@ -1297,7 +1297,7 @@
          id="text2452"
          y="148.30812"
          x="129.02724"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="148.30812"
            x="129.02724"
@@ -1335,7 +1335,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:9.82343102px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:9.82343102px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="83.05761"
          y="84.052071"
          id="text2468"
@@ -1360,7 +1360,7 @@
          id="text2487"
          y="100.82442"
          x="127.41261"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2489"
            y="100.82442"
@@ -1386,7 +1386,7 @@
          id="text2529"
          y="100.73251"
          x="233.02431"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2531"
            y="100.73251"
@@ -1412,7 +1412,7 @@
          id="text2543"
          y="100.73251"
          x="268.22818"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2545"
            y="100.73251"
@@ -1438,7 +1438,7 @@
          id="text2553"
          y="100.73251"
          x="303.43213"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2555"
            y="100.73251"
@@ -1464,7 +1464,7 @@
          id="text2563"
          y="100.73251"
          x="338.63605"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2565"
            y="100.73251"
@@ -1490,7 +1490,7 @@
          id="text2573"
          y="100.73251"
          x="373.83994"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2575"
            y="100.73251"
@@ -1516,7 +1516,7 @@
          id="text2591"
          y="100.73251"
          x="409.04385"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2593"
            y="100.73251"
@@ -1542,7 +1542,7 @@
          id="text2601"
          y="100.73251"
          x="444.24777"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2603"
            y="100.73251"
@@ -1568,7 +1568,7 @@
          id="text2611"
          y="100.73251"
          x="479.45166"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2613"
            y="100.73251"
@@ -1594,7 +1594,7 @@
          id="text2621"
          y="100.70037"
          x="514.65552"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2623"
            y="100.70037"
@@ -1680,7 +1680,7 @@
          id="path2828" />
       <text
          xml:space="preserve"
-         style="font-size:5.17064571px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.17064571px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="71.818665"
          y="191.95552"
          id="text2845"
@@ -1717,7 +1717,7 @@
          id="text2859"
          y="148.30812"
          x="158.37857"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="148.30812"
            x="158.37857"
@@ -1747,7 +1747,7 @@
          id="text2873"
          y="148.30812"
          x="187.72989"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="148.30812"
            x="187.72989"
@@ -1777,7 +1777,7 @@
          id="text2887"
          y="148.30812"
          x="217.08124"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="148.30812"
            x="217.08124"
@@ -1807,7 +1807,7 @@
          id="text2901"
          y="148.30812"
          x="246.43257"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="148.30812"
            x="246.43257"
@@ -1837,7 +1837,7 @@
          id="text2915"
          y="148.30812"
          x="275.78394"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="148.30812"
            x="275.78394"
@@ -1866,7 +1866,7 @@
            id="path2925" />
         <text
            xml:space="preserve"
-           style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+           style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
            x="305.13531"
            y="148.30812"
            id="text2929"
@@ -1909,7 +1909,7 @@
          id="text2941"
          y="148.18858"
          x="334.48663"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="148.18858"
            x="334.48663"
@@ -1939,7 +1939,7 @@
          id="text2953"
          y="148.30812"
          x="363.83795"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="148.30812"
            x="363.83795"
@@ -1978,7 +1978,7 @@
          id="text2965"
          y="148.89705"
          x="393.1893"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="148.89705"
            x="393.1893"
@@ -2008,7 +2008,7 @@
          id="text4162"
          y="176.68073"
          x="136.19246"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="176.68073"
            x="136.19246"
@@ -2038,7 +2038,7 @@
          id="text4176"
          y="176.68073"
          x="165.54564"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="176.68073"
            x="165.54564"
@@ -2069,7 +2069,7 @@
          id="text4190"
          y="176.68073"
          x="194.89883"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="176.68073"
            x="194.89883"
@@ -2099,7 +2099,7 @@
          id="text4204"
          y="176.68073"
          x="224.25203"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="176.68073"
            x="224.25203"
@@ -2129,7 +2129,7 @@
          id="text4218"
          y="176.68073"
          x="253.60524"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="176.68073"
            x="253.60524"
@@ -2159,7 +2159,7 @@
          id="text4232"
          y="176.68073"
          x="282.95844"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="176.68073"
            x="282.95844"
@@ -2194,7 +2194,7 @@
            id="path4242" />
         <text
            xml:space="preserve"
-           style="font-size:127.8480072px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+           style="font-size:127.8480072px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
            x="2496.1589"
            y="-3857.9382"
            id="text4246"
@@ -2237,7 +2237,7 @@
          id="text4262"
          y="176.56145"
          x="341.66492"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="176.56145"
            x="341.66492"
@@ -2267,7 +2267,7 @@
          id="text4276"
          y="176.68073"
          x="371.0181"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="176.68073"
            x="371.0181"
@@ -2306,7 +2306,7 @@
          id="text4292"
          y="176.45285"
          x="399.61465"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="176.45285"
            x="399.61465"
@@ -2336,7 +2336,7 @@
          id="text4389"
          y="204.89314"
          x="147.05582"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="204.89314"
            x="147.05582"
@@ -2366,7 +2366,7 @@
          id="text4403"
          y="204.89314"
          x="176.41534"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="204.89314"
            x="176.41534"
@@ -2396,7 +2396,7 @@
          id="text4417"
          y="204.89314"
          x="205.7749"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="204.89314"
            x="205.7749"
@@ -2426,7 +2426,7 @@
          id="text4431"
          y="204.89314"
          x="235.13446"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="204.89314"
            x="235.13446"
@@ -2456,7 +2456,7 @@
          id="text4445"
          y="204.89314"
          x="264.49408"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="204.89314"
            x="264.49408"
@@ -2491,7 +2491,7 @@
            id="path4457" />
         <text
            xml:space="preserve"
-           style="font-size:127.8480072px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+           style="font-size:127.8480072px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
            x="2496.1589"
            y="-3857.9382"
            id="text4461"
@@ -2534,7 +2534,7 @@
          id="text4477"
          y="204.77361"
          x="323.21323"
-         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.09369183px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="204.77361"
            x="323.21323"
@@ -2564,7 +2564,7 @@
          id="text4491"
          y="219.49237"
          x="328.86005"
-         style="font-size:10.28196239px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:10.28196239px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="219.49237"
            x="328.86005"
@@ -2607,7 +2607,7 @@
          id="text4507"
          y="221.12988"
          x="354.14444"
-         style="font-size:10.22632217px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:10.22632217px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="221.12988"
            x="354.14444"
@@ -2668,7 +2668,7 @@
          id="text4595"
          y="222.10814"
          x="528.11292"
-         style="font-size:9.82343102px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:9.82343102px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="222.10814"
            x="528.11292"
@@ -2699,7 +2699,7 @@
          id="text2898"
          y="222.10814"
          x="400.99127"
-         style="font-size:9.82343102px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:9.82343102px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="222.10814"
            x="400.99127"
@@ -2859,7 +2859,7 @@
          id="path3017" />
       <text
          xml:space="preserve"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="154.28087"
          y="90.558006"
          id="text3021"
@@ -2892,7 +2892,7 @@
          id="text3216"
          y="90.558006"
          x="184.31413"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="90.558006"
            x="184.31413"
@@ -2922,7 +2922,7 @@
          id="text3230"
          y="90.558006"
          x="214.34741"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="90.558006"
            x="214.34741"
@@ -2949,7 +2949,7 @@
          id="path3238" />
       <text
          xml:space="preserve"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="244.38069"
          y="90.558006"
          id="text3242"
@@ -2982,7 +2982,7 @@
          id="text3258"
          y="90.558006"
          x="290.34253"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="90.558006"
            x="290.34253"
@@ -3009,7 +3009,7 @@
          id="path3266" />
       <text
          xml:space="preserve"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="320.37579"
          y="90.558006"
          id="text3270"
@@ -3039,7 +3039,7 @@
          id="path3278" />
       <text
          xml:space="preserve"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="350.40912"
          y="90.558006"
          id="text3282"
@@ -3072,7 +3072,7 @@
          id="text3294"
          y="90.558006"
          x="380.44235"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="90.558006"
            x="380.44235"
@@ -3099,7 +3099,7 @@
          id="path3310" />
       <text
          xml:space="preserve"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="426.40421"
          y="90.558006"
          id="text3314"
@@ -3110,32 +3110,31 @@
            y="90.558006">F9</tspan></text>
     </g>
     <g
-       id="g4786"
-       transform="matrix(1.361158,0,0,1.361158,-250.7959,-22.776082)"
-       inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
-       inkscape:export-xdpi="300"
-       inkscape:export-ydpi="300">
+       id="g5023">
       <path
-         style="fill:#ececec;fill-opacity:1;stroke:none"
-         d="m 401.71947,81.730963 18.39763,0 c 1.96005,0 3.538,1.450556 3.538,3.252339 l 0,23.741648 c 0,1.80179 -1.57795,3.25229 -3.538,3.25229 l -18.39763,0 c -1.96005,0 -3.53801,-1.4505 -3.53801,-3.25229 l 0,-23.741648 c 0,-1.801783 1.57796,-3.252339 3.53801,-3.252339 z"
-         id="path7652" />
+         style="fill:#f7ca86;fill-opacity:1;stroke:none"
+         d="m 296.00777,88.472672 25.04208,0 c 2.66794,0 4.81578,1.974436 4.81578,4.426947 l 0,32.316131 c 0,2.45252 -2.14784,4.42688 -4.81578,4.42688 l -25.04208,0 c -2.66794,0 -4.81579,-1.97436 -4.81579,-4.42688 l 0,-32.316131 c 0,-2.452511 2.14785,-4.426947 4.81579,-4.426947 z"
+         id="path7652"
+         inkscape:connector-curvature="0" />
       <path
          id="path3320"
-         d="m 420.56999,86.023057 3.08511,-1.039755 0,23.741648 -3.08511,-3.55128 0,-19.150613 z"
-         style="fill:none;stroke:none" />
+         d="m 321.66631,94.31489 4.19932,-1.415271 0,32.316131 -4.19932,-4.83385 0,-26.06701 z"
+         style="fill:none;stroke:none"
+         inkscape:connector-curvature="0" />
       <path
          id="path3322"
-         d="m 403.94762,107.79705 13.94134,0 2.22814,4.18019 -18.39763,0 2.22815,-4.18019"
-         style="fill:none;stroke:none" />
+         d="m 299.04063,123.95273 18.97637,0 3.03285,5.6899 -25.04208,0 3.03286,-5.6899"
+         style="fill:none;stroke:none"
+         inkscape:connector-curvature="0" />
       <text
-         transform="scale(0.8907838,1.1226069)"
+         transform="scale(0.89078377,1.1226069)"
          id="text3326"
-         y="90.558006"
-         x="454.22614"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         y="102.9752"
+         x="336.72836"
+         style="font-style:normal;font-weight:normal;font-size:9.87025356px;font-family:Arial;fill:#000000;fill-opacity:1;stroke:none"
          xml:space="preserve"><tspan
-           y="90.558006"
-           x="454.22614"
+           y="102.9752"
+           x="336.72836"
            id="tspan3328"
            sodipodi:role="line">F10</tspan></text>
     </g>
@@ -3162,7 +3161,7 @@
          id="text3338"
          y="90.558006"
          x="484.54419"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="90.558006"
            x="484.54419"
@@ -3189,7 +3188,7 @@
          id="path3346" />
       <text
          xml:space="preserve"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="514.79681"
          y="90.333801"
          id="text3350"
@@ -3305,7 +3304,7 @@
          id="path14043" />
       <text
          xml:space="preserve"
-         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="466.44339"
          y="99.200981"
          id="text14047"
@@ -3334,7 +3333,7 @@
          id="text14099"
          y="99.200981"
          x="490.72278"
-         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan14103"
            y="99.200981"
@@ -3376,7 +3375,7 @@
          id="text14187"
          y="82.792953"
          x="647.85706"
-         style="font-size:5.78253794px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.78253794px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="82.792953"
            x="647.85706"
@@ -3406,7 +3405,7 @@
          id="text14212"
          y="143.27509"
          x="465.07236"
-         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan14216"
            y="143.27509"
@@ -3425,7 +3424,7 @@
          id="path14220" />
       <text
          xml:space="preserve"
-         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="491.06549"
          y="143.35452"
          id="text14226"
@@ -3463,7 +3462,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:5.78253794px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.78253794px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="651.1366"
          y="111.23145"
          id="text14248"
@@ -3497,7 +3496,7 @@
          id="path14266" />
       <text
          xml:space="preserve"
-         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="466.52652"
          y="175.44954"
          id="text14270"
@@ -3522,7 +3521,7 @@
          id="text14284"
          y="176.03156"
          x="494.13638"
-         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.16138029px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="176.03156"
            x="494.13638"
@@ -3560,7 +3559,7 @@
          id="text14306"
          y="137.25127"
          x="651.39771"
-         style="font-size:5.78253794px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.78253794px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="137.25127"
            x="651.39771"
@@ -3686,7 +3685,7 @@
          id="text3411"
          y="126.12906"
          x="624.43134"
-         style="font-size:5.9661417px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.9661417px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="126.12906"
            x="624.43134"
@@ -3713,7 +3712,7 @@
          id="path3423" />
       <text
          xml:space="preserve"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="676.8197"
          y="122.83234"
          id="text3427"
@@ -3743,7 +3742,7 @@
          id="path3439" />
       <text
          xml:space="preserve"
-         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.25136471px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="707.13782"
          y="123.96796"
          id="text3443"
@@ -3776,7 +3775,7 @@
          id="text3459"
          y="211.40059"
          x="428.75604"
-         style="font-size:12.4594717px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:12.4594717px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="211.40059"
            x="428.75604"
@@ -3803,7 +3802,7 @@
          id="path3647" />
       <text
          xml:space="preserve"
-         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="771.09503"
          y="185.25645"
          id="text3651"
@@ -3837,7 +3836,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          x="738.59015"
          y="159.22217"
          id="text4878"
@@ -3871,7 +3870,7 @@
          id="path3479" />
       <text
          xml:space="preserve"
-         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          x="704.87634"
          y="133.51888"
          id="text4902"
@@ -3905,7 +3904,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          x="770.84369"
          y="133.81625"
          id="text4908"
@@ -3939,7 +3938,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          x="705.16687"
          y="185.44521"
          id="text4920"
@@ -3972,7 +3971,7 @@
          id="text3731"
          y="221.49487"
          x="712.28357"
-         style="font-size:6.05655479px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:6.05655479px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="221.49487"
            x="712.28357"
@@ -4007,7 +4006,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          x="737.72797"
          y="133.88426"
          id="text4914"
@@ -4045,7 +4044,7 @@
          id="path3631" />
       <text
          xml:space="preserve"
-         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          x="738.5495"
          y="185.18341"
          id="text4896"
@@ -4083,7 +4082,7 @@
          id="path3551" />
       <text
          xml:space="preserve"
-         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          x="704.95746"
          y="159.4554"
          id="text4890"
@@ -4121,7 +4120,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          x="771.09503"
          y="159.73619"
          id="text4884"
@@ -4155,7 +4154,7 @@
          id="text6887"
          y="210.33936"
          x="705.36212"
-         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:5.56553698px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          xml:space="preserve"><tspan
            y="210.33936"
            x="705.36212"
@@ -4186,7 +4185,7 @@
          id="text6918"
          y="154.95454"
          x="775.19714"
-         style="font-size:9.75647926px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:9.75647926px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="154.95454"
            x="775.19714"
@@ -4217,7 +4216,7 @@
          id="text6922"
          y="178.82065"
          x="893.86029"
-         style="font-size:6.44717693px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:6.44717693px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="178.82065"
            x="893.86029"
@@ -4247,7 +4246,7 @@
          id="text3390"
          y="227.72847"
          x="362.31369"
-         style="font-size:8.59657383px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:8.59657383px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="227.72847"
            x="362.31369"
@@ -4282,7 +4281,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:8.82329273px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:8.82329273px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="130.0732"
          y="188.40688"
          id="text3408"
@@ -4311,7 +4310,7 @@
          id="text2507"
          y="100.82442"
          x="162.61649"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2509"
            y="100.82442"
@@ -4326,7 +4325,7 @@
          id="text3418"
          y="135.22244"
          x="140.13458"
-         style="font-size:5.66036844px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:5.66036844px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="135.22244"
            x="140.13458"
@@ -4348,7 +4347,7 @@
          id="text2519"
          y="100.73251"
          x="197.8204"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2521"
            y="100.73251"
@@ -4363,7 +4362,7 @@
          id="text3422"
          y="136.06573"
          x="169.44728"
-         style="font-size:7.83684492px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.83684492px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="136.06573"
            x="169.44728"
@@ -4385,7 +4384,7 @@
          id="text2778"
          y="100.82442"
          x="92.208679"
-         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.72778702px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            id="tspan2780"
            y="100.82442"
@@ -4400,7 +4399,7 @@
          id="text3434"
          y="187.28848"
          x="61.541946"
-         style="font-size:10.08606529px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:10.08606529px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="187.28848"
            x="61.541946"
@@ -4427,7 +4426,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:13.99057293px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:13.99057293px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="389.11539"
          y="199.49626"
          id="text3360"
@@ -4445,7 +4444,7 @@
          id="text4419"
          y="175.86552"
          x="468.62149"
-         style="font-size:8.19007587px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:8.19007587px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="175.86552"
            x="468.62149"
@@ -4475,7 +4474,7 @@
          id="text3366"
          y="189.48395"
          x="428.70001"
-         style="font-size:7.39597368px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:7.39597368px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="189.48395"
            x="428.70001"
@@ -4483,7 +4482,7 @@
            id="tspan3370">Ç</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:8.19007587px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:8.19007587px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="-505.26462"
          y="175.86552"
          id="text4423"
@@ -4513,7 +4512,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:11.93660355px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:11.93660355px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="458.59998"
          y="140.28134"
          id="text3372"
@@ -4531,7 +4530,7 @@
          id="text4427"
          y="135.96358"
          x="507.0715"
-         style="font-size:8.46830463px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:8.46830463px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          xml:space="preserve"><tspan
            y="135.96358"
            x="507.0715"
@@ -4558,7 +4557,7 @@
          style="fill:none;stroke:none" />
       <text
          xml:space="preserve"
-         style="font-size:10.28196239px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:10.28196239px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="422.17557"
          y="159.43808"
          id="text3384"
@@ -4573,7 +4572,7 @@
            y="172.29053">+</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:8.46830463px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         style="font-size:8.46830463px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial"
          x="-545.53442"
          y="135.96358"
          id="text4433"
@@ -4597,8 +4596,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/zoom.png"
-       xlink:href="../../../src/main/images/zoom.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\zoom.png"
+       xlink:href="..\..\..\src\main\images\zoom.png"
        y="284.40485"
        x="-63.678204"
        id="image17748"
@@ -4608,8 +4607,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/angle.png"
-       xlink:href="../../../src/main/images/angle.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\angle.png"
+       xlink:href="..\..\..\src\main\images\angle.png"
        y="241.80186"
        x="-75.476326"
        id="image17762"
@@ -4619,8 +4618,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/windowLevel.png"
-       xlink:href="../../../src/main/images/windowLevel.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\windowLevel.png"
+       xlink:href="..\..\..\src\main\images\windowLevel.png"
        y="137.82471"
        x="216.70068"
        id="image17776"
@@ -4630,8 +4629,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/slicing.png"
-       xlink:href="../../../src/main/images/slicing.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\slicing.png"
+       xlink:href="..\..\..\src\main\images\slicing.png"
        y="240.68239"
        x="-40.775959"
        id="image17790"
@@ -4641,8 +4640,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/distance.png"
-       xlink:href="../../../src/main/images/distance.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\distance.png"
+       xlink:href="..\..\..\src\main\images\distance.png"
        y="243.45839"
        x="-7.4636669"
        id="image3636"
@@ -4652,8 +4651,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/flipHorizontal.png"
-       xlink:href="../../../src/main/images/flipHorizontal.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\flipHorizontal.png"
+       xlink:href="..\..\..\src\main\images\flipHorizontal.png"
        y="243.56091"
        x="104.8381"
        id="image3678"
@@ -4663,8 +4662,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/flipVertical.png"
-       xlink:href="../../../src/main/images/flipVertical.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\flipVertical.png"
+       xlink:href="..\..\..\src\main\images\flipVertical.png"
        y="243.0116"
        x="142.56812"
        id="image3692"
@@ -4674,8 +4673,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/referenceLines.png"
-       xlink:href="../../../src/main/images/referenceLines.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\referenceLines.png"
+       xlink:href="..\..\..\src\main\images\referenceLines.png"
        y="242.93895"
        x="213.36678"
        id="image3706"
@@ -4685,8 +4684,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/windowLevel.png"
-       xlink:href="../../../src/main/images/windowLevel.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\windowLevel.png"
+       xlink:href="..\..\..\src\main\images\windowLevel.png"
        style="display:inline"
        y="201.42957"
        x="-47.384724"
@@ -4758,7 +4757,7 @@
          id="text3623"
          y="252.02412"
          x="391.16992"
-         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          xml:space="preserve"><tspan
            style="font-size:9px"
            y="252.02412"
@@ -4794,7 +4793,7 @@
          id="text3623-6"
          y="252.02412"
          x="391.16992"
-         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          xml:space="preserve"><tspan
            style="font-size:9px"
            y="252.02412"
@@ -4834,7 +4833,7 @@
          id="text3623-5"
          y="252.02412"
          x="391.16992"
-         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          xml:space="preserve"><tspan
            style="font-size:9px"
            y="252.02412"
@@ -4843,8 +4842,8 @@
            sodipodi:role="line">Tall inicial/final</tspan></text>
     </g>
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/rotate3d.png"
-       xlink:href="../../../src/main/images/rotate3d.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\rotate3d.png"
+       xlink:href="..\..\..\src\main\images\rotate3d.png"
        y="201.62102"
        x="-82.878181"
        id="image5231"
@@ -4854,8 +4853,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/eraser2.png"
-       xlink:href="../../../src/main/images/eraser2.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\eraser2.png"
+       xlink:href="..\..\..\src\main\images\eraser2.png"
        y="198.13155"
        x="-15.4763"
        id="image5245"
@@ -4865,8 +4864,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/rotateClockWise.png"
-       xlink:href="../../../src/main/images/rotateClockWise.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\rotateClockWise.png"
+       xlink:href="..\..\..\src\main\images\rotateClockWise.png"
        y="244.16609"
        x="69.676971"
        id="image5273"
@@ -4877,8 +4876,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/rotateCounterClockWise.png"
-       xlink:href="../../../src/main/images/rotateCounterClockWise.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\rotateCounterClockWise.png"
+       xlink:href="..\..\..\src\main\images\rotateCounterClockWise.png"
        y="244.36343"
        x="31.229334"
        id="image5287"
@@ -4888,8 +4887,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/mouse.png"
-       xlink:href="../../../src/main/images/mouse.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\mouse.png"
+       xlink:href="..\..\..\src\main\images\mouse.png"
        y="286.13708"
        x="9.9085035"
        id="image5301"
@@ -4899,8 +4898,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/voxelInformation.png"
-       xlink:href="../../../src/main/images/voxelInformation.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\voxelInformation.png"
+       xlink:href="..\..\..\src\main\images\voxelInformation.png"
        y="285.36646"
        x="45.650509"
        id="image5315"
@@ -4910,8 +4909,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/clippingBox.png"
-       xlink:href="../../../src/main/images/clippingBox.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\clippingBox.png"
+       xlink:href="..\..\..\src\main\images\clippingBox.png"
        y="285.41605"
        x="84.177536"
        id="image5329"
@@ -4921,8 +4920,8 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/invertWL.png"
-       xlink:href="../../../src/main/images/invertWL.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\invertWL.png"
+       xlink:href="..\..\..\src\main\images\invertWL.png"
        y="199.69717"
        x="169.17534"
        id="image5343"
@@ -4951,7 +4950,7 @@
          id="text3623-3"
          y="251.58672"
          x="390.97839"
-         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          xml:space="preserve"><tspan
            style="font-size:9px"
            y="251.58672"
@@ -4965,8 +4964,8 @@
            id="tspan5388">entre sèries</tspan></text>
     </g>
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\../../../src/main/images/ellipticalROITool.png"
-       xlink:href="../../../src/main/images/ellipticalROITool.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\src\main\images\ellipticalROITool.png"
+       xlink:href="..\..\..\src\main\images\ellipticalROITool.png"
        style="display:inline"
        y="201.57373"
        x="23.297691"
@@ -4996,7 +4995,7 @@
          id="text3623-3-0"
          y="251.58672"
          x="390.97839"
-         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          xml:space="preserve"><tspan
            style="font-size:9px"
            y="251.58672"
@@ -5010,7 +5009,7 @@
            id="tspan3709">definides a la imatge actual</tspan></text>
     </g>
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\..\..\..\\src\main\images\magicroitool.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\\src\main\images\magicroitool.png"
        xlink:href="..\..\..\\src\main\images\magicroitool.png"
        y="286.86005"
        x="159.39368"
@@ -5021,7 +5020,7 @@
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
     <image
-       sodipodi:absref="C:\Users\roger\devel\release\starviewer-src\starviewer\doc\help\shortcuts\..\..\..\\src\main\images\synchronize.png"
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\\src\main\images\synchronize.png"
        xlink:href="..\..\..\\src\main\images\synchronize.png"
        y="195.67305"
        x="206.30133"
@@ -5033,7 +5032,7 @@
        inkscape:export-ydpi="300" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4415);font-family:Bitstream Vera Sans"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4415);font-family:Arial"
        x="199.12375"
        y="223.32103"
        id="text3307"
@@ -5059,6 +5058,8 @@
        id="path3890"
        inkscape:connector-curvature="0" />
     <image
+       sodipodi:absref="C:\Users\Marc\starviewer\starviewer\doc\help\shortcuts\..\..\..\\src\main\images\linkAll.png"
+       xlink:href="..\..\..\\src\main\images\linkAll.png"
        inkscape:export-ydpi="300"
        inkscape:export-xdpi="300"
        inkscape:export-filename="C:\Documents and Settings\Roger\teclat.png"
@@ -5067,12 +5068,10 @@
        id="image3303-1"
        x="131.01477"
        y="195.16631"
-       style="display:inline"
-       xlink:href="C:\Users\chus\devel\starviewer-git\src\main\images\..\..\..\\src\main\images\linkAll.png"
-       sodipodi:absref="C:\Users\chus\devel\starviewer-git\src\main\images\..\..\..\\src\main\images\linkAll.png" />
+       style="display:inline" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;filter:url(#filter4415-7);font-family:Bitstream Vera Sans"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;filter:url(#filter4415-7);font-family:Arial"
        x="126.9401"
        y="222.95863"
        id="text4428-0"
@@ -5104,7 +5103,7 @@
          id="text3623-3-4"
          y="251.58672"
          x="390.97839"
-         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Bitstream Vera Sans"
+         style="font-size:9px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Arial"
          xml:space="preserve"><tspan
            style="font-size:9px"
            y="251.58672"
@@ -5116,6 +5115,34 @@
            x="390.97839"
            sodipodi:role="line"
            id="tspan3913">Protocols disponibles</tspan></text>
+    </g>
+    <g
+       id="g5038"
+       transform="translate(14.786097,52.006253)">
+      <rect
+         ry="1.87544"
+         rx="1.47746"
+         y="43.848423"
+         x="183.55154"
+         height="25.493271"
+         width="90.756042"
+         id="rect5036"
+         style="fill:#f7ca86;fill-opacity:1;fill-rule:nonzero" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text5030"
+         y="54.555595"
+         x="186.61073"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           y="54.555595"
+           x="186.61073"
+           id="tspan5032"
+           sodipodi:role="line">Activar/desactivar la</tspan><tspan
+           id="tspan5034"
+           y="65.805595"
+           x="186.61073"
+           sodipodi:role="line">comparació d'estudis</tspan></text>
     </g>
   </g>
 </svg>

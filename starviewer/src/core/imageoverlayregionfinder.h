@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGIMAGEOVERLAYREGIONFINDER_H
 #define UDGIMAGEOVERLAYREGIONFINDER_H
 
@@ -11,7 +25,7 @@ namespace udg {
 class ImageOverlay;
 
 /**
-    Aquesta classe permet trobar regions en un ImageOverlay intentant minimitzar l'‡rea buida total perÚ sense fer moltes regions molt petites.
+    Aquesta classe permet trobar regions en un ImageOverlay intentant minimitzar l'√†rea buida total per√≤ sense fer moltes regions molt petites.
  */
 class ImageOverlayRegionFinder {
 
@@ -20,36 +34,36 @@ public:
     ImageOverlayRegionFinder(const ImageOverlay &overlay);
 
     /// Troba les regions de l'overlay que contenen objectes i les guarda a la llista de regions.
-    /// Si optimizeForPowersOf2 Ès cert, ajunta les regions que juntes ocupen menys memÚria de textures que per separat, tenint en compte que les textures tenen
-    /// mides que sÛn potËncies de 2.
+    /// Si optimizeForPowersOf2 √©s cert, ajunta les regions que juntes ocupen menys mem√≤ria de textures que per separat, tenint en compte que les textures tenen
+    /// mides que s√≥n pot√®ncies de 2.
     void findRegions(bool optimizeForPowersOf2);
     /// Retorna la llista de regions de l'overlay.
     const QList<QRect>& regions() const;
 
 protected:
 
-    /// Retorna la dist‡ncia entre les regions donades, calculada com una dist‡ncia de Chebyshev (http://en.wikipedia.org/wiki/Chebyshev_distance).
+    /// Retorna la dist√†ncia entre les regions donades, calculada com una dist√†ncia de Chebyshev (http://en.wikipedia.org/wiki/Chebyshev_distance).
     static int distanceBetweenRegions(const QRect &region1, const QRect &region2);
 
 private:
 
-    /// Retorna l'Ìndex per accedir a les dades a partir de la fila i la columna.
+    /// Retorna l'√≠ndex per accedir a les dades a partir de la fila i la columna.
     int getDataIndex(int row, int column) const;
-    /// Retorna l'Ìndex de la fila a partir de l'Ìndex de les dades.
+    /// Retorna l'√≠ndex de la fila a partir de l'√≠ndex de les dades.
     int getRowIndex(int i) const;
-    /// Retorna l'Ìndex de la columna a partir de l'Ìndex de les dades.
+    /// Retorna l'√≠ndex de la columna a partir de l'√≠ndex de les dades.
     int getColumnIndex(int i) const;
 
-    /// Fa crÈixer una regiÛ a partir del pÌxel indicat. Emplena la m‡scara i retorna la regiÛ trobada.
+    /// Fa cr√©ixer una regi√≥ a partir del p√≠xel indicat. Emplena la m√†scara i retorna la regi√≥ trobada.
     QRect growRegion(int row, int column, QBitArray &mask);
-    /// Posa a 1 tots els pÌxels de la m‡scara que pertanyen a la regiÛ.
+    /// Posa a 1 tots els p√≠xels de la m√†scara que pertanyen a la regi√≥.
     void fillMaskForRegion(QBitArray &mask, const QRect &region);
-    /// Afegeix un padding d'un pÌxel al voltant de la regiÛ.
+    /// Afegeix un padding d'un p√≠xel al voltant de la regi√≥.
     void addPadding(QRect &region);
-    /// Treu el padding d'un pÌxel al voltant de la regiÛ.
+    /// Treu el padding d'un p√≠xel al voltant de la regi√≥.
     void removePadding(QRect &region);
-    /// Afegeix la regiÛ a la llista, fusionant-la amb altres si sÛn molt properes.
-    /// Si optimizeForPowersOf2 Ès cert, tambÈ les fusiona si juntes aprofiten millor la memÚria de textures.
+    /// Afegeix la regi√≥ a la llista, fusionant-la amb altres si s√≥n molt properes.
+    /// Si optimizeForPowersOf2 √©s cert, tamb√© les fusiona si juntes aprofiten millor la mem√≤ria de textures.
     void addRegion(QRect &region, bool optimizeForPowersOf2);
 
 private:

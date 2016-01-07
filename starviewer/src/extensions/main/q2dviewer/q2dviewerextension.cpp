@@ -1,17 +1,31 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "q2dviewerextension.h"
 
 #include "volume.h"
 #include "image.h"
 #include "logging.h"
-#include "qwindowlevelcombobox.h"
+#include "qvoilutcombobox.h"
 #include "q2dviewerwidget.h"
-#include "menugridwidget.h"
+#include "qhangingprotocolswidget.h"
 #include "tablemenu.h"
 #include "patient.h"
 #include "study.h"
 #include "toolmanager.h"
 #include "toolconfiguration.h"
-#include "windowlevelpresetstooldata.h"
+#include "voilutpresetstooldata.h"
 #include "qdicomdumpbrowser.h"
 #include "statswatcher.h"
 #include "automaticsynchronizationtool.h"
@@ -24,6 +38,7 @@
 #include "shortcutmanager.h"
 #include "transferfunctionmodel.h"
 #include "transferfunctionmodelfiller.h"
+#include "hangingprotocol.h"
 
 #ifndef STARVIEWER_LITE
 #include "qrelatedstudieswidget.h"
@@ -82,7 +97,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_relatedStudiesManager = new RelatedStudiesManager();
 #endif
 
-    m_hangingProtocolsMenu = new MenuGridWidget(this);
+    m_hangingProtocolsMenu = new QHangingProtocolsWidget(this);
     m_viewersLayoutGrid = new TableMenu(this);
 
     m_dicomDumpCurrentDisplayedImage = new QDICOMDumpBrowser(this);
@@ -130,7 +145,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_viewerLayersToolButton->setMenu(viewerInformationMenu);
     
     m_dicomDumpToolButton->setToolTip(tr("Dump DICOM information of the current image"));
-    m_windowLevelComboBox->setToolTip(tr("Choose Window/Level Presets"));
+    m_voiLutComboBox->setToolTip(tr("Choose a VOI LUT preset"));
 
     readSettings();
     createConnections();
@@ -163,8 +178,8 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 
     m_emptyTransferFunctionModel = new TransferFunctionModel(this);
 
-    m_windowLevelComboBox->view()->setTextElideMode(Qt::ElideRight);
-    m_windowLevelComboBox->view()->setMinimumWidth(MinimumComboBoxViewWidth);
+    m_voiLutComboBox->view()->setTextElideMode(Qt::ElideRight);
+    m_voiLutComboBox->view()->setMinimumWidth(MinimumComboBoxViewWidth);
     m_transferFunctionComboBox->view()->setTextElideMode(Qt::ElideRight);
     m_transferFunctionComboBox->view()->setMinimumWidth(MinimumComboBoxViewWidth);
 }
@@ -211,6 +226,15 @@ void Q2DViewerExtension::createConnections()
 #endif
 
     connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
+
+    connect(m_workingArea, SIGNAL(fusionLayout2x1FirstRequested(QList<Volume*>,AnatomicalPlane)),
+            SLOT(setFusionLayout2x1First(QList<Volume*>,AnatomicalPlane)));
+    connect(m_workingArea, SIGNAL(fusionLayout2x1SecondRequested(QList<Volume*>,AnatomicalPlane)),
+            SLOT(setFusionLayout2x1Second(QList<Volume*>,AnatomicalPlane)));
+    connect(m_workingArea, SIGNAL(fusionLayout3x1Requested(QList<Volume*>,AnatomicalPlane)), SLOT(setFusionLayout3x1(QList<Volume*>,AnatomicalPlane)));
+    connect(m_workingArea, SIGNAL(fusionLayout2x3FirstRequested(QList<Volume*>)), SLOT(setFusionLayout2x3First(QList<Volume*>)));
+    connect(m_workingArea, SIGNAL(fusionLayout2x3SecondRequested(QList<Volume*>)), SLOT(setFusionLayout2x3Second(QList<Volume*>)));
+    connect(m_workingArea, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SLOT(setFusionLayout3x3(QList<Volume*>)));
 }
 
 #ifdef STARVIEWER_LITE
@@ -262,8 +286,7 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
         return;
     }
 
-    // Ara és super txapussa i només mirarà el primer estudi
-    Study *study = m_patient->getStudies().first();
+    Study *study = m_patient->getStudy(m_currentStudyUID);
     if (study)
     {
         Settings settings;
@@ -294,10 +317,17 @@ void Q2DViewerExtension::setupDefaultLeftButtonTool()
 void Q2DViewerExtension::setupLayoutManager()
 {
     m_layoutManager = new LayoutManager(m_patient, m_workingArea, this);
-    connect(m_layoutManager, SIGNAL(hangingProtocolCandidatesFound(QList<HangingProtocol*>)), m_hangingProtocolsMenu, SLOT(setHangingItems(QList<HangingProtocol*>)));
-    // HACK Should be done in a better way
-    connect(m_layoutManager, SIGNAL(previousStudiesSearchEnded()), SLOT(hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()));
-    connect(m_hangingProtocolsMenu, SIGNAL(selectedGrid(int)), m_layoutManager, SLOT(setHangingProtocol(int)));
+    connect(m_layoutManager, &LayoutManager::hangingProtocolCandidatesFound, m_hangingProtocolsMenu, &QHangingProtocolsWidget::setItems);
+    connect(m_layoutManager, &LayoutManager::activeCombinedHangingProtocolChanged,
+            m_hangingProtocolsMenu, &QHangingProtocolsWidget::setActiveCombinedHangingProtocol);
+    connect(m_layoutManager, &LayoutManager::activeCurrentHangingProtocolChanged,
+            m_hangingProtocolsMenu, &QHangingProtocolsWidget::setActiveCurrentHangingProtocol);
+    connect(m_layoutManager, &LayoutManager::activePriorHangingProtocolChanged,
+            m_hangingProtocolsMenu, &QHangingProtocolsWidget::setActivePriorHangingProtocol);
+    connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedCurrent, m_layoutManager, &LayoutManager::setCurrentHangingProtocol);
+    connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedPrior, m_layoutManager, &LayoutManager::setPriorHangingProtocol);
+    connect(m_hangingProtocolsMenu, &QHangingProtocolsWidget::selectedCombined, m_layoutManager, &LayoutManager::setCombinedHangingProtocol);
+    connect(m_relatedStudiesWidget, SIGNAL(workingStudiesChanged(QString, QString)), this, SLOT(setWorkingStudies(QString, QString)));
 
     // Actions to show the next o previous hanging protocol of the list. Currently, it can only be carried out through keyboard
     QAction *nextHangingProtocolAction = new QAction(this);
@@ -310,8 +340,14 @@ void Q2DViewerExtension::setupLayoutManager()
     previousHangingProtocolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::PreviousHangingProtocol));
     connect(previousHangingProtocolAction, SIGNAL(triggered()), m_layoutManager, SLOT(applyPreviousHangingProtocol()));
 
+    QAction *toggleComparativeModeAction = new QAction(this);
+    toggleComparativeModeAction->setText("Comparative Mode");
+    toggleComparativeModeAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ToggleComparativeStudiesMode));
+    connect(toggleComparativeModeAction, SIGNAL(triggered()), m_relatedStudiesWidget, SLOT(toggleComparativeMode()));
+
     this->addAction(previousHangingProtocolAction);
     this->addAction(nextHangingProtocolAction);
+    this->addAction(toggleComparativeModeAction);
 
     m_layoutManager->initialize();
 }
@@ -351,6 +387,7 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 
     if (m_patient)
     {
+        m_currentStudyUID = m_patient->getStudies().first()->getInstanceUID();
         setupLayoutManager();
         setupDefaultToolsForModalities(m_patient->getModalities());
     }
@@ -361,21 +398,14 @@ void Q2DViewerExtension::setPatient(Patient *patient)
     setupPropagation();
     // Habilitem la possibilitat de buscar estudis relacionats.
     m_relatedStudiesToolButton->setEnabled(true);
-    connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), m_layoutManager, SLOT(addHangingProtocolsWithPrevious(QList<Study*>)));
-    m_hangingProtocolsMenu->setSearchingItem(true);
     m_relatedStudiesWidget->searchStudiesOf(m_patient);
     connect(m_patient, SIGNAL(studyAdded(Study*)), m_relatedStudiesWidget, SLOT(updateList()));
 #endif
 }
 
-void Q2DViewerExtension::layoutAgain()
+void Q2DViewerExtension::setCurrentStudy(const QString &studyUID)
 {
-    m_layoutManager->applyProperLayoutChoice();
-}
-
-void Q2DViewerExtension::hideHangingProtocolsWithPreviousAreBeingSearchedInMenu()
-{
-    m_hangingProtocolsMenu->setSearchingItem(false);
+    m_relatedStudiesWidget->setCurrentStudy(studyUID);
 }
 
 void Q2DViewerExtension::initializeTools()
@@ -441,7 +471,7 @@ void Q2DViewerExtension::initializeTools()
 
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
     // Registrem les eines de valors predefinits de window level, slicing per teclat i sincronització
-    m_toolManager->registerTool("WindowLevelPresetsTool");
+    m_toolManager->registerTool("VoiLutPresetsTool");
     m_toolManager->registerTool("SlicingKeyboardTool");
     m_toolManager->registerTool("SlicingWheelTool");
     m_toolManager->registerTool("SynchronizeTool");
@@ -463,7 +493,7 @@ void Q2DViewerExtension::initializeTools()
     m_flipHorizontalToolButton->setDefaultAction(m_toolManager->registerActionTool("HorizontalFlipActionTool"));
     m_flipVerticalToolButton->setDefaultAction(m_toolManager->registerActionTool("VerticalFlipActionTool"));
     m_restoreToolButton->setDefaultAction(m_toolManager->registerActionTool("RestoreActionTool"));
-    m_invertToolButton->setDefaultAction(m_toolManager->registerActionTool("InvertWindowLevelActionTool"));
+    m_invertToolButton->setDefaultAction(m_toolManager->registerActionTool("InvertVoiLutActionTool"));
     // Afegim un menú al botó d'erase per incorporar l'acció d'esborrar tot el que hi ha al visor
     m_eraserToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     QMenu *eraserToolMenu = new QMenu(this);
@@ -484,7 +514,7 @@ void Q2DViewerExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "WindowLevelPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";
     m_toolManager->triggerTools(defaultTools);
 
     //
@@ -573,9 +603,11 @@ void Q2DViewerExtension::initializeTools()
 
 void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
 {
+    connect(newViewerWidget, SIGNAL(doubleClicked(Q2DViewerWidget*)), SLOT(handleViewerDoubleClick(Q2DViewerWidget*)));
+
     // Activem/Desactivem les capes d'annotacions segons l'estat del botó
     // Informació de l'estudi
-    newViewerWidget->getViewer()->enableAnnotation(AllAnnotation, m_showViewersTextualInformationAction->isChecked());
+    newViewerWidget->getViewer()->enableAnnotation(AllAnnotations, m_showViewersTextualInformationAction->isChecked());
     // Overlays
     newViewerWidget->getViewer()->showImageOverlays(m_showOverlaysAction->isChecked());
     // Shutters
@@ -639,11 +671,8 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
                 connect(m_multipleShotAction, SIGNAL(triggered()), screenShotTool, SLOT(completeCapture()));
             }
 
-            // TODO Potser hi hauria alguna manera més elegant, com tenir un slot a WindowLevelPresetsToolData
-            // que es digués activateCurrentPreset() i el poguéssim connectar a algun signal
-            WindowLevelPresetsToolData *windowLevelData = selected2DViewer->getWindowLevelData();
-            m_windowLevelComboBox->setPresetsData(windowLevelData);
-            windowLevelData->selectCurrentPreset(windowLevelData->getCurrentPreset().getName());
+            VoiLutPresetsToolData *voiLutData = selected2DViewer->getVoiLutData();
+            m_voiLutComboBox->setPresetsData(voiLutData);
 
             updateTransferFunctionComboBox(selected2DViewer->getTransferFunctionModel());
 
@@ -660,7 +689,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             // Si és nul vol dir que en aquell moment o bé no tenim cap
             // visor seleccionat o bé no n'existeix cap. És per això que
             // cal desvincular els widgets adients de qualsevol visor.
-            m_windowLevelComboBox->clearPresets();
+            m_voiLutComboBox->clearPresets();
             m_cineController->setQViewer(0);
             m_thickSlabWidget->unlink();
             updateTransferFunctionComboBox(0);
@@ -715,7 +744,7 @@ void Q2DViewerExtension::showViewersTextualInformation(bool show)
 
     for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
     {
-        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotation(AllAnnotation, show);
+        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotation(AllAnnotations, show);
     }
 }
 
@@ -950,13 +979,18 @@ void Q2DViewerExtension::setupPropagation()
 {
     if (m_patient)
     {
-        Settings settings;
-        QSet<QString> modalitiesWithPropagation = settings.getValueAsQStringList(CoreSettings::ModalitiesWithPropagationEnabledByDefault).toSet();
+        Study *study = m_patient->getStudy(m_currentStudyUID);
 
-        // Propagation will be enabled if any of the configured modalities is present in the current patient modalities
-        if (!modalitiesWithPropagation.intersect(m_patient->getModalities().toSet()).isEmpty())
+        if (study)
         {
-            m_propagateToolButton->defaultAction()->setChecked(true);
+            Settings settings;
+            QSet<QString> modalitiesWithPropagation = settings.getValueAsQStringList(CoreSettings::ModalitiesWithPropagationEnabledByDefault).toSet();
+
+            // Propagation will be enabled if any of the configured modalities is present in the current patient modalities
+            if (!modalitiesWithPropagation.intersect(study->getModalities().toSet()).isEmpty())
+            {
+                m_propagateToolButton->defaultAction()->setChecked(true);
+            }
         }
     }
 }
@@ -967,7 +1001,7 @@ void Q2DViewerExtension::setGrid(int rows, int columns)
 #ifndef STARVIEWER_LITE
     m_layoutManager->cancelOngoingOperations();
 #endif
-    m_workingArea->setGrid(rows, columns);
+    m_layoutManager->setGrid(rows, columns);
 }
 
 void Q2DViewerExtension::updateTransferFunctionComboBoxWithCurrentViewerModel()
@@ -1020,6 +1054,144 @@ void Q2DViewerExtension::setTransferFunctionToCurrentViewer(int transferFunction
     // For now, always set the transfer function to the last volume
     viewer->setVolumeTransferFunction(viewer->getNumberOfInputs() - 1, viewer->getTransferFunctionModel()->getTransferFunction(transferFunctionIndex));
     viewer->render();
+}
+
+void Q2DViewerExtension::handleViewerDoubleClick(Q2DViewerWidget *viewerWidget)
+{
+    QSet<QString> toolsIncompatibleWithDoubleClickMaximization;
+    toolsIncompatibleWithDoubleClickMaximization << "AngleTool" << "NonClosedAngleTool" << "DistanceTool" << "PerpendicularDistanceTool"
+                                                 << "MagicROITool" << "PolylineROITool";
+
+    foreach (const QString &tool, toolsIncompatibleWithDoubleClickMaximization)
+    {
+        if (viewerWidget->getViewer()->getToolProxy()->isToolActive(tool))
+        {
+            return;
+        }
+    }
+
+    m_workingArea->toggleMaximization(viewerWidget);
+}
+
+void Q2DViewerExtension::setWorkingStudies(const QString &currentStudyUID, const QString &priorStudyUID)
+{
+    m_layoutManager->setWorkingStudies(currentStudyUID, priorStudyUID);
+
+    if (m_currentStudyUID != currentStudyUID)
+    {
+        m_currentStudyUID = currentStudyUID;
+        Study *currentStudy = m_patient->getStudy(currentStudyUID);
+
+        if (currentStudy)
+        {
+            setupDefaultToolsForModalities(currentStudy->getModalities());
+            setupDefaultLeftButtonTool();
+            setupPropagation();
+        }
+
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout2x1First(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout2x1First(volumes, anatomicalPlane);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout2x1Second(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout2x1Second(volumes, anatomicalPlane);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout3x1(const QList<Volume*> &volumes, const AnatomicalPlane &anatomicalPlane)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout3x1(volumes, anatomicalPlane);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout2x3First(const QList<Volume*> &volumes)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout2x3First(volumes);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout2x3Second(const QList<Volume*> &volumes)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout2x3Second(volumes);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayout3x3(const QList<Volume*> &volumes)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayout3x3(volumes);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
 }
 
 }

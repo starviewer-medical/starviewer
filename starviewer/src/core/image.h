@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGIMAGE_H
 #define UDGIMAGE_H
 
@@ -14,7 +28,7 @@
 #include "photometricinterpretation.h"
 #include "imageoverlay.h"
 #include "displayshutter.h"
-#include "windowlevel.h"
+#include "voilut.h"
 #include "pixelspacing2d.h"
 
 namespace udg {
@@ -115,15 +129,15 @@ public:
     double getRescaleIntercept() const;
 
     /// Assignar/Obtenir els valors del rescalat de la VOI LUT que s'apliquen sobre la imatge
-    void addWindowLevel(const WindowLevel &windowLevel);
-    WindowLevel getWindowLevel(int index = 0) const;
+    void addVoiLut(const VoiLut &voiLut);
+    VoiLut getVoiLut(int index = 0) const;
 
     /// Assignem el llistat de WindowLevels de la imatge. Si el llistat conté algun WW/WL invàlid, no s'afegeix
     /// Sempre s'esborrarà qualsevol llistat de window level que hi hagués anteriorment
-    void setWindowLevelList(const QList<WindowLevel> &windowLevelList);
+    void setVoiLutList(const QList<VoiLut> &voiLutList);
     
     /// Ens retorna el nombre de window levels que tenim
-    int getNumberOfWindowLevels();
+    int getNumberOfVoiLuts();
 
     /// Li indiquem quina és la sèrie pare a la qual pertany
     void setParentSeries(Series *series);
@@ -321,7 +335,7 @@ private:
     /// Valors de rescalat de la VOI LUT. (0028,1050),(0028,1051) Tipus 1C, present si no hi ha VOI LUT Sequence
     /// Poden incloure "Explicació" dels window levels si n'hi ha, texte descriptiu.(0028,1055) Tipus 3.
     /// Com que podem tenir més d'un tindrem una llista
-    QList<WindowLevel> m_windowLevelList;
+    QList<VoiLut> m_voiLutList;
 
     // TODO millorar definició
     /// Situació especial de la llesca en mm. (0020,1041)

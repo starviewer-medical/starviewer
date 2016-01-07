@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "screen.h"
 
 #include <QString>
@@ -152,7 +166,7 @@ bool Screen::isTop(const Screen &screen) const
     // Esta posat a sobre
     if (abs(m_geometry.bottom() - screen.getGeometry().top()) < MaximumDistanceInBetween)
     {
-        // Te la mateixa alÁada
+        // Te la mateixa al√ßada
         int leftPart = abs(m_geometry.left() - screen.getGeometry().left());
         int rightPart = abs(m_geometry.right() - screen.getGeometry().right());
         if (leftPart + rightPart < MaximumDistanceInBetween)
@@ -169,7 +183,7 @@ bool Screen::isBottom(const Screen &screen) const
     // Esta posat a sota
     if (abs(m_geometry.top() - screen.getGeometry().bottom()) < MaximumDistanceInBetween)
     {
-        // Te la mateixa alÁada
+        // Te la mateixa al√ßada
         int leftPart = abs(m_geometry.left() - screen.getGeometry().left());
         int rightPart = abs(m_geometry.right() - screen.getGeometry().right());
         if (leftPart + rightPart < MaximumDistanceInBetween)
@@ -186,7 +200,7 @@ bool Screen::isLeft(const Screen &screen) const
     // Esta posat a l'esquerra
     if (abs(m_geometry.right() - screen.getGeometry().left()) < MaximumDistanceInBetween)
     {
-        // Te la mateixa alÁada
+        // Te la mateixa al√ßada
         int topPart = abs(m_geometry.top() - screen.getGeometry().top());
         int bottomPart = abs(m_geometry.bottom() - screen.getGeometry().bottom());
         if (topPart + bottomPart < MaximumDistanceInBetween)
@@ -202,7 +216,7 @@ bool Screen::isRight(const Screen &screen) const
     // Esta posat a l'esquerra
     if (abs(m_geometry.left() - screen.getGeometry().right()) < MaximumDistanceInBetween)
     {
-        // Te la mateixa alÁada
+        // Te la mateixa al√ßada
         int topPart = abs(m_geometry.top() - screen.getGeometry().top());
         int bottomPart = abs(m_geometry.bottom() - screen.getGeometry().bottom());
         if (topPart + bottomPart < MaximumDistanceInBetween)

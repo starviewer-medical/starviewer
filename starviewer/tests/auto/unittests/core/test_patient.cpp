@@ -59,8 +59,8 @@ void test_Patient::compareTo_ShoudReturnExpectedPatientsSimilarity()
     QFETCH(QString, namePatient2);
     QFETCH(Patient::PatientsSimilarity, patientsSimilarity);
 
-    QSharedPointer<Patient> patient1 = QSharedPointer<udg::Patient>(PatientTestHelper::createPatientWithIDAndName(idPatient1, namePatient1));
-    QSharedPointer<Patient> patient2 = QSharedPointer<udg::Patient>(PatientTestHelper::createPatientWithIDAndName(idPatient2, namePatient2));
+    QScopedPointer<Patient> patient1(PatientTestHelper::createPatientWithIDAndName(idPatient1, namePatient1));
+    QScopedPointer<Patient> patient2(PatientTestHelper::createPatientWithIDAndName(idPatient2, namePatient2));
 
     QCOMPARE(patient1->compareTo(patient2.data()), patientsSimilarity);
 }
@@ -82,9 +82,6 @@ void test_Patient::getStudies_ShouldGetThemInTheExpectedOrder_data()
     Study *middleAgedStudy = new Study(0);
     middleAgedStudy->setDate(QDate(2006, 6, 15));
     middleAgedStudy->setInstanceUID("2");
-
-    QList<Study*> inputStudiesList;
-    inputStudiesList << middleAgedStudy << mostRecentStudy << olderStudy;
 
     QList<Study*> recentFirstSortedResult;
     recentFirstSortedResult << mostRecentStudy << middleAgedStudy << olderStudy;
@@ -211,7 +208,7 @@ void test_Patient::getModalities_ShouldReturnExpectedValues_data()
     modalities.clear();
 
     patient->addStudy(MRandPRStudy);
-    modalities << "PR" << "MR";
+    modalities << "MR" << "PR";
     QTest::newRow("1 study 2 modalities") << patient << modalities;
 
     patient = new Patient(0);
@@ -219,7 +216,7 @@ void test_Patient::getModalities_ShouldReturnExpectedValues_data()
 
     patient->addStudy(MRStudy);
     patient->addStudy(CRandRFStudy);
-    modalities << "RF" << "MR" << "CR";
+    modalities << "CR" << "RF" << "MR";
     QTest::newRow("2 studies 3 modalities") << patient << modalities;
 
     patient = new Patient(0);
@@ -228,7 +225,7 @@ void test_Patient::getModalities_ShouldReturnExpectedValues_data()
     patient->addStudy(MRandPRStudy);
     patient->addStudy(CRandRFStudy);
     patient->addStudy(MRStudy);
-    modalities << "PR" << "MR" << "RF" << "CR";
+    modalities << "MR" << "CR" << "RF" << "PR";
     QTest::newRow("3 studies 4 modalities (1 repeated among studies)") << patient << modalities;
 }
 

@@ -1,24 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hangingProtocol name="PreviGeneral">
+<?xml version='1.0' encoding='UTF-8'?>
+<hangingProtocol name="PreviGeneral" version="2">
     <hangingProtocolName>Previous</hangingProtocolName>
     <numberScreens>1</numberScreens>
     <allDifferent>yes</allDifferent>
     <strictness>yes</strictness>
     <protocol>CT</protocol>
-    <hasPrevious>yes</hasPrevious>
+    <numberOfPriors>1</numberOfPriors>
     <restriction identifier="1">
-        <usageFlag>NO_MATCH</usageFlag>
         <selectorAttribute>ImageType</selectorAttribute>
-        <valueRepresentation>LOCALIZER</valueRepresentation>
+        <selectorValue>LOCALIZER</selectorValue>
     </restriction>
     <imageSet identifier="1">
-        <restriction>1</restriction>
         <type>image</type>
+        <restrictionExpression>not 1</restrictionExpression>
     </imageSet>
     <imageSet identifier="2">
-        <restriction>1</restriction>
         <type>image</type>
-        <previous>1</previous>
+        <abstractPriorValue>1</abstractPriorValue>
+        <restrictionExpression>not 1</restrictionExpression>
     </imageSet>
     <displaySet identifier="1">
         <imageSetNumber>1</imageSetNumber>

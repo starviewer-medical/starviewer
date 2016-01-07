@@ -1,17 +1,28 @@
-/*=========================================================================
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
 
-  Program: GDCM (Grassroots DICOM). A DICOM library
-  Module:  $URL$
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
 
-  Copyright (c) 2006-2010 Mathieu Malaterre
-  All rights reserved.
-  See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
+  This file incorporates work covered by the following copyright and
+  permission notice:
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notice for more information.
+    Copyright (c) 2006-2010 Mathieu Malaterre
+    All rights reserved.
+    See Copyright.txt or http://gdcm.sourceforge.net/Copyright.html for details.
 
-=========================================================================*/
+       This software is distributed WITHOUT ANY WARRANTY; without even
+       the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+       PURPOSE.  See the above copyright notice for more information.
+ *************************************************************************************/
+
 #ifndef GDCMANONYMIZERSTARVIEWER_H
 #define GDCMANONYMIZERSTARVIEWER_H
 
@@ -21,19 +32,19 @@
 #include <gdcmSmartPointer.h>
 #include <gdcmWriter.h>
 
-/** ATENCI”!!!!!!!!!!!!!!!!!!!!!!!!!!
-    AQUESTA CLASSE …S UNA MODIFICACI” de la classe de Gdcm Anonymizer, que podrem trobar al fitxer gdcmAnonymizer. Anonymizer Ès una classe que ens permet
-    anonimitzar un fitxer DICOM i guardar els valors dels tags originals encriptats en el propi DICOM utilitzant OpenSSL, el problema Ès que les GDCM amb les
+/** ATENCI√ì!!!!!!!!!!!!!!!!!!!!!!!!!!
+    AQUESTA CLASSE √âS UNA MODIFICACI√ì de la classe de Gdcm Anonymizer, que podrem trobar al fitxer gdcmAnonymizer. Anonymizer √©s una classe que ens permet
+    anonimitzar un fitxer DICOM i guardar els valors dels tags originals encriptats en el propi DICOM utilitzant OpenSSL, el problema √©s que les GDCM amb les
     que treballem ara no estan compilades amb OpenSSL i la classe no funcionaria.
 
     Com en aquestes altures de desenvolupament de la release no considerem que sigui gaire oportu crear un nou sdk amb les GDCM compilades amb openSSL
-    i la part d'encriptar els tags amb el seu valor original no ens interessa, el que hem decidit Ès modificar aquesta classe treien tota la part d'encriptaciÛ
+    i la part d'encriptar els tags amb el seu valor original no ens interessa, el que hem decidit √©s modificar aquesta classe treien tota la part d'encriptaci√≥
     ,d'aquesta manera podrem anonimitzar DICOM utilitzant aquesta classe modificada.
 
     En la proxima release ja tindrem les GDCM compilades amb OpenSSL i podrem prescindir d'aquesta classe. D'aquesta manera les altres nostres classes que
-    utilitzen aquesta classe simplement hauran de fer referËncia a la classe de gdcm i ja funcionar‡ l'anonimitzaciÛ*/
+    utilitzen aquesta classe simplement hauran de fer refer√®ncia a la classe de gdcm i ja funcionar√† l'anonimitzaci√≥*/
 
-//Utilitzem el namespace de gdcm aixÌ quan substituim aquesta classe per la original de gdcm nomÈs haurem de canviar el nom de la classe
+//Utilitzem el namespace de gdcm aix√≠ quan substituim aquesta classe per la original de gdcm nom√©s haurem de canviar el nom de la classe
 namespace gdcm
 {
 

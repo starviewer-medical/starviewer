@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "series.h"
 #include "study.h"
 #include "image.h"
@@ -89,7 +103,7 @@ void Series::setImages(QList<Image*> imageSet)
     m_numberOfImages = m_imageSet.count();
 }
 
-int Series::getNumberOfImages()
+int Series::getNumberOfImages() const
 {
     return m_numberOfImages;
 }
@@ -406,13 +420,13 @@ DICOMSource Series::getDICOMSource() const
     return resultDICOMSource;
 }
 
-Volume* Series::getVolume(Identifier id)
+Volume* Series::getVolume(Identifier id) const
 {
     int index = m_volumesList.indexOf(id);
     return index != -1 ? VolumeRepository::getRepository()->getVolume(m_volumesList[index]) : NULL;
 }
 
-Volume* Series::getFirstVolume()
+Volume* Series::getFirstVolume() const
 {
     return m_volumesList.isEmpty() ? NULL : this->getVolume(m_volumesList[0]);
 }

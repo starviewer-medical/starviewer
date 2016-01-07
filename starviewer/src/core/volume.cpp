@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "volume.h"
 
 #include "volumereader.h"
@@ -97,14 +111,14 @@ double* Volume::getSpacing()
     return getVtkData()->GetSpacing();
 }
 
-void Volume::getWholeExtent(int extent[6])
+void Volume::getExtent(int extent[6])
 {
-    getVtkData()->GetWholeExtent(extent);
+    getVtkData()->GetExtent(extent);
 }
 
-int* Volume::getWholeExtent()
+int* Volume::getExtent()
 {
-    return getVtkData()->GetWholeExtent();
+    return getVtkData()->GetExtent();
 }
 
 int* Volume::getDimensions()
@@ -326,7 +340,7 @@ QString Volume::toString(bool verbose)
         this->getDimensions(dims);
         this->getOrigin(origin);
         this->getSpacing(spacing);
-        this->getWholeExtent(extent);
+        this->getExtent(extent);
         this->getVtkData()->GetBounds(bounds);
 
         result += QString("Dimensions: %1, %2, %3").arg(dims[0]).arg(dims[1]).arg(dims[2]);
@@ -368,7 +382,7 @@ QString Volume::getPixelUnits()
         if (image->getParentSeries())
         {
             QString modality = image->getParentSeries()->getModality();
-            if (modality == "CT")
+            if (VolumeHelper::isPrimaryCT(this))
             {
                 units = "HU";
             }
@@ -580,7 +594,7 @@ void Volume::getSliceRange(int &min, int &max, const OrthogonalPlane &plane)
     }
     else
     {
-        int *extent = getWholeExtent();
+        int *extent = getExtent();
         min = extent[plane.getZIndex() * 2];
         max = extent[plane.getZIndex() * 2 + 1];
     }
@@ -669,7 +683,7 @@ void Volume::convertToNeutralVolume()
     this->setNumberOfPhases(1);
 }
 
-AnatomicalPlane::AnatomicalPlaneType Volume::getAcquisitionPlane() const
+AnatomicalPlane Volume::getAcquisitionPlane() const
 {
     if (m_imageSet.isEmpty())
     {
@@ -677,14 +691,14 @@ AnatomicalPlane::AnatomicalPlaneType Volume::getAcquisitionPlane() const
     }
     else
     {
-        return AnatomicalPlane::getPlaneTypeFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
+        return AnatomicalPlane::getPlaneFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
     }
 }
 
-OrthogonalPlane Volume::getCorrespondingOrthogonalPlane(AnatomicalPlane::AnatomicalPlaneType anatomicalPlane) const
+OrthogonalPlane Volume::getCorrespondingOrthogonalPlane(const AnatomicalPlane &anatomicalPlane) const
 {
     OrthogonalPlane orthogonalPlane;
-    AnatomicalPlane::AnatomicalPlaneType acquisitionPlane = getAcquisitionPlane();
+    AnatomicalPlane acquisitionPlane = getAcquisitionPlane();
     switch (acquisitionPlane)
     {
         case AnatomicalPlane::Axial:
@@ -802,11 +816,11 @@ bool Volume::areAllImagesInTheSameAnatomicalPlane() const
 
         if (!m_imageSet.isEmpty())
         {
-            AnatomicalPlane::AnatomicalPlaneType anatomicalPlane = AnatomicalPlane::getPlaneTypeFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
+            AnatomicalPlane anatomicalPlane = AnatomicalPlane::getPlaneFromPatientOrientation(m_imageSet.first()->getPatientOrientation());
 
             foreach (Image *image, m_imageSet)
             {
-                if (AnatomicalPlane::getPlaneTypeFromPatientOrientation(image->getPatientOrientation()) != anatomicalPlane)
+                if (AnatomicalPlane::getPlaneFromPatientOrientation(image->getPatientOrientation()) != anatomicalPlane)
                 {
                     m_allImagesAreInTheSameAnatomicalPlane = false;
                     break;

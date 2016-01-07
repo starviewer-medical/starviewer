@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de GrÃ fics i Imatge, Universitat de Girona &
+  Institut de DiagnÃ²stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "ellipticalroitool.h"
 #include "q2dviewer.h"
 #include "logging.h"
@@ -114,7 +128,7 @@ void EllipticalROITool::setTextPosition(DrawerText *text)
     double attachmentPointInDisplay[3];
     // Passem attachmentPoint a coordenades de display
     m_2DViewer->computeWorldToDisplay(attachmentPoint[0], attachmentPoint[1], attachmentPoint[2], attachmentPointInDisplay);
-    // Apliquem el padding i tornem a coordenades de món
+    // Apliquem el padding i tornem a coordenades de mÃ³n
     m_2DViewer->computeDisplayToWorld(attachmentPointInDisplay[0], attachmentPointInDisplay[1] + paddingY, attachmentPointInDisplay[2], attachmentPoint);
 
     text->setAttachmentPoint(attachmentPoint);
@@ -141,11 +155,11 @@ void EllipticalROITool::simulateEllipse()
         m_2DViewer->getEventWorldCoordinate(m_secondPoint);
         m_2DViewer->putCoordinateInCurrentImageBounds(m_secondPoint);
 
-        // Si encara no havíem creat el polígon, ho fem
+        // Si encara no havÃ­em creat el polÃ­gon, ho fem
         if (!m_roiPolygon)
         {
             m_roiPolygon = new DrawerPolygon;
-            // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
+            // AixÃ­ evitem que la primitiva pugui ser esborrada durant l'ediciÃ³ per events externs
             m_roiPolygon->increaseReferenceCount();
             m_2DViewer->getDrawer()->draw(m_roiPolygon);
         }
@@ -172,7 +186,7 @@ void EllipticalROITool::updatePolygonPoints()
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
-    // Algorisme pel càlcul de l'el·lipse, extret de http://en.wikipedia.org/wiki/Ellipse#Ellipses_in_computer_graphics
+    // Algorisme pel cÃ lcul de l'elÂ·lipse, extret de http://en.wikipedia.org/wiki/Ellipse#Ellipses_in_computer_graphics
     double xRadius = (m_secondPoint[xIndex] - m_firstPoint[xIndex]) * 0.5;
     double yRadius = (m_secondPoint[yIndex] - m_firstPoint[yIndex]) * 0.5;
     double depthValue = centre[zIndex];
@@ -204,13 +218,13 @@ void EllipticalROITool::updatePolygonPoints()
 
 void EllipticalROITool::closeForm()
 {
-    // Cal comprovar si hi ha un objecte creat ja que podria ser que no s'hagués creat si s'hagués realitzat un doble clic,
-    // per exemple, ja que no s'hauria passat per l'event de mouse move, que és quan es crea la primitiva.
+    // Cal comprovar si hi ha un objecte creat ja que podria ser que no s'haguÃ©s creat si s'haguÃ©s realitzat un doble clic,
+    // per exemple, ja que no s'hauria passat per l'event de mouse move, que Ã©s quan es crea la primitiva.
     if (m_roiPolygon)
     {
         equalizeDepth();
         printData();
-        // Alliberem la primitiva perquè pugui ser esborrada
+        // Alliberem la primitiva perquÃ¨ pugui ser esborrada
         m_roiPolygon->decreaseReferenceCount();
         // Pintem la primitiva al lloc corresponent
         m_2DViewer->getDrawer()->erasePrimitive(m_roiPolygon);
@@ -224,7 +238,7 @@ void EllipticalROITool::closeForm()
 
 void EllipticalROITool::initialize()
 {
-    // Alliberem les primitives perquè puguin ser esborrades
+    // Alliberem les primitives perquÃ¨ puguin ser esborrades
     if (!m_roiPolygon.isNull())
     {
         m_roiPolygon->decreaseReferenceCount();

@@ -37,6 +37,7 @@
 #define CLIENT_MAC_HANDLER_EXCEPTION_HANDLER_H__
 
 #include <mach/mach.h>
+#include <pthread.h>
 
 #include <string>
 

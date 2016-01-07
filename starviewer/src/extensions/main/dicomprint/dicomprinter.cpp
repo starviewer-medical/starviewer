@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "dicomprinter.h"
 
 namespace udg {
@@ -425,7 +439,7 @@ void DicomPrinter::getDefaultFilmLayoutColumnsRows(int &columns, int &rows)
     QStringList splittedFilmLayout;
     QString filmLayout = getDefaultFilmLayout();
     // Comprovem amb expresions regulars que sigui un film layout correcte tenir en compte que en c++ per indicar '\' hem d'escriure '\\'
-    // en el cas com Ès aquest que l'expresiÚ regular contÈ un '\', en expresiÛ regular s'escriu '\\', i en codi ho hem d'escriur com '\\\\'
+    // en el cas com √©s aquest que l'expresi√≤ regular cont√© un '\', en expresi√≥ regular s'escriu '\\', i en codi ho hem d'escriur com '\\\\'
 
     if (filmLayout.contains(QRegExp("STANDARD\\\\\\d,\\d", Qt::CaseInsensitive)))
     {
@@ -441,8 +455,8 @@ void DicomPrinter::getDefaultFilmLayoutColumnsRows(int &columns, int &rows)
         columns = -1;
         rows = -1;
     }
-    // TODO: falten per implementar obtenir el n˙mero de columnes i files pels altres Layouts que tambÈ contempla el DICOM
-    // (PS 3.3 p‡g 918 Tag Image Display Format)
+    // TODO: falten per implementar obtenir el n√∫mero de columnes i files pels altres Layouts que tamb√© contempla el DICOM
+    // (PS 3.3 p√†g 918 Tag Image Display Format)
 }
 
 }

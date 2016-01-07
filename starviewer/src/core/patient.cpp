@@ -1,9 +1,22 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "patient.h"
 #include "logging.h"
 
 #include <QStringList>
 #include <QChar>
-#include <QSet>
 
 namespace {
 
@@ -70,7 +83,7 @@ namespace udg {
 Patient::Patient(QObject *parent)
  : QObject(parent)
 {
-    m_databaseID = NULL;
+    m_databaseID = 0;
 }
 
 Patient::Patient(const Patient &patient, QObject *parent)
@@ -122,7 +135,7 @@ qlonglong Patient::getDatabaseID()
 
 void Patient::setBirthDate(int day, int month, int year)
 {
-    m_birthDate.setYMD(year, month, day);
+    m_birthDate.setDate(year, month, day);
 }
 
 void Patient::setBirthDate(const QString &date)
@@ -258,14 +271,16 @@ QList<Study*> Patient::getStudiesByModality(const QString &modality)
 
 QStringList Patient::getModalities() const
 {
-    QSet<QString> modalitiesSet;
+    QStringList modalities;
+
     foreach (Study *study, m_studiesList)
     {
-        // This way we remove duplicates if any
-        modalitiesSet += study->getModalities().toSet();
+        modalities.append(study->getModalities());
     }
     
-    return modalitiesSet.toList();
+    modalities.removeDuplicates();
+
+    return modalities;
 }
 
 Series *Patient::getSeries(const QString &uid)

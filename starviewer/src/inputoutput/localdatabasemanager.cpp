@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "localdatabasemanager.h"
 
 #include <QDir>
@@ -10,6 +24,7 @@
 #include "localdatabasestudydal.h"
 #include "localdatabasepatientdal.h"
 #include "localdatabaseutildal.h"
+#include "localdatabasevoilutdal.h"
 #include "databaseconnection.h"
 #include "dicommask.h"
 #include "sqlite3.h"
@@ -21,6 +36,53 @@
 #include "thumbnailcreator.h"
 
 namespace udg {
+
+namespace {
+
+/// Inserts in the database all the VOI LUTs that are LUTs in the given image.
+int insertVoiLuts(DatabaseConnection *dbConnect, Image *image)
+{
+    int status = SQLITE_OK;
+    LocalDatabaseVoiLutDAL voiLutDal(dbConnect);
+
+    for (int i = 0; i < image->getNumberOfVoiLuts(); i++)
+    {
+        const VoiLut &voiLut = image->getVoiLut(i);
+
+        if (voiLut.isLut())
+        {
+            voiLutDal.insert(voiLut, image);
+            status = voiLutDal.getLastError();
+
+            if (status != SQLITE_OK)
+            {
+                return status;
+            }
+        }
+    }
+
+    return status;
+}
+
+/// Deletes from the database all the VOI LUTs that match the given mask.
+int deleteVoiLuts(DatabaseConnection *dbConnect, const DicomMask &mask)
+{
+    LocalDatabaseVoiLutDAL voiLutDal(dbConnect);
+    voiLutDal.del(mask);
+    return voiLutDal.getLastError();
+}
+
+/// Deletes from the database all the VOI LUTs from the given image.
+int deleteVoiLuts(DatabaseConnection *dbConnect, Image *image)
+{
+    DicomMask mask;
+    mask.setSOPInstanceUID(image->getSOPInstanceUID());
+    mask.setImageNumber(QString::number(image->getFrameNumber()));
+    return deleteVoiLuts(dbConnect, mask);
+}
+
+}
+
 // Nom de la llista de Settings que guardarà els estudis que tenim en aquell moment descarregant
 QDate LocalDatabaseManager::LastAccessDateSelectedStudies;
 
@@ -747,6 +809,14 @@ int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageT
         // Un cop actualitzades les imatges, actualitzem els corresponents shutters
         LocalDatabaseDisplayShutterDAL shutterDAL(dbConnect);
         shutterDAL.update(imageToSave->getDisplayShutters(), imageToSave);
+
+        // Delete existing VOI LUTs from the image. The new ones (or the same ones) are inserted below.
+        int status = deleteVoiLuts(dbConnect, imageToSave);
+
+        if (status != SQLITE_OK)
+        {
+            return status;
+        }
     }
     else
     {
@@ -755,6 +825,14 @@ int LocalDatabaseManager::saveImage(DatabaseConnection *dbConnect, Image *imageT
         {
             return status;
         }
+    }
+
+    // Insert VOI LUTs in the database
+    int status = insertVoiLuts(dbConnect, imageToSave);
+
+    if (status != SQLITE_OK)
+    {
+        return status;
     }
     
     return imageDAL.getLastError();
@@ -889,6 +967,14 @@ int LocalDatabaseManager::deleteImageFromDatabase(DatabaseConnection *dbConnect,
     if (shutterDAL.getLastError() != SQLITE_OK)
     {
         return shutterDAL.getLastError();
+    }
+
+    // Delete VOI LUTs from this image
+    int status = deleteVoiLuts(dbConnect, maskToDelete);
+
+    if (status != SQLITE_OK)
+    {
+        return status;
     }
     
     // Si no hi ha cap error en esborrar els shutters, esborrem les corresponents imatges

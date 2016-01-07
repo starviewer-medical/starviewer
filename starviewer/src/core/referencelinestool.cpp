@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "referencelinestool.h"
 #include "referencelinestooldata.h"
 #include "q2dviewer.h"
@@ -171,20 +185,19 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         // Projecció de la intersecció dels plans
         /// Llegir http://fixunix.com/dicom/51195-scanogram-lines-mr.html
 
-        bool showLines = false;
+        QList<int> boundsList;
         if (m_showPlaneThickness)
         {
             // Cal que intersectin els dos plans del gruix perquè es mostrin les línies
-            showLines = computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getUpperBounds(), drawerLineOffset);
-            showLines = showLines && computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getLowerBounds(), drawerLineOffset + 1);
+            boundsList << 0 << 1;
         }
         else
         {
             // Nomes agafem el pla "central"
-            showLines = computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane->getCentralBounds(), drawerLineOffset);
+            boundsList << 2;
         }
 
-        if (showLines)
+        if (computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane, boundsList, drawerLineOffset))
         {
             m_2DViewer->getDrawer()->enableGroup(ReferenceLinesDrawerGroup);
         }
@@ -199,42 +212,52 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
     }
 }
 
-bool ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, const QList<QVector<double> > &referencePlaneBounds, 
-                                                                     int lineOffset)
+bool ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, ImagePlane *referencePlane, QList<int> boundsList, int lineOffset)
 {
-    // Calculem totes les possibles interseccions
-    double firstIntersectionPoint[3], secondIntersectionPoint[3];
-
-    int numberOfIntersections = this->getIntersections(referencePlaneBounds.at(0), referencePlaneBounds.at(1), referencePlaneBounds.at(2),
-        referencePlaneBounds.at(3), localizerPlane, firstIntersectionPoint, secondIntersectionPoint);
-    
-    if (numberOfIntersections > 0)
+    bool hasEnoughIntersections = true;
+    int numberOfIntersections = 0;
+    for (int i = 0; i < boundsList.size(); ++i)
     {
-        m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint, firstIntersectionPoint);
-        m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint, secondIntersectionPoint);
-
-        // Linia discontinua
-        m_projectedIntersectionLines[lineOffset]->setFirstPoint(firstIntersectionPoint);
-        m_projectedIntersectionLines[lineOffset]->setSecondPoint(secondIntersectionPoint);
-        // Linia de background
-        m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(firstIntersectionPoint);
-        m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(secondIntersectionPoint);
-
-        return true;
+        double firstIntersectionPoint[3], secondIntersectionPoint[3];
+        numberOfIntersections = referencePlane->getIntersections(localizerPlane, firstIntersectionPoint, secondIntersectionPoint, boundsList.at(i));
+        if (numberOfIntersections)
+        {
+            updateProjectionLinesFromIntersections(firstIntersectionPoint, secondIntersectionPoint, lineOffset + i);
+            hasEnoughIntersections = hasEnoughIntersections && true;
+        }
+        else
+        {
+            resetProjectedLine(lineOffset + i);
+            hasEnoughIntersections = hasEnoughIntersections && false;
+        }
     }
-    else
-    {
-        // Per assegurar-nos que no queden dades residuals, matxaquem els punts posant-lis a tots el mateix valor, així no es produeix cap línia
-        double nullPoint[3] = { 0.0, 0.0, 0.0 };
-        // Linia discontinua
-        m_projectedIntersectionLines[lineOffset]->setFirstPoint(nullPoint);
-        m_projectedIntersectionLines[lineOffset]->setSecondPoint(nullPoint);
-        // Linia de background
-        m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(nullPoint);
-        m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(nullPoint);
-        
-        return false;
-    }
+
+    return hasEnoughIntersections;
+}
+
+void ReferenceLinesTool::updateProjectionLinesFromIntersections(double firstIntersectionPoint[3], double secondIntersectionPoint[3], int lineOffset)
+{
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint, firstIntersectionPoint);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint, secondIntersectionPoint);
+
+    updateProjectedLine(lineOffset, firstIntersectionPoint, secondIntersectionPoint);
+}
+
+void ReferenceLinesTool::updateProjectedLine(int lineOffset, double firstPoint[3], double secondPoint[3])
+{
+    // Dashed line
+    m_projectedIntersectionLines[lineOffset]->setFirstPoint(firstPoint);
+    m_projectedIntersectionLines[lineOffset]->setSecondPoint(secondPoint);
+    // Background line
+    m_backgroundProjectedIntersectionLines[lineOffset]->setFirstPoint(firstPoint);
+    m_backgroundProjectedIntersectionLines[lineOffset]->setSecondPoint(secondPoint);
+}
+
+void ReferenceLinesTool::resetProjectedLine(int lineOffset)
+{
+    double voidPoint[3] = { 0.0, 0.0, 0.0 };
+
+    updateProjectedLine(lineOffset, voidPoint, voidPoint);
 }
 
 void ReferenceLinesTool::projectPlane(ImagePlane *planeToProject)
@@ -253,42 +276,6 @@ void ReferenceLinesTool::projectPlane(ImagePlane *planeToProject)
     m_projectedReferencePlane->setVertix(2, projectedVertix3);
     m_projectedReferencePlane->setVertix(3, projectedVertix4);
     m_2DViewer->getDrawer()->enableGroup(ReferenceLinesDrawerGroup);
-}
-
-int ReferenceLinesTool::getIntersections(QVector<double> tlhc, QVector<double> trhc, QVector<double> brhc, QVector<double> blhc, ImagePlane *localizerPlane,
-                                         double firstIntersectionPoint[3], double secondIntersectionPoint[3])
-{
-    double t;
-    int numberOfIntersections = 0;
-    double localizerNormalVector[3], localizerOrigin[3];
-    localizerPlane->getNormalVector(localizerNormalVector);
-    localizerPlane->getOrigin(localizerOrigin);
-
-    // Primera "paral·lela"
-    if (vtkPlane::IntersectWithLine((double*)tlhc.data(), (double*)trhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
-    {
-        numberOfIntersections++;
-    }
-    if (vtkPlane::IntersectWithLine((double*)brhc.data(), (double*)blhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
-    {
-        numberOfIntersections++;
-    }
-
-    // Provar amb la segona "paral·lela"
-    if (numberOfIntersections == 0)
-    {
-        if (vtkPlane::IntersectWithLine((double*)trhc.data(), (double*)brhc.data(), localizerNormalVector, localizerOrigin, t, firstIntersectionPoint))
-        {
-            numberOfIntersections++;
-        }
-
-        if (vtkPlane::IntersectWithLine((double*)blhc.data(), (double*)tlhc.data(), localizerNormalVector, localizerOrigin, t, secondIntersectionPoint))
-        {
-            numberOfIntersections++;
-        }
-    }
-
-    return numberOfIntersections;
 }
 
 void ReferenceLinesTool::updateFrameOfReference()

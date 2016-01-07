@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "image.h"
 
 #include "series.h"
@@ -248,45 +262,46 @@ QString Image::getSliceLocation() const
     return m_sliceLocation;
 }
 
-void Image::addWindowLevel(const WindowLevel &windowLevel)
+void Image::addVoiLut(const VoiLut &voiLut)
 {
-    if (windowLevel.isValid())
+    if (voiLut.isWindowLevel() && !voiLut.getWindowLevel().isValid())
     {
-        m_windowLevelList << windowLevel;
-    }
-    else
-    {
-        QString logMessage = QString("WW/WL Inconsistent: %1, %2. No s'afegira a la imatge").arg(windowLevel.getWidth()).arg(windowLevel.getCenter());
+        QString logMessage = QString("WW/WL Inconsistent: %1, %2. No s'afegira a la imatge").arg(voiLut.getWindowLevel().getWidth())
+                                                                                            .arg(voiLut.getWindowLevel().getCenter());
         WARN_LOG(logMessage);
         DEBUG_LOG(logMessage);
     }
+    else
+    {
+        m_voiLutList << voiLut;
+    }
 }
 
-WindowLevel Image::getWindowLevel(int index) const
+VoiLut Image::getVoiLut(int index) const
 {
-    if (index >= 0 && index < m_windowLevelList.size())
+    if (index >= 0 && index < m_voiLutList.size())
     {
-        return m_windowLevelList.at(index);
+        return m_voiLutList.at(index);
     }
     else
     {
         DEBUG_LOG("Index out of range");
-        return WindowLevel();
+        return VoiLut();
     }
 }
 
-void Image::setWindowLevelList(const QList<WindowLevel> &windowLevelList)
+void Image::setVoiLutList(const QList<VoiLut> &voiLutList)
 {
-    m_windowLevelList.clear();
-    foreach (WindowLevel windowLevel, windowLevelList)
+    m_voiLutList.clear();
+    foreach (const VoiLut &voiLut, voiLutList)
     {
-        addWindowLevel(windowLevel);
+        addVoiLut(voiLut);
     }
 }
 
-int Image::getNumberOfWindowLevels()
+int Image::getNumberOfVoiLuts()
 {
-    return m_windowLevelList.size();
+    return m_voiLutList.size();
 }
 
 void Image::setRetrievedDate(QDate retrievedDate)

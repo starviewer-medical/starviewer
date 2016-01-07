@@ -1,7 +1,21 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "volumerepository.h"
 #include "volume.h"
 #include "logging.h"
-#include "asynchronousvolumereader.h"
+#include "volumereaderjobfactory.h"
 
 namespace udg {
 
@@ -38,8 +52,8 @@ void VolumeRepository::deleteVolume(Identifier id)
     this->removeItem(id);
 
     // I l'eliminem
-    AsynchronousVolumeReader volumeReader;
-    volumeReader.cancelLoadingAndDeleteVolume(volume);
+    VolumeReaderJobFactory *volumeReader = VolumeReaderJobFactory::instance();
+    volumeReader->cancelLoadingAndDeleteVolume(volume);
 
     emit itemRemoved(id);
     INFO_LOG("S'ha esborrat del repositori el volum amb id: " + QString::number(id.getValue()));

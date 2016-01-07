@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "studylayoutconfigsettingsconverter.h"
 
 #include <QStringList>
@@ -148,7 +162,7 @@ StudyLayoutConfig::UnfoldDirectionType StudyLayoutConfigSettingsConverter::getUn
         return StudyLayoutConfig::TopToBottomFirst;
     }
 
-    // Si no hi ha cap valor v�lid, retornem el valor per defecte
+    // Si no hi ha cap valor vàlid, retornem el valor per defecte
     return StudyLayoutConfig::DefaultUnfoldDirection;
 }
 
@@ -164,7 +178,7 @@ StudyLayoutConfig::UnfoldType StudyLayoutConfigSettingsConverter::getUnfoldTypeF
         return StudyLayoutConfig::UnfoldSeries;
     }
 
-    // Si no hi ha cap valor v�lid, retornem el valor per defecte
+    // Si no hi ha cap valor vàlid, retornem el valor per defecte
     return StudyLayoutConfig::DefaultUnfoldType;
 }
 

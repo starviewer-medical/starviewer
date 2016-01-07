@@ -176,7 +176,7 @@ void Experimental3DVolume::setGradientEstimator(GradientEstimator gradientEstima
                 m_finiteDifferenceGradientEstimator = vtkFiniteDifferenceGradientEstimator::New();
             }
             m_cpuRayCastMapper->SetGradientEstimator(m_finiteDifferenceGradientEstimator);
-            m_finiteDifferenceGradientEstimator->SetInput(m_alternativeImage ? m_alternativeImage : m_image);
+            m_finiteDifferenceGradientEstimator->SetInputData(m_alternativeImage ? m_alternativeImage : m_image);
             break;
         case FourDLInearRegression1:
             if (!m_4DLinearRegressionGradientEstimator)
@@ -185,7 +185,7 @@ void Experimental3DVolume::setGradientEstimator(GradientEstimator gradientEstima
             }
             m_4DLinearRegressionGradientEstimator->setRadius(1);
             m_cpuRayCastMapper->SetGradientEstimator(m_4DLinearRegressionGradientEstimator);
-            m_4DLinearRegressionGradientEstimator->SetInput(m_alternativeImage ? m_alternativeImage : m_image);
+            m_4DLinearRegressionGradientEstimator->SetInputData(m_alternativeImage ? m_alternativeImage : m_image);
             break;
         case FourDLInearRegression2:
             if (!m_4DLinearRegressionGradientEstimator)
@@ -194,7 +194,7 @@ void Experimental3DVolume::setGradientEstimator(GradientEstimator gradientEstima
             }
             m_4DLinearRegressionGradientEstimator->setRadius(2);
             m_cpuRayCastMapper->SetGradientEstimator(m_4DLinearRegressionGradientEstimator);
-            m_4DLinearRegressionGradientEstimator->SetInput(m_alternativeImage ? m_alternativeImage : m_image);
+            m_4DLinearRegressionGradientEstimator->SetInputData(m_alternativeImage ? m_alternativeImage : m_image);
             break;
     }
 }
@@ -464,12 +464,11 @@ QVector<float> Experimental3DVolume::computeVomiGradient(const QVector<float> &v
     vomiArray->SetArray(const_cast<float*>(vomi.data()), m_dataSize, 1);
     vtkImageData *vomiData = vtkImageData::New();
     vomiData->CopyStructure(m_image);
-    vomiData->SetScalarTypeToFloat();
     vtkPointData *vomiPointData = vomiData->GetPointData();
     vomiPointData->SetScalars(vomiArray);
 
     vtkEncodedGradientEstimator *gradientEstimator = this->gradientEstimator();
-    gradientEstimator->SetInput(vomiData);
+    gradientEstimator->SetInputData(vomiData);
     unsigned char *gradientMagnitudes = gradientEstimator->GetGradientMagnitudes();
 
     QVector<float> vomiGradient(m_dataSize);
@@ -486,7 +485,7 @@ QVector<float> Experimental3DVolume::computeVomiGradient(const QVector<float> &v
         vomiGradient[i] = gradientMagnitudes[i] / maxVomiGradient;
     }
 
-    gradientEstimator->SetInput(m_image);
+    gradientEstimator->SetInputData(m_image);
 
     vomiArray->Delete();
     vomiData->Delete();
@@ -529,7 +528,7 @@ void Experimental3DVolume::createImage(vtkImageData *image)
     double shift = -min;
     // fem servir directament un vtkImageShiftScale, que permet fer castings també
     vtkImageShiftScale *imageShiftScale = vtkImageShiftScale::New();
-    imageShiftScale->SetInput(image);
+    imageShiftScale->SetInputData(image);
     imageShiftScale->SetOutputScalarTypeToUnsignedShort();
     imageShiftScale->SetShift(shift);
     imageShiftScale->Update();
@@ -586,10 +585,10 @@ void Experimental3DVolume::createVoxelShaders()
 void Experimental3DVolume::createMappers()
 {
     m_cpuRayCastMapper = vtkVolumeRayCastMapper::New();
-    m_cpuRayCastMapper->SetInput(m_image);
+    m_cpuRayCastMapper->SetInputData(m_image);
     m_cpuRayCastMapper->SetVolumeRayCastFunction(m_simpleVolumeRayCastFunction);
     m_gpuRayCastMapper = vtkOpenGLGPUVolumeRayCastMapper::New();
-    m_gpuRayCastMapper->SetInput(m_image);
+    m_gpuRayCastMapper->SetInputData(m_image);
 }
 
 void Experimental3DVolume::createProperty()

@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGWINDOWSSYSTEMINFORMATION_H
 #define UDGWINDOWSSYSTEMINFORMATION_H
 
@@ -22,14 +36,14 @@ public:
     QString getOperatingSystemAsString();
     QString getOperatingSystemAsShortString();
 
-    /// Retorna la quantitat total de memÚria RAM en MegaBytes
+    /// Retorna la quantitat total de mem√≤ria RAM en MegaBytes
     unsigned int getRAMTotalAmount();
     QList<unsigned int> getRAMModulesCapacity();
     QList<unsigned int> getRAMModulesFrequency();
 
     unsigned int getCPUNumberOfCores();
     
-    /// Retorna una llista amb la freq¸Ëncia de cada processador 
+    /// Retorna una llista amb la freq√º√®ncia de cada processador 
     QList<unsigned int> getCPUFrequencies();
     unsigned int getCPUL2CacheSize();
 
@@ -44,7 +58,7 @@ public:
     QStringList getScreenVendors();
 
     QStringList getHardDiskDevices();
-    unsigned int getHardDiskCapacity(const QString &device); // Del disc dur que contÈ la carpeta de la cache de Starviewer
+    unsigned int getHardDiskCapacity(const QString &device); // Del disc dur que cont√© la carpeta de la cache de Starviewer
     unsigned int getHardDiskFreeSpace(const QString &device);
     bool doesOpticalDriveHaveWriteCapabilities();
 
@@ -54,7 +68,7 @@ public:
     bool isDesktopCompositionEnabled();
 
 protected:
-    /// MËtode alternatiu per si no podem obtenir el nombre de nuclis via WMI
+    /// M√®tode alternatiu per si no podem obtenir el nombre de nuclis via WMI
     virtual unsigned int getCPUNumberOfCoresFromEnvironmentVar();
 
     /// Gets the major version of the service pack

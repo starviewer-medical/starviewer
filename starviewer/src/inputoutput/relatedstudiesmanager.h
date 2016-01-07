@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGRELATEDSTUDIESMANAGER_H
 #define UDGRELATEDSTUDIESMANAGER_H
 
@@ -7,6 +21,7 @@
 #include <QDate>
 
 #include "pacsdevice.h"
+#include "pacsjob.h"
 
 namespace udg {
 
@@ -14,7 +29,6 @@ class Patient;
 class Study;
 class DicomMask;
 class PacsManager;
-class PACSJob;
 class QueryPacsJob;
 
 /**
@@ -32,6 +46,9 @@ Q_OBJECT
 public:
     RelatedStudiesManager();
     ~RelatedStudiesManager();
+
+    /// Enum to know if loadStudy method was able to load the study from database, it's being retrieved or failed.
+    enum LoadStatus { Loaded, Retrieving, Failed };
 
     /// Fa una consulta d'estudis previs assíncrona als PACS que estiguin marcats per defecte, si dos del PACS retornen el mateix estudi només es tindrà en compte
     /// el del primer PACS que ha respós
@@ -57,6 +74,12 @@ public:
 
     /// Retrieves and views the given study from the specified PACS
     void retrieveAndView(Study *study, const PacsDevice &pacsDevice);
+
+    /// Load study from the database. If it is not in the database it is retrieved from PACS before being loaded.
+    RelatedStudiesManager::LoadStatus loadStudy(Study *study);
+
+    /// Return the list of studies of the given patient stored in the database
+    QList<Study*> getStudiesFromDatabase(Patient *patient);
 
 signals:
     /// Signal que s'emet quan ha finalitzat la consulta d'estudis. La llista amb els resultats s'esborrarà quan es demani una altra cerca.
@@ -90,14 +113,14 @@ private:
 
     /// Ens encua el QueryPACSJob al PACSManager i ens connecta amb els seus signals per poder processar els resultats. També afegeix el Job en una taula
     /// de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
-    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(QueryPacsJob *queryPACSJob);
+    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPACSJob);
 
     /// Ens afegeix els estudis trobats en una llista, si algun dels estudis ja existeix a la llista perquè s'ha trobat en algun altre PACS no
     /// se li afegeix
-    void mergeFoundStudiesInQuery(QueryPacsJob *queryPACSJob);
+    void mergeFoundStudiesInQuery(PACSJobPointer queryPACSJob);
 
     /// Emet signal indicant que la consulta a un PACS ha fallat
-    void errorQueringPACS(QueryPacsJob *queryPACSJob);
+    void errorQueringPACS(PACSJobPointer queryPACSJob);
 
     /// Emet signal indicant la la consulta ha acabat
     void queryFinished();
@@ -115,12 +138,16 @@ private:
     /// Retrieves the given study from the specified PACS and applies the given action upon retrieval
     void retrieveAndApplyAction(Study *study, const PacsDevice &pacsDevice, ActionsAfterRetrieve action);
 
+    /// Return DICOM Masks to know what to query. It takes into accound
+    /// the PatientID and PatientName properties of the patient and the value of m_searchRelatedStudiesByName
+    QList<DicomMask> getDicomMasks(Patient *patient);
+
 private slots:
     /// Slot que s'activa quan finalitza un job de consulta al PACS
-    void queryPACSJobFinished(PACSJob *pacsJob);
+    void queryPACSJobFinished(PACSJobPointer pacsJob);
 
     /// Slot que s'activa quan un job de consulta al PACS és cancel·lat
-    void queryPACSJobCancelled(PACSJob *pacsJob);
+    void queryPACSJobCancelled(PACSJobPointer pacsJob);
 
 private:
     PacsManager *m_pacsManager;
@@ -134,7 +161,7 @@ private:
     /// com ja el tindrem aquesta llista ja no en farem signal
     QStringList m_pacsDeviceIDErrorEmited;
     /// Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
-    QHash<int, QueryPacsJob*> m_queryPACSJobPendingExecuteOrExecuting;
+    QHash<int, PACSJobPointer> m_queryPACSJobPendingExecuteOrExecuting;
     /// Boolea per saber si s'ha de cercar estudis relacionats a partir del nom del pacient.
     bool m_searchRelatedStudiesByName;
 };

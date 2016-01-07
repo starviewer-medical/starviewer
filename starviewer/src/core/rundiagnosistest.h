@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGRUNDIAGNOSISTEST_H
 #define UDGRUNDIAGNOSISTEST_H
 
@@ -12,7 +26,7 @@ namespace udg {
 class DiagnosisTest;
 
 /**
-    Executa els DiagnosisTest passats per par‡metre i en retorna el resultat. Aquesta classe est‡ pensada per ser executada de forma assÌncrona per un altre Thread i notificar-nos
+    Executa els DiagnosisTest passats per par√†metre i en retorna el resultat. Aquesta classe est√† pensada per ser executada de forma ass√≠ncrona per un altre Thread i notificar-nos
     quan s'han acabat d'executar tots els threads.
   */
 
@@ -33,7 +47,7 @@ public slots:
     void run();
 
 signals:
-    /// Signal que s'emet per indicar que es comenÁa a executar el DiagnosisTest passat
+    /// Signal que s'emet per indicar que es comen√ßa a executar el DiagnosisTest passat
     void runningDiagnosisTest(DiagnosisTest *);
 
     /// Signal que s'emet quan s'han executat tots els testos

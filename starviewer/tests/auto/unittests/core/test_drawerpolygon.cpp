@@ -46,7 +46,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(polyData);
+        mapper->SetInputData(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -73,7 +73,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(polyData);
+        mapper->SetInputData(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -105,7 +105,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(polyData);
+        mapper->SetInputData(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -140,7 +140,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(polyData);
+        mapper->SetInputData(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -176,7 +176,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(polyData);
+        mapper->SetInputData(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -215,7 +215,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(polyData);
+        mapper->SetInputData(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -234,7 +234,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         drawerPolygon->addVertix(3.0, 4.0, 0.0);
         drawerPolygon->addVertix(4.0, 3.0, 0.0);
         drawerPolygon->setFilled(true);
-        // Per saber els punts finals hem de passar per GluTessellator. No poden ser hardcoded perquè poden canviar segons la implementació de GLU.
+        // Per saber els punts finals hem de passar per GluTessellator. No poden ser hardcoded perquÃ¨ poden canviar segons la implementaciÃ³ de GLU.
         QList<Vector3> vertices;
         vertices << Vector3(0.0, 0.0, 0.0) << Vector3(1.0, 1.0, 0.0) << Vector3(3.0, 4.0, 0.0) << Vector3(4.0, 3.0, 0.0);
         GluTessellator tessellator;
@@ -263,7 +263,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToWorld();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(polyData);
+        mapper->SetInputData(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->SetMapper(mapper);
@@ -323,7 +323,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         vtkSmartPointer<vtkCoordinate> coordinate = vtkSmartPointer<vtkCoordinate>::New();
         coordinate->SetCoordinateSystemToDisplay();
         vtkSmartPointer<vtkPolyDataMapper2D> mapper = vtkSmartPointer<vtkPolyDataMapper2D>::New();
-        mapper->SetInput(polyData);
+        mapper->SetInputData(polyData);
         mapper->SetTransformCoordinate(coordinate);
         vtkSmartPointer<vtkActor2D> backgroundActor = DrawerPolygonTestHelper::createDefaultBackgroundActor();
         backgroundActor->GetProperty()->SetLineStipplePattern(0xFF00);

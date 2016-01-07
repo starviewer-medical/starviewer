@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gr√†fics i Imatge, Universitat de Girona &
+  Institut de Diagn√≤stic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef UDGQDICOMPRINTERBASICSETTINGSWIDGETBASE_H
 #define UDGQDICOMPRINTERBASICSETTINGSWIDGETBASE_H
 
@@ -7,7 +21,7 @@
 
 namespace udg {
 
-/// Classe que mostra i permet especificar els par‡metres b‡sics de configuraciÛ d'una impressora dicom;
+/// Classe que mostra i permet especificar els par√†metres b√†sics de configuraci√≥ d'una impressora dicom;
 class QDicomPrinterBasicSettingsWidget : public QWidget, private::Ui::QDicomPrinterBasicSettingsWidgetBase {
 Q_OBJECT
 
@@ -38,10 +52,10 @@ private:
     /// Emplena DicomPrinter amb les dades del GroupBox Print Settings
     void getPrintSettings(DicomPrinter &dicomPrinter);
 
-    /// Mostra els par‡metres de Film Settings
+    /// Mostra els par√†metres de Film Settings
     void setFilmSettings(DicomPrinter &dicomPrinter);
 
-    /// Mostra els par‡metres del Print Settings
+    /// Mostra els par√†metres del Print Settings
     void setPrintSettings(DicomPrinter &dicomPrinter);
 };
 } // end namespace udg.

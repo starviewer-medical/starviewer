@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "thumbnailcreator.h"
 
 #include <QObject>
@@ -242,7 +256,7 @@ QImage ThumbnailCreator::convertToQImage(DicomImage *dicomImage)
     if (buffer != NULL)
     {
         // Copy PGM/PPM header to buffer
-        OFBitmanipTemplate<Uint8>::copyMem((const Uint8*)imageHeader.toAscii().data(), buffer, offset);
+        OFBitmanipTemplate<Uint8>::copyMem((const Uint8*)imageHeader.toLatin1().data(), buffer, offset);
         if (dicomImage->getOutputData((void*)(buffer + offset), length, 8))
         {
             if (!thumbnail.loadFromData((const unsigned char*)buffer, length, imageFormat.toLatin1()))

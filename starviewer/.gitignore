@@ -7,6 +7,7 @@ Makefile*
 # Especial files
 src/core/i18n_release
 src/main/extensions.h
+src/core/executablesnames.h
 
 # Temporals of Qt Single Application
 bin/*.dylib
@@ -17,6 +18,7 @@ tmp
 bin/starviewer.app/
 src/main/starviewer.xcodeproj
 src/main/Info.plist
+linuxpackage
 
 # QtCreator generated files
 *.pro.user*
@@ -36,6 +38,10 @@ src/main/Info.plist
 *.dll
 # Application executables
 bin/*.exe
+bin/starviewer
+bin/starviewer_crashreporter
+bin/starviewer_sapwrapper
+bin/*.so*
 
 # Testing outputs
 tests/auto/*.log
@@ -52,3 +58,7 @@ ipch/*
 vcxproj.*
 fixdebug*
 *.tmp
+
+# Manifests
+bin/*manifest*
+tests/auto/*manifest*

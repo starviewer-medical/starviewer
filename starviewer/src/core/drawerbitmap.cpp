@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "drawerbitmap.h"
 
 #include "logging.h"
@@ -86,12 +100,13 @@ vtkProp* DrawerBitmap::getAsVtkProp()
  
             vtkSmartPointer<vtkImageMapToColors> mapTransparency = vtkSmartPointer<vtkImageMapToColors>::New();
             mapTransparency->SetLookupTable(lookupTable);
-            mapTransparency->SetInput(imageData);
+            mapTransparency->SetInputData(imageData);
             mapTransparency->PassAlphaToOutputOn();
  
             // Creem l'actor
             m_imageActor = vtkSmartPointer<vtkImageActor>::New();
-            m_imageActor->SetInput(mapTransparency->GetOutput());
+            mapTransparency->Update();
+            m_imageActor->SetInputData(mapTransparency->GetOutput());
             m_imageActor->SetDisplayExtent(0, m_width - 1, 0, m_height - 1, 0, 0);
             m_imageActor->SetVisibility(this->isVisible());
         }

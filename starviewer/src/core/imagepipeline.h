@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef IMAGEPIPELINE_H
 #define IMAGEPIPELINE_H
 
@@ -14,6 +28,7 @@ class WindowLevelFilter;
 class ThickSlabFilter;
 class DisplayShutterFilter;
 class TransferFunction;
+class VoiLut;
 
 /// Pipeline that applies the filters required to generate the image to be used in Q2DViewer
 class ImagePipeline : public Filter {
@@ -27,10 +42,8 @@ public:
     /// Sets the given filter output as input of the filter
     void setInput(FilterOutput input);
 
-    /// Sets the window window and window level
-    bool setWindowLevel(double window, double level);
-    /// Gets the window window and window level
-    void getCurrentWindowLevel(double wl[]);
+    /// Sets the VOI LUT.
+    void setVoiLut(const VoiLut &voiLut);
     /// Sets the transfer function
     void setTransferFunction(const TransferFunction &transferFunction);
     /// Clears the transfer function.
@@ -68,6 +81,9 @@ private:
     vtkImageData *m_input;
     /// The shutter data to be applied
     vtkImageData *m_shutterData;
+
+    /// Used to keep track of whether there's a currently active transfer function when applying a VOI LUT.
+    bool m_hasTransferFunction;
 
 };
 

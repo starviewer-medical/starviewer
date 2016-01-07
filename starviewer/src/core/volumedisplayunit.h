@@ -1,12 +1,26 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #ifndef VOLUMEDISPLAYUNIT_H
 #define VOLUMEDISPLAYUNIT_H
 
 #include "accumulator.h"
 #include "transferfunction.h"
-#include "windowlevel.h"
 
-class vtkImageActor;
+class vtkCamera;
 class vtkImageData;
+class vtkImageSlice;
 class vtkPropPicker;
 
 namespace udg {
@@ -16,35 +30,36 @@ class ImagePipeline;
 class OrthogonalPlane;
 class SliceHandler;
 class Volume;
-class WindowLevelPresetsToolData;
+class VoiLut;
+class VoiLutPresetsToolData;
 class VolumePixelData;
 
 /**
     This class groups together a Volume and the associated objects that a Q2DViewer needs to display a volume.
-    The ImagePipeline, the vtkImageActor and the SliceHandler are created internally in the constructor and destroyed in the destructor, so only the Volume has
+    The ImagePipeline, the vtkImageSlice and the SliceHandler are created internally in the constructor and destroyed in the destructor, so only the Volume has
     to be supplied externally.
  */
 class VolumeDisplayUnit {
 
 public:
     VolumeDisplayUnit();
-    ~VolumeDisplayUnit();
+    virtual ~VolumeDisplayUnit();
 
     /// Returns the volume.
     Volume* getVolume() const;
     /// Sets a new volume and resets display properties (pipeline and slice handler).
     void setVolume(Volume *volume);
 
-    /// Returns the window level data
-    WindowLevelPresetsToolData* getWindowLevelData();
-    /// Sets a new window level data
-    void setWindowLevelData(WindowLevelPresetsToolData *windowLevelData);
+    /// Returns the VOI LUT data.
+    VoiLutPresetsToolData* getVoiLutData() const;
+    /// Sets a new VOI LUT data.
+    void setVoiLutData(VoiLutPresetsToolData *voiLutData);
 
     /// Returns the image pipeline.
     ImagePipeline* getImagePipeline() const;
 
-    /// Returns the image actor.
-    vtkImageActor* getImageActor() const;
+    /// Returns the vtkImageSlice.
+    vtkImageSlice* getImageSlice() const;
 
     /// Returns the configured point picker for this unit.
     vtkPropPicker* getImagePointPicker();
@@ -67,19 +82,16 @@ public:
     /// If some orthogonal reconstruction different from original acquisition is applied, returns null
     Image* getCurrentDisplayedImage() const;
 
-    /// Updates the display extent of the image actor.
-    void updateDisplayExtent();
+    /// Updates the displayed image in the image slice.
+    virtual void updateImageSlice(vtkCamera *camera);
 
     /// Updates the current image default presets values. It only applies to original acquisition plane.
     void updateCurrentImageDefaultPresets();
 
-    /// Updates the current window level
-    void updateWindowLevel(const WindowLevel &windowLevel);
-
-    /// Returns the current window level on the given array.
-    void getWindowLevel(double windowLevel[2]) const;
-    /// Sets the window level.
-    void setWindowLevel(double window, double level);
+    /// Sets the given VOI LUT to the pipeline.
+    void setVoiLut(const VoiLut &voiLut);
+    /// Sets the given VOI LUT to the VOI LUT data and to the pipeline.
+    void setCurrentVoiLutPreset(const VoiLut &voiLut);
 
     /// Sets the transfer function.
     void setTransferFunction(const TransferFunction &transferFunction);
@@ -128,6 +140,16 @@ public:
     /// Sets the display shutter image data.
     void setShutterData(vtkImageData *shutterData);
 
+protected:
+    /// The volume.
+    Volume *m_volume;
+
+    /// The image actor where the slices are rendered.
+    vtkImageSlice *m_imageSlice;
+
+    /// The slice handler that controls slices, phases and slabs.
+    SliceHandler *m_sliceHandler;
+
 private:
     /// Called when setting a new volume to reset the thick slab filter.
     void resetThickSlab();
@@ -135,23 +157,14 @@ private:
     void setupPicker();
 
 private:
-    /// The volume.
-    Volume *m_volume;
-
     /// The image pipeline that processes the volume.
     ImagePipeline *m_imagePipeline;
-
-    /// The image actor where the slices are rendered.
-    vtkImageActor *m_imageActor;
-
-    /// The slice handler that controls slices, phases and slabs.
-    SliceHandler *m_sliceHandler;
 
     /// Point picker to probe pixels from the image to display
     vtkPropPicker *m_imagePointPicker;
 
-    /// Window and level data
-    WindowLevelPresetsToolData *m_windowLevelData;
+    /// VOI LUT data.
+    VoiLutPresetsToolData *m_voiLutData;
 
     /// The current transfer function.
     TransferFunction m_transferFunction;

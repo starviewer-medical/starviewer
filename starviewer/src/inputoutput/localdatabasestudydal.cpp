@@ -1,3 +1,17 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include <sqlite3.h>
 #include <QString>
 #include <QDate>
@@ -17,7 +31,7 @@ LocalDatabaseStudyDAL::LocalDatabaseStudyDAL(DatabaseConnection *dbConnection)
 
 void LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlInsert(newStudy, lastAccessDate)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(newStudy, lastAccessDate).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -27,7 +41,7 @@ void LocalDatabaseStudyDAL::insert(Study *newStudy, const QDate &lastAccessDate)
 
 void LocalDatabaseStudyDAL::update(Study *studyToUpdate, const QDate &lastAccessDate)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlUpdate(studyToUpdate, lastAccessDate)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlUpdate(studyToUpdate, lastAccessDate).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -37,7 +51,7 @@ void LocalDatabaseStudyDAL::update(Study *studyToUpdate, const QDate &lastAccess
 
 void LocalDatabaseStudyDAL::del(const DicomMask &studyMaskToDelete)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), qPrintable(buildSqlDelete(studyMaskToDelete)), 0, 0, 0);
+    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlDelete(studyMaskToDelete).toUtf8().constData(), 0, 0, 0);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -54,7 +68,7 @@ QList<Study*> LocalDatabaseStudyDAL::queryOrderByLastAccessDate(const DicomMask 
     QList<Study*> studyList;
     QString sqlSentence = buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor) + " Order by LastAccessDate";
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(sqlSentence), &reply, &rows, &columns, error);
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), sqlSentence.toUtf8().constData(), &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
     {
@@ -82,7 +96,7 @@ QList<Study*> LocalDatabaseStudyDAL::query(const DicomMask &studyMask, QDate las
     QList<Study*> studyList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          qPrintable(buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor)),
+                                          buildSqlSelect(studyMask, lastAccessDateMinor, lastAccessDateEqualOrMajor).toUtf8().constData(),
                                           &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
@@ -110,7 +124,7 @@ QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(const DicomMask &patien
     QList<Patient*> patientList;
 
     m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(),
-                                          qPrintable(buildSqlSelectStudyPatient(patientStudyMaskToQuery, lastAccessDateMinor, lastAccessDateEqualOrMajor)),
+                                          buildSqlSelectStudyPatient(patientStudyMaskToQuery, lastAccessDateMinor, lastAccessDateEqualOrMajor).toUtf8().constData(),
                                           &reply, &rows, &columns, error);
     if (getLastError() != SQLITE_OK)
     {
@@ -140,7 +154,7 @@ qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString 
     char **error = NULL;
     qlonglong patientID = -1;
 
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), qPrintable(buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID)),
+    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), buildSqlGetPatientIDFromStudyInstanceUID(studyInstanceUID).toUtf8().constData(),
         &reply, &rows, &columns, error);
 
     if (getLastError() != SQLITE_OK)
@@ -164,7 +178,6 @@ qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString 
 
 Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
 {
-    QString studyInstanceUID;
     Study *study = new Study();
     QStringList modalities;
 
@@ -176,8 +189,8 @@ Study* LocalDatabaseStudyDAL::fillStudy(char **reply, int row, int columns)
     study->setDate(reply[7 + row * columns]);
     study->setTime(reply[8 + row * columns]);
     study->setAccessionNumber(reply[9 + row * columns]);
-    study->setDescription(reply[10 + row * columns]);
-    study->setReferringPhysiciansName(reply[11 + row * columns]);
+    study->setDescription(convertToQString(reply[10 + row * columns]));
+    study->setReferringPhysiciansName(convertToQString(reply[11 + row * columns]));
     study->setRetrievedDate(QDate().fromString(reply[13 + row * columns], "yyyyMMdd"));
     study->setRetrievedTime(QTime().fromString(reply[14 + row * columns], "hhmmss"));
 
@@ -197,7 +210,7 @@ Patient* LocalDatabaseStudyDAL::fillPatient(char **reply, int row, int columns)
 
     patient->setDatabaseID(QString(reply[16 + row * columns]).toLongLong());
     patient->setID(reply[17 + row * columns]);
-    patient->setFullName(reply[18 + row * columns]);
+    patient->setFullName(convertToQString(reply[18 + row * columns]));
     patient->setBirthDate(reply[19 + row * columns]);
     patient->setSex(reply[20 + row * columns]);
 
