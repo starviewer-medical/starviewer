@@ -47,6 +47,6 @@ const QString UserLogsFile(UserLogsPath + "starviewer.log");
 
 // TODO const QString LogConfigurationFileLocation();
 
-}; // End namespace udg
+}
 
 #endif
