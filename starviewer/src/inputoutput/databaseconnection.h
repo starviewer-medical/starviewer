@@ -56,10 +56,10 @@ public:
     /// Rolls back the current transaction in the database. If the connexion is closed, the current transaction is rolled back automatically.
     void rollbackTransaction();
 
+private:
     /// Opens the connection to the database specified in the database path.
     void open();
 
-private:
     /// Closes the connection to the database.
     void close();
 
