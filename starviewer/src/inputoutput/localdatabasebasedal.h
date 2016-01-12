@@ -35,10 +35,6 @@ public:
     /// Returns the last error.
     const QSqlError& getLastError() const;
 
-    /// Formata l'string de forma que no contingui caràcters extranys que puguin fer
-    /// que l'execució d'una comanda SQL sigui incorrecta
-    static QString formatTextToValidSQLSyntax(QString string);
-
     /// Formata un qchar perquè no contingui caràcters estranys o Nulls que pugin fer que la sentència sql sigui incorrecte
     static QString formatTextToValidSQLSyntax(QChar qchar);
 
