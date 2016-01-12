@@ -44,7 +44,7 @@ void bindValues(QSqlQuery &query, const Series *series)
     query.bindValue(":bodyPartExamined", series->getBodyPartExamined());
     query.bindValue(":viewPosition", series->getViewPosition());
     query.bindValue(":manufacturer", series->getManufacturer());
-    query.bindValue(":laterality", series->getLaterality());
+    query.bindValue(":laterality", LocalDatabaseBaseDAL::convertToQString(series->getLaterality()));
     query.bindValue(":retrievedDate", series->getRetrievedDate().toString("yyyyMMdd"));
     query.bindValue(":retrievedTime", series->getRetrievedTime().toString("hhmmss"));
     query.bindValue(":state", 0);

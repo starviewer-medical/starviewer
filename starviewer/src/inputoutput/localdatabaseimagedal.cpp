@@ -296,7 +296,7 @@ void LocalDatabaseImageDAL::bindValues(QSqlQuery &query, const Image *image)
     query.bindValue(":photometricInterpretation", image->getPhotometricInterpretation().getAsQString());
     query.bindValue(":imageType", image->getImageType());
     query.bindValue(":viewPosition", image->getViewPosition());
-    query.bindValue(":imageLaterality", image->getImageLaterality());
+    query.bindValue(":imageLaterality", convertToQString(image->getImageLaterality()));
     query.bindValue(":viewCodeMeaning", image->getViewCodeMeaning());
     query.bindValue(":phaseNumber", image->getPhaseNumber());
     query.bindValue(":imageTime", image->getImageTime());
