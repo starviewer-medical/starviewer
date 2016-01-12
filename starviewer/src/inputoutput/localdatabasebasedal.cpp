@@ -32,11 +32,9 @@ const QSqlError& LocalDatabaseBaseDAL::getLastError() const
     return m_lastError;
 }
 
-QString LocalDatabaseBaseDAL::formatTextToValidSQLSyntax(QChar qchar)
+QString LocalDatabaseBaseDAL::convertToQString(const QChar &qchar)
 {
-    // Retornem un QString perquè si retornem QChar('') si qchar és null al converti-lo a QString(QChar('')) el QString s'inicialitza incorrectament agafant
-    // com a valor un caràcter estrany en comptes de QString("")
-    return qchar.isNull() ? "" : QString(qchar);
+    return qchar.isNull() ? QString("") : qchar;
 }
 
 QString LocalDatabaseBaseDAL::convertToQString(const QVariant &text)

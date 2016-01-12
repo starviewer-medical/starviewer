@@ -35,8 +35,8 @@ public:
     /// Returns the last error.
     const QSqlError& getLastError() const;
 
-    /// Formata un qchar perquè no contingui caràcters estranys o Nulls que pugin fer que la sentència sql sigui incorrecte
-    static QString formatTextToValidSQLSyntax(QChar qchar);
+    /// Converts the given QChar to the corresponding QString. If the QChar is null, returns a null QString instead of a QString containing the null character.
+    static QString convertToQString(const QChar &qchar);
 
 protected:
     /// Converts the given text to a QString, interpreting the input as either UTF-8 or Latin-1 depending on its content.
