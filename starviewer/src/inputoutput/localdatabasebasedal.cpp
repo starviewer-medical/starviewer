@@ -32,11 +32,6 @@ const QSqlError& LocalDatabaseBaseDAL::getLastError() const
     return m_lastError;
 }
 
-QString LocalDatabaseBaseDAL::formatTextToValidSQLSyntax(QString string)
-{
-    return string.isNull() ? "" : string.replace("'", "''");
-}
-
 QString LocalDatabaseBaseDAL::formatTextToValidSQLSyntax(QChar qchar)
 {
     // Retornem un QString perquè si retornem QChar('') si qchar és null al converti-lo a QString(QChar('')) el QString s'inicialitza incorrectament agafant
