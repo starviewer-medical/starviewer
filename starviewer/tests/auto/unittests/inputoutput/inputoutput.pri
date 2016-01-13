@@ -10,4 +10,5 @@ SOURCES += $$PWD/test_dicommask.cpp \
            $$PWD//test_pacsdevice.cpp \
            $$PWD/test_cachetest.cpp \
            $$PWD/test_senddicomfilestopacs.cpp \
-           $$PWD/test_databaseconnection.cpp
+           $$PWD/test_databaseconnection.cpp \
+           $$PWD/test_localdatabasebasedal.cpp
