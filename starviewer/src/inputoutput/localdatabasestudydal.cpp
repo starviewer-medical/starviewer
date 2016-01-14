@@ -253,6 +253,14 @@ QList<Patient*> LocalDatabaseStudyDAL::queryPatientStudy(const DicomMask &mask, 
     return patientList;
 }
 
+bool LocalDatabaseStudyDAL::exists(const QString &studyInstanceUID)
+{
+    QSqlQuery query = getNewQuery();
+    query.prepare("SELECT InstanceUID FROM Study WHERE InstanceUID = :instanceUID");
+    query.bindValue(":instanceUID", studyInstanceUID);
+    return executeQueryAndLogError(query) && query.next();
+}
+
 qlonglong LocalDatabaseStudyDAL::getPatientIDFromStudyInstanceUID(const QString &studyInstanceUID)
 {
     QSqlQuery query = getNewQuery();

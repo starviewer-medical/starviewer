@@ -229,7 +229,7 @@ void RetrieveDICOMFilesFromPACSJob::deleteRetrievedDICOMFilesIfStudyNotExistInDa
 {
     // Comprovem si l'estudi està inserit a la base de dades, si és així vol dir que anteriorment s'havia descarregat un part o tot l'estudi,
     // com que ja tenim altres elements d'aquest estudi inserits a la base de dades no esborrem el directori de l'estudi
-    if (!LocalDatabaseManager().studyExists(m_studyToRetrieveDICOMFiles))
+    if (!LocalDatabaseManager().studyExists(m_studyToRetrieveDICOMFiles->getInstanceUID()))
     {
         // Si l'estudi no existeix a la base de dades esborrem el contingut del directori, en principi segons la normativa DICO; si rebem un status de
         // tipus error per part de MoveSCP indicaria s'ha pogut descarregar cap objecte dicom amb èxit

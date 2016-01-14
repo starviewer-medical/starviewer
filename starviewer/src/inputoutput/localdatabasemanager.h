@@ -67,8 +67,8 @@ public:
     /// are considered. If no result is found, returns null.
     Patient* retrieve(const DicomMask &mask);
 
-    /// Returns true if the given study is in the database and false otherwise. Only the StudyInstanceUID is used for the query.
-    bool studyExists(const Study *study);
+    /// Returns true if a study with the given UID exists in the database and false otherwise.
+    bool studyExists(const QString &studyInstanceUID);
 
     /// Deletes the study with the given UID from the database and the disk.
     void deleteStudy(const QString &studyInstanceUID);

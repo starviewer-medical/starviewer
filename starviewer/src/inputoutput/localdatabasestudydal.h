@@ -55,6 +55,9 @@ public:
     /// For each matching study a Patient object with one Study object will be returned, so there may be multiple Patient objects representing the same patient.
     QList<Patient*> queryPatientStudy(const DicomMask &mask, const QDate &accessedBefore = QDate(), const QDate &accessedAfter = QDate());
 
+    /// Returns true if there's a study with the given UID in the database, and false otherwise.
+    bool exists(const QString &studyInstanceUID);
+
     /// Returns the PatientID field (referencing the database ID of a patient) from the study with the given StudyInstanceUID.
     /// If there is no such study, returns -1.
     qlonglong getPatientIDFromStudyInstanceUID(const QString &studyInstanceUID);
