@@ -145,6 +145,21 @@ QList<Series*> LocalDatabaseSeriesDAL::query(const DicomMask &mask)
     return seriesList;
 }
 
+int LocalDatabaseSeriesDAL::count(const DicomMask &mask)
+{
+    QSqlQuery query = getNewQuery();
+    prepareQueryWithMask(query, mask, "SELECT count(*) FROM Series");
+
+    if (executeQueryAndLogError(query) && query.next())
+    {
+        return query.value(0).toInt();
+    }
+    else
+    {
+        return -1;
+    }
+}
+
 Series* LocalDatabaseSeriesDAL::getSeries(const QSqlQuery &query)
 {
     Series *series = new Series();
