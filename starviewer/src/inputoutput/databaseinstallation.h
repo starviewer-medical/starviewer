@@ -19,6 +19,8 @@
 
 namespace udg {
 
+class DatabaseConnection;
+
 /**
  * @brief The DatabaseInstallation class has methods to check that the cache directories and the database are properly created, and if that's not the case to
  *        create them.
@@ -36,6 +38,9 @@ public:
 
     /// Deletes the database and creates it again. Returns true if successful and false otherwise.
     bool reinstallDatabase();
+
+    /// Runs the database creation script in the given connection. Returns true if successful and false otherwise.
+    bool createDatabase(DatabaseConnection &databaseConnection);
 
     /// Returns the last error message.
     const QString& getErrorMessage() const;
