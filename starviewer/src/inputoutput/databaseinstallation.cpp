@@ -152,6 +152,41 @@ bool DatabaseInstallation::reinstallDatabase()
     return createDatabaseFile();
 }
 
+bool DatabaseInstallation::createDatabase(DatabaseConnection &databaseConnection)
+{
+    QFile sqlTablesScriptFile(":cache/database.sql");
+
+    if (!sqlTablesScriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        ERROR_LOG("Can't read database creation script.");
+        m_errorMessage = QObject::tr("Can't read database creation script. Can't create the database.");
+        return false;
+    }
+
+    QTextStream stream(&sqlTablesScriptFile);
+    QString sqlTablesScript = stream.readAll();
+    sqlTablesScriptFile.close();
+
+    // Trimmed to remove newline at end of file
+    QStringList sqlCommands = sqlTablesScript.trimmed().split(';', QString::SkipEmptyParts);
+
+    QSqlQuery query(databaseConnection.getConnection());
+
+    foreach (const QString &command, sqlCommands)
+    {
+        if (!query.exec(command))
+        {
+            ERROR_LOG(QString("Database creation SQL command failed: %1. Error: %2").arg(query.lastQuery()).arg(query.lastError().text()));
+            m_errorMessage = QObject::tr("Database creation script failed.");
+            return false;
+        }
+    }
+
+    INFO_LOG("Database created successfully.");
+
+    return true;
+}
+
 const QString& DatabaseInstallation::getErrorMessage() const
 {
     return m_errorMessage;
@@ -334,38 +369,8 @@ bool DatabaseInstallation::createDatabaseFile()
         return false;
     }
 
-    QFile sqlTablesScriptFile(":cache/database.sql");
-
-    if (!sqlTablesScriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        ERROR_LOG("Can't read database creation script.");
-        m_errorMessage = QObject::tr("Can't read database creation script. Can't create the database.");
-        return false;
-    }
-
-    QTextStream stream(&sqlTablesScriptFile);
-    QString sqlTablesScript = stream.readAll();
-    sqlTablesScriptFile.close();
-
-    // Trimmed to remove newline at end of file
-    QStringList sqlCommands = sqlTablesScript.trimmed().split(';', QString::SkipEmptyParts);
-
     DatabaseConnection databaseConnection;
-    QSqlQuery query(databaseConnection.getConnection());
-
-    foreach (const QString &command, sqlCommands)
-    {
-        if (!query.exec(command))
-        {
-            ERROR_LOG(QString("Database creation SQL command failed: %1. Error: %2").arg(query.lastQuery()).arg(query.lastError().text()));
-            m_errorMessage = QObject::tr("Database creation script failed.");
-            return false;
-        }
-    }
-
-    INFO_LOG("Database created successfully.");
-
-    return true;
+    return createDatabase(databaseConnection);
 }
 
 bool DatabaseInstallation::deleteLocalImagesAndReinstallDatabase()

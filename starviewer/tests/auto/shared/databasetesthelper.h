@@ -15,6 +15,8 @@ class DatabaseTestHelper
 public:
     /// Returns an empty in-memory database.
     static udg::DatabaseConnection* getEmptyDatabase();
+    /// Returns an in-memory database with the tables created but empty.
+    static udg::DatabaseConnection* getCreatedDatabase();
 };
 
 }
