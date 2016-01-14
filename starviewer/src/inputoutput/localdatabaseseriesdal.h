@@ -43,6 +43,9 @@ public:
     /// Retrieves from the database the series that match the given mask (only StudyUID and SeriesUID are considered) and returns them in a list.
     QList<Series*> query(const DicomMask &mask);
 
+    /// Returns how many series in the database match the given mask (only StudyUID and SeriesUID are considered). Returns -1 in case of error.
+    int count(const DicomMask &mask);
+
 private:
     /// Creates and returns a series with the information of the current row of the given query.
     static Series* getSeries(const QSqlQuery &query);

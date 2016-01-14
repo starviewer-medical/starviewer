@@ -333,6 +333,21 @@ void deleteStudyStructureFromDatabase(DatabaseConnection &databaseConnection, co
     deleteSeriesStructureFromDatabase(databaseConnection, studyInstanceUID, QString());
 }
 
+// Returns how many series in the database match the given mask (only StudyUID and SeriesUID are considered). Returns -1 in case of error.
+int countSeries(const DicomMask &mask)
+{
+    DatabaseConnection databaseConnection;
+    LocalDatabaseSeriesDAL seriesDAL(databaseConnection);
+    int count = seriesDAL.count(mask);
+
+    if (count == -1)
+    {
+        throw seriesDAL.getLastError();
+    }
+
+    return count;
+}
+
 // Deletes all the studies from the given patient from the disk.
 void deleteRetrievedObjects(const Patient *patient)
 {
@@ -651,15 +666,14 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
     DicomMask mask;
     mask.setStudyInstanceUID(studyInstanceUID);
 
-    // TODO Memory leak: the series
-    if (querySeries(mask).count() == 1)
+    try
     {
-        INFO_LOG("The study contains only this series, so the study will be also deleted.");
-        deleteStudy(studyInstanceUID);
-    }
-    else
-    {
-        try
+        if (countSeries(mask) == 1)
+        {
+            INFO_LOG("The study contains only this series, so the study will be also deleted.");
+            deleteStudy(studyInstanceUID);
+        }
+        else
         {
             DatabaseConnection databaseConnection;
             databaseConnection.beginTransaction();
@@ -670,10 +684,10 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
 
             m_lastError = Ok;
         }
-        catch (const QSqlError &error)
-        {
-            setLastError(error);
-        }
+    }
+    catch (const QSqlError &error)
+    {
+        setLastError(error);
     }
 }
 
