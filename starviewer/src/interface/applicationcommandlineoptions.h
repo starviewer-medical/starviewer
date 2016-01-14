@@ -16,6 +16,7 @@
 #define UDGAPPLICATIONCOMMANDLINEOPTIONS_H
 
 #include <QHash>
+#include <QMap>
 #include <QStringList>
 
 #include "commandlineoption.h"
@@ -82,7 +83,7 @@ private:
     QString m_applicationName;
     
     // Conté les opcions possibles que ens poden entrar des de la línia de comandes, i conté associada la descripció del que fa aquella opció
-    QHash<QString, CommandLineOption> m_commandLineOptions;
+    QMap<QString, CommandLineOption> m_commandLineOptions;
     // Conté les opcions parsejades entrades per comandes de línia amb el seu valor
     QHash<QString, QString> m_parsedOptions;
     // Argumens de la línia de comandes a persajar
