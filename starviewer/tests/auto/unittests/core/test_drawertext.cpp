@@ -54,38 +54,36 @@ void test_DrawerText::getDistanceToPoint_ShouldReturnExpectedDistanceAndClosestP
     QList<double> bounds;
     bounds << 0.0 << 2.0 << 0.2 << 1.0 << -0.15 << 1.0;
     QVector3D pointInsideBounds(0.5, 0.5, 0.5);
-    QVector3D pointOutsideBoundsInX(2.4, 0.5, 0.5);
-    QVector3D pointOutsideBoundsInXNegative(-2.4, 0.5, 0.5);
-    QVector3D pointOutsideBoundsInY(0.5, 2.4, 0.5);
-    QVector3D pointOutsideBoundsInYNegative(0.5, -2.4, 0.5);
-    QVector3D pointOutsideBoundsInZ(0.5, 0.5, 2.4);
-    QVector3D pointOutsideBoundsInZNegative(0.5, 0.5, -2.4);
+    QVector3D pointOutsideBoundsInX(2.4f, 0.5f, 0.5f);
+    QVector3D pointOutsideBoundsInXNegative(-2.4f, 0.5f, 0.5f);
+    QVector3D pointOutsideBoundsInY(0.5f, 2.4f, 0.5f);
+    QVector3D pointOutsideBoundsInYNegative(0.5f, -2.4f, 0.5f);
+    QVector3D pointOutsideBoundsInZ(0.5f, 0.5f, 2.4f);
+    QVector3D pointOutsideBoundsInZNegative(0.5f, 0.5f, -2.4f);
 
     QList<double> boundsSameXminXmax;
     boundsSameXminXmax << 1.234 << 1.234 << 0.0 << 1.0 << 0.0 << 1.0;
-    QVector3D pointInsideBoundsSameXminXmax(1.234, 0.2, 0.2);
+    QVector3D pointInsideBoundsSameXminXmax(1.234f, 0.2f, 0.2f);
 
     QList<double> boundsSameYminYmax;
     boundsSameYminYmax << -12.0 << -5.0 << -5.554 << -5.554 << 0.0 << 1.0;
-    QVector3D pointInsideBoundsSameYminYmax(-11.666, -5.554, 0.8);
+    QVector3D pointInsideBoundsSameYminYmax(-11.666f, -5.554f, 0.8f);
 
     QList<double> boundsSameZminZmax;
     boundsSameZminZmax << -4.0 << 15.0 << 2.453 << 2.876 << 4.4443 << 4.4443;
-    QVector3D pointInsideBoundsSameZminZmax(1.666, 2.554, 4.4443 );
-
-    QVector3D invalidPoint(-100.0, -100.0, -100.0);
+    QVector3D pointInsideBoundsSameZminZmax(1.666f, 2.554f, 4.4443f);
 
     QTest::newRow("all min and max different, point inside") << bounds << pointInsideBounds << 0.0 << pointInsideBounds;
     QTest::newRow("same Xmin and Xmax, point inside") << boundsSameXminXmax << pointInsideBoundsSameXminXmax << 0.0 << pointInsideBoundsSameXminXmax;
     QTest::newRow("same Ymin and Ymax, point inside") << boundsSameYminYmax << pointInsideBoundsSameYminYmax << 0.0 << pointInsideBoundsSameYminYmax;
     QTest::newRow("same Zmin and Zmax, point inside") << boundsSameZminZmax << pointInsideBoundsSameZminZmax << 0.0 << pointInsideBoundsSameZminZmax;
 
-    QTest::newRow("point outside in X") << bounds << pointOutsideBoundsInX << MathTools::DoubleMaximumValue << invalidPoint;
-    QTest::newRow("point outside in Y") << bounds << pointOutsideBoundsInY << MathTools::DoubleMaximumValue << invalidPoint;
-    QTest::newRow("point outside in Z") << bounds << pointOutsideBoundsInZ << MathTools::DoubleMaximumValue << invalidPoint;
-    QTest::newRow("point outside in X negative") << bounds << pointOutsideBoundsInXNegative << MathTools::DoubleMaximumValue << invalidPoint;
-    QTest::newRow("point outside in Y negative") << bounds << pointOutsideBoundsInYNegative << MathTools::DoubleMaximumValue << invalidPoint;
-    QTest::newRow("point outside in Z negative") << bounds << pointOutsideBoundsInZNegative << MathTools::DoubleMaximumValue << invalidPoint;
+    QTest::newRow("point outside in X") << bounds << pointOutsideBoundsInX << 0.4 << QVector3D(2.0f, 0.5f, 0.5f);
+    QTest::newRow("point outside in Y") << bounds << pointOutsideBoundsInY << 1.4 << QVector3D(0.5f, 1.0f, 0.5f);
+    QTest::newRow("point outside in Z") << bounds << pointOutsideBoundsInZ << 1.4 << QVector3D(0.5f, 0.5f, 1.0f);
+    QTest::newRow("point outside in X negative") << bounds << pointOutsideBoundsInXNegative << 2.4 << QVector3D(0.0f, 0.5f, 0.5f);
+    QTest::newRow("point outside in Y negative") << bounds << pointOutsideBoundsInYNegative << 2.6 << QVector3D(0.5f, 0.2f, 0.5f);
+    QTest::newRow("point outside in Z negative") << bounds << pointOutsideBoundsInZNegative << 2.25 << QVector3D(0.5f, 0.5f, -0.15f);
 
 }
 
@@ -100,7 +98,7 @@ void test_DrawerText::getDistanceToPoint_ShouldReturnExpectedDistanceAndClosestP
     drawerText.setBounds(bounds);
 
     double point[3] = {pointToCheck.x(), pointToCheck.y(), pointToCheck.z()};
-    double closestPoint[3] = {-100.0, -100.0, -100.0};
+    double closestPoint[3];
     double distance = drawerText.getDistanceToPoint(point, closestPoint);
     QVector3D closestPoint3D(closestPoint[0], closestPoint[1], closestPoint[2]);
 
@@ -109,7 +107,7 @@ void test_DrawerText::getDistanceToPoint_ShouldReturnExpectedDistanceAndClosestP
                               .arg(closestPoint[0]).arg(closestPoint[1]).arg(closestPoint[2])
                               .arg(expectedClosestPoint.x()).arg(expectedClosestPoint.y()).arg(expectedClosestPoint.z()));
 
-    QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(distance, expectedDistance), qPrintable(distanceError));
+    QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(distance, expectedDistance, 0.001), qPrintable(distanceError));
     QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(closestPoint3D, expectedClosestPoint), qPrintable(closestPointError));
 }
 
