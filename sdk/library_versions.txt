@@ -11,4 +11,3 @@ Si existeix vol dir que cal aplicar tots els patch que hi hagi en aquest directo
 - gdcm 2.4.4
 - log4cxx 0.10.0
 - ThreadWeaver 5.3.0
-- sqlite3 3.8.8.3
