@@ -604,12 +604,13 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &mask)
     return patient;
 }
 
-// TODO Memory leak when the study exists: the study returned by queryStudies()
-bool LocalDatabaseManager::studyExists(const Study *study)
+bool LocalDatabaseManager::studyExists(const QString &studyInstanceUID)
 {
-    DicomMask mask;
-    mask.setStudyInstanceUID(study->getInstanceUID());
-    return !queryStudies(mask).isEmpty();
+    DatabaseConnection databaseConnection;
+    LocalDatabaseStudyDAL studyDAL(databaseConnection);
+    bool exists = studyDAL.exists(studyInstanceUID);
+    setLastError(studyDAL.getLastError());
+    return exists;
 }
 
 void LocalDatabaseManager::deleteStudy(const QString &studyInstanceUID)
@@ -815,11 +816,7 @@ void LocalDatabaseManager::deleteStudyBeingRetrieved()
 
         // The study could have really been fully downloaded and the application have finished just before clearing the setting,
         // so we must delete the study if it exists in the database.
-        DicomMask mask;
-        mask.setStudyInstanceUID(studyInstanceUID);
-
-        // TODO Memory leak if the study exists
-        if (!queryStudies(mask).isEmpty())
+        if (studyExists(studyInstanceUID))
         {
             deleteStudy(studyInstanceUID);
         }

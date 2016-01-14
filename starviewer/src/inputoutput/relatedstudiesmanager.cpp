@@ -309,7 +309,7 @@ DicomMask RelatedStudiesManager::getBasicDicomMask()
 
 RelatedStudiesManager::LoadStatus RelatedStudiesManager::loadStudy(Study *study)
 {
-    if (LocalDatabaseManager().studyExists(study))
+    if (LocalDatabaseManager().studyExists(study->getInstanceUID()))
     {
         SingletonPointer<QueryScreen>::instance()->loadStudyFromDatabase(study->getInstanceUID());
         return Loaded;

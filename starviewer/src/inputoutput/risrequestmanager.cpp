@@ -395,7 +395,7 @@ RISRequestManager::DICOMSourcesFromRetrieveStudy RISRequestManager::getDICOMSouc
 {
     DICOMSourcesFromRetrieveStudy DICOMSourceFromRetrieveStudy;
 
-    if (LocalDatabaseManager().studyExists(study))
+    if (LocalDatabaseManager().studyExists(study->getInstanceUID()))
     {
         if (!m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain)
         {
