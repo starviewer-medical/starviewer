@@ -97,7 +97,7 @@ void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHan
     QList<HangingProtocol*> expectedHangingProtocolsMR;
     QList<HangingProtocol*> repositoryHangingProtocolsCTUS = getHangingProtocolsRepository();
     QList<HangingProtocol*> expectedHangingProtocolsCTUS;
-    expectedHangingProtocolsCTUS << repositoryHangingProtocolsCTUS.at(1) << repositoryHangingProtocolsCTUS.at(3);
+    expectedHangingProtocolsCTUS << repositoryHangingProtocolsCTUS.at(1);   // only hanging protocols for the first study are searched
 
     QTest::newRow("Patint with strict hanging protocol") << repositoryHangingProtocolsMG << MGPatient << expectedHangingProtocolsMG;
     QTest::newRow("Patient with non-strict hanging protocol") << repositoryHangingProtocolsCT << CTPatient << expectedHangingProtocolsCT;
@@ -121,9 +121,10 @@ void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHan
     QList<HangingProtocol *> hangingProtocolsCandidates = testHangingProtocolManager.searchHangingProtocols(patient->getStudies().first());
     QCOMPARE(hangingProtocolsCandidates.count(), expectedHangingProtocols.count());
 
-    foreach(HangingProtocol *hangingProtocol, expectedHangingProtocols)
+    for (int i = 0; i < expectedHangingProtocols.count(); i++)
     {
-        QVERIFY(hangingProtocolsCandidates.contains(hangingProtocol));
+        // Compare identifiers because the returned hanging protocols are filled copies of the originals
+        QCOMPARE(hangingProtocolsCandidates.at(i)->getIdentifier(), expectedHangingProtocols.at(i)->getIdentifier());
     }
 }
 
