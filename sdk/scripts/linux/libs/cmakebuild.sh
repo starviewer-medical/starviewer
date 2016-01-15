@@ -18,21 +18,21 @@ then
     SOURCE_DIR=$PATCHED_SOURCE_DIR
 fi
 
-cmake $CMAKE_OPTIONS $SOURCE_DIR
+cmake $CMAKE_OPTIONS $CMAKE_DISTCC $CMAKE_COMPILER $SOURCE_DIR
 if [ $? -ne 0 ]
 then
     echo "ERROR: CMake of $LIB failed"
     exit
 fi
 
-make -j4
+make -j$MAKE_CONCURRENCY $MAKE_VERBOSE
 if [ $? -ne 0 ]
 then
     echo "ERROR: Compilation of $LIB failed"
     exit
 fi
 
-make install
+make $MAKE_VERBOSE install
 if [ $? -ne 0 ]
 then
     echo "ERROR: Installation phase of $LIB failed"
