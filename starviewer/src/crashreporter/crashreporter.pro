@@ -41,7 +41,7 @@ INCLUDEPATH += ../thirdparty/breakpad ../core
 macx {
     HEADERS += ../thirdparty/breakpad/common/mac/HTTPMultipartUpload.h
     OBJECTIVE_SOURCES += crashreportersender_mac.mm \
-                         ../thirdparty/breakpad/common/mac/HTTPMultipartUpload.m
+                         ../thirdparty/breakpad/common/mac/HTTPMultipartUpload.mm
     ICON = ../main/images/starviewer.icns
 }
 linux* {
