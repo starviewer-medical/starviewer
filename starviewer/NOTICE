@@ -202,3 +202,22 @@ Foundation and appearing in the file LICENSE.GPL included in the
 packaging of this file.  Please review the following information to
 ensure the GNU General Public License version 3.0 requirements will be
 met: http://www.gnu.org/copyleft/gpl.html.
+
+
+EASYLOGGING++
+=============
+
+Easylogging++ v9.80
+Single-header only, cross-platform logging library for C++ applications
+
+Copyright (c) 2015 muflihun.com
+
+This library is released under the MIT Licence.
+http://easylogging.muflihun.com/licence.php
+
+easylogging@muflihun.com
+
+https://github.com/easylogging/easyloggingpp
+http://easylogging.muflihun.com
+http://muflihun.com
+
