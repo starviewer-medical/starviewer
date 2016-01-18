@@ -4,6 +4,9 @@ CONFIG += debug_and_release c++11
 clang:QMAKE_CXXFLAGS += -Wno-static-float-init -Wno-c++11-narrowing
 linux-g++:QMAKE_CXXFLAGS += -fpermissive
 
+# Use gold linker
+unix:QMAKE_LFLAGS += -fuse-ld=gold
+
 unix {
     QMAKE_CXXFLAGS_RELEASE += -Wno-deprecated
     QMAKE_CXXFLAGS_DEBUG += -Wno-deprecated
