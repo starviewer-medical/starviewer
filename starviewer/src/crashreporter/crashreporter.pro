@@ -31,6 +31,7 @@ SOURCES = crashreporter.cpp \
           ../core/coresettings.cpp \
           ../core/settingsaccesslevelfilereader.cpp \
           ../main/applicationtranslationsloader.cpp \
+          ../core/logging.cpp
 
 TRANSLATIONS += crashreporter_ca_ES.ts \
                 crashreporter_es_ES.ts \
@@ -61,6 +62,5 @@ RESOURCES = crashreporter.qrc ../main/main.qrc
 
 include(../corelibsconfiguration.pri)
 include(../compilationtype.pri)
-include(../log4cxx.pri)
 
 QT += network widgets

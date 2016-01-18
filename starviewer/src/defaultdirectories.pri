@@ -71,23 +71,6 @@ isEmpty(GDCMINCLUDEDIR){
     win32:contains(QMAKE_TARGET.arch, x86_64):GDCMINCLUDEDIR = $$(SystemDrive)/gdcm/2.4.4-64/include/gdcm-2.4
 }
 
-# Log4cxx Libraries
-
-LOG4CXXLIBDIR = $$(LOG4CXXLIBDIR)
-isEmpty(LOG4CXXLIBDIR){
-    unix:LOG4CXXLIBDIR = /usr/lib
-    macx:LOG4CXXLIBDIR = /usr/local/lib/
-    win32:LOG4CXXLIBDIR = C:/log4cxx
-    win32:contains(QMAKE_TARGET.arch, x86_64):LOG4CXXLIBDIR = C:/log4cxx-64
-}
-LOG4CXXINCLUDEDIR = $$(LOG4CXXINCLUDEDIR)
-isEmpty(LOG4CXXINCLUDEDIR){
-    unix:LOG4CXXINCLUDEDIR = /usr/include/log4cxx
-    macx:LOG4CXXINCLUDEDIR = /usr/local/include
-    win32:LOG4CXXINCLUDEDIR = C:/log4cxx/include
-    win32:contains(QMAKE_TARGET.arch, x86_64):LOG4CXXINCLUDEDIR = C:/log4cxx-64/include
-}
-
 # Threadweaver libraries
 
 THREADWEAVERLIBDIR = $$(THREADWEAVERLIBDIR)
