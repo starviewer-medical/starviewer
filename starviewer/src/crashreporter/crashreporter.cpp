@@ -12,7 +12,9 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 #include "logging.h"
-LOGGER_INIT
+#include "easylogging++.h"
+INITIALIZE_EASYLOGGINGPP
+
 #include "../main/applicationtranslationsloader.h"
 #include "../core/starviewerapplication.h"
 #include "../core/coresettings.h"

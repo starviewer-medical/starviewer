@@ -1,5 +1,6 @@
 #include "logging.h"
-LOGGER_INIT
+#include "easylogging++.h"
+INITIALIZE_EASYLOGGINGPP
 
 #include <QDir>
 #include <QApplication>

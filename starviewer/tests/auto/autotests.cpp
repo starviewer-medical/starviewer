@@ -3,7 +3,8 @@
 #include <iostream>
 
 #include "../../src/core/logging.h"
-LOGGER_INIT
+#include "../../src/core/easylogging++.h"
+INITIALIZE_EASYLOGGINGPP
 
 #include <QDir>
 

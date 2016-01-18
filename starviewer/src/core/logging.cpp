@@ -1,3 +1,4 @@
+#include "easylogging++.h"
 #include "logging.h"
 #include "starviewerapplication.h"
 #include <QDir>
@@ -45,4 +46,37 @@ void udg::endLogging(int returnValue) {
     INFO_LOG(QString("%1 Version %2 BuildID %3, returnValue %4").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString)
              .arg(udg::StarviewerBuildID).arg(returnValue));
     INFO_LOG("===================================================== END =====================================================");
+}
+
+
+void udg::debugLog(const QString &msg) {
+    LOG(DEBUG) << qPrintable(QString(msg));
+}
+
+
+void udg::infoLog(const QString &msg) {
+    LOG(INFO) << qPrintable(QString(msg));
+}
+
+
+void udg::warnLog(const QString &msg) {
+    LOG(WARNING) << qPrintable(QString(msg));
+}
+
+
+void udg::errorLog(const QString &msg) {
+    LOG(ERROR) << qPrintable(QString(msg));
+}
+
+void udg::fatalLog(const QString &msg) {
+    LOG(FATAL) << qPrintable(QString(msg));
+}
+
+void udg::verboseLog(int vLevel, const QString &msg) {
+    VLOG(vLevel) << qPrintable(QString(msg));
+}
+
+
+void udg::traceLog(const QString &msg) {
+    LOG(TRACE) << qPrintable(QString(msg));
 }

@@ -16,17 +16,23 @@
 #define _LOGGING_
 
 #include <QString>
-#include "easylogging++.h"
+
 
 /// Macro per a inicialitzar els loggers
 /// Assegurar que només es crida una sola vegada, preferiblement crideu-la
 /// just després d'incloure el fitxer logging.h al main.cpp.
 
-#define LOGGER_INIT INITIALIZE_EASYLOGGINGPP
-
 namespace udg {
     void beginLogging();
     void endLogging(int returnValue);
+
+    void debugLog(const QString &msg);
+    void infoLog(const QString &msg);
+    void warnLog(const QString &msg);
+    void errorLog(const QString &msg);
+    void fatalLog(const QString &msg);
+    void verboseLog(int vLevel, const QString &msg);
+    void traceLog(const QString &msg);
 }
 
 
@@ -35,60 +41,14 @@ namespace udg {
 #ifdef QT_NO_DEBUG
 #define DEBUG_LOG(msg) while (false)
 #else
-#define DEBUG_LOG(msg) \
-    do \
-    { \
-        LOG(DEBUG) << qPrintable(QString(msg)); \
-    } while (false)
+#define DEBUG_LOG(msg) udg::debugLog(msg)
 #endif
 
-/// Macro per a missatges d'informació general
-#define INFO_LOG(msg) \
-    do \
-    { \
-        LOG(INFO) << qUtf8Printable(QString(msg)); \
-    } while (false)
-
-/// Macro per a missatges de warning
-#define WARN_LOG(msg) \
-    do \
-    { \
-        LOG(WARNING) << qUtf8Printable(QString(msg)); \
-    } while (false)
-
-/// Macro per a missatges d'error
-#define ERROR_LOG(msg) \
-    do \
-    { \
-        LOG(ERROR) << qUtf8Printable(QString(msg)); \
-    } while (false)
-
-/// Macro per a missatges d'error fatals/crítics
-#define FATAL_LOG(msg) \
-    do \
-    { \
-        LOG(FATAL) << qUtf8Printable(QString(msg)); \
-    } while (false)
-
-/// Macro per a missatges verbose
-#define VERBOSE_LOG(msg) \
-    do \
-    { \
-        LOG(VERBOSE) << qUtf8Printable(QString(msg)); \
-    } while (false)
-
-/// Macro per a missatges d'assegurament de la qualitat
-#define QA_LOG(msg) \
-    do \
-    { \
-        LOG(QA) << qUtf8Printable(QString(msg)); \
-    } while (false)
-
-/// Macro per a missatges de traca
-#define TRACE_LOG(msg) \
-    do \
-    { \
-        LOG(TRACE) << qUtf8Printable(QString(msg)); \
-    } while (false)
+#define INFO_LOG(msg) udg::infoLog(msg)
+#define WARN_LOG(msg) udg::warnLog(msg)
+#define ERROR_LOG(msg) udg::errorLog(msg)
+#define FATAL_LOG(msg) udg::fatalLog(msg)
+#define VERBOSE_LOG(vLevel, msg) udg::verboseLog(vLevel, msg)
+#define TRACE_LOG(msg) udg::traceLog(msg)
 
 #endif //_LOGGING_
