@@ -19,6 +19,7 @@
 
 #include <QDataStream>
 #include <QString>
+#include <QVector3D>
 
 namespace udg {
 
@@ -37,6 +38,7 @@ public:
     static TVector3<T> cross(const TVector3<T> &v1, const TVector3<T> &v2);
 
     TVector3(T x = 0.0, T y = 0.0, T z = 0.0);
+    TVector3(const QVector3D &v);
     template <class C>
     TVector3(const TVector3<C> &v);
 
@@ -128,6 +130,12 @@ inline TVector3<T> TVector3<T>::cross(const TVector3<T> &v1, const TVector3<T> &
 template <class T>
 inline TVector3<T>::TVector3(T aX, T aY, T aZ)
  : x(aX), y(aY), z(aZ)
+{
+}
+
+template <class T>
+inline TVector3<T>::TVector3(const QVector3D &v)
+ : x(v.x()), y(v.y()), z(v.z())
 {
 }
 
