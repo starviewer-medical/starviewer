@@ -14,6 +14,7 @@
 
 #include "mathtools.h"
 #include "logging.h"
+#include "vector3.h"
 
 #include <cmath>
 #include <ctime>
@@ -75,20 +76,19 @@ double MathTools::angleInDegrees(const QVector2D &vector)
     return angleInRadians(vector) * MathTools::RadiansToDegreesAsDouble;
 }
 
-double MathTools::angleInRadians(const QVector3D &vec1, const QVector3D &vec2)
+double MathTools::angleInRadians(const Vector3 &vec1, const Vector3 &vec2)
 {
-    // Cast all values to double to operate with maximum precision (the returned values are floats in Qt5)
-    return acos(static_cast<double>(QVector3D::dotProduct(vec1, vec2)) / (static_cast<double>(vec1.length()) * static_cast<double>(vec2.length())));
+    return acos(Vector3::dot(vec1, vec2) / (vec1.length() * vec2.length()));
 }
 
-double MathTools::angleInDegrees(const QVector3D &vec1, const QVector3D &vec2)
+double MathTools::angleInDegrees(const Vector3 &vec1, const Vector3 &vec2)
 {
     return angleInRadians(vec1, vec2) * MathTools::RadiansToDegreesAsDouble;
 }
 
 int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m[3], double r[3], double t[3])
 {
-    if (angleInDegrees(QVector3D(n[0], n[1], n[2]), QVector3D(m[0], m[1], m[2])) == 0.0)
+    if (angleInDegrees(Vector3(n[0], n[1], n[2]), Vector3(m[0], m[1], m[2])) == 0.0)
     {
         return 0;
     }
