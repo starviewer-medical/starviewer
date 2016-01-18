@@ -12,7 +12,8 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 #include "logging.h"
-LOGGER_INIT
+#include "easylogging++.h"
+INITIALIZE_EASYLOGGINGPP
 
 #include "qapplicationmainwindow.h"
 
