@@ -39,9 +39,9 @@ namespace udg {
 /// Macro per a missatges de debug. \TODO de moment fem servir aquesta variable de qmake i funciona bé, però podria ser més adequat troba la forma d'afegir
 /// una variable pròpia, com per exemple DEBUG
 #ifdef QT_NO_DEBUG
-#define DEBUG_LOG(msg) while (false)
+    #define DEBUG_LOG(msg) while (false)
 #else
-#define DEBUG_LOG(msg) udg::debugLog(msg)
+    #define DEBUG_LOG(msg) udg::debugLog(msg)
 #endif
 
 #define INFO_LOG(msg) udg::infoLog(msg)

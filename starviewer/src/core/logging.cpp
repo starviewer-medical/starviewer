@@ -1,8 +1,10 @@
-#include "easylogging++.h"
 #include "logging.h"
+#include "easylogging++.h"
 #include "starviewerapplication.h"
 #include <QDir>
 #include <QApplication>
+
+static bool loggingStarted = false;
 
 void udg::beginLogging() {
     // Primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
@@ -36,6 +38,7 @@ void udg::beginLogging() {
     #endif
 
     el::Loggers::reconfigureAllLoggers(logConfig);
+    loggingStarted = true;
 
     // Marquem l'inici de l'aplicació al log
     INFO_LOG("==================================================== BEGIN ====================================================");
@@ -48,35 +51,48 @@ void udg::endLogging(int returnValue) {
     INFO_LOG("===================================================== END =====================================================");
 }
 
-
 void udg::debugLog(const QString &msg) {
-    LOG(DEBUG) << qPrintable(QString(msg));
+    if (loggingStarted) {
+        LOG(DEBUG) << qPrintable(QString(msg));
+    }
 }
 
 
 void udg::infoLog(const QString &msg) {
-    LOG(INFO) << qPrintable(QString(msg));
+    if (loggingStarted) {
+        LOG(INFO) << qPrintable(QString(msg));
+    }
 }
 
 
 void udg::warnLog(const QString &msg) {
-    LOG(WARNING) << qPrintable(QString(msg));
+    if (loggingStarted) {
+        LOG(WARNING) << qPrintable(QString(msg));
+    }
 }
 
 
 void udg::errorLog(const QString &msg) {
-    LOG(ERROR) << qPrintable(QString(msg));
+    if (loggingStarted) {
+        LOG(ERROR) << qPrintable(QString(msg));
+    }
 }
 
 void udg::fatalLog(const QString &msg) {
-    LOG(FATAL) << qPrintable(QString(msg));
+    if (loggingStarted) {
+        LOG(FATAL) << qPrintable(QString(msg));
+    }
 }
 
 void udg::verboseLog(int vLevel, const QString &msg) {
-    VLOG(vLevel) << qPrintable(QString(msg));
+    if (loggingStarted) {
+        VLOG(vLevel) << qPrintable(QString(msg));
+    }
 }
 
 
 void udg::traceLog(const QString &msg) {
-    LOG(TRACE) << qPrintable(QString(msg));
+    if (loggingStarted) {
+        LOG(TRACE) << qPrintable(QString(msg));
+    }
 }

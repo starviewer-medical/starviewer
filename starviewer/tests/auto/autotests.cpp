@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "../../src/core/logging.h"
 #include "../../src/core/easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
 
