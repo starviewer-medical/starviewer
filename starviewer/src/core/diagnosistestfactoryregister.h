@@ -40,7 +40,7 @@ public:
     DiagnosisTestFactoryRegister(const QString &identifier)
      : GenericSingletonFactoryRegister<DiagnosisTest, FactoryType, QString, DiagnosisTestFactory, QObject>(identifier)
     {
-        DEBUG_LOG("DiagnosisTestFactoryRegister: " + identifier);
+
     }
 };
 

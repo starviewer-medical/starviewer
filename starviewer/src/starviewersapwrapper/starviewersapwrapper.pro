@@ -11,12 +11,11 @@ macx {
 
 HEADERS = ../core/starviewerapplication.h
 
-SOURCES = starviewersapwrapper.cpp 
+SOURCES = starviewersapwrapper.cpp ../core/logging.cpp
 
 INCLUDEPATH += ../core
 
 include(../corelibsconfiguration.pri)
 include(../compilationtype.pri)
-include(../log4cxx.pri)
 
 QT += widgets

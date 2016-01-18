@@ -426,12 +426,14 @@ HEADERS += extensionfactory.h \
     hangingprotocolfiller.h \
     qfusionlayoutwidget.h \
     gridicon.h \
-    itemmenu.h
+    itemmenu.h \
+    easylogging++.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
     mathtools.cpp \
     harddiskinformation.cpp \
+    logging.cpp \
     volume.cpp \
     volumehelper.cpp \
     volumereader.cpp \
@@ -819,7 +821,6 @@ include(../itk.pri)
 include(../gdcm.pri)
 include(../vtk.pri)
 include(../dcmtk.pri)
-include(../log4cxx.pri)
 include(../compilationtype.pri)
 include(../translations.pri)
 include(../threadweaver.pri)

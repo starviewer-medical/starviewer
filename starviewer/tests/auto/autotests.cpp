@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+#include "../../src/core/easylogging++.h"
+INITIALIZE_EASYLOGGINGPP
+
 #include <QDir>
 
 /// A part dels paràmetres que QTest defineix de cada test, se n'han afegint més:

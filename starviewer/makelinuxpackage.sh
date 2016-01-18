@@ -47,13 +47,6 @@ then
     echo "THREADWEAVER_LIB_DIR=$THREADWEAVER_LIB_DIR"
 fi
 
-if [ ! $LOG4CXX_LIB_DIR ]
-then
-    LOG4CXX_LIB_DIR=$(dirname $(ldd $STARVIEWER_DIR/bin/starviewer | grep liblog4cxx | awk '{print $3}'))
-    test $LOG4CXX_LIB_DIR != . || { echo Please provide the LOG4CXX_LIB_DIR variable; exit; }
-    echo "LOG4CXX_LIB_DIR=$LOG4CXX_LIB_DIR"
-fi
-
 if [ ! $APR_LIB_DIR ]
 then
     APR_LIB_DIR=$(dirname $(ldd $STARVIEWER_DIR/bin/starviewer | grep libapr-1 | awk '{print $3}'))
