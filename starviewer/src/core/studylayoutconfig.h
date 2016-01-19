@@ -15,7 +15,7 @@
 #ifndef UDGSTUDYLAYOUTCONFIG_H
 #define UDGSTUDYLAYOUTCONFIG_H
 
-#include <QSet>
+#include <QList>
 #include <QString>
 
 namespace udg {
@@ -59,7 +59,7 @@ private:
     UnfoldDirectionType m_unfoldDirection;
 
     /// Conjunt de criteris d'exclusió
-    QSet<ExclusionCriteriaType> m_exclusionCriteria;
+    QList<ExclusionCriteriaType> m_exclusionCriteria;
 
     /// Modalitat a la que aplicar aquesta configuració
     QString m_modality;
