@@ -15,113 +15,74 @@
 #ifndef UDGLOCALDATABASEIMAGEDAL_H
 #define UDGLOCALDATABASEIMAGEDAL_H
 
-#include <QString>
-#include <QList>
+#include "localdatabasebasedal.h"
+
 #include <QHash>
 
-#include "localdatabasebasedal.h"
-#include "image.h"
+class QVector2D;
 
 namespace udg {
 
 class DicomMask;
-class PacsDevice;
 class DICOMSource;
+class Image;
+class PacsDevice;
 
 /**
-    Aquesta classe conté els mètodes per operar amb l'objecte image en la caché de l'aplicació
-  */
+ * @brief The LocalDatabaseImageDAL class is the Data Access Layer class for images in the local cache.
+ */
 class LocalDatabaseImageDAL : public LocalDatabaseBaseDAL {
+
 public:
-    LocalDatabaseImageDAL(DatabaseConnection *dbConnection);
+    LocalDatabaseImageDAL(DatabaseConnection &databaseConnection);
 
-    /// Insereix la informació d'una imatge a la caché, actualitzamt l'espai ocupat de la pool, com s'ha de fer un insert i un update aquests dos operacion
-    /// es fan dins el marc d'una transaccio, per mantenir coherent l'espai de la pool ocupat. Per això tot i que accedim a dos taules, al haver-se de fer
-    /// dins el marc d'una transacció, necessitem fer-les dins el mateix mètode. Ja que sinó ens podríem trobar que altres operacions entressin entre insertar
-    /// la imatge i updatar la pool i quedessin incloses dins la tx
-    /// @param dades de la imatge
-    /// @return retorna estat del mètode
-    void insert(Image *newImage);
+    /// Inserts to the database the given image. Returns true if successful and false otherwise.
+    bool insert(const Image *image);
 
-    /// Esborra les imatges que compleixin el filtre de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
-    void del(const DicomMask &imageMaskToDelete);
+    /// Updates in the database the given image. Returns true if successful and false otherwise.
+    bool update(const Image *image);
 
-    /// Actualitza la imatge passada per paràmetre
-    void update(Image *imageToUpdate);
+    /// Deletes from the database the images that match the given mask (only StudyUID, SeriesUID and SOPInstanceUID are considered).
+    /// Returns true if successful and false otherwise.
+    bool del(const DicomMask &mask);
 
-    /// Selecciona les imatges que compleixen la màscara, només es té en compte de la màscara el StudyUID, SeriesUID i SOPInstanceUID
-    QList<Image*> query(const DicomMask &imageMaskToSelect);
+    /// Retrieves from the database the images that match the given mask (only StudyUID, SeriesUID and SOPInstanceUID are considered)
+    /// and returns them in a list.
+    QList<Image*> query(const DicomMask &mask);
 
-    /// Compta les imatges que compleixin el filtre de la màscara, només es té en compte l'StudyUID, SeriesUID i SOPInstanceUID
-    int count(const DicomMask &imageMaskToCount);
+    /// Counts and returns the number of images that match the given mask (only StudyUID, SeriesUID and SOPInstanceUID are considered).
+    /// Returns -1 in case of error.
+    int count(const DicomMask &mask);
 
 private:
-    double m_imageOrientationPatient[6];
-    double m_pixelSpacing[2];
-    double m_patientPosition[3];
+    /// Binds the necessary values of the given query with the information of the given image.
+    void bindValues(QSqlQuery &query, const Image *image);
 
-    //Utilitzem aquest QHash com una cache per fer la tradució de la cadena IP+AETitle a ID de PACS per quan inserim/actualitzem imatges
-    QHash<QString, QString> m_PACSIDCache;
-    //Utilitzem aquest QHash com una cache per fer la traducció del IDPACS a PacsDevice per quan es consulten imatges, d'aquesta manera si ja hem
-    //recuperat un pacs amb un ID determinat no farà falta tornar a accedir a la base de dades per obtenir-ne les dades.
-    QHash<int, PacsDevice> m_PACSDeviceCacheByIDPACSInDatabase;
+    /// Creates and returns an image with the information of the current row of the given query.
+    Image* getImage(const QSqlQuery &query);
 
-    /// Emplena un l'objecte imatge de la fila passada per paràmetre
-    Image* fillImage(char **reply, int row, int columns);
+    /// If the given DICOM source contains a PACS, returns its ID in the database. If the PACS doesn't exist in the database, it's inserted.
+    /// If the given DICOM source contains multiple PACS, only the first one is considered.
+    /// If the given DICOM source doesn't contain a PACS, returns a null QVariant.
+    QVariant getDatabasePacsId(const DICOMSource &dicomSource);
 
-    /// Genera la sentència sql per fer selectes d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID
-    QString buildSqlSelect(const DicomMask &imageMaskToSelect);
+    /// Returns the ID of the given PACS in the database. If the PACS doesn't exist in the database, it's inserted.
+    /// Keeps a cache of the queried and inserted PACS to avoid subsequent database queries for the same PACS.
+    QVariant getDatabasePacsId(const PacsDevice &pacsDevice);
 
-    /// Genera la sentència sql per comptar número d'imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i
-    /// SOPInstanceUID
-    QString buildSqlSelectCountImages(const DicomMask &imageMaskToSelect);
+    /// Returns the DICOM source with the PACS with the given ID in the database, or an empty DICOM source if there's no such PACS.
+    DICOMSource getDicomSource(const QVariant &retrievedPacsId);
 
-    /// Genera la sentència sql per inserir la nova imatge a la base de dades
-    QString buildSqlInsert(Image *newImage);
+    /// Returns the PACS device with the given ID in the database, or a default PACS device if there's no such PACS.
+    /// Keeps a cache of the queried PACS to avoid subsequent database queries for the same PACS.
+    PacsDevice getPacsDevice(qlonglong retrievedPacsId);
 
-    /// Genera la sentència sql per updatar la imatge a la base de dades
-    QString buildSqlUpdate(Image *imageToUpdate);
+private:
+    /// Hash from IP+AETitle to database PACS id used as a cache to avoid many accesses to the database.
+    QHash<QString, QVariant> m_databasePacsIdCache;
 
-    /// Genera la sentencia Sql per esborrar Imatges, de la màscara només té en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID
-    QString buildSqlDelete(const DicomMask &imageMaskToDelete);
-
-    /// Genera la sentència del where a partir de la màscara tenint en compte per construir la sentència el StudyUID, SeriesUID i SOPInstanceUID
-    QString buildWhereSentence(const DicomMask &imageMask);
-
-    /// Retorna el Pixel Spacing en format d'string separat per "\\"
-    QString getPixelSpacingAsQString(Image *newImage);
-    /// Retorna el Pixel spacing en format de double
-    double* getPixelSpacingAsDouble(const QString &pixelSpacing);
-
-    /// Returns Imager Pixel Spacing in string format. Each value is delimited by "\\"
-    QString getImagerPixelSpacingAsQString(Image *newImage) const;
-    
-    /// Returns Imager Pixel Spacing in a 2D double vector.
-    QVector2D getImagerPixelSpacingAs2DVector(const QString &imagerPixelSpacing) const;
-
-    /// Retorna l'imagePatientPosition en format d'string separat per "\\";
-    QString getPatientPositionAsQString(Image *newImage);
-    /// Retorna el Patient Position en format double
-    double* getPatientPositionAsDouble(const QString &patientPosition);
-
-    /// Retorna el WindowWidth, WindowCenter i explanation en format d'string separats per "\\" en els strings passats per paràmetre;
-    void getWindowLevelInformationAsQString(Image *newImage, QString &windowWidth, QString &windowCenter, QString &explanation);
-
-    /// Si el DICOMSource conté un PACS retorna l'ID d'aquest a la base de dades, (si no existeix l'insereix)
-    /// Si el DICOMSource té més d'un PACS només es té en compte el primer, una imatge no hauria de tenir més d'un PACS com a DICOMSource
-    /// i si el DICOMSource no conté  cap PACS retorna string contenint la paraula null.
-    QString getIDPACSInDatabaseFromDICOMSource(DICOMSource DICOMSourceRetrievedImage);
-
-    /// Obté el ID del PACS a la base de ades sinó existeix li insereix.
-    /// Guarda una cache dels PACS consultats i inserits de manera que si ja s'ha demanat el ID d'un PACS el va a buscar directament a la caché
-    QString getIDPACSInDatabase(PacsDevice pacsDevice);
-
-    /// A partir del camp retrievedPACSID de la base de dades ens omple el DICOMSource de la imatge
-    DICOMSource getImageDICOMSourceByIDPACSInDatabase(const QString &retrievedPACSID);
-
-    /// Retorna un PACSDevice a partir del seu ID a la base de dades, sinó el troba retorna un pacs buit
-    /// Guarda en una caché el PACS consultats de manere que si es torna demana un PACS ja consultat anteriorment l'obté directament de la caché
-    PacsDevice getPACSDeviceByIDPACSInDatabase(int IDPACSInDatabase);
+    /// Hash from database PACS id to PacsDevice used as a cache to avoid many accesses to the database.
+    QHash<qlonglong, PacsDevice> m_pacsDeviceCache;
 
 };
 

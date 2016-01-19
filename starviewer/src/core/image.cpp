@@ -299,7 +299,7 @@ void Image::setVoiLutList(const QList<VoiLut> &voiLutList)
     }
 }
 
-int Image::getNumberOfVoiLuts()
+int Image::getNumberOfVoiLuts() const
 {
     return m_voiLutList.size();
 }
@@ -314,12 +314,12 @@ void Image::setRetrievedTime(QTime retrievedTime)
     m_retrieveTime = retrievedTime;
 }
 
-QDate Image::getRetrievedDate()
+QDate Image::getRetrievedDate() const
 {
     return m_retrievedDate;
 }
 
-QTime Image::getRetrievedTime()
+QTime Image::getRetrievedTime() const
 {
     return m_retrieveTime;
 }

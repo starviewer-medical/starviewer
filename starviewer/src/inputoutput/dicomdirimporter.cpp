@@ -30,6 +30,7 @@
 #include "localdatabasemanager.h"
 #include "localdatabasemanager.h"
 #include "directoryutilities.h"
+#include "patient.h"
 
 namespace udg {
 

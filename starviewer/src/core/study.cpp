@@ -195,7 +195,7 @@ void Study::setReferringPhysiciansName(QString referringPhysiciansName)
     m_referringPhysiciansName = referringPhysiciansName;
 }
 
-QString Study::getReferringPhysiciansName()
+QString Study::getReferringPhysiciansName() const
 {
     return m_referringPhysiciansName;
 }
@@ -272,7 +272,7 @@ bool Study::setTime(QTime time)
     }
 }
 
-QDate Study::getDate()
+QDate Study::getDate() const
 {
     return m_date;
 }
@@ -282,7 +282,7 @@ QString Study::getDateAsString()
     return m_date.toString(Qt::LocaleDate);
 }
 
-QTime Study::getTime()
+QTime Study::getTime() const
 {
     return m_time;
 }
@@ -307,12 +307,12 @@ void Study::setRetrievedTime(QTime retrievedTime)
     m_retrieveTime = retrievedTime;
 }
 
-QDate Study::getRetrievedDate()
+QDate Study::getRetrievedDate() const
 {
     return m_retrievedDate;
 }
 
-QTime Study::getRetrievedTime()
+QTime Study::getRetrievedTime() const
 {
     return m_retrieveTime;
 }

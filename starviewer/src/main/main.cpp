@@ -231,27 +231,36 @@ int main(int argc, char *argv[])
     else
     {
         // Instància principal, no n'hi ha cap més executant-se
-        udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
-        // Fem el connect per rebre els arguments de les altres instàncies
-        QObject::connect(&app, SIGNAL(messageReceived(QString)), StarviewerSingleApplicationCommandLineSingleton::instance(), SLOT(parseAndRun(QString)));
-
-        INFO_LOG("Creada finestra principal");
-
-        mainWin->show();
-
-        QObject::connect(&app, SIGNAL(lastWindowClosed()),
-                         &app, SLOT(quit()));
-        splash.close();
-
-        // S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun
-        // QMessageBox, ja es llança mostrant-se la MainWindow.
-        if (commandLineArgumentsList.count() > 1)
+        try
         {
-            QString errorInvalidCommanLineArguments;
-            StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(commandLineArgumentsList, errorInvalidCommanLineArguments);
-        }
+            udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
+            // Fem el connect per rebre els arguments de les altres instàncies
+            QObject::connect(&app, SIGNAL(messageReceived(QString)), StarviewerSingleApplicationCommandLineSingleton::instance(), SLOT(parseAndRun(QString)));
 
-        returnValue = app.exec();
+            INFO_LOG("Creada finestra principal");
+
+            mainWin->show();
+
+            QObject::connect(&app, SIGNAL(lastWindowClosed()),
+                             &app, SLOT(quit()));
+            splash.close();
+
+            // S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun
+            // QMessageBox, ja es llança mostrant-se la MainWindow.
+            if (commandLineArgumentsList.count() > 1)
+            {
+                QString errorInvalidCommanLineArguments;
+                StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(commandLineArgumentsList, errorInvalidCommanLineArguments);
+            }
+
+            returnValue = app.exec();
+        }
+        // Handle special case when the database is newer than expected and the users prefers to quit. In that case an int is thrown and catched here.
+        // TODO Find a cleaner way to handle this case (this is already cleaner than the exit(0) that there was before).
+        catch (int i)
+        {
+            returnValue = i;
+        }
     }
 
 

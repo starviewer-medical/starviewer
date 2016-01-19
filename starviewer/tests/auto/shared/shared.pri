@@ -23,7 +23,8 @@ SOURCES += $$PWD/pacsdevicetesthelper.cpp \
            $$PWD/testingsenddicomfilestopacs.cpp \
            $$PWD/testingsettings.cpp \
            $$PWD/testingmammographyimagehelper.cpp \
-           $$PWD/testingdecaycorrectionfactorformulacalculator.cpp
+           $$PWD/testingdecaycorrectionfactorformulacalculator.cpp \
+           $$PWD/databasetesthelper.cpp
            
 HEADERS += $$PWD/autotest.h \
            $$PWD/pacsdevicetesthelper.h \
@@ -50,4 +51,5 @@ HEADERS += $$PWD/autotest.h \
            $$PWD/testingsenddicomfilestopacs.h \
            $$PWD/testingsettings.h \
            $$PWD/testingmammographyimagehelper.h \
-           $$PWD/testingdecaycorrectionfactorformulacalculator.h
+           $$PWD/testingdecaycorrectionfactorformulacalculator.h \
+           $$PWD/databasetesthelper.h
