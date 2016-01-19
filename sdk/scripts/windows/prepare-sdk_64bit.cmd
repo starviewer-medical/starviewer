@@ -14,7 +14,6 @@ echo robocopy %%ScriptsRoot%% %%InstallDir%% /E /XF install-sdk.cmd >> %SDKDIR%\
 robocopy "%SystemDrive%\dcmtk\3.6.1_20120515-64" "dcmtk\3.6.1_20120515-64" /MIR
 robocopy "%SystemDrive%\gdcm\2.4.4-64" "gdcm\2.4.4-64" /MIR
 robocopy "%SystemDrive%\InsightToolkit\4.7.1-64" "InsightToolkit\4.7.1-64" /MIR
-robocopy "%SystemDrive%\log4cxx-64" "log4cxx-64" /MIR
 robocopy "%SystemDrive%\ThreadWeaver\5.3.0-64" "ThreadWeaver\5.3.0-64" /MIR
 robocopy "%SystemDrive%\vtk\6.1.0-64" "vtk\6.1.0-64" /MIR
 
