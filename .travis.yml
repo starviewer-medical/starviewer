@@ -26,7 +26,6 @@ before_install:
       sudo apt-add-repository -y ppa:beineri/opt-qt542-trusty                           &&
       sudo apt-get update -qq                                                           &&
       sudo apt-get install -qq qt54base qt54quick1 qt54tools qt54webkit qt54xmlpatterns &&
-      sudo apt-get install -qq liblog4cxx10 liblog4cxx10-dev                            &&
       sudo apt-get install -qq libwrap0 libwrap0-dev                                    ;
     else
       brew update > /dev/null                                                      &&
@@ -35,8 +34,7 @@ before_install:
       git checkout 00e46351980ad915424aad9316abffc19936809c Library/Formula/qt5.rb &&
       cd -                                                                         &&
       brew install qt5                                                             &&
-      chmod -R 755 /usr/local/opt/qt5/*                                            &&
-      brew install log4cxx                                                         ;
+      chmod -R 755 /usr/local/opt/qt5/*                                            ;
     fi
 
 install:
