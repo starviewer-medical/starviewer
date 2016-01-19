@@ -14,45 +14,74 @@
 
 #include "localdatabasebasedal.h"
 
-#include <QString>
-#include <sqlite3.h>
-
 #include "databaseconnection.h"
 #include "logging.h"
 
+#include <QSqlQuery>
+#include <QVariant>
+
 namespace udg {
 
-LocalDatabaseBaseDAL::LocalDatabaseBaseDAL(DatabaseConnection *dbConnection)
+LocalDatabaseBaseDAL::LocalDatabaseBaseDAL(DatabaseConnection &databaseConnection)
+    : m_databaseConnection(databaseConnection)
 {
-    m_dbConnection = dbConnection;
-    m_lastSqliteError = SQLITE_OK;
 }
 
-int LocalDatabaseBaseDAL::getLastError()
+const QSqlError& LocalDatabaseBaseDAL::getLastError() const
 {
-    return m_lastSqliteError;
+    return m_lastError;
 }
 
-QString LocalDatabaseBaseDAL::convertToQString(const char *text)
+QString LocalDatabaseBaseDAL::convertToQString(const QChar &qchar)
 {
-    QString string = QString::fromUtf8(text);
+    return qchar.isNull() ? QString("") : qchar;
+}
+
+QString LocalDatabaseBaseDAL::convertToQString(const QVariant &text)
+{
+    QString string = text.toString();
 
     if (string.contains(QChar::ReplacementCharacter))
     {
-        string = QString::fromLatin1(text);
+        string = QString::fromLatin1(string.toUtf8().constData());
     }
 
     return string;
 }
 
-void LocalDatabaseBaseDAL::logError(const QString &sqlSentence)
+void LocalDatabaseBaseDAL::logError(const QSqlQuery &query)
 {
-    // Ingnorem l'error de clau duplicada
-    if (getLastError() != SQLITE_CONSTRAINT)
+    // Ignore duplicate key error
+    if (query.lastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteConstraint)
     {
-        ERROR_LOG("S'ha produit l'error: " + QString().setNum(getLastError()) + ", " + m_dbConnection->getLastErrorMessage() +
-                  ", al executar la seguent sentencia sql " + sqlSentence);
+        ERROR_LOG(QString("SQLite error %1: \"%2\", when executing \"%3\"")
+                  .arg(query.lastError().nativeErrorCode()).arg(query.lastError().text()).arg(query.lastQuery()));
     }
+}
+
+QSqlQuery LocalDatabaseBaseDAL::getNewQuery()
+{
+    return QSqlQuery(m_databaseConnection.getConnection());
+}
+
+bool LocalDatabaseBaseDAL::executeSql(const QString &sql)
+{
+    QSqlQuery query(m_databaseConnection.getConnection());
+    query.prepare(sql);
+    return executeQueryAndLogError(query);
+}
+
+bool LocalDatabaseBaseDAL::executeQueryAndLogError(QSqlQuery &query)
+{
+    bool ok = query.exec();
+    m_lastError = query.lastError();
+
+    if (!ok)
+    {
+        logError(query);
+    }
+
+    return ok;
 }
 
 }

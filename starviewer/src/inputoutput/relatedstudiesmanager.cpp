@@ -109,7 +109,7 @@ QList<Study*> RelatedStudiesManager::getStudiesFromDatabase(Patient *patient)
 
     foreach (const DicomMask &dicomMask, queryDicomMasksList)
     {
-        foreach(Patient *p, database.queryPatientStudy(dicomMask))
+        foreach(Patient *p, database.queryPatientsAndStudies(dicomMask))
         {
             foreach (Study *study, p->getStudies())
             {
@@ -309,7 +309,7 @@ DicomMask RelatedStudiesManager::getBasicDicomMask()
 
 RelatedStudiesManager::LoadStatus RelatedStudiesManager::loadStudy(Study *study)
 {
-    if (LocalDatabaseManager().existsStudy(study))
+    if (LocalDatabaseManager().studyExists(study->getInstanceUID()))
     {
         SingletonPointer<QueryScreen>::instance()->loadStudyFromDatabase(study->getInstanceUID());
         return Loaded;

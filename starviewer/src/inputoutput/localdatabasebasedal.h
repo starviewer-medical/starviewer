@@ -12,39 +12,57 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-
-
 #ifndef UDGLOCALDATABASEBASEDAL_H
 #define UDGLOCALDATABASEBASEDAL_H
 
-class QString;
+#include <QSqlError>
+
+class QSqlQuery;
+class QVariant;
 
 namespace udg {
 
 class DatabaseConnection;
 
 /**
-    Classe base de les que hereden totes les classes que implementen una DAL per accés a dades
-  */
+ * @brief The LocalDatabaseBaseDAL class is the base class for all Data Access Layer classes.
+ */
 class LocalDatabaseBaseDAL {
-public:
-    LocalDatabaseBaseDAL(DatabaseConnection *dbConnection);
 
-    /// Retorna l'últim error produït
-    int getLastError();
+public:
+    LocalDatabaseBaseDAL(DatabaseConnection &databaseConnection);
+
+    /// Returns the last error.
+    const QSqlError& getLastError() const;
+
+    /// Converts the given QChar to the corresponding QString. If the QChar is null, returns a null QString instead of a QString containing the null character.
+    static QString convertToQString(const QChar &qchar);
 
 protected:
     /// Converts the given text to a QString, interpreting the input as either UTF-8 or Latin-1 depending on its content.
-    static QString convertToQString(const char *text);
+    static QString convertToQString(const QVariant &text);
 
-    /// Ens fa un ErrorLog d'una sentència sql. No es té en compte l'error és SQL_CONSTRAINT (clau duplicada)
-    void logError(const QString &sqlSentence);
+    /// Logs the last error produced in the given query. It ignores SqliteConstraint errors (duplicate key).
+    static void logError(const QSqlQuery &query);
+
+    /// Returns a new query that uses the current database connection.
+    QSqlQuery getNewQuery();
+
+    /// Executes the given SQL command, keeps the last error and logs it, if any. Returns true if there's no error and false otherwise.
+    bool executeSql(const QString &sql);
+
+    /// Executes the given query, keeps the last error and logs it, if any. Returns true if there's no error and false otherwise.
+    bool executeQueryAndLogError(QSqlQuery &query);
 
 protected:
-    int m_lastSqliteError;
-    DatabaseConnection *m_dbConnection;
+    /// Database connection that will be used.
+    DatabaseConnection &m_databaseConnection;
+
+    /// Last error produced in the last executed command.
+    QSqlError m_lastError;
 
 };
+
 }
 
 #endif

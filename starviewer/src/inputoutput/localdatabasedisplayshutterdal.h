@@ -17,48 +17,33 @@
 
 #include "localdatabasebasedal.h"
 
-#include <QList>
-
 namespace udg {
 
 class DicomMask;
-class Image;
 class DisplayShutter;
+class Image;
 
 /**
-    Classe que conté els mètodes d'accés a la taula DisplayShutter de la base de dades
-  */
+ * @brief The LocalDatabaseDisplayShutterDAL class is the Data Access Layer class for display shutters.
+ */
 class LocalDatabaseDisplayShutterDAL : public LocalDatabaseBaseDAL {
+
 public:
-    LocalDatabaseDisplayShutterDAL(DatabaseConnection *dbConnection);
+    LocalDatabaseDisplayShutterDAL(DatabaseConnection &databaseConnection);
 
-    /// Insereix un nou DisplayShutter corresponent a la imatge donada
-    void insert(const DisplayShutter &shutter, Image *shuttersImage);
+    /// Inserts to the database the given display shutter that corresponds to the given image. Returns true if successful and false otherwise.
+    bool insert(const DisplayShutter &shutter, const Image *shuttersImage);
 
-    /// Actualitza la llista de DisplayShutters corresponents a la imatge donada
-    void update(const QList<DisplayShutter> &shuttersList, Image *shuttersImage);
+    /// Updates in the database the display shutters that belong to the given image, which are the ones given in the list.
+    /// The existing shutters are deleted and the given ones are inserted. Returns true if successful and false otherwise.
+    bool update(const QList<DisplayShutter> &shuttersList, const Image *shuttersImage);
 
-    /// Esborra els DisplayShutters que coincideixin amb els criteris de la màscara
-    void del(const DicomMask &mask);
+    /// Deletes from the database the display shutters that match the given mask. Returns true if successful and false otherwise.
+    bool del(const DicomMask &mask);
 
-    /// Cerca els DisplayShutters que coincideixin amb els criteris de la màscara i ens torna els resultats en una llista
+    /// Retrieves from the database the display shutters that match the given mask and returns them in a list.
     QList<DisplayShutter> query(const DicomMask &mask);
 
-private:
-    /// Construeix la sentència SQL per inserir un DisplayShutter
-    QString buildSQLInsert(const DisplayShutter &shutter, Image *shuttersImage);
-
-    /// Construeix la sentència SQL per seleccionar els DisplayShutters que coincideixin amb els criteris de la màscara
-    QString buildSQLSelect(const DicomMask &mask);
-
-    /// Construeix la sentència SQL per esborrar els DisplayShutters que coincideixin amb els criteris de la màscara
-    QString buildSQLDelete(const DicomMask &mask);
-
-    /// Construeix la sentència WHERE segons els criteris de la màscara
-    QString buildWhereSentence(const DicomMask &mask);
-
-    /// Omple un objecte DisplayShutter a partir del resultat SQL (reply) segons la fila i columna indicades
-    DisplayShutter fillDisplayShutter(char **reply, int row, int columns);
 };
 
 } // End namespace udg

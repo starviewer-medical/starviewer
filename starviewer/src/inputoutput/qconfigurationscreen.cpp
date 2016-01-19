@@ -467,7 +467,7 @@ void QConfigurationScreen::updateInstitutionPhoneNumberSetting()
 bool QConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
 {
     // Comprovem que el port estigui o no en ús i que en el cas que estigui en ús, no sigui utilitzat per l'Starviewer
-    return PortInUse().isPortInUse(m_textLocalPort->text().toInt()) && !LocalDatabaseManager().isStudyRetrieving();
+    return PortInUse().isPortInUse(m_textLocalPort->text().toInt()) && !LocalDatabaseManager().isAStudyBeingRetrieved();
 }
 
 void QConfigurationScreen::checkIncomingConnectionsPortNotInUse()

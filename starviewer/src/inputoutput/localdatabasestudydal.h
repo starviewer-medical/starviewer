@@ -15,76 +15,66 @@
 #ifndef UDGLOCALDATABASESTUDY_H
 #define UDGLOCALDATABASESTUDY_H
 
-#include <QList>
-
 #include "localdatabasebasedal.h"
-#include "study.h"
+
+#include <QDate>
 
 namespace udg {
 
 class DicomMask;
-class PacsDevice;
-class DICOMSource;
+class Patient;
+class Study;
 
 /**
-    Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
-  */
+ * @brief The LocalDatabaseStudyDAL class is the Data Access Layer class for studies.
+ */
 class LocalDatabaseStudyDAL : public LocalDatabaseBaseDAL {
+
 public:
-    LocalDatabaseStudyDAL(DatabaseConnection *dbConnection);
+    LocalDatabaseStudyDAL(DatabaseConnection &databaseConnection);
 
-    /// Insereix el nou estudi, i insereix com LastAccessDate la data actual
-    void insert(Study *newStudy, const QDate &lastAccessData);
+    /// Inserts to the database the given study and sets the given date as the last access date. Returns true if successful and false otherwise.
+    bool insert(const Study *study, const QDate &lastAccessDate);
 
-    /// Updata l'estudi
-    void update(Study *studyToUpdate, const QDate &LastAcessDate);
+    /// Updates in the database the given study and sets the given date as the last access date. Returns true if successful and false otherwise.
+    bool update(const Study *study, const QDate &lastAccessDate);
 
-    /// Esborra els estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
-    void del(const DicomMask &studyMaskToDelete);
+    /// Deletes from the database the studies that match the given mask (only StudyUID is considered). Returns true if successful and false otherwise.
+    bool del(const DicomMask &mask);
 
-    /// Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID, retorna els estudis ordenats per
-    /// LastAccessDate de manera creixent
-    QList<Study*> queryOrderByLastAccessDate(const DicomMask &studyMaskToQuery, QDate lastAccessDateMinor = QDate(),
-                                             QDate lastAccessDateEqualOrMajor = QDate());
+    /// Retrieves from the database the studies that match the given mask (only StudyUID is considered) and whose last access date is in the range
+    /// (\a accessedBefore, \a accessedAfter], and returns them in a list.
+    QList<Study*> query(const DicomMask &mask, const QDate &accessedBefore = QDate(), const QDate &accessedAfter = QDate());
 
-    /// Cerca les estudis que compleixen amb els criteris de la màscara de cerca, només té en compte l'StudyUID
-    QList<Study*> query(const DicomMask &studyMaskToQuery, QDate lastAccessDateMinor = QDate(), QDate lastAccessDateEqualOrMajor = QDate());
+    /// Retrieves from the database the studies that match the given mask (only StudyUID is considered) and whose last access date is in the range
+    /// (\a accessedBefore, \a accessedAfter], and returns them in a list sorted by last access date in ascending order.
+    QList<Study*> queryOrderByLastAccessDate(const DicomMask &mask, const QDate &accessedBefore = QDate(), const QDate &accessedAfter = QDate());
 
-    /// Ens retorna els pacients que tenen estudis que compleixen amb els criteris de la màscara. Té en compte el patientID, patient name, data de l'estudi
-    /// i l'study instance UID
-    QList<Patient*> queryPatientStudy(const DicomMask &patientStudyMaskToQuery, QDate lastAccessDateMinor = QDate(),
-                                      QDate lastAccessDateEqualOrMajor = QDate());
+    /// Retrieves from the database the patients that contain studies that match the given mask (patient id, patient name, study date, study instance UID and
+    /// modalities are considered) and whose last access date is in the range (\a accessedBefore, \a accessedAfter], and returns the patients in a list.
+    /// For each matching study a Patient object with one Study object will be returned, so there may be multiple Patient objects representing the same patient.
+    QList<Patient*> queryPatientStudy(const DicomMask &mask, const QDate &accessedBefore = QDate(), const QDate &accessedAfter = QDate());
 
-    /// Retorna el ID amb que Starviewer indentifica un pacient (aquest és diferent del Patient ID de DICOM) a partir de l'UID d'un estudi, si no troba l'estudi
-    /// retorna -1
+    /// Returns true if there's a study with the given UID in the database, and false otherwise.
+    bool exists(const QString &studyInstanceUID);
+
+    /// Returns the PatientID field (referencing the database ID of a patient) from the study with the given StudyInstanceUID.
+    /// If there is no such study, returns -1.
     qlonglong getPatientIDFromStudyInstanceUID(const QString &studyInstanceUID);
 
 private:
-    /// Construeix la sentència sql per inserir el nou estudi
-    QString buildSqlInsert(Study *newStudy, const QDate &lastAcessDate);
+    /// Creates and returns a study with the information of the current row of the given query.
+    static Study* getStudy(const QSqlQuery &query);
 
-    /// Construeix la sentència updata l'estudi
-    QString buildSqlUpdate(Study *studyToUpdate, const QDate &lastAccessDate);
+    /// Creates and returns a patient with the information of the current row of the given query.
+    static Patient* getPatient(const QSqlQuery &query);
 
-    /// Construeix la setència per fer select d'estudis a partir de la màscara, només té en compte el StudyUID i els estudis que tinguin un LastAccessDate
-    /// menor que el de la màscara
-    QString buildSqlSelect(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor);
+    /// Retrieves from the database the studies that match the given mask (only StudyUID is considered) and whose last access date is in the range
+    /// (\a accessedBefore, \a accessedAfter], and returns them in a list sorted according to \a orderBy.
+    QList<Study*> query(const DicomMask &mask, const QDate &accessedBefore, const QDate &accessedAfter, const QString &orderBy);
 
-    /// Construeix la setència per esborrar l'estudi a partir de la màscara, només té en compte el StudyUID
-    QString buildSqlDelete(const DicomMask &studyMaskToDelete);
-
-    /// Construeix la sentència per fer select d'estudi i pacients a partir de la màscara. Té en compte studyUID, Patient Id, Patient Name, i data de l'estudi
-    QString buildSqlSelectStudyPatient(const DicomMask &studyMaskToSelect, const QDate &lastAccessDateMinor, const QDate &lastAccessDateEqualOrMajor);
-
-    /// Retorna la sentència per buscar el pacient d'un estudi a partir del Study Instance UID
-    QString buildSqlGetPatientIDFromStudyInstanceUID(const QString &studyInstanceUID);
-
-    /// Emplena un l'objecte Study de la fila passada per paràmetre
-    Study* fillStudy(char **reply, int row, int columns);
-
-    /// Emplena un objecte Patient a partir de la fila passada per paràmetre
-    Patient* fillPatient(char **reply, int row, int columns);
 };
+
 }
 
 #endif

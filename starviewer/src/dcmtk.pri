@@ -15,7 +15,6 @@ INCLUDEPATH += $${DCMTKINCLUDEDIR} \
     $${DCMTKINCLUDEDIR}/dcmjpeg
 
 LIBS += -L$${DCMTKLIBDIR} \
-    -lsqlite3 \
     -ldcmpstat \
     -ldcmnet \
     -ldcmdata \
@@ -43,15 +42,5 @@ unix:!macx {
 
 win32 {
     LIBS += -lNetAPI32 -lWSock32 -lSnmpAPI
-
-    contains(QMAKE_TARGET.arch, x86_64) {
-        INCLUDEPATH += C:/sqlite3-64
-        LIBS += -LC:/sqlite3-64
-    }
-    else {
-        INCLUDEPATH += C:/sqlite3-32
-        LIBS += -LC:/sqlite3-32
-    }
     LIBS -= -lxml2
 }
-

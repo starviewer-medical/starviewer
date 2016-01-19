@@ -103,9 +103,9 @@ public:
     bool setTime(int hour, int minute, int second = 0);
     bool setTime(QString time);
     bool setTime(QTime time);
-    QDate getDate();
+    QDate getDate() const;
     QString getDateAsString();
-    QTime getTime();
+    QTime getTime() const;
     QString getTimeAsString();
 
     /// Assignar/Obtenir la institució on s'ha realitzat l'estudi
@@ -127,8 +127,8 @@ public:
     /// Assignar/Obtenir la data i hora en que la sèrie s'ha descarregat a la base de dades Local
     void setRetrievedDate(QDate date);
     void setRetrievedTime(QTime time);
-    QDate getRetrievedDate();
-    QTime getRetrievedTime();
+    QDate getRetrievedDate() const;
+    QTime getRetrievedTime() const;
 
     /// Assigna l'estudi pare de la sèrie
     void setParentStudy(Study *study);

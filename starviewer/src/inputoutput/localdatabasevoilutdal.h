@@ -17,8 +17,6 @@
 
 #include "localdatabasebasedal.h"
 
-#include <QList>
-
 namespace udg {
 
 class DicomMask;
@@ -26,20 +24,20 @@ class Image;
 class VoiLut;
 
 /**
- * @brief The LocalDatabaseVoiLutDAL class is a database access layer for VoiLut.
+ * @brief The LocalDatabaseVoiLutDAL class is the Data Access Layer class for VOI LUTs.
  */
 class LocalDatabaseVoiLutDAL : public LocalDatabaseBaseDAL
 {
 public:
-    LocalDatabaseVoiLutDAL(DatabaseConnection *dbConnection);
+    LocalDatabaseVoiLutDAL(DatabaseConnection &databaseConnection);
 
-    /// Inserts a new VoiLut from the given Image in the database.
-    void insert(const VoiLut &voiLut, Image *image);
+    /// Inserts to the database the given VOI LUT from the given image. Returns true if successful and false otherwise.
+    bool insert(const VoiLut &voiLut, const Image *image);
 
-    /// Deletes all VoiLuts in the database that match the given mask.
-    void del(const DicomMask &mask);
+    /// Deletes from the database the VOI LUTs that match the given mask. Returns true if successful and false otherwise.
+    bool del(const DicomMask &mask);
 
-    /// Returns all VoiLuts in the database that match the given mask.
+    /// Retrieves from the database the VOI LUTs that match the given mask and returns them in a list.
     QList<VoiLut> query(const DicomMask &mask);
 
 };
