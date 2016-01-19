@@ -19,10 +19,7 @@ install:
 
     7z x $destination -oc:\ > 7z-output.txt
 
-    if ($env:BITS -eq 32) { $env:LOG4CXXDIR="c:\log4cxx" }
-    else { $env:LOG4CXXDIR="c:\log4cxx-64" }
-
-    $env:PATH = "$env:PATH;$env:QTDIR\bin;c:\vtk\6.1.0-$env:BITS\bin;c:\gdcm\2.4.4-$env:BITS\bin;c:\ThreadWeaver\5.3.0-$env:BITS\bin;$env:LOG4CXXDIR"
+    $env:PATH = "$env:PATH;$env:QTDIR\bin;c:\vtk\6.1.0-$env:BITS\bin;c:\gdcm\2.4.4-$env:BITS\bin;c:\ThreadWeaver\5.3.0-$env:BITS\bin"
 
 
     # Setup jom
