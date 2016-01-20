@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     udg::beginLogging();
-    INFO_LOG("============================================ CRASH REPORTER BEGIN =============================================");
+    INFO_LOG("============================================ BEGIN STARVIEWER CRASH REPORTER =============================================");
     INFO_LOG(QString("%1 Crash Reporter Version %2 BuildID %3").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString).arg(udg::StarviewerBuildID));
 
     int returnValue;
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
     INFO_LOG(QString("%1 Crash Reporter Version %2 BuildID %3, returnValue %4").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString)
              .arg(udg::StarviewerBuildID).arg(returnValue));
-    INFO_LOG("============================================= CRASH REPORTER END ==============================================");
+    INFO_LOG("============================================= END STARVIEWER CRASH REPORTER ==============================================");
     udg::endLogging(returnValue);
 
     return returnValue;

@@ -39,16 +39,10 @@ void udg::beginLogging() {
 
     el::Loggers::reconfigureAllLoggers(logConfig);
     loggingStarted = true;
-
-    // Marquem l'inici de l'aplicació al log
-    INFO_LOG("==================================================== BEGIN ====================================================");
-    INFO_LOG(QString("%1 Version %2 BuildID %3").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString).arg(udg::StarviewerBuildID));
 }
 
 void udg::endLogging(int returnValue) {
-    INFO_LOG(QString("%1 Version %2 BuildID %3, returnValue %4").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString)
-             .arg(udg::StarviewerBuildID).arg(returnValue));
-    INFO_LOG("===================================================== END =====================================================");
+    //Not used
 }
 
 void udg::debugLog(const QString &msg) {
