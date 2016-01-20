@@ -128,6 +128,10 @@ int main(int argc, char *argv[])
     // TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en una classe dedicada a tal efecte
 
     udg::beginLogging();
+    // Marquem l'inici de l'aplicació al log
+    INFO_LOG("==================================================== BEGIN STARVIEWER ====================================================");
+    INFO_LOG(QString("%1 Version %2 BuildID %3").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString).arg(udg::StarviewerBuildID));
+    
     // Redirigim els missatges de VTK cap al log.
     udg::LoggingOutputWindow *loggingOutputWindow = udg::LoggingOutputWindow::New();
     vtkOutputWindow::SetInstance(loggingOutputWindow);
@@ -265,6 +269,9 @@ int main(int argc, char *argv[])
 
 
     // Marquem el final de l'aplicació al log
+    INFO_LOG(QString("%1 Version %2 BuildID %3, returnValue %4").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString)
+             .arg(udg::StarviewerBuildID).arg(returnValue));
+    INFO_LOG("===================================================== END STARVIEWER =====================================================");
     udg::endLogging(returnValue);
 
 
