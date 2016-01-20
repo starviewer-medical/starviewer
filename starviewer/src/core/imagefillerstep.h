@@ -58,6 +58,15 @@ private:
     /// Mètode específic per processar els arxius que siguin de tipus Enhanced
     QList<Image*> processEnhancedDICOMFile(DICOMTagReader *dicomReader);
 
+    /// Mètode encarregat de processar el fitxer DICOM per extreure'n el conjunt de les imatges
+    /// que el conformen, omplint la informació necessària
+    /// HACK Hitachi
+    QList<Image*> processDICOMFileHitachi(DICOMTagReader *dicomReader);
+
+    /// Mètode específic per processar els arxius que siguin de tipus Enhanced
+    /// HACK Hitachi
+    QList<Image*> processEnhancedDICOMFileHitachi(DICOMTagReader *dicomReader);
+
     /// Donat un dicomReader guardem a la cache el corresponent thumbnail.
     /// La intenció d'aquest mètode és estalviar temps en la càrrega de thumbnails per arxius
     /// multiframe i enhanced ja que actualment és molt costós perquè hem de carregar tot el volum
