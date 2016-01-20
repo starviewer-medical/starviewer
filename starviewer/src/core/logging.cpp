@@ -14,23 +14,9 @@ void udg::beginLogging() {
         // Creem el directori
         logDir.mkpath(udg::UserLogsPath);
     }
-    // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
-    // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
-    QString configurationFile = "/etc/starviewer/log.conf";
-    if (!QFile::exists(configurationFile))
-    {
-        configurationFile = qApp->applicationDirPath() + "/log.conf";
-    }
-    // Afegim localització per Mac OS X en desenvolupament
-    if (!QFile::exists(configurationFile))
-    {
-        configurationFile = qApp->applicationDirPath() + "/../../../log.conf";
-    }
 
-    QString logFilePath = QDir::toNativeSeparators(udg::UserLogsFile);
-
-    el::Configurations logConfig(configurationFile.toStdString());
-    logConfig.setGlobally(el::ConfigurationType::Filename, logFilePath.toStdString());
+    el::Configurations logConfig(getLogConfFilePath().toStdString());
+    logConfig.setGlobally(el::ConfigurationType::Filename, getLogFilePath().toStdString());
 
     //Disable logging to the standard output when compiled on release
     #ifdef QT_NO_DEBUG
@@ -44,6 +30,27 @@ void udg::beginLogging() {
 void udg::endLogging(int returnValue) {
     //Not used
 }
+
+QString udg::getLogFilePath() {
+    return QDir::toNativeSeparators(udg::UserLogsFile);
+}
+
+QString udg::getLogConfFilePath() {
+    // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
+    // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
+    QString configurationFile = "/etc/starviewer/log.conf";
+    if (!QFile::exists(configurationFile))
+    {
+        configurationFile = qApp->applicationDirPath() + "/log.conf";
+    }
+    // Afegim localització per Mac OS X en desenvolupament
+    if (!QFile::exists(configurationFile))
+    {
+        configurationFile = qApp->applicationDirPath() + "/../../../log.conf";
+    }
+    return configurationFile;
+}
+
 
 void udg::debugLog(const QString &msg) {
     if (loggingStarted) {

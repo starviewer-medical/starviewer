@@ -25,6 +25,21 @@
 namespace udg {
     void beginLogging();
     void endLogging(int returnValue);
+    /**
+     * Returns the path where the log should be outputted to.
+     * @return Log file path
+     */
+    QString getLogFilePath();
+    /**
+     * Location of log.conf file.
+     * 
+     * This function tries to locate the logging configuration file, trying
+     * different fallback alternatives.
+     * 
+     * @return Path where log.conf is expected to be found
+     */
+    QString getLogConfFilePath();
+    
 
     void debugLog(const QString &msg);
     void infoLog(const QString &msg);

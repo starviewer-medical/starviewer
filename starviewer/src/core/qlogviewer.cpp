@@ -54,7 +54,7 @@ void QLogViewer::updateData()
     }
     else
     {
-        INFO_LOG("S'ha obert amb èxit l'arxiu de logs [" + QString(QString::fromLocal8Bit(qgetenv("logFilePath"))) + "]");
+        INFO_LOG("S'ha obert amb èxit l'arxiu de logs [" + udg::getLogFilePath() + "]");
         m_logBrowser->setReadOnly(true);
         m_logBrowser->setPlainText(logFile.readAll());
     }
