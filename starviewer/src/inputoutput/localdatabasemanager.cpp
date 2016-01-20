@@ -182,7 +182,7 @@ void savePatientOfStudy(DatabaseConnection &databaseConnection, const Study *stu
     if (patientID == -1)
     {
         // The patient doesn't exist, insert it
-        ok = !patientDAL.insert(study->getParentPatient());
+        ok = patientDAL.insert(study->getParentPatient());
     }
     else
     {
