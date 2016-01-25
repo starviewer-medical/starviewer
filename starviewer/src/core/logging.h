@@ -41,14 +41,32 @@ namespace udg {
     QString getLogConfFilePath();
     
 
-    void debugLog(const QString &msg);
-    void infoLog(const QString &msg);
-    void warnLog(const QString &msg);
-    void errorLog(const QString &msg);
-    void fatalLog(const QString &msg);
-    void verboseLog(int vLevel, const QString &msg);
-    void traceLog(const QString &msg);
+    void debugLog(const QString &msg, const QString &file, int line, const QString &function);
+    void infoLog(const QString &msg, const QString &file, int line, const QString &function);
+    void warnLog(const QString &msg, const QString &file, int line, const QString &function);
+    void errorLog(const QString &msg, const QString &file, int line, const QString &function);
+    void fatalLog(const QString &msg, const QString &file, int line, const QString &function);
+    void verboseLog(int vLevel, const QString &msg, const QString &file, int line, const QString &function);
+    void traceLog(const QString &msg, const QString &file, int line, const QString &function);
 }
+
+
+//Taken from easylogging++.h
+#if _MSC_VER  // Visual C++
+    #define LOG_FUNC __FUNCSIG__
+#elif __GNUC__  // GCC
+    #define LOG_FUNC __PRETTY_FUNCTION__
+#elif defined(__clang__) && (__clang__ == 1)  // Clang++
+    #define LOG_FUNC __PRETTY_FUNCTION__
+#elif __INTEL_COMPILER  // Intel C++
+    #define LOG_FUNC __PRETTY_FUNCTION__
+#else
+    #if defined(__func__)
+        #define LOG_FUNC __func__
+    #else
+        #define LOG_FUNC ""
+    #endif
+#endif
 
 
 /// Macro per a missatges de debug. \TODO de moment fem servir aquesta variable de qmake i funciona bé, però podria ser més adequat troba la forma d'afegir
@@ -56,14 +74,17 @@ namespace udg {
 #ifdef QT_NO_DEBUG
     #define DEBUG_LOG(msg) while (false)
 #else
-    #define DEBUG_LOG(msg) udg::debugLog(msg)
+    #define DEBUG_LOG(msg) udg::debugLog(msg,__FILE__,__LINE__,LOG_FUNC)
 #endif
 
-#define INFO_LOG(msg) udg::infoLog(msg)
-#define WARN_LOG(msg) udg::warnLog(msg)
-#define ERROR_LOG(msg) udg::errorLog(msg)
-#define FATAL_LOG(msg) udg::fatalLog(msg)
-#define VERBOSE_LOG(vLevel, msg) udg::verboseLog(vLevel, msg)
-#define TRACE_LOG(msg) udg::traceLog(msg)
+#define INFO_LOG(msg) udg::infoLog(msg,__FILE__,__LINE__,LOG_FUNC)
+#define WARN_LOG(msg) udg::warnLog(msg,__FILE__,__LINE__,LOG_FUNC)
+#define ERROR_LOG(msg) udg::errorLog(msg,__FILE__,__LINE__,LOG_FUNC)
+#define FATAL_LOG(msg) udg::fatalLog(msg,__FILE__,__LINE__,LOG_FUNC)
+#define VERBOSE_LOG(vLevel, msg) udg::verboseLog(vLevel, msg,__FILE__,__LINE__,LOG_FUNC)
+#define TRACE_LOG(msg) udg::traceLog(msg,__FILE__,__LINE__,LOG_FUNC)
+
+
+
 
 #endif //_LOGGING_
