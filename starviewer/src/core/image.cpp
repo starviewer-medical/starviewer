@@ -324,6 +324,16 @@ QTime Image::getRetrievedTime() const
     return m_retrieveTime;
 }
 
+const QString& Image::getAcquisitionNumber() const
+{
+    return m_acquisitionNumber;
+}
+
+void Image::setAcquisitionNumber(QString acquisitionNumber)
+{
+    m_acquisitionNumber = std::move(acquisitionNumber);
+}
+
 void Image::setImageType(const QString &imageType)
 {
     m_imageType = imageType;

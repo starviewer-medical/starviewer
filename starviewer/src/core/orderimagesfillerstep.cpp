@@ -20,7 +20,6 @@
 #include "series.h"
 #include "image.h"
 #include "mathtools.h"
-#include "dicomtagreader.h"
 
 namespace udg {
 
@@ -130,6 +129,11 @@ bool OrderImagesFillerStep::fillIndividually()
     }
 
     // Avaluació dels AcquisitionNumbers
+    QString acquisitionNumber;
+    if (!m_input->getCurrentImages().isEmpty())
+    {
+        acquisitionNumber = m_input->getCurrentImages().first()->getAcquisitionNumber();
+    }
     if (m_acquisitionNumberEvaluation.contains(m_input->getCurrentSeries()))
     {
         if (m_acquisitionNumberEvaluation.value(m_input->getCurrentSeries()).contains(m_input->getCurrentVolumeNumber()))
@@ -138,7 +142,7 @@ bool OrderImagesFillerStep::fillIndividually()
             QPair<QString, bool> *pair = m_acquisitionNumberEvaluation[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
             if (!pair->second)
             {
-                if (pair->first != m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber))
+                if (pair->first != acquisitionNumber)
                 {
                     pair->second = true;
                 }
@@ -146,14 +150,14 @@ bool OrderImagesFillerStep::fillIndividually()
         }
         else
         {
-            QPair<QString, bool> *acquisitionPair = new QPair<QString, bool>(m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber), false);
+            QPair<QString, bool> *acquisitionPair = new QPair<QString, bool>(acquisitionNumber, false);
             m_acquisitionNumberEvaluation[m_input->getCurrentSeries()].insert(m_input->getCurrentVolumeNumber(), acquisitionPair);
         }
     }
     else
     {
         QHash<int, QPair<QString, bool>*> volumeHash;
-        QPair<QString, bool> *acquisitionPair = new QPair<QString, bool>(m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber), false);
+        QPair<QString, bool> *acquisitionPair = new QPair<QString, bool>(acquisitionNumber, false);
         volumeHash.insert(m_input->getCurrentVolumeNumber(), acquisitionPair);
 
         m_acquisitionNumberEvaluation.insert(m_input->getCurrentSeries(), volumeHash);
