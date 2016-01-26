@@ -41,8 +41,6 @@ bool DICOMFileClassifierFillerStep::fillIndividually()
     m_dicomReader = m_input->getDICOMFile();
     classifyFile();
 
-    m_input->addLabel("DICOMFileClassifierFillerStep");
-
     return true;
 }
 

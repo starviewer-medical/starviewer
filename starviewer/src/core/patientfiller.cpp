@@ -14,9 +14,6 @@
 
 #include "patientfiller.h"
 
-#include <QTime>
-#include <QtAlgorithms>
-
 #include "patientfillerinput.h"
 #include "logging.h"
 #include "dicomtagreader.h"
@@ -55,20 +52,9 @@ PatientFiller::~PatientFiller()
     delete m_patientFillerInput;
 }
 
-// Mètode intern per poder realitzar l'ordenació dels patientfiller
-bool patientFillerMorePriorityFirst(const PatientFillerStep *s1, const PatientFillerStep *s2)
-{
-    return (*s1) < (*s2);
-}
-
 void PatientFiller::registerSteps()
 {
-    m_registeredSteps.append(new ImageFillerStep());
-    m_registeredSteps.append(new DICOMFileClassifierFillerStep());
-    m_registeredSteps.append(new OrderImagesFillerStep());
-    // \TODO Donat que al postProcessing no tenim política d'etiquetes, s'ha posat el Temporal al final
-    // perquè necessita que s'hagi executat l'Order abans. S'hauria de millorar.
-    m_registeredSteps.append(new TemporalDimensionFillerStep());
+    m_registeredSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep() << new OrderImagesFillerStep() << new TemporalDimensionFillerStep();
 
     // TODO encara no hi ha suport a KINs i Presentation States, per tant
     // fins que no tinguem suport i implementem correctament els respectius
@@ -83,41 +69,11 @@ void PatientFiller::processDICOMFile(const DICOMTagReader *dicomTagReader)
 
     m_patientFillerInput->setDICOMFile(dicomTagReader);
 
-    QList<PatientFillerStep*> processedFillerSteps;
-    QList<PatientFillerStep*> candidatesFillerSteps = m_registeredSteps;
-    bool continueIterating = true;
-
-    while (!candidatesFillerSteps.isEmpty() && continueIterating)
+    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
     {
-        QList<PatientFillerStep*> fillerStepsToProcess;
-        QList<PatientFillerStep*> newCandidatesFillerSteps;
-        continueIterating = false;
-
-        for (int i = 0; i < candidatesFillerSteps.size(); ++i)
-        {
-            if (m_patientFillerInput->hasAllLabels(candidatesFillerSteps.at(i)->getRequiredLabels()))
-            {
-                fillerStepsToProcess.append(candidatesFillerSteps.at(i));
-                continueIterating = true;
-            }
-            else
-            {
-                newCandidatesFillerSteps.append(candidatesFillerSteps.at(i));
-            }
-        }
-        candidatesFillerSteps = newCandidatesFillerSteps;
-
-        // Ordenem segons la seva prioritat
-        qSort(fillerStepsToProcess.begin(), fillerStepsToProcess.end(), patientFillerMorePriorityFirst);
-
-        foreach (PatientFillerStep *fillerStep, fillerStepsToProcess)
-        {
-            fillerStep->setInput(m_patientFillerInput);
-            fillerStep->fillIndividually();
-        }
+        fillerStep->setInput(m_patientFillerInput);
+        fillerStep->fillIndividually();
     }
-
-    m_patientFillerInput->initializeAllLabels();
 
     emit progress(++m_imageCounter);
 }

@@ -25,7 +25,6 @@ namespace udg {
 KeyImageNoteFillerStep::KeyImageNoteFillerStep()
  : PatientFillerStep()
 {
-    m_requiredLabelsList << "DICOMFileClassifierFillerStep";
 }
 
 KeyImageNoteFillerStep::~KeyImageNoteFillerStep()

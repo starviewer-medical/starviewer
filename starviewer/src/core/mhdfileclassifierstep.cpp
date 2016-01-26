@@ -145,8 +145,6 @@ bool MHDFileClassifierStep::fillIndividually()
 
     series->addImage(image);
 
-    m_input->addLabelToSeries("MHDFileClassifierStep", series);
-
     return true;
 }
 

@@ -60,20 +60,6 @@ public:
     void setFile(QString file);
     QString getFile() const;
 
-    /// Afegim etiquetes a nivell global/Series
-    void addLabel(QString label);
-    void addLabelToSeries(QString label, Series *series);
-
-    /// Obtenim totes les etiquetes que s'han aplicat fins al moment, tant a nivell global com a nivell de sèries.
-    /// Retorna una llista composada per les etiquetes globals i de series
-    QStringList getLabels() const;
-
-    /// Retorna true en el cas que es tinguin tots els labels (ja sigui a nivell de sèrie o global)
-    bool hasAllLabels(QStringList requiredLabelsList) const;
-
-    /// Buida totes les llistes d'etiquetes.
-    void initializeAllLabels();
-
     /// S'indica/obté quin serà el DICOMTagReader a processar. Aquest mètode esborrarà l'objecte que es tenia guardat
     /// anteriorment fent que no es pugui utilitzar més: es pren el control absolut de l'objecte.
     /// Per objectes no dicom, cal utilitzar set/getFile(QString)
@@ -118,16 +104,6 @@ private:
 
     /// Arxius que cal tractar per omplir la llista de pacients
     QString m_file;
-
-    /// Llista d'etiquetes assignades a nivell global
-    QStringList m_globalLabels;
-
-    /// Llista que té totes les labels aplicades sense repeticions de labels globals i de series.
-    /// Aquesta variable la tenim per ser més àgils en el getLabels per ser una mica més ràpids.
-    QStringList m_allLabels;
-
-    /// Llista d'etiquetes assignades a nivell de sèries. Per cada Series tenim vàries etiquetes
-    QMultiMap<Series*, QString> m_seriesLabels;
 
     /// Atribut que s'utilitza per executar els fillers individualment.
     const DICOMTagReader *m_dicomFile;

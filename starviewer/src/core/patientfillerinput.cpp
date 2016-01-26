@@ -113,62 +113,6 @@ QString PatientFillerInput::getFile() const
     return m_file;
 }
 
-void PatientFillerInput::addLabel(QString label)
-{
-    if (!m_globalLabels.contains(label))
-    {
-        m_globalLabels << label;
-        // Afegim a la llista de tots també
-        m_allLabels << label;
-    }
-}
-
-void PatientFillerInput::addLabelToSeries(QString label, Series *series)
-{
-    if (!m_seriesLabels.values(series).contains(label))
-    {
-        m_seriesLabels.insert(series, label);
-    }
-    // Aquí ho separem perquè podria ser que la serie que especifiquem no tingui aquella label i una altre sí i s'hagi afegit ja abans
-    if (!m_allLabels.contains(label))
-    {
-        m_allLabels << label;
-    }
-}
-
-QStringList PatientFillerInput::getLabels() const
-{
-    return m_allLabels;
-}
-
-bool PatientFillerInput::hasAllLabels(QStringList requiredLabelsList) const
-{
-    foreach (const QString &requiredLabel, requiredLabelsList)
-    {
-        if (!getLabels().contains(requiredLabel))
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-void PatientFillerInput::initializeAllLabels()
-{
-    while (!m_allLabels.isEmpty())
-    {
-        m_allLabels.removeFirst();
-    }
-    while (!m_globalLabels.isEmpty())
-    {
-        m_globalLabels.removeFirst();
-    }
-    foreach (Series *key, m_seriesLabels.keys())
-    {
-        m_seriesLabels.remove(key);
-    }
-}
-
 void PatientFillerInput::setDICOMFile(const DICOMTagReader *dicomTagReader)
 {
     if (m_dicomFile)

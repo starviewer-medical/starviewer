@@ -19,7 +19,7 @@
 
 namespace udg {
 
-PatientFillerStep::PatientFillerStep() : m_input(0), m_priority(NormalPriority)
+PatientFillerStep::PatientFillerStep() : m_input(0)
 {
 }
 
@@ -30,11 +30,6 @@ PatientFillerStep::~PatientFillerStep()
 void PatientFillerStep::setInput(PatientFillerInput *input)
 {
     m_input = input;
-}
-
-bool PatientFillerStep::operator<(const PatientFillerStep &patientFillerStep) const
-{
-    return m_priority < patientFillerStep.getPriority();
 }
 
 bool PatientFillerStep::isImageSeries(Series *series)

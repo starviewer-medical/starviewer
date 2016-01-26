@@ -27,9 +27,6 @@ class Series;
   */
 class PatientFillerStep {
 public:
-    /// Flags que defineixen les diferents prioritats que poden tenir els Steps
-    enum PriorityFlags{ LowPriority = 2, NormalPriority = 1, HighPriority = 0 };
-
     PatientFillerStep();
 
     virtual ~PatientFillerStep();
@@ -37,18 +34,6 @@ public:
     /// Li assignem les dades d'entrada que li caldrà processar. Aquestes dades seran proporcionades per una classe externa.
     /// Es presuposa que aquest input mai serà NUL.
     void setInput(PatientFillerInput *input);
-
-    /// Retorna la llista d'etiquetes que s'han de complir per poder processar aquest step.
-    QStringList getRequiredLabels() const
-    {
-        return m_requiredLabelsList;
-    }
-
-    /// Retorna la prioritat que té assignada
-    PriorityFlags getPriority() const
-    {
-        return m_priority;
-    }
 
     /// Donat l'input, omple la part de l'estructura Patient que li pertoca a l'step. Si no és capaç de tractar el
     /// que li toca retorna fals, true altrament. S'ha d'utilitzar passant els steps individualment fitxer a fitxer.
@@ -61,9 +46,6 @@ public:
     /// Retorna el nom del Filler Step. Aquest no serà mai visible per l'usuari però ajuda a l'hora de debugar el sistema.
     virtual QString name() = 0;
 
-    /// Operador que serveix per saber, de dos PatientFillerSteps, quin és el que té una prioritat més gran
-    bool operator<(const PatientFillerStep &patientFillerStep) const;
-
 protected:
     /// Mètodes de conveniència
     /// Ens diu si aquella sèrie és d'imatges, kin's o presentation states
@@ -74,13 +56,6 @@ protected:
 protected:
     /// L'input a tractar
     PatientFillerInput *m_input;
-
-    /// Llista d'etiquetes necessàries per poder processar aquest step.
-    QStringList m_requiredLabelsList;
-
-    /// Prioritat de l'step. Per defecte tindrem prioritat normal en tots els steps, excepte en aquells que es defineixi
-    /// alguna prioritat diferent.
-    PriorityFlags m_priority;
 
 };
 
