@@ -77,7 +77,7 @@ void PatientFiller::registerSteps()
     //m_registeredSteps.append(new PresentationStateFillerStep());
 }
 
-void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
+void PatientFiller::processDICOMFile(const DICOMTagReader *dicomTagReader)
 {
     Q_ASSERT(dicomTagReader);
 

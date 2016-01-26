@@ -169,7 +169,7 @@ void PatientFillerInput::initializeAllLabels()
     }
 }
 
-void PatientFillerInput::setDICOMFile(DICOMTagReader *dicomTagReader)
+void PatientFillerInput::setDICOMFile(const DICOMTagReader *dicomTagReader)
 {
     if (m_dicomFile)
     {
@@ -179,7 +179,7 @@ void PatientFillerInput::setDICOMFile(DICOMTagReader *dicomTagReader)
     m_dicomFile = dicomTagReader;
 }
 
-DICOMTagReader* PatientFillerInput::getDICOMFile()
+const DICOMTagReader* PatientFillerInput::getDICOMFile()
 {
     return m_dicomFile;
 }

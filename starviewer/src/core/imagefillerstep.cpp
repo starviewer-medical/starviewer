@@ -51,7 +51,7 @@ bool ImageFillerStep::fillIndividually()
 
     bool ok = false;
 
-    DICOMTagReader *dicomReader = m_input->getDICOMFile();
+    const DICOMTagReader *dicomReader = m_input->getDICOMFile();
 
     if (dicomReader)
     {
@@ -67,7 +67,7 @@ bool ImageFillerStep::fillIndividually()
     return ok;
 }
 
-QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
+QList<Image*> ImageFillerStep::processDICOMFile(const DICOMTagReader *dicomReader)
 {
     Q_ASSERT(dicomReader);
 
@@ -156,7 +156,7 @@ QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
     return generatedImages;
 }
 
-void ImageFillerStep::saveThumbnail(DICOMTagReader *dicomReader)
+void ImageFillerStep::saveThumbnail(const DICOMTagReader *dicomReader)
 {
     Q_ASSERT(dicomReader);
 
@@ -174,7 +174,7 @@ void ImageFillerStep::saveThumbnail(DICOMTagReader *dicomReader)
     }
 }
 
-bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *dicomReader)
+bool ImageFillerStep::fillCommonImageInformation(Image *image, const DICOMTagReader *dicomReader)
 {
     Q_ASSERT(image);
     Q_ASSERT(dicomReader);
@@ -220,7 +220,7 @@ bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *d
     return true;
 }
 
-bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
+bool ImageFillerStep::processImage(Image *image, const DICOMTagReader *dicomReader)
 {
     Q_ASSERT(image);
     Q_ASSERT(dicomReader);
@@ -477,7 +477,7 @@ bool ImageFillerStep::processImage(Image *image, DICOMTagReader *dicomReader)
     return ok;
 }
 
-QList<Image*> ImageFillerStep::processEnhancedDICOMFile(DICOMTagReader *dicomReader)
+QList<Image*> ImageFillerStep::processEnhancedDICOMFile(const DICOMTagReader *dicomReader)
 {
     Q_ASSERT(dicomReader);
 
@@ -983,7 +983,7 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
     }
 }
 
-unsigned short ImageFillerStep::getNumberOfOverlays(DICOMTagReader *dicomReader)
+unsigned short ImageFillerStep::getNumberOfOverlays(const DICOMTagReader *dicomReader)
 {
     Q_ASSERT(dicomReader);
 
@@ -1181,7 +1181,7 @@ void ImageFillerStep::fillDisplayShutterInformation(Image *image, DICOMSequenceI
     }
 }
 
-void ImageFillerStep::fillDisplayShutterInformation(Image *image, DICOMTagReader *dicomReader)
+void ImageFillerStep::fillDisplayShutterInformation(Image *image, const DICOMTagReader *dicomReader)
 {
     Q_ASSERT(image);
     Q_ASSERT(dicomReader);
@@ -1223,7 +1223,7 @@ void ImageFillerStep::fillDisplayShutterInformation(Image *image, DICOMTagReader
     }
 }
 
-void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomReader)
+void ImageFillerStep::computePixelSpacing(Image *image, const DICOMTagReader *dicomReader)
 {
     Q_ASSERT(image);
     Q_ASSERT(dicomReader);
@@ -1323,7 +1323,7 @@ void ImageFillerStep::computePixelSpacing(Image *image, DICOMTagReader *dicomRea
     validateAndSetSpacingAttribute(image, imagerPixelSpacing, DICOMImagerPixelSpacing);
 }
 
-void ImageFillerStep::checkAndSetEstimatedRadiographicMagnificationFactor(Image *image, DICOMTagReader *dicomReader)
+void ImageFillerStep::checkAndSetEstimatedRadiographicMagnificationFactor(Image *image, const DICOMTagReader *dicomReader)
 {
     Q_ASSERT(image);
     Q_ASSERT(dicomReader);

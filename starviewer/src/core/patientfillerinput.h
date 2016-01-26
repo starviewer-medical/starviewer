@@ -77,8 +77,8 @@ public:
     /// S'indica/obté quin serà el DICOMTagReader a processar. Aquest mètode esborrarà l'objecte que es tenia guardat
     /// anteriorment fent que no es pugui utilitzar més: es pren el control absolut de l'objecte.
     /// Per objectes no dicom, cal utilitzar set/getFile(QString)
-    void setDICOMFile(DICOMTagReader *dicomTagReader);
-    DICOMTagReader* getDICOMFile();
+    void setDICOMFile(const DICOMTagReader *dicomTagReader);
+    const DICOMTagReader* getDICOMFile();
 
     /// Assignar/Obtenir la llista d'imatges que s'han de processar.
     void setCurrentImages(const QList<Image*> &images);
@@ -130,7 +130,7 @@ private:
     QMultiMap<Series*, QString> m_seriesLabels;
 
     /// Atribut que s'utilitza per executar els fillers individualment.
-    DICOMTagReader *m_dicomFile;
+    const DICOMTagReader *m_dicomFile;
 
     /// Guarda les imatges que els fillers han de processar.
     QList<Image*> m_currentImages;

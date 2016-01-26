@@ -53,7 +53,7 @@ public slots:
     /// Processem un fitxer DICOM. Ens permet anar passant fitxers un a un i, un cop acabem, cridar el mètode finishDICOMFilesProcess
     /// per obtenir el resultat a partir del signal patientProcessed.
     /// Es presuposa que el fitxer DICOM passat no està buit.
-    void processDICOMFile(DICOMTagReader *dicomTagReader);
+    void processDICOMFile(const DICOMTagReader *dicomTagReader);
 
     /// Indica que ja hem acabat de processar fitxers i ja podem obtenir el resultat final, és a dir, l'estructura Patient omplerta.
     /// Aquesta se'ns dona a partir del signal patientProcessed.
