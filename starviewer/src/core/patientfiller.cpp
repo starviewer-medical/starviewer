@@ -24,6 +24,7 @@
 #include "temporaldimensionfillerstep.h"
 #include "mhdfileclassifierstep.h"
 #include "orderimagesfillerstep.h"
+#include "volumefillerstep.h"
 // TODO encara no hi ha suport a KINs i Presentation States, per tant
 // fins que no tinguem suport i implementem correctament els respectius
 // filler steps no caldrà afegir-los dins del pipeline
@@ -54,7 +55,8 @@ PatientFiller::~PatientFiller()
 
 void PatientFiller::registerSteps()
 {
-    m_registeredSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep() << new OrderImagesFillerStep() << new TemporalDimensionFillerStep();
+    m_registeredSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep() << new VolumeFillerStep() << new OrderImagesFillerStep()
+                      << new TemporalDimensionFillerStep();
 
     // TODO encara no hi ha suport a KINs i Presentation States, per tant
     // fins que no tinguem suport i implementem correctament els respectius
