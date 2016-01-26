@@ -144,7 +144,7 @@ void test_DICOMValueRepresentationConverter::timeToQTime_ShouldReturnExpectedVal
 
     int randomHour = MathTools::randomInt(0, 23);
     int randomMinute = MathTools::randomInt(0, 59);
-    int randomSecond = MathTools::randomInt(0, 60);
+    int randomSecond = MathTools::randomInt(0, 59);
     int randomMicroSecond = MathTools::randomInt(0, 999999);
 
     QString randomHourString = QString("%1").arg(randomHour, 2, 10, QChar('0'));
@@ -155,6 +155,7 @@ void test_DICOMValueRepresentationConverter::timeToQTime_ShouldReturnExpectedVal
     QTest::newRow("2 digits (HH)") << randomHourString << QTime(randomHour, 0);
     QTest::newRow("4 digits (HHMM") << randomHourString + randomMinuteString << QTime(randomHour, randomMinute);
     QTest::newRow("6 digits (HHMMSS)") << randomHourString + randomMinuteString + randomSecondString << QTime(randomHour, randomMinute, randomSecond);
+    QTest::newRow("6 digits (HHMMSS) leap second") << randomHourString + randomMinuteString + "60" << QTime(randomHour, randomMinute, 59);
     
     QString precisionString = "F";
     for (int i = 1; i < 7; ++i)
@@ -194,7 +195,7 @@ void test_DICOMValueRepresentationConverter::timeToQTime_ShouldReturnExpectedVal
     QFETCH(QString, timeString);
     QFETCH(QTime, expectedTime);
     
-    QCOMPARE(expectedTime, DICOMValueRepresentationConverter::timeToQTime(timeString));
+    QCOMPARE(DICOMValueRepresentationConverter::timeToQTime(timeString), expectedTime);
 }
 
 DECLARE_TEST(test_DICOMValueRepresentationConverter)
