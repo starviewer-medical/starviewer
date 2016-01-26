@@ -38,7 +38,6 @@ namespace udg {
 ImageFillerStep::ImageFillerStep()
  : PatientFillerStep()
 {
-    m_requiredLabelsList << "DICOMFileClassifierFillerStep";
 }
 
 ImageFillerStep::~ImageFillerStep()
@@ -60,7 +59,6 @@ bool ImageFillerStep::fillIndividually()
         if (!generatedImages.isEmpty())
         {
             m_input->setCurrentImages(generatedImages);
-            m_input->addLabelToSeries("ImageFillerStep", m_input->getCurrentSeries());
         }
     }
 

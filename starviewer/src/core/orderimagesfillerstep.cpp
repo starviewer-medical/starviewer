@@ -26,8 +26,6 @@ namespace udg {
 OrderImagesFillerStep::OrderImagesFillerStep()
 : PatientFillerStep()
 {
-    m_requiredLabelsList << "ImageFillerStep";
-    m_priority = HighPriority;
 }
 
 OrderImagesFillerStep::~OrderImagesFillerStep()
@@ -162,8 +160,6 @@ bool OrderImagesFillerStep::fillIndividually()
 
         m_acquisitionNumberEvaluation.insert(m_input->getCurrentSeries(), volumeHash);
     }
-
-    m_input->addLabelToSeries("OrderImagesFillerStep", m_input->getCurrentSeries());
 
     return true;
 }

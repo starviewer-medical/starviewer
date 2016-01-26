@@ -25,7 +25,6 @@ namespace udg {
 PresentationStateFillerStep::PresentationStateFillerStep()
  : PatientFillerStep()
 {
-    m_requiredLabelsList << "DICOMFileClassifierFillerStep";
 }
 
 PresentationStateFillerStep::~PresentationStateFillerStep()

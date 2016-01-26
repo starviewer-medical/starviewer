@@ -26,7 +26,6 @@ namespace udg {
 TemporalDimensionFillerStep::TemporalDimensionFillerStep()
 : PatientFillerStep()
 {
-    m_requiredLabelsList << "ImageFillerStep";
 }
 
 TemporalDimensionFillerStep::~TemporalDimensionFillerStep()
@@ -155,8 +154,6 @@ bool TemporalDimensionFillerStep::fillIndividually()
             volumeInfo->numberOfImages++;
         }
     }
-
-    m_input->addLabelToSeries("TemporalDimensionFillerStep", m_input->getCurrentSeries());
 
     return true;
 }
