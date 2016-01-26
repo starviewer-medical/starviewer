@@ -32,13 +32,6 @@ public:
 
     ~KeyImageNoteFillerStep();
 
-    bool fillIndividually()
-    {
-        return false;
-    };
-
-    void postProcessing(){};
-
     QString name()
     {
         return "KeyImageNoteFillerStep";

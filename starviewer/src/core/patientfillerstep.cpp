@@ -32,6 +32,15 @@ void PatientFillerStep::setInput(PatientFillerInput *input)
     m_input = input;
 }
 
+bool PatientFillerStep::fillIndividually()
+{
+    return false;
+}
+
+void PatientFillerStep::postProcessing()
+{
+}
+
 bool PatientFillerStep::isImageSeries(Series *series)
 {
     QStringList supportedModalitiesAsImage = Image::getSupportedModalities();
