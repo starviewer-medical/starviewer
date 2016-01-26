@@ -56,13 +56,6 @@ private:
     /// Mètode específic per processar els arxius que siguin de tipus Enhanced
     QList<Image*> processEnhancedDICOMFile(const DICOMTagReader *dicomReader);
 
-    /// Donat un dicomReader guardem a la cache el corresponent thumbnail.
-    /// La intenció d'aquest mètode és estalviar temps en la càrrega de thumbnails per arxius
-    /// multiframe i enhanced ja que actualment és molt costós perquè hem de carregar tot el volum
-    /// a memòria i aquí podem aprofitar que el dataset està a memòria evitant la càrrega posterior
-    /// Tot i així es pot fer servir en altres casos que es cregui necessari avançar la creació del thumbnail
-    void saveThumbnail(const DICOMTagReader *dicomReader);
-
     /// Omple la informació comú a totes les imatges.
     /// Image i dicomReader han de ser objectes vàlids.
     bool fillCommonImageInformation(Image *image, const DICOMTagReader *dicomReader);
@@ -86,15 +79,6 @@ private:
 
     /// Checks and sets the Estimated Radiographic Magnification Factor tag for the corresponding modalities
     void checkAndSetEstimatedRadiographicMagnificationFactor(Image *image, const DICOMTagReader *dicomReader);
-
-    /// Ens diu si les imatges són de mides diferents
-    bool areOfDifferentSize(Image *firstImage, Image *secondImage);
-
-    /// Ens diu si les imatges tenen photometric interpretations diferents
-    bool areOfDifferentPhotometricInterpretation(Image *firstImage, Image *secondImage);
-
-    /// Ens diu si les imatges tenen pixel spacing diferents
-    bool areOfDifferentPixelSpacing(Image *firstImage, Image *secondImage);
 
     /// Ens diu si el SOP Class UID es correspon amb el d'una imatge enhanced
     bool isEnhancedImageSOPClass(const QString &sopClassUID);

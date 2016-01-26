@@ -23,7 +23,6 @@
 #include "dicomsequenceattribute.h"
 #include "dicomsequenceitem.h"
 #include "dicomvalueattribute.h"
-#include "thumbnailcreator.h"
 #include "patientorientation.h"
 #include "displayshutter.h"
 #include "mathtools.h"
@@ -31,7 +30,6 @@
 #include "dicomvaluerepresentationconverter.h"
 // Pel fabs. Necessari per Mac
 #include <cmath>
-#include <QFileInfo>
 
 namespace udg {
 
@@ -81,16 +79,9 @@ QList<Image*> ImageFillerStep::processDICOMFile(const DICOMTagReader *dicomReade
         else
         {
             int numberOfFrames = 1;
-            int volumeNumber = m_input->getCurrentSingleFrameVolumeNumber();
             if (dicomReader->tagExists(DICOMNumberOfFrames))
             {
                 numberOfFrames = dicomReader->getValueAttributeAsQString(DICOMNumberOfFrames).toInt();
-                // Si és la segona imatge multiframe que ens trobem, augmentarem el número que identifica l'actual volum
-                if (m_input->currentSeriesContainsAMultiframeVolume())
-                {
-                    m_input->increaseCurrentMultiframeVolumeNumber();
-                }
-                volumeNumber = m_input->getCurrentMultiframeVolumeNumber();
             }
 
             for (int frameNumber = 0; frameNumber < numberOfFrames; frameNumber++)
@@ -101,36 +92,6 @@ QList<Image*> ImageFillerStep::processDICOMFile(const DICOMTagReader *dicomReade
 
                 if (processImage(image, dicomReader))
                 {
-                    // Setting volume number
-
-                    // Comprovem si les imatges són de diferents mides per assignar-lis volums diferents
-                    // Això només passarà quan les imatges siguin single-frame
-                    if (numberOfFrames == 1)
-                    {
-                        if (!m_input->getCurrentSeries()->getImages().isEmpty())
-                        {
-                            // Si la imatge anterior i l'actual tenen mides diferents, aniran en un volum diferent
-                            Image *lastProcessedImage = m_input->getCurrentSeries()->getImages().last();
-                            if (areOfDifferentSize(lastProcessedImage, image) || areOfDifferentPhotometricInterpretation(lastProcessedImage, image) 
-                                || areOfDifferentPixelSpacing(lastProcessedImage, image))
-                            {
-                                m_input->increaseCurrentSingleFrameVolumeNumber();
-                                volumeNumber = m_input->getCurrentSingleFrameVolumeNumber();
-                                // Actualitzem el número actual de volum i guardem el corresponent thumbnail
-                                m_input->setCurrentVolumeNumber(volumeNumber);
-                                // HACK Si és la segona imatge de mida diferent, cal generar el propi thumbnail de la imatge anterior
-                                if (volumeNumber == 101)
-                                {
-                                    QString path = QString("%1/thumbnail%2.png").arg(QFileInfo(lastProcessedImage->getPath()).absolutePath()).arg(
-                                                           lastProcessedImage->getVolumeNumberInSeries());
-                                    ThumbnailCreator().getThumbnail(lastProcessedImage).save(path, "PNG");
-                                }
-                                saveThumbnail(dicomReader);
-                            }
-                        }
-                    }
-                    image->setVolumeNumberInSeries(volumeNumber);
-
                     // Afegirem la imatge a la llista si aquesta s'ha pogut afegir a la corresponent sèrie
                     if (m_input->getCurrentSeries()->addImage(image))
                     {
@@ -142,34 +103,9 @@ QList<Image*> ImageFillerStep::processDICOMFile(const DICOMTagReader *dicomReade
                     delete image;
                 }
             }
-            m_input->setCurrentVolumeNumber(volumeNumber);
-        }
-
-        if (generatedImages.count() > 1)
-        {
-            // Com que la imatge és multiframe (tant si és enhanced com si no) creem els corresponents thumbnails i els guardem a la cache
-            saveThumbnail(dicomReader);
         }
     }
     return generatedImages;
-}
-
-void ImageFillerStep::saveThumbnail(const DICOMTagReader *dicomReader)
-{
-    Q_ASSERT(dicomReader);
-
-    int volumeNumber = m_input->getCurrentVolumeNumber();
-    QString thumbnailPath = QFileInfo(dicomReader->getFileName()).absolutePath();
-
-    ThumbnailCreator thumbnailCreator;
-    QImage thumbnail = thumbnailCreator.getThumbnail(dicomReader);
-    thumbnail.save(QString("%1/thumbnail%2.png").arg(thumbnailPath).arg(volumeNumber), "PNG");
-
-    // Si és el primer thumbnail, també creem el thumbnail ordinari que s'havia fet sempre
-    if (volumeNumber == 1)
-    {
-        thumbnail.save(QString("%1/thumbnail.png").arg(thumbnailPath), "PNG");
-    }
 }
 
 bool ImageFillerStep::fillCommonImageInformation(Image *image, const DICOMTagReader *dicomReader)
@@ -485,12 +421,6 @@ QList<Image*> ImageFillerStep::processEnhancedDICOMFile(const DICOMTagReader *di
     if (dicomReader->tagExists(DICOMPixelData))
     {
         int numberOfFrames = dicomReader->getValueAttributeAsQString(DICOMNumberOfFrames).toInt();
-        // Si és la segona imatge enhanced que ens trobem, augmentarem el número que identifica l'actual volum
-        if (m_input->currentSeriesContainsAMultiframeVolume())
-        {
-            m_input->increaseCurrentMultiframeVolumeNumber();
-        }
-        m_input->setCurrentVolumeNumber(m_input->getCurrentMultiframeVolumeNumber());
 
         for (int frameNumber = 0; frameNumber < numberOfFrames; frameNumber++)
         {
@@ -498,7 +428,6 @@ QList<Image*> ImageFillerStep::processEnhancedDICOMFile(const DICOMTagReader *di
             fillCommonImageInformation(image, dicomReader);
             // Li assignem el nº de frame i el nº de volum al que pertany
             image->setFrameNumber(frameNumber);
-            image->setVolumeNumberInSeries(m_input->getCurrentVolumeNumber());
 
             // Afegirem la imatge a la llista si aquesta s'ha pogut afegir a la corresponent sèrie
             if (m_input->getCurrentSeries()->addImage(image))
@@ -1370,33 +1299,6 @@ void ImageFillerStep::checkAndSetEstimatedRadiographicMagnificationFactor(Image 
     {
         image->setEstimatedRadiographicMagnificationFactor(factor.toDouble());
     }
-}
-
-bool ImageFillerStep::areOfDifferentSize(Image *firstImage, Image *secondImage)
-{
-    Q_ASSERT(firstImage);
-    Q_ASSERT(secondImage);
-
-    return firstImage->getColumns() != secondImage->getColumns() || firstImage->getRows() != secondImage->getRows();
-}
-
-bool ImageFillerStep::areOfDifferentPhotometricInterpretation(Image *firstImage, Image *secondImage)
-{
-    Q_ASSERT(firstImage);
-    Q_ASSERT(secondImage);
-
-    return firstImage->getPhotometricInterpretation() != secondImage->getPhotometricInterpretation();
-}
-
-bool ImageFillerStep::areOfDifferentPixelSpacing(Image *firstImage, Image *secondImage)
-{
-    Q_ASSERT(firstImage);
-    Q_ASSERT(secondImage);
-
-    PixelSpacing2D spacing1 = firstImage->getPreferredPixelSpacing();
-    PixelSpacing2D spacing2 = secondImage->getPreferredPixelSpacing();
-    
-    return !spacing1.isEqual(spacing2);
 }
 
 bool ImageFillerStep::isEnhancedImageSOPClass(const QString &sopClassUID)

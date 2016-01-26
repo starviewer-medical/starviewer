@@ -427,7 +427,8 @@ HEADERS += extensionfactory.h \
     qfusionlayoutwidget.h \
     gridicon.h \
     itemmenu.h \
-    easylogging++.h
+    easylogging++.h \
+    volumefillerstep.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -802,7 +803,8 @@ SOURCES += extensionmediator.cpp \
     hangingprotocolfiller.cpp \
     qfusionlayoutwidget.cpp \
     gridicon.cpp \
-    itemmenu.cpp
+    itemmenu.cpp \
+    volumefillerstep.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
