@@ -56,7 +56,7 @@ private:
 
 private:
     /// El lector de tags que anirem fent servir per analitzar les dades
-    DICOMTagReader *m_dicomReader;
+    const DICOMTagReader *m_dicomReader;
 };
 
 }

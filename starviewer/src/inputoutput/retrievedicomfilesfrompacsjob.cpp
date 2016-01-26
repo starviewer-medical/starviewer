@@ -108,7 +108,7 @@ void RetrieveDICOMFilesFromPACSJob::run(ThreadWeaver::JobPointer self, ThreadWea
         connect(m_retrieveDICOMFilesFromPACS, SIGNAL(DICOMFileRetrieved(DICOMTagReader*, int)), this, SLOT(DICOMFileRetrieved(DICOMTagReader*, int)),
                 Qt::DirectConnection);
         // Connectem amb els signals del patientFiller per processar els fitxers descarregats
-        connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader*)), &patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));
+        connect(this, &RetrieveDICOMFilesFromPACSJob::DICOMTagReaderReadyForProcess, &patientFiller, &PatientFiller::processDICOMFile);
         connect(this, SIGNAL(DICOMFilesRetrieveFinished()), &patientFiller, SLOT(finishDICOMFilesProcess()));
         // Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
         // el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan surt

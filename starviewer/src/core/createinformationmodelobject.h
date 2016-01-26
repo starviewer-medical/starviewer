@@ -30,16 +30,16 @@ class CreateInformationModelObject {
 
 public:
     /// Crea un patient a partir d'un DICOMTagReader
-    static Patient* createPatient(DICOMTagReader *dicomTagReader);
+    static Patient* createPatient(const DICOMTagReader *dicomTagReader);
 
     /// Crea un Study a partir d'un DICOMTagReader
-    static Study* createStudy(DICOMTagReader *dicomTagReader);
+    static Study* createStudy(const DICOMTagReader *dicomTagReader);
 
     /// Crea un Series a partir d'un DICOMTagReader
-    static Series* createSeries(DICOMTagReader *dicomTagReader);
+    static Series* createSeries(const DICOMTagReader *dicomTagReader);
 
     /// Crea un Image a partir d'un DICOMTagReader
-    static Image* createImage(DICOMTagReader *dicomTagReader);
+    static Image* createImage(const DICOMTagReader *dicomTagReader);
 
 };
 

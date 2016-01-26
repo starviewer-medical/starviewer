@@ -24,7 +24,7 @@
 
 namespace udg {
 
-Patient* CreateInformationModelObject::createPatient(DICOMTagReader *dicomTagReader)
+Patient* CreateInformationModelObject::createPatient(const DICOMTagReader *dicomTagReader)
 {
     Patient *patient = new Patient;
 
@@ -36,7 +36,7 @@ Patient* CreateInformationModelObject::createPatient(DICOMTagReader *dicomTagRea
     return patient;
 }
 
-Study* CreateInformationModelObject::createStudy(DICOMTagReader *dicomTagReader)
+Study* CreateInformationModelObject::createStudy(const DICOMTagReader *dicomTagReader)
 {
     Study *study = new Study;
     QString studyModalities;
@@ -64,7 +64,7 @@ Study* CreateInformationModelObject::createStudy(DICOMTagReader *dicomTagReader)
     return study;
 }
 
-Series* CreateInformationModelObject::createSeries(DICOMTagReader *dicomTagReader)
+Series* CreateInformationModelObject::createSeries(const DICOMTagReader *dicomTagReader)
 {
     Series *series = new Series;
 
@@ -97,7 +97,7 @@ Series* CreateInformationModelObject::createSeries(DICOMTagReader *dicomTagReade
     return series;
 }
 
-Image* CreateInformationModelObject::createImage(DICOMTagReader *dicomTagReader)
+Image* CreateInformationModelObject::createImage(const DICOMTagReader *dicomTagReader)
 {
     Image *image = new Image();
 
