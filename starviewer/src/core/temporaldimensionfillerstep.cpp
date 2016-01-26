@@ -15,7 +15,6 @@
 #include "temporaldimensionfillerstep.h"
 #include "logging.h"
 #include "patientfillerinput.h"
-#include "dicomtagreader.h"
 #include "patient.h"
 #include "study.h"
 #include "series.h"
@@ -54,6 +53,12 @@ bool TemporalDimensionFillerStep::fillIndividually()
     VolumeInfo *volumeInfo;
     bool volumeInfoInitialized = false;
 
+    QString acquisitionNumber;
+    if (!m_input->getCurrentImages().isEmpty())
+    {
+        acquisitionNumber = m_input->getCurrentImages().first()->getAcquisitionNumber();
+    }
+
     // Obtenim el VolumeInfo. Si no existeix en generem un de nou i l'afegim a l'estructura.
     if (TemporalDimensionInternalInfo.contains(m_input->getCurrentSeries()))
     {
@@ -67,7 +72,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
 
             if (!volumeInfo->multipleAcquisitionNumber)
             {
-                if (volumeInfo->firstAcquisitionNumber != m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber))
+                if (volumeInfo->firstAcquisitionNumber != acquisitionNumber)
                 {
                     volumeInfo->multipleAcquisitionNumber = true;
                 }
@@ -95,7 +100,7 @@ bool TemporalDimensionFillerStep::fillIndividually()
         volumeInfo->numberOfImages = 0;
         volumeInfo->isCTLocalizer = false;
         volumeInfo->firstImagePosition = "";
-        volumeInfo->firstAcquisitionNumber = m_input->getDICOMFile()->getValueAttributeAsQString(DICOMAcquisitionNumber);
+        volumeInfo->firstAcquisitionNumber = acquisitionNumber;
         volumeInfo->multipleAcquisitionNumber = false;
 
         // En el cas del CT ens interessa saber si és localizer

@@ -157,6 +157,11 @@ public:
     QDate getRetrievedDate() const;
     QTime getRetrievedTime() const;
 
+    /// Returns the Acquisition Number (0020,0012).
+    const QString& getAcquisitionNumber() const;
+    /// Sets the Acquisition Number (0020,0012).
+    void setAcquisitionNumber(QString acquisitionNumber);
+
     /// Assignar/Obtenir la descripció del tipus d'imatge
     void setImageType(const QString &imageType);
     QString getImageType() const;
@@ -405,6 +410,10 @@ private:
     /// Data en que la imatge s'ha descarregat a la base de dades local
     QDate m_retrievedDate;
     QTime m_retrieveTime;
+
+    /// Acquisition Number (0020,0012). Type 3 in C.7.6.1 General Image Module (type 1 or 2 in other modules).
+    /// A number identifying the single continuous gathering of data over a period of time that resulted in this image.
+    QString m_acquisitionNumber;
 
     /// Atribut que ens dirà quants overlays té la imatge
     unsigned short m_numberOfOverlays;

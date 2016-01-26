@@ -209,6 +209,8 @@ bool ImageFillerStep::fillCommonImageInformation(Image *image, DICOMTagReader *d
     // C.7.6.16 Multi-Frame Functional Groups Module
     image->setImageTime(dicomReader->getValueAttributeAsQString(DICOMContentTime));
 
+    image->setAcquisitionNumber(std::move(dicomReader->getValueAttributeAsQString(DICOMAcquisitionNumber)));
+
     // C.9 Overlays
     image->setNumberOfOverlays(getNumberOfOverlays(dicomReader));
 
