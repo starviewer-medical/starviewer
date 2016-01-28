@@ -19,7 +19,6 @@
 
 namespace udg {
 
-class DICOMTagReader;
 class Image;
 
 /**
@@ -37,8 +36,6 @@ public:
     virtual QString name() override;
 
 private:
-    void processDICOMFile(const DICOMTagReader *dicomReader);
-
     /// Donat un dicomReader guardem a la cache el corresponent thumbnail.
     /// La intenció d'aquest mètode és estalviar temps en la càrrega de thumbnails per arxius
     /// multiframe i enhanced ja que actualment és molt costós perquè hem de carregar tot el volum
