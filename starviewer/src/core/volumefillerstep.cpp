@@ -14,7 +14,6 @@
 
 #include "volumefillerstep.h"
 
-#include "dicomtagreader.h"
 #include "image.h"
 #include "patientfillerinput.h"
 #include "series.h"
@@ -64,27 +63,12 @@ VolumeFillerStep::VolumeFillerStep()
 
 bool VolumeFillerStep::fillIndividually()
 {
-    if (!m_input->getCurrentImages().isEmpty())
-    {
-        const DICOMTagReader *dicomReader = m_input->getDICOMFile();
-        processDICOMFile(dicomReader);
-    }
-
-    return true;
-}
-
-QString VolumeFillerStep::name()
-{
-    return "VolumeFillerStep";
-}
-
-void VolumeFillerStep::processDICOMFile(const DICOMTagReader *dicomReader)
-{
-    int numberOfFrames = 1;
+    QList<Image*> currentImages = m_input->getCurrentImages();
+    int numberOfFrames = currentImages.size();
     int volumeNumber = m_input->getCurrentSingleFrameVolumeNumber();
-    if (dicomReader->tagExists(DICOMNumberOfFrames))
+
+    if (numberOfFrames > 1)
     {
-        numberOfFrames = dicomReader->getValueAttributeAsQString(DICOMNumberOfFrames).toInt();
         // Si és la segona imatge multiframe que ens trobem, augmentarem el número que identifica l'actual volum
         if (m_input->currentSeriesContainsAMultiframeVolume())
         {
@@ -92,8 +76,6 @@ void VolumeFillerStep::processDICOMFile(const DICOMTagReader *dicomReader)
         }
         volumeNumber = m_input->getCurrentMultiframeVolumeNumber();
     }
-
-    QList<Image*> currentImages = m_input->getCurrentImages();
 
     for (int frameNumber = 0; frameNumber < numberOfFrames; frameNumber++)
     {
@@ -139,6 +121,13 @@ void VolumeFillerStep::processDICOMFile(const DICOMTagReader *dicomReader)
         // Com que la imatge és multiframe (tant si és enhanced com si no) creem els corresponents thumbnails i els guardem a la cache
         saveThumbnail(currentImages.first());
     }
+
+    return true;
+}
+
+QString VolumeFillerStep::name()
+{
+    return "VolumeFillerStep";
 }
 
 void VolumeFillerStep::saveThumbnail(const Image *image)
