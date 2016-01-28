@@ -20,6 +20,7 @@
 namespace udg {
 
 class DICOMTagReader;
+class Image;
 
 /**
  * @brief The VolumeFillerStep class has the responsibility of assigning images to volumes.
@@ -43,7 +44,7 @@ private:
     /// multiframe i enhanced ja que actualment és molt costós perquè hem de carregar tot el volum
     /// a memòria i aquí podem aprofitar que el dataset està a memòria evitant la càrrega posterior
     /// Tot i així es pot fer servir en altres casos que es cregui necessari avançar la creació del thumbnail
-    void saveThumbnail(const DICOMTagReader *dicomReader);
+    void saveThumbnail(const Image *image);
 
 };
 

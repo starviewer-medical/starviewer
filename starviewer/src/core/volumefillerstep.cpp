@@ -126,7 +126,7 @@ void VolumeFillerStep::processDICOMFile(const DICOMTagReader *dicomReader)
                                                lastProcessedImage->getVolumeNumberInSeries());
                         ThumbnailCreator().getThumbnail(lastProcessedImage).save(path, "PNG");
                     }
-                    saveThumbnail(dicomReader);
+                    saveThumbnail(image);
                 }
             }
         }
@@ -137,17 +137,17 @@ void VolumeFillerStep::processDICOMFile(const DICOMTagReader *dicomReader)
     if (currentImages.count() > 1)
     {
         // Com que la imatge és multiframe (tant si és enhanced com si no) creem els corresponents thumbnails i els guardem a la cache
-        saveThumbnail(dicomReader);
+        saveThumbnail(currentImages.first());
     }
 }
 
-void VolumeFillerStep::saveThumbnail(const DICOMTagReader *dicomReader)
+void VolumeFillerStep::saveThumbnail(const Image *image)
 {
     int volumeNumber = m_input->getCurrentVolumeNumber();
-    QString thumbnailPath = QFileInfo(dicomReader->getFileName()).absolutePath();
+    QString thumbnailPath = QFileInfo(image->getPath()).absolutePath();
 
     ThumbnailCreator thumbnailCreator;
-    QImage thumbnail = thumbnailCreator.getThumbnail(dicomReader);
+    QImage thumbnail = thumbnailCreator.getThumbnail(image);
     thumbnail.save(QString("%1/thumbnail%2.png").arg(thumbnailPath).arg(volumeNumber), "PNG");
 
     // Si és el primer thumbnail, també creem el thumbnail ordinari que s'havia fet sempre
