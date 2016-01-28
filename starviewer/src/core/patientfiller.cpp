@@ -17,6 +17,7 @@
 #include "patientfillerinput.h"
 #include "logging.h"
 #include "dicomtagreader.h"
+#include "patient.h"
 
 // TODO Include's temporals mentre no tenim un registre:
 #include "imagefillerstep.h"
@@ -41,11 +42,24 @@ PatientFiller::PatientFiller(DICOMSource dicomSource, QObject *parent)
     m_imageCounter = 0;
 
     m_patientFillerInput->setDICOMSource(dicomSource);
+
+    foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
+    {
+        fillerStep->setInput(m_patientFillerInput);
+    }
+    foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
+    {
+        fillerStep->setInput(m_patientFillerInput);
+    }
 }
 
 PatientFiller::~PatientFiller()
 {
-    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
+    foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
+    {
+        delete fillerStep;
+    }
+    foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
     {
         delete fillerStep;
     }
@@ -55,8 +69,8 @@ PatientFiller::~PatientFiller()
 
 void PatientFiller::registerSteps()
 {
-    m_registeredSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep() << new VolumeFillerStep() << new OrderImagesFillerStep()
-                      << new TemporalDimensionFillerStep();
+    m_firstStageSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep();
+    m_secondStageSteps << new VolumeFillerStep() << new OrderImagesFillerStep() << new TemporalDimensionFillerStep();
 
     // TODO encara no hi ha suport a KINs i Presentation States, per tant
     // fins que no tinguem suport i implementem correctament els respectius
@@ -71,9 +85,8 @@ void PatientFiller::processDICOMFile(const DICOMTagReader *dicomTagReader)
 
     m_patientFillerInput->setDICOMFile(dicomTagReader);
 
-    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
+    foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
     {
-        fillerStep->setInput(m_patientFillerInput);
         fillerStep->fillIndividually();
     }
 
@@ -82,7 +95,25 @@ void PatientFiller::processDICOMFile(const DICOMTagReader *dicomTagReader)
 
 void PatientFiller::finishDICOMFilesProcess()
 {
-    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
+    foreach (Patient *patient, m_patientFillerInput->getPatientsList())
+    {
+        foreach (Series *series, patient->getStudies().first()->getSeries())
+        {
+            m_patientFillerInput->setCurrentSeries(series);
+
+            foreach (const QList<Image*> &currentImages, m_patientFillerInput->getCurrentImagesList())
+            {
+                m_patientFillerInput->setCurrentImages(currentImages, false);
+
+                foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
+                {
+                    fillerStep->fillIndividually();
+                }
+            }
+        }
+    }
+
+    foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
     {
         fillerStep->postProcessing();
     }
@@ -152,14 +183,9 @@ QList<Patient*> PatientFiller::processDICOMFiles(const QStringList &files)
         {
             this->processDICOMFile(dicomTagReader);
         }
-
-        emit progress(++m_imageCounter);
     }
 
-    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
-    {
-        fillerStep->postProcessing();
-    }
+    this->finishDICOMFilesProcess();
 
     return m_patientFillerInput->getPatientsList();
 }

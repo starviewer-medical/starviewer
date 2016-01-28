@@ -85,7 +85,8 @@ private:
 
 private:
     /// Registre d'steps
-    QList<PatientFillerStep*> m_registeredSteps;
+    QList<PatientFillerStep*> m_firstStageSteps;
+    QList<PatientFillerStep*> m_secondStageSteps;
 
     /// S'encarrega de guardar l'input durant tota l'execucció dels mòduls. S'utilitza
     /// en cas que es processin fitxer individualment.
