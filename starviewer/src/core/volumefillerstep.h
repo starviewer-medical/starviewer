@@ -37,7 +37,6 @@ public:
 
 private:
     void processDICOMFile(const DICOMTagReader *dicomReader);
-    void processEnhancedDICOMFile(const DICOMTagReader *dicomReader);
 
     /// Donat un dicomReader guardem a la cache el corresponent thumbnail.
     /// La intenció d'aquest mètode és estalviar temps en la càrrega de thumbnails per arxius
