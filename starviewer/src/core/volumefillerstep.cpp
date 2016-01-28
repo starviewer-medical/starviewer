@@ -87,13 +87,12 @@ bool VolumeFillerStep::fillIndividually()
         // Això només passarà quan les imatges siguin single-frame
         if (numberOfFrames == 1)
         {
-            int imagesInCurrentFile = currentImages.size();
-            int imagesInCurrentSeries = m_input->getCurrentSeries()->getImages().size();
+            int currentImageIndex = m_input->getCurrentSeries()->getImages().indexOf(image);
 
-            if (imagesInCurrentSeries > imagesInCurrentFile)
+            if (currentImageIndex > 0)
             {
                 // Si la imatge anterior i l'actual tenen mides diferents, aniran en un volum diferent
-                Image *lastProcessedImage = m_input->getCurrentSeries()->getImages().at(imagesInCurrentSeries - imagesInCurrentFile - 1);
+                Image *lastProcessedImage = m_input->getCurrentSeries()->getImages().at(currentImageIndex - 1);
                 if (areOfDifferentSize(lastProcessedImage, image) || areOfDifferentPhotometricInterpretation(lastProcessedImage, image)
                     || areOfDifferentPixelSpacing(lastProcessedImage, image))
                 {

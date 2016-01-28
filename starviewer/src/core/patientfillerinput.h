@@ -67,8 +67,9 @@ public:
     const DICOMTagReader* getDICOMFile();
 
     /// Assignar/Obtenir la llista d'imatges que s'han de processar.
-    void setCurrentImages(const QList<Image*> &images);
+    void setCurrentImages(const QList<Image*> &images, bool addToHistory = true);
     QList<Image*> getCurrentImages();
+    QList<QList<Image*>> getCurrentImagesList() const;
 
     /// Afegir / Obtenir la sèrie del fitxer que s'ha de processar.
     void setCurrentSeries(Series *series);
@@ -110,6 +111,8 @@ private:
 
     /// Guarda les imatges que els fillers han de processar.
     QList<Image*> m_currentImages;
+    /// Hash that contains the list of "current images" that have been set for each series.
+    QHash<Series*, QList<QList<Image*>>> m_perSeriesCurrentImagesList;
 
     /// Guardem la sèrie del fitxer que els fillers han de processar. S'utilitza si es vol exectuar els fillers individualment per fitxers.
     Series *m_currentSeries;

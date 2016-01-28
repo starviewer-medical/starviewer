@@ -128,14 +128,24 @@ const DICOMTagReader* PatientFillerInput::getDICOMFile()
     return m_dicomFile;
 }
 
-void PatientFillerInput::setCurrentImages(const QList<Image*> &images)
+void PatientFillerInput::setCurrentImages(const QList<Image*> &images, bool addToHistory)
 {
     m_currentImages = images;
+
+    if (addToHistory)
+    {
+        m_perSeriesCurrentImagesList[m_currentSeries].append(images);
+    }
 }
 
 QList<Image*> PatientFillerInput::getCurrentImages()
 {
     return m_currentImages;
+}
+
+QList<QList<Image*>> PatientFillerInput::getCurrentImagesList() const
+{
+    return m_perSeriesCurrentImagesList[m_currentSeries];
 }
 
 void PatientFillerInput::setCurrentSeries(Series *series)
