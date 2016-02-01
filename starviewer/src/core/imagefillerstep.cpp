@@ -35,6 +35,19 @@
 
 namespace udg {
 
+namespace {
+
+// HACK Hitachi: returns true if the image is from the affected Hitachi scanner
+bool isHitachi(const DICOMTagReader *dicomReader)
+{
+    return dicomReader->getValueAttributeAsQString(DICOMManufacturer) == "Hitachi Medical Corporation"
+        && dicomReader->getValueAttributeAsQString(DICOMInstitutionName) == "ICS"
+        && dicomReader->getValueAttributeAsQString(DICOMStationName) == "HITACHI"
+        && dicomReader->getValueAttributeAsQString(DICOMManufacturerModelName) == "Aperto_Inspire";
+}
+
+}
+
 ImageFillerStep::ImageFillerStep()
  : PatientFillerStep()
 {
@@ -70,6 +83,13 @@ bool ImageFillerStep::fillIndividually()
 QList<Image*> ImageFillerStep::processDICOMFile(DICOMTagReader *dicomReader)
 {
     Q_ASSERT(dicomReader);
+
+    // HACK for Hitachi #2112
+    if (isHitachi(dicomReader))
+    {
+        INFO_LOG("Hitachi hack");
+        return processDICOMFileHitachi(dicomReader);
+    }
 
     QList<Image*> generatedImages;
     bool ok = dicomReader->tagExists(DICOMPixelData);
@@ -1438,6 +1458,160 @@ bool ImageFillerStep::validateAndSetSpacingAttribute(Image *image, const QString
     }
 
     return ok;
+}
+
+QList<Image*> ImageFillerStep::processDICOMFileHitachi(DICOMTagReader *dicomReader)
+{
+    Q_ASSERT(dicomReader);
+
+    QList<Image*> generatedImages;
+    bool ok = dicomReader->tagExists(DICOMPixelData);
+    if (ok)
+    {
+        // Comprovem si la imatge és enhanced o no per tal de cridar el mètode específic més adient
+        if (isEnhancedImageSOPClass(dicomReader->getValueAttributeAsQString(DICOMSOPClassUID)))
+        {
+            generatedImages = processEnhancedDICOMFileHitachi(dicomReader);
+        }
+        else
+        {
+            int numberOfFrames = 1;
+            int volumeNumber = m_input->getCurrentSingleFrameVolumeNumber();
+            if (dicomReader->tagExists(DICOMNumberOfFrames))
+            {
+                numberOfFrames = dicomReader->getValueAttributeAsQString(DICOMNumberOfFrames).toInt();
+                volumeNumber = m_input->getCurrentMultiframeVolumeNumber();
+            }
+
+            for (int frameNumber = 0; frameNumber < numberOfFrames; frameNumber++)
+            {
+                Image *image = new Image();
+
+                image->setFrameNumber(frameNumber);
+
+                if (processImage(image, dicomReader))
+                {
+                    // Setting volume number
+
+                    // Comprovem si les imatges són de diferents mides per assignar-lis volums diferents
+                    {
+                        if (!m_input->getCurrentSeries()->getImages().isEmpty())
+                        {
+                            // Si la imatge anterior i l'actual tenen mides diferents, aniran en un volum diferent
+                            Image *lastProcessedImage = m_input->getCurrentSeries()->getImages().last();
+                            if (areOfDifferentSize(lastProcessedImage, image) || areOfDifferentPhotometricInterpretation(lastProcessedImage, image)
+                                || areOfDifferentPixelSpacing(lastProcessedImage, image))
+                            {
+                                m_input->increaseCurrentMultiframeVolumeNumber();
+                                volumeNumber = m_input->getCurrentMultiframeVolumeNumber();
+                                // Actualitzem el número actual de volum i guardem el corresponent thumbnail
+                                m_input->setCurrentVolumeNumber(volumeNumber);
+                                // HACK Si és la segona imatge de mida diferent, cal generar el propi thumbnail de la imatge anterior
+                                if (volumeNumber == 2)
+                                {
+                                    QString path = QString("%1/thumbnail%2.png").arg(QFileInfo(lastProcessedImage->getPath()).absolutePath()).arg(
+                                                           lastProcessedImage->getVolumeNumberInSeries());
+                                    ThumbnailCreator().getThumbnail(lastProcessedImage).save(path, "PNG");
+                                }
+                                saveThumbnail(dicomReader);
+                            }
+                        }
+                    }
+                    image->setVolumeNumberInSeries(volumeNumber);
+
+                    // Afegirem la imatge a la llista si aquesta s'ha pogut afegir a la corresponent sèrie
+                    if (m_input->getCurrentSeries()->addImage(image))
+                    {
+                        generatedImages << image;
+                    }
+                }
+                else
+                {
+                    delete image;
+                }
+            }
+            m_input->setCurrentVolumeNumber(volumeNumber);
+        }
+
+        if (generatedImages.count() > 1)
+        {
+            // Com que la imatge és multiframe (tant si és enhanced com si no) creem els corresponents thumbnails i els guardem a la cache
+            saveThumbnail(dicomReader);
+        }
+    }
+    return generatedImages;
+}
+
+QList<Image*> ImageFillerStep::processEnhancedDICOMFileHitachi(DICOMTagReader *dicomReader)
+{
+    Q_ASSERT(dicomReader);
+
+    QList<Image*> generatedImages;
+    // Comprovem si l'arxiu és una imatge, per això caldrà que existeixi el tag PixelData->TODO es podria eliminar perquè ja ho comprovem abans! Falta fer la
+    // comprovació quan llegim fitxer a fitxer
+    if (dicomReader->tagExists(DICOMPixelData))
+    {
+        int numberOfFrames = dicomReader->getValueAttributeAsQString(DICOMNumberOfFrames).toInt();
+        m_input->setCurrentVolumeNumber(m_input->getCurrentMultiframeVolumeNumber());
+
+        for (int frameNumber = 0; frameNumber < numberOfFrames; frameNumber++)
+        {
+            Image *image = new Image();
+            fillCommonImageInformation(image, dicomReader);
+            // Li assignem el nº de frame i el nº de volum al que pertany
+            image->setFrameNumber(frameNumber);
+            image->setVolumeNumberInSeries(m_input->getCurrentVolumeNumber());
+
+            // Afegirem la imatge a la llista si aquesta s'ha pogut afegir a la corresponent sèrie
+            if (m_input->getCurrentSeries()->addImage(image))
+            {
+                generatedImages << image;
+            }
+        }
+
+        // Tractem la Shared Functional Groups Sequence
+        DICOMSequenceAttribute *sharedFunctionalGroupsSequence = dicomReader->getSequenceAttribute(DICOMSharedFunctionalGroupsSequence);
+        if (sharedFunctionalGroupsSequence)
+        {
+            // Aquesta seqüència pot contenir un ítem o cap
+            QList<DICOMSequenceItem*> sharedItems = sharedFunctionalGroupsSequence->getItems();
+            if (!sharedItems.isEmpty())
+            {
+                foreach (Image *image, generatedImages)
+                {
+                    fillFunctionalGroupsInformation(image, sharedItems.first());
+                }
+            }
+        }
+        else
+        {
+            DEBUG_LOG("No hem trobat la Shared Functional Groups Sequence en un arxiu DICOM que es presuposa Enhanced");
+            ERROR_LOG("No hem trobat la Shared Functional Groups Sequence en un arxiu DICOM que es presuposa Enhanced");
+        }
+        // Tractem la Per-Frame Functional Groups Sequence
+        DICOMSequenceAttribute *perFrameFunctionalGroupsSequence = dicomReader->getSequenceAttribute(DICOMPerFrameFunctionalGroupsSequence);
+        if (perFrameFunctionalGroupsSequence)
+        {
+            QList<DICOMSequenceItem*> perFrameItems = perFrameFunctionalGroupsSequence->getItems();
+            int frameNumber = 0;
+            foreach (DICOMSequenceItem *item, perFrameItems)
+            {
+                fillFunctionalGroupsInformation(generatedImages.at(frameNumber), item);
+                frameNumber++;
+            }
+        }
+        else
+        {
+            DEBUG_LOG("No hem trobat la per-frame Functional Groups Sequence en un arxiu DICOM que es presuposa Enhanced");
+            ERROR_LOG("No hem trobat la per-frame Functional Groups Sequence en un arxiu DICOM que es presuposa Enhanced");
+        }
+    }
+    else
+    {
+        DEBUG_LOG("L'arxiu [" + dicomReader->getFileName() + "] no conté el tag PixelData");
+    }
+
+    return generatedImages;
 }
 
 }
