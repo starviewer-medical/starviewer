@@ -55,8 +55,8 @@ void test_VolumeFillerStep::fillIndividually_ShouldReturnExpectedValue_data()
     QTest::addColumn<TestingDICOMTagReader*>("reader");
     QTest::addColumn<bool>("expectedValue");
 
-    QTest::newRow("null reader") << static_cast<TestingDICOMTagReader*>(NULL) << true;
-    QTest::newRow("empty reader") << new TestingDICOMTagReader() << true;
+    QTest::newRow("null reader") << static_cast<TestingDICOMTagReader*>(NULL) << false;
+    QTest::newRow("empty reader") << new TestingDICOMTagReader() << false;
 }
 
 void test_VolumeFillerStep::fillIndividually_ShouldReturnExpectedValue()
@@ -96,7 +96,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             reader->addTag(DICOMRows, 256);
             reader->addTag(DICOMColumns, 256);
             readers.append(reader);
-            volumeNumberInSeries.append(100);
+            volumeNumberInSeries.append(1);
         }
 
         QTest::newRow("10 images same size") << readers << volumeNumberInSeries;
@@ -113,7 +113,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             reader->addTag(DICOMRows, 256);
             reader->addTag(DICOMColumns, 256);
             readers.append(reader);
-            volumeNumberInSeries.append(100);
+            volumeNumberInSeries.append(1);
         }
 
         for (int i = 1; i < 3; i++)
@@ -122,7 +122,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             reader->addTag(DICOMRows, 256);
             reader->addTag(DICOMColumns, 512);
             readers.append(reader);
-            volumeNumberInSeries.append(101);
+            volumeNumberInSeries.append(2);
         }
 
         for (int i = 3; i < 6; i++)
@@ -131,7 +131,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             reader->addTag(DICOMRows, 512);
             reader->addTag(DICOMColumns, 512);
             readers.append(reader);
-            volumeNumberInSeries.append(102);
+            volumeNumberInSeries.append(3);
         }
 
         for (int i = 6; i < 10; i++)
@@ -140,7 +140,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             reader->addTag(DICOMRows, 256);
             reader->addTag(DICOMColumns, 256);
             readers.append(reader);
-            volumeNumberInSeries.append(103);
+            volumeNumberInSeries.append(4);
         }
 
         QTest::newRow("different variations in size") << readers << volumeNumberInSeries;
@@ -170,7 +170,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "MONOCHROME2");
             readers.append(reader);
-            volumeNumberInSeries.append(100);
+            volumeNumberInSeries.append(1);
         }
 
         QTest::newRow("10 MONO") << readers << volumeNumberInSeries;
@@ -186,7 +186,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "MONOCHROME2");
             readers.append(reader);
-            volumeNumberInSeries.append(100);
+            volumeNumberInSeries.append(1);
         }
 
         for (int i = 4; i < 10; i++)
@@ -194,7 +194,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "RGB");
             readers.append(reader);
-            volumeNumberInSeries.append(101);
+            volumeNumberInSeries.append(2);
         }
 
         QTest::newRow("4 MONO + 6 RGB") << readers << volumeNumberInSeries;
@@ -210,7 +210,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "MONOCHROME2");
             readers.append(reader);
-            volumeNumberInSeries.append(100);
+            volumeNumberInSeries.append(1);
         }
 
         for (int i = 4; i < 7; i++)
@@ -218,7 +218,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "RGB");
             readers.append(reader);
-            volumeNumberInSeries.append(101);
+            volumeNumberInSeries.append(2);
         }
 
         for (int i = 7; i < 10; i++)
@@ -226,7 +226,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "MONOCHROME2");
             readers.append(reader);
-            volumeNumberInSeries.append(102);
+            volumeNumberInSeries.append(3);
         }
 
         QTest::newRow("4 MONO + 3 RGB + 3 MONO") << readers << volumeNumberInSeries;
@@ -256,7 +256,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "1\\1");
             readers.append(reader);
-            volumeNumberInSeries.append(100);
+            volumeNumberInSeries.append(1);
         }
 
         QTest::newRow("10 images same spacing") << readers << volumeNumberInSeries;
@@ -272,7 +272,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "1\\1");
             readers.append(reader);
-            volumeNumberInSeries.append(100);
+            volumeNumberInSeries.append(1);
         }
 
         for (int i = 4; i < 10; i++)
@@ -280,7 +280,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "0.5\\0.5");
             readers.append(reader);
-            volumeNumberInSeries.append(101);
+            volumeNumberInSeries.append(2);
         }
 
         QTest::newRow("4 + 6") << readers << volumeNumberInSeries;
@@ -296,7 +296,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "1\\1");
             readers.append(reader);
-            volumeNumberInSeries.append(100);
+            volumeNumberInSeries.append(1);
         }
 
         for (int i = 4; i < 7; i++)
@@ -304,7 +304,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "0.5\\0.5");
             readers.append(reader);
-            volumeNumberInSeries.append(101);
+            volumeNumberInSeries.append(2);
         }
 
         for (int i = 7; i < 10; i++)
@@ -312,7 +312,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "1\\1");
             readers.append(reader);
-            volumeNumberInSeries.append(102);
+            volumeNumberInSeries.append(3);
         }
 
         QTest::newRow("4 + 3 + 3") << readers << volumeNumberInSeries;

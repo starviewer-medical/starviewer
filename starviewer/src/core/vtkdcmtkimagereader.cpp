@@ -401,7 +401,7 @@ void VtkDcmtkImageReader::readExtent(const DICOMTagReader &dicomTagReader)
 
     m_isMultiframe = false;
 
-    if (dicomTagReader.tagExists(DICOMNumberOfFrames))
+    if (this->FileName && dicomTagReader.tagExists(DICOMNumberOfFrames))
     {
         frames = dicomTagReader.getValueAttributeAsQString(DICOMNumberOfFrames).toInt();
         m_isMultiframe = true;
