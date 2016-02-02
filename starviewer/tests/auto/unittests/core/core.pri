@@ -23,7 +23,6 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_displayshutter.cpp \
            $$PWD/test_firewallaccesstest.cpp \
            $$PWD/test_dicomtagreader.cpp \
-           $$PWD/test_patientfillerinput.cpp \
            $$PWD/test_automaticsynchronizationtooldata.cpp \
            $$PWD/test_volumepixeldata.cpp \
            $$PWD/test_drawertext.cpp \

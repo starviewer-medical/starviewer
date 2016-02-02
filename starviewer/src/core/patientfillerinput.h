@@ -75,20 +75,8 @@ public:
     void setCurrentSeries(Series *series);
     Series* getCurrentSeries();
 
-    /// Incrementa el número de volum (multiframe) actual
-    void increaseCurrentMultiframeVolumeNumber();
-
-    /// Retorna el número de volum (multiframe) actual
-    int getCurrentMultiframeVolumeNumber();
-
     /// Returns true if the current series already contains at least one multiframe volume.
-    bool currentSeriesContainsAMultiframeVolume() const;
-
-    /// Incrementa el número de volum (single frame) actual
-    void increaseCurrentSingleFrameVolumeNumber();
-
-    /// Retorna el corresponent número de volum pel conjunt d'imatges single frame actual
-    int getCurrentSingleFrameVolumeNumber();
+    bool currentSeriesContainsMultiframeImages() const;
 
     /// Assigna/Retorna el número de volum actual que estem tractant, necessari pels
     /// passos posteriors a l'ImageFillerStep
@@ -113,18 +101,14 @@ private:
     QList<Image*> m_currentImages;
     /// Hash that contains the list of "current images" that have been set for each series.
     QHash<Series*, QList<QList<Image*>>> m_perSeriesCurrentImagesList;
+    /// Hash that stores for each series whether it contains or not at least one file with more than one frame.
+    QHash<Series*, bool> m_seriesContainsMultiframeImages;
 
     /// Guardem la sèrie del fitxer que els fillers han de processar. S'utilitza si es vol exectuar els fillers individualment per fitxers.
     Series *m_currentSeries;
 
-    /// Guardem el volume number de la sèrie que els fillers han de processar. S'utilitza si es vol exectuar els fillers individualment per fitxers.
-    int m_currentVolumeNumber;
-
-    /// Manté el número actual de volum pel subconjunt de volums multiframe
-    QHash<Series*, int> m_currentMultiframeVolumeNumber;
-
-    /// Manté el número actual de volum pel subconjunt de volums single frame
-    QHash<Series*, int> m_currentSingleFrameVolumeNumber;
+    /// Hash that stores the current volume number for each series.
+    QHash<Series*, int> m_perSeriesCurrentVolumeNumber;
 
     /// Conté el DICOMSource del qual provenen les imatges
     DICOMSource m_imagesDICOMSource;

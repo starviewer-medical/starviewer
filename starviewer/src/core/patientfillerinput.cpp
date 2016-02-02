@@ -19,7 +19,7 @@
 
 namespace udg {
 
-PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentSeries(0), m_currentVolumeNumber(0)
+PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentSeries(0)
 {
 }
 
@@ -135,6 +135,11 @@ void PatientFillerInput::setCurrentImages(const QList<Image*> &images, bool addT
     if (addToHistory)
     {
         m_perSeriesCurrentImagesList[m_currentSeries].append(images);
+
+        if (images.size() > 1)
+        {
+            m_seriesContainsMultiframeImages[m_currentSeries] = true;
+        }
     }
 }
 
@@ -151,6 +156,12 @@ QList<QList<Image*>> PatientFillerInput::getCurrentImagesList() const
 void PatientFillerInput::setCurrentSeries(Series *series)
 {
     m_currentSeries = series;
+
+    if (!m_perSeriesCurrentVolumeNumber.contains(series))
+    {
+        m_perSeriesCurrentVolumeNumber[series] = 1;
+        m_seriesContainsMultiframeImages[series] = false;
+    }
 }
 
 Series* PatientFillerInput::getCurrentSeries()
@@ -158,71 +169,19 @@ Series* PatientFillerInput::getCurrentSeries()
     return m_currentSeries;
 }
 
-void PatientFillerInput::increaseCurrentMultiframeVolumeNumber()
+bool PatientFillerInput::currentSeriesContainsMultiframeImages() const
 {
-    if (m_currentSeries)
-    {
-        m_currentMultiframeVolumeNumber.insert(m_currentSeries, getCurrentMultiframeVolumeNumber() + 1);
-    }
-}
-
-int PatientFillerInput::getCurrentMultiframeVolumeNumber()
-{
-    if (m_currentSeries)
-    {
-        // Insert default value if it doesn't exist
-        if (!m_currentMultiframeVolumeNumber.contains(m_currentSeries))
-        {
-            m_currentMultiframeVolumeNumber[m_currentSeries] = 1;
-        }
-
-        return m_currentMultiframeVolumeNumber[m_currentSeries];
-    }
-    else
-    {
-        return -1;
-    }
-}
-
-bool PatientFillerInput::currentSeriesContainsAMultiframeVolume() const
-{
-    return m_currentMultiframeVolumeNumber.contains(m_currentSeries);
-}
-
-void PatientFillerInput::increaseCurrentSingleFrameVolumeNumber()
-{
-    if (m_currentSeries)
-    {
-        m_currentSingleFrameVolumeNumber.insert(m_currentSeries, getCurrentSingleFrameVolumeNumber() + 1);
-    }
-}
-
-int PatientFillerInput::getCurrentSingleFrameVolumeNumber()
-{
-    if (m_currentSeries)
-    {
-        // Insert default value if it doesn't exist
-        if (!m_currentSingleFrameVolumeNumber.contains(m_currentSeries))
-        {
-            m_currentSingleFrameVolumeNumber[m_currentSeries] = 100;
-        }
-
-        return m_currentSingleFrameVolumeNumber[m_currentSeries];
-    }
-    else
-    {
-        return -1;
-    }
+    return m_seriesContainsMultiframeImages[m_currentSeries];
 }
 
 void PatientFillerInput::setCurrentVolumeNumber(int volumeNumber)
 {
-    m_currentVolumeNumber = volumeNumber;
+    m_perSeriesCurrentVolumeNumber[m_currentSeries] = volumeNumber;
 }
 
 int PatientFillerInput::getCurrentVolumeNumber() const
 {
-    return m_currentVolumeNumber;
+    return m_perSeriesCurrentVolumeNumber[m_currentSeries];
 }
 
 void PatientFillerInput::setDICOMSource(const DICOMSource &imagesDICOMSource)
