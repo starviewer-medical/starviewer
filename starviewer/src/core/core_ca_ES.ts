@@ -303,7 +303,7 @@
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="120"/>
         <source>Warning: Sub-operations complete, one or more failures</source>
-        <translation>Avís: S&apos;han completat les suboperacions amb on o més errors</translation>
+        <translation>Avís: S&apos;han completat les suboperacions amb un o més errors</translation>
     </message>
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="124"/>
