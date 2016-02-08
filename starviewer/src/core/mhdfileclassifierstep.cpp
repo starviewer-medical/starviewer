@@ -74,7 +74,7 @@ bool MHDFileClassifierStep::fillIndividually()
     // Abans de res comprovar que l'arxiu no estigui ja classificat
     // comprovem primer que l'arxiu no estigui ja dins de l'estructura, el qual vol dir que ja l'han classificat
     bool found = false;
-    unsigned int i = 0;
+    int i = 0;
     while (i < m_input->getNumberOfPatients() && !found)
     {
         found = m_input->getPatient(i)->hasFile(file);

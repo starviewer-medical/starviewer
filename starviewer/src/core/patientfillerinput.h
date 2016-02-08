@@ -15,103 +15,103 @@
 #ifndef UDGPATIENTFILLERINPUT_H
 #define UDGPATIENTFILLERINPUT_H
 
-#include <QStringList>
-#include <QMultiMap>
-#include <QHash>
-
 #include "dicomsource.h"
+
+#include <QHash>
 
 namespace udg {
 
+class DICOMTagReader;
+class Image;
 class Patient;
 class Series;
-class Image;
-class DICOMTagReader;
 
 /**
-    Classe que encapsula els paràmetres d'input que es faran servir a PatientFiller
-  */
+ * @brief The PatientFillerInput class encapsulates input data used by PatientFiller and its steps.
+ */
 class PatientFillerInput {
+
 public:
     PatientFillerInput();
-
     ~PatientFillerInput();
 
-    /// Afegeix un pacient a la llista
-    void addPatient(Patient *patient);
+    /// Returns the DICOM source of the images.
+    const DICOMSource& getDICOMSource() const;
+    /// Sets the DICOM source of the images.
+    void setDICOMSource(DICOMSource imagesDICOMSource);
 
-    /// Obté un pacient de la llista indexat. Si l'índex supera el nombre de membres de la llista es retorna NUL
-    Patient* getPatient(int index = 0);
-
-    /// Obté un pacient identificat pel seu nom
-    Patient* getPatientByName(QString name);
-
-    /// Obté un pacient identificat pel seu ID
-    Patient* getPatientByID(QString id);
-
-    /// Retorna el nombre de pacients que tenim a la llista
-    unsigned int getNumberOfPatients();
-
-    /// Retorna la llista de Patients que tenim.
-    QList<Patient*> getPatientsList();
-
-    /// Assigna/Obté l'arxiu a tractar. TODO: De moment és independent del setDICOMFile i només té sentit per fitxers
-    /// no DICOM, com els fitxers MHD. Per DICOM cal utilitzar setDICOMFile(DICOMTagReader*).
-    void setFile(QString file);
-    QString getFile() const;
-
-    /// S'indica/obté quin serà el DICOMTagReader a processar. Aquest mètode esborrarà l'objecte que es tenia guardat
-    /// anteriorment fent que no es pugui utilitzar més: es pren el control absolut de l'objecte.
-    /// Per objectes no dicom, cal utilitzar set/getFile(QString)
+    /// Returns the DICOM file that is currently being processed.
+    const DICOMTagReader* getDICOMFile() const;
+    /// Sets the DICOM file that will be processed. PatientFillerInput takes ownership of the DICOMTagReader.
     void setDICOMFile(const DICOMTagReader *dicomTagReader);
-    const DICOMTagReader* getDICOMFile();
 
-    /// Assignar/Obtenir la llista d'imatges que s'han de processar.
-    void setCurrentImages(const QList<Image*> &images, bool addToHistory = true);
-    QList<Image*> getCurrentImages();
-    QList<QList<Image*>> getCurrentImagesList() const;
+    /// Returns the non-DICOM file that is currently being processed.
+    const QString& getFile() const;
+    /// Sets the non-DICOM file that will be processed.
+    void setFile(QString file);
 
-    /// Afegir / Obtenir la sèrie del fitxer que s'ha de processar.
+    /// Adds a patient to the list.
+    void addPatient(Patient *patient);
+    /// Returns the patient at the given position in the list. If the index is out of range, returns null.
+    Patient* getPatient(int index = 0) const;
+    /// Returns the patient with the given id in the list. If no such patient exists, returns null.
+    Patient* getPatientByID(const QString &id) const;
+    /// Returns the number of patients in the list.
+    int getNumberOfPatients() const;
+    /// Returns the list of generated patients.
+    const QList<Patient*>& getPatientList() const;
+
+    /// Returns the series that is currently being processed.
+    Series* getCurrentSeries() const;
+    /// Sets the series that is currently being processed.
     void setCurrentSeries(Series *series);
-    Series* getCurrentSeries();
 
-    /// Returns true if the current series already contains at least one multiframe volume.
+    /// Returns the images generated from the current file.
+    const QList<Image*>& getCurrentImages() const;
+    /// Sets the images generated from the current file. Adds this images to the history except if \a addToHistory is false.
+    void setCurrentImages(const QList<Image*> &images, bool addToHistory = true);
+    /// Returns the history of current images of the current series.
+    QList<QList<Image*>> getCurrentImagesHistory() const;
+
+    /// Returns true if the current series contains at least one multiframe volume.
     bool currentSeriesContainsMultiframeImages() const;
 
-    /// Assigna/Retorna el número de volum actual que estem tractant, necessari pels
-    /// passos posteriors a l'ImageFillerStep
-    void setCurrentVolumeNumber(int volumeNumber);
+    /// Returns the current volume number.
     int getCurrentVolumeNumber() const;
+    /// Sets the current volume number.
+    void setCurrentVolumeNumber(int volumeNumber);
 
-    /// Assigna/Retorna el DICOMSource de les imatges
-    void setDICOMSource(const DICOMSource &imagesDICOMSource);
-    DICOMSource getDICOMSource() const;
+    // Disable copy
+    PatientFillerInput(const PatientFillerInput&) = delete;
+    PatientFillerInput& operator =(const PatientFillerInput&) = delete;
 
 private:
-    /// Llista de pacients a omplir
-    QList<Patient*> m_patientList;
+    /// The DICOM source of the images.
+    DICOMSource m_imagesDICOMSource;
 
-    /// Arxius que cal tractar per omplir la llista de pacients
-    QString m_file;
-
-    /// Atribut que s'utilitza per executar els fillers individualment.
+    /// The DICOM file that is currently being processed.
     const DICOMTagReader *m_dicomFile;
 
-    /// Guarda les imatges que els fillers han de processar.
+    /// The non-DICOM file that is currently being processed.
+    QString m_file;
+
+    /// List of generated patients.
+    QList<Patient*> m_patientList;
+
+    /// The series that is currently being processed.
+    Series *m_currentSeries;
+
+    /// The images generated from the current file.
     QList<Image*> m_currentImages;
-    /// Hash that contains the list of "current images" that have been set for each series.
-    QHash<Series*, QList<QList<Image*>>> m_perSeriesCurrentImagesList;
+    /// History of current images for each series.
+    QHash<Series*, QList<QList<Image*>>> m_perSeriesCurrentImagesHistory;
+
     /// Hash that stores for each series whether it contains or not at least one file with more than one frame.
     QHash<Series*, bool> m_seriesContainsMultiframeImages;
-
-    /// Guardem la sèrie del fitxer que els fillers han de processar. S'utilitza si es vol exectuar els fillers individualment per fitxers.
-    Series *m_currentSeries;
 
     /// Hash that stores the current volume number for each series.
     QHash<Series*, int> m_perSeriesCurrentVolumeNumber;
 
-    /// Conté el DICOMSource del qual provenen les imatges
-    DICOMSource m_imagesDICOMSource;
 };
 
 }
