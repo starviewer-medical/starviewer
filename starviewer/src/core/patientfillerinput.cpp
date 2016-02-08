@@ -13,19 +13,52 @@
  *************************************************************************************/
 
 #include "patientfillerinput.h"
+
+#include "dicomtagreader.h"
 #include "logging.h"
 #include "patient.h"
-#include "dicomtagreader.h"
 
 namespace udg {
 
-PatientFillerInput::PatientFillerInput(): m_dicomFile(0), m_currentSeries(0)
+PatientFillerInput::PatientFillerInput()
+    : m_dicomFile(nullptr), m_currentSeries(nullptr)
 {
 }
 
 PatientFillerInput::~PatientFillerInput()
 {
     delete m_dicomFile;
+}
+
+const DICOMSource& PatientFillerInput::getDICOMSource() const
+{
+    return m_imagesDICOMSource;
+}
+
+void PatientFillerInput::setDICOMSource(DICOMSource imagesDICOMSource)
+{
+    m_imagesDICOMSource = std::move(imagesDICOMSource);
+}
+
+const DICOMTagReader* PatientFillerInput::getDICOMFile() const
+{
+    return m_dicomFile;
+}
+
+void PatientFillerInput::setDICOMFile(const DICOMTagReader *dicomTagReader)
+{
+    delete m_dicomFile;
+    m_dicomFile = dicomTagReader;
+}
+
+const QString& PatientFillerInput::getFile() const
+{
+    return m_file;
+}
+
+void PatientFillerInput::setFile(QString file)
+{
+    m_file = std::move(file);
 }
 
 void PatientFillerInput::addPatient(Patient *patient)
@@ -36,96 +69,66 @@ void PatientFillerInput::addPatient(Patient *patient)
     }
     else
     {
-        DEBUG_LOG("S'ha passat un pacient NUL, per tant no s'ha afegit res a la llista");
+        DEBUG_LOG("Ignoring null patient");
     }
 }
 
-Patient *PatientFillerInput::getPatient(int index)
+Patient* PatientFillerInput::getPatient(int index) const
 {
-    Patient *patient = 0;
-    if (index < m_patientList.size())
+    if (index >= 0 && index < m_patientList.size())
     {
-        patient = m_patientList.at(index);
+        return m_patientList[index];
     }
     else
     {
-        DEBUG_LOG("Índex fora de rang");
+        DEBUG_LOG("Index out of range");
+        return nullptr;
     }
-
-    return patient;
 }
 
-Patient *PatientFillerInput::getPatientByName(QString name)
+Patient* PatientFillerInput::getPatientByID(const QString &id) const
 {
-    bool found = false;
-    int i = 0;
-    Patient *patient = 0;
-
-    while (i < m_patientList.size() && !found)
+    foreach (Patient *patient, m_patientList)
     {
-        if (m_patientList.at(i)->getFullName() == name)
+        if (patient->getID() == id)
         {
-            patient = m_patientList[i];
-            found = true;
+            return patient;
         }
-        i++;
     }
 
-    return patient;
+    return nullptr;
 }
 
-Patient *PatientFillerInput::getPatientByID(QString id)
-{
-    bool found = false;
-    int i = 0;
-    Patient *patient = 0;
-
-    while (i < m_patientList.size() && !found)
-    {
-        if (m_patientList.at(i)->getID() == id)
-        {
-            patient = m_patientList[i];
-            found = true;
-        }
-        i++;
-    }
-
-    return patient;
-}
-
-unsigned int PatientFillerInput::getNumberOfPatients()
+int PatientFillerInput::getNumberOfPatients() const
 {
     return m_patientList.size();
 }
 
-void PatientFillerInput::setFile(QString file)
-{
-    m_file = file;
-}
-
-QList<Patient*> PatientFillerInput::getPatientsList()
+const QList<Patient*>& PatientFillerInput::getPatientList() const
 {
     return m_patientList;
 }
 
-QString PatientFillerInput::getFile() const
+Series* PatientFillerInput::getCurrentSeries() const
 {
-    return m_file;
+    return m_currentSeries;
 }
 
-void PatientFillerInput::setDICOMFile(const DICOMTagReader *dicomTagReader)
+void PatientFillerInput::setCurrentSeries(Series *series)
 {
-    if (m_dicomFile)
+    m_currentSeries = series;
+
+    // If it's a new series
+    if (!m_perSeriesCurrentImagesHistory.contains(series))
     {
-        delete m_dicomFile;
+        m_seriesContainsMultiframeImages[series] = false;
+        m_perSeriesCurrentVolumeNumber[series] = 1;
     }
-
-    m_dicomFile = dicomTagReader;
 }
 
-const DICOMTagReader* PatientFillerInput::getDICOMFile()
+const QList<Image*>& PatientFillerInput::getCurrentImages() const
 {
-    return m_dicomFile;
+    return m_currentImages;
 }
 
 void PatientFillerInput::setCurrentImages(const QList<Image*> &images, bool addToHistory)
@@ -134,7 +137,7 @@ void PatientFillerInput::setCurrentImages(const QList<Image*> &images, bool addT
 
     if (addToHistory)
     {
-        m_perSeriesCurrentImagesList[m_currentSeries].append(images);
+        m_perSeriesCurrentImagesHistory[m_currentSeries].append(images);
 
         if (images.size() > 1)
         {
@@ -143,30 +146,9 @@ void PatientFillerInput::setCurrentImages(const QList<Image*> &images, bool addT
     }
 }
 
-QList<Image*> PatientFillerInput::getCurrentImages()
+QList<QList<Image*>> PatientFillerInput::getCurrentImagesHistory() const
 {
-    return m_currentImages;
-}
-
-QList<QList<Image*>> PatientFillerInput::getCurrentImagesList() const
-{
-    return m_perSeriesCurrentImagesList[m_currentSeries];
-}
-
-void PatientFillerInput::setCurrentSeries(Series *series)
-{
-    m_currentSeries = series;
-
-    if (!m_perSeriesCurrentVolumeNumber.contains(series))
-    {
-        m_perSeriesCurrentVolumeNumber[series] = 1;
-        m_seriesContainsMultiframeImages[series] = false;
-    }
-}
-
-Series* PatientFillerInput::getCurrentSeries()
-{
-    return m_currentSeries;
+    return m_perSeriesCurrentImagesHistory[m_currentSeries];
 }
 
 bool PatientFillerInput::currentSeriesContainsMultiframeImages() const
@@ -174,24 +156,14 @@ bool PatientFillerInput::currentSeriesContainsMultiframeImages() const
     return m_seriesContainsMultiframeImages[m_currentSeries];
 }
 
-void PatientFillerInput::setCurrentVolumeNumber(int volumeNumber)
-{
-    m_perSeriesCurrentVolumeNumber[m_currentSeries] = volumeNumber;
-}
-
 int PatientFillerInput::getCurrentVolumeNumber() const
 {
     return m_perSeriesCurrentVolumeNumber[m_currentSeries];
 }
 
-void PatientFillerInput::setDICOMSource(const DICOMSource &imagesDICOMSource)
+void PatientFillerInput::setCurrentVolumeNumber(int volumeNumber)
 {
-    m_imagesDICOMSource = imagesDICOMSource;
-}
-
-DICOMSource PatientFillerInput::getDICOMSource() const
-{
-    return m_imagesDICOMSource;
+    m_perSeriesCurrentVolumeNumber[m_currentSeries] = volumeNumber;
 }
 
 }

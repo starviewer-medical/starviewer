@@ -95,13 +95,13 @@ void PatientFiller::processDICOMFile(const DICOMTagReader *dicomTagReader)
 
 void PatientFiller::finishDICOMFilesProcess()
 {
-    foreach (Patient *patient, m_patientFillerInput->getPatientsList())
+    foreach (Patient *patient, m_patientFillerInput->getPatientList())
     {
         foreach (Series *series, patient->getStudies().first()->getSeries())
         {
             m_patientFillerInput->setCurrentSeries(series);
 
-            foreach (const QList<Image*> &currentImages, m_patientFillerInput->getCurrentImagesList())
+            foreach (const QList<Image*> &currentImages, m_patientFillerInput->getCurrentImagesHistory())
             {
                 m_patientFillerInput->setCurrentImages(currentImages, false);
 
@@ -169,7 +169,7 @@ QList<Patient*> PatientFiller::processMHDFiles(const QStringList &files)
         emit progress(++m_imageCounter);
     }
 
-    return patientFillerInput.getPatientsList();
+    return patientFillerInput.getPatientList();
 }
 
 QList<Patient*> PatientFiller::processDICOMFiles(const QStringList &files)
@@ -187,7 +187,7 @@ QList<Patient*> PatientFiller::processDICOMFiles(const QStringList &files)
 
     this->finishDICOMFilesProcess();
 
-    return m_patientFillerInput->getPatientsList();
+    return m_patientFillerInput->getPatientList();
 }
 
 }
