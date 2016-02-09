@@ -24,7 +24,6 @@
 
 namespace udg {
     void beginLogging();
-    void endLogging(int returnValue);
     /**
      * Returns the path where the log should be outputted to.
      * @return Log file path

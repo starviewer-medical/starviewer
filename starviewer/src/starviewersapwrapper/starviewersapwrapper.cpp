@@ -72,6 +72,6 @@ int main(int argc, char *argv[])
     INFO_LOG(QString("%1 Version %2 BuildID %3, returnValue %4").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString)
              .arg(udg::StarviewerBuildID).arg(returnValue));
     INFO_LOG("===================================================== END STARVIEWER SAP WRAPPER =====================================================");
-    udg::endLogging(returnValue);
+
     return returnValue;
 }

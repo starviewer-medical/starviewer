@@ -25,11 +25,6 @@ void udg::beginLogging()
     el::Loggers::reconfigureAllLoggers(logConfig);
 }
 
-void udg::endLogging(int returnValue) 
-{
-    //Not used
-}
-
 QString udg::getLogFilePath() 
 {
     return QDir::toNativeSeparators(udg::UserLogsFile);
