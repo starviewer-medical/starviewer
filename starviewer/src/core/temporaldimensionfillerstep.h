@@ -17,6 +17,8 @@
 
 #include "patientfillerstep.h"
 #include <QHash>
+#include <QString>
+
 namespace udg {
 
 class Patient;
@@ -35,11 +37,6 @@ public:
     bool fillIndividually();
 
     void postProcessing();
-
-    QString name()
-    {
-        return "TemporalDimensionFillerStep";
-    }
 
 protected:
     struct VolumeInfo

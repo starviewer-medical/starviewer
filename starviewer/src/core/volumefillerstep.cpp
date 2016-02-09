@@ -116,11 +116,6 @@ bool VolumeFillerStep::fillIndividually()
     return true;
 }
 
-QString VolumeFillerStep::name()
-{
-    return "VolumeFillerStep";
-}
-
 void VolumeFillerStep::saveThumbnail(const Image *image)
 {
     int volumeNumber = m_input->getCurrentVolumeNumber();

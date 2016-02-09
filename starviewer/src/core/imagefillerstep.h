@@ -40,11 +40,6 @@ public:
 
     bool fillIndividually();
 
-    QString name()
-    {
-        return "ImageFillerStep";
-    }
-
 private:
     /// Mètode per processar la informació específica de pacient,series i imatge
     bool processImage(Image *image, const DICOMTagReader *dicomReader);

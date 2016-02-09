@@ -33,8 +33,6 @@ public:
 
     virtual bool fillIndividually() override;
 
-    virtual QString name() override;
-
 private:
     /// Donat un dicomReader guardem a la cache el corresponent thumbnail.
     /// La intenció d'aquest mètode és estalviar temps en la càrrega de thumbnails per arxius
