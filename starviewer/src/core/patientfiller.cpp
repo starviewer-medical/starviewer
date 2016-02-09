@@ -14,34 +14,39 @@
 
 #include "patientfiller.h"
 
-#include "patientfillerinput.h"
-#include "logging.h"
-#include "dicomtagreader.h"
-#include "patient.h"
-
-// TODO Include's temporals mentre no tenim un registre:
-#include "imagefillerstep.h"
 #include "dicomfileclassifierfillerstep.h"
-#include "temporaldimensionfillerstep.h"
+#include "dicomtagreader.h"
+#include "imagefillerstep.h"
+//#include "keyimagenotefillerstep.h"       // future use
+#include "logging.h"
 #include "mhdfileclassifierstep.h"
 #include "orderimagesfillerstep.h"
+#include "patient.h"
+#include "patientfillerinput.h"
+#include "patientfillerstep.h"
+//#include "presentationstatefillerstep.h"  // future use
+#include "temporaldimensionfillerstep.h"
 #include "volumefillerstep.h"
-// TODO encara no hi ha suport a KINs i Presentation States, per tant
-// fins que no tinguem suport i implementem correctament els respectius
-// filler steps no caldrà afegir-los dins del pipeline
-//#include "keyimagenotefillerstep.h"
-//#include "presentationstatefillerstep.h"
 
 namespace udg {
 
-PatientFiller::PatientFiller(DICOMSource dicomSource, QObject *parent)
- : QObject(parent)
-{
-    registerSteps();
-    m_patientFillerInput = new PatientFillerInput();
-    m_imageCounter = 0;
+namespace {
 
-    m_patientFillerInput->setDICOMSource(dicomSource);
+// Returns true if the list contains MHD files and false otherwise. Only the first file is checked.
+bool containsMHDFiles(const QStringList &files)
+{
+    return !files.isEmpty() && files.first().endsWith(".mhd", Qt::CaseInsensitive);
+}
+
+}
+
+PatientFiller::PatientFiller(DICOMSource dicomSource, QObject *parent)
+ : QObject(parent), m_numberOfProcessedFiles(0)
+{
+    createSteps();
+
+    m_patientFillerInput = new PatientFillerInput();
+    m_patientFillerInput->setDICOMSource(std::move(dicomSource));
 
     foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
     {
@@ -67,18 +72,6 @@ PatientFiller::~PatientFiller()
     delete m_patientFillerInput;
 }
 
-void PatientFiller::registerSteps()
-{
-    m_firstStageSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep();
-    m_secondStageSteps << new VolumeFillerStep() << new OrderImagesFillerStep() << new TemporalDimensionFillerStep();
-
-    // TODO encara no hi ha suport a KINs i Presentation States, per tant
-    // fins que no tinguem suport i implementem correctament els respectius
-    // filler steps no caldrà afegir-los dins del pipeline
-    //m_registeredSteps.append(new KeyImageNoteFillerStep());
-    //m_registeredSteps.append(new PresentationStateFillerStep());
-}
-
 void PatientFiller::processDICOMFile(const DICOMTagReader *dicomTagReader)
 {
     Q_ASSERT(dicomTagReader);
@@ -90,7 +83,7 @@ void PatientFiller::processDICOMFile(const DICOMTagReader *dicomTagReader)
         fillerStep->fillIndividually();
     }
 
-    emit progress(++m_imageCounter);
+    emit progress(++m_numberOfProcessedFiles);
 }
 
 void PatientFiller::finishDICOMFilesProcess()
@@ -119,16 +112,10 @@ void PatientFiller::finishDICOMFilesProcess()
     }
 
     emit patientProcessed(m_patientFillerInput->getPatient());
-
-    // Al acabar hem de reiniciar el comptador d'imatges
-    m_imageCounter = 0;
 }
 
 QList<Patient*> PatientFiller::processFiles(const QStringList &files)
 {
-    // HACK per fer el cas especial dels mhd. Això està així perquè perquè el mètode
-    // processDICOMFile s'espera un DICOMTagReader, que no podem crear a partir d'un mhd.
-    // El filler d'mhd realment no s'està utilitzant a dintre del process de fillers com la resta.
     if (containsMHDFiles(files))
     {
         return processMHDFiles(files);
@@ -139,50 +126,39 @@ QList<Patient*> PatientFiller::processFiles(const QStringList &files)
     }
 }
 
-bool PatientFiller::containsMHDFiles(const QStringList &files)
+void PatientFiller::createSteps()
 {
-    if (!files.isEmpty())
-    {
-        return files.first().endsWith(".mhd", Qt::CaseInsensitive);
-    }
-    else
-    {
-        return false;
-    }
+    m_firstStageSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep();
+    m_secondStageSteps << new VolumeFillerStep() << new OrderImagesFillerStep() << new TemporalDimensionFillerStep();
 }
 
 QList<Patient*> PatientFiller::processMHDFiles(const QStringList &files)
 {
-    PatientFillerInput patientFillerInput;
-    m_imageCounter = 0;
+    MHDFileClassifierStep mhdFileClassiferStep;
+    mhdFileClassiferStep.setInput(m_patientFillerInput);
+
     foreach (const QString &file, files)
     {
-        patientFillerInput.setFile(file);
+        m_patientFillerInput->setFile(file);
 
-        MHDFileClassifierStep mhdFileClassiferStep;
-        mhdFileClassiferStep.setInput(&patientFillerInput);
         if (!mhdFileClassiferStep.fillIndividually())
         {
-            DEBUG_LOG("No s'ha pogut processar el fitxer MHD: " + file);
-            ERROR_LOG("No s'ha pogut processar el fitxer MHD: " + file);
+            ERROR_LOG("Can't process MHD file " + file);
         }
-        emit progress(++m_imageCounter);
+
+        emit progress(++m_numberOfProcessedFiles);
     }
 
-    return patientFillerInput.getPatientList();
+    return m_patientFillerInput->getPatientList();
 }
 
 QList<Patient*> PatientFiller::processDICOMFiles(const QStringList &files)
 {
-    m_imageCounter = 0;
-
     foreach (const QString &dicomFile, files)
     {
+        // The DICOMTagReader is deleted by the PatientFillerInput
         DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFile);
-        if (dicomTagReader->canReadFile())
-        {
-            this->processDICOMFile(dicomTagReader);
-        }
+        this->processDICOMFile(dicomTagReader);
     }
 
     this->finishDICOMFilesProcess();
