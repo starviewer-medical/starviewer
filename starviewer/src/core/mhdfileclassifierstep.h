@@ -30,10 +30,6 @@ public:
 
     bool fillIndividually();
 
-    QString name()
-    {
-        return "MHDFileClassifierStep";
-    }
 };
 
 }

@@ -32,11 +32,6 @@ public:
 
     ~KeyImageNoteFillerStep();
 
-    QString name()
-    {
-        return "KeyImageNoteFillerStep";
-    }
-
 private:
     // TODO mètode per implementar
     void processKeyImageNote();

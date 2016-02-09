@@ -32,11 +32,6 @@ public:
 
     ~PresentationStateFillerStep();
 
-    QString name()
-    {
-        return "PresentationStateFillerStep";
-    }
-
 private:
     // TODO mètode per implementar
     void processPresentationState();

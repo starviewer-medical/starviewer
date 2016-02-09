@@ -41,11 +41,6 @@ public:
 
     void postProcessing();
 
-    QString name()
-    {
-        return "OrderImagesFillerStep";
-    }
-
 private:
     /// Mètodes per processar la informació específica de series
     void processImage(Image *image);

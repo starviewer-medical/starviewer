@@ -43,11 +43,6 @@ public:
 
     bool fillIndividually();
 
-    QString name()
-    {
-        return "DICOMFileClassifierFillerStep";
-    }
-
 private:
     /// Classifica l'arxiu que tenim al lector de tags. Presuposa que es treballa amb un lector correcte.
     void classifyFile();
