@@ -4,8 +4,6 @@
 #include <QDir>
 #include <QApplication>
 
-static bool loggingStarted = false;
-
 void udg::beginLogging() 
 {
     // Primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
@@ -25,7 +23,6 @@ void udg::beginLogging()
     #endif
     
     el::Loggers::reconfigureAllLoggers(logConfig);
-    loggingStarted = true;
 }
 
 void udg::endLogging(int returnValue) 
@@ -57,57 +54,35 @@ QString udg::getLogConfFilePath()
 
 void udg::debugLog(const QString &msg, const QString &file, int line, const QString &function) 
 {
-    if (loggingStarted) 
-    {
-        ;
-        LOG(DEBUG) << qPrintable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
-    }
+    LOG(DEBUG) << qPrintable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
 }
 
 void udg::infoLog(const QString &msg, const QString&, int, const QString&) 
 {
-    if (loggingStarted) 
-    {
-        LOG(INFO) << qUtf8Printable(msg);
-    }
+    LOG(INFO) << qUtf8Printable(msg);
 }
 
 void udg::warnLog(const QString &msg, const QString &file, int line, const QString &function) 
 {
-    if (loggingStarted) 
-    {
-        LOG(WARNING) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
-    }
+    LOG(WARNING) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
 }
 
 void udg::errorLog(const QString &msg, const QString &file, int line, const QString &function) 
 {
-    if (loggingStarted) 
-    {
-        LOG(ERROR) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
-    }
+    LOG(ERROR) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
 }
 
 void udg::fatalLog(const QString &msg, const QString &file, int line, const QString &function) 
 {
-    if (loggingStarted) 
-    {
-        LOG(FATAL) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
-    }
+    LOG(FATAL) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
 }
 
 void udg::verboseLog(int vLevel, const QString &msg, const QString&, int, const QString&) 
 {
-    if (loggingStarted) 
-    {
-        VLOG(vLevel) << qUtf8Printable(msg);
-    }
+    VLOG(vLevel) << qUtf8Printable(msg);
 }
 
 void udg::traceLog(const QString &msg, const QString&, int, const QString&) 
 {
-    if (loggingStarted) 
-    {
-        LOG(TRACE) << qUtf8Printable(msg);
-    }
+    LOG(TRACE) << qUtf8Printable(msg);
 }

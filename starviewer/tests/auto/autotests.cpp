@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+// Disable all logs for autotests
+#define ELPP_DISABLE_LOGS
 #include "../../src/core/easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
 
