@@ -49,5 +49,5 @@ win32-msvc2013:QMAKE_CXXFLAGS_RELEASE -= -Zc:strictStrings
 # Definim variable per construir versió lite en temps de compilació
 lite_version:DEFINES += STARVIEWER_LITE
 
-# EasyLogging++ is set to be thread safe.
-DEFINES += ELPP_THREAD_SAFE
+# EasyLogging++ is set to be thread safe and to not have a default log file
+DEFINES += ELPP_THREAD_SAFE ELPP_NO_DEFAULT_LOG_FILE
