@@ -21,7 +21,8 @@ FORMS += qlogviewerbase.ui \
     q2dviewerconfigurationscreenbase.ui \
     qlayoutoptionswidgetbase.ui \
     qnotificationpopupbase.ui \
-    qfusionlayoutwidgetbase.ui
+    qfusionlayoutwidgetbase.ui \
+    qexternalapplicationconfigurationscreenbase.ui
 
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
@@ -428,7 +429,8 @@ HEADERS += extensionfactory.h \
     gridicon.h \
     itemmenu.h \
     easylogging++.h \
-    volumefillerstep.h
+    volumefillerstep.h \
+    qexternalapplicationconfigurationscreen.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -804,7 +806,8 @@ SOURCES += extensionmediator.cpp \
     qfusionlayoutwidget.cpp \
     gridicon.cpp \
     itemmenu.cpp \
-    volumefillerstep.cpp
+    volumefillerstep.cpp \
+    qexternalapplicationconfigurationscreen.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

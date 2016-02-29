@@ -23,6 +23,7 @@
 #include "qdicomdirconfigurationscreen.h"
 #include "q2dviewerconfigurationscreen.h"
 #include "q2dviewerlayoutconfigurationscreen.h"
+#include "qexternalapplicationconfigurationscreen.h"
 #include "starviewerapplication.h"
 
 namespace udg {
@@ -61,6 +62,10 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     // Configuració del programa de gravació
     QDICOMDIRConfigurationScreen *dicomdirScreen = new QDICOMDIRConfigurationScreen(this);
     this->addConfigurationWidget(dicomdirScreen, tr("DICOMDIR"), AdvancedConfiguration);
+
+    // External applications configuration
+    QExternalApplicationConfigurationScreen *externalApplicationScreen = new QExternalApplicationConfigurationScreen(this);
+    this->addConfigurationWidget(externalApplicationScreen, tr("External application"), AdvancedConfiguration);
 
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
 
