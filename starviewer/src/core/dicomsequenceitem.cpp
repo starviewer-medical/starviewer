@@ -51,12 +51,12 @@ bool DICOMSequenceItem::hasAttribute(const DICOMTag &tag) const
     return m_attributeList.contains(tag.getKeyAsQString());
 }
 
-DICOMAttribute* DICOMSequenceItem::getAttribute(const DICOMTag &tag)
+DICOMAttribute* DICOMSequenceItem::getAttribute(const DICOMTag &tag) const
 {
     return m_attributeList.value(tag.getKeyAsQString());
 }
 
-DICOMValueAttribute* DICOMSequenceItem::getValueAttribute(const DICOMTag &tag)
+DICOMValueAttribute* DICOMSequenceItem::getValueAttribute(const DICOMTag &tag) const
 {
     DICOMAttribute *attribute = this->getAttribute(tag);
 
@@ -77,7 +77,19 @@ DICOMValueAttribute* DICOMSequenceItem::getValueAttribute(const DICOMTag &tag)
     }
 }
 
-DICOMSequenceAttribute* DICOMSequenceItem::getSequenceAttribute(const DICOMTag &tag)
+QString DICOMSequenceItem::getValueAttributeAsQString(const DICOMTag &tag) const
+{
+    if (DICOMValueAttribute *attribute = this->getValueAttribute(tag))
+    {
+        return attribute->getValueAsQString();
+    }
+    else
+    {
+        return QString();
+    }
+}
+
+DICOMSequenceAttribute* DICOMSequenceItem::getSequenceAttribute(const DICOMTag &tag) const
 {
     DICOMAttribute *attribute = this->getAttribute(tag);
 
@@ -96,6 +108,23 @@ DICOMSequenceAttribute* DICOMSequenceItem::getSequenceAttribute(const DICOMTag &
     {
         return NULL;
     }
+}
+
+DICOMSequenceItem* DICOMSequenceItem::getFirstSequenceItem(const DICOMTag &tag) const
+{
+    DICOMSequenceAttribute *sequence = getSequenceAttribute(tag);
+
+    if (sequence)
+    {
+        const QList<DICOMSequenceItem*> &items = sequence->getItems();
+
+        if (!items.isEmpty())
+        {
+            return items.first();
+        }
+    }
+
+    return nullptr;
 }
 
 QString DICOMSequenceItem::toString()

@@ -16,33 +16,29 @@
 #define UDGIMAGEFILLERSTEP_H
 
 #include "patientfillerstep.h"
-#include "dicomtag.h"
 
-class QVector3D;
+#include "dicomtag.h"
 
 namespace udg {
 
-class Patient;
-class Series;
-class Image;
-class DICOMTagReader;
 class DICOMSequenceItem;
-class ImageOrientation;
+class DICOMTagReader;
+class Image;
 
 /**
-    Mòdul que s'encarrega d'omplir la informació general d'objectes DICOM que són imatges. Un dels seus requisits és que es tingui l'etiqueta de
-    DICOMClassified i que la Series a tractar sigui d'imatges
-  */
+ * @brief The ImageFillerStep class creates and fills Image objects from DICOM files.
+ */
 class ImageFillerStep : public PatientFillerStep {
+
 public:
     ImageFillerStep();
-    ~ImageFillerStep();
+    virtual ~ImageFillerStep();
 
-    bool fillIndividually();
+    virtual bool fillIndividually() override;
 
 private:
     /// Mètode per processar la informació específica de pacient,series i imatge
-    bool processImage(Image *image, const DICOMTagReader *dicomReader);
+    void processImage(Image *image, const DICOMTagReader *dicomReader);
 
     /// Mètode encarregat de processar el fitxer DICOM per extreure'n el conjunt de les imatges
     /// que el conformen, omplint la informació necessària
@@ -53,7 +49,7 @@ private:
 
     /// Omple la informació comú a totes les imatges.
     /// Image i dicomReader han de ser objectes vàlids.
-    bool fillCommonImageInformation(Image *image, const DICOMTagReader *dicomReader);
+    void fillCommonImageInformation(Image *image, const DICOMTagReader *dicomReader);
 
     /// Omple l'image donat amb la informació dels functional groups continguts en l'ítem proporcionat
     /// Aquest mètode està pensat per fer-se servir amb els ítems obtinguts
@@ -62,10 +58,6 @@ private:
 
     /// Retorna quants overlays hi ha en el dataset proporcionat
     unsigned short getNumberOfOverlays(const DICOMTagReader *dicomReader);
-    
-    /// Afegeix la informació de shutters a la imatge, si n'hi ha
-    void fillDisplayShutterInformation(Image *image, const DICOMTagReader *dicomReader);
-    void fillDisplayShutterInformation(Image *image, DICOMSequenceItem *displayShutterItems);
     
     /// Calcula el pixel spacing i se l'assigna a l'image donada en cas de que aquest es pugui calcular
     /// @param image Image a la que li assignarem el pixel spacing
@@ -82,7 +74,8 @@ private:
     /// If no pixel spacing tag is specified, Pixel Spacing will be used by default
     /// PixelSpacing and ImagerPixelSpacing tags are the only tags supported currently
     /// Returns true on success, false otherwise
-    bool validateAndSetSpacingAttribute(Image *image, const QString &spacing, const DICOMTag &tag = DICOMTag(0x0028, 0x0030));
+    void validateAndSetSpacingAttribute(Image *image, const QString &spacing, const DICOMTag &tag = DICOMTag(0x0028, 0x0030));
+
 };
 
 }
