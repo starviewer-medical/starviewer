@@ -44,15 +44,21 @@ public:
     bool hasAttribute(const DICOMTag &tag) const;
 
     /// Retorna l'atribut associat al tag passat per parametre. Si no disposa d'ell retorna null.
-    DICOMAttribute* getAttribute(const DICOMTag &tag);
+    DICOMAttribute* getAttribute(const DICOMTag &tag) const;
 
     /// Retorna l'atribut associat al tag passat per paràmetre.
     /// Si no disposa d'ell o el tag no és un valor retorna null.
-    DICOMValueAttribute* getValueAttribute(const DICOMTag &tag);
+    DICOMValueAttribute* getValueAttribute(const DICOMTag &tag) const;
+
+    /// Returns the value of the attribute with the given tag. If the attribute is missing, returns a null QString.
+    QString getValueAttributeAsQString(const DICOMTag &tag) const;
 
     /// Retorna l'atribut associat al tag passat per paràmetre.
     /// Si no disposa d'ell o el tag no és un retorna null.
-    DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &tag);
+    DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &tag) const;
+
+    /// Returns the first item of the specified sequence, or null if the sequence does not exist or is empty.
+    DICOMSequenceItem* getFirstSequenceItem(const DICOMTag &tag) const;
 
     /// Retorna el contingut de l'item en forma de text. Útil per analitzar el contingut.
     QString toString();

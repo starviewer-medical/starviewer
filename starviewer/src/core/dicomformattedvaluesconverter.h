@@ -20,6 +20,7 @@
 
 namespace udg {
 
+class PixelSpacing2D;
 class VoiLut;
 class WindowLevel;
 
@@ -41,6 +42,10 @@ public:
 
     /// Given the values of the DICOM tags LUTDescriptor, LUTExplanation and LUTData, constructs and returns a VoiLut object matching these values.
     static VoiLut parseVoiLut(const QString &lutDescriptor, const QString &lutExplanation, const QString &lutData);
+
+    /// Returns pixel spacing constructed from a formatted DICOM string.
+    static PixelSpacing2D parsePixelSpacing(const QString &pixelSpacingString);
+
 };
 
 }
