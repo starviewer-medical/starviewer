@@ -47,6 +47,12 @@
    </item>
    <item row="0" column="0" rowspan="5">
     <widget class="QTableWidget" name="tableWidget">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
      <attribute name="horizontalHeaderVisible">
       <bool>true</bool>
      </attribute>
