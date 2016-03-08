@@ -32,10 +32,12 @@ bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QS
     // Enviem el report
     std::wstring responseBody;
     int responseCode = 0;
+    std::map<std::wstring, std::wstring> files;
+    files[L"upload_file_minidump"] = minidumpPath.toStdWString();
     bool success = google_breakpad::HTTPUpload::SendRequest(url.toStdWString(),
                                                             parameters,
-                                                            minidumpPath.toStdWString(),
-                                                            L"upload_file_minidump",
+                                                            files,
+                                                            0,  // timeout
                                                             &responseBody,
                                                             &responseCode);
     if (success)
