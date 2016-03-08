@@ -693,6 +693,8 @@ void LocalDatabaseManager::deleteSeries(const QString &studyInstanceUID, const Q
 
 void LocalDatabaseManager::deleteOldStudies()
 {
+    m_lastError = Ok;
+
     // If the setting is false don't do anything
     if (!Settings().getValue(InputOutputSettings::DeleteLeastRecentlyUsedStudiesInDaysCriteria).toBool())
     {
