@@ -1,92 +1,101 @@
 #include "autotest.h"
 #include "patientfillerinput.h"
-#include "series.h"
+
+#include "image.h"
+#include "patient.h"
 
 using namespace udg;
 
 class test_PatientFillerInput : public QObject {
-Q_OBJECT
+
+    Q_OBJECT
 
 private slots:
-    void getCurrentSingleFrameVolumeNumber_ShouldReturnErrorWithNullSeries();
-    void increaseCurrentSingleFrameVolumeNumber_ShouldIncreaseCountersSeparately();
+    void addPatient_ShouldAddPatientIfNotNull();
 
-    void getCurrentMultiframeVolumeNumber_ShouldReturnErrorWithNullSeries();
-    void increaseCurrentMultiframeVolumeNumber_ShouldIncreaseCountersSeparately();
+    void getPatient_ShouldReturnNullIfOutOfRange();
+
+    void getPatientByID_ShouldReturnExpectedPatientOrNull();
+
+    void setCurrentImages_ShouldRespectAddToHistoryParameter();
+
+    void setCurrentImages_ShouldProperlyUpdateMultiframeInfo();
+
 };
 
-void test_PatientFillerInput::getCurrentSingleFrameVolumeNumber_ShouldReturnErrorWithNullSeries()
+void test_PatientFillerInput::addPatient_ShouldAddPatientIfNotNull()
 {
-    PatientFillerInput *patientFillerInput = new PatientFillerInput();
+    Patient patient;
+    PatientFillerInput input;
+    input.addPatient(&patient);
 
-    patientFillerInput->setCurrentSeries(NULL);
-    QCOMPARE(patientFillerInput->getCurrentSingleFrameVolumeNumber(), -1);
+    QCOMPARE(input.getNumberOfPatients(), 1);
 
-    delete patientFillerInput;
+    input.addPatient(nullptr);
+
+    QCOMPARE(input.getNumberOfPatients(), 1);
 }
 
-void test_PatientFillerInput::increaseCurrentSingleFrameVolumeNumber_ShouldIncreaseCountersSeparately()
+void test_PatientFillerInput::getPatient_ShouldReturnNullIfOutOfRange()
 {
-    PatientFillerInput *patientFillerInput = new PatientFillerInput();
+    Patient patient;
+    PatientFillerInput input;
+    input.addPatient(&patient);
 
-    patientFillerInput->setCurrentSeries(NULL);
-    QCOMPARE(patientFillerInput->getCurrentSingleFrameVolumeNumber(), -1);
-
-    Series *series1 = new Series();
-    patientFillerInput->setCurrentSeries(series1);
-    QCOMPARE(patientFillerInput->getCurrentSingleFrameVolumeNumber(), 100);
-
-    patientFillerInput->increaseCurrentSingleFrameVolumeNumber();
-
-    Series *series2 = new Series();
-    patientFillerInput->setCurrentSeries(series2);
-    patientFillerInput->increaseCurrentSingleFrameVolumeNumber();
-    patientFillerInput->increaseCurrentSingleFrameVolumeNumber();
-    QCOMPARE(patientFillerInput->getCurrentSingleFrameVolumeNumber(), 102);
-
-    patientFillerInput->setCurrentSeries(series1);
-    QCOMPARE(patientFillerInput->getCurrentSingleFrameVolumeNumber(), 101);
-
-    delete patientFillerInput;
-    delete series1;
-    delete series2;
+    QCOMPARE(input.getPatient(-1), static_cast<Patient*>(nullptr));
+    QCOMPARE(input.getPatient(0), &patient);
+    QCOMPARE(input.getPatient(1), static_cast<Patient*>(nullptr));
 }
 
-void test_PatientFillerInput::getCurrentMultiframeVolumeNumber_ShouldReturnErrorWithNullSeries()
+void test_PatientFillerInput::getPatientByID_ShouldReturnExpectedPatientOrNull()
 {
-    PatientFillerInput *patientFillerInput = new PatientFillerInput();
+    Patient patient;
+    patient.setID("foo");
+    PatientFillerInput input;
+    input.addPatient(&patient);
 
-    patientFillerInput->setCurrentSeries(NULL);
-    QCOMPARE(patientFillerInput->getCurrentMultiframeVolumeNumber(), -1);
-
-    delete patientFillerInput;
+    QCOMPARE(input.getPatientByID("foo"), &patient);
+    QCOMPARE(input.getPatientByID("bar"), static_cast<Patient*>(nullptr));
 }
 
-void test_PatientFillerInput::increaseCurrentMultiframeVolumeNumber_ShouldIncreaseCountersSeparately()
+void test_PatientFillerInput::setCurrentImages_ShouldRespectAddToHistoryParameter()
 {
-    PatientFillerInput *patientFillerInput = new PatientFillerInput();
+    Series series;
+    PatientFillerInput input;
+    input.setCurrentSeries(&series);
+    input.setCurrentImages(QList<Image*>(), false);
 
-    patientFillerInput->setCurrentSeries(NULL);
-    QCOMPARE(patientFillerInput->getCurrentMultiframeVolumeNumber(), -1);
+    QVERIFY(input.getCurrentImagesHistory().isEmpty());
 
-    Series *series1 = new Series();
-    patientFillerInput->setCurrentSeries(series1);
-    QCOMPARE(patientFillerInput->getCurrentMultiframeVolumeNumber(), 1);
+    input.setCurrentImages(QList<Image*>(), true);
 
-    patientFillerInput->increaseCurrentMultiframeVolumeNumber();
+    QVERIFY(!input.getCurrentImagesHistory().isEmpty());
+}
 
-    Series *series2 = new Series();
-    patientFillerInput->setCurrentSeries(series2);
-    patientFillerInput->increaseCurrentMultiframeVolumeNumber();
-    patientFillerInput->increaseCurrentMultiframeVolumeNumber();
-    QCOMPARE(patientFillerInput->getCurrentMultiframeVolumeNumber(), 3);
+void test_PatientFillerInput::setCurrentImages_ShouldProperlyUpdateMultiframeInfo()
+{
+    Series series;
+    Image image;
+    PatientFillerInput input;
+    input.setCurrentSeries(&series);
 
-    patientFillerInput->setCurrentSeries(series1);
-    QCOMPARE(patientFillerInput->getCurrentMultiframeVolumeNumber(), 2);
+    QVERIFY(!input.currentSeriesContainsMultiframeImages());
 
-    delete patientFillerInput;
-    delete series1;
-    delete series2;
+    input.setCurrentImages(QList<Image*>());
+
+    QVERIFY(!input.currentSeriesContainsMultiframeImages());
+
+    input.setCurrentImages(QList<Image*>() << &image);
+
+    QVERIFY(!input.currentSeriesContainsMultiframeImages());
+
+    input.setCurrentImages(QList<Image*>() << &image << &image);
+
+    QVERIFY(input.currentSeriesContainsMultiframeImages());
+
+    input.setCurrentImages(QList<Image*>() << &image);
+
+    QVERIFY(input.currentSeriesContainsMultiframeImages());
 }
 
 DECLARE_TEST(test_PatientFillerInput)

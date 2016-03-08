@@ -34,7 +34,7 @@ public:
     QImage getThumbnail(const Image *image, int resolution = 100);
 
     /// Obté el thumbnail a partir del DICOMTagReader
-    QImage getThumbnail(DICOMTagReader *reader, int resolution = 100);
+    QImage getThumbnail(const DICOMTagReader *reader, int resolution = 100);
 
     /// Crea un thumbnail buit personalitzat amb el text que li donem
     static QImage makeEmptyThumbnailWithCustomText(const QString &text, int resolution = 100);
@@ -44,14 +44,14 @@ private:
     QImage createImageThumbnail(const QString &imageFileName, int resolution);
 
     /// Crea el thumbnail a partir d'un DICOMTagReader
-    QImage createThumbnail(DICOMTagReader *reader, int resolution);
+    QImage createThumbnail(const DICOMTagReader *reader, int resolution);
 
     /// Crea el thumbnail a partir d'una DicomImage
     QImage createThumbnail(DicomImage *dicomImage, int resolution);
 
     /// Comprova que el dataset compleixi els requisitis necessaris per poder fer un thumbnail
     /// Retorna true si és un dataset vàlid, false altrament
-    bool isSuitableForThumbnailCreation(DICOMTagReader *reader) const;
+    bool isSuitableForThumbnailCreation(const DICOMTagReader *reader) const;
 
     /// Converteix la DicomImage a una QImage en format PGM/PPM
     /// depenent si la imatge és monocrom o de color.

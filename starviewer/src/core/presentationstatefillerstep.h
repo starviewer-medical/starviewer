@@ -32,18 +32,6 @@ public:
 
     ~PresentationStateFillerStep();
 
-    bool fillIndividually()
-    {
-        return false;
-    };
-
-    void postProcessing(){};
-
-    QString name()
-    {
-        return "PresentationStateFillerStep";
-    }
-
 private:
     // TODO mètode per implementar
     void processPresentationState();

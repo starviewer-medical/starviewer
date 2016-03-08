@@ -288,7 +288,7 @@ QString DICOMDIRImporter::getDicomdirImagePath(Image *image)
 void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalDatabaseManager *localDatabaseManager, QThread *fillersThread)
 {
     // Connexions entre la descarrega i el processat dels fitxers
-    connect(this, SIGNAL(imageImportedToDisk(DICOMTagReader*)), patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));
+    connect(this, &DICOMDIRImporter::imageImportedToDisk, patientFiller, &PatientFiller::processDICOMFile);
     connect(this, SIGNAL(importFinished()), patientFiller, SLOT(finishDICOMFilesProcess()));
 
     // Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
