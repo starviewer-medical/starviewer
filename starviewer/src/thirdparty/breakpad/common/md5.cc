@@ -17,6 +17,8 @@
 
 #include "common/md5.h"
 
+namespace google_breakpad {
+
 #ifndef WORDS_BIGENDIAN
 #define byteReverse(buf, len)   /* Nothing */
 #else
@@ -56,7 +58,7 @@ void MD5Init(struct MD5Context *ctx)
  * Update context to reflect the concatenation of another buffer full
  * of bytes.
  */
-void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
+void MD5Update(struct MD5Context *ctx, unsigned char const *buf, size_t len)
 {
   u32 t;
 
@@ -142,7 +144,7 @@ void MD5Final(unsigned char digest[16], struct MD5Context *ctx)
   MD5Transform(ctx->buf, (u32 *) ctx->in);
   byteReverse((unsigned char *) ctx->buf, 4);
   memcpy(digest, ctx->buf, 16);
-  memset(ctx, 0, sizeof(ctx));        /* In case it's sensitive */
+  memset(ctx, 0, sizeof(*ctx));        /* In case it's sensitive */
 }
 
 /* The four core functions - F1 is optimized somewhat */
@@ -164,7 +166,7 @@ void MD5Final(unsigned char digest[16], struct MD5Context *ctx)
  */
 static void MD5Transform(u32 buf[4], u32 const in[16])
 {
-  register u32 a, b, c, d;
+  u32 a, b, c, d;
 
   a = buf[0];
   b = buf[1];
@@ -244,3 +246,6 @@ static void MD5Transform(u32 buf[4], u32 const in[16])
   buf[2] += c;
   buf[3] += d;
 }
+
+}  // namespace google_breakpad
+

@@ -40,7 +40,8 @@ TRANSLATIONS += crashreporter_ca_ES.ts \
 INCLUDEPATH += ../thirdparty/breakpad ../core
 
 macx {
-    HEADERS += ../thirdparty/breakpad/common/mac/HTTPMultipartUpload.h
+    HEADERS += ../thirdparty/breakpad/common/mac/HTTPMultipartUpload.h \
+               ../thirdparty/breakpad/common/mac/GTMDefines.h
     OBJECTIVE_SOURCES += crashreportersender_mac.mm \
                          ../thirdparty/breakpad/common/mac/HTTPMultipartUpload.mm
     ICON = ../main/images/starviewer.icns

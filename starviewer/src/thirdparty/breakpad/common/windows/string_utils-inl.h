@@ -30,8 +30,8 @@
 // string_utils-inl.h: Safer string manipulation on Windows, supporting
 // pre-MSVC8 environments.
 
-#ifndef COMMON_WINDOWS_STRING_UTILS_INL_H__
-#define COMMON_WINDOWS_STRING_UTILS_INL_H__
+#ifndef COMMON_WINDOWS_STRING_UTILS_INL_H_
+#define COMMON_WINDOWS_STRING_UTILS_INL_H_
 
 #include <stdarg.h>
 #include <wchar.h>
@@ -87,6 +87,9 @@ class WindowsStringUtils {
   // without setting wcs.
   static bool safe_mbstowcs(const string &mbs, wstring *wcs);
 
+  // The inverse of safe_mbstowcs.
+  static bool safe_wcstombs(const wstring &wcs, string *mbs);
+
   // Returns the base name of a file, e.g. strips off the path.
   static wstring GetBaseName(const wstring &filename);
 
@@ -136,4 +139,4 @@ inline void WindowsStringUtils::safe_wcsncpy(wchar_t *destination,
 
 }  // namespace google_breakpad
 
-#endif  // COMMON_WINDOWS_STRING_UTILS_INL_H__
+#endif  // COMMON_WINDOWS_STRING_UTILS_INL_H_
