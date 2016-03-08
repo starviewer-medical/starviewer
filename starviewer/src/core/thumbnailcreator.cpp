@@ -72,7 +72,7 @@ QImage ThumbnailCreator::getThumbnail(const Image *image, int resolution)
     return createImageThumbnail(image->getPath(), resolution);
 }
 
-QImage ThumbnailCreator::getThumbnail(DICOMTagReader *reader, int resolution)
+QImage ThumbnailCreator::getThumbnail(const DICOMTagReader *reader, int resolution)
 {
     return createThumbnail(reader, resolution);
 }
@@ -97,7 +97,7 @@ QImage ThumbnailCreator::createImageThumbnail(const QString &imageFileName, int 
     return createThumbnail(&reader, resolution);
 }
 
-QImage ThumbnailCreator::createThumbnail(DICOMTagReader *reader, int resolution)
+QImage ThumbnailCreator::createThumbnail(const DICOMTagReader *reader, int resolution)
 {
     QImage thumbnail;
 
@@ -202,7 +202,7 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
     return thumbnail;
 }
 
-bool ThumbnailCreator::isSuitableForThumbnailCreation(DICOMTagReader *reader) const
+bool ThumbnailCreator::isSuitableForThumbnailCreation(const DICOMTagReader *reader) const
 {
     if (!reader)
     {

@@ -15,84 +15,73 @@
 #ifndef UDGPATIENTFILLER_H
 #define UDGPATIENTFILLER_H
 
-#include <QStringList>
-
 #include "dicomsource.h"
 
 namespace udg {
 
+class DICOMTagReader;
+class Patient;
 class PatientFillerInput;
 class PatientFillerStep;
-class Patient;
-class DICOMTagReader;
 
 /**
-    Classe que s'encarrega de "omplir" un Patient a partir de fitxers DICOM. Bàsicament té dos modes d'operació: "asíncron" i "síncron".
-
-    En el mode d'operació asíncron el que podem fer és anar enviant fitxers dicom a processar i, un cop no tenim més fitxers, indiquem que
-    que finalitzi el procés per obtenir el resultat amb finishDICOMFilesProcess. El resultat ens el donarà en el signal
-    patientProcessed(Patient*).
-
-    En canvi, en el mode d'operació síncron, simplement cal cridar el mètode processFiles passant la llista de fitxers que
-    volem processar.
-
-    El mètode asíncron està pensant per poder processar fitxers DICOM un a un a mesura que els anem obtenit en threads diferents, siguent
-    recomenable el mètode síncron en qualsevol altra situació.
-
-    No es poden utilitzar els dos mètodes de processament alhora en el mateix fitxer.
-
-    TODO De moment hi ha la limitiació de que es pressuposa que totes les imatges que se li passen són del mateix pacient.
-  */
+ * @brief The PatientFiller class generates patients, studies, series, images and volumes from a list of DICOM or MHD files.
+ *
+ * Files can be given to it one by one (e.g. as they arrive from PACS) in processDICOMFile() and then call finishDICOMFilesProcess() after the last file.
+ * Alternatively, files can be given to it all at once (e.g. when reading fils from a directory) in processFiles().
+ *
+ * The files are processed by several steps that share a common PatientFillerInput.
+ */
 class PatientFiller : public QObject {
-Q_OBJECT
+
+    Q_OBJECT
+
 public:
     PatientFiller(DICOMSource dicomSource = DICOMSource(), QObject *parent = 0);
-    ~PatientFiller();
+    virtual ~PatientFiller();
 
 public slots:
-    /// Processem un fitxer DICOM. Ens permet anar passant fitxers un a un i, un cop acabem, cridar el mètode finishDICOMFilesProcess
-    /// per obtenir el resultat a partir del signal patientProcessed.
-    /// Es presuposa que el fitxer DICOM passat no està buit.
-    void processDICOMFile(DICOMTagReader *dicomTagReader);
+    /// Processes the given DICOM file. Executes the first stage steps with the file. Emits the progress() signal at the end.
+    void processDICOMFile(const DICOMTagReader *dicomTagReader);
 
-    /// Indica que ja hem acabat de processar fitxers i ja podem obtenir el resultat final, és a dir, l'estructura Patient omplerta.
-    /// Aquesta se'ns dona a partir del signal patientProcessed.
+    /// Executes the second stage steps with all the images generated in the first stage and then executes the post-processing.
+    /// Emits the patientProcessed() signal at the end.
     void finishDICOMFilesProcess();
 
-    /// Processa tots els fitxers que se li passin de cop, retornant la llista d'objectes Patient que es generin.
+    /// Processes the given files executing both stages and post-processing. Returns the generated patients.
     QList<Patient*> processFiles(const QStringList &files);
 
 signals:
-    /// Senyal que s'emet cada vegada que es processa un fitxer indicant quin és dintre del "lot" a processar.
-    void progress(int);
+    /// This signal is emitted each time a file is processed.
+    void progress(int numberOfProcessedFiles);
 
-    /// Senyal que s'emet quan en el mode asíncron s'ha acabat de processar totes les images passades.
+    /// This signal is emitted when finishDICOMFilesProcess() has finished, with the first generated patient.
+    /// \todo If more than one patient was generated, all but the first will be ignored.
     void patientProcessed(Patient *patient);
 
 private:
-    /// S'encarrega de registrar els mòduls/steps que processaran l'input.
-    // TODO Això en un futur ho farà una classe registradora, ara es fa tot aquí per conveniència
-    void registerSteps();
+    /// Creates the steps of the patient filler.
+    void createSteps();
 
-    /// Ens diu si la llista d'arxius conté fitxers mhd
-    bool containsMHDFiles(const QStringList &files);
-
-    /// Processa els arxius assumint que aquests són MHD i ens retorna la pertinent llista de pacients
+    /// Processes the given MHD files and returns the generated patients.
     QList<Patient*> processMHDFiles(const QStringList &files);
 
-    /// Processa els arxius assumint que aquests són DICOM i ens retorna la pertinent llista de pacients
+    /// Processes the given DICOM files and returns the generated patients.
     QList<Patient*> processDICOMFiles(const QStringList &files);
 
 private:
-    /// Registre d'steps
-    QList<PatientFillerStep*> m_registeredSteps;
+    /// Steps that are executed in the first stage of processing.
+    QList<PatientFillerStep*> m_firstStageSteps;
+    /// Steps that are executed in the second stage of processing.
+    QList<PatientFillerStep*> m_secondStageSteps;
 
     /// S'encarrega de guardar l'input durant tota l'execucció dels mòduls. S'utilitza
     /// en cas que es processin fitxer individualment.
     PatientFillerInput *m_patientFillerInput;
 
-    // Contador per saber el núm. d'imatge que estem tractant.
-    int m_imageCounter;
+    /// Counts the number of processed files.
+    int m_numberOfProcessedFiles;
+
 };
 
 }

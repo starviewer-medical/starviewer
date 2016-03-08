@@ -171,6 +171,11 @@ bool DICOMTagReader::tagExists(const DICOMTag &tag) const
     return existsInDataset || existsInHeader;
 }
 
+bool DICOMTagReader::hasAttribute(const DICOMTag &tag) const
+{
+    return tagExists(tag);
+}
+
 QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
 {
     if (!m_dicomData && !m_dicomHeader)
@@ -276,6 +281,23 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
         m_sequencesCache[sequenceTag] = NULL;
         return NULL;
     }
+}
+
+DICOMSequenceItem* DICOMTagReader::getFirstSequenceItem(const DICOMTag &sequenceTag, ReturnValueOfTags returnValueOfTags) const
+{
+    DICOMSequenceAttribute *sequence = getSequenceAttribute(sequenceTag, returnValueOfTags);
+
+    if (sequence)
+    {
+        const QList<DICOMSequenceItem*> &items = sequence->getItems();
+
+        if (!items.isEmpty())
+        {
+            return items.first();
+        }
+    }
+
+    return nullptr;
 }
 
 void DICOMTagReader::initialize()

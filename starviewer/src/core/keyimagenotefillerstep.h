@@ -32,18 +32,6 @@ public:
 
     ~KeyImageNoteFillerStep();
 
-    bool fillIndividually()
-    {
-        return false;
-    };
-
-    void postProcessing(){};
-
-    QString name()
-    {
-        return "KeyImageNoteFillerStep";
-    }
-
 private:
     // TODO mètode per implementar
     void processKeyImageNote();
