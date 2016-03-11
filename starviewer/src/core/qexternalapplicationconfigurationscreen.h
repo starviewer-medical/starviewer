@@ -15,6 +15,8 @@
 #ifndef QEXTERNALAPPLICATIONCONFIGURATIONSCREEN_H
 #define QEXTERNALAPPLICATIONCONFIGURATIONSCREEN_H
 
+#include <QList>
+#include "externalapplication.h"
 #include "ui_qexternalapplicationconfigurationscreenbase.h"
 
 namespace udg {
@@ -30,6 +32,11 @@ Q_OBJECT
 public:
     QExternalApplicationConfigurationScreen(QWidget *parent = 0);
     ~QExternalApplicationConfigurationScreen();
+
+    void setExternalApplications(const QList<ExternalApplication> &externalApplications);
+    QList<ExternalApplication> getExternalApplications() const;
+
+    void addApplication(const ExternalApplication &externalApplication);
 
 private:
     /**
