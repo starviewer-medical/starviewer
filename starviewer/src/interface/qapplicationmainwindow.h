@@ -39,6 +39,7 @@ class QLogViewer;
 class Patient;
 class StatsWatcher;
 class ApplicationVersionChecker;
+class ExternalApplication;
 
 class QApplicationMainWindow : public QMainWindow {
 Q_OBJECT
@@ -93,6 +94,9 @@ private:
     /// Crea el menú per escollir l'idioma de l'aplicació
     void createLanguageMenu();
 
+    /// External applications submenu with the defined external applications.
+    void createExternalApplicationsMenu();
+
     /// Crea una acció per canviar d'idioma passant l'idioma (ex. Catalan) i el locale al que s'ha de canviar (ex. ca_ES)
     QAction* createLanguageAction(const QString &language, const QString &locale);
 
@@ -141,6 +145,9 @@ private slots:
     /// Canvia a l'idioma indicat
     void switchToLanguage(QString locale);
 
+    /// Launches the corresponding external application. (Where the number is the position on the list)
+    void launchExternalApplication(int i);
+
     /// Maximitza a tantes pantalles com es pugui
     void maximizeMultipleScreens();
 
@@ -184,6 +191,7 @@ private:
     QMenu *m_visualizationMenu;
     QMenu *m_windowMenu;
     QMenu *m_languageMenu;
+    QMenu *m_externalApplicationsMenu;
     QMenu *m_helpMenu;
     QMenu *m_toolsMenu;
     QMenu *m_moveWindowToDesktopMenu;
@@ -213,6 +221,9 @@ private:
     QAction *m_runDiagnosisTestsAction;
 
     QLabel *m_betaVersionMenuText;
+
+    /// External applications
+    QList<ExternalApplication> m_externalApplications;
 
     /// Mapeig de signals
     QSignalMapper *m_signalMapper;
