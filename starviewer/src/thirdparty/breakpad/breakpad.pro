@@ -38,12 +38,14 @@ unix {
                google_breakpad/common/minidump_size.h \
                common/linux/linux_libc_support.h \
                common/using_std_string.h \
-               common/memory.h
+               common/memory.h \
+               common/md5.h
 
     SOURCES += common/convert_UTF.c \
                client/minidump_file_writer.cc \
                common/string_conversion.cc \
-               common/linux/linux_libc_support.cc
+               common/linux/linux_libc_support.cc \
+               common/md5.cc
 }
 
 macx {
@@ -104,8 +106,7 @@ win32 {
 
 linux* {
 
-    HEADERS += common/md5.h \
-               client/linux/handler/exception_handler.h \
+    HEADERS += client/linux/handler/exception_handler.h \
                client/linux/handler/minidump_descriptor.h \
                client/linux/handler/microdump_extra_info.h \
                client/linux/crash_generation/crash_generation_client.h \
@@ -141,8 +142,7 @@ linux* {
                third_party/curl/curlrules.h \
                third_party/curl/easy.h \
                third_party/curl/multi.h
-    SOURCES += common/md5.cc \
-               client/linux/handler/exception_handler.cc \
+    SOURCES += client/linux/handler/exception_handler.cc \
                client/linux/handler/minidump_descriptor.cc \
                client/linux/crash_generation/crash_generation_client.cc \
                client/linux/minidump_writer/minidump_writer.cc \
