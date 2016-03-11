@@ -31,6 +31,7 @@
 #include "starviewerapplicationcommandline.h"
 #include "risrequestwrapper.h"
 #include "qaboutdialog.h"
+#include "externalapplication.h"
 
 // Pel LanguageLocale
 #include "coresettings.h"
@@ -408,6 +409,8 @@ void QApplicationMainWindow::createMenus()
     m_toolsMenu = menuBar()->addMenu(tr("&Tools"));
     m_languageMenu = m_toolsMenu->addMenu(tr("&Language"));
     createLanguageMenu();
+    m_externalApplicationsMenu = 0;
+    createExternalApplicationsMenu();
     m_toolsMenu->addAction(m_configurationAction);
     m_toolsMenu->addAction(m_runDiagnosisTestsAction);
 
@@ -460,6 +463,29 @@ void QApplicationMainWindow::createLanguageMenu()
     }
 }
 
+void QApplicationMainWindow::createExternalApplicationsMenu()
+{
+    delete m_externalApplicationsMenu;
+    m_externalApplicationsMenu = m_toolsMenu->addMenu(tr("&External applications"));
+
+    QSignalMapper *signalMapper = new QSignalMapper(m_externalApplicationsMenu);
+    connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(launchExternalApplication(int)));
+
+    QListIterator<ExternalApplication> i(m_externalApplications);
+    int pos = 0;
+    while (i.hasNext()) {
+        const ExternalApplication& extApp = i.next();
+        //TODO: debug to check if what i've said on the comment is true.
+        QAction* action = new QAction(extApp.getName(),0); //When added to a QMenu, that menu becomes the parent.
+        m_externalApplicationsMenu->addAction(action);
+        signalMapper->setMapping(action, pos);
+        connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
+        pos++;
+    }
+
+
+}
+
 QAction* QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
 {
     Settings settings;
@@ -501,6 +527,15 @@ void QApplicationMainWindow::switchToLanguage(QString locale)
     settings.setValue(CoreSettings::LanguageLocale, locale);
 
     QMessageBox::information(this, tr("Language Switch"), tr("Changes will take effect the next time you start the application"));
+}
+
+void QApplicationMainWindow::launchExternalApplication(int i)
+{
+    if (i < 0 && i >= m_externalApplications.size()) {
+        ERROR_LOG("Trying to launch an unexistant external application");
+    }
+    const ExternalApplication& app = m_externalApplications.at(i);
+    app.launch(QHash<QString,QString>());
 }
 
 QApplicationMainWindow* QApplicationMainWindow::setPatientInNewWindow(Patient *patient)
