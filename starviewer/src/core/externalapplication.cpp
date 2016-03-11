@@ -13,6 +13,7 @@
  *************************************************************************************/
 
 #include "externalapplication.h"
+#include "logging.h"
 #include <QDesktopServices>
 #include <QUrl>
 
@@ -82,7 +83,9 @@ QString ExternalApplication::getReplacedUrl(const QHash<QString,QString> &replac
 
 void ExternalApplication::launch(const QHash<QString,QString> &replacements) const
 {
-    QUrl url = QUrl(this->getReplacedUrl(replacements));
+    const QString& replacedUrl = this->getReplacedUrl(replacements);
+    DEBUG_LOG("Opening URL " + replacedUrl);
+    const QUrl& url = QUrl(replacedUrl);
     QDesktopServices::openUrl(url);
 }
 

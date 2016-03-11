@@ -29,6 +29,35 @@ QExternalApplicationConfigurationScreen::~QExternalApplicationConfigurationScree
 
 }
 
+void QExternalApplicationConfigurationScreen::setExternalApplications(const QList<ExternalApplication> &externalApplications)
+{
+    QList<ExternalApplication>::const_iterator it;
+    for (it = externalApplications.constBegin(); it != externalApplications.constEnd(); ++it) {
+        this->addApplication(*it);
+    }
+}
+
+QList<ExternalApplication> QExternalApplicationConfigurationScreen::getExternalApplications() const
+{
+    QList<ExternalApplication> applications;
+    for (int i = 0; i < tableWidget->rowCount(); i++) {
+        QString name = tableWidget->item(i,0)->text();
+        QString url = tableWidget->item(i,1)->text();
+        applications.append(ExternalApplication(name,url));
+    }
+    return applications;
+}
+
+void QExternalApplicationConfigurationScreen::addApplication(const ExternalApplication &externalApplication)
+{
+    QTableWidgetItem* nameWidget = new QTableWidgetItem(externalApplication.getName());
+    QTableWidgetItem* urlWidget = new QTableWidgetItem(externalApplication.getUrl());
+    tableWidget->insertRow(tableWidget->rowCount());
+    tableWidget->setItem(tableWidget->rowCount()-1,0,nameWidget);
+    tableWidget->setItem(tableWidget->rowCount()-1,1,urlWidget);
+    checkGrayeds();
+}
+
 void QExternalApplicationConfigurationScreen::moveItem(int shift)
 {
     //This wants to be understandable code:
@@ -76,12 +105,8 @@ void QExternalApplicationConfigurationScreen::on_btnDown_clicked()
 
 void QExternalApplicationConfigurationScreen::on_btnAdd_clicked() 
 {
-    QTableWidgetItem* nameWidget = new QTableWidgetItem("New application");
-    QTableWidgetItem* urlWidget = new QTableWidgetItem("http://www.starviewer.org");
-    tableWidget->insertRow(tableWidget->rowCount());
-    tableWidget->setItem(tableWidget->rowCount()-1,0,nameWidget);
-    tableWidget->setItem(tableWidget->rowCount()-1,1,urlWidget);
-    checkGrayeds();
+    ExternalApplication newApp("New application", "http://www.starviewer.org");
+    this->addApplication(newApp);
 }
 
 void QExternalApplicationConfigurationScreen::on_btnDelete_clicked() 
