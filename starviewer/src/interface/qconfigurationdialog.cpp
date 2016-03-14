@@ -11,7 +11,7 @@
   may be copied, modified, propagated, or distributed except according to the
   terms contained in the LICENSE file.
  *************************************************************************************/
-
+#include <QCloseEvent>
 #include "qconfigurationdialog.h"
 
 #ifndef STARVIEWER_LITE
@@ -77,6 +77,21 @@ QConfigurationDialog::~QConfigurationDialog()
 {
 }
 
+void QConfigurationDialog::closeEvent(QCloseEvent *event)
+{
+    bool close = true;
+    foreach (QWidget* screen, m_configurationScreenWidgets) {
+        close = close && screen->close();
+    }
+    if (close) {
+        event->accept();
+    }
+    else {
+        event->ignore();
+    }
+
+}
+
 void QConfigurationDialog::setViewAdvancedConfiguration()
 {
     foreach (QListWidgetItem *item, m_configurationListItems.values(AdvancedConfiguration))
@@ -129,6 +144,7 @@ void QConfigurationDialog::addConfigurationWidget(QWidget *widget, const QString
     item->setIcon(widget->windowIcon());
 
     m_configurationListItems.insert(type, item);
+    m_configurationScreenWidgets.append(widget);
 }
 
 }
