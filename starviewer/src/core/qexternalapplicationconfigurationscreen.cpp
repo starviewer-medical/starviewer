@@ -12,8 +12,12 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
+#include <QCloseEvent>
 #include "logging.h"
+#include "coresettings.h"
 #include "qexternalapplicationconfigurationscreen.h"
+#include "externalapplicationsmanager.h"
+
 
 namespace udg {
 
@@ -22,11 +26,12 @@ QExternalApplicationConfigurationScreen::QExternalApplicationConfigurationScreen
 {
     setupUi(this);
     checkGrayeds();
+    this->setExternalApplications(ExternalApplicationsManager::instance()->getApplications());
 }
 
 QExternalApplicationConfigurationScreen::~QExternalApplicationConfigurationScreen()
 {
-
+    this->close();
 }
 
 void QExternalApplicationConfigurationScreen::setExternalApplications(const QList<ExternalApplication> &externalApplications)
@@ -121,6 +126,13 @@ void QExternalApplicationConfigurationScreen::on_btnDelete_clicked()
 void QExternalApplicationConfigurationScreen::on_tableWidget_currentItemChanged(QTableWidgetItem* current, QTableWidgetItem* previous)
 {
      checkGrayeds();
+}
+
+void QExternalApplicationConfigurationScreen::closeEvent(QCloseEvent *event)
+{
+    ExternalApplicationsManager::instance()->setApplications(this->getExternalApplications());
+    event->accept();
+    DEBUG_LOG("CLOSE");
 }
 
 }
