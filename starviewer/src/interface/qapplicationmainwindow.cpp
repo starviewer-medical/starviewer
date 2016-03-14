@@ -32,6 +32,7 @@
 #include "risrequestwrapper.h"
 #include "qaboutdialog.h"
 #include "externalapplication.h"
+#include "externalapplicationsmanager.h"
 
 // Pel LanguageLocale
 #include "coresettings.h"
@@ -411,6 +412,7 @@ void QApplicationMainWindow::createMenus()
     createLanguageMenu();
     m_externalApplicationsMenu = 0;
     createExternalApplicationsMenu();
+    connect(ExternalApplicationsManager::instance(), SIGNAL(onApplicationsChanged()), this, SLOT(createExternalApplicationsMenu()));
     m_toolsMenu->addAction(m_configurationAction);
     m_toolsMenu->addAction(m_runDiagnosisTestsAction);
 
@@ -465,13 +467,14 @@ void QApplicationMainWindow::createLanguageMenu()
 
 void QApplicationMainWindow::createExternalApplicationsMenu()
 {
+    QList<ExternalApplication> externalApplications = ExternalApplicationsManager::instance()->getApplications();
     delete m_externalApplicationsMenu;
     m_externalApplicationsMenu = m_toolsMenu->addMenu(tr("&External applications"));
 
     QSignalMapper *signalMapper = new QSignalMapper(m_externalApplicationsMenu);
     connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(launchExternalApplication(int)));
 
-    QListIterator<ExternalApplication> i(m_externalApplications);
+    QListIterator<ExternalApplication> i(externalApplications);
     int pos = 0;
     while (i.hasNext()) {
         const ExternalApplication& extApp = i.next();
@@ -531,10 +534,11 @@ void QApplicationMainWindow::switchToLanguage(QString locale)
 
 void QApplicationMainWindow::launchExternalApplication(int i)
 {
-    if (i < 0 && i >= m_externalApplications.size()) {
+    QList<ExternalApplication> externalApplications = ExternalApplicationsManager::instance()->getApplications();
+    if (i < 0 && i >= externalApplications.size()) {
         ERROR_LOG("Trying to launch an unexistant external application");
     }
-    const ExternalApplication& app = m_externalApplications.at(i);
+    const ExternalApplication& app = externalApplications.at(i);
     app.launch(QHash<QString,QString>());
 }
 

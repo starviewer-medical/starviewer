@@ -15,9 +15,9 @@
 #ifndef QEXTERNALAPPLICATIONCONFIGURATIONSCREEN_H
 #define QEXTERNALAPPLICATIONCONFIGURATIONSCREEN_H
 
+#include "ui_qexternalapplicationconfigurationscreenbase.h"
 #include <QList>
 #include "externalapplication.h"
-#include "ui_qexternalapplicationconfigurationscreenbase.h"
 
 namespace udg {
 
@@ -30,13 +30,38 @@ namespace udg {
 class QExternalApplicationConfigurationScreen : public QWidget, private Ui::QExternalApplicationConfigurationScreenBase {
 Q_OBJECT
 public:
+    /**
+     * @brief Constructs the GUI and fills the list.
+     * The constructor retrieves the information from the settings and fills the GUI list automatically using the setExternalApplications method.
+     * @param parent
+     */
     QExternalApplicationConfigurationScreen(QWidget *parent = 0);
     ~QExternalApplicationConfigurationScreen();
 
+    /**
+     * @brief Use it to show the applications
+     * @param externalApplications List of external applications to show on the list.
+     */
     void setExternalApplications(const QList<ExternalApplication> &externalApplications);
+    /**
+     * @brief Generates the list of the external applications edited by the user.
+     * @return List of the applications on the GUI list.
+     */
     QList<ExternalApplication> getExternalApplications() const;
 
+    /**
+     * @brief Adds applications to the GUI application list.
+     * @param externalApplication Application to add.
+     */
     void addApplication(const ExternalApplication &externalApplication);
+
+protected:
+    /**
+     * @brief On close the configuration is saved.
+     * Make sure that you call the close() function before destroying this class.
+     * @param event
+     */
+    void closeEvent(QCloseEvent *event);
 
 private:
     /**
