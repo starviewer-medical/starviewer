@@ -50,6 +50,7 @@ linux* {
     HEADERS += ../thirdparty/breakpad/common/linux/http_upload.h
     SOURCES += crashreportersender_linux.cpp \
                ../thirdparty/breakpad/common/linux/http_upload.cc
+    LIBS += -ldl
 }
 win32 {
     HEADERS += ../thirdparty/breakpad/common/windows/http_upload.h
