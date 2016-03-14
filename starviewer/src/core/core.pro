@@ -431,7 +431,8 @@ HEADERS += extensionfactory.h \
     easylogging++.h \
     volumefillerstep.h \
     qexternalapplicationconfigurationscreen.h \
-    externalapplication.h
+    externalapplication.h \
+    externalapplicationsmanager.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -809,7 +810,8 @@ SOURCES += extensionmediator.cpp \
     itemmenu.cpp \
     volumefillerstep.cpp \
     qexternalapplicationconfigurationscreen.cpp \
-    externalapplication.cpp
+    externalapplication.cpp \
+    externalapplicationsmanager.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
