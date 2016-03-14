@@ -94,9 +94,6 @@ private:
     /// Crea el menú per escollir l'idioma de l'aplicació
     void createLanguageMenu();
 
-    /// External applications submenu with the defined external applications.
-    void createExternalApplicationsMenu();
-
     /// Crea una acció per canviar d'idioma passant l'idioma (ex. Catalan) i el locale al que s'ha de canviar (ex. ca_ES)
     QAction* createLanguageAction(const QString &language, const QString &locale);
 
@@ -179,6 +176,12 @@ private slots:
     /// Mostra el diàleg que executa els diagnosis test
     void showDiagnosisTestDialog();
 
+    /**
+     * @brief External applications submenu with the defined external applications.
+     * When called multiple times, deletes the previous menu and regenerates a new one.
+     */
+    void createExternalApplicationsMenu();
+
 private:
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
@@ -221,9 +224,6 @@ private:
     QAction *m_runDiagnosisTestsAction;
 
     QLabel *m_betaVersionMenuText;
-
-    /// External applications
-    QList<ExternalApplication> m_externalApplications;
 
     /// Mapeig de signals
     QSignalMapper *m_signalMapper;
