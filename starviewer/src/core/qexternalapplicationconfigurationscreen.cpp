@@ -31,7 +31,7 @@ QExternalApplicationConfigurationScreen::QExternalApplicationConfigurationScreen
 
 QExternalApplicationConfigurationScreen::~QExternalApplicationConfigurationScreen()
 {
-    this->close();
+
 }
 
 void QExternalApplicationConfigurationScreen::setExternalApplications(const QList<ExternalApplication> &externalApplications)
@@ -132,7 +132,6 @@ void QExternalApplicationConfigurationScreen::closeEvent(QCloseEvent *event)
 {
     ExternalApplicationsManager::instance()->setApplications(this->getExternalApplications());
     event->accept();
-    DEBUG_LOG("CLOSE");
 }
 
 }

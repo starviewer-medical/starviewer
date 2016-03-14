@@ -32,6 +32,9 @@ public:
 
     ~QConfigurationDialog();
 
+protected:
+    void closeEvent(QCloseEvent* event);
+
 private slots:
     /// S'encarrega d'amagar/mostrar les opcions de configuració depenent si s'ha seleccionat o no l'opció
     /// de mostrar opcions avançades.
@@ -46,6 +49,7 @@ private:
 
 private:
     QMultiMap<ConfigurationType, QListWidgetItem*> m_configurationListItems;
+    QList<QWidget*> m_configurationScreenWidgets;
 };
 
 }
