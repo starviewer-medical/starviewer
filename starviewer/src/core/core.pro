@@ -429,7 +429,8 @@ HEADERS += extensionfactory.h \
     gridicon.h \
     itemmenu.h \
     qexternalapplicationconfigurationscreen.h \
-    externalapplication.h
+    externalapplication.h \
+    externalapplicationsmanager.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -805,7 +806,8 @@ SOURCES += extensionmediator.cpp \
     gridicon.cpp \
     itemmenu.cpp \
     qexternalapplicationconfigurationscreen.cpp \
-    externalapplication.cpp
+    externalapplication.cpp \
+    externalapplicationsmanager.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
