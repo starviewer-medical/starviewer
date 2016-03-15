@@ -1,0 +1,2 @@
+# Normalize all auto-detected text files in the repository to LF line ending
+*   text=auto
