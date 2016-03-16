@@ -16,14 +16,16 @@
 #include "logging.h"
 #include <QDesktopServices>
 #include <QUrl>
+#include <QProcess>
 
 namespace udg {
 
 
-ExternalApplication::ExternalApplication(QString name, QString url)
+ExternalApplication::ExternalApplication(QString name, QString url, ExternalApplicationType type)
 {
     this->setName(name);
     this->setUrl(url);
+    this->setType(type);
 }
 
 ExternalApplication::~ExternalApplication()
@@ -41,6 +43,12 @@ void ExternalApplication::setUrl(QString url)
     m_url = url;
 }
 
+void ExternalApplication::setType(ExternalApplicationType type)
+{
+    m_type = type;
+}
+
+
 QString ExternalApplication::getName() const
 {
     return m_name;
@@ -49,6 +57,11 @@ QString ExternalApplication::getName() const
 QString ExternalApplication::getUrl() const
 {
     return m_url;
+}
+
+ExternalApplication::ExternalApplicationType ExternalApplication::getType() const
+{
+    return m_type;
 }
 
 QString ExternalApplication::getReplacedUrl(const QHash<QString,QString> &replacements) const
@@ -84,9 +97,19 @@ QString ExternalApplication::getReplacedUrl(const QHash<QString,QString> &replac
 void ExternalApplication::launch(const QHash<QString,QString> &replacements) const
 {
     const QString& replacedUrl = this->getReplacedUrl(replacements);
-    DEBUG_LOG("Opening URL " + replacedUrl);
-    const QUrl& url = QUrl(replacedUrl);
-    QDesktopServices::openUrl(url);
+    if (this->getType() == Url) {
+        INFO_LOG("Opening URL " + replacedUrl);
+        const QUrl& url = QUrl(replacedUrl);
+        QDesktopServices::openUrl(url);
+    }
+    else if (this->getType() == Cmd) {
+        if (QProcess::startDetached(replacedUrl)) {
+            INFO_LOG("Running command " + replacedUrl);
+        }
+        else {
+            ERROR_LOG("Command " + replacedUrl + " could not be started.");
+        }
+    }
 }
 
 }

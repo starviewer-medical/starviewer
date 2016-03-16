@@ -46,20 +46,33 @@ QList<ExternalApplication> QExternalApplicationConfigurationScreen::getExternalA
 {
     QList<ExternalApplication> applications;
     for (int i = 0; i < tableWidget->rowCount(); i++) {
-        QString name = tableWidget->item(i,0)->text();
-        QString url = tableWidget->item(i,1)->text();
-        applications.append(ExternalApplication(name,url));
+        ExternalApplication::ExternalApplicationType type =
+                tableWidget->item(i,0)->checkState() == Qt::CheckState::Checked ?
+                ExternalApplication::ExternalApplicationType::Cmd :
+                ExternalApplication::ExternalApplicationType::Url;
+        QString name = tableWidget->item(i,1)->text();
+        QString url = tableWidget->item(i,2)->text();
+        applications.append(ExternalApplication(name,url,type));
     }
     return applications;
 }
 
 void QExternalApplicationConfigurationScreen::addApplication(const ExternalApplication &externalApplication)
 {
+    QTableWidgetItem* typeWidget = new QTableWidgetItem("System command");
     QTableWidgetItem* nameWidget = new QTableWidgetItem(externalApplication.getName());
     QTableWidgetItem* urlWidget = new QTableWidgetItem(externalApplication.getUrl());
+    if (externalApplication.getType() == ExternalApplication::ExternalApplicationType::Cmd) {
+        typeWidget->setCheckState(Qt::CheckState::Checked);
+    }
+    else {
+        typeWidget->setCheckState(Qt::CheckState::Unchecked);
+    }
+
     tableWidget->insertRow(tableWidget->rowCount());
-    tableWidget->setItem(tableWidget->rowCount()-1,0,nameWidget);
-    tableWidget->setItem(tableWidget->rowCount()-1,1,urlWidget);
+    tableWidget->setItem(tableWidget->rowCount()-1,0,typeWidget);
+    tableWidget->setItem(tableWidget->rowCount()-1,1,nameWidget);
+    tableWidget->setItem(tableWidget->rowCount()-1,2,urlWidget);
     checkGrayeds();
 }
 
@@ -76,13 +89,17 @@ void QExternalApplicationConfigurationScreen::moveItem(int shift)
 
         QTableWidgetItem* currentRowCol0 = tableWidget->takeItem(currentRow,0);
         QTableWidgetItem* currentRowCol1 = tableWidget->takeItem(currentRow,1);
+        QTableWidgetItem* currentRowCol2 = tableWidget->takeItem(currentRow,2);
         QTableWidgetItem* swappingRowCol0 = tableWidget->takeItem(swappingRow,0);
         QTableWidgetItem* swappingRowCol1 = tableWidget->takeItem(swappingRow,1);
+        QTableWidgetItem* swappingRowCol2 = tableWidget->takeItem(swappingRow,2);
 
         tableWidget->setItem(currentRow,0,swappingRowCol0);
         tableWidget->setItem(currentRow,1,swappingRowCol1);
+        tableWidget->setItem(currentRow,2,swappingRowCol2);
         tableWidget->setItem(swappingRow,0,currentRowCol0);
         tableWidget->setItem(swappingRow,1,currentRowCol1);
+        tableWidget->setItem(swappingRow,2,currentRowCol2);
 
         tableWidget->setCurrentItem(tableWidget->item(swappingRow,currentCol));
     }
