@@ -165,5 +165,7 @@
         <file>../../COPYRIGHT</file>
         <file>../../LICENSE</file>
         <file>../../NOTICE</file>
+        <file>images/system-run-big.svg</file>
+        <file>images/system-run.svg</file>
     </qresource>
 </RCC>
