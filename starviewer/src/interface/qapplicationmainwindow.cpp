@@ -470,6 +470,7 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
     QList<ExternalApplication> externalApplications = ExternalApplicationsManager::instance()->getApplications();
     delete m_externalApplicationsMenu;
     m_externalApplicationsMenu = m_toolsMenu->addMenu(tr("&External applications"));
+    m_externalApplicationsMenu->setIcon(QIcon(":/images/system-run.svg"));
 
     QSignalMapper *signalMapper = new QSignalMapper(m_externalApplicationsMenu);
     connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(launchExternalApplication(int)));
