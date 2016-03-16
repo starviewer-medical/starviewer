@@ -41,7 +41,9 @@ namespace udg {
 class ExternalApplication
 {
 public:
-    ExternalApplication(QString name = QString(), QString url = QString());
+    enum ExternalApplicationType { Url, Cmd };
+
+    ExternalApplication(QString name = QString(), QString url = QString(), ExternalApplicationType type = Url);
     ~ExternalApplication();
 
     void setName(QString name);
@@ -65,6 +67,10 @@ public:
      * @return URL with the parameters replaced.
      */
     QString getReplacedUrl(const QHash<QString,QString> &replacements) const;
+    void setType(ExternalApplicationType type);
+    ExternalApplicationType getType() const;
+
+
     /**
      * @brief Launch the URL with the system default browser.
      *
@@ -77,6 +83,7 @@ public:
 private:
     QString m_name;
     QString m_url;
+    ExternalApplicationType m_type;
 
 };
 

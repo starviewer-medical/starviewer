@@ -12,6 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
+#include "logging.h"
 #include "externalapplicationsmanager.h"
 #include "coresettings.h"
 
@@ -34,7 +35,18 @@ QList<ExternalApplication> ExternalApplicationsManager::getApplications() const
     Settings settings;
     Settings::SettingListType list = settings.getList(CoreSettings::ExternalApplicationsConfigurationSectionName);
     foreach (Settings::SettingsListItemType item, list) {
-        ExternalApplication application(item["name"].toString(),item["url"].toString());
+        ExternalApplication::ExternalApplicationType type;
+        if (item["type"] == "url") {
+            type = ExternalApplication::ExternalApplicationType::Url;
+        }
+        else if (item["type"] == "cmd") {
+            type = ExternalApplication::ExternalApplicationType::Cmd;
+        }
+        else {
+            ERROR_LOG("Unexpected external application type");
+            break;
+        }
+        ExternalApplication application(item["name"].toString(),item["url"].toString(),type);
         applications.append(application);
     }
     return applications;
@@ -48,6 +60,7 @@ void ExternalApplicationsManager::setApplications(const QList<ExternalApplicatio
         Settings::SettingsListItemType item;
         item["name"] = application.getName();
         item["url"] = application.getUrl();
+        item["type"] = application.getType() == ExternalApplication::ExternalApplicationType::Url ? "url" : "cmd";
         list.append(item);
     }
     settings.setList(CoreSettings::ExternalApplicationsConfigurationSectionName, list);
