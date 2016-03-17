@@ -552,7 +552,7 @@ void QApplicationMainWindow::launchExternalApplication(int i)
         ERROR_LOG("Trying to launch an unexistant external application");
     }
     const ExternalApplication& app = externalApplications.at(i);
-    app.launch(QHash<QString,QString>());
+    ExternalApplicationsManager::instance()->launch(app);
 }
 
 QApplicationMainWindow* QApplicationMainWindow::setPatientInNewWindow(Patient *patient)

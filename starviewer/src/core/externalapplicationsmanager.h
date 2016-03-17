@@ -22,11 +22,20 @@
 
 namespace udg {
 
+class Volume;
+
 /**
  * @brief Singleton to manage external applications
  *
- * ExternalApplicationsManager singleton reads and saves the external applications to the settings.
- * It also emits an event when the list of applications is changed, thus the UI can be updated.
+ * ExternalApplicationsManager singleton reads and saves the external
+ * applications to the settings.
+ *
+ * It also emits an event when the list of applications is changed, thus the UI
+ * can be updated.
+ *
+ * This singleton is the point where the parameters to be replaced are
+ * collected. When the active study changes, setParameters should be
+ * called.
  */
 class ExternalApplicationsManager : public QObject, public Singleton<ExternalApplicationsManager>
 {
@@ -42,6 +51,35 @@ public:
      */
     void setApplications(const QList<ExternalApplication>& applications);
 
+    /**
+     * @brief Empties the parameters list.
+     *
+     * You should call this when no study is active. Parameters will be empty
+     * when an application is launched.
+     */
+    void cleanParameters();
+    /**
+     * @brief Reads the parameters to replace for the current active study.
+     *
+     * This function should be called when an study becomes active. It reads
+     * the information to fill the parameters from the given volume.
+     *
+     * @param volume Volume that is currently active
+     */
+    void setParameters(Volume* volume);
+    /**
+     * @return Parameter names and correspondant values.
+     */
+    const QHash<QString,QString>& getParameters() const;
+
+    /**
+     * @brief Launches the given application.
+     *
+     * The given application is launched with the parameters given by
+     * getParameters().
+     */
+    void launch(const ExternalApplication& application) const;
+
 protected:
     friend class Singleton<ExternalApplicationsManager>;
     explicit ExternalApplicationsManager(QObject *parent = 0);
@@ -53,7 +91,9 @@ signals:
      */
     void onApplicationsChanged();
 
-public slots:
+private:
+    QHash<QString,QString> m_parameters;
+
 };
 
 }
