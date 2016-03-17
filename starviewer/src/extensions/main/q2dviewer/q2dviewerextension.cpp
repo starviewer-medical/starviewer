@@ -39,6 +39,7 @@
 #include "transferfunctionmodel.h"
 #include "transferfunctionmodelfiller.h"
 #include "hangingprotocol.h"
+#include "externalapplicationsmanager.h"
 
 #ifndef STARVIEWER_LITE
 #include "qrelatedstudieswidget.h"
@@ -639,6 +640,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewChanged(int)), this, SLOT(updateDICOMInformationButton()));
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewerStatusChanged()), this, SLOT(updateExporterToolButton()));
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(volumeChanged(Volume*)), this, SLOT(updateTransferFunctionComboBoxWithCurrentViewerModel()));
+            disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(volumeChanged(Volume*)), this, SLOT(updateExternalApplicationsWithCurrentView(Volume*)));
 
             // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
             ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool*>(m_lastSelectedViewer->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
@@ -662,6 +664,17 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton()));
             connect(m_lastSelectedViewer->getViewer(), SIGNAL(viewerStatusChanged()), this, SLOT(updateExporterToolButton()));
             connect(selected2DViewer, SIGNAL(volumeChanged(Volume*)), this, SLOT(updateTransferFunctionComboBoxWithCurrentViewerModel()));
+            connect(m_lastSelectedViewer->getViewer(), SIGNAL(volumeChanged(Volume*)), this, SLOT(updateExternalApplicationsWithCurrentView(Volume*)));
+
+            // Update external application parameters
+            if (!m_lastSelectedViewer->getViewer()->getInputs().isEmpty())
+            {
+                ExternalApplicationsManager::instance()->setParameters(m_lastSelectedViewer->getViewer()->getInput(0));
+            }
+            else
+            {
+                ExternalApplicationsManager::instance()->cleanParameters();
+            }
 
             // És necessari associar cada cop al viewer actual les associacions del menú de la tool d'screen shot
             ScreenShotTool *screenShotTool = dynamic_cast<ScreenShotTool*>(viewerWidget->getViewer()->getToolProxy()->getTool("ScreenShotTool"));
@@ -693,6 +706,7 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
             m_cineController->setQViewer(0);
             m_thickSlabWidget->unlink();
             updateTransferFunctionComboBox(0);
+            ExternalApplicationsManager::instance()->cleanParameters();
         }
     }
 }
@@ -1007,6 +1021,14 @@ void Q2DViewerExtension::setGrid(int rows, int columns)
 void Q2DViewerExtension::updateTransferFunctionComboBoxWithCurrentViewerModel()
 {
     updateTransferFunctionComboBox(m_workingArea->getSelectedViewer()->getViewer()->getTransferFunctionModel());
+}
+
+void Q2DViewerExtension::updateExternalApplicationsWithCurrentView(Volume *volume)
+{
+    if (volume)
+    {
+        ExternalApplicationsManager::instance()->setParameters(volume);
+    }
 }
 
 void Q2DViewerExtension::updateTransferFunctionComboBox(TransferFunctionModel *transferFunctionModel)

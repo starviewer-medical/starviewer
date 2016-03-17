@@ -15,6 +15,8 @@
 #include "logging.h"
 #include "externalapplicationsmanager.h"
 #include "coresettings.h"
+#include "volume.h"
+#include "patient.h"
 
 namespace udg {
 
@@ -67,6 +69,29 @@ void ExternalApplicationsManager::setApplications(const QList<ExternalApplicatio
     emit onApplicationsChanged();
 }
 
+void ExternalApplicationsManager::cleanParameters()
+{
+    m_parameters = QHash<QString,QString>();
+}
+
+void ExternalApplicationsManager::setParameters(Volume* volume)
+{
+    m_parameters = QHash<QString,QString>();
+    m_parameters["StudyInstanceUID"] = volume->getStudy()->getInstanceUID();
+    m_parameters["SeriesInstanceUID"] = volume->getSeries()->getInstanceUID();
+    m_parameters["AccessionNumber"] = volume->getStudy()->getAccessionNumber();
+    m_parameters["PatientID"] = volume->getPatient()->getID();
+}
+
+const QHash<QString,QString>& ExternalApplicationsManager::getParameters() const
+{
+    return m_parameters;
+}
+
+void ExternalApplicationsManager::launch(const ExternalApplication& application) const
+{
+    application.launch(getParameters());
+}
 
 }
 
