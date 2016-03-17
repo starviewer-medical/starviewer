@@ -3,6 +3,9 @@
         <file>images/expand.png</file>
         <file>images/collapse.png</file>
         <file>images/round-warning.png</file>
+        <file>main_ca_ES.qm</file>
+        <file>main_es_ES.qm</file>
+        <file>main_en_GB.qm</file>
         <file>../core/core_ca_ES.qm</file>
         <file>../core/core_en_GB.qm</file>
         <file>../core/core_es_ES.qm</file>

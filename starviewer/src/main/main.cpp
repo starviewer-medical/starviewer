@@ -70,6 +70,7 @@ void initializeTranslations(QApplication &app)
     translationsLoader.loadTranslation(":/core/core_" + defaultLocale.name());
     translationsLoader.loadTranslation(":/interface/interface_" + defaultLocale.name());
     translationsLoader.loadTranslation(":/inputoutput/inputoutput_" + defaultLocale.name());
+    translationsLoader.loadTranslation(":/main_" + defaultLocale.name());
 
     initExtensionsResources();
     INFO_LOG("Locales = " + defaultLocale.name());
