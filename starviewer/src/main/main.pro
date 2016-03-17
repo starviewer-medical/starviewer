@@ -19,6 +19,10 @@ HEADERS += applicationtranslationsloader.h \
            syncactionsregister.h \
            diagnosistests.h \
            vtkinit.h
+TRANSLATIONS += main_ca_ES.ts \
+                main_es_ES.ts \
+                main_en_GB.ts
+
 RESOURCES = main.qrc ../qml/qml.qrc
 
 win32{
