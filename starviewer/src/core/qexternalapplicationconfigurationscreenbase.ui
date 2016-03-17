@@ -24,28 +24,28 @@
     <normaloff>:/images/system-run-big.svg</normaloff>:/images/system-run-big.svg</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="3" column="1">
+   <item row="4" column="1">
     <widget class="QPushButton" name="btnDelete">
      <property name="text">
-      <string>Suprimeix</string>
+      <string>Delete</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
     <widget class="QPushButton" name="btnDown">
      <property name="text">
-      <string>Baixa</string>
+      <string>Down</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QPushButton" name="btnAdd">
+   <item row="3" column="1">
+    <widget class="QPushButton" name="btnAddCmd">
      <property name="text">
-      <string>Afegeix</string>
+      <string>Add command</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="0" rowspan="5">
+   <item row="0" column="0" rowspan="6">
     <widget class="QTableWidget" name="tableWidget">
      <property name="selectionMode">
       <enum>QAbstractItemView::SingleSelection</enum>
@@ -85,11 +85,11 @@
    <item row="0" column="1">
     <widget class="QPushButton" name="btnUp">
      <property name="text">
-      <string>Puja</string>
+      <string>Up</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="label_3">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
@@ -98,15 +98,32 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Les aplicacions externes obren un navegador web amb una URL personalitzada a partir de les dades de l'estudi que tingueu obert.&lt;/p&gt;&lt;p&gt;Si a la URL que proporcioneu aquí hi figura algun dels següents camps, aquests seran substituits per el valor corresponent:&lt;/p&gt;
+      <string>&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+
+&lt;p&gt;External applications can be an URL which is opened with the system's default browser or a system command.&lt;/p&gt;
+&lt;p&gt;If an URL or command has the following parameters, then they will be replaced with the corresponding real values before doing the launch.&lt;/p&gt;
+
 &lt;ul&gt;
-&lt;li&gt;&lt;b&gt;%studyId%&lt;/b&gt; Identificador de l'estudi&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;%patientId%&lt;/b&gt; Identificador del pacient&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%StudyInstanceUID%}&lt;/b&gt; Study UUID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%SeriesInstanceUID%}&lt;/b&gt; Series UUID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Accession number.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; Patient ID.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p&gt;Be aware of the security risks when defining external applications. To mitigate them, parameters will have a limited set of characters (alphanumeric and dot).&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="btnAddUrl">
+     <property name="text">
+      <string>Add URL</string>
      </property>
     </widget>
    </item>
