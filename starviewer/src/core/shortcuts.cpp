@@ -87,6 +87,16 @@ const QString Shortcuts::MoveToPreviousDesktop(ShortcutsBase + "MoveToPreviousDe
 const QString Shortcuts::MoveToNextDesktop(ShortcutsBase + "MoveToNextDesktop");
 const QString Shortcuts::MaximizeMultipleScreens(ShortcutsBase + "MaximizeMultipleScreens");
 
+const QString Shortcuts::ExternalApplication1(ShortcutsBase + "ExternalApplication1");
+const QString Shortcuts::ExternalApplication2(ShortcutsBase + "ExternalApplication2");
+const QString Shortcuts::ExternalApplication3(ShortcutsBase + "ExternalApplication3");
+const QString Shortcuts::ExternalApplication4(ShortcutsBase + "ExternalApplication4");
+const QString Shortcuts::ExternalApplication5(ShortcutsBase + "ExternalApplication5");
+const QString Shortcuts::ExternalApplication6(ShortcutsBase + "ExternalApplication6");
+const QString Shortcuts::ExternalApplication7(ShortcutsBase + "ExternalApplication7");
+const QString Shortcuts::ExternalApplication8(ShortcutsBase + "ExternalApplication8");
+const QString Shortcuts::ExternalApplication9(ShortcutsBase + "ExternalApplication9");
+
 Shortcuts::Shortcuts()
 {
 }
@@ -346,6 +356,44 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("F10"));
     settingsRegistry->addSetting(ToggleComparativeStudiesMode, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+1"));
+    settingsRegistry->addSetting(ExternalApplication1, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+2"));
+    settingsRegistry->addSetting(ExternalApplication2, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+3"));
+    settingsRegistry->addSetting(ExternalApplication3, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+4"));
+    settingsRegistry->addSetting(ExternalApplication4, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+5"));
+    settingsRegistry->addSetting(ExternalApplication5, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+6"));
+    settingsRegistry->addSetting(ExternalApplication6, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+7"));
+    settingsRegistry->addSetting(ExternalApplication7, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+8"));
+    settingsRegistry->addSetting(ExternalApplication8, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+9"));
+    settingsRegistry->addSetting(ExternalApplication9, shortcutsList);
+
+
 }
 
 } // End namespace udg

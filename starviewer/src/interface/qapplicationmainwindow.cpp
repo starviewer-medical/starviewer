@@ -475,12 +475,24 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
     QSignalMapper *signalMapper = new QSignalMapper(m_externalApplicationsMenu);
     connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(launchExternalApplication(int)));
 
+    QVector<QList<QKeySequence>> shortcutVector(9);
+    shortcutVector[0] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication1);
+    shortcutVector[1] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication2);
+    shortcutVector[2] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication3);
+    shortcutVector[3] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication4);
+    shortcutVector[4] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication5);
+    shortcutVector[5] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication6);
+    shortcutVector[6] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication7);
+    shortcutVector[7] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication8);
+    shortcutVector[8] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication9);
+
     QListIterator<ExternalApplication> i(externalApplications);
     int pos = 0;
     while (i.hasNext()) {
         const ExternalApplication& extApp = i.next();
         //TODO: debug to check if what i've said on the comment is true.
         QAction* action = new QAction(extApp.getName(),0); //When added to a QMenu, that menu becomes the parent.
+        action->setShortcuts(shortcutVector[pos]);
         m_externalApplicationsMenu->addAction(action);
         signalMapper->setMapping(action, pos);
         connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
