@@ -47,9 +47,9 @@ QList<ExternalApplication> QExternalApplicationConfigurationScreen::getExternalA
     QList<ExternalApplication> applications;
     for (int i = 0; i < tableWidget->rowCount(); i++) {
         ExternalApplication::ExternalApplicationType type =
-                tableWidget->item(i,0)->checkState() == Qt::CheckState::Checked ?
-                ExternalApplication::ExternalApplicationType::Cmd :
-                ExternalApplication::ExternalApplicationType::Url;
+                tableWidget->item(i,0)->text() == tr("URL") ?
+                ExternalApplication::ExternalApplicationType::Url :
+                ExternalApplication::ExternalApplicationType::Cmd;
         QString name = tableWidget->item(i,1)->text();
         QString url = tableWidget->item(i,2)->text();
         applications.append(ExternalApplication(name,url,type));
@@ -59,14 +59,15 @@ QList<ExternalApplication> QExternalApplicationConfigurationScreen::getExternalA
 
 void QExternalApplicationConfigurationScreen::addApplication(const ExternalApplication &externalApplication)
 {
-    QTableWidgetItem* typeWidget = new QTableWidgetItem("System command");
+    QTableWidgetItem* typeWidget = new QTableWidgetItem();
     QTableWidgetItem* nameWidget = new QTableWidgetItem(externalApplication.getName());
     QTableWidgetItem* urlWidget = new QTableWidgetItem(externalApplication.getUrl());
+    typeWidget->setFlags(Qt::ItemIsSelectable);
     if (externalApplication.getType() == ExternalApplication::ExternalApplicationType::Cmd) {
-        typeWidget->setCheckState(Qt::CheckState::Checked);
+        typeWidget->setText(tr("Command"));
     }
     else {
-        typeWidget->setCheckState(Qt::CheckState::Unchecked);
+        typeWidget->setText(tr("URL"));
     }
 
     tableWidget->insertRow(tableWidget->rowCount());
@@ -125,9 +126,15 @@ void QExternalApplicationConfigurationScreen::on_btnDown_clicked()
     moveItem(1);
 }
 
-void QExternalApplicationConfigurationScreen::on_btnAdd_clicked() 
+void QExternalApplicationConfigurationScreen::on_btnAddUrl_clicked()
 {
-    ExternalApplication newApp("New application", "http://www.starviewer.org");
+    ExternalApplication newApp("New application", "http://www.starviewer.org", ExternalApplication::ExternalApplicationType::Url);
+    this->addApplication(newApp);
+}
+
+void QExternalApplicationConfigurationScreen::on_btnAddCmd_clicked()
+{
+    ExternalApplication newApp("New application", "echo \"Starviewer Medical {%AccessionNumber%}\"", ExternalApplication::ExternalApplicationType::Cmd);
     this->addApplication(newApp);
 }
 

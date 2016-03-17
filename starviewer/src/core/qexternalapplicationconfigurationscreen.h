@@ -84,7 +84,8 @@ private:
 private slots:
     void on_btnUp_clicked();
     void on_btnDown_clicked();
-    void on_btnAdd_clicked();
+    void on_btnAddUrl_clicked();
+    void on_btnAddCmd_clicked();
     void on_btnDelete_clicked();
     void on_tableWidget_currentItemChanged(QTableWidgetItem* current, QTableWidgetItem* previous);
 
