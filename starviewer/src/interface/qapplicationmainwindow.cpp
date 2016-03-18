@@ -475,6 +475,7 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
     QSignalMapper *signalMapper = new QSignalMapper(m_externalApplicationsMenu);
     connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(launchExternalApplication(int)));
 
+
     QVector<QList<QKeySequence>> shortcutVector(12);
     shortcutVector[0] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication1);
     shortcutVector[1] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication2);
@@ -495,7 +496,10 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
         const ExternalApplication& extApp = i.next();
         //TODO: debug to check if what i've said on the comment is true.
         QAction* action = new QAction(extApp.getName(),0); //When added to a QMenu, that menu becomes the parent.
-        action->setShortcuts(shortcutVector[pos]);
+        if (pos < shortcutVector.size())
+        {
+            action->setShortcuts(shortcutVector[pos]);
+        }
         m_externalApplicationsMenu->addAction(action);
         signalMapper->setMapping(action, pos);
         connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
