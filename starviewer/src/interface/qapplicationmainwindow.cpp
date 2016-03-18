@@ -475,7 +475,7 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
     QSignalMapper *signalMapper = new QSignalMapper(m_externalApplicationsMenu);
     connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(launchExternalApplication(int)));
 
-    QVector<QList<QKeySequence>> shortcutVector(9);
+    QVector<QList<QKeySequence>> shortcutVector(12);
     shortcutVector[0] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication1);
     shortcutVector[1] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication2);
     shortcutVector[2] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication3);
@@ -485,6 +485,9 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
     shortcutVector[6] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication7);
     shortcutVector[7] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication8);
     shortcutVector[8] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication9);
+    shortcutVector[9] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication10);
+    shortcutVector[10] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication11);
+    shortcutVector[11] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication12);
 
     QListIterator<ExternalApplication> i(externalApplications);
     int pos = 0;

@@ -96,6 +96,9 @@ const QString Shortcuts::ExternalApplication6(ShortcutsBase + "ExternalApplicati
 const QString Shortcuts::ExternalApplication7(ShortcutsBase + "ExternalApplication7");
 const QString Shortcuts::ExternalApplication8(ShortcutsBase + "ExternalApplication8");
 const QString Shortcuts::ExternalApplication9(ShortcutsBase + "ExternalApplication9");
+const QString Shortcuts::ExternalApplication10(ShortcutsBase + "ExternalApplication10");
+const QString Shortcuts::ExternalApplication11(ShortcutsBase + "ExternalApplication11");
+const QString Shortcuts::ExternalApplication12(ShortcutsBase + "ExternalApplication12");
 
 Shortcuts::Shortcuts()
 {
@@ -358,41 +361,52 @@ void Shortcuts::init()
     settingsRegistry->addSetting(ToggleComparativeStudiesMode, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+Shift+1"));
+    shortcutsList.append(QString("Shift+F1"));
     settingsRegistry->addSetting(ExternalApplication1, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+Shift+2"));
+    shortcutsList.append(QString("Shift+F2"));
     settingsRegistry->addSetting(ExternalApplication2, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+Shift+3"));
+    shortcutsList.append(QString("Shift+F3"));
     settingsRegistry->addSetting(ExternalApplication3, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+Shift+4"));
+    shortcutsList.append(QString("Shift+F4"));
     settingsRegistry->addSetting(ExternalApplication4, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+Shift+5"));
+    shortcutsList.append(QString("Shift+F5"));
     settingsRegistry->addSetting(ExternalApplication5, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+Shift+6"));
+    shortcutsList.append(QString("Shift+F6"));
     settingsRegistry->addSetting(ExternalApplication6, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+Shift+7"));
+    shortcutsList.append(QString("Shift+F7"));
     settingsRegistry->addSetting(ExternalApplication7, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+Shift+8"));
+    shortcutsList.append(QString("Shift+F8"));
     settingsRegistry->addSetting(ExternalApplication8, shortcutsList);
 
     shortcutsList.clear();
-    shortcutsList.append(QString("Ctrl+Shift+9"));
+    shortcutsList.append(QString("Shift+F9"));
     settingsRegistry->addSetting(ExternalApplication9, shortcutsList);
 
+    shortcutsList.clear();
+    shortcutsList.append(QString("Shift+F10"));
+    settingsRegistry->addSetting(ExternalApplication10, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Shift+F11"));
+    settingsRegistry->addSetting(ExternalApplication11, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Shift+F12"));
+    settingsRegistry->addSetting(ExternalApplication12, shortcutsList);
 
 }
 
