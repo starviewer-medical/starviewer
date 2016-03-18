@@ -57,7 +57,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../core/coresettings.cpp" line="127"/>
+        <location filename="../core/coresettings.cpp" line="129"/>
         <source>PNG (*.png)</source>
         <translation>PNG (*.png)</translation>
     </message>
