@@ -54,6 +54,14 @@ void test_ExternalApplication::getReplacedUrl_ReturnsExpectedValues_data()
     QTest::newRow("test2.8") << ExternalApplication("test","{%%}") << replacements << "";
     QTest::newRow("test2.9") << ExternalApplication("test","{%%%}") << replacements << "percent";
     QTest::newRow("test2.10") << ExternalApplication("test","{%{%%}") << replacements << "percentopen";
+
+    replacements = QHash<QString,QString>();
+    replacements["thug"] = "thug life";
+    replacements["nyan"] = "az.nyan.cat123409";
+    replacements["long"] = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+    QTest::newRow("test3.1") << ExternalApplication("test","http://example.com/{%nyan%}{%thug%}") << replacements << "http://example.com/az.nyan.cat123409";
+    QTest::newRow("test3.2") << ExternalApplication("test","http://example.com/{%long%}") << replacements << "http://example.com/";
+
 }
 
 void test_ExternalApplication::getReplacedUrl_ReturnsExpectedValues()
