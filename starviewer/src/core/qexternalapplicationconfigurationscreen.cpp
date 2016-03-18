@@ -128,13 +128,13 @@ void QExternalApplicationConfigurationScreen::on_btnDown_clicked()
 
 void QExternalApplicationConfigurationScreen::on_btnAddUrl_clicked()
 {
-    ExternalApplication newApp("New application", "http://www.starviewer.org", ExternalApplication::ExternalApplicationType::Url);
+    ExternalApplication newApp(tr("New application"), "http://www.starviewer.org", ExternalApplication::ExternalApplicationType::Url);
     this->addApplication(newApp);
 }
 
 void QExternalApplicationConfigurationScreen::on_btnAddCmd_clicked()
 {
-    ExternalApplication newApp("New application", "echo \"Starviewer Medical {%AccessionNumber%}\"", ExternalApplication::ExternalApplicationType::Cmd);
+    ExternalApplication newApp(tr("New application"), "echo \"Starviewer Medical {%AccessionNumber%}\"", ExternalApplication::ExternalApplicationType::Cmd);
     this->addApplication(newApp);
 }
 
