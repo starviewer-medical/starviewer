@@ -80,13 +80,16 @@ QConfigurationDialog::~QConfigurationDialog()
 void QConfigurationDialog::closeEvent(QCloseEvent *event)
 {
     bool close = true;
-    foreach (QWidget* screen, m_configurationScreenWidgets) {
+    foreach (QWidget *screen, m_configurationScreenWidgets)
+    {
         close = close && screen->close();
     }
-    if (close) {
+    if (close)
+    {
         event->accept();
     }
-    else {
+    else
+    {
         event->ignore();
     }
 

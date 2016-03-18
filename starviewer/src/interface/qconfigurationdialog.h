@@ -16,8 +16,8 @@
 #define UDGQCONFIGURATIONDIALOG_H
 
 #include "ui_qconfigurationdialogbase.h"
-#include <QDialog>
 
+#include <QDialog>
 #include <QMultiMap>
 
 namespace udg {
@@ -33,6 +33,7 @@ public:
     ~QConfigurationDialog();
 
 protected:
+    /// @brief Calls .close() on each configuration subdialog.
     void closeEvent(QCloseEvent* event);
 
 private slots:
