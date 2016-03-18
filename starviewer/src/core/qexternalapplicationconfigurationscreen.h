@@ -16,10 +16,12 @@
 #define QEXTERNALAPPLICATIONCONFIGURATIONSCREEN_H
 
 #include "ui_qexternalapplicationconfigurationscreenbase.h"
+
 #include <QList>
-#include "externalapplication.h"
 
 namespace udg {
+
+class ExternalApplication;
 
 /**
     @brief External application configuration GUI
@@ -30,64 +32,52 @@ namespace udg {
 class QExternalApplicationConfigurationScreen : public QWidget, private Ui::QExternalApplicationConfigurationScreenBase {
 Q_OBJECT
 public:
-    /**
-     * @brief Constructs the GUI and fills the list.
-     * The constructor retrieves the information from the settings and fills the GUI list automatically using the setExternalApplications method.
-     * @param parent
-     */
+    /// @brief Constructs the GUI and fills the list.
+    /// The constructor retrieves the information from the settings and fills the GUI list automatically using the setExternalApplications method.
+    /// @param parent
     QExternalApplicationConfigurationScreen(QWidget *parent = 0);
     ~QExternalApplicationConfigurationScreen();
 
-    /**
-     * @brief Use it to show the applications
-     * @param externalApplications List of external applications to show on the list.
-     */
+    /// @brief Use it to show the applications
+    /// @param externalApplications List of external applications to show on the list.
     void setExternalApplications(const QList<ExternalApplication> &externalApplications);
-    /**
-     * @brief Generates the list of the external applications edited by the user.
-     * @return List of the applications on the GUI list.
-     */
+    
+    /// @brief Generates the list of the external applications edited by the user.
+    /// @return List of the applications on the GUI list.
     QList<ExternalApplication> getExternalApplications() const;
 
-    /**
-     * @brief Adds applications to the GUI application list.
-     * @param externalApplication Application to add.
-     */
+    /// @brief Adds applications to the GUI application list.
+    /// @param externalApplication Application to add.
     void addApplication(const ExternalApplication &externalApplication);
 
 protected:
-    /**
-     * @brief On close the configuration is saved.
-     * Make sure that you call the close() function before destroying this class.
-     * @param event
-     */
+    /// @brief On close the configuration is saved.
+    /// Make sure that you call the close() function before destroying this class.
+    /// @param event
     void closeEvent(QCloseEvent *event);
 
 private:
-    /**
-     * @brief Moves a table row up or down according to a given shift.
-     * @param shift Amount of
-     */
+
+    /// @brief Moves a table row up or down according to a given shift.
+    /// @param shift Amount of
     void moveItem(int shift = -1);
 
-    /**
-     * @brief Enables or disables the buttons.
-     *
-     * Checks the situation with the table widget and enables or disables up,
-     * down and delete buttons.
-     * They are only enabled when needed.
-     *
-     * You should invoke this method when the table data changes.
-     */
+    /// @brief Enables or disables the buttons.
+    ///
+    /// Checks the situation with the table widget and enables or disables up,
+    /// down and delete buttons.
+    /// They are only enabled when needed.
+    ///
+    /// You should invoke this method when the table data changes.
     void checkGrayeds();
 
 private slots:
-    void on_btnUp_clicked();
-    void on_btnDown_clicked();
-    void on_btnAddUrl_clicked();
-    void on_btnAddCmd_clicked();
-    void on_btnDelete_clicked();
-    void on_tableWidget_currentItemChanged(QTableWidgetItem* current, QTableWidgetItem* previous);
+    void addCommandClicked();
+    void buttonAddUrlClicked();
+    void buttonDeleteClicked();
+    void buttonDownClicked();
+    void buttonUpClicked();
+    void tableCurrentItemChanged(QTableWidgetItem* current, QTableWidgetItem* previous);
 
 };
 

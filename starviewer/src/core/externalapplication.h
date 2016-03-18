@@ -15,9 +15,8 @@
 #ifndef EXTERNALAPPLICATION_H
 #define EXTERNALAPPLICATION_H
 
-#include <QMetaType>
-#include <QString>
 #include <QHash>
+#include <QString>
 
 namespace udg {
 
@@ -41,7 +40,7 @@ namespace udg {
 class ExternalApplication
 {
 public:
-    enum ExternalApplicationType { Url, Cmd };
+    enum ExternalApplicationType { Url, Command };
 
     ExternalApplication(QString name = QString(), QString url = QString(), ExternalApplicationType type = Url);
     ~ExternalApplication();
@@ -49,40 +48,38 @@ public:
     void setName(QString name);
     QString getName() const;
     void setUrl(QString url);
-    /**
-     * @return Url with fields {%fieldName%}.
-     */
+    /// @return Url with fields {%fieldName%}.
     QString getUrl() const;
-    /**
-     * @brief Returns an URL with the fields replaced.
-     *
-     * Given a hash map with the field names and its values, the funcion
-     * searches for the fields written as {%fieldName%} and replaces them
-     * with the value on the hash map.
-     *
-     * If a field name is not found on the hash map, the value will be an empty
-     * string. Thus removing the brackets {% %}.
-     *
-     * Replacement values must be at least 256 characters long and only
-     * alphanumeric and dot characters are allowed. When this condition is not
-     * satisfied the replacement value is an empty string.
-     *
-     * @param replacements Hash map where the key is the field name.
-     * @return URL with the parameters replaced.
-     */
+    /// @brief Returns an URL with the fields replaced.
+    ///
+    /// Given a hash map with the field names and its values, the funcion
+    /// searches for the fields written as {%fieldName%} and replaces them
+    /// with the value on the hash map.
+    /// 
+    /// If a field name is not found on the hash map, the value will be an empty
+    /// string. Thus removing the brackets {% %}.
+    /// 
+    /// Replacement values must be at least 256 characters long and only
+    /// alphanumeric and dot characters are allowed. When this condition is not
+    /// satisfied the replacement value is an empty string.
+    /// 
+    /// @param replacements Hash map where the key is the field name.
+    /// @return URL with the parameters replaced.
     QString getReplacedUrl(const QHash<QString,QString> &replacements) const;
     void setType(ExternalApplicationType type);
+    /// @brief Application type, which can be an URL or a command.
     ExternalApplicationType getType() const;
 
-
-    /**
-     * @brief Launch the URL with the system default browser.
-     *
-     * The launched URL is given by the method getReplacedUrl().
-     *
-     * @param replacements Hash map where the key is the field name.
-     */
-    void launch(const QHash<QString, QString> &replacements) const;
+    /// @brief Launch the URL with the system default browser.
+    /// 
+    /// The launched URL is given by the method getReplacedUrl().
+    /// 
+    /// If the type is URL, then the system default browser is launched.
+    /// 
+    /// If the type is Cmd, then the URL is run as a command.
+    ///
+    /// @param replacements Hash map where the key is the field name.
+    void launch(const QHash<QString, QString> &replacements = QHash<QString, QString>()) const;
 
 private:
     QString m_name;

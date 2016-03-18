@@ -12,11 +12,14 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "logging.h"
 #include "externalapplicationsmanager.h"
+
 #include "coresettings.h"
-#include "volume.h"
+#include "externalapplication.h"
+#include "logging.h"
 #include "patient.h"
+#include "volume.h"
+
 
 namespace udg {
 
@@ -36,59 +39,68 @@ QList<ExternalApplication> ExternalApplicationsManager::getApplications() const
     QList<ExternalApplication> applications;
     Settings settings;
     Settings::SettingListType list = settings.getList(CoreSettings::ExternalApplicationsConfigurationSectionName);
-    foreach (Settings::SettingsListItemType item, list) {
+    
+    foreach (Settings::SettingsListItemType item, list) 
+    {
         ExternalApplication::ExternalApplicationType type;
-        if (item["type"] == "url") {
+        if (item["type"] == "url")
+        {
             type = ExternalApplication::ExternalApplicationType::Url;
         }
-        else if (item["type"] == "cmd") {
-            type = ExternalApplication::ExternalApplicationType::Cmd;
+        else if (item["type"] == "cmd")
+        {
+            type = ExternalApplication::ExternalApplicationType::Command;
         }
-        else {
+        else
+        {
             ERROR_LOG("Unexpected external application type");
             break;
         }
-        ExternalApplication application(item["name"].toString(),item["url"].toString(),type);
+        
+        ExternalApplication application(item["name"].toString(), item["url"].toString(), type);
         applications.append(application);
     }
     return applications;
 }
 
-void ExternalApplicationsManager::setApplications(const QList<ExternalApplication>& applications)
+void ExternalApplicationsManager::setApplications(const QList<ExternalApplication> &applications)
 {
     Settings::SettingListType list;
     Settings settings;
-    foreach(ExternalApplication application, applications) {
+    
+    foreach(ExternalApplication application, applications)
+    {
         Settings::SettingsListItemType item;
         item["name"] = application.getName();
         item["url"] = application.getUrl();
         item["type"] = application.getType() == ExternalApplication::ExternalApplicationType::Url ? "url" : "cmd";
         list.append(item);
     }
+    
     settings.setList(CoreSettings::ExternalApplicationsConfigurationSectionName, list);
     emit onApplicationsChanged();
 }
 
 void ExternalApplicationsManager::cleanParameters()
 {
-    m_parameters = QHash<QString,QString>();
+    m_parameters = QHash<QString, QString>();
 }
 
 void ExternalApplicationsManager::setParameters(Volume* volume)
 {
-    m_parameters = QHash<QString,QString>();
+    m_parameters = QHash<QString, QString>();
     m_parameters["StudyInstanceUID"] = volume->getStudy()->getInstanceUID();
     m_parameters["SeriesInstanceUID"] = volume->getSeries()->getInstanceUID();
     m_parameters["AccessionNumber"] = volume->getStudy()->getAccessionNumber();
     m_parameters["PatientID"] = volume->getPatient()->getID();
 }
 
-const QHash<QString,QString>& ExternalApplicationsManager::getParameters() const
+const QHash<QString, QString>& ExternalApplicationsManager::getParameters() const
 {
     return m_parameters;
 }
 
-void ExternalApplicationsManager::launch(const ExternalApplication& application) const
+void ExternalApplicationsManager::launch(const ExternalApplication &application) const
 {
     application.launch(getParameters());
 }

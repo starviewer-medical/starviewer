@@ -25,28 +25,28 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="4" column="1">
-    <widget class="QPushButton" name="btnDelete">
+    <widget class="QPushButton" name="m_buttonDelete">
      <property name="text">
       <string>Delete</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QPushButton" name="btnDown">
+    <widget class="QPushButton" name="m_buttonDown">
      <property name="text">
       <string>Down</string>
      </property>
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QPushButton" name="btnAddCmd">
+    <widget class="QPushButton" name="m_buttonAddCommand">
      <property name="text">
       <string>Add command</string>
      </property>
     </widget>
    </item>
    <item row="0" column="0" rowspan="6">
-    <widget class="QTableWidget" name="tableWidget">
+    <widget class="QTableWidget" name="m_tableWidget">
      <property name="selectionMode">
       <enum>QAbstractItemView::SingleSelection</enum>
      </property>
@@ -83,7 +83,7 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QPushButton" name="btnUp">
+    <widget class="QPushButton" name="m_buttonUp">
      <property name="text">
       <string>Up</string>
      </property>
@@ -121,7 +121,7 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QPushButton" name="btnAddUrl">
+    <widget class="QPushButton" name="m_buttonAddUrl">
      <property name="text">
       <string>Add URL</string>
      </property>
