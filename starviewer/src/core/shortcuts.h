@@ -102,6 +102,9 @@ public:
     static const QString ExternalApplication7;
     static const QString ExternalApplication8;
     static const QString ExternalApplication9;
+    static const QString ExternalApplication10;
+    static const QString ExternalApplication11;
+    static const QString ExternalApplication12;
 };
 
 }
