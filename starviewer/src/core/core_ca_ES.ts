@@ -82,7 +82,7 @@
         <translation>La previsualització no està disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="127"/>
+        <location filename="coresettings.cpp" line="129"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
@@ -1172,6 +1172,126 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
         <location filename="qdiagnosistestbase.ui" line="269"/>
         <source>OK</source>
         <translation>D&apos;acord</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QExternalApplicationConfigurationScreen</name>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="50"/>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="70"/>
+        <source>URL</source>
+        <translation>URL</translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="67"/>
+        <source>Command</source>
+        <translation>Ordre</translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="131"/>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="137"/>
+        <source>New application</source>
+        <translation>Nova aplicació</translation>
+    </message>
+</context>
+<context>
+    <name>udg::QExternalApplicationConfigurationScreenBase</name>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="20"/>
+        <source>External applications</source>
+        <translation>Aplicació externa</translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="30"/>
+        <source>Delete</source>
+        <translation>Elimina</translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="37"/>
+        <source>Down</source>
+        <translation>Baixa</translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="44"/>
+        <source>Add command</source>
+        <translation>Afegeix ordre</translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="70"/>
+        <source>Type</source>
+        <translation>Tipus</translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="75"/>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="80"/>
+        <source>URL</source>
+        <oldsource>Url</oldsource>
+        <translation>URL</translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="88"/>
+        <source>Up</source>
+        <translation>Puja</translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="101"/>
+        <source>&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+
+&lt;p&gt;External applications can be an URL which is opened with the system&apos;s default browser or a system command.&lt;/p&gt;
+&lt;p&gt;If an URL or command has the following parameters, then they will be replaced with the corresponding real values before doing the launch.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;{%StudyInstanceUID%}&lt;/b&gt; Study UID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%SeriesInstanceUID%}&lt;/b&gt; Series UID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Accession number.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; Patient ID.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Be aware of the security risks when defining external applications. To mitigate them, parameters will have a limited set of characters (alphanumeric and dot).&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</source>
+        <oldsource>&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+
+&lt;p&gt;External applications can be an URL which is opened with the system&apos;s default browser or a system command.&lt;/p&gt;
+&lt;p&gt;If an URL or command has the following parameters, then they will be replaced with the corresponding real values before doing the launch.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;{%StudyInstanceUID%}&lt;/b&gt; Study UUID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%SeriesInstanceUID%}&lt;/b&gt; Series UUID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Accession number.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; Patient ID.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Be aware of the security risks when defining external applications. To mitigate them, parameters will have a limited set of characters (alphanumeric and dot).&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</oldsource>
+        <translation>&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+
+&lt;p&gt;Les aplicacions externes consisteixen en una URL que pot ser oberta per el navegador o executada com una ordre del sistema.&lt;/p&gt;
+&lt;p&gt;Si una URL o ordre té els següents paràmetres, llavors aquests seràn substituïts per els seus valors reals corresponents en el moment de fer el llançament.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;{%StudyInstanceUID%}&lt;/b&gt; UID de l&apos;estudi.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%SeriesInstanceUID%}&lt;/b&gt; UID de la sèrie.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Nombre d&apos;adhesió.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; ID del pacient.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;En el moment de definir aplicacions externes tingueu en compte els riscs de seguretat. Per mitigar-los, els paràmetres ténen un joc de caràcters limitat (alfanumèric i el punt).&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="126"/>
+        <source>Add URL</source>
+        <translation>Afegeix URL</translation>
     </message>
 </context>
 <context>
