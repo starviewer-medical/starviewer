@@ -410,11 +410,11 @@ void QApplicationMainWindow::createMenus()
     m_toolsMenu = menuBar()->addMenu(tr("&Tools"));
     m_languageMenu = m_toolsMenu->addMenu(tr("&Language"));
     createLanguageMenu();
+    m_toolsMenu->addAction(m_configurationAction);
+    m_toolsMenu->addAction(m_runDiagnosisTestsAction);
     m_externalApplicationsMenu = 0;
     createExternalApplicationsMenu();
     connect(ExternalApplicationsManager::instance(), SIGNAL(onApplicationsChanged()), this, SLOT(createExternalApplicationsMenu()));
-    m_toolsMenu->addAction(m_configurationAction);
-    m_toolsMenu->addAction(m_runDiagnosisTestsAction);
 
     // Menú 'window'
     m_windowMenu = menuBar()->addMenu(tr("&Window"));
@@ -475,7 +475,6 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
     QSignalMapper *signalMapper = new QSignalMapper(m_externalApplicationsMenu);
     connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(launchExternalApplication(int)));
 
-
     QVector<QList<QKeySequence>> shortcutVector(12);
     shortcutVector[0] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication1);
     shortcutVector[1] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication2);
@@ -491,22 +490,21 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
     shortcutVector[11] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication12);
 
     QListIterator<ExternalApplication> i(externalApplications);
-    int pos = 0;
-    while (i.hasNext()) {
+    int position = 0;
+    while (i.hasNext())
+    {
         const ExternalApplication& extApp = i.next();
-        //TODO: debug to check if what i've said on the comment is true.
         QAction* action = new QAction(extApp.getName(),0); //When added to a QMenu, that menu becomes the parent.
-        if (pos < shortcutVector.size())
+        if (position < shortcutVector.size())
         {
-            action->setShortcuts(shortcutVector[pos]);
+            action->setShortcuts(shortcutVector[position]);
         }
+
         m_externalApplicationsMenu->addAction(action);
-        signalMapper->setMapping(action, pos);
+        signalMapper->setMapping(action, position);
         connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
-        pos++;
+        position++;
     }
-
-
 }
 
 QAction* QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
@@ -555,10 +553,11 @@ void QApplicationMainWindow::switchToLanguage(QString locale)
 void QApplicationMainWindow::launchExternalApplication(int i)
 {
     QList<ExternalApplication> externalApplications = ExternalApplicationsManager::instance()->getApplications();
-    if (i < 0 && i >= externalApplications.size()) {
+    if (i < 0 && i >= externalApplications.size())
+    {
         ERROR_LOG("Trying to launch an unexistant external application");
     }
-    const ExternalApplication& app = externalApplications.at(i);
+    const ExternalApplication &app = externalApplications.at(i);
     ExternalApplicationsManager::instance()->launch(app);
 }
 

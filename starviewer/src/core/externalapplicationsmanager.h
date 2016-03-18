@@ -15,14 +15,16 @@
 #ifndef EXTERNALAPPLICATIONSMANAGER_H
 #define EXTERNALAPPLICATIONSMANAGER_H
 
+#include "singleton.h"
+
 #include <QObject>
 #include <QList>
-#include "singleton.h"
-#include "externalapplication.h"
+#include <QHash>
 
 namespace udg {
 
 class Volume;
+class ExternalApplication;
 
 /**
  * @brief Singleton to manage external applications
@@ -41,44 +43,35 @@ class ExternalApplicationsManager : public QObject, public Singleton<ExternalApp
 {
     Q_OBJECT
 public:
-    /**
-     * @brief Reads the external applications from the settings.
-     * @return List of external applications
-     */
+    /// @brief Reads the external applications from the settings.
+    /// @return List of external applications
     QList<ExternalApplication> getApplications() const;
-    /**
-     * @brief Writes the given external applications to the settings.
-     */
-    void setApplications(const QList<ExternalApplication>& applications);
+    
+    /// @brief Writes the given external applications to the settings.
+    void setApplications(const QList<ExternalApplication> &applications);
 
-    /**
-     * @brief Empties the parameters list.
-     *
-     * You should call this when no study is active. Parameters will be empty
-     * when an application is launched.
-     */
+    /// @brief Empties the parameters list.
+    /// 
+    /// You should call this when no study is active. Parameters will be empty
+    /// when an application is launched.
     void cleanParameters();
-    /**
-     * @brief Reads the parameters to replace for the current active study.
-     *
-     * This function should be called when an study becomes active. It reads
-     * the information to fill the parameters from the given volume.
-     *
-     * @param volume Volume that is currently active
-     */
+    
+    /// @brief Reads the parameters to replace for the current active study.
+    ///
+    /// This function should be called when an study becomes active. It reads
+    /// the information to fill the parameters from the given volume.
+    ///
+    /// @param volume Volume that is currently active
     void setParameters(Volume* volume);
-    /**
-     * @return Parameter names and correspondant values.
-     */
-    const QHash<QString,QString>& getParameters() const;
+    
+    /// @return Parameter names and correspondant values.
+    const QHash<QString, QString>& getParameters() const;
 
-    /**
-     * @brief Launches the given application.
-     *
-     * The given application is launched with the parameters given by
-     * getParameters().
-     */
-    void launch(const ExternalApplication& application) const;
+    /// @brief Launches the given application.
+    ///
+    /// The given application is launched with the parameters given by
+    /// getParameters().
+    void launch(const ExternalApplication &application) const;
 
 protected:
     friend class Singleton<ExternalApplicationsManager>;
@@ -86,9 +79,7 @@ protected:
     ~ExternalApplicationsManager();
 
 signals:
-    /**
-     * @brief Emmited when the external applications list is set and written to the settings
-     */
+    /// @brief Emmited when the external applications list is set and written to the settings
     void onApplicationsChanged();
 
 private:
