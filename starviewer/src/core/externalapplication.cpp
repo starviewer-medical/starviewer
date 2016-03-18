@@ -69,6 +69,8 @@ QString ExternalApplication::getReplacedUrl(const QHash<QString,QString> &replac
     if (m_url.isNull()) {
         return QString();
     }
+    //Regex to match unsafe parameter values
+    QRegExp safetyChecker("([A-Za-z0-9\.])+");
     QString ret;
     int begin = 0;
     while(true) {
@@ -85,7 +87,16 @@ QString ExternalApplication::getReplacedUrl(const QHash<QString,QString> &replac
         }
 
         const QString& fieldName = m_url.mid(fieldStart,fieldEnd-fieldStart);
-        ret += replacements[fieldName];
+
+        //Is the value safe?
+        if (safetyChecker.exactMatch(replacements[fieldName]) && replacements[fieldName].length() < 256)
+        {
+            ret += replacements[fieldName];
+        }
+        else if (!replacements[fieldName].isEmpty())
+        {
+            WARN_LOG("Unsafe external application parameter value, value set to empty string for security reasons.");
+        }
 
         fieldEnd += 2; //Skip the two characters of the delimiter
         begin = fieldEnd;
