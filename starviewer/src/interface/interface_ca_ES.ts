@@ -461,7 +461,7 @@
     <message>
         <location filename="qapplicationmainwindow.cpp" line="472"/>
         <source>&amp;External applications</source>
-        <translation>Aplicació &amp;externa</translation>
+        <translation>&amp;Aplicació externa</translation>
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="517"/>
