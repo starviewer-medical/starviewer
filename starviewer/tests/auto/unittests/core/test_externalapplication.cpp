@@ -55,6 +55,12 @@ void test_ExternalApplication::getReplacedUrl_ReturnsExpectedValues_data()
     QTest::newRow("test2.9") << ExternalApplication("test","{%%%}") << replacements << "percent";
     QTest::newRow("test2.10") << ExternalApplication("test","{%{%%}") << replacements << "percentopen";
 
+    replacements = QHash<QString,QString>();
+    replacements["percentencoding"] = "33657-->1.2413 (2%)";
+    QTest::newRow("test3.1") << ExternalApplication("test","http://exam ple.com/{%percentencoding%}") << replacements << "http://exam ple.com/33657--%3E1.2413%20%282%25%29";
+    QTest::newRow("test3.2") << ExternalApplication("test","http://exam ple.com/{%percentencoding%}",ExternalApplication::ExternalApplicationType::Command) << replacements << "http://exam ple.com/33657-->1.2413 (2%)";
+
+
 }
 
 void test_ExternalApplication::getReplacedUrl_ReturnsExpectedValues()

@@ -91,7 +91,14 @@ QString ExternalApplication::getReplacedUrl(const QHash<QString,QString> &replac
         }
 
         const QString &fieldName = m_url.mid(fieldStart, fieldEnd-fieldStart);
-        replacedUrl += replacements[fieldName];
+        if (this->getType() == ExternalApplicationType::Url)
+        {
+            replacedUrl += QUrl::toPercentEncoding(replacements[fieldName]);
+        }
+        else
+        {
+            replacedUrl += replacements[fieldName];
+        }
         fieldEnd += 2; //Skip the two characters of the delimiter
         begin = fieldEnd;
     }
