@@ -55,7 +55,10 @@ public:
     /// Given a hash map with the field names and its values, the funcion
     /// searches for the fields written as {%fieldName%} and replaces them
     /// with the value on the hash map.
-    /// 
+    ///
+    /// If the type is set to URL, parameters will pass a percent encoding
+    /// (url encoding) to sanitize them.
+    ///
     /// @param replacements Hash map where the key is the field name.
     /// @return URL with the parameters replaced.
     QString getReplacedUrl(const QHash<QString,QString> &replacements) const;

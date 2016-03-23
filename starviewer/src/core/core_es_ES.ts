@@ -1268,7 +1268,8 @@ Se deshabilitará el sombreado, de manera que no se visualizará como se esperab
 &lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Accession number.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; Patient ID.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Be aware of the security risks when defining external applications. To mitigate them, parameters will have a limited set of characters (alphanumeric and dot).&lt;/p&gt;
+&lt;p&gt;When launching an URL with browser parameter values will be percent encoded (url encoding).&lt;/p&gt;
+&lt;p&gt;Be aware of the security risks when defining external applications. Code injection attacks through command invocation may happen when opening a malicious DICOM file. Files may also be altered by a MITM attacker between the user and the PACS server.&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</oldsource>
         <translation>&lt;html&gt;
