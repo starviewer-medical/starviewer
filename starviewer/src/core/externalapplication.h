@@ -72,7 +72,8 @@ public:
     /// If the type is Cmd, then the URL is run as a command.
     ///
     /// @param replacements Hash map where the key is the field name.
-    void launch(const QHash<QString, QString> &replacements = QHash<QString, QString>()) const;
+    /// @return Returns true if launch has been successful.
+    bool launch(const QHash<QString, QString> &replacements = QHash<QString, QString>()) const;
 
 private:
     QString m_name;
