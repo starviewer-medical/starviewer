@@ -469,6 +469,12 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
 {
     QList<ExternalApplication> externalApplications = ExternalApplicationsManager::instance()->getApplications();
     delete m_externalApplicationsMenu;
+
+    if (externalApplications.length() == 0) //If no external applications are defined, do not create the menu;
+    {
+        return;
+    }
+
     m_externalApplicationsMenu = m_toolsMenu->addMenu(tr("&External applications"));
     m_externalApplicationsMenu->setIcon(QIcon(":/images/system-run.svg"));
 
