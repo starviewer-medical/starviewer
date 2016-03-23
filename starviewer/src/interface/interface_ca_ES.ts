@@ -269,7 +269,7 @@
         <translation>Obre una carpeta DICOM existent</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="550"/>
+        <location filename="qapplicationmainwindow.cpp" line="556"/>
         <source>Language Switch</source>
         <translation>Canvi d&apos;idioma</translation>
     </message>
@@ -459,35 +459,45 @@
         <translation>Anglès</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="472"/>
+        <location filename="qapplicationmainwindow.cpp" line="478"/>
         <source>&amp;External applications</source>
         <translation>&amp;Aplicació externa</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="517"/>
+        <location filename="qapplicationmainwindow.cpp" line="523"/>
         <source>Switch to %1 language</source>
         <oldsource>Switch to %1 Language</oldsource>
         <translation>Canvia a l&apos;idioma %1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="550"/>
+        <location filename="qapplicationmainwindow.cpp" line="556"/>
         <source>Changes will take effect the next time you start the application</source>
         <translation>Els canvis tindran efecte la pròxima vegada que inicieu l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="710"/>
+        <location filename="qapplicationmainwindow.cpp" line="570"/>
+        <source>External application launch error</source>
+        <translation>Error en llançar l&apos;aplicació externa</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="570"/>
+        <source>There has been an error launching the external application.</source>
+        <translation>Ha ocorregut un error en llançar l&apos;aplicació externa.</translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="720"/>
         <source>Beta Version</source>
         <oldsource>Beta version</oldsource>
         <translation>Versió beta</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="711"/>
+        <location filename="qapplicationmainwindow.cpp" line="721"/>
         <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 used exclusively for testing purposes.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our test-team members. Users of this version should not expect extensions to function properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve %1, please report any found bug or any feature request you may have by sending an e-mail to: &lt;a href=&quot;mailto:%2&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;We really appreciate your feedback!&lt;/h3&gt;</source>
         <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 used exclusively for testing purposes.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our test-team members. Users of this version should not expect the extensions function properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve %1, please report any found bug or any feature request you may have by sending an e-mail to: &lt;a href=&quot;mailto:%2&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;We really appreciate your feedback!&lt;/h3&gt;</oldsource>
         <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;Aquesta és una versió preliminar de l&apos;%1 que s&apos;hauria d&apos;utilitzar exclusivament amb finalitats de verificació.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Aquesta versió està dirigida als radiòlegs i al nostre equip de proves. En aquesta versió és possible que les extensions no funcionin correctament.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Si ens voleu ajudar a millorar l&apos;%1 informeu-nos de qualsevol error o funcionalitat que necessiteu enviant-nos un correu electrònic a: &lt;a href=&quot;mailto:%2&quot;&gt;%2.&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;Us agraïm molt la vostra col·laboració.&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="782"/>
+        <location filename="qapplicationmainwindow.cpp" line="792"/>
         <source>Please activate &quot;Listen to RIS requests&quot; option in %1 configuration to retrieve studies from SAP.</source>
         <oldsource>Please activate &quot;Listen RIS Request&quot; option in %1 configuration to retrieve studies from SAP.</oldsource>
         <translation>Activeu l&apos;opció «Escolta peticions del RIS» a la configuració de l&apos;%1 per poder rebre estudis del SAP.</translation>

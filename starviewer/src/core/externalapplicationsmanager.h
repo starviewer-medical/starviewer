@@ -71,7 +71,9 @@ public:
     ///
     /// The given application is launched with the parameters given by
     /// getParameters().
-    void launch(const ExternalApplication &application) const;
+    ///
+    /// @return Returns true if launch has been successful.
+    bool launch(const ExternalApplication &application) const;
 
 protected:
     friend class Singleton<ExternalApplicationsManager>;

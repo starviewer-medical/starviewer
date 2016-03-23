@@ -100,9 +100,9 @@ const QHash<QString, QString>& ExternalApplicationsManager::getParameters() cons
     return m_parameters;
 }
 
-void ExternalApplicationsManager::launch(const ExternalApplication &application) const
+bool ExternalApplicationsManager::launch(const ExternalApplication &application) const
 {
-    application.launch(getParameters());
+    return application.launch(getParameters());
 }
 
 }
