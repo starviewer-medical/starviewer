@@ -1177,19 +1177,19 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
 <context>
     <name>udg::QExternalApplicationConfigurationScreen</name>
     <message>
-        <location filename="qexternalapplicationconfigurationscreen.cpp" line="50"/>
-        <location filename="qexternalapplicationconfigurationscreen.cpp" line="70"/>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="61"/>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="84"/>
         <source>URL</source>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="qexternalapplicationconfigurationscreen.cpp" line="67"/>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="80"/>
         <source>Command</source>
         <translation>Ordre</translation>
     </message>
     <message>
-        <location filename="qexternalapplicationconfigurationscreen.cpp" line="131"/>
-        <location filename="qexternalapplicationconfigurationscreen.cpp" line="137"/>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="147"/>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="153"/>
         <source>New application</source>
         <translation>Nova aplicació</translation>
     </message>
@@ -1252,7 +1252,7 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
 &lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Accession number.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; Patient ID.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Be aware of the security risks when defining external applications. To mitigate them, parameters will have a limited set of characters (alphanumeric and dot).&lt;/p&gt;
+&lt;p&gt;Be aware of the security risks when defining external applications. Code injection attacks through command invocation may happen when opening a malicious DICOM file. Files may also be altered by a MITM attacker between the user and the PACS server.&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</source>
         <oldsource>&lt;html&gt;
@@ -1263,8 +1263,8 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
 &lt;p&gt;If an URL or command has the following parameters, then they will be replaced with the corresponding real values before doing the launch.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;b&gt;{%StudyInstanceUID%}&lt;/b&gt; Study UUID.&lt;/li&gt;
-&lt;li&gt;&lt;b&gt;{%SeriesInstanceUID%}&lt;/b&gt; Series UUID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%StudyInstanceUID%}&lt;/b&gt; Study UID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%SeriesInstanceUID%}&lt;/b&gt; Series UID.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Accession number.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; Patient ID.&lt;/li&gt;
 &lt;/ul&gt;
@@ -1284,7 +1284,7 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
 &lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Nombre d&apos;adhesió.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; ID del pacient.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;En el moment de definir aplicacions externes tingueu en compte els riscs de seguretat. Per mitigar-los, els paràmetres ténen un joc de caràcters limitat (alfanumèric i el punt).&lt;/p&gt;
+&lt;p&gt;Tingueu en compte els riscs en definir aplicacions externes. A través d&apos;un fitxer DICOM maligne es poden produïr atacs d&apos;injecció de codi a través de l&apos;invocació d&apos;ordres. Els fitxers també poden veure&apos;s alterats per mitjà d&apos;atacs MITM entre l&apos;usuari i el servidor PACS.&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</translation>
     </message>

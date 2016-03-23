@@ -56,13 +56,6 @@ public:
     /// searches for the fields written as {%fieldName%} and replaces them
     /// with the value on the hash map.
     /// 
-    /// If a field name is not found on the hash map, the value will be an empty
-    /// string. Thus removing the brackets {% %}.
-    /// 
-    /// Replacement values must be at least 256 characters long and only
-    /// alphanumeric and dot characters are allowed. When this condition is not
-    /// satisfied the replacement value is an empty string.
-    /// 
     /// @param replacements Hash map where the key is the field name.
     /// @return URL with the parameters replaced.
     QString getReplacedUrl(const QHash<QString,QString> &replacements) const;
