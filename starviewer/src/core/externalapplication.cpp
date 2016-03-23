@@ -99,18 +99,19 @@ QString ExternalApplication::getReplacedUrl(const QHash<QString,QString> &replac
     return replacedUrl;
 }
 
-void ExternalApplication::launch(const QHash<QString,QString> &replacements) const
+bool ExternalApplication::launch(const QHash<QString,QString> &replacements) const
 {
+    bool success = false;
     const QString& replacedUrl = this->getReplacedUrl(replacements);
     if (this->getType() == Url)
     {
         INFO_LOG("Opening URL " + replacedUrl);
         const QUrl& url = QUrl(replacedUrl);
-        QDesktopServices::openUrl(url);
+        success = QDesktopServices::openUrl(url);
     }
     else if (this->getType() == Command)
     {
-        if (QProcess::startDetached(replacedUrl))
+        if (success = QProcess::startDetached(replacedUrl)) //Ninja code: assignation inside an if condition.
         {
             INFO_LOG("Running command " + replacedUrl);
         }
@@ -119,6 +120,7 @@ void ExternalApplication::launch(const QHash<QString,QString> &replacements) con
             ERROR_LOG("Command " + replacedUrl + " could not be started.");
         }
     }
+    return success;
 }
 
 }

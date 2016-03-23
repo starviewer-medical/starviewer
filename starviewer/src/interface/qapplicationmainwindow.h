@@ -142,7 +142,9 @@ private slots:
     /// Canvia a l'idioma indicat
     void switchToLanguage(QString locale);
 
-    /// Launches the corresponding external application. (Where the number is the position on the list)
+    /// Launches the corresponding external application. (Where the number is
+    /// the position on the list). If application launch has failed, shows an
+    /// error message box.
     void launchExternalApplication(int i);
 
     /// Maximitza a tantes pantalles com es pugui
@@ -179,6 +181,8 @@ private slots:
     /// @brief External applications submenu with the defined external applications.
     ///
     /// When called multiple times, deletes the previous menu and regenerates a new one.
+    ///
+    /// If no external applications are defined, the menu is not created.
     void createExternalApplicationsMenu();
 
 private:
