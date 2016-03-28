@@ -47,20 +47,6 @@ then
     echo "THREADWEAVER_LIB_DIR=$THREADWEAVER_LIB_DIR"
 fi
 
-if [ ! $APR_LIB_DIR ]
-then
-    APR_LIB_DIR=$(dirname $(ldd $STARVIEWER_DIR/bin/starviewer | grep libapr-1 | awk '{print $3}'))
-    test $APR_LIB_DIR != . || { echo Please provide the APR_LIB_DIR variable; exit; }
-    echo "APR_LIB_DIR=$APR_LIB_DIR"
-fi
-
-if [ ! $SQLITE3_LIB_DIR ]
-then
-    SQLITE3_LIB_DIR=$(dirname $(ldd $STARVIEWER_DIR/bin/starviewer | grep libsqlite3 | awk '{print $3}'))
-    test $SQLITE3_LIB_DIR != . || { echo Please provide the SQLITE3_LIB_DIR variable; exit; }
-    echo "SQLITE3_LIB_DIR=$SQLITE3_LIB_DIR"
-fi
-
 
 # Create directory
 
@@ -86,7 +72,7 @@ mkdir -p lib
 cd lib
 
 echo "  - SingleApplication..."
-cp $STARVIEWER_DIR/bin/libQtSolutions_SingleApplication-head.so.1 .
+cp $STARVIEWER_DIR/bin/libQt*Solutions_SingleApplication-head.so.1 .
 
 echo "  - Qt..."
 cp $QT_LIB_DIR/libQt5*.so.5 .
@@ -108,15 +94,6 @@ cp $GDCM_LIB_DIR/libgdcmopenjpeg.so.1.4 .
 echo "  - ThreadWeaver..."
 cp $THREADWEAVER_LIB_DIR/libKF5ThreadWeaver.so.5 .
 
-echo "  - log4cxx..."
-cp $LOG4CXX_LIB_DIR/liblog4cxx.so.10 .
-
-echo "  - apr..."
-cp $APR_LIB_DIR/libapr*.so.0 .
-
-echo "  - sqlite3..."
-cp $SQLITE3_LIB_DIR/libsqlite3.so.0 .
-
 cd ..
 
 
@@ -127,6 +104,8 @@ mkdir -p platforms
 cp $QT_LIB_DIR/../plugins/platforms/libqxcb.so platforms/
 mkdir -p imageformats
 cp $QT_LIB_DIR/../plugins/imageformats/libqgif.so imageformats/
+mkdir -p sqldrivers
+cp $QT_LIB_DIR/../plugins/sqldrivers/libqsqlite.so sqldrivers/
 
 echo Copying DICOM dump default tags...
 cp -r $STARVIEWER_DIR/dicomdumpdefaulttags .

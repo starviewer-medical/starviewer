@@ -17,8 +17,9 @@ will become a system wide setup.
 Getting started: the quick way
 ------------------------------
 
-1.  Use the script 'buildall.sh' to do the explained steps automatically.
-    Remember to install Qt on the proper location (the script will tell you).
+1.  Use the script 'buildall.sh' located at (starviewer/sdk/scripts/linux) to
+    do the explained steps automatically. Remember to install Qt on the proper
+    location (the script will tell you).
 
 2.  To customize the default paths edit 'sdk/config/setup.sh'
 
@@ -58,7 +59,6 @@ Can be installed with your package manager.
 
     apt-get install cmake build-essential
     apt-get install libgl1-mesa-dev libxt-dev
-    apt-get install liblog4cxx10-dev liblog4cxx10
     apt-get install freeglut3 freeglut3-dev
     apt-get install libsqlite3-0 libsqlite3-dev
     apt-get install libssl1.0.0 libssl-dev
@@ -66,6 +66,7 @@ Can be installed with your package manager.
     apt-get install libpng12-0 libpng12-dev
     apt-get install libtiff5 libtiff5-dev
     apt-get install libxml2 libxml2-dev
+    apt-get install libgstreamer0.10-0 libgstreamer-plugins-base0.10-0
 
 ### SDK libraries
 
@@ -97,7 +98,7 @@ With SHA256 sums.
 
     3328145e79e693078be01c2ca96764e364d7ce399ccf92f9e9f45ec780dfb23d
 
-    http://skylink.dl.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.4.4/gdcm-2.4.4.tar.gz
+    http://downloads.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.4.4/gdcm-2.4.4.tar.gz
 
     9f7b45ec57e01ca9ad89a05411752914f810fd70b7038fc48abd59e3ec13c6ee
 
@@ -105,11 +106,11 @@ With SHA256 sums.
 
     ea8b6a648b7b2dc313df709940813c22ed5b68d2f7bef30acbaf2a83a6e4c723
 
-    http://download.kde.org/stable/frameworks/5.3.0/extra-cmake-modules-1.3.0.tar.xz
+    http://download.kde.org/Attic/frameworks/5.3.0/extra-cmake-modules-1.3.0.tar.xz
 
     c15818ec6e6320bea79a0d44e29cb4fc19a0e0d428cccb979d6c3104ec65a838
-
-    http://download.kde.org/stable/frameworks/5.3.0/threadweaver-5.3.0.tar.xz
+ 
+    http://download.kde.org/Attic/frameworks/5.3.0/threadweaver-5.3.0.tar.xz
 
 
 Building the SDK
@@ -117,16 +118,16 @@ Building the SDK
 
 ### Libraries directory
 
-1. Run the Qt setup and set the installation path to '~/uroot/usr/lib/Qt5.4.1/'.
+1. Run the Qt setup and set the installation path to '~/uroot/usr/local/lib/Qt5.4.1/'.
 
 2. Extract the downloaded library sources on (discarding Qt):
    '~/uroot/usr/local/src/'
 
-3. Copy 'extra-cmake-modules-1.3.0' inside 'threadweaver-5.3.0 directory'.
+3. Move 'extra-cmake-modules-1.3.0' folder inside 'threadweaver-5.3.0 directory'.
 
 ### Configure
 
-Edit the '/scripts/linux/config/setup.sh'
+Edit the 'starviewer/sdk/scripts/linux/config/setup.sh'
 
 
 -   DOWNLOAD_PREFIX=~/uroot/downloads
@@ -174,7 +175,7 @@ Edit the '/scripts/linux/config/setup.sh'
 
 -   CMAKE_COMPILER
 
-    Use it if you want to compile the SDK with a different compiler like clang.ç
+    Use it if you want to compile the SDK with a different compiler like clang.
 
 -   MAKE_VERBOSE
 
@@ -185,6 +186,32 @@ Edit the '/scripts/linux/config/setup.sh'
     How many compile jobs can be run simultaneously, this ought to be the
     number of cpu's your computer has.
 
+### Building the SDK
+
+Run the following script: 'starviewer/sdk/scripts/linux/build.sh'
+
+### Saving the environment variables
+
+If the above script ends up successfully, the environment variables used will
+be outputted.
+
+It is strongly recommended to copy them on a .txt file for future use.
+
+Example:
+
+SDK_INSTALL_PREFIX=/home/user/uroot/usr/local
+LD_LIBRARY_PATH=/home/user/uroot/usr/local/lib:/home/user/uroot/usr/local/lib/x86_64-linux-gnu:/home/user/uroot/usr/local/lib/Qt5.4.1/5.4/gcc_64/lib/
+QTDIR=/home/user/uroot/usr/local/lib/Qt5.4.1/5.4/gcc_64
+DCMTKLIBDIR=/home/user/uroot/usr/local/lib
+DCMTKINCLUDEDIR=/home/user/uroot/usr/local/include/dcmtk
+VTKLIBDIR=/home/user/uroot/usr/local/lib
+VTKINCLUDEDIR=/home/user/uroot/usr/local/include/vtk-6.1
+GDCMLIBDIR=/home/user/uroot/usr/local/lib
+GDCMINCLUDEDIR=/home/user/uroot/usr/local/include/gdcm-2.4
+ITKLIBDIR=/home/user/uroot/usr/local/lib
+ITKINCLUDEDIR=/home/user/uroot/usr/local/include/ITK-4.7
+THREADWEAVERLIBDIR=/home/user/uroot/usr/local/lib/x86_64-linux-gnu
+THREADWEAVERINCLUDEDIR=/home/user/uroot/usr/local/include/KF5
 
 Building Starviewer
 -------------------
@@ -217,20 +244,27 @@ The project main file is located in 'starviewer/starviewer.pro'
 If you want to customize where the SDK libraries are placed or use the system
 ones edit 'starviewer/starviewer/src/defaultdirectories.pri'
 
-
 ### Step by step build
 
 1.  Export this environment variables. You should have copied them on your
     clipboard.
 
-        export SDK_INSTALL_PREFIX
-        export LD_LIBRARY_PAYH
-        export QTDIR
+        export SDK_INSTALL_PREFIX='replace with value outputted by sdk build script'
+        export LD_LIBRARY_PAYH='replace with value outputted by sdk build script'
+        export QTDIR='replace with value outputted by sdk build script'
 
 2.  Run QMake on Starviewer directory (do not use the absolute path $QTDIR if
     you want to use the Qt libraries installed on your system).
 
         $QTDIR/bin/qmake starviewer.pro -r -spec linux-g++
+
+    In case you want to use a different compiler, then run:
+
+	$QTDIR/bin/qmake starviewer.pro -r -spec linux-clang 'QMAKE_CXX=clang++' 'QMAKE_CC=clang'
+
+    In case you want to use a different complier with distcc, then run:
+
+	$QTDIR/bin/qmake starviewer.pro -r -spec linux-clang 'QMAKE_CXX=distcc clang++' 'QMAKE_CC=distcc clang'
 
 3.  Compile
 
@@ -245,7 +279,9 @@ ones edit 'starviewer/starviewer/src/defaultdirectories.pri'
     Replace [PUT YOUR LD PATH HERE] with the real LD path, outputted by the
     build script, you should have it in your clipboard.
 
+5. Run starviewer.sh
 
+6. Enjoy :D
 
 Setting up QtCreator
 --------------------
