@@ -39,7 +39,7 @@ download_and_verify bd7df10a479606d529a8b71f466c44a2bdd11fd534c62ce0aa44fad91883
 
 download_and_verify 3328145e79e693078be01c2ca96764e364d7ce399ccf92f9e9f45ec780dfb23d \
                     'gdcm-2.4.4.tar.gz' \
-                    'http://skylink.dl.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.4.4/gdcm-2.4.4.tar.gz'
+                    'http://downloads.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.4.4/gdcm-2.4.4.tar.gz'
 
 download_and_verify 9f7b45ec57e01ca9ad89a05411752914f810fd70b7038fc48abd59e3ec13c6ee \
                     'InsightToolkit-4.7.1.tar.xz' \
@@ -47,11 +47,11 @@ download_and_verify 9f7b45ec57e01ca9ad89a05411752914f810fd70b7038fc48abd59e3ec13
 
 download_and_verify ea8b6a648b7b2dc313df709940813c22ed5b68d2f7bef30acbaf2a83a6e4c723 \
                     'extra-cmake-modules-1.3.0.tar.xz' \
-                    'http://download.kde.org/stable/frameworks/5.3.0/extra-cmake-modules-1.3.0.tar.xz'
+                    'http://download.kde.org/Attic/frameworks/5.3.0/extra-cmake-modules-1.3.0.tar.xz'
 
 download_and_verify c15818ec6e6320bea79a0d44e29cb4fc19a0e0d428cccb979d6c3104ec65a838 \
                     'threadweaver-5.3.0.tar.xz' \
-                    'http://download.kde.org/stable/frameworks/5.3.0/threadweaver-5.3.0.tar.xz'
+                    'http://download.kde.org/Attic/frameworks/5.3.0/threadweaver-5.3.0.tar.xz'
 
 
 chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.4.1.run"
