@@ -35,7 +35,7 @@ public:
     /// @brief Constructs the GUI and fills the list.
     /// The constructor retrieves the information from the settings and fills the GUI list automatically using the setExternalApplications method.
     /// @param parent
-    QExternalApplicationConfigurationScreen(QWidget *parent = 0);
+    explicit QExternalApplicationConfigurationScreen(QWidget *parent = 0);
     ~QExternalApplicationConfigurationScreen();
 
     /// @brief Use it to show the applications
@@ -64,9 +64,7 @@ private:
 
     /// @brief Enables or disables the buttons.
     ///
-    /// Checks the situation with the table widget and enables or disables up,
-    /// down and delete buttons.
-    /// They are only enabled when needed.
+    /// Checks the situation with the table widget and enables or disables up, down and delete buttons. They are only enabled when needed.
     ///
     /// You should invoke this method when the table data changes.
     void checkGrayeds();
