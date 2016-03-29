@@ -23,17 +23,14 @@ namespace udg {
 /**
  * @brief The ExternalApplication class made with an Url and a name.
  *
- * The name, is the name of the external application, this name will be
- * displayed on the external applications menu.
+ * The name, is the name of the external application, this name will be displayed on the external applications menu.
  *
- * The concept of an external application is launching an URL with the system
- * default browser and replacing some URL parameters or fields with information
- * of the currently opened study.
+ * The concept of an external application is launching an URL with the system default browser and replacing some URL parameters or fields with information of
+ * the currently opened study.
  *
  * Fields are defined on the url with this style: {%fieldName%}.
  *
- * When the application is launched a hash with the key as the field name and
- * the value as the value of the field has to be passed in order to do the
+ * When the application is launched a hash with the key as the field name and the value as the value of the field has to be passed in order to do the
  * substitution.
  *
  */
@@ -42,7 +39,7 @@ class ExternalApplication
 public:
     enum ExternalApplicationType { Url, Command };
 
-    ExternalApplication(QString name = QString(), QString url = QString(), ExternalApplicationType type = Url);
+    explicit ExternalApplication(QString name = QString(), QString url = QString(), ExternalApplicationType type = Url);
     ~ExternalApplication();
 
     void setName(QString name);
@@ -52,12 +49,10 @@ public:
     QString getUrl() const;
     /// @brief Returns an URL with the fields replaced.
     ///
-    /// Given a hash map with the field names and its values, the funcion
-    /// searches for the fields written as {%fieldName%} and replaces them
-    /// with the value on the hash map.
+    /// Given a hash map with the field names and its values, the funcion searches for the fields written as {%fieldName%} and replaces them with the value on
+    /// the hash map.
     ///
-    /// If the type is set to URL, parameters will pass a percent encoding
-    /// (url encoding) to sanitize them.
+    /// If the type is set to URL, parameters will pass a percent encoding (url encoding) to sanitize them.
     ///
     /// @param replacements Hash map where the key is the field name.
     /// @return URL with the parameters replaced.

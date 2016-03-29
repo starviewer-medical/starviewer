@@ -29,15 +29,11 @@ class ExternalApplication;
 /**
  * @brief Singleton to manage external applications
  *
- * ExternalApplicationsManager singleton reads and saves the external
- * applications to the settings.
+ * ExternalApplicationsManager singleton reads and saves the external applications to the settings.
  *
- * It also emits an event when the list of applications is changed, thus the UI
- * can be updated.
+ * It also emits an event when the list of applications is changed, thus the UI can be updated.
  *
- * This singleton is the point where the parameters to be replaced are
- * collected. When the active study changes, setParameters should be
- * called.
+ * This singleton is the point where the parameters to be replaced are collected. When the active study changes, setParameters should be called.
  */
 class ExternalApplicationsManager : public QObject, public Singleton<ExternalApplicationsManager>
 {
@@ -52,14 +48,12 @@ public:
 
     /// @brief Empties the parameters list.
     /// 
-    /// You should call this when no study is active. Parameters will be empty
-    /// when an application is launched.
+    /// You should call this when no study is active. Parameters will be empty when an application is launched.
     void cleanParameters();
     
     /// @brief Reads the parameters to replace for the current active study.
     ///
-    /// This function should be called when an study becomes active. It reads
-    /// the information to fill the parameters from the given volume.
+    /// This function should be called when an study becomes active. It reads the information to fill the parameters from the given volume.
     ///
     /// @param volume Volume that is currently active
     void setParameters(Volume* volume);
@@ -69,8 +63,7 @@ public:
 
     /// @brief Launches the given application.
     ///
-    /// The given application is launched with the parameters given by
-    /// getParameters().
+    /// The given application is launched with the parameters given by getParameters().
     ///
     /// @return Returns true if launch has been successful.
     bool launch(const ExternalApplication &application) const;
