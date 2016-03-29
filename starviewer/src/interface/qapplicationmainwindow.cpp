@@ -472,6 +472,7 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
 
     if (externalApplications.length() == 0) //If no external applications are defined, do not create the menu;
     {
+        m_externalApplicationsMenu = 0;
         return;
     }
 
