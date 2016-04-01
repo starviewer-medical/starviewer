@@ -1199,7 +1199,7 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     <message>
         <location filename="qexternalapplicationconfigurationscreenbase.ui" line="20"/>
         <source>External applications</source>
-        <translation>Aplicació externa</translation>
+        <translation type="unfinished">Aplicacions externes</translation>
     </message>
     <message>
         <location filename="qexternalapplicationconfigurationscreenbase.ui" line="30"/>
