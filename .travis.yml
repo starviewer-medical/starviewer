@@ -28,13 +28,13 @@ before_install:
       sudo apt-get install -qq qt54base qt54quick1 qt54tools qt54webkit qt54xmlpatterns &&
       sudo apt-get install -qq libwrap0 libwrap0-dev                                    ;
     else
-      brew update > /dev/null                                                      &&
-      cd `brew --prefix`                                                           &&
-      echo "Install Qt 5.4."                                                       &&
-      git checkout 00e46351980ad915424aad9316abffc19936809c Library/Formula/qt5.rb &&
-      cd -                                                                         &&
-      brew install qt5                                                             &&
-      chmod -R 755 /usr/local/opt/qt5/*                                            ;
+      brew update > /dev/null                                                                                                                 &&
+      cd $(brew --prefix)/Library/Formula                                                                                                     &&
+      echo "Install Qt 5.4."                                                                                                                  &&
+      wget -O qt5.rb https://raw.githubusercontent.com/Homebrew/homebrew-core/00e46351980ad915424aad9316abffc19936809c/Library/Formula/qt5.rb &&
+      cd -                                                                                                                                    &&
+      brew install qt5                                                                                                                        &&
+      chmod -R 755 /usr/local/opt/qt5/*                                                                                                       ;
     fi
 
 install:
