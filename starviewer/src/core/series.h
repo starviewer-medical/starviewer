@@ -25,6 +25,7 @@
 
 namespace udg {
 
+class EncapsulatedDocument;
 class Volume;
 class Image;
 class Study;
@@ -160,6 +161,18 @@ public:
 
     /// Indica si una sèrie té imatges
     bool hasImages() const;
+
+    /// Adds the given encapsulated document to this series and sets this series as the parent of the document.
+    /// Returns true if the encapsulated document is added and false if it's not added because it was already in this series.
+    bool addEncapsulatedDocument(EncapsulatedDocument *document);
+    /// Returns true if this series contains an encapsulated document with the given key and false otherwise.
+    bool encapsulatedDocumentExists(const QString &key) const;
+    /// Returns the list of all the encapsulated documents in this series.
+    const QList<EncapsulatedDocument*>& getEncapsulatedDocuments() const;
+    /// Returns the number of encapsulated documents in this series.
+    int getNumberOfEncapsulatedDocuments() const;
+    /// Returns true if this series contains at least one encapsulated document and false otherwise.
+    bool hasEncapsulatedDocuments() const;
 
     /// Assignar/Obtenir el path de les imatges de la sèrie
     void setImagesPath(QString imagesPath);
@@ -325,6 +338,9 @@ private:
     /// Llista de les Image de la serie ordenades per criteris d'ordenació com SliceLocation,InstanceNumber, etc
     /// TODO falta definir quina és l'estrategia d'ordenació per defecte
     QList<Image*> m_imageSet;
+
+    /// List of encapsulated documents contained in this series.
+    QList<EncapsulatedDocument*> m_encapsulatedDocumentSet;
 
     /// Estudi pare
     Study *m_parentStudy;
