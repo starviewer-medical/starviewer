@@ -13,6 +13,8 @@
  *************************************************************************************/
 
 #include "series.h"
+
+#include "encapsulateddocument.h"
 #include "study.h"
 #include "image.h"
 #include "logging.h"
@@ -132,6 +134,56 @@ int Series::getNumberOfItems()
 bool Series::hasImages() const
 {
     return !m_imageSet.isEmpty();
+}
+
+bool Series::addEncapsulatedDocument(EncapsulatedDocument *document)
+{
+    QString key = document->getKeyIdentifier();
+
+    if (key.isEmpty())
+    {
+        DEBUG_LOG("Empty key identifier. The encapsulated document can't be added to the series.");
+        return false;
+    }
+
+    if (this->encapsulatedDocumentExists(key))
+    {
+        DEBUG_LOG("Encapsulated document not added to the series because there's already a document with the key " + key);
+        return false;
+    }
+
+    document->setParentSeries(this);
+    m_encapsulatedDocumentSet.append(document);
+
+    return true;
+}
+
+bool Series::encapsulatedDocumentExists(const QString &key) const
+{
+    foreach (EncapsulatedDocument *document, m_encapsulatedDocumentSet)
+    {
+        if (document->getKeyIdentifier() == key)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+const QList<EncapsulatedDocument*>& Series::getEncapsulatedDocuments() const
+{
+    return m_encapsulatedDocumentSet;
+}
+
+int Series::getNumberOfEncapsulatedDocuments() const
+{
+    return m_encapsulatedDocumentSet.size();
+}
+
+bool Series::hasEncapsulatedDocuments() const
+{
+    return !m_encapsulatedDocumentSet.isEmpty();
 }
 
 void Series::setSOPClassUID(QString sopClassUID)

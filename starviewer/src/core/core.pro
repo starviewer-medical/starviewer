@@ -432,7 +432,8 @@ HEADERS += extensionfactory.h \
     volumefillerstep.h \
     qexternalapplicationconfigurationscreen.h \
     externalapplication.h \
-    externalapplicationsmanager.h
+    externalapplicationsmanager.h \
+    encapsulateddocument.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -811,7 +812,8 @@ SOURCES += extensionmediator.cpp \
     volumefillerstep.cpp \
     qexternalapplicationconfigurationscreen.cpp \
     externalapplication.cpp \
-    externalapplicationsmanager.cpp
+    externalapplicationsmanager.cpp \
+    encapsulateddocument.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
