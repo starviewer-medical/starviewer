@@ -20,6 +20,8 @@
 
 namespace udg {
 
+class Patient;
+
 /**
  * @brief QPdfExtension is an extension that allows to open in the default PDF reader the encapsulated PDFs contained in a Patient.
  */
@@ -31,6 +33,9 @@ public:
 
     explicit QPdfExtension(QWidget *parent = 0);
     virtual ~QPdfExtension();
+
+    /// Sets the given patient to the extension. All the PDF documents in this patient are shown.
+    void setPatient(Patient *patient);
 
 };
 
