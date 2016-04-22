@@ -37,6 +37,11 @@ public:
     /// Sets the given patient to the extension. All the PDF documents in this patient are shown.
     void setPatient(Patient *patient);
 
+private slots:
+
+    /// Desencapsulates and opens the PDF associated with the given item.
+    void openPdf(QListWidgetItem *item);
+
 };
 
 } // namespace udg

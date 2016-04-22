@@ -14,9 +14,14 @@
 
 #include "qpdfextension.h"
 
+#include "dicomtagreader.h"
 #include "encapsulateddocument.h"
 #include "logging.h"
 #include "patient.h"
+
+#include <QDesktopServices>
+#include <QFile>
+#include <QUrl>
 
 namespace udg {
 
@@ -24,6 +29,8 @@ QPdfExtension::QPdfExtension(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
+
+    connect(m_listWidget, &QListWidget::itemActivated, this, &QPdfExtension::openPdf);
 }
 
 QPdfExtension::~QPdfExtension()
@@ -60,6 +67,28 @@ void QPdfExtension::setPatient(Patient *patient)
                 }
             }
         }
+    }
+}
+
+void QPdfExtension::openPdf(QListWidgetItem *item)
+{
+    QString path = item->data(Qt::UserRole).toString();
+
+    DICOMTagReader dicomTagReader(path);
+    QByteArray pdfData = dicomTagReader.getValueAttributeAsByteArray(DICOMEncapsulatedDocument);
+
+    QFile pdfFile(path + ".pdf");
+    if (!pdfFile.open(QFile::WriteOnly | QFile::Truncate))
+    {
+        ERROR_LOG("Can't write to file " + pdfFile.fileName());
+        return;
+    }
+    pdfFile.write(pdfData);
+    pdfFile.close();
+
+    if (!QDesktopServices::openUrl(QUrl::fromLocalFile(pdfFile.fileName())))
+    {
+        ERROR_LOG("Can't open file " + pdfFile.fileName());
     }
 }
 
