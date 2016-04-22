@@ -14,6 +14,8 @@
 
 #include "pdfextensionmediator.h"
 
+#include "extensioncontext.h"
+
 namespace udg {
 
 PdfExtensionMediator::PdfExtensionMediator(QObject *parent)
@@ -34,7 +36,7 @@ bool PdfExtensionMediator::initializeExtension(QWidget *extension, const Extensi
         return false;
     }
 
-    // ...
+    pdfExtension->setPatient(extensionContext.getPatient());
 
     return true;
 }

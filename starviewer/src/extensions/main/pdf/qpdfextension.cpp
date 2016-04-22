@@ -14,6 +14,10 @@
 
 #include "qpdfextension.h"
 
+#include "encapsulateddocument.h"
+#include "logging.h"
+#include "patient.h"
+
 namespace udg {
 
 QPdfExtension::QPdfExtension(QWidget *parent)
@@ -24,6 +28,39 @@ QPdfExtension::QPdfExtension(QWidget *parent)
 
 QPdfExtension::~QPdfExtension()
 {
+}
+
+void QPdfExtension::setPatient(Patient *patient)
+{
+    m_listWidget->clear();
+
+    if (!patient)
+    {
+        DEBUG_LOG("Received a null patient");
+        return;
+    }
+
+    int count = 0;
+
+    foreach (Study *study, patient->getStudies())
+    {
+        foreach (Series *series, study->getSeries())
+        {
+            foreach (EncapsulatedDocument *document, series->getEncapsulatedDocuments())
+            {
+                if (document->getMimeTypeOfEncapsulatedDocument() == "application/pdf")
+                {
+                    count++;
+                    QListWidgetItem *item = new QListWidgetItem(document->getDocumentTitle(), m_listWidget);
+                    if (document->getDocumentTitle().isEmpty())
+                    {
+                        item->setText(tr("Document %1").arg(count));
+                    }
+                    item->setData(Qt::UserRole, document->getPath());
+                }
+            }
+        }
+    }
 }
 
 } // namespace udg
