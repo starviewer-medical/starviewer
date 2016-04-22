@@ -21,6 +21,7 @@
 #include "image.h"
 #include "inputoutputsettings.h"
 #include "localdatabasedisplayshutterdal.h"
+#include "localdatabaseencapsulateddocumentdal.h"
 #include "localdatabaseimagedal.h"
 #include "localdatabasepatientdal.h"
 #include "localdatabaseseriesdal.h"
@@ -136,6 +137,37 @@ void saveImages(DatabaseConnection &databaseConnection, const QList<Image*> &ima
     }
 }
 
+// Saves to the database the given encapsulated document, doing an insert or an update as necessary.
+void saveEncapsulatedDocument(DatabaseConnection &databaseConnection, const EncapsulatedDocument *document)
+{
+    LocalDatabaseEncapsulatedDocumentDAL encapsulatedDocumentDAL(databaseConnection);
+
+    if (!encapsulatedDocumentDAL.insert(document))
+    {
+        if (encapsulatedDocumentDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
+        {
+            // The encapsulated document already exists, let's update it
+            if (!encapsulatedDocumentDAL.update(document))
+            {
+                throw encapsulatedDocumentDAL.getLastError();
+            }
+        }
+        else
+        {
+            throw encapsulatedDocumentDAL.getLastError();
+        }
+    }
+}
+
+// Saves the encapsulated documents in the given list to the database, inserting or updating them as necessary.
+void saveEncapsulatedDocuments(DatabaseConnection &databaseConnection, const QList<EncapsulatedDocument*> &documentList)
+{
+    foreach (EncapsulatedDocument *document, documentList)
+    {
+        saveEncapsulatedDocument(databaseConnection, document);
+    }
+}
+
 // Saves the given series to the database, doing an insert or an update as necessary.
 void saveSeries(DatabaseConnection &databaseConnection, const Series *series)
 {
@@ -164,6 +196,7 @@ void saveSeries(DatabaseConnection &databaseConnection, const QList<Series*> &se
     foreach (Series *series, seriesList)
     {
         saveImages(databaseConnection, series->getImages(), currentDate, currentTime);
+        saveEncapsulatedDocuments(databaseConnection, series->getEncapsulatedDocuments());
 
         series->setRetrievedDate(currentDate);
         series->setRetrievedTime(currentTime);
@@ -312,6 +345,17 @@ void deleteImagesFromDatabase(DatabaseConnection &databaseConnection, const Dico
     }
 }
 
+// Deletes the encapsulated documents that match the given mask from the database.
+void deleteEncapsulatedDocumentsFromDatabase(DatabaseConnection &databaseConnection, const DicomMask &mask)
+{
+    LocalDatabaseEncapsulatedDocumentDAL encapsulatedDocumentDAL(databaseConnection);
+
+    if (!encapsulatedDocumentDAL.del(mask))
+    {
+        throw encapsulatedDocumentDAL.getLastError();
+    }
+}
+
 // Deletes from the database the series with the given SeriesInstanceUID from the study with the given StudyInstanceUID.
 // If SeriesInstanceUID is empty, deletes all series from the study with the given StudyInstanceUID, but not the study itself.
 void deleteSeriesStructureFromDatabase(DatabaseConnection &databaseConnection, const QString &studyInstanceUID, const QString &seriesIntanceUID)
@@ -321,6 +365,7 @@ void deleteSeriesStructureFromDatabase(DatabaseConnection &databaseConnection, c
     mask.setSeriesInstanceUID(seriesIntanceUID);
     deleteSeriesFromDatabase(databaseConnection, mask);
     deleteImagesFromDatabase(databaseConnection, mask);
+    deleteEncapsulatedDocumentsFromDatabase(databaseConnection, mask);
 }
 
 // Deletes from the database the patient, study, series and images from the study with the given UID.
@@ -560,6 +605,15 @@ QList<Image*> LocalDatabaseManager::queryImages(const DicomMask &mask)
     return imageList;
 }
 
+QList<EncapsulatedDocument*> LocalDatabaseManager::queryEncapsulatedDocuments(const DicomMask &mask)
+{
+    DatabaseConnection databaseConnection;
+    LocalDatabaseEncapsulatedDocumentDAL encapsulatedDocumentDAL(databaseConnection);
+    QList<EncapsulatedDocument*> documentList = encapsulatedDocumentDAL.query(mask);
+    setLastError(encapsulatedDocumentDAL.getLastError());
+    return documentList;
+}
+
 // TODO Possible memory leaks in this method: patients, and images
 Patient* LocalDatabaseManager::retrieve(const DicomMask &mask)
 {
@@ -587,8 +641,9 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &mask)
         return 0;
     }
 
-    // Get images
+    // Get images and encapsulated documents
     LocalDatabaseImageDAL imageDAL(databaseConnection);
+    LocalDatabaseEncapsulatedDocumentDAL encapsulatedDocumentDAL(databaseConnection);
     DicomMask imagesMask;
     imagesMask.setStudyInstanceUID(mask.getStudyInstanceUID());
 
@@ -606,6 +661,18 @@ Patient* LocalDatabaseManager::retrieve(const DicomMask &mask)
         foreach (Image *image, imageList)
         {
             series->addImage(image);
+        }
+
+        QList<EncapsulatedDocument*> documentList = encapsulatedDocumentDAL.query(imagesMask);
+
+        if (encapsulatedDocumentDAL.getLastError().isValid())
+        {
+            return 0;
+        }
+
+        foreach (EncapsulatedDocument *document, documentList)
+        {
+            series->addEncapsulatedDocument(document);
         }
 
         patient->getStudy(mask.getStudyInstanceUID())->addSeries(series);

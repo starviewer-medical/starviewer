@@ -98,7 +98,8 @@ HEADERS += databaseconnection.h \
     cachetest.h \
     usermessage.h \
     portinusebyanotherapplication.h \
-    localdatabasevoilutdal.h
+    localdatabasevoilutdal.h \
+    localdatabaseencapsulateddocumentdal.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsconnection.cpp \
@@ -173,7 +174,8 @@ SOURCES += databaseconnection.cpp \
     cachetest.cpp \
     usermessage.cpp \
     portinusebyanotherapplication.cpp \
-    localdatabasevoilutdal.cpp
+    localdatabasevoilutdal.cpp \
+    localdatabaseencapsulateddocumentdal.cpp
 win32 {
     HEADERS += windowsportinusebyanotherapplication.h
     SOURCES += windowsportinusebyanotherapplication.cpp
