@@ -49,4 +49,19 @@
             );
         </upgradeCommand>
     </upgradeDatabaseToRevision>
+    <upgradeDatabaseToRevision updateToRevision="9593">
+        <upgradeCommand>
+            CREATE TABLE EncapsulatedDocument
+            (
+                SOPInstanceUID                  TEXT PRIMARY KEY,
+                TransferSyntaxUID               TEXT,
+                InstanceNumber                  TEXT,
+                DocumentTitle                   TEXT,
+                MimeTypeOfEncapsulatedDocument  TEXT,
+                RetrievedPacsID                 INTEGER,
+                StudyInstanceUID                TEXT,
+                SeriesInstanceUID               TEXT
+            );
+        </upgradeCommand>
+    </upgradeDatabaseToRevision>
 </upgradeDatabase>
