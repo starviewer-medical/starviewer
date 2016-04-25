@@ -24,7 +24,7 @@ install:
 
     # Setup jom
 
-    $source = "http://download.qt.io/official_releases/jom/jom.zip"
+    $source = "http://ftp.fau.de/qtproject/official_releases/jom/jom_1_1_0.zip"
     $destination = "c:\jom.zip"
     Invoke-WebRequest $source -OutFile $destination
 
