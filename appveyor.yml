@@ -9,6 +9,10 @@ environment:
     QTDIR: C:\Qt\5.4\msvc2013_64_opengl
     ARCH: amd64
 
+# Uncomment to enable RDP
+#init:
+#- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 install:
 - ps: |
     # Setup precompiled SDK
@@ -19,7 +23,7 @@ install:
 
     7z x $destination -oc:\ > 7z-output.txt
 
-    $env:PATH = "$env:PATH;$env:QTDIR\bin;c:\vtk\6.1.0-$env:BITS\bin;c:\gdcm\2.4.4-$env:BITS\bin;c:\ThreadWeaver\5.3.0-$env:BITS\bin"
+    $env:PATH = "$env:QTDIR\bin;c:\vtk\6.1.0-$env:BITS\bin;c:\gdcm\2.4.4-$env:BITS\bin;c:\ThreadWeaver\5.3.0-$env:BITS\bin;$env:PATH"
 
 
     # Setup jom
