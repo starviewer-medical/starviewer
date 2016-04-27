@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-// Disable all logs for autotests
-#define ELPP_DISABLE_LOGS
+#include "logging.h"
 #include "../../src/core/easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
 
@@ -154,5 +153,6 @@ inline int run()
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    udg::beginLogging();
     return AutoTest::run();
 }
