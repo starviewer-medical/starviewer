@@ -44,6 +44,11 @@ QString udg::getLogConfFilePath()
     {
         configurationFile = qApp->applicationDirPath() + "/../../../log.conf";
     }
+    // Mac OS X crash reporter
+    if (!QFile::exists(configurationFile))
+    {
+        configurationFile = qApp->applicationDirPath() + "/../../../../../../log.conf";
+    }
     return configurationFile;
 }
 
