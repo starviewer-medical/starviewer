@@ -574,17 +574,25 @@ QList<Series*> LocalDatabaseManager::querySeries(DicomMask mask)
         return seriesList;
     }
 
-    // Fill number of images of each series
+    // Fill number of images and encapsulated documents of each series
     LocalDatabaseImageDAL imageDAL(databaseConnection);
+    LocalDatabaseEncapsulatedDocumentDAL encapsulatedDocumentDAL(databaseConnection);
 
     foreach (Series *series, seriesList)
     {
         mask.setSeriesInstanceUID(series->getInstanceUID());
-        series->setNumberOfImages(imageDAL.count(mask));
 
+        series->setNumberOfImages(imageDAL.count(mask));
         if (imageDAL.getLastError().isValid())
         {
             setLastError(imageDAL.getLastError());
+            return seriesList;
+        }
+
+        series->setNumberOfEncapsulatedDocuments(encapsulatedDocumentDAL.count(mask));
+        if (encapsulatedDocumentDAL.getLastError().isValid())
+        {
+            setLastError(encapsulatedDocumentDAL.getLastError());
             return seriesList;
         }
     }

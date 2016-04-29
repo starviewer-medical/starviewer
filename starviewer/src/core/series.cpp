@@ -27,7 +27,7 @@
 namespace udg {
 
 Series::Series(QObject *parent)
- : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfImages(0)
+ : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfImages(0), m_numberOfEncapsulatedDocuments(0)
 {
 }
 
@@ -133,7 +133,7 @@ int Series::getNumberOfItems()
 
 bool Series::hasImages() const
 {
-    return !m_imageSet.isEmpty();
+    return m_numberOfImages > 0;
 }
 
 bool Series::addEncapsulatedDocument(EncapsulatedDocument *document)
@@ -154,6 +154,7 @@ bool Series::addEncapsulatedDocument(EncapsulatedDocument *document)
 
     document->setParentSeries(this);
     m_encapsulatedDocumentSet.append(document);
+    m_numberOfEncapsulatedDocuments++;
 
     return true;
 }
@@ -178,12 +179,17 @@ const QList<EncapsulatedDocument*>& Series::getEncapsulatedDocuments() const
 
 int Series::getNumberOfEncapsulatedDocuments() const
 {
-    return m_encapsulatedDocumentSet.size();
+    return m_numberOfEncapsulatedDocuments;
+}
+
+void Series::setNumberOfEncapsulatedDocuments(int numberOfEncapsulatedDocuments)
+{
+    m_numberOfEncapsulatedDocuments = numberOfEncapsulatedDocuments;
 }
 
 bool Series::hasEncapsulatedDocuments() const
 {
-    return !m_encapsulatedDocumentSet.isEmpty();
+    return m_numberOfEncapsulatedDocuments > 0;
 }
 
 void Series::setSOPClassUID(QString sopClassUID)

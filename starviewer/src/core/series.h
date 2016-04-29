@@ -171,6 +171,9 @@ public:
     const QList<EncapsulatedDocument*>& getEncapsulatedDocuments() const;
     /// Returns the number of encapsulated documents in this series.
     int getNumberOfEncapsulatedDocuments() const;
+    /// Sets the number of encapsulated documents that is returned when there are no documents.
+    /// It's used when querying the database to avoid retrieving the documents themselves.
+    void setNumberOfEncapsulatedDocuments(int numberOfEncapsulatedDocuments);
     /// Returns true if this series contains at least one encapsulated document and false otherwise.
     bool hasEncapsulatedDocuments() const;
 
@@ -360,6 +363,9 @@ private:
 
     /// Número d'imatges de la sèrie. Fem el recompte manualment per quan consultem de la BDD
     int m_numberOfImages;
+
+    /// Number of encapsulated documents in the series. It's used when querying the database to avoid querying the full document set.
+    int m_numberOfEncapsulatedDocuments;
 
     /// Guarda el thumbnail de la sèrie
     QPixmap m_seriesThumbnail;
