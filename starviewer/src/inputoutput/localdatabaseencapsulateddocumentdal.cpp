@@ -130,6 +130,21 @@ QList<EncapsulatedDocument*> LocalDatabaseEncapsulatedDocumentDAL::query(const D
     return documentList;
 }
 
+int LocalDatabaseEncapsulatedDocumentDAL::count(const DicomMask &mask)
+{
+    QSqlQuery query = getNewQuery();
+    prepareQueryWithMask(query, mask, "SELECT count(*) FROM EncapsulatedDocument");
+
+    if (executeQueryAndLogError(query) && query.next())
+    {
+        return query.value(0).toInt();
+    }
+    else
+    {
+        return -1;
+    }
+}
+
 void LocalDatabaseEncapsulatedDocumentDAL::bindValues(QSqlQuery &query, const EncapsulatedDocument *document)
 {
     query.bindValue(":sopInstanceUID", document->getSopInstanceUid());

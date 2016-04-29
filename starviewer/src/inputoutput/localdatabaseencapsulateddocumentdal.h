@@ -49,6 +49,10 @@ public:
     /// and returns them in a list.
     QList<EncapsulatedDocument*> query(const DicomMask &mask);
 
+    /// Counts and returns the number of encapsulated documents that match the given mask (only StudyUID, SeriesUID and SOPInstanceUID are considered).
+    /// Returns -1 in case of error.
+    int count(const DicomMask &mask);
+
 private:
 
     /// Binds the necessary values of the given query with the information of the given encapsulated document.
