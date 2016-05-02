@@ -37,6 +37,9 @@ public:
     /// Sets the given patient to the extension. All the PDF documents in this patient are shown.
     void setPatient(Patient *patient);
 
+protected:
+    virtual void showEvent(QShowEvent *event) override;
+
 private slots:
 
     /// Desencapsulates and opens the PDF associated with the given item.
