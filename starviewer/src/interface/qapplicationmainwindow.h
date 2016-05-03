@@ -39,6 +39,7 @@ class QLogViewer;
 class Patient;
 class StatsWatcher;
 class ApplicationVersionChecker;
+class ExternalApplication;
 
 class QApplicationMainWindow : public QMainWindow {
 Q_OBJECT
@@ -106,8 +107,8 @@ private:
     /// Escriu la configuració amb la que s'engegarà el programa el pròxim cop. \TODO: s'hauria de cridar també quan obrim una finestra nova?
     void writeSettings();
 
-    // Fa accessibles les extensions a través dels menús. S'hauria de cridar quan ja
-    // tenim un input vàlid i es poden carregar volums
+    /// Fa accessibles les extensions a través dels menús. S'hauria de cridar quan ja
+    /// tenim un input vàlid i es poden carregar volums
     void enableExtensions();
 
     /// Marca aquesta aplicació com a aplicació beta, mostrant informació a l'usuari.
@@ -124,9 +125,9 @@ private:
     void computeDefaultToolTextSize();
 
 private slots:
-    // Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
-    // com per exemple un QProgressDialog o en un label
-    // @param progress valor del progrés de càrrega
+    /// Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
+    /// com per exemple un QProgressDialog o en un label
+    /// @param progress valor del progrés de càrrega
     void updateVolumeLoadProgressNotification(int progress);
 
     /// Mostra el diàleg on s'explica que és una versió beta.
@@ -140,6 +141,11 @@ private slots:
 
     /// Canvia a l'idioma indicat
     void switchToLanguage(QString locale);
+
+    /// Launches the corresponding external application. (Where the number is
+    /// the position on the list). If application launch has failed, shows an
+    /// error message box.
+    void launchExternalApplication(int i);
 
     /// Maximitza a tantes pantalles com es pugui
     void maximizeMultipleScreens();
@@ -172,6 +178,13 @@ private slots:
     /// Mostra el diàleg que executa els diagnosis test
     void showDiagnosisTestDialog();
 
+    /// @brief External applications submenu with the defined external applications.
+    ///
+    /// When called multiple times, deletes the previous menu and regenerates a new one.
+    ///
+    /// If no external applications are defined, the menu is not created.
+    void createExternalApplicationsMenu();
+
 private:
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
@@ -184,6 +197,7 @@ private:
     QMenu *m_visualizationMenu;
     QMenu *m_windowMenu;
     QMenu *m_languageMenu;
+    QMenu *m_externalApplicationsMenu;
     QMenu *m_helpMenu;
     QMenu *m_toolsMenu;
     QMenu *m_moveWindowToDesktopMenu;

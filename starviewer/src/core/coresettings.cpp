@@ -95,6 +95,8 @@ const QString CoreSettings::DefaultPACSListToQuery("PACS/defaultPACSListToQuery"
 //TODO:Aquesta clau està duplicada a InputOutputSettings
 const QString CoreSettings::PacsListConfigurationSectionName = "PacsList";
 
+const QString CoreSettings::ExternalApplicationsConfigurationSectionName = "ExternalApplications";
+
 const QString Q2DViewerBase("2DViewer/");
 const QString CoreSettings::EnableQ2DViewerSliceScrollLoop(Q2DViewerBase + "enable2DViewerSliceScrollLoop");
 const QString CoreSettings::EnableQ2DViewerPhaseScrollLoop(Q2DViewerBase + "enable2DViewerPhaseScrollLoop");

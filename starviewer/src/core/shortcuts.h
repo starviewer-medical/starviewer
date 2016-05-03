@@ -92,6 +92,19 @@ public:
     static const QString MoveToPreviousDesktop;
     static const QString MoveToNextDesktop;
     static const QString MaximizeMultipleScreens;
+
+    static const QString ExternalApplication1;
+    static const QString ExternalApplication2;
+    static const QString ExternalApplication3;
+    static const QString ExternalApplication4;
+    static const QString ExternalApplication5;
+    static const QString ExternalApplication6;
+    static const QString ExternalApplication7;
+    static const QString ExternalApplication8;
+    static const QString ExternalApplication9;
+    static const QString ExternalApplication10;
+    static const QString ExternalApplication11;
+    static const QString ExternalApplication12;
 };
 
 }

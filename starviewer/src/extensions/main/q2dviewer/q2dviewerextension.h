@@ -196,6 +196,9 @@ private slots:
     /// current viewer.
     void updateTransferFunctionComboBoxWithCurrentViewerModel();
 
+    /// Updates external application parameters from the currently active view.
+    void updateExternalApplicationsWithCurrentView(Volume* volume);
+
     /// Sets the transfer function at the given index in the current model to the current viewer.
     void setTransferFunctionToCurrentViewer(int transferFunctionIndex);
 

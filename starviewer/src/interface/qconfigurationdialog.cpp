@@ -11,7 +11,7 @@
   may be copied, modified, propagated, or distributed except according to the
   terms contained in the LICENSE file.
  *************************************************************************************/
-
+#include <QCloseEvent>
 #include "qconfigurationdialog.h"
 
 #ifndef STARVIEWER_LITE
@@ -23,6 +23,7 @@
 #include "qdicomdirconfigurationscreen.h"
 #include "q2dviewerconfigurationscreen.h"
 #include "q2dviewerlayoutconfigurationscreen.h"
+#include "qexternalapplicationconfigurationscreen.h"
 #include "starviewerapplication.h"
 
 namespace udg {
@@ -62,6 +63,10 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     QDICOMDIRConfigurationScreen *dicomdirScreen = new QDICOMDIRConfigurationScreen(this);
     this->addConfigurationWidget(dicomdirScreen, tr("DICOMDIR"), AdvancedConfiguration);
 
+    // External applications configuration
+    QExternalApplicationConfigurationScreen *externalApplicationScreen = new QExternalApplicationConfigurationScreen(this);
+    this->addConfigurationWidget(externalApplicationScreen, tr("External application"), AdvancedConfiguration);
+
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
 
     m_optionsList->setCurrentRow(0);
@@ -70,6 +75,24 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
 
 QConfigurationDialog::~QConfigurationDialog()
 {
+}
+
+void QConfigurationDialog::closeEvent(QCloseEvent *event)
+{
+    bool close = true;
+    foreach (QWidget *screen, m_configurationScreenWidgets)
+    {
+        close = close && screen->close();
+    }
+    if (close)
+    {
+        event->accept();
+    }
+    else
+    {
+        event->ignore();
+    }
+
 }
 
 void QConfigurationDialog::setViewAdvancedConfiguration()
@@ -124,6 +147,7 @@ void QConfigurationDialog::addConfigurationWidget(QWidget *widget, const QString
     item->setIcon(widget->windowIcon());
 
     m_configurationListItems.insert(type, item);
+    m_configurationScreenWidgets.append(widget);
 }
 
 }

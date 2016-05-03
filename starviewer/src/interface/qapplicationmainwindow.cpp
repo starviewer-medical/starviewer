@@ -31,6 +31,8 @@
 #include "starviewerapplicationcommandline.h"
 #include "risrequestwrapper.h"
 #include "qaboutdialog.h"
+#include "externalapplication.h"
+#include "externalapplicationsmanager.h"
 
 // Pel LanguageLocale
 #include "coresettings.h"
@@ -410,6 +412,9 @@ void QApplicationMainWindow::createMenus()
     createLanguageMenu();
     m_toolsMenu->addAction(m_configurationAction);
     m_toolsMenu->addAction(m_runDiagnosisTestsAction);
+    m_externalApplicationsMenu = 0;
+    createExternalApplicationsMenu();
+    connect(ExternalApplicationsManager::instance(), SIGNAL(onApplicationsChanged()), this, SLOT(createExternalApplicationsMenu()));
 
     // Menú 'window'
     m_windowMenu = menuBar()->addMenu(tr("&Window"));
@@ -460,6 +465,55 @@ void QApplicationMainWindow::createLanguageMenu()
     }
 }
 
+void QApplicationMainWindow::createExternalApplicationsMenu()
+{
+    QList<ExternalApplication> externalApplications = ExternalApplicationsManager::instance()->getApplications();
+    delete m_externalApplicationsMenu;
+
+    if (externalApplications.length() == 0) //If no external applications are defined, do not create the menu;
+    {
+        m_externalApplicationsMenu = 0;
+        return;
+    }
+
+    m_externalApplicationsMenu = m_toolsMenu->addMenu(tr("&External applications"));
+    m_externalApplicationsMenu->setIcon(QIcon(":/images/system-run.svg"));
+
+    QSignalMapper *signalMapper = new QSignalMapper(m_externalApplicationsMenu);
+    connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(launchExternalApplication(int)));
+
+    QVector<QList<QKeySequence>> shortcutVector(12);
+    shortcutVector[0] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication1);
+    shortcutVector[1] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication2);
+    shortcutVector[2] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication3);
+    shortcutVector[3] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication4);
+    shortcutVector[4] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication5);
+    shortcutVector[5] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication6);
+    shortcutVector[6] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication7);
+    shortcutVector[7] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication8);
+    shortcutVector[8] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication9);
+    shortcutVector[9] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication10);
+    shortcutVector[10] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication11);
+    shortcutVector[11] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication12);
+
+    QListIterator<ExternalApplication> i(externalApplications);
+    int position = 0;
+    while (i.hasNext())
+    {
+        const ExternalApplication& extApp = i.next();
+        QAction* action = new QAction(extApp.getName(),0); //When added to a QMenu, that menu becomes the parent.
+        if (position < shortcutVector.size())
+        {
+            action->setShortcuts(shortcutVector[position]);
+        }
+
+        m_externalApplicationsMenu->addAction(action);
+        signalMapper->setMapping(action, position);
+        connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
+        position++;
+    }
+}
+
 QAction* QApplicationMainWindow::createLanguageAction(const QString &language, const QString &locale)
 {
     Settings settings;
@@ -501,6 +555,21 @@ void QApplicationMainWindow::switchToLanguage(QString locale)
     settings.setValue(CoreSettings::LanguageLocale, locale);
 
     QMessageBox::information(this, tr("Language Switch"), tr("Changes will take effect the next time you start the application"));
+}
+
+void QApplicationMainWindow::launchExternalApplication(int i)
+{
+    QList<ExternalApplication> externalApplications = ExternalApplicationsManager::instance()->getApplications();
+    if (i < 0 && i >= externalApplications.size())
+    {
+        ERROR_LOG("Trying to launch an unexistant external application");
+    }
+    const ExternalApplication &app = externalApplications.at(i);
+    if (!ExternalApplicationsManager::instance()->launch(app))
+    {
+        //Launch failed.
+        QMessageBox::critical(this, tr("External application launch error"), tr("There has been an error launching the external application."));
+    }
 }
 
 QApplicationMainWindow* QApplicationMainWindow::setPatientInNewWindow(Patient *patient)
