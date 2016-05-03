@@ -16,8 +16,8 @@
 #define UDGQCONFIGURATIONDIALOG_H
 
 #include "ui_qconfigurationdialogbase.h"
-#include <QDialog>
 
+#include <QDialog>
 #include <QMultiMap>
 
 namespace udg {
@@ -31,6 +31,10 @@ public:
     QConfigurationDialog(QWidget *parent = 0, Qt::WindowFlags f = 0);
 
     ~QConfigurationDialog();
+
+protected:
+    /// @brief Calls .close() on each configuration subdialog.
+    void closeEvent(QCloseEvent* event);
 
 private slots:
     /// S'encarrega d'amagar/mostrar les opcions de configuració depenent si s'ha seleccionat o no l'opció
@@ -46,6 +50,7 @@ private:
 
 private:
     QMultiMap<ConfigurationType, QListWidgetItem*> m_configurationListItems;
+    QList<QWidget*> m_configurationScreenWidgets;
 };
 
 }

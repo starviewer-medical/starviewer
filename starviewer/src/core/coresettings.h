@@ -112,6 +112,9 @@ public:
     //TODO: Aquesta clau està duplicada a InputOutputSettings
     static const QString PacsListConfigurationSectionName;
 
+    /// List containing the external applications.
+    static const QString ExternalApplicationsConfigurationSectionName;
+
     /// Defineix si el loop està habilitat en l'scroll d'imatges/fases del visor 2D
     static const QString EnableQ2DViewerSliceScrollLoop;
     static const QString EnableQ2DViewerPhaseScrollLoop;

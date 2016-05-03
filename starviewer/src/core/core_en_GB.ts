@@ -82,7 +82,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="127"/>
+        <location filename="coresettings.cpp" line="129"/>
         <source>PNG (*.png)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1163,6 +1163,112 @@ Shading will be disabled, it will not render as expected.</source>
     <message>
         <location filename="qdiagnosistestbase.ui" line="269"/>
         <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QExternalApplicationConfigurationScreen</name>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="61"/>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="84"/>
+        <source>URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="80"/>
+        <source>Command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="147"/>
+        <location filename="qexternalapplicationconfigurationscreen.cpp" line="153"/>
+        <source>New application</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QExternalApplicationConfigurationScreenBase</name>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="20"/>
+        <source>External applications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="30"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="37"/>
+        <source>Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="44"/>
+        <source>Add command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="70"/>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="75"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="80"/>
+        <source>URL</source>
+        <oldsource>Url</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="88"/>
+        <source>Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="101"/>
+        <source>&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+
+&lt;p&gt;External applications can be an URL which is opened with the system&apos;s default browser or a system command.&lt;/p&gt;
+&lt;p&gt;If an URL or command has the following parameters, then they will be replaced with the corresponding real values before doing the launch.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;{%StudyInstanceUID%}&lt;/b&gt; Study UID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%SeriesInstanceUID%}&lt;/b&gt; Series UID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Accession number.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; Patient ID.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Be aware of the security risks when defining external applications. Code injection attacks through command invocation may happen when opening a malicious DICOM file. Files may also be altered by a MITM attacker between the user and the PACS server.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</source>
+        <oldsource>&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+
+&lt;p&gt;External applications can be an URL which is opened with the system&apos;s default browser or a system command.&lt;/p&gt;
+&lt;p&gt;If an URL or command has the following parameters, then they will be replaced with the corresponding real values before doing the launch.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;{%StudyInstanceUID%}&lt;/b&gt; Study UID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%SeriesInstanceUID%}&lt;/b&gt; Series UID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Accession number.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; Patient ID.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;When launching an URL with browser parameter values will be percent encoded (url encoding).&lt;/p&gt;
+&lt;p&gt;Be aware of the security risks when defining external applications. Code injection attacks through command invocation may happen when opening a malicious DICOM file. Files may also be altered by a MITM attacker between the user and the PACS server.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="126"/>
+        <source>Add URL</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

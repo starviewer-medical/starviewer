@@ -93,6 +93,56 @@
         <source>Close all %1 windows and try again.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="147"/>
+        <source>Can&apos;t reinstall database because the current database can&apos;t be removed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="162"/>
+        <source>Can&apos;t read database creation script. Can&apos;t create the database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="180"/>
+        <source>Database creation script failed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="210"/>
+        <source>You don&apos;t have write permission on cache image directory. Retrieval or importing of new studies will fail.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="235"/>
+        <source>You don&apos;t have write permission on the database directory. Can&apos;t create the database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="257"/>
+        <source>You don&apos;t have write permission on %1 database. Retrieval or importing of new studies will fail.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="342"/>
+        <source>Unable to create the cache image directory. Please check user permissions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="360"/>
+        <source>Unable to create the database directory. Please check user permissions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="378"/>
+        <source>Reinstalling database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="394"/>
+        <source>Current database is of a newer version. In order to run %1, local studies must be deleted and the database reinstalled. Do you want to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::CacheTest</name>
@@ -174,71 +224,27 @@
 <context>
     <name>udg::DICOMDIRImporter</name>
     <message>
-        <location filename="dicomdirimporter.cpp" line="346"/>
+        <location filename="dicomdirimporter.cpp" line="347"/>
         <source>Importing image %1 of series %2 from study %3, %4</source>
         <oldsource>Importing Image %1 of Series %2 from Study %3, %4</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirimporter.cpp" line="351"/>
+        <location filename="dicomdirimporter.cpp" line="352"/>
         <source>Importing series %1 of study %2, %3</source>
         <oldsource>Importing Series %1 of Study %2, %3</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirimporter.cpp" line="356"/>
+        <location filename="dicomdirimporter.cpp" line="357"/>
         <source>Importing study %1, %2</source>
         <oldsource>Importing Study %1, %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirimporter.cpp" line="361"/>
+        <location filename="dicomdirimporter.cpp" line="362"/>
         <source>Importing images from DICOMDIR</source>
         <oldsource>Importing Images from DICOMDIR</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>udg::DatabaseInstallation</name>
-    <message>
-        <location filename="databaseinstallation.cpp" line="57"/>
-        <source>Unable to create database, be sure you have write permission on the database directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="70"/>
-        <source>You don&apos;t have write permission on %1 database. Retrieval or importing of new studies will fail.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="77"/>
-        <source>Unable to upgrade database file, be sure you have write permission on the database directory.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="100"/>
-        <source>Unable to create the cache image directory. Please check user permissions.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="112"/>
-        <source>You don&apos;t have write permission on cache image directory. Retrieval or importing of new studies will fail.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="210"/>
-        <source>Reinstalling database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="232"/>
-        <source>Updating database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="458"/>
-        <source>Current database is of newer version. In order to run %1, local studies must be deleted and the database will be reinstalled. Do you want to continue?</source>
-        <oldsource>Current database is of newer version. In order to run %1, local studies must be deleted and database will be reinstalled. Do you want to continue?</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
