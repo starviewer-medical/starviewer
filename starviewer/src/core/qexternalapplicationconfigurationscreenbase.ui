@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>udg::QExternalApplicationConfigurationScreenBase</class>
+ <widget class="QWidget" name="udg::QExternalApplicationConfigurationScreenBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>663</width>
+    <height>455</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>External applications</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../main/main.qrc">
+    <normaloff>:/images/system-run-big.svg</normaloff>:/images/system-run-big.svg</iconset>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="4" column="1">
+    <widget class="QPushButton" name="m_buttonDelete">
+     <property name="text">
+      <string>Delete</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="m_buttonDown">
+     <property name="text">
+      <string>Down</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="m_buttonAddCommand">
+     <property name="text">
+      <string>Add command</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" rowspan="6">
+    <widget class="QTableWidget" name="m_tableWidget">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <attribute name="horizontalHeaderVisible">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>150</number>
+     </attribute>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Type</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>URL</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QPushButton" name="m_buttonUp">
+     <property name="text">
+      <string>Up</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;
+&lt;head/&gt;
+&lt;body&gt;
+
+&lt;p&gt;External applications can be an URL which is opened with the system's default browser or a system command.&lt;/p&gt;
+&lt;p&gt;If an URL or command has the following parameters, then they will be replaced with the corresponding real values before doing the launch.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;b&gt;{%StudyInstanceUID%}&lt;/b&gt; Study UID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%SeriesInstanceUID%}&lt;/b&gt; Series UID.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Accession number.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; Patient ID.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Be aware of the security risks when defining external applications. Code injection attacks through command invocation may happen when opening a malicious DICOM file. Files may also be altered by a MITM attacker between the user and the PACS server.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="m_buttonAddUrl">
+     <property name="text">
+      <string>Add URL</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../main/main.qrc"/>
+  <include location="../main/main.qrc"/>
+  <include location="../main/main.qrc"/>
+ </resources>
+ <connections/>
+</ui>
