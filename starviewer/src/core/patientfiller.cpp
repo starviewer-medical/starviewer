@@ -80,7 +80,14 @@ void PatientFiller::processDICOMFile(const DICOMTagReader *dicomTagReader)
 
     foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
     {
-        fillerStep->fillIndividually();
+        // If some step fails to fill we can skip the rest of steps.
+        // This is done in order to skip further processing of non-DICOM files (e.g. thumbnails when opening files from a directory).
+        // Note: this is done thinking that the first stage steps are DICOMFileClassifierFillerStep and ImageFillerStep;
+        // the condition may have to change if this circumstance changes.
+        if (!fillerStep->fillIndividually())
+        {
+            break;
+        }
     }
 
     emit progress(++m_numberOfProcessedFiles);

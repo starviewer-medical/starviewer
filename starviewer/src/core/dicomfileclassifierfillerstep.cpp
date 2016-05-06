@@ -37,6 +37,12 @@ bool DICOMFileClassifierFillerStep::fillIndividually()
 
     Q_ASSERT(dicomReader);
 
+    // Don't generate anything for invalid DICOM files
+    if (!dicomReader->canReadFile())
+    {
+        return false;
+    }
+
     QString patientID = dicomReader->getValueAttributeAsQString(DICOMPatientID);
     QString studyUID = dicomReader->getValueAttributeAsQString(DICOMStudyInstanceUID);
     QString seriesUID = dicomReader->getValueAttributeAsQString(DICOMSeriesInstanceUID);
