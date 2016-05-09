@@ -513,13 +513,22 @@ void ExtensionHandler::openDefaultExtension()
 {
     if (m_mainApp->getCurrentPatient())
     {
-        Settings settings;
-        QString defaultExtension = settings.getValue(InterfaceSettings::DefaultExtension).toString();
-        if (!request(defaultExtension))
+        // TODO If there are no images nor documents it would be better to inform the user than to open an extension, but a message box doesn't let the tests
+        //      continue, so for the moment we keep the old behaviour for this scenario.
+        if (m_extensionContext.hasImages() || !m_extensionContext.hasEncapsulatedDocuments())
         {
-            WARN_LOG("Ha fallat la petició per la default extension anomenada: " + defaultExtension + ". Engeguem extensió 2D per defecte(hardcoded)");
-            DEBUG_LOG("Ha fallat la petició per la default extension anomenada: " + defaultExtension + ". Engeguem extensió 2D per defecte(hardcoded)");
-            request("Q2DViewerExtension");
+            Settings settings;
+            QString defaultExtension = settings.getValue(InterfaceSettings::DefaultExtension).toString();
+            if (!request(defaultExtension))
+            {
+                WARN_LOG("Ha fallat la petició per la default extension anomenada: " + defaultExtension + ". Engeguem extensió 2D per defecte(hardcoded)");
+                request("Q2DViewerExtension");
+            }
+        }
+
+        if (m_extensionContext.hasEncapsulatedDocuments())
+        {
+            request("PdfExtension");
         }
     }
     else
@@ -528,4 +537,4 @@ void ExtensionHandler::openDefaultExtension()
     }
 }
 
-};  // end namespace udg
+}   // end namespace udg

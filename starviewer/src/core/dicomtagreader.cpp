@@ -217,6 +217,41 @@ QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
     return result;
 }
 
+QByteArray DICOMTagReader::getValueAttributeAsByteArray(const DICOMTag &tag) const
+{
+    if (!m_dicomData && !m_dicomHeader)
+    {
+        DEBUG_LOG("No dataset nor header is loaded. Returning default QByteArray.");
+        return QByteArray();
+    }
+
+    // Look for the attribute in the dataset first; if not found, then look in the header
+    DcmItem *dcmItems[2] = { m_dicomData, m_dicomHeader };
+    QByteArray result;
+
+    for (int i = 0; i < 2; i++)
+    {
+        if (dcmItems[i])
+        {
+            const Uint8 *value;
+            unsigned long size;
+            OFCondition status = dcmItems[i]->findAndGetUint8Array(DcmTagKey(tag.getGroup(), tag.getElement()), value, &size);
+
+            if (status.good())
+            {
+                result = QByteArray(reinterpret_cast<const char*>(value), size);
+                break;
+            }
+            else
+            {
+                logStatusForTagOperation(tag, status);
+            }
+        }
+    }
+
+    return result;
+}
+
 DICOMValueAttribute* DICOMTagReader::getValueAttribute(const DICOMTag &attributeTag) const
 {
     if (!m_dicomData && !m_dicomHeader)

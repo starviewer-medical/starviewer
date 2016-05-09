@@ -22,6 +22,7 @@ class QSqlError;
 namespace udg {
 
 class DicomMask;
+class EncapsulatedDocument;
 class Image;
 class Patient;
 class Series;
@@ -62,6 +63,8 @@ public:
     QList<Series*> querySeries(DicomMask mask);
     /// Returns images that match the given mask (only StudyInstanceUID, SeriesInstanceUID and SOPInstanceUID are considered).
     QList<Image*> queryImages(const DicomMask &mask);
+    /// Returns encapsulated documents that match the given mask (only StudyInstanceUID, SeriesInstanceUID and SOPInstanceUID are considered).
+    QList<EncapsulatedDocument*> queryEncapsulatedDocuments(const DicomMask &mask);
 
     /// Returns a patient structure, including studies, series and images, that matches the given mask. StudyInstanceUID, SeriesInstanceUID and SOPInstanceUID
     /// are considered. If no result is found, returns null.

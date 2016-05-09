@@ -4,7 +4,8 @@
 SUBDIRS = mpr \
           dicomprint \
           q2dviewer \
-          q3dviewer
+          q3dviewer \
+          pdf
 
 include(../../extensions.pri)
 
