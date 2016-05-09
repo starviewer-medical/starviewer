@@ -16,6 +16,7 @@
 
 #include "dicomfileclassifierfillerstep.h"
 #include "dicomtagreader.h"
+#include "encapsulateddocumentfillerstep.h"
 #include "imagefillerstep.h"
 //#include "keyimagenotefillerstep.h"       // future use
 #include "logging.h"
@@ -135,7 +136,7 @@ QList<Patient*> PatientFiller::processFiles(const QStringList &files)
 
 void PatientFiller::createSteps()
 {
-    m_firstStageSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep();
+    m_firstStageSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep() << new EncapsulatedDocumentFillerStep();
     m_secondStageSteps << new VolumeFillerStep() << new OrderImagesFillerStep() << new TemporalDimensionFillerStep();
 }
 

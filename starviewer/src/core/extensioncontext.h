@@ -40,6 +40,11 @@ public:
     /// tenim pacient (cas mhd's) fer-ho amb el volumeIdentifier
     Volume* getDefaultVolume() const;
 
+    /// Returns true if the patient of this context contains at least one image and false otherwise.
+    bool hasImages() const;
+    /// Returns true if the patient of this context contains at least one encapsulated document and false otherwise.
+    bool hasEncapsulatedDocuments() const;
+
 private:
     Patient* m_patient;
 

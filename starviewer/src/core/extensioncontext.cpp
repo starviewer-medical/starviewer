@@ -88,4 +88,46 @@ Volume *ExtensionContext::getDefaultVolume() const
     return defaultVolume;
 }
 
+bool ExtensionContext::hasImages() const
+{
+    if (!m_patient)
+    {
+        return false;
+    }
+
+    foreach (Study *study, m_patient->getStudies())
+    {
+        foreach (Series *series, study->getSeries())
+        {
+            if (series->hasImages())
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool ExtensionContext::hasEncapsulatedDocuments() const
+{
+    if (!m_patient)
+    {
+        return false;
+    }
+
+    foreach (Study *study, m_patient->getStudies())
+    {
+        foreach (Series *series, study->getSeries())
+        {
+            if (series->hasEncapsulatedDocuments())
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 }

@@ -83,6 +83,10 @@ public:
     /// Si no es troba el tag es retornarà un QString buit
     virtual QString getValueAttributeAsQString(const DICOMTag &tag) const;
 
+    /// Obtains the value at the given tag and returns it as a QByteArray with binary data (not text).
+    /// Returns an empty QByteArray if the tag is not found or there is an error.
+    QByteArray getValueAttributeAsByteArray(const DICOMTag &tag) const;
+
     /// Ens torna un atribut DICOM que estigui al primer nivell (que no estigui contingut en seqüències)
     /// Retorna nul en cas que no s'hagi trobat el tag o que aquest no es correspongui amb un atribut (p.ex. és una seqüència)
     /// No discrimina si aquell tag pot ser "pesat" o no, carregarà tota la informació demanada. Per exemple, si demanem 

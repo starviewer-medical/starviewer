@@ -46,7 +46,7 @@ QImage ThumbnailCreator::getThumbnail(const Series *series, int resolution)
     {
         thumbnail.load(":/images/presentationStateThumbnail.png");
     }
-    else if (series->getModality() == "SR")
+    else if (series->getModality() == "SR" || (!series->hasImages() && series->hasEncapsulatedDocuments()))
     {
         thumbnail.load(":/images/structuredReportThumbnail.png");
     }
