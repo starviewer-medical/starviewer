@@ -12,7 +12,7 @@ SOURCES += autotests.cpp
 
 QT += testlib
 
-QT += xml opengl network xmlpatterns gui declarative concurrent qml quick sql webenginewidgets
+QT += xml opengl network xmlpatterns gui concurrent qml quick quickwidgets sql webenginewidgets
 
 OBJECTS_DIR = ../../tmp/obj
 UI_DIR = ../../tmp/ui
