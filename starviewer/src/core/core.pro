@@ -842,6 +842,7 @@ QT += xml \
     xmlpatterns \
     opengl \
     qml \
-    declarative \
+    quick \
+    quickwidgets \
     concurrent \
     webenginewidgets

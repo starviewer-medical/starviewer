@@ -17,9 +17,9 @@
 
 #include <QWidget>
 #include <QKeyEvent>
-#include <QDeclarativeView>
 
 class QGridLayout;
+class QQuickWidget;
 
 namespace udg {
 
@@ -80,7 +80,7 @@ private:
     QList<QObject*> m_groups;
 
     /// Patient browser menu list based on qml
-    QDeclarativeView *m_qmlView;
+    QQuickWidget *m_qmlView;
 };
 
 }
