@@ -3,10 +3,10 @@ version: 0.14-{build}-{branch}
 environment:
   matrix:
   - BITS: 32
-    QTDIR: C:\Qt\5.4\msvc2013_opengl
+    QTDIR: C:\Qt\Qt5.4.2\5.4\msvc2013_opengl
     ARCH: x86
   - BITS: 64
-    QTDIR: C:\Qt\5.4\msvc2013_64_opengl
+    QTDIR: C:\Qt\Qt5.4.2\5.4\msvc2013_64_opengl
     ARCH: amd64
 
 # Uncomment to enable RDP
@@ -35,6 +35,38 @@ install:
     7z x $destination -oc:\jom\
 
     $env:PATH = "$env:PATH;c:\jom"
+
+
+    # Qt 5.4 WebEngine
+
+    if ($env:BITS -eq 32) { $qtinstaller = "qt-opensource-windows-x86-msvc2013_opengl-5.4.2.exe" }
+    else { $qtinstaller = "qt-opensource-windows-x86-msvc2013_64_opengl-5.4.2.exe" }
+
+    $source = "http://qt.mirror.constant.com/archive/qt/5.4/5.4.2/$qtinstaller"
+    $destination = "c:\$qtinstaller"
+    Invoke-WebRequest $source -OutFile $destination
+
+    $source = "https://autohotkey.com/download/ahk-u64.zip"
+    $destination = "c:\ahk-u64.zip"
+    Invoke-WebRequest $source -OutFile $destination
+
+    7z x $destination -oc:\
+
+    $ahk = @"
+    Run c:\$qtinstaller
+    WinWait, Qt 5.4.2 Setup, , 1
+    WinActivate, Qt 5.4.2 Setup, , AppVeyor Build Agent
+    Sleep 300
+    Send {Enter 3}
+    Send !a
+    Sleep 200
+    Send {Enter 2}
+    Send !i
+    "@
+    echo $ahk > script.ahk
+    c:\AutoHotKey script.ahk
+
+    sleep 180
 
 build_script:
 - cmd: |
