@@ -839,10 +839,9 @@ include(../translations.pri)
 include(../threadweaver.pri)
 QT += xml \
     network \
-    webkit \
     xmlpatterns \
     opengl \
     qml \
     declarative \
     concurrent \
-    webkitwidgets
+    webenginewidgets

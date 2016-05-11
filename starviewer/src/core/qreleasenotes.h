@@ -50,7 +50,7 @@ protected:
 
 protected slots:
     /// comprova si l'url que se li passa relament existeix
-    void loadFinished(QNetworkReply *reply);
+    void loadFinished(bool ok);
 };
 
 } // End namespace udg
