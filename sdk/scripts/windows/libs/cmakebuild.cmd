@@ -14,7 +14,7 @@ if exist "%PatchesRoot%\%BuildLib%" (
     set SourceDir=!PatchedSourceDir!
 )
 
-%CMake% %CMakeOptions% "%SourceDir%"
+%CMake% -Wno-dev %CMakeOptions% "%SourceDir%"
 nmake
 nmake install
 
