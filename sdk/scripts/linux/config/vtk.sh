@@ -19,7 +19,12 @@ CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
                -DCMAKE_INSTALL_PREFIX:PATH=$SDK_INSTALL_PREFIX \
                -DCMAKE_PREFIX_PATH:PATH=$QTDIR \
                -DCMAKE_CXX_FLAGS=-DGLX_GLXEXT_LEGACY \
-               -DVTK_Group_Qt:BOOL=TRUE \
+               -DModule_vtkGUISupportQt:BOOL=TRUE \
+               -DModule_vtkGUISupportQtOpenGL:BOOL=TRUE \
+               -DModule_vtkGUISupportQtSQL:BOOL=TRUE \
+               -DModule_vtkGUISupportQtWebkit:BOOL=FALSE \
+               -DModule_vtkRenderingQt:BOOL=TRUE \
+               -DModule_vtkViewsQt:BOOL=TRUE \
                -DVTK_QT_VERSION:STRING=5"
 
 VTKCMAKEDIR=$SDK_INSTALL_PREFIX/lib/cmake/vtk-6.1
