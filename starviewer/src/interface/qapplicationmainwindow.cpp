@@ -150,6 +150,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     m_progressDialog->setWindowTitle(tr("Loading"));
     m_progressDialog->setLabelText(tr("Loading data, please wait..."));
     m_progressDialog->setCancelButton(0);
+    m_progressDialog->setValue(100);
 
 #ifdef BETA_VERSION
     markAsBetaVersion();

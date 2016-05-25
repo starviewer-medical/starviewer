@@ -27,6 +27,11 @@ win32 {
     else {
         CONFIG -= console
     }
+
+    # Required since Qt 5.6 to use OpenGl directly
+    LIBS += opengl32.lib glu32.lib
+    # Required since Qt 5.6 by ITKCommon
+    LIBS += gdi32.lib
 }
 
 macx {
