@@ -18,9 +18,8 @@ then
     SourceDir=$PatchedSourceDir
 fi
 
-echo $CMake $CMakeOptions $SourceDir
-eval $CMake $CMakeGenerator $CMakeOptions -DCMAKE_PREFIX_PATH:STRING=$CMAKE_PREFIX_PATH $SourceDir
-make -j4
+$CMake -Wno-dev $CMakeOptions $SourceDir
+make -j$MakeConcurrency
 make install
 
 popd

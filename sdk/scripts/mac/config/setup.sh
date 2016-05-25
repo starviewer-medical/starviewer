@@ -4,14 +4,31 @@
 BuildTypes="release"
 # List of libs to build. Possible values: dcmtk, vtk, gdcm, itk, ecm, threadweaver.
 Libs="dcmtk vtk gdcm itk ecm threadweaver"
-SourceDirBase="/Developer/starviewer-0.13-sdk"
 
-CMakeGenerator="-G \"Unix Makefiles\""
-CMake="/Applications/CMake\\ 2.8-12.app/Contents/bin/cmake"
+# Global prefix of the Starviewer SDK files.
+Prefix=~/starviewer-sdk-0.14
 
-QtInstallPrefix="/Developer/Qt/5.4/clang_64"
-CMAKE_PREFIX_PATH=$QtInstallPrefix
+# Where buildall.sh downloads the libraries.
+DownloadPrefix=$Prefix/downloads
+
+# Where to install the SDK libraries once compiled.
+SdkInstallPrefix=$Prefix/usr/local
+
+# If you use a local Qt installaton, the path where it is installed.
+QTDIR=~/Qt/5.6/clang_64
+
+# Location of SDK sources to build.
+SourceDirBase=$SdkInstallPrefix/src
+
+# Location of the pathes to apply to SDK libraries.
+PatchesRoot=$ScriptsRoot/../../patches
+
+# C++11 support.
+CMakeCpp11='-DCMAKE_CXX_STANDARD:STRING=11 -DCMAKE_CXX_STANDARD_REQUIRED:BOOL=ON -DCMAKE_C_STANDARD:STRING=11 -DCMAKE_C_STANDARD_REQUIRED:BOOL=ON'
+
+# Number of simultaneous make jobs (-j8).
+MakeConcurrency=8
+
+CMake="/Applications/CMake.app/Contents/bin/cmake"
 
 Git="git"
-
-PatchesRoot=$ScriptsRoot/../../patches
