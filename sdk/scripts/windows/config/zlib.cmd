@@ -1,13 +1,14 @@
-set SourceDir=%SourceDirBase%\dcmtk-3.6.1_20120515\zlib-1.2.5
+set SourceDir=%SourceDirPrefix%\zlib-1.2.5
+set BuildDir=%BuildDirPrefix%\zlib-1.2.5
 
 if %BuildType% == debug (
     set CMakeBuildType=Debug
-    set BuildDir=%SourceDir%-build-debug
+    set BuildDir=%BuildDir%-deb
     set InstallPrefix=%SourceDir%d-%Arch%
 )
 if %BuildType% == release (
     set CMakeBuildType=RelWithDebInfo
-    set BuildDir=%SourceDir%-build-release
+    set BuildDir=%BuildDir%-rel
     set InstallPrefix=%SourceDir%-%Arch%
 )
 

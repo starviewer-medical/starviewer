@@ -477,6 +477,7 @@ QList<unsigned int> WindowsSystemInformation::getGPURAM()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         if (getProperty(object, "AdapterRAM", &variantProperty))
         {
             GPURAM << variantProperty.uintVal / (1024 * 1024);
