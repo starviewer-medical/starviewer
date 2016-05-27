@@ -15,6 +15,8 @@
 #ifndef UDGPATIENTFILLER_H
 #define UDGPATIENTFILLER_H
 
+#include <QObject>
+
 #include "dicomsource.h"
 
 namespace udg {
