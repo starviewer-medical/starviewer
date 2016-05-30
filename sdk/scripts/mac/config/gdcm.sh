@@ -3,7 +3,7 @@
 # Call vtk configuration script to make sure VtkDir is set
 . $ScriptsRoot/config/vtk.sh
 
-SourceDir="$SourceDirBase/gdcm-2.4.4"
+SourceDir="$SourceDirBase/gdcm-2.6.3"
 
 if [ $BuildType = "debug" ]
 then
@@ -25,4 +25,4 @@ CMakeOptions="-DCMAKE_BUILD_TYPE:STRING=$CMakeBuildType \
               -DGDCM_USE_VTK:BOOL=TRUE \
               -DVTK_DIR=$VtkDir"
 
-GdcmDir="$SdkInstallPrefix/lib/gdcm-2.4"
+GdcmDir="$SdkInstallPrefix/lib/gdcm-2.6"
