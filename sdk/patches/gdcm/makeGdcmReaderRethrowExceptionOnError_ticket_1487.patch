@@ -2,7 +2,7 @@
 +++ gdcm-2.0.19_with_modifications/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx	Tue Jun 12 11:39:31 2012
 @@ -657,6 +657,7 @@
  #else
-     gdcmDebugMacro( ex.what() );
+     gdcmDebugMacro( ex.what() ); (void)ex;
      success = false;
 +    throw ex;
  #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
