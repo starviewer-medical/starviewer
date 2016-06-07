@@ -195,7 +195,10 @@ void TableMenu::dropTable()
     {
         item = m_itemList.value(i);
         m_gridLayout->removeWidget(item);
-        delete item;
+        // This used to work with a simple delete item, but with Qt 5.6.0 it caused random crashes
+        // from accessing a null pointer internally in Qt when the grid menu was closed
+        // TODO Try to revert it back to delete item with a later version of Qt
+        item->deleteLater();
     }
 
     m_itemList.clear();
