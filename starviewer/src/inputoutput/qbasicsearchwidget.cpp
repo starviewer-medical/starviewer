@@ -97,18 +97,12 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     // DICOM indica que fer una wildcard amb '*' és el mateix que fer Universal Matching. Nosaltres hem optat per fer Universal matching perquè hi ha algun scp
     // que si li passem un asterisc sol '*' al fer la cerca no es comportant correctament, per exemple retorna cap resultat.
 
-    // Si pel contrari algun dels lineEdit tenen valor, llavors fem wild card matching "*" + valor "*", posant "*" a davant i a darrera del valor indiquem
-    // que el SCP que ens ha de retornar tots els objectes dicom que per aquell tag alguna part de la seu text coincideix amb el valor que ens han indicat.
-
     // Per més informació consultar el PS 3.4 C.2.2.2
 
-    // S'afegeix '*' al patientId i patientName automàticament
     QString patientID = m_patientIDText->text().trimmed();
-    addWildCards(patientID);
     mask.setPatientID(patientID);
 
     QString patientName = m_patientNameText->text().trimmed();
-    addWildCards(patientName);
     mask.setPatientName(patientName);
 
     setStudyDateToDICOMMask(&mask);
@@ -235,21 +229,6 @@ void QBasicSearchWidget::showEvent(QShowEvent *event)
         // en primer lloc està enfocant al PatientName, ja que és pel camp que més cerquen.
         m_patientNameText->setFocus();
         m_widgetHasBeenShowed = true;
-    }
-}
-
-void QBasicSearchWidget::addWildCards(QString &string)
-{
-    if (!string.isEmpty())
-    {
-        if (!string.startsWith("*"))
-        {
-            string = "*" + string;
-        }
-        if (!string.endsWith("*"))
-        {
-            string = string + "*";
-        }
     }
 }
 
