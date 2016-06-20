@@ -8,31 +8,31 @@ include(extensions.pri)
 
 for(directory, PLAYGROUND_EXTENSIONS) {
     exists(extensions/playground/$$directory) {
-        I18NPROJECTS += ../extensions/playground/$$directory
-        I18NPROJECTS_TSFILES += ../extensions/playground/$$directory/*.ts
-        I18NPROJECTS_QMFILES += ../extensions/playground/$$directory/*.qm
+        I18NPROJECTS += $$PWD/extensions/playground/$$directory
+        I18NPROJECTS_TSFILES += $$PWD/extensions/playground/$$directory/*.ts
+        I18NPROJECTS_QMFILES += $$PWD/extensions/playground/$$directory/*.qm
 }
 }
 
 for(directory, CONTRIB_EXTENSIONS) {
     exists(extensions/contrib/$$directory) {
-        I18NPROJECTS += ../extensions/contrib/$$dir
-        I18NPROJECTS_TSFILES += ../extensions/contrib/$$directory/*.ts
-        I18NPROJECTS_QMFILES += ../extensions/contrib/$$directory/*.qm
+        I18NPROJECTS += $$PWD/extensions/contrib/$$dir
+        I18NPROJECTS_TSFILES += $$PWD/extensions/contrib/$$directory/*.ts
+        I18NPROJECTS_QMFILES += $$PWD/extensions/contrib/$$directory/*.qm
 }
 }
 
 for(directory, MAIN_EXTENSIONS) {
     exists(extensions/main/$$directory) {
-        I18NPROJECTS += ../extensions/main/$$directory
-        I18NPROJECTS_TSFILES += ../extensions/main/$$directory/*.ts
-        I18NPROJECTS_QMFILES += ../extensions/main/$$directory/*.qm
+        I18NPROJECTS += $$PWD/extensions/main/$$directory
+        I18NPROJECTS_TSFILES += $$PWD/extensions/main/$$directory/*.ts
+        I18NPROJECTS_QMFILES += $$PWD/extensions/main/$$directory/*.qm
 }
 }
 
-I18NPROJECTS += ../core ../interface ../inputoutput ../crashreporter ../main
-I18NPROJECTS_TSFILES += ../core/*.ts ../interface/*.ts ../inputoutput/*.ts ../crashreporter/*.ts ../main/*.ts
-I18NPROJECTS_QMFILES += ../core/*.qm ../interface/*.qm ../inputoutput/*.qm ../crashreporter/*.qm ../main/*.qm
+I18NPROJECTS += $$PWD/core $$PWD/interface $$PWD/inputoutput $$PWD/crashreporter $$PWD/main
+I18NPROJECTS_TSFILES += $$PWD/core/*.ts $$PWD/interface/*.ts $$PWD/inputoutput/*.ts $$PWD/crashreporter/*.ts $$PWD/main/*.ts
+I18NPROJECTS_QMFILES += $$PWD/core/*.qm $$PWD/interface/*.qm $$PWD/inputoutput/*.qm $$PWD/crashreporter/*.qm $$PWD/main/*.qm
 
 unix {
 i18n_update.commands = @for directory in $$I18NPROJECTS; do \
