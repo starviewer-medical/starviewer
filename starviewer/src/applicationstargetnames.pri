@@ -13,7 +13,8 @@ TARGET_STARVIEWER_SAP_WRAPPER = starviewer_sapwrapper
 
 # Generate header file with the names of the executables
 
-exesHeaderDir = core
+exesHeaderDir = $$OUT_PWD
+INCLUDEPATH += $$OUT_PWD
 exesHeader = executablesnames.h
 exesDefine = EXECUTABLESNAMES_H
 
