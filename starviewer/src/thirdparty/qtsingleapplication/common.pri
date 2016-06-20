@@ -11,5 +11,5 @@ greaterThan(QT_MAJOR_VERSION, 5)|\
 }
 TEMPLATE -= fakelib
 
-QTSINGLEAPPLICATION_LIBDIR = $$PWD/../../../bin
+QTSINGLEAPPLICATION_LIBDIR = $$OUT_PWD/../../bin
 unix:qtsingleapplication-uselib:!qtsingleapplication-buildlib:QMAKE_RPATHDIR += $$QTSINGLEAPPLICATION_LIBDIR
