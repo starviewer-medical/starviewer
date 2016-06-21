@@ -1,0 +1,26 @@
+diff --git a/Rendering/Volume/CMakeLists.txt b/Rendering/Volume/CMakeLists.txt
+index 9e91c6a..e37f2dc 100644
+--- a/Rendering/Volume/CMakeLists.txt
++++ b/Rendering/Volume/CMakeLists.txt
+@@ -51,7 +51,7 @@ set_source_files_properties(
+   ABSTRACT
+   )
+ 
+-if (VTK_LEGACY_REMOVE)
++if (NOT VTK_LEGACY_REMOVE)
+   set_source_files_properties(
+     vtkVolumeRayCastCompositeFunction.h
+     vtkVolumeRayCastCompositeFunction.cxx
+diff --git a/Rendering/VolumeOpenGL/CMakeLists.txt b/Rendering/VolumeOpenGL/CMakeLists.txt
+index e64224f..ed607c3 100644
+--- a/Rendering/VolumeOpenGL/CMakeLists.txt
++++ b/Rendering/VolumeOpenGL/CMakeLists.txt
+@@ -85,7 +85,7 @@ foreach(file ${shader_files})
+     )
+ endforeach()
+ 
+-if (VTK_LEGACY_REMOVE)
++if (NOT VTK_LEGACY_REMOVE)
+   set_source_files_properties(
+     vtkOpenGLVolumeTextureMapper2D.h
+     vtkOpenGLVolumeTextureMapper2D.cxx
