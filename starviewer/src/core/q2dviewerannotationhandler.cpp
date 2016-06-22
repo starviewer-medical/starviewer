@@ -488,7 +488,7 @@ void Q2DViewerAnnotationHandler::setCornerAnnotation(AnnotationFlag annotation, 
         text = text.replace(QRegularExpression("\n+"), "\n");
     }
 
-    m_cornerAnnotations->SetText(getCornerForAnnotationType(annotation), text.toLatin1().constData());
+    m_cornerAnnotations->SetText(getCornerForAnnotationType(annotation), text.toUtf8().constData());
 }
 
 void Q2DViewerAnnotationHandler::createAnnotations()
