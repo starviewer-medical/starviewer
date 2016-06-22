@@ -33,7 +33,6 @@
 #include "logging.h"
 
 
-vtkCxxRevisionMacro(vtkProjectionImageFilter, "$Revision: 1.0 $");
 vtkStandardNewMacro(vtkProjectionImageFilter);
 
 

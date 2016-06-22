@@ -402,7 +402,6 @@ static VTK_THREAD_RETURN_TYPE switchOnDataType(void *arg)
 
 namespace udg {
 
-vtkCxxRevisionMacro(Vtk4DLinearRegressionGradientEstimator, "$Revision: 1.0 $");
 vtkStandardNewMacro(Vtk4DLinearRegressionGradientEstimator);
 
 unsigned int Vtk4DLinearRegressionGradientEstimator::getRadius() const

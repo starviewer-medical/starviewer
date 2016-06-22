@@ -41,7 +41,6 @@
 namespace udg {
 
 
-vtkCxxRevisionMacro( vtkVolumeRayCastVoxelShaderCompositeFunction, "$Revision: 1.0 $" );
 vtkStandardNewMacro( vtkVolumeRayCastVoxelShaderCompositeFunction );
 
 const float vtkVolumeRayCastVoxelShaderCompositeFunction::MINIMUM_REMAINING_OPACITY = 0.02f;
