@@ -42,17 +42,17 @@ before_install:
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
       . /opt/qt56/bin/qt56-env.sh                                                                                  &&
-      wget --directory-prefix=$HOME http://trueta.udg.edu/apt/ubuntu/devel/0.14/starviewer-sdk-linux-0.14-1.tar.xz &&
+      wget --directory-prefix=$HOME http://trueta.udg.edu/apt/ubuntu/devel/0.14/starviewer-sdk-linux-0.14-2.tar.xz &&
       mkdir ~/uroot                                                                                                &&
-      tar xf ~/starviewer-sdk-linux-0.14-1.tar.xz -C ~/uroot                                                       ;
+      tar xf ~/starviewer-sdk-linux-0.14-2.tar.xz -C ~/uroot                                                       ;
     else
       QTDIR="/usr/local/opt/qt5"                                                                                        &&
       PATH="$QTDIR/bin:$PATH"                                                                                           &&
       LDFLAGS=-L$QTDIR/lib                                                                                              &&
       CPPFLAGS=-I$QTDIR/include                                                                                         &&
-      wget -nv --directory-prefix=$HOME http://trueta.udg.edu/apt/macosx/devel/0.14/starviewer-sdk-macosx-0.14-1.tar.xz &&
+      wget -nv --directory-prefix=$HOME http://trueta.udg.edu/apt/macosx/devel/0.14/starviewer-sdk-macosx-0.14-2.tar.xz &&
       mkdir ~/uroot                                                                                                     &&
-      tar xf ~/starviewer-sdk-macosx-0.14-1.tar.xz -C ~/uroot                                                           ;
+      tar xf ~/starviewer-sdk-macosx-0.14-2.tar.xz -C ~/uroot                                                           ;
     fi
 
 before_script:
