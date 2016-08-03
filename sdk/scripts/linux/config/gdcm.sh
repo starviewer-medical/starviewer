@@ -3,7 +3,7 @@
 # Call vtk configuration script to make sure VTKCMAKEDIR is set
 . $SCRIPTS_ROOT/config/vtk.sh
 
-SOURCE_DIR=$SOURCE_DIR_BASE/gdcm-2.6.3
+SOURCE_DIR=$SOURCE_DIR_BASE/gdcm-2.6.4
 
 if [ $BUILD_TYPE = debug ]
 then

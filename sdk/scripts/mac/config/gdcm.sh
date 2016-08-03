@@ -3,7 +3,7 @@
 # Call vtk configuration script to make sure VtkDir is set
 . $ScriptsRoot/config/vtk.sh
 
-SourceDir="$SourceDirBase/gdcm-2.6.3"
+SourceDir="$SourceDirBase/gdcm-2.6.4"
 
 if [ $BuildType = "debug" ]
 then
