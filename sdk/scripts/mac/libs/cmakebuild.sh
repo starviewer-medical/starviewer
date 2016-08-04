@@ -6,7 +6,7 @@ pushd $BuildDir
 if [ -d "$PatchesRoot/$Lib" ]
 then
     PatchedSourceDir="$SourceDir-patched"
-    rsync -auv $SourceDir/ $PatchedSourceDir
+    rsync -a --delete $SourceDir/ $PatchedSourceDir
     pushd $PatchedSourceDir
 
     for PATCH in $(ls "$PatchesRoot/$Lib")
