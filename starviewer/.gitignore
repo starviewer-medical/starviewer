@@ -58,6 +58,7 @@ ipch/*
 vcxproj.*
 fixdebug*
 *.tmp
+.qmake.stash
 
 # Manifests
 bin/*manifest*
