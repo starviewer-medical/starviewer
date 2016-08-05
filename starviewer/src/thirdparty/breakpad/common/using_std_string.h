@@ -1,7 +1,7 @@
-// Copyright (c) 2006, Google Inc.
+// -*- mode: C++ -*-
+
+// Copyright (c) 2012, Google Inc.
 // All rights reserved.
-//
-// Author: Li Liu
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are
@@ -29,45 +29,37 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef CLIENT_LINUX_HANDLER_MINIDUMP_GENERATOR_H__
-#define CLIENT_LINUX_HANDLER_MINIDUMP_GENERATOR_H__
+// Original author: Ivan Penkov
 
-#include <stdint.h>
-
-#include "google_breakpad/common/breakpad_types.h"
-#include "processor/scoped_ptr.h"
-
-struct sigcontext;
-
-namespace google_breakpad {
-
+// using_std_string.h: Allows building this code in environments where
+//                     global string (::string) exists.
 //
-// MinidumpGenerator
+// The problem:
+// -------------
+// Let's say you want to build this code in an environment where a global
+// string type is defined (i.e. ::string).  Now, let's suppose that ::string
+// is different that std::string and you'd like to have the option to easily
+// choose between the two string types.  Ideally you'd like to control which
+// string type is chosen by simply #defining an identifier.
 //
-// Write a minidump to file based on the signo and sig_ctx.
-// A minidump generator should be created before any exception happen.
-//
-class MinidumpGenerator {
-  public:
-   MinidumpGenerator();
+// The solution:
+// -------------
+// #define HAS_GLOBAL_STRING somewhere in a global header file and then
+// globally replace std::string with string.  Then include this header
+// file everywhere where string is used.  If you want to revert back to
+// using std::string, simply remove the #define (HAS_GLOBAL_STRING).
 
-   ~MinidumpGenerator();
+#ifndef THIRD_PARTY_BREAKPAD_SRC_COMMON_USING_STD_STRING_H_
+#define THIRD_PARTY_BREAKPAD_SRC_COMMON_USING_STD_STRING_H_
 
-   // Write minidump.
-   bool WriteMinidumpToFile(const char *file_pathname,
-                            int signo,
-                            uintptr_t sighandler_ebp,
-                            struct sigcontext **sig_ctx) const;
-  private:
-   // Allocate memory for stack.
-   void AllocateStack();
+#ifdef HAS_GLOBAL_STRING
+  typedef ::string google_breakpad_string;
+#else
+  using std::string;
+  typedef std::string google_breakpad_string;
+#endif
 
-  private:
-   // Stack size of the writer thread.
-   static const int kStackSize = 1024 * 1024;
-   scoped_array<char> stack_;
-};
+// Inicates that type google_breakpad_string is defined
+#define HAS_GOOGLE_BREAKPAD_STRING
 
-}  // namespace google_breakpad
-
-#endif   // CLIENT_LINUX_HANDLER_MINIDUMP_GENERATOR_H__
+#endif  // THIRD_PARTY_BREAKPAD_SRC_COMMON_USING_STD_STRING_H_
