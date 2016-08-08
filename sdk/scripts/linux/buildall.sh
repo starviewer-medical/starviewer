@@ -33,9 +33,9 @@ download_and_verify 09a97e82cf43672a4b16b162651f5bc0d86b9d7b8cfff58c345e5c97d620
                     'dcmtk-3.6.1_20120515.tar.gz' \
                     'http://support.dcmtk.org/redmine/attachments/download/8/dcmtk-3.6.1_20120515.tar.gz'
 
-download_and_verify bd7df10a479606d529a8b71f466c44a2bdd11fd534c62ce0aa44fad91883fa34 \
-                    'VTK-6.1.0.tar.gz' \
-                    'http://www.vtk.org/files/release/6.1/VTK-6.1.0.tar.gz'
+download_and_verify 78a990a15ead79cdc752e86b83cfab7dbf5b7ef51ba409db02570dbdd9ec32c3 \
+                    'VTK-7.0.0.tar.gz' \
+                    'http://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz'
 
 download_and_verify b116dc0b0e9f65dcd2196fa55d8815be215065ec537b15665afde0469bd47e91 \
                     'gdcm-2.6.4.tar.bz2' \
@@ -63,7 +63,7 @@ echo "Please install Qt on ${INSTALL_QTDIR}"
 mkdir -p "${SOURCE_DIR_BASE}"
 
 tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/dcmtk-3.6.1_20120515.tar.gz"
-tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/VTK-6.1.0.tar.gz"
+tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/VTK-7.0.0.tar.gz"
 tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/gdcm-2.6.4.tar.bz2"
 tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-4.7.1.tar.xz"
 tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/threadweaver-5.3.0.tar.xz"
