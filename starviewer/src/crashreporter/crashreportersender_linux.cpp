@@ -18,8 +18,7 @@
 #include <string>
 #include <map>
 
-#include "../thirdparty/breakpad/common/linux/http_upload.h"
-
+#include <common/linux/http_upload.h>
 namespace udg {
 
 bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QString, QString> &options)
@@ -36,7 +35,7 @@ bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QS
     long responseCode;
     std::map<std::string, std::string> files;
     files["upload_file_minidump"] = minidumpPath.toStdString();
-    bool success = google_breakpad::HTTPUpload::SendRequest(url.toStdString(),
+    /*bool success = google_breakpad::HTTPUpload::SendRequest(url.toStdString(),
                                                             parameters,
                                                             files,
                                                             "", //proxy
@@ -45,7 +44,6 @@ bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QS
                                                             &response,
                                                             &responseCode,
                                                             &error);
-
     if (success)
     {
         printf("Successfully sent the minidump file.\n");
@@ -58,6 +56,7 @@ bool CrashReporterSender::sendReport(QString url, QString minidumpPath, QHash<QS
     }
 
     return success;
+*/
 
 }
 

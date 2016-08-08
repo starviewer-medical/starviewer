@@ -37,25 +37,21 @@ TRANSLATIONS += crashreporter_ca_ES.ts \
                 crashreporter_es_ES.ts \
                 crashreporter_en_GB.ts 
                 
-INCLUDEPATH += ../thirdparty/breakpad ../core
+INCLUDEPATH += ../core
 
 macx {
-    HEADERS += ../thirdparty/breakpad/common/mac/HTTPMultipartUpload.h \
-               ../thirdparty/breakpad/common/mac/GTMDefines.h
-    OBJECTIVE_SOURCES += crashreportersender_mac.mm \
-                         ../thirdparty/breakpad/common/mac/HTTPMultipartUpload.mm
+    HEADERS +=
+    OBJECTIVE_SOURCES += crashreportersender_mac.mm
     ICON = ../main/images/starviewer.icns
 }
 linux* {
-    HEADERS += ../thirdparty/breakpad/common/linux/http_upload.h
-    SOURCES += crashreportersender_linux.cpp \
-               ../thirdparty/breakpad/common/linux/http_upload.cc
+    HEADERS +=
+    SOURCES += crashreportersender_linux.cpp
     LIBS += -ldl
 }
 win32 {
-    HEADERS += ../thirdparty/breakpad/common/windows/http_upload.h
-    SOURCES += crashreportersender_windows.cpp \
-               ../thirdparty/breakpad/common/windows/http_upload.cc
+    HEADERS +=
+    SOURCES += crashreportersender_windows.cpp
                
     LIBS += -lWinInet
 }
@@ -63,6 +59,7 @@ win32 {
 RESOURCES = crashreporter.qrc ../main/main.qrc
 
 include(../corelibsconfiguration.pri)
+include(../breakpad.pri)
 include(../compilationtype.pri)
 
 QT += network widgets

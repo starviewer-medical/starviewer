@@ -24,7 +24,7 @@
 
 #ifdef Q_OS_LINUX
 
-#include "client/linux/handler/exception_handler.h"
+#include <client/linux/handler/exception_handler.h>
 
 static bool launchCrashReporter(const google_breakpad::MinidumpDescriptor &minidumpDescriptor, void *crashHandler, bool succeeded)
 {

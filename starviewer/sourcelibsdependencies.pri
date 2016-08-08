@@ -47,6 +47,7 @@ win32{
           -lIphlpapi
 }
 
+include($$PWD/src/breakpad.pri)
 include($$PWD/src/dcmtk.pri)
 include($$PWD/src/vtk.pri)
 include($$PWD/src/itk.pri)

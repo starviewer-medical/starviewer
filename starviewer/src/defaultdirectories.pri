@@ -9,6 +9,20 @@ isEmpty(SDK_INSTALL_PREFIX){
     win32:contains(QMAKE_TARGET.arch, x86_64):SDK_INSTALL_PREFIX = $$(USERPROFILE)/starviewer-sdk/64
 }
 
+# Breakpad Libraries
+
+BREAKPADLIBDIR = $$(BREAKPADLIBDIR)
+isEmpty(BREAKPADLIBDIR){
+    unix:BREAKPADLIBDIR = $$SDK_INSTALL_PREFIX/lib
+    win32:BREAKPADLIBDIR = $$SDK_INSTALL_PREFIX/dcmtk/somewhereovertherainbowthereisthe_versionnumber/lib
+}
+BREAKPADINCLUDEDIR = $$(BREAKPADINCLUDEDIR)
+isEmpty(BREAKPADINCLUDEDIR){
+    unix:BREAKPADINCLUDEDIR = $$SDK_INSTALL_PREFIX/include/breakpad
+    win32:BREAKPADINCLUDEDIR = $$SDK_INSTALL_PREFIX/dcmtk/somewhereovertherainbowthereisthe_versionnumber/include/breakpad
+}
+
+
 # DCMTK Libraries
 
 DCMTKLIBDIR = $$(DCMTKLIBDIR)
