@@ -31,6 +31,7 @@ public:
 private slots:
     /// Shows a dialog with the license information.
     void showLicenseInformation();
+    void on_btnCrashClicked();
 
 };
 

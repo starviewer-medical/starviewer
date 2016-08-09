@@ -18,6 +18,7 @@
 #include "starviewerapplication.h"
 
 #include <QPushButton>
+#include <QMessageBox>
 
 namespace udg {
 
@@ -60,6 +61,9 @@ QAboutDialog::QAboutDialog(QWidget *parent)
 
     QPushButton *licenseButton = m_buttonBox->addButton(tr("License information"), QDialogButtonBox::ActionRole);
     connect(licenseButton, &QPushButton::clicked, this, &QAboutDialog::showLicenseInformation);
+
+    QPushButton *crashBtn = m_buttonBox->addButton(tr("Crash test"), QDialogButtonBox::ActionRole);
+    connect(crashBtn, &QPushButton::clicked, this, &QAboutDialog::on_btnCrashClicked);
 }
 
 QAboutDialog::~QAboutDialog()
@@ -70,6 +74,19 @@ void QAboutDialog::showLicenseInformation()
 {
     QLicenseDialog *licenseDialog = new QLicenseDialog(this);
     licenseDialog->open();
+}
+
+void QAboutDialog::on_btnCrashClicked()
+{
+    QMessageBox confirmMsgbox(QMessageBox::Icon::Warning, tr("Crash test"), tr("Are you sure do you want to crash Starviewer on purpose?"));
+    confirmMsgbox.addButton(QMessageBox::StandardButton::Yes);
+    confirmMsgbox.addButton(QMessageBox::StandardButton::No);
+    if (confirmMsgbox.exec() == QMessageBox::Yes) {
+        int* nowhere;
+        nowhere = 0x0;
+        *nowhere = 1;
+    }
+
 }
 
 }
