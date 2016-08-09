@@ -19,10 +19,7 @@
 #include "starviewerapplication.h"
 #include "coresettings.h"
 
-#include <QString>
 #include <QFileInfo>
-#include <QApplication>
-#include <QDir>
 #include <QFileInfoList>
 
 namespace udg {
@@ -43,17 +40,11 @@ void DICOMDumpDefaultTagsLoader::loadDefaults()
 
     if (!QFile::exists(defaultPath))
     {
-        defaultPath = qApp->applicationDirPath() + "/dicomdumpdefaulttags/";
+        defaultPath = installationPath() + "/dicomdumpdefaulttags/";
     }
     if (!QFile::exists(defaultPath))
     {
-        // En entorn de desenvolupament Windows & Linux
-        defaultPath = qApp->applicationDirPath() + "/../dicomdumpdefaulttags/";
-    }
-    if (!QFile::exists(defaultPath))
-    {
-        // En entorn de desenvolupament Mac OS X
-        defaultPath = qApp->applicationDirPath() + "/../../../../dicomdumpdefaulttags/";
+        defaultPath = sourcePath() + "/dicomdumpdefaulttags/";
     }
 
     if (QFile::exists(defaultPath))

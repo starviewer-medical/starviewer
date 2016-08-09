@@ -29,7 +29,6 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QTextStream>
-#include <QApplication>
 
 namespace udg {
 
@@ -51,17 +50,11 @@ void HangingProtocolsLoader::loadDefaults()
     QString defaultPath = "/etc/xdg/" + OrganizationNameString + "/" + ApplicationNameString + "/hangingprotocols/";
     if (!QFile::exists(defaultPath))
     {
-        defaultPath = qApp->applicationDirPath() + "/hangingprotocols/";
+        defaultPath = installationPath() + "/hangingprotocols/";
     }
     if (!QFile::exists(defaultPath))
     {
-        // En entorn de desenvolupament Windows & Linux
-        defaultPath = qApp->applicationDirPath() + "/../hangingprotocols/";
-    }
-    if (!QFile::exists(defaultPath))
-    {
-        // En entorn de desenvolupament Mac OS X
-        defaultPath = qApp->applicationDirPath() + "/../../../../hangingprotocols/";
+        defaultPath = sourcePath() + "/hangingprotocols/";
     }
 
     if (QFile::exists(defaultPath))
