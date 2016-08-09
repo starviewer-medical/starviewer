@@ -45,7 +45,12 @@ const QString UserLogsPath(UserDataRootPath + "log/");
 /// Ruta absoluta del fitxer de log
 const QString UserLogsFile(UserLogsPath + "starviewer.log");
 
-// TODO const QString LogConfigurationFileLocation();
+// Note: the following two are methods because they depend on QApplication being initialized.
+
+/// Returns the base directory where the application is installed.
+QString installationPath();
+/// Returns the root source directory (the one containing src).
+QString sourcePath();
 
 }
 

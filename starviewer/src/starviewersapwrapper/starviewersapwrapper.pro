@@ -11,7 +11,9 @@ macx {
 
 HEADERS = ../core/starviewerapplication.h
 
-SOURCES = starviewersapwrapper.cpp ../core/logging.cpp
+SOURCES = starviewersapwrapper.cpp \
+    ../core/logging.cpp \
+    ../core/starviewerapplication.cpp
 
 INCLUDEPATH += ../core
 

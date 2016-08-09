@@ -815,7 +815,8 @@ SOURCES += extensionmediator.cpp \
     externalapplication.cpp \
     externalapplicationsmanager.cpp \
     encapsulateddocument.cpp \
-    encapsulateddocumentfillerstep.cpp
+    encapsulateddocumentfillerstep.cpp \
+    starviewerapplication.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

@@ -1,8 +1,6 @@
 #include "logging.h"
 #include "easylogging++.h"
 #include "starviewerapplication.h"
-#include <QDir>
-#include <QApplication>
 
 void udg::beginLogging() 
 {
@@ -37,17 +35,11 @@ QString udg::getLogConfFilePath()
     QString configurationFile = "/etc/starviewer/log.conf";
     if (!QFile::exists(configurationFile))
     {
-        configurationFile = qApp->applicationDirPath() + "/log.conf";
+        configurationFile = installationPath() + "/log.conf";
     }
-    // Afegim localització per Mac OS X en desenvolupament
     if (!QFile::exists(configurationFile))
     {
-        configurationFile = qApp->applicationDirPath() + "/../../../log.conf";
-    }
-    // Mac OS X crash reporter
-    if (!QFile::exists(configurationFile))
-    {
-        configurationFile = qApp->applicationDirPath() + "/../../../../../../log.conf";
+        configurationFile = sourcePath() + "/bin/log.conf";
     }
     return configurationFile;
 }
