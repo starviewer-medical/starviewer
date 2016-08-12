@@ -114,6 +114,8 @@ const QString CoreSettings::SUVMeasurementNormalizationType(Q2DViewerBase + "Mea
 
 const QString CoreSettings::EnabledSyncActionsKey("enabledSyncActions");
 
+const QString CoreSettings::DontForceMultiSampling("DontForceMultiSampling");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -157,6 +159,7 @@ void CoreSettings::init()
     settingsRegistry->addSetting(ModalitiesToApplyHangingProtocolsAsFirstOption, "CR;CT;MG;MR;US");
     settingsRegistry->addSetting(ModalitiesWithPropagationEnabledByDefault, "CT;MR;PT");
     settingsRegistry->addSetting(SUVMeasurementNormalizationType, "BodyWeight");
+    settingsRegistry->addSetting(DontForceMultiSampling, false);
 }
 
 } // End namespace udg

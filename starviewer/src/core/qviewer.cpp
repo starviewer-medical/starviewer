@@ -25,6 +25,7 @@
 #include "logging.h"
 #include "mathtools.h"
 #include "starviewerapplication.h"
+#include "coresettings.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de
 // interface, pacs, etc.etc.!!
@@ -923,6 +924,13 @@ void QViewer::setupRenderWindow()
     renderWindow->AddRenderer(getRenderer());
     renderWindow->DoubleBufferOn();
     renderWindow->LineSmoothingOn();
+
+    if (!Settings().getValue(CoreSettings::DontForceMultiSampling).toBool())
+    {
+        // This is the default of VTK except on Mac due to some alleged problems in some models, and is needed to get smooth lines
+        // The setting will allow to avoid those problems if they arise, at the cost of getting aliased lines
+        renderWindow->SetMultiSamples(8);
+    }
 
     // TODO This is needed for the rendering process to work correctly if coming from handleNotEnoughMemoryForVisualizationError().
     //      Alternatively the rendering process also works correctly after a Q2DViewer::restore().
