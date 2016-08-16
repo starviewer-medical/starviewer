@@ -51,7 +51,7 @@ class Q3DViewer : public QViewer {
 Q_OBJECT
 public:
     enum RenderFunction { RayCasting, RayCastingObscurance, GpuRayCasting,
-                          MIP3D, IsoSurface, Texture2D, Texture3D, Contouring };
+                          MIP3D, IsoSurface, Contouring };
     enum ObscuranceQuality { Low, Medium, High };
 
     Q3DViewer(QWidget *parent = 0);
@@ -94,8 +94,6 @@ public slots:
     void setRenderFunctionToGpuRayCasting();
     void setRenderFunctionToMIP3D();
     void setRenderFunctionToIsoSurface();
-    void setRenderFunctionToTexture2D();
-    void setRenderFunctionToTexture3D();
     void setRenderFunctionToContouring();
 
     /// Mètodes per controlar la visibilitat de l'orientation marker widget
@@ -168,12 +166,6 @@ private:
 
     /// Fa la visualització per reconstrucció de superfíces
     void renderIsoSurface();
-
-    /// Fa la visualització per textures 2D \TODO afegir comprovació de si el hard o suporta o no
-    void renderTexture2D();
-
-    /// Fa la visualització per textures 3D \TODO afegir comprovació de si el hard o suporta o no
-    void renderTexture3D();
 
     /// Reescala les dades de volume en el format adequat per als corresponents algorismes. Retorna fals si no pot crear el volum reescalat.
     bool rescale(Volume *volume);

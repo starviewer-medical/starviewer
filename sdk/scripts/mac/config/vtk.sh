@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SourceDir="$SourceDirBase/VTK-6.1.0"
+SourceDir="$SourceDirBase/VTK-7.0.0"
 
 if [ $BuildType = "debug" ]
 then
@@ -27,4 +27,4 @@ CMakeOptions="-DCMAKE_BUILD_TYPE:STRING=$CMakeBuildType \
               -DVTK_REQUIRED_OBJCXX_FLAGS:STRING=\"\" \
               -DVTK_QT_VERSION:STRING=5"
 
-VtkDir="$SdkInstallPrefix/lib/cmake/vtk-6.1"
+VtkDir="$SdkInstallPrefix/lib/cmake/vtk-7.0"

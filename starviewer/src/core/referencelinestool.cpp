@@ -385,15 +385,16 @@ DrawerLine* ReferenceLinesTool::createNewLine(bool isBackgroundLine)
     // HACK Sucedani d'smart pointer(TM)
     line->increaseReferenceCount();
     line->setVisibility(false);
+    line->setLineWidth(1.5);
 
     if (isBackgroundLine)
     {
         line->setColor(QColor(0, 0, 0));
+        line->setOpacity(0.85);
     }
     else
     {
-        line->setColor(QColor(255, 160, 0));
-        line->setLinePattern(DrawerPrimitive::DiscontinuousLinePattern);
+        line->setColor(QColor(33, 202, 79));
     }
 
     return line;

@@ -149,6 +149,10 @@ public:
 
     /// Corresponding key to the enabled sync actions
     static const QString EnabledSyncActionsKey;
+
+    /// Multi-sampling is forced to 8 multi-samples in QViewer unless this is true.
+    static const QString DontForceMultiSampling;
+
 };
 
 } // End namespace udg
