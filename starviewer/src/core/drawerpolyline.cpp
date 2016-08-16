@@ -221,7 +221,7 @@ void DrawerPolyline::updateVtkActorProperties()
     // Assignem color
     QColor color = this->getColor();
     m_vtkActor->GetProperty()->SetColor(color.redF(), color.greenF(), color.blueF());
-    m_vtkBackgroundActor->GetProperty()->SetColor(255.0, 255.0, 255.0);
+    m_vtkBackgroundActor->GetProperty()->SetColor(0.0, 0.0, 0.0);
 }
 
 int DrawerPolyline::getNumberOfPoints()

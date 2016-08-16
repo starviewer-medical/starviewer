@@ -19,13 +19,13 @@ install:
 - ps: |
     # Setup precompiled SDK
 
-    $source = "http://trueta.udg.edu/apt/windows/devel/0.14/starviewer-sdk-win$env:BITS-0.14-2.7z"
-    $destination = "c:\starviewer-sdk-win$env:BITS-0.14-2.7z"
+    $source = "http://trueta.udg.edu/apt/windows/devel/0.14/starviewer-sdk-win$env:BITS-0.14-3.7z"
+    $destination = "c:\starviewer-sdk-win$env:BITS-0.14-3.7z"
     Invoke-WebRequest $source -OutFile $destination
 
     7z x $destination -oc:\ > 7z-output.txt
 
-    $env:PATH = "$env:QTDIR\bin;c:\vtk\6.1.0\bin;c:\gdcm\2.6.4\bin;c:\ThreadWeaver\5.3.0\bin;$env:PATH"
+    $env:PATH = "$env:QTDIR\bin;c:\vtk\7.0.0\bin;c:\gdcm\2.6.4\bin;c:\ThreadWeaver\5.3.0\bin;$env:PATH"
 
 
     # Setup jom
