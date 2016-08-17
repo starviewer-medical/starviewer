@@ -1,9 +1,5 @@
 CONFIG += debug_and_release c++11
 
-# TODO: remove once ITK is compiled with c++11
-clang:QMAKE_CXXFLAGS += -Wno-static-float-init -Wno-c++11-narrowing
-linux-g++:QMAKE_CXXFLAGS += -fpermissive
-
 # Use gold linker
 linux:QMAKE_LFLAGS += -fuse-ld=gold
 

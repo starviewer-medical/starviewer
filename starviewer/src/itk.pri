@@ -2,12 +2,9 @@ include(defaultdirectories.pri)
 
 INCLUDEPATH += $${ITKINCLUDEDIR}
 
-ITKLIBSUFFIX = -4.7
+ITKLIBSUFFIX = -4.10
 ITKLIBS = \
         ITKCommon \
-        ITKDICOMParser \
-        ITKEXPAT \
-        ITKFEM \
         ITKMetaIO \
         ITKNrrdIO \
         ITKSpatialObjects \
@@ -25,7 +22,8 @@ ITKLIBS = \
         ITKVTK \
         ITKIOGDCM \
         itksys \
-        itkdouble-conversion
+        itkdouble-conversion \
+        ITKTransform
 
 win32 {
  ITKLIBS += itktiff \
