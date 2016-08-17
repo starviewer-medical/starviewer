@@ -41,9 +41,9 @@ download_and_verify b116dc0b0e9f65dcd2196fa55d8815be215065ec537b15665afde0469bd4
                     'gdcm-2.6.4.tar.bz2' \
                     'http://downloads.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.6.4/gdcm-2.6.4.tar.bz2'
 
-download_and_verify 9f7b45ec57e01ca9ad89a05411752914f810fd70b7038fc48abd59e3ec13c6ee \
-                    'InsightToolkit-4.7.1.tar.xz' \
-                    'http://vorboss.dl.sourceforge.net/project/itk/itk/4.7/InsightToolkit-4.7.1.tar.xz'
+download_and_verify ea0011fc99a6303427b236c3ceaf54688224350ce1a216b64c9771ab3194b15f \
+                    'InsightToolkit-4.10.0.tar.xz' \
+                    'http://downloads.sourceforge.net/project/itk/itk/4.10/InsightToolkit-4.10.0.tar.xz'
 
 download_and_verify ea8b6a648b7b2dc313df709940813c22ed5b68d2f7bef30acbaf2a83a6e4c723 \
                     'extra-cmake-modules-1.3.0.tar.xz' \
@@ -65,7 +65,7 @@ mkdir -p "${SOURCE_DIR_BASE}"
 tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/dcmtk-3.6.1_20120515.tar.gz"
 tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/VTK-7.0.0.tar.gz"
 tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/gdcm-2.6.4.tar.bz2"
-tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-4.7.1.tar.xz"
+tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-4.10.0.tar.xz"
 tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/threadweaver-5.3.0.tar.xz"
 tar -C "${SOURCE_DIR_BASE}/threadweaver-5.3.0" -xvf "${DOWNLOAD_PREFIX}/extra-cmake-modules-1.3.0.tar.xz"
 
