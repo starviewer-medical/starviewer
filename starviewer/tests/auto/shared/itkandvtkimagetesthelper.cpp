@@ -8,9 +8,13 @@
 
 namespace testing {
 
+typedef VolumePixelData::ItkImageType::SizeValueType SizeValueType;
+
 VolumePixelData::ItkImageTypePointer ItkAndVtkImageTestHelper::createItkImage(int dimensions[3], int startIndex[3], double spacing[3], double origin[3])
 {
-    VolumePixelData::ItkImageType::SizeType size = { dimensions[0], dimensions[1], dimensions[2] };
+    VolumePixelData::ItkImageType::SizeType size = { static_cast<SizeValueType>(dimensions[0]),
+                                                     static_cast<SizeValueType>(dimensions[1]),
+                                                     static_cast<SizeValueType>(dimensions[2]) };
     VolumePixelData::ItkImageType::IndexType index = { startIndex[0], startIndex[1], startIndex[2] };
     VolumePixelData::ItkImageType::RegionType region;
     region.SetSize(size);
@@ -38,7 +42,9 @@ VolumePixelData::ItkImageTypePointer ItkAndVtkImageTestHelper::createItkImage(in
 void ItkAndVtkImageTestHelper::createItkAndVtkImages(int dimensions[3], int startIndex[3], double spacing[3], double origin[3],
                                                      VolumePixelData::ItkImageTypePointer &itkImage, vtkSmartPointer<vtkImageData> &vtkImage)
 {
-    VolumePixelData::ItkImageType::SizeType size = { dimensions[0], dimensions[1], dimensions[2] };
+    VolumePixelData::ItkImageType::SizeType size = { static_cast<SizeValueType>(dimensions[0]),
+                                                     static_cast<SizeValueType>(dimensions[1]),
+                                                     static_cast<SizeValueType>(dimensions[2]) };
     VolumePixelData::ItkImageType::IndexType index = { startIndex[0], startIndex[1], startIndex[2] };
     VolumePixelData::ItkImageType::RegionType region;
     region.SetSize(size);

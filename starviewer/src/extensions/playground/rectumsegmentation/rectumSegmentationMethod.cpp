@@ -163,7 +163,7 @@ double rectumSegmentationMethod::applyMethod()
     binaryErode->SetErodeValue(m_insideMaskValue);
     binaryDilate->SetDilateValue(m_insideMaskValue);
 
-    unsigned long radiusDilatePre[2];
+    StructuringElementType::SizeType radiusDilatePre;
     radiusDilatePre[0]=1;
     radiusDilatePre[1]=1;
     StructuringElementType structuringElementDilatePre;
@@ -173,7 +173,7 @@ double rectumSegmentationMethod::applyMethod()
     binaryDilatePre->SetKernel(structuringElementDilatePre);
     binaryDilatePre->SetInput(connectedThreshold->GetOutput());
 
-    unsigned long radiusErode[2];
+    StructuringElementType::SizeType radiusErode;
     //Màxim budell sa 8mm--> Per confirmar!!!!
     //double rectumwith = 8.0;
     double rectumwidth = m_multiplier;
@@ -188,7 +188,7 @@ double rectumSegmentationMethod::applyMethod()
     binaryErode->SetKernel(structuringElementErode);
     binaryErode->SetInput(binaryDilatePre->GetOutput());
 
-    unsigned long radiusDilate[2];
+    StructuringElementType::SizeType radiusDilate;
     radiusDilate[0]=(unsigned long) (rectumwidth/(2*m_Volume->getItkData()->GetSpacing()[0]));
     radiusDilate[1]=(unsigned long) (rectumwidth/(2*m_Volume->getItkData()->GetSpacing()[1]));
     StructuringElementType structuringElementDilate;
@@ -394,7 +394,7 @@ void rectumSegmentationMethod::applyMethodNextSlice(unsigned int slice, int step
     binaryErode->SetErodeValue(m_insideMaskValue);
     binaryDilate->SetDilateValue(m_insideMaskValue);
 
-    unsigned long radiusDilatePre[2];
+    StructuringElementType::SizeType radiusDilatePre;
     radiusDilatePre[0]=1;
     radiusDilatePre[1]=1;
     StructuringElementType structuringElementDilatePre;
@@ -404,7 +404,7 @@ void rectumSegmentationMethod::applyMethodNextSlice(unsigned int slice, int step
     binaryDilatePre->SetKernel(structuringElementDilatePre);
     binaryDilatePre->SetInput(ThresholdFilter->GetOutput());
 
-    unsigned long radiusErode[2];
+    StructuringElementType::SizeType radiusErode;
     //Màxim budell sa 8mm--> Per confirmar!!!!
     //double rectumwidth = 8.0;
     double rectumwidth = m_multiplier;
@@ -419,7 +419,7 @@ void rectumSegmentationMethod::applyMethodNextSlice(unsigned int slice, int step
     binaryErode->SetKernel(structuringElementErode);
     binaryErode->SetInput(binaryDilatePre->GetOutput());
 
-    unsigned long radiusDilate[2];
+    StructuringElementType::SizeType radiusDilate;
     radiusDilate[0]=(unsigned long) (rectumwidth/(2*m_Volume->getItkData()->GetSpacing()[0]));
     radiusDilate[1]=(unsigned long) (rectumwidth/(2*m_Volume->getItkData()->GetSpacing()[1]));
     StructuringElementType structuringElementDilate;
