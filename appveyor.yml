@@ -5,10 +5,10 @@ environment:
 
   matrix:
   - BITS: 32
-    QTDIR: C:\Qt\5.6\msvc2013
+    QTDIR: C:\Qt\5.6\msvc2015
     ARCH: x86
   - BITS: 64
-    QTDIR: C:\Qt\5.6\msvc2013_64
+    QTDIR: C:\Qt\5.6\msvc2015_64
     ARCH: amd64
 
 # Uncomment to enable RDP
@@ -19,8 +19,8 @@ install:
 - ps: |
     # Setup precompiled SDK
 
-    $source = "http://trueta.udg.edu/apt/windows/devel/0.14/starviewer-sdk-win$env:BITS-0.14-4.7z"
-    $destination = "c:\starviewer-sdk-win$env:BITS-0.14-4.7z"
+    $source = "http://trueta.udg.edu/apt/windows/devel/0.14/starviewer-sdk-win$env:BITS-0.14-5.7z"
+    $destination = "c:\starviewer-sdk-win$env:BITS-0.14-5.7z"
     Invoke-WebRequest $source -OutFile $destination
 
     7z x $destination -oc:\ > 7z-output.txt
@@ -40,7 +40,7 @@ install:
 
 build_script:
 - cmd: |
-    call "%ProgramFiles(x86)%\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %ARCH%
+    call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %ARCH%
     cd starviewer
     qmake
     jom -j2
