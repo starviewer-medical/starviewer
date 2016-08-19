@@ -158,6 +158,7 @@
         <file>javascript/qdiagnosistest.js</file>
         <file>css/qdiagnosistest.css</file>
         <file>cluts/2d/blackandwhiteinverse.xml</file>
+        <file>cluts/2d/hotbody.xml</file>
         <file>cluts/2d/hotiron.xml</file>
         <file>cluts/2d/hotmetalblue.xml</file>
         <file>cluts/2d/pet.xml</file>
