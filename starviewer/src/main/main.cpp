@@ -145,7 +145,8 @@ int main(int argc, char *argv[])
     #else
     splashPixmap.load(":/images/splash.png");
     #endif
-    QLabel splash(0, Qt::SplashScreen|Qt::FramelessWindowHint);
+    // Note: We use Qt::Tool instead of Qt::SplashScreen because in Mac with the latter if a message box was shown it appeared under the splash.
+    QLabel splash(0, Qt::Tool|Qt::FramelessWindowHint);
     splash.setAttribute(Qt::WA_TranslucentBackground);
     splash.setPixmap(splashPixmap);
     splash.resize(splashPixmap.size());
