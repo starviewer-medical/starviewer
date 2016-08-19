@@ -31,15 +31,26 @@ QString installationPath()
 //                       shadow build                build-starviewer.../bin/starviewer.app/Contents/MacOS
 // Mac crash reporter no shadow build                starviewer/bin/starviewer.app/Contents/MacOS/starviewer_crashreporter.app/Contents/MacOS
 //                       shadow build                build-starviewer.../bin/starviewer.app/Contents/MacOS/starviewer_crashreporter.app/Contents/MacOS
+// All autotests      no shadow build app dir path = starviewer/tests/auto
+//                       shadow build                build-starviewer.../tests/auto
 QString sourcePath()
 {
+    QString sourceDirPath;
+
+    if (qApp->applicationFilePath().contains("autotests"))
+    {
+        sourceDirPath = qApp->applicationDirPath() + "/../..";
+    }
+    else
+    {
 #ifdef Q_OS_OSX
-    QString sourceDirPath = qApp->applicationFilePath().endsWith("starviewer") ?
-                qApp->applicationDirPath() + "/../../../.." :           // starviewer
-                qApp->applicationDirPath() + "/../../../../../../..";   // starviewer_crashreporter
+        sourceDirPath = qApp->applicationFilePath().endsWith("starviewer") ?
+                    qApp->applicationDirPath() + "/../../../.." :           // starviewer
+                    qApp->applicationDirPath() + "/../../../../../../..";   // starviewer_crashreporter
 #else
-    QString sourceDirPath = qApp->applicationDirPath() + "/..";
+        sourceDirPath = qApp->applicationDirPath() + "/..";
 #endif
+    }
 
     if (QDir(sourceDirPath).dirName() != "starviewer")
     {
