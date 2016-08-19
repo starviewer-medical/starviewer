@@ -2,6 +2,8 @@
 #include "easylogging++.h"
 #include "starviewerapplication.h"
 
+#include <QApplication>
+
 void udg::beginLogging() 
 {
     // Primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
@@ -32,15 +34,27 @@ QString udg::getLogConfFilePath()
 {
     // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
     // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
-    QString configurationFile = "/etc/starviewer/log.conf";
-    if (!QFile::exists(configurationFile))
+
+    QString configurationFile;
+
+    if (qApp->applicationFilePath().contains("autotests"))
     {
-        configurationFile = installationPath() + "/log.conf";
+        configurationFile = sourcePath() + "/tests/auto/log.conf";
     }
-    if (!QFile::exists(configurationFile))
+    else
     {
-        configurationFile = sourcePath() + "/bin/log.conf";
+        configurationFile = "/etc/starviewer/log.conf";
+
+        if (!QFile::exists(configurationFile))
+        {
+            configurationFile = installationPath() + "/log.conf";
+        }
+        if (!QFile::exists(configurationFile))
+        {
+            configurationFile = sourcePath() + "/bin/log.conf";
+        }
     }
+
     return configurationFile;
 }
 
