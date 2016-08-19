@@ -24,9 +24,9 @@ set SdkInstallPrefix=%Prefix%\%Arch%
 
 REM The path where Qt is installed.
 if %Arch% == 32 (
-    set QtInstallPrefix=%SystemDrive%\Qt\5.6\msvc2013
+    set QtInstallPrefix=%SystemDrive%\Qt\5.6\msvc2015
 ) else (
-    set QtInstallPrefix=%SystemDrive%\Qt\5.6\msvc2013_64
+    set QtInstallPrefix=%SystemDrive%\Qt\5.6\msvc2015_64
 )
 
 REM How to call CMake.
