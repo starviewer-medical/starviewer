@@ -25,6 +25,7 @@ namespace udg {
 SecondaryVolumeDisplayUnit::SecondaryVolumeDisplayUnit()
 {
     m_mapper = vtkImageSliceMapper::New();
+    m_mapper->StreamingOn();
     m_imageSlice->SetMapper(m_mapper);
 }
 
