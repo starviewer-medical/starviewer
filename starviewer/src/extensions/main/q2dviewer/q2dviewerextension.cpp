@@ -256,8 +256,8 @@ void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modal
     Settings settings;
     bool enableReferenceLinesForMR = settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForMR).toBool();
     bool enableReferenceLinesForCT = settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForCT).toBool();
-    
-    if (modalities.contains("MR") && enableReferenceLinesForMR || modalities.contains("CT") && enableReferenceLinesForCT)
+
+    if ((modalities.contains("MR") && enableReferenceLinesForMR) || (modalities.contains("CT") && enableReferenceLinesForCT))
     {
         m_referenceLinesToolButton->defaultAction()->setChecked(true);
     }
@@ -268,8 +268,8 @@ void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modal
 
     bool enableAutomaticSynchronizationForMR = settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForMR).toBool();
     bool enableAutomaticSynchronizationForCT = settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT).toBool();
-    
-    if (modalities.contains("MR") && enableAutomaticSynchronizationForMR || modalities.contains("CT") && enableAutomaticSynchronizationForCT)
+
+    if ((modalities.contains("MR") && enableAutomaticSynchronizationForMR) || (modalities.contains("CT") && enableAutomaticSynchronizationForCT))
     {
         m_automaticSynchronizationToolButton->defaultAction()->setChecked(true);
     }
