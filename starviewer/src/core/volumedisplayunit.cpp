@@ -39,6 +39,7 @@ VolumeDisplayUnit::VolumeDisplayUnit()
     mapper->SliceAtFocalPointOn();
     mapper->SliceFacesCameraOn();
     mapper->JumpToNearestSliceOn();
+    mapper->StreamingOn();
     m_imageSlice->SetMapper(mapper);
     mapper->Delete();
     m_imageSlice->GetProperty()->SetInterpolationTypeToCubic();
