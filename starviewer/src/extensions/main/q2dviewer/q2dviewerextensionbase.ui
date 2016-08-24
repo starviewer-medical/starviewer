@@ -229,7 +229,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_zoomToolButton">
+        <widget class="udg::QMruSortedToolButtonWithMenu" name="m_zoomToolButton">
          <property name="text">
           <string>Zoom</string>
          </property>
@@ -262,7 +262,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_roiButton">
+        <widget class="udg::QMruSortedToolButtonWithMenu" name="m_roiButton">
          <property name="text">
           <string>ROI</string>
          </property>
@@ -288,7 +288,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_distanceToolButton">
+        <widget class="udg::QMruSortedToolButtonWithMenu" name="m_distanceToolButton">
          <property name="text">
           <string>Distance</string>
          </property>
@@ -321,7 +321,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_angleToolButton">
+        <widget class="udg::QMruSortedToolButtonWithMenu" name="m_angleToolButton">
          <property name="text">
           <string>Angle</string>
          </property>
@@ -975,7 +975,7 @@
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
+        <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
           <widget class="QToolButton" name="m_synchronizeAllViewersButton">
            <property name="sizePolicy">
@@ -1094,6 +1094,11 @@
    <class>udg::QThickSlabWidget</class>
    <extends>QWidget</extends>
    <header>qthickslabwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QMruSortedToolButtonWithMenu</class>
+   <extends>QToolButton</extends>
+   <header>qmrusortedtoolbuttonwithmenu.h</header>
   </customwidget>
  </customwidgets>
  <resources>
