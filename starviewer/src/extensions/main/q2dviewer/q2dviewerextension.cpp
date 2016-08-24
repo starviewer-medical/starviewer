@@ -74,9 +74,6 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     Q2DViewerSettings().init();
 
 #ifdef STARVIEWER_LITE
-    m_roiButton->hide();
-    m_angleToolButton->hide();
-    m_openAngleToolButton->hide();
     m_axialViewToolButton->hide();
     m_coronalViewToolButton->hide();
     m_sagitalViewToolButton->hide();
@@ -156,9 +153,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_statsWatcher = new StatsWatcher("2D Extension", this);
     m_statsWatcher->addClicksCounter(m_slicingToolButton);
     m_statsWatcher->addClicksCounter(m_zoomToolButton);
-    m_statsWatcher->addClicksCounter(m_roiButton);
-    m_statsWatcher->addClicksCounter(m_distanceToolButton);
-    m_statsWatcher->addClicksCounter(m_angleToolButton);
+    m_statsWatcher->addClicksCounter(m_drawingToolButton);
     m_statsWatcher->addClicksCounter(m_eraserToolButton);
 
     m_statsWatcher->addClicksCounter(m_axialViewToolButton);
@@ -420,24 +415,24 @@ void Q2DViewerExtension::initializeTools()
     m_toolManager->registerTool("WindowLevelTool");
     m_referenceLinesToolButton->setDefaultAction(m_toolManager->registerTool("ReferenceLinesTool"));
 
-    m_distanceToolButton->setDefaultAction(m_toolManager->registerTool("DistanceTool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("DistanceTool"));
 
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
 
 #ifndef STARVIEWER_LITE
     m_zoomToolButton->addAction(m_toolManager->registerTool("MagnifyingGlassTool"));
 
-    m_distanceToolButton->addAction(m_toolManager->registerTool("PerpendicularDistanceTool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("PerpendicularDistanceTool"));
 
-    m_roiButton->setDefaultAction(m_toolManager->registerTool("EllipticalROITool"));
-    m_roiButton->addAction(m_toolManager->registerTool("MagicROITool"));
-    m_roiButton->addAction(m_toolManager->registerTool("PolylineROITool"));
-    m_roiButton->addAction(m_toolManager->registerTool("CircleTool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("EllipticalROITool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("MagicROITool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("PolylineROITool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("CircleTool"));
 
     m_cursor3DToolButton->setDefaultAction(m_toolManager->registerTool("Cursor3DTool"));
 
-    m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
-    m_angleToolButton->addAction(m_toolManager->registerTool("NonClosedAngleTool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("AngleTool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("NonClosedAngleTool"));
 
     m_automaticSynchronizationToolButton->setDefaultAction(m_toolManager->registerTool("AutomaticSynchronizationTool"));
 #endif
