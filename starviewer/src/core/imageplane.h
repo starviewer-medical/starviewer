@@ -15,127 +15,122 @@
 #ifndef UDGIMAGEPLANE_H
 #define UDGIMAGEPLANE_H
 
-#include <QList>
-#include <QVector>
-
 #include "imageorientation.h"
 #include "pixelspacing2d.h"
+#include "vector3.h"
 
 namespace udg {
 
 class Image;
+
 /**
-    Classe que defineix un pla d'imatge. El pla consta de vectors de direcció de X i Y, normal, origen, espaiat i nombre de files i columnes per definir un pla
-    tancat i finit com és el de la imatge. Està definit en coordenades de món.
-  */
+ * @brief The ImagePlane class represents the bounded plane of an image.
+ *
+ * The plane stores the image orientation, origin, spacing, row and column length, and thickness of the image.
+ */
 class ImagePlane {
+
 public:
     ImagePlane();
 
-    ImagePlane(ImagePlane *imagePlane);
+    /// Returns the image plane orientation.
+    const ImageOrientation& getImageOrientation() const;
+    /// Sets the image plane orientation.
+    void setImageOrientation(ImageOrientation imageOrientation);
 
-    ~ImagePlane();
-
-    void setImageOrientation(const ImageOrientation &imageOrientation);
-    ImageOrientation getImageOrientation() const;
-
-    /// TODO Mètodes de transició. Es mantenen en la primera fase de refactoring d'ImageOrientation
-    /// Amb el temps hauríem de prescindir d'aquests i accedir a través dels que ens proporciona ImageOrientation
-    void getRowDirectionVector(double vector[3]);
-    void getColumnDirectionVector(double vector[3]);
-    void getNormalVector(double vector[3]);
-
-    void setOrigin(double origin[3]);
+    /// Returns the top left corner of the plane.
+    const Vector3& getOrigin() const;
+    /// Sets the top left corner of the plane.
+    void setOrigin(Vector3 origin);
+    /// Sets the top left corner of the plane.
     void setOrigin(double x, double y, double z);
-    void getOrigin(double origin[3]);
 
-    void setSpacing(const PixelSpacing2D &spacing);
-    PixelSpacing2D getSpacing() const;
+    /// Returns the pixel spacing.
+    const PixelSpacing2D& getSpacing() const;
+    /// Sets the pixel spacing.
+    void setSpacing(PixelSpacing2D spacing);
 
-    void setThickness(double thickness);
-    double getThickness() const;
-
-    void setRows(int rows);
-    void setColumns(int columns);
-
-    int getRows() const;
-    int getColumns() const;
-
+    /// Returns the plane width.
     double getRowLength() const;
+    /// Sets the plane width.
+    void setRowLength(double length);
+
+    /// Returns the plane height.
     double getColumnLength() const;
+    /// Sets the plane height.
+    void setColumnLength(double length);
 
-    /// Omple les dades del pla a partir d'un objecte Image
-    /// @param image objecte Image
-    /// @return Cert si l'objecte Image és vàlid per omplir les dades, fals altrament
-    bool fillFromImage(const Image *image);
+    /// Returns the plane thickness.
+    double getThickness() const;
+    /// Sets the plane thickness.
+    void setThickness(double thickness);
 
-    bool operator ==(const ImagePlane &imagePlane);
-    bool operator !=(const ImagePlane &imagePlane);
-
-    /// Ens retorna una llista amb 4 punts que defineix els bounds del pla.
-    /// Tenint en compte que la coordenada d'origen s'assumeix que és al centre de la llesca ( és a dir, enmig +/- thickness )
-    /// Podem obtenir els bounds respecte el centre, thickness per amunt o thickness per avall
-    /// L'ordre dels punts retornats és el següent:
-    /// TLHC, TRHC, BRHC, BLHC,
-    /// On:
-    /// TLHC == TopLeftHandCorner == Origen
-    /// TRHC == TopRightHandCorner
-    /// BRHC == BottomRightHandCorner
-    /// BLHC == BottomLeftHandCorner
-    /// @param location defineix quins bounds volem, 0: Central, 1: Upper (+thickness/2), 2: Lower (-thickness/2)
-    QList<QVector<double> > getBounds(int location);
-    QList<QVector<double> > getCentralBounds();
-    QList<QVector<double> > getUpperBounds();
-    QList<QVector<double> > getLowerBounds();
-
-    /// Retorna un volcat d'informació de l'objecte en format d'string
-    QString toString(bool verbose = false);
-
-    /// Ens dóna els punts d'intersecció entre el pla localitzador passat per paràmetre i el pla
-    /// @param planeToIntersect pla que volem fer intersectar amb el pla
-    /// @param firstIntersectionPoint[] primer punt d'intersecció trobat ( si n'hi ha )
-    /// @param secondIntersectionPoint[] segon punt d'intersecció trobat ( si n'hi ha )
-    /// @param bounds Which plane bounds to take to make the intersection computing. 0 = upper, 1 = lower, 2 = central, upper by default.
-    /// @return el nombre d'interseccions trobades
-    int getIntersections(ImagePlane *planeToIntersect, double firstIntersectionPoint[3], double secondIntersectionPoint[3], int bounds = 0);
-
-    /// Returns the distance from the given point to the current plane
-    double getDistanceToPoint(double point[3]);
-    
-    /// Computes the projection of pointToProject on this image plane and sets it on projectedPoint parameter
-    void projectPoint(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false);
-    
-    /// Quan es modifica algun dels vectors directors del pla es modifica el centre.
-    void updateCenter();
-
-    void getCenter(double center[3]);
-
-    /// Assigna un nou centre al pla i per tant modifica l'origen, els dos vectors de direcció (row i column) i el vector normal.
+    /// Returns the plane center.
+    Vector3 getCenter() const;
+    /// Modifies the origin so that the given point becomes the center.
+    void setCenter(const Vector3 &center);
+    /// Modifies the origin so that the given point becomes the center.
     void setCenter(double x, double y, double z);
-    void setCenter(double center[3]);
 
-    /// Trasllada el pla en la direcció de la normal en la distància especificada.
-    /// Valors negatius mouen el pla en la direcció oposada.
-    void push(double distance);
+    /// Fills this ImagePlane from the given Image.
+    void fillFromImage(const Image *image);
+
+    bool operator ==(const ImagePlane &imagePlane) const;
+    bool operator !=(const ImagePlane &imagePlane) const;
+
+    /// Location of the bounds. Central = middle of the plane, Upper = middle of the plane + thickness/2, Lower = middle of the plane - thickness/2.
+    enum CornersLocation { Central, Upper, Lower };
+
+    /// Contains the 4 corners of an ImagePlane at the specified location.
+    struct Corners
+    {
+        CornersLocation location;
+        Vector3 topLeft, topRight, bottomRight, bottomLeft;
+    };
+
+    /// Returns the corners of the plane in the specified location.
+    Corners getCorners(CornersLocation location) const;
+    /// Returns the central corners of the plane.
+    Corners getCentralCorners() const;
+    /// Returns the upper corners of the plane.
+    Corners getUpperCorners() const;
+    /// Returns the lower corners of the plane.
+    Corners getLowerCorners() const;
+
+    /// Returns a string representation of this ImagePlane.
+    QString toString(bool verbose = false) const;
+
+    /// Computes the intersection between this ImagePlane and \a planeToIntersect.
+    /// \param plane Plane to intersect with this one. It's considered an infinite plane.
+    /// \param intersectionPoint1 The first intersection point will be stored here.
+    /// \param intersectionPoint2 The second intersection point will be stored here.
+    /// \param cornersLocation Specify which corners of this ImagePlane will be used to compute the intersection (upper by default)
+    ///                        (\a plane is always used with the central location).
+    /// \return True if there are intersections, and false otherwise.
+    bool getIntersections(const ImagePlane *plane, Vector3 &intersectionPoint1, Vector3 &intersectionPoint2, CornersLocation cornersLocation = Upper) const;
+
+    /// Returns the distance from the given point to this ImagePlane.
+    double getDistanceToPoint(const Vector3 &point) const;
+    
+    /// Projects the given point onto this ImagePlane and returns the result.
+    /// The projection consists in changing the coordinates so that the ImagePlane origin is the new (0,0,0),
+    /// and the row and column vector the new X and Y axes, respectively.
+    Vector3 projectPoint(Vector3 point, bool vtkReconstructionHack = false) const;
 
 private:
-    /// Orientació del pla imatge
+    /// The image plane orientation.
     ImageOrientation m_imageOrientation;
-
-    /// Origen del pla
-    double m_origin[3];
-
-    /// Espaiat de les X i les Y
+    /// Top left corner of the plane.
+    Vector3 m_origin;
+    /// Pixel spacing.
     PixelSpacing2D m_spacing;
-
-    /// Files i columnes
-    int m_rows, m_columns;
-
-    /// Gruix del pla
+    /// Plane width.
+    double m_rowLength;
+    /// Plane height.
+    double m_columnLength;
+    /// Plane thickness.
     double m_thickness;
 
-    /// Centre del pla
-    double m_center[3];
 };
 
 }

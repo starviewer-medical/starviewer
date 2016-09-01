@@ -1170,13 +1170,9 @@ bool Q2DViewer::getDicomWorldCoordinates(const double xyz[3], double dicomWorldP
     if (currentPlane)
     {
         // 3.- Construim la matiu per mapejar l'index del píxel del DICOM a un punt del món real
-        double currentPlaneRowVector[3];
-        double currentPlaneColumnVector[3];
-        double currentPlaneOrigin[3];
-
-        currentPlane->getRowDirectionVector(currentPlaneRowVector);
-        currentPlane->getColumnDirectionVector(currentPlaneColumnVector);
-        currentPlane->getOrigin(currentPlaneOrigin);
+        std::array<double, 3> currentPlaneRowVector = Vector3(currentPlane->getImageOrientation().getRowVector());
+        std::array<double, 3> currentPlaneColumnVector = Vector3(currentPlane->getImageOrientation().getColumnVector());
+        std::array<double, 3> currentPlaneOrigin = currentPlane->getOrigin();
 
         int xIndex, yIndex, zIndex;
         getCurrentViewPlane().getXYZIndexes(xIndex, yIndex, zIndex);
@@ -1228,8 +1224,8 @@ void Q2DViewer::projectDICOMPointToCurrentDisplayedImage(const double pointToPro
     if (currentPlane)
     {
         // First we project the point on the current image plane
-        double planeProjectedPoint[3];
-        currentPlane->projectPoint(pointToProject, planeProjectedPoint, getCurrentViewPlane() == OrthogonalPlane::YZPlane && vtkReconstructionHack);
+        std::array<double, 3> planeProjectedPoint = currentPlane->projectPoint(pointToProject,
+                                                                               getCurrentViewPlane() == OrthogonalPlane::YZPlane && vtkReconstructionHack);
         
         //
         // CORRECIÓ VTK!

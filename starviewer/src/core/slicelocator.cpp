@@ -86,10 +86,7 @@ int SliceLocator::getNearestSlice(ImagePlane *imagePlane)
         return -1;
     }
 
-    double planePoint[3];
-    imagePlane->getCenter(planePoint);
-
-    return getNearestSlice(planePoint);
+    return getNearestSlice(imagePlane->getCenter().toArray().data());
 }
 
 bool SliceLocator::isWithinProximityBounds(double distanceToSlice)
