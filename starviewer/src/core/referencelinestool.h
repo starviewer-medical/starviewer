@@ -17,6 +17,8 @@
 
 #include "tool.h"
 
+#include "imageplane.h"
+
 // Forward declarations
 class vtkMatrix4x4;
 
@@ -24,7 +26,6 @@ namespace udg {
 
 class ReferenceLinesToolData;
 class Q2DViewer;
-class ImagePlane;
 class DrawerPolygon;
 class DrawerLine;
 
@@ -80,7 +81,8 @@ private:
     /// Computes intersection between given localizer and reference plane. boundsList shows which reference bound planes should be used to
     /// compute intersections (upper, lower, central). If there is intersection with a bound plane, updates the correspoding lines
     /// according to the given offset. If there is intersection with all the given bound planes returns true, false otherwise.
-    bool computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, ImagePlane *referencePlane, QList<int> boundsList, int lineOffset);
+    bool computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, ImagePlane *referencePlane,
+                                                     const QList<ImagePlane::CornersLocation> &cornerLocations, int lineOffset);
     
     /// Projects the given intersection points and updates the corresponding lines according to lineOffset
     void updateProjectionLinesFromIntersections(double firstIntersectionPoint[3], double secondIntersectionPoint[3], int lineOffset);

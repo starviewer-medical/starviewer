@@ -582,9 +582,9 @@ void Q3DViewer::setVolumeTransformation()
     Image *imageReference = getMainInput()->getImage(0);
     ImagePlane currentPlane;
     currentPlane.fillFromImage(imageReference);
-    double currentPlaneRowVector[3], currentPlaneColumnVector[3], stackDirection[3];
-    currentPlane.getRowDirectionVector(currentPlaneRowVector);
-    currentPlane.getColumnDirectionVector(currentPlaneColumnVector);
+    std::array<double, 3> currentPlaneRowVector = Vector3(currentPlane.getImageOrientation().getRowVector());
+    std::array<double, 3> currentPlaneColumnVector = Vector3(currentPlane.getImageOrientation().getColumnVector());
+    double stackDirection[3];
     getMainInput()->getStackDirection(stackDirection);
 
     DEBUG_LOG(QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
