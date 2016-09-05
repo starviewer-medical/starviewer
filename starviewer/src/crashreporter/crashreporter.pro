@@ -6,13 +6,11 @@ TARGET = $${TARGET_STARVIEWER_CRASH_REPORTER}
 DESTDIR = ../../bin
 
 macx {
-    CONFIG += no_keywords
     DESTDIR = $${DESTDIR}/$${TARGET_STARVIEWER}.app/Contents/MacOS
 }
 
 FORMS = qcrashreporterbase.ui
 HEADERS = qcrashreporter.h \
-          crashreportersender.h \
           ../core/settingsregistry.h \
           ../core/settings.h \
           ../core/settingsparser.h \
@@ -38,27 +36,10 @@ TRANSLATIONS += crashreporter_ca_ES.ts \
                 crashreporter_es_ES.ts \
                 crashreporter_en_GB.ts 
                 
-INCLUDEPATH += ../thirdparty/breakpad ../core
+INCLUDEPATH += ../core
 
 macx {
-    HEADERS += ../thirdparty/breakpad/common/mac/HTTPMultipartUpload.h \
-               ../thirdparty/breakpad/common/mac/GTMDefines.h
-    OBJECTIVE_SOURCES += crashreportersender_mac.mm \
-                         ../thirdparty/breakpad/common/mac/HTTPMultipartUpload.mm
     ICON = ../main/images/starviewer.icns
-}
-linux* {
-    HEADERS += ../thirdparty/breakpad/common/linux/http_upload.h
-    SOURCES += crashreportersender_linux.cpp \
-               ../thirdparty/breakpad/common/linux/http_upload.cc
-    LIBS += -ldl
-}
-win32 {
-    HEADERS += ../thirdparty/breakpad/common/windows/http_upload.h
-    SOURCES += crashreportersender_windows.cpp \
-               ../thirdparty/breakpad/common/windows/http_upload.cc
-               
-    LIBS += -lWinInet
 }
 
 RESOURCES = crashreporter.qrc ../main/main.qrc

@@ -196,24 +196,41 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="m_sendReportAnimation">
-       <property name="text">
-        <string/>
+      <widget class="QProgressBar" name="m_sendProgressBar">
+       <property name="value">
+        <number>0</number>
        </property>
       </widget>
      </item>
      <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QLabel" name="m_sendError">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
+       <property name="styleSheet">
+        <string notr="true">color: white;
+background-color: red;</string>
        </property>
-      </spacer>
+       <property name="text">
+        <string>Crash report could not be sent.</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_sendSuccess">
+       <property name="text">
+        <string>Crash report sent.</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="m_quitPushButton">
@@ -232,11 +249,19 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="m_abortSendPushButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <resources>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
  <connections>
