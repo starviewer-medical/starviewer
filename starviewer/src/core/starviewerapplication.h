@@ -22,6 +22,16 @@ namespace udg {
 const QString StarviewerVersionString("0.14.0-devel");
 const QString StarviewerBuildID("2016061600");
 
+#ifdef Q_OS_WIN
+const QString StarviewerBuildPlatform("Windows");
+#endif
+#ifdef Q_OS_OSX
+const QString StarviewerBuildPlatform("Mac");
+#endif
+#ifdef Q_OS_LINUX
+const QString StarviewerBuildPlatform("Linux");
+#endif
+
 // Indica per aquesta versió d'starviewer quina és la revisió de bd necessària
 const int StarviewerDatabaseRevisionRequired(9593);
 
