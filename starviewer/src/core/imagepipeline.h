@@ -24,11 +24,8 @@ class vtkRunThroughFilter;
 
 namespace udg {
 
-class WindowLevelFilter;
 class ThickSlabFilter;
 class DisplayShutterFilter;
-class TransferFunction;
-class VoiLut;
 
 /// Pipeline that applies the filters required to generate the image to be used in Q2DViewer
 class ImagePipeline : public Filter {
@@ -42,12 +39,6 @@ public:
     /// Sets the given filter output as input of the filter
     void setInput(FilterOutput input);
 
-    /// Sets the VOI LUT.
-    void setVoiLut(const VoiLut &voiLut);
-    /// Sets the transfer function
-    void setTransferFunction(const TransferFunction &transferFunction);
-    /// Clears the transfer function.
-    void clearTransferFunction();
     /// Sets the shutter data
     void setShutterData(vtkImageData *shutterData);
     /// Sets the slice to be visualized
@@ -67,11 +58,12 @@ private:
     /// Returns the vtkAlgorithm used to implement the filter.
     virtual vtkAlgorithm* getVtkAlgorithm() const;
 
+    /// Rebuilds this pipeline choosing which filters to use according to their current status.
+    void rebuild();
+
 private:
     /// Filter to apply thick slab
     ThickSlabFilter *m_thickSlabProjectionFilter;
-    /// Filter to apply a grayscale to volume
-    WindowLevelFilter *m_windowLevelLUTFilter;
     /// Filter to show display shutters
     DisplayShutterFilter *m_displayShutterFilter;
     /// Filter to obtain the final output of the pipeline
@@ -81,9 +73,6 @@ private:
     vtkImageData *m_input;
     /// The shutter data to be applied
     vtkImageData *m_shutterData;
-
-    /// Used to keep track of whether there's a currently active transfer function when applying a VOI LUT.
-    bool m_hasTransferFunction;
 
 };
 

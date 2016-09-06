@@ -23,10 +23,11 @@
 #include "voiluthelper.h"
 
 #include <vtkCamera.h>
+#include <vtkImageProperty.h>
 #include <vtkImageResliceMapper.h>
 #include <vtkImageSlice.h>
+#include <vtkLookupTable.h>
 #include <vtkPropPicker.h>
-#include <vtkImageProperty.h>
 
 namespace udg {
 
@@ -40,6 +41,7 @@ VolumeDisplayUnit::VolumeDisplayUnit()
     mapper->SliceFacesCameraOn();
     mapper->JumpToNearestSliceOn();
     mapper->StreamingOn();
+    mapper->SeparateWindowLevelOperationOff();  // improves slicing performance when doing internal window level
     m_imageSlice->SetMapper(mapper);
     mapper->Delete();
     m_imageSlice->GetProperty()->SetInterpolationTypeToCubic();
@@ -310,15 +312,28 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
     setVoiLut(voiLut);
 }
 
-void VolumeDisplayUnit::setVoiLut(const VoiLut &voiLut)
-{
+void VolumeDisplayUnit::setVoiLut(VoiLut voiLut)
+{    
     if (m_volume->getImage(0) && m_volume->getImage(0)->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
     {
-        m_imagePipeline->setVoiLut(voiLut.inverse());
+        voiLut = voiLut.inverse();
+    }
+
+    m_voiLut = voiLut;
+
+    m_imageSlice->GetProperty()->SetColorWindow(voiLut.getWindowLevel().getWidth());
+    m_imageSlice->GetProperty()->SetColorLevel(voiLut.getWindowLevel().getCenter());
+
+    if (m_voiLut.isWindowLevel())
+    {
+        // The transfer function must be rescaled according to the window level
+        setTransferFunction(m_transferFunction);
     }
     else
     {
-        m_imagePipeline->setVoiLut(voiLut);
+        // Setting a VOI LUT removes the transfer function
+        clearTransferFunction();
+        m_imageSlice->GetProperty()->SetLookupTable(m_voiLut.getLut().toVtkLookupTable());
     }
 }
 
@@ -338,11 +353,12 @@ void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunc
     }
     else
     {
-        double newRange[2];
-        m_volume->getScalarRange(newRange);
+        double windowLevel = m_voiLut.getWindowLevel().getCenter();
+        double windowWidth = m_voiLut.getWindowLevel().getWidth();
+        double newRange[2] = { windowLevel - windowWidth / 2.0, windowLevel + windowWidth / 2.0 };
 
         // Scale transfer function before applying (only if the volume has at least 2 distinct values and the transfer function has at least 2 points)
-        if (newRange[0] < newRange[1] && transferFunction.keys().size() > 1)
+        if (newRange[0] != newRange[1] && transferFunction.keys().size() > 1)
         {
             double originalRange[2] = { transferFunction.keys().first(), transferFunction.keys().last() };
             m_transferFunction = transferFunction.toNewRange(originalRange[0], originalRange[1], newRange[0], newRange[1]);
@@ -353,7 +369,7 @@ void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunc
             m_transferFunction = transferFunction;
         }
 
-        m_imagePipeline->setTransferFunction(m_transferFunction);
+        m_imageSlice->GetProperty()->SetLookupTable(m_transferFunction.toVtkLookupTable());
     }
 }
 
@@ -365,7 +381,7 @@ const TransferFunction& VolumeDisplayUnit::getTransferFunction() const
 void VolumeDisplayUnit::clearTransferFunction()
 {
     m_transferFunction.clear();
-    m_imagePipeline->clearTransferFunction();
+    m_imageSlice->GetProperty()->SetLookupTable(nullptr);
 }
 
 void VolumeDisplayUnit::setSlabProjectionMode(AccumulatorFactory::AccumulatorType accumulatorType)

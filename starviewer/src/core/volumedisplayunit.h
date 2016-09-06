@@ -16,7 +16,7 @@
 #define VOLUMEDISPLAYUNIT_H
 
 #include "accumulator.h"
-#include "transferfunction.h"
+#include "voilut.h"
 
 class vtkCamera;
 class vtkImageData;
@@ -30,7 +30,6 @@ class ImagePipeline;
 class OrthogonalPlane;
 class SliceHandler;
 class Volume;
-class VoiLut;
 class VoiLutPresetsToolData;
 class VolumePixelData;
 
@@ -89,7 +88,7 @@ public:
     void updateCurrentImageDefaultPresets();
 
     /// Sets the given VOI LUT to the pipeline.
-    void setVoiLut(const VoiLut &voiLut);
+    void setVoiLut(VoiLut voiLut);
     /// Sets the given VOI LUT to the VOI LUT data and to the pipeline.
     void setCurrentVoiLutPreset(const VoiLut &voiLut);
 
@@ -165,6 +164,9 @@ private:
 
     /// VOI LUT data.
     VoiLutPresetsToolData *m_voiLutData;
+
+    /// The current VOI LUT.
+    VoiLut m_voiLut;
 
     /// The current transfer function.
     TransferFunction m_transferFunction;
