@@ -23,6 +23,7 @@
 namespace udg {
 
 ImagePipeline::ImagePipeline()
+ : m_input(nullptr), m_shutterData(nullptr)
 {
     // Filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = new ThickSlabFilter();
@@ -31,8 +32,6 @@ ImagePipeline::ImagePipeline()
     m_displayShutterFilter = new DisplayShutterFilter();
 
     m_outputFilter = vtkRunThroughFilter::New();
-
-    m_shutterData = 0;
 }
 
 ImagePipeline::~ImagePipeline()

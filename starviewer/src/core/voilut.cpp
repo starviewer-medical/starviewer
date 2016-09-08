@@ -122,4 +122,9 @@ VoiLut VoiLut::inverse() const
     }
 }
 
+vtkLookupTable* VoiLut::toVtkLookupTable() const
+{
+    return isWindowLevel() ? m_windowLevel.toVtkLookupTable() : m_lut.toVtkLookupTable();
+}
+
 } // namespace udg

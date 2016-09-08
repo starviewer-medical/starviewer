@@ -13,7 +13,10 @@
  *************************************************************************************/
 
 #include "windowlevel.h"
-#include <QString>
+
+#include <cmath>
+
+#include <vtkWindowLevelLookupTable.h>
 
 namespace udg {
 
@@ -98,6 +101,19 @@ bool WindowLevel::operator==(const WindowLevel &windowLevelToCompare) const
     {
         return false;
     }
+}
+
+vtkLookupTable* WindowLevel::toVtkLookupTable() const
+{
+    vtkWindowLevelLookupTable *lut = vtkWindowLevelLookupTable::New();
+//    lut->SetMinimumTableValue(0.0, 0.0, 0.0, 1.0);
+//    lut->SetMaximumTableValue(1.0, 1.0, 1.0, 1.0);
+    lut->SetWindow(qAbs(m_width));
+    lut->SetLevel(m_center);
+    lut->SetInverseVideo(std::signbit(m_width));
+    lut->Build();
+    lut->Print(std::cout);
+    return lut;
 }
 
 }

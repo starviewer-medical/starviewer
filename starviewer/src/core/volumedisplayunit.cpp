@@ -319,21 +319,46 @@ void VolumeDisplayUnit::setVoiLut(VoiLut voiLut)
         voiLut = voiLut.inverse();
     }
 
+    bool changedSign = std::signbit(m_voiLut.getWindowLevel().getWidth()) != std::signbit(voiLut.getWindowLevel().getWidth());
+
     m_voiLut = voiLut;
 
-    m_imageSlice->GetProperty()->SetColorWindow(voiLut.getWindowLevel().getWidth());
+    m_imageSlice->GetProperty()->SetColorWindow(qAbs(voiLut.getWindowLevel().getWidth()));
     m_imageSlice->GetProperty()->SetColorLevel(voiLut.getWindowLevel().getCenter());
 
     if (m_voiLut.isWindowLevel())
     {
-        // The transfer function must be rescaled according to the window level
-        setTransferFunction(m_transferFunction);
+        if (m_transferFunction.isEmpty())
+        {
+            vtkLookupTable *lut = m_voiLut.toVtkLookupTable();
+            if (m_volume && m_volume->getNumberOfScalarComponents() == 3)
+            {
+                lut->SetVectorModeToRGBColors();
+                m_imageSlice->GetProperty()->SetColorWindow(voiLut.getWindowLevel().getWidth());
+            }
+            m_imageSlice->GetProperty()->SetLookupTable(lut);
+//            m_imageSlice->GetProperty()->UseLookupTableScalarRangeOn();
+            lut->Delete();
+        }
+        else
+        {
+            // The transfer function must be rescaled according to the window level
+            if (changedSign)
+            {
+                setTransferFunction(VoiLut(m_transferFunction).inverse().getLut());
+            }
+            else
+            {
+                setTransferFunction(m_transferFunction);
+            }
+        }
     }
     else
     {
         // Setting a VOI LUT removes the transfer function
         clearTransferFunction();
         m_imageSlice->GetProperty()->SetLookupTable(m_voiLut.getLut().toVtkLookupTable());
+//        m_imageSlice->GetProperty()->UseLookupTableScalarRangeOff();
     }
 }
 
@@ -354,7 +379,7 @@ void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunc
     else
     {
         double windowLevel = m_voiLut.getWindowLevel().getCenter();
-        double windowWidth = m_voiLut.getWindowLevel().getWidth();
+        double windowWidth = qMax(qAbs(m_voiLut.getWindowLevel().getWidth()), 1.0);
         double newRange[2] = { windowLevel - windowWidth / 2.0, windowLevel + windowWidth / 2.0 };
 
         // Scale transfer function before applying (only if the volume has at least 2 distinct values and the transfer function has at least 2 points)
@@ -370,6 +395,7 @@ void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunc
         }
 
         m_imageSlice->GetProperty()->SetLookupTable(m_transferFunction.toVtkLookupTable());
+//        m_imageSlice->GetProperty()->UseLookupTableScalarRangeOff();
     }
 }
 
