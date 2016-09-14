@@ -375,7 +375,6 @@ HEADERS += extensionfactory.h \
     orthogonalplane.h \
     filter.h \
     filteroutput.h \
-    displayshutterfilter.h \
     windowlevelfilter.h \
     thickslabfilter.h \
     blendfilter.h \
@@ -755,7 +754,6 @@ SOURCES += extensionmediator.cpp \
     orthogonalplane.cpp \
     filter.cpp \
     filteroutput.cpp \
-    displayshutterfilter.cpp \
     windowlevelfilter.cpp \
     thickslabfilter.cpp \
     blendfilter.cpp \

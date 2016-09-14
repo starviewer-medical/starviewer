@@ -355,7 +355,7 @@ bool Q2DViewer::doesInputHavePhases(int i) const
 
 bool Q2DViewer::isInputVisible(int i) const
 {
-    return getDisplayUnit(i)->getImageSlice()->GetVisibility();
+    return getDisplayUnit(i)->isVisible();
 }
 
 void Q2DViewer::initializeCamera()
@@ -368,7 +368,7 @@ void Q2DViewer::initializeCamera()
 void Q2DViewer::initializeDummyDisplayUnit()
 {
     m_dummyDisplayUnit = new VolumeDisplayUnit;
-    m_dummyDisplayUnit->getImageSlice()->VisibilityOff();
+    m_dummyDisplayUnit->setVisible(false);
 }
 
 void Q2DViewer::addImageActors()
@@ -1047,12 +1047,12 @@ void Q2DViewer::updateSecondaryVolumesSlices()
 
         if (nearestSlice >= 0)
         {
-            getDisplayUnit(i)->getImageSlice()->VisibilityOn();
+            getDisplayUnit(i)->setVisible(true);
             getDisplayUnit(i)->setSlice(nearestSlice);
         }
         else
         {
-            getDisplayUnit(i)->getImageSlice()->VisibilityOff();
+            getDisplayUnit(i)->setVisible(false);
             getDisplayUnit(i)->setSlice(0);
         }
     }
@@ -1889,7 +1889,7 @@ bool Q2DViewer::canShowDisplayShutter() const
         && !isThickSlabActive()
         && getCurrentViewPlane() == OrthogonalPlane::XYPlane
         && getCurrentDisplayedImage()
-        && getCurrentDisplayedImage()->getDisplayShutterForDisplayAsVtkImageData(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+        && getCurrentDisplayedImage()->getDisplayShutterForDisplayAsVtkImageData();
 }
 
 void Q2DViewer::updateDisplayShutterMask()
@@ -1901,7 +1901,7 @@ void Q2DViewer::updateDisplayShutterMask()
 
         if (image)
         {
-            shutterData = image->getDisplayShutterForDisplayAsVtkImageData(getMainInput()->getImageIndex(getCurrentSlice(), getCurrentPhase()));
+            shutterData = image->getDisplayShutterForDisplayAsVtkImageData();
         }
     }
     
@@ -1925,7 +1925,7 @@ void Q2DViewer::setCurrentViewPlane(const OrthogonalPlane &viewPlane)
 
 void Q2DViewer::setVolumeOpacity(int index, double opacity)
 {
-    getDisplayUnit(index)->getImageSlice()->GetProperty()->SetOpacity(opacity);
+    getDisplayUnit(index)->setOpacity(opacity);
 }
 
 const TransferFunction& Q2DViewer::getVolumeTransferFunction(int index) const

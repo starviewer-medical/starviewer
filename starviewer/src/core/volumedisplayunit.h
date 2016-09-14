@@ -21,6 +21,7 @@
 class vtkCamera;
 class vtkImageData;
 class vtkImageSlice;
+class vtkImageStack;
 class vtkPropPicker;
 
 namespace udg {
@@ -58,8 +59,11 @@ public:
     /// Returns the image pipeline.
     ImagePipeline* getImagePipeline() const;
 
-    /// Returns the vtkImageSlice.
+    /// Returns the main vtkImageSlice.
     vtkImageSlice* getImageSlice() const;
+
+    /// Returns the image stack.
+    vtkImageStack* getImageStack() const;
 
     /// Returns the configured point picker for this unit.
     vtkPropPicker* getImagePointPicker();
@@ -140,6 +144,14 @@ public:
     /// Sets the display shutter image data.
     void setShutterData(vtkImageData *shutterData);
 
+    /// Returns true if this volume display unit is visible and false otherwise.
+    bool isVisible() const;
+    /// Sets the visibility of this volume display unit to the given value.
+    void setVisible(bool visible);
+
+    /// Sets the opacity of this volume display unit.
+    void setOpacity(double opacity);
+
 protected:
     /// The volume.
     Volume *m_volume;
@@ -160,6 +172,11 @@ private:
     /// The image pipeline that processes the volume.
     ImagePipeline *m_imagePipeline;
 
+    /// Used to render the shutter.
+    vtkImageSlice *m_shutterImageSlice;
+    /// Used to compose the shutter on top of the main image.
+    vtkImageStack *m_imageStack;
+
     /// Point picker to probe pixels from the image to display
     vtkPropPicker *m_imagePointPicker;
 
@@ -171,6 +188,7 @@ private:
 
     /// Holds the current thickslab pixel data
     VolumePixelData *m_currentThickSlabPixelData;
+
 };
 
 }

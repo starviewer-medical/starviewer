@@ -15,7 +15,6 @@
 #include "imagepipeline.h"
 #include "windowlevelfilter.h"
 #include "thickslabfilter.h"
-#include "displayshutterfilter.h"
 #include "transferfunction.h"
 #include "voilut.h"
 
@@ -33,18 +32,12 @@ ImagePipeline::ImagePipeline()
 
     m_windowLevelLUTFilter = new WindowLevelFilter();
 
-    m_displayShutterFilter = new DisplayShutterFilter();
-    m_displayShutterFilter->setInput(m_windowLevelLUTFilter->getOutput());
-
     m_outputFilter = vtkRunThroughFilter::New();
     m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
-
-    m_shutterData = 0;
 }
 
 ImagePipeline::~ImagePipeline()
 {
-    delete m_displayShutterFilter;
     delete m_windowLevelLUTFilter;
     delete m_thickSlabProjectionFilter;
     m_outputFilter->Delete();
@@ -68,20 +61,6 @@ void ImagePipeline::setInput(vtkImageData *input)
 void ImagePipeline::setInput(FilterOutput input)
 {
     setInput(input.getVtkImageData());
-}
-
-void ImagePipeline::setShutterData(vtkImageData *shutterData)
-{
-    m_shutterData = shutterData;
-    if (m_shutterData)
-    {
-        m_displayShutterFilter->setDisplayShutter(m_shutterData);
-        m_outputFilter->SetInputConnection(m_displayShutterFilter->getOutput().getVtkAlgorithmOutput());
-    }
-    else
-    {
-        m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
-    }
 }
 
 void ImagePipeline::setSlice(int slice)

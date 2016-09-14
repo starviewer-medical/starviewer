@@ -26,7 +26,6 @@ namespace udg {
 
 class WindowLevelFilter;
 class ThickSlabFilter;
-class DisplayShutterFilter;
 class TransferFunction;
 class VoiLut;
 
@@ -48,8 +47,6 @@ public:
     void setTransferFunction(const TransferFunction &transferFunction);
     /// Clears the transfer function.
     void clearTransferFunction();
-    /// Sets the shutter data
-    void setShutterData(vtkImageData *shutterData);
     /// Sets the slice to be visualized
     void setSlice(int slice);
     /// Sets the orthogonal that has to be visualized
@@ -72,15 +69,11 @@ private:
     ThickSlabFilter *m_thickSlabProjectionFilter;
     /// Filter to apply a grayscale to volume
     WindowLevelFilter *m_windowLevelLUTFilter;
-    /// Filter to show display shutters
-    DisplayShutterFilter *m_displayShutterFilter;
     /// Filter to obtain the final output of the pipeline
     vtkRunThroughFilter *m_outputFilter;
 
     /// Input data
     vtkImageData *m_input;
-    /// The shutter data to be applied
-    vtkImageData *m_shutterData;
 
     /// Used to keep track of whether there's a currently active transfer function when applying a VOI LUT.
     bool m_hasTransferFunction;

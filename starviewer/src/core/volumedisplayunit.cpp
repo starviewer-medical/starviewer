@@ -25,13 +25,15 @@
 #include <vtkCamera.h>
 #include <vtkImageResliceMapper.h>
 #include <vtkImageSlice.h>
+#include <vtkImageSliceMapper.h>
+#include <vtkImageStack.h>
 #include <vtkPropPicker.h>
 #include <vtkImageProperty.h>
 
 namespace udg {
 
 VolumeDisplayUnit::VolumeDisplayUnit()
- : m_volume(0)
+ : m_volume(nullptr), m_shutterImageSlice(nullptr)
 {
     m_imagePipeline = new ImagePipeline();
     m_imageSlice = vtkImageSlice::New();
@@ -43,6 +45,8 @@ VolumeDisplayUnit::VolumeDisplayUnit()
     m_imageSlice->SetMapper(mapper);
     mapper->Delete();
     m_imageSlice->GetProperty()->SetInterpolationTypeToCubic();
+    m_imageStack = vtkImageStack::New();
+    m_imageStack->AddImage(m_imageSlice);
     m_sliceHandler = new SliceHandler();
     m_imagePointPicker =  0;
     m_voiLutData = 0;
@@ -53,6 +57,13 @@ VolumeDisplayUnit::~VolumeDisplayUnit()
 {
     delete m_imagePipeline;
     m_imageSlice->Delete();
+    m_imageStack->Delete();
+
+    if (m_shutterImageSlice)
+    {
+        m_shutterImageSlice->Delete();
+    }
+
     delete m_sliceHandler;
     
     if (m_imagePointPicker)
@@ -96,6 +107,11 @@ ImagePipeline* VolumeDisplayUnit::getImagePipeline() const
 vtkImageSlice* VolumeDisplayUnit::getImageSlice() const
 {
     return m_imageSlice;
+}
+
+vtkImageStack* VolumeDisplayUnit::getImageStack() const
+{
+    return m_imageStack;
 }
 
 vtkPropPicker* VolumeDisplayUnit::getImagePointPicker()
@@ -375,7 +391,48 @@ void VolumeDisplayUnit::setSlabProjectionMode(AccumulatorFactory::AccumulatorTyp
 
 void VolumeDisplayUnit::setShutterData(vtkImageData *shutterData)
 {
-    m_imagePipeline->setShutterData(shutterData);
+    if (shutterData)
+    {
+        if (!m_shutterImageSlice)
+        {
+            m_shutterImageSlice = vtkImageSlice::New();
+            m_shutterImageSlice->GetProperty()->SetLayerNumber(1);
+            auto *mapper = vtkImageSliceMapper::New();
+            m_shutterImageSlice->SetMapper(mapper);
+            mapper->Delete();
+        }
+
+        m_shutterImageSlice->GetMapper()->SetInputData(shutterData);
+        m_imageStack->AddImage(m_shutterImageSlice);
+    }
+    else
+    {
+        m_imageStack->RemoveImage(m_shutterImageSlice);
+    }
+}
+
+bool VolumeDisplayUnit::isVisible() const
+{
+    return m_imageStack->GetVisibility() || m_imageSlice->GetVisibility() || (m_shutterImageSlice && m_shutterImageSlice->GetVisibility());
+}
+
+void VolumeDisplayUnit::setVisible(bool visible)
+{
+    m_imageStack->SetVisibility(visible);
+    m_imageSlice->SetVisibility(visible);
+    if (m_shutterImageSlice)
+    {
+        m_shutterImageSlice->SetVisibility(visible);
+    }
+}
+
+void VolumeDisplayUnit::setOpacity(double opacity)
+{
+    m_imageSlice->GetProperty()->SetOpacity(opacity);
+    if (m_shutterImageSlice)
+    {
+        m_shutterImageSlice->GetProperty()->SetOpacity(opacity);
+    }
 }
 
 }
