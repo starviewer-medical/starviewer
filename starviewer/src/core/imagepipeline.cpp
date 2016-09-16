@@ -13,18 +13,18 @@
  *************************************************************************************/
 
 #include "imagepipeline.h"
-#include "windowlevelfilter.h"
-#include "thickslabfilter.h"
-#include "transferfunction.h"
-#include "voilut.h"
 
-#include "vtkImageData.h"
+#include "thickslabfilter.h"
+#include "voilut.h"
 #include "vtkRunThroughFilter.h"
+#include "windowlevelfilter.h"
+
+#include <vtkImageData.h>
 
 namespace udg {
 
 ImagePipeline::ImagePipeline()
-    : m_hasTransferFunction(false)
+ : m_input(nullptr), m_enableColorMapping(false), m_hasTransferFunction(false)
 {
     // Filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = new ThickSlabFilter();
@@ -33,29 +33,19 @@ ImagePipeline::ImagePipeline()
     m_windowLevelLUTFilter = new WindowLevelFilter();
 
     m_outputFilter = vtkRunThroughFilter::New();
-    m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
 }
 
 ImagePipeline::~ImagePipeline()
 {
-    delete m_windowLevelLUTFilter;
     delete m_thickSlabProjectionFilter;
+    delete m_windowLevelLUTFilter;
     m_outputFilter->Delete();
 }
 
 void ImagePipeline::setInput(vtkImageData *input)
 {
     m_input = input;
-
-    if (m_thickSlabProjectionFilter->getSlabThickness() > 1)
-    {
-        m_thickSlabProjectionFilter->setInput(m_input);
-        m_windowLevelLUTFilter->setInput(m_thickSlabProjectionFilter->getOutput());
-    }
-    else
-    {
-        m_windowLevelLUTFilter->setInput(m_input);
-    }
+    rebuild();
 }
 
 void ImagePipeline::setInput(FilterOutput input)
@@ -85,23 +75,19 @@ void ImagePipeline::setProjectionAxis(const OrthogonalPlane &axis)
 
 void ImagePipeline::setSlabThickness(int numberOfSlices)
 {
-    int previousSlabThickness = m_thickSlabProjectionFilter->getSlabThickness();
     m_thickSlabProjectionFilter->setSlabThickness(numberOfSlices);
-
-    if (m_thickSlabProjectionFilter->getSlabThickness() > 1 && previousSlabThickness == 1)
-    {
-        m_thickSlabProjectionFilter->setInput(m_input);
-        m_windowLevelLUTFilter->setInput(m_thickSlabProjectionFilter->getOutput());
-    }
-    else if (m_thickSlabProjectionFilter->getSlabThickness() == 1)
-    {
-        m_windowLevelLUTFilter->setInput(m_input);
-    }
+    rebuild();
 }
 
 vtkImageData* ImagePipeline::getSlabProjectionOutput()
 {
     return m_thickSlabProjectionFilter->getOutput().getVtkImageData();
+}
+
+void ImagePipeline::enableColorMapping(bool enable)
+{
+    m_enableColorMapping = enable;
+    rebuild();
 }
 
 void ImagePipeline::setVoiLut(const VoiLut &voiLut)
@@ -136,6 +122,30 @@ void ImagePipeline::clearTransferFunction()
 vtkAlgorithm* ImagePipeline::getVtkAlgorithm() const
 {
     return m_outputFilter;
+}
+
+void ImagePipeline::rebuild()
+{
+    if (m_thickSlabProjectionFilter->getSlabThickness() > 1 && m_enableColorMapping)
+    {
+        m_thickSlabProjectionFilter->setInput(m_input);
+        m_windowLevelLUTFilter->setInput(m_thickSlabProjectionFilter->getOutput());
+        m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else if (m_thickSlabProjectionFilter->getSlabThickness() > 1)
+    {
+        m_thickSlabProjectionFilter->setInput(m_input);
+        m_outputFilter->SetInputConnection(m_thickSlabProjectionFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else if (m_enableColorMapping)
+    {
+        m_windowLevelLUTFilter->setInput(m_input);
+        m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else
+    {
+        m_outputFilter->SetInputData(m_input);
+    }
 }
 
 }

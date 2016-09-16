@@ -29,7 +29,9 @@ class ThickSlabFilter;
 class TransferFunction;
 class VoiLut;
 
-/// Pipeline that applies the filters required to generate the image to be used in Q2DViewer
+/**
+ * @brief The ImagePipeline class encapsulates the pipeline that applies the filters required to generate the image to be used in Q2DViewer.
+ */
 class ImagePipeline : public Filter {
 
 public:
@@ -41,6 +43,8 @@ public:
     /// Sets the given filter output as input of the filter
     void setInput(FilterOutput input);
 
+    /// Enables or disables window level and transfer function filter.
+    void enableColorMapping(bool enable);
     /// Sets the VOI LUT.
     void setVoiLut(const VoiLut &voiLut);
     /// Sets the transfer function
@@ -64,6 +68,9 @@ private:
     /// Returns the vtkAlgorithm used to implement the filter.
     virtual vtkAlgorithm* getVtkAlgorithm() const;
 
+    /// Rebuilds this pipeline choosing which filters to use according to their current status.
+    void rebuild();
+
 private:
     /// Filter to apply thick slab
     ThickSlabFilter *m_thickSlabProjectionFilter;
@@ -75,6 +82,8 @@ private:
     /// Input data
     vtkImageData *m_input;
 
+    /// Whether the window level filter is enabled.
+    bool m_enableColorMapping;
     /// Used to keep track of whether there's a currently active transfer function when applying a VOI LUT.
     bool m_hasTransferFunction;
 

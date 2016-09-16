@@ -68,6 +68,9 @@ public:
     /// Returns a VOI LUT that is the inverse of this one, with the same explanation (or name).
     VoiLut inverse() const;
 
+    /// Returns a vtkLookupTable representing this VOI LUT.
+    vtkLookupTable* toVtkLookupTable() const;
+
 private:
     /// The window level contained in this VOI LUT. If this VOI LUT represents a LUT the window level is defined as explained in setLut().
     WindowLevel m_windowLevel;

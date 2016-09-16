@@ -23,12 +23,13 @@
 #include "voiluthelper.h"
 
 #include <vtkCamera.h>
+#include <vtkImageProperty.h>
 #include <vtkImageResliceMapper.h>
 #include <vtkImageSlice.h>
 #include <vtkImageSliceMapper.h>
 #include <vtkImageStack.h>
+#include <vtkLookupTable.h>
 #include <vtkPropPicker.h>
-#include <vtkImageProperty.h>
 
 namespace udg {
 
@@ -327,14 +328,46 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
 }
 
 void VolumeDisplayUnit::setVoiLut(const VoiLut &voiLut)
-{
+{    
     if (m_volume->getImage(0) && m_volume->getImage(0)->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
     {
-        m_imagePipeline->setVoiLut(voiLut.inverse());
+        m_voiLut = voiLut.inverse();
     }
     else
     {
-        m_imagePipeline->setVoiLut(voiLut);
+        m_voiLut = voiLut;
+    }
+
+    applyVoiLut();
+}
+
+void VolumeDisplayUnit::applyVoiLut()
+{
+    if (m_volume && m_volume->getNumberOfScalarComponents() == 3)
+    {
+        m_imagePipeline->enableColorMapping(true);
+        m_imagePipeline->setVoiLut(m_voiLut);
+    }
+    else
+    {
+        m_imagePipeline->enableColorMapping(false);
+        m_imageSlice->GetProperty()->SetColorWindow(qAbs(m_voiLut.getWindowLevel().getWidth()));
+        m_imageSlice->GetProperty()->SetColorLevel(m_voiLut.getWindowLevel().getCenter());
+
+        if (!m_transferFunction.isEmpty())
+        {
+            applyTransferFunction();
+        }
+        else if (m_voiLut.isWindowLevel())
+        {
+            vtkLookupTable *lut = m_voiLut.toVtkLookupTable();
+            m_imageSlice->GetProperty()->SetLookupTable(lut);
+            lut->Delete();
+        }
+        else
+        {
+            m_imageSlice->GetProperty()->SetLookupTable(m_voiLut.toVtkLookupTable());
+        }
     }
 }
 
@@ -354,22 +387,9 @@ void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunc
     }
     else
     {
-        double newRange[2];
-        m_volume->getScalarRange(newRange);
-
-        // Scale transfer function before applying (only if the volume has at least 2 distinct values and the transfer function has at least 2 points)
-        if (newRange[0] < newRange[1] && transferFunction.keys().size() > 1)
-        {
-            double originalRange[2] = { transferFunction.keys().first(), transferFunction.keys().last() };
-            m_transferFunction = transferFunction.toNewRange(originalRange[0], originalRange[1], newRange[0], newRange[1]);
-            m_transferFunction.setName(transferFunction.name());
-        }
-        else
-        {
-            m_transferFunction = transferFunction;
-        }
-
+        m_transferFunction = transferFunction;
         m_imagePipeline->setTransferFunction(m_transferFunction);
+        applyTransferFunction();
     }
 }
 
@@ -382,6 +402,54 @@ void VolumeDisplayUnit::clearTransferFunction()
 {
     m_transferFunction.clear();
     m_imagePipeline->clearTransferFunction();
+    applyVoiLut();  // we must reapply the current VOI LUT without transfer function
+}
+
+void VolumeDisplayUnit::applyTransferFunction()
+{
+    if (!(m_volume && m_volume->getNumberOfScalarComponents() == 3))
+    {
+        TransferFunction scaledTransferFunction;
+
+        // Scale transfer function before applying (only if the volume has at least 2 distinct values and the transfer function has at least 2 points)
+        if (m_transferFunction.keys().size() > 1)
+        {
+            double oldX1 = m_transferFunction.keys().first();
+            double oldX2 = m_transferFunction.keys().last();
+            double windowLevel = m_voiLut.getWindowLevel().getCenter();
+            double windowWidth = m_voiLut.getWindowLevel().getWidth();
+
+            if (qAbs(windowWidth) < 1)
+            {
+                // The minimum width is restricted to 1 (absolute value) to avoid glitches
+                windowWidth = std::copysign(1.0, windowWidth);
+            }
+
+            if (m_voiLut.isLut())
+            {
+                auto lut = m_voiLut.getLut();
+                int leftValue = lut.getColor(lut.keys().first()).value();
+                int rightValue = lut.getColor(lut.keys().last()).value();
+
+                // If the LUT goes from light to dark, invert the window width to invert the transfer function
+                if (leftValue > rightValue)
+                {
+                    windowWidth = -windowWidth;
+                }
+            }
+
+            double newX1 = windowLevel - windowWidth / 2.0;
+            double newX2 = windowLevel + windowWidth / 2.0;
+            scaledTransferFunction = m_transferFunction.toNewRange(oldX1, oldX2, newX1, newX2);
+            scaledTransferFunction.setName(m_transferFunction.name());
+        }
+        else
+        {
+            scaledTransferFunction = m_transferFunction;
+        }
+
+        m_imageSlice->GetProperty()->SetLookupTable(scaledTransferFunction.toVtkLookupTable());
+    }
 }
 
 void VolumeDisplayUnit::setSlabProjectionMode(AccumulatorFactory::AccumulatorType accumulatorType)
