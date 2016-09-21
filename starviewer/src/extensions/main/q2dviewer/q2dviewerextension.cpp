@@ -73,12 +73,14 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     setupUi(this);
     Q2DViewerSettings().init();
 
+    // We set a minimum size in the .ui file to see the widget and unset it here to avoid the button being too small if the window doesn't fit in the screen
+    m_thickSlabWidget->setMinimumSize(0, 0);
+
 #ifdef STARVIEWER_LITE
     m_axialViewToolButton->hide();
     m_coronalViewToolButton->hide();
     m_sagitalViewToolButton->hide();
     m_orientationButtonsLabel->hide();
-    m_thickSlabLabel->hide();
     m_thickSlabWidget->hide();
     m_referenceLinesToolButton->hide();
     m_cursor3DToolButton->hide();

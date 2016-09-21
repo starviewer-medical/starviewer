@@ -6,104 +6,109 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>106</width>
-    <height>65</height>
+    <width>246</width>
+    <height>168</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="leftMargin">
-    <number>1</number>
+    <number>0</number>
    </property>
    <property name="topMargin">
     <number>0</number>
    </property>
    <property name="rightMargin">
-    <number>1</number>
+    <number>0</number>
    </property>
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <property name="horizontalSpacing">
-    <number>0</number>
-   </property>
-   <property name="verticalSpacing">
-    <number>3</number>
-   </property>
-   <item row="0" column="0" colspan="2">
-    <widget class="QComboBox" name="m_projectionModeComboBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item>
+    <widget class="QToolButton" name="m_toolButton">
+     <property name="text">
+      <string>Thick Slab</string>
      </property>
-     <property name="sizeAdjustPolicy">
-      <enum>QComboBox::AdjustToContents</enum>
+     <property name="icon">
+      <iconset resource="../main/main.qrc">
+       <normaloff>:/images/icons/thick-slab.svg</normaloff>:/images/icons/thick-slab.svg</iconset>
      </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QSlider" name="m_slabThicknessSlider">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
+     <property name="iconSize">
       <size>
-       <width>500</width>
-       <height>16777215</height>
+       <width>32</width>
+       <height>32</height>
       </size>
      </property>
-     <property name="minimum">
-      <number>2</number>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
-     <property name="maximum">
-      <number>100</number>
+     <property name="popupMode">
+      <enum>QToolButton::MenuButtonPopup</enum>
      </property>
-     <property name="pageStep">
-      <number>1</number>
+     <property name="toolButtonStyle">
+      <enum>Qt::ToolButtonTextUnderIcon</enum>
      </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::NoTicks</enum>
-     </property>
-     <property name="tickInterval">
-      <number>0</number>
+     <property name="autoRaise">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="m_slabThicknessLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>2</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QCheckBox" name="m_maximumThicknessCheckBox">
-     <property name="text">
-      <string>Max. Thickness</string>
-     </property>
+   <item>
+    <widget class="QWidget" name="m_menuWidget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QComboBox" name="m_projectionModeComboBox"/>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QSlider" name="m_slabThicknessSlider">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="minimum">
+           <number>2</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="pageStep">
+           <number>1</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="m_slabThicknessLabel">
+          <property name="text">
+           <string>2</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="m_maximumThicknessCheckBox">
+        <property name="text">
+         <string>Max. Thickness</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../main/main.qrc"/>
+  <include location="../main/main.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -22,76 +22,61 @@ namespace udg {
 class Q2DViewer;
 
 /**
-    Widget per controlar el Thick Slab d'un Q2DViewer
-  */
+ * @brief The QThickSlabWidget class creates a tool button with a dropdown panel with the controls to change the thick slab properties of a Q2DViewer.
+ */
 class QThickSlabWidget : public QWidget, private Ui::QThickSlabWidgetBase {
-Q_OBJECT
+
+    Q_OBJECT
+
 public:
-    QThickSlabWidget(QWidget *parent = 0);
+    explicit QThickSlabWidget(QWidget *parent = nullptr);
+    virtual ~QThickSlabWidget();
 
-    ~QThickSlabWidget();
-
-    void setSlabThickness(int thickness);
-    // TODO int o QString?
-    void setProjectionMode(int mode);
-
-    /// Enllacem aquest controlador amb un Q2DViewer. De moment només està previst que
-    /// s'enllaci amb un sol visor. Tenir més d'un visor linkat pot no tenir massa sentit ja que
-    /// els thickness seran diferents i tampoc es veu cap utilitat de tenir més d'un thickslab
-    /// "sincronitzat" alhora
-    /// @param viewer Visualitzador al que linkem el control de thick slab
+    /// Links this widget to the given viewer, i.e. makes this widget control the thick slab properties of that viewer.
+    /// If there is already a linked viewer, it is automatically unlinked first.
     void link(Q2DViewer *viewer);
 
-    /// Desvinculem el widget del visor que tingui vinculat
+    /// Unlinks this widget from the linked viewer.
     void unlink();
 
 signals:
-    void thicknessChanged(int thickness);
-    // TODO enviar int o QString?
-    void projectionModeChanged(int mode);
-
-    /// S'emet cada cop que canvia l'estat del checkbox del mode de gruix màxim indicant si està marcat o no
+    /// Emitted when the maximum thickness checkbox changes its status.
     void maximumThicknessModeToggled(bool checked);
 
-protected slots:
-    /// Aquest slot està connectat als canvis en el combo i segons el valor
-    /// escollit aplica sobre el visor el tipus de projecció adequat
-    /// @param comboItem
-    void applyProjectionMode(int comboItem);
+private:
+    /// Creates the signal-slot connections.
+    void createConnections();
+    /// Removes the signal-slot connections.
+    void removeConnections();
 
-    /// Actualiza el valor màxim de thickness que es mostra en el combo
-    /// d'acord amb les llesques que té el volum del visor actual
+    /// Updates the maximum thickness allowed by the slider to match the number of slices of the linked viewer in the current direction of projection.
     void updateMaximumThickness();
 
-    /// Actualitza el valor de thickness que mostra el label. Anirà connectat amb l'slider
-    /// @param value Valor de thickness
-    void updateThicknessLabel(int value);
+    /// Returns true if thick slab is enabled by this widget.
+    bool isThickSlabEnabled() const;
 
-    /// Reseteja el viewer associat. Útil per quan ens canvien l'input, per exemple
-    void reset();
+private slots:
+    /// Enables or disables thick slab on the linked viewer.
+    void setThickSlabEnabled(bool enabled);
 
-    /// Aplica el thick slab segons el valor de l'slider.
-    void applyThickSlab();
+    /// If thick slab is enabled, applies the given projection mode to the linked viewer.
+    void applyProjectionMode(int projectionMode);
 
-    /// Mètodes per controlar les connexions de l'slider amb l'actualització de l'slab
-    void turnOnDelayedUpdate();
-    void turnOffDelayedUpdate();
-    void onSliderReleased();
+    /// If thick slab is enabled, applies the given thickness to the linked viewer.
+    void applyThickness(int thickness);
 
-    /// Es cridarà quan es canvïi la vista al visor associat.
-    /// Segons les opcions marcades per l'usuari desactivarà o no la projecció aplicada.
+    /// Sets the thickness to the maximum possible value, keeping it at the maximum even when the direction of projection changes.
+    void setMaximumThicknessEnabled(bool enabled);
+
+    /// Resets values after the linked viewer has changed its volume.
+    void onVolumeChanged();
+
+    /// Resets values to those of the viewer after it has changed its view.
     void onViewChanged();
 
-    /// Si cert, posa el thickness al màxim i el manté encara que es canvïi de vista
-    void enableVolumeMode(bool enable);
-
 private:
-    /// Desconnecta els signals i slots associats al viewer vinculat si en tenim
-    void disconnectSignalsAndSlots();
-
-protected:
-    /// Visualitzador linkat al widget
-    Q2DViewer *m_currentViewer;
+    /// The linked viewer.
+    Q2DViewer *m_viewer;
 
 };
 

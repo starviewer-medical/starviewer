@@ -618,6 +618,8 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
 
+    m_slabProjectionMode = AccumulatorFactory::Maximum;
+
     executeInputFinishedCommand();
     // Indiquem el canvi de volum
     emit volumeChanged(getMainInput());
