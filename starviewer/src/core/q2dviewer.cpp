@@ -1394,10 +1394,8 @@ void Q2DViewer::updateImageSlices()
         return;
     }
 
-    foreach (VolumeDisplayUnit *volumeDisplayUnit, getDisplayUnits())
-    {
-        volumeDisplayUnit->updateImageSlice(m_renderer->GetActiveCamera());
-    }
+    // We only need to update the main vdu, since it will modify the camera and thus the others will also be updated
+    getMainDisplayUnit()->updateImageSlice(m_renderer->GetActiveCamera());
 
     // TODO Si separem els renderers potser caldria aplicar-ho a cada renderer?
     getRenderer()->ResetCameraClippingRange();
