@@ -209,7 +209,7 @@ void VolumeDisplayUnit::updateImageSlice(vtkCamera *camera)
         return;
     }
 
-    int imageIndex = m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
+    int imageIndex = getSlice();
     int zIndex = this->getViewPlane().getZIndex();
     double origin[3];
     m_volume->getOrigin(origin);
@@ -229,7 +229,7 @@ int VolumeDisplayUnit::getSlice() const
 void VolumeDisplayUnit::setSlice(int slice)
 {
     m_sliceHandler->setSlice(slice);
-    m_imagePipeline->setSlice(m_volume->getImageIndex(getSlice(), getPhase()));
+    m_imagePipeline->setSlice(getSlice());
 }
 
 int VolumeDisplayUnit::getMinimumSlice() const
@@ -255,7 +255,8 @@ int VolumeDisplayUnit::getPhase() const
 void VolumeDisplayUnit::setPhase(int phase)
 {
     m_sliceHandler->setPhase(phase);
-    m_imagePipeline->setSlice(m_volume->getImageIndex(getSlice(), getPhase()));
+    m_imagePipeline->setSlice(getSlice());
+    m_imagePipeline->setPhase(getPhase());
 }
 
 int VolumeDisplayUnit::getNumberOfPhases() const
@@ -274,7 +275,7 @@ void VolumeDisplayUnit::setSlabThickness(int thickness)
     int admittedThickness = qBound(1, thickness, getNumberOfSlices());
     
     m_sliceHandler->setSlabThickness(admittedThickness);
-    m_imagePipeline->setSlice(m_volume->getImageIndex(getSlice(), getPhase()));
+    m_imagePipeline->setSlice(getSlice());
     m_imagePipeline->setSlabThickness(admittedThickness);
 }
 
@@ -293,10 +294,10 @@ void VolumeDisplayUnit::resetThickSlab()
     if (m_volume)
     {
         m_imagePipeline->setInput(m_volume->getVtkData());
+        m_imagePipeline->setNumberOfPhases(getNumberOfPhases());
         m_imagePipeline->setProjectionAxis(this->getViewPlane());
-        m_imagePipeline->setSlice(m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase()));
+        m_imagePipeline->setSlice(getSlice());
         m_imagePipeline->setSlabThickness(m_sliceHandler->getSlabThickness());
-        m_imagePipeline->setSlabStride(m_sliceHandler->getNumberOfPhases());
     }
 }
 

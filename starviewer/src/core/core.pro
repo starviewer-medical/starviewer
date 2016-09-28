@@ -433,7 +433,9 @@ HEADERS += extensionfactory.h \
     externalapplicationsmanager.h \
     encapsulateddocument.h \
     encapsulateddocumentfillerstep.h \
-    qdpiconfigurationscreen.h
+    qdpiconfigurationscreen.h \
+    vtkimageextractphase.h \
+    phasefilter.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -812,7 +814,9 @@ SOURCES += extensionmediator.cpp \
     encapsulateddocument.cpp \
     encapsulateddocumentfillerstep.cpp \
     starviewerapplication.cpp \
-    qdpiconfigurationscreen.cpp
+    qdpiconfigurationscreen.cpp \
+    vtkimageextractphase.cpp \
+    phasefilter.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

@@ -14,6 +14,7 @@
 
 #include "imagepipeline.h"
 
+#include "phasefilter.h"
 #include "thickslabfilter.h"
 #include "voilut.h"
 #include "vtkRunThroughFilter.h"
@@ -26,6 +27,8 @@ namespace udg {
 ImagePipeline::ImagePipeline()
  : m_input(nullptr), m_enableColorMapping(false), m_hasTransferFunction(false)
 {
+    m_phaseFilter = new PhaseFilter();
+
     // Filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = new ThickSlabFilter();
     m_thickSlabProjectionFilter->setSlabThickness(1);
@@ -37,6 +40,7 @@ ImagePipeline::ImagePipeline()
 
 ImagePipeline::~ImagePipeline()
 {
+    delete m_phaseFilter;
     delete m_thickSlabProjectionFilter;
     delete m_windowLevelLUTFilter;
     m_outputFilter->Delete();
@@ -51,6 +55,17 @@ void ImagePipeline::setInput(vtkImageData *input)
 void ImagePipeline::setInput(FilterOutput input)
 {
     setInput(input.getVtkImageData());
+}
+
+void ImagePipeline::setNumberOfPhases(int numberOfPhases)
+{
+    m_phaseFilter->setNumberOfPhases(numberOfPhases);
+    rebuild();
+}
+
+void ImagePipeline::setPhase(int phase)
+{
+    m_phaseFilter->setPhase(phase);
 }
 
 void ImagePipeline::setSlice(int slice)
@@ -126,7 +141,31 @@ vtkAlgorithm* ImagePipeline::getVtkAlgorithm() const
 
 void ImagePipeline::rebuild()
 {
-    if (m_thickSlabProjectionFilter->getSlabThickness() > 1 && m_enableColorMapping)
+    if (m_phaseFilter->getNumberOfPhases() > 1 && m_thickSlabProjectionFilter->getSlabThickness() > 1 && m_enableColorMapping)
+    {
+        m_phaseFilter->setInput(m_input);
+        m_thickSlabProjectionFilter->setInput(m_phaseFilter->getOutput());
+        m_windowLevelLUTFilter->setInput(m_thickSlabProjectionFilter->getOutput());
+        m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else if (m_phaseFilter->getNumberOfPhases() > 1 && m_thickSlabProjectionFilter->getSlabThickness() > 1)
+    {
+        m_phaseFilter->setInput(m_input);
+        m_thickSlabProjectionFilter->setInput(m_phaseFilter->getOutput());
+        m_outputFilter->SetInputConnection(m_thickSlabProjectionFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else if (m_phaseFilter->getNumberOfPhases() > 1 && m_enableColorMapping)
+    {
+        m_phaseFilter->setInput(m_input);
+        m_windowLevelLUTFilter->setInput(m_phaseFilter->getOutput());
+        m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else if (m_phaseFilter->getNumberOfPhases() > 1)
+    {
+        m_phaseFilter->setInput(m_input);
+        m_outputFilter->SetInputConnection(m_phaseFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else if (m_thickSlabProjectionFilter->getSlabThickness() > 1 && m_enableColorMapping)
     {
         m_thickSlabProjectionFilter->setInput(m_input);
         m_windowLevelLUTFilter->setInput(m_thickSlabProjectionFilter->getOutput());

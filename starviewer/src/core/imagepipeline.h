@@ -24,10 +24,11 @@ class vtkRunThroughFilter;
 
 namespace udg {
 
-class WindowLevelFilter;
+class PhaseFilter;
 class ThickSlabFilter;
 class TransferFunction;
 class VoiLut;
+class WindowLevelFilter;
 
 /**
  * @brief The ImagePipeline class encapsulates the pipeline that applies the filters required to generate the image to be used in Q2DViewer.
@@ -42,6 +43,11 @@ public:
     void setInput(vtkImageData *input);
     /// Sets the given filter output as input of the filter
     void setInput(FilterOutput input);
+
+    /// Sets the number of phases of the volume.
+    void setNumberOfPhases(int numberOfPhases);
+    /// Sets the phase that has to be displayed in the volume.
+    void setPhase(int phase);
 
     /// Enables or disables window level and transfer function filter.
     void enableColorMapping(bool enable);
@@ -72,6 +78,8 @@ private:
     void rebuild();
 
 private:
+    /// Filter to extract a single phase from a multi-phase volume.
+    PhaseFilter *m_phaseFilter;
     /// Filter to apply thick slab
     ThickSlabFilter *m_thickSlabProjectionFilter;
     /// Filter to apply a grayscale to volume
