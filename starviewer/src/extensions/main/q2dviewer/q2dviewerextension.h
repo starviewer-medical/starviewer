@@ -101,11 +101,6 @@ private:
     void updateTransferFunctionComboBox(TransferFunctionModel *transferFunctionModel);
 
 private slots:
-#ifndef STARVIEWER_LITE
-    /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
-    void validePhases();
-#endif
-
     /// Habilita o deshabilita el botó de Dump d'info DICOM segons en la vista en la que es trobi
     /// l'actual visor seleccionat. Si no hi ha cap visor actiu, dehsabilitarà el botó.
     void updateDICOMInformationButton();

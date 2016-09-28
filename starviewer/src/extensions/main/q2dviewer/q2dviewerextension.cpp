@@ -599,11 +599,6 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
         // enviin el senyal al visualitzador que toca.
         if (m_lastSelectedViewer)
         {
-
-#ifndef STARVIEWER_LITE
-            disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(volumeChanged(Volume*)), this, SLOT(validePhases()));
-#endif
-
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewChanged(int)), this, SLOT(updateDICOMInformationButton()));
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewerStatusChanged()), this, SLOT(updateExporterToolButton()));
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(volumeChanged(Volume*)), this, SLOT(updateTransferFunctionComboBoxWithCurrentViewerModel()));
@@ -624,10 +619,6 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
         {
             Q2DViewer *selected2DViewer = viewerWidget->getViewer();
 
-#ifndef STARVIEWER_LITE
-            validePhases();
-            connect(viewerWidget->getViewer(), SIGNAL(volumeChanged(Volume*)), SLOT(validePhases()));
-#endif
             connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton()));
             connect(m_lastSelectedViewer->getViewer(), SIGNAL(viewerStatusChanged()), this, SLOT(updateExporterToolButton()));
             connect(selected2DViewer, SIGNAL(volumeChanged(Volume*)), this, SLOT(updateTransferFunctionComboBoxWithCurrentViewerModel()));
@@ -754,23 +745,6 @@ void Q2DViewerExtension::showScreenshotsExporterDialog()
             QExporterTool exporter(selectedViewerWidget->getViewer());
             exporter.exec();
         }
-    }
-}
-
-void Q2DViewerExtension::validePhases()
-{
-    m_axialViewToolButton->setEnabled(true);
-    if (m_workingArea->getSelectedViewer()->hasPhases())
-    {
-        m_axialViewToolButton->setEnabled(false);
-        m_sagitalViewToolButton->setEnabled(false);
-        m_coronalViewToolButton->setEnabled(false);
-    }
-    else
-    {
-        m_axialViewToolButton->setEnabled(true);
-        m_sagitalViewToolButton->setEnabled(true);
-        m_coronalViewToolButton->setEnabled(true);
     }
 }
 #endif
