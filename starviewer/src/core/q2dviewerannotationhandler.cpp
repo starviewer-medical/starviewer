@@ -221,15 +221,8 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
     {
         QString locationInfo = getSliceLocationString();
 
-        // Setup the slice/slab annotation
+        // Setup the slice annotation
         QString sliceInfo = QObject::tr("Slice: %1").arg(m_2DViewer->getCurrentSlice() + 1);
-
-        if (m_2DViewer->isThickSlabActive())
-        {
-            // TODO We need a getLastSlabSlice() method on Q2Dviewer to avoid doing this computing
-            sliceInfo += QString("-%1").arg(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness());
-        }
-
         sliceInfo += QString("/%1").arg(m_2DViewer->getNumberOfSlices());
         
         QString phaseInfo;
@@ -419,18 +412,16 @@ QString Q2DViewerAnnotationHandler::getSliceLocationString() const
             QString location = image->getSliceLocation();
             if (!location.isEmpty())
             {
-                sliceLocation = QObject::tr("Loc: %1").arg(location.toDouble(), 0, 'f', 2);
+                double loc = location.toDouble();
                 if (m_2DViewer->isThickSlabActive())
                 {
-                    // TODO We should have high level methods to get consecutive images according to current thickness, phase, etc.
-                    Image *secondImage = m_2DViewer->getMainInput()->getImage(
-                        // TODO We need a getLastSlabSlice() method on Q2Dviewer to avoid doing this computing
-                        m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1,
-                        m_2DViewer->getCurrentPhase());
-                    if (secondImage)
-                    {
-                        sliceLocation += QObject::tr("-%1").arg(secondImage->getSliceLocation().toDouble(), 0, 'f', 2);
-                    }
+                    double halfThickness = m_2DViewer->getSlabThickness() / 2.0;
+                    sliceLocation = QObject::tr("Loc: %1-%2").arg(loc - halfThickness, 0, 'f', 2)
+                                                             .arg(loc + halfThickness, 0, 'f', 2);
+                }
+                else
+                {
+                    sliceLocation = QObject::tr("Loc: %1").arg(loc, 0, 'f', 2);
                 }
             }
         }

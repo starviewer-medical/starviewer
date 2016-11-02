@@ -16,8 +16,6 @@
 #define IMAGEPIPELINE_H
 
 #include "filter.h"
-#include "accumulator.h"
-#include "orthogonalplane.h"
 
 class vtkImageData;
 class vtkRunThroughFilter;
@@ -25,7 +23,6 @@ class vtkRunThroughFilter;
 namespace udg {
 
 class PhaseFilter;
-class ThickSlabFilter;
 class TransferFunction;
 class VoiLut;
 class WindowLevelFilter;
@@ -48,6 +45,8 @@ public:
     void setNumberOfPhases(int numberOfPhases);
     /// Sets the phase that has to be displayed in the volume.
     void setPhase(int phase);
+    /// Returns the output image data of the phase filter.
+    vtkImageData* getPhaseOutput();
 
     /// Enables or disables window level and transfer function filter.
     void enableColorMapping(bool enable);
@@ -57,18 +56,6 @@ public:
     void setTransferFunction(const TransferFunction &transferFunction);
     /// Clears the transfer function.
     void clearTransferFunction();
-    /// Sets the slice to be visualized
-    void setSlice(int slice);
-    /// Sets the orthogonal that has to be visualized
-    void setProjectionAxis(const OrthogonalPlane &axis);
-    /// Sets the slab thickness given by the number of slices
-    void setSlabThickness(int numberOfSlices);
-    /// Sets the stride between slices
-    void setSlabStride(int step);
-    /// Sets the projection mode of the accumulation
-    void setSlabProjectionMode(AccumulatorFactory::AccumulatorType type);
-    /// Returns the output of the thickslab filter. TODO This should be avoided!
-    vtkImageData *getSlabProjectionOutput();
 
 private:
     /// Returns the vtkAlgorithm used to implement the filter.
@@ -80,8 +67,6 @@ private:
 private:
     /// Filter to extract a single phase from a multi-phase volume.
     PhaseFilter *m_phaseFilter;
-    /// Filter to apply thick slab
-    ThickSlabFilter *m_thickSlabProjectionFilter;
     /// Filter to apply a grayscale to volume
     WindowLevelFilter *m_windowLevelLUTFilter;
     /// Filter to obtain the final output of the pipeline

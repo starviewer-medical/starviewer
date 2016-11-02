@@ -17,6 +17,8 @@
 
 #include "syncaction.h"
 
+#include "volumedisplayunit.h"
+
 namespace udg {
 
 class Volume;
@@ -31,10 +33,10 @@ public:
     virtual ~ThickSlabSyncAction();
 
     /// Sets the slab projection mode to be propagated.
-    void setSlabProjectionMode(int slabProjectionMode);
+    void setSlabProjectionMode(VolumeDisplayUnit::SlabProjectionMode slabProjectionMode);
 
     /// Sets the slab thickess to be propagated.
-    void setSlabThickness(int numberOfSlices);
+    void setSlabThickness(double slabThickness);
 
     /// Sets the volume to be thick-slab-synced across viewers.
     void setVolume(Volume *volume);
@@ -51,10 +53,10 @@ protected:
 
 private:
     /// Slab projection mode to be propagated.
-    int m_slabProjectionMode;
+    VolumeDisplayUnit::SlabProjectionMode m_slabProjectionMode;
 
     /// Slab thickness to be propagated.
-    int m_slabThickness;
+    double m_slabThickness;
 
     /// Volume to be thick-slab-synced across viewers.
     Volume *m_volume;

@@ -28,8 +28,12 @@
 #include "petroidataprinter.h"
 #include "nmroidataprinter.h"
 #include "nmctfusionroidataprinter.h"
+#include "sliceorientedvolumepixeldata.h"
 
 #include <QApplication>
+
+#include <vtkTransform.h>
+#include <vtkTransformPolyDataFilter.h>
 
 namespace udg {
 
@@ -53,22 +57,33 @@ QMap<int, ROIData> ROITool::computeROIData()
 {
     Q_ASSERT(m_roiPolygon);
 
+    auto pixelData = m_2DViewer->getCurrentPixelData();
+
+    auto transformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+    transformFilter->SetInputData(m_roiPolygon->getVtkPolyData());
+    auto transform = vtkSmartPointer<vtkTransform>::New();
+    transform->SetMatrix(pixelData.getWorldToDataMatrix());
+    transformFilter->SetTransform(transform);
+    transformFilter->Update();
+    auto *pixelDataOrientedRoiPolyData = transformFilter->GetOutput();
+    // Pixel data oriented because it's not really slice oriented: still needs to permute axes
+
     // To compute the voxels inside the polygon we'll use the sweep line algorithm approach
     // tracing a set of lines within the bounds of the drawn polygon. Upon the resulting intersections between polygon segments and sweep lines
     // we will be able to compute which points of the line are inside of the polygon and get the corresponding voxel values.
     // The sweep lines will be horizontal and swept down in vertical direction
     double bounds[6];
-    m_roiPolygon->getBounds(bounds);
+    pixelDataOrientedRoiPolyData->GetBounds(bounds);
 
     int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
+    pixelData.getOrthogonalPlane().getXYZIndexes(xIndex, yIndex, zIndex);
 
     // Building up the initial sweep line
     // We'll have to add some extra space to the x/y bounds just to help the sweep line algorithm work better
     // when the vertices and segments are just on the bound lines
-    double *spacing = m_2DViewer->getMainInput()->getSpacing();
-    double xMargin = spacing[xIndex] * 1.1;
-    double yMargin = spacing[yIndex] * 1.1;
+    Vector3 spacing = pixelData.getSpacing();   // This is really slice oriented
+    double xMargin = spacing.x * 1.1;
+    double yMargin = spacing.y * 1.1;
     
     // First point of the sweep line, will be at the minimum x, y, z bounds of the polygon
     Point3D sweepLineBeginPoint;
@@ -85,6 +100,15 @@ QMap<int, ROIData> ROITool::computeROIData()
     // The ending height of the sweep line will be at the maximum y bounds of the polygon
     double verticalLimit = bounds[yIndex * 2 + 1] + yMargin;
 
+    // Build segments
+    QList<Line3D> segments;
+    auto *points = pixelDataOrientedRoiPolyData->GetPoints();
+    for (int i = 0; i < points->GetNumberOfPoints() - 1; i++)
+    {
+        segments.append(Line3D(points->GetPoint(i), points->GetPoint(i+1)));
+    }
+    segments.append(Line3D(points->GetPoint(points->GetNumberOfPoints() - 1), points->GetPoint(0)));
+
     // Compute the ROI data corresponding for each input
     QMap<int, ROIData> roiDataMap;
     for (int i = 0; i < m_2DViewer->getNumberOfInputs(); ++i)
@@ -92,7 +116,7 @@ QMap<int, ROIData> ROITool::computeROIData()
         // Compute the voxel values inside of the polygon if the input is visible and the images are monochrome
         if (m_2DViewer->isInputVisible(i) && !m_2DViewer->getInput(i)->getImage(0)->getPhotometricInterpretation().isColor())
         {
-            ROIData roiData = computeVoxelValues(m_roiPolygon->getSegments(), sweepLineBeginPoint, sweepLineEndPoint, verticalLimit, i);
+            ROIData roiData = computeVoxelValues(segments, sweepLineBeginPoint, sweepLineEndPoint, verticalLimit, i);
             
             // Set additional information of the ROI data
             roiData.setUnits(m_2DViewer->getInput(i)->getPixelUnits());
@@ -107,26 +131,13 @@ QMap<int, ROIData> ROITool::computeROIData()
 
 ROIData ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3D sweepLineBeginPoint, Point3D sweepLineEndPoint, double sweepLineEnd, int inputNumber)
 {
-    // We get the pointer of the pixel data to obtain voxels values from
-    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelDataFromInput(inputNumber);
-    if (!pixelData)
-    {
-        return ROIData();
-    }
+    // We get the pixel data to obtain voxels values from
+    auto pixelData = m_2DViewer->getCurrentPixelDataFromInput(inputNumber);
     
-    OrthogonalPlane currentView = m_2DViewer->getView();
+    OrthogonalPlane currentView = pixelData.getOrthogonalPlane();
     int yIndex = currentView.getYIndex();
-    double currentZDepth = m_2DViewer->getCurrentDisplayedImageDepthOnInput(inputNumber);
-    
-    double spacing[3];
-    pixelData->getSpacing(spacing);
-    double verticalSpacingIncrement = spacing[yIndex];
-    
-    int phaseIndex = 0;
-    if (currentView == OrthogonalPlane::XYPlane && m_2DViewer->doesInputHavePhases(inputNumber))
-    {
-        phaseIndex = m_2DViewer->getCurrentPhaseOnInput(inputNumber);
-    }
+
+    double verticalSpacingIncrement = pixelData.getSpacing().y; // slice oriented
 
     // ROI voxel data to be obtained from the sweep line
     ROIData roiData;
@@ -136,7 +147,7 @@ ROIData ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3
         QList<double*> intersectionList = getIntersectionPoints(polygonSegments, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
 
         // Adding the voxels from the current intersections of the current sweep line to the voxel values list
-        addVoxelsFromIntersections(intersectionList, currentZDepth, currentView, pixelData, phaseIndex, roiData);
+        addVoxelsFromIntersections(intersectionList, currentView, pixelData, roiData);
         
         // Shift the sweep line the corresponding space in vertical direction
         sweepLineBeginPoint[yIndex] += verticalSpacingIncrement;
@@ -204,16 +215,12 @@ QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegmen
     return intersectionPoints;
 }
 
-void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, double currentZDepth, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, ROIData &roiData)
+void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, const OrthogonalPlane &view, SliceOrientedVolumePixelData &pixelData, ROIData &roiData)
 {
     if (MathTools::isEven(intersectionPoints.count()))
     {
         int scanDirectionIndex = view.getXIndex();
-        double spacing[3];
-        pixelData->getSpacing(spacing);
-        double scanDirectionIncrement = spacing[scanDirectionIndex];
-        
-        int zIndex = view.getZIndex();
+        double scanDirectionIncrement = pixelData.getSpacing().x;   // slice oriented
 
         int limit = intersectionPoints.count() / 2;
         for (int i = 0; i < limit; ++i)
@@ -242,10 +249,12 @@ void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoint
             // Then we scan and get the voxels along the line
             while (currentScanLinePoint.at(scanDirectionIndex) <= scanLineEnd)
             {
-                Point3D voxelCoordinate(currentScanLinePoint.getAsDoubleArray());
-                voxelCoordinate[zIndex] = currentZDepth;
-                
-                roiData.addVoxel(pixelData->getVoxelValue(voxelCoordinate.getAsDoubleArray(), phaseIndex));
+                // currentScanLinePoint is pixel data oriented
+                double pixelDataOrientedPoint[4] = { currentScanLinePoint[0], currentScanLinePoint[1], currentScanLinePoint[2], 1.0 };
+                double worldPoint[4];
+                pixelData.getDataToWorldMatrix()->MultiplyPoint(pixelDataOrientedPoint, worldPoint);
+                Vector3 voxelCoordinate(worldPoint);
+                roiData.addVoxel(pixelData.getVoxelValue(voxelCoordinate));
                 currentScanLinePoint[scanDirectionIndex] += scanDirectionIncrement;
             }
         }
@@ -297,6 +306,7 @@ QString ROITool::getAnnotation()
         annotation = roiDataPrinter->getString();
     }
     delete roiDataPrinter;
+    m_2DViewer->restoreRenderingQuality();
 
     return annotation;
 }

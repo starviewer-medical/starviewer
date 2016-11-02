@@ -71,7 +71,7 @@ void QViewerCINEController::setInputViewer(QViewer *viewer)
     }
 
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(resetCINEInformation(Volume*)));
-    connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(updateThickness(int)));
+    connect(m_2DViewer, &Q2DViewer::slabThicknessChanged, this, &QViewerCINEController::updateSliceRange);
 
     resetCINEInformation(m_2DViewer->getMainInput());
 }
@@ -271,15 +271,13 @@ void QViewerCINEController::resetCINEInformation(Volume *input)
             // Li donarem una velocitat de 10 img/sec
             setVelocity(10);
         }
-        m_firstSliceInterval = 0;
-        this->updateThickness(m_2DViewer->getSlabThickness());
+
+        this->updateSliceRange();
     }
 }
 
-void QViewerCINEController::updateThickness(int thickness)
+void QViewerCINEController::updateSliceRange()
 {
-    Q_UNUSED(thickness)
-
     if (!m_2DViewer->hasInput())
     {
         return;
@@ -287,10 +285,12 @@ void QViewerCINEController::updateThickness(int thickness)
 
     if (m_cineDimension == SpatialDimension)
     {
+        m_firstSliceInterval = m_2DViewer->getMinimumSlice();
         m_lastSliceInterval = m_2DViewer->getMaximumSlice();
     }
     else
     {
+        m_firstSliceInterval = 0;
         m_lastSliceInterval = m_2DViewer->getNumberOfPhases() - 1;
     }
 }

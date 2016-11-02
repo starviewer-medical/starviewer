@@ -60,7 +60,7 @@ void Voxel::reset()
     m_values.clear();
 }
 
-QString Voxel::getAsQString()
+QString Voxel::getAsQString() const
 {
     QString valueString;
     

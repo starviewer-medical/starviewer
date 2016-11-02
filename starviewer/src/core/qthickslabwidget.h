@@ -59,11 +59,11 @@ private slots:
     /// Enables or disables thick slab on the linked viewer.
     void setThickSlabEnabled(bool enabled);
 
-    /// If thick slab is enabled, applies the given projection mode to the linked viewer.
-    void applyProjectionMode(int projectionMode);
+    /// If thick slab is enabled, applies the projection mode in the given index to the linked viewer.
+    void applyProjectionMode(int index);
 
     /// If thick slab is enabled, applies the given thickness to the linked viewer.
-    void applyThickness(int thickness);
+    void applyThickness(double thickness);
 
     /// Sets the thickness to the maximum possible value, keeping it at the maximum even when the direction of projection changes.
     void setMaximumThicknessEnabled(bool enabled);

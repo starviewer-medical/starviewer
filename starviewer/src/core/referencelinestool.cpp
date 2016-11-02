@@ -60,7 +60,7 @@ ReferenceLinesTool::ReferenceLinesTool(QViewer *viewer, QObject *parent)
     // Cada cop que el viewer canvïi de llesca, hem d'actualitzar el pla de projecció
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateReferenceImagePlanesToProject()));
     // Cada cop que canvii l'slab thickness haurem d'actualitzar els plans a projectar
-    connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(updateReferenceImagePlanesToProject()));
+    connect(m_2DViewer, &Q2DViewer::slabThicknessChanged, this, &ReferenceLinesTool::updateReferenceImagePlanesToProject);
 
     connect(m_2DViewer, SIGNAL(selected()), SLOT(setAsReferenceViewer()));
 }
@@ -321,21 +321,13 @@ void ReferenceLinesTool::updateReferenceImagePlanesToProject()
     switch (m_planesToProject)
     {
         case SingleImage:
-            if (m_2DViewer->isThickSlabActive())
             {
-                QList<ImagePlane*> planes;
-                planes << m_2DViewer->getCurrentImagePlane();
-                Volume *currentInput = m_2DViewer->getMainInput();
-                if (currentInput)
+                ImagePlane *plane = m_2DViewer->getCurrentImagePlane();
+                if (m_2DViewer->isThickSlabActive())
                 {
-                    planes << currentInput->getImagePlane(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1, m_2DViewer->getView());
+                    plane->setThickness(m_2DViewer->getSlabThickness());
                 }
-
-                m_myData->setPlanesToProject(planes);
-            }
-            else
-            {
-                m_myData->setPlanesToProject(m_2DViewer->getCurrentImagePlane());
+                m_myData->setPlanesToProject(plane);
             }
             break;
 

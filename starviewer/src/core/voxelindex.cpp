@@ -12,32 +12,55 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGACCUMULATOR_H
-#define UDGACCUMULATOR_H
-
-#include <QString>
+#include "voxelindex.h"
 
 namespace udg {
 
-template <class T> class Accumulator {
-public:
-    Accumulator() {}
-    virtual ~Accumulator() {}
-
-    virtual void initialize() = 0;
-    virtual void accumulate(T input) = 0;
-    virtual T getValue() const = 0;
-};
-
-class AccumulatorFactory {
-public:
-    enum AccumulatorType { Maximum = 0, Minimum = 1, Average = 2 };
-    template <class T> static Accumulator<T>* getAccumulator(AccumulatorType type, unsigned long size);
-    template <class T> static Accumulator<T>* getAccumulator(const QString &type, unsigned long size);
-};
-
+VoxelIndex::VoxelIndex()
+    : VoxelIndex(-1, -1, -1)
+{
 }
 
-#include "accumulator.cpp"
+VoxelIndex::VoxelIndex(int x, int y, int z)
+{
+    m_index[0] = x;
+    m_index[1] = y;
+    m_index[2] = z;
+}
 
-#endif
+bool VoxelIndex::isValid() const
+{
+    return x() >= 0 && y() >= 0 && z() >= 0;
+}
+
+int VoxelIndex::x() const
+{
+    return m_index[0];
+}
+
+int VoxelIndex::y() const
+{
+    return m_index[1];
+}
+
+int VoxelIndex::z() const
+{
+    return m_index[2];
+}
+
+int VoxelIndex::operator[](int i) const
+{
+    return m_index[i];
+}
+
+int& VoxelIndex::operator[](int i)
+{
+    return m_index[i];
+}
+
+bool VoxelIndex::operator==(const VoxelIndex &index) const
+{
+    return this->x() == index.x() && this->y() == index.y() && this->z() == index.z();
+}
+
+} // namespace udg

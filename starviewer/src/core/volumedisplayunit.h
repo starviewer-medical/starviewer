@@ -15,8 +15,9 @@
 #ifndef VOLUMEDISPLAYUNIT_H
 #define VOLUMEDISPLAYUNIT_H
 
-#include "accumulator.h"
 #include "voilut.h"
+
+#include <vtkSystemIncludes.h>
 
 class vtkCamera;
 class vtkImageData;
@@ -30,9 +31,11 @@ class Image;
 class ImagePipeline;
 class OrthogonalPlane;
 class SliceHandler;
+class SliceOrientedVolumePixelData;
 class Volume;
 class VoiLutPresetsToolData;
 class VolumePixelData;
+class VtkImageResliceMapper2;
 
 /**
     This class groups together a Volume and the associated objects that a Q2DViewer needs to display a volume.
@@ -42,6 +45,9 @@ class VolumePixelData;
 class VolumeDisplayUnit {
 
 public:
+    /// Supported projection modes for thick slab.
+    enum SlabProjectionMode { Max = VTK_IMAGE_SLAB_MAX, Min = VTK_IMAGE_SLAB_MIN, Mean = VTK_IMAGE_SLAB_MEAN, Sum = VTK_IMAGE_SLAB_SUM };
+
     VolumeDisplayUnit();
     virtual ~VolumeDisplayUnit();
 
@@ -79,7 +85,10 @@ public:
     double getCurrentDisplayedImageDepth() const;
     
     /// Gets the current pixel data according to the current state.
-    VolumePixelData* getCurrentPixelData();
+    SliceOrientedVolumePixelData getCurrentPixelData();
+
+    /// Restores the standard rendering quality (resample to screen pixels on) of this volume display unit.
+    void restoreRenderingQuality();
     
     /// Returns current displayed image.
     /// If some orthogonal reconstruction different from original acquisition is applied, returns null
@@ -110,7 +119,7 @@ public:
 
     /// Returns the minimum slice index.
     int getMinimumSlice() const;
-    /// Returns the maximum slice index that could be set, so it takes into account the current slice thickness.
+    /// Returns the maximum slice index.
     int getMaximumSlice() const;
 
     /// Returns the total number of slices in the spatial dimension for the current view plane.
@@ -124,10 +133,13 @@ public:
     /// Returns the number of phases in the temporal dimension.
     int getNumberOfPhases() const;
 
-    /// Returns the number of slices that form a slab.
-    int getSlabThickness() const;
-    /// Sets the number of slices that form a slab.
-    void setSlabThickness(int thickness);
+    /// Returns the slab thickness in mm.
+    double getSlabThickness() const;
+    /// Sets the slab thickness in mm.
+    void setSlabThickness(double thickness);
+
+    /// Returns the maximum slab thickness that can be set.
+    double getMaximumSlabThickness() const;
 
     /// Returns true i slab thickness is greater than 1
     bool isThickSlabActive() const;
@@ -138,7 +150,7 @@ public:
     double getSliceThickness() const;
 
     /// Sets the slab projection mode for the thick slab.
-    void setSlabProjectionMode(AccumulatorFactory::AccumulatorType accumulatorType);
+    void setSlabProjectionMode(SlabProjectionMode mode);
 
     /// Sets the display shutter image data.
     void setShutterData(vtkImageData *shutterData);
@@ -157,6 +169,9 @@ protected:
 
     /// The image actor where the slices are rendered.
     vtkImageSlice *m_imageSlice;
+
+    /// The mapper for the slice.
+    VtkImageResliceMapper2 *m_mapper;
 
     /// The slice handler that controls slices, phases and slabs.
     SliceHandler *m_sliceHandler;
@@ -193,8 +208,8 @@ private:
     /// The current transfer function.
     TransferFunction m_transferFunction;
 
-    /// Holds the current thickslab pixel data
-    VolumePixelData *m_currentThickSlabPixelData;
+    /// Holds the current volume pixel data to return in case of thick slab or phases.
+    VolumePixelData *m_auxiliarCurrentVolumePixelData;
 
 };
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>246</width>
-    <height>168</height>
+    <width>326</width>
+    <height>171</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -71,24 +71,27 @@
             <height>0</height>
            </size>
           </property>
-          <property name="minimum">
-           <number>2</number>
-          </property>
-          <property name="maximum">
-           <number>100</number>
-          </property>
-          <property name="pageStep">
-           <number>1</number>
-          </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="m_slabThicknessLabel">
-          <property name="text">
-           <string>2</string>
+         <widget class="QDoubleSpinBox" name="m_slabThicknessDoubleSpinBox">
+          <property name="accelerated">
+           <bool>true</bool>
+          </property>
+          <property name="correctionMode">
+           <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+          </property>
+          <property name="suffix">
+           <string> mm</string>
+          </property>
+          <property name="minimum">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
           </property>
          </widget>
         </item>

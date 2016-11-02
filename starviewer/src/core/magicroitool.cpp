@@ -20,7 +20,9 @@
 #include "drawerpolygon.h"
 #include "drawertext.h"
 #include "mathtools.h"
+#include "sliceorientedvolumepixeldata.h"
 #include "voxel.h"
+#include "voxelindex.h"
 
 #include <QApplication> // to check pressed mouse buttons
 #include <qmath.h>
@@ -164,31 +166,23 @@ void MagicROITool::setTextPosition(DrawerText *text)
     text->setAttachmentPoint(attachmentPoint);
 }
 
-void MagicROITool::computeMaskBounds()
+SliceOrientedVolumePixelData MagicROITool::getPixelData()
 {
-    int extent[6];
-    m_2DViewer->getInput(m_inputIndex)->getExtent(extent);
-
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
-
-    m_minX = extent[xIndex * 2];
-    m_maxX = extent[(xIndex * 2) + 1];
-    m_minY = extent[yIndex * 2];
-    m_maxY = extent[(yIndex * 2) + 1];
+    return m_2DViewer->getCurrentPixelDataFromInput(m_inputIndex);
 }
 
-double MagicROITool::getVoxelValue(int x, int y, int z, VolumePixelData *pixelData)
+void MagicROITool::computeMaskBounds()
 {
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
+    auto extent = getPixelData().getExtent();   // slice oriented extent
+    m_minX = extent[0];
+    m_maxX = extent[1];
+    m_minY = extent[2];
+    m_maxY = extent[3];
+}
 
-    int index[3];
-    index[xIndex] = x;
-    index[yIndex] = y;
-    index[zIndex] = z;
-
-    return pixelData->getVoxelValue(index).getComponent(0);
+double MagicROITool::getVoxelValue(const VoxelIndex &index) // slice oriented index
+{
+    return getPixelData().getVoxelValue(index).getComponent(0);
 }
 
 void MagicROITool::startRegion()
@@ -199,11 +193,10 @@ void MagicROITool::startRegion()
         {
             // Discard a border of 1 pixel around the image (workaround for #1949)
             // TODO Implement a better solution, probably reimplementing the whole algorithm
-            int x, y, z;
-            getPickedPositionVoxelIndex(m_2DViewer->getCurrentPixelDataFromInput(m_inputIndex), x, y, z);
+            VoxelIndex index = getPickedPositionVoxelIndex();   // slice oriented index
             computeMaskBounds();
 
-            if (x == m_minX || x == m_maxX || y == m_minY || y == m_maxY)
+            if (index.x() == m_minX || index.x() == m_maxX || index.y() == m_minY || index.y() == m_maxY)
             {
                 return;
             }
@@ -296,10 +289,9 @@ void MagicROITool::modifyRegionByFactor()
 void MagicROITool::generateRegion()
 {
     computeMaskBounds();
-    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelDataFromInput(m_inputIndex);
 
     // Posem a true els punts on la imatge està dins els llindard i connectat amb la llavor (region growing)
-    this->computeRegionMask(pixelData);
+    this->computeRegionMask();
 
     // Trobem els punts frontera i creem el polígon
     this->computePolygon();
@@ -339,50 +331,25 @@ int MagicROITool::getROIInputIndex() const
     return index;
 }
 
-void MagicROITool::getPickedPositionVoxelIndex(VolumePixelData *pixelData, int &x, int &y, int &z)
+VoxelIndex MagicROITool::getPickedPositionVoxelIndex()
 {
-    if (!pixelData)
-    {
-        return;
-    }
-    
-    int index[3];
-    pixelData->computeCoordinateIndex(m_pickedPosition, index);
-
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
-
-    x = index[xIndex];
-    y = index[yIndex];
-    // HACK To correctly create regions when we have images with phases
-    // Since volumes with phases don't support reconstructions, we only need to handle the Axial (XYPlane) case
-    // TODO Revise when ticket #1247 (Support reconstruction in volumes with phases) is implemented
-    if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
-    {
-        z = m_2DViewer->getInput(m_inputIndex)->getImageIndex(m_2DViewer->getCurrentSliceOnInput(m_inputIndex), m_2DViewer->getCurrentPhaseOnInput(m_inputIndex));
-    }
-    else
-    {
-        z = index[zIndex];
-    }
+    return getPixelData().getVoxelIndex(m_pickedPosition);  // slice oriented voxel index
 }
 
-void MagicROITool::computeLevelRange(VolumePixelData *pixelData, int x, int y, int z)
+void MagicROITool::computeLevelRange()
 {
     // Calculem la desviació estàndard dins la finestra que ens marca la magic size
-    double standardDeviation = getStandardDeviation(x, y, z, pixelData);
+    double standardDeviation = getStandardDeviation();
     
     // Calculem els llindars com el valor en el pixel +/- la desviació estàndard * magic factor
-    double value = this->getVoxelValue(x, y, z, pixelData);
+    double value = this->getVoxelValue(getPickedPositionVoxelIndex());
     m_lowerLevel = value - m_magicFactor * standardDeviation;
     m_upperLevel = value + m_magicFactor * standardDeviation;
 }
 
-void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
+void MagicROITool::computeRegionMask()
 {
-    int x, y, z;
-    getPickedPositionVoxelIndex(pixelData, x, y, z);
-    this->computeLevelRange(pixelData, x, y, z);
+    this->computeLevelRange();
 
     // Creem la màscara
     if (m_minX == 0 && m_minY == 0)
@@ -394,10 +361,10 @@ void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
         DEBUG_LOG("ERROR: extension no comença a 0");
     }
     
-    // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
-    // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
-    double value = this->getVoxelValue(x, y, z, pixelData);
-    
+    VoxelIndex index = getPickedPositionVoxelIndex();   // slice oriented index
+    double value = this->getVoxelValue(index);
+    int x = index.x(), y = index.y(), z = index.z();
+
     if ((value >= m_lowerLevel) && (value <= m_upperLevel))
     {
         int maskIndex = getMaskVectorIndex(x, y);
@@ -418,9 +385,7 @@ void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
     while (i < 4 && !found)
     {
         this->doMovement(x, y, i);
-        // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
-        // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
-        value = this->getVoxelValue(x, y, z, pixelData);
+        value = this->getVoxelValue(VoxelIndex(x, y, z));
 
         if ((value >= m_lowerLevel) && (value <= m_upperLevel))
         {
@@ -446,9 +411,7 @@ void MagicROITool::computeRegionMask(VolumePixelData *pixelData)
             this->doMovement(x, y, i);
             if ((x > m_minX) && (x < m_maxX) && (y > m_minY) && (y < m_maxY))
             {
-                // TODO Desfà els índexs projectats a 2D als originals 3D per poder obtenir el valor
-                // Corretgir-ho d'una millor manera perquè no calgui fer servir aquest mètode (guardar els índexs x,y,z o d'una altra manera)
-                value = this->getVoxelValue(x, y, z, pixelData);
+                value = this->getVoxelValue(VoxelIndex(x, y, z));
                 maskIndex = getMaskVectorIndex(x, y);
                 if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[maskIndex]))
                 {
@@ -633,58 +596,51 @@ int MagicROITool::getInverseDirection(int direction)
 
 void MagicROITool::addPoint(int direction, int x, int y)
 {
-    double origin[3];
-    double spacing[3];
-    m_2DViewer->getInput(m_inputIndex)->getSpacing(spacing);
-    m_2DViewer->getInput(m_inputIndex)->getOrigin(origin);
+    int z = getPickedPositionVoxelIndex().z();
+    Vector3 p1 = getPixelData().getWorldCoordinate(VoxelIndex(x, y, z));
+    Vector3 p2;
 
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
- 
-    double point[3];
     switch (direction)
     {
         case Down:
-            point[xIndex] = x * spacing[xIndex] + origin[xIndex];
-            point[yIndex] = (y - 0.5) * spacing[yIndex] + origin[yIndex];
+            p2 = getPixelData().getWorldCoordinate(VoxelIndex(x, y-1, z));
             break;
         case Right:
-            point[xIndex] = (x + 0.5) * spacing[xIndex] + origin[xIndex];
-            point[yIndex] = y * spacing[yIndex] + origin[yIndex];
+            p2 = getPixelData().getWorldCoordinate(VoxelIndex(x+1, y, z));
             break;
         case Up:
-            point[xIndex] = x * spacing[xIndex] + origin[xIndex];
-            point[yIndex] = (y + 0.5) * spacing[yIndex] + origin[yIndex];
+            p2 = getPixelData().getWorldCoordinate(VoxelIndex(x, y+1, z));
             break;
         case Left:
-            point[xIndex] = (x - 0.5) * spacing[xIndex] + origin[xIndex];
-            point[yIndex] = y * spacing[yIndex] + origin[yIndex];
+            p2 = getPixelData().getWorldCoordinate(VoxelIndex(x-1, y, z));
             break;
         default:
             DEBUG_LOG("ERROR: This direction doesn't exist");
     }
 
-    double eventWorldCoordinate[3];
-    m_2DViewer->getEventWorldCoordinate(eventWorldCoordinate);
-    point[zIndex] = eventWorldCoordinate[zIndex];
+    Vector3 point = (p1 + p2) * 0.5;
 
-    m_roiPolygon->addVertix(point);
-    m_filledRoiPolygon->addVertix(point);
+    m_roiPolygon->addVertix(point.x, point.y, point.z);
+    m_filledRoiPolygon->addVertix(point.x, point.y, point.z);
 }
 
 bool MagicROITool::isLoopReached()
 {
     const double *firstVertix = this->m_roiPolygon->getVertix(0);
     const double *lastVertix = this->m_roiPolygon->getVertix(m_roiPolygon->getNumberOfPoints() - 1);
-    return ((qAbs(firstVertix[0] - lastVertix[0]) < 0.0001) && (qAbs(firstVertix[1] - lastVertix[1]) < 0.0001));
+    return ((qAbs(firstVertix[0] - lastVertix[0]) < 0.0001)
+         && (qAbs(firstVertix[1] - lastVertix[1]) < 0.0001)
+         && (qAbs(firstVertix[2] - lastVertix[2]) < 0.0001));
 }
 
-double MagicROITool::getStandardDeviation(int x, int y, int z, VolumePixelData *pixelData)
+double MagicROITool::getStandardDeviation()
 {
-    int minX = qMax(x - MagicSize, m_minX);
-    int maxX = qMin(x + MagicSize, m_maxX);
-    int minY = qMax(y - MagicSize, m_minY);
-    int maxY = qMin(y + MagicSize, m_maxY);
+    VoxelIndex index = getPickedPositionVoxelIndex();   // slice oriented index
+    int minX = qMax(index.x() - MagicSize, m_minX);
+    int maxX = qMin(index.x() + MagicSize, m_maxX);
+    int minY = qMax(index.y() - MagicSize, m_minY);
+    int maxY = qMin(index.y() + MagicSize, m_maxY);
+    int z = index.z();
 
     // Calculem la mitjana
     double mean = 0.0;
@@ -694,7 +650,7 @@ double MagicROITool::getStandardDeviation(int x, int y, int z, VolumePixelData *
     {
         for (int j = minY; j <= maxY; ++j)
         {
-            value = this->getVoxelValue(i, j, z, pixelData);
+            value = this->getVoxelValue(VoxelIndex(i, j, z));
             mean += value;
         }
     }
@@ -708,7 +664,7 @@ double MagicROITool::getStandardDeviation(int x, int y, int z, VolumePixelData *
     {
         for (int j = minY; j <= maxY; ++j)
         {
-            value = this->getVoxelValue(i, j, z, pixelData);
+            value = this->getVoxelValue(VoxelIndex(i, j, z));
             deviation += qPow(value - mean, 2);
         }
     }

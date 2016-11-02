@@ -16,15 +16,16 @@
 
 #include "imagepipeline.h"
 #include "slicehandler.h"
+#include "sliceorientedvolumepixeldata.h"
 #include "volume.h"
 #include "voilutpresetstooldata.h"
 #include "volumepixeldata.h"
 #include "image.h"
 #include "voiluthelper.h"
+#include "vtkimagereslicemapper2.h"
 
 #include <vtkCamera.h>
 #include <vtkImageProperty.h>
-#include <vtkImageResliceMapper.h>
 #include <vtkImageSlice.h>
 #include <vtkImageSliceMapper.h>
 #include <vtkImageStack.h>
@@ -34,30 +35,29 @@
 namespace udg {
 
 VolumeDisplayUnit::VolumeDisplayUnit()
- : m_volume(nullptr), m_shutterImageSlice(nullptr)
+ : m_volume(nullptr), m_shutterImageSlice(nullptr), m_auxiliarCurrentVolumePixelData(nullptr)
 {
     m_imagePipeline = new ImagePipeline();
     m_imageSlice = vtkImageSlice::New();
-    vtkImageResliceMapper *mapper = vtkImageResliceMapper::New();
-    mapper->SliceAtFocalPointOn();
-    mapper->SliceFacesCameraOn();
-    mapper->JumpToNearestSliceOn();
-    mapper->StreamingOn();
-    m_imageSlice->SetMapper(mapper);
-    mapper->Delete();
+    m_mapper = VtkImageResliceMapper2::New();
+    m_mapper->SliceAtFocalPointOn();
+    m_mapper->SliceFacesCameraOn();
+    m_mapper->JumpToNearestSliceOn();
+    m_mapper->StreamingOn();
+    m_imageSlice->SetMapper(m_mapper);
     m_imageSlice->GetProperty()->SetInterpolationTypeToCubic();
     m_imageStack = vtkImageStack::New();
     m_imageStack->AddImage(m_imageSlice);
     m_sliceHandler = new SliceHandler();
     m_imagePointPicker =  0;
     m_voiLutData = 0;
-    m_currentThickSlabPixelData = 0;
 }
 
 VolumeDisplayUnit::~VolumeDisplayUnit()
 {
     delete m_imagePipeline;
     m_imageSlice->Delete();
+    m_mapper->Delete();
     m_imageStack->Delete();
 
     if (m_shutterImageSlice)
@@ -71,7 +71,7 @@ VolumeDisplayUnit::~VolumeDisplayUnit()
     {
         m_imagePointPicker->Delete();
     }
-    delete m_currentThickSlabPixelData;
+    delete m_auxiliarCurrentVolumePixelData;
 }
 
 Volume* VolumeDisplayUnit::getVolume() const
@@ -133,7 +133,6 @@ const OrthogonalPlane& VolumeDisplayUnit::getViewPlane() const
 void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_sliceHandler->setViewPlane(viewPlane);
-    m_imagePipeline->setProjectionAxis(viewPlane);
 }
 
 double VolumeDisplayUnit::getCurrentSpacingBetweenSlices() const
@@ -166,28 +165,46 @@ double VolumeDisplayUnit::getCurrentDisplayedImageDepth() const
     }
 }
 
-VolumePixelData* VolumeDisplayUnit::getCurrentPixelData()
+SliceOrientedVolumePixelData VolumeDisplayUnit::getCurrentPixelData()
 {
     if (!m_volume)
     {
-        return 0;
+        return SliceOrientedVolumePixelData();
     }
     
     if (isThickSlabActive())
     {
-        if (!m_currentThickSlabPixelData)
+        if (!m_auxiliarCurrentVolumePixelData)
         {
-            m_currentThickSlabPixelData = new VolumePixelData;
-            m_currentThickSlabPixelData->setNumberOfPhases(m_volume->getNumberOfPhases());
-            m_currentThickSlabPixelData->setData(getImagePipeline()->getSlabProjectionOutput());
+            m_auxiliarCurrentVolumePixelData = new VolumePixelData();
         }
 
-        return m_currentThickSlabPixelData;
+        m_mapper->ResampleToScreenPixelsOff();
+        m_mapper->Update();
+        m_auxiliarCurrentVolumePixelData->setData(m_mapper->getResliceOutput());
+
+        return SliceOrientedVolumePixelData().setVolumePixelData(m_auxiliarCurrentVolumePixelData).setDataToWorldMatrix(m_mapper->getSliceToWorldMatrix());
+    }
+    else if (m_sliceHandler->getNumberOfPhases() > 1)
+    {
+        if (!m_auxiliarCurrentVolumePixelData)
+        {
+            m_auxiliarCurrentVolumePixelData = new VolumePixelData();
+        }
+
+        m_auxiliarCurrentVolumePixelData->setData(m_imagePipeline->getPhaseOutput());
+
+        return SliceOrientedVolumePixelData().setVolumePixelData(m_auxiliarCurrentVolumePixelData).setOrthogonalPlane(getViewPlane());
     }
     else
     {
-        return m_volume->getPixelData();
+        return SliceOrientedVolumePixelData().setVolumePixelData(m_volume->getPixelData()).setOrthogonalPlane(getViewPlane());
     }
+}
+
+void VolumeDisplayUnit::restoreRenderingQuality()
+{
+    m_mapper->ResampleToScreenPixelsOn();
 }
 
 Image* VolumeDisplayUnit::getCurrentDisplayedImage() const
@@ -229,7 +246,6 @@ int VolumeDisplayUnit::getSlice() const
 void VolumeDisplayUnit::setSlice(int slice)
 {
     m_sliceHandler->setSlice(slice);
-    m_imagePipeline->setSlice(getSlice());
 }
 
 int VolumeDisplayUnit::getMinimumSlice() const
@@ -255,7 +271,6 @@ int VolumeDisplayUnit::getPhase() const
 void VolumeDisplayUnit::setPhase(int phase)
 {
     m_sliceHandler->setPhase(phase);
-    m_imagePipeline->setSlice(getSlice());
     m_imagePipeline->setPhase(getPhase());
 }
 
@@ -264,24 +279,25 @@ int VolumeDisplayUnit::getNumberOfPhases() const
     return m_sliceHandler->getNumberOfPhases();
 }
 
-int VolumeDisplayUnit::getSlabThickness() const
+double VolumeDisplayUnit::getSlabThickness() const
 {
-    return m_sliceHandler->getSlabThickness();
+    return m_mapper->GetSlabThickness();
 }
 
-void VolumeDisplayUnit::setSlabThickness(int thickness)
+void VolumeDisplayUnit::setSlabThickness(double thickness)
 {
-    // Make sure thickness is within valid bounds. Must be between 1 and the maximum number of slices on the curren view.
-    int admittedThickness = qBound(1, thickness, getNumberOfSlices());
-    
-    m_sliceHandler->setSlabThickness(admittedThickness);
-    m_imagePipeline->setSlice(getSlice());
-    m_imagePipeline->setSlabThickness(admittedThickness);
+    m_mapper->SetSlabThickness(thickness);
+    m_sliceHandler->setSlabThickness(thickness);
+}
+
+double VolumeDisplayUnit::getMaximumSlabThickness() const
+{
+    return m_sliceHandler->getMaximumSlabThickness();
 }
 
 bool VolumeDisplayUnit::isThickSlabActive() const
 {
-    return getSlabThickness() > 1;
+    return getSlabThickness() > 0.0;
 }
 
 double VolumeDisplayUnit::getSliceThickness() const
@@ -295,9 +311,8 @@ void VolumeDisplayUnit::resetThickSlab()
     {
         m_imagePipeline->setInput(m_volume->getVtkData());
         m_imagePipeline->setNumberOfPhases(getNumberOfPhases());
-        m_imagePipeline->setProjectionAxis(this->getViewPlane());
-        m_imagePipeline->setSlice(getSlice());
-        m_imagePipeline->setSlabThickness(m_sliceHandler->getSlabThickness());
+        m_mapper->SetSlabThickness(0.0);
+        m_mapper->SetSlabTypeToMax();
     }
 }
 
@@ -453,9 +468,9 @@ void VolumeDisplayUnit::applyTransferFunction()
     }
 }
 
-void VolumeDisplayUnit::setSlabProjectionMode(AccumulatorFactory::AccumulatorType accumulatorType)
+void VolumeDisplayUnit::setSlabProjectionMode(SlabProjectionMode mode)
 {
-    m_imagePipeline->setSlabProjectionMode(accumulatorType);
+    m_mapper->SetSlabType(mode);
 }
 
 void VolumeDisplayUnit::setShutterData(vtkImageData *shutterData)

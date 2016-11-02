@@ -35,13 +35,13 @@
 #include "qviewercommand.h"
 #include "renderqviewercommand.h"
 #include "mammographyimagehelper.h"
-#include "volumedisplayunit.h"
 #include "slicelocator.h"
 #include "q2dviewerannotationhandler.h"
 #include "volumedisplayunithandlerfactory.h"
 #include "genericvolumedisplayunithandler.h"
 #include "patientbrowsermenu.h"
 #include "voiluthelper.h"
+#include "sliceorientedvolumepixeldata.h"
 
 // Qt
 #include <QResizeEvent>
@@ -64,7 +64,7 @@ const QString Q2DViewer::DummyVolumeObjectName("Dummy Volume");
 
 Q2DViewer::Q2DViewer(QWidget *parent)
 : QViewer(parent), m_overlayVolume(0), m_blender(0), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_applyFlip(false),
-  m_isImageFlipped(false), m_slabProjectionMode(AccumulatorFactory::Maximum), m_fusionBalance(50)
+  m_isImageFlipped(false), m_slabProjectionMode(VolumeDisplayUnit::Max), m_fusionBalance(50)
 {
     m_displayUnitsFactory = new VolumeDisplayUnitHandlerFactory;
     initializeDummyDisplayUnit();
@@ -618,7 +618,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
     // S'activa el rendering de nou per tal de que es renderitzi l'escena
     enableRendering(true);
 
-    m_slabProjectionMode = AccumulatorFactory::Maximum;
+    m_slabProjectionMode = VolumeDisplayUnit::Max;
 
     executeInputFinishedCommand();
     // Indiquem el canvi de volum
@@ -778,20 +778,8 @@ int Q2DViewer::getNumberOfInputs() const
 
 void Q2DViewer::resetView(const OrthogonalPlane &view)
 {
-    // First we compute which slab thickness should be applied after the view has been reseted
-    int desiredSlabSlices = 1;
-    if (isThickSlabActive())
-    {
-        // In case thick slab is enabled, we should keep the slice thickness, 
-        // so the proper number of slices of the thick slab should be computed for the new view
-        double currentSlabThickness = getCurrentSliceThickness();
-        int viewIndex = view.getZIndex();
-        double zSpacingAfterReset = getMainInput()->getSpacing()[viewIndex];
-        desiredSlabSlices = qRound(currentSlabThickness / zSpacingAfterReset);
-    }
-    
-    // Important, cal desactivar el thickslab abans de fer m_currentViewPlane = view, sinó falla amb l'update extent
-    disableThickSlab();
+    double slabThickness = getSlabThickness();
+
     setCurrentViewPlane(view);
     m_annotationsHandler->updateAnnotations(VoiLutAnnotation);
     
@@ -811,18 +799,18 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         getRenderer()->ResetCamera(bounds);
 
         // Calculem la llesca que cal mostrar segons la vista escollida
-        int initialSliceIndex = 0;
+        int initialSliceIndex = this->getMinimumSlice();
         if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
         {
-            initialSliceIndex = getMaximumSlice() / 2;
+            initialSliceIndex = (getMinimumSlice() + getMaximumSlice()) / 2;
         }
         setSlice(initialSliceIndex);
 
         // Set appropriate zoom level
         fitRenderingIntoViewport();
 
-        // Restore thick Slab
-        setSlabThickness(desiredSlabSlices);
+        // Set slab thickness again to ensure that annotations are updated and signals emitted if necessary
+        setSlabThickness(slabThickness);
     }
 
     emit viewChanged(getCurrentViewPlane());
@@ -1317,10 +1305,6 @@ bool Q2DViewer::getCurrentCursorImageCoordinateOnInput(double xyz[3], int i)
         int zIndex = displayUnit->getViewPlane().getZIndex();
         xyz[zIndex] =  displayUnit->getCurrentDisplayedImageDepth();
     }
-    else
-    {
-        DEBUG_LOG("Outside");
-    }
     return inside;
 }
 
@@ -1479,7 +1463,7 @@ void Q2DViewer::printVolumeInformation()
     // Fins que no implementem Presentation states aquest serà el cas que sempre s'executarà el 100% dels casos
 }
 
-void Q2DViewer::setSlabProjectionMode(int projectionMode)
+void Q2DViewer::setSlabProjectionMode(VolumeDisplayUnit::SlabProjectionMode projectionMode)
 {
     if (m_slabProjectionMode != projectionMode)
     {
@@ -1491,7 +1475,7 @@ void Q2DViewer::setSlabProjectionMode(int projectionMode)
             // This could be a potential problem with measures that depend on the underlying data, such as ROIs,
             // as the data measured could be incoherent with the underlying data when changing the projection mode
             getDrawer()->removeAllPrimitives();
-            getMainDisplayUnit()->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(m_slabProjectionMode));
+            getMainDisplayUnit()->setSlabProjectionMode(m_slabProjectionMode);
             updateImageSlices();
             render();
         }
@@ -1500,7 +1484,7 @@ void Q2DViewer::setSlabProjectionMode(int projectionMode)
     }
 }
 
-void Q2DViewer::setSlabProjectionModeInVolume(int index, int slabProjectionMode)
+void Q2DViewer::setSlabProjectionModeInVolume(int index, VolumeDisplayUnit::SlabProjectionMode slabProjectionMode)
 {
     VolumeDisplayUnit *unit = this->getDisplayUnit(index);
 
@@ -1511,17 +1495,17 @@ void Q2DViewer::setSlabProjectionModeInVolume(int index, int slabProjectionMode)
         return;
     }
 
-    unit->setSlabProjectionMode(static_cast<AccumulatorFactory::AccumulatorType>(slabProjectionMode));
+    unit->setSlabProjectionMode(slabProjectionMode);
     this->updateImageSlices();
     this->render();
 }
 
-int Q2DViewer::getSlabProjectionMode() const
+VolumeDisplayUnit::SlabProjectionMode Q2DViewer::getSlabProjectionMode() const
 {
     return m_slabProjectionMode;
 }
 
-void Q2DViewer::setSlabThickness(int thickness)
+void Q2DViewer::setSlabThickness(double thickness)
 {
     if (!hasInput())
     {
@@ -1532,7 +1516,7 @@ void Q2DViewer::setSlabThickness(int thickness)
     
     if (thickness != mainDisplayUnit->getSlabThickness())
     {
-        int oldThickness = mainDisplayUnit->getSlabThickness();
+        double oldThickness = mainDisplayUnit->getSlabThickness();
         int oldSlice = getCurrentSlice();
 
         // Primera aproximació per evitar error dades de primitives: a l'activar o desactivar l'slabthickness, esborrem primitives
@@ -1556,7 +1540,7 @@ void Q2DViewer::setSlabThickness(int thickness)
     }
 }
 
-void Q2DViewer::setSlabThicknessInVolume(int index, int thickness)
+void Q2DViewer::setSlabThicknessInVolume(int index, double thickness)
 {
     VolumeDisplayUnit *unit = this->getDisplayUnit(index);
 
@@ -1572,14 +1556,19 @@ void Q2DViewer::setSlabThicknessInVolume(int index, int thickness)
     this->render();
 }
 
-int Q2DViewer::getSlabThickness() const
+double Q2DViewer::getSlabThickness() const
 {
     return getMainDisplayUnit()->getSlabThickness();
 }
 
+double Q2DViewer::getMaximumSlabThickness() const
+{
+    return getMainDisplayUnit()->getMaximumSlabThickness();
+}
+
 void Q2DViewer::disableThickSlab()
 {
-    setSlabThickness(1);
+    setSlabThickness(0.0);
 }
 
 bool Q2DViewer::isThickSlabActive() const
@@ -1605,14 +1594,25 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
     xyz[yIndex] = qBound(bounds[yIndex * 2], xyz[yIndex], bounds[yIndex * 2 + 1]);
 }
 
-VolumePixelData* Q2DViewer::getCurrentPixelData()
+SliceOrientedVolumePixelData Q2DViewer::getCurrentPixelData()
 {
     return getMainDisplayUnit()->getCurrentPixelData();
 }
 
-VolumePixelData* Q2DViewer::getCurrentPixelDataFromInput(int i)
+SliceOrientedVolumePixelData Q2DViewer::getCurrentPixelDataFromInput(int i)
 {
     return getDisplayUnit(i)->getCurrentPixelData();
+}
+
+void Q2DViewer::restoreRenderingQuality()
+{
+    if (m_displayUnitsHandler)
+    {
+        foreach (auto *volumeDisplayUnit, m_displayUnitsHandler->getVolumeDisplayUnitList())
+        {
+            volumeDisplayUnit->restoreRenderingQuality();
+        }
+    }
 }
 
 void Q2DViewer::restore()

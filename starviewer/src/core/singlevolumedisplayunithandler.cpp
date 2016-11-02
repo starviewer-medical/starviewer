@@ -34,9 +34,4 @@ int SingleVolumeDisplayUnitHandler::getMaximumNumberOfInputs() const
     return 1;
 }
 
-vtkImageSlice* SingleVolumeDisplayUnitHandler::getImageProp() const
-{
-    return m_displayUnits.first()->getImageStack();
-}
-
 } // End namespace udg

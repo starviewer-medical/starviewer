@@ -12,44 +12,37 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGMINIMUMACCUMULATOR_H
-#define UDGMINIMUMACCUMULATOR_H
+#ifndef UDG_VTKIMAGERESLICEMAPPER2_H
+#define UDG_VTKIMAGERESLICEMAPPER2_H
 
-#include "accumulator.h"
-
-#include <QtGlobal>
+#include <vtkImageResliceMapper.h>
 
 namespace udg {
 
-template <class T> class MinimumAccumulator : public Accumulator<T> {
+/**
+ * @brief The VtkImageResliceMapper2 class is a subclass of vtkImageResliceMapper with a few additional methods useful to Starviewer.
+ */
+class VtkImageResliceMapper2 : public vtkImageResliceMapper
+{
 public:
-    MinimumAccumulator() : Accumulator<T>() {}
-    virtual ~MinimumAccumulator() {}
+    static VtkImageResliceMapper2* New();
 
-    inline virtual void initialize()
-    {
-        m_first = true;
-    }
-    inline virtual void accumulate(T input)
-    {
-        if (m_first)
-        {
-            m_minimum = input;
-            m_first = false;
-            return;
-        }
-        m_minimum = qMin(m_minimum, input);
-    }
-    inline virtual T getValue() const
-    {
-        return m_minimum;
-    }
+    vtkTypeMacro(VtkImageResliceMapper2, vtkImageResliceMapper)
 
-private:
-    T m_minimum;
-    bool m_first;
+    /// Returns the output of the reslice operation.
+    vtkImageData* getResliceOutput();
+
+    /// Returns the slice to world matrix.
+    vtkMatrix4x4* getSliceToWorldMatrix() const;
+
+    using Superclass::Update;
+
+protected:
+    VtkImageResliceMapper2();
+    virtual ~VtkImageResliceMapper2();
+
 };
 
-}
+} // namespace udg
 
-#endif
+#endif // UDG_VTKIMAGERESLICEMAPPER2_H

@@ -30,7 +30,7 @@ SliceHandler::SliceHandler(QObject *parent)
     m_numberOfSlices = 1;
     m_currentPhase = 0;
     m_numberOfPhases = 1;
-    m_slabThickness = 1;
+    m_slabThickness = 0.0;
 }
 
 SliceHandler::~SliceHandler()
@@ -84,12 +84,12 @@ int SliceHandler::getCurrentSlice() const
 
 int SliceHandler::getMinimumSlice() const
 {
-    return m_minSliceValue;
+    return m_minSliceValue + getNumberOfSlicesInSlabThickness() / 2;
 }
 
 int SliceHandler::getMaximumSlice() const
 {
-    return m_minSliceValue + m_numberOfSlices - m_slabThickness;
+    return m_minSliceValue + m_numberOfSlices - 1 - getNumberOfSlicesInSlabThickness() / 2;
 }
 
 int SliceHandler::getNumberOfSlices() const
@@ -115,7 +115,7 @@ int SliceHandler::getNumberOfPhases() const
     return m_numberOfPhases;
 }
 
-void SliceHandler::setSlabThickness(int thickness)
+void SliceHandler::setSlabThickness(double thickness)
 {
     // If the new thickness is invalid or is the same as the current one, then do nothing
     if (!isValidSlabThickness(thickness) || thickness == m_slabThickness)
@@ -124,90 +124,87 @@ void SliceHandler::setSlabThickness(int thickness)
     }
 
     // Keep thickness in bounds
-    if (thickness > m_numberOfSlices)
+    if (thickness > getMaximumSlabThickness())
     {
-        thickness = m_numberOfSlices;
+        thickness = getMaximumSlabThickness();
         DEBUG_LOG("New thickness exceeds maximum permitted thickness, setting it to maximum.");
     }
 
-    // The slices of the slab are distributed with the following criterion:
-    // (in the examples 'X' represents the original slice and '|' represents the additional slab slices)
-    // - Assume that we start with a thickness of 1
-    // - Slices are added alternately on each side, starting towards the end, e.g.: X, X|, |X|, |X||, ||X||, ...
-    // - Slices are removed in the inverse order, e.g.: ..., ||X||, |X||, |X|, X|, X
-    // - If the slab range is out of range, it is moved appropriately to the beginning or the end
-
-    // This behaviour is implemented with this algorithm:
-    // 1. Find the slice at the center of the current slab; if the current thickness is even, choose the left center slice
-    int centerSlice = m_currentSlice + (m_slabThickness - 1) / 2;
-
-    // 2. Set the first slice (m_currentSlice) so that the first (maybe smaller) half of the additional (not counting the center) slices are before the center;
-    //    the other (maybe bigger) half goes after the center
-    m_currentSlice = centerSlice - (thickness - 1) / 2;
-
-    // 3. Set the thickness (m_slabThickness)
+    // Set the thickness (m_slabThickness)
     m_slabThickness = thickness;
 
-    // 4. Keep the slab in range (getMaximumSlice() takes m_slabThickness into account)
+    // Keep the slab in range
     m_currentSlice = qBound(getMinimumSlice(), m_currentSlice, getMaximumSlice());
 }
 
-int SliceHandler::getSlabThickness() const
+double SliceHandler::getSlabThickness() const
 {
     return m_slabThickness;
 }
 
-int SliceHandler::getLastSlabSlice() const
+double SliceHandler::getMaximumSlabThickness() const
 {
-    return m_currentSlice + m_slabThickness - 1;
+    if (m_volume)
+    {
+        int zIndex = this->getViewPlane().getZIndex();
+        return this->getNumberOfSlices() * m_volume->getSpacing()[zIndex];
+    }
+    else
+    {
+        return 0.0;
+    }
+}
+
+int SliceHandler::getNumberOfSlicesInSlabThickness() const
+{
+    if (m_volume)
+    {
+        int zIndex = this->getViewPlane().getZIndex();
+        return qRound(m_slabThickness / m_volume->getSpacing()[zIndex]);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 double SliceHandler::getSliceThickness() const
 {
-    double thickness = 0.0;
-
-    if (m_volume)
+    if (m_slabThickness > 0.0)
     {
-        switch (this->getViewPlane())
+        return m_slabThickness;
+    }
+    else
+    {
+        double thickness = 0.0;
+
+        if (m_volume)
         {
-            case OrthogonalPlane::XYPlane:
-                {
-                    Image *image = m_volume->getImage(this->getCurrentSlice(), this->getCurrentPhase());
-
-                    if (image)
+            switch (this->getViewPlane())
+            {
+                case OrthogonalPlane::XYPlane:
                     {
-                        thickness = image->getSliceThickness();
+                        Image *image = m_volume->getImage(this->getCurrentSlice(), this->getCurrentPhase());
 
-                        if (this->getSlabThickness() > 1)
+                        if (image)
                         {
-                            double gap = m_volume->getSpacing()[2] - thickness;
-
-                            if (gap < 0)
-                            {
-                                // If gap between spacing and thickness is negative, this means slices overlap, so
-                                // we have to substract this gap between to get the real thickness
-                                thickness = (thickness + gap) * this->getSlabThickness();
-                            }
-                            else
-                            {
-                                thickness = thickness * this->getSlabThickness();
-                            }
+                            thickness = image->getSliceThickness();
                         }
                     }
-                }
-                break;
+                    break;
 
-            case OrthogonalPlane::YZPlane:
-                thickness = m_volume->getSpacing()[0] * this->getSlabThickness();
-                break;
+                case OrthogonalPlane::YZPlane:
+                    thickness = m_volume->getSpacing()[0];
+                    break;
 
-            case OrthogonalPlane::XZPlane:
-                thickness = m_volume->getSpacing()[1] * this->getSlabThickness();
-                break;
+                case OrthogonalPlane::XZPlane:
+                    thickness = m_volume->getSpacing()[1];
+                    break;
+            }
         }
-    }
 
-    return thickness;
+        return thickness;
+    }
 }
 
 bool SliceHandler::isLoopEnabledForSlices() const
@@ -224,20 +221,14 @@ bool SliceHandler::isLoopEnabledForPhases() const
 
 void SliceHandler::reset()
 {
-    setSlabThickness(1);
+    setSlabThickness(0.0);
     setSlice(0);
     setPhase(0);
 }
 
-bool SliceHandler::isValidSlabThickness(int thickness)
+bool SliceHandler::isValidSlabThickness(double thickness)
 {
-    if (thickness < 1)
-    {
-        DEBUG_LOG("Invalid thickness value. Must be >= 1.");
-        return false;
-    }
-
-    return true;
+    return thickness >= 0.0;
 }
 
 } // End namespace udg
