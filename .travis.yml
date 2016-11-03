@@ -68,6 +68,6 @@ script:
     else
       qmake ;
     fi
-  - make -j3
+  - make -j3 | sed 's/\/Applications\/Xcode\.app\/Contents\/Developer/[xcode]/g' | sed -E 's/\/(Users|home)\/travis\/uroot/[uroot]/g'
   - cd tests/auto
   - ./autotests -silent
