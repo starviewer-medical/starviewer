@@ -905,27 +905,6 @@ void Q2DViewer::updateCamera()
 
 void Q2DViewer::resetCamera()
 {
-    vtkCamera *camera = getActiveCamera();
-    Q_ASSERT(camera);
-
-    // Ajustem els paràmetres de la càmera segons la vista
-    double cameraRoll = 0.0;
-    switch (getCurrentViewPlane())
-    {
-        case OrthogonalPlane::XYPlane:
-            cameraRoll = 180.0;
-            break;
-
-        case OrthogonalPlane::YZPlane:
-            cameraRoll = -90.0;
-            break;
-
-        case OrthogonalPlane::XZPlane:
-            cameraRoll = 0.0;
-            break;
-    }
-
-    camera->SetRoll(cameraRoll);
     setCameraViewPlane(getCurrentViewPlane());
 }
 
