@@ -44,6 +44,7 @@ macx {
     QMAKE_CXXFLAGS += -stdlib=libc++
     QMAKE_LFLAGS += -stdlib=libc++
     LIBS += -framework Cocoa
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
 }
 
 # Definim variable per construir versió lite en temps de compilació
