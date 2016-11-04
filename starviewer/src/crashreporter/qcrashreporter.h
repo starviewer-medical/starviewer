@@ -16,7 +16,11 @@
 #define UDGQCRASHREPORTER_H
 
 #include <QWidget>
+#include <QDateTime>
+#include <QNetworkReply>
 #include "ui_qcrashreporterbase.h"
+
+class QHttpMultiPart;
 
 namespace udg {
 
@@ -28,19 +32,55 @@ class QCrashReporter : public QWidget, Ui::QCrashReporterBase {
 Q_OBJECT
 
 public:
-    QCrashReporter(const QStringList &argv, QWidget *parent = 0);
+    explicit QCrashReporter(const QStringList &argv, QWidget *parent = 0);
+    virtual ~QCrashReporter();
 
-public Q_SLOTS:
-    void quitButtonClickedSlot();
-    void restartButtonClickedSlot();
+protected:
+    virtual void closeEvent(QCloseEvent* event);
 
-private:
-    bool restart(const QString &path);
-    void sendReport();
+private slots:
+    void onQuitPushButtonClicked();
+    void onRestartPushButtonClicked();
+    void onAbortSendPushButtonClicked();
+    void onReplyError(QNetworkReply::NetworkError code);
+    void onReplyFinished();
+    void onReplyUploadProgress(qint64 bytesReceived, qint64 bytesTotal);
+    /// No SSL is used, so all SSL errors are ignored.
+    void onManagerSslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
+
     void maybeSendReport();
 
+signals:
+    void resendReport();
+
 private:
+
+    /// Restart executable
+    bool restart();
+    void sendReport();
+
+    /// Restart on exit
+    bool m_doRestart = false;
+    /// Close the window on close() event.
+    bool m_acceptClose = false;
+    /// Indicates if crash report has been sent successfully
+    bool m_successful = false;
+    /// Indicates that timer has timed out, so we can definetively close.
+    bool m_timerStarted = false;
+    /// Show error and success message boxes to the user (might be more intrusive)
+    static constexpr bool m_enableMsgboxes = false;
+    QString m_minidumpUUID;
     QString m_minidumpPath;
+    QString m_minidumpFilename;
+    QNetworkReply* m_reply;
+    QHttpMultiPart* m_multipart;
+    QFile* m_dumpQFile;
+    QNetworkAccessManager* m_manager;
+    QTimer* m_closeTimer;
+
+    /// Set on the constructor in order to precisely specify the time of the crash (this is motivated by the fact that an user may left the crash reporting window several minutes.
+    QDateTime m_crashTime;
+
 };
 
 }

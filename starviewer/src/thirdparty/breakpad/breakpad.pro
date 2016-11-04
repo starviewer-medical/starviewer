@@ -135,13 +135,7 @@ linux* {
                common/basictypes.h \
                common/memory_range.h \
                common/minidump_type_helper.h \
-               third_party/lss/linux_syscall_support.h \
-               third_party/curl/curl.h \
-               third_party/curl/curlver.h \
-               third_party/curl/curlbuild.h \
-               third_party/curl/curlrules.h \
-               third_party/curl/easy.h \
-               third_party/curl/multi.h
+               third_party/lss/linux_syscall_support.h
     SOURCES += client/linux/handler/exception_handler.cc \
                client/linux/handler/minidump_descriptor.cc \
                client/linux/crash_generation/crash_generation_client.cc \

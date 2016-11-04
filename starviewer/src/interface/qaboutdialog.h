@@ -20,7 +20,11 @@
 namespace udg {
 
 /**
-    Diàleg d'about de l'aplicació
+  @brief Application about dialog.
+
+  This application dialog shows a hidden button to crash the application on purpose, to show it the user must hold and release the Ok button for a significant
+  amount of time.
+
   */
 class QAboutDialog : public QDialog, private Ui::QAboutDialogBase {
 Q_OBJECT
@@ -31,6 +35,16 @@ public:
 private slots:
     /// Shows a dialog with the license information.
     void showLicenseInformation();
+    void btnCrashClicked();
+    void btnOkClicked();
+    void btnOkPressed();
+    void btnOkReleased();
+
+private:
+    static constexpr unsigned int msecsToShowCrash = 5000;
+    qint64 m_longClickStart;
+    QPushButton* m_crashBtn;
+    QPushButton* m_okBtn;
 
 };
 
