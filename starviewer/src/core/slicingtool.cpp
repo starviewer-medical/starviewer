@@ -126,7 +126,7 @@ void SlicingTool::doSlicing()
     if (m_state == Slicing)
     {
         Q_ASSERT(m_screenSize.isValid());
-        m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
+        m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll.svg")));
         m_currentPosition.setY(m_2DViewer->getEventPosition().y());
 
         // Increment normalitzat segons la mida de la finestra i el nombre de llesques

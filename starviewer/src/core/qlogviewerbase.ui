@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/logs.png</normaloff>:/images/logs.png</iconset>
+    <normaloff>:/images/icons/log.svg</normaloff>:/images/icons/log.svg</iconset>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -58,7 +58,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../main/main.qrc">:/images/logs.png</pixmap>
+        <pixmap resource="../main/main.qrc">:/images/icons/log.svg</pixmap>
        </property>
       </widget>
      </item>

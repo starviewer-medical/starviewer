@@ -45,7 +45,7 @@ EditorTool::EditorTool(QViewer *viewer, QObject *parent)
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_2DViewer);
 
-    m_2DViewer->setCursor(QCursor(QPixmap(":/images/pencilcursor.png")));
+    m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/pencil.svg")));
     this->initialize();
 
     // \TODO:cada cop que canvïi l'input a l'overlay cal fer algunes inicialitzacions
@@ -168,19 +168,19 @@ void EditorTool::increaseState()
 
         case Erase:
             m_editorState = EraseRegion;
-            m_2DViewer->setCursor(QCursor(QPixmap(":/images/eraseregioncursor.png")));
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/translate-erase.svg")));
             m_squareActor->VisibilityOff();
             m_2DViewer->render();
             break;
 
         case EraseRegion:
             m_editorState = EraseSlice;
-            m_2DViewer->setCursor(QCursor(QPixmap(":/images/slicecursor.png")));
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/slice-erase.svg")));
             break;
 
         case EraseSlice:
             m_editorState = Paint;
-            m_2DViewer->setCursor(QCursor(QPixmap(":/images/pencilcursor.png")));
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/pencil.svg")));
             this->setPaintCursor();
             break;
 
@@ -201,19 +201,19 @@ void EditorTool::decreaseState()
 
         case EraseSlice:
             m_editorState = EraseRegion;
-            m_2DViewer->setCursor(QCursor(QPixmap(":/images/eraseregioncursor.png")));
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/translate-erase.svg")));
             break;
 
         case Paint:
             m_editorState = EraseSlice;
-            m_2DViewer->setCursor(QCursor(QPixmap(":/images/slicecursor.png")));
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/slice-erase.svg")));
             m_squareActor->VisibilityOff();
             m_2DViewer->render();
             break;
 
         case Erase:
             m_editorState = Paint;
-            m_2DViewer->setCursor(QCursor(QPixmap(":/images/pencilcursor.png")));
+            m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/pencil.svg")));
             break;
 
         default:

@@ -90,7 +90,7 @@ void QRelatedStudiesWidget::updateList()
                     this->decreaseNumberOfDownladingStudies();
                 }
                 studyInfo->status = Finished;
-                studyInfo->statusIcon->setPixmap(QPixmap(":/images/button_ok.png"));
+                studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-ok-apply.svg"));
                 studyInfo->downloadButton->setEnabled(false);
             }
         }
@@ -303,7 +303,7 @@ void QRelatedStudiesWidget::initializeLookingForStudiesWidget()
 
     QLabel *downloadigAnimation = new QLabel();
     QMovie *operationAnimation = new QMovie();
-    operationAnimation->setFileName(":/images/loader.gif");
+    operationAnimation->setFileName(":/images/animations/loader.gif");
     downloadigAnimation->setMovie(operationAnimation);
     operationAnimation->start();
 
@@ -363,7 +363,7 @@ void QRelatedStudiesWidget::insertStudyToTree(Study *study)
     m_relatedStudiesTree->setItemWidget(item, DownloadingStatus, statusWidget);
 
     // Posem el botó en un Layout amb Margin 2 per a que els Items del QTreeWidget no estiguin tant junts i el control sigui més llegible
-    QIcon dowloadIcon(QString(":/images/view.png"));
+    QIcon dowloadIcon(QString(":/images/icons/visibility.svg"));
     QPushButton *downloadButton = new QPushButton(dowloadIcon, QString(""));
     QWidget *downloadButtonWidget = new QWidget(m_relatedStudiesTree);
     QVBoxLayout *downloadButtonLayout = new QVBoxLayout(downloadButtonWidget);
@@ -480,13 +480,13 @@ void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID
     {
         case RelatedStudiesManager::Loaded:
             studyInfo->status = Finished;
-            studyInfo->statusIcon->setPixmap(QPixmap(":/images/button_ok.png"));
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-ok-apply.svg"));
             notifyWorkingStudiesChangedIfReady();
             break;
 
         case RelatedStudiesManager::Failed:
             studyInfo->status = Failed;
-            studyInfo->statusIcon->setPixmap(QPixmap(":/images/cancel.png"));
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-cancel.svg"));
             studyInfo->downloadButton->setEnabled(true);
             break;
 
@@ -496,7 +496,7 @@ void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID
 
             QMovie *statusAnimation = new QMovie();
             studyInfo->statusIcon->setMovie(statusAnimation);
-            statusAnimation->setFileName(":/images/loader.gif");
+            statusAnimation->setFileName(":/images/animations/loader.gif");
             statusAnimation->start();
 
             this->increaseNumberOfDownladingStudies();
@@ -528,7 +528,7 @@ void QRelatedStudiesWidget::studyRetrieveFinished(QString studyInstanceUID)
         if (studyInfo->status == Downloading)
         {
             studyInfo->status = Finished;
-            studyInfo->statusIcon->setPixmap(QPixmap(":/images/button_ok.png"));
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-ok-apply.svg"));
 
             this->decreaseNumberOfDownladingStudies();
         }
@@ -546,7 +546,7 @@ void QRelatedStudiesWidget::studyRetrieveFailed(QString studyInstanceUID)
         if (studyInfo->status == Downloading)
         {
             studyInfo->status = Failed;
-            studyInfo->statusIcon->setPixmap(QPixmap(":/images/cancel.png"));
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-cancel.svg"));
             studyInfo->downloadButton->setEnabled(true);
 
             this->decreaseNumberOfDownladingStudies();
@@ -564,7 +564,7 @@ void QRelatedStudiesWidget::studyRetrieveCancelled(QString studyInstanceUID)
         if (studyInfo->status == Downloading || studyInfo->status == Pending)
         {
             studyInfo->status = Cancelled;
-            studyInfo->statusIcon->setPixmap(QPixmap(":/images/cancel.png"));
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-cancel.svg"));
             studyInfo->downloadButton->setEnabled(true);
 
             this->decreaseNumberOfDownladingStudies();

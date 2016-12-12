@@ -55,7 +55,7 @@
         <string>View</string>
        </property>
        <property name="icon" >
-        <iconset resource="../main/main.qrc" >:/images/view.png</iconset>
+        <iconset resource="../main/main.qrc" >:/images/icons/visibility.svg</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -74,7 +74,7 @@
         <string>Import</string>
        </property>
        <property name="icon" >
-        <iconset resource="../main/main.qrc" >:/images/retrieve.png</iconset>
+        <iconset resource="../main/main.qrc" >:/images/icons/document-import.svg</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -106,7 +106,7 @@
         <string>Open DICOMDIR</string>
        </property>
        <property name="icon" >
-        <iconset resource="../main/main.qrc" >:/images/openDICOMDIR.png</iconset>
+        <iconset resource="../main/main.qrc" >:/images/icons/document-open-dicomdir.svg</iconset>
        </property>
        <property name="iconSize" >
         <size>

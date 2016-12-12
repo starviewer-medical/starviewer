@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/createDICOMDIR.png</normaloff>:/images/createDICOMDIR.png</iconset>
+    <normaloff>:/images/icons/folder-new-dicomdir.svg</normaloff>:/images/icons/folder-new-dicomdir.svg</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
@@ -205,7 +205,7 @@
             </property>
             <property name="icon">
              <iconset resource="../main/main.qrc">
-              <normaloff>:/images/cdrom.png</normaloff>:/images/cdrom.png</iconset>
+              <normaloff>:/images/icons/media-optical.svg</normaloff>:/images/icons/media-optical.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -248,7 +248,7 @@
             </property>
             <property name="icon">
              <iconset resource="../main/main.qrc">
-              <normaloff>:/images/dvd.png</normaloff>:/images/dvd.png</iconset>
+              <normaloff>:/images/icons/media-optical-dvd.svg</normaloff>:/images/icons/media-optical-dvd.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -331,7 +331,7 @@
             </property>
             <property name="icon">
              <iconset resource="../main/main.qrc">
-              <normaloff>:/images/usbpendrive.png</normaloff>:/images/usbpendrive.png</iconset>
+              <normaloff>:/images/icons/drive-removable-media.svg</normaloff>:/images/icons/drive-removable-media.svg</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -486,7 +486,7 @@
               </property>
               <property name="icon">
                <iconset resource="../main/main.qrc">
-                <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
+                <normaloff>:/images/icons/document-open.svg</normaloff>:/images/icons/document-open.svg</iconset>
               </property>
               <property name="iconSize">
                <size>

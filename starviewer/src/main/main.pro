@@ -30,7 +30,7 @@ win32{
 RC_FILE = starviewer.rc
 }
 macx {
-    ICON = images/starviewer.icns
+    ICON = images/logo/logo.icns
 }
 
 # Definim que per sistemes de compilació windows basats en visual studio 

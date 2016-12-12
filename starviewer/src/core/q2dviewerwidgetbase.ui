@@ -83,7 +83,7 @@
         </property>
         <property name="icon">
          <iconset resource="../main/main.qrc">
-          <normaloff>:/images/grid.png</normaloff>:/images/grid.png</iconset>
+          <normaloff>:/images/icons/view-list-icons.svg</normaloff>:/images/icons/view-list-icons.svg</iconset>
         </property>
        </widget>
       </item>
@@ -97,7 +97,7 @@
         </property>
         <property name="icon">
          <iconset resource="../main/main.qrc">
-          <normaloff>:/images/fusionbalance.png</normaloff>:/images/fusionbalance.png</iconset>
+          <normaloff>:/images/icons/crossfade.svg</normaloff>:/images/icons/crossfade.svg</iconset>
         </property>
         <property name="popupMode">
          <enum>QToolButton::InstantPopup</enum>

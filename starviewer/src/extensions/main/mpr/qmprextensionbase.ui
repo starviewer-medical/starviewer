@@ -53,7 +53,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/slicing.png</normaloff>:/images/slicing.png</iconset>
+         <normaloff>:/images/icons/layer-previous.svg</normaloff>:/images/icons/layer-previous.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -79,7 +79,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/zoom.png</normaloff>:/images/zoom.png</iconset>
+         <normaloff>:/images/icons/edit-find.svg</normaloff>:/images/icons/edit-find.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -105,7 +105,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/polyline.png</normaloff>:/images/polyline.png</iconset>
+         <normaloff>:/images/icons/draw-polyline.svg</normaloff>:/images/icons/draw-polyline.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -127,8 +127,8 @@
         <string>Angle</string>
        </property>
        <property name="icon">
-        <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/distance.png</normaloff>:/images/distance.png</iconset>
+        <iconset>
+         <normaloff>:/images/icons/tool-measure.svg</normaloff>:/images/icons/tool-measure.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -154,7 +154,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/angle.png</normaloff>:/images/angle.png</iconset>
+         <normaloff>:/images/icons/measure-angle.svg</normaloff>:/images/icons/measure-angle.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -180,7 +180,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/eraser2.png</normaloff>:/images/eraser2.png</iconset>
+         <normaloff>:/images/icons/draw-eraser.svg</normaloff>:/images/icons/draw-eraser.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -203,7 +203,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/photo.png</normaloff>:/images/photo.png</iconset>
+         <normaloff>:/images/icons/camera-photo.svg</normaloff>:/images/icons/camera-photo.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -223,7 +223,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/store.png</normaloff>:/images/store.png</iconset>
+         <normaloff>:/images/icons/upload-media.svg</normaloff>:/images/icons/upload-media.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -243,7 +243,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/showViewersInformation.png</normaloff>:/images/showViewersInformation.png</iconset>
+         <normaloff>:/images/icons/annotations.svg</normaloff>:/images/icons/annotations.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -269,7 +269,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/voxelInformation.png</normaloff>:/images/voxelInformation.png</iconset>
+         <normaloff>:/images/icons/edit-select.svg</normaloff>:/images/icons/edit-select.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -547,7 +547,6 @@ Series with multiple phases so it won't work properly.</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>

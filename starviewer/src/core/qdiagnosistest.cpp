@@ -43,7 +43,7 @@ QDiagnosisTest::QDiagnosisTest(QWidget *parent)
     createConnections();
 
     QMovie *operationAnimation = new QMovie(this);
-    operationAnimation->setFileName(":/images/loader.gif");
+    operationAnimation->setFileName(":/images/animations/loader.gif");
     m_animationInProgressLabel->setMovie(operationAnimation);
     operationAnimation->start();
 

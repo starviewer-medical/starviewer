@@ -206,13 +206,7 @@
             </property>
             <property name="icon">
              <iconset resource="../../../main/main.qrc">
-              <normaloff>:/images/printerPreferences.png</normaloff>:/images/printerPreferences.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>32</width>
-              <height>32</height>
-             </size>
+              <normaloff>:/images/icons/configure.svg</normaloff>:/images/icons/configure.svg</iconset>
             </property>
             <property name="popupMode">
              <enum>QToolButton::DelayedPopup</enum>
@@ -356,7 +350,7 @@ border: 1px solid  #680000;
               <string/>
              </property>
              <property name="pixmap">
-              <pixmap resource="../../../main/main.qrc">:/images/small-warning.png</pixmap>
+              <pixmap resource="../../../main/main.qrc">:/images/icons/emblem-warning.svg</pixmap>
              </property>
             </widget>
            </item>
@@ -632,7 +626,7 @@ border: 1px solid  #680000;
             </property>
             <property name="icon">
              <iconset resource="../../../main/main.qrc">
-              <normaloff>:/images/addNewPrinter.png</normaloff>:/images/addNewPrinter.png</iconset>
+              <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
             </property>
            </widget>
           </item>
@@ -661,6 +655,10 @@ border: 1px solid  #680000;
             <property name="text">
              <string>Remove selection</string>
             </property>
+            <property name="icon">
+             <iconset resource="../../../main/main.qrc">
+              <normaloff>:/images/icons/edit-delete.svg</normaloff>:/images/icons/edit-delete.svg</iconset>
+            </property>
            </widget>
           </item>
           <item>
@@ -670,7 +668,7 @@ border: 1px solid  #680000;
             </property>
             <property name="icon">
              <iconset resource="../../../main/main.qrc">
-              <normaloff>:/images/removePrinter.png</normaloff>:/images/removePrinter.png</iconset>
+              <normaloff>:/images/icons/edit-clear.svg</normaloff>:/images/icons/edit-clear.svg</iconset>
             </property>
            </widget>
           </item>
@@ -771,7 +769,7 @@ border: 1px solid  #680000;
                 <string/>
                </property>
                <property name="pixmap">
-                <pixmap resource="../../../main/main.qrc">:/images/apply.png</pixmap>
+                <pixmap resource="../../../main/main.qrc">:/images/icons/dialog-ok-apply.svg</pixmap>
                </property>
               </widget>
              </item>
@@ -814,6 +812,10 @@ border: 1px solid  #680000;
            <widget class="QPushButton" name="m_printButton">
             <property name="text">
              <string>Print</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../../main/main.qrc">
+              <normaloff>:/images/icons/document-print.svg</normaloff>:/images/icons/document-print.svg</iconset>
             </property>
            </widget>
           </item>
@@ -880,14 +882,14 @@ border: 1px solid  #680000;
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>udg::Q2DViewer</class>
-   <extends>QWidget</extends>
-   <header>q2dviewer.h</header>
-  </customwidget>
-  <customwidget>
    <class>udg::QDicomPrinterBasicSettingsWidget</class>
    <extends>QWidget</extends>
    <header>qdicomprinterbasicsettingswidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::Q2DViewer</class>
+   <extends>QWidget</extends>
+   <header>q2dviewer.h</header>
   </customwidget>
   <customwidget>
    <class>udg::QThumbnailsPreviewWidget</class>
@@ -901,7 +903,6 @@ border: 1px solid  #680000;
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>

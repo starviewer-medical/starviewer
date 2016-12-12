@@ -35,7 +35,7 @@
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
-         <normaloff>:/images/play.png</normaloff>:/images/play.png</iconset>
+         <normaloff>:/images/icons/media-playback-start.svg</normaloff>:/images/icons/media-playback-start.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -66,7 +66,7 @@
          </property>
          <property name="icon">
           <iconset resource="../main/main.qrc">
-           <normaloff>:/images/repeat.png</normaloff>:/images/repeat.png</iconset>
+           <normaloff>:/images/icons/media-playlist-repeat.svg</normaloff>:/images/icons/media-playlist-repeat.svg</iconset>
          </property>
         </widget>
        </item>
@@ -80,7 +80,7 @@
          </property>
          <property name="icon">
           <iconset resource="../main/main.qrc">
-           <normaloff>:/images/boomerang.png</normaloff>:/images/boomerang.png</iconset>
+           <normaloff>:/images/icons/media-playlist-boomerang.svg</normaloff>:/images/icons/media-playlist-boomerang.svg</iconset>
          </property>
         </widget>
        </item>

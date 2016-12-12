@@ -69,7 +69,7 @@ void TranslateTool::doTranslate()
 {
     if (m_state == Translating)
     {
-        m_viewer->setCursor(QCursor(QPixmap(":/images/move.png")));
+        m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/pan.svg")));
         this->pan();
     }
 }

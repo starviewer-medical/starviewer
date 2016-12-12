@@ -116,7 +116,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_showViewersTextualInformationAction->setText(tr("Text"));
     m_showViewersTextualInformationAction->setToolTip(tr("Show/Hide viewer's textual information"));
     m_showViewersTextualInformationAction->setStatusTip(m_showViewersTextualInformationAction->toolTip());
-    m_showViewersTextualInformationAction->setIcon(QIcon(":/images/showViewersInformation.png"));
+    m_showViewersTextualInformationAction->setIcon(QIcon(":/images/icons/annotations.svg"));
     connect(m_showViewersTextualInformationAction, SIGNAL(toggled(bool)), SLOT(showViewersTextualInformation(bool)));
     
     m_showOverlaysAction = new QAction(this);
@@ -125,7 +125,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_showOverlaysAction->setText(tr("Overlays"));
     m_showOverlaysAction->setToolTip(tr("Show/Hide image overlays"));
     m_showOverlaysAction->setStatusTip(m_showOverlaysAction->toolTip());
-    m_showOverlaysAction->setIcon(QIcon(":/images/showOverlays.png"));
+    m_showOverlaysAction->setIcon(QIcon(":/images/icons/overlays.svg"));
     connect(m_showOverlaysAction, SIGNAL(toggled(bool)), SLOT(showImageOverlays(bool)));
 
     m_showDisplayShuttersAction = new QAction(this);
@@ -134,7 +134,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_showDisplayShuttersAction->setText(tr("Shutters"));
     m_showDisplayShuttersAction->setToolTip(tr("Show/Hide shutter layer"));
     m_showDisplayShuttersAction->setStatusTip(m_showDisplayShuttersAction->toolTip());
-    m_showDisplayShuttersAction->setIcon(QIcon(":/images/showDisplayShutters.png"));
+    m_showDisplayShuttersAction->setIcon(QIcon(":/images/icons/shutter.svg"));
     connect(m_showDisplayShuttersAction, SIGNAL(toggled(bool)), SLOT(showDisplayShutters(bool)));
     
     m_viewerLayersToolButton->setDefaultAction(m_showViewersTextualInformationAction);
@@ -530,7 +530,7 @@ void Q2DViewerExtension::initializeTools()
     m_synchronizeAllAction = new QAction(this);
     m_synchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SynchronizeAllViewers));
     m_synchronizeAllAction->setToolTip(tr("Activate manual synchronization in all viewers (%1)").arg(m_synchronizeAllAction->shortcut().toString()));
-    m_synchronizeAllAction->setIcon(QIcon(":/images/linkAll.png"));
+    m_synchronizeAllAction->setIcon(QIcon(":/images/icons/insert-link.svg"));
     m_synchronizeAllAction->setText(tr("All"));
 
     m_synchronizeAllViewersButton->setIcon(m_synchronizeAllAction->icon());
@@ -543,7 +543,7 @@ void Q2DViewerExtension::initializeTools()
     m_desynchronizeAllAction = new QAction(this);
     m_desynchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::DesynchronizeAllViewers));
     m_desynchronizeAllAction->setToolTip(tr("Deactivate manual synchronization in all viewers (%1)").arg(m_desynchronizeAllAction->shortcut().toString()));
-    m_desynchronizeAllAction->setIcon(QIcon(":/images/unlinkAll.png"));
+    m_desynchronizeAllAction->setIcon(QIcon(":/images/icons/remove-link.svg"));
     m_desynchronizeAllAction->setText(tr("None"));
 
     m_desynchronizeAllViewersButton->setIcon(m_desynchronizeAllAction->icon());
@@ -559,7 +559,7 @@ void Q2DViewerExtension::initializeTools()
     m_propagationAction = new QAction(this);
     m_propagationAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::Propagation));
     m_propagationAction->setToolTip(tr("Propagate properties between viewers (%1)").arg(m_propagationAction->shortcut().toString()));
-    m_propagationAction->setIcon(QIcon(":/images/propagate.png"));
+    m_propagationAction->setIcon(QIcon(":/images/icons/feed-subscribe.svg"));
     m_propagationAction->setText(tr("Propagate"));
     m_propagationAction->setCheckable(true);
     m_propagateToolButton->setDefaultAction(m_propagationAction);
@@ -924,12 +924,12 @@ void Q2DViewerExtension::disableSynchronization()
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::changeToRelatedStudiesDownloadingIcon()
 {
-    m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/cal_downloading.png")));
+    m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/icons/view-calendar-download.svg")));
 }
 
 void Q2DViewerExtension::changeToRelatedStudiesDefaultIcon()
 {
-    m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/cal.png")));
+    m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/icons/view-calendar.svg")));
 }
 
 void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)

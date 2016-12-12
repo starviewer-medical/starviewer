@@ -135,7 +135,7 @@ void QueryScreen::initialize()
     m_qInputOutputLocalDatabaseWidget->setQCreateDicomdir(m_qcreateDicomdir);
 
     QMovie *operationAnimation = new QMovie(this);
-    operationAnimation->setFileName(":/images/loader.gif");
+    operationAnimation->setFileName(":/images/animations/loader.gif");
     m_operationAnimation->setMovie(operationAnimation);
     operationAnimation->start();
 

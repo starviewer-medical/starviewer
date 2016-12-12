@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/pacsQuery.png</normaloff>:/images/pacsQuery.png</iconset>
+    <normaloff>:/images/icons/folder-dicom.svg</normaloff>:/images/icons/folder-dicom.svg</iconset>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
@@ -125,13 +125,7 @@
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
-         <normaloff>:/images/search.png</normaloff>:/images/search.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
+         <normaloff>:/images/icons/edit-find-replace.svg</normaloff>:/images/icons/edit-find-replace.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -164,13 +158,7 @@
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
-         <normaloff>:/images/clear.png</normaloff>:/images/clear.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
+         <normaloff>:/images/icons/edit-clear.svg</normaloff>:/images/icons/edit-clear.svg</iconset>
        </property>
        <property name="toolButtonStyle">
         <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -187,13 +175,7 @@
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
-         <normaloff>:/images/advancedSearch.png</normaloff>:/images/advancedSearch.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
+         <normaloff>:/images/icons/edit-find.svg</normaloff>:/images/icons/edit-find.svg</iconset>
        </property>
        <property name="default">
         <bool>true</bool>
@@ -213,22 +195,13 @@
      <property name="tabPosition">
       <enum>QTabWidget::North</enum>
      </property>
-     <property name="tabShape">
-      <enum>QTabWidget::Rounded</enum>
-     </property>
      <property name="currentIndex">
-      <number>0</number>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>16</width>
-       <height>16</height>
-      </size>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="m_tabCache">
       <attribute name="icon">
        <iconset resource="../main/main.qrc">
-        <normaloff>:/images/database.png</normaloff>:/images/database.png</iconset>
+        <normaloff>:/images/icons/database-local.svg</normaloff>:/images/icons/database-local.svg</iconset>
       </attribute>
       <attribute name="title">
        <string>Local Database</string>
@@ -249,7 +222,7 @@
      <widget class="QWidget" name="m_tabPacs">
       <attribute name="icon">
        <iconset resource="../main/main.qrc">
-        <normaloff>:/images/pacsServer.png</normaloff>:/images/pacsServer.png</iconset>
+        <normaloff>:/images/icons/document-open-remote.svg</normaloff>:/images/icons/document-open-remote.svg</iconset>
       </attribute>
       <attribute name="title">
        <string>PACS Server</string>
@@ -269,8 +242,8 @@
      </widget>
      <widget class="QWidget" name="m_tabDicomdir">
       <attribute name="icon">
-       <iconset resource="../main/main.qrc">
-        <normaloff>:/images/openDICOMDIR.png</normaloff>:/images/openDICOMDIR.png</iconset>
+       <iconset>
+        <normaloff>:/images/icons/document-open-dicomdir.svg</normaloff>:/images/icons/document-open-dicomdir.svg</iconset>
       </attribute>
       <attribute name="title">
        <string>DICOMDIR</string>
@@ -314,13 +287,7 @@
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
-         <normaloff>:/images/operationList.png</normaloff>:/images/operationList.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
+         <normaloff>:/images/icons/download-later.svg</normaloff>:/images/icons/download-later.svg</iconset>
        </property>
        <property name="toolButtonStyle">
         <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -383,13 +350,7 @@
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
-         <normaloff>:/images/pacsNodes.png</normaloff>:/images/pacsNodes.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
+         <normaloff>:/images/icons/document-open-remote.svg</normaloff>:/images/icons/document-open-remote.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -409,13 +370,7 @@
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
-         <normaloff>:/images/createDICOMDIR.png</normaloff>:/images/createDICOMDIR.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
+         <normaloff>:/images/icons/folder-new-dicomdir.svg</normaloff>:/images/icons/folder-new-dicomdir.svg</iconset>
        </property>
        <property name="toolButtonStyle">
         <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -460,6 +415,7 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
  <connections/>

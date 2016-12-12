@@ -92,7 +92,7 @@
              </property>
              <property name="icon">
               <iconset resource="../../../main/main.qrc">
-               <normaloff>:/images/grid.png</normaloff>:/images/grid.png</iconset>
+               <normaloff>:/images/icons/view-list-icons.svg</normaloff>:/images/icons/view-list-icons.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -127,7 +127,7 @@
              </property>
              <property name="icon">
               <iconset resource="../../../main/main.qrc">
-               <normaloff>:/images/down.png</normaloff>:/images/down.png</iconset>
+               <normaloff>:/images/icons/view-list-details.svg</normaloff>:/images/icons/view-list-details.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -170,7 +170,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/cal.png</normaloff>:/images/cal.png</iconset>
+           <normaloff>:/images/icons/view-calendar.svg</normaloff>:/images/icons/view-calendar.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -637,7 +637,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/store.png</normaloff>:/images/store.png</iconset>
+           <normaloff>:/images/icons/upload-media.svg</normaloff>:/images/icons/upload-media.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -758,7 +758,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/dicomDump.png</normaloff>:/images/dicomDump.png</iconset>
+           <normaloff>:/images/icons/dicom-tags.svg</normaloff>:/images/icons/dicom-tags.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -817,7 +817,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/voxelInformation.png</normaloff>:/images/voxelInformation.png</iconset>
+           <normaloff>:/images/icons/edit-select.svg</normaloff>:/images/icons/edit-select.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -926,7 +926,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/propagate.png</normaloff>:/images/propagate.png</iconset>
+           <normaloff>:/images/icons/feed-subscribe.svg</normaloff>:/images/icons/feed-subscribe.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -952,7 +952,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/synchronize.png</normaloff>:/images/synchronize.png</iconset>
+           <normaloff>:/images/icons/emblem-symbolic-link.svg</normaloff>:/images/icons/emblem-symbolic-link.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -989,7 +989,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../../main/main.qrc">
-             <normaloff>:/images/linkAll.png</normaloff>:/images/linkAll.png</iconset>
+             <normaloff>:/images/icons/insert-link.svg</normaloff>:/images/icons/insert-link.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1018,7 +1018,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../../main/main.qrc">
-             <normaloff>:/images/unlinkAll.png</normaloff>:/images/unlinkAll.png</iconset>
+             <normaloff>:/images/icons/remove-link.svg</normaloff>:/images/icons/remove-link.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1097,7 +1097,6 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>

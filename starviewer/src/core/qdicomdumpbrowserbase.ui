@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/dicomDump.png</normaloff>:/images/dicomDump.png</iconset>
+    <normaloff>:/images/icons/dicom-tags.svg</normaloff>:/images/icons/dicom-tags.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

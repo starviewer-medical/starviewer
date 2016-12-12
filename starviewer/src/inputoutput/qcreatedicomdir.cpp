@@ -112,7 +112,7 @@ void QCreateDicomdir::createActions()
     m_cdromAction = new QAction(0);
     m_cdromAction->setText(tr("CD-ROM"));
     m_cdromAction->setStatusTip(tr("Record DICOMDIR on a CD-ROM"));
-    m_cdromAction->setIcon(QIcon(":/images/cdrom.png"));
+    m_cdromAction->setIcon(QIcon(":/images/icons/media-optical.svg"));
     m_cdromAction->setCheckable(true);
     m_signalMapper->setMapping(m_cdromAction, CreateDicomdir::CdRom);
     connect(m_cdromAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
@@ -121,7 +121,7 @@ void QCreateDicomdir::createActions()
     m_dvdromAction = new QAction(0);
     m_dvdromAction->setText(tr("DVD-ROM"));
     m_dvdromAction->setStatusTip(tr("Record DICOMDIR on a DVD-ROM"));
-    m_dvdromAction->setIcon(QIcon(":/images/dvd.png"));
+    m_dvdromAction->setIcon(QIcon(":/images/icons/media-optical-dvd.svg"));
     m_dvdromAction->setCheckable(true);
     m_signalMapper->setMapping(m_dvdromAction, CreateDicomdir::DvdRom);
     connect(m_dvdromAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
@@ -130,7 +130,7 @@ void QCreateDicomdir::createActions()
     m_hardDiskAction = new QAction(0);
     m_hardDiskAction->setText(tr("Hard Disk"));
     m_hardDiskAction->setStatusTip(tr("Record DICOMDIR on the Hard Disk"));
-    m_hardDiskAction->setIcon(QIcon(":/images/harddrive.png"));
+    m_hardDiskAction->setIcon(QIcon(":/images/icons/drive-harddisk.svg"));
     m_hardDiskAction->setCheckable(true);
     m_signalMapper->setMapping(m_hardDiskAction, CreateDicomdir::HardDisk);
     connect(m_hardDiskAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
@@ -139,7 +139,7 @@ void QCreateDicomdir::createActions()
     m_pendriveAction = new QAction(0);
     m_pendriveAction->setText(tr("USB Flash Drive"));
     m_pendriveAction->setStatusTip(tr("Record DICOMDIR on a USB Flash Drive"));
-    m_pendriveAction->setIcon(QIcon(":/images/usbpendrive.png"));
+    m_pendriveAction->setIcon(QIcon(":/images/icons/drive-removable-media.svg"));
     m_pendriveAction->setCheckable(true);
     m_signalMapper->setMapping(m_pendriveAction, CreateDicomdir::UsbPen);
     connect(m_pendriveAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));

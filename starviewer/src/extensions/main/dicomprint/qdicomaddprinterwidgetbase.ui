@@ -16,6 +16,10 @@
   <property name="windowTitle">
    <string>Add new DICOM printer</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../../main/main.qrc">
+    <normaloff>:/images/icons/printer.svg</normaloff>:/images/icons/printer.svg</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="m_printerSettingsGroupBox">
@@ -144,12 +148,20 @@
        <property name="text">
         <string>Cancel</string>
        </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="m_addButton">
        <property name="text">
         <string>Add</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
        </property>
       </widget>
      </item>
@@ -162,6 +174,7 @@
   <tabstop>m_addButton</tabstop>
  </tabstops>
  <resources>
+  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>
  <connections/>
