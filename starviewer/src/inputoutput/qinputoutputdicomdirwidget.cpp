@@ -83,11 +83,11 @@ void QInputOutputDicomdirWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(view()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/icons/visibility.svg"), tr("&View"), this, SLOT(view()));
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(view()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Import"), this, SLOT(retrieveSelectedStudies()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/icons/document-import.svg"), tr("&Import"), this, SLOT(retrieveSelectedStudies()));
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ImportToLocalDatabaseSelectedDICOMDIRStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
 

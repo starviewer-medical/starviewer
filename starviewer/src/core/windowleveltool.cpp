@@ -85,7 +85,7 @@ void WindowLevelTool::startWindowLevel()
 
 void WindowLevelTool::doWindowLevel()
 {
-    m_viewer->setCursor(QCursor(QPixmap(":/images/windowLevel.png")));
+    m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/contrast.svg")));
     m_windowLevelCurrentPosition = m_viewer->getEventPosition();
 
     QSize size = m_viewer->getRenderWindowSize();

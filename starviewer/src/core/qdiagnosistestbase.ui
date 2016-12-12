@@ -105,7 +105,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="../main/main.qrc">:/images/round-warning.png</pixmap>
+           <pixmap resource="../main/main.qrc">:/images/icons/emblem-warning.svg</pixmap>
           </property>
           <property name="scaledContents">
            <bool>false</bool>
@@ -167,7 +167,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="../main/main.qrc">:/images/checkOkBigger.png</pixmap>
+           <pixmap resource="../main/main.qrc">:/images/icons/emblem-success.svg</pixmap>
           </property>
           <property name="scaledContents">
            <bool>true</bool>
@@ -283,7 +283,7 @@
         </property>
         <property name="icon">
          <iconset resource="../main/main.qrc">
-          <normaloff>:/images/filesave.png</normaloff>:/images/filesave.png</iconset>
+          <normaloff>:/images/icons/document-save.svg</normaloff>:/images/icons/document-save.svg</iconset>
         </property>
        </widget>
       </item>

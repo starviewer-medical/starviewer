@@ -40,15 +40,15 @@ QImage ThumbnailCreator::getThumbnail(const Series *series, int resolution)
 
     if (series->getModality() == "KO")
     {
-        thumbnail.load(":/images/kinThumbnail.png");
+        thumbnail.load(":/images/icons/mime-ko.svg");
     }
     else if (series->getModality() == "PR")
     {
-        thumbnail.load(":/images/presentationStateThumbnail.png");
+        thumbnail.load(":/images/icons/mime-ps.svg");
     }
     else if (series->getModality() == "SR" || (!series->hasImages() && series->hasEncapsulatedDocuments()))
     {
-        thumbnail.load(":/images/structuredReportThumbnail.png");
+        thumbnail.load(":/images/icons/mime-sr.svg");
     }
     else
     {

@@ -161,7 +161,7 @@ bool QNotificationPopup::eventFilter(QObject *, QEvent *event)
 void QNotificationPopup::setupOngoingOperationAnimation()
 {
     m_ongoingOperationAnimationMovie = new QMovie(this);
-    m_ongoingOperationAnimationMovie->setFileName(":/images/loader.gif");
+    m_ongoingOperationAnimationMovie->setFileName(":/images/animations/loader.gif");
     m_progressAnimationLabel->setMovie(m_ongoingOperationAnimationMovie);
     
     hideOngoingOperationAnimation();

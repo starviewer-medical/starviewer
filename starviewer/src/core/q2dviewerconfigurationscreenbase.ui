@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/q2dviewerconfiguration.png</normaloff>:/images/q2dviewerconfiguration.png</iconset>
+    <normaloff>:/images/icons/preferences-2dviewer.svg</normaloff>:/images/icons/preferences-2dviewer.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>

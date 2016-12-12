@@ -47,7 +47,7 @@ body
 
 #systemInformation .result .description
 {
-    background-image: url(qrc:///images/info_small.png);
+    background-image: url(qrc:///images/icons/emblem-information.svg);
 }
 
 #systemInformation .info
@@ -57,15 +57,15 @@ body
 
 .succeededTest .result .description
 {
-    background-image: url(qrc:///images/succeeded.png);
+    background-image: url(qrc:///images/icons/emblem-success.svg);
 }
 .errorTest .result .description
 {
-    background-image: url(qrc:///images/error.png);
+    background-image: url(qrc:///images/icons/emblem-error.svg);
 }
 .warningTest .result .description
 {
-    background-image: url(qrc:///images/beta-warning.png);
+    background-image: url(qrc:///images/icons/emblem-warning.svg);
 }
 
 .tests
@@ -145,17 +145,17 @@ body
 
 #succeededButton .buttonDescription
 {
-    background-image: url(qrc:///images/succeeded.png);
+    background-image: url(qrc:///images/icons/emblem-success.svg);
 }
 
 #errorButton .buttonDescription
 {
-    background-image: url(qrc:///images/error.png);
+    background-image: url(qrc:///images/icons/emblem-error.svg);
 }
 
 #warningButton .buttonDescription
 {
-    background-image: url(qrc:///images/beta-warning.png);
+    background-image: url(qrc:///images/icons/emblem-warning.svg);
 }
 
 ul
@@ -178,10 +178,10 @@ li
 
 .error li
 {
-    background-image: url(qrc:///images/error.png);
+    background-image: url(qrc:///images/icons/emblem-error.svg);
 }
 
 .warning li
 {
-    background-image: url(qrc:///images/beta-warning.png);
+    background-image: url(qrc:///images/icons/emblem-warning.svg);
 }

@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/pacsServer.png</normaloff>:/images/pacsServer.png</iconset>
+    <normaloff>:/images/icons/preferences-system-network.svg</normaloff>:/images/icons/preferences-system-network.svg</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
@@ -131,7 +131,16 @@
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -157,7 +166,7 @@
            </property>
            <property name="icon">
             <iconset resource="../main/main.qrc">
-             <normaloff>:/images/removePrinter.png</normaloff>:/images/removePrinter.png</iconset>
+             <normaloff>:/images/icons/edit-delete.svg</normaloff>:/images/icons/edit-delete.svg</iconset>
            </property>
           </widget>
          </item>
@@ -181,7 +190,16 @@
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -400,7 +418,16 @@
          </item>
          <item>
           <layout class="QGridLayout">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <property name="spacing">
@@ -471,7 +498,16 @@
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -576,7 +612,16 @@
        </item>
        <item row="2" column="0">
         <layout class="QGridLayout">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <property name="spacing">
@@ -642,7 +687,16 @@
             <enum>QFrame::Raised</enum>
            </property>
            <layout class="QGridLayout">
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <property name="spacing">
@@ -660,7 +714,7 @@
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap resource="../main/main.qrc">:/images/warningIcon.png</pixmap>
+               <pixmap resource="../main/main.qrc">:/images/icons/emblem-warning.svg</pixmap>
               </property>
              </widget>
             </item>
@@ -857,7 +911,16 @@
          </item>
          <item>
           <layout class="QGridLayout">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <property name="spacing">
@@ -1075,7 +1138,6 @@
   <tabstop>m_textInstitutionPhoneNumber</tabstop>
  </tabstops>
  <resources>
-  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>

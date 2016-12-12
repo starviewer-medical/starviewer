@@ -141,7 +141,7 @@ void TransDifferenceTool::startTransDifference()
 void TransDifferenceTool::doTransDifference()
 {
     // TODO: canviar imatge
-    m_viewer->setCursor(QCursor(QPixmap(":/images/moveDifference.png")));
+    m_viewer->setCursor(QCursor(QPixmap(":/images/icons/transform-move-difference.svg")));
 
     QPoint currentPosition = m_viewer->getEventPosition();
 

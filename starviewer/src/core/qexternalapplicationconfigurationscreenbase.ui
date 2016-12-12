@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/system-run-big.svg</normaloff>:/images/system-run-big.svg</iconset>
+    <normaloff>:/images/icons/system-run-big.svg</normaloff>:/images/icons/system-run-big.svg</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="4" column="1">

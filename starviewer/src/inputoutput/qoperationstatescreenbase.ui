@@ -127,7 +127,7 @@
      </property>
      <property name="icon">
       <iconset resource="../main/main.qrc">
-       <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+       <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
      </property>
     </widget>
    </item>
@@ -176,7 +176,7 @@
      </property>
      <property name="icon">
       <iconset resource="../main/main.qrc">
-       <normaloff>:/images/eraser2.png</normaloff>:/images/eraser2.png</iconset>
+       <normaloff>:/images/icons/draw-eraser.svg</normaloff>:/images/icons/draw-eraser.svg</iconset>
      </property>
     </widget>
    </item>

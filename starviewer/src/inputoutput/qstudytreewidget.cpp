@@ -49,9 +49,9 @@ QStudyTreeWidget::QStudyTreeWidget(QWidget *parent)
     m_studyTreeView->header()->moveSection(Modality + 2, 4);
 
     // Carreguem les imatges que es mostren el QStudyTreeWidget
-    m_openFolder = QIcon(":/images/folderopen.png");
-    m_closeFolder = QIcon(":/images/folderclose.png");
-    m_iconSeries = QIcon(":/images/series.png");
+    m_openFolder = QIcon(":/images/icons/dicom-study.svg");
+    m_closeFolder = QIcon(":/images/icons/dicom-study-closed.svg");
+    m_iconSeries = QIcon(":/images/icons/dicom-series.svg");
 
     createConnections();
 

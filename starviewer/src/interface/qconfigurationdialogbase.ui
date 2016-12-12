@@ -12,7 +12,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/preferences.png</normaloff>:/images/preferences.png</iconset>
+    <normaloff>:/images/icons/configuration.svg</normaloff>:/images/icons/configuration.svg</iconset>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>

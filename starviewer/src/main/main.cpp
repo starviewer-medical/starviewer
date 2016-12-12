@@ -141,9 +141,9 @@ int main(int argc, char *argv[])
 
     QPixmap splashPixmap;
     #ifdef STARVIEWER_LITE
-    splashPixmap.load(":/images/splashLite.png");
+    splashPixmap.load(":/images/splash-lite.svg");
     #else
-    splashPixmap.load(":/images/splash.png");
+    splashPixmap.load(":/images/splash.svg");
     #endif
     // Note: We use Qt::Tool instead of Qt::SplashScreen because in Mac with the latter if a message box was shown it appeared under the splash.
     QLabel splash(0, Qt::Tool|Qt::FramelessWindowHint);
@@ -156,7 +156,6 @@ int main(int argc, char *argv[])
     {
         splash.show();
     }
-
     app.setOrganizationName(udg::OrganizationNameString);
     app.setOrganizationDomain(udg::OrganizationDomainString);
     app.setApplicationName(udg::ApplicationNameString);

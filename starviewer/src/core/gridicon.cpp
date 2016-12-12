@@ -45,7 +45,7 @@ void GridIcon::setIconType(QString iconType)
         iconType = "axial";
     }
 
-    setScaledPixmap(QPixmap(QString(":/images/%1.png").arg(iconType)));
+    setScaledPixmap(QPixmap(QString(":/images/icons/%1.svg").arg(iconType)));
 }
 
 void GridIcon::resizeEvent(QResizeEvent *event)

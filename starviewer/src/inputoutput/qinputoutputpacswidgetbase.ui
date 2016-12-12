@@ -47,7 +47,7 @@
          </property>
          <property name="icon">
           <iconset resource="../main/main.qrc">
-           <normaloff>:/images/retrieveAndView.png</normaloff>:/images/retrieveAndView.png</iconset>
+           <normaloff>:/images/icons/download-view.svg</normaloff>:/images/icons/download-view.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -67,7 +67,7 @@
          </property>
          <property name="icon">
           <iconset resource="../main/main.qrc">
-           <normaloff>:/images/retrieve.png</normaloff>:/images/retrieve.png</iconset>
+           <normaloff>:/images/icons/folder-download.svg</normaloff>:/images/icons/folder-download.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -131,7 +131,7 @@
          </property>
          <property name="icon">
           <iconset resource="../main/main.qrc">
-           <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+           <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
          </property>
          <property name="iconSize">
           <size>

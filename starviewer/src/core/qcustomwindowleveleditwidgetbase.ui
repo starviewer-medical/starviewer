@@ -69,7 +69,7 @@
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
-         <normaloff>:/images/addNewPrinter.png</normaloff>:/images/addNewPrinter.png</iconset>
+         <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
        </property>
       </widget>
      </item>
@@ -92,7 +92,7 @@
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
-         <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+         <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
        </property>
       </widget>
      </item>
