@@ -44,15 +44,15 @@ void GridIcon::setIconType(QString iconType)
     {
         iconType = "axial";
     }
-
-    setScaledPixmap(QPixmap(QString(":/images/icons/%1.svg").arg(iconType)));
+    m_icon = QIcon(QString(":/images/icons/%1.svg").arg(iconType));
+    setScaledPixmap(m_icon);
 }
 
 void GridIcon::resizeEvent(QResizeEvent *event)
 {
     QFrame::resizeEvent(event);
 
-    setScaledPixmap(*m_label->pixmap());
+    setScaledPixmap(m_icon);
 }
 
 void GridIcon::initialize(const QString &iconType)
@@ -63,13 +63,13 @@ void GridIcon::initialize(const QString &iconType)
     m_label = new QLabel(this);
     m_label->setStyleSheet("QLabel { border: 1px solid #909090; }");
     m_label->setAlignment(Qt::AlignCenter);
-    setIconType(iconType);
     gridLayout->addWidget(m_label, 0, 0, 1, 1);
+    setIconType(iconType);
 }
 
-void GridIcon::setScaledPixmap(const QPixmap &pixmap)
+void GridIcon::setScaledPixmap(const QIcon &icon)
 {
-    m_label->setPixmap(pixmap.scaled(this->width() - 2, this->height() - 2, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    m_label->setPixmap(icon.pixmap(this->width() - 2, this->height() - 2));
 }
 
 }

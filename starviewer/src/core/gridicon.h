@@ -16,6 +16,7 @@
 #define UDGGRIDICON_H
 
 #include <QFrame>
+#include <QIcon>
 
 class QLabel;
 
@@ -41,11 +42,13 @@ protected:
 private:
     void initialize(const QString &iconType = QString());
     /// Scales the given pixmap to fit this GridIcon and sets it to the label.
-    void setScaledPixmap(const QPixmap &pixmap);
+    void setScaledPixmap(const QIcon &icon);
 
 private:
     /// Label on posarem la icona
     QLabel *m_label;
+    /// Icon to show
+    QIcon m_icon;
 };
 
 }
