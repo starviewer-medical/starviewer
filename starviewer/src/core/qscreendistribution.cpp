@@ -26,7 +26,6 @@
 
 namespace udg {
 
-const int QScreenDistribution::MaximumScreenNumberPixelSize = 50;
 const int QScreenDistribution::WidgetMargin = 20;
 
 QScreenDistribution::QScreenDistribution(QWidget *parent)
@@ -98,63 +97,83 @@ void QScreenDistribution::paintEvent(QPaintEvent *event)
 {
     m_screens.clear();
 
-    // Calcul de les posicions on s'haurà de pintar les diferents icones de finestres.
+    // Fills the list of rects (screens) to be painted.
     computeSizesAndPositions();
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QPen pen = QPen(Qt::white, 2, Qt::SolidLine);
-    painter.setPen(pen);
 
-    QFont font;
-    font.setPixelSize(m_screenNumberPixelSize);
-    painter.setFont(font);
+    int borderSize = 8;
+    int outerRadius = 5;
+    int circleRadius = m_screenNumberPixelSize * 1.25;
+
+    QBrush borderBrush = QBrush(QColor("#18222a"));
+
+    QLinearGradient screenGradient(0, 0, 0, 1);
+    screenGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+    screenGradient.setColorAt(0, QColor("#545e67"));
+    screenGradient.setColorAt(1, QColor("#333639"));
+    QBrush screenBrush = QBrush(screenGradient);
+
+    QLinearGradient circleGradient(0, 0, 0, 1);
+    circleGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+    circleGradient.setColorAt(0, QColor("#b7bcc0"));
+    circleGradient.setColorAt(1, QColor("#9c9d9f"));
+    QBrush circleBrush = QBrush(circleGradient);
+
+    QLinearGradient circleActiveGradient(0, 0, 0, 1);
+    circleActiveGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+    circleActiveGradient.setColorAt(0, QColor("#2093e6"));
+    circleActiveGradient.setColorAt(1, QColor("#1e6ea5"));
+    QBrush circleActiveBrush = QBrush(circleActiveGradient);
+
+    QPen whitePen = QPen(QColor("#f3f3f3"), 2, Qt::SolidLine);
+    QPen blackPen = QPen(QColor("#2a2c2f"), 2, Qt::SolidLine);
+    painter.setPen(blackPen);
+    QFont numberFont;
+    numberFont.setPixelSize(m_screenNumberPixelSize);
 
     for (int i = 0; i < m_screens.count(); i++)
     {
-        if (m_mouseInScreen == i)
+        // Paint the border
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(borderBrush);
+        painter.drawRoundedRect(m_screens.at(i), outerRadius, outerRadius);
+
+        // Paint the screen
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(screenBrush);
+        QRect screenRect = m_screens.at(i);
+        screenRect = QRect(screenRect.left() + borderSize,
+                           screenRect.top() + borderSize,
+                           screenRect.width() - borderSize*2,
+                           screenRect.height() - borderSize*2);
+        painter.drawRect(screenRect);
+
+        // Paint the circle
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(circleBrush);
+        if (m_mouseInScreen ==  i) // Screen hovered by mouse
         {
-            QLinearGradient linearGradient(0.1, 0.1, 1.2, 1.2);
-            linearGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
-            linearGradient.setColorAt(0, QColor("#777777"));
-            linearGradient.setColorAt(1, QColor("#111111"));
-            painter.setBrush(QBrush(linearGradient));
-            painter.drawRoundedRect(m_screens.at(i), 2, 2);
-
-            QRadialGradient radialGradient(0.9, 2.1, 2.5);
-            radialGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
-            radialGradient.setColorAt(0, QColor(255, 255, 255, 0));
-            radialGradient.setColorAt(0.74, QColor(255, 255, 255, 0));
-            radialGradient.setColorAt(0.75, QColor(255, 255, 255, 40));
-            radialGradient.setColorAt(1, QColor(255, 255, 255, 0));
-            painter.setBrush(QBrush(radialGradient));
-            painter.drawRoundedRect(m_screens.at(i), 2, 2);
+            painter.setPen(whitePen);
+            painter.setBrush(circleActiveBrush);
         }
-        else
+        QRect circleRect = m_screens.at(i);
+        circleRect = QRect(circleRect.left() + circleRect.width() / 2 - circleRadius / 2,
+                           circleRect.top() + circleRect.height() / 2 - circleRadius / 2,
+                           circleRadius,
+                           circleRadius);
+        painter.drawEllipse(circleRect);
+
+        // Paint the number
+        painter.setPen(blackPen);
+        painter.setBrush(Qt::NoBrush);
+        if (m_mouseInScreen ==  i) // Screen hovered by mouse
         {
-            painter.setPen(Qt::NoPen);
-
-            QLinearGradient linearGradient(0.1, 0.1, 1.2, 1.2);
-            linearGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
-            linearGradient.setColorAt(0, QColor("#666666"));
-            linearGradient.setColorAt(1, QColor("#000000"));
-            painter.setBrush(QBrush(linearGradient));
-            painter.drawRoundedRect(m_screens.at(i), 2, 2);
-
-            QRadialGradient radialGradient(0.9, 2.1, 2.5);
-            radialGradient.setCoordinateMode(QGradient::ObjectBoundingMode);
-            radialGradient.setColorAt(0, QColor(255, 255, 255, 0));
-            radialGradient.setColorAt(0.74, QColor(255, 255, 255, 0));
-            radialGradient.setColorAt(0.75, QColor(255, 255, 255, 40));
-            radialGradient.setColorAt(1, QColor(255, 255, 255, 0));
-            painter.setBrush(QBrush(radialGradient));
-            painter.drawRoundedRect(m_screens.at(i), 2, 2);
-
-            painter.setPen(pen);
+            painter.setPen(whitePen);
         }
-
-        // Pintar el numero
+        painter.setFont(numberFont);
         painter.drawText(m_screens.at(i), Qt::AlignCenter, QString::number(i + 1));
     }
     event->accept();
@@ -223,6 +242,7 @@ void QScreenDistribution::computeSizesAndPositions()
 
     // Adaptem les posicións a les posicions de dibuix escalades i centrades
     int minimumScreenHeight = 0;
+    int minimumScreenWidth = 0;
     for (int i = 0; i < m_screens.count(); i++)
     {
         // Requadre
@@ -237,9 +257,14 @@ void QScreenDistribution::computeSizesAndPositions()
         {
            minimumScreenHeight = screen.height();
         }
+        if (i == 0 || screen.height() < minimumScreenWidth)
+        {
+            minimumScreenWidth = screen.width();
+        }
     }
-
-    m_screenNumberPixelSize = (minimumScreenHeight - 15 < MaximumScreenNumberPixelSize)? minimumScreenHeight - 15: MaximumScreenNumberPixelSize;
+    //The number must be half of the screen smallest dimension (width or height)
+    m_screenNumberPixelSize = minimumScreenHeight < minimumScreenWidth ?  minimumScreenHeight : minimumScreenWidth;
+    m_screenNumberPixelSize /= 2;
 }
 
 } // End namespace udg
