@@ -186,5 +186,6 @@
         <file>images/animations/loader.gif</file>
         <file>images/icons/edit-delete.svg</file>
         <file>images/icons/preferences-system-network.svg</file>
+        <file>images/icons/mime-unknown.svg</file>
     </qresource>
 </RCC>
