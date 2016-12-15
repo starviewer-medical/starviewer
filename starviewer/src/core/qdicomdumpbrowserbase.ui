@@ -39,7 +39,7 @@
    <item>
     <widget class="QTabWidget" name="m_dumpTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="m_defaultTagsTab">
       <attribute name="title">

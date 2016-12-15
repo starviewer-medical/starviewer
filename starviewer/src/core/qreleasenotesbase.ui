@@ -81,6 +81,10 @@
         <property name="text">
          <string>Close</string>
         </property>
+        <property name="icon">
+         <iconset resource="../main/main.qrc">
+          <normaloff>:/images/icons/window-close.svg</normaloff>:/images/icons/window-close.svg</iconset>
+        </property>
        </widget>
       </item>
      </layout>
@@ -96,6 +100,9 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../main/main.qrc"/>
+  <include location="../main/main.qrc"/>
+ </resources>
  <connections/>
 </ui>

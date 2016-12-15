@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>541</width>
-    <height>135</height>
+    <height>150</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -144,17 +144,6 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="m_cancelButton">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="m_addButton">
        <property name="text">
         <string>Add</string>
@@ -165,13 +154,23 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="m_cancelButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
  </widget>
  <tabstops>
   <tabstop>m_cancelButton</tabstop>
-  <tabstop>m_addButton</tabstop>
  </tabstops>
  <resources>
   <include location="../../../main/main.qrc"/>

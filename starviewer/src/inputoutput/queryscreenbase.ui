@@ -119,9 +119,9 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QToolButton" name="m_advancedSearchToolButton">
+      <widget class="QPushButton" name="m_advancedSearchPushButton">
        <property name="text">
-        <string>Advanced Search &gt;&gt;</string>
+        <string>Advanced search &gt;&gt;</string>
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
@@ -130,11 +130,19 @@
        <property name="checkable">
         <bool>true</bool>
        </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_showPACSNodesPushButton">
+       <property name="text">
+        <string>PACS nodes &gt;&gt;</string>
        </property>
-       <property name="autoRaise">
-        <bool>false</bool>
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/icons/document-open-remote.svg</normaloff>:/images/icons/document-open-remote.svg</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -152,19 +160,13 @@
       </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="m_clearToolButton">
+      <widget class="QPushButton" name="m_clearPushButton">
        <property name="text">
-        <string>Clear Search Fields</string>
+        <string>Clear</string>
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
          <normaloff>:/images/icons/edit-clear.svg</normaloff>:/images/icons/edit-clear.svg</iconset>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-       <property name="autoRaise">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -196,7 +198,7 @@
       <enum>QTabWidget::North</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="m_tabCache">
       <attribute name="icon">
@@ -242,7 +244,7 @@
      </widget>
      <widget class="QWidget" name="m_tabDicomdir">
       <attribute name="icon">
-       <iconset>
+       <iconset resource="../main/main.qrc">
         <normaloff>:/images/icons/document-open-dicomdir.svg</normaloff>:/images/icons/document-open-dicomdir.svg</iconset>
       </attribute>
       <attribute name="title">
@@ -264,10 +266,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -281,7 +280,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QToolButton" name="m_operationListToolButton">
+      <widget class="QPushButton" name="m_operationListPushButton">
        <property name="text">
         <string>Operation List</string>
        </property>
@@ -289,46 +288,21 @@
         <iconset resource="../main/main.qrc">
          <normaloff>:/images/icons/download-later.svg</normaloff>:/images/icons/download-later.svg</iconset>
        </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-       <property name="autoRaise">
-        <bool>false</bool>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_labelOperation">
+       <property name="text">
+        <string>Operation in progress</string>
        </property>
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout">
-       <property name="spacing">
-        <number>6</number>
+      <widget class="QLabel" name="m_operationAnimation">
+       <property name="text">
+        <string>TextLabel</string>
        </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="m_labelOperation">
-         <property name="text">
-          <string>Operation in progress</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="m_operationAnimation">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      </widget>
      </item>
      <item>
       <spacer>
@@ -337,43 +311,20 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>27</width>
-         <height>42</height>
+         <width>13</width>
+         <height>13</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="m_showPACSNodesToolButton">
-       <property name="text">
-        <string>PACS Nodes</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../main/main.qrc">
-         <normaloff>:/images/icons/document-open-remote.svg</normaloff>:/images/icons/document-open-remote.svg</iconset>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-       <property name="autoRaise">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="m_createDICOMDIRToolButton">
+      <widget class="QPushButton" name="m_createDICOMDIRPushButton">
        <property name="text">
         <string>Create DICOMDIR</string>
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
          <normaloff>:/images/icons/folder-new-dicomdir.svg</normaloff>:/images/icons/folder-new-dicomdir.svg</iconset>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
        </property>
       </widget>
      </item>
@@ -384,6 +335,12 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
+   <class>udg::QPacsList</class>
+   <extends>QWidget</extends>
+   <header>qpacslist.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>udg::QAdvancedSearchWidget</class>
    <extends>QWidget</extends>
    <header>qadvancedsearchwidget.h</header>
@@ -392,11 +349,6 @@
    <class>udg::QBasicSearchWidget</class>
    <extends>QWidget</extends>
    <header>qbasicsearchwidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>udg::QPacsList</class>
-   <extends>QWidget</extends>
-   <header>qpacslist.h</header>
   </customwidget>
   <customwidget>
    <class>udg::QInputOutputDicomdirWidget</class>
