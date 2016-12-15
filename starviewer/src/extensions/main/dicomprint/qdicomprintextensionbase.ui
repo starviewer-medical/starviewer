@@ -322,10 +322,9 @@
         <item>
          <widget class="QFrame" name="m_noSupportedSeriesFrame">
           <property name="styleSheet">
-           <string>#m_noSupportedSeriesFrame {
-background-color: #dc8a8a;
+           <string notr="true">#m_noSupportedSeriesFrame {
+background-color: #da4453;
 border-radius: 4px;
-border: 1px solid  #680000;
 }</string>
           </property>
           <property name="frameShape">
@@ -343,14 +342,15 @@ border: 1px solid  #680000;
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>22</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="styleSheet">
-              <string>margin-right: 5px;</string>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap resource="../../../main/main.qrc">:/images/icons/emblem-warning.svg</pixmap>
+              <string notr="true">image: url(:/images/icons/emblem-warning.svg);
+margin-right: 5px;</string>
              </property>
             </widget>
            </item>
@@ -651,6 +651,36 @@ border: 1px solid  #680000;
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
+           <widget class="QLabel" name="label_32">
+            <property name="text">
+             <string>Pages to print:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="m_pagesToPrintLabel">
+            <property name="text">
+             <string>2</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
            <widget class="QPushButton" name="m_removeSelectedDICOMImagesSelectionToPrintButton">
             <property name="text">
              <string>Remove selection</string>
@@ -672,36 +702,6 @@ border: 1px solid  #680000;
             </property>
            </widget>
           </item>
-          <item>
-           <spacer name="horizontalSpacer_6">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_32">
-            <property name="text">
-             <string>Pages to print:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="m_pagesToPrintLabel">
-            <property name="text">
-             <string>2</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
@@ -719,19 +719,6 @@ border: 1px solid  #680000;
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_11">
-          <item>
-           <spacer name="horizontalSpacer_10">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item>
            <widget class="QFrame" name="m_sentToPrintSuccessfullyFrame">
             <property name="frameShape">
@@ -765,11 +752,15 @@ border: 1px solid  #680000;
              </item>
              <item row="0" column="0">
               <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string/>
+               <property name="minimumSize">
+                <size>
+                 <width>22</width>
+                 <height>0</height>
+                </size>
                </property>
-               <property name="pixmap">
-                <pixmap resource="../../../main/main.qrc">:/images/icons/dialog-ok-apply.svg</pixmap>
+               <property name="styleSheet">
+                <string notr="true">image: url(:/images/icons/emblem-success.svg);
+margin-right: 5px;</string>
                </property>
               </widget>
              </item>
@@ -882,14 +873,14 @@ border: 1px solid  #680000;
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>udg::QDicomPrinterBasicSettingsWidget</class>
-   <extends>QWidget</extends>
-   <header>qdicomprinterbasicsettingswidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>udg::Q2DViewer</class>
    <extends>QWidget</extends>
    <header>q2dviewer.h</header>
+  </customwidget>
+  <customwidget>
+   <class>udg::QDicomPrinterBasicSettingsWidget</class>
+   <extends>QWidget</extends>
+   <header>qdicomprinterbasicsettingswidget.h</header>
   </customwidget>
   <customwidget>
    <class>udg::QThumbnailsPreviewWidget</class>

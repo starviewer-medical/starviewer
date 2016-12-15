@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>905</width>
+    <width>917</width>
     <height>632</height>
    </rect>
   </property>
@@ -225,12 +225,20 @@ background-color: red;</string>
        <property name="text">
         <string>Quit Starviewer</string>
        </property>
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/icons/application-exit.svg</normaloff>:/images/icons/application-exit.svg</iconset>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="m_restartPushButton">
        <property name="text">
         <string>Restart Starviewer</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/logo/logo.ico</normaloff>:/images/logo/logo.ico</iconset>
        </property>
        <property name="default">
         <bool>true</bool>
@@ -241,6 +249,10 @@ background-color: red;</string>
       <widget class="QPushButton" name="m_abortSendPushButton">
        <property name="text">
         <string>Cancel</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
        </property>
       </widget>
      </item>

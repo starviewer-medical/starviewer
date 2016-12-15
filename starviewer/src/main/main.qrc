@@ -149,6 +149,8 @@
         <file>images/icons/mime-pdf.svg</file>
         <file>images/icons/mime-ps.svg</file>
         <file>images/icons/mime-sr.svg</file>
+        <file>images/icons/package.svg</file>
+        <file>images/icons/process-stop.svg</file>
         <file>images/icons/ris.svg</file>
         <file>images/icons/emblem-error.svg</file>
         <file>images/icons/emblem-information.svg</file>
@@ -156,6 +158,7 @@
         <file>images/icons/emblem-warning.svg</file>
         <file>images/icons/database-local.svg</file>
         <file>images/icons/document-import.svg</file>
+        <file>images/icons/document-export.svg</file>
         <file>images/icons/document-open-dicomdir.svg</file>
         <file>images/icons/document-open-remote.svg</file>
         <file>images/icons/download-view.svg</file>
@@ -187,5 +190,10 @@
         <file>images/icons/edit-delete.svg</file>
         <file>images/icons/preferences-system-network.svg</file>
         <file>images/icons/mime-unknown.svg</file>
+        <file>images/icons/window-close.svg</file>
+        <file>images/icons/go-up.svg</file>
+        <file>images/icons/go-down.svg</file>
+        <file>images/icons/tools-media-optical-burn.svg</file>
+        <file>images/icons/send-dicom.svg</file>
     </qresource>
 </RCC>

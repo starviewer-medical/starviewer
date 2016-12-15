@@ -29,6 +29,10 @@
      <property name="text">
       <string>Delete</string>
      </property>
+     <property name="icon">
+      <iconset resource="../main/main.qrc">
+       <normaloff>:/images/icons/edit-delete.svg</normaloff>:/images/icons/edit-delete.svg</iconset>
+     </property>
     </widget>
    </item>
    <item row="1" column="1">
@@ -36,12 +40,20 @@
      <property name="text">
       <string>Down</string>
      </property>
+     <property name="icon">
+      <iconset resource="../main/main.qrc">
+       <normaloff>:/images/icons/go-down.svg</normaloff>:/images/icons/go-down.svg</iconset>
+     </property>
     </widget>
    </item>
    <item row="3" column="1">
     <widget class="QPushButton" name="m_buttonAddCommand">
      <property name="text">
       <string>Add command</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../main/main.qrc">
+       <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
      </property>
     </widget>
    </item>
@@ -87,6 +99,10 @@
      <property name="text">
       <string>Up</string>
      </property>
+     <property name="icon">
+      <iconset resource="../main/main.qrc">
+       <normaloff>:/images/icons/go-up.svg</normaloff>:/images/icons/go-up.svg</iconset>
+     </property>
     </widget>
    </item>
    <item row="6" column="0">
@@ -125,12 +141,15 @@
      <property name="text">
       <string>Add URL</string>
      </property>
+     <property name="icon">
+      <iconset resource="../main/main.qrc">
+       <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
+     </property>
     </widget>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
