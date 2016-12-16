@@ -160,12 +160,17 @@ QSize QViewer::getRenderWindowSize() const
 
 QPoint QViewer::getEventPosition() const
 {
-    return QPoint(this->getInteractor()->GetEventPosition()[0], this->getInteractor()->GetEventPosition()[1]);
+    QPoint point(this->getInteractor()->GetEventPosition()[0], this->getInteractor()->GetEventPosition()[1]);
+    point *= this->devicePixelRatioF();
+    return point;
+
 }
 
 QPoint QViewer::getLastEventPosition() const
 {
-    return QPoint(this->getInteractor()->GetLastEventPosition()[0], this->getInteractor()->GetLastEventPosition()[1]);
+    QPoint point(this->getInteractor()->GetLastEventPosition()[0], this->getInteractor()->GetLastEventPosition()[1]);
+    point *= this->devicePixelRatioF();
+    return point;
 }
 
 bool QViewer::isActive() const
@@ -665,10 +670,14 @@ void QViewer::contextMenuRelease()
 
     // Obtenim la posició de l'event
     QPoint point = this->getEventPosition();
+    point /= this->devicePixelRatioF(); // Vtk pixels are real pixels, Qt wants logical pixels.
 
     // Remember to flip y
     QSize size = this->getRenderWindowSize();
+    size /= this->devicePixelRatioF(); // Vtk pixels are real pixels, Qt wants logical pixels.
     point.setY(size.height() - point.y());
+
+
 
     // Map to global
     QPoint globalPoint = this->mapToGlobal(point);

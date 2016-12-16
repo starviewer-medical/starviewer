@@ -122,6 +122,18 @@ void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
 
 int main(int argc, char *argv[])
 {
+    // Applying scale factor
+    {
+        QVariant cfgValue = udg::Settings().getValue(udg::CoreSettings::ScaleFactor);
+        bool exists;
+        int scaleFactor = cfgValue.toInt(&exists);
+        if (exists && scaleFactor != 1) { // Setting exists and is different than one
+            QString envVar = QString::number(1 + (scaleFactor * 0.125),'f', 3);
+            qputenv("QT_SCALE_FACTOR", envVar.toUtf8());
+            QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+        }
+    }
+
     // Utilitzem QtSingleApplication en lloc de QtApplication, ja que ens permet tenir executant sempre una sola instància d'Starviewer, si l'usuari executa
     // una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
 
