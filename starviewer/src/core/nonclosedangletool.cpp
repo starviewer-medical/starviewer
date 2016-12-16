@@ -22,8 +22,6 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
 
-#include <QVector3D>
-
 namespace udg {
 
 NonClosedAngleTool::NonClosedAngleTool(QViewer *viewer, QObject *parent)
@@ -129,8 +127,8 @@ void NonClosedAngleTool::annotateLinePoints()
         line = m_secondLine;
     }
 
-    double clickedWorldPoint[3];
-    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
+    Vector3 clickedWorldPoint;
+    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint.data());
 
     // Afegim el punt
     if (m_lineState == NoPoints)
@@ -182,8 +180,8 @@ void NonClosedAngleTool::handleLineDrawing()
 
 void NonClosedAngleTool::simulateLine(DrawerLine *line)
 {
-    double clickedWorldPoint[3];
-    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
+    Vector3 clickedWorldPoint;
+    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint.data());
     line->setSecondPoint(clickedWorldPoint);
     // Actualitzem viewer
     line->update();
@@ -203,22 +201,22 @@ void NonClosedAngleTool::computeAngle()
     m_middleLine->setColor(QColor(191, 147, 64));
     m_middleLine->setOpacity(0.5);
 
-    double *point1 = m_firstLine->getFirstPoint();
-    double *point2 = m_firstLine->getSecondPoint();
-    double *point3 = m_secondLine->getFirstPoint();
-    double *point4 = m_secondLine->getSecondPoint();
+    auto point1 = m_firstLine->getFirstPoint();
+    auto point2 = m_firstLine->getSecondPoint();
+    auto point3 = m_secondLine->getFirstPoint();
+    auto point4 = m_secondLine->getSecondPoint();
 
     int state;
 
-    double *intersection = MathTools::infiniteLinesIntersection(point1, point2, point3, point4, state);
+    Vector3 intersection = MathTools::infiniteLinesIntersection(point1, point2, point3, point4, state);
 
     double distance1 = MathTools::getDistance3D(intersection, point1);
     double distance2 = MathTools::getDistance3D(intersection, point2);
     double distance3 = MathTools::getDistance3D(intersection, point3);
     double distance4 = MathTools::getDistance3D(intersection, point4);
 
-    QVector3D directorVector1;
-    QVector3D directorVector2;
+    Vector3 directorVector1;
+    Vector3 directorVector2;
     // Per calcular el vectors directors farem servir la intersecció i el punt
     // més llunyà a la intersecció de cada recta ja que si per alguna casualitat
     // l'usuari fa coincidir un dels punts de cada recta, la distància seria de 0
@@ -227,19 +225,15 @@ void NonClosedAngleTool::computeAngle()
     {
         if (distance3 <= distance4)
         {
-            directorVector1 = MathTools::directorVector(QVector3D(point2[0], point2[1], point2[2]),
-                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
-            directorVector2 = MathTools::directorVector(QVector3D(point4[0], point4[1], point4[2]),
-                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
+            directorVector1 = MathTools::directorVector(point2, intersection);
+            directorVector2 = MathTools::directorVector(point4, intersection);
             m_middleLine->setFirstPoint(point1);
             m_middleLine->setSecondPoint(point3);
         }
         else
         {
-            directorVector1 = MathTools::directorVector(QVector3D(point2[0], point2[1], point2[2]),
-                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
-            directorVector2 = MathTools::directorVector(QVector3D(point3[0], point3[1], point3[2]),
-                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
+            directorVector1 = MathTools::directorVector(point2, intersection);
+            directorVector2 = MathTools::directorVector(point3, intersection);
             m_middleLine->setFirstPoint(point1);
             m_middleLine->setSecondPoint(point4);
         }
@@ -248,19 +242,15 @@ void NonClosedAngleTool::computeAngle()
     {
         if (distance3 <= distance4)
         {
-            directorVector1 = MathTools::directorVector(QVector3D(point1[0], point1[1], point1[2]),
-                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
-            directorVector2 = MathTools::directorVector(QVector3D(point4[0], point4[1], point4[2]),
-                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
+            directorVector1 = MathTools::directorVector(point1, intersection);
+            directorVector2 = MathTools::directorVector(point4, intersection);
             m_middleLine->setFirstPoint(point2);
             m_middleLine->setSecondPoint(point3);
         }
         else
         {
-            directorVector1 = MathTools::directorVector(QVector3D(point1[0], point1[1], point1[2]),
-                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
-            directorVector2 = MathTools::directorVector(QVector3D(point3[0], point3[1], point3[2]),
-                                                        QVector3D(intersection[0], intersection[1], intersection[2]));
+            directorVector1 = MathTools::directorVector(point1, intersection);
+            directorVector2 = MathTools::directorVector(point3, intersection);
             m_middleLine->setFirstPoint(point2);
             m_middleLine->setSecondPoint(point4);
         }
@@ -278,30 +268,30 @@ void NonClosedAngleTool::computeAngle()
     m_2DViewer->getDrawer()->draw(m_secondLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     m_2DViewer->getDrawer()->draw(m_middleLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 
-    if (fabs(directorVector1.x()) < 0.0001)
+    if (fabs(directorVector1.x) < 0.0001)
     {
-        directorVector1.setX(0.0);
+        directorVector1.x = 0.0;
     }
-    if (fabs(directorVector1.y()) < 0.0001)
+    if (fabs(directorVector1.y) < 0.0001)
     {
-        directorVector1.setY(0.0);
+        directorVector1.y = 0.0;
     }
-    if (fabs(directorVector1.z()) < 0.0001)
+    if (fabs(directorVector1.z) < 0.0001)
     {
-        directorVector1.setZ(0.0);
+        directorVector1.z = 0.0;
     }
 
-    if (fabs(directorVector2.x()) < 0.0001)
+    if (fabs(directorVector2.x) < 0.0001)
     {
-        directorVector2.setX(0.0);
+        directorVector2.x = 0.0;
     }
-    if (fabs(directorVector2.y()) < 0.0001)
+    if (fabs(directorVector2.y) < 0.0001)
     {
-        directorVector2.setY(0.0);
+        directorVector2.y = 0.0;
     }
-    if (fabs(directorVector2.z()) < 0.0001)
+    if (fabs(directorVector2.z) < 0.0001)
     {
-        directorVector2.setZ(0.0);
+        directorVector2.z = 0.0;
     }
 
     double angle = MathTools::angleInDegrees(directorVector1, directorVector2);
@@ -322,7 +312,7 @@ void NonClosedAngleTool::computeAngle()
         text->setText(tr("%1 degrees").arg(angle, 0, 'f', 1));
     }
 
-    placeText(m_middleLine->getFirstPoint(), m_middleLine->getSecondPoint(), text);
+    placeText(m_middleLine->getFirstPoint().toArray().data(), m_middleLine->getSecondPoint().toArray().data(), text);
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
 
     // Re-iniciem els punters
@@ -331,9 +321,9 @@ void NonClosedAngleTool::computeAngle()
     m_middleLine = NULL;
 }
 
-void NonClosedAngleTool::placeText(double *firstLineVertex, double *secondLineVertex, DrawerText *angleText)
+void NonClosedAngleTool::placeText(const Vector3 &firstLineVertex, const Vector3 &secondLineVertex, DrawerText *angleText)
 {
-    double position[3];
+    Vector3 position;
     int xIndex, yIndex, zIndex;
 
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
@@ -370,7 +360,7 @@ void NonClosedAngleTool::equalizeDepth()
     // Assignem a tots els punts la z de l'últim
     int zIndex = m_2DViewer->getView().getZIndex();
     double z = m_secondLine->getSecondPoint()[zIndex];
-    double *point = m_firstLine->getFirstPoint();
+    auto point = m_firstLine->getFirstPoint();
     point[zIndex] = z;
     m_firstLine->setFirstPoint(point);
     point = m_firstLine->getSecondPoint();

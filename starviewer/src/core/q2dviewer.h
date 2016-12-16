@@ -338,7 +338,7 @@ public slots:
 
     /// L'únic que fa és emetre el senyal seedPositionChanged, per poder-ho cridar desde la seedTool
     /// TODO Aquest mètode hauria de quedar obsolet
-    void setSeedPosition(double pos[3]);
+    void setSeedPosition(const Vector3 &pos);
 
     /// Aplica una rotació de 90 graus en el sentit de les agulles del rellotge
     /// tantes "times" com li indiquem, per defecte sempre serà 1 "time"

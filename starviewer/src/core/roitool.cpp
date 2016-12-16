@@ -144,7 +144,7 @@ ROIData ROITool::computeVoxelValues(const QList<Line3D> &polygonSegments, Point3
     while (sweepLineBeginPoint.at(yIndex) <= sweepLineEnd)
     {
         // We get the intersections bewteen ROI segments and current sweep line
-        QList<double*> intersectionList = getIntersectionPoints(polygonSegments, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
+        auto intersectionList = getIntersectionPoints(polygonSegments, Line3D(sweepLineBeginPoint, sweepLineEndPoint), currentView);
 
         // Adding the voxels from the current intersections of the current sweep line to the voxel values list
         addVoxelsFromIntersections(intersectionList, currentView, pixelData, roiData);
@@ -173,9 +173,9 @@ QList<int> ROITool::getIndexOfSegmentsCrossingAtHeight(const QList<Line3D> &segm
     return intersectedSegmentsIndexList;
 }
 
-QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegments, const Line3D &sweepLine, const OrthogonalPlane &view)
+QList<Vector3> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegments, const Line3D &sweepLine, const OrthogonalPlane &view)
 {
-    QList<double*> intersectionPoints;
+    QList<Vector3> intersectionPoints;
     int sortIndex = view.getXIndex();
     int heightIndex = view.getYIndex();
     
@@ -183,10 +183,10 @@ QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegmen
     foreach (int segmentIndex, indexListOfSegmentsToIntersect)
     {
         int intersectionState;
-        double *foundPoint = MathTools::infiniteLinesIntersection(polygonSegments.at(segmentIndex).getFirstPoint().getAsDoubleArray(),
-                                                                    polygonSegments.at(segmentIndex).getSecondPoint().getAsDoubleArray(),
-                                                                    sweepLine.getFirstPoint().getAsDoubleArray(), sweepLine.getSecondPoint().getAsDoubleArray(),
-                                                                    intersectionState);
+        auto foundPoint = MathTools::infiniteLinesIntersection(polygonSegments.at(segmentIndex).getFirstPoint().getAsDoubleArray(),
+                                                               polygonSegments.at(segmentIndex).getSecondPoint().getAsDoubleArray(),
+                                                               sweepLine.getFirstPoint().getAsDoubleArray(), sweepLine.getSecondPoint().getAsDoubleArray(),
+                                                               intersectionState);
         if (intersectionState == MathTools::LinesIntersect)
         {
             // Must sort intersections horizontally in order to be able to get voxels inside polygon correctly
@@ -215,7 +215,8 @@ QList<double*> ROITool::getIntersectionPoints(const QList<Line3D> &polygonSegmen
     return intersectionPoints;
 }
 
-void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoints, const OrthogonalPlane &view, SliceOrientedVolumePixelData &pixelData, ROIData &roiData)
+void ROITool::addVoxelsFromIntersections(const QList<Vector3> &intersectionPoints, const OrthogonalPlane &view, SliceOrientedVolumePixelData &pixelData,
+                                         ROIData &roiData)
 {
     if (MathTools::isEven(intersectionPoints.count()))
     {
@@ -225,8 +226,8 @@ void ROITool::addVoxelsFromIntersections(const QList<double*> &intersectionPoint
         int limit = intersectionPoints.count() / 2;
         for (int i = 0; i < limit; ++i)
         {
-            double *firstIntersection = intersectionPoints.at(i * 2);
-            double *secondIntersection = intersectionPoints.at(i * 2 + 1);
+            auto firstIntersection = intersectionPoints.at(i * 2);
+            auto secondIntersection = intersectionPoints.at(i * 2 + 1);
             // First we check which will be the direction of the scan line
             Point3D currentScanLinePoint;
             double scanLineEnd;
@@ -282,7 +283,7 @@ void ROITool::setTextPosition(DrawerText *text)
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
 
-    double attachmentPoint[3];
+    Vector3 attachmentPoint;
     attachmentPoint[0] = (bounds[1] + bounds[0]) / 2.0;
     attachmentPoint[1] = (bounds[3] + bounds[2]) / 2.0;
     attachmentPoint[2] = (bounds[5] + bounds[4]) / 2.0;

@@ -44,10 +44,8 @@ public:
     /// @param data
     void setToolData(ToolData *data);
 
-    void handleEvent(long unsigned eventID)
-    {
-        eventID = eventID;
-    }; // Cal implementar-lo, ja que a Tool és virtual pur TODO potser seria millor deixar-ho implementat buit en el pare?
+    // Cal implementar-lo, ja que a Tool és virtual pur TODO potser seria millor deixar-ho implementat buit en el pare?
+    void handleEvent(unsigned long) {}
 
 private slots:
     /// Actualitza les línies a projectar sobre la imatge segons les dades de la tool
@@ -85,10 +83,10 @@ private:
                                                      const QList<ImagePlane::CornersLocation> &cornerLocations, int lineOffset);
     
     /// Projects the given intersection points and updates the corresponding lines according to lineOffset
-    void updateProjectionLinesFromIntersections(double firstIntersectionPoint[3], double secondIntersectionPoint[3], int lineOffset);
+    void updateProjectionLinesFromIntersections(const Vector3 &firstIntersectionPoint, const Vector3 &secondIntersectionPoint, int lineOffset);
     
     /// Update the projected line according to lineOffset with the given points
-    void updateProjectedLine(int lineOffset, double firstPoint[3], double secondPoint[3]);
+    void updateProjectedLine(int lineOffset, const Vector3 &firstPoint, const Vector3 &secondPoint);
 
     /// Resets the projected line according to lineOffset so all points are the same and nothing can be viewed
     void resetProjectedLine(int lineOffset);

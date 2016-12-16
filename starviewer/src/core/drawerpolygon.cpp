@@ -23,8 +23,6 @@
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
 #include <vtkPropAssembly.h>
-// Qt
-#include <QVector>
 
 namespace udg {
 
@@ -50,44 +48,22 @@ DrawerPolygon::~DrawerPolygon()
     }
 }
 
-void DrawerPolygon::addVertix(double point[3])
+void DrawerPolygon::addVertex(const Vector3 &point)
 {
-    this->addVertix(point[0], point[1], point[2]);
-}
-
-void DrawerPolygon::addVertix(double x, double y, double z)
-{
-    QVector<double> array(3);
-
-    array[0] = x;
-    array[1] = y;
-    array[2] = z;
-
-    m_pointsList << array;
+    m_pointsList << point;
     emit changed();
     m_pointsChanged = true;
 }
 
-void DrawerPolygon::setVertix(int i, double point[3])
-{
-    this->setVertix(i, point[0], point[1], point[2]);
-}
-
-void DrawerPolygon::setVertix(int i, double x, double y, double z)
+void DrawerPolygon::setVertex(int i, const Vector3 &point)
 {
     if (i >= m_pointsList.count() || i < 0)
     {
-        addVertix(x, y, z);
+        addVertex(point);
     }
     else
     {
-        QVector<double> array(3);
-        array = m_pointsList.takeAt(i);
-        array[0] = x;
-        array[1] = y;
-        array[2] = z;
-
-        m_pointsList.insert(i, array);
+        m_pointsList[i] = point;
         emit changed();
         m_pointsChanged = true;
     }
@@ -100,12 +76,11 @@ void DrawerPolygon::removeVertices()
     m_pointsChanged = true;
 }
 
-const double* DrawerPolygon::getVertix(int i) const
+Vector3 DrawerPolygon::getVertex(int i) const
 {
     if (i >= m_pointsList.count() || i < 0)
     {
-        double *vertix = new double[3];
-        return vertix;
+        return Vector3();
     }
     else
     {
@@ -120,14 +95,14 @@ QList<Line3D> DrawerPolygon::getSegments()
     int numberOfSegments = getNumberOfPoints();
     for (int i = 0; i < numberOfSegments - 1; ++i)
     {
-        Point3D firstPoint((double*)getVertix(i));
-        Point3D secondPoint((double*)getVertix(i + 1));
+        Point3D firstPoint(getVertex(i).data());
+        Point3D secondPoint(getVertex(i + 1).data());
         Line3D segment(firstPoint, secondPoint);
         polygonSegments << segment;
     }
     // Must add last segment corresponding to the last point to the first of the polygon
-    Point3D firstPoint((double*)getVertix(numberOfSegments - 1));
-    Point3D secondPoint((double*)getVertix(0));
+    Point3D firstPoint(getVertex(numberOfSegments - 1).data());
+    Point3D secondPoint(getVertex(0).data());
     Line3D segment(firstPoint, secondPoint);
     polygonSegments << segment;
 
@@ -196,39 +171,32 @@ void DrawerPolygon::buildVtkPoints()
 {
     // Primer comprovem si el polígon és tancat. En cas que l'últim i el primer no coincideixin, l'afegim
     // TODO es podria comprovar si com a mínim té tres punts, sinó, no es pot considerar polígon
-    bool extraVertix = false;
+    bool extraVertex = false;
     if (!m_pointsList.isEmpty())
     {
-        double *firstPoint = m_pointsList.first().data();
-        double *lastPoint = m_pointsList.last().data();
-        if ((firstPoint[0] != lastPoint[0]) || (firstPoint[1] != lastPoint[1]) || (firstPoint[2] != lastPoint[2]))
+        auto firstPoint = m_pointsList.first();
+        auto lastPoint = m_pointsList.last();
+        if (firstPoint != lastPoint)
         {
-            extraVertix = true;
+            extraVertex = true;
         }
     }
 
     // Especifiquem el nombre de vèrtexs que té el polígon
-    int numberOfVertices = m_pointsList.count() + (extraVertix ? 1 : 0);
+    int numberOfVertices = m_pointsList.count() + (extraVertex ? 1 : 0);
     m_vtkCellArray->Reset();
 
     if (this->isFilled())
     {
-        QList<Vector3> vertices;
-        for (int i = 0; i < m_pointsList.size(); i++)
-        {
-            vertices.append(Vector3(m_pointsList[i][0], m_pointsList[i][1], m_pointsList[i][2]));
-        }
-
         GluTessellator tessellator;
-        tessellator.tessellate(vertices);
+        tessellator.tessellate(m_pointsList);
         
-        vertices = tessellator.getVertices();
+        QList<Vector3> vertices = tessellator.getVertices();
         m_vtkPoints->SetNumberOfPoints(vertices.size());
 
         for (int i = 0; i < vertices.size(); i++)
         {
-            double point[3] = { vertices[i].x, vertices[i].y, vertices[i].z };
-            m_vtkPoints->SetPoint(i, point);
+            m_vtkPoints->SetPoint(i, vertices[i].data());
         }
 
         const QList<GluTessellator::Triangle> &triangles = tessellator.getTriangles();
@@ -258,14 +226,14 @@ void DrawerPolygon::buildVtkPoints()
 
         // Donem els punts/vèrtexs
         int i = 0;
-        foreach (const QVector<double> &vertix, m_pointsList)
+        foreach (const auto &vertex, m_pointsList)
         {
-            m_vtkPoints->InsertPoint(i, vertix.data());
+            m_vtkPoints->InsertPoint(i, vertex.data());
             m_vtkCellArray->InsertCellPoint(i);
             i++;
         }
 
-        if (extraVertix)
+        if (extraVertex)
         {
             // Tornem a afegir el primer punt
             m_vtkPoints->InsertPoint(numberOfVertices - 1, m_pointsList.at(0).data());
@@ -306,7 +274,7 @@ int DrawerPolygon::getNumberOfPoints() const
     return m_pointsList.count();
 }
 
-double DrawerPolygon::getDistanceToPoint(double *point3D, double closestPoint[3])
+double DrawerPolygon::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
 {
     int closestEdge;
     return MathTools::getPointToClosestEdgeDistance(point3D, m_pointsList, true, closestPoint, closestEdge);
@@ -333,8 +301,8 @@ void DrawerPolygon::get2DPlaneIndices(int &xIndex, int &yIndex) const
     int numberOfPoints = getNumberOfPoints();
     for (int i = 0; i < numberOfPoints - 1; ++i)
     {
-        const double *p1 = getVertix(i);
-        const double *p2 = getVertix(i + 1);
+        auto p1 = getVertex(i);
+        auto p2 = getVertex(i + 1);
 
         if (!qFuzzyCompare(p1[0], p2[0]))
         {

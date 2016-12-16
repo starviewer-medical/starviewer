@@ -64,7 +64,7 @@ public:
     /// Retorna la primitiva esborrable més propera al punt donat, dins de la vista i llesca proporcionats
     /// Aquest mètode no té en compte cap llindar de proximitat, és a dir, ens retorna la primitiva que en termes
     /// absoluts és més propera al punt donat. En cas que no hi hagi cap primitiva per aquella vista i llesca, es retornarà nul.
-    DrawerPrimitive* getNearestErasablePrimitiveToPoint(double point[3], const OrthogonalPlane &view, int slice, double closestPoint[3]);
+    DrawerPrimitive* getNearestErasablePrimitiveToPoint(const Vector3 &point, const OrthogonalPlane &view, int slice, Vector3 &closestPoint);
 
     /// Ens esborra les primitives esborrables que estiguin dins de la zona delimitada pels punts passats per paràmetre.
     void erasePrimitivesInsideBounds(double bounds[6], const OrthogonalPlane &view, int slice);

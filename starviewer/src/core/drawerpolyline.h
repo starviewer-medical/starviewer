@@ -16,7 +16,6 @@
 #define UDGDRAWERPOLYLINE_H
 
 #include "drawerprimitive.h"
-#include <QVector>
 
 class vtkPolyData;
 class vtkPoints;
@@ -37,15 +36,13 @@ public:
     ~DrawerPolyline();
 
     /// Afegim un punt a la polilínia.
-    /// @param point[] Punt que defineix el punt
-    void addPoint(double point[3]);
+    void addPoint(const Vector3 &point);
 
     /// Assigna el valor del punt i-éssim de la polilínia. En aquest cas equival a
     /// actualitzar el valor d'aquest punt indicat. Si 'i' està fora de rang,
     /// s'afegeix el punt donat al final, tal com si fessim addPoint(point)
     /// @param i índex del point que volem modificar
-    /// @param point[] coordenades del point
-    void setPoint(int i, double point[3]);
+    void setPoint(int i, const Vector3 &point);
 
     /// Elimina el punt i-éssim de la polilínia. Si 'i' està fora de rang,
     /// no s'esborrarà cap punt de la polilínia.
@@ -59,18 +56,18 @@ public:
     int getNumberOfPoints();
 
     /// Retorna l'i-essim punt de la polilinia en cas de que existeixi.
-    double* getPoint(int position);
+    Vector3 getPoint(int position) const;
 
     /// Esborra tots els punts de la polilinia
     void deleteAllPoints();
 
     /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint(double *point3D, double closestPoint[3]);
+    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
 
     void getBounds(double bounds[6]);
 
     /// Retorna la llista de punts de la polilínia
-    QList<QVector<double> > getPointsList();
+    QList<Vector3> getPointsList() const;
 
 public slots:
     void update();
@@ -87,7 +84,7 @@ private:
 
 private:
     /// Llista de punts de la polilínia
-    QList<QVector<double> > m_pointsList;
+    QList<Vector3> m_pointsList;
 
     /// Estructures de vtk, per construir la polilínia
     vtkPolyData *m_vtkPolydata;

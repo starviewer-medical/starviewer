@@ -17,6 +17,8 @@
 
 #include "roitool.h"
 
+#include "vector3.h"
+
 namespace udg {
 
 class Q2DViewer;
@@ -47,7 +49,7 @@ private:
     void simulateEllipse();
 
     /// Calcula el centre de l'el·lipse a partir dels punts introduits mitjançant la interacció de l'usuari
-    void computeEllipseCentre(double centre[3]);
+    Vector3 computeEllipseCentre() const;
 
     /// Actualitza els punts del polígon perquè resulti el dibuix de l'òval
     void updatePolygonPoints();
@@ -67,8 +69,8 @@ private slots:
 
 private:
     /// Punts que annotem de la interacció de l'usuari per crear l'òval
-    double m_firstPoint[3];
-    double m_secondPoint[3];
+    Vector3 m_firstPoint;
+    Vector3 m_secondPoint;
 
     /// Estat de la tool
     int m_state;

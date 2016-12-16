@@ -39,10 +39,10 @@ public:
     QString getText();
 
     /// Permet canviar el punt d'ancoratge
-    void setAttachmentPoint(double point[3]);
+    void setAttachmentPoint(Vector3 point);
 
     /// Retorna el punt d'ancoratge
-    double* getAttachmentPoint();
+    const Vector3& getAttachmentPoint() const;
 
     /// Ens retorna el tipus de font
     QString getFontFamily();
@@ -117,7 +117,7 @@ public:
     bool isTextScaled();
 
     /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint(double *point3D, double closestPoint[3]);
+    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
 
     /// Ens retorna els límits de l'hexahedre que encapsula la primitiva
     /// en aquest ordre: minX, maxX, minY, maxY, minZ, maxZ
@@ -142,7 +142,7 @@ private:
     void updateVtkActorProperties();
 
     /// Retorna cert si el punt està dins de la bounding box del text
-    bool isInside(const double *point3D);
+    bool isInside(const Vector3 &point3D);
 
 private:
     /// Text a mostrar
@@ -182,7 +182,7 @@ private:
     VtkTextActorWithBackground *m_vtkActor;
 
     /// Punt on es mostrarà el text
-    double m_attachPoint[3];
+    Vector3 m_attachPoint;
 
     /// Color de fons de la imatge
     QColor m_backgroundColor;

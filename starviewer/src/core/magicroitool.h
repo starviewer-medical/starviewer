@@ -17,6 +17,8 @@
 
 #include "roitool.h"
 
+#include "vector3.h"
+
 #include <QVector>
 
 namespace udg {
@@ -142,7 +144,7 @@ private:
     double m_upperLevel;
 
     /// Coordenades de món a on s'ha fet el click inicial
-    double m_pickedPosition[3];
+    Vector3 m_pickedPosition;
 
     /// Polígon ple que es mostrarà durant l'edició de la ROI.
     QPointer<DrawerPolygon> m_filledRoiPolygon;

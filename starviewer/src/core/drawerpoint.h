@@ -16,8 +16,6 @@
 #define UDGDRAWERPOINT_H
 
 #include "drawerprimitive.h"
-// Qt's
-#include <QVector>
 
 class vtkSphereSource;
 class vtkActor;
@@ -35,8 +33,7 @@ public:
     ~DrawerPoint();
 
     /// Assignem el punt
-    void setPosition(double point[3]);
-    void setPosition(QVector<double> point);
+    void setPosition(Vector3 point);
 
     /// Li assignem el radi a la circumferència que defineix el punt
     void setRadius(double radius);
@@ -46,7 +43,7 @@ public:
     void getBounds(double bounds[6]);
 
     /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint(double *point3D, double closestPoint[3]);
+    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
 
 public slots:
     void update();
@@ -60,7 +57,7 @@ private:
 
 private:
     /// Posició del punt
-    double m_position[3];
+    Vector3 m_position;
 
     /// Radi de la circumferència amb la que dibuixem el punt
     double m_pointRadius;

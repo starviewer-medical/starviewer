@@ -1319,9 +1319,9 @@ QString Q2DViewer::getInputIdentifier() const
     return identifiers.join("+");
 }
 
-void Q2DViewer::setSeedPosition(double pos[3])
+void Q2DViewer::setSeedPosition(const Vector3 &pos)
 {
-    emit seedPositionChanged(pos[0], pos[1], pos[2]);
+    emit seedPositionChanged(pos.x, pos.y, pos.z);
 }
 
 QChar Q2DViewer::getCurrentDisplayedImageLaterality() const

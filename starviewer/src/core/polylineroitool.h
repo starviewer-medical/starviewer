@@ -17,6 +17,8 @@
 
 #include "roitool.h"
 
+#include "vector3.h"
+
 namespace udg {
 
 class DrawerPolyline;
@@ -58,7 +60,7 @@ private:
     void deleteTemporalRepresentation();
 
     /// Retorna una llista de punts que representen la bounding box en la vista actual.
-    QList<QVector<double> > getBoundingBoxPoints();
+    QList<Vector3> getBoundingBoxPoints();
 
     /// Equalitza la profunditat dels elements que formen la ROI polilínia final.
     void equalizeDepth();

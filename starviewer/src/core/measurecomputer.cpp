@@ -27,39 +27,28 @@ MeasureComputer::~MeasureComputer()
 {
 }
 
-double* MeasureComputer::amendCoordinate(double coordinate[3], double coordinateSpacing[3], const PixelSpacing2D &amenderSpacing)
+Vector3 MeasureComputer::amendCoordinate(const Vector3 &coordinate, double coordinateSpacing[3], const PixelSpacing2D &amenderSpacing)
 {
-    if (!coordinate)
-    {
-        return 0;
-    }
-
     if (!coordinateSpacing)
     {
-        double *sameCoordinate = new double[3];
-        sameCoordinate[0] = coordinate[0];
-        sameCoordinate[1] = coordinate[1];
-        sameCoordinate[2] = coordinate[2];
-
-        return sameCoordinate;
+        return coordinate;
     }
     
-    double *amendedCoordinate = new double[3];
-
+    Vector3 amendedCoordinate;
     double multiplierFactor[2];
     
     if (!amenderSpacing.isValid())
     {
         multiplierFactor[0] = multiplierFactor[1] = 1.0;
         
-        amendedCoordinate[2] = coordinate[2] / coordinateSpacing[2];
+        amendedCoordinate.z = coordinate.z / coordinateSpacing[2];
     }
     else
     {
         multiplierFactor[0] = amenderSpacing.x();
         multiplierFactor[1] = amenderSpacing.y(); 
 
-        amendedCoordinate[2] = coordinate[2];
+        amendedCoordinate.z = coordinate.z;
     }
     
     for (int i = 0; i < 2; ++i)

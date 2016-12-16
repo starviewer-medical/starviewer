@@ -17,7 +17,7 @@
 
 #include "tooldata.h"
 
-#include <QVector>
+#include "vector3.h"
 
 namespace udg {
 
@@ -30,9 +30,9 @@ public:
     SeedToolData(QObject *parent = 0);
     ~SeedToolData();
 
-    void setSeedPosition(QVector<double> pos);
+    void setSeedPosition(Vector3 pos);
 
-    QVector<double> getSeedPosition();
+    const Vector3& getSeedPosition() const;
     DrawerPoint* getPoint();
     void setPoint(DrawerPoint *p = NULL);
     Volume* getVolume();
@@ -40,7 +40,7 @@ public:
 
 private:
     /// Hi guardem la posició de la llavor
-    QVector<double> m_position;
+    Vector3 m_position;
 
     /// Punt que es dibuixa
     DrawerPoint *m_point;

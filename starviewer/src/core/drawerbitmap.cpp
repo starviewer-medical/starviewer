@@ -119,55 +119,55 @@ vtkProp* DrawerBitmap::getAsVtkProp()
     return m_imageActor;
 }
 
-double DrawerBitmap::getDistanceToPoint(double *point3D, double closestPoint[3])
+double DrawerBitmap::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
 {
     // Si el punt es troba dins del requadre del bitmap (només coordenades X,Y), retornarem distància 0 i com a closestPoint el point3D
     // Si el punt es troba fora del requadre del bitmap, la distància serà la d'aquella a l'aresta més propera al punt
     double bounds[6];
     getBounds(bounds);
 
-    if (point3D[0] >= bounds[0] && point3D[0] <= bounds[1] && 
-        point3D[1] >= bounds[2] && point3D[1] <= bounds[3])
+    if (point3D.x >= bounds[0] && point3D.x <= bounds[1] &&
+        point3D.y >= bounds[2] && point3D.y <= bounds[3])
     {
-        memcpy(closestPoint, point3D, 3 * sizeof(double));
+        closestPoint = point3D;
         return 0.0;
     }
 
-    double topLeftCorner[3] = { bounds[0], bounds[2], bounds[4] };
-    double topRightCorner[3] = { bounds[1], bounds[2], bounds[4] };
-    double bottomRightCorner[3] = { bounds[1], bounds[3], bounds[4] };
-    double bottomLeftCorner[3] = { bounds[0], bounds[3], bounds[4] };
+    Vector3 topLeftCorner{bounds[0], bounds[2], bounds[4]};
+    Vector3 topRightCorner{bounds[1], bounds[2], bounds[4]};
+    Vector3 bottomRightCorner{bounds[1], bounds[3], bounds[4]};
+    Vector3 bottomLeftCorner{bounds[0], bounds[3], bounds[4]};
     
     double minimumDistanceFound = MathTools::DoubleMaximumValue;
     double distance;
-    double localClosestPoint[3];
+    Vector3 localClosestPoint;
 
     distance = MathTools::getPointToFiniteLineDistance(point3D, topLeftCorner, topRightCorner, localClosestPoint);
     if (distance < minimumDistanceFound)
     {
         minimumDistanceFound = distance;
-        memcpy(closestPoint, localClosestPoint, 3 * sizeof(double));
+        closestPoint = localClosestPoint;
     }
 
     distance = MathTools::getPointToFiniteLineDistance(point3D, topRightCorner, bottomRightCorner, localClosestPoint);
     if (distance < minimumDistanceFound)
     {
         minimumDistanceFound = distance;
-        memcpy(closestPoint, localClosestPoint, 3 * sizeof(double));
+        closestPoint = localClosestPoint;
     }
     
     distance = MathTools::getPointToFiniteLineDistance(point3D, bottomRightCorner, bottomLeftCorner, localClosestPoint);
     if (distance < minimumDistanceFound)
     {
         minimumDistanceFound = distance;
-        memcpy(closestPoint, localClosestPoint, 3 * sizeof(double));
+        closestPoint = localClosestPoint;
     }
     
     distance = MathTools::getPointToFiniteLineDistance(point3D, bottomLeftCorner, topLeftCorner, localClosestPoint);
     if (distance < minimumDistanceFound)
     {
         minimumDistanceFound = distance;
-        memcpy(closestPoint, localClosestPoint, 3 * sizeof(double));
+        closestPoint = localClosestPoint;
     }
 
     return minimumDistanceFound;

@@ -144,13 +144,12 @@ void test_MeasurementManager::getMeasurementForDisplay_ReturnsExpectedString_dat
 
     // Setup measure computer
     DrawerLine *line = new DrawerLine(this);
-    double p1[3] = { 8.99, 10.2, 8.97 };
-    double p2[3] = { 2.34, 9.02, 8.97 };
+    Vector3 p1{8.99, 10.2, 8.97};
+    Vector3 p2{2.34, 9.02, 8.97};
     line->setFirstPoint(p1);
     line->setSecondPoint(p2);
     MeasureComputer *anyMeasureComputer = new DistanceMeasureComputer(line);
     
-    PixelSpacing2D invalidSpacing(0.0, 0.0);
     PixelSpacing2D pixelSpacing(1.2, 1.2);
     
     // Image with no pixel spacing and no imager pixel spacing
@@ -303,8 +302,8 @@ void test_MeasurementManager::getMeasurementForDisplay_DistanceComputer_ReturnsE
 
     double *spacing = 0;
     double randomZSpacing = MathTools::randomDouble(0.1, 9.8);
-    double p1[3] = { 8.99, 10.2, 8.97 };
-    double p2[3] = { 2.34, 9.02, 8.97 };
+    Vector3 p1{8.99, 10.2, 8.97};
+    Vector3 p2{2.34, 9.02, 8.97};
     DrawerLine *line = new DrawerLine(this);
     line->setFirstPoint(p1);
     line->setSecondPoint(p2);
@@ -388,19 +387,19 @@ void test_MeasurementManager::getMeasurementForDisplay_AreaComputer_ReturnsExpec
     areaMeasureComputer = new AreaMeasureComputer(nullPolygon);
     QTest::newRow("null polygon, image with pixel spacing, random data spacing") << areaMeasureComputer << imageWithPixelSpacing << randomSpacing << "0.00 mm2";
     
-    double p1[3] = { 0.0, 0.0, 0.0 };
-    double p2[3] = { 1.0, 1.0, 0.0 };
-    double p3[3] = { 3.0, 4.0, 0.0 };
-    double p4[3] = { 4.0, 3.0, 0.0 };
+    Vector3 p1{0.0, 0.0, 0.0};
+    Vector3 p2{1.0, 1.0, 0.0};
+    Vector3 p3{3.0, 4.0, 0.0};
+    Vector3 p4{4.0, 3.0, 0.0};
     
     double *spacing = 0;
     
     // Axial areas
     DrawerPolygon *axialPolygon = new DrawerPolygon(this);
-    axialPolygon->addVertix(p1);
-    axialPolygon->addVertix(p2);
-    axialPolygon->addVertix(p3);
-    axialPolygon->addVertix(p4);
+    axialPolygon->addVertex(p1);
+    axialPolygon->addVertex(p2);
+    axialPolygon->addVertex(p3);
+    axialPolygon->addVertex(p4);
     
     double randomZSpacing = MathTools::randomDouble(0.1, 9.8);
     spacing = new double[3];

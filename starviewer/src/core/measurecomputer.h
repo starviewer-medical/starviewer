@@ -15,6 +15,8 @@
 #ifndef UDGMEASURECOMPUTER_H
 #define UDGMEASURECOMPUTER_H
 
+#include "vector3.h"
+
 namespace udg {
 
 class Image;
@@ -40,7 +42,7 @@ public:
     virtual int getMeasureDimensions() = 0;
 
     /// Amends coordinate taken on coordinateSpacing with the given amenderSpacing
-    double* amendCoordinate(double coordinate[3], double coordinateSpacing[3], const PixelSpacing2D &amenderSpacing);
+    Vector3 amendCoordinate(const Vector3 &coordinate, double coordinateSpacing[3], const PixelSpacing2D &amenderSpacing);
 
 protected:
     /// Given an Image and the spacing of the data where is being represented, returns the pixel spacing values that should be used for measures

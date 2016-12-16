@@ -50,13 +50,9 @@ DrawerText::~DrawerText()
     }
 }
 
-void DrawerText::setAttachmentPoint(double point[3])
+void DrawerText::setAttachmentPoint(Vector3 point)
 {
-    for (int i = 0; i < 3; i++)
-    {
-        m_attachPoint[i] = point[i];
-    }
-
+    m_attachPoint = std::move(point);
     emit changed();
 }
 
@@ -84,7 +80,7 @@ vtkProp* DrawerText::getAsVtkProp()
 
         // Assignem la posició en pantalla
         m_vtkActor->GetPositionCoordinate()->SetCoordinateSystemToWorld();
-        m_vtkActor->GetPositionCoordinate()->SetValue(m_attachPoint);
+        m_vtkActor->GetPositionCoordinate()->SetValue(m_attachPoint.data());
 
         // Li donem els atributs
         updateVtkActorProperties();
@@ -124,7 +120,7 @@ void DrawerText::updateVtkProp()
         }
         // Assignem la posició en pantalla
         m_vtkActor->GetPositionCoordinate()->SetCoordinateSystemToWorld();
-        m_vtkActor->GetPositionCoordinate()->SetValue(m_attachPoint);
+        m_vtkActor->GetPositionCoordinate()->SetValue(m_attachPoint.data());
         updateVtkActorProperties();
         this->setModified(false);
     }
@@ -265,7 +261,7 @@ QString DrawerText::getText()
     return m_text;
 }
 
-double* DrawerText::getAttachmentPoint()
+const Vector3& DrawerText::getAttachmentPoint() const
 {
     return m_attachPoint;
 }
@@ -398,14 +394,11 @@ bool DrawerText::isTextScaled()
     return m_scaled;
 }
 
-double DrawerText::getDistanceToPoint(double *point3D, double closestPoint[3])
+double DrawerText::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
 {
     if (isInside(point3D))
     {
-        closestPoint[0] = point3D[0];
-        closestPoint[1] = point3D[1];
-        closestPoint[2] = point3D[2];
-
+        closestPoint = point3D;
         return 0.0;
     }
     else
@@ -433,7 +426,7 @@ double DrawerText::getDistanceToPoint(double *point3D, double closestPoint[3])
     }
 }
 
-bool DrawerText::isInside(const double *point3D)
+bool DrawerText::isInside(const Vector3 &point3D)
 {
     double bounds[6];
     this->getBounds(bounds);
@@ -479,6 +472,5 @@ double DrawerText::getBackgroundOpacity() const
 {
     return m_backgroundOpacity;
 }
-
 
 }

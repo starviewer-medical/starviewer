@@ -114,9 +114,9 @@ void PolylineROITool::handlePointAddition()
 
 void PolylineROITool::annotateNewPoint()
 {
-    double pickedPoint[3];
-    m_2DViewer->getEventWorldCoordinate(pickedPoint);
-    m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint);
+    Vector3 pickedPoint;
+    m_2DViewer->getEventWorldCoordinate(pickedPoint.data());
+    m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint.data());
 
     bool firstPoint = false;
     if (!m_mainPolyline)
@@ -147,16 +147,16 @@ void PolylineROITool::annotateNewPoint()
         m_roiPolygon->increaseReferenceCount();
     }
     // Afegim el punt al polígon de la ROI
-    m_roiPolygon->addVertix(pickedPoint);
+    m_roiPolygon->addVertex(pickedPoint);
 }
 
 void PolylineROITool::simulateClosingPolyline()
 {
     if (m_mainPolyline && (m_mainPolyline->getNumberOfPoints() >= 1))
     {
-        double pickedPoint[3];
-        m_2DViewer->getEventWorldCoordinate(pickedPoint);
-        m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint);
+        Vector3 pickedPoint;
+        m_2DViewer->getEventWorldCoordinate(pickedPoint.data());
+        m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint.data());
 
         if (!m_closingPolyline)
         {
@@ -210,13 +210,13 @@ void PolylineROITool::closeForm()
 
 void PolylineROITool::setTextPosition(DrawerText *text)
 {
-    double lastPoint[3];
-    m_2DViewer->getEventWorldCoordinate(lastPoint);
-    m_2DViewer->putCoordinateInCurrentImageBounds(lastPoint);
+    Vector3 lastPoint;
+    m_2DViewer->getEventWorldCoordinate(lastPoint.data());
+    m_2DViewer->putCoordinateInCurrentImageBounds(lastPoint.data());
 
-    QList<QVector<double> > pointsList = getBoundingBoxPoints();
+    auto pointsList = getBoundingBoxPoints();
 
-    double closestPoint[3];
+    Vector3 closestPoint;
     int closestEdge;
     MathTools::getPointToClosestEdgeDistance(lastPoint, pointsList, true, closestPoint, closestEdge);
 
@@ -269,16 +269,16 @@ void PolylineROITool::setTextPosition(DrawerText *text)
             break;
     }
 
-    double closestPointInDisplay[3];
+    Vector3 closestPointInDisplay;
     // Passem closestPoint a coordenades de display
-    m_2DViewer->computeWorldToDisplay(closestPoint[0], closestPoint[1], closestPoint[2], closestPointInDisplay);
+    m_2DViewer->computeWorldToDisplay(closestPoint[0], closestPoint[1], closestPoint[2], closestPointInDisplay.data());
     // Apliquem el padding i tornem a coordenades de món
-    m_2DViewer->computeDisplayToWorld(closestPointInDisplay[0] + paddingX, closestPointInDisplay[1] + paddingY, closestPointInDisplay[2], closestPoint);
+    m_2DViewer->computeDisplayToWorld(closestPointInDisplay[0] + paddingX, closestPointInDisplay[1] + paddingY, closestPointInDisplay[2], closestPoint.data());
 
     text->setAttachmentPoint(closestPoint);
 }
 
-QList<QVector<double> > PolylineROITool::getBoundingBoxPoints()
+QList<Vector3> PolylineROITool::getBoundingBoxPoints()
 {
     double bounds[6];
     m_roiPolygon->getBounds(bounds);
@@ -286,8 +286,8 @@ QList<QVector<double> > PolylineROITool::getBoundingBoxPoints()
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
-    QList<QVector<double> > pointsList;
-    QVector<double> point(3);
+    QList<Vector3> pointsList;
+    Vector3 point;
     point[xIndex] = bounds[xIndex * 2];
     point[yIndex] = bounds[yIndex * 2];
     point[zIndex] = bounds[zIndex * 2];
@@ -340,10 +340,9 @@ void PolylineROITool::equalizeDepth()
     int n = m_roiPolygon->getNumberOfPoints();
     for (int i = 0; i < n - 1; i++)
     {
-        const double *constPoint = m_roiPolygon->getVertix(i);
-        double point[3] = { constPoint[0], constPoint[1], constPoint[2] };
+        auto point = m_roiPolygon->getVertex(i);
         point[zIndex] = z;
-        m_roiPolygon->setVertix(i, point);
+        m_roiPolygon->setVertex(i, point);
     }
     m_roiPolygon->update();
 }

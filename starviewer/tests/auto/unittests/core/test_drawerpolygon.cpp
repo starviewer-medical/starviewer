@@ -60,7 +60,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
         vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
         points->SetNumberOfPoints(1);
         points->InsertPoint(0, 0.0, 0.0, 0.0);
@@ -87,8 +87,8 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
-        drawerPolygon->addVertix(1.0, 1.0, 1.0);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
+        drawerPolygon->addVertex(Vector3(1.0, 1.0, 1.0));
         vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
         points->SetNumberOfPoints(3);
         points->InsertPoint(0, 0.0, 0.0, 0.0);
@@ -119,9 +119,9 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
-        drawerPolygon->addVertix(1.0, 1.0, 1.0);
-        drawerPolygon->addVertix(4.0, 3.0, 3.0);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
+        drawerPolygon->addVertex(Vector3(1.0, 1.0, 1.0));
+        drawerPolygon->addVertex(Vector3(4.0, 3.0, 3.0));
         vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
         points->SetNumberOfPoints(4);
         points->InsertPoint(0, 0.0, 0.0, 0.0);
@@ -154,10 +154,10 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
-        drawerPolygon->addVertix(1.0, 1.0, 1.0);
-        drawerPolygon->addVertix(4.0, 3.0, 3.0);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
+        drawerPolygon->addVertex(Vector3(1.0, 1.0, 1.0));
+        drawerPolygon->addVertex(Vector3(4.0, 3.0, 3.0));
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
         vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
         points->SetNumberOfPoints(4);
         points->InsertPoint(0, 0.0, 0.0, 0.0);
@@ -190,10 +190,10 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
-        drawerPolygon->addVertix(1.0, 1.0, 0.0);
-        drawerPolygon->addVertix(3.0, 4.0, 0.0);
-        drawerPolygon->addVertix(4.0, 3.0, 0.0);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
+        drawerPolygon->addVertex(Vector3(1.0, 1.0, 0.0));
+        drawerPolygon->addVertex(Vector3(3.0, 4.0, 0.0));
+        drawerPolygon->addVertex(Vector3(4.0, 3.0, 0.0));
         drawerPolygon->setFilled(false);
         vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
         points->SetNumberOfPoints(5);
@@ -229,10 +229,10 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
-        drawerPolygon->addVertix(1.0, 1.0, 0.0);
-        drawerPolygon->addVertix(3.0, 4.0, 0.0);
-        drawerPolygon->addVertix(4.0, 3.0, 0.0);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
+        drawerPolygon->addVertex(Vector3(1.0, 1.0, 0.0));
+        drawerPolygon->addVertex(Vector3(3.0, 4.0, 0.0));
+        drawerPolygon->addVertex(Vector3(4.0, 3.0, 0.0));
         drawerPolygon->setFilled(true);
         // Per saber els punts finals hem de passar per GluTessellator. No poden ser hardcoded perquè poden canviar segons la implementació de GLU.
         QList<Vector3> vertices;
@@ -244,8 +244,7 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
         points->SetNumberOfPoints(vertices.size());
         for (int i = 0; i < vertices.size(); i++)
         {
-            double point[3] = { vertices[i].x, vertices[i].y, vertices[i].z };
-            points->SetPoint(i, point);
+            points->SetPoint(i, vertices[i].data());
         }
         vtkSmartPointer<vtkCellArray> cellArray = vtkSmartPointer<vtkCellArray>::New();
         const QList<GluTessellator::Triangle> &triangles = tessellator.getTriangles();
@@ -277,15 +276,15 @@ void test_DrawerPolygon::getAsVtkProp_ShouldReturnPropLikeExpected_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(-1.0, 8.0,  8.0);
-        drawerPolygon->addVertix( 9.0, 8.0,  9.0);
-        drawerPolygon->addVertix( 7.0, 8.0,  2.0);
-        drawerPolygon->addVertix( 6.0, 8.0,  1.0);
-        drawerPolygon->addVertix( 9.0, 8.0, -8.0);
-        drawerPolygon->addVertix( 2.0, 8.0,  1.0);
-        drawerPolygon->addVertix( 0.0, 8.0, -6.0);
-        drawerPolygon->addVertix( 3.0, 8.0, -8.0);
-        drawerPolygon->addVertix(-4.0, 8.0, -4.0);
+        drawerPolygon->addVertex(Vector3(-1.0, 8.0,  8.0));
+        drawerPolygon->addVertex(Vector3( 9.0, 8.0,  9.0));
+        drawerPolygon->addVertex(Vector3( 7.0, 8.0,  2.0));
+        drawerPolygon->addVertex(Vector3( 6.0, 8.0,  1.0));
+        drawerPolygon->addVertex(Vector3( 9.0, 8.0, -8.0));
+        drawerPolygon->addVertex(Vector3( 2.0, 8.0,  1.0));
+        drawerPolygon->addVertex(Vector3( 0.0, 8.0, -6.0));
+        drawerPolygon->addVertex(Vector3( 3.0, 8.0, -8.0));
+        drawerPolygon->addVertex(Vector3(-4.0, 8.0, -4.0));
         drawerPolygon->setFilled(false);
         drawerPolygon->setCoordinateSystem(DrawerPrimitive::DisplayCoordinateSystem);
         drawerPolygon->setLinePattern(DrawerPrimitive::DiscontinuousLinePattern);
@@ -386,15 +385,8 @@ void test_DrawerPolygon::isModified_ShouldReturnExpectedValue_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        double vertex[3] = { 0.0, 0.0, 0.0 };
-        drawerPolygon->addVertix(vertex);
-        QTest::newRow("after addVertix (1)") << drawerPolygon << true;
-    }
-
-    {
-        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
-        QTest::newRow("after addVertix (2)") << drawerPolygon << true;
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
+        QTest::newRow("after addVertix") << drawerPolygon << true;
     }
 
     {
@@ -405,65 +397,49 @@ void test_DrawerPolygon::isModified_ShouldReturnExpectedValue_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(1.0, 2.0, 3.0);
+        drawerPolygon->addVertex(Vector3(1.0, 2.0, 3.0));
         drawerPolygon->getAsVtkProp();
-        double vertex[3] = { 0.0, 0.0, 0.0 };
-        drawerPolygon->setVertix(0, vertex);
-        QTest::newRow("after setVertix in range (1)") << drawerPolygon << true;
+        drawerPolygon->setVertex(0, Vector3(0.0, 0.0, 0.0));
+        QTest::newRow("after setVertix in range") << drawerPolygon << true;
     }
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(1.0, 2.0, 3.0);
+        drawerPolygon->setVertex(0, Vector3(0.0, 0.0, 0.0));
+        QTest::newRow("after setVertix out of range") << drawerPolygon << true;
+    }
+
+    {
+        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
         drawerPolygon->getAsVtkProp();
-        drawerPolygon->setVertix(0, 0.0, 0.0, 0.0);
-        QTest::newRow("after setVertix in range (2)") << drawerPolygon << true;
-    }
-
-    {
-        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        double vertex[3] = { 0.0, 0.0, 0.0 };
-        drawerPolygon->setVertix(0, vertex);
-        QTest::newRow("after setVertix out of range (1)") << drawerPolygon << true;
-    }
-
-    {
-        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->setVertix(0, 0.0, 0.0, 0.0);
-        QTest::newRow("after setVertix out of range (2)") << drawerPolygon << true;
-    }
-
-    {
-        DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
-        drawerPolygon->getAsVtkProp();
-        drawerPolygon->getVertix(0);
+        drawerPolygon->getVertex(0);
         QTest::newRow("after getVertix in range (on unmodified)") << drawerPolygon << false;
     }
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
-        drawerPolygon->getVertix(0);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
+        drawerPolygon->getVertex(0);
         QTest::newRow("after getVertix in range (on modified)") << drawerPolygon << true;
     }
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->getVertix(0);
+        drawerPolygon->getVertex(0);
         QTest::newRow("after getVertix out of range (on unmodified)") << drawerPolygon << false;
     }
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
         drawerPolygon->removeVertices();
-        drawerPolygon->getVertix(0);
+        drawerPolygon->getVertex(0);
         QTest::newRow("after getVertix out of range (on modified)") << drawerPolygon << true;
     }
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
         drawerPolygon->getAsVtkProp();
         QTest::newRow("after getAsVtkProp") << drawerPolygon << false;
     }
@@ -476,24 +452,22 @@ void test_DrawerPolygon::isModified_ShouldReturnExpectedValue_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
         drawerPolygon->getNumberOfPoints();
         QTest::newRow("after getNumberOfPoints (on modified)") << drawerPolygon << true;
     }
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        double point[3] = { 0.0, 0.0, 0.0 };
-        double closestPoint[3];
+        Vector3 point, closestPoint;
         drawerPolygon->getDistanceToPoint(point, closestPoint);
         QTest::newRow("after getDistanceToPoint (on unmodified)") << drawerPolygon << false;
     }
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
-        double point[3] = { 0.0, 0.0, 0.0 };
-        double closestPoint[3];
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
+        Vector3 point, closestPoint;
         drawerPolygon->getDistanceToPoint(point, closestPoint);
         QTest::newRow("after getDistanceToPoint (on modified)") << drawerPolygon << true;
     }
@@ -507,7 +481,7 @@ void test_DrawerPolygon::isModified_ShouldReturnExpectedValue_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
         double bounds[6];
         drawerPolygon->getBounds(bounds);
         QTest::newRow("after getBounds (on modified)") << drawerPolygon << true;
@@ -515,7 +489,7 @@ void test_DrawerPolygon::isModified_ShouldReturnExpectedValue_data()
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        drawerPolygon->addVertix(0.0, 0.0, 0.0);
+        drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
         drawerPolygon->update();
         QTest::newRow("after update") << drawerPolygon << false;
     }
@@ -536,36 +510,36 @@ void test_DrawerPolygon::get2DPlaneIndices_ReturnsExpectedValues_data()
     QTest::addColumn<int>("expectedYIndex");
 
     DrawerPolygon *polygon = 0;
-    double p1[3] = { 0.0, 0.0, 0.0 };
-    double p2[3] = { 1.0, 1.0, 0.0 };
-    double p3[3] = { 3.0, 4.0, 0.0 };
-    double p4[3] = { 4.0, 3.0, 0.0 };
+    Vector3 p1{0.0, 0.0, 0.0};
+    Vector3 p2{1.0, 1.0, 0.0};
+    Vector3 p3{3.0, 4.0, 0.0};
+    Vector3 p4{4.0, 3.0, 0.0};
 
     polygon = new DrawerPolygon(this);
-    polygon->addVertix(p1);
-    polygon->addVertix(p2);
-    polygon->addVertix(p3);
-    polygon->addVertix(p4);
+    polygon->addVertex(p1);
+    polygon->addVertex(p2);
+    polygon->addVertex(p3);
+    polygon->addVertex(p4);
     QTest::newRow("Axial plane polygon") << polygon << 0 << 1;
 
     polygon = new DrawerPolygon(this);
-    qSwap<double>(p2[0], p2[2]);
-    qSwap<double>(p3[0], p3[2]);
-    qSwap<double>(p4[0], p4[2]);
-    polygon->addVertix(p1);
-    polygon->addVertix(p2);
-    polygon->addVertix(p3);
-    polygon->addVertix(p4);
+    qSwap(p2[0], p2[2]);
+    qSwap(p3[0], p3[2]);
+    qSwap(p4[0], p4[2]);
+    polygon->addVertex(p1);
+    polygon->addVertex(p2);
+    polygon->addVertex(p3);
+    polygon->addVertex(p4);
     QTest::newRow("Sagital plane polygon") << polygon << 1 << 2;
 
     polygon = new DrawerPolygon(this);
-    qSwap<double>(p2[0], p2[1]);
-    qSwap<double>(p3[0], p3[1]);
-    qSwap<double>(p4[0], p4[1]);
-    polygon->addVertix(p1);
-    polygon->addVertix(p2);
-    polygon->addVertix(p3);
-    polygon->addVertix(p4);
+    qSwap(p2[0], p2[1]);
+    qSwap(p3[0], p3[1]);
+    qSwap(p4[0], p4[1]);
+    polygon->addVertex(p1);
+    polygon->addVertex(p2);
+    polygon->addVertex(p3);
+    polygon->addVertex(p4);
     QTest::newRow("Coronal plane polygon") << polygon << 0 << 2;
 
     polygon = new DrawerPolygon(this);
@@ -573,10 +547,10 @@ void test_DrawerPolygon::get2DPlaneIndices_ReturnsExpectedValues_data()
     p2[1] = 2.0;
     p3[1] = 3.0;
     p4[1] = 4.0;
-    polygon->addVertix(p1);
-    polygon->addVertix(p2);
-    polygon->addVertix(p3);
-    polygon->addVertix(p4);
+    polygon->addVertex(p1);
+    polygon->addVertex(p2);
+    polygon->addVertex(p3);
+    polygon->addVertex(p4);
     QTest::newRow("Undetermined plane polygon") << polygon << -1 << -1;
 }
 

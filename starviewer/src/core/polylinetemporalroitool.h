@@ -51,7 +51,7 @@ private:
     double computeTemporalMean();
 
     /// Metode que retorna la serie temporal de mida size en una determinada coordenada
-    QVector<double> getGraySerie(double *coords, int size);
+    QVector<double> getGraySerie(const Vector3 &coords, int size);
 
 private:
     /// Dades específiques de la tool

@@ -25,7 +25,6 @@
 #include <vtkCommand.h>
 
 #include <QVector2D>
-#include <QVector3D>
 
 namespace udg {
 
@@ -101,8 +100,8 @@ void AngleTool::annotateFirstPoint()
     m_mainPolyline = new DrawerPolyline;
 
     // Obtenim el punt clickat
-    double clickedWorldPoint[3];
-    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
+    Vector3 clickedWorldPoint;
+    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint.data());
     // Afegim el punt a la polilínia
     m_mainPolyline->addPoint(clickedWorldPoint);
     // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
@@ -127,19 +126,19 @@ void AngleTool::fixFirstSegment()
 
 void AngleTool::drawCircle()
 {
-    double *firstPoint = m_mainPolyline->getPoint(0);
-    double *circleCentre = m_mainPolyline->getPoint(1);
-    double *lastPoint = m_mainPolyline->getPoint(2);
+    auto firstPoint = m_mainPolyline->getPoint(0);
+    auto circleCentre = m_mainPolyline->getPoint(1);
+    auto lastPoint = m_mainPolyline->getPoint(2);
 
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
-    QVector3D firstPointProjected(firstPoint[xIndex], firstPoint[yIndex], 0.0);
-    QVector3D circleCentreProjected(circleCentre[xIndex], circleCentre[yIndex], 0.0);
-    QVector3D lastPointProjected(lastPoint[xIndex], lastPoint[yIndex], 0.0);
+    Vector3 firstPointProjected(firstPoint[xIndex], firstPoint[yIndex], 0.0);
+    Vector3 circleCentreProjected(circleCentre[xIndex], circleCentre[yIndex], 0.0);
+    Vector3 lastPointProjected(lastPoint[xIndex], lastPoint[yIndex], 0.0);
 
     // Calculem l'angle que formen els dos segments
-    QVector3D firstSegment = MathTools::directorVector(circleCentreProjected, firstPointProjected);
-    QVector3D secondSegment = MathTools::directorVector(circleCentreProjected, lastPointProjected);
+    Vector3 firstSegment = MathTools::directorVector(circleCentreProjected, firstPointProjected);
+    Vector3 secondSegment = MathTools::directorVector(circleCentreProjected, lastPointProjected);
     m_currentAngle = MathTools::angleInDegrees(firstSegment, secondSegment);
 
     // Calculem el radi de l'arc de circumferència que mesurarà un quart del segment més curt dels dos que formen l'angle
@@ -148,12 +147,12 @@ void AngleTool::drawCircle()
     double radius = qMin(distance1, distance2) / 4.0;
 
     // Calculem el rang de les iteracions per pintar l'angle correctament
-    double initialAngle = MathTools::angleInRadians(firstSegment.toVector2D());
+    double initialAngle = MathTools::angleInRadians(QVector2D(firstSegment.x, firstSegment.y));
     if (initialAngle < 0.0)
     {
         initialAngle += 2.0 * MathTools::PiNumber;
     }
-    double finalAngle = MathTools::angleInRadians(secondSegment.toVector2D());
+    double finalAngle = MathTools::angleInRadians(QVector2D(secondSegment.x, secondSegment.y));
     if (finalAngle < 0.0)
     {
         finalAngle += 2.0 * MathTools::PiNumber;
@@ -179,7 +178,7 @@ void AngleTool::drawCircle()
     for (int i = 0; i <= degrees; i++)
     {
         angle = initialAngle + i * increment;
-        double newPoint[3];
+        Vector3 newPoint;
         newPoint[xIndex] = cos(angle) * radius + circleCentre[xIndex];
         newPoint[yIndex] = sin(angle) * radius + circleCentre[yIndex];
         newPoint[zIndex] = 0.0;
@@ -223,8 +222,8 @@ void AngleTool::simulateCorrespondingSegmentOfAngle()
     if (m_state != None)
     {
         // Agafem la coordenada de pantalla
-        double clickedWorldPoint[3];
-        m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
+        Vector3 clickedWorldPoint;
+        m_2DViewer->getEventWorldCoordinate(clickedWorldPoint.data());
 
         int pointIndex;
         if (m_state == FirstPointFixed)
@@ -274,10 +273,10 @@ void AngleTool::placeText(DrawerText *angleText)
     // Padding de 5 pixels
     const double Padding = 5.0;
 
-    double *point1 = m_mainPolyline->getPoint(0);
-    double *point2 = m_mainPolyline->getPoint(1);
-    double *point3 = m_mainPolyline->getPoint(2);
-    double position[3];
+    auto point1 = m_mainPolyline->getPoint(0);
+    auto point2 = m_mainPolyline->getPoint(1);
+    auto point3 = m_mainPolyline->getPoint(2);
+    Vector3 position;
     const OrthogonalPlane &view = m_2DViewer->getView();
     int xIndex = view.getXIndex();
     int yIndex = view.getYIndex();
@@ -298,9 +297,9 @@ void AngleTool::placeText(DrawerText *angleText)
     }
     else
     {
-        double point2InDisplay[3];
+        Vector3 point2InDisplay;
         // Passem point2 a coordenades de display
-        m_2DViewer->computeWorldToDisplay(point2[0], point2[1], point2[2], point2InDisplay);
+        m_2DViewer->computeWorldToDisplay(point2[0], point2[1], point2[2], point2InDisplay.data());
 
         // Apliquem el padding
         if (point2[yIndex] <= point3[yIndex])
@@ -312,7 +311,7 @@ void AngleTool::placeText(DrawerText *angleText)
             point2InDisplay[1] += Padding;
         }
         // Tornem a coordenades de món
-        m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], position);
+        m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], position.data());
 
         // Ara position és l'attachment point que volem
         angleText->setAttachmentPoint(position);
@@ -346,7 +345,7 @@ void AngleTool::equalizeDepth()
     double z = m_mainPolyline->getPoint(2)[zIndex];
     for (int i = 0; i < 2; i++)
     {
-        double *point = m_mainPolyline->getPoint(i);
+        auto point = m_mainPolyline->getPoint(i);
         point[zIndex] = z;
         m_mainPolyline->setPoint(i, point);
     }

@@ -223,7 +223,7 @@ bool ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane 
         numberOfIntersections = referencePlane->getIntersections(localizerPlane, firstIntersectionPoint, secondIntersectionPoint, cornerLocations.at(i));
         if (numberOfIntersections)
         {
-            updateProjectionLinesFromIntersections(firstIntersectionPoint.toArray().data(), secondIntersectionPoint.toArray().data(), lineOffset + i);
+            updateProjectionLinesFromIntersections(firstIntersectionPoint, secondIntersectionPoint, lineOffset + i);
             hasEnoughIntersections = hasEnoughIntersections && true;
         }
         else
@@ -236,15 +236,16 @@ bool ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane 
     return hasEnoughIntersections;
 }
 
-void ReferenceLinesTool::updateProjectionLinesFromIntersections(double firstIntersectionPoint[3], double secondIntersectionPoint[3], int lineOffset)
+void ReferenceLinesTool::updateProjectionLinesFromIntersections(const Vector3 &firstIntersectionPoint, const Vector3 &secondIntersectionPoint, int lineOffset)
 {
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint, firstIntersectionPoint);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint, secondIntersectionPoint);
+    Vector3 projectedFirstIntersection, projectedSecondIntersection;
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(firstIntersectionPoint.data(), projectedFirstIntersection.data());
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(secondIntersectionPoint.data(), projectedSecondIntersection.data());
 
-    updateProjectedLine(lineOffset, firstIntersectionPoint, secondIntersectionPoint);
+    updateProjectedLine(lineOffset, projectedFirstIntersection, projectedSecondIntersection);
 }
 
-void ReferenceLinesTool::updateProjectedLine(int lineOffset, double firstPoint[3], double secondPoint[3])
+void ReferenceLinesTool::updateProjectedLine(int lineOffset, const Vector3 &firstPoint, const Vector3 &secondPoint)
 {
     // Dashed line
     m_projectedIntersectionLines[lineOffset]->setFirstPoint(firstPoint);
@@ -256,26 +257,24 @@ void ReferenceLinesTool::updateProjectedLine(int lineOffset, double firstPoint[3
 
 void ReferenceLinesTool::resetProjectedLine(int lineOffset)
 {
-    double voidPoint[3] = { 0.0, 0.0, 0.0 };
-
-    updateProjectedLine(lineOffset, voidPoint, voidPoint);
+    updateProjectedLine(lineOffset, Vector3(), Vector3());
 }
 
 void ReferenceLinesTool::projectPlane(ImagePlane *planeToProject)
 {
     auto planeCorners = planeToProject->getCentralCorners();
-    double projectedVertix1[3], projectedVertix2[3], projectedVertix3[3], projectedVertix4[3];
+    Vector3 projectedVertex1, projectedVertex2, projectedVertex3, projectedVertex4;
 
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.topLeft.toArray().data(), projectedVertix1);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.topRight.toArray().data(), projectedVertix2);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.bottomRight.toArray().data(), projectedVertix3);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.bottomLeft.toArray().data(), projectedVertix4);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.topLeft.data(), projectedVertex1.data());
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.topRight.data(), projectedVertex2.data());
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.bottomRight.data(), projectedVertex3.data());
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.bottomLeft.data(), projectedVertex4.data());
 
     // Donem els punts al poligon a dibuixar
-    m_projectedReferencePlane->setVertix(0, projectedVertix1);
-    m_projectedReferencePlane->setVertix(1, projectedVertix2);
-    m_projectedReferencePlane->setVertix(2, projectedVertix3);
-    m_projectedReferencePlane->setVertix(3, projectedVertix4);
+    m_projectedReferencePlane->setVertex(0, projectedVertex1);
+    m_projectedReferencePlane->setVertex(1, projectedVertex2);
+    m_projectedReferencePlane->setVertex(2, projectedVertex3);
+    m_projectedReferencePlane->setVertex(3, projectedVertex4);
     m_2DViewer->getDrawer()->enableGroup(ReferenceLinesDrawerGroup);
 }
 

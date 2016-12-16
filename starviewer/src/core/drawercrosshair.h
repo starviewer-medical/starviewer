@@ -39,7 +39,7 @@ public:
 
     vtkProp* getAsVtkProp();
 
-    double getDistanceToPoint(double *point3D, double closestPoint[3]);
+    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
 
     void getBounds(double bounds[6]);
 
@@ -57,7 +57,7 @@ private:
 
 private:
     /// Centre de la crosshair.
-    double m_centrePoint[3];
+    Vector3 m_centrePoint;
 
     /// Línies per construir el crosshair
     DrawerLine *m_lineUp;

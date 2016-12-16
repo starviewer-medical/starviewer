@@ -18,6 +18,7 @@
 #include "measurementtool.h"
 #include "volume.h"
 #include "line3d.h"
+#include "vector3.h"
 #include <QPointer>
 
 namespace udg {
@@ -72,10 +73,11 @@ private:
     QList<int> getIndexOfSegmentsCrossingAtHeight(const QList<Line3D> &segments, double height, int heightIndex);
 
     /// Gets the points that intersect with polygonSegments and the given sweepLine and orders them by the xIndex of view
-    QList<double*> getIntersectionPoints(const QList<Line3D> &polygonSegments, const Line3D &sweepLine, const OrthogonalPlane &view);
+    QList<Vector3> getIntersectionPoints(const QList<Line3D> &polygonSegments, const Line3D &sweepLine, const OrthogonalPlane &view);
 
     /// Adds the voxels that are in the path of the intersection points to the given ROIData
-    void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, const OrthogonalPlane &view, SliceOrientedVolumePixelData &pixelData, ROIData &roiData);
+    void addVoxelsFromIntersections(const QList<Vector3> &intersectionPoints, const OrthogonalPlane &view, SliceOrientedVolumePixelData &pixelData,
+                                    ROIData &roiData);
 
     /// Returns the appropiate ROIDataPrinter for the given roi data
     AbstractROIDataPrinter* getROIDataPrinter(const QMap<int, ROIData> &roiDataMap);

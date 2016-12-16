@@ -349,7 +349,7 @@ void Drawer::enableGroup(const QString &groupName)
     }
 }
 
-DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], const OrthogonalPlane &view, int slice, double closestPoint[3])
+DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(const Vector3 &point, const OrthogonalPlane &view, int slice, Vector3 &closestPoint)
 {
     double distance;
     double minimumDistance = MathTools::DoubleMaximumValue;
@@ -375,7 +375,7 @@ DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], con
             break;
     }
 
-    double localClosestPoint[3];
+    Vector3 localClosestPoint;
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
         if (primitive->isErasable())
@@ -385,9 +385,7 @@ DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(double point[3], con
             {
                 minimumDistance = distance;
                 nearestPrimitive = primitive;
-                closestPoint[0] = localClosestPoint[0];
-                closestPoint[1] = localClosestPoint[1];
-                closestPoint[2] = localClosestPoint[2];
+                closestPoint = localClosestPoint;
             }
         }
     }

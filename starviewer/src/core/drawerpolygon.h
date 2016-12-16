@@ -39,8 +39,7 @@ public:
 
     /// Afegim un vèrtex al polígon.
     /// @param point[] Punt que defineix el vèrtex del polígon
-    void addVertix(double point[3]);
-    void addVertix(double x, double y, double z);
+    void addVertex(const Vector3 &point);
 
     /// Buida la llista de vèrtexs
     void removeVertices();
@@ -50,11 +49,10 @@ public:
     /// s'afegeix el vèrtex donat al final, tal com si fessim addVertix(point)
     /// @param i índex del vèrtex que volem modificar
     /// @param point[] coordenades del vèrtex
-    void setVertix(int i, double point[3]);
-    void setVertix(int i, double x, double y, double z);
+    void setVertex(int i, const Vector3 &point);
 
     /// Ens retorna l'i-èssim vèrtex del polígon. Si l'índex està fora de rang ens retornarà un array sense inicialitzar
-    const double* getVertix(int i) const;
+    Vector3 getVertex(int i) const;
 
     /// Returns the segments of the polygon
     QList<Line3D> getSegments();
@@ -65,7 +63,7 @@ public:
     int getNumberOfPoints() const;
 
     /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint(double *point3D, double closestPoint[3]);
+    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
 
     void getBounds(double [6]);
 
@@ -93,7 +91,7 @@ private:
 
 private:
     /// Llista de punts del polígon
-    QList<QVector<double> > m_pointsList;
+    QList<Vector3> m_pointsList;
     /// Indica si els punts han canviat des de l'última vegada que s'ha actualitzat la representació de VTK.
     bool m_pointsChanged;
 

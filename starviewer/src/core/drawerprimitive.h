@@ -18,6 +18,8 @@
 #include <QObject>
 #include <QColor>
 
+#include "vector3.h"
+
 class vtkProp;
 class vtkCoordinate;
 
@@ -90,7 +92,7 @@ public:
 
     /// Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
     /// i ens dóna un paràmetre de sortida indicant quin és el punt de la primitiva més proper a aquest punt.
-    virtual double getDistanceToPoint(double *point3D, double closestPoint[3]) = 0;
+    virtual double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint) = 0;
 
     /// Ens retorna els límits de l'hexahedre que encapsula la primitiva
     /// en aquest ordre: minX, maxX, minY, maxY, minZ, maxZ

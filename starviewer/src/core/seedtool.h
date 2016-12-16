@@ -17,6 +17,8 @@
 
 #include "tool.h"
 
+#include "vector3.h"
+
 namespace udg {
 
 class Q2DViewer;
@@ -43,7 +45,7 @@ public:
     void setToolData(ToolData *data);
 
     /// Posem la llavor i li passem la posició i la llesca: útil per fer-ho per codi
-    void setSeed(QVector<double> seedPosition, int slice);
+    void setSeed(const Vector3 &seedPosition, int slice);
 
 signals:
     void seedChanged(double, double, double);

@@ -17,6 +17,7 @@
 
 #include "tool.h"
 #include "orthogonalplane.h"
+#include "vector3.h"
 
 namespace udg {
 
@@ -57,7 +58,7 @@ private:
     /// @param slice Llesca d'on volem obtenir la primitiva
     /// @return La primitiva que estigui propera al punt determinat, dins d'un llindar determinat.
     /// Si el punt no és prou proper segons el llindar o no hi ha primitives en aquella llesca, la primitiva retornada serà nul·la.
-    DrawerPrimitive* getErasablePrimitive(double point[3], const OrthogonalPlane &view, int slice);
+    DrawerPrimitive* getErasablePrimitive(const Vector3 &point, const OrthogonalPlane &view, int slice);
 
 private slots:
     /// Slot que torna la tool al seu estat inicial
@@ -71,10 +72,10 @@ private:
     int m_state;
 
     /// Primer punt de l'àrea d'esborrat
-    double m_startPoint[3];
+    Vector3 m_startPoint;
 
     /// Darrer punt de l'àrea d'esborrat
-    double m_endPoint[3];
+    Vector3 m_endPoint;
 
     /// Polígon que ens marca la zona d'esborrat.
     DrawerPolygon *m_polygon;

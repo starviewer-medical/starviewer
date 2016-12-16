@@ -54,31 +54,15 @@ DrawerLine::~DrawerLine()
     }
 }
 
-void DrawerLine::setFirstPoint(double point[3])
+void DrawerLine::setFirstPoint(Vector3 point)
 {
-    this->setFirstPoint(point[0], point[1], point[2]);
-}
-
-void DrawerLine::setFirstPoint(double x, double y, double z)
-{
-    m_firstPoint[0] = x;
-    m_firstPoint[1] = y;
-    m_firstPoint[2] = z;
-
+    m_firstPoint = std::move(point);
     emit changed();
 }
 
-void DrawerLine::setSecondPoint(double point[3])
+void DrawerLine::setSecondPoint(Vector3 point)
 {
-    this->setSecondPoint(point[0], point[1], point[2]);
-}
-
-void DrawerLine::setSecondPoint(double x, double y, double z)
-{
-    m_secondPoint[0] = x;
-    m_secondPoint[1] = y;
-    m_secondPoint[2] = z;
-
+    m_secondPoint = std::move(point);
     emit changed();
 }
 
@@ -95,8 +79,8 @@ vtkProp* DrawerLine::getAsVtkProp()
         m_vtkMapper = vtkPolyDataMapper2D::New();
 
         // Assignem els punts a la línia
-        m_vtkLineSource->SetPoint1(m_firstPoint);
-        m_vtkLineSource->SetPoint2(m_secondPoint);
+        m_vtkLineSource->SetPoint1(m_firstPoint.data());
+        m_vtkLineSource->SetPoint2(m_secondPoint.data());
 
         m_vtkActor->SetMapper(m_vtkMapper);
         m_vtkBackgroundActor->SetMapper(m_vtkMapper);
@@ -111,12 +95,12 @@ vtkProp* DrawerLine::getAsVtkProp()
     return m_vtkPropAssembly;
 }
 
-double* DrawerLine::getFirstPoint()
+const Vector3& DrawerLine::getFirstPoint() const
 {
     return m_firstPoint;
 }
 
-double* DrawerLine::getSecondPoint()
+const Vector3& DrawerLine::getSecondPoint() const
 {
     return m_secondPoint;
 }
@@ -139,8 +123,8 @@ void DrawerLine::updateVtkProp()
     if (m_vtkPropAssembly)
     {
         // Assignem els punts a la línia
-        m_vtkLineSource->SetPoint1(m_firstPoint);
-        m_vtkLineSource->SetPoint2(m_secondPoint);
+        m_vtkLineSource->SetPoint1(m_firstPoint.data());
+        m_vtkLineSource->SetPoint2(m_secondPoint.data());
         updateVtkActorProperties();
         this->setModified(false);
     }
@@ -180,7 +164,7 @@ void DrawerLine::updateVtkActorProperties()
     propertiesBackground->SetColor(0.0, 0.0, 0.0);
 }
 
-double DrawerLine::getDistanceToPoint(double *point3D, double closestPoint[3])
+double DrawerLine::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
 {
     return MathTools::getPointToFiniteLineDistance(point3D, m_firstPoint, m_secondPoint, closestPoint);
 }

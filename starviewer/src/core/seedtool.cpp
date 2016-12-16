@@ -19,8 +19,6 @@
 #include "drawer.h"
 // Vtk's
 #include <vtkCommand.h>
-// Qt's
-#include <QVector>
 
 namespace udg {
 
@@ -121,21 +119,16 @@ void SeedTool::updateSeedPosition()
 {
     Q_ASSERT(m_2DViewer);
 
-    double xyz[3];
-    if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
+    Vector3 seedPosition;
+    if (m_2DViewer->getCurrentCursorImageCoordinate(seedPosition.data()))
     {
-        QVector<double> seedPosition(3);
-        seedPosition[0] = xyz[0];
-        seedPosition[1] = xyz[1];
-        seedPosition[2] = xyz[2];
-
         //DEBUG_LOG(QString("Seed Pos: [%1,%2,%3]").arg(seedPosition[0]).arg(seedPosition[1]).arg(seedPosition[2]));
 
         m_myData->setSeedPosition(seedPosition);
         // TODO Apanyo perquè funcioni de moment, però s'ha d'arreglar
         // S'hauria d'emetre únicament "seedChanged()" i prou
-        m_2DViewer->setSeedPosition(xyz);
-        emit seedChanged(seedPosition[0], seedPosition[1], seedPosition[2]);
+        m_2DViewer->setSeedPosition(seedPosition);
+        emit seedChanged(seedPosition.x, seedPosition.y, seedPosition.z);
 
         if (!m_drawn)
         {
@@ -152,17 +145,13 @@ void SeedTool::updateSeedPosition()
     }
 }
 
-void SeedTool::setSeed(QVector<double> seedPosition, int slice)
+void SeedTool::setSeed(const Vector3 &seedPosition, int slice)
 {
     Q_ASSERT(m_2DViewer);
 
     m_myData->setSeedPosition(seedPosition);
-    double xyz[3];
-    xyz[0] = seedPosition[0];
-    xyz[1] = seedPosition[1];
-    xyz[2] = seedPosition[2];
-    m_2DViewer->setSeedPosition(xyz);
-    emit seedChanged(seedPosition[0], seedPosition[1], seedPosition[2]);
+    m_2DViewer->setSeedPosition(seedPosition);
+    emit seedChanged(seedPosition.x, seedPosition.y, seedPosition.z);
     //DEBUG_LOG(QString("Seed Pos: [%1,%2,%3], slice = %4").arg(seedPosition[0]).arg(seedPosition[1]).arg(seedPosition[2]).arg(slice));
     m_2DViewer->getDrawer()->draw(m_myData->getPoint(), m_2DViewer->getView(), slice);
 }

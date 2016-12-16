@@ -131,7 +131,7 @@ int MathTools::planeIntersection(double p[3], double n[3], double q[3], double m
     return 1;
 }
 
-QVector3D MathTools::directorVector(const QVector3D &point1, const QVector3D &point2)
+Vector3 MathTools::directorVector(const Vector3 &point1, const Vector3 &point2)
 {
     return point2 - point1;
 }
@@ -173,13 +173,9 @@ double MathTools::cubeRoot(double x)
     return std::pow(x, 1.0 / 3.0);
 }
 
-double MathTools::getDistance3D(const double firstPoint[3], const double secondPoint[3])
+double MathTools::getDistance3D(const Vector3 &firstPoint, const Vector3 &secondPoint)
 {
-    double xx = firstPoint[0] - secondPoint[0];
-    double yy = firstPoint[1] - secondPoint[1];
-    double zz = firstPoint[2] - secondPoint[2];
-    double value = pow(xx, 2) + pow(yy, 2) + pow(zz, 2);
-    return sqrt(value);
+    return (firstPoint - secondPoint).length();
 }
 
 double MathTools::randomDouble(double minimum, double maximum)
@@ -201,7 +197,8 @@ int MathTools::randomInt(int minimum, int maximum)
     return qrand() % ((maximum + 1) - minimum) + minimum;
 }
 
-double MathTools::getPointToClosestEdgeDistance(double point3D[3], const QList<QVector<double> > &pointsList, bool lastToFirstEdge, double closestPoint[3], int &closestEdge)
+double MathTools::getPointToClosestEdgeDistance(const Vector3 &point3D, const QList<Vector3> &pointsList, bool lastToFirstEdge, Vector3 &closestPoint,
+                                                int &closestEdge)
 {
     double minimumDistanceFound = MathTools::DoubleMaximumValue;
 
@@ -210,19 +207,17 @@ double MathTools::getPointToClosestEdgeDistance(double point3D[3], const QList<Q
         // Recorrem tots els punts del polígon calculant la distància a cadascun dels
         // segments que uneixen cada vèrtex
         double distance;
-        double localClosestPoint[3];
+        Vector3 localClosestPoint;
         int i = 0;
         while (i < pointsList.count() - 1)
         {
-            double startPoint[3] = { pointsList.at(i).data()[0], pointsList.at(i).data()[1], pointsList.at(i).data()[2] };
-            double endPoint[3] = { pointsList.at(i + 1).data()[0], pointsList.at(i + 1).data()[1], pointsList.at(i + 1).data()[2] };
+            auto startPoint = pointsList.at(i);
+            auto endPoint = pointsList.at(i + 1);
             distance = MathTools::getPointToFiniteLineDistance(point3D, startPoint, endPoint, localClosestPoint);
             if (distance < minimumDistanceFound)
             {
                 minimumDistanceFound = distance;
-                closestPoint[0] = localClosestPoint[0];
-                closestPoint[1] = localClosestPoint[1];
-                closestPoint[2] = localClosestPoint[2];
+                closestPoint = localClosestPoint;
                 closestEdge = i;
             }
 
@@ -232,15 +227,13 @@ double MathTools::getPointToClosestEdgeDistance(double point3D[3], const QList<Q
         if (lastToFirstEdge)
         {
             // Calculem la distància del segment que va de l'últim al primer punt
-            double startPoint[3] = { pointsList.first().data()[0], pointsList.first().data()[1], pointsList.first().data()[2] };
-            double endPoint[3] = { pointsList.last().data()[0], pointsList.last().data()[1], pointsList.last().data()[2] };
+            auto startPoint = pointsList.first();
+            auto endPoint = pointsList.last();
             distance = MathTools::getPointToFiniteLineDistance(point3D, startPoint, endPoint, localClosestPoint);
             if (distance < minimumDistanceFound)
             {
                 minimumDistanceFound = distance;
-                closestPoint[0] = localClosestPoint[0];
-                closestPoint[1] = localClosestPoint[1];
-                closestPoint[2] = localClosestPoint[2];
+                closestPoint = localClosestPoint;
                 closestEdge = i;
             }
         }
@@ -249,65 +242,47 @@ double MathTools::getPointToClosestEdgeDistance(double point3D[3], const QList<Q
     return minimumDistanceFound;
 }
 
-double MathTools::getPointToFiniteLineDistance(double point[3], double lineFirstPoint[3], double lineSecondPoint[3], double closestPoint[3])
+double MathTools::getPointToFiniteLineDistance(const Vector3 &point, const Vector3 &lineFirstPoint, const Vector3 &lineSecondPoint, Vector3 &closestPoint)
 {
     double parametricCoordinate;
 
     // vtkLine::DistanceToLine() ens retorna la distància al quadrat, per això fem sqrt()
-    return sqrt(vtkLine::DistanceToLine(point, lineFirstPoint, lineSecondPoint, parametricCoordinate, closestPoint));
+    return sqrt(vtkLine::DistanceToLine(point.toArray().data(), lineFirstPoint.toArray().data(), lineSecondPoint.toArray().data(), parametricCoordinate,
+                                        closestPoint.data()));
 }
 
-double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state)
+Vector3 MathTools::infiniteLinesIntersection(const Vector3 &p1, const Vector3 &p2, const Vector3 &p3, const Vector3 &p4, int &state)
 {
     //  Solution by Wolfram Mathematics
     //
     //   http://mathworld.wolfram.com/Line-LineIntersection.html
     //
-    double *intersection;
-
-    intersection = new double[3];
-    intersection[0] = 0;
-    intersection[1] = 0;
-    intersection[2] = 0;
+    Vector3 intersection;
 
     // Line 1: x = x1 + (x2 - x1)s
     // Line 2: x = x3 + (x4 - x3)t
     double s;
     // Director vectors for each line
-    double dv1[3], dv2[3], dv3[3];
-
-    dv1[0] = p2[0] - p1[0];
-    dv1[1] = p2[1] - p1[1];
-    dv1[2] = p2[2] - p1[2];
-
-    dv2[0] = p4[0] - p3[0];
-    dv2[1] = p4[1] - p3[1];
-    dv2[2] = p4[2] - p3[2];
-
-    dv3[0] = p3[0] - p1[0];
-    dv3[1] = p3[1] - p1[1];
-    dv3[2] = p3[2] - p1[2];
+    Vector3 dv1, dv2, dv3;
+    dv1 = p2 - p1;
+    dv2 = p4 - p3;
+    dv3 = p3 - p1;
 
     // Coplanarity test
-    double cross[3];
-    MathTools::crossProduct(dv1, dv2, cross);
-
-    double dot = MathTools::dotProduct(dv1, cross);
+    Vector3 cross = Vector3::cross(dv1, dv2);
+    double dot = Vector3::dot(dv1, cross);
 
     // Coplanarity check
     if (MathTools::closeEnough(dot, 0.0))
     {
-        double numerator1[3], numerator2[3], denominator1[3];
-        double numerator, denominator;
+        Vector3 numerator1 = Vector3::cross(dv3, dv2);
+        Vector3 numerator2 = Vector3::cross(dv1, dv2);
 
-        MathTools::crossProduct(dv3, dv2, numerator1);
-        MathTools::crossProduct(dv1, dv2, numerator2);
+        double numerator = Vector3::dot(numerator1, numerator2);
 
-        numerator = MathTools::dotProduct(numerator1, numerator2);
+        Vector3 denominator1 = Vector3::cross(dv1, dv2);
 
-        MathTools::crossProduct(dv1, dv2, denominator1);
-
-        denominator = pow(MathTools::modulus(denominator1), 2);
+        double denominator = denominator1.lengthSquared();
 
         if (MathTools::closeEnough(denominator, 0.0))
         {
@@ -318,9 +293,7 @@ double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
         {
             s = numerator / denominator;
 
-            intersection[0] = p1[0] + (s * dv1[0]);
-            intersection[1] = p1[1] + (s * dv1[1]);
-            intersection[2] = p1[2] + (s * dv1[2]);
+            intersection = p1 + (s * dv1);
 
             state = LinesIntersect;
             return intersection;

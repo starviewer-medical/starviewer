@@ -62,8 +62,8 @@ double AreaMeasureComputer::computeMeasureExplicit(double dataSpacing[3], const 
             j = 0;
         }
 
-        double *p1 = amendCoordinate((double*)m_polygon->getVertix(i), dataSpacing, desiredSpacing);
-        double *p2 = amendCoordinate((double*)m_polygon->getVertix(j), dataSpacing, desiredSpacing);
+        auto p1 = amendCoordinate(m_polygon->getVertex(i), dataSpacing, desiredSpacing);
+        auto p2 = amendCoordinate(m_polygon->getVertex(j), dataSpacing, desiredSpacing);
 
         area += (p1[xIndex] + p2[xIndex]) * (p1[yIndex] - p2[yIndex]);
     }

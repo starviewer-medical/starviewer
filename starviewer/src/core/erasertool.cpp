@@ -68,12 +68,10 @@ void EraserTool::handleEvent(unsigned long eventID)
 
 void EraserTool::startEraserAction()
 {
-    m_2DViewer->getEventWorldCoordinate(m_startPoint);
+    m_2DViewer->getEventWorldCoordinate(m_startPoint.data());
     // A l'agafar el primer punt inicialitzem l'start i l'end point per igual
     // simplement per què així és més segur que no tenir un valor arbitrari a endPoint
-    m_endPoint[0] = m_startPoint[0];
-    m_endPoint[1] = m_startPoint[1];
-    m_endPoint[2] = m_startPoint[2];
+    m_endPoint = m_startPoint;
 
     m_state = StartClick;
 }
@@ -82,10 +80,10 @@ void EraserTool::drawAreaOfErasure()
 {
     if (m_state == StartClick)
     {
-        double p2[3], p3[3];
+        Vector3 p2, p3;
         int xIndex, yIndex, zIndex;
 
-        m_2DViewer->getEventWorldCoordinate(m_endPoint);
+        m_2DViewer->getEventWorldCoordinate(m_endPoint.data());
         m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
         // Calculem el segon punt i el tercer
@@ -102,19 +100,19 @@ void EraserTool::drawAreaOfErasure()
             m_polygon = new DrawerPolygon;
             // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
             m_polygon->increaseReferenceCount();
-            m_polygon->addVertix(p2);
-            m_polygon->addVertix(m_endPoint);
-            m_polygon->addVertix(p3);
-            m_polygon->addVertix(m_startPoint);
+            m_polygon->addVertex(p2);
+            m_polygon->addVertex(m_endPoint);
+            m_polygon->addVertex(p3);
+            m_polygon->addVertex(m_startPoint);
             m_2DViewer->getDrawer()->draw(m_polygon);
         }
         else
         {
             // Assignem els punts del polígon
-            m_polygon->setVertix(0, p2);
-            m_polygon->setVertix(1, m_endPoint);
-            m_polygon->setVertix(2, p3);
-            m_polygon->setVertix(3, m_startPoint);
+            m_polygon->setVertex(0, p2);
+            m_polygon->setVertex(1, m_endPoint);
+            m_polygon->setVertex(2, p3);
+            m_polygon->setVertex(3, m_startPoint);
             // Actualitzem els atributs de la polilinia
             m_polygon->update();
             m_2DViewer->render();
@@ -141,18 +139,18 @@ void EraserTool::erasePrimitive()
     }
 }
 
-DrawerPrimitive* EraserTool::getErasablePrimitive(double point[3], const OrthogonalPlane &view, int slice)
+DrawerPrimitive* EraserTool::getErasablePrimitive(const Vector3 &point, const OrthogonalPlane &view, int slice)
 {
-    double closestPoint[3];
+    Vector3 closestPoint;
     DrawerPrimitive *nearestPrimitive = m_2DViewer->getDrawer()->getNearestErasablePrimitiveToPoint(point, view, slice, closestPoint);
 
     if (nearestPrimitive)
     {
-        double displayPoint[3];
-        m_2DViewer->computeWorldToDisplay(point[0], point[1], point[2], displayPoint);
+        Vector3 displayPoint;
+        m_2DViewer->computeWorldToDisplay(point[0], point[1], point[2], displayPoint.data());
 
-        double closestDisplayPoint[3];
-        m_2DViewer->computeWorldToDisplay(closestPoint[0], closestPoint[1], closestPoint[2], closestDisplayPoint);
+        Vector3 closestDisplayPoint;
+        m_2DViewer->computeWorldToDisplay(closestPoint[0], closestPoint[1], closestPoint[2], closestDisplayPoint.data());
 
         double displayDistance = MathTools::getDistance3D(displayPoint, closestDisplayPoint);
         // Si la distància entre els punts no està dins d'un llindar determinat, no considerem que la primitiva es pugui esborrar

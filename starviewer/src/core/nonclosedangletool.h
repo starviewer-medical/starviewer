@@ -16,6 +16,9 @@
 #define UDGNONCLOSEDANGLETOOL_H
 
 #include "tool.h"
+
+#include "vector3.h"
+
 #include <QPointer>
 
 namespace udg {
@@ -56,7 +59,7 @@ private:
     void computeAngle();
 
     /// Calcula la correcta posició del caption de l'angle segons els punts de l'angle
-    void placeText(double *firstLineVertex, double *secondLineVertex, DrawerText *angleText);
+    void placeText(const Vector3 &firstLineVertex, const Vector3 &secondLineVertex, DrawerText *angleText);
 
     /// Elimina la representacio temporal de la tool
     void deleteTemporalRepresentation();

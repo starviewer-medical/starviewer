@@ -22,8 +22,6 @@
 #include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
 #include <vtkPropAssembly.h>
-// Qt
-#include <QVector>
 
 namespace udg {
 
@@ -66,19 +64,13 @@ DrawerPolyline::~DrawerPolyline()
     }
 }
 
-void DrawerPolyline::addPoint(double point[3])
+void DrawerPolyline::addPoint(const Vector3 &point)
 {
-    QVector<double> array(3);
-
-    array[0] = point[0];
-    array[1] = point[1];
-    array[2] = point[2];
-
-    m_pointsList << array;
+    m_pointsList.append(point);
     emit changed();
 }
 
-void DrawerPolyline::setPoint(int i, double point[3])
+void DrawerPolyline::setPoint(int i, const Vector3 &point)
 {
     if (i >= m_pointsList.count() || i < 0)
     {
@@ -86,27 +78,21 @@ void DrawerPolyline::setPoint(int i, double point[3])
     }
     else
     {
-        QVector<double> array(3);
-        array[0] = point[0];
-        array[1] = point[1];
-        array[2] = point[2];
-
         m_pointsList.removeAt(i);
-        m_pointsList.insert(i, array);
+        m_pointsList.insert(i, point);
         emit changed();
     }
 }
 
-double* DrawerPolyline::getPoint(int position)
+Vector3 DrawerPolyline::getPoint(int position) const
 {
     if (position >= m_pointsList.count())
     {
-        double *array = new double[3];
-        return array;
+        return Vector3();
     }
     else
     {
-        return m_pointsList[position].data();
+        return m_pointsList[position];
     }
 }
 
@@ -189,9 +175,9 @@ void DrawerPolyline::buildVtkPoints()
 
     // Donem els punts
     int i = 0;
-    foreach (const QVector<double> &vertix, m_pointsList)
+    foreach (const auto &vertex, m_pointsList)
     {
-        m_vtkPoints->InsertPoint(i, vertix.data());
+        m_vtkPoints->InsertPoint(i, vertex.x, vertex.y, vertex.z);
         m_vtkCellArray->InsertCellPoint(i);
         i++;
     }
@@ -229,7 +215,7 @@ int DrawerPolyline::getNumberOfPoints()
     return m_pointsList.count();
 }
 
-double DrawerPolyline::getDistanceToPoint(double *point3D, double closestPoint[3])
+double DrawerPolyline::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
 {
     int closestEdge;
     return MathTools::getPointToClosestEdgeDistance(point3D, m_pointsList, false, closestPoint, closestEdge);
@@ -247,7 +233,7 @@ void DrawerPolyline::getBounds(double bounds[6])
     }
 }
 
-QList<QVector<double> > DrawerPolyline::getPointsList()
+QList<Vector3> DrawerPolyline::getPointsList() const
 {
     return m_pointsList;
 }

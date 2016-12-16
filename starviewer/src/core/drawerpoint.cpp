@@ -43,21 +43,9 @@ DrawerPoint::~DrawerPoint()
     }
 }
 
-void DrawerPoint::setPosition(double point[3])
+void DrawerPoint::setPosition(Vector3 point)
 {
-    m_position[0] = point[0];
-    m_position[1] = point[1];
-    m_position[2] = point[2];
-
-    emit changed();
-}
-
-void DrawerPoint::setPosition(QVector<double> point)
-{
-    m_position[0] = point[0];
-    m_position[1] = point[1];
-    m_position[2] = point[2];
-
+    m_position = std::move(point);
     emit changed();
 }
 
@@ -79,7 +67,7 @@ vtkProp* DrawerPoint::getAsVtkProp()
     }
 
     // Li donem els atributs
-    m_pointSphere->SetCenter(m_position);
+    m_pointSphere->SetCenter(m_position.data());
 
     updateVtkActorProperties();
 
@@ -104,7 +92,7 @@ void DrawerPoint::updateVtkProp()
     if (m_pointActor)
     {
         // Assignem les propietats del punt
-        m_pointSphere->SetCenter(m_position);
+        m_pointSphere->SetCenter(m_position.data());
         updateVtkActorProperties();
         this->setModified(false);
     }
@@ -137,14 +125,10 @@ void DrawerPoint::updateVtkActorProperties()
     properties->SetColor(color.redF(), color.greenF(), color.blueF());
 }
 
-double DrawerPoint::getDistanceToPoint(double *point3D, double closestPoint[3])
+double DrawerPoint::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
 {
-    closestPoint[0] = m_position[0];
-    closestPoint[1] = m_position[1];
-    closestPoint[2] = m_position[2];
-
-    return sqrt((point3D[0] - m_position[0]) * (point3D[0] - m_position[0]) + (point3D[1] - m_position[1]) * (point3D[1] - m_position[1]) +
-                (point3D[2] - m_position[2]) * (point3D[2] - m_position[2]));
+    closestPoint = m_position;
+    return (point3D - m_position).length();
 }
 
 void DrawerPoint::getBounds(double bounds[6])

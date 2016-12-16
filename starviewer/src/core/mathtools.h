@@ -116,7 +116,7 @@ static double cubeRoot(double x);
 static bool closeEnough(float f1, float f2);
 
 /// Distància entre punts 3D
-static double getDistance3D(const double firstPoint[3], const double secondPoint[3]);
+static double getDistance3D(const Vector3 &firstPoint, const Vector3 &secondPoint);
 
 /// Random number generation helpers
 
@@ -127,11 +127,12 @@ static int randomInt(int minimum, int maximum);
 /// Retorna a distància entre un punt i l'aresta més propera.
 /// LastToFirstEdge significa si volem que es comprovi l'aresta que forma l'últim i el primer punt de la llista.
 /// El paràmetre de sortida closestPoint, ens indicarà quin és el punt de la línia que queda més a prop del punt indicat i ClosestEdge ens indicarà l'aresta.
-static double getPointToClosestEdgeDistance(double point3D[3], const QList<QVector<double> > &pointsList, bool lastToFirstEdge, double closestPoint[3], int &closestEdge);
+static double getPointToClosestEdgeDistance(const Vector3 &point3D, const QList<Vector3> &pointsList, bool lastToFirstEdge, Vector3 &closestPoint,
+                                            int &closestEdge);
 
 /// Distància entre un punt i un segment finit definit per lineFirstPoint i lineSecondPoint
 /// El paràmetre de sortida closestPoint, ens indicarà quin és el punt de la línia que queda més a prop del punt indicat
-static double getPointToFiniteLineDistance(double point[3], double lineFirstPoint[3], double lineSecondPoint[3], double closestPoint[3]);
+static double getPointToFiniteLineDistance(const Vector3 &point, const Vector3 &lineFirstPoint, const Vector3 &lineSecondPoint, Vector3 &closestPoint);
 
 ///
 /// Càlculs d'interseccions
@@ -148,14 +149,14 @@ static int planeIntersection(double p[3], double n[3], double q[3], double m[3],
 /// @param p3 Primer punt de la segona recta
 /// @param p4 Segon punt de la segona recta
 /// @param state Contindrà el resultat de la intersecció: ParallelLines, LinesIntersect, SkewLines (no intersecten però es creuen, estan a plans paral·lels)
-static double* infiniteLinesIntersection(double *p1, double *p2, double *p3, double *p4, int &state);
+static Vector3 infiniteLinesIntersection(const Vector3 &p1, const Vector3 &p2, const Vector3 &p3, const Vector3 &p4, int &state);
 
 ///
 /// Càlculs amb vectors
 ///
 
 /// A partir del segment determinat pels dos punts passats com a paràmetres, calcula un dels possibles vectors directors
-static QVector3D directorVector(const QVector3D &point1, const QVector3D &point2);
+static Vector3 directorVector(const Vector3 &point1, const Vector3 &point2);
 
 /// Calcula el mòdul d'un vector
 static double modulus(double vector[3]);

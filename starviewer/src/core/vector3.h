@@ -46,10 +46,22 @@ public:
     TVector3(const std::array<C, 3> &v);
     template <class C>
     TVector3(const TVector3<C> &v);
+    TVector3(const TVector3<T> &v) = default;
+    TVector3(TVector3<T> &&v) = default;
 
     template <class C>
     operator std::array<C, 3>() const;
     std::array<T, 3> toArray() const;
+
+    /// Returns a pointer to the first element of the vector data.
+    T* data();
+    /// Returns a pointer to the first element of the vector data.
+    const T* data() const;
+
+    /// Array access operator.
+    T& operator[](int i);
+    /// Array access operator.
+    const T& operator[](int i) const;
 
     /// Assigna els components del vector.
     void set(T x, T y, T z);
@@ -63,7 +75,9 @@ public:
 
     /// Operador d'assignació.
     template <class C>
-    TVector3<T>& operator =(const TVector3<C> &v);
+    TVector3<T>& operator=(const TVector3<C> &v);
+    TVector3<T>& operator=(const TVector3<T> &v) = default;
+    TVector3<T>& operator=(TVector3<T> &&v) = default;
 
     /// Retorna cert si els vector són iguals.
     bool operator ==(const TVector3<T> &v) const;
@@ -183,6 +197,32 @@ inline std::array<T, 3> TVector3<T>::toArray() const
 }
 
 template <class T>
+inline T* TVector3<T>::data()
+{
+    static_assert(sizeof(TVector3<T>) == 3 * sizeof(T), "unexpected padding in TVector3<T>");
+    return &x;
+}
+
+template <class T>
+inline const T* TVector3<T>::data() const
+{
+    static_assert(sizeof(TVector3<T>) == 3 * sizeof(T), "unexpected padding in TVector3<T>");
+    return &x;
+}
+
+template <class T>
+inline T& TVector3<T>::operator[](int i)
+{
+    return data()[i];
+}
+
+template <class T>
+inline const T& TVector3<T>::operator[](int i) const
+{
+    return data()[i];
+}
+
+template <class T>
 inline void TVector3<T>::set(T x, T y, T z)
 {
     this->x = x; this->y = y; this->z = z;
@@ -210,7 +250,7 @@ inline TVector3<T>& TVector3<T>::normalize()
 
 template <class T>
 template <class C>
-inline TVector3<T>& TVector3<T>::operator =(const TVector3<C> &v)
+inline TVector3<T>& TVector3<T>::operator=(const TVector3<C> &v)
 {
     x = v.x; y = v.y; z = v.z;
     return *this;

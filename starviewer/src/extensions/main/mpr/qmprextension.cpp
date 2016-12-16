@@ -624,7 +624,7 @@ bool QMPRExtension::detectAxialViewAxisActor()
 {
     bool picked = false;
     double clickedWorldPoint[3];
-    double dummyPoint[3];
+    Vector3 dummyPoint;
     m_axial2DView->getEventWorldCoordinate(clickedWorldPoint);
 
     // Detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
@@ -748,7 +748,7 @@ void QMPRExtension::detectSagitalViewAxisActor()
     double point[3] = { clickedWorldPoint[0], clickedWorldPoint[1], 0.0 };
     double *r1, *r2;
     double distanceToCoronal;
-    double dummyPoint[3];
+    Vector3 dummyPoint;
 
     r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
@@ -923,7 +923,7 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
     double point[3] = { clickedWorldPoint[0], clickedWorldPoint[1], 0.0 };
     double *r1, *r2;
     double distanceToAxial, distanceToCoronal;
-    double dummyPoint[3];
+    Vector3 dummyPoint;
 
     r1 = m_axialOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_axialOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();

@@ -41,8 +41,8 @@ double DistanceMeasureComputer::computeMeasureExplicit(double dataSpacing[3], co
         return 0.0;
     }
     
-    double *p1 = amendCoordinate(m_line->getFirstPoint(), dataSpacing, desiredSpacing);
-    double *p2 = amendCoordinate(m_line->getSecondPoint(), dataSpacing, desiredSpacing);
+    auto p1 = amendCoordinate(m_line->getFirstPoint(), dataSpacing, desiredSpacing);
+    auto p2 = amendCoordinate(m_line->getSecondPoint(), dataSpacing, desiredSpacing);
 
     return MathTools::getDistance3D(p1, p2);
 }

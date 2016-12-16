@@ -32,6 +32,7 @@ private slots:
 Q_DECLARE_METATYPE(DrawerBitmap*)
 Q_DECLARE_METATYPE(QVector<double>)
 Q_DECLARE_METATYPE(vtkSmartPointer<vtkImageActor>)
+Q_DECLARE_METATYPE(Vector3)
 
 void test_DrawerBitmap::getBounds_ReturnsExpectedValues_data()
 {
@@ -75,97 +76,41 @@ void test_DrawerBitmap::getBounds_ReturnsExpectedValues()
 
 void test_DrawerBitmap::getDistanceToPoint_ReturnsExpectedValues_data()
 {
-    QTest::addColumn<QVector<double> >("point");
-    QTest::addColumn<QVector<double> >("origin");
-    QTest::addColumn<QVector<double> >("spacing");
+    QTest::addColumn<Vector3>("point");
+    QTest::addColumn<Vector3>("origin");
+    QTest::addColumn<Vector3>("spacing");
     QTest::addColumn<unsigned int>("width");
     QTest::addColumn<unsigned int>("height");
     QTest::addColumn<double>("distance");
-    QTest::addColumn<QVector<double> >("closestPoint");
+    QTest::addColumn<Vector3>("closestPoint");
 
-    QVector<double> point(3);
-    QVector<double> origin(3);
-    QVector<double> spacing(3);
-    QVector<double> closestPoint(3);
-    
-    unsigned int width;
-    unsigned int height;
+    QTest::newRow("default values for empty bitmap") << Vector3(2.3, 5.1, 0.6) << Vector3(0.0, 0.0, 0.0) << Vector3(1.0, 1.0, 1.0) << 0u << 0u << 5.62672
+                                                     << Vector3(0.0, 0.0, 0.0);
 
-    width = 0;
-    height = 0;
-
-    point[0] = 2.3;
-    point[1] = 5.1;
-    point[2] = 0.6;
+    QTest::newRow("point outside bounds") << Vector3(2.3, 5.1, 0.6) << Vector3(9.7, 1.3, 8.0) << Vector3(9.7, 1.3, 8.0) << 124u << 38u << 10.4652
+                                          << Vector3(9.7, 5.1, 8.0);
     
-    origin[0] = origin[1] = origin[2] = 0.0;
-    
-    spacing[0] = spacing[1] = spacing[2] = 1.0;
-    
-    closestPoint[0] = closestPoint[1] = closestPoint[2] = 0.0;
-
-    QTest::newRow("default values for empty bitmap") << point << origin << spacing << width << height << 5.62672 << closestPoint;
-    
-    width  = 124;
-    height = 38;
-    
-    point[0] = 2.3;
-    point[1] = 5.1;
-    point[2] = 0.6;
-    
-    origin[0] = 9.7;
-    origin[1] = 1.3;
-    origin[2] = 8.0;
-    
-    spacing[0] = 9.7;
-    spacing[1] = 1.3;
-    spacing[2] = 8.0;
-    
-    closestPoint[0] = 9.7;
-    closestPoint[1] = 5.1;
-    closestPoint[2] = 8.0;
-
-    QTest::newRow("point outside bounds") << point << origin << spacing << width << height << 10.4652 << closestPoint;
-
-    width  = 256;
-    height = 128;
-    
-    point[0] = 1.8;
-    point[1] = 52.2;
-    point[2] = 9.6;
-    
-    origin[0] = 0.3;
-    origin[1] = 4.6;
-    origin[2] = 2.7;
-    
-    spacing[0] = 3.2;
-    spacing[1] = 6.7;
-    spacing[2] = 1.2;
-    
-    closestPoint[0] = point[0];
-    closestPoint[1] = point[1];
-    closestPoint[2] = point[2];
-    
-    QTest::newRow("point inside bounds") << point << origin << spacing << width << height << 0.0 << closestPoint;
+    QTest::newRow("point inside bounds") << Vector3(1.8, 52.2, 9.6) << Vector3(0.3, 4.6, 2.7) << Vector3(3.2, 6.7, 1.2) << 256u << 128u << 0.0 <<
+                                            Vector3(1.8, 52.2, 9.6);
 }
 
 void test_DrawerBitmap::getDistanceToPoint_ReturnsExpectedValues()
 {
-    QFETCH(QVector<double>, point);
-    QFETCH(QVector<double>, origin);
-    QFETCH(QVector<double>, spacing);
+    QFETCH(Vector3, point);
+    QFETCH(Vector3, origin);
+    QFETCH(Vector3, spacing);
     QFETCH(unsigned int, width);
     QFETCH(unsigned int, height);
     QFETCH(double, distance);
-    QFETCH(QVector<double>, closestPoint);
+    QFETCH(Vector3, closestPoint);
 
     DrawerBitmap *bitmap = new DrawerBitmap(this);
     bitmap->setOrigin(origin.data());
     bitmap->setSpacing(spacing.data());
     bitmap->setData(width, height, 0);
     
-    QVector<double> computedClosestPoint(3);
-    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(bitmap->getDistanceToPoint(point.data(), computedClosestPoint.data()), distance, 0.0001));
+    Vector3 computedClosestPoint;
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(bitmap->getDistanceToPoint(point, computedClosestPoint), distance, 0.0001));
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(computedClosestPoint, closestPoint));
 }
 

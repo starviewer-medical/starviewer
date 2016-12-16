@@ -139,7 +139,7 @@ void MagicROITool::setTextPosition(DrawerText *text)
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
-    double attachmentPoint[3];
+    Vector3 attachmentPoint;
     attachmentPoint[xIndex] = (bounds[xIndex * 2] + bounds[xIndex * 2 + 1]) / 2.0;
     attachmentPoint[zIndex] = bounds[zIndex * 2];
     if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
@@ -157,11 +157,11 @@ void MagicROITool::setTextPosition(DrawerText *text)
     paddingY = -Padding;
     text->setVerticalJustification("Top");
 
-    double attachmentPointInDisplay[3];
+    Vector3 attachmentPointInDisplay;
     // Passem attachmentPoint a coordenades de display
-    m_2DViewer->computeWorldToDisplay(attachmentPoint[0], attachmentPoint[1], attachmentPoint[2], attachmentPointInDisplay);
+    m_2DViewer->computeWorldToDisplay(attachmentPoint[0], attachmentPoint[1], attachmentPoint[2], attachmentPointInDisplay.data());
     // Apliquem el padding i tornem a coordenades de món
-    m_2DViewer->computeDisplayToWorld(attachmentPointInDisplay[0], attachmentPointInDisplay[1] + paddingY, attachmentPointInDisplay[2], attachmentPoint);
+    m_2DViewer->computeDisplayToWorld(attachmentPointInDisplay[0], attachmentPointInDisplay[1] + paddingY, attachmentPointInDisplay[2], attachmentPoint.data());
 
     text->setAttachmentPoint(attachmentPoint);
 }
@@ -189,7 +189,7 @@ void MagicROITool::startRegion()
 {
     if (m_state == Ready && m_2DViewer->hasInput())
     {
-        if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(m_pickedPosition, m_inputIndex))
+        if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(m_pickedPosition.data(), m_inputIndex))
         {
             // Discard a border of 1 pixel around the image (workaround for #1949)
             // TODO Implement a better solution, probably reimplementing the whole algorithm
@@ -620,17 +620,17 @@ void MagicROITool::addPoint(int direction, int x, int y)
 
     Vector3 point = (p1 + p2) * 0.5;
 
-    m_roiPolygon->addVertix(point.x, point.y, point.z);
-    m_filledRoiPolygon->addVertix(point.x, point.y, point.z);
+    m_roiPolygon->addVertex(point);
+    m_filledRoiPolygon->addVertex(point);
 }
 
 bool MagicROITool::isLoopReached()
 {
-    const double *firstVertix = this->m_roiPolygon->getVertix(0);
-    const double *lastVertix = this->m_roiPolygon->getVertix(m_roiPolygon->getNumberOfPoints() - 1);
-    return ((qAbs(firstVertix[0] - lastVertix[0]) < 0.0001)
-         && (qAbs(firstVertix[1] - lastVertix[1]) < 0.0001)
-         && (qAbs(firstVertix[2] - lastVertix[2]) < 0.0001));
+    auto firstVertex = this->m_roiPolygon->getVertex(0);
+    auto lastVertex = this->m_roiPolygon->getVertex(m_roiPolygon->getNumberOfPoints() - 1);
+    return ((qAbs(firstVertex[0] - lastVertex[0]) < 0.0001)
+         && (qAbs(firstVertex[1] - lastVertex[1]) < 0.0001)
+         && (qAbs(firstVertex[2] - lastVertex[2]) < 0.0001));
 }
 
 double MagicROITool::getStandardDeviation()

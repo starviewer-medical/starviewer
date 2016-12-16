@@ -84,8 +84,8 @@ void GenericDistanceTool::placeMeasurementText(DrawerText *text)
 {
     // We place text to the left or right of the second point depending on the way line had been drawn
     int xIndex = m_2DViewer->getView().getXIndex();
-    double *firstPoint = m_distanceLine->getFirstPoint();
-    double *secondPoint = m_distanceLine->getSecondPoint();
+    auto firstPoint = m_distanceLine->getFirstPoint();
+    auto secondPoint = m_distanceLine->getSecondPoint();
 
     // Applying 5-pixel padding
     const double Padding = 5.0;
@@ -101,12 +101,12 @@ void GenericDistanceTool::placeMeasurementText(DrawerText *text)
         text->setHorizontalJustification("Right");
     }
 
-    double secondPointInDisplay[3];
+    Vector3 secondPointInDisplay;
     // Converting secondPoint to display coordinates
-    m_2DViewer->computeWorldToDisplay(secondPoint[0], secondPoint[1], secondPoint[2], secondPointInDisplay);
+    m_2DViewer->computeWorldToDisplay(secondPoint.x, secondPoint.y, secondPoint.z, secondPointInDisplay.data());
     // Applying padding and converting back to world coordinates
-    double attachmentPoint[3];
-    m_2DViewer->computeDisplayToWorld(secondPointInDisplay[0] + textPadding, secondPointInDisplay[1], secondPointInDisplay[2], attachmentPoint);
+    Vector3 attachmentPoint;
+    m_2DViewer->computeDisplayToWorld(secondPointInDisplay.x + textPadding, secondPointInDisplay.y, secondPointInDisplay.z, attachmentPoint.data());
 
     text->setAttachmentPoint(attachmentPoint);
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());

@@ -197,7 +197,7 @@ void CircleTool::updatePolygonPoints()
         point[xIndex] = a + radius * cos(angle);
         point[yIndex] = b + radius * sin(angle);
         point[zIndex] = center[zIndex];
-        m_circle->addVertix(point);
+        m_circle->addVertex(point);
     }
 
     m_circle->update();

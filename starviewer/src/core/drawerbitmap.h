@@ -59,7 +59,7 @@ public:
 
     vtkProp* getAsVtkProp();
 
-    double getDistanceToPoint(double *point3D, double closestPoint[3]);
+    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
 
     void getBounds(double bounds[6]);
 

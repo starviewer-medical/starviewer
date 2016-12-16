@@ -22,7 +22,6 @@ namespace udg {
 SeedToolData::SeedToolData(QObject *parent)
  : ToolData(parent)
 {
-    m_position = QVector<double> (3, 0);
     m_point = NULL;
     //DEBUG_LOG("SEED TOOL DATA CREADA ");
 }
@@ -36,11 +35,9 @@ SeedToolData::~SeedToolData()
     //DEBUG_LOG("DYING SEED TOOL DATA ");
 }
 
-void SeedToolData::setSeedPosition(QVector<double> pos)
+void SeedToolData::setSeedPosition(Vector3 pos)
 {
-    m_position[0] = pos[0];
-    m_position[1] = pos[1];
-    m_position[2] = pos[2];
+    m_position = std::move(pos);
 
     if (!m_point)
     {
@@ -53,7 +50,7 @@ void SeedToolData::setSeedPosition(QVector<double> pos)
 
 }
 
-QVector<double> SeedToolData::getSeedPosition()
+const Vector3& SeedToolData::getSeedPosition() const
 {
     return m_position;
 }

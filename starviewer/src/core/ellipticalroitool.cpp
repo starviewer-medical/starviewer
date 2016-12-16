@@ -90,7 +90,7 @@ void EllipticalROITool::setTextPosition(DrawerText *text)
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
-    double attachmentPoint[3];
+    Vector3 attachmentPoint;
     attachmentPoint[xIndex] = (bounds[xIndex * 2] + bounds[xIndex * 2 + 1]) / 2.0;
     attachmentPoint[yIndex] = m_secondPoint[yIndex];
     attachmentPoint[zIndex] = m_secondPoint[zIndex];
@@ -125,11 +125,11 @@ void EllipticalROITool::setTextPosition(DrawerText *text)
         }
     }
 
-    double attachmentPointInDisplay[3];
+    Vector3 attachmentPointInDisplay;
     // Passem attachmentPoint a coordenades de display
-    m_2DViewer->computeWorldToDisplay(attachmentPoint[0], attachmentPoint[1], attachmentPoint[2], attachmentPointInDisplay);
+    m_2DViewer->computeWorldToDisplay(attachmentPoint[0], attachmentPoint[1], attachmentPoint[2], attachmentPointInDisplay.data());
     // Apliquem el padding i tornem a coordenades de món
-    m_2DViewer->computeDisplayToWorld(attachmentPointInDisplay[0], attachmentPointInDisplay[1] + paddingY, attachmentPointInDisplay[2], attachmentPoint);
+    m_2DViewer->computeDisplayToWorld(attachmentPointInDisplay[0], attachmentPointInDisplay[1] + paddingY, attachmentPointInDisplay[2], attachmentPoint.data());
 
     text->setAttachmentPoint(attachmentPoint);
 }
@@ -138,10 +138,10 @@ void EllipticalROITool::handlePointAddition()
 {
     if (m_state == Ready)
     {
-        m_2DViewer->getEventWorldCoordinate(m_firstPoint);
-        m_2DViewer->putCoordinateInCurrentImageBounds(m_firstPoint);
+        m_2DViewer->getEventWorldCoordinate(m_firstPoint.data());
+        m_2DViewer->putCoordinateInCurrentImageBounds(m_firstPoint.data());
 
-        memcpy(m_secondPoint, m_firstPoint, sizeof(double) * 3);
+        m_secondPoint = m_firstPoint;
 
         m_state = FirstPointFixed;
     }
@@ -152,8 +152,8 @@ void EllipticalROITool::simulateEllipse()
     if (m_state == FirstPointFixed)
     {
         // Obtenim el segon punt
-        m_2DViewer->getEventWorldCoordinate(m_secondPoint);
-        m_2DViewer->putCoordinateInCurrentImageBounds(m_secondPoint);
+        m_2DViewer->getEventWorldCoordinate(m_secondPoint.data());
+        m_2DViewer->putCoordinateInCurrentImageBounds(m_secondPoint.data());
 
         // Si encara no havíem creat el polígon, ho fem
         if (!m_roiPolygon)
@@ -170,18 +170,14 @@ void EllipticalROITool::simulateEllipse()
     }
 }
 
-void EllipticalROITool::computeEllipseCentre(double centre[3])
+Vector3 EllipticalROITool::computeEllipseCentre() const
 {
-    for (int i = 0; i < 3; ++i)
-    {
-        centre[i] = m_firstPoint[i] + (m_secondPoint[i] - m_firstPoint[i]) * 0.5;
-    }
+    return m_firstPoint + (m_secondPoint - m_firstPoint) * 0.5;
 }
 
 void EllipticalROITool::updatePolygonPoints()
 {
-    double centre[3];
-    computeEllipseCentre(centre);
+    Vector3 centre = computeEllipseCentre();
 
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
@@ -204,13 +200,13 @@ void EllipticalROITool::updatePolygonPoints()
         double sinusAlpha = sin(alpha);
         double cosinusAlpha = cos(alpha);
 
-        double polygonPoint[3];
+        Vector3 polygonPoint;
 
         polygonPoint[xIndex] = centre[xIndex] + (xRadius * cosinusAlpha * cosinusBeta - yRadius * sinusAlpha * sinusBeta);
         polygonPoint[yIndex] = centre[yIndex] + (xRadius * cosinusAlpha * sinusBeta + yRadius * sinusAlpha * cosinusBeta);
         polygonPoint[zIndex] = depthValue;
 
-        m_roiPolygon->setVertix(vertixIndex++, polygonPoint);
+        m_roiPolygon->setVertex(vertixIndex++, polygonPoint);
     }
 
     m_roiPolygon->update();
