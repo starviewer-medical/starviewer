@@ -153,6 +153,9 @@ public:
     /// Multi-sampling is forced to 8 multi-samples in QViewer unless this is true.
     static const QString DontForceMultiSampling;
 
+    /// Force a DPI scaling when not equal to 1.
+    static const QString ScaleFactor;
+
 };
 
 } // End namespace udg
