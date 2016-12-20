@@ -1667,14 +1667,14 @@ void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
     getCurrentRenderedItemBounds(bounds);
     double motionVector[4] = { 0.0, 0.0, 0.0, 0.0 };
     
-    double alignmentPoint[3];
+    Vector3 alignmentPoint;
     if (alignPosition == AlignLeft)
     {
-        computeDisplayToWorld(0.0, 0.0, 0.0, alignmentPoint);
+        alignmentPoint = computeDisplayToWorld(Vector3());
     }
     else if (alignPosition == AlignRight)
     {
-        computeDisplayToWorld((double)getRenderer()->GetSize()[0], 0.0, 0.0, alignmentPoint);
+        alignmentPoint = computeDisplayToWorld(Vector3(getRenderer()->GetSize()[0], 0, 0));
     }
     
     // Càlcul del desplaçament

@@ -641,13 +641,10 @@ bool QMPRExtension::detectAxialViewAxisActor()
     distanceToSagital = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
 
     // Passem les distàncies a coordenades de vista per controlar la tolerància
-    double zeroInDisplay[3];
-    m_axial2DView->computeWorldToDisplay(0.0, 0.0, 0.0, zeroInDisplay);
-    double distanceToCoronalInDisplay[3];
-    m_axial2DView->computeWorldToDisplay(distanceToCoronal, 0.0, 0.0, distanceToCoronalInDisplay);
+    Vector3 zeroInDisplay = m_axial2DView->computeWorldToDisplay(Vector3(0.0, 0.0, 0.0));
+    Vector3 distanceToCoronalInDisplay = m_axial2DView->computeWorldToDisplay(Vector3(distanceToCoronal, 0.0, 0.0));
     distanceToCoronal = MathTools::getDistance3D(zeroInDisplay, distanceToCoronalInDisplay);
-    double distanceToSagitalInDisplay[3];
-    m_axial2DView->computeWorldToDisplay(distanceToSagital, 0.0, 0.0, distanceToSagitalInDisplay);
+    Vector3 distanceToSagitalInDisplay = m_axial2DView->computeWorldToDisplay(Vector3(distanceToSagital, 0.0, 0.0));
     distanceToSagital = MathTools::getDistance3D(zeroInDisplay, distanceToSagitalInDisplay);
 
     // Donem una "tolerància" mínima
@@ -755,10 +752,8 @@ void QMPRExtension::detectSagitalViewAxisActor()
     distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
 
     // Passem les distàncies a coordenades de vista per controlar la tolerància
-    double zeroInDisplay[3];
-    m_sagital2DView->computeWorldToDisplay(0.0, 0.0, 0.0, zeroInDisplay);
-    double distanceToCoronalInDisplay[3];
-    m_sagital2DView->computeWorldToDisplay(distanceToCoronal, 0.0, 0.0, distanceToCoronalInDisplay);
+    Vector3 zeroInDisplay = m_sagital2DView->computeWorldToDisplay(Vector3(0.0, 0.0, 0.0));
+    Vector3 distanceToCoronalInDisplay = m_sagital2DView->computeWorldToDisplay(Vector3(distanceToCoronal, 0.0, 0.0));
     distanceToCoronal = MathTools::getDistance3D(zeroInDisplay, distanceToCoronalInDisplay);
 
     // Donem una "tolerància" mínima
@@ -915,32 +910,29 @@ void QMPRExtension::pushAxialViewAxisActor()
 
 void QMPRExtension::detectPushSagitalViewAxisActor()
 {
-    double clickedWorldPoint[3];
-    m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
+    Vector3 clickedWorldPoint;
+    m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint.data());
 
     // Detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
     // Únicament mourem la vista axial. Desde la vista sagital no podrem moure l'slice de la coronal
-    double point[3] = { clickedWorldPoint[0], clickedWorldPoint[1], 0.0 };
+    clickedWorldPoint.z = 0.0;
     double *r1, *r2;
     double distanceToAxial, distanceToCoronal;
     Vector3 dummyPoint;
 
     r1 = m_axialOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_axialOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToAxial = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
+    distanceToAxial = MathTools::getPointToFiniteLineDistance(clickedWorldPoint, r1, r2, dummyPoint);
 
     r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
+    distanceToCoronal = MathTools::getPointToFiniteLineDistance(clickedWorldPoint, r1, r2, dummyPoint);
 
     // Passem les distàncies a coordenades de vista per controlar la tolerància
-    double zeroInDisplay[3];
-    m_sagital2DView->computeWorldToDisplay(0.0, 0.0, 0.0, zeroInDisplay);
-    double distanceToCoronalInDisplay[3];
-    m_sagital2DView->computeWorldToDisplay(distanceToCoronal, 0.0, 0.0, distanceToCoronalInDisplay);
+    Vector3 zeroInDisplay = m_sagital2DView->computeWorldToDisplay(Vector3(0.0, 0.0, 0.0));
+    Vector3 distanceToCoronalInDisplay = m_sagital2DView->computeWorldToDisplay(Vector3(distanceToCoronal, 0.0, 0.0));
     distanceToCoronal = MathTools::getDistance3D(zeroInDisplay, distanceToCoronalInDisplay);
-    double distanceToAxialInDisplay[3];
-    m_sagital2DView->computeWorldToDisplay(distanceToAxial, 0.0, 0.0, distanceToAxialInDisplay);
+    Vector3 distanceToAxialInDisplay = m_sagital2DView->computeWorldToDisplay(Vector3(distanceToAxial, 0.0, 0.0));
     distanceToAxial = MathTools::getDistance3D(zeroInDisplay, distanceToAxialInDisplay);
 
     // Donem una "tolerància" mínima
@@ -960,8 +952,8 @@ void QMPRExtension::detectPushSagitalViewAxisActor()
             m_pickedActorReslice = m_sagitalReslice;
         }
         m_state = Pushing;
-        m_initialPickX = clickedWorldPoint[0];
-        m_initialPickY = clickedWorldPoint[1];
+        m_initialPickX = clickedWorldPoint.x;
+        m_initialPickY = clickedWorldPoint.y;
     }
 }
 

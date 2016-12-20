@@ -125,11 +125,10 @@ void EllipticalROITool::setTextPosition(DrawerText *text)
         }
     }
 
-    Vector3 attachmentPointInDisplay;
     // Passem attachmentPoint a coordenades de display
-    m_2DViewer->computeWorldToDisplay(attachmentPoint[0], attachmentPoint[1], attachmentPoint[2], attachmentPointInDisplay.data());
+    Vector3 attachmentPointInDisplay = m_2DViewer->computeWorldToDisplay(attachmentPoint);
     // Apliquem el padding i tornem a coordenades de món
-    m_2DViewer->computeDisplayToWorld(attachmentPointInDisplay[0], attachmentPointInDisplay[1] + paddingY, attachmentPointInDisplay[2], attachmentPoint.data());
+    attachmentPoint = m_2DViewer->computeDisplayToWorld(attachmentPointInDisplay + Vector3(0, paddingY, 0));
 
     text->setAttachmentPoint(attachmentPoint);
 }

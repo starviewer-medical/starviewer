@@ -256,35 +256,42 @@ void QViewer::setActive(bool active)
     }
 }
 
-void QViewer::computeDisplayToWorld(double x, double y, double z, double worldPoint[3])
+Vector3 QViewer::computeDisplayToWorld(const Vector3 &displayPoint)
 {
     vtkRenderer *renderer = this->getRenderer();
     if (renderer)
     {
         double homogeneousWorldPoint[4];
-        renderer->SetDisplayPoint(x, y, z);
+        renderer->SetDisplayPoint(displayPoint.x, displayPoint.y, displayPoint.z);
         renderer->DisplayToWorld();
         renderer->GetWorldPoint(homogeneousWorldPoint);
         
         double divisor = 1.0;
-        if (homogeneousWorldPoint[3])
+        if (homogeneousWorldPoint[3] != 0.0)
         {
             divisor = homogeneousWorldPoint[3];
         }
-        worldPoint[0] = homogeneousWorldPoint[0] / divisor;
-        worldPoint[1] = homogeneousWorldPoint[1] / divisor;
-        worldPoint[2] = homogeneousWorldPoint[2] / divisor;
+
+        return Vector3(homogeneousWorldPoint) / divisor;
+    }
+    else
+    {
+        return displayPoint;
     }
 }
 
-void QViewer::computeWorldToDisplay(double x, double y, double z, double displayPoint[3])
+Vector3 QViewer::computeWorldToDisplay(const Vector3 &worldPoint)
 {
     vtkRenderer *renderer = this->getRenderer();
     if (renderer)
     {
-        renderer->SetWorldPoint(x, y, z, 1.0);
+        renderer->SetWorldPoint(worldPoint.x, worldPoint.y, worldPoint.z, 1.0);
         renderer->WorldToDisplay();
-        renderer->GetDisplayPoint(displayPoint);
+        return Vector3(renderer->GetDisplayPoint());
+    }
+    else
+    {
+        return worldPoint;
     }
 }
 
@@ -311,7 +318,8 @@ void QViewer::getRecentEventWorldCoordinate(double worldCoordinate[3], bool curr
         position = this->getLastEventPosition();
     }
 
-    this->computeDisplayToWorld(position.x(), position.y(), 0, worldCoordinate);
+    Vector3 wc = this->computeDisplayToWorld(Vector3(position.x(), position.y(), 0));
+    memcpy(worldCoordinate, wc.data(), sizeof(wc));
 }
 
 void QViewer::setupInteraction()
@@ -538,9 +546,8 @@ bool QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double m
     }
 
     // Calcular la width i height en coordenades de display
-    double displayTopLeft[3], displayBottomRight[3];
-    this->computeWorldToDisplay(topCorner[0], topCorner[1], topCorner[2], displayTopLeft);
-    this->computeWorldToDisplay(bottomCorner[0], bottomCorner[1], bottomCorner[2], displayBottomRight);
+    Vector3 displayTopLeft = this->computeWorldToDisplay(topCorner);
+    Vector3 displayBottomRight = this->computeWorldToDisplay(bottomCorner);
 
     // Recalculem tenint en compte el display
     double width, height;

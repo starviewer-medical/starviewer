@@ -269,11 +269,10 @@ void PolylineROITool::setTextPosition(DrawerText *text)
             break;
     }
 
-    Vector3 closestPointInDisplay;
     // Passem closestPoint a coordenades de display
-    m_2DViewer->computeWorldToDisplay(closestPoint[0], closestPoint[1], closestPoint[2], closestPointInDisplay.data());
+    Vector3 closestPointInDisplay = m_2DViewer->computeWorldToDisplay(closestPoint);
     // Apliquem el padding i tornem a coordenades de món
-    m_2DViewer->computeDisplayToWorld(closestPointInDisplay[0] + paddingX, closestPointInDisplay[1] + paddingY, closestPointInDisplay[2], closestPoint.data());
+    closestPoint = m_2DViewer->computeDisplayToWorld(closestPointInDisplay + Vector3(paddingX, paddingY));
 
     text->setAttachmentPoint(closestPoint);
 }

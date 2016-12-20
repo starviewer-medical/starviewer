@@ -146,11 +146,8 @@ DrawerPrimitive* EraserTool::getErasablePrimitive(const Vector3 &point, const Or
 
     if (nearestPrimitive)
     {
-        Vector3 displayPoint;
-        m_2DViewer->computeWorldToDisplay(point[0], point[1], point[2], displayPoint.data());
-
-        Vector3 closestDisplayPoint;
-        m_2DViewer->computeWorldToDisplay(closestPoint[0], closestPoint[1], closestPoint[2], closestDisplayPoint.data());
+        Vector3 displayPoint = m_2DViewer->computeWorldToDisplay(point);
+        Vector3 closestDisplayPoint = m_2DViewer->computeWorldToDisplay(closestPoint);
 
         double displayDistance = MathTools::getDistance3D(displayPoint, closestDisplayPoint);
         // Si la distància entre els punts no està dins d'un llindar determinat, no considerem que la primitiva es pugui esborrar

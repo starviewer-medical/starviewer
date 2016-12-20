@@ -276,7 +276,6 @@ void AngleTool::placeText(DrawerText *angleText)
     auto point1 = m_mainPolyline->getPoint(0);
     auto point2 = m_mainPolyline->getPoint(1);
     auto point3 = m_mainPolyline->getPoint(2);
-    Vector3 position;
     const OrthogonalPlane &view = m_2DViewer->getView();
     int xIndex = view.getXIndex();
     int yIndex = view.getYIndex();
@@ -297,9 +296,8 @@ void AngleTool::placeText(DrawerText *angleText)
     }
     else
     {
-        Vector3 point2InDisplay;
         // Passem point2 a coordenades de display
-        m_2DViewer->computeWorldToDisplay(point2[0], point2[1], point2[2], point2InDisplay.data());
+        Vector3 point2InDisplay = m_2DViewer->computeWorldToDisplay(point2);
 
         // Apliquem el padding
         if (point2[yIndex] <= point3[yIndex])
@@ -311,7 +309,7 @@ void AngleTool::placeText(DrawerText *angleText)
             point2InDisplay[1] += Padding;
         }
         // Tornem a coordenades de món
-        m_2DViewer->computeDisplayToWorld(point2InDisplay[0], point2InDisplay[1], point2InDisplay[2], position.data());
+        Vector3 position = m_2DViewer->computeDisplayToWorld(point2InDisplay);
 
         // Ara position és l'attachment point que volem
         angleText->setAttachmentPoint(position);

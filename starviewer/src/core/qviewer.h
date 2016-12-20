@@ -17,6 +17,7 @@
 
 #include "orthogonalplane.h"
 #include "anatomicalplane.h"
+#include "vector3.h"
 
 #include <QWidget>
 // Llista de captures de pantalla
@@ -96,8 +97,8 @@ public:
     ToolProxy* getToolProxy() const;
 
     /// Passa coordenades de display a coordenades de món i viceversa
-    void computeDisplayToWorld(double x, double y, double z, double worldPoint[3]);
-    void computeWorldToDisplay(double x, double y, double z, double displayPoint[3]);
+    Vector3 computeDisplayToWorld(const Vector3 &displayPoint);
+    Vector3 computeWorldToDisplay(const Vector3 &worldPoint);
 
     /// Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat
     void getEventWorldCoordinate(double worldCoordinate[3]);

@@ -17,6 +17,8 @@
 
 #include "tool.h"
 
+#include "vector3.h"
+
 #include <vtkSmartPointer.h>
 
 class vtkRenderer;
@@ -72,7 +74,7 @@ private:
 
     /// Calcula el focal point correcte tenint en compte que si estem a les cantonades
     /// el focal point no ha de ser necessariament el punt on esta el cursor.
-    void setFocalPoint(const double cursorPosition[3]);
+    void setFocalPoint(const Vector3 &cursorPosition);
 private:
     /// Renderer on tindrem la vista magnificada
     vtkRenderer *m_magnifiedRenderer;

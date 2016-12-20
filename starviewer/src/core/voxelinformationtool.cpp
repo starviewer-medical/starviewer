@@ -97,8 +97,8 @@ void VoxelInformationTool::updateCaption()
     QStringList inputsCaptions;
     for (int i = 0; i < m_2DViewer->getNumberOfInputs(); ++i)
     {
-        double xyz[3];
-        if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(xyz, i))
+        Vector3 xyz;
+        if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(xyz.data(), i))
         {
             QString caption = computeVoxelValueOnInput(xyz, i);
 
@@ -114,9 +114,8 @@ void VoxelInformationTool::updateCaption()
     // Update the DrawerText element according to the gathered information
     if (!inputsCaptions.isEmpty())
     {
-        double attachmentPoint[3];
         QString horizontalJustification, verticalJustification;
-        computeCaptionAttachmentPointAndTextAlignment(attachmentPoint, horizontalJustification, verticalJustification);
+        Vector3 attachmentPoint = computeCaptionAttachmentPointAndTextAlignment(horizontalJustification, verticalJustification);
 
         // Actualitzem els valors del caption
         m_caption->visibilityOn();
@@ -134,7 +133,7 @@ void VoxelInformationTool::updateCaption()
     m_2DViewer->render();
 }
 
-QString VoxelInformationTool::computeVoxelValueOnInput(double worldCoordinate[3], int i)
+QString VoxelInformationTool::computeVoxelValueOnInput(const Vector3 &worldCoordinate, int i)
 {
     SliceOrientedVolumePixelData pixelData = m_2DViewer->getCurrentPixelDataFromInput(i);
     Voxel voxel = pixelData.getVoxelValue(worldCoordinate);
@@ -159,8 +158,7 @@ QString VoxelInformationTool::computeVoxelValueOnInput(double worldCoordinate[3]
     return voxel.getAsQString() + " " + m_2DViewer->getInput(i)->getPixelUnits();
 }
 
-void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double attachmentPoint[3], QString &horizontalJustification,
-                                                                         QString &verticalJustification)
+Vector3 VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(QString &horizontalJustification, QString &verticalJustification)
 {
     // Per defecte alinearem el texte a la dreta i el més amunt possible
     horizontalJustification = "Right";
@@ -214,7 +212,7 @@ void VoxelInformationTool::computeCaptionAttachmentPointAndTextAlignment(double 
     }
 
     // I finalment transformem la coordenada de viewport en coordenada de món
-    m_2DViewer->computeDisplayToWorld(adjustedCursorPosition.x(), adjustedCursorPosition.y(), 0.0, attachmentPoint);
+    return m_2DViewer->computeDisplayToWorld(Vector3(adjustedCursorPosition.x(), adjustedCursorPosition.y(), 0.0));
 }
 
 }

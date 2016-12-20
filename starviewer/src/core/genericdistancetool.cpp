@@ -101,12 +101,10 @@ void GenericDistanceTool::placeMeasurementText(DrawerText *text)
         text->setHorizontalJustification("Right");
     }
 
-    Vector3 secondPointInDisplay;
     // Converting secondPoint to display coordinates
-    m_2DViewer->computeWorldToDisplay(secondPoint.x, secondPoint.y, secondPoint.z, secondPointInDisplay.data());
+    Vector3 secondPointInDisplay = m_2DViewer->computeWorldToDisplay(secondPoint);
     // Applying padding and converting back to world coordinates
-    Vector3 attachmentPoint;
-    m_2DViewer->computeDisplayToWorld(secondPointInDisplay.x + textPadding, secondPointInDisplay.y, secondPointInDisplay.z, attachmentPoint.data());
+    Vector3 attachmentPoint = m_2DViewer->computeDisplayToWorld(secondPointInDisplay + Vector3(textPadding, 0, 0));
 
     text->setAttachmentPoint(attachmentPoint);
     m_2DViewer->getDrawer()->draw(text, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());

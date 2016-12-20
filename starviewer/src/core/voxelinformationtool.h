@@ -16,6 +16,9 @@
 #define UDGVOXELINFORMATIONTOOL_H
 
 #include "tool.h"
+
+#include "vector3.h"
+
 #include <QPointer>
 
 namespace udg {
@@ -46,11 +49,11 @@ private slots:
 
 private:
     /// Returns the voxel value in a properly formatted string corresponding to the given worldCoordinate on the i-th viewer's input
-    QString computeVoxelValueOnInput(double worldCoordinate[3], int i);
+    QString computeVoxelValueOnInput(const Vector3 &worldCoordinate, int i);
 
     /// Calcula quin és el punt on col·locarem el caption i la justificació del texte corresponent
     /// segons la posició en la que es trobi el punter del mouse.
-    void computeCaptionAttachmentPointAndTextAlignment(double attachmentPoint[3], QString &horizontalJustification, QString &verticalJustification);
+    Vector3 computeCaptionAttachmentPointAndTextAlignment(QString &horizontalJustification, QString &verticalJustification);
 
 private:
     /// 2DViewer amb el que operem

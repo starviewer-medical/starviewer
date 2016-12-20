@@ -142,10 +142,10 @@ void MagnifyingGlassTool::updateMagnifiedView()
         return;
     }
     
-    double xyz[3];
-    if (!m_2DViewer->getCurrentCursorImageCoordinate(xyz))
+    Vector3 xyz;
+    if (!m_2DViewer->getCurrentCursorImageCoordinate(xyz.data()))
     {
-        m_2DViewer->getEventWorldCoordinate(xyz);
+        m_2DViewer->getEventWorldCoordinate(xyz.data());
     }
 
     m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
@@ -165,11 +165,10 @@ void MagnifyingGlassTool::updateMagnifiedView()
     m_2DViewer->render();
 }
 
-void MagnifyingGlassTool::setFocalPoint(const double cursorPosition[3])
+void MagnifyingGlassTool::setFocalPoint(const Vector3 &cursorPosition)
 {
     // Passem el punt a coordenades de display
-    double pointInDisplay[3];
-    m_2DViewer->computeWorldToDisplay(cursorPosition[0], cursorPosition[1], cursorPosition[2], pointInDisplay);
+    Vector3 pointInDisplay = m_2DViewer->computeWorldToDisplay(cursorPosition);
 
     double viewportBounds[4];
     m_magnifiedRenderer->GetViewport(viewportBounds);
@@ -190,10 +189,9 @@ void MagnifyingGlassTool::setFocalPoint(const double cursorPosition[3])
     double offsetX = (offsetXMax - offsetXMin) / zoomFactor;
     double offsetY = (offsetYMax - offsetYMin) / zoomFactor;
 
-    double focalPoint[3];
-    m_2DViewer->computeDisplayToWorld(pointInDisplay[0] - offsetX, pointInDisplay[1] - offsetY, pointInDisplay[2], focalPoint);
+    Vector3 focalPoint = m_2DViewer->computeDisplayToWorld(pointInDisplay - Vector3(offsetX, offsetY, 0));
 
-    m_magnifiedCamera->SetFocalPoint(focalPoint);
+    m_magnifiedCamera->SetFocalPoint(focalPoint.data());
 
     int xIndex, yIndex, zIndex;
     m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
