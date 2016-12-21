@@ -24,6 +24,7 @@
 #include "q2dviewerconfigurationscreen.h"
 #include "q2dviewerlayoutconfigurationscreen.h"
 #include "qexternalapplicationconfigurationscreen.h"
+#include "qdpiconfigurationscreen.h"
 #include "starviewerapplication.h"
 
 namespace udg {
@@ -66,6 +67,11 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     // External applications configuration
     QExternalApplicationConfigurationScreen *externalApplicationScreen = new QExternalApplicationConfigurationScreen(this);
     this->addConfigurationWidget(externalApplicationScreen, tr("External application"), AdvancedConfiguration);
+
+    // Magnification
+    QDPIConfigurationScreen *dpiScreen = new QDPIConfigurationScreen(this);
+    this->addConfigurationWidget(dpiScreen, tr("Magnification"), BasicConfiguration);
+
 
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
 
