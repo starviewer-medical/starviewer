@@ -623,22 +623,21 @@ void QMPRExtension::handleSagitalViewEvents(unsigned long eventID)
 bool QMPRExtension::detectAxialViewAxisActor()
 {
     bool picked = false;
-    double clickedWorldPoint[3];
     Vector3 dummyPoint;
-    m_axial2DView->getEventWorldCoordinate(clickedWorldPoint);
+    auto clickedWorldPoint = m_axial2DView->getEventWorldCoordinate();
 
     // Detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
-    double point[3] = { clickedWorldPoint[0], clickedWorldPoint[1], 0.0 };
+    clickedWorldPoint.z = 0.0;
     double *r1, *r2;
     double distanceToCoronal, distanceToSagital;
 
     r1 = m_coronalOverAxialIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverAxialIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
+    distanceToCoronal = MathTools::getPointToFiniteLineDistance(clickedWorldPoint, r1, r2, dummyPoint);
 
     r1 = m_sagitalOverAxialAxisActor->GetPositionCoordinate()->GetValue();
     r2 = m_sagitalOverAxialAxisActor->GetPosition2Coordinate()->GetValue();
-    distanceToSagital = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
+    distanceToSagital = MathTools::getPointToFiniteLineDistance(clickedWorldPoint, r1, r2, dummyPoint);
 
     // Passem les distàncies a coordenades de vista per controlar la tolerància
     Vector3 zeroInDisplay = m_axial2DView->computeWorldToDisplay(Vector3(0.0, 0.0, 0.0));
@@ -663,8 +662,8 @@ bool QMPRExtension::detectAxialViewAxisActor()
         m_pickedActorReslice->SetInterpolationModeToNearestNeighbor();
         // Desactivem les tools que puguin estar actives
         m_toolManager->disableAllToolsTemporarily();
-        m_initialPickX = clickedWorldPoint[0];
-        m_initialPickY = clickedWorldPoint[1];
+        m_initialPickX = clickedWorldPoint.x;
+        m_initialPickY = clickedWorldPoint.y;
         picked = true;
     }
     return picked;
@@ -672,11 +671,10 @@ bool QMPRExtension::detectAxialViewAxisActor()
 
 void QMPRExtension::rotateAxialViewAxisActor()
 {
-    double clickedWorldPoint[3];
-    m_axial2DView->getEventWorldCoordinate(clickedWorldPoint);
+    auto clickedWorldPoint = m_axial2DView->getEventWorldCoordinate();
 
     // Vectors des del centre del picked plane a m_initialPick i clickedWorldPoint
-    double vec1[3], vec2[3];
+    Vector3 vec1, vec2;
 
     vec1[0] = m_initialPickX - m_pickedActorPlaneSource->GetCenter()[0];
     vec1[1] = m_initialPickY - m_pickedActorPlaneSource->GetCenter()[1];
@@ -686,28 +684,24 @@ void QMPRExtension::rotateAxialViewAxisActor()
     vec2[1] = clickedWorldPoint[1] - m_pickedActorPlaneSource->GetCenter()[1];
     vec2[2] = 0.0;
 
-    m_initialPickX = clickedWorldPoint[0];
-    m_initialPickY = clickedWorldPoint[1];
+    m_initialPickX = clickedWorldPoint.x;
+    m_initialPickY = clickedWorldPoint.y;
 
     // Angle de gir en graus
-    double angle = MathTools::angleInDegrees(QVector3D(vec1[0], vec1[1], vec1[2]), QVector3D(vec2[0], vec2[1], vec2[2]));
+    double angle = MathTools::angleInDegrees(vec1, vec2);
 
     // Direcció de l'eix de rotació
-    double direction[3];
-    MathTools::crossProduct(vec1, vec2, direction);
+    auto direction = Vector3::cross(vec1, vec2);
 
     // Eix de rotació en coordenades de món
-    double axis[3];
-    m_axialPlaneSource->GetNormal(axis);
+    Vector3 axis = m_axialPlaneSource->GetNormal();
 
     // Calculem el producte escalar per saber el sentit de l'eix (i per tant del gir)
-    double dot = MathTools::dotProduct(direction, axis);
-    axis[0] *= dot;
-    axis[1] *= dot;
-    axis[2] *= dot;
-    MathTools::normalize(axis);
+    double dot = Vector3::dot(direction, axis);
+    axis *= dot;
+    axis.normalize();
 
-    rotateMiddle(angle, axis, m_pickedActorPlaneSource);
+    rotateMiddle(angle, axis.data(), m_pickedActorPlaneSource);
 
     updatePlanes();
     updateControls();
@@ -738,18 +732,17 @@ void QMPRExtension::releaseAxialViewAxisActor()
 
 void QMPRExtension::detectSagitalViewAxisActor()
 {
-    double clickedWorldPoint[3];
-    m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
+    auto clickedWorldPoint = m_sagital2DView->getEventWorldCoordinate();
 
     // Detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
-    double point[3] = { clickedWorldPoint[0], clickedWorldPoint[1], 0.0 };
+    clickedWorldPoint.z = 0.0;
     double *r1, *r2;
     double distanceToCoronal;
     Vector3 dummyPoint;
 
     r1 = m_coronalOverSagitalIntersectionAxis->GetPositionCoordinate()->GetValue();
     r2 = m_coronalOverSagitalIntersectionAxis->GetPosition2Coordinate()->GetValue();
-    distanceToCoronal = MathTools::getPointToFiniteLineDistance(point, r1, r2, dummyPoint);
+    distanceToCoronal = MathTools::getPointToFiniteLineDistance(clickedWorldPoint, r1, r2, dummyPoint);
 
     // Passem les distàncies a coordenades de vista per controlar la tolerància
     Vector3 zeroInDisplay = m_sagital2DView->computeWorldToDisplay(Vector3(0.0, 0.0, 0.0));
@@ -765,8 +758,8 @@ void QMPRExtension::detectSagitalViewAxisActor()
         // Desactivem les tools que puguin estar actives
         m_toolManager->disableAllToolsTemporarily();
 
-        m_initialPickX = clickedWorldPoint[0];
-        m_initialPickY = clickedWorldPoint[1];
+        m_initialPickX = clickedWorldPoint.x;
+        m_initialPickY = clickedWorldPoint.y;
         m_state = Rotating;
     }
 }
@@ -774,8 +767,7 @@ void QMPRExtension::detectSagitalViewAxisActor()
 void QMPRExtension::rotateSagitalViewAxisActor()
 {
     // Coordenades de sagital
-    double clickedWorldPoint[3];
-    m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
+    auto clickedWorldPoint = m_sagital2DView->getEventWorldCoordinate();
 
     // Transformació de coordenades de món a coordenades de sagital
     vtkTransform *transform = getWorldToSagitalTransform();
@@ -785,7 +777,7 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     transform->TransformPoint(m_pickedActorPlaneSource->GetCenter(), pickedPlaneCenter);
 
     // Vectors des del centre del picked plane (sempre és el coronal) a m_initialPick i clickedWorldPoint (coordenades de sagital)
-    double vec1[3], vec2[3];
+    Vector3 vec1, vec2;
 
     vec1[0] = m_initialPickX - pickedPlaneCenter[0];
     vec1[1] = m_initialPickY - pickedPlaneCenter[1];
@@ -795,35 +787,31 @@ void QMPRExtension::rotateSagitalViewAxisActor()
     vec2[1] = clickedWorldPoint[1] - pickedPlaneCenter[1];
     vec2[2] = 0.0;
 
-    m_initialPickX = clickedWorldPoint[0];
-    m_initialPickY = clickedWorldPoint[1];
+    m_initialPickX = clickedWorldPoint.x;
+    m_initialPickY = clickedWorldPoint.y;
 
     // Angle de gir en graus
-    double angle = MathTools::angleInDegrees(QVector3D(vec1[0], vec1[1], vec1[2]), QVector3D(vec2[0], vec2[1], vec2[2]));
+    double angle = MathTools::angleInDegrees(vec1, vec2);
 
     // Direcció de l'eix de rotació (coordenades de sagital)
-    double direction[3];
-    MathTools::crossProduct(vec1, vec2, direction);
+    auto direction = Vector3::cross(vec1, vec2);
     // Transformació de coordenades de sagital a coordenades de món
     transform->Inverse();
-    transform->TransformVector(direction, direction);
+    transform->TransformVector(direction.data(), direction.data());
     // Ara direction és la direcció de l'eix de rotació en coordenades de món
 
     // Ja no hem de fer més transformacions; destruïm transform
     transform->Delete();
 
     // Eix de rotació en coordenades de món
-    double axis[3];
-    m_sagitalPlaneSource->GetNormal(axis);
+    Vector3 axis = m_sagitalPlaneSource->GetNormal();
 
     // Calculem el producte escalar per saber el sentit de l'eix (i per tant del gir)
-    double dot = MathTools::dotProduct(direction, axis);
-    axis[0] *= dot;
-    axis[1] *= dot;
-    axis[2] *= dot;
-    MathTools::normalize(axis);
+    double dot = Vector3::dot(direction, axis);
+    axis *= dot;
+    axis.normalize();
 
-    rotateMiddle(angle, axis, m_pickedActorPlaneSource);
+    rotateMiddle(angle, axis.data(), m_pickedActorPlaneSource);
 
     updatePlanes();
     updateControls();
@@ -861,11 +849,10 @@ void QMPRExtension::pushSagitalViewCoronalAxisActor()
     m_sagital2DView->setCursor(Qt::ClosedHandCursor);
 
     // Coordenades de sagital
-    double clickedWorldPoint[3];
-    m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
+    auto clickedWorldPoint = m_sagital2DView->getEventWorldCoordinate();
 
     // Translació del pla coronal (coordenades de sagital)
-    double translation[3];
+    Vector3 translation;
     translation[0] = clickedWorldPoint[0] - m_initialPickX;
     translation[1] = clickedWorldPoint[1] - m_initialPickY;
     translation[2] = 0.0;
@@ -874,44 +861,42 @@ void QMPRExtension::pushSagitalViewCoronalAxisActor()
     vtkTransform *sagitalToWorldTransform = getWorldToSagitalTransform();
     sagitalToWorldTransform->Inverse();
 
-    sagitalToWorldTransform->TransformVector(translation, translation);
+    sagitalToWorldTransform->TransformVector(translation.data(), translation.data());
     // Ara translation és la translació del pla coronal en coordenades de món
 
     // Ja no hem de fer més transformacions; destruïm sagitalToWorldTransform
     sagitalToWorldTransform->Delete();
 
-    m_pickedActorPlaneSource->Push(MathTools::dotProduct(translation, m_pickedActorPlaneSource->GetNormal()));
+    m_pickedActorPlaneSource->Push(Vector3::dot(translation, m_pickedActorPlaneSource->GetNormal()));
 
     updatePlanes();
     updateControls();
 
-    m_initialPickX = clickedWorldPoint[0];
-    m_initialPickY = clickedWorldPoint[1];
+    m_initialPickX = clickedWorldPoint.x;
+    m_initialPickY = clickedWorldPoint.y;
 }
 
 void QMPRExtension::pushAxialViewAxisActor()
 {
     m_axial2DView->setCursor(Qt::ClosedHandCursor);
-    double clickedWorldPoint[3];
-    m_axial2DView->getEventWorldCoordinate(clickedWorldPoint);
+    auto clickedWorldPoint = m_axial2DView->getEventWorldCoordinate();
     // Get the motion vector
-    double v[3];
+    Vector3 v;
     v[0] = clickedWorldPoint[0] - m_initialPickX;
     v[1] = clickedWorldPoint[1] - m_initialPickY;
     v[2] = 0.0;
 
-    m_pickedActorPlaneSource->Push(MathTools::dotProduct(v, m_pickedActorPlaneSource->GetNormal()));
+    m_pickedActorPlaneSource->Push(Vector3::dot(v, m_pickedActorPlaneSource->GetNormal()));
     updatePlanes();
     updateControls();
 
-    m_initialPickX = clickedWorldPoint[0];
-    m_initialPickY = clickedWorldPoint[1];
+    m_initialPickX = clickedWorldPoint.x;
+    m_initialPickY = clickedWorldPoint.y;
 }
 
 void QMPRExtension::detectPushSagitalViewAxisActor()
 {
-    Vector3 clickedWorldPoint;
-    m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint.data());
+    Vector3 clickedWorldPoint = m_sagital2DView->getEventWorldCoordinate();
 
     // Detectem quin és l'actor més proper, l'identifiquem i llavors el deixem com a seleccionat
     // Únicament mourem la vista axial. Desde la vista sagital no podrem moure l'slice de la coronal
@@ -961,15 +946,14 @@ void QMPRExtension::pushSagitalViewAxialAxisActor()
 {
     m_sagital2DView->setCursor(Qt::ClosedHandCursor);
 
-    double clickedWorldPoint[3];
-    m_sagital2DView->getEventWorldCoordinate(clickedWorldPoint);
+    auto clickedWorldPoint = m_sagital2DView->getEventWorldCoordinate();
 
     m_axial2DView->setSlice(m_axial2DView->getMaximumSlice() - static_cast<int>(clickedWorldPoint[1] / m_axialSpacing[2]));
     updatePlanes();
     updateControls();
 
-    m_initialPickX = clickedWorldPoint[0];
-    m_initialPickY = clickedWorldPoint[1];
+    m_initialPickX = clickedWorldPoint.x;
+    m_initialPickY = clickedWorldPoint.y;
 }
 
 void QMPRExtension::setInput(Volume *input)

@@ -17,6 +17,8 @@
 
 #include "signaltosyncactionmapper.h"
 
+#include "vector3.h"
+
 namespace udg {
 
 /**
@@ -38,7 +40,7 @@ protected:
 protected slots:
     /// Maps given factor to a PanSyncAction with the corresponding values
     /// Should be connected to the corresponding signals on Q*Viewer
-    void mapToSyncAction(double *vector);
+    void mapToSyncAction(const Vector3 &vector);
 };
 
 } // End namespace udg

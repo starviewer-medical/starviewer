@@ -68,7 +68,7 @@ void EraserTool::handleEvent(unsigned long eventID)
 
 void EraserTool::startEraserAction()
 {
-    m_2DViewer->getEventWorldCoordinate(m_startPoint.data());
+    m_startPoint = m_2DViewer->getEventWorldCoordinate();
     // A l'agafar el primer punt inicialitzem l'start i l'end point per igual
     // simplement per què així és més segur que no tenir un valor arbitrari a endPoint
     m_endPoint = m_startPoint;
@@ -83,7 +83,7 @@ void EraserTool::drawAreaOfErasure()
         Vector3 p2, p3;
         int xIndex, yIndex, zIndex;
 
-        m_2DViewer->getEventWorldCoordinate(m_endPoint.data());
+        m_endPoint = m_2DViewer->getEventWorldCoordinate();
         m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
 
         // Calculem el segon punt i el tercer

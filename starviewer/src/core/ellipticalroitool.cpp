@@ -137,7 +137,7 @@ void EllipticalROITool::handlePointAddition()
 {
     if (m_state == Ready)
     {
-        m_2DViewer->getEventWorldCoordinate(m_firstPoint.data());
+        m_firstPoint = m_2DViewer->getEventWorldCoordinate();
         m_2DViewer->putCoordinateInCurrentImageBounds(m_firstPoint.data());
 
         m_secondPoint = m_firstPoint;
@@ -151,7 +151,7 @@ void EllipticalROITool::simulateEllipse()
     if (m_state == FirstPointFixed)
     {
         // Obtenim el segon punt
-        m_2DViewer->getEventWorldCoordinate(m_secondPoint.data());
+        m_secondPoint = m_2DViewer->getEventWorldCoordinate();
         m_2DViewer->putCoordinateInCurrentImageBounds(m_secondPoint.data());
 
         // Si encara no havíem creat el polígon, ho fem

@@ -127,8 +127,7 @@ void NonClosedAngleTool::annotateLinePoints()
         line = m_secondLine;
     }
 
-    Vector3 clickedWorldPoint;
-    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint.data());
+    Vector3 clickedWorldPoint = m_2DViewer->getEventWorldCoordinate();
 
     // Afegim el punt
     if (m_lineState == NoPoints)
@@ -180,8 +179,7 @@ void NonClosedAngleTool::handleLineDrawing()
 
 void NonClosedAngleTool::simulateLine(DrawerLine *line)
 {
-    Vector3 clickedWorldPoint;
-    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint.data());
+    Vector3 clickedWorldPoint = m_2DViewer->getEventWorldCoordinate();
     line->setSecondPoint(clickedWorldPoint);
     // Actualitzem viewer
     line->update();

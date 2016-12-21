@@ -92,8 +92,7 @@ void DistanceTool::annotateNewPoint()
         m_distanceLine->increaseReferenceCount();
     }
 
-    double clickedWorldPoint[3];
-    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
+    auto clickedWorldPoint = m_2DViewer->getEventWorldCoordinate();
 
     // Afegim el punt
     if (m_lineState == NoPointFixed)
@@ -128,8 +127,7 @@ void DistanceTool::simulateLine()
 {
     if (m_distanceLine)
     {
-        double clickedWorldPoint[3];
-        m_2DViewer->getEventWorldCoordinate(clickedWorldPoint);
+        auto clickedWorldPoint = m_2DViewer->getEventWorldCoordinate();
 
         m_distanceLine->setSecondPoint(clickedWorldPoint);
         m_distanceLine->update();

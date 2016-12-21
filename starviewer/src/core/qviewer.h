@@ -101,8 +101,8 @@ public:
     Vector3 computeWorldToDisplay(const Vector3 &worldPoint);
 
     /// Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat
-    void getEventWorldCoordinate(double worldCoordinate[3]);
-    void getLastEventWorldCoordinate(double worldCoordinate[3]);
+    Vector3 getEventWorldCoordinate();
+    Vector3 getLastEventWorldCoordinate();
 
     /// Fa una captura de la vista actual i la guarda en una estructura interna
     void grabCurrentView();
@@ -126,7 +126,7 @@ public:
 
     /// Desplaça la càmera segons el vector de moviment que li passem
     /// @param motionVector[] Vector de moviment que determina cap on i quant es mou la càmera
-    void pan(double motionVector[3]);
+    void pan(const Vector3 &motionVector);
 
     /// Fem un zoom del requadre definit pels paràmetres topCorner i bottomCorner en coordenades de món
     /// perquè s'ajusti a la mida de la finestra.
@@ -170,7 +170,7 @@ public:
     double getCurrentZoomFactor();
 
     /// Returns the current focal point of the active camera
-    bool getCurrentFocalPoint(double focalPoint[3]);
+    Vector3 getCurrentFocalPoint();
 
     /// Returns the VOI LUT that is currently applied to the image in this viewer. The default implementation returns a default VoiLut.
     virtual VoiLut getCurrentVoiLut() const;
@@ -231,7 +231,7 @@ signals:
     void zoomFactorChanged(double factor);
 
     /// Informa que s'ha mogut la imatge
-    void panChanged(double *translation);
+    void panChanged(const Vector3 &translation);
 
     /// Indica que l'estat del visor ha canviat
     void viewerStatusChanged();
@@ -270,12 +270,6 @@ protected:
     
     /// Ens retorna la càmera activa pel renderer principal, si n'hi ha, NUL altrament.
     vtkCamera* getActiveCamera();
-
-    /// Ens dóna la coordenada de món de l'últim (o previ a aquest) event capturat
-    /// @param worldCoordinate Variable on es retornarà la coordenada
-    /// @param current Si true, ens dóna la coordenada de l'event més recent,
-    /// si fals, ens dóna la coordenada anterior a l'event més recent
-    void getRecentEventWorldCoordinate(double worldCoordinate[3], bool current);
 
     virtual void setupInteraction();
 

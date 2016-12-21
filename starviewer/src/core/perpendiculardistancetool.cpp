@@ -92,8 +92,7 @@ void PerpendicularDistanceTool::addFirstPoint()
         m_referenceLine->increaseReferenceCount();
     }
 
-    Vector3 clickedWorldPoint;
-    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint.data());
+    Vector3 clickedWorldPoint = m_2DViewer->getEventWorldCoordinate();
 
     // Afegim el punt
     m_referenceLine->setFirstPoint(clickedWorldPoint);
@@ -118,8 +117,7 @@ void PerpendicularDistanceTool::addSecondPoint()
         m_firstPerpendicularLine->increaseReferenceCount();
     }
 
-    Vector3 clickedWorldPoint;
-    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint.data());
+    Vector3 clickedWorldPoint = m_2DViewer->getEventWorldCoordinate();
     m_firstPerpendicularLine->setFirstPoint(clickedWorldPoint);
     m_firstPerpendicularLine->setSecondPoint(clickedWorldPoint);
     m_firstPerpendicularLine->update();
@@ -142,8 +140,7 @@ void PerpendicularDistanceTool::addThirdPoint()
         m_secondPerpendicularLine->increaseReferenceCount();
     }
 
-    Vector3 clickedWorldPoint;
-    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint.data());
+    Vector3 clickedWorldPoint = m_2DViewer->getEventWorldCoordinate();
     m_secondPerpendicularLine->setFirstPoint(clickedWorldPoint);
     m_secondPerpendicularLine->setSecondPoint(clickedWorldPoint);
     m_secondPerpendicularLine->update();
@@ -184,8 +181,7 @@ void PerpendicularDistanceTool::updateReferenceLine()
 {
     Q_ASSERT(m_state == DrawingReferenceLine);
 
-    Vector3 mouseWorldPoint;
-    m_2DViewer->getEventWorldCoordinate(mouseWorldPoint.data());
+    Vector3 mouseWorldPoint = m_2DViewer->getEventWorldCoordinate();
     m_referenceLine->setSecondPoint(mouseWorldPoint);
     m_referenceLine->update();
 }
@@ -197,8 +193,7 @@ void PerpendicularDistanceTool::updateFirstPerpendicularLine()
     equalizeDepth();
 
     // Obtenim la posició del ratolí
-    Vector3 mouseWorldPoint;
-    m_2DViewer->getEventWorldCoordinate(mouseWorldPoint.data());
+    Vector3 mouseWorldPoint = m_2DViewer->getEventWorldCoordinate();
 
     // Obtenim el punt de la línia de referència més proper a la posició del ratolí i també la distància
     // Serà el primer punt de la primera línia perpendicular
@@ -238,8 +233,7 @@ void PerpendicularDistanceTool::updateSecondPerpendicularLine()
     equalizeDepth();
 
     // Obtenim la posició del ratolí
-    Vector3 mouseWorldPoint;
-    m_2DViewer->getEventWorldCoordinate(mouseWorldPoint.data());
+    Vector3 mouseWorldPoint = m_2DViewer->getEventWorldCoordinate();
 
     // Obtenim el punt de la línia de referència més proper a la posició del ratolí
     // Serà el primer punt de la segona línia perpendicular
@@ -293,8 +287,7 @@ void PerpendicularDistanceTool::drawDistanceLine()
     m_distanceLine = new DrawerLine();
 
     // Obtenim la posició del ratolí
-    Vector3 mouseWorldPoint;
-    m_2DViewer->getEventWorldCoordinate(mouseWorldPoint.data());
+    Vector3 mouseWorldPoint = m_2DViewer->getEventWorldCoordinate();
 
     // Obtenim el punt de la primera línia perpendicular més proper a la posició del ratolí
     // Serà el primer punt de la línia de distància
@@ -332,8 +325,7 @@ void PerpendicularDistanceTool::abortDrawing()
 void PerpendicularDistanceTool::equalizeDepth()
 {
     // Ens quedem amb la z de la llesca actual
-    Vector3 currentPoint;
-    m_2DViewer->getEventWorldCoordinate(currentPoint.data());
+    Vector3 currentPoint = m_2DViewer->getEventWorldCoordinate();
     int zIndex = m_2DViewer->getView().getZIndex();
     double z = currentPoint[zIndex];
     auto point = m_referenceLine->getFirstPoint();

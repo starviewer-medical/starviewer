@@ -388,8 +388,7 @@ void QRectumSegmentationExtension::setSeedPosition(double x, double y, double z)
 
 void QRectumSegmentationExtension::setRegionOfInterest()
 {
-    double pos[3];
-    m_2DView->getEventWorldCoordinate(pos);
+    auto pos = m_2DView->getEventWorldCoordinate();
     m_initialRegionPoint[0]= pos[0];
     m_initialRegionPoint[1]= pos[1];
     m_isRegionSetting = true;
@@ -399,10 +398,9 @@ void QRectumSegmentationExtension::setMovingRegionOfInterest()
 {
     if(m_isRegionSetting)
     {
-        double pos[3];
         double spacing[3];
         m_mainVolume->getSpacing(spacing);
-        m_2DView->getEventWorldCoordinate(pos);
+        auto pos = m_2DView->getEventWorldCoordinate();
         m_finalRegionPoint[0]= pos[0];
         m_finalRegionPoint[1]= pos[1];
 

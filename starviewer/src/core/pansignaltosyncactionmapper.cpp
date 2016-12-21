@@ -33,12 +33,7 @@ void PanSignalToSyncActionMapper::mapProperty()
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     if (viewer2D)
     {
-        double centerPoint[3];
-
-        if (viewer2D->getCurrentFocalPoint(centerPoint))
-        {
-            mapToSyncAction(centerPoint);
-        }
+        mapToSyncAction(viewer2D->getCurrentFocalPoint());
     }
 }
 
@@ -48,7 +43,7 @@ void PanSignalToSyncActionMapper::mapSignal()
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     if (viewer2D)
     {
-        connect(viewer2D, SIGNAL(panChanged(double*)), SLOT(mapToSyncAction(double*)));
+        connect(viewer2D, &QViewer::panChanged, this, &PanSignalToSyncActionMapper::mapToSyncAction);
     }
 }
 
@@ -57,11 +52,11 @@ void PanSignalToSyncActionMapper::unmapSignal()
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     if (viewer2D)
     {
-        disconnect(viewer2D, SIGNAL(panChanged(double*)), this, SLOT(mapToSyncAction(double*)));
+        disconnect(viewer2D, &QViewer::panChanged, this, &PanSignalToSyncActionMapper::mapToSyncAction);
     }
 }
 
-void PanSignalToSyncActionMapper::mapToSyncAction(double *factor)
+void PanSignalToSyncActionMapper::mapToSyncAction(const Vector3 &factor)
 {
     if (!m_mappedSyncAction)
     {
@@ -70,7 +65,7 @@ void PanSignalToSyncActionMapper::mapToSyncAction(double *factor)
 
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     double dicomWorldPosition[4];
-    viewer2D->getDicomWorldCoordinates(factor, dicomWorldPosition);
+    viewer2D->getDicomWorldCoordinates(factor.data(), dicomWorldPosition);
 
     static_cast<PanSyncAction*>(m_mappedSyncAction)->setMotionVector(dicomWorldPosition);
     

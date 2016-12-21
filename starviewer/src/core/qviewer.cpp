@@ -295,31 +295,16 @@ Vector3 QViewer::computeWorldToDisplay(const Vector3 &worldPoint)
     }
 }
 
-void QViewer::getEventWorldCoordinate(double worldCoordinate[3])
+Vector3 QViewer::getEventWorldCoordinate()
 {
-    getRecentEventWorldCoordinate(worldCoordinate, true);
+    QPoint position = this->getEventPosition();
+    return this->computeDisplayToWorld(Vector3(position.x(), position.y(), 0));
 }
 
-void QViewer::getLastEventWorldCoordinate(double worldCoordinate[3])
+Vector3 QViewer::getLastEventWorldCoordinate()
 {
-    getRecentEventWorldCoordinate(worldCoordinate, false);
-}
-
-void QViewer::getRecentEventWorldCoordinate(double worldCoordinate[3], bool current)
-{
-    QPoint position;
-
-    if (current)
-    {
-        position = this->getEventPosition();
-    }
-    else
-    {
-        position = this->getLastEventPosition();
-    }
-
-    Vector3 wc = this->computeDisplayToWorld(Vector3(position.x(), position.y(), 0));
-    memcpy(worldCoordinate, wc.data(), sizeof(wc));
+    QPoint position = this->getLastEventPosition();
+    return this->computeDisplayToWorld(Vector3(position.x(), position.y(), 0));
 }
 
 void QViewer::setupInteraction()
@@ -483,7 +468,7 @@ void QViewer::zoom(double factor)
     }
 }
 
-void QViewer::pan(double motionVector[3])
+void QViewer::pan(const Vector3 &motionVector)
 {
     if (!this->hasInput())
     {
@@ -497,11 +482,10 @@ void QViewer::pan(double motionVector[3])
         return;
     }
 
-    double viewFocus[4], viewPoint[3];
-    camera->GetFocalPoint(viewFocus);
-    camera->GetPosition(viewPoint);
-    camera->SetFocalPoint(motionVector[0] + viewFocus[0], motionVector[1] + viewFocus[1], motionVector[2] + viewFocus[2]);
-    camera->SetPosition(motionVector[0] + viewPoint[0], motionVector[1] + viewPoint[1], motionVector[2] + viewPoint[2]);
+    Vector3 viewFocus = camera->GetFocalPoint();
+    Vector3 viewPoint = camera->GetPosition();
+    camera->SetFocalPoint((viewFocus + motionVector).data());
+    camera->SetPosition((viewPoint + motionVector).data());
 
     // Nosaltres en principi no fem ús d'aquesta característica
     if (this->getInteractor()->GetLightFollowCamera())
@@ -511,26 +495,23 @@ void QViewer::pan(double motionVector[3])
         renderer->UpdateLightsGeometryToFollowCamera();
     }
 
-    double xyz[3];
-    getCurrentFocalPoint(xyz);
-
     emit cameraChanged();
-    emit panChanged(xyz);
+    emit panChanged(getCurrentFocalPoint());
     this->render();
 }
 
-bool QViewer::getCurrentFocalPoint(double focalPoint[3])
+Vector3 QViewer::getCurrentFocalPoint()
 {
     vtkCamera *camera = getActiveCamera();
-    if (!camera)
+    if (camera)
+    {
+        return camera->GetFocalPoint();
+    }
+    else
     {
         DEBUG_LOG("No hi ha càmera");
-        return false;
+        return Vector3();
     }
-
-    camera->GetFocalPoint(focalPoint);
-
-    return true;
 }
 
 VoiLut QViewer::getCurrentVoiLut() const

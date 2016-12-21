@@ -100,8 +100,7 @@ void AngleTool::annotateFirstPoint()
     m_mainPolyline = new DrawerPolyline;
 
     // Obtenim el punt clickat
-    Vector3 clickedWorldPoint;
-    m_2DViewer->getEventWorldCoordinate(clickedWorldPoint.data());
+    Vector3 clickedWorldPoint = m_2DViewer->getEventWorldCoordinate();
     // Afegim el punt a la polilínia
     m_mainPolyline->addPoint(clickedWorldPoint);
     // Així evitem que durant l'edició la primitiva pugui ser esborrada per events externs
@@ -222,8 +221,7 @@ void AngleTool::simulateCorrespondingSegmentOfAngle()
     if (m_state != None)
     {
         // Agafem la coordenada de pantalla
-        Vector3 clickedWorldPoint;
-        m_2DViewer->getEventWorldCoordinate(clickedWorldPoint.data());
+        Vector3 clickedWorldPoint = m_2DViewer->getEventWorldCoordinate();
 
         int pointIndex;
         if (m_state == FirstPointFixed)

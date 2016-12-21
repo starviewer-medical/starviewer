@@ -114,8 +114,7 @@ void PolylineROITool::handlePointAddition()
 
 void PolylineROITool::annotateNewPoint()
 {
-    Vector3 pickedPoint;
-    m_2DViewer->getEventWorldCoordinate(pickedPoint.data());
+    Vector3 pickedPoint = m_2DViewer->getEventWorldCoordinate();
     m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint.data());
 
     bool firstPoint = false;
@@ -154,8 +153,7 @@ void PolylineROITool::simulateClosingPolyline()
 {
     if (m_mainPolyline && (m_mainPolyline->getNumberOfPoints() >= 1))
     {
-        Vector3 pickedPoint;
-        m_2DViewer->getEventWorldCoordinate(pickedPoint.data());
+        Vector3 pickedPoint = m_2DViewer->getEventWorldCoordinate();
         m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint.data());
 
         if (!m_closingPolyline)
@@ -210,8 +208,7 @@ void PolylineROITool::closeForm()
 
 void PolylineROITool::setTextPosition(DrawerText *text)
 {
-    Vector3 lastPoint;
-    m_2DViewer->getEventWorldCoordinate(lastPoint.data());
+    Vector3 lastPoint = m_2DViewer->getEventWorldCoordinate();
     m_2DViewer->putCoordinateInCurrentImageBounds(lastPoint.data());
 
     auto pointsList = getBoundingBoxPoints();

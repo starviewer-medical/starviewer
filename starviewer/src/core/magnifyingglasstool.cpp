@@ -145,7 +145,7 @@ void MagnifyingGlassTool::updateMagnifiedView()
     Vector3 xyz;
     if (!m_2DViewer->getCurrentCursorImageCoordinate(xyz.data()))
     {
-        m_2DViewer->getEventWorldCoordinate(xyz.data());
+        xyz = m_2DViewer->getEventWorldCoordinate();
     }
 
     m_2DViewer->setCursor(QCursor(Qt::BlankCursor));

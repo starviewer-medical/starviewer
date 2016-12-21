@@ -76,15 +76,11 @@ void TranslateTool::doTranslate()
 
 void TranslateTool::pan()
 {
-    double newPickPoint[4], oldPickPoint[4], motionVector[3];
-
-    m_viewer->getEventWorldCoordinate(newPickPoint);
-    m_viewer->getLastEventWorldCoordinate(oldPickPoint);
+    auto newPickPoint = m_viewer->getEventWorldCoordinate();
+    auto oldPickPoint = m_viewer->getLastEventWorldCoordinate();
 
     // Camera motion is reversed
-    motionVector[0] = oldPickPoint[0] - newPickPoint[0];
-    motionVector[1] = oldPickPoint[1] - newPickPoint[1];
-    motionVector[2] = oldPickPoint[2] - newPickPoint[2];
+    auto motionVector = oldPickPoint - newPickPoint;
     m_viewer->pan(motionVector);
 }
 
