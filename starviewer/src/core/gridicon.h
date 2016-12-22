@@ -16,9 +16,6 @@
 #define UDGGRIDICON_H
 
 #include <QFrame>
-#include <QIcon>
-
-class QLabel;
 
 namespace udg {
 
@@ -28,27 +25,13 @@ namespace udg {
 class GridIcon : public QFrame {
 Q_OBJECT
 public:
-    explicit GridIcon(QWidget *parent = 0);
+    explicit GridIcon(QWidget* parent = 0);
     explicit GridIcon(const QString &iconType, QWidget *parent = 0);
     ~GridIcon();
 
     /// Updates the current icon to match the given iconType.
-    void setIconType(QString iconType);
+    void setIconType(QString iconType = QString());
 
-protected:
-    /// Tractament del resize per mantenir els tamanys de les icones
-    void resizeEvent(QResizeEvent *event);
-
-private:
-    void initialize(const QString &iconType = QString());
-    /// Scales the given pixmap to fit this GridIcon and sets it to the label.
-    void setScaledPixmap(const QIcon &icon);
-
-private:
-    /// Label on posarem la icona
-    QLabel *m_label;
-    /// Icon to show
-    QIcon m_icon;
 };
 
 }
