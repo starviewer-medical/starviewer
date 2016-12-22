@@ -12,6 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 #include <QCloseEvent>
+#include <QScrollBar>
 #include "qconfigurationdialog.h"
 
 #ifndef STARVIEWER_LITE
@@ -38,11 +39,11 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
 
     // Configuració del visor 2D
     Q2DViewerConfigurationScreen *q2dviewerScreen = new Q2DViewerConfigurationScreen(this);
-    addConfigurationWidget(q2dviewerScreen, tr("2D Viewer"), BasicConfiguration);
+    this->addConfigurationWidget(q2dviewerScreen, tr("2D Viewer"), BasicConfiguration);
 
     // Configuració del layout del visor 2D
     Q2DViewerLayoutConfigurationScreen *q2dviewerLayoutScreen = new Q2DViewerLayoutConfigurationScreen(this);
-    addConfigurationWidget(q2dviewerLayoutScreen, tr("2D Viewer Layout"), BasicConfiguration);
+    this->addConfigurationWidget(q2dviewerLayoutScreen, tr("2D Viewer Layout"), BasicConfiguration);
 
 #ifndef STARVIEWER_LITE
     // No mostrem configuració del PACS
@@ -74,6 +75,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
 
 
     connect(m_viewAdvancedOptions, SIGNAL(stateChanged(int)), SLOT(setViewAdvancedConfiguration()));
+    connect(m_optionsStack, SIGNAL(currentChanged(int)), this, SLOT(sectionChanged(int)));
 
     m_optionsList->setCurrentRow(0);
     m_viewAdvancedOptions->setCheckState(Qt::Checked);
@@ -108,6 +110,26 @@ void QConfigurationDialog::setViewAdvancedConfiguration()
         item->setHidden(!m_viewAdvancedOptions->isChecked());
     }
     m_optionsList->setCurrentRow(0);
+}
+
+void QConfigurationDialog::sectionChanged(int index)
+{
+    m_scrollArea->verticalScrollBar()->setValue(0);
+    m_scrollArea->horizontalScrollBar()->setValue(0);
+    for (int i = 0; i < m_optionsStack->count(); i++)
+    {
+        QWidget* current = m_optionsStack->widget(i);
+        if (i == index) { // The visible widget
+            current->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        }
+        else {
+            current->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+
+        }
+        current->adjustSize();
+    }
+    m_optionsStack->adjustSize();
+
 }
 
 void QConfigurationDialog::addConfigurationWidget(QWidget *widget, const QString &name, ConfigurationType type)

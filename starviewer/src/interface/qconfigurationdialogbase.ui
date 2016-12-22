@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>630</width>
-    <height>251</height>
+    <width>1024</width>
+    <height>576</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1024</width>
+    <height>576</height>
+   </size>
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
@@ -45,9 +51,6 @@
      <property name="icon">
       <iconset resource="../main/main.qrc">
        <normaloff>:/images/icons/window-close.svg</normaloff>:/images/icons/window-close.svg</iconset>
-     </property>
-     <property name="shortcut">
-      <string>Alt+B</string>
      </property>
      <property name="autoDefault">
       <bool>true</bool>
@@ -113,9 +116,6 @@
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>
-       <property name="frameShadow">
-        <enum>QFrame::Plain</enum>
-       </property>
        <property name="horizontalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
@@ -155,13 +155,48 @@
       </widget>
      </item>
      <item>
-      <widget class="QStackedWidget" name="m_optionsStack">
+      <widget class="QScrollArea" name="m_scrollArea">
        <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
+        <enum>QFrame::NoFrame</enum>
        </property>
        <property name="frameShadow">
-        <enum>QFrame::Sunken</enum>
+        <enum>QFrame::Plain</enum>
        </property>
+       <property name="lineWidth">
+        <number>0</number>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QStackedWidget" name="m_optionsStack">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>

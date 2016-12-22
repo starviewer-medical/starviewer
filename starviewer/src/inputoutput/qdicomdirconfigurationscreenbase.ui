@@ -2,26 +2,6 @@
 <ui version="4.0">
  <class>udg::QDICOMDIRConfigurationScreenBase</class>
  <widget class="QWidget" name="udg::QDICOMDIRConfigurationScreenBase">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>651</width>
-    <height>592</height>
-   </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>20000</width>
-    <height>5000</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>DICOMDIR Configuration</string>
   </property>
@@ -37,18 +17,6 @@
        <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>16777215</height>
-        </size>
-       </property>
       </widget>
      </item>
      <item row="2" column="2">
@@ -56,19 +24,10 @@
        <property name="enabled">
         <bool>false</bool>
        </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
       </widget>
      </item>
      <item row="1" column="1">
       <widget class="QLabel" name="labelCDParameters">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
        <property name="text">
         <string>CD parameters:</string>
        </property>
@@ -104,12 +63,6 @@
    </item>
    <item row="7" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="title">
       <string>Copy additional folder content when creating DICOMDIR on these supports</string>
      </property>
@@ -130,48 +83,20 @@
       </item>
       <item>
        <widget class="QLabel" name="textLabel1_10">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>90</width>
-          <height>0</height>
-         </size>
-        </property>
         <property name="text">
          <string>Folder path to copy content:</string>
-        </property>
-        <property name="textFormat">
-         <enum>Qt::RichText</enum>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QLineEdit" name="m_textDICOMDIRFolderPathToCopy">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-         </widget>
+         <widget class="QLineEdit" name="m_textDICOMDIRFolderPathToCopy"/>
         </item>
         <item>
          <widget class="QToolButton" name="m_buttonExaminateDICOMDIRFolderPathToCopy">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
           <property name="toolTip">
-           <string>Examine disk to find the folder to copy to DICOMDIR</string>
-          </property>
-          <property name="text">
-           <string/>
+           <string>Browse disk to find the folder to copy to DICOMDIR</string>
           </property>
           <property name="icon">
            <iconset resource="../main/main.qrc">
@@ -196,15 +121,15 @@
           <property name="styleSheet">
            <string notr="true">image: url(:/images/icons/emblem-warning.svg);</string>
           </property>
-          <property name="text">
-           <string/>
-          </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="m_copyFolderContentValidationLabel">
           <property name="text">
            <string>Wrong path</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -217,26 +142,8 @@
     <layout class="QGridLayout">
      <item row="1" column="0">
       <widget class="QLabel" name="textLabel1_9">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>90</width>
-         <height>0</height>
-        </size>
-       </property>
        <property name="text">
         <string>Application path:</string>
-       </property>
-       <property name="textFormat">
-        <enum>Qt::RichText</enum>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -265,12 +172,6 @@
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="textLabel1_8">
-       <property name="minimumSize">
-        <size>
-         <width>120</width>
-         <height>0</height>
-        </size>
-       </property>
        <property name="text">
         <string>Application parameters:</string>
        </property>
@@ -289,9 +190,6 @@
         <widget class="QToolButton" name="m_buttonExaminateBurningApplication">
          <property name="toolTip">
           <string>Examine disk to find the application</string>
-         </property>
-         <property name="text">
-          <string/>
          </property>
          <property name="icon">
           <iconset resource="../main/main.qrc">
@@ -322,6 +220,9 @@
         <widget class="QLabel" name="m_burningApplicationPathValidationLabel">
          <property name="text">
           <string>Validation Message</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -377,9 +278,6 @@
    </item>
    <item row="4" column="0">
     <widget class="QCheckBox" name="m_checkBoxHasDifferentCDDVDParameteres">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
      <property name="text">
       <string>Use different parameters for CD and DVD burning:</string>
      </property>

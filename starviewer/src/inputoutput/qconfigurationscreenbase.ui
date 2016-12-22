@@ -2,26 +2,6 @@
 <ui version="4.0">
  <class>udg::QConfigurationScreenBase</class>
  <widget class="QWidget" name="udg::QConfigurationScreenBase">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>1106</width>
-    <height>545</height>
-   </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>20000</width>
-    <height>5000</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>PACS Configuration</string>
   </property>
@@ -32,24 +12,6 @@
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabConfiguration">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>32767</width>
-       <height>32767</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string/>
-     </property>
-     <property name="whatsThis">
-      <string/>
-     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -58,245 +20,7 @@
        <string>PACS Servers</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_5">
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_11">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Modify Selected PACS Server/Add New PACS Server</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" rowspan="4">
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="textLabel1_2">
-           <property name="text">
-            <string>AE Title:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1" colspan="2">
-          <widget class="QLineEdit" name="m_textAETitle">
-           <property name="maxLength">
-            <number>16</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="textLabel3_5">
-           <property name="text">
-            <string>Address:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1" colspan="2">
-          <widget class="QLineEdit" name="m_textAddress"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="textLabel4_2">
-           <property name="text">
-            <string>Q/R Service:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2" rowspan="2">
-          <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>Port:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="m_textQueryRetrieveServicePort">
-             <property name="maximumSize">
-              <size>
-               <width>67</width>
-               <height>32767</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4">
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>Port:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="m_textStoreServicePort">
-             <property name="maximumSize">
-              <size>
-               <width>67</width>
-               <height>32767</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="4">
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="0" column="3">
-            <widget class="QCheckBox" name="m_checkDefault">
-             <property name="text">
-              <string>Default Query PACS</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <spacer name="horizontalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>10</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="textLabel4_3">
-           <property name="text">
-            <string>Send Service:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QCheckBox" name="m_checkBoxStoreEnabled">
-           <property name="text">
-            <string>Enabled</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QCheckBox" name="m_checkBoxQueryRetrieveEnabled">
-           <property name="text">
-            <string>Enabled</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="1" rowspan="4">
-        <layout class="QGridLayout">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <property name="spacing">
-          <number>6</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="textLabel6_7">
-           <property name="text">
-            <string>Institution:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="m_textInstitution"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="textLabel7_6">
-           <property name="text">
-            <string>Location:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="m_textLocation"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="textLabel8_6">
-           <property name="text">
-            <string>Description:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="m_textDescription"/>
-         </item>
-         <item row="3" column="1">
-          <spacer name="horizontalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="2">
-        <widget class="QPushButton" name="m_buttonAddPacs">
-         <property name="toolTip">
-          <string>Add the new PACS to the list</string>
-         </property>
-         <property name="text">
-          <string>Add</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../main/main.qrc">
-           <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
+       <item row="4" column="1">
         <widget class="QPushButton" name="m_buttonDeletePacs">
          <property name="toolTip">
           <string>Delete selected PACS</string>
@@ -310,11 +34,22 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="2">
-        <widget class="QPushButton" name="m_buttonTestPacs">
-         <property name="enabled">
-          <bool>true</bool>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="m_buttonAddPacs">
+         <property name="toolTip">
+          <string>Add the new PACS to the list</string>
          </property>
+         <property name="text">
+          <string>Add</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../main/main.qrc">
+           <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QPushButton" name="m_buttonTestPacs">
          <property name="toolTip">
           <string>Test if selected PACS is alive</string>
          </property>
@@ -323,11 +58,8 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0" colspan="3">
+       <item row="0" column="0" colspan="2">
         <widget class="QTreeWidget" name="m_PacsTreeView">
-         <property name="frameShadow">
-          <enum>QFrame::Sunken</enum>
-         </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
@@ -391,7 +123,153 @@
          </column>
         </widget>
        </item>
-       <item row="3" column="2">
+       <item row="2" column="0" rowspan="4">
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="3" column="2">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Port:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="5">
+          <widget class="QLabel" name="textLabel6_7">
+           <property name="text">
+            <string>Institution:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="textLabel4_3">
+           <property name="text">
+            <string>Send Service:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Port:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QCheckBox" name="m_checkBoxStoreEnabled">
+           <property name="text">
+            <string>Enabled</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="3">
+          <widget class="QLineEdit" name="m_textStoreServicePort">
+           <property name="maximumSize">
+            <size>
+             <width>64</width>
+             <height>32767</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QCheckBox" name="m_checkBoxQueryRetrieveEnabled">
+           <property name="text">
+            <string>Enabled</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="5">
+          <widget class="QLabel" name="textLabel8_6">
+           <property name="text">
+            <string>Description:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="3">
+          <widget class="QLineEdit" name="m_textQueryRetrieveServicePort">
+           <property name="maximumSize">
+            <size>
+             <width>64</width>
+             <height>32767</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="textLabel1_2">
+           <property name="text">
+            <string>AE Title:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="6">
+          <widget class="QLineEdit" name="m_textDescription"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="textLabel3_5">
+           <property name="text">
+            <string>Address:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="6">
+          <widget class="QLineEdit" name="m_textLocation"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="textLabel4_2">
+           <property name="text">
+            <string>Q/R Service:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="6">
+          <widget class="QLineEdit" name="m_textInstitution"/>
+         </item>
+         <item row="1" column="5">
+          <widget class="QLabel" name="textLabel7_6">
+           <property name="text">
+            <string>Location:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" colspan="3">
+          <widget class="QLineEdit" name="m_textAddress"/>
+         </item>
+         <item row="0" column="1" colspan="3">
+          <widget class="QLineEdit" name="m_textAETitle">
+           <property name="maxLength">
+            <number>16</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="6">
+          <widget class="QCheckBox" name="m_checkDefault">
+           <property name="text">
+            <string>Default Query PACS</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Modify Selected PACS Server/Add New PACS Server</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
         <widget class="QPushButton" name="m_buttonUpdatePacs">
          <property name="toolTip">
           <string>Update parameters of the selected PACS</string>
@@ -412,191 +290,6 @@
        <string>Local Configuration</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="5" column="0">
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0">
-        <layout class="QGridLayout">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <property name="spacing">
-          <number>6</number>
-         </property>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="m_textAETitleMachine">
-           <property name="maxLength">
-            <number>16</number>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="textLabel5">
-           <property name="text">
-            <string>Max. Seconds for Timeout:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="m_textTimeout">
-           <property name="maxLength">
-            <number>8</number>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="3">
-          <widget class="QLabel" name="textLabel7">
-           <property name="text">
-            <string>Max. Simultaneous Connections:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="textLabel3">
-           <property name="text">
-            <string>Local Machine AE Title:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="4">
-          <widget class="QLineEdit" name="m_textLocalPort">
-           <property name="maxLength">
-            <number>8</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="3">
-          <widget class="QLabel" name="textLabel6">
-           <property name="text">
-            <string>Incoming Connections Port:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="4">
-          <widget class="QLineEdit" name="m_textMaxConnections">
-           <property name="maxLength">
-            <number>8</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="6" rowspan="2">
-          <widget class="QFrame" name="m_warningFrameIncomingConnectionsPortInUse">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-           <layout class="QGridLayout">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_16">
-              <property name="minimumSize">
-               <size>
-                <width>22</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">image: url(:/images/icons/emblem-warning.svg)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="label_13">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>180</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="text">
-               <string>&lt;b&gt;This port is in use by another application.&lt;/b&gt;</string>
-              </property>
-              <property name="wordWrap">
-               <bool>true</bool>
-              </property>
-              <property name="indent">
-               <number>-1</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="1" column="5" rowspan="2">
-          <spacer name="horizontalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_14">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Institution Contact Information</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_15">
          <property name="font">
@@ -627,14 +320,35 @@
          <property name="spacing">
           <number>6</number>
          </property>
-         <item row="3" column="1">
-          <widget class="QLineEdit" name="m_textInstitutionCountry">
-           <property name="minimumSize">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Address:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="3">
+          <widget class="QLineEdit" name="m_textInstitutionPhoneNumber">
+           <property name="maximumSize">
             <size>
              <width>150</width>
-             <height>0</height>
+             <height>16777215</height>
             </size>
            </property>
+           <property name="maxLength">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Country:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="m_textInstitutionCountry">
            <property name="maxLength">
             <number>100</number>
            </property>
@@ -644,46 +358,6 @@
           <widget class="QLabel" name="label_9">
            <property name="text">
             <string>Phone Number:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1" colspan="3">
-          <widget class="QLineEdit" name="m_textInstitutionName">
-           <property name="minimumSize">
-            <size>
-             <width>300</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maxLength">
-            <number>150</number>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="m_textInstitutionTown">
-           <property name="minimumSize">
-            <size>
-             <width>130</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maxLength">
-            <number>100</number>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>ZIP Code:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>City:</string>
            </property>
           </widget>
          </item>
@@ -702,47 +376,8 @@
          </item>
          <item row="1" column="1" colspan="3">
           <widget class="QLineEdit" name="m_textInstitutionAddress">
-           <property name="minimumSize">
-            <size>
-             <width>180</width>
-             <height>0</height>
-            </size>
-           </property>
            <property name="maxLength">
             <number>150</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Address:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="3">
-          <widget class="QLineEdit" name="m_textInstitutionPhoneNumber">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>150</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="maxLength">
-            <number>100</number>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_7">
-           <property name="text">
-            <string>Country:</string>
            </property>
           </widget>
          </item>
@@ -762,15 +397,188 @@
          </item>
          <item row="4" column="1">
           <widget class="QLineEdit" name="m_textInstitutionEmail">
-           <property name="minimumSize">
-            <size>
-             <width>120</width>
-             <height>0</height>
-            </size>
-           </property>
            <property name="maxLength">
             <number>150</number>
            </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="3">
+          <widget class="QLineEdit" name="m_textInstitutionName">
+           <property name="maxLength">
+            <number>150</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="m_textInstitutionTown">
+           <property name="maxLength">
+            <number>100</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>ZIP Code:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>City:</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_14">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Institution Contact Information</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <layout class="QGridLayout">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <item row="3" column="0">
+          <widget class="QLabel" name="textLabel7">
+           <property name="text">
+            <string>Max. Simultaneous Connections:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="m_textLocalPort">
+           <property name="maxLength">
+            <number>8</number>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="textLabel3">
+           <property name="text">
+            <string>Local Machine AE Title:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="textLabel5">
+           <property name="text">
+            <string>Max. Seconds for Timeout:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="m_textTimeout">
+           <property name="maxLength">
+            <number>8</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="textLabel6">
+           <property name="text">
+            <string>Incoming Connections Port:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="m_textAETitleMachine">
+           <property name="maxLength">
+            <number>16</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="m_textMaxConnections">
+           <property name="maxLength">
+            <number>8</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2" rowspan="2">
+          <widget class="QFrame" name="m_warningFrameIncomingConnectionsPortInUse">
+           <layout class="QGridLayout">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_16">
+              <property name="minimumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">image: url(:/images/icons/emblem-warning.svg)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>This port is in use by another application.</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
@@ -787,15 +595,8 @@
   <tabstop>m_textAETitle</tabstop>
   <tabstop>m_textAddress</tabstop>
   <tabstop>m_checkBoxQueryRetrieveEnabled</tabstop>
-  <tabstop>m_textQueryRetrieveServicePort</tabstop>
-  <tabstop>m_checkDefault</tabstop>
   <tabstop>m_checkBoxStoreEnabled</tabstop>
-  <tabstop>m_textStoreServicePort</tabstop>
-  <tabstop>m_textInstitution</tabstop>
-  <tabstop>m_textLocation</tabstop>
-  <tabstop>m_textDescription</tabstop>
   <tabstop>m_textTimeout</tabstop>
-  <tabstop>m_textMaxConnections</tabstop>
   <tabstop>m_textInstitutionName</tabstop>
   <tabstop>m_textInstitutionAddress</tabstop>
   <tabstop>m_textInstitutionTown</tabstop>

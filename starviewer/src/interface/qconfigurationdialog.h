@@ -41,6 +41,9 @@ private slots:
     /// de mostrar opcions avançades.
     void setViewAdvancedConfiguration();
 
+    /// Puts scroll on top and resizes widgets
+    void sectionChanged(int index);
+
 private:
     /// Ens serveix per diferenciar entre configuració avançada i configuració bàsica
     enum ConfigurationType { BasicConfiguration, AdvancedConfiguration };
