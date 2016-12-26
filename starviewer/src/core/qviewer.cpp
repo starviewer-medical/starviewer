@@ -36,6 +36,7 @@
 #include <QContextMenuEvent>
 #include <QMessageBox>
 #include <QDir>
+#include <QScreen>
 
 // Include's vtk
 #include <QVTKWidget.h>
@@ -933,6 +934,7 @@ void QViewer::setupRenderWindow()
     renderWindow->AddRenderer(getRenderer());
     renderWindow->DoubleBufferOn();
     renderWindow->LineSmoothingOn();
+    renderWindow->SetDPI(QGuiApplication::primaryScreen()->logicalDotsPerInch());
 
     if (!Settings().getValue(CoreSettings::DontForceMultiSampling).toBool())
     {
