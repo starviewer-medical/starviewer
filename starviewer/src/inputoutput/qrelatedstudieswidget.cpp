@@ -27,7 +27,6 @@
 #include <QMovie>
 #include <QTreeWidgetItem>
 #include <QScrollBar>
-#include "applicationstylehelper.h"
 
 namespace udg {
 
@@ -48,10 +47,6 @@ QRelatedStudiesWidget::QRelatedStudiesWidget(RelatedStudiesManager *relatedStudi
     m_priorStudySignalMapper = new QSignalMapper(this);
     m_queryScreen = SingletonPointer<QueryScreen>::instance();
     m_numberOfDownloadingStudies = 0;
-
-    ApplicationStyleHelper style;
-    style.setScaledFontSizeTo(this);
-    style.setScaledSizeToRadioButtons(this);
 
     initializeLookingForStudiesWidget();
     initializeTree();
@@ -453,9 +448,6 @@ void QRelatedStudiesWidget::insertStudiesToTree(const QList<Study*> &studiesList
         updateList();
 
         m_relatedStudiesTree->setVisible(true);
-
-        ApplicationStyleHelper style;
-        style.setScaledFontSizeTo(m_relatedStudiesTree);
 
         updateWidgetWidth();
         updateWidgetHeight();

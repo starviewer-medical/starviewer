@@ -14,7 +14,6 @@
 
 #include "patientbrowsermenulist.h"
 
-#include "applicationstylehelper.h"
 #include "patientbrowsermenubasicitem.h"
 #include "patientbrowsermenufusionitem.h"
 #include "patientbrowsermenugroup.h"
@@ -35,7 +34,7 @@ PatientBrowserMenuList::PatientBrowserMenuList(QWidget *parent)
     m_qmlView = new QQuickWidget(this);
     QQmlContext *context = m_qmlView->rootContext();
     context->setContextProperty("browserModel", QVariant::fromValue(m_groups));
-    context->setContextProperty("applicationFontSize", QVariant::fromValue(ApplicationStyleHelper().getApplicationScaledFontSize()));
+    context->setContextProperty("applicationFontSize", QVariant::fromValue(this->font().pointSizeF()));
 
     layout->addWidget(m_qmlView);
 

@@ -22,7 +22,6 @@
 #include "image.h"
 #include "volume.h"
 #include "volumerepository.h"
-#include "applicationstylehelper.h"
 #include "screenmanager.h"
 
 #include "patientbrowsermenugroup.h"
@@ -35,9 +34,6 @@ namespace udg {
 PatientBrowserMenu::PatientBrowserMenu(QWidget *parent)
  : QWidget(parent), m_patientBrowserList(0), m_patientAdditionalInfo(0)
 {
-    ApplicationStyleHelper style;
-    style.setScaledFontSizeTo(this);
-
     // Inicialment no sabem en quina pantalla es pot desplegar el menú
     m_currentScreenID = m_leftScreenID = m_rightScreenID = -1;
 

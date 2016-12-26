@@ -28,7 +28,7 @@ DrawerText::DrawerText(QObject *parent)
     m_horizontalJustification = "Centered";
     m_verticalJustification = "Centered";
     m_fontFamily = "Arial";
-    m_fontSize = ApplicationStyleHelper().getToolsFontSize();
+    m_fontSize = ApplicationStyleHelper(true).getToolsFontSize();
     m_shadow = false;
     m_italic = false;
     m_bold = true;

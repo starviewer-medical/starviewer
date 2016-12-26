@@ -16,6 +16,7 @@
 
 #include "q2dviewer.h"
 #include "mathtools.h"
+#include "applicationstylehelper.h"
 #include "mammographyimagehelper.h"
 #include "image.h"
 #include "study.h"
@@ -494,6 +495,7 @@ void Q2DViewerAnnotationHandler::setCornerAnnotation(AnnotationFlag annotation, 
 void Q2DViewerAnnotationHandler::createAnnotations()
 {
     m_cornerAnnotations = vtkCornerAnnotation::New();
+    m_cornerAnnotations->SetMaximumFontSize(ApplicationStyleHelper(true).getCornerAnnotationFontSize());
     m_cornerAnnotations->GetTextProperty()->SetFontFamilyToArial();
     m_cornerAnnotations->GetTextProperty()->ShadowOn();
 
@@ -506,7 +508,7 @@ void Q2DViewerAnnotationHandler::createOrientationAnnotations()
     {
         m_patientOrientationTextActor[i] = vtkTextActor::New();
         m_patientOrientationTextActor[i]->SetTextScaleModeToNone();
-        m_patientOrientationTextActor[i]->GetTextProperty()->SetFontSize(18);
+        m_patientOrientationTextActor[i]->GetTextProperty()->SetFontSize(ApplicationStyleHelper(true).getOrientationAnnotationFontSize());
         m_patientOrientationTextActor[i]->GetTextProperty()->BoldOn();
         m_patientOrientationTextActor[i]->GetTextProperty()->SetFontFamilyToArial();
         m_patientOrientationTextActor[i]->GetTextProperty()->ShadowOn();

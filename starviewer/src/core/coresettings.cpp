@@ -36,9 +36,6 @@ const QString CoreSettings::UserCustomWindowLevelsPath("CustomWindowLevels/path"
 const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics");
 
 const QString ToolsBase("Tools/");
-const QString CoreSettings::ToolsFontSize(ToolsBase + "ToolsFontSize");
-const QString CoreSettings::ScaledUserInterfaceFontSize("ScaledUserInterfaceFontSize");
-
 const QString CoreSettings::MagnifyingGlassZoomFactor(ToolsBase + "MagnifyingGlassZoomFactor");
 
 // Paràmetres d'obscurances
