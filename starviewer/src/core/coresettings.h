@@ -35,10 +35,6 @@ public:
     static const QString UserDICOMDumpDefaultTagsPath;
     static const QString UserCustomWindowLevelsPath;
     static const QString RegisterStatLogs;
-    // Mida per defecte de la font de les annotacions, si no s'especifica, s'autocalcula.
-    static const QString ToolsFontSize;
-    // Mida per defecte del text dels widgets que s'autoescalen: PatientBrowserMenu, WorInProgress, Popup RIS... si no s'especifica, s'autocalcula.
-    static const QString ScaledUserInterfaceFontSize;
 
     static const QString NumberOfDirectionsForLowQualityObscurances;
     static const QString FunctionForLowQualityObscurances;

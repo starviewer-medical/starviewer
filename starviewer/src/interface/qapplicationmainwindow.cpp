@@ -41,7 +41,6 @@
 #include "screenmanager.h"
 #include "qscreendistribution.h"
 #include "volumerepository.h"
-#include "applicationstylehelper.h"
 #include "qdiagnosistest.h"
 
 // Amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
@@ -156,8 +155,6 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     markAsBetaVersion();
     showBetaVersionDialog();
 #endif
-
-    computeDefaultToolTextSize();
 
     m_statsWatcher = new StatsWatcher("Menu triggering", this);
     m_statsWatcher->addTriggerCounter(m_fileMenu);
@@ -830,8 +827,4 @@ void QApplicationMainWindow::openReleaseNotes()
     m_applicationVersionChecker->showLocalReleaseNotes();
 }
 
-void QApplicationMainWindow::computeDefaultToolTextSize()
-{
-    ApplicationStyleHelper().recomputeStyleToScreenOfWidget(this);
-}
 }; // end namespace udg
