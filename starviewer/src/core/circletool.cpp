@@ -57,17 +57,15 @@ void CircleTool::handleEvent(unsigned long eventId)
             {
                 startDrawing();
             }
+            else
+            {
+                endDrawing();
+            }
             break;
         case vtkCommand::MouseMoveEvent:
             if (m_isDrawing)
             {
                 updateCircle();
-            }
-            break;
-        case vtkCommand::LeftButtonReleaseEvent:
-            if (m_isDrawing)
-            {
-                endDrawing();
             }
             break;
         case vtkCommand::KeyPressEvent:
