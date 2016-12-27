@@ -48,19 +48,22 @@ void EraserTool::handleEvent(unsigned long eventID)
     switch (eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
-            startEraserAction();
+            if (m_state == None)
+            {
+                startEraserAction();
+            }
+            else if (m_state == StartClick) // The second click finishes the shape
+            {
+                erasePrimitive();
+                reset();
+                m_2DViewer->render();
+            }
+            // A side effect is that double click erases the shape over the cursor
             break;
 
         case vtkCommand::MouseMoveEvent:
             drawAreaOfErasure();
             break;
-
-        case vtkCommand::LeftButtonReleaseEvent:
-            erasePrimitive();
-            reset();
-            m_2DViewer->render();
-            break;
-
         default:
             break;
     }
