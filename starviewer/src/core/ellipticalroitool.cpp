@@ -69,9 +69,6 @@ void EllipticalROITool::handleEvent(long unsigned eventID)
             simulateEllipse();
             break;
 
-        case vtkCommand::LeftButtonReleaseEvent:
-            closeForm();
-            break;
         case vtkCommand::KeyPressEvent:
             int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
             if (keyCode == 27) // ESC
@@ -144,6 +141,10 @@ void EllipticalROITool::handlePointAddition()
         memcpy(m_secondPoint, m_firstPoint, sizeof(double) * 3);
 
         m_state = FirstPointFixed;
+    }
+    else if (m_state == FirstPointFixed) // Second click, shape finished.
+    {
+        closeForm();
     }
 }
 
