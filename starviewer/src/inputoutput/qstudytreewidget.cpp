@@ -49,9 +49,11 @@ QStudyTreeWidget::QStudyTreeWidget(QWidget *parent)
     m_studyTreeView->header()->moveSection(Modality + 2, 4);
 
     // Carreguem les imatges que es mostren el QStudyTreeWidget
-    m_openFolder = QIcon(":/images/folderopen.png");
-    m_closeFolder = QIcon(":/images/folderclose.png");
-    m_iconSeries = QIcon(":/images/series.png");
+    m_iconOpenStudy = QIcon(":/images/icons/dicom-study.svg");
+    m_iconCloseStudy = QIcon(":/images/icons/dicom-study-closed.svg");
+    m_iconOpenSeries = QIcon(":/images/icons/dicom-series.svg");
+    m_iconCloseSeries = QIcon(":/images/icons/dicom-series-closed.svg");
+    m_iconDicomFile = QIcon(":/images/icons/dicom-document.svg");
 
     createConnections();
 
@@ -148,7 +150,7 @@ void QStudyTreeWidget::insertImageList(const QString &studyInstanceUID, const QS
         QTreeWidgetItem *newImageItem = new QTreeWidgetItem();
 
         newImageItem->setText(DICOMItemID, QString::number(m_nextDICOMItemIDOfImage++));
-        newImageItem->setIcon(ObjectName, m_iconSeries);
+        newImageItem->setIcon(ObjectName, m_iconDicomFile);
         // Li fem un padding per poder ordenar la columna, ja que s'ordena per String
         newImageItem->setText(ObjectName, tr("File %1").arg(image->getInstanceNumber().rightJustified(4, ' ')));
         newImageItem->setText(UID, image->getSOPInstanceUID());
@@ -427,7 +429,7 @@ QList<QTreeWidgetItem*> QStudyTreeWidget::fillPatient(Patient *patient)
         QTreeWidgetItem *item = new QTreeWidgetItem();
 
         item->setText(DICOMItemID, QString::number(m_nextIDICOMItemIDOfStudy++));
-        item->setIcon(ObjectName, m_closeFolder);
+        item->setIcon(ObjectName, m_iconCloseStudy);
         item->setText(ObjectName, patient->getFullName());
         item->setText(PatientID, patient->getID());
         item->setText(PatientBirth, formatDateTime(patient->getBirthDate(), QTime()));
@@ -465,7 +467,7 @@ QTreeWidgetItem* QStudyTreeWidget::fillSeries(Series *series)
     QTreeWidgetItem *seriesItem = new QTreeWidgetItem();
 
     seriesItem->setText(DICOMItemID, QString::number(m_nextDICOMItemIDOfSeries++));
-    seriesItem->setIcon(ObjectName, m_iconSeries);
+    seriesItem->setIcon(ObjectName, m_iconCloseSeries);
     // Li fem un padding per poder ordenar la columna, ja que s'ordena per String
     seriesItem->setText(ObjectName, tr("Series %1").arg(series->getSeriesNumber().rightJustified(4, ' ')));
     seriesItem->setText(Modality, series->getModality());
@@ -678,11 +680,12 @@ void QStudyTreeWidget::itemExpanded(QTreeWidgetItem *itemExpanded)
 
         if (isItemStudy(itemExpanded))
         {
-            itemExpanded->setIcon(ObjectName, m_openFolder);
+            itemExpanded->setIcon(ObjectName, m_iconOpenStudy);
             emit (requestedSeriesOfStudy(getStudyByDICOMItemID(itemExpanded->text(DICOMItemID).toInt())));
         }
         else if (isItemSeries(itemExpanded))
         {
+            itemExpanded->setIcon(ObjectName, m_iconOpenSeries);
             emit (requestedImagesOfSeries(getSeriesByDICOMItemID(itemExpanded->text(DICOMItemID).toInt())));
         }
     }
@@ -703,7 +706,11 @@ void QStudyTreeWidget::itemCollapsed(QTreeWidgetItem *itemCollapsed)
     {
         if (isItemStudy(itemCollapsed))
         {
-            itemCollapsed->setIcon(ObjectName, m_closeFolder);
+            itemCollapsed->setIcon(ObjectName, m_iconCloseStudy);
+        }
+        else if (isItemSeries(itemCollapsed))
+        {
+            itemCollapsed->setIcon(ObjectName, m_iconCloseSeries);
         }
     }
     else

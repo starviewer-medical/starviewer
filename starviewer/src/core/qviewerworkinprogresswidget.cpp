@@ -14,8 +14,6 @@
 
 #include "qviewerworkinprogresswidget.h"
 
-#include "applicationstylehelper.h"
-
 #include <QMovie>
 
 namespace udg {
@@ -26,12 +24,9 @@ QViewerWorkInProgressWidget::QViewerWorkInProgressWidget(QWidget *parent)
     this->setupUi(this);
 
     m_progressBarAnimation = new QMovie(this);
-    m_progressBarAnimation->setFileName(":/images/downloading.gif");
+    m_progressBarAnimation->setFileName(":/images/animations/downloading.gif");
     m_progressBarLabel->setMovie(m_progressBarAnimation);
 
-    ApplicationStyleHelper styleHelper;
-    styleHelper.setScaledSizeTo(m_progressBarAnimation);
-    styleHelper.setScaledFontSizeTo(this);
 
     this->reset();
 }

@@ -127,9 +127,9 @@ void QDifuPerfuSegmentationExtension::initializeTools()
 void QDifuPerfuSegmentationExtension::createActions()
 {
     // TODO el nom tant dels botons com de les icones, s'ahurien de millorar
-    m_splitterLeftButton->setIcon(QIcon(":/images/back.png"));
-    m_splitterCenterButton->setIcon(QIcon(":/images/view_left_right.png"));
-    m_splitterRightButton->setIcon(QIcon(":/images/play.png"));
+    m_splitterLeftButton->setIcon(QIcon(":/images/icons/media-playback-backwards.svg"));
+    m_splitterCenterButton->setIcon(QIcon(":/images/icons/view-split-left-right.svg"));
+    m_splitterRightButton->setIcon(QIcon(":/images/icons/media-playback-start.svg"));
 
     m_lesionViewAction = new QAction(this);
     m_lesionViewAction->setText(tr("Lesion Overlay"));

@@ -78,7 +78,7 @@ void ZoomTool::doZoom()
 {
     if (m_state == Zooming)
     {
-        m_viewer->setCursor(QCursor(QPixmap(":/images/zoom.png")));
+        m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/zoom.svg")));
         double *center = m_viewer->getRenderer()->GetCenter();
         int dy = m_viewer->getEventPosition().y() - m_viewer->getLastEventPosition().y();
         // TODO el 10.0 és un valor constant que podria refinar-se si es volgués (motion factor)

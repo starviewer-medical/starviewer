@@ -15,57 +15,38 @@
 #ifndef UDGAPPLICATIONSTYLEHELPER_H
 #define UDGAPPLICATIONSTYLEHELPER_H
 
-class QWidget;
-class QString;
-class QMovie;
-class QTreeWidget;
 
 namespace udg {
 
 /**
-    Classe que s'encarrega d'indicar i calcular diferents estils i configuracions de la interficie de l'aplicació, com per exemple
-    tamanys de lletra, colors, etc.
-
-    Per poder cridar els seu mètodes que ens retornin els diferents valors cal cridar, prèviament, a recomputeStyleToScreenOfWidget(widget)
-    passant-li un widget que es trobi en la pantalla on volem que l'style s'apliqui.
-
-    D'aquesta manera els diferents tamanys i estils s'adaptaran a la resolució i característiques d'aquella pantalla. Si no es fa, per defecte,
-    retornarà valors vàlids per una pantalla "normal" (on normal = de resolució no més gran d'1 Mpx)
-  */
+  Returns system's default font sizes efficiently by the querying system only one time.
+*/
 
 class ApplicationStyleHelper {
 public:
-    ApplicationStyleHelper();
+    /// If true, the results in Pt are multiplied by the Qt's scale factor.
+    /// This should be true when you know that contents are not scaled by this factor, for example in VTK (at least in 7.0).
+    ApplicationStyleHelper(bool applyScaleFactor = false);
 
-    /// Mètode que recalcula l'estil per aplicar en la pantalla on està situat el widget que se li passa.
-    /// Útil per quan, per exemple, el tamany de lletra ha de ser diferent per tenir en compte pantalles amb resolucions molt altes
-    void recomputeStyleToScreenOfWidget(QWidget *widget);
+    /// Returns default font size in Pt multiplied by an scale factor.
+    int getScaledFontSize(double multiplier) const;
 
-    /// Ens retorna el tamany de font que han de tenir les tools
+    /// Returns font size in Pt.
     int getToolsFontSize() const;
 
-    /// Escala el tamany d'una QMovie al adient a la pantalla on s'ha cridat recomputeStyleToScreenOfWidget
-    void setScaledSizeTo(QMovie *movie) const;
+    /// Returns font size in Pt.
+    int getCornerAnnotationFontSize() const;
 
-    /// Escala el tamany de lletra d'un QWidget al adient a la pantalla on s'ha cridat recomputeStyleToScreenOfWidget
-    void setScaledFontSizeTo(QWidget *widget) const;
+    /// Returns font size in Pt.
+    int getOrientationAnnotationFontSize() const;
 
-    /// Escala el tamany de lletra d'un QTreeWidget al adient a la pantalla on s'ha cridat recomputeStyleToScreenOfWidget
-    void setScaledFontSizeTo(QTreeWidget *treeWidget) const;
 
-    /// Scale radio buttons according to the screen size. A custom design is needed to be able to enlarge radio buttons.
-    void setScaledSizeToRadioButtons(QWidget *widget) const;
-
-    /// Scales application font size taking into account where recomputeStyleToScreenOfWidget was called
-    int getApplicationScaledFontSize() const;
+    /// Returns font size in Pt.
+    int getDefaultFontSize() const;
 
 private:
-    /// A partir d'un tamany per defecte i una clau de setting que indica si el tamany està canviat per config.
-    /// retorna el tamany de lletra adaptat a la pantalla
-    int getScaledFontSize(double defaultFontSize, const QString &settingsBackdoorKey) const;
-
-private:
-    static double m_scaleFactor;
+    static double m_systemFontSize;
+    bool m_applyScaleFactor;
 };
 
 } // End namespace udg

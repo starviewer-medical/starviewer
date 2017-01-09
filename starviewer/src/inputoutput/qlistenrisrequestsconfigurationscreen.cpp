@@ -28,7 +28,7 @@ QListenRisRequestsConfigurationScreen::QListenRisRequestsConfigurationScreen(QWi
     m_RISRequestsPortWarningIcon->setVisible(false);
     loadRisConfiguration();
 
-    this->setWindowIcon(QIcon(":images/RISConfiguration.png"));
+    this->setWindowIcon(QIcon(":images/icons/ris.svg"));
     createConnections();
     configureInputValidator();
 }

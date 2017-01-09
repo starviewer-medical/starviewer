@@ -22,7 +22,9 @@ FORMS += qlogviewerbase.ui \
     qlayoutoptionswidgetbase.ui \
     qnotificationpopupbase.ui \
     qfusionlayoutwidgetbase.ui \
-    qexternalapplicationconfigurationscreenbase.ui
+    qexternalapplicationconfigurationscreenbase.ui \
+    qdpiconfigurationscreenbase.ui
+
 
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
@@ -434,7 +436,8 @@ HEADERS += extensionfactory.h \
     externalapplication.h \
     externalapplicationsmanager.h \
     encapsulateddocument.h \
-    encapsulateddocumentfillerstep.h
+    encapsulateddocumentfillerstep.h \
+    qdpiconfigurationscreen.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -816,7 +819,8 @@ SOURCES += extensionmediator.cpp \
     externalapplicationsmanager.cpp \
     encapsulateddocument.cpp \
     encapsulateddocumentfillerstep.cpp \
-    starviewerapplication.cpp
+    starviewerapplication.cpp \
+    qdpiconfigurationscreen.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

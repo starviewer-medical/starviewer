@@ -22,6 +22,10 @@
   <property name="windowTitle">
    <string>DICOM Printers Configuration</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../../main/main.qrc">
+    <normaloff>:/images/icons/printer.svg</normaloff>:/images/icons/printer.svg</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
     <widget class="QTreeWidget" name="m_listPrintersTreeWidget">
@@ -85,7 +89,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/addNewPrinter.png</normaloff>:/images/addNewPrinter.png</iconset>
+         <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
        </property>
       </widget>
      </item>
@@ -121,7 +125,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/removePrinter.png</normaloff>:/images/removePrinter.png</iconset>
+         <normaloff>:/images/icons/edit-delete.svg</normaloff>:/images/icons/edit-delete.svg</iconset>
        </property>
       </widget>
      </item>
@@ -138,7 +142,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/printerTest.png</normaloff>:/images/printerTest.png</iconset>
+         <normaloff>:/images/icons/document-print-direct.svg</normaloff>:/images/icons/document-print-direct.svg</iconset>
        </property>
       </widget>
      </item>
@@ -775,6 +779,10 @@
        <property name="text">
         <string>Accept</string>
        </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/icons/dialog-ok-apply.svg</normaloff>:/images/icons/dialog-ok-apply.svg</iconset>
+       </property>
       </widget>
      </item>
      <item>
@@ -785,12 +793,20 @@
        <property name="text">
         <string>Apply</string>
        </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/icons/dialog-ok-apply.svg</normaloff>:/images/icons/dialog-ok-apply.svg</iconset>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="m_cancelSettingsPushButton">
        <property name="text">
         <string>Cancel</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
        </property>
       </widget>
      </item>
@@ -830,6 +846,7 @@
   <tabstop>m_cancelSettingsPushButton</tabstop>
  </tabstops>
  <resources>
+  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>
  <connections/>

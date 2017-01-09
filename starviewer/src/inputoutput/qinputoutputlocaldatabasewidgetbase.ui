@@ -14,7 +14,16 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <property name="spacing">
@@ -64,13 +73,7 @@
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
-         <normaloff>:/images/view.png</normaloff>:/images/view.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
+         <normaloff>:/images/icons/visibility.svg</normaloff>:/images/icons/visibility.svg</iconset>
        </property>
        <property name="toolButtonStyle">
         <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -110,6 +113,7 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
  <connections/>

@@ -36,9 +36,6 @@ const QString CoreSettings::UserCustomWindowLevelsPath("CustomWindowLevels/path"
 const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics");
 
 const QString ToolsBase("Tools/");
-const QString CoreSettings::ToolsFontSize(ToolsBase + "ToolsFontSize");
-const QString CoreSettings::ScaledUserInterfaceFontSize("ScaledUserInterfaceFontSize");
-
 const QString CoreSettings::MagnifyingGlassZoomFactor(ToolsBase + "MagnifyingGlassZoomFactor");
 
 // Paràmetres d'obscurances
@@ -116,6 +113,8 @@ const QString CoreSettings::EnabledSyncActionsKey("enabledSyncActions");
 
 const QString CoreSettings::DontForceMultiSampling("DontForceMultiSampling");
 
+const QString CoreSettings::ScaleFactor("scaleFactor");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -160,6 +159,8 @@ void CoreSettings::init()
     settingsRegistry->addSetting(ModalitiesWithPropagationEnabledByDefault, "CT;MR;PT");
     settingsRegistry->addSetting(SUVMeasurementNormalizationType, "BodyWeight");
     settingsRegistry->addSetting(DontForceMultiSampling, false);
+
+    settingsRegistry->addSetting(ScaleFactor, "0");
 }
 
 } // End namespace udg

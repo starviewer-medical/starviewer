@@ -52,7 +52,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/axial.png</normaloff>:/images/axial.png</iconset>
+           <normaloff>:/images/icons/axial.svg</normaloff>:/images/icons/axial.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -81,7 +81,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/sagital.png</normaloff>:/images/sagital.png</iconset>
+           <normaloff>:/images/icons/sagittal.svg</normaloff>:/images/icons/sagittal.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -110,7 +110,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/coronal.png</normaloff>:/images/coronal.png</iconset>
+           <normaloff>:/images/icons/coronal.svg</normaloff>:/images/icons/coronal.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -209,7 +209,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/zoom.png</normaloff>:/images/zoom.png</iconset>
+           <normaloff>:/images/icons/edit-find.svg</normaloff>:/images/icons/edit-find.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -238,7 +238,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/rotate3d.png</normaloff>:/images/rotate3d.png</iconset>
+           <normaloff>:/images/icons/swivel.svg</normaloff>:/images/icons/swivel.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -267,7 +267,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/windowLevel.png</normaloff>:/images/windowLevel.png</iconset>
+           <normaloff>:/images/icons/contrast.svg</normaloff>:/images/icons/contrast.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -334,7 +334,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/clippingBox.png</normaloff>:/images/clippingBox.png</iconset>
+         <normaloff>:/images/icons/node.svg</normaloff>:/images/icons/node.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -477,7 +477,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/clutEdit.png</normaloff>:/images/clutEdit.png</iconset>
+         <normaloff>:/images/icons/adjustrgb.svg</normaloff>:/images/icons/adjustrgb.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -1102,7 +1102,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/photo.png</normaloff>:/images/photo.png</iconset>
+           <normaloff>:/images/icons/camera-photo.svg</normaloff>:/images/icons/camera-photo.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1125,7 +1125,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/store.png</normaloff>:/images/store.png</iconset>
+           <normaloff>:/images/icons/upload-media.svg</normaloff>:/images/icons/upload-media.svg</iconset>
          </property>
          <property name="iconSize">
           <size>

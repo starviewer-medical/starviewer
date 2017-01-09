@@ -37,7 +37,7 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
 
     // Creació de l'acció del boto de sincronitzar.
     m_synchronizeButtonAction = new QAction(0);
-    m_synchronizeButtonAction->setIcon(QIcon(":/images/unlinked.png"));
+    m_synchronizeButtonAction->setIcon(QIcon(":/images/icons/emblem-symbolic-link.svg"));
     m_synchronizeButtonAction->setText(tr("Enable manual synchronization in this viewer"));
     m_synchronizeButtonAction->setStatusTip(m_synchronizeButtonAction->text());
     m_synchronizeButtonAction->setCheckable(true);
@@ -226,13 +226,13 @@ void Q2DViewerWidget::enableSynchronization(bool enable)
 {
     if (!enable)
     {
-        m_synchronizeButtonAction->setIcon(QIcon(":/images/unlinked.png"));
+        m_synchronizeButtonAction->setIcon(QIcon(":/images/icons/emblem-symbolic-unlink.svg"));
         m_synchronizeButtonAction->setText(tr("Enable manual synchronization in this viewer"));
         m_synchronizeButtonAction->setStatusTip(m_synchronizeButtonAction->text());
     }
     else
     {
-        m_synchronizeButtonAction->setIcon(QIcon(":/images/linked.png"));
+        m_synchronizeButtonAction->setIcon(QIcon(":/images/icons/emblem-symbolic-link.svg"));
         m_synchronizeButtonAction->setText(tr("Disable manual synchronization in this viewer"));
         m_synchronizeButtonAction->setStatusTip(m_synchronizeButtonAction->text());
     }

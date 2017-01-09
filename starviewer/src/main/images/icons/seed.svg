@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 22 22">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3051">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+      .ColorScheme-Text {
+        color:#4d4d4d;
+      }
+      </style>
+    <style
+       id="current-color-scheme-55"
+       type="text/css">
+      .ColorScheme-Text {
+        color:#4d4d4d;
+      }
+      </style>
+    <style
+       type="text/css"
+       id="current-color-scheme-5">
+      .ColorScheme-Text {
+        color:#4d4d4d;
+      }
+      </style>
+    <style
+       type="text/css"
+       id="current-color-scheme-9">
+      .ColorScheme-Text {
+        color:#4d4d4d;
+      }
+      </style>
+  </defs>
+  <path
+     id="path6"
+     class="ColorScheme-Text"
+     d="m 10.983051,2.025424 c -3.3137038,1.23e-5 -5.9999881,2.6862966 -6.0000004,5.9999999 0.00235,0.714556 0.1323211,1.4229474 0.3837891,2.0917961 0.1820025,0.503011 0.5490352,1.059963 0.7792967,1.444337 l 4.8369146,8.463867 4.836912,-8.460937 c 0.379815,-0.473115 0.54441,-0.973832 0.782228,-1.447267 C 16.85266,9.4481881 16.981638,8.7398026 16.983052,8.0254239 16.983039,4.7117206 14.296755,2.0254363 10.983051,2.025424 Z m 0,1.4999999 c 1.372954,2.33e-5 2.670787,0.6268237 3.524412,1.7021484 0.186929,0.2350919 0.34985,0.4883078 0.486329,0.7558594 0.272779,0.5365055 0.435162,1.1222803 0.477541,1.7226563 0.0077,0.1062731 0.01157,0.2127856 0.01172,0.3193359 -3.52e-4,0.4509841 -0.06849,0.8993531 -0.202149,1.3300782 -0.0741,0.2337675 -0.167182,0.4610869 -0.278318,0.6796879 -0.01245,0.02747 -0.02511,0.05482 -0.03808,0.08204 -0.776924,1.479832 -2.310058,2.407149 -3.98145,2.408196 C 9.311659,12.524377 7.7785409,11.597059 7.0016052,10.11722 6.9348852,9.9903057 6.8742692,9.8602747 6.8199647,9.7275722 l -0.00879,-0.020508 C 6.7616467,9.5831056 6.7176579,9.4570043 6.6793397,9.3291349 6.6733718,9.311593 6.6675123,9.2940146 6.6617616,9.2764004 6.6284315,9.1565332 6.6000868,9.0353353 6.5768007,8.9131192 6.5707208,8.8877799 6.5648613,8.8623882 6.5592224,8.8369473 6.5362262,8.7108035 6.5186321,8.5837343 6.5064882,8.456088 6.5043805,8.4346178 6.5024275,8.4131329 6.5006288,8.3916348 6.4897968,8.269854 6.4839328,8.1476823 6.4830506,8.0254239 6.4834019,7.8757129 6.4912241,7.7261129 6.5064882,7.5771818 6.6274014,6.3670803 7.2329488,5.2574388 8.1851989,4.5010099 8.4202909,4.3140819 8.6735067,4.1511602 8.9410584,4.0146818 9.5736167,3.6928502 10.273329,3.5252006 10.983051,3.5254239 Z"
+     style="color:#4d4d4d;fill:currentColor;fill-opacity:1;stroke:none" />
+  <path
+     id="path4170"
+     d="m 10.5,5.4745767 0,2 -1.9999998,0 0,1 1.9999998,0 0,2.0000033 1,0 0,-2.0000033 2,0 0,-1 -2,0 0,-2 -1,0 z"
+     style="color:#4d4d4d;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:currentColor;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+</svg>

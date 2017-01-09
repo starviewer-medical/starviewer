@@ -68,13 +68,13 @@ void Rotate3DTool::startRotate3D()
     {
         m_state = Spinning;
         // TODO podria ser que volguéssim posar-li una icona diferent per quan fem SPIN
-        m_viewer->setCursor(QCursor(QPixmap(":/images/rotate3d.png")));
+        m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/swivel.svg")));
         m_interactorStyle->StartSpin();
     }
     else
     {
         m_state = Rotating;
-        m_viewer->setCursor(QCursor(QPixmap(":/images/rotate3d.png")));
+        m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/swivel.svg")));
         m_interactorStyle->StartRotate();
     }
 }

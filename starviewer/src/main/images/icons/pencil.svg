@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   viewBox="0 0 22 22"
+   id="svg2"
+   version="1.1">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3051">
+    <style
+       type="text/css"
+       id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#4d4d4d;
+      }
+      </style>
+  </defs>
+  <path
+     style="color:#4d4d4d;fill:currentColor;fill-opacity:1;stroke:none"
+     d="M 16,2 4.65625,13.3125 3.25,14.75 3,15 3,19 4,19 6,19 7,19 7.25,18.75 7.625,18.40625 8.3125,17.6875 8.6875,17.34375 18.998047,7 l 1,-1 z m -0.59375,2 2.591797,2.59375 -8.279297,8.25 L 7.15625,12.25 Z M 6.4375,12.96875 9.03125,15.5625 8.3125,16.28125 5.71875,13.6875 6,13.40625 Z M 5.03125,14.375 7.625,16.96875 6.90625,17.6875 4.3125,15.09375 Z"
+     class="ColorScheme-Text"
+     id="path6" />
+</svg>
