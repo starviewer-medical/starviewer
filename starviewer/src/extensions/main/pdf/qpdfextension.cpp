@@ -58,7 +58,7 @@ void QPdfExtension::setPatient(Patient *patient)
                 if (document->getMimeTypeOfEncapsulatedDocument() == "application/pdf")
                 {
                     count++;
-                    QListWidgetItem *item = new QListWidgetItem(QIcon(":/images/structuredReportThumbnail.png"), document->getDocumentTitle(), m_listWidget);
+                    QListWidgetItem *item = new QListWidgetItem(QIcon(":/images/icons/mime-pdf.svg"), document->getDocumentTitle(), m_listWidget);
                     if (document->getDocumentTitle().isEmpty())
                     {
                         item->setText(tr("Document %1").arg(count));

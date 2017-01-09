@@ -2,54 +2,49 @@
 <ui version="4.0">
  <class>udg::QDICOMDIRConfigurationScreenBase</class>
  <widget class="QWidget" name="udg::QDICOMDIRConfigurationScreenBase">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>651</width>
-    <height>592</height>
-   </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>20000</width>
-    <height>5000</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>DICOMDIR Configuration</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/cdrom.png</normaloff>:/images/cdrom.png</iconset>
+    <normaloff>:/images/icons/media-optical-dicom.svg</normaloff>:/images/icons/media-optical-dicom.svg</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>DICOMDIR creation configuration</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <item>
-      <spacer name="horizontalSpacer">
+   <item row="5" column="0">
+    <layout class="QGridLayout">
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="m_textBurningApplicationCDParameters">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLineEdit" name="m_textBurningApplicationDVDParameters">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="labelCDParameters">
+       <property name="text">
+        <string>CD parameters:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="labelDVDParameteres">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>DVD parameters:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" rowspan="2">
+      <spacer>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -58,38 +53,184 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>12</width>
+         <width>40</width>
          <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
-     <item>
-      <widget class="QCheckBox" name="m_checkBoxConvertDICOMDIRImagesToLittleEndian">
+    </layout>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Copy additional folder content when creating DICOMDIR on these supports</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QCheckBox" name="m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk">
+        <property name="text">
+         <string>USB Drive or Hard Disk</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="m_checkBoxCopyFolderContentToDICOMDIRCdDvd">
+        <property name="text">
+         <string>CD or DVD</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="textLabel1_10">
+        <property name="text">
+         <string>Folder path to copy content:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLineEdit" name="m_textDICOMDIRFolderPathToCopy"/>
+        </item>
+        <item>
+         <widget class="QToolButton" name="m_buttonExaminateDICOMDIRFolderPathToCopy">
+          <property name="toolTip">
+           <string>Browse disk to find the folder to copy to DICOMDIR</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../main/main.qrc">
+            <normaloff>:/images/icons/document-open.svg</normaloff>:/images/icons/document-open.svg</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="m_copyFolderContentValidationIcon">
+          <property name="minimumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">image: url(:/images/icons/emblem-warning.svg);</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="m_copyFolderContentValidationLabel">
+          <property name="text">
+           <string>Wrong path</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <layout class="QGridLayout">
+     <item row="1" column="0">
+      <widget class="QLabel" name="textLabel1_9">
        <property name="text">
-        <string>Convert all images to Explicit Little Endian</string>
+        <string>Application path:</string>
        </property>
       </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="m_textBurningApplicationParameters"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="m_burningApplicationDownloadURL">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="m_burningApplicationDownloadURLLabel">
+       <property name="text">
+        <string>Download from:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="textLabel1_8">
+       <property name="text">
+        <string>Application parameters:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <layout class="QHBoxLayout">
+       <item>
+        <widget class="QLineEdit" name="m_textBurningApplicationPath">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_buttonExaminateBurningApplication">
+         <property name="toolTip">
+          <string>Examine disk to find the application</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../main/main.qrc">
+           <normaloff>:/images/icons/document-open.svg</normaloff>:/images/icons/document-open.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="m_burningApplicationPathValidationIcon">
+         <property name="minimumSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">image: url(:/images/icons/emblem-warning.svg);</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="m_burningApplicationPathValidationLabel">
+         <property name="text">
+          <string>Validation Message</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
    <item row="2" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>10</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="3" column="0">
     <widget class="QLabel" name="label">
      <property name="font">
       <font>
@@ -102,225 +243,25 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="2">
-    <layout class="QVBoxLayout">
-     <property name="leftMargin">
-      <number>10</number>
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="m_checkBoxConvertDICOMDIRImagesToLittleEndian">
+     <property name="text">
+      <string>Convert all images to Explicit Little Endian</string>
      </property>
-     <property name="topMargin">
-      <number>10</number>
-     </property>
-     <item>
-      <layout class="QGridLayout">
-       <item row="1" column="0">
-        <widget class="QLabel" name="textLabel1_9">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>90</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Application path:</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::RichText</enum>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <layout class="QHBoxLayout">
-         <item>
-          <widget class="QLineEdit" name="m_textBurningApplicationPath">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_buttonExaminateBurningApplication">
-           <property name="toolTip">
-            <string>Examine disk to find the application</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="../main/main.qrc">
-             <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="m_burningApplicationPathValidationIcon">
-           <property name="pixmap">
-            <pixmap resource="../main/main.qrc">:/images/warningIcon.png</pixmap>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="m_burningApplicationPathValidationLabel">
-           <property name="text">
-            <string>Validation Message</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="textLabel1_8">
-         <property name="minimumSize">
-          <size>
-           <width>120</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Application parameters:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="m_textBurningApplicationParameters"/>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="m_burningApplicationDownloadURLLabel">
-         <property name="text">
-          <string>Download from:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="m_burningApplicationDownloadURL">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-         <property name="openExternalLinks">
-          <bool>true</bool>
-         </property>
-         <property name="textInteractionFlags">
-          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout">
-       <item>
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <layout class="QVBoxLayout">
-         <item>
-          <widget class="QCheckBox" name="m_checkBoxHasDifferentCDDVDParameteres">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Use different parameters for CD and DVD burning:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QGridLayout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="labelCDParameters">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>CD parameters:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLineEdit" name="m_textBurningApplicationCDParameters">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>16777215</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="labelDVDParameteres">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>DVD parameters:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLineEdit" name="m_textBurningApplicationDVDParameters">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-    </layout>
+    </widget>
    </item>
-   <item row="5" column="0">
-    <spacer name="verticalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
+     <property name="text">
+      <string>DICOMDIR creation configuration</string>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>10</height>
-      </size>
-     </property>
-    </spacer>
+    </widget>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_3">
@@ -335,156 +276,14 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0" colspan="2">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>13</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string>Copy additional folder content when creating DICOMDIR on these supports</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QCheckBox" name="m_checkBoxCopyFolderContentToDICOMDIRUsbHardDisk">
-            <property name="text">
-             <string>USB Drive or Hard Disk</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="m_checkBoxCopyFolderContentToDICOMDIRCdDvd">
-            <property name="text">
-             <string>CD or DVD</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>13</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="textLabel1_10">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>90</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Folder path to copy content:</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::RichText</enum>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLineEdit" name="m_textDICOMDIRFolderPathToCopy">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QPushButton" name="m_buttonExaminateDICOMDIRFolderPathToCopy">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="toolTip">
-          <string>Examine disk to find the folder to copy to DICOMDIR</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="../main/main.qrc">
-           <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QLabel" name="m_copyFolderContentValidationIcon">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="../main/main.qrc">:/images/warningIcon.png</pixmap>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="m_copyFolderContentValidationLabel">
-           <property name="text">
-            <string>Wrong path</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-    </layout>
+   <item row="4" column="0">
+    <widget class="QCheckBox" name="m_checkBoxHasDifferentCDDVDParameteres">
+     <property name="text">
+      <string>Use different parameters for CD and DVD burning:</string>
+     </property>
+    </widget>
    </item>
-   <item row="8" column="1">
+   <item row="8" column="0">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -501,17 +300,14 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>m_checkBoxConvertDICOMDIRImagesToLittleEndian</tabstop>
   <tabstop>m_textBurningApplicationPath</tabstop>
   <tabstop>m_buttonExaminateBurningApplication</tabstop>
   <tabstop>m_textBurningApplicationParameters</tabstop>
-  <tabstop>m_checkBoxHasDifferentCDDVDParameteres</tabstop>
   <tabstop>m_textBurningApplicationCDParameters</tabstop>
   <tabstop>m_textBurningApplicationDVDParameters</tabstop>
-  <tabstop>m_textDICOMDIRFolderPathToCopy</tabstop>
-  <tabstop>m_buttonExaminateDICOMDIRFolderPathToCopy</tabstop>
  </tabstops>
  <resources>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
  <connections>

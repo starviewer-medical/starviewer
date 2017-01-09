@@ -39,7 +39,7 @@ TRANSLATIONS += crashreporter_ca_ES.ts \
 INCLUDEPATH += ../core
 
 macx {
-    ICON = ../main/images/starviewer.icns
+    ICON = ../main/images/logo/logo.icns
 }
 
 RESOURCES = crashreporter.qrc ../main/main.qrc

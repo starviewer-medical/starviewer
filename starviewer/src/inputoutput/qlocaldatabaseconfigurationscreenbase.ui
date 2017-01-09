@@ -6,28 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>854</width>
-    <height>371</height>
+    <width>573</width>
+    <height>424</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>20000</width>
-    <height>5000</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>Local Database Configuration</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/database.png</normaloff>:/images/database.png</iconset>
+    <normaloff>:/images/icons/database.svg</normaloff>:/images/icons/database.svg</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_5">
    <item row="0" column="0">
@@ -38,75 +26,39 @@
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QLabel" name="textLabel1_9">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>90</width>
-            <height>0</height>
-           </size>
-          </property>
+        <item row="1" column="4">
+         <widget class="QLabel" name="m_cachePathWarningLabel">
           <property name="text">
-           <string>Database Location:</string>
+           <string>TextLabel</string>
           </property>
-          <property name="textFormat">
-           <enum>Qt::RichText</enum>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="m_textDatabaseRoot"/>
-        </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="m_buttonExaminateDataBase">
-          <property name="toolTip">
-           <string>Examine disk to find the database</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="../main/main.qrc">
-            <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
         <item row="0" column="3">
          <widget class="QLabel" name="m_databasePathWarningIcon">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="../main/main.qrc">:/images/warningIcon.png</pixmap>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="4">
-         <widget class="QLabel" name="m_databasePathWarningLabel">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="textLabel1_8">
           <property name="minimumSize">
            <size>
-            <width>120</width>
-            <height>0</height>
+            <width>16</width>
+            <height>16</height>
            </size>
           </property>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">image: url(:/images/icons/emblem-warning.svg);</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="textLabel1_9">
           <property name="text">
-           <string>DICOM Files Cache Location:</string>
+           <string>Database Location:</string>
           </property>
          </widget>
         </item>
@@ -117,48 +69,90 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="2">
-         <widget class="QPushButton" name="m_buttonExaminateCacheImage">
-          <property name="toolTip">
-           <string>Examine disk to find the directory to save the retrieved DICOM files</string>
-          </property>
+        <item row="1" column="0">
+         <widget class="QLabel" name="textLabel1_8">
           <property name="text">
-           <string/>
+           <string>DICOM Files Cache Location:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QToolButton" name="m_buttonExaminateCacheImage">
+          <property name="toolTip">
+           <string>Browse disk to find the directory to save the retrieved DICOM files</string>
           </property>
           <property name="icon">
            <iconset resource="../main/main.qrc">
-            <normaloff>:/images/folderopen.png</normaloff>:/images/folderopen.png</iconset>
+            <normaloff>:/images/icons/document-open.svg</normaloff>:/images/icons/document-open.svg</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QLabel" name="m_databasePathWarningLabel">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
         <item row="1" column="3">
          <widget class="QLabel" name="m_cachePathWarningIcon">
-          <property name="text">
-           <string/>
+          <property name="minimumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
           </property>
-          <property name="pixmap">
-           <pixmap resource="../main/main.qrc">:/images/warningIcon.png</pixmap>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">image: url(:/images/icons/emblem-warning.svg);</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="4">
-         <widget class="QLabel" name="m_cachePathWarningLabel">
-          <property name="text">
-           <string>TextLabel</string>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="m_textDatabaseRoot"/>
+        </item>
+        <item row="0" column="2">
+         <widget class="QToolButton" name="m_buttonExaminateDataBase">
+          <property name="toolTip">
+           <string>Browse disk to find the database</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../main/main.qrc">
+            <normaloff>:/images/icons/document-open.svg</normaloff>:/images/icons/document-open.svg</iconset>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
+      <item row="2" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QLabel" name="m_mustRestartToApplyWarningIcon">
+          <property name="minimumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">image: url(:/images/icons/emblem-warning.svg);</string>
+          </property>
           <property name="text">
            <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="../main/main.qrc">:/images/warningIcon.png</pixmap>
           </property>
          </widget>
         </item>
@@ -170,23 +164,10 @@
           <property name="textFormat">
            <enum>Qt::PlainText</enum>
           </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
          </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>13</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </item>
@@ -212,7 +193,7 @@
          <widget class="QLineEdit" name="m_textMinimumSpaceRequiredToRetrieve">
           <property name="maximumSize">
            <size>
-            <width>40</width>
+            <width>64</width>
             <height>16777215</height>
            </size>
           </property>
@@ -233,11 +214,20 @@
         </item>
         <item>
          <widget class="QLabel" name="m_minimumSpaceWarningIcon">
-          <property name="text">
-           <string/>
+          <property name="minimumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
           </property>
-          <property name="pixmap">
-           <pixmap resource="../main/main.qrc">:/images/warningIcon.png</pixmap>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">image: url(:/images/icons/emblem-warning.svg);</string>
           </property>
          </widget>
         </item>
@@ -245,6 +235,9 @@
          <widget class="QLabel" name="m_minimumSpaceWarningLabel">
           <property name="text">
            <string>TextLabel</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -268,7 +261,16 @@
         <property name="spacing">
          <number>6</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -282,7 +284,7 @@
          <widget class="QLineEdit" name="m_textMaximumDaysNotViewed">
           <property name="maximumSize">
            <size>
-            <width>40</width>
+            <width>64</width>
             <height>16777215</height>
            </size>
           </property>
@@ -303,11 +305,20 @@
         </item>
         <item>
          <widget class="QLabel" name="m_deleteNotViewedStudiesWarningIcon">
-          <property name="text">
-           <string/>
+          <property name="minimumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
           </property>
-          <property name="pixmap">
-           <pixmap resource="../main/main.qrc">:/images/warningIcon.png</pixmap>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">image: url(:/images/icons/emblem-warning.svg);</string>
           </property>
          </widget>
         </item>
@@ -315,6 +326,9 @@
          <widget class="QLabel" name="m_deleteNotViewedStudiesWarningLabel">
           <property name="text">
            <string>TextLabel</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -334,19 +348,38 @@
        </layout>
       </item>
       <item row="2" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
          <widget class="QCheckBox" name="m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable">
           <property name="text">
-           <string>When there is not enough free space to retrieve or import new studies, delete old studies until</string>
+           <string>Delete studies to keep</string>
           </property>
          </widget>
         </item>
-        <item>
+        <item row="0" column="3">
+         <widget class="QLabel" name="m_freeSpaceWarningIcon">
+          <property name="minimumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">image: url(:/images/icons/emblem-warning.svg);</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
          <widget class="QLineEdit" name="m_textSpaceToFreeIfNotEnoughSpaceAvailable">
           <property name="maximumSize">
            <size>
-            <width>35</width>
+            <width>64</width>
             <height>16777215</height>
            </size>
           </property>
@@ -358,31 +391,37 @@
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>GB of free space are obtained.</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="m_freeSpaceWarningIcon">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="../main/main.qrc">:/images/warningIcon.png</pixmap>
-          </property>
-         </widget>
-        </item>
-        <item>
+        <item row="0" column="4">
          <widget class="QLabel" name="m_freeSpaceWarningLabel">
           <property name="text">
            <string>TextLabel</string>
           </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
-        <item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>GB of free space.</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="5">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>When there is not enough free space to retrieve or import new studies, older studies will be deleted to mantain the specified free space.</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="indent">
+           <number>16</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5" rowspan="2">
          <spacer>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -406,80 +445,59 @@
       <string>Local Database Maintenance</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="2">
+       <widget class="QPushButton" name="m_buttonCompactDatabase">
+        <property name="toolTip">
+         <string>Compact Database</string>
+        </property>
+        <property name="text">
+         <string>Compact database</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../main/main.qrc">
+          <normaloff>:/images/icons/package.svg</normaloff>:/images/icons/package.svg</iconset>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
-       <layout class="QHBoxLayout">
-        <property name="spacing">
-         <number>6</number>
+       <spacer>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="margin">
-         <number>0</number>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>23</height>
+         </size>
         </property>
-        <item>
-         <widget class="QPushButton" name="m_buttonCompactDatabase">
-          <property name="toolTip">
-           <string>Compact Database</string>
-          </property>
-          <property name="text">
-           <string>Compact Database</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="m_buttonDeleteStudies">
-          <property name="toolTip">
-           <string>Delete all studies from the cache</string>
-          </property>
-          <property name="text">
-           <string>Delete All Studies</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>23</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
+       </spacer>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="m_buttonDeleteStudies">
+        <property name="toolTip">
+         <string>Delete all studies from the cache</string>
+        </property>
+        <property name="text">
+         <string>Delete all studies</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../main/main.qrc">
+          <normaloff>:/images/icons/edit-delete.svg</normaloff>:/images/icons/edit-delete.svg</iconset>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
    </item>
    <item row="3" column="0">
-    <spacer>
+    <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>830</width>
-       <height>16</height>
+       <width>20</width>
+       <height>40</height>
       </size>
      </property>
     </spacer>
@@ -496,8 +514,6 @@
   <tabstop>m_textMaximumDaysNotViewed</tabstop>
   <tabstop>m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable</tabstop>
   <tabstop>m_textSpaceToFreeIfNotEnoughSpaceAvailable</tabstop>
-  <tabstop>m_buttonCompactDatabase</tabstop>
-  <tabstop>m_buttonDeleteStudies</tabstop>
  </tabstops>
  <resources>
   <include location="../main/main.qrc"/>

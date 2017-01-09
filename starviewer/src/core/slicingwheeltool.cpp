@@ -56,7 +56,7 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
     {
         case vtkCommand::MouseWheelForwardEvent:
             m_mouseMovement = false;
-            m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
+            m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll.svg")));
             SlicingTool::updateIncrement(1);
             m_viewer->unsetCursor();
             // Estadístiques
@@ -65,7 +65,7 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
 
         case vtkCommand::MouseWheelBackwardEvent:
             m_mouseMovement = false;
-            m_viewer->setCursor(QCursor(QPixmap(":/images/slicing.png")));
+            m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll.svg")));
             SlicingTool::updateIncrement(-1);
             m_viewer->unsetCursor();
             // Estadístiques

@@ -37,17 +37,17 @@ QViewerCINEController::QViewerCINEController(QObject *parent)
 
     m_playAction = new QAction(this);
 //     m_playAction->setShortcut(tr("Space"));
-    m_playAction->setIcon(QIcon(":/images/play.png"));
+    m_playAction->setIcon(QIcon(":/images/icons/media-playback-start.svg"));
     m_playAction->setText(tr("Play"));
     connect(m_playAction, SIGNAL(triggered()), SLOT(play()));
 
     m_boomerangAction = new QAction(this);
-    m_boomerangAction->setIcon(QIcon(":/images/boomerang.png"));
+    m_boomerangAction->setIcon(QIcon(":/images/icons/media-playlist-boomerang.svg"));
     m_boomerangAction->setCheckable(true);
     connect(m_boomerangAction, SIGNAL(triggered(bool)), SLOT(enableBoomerang(bool)));
 
     m_loopAction = new QAction(this);
-    m_loopAction->setIcon(QIcon(":/images/repeat.png"));
+    m_loopAction->setIcon(QIcon(":/images/icons/media-playlist-repeat.svg"));
     m_loopAction->setCheckable(true);
     connect(m_loopAction, SIGNAL(triggered(bool)), SLOT(enableLoop(bool)));
 }
@@ -109,7 +109,7 @@ void QViewerCINEController::play()
     if (!m_playing)
     {
         m_playing = true;
-        m_playAction->setIcon(QIcon(":/images/pause.png"));
+        m_playAction->setIcon(QIcon(":/images/icons/media-playback-pause.svg"));
         m_playAction->setText(tr("Pause"));
         emit playing();
         m_timer->start(1000 / m_velocity, this);
@@ -124,7 +124,7 @@ void QViewerCINEController::pause()
 {
     m_timer->stop();
     m_playing = false;
-    m_playAction->setIcon(QIcon(":/images/play.png"));
+    m_playAction->setIcon(QIcon(":/images/icons/media-playback-start.svg"));
     m_playAction->setText(tr("Play"));
     emit paused();
 }

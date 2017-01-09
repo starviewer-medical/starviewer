@@ -97,7 +97,7 @@ void QRectumSegmentationExtension::initializeTools()
     m_regionAction->setStatusTip(tr("Enable/Disable region tool"));
     m_regionAction->setCheckable(true);
     m_regionAction->setEnabled(true);
-    m_regionAction->setIcon(QIcon(":/images/roi.png"));
+    m_regionAction->setIcon(QIcon(":/images/icons/roi.svg"));
     m_regionToolButton->setDefaultAction(m_regionAction);
 
     //Apanyo que hem de fer per tal de detectar quan s'activa una tool 

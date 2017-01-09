@@ -43,7 +43,7 @@ QCrashReporter::QCrashReporter(const QStringList &args, QWidget *parent)
     m_closeTimer->setInterval(1500);
 
     setupUi(this);
-    setWindowIcon(QIcon(":/images/starviewer.png"));
+    setWindowIcon(QIcon(":/images/logo/logo.ico"));
 
     setWindowTitle(tr("%1").arg(ApplicationNameString));
     m_quitPushButton->setText(tr("Quit %1").arg(ApplicationNameString));
