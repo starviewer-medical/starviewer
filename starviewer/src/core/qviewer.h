@@ -172,6 +172,9 @@ public:
     /// Returns the current focal point of the active camera
     Vector3 getCurrentFocalPoint();
 
+    /// Returns the direction of projection of the active camera.
+    Vector3 getDirectionOfProjection();
+
     /// Returns the VOI LUT that is currently applied to the image in this viewer. The default implementation returns a default VoiLut.
     virtual VoiLut getCurrentVoiLut() const;
 

@@ -20,6 +20,8 @@
 
 #include "vector3.h"
 
+#include <functional>
+
 class vtkProp;
 class vtkCoordinate;
 
@@ -90,13 +92,14 @@ public:
     /// @return Cert si s'ha modificat alguna propietat des de l'últim "update". Fals altrament
     bool isModified() const;
 
-    /// Aquest mètode ens retorna la distància que hi ha des d'una determinada primitiva fins al punt passat per paràmetre.
-    /// i ens dóna un paràmetre de sortida indicant quin és el punt de la primitiva més proper a aquest punt.
-    virtual double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint) = 0;
+    /// Returns the distance in display coordinates from the given \a displayPoint to this primitive, and also returns the closest primitive point in display
+    /// coordinates in \a closestDisplayPoint. The provided \a worldToDisplay function converts a point from world to display coordinates.
+    virtual double getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                               std::function<Vector3(const Vector3&)> worldToDisplay) = 0;
 
-    /// Ens retorna els límits de l'hexahedre que encapsula la primitiva
-    /// en aquest ordre: minX, maxX, minY, maxY, minZ, maxZ
-    virtual void getBounds(double bounds[6]) = 0;
+    /// Returns this primitive's bounds in display coordinates [minX, maxX, minY, maxY].
+    /// The provided \a worldToDisplay function converts a point from world to display coordinates.
+    virtual std::array<double, 4> getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay) = 0;
 
     /// HACK això és una solució temporal, minimitzar el seu ús a casos molt concrets!
     /// Mètodes per emular els smart pointers.

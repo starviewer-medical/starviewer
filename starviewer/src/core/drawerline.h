@@ -39,7 +39,7 @@ public:
     /// Afegim el segon punt de la línia
     void setSecondPoint(Vector3 point);
 
-    vtkProp* getAsVtkProp();
+    virtual vtkProp* getAsVtkProp() override;
 
     /// Retorna el primer punt de la línia
     const Vector3& getFirstPoint() const;
@@ -47,16 +47,16 @@ public:
     /// Retorna el segon punt de la línia
     const Vector3& getSecondPoint() const;
 
-    /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
+    virtual double getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                               std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
-    void getBounds(double bounds[6]);
+    virtual std::array<double, 4> getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
 public slots:
-    void update();
+    virtual void update() override;
 
 protected slots:
-    void updateVtkProp();
+    virtual void updateVtkProp() override;
 
 private:
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk

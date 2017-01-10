@@ -30,7 +30,7 @@ public:
     DrawerText(QObject *parent = 0);
     ~DrawerText();
 
-    vtkProp* getAsVtkProp();
+    virtual vtkProp* getAsVtkProp() override;
 
     /// Permet assignar el text
     void setText(const QString &text);
@@ -116,12 +116,10 @@ public:
     /// Ens diu si el text és escalat o no
     bool isTextScaled();
 
-    /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
+    virtual double getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                               std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
-    /// Ens retorna els límits de l'hexahedre que encapsula la primitiva
-    /// en aquest ordre: minX, maxX, minY, maxY, minZ, maxZ
-    virtual void getBounds(double bounds[6]);
+    virtual std::array<double, 4> getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
     /// Assigna/Obté el color del fons de l'objecte
     void setBackgroundColor(QColor color);
@@ -132,17 +130,14 @@ public:
     double getBackgroundOpacity() const;
 
 public slots:
-    void update();
+    virtual void update() override;
 
 protected slots:
-    void updateVtkProp();
+    virtual void updateVtkProp() override;
 
 private:
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
     void updateVtkActorProperties();
-
-    /// Retorna cert si el punt està dins de la bounding box del text
-    bool isInside(const Vector3 &point3D);
 
 private:
     /// Text a mostrar

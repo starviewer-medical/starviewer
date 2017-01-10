@@ -115,7 +115,7 @@ void PolylineROITool::handlePointAddition()
 void PolylineROITool::annotateNewPoint()
 {
     Vector3 pickedPoint = m_2DViewer->getEventWorldCoordinate();
-    m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint.data());
+    pickedPoint = m_2DViewer->putCoordinateInCurrentImagePlane(pickedPoint);
 
     bool firstPoint = false;
     if (!m_mainPolyline)
@@ -154,7 +154,7 @@ void PolylineROITool::simulateClosingPolyline()
     if (m_mainPolyline && (m_mainPolyline->getNumberOfPoints() >= 1))
     {
         Vector3 pickedPoint = m_2DViewer->getEventWorldCoordinate();
-        m_2DViewer->putCoordinateInCurrentImageBounds(pickedPoint.data());
+        pickedPoint = m_2DViewer->putCoordinateInCurrentImagePlane(pickedPoint);
 
         if (!m_closingPolyline)
         {
@@ -209,97 +209,59 @@ void PolylineROITool::closeForm()
 void PolylineROITool::setTextPosition(DrawerText *text)
 {
     Vector3 lastPoint = m_2DViewer->getEventWorldCoordinate();
-    m_2DViewer->putCoordinateInCurrentImageBounds(lastPoint.data());
+    lastPoint = m_2DViewer->putCoordinateInCurrentImagePlane(lastPoint);
+    auto lastPointDisplay = m_2DViewer->computeWorldToDisplay(lastPoint);
 
-    auto pointsList = getBoundingBoxPoints();
+    auto displayBoundingBoxPoints = getDisplayBoundingBoxPoints();
 
-    Vector3 closestPoint;
-    int closestEdge;
-    MathTools::getPointToClosestEdgeDistance(lastPoint, pointsList, true, closestPoint, closestEdge);
+    Vector3 closestPointDisplay;
+    int closestEdgeDisplay;
+    MathTools::getPointToClosestEdgeDistance(lastPointDisplay, displayBoundingBoxPoints, true, closestPointDisplay, closestEdgeDisplay);
 
     const double Padding = 5.0;
-    double paddingX = 0.0;
-    double paddingY = 0.0;
 
-    //     0
+    //     2
     //    ____
     // 3 |    | 1
     //   |____|
-    //     2
-    switch (closestEdge)
+    //     0
+    switch (closestEdgeDisplay)
     {
         case 0:
-            if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
-            {
-                paddingY = Padding;
-                text->setVerticalJustification("Bottom");
-            }
-            else
-            {
-                paddingY = -Padding;
-                text->setVerticalJustification("Top");
-            }
+            closestPointDisplay.y -= Padding;
+            text->setVerticalJustification("Top");
             text->setHorizontalJustification("Centered");
             break;
         case 1:
-            paddingX = Padding;
+            closestPointDisplay.x += Padding;
             text->setVerticalJustification("Centered");
             text->setHorizontalJustification("Left");
             break;
-        case 2:
-            if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
-            {
-                paddingY = -Padding;
-                text->setVerticalJustification("Top");
-            }
-            else
-            {
-                paddingY = Padding;
-                text->setVerticalJustification("Bottom");
-            }
+        case 2:    
+            closestPointDisplay.y += Padding;
+            text->setVerticalJustification("Bottom");
             text->setHorizontalJustification("Centered");
             break;
         case 3:
-            paddingX = -Padding;
+            closestPointDisplay.x -= Padding;
             text->setVerticalJustification("Centered");
             text->setHorizontalJustification("Right");
             break;
     }
 
-    // Passem closestPoint a coordenades de display
-    Vector3 closestPointInDisplay = m_2DViewer->computeWorldToDisplay(closestPoint);
-    // Apliquem el padding i tornem a coordenades de món
-    closestPoint = m_2DViewer->computeDisplayToWorld(closestPointInDisplay + Vector3(paddingX, paddingY));
-
+    auto closestPoint = m_2DViewer->computeDisplayToWorld(closestPointDisplay);
     text->setAttachmentPoint(closestPoint);
 }
 
-QList<Vector3> PolylineROITool::getBoundingBoxPoints()
+QList<Vector3> PolylineROITool::getDisplayBoundingBoxPoints()
 {
-    double bounds[6];
-    m_roiPolygon->getBounds(bounds);
-
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
+    auto displayBounds = getDisplayBounds();
 
     QList<Vector3> pointsList;
-    Vector3 point;
-    point[xIndex] = bounds[xIndex * 2];
-    point[yIndex] = bounds[yIndex * 2];
-    point[zIndex] = bounds[zIndex * 2];
-    pointsList << point;
-    point[xIndex] = bounds[xIndex * 2 + 1];
-    point[yIndex] = bounds[yIndex * 2];
-    point[zIndex] = bounds[zIndex * 2];
-    pointsList << point;
-    point[xIndex] = bounds[xIndex * 2 + 1];
-    point[yIndex] = bounds[yIndex * 2 + 1];
-    point[zIndex] = bounds[zIndex * 2];
-    pointsList << point;
-    point[xIndex] = bounds[xIndex * 2];
-    point[yIndex] = bounds[yIndex * 2 + 1];
-    point[zIndex] = bounds[zIndex * 2];
-    pointsList << point;
+    pointsList << Vector3(displayBounds[0], displayBounds[2], 0.0)
+               << Vector3(displayBounds[1], displayBounds[2], 0.0)
+               << Vector3(displayBounds[1], displayBounds[3], 0.0)
+               << Vector3(displayBounds[0], displayBounds[3], 0.0);
 
     return pointsList;
 }
@@ -331,15 +293,17 @@ void PolylineROITool::initialize()
 
 void PolylineROITool::equalizeDepth()
 {
-    int zIndex = m_2DViewer->getView().getZIndex();
     double z = m_2DViewer->getCurrentDisplayedImageDepth();
-    int n = m_roiPolygon->getNumberOfPoints();
-    for (int i = 0; i < n - 1; i++)
+
+    for (int i = 0; i < m_roiPolygon->getNumberOfPoints(); i++)
     {
         auto point = m_roiPolygon->getVertex(i);
-        point[zIndex] = z;
+        auto pointDisplay = m_2DViewer->computeWorldToDisplay(point);
+        pointDisplay.z = z;
+        point = m_2DViewer->computeDisplayToWorld(pointDisplay);
         m_roiPolygon->setVertex(i, point);
     }
+
     m_roiPolygon->update();
 }
 

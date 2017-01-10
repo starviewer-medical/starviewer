@@ -57,15 +57,15 @@ public:
     /// Returns the segments of the polygon
     QList<Line3D> getSegments();
     
-    vtkProp* getAsVtkProp();
+    virtual vtkProp* getAsVtkProp() override;
 
     /// Ens retorna el nombre de punts que té el polígon
     int getNumberOfPoints() const;
 
-    /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
+    virtual double getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                               std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
-    void getBounds(double [6]);
+    virtual std::array<double, 4> getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
     /// Returns the 2D coordinate indices corresponding to the plane where the polygon is lying on.
     /// If the plane could not be determined, -1, -1 will be returned
@@ -75,10 +75,10 @@ public:
     vtkPolyData* getVtkPolyData() const;
 
 public slots:
-    void update();
+    virtual void update() override;
 
 protected slots:
-    void updateVtkProp();
+    virtual void updateVtkProp() override;
 
 private:
 

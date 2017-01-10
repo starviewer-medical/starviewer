@@ -13,15 +13,17 @@
 using namespace udg;
 using namespace testing;
 
+using DisplayBounds = std::array<double, 4>;
+
 class test_DrawerBitmap : public QObject {
 Q_OBJECT
 
 private slots:
-    void getBounds_ReturnsExpectedValues_data();
-    void getBounds_ReturnsExpectedValues();
+    void getDisplayBounds_ReturnsExpectedValues_data();
+    void getDisplayBounds_ReturnsExpectedValues();
 
-    void getDistanceToPoint_ReturnsExpectedValues_data();
-    void getDistanceToPoint_ReturnsExpectedValues();
+    void getDistanceToPointInDisplay_ReturnsExpectedValues_data();
+    void getDistanceToPointInDisplay_ReturnsExpectedValues();
 
     void getAsVtkProp_ShouldReturnNull();
 
@@ -30,18 +32,17 @@ private slots:
 };
 
 Q_DECLARE_METATYPE(DrawerBitmap*)
-Q_DECLARE_METATYPE(QVector<double>)
+Q_DECLARE_METATYPE(DisplayBounds)
 Q_DECLARE_METATYPE(vtkSmartPointer<vtkImageActor>)
 Q_DECLARE_METATYPE(Vector3)
 
-void test_DrawerBitmap::getBounds_ReturnsExpectedValues_data()
+void test_DrawerBitmap::getDisplayBounds_ReturnsExpectedValues_data()
 {
     QTest::addColumn<DrawerBitmap*>("drawerBitmap");
-    QTest::addColumn<QVector<double> >("bounds");
+    QTest::addColumn<DisplayBounds>("bounds");
 
     DrawerBitmap *emptyBitmap = new DrawerBitmap(this);
-    QVector<double> emptyBounds(6, 0.0);
-    emptyBounds[5] = 1.0;
+    DisplayBounds emptyBounds{{0, 0, 0, 0}};
     QTest::newRow("Empty drawer bitmap") << emptyBitmap << emptyBounds;
 
     DrawerBitmap *bitmap = new DrawerBitmap(this);
@@ -52,29 +53,26 @@ void test_DrawerBitmap::getBounds_ReturnsExpectedValues_data()
     bitmap->setOrigin(origin);
     bitmap->setSpacing(spacing);
     bitmap->setData(width, height, 0);
-    QVector<double> bounds(6);
+    DisplayBounds bounds;
     bounds[0] = origin[0];
     bounds[1] = origin[0] + spacing[0] * width;
     bounds[2] = origin[1];
     bounds[3] = origin[1] + spacing[1] * height;
-    bounds[4] = origin[2];
-    bounds[5] = origin[2] + spacing[2];
 
     QTest::newRow("bitmap with data") << bitmap << bounds;
 }
 
-void test_DrawerBitmap::getBounds_ReturnsExpectedValues()
+void test_DrawerBitmap::getDisplayBounds_ReturnsExpectedValues()
 {
     QFETCH(DrawerBitmap*, drawerBitmap);
-    QFETCH(QVector<double>, bounds);
+    QFETCH(DisplayBounds, bounds);
     
-    QVector<double> computedBounds(6);
-    drawerBitmap->getBounds(computedBounds.data());
+    DisplayBounds computedBounds = drawerBitmap->getDisplayBounds([](const Vector3 &v) { return v; });
 
     QCOMPARE(computedBounds, bounds);
 }
 
-void test_DrawerBitmap::getDistanceToPoint_ReturnsExpectedValues_data()
+void test_DrawerBitmap::getDistanceToPointInDisplay_ReturnsExpectedValues_data()
 {
     QTest::addColumn<Vector3>("point");
     QTest::addColumn<Vector3>("origin");
@@ -84,17 +82,17 @@ void test_DrawerBitmap::getDistanceToPoint_ReturnsExpectedValues_data()
     QTest::addColumn<double>("distance");
     QTest::addColumn<Vector3>("closestPoint");
 
-    QTest::newRow("default values for empty bitmap") << Vector3(2.3, 5.1, 0.6) << Vector3(0.0, 0.0, 0.0) << Vector3(1.0, 1.0, 1.0) << 0u << 0u << 5.62672
+    QTest::newRow("default values for empty bitmap") << Vector3(2.3, 5.1, 0.0) << Vector3(0.0, 0.0, 0.0) << Vector3(1.0, 1.0, 1.0) << 0u << 0u << 5.59464
                                                      << Vector3(0.0, 0.0, 0.0);
 
-    QTest::newRow("point outside bounds") << Vector3(2.3, 5.1, 0.6) << Vector3(9.7, 1.3, 8.0) << Vector3(9.7, 1.3, 8.0) << 124u << 38u << 10.4652
-                                          << Vector3(9.7, 5.1, 8.0);
+    QTest::newRow("point outside bounds") << Vector3(2.3, 5.1, 0.0) << Vector3(9.7, 1.3, 0.0) << Vector3(9.7, 1.3, 8.0) << 124u << 38u << 7.4
+                                          << Vector3(9.7, 5.1, 0.0);
     
-    QTest::newRow("point inside bounds") << Vector3(1.8, 52.2, 9.6) << Vector3(0.3, 4.6, 2.7) << Vector3(3.2, 6.7, 1.2) << 256u << 128u << 0.0 <<
-                                            Vector3(1.8, 52.2, 9.6);
+    QTest::newRow("point inside bounds") << Vector3(1.8, 52.2, 0.0) << Vector3(0.3, 4.6, 0.0) << Vector3(3.2, 6.7, 1.2) << 256u << 128u << 0.0 <<
+                                            Vector3(1.8, 52.2, 0.0);
 }
 
-void test_DrawerBitmap::getDistanceToPoint_ReturnsExpectedValues()
+void test_DrawerBitmap::getDistanceToPointInDisplay_ReturnsExpectedValues()
 {
     QFETCH(Vector3, point);
     QFETCH(Vector3, origin);
@@ -110,7 +108,8 @@ void test_DrawerBitmap::getDistanceToPoint_ReturnsExpectedValues()
     bitmap->setData(width, height, 0);
     
     Vector3 computedClosestPoint;
-    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(bitmap->getDistanceToPoint(point, computedClosestPoint), distance, 0.0001));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(bitmap->getDistanceToPointInDisplay(point, computedClosestPoint, [](const Vector3 &v) { return v; }), distance,
+                                                 0.0001));
     QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(computedClosestPoint, closestPoint));
 }
 

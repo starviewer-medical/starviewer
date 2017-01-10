@@ -38,18 +38,18 @@ public:
     /// Li assignem el radi a la circumferència que defineix el punt
     void setRadius(double radius);
 
-    vtkProp* getAsVtkProp();
+    virtual vtkProp* getAsVtkProp() override;
 
-    void getBounds(double bounds[6]);
+    virtual double getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                               std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
-    /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
+    virtual std::array<double, 4> getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
 public slots:
-    void update();
+    virtual void update() override;
 
 protected slots:
-    void updateVtkProp();
+    virtual void updateVtkProp() override;
 
 private:
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk

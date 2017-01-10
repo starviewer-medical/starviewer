@@ -55,6 +55,9 @@ protected:
     /// Mètode per assignar propietats de posició al text
     virtual void setTextPosition(DrawerText *text);
 
+    /// Returns the bounds of the ROI polygon in display space.
+    std::array<double, 4> getDisplayBounds();
+
 protected:
     /// Polígon que defineix la ROI
     QPointer<DrawerPolygon> m_roiPolygon;

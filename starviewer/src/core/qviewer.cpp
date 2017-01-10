@@ -514,6 +514,19 @@ Vector3 QViewer::getCurrentFocalPoint()
     }
 }
 
+Vector3 QViewer::getDirectionOfProjection()
+{
+    if (vtkCamera *camera = getActiveCamera())
+    {
+        return Vector3(camera->GetDirectionOfProjection());
+    }
+    else
+    {
+        DEBUG_LOG("No active camera");
+        return Vector3();
+    }
+}
+
 VoiLut QViewer::getCurrentVoiLut() const
 {
     return VoiLut();

@@ -46,33 +46,33 @@ DrawerCrossHair::~DrawerCrossHair()
     }
 }
 
-void DrawerCrossHair::setCentrePoint(double x, double y, double z)
+void DrawerCrossHair::setPosition(Vector3 position)
 {
-    m_centrePoint.set(x, y, z);
+    m_position = std::move(position);
 
     // Assignem els punts a la línia 1
-    m_lineUp->setFirstPoint(Vector3(m_centrePoint.x, m_centrePoint.y - 6, m_centrePoint.z));
-    m_lineUp->setSecondPoint(Vector3(m_centrePoint.x, m_centrePoint.y - 1, m_centrePoint.z));
+    m_lineUp->setFirstPoint(Vector3(m_position.x, m_position.y - 6, m_position.z));
+    m_lineUp->setSecondPoint(Vector3(m_position.x, m_position.y - 1, m_position.z));
 
     // Assignem els punts a la línia 2
-    m_lineDown->setFirstPoint(Vector3(m_centrePoint.x, m_centrePoint.y + 6, m_centrePoint.z));
-    m_lineDown->setSecondPoint(Vector3(m_centrePoint.x, m_centrePoint.y + 1, m_centrePoint.z));
+    m_lineDown->setFirstPoint(Vector3(m_position.x, m_position.y + 6, m_position.z));
+    m_lineDown->setSecondPoint(Vector3(m_position.x, m_position.y + 1, m_position.z));
 
     // Assignem els punts a la línia 3
-    m_lineLeft->setFirstPoint(Vector3(m_centrePoint.x - 6, m_centrePoint.y, m_centrePoint.z));
-    m_lineLeft->setSecondPoint(Vector3(m_centrePoint.x - 1, m_centrePoint.y, m_centrePoint.z));
+    m_lineLeft->setFirstPoint(Vector3(m_position.x - 6, m_position.y, m_position.z));
+    m_lineLeft->setSecondPoint(Vector3(m_position.x - 1, m_position.y, m_position.z));
 
     // Assignem els punts a la línia 4
-    m_lineRight->setFirstPoint(Vector3(m_centrePoint.x + 6, m_centrePoint.y, m_centrePoint.z));
-    m_lineRight->setSecondPoint(Vector3(m_centrePoint.x + 1, m_centrePoint.y, m_centrePoint.z));
+    m_lineRight->setFirstPoint(Vector3(m_position.x + 6, m_position.y, m_position.z));
+    m_lineRight->setSecondPoint(Vector3(m_position.x + 1, m_position.y, m_position.z));
 
     // Assignem els punts a la línia 5
-    m_lineBack->setFirstPoint(Vector3(m_centrePoint.x, m_centrePoint.y, m_centrePoint.z - 6));
-    m_lineBack->setSecondPoint(Vector3(m_centrePoint.x, m_centrePoint.y, m_centrePoint.z - 1));
+    m_lineBack->setFirstPoint(Vector3(m_position.x, m_position.y, m_position.z - 6));
+    m_lineBack->setSecondPoint(Vector3(m_position.x, m_position.y, m_position.z - 1));
 
     // Assignem els punts a la línia 6
-    m_lineFront->setFirstPoint(Vector3(m_centrePoint.x, m_centrePoint.y, m_centrePoint.z + 6));
-    m_lineFront->setSecondPoint(Vector3(m_centrePoint.x, m_centrePoint.y, m_centrePoint.z + 1));
+    m_lineFront->setFirstPoint(Vector3(m_position.x, m_position.y, m_position.z + 6));
+    m_lineFront->setSecondPoint(Vector3(m_position.x, m_position.y, m_position.z + 1));
 
     emit changed();
 }
@@ -140,20 +140,32 @@ void DrawerCrossHair::updateVtkActorProperties()
     m_lineFront->setLineWidth(2.0);
 }
 
-double DrawerCrossHair::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
+double DrawerCrossHair::getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                                    std::function<Vector3(const Vector3&)> worldToDisplay)
 {
-    closestPoint = m_centrePoint;
-    return MathTools::getDistance3D(m_centrePoint, point3D);
+    closestDisplayPoint = worldToDisplay(m_position);
+    return (displayPoint - closestDisplayPoint).length();
 }
 
-void DrawerCrossHair::getBounds(double bounds[6])
+std::array<double, 4> DrawerCrossHair::getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay)
 {
-    bounds[0] = m_lineLeft->getFirstPoint()[0];
-    bounds[1] = m_lineRight->getFirstPoint()[0];
-    bounds[2] = m_lineUp->getFirstPoint()[1];
-    bounds[3] = m_lineDown->getFirstPoint()[1];
-    bounds[4] = m_lineBack->getFirstPoint()[2];
-    bounds[5] = m_lineFront->getFirstPoint()[2];
+    std::array<double, 4> linesBounds[] = { m_lineUp->getDisplayBounds(worldToDisplay),
+                                            m_lineDown->getDisplayBounds(worldToDisplay),
+                                            m_lineLeft->getDisplayBounds(worldToDisplay),
+                                            m_lineRight->getDisplayBounds(worldToDisplay),
+                                            m_lineFront->getDisplayBounds(worldToDisplay),
+                                            m_lineBack->getDisplayBounds(worldToDisplay) };
+    auto bounds = linesBounds[0];
+
+    for (auto lineBounds : linesBounds)
+    {
+        bounds[0] = std::min(lineBounds[0], bounds[0]);
+        bounds[1] = std::max(lineBounds[1], bounds[1]);
+        bounds[2] = std::min(lineBounds[2], bounds[2]);
+        bounds[3] = std::max(lineBounds[3], bounds[3]);
+    }
+
+    return bounds;
 }
 
 void DrawerCrossHair::setVisibility(bool visible)

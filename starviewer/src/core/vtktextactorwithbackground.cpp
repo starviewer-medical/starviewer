@@ -376,6 +376,7 @@ int VtkTextActorWithBackground::UpdateRectangle(vtkViewport *viewport)
     }
 
     updateWorldBounds(viewport);
+    updateDisplayBounds(viewport);
 
     return returnValue;
 }
@@ -401,6 +402,29 @@ void VtkTextActorWithBackground::updateWorldBounds(vtkViewport *viewport)
     }
 
     boundingPoints->GetBounds(this->WorldBounds);
+    boundingPoints->Delete();
+}
+
+void VtkTextActorWithBackground::updateDisplayBounds(vtkViewport *viewport)
+{
+    double position[3];
+    this->PositionCoordinate->GetValue(position);
+    this->SpecifiedToDisplay(position, viewport, this->PositionCoordinate->GetCoordinateSystem());
+
+    vtkPoints *boundingPoints = vtkPoints::New();
+    boundingPoints->SetNumberOfPoints(4);
+
+    for (int i = 0; i < 4; i++)
+    {
+        double point[3];
+        this->RectanglePoints->GetPoint(i, point);
+        point[0] = position[0] + point[0];
+        point[1] = position[1] + point[1];
+        point[2] = position[2];
+        boundingPoints->SetPoint(i, point);
+    }
+
+    memcpy(this->DisplayBounds, boundingPoints->GetBounds(), sizeof(this->DisplayBounds));
     boundingPoints->Delete();
 }
 

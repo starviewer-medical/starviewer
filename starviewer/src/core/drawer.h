@@ -64,10 +64,10 @@ public:
     /// Retorna la primitiva esborrable més propera al punt donat, dins de la vista i llesca proporcionats
     /// Aquest mètode no té en compte cap llindar de proximitat, és a dir, ens retorna la primitiva que en termes
     /// absoluts és més propera al punt donat. En cas que no hi hagi cap primitiva per aquella vista i llesca, es retornarà nul.
-    DrawerPrimitive* getNearestErasablePrimitiveToPoint(const Vector3 &point, const OrthogonalPlane &view, int slice, Vector3 &closestPoint);
+    DrawerPrimitive* getNearestErasablePrimitiveToPoint(const Vector3 &point, const OrthogonalPlane &view, int slice, Vector3 &closestDisplayPoint);
 
     /// Ens esborra les primitives esborrables que estiguin dins de la zona delimitada pels punts passats per paràmetre.
-    void erasePrimitivesInsideBounds(double bounds[6], const OrthogonalPlane &view, int slice);
+    void erasePrimitivesInsideBounds(const std::array<double, 4> &displayBounds, const OrthogonalPlane &view, int slice);
 
     /// Ens diu el total de primitives dibuixades en totes les vistes
     int getNumberOfDrawnPrimitives();
@@ -89,7 +89,7 @@ private:
     void show(const OrthogonalPlane &plane, int slice);
 
     /// Ens diu si la primitiva donada, que es troba a la vista view, està dins dels bounds indicats
-    bool isPrimitiveInside(DrawerPrimitive *primitive, const OrthogonalPlane &view, double bounds[6]);
+    bool isPrimitiveInside(DrawerPrimitive *primitive, const std::array<double, 4> &displayBounds);
 
     /// Esborra la primitiva donada del contenidor de primitives especificat.
     /// Si la troba l'esborra. Retorna cert si la troba, fals altrament.

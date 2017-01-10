@@ -38,7 +38,7 @@ const double MathTools::PiNumber = 3.14159265358979323846;
 const long double MathTools::PiNumberLong = 3.14159265358979323846;
 // pi/2
 const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916397514L;
-const double MathTools::Epsilon = 1E-9;
+const double MathTools::Epsilon = 1E-8;
 const double MathTools::DegreesToRadiansAsDouble = 0.017453292519943295;
 const double MathTools::RadiansToDegreesAsDouble = 57.29577951308232;
 // TODO Potser seria més conevnient fer servir std::numeric_limits<double>::max(). Caldria incloure <limits>
@@ -270,7 +270,7 @@ Vector3 MathTools::infiniteLinesIntersection(const Vector3 &p1, const Vector3 &p
 
     // Coplanarity test
     Vector3 cross = Vector3::cross(dv1, dv2);
-    double dot = Vector3::dot(dv1, cross);
+    double dot = Vector3::dot(dv3, cross);
 
     // Coplanarity check
     if (MathTools::closeEnough(dot, 0.0))
@@ -318,9 +318,9 @@ int MathTools::roundToNearestInteger(double x)
     return vtkMath::Round(x);
 }
 
-bool MathTools::closeEnough(float f1, float f2)
+bool MathTools::closeEnough(double f1, double f2)
 {
-    return fabsf((f1 - f2) / ((f2 == 0.0f) ? 1.0f : f2)) < Epsilon;
+    return std::abs((f1 - f2) / ((f2 == 0.0) ? 1.0 : f2)) < Epsilon;
 }
 
 float MathTools::degreesToRadians(float degrees)

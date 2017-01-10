@@ -114,8 +114,8 @@ void ImagePlane::fillFromImage(const Image *image)
         this->setImageOrientation(image->getImageOrientationPatient());
         this->setOrigin(image->getImagePositionPatient());
         this->setSpacing(image->getPreferredPixelSpacing());
-        this->setRowLength(image->getColumns() * m_spacing.x());
-        this->setColumnLength(image->getRows() * m_spacing.y());
+        this->setRowLength(image->getColumns() * (m_spacing.isValid() ? m_spacing.x() : 1));
+        this->setColumnLength(image->getRows() * (m_spacing.isValid() ? m_spacing.y() : 1));
         this->setThickness(image->getSliceThickness());
     }
 }
@@ -142,9 +142,14 @@ ImagePlane::Corners ImagePlane::getCorners(CornersLocation location) const
         case Lower: factor = -m_thickness * 0.5; break;
     }
 
-    Vector3 rowVector = m_imageOrientation.getRowVector();
-    Vector3 columnVector = m_imageOrientation.getColumnVector();
-    Vector3 normalVector = m_imageOrientation.getNormalVector();
+    auto imageOrientation = m_imageOrientation;
+    if (imageOrientation == ImageOrientation())
+    {
+        imageOrientation = ImageOrientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0));
+    }
+    Vector3 rowVector = imageOrientation.getRowVector();
+    Vector3 columnVector = imageOrientation.getColumnVector();
+    Vector3 normalVector = imageOrientation.getNormalVector();
 
     Corners corners;
     corners.location = location;

@@ -394,61 +394,34 @@ bool DrawerText::isTextScaled()
     return m_scaled;
 }
 
-double DrawerText::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
+double DrawerText::getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint, std::function<Vector3(const Vector3&)> worldToDisplay)
 {
-    if (isInside(point3D))
+    // Everything in this method is in display coordinates
+    auto bounds = getDisplayBounds(worldToDisplay);
+
+    if (displayPoint.x >= bounds[0] && displayPoint.x <= bounds[1] && displayPoint.y >= bounds[2] && displayPoint.y <= bounds[3])
     {
-        closestPoint = point3D;
+        closestDisplayPoint = displayPoint;
         return 0.0;
     }
-    else
-    {
-        double bounds[6];
-        getBounds(bounds);
 
-        for (int i = 0; i < 3; i++)
-        {
-            if (point3D[i] < bounds[2*i])
-            {
-                closestPoint[i] = bounds[2*i];
-            }
-            else if (point3D[i] > bounds[2*i+1])
-            {
-                closestPoint[i] = bounds[2*i+1];
-            }
-            else
-            {
-                closestPoint[i] = point3D[i];
-            }
-        }
+    closestDisplayPoint.x = qBound(bounds[0], displayPoint.x, bounds[1]);
+    closestDisplayPoint.y = qBound(bounds[2], displayPoint.y, bounds[3]);
+    closestDisplayPoint.z = 0;
 
-        return MathTools::getDistance3D(point3D, closestPoint);
-    }
+    return (displayPoint - closestDisplayPoint).length();
 }
 
-bool DrawerText::isInside(const Vector3 &point3D)
+std::array<double, 4> DrawerText::getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay)
 {
-    double bounds[6];
-    this->getBounds(bounds);
+    Q_UNUSED(worldToDisplay)
 
-    if (((point3D[0] >= bounds[0] && point3D[0] <= bounds[1]) || qAbs(point3D[0] - bounds[0]) < 0.0001) &&
-        ((point3D[1] >= bounds[2] && point3D[1] <= bounds[3]) || qAbs(point3D[1] - bounds[2]) < 0.0001) &&
-        ((point3D[2] >= bounds[4] && point3D[2] <= bounds[5]) || qAbs(point3D[2] - bounds[4]) < 0.0001))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void DrawerText::getBounds(double bounds[6])
-{
+    std::array<double, 4> bounds;
     if (m_vtkActor)
     {
-        m_vtkActor->GetWorldBounds(bounds);
+        m_vtkActor->GetDisplayBounds(bounds.data());
     }
+    return bounds;
 }
 
 void DrawerText::setBackgroundColor(QColor color)

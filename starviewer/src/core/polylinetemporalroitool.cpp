@@ -60,8 +60,6 @@ void PolylineTemporalROITool::setToolData(ToolData *data)
 void PolylineTemporalROITool::start()
 {
     DEBUG_LOG("Start PolylineTemporalROI");
-    double bounds[6];
-    m_roiPolygon->getBounds(bounds);
     this->computeTemporalMean();
 }
 
@@ -106,7 +104,18 @@ double PolylineTemporalROITool::computeTemporalMean()
     }
 
     double bounds[6];
-    m_roiPolygon->getBounds(bounds);
+    bounds[0] = bounds[2] = bounds[4] = std::numeric_limits<double>::infinity();
+    bounds[1] = bounds[3] = bounds[5] = -std::numeric_limits<double>::infinity();
+    for (int i = 0; i < m_roiPolygon->getNumberOfPoints(); i++)
+    {
+        auto point = m_roiPolygon->getVertex(i);
+        bounds[0] = std::min(point.x, bounds[0]);
+        bounds[1] = std::max(point.x, bounds[1]);
+        bounds[2] = std::min(point.y, bounds[2]);
+        bounds[3] = std::max(point.y, bounds[3]);
+        bounds[4] = std::min(point.z, bounds[4]);
+        bounds[5] = std::max(point.z, bounds[5]);
+    }
     double *spacing = m_2DViewer->getMainInput()->getSpacing();
 
     double rayP1[3];

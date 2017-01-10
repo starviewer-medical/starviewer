@@ -80,20 +80,20 @@ void EraserTool::drawAreaOfErasure()
 {
     if (m_state == StartClick)
     {
-        Vector3 p2, p3;
-        int xIndex, yIndex, zIndex;
-
         m_endPoint = m_2DViewer->getEventWorldCoordinate();
-        m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
+
+        auto startPointDisplay = m_2DViewer->computeWorldToDisplay(m_startPoint);
+        auto endPointDisplay = m_2DViewer->computeWorldToDisplay(m_endPoint);
+        startPointDisplay.z = endPointDisplay.z = 0.0;
 
         // Calculem el segon punt i el tercer
-        p2[xIndex] = m_endPoint[xIndex];
-        p2[yIndex] = m_startPoint[yIndex];
-        p2[zIndex] = m_2DViewer->getCurrentSlice();
+        Vector3 p2Display(endPointDisplay.x, startPointDisplay.y, 0.0);
+        Vector3 p3Display(startPointDisplay.x, endPointDisplay.y, 0.0);
 
-        p3[xIndex] = m_startPoint[xIndex];
-        p3[yIndex] = m_endPoint[yIndex];
-        p3[zIndex] = m_2DViewer->getCurrentSlice();
+        m_startPoint = m_2DViewer->computeDisplayToWorld(startPointDisplay);
+        m_endPoint = m_2DViewer->computeDisplayToWorld(endPointDisplay);
+        auto p2 = m_2DViewer->computeDisplayToWorld(p2Display);
+        auto p3 = m_2DViewer->computeDisplayToWorld(p3Display);
 
         if (!m_polygon)
         {
@@ -133,22 +133,24 @@ void EraserTool::erasePrimitive()
     }
     else
     {
-        double bounds[6];
-        m_polygon->getBounds(bounds);
-        m_2DViewer->getDrawer()->erasePrimitivesInsideBounds(bounds, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+        auto startPointDisplay = m_2DViewer->computeWorldToDisplay(m_startPoint);
+        auto endPointDisplay = m_2DViewer->computeWorldToDisplay(m_endPoint);
+        std::array<double, 4> displayBounds{{std::min(startPointDisplay.x, endPointDisplay.x),
+                                             std::max(startPointDisplay.x, endPointDisplay.x),
+                                             std::min(startPointDisplay.y, endPointDisplay.y),
+                                             std::max(startPointDisplay.y, endPointDisplay.y)}};
+        m_2DViewer->getDrawer()->erasePrimitivesInsideBounds(displayBounds, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     }
 }
 
 DrawerPrimitive* EraserTool::getErasablePrimitive(const Vector3 &point, const OrthogonalPlane &view, int slice)
 {
-    Vector3 closestPoint;
-    DrawerPrimitive *nearestPrimitive = m_2DViewer->getDrawer()->getNearestErasablePrimitiveToPoint(point, view, slice, closestPoint);
+    auto displayPoint = m_2DViewer->computeWorldToDisplay(point);
+    Vector3 closestDisplayPoint;
+    DrawerPrimitive *nearestPrimitive = m_2DViewer->getDrawer()->getNearestErasablePrimitiveToPoint(displayPoint, view, slice, closestDisplayPoint);
 
     if (nearestPrimitive)
     {
-        Vector3 displayPoint = m_2DViewer->computeWorldToDisplay(point);
-        Vector3 closestDisplayPoint = m_2DViewer->computeWorldToDisplay(closestPoint);
-
         double displayDistance = MathTools::getDistance3D(displayPoint, closestDisplayPoint);
         // Si la distància entre els punts no està dins d'un llindar determinat, no considerem que la primitiva es pugui esborrar
         double proximityThreshold = 5.0;

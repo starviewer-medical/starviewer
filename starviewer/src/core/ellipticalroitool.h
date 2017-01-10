@@ -48,9 +48,6 @@ private:
     /// Simula la forma de l'el·lipse quan tenim el primer punt i movem el mouse
     void simulateEllipse();
 
-    /// Calcula el centre de l'el·lipse a partir dels punts introduits mitjançant la interacció de l'usuari
-    Vector3 computeEllipseCentre() const;
-
     /// Actualitza els punts del polígon perquè resulti el dibuix de l'òval
     void updatePolygonPoints();
 

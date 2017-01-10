@@ -136,7 +136,7 @@ void Cursor3DTool::updatePosition()
             if (m_2DViewer->getDicomWorldCoordinates(xyz, dicomWorldPosition))
             {
                 // 4.- Modificar les dades compartides del punt per tal que els altres s'actualitzin i situar el punt origen
-                m_crossHair->setCentrePoint(xyz[0], xyz[1], xyz[2]);
+                m_crossHair->setPosition(xyz);
                 m_crossHair->setVisibility(true);
                 m_crossHair->update();
                 m_2DViewer->render();
@@ -193,7 +193,7 @@ void Cursor3DTool::projectPoint()
         m_2DViewer->setSlice(nearestSlice);
         double position[3];
         m_2DViewer->projectDICOMPointToCurrentDisplayedImage(m_myData->getOriginPointPosition(), position);
-        m_crossHair->setCentrePoint(position[0], position[1], position[2]);
+        m_crossHair->setPosition(position);
         m_crossHair->setVisibility(true);
     }
     else

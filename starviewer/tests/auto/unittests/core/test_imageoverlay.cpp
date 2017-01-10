@@ -574,12 +574,11 @@ void test_ImageOverlay::getAsDrawerBitmap_ReturnsExpectedValues()
 
     DrawerBitmap *resultingBitmap = overlay.getAsDrawerBitmap(imageOrigin, imageSpacing);
 
-    double resultingBounds[6];
-    resultingBitmap->getBounds(resultingBounds);
-    double expectedBounds[6];
-    expectedDrawerBitmap->getBounds(expectedBounds);
+    auto worldToDisplay = [](const Vector3 &v) -> Vector3 { return v; };    // explicit return type needed by some versions of gcc
+    auto resultingBounds = resultingBitmap->getDisplayBounds(worldToDisplay);
+    auto expectedBounds = expectedDrawerBitmap->getDisplayBounds(worldToDisplay);
 
-    for (int i = 0; i < 6; ++i)
+    for (int i = 0; i < 4; ++i)
     {
         QCOMPARE(resultingBounds[i], expectedBounds[i]);
     }

@@ -58,6 +58,9 @@ public:
     /// Returns the bounds of the actor in world coordinates as (Xmin, Xmax, Ymin, Ymax, Zmin, Zmax).
     vtkGetVector6Macro(WorldBounds, double)
 
+    /// Returns the bounds of the actor in display coordinates as (Xmin, Xmax, Ymin, Ymax).
+    vtkGetVector4Macro(DisplayBounds, double)
+
 protected:
     VtkTextActorWithBackground();
     virtual ~VtkTextActorWithBackground();
@@ -78,6 +81,8 @@ protected:
 
     /// Bounds of the actor in world coordinates.
     double WorldBounds[6];
+    /// Bounds of the actor in display coordinates.
+    double DisplayBounds[4];
 
 private:
     // Not implemented.
@@ -87,6 +92,8 @@ private:
 
     /// Updates the bounds of the actor in world coordinates.
     void updateWorldBounds(vtkViewport *viewport);
+    /// Updates the bounds of the actor in display coordinates.
+    void updateDisplayBounds(vtkViewport *viewport);
 
 private:
     /// Image data to represent the background.

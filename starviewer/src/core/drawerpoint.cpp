@@ -125,19 +125,17 @@ void DrawerPoint::updateVtkActorProperties()
     properties->SetColor(color.redF(), color.greenF(), color.blueF());
 }
 
-double DrawerPoint::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
+double DrawerPoint::getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                                std::function<Vector3(const Vector3&)> worldToDisplay)
 {
-    closestPoint = m_position;
-    return (point3D - m_position).length();
+    closestDisplayPoint = worldToDisplay(m_position);
+    return (displayPoint - closestDisplayPoint).length();
 }
 
-void DrawerPoint::getBounds(double bounds[6])
+std::array<double, 4> DrawerPoint::getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay)
 {
-    for (int i = 0; i < 3; i++)
-    {
-        bounds[i * 2] = m_position[i] - m_pointRadius;
-        bounds[i * 2 + 1] = m_position[i] + m_pointRadius;
-    }
+    auto positionDisplay = worldToDisplay(m_position);
+    return std::array<double, 4>{{positionDisplay.x, positionDisplay.x, positionDisplay.y, positionDisplay.y}};
 }
 
 }

@@ -192,35 +192,33 @@ void PerpendicularDistanceTool::updateFirstPerpendicularLine()
 
     equalizeDepth();
 
-    // Obtenim la posició del ratolí
+    // Get mouse position
     Vector3 mouseWorldPoint = m_2DViewer->getEventWorldCoordinate();
 
-    // Obtenim el punt de la línia de referència més proper a la posició del ratolí i també la distància
-    // Serà el primer punt de la primera línia perpendicular
+    // Compute first perpendicular line's first point
+    // It will be the point on the reference line closer to the mouse position
+    // We also need the distance to compute the second point later
+    Vector3 referenceLineFirstPoint = m_referenceLine->getFirstPoint();
+    Vector3 referenceLineSecondPoint = m_referenceLine->getSecondPoint();
     Vector3 firstPerpendicularLineFirstPoint;
-    double distance;
-    distance = MathTools::getPointToFiniteLineDistance(mouseWorldPoint, m_referenceLine->getFirstPoint(), m_referenceLine->getSecondPoint(),
-                                                       firstPerpendicularLineFirstPoint);
+    double distance = MathTools::getPointToFiniteLineDistance(mouseWorldPoint, referenceLineFirstPoint, referenceLineSecondPoint,
+                                                              firstPerpendicularLineFirstPoint);
 
-    // Calculem una línia perpendicular a la línia de referència que passi pel punt obtingut al pas anterior
-    auto referenceLineFirstPoint = m_referenceLine->getFirstPoint();
-    auto referenceLineSecondPoint = m_referenceLine->getSecondPoint();
-    auto referenceLineDirectorVector = MathTools::directorVector(referenceLineFirstPoint, referenceLineSecondPoint);
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
-    Vector3 auxiliarLineDirectorVector;
-    auxiliarLineDirectorVector[xIndex] = referenceLineDirectorVector[yIndex];
-    auxiliarLineDirectorVector[yIndex] = -referenceLineDirectorVector[xIndex];
-    auxiliarLineDirectorVector[zIndex] = referenceLineDirectorVector[zIndex];
-    auto auxiliarLineFirstPoint = firstPerpendicularLineFirstPoint + distance * auxiliarLineDirectorVector;
-    auto auxiliarLineSecondPoint = firstPerpendicularLineFirstPoint - distance * auxiliarLineDirectorVector;
+    // Compute an auxiliar line perpendicular to the reference line, on the display plane,
+    // and crossing the reference line at the first perpendicular line's first point
+    // This auxiliar line will contain the first perpendicular line but it will be longer
+    Vector3 referenceLineDirectorVector = MathTools::directorVector(referenceLineFirstPoint, referenceLineSecondPoint);
+    Vector3 directionOfProjection = m_2DViewer->getDirectionOfProjection();
+    Vector3 auxiliarLineDirectorVector = Vector3::cross(referenceLineDirectorVector, directionOfProjection).normalize();
+    Vector3 auxiliarLineFirstPoint = firstPerpendicularLineFirstPoint + distance * auxiliarLineDirectorVector;
+    Vector3 auxiliarLineSecondPoint = firstPerpendicularLineFirstPoint - distance * auxiliarLineDirectorVector;
 
-    // Obtenim el punt de la línia auxiliar més proper a la posició del ratolí
-    // Serà el segon punt de la primera línia perpendicular
+    // Compute first perpendicular line's second point
+    // It will be the point on the auxiliar line closer to the mouse position
     Vector3 firstPerpendicularLineSecondPoint;
     MathTools::getPointToFiniteLineDistance(mouseWorldPoint, auxiliarLineFirstPoint, auxiliarLineSecondPoint, firstPerpendicularLineSecondPoint);
 
-    // Assignem els punts calculats a la primera línia perpendicular
+    // Update first perpendicular line
     m_firstPerpendicularLine->setFirstPoint(firstPerpendicularLineFirstPoint);
     m_firstPerpendicularLine->setSecondPoint(firstPerpendicularLineSecondPoint);
     m_firstPerpendicularLine->update();
@@ -232,27 +230,25 @@ void PerpendicularDistanceTool::updateSecondPerpendicularLine()
 
     equalizeDepth();
 
-    // Obtenim la posició del ratolí
+    // Get mouse position
     Vector3 mouseWorldPoint = m_2DViewer->getEventWorldCoordinate();
 
-    // Obtenim el punt de la línia de referència més proper a la posició del ratolí
-    // Serà el primer punt de la segona línia perpendicular
+    // Compute second perpendicular line's first point
+    // It will be the point on the reference line closer to the mouse position
     Vector3 secondPerpendicularLineFirstPoint;
     MathTools::getPointToFiniteLineDistance(mouseWorldPoint, m_referenceLine->getFirstPoint(), m_referenceLine->getSecondPoint(),
                                             secondPerpendicularLineFirstPoint);
 
-    // Calculem la longitud i el vector director de la primera línia perpendicular per fer que la segona sigui igual
-    auto firstPerpendicularLineFirstPoint = m_firstPerpendicularLine->getFirstPoint();
-    auto firstPerpendicularLineSecondPoint = m_firstPerpendicularLine->getSecondPoint();
-    // No fem servir el mètode de MathTools perquè volem el vector que va del primer punt al segon, i MathTools no assegura que sigui sempre així.
-    auto firstPerpendicularLineDirectorVector = firstPerpendicularLineSecondPoint - firstPerpendicularLineFirstPoint;
-    double length = firstPerpendicularLineDirectorVector.length();
-    firstPerpendicularLineDirectorVector.normalize();
+    // Compute the non-normalized director vector of first perpendicular line to reuse it for the second perpendicular line
+    Vector3 firstPerpendicularLineFirstPoint = m_firstPerpendicularLine->getFirstPoint();
+    Vector3 firstPerpendicularLineSecondPoint = m_firstPerpendicularLine->getSecondPoint();
+    // We want the vector from the first to the second point (not the reverse)
+    Vector3 firstPerpendicularLineDirectorVector = firstPerpendicularLineSecondPoint - firstPerpendicularLineFirstPoint;
 
-    // Calculem el segon punt de la segona línia perpendicular
-    auto secondPerpendicularLineSecondPoint = secondPerpendicularLineFirstPoint + length * firstPerpendicularLineDirectorVector;
+    // Compute second perpendicular line's second point
+    Vector3 secondPerpendicularLineSecondPoint = secondPerpendicularLineFirstPoint + firstPerpendicularLineDirectorVector;
 
-    // Assignem els punts calculats a la segona línia perpendicular
+    // Update second perpendicular line
     m_secondPerpendicularLine->setFirstPoint(secondPerpendicularLineFirstPoint);
     m_secondPerpendicularLine->setSecondPoint(secondPerpendicularLineSecondPoint);
     m_secondPerpendicularLine->update();
@@ -324,31 +320,41 @@ void PerpendicularDistanceTool::abortDrawing()
 
 void PerpendicularDistanceTool::equalizeDepth()
 {
-    // Ens quedem amb la z de la llesca actual
-    Vector3 currentPoint = m_2DViewer->getEventWorldCoordinate();
-    int zIndex = m_2DViewer->getView().getZIndex();
-    double z = currentPoint[zIndex];
     auto point = m_referenceLine->getFirstPoint();
-    point[zIndex] = z;
+    auto displayPoint = m_2DViewer->computeWorldToDisplay(point);
+    displayPoint.z = 0;
+    point = m_2DViewer->computeDisplayToWorld(displayPoint);
     m_referenceLine->setFirstPoint(point);
     point = m_referenceLine->getSecondPoint();
-    point[zIndex] = z;
+    displayPoint = m_2DViewer->computeWorldToDisplay(point);
+    displayPoint.z = 0;
+    point = m_2DViewer->computeDisplayToWorld(displayPoint);
     m_referenceLine->setSecondPoint(point);
     m_referenceLine->update();
+
     point = m_firstPerpendicularLine->getFirstPoint();
-    point[zIndex] = z;
+    displayPoint = m_2DViewer->computeWorldToDisplay(point);
+    displayPoint.z = 0;
+    point = m_2DViewer->computeDisplayToWorld(displayPoint);
     m_firstPerpendicularLine->setFirstPoint(point);
     point = m_firstPerpendicularLine->getSecondPoint();
-    point[zIndex] = z;
+    displayPoint = m_2DViewer->computeWorldToDisplay(point);
+    displayPoint.z = 0;
+    point = m_2DViewer->computeDisplayToWorld(displayPoint);
     m_firstPerpendicularLine->setSecondPoint(point);
     m_firstPerpendicularLine->update();
+
     if (m_secondPerpendicularLine)
     {
         point = m_secondPerpendicularLine->getFirstPoint();
-        point[zIndex] = z;
+        displayPoint = m_2DViewer->computeWorldToDisplay(point);
+        displayPoint.z = 0;
+        point = m_2DViewer->computeDisplayToWorld(displayPoint);
         m_secondPerpendicularLine->setFirstPoint(point);
         point = m_secondPerpendicularLine->getSecondPoint();
-        point[zIndex] = z;
+        displayPoint = m_2DViewer->computeWorldToDisplay(point);
+        displayPoint.z = 0;
+        point = m_2DViewer->computeDisplayToWorld(displayPoint);
         m_secondPerpendicularLine->setSecondPoint(point);
         m_secondPerpendicularLine->update();
     }

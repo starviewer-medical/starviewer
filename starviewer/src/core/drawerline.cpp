@@ -164,26 +164,21 @@ void DrawerLine::updateVtkActorProperties()
     propertiesBackground->SetColor(0.0, 0.0, 0.0);
 }
 
-double DrawerLine::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
+double DrawerLine::getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint, std::function<Vector3(const Vector3&)> worldToDisplay)
 {
-    return MathTools::getPointToFiniteLineDistance(point3D, m_firstPoint, m_secondPoint, closestPoint);
+    auto firstPointDisplay = worldToDisplay(m_firstPoint);
+    auto secondPointDisplay = worldToDisplay(m_secondPoint);
+    return MathTools::getPointToFiniteLineDistance(displayPoint, firstPointDisplay, secondPointDisplay, closestDisplayPoint);
 }
 
-void DrawerLine::getBounds(double bounds[6])
+std::array<double, 4> DrawerLine::getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay)
 {
-    for (int i = 0; i < 3; i++)
-    {
-        if (m_firstPoint[i] < m_secondPoint[i])
-        {
-            bounds[i * 2] = m_firstPoint[i];
-            bounds[i * 2 + 1] = m_secondPoint[i];
-        }
-        else
-        {
-            bounds[i * 2] = m_secondPoint[i];
-            bounds[i * 2 + 1] = m_firstPoint[i];
-        }
-    }
+    auto firstPointDisplay = worldToDisplay(m_firstPoint);
+    auto secondPointDisplay = worldToDisplay(m_secondPoint);
+    return std::array<double, 4>{{std::min(firstPointDisplay.x, secondPointDisplay.x),
+                                  std::max(firstPointDisplay.x, secondPointDisplay.x),
+                                  std::min(firstPointDisplay.y, secondPointDisplay.y),
+                                  std::max(firstPointDisplay.y, secondPointDisplay.y)}};
 }
 
 }

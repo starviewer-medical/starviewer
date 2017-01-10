@@ -60,7 +60,7 @@ private:
     void deleteTemporalRepresentation();
 
     /// Retorna una llista de punts que representen la bounding box en la vista actual.
-    QList<Vector3> getBoundingBoxPoints();
+    QList<Vector3> getDisplayBoundingBoxPoints();
 
     /// Equalitza la profunditat dels elements que formen la ROI polilínia final.
     void equalizeDepth();

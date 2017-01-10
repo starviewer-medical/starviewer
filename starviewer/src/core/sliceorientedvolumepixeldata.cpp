@@ -120,7 +120,7 @@ VoxelIndex SliceOrientedVolumePixelData::getVoxelIndex(const Vector3 &wc)
 
     for (int i = 0; i < 3; i++)
     {
-        index[i] = qRound((pixelDataCoordinate[i] - origin[i]) / spacing[i]);
+        index[i] = qRound((pixelDataCoordinate[i] - origin[i]) / (spacing[i] == 0 ? 1 : spacing[i]));
     }
 
     int *extent = m_volumePixelData->getVtkData()->GetExtent();

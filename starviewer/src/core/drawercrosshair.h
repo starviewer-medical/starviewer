@@ -32,24 +32,24 @@ public:
     DrawerCrossHair(QObject *parent = 0);
     ~DrawerCrossHair();
 
-    /// Afegim el primer punt de la línia
-    void setCentrePoint(double x, double y, double z);
+    void setPosition(Vector3 position);
 
     vtkPropAssembly* getAsVtkPropAssembly();
 
-    vtkProp* getAsVtkProp();
+    virtual vtkProp* getAsVtkProp() override;
 
-    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
+    virtual double getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                               std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
-    void getBounds(double bounds[6]);
+    virtual std::array<double, 4> getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
-    void setVisibility(bool visible);
+    virtual void setVisibility(bool visible) override;
 
 public slots:
-    void update();
+    virtual void update() override;
 
 protected slots:
-    void updateVtkProp();
+    virtual void updateVtkProp() override;
 
 private:
     /// Mètode intern per transformar les propietats de la primitiva a propietats de vtk
@@ -57,7 +57,7 @@ private:
 
 private:
     /// Centre de la crosshair.
-    Vector3 m_centrePoint;
+    Vector3 m_position;
 
     /// Línies per construir el crosshair
     DrawerLine *m_lineUp;

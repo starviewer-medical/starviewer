@@ -113,7 +113,7 @@ static double cubeRoot(double x);
 
 /// Determina si podem considerar pràcticament iguals els dos
 /// valors passats per paràmetre si la seva diferència és menor al valor d'Epsilon
-static bool closeEnough(float f1, float f2);
+static bool closeEnough(double f1, double f2);
 
 /// Distància entre punts 3D
 static double getDistance3D(const Vector3 &firstPoint, const Vector3 &secondPoint);

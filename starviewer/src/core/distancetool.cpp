@@ -107,6 +107,7 @@ void DistanceTool::annotateNewPoint()
     {
         m_distanceLine->setSecondPoint(clickedWorldPoint);
         m_distanceLine->update();
+        equalizeDepth();
 
         // Posem el text
         drawMeasurement();
@@ -114,7 +115,6 @@ void DistanceTool::annotateNewPoint()
         // Alliberem la primitiva perquè pugui ser esborrada
         m_distanceLine->decreaseReferenceCount();
         m_2DViewer->getDrawer()->erasePrimitive(m_distanceLine);
-        equalizeDepth();
         // Coloquem la primitiva en el pla corresponent
         m_2DViewer->getDrawer()->draw(m_distanceLine, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
         // Reiniciem l'estat de la tool
@@ -149,12 +149,18 @@ void DistanceTool::initialize()
 
 void DistanceTool::equalizeDepth()
 {
-    // Assignem al primer punt la z del segon
-    int zIndex = m_2DViewer->getView().getZIndex();
-    double z = m_distanceLine->getSecondPoint()[zIndex];
     auto firstPoint = m_distanceLine->getFirstPoint();
-    firstPoint[zIndex] = z;
+    auto firstPointDisplay = m_2DViewer->computeWorldToDisplay(firstPoint);
+    firstPointDisplay.z = 0;
+    firstPoint = m_2DViewer->computeDisplayToWorld(firstPointDisplay);
     m_distanceLine->setFirstPoint(firstPoint);
+
+    auto secondPoint = m_distanceLine->getSecondPoint();
+    auto secondPointDisplay = m_2DViewer->computeWorldToDisplay(secondPoint);
+    secondPointDisplay.z = 0;
+    secondPoint = m_2DViewer->computeDisplayToWorld(secondPointDisplay);
+    m_distanceLine->setSecondPoint(secondPoint);
+
     m_distanceLine->update();
 }
 

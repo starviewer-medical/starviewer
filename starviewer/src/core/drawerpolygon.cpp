@@ -274,22 +274,36 @@ int DrawerPolygon::getNumberOfPoints() const
     return m_pointsList.count();
 }
 
-double DrawerPolygon::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
+double DrawerPolygon::getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                                  std::function<Vector3(const Vector3&)> worldToDisplay)
 {
+    QList<Vector3> pointsListDisplay;
+
+    foreach (auto point, m_pointsList)
+    {
+        pointsListDisplay.append(worldToDisplay(point));
+    }
+
     int closestEdge;
-    return MathTools::getPointToClosestEdgeDistance(point3D, m_pointsList, true, closestPoint, closestEdge);
+    return MathTools::getPointToClosestEdgeDistance(displayPoint, pointsListDisplay, true, closestDisplayPoint, closestEdge);
 }
 
-void DrawerPolygon::getBounds(double bounds[6])
+std::array<double, 4> DrawerPolygon::getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay)
 {
-    if (m_vtkPolyData)
+    double minX, maxX, minY, maxY;
+    minX = minY = std::numeric_limits<double>::infinity();
+    maxX = maxY = -std::numeric_limits<double>::infinity();
+
+    foreach (auto point, m_pointsList)
     {
-        m_vtkPolyData->GetBounds(bounds);
+        auto pointDisplay = worldToDisplay(point);
+        minX = std::min(pointDisplay.x, minX);
+        maxX = std::max(pointDisplay.x, maxX);
+        minY = std::min(pointDisplay.y, minY);
+        maxY = std::max(pointDisplay.y, maxY);
     }
-    else
-    {
-        memset(bounds, 0.0, sizeof(double) * 6);
-    }
+
+    return std::array<double, 4>{{minX, maxX, minY, maxY}};
 }
 
 void DrawerPolygon::get2DPlaneIndices(int &xIndex, int &yIndex) const

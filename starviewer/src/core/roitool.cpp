@@ -280,15 +280,16 @@ void ROITool::printData()
 
 void ROITool::setTextPosition(DrawerText *text)
 {
-    double bounds[6];
-    m_roiPolygon->getBounds(bounds);
-
-    Vector3 attachmentPoint;
-    attachmentPoint[0] = (bounds[1] + bounds[0]) / 2.0;
-    attachmentPoint[1] = (bounds[3] + bounds[2]) / 2.0;
-    attachmentPoint[2] = (bounds[5] + bounds[4]) / 2.0;
-
+    auto bounds = getDisplayBounds();
+    Vector3 attachmentPointDisplay((bounds[1] + bounds[0]) / 2.0, (bounds[3] + bounds[2]) / 2.0, 0);
+    Vector3 attachmentPoint = m_2DViewer->computeDisplayToWorld(attachmentPointDisplay);
     text->setAttachmentPoint(attachmentPoint);
+}
+
+
+std::array<double, 4> ROITool::getDisplayBounds()
+{
+    return m_roiPolygon->getDisplayBounds([this](const Vector3 &v) { return m_2DViewer->computeWorldToDisplay(v); });
 }
 
 QString ROITool::getAnnotation()

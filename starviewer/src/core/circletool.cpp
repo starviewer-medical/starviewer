@@ -108,7 +108,7 @@ void CircleTool::endDrawing()
         // Dibuixem la creu al centre
         Vector3 center = getCenter();
         DrawerCrossHair *cross = new DrawerCrossHair();
-        cross->setCentrePoint(center.x, center.y, center.z);
+        cross->setPosition(center);
         m_2DViewer->getDrawer()->draw(cross, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
     }
 
@@ -146,32 +146,33 @@ void CircleTool::getEndPoint()
 {
     m_endPoint = m_2DViewer->getEventWorldCoordinate();
 
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
+    auto startPointDisplay = m_2DViewer->computeWorldToDisplay(m_startPoint);
+    auto endPointDisplay = m_2DViewer->computeWorldToDisplay(m_endPoint);
 
-    double width = m_endPoint[xIndex] - m_startPoint[xIndex];
-    double height = m_endPoint[yIndex] - m_startPoint[yIndex];
+    double width = endPointDisplay.x - startPointDisplay.x;
+    double height = endPointDisplay.y - startPointDisplay.y;
     
     // Ens quedem amb la mida més gran
     if (qAbs(width) > qAbs(height))
     {
-        m_endPoint[yIndex] = m_startPoint[yIndex] + MathTools::copySign(width, height);
+        endPointDisplay.y = startPointDisplay.y + std::copysign(width, height);
     }
     else
     {
-        m_endPoint[xIndex] = m_startPoint[xIndex] + MathTools::copySign(height, width);
+        endPointDisplay.x = startPointDisplay.x + std::copysign(height, width);
     }
+
+    m_endPoint = m_2DViewer->computeDisplayToWorld(endPointDisplay);
 }
 
 void CircleTool::updatePolygonPoints()
 {
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
-
     auto center = getCenter();
-    double a = center[xIndex];
-    double b = center[yIndex];
-    double radius = qAbs(m_startPoint[xIndex] - center[xIndex]);
+    auto centerDisplay = m_2DViewer->computeWorldToDisplay(center);
+    double a = centerDisplay.x;
+    double b = centerDisplay.y;
+    auto startPointDisplay = m_2DViewer->computeWorldToDisplay(m_startPoint);
+    double radius = qAbs(startPointDisplay.x - centerDisplay.x);
 
     m_circle->removeVertices();
 
@@ -180,10 +181,8 @@ void CircleTool::updatePolygonPoints()
     for (int i = 0; i < NumberOfPoints; i++)
     {
         double angle = static_cast<double>(i) / NumberOfPoints * 2.0 * MathTools::PiNumber;
-        Vector3 point;
-        point[xIndex] = a + radius * cos(angle);
-        point[yIndex] = b + radius * sin(angle);
-        point[zIndex] = center[zIndex];
+        Vector3 pointDisplay(a + radius * cos(angle), b + radius * sin(angle), centerDisplay.z);
+        auto point = m_2DViewer->computeDisplayToWorld(pointDisplay);
         m_circle->addVertex(point);
     }
 
@@ -197,13 +196,13 @@ Vector3 CircleTool::getCenter() const
 
 void CircleTool::equalizeDepth()
 {
-    // Ens quedem amb la z de la llesca actual
-    auto currentPoint = m_2DViewer->getEventWorldCoordinate();
-    int zIndex = m_2DViewer->getView().getZIndex();
-    double z = currentPoint[zIndex];
-    
-    m_startPoint[zIndex] = z;
-    m_endPoint[zIndex] = z;
+    auto startPointDisplay = m_2DViewer->computeWorldToDisplay(m_startPoint);
+    startPointDisplay.z = 0;
+    m_startPoint = m_2DViewer->computeDisplayToWorld(startPointDisplay);
+
+    auto endPointDisplay = m_2DViewer->computeWorldToDisplay(m_endPoint);
+    endPointDisplay.z = 0;
+    m_endPoint = m_2DViewer->computeDisplayToWorld(endPointDisplay);
 
     updatePolygonPoints();
 }

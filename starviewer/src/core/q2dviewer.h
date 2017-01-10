@@ -161,7 +161,7 @@ public:
     double getCurrentSpacingBetweenSlices();
 
     /// Returns the depth (z coordinate value) of the main displayed image
-    double getCurrentDisplayedImageDepth() const;
+    double getCurrentDisplayedImageDepth();
     
     /// Returns the depth (z coordinate value) of the displayed image from the specified input
     double getCurrentDisplayedImageDepthOnInput(int i) const;
@@ -243,6 +243,8 @@ public:
     /// @param xyz[] Coordenada que volem ajustar. Serà un paràmetre d'entrada/sortida i el seu contingut
     /// es modificarà perquè caigui dins dels límits de la imatge
     void putCoordinateInCurrentImageBounds(double xyz[3]);
+    /// Returns a new world coordinate resulting from keeping the provided world coordinate inside the current image plane.
+    Vector3 putCoordinateInCurrentImagePlane(const Vector3 &point);
 
     /// donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
     /// el pla actual, transformat a coordenades de món VTK
@@ -427,6 +429,7 @@ protected:
     virtual void resizeEvent(QResizeEvent *resize);
 
     void getCurrentRenderedItemBounds(double bounds[6]);
+    std::array<double, 6> getCurrentImagePlaneDisplayBounds();
 
     void setDefaultOrientation(const AnatomicalPlane &anatomicalPlane);
 

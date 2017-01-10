@@ -321,14 +321,7 @@ void NonClosedAngleTool::computeAngle()
 
 void NonClosedAngleTool::placeText(const Vector3 &firstLineVertex, const Vector3 &secondLineVertex, DrawerText *angleText)
 {
-    Vector3 position;
-    int xIndex, yIndex, zIndex;
-
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
-    position[xIndex] = (firstLineVertex[xIndex] + secondLineVertex[xIndex]) / 2.0;
-    position[yIndex] = (firstLineVertex[yIndex] + secondLineVertex[yIndex]) / 2.0;
-    position[zIndex] = firstLineVertex[zIndex];
-
+    auto position = (firstLineVertex + secondLineVertex) / 2.0;
     angleText->setAttachmentPoint(position);
 }
 
@@ -355,19 +348,32 @@ void NonClosedAngleTool::initialize()
 
 void NonClosedAngleTool::equalizeDepth()
 {
-    // Assignem a tots els punts la z de l'últim
-    int zIndex = m_2DViewer->getView().getZIndex();
-    double z = m_secondLine->getSecondPoint()[zIndex];
     auto point = m_firstLine->getFirstPoint();
-    point[zIndex] = z;
+    auto pointDisplay = m_2DViewer->computeWorldToDisplay(point);
+    pointDisplay.z = 0.0;
+    point = m_2DViewer->computeDisplayToWorld(pointDisplay);
     m_firstLine->setFirstPoint(point);
+
     point = m_firstLine->getSecondPoint();
-    point[zIndex] = z;
+    pointDisplay = m_2DViewer->computeWorldToDisplay(point);
+    pointDisplay.z = 0.0;
+    point = m_2DViewer->computeDisplayToWorld(pointDisplay);
     m_firstLine->setSecondPoint(point);
+
     m_firstLine->update();
+
     point = m_secondLine->getFirstPoint();
-    point[zIndex] = z;
+    pointDisplay = m_2DViewer->computeWorldToDisplay(point);
+    pointDisplay.z = 0.0;
+    point = m_2DViewer->computeDisplayToWorld(pointDisplay);
     m_secondLine->setFirstPoint(point);
+
+    point = m_secondLine->getSecondPoint();
+    pointDisplay = m_2DViewer->computeWorldToDisplay(point);
+    pointDisplay.z = 0.0;
+    point = m_2DViewer->computeDisplayToWorld(pointDisplay);
+    m_secondLine->setSecondPoint(point);
+
     m_secondLine->update();
 }
 

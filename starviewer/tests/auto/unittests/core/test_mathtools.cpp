@@ -720,13 +720,13 @@ void test_MathTools::infiniteLinesIntersection_ShouldComputeExpectedIntersection
                               << MathTools::ParallelLines << Vector3(0.0, 0.0, 0.0);
 
     QTest::newRow("skew XY") << Vector3(-8.5, -0.8, -2.2) << Vector3(+9.2, -7.0, -2.2) << Vector3(+2.4, -9.8, -8.3) << Vector3(+8.3, -6.5, -8.3)
-                             << MathTools::LinesIntersect << Vector3(+8.09689, -6.6136, -2.2);
+                             << MathTools::SkewIntersection << Vector3();
     QTest::newRow("skew XZ") << Vector3(+4.6, -6.4, +0.5) << Vector3(+7.5, -6.4, +5.5) << Vector3(-8.8, +10.0, -8.1) << Vector3(-5.9, +10.0, -1.1)
-                             << MathTools::LinesIntersect << Vector3(-29.83, -6.4, -58.8621);
+                             << MathTools::SkewIntersection << Vector3();
     QTest::newRow("skew YZ") << Vector3(-5.6, +8.9, -8.8) << Vector3(-5.6, -1.5, -6.5) << Vector3(-7.1, +6.6, -2.3) << Vector3(-7.1, -1.7, -7.3)
-                             << MathTools::LinesIntersect << Vector3(-5.6, -0.674905, -6.68247);
+                             << MathTools::SkewIntersection << Vector3();
     QTest::newRow("skew") << Vector3(+7.6, -3.7, +7.9) << Vector3(+8.8, -5.6, -8.9) << Vector3(-1.3, +3.3, -9.7) << Vector3(-4.3, -9.7, +4.4)
-                          << MathTools::LinesIntersect << Vector3(+8.27995, -4.77659, -1.6193);
+                          << MathTools::SkewIntersection << Vector3();
 
     QTest::newRow("intersection XY") << Vector3(+1.0, -1.6, -10.0) << Vector3(-6.2, -8.2, -10.0) << Vector3(-8.3, -4.4, -10.0)
                                      << Vector3(+0.3, -1.4, -10.0) << MathTools::LinesIntersect << Vector3(+1.78225, -0.882935, -10.0);

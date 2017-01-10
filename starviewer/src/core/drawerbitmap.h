@@ -57,17 +57,18 @@ public:
     /// Determina el color amb que es mapeja el color principal
     void setForegroundColor(const QColor &color);
 
-    vtkProp* getAsVtkProp();
+    virtual vtkProp* getAsVtkProp() override;
 
-    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
+    virtual double getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                               std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
-    void getBounds(double bounds[6]);
+    virtual std::array<double, 4> getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
 public slots:
-    void update();
+    virtual void update() override;
 
 protected slots:
-    void updateVtkProp();
+    virtual void updateVtkProp() override;
 
 private:
     /// Origen del bitmap

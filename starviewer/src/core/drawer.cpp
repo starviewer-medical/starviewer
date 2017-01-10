@@ -349,7 +349,7 @@ void Drawer::enableGroup(const QString &groupName)
     }
 }
 
-DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(const Vector3 &point, const OrthogonalPlane &view, int slice, Vector3 &closestPoint)
+DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(const Vector3 &displayPoint, const OrthogonalPlane &view, int slice, Vector3 &closestDisplayPoint)
 {
     double distance;
     double minimumDistance = MathTools::DoubleMaximumValue;
@@ -376,23 +376,30 @@ DrawerPrimitive* Drawer::getNearestErasablePrimitiveToPoint(const Vector3 &point
     }
 
     Vector3 localClosestPoint;
+
+    auto worldToDisplay = [this, displayPoint](const Vector3 &point) {
+        auto pointDisplay = m_2DViewer->computeWorldToDisplay(point);
+        pointDisplay.z = displayPoint.z;
+        return pointDisplay;
+    };
+
     foreach (DrawerPrimitive *primitive, primitivesList)
     {
         if (primitive->isErasable())
         {
-            distance = primitive->getDistanceToPoint(point, localClosestPoint);
+            distance = primitive->getDistanceToPointInDisplay(displayPoint, localClosestPoint, worldToDisplay);
             if (distance <= minimumDistance)
             {
                 minimumDistance = distance;
                 nearestPrimitive = primitive;
-                closestPoint = localClosestPoint;
+                closestDisplayPoint = localClosestPoint;
             }
         }
     }
     return nearestPrimitive;
 }
 
-void Drawer::erasePrimitivesInsideBounds(double bounds[6], const OrthogonalPlane &view, int slice)
+void Drawer::erasePrimitivesInsideBounds(const std::array<double, 4> &displayBounds, const OrthogonalPlane &view, int slice)
 {
     QList<DrawerPrimitive*> primitivesList;
 
@@ -418,7 +425,7 @@ void Drawer::erasePrimitivesInsideBounds(double bounds[6], const OrthogonalPlane
     {
         if (primitive->isErasable())
         {
-            if (isPrimitiveInside(primitive, view, bounds))
+            if (isPrimitiveInside(primitive, displayBounds))
             {
                 erasePrimitive(primitive);
             }
@@ -426,24 +433,11 @@ void Drawer::erasePrimitivesInsideBounds(double bounds[6], const OrthogonalPlane
     }
 }
 
-bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, const OrthogonalPlane &view, double bounds[6])
+bool Drawer::isPrimitiveInside(DrawerPrimitive *primitive, const std::array<double, 4> &displayBounds)
 {
-    // Comprovem que els bounds de la primitiva estiguin continguts
-    // dins dels que ens han passat per paràmetre
-    double primitiveBounds[6];
-    primitive->getBounds(primitiveBounds);
-
-    int xIndex = view.getXIndex();
-    int yIndex = view.getYIndex();
-
-    bool inside = false;
-    if (bounds[xIndex * 2] <= primitiveBounds[xIndex * 2] && bounds[xIndex * 2 + 1] >= primitiveBounds[xIndex * 2 + 1] &&
-        bounds[yIndex * 2] <= primitiveBounds[yIndex * 2] && bounds[yIndex * 2 + 1] >= primitiveBounds[yIndex * 2 + 1])
-    {
-        inside = true;
-    }
-
-    return inside;
+    auto primitiveBounds = primitive->getDisplayBounds([this](const Vector3 &point) { return m_2DViewer->computeWorldToDisplay(point); });
+    return displayBounds[0] <= primitiveBounds[0] && displayBounds[1] >= primitiveBounds[1] &&
+           displayBounds[2] <= primitiveBounds[2] && displayBounds[3] >= primitiveBounds[3];
 }
 
 bool Drawer::erasePrimitiveFromContainer(DrawerPrimitive *primitive, QMultiMap<int, DrawerPrimitive*> &primitiveContainer)

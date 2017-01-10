@@ -1573,6 +1573,17 @@ void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
     xyz[yIndex] = qBound(bounds[yIndex * 2], xyz[yIndex], bounds[yIndex * 2 + 1]);
 }
 
+Vector3 Q2DViewer::putCoordinateInCurrentImagePlane(const Vector3 &point)
+{
+    auto bounds = getCurrentImagePlaneDisplayBounds();
+    auto pointDisplay = computeWorldToDisplay(point);
+    for (int i = 0; i < 3; i++)
+    {
+        pointDisplay[i] = qBound(bounds[2*i], pointDisplay[i], bounds[2*i+1]);
+    }
+    return computeDisplayToWorld(pointDisplay);
+}
+
 SliceOrientedVolumePixelData Q2DViewer::getCurrentPixelData()
 {
     return getMainDisplayUnit()->getCurrentPixelData();
@@ -1806,6 +1817,27 @@ void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
     getMainDisplayUnit()->getImageSlice()->GetBounds(bounds);
 }
 
+std::array<double, 6> Q2DViewer::getCurrentImagePlaneDisplayBounds()
+{
+    auto imagePlane = getCurrentImagePlane();
+    auto corners = imagePlane->getCentralCorners();
+    auto topLeft = computeWorldToDisplay(corners.topLeft);
+    auto topRight = computeWorldToDisplay(corners.topRight);
+    auto bottomRight = computeWorldToDisplay(corners.bottomRight);
+    auto bottomLeft = computeWorldToDisplay(corners.bottomLeft);
+
+    std::array<double, 6> bounds;
+    bounds[4] = bounds[5] = 0.0;
+
+    for (int i = 0; i < 2; i++)
+    {
+        bounds[2*i] = std::min({topLeft[i], topRight[i], bottomRight[i], bottomLeft[i]});
+        bounds[2*i+1] = std::max({topLeft[i], topRight[i], bottomRight[i], bottomLeft[i]});
+    }
+
+    return bounds;
+}
+
 void Q2DViewer::updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane()
 {
     if (getCurrentViewPlane() == OrthogonalPlane::XYPlane)
@@ -1822,9 +1854,9 @@ double Q2DViewer::getCurrentSpacingBetweenSlices()
     return getMainDisplayUnit()->getCurrentSpacingBetweenSlices();
 }
 
-double Q2DViewer::getCurrentDisplayedImageDepth() const
+double Q2DViewer::getCurrentDisplayedImageDepth()
 {
-    return getCurrentDisplayedImageDepthOnInput(0);
+    return computeWorldToDisplay(getCurrentFocalPoint()).z;
 }
 
 double Q2DViewer::getCurrentDisplayedImageDepthOnInput(int i) const

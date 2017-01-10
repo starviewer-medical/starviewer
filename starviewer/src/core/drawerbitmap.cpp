@@ -119,70 +119,78 @@ vtkProp* DrawerBitmap::getAsVtkProp()
     return m_imageActor;
 }
 
-double DrawerBitmap::getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint)
+double DrawerBitmap::getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                                 std::function<Vector3(const Vector3&)> worldToDisplay)
 {
-    // Si el punt es troba dins del requadre del bitmap (només coordenades X,Y), retornarem distància 0 i com a closestPoint el point3D
-    // Si el punt es troba fora del requadre del bitmap, la distància serà la d'aquella a l'aresta més propera al punt
-    double bounds[6];
-    getBounds(bounds);
+    // Everything in this method is in display coordinates
+    auto bounds = getDisplayBounds(worldToDisplay);
 
-    if (point3D.x >= bounds[0] && point3D.x <= bounds[1] &&
-        point3D.y >= bounds[2] && point3D.y <= bounds[3])
+    if (displayPoint.x >= bounds[0] && displayPoint.x <= bounds[1] && displayPoint.y >= bounds[2] && displayPoint.y <= bounds[3])
     {
-        closestPoint = point3D;
+        closestDisplayPoint = displayPoint;
         return 0.0;
     }
 
-    Vector3 topLeftCorner{bounds[0], bounds[2], bounds[4]};
-    Vector3 topRightCorner{bounds[1], bounds[2], bounds[4]};
-    Vector3 bottomRightCorner{bounds[1], bounds[3], bounds[4]};
-    Vector3 bottomLeftCorner{bounds[0], bounds[3], bounds[4]};
+    Vector3 topLeftCorner{bounds[0], bounds[2], 0};
+    Vector3 topRightCorner{bounds[1], bounds[2], 0};
+    Vector3 bottomRightCorner{bounds[1], bounds[3], 0};
+    Vector3 bottomLeftCorner{bounds[0], bounds[3], 0};
     
     double minimumDistanceFound = MathTools::DoubleMaximumValue;
-    double distance;
     Vector3 localClosestPoint;
 
-    distance = MathTools::getPointToFiniteLineDistance(point3D, topLeftCorner, topRightCorner, localClosestPoint);
+    double distance = MathTools::getPointToFiniteLineDistance(displayPoint, topLeftCorner, topRightCorner, localClosestPoint);
     if (distance < minimumDistanceFound)
     {
         minimumDistanceFound = distance;
-        closestPoint = localClosestPoint;
+        closestDisplayPoint = localClosestPoint;
     }
 
-    distance = MathTools::getPointToFiniteLineDistance(point3D, topRightCorner, bottomRightCorner, localClosestPoint);
+    distance = MathTools::getPointToFiniteLineDistance(displayPoint, topRightCorner, bottomRightCorner, localClosestPoint);
     if (distance < minimumDistanceFound)
     {
         minimumDistanceFound = distance;
-        closestPoint = localClosestPoint;
+        closestDisplayPoint = localClosestPoint;
     }
     
-    distance = MathTools::getPointToFiniteLineDistance(point3D, bottomRightCorner, bottomLeftCorner, localClosestPoint);
+    distance = MathTools::getPointToFiniteLineDistance(displayPoint, bottomRightCorner, bottomLeftCorner, localClosestPoint);
     if (distance < minimumDistanceFound)
     {
         minimumDistanceFound = distance;
-        closestPoint = localClosestPoint;
+        closestDisplayPoint = localClosestPoint;
     }
     
-    distance = MathTools::getPointToFiniteLineDistance(point3D, bottomLeftCorner, topLeftCorner, localClosestPoint);
+    distance = MathTools::getPointToFiniteLineDistance(displayPoint, bottomLeftCorner, topLeftCorner, localClosestPoint);
     if (distance < minimumDistanceFound)
     {
         minimumDistanceFound = distance;
-        closestPoint = localClosestPoint;
+        closestDisplayPoint = localClosestPoint;
     }
 
     return minimumDistanceFound;
 }
 
-void DrawerBitmap::getBounds(double bounds[6])
+std::array<double, 4> DrawerBitmap::getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay)
 {
-    bounds[0] = m_origin[0];
-    bounds[1] = m_origin[0] + m_spacing[0] * m_width;
+    double minX = m_origin[0], maxX = m_origin[0] + m_spacing[0] * m_width,
+           minY = m_origin[1], maxY = m_origin[1] + m_spacing[1] * m_height,
+           minZ = m_origin[2], maxZ = m_origin[2] + m_spacing[2];
+    Vector3 corners[] = { Vector3(minX, minY, minZ), Vector3(minX, minY, maxZ), Vector3(minX, maxY, minZ), Vector3(minX, maxY, maxZ),
+                          Vector3(maxX, minY, minZ), Vector3(maxX, minY, maxZ), Vector3(maxX, maxY, minZ), Vector3(maxX, maxY, maxZ) };
 
-    bounds[2] = m_origin[1];
-    bounds[3] = m_origin[1] + m_spacing[1] * m_height;
+    minX = minY = std::numeric_limits<double>::infinity();
+    maxX = maxY = -std::numeric_limits<double>::infinity();
 
-    bounds[4] = m_origin[2];
-    bounds[5] = m_origin[2] + m_spacing[2];
+    for (auto corner : corners)
+    {
+        auto displayPoint = worldToDisplay(corner);
+        minX = std::min(displayPoint.x, minX);
+        maxX = std::max(displayPoint.x, maxX);
+        minY = std::min(displayPoint.y, minY);
+        maxY = std::max(displayPoint.y, maxY);
+    }
+
+    return std::array<double, 4>{{minX, maxX, minY, maxY}};
 }
 
 void DrawerBitmap::update()

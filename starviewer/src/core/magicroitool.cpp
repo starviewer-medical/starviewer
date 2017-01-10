@@ -133,35 +133,13 @@ void MagicROITool::handleEvent(unsigned long eventID)
 
 void MagicROITool::setTextPosition(DrawerText *text)
 {
-    double bounds[6];
-    m_roiPolygon->getBounds(bounds);
-
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
-
-    Vector3 attachmentPoint;
-    attachmentPoint[xIndex] = (bounds[xIndex * 2] + bounds[xIndex * 2 + 1]) / 2.0;
-    attachmentPoint[zIndex] = bounds[zIndex * 2];
-    if (m_2DViewer->getView() == OrthogonalPlane::XYPlane)
-    {
-        attachmentPoint[yIndex] = bounds[yIndex * 2 + 1];
-    }
-    else
-    {
-        attachmentPoint[yIndex] = bounds[yIndex * 2];
-    }
+    auto displayBounds = getDisplayBounds();
 
     const double Padding = 5.0;
-    double paddingY = 0.0;
+    Vector3 attachmentPointDisplay((displayBounds[0] + displayBounds[1]) * 0.5, displayBounds[2] - Padding, 0.0);
+    auto attachmentPoint = m_2DViewer->computeDisplayToWorld(attachmentPointDisplay);
 
-    paddingY = -Padding;
     text->setVerticalJustification("Top");
-
-    // Passem attachmentPoint a coordenades de display
-    Vector3 attachmentPointInDisplay = m_2DViewer->computeWorldToDisplay(attachmentPoint);
-    // Apliquem el padding i tornem a coordenades de món
-    attachmentPoint = m_2DViewer->computeDisplayToWorld(attachmentPointInDisplay + Vector3(0, paddingY, 0));
-
     text->setAttachmentPoint(attachmentPoint);
 }
 

@@ -457,34 +457,34 @@ void test_DrawerPolygon::isModified_ShouldReturnExpectedValue_data()
         QTest::newRow("after getNumberOfPoints (on modified)") << drawerPolygon << true;
     }
 
+    auto worldToDisplay = [](const Vector3 &v) { return v; };
+
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
         Vector3 point, closestPoint;
-        drawerPolygon->getDistanceToPoint(point, closestPoint);
-        QTest::newRow("after getDistanceToPoint (on unmodified)") << drawerPolygon << false;
+        drawerPolygon->getDistanceToPointInDisplay(point, closestPoint, worldToDisplay);
+        QTest::newRow("after getDistanceToPointInDisplay (on unmodified)") << drawerPolygon << false;
     }
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
         drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
         Vector3 point, closestPoint;
-        drawerPolygon->getDistanceToPoint(point, closestPoint);
-        QTest::newRow("after getDistanceToPoint (on modified)") << drawerPolygon << true;
+        drawerPolygon->getDistanceToPointInDisplay(point, closestPoint, worldToDisplay);
+        QTest::newRow("after getDistanceToPointInDisplay (on modified)") << drawerPolygon << true;
     }
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
-        double bounds[6];
-        drawerPolygon->getBounds(bounds);
-        QTest::newRow("after getBounds (on unmodified)") << drawerPolygon << false;
+        drawerPolygon->getDisplayBounds(worldToDisplay);
+        QTest::newRow("after getDisplayBounds (on unmodified)") << drawerPolygon << false;
     }
 
     {
         DrawerPolygon *drawerPolygon = new DrawerPolygon(this);
         drawerPolygon->addVertex(Vector3(0.0, 0.0, 0.0));
-        double bounds[6];
-        drawerPolygon->getBounds(bounds);
-        QTest::newRow("after getBounds (on modified)") << drawerPolygon << true;
+        drawerPolygon->getDisplayBounds(worldToDisplay);
+        QTest::newRow("after getDisplayBounds (on modified)") << drawerPolygon << true;
     }
 
     {

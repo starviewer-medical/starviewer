@@ -50,7 +50,7 @@ public:
     void removePoint(int i);
 
     /// Retorna la polilínia com a objecte VTK de representació
-    vtkProp* getAsVtkProp();
+    virtual vtkProp* getAsVtkProp() override;
 
     /// Retorna el nombre de punts que te la polilinia
     int getNumberOfPoints();
@@ -61,19 +61,19 @@ public:
     /// Esborra tots els punts de la polilinia
     void deleteAllPoints();
 
-    /// Calcula la distància que té respecte al punt passat per paràmetre
-    double getDistanceToPoint(const Vector3 &point3D, Vector3 &closestPoint);
+    virtual double getDistanceToPointInDisplay(const Vector3 &displayPoint, Vector3 &closestDisplayPoint,
+                                               std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
-    void getBounds(double bounds[6]);
+    virtual std::array<double, 4> getDisplayBounds(std::function<Vector3(const Vector3&)> worldToDisplay) override;
 
     /// Retorna la llista de punts de la polilínia
     QList<Vector3> getPointsList() const;
 
 public slots:
-    void update();
+    virtual void update() override;
 
 protected slots:
-    void updateVtkProp();
+    virtual void updateVtkProp() override;
 
 private:
     /// Mètode intern per passar de la llista de punts a l'estructura vtk pertinent
