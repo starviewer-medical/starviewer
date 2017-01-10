@@ -60,6 +60,12 @@ Settings::Properties SettingsRegistry::getProperties(const QString &key)
 
 void SettingsRegistry::loadAccesLevelTable()
 {
+    // We can arrive here before creating QApplication due to the initial HDPI support, thus this check is needed
+    if (!qApp)
+    {
+        return;
+    }
+
     // Al directori on s'instal·la l'aplicació tindrem
     // un .ini que definirà els nivells d'accés de cada settings
     QString filePath = qApp->applicationDirPath() + "/settingsAccessLevel.ini";
