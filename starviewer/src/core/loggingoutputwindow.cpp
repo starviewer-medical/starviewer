@@ -30,6 +30,13 @@ void LoggingOutputWindow::DisplayText(const char *text)
 
 void LoggingOutputWindow::DisplayErrorText(const char *text)
 {
+    // HACK: ignore error thrown when using the magnifying glass tool
+    QString string(text);
+    if (string.contains("vtkImageMapper3D.cxx") && string.contains("Cannot follow camera"))
+    {
+        return;
+    }
+
     ERROR_LOG(text);
     this->InvokeEvent(vtkCommand::ErrorEvent, const_cast<char*>(text));
 }
