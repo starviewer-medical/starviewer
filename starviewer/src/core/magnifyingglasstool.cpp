@@ -142,12 +142,6 @@ void MagnifyingGlassTool::updateMagnifiedView()
         return;
     }
     
-    Vector3 xyz;
-    if (!m_2DViewer->getCurrentCursorImageCoordinate(xyz.data()))
-    {
-        xyz = m_2DViewer->getEventWorldCoordinate();
-    }
-
     m_2DViewer->setCursor(QCursor(Qt::BlankCursor));
     
     // Actualitzem el viewport
@@ -160,47 +154,34 @@ void MagnifyingGlassTool::updateMagnifiedView()
     }
     
     // Actualitzem la posició que enfoca la càmera
-    setFocalPoint(xyz);
+    setFocalPoint();
     m_magnifiedRenderer->ResetCameraClippingRange();
     m_2DViewer->render();
 }
 
-void MagnifyingGlassTool::setFocalPoint(const Vector3 &cursorPosition)
+void MagnifyingGlassTool::setFocalPoint()
 {
-    // Passem el punt a coordenades de display
-    Vector3 pointInDisplay = m_2DViewer->computeWorldToDisplay(cursorPosition);
-
-    double viewportBounds[4];
-    m_magnifiedRenderer->GetViewport(viewportBounds);
-
+    // Compute offset in pixels from the viewer center and the mouse position
     QSize renderWindowSize = m_2DViewer->getRenderWindowSize();
+    QPoint renderWindowCenter(renderWindowSize.width() / 2, renderWindowSize.height() / 2);
+    QPoint mousePosition = m_2DViewer->getEventPosition();
+    QPoint offset = mousePosition - renderWindowCenter;
 
-    double magnifyingWindowHalfWidht = (viewportBounds[2] - viewportBounds[0]) * renderWindowSize.width() / 2.0;
-    double magnifyingWindowHalfHeight = (viewportBounds[3] - viewportBounds[1]) * renderWindowSize.height() / 2.0;
+    // Compute right and up vectors in world coordinates with a length of 1 pixel in display
+    Vector3 zero = m_2DViewer->computeDisplayToWorld(Vector3(0, 0, 0));
+    Vector3 x1 = m_2DViewer->computeDisplayToWorld(Vector3(1, 0, 0));
+    Vector3 y1 = m_2DViewer->computeDisplayToWorld(Vector3(0, 1, 0));
+    Vector3 right = x1 - zero;
+    Vector3 up = y1 - zero;
 
-    // Calculem la diferencia entre el centre del viewport i on esta el cursor per calcular el punt central real
-    double offsetXMin = qMax(0.0, magnifyingWindowHalfWidht - pointInDisplay[0]);
-    double offsetXMax = qMax(0.0, (pointInDisplay[0] + magnifyingWindowHalfWidht) - renderWindowSize.width());
-    double offsetYMin = qMax(0.0, magnifyingWindowHalfHeight - pointInDisplay[1]);
-    double offsetYMax = qMax(0.0, (pointInDisplay[1] + magnifyingWindowHalfHeight) - renderWindowSize.height());
+    // Compute offset vector in world coordinates to add to the camera
+    Vector3 offsetVector = right * offset.x() + up * offset.y();
 
-    // Apliquem el factor de zoom perque volem la distancia en el render magnificat
-    double zoomFactor = getZoomFactor();
-    double offsetX = (offsetXMax - offsetXMin) / zoomFactor;
-    double offsetY = (offsetYMax - offsetYMin) / zoomFactor;
-
-    Vector3 focalPoint = m_2DViewer->computeDisplayToWorld(pointInDisplay - Vector3(offsetX, offsetY, 0));
-
-    m_magnifiedCamera->SetFocalPoint(focalPoint.data());
-
-    int xIndex, yIndex, zIndex;
-    m_2DViewer->getView().getXYZIndexes(xIndex, yIndex, zIndex);
-
-    double position[3];
-    m_magnifiedCamera->GetPosition(position);
-    position[xIndex] = focalPoint[xIndex];
-    position[yIndex] = focalPoint[yIndex];
-    m_magnifiedCamera->SetPosition(position);
+    // Add the computed offset to magnified camera's position and focal point
+    Vector3 position(m_magnifiedCamera->GetPosition());
+    Vector3 focalPoint(m_magnifiedCamera->GetFocalPoint());
+    m_magnifiedCamera->SetPosition((position + offsetVector).data());
+    m_magnifiedCamera->SetFocalPoint((focalPoint + offsetVector).data());
 }
 
 void MagnifyingGlassTool::updateCamera()
