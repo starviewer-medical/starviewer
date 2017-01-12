@@ -17,19 +17,21 @@
 
 #include "syncaction.h"
 
+#include "vector3.h"
+
 namespace udg {
 
 /**
     Implementation of a SyncAction for a pan action
-    The set motion vector on setMotionVector() will be applied when run() is called
+    The set source focal point on setSourceFocalPoint() will be applied when run() is called
  */
 class PanSyncAction : public SyncAction {
 public:
     PanSyncAction();
     ~PanSyncAction();
 
-    /// Sets motion vector to be synched
-    void setMotionVector(double vector[3]);
+    /// Sets source focal point to be synched
+    void setSourceFocalPoint(Vector3 vector);
     
     void run(QViewer *viewer);
 
@@ -38,8 +40,8 @@ protected:
     void setupDefaultSyncCriteria();
 
 protected:
-    /// Motion vector that will be applied on run()
-    double m_motionVector[3];
+    /// New focal point of the source viewer that will be applied to the receiving viewer on run()
+    Vector3 m_sourceFocalPoint;
 };
 
 } // End namespace udg

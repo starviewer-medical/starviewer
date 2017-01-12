@@ -246,16 +246,6 @@ public:
     /// Returns a new world coordinate resulting from keeping the provided world coordinate inside the current image plane.
     Vector3 putCoordinateInCurrentImagePlane(const Vector3 &point);
 
-    /// donat un punt 3D en espai de referència DICOM, ens dóna la projecció d'aquest punt sobre
-    /// el pla actual, transformat a coordenades de món VTK
-    /// @param pointToProject[]
-    /// @param projectedPoint[]
-    /// @param vtkReconstructionHack HACK variable booleana que ens fa un petit hack
-    /// per casos en que el pla "real" no és el que volem i necessitem una petita modificació
-    void projectDICOMPointToCurrentDisplayedImage(const double pointToProject[3], double projectedPoint[3], bool vtkReconstructionHack = false);
-
-    bool getDicomWorldCoordinates(const double xyz[3], double dicomWorldPosition[4]);
-
     /// Assigna/Retorna el volum solapat
     void setOverlayInput(Volume *volume);
     Volume* getOverlayInput();
@@ -289,7 +279,7 @@ public:
     int getFusionBalance() const;
 
     /// Moves the camera based on the absolute motion vector
-    void absolutePan(double motionVector[3]);
+    void absolutePan(const Vector3 &sourceFocalPoint);
 
 public slots:
     virtual void setInput(Volume *volume);

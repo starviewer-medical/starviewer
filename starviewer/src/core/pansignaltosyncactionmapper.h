@@ -38,9 +38,9 @@ protected:
     void unmapSignal();
 
 protected slots:
-    /// Maps given factor to a PanSyncAction with the corresponding values
+    /// Maps given source focal point to a PanSyncAction with the corresponding value
     /// Should be connected to the corresponding signals on Q*Viewer
-    void mapToSyncAction(const Vector3 &vector);
+    void mapToSyncAction(const Vector3 &sourceFocalPoint);
 };
 
 } // End namespace udg

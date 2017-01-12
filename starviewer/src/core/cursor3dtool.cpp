@@ -132,17 +132,13 @@ void Cursor3DTool::updatePosition()
         // 1.- Trobar el punt correcte en el món VTK
         if (m_2DViewer->getCurrentCursorImageCoordinate(xyz))
         {
-            double dicomWorldPosition[4];
-            if (m_2DViewer->getDicomWorldCoordinates(xyz, dicomWorldPosition))
-            {
-                // 4.- Modificar les dades compartides del punt per tal que els altres s'actualitzin i situar el punt origen
-                m_crossHair->setPosition(xyz);
-                m_crossHair->setVisibility(true);
-                m_crossHair->update();
-                m_2DViewer->render();
-                // Punt al món real (DICOM)
-                m_myData->setOriginPointPosition(dicomWorldPosition);
-            }
+            // 4.- Modificar les dades compartides del punt per tal que els altres s'actualitzin i situar el punt origen
+            m_crossHair->setPosition(xyz);
+            m_crossHair->setVisibility(true);
+            m_crossHair->update();
+            m_2DViewer->render();
+            // Punt al món real (DICOM)
+            m_myData->setOriginPointPosition(xyz);
         }
 
     }
@@ -191,9 +187,7 @@ void Cursor3DTool::projectPoint()
     if (nearestSlice != -1)
     {
         m_2DViewer->setSlice(nearestSlice);
-        double position[3];
-        m_2DViewer->projectDICOMPointToCurrentDisplayedImage(m_myData->getOriginPointPosition(), position);
-        m_crossHair->setPosition(position);
+        m_crossHair->setPosition(m_myData->getOriginPointPosition());
         m_crossHair->setVisibility(true);
     }
     else

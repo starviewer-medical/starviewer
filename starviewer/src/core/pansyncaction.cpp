@@ -25,22 +25,15 @@ namespace udg {
 PanSyncAction::PanSyncAction()
  : SyncAction()
 {
-    for (int i = 0; i < 3; ++i)
-    {
-        m_motionVector[i] = 0.0;
-    }
 }
 
 PanSyncAction::~PanSyncAction()
 {
 }
 
-void PanSyncAction::setMotionVector(double vector[3])
+void PanSyncAction::setSourceFocalPoint(Vector3 vector)
 {
-    for (int i = 0; i < 3; ++i)
-    {
-        m_motionVector[i] = vector[i];
-    }
+    m_sourceFocalPoint = std::move(vector);
 }
 
 void PanSyncAction::run(QViewer *viewer)
@@ -48,7 +41,7 @@ void PanSyncAction::run(QViewer *viewer)
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
     if (viewer2D)
     {
-        viewer2D->absolutePan(m_motionVector);
+        viewer2D->absolutePan(m_sourceFocalPoint);
     }
 }
 

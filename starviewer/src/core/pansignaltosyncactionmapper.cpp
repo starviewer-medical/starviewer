@@ -56,18 +56,14 @@ void PanSignalToSyncActionMapper::unmapSignal()
     }
 }
 
-void PanSignalToSyncActionMapper::mapToSyncAction(const Vector3 &factor)
+void PanSignalToSyncActionMapper::mapToSyncAction(const Vector3 &sourceFocalPoint)
 {
     if (!m_mappedSyncAction)
     {
         m_mappedSyncAction = new PanSyncAction();
     }
 
-    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
-    double dicomWorldPosition[4];
-    viewer2D->getDicomWorldCoordinates(factor.data(), dicomWorldPosition);
-
-    static_cast<PanSyncAction*>(m_mappedSyncAction)->setMotionVector(dicomWorldPosition);
+    static_cast<PanSyncAction*>(m_mappedSyncAction)->setSourceFocalPoint(sourceFocalPoint);
     
     emit actionMapped(m_mappedSyncAction);
 }
