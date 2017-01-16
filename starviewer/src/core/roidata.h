@@ -15,16 +15,20 @@
 #ifndef UDGROIDATA_H
 #define UDGROIDATA_H
 
-#include "voxel.h"
-
 #include <QString>
 
 namespace udg {
 
+class Voxel;
+
 /**
-    Class to save voxel data contained in a ROI and compute statistics from it.
-    Currently it only takes into account the first component of the voxel,
-    i.e. if the voxel is an RGB color voxel, it only will take into account the red channel
+ * @brief The ROIData class computes statistics from voxel data in a ROI.
+ *
+ * Currently it only takes into account the first component of the voxel,
+ * i.e. if the voxel is an RGB color voxel, it only will take into account the red channel.
+ *
+ * The mean and the standard deviation are computed using the shifted data algorithm
+ * (see https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Computing_shifted_data).
  */
 class ROIData {
 public:
@@ -37,10 +41,12 @@ public:
     /// Adds a voxel unless Voxel::isEmpty() is true
     void addVoxel(const Voxel &voxel);
 
-    /// Gets the mean/standard deviation/maximum corresponding to the current voxels
-    double getMean();
-    double getStandardDeviation();
-    double getMaximum();
+    /// Returns the mean of the added voxels.
+    double getMean() const;
+    /// Returns the standard deviation of the added voxels.
+    double getStandardDeviation() const;
+    /// Returns the maximum value of the added voxels.
+    double getMaximum() const;
 
     /// Sets/gets the units of the voxels of this ROI
     void setUnits(const QString &units);
@@ -51,29 +57,16 @@ public:
     QString getModality() const;
 
 private:
-    /// Computes all statistics data if needed
-    void computeStatistics();
-
-    /// Computes voxels mean
-    void computeMean();
-
-    /// Computes voxels standard deviation. Requires mean to be computed before, as it uses the m_mean value
-    void computeStandardDeviation();
-
-    /// Computes voxels maximum value
-    void computeMaximum();
-
-private:
-    /// The container of the ROI voxels
-    QVector<Voxel> m_voxels;
-    
-    /// Statistic data members
-    double m_mean;
-    double m_standardDeviation;
+    /// Number of voxels that have been added.
+    int m_count;
+    /// Shift to substract from the added voxels (equal to the first value added).
+    double m_k;
+    /// Sum of shifted data.
+    double m_ex;
+    /// Sum of squares of shifted data.
+    double m_ex2;
+    /// Maximum value.
     double m_maximum;
-
-    /// Used to control whether the statistics data has to be computed or not when requested
-    bool m_statisticsAreOutdated;
     
     /// Additional optional information of the ROI regarding the units of the voxels and their modality
     QString m_units;

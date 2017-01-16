@@ -2,8 +2,7 @@
 #include "roidata.h"
 
 #include "fuzzycomparetesthelper.h"
-
-#include <QString>
+#include "voxel.h"
 
 using namespace udg;
 using namespace testing;

@@ -14,8 +14,9 @@
 
 #include "roidata.h"
 
-#include <QtCore/qmath.h>
-#include <cfloat>
+#include "voxel.h"
+
+#include <cmath>
 
 namespace udg {
 
@@ -30,10 +31,10 @@ ROIData::~ROIData()
 
 void ROIData::clear()
 {
-    m_voxels.clear();
-    m_statisticsAreOutdated = false;
-    m_mean = 0.0;
-    m_standardDeviation = 0.0;
+    m_count = 0;
+    m_k = 0;
+    m_ex = 0;
+    m_ex2 = 0;
     m_maximum = 0.0;
     m_units = "";
     m_modality = "";
@@ -43,26 +44,45 @@ void ROIData::addVoxel(const Voxel &voxel)
 {
     if (!voxel.isEmpty())
     {
-        m_voxels << voxel;
-        m_statisticsAreOutdated = true;
+        double x = voxel.getComponent(0);
+        if (m_count == 0)
+        {
+            m_k = x;
+            m_maximum = -std::numeric_limits<double>::infinity();
+        }
+        m_count++;
+        m_ex += x - m_k;
+        m_ex2 += (x - m_k) * (x - m_k);
+        m_maximum = std::max(x, m_maximum);
     }
 }
 
-double ROIData::getMean()
+double ROIData::getMean() const
 {
-    computeStatistics();
-    return m_mean;
+    if (m_count > 0)
+    {
+        return m_k + m_ex / m_count;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
-double ROIData::getStandardDeviation()
+double ROIData::getStandardDeviation() const
 {
-    computeStatistics();
-    return m_standardDeviation;
+    if (m_count > 0)
+    {
+        return sqrt((m_ex2 - (m_ex * m_ex) / m_count) / (m_count));
+    }
+    else
+    {
+        return 0;
+    }
 }
 
-double ROIData::getMaximum()
+double ROIData::getMaximum() const
 {
-    computeStatistics();
     return m_maximum;
 }
 
@@ -84,64 +104,6 @@ void ROIData::setModality(const QString &modality)
 QString ROIData::getModality() const
 {
     return m_modality;
-}
-
-void ROIData::computeStatistics()
-{
-    if (!m_statisticsAreOutdated)
-    {
-        return;
-    }
-
-    computeMean();
-    computeStandardDeviation();
-    computeMaximum();
-
-    m_statisticsAreOutdated = false;
-}
-
-void ROIData::computeMean()
-{
-    m_mean = 0.0;
-    foreach (const Voxel &voxel, m_voxels)
-    {
-        m_mean += voxel.getComponent(0);
-    }
-
-    m_mean = m_mean / m_voxels.size();
-}
-
-void ROIData::computeStandardDeviation()
-{
-    m_standardDeviation = 0.0;
-    QList<double> deviations;
-    foreach (const Voxel &voxel, m_voxels)
-    {
-        double individualDeviation = voxel.getComponent(0) - m_mean;
-        deviations << (individualDeviation * individualDeviation);
-    }
-
-    foreach (double deviation, deviations)
-    {
-        m_standardDeviation += deviation;
-    }
-
-    m_standardDeviation /= deviations.size();
-    m_standardDeviation = qSqrt(m_standardDeviation);
-}
-
-void ROIData::computeMaximum()
-{
-    m_maximum = -DBL_MAX;
-
-    foreach (const Voxel &voxel, m_voxels)
-    {
-        double value = voxel.getComponent(0);
-        if (value > m_maximum)
-        {
-            m_maximum = value;
-        }
-    }
 }
 
 } // End namespace udg
