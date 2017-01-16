@@ -1457,19 +1457,6 @@ bool Q2DViewer::isThickSlabActiveOnInput(int i) const
     return getDisplayUnit(i)->isThickSlabActive();
 }
 
-void Q2DViewer::putCoordinateInCurrentImageBounds(double xyz[3])
-{
-    double bounds[6];
-    getCurrentRenderedItemBounds(bounds);
-
-    int xIndex = getCurrentViewPlane().getXIndex();
-    int yIndex = getCurrentViewPlane().getYIndex();
-
-    // Make each coordinate index to be in its corresponding 2D bounds
-    xyz[xIndex] = qBound(bounds[xIndex * 2], xyz[xIndex], bounds[xIndex * 2 + 1]);
-    xyz[yIndex] = qBound(bounds[yIndex * 2], xyz[yIndex], bounds[yIndex * 2 + 1]);
-}
-
 Vector3 Q2DViewer::putCoordinateInCurrentImagePlane(const Vector3 &point)
 {
     auto bounds = getCurrentImagePlaneDisplayBounds();

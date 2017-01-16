@@ -236,13 +236,6 @@ public:
     /// any restriction to show display shutters.
     bool canShowDisplayShutter() const;
 
-    /// Donada una coordenada de món, l'ajustem perquè caigui dins dels límits de l'imatge actual
-    /// Això ens serveix per tools que agafen qualsevol punt de món, però necessiten que aquesta estigui
-    /// dins dels límits de la imatge, com pot ser una ROI. Aquest mètode acaba d'ajustar la coordenada perquè
-    /// estigui dins dels límits de la pròpia imatge
-    /// @param xyz[] Coordenada que volem ajustar. Serà un paràmetre d'entrada/sortida i el seu contingut
-    /// es modificarà perquè caigui dins dels límits de la imatge
-    void putCoordinateInCurrentImageBounds(double xyz[3]);
     /// Returns a new world coordinate resulting from keeping the provided world coordinate inside the current image plane.
     Vector3 putCoordinateInCurrentImagePlane(const Vector3 &point);
 
