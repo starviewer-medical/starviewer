@@ -17,7 +17,9 @@
 
 #include "roitool.h"
 
+#include "sliceorientedvolumepixeldata.h"
 #include "vector3.h"
+#include "voxelindex.h"
 
 #include <QVector>
 
@@ -36,11 +38,6 @@ class VoxelIndex;
 class MagicROITool : public ROITool {
 Q_OBJECT
 public:
-    
-    // Creixement
-    enum { LeftDown, Down, RightDown, Right, RightUp, Up, LeftUp, Left };
-    // Moviments
-    enum { MoveRight, MoveLeft, MoveUp, MoveDown };
 
     MagicROITool(QViewer *viewer, QObject *parent = 0);
     ~MagicROITool();
@@ -52,7 +49,7 @@ protected:
 
 private:
     /// Returns the current pixel data from the selected input.
-    SliceOrientedVolumePixelData getPixelData();
+    SliceOrientedVolumePixelData& getPixelData();
 
     /// Crida a la generació de la regió màgica
     void generateRegion();
@@ -61,13 +58,13 @@ private:
     int getROIInputIndex() const;
     
     /// Returns the slice oriented voxel index in the selected pixel data corresponding to the current picked position.
-    VoxelIndex getPickedPositionVoxelIndex();
+    const VoxelIndex& getStartVoxelIndex() const;
     
     /// Calcula el rang de valors d'intensitat vàlid a partir de \sa #m_magicSize i \see #m_magicFactor
-    void computeLevelRange();
+    std::array<double, 2> computeLevelRange();
 
     /// Versió iterativa del region Growing
-    void computeRegionMask();
+    std::array<int, 2> computeRegionMask();
 
     /// Fer un moviment des d'un índex cap a una direcció
     /// @param a, @param b índex del volum de la màscara que estem mirant en cada crida
@@ -80,7 +77,7 @@ private:
     void undoMovement(int &a, int &b, int movement);
 
     /// Genera el polígon a partir de la màscara
-    void computePolygon();
+    void computePolygon(const std::array<int, 2> &firstTrueInMask);
 
     /// Mètodes auxiliar per la generació del polígon
     void getNextIndex(int direction, int x, int y, int &nextX, int &nextY);
@@ -107,9 +104,6 @@ private:
     /// Returns the value of the voxel at the given slice oriented voxel index. Only the first component is considered.
     double getVoxelValue(const VoxelIndex &index);
 
-    /// Elimina la representacio temporal de la tool
-    void deleteTemporalRepresentation();
-
     /// Returns the mask index corresponding to the given x and y image indices.
     int getMaskVectorIndex(int x, int y) const;
 
@@ -117,8 +111,9 @@ private:
     bool getMaskValue(int x, int y) const;
 
 private slots:
-    /// Inicialitza la tool
-    void initialize();
+
+    /// Resets this tool to its initial state.
+    void reset();
 
     /// Reinicia la regió, invalidant l'anterior que hi hagués en curs si existia
     void restartRegion();
@@ -127,10 +122,6 @@ private:
     /// Possible states of the tool.
     enum State { Ready, Drawing };
 
-    /// Mida de la tool
-    static const int MagicSize;
-    static const double InitialMagicFactor;
-
     double m_magicFactor;
 
     /// Màscara de la regió que formarà el polígon
@@ -138,25 +129,28 @@ private:
 
     /// Bounds de la màscara
     int m_minX, m_maxX, m_minY, m_maxY;
-    
-    /// Rang de valors que es tindran en compte pel region growing
-    double m_lowerLevel;
-    double m_upperLevel;
 
     /// Coordenades de món a on s'ha fet el click inicial
-    Vector3 m_pickedPosition;
+    Vector3 m_startWorldCoordinate;
+
+    /// Coordenades de pantalla a on s'ha fet el click inicial
+    QPoint m_startEventPosition;
+
+    /// Slice oriented voxel index of the first clicked voxel.
+    VoxelIndex m_startVoxelIndex;
 
     /// Polígon ple que es mostrarà durant l'edició de la ROI.
     QPointer<DrawerPolygon> m_filledRoiPolygon;
-
-    /// Coordenades de pantalla a on s'ha fet el click inicial
-    QPoint m_pickedPositionInDisplayCoordinates;
 
     /// Index of the input to draw the magic ROI on
     int m_inputIndex;
 
     /// Current state of the tool.
     State m_state;
+
+    /// Cached pixel data to speed up access to it.
+    SliceOrientedVolumePixelData m_cachedPixelData;
+
 };
 
 }

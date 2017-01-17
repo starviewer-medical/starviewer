@@ -20,12 +20,12 @@
 #include "drawerpolygon.h"
 #include "drawertext.h"
 #include "mathtools.h"
-#include "sliceorientedvolumepixeldata.h"
+#include "roidata.h"
 #include "voxel.h"
 #include "voxelindex.h"
 
 #include <QApplication> // to check pressed mouse buttons
-#include <qmath.h>
+#include <QStack>
 
 // Vtk
 #include <vtkCommand.h>
@@ -33,28 +33,14 @@
 
 namespace udg {
 
-const int MagicROITool::MagicSize = 3;
-const double MagicROITool::InitialMagicFactor = 0.0;
-
 MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
-: ROITool(viewer, parent)
+: ROITool(viewer, parent), m_magicFactor(0), m_minX(0), m_maxX(0), m_minY(0), m_maxY(0)
 {
-    m_magicFactor = InitialMagicFactor;
-    m_minX = 0;
-    m_maxX = 0;
-    m_minY = 0;
-    m_maxY = 0;
-    m_lowerLevel = 0.0;
-    m_upperLevel = 0.0;
-    m_inputIndex = getROIInputIndex();
     m_toolName = "MagicROITool";
 
-    m_roiPolygon = NULL;
-    m_filledRoiPolygon = NULL;
+    reset();
 
-    m_state = Ready;
-
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(initialize()));
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(restartRegion()));
     connect(m_2DViewer, SIGNAL(phaseChanged(int)), SLOT(restartRegion()));
     connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(restartRegion()));
@@ -63,45 +49,31 @@ MagicROITool::MagicROITool(QViewer *viewer, QObject *parent)
 
 MagicROITool::~MagicROITool()
 {
-    deleteTemporalRepresentation();
+    reset();
 }
 
-void MagicROITool::deleteTemporalRepresentation()
+void MagicROITool::reset()
 {
+    bool needsToRender = false;
+
     if (!m_roiPolygon.isNull())
     {
         m_roiPolygon->decreaseReferenceCount();
         delete m_roiPolygon;
-        m_2DViewer->render();
+        needsToRender = true;
     }
+
     if (!m_filledRoiPolygon.isNull())
     {
         m_filledRoiPolygon->decreaseReferenceCount();
         delete m_filledRoiPolygon;
-        m_2DViewer->render();
+        needsToRender = true;
     }
 
-    m_state = Ready;
-}
-
-void MagicROITool::initialize()
-{
-    // Alliberem les primitives perquè puguin ser esborrades
-    if (!m_roiPolygon.isNull())
+    if (needsToRender)
     {
-        m_roiPolygon->decreaseReferenceCount();
-        delete m_roiPolygon;
         m_2DViewer->render();
     }
-    if (!m_filledRoiPolygon.isNull())
-    {
-        m_filledRoiPolygon->decreaseReferenceCount();
-        delete m_filledRoiPolygon;
-        m_2DViewer->render();
-    }
-
-    m_roiPolygon = NULL;
-    m_filledRoiPolygon = NULL;
 
     m_inputIndex = getROIInputIndex();
 
@@ -125,7 +97,7 @@ void MagicROITool::handleEvent(unsigned long eventID)
             int keyCode = m_2DViewer->getInteractor()->GetKeyCode();
             if (keyCode == 27) // ESC
             {
-                deleteTemporalRepresentation();
+                reset();
             }
             break;
     }
@@ -143,9 +115,9 @@ void MagicROITool::setTextPosition(DrawerText *text)
     text->setAttachmentPoint(attachmentPoint);
 }
 
-SliceOrientedVolumePixelData MagicROITool::getPixelData()
+SliceOrientedVolumePixelData& MagicROITool::getPixelData()
 {
-    return m_2DViewer->getCurrentPixelDataFromInput(m_inputIndex);
+    return m_cachedPixelData;
 }
 
 void MagicROITool::computeMaskBounds()
@@ -164,21 +136,25 @@ double MagicROITool::getVoxelValue(const VoxelIndex &index) // slice oriented in
 
 void MagicROITool::startRegion()
 {
+    constexpr double InitialMagicFactor = 0.0;
+
     if (m_state == Ready && m_2DViewer->hasInput())
     {
-        if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(m_pickedPosition.data(), m_inputIndex))
+        if (m_2DViewer->getCurrentCursorImageCoordinateOnInput(m_startWorldCoordinate.data(), m_inputIndex))
         {
+            // Cache current pixel data
+            m_cachedPixelData = m_2DViewer->getCurrentPixelDataFromInput(m_inputIndex);
+            m_startVoxelIndex = getPixelData().getVoxelIndex(m_startWorldCoordinate);   // slice oriented voxel index
+
             // Discard a border of 1 pixel around the image (workaround for #1949)
             // TODO Implement a better solution, probably reimplementing the whole algorithm
-            VoxelIndex index = getPickedPositionVoxelIndex();   // slice oriented index
             computeMaskBounds();
-
-            if (index.x() == m_minX || index.x() == m_maxX || index.y() == m_minY || index.y() == m_maxY)
+            if (m_startVoxelIndex.x() == m_minX || m_startVoxelIndex.x() == m_maxX || m_startVoxelIndex.y() == m_minY || m_startVoxelIndex.y() == m_maxY)
             {
                 return;
             }
 
-            m_pickedPositionInDisplayCoordinates = m_2DViewer->getEventPosition();
+            m_startEventPosition = m_2DViewer->getEventPosition();
             m_magicFactor = InitialMagicFactor;
             m_roiPolygon = new DrawerPolygon;
             m_roiPolygon->increaseReferenceCount();
@@ -197,50 +173,40 @@ void MagicROITool::startRegion()
 
 void MagicROITool::endRegion()
 {
-    if (m_roiPolygon)
+    if (m_state == Drawing)
     {
-        this->generateRegion();
-        this->printData();
-        // Alliberem la primitiva perquè es pugui esborrar
-        m_roiPolygon->decreaseReferenceCount();
-        // Col·loquem el dibuix al lloc corresponent
-        m_2DViewer->getDrawer()->erasePrimitive(m_roiPolygon);
-        m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
-        // Re-iniciem el punter
-        m_roiPolygon = NULL;
-    }
+        if (m_roiPolygon)
+        {
+            this->printData();
+            // Alliberem la primitiva perquè es pugui esborrar
+            m_roiPolygon->decreaseReferenceCount();
+            // Col·loquem el dibuix al lloc corresponent
+            m_2DViewer->getDrawer()->erasePrimitive(m_roiPolygon);
+            m_2DViewer->getDrawer()->draw(m_roiPolygon, m_2DViewer->getView(), m_2DViewer->getCurrentSlice());
+            // Re-iniciem el punter
+            m_roiPolygon = NULL;
+        }
 
-    if (m_filledRoiPolygon)
-    {
-        // Alliberem la primitiva perquè es pugui esborrar
-        m_filledRoiPolygon->decreaseReferenceCount();
-        // Esborrem el polígon ple del visor i el destruïm
-        m_2DViewer->getDrawer()->erasePrimitive(m_filledRoiPolygon);
-        delete m_filledRoiPolygon;
-        m_filledRoiPolygon = NULL;
-    }
+        if (m_filledRoiPolygon)
+        {
+            // Alliberem la primitiva perquè es pugui esborrar
+            m_filledRoiPolygon->decreaseReferenceCount();
+            // Esborrem el polígon ple del visor i el destruïm
+            m_2DViewer->getDrawer()->erasePrimitive(m_filledRoiPolygon);
+            delete m_filledRoiPolygon;
+            m_filledRoiPolygon = NULL;
+        }
 
-    m_state = Ready;
+        m_state = Ready;
+    }
 }
 
 void MagicROITool::restartRegion()
 {
     // Check that mouse is over the viewer and the left button is pressed
-    if (m_2DViewer->underMouse() && QApplication::mouseButtons().testFlag(Qt::LeftButton))
+    if (m_state == Drawing && m_2DViewer->underMouse() && QApplication::mouseButtons().testFlag(Qt::LeftButton))
     {
-        if (!m_filledRoiPolygon.isNull())
-        {
-            m_filledRoiPolygon->decreaseReferenceCount();
-            delete m_filledRoiPolygon;
-        }
-
-        if (!m_roiPolygon.isNull())
-        {
-            m_roiPolygon->decreaseReferenceCount();
-            delete m_roiPolygon;
-        }
-
-        m_state = Ready;
+        reset();
         startRegion();
     }
 }
@@ -252,7 +218,7 @@ void MagicROITool::modifyRegionByFactor()
         const double ScaleFactor = 0.05;
 
         // Fem servir la distància al punt inicial que s'ha clicat. Es fa la distància de mahattan que és una bona aproximació i molt més ràpida de calcular
-        int displacement =  (m_viewer->getEventPosition() - m_pickedPositionInDisplayCoordinates).manhattanLength();
+        int displacement =  (m_viewer->getEventPosition() - m_startEventPosition).manhattanLength();
         m_magicFactor = displacement * ScaleFactor;
         if (m_magicFactor < 0.0)
         {
@@ -265,13 +231,11 @@ void MagicROITool::modifyRegionByFactor()
 
 void MagicROITool::generateRegion()
 {
-    computeMaskBounds();
-
     // Posem a true els punts on la imatge està dins els llindard i connectat amb la llavor (region growing)
-    this->computeRegionMask();
+    auto firstTrueInMask = this->computeRegionMask();
 
     // Trobem els punts frontera i creem el polígon
-    this->computePolygon();
+    this->computePolygon(firstTrueInMask);
 
     m_2DViewer->render();
 }
@@ -308,41 +272,41 @@ int MagicROITool::getROIInputIndex() const
     return index;
 }
 
-VoxelIndex MagicROITool::getPickedPositionVoxelIndex()
+const VoxelIndex& MagicROITool::getStartVoxelIndex() const
 {
-    return getPixelData().getVoxelIndex(m_pickedPosition);  // slice oriented voxel index
+    return m_startVoxelIndex;   // slice oriented voxel index
 }
 
-void MagicROITool::computeLevelRange()
+std::array<double, 2> MagicROITool::computeLevelRange()
 {
     // Calculem la desviació estàndard dins la finestra que ens marca la magic size
     double standardDeviation = getStandardDeviation();
     
     // Calculem els llindars com el valor en el pixel +/- la desviació estàndard * magic factor
-    double value = this->getVoxelValue(getPickedPositionVoxelIndex());
-    m_lowerLevel = value - m_magicFactor * standardDeviation;
-    m_upperLevel = value + m_magicFactor * standardDeviation;
+    double value = this->getVoxelValue(getStartVoxelIndex());
+    double lowerLevel = value - m_magicFactor * standardDeviation;
+    double upperLevel = value + m_magicFactor * standardDeviation;
+
+    return {{lowerLevel, upperLevel}};
 }
 
-void MagicROITool::computeRegionMask()
+// Movements
+enum { MoveRight, MoveLeft, MoveUp, MoveDown };
+
+std::array<int, 2> MagicROITool::computeRegionMask()
 {
-    this->computeLevelRange();
+    auto levelRange = this->computeLevelRange();
+    double lowerLevel = levelRange[0];
+    double upperLevel = levelRange[1];
 
     // Creem la màscara
-    if (m_minX == 0 && m_minY == 0)
-    {
-        m_mask = QVector<bool>((m_maxX + 1) * (m_maxY + 1), false);
-    }
-    else
-    {
-        DEBUG_LOG("ERROR: extension no comença a 0");
-    }
-    
-    VoxelIndex index = getPickedPositionVoxelIndex();   // slice oriented index
+    m_mask = QVector<bool>((m_maxX - m_minX + 1) * (m_maxY - m_minY + 1), false);
+
+    VoxelIndex index = getStartVoxelIndex();   // slice oriented index
     double value = this->getVoxelValue(index);
     int x = index.x(), y = index.y(), z = index.z();
 
-    if ((value >= m_lowerLevel) && (value <= m_upperLevel))
+    if ((value >= lowerLevel) && (value <= upperLevel))
     {
         int maskIndex = getMaskVectorIndex(x, y);
         m_mask[maskIndex] = true;
@@ -350,68 +314,89 @@ void MagicROITool::computeRegionMask()
     else
     {
         DEBUG_LOG("Ha petat i sortim");
-        return;
+        return std::array<int, 2>();
     }
 
+    // Keep indices of first true value
+    std::array<int, 2> firstTrue{{x, y}};
+    auto updateFirstTrue = [&firstTrue](int x, int y) {
+        if (x < firstTrue[0] || (x == firstTrue[0] && y < firstTrue[1]))
+        {
+            firstTrue[0] = x;
+            firstTrue[1] = y;
+        }
+    };
+
     // Comencem el Region Growing
-    QVector<int> movements;
+    QStack<int> moves;
+
     // First movement \TODO Codi duplicat amb main loop
-    int i = 0;
+    int move = 0;
     bool found = false;
-    int maskIndex = 0;
-    while (i < 4 && !found)
+
+    while (move < 4 && !found)
     {
-        this->doMovement(x, y, i);
+        this->doMovement(x, y, move);
         value = this->getVoxelValue(VoxelIndex(x, y, z));
 
-        if ((value >= m_lowerLevel) && (value <= m_upperLevel))
+        if ((value >= lowerLevel) && (value <= upperLevel))
         {
-            maskIndex = getMaskVectorIndex(x, y);
+            int maskIndex = getMaskVectorIndex(x, y);
             m_mask[maskIndex] = true;
+            updateFirstTrue(x, y);
+            moves.push(move);
             found = true;
-            movements.push_back(i);
         }
-        if (!found)
+        else
         {
-            this->undoMovement(x, y, i);
+            this->undoMovement(x, y, move);
         }
-        ++i;
+
+        ++move;
     }
 
     // Main loop
-    i = 0;
-    while (movements.size() > 0)
+    move = 0;
+
+    while (!moves.isEmpty())
     {
         found = false;
-        while (i < 4 && !found)
+
+        while (move < 4 && !found)
         {
-            this->doMovement(x, y, i);
+            this->doMovement(x, y, move);
+
             if ((x > m_minX) && (x < m_maxX) && (y > m_minY) && (y < m_maxY))
             {
                 value = this->getVoxelValue(VoxelIndex(x, y, z));
-                maskIndex = getMaskVectorIndex(x, y);
-                if ((value >= m_lowerLevel) && (value <= m_upperLevel) && (!m_mask[maskIndex]))
+                int maskIndex = getMaskVectorIndex(x, y);
+
+                if ((value >= lowerLevel) && (value <= upperLevel) && (!m_mask[maskIndex]))
                 {
                     m_mask[maskIndex] = true;
+                    updateFirstTrue(x, y);
+                    moves.push(move);
+                    move = 0;
                     found = true;
-                    movements.push_back(i);
-                    i = 0;
                 }
             }
+
             if (!found)
             {
-                this->undoMovement(x, y, i);
-                ++i;
+                this->undoMovement(x, y, move);
+                ++move;
             }
         }
+
         if (!found)
         {
-            this->undoMovement(x, y, movements.back());
-            i = movements.back();
-            ++i;
-            movements.pop_back();
+            move = moves.pop();
+            this->undoMovement(x, y, move);
+            ++move;
         }
     }
+
+    return firstTrue;
 }
 
 void MagicROITool::doMovement(int &x, int &y, int movement)
@@ -456,36 +441,18 @@ void MagicROITool::undoMovement(int &x, int &y, int movement)
     }
 }
 
-void MagicROITool::computePolygon()
-{
-    int i = m_minX;
-    int j;
-    int maskIndex = 0;
-    // Busquem el primer punt
-    bool found = false;
-    while ((i <= m_maxX) && !found)
-    {
-        j = m_minY;
-        while ((j <= m_maxY) && !found)
-        {
-            maskIndex = getMaskVectorIndex(i, j);
-            if (m_mask[maskIndex])
-            {
-                found = true;
-            }
-            ++j;
-        }
-        ++i;
-    }
+// Directions
+enum { LeftDown, Down, RightDown, Right, RightUp, Up, LeftUp, Left };
 
-    // L'índex és -1 pq els hem incrementat una vegada més    
-    int x = i - 1;
-    int y = j - 1;
+void MagicROITool::computePolygon(const std::array<int, 2> &firstTrueInMask)
+{
     m_roiPolygon->removeVertices();
     m_filledRoiPolygon->removeVertices();
-    
-    this->addPoint(7, x, y);
-    this->addPoint(1, x, y);
+
+    int x = firstTrueInMask[0];
+    int y = firstTrueInMask[1];
+    this->addPoint(Left, x, y);
+    this->addPoint(Down, x, y);
     
     int nextX;
     int nextY;
@@ -494,6 +461,7 @@ void MagicROITool::computePolygon()
 
     bool loop = false;
     bool next = false;
+
     while (!loop)
     {
         this->getNextIndex(direction, x, y, nextX, nextY);
@@ -562,8 +530,7 @@ void MagicROITool::getNextIndex(int direction, int x, int y, int &nextX, int &ne
 
 int MagicROITool::getNextDirection(int direction)
 {
-    int nextDirection = direction + 1;
-    return (nextDirection == 8)? 0: nextDirection;
+    return (direction + 1) % 8;
 }
 
 int MagicROITool::getInverseDirection(int direction)
@@ -573,7 +540,7 @@ int MagicROITool::getInverseDirection(int direction)
 
 void MagicROITool::addPoint(int direction, int x, int y)
 {
-    int z = getPickedPositionVoxelIndex().z();
+    int z = getStartVoxelIndex().z();
     Vector3 p1 = getPixelData().getWorldCoordinate(VoxelIndex(x, y, z));
     Vector3 p2;
 
@@ -612,46 +579,31 @@ bool MagicROITool::isLoopReached()
 
 double MagicROITool::getStandardDeviation()
 {
-    VoxelIndex index = getPickedPositionVoxelIndex();   // slice oriented index
+    constexpr int MagicSize = 3;
+
+    const VoxelIndex &index = getStartVoxelIndex(); // slice oriented index
     int minX = qMax(index.x() - MagicSize, m_minX);
     int maxX = qMin(index.x() + MagicSize, m_maxX);
     int minY = qMax(index.y() - MagicSize, m_minY);
     int maxY = qMin(index.y() + MagicSize, m_maxY);
     int z = index.z();
 
-    // Calculem la mitjana
-    double mean = 0.0;
-    double value;
+    ROIData roiData;
 
     for (int i = minX; i <= maxX; ++i)
     {
         for (int j = minY; j <= maxY; ++j)
         {
-            value = this->getVoxelValue(VoxelIndex(i, j, z));
-            mean += value;
+            roiData.addVoxel(getPixelData().getVoxelValue(VoxelIndex(i, j, z)));
         }
     }
 
-    int numberOfSamples = (maxX - minX + 1) * (maxY - minY + 1);
-    mean = mean / (double)numberOfSamples;
-
-    // Calculem la desviació estandard
-    double deviation = 0.0;
-    for (int i = minX; i <= maxX; ++i)
-    {
-        for (int j = minY; j <= maxY; ++j)
-        {
-            value = this->getVoxelValue(VoxelIndex(i, j, z));
-            deviation += qPow(value - mean, 2);
-        }
-    }
-    deviation = qSqrt(deviation / (double)numberOfSamples);
-    return deviation;
+    return roiData.getStandardDeviation();
 }
 
 int MagicROITool::getMaskVectorIndex(int x, int y) const
 {
-    return y * (m_maxX + 1) + x;
+    return (y - m_minY) * (m_maxX - m_minX + 1) + x - m_minX;
 }
 
 bool MagicROITool::getMaskValue(int x, int y) const
