@@ -487,9 +487,9 @@ QString Volume::getPTPixelUnits(const Image *image)
     return m_PTPixelUnits;
 }
 
-ImagePlane* Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane, bool vtkReconstructionHack)
+QSharedPointer<ImagePlane> Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane, bool vtkReconstructionHack)
 {
-    ImagePlane *imagePlane = 0;
+    QSharedPointer<ImagePlane> imagePlane;
     int *dimensions = getDimensions();
     double *spacing = getSpacing();
     const double *origin = getOrigin();
@@ -501,7 +501,7 @@ ImagePlane* Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane,
             Image *image = getImage(sliceNumber);
             if (image)
             {
-                imagePlane = new ImagePlane();
+                imagePlane.reset(new ImagePlane());
                 imagePlane->fillFromImage(image);
             }
         }
@@ -529,7 +529,7 @@ ImagePlane* Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane,
                     sagittalColumnVector.setZ(sagittalColumnArray[2]);
                 }
 
-                imagePlane = new ImagePlane();
+                imagePlane.reset(new ImagePlane());
                 imagePlane->setImageOrientation(ImageOrientation(sagittalRowVector, sagittalColumnVector));
                 imagePlane->setSpacing(PixelSpacing2D(spacing[1], spacing[2]));
                 imagePlane->setThickness(spacing[0]);
@@ -566,7 +566,7 @@ ImagePlane* Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane,
                     coronalColumnVector.setZ(coronalColumnArray[2]);
                 }
 
-                imagePlane = new ImagePlane();
+                imagePlane.reset(new ImagePlane());
                 imagePlane->setImageOrientation(ImageOrientation(coronalRowVector, coronalColumnVector));
                 imagePlane->setSpacing(PixelSpacing2D(spacing[0], spacing[2]));
                 imagePlane->setThickness(spacing[1]);

@@ -135,7 +135,7 @@ public:
     /// per casos en que el pla "real" no és el que volem i necessitem una petita modificació
     /// ATENCIÓ: Només es donarà aquest paràmetre (amb valor true) en casos que realment se sàpiga el que s'està fent!
     /// @return El pla imatge actual
-    ImagePlane* getCurrentImagePlane(bool vtkReconstructionHack = false);
+    QSharedPointer<ImagePlane> getCurrentImagePlane(bool vtkReconstructionHack = false);
 
     /// Returns the laterality corresponding to the current displayed image.
     /// If image is not reconstructed, image laterality is returned, or series laterality if not present

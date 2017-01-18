@@ -1012,7 +1012,7 @@ void Q2DViewer::updateSecondaryVolumesSlices()
     for (int i = 1; i < getNumberOfInputs(); i++)
     {
         sliceLocator.setVolume(getDisplayUnit(i)->getVolume());
-        int nearestSlice = sliceLocator.getNearestSlice(getCurrentImagePlane());
+        int nearestSlice = sliceLocator.getNearestSlice(getCurrentImagePlane().data());
 
         if (nearestSlice >= 0)
         {
@@ -1112,11 +1112,11 @@ Image* Q2DViewer::getCurrentDisplayedImageOnInput(int i) const
     return getDisplayUnit(i)->getCurrentDisplayedImage();
 }
 
-ImagePlane* Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
+QSharedPointer<ImagePlane> Q2DViewer::getCurrentImagePlane(bool vtkReconstructionHack)
 {
     if (!hasInput())
     {
-        return 0;
+        return QSharedPointer<ImagePlane>();
     }
     
     return getMainInput()->getImagePlane(getCurrentSlice(), getCurrentViewPlane(), vtkReconstructionHack);

@@ -132,7 +132,7 @@ void ReferenceLinesTool::updateProjectionLines()
         // Primer cal que comparteixin el mateix FrameOfReference
         if (m_myFrameOfReferenceUID == m_myData->getFrameOfReferenceUID() && !m_myFrameOfReferenceUID.isEmpty())
         {
-            QList<ImagePlane*> planesToProject = m_myData->getPlanesToProject();
+            const auto &planesToProject = m_myData->getPlanesToProject();
             // Primer comprovar si tenim el nombre adequat de linies creades, donat el nombre de plans a projectar
             checkAvailableLines();
             if (planesToProject.count() == 0)
@@ -142,12 +142,11 @@ void ReferenceLinesTool::updateProjectionLines()
             else
             {
                 int drawerLineOffset = 0;
-                foreach (ImagePlane *referencePlane, planesToProject)
+                foreach (const QSharedPointer<ImagePlane> &referencePlane, planesToProject)
                 {
                     // Aquí ja ho deixem en mans de la projecció
-                    ImagePlane *localizerPlane = m_2DViewer->getCurrentImagePlane();
-                    projectIntersection(referencePlane, localizerPlane, drawerLineOffset);
-                    delete localizerPlane;
+                    QSharedPointer<ImagePlane> localizerPlane = m_2DViewer->getCurrentImagePlane();
+                    projectIntersection(referencePlane.data(), localizerPlane.data(), drawerLineOffset);
                     drawerLineOffset += m_showPlaneThickness ? 2 : 1;
                 }
             }
@@ -311,7 +310,7 @@ void ReferenceLinesTool::updateReferenceImagePlanesToProject()
     {
         case SingleImage:
             {
-                ImagePlane *plane = m_2DViewer->getCurrentImagePlane();
+                QSharedPointer<ImagePlane> plane = m_2DViewer->getCurrentImagePlane();
                 if (m_2DViewer->isThickSlabActive())
                 {
                     plane->setThickness(m_2DViewer->getSlabThickness());

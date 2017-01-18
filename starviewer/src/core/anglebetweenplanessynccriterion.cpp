@@ -43,8 +43,8 @@ bool AngleBetweenPlanesSyncCriterion::criterionIsMet(Q2DViewer *viewer1, Q2DView
     }
     else
     {
-        ImagePlane *imagePlane1 = viewer1->getCurrentImagePlane();
-        ImagePlane *imagePlane2 = viewer2->getCurrentImagePlane();
+        QSharedPointer<ImagePlane> imagePlane1 = viewer1->getCurrentImagePlane();
+        QSharedPointer<ImagePlane> imagePlane2 = viewer2->getCurrentImagePlane();
 
         if (!imagePlane1 || !imagePlane2)
         {

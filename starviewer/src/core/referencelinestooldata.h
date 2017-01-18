@@ -36,7 +36,7 @@ public:
 
     /// Retorna els plans a projectar
     /// @return
-    QList<ImagePlane*> getPlanesToProject() const;
+    const QList<QSharedPointer<ImagePlane>>& getPlanesToProject() const;
 
 public slots:
     /// Li assignem el frameOfReference del pla de referencia
@@ -47,15 +47,15 @@ public slots:
 
     /// Assigna els plans de la serie de referencia
     /// @param imagePlane
-    void setPlanesToProject(QList<ImagePlane*> planes);
-    void setPlanesToProject(ImagePlane *plane);
+    void setPlanesToProject(QList<QSharedPointer<ImagePlane>> planes);
+    void setPlanesToProject(QSharedPointer<ImagePlane> plane);
 
 private:
     /// El frame of reference UID del pla de referència
     QString m_frameOfReferenceUID;
 
     /// Llista de plans a projectar
-    QList<ImagePlane*> m_planesToProject;
+    QList<QSharedPointer<ImagePlane>> m_planesToProject;
 };
 
 }

@@ -55,7 +55,7 @@ int SliceLocator::getNearestSlice(double point[3])
     
     for (int i = 0; i <= m_volume->getMaximumSlice(m_volumePlane); ++i)
     {
-        ImagePlane *currentPlane = m_volume->getImagePlane(i, m_volumePlane);
+        QSharedPointer<ImagePlane> currentPlane = m_volume->getImagePlane(i, m_volumePlane);
         if (currentPlane)
         {
             double currentDistance = currentPlane->getDistanceToPoint(point);
@@ -64,8 +64,6 @@ int SliceLocator::getNearestSlice(double point[3])
                 nearestSliceDistance = currentDistance;
                 nearestSlice = i;
             }
-
-            delete currentPlane;
         }
     }
 

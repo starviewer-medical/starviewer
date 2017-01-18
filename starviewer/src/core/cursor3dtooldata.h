@@ -17,6 +17,8 @@
 
 #include "tooldata.h"
 
+#include <QSharedPointer>
+
 namespace udg {
 
 class ImagePlane;
@@ -37,7 +39,7 @@ public:
     QString getInstanceUID() const;
 
     /// Retorna el pla d'imatge
-    ImagePlane* getImagePlane() const;
+    QSharedPointer<ImagePlane> getImagePlane() const;
 
     /// Retorna el punt origen
     double* getOriginPointPosition() const;
@@ -64,7 +66,7 @@ public slots:
     /// Aquest pla pot canviar cada cop que es canvia de llesca en el viewer
     /// Quan canvïi aquest valor, s'emetrà el senyal changed()
     /// @param imagePlane
-    void setImagePlane(ImagePlane *imagePlane);
+    void setImagePlane(QSharedPointer<ImagePlane> imagePlane);
 
     /// Assigna una posició al punt origen
     /// Quan canvïi aquest valor, s'emetrà el senyal changed()
@@ -79,7 +81,7 @@ private:
     QString m_instanceUID;
 
     /// Pla d'imatge del pla de referència
-    ImagePlane* m_referenceImagePlane;
+    QSharedPointer<ImagePlane> m_referenceImagePlane;
 
     /// Punt a on es troba el cursor 3D
     double* m_originPointPosition;

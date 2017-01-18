@@ -15,6 +15,8 @@
 #include "referencelinestooldata.h"
 #include "imageplane.h"
 
+#include <QSharedPointer>
+
 namespace udg {
 
 ReferenceLinesToolData::ReferenceLinesToolData(QObject *parent)
@@ -24,10 +26,6 @@ ReferenceLinesToolData::ReferenceLinesToolData(QObject *parent)
 
 ReferenceLinesToolData::~ReferenceLinesToolData()
 {
-    foreach (ImagePlane *plane, m_planesToProject)
-    {
-        delete plane;
-    }
 }
 
 QString ReferenceLinesToolData::getFrameOfReferenceUID() const
@@ -35,7 +33,7 @@ QString ReferenceLinesToolData::getFrameOfReferenceUID() const
     return m_frameOfReferenceUID;
 }
 
-QList<ImagePlane*> ReferenceLinesToolData::getPlanesToProject() const
+const QList<QSharedPointer<ImagePlane>>& ReferenceLinesToolData::getPlanesToProject() const
 {
     return m_planesToProject;
 }
@@ -45,27 +43,18 @@ void ReferenceLinesToolData::setFrameOfReferenceUID(const QString &frameOfRefere
     m_frameOfReferenceUID = frameOfReference;
 }
 
-void ReferenceLinesToolData::setPlanesToProject(QList<ImagePlane*> planes)
+void ReferenceLinesToolData::setPlanesToProject(QList<QSharedPointer<ImagePlane>> planes)
 {
-    foreach (ImagePlane *plane, m_planesToProject)
-    {
-        delete plane;
-    }
-    m_planesToProject.clear();
-    m_planesToProject = planes;
+    m_planesToProject = std::move(planes);
     emit changed();
 }
 
-void ReferenceLinesToolData::setPlanesToProject(ImagePlane *plane)
+void ReferenceLinesToolData::setPlanesToProject(QSharedPointer<ImagePlane> plane)
 {
-    foreach (ImagePlane *plane, m_planesToProject)
-    {
-        delete plane;
-    }
     m_planesToProject.clear();
     if (plane)
     {
-        m_planesToProject << plane;
+        m_planesToProject << std::move(plane);
     }
     emit changed();
 }

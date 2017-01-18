@@ -18,7 +18,7 @@
 namespace udg {
 
 Cursor3DToolData::Cursor3DToolData(QObject *parent)
- : ToolData(parent), m_referenceImagePlane(0)
+ : ToolData(parent)
 {
     m_originPointPosition = new double[3];
 }
@@ -33,7 +33,7 @@ QString Cursor3DToolData::getFrameOfReferenceUID() const
     return m_frameOfReferenceUID;
 }
 
-ImagePlane* Cursor3DToolData::getImagePlane() const
+QSharedPointer<ImagePlane> Cursor3DToolData::getImagePlane() const
 {
     return m_referenceImagePlane;
 }
@@ -48,9 +48,9 @@ void Cursor3DToolData::setFrameOfReferenceUID(const QString &frameOfReference)
     m_frameOfReferenceUID = frameOfReference;
 }
 
-void Cursor3DToolData::setImagePlane(ImagePlane *imagePlane)
+void Cursor3DToolData::setImagePlane(QSharedPointer<ImagePlane> imagePlane)
 {
-    m_referenceImagePlane = imagePlane;
+    m_referenceImagePlane = std::move(imagePlane);
     emit changed();
 }
 

@@ -145,7 +145,7 @@ public:
     /// @param vtkReconstructionHack HACK enables a hack for cases which the "real" plane is not the really wanted
     /// applying a correction to satisfy some restrictions with vtk. This should only be used on very concrete cases. Default value should be used.
     /// @return The corresponding image plane
-    ImagePlane* getImagePlane(int sliceNumber, const OrthogonalPlane &plane, bool vtkReconstructionHack = false);
+    QSharedPointer<ImagePlane> getImagePlane(int sliceNumber, const OrthogonalPlane &plane, bool vtkReconstructionHack = false);
     
     /// Returns the pixel units for this volume. If the units cannot be specified, an empty string will be returned
     QString getPixelUnits();
