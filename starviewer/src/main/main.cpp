@@ -15,6 +15,8 @@
 #include "easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
 
+#include "profiling.h"
+
 #include "qapplicationmainwindow.h"
 
 #include "statswatcher.h"
@@ -48,6 +50,7 @@ INITIALIZE_EASYLOGGINGPP
 #include <QLocale>
 #include <QTextCodec>
 #include <QDir>
+#include <QFile>
 #include <QMessageBox>
 #include <QLibraryInfo>
 #include <qtsingleapplication.h>
@@ -58,6 +61,31 @@ INITIALIZE_EASYLOGGINGPP
 #include <vtkOverrideInformationCollection.h>
 
 typedef udg::SingletonPointer<udg::StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
+
+namespace profileGlobals 
+{
+    QFile* file;
+    udg::profiling::Profiler* profiler;
+    udg::profiling::TextPrinter* printer;
+};
+
+void initializeProfiling()
+{
+    profileGlobals::file = new QFile("profile.log");
+    profileGlobals::file->open(QIODevice::OpenModeFlag::WriteOnly | QIODevice::OpenModeFlag::Text);
+    profileGlobals::printer = new udg::profiling::TextPrinter(profileGlobals::file);
+    profileGlobals::profiler = new udg::profiling::Profiler(profileGlobals::printer);
+    udg::profiling::Profilers::add(profileGlobals::profiler); // The profiler name is default (see signature)
+};
+
+void uninitializeProfiling()
+{
+    udg::profiling::Profilers::remove(profileGlobals::profiler);
+    delete profileGlobals::profiler;
+    delete profileGlobals::printer;
+    profileGlobals::file->close();
+    delete profileGlobals::file;
+};
 
 void initializeTranslations(QApplication &app)
 {
@@ -150,6 +178,7 @@ int main(int argc, char *argv[])
     vtkOutputWindow::SetInstance(loggingOutputWindow);
     loggingOutputWindow->Delete();
 
+    initializeProfiling();
 
     QPixmap splashPixmap;
     #ifdef STARVIEWER_LITE
@@ -280,6 +309,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    uninitializeProfiling();
 
     // Marquem el final de l'aplicació al log
     INFO_LOG(QString("%1 Version %2 BuildID %3, returnValue %4").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString)
