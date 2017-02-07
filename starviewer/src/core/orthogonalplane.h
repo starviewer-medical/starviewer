@@ -23,8 +23,8 @@ namespace udg {
 class OrthogonalPlane {
 
 public:
-    /// Definition of the 3 orthogonal planes.
-    enum Plane { XYPlane = 2, YZPlane = 0, XZPlane = 1 };
+    /// Definition of the 3 orthogonal planes and the exceptional case None.
+    enum Plane { XYPlane = 2, YZPlane = 0, XZPlane = 1, None = -1 };
 
     OrthogonalPlane(Plane plane = XYPlane);
 

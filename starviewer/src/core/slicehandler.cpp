@@ -22,15 +22,47 @@
 
 namespace udg {
 
-SliceHandler::SliceHandler(QObject *parent)
- : QObject(parent), m_volume(0)
+namespace {
+
+// Returns the normal that corresponds to the given orthogonal plane.
+Vector3 getNormalFromOrthogonalPlane(const OrthogonalPlane &orthogonalPlane)
 {
-    m_currentSlice = 0;
-    m_minSliceValue = 0;
-    m_numberOfSlices = 1;
-    m_currentPhase = 0;
-    m_numberOfPhases = 1;
-    m_slabThickness = 0.0;
+    switch (orthogonalPlane)
+    {
+        case OrthogonalPlane::XYPlane: return Vector3(0, 0, 1);
+        case OrthogonalPlane::XZPlane: return Vector3(0, 1, 0);
+        case OrthogonalPlane::YZPlane: return Vector3(1, 0, 0);
+        case OrthogonalPlane::None: throw std::invalid_argument("Normal not defined for OrthogonalPlane::None");
+    }
+}
+
+// Returns the orthogonal plane that corresponds to the given plane.
+OrthogonalPlane getOrthogonalPlaneFromPlane(const Plane &plane)
+{
+    if (plane.getNormal() == Vector3(0, 0, 1))
+    {
+        return OrthogonalPlane::XYPlane;
+    }
+    else if (plane.getNormal() == Vector3(0, 1, 0))
+    {
+        return OrthogonalPlane::XZPlane;
+    }
+    else if (plane.getNormal() == Vector3(1, 0, 0))
+    {
+        return OrthogonalPlane::YZPlane;
+    }
+    else
+    {
+        return OrthogonalPlane::None;
+    }
+}
+
+}
+
+SliceHandler::SliceHandler()
+    : m_volume(nullptr), m_referenceViewPlane(Vector3(0, 0 ,1), Vector3(0, 0, 0)), m_position(0), m_minPosition(0), m_maxPosition(0), m_stepDistance(1),
+      m_phase(0), m_numberOfPhases(1), m_slabThickness(0), m_snapToSlice(true)
+{
 }
 
 SliceHandler::~SliceHandler()
@@ -41,78 +73,161 @@ void SliceHandler::setVolume(Volume *volume)
 {
     m_volume = volume;
 
-    this->setViewPlane(OrthogonalPlane::XYPlane);
+    this->setOrthogonalViewPlane(OrthogonalPlane::XYPlane);
+
+    m_numberOfPhases = m_volume ? m_volume->getNumberOfPhases() : 1;
+
+    setSlabThickness(0.0);
+    setSlice(0);
+    setPhase(0);
+}
+
+const Plane& SliceHandler::getReferenceViewPlane() const
+{
+    return m_referenceViewPlane;
+}
+
+void SliceHandler::setReferenceViewPlane(Plane viewPlane)
+{
+    m_referenceViewPlane = std::move(viewPlane);
+    m_orthogonalViewPlane = getOrthogonalPlaneFromPlane(m_referenceViewPlane);
 
     if (m_volume)
     {
-        m_numberOfPhases = m_volume->getNumberOfPhases();
-    }
+        auto corners = m_volume->getCorners();
+        m_minPosition = std::numeric_limits<double>::infinity();
+        m_maxPosition = -std::numeric_limits<double>::infinity();
 
-    reset();
+        for (const Vector3 &corner : corners)
+        {
+            double distance = m_referenceViewPlane.signedDistanceToPoint(corner);
+            m_minPosition = std::min(distance, m_minPosition);
+            m_maxPosition = std::max(distance, m_maxPosition);
+        }
+    }
 }
 
-void SliceHandler::setViewPlane(const OrthogonalPlane &viewPlane)
+const OrthogonalPlane& SliceHandler::getOrthogonalViewPlane() const
 {
-    m_viewPlane = viewPlane;
+    return m_orthogonalViewPlane;
+}
 
+void SliceHandler::setOrthogonalViewPlane(const OrthogonalPlane &viewPlane)
+{
+    Vector3 normal = getNormalFromOrthogonalPlane(viewPlane);
+    Vector3 origin;
     if (m_volume)
     {
-        // Update the slice range for the new view
-        int maxSliceValue;
-        m_volume->getSliceRange(m_minSliceValue, maxSliceValue, viewPlane);
-        m_numberOfSlices = maxSliceValue - m_minSliceValue + 1;
+        origin = m_volume->getOrigin();
+        setStepDistance(m_volume->getSpacing()[viewPlane.getZIndex()]);
+    }
+    setReferenceViewPlane(Plane(normal, origin));
+}
+
+double SliceHandler::getPosition() const
+{
+    return m_position;
+}
+
+void SliceHandler::setPosition(double position)
+{
+    m_position = qBound(getMinimumPosition(), position, getMaximumPosition());
+
+    if (m_snapToSlice)
+    {
+        setSlice(getSlice());
     }
 }
 
-const OrthogonalPlane& SliceHandler::getViewPlane() const
+double SliceHandler::getMinimumPosition() const
 {
-    return m_viewPlane;
+    return m_minPosition + m_slabThickness / 2;
+}
+
+double SliceHandler::getMaximumPosition() const
+{
+    return m_maxPosition - m_slabThickness / 2;
+}
+
+double SliceHandler::getDefaultStepDistance() const
+{
+    if (m_volume)
+    {
+        auto spacing = m_volume->getSpacing();
+
+        if (this->getOrthogonalViewPlane() == OrthogonalPlane::None)
+        {
+            // Compute a transformed z-spacing like vtkImageReslice does
+            const auto &normal = m_referenceViewPlane.getNormal();
+            return normal.x * normal.x * spacing[0] + normal.y * normal.y * spacing[1] + normal.z * normal.z * spacing[2];
+        }
+        else
+        {
+            return spacing[this->getOrthogonalViewPlane().getZIndex()];
+        }
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+double SliceHandler::getStepDistance() const
+{
+    return m_stepDistance;
+}
+
+void SliceHandler::setStepDistance(double stepDistance)
+{
+    m_stepDistance = stepDistance;
+}
+
+int SliceHandler::getSlice() const
+{
+    return qRound(m_position / m_stepDistance);
 }
 
 void SliceHandler::setSlice(int slice)
 {
-    if (m_currentSlice != slice)
-    {
-        m_currentSlice = MathTools::getBoundedValue(slice, getMinimumSlice(), getMaximumSlice(), isLoopEnabledForSlices());
-    }
-}
-
-int SliceHandler::getCurrentSlice() const
-{
-    return m_currentSlice;
+    slice = MathTools::getBoundedValue(slice, getMinimumSlice(), getMaximumSlice(), isLoopEnabledForSlices());
+    m_position = slice * m_stepDistance;
 }
 
 int SliceHandler::getMinimumSlice() const
 {
-    return m_minSliceValue + getNumberOfSlicesInSlabThickness() / 2;
+    return qRound(getMinimumPosition() / m_stepDistance);
 }
 
 int SliceHandler::getMaximumSlice() const
 {
-    return m_minSliceValue + m_numberOfSlices - 1 - getNumberOfSlicesInSlabThickness() / 2;
+    return qRound(getMaximumPosition() / m_stepDistance);
 }
 
 int SliceHandler::getNumberOfSlices() const
 {
-    return m_numberOfSlices;
+    int minSliceValue = qRound(m_minPosition / m_stepDistance);
+    int maxSliceValue = qRound(m_maxPosition / m_stepDistance);
+    return maxSliceValue - minSliceValue + 1;
+}
+
+int SliceHandler::getPhase() const
+{
+    return m_phase;
 }
 
 void SliceHandler::setPhase(int phase)
 {
-    if (m_currentPhase != phase)
-    {
-        m_currentPhase = MathTools::getBoundedValue(phase, 0, m_numberOfPhases - 1, isLoopEnabledForPhases());
-    }
-}
-
-int SliceHandler::getCurrentPhase() const
-{
-    return m_currentPhase;
+    m_phase = MathTools::getBoundedValue(phase, 0, m_numberOfPhases - 1, isLoopEnabledForPhases());
 }
 
 int SliceHandler::getNumberOfPhases() const
 {
     return m_numberOfPhases;
+}
+
+double SliceHandler::getSlabThickness() const
+{
+    return m_slabThickness;
 }
 
 void SliceHandler::setSlabThickness(double thickness)
@@ -134,38 +249,31 @@ void SliceHandler::setSlabThickness(double thickness)
     m_slabThickness = thickness;
 
     // Keep the slab in range
-    m_currentSlice = qBound(getMinimumSlice(), m_currentSlice, getMaximumSlice());
-}
-
-double SliceHandler::getSlabThickness() const
-{
-    return m_slabThickness;
+    if (m_snapToSlice)
+    {
+        int slice = qBound(getMinimumSlice(), getSlice(), getMaximumSlice());
+        setSlice(slice);
+    }
+    else
+    {
+        double position = qBound(getMinimumPosition(), getPosition(), getMaximumPosition());
+        setPosition(position);
+    }
 }
 
 double SliceHandler::getMaximumSlabThickness() const
 {
-    if (m_volume)
-    {
-        int zIndex = this->getViewPlane().getZIndex();
-        return this->getNumberOfSlices() * m_volume->getSpacing()[zIndex];
-    }
-    else
-    {
-        return 0.0;
-    }
+    return m_maxPosition - m_minPosition;
 }
 
-int SliceHandler::getNumberOfSlicesInSlabThickness() const
+bool SliceHandler::getSnapToSlice() const
 {
-    if (m_volume)
-    {
-        int zIndex = this->getViewPlane().getZIndex();
-        return qRound(m_slabThickness / m_volume->getSpacing()[zIndex]);
-    }
-    else
-    {
-        return 0;
-    }
+    return m_snapToSlice;
+}
+
+void SliceHandler::setSnapToSlice(bool snapToSlice)
+{
+    m_snapToSlice = snapToSlice;
 }
 
 double SliceHandler::getSliceThickness() const
@@ -180,31 +288,48 @@ double SliceHandler::getSliceThickness() const
 
         if (m_volume)
         {
-            switch (this->getViewPlane())
+            Image *image = getImage();
+
+            if (image)
             {
-                case OrthogonalPlane::XYPlane:
-                    {
-                        Image *image = m_volume->getImage(this->getCurrentSlice(), this->getCurrentPhase());
-
-                        if (image)
-                        {
-                            thickness = image->getSliceThickness();
-                        }
-                    }
-                    break;
-
-                case OrthogonalPlane::YZPlane:
-                    thickness = m_volume->getSpacing()[0];
-                    break;
-
-                case OrthogonalPlane::XZPlane:
-                    thickness = m_volume->getSpacing()[1];
-                    break;
+                thickness = image->getSliceThickness();
+            }
+            else
+            {
+                // Compute a transformed thickness like vtkImageReslice does
+                const auto &normal = m_referenceViewPlane.getNormal();
+                std::array<double, 3> voxelSize;
+                m_volume->getSpacing(voxelSize.data());
+                if ((image = m_volume->getImage(0, getPhase())))
+                {
+                    voxelSize[2] = image->getSliceThickness();
+                }
+                thickness = normal.x * normal.x * voxelSize[0] + normal.y * normal.y * voxelSize[1] + normal.z * normal.z * voxelSize[2];
             }
         }
 
         return thickness;
     }
+}
+
+Image* SliceHandler::getImage() const
+{
+    constexpr double Tolerance = 1e-6;
+
+    Image *image = nullptr;
+
+    if (m_volume && this->getOrthogonalViewPlane() == OrthogonalPlane::XYPlane)
+    {
+        int nearestSlice = qRound(m_position / getDefaultStepDistance());
+        double nearestImagePosition = nearestSlice * getDefaultStepDistance();
+
+        if (std::abs(m_position - nearestImagePosition) < Tolerance)
+        {
+            image = m_volume->getImage(nearestSlice, getPhase());
+        }
+    }
+
+    return image;
 }
 
 bool SliceHandler::isLoopEnabledForSlices() const
@@ -217,13 +342,6 @@ bool SliceHandler::isLoopEnabledForPhases() const
 {
     Settings settings;
     return settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
-}
-
-void SliceHandler::reset()
-{
-    setSlabThickness(0.0);
-    setSlice(0);
-    setPhase(0);
 }
 
 bool SliceHandler::isValidSlabThickness(double thickness)

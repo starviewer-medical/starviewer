@@ -20,6 +20,8 @@
 using namespace udg;
 using namespace testing;
 
+using Corners = decltype(Volume().getCorners());
+
 class test_Volume : public QObject {
 Q_OBJECT
 
@@ -66,6 +68,9 @@ private slots:
 
     void getDimensions_ShouldReturnExpectedDimensions_data();
     void getDimensions_ShouldReturnExpectedDimensions();
+
+    void getCorners_ShouldReturnExpectedValues_data();
+    void getCorners_ShouldReturnExpectedValues();
 
     void getSpacing_ShouldReturnExpectedSpacing_data();
     void getSpacing_ShouldReturnExpectedSpacing();
@@ -114,6 +119,7 @@ Q_DECLARE_METATYPE(vtkSmartPointer<vtkImageData>)
 Q_DECLARE_METATYPE(VolumePixelData*)
 Q_DECLARE_METATYPE(Image*)
 Q_DECLARE_METATYPE(OrthogonalPlane)
+Q_DECLARE_METATYPE(Corners)
 
 void test_Volume::constructor_ShouldCreateMinimalVolume()
 {
@@ -827,6 +833,57 @@ void test_Volume::getDimensions_ShouldReturnExpectedDimensions()
     QCOMPARE(volume->getDimensions()[0], xValue);
     QCOMPARE(volume->getDimensions()[1], yValue);
     QCOMPARE(volume->getDimensions()[2], zValue);
+
+    VolumeTestHelper::cleanUp(volume);
+}
+
+void test_Volume::getCorners_ShouldReturnExpectedValues_data()
+{
+    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<Corners>("expectedCorners");
+
+    double origin[3] = { 12, 8, 4 };
+    double spacing[3] = { 0.3, 0.8, 1.5 };
+    int extent[6] = { 10, 20, -9, 2, 0, 38 };
+    double xMin = 15, xMax = 18, yMin = 0.8, yMax = 9.6, zMin = 4, zMax = 61;
+    QTest::newRow("3d volume") << VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent)
+                               << Corners{{Vector3(xMin, yMin, zMin), Vector3(xMax, yMin, zMin), Vector3(xMin, yMax, zMin), Vector3(xMax, yMax, zMin),
+                                           Vector3(xMin, yMin, zMax), Vector3(xMax, yMin, zMax), Vector3(xMin, yMax, zMax), Vector3(xMax, yMax, zMax)}};
+
+    zMax = 22;
+    QTest::newRow("3d volume with phases") << VolumeTestHelper::createVolumeWithParameters(39, 3, 13, origin, spacing, extent)
+                                           << Corners{{Vector3(xMin, yMin, zMin), Vector3(xMax, yMin, zMin),
+                                                       Vector3(xMin, yMax, zMin), Vector3(xMax, yMax, zMin),
+                                                       Vector3(xMin, yMin, zMax), Vector3(xMax, yMin, zMax),
+                                                       Vector3(xMin, yMax, zMax), Vector3(xMax, yMax, zMax)}};
+
+    extent[5] = 0;
+    zMax = 4;
+    QTest::newRow("single slice volume") << VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent)
+                                         << Corners{{Vector3(xMin, yMin, zMin), Vector3(xMax, yMin, zMin),
+                                                     Vector3(xMin, yMax, zMin), Vector3(xMax, yMax, zMin),
+                                                     Vector3(xMin, yMin, zMax), Vector3(xMax, yMin, zMax),
+                                                     Vector3(xMin, yMax, zMax), Vector3(xMax, yMax, zMax)}};
+
+    extent[5] = 2;
+    QTest::newRow("single slice volume with phases") << VolumeTestHelper::createVolumeWithParameters(3, 3, 1, origin, spacing, extent)
+                                                     << Corners{{Vector3(xMin, yMin, zMin), Vector3(xMax, yMin, zMin),
+                                                                 Vector3(xMin, yMax, zMin), Vector3(xMax, yMax, zMin),
+                                                                 Vector3(xMin, yMin, zMax), Vector3(xMax, yMin, zMax),
+                                                                 Vector3(xMin, yMax, zMax), Vector3(xMax, yMax, zMax)}};
+}
+
+void test_Volume::getCorners_ShouldReturnExpectedValues()
+{
+    QFETCH(Volume*, volume);
+    QFETCH(Corners, expectedCorners);
+
+    Corners corners = volume->getCorners();
+
+    for (int i = 0; i < 8; i++)
+    {
+        QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(corners[i], expectedCorners[i]));
+    }
 
     VolumeTestHelper::cleanUp(volume);
 }

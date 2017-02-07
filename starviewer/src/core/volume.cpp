@@ -131,6 +131,21 @@ void Volume::getDimensions(int dims[3])
     getVtkData()->GetDimensions(dims);
 }
 
+std::array<Vector3, 8> Volume::getCorners()
+{
+    double *bounds = getVtkData()->GetBounds();
+    double xMin = bounds[0], xMax = bounds[1], yMin = bounds[2], yMax = bounds[3], zMin = bounds[4], zMax = bounds[5];
+
+    if (getNumberOfPhases() > 1)    // correction for multi-phase volumes
+    {
+        int extent5 = getExtent()[4] + getDimensions()[2] / getNumberOfPhases() - 1;
+        zMax = getOrigin()[2] + extent5 * getSpacing()[2];
+    }
+
+    return {{Vector3(xMin, yMin, zMin), Vector3(xMax, yMin, zMin), Vector3(xMin, yMax, zMin), Vector3(xMax, yMax, zMin),
+             Vector3(xMin, yMin, zMax), Vector3(xMax, yMin, zMax), Vector3(xMin, yMax, zMax), Vector3(xMax, yMax, zMax)}};
+}
+
 void Volume::getScalarRange(double range[2])
 {
     getVtkData()->GetScalarRange(range);

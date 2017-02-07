@@ -13,7 +13,7 @@
  *************************************************************************************/
 
 #include "orthogonalplane.h"
-#include <QString>
+
 #include "logging.h"
 
 namespace udg {
@@ -43,10 +43,11 @@ int OrthogonalPlane::getXIndex() const
         case XZPlane:
             return 0;
 
+        case None:
+            throw std::domain_error("x index not defined for non-orthogonal plane");
+
         default:
-            DEBUG_LOG(QString("Unexpected plane: %1").arg(m_plane));
-            ERROR_LOG(QString("Unexpected plane: %1").arg(m_plane));
-            return -1;
+            throw std::domain_error(qUtf8Printable(QString("Unexpected plane: %1").arg(m_plane)));
     }
 }
 
@@ -63,10 +64,11 @@ int OrthogonalPlane::getYIndex() const
         case XZPlane:
             return 2;
 
+        case None:
+            throw std::domain_error("y index not defined for non-orthogonal plane");
+
         default:
-            DEBUG_LOG(QString("Unexpected plane: %1").arg(m_plane));
-            ERROR_LOG(QString("Unexpected plane: %1").arg(m_plane));
-            return -1;
+            throw std::domain_error(qUtf8Printable(QString("Unexpected plane: %1").arg(m_plane)));
     }
 }
 
@@ -83,10 +85,11 @@ int OrthogonalPlane::getZIndex() const
         case XZPlane:
             return 1;
 
+        case None:
+            throw std::domain_error("z index not defined for non-orthogonal plane");
+
         default:
-            DEBUG_LOG(QString("Unexpected plane: %1").arg(m_plane));
-            ERROR_LOG(QString("Unexpected plane: %1").arg(m_plane));
-            return -1;
+            throw std::domain_error(qUtf8Printable(QString("Unexpected plane: %1").arg(m_plane)));
     }
 }
 

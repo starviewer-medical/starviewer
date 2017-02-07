@@ -127,12 +127,12 @@ vtkPropPicker* VolumeDisplayUnit::getImagePointPicker()
 
 const OrthogonalPlane& VolumeDisplayUnit::getViewPlane() const
 {
-    return m_sliceHandler->getViewPlane();
+    return m_sliceHandler->getOrthogonalViewPlane();
 }
 
 void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
 {
-    m_sliceHandler->setViewPlane(viewPlane);
+    m_sliceHandler->setOrthogonalViewPlane(viewPlane);
 }
 
 double VolumeDisplayUnit::getCurrentSpacingBetweenSlices() const
@@ -211,7 +211,7 @@ Image* VolumeDisplayUnit::getCurrentDisplayedImage() const
 {
     if (m_volume && getViewPlane() == OrthogonalPlane::XYPlane)
     {
-        return m_volume->getImage(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
+        return m_volume->getImage(m_sliceHandler->getSlice(), m_sliceHandler->getPhase());
     }
     else
     {
@@ -240,7 +240,7 @@ void VolumeDisplayUnit::updateImageSlice(vtkCamera *camera)
 
 int VolumeDisplayUnit::getSlice() const
 {
-    return m_sliceHandler->getCurrentSlice();
+    return m_sliceHandler->getSlice();
 }
 
 void VolumeDisplayUnit::setSlice(int slice)
@@ -265,7 +265,7 @@ int VolumeDisplayUnit::getNumberOfSlices() const
 
 int VolumeDisplayUnit::getPhase() const
 {
-    return m_sliceHandler->getCurrentPhase();
+    return m_sliceHandler->getPhase();
 }
 
 void VolumeDisplayUnit::setPhase(int phase)
@@ -328,7 +328,7 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
 {
     if (getViewPlane() == OrthogonalPlane::XYPlane)
     {
-        Image *image = getVolume()->getImage(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
+        Image *image = getVolume()->getImage(m_sliceHandler->getSlice(), m_sliceHandler->getPhase());
         if (image)
         {
             for (int i = 0; i < image->getNumberOfVoiLuts(); ++i)

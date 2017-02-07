@@ -15,80 +15,143 @@
 #ifndef UDGSLICEHANDLER_H
 #define UDGSLICEHANDLER_H
 
-#include <QObject>
-
 #include "orthogonalplane.h"
+#include "plane.h"
 
 namespace udg {
 
+class Image;
 class Volume;
 
 /**
-    Handles the proper computing of slices, phases, slab thickness and the related ranges
+ * @brief The SliceHandler class eases the navigation along a view plane normal with absolute positioning or slices. It supports phases and slab thickness.
  */
-class SliceHandler : public QObject {
-Q_OBJECT
-public:
-    SliceHandler(QObject *parent = 0);
-    ~SliceHandler();
+class SliceHandler {
 
+public:
+
+    SliceHandler();
+    virtual ~SliceHandler();
+
+    /// Sets the volume to work with and resets all fields to the default values for this volume
+    /// (view plane with normal (0, 0, 1) and origin at volume origin, position 0, step distance to z-spacing, no slab thickness, and first phase).
     void setVolume(Volume *volume);
 
-    void setViewPlane(const OrthogonalPlane &viewPlane);
-    const OrthogonalPlane& getViewPlane() const;
+    /// Returns the reference view plane.
+    const Plane& getReferenceViewPlane() const;
+    /// Sets the reference view plane.
+    void setReferenceViewPlane(Plane viewPlane);
 
+    /// Returns the orthogonal plane corresponding to the reference view plane.
+    const OrthogonalPlane& getOrthogonalViewPlane() const;
+    /// Sets the reference view plane to the equivalent of the given orthogonal plane.
+    void setOrthogonalViewPlane(const OrthogonalPlane &viewPlane);
+
+    /// Returns the current position.
+    double getPosition() const;
+    /// Sets the current position bounded by minimum and maximum position.
+    /// If snap to slice is on it will also adjust the position to match a slice according to the current step distance.
+    void setPosition(double position);
+
+    /// Returns the minimum allowed position taking into account volume size, the reference view plane and slab thickness.
+    double getMinimumPosition() const;
+    /// Returns the maximum allowed position taking into account volume size, the reference view plane and slab thickness.
+    double getMaximumPosition() const;
+
+    /// Returns the default step distance according to the current volume and reference view plane. The default step distance is the spacing in the normal
+    /// direction if the reference view plane is orthogonal, and a combination of the spacing in each direction otherwise.
+    double getDefaultStepDistance() const;
+
+    /// Returns the current step distance.
+    double getStepDistance() const;
+    /// Sets the current step distance.
+    void setStepDistance(double stepDistance);
+
+    /// Returns the slice (according to the step distance) closest to the current position.
+    int getSlice() const;
+    /// Sets the position to match the given slice bounded by minimum and maximum slice (according to the step distance).
+    /// If loop for slices is enabled in settings and the given slice is out of bounds, it will loop.
     void setSlice(int slice);
-    int getCurrentSlice() const;
 
-    /// Returns the minimum slice that can be set taking into account current slice thickness.
+    /// Returns the minimum allowed slice taking into account volume size, the reference view plane, step distance and slab thickness.
     int getMinimumSlice() const;
-    /// Returns the maximum slice that can be set taking into account current slice thickness.
+    /// Returns the maximum allowed slice taking into account volume size, the reference view plane, step distance and slab thickness.
     int getMaximumSlice() const;
     
-    /// Returns the total number of slices on the spatial dimension for the current view plane
+    /// Returns the number of slices taking into account volume size, the reference view plane and current step distance, but not slab thickness.
     int getNumberOfSlices() const;
     
+    /// Returns the current phase.
+    int getPhase() const;
+    /// Sets the phase bounded by the number of phases. If loop for phases is enabled in settings and the given phase is out of bounds, it will loop.
     void setPhase(int phase);
-    int getCurrentPhase() const;
 
+    /// Returns the number of phases in the current volume.
     int getNumberOfPhases() const;
     
-    void setSlabThickness(double thickness);
+    /// Returns the current slab thickness.
     double getSlabThickness() const;
+    /// Sets the slab thickness to the given value limited to the maximum slab thickness.
+    /// Adjusts position so that the entire slab is within position bounds, snapping to a slice if needed.
+    void setSlabThickness(double thickness);
 
-    /// Returns the maximum slab thickness that can be set.
+    /// Returns the maximum allowed slab thickness.
     double getMaximumSlabThickness() const;
 
-    /// Returns the number of slices that fit in the current slab thickness.
-    int getNumberOfSlicesInSlabThickness() const;
+    /// Returns true if snap to slice is enabled and false otherwise.
+    bool getSnapToSlice() const;
+    /// Enables or disables snap to slice.
+    void setSnapToSlice(bool snapToSlice);
 
-    /// Returns slice thickness of the currently displayed image.
-    /// On the acquisition plane, this depends on DICOM's slice thickness and slab thickness (if DICOM's slice thickness is not defined, the method returns 0).
-    /// On the other planes, this depends on the spacing and the slab thickness.
+    /// Returns the slice thickness of the currently displayed image. If the current position corresponds to an image in the volume, then DICOM Slice Thickness
+    /// is returned. Otherwise it's computed from a combination of the spacing in X and Y and the slice thickness of the first image.
     double getSliceThickness() const;
 
+    /// Returns the volume image corresponding to the current position, or null if there's no such image.
+    Image* getImage() const;
+
 protected:
+
+    /// Returns true if loop is enabled for slices in settings and false otherwise.
     virtual bool isLoopEnabledForSlices() const;
+    /// Returns true if loop is enabled for phases in settings and false otherwise.
     virtual bool isLoopEnabledForPhases() const;
 
-protected:
-    int m_minSliceValue;
-    int m_numberOfSlices;
-    int m_numberOfPhases;
-
 private:
-    /// Called when setting a new Volume to reset slab thickness, slice and phase.
-    void reset();
 
     /// Returns true if the given slab thickness value is valid and false otherwise.
     bool isValidSlabThickness(double thickness);
 
-private:
+protected:
+
+    /// The volume with the images and image data.
     Volume *m_volume;
-    OrthogonalPlane m_viewPlane;
+
+    /// The view plane that defines the normal and position 0.
+    Plane m_referenceViewPlane;
+    /// Orthogonal plane corresponding to the reference view plane.
+    OrthogonalPlane m_orthogonalViewPlane;
+
+    /// Signed distance to the reference plane along its normal.
+    double m_position;
+    /// Minimum position computed from the volume and the reference view plane.
+    double m_minPosition;
+    /// Maximum position computed from the volume and the reference view plane.
+    double m_maxPosition;
+
+    /// The step distance when navigating by slices. Slice s corresponds to position s * step distance.
+    double m_stepDistance;
+
+    /// Current phase.
+    int m_phase;
+    /// Number of phases in the volume.
+    int m_numberOfPhases;
+
+    /// Slab thickness.
     double m_slabThickness;
-    int m_currentSlice;
-    int m_currentPhase;
+
+    /// If true, setPosition and setSlabThickness will round the position to the nearest multiple of step distance.
+    bool m_snapToSlice;
 
 };
 

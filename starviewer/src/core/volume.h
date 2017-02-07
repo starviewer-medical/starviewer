@@ -21,6 +21,7 @@
 #include "volumepixeldata.h"
 #include "anatomicalplane.h"
 #include "orthogonalplane.h"
+#include "vector3.h"
 // Qt
 #include <QPixmap>
 #include <QVector>
@@ -88,6 +89,9 @@ public:
     /// Retorna les dimensions del volum
     int* getDimensions();
     void getDimensions(int dims[3]);
+
+    /// Returns the 8 corners of the volume.
+    std::array<Vector3, 8> getCorners();
 
     /// Ens retornar el rang de valors del volum (valor mínim i màxim).
     void getScalarRange(double range[2]);
