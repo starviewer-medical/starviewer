@@ -149,22 +149,6 @@ double VolumeDisplayUnit::getCurrentSpacingBetweenSlices() const
     }
 }
 
-double VolumeDisplayUnit::getCurrentDisplayedImageDepth() const
-{
-    if (getVolume())
-    {
-        double zSpacing = getCurrentSpacingBetweenSlices();
-        int zIndex = getViewPlane().getZIndex();
-        double zOrigin = getVolume()->getOrigin()[zIndex];
-        
-        return zOrigin + zSpacing * getSlice();
-    }
-    else
-    {
-        return 0.0;
-    }
-}
-
 SliceOrientedVolumePixelData VolumeDisplayUnit::getCurrentPixelData()
 {
     if (!m_volume)

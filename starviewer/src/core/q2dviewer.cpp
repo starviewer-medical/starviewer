@@ -1175,11 +1175,6 @@ bool Q2DViewer::getCurrentCursorImageCoordinateOnInput(double xyz[3], int i)
         inside = true;
         // Calculem el pixel trobat
         picker->GetPickPosition(xyz);
-        // Calculem la profunditat correcta. S'ha de tenir en compte que en el cas que tinguem fases
-        // vtk no n'és conscient (cada fase es desplaça en la profunditat z com si fos una imatge més)
-        // i si no fèssim aquest càlcul, estaríem donant una coordenada Z incorrecta
-        int zIndex = displayUnit->getViewPlane().getZIndex();
-        xyz[zIndex] =  displayUnit->getCurrentDisplayedImageDepth();
     }
     return inside;
 }
@@ -1741,11 +1736,6 @@ double Q2DViewer::getCurrentSpacingBetweenSlices()
 double Q2DViewer::getCurrentDisplayedImageDepth()
 {
     return computeWorldToDisplay(getCurrentFocalPoint()).z;
-}
-
-double Q2DViewer::getCurrentDisplayedImageDepthOnInput(int i) const
-{
-    return getDisplayUnit(i)->getCurrentDisplayedImageDepth();
 }
 
 vtkImageSlice* Q2DViewer::getImageProp() const

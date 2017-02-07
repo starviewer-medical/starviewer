@@ -162,9 +162,6 @@ public:
 
     /// Returns the depth (z coordinate value) of the main displayed image
     double getCurrentDisplayedImageDepth();
-    
-    /// Returns the depth (z coordinate value) of the displayed image from the specified input
-    double getCurrentDisplayedImageDepthOnInput(int i) const;
 
     /// Gets the pixel data corresponding to the current rendered image
     SliceOrientedVolumePixelData getCurrentPixelData();

@@ -81,9 +81,6 @@ public:
     /// Gets the current spacing between slices according to the current view on the set volume
     double getCurrentSpacingBetweenSlices() const;
     
-    /// Returns the depth (z coordinate value) of the displayed image
-    double getCurrentDisplayedImageDepth() const;
-    
     /// Gets the current pixel data according to the current state.
     SliceOrientedVolumePixelData getCurrentPixelData();
 
