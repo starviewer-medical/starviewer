@@ -125,28 +125,31 @@ vtkPropPicker* VolumeDisplayUnit::getImagePointPicker()
     return m_imagePointPicker;
 }
 
-const OrthogonalPlane& VolumeDisplayUnit::getViewPlane() const
+const Plane& VolumeDisplayUnit::getReferenceViewPlane() const
+{
+    return m_sliceHandler->getReferenceViewPlane();
+}
+
+void VolumeDisplayUnit::setReferenceViewPlane(Plane plane)
+{
+    m_sliceHandler->setReferenceViewPlane(std::move(plane));
+    m_sliceHandler->setStepDistance(m_sliceHandler->getDefaultStepDistance());
+    m_sliceHandler->setSlice(0);
+}
+
+const OrthogonalPlane& VolumeDisplayUnit::getOrthogonalViewPlane() const
 {
     return m_sliceHandler->getOrthogonalViewPlane();
 }
 
-void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
+void VolumeDisplayUnit::setOrthogonalViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_sliceHandler->setOrthogonalViewPlane(viewPlane);
 }
 
 double VolumeDisplayUnit::getCurrentSpacingBetweenSlices() const
 {
-    if (getVolume())
-    {
-        int zIndex = getViewPlane().getZIndex();
-        
-        return getVolume()->getSpacing()[zIndex];
-    }
-    else
-    {
-        return 0.0;
-    }
+    return m_sliceHandler->getStepDistance();
 }
 
 SliceOrientedVolumePixelData VolumeDisplayUnit::getCurrentPixelData()
@@ -178,11 +181,11 @@ SliceOrientedVolumePixelData VolumeDisplayUnit::getCurrentPixelData()
 
         m_auxiliarCurrentVolumePixelData->setData(m_imagePipeline->getPhaseOutput());
 
-        return SliceOrientedVolumePixelData().setVolumePixelData(m_auxiliarCurrentVolumePixelData).setOrthogonalPlane(getViewPlane());
+        return SliceOrientedVolumePixelData().setVolumePixelData(m_auxiliarCurrentVolumePixelData).setOrthogonalPlane(getOrthogonalViewPlane());
     }
     else
     {
-        return SliceOrientedVolumePixelData().setVolumePixelData(m_volume->getPixelData()).setOrthogonalPlane(getViewPlane());
+        return SliceOrientedVolumePixelData().setVolumePixelData(m_volume->getPixelData()).setOrthogonalPlane(getOrthogonalViewPlane());
     }
 }
 
@@ -193,14 +196,7 @@ void VolumeDisplayUnit::restoreRenderingQuality()
 
 Image* VolumeDisplayUnit::getCurrentDisplayedImage() const
 {
-    if (m_volume && getViewPlane() == OrthogonalPlane::XYPlane)
-    {
-        return m_volume->getImage(m_sliceHandler->getSlice(), m_sliceHandler->getPhase());
-    }
-    else
-    {
-        return 0;
-    }
+    return m_sliceHandler->getImage();
 }
 
 void VolumeDisplayUnit::updateImageSlice(vtkCamera *camera)
@@ -210,16 +206,11 @@ void VolumeDisplayUnit::updateImageSlice(vtkCamera *camera)
         return;
     }
 
-    int imageIndex = getSlice();
-    int zIndex = this->getViewPlane().getZIndex();
-    double origin[3];
-    m_volume->getOrigin(origin);
-    double spacing[3];
-    m_volume->getSpacing(spacing);
-    double focalPoint[3];
-    camera->GetFocalPoint(focalPoint);
-    focalPoint[zIndex] = origin[zIndex] + imageIndex * spacing[zIndex];
-    camera->SetFocalPoint(focalPoint);
+    Vector3 focalPoint(camera->GetFocalPoint());
+    const Plane &referenceViewPlane = m_sliceHandler->getReferenceViewPlane();
+    double distanceToReferenceViewPlane = referenceViewPlane.signedDistanceToPoint(focalPoint);
+    focalPoint += referenceViewPlane.getNormal() * (m_sliceHandler->getPosition() - distanceToReferenceViewPlane);
+    camera->SetFocalPoint(focalPoint.data());
 }
 
 int VolumeDisplayUnit::getSlice() const
@@ -310,7 +301,7 @@ void VolumeDisplayUnit::setupPicker()
 
 void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
 {
-    if (getViewPlane() == OrthogonalPlane::XYPlane)
+    if (getOrthogonalViewPlane() == OrthogonalPlane::XYPlane)
     {
         Image *image = getVolume()->getImage(m_sliceHandler->getSlice(), m_sliceHandler->getPhase());
         if (image)

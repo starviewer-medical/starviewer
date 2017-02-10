@@ -30,6 +30,7 @@ namespace udg {
 class Image;
 class ImagePipeline;
 class OrthogonalPlane;
+class Plane;
 class SliceHandler;
 class SliceOrientedVolumePixelData;
 class Volume;
@@ -73,10 +74,15 @@ public:
     /// Returns the configured point picker for this unit.
     vtkPropPicker* getImagePointPicker();
     
-    /// Returns the view plane.
-    const OrthogonalPlane& getViewPlane() const;
-    /// Sets a new view plane, resetting some properties of the slice handler.
-    void setViewPlane(const OrthogonalPlane &viewPlane);
+    /// Returns the current reference plane.
+    const Plane& getReferenceViewPlane() const;
+    /// Sets a new reference view plane.
+    void setReferenceViewPlane(Plane plane);
+
+    /// Returns the current orthogonal view plane.
+    const OrthogonalPlane& getOrthogonalViewPlane() const;
+    /// Sets a new orthogonal view plane.
+    void setOrthogonalViewPlane(const OrthogonalPlane &viewPlane);
 
     /// Gets the current spacing between slices according to the current view on the set volume
     double getCurrentSpacingBetweenSlices() const;
