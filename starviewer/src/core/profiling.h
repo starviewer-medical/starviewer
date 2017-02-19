@@ -28,7 +28,6 @@ namespace udg { namespace profiling {
 class Profiler;
 class Printer;
 
-//TODO: make it uncopyable, so it will always be the same object returned by the creator (Profiler)
 class Task {
 friend class Profiler;
 public:
@@ -120,6 +119,18 @@ private:
     static Profilers& singleton();
     QHash<QString, Profiler*> m_profilers;
 };
+
+class FormattingHelper {
+public:
+    static QString toMillisecondsString(uint64_t ms);
+    static QString toSecondsString(uint64_t ms);
+    static QString toTimeString(uint64_t ms, bool fixedSize = false);
+    
+    static QString taskStatus(bool isStarting, bool isFinishing, bool isFinished, bool shortFormat = false);
+    
+};
+
+
 
 
 }}

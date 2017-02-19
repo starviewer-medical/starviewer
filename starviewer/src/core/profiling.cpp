@@ -13,6 +13,7 @@
  *************************************************************************************/
 
 #include <QFile>
+#include <QStringBuilder>
 #include "profiling.h"
 
 
@@ -184,7 +185,8 @@ void TextPrinter::taskFinished(const Profiler& profiler, const Task& task)
 }
 void TextPrinter::taskReport(const Profiler& profiler)
 {
-    writeLine("[REPORT]");
+    writeLine("Status        Time elapsed               Task name");
+    writeLine("-------------------------------------------------------------------------------");
     auto iterator = m_tasksToReport.begin();
     while (iterator != m_tasksToReport.end()) 
     {
@@ -203,6 +205,7 @@ void TextPrinter::taskReport(const Profiler& profiler)
         }
         iterator++;
     }
+    writeLine("-------------------------------------------------------------------------------");
     m_lastStartedTask = 0;
     m_lastFinishedTask = 0;
 }
@@ -220,36 +223,20 @@ void TextPrinter::writeLine(const QString& line)
 
 void TextPrinter::writeTaskLine(const udg::profiling::Task& task, bool starting, bool finishing)
 {
-    QString states[4] = {
-        QString("......"), // Running
-        QString("start "), // Starting
-        QString("finish"), // Finishing
-        QString("      ")  // Finished
-    };
-    int status = 0;
-    if (starting) {
-        status = 1;
-    }
-    else if (finishing) {
-        status = 2;
-    }
-    else if (task.isFinished()) {
-        status = 3;
-    }
+    QString shortStatus = FormattingHelper::taskStatus(starting, finishing, task.isFinished(), true);
+    QString status = FormattingHelper::taskStatus(starting, finishing, task.isFinished(), false);
+    QString elapsed = FormattingHelper::toTimeString(task.elapsed(), true);
+    QString elapsedSeconds = FormattingHelper::toSecondsString(task.elapsed());
+    QString taskNumber = FormattingHelper::toSecondsString(task.elapsed());
     
-    int minutes = task.elapsed() / (60*1000);
-    int seconds = task.elapsed() / 1000 - minutes * 60;
-    int milliseconds = task.elapsed() % 1000;
-    int millisecondsElapsed = task.elapsed();
     
-    QString line = "%1ms %2m %3.%4s %5 (%6) %7";
+    QString line = "%1 %2 %3 %4 %5 %6";
     line = line
-    .arg(millisecondsElapsed, 8, 10, QChar(' '))
-    .arg(minutes, 2, 10, QChar('0'))
-    .arg(seconds, 2, 10, QChar('0'))
-    .arg(milliseconds, 3, 10, QChar('0'))
-    .arg(states[status])
-    .arg(task.getInstance(), 3, 10, QChar('0'))
+    .arg(shortStatus)
+    .arg(status.leftJustified(8,QChar(' ')))
+    .arg(elapsed.rightJustified(16,QChar(' ')))
+    .arg(elapsedSeconds.rightJustified(10,QChar(' ')))
+    .arg(QString::number(task.getInstance()).rightJustified(4,QChar('0')))
     .arg(task.getName());
     
     writeLine(line);
@@ -281,6 +268,73 @@ Profilers& Profilers::singleton()
     static Profilers profilers;
     return profilers;
 }
+
+// ******** FormattingHelper ********
+
+QString FormattingHelper::toMillisecondsString(uint64_t ms)
+{
+    return QString::number(ms) % "ms";
+}
+
+QString FormattingHelper::toSecondsString(uint64_t ms)
+{
+    return QString::number(ms / 1000) % "." % QString::number(ms % 1000).rightJustified(3,QChar('0')) % "s";
+}
+
+QString FormattingHelper::toTimeString(uint64_t ms, bool fixedSize)
+{
+    uint64_t h;
+    uint64_t m;
+    uint64_t s;
+    // ms used destructively !
+
+    h = ms / (3600 * 1000);
+    m = ms / (60 * 1000) - h * 60;
+    s = ms / (1 * 1000) - m * 60 - h * 3600;
+    ms = ms % 1000;
+    
+    QString line = "%1h %2m %3.%4s";
+    
+    if (fixedSize)
+    {
+        line = line
+        .arg(h, 2, 10, QChar('0'))
+        .arg(m, 2, 10, QChar('0'))
+        .arg(s, 2, 10, QChar('0'))
+        .arg(ms, 3, 10, QChar('0'));
+    }
+    else
+    {
+        line = line
+        .arg(h)
+        .arg(m)
+        .arg(s)
+        .arg(ms, 3, 10, QChar('0'));
+    }
+    return line;
+}
+
+
+QString FormattingHelper::taskStatus(bool isStarting, bool isFinishing, bool isFinished, bool shortFormat)
+{
+    if (isStarting)
+    {
+        return shortFormat ? "|>>" : "Starting";
+    }
+    else if (isFinishing)
+    {
+        return shortFormat ? ">>|" : "Stopping";
+    }
+    else if (isFinished)
+    {
+        return shortFormat ? ":::" : "Finished";
+    }
+    else
+    {
+        return shortFormat ? ">>>" : "Running";
+    }
+}
+
 
 
 }}
