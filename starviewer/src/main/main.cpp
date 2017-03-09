@@ -62,31 +62,6 @@ INITIALIZE_EASYLOGGINGPP
 
 typedef udg::SingletonPointer<udg::StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
 
-namespace profileGlobals 
-{
-    QFile* file;
-    udg::profiling::Profiler* profiler;
-    udg::profiling::TextPrinter* printer;
-};
-
-void initializeProfiling()
-{
-    profileGlobals::file = new QFile("profile.log");
-    profileGlobals::file->open(QIODevice::OpenModeFlag::WriteOnly | QIODevice::OpenModeFlag::Text);
-    profileGlobals::printer = new udg::profiling::TextPrinter(profileGlobals::file);
-    profileGlobals::profiler = new udg::profiling::Profiler(profileGlobals::printer);
-    udg::profiling::Profilers::add(profileGlobals::profiler); // The profiler name is default (see signature)
-};
-
-void uninitializeProfiling()
-{
-    udg::profiling::Profilers::remove(profileGlobals::profiler);
-    delete profileGlobals::profiler;
-    delete profileGlobals::printer;
-    profileGlobals::file->close();
-    delete profileGlobals::file;
-};
-
 void initializeTranslations(QApplication &app)
 {
     udg::ApplicationTranslationsLoader translationsLoader(&app);
@@ -124,6 +99,9 @@ void initializeTranslations(QApplication &app)
     }
 }
 
+
+
+
 /// Afegeix els directoris on s'han de buscar els plugins de Qt. Útil a windows.
 void initQtPluginsDirectory()
 {
@@ -150,6 +128,7 @@ void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
 
 int main(int argc, char *argv[])
 {
+
     // Applying scale factor
     {
         QVariant cfgValue = udg::Settings().getValue(udg::CoreSettings::ScaleFactor);
@@ -178,8 +157,20 @@ int main(int argc, char *argv[])
     vtkOutputWindow::SetInstance(loggingOutputWindow);
     loggingOutputWindow->Delete();
 
-    initializeProfiling();
+    #ifdef PROFILE_ENABLED
+    QFile* profile_file;
+    udg::profiling::Profiler* profile_profiler;
+    udg::profiling::TextPrinter* profile_printer;
 
+    udg::profiling::Profiler* profiler;
+    udg::profiling::TextPrinter* printer;
+    profile_file = new QFile("profile.log");
+    profile_file->open(QIODevice::OpenModeFlag::WriteOnly | QIODevice::OpenModeFlag::Text);
+    profile_printer = new udg::profiling::TextPrinter(profile_file);
+    profile_profiler = new udg::profiling::Profiler(profile_printer);
+    udg::profiling::Profilers::add(profile_profiler); // The profiler name is default (see signature)
+    #endif
+    
     QPixmap splashPixmap;
     #ifdef STARVIEWER_LITE
     splashPixmap.load(":/images/splash-lite.svg");
@@ -308,9 +299,15 @@ int main(int argc, char *argv[])
             returnValue = i;
         }
     }
-
-    uninitializeProfiling();
-
+    
+    #ifdef PROFILE_ENABLED
+    udg::profiling::Profilers::remove(profile_profiler);
+    delete profile_profiler;
+    delete profile_printer;
+    profile_file->close();
+    delete profile_file;
+    #endif
+    
     // Marquem el final de l'aplicació al log
     INFO_LOG(QString("%1 Version %2 BuildID %3, returnValue %4").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString)
              .arg(udg::StarviewerBuildID).arg(returnValue));

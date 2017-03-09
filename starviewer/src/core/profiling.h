@@ -11,8 +11,16 @@
   may be copied, modified, propagated, or distributed except according to the
   terms contained in the LICENSE file.
  *************************************************************************************/
+
+// If debug is enabled, profiling is enabled by default
 #ifndef PROFILING_H
 #define PROFILING_H
+
+#ifndef QT_NO_DEBUG
+    #define PROFILE_ENABLED
+#endif
+
+#ifdef PROFILE_ENABLED
 
 #include <QString>
 #include <QTime>
@@ -72,7 +80,7 @@ private:
 
     QList<Task*> tasks;
     // Used to control the instance number for tasks with the same name
-    QMap<QString, int> instanceCounter;
+    QHash<QString, int> instanceCounter;
     Printer* m_printer;
 
 };
@@ -90,7 +98,6 @@ public:
 
 class TextPrinter : public Printer {
 public:
-    //LogProfilerPrinter() = delete;
     explicit TextPrinter(QIODevice* output, bool showFinished = true);
     ~TextPrinter() override;
     void printBegin(const Profiler & profiler) override;
@@ -130,9 +137,45 @@ public:
     
 };
 
-
-
-
 }}
+
+#endif // PROFILE_ENABLED
+
+// **** Convenience macros to simplify task creation. ****
+
+// NOTE: This code is an artistic expression.
+// What it does is defining macros that have overloaded parameters, see how to
+// use them on the class documentation.
+// WARNING: Very esoteric code ahead!
+
+#ifdef PROFILE_ENABLED
+    #define PROFILING_VAR_NAME(...) PROFILING_VAR_NAME_IMPL(__VA_ARGS__, defaultTask)
+    #define PROFILING_VAR_NAME_IMPL(_1, varName, ...) varName
+
+    // Extracts the first parameter
+    #define PROFILING_TASK_NAME(taskName, ...) taskName
+
+    // Writes the profiler name if a profiler name is given
+    #define PROFILING_PROFILER_NAME(...) PROFILING_PROFILER_NAME_IMPL(__VA_ARGS__, , )
+    #define PROFILING_PROFILER_NAME_IMPL(_1, _2, profilerName, ...) profilerName
+
+    // Accepts three forms of overloading:
+    // PROFILE_START_TASK("taskName", variableName, "profilerName")
+    // PROFILE_START_TASK("taskName", variableName) uses the "default" named profiler.
+    // PROFILE_START_TASK("taskName") uses the variable name defaultTask
+    
+    #define PROFILE_START_TASK(...) \
+    udg::profiling::Task& PROFILING_VAR_NAME(__VA_ARGS__) = udg::profiling::Profilers::get(PROFILING_PROFILER_NAME(__VA_ARGS__))->startTask(PROFILING_TASK_NAME(__VA_ARGS__)); \
+    do {} while(false)
+    
+    #define PROFILE_FINISH_TASK(varName) \
+        varName.finish(); \
+        do {} while(false)
+    
+#else
+    #define PROFILE_START_TASK(...) do {} while(false)
+    #define PROFILE_FINISH_TASK(...) do {} while(false)
+#endif //PROFILE_ENABLED
+
 
 #endif // PROFILING_H
