@@ -23,6 +23,7 @@
 #include "qviewerworkinprogresswidget.h"
 #include "voiluthelper.h"
 #include "logging.h"
+#include "profiling.h"
 #include "mathtools.h"
 #include "starviewerapplication.h"
 #include "coresettings.h"
@@ -58,6 +59,8 @@ QViewer::QViewer(QWidget *parent)
  : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_voiLutData(0),
    m_isRenderingEnabled(true), m_isActive(false)
 {
+    PROFILE_START_TASK("QViewer::QViewer");
+
     m_defaultFitIntoViewportMarginRate = 0.0;
     m_vtkWidget = new QVTKWidget(this);
     m_vtkWidget->setFocusPolicy(Qt::WheelFocus);
@@ -96,6 +99,8 @@ QViewer::QViewer(QWidget *parent)
     m_patientBrowserMenu = new PatientBrowserMenu(0);
     // Ara mateix el comportament per defecte serà que un cop seleccionat un volum li assignem immediatament com a input
     this->setAutomaticallyLoadPatientBrowserMenuSelectedInput(true);
+    
+    PROFILE_FINISH_TASK(defaultTask);
 }
 
 QViewer::~QViewer()
@@ -927,6 +932,8 @@ void QViewer::handleNotEnoughMemoryForVisualizationError()
 
 void QViewer::setupRenderWindow()
 {
+    PROFILE_START_TASK("QViewer::setupRenderWindow");
+    
     vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
     // TODO getInteractor() forces m_vtkWiget to create a render window the first time just to return the interactor, that render window is unused afterwards.
     //      Could this be improved?
@@ -950,6 +957,9 @@ void QViewer::setupRenderWindow()
 
     m_vtkWidget->SetRenderWindow(renderWindow);
     m_windowToImageFilter->SetInput(renderWindow);
+    
+    PROFILE_FINISH_TASK(defaultTask);
+    
 }
 
 };  // End namespace udg

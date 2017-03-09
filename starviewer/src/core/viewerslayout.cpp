@@ -16,6 +16,7 @@
 
 #include "griditerator.h"
 #include "logging.h"
+#include "profiling.h"
 #include "patientbrowsermenu.h"
 #include "q2dviewerwidget.h"
 #include "relativegeometrylayout.h"
@@ -102,6 +103,8 @@ Q2DViewerWidget* ViewersLayout::getSelectedViewer() const
 
 Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
 {
+    PROFILE_START_TASK("ViewersLayout::getNewQ2DViewerWidget");
+
     Q2DViewerWidget *newViewer = new Q2DViewerWidget(this);
     // Set the default application palette to the viewer
     newViewer->setPalette(QGuiApplication::palette());
@@ -120,6 +123,9 @@ Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
     newViewer->getViewer()->getPatientBrowserMenu()->setShowFusionOptions(true);
 
     emit viewerAdded(newViewer);
+
+    PROFILE_FINISH_TASK(defaultTask);
+    
     return newViewer;
 }
 
