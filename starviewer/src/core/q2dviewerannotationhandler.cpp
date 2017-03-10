@@ -319,13 +319,22 @@ QString Q2DViewerAnnotationHandler::getStandardAdditionalInformation() const
             fusionBalance = QObject::tr("Fusion: ") + QString("%1% %2 + %3% %4").arg(100 - balance).arg(modality0).arg(balance).arg(modality1);
             seriesLabel += " +\n" + getSeriesDescriptiveLabel(m_2DViewer->getInput(1)->getSeries());
         }
+        
+        Study *study = m_2DViewer->getMainInput()->getStudy();
+        QString physicianName = study->getReferringPhysiciansName();
+        if (!physicianName.isEmpty())
+        {
+            physicianName = QString(QObject::tr("Phyisician: %1")).arg(physicianName);
+        }
 
         return QString("%1\n"
                        "%2\n"
-                       "%3")
+                       "%3\n"
+                       "%4")
                 .arg(lateralityString)
                 .arg(fusionBalance)
                 .arg(seriesLabel)
+                .arg(physicianName)
                 .trimmed();
     }
     else
