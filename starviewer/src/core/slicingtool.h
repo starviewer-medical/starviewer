@@ -38,16 +38,16 @@ public:
     enum SlicingMode { SliceMode, PhaseMode };
 
     SlicingTool(QViewer *viewer, QObject *parent = 0);
-    ~SlicingTool();
+    virtual ~SlicingTool();
 
-    void handleEvent(unsigned long eventID);
+    virtual void handleEvent(unsigned long eventID) override;
 
     /// Retorna el mode de slicing (Slice o Phase)
     SlicingMode getSlicingMode();
 
 protected:
     /// Actualitza el valor de la llesca/fase, en funció del mode en que estem
-    /// @param value nou valor de la llesca/fase
+    /// @param increment nou valor de la llesca/fase
     void updateIncrement(int increment);
 
     /// Canvia el mode d'slicing tenint en compte l'actual
