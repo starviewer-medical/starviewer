@@ -37,10 +37,10 @@ public:
     /// Mode d'slicing, si estem fent per llesques o per fases
     enum SlicingMode { SliceMode, PhaseMode };
 
-    SlicingTool(QViewer *viewer, QObject *parent = 0);
+    explicit SlicingTool(QViewer *viewer, QObject *parent = 0);
     virtual ~SlicingTool();
 
-    virtual void handleEvent(unsigned long eventID) override;
+    virtual void handleEvent(unsigned long eventID) override = 0;
 
     /// Retorna el mode de slicing (Slice o Phase)
     SlicingMode getSlicingMode();
@@ -58,7 +58,6 @@ protected:
     /// depenent del mode en que ens trobem
     void computeImagesForScrollMode();
 
-private:
     /// Comença l'slicing
     void startSlicing();
 
@@ -68,6 +67,7 @@ private:
     /// Atura l'estat d'slicing
     void endSlicing();
 
+private:
     /// Segons l'input escull el millor mode d'srcoll per defecte
     /// Per exemple, en el cas que només tinguem fases i una sola imatge
     /// és millor que per defecte estem en PhaseMode

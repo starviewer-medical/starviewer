@@ -42,47 +42,23 @@ void SlicingMouseTool::handleEvent(unsigned long eventID)
         return;
     }
 
-    /// We need to have the same slicing mode as slicing tool to prevent slicing mode incongruences
-    updateSlicingModeAccordingToSlicingTool();
-    
     switch (eventID)
     {
-        case vtkCommand::MouseWheelForwardEvent:
-            m_mouseMovement = false;
-            m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll.svg")));
-            SlicingTool::updateIncrement(1);
-            m_viewer->unsetCursor();
-            break;
-
-        case vtkCommand::MouseWheelBackwardEvent:
-            m_mouseMovement = false;
-            m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll.svg")));
-            SlicingTool::updateIncrement(-1);
-            m_viewer->unsetCursor();
-            break;
-
-        //Per tenir constancia de les estadístiques
-        case vtkCommand::LeftButtonPressEvent:
-
-            break;
         
+        case vtkCommand::LeftButtonPressEvent:
+            m_mouseMovement = false;
+            this->startSlicing();
+
         case vtkCommand::MouseMoveEvent:
             m_mouseMovement = true;
+            this->doSlicing();
             break;
 
-        case vtkCommand::MiddleButtonPressEvent:
+        case vtkCommand::LeftButtonReleaseEvent:
             m_mouseMovement = false;
+            this->endSlicing();
             break;
-
-        case vtkCommand::MiddleButtonReleaseEvent:
-            // TODO aquest comportament de fer switch es podria eliminar ja que no és gaire usable
-            // de moment es manté perquè ja tenim un conjunt d'usuaris acostumats a aquest comportament
-            if (!m_mouseMovement)
-            {
-                switchSlicingMode();
-            }
-            break;
-
+            
         case vtkCommand::KeyPressEvent:
             if (m_viewer->getInteractor()->GetControlKey() && m_inputHasPhases)
             {
@@ -98,15 +74,6 @@ void SlicingMouseTool::handleEvent(unsigned long eventID)
 
         default:
             break;
-    }
-}
-
-void SlicingMouseTool::updateSlicingModeAccordingToSlicingTool()
-{
-    SlicingTool *slicingTool = qobject_cast<SlicingTool*>(m_2DViewer->getToolProxy()->getTool("SlicingTool"));
-    if (slicingTool)
-    {
-        m_slicingMode = slicingTool->getSlicingMode();
     }
 }
 

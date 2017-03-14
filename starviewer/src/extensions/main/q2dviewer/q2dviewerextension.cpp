@@ -412,7 +412,7 @@ void Q2DViewerExtension::initializeTools()
     m_toolManager = new ToolManager(this);
     // Obtenim les accions de cada tool que volem
     m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
-    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
+    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingMouseTool"));
     m_toolManager->registerTool("TranslateTool");
     m_toolManager->registerTool("WindowLevelTool");
     m_referenceLinesToolButton->setDefaultAction(m_toolManager->registerTool("ReferenceLinesTool"));
@@ -474,9 +474,9 @@ void Q2DViewerExtension::initializeTools()
     QStringList leftButtonExclusiveTools;
 
 #ifdef STARVIEWER_LITE
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool";
 #else
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool"
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool"
                              << "Cursor3DTool" << "EllipticalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
 #endif
 
@@ -484,7 +484,7 @@ void Q2DViewerExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingMouseTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";
     m_toolManager->triggerTools(defaultTools);
 
     //
@@ -883,7 +883,7 @@ void Q2DViewerExtension::manualSynchronizationActivated(bool activated)
         //             we enable the slicing tool to disable cursor 3D.
         if (m_cursor3DToolButton->isChecked())
         {
-            m_toolManager->triggerTool("SlicingTool");
+            m_toolManager->triggerTool("SlicingMouseTool");
         }
     }
 }

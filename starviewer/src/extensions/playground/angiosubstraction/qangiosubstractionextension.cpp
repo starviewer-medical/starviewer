@@ -52,7 +52,7 @@ void QAngioSubstractionExtension::initializeTools()
     m_toolManager = new ToolManager(this);
     // Registrem les tools
     m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
-    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
+    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingMouseTool"));
     m_translateToolButton->setDefaultAction(m_toolManager->registerTool("TranslateTool"));
     m_windowLevelToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelTool"));
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
@@ -64,12 +64,12 @@ void QAngioSubstractionExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "SlicingKeyboardTool";
+    defaultTools << "SlicingMouseTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "SlicingKeyboardTool";
     m_toolManager->triggerTools(defaultTools);
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "TransDifferenceTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "TransDifferenceTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -163,7 +163,7 @@ void QAngioSubstractionExtension::computeDifferenceImage(int imageid)
     }
     m_tdToolData->setReferenceSlice(imageid);
     tdTool->initializeDifferenceImage();
-    m_toolManager->triggerTool("SlicingTool");
+    m_toolManager->triggerTool("SlicingMouseTool");
     
     QApplication::restoreOverrideCursor();
 }
@@ -330,7 +330,7 @@ void QAngioSubstractionExtension::computeAutomateSingleImage()
         m_tdToolData->setInputVolume(m_mainVolume);
     }
     tdTool->setSingleDifferenceImage(TranslationAlongX / spacing[0],TranslationAlongY / spacing[1]);
-    m_toolManager->triggerTool("SlicingTool");
+    m_toolManager->triggerTool("SlicingMouseTool");
     
 
 /*    typedef itk::Image< PixelType, Dimension >  FixedImageType;

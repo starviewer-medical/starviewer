@@ -28,15 +28,10 @@ class ToolProxy;
 class SlicingWheelTool : public SlicingTool {
 Q_OBJECT
 public:
-    SlicingWheelTool(QViewer *viewer, QObject *parent = 0);
+    explicit SlicingWheelTool(QViewer *viewer, QObject *parent = 0);
     virtual ~SlicingWheelTool();
 
     virtual void handleEvent(unsigned long eventID) override;
-
-private:
-    /// Updates the current slicing mode according to the slicing tool in the current viewer, if slicing tool exists.
-    void updateSlicingModeAccordingToSlicingTool();
-
 };
 
 }

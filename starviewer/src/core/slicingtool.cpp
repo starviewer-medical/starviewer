@@ -49,60 +49,6 @@ SlicingTool::~SlicingTool()
     m_viewer->unsetCursor();
 }
 
-void SlicingTool::handleEvent(unsigned long eventID)
-{
-    if (!m_2DViewer->hasInput())
-    {
-        return;
-    }
-
-    switch (eventID)
-    {
-        case vtkCommand::LeftButtonPressEvent:
-            m_mouseMovement = false;
-            this->startSlicing();
-
-        case vtkCommand::MouseMoveEvent:
-            m_mouseMovement = true;
-            this->doSlicing();
-            break;
-
-        case vtkCommand::LeftButtonReleaseEvent:
-            m_mouseMovement = false;
-            this->endSlicing();
-            break;
-
-        case vtkCommand::MiddleButtonPressEvent:
-            m_mouseMovement = false;
-            break;
-
-        case vtkCommand::MiddleButtonReleaseEvent:
-            // TODO aquest comportament de fer switch es podria eliminar ja que no és gaire usable
-            // de moment es manté perquè ja tenim un conjunt d'usuaris acostumats a aquest comportament
-            if (!m_mouseMovement)
-            {
-                switchSlicingMode();
-            }
-            break;
-
-        case vtkCommand::KeyPressEvent:
-            if (m_viewer->getInteractor()->GetControlKey() && m_inputHasPhases)
-            {
-                m_forcePhaseMode = true;
-                computeImagesForScrollMode();
-            }
-            break;
-
-        case vtkCommand::KeyReleaseEvent:
-            m_forcePhaseMode = false;
-            computeImagesForScrollMode();
-            break;
-
-        default:
-            break;
-    }
-}
-
 void SlicingTool::startSlicing()
 {
     m_state = Slicing;
@@ -168,23 +114,19 @@ void SlicingTool::inputChanged(Volume *input)
 
 void SlicingTool::switchSlicingMode()
 {
-    QString statMessage = "SlicingTool: ";
     if (m_inputHasPhases)
     {
         if (m_slicingMode == SliceMode)
         {
             m_slicingMode = PhaseMode;
-            statMessage += "Switch from slice mode to phase mode";
         }
         else
         {
             m_slicingMode = SliceMode;
-            statMessage += "Switch from phase mode to slice mode";
         }
     }
     else
     {
-        statMessage += "Try to switch slicing mode with input with no phases";
     }
 }
 
