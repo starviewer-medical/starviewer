@@ -14,7 +14,6 @@
 
 #include "slicingwheeltool.h"
 #include "q2dviewer.h"
-#include "statswatcher.h"
 #include "toolproxy.h"
 
 // Vtk
@@ -34,12 +33,7 @@ SlicingWheelTool::SlicingWheelTool(QViewer *viewer, QObject *parent)
 
 SlicingWheelTool::~SlicingWheelTool()
 {
-    // Estadístiques
-    if (!m_wheelSteps.isEmpty())
-    {
-        StatsWatcher::log("Slicing Wheel Tool: Wheel Record: " + m_wheelSteps);
-        m_wheelSteps.clear();
-    }
+
 }
 
 void SlicingWheelTool::handleEvent(unsigned long eventID)
@@ -60,7 +54,6 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
             SlicingTool::updateIncrement(1);
             m_viewer->unsetCursor();
             // Estadístiques
-            m_wheelSteps += QString::number(1) + " ";
             break;
 
         case vtkCommand::MouseWheelBackwardEvent:
@@ -69,16 +62,11 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
             SlicingTool::updateIncrement(-1);
             m_viewer->unsetCursor();
             // Estadístiques
-            m_wheelSteps += QString::number(-1) + " ";
             break;
 
         //Per tenir constancia de les estadístiques
         case vtkCommand::LeftButtonPressEvent:
-            if (!m_wheelSteps.isEmpty())
-            {
-                StatsWatcher::log("Slicing Wheel Tool: Wheel Record: " + m_wheelSteps);
-                m_wheelSteps.clear();
-            }
+            
             break;
         
         case vtkCommand::MouseMoveEvent:
@@ -103,14 +91,12 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
             {
                 m_forcePhaseMode = true;
                 computeImagesForScrollMode();
-                StatsWatcher::log("FORCE phase mode with Ctrl key");
             }
             break;
 
         case vtkCommand::KeyReleaseEvent:
             m_forcePhaseMode = false;
             computeImagesForScrollMode();
-            StatsWatcher::log("Disable FORCED phase mode releasing Ctrl key");
             break;
 
         default:

@@ -37,9 +37,6 @@ private:
     /// Updates the current slicing mode according to the slicing tool in the current viewer, if slicing tool exists.
     void updateSlicingModeAccordingToSlicingTool();
 
-private:
-    /// Guardem els estadistics dels girs de rodeta.
-    QString m_wheelSteps;
 };
 
 }

@@ -16,7 +16,6 @@
 #include "logging.h"
 #include "q2dviewer.h"
 #include "volume.h"
-#include "statswatcher.h"
 
 // Vtk
 #include <vtkCommand.h>
@@ -71,12 +70,6 @@ void SlicingTool::handleEvent(unsigned long eventID)
         case vtkCommand::LeftButtonReleaseEvent:
             m_mouseMovement = false;
             this->endSlicing();
-            // Estadístiques
-            if (!m_scrollSteps.isEmpty())
-            {
-                StatsWatcher::log("Slicing Tool: Button Scroll Record: " + m_scrollSteps + " ::Over a total of " + QString::number(m_numberOfImages) + " images");
-                m_scrollSteps.clear();
-            }
             break;
 
         case vtkCommand::MiddleButtonPressEvent:
@@ -97,14 +90,12 @@ void SlicingTool::handleEvent(unsigned long eventID)
             {
                 m_forcePhaseMode = true;
                 computeImagesForScrollMode();
-                StatsWatcher::log("FORCE phase mode with Ctrl key");
             }
             break;
 
         case vtkCommand::KeyReleaseEvent:
             m_forcePhaseMode = false;
             computeImagesForScrollMode();
-            StatsWatcher::log("Disable FORCED phase mode releasing Ctrl key");
             break;
 
         default:
@@ -147,8 +138,6 @@ void SlicingTool::doSlicing()
             }
         }
         this->updateIncrement(value);
-        // Estadístiques
-        m_scrollSteps += QString::number(value) + " ";
     }
 }
 
@@ -197,8 +186,6 @@ void SlicingTool::switchSlicingMode()
     {
         statMessage += "Try to switch slicing mode with input with no phases";
     }
-
-    StatsWatcher::log(statMessage);
 }
 
 void SlicingTool::updateIncrement(int increment)
@@ -252,11 +239,9 @@ void SlicingTool::chooseBestDefaultScrollMode(Volume *input)
         if (input->getNumberOfPhases() > 1 && input->getNumberOfSlicesPerPhase() <= 1)
         {
             m_slicingMode = PhaseMode;
-            StatsWatcher::log("Slicing Tool: Default Scroll Mode = PHASE");
         }
         else
         {
-            StatsWatcher::log("Slicing Tool: Default Scroll Mode = SLICE");
         }
     }
 }
