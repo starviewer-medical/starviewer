@@ -311,6 +311,27 @@ QList<Series*> Patient::getSelectedSeries()
     return selectedSeries;
 }
 
+QList<Volume*> Patient::getVolumesList()
+{
+    QList<Volume*> volumesList;
+    foreach (Study* study, m_studiesList)
+    {
+        volumesList << study->getVolumesList();
+    }
+    return volumesList;
+}
+
+int Patient::getNumberOfVolumes()
+{
+    int sum = 0;
+    foreach (Study* study, m_studiesList)
+    {
+        sum += study->getNumberOfVolumes();
+    }
+    return sum;
+}
+
+
 bool Patient::hasFile(const QString &filename)
 {
     QList<Study*> studyList = this->getStudies();

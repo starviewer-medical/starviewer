@@ -86,22 +86,11 @@ void SlicingKeyboardTool::handleEvent(unsigned long eventID)
                         if (currentStudy != NULL)
                         {
                             Patient *currentPatient = currentStudy->getParentPatient();
-                            foreach (Study *study, currentPatient->getStudies())
-                            {
-                                foreach (Series *series, study->getSeries())
-                                {
-                                    foreach (Volume *volume, series->getVolumesList())
-                                    {
-                                        if (volume->getIdentifier() == currentVolume->getIdentifier())
-                                        {
-                                            // Encara no hem afegit el nou volume, si no, seria size - 1
-                                            currentVolumeIndex = volumesList.size();
-                                        }
 
-                                        volumesList << volume;
-                                    }
-                                }
-                            }
+                            volumesList = currentPatient->getVolumesList();
+                            currentVolumeIndex = volumesList.indexOf(currentVolume);
+                            Q_ASSERT_X(currentVolumeIndex >= 0, "", "Volume must be found in the list");
+
                             int nextVolumeIndex = 0;
                             QViewerCommand *command;
                             if (keySymbol == "plus")
@@ -114,7 +103,7 @@ void SlicingKeyboardTool::handleEvent(unsigned long eventID)
                                 {
                                     nextVolumeIndex = currentVolumeIndex + 1;
                                 }
-                                command = new RenderQViewerCommand(m_2DViewer);
+                                command = new ChangeSliceQViewerCommand(m_2DViewer, ChangeSliceQViewerCommand::MinimumSlice);
                             }
                             else
                             {

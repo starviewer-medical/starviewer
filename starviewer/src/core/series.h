@@ -206,8 +206,6 @@ public:
     ///Retorna un DICOMSource que aglutina els diferents DICOMSource de les imatges que conté la sèrie i el de la sèrie si se n'hi ha assignat un.
     DICOMSource getDICOMSource() const;
 
-    /// Retorna el nombre de volums dels que es composa la sèrie.
-    int getNumberOfVolumes();
 
     /// Retorna el Volume amb identificador id
     /// Retorna NULL en cas que no hi hagi cap volum amb aquest id.
@@ -222,8 +220,11 @@ public:
     /// de volums.
     Identifier addVolume(Volume *volume);
 
-    /// Retorna una llista amb tots els volums de la sèrie.
+    /// Returns a list of volumes that compose the series.
     QList<Volume*> getVolumesList();
+
+    /// Returns the number of volumes that compose the series.
+    int getNumberOfVolumes();
 
     /// Retorna la llista d'identificadors de volum
     QList<Identifier> getVolumesIDList() const;
