@@ -153,16 +153,11 @@ DcmSequenceOfItems* DICOMWriterDCMTK::generateDcmSequenceOfItems(DICOMSequenceAt
 
 bool DICOMWriterDCMTK::write()
 {
-    DcmElement *element;
-    m_fileFormat->getDataset()->findAndGetElement(DCM_Rows, element);
-    element->print(std::cout);
-
-    DcmElement *element_col;
-    m_fileFormat->getDataset()->findAndGetElement(DCM_Columns, element_col);
-    element_col->print(std::cout);
-
     // Guardem la imatge
-    OFCondition saveFileCondition = DVPSHelper::saveFileFormat(qPrintable(this->getPath()), m_fileFormat, true);
+    // TODO
+    //OFCondition saveFileCondition = DVPSHelper::saveFileFormat(qPrintable(this->getPath()), m_fileFormat, true);
+    //Added by Anton
+    OFCondition saveFileCondition = DVPSHelper::saveFileFormat(qPrintable(this->getPath()+".dcm"), m_fileFormat, false);    // true -> explicit, false -> implicit
 
     if (saveFileCondition == EC_Normal)
     {

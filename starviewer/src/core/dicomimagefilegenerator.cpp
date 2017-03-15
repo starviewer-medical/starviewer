@@ -49,7 +49,7 @@ bool DICOMImageFileGenerator::generateDICOMFiles()
     // Analitzem el SOP Class UID per saber si sabem generar el tipus de fitxers
     QString sopClass = m_input->getImage(0)->getParentSeries()->getSOPClassUID();
 
-    if (sopClass == UIDSecondaryCaptureImageStorage)
+    if (sopClass == UIDSecondaryCaptureImageStorage || sopClass == UIDCTImageStorage)   // TODO Add more SOP classes
     {
         return generateSecondaryCaptureDICOMFiles();
     }
@@ -159,6 +159,46 @@ void DICOMImageFileGenerator::fillImagePixelInfo(DICOMWriter *writer, Image *ima
     pixelRepresentation.setTag(DICOMPixelRepresentation);
     pixelRepresentation.setValue(image->getPixelRepresentation());
     writer->addValueAttribute(&pixelRepresentation);
+
+    DICOMValueAttribute pixelSpacing;
+    pixelSpacing.setTag(DICOMPixelSpacing);
+    pixelSpacing.setValue(QString("%1").arg(image->getPixelSpacing().y())+"\\" +QString("%1").arg(image->getPixelSpacing().x()));
+    writer->addValueAttribute(&pixelSpacing);
+
+    DICOMValueAttribute sliceThickness;
+    sliceThickness.setTag(DICOMSliceThickness);
+    sliceThickness.setValue(image->getSliceThickness());
+    writer->addValueAttribute(&sliceThickness);
+
+    DICOMValueAttribute imageOrientationPatient;
+    imageOrientationPatient.setTag(DICOMImageOrientationPatient);
+    imageOrientationPatient.setValue(image->getImageOrientationPatient().getDICOMFormattedImageOrientation());
+    writer->addValueAttribute(&imageOrientationPatient);
+
+    // TODO Add VOI LUTs
+//    QPair<double,double> wl = image->getWindowLevel(0);
+//    DICOMValueAttribute windowCenter;
+//    windowCenter.setTag(DICOMWindowCenter);
+//    windowCenter.setValue(wl.second);
+//    writer->addValueAttribute(&windowCenter);
+
+//    //Added by Anton
+//    DICOMValueAttribute windowWidth;
+//    windowWidth.setTag(DICOMWindowWidth);
+//    windowWidth.setValue(wl.first);
+//    writer->addValueAttribute(&windowWidth);
+
+    DICOMValueAttribute imagePosition;
+    imagePosition.setTag(DICOMImagePositionPatient);
+    QString imagePositionPatientString =
+            QString("%1\\%2\\%3").arg(image->getImagePositionPatient()[0]).arg(image->getImagePositionPatient()[1]).arg(image->getImagePositionPatient()[2]);
+    imagePosition.setValue(imagePositionPatientString);
+    writer->addValueAttribute(&imagePosition);
+
+    DICOMValueAttribute imageType;
+    imageType.setTag(DICOMImageType);
+    imageType.setValue(image->getImageType());
+    writer->addValueAttribute(&imageType);
 
     // Planar Configuration 1C
     if (image->getSamplesPerPixel() > 1)

@@ -358,6 +358,7 @@ void ImageFillerStep::fillCommonImageInformation(Image *image, const DICOMTagRea
     image->setColumns(dicomReader->getValueAttributeAsQString(DICOMColumns).toInt());
     image->setBitsAllocated(dicomReader->getValueAttributeAsQString(DICOMBitsAllocated).toInt());
     image->setBitsStored(dicomReader->getValueAttributeAsQString(DICOMBitsStored).toInt());
+    image->setHighBit(dicomReader->getValueAttributeAsQString(DICOMHighBit).toInt());
     image->setPixelRepresentation(dicomReader->getValueAttributeAsQString(DICOMPixelRepresentation).toInt());
 
     // C.7.6.1 General Image Module (present a totes les modalitats no enhanced, excepte 3D XA, 3D CF i OPT)

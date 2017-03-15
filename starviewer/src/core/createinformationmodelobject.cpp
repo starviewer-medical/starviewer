@@ -68,6 +68,7 @@ Series* CreateInformationModelObject::createSeries(const DICOMTagReader *dicomTa
 {
     Series *series = new Series;
 
+    series->setSOPClassUID(dicomTagReader->getValueAttributeAsQString(DICOMSOPClassUID));
     series->setInstanceUID(dicomTagReader->getValueAttributeAsQString(DICOMSeriesInstanceUID));
     series->setModality(dicomTagReader->getValueAttributeAsQString(DICOMModality));
     series->setSeriesNumber(dicomTagReader->getValueAttributeAsQString(DICOMSeriesNumber));
