@@ -67,8 +67,8 @@ isEmpty(GDCMINCLUDEDIR){
 
 THREADWEAVERLIBDIR = $$(THREADWEAVERLIBDIR)
 isEmpty(THREADWEAVERLIBDIR){
-    # This unix default is for 64-bit Debian-based systems. It will be different for others.
-    unix:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/lib/x86_64-linux-gnu
+    exists(/etc/debian_version):unix:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/lib/x86_64-linux-gnu # Debian-based systems
+    !exists(/etc/debian_version):unix:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/lib64               # Other systems
     macx:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/lib
     win32:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/ThreadWeaver/5.3.0/lib
 }
