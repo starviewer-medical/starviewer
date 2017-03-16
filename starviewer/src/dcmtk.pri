@@ -33,7 +33,7 @@ LIBS += -L$${DCMTKLIBDIR} \
 
 unix {
     DEFINES += HAVE_CONFIG_H
-    LIBS += -lssl
+    LIBS += -lssl -lz
 }
 
 unix:!macx {
