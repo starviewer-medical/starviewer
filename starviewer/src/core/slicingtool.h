@@ -15,102 +15,57 @@
 #ifndef UDGSLICINGTOOL_H
 #define UDGSLICINGTOOL_H
 
-#include <QPoint>
-#include <QSize>
-
 #include "tool.h"
+
+#include "changesliceqviewercommand.h"
+
+// Qt
+#include <QVector>
 
 namespace udg {
 
 class Q2DViewer;
-class Volume;
 
-/**
-    Tool que serveix per fer slicing en un visor 2D
-  */
 class SlicingTool : public Tool {
-Q_OBJECT
+    Q_OBJECT
 public:
-    /// Estats de la tool
-    enum { None, Slicing };
-
-    /// Mode d'slicing, si estem fent per llesques o per fases
-    enum SlicingMode { SliceMode, PhaseMode };
+    enum class SlicingMode {None, Slice, Phase, Volume };
 
     explicit SlicingTool(QViewer *viewer, QObject *parent = 0);
     virtual ~SlicingTool();
-
-    virtual void handleEvent(unsigned long eventID) override = 0;
-
-    /// Retorna el mode de slicing (Slice o Phase)
-    SlicingMode getSlicingMode();
-
+    
+    int getMinimum(SlicingMode mode) const;
+    int getMaximum(SlicingMode mode) const;
+    unsigned int getRangeSize(SlicingMode mode) const;
+    int getLocation(SlicingMode mode) const;
+    int setLocation(SlicingMode mode, int location, bool dryRun = false);
+    int incrementLocation(SlicingMode mode, int shift, bool dryRun = false);
+    
+    unsigned int getNumberOfAxes() const;
+    void setNumberOfAxes(unsigned int numberOfAxes);
+    
+    SlicingMode getMode(unsigned int axis) const;
+    void setMode(unsigned int axis, SlicingMode mode);
+    
+    int getMinimum(unsigned int axis) const;
+    int getMaximum(unsigned int axis) const;
+    unsigned int getRangeSize(unsigned int axis) const;
+    int getLocation(unsigned int axis) const;
+    int setLocation(unsigned int axis, int location, bool dryRun = false);
+    int incrementLocation(unsigned int axis, int shift, bool dryRun = false);
+    
+public slots:
+    /// React to major changes that will alter the results of isUsable function, which is precondition to use others. (This is called when volume is changed)
+    virtual void reassignAxis() = 0;
+    
 protected:
-    /// Actualitza el valor de la llesca/fase, en funció del mode en que estem
-    /// @param increment nou valor de la llesca/fase
-    void updateIncrement(int increment);
-
-    /// Canvia el mode d'slicing tenint en compte l'actual
-    void switchSlicingMode();
-
-    /// Calcula les imatges o fases a tenir en compte
-    /// pel càlcul del desplaçament a aplicar durant la interacció
-    /// depenent del mode en que ens trobem
-    void computeImagesForScrollMode();
-
-    /// Comença l'slicing
-    void startSlicing();
-
-    /// Calcula la llesca que s'ha de moure
-    void doSlicing();
-
-    /// Atura l'estat d'slicing
-    void endSlicing();
+    ChangeSliceQViewerCommand::SlicePosition m_volumeInitialPosition;
+    Q2DViewer* m_2DViewer;
 
 private:
-    /// Segons l'input escull el millor mode d'srcoll per defecte
-    /// Per exemple, en el cas que només tinguem fases i una sola imatge
-    /// és millor que per defecte estem en PhaseMode
-    void chooseBestDefaultScrollMode(Volume *input);
-
-private slots:
-    /// Es crida cada cop que l'input del viewer s'ha actualitzat
-    void inputChanged(Volume *input);
-
-protected:
-    /// Ens guardem aquest punter per ser més còmode
-    Q2DViewer *m_2DViewer;
-
-    /// Indica si entre event i event hi ha hagut moviment del ratolí
-    bool m_mouseMovement;
-
-    /// Ens indica si l'input actual té fases. S'actualitza cada cop que es canvia d'input
-    bool m_inputHasPhases;
-
-    /// Controla si estem forçant el mode de phases amb la tecla Ctrl
-    bool m_forcePhaseMode;
-
-    /// El mode en que movem les llesques.
-    /// De moment podrà tenir els valors SliceMode o PhaseMode, per defecte SliceMode
-    SlicingMode m_slicingMode;
-
-private:
-    /// Coordenades per calcular el moviment del mouse que determina com incrmentar o decrementar l'slicing
-    QPoint m_startPosition;
-    QPoint m_currentPosition;
-
-    /// Estats d'execució de la tool
-    int m_state;
-
-    /// Nombre d'imatges (ja siguin fases o llesques) del volum sobre el que fem slicing
-    /// útil per calcular l'increment proporcional de llesques
-    int m_numberOfImages;
-
-    /// Mida de la pantalla
-    /// Útil per calcular l'increment proporcional de llesques
-    QSize m_screenSize;
+    QVector<SlicingMode> m_axes;
 };
 
 }
 
-#endif
+#endif //UDGSLICINGTOOL_H

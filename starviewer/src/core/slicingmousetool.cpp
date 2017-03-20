@@ -13,8 +13,8 @@
  *************************************************************************************/
 
 #include "slicingmousetool.h"
+
 #include "q2dviewer.h"
-#include "toolproxy.h"
 
 // Vtk
 #include <vtkCommand.h>
@@ -25,10 +25,13 @@ namespace udg {
 SlicingMouseTool::SlicingMouseTool(QViewer *viewer, QObject *parent)
 : SlicingTool(viewer, parent)
 {
+    m_dragActive = false;
+    m_verticalIsLikeHorizontal = false;
+    m_direction = Direction::Undefined;
+    m_lastMousePosition = QPoint(0,0);
+    
     m_toolName = "SlicingMouseTool";
-    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
-    // Ens assegurem que desde la creació tenim un viewer vàlid
-    Q_ASSERT(m_2DViewer);
+    reassignAxis();
 }
 
 SlicingMouseTool::~SlicingMouseTool()
@@ -37,44 +40,100 @@ SlicingMouseTool::~SlicingMouseTool()
 
 void SlicingMouseTool::handleEvent(unsigned long eventID)
 {
-    if (!m_2DViewer->hasInput())
+    if (eventID == vtkCommand::LeftButtonPressEvent)
     {
-        return;
+        onMousePress(m_2DViewer->getEventPosition());
     }
-
-    switch (eventID)
+    else if (eventID == vtkCommand::LeftButtonReleaseEvent)
     {
-        
-        case vtkCommand::LeftButtonPressEvent:
-            m_mouseMovement = false;
-            this->startSlicing();
-
-        case vtkCommand::MouseMoveEvent:
-            m_mouseMovement = true;
-            this->doSlicing();
-            break;
-
-        case vtkCommand::LeftButtonReleaseEvent:
-            m_mouseMovement = false;
-            this->endSlicing();
-            break;
-            
-        case vtkCommand::KeyPressEvent:
-            if (m_viewer->getInteractor()->GetControlKey() && m_inputHasPhases)
-            {
-                m_forcePhaseMode = true;
-                computeImagesForScrollMode();
-            }
-            break;
-
-        case vtkCommand::KeyReleaseEvent:
-            m_forcePhaseMode = false;
-            computeImagesForScrollMode();
-            break;
-
-        default:
-            break;
+        onMouseRelease(m_2DViewer->getEventPosition());
+    }
+    else if (eventID == vtkCommand::MouseMoveEvent)
+    {
+        onMouseMove(m_2DViewer->getEventPosition());
+    }
+    else if (eventID == vtkCommand::KeyPressEvent)
+    {
+        if (m_viewer->getInteractor()->GetControlKey())
+        {
+            onCtrlPress();
+        }
+    }
+    else if (eventID == vtkCommand::KeyReleaseEvent)
+    {
+        if (!m_viewer->getInteractor()->GetControlKey())
+        {
+            onCtrlRelease();
+        }
     }
 }
+
+void SlicingMouseTool::reassignAxis()
+{
+    setNumberOfAxes(2);
+    bool sliceable = getRangeSize(SlicingMode::Slice) > 1;
+    bool phaseable = getRangeSize(SlicingMode::Phase) > 1;
+    if (sliceable && phaseable) 
+    {
+        setMode(VERTICAL_AXIS, SlicingMode::Slice);
+        setMode(HORIZONTAL_AXIS, SlicingMode::Phase);
+    }
+    else if (sliceable && !phaseable)
+    {
+        setMode(VERTICAL_AXIS, SlicingMode::Slice);
+        setMode(HORIZONTAL_AXIS, SlicingMode::None);
+    }
+    else if (!sliceable && phaseable)
+    {
+        setMode(VERTICAL_AXIS, SlicingMode::None);
+        setMode(HORIZONTAL_AXIS, SlicingMode::Phase);
+    }
+}
+
+
+void SlicingMouseTool::onMousePress(const QPoint &position)
+{
+    m_dragActive = true;
+    m_direction = Direction::Undefined;
+    m_lastMousePosition = position;
+    onMouseMove(position);
+}
+
+void SlicingMouseTool::onMouseMove(const QPoint &position)
+{
+    if (m_dragActive)
+    {
+        if (m_direction == Direction::Undefined) // Keep detecting direction
+        {
+            //TODO: Temporary code.
+            incrementLocation(VERTICAL_AXIS, (m_lastMousePosition.y() - position.y()) / 5);
+            incrementLocation(HORIZONTAL_AXIS, (m_lastMousePosition.x() - position.x()) / 5);
+            
+        }
+        else {
+            
+        }
+    }
+    m_lastMousePosition = position;
+}
+
+void SlicingMouseTool::onMouseRelease(const QPoint &position)
+{
+    onMouseMove(position);
+    m_lastMousePosition = position;
+    m_direction = Direction::Undefined;
+    m_dragActive = false;
+}
+
+void SlicingMouseTool::onCtrlPress()
+{
+    m_verticalIsLikeHorizontal = true;
+}
+
+void SlicingMouseTool::onCtrlRelease()
+{
+    m_verticalIsLikeHorizontal = false;
+}
+
 
 }

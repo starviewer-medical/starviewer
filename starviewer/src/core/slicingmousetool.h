@@ -17,14 +17,11 @@
 
 #include "slicingtool.h"
 
+// Qt
+#include <QPoint>
+
 namespace udg {
 
-class Q2DViewer;
-class ToolProxy;
-
-/**
-    Tool que hereta de SlicingTool que serveix per fer slicing amb la rodeta en un visor 2D
-  */
 class SlicingMouseTool : public SlicingTool {
 Q_OBJECT
 public:
@@ -32,8 +29,30 @@ public:
     virtual ~SlicingMouseTool();
 
     virtual void handleEvent(unsigned long eventID) override;
+    
+public slots:
+    virtual void reassignAxis() override;
+    
+private:
+    void onMousePress(const QPoint &position);
+    void onMouseMove(const QPoint &position);
+    void onMouseRelease(const QPoint &position);
+    
+    void onCtrlPress();
+    void onCtrlRelease();
+    
+    bool m_dragActive;
+    bool m_verticalIsLikeHorizontal;
+    
+    enum class Direction {Undefined, Horizontal, Vertical, Oblique};
+    Direction m_direction;
+    
+    QPoint m_lastMousePosition;
+    
+    static constexpr auto VERTICAL_AXIS = 0;
+    static constexpr auto HORIZONTAL_AXIS = 1;
 };
 
 }
 
-#endif
+#endif //UDGSLICINGMOUSETOOL_H

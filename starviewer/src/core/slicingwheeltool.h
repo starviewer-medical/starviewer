@@ -19,21 +19,37 @@
 
 namespace udg {
 
-class Q2DViewer;
-class ToolProxy;
-
-/**
-    Tool que hereta de SlicingTool que serveix per fer slicing amb la rodeta en un visor 2D
-  */
 class SlicingWheelTool : public SlicingTool {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit SlicingWheelTool(QViewer *viewer, QObject *parent = 0);
     virtual ~SlicingWheelTool();
 
     virtual void handleEvent(unsigned long eventID) override;
+
+public slots:
+    virtual void reassignAxis() override;
+    
+private:
+    void onScroll(int steps);
+
+    void onCtrlPress();
+    void onCtrlRelease();
+
+    void onMiddleButtonPress();
+    void onMiddleButtonRelease();
+
+    /** Some mouses produce unwanted scrolls when the wheel is clicked. This is
+     *  used to cancel them until the wheel is released.
+     */
+    bool m_scrollDisabled;
+    bool m_ctrlPressed;
+    bool m_middleButtonToggled;
+    
+    static constexpr auto MAIN_AXIS = 0;
+    static constexpr auto SECONDARY_AXIS = 1;
 };
 
 }
 
-#endif
+#endif //UDGSLICINGWHEELTOOL_H
