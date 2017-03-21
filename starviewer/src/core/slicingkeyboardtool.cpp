@@ -14,14 +14,7 @@
 
 #include "slicingkeyboardtool.h"
 #include "q2dviewer.h"
-#include "volume.h"
-#include "study.h"
-#include "series.h"
-#include "patient.h"
-#include "changesliceqviewercommand.h"
-#include "renderqviewercommand.h"
-// Qt
-#include <QTime>
+
 // Vtk
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCommand.h>
@@ -29,10 +22,10 @@
 namespace udg {
 
 SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent)
- : Tool(viewer, parent)
+ : SlicingTool(viewer, parent)
 {
     m_toolName = "SlicingKeyboardTool";
-    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
+    reassignAxis();
 }
 
 SlicingKeyboardTool::~SlicingKeyboardTool()
@@ -41,104 +34,134 @@ SlicingKeyboardTool::~SlicingKeyboardTool()
 
 void SlicingKeyboardTool::handleEvent(unsigned long eventID)
 {
-    switch (eventID)
+    if (eventID == vtkCommand::KeyPressEvent)
     {
-        case vtkCommand::KeyPressEvent:
+        QString keySymbol = m_2DViewer->getInteractor()->GetKeySym();
+        if (keySymbol == "Home")
         {
-            QString keySymbol = m_2DViewer->getInteractor()->GetKeySym();
-            if (keySymbol == "Home")
-            {
-                m_2DViewer->setSlice(0);
-            }
-            else if (keySymbol == "End")
-            {
-                m_2DViewer->setSlice(m_2DViewer->getMaximumSlice());
-            }
-            else if (keySymbol == "Up")
-            {
-                m_2DViewer->setSlice(m_2DViewer->getCurrentSlice() + 1);
-            }
-            else if (keySymbol == "Down")
-            {
-                m_2DViewer->setSlice(m_2DViewer->getCurrentSlice() - 1);
-            }
-            else if (keySymbol == "Left")
-            {
-                m_2DViewer->setPhase(m_2DViewer->getCurrentPhase() - 1);
-            }
-            else if (keySymbol == "Right")
-            {
-                m_2DViewer->setPhase(m_2DViewer->getCurrentPhase() + 1);
-            }
-            // TODO Vigilar que no es pot fer només començar perquè no hi ha cap viewer seleccionat si no s'aplica cap HP
-            else if (keySymbol == "plus" || keySymbol == "minus")
-            {
-                if ((m_2DViewer->getCurrentSlice() == m_2DViewer->getMaximumSlice() && keySymbol == "plus") ||
-                    (m_2DViewer->getCurrentSlice() == m_2DViewer->getMinimumSlice() && keySymbol == "minus"))
-                {
-                    QList<Volume*> volumesList;
-                    int currentVolumeIndex = 0;
-
-                    Volume *currentVolume = m_2DViewer->getMainInput();
-                    if (currentVolume != NULL)
-                    {
-                        Study *currentStudy = currentVolume->getStudy();
-                        if (currentStudy != NULL)
-                        {
-                            Patient *currentPatient = currentStudy->getParentPatient();
-
-                            volumesList = currentPatient->getVolumesList();
-                            currentVolumeIndex = volumesList.indexOf(currentVolume);
-                            Q_ASSERT_X(currentVolumeIndex >= 0, "", "Volume must be found in the list");
-
-                            int nextVolumeIndex = 0;
-                            QViewerCommand *command;
-                            if (keySymbol == "plus")
-                            {
-                                if (currentVolumeIndex >= volumesList.size() - 1)
-                                {
-                                    nextVolumeIndex = 0;
-                                }
-                                else
-                                {
-                                    nextVolumeIndex = currentVolumeIndex + 1;
-                                }
-                                command = new ChangeSliceQViewerCommand(m_2DViewer, ChangeSliceQViewerCommand::MinimumSlice);
-                            }
-                            else
-                            {
-                                if (currentVolumeIndex <= 0)
-                                {
-                                    nextVolumeIndex = volumesList.size() - 1;
-                                }
-                                else
-                                {
-                                    nextVolumeIndex = currentVolumeIndex - 1;
-                                }
-                                command = new ChangeSliceQViewerCommand(m_2DViewer, ChangeSliceQViewerCommand::MaximumSlice);
-                            }
-                            Volume *nextVolume = volumesList.at(nextVolumeIndex);
-                            m_2DViewer->setInputAsynchronously(nextVolume, command);
-                        }
-                    }
-                }
-                else
-                {
-                    if (keySymbol == "plus")
-                    {
-                        m_2DViewer->setSlice(m_2DViewer->getCurrentSlice() + 1);
-                    }
-                    else if (keySymbol == "minus")
-                    {
-                        m_2DViewer->setSlice(m_2DViewer->getCurrentSlice() - 1);
-                    }
-                }
-            }
+            onHomePress();
         }
-            break;
-
-        default:
-            break;
+        else if (keySymbol == "End")
+        {
+            onEndPress();
+        }
+        else if (keySymbol == "Up")
+        {
+            onUpPress();
+        }
+        else if (keySymbol == "Down")
+        {
+            onDownPress();
+        }
+        else if (keySymbol == "Left")
+        {
+            onLeftPress();
+        }
+        else if (keySymbol == "Right")
+        {
+            onRightPress();
+        }
+        else if (keySymbol == "plus")
+        {
+            onPlusPress();
+        }
+        else if (keySymbol == "minus")
+        {
+            onMinusPress();
+        }
     }
 }
+
+void SlicingKeyboardTool::reassignAxis()
+{
+    setNumberOfAxes(2);
+    bool sliceable = getRangeSize(SlicingMode::Slice) > 1;
+    bool phaseable = getRangeSize(SlicingMode::Phase) > 1;
+    if (sliceable && phaseable) 
+    {
+        setMode(MAIN_AXIS, SlicingMode::Slice);
+        setMode(SECONDARY_AXIS, SlicingMode::Phase);
+    }
+    else if (sliceable && !phaseable)
+    {
+        setMode(MAIN_AXIS, SlicingMode::Slice);
+        setMode(SECONDARY_AXIS, SlicingMode::None);
+    }
+    else if (!sliceable && phaseable)
+    {
+        setMode(MAIN_AXIS, SlicingMode::Phase);
+        setMode(SECONDARY_AXIS, SlicingMode::Phase);
+    }
+    else
+    {
+        setMode(MAIN_AXIS, SlicingMode::Slice);
+        setMode(SECONDARY_AXIS, SlicingMode::None);
+    }
+
+}
+
+void SlicingKeyboardTool::onHomePress()
+{
+    setLocation(MAIN_AXIS, getMinimum(MAIN_AXIS));
+}
+
+void SlicingKeyboardTool::onEndPress()
+{
+    setLocation(MAIN_AXIS, getMaximum(MAIN_AXIS));
+}
+
+void SlicingKeyboardTool::onUpPress()
+{
+    incrementLocation(MAIN_AXIS, 1);
+}
+
+void SlicingKeyboardTool::onDownPress()
+{
+    incrementLocation(MAIN_AXIS, -1);
+}
+
+void SlicingKeyboardTool::onLeftPress()
+{
+    incrementLocation(SECONDARY_AXIS, -1);
+}
+
+void SlicingKeyboardTool::onRightPress()
+{
+    incrementLocation(SECONDARY_AXIS, 1);
+}
+
+void SlicingKeyboardTool::onPlusPress()
+{
+    incrementLocationWithVolumesLoop(1);
+}
+
+void SlicingKeyboardTool::onMinusPress()
+{
+    incrementLocationWithVolumesLoop(-1);
+}
+
+void SlicingKeyboardTool::incrementLocationWithVolumesLoop(int shift)
+{
+    int overflow = incrementLocation(MAIN_AXIS, shift);
+    if (overflow != 0)
+    {
+        overflow = overflow > 0 ? 1 : -1; // Only -1 or 1 values allowed.
+        m_volumeInitialPosition = overflow > 0 ? ChangeSliceQViewerCommand::SlicePosition::MinimumSlice : ChangeSliceQViewerCommand::SlicePosition::MaximumSlice;
+        int volumeOverflow = incrementLocation(SlicingMode::Volume, overflow);
+        if (volumeOverflow != 0) // At first or last volume
+        {
+            if (volumeOverflow > 0)
+            { // Arrived to last volume
+                m_volumeInitialPosition = ChangeSliceQViewerCommand::SlicePosition::MinimumSlice;
+                setLocation(SlicingMode::Volume, getMinimum(SlicingMode::Volume));
+            }
+            else
+            { // Arrived to first volume
+                m_volumeInitialPosition = ChangeSliceQViewerCommand::SlicePosition::MaximumSlice;
+                setLocation(SlicingMode::Volume, getMaximum(SlicingMode::Volume));
+            }
+        }
+    }
+}
+
 }

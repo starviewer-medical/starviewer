@@ -15,27 +15,36 @@
 #ifndef UDGSLICINGKEYBOARDTOOL_H
 #define UDGSLICINGKEYBOARDTOOL_H
 
-#include "tool.h"
+#include "slicingtool.h"
 
 namespace udg {
 
-class Q2DViewer;
-class Volume;
-
-/**
-    Tool per la sincronització de llesques a partir de teclat
-  */
-class SlicingKeyboardTool : public Tool {
+class SlicingKeyboardTool : public SlicingTool {
 Q_OBJECT
 public:
-    SlicingKeyboardTool(QViewer *viewer, QObject *parent = 0);
-    ~SlicingKeyboardTool();
-
-    void handleEvent(unsigned long eventID);
+    explicit SlicingKeyboardTool(QViewer *viewer, QObject *parent = 0);
+    virtual ~SlicingKeyboardTool();
+    
+    virtual void handleEvent(unsigned long eventID) override;
+    
+public slots:
+    virtual void reassignAxis() override;
 
 private:
-    /// Ens guardem aquest punter per ser més còmode
-    Q2DViewer *m_2DViewer;
+    void onHomePress();
+    void onEndPress();
+    void onUpPress();
+    void onDownPress();
+    void onLeftPress();
+    void onRightPress();
+    void onPlusPress();
+    void onMinusPress();
+    
+    void incrementLocationWithVolumesLoop(int shift);
+    
+    static constexpr auto MAIN_AXIS = 0;
+    static constexpr auto SECONDARY_AXIS = 1;
+    
 };
 
 }
