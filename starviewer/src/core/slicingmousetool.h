@@ -32,6 +32,22 @@ public:
     
 public slots:
     virtual void reassignAxis() override;
+
+protected:
+    enum class CardinalDirection
+    {
+        Undefined,
+        North,
+        NorthWest,
+        West,
+        SouthWest,
+        South,
+        SouthEast,
+        East,
+        NorthEast
+    };
+    
+    static CardinalDirection getDirection(double radians);
     
 private:
     void onMousePress(const QPoint &position);
@@ -41,13 +57,17 @@ private:
     void onCtrlPress();
     void onCtrlRelease();
     
+    
     bool m_dragActive;
     bool m_verticalIsLikeHorizontal;
     
-    enum class Direction {Undefined, Horizontal, Vertical, Oblique};
-    Direction m_direction;
     
-    QPoint m_lastMousePosition;
+    CardinalDirection m_direction;
+    QPoint m_oldPosition = QPoint(0,0);
+    double m_unusedDistance = 0;
+    unsigned int m_detectionDistance = 16;
+    unsigned int m_scrollDistance = 4;
+    
     
     static constexpr auto VERTICAL_AXIS = 0;
     static constexpr auto HORIZONTAL_AXIS = 1;
