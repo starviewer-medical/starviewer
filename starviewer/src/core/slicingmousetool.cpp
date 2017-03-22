@@ -28,11 +28,7 @@ namespace udg {
 
 SlicingMouseTool::SlicingMouseTool(QViewer *viewer, QObject *parent)
 : SlicingTool(viewer, parent)
-{
-    m_dragActive = false;
-    m_verticalIsLikeHorizontal = false;
-    m_direction = CardinalDirection::Undefined;
-    
+{    
     m_toolName = "SlicingMouseTool";
     reassignAxis();
 }
@@ -55,20 +51,6 @@ void SlicingMouseTool::handleEvent(unsigned long eventID)
     {
         onMouseMove(m_2DViewer->getEventPosition());
     }
-    else if (eventID == vtkCommand::KeyPressEvent)
-    {
-        if (m_viewer->getInteractor()->GetControlKey())
-        {
-            onCtrlPress();
-        }
-    }
-    else if (eventID == vtkCommand::KeyReleaseEvent)
-    {
-        if (!m_viewer->getInteractor()->GetControlKey())
-        {
-            onCtrlRelease();
-        }
-    }
 }
 
 void SlicingMouseTool::reassignAxis()
@@ -76,6 +58,11 @@ void SlicingMouseTool::reassignAxis()
     setNumberOfAxes(2);
     bool sliceable = getRangeSize(SlicingMode::Slice) > 1;
     bool phaseable = getRangeSize(SlicingMode::Phase) > 1;
+    // TODO: Read configuration
+    m_loopEnabled = false;
+    m_cursorWrapArround = false;
+    
+    
     if (sliceable && phaseable) 
     {
         setMode(VERTICAL_AXIS, SlicingMode::Slice);
@@ -84,77 +71,31 @@ void SlicingMouseTool::reassignAxis()
     else if (sliceable && !phaseable)
     {
         setMode(VERTICAL_AXIS, SlicingMode::Slice);
-        setMode(HORIZONTAL_AXIS, SlicingMode::None);
+        setMode(HORIZONTAL_AXIS, SlicingMode::Slice);
     }
     else if (!sliceable && phaseable)
     {
-        setMode(VERTICAL_AXIS, SlicingMode::None);
+        setMode(VERTICAL_AXIS, SlicingMode::Phase);
         setMode(HORIZONTAL_AXIS, SlicingMode::Phase);
     }
 }
 
-SlicingMouseTool::CardinalDirection SlicingMouseTool::getDirection(double radians)
-{
-    constexpr double deg000 = 0;
-    constexpr double deg030 = M_PI/6;
-    constexpr double deg060 = M_PI/3;
-    constexpr double deg120 = (2*M_PI)/3;
-    constexpr double deg150 = (5*M_PI)/6;
-    constexpr double deg210 = (7*M_PI)/6;
-    constexpr double deg240 = (4*M_PI)/3;
-    constexpr double deg300 = (5*M_PI)/3;
-    constexpr double deg330 = (11*M_PI)/6;
-    constexpr double deg360 = 2*M_PI;
-    
-    radians = fmod(radians, deg360);
-    radians += radians >= 0 ? 0 : M_PI*2;
-    
-    if (deg030 >= radians && radians >= deg000) 
-    {
-        return CardinalDirection::East;
-    }
-    else if (deg060 > radians && radians > deg030)
-    {
-        return CardinalDirection::NorthEast;
-    }
-    else if (deg120 >= radians && radians >= deg060)
-    {
-        return CardinalDirection::North;
-    }
-    else if (deg150 > radians && radians > deg120)
-    {
-        return CardinalDirection::NorthWest;
-    }
-    else if (deg210 >= radians && radians >= deg150)
-    {
-        return CardinalDirection::West;
-    }
-    else if (deg240 > radians && radians > deg210)
-    {
-        return CardinalDirection::SouthWest;
-    }
-    else if (deg300 >= radians && radians >= deg240)
-    {
-        return CardinalDirection::South;
-    }
-    else if (deg330 > radians && radians > deg300)
-    {
-        return CardinalDirection::SouthEast;
-    }
-    else if (deg360 >= radians && radians >= deg330) 
-    {
-        return CardinalDirection::East;
-    }
-    return CardinalDirection::Undefined;
-}
 
 void SlicingMouseTool::onMousePress(const QPoint &position)
 {
     m_dragActive = true;
     
-    m_direction = CardinalDirection::Undefined;
-    m_unusedDistance = 0;
-    m_oldPosition = position;
+    beginDirectionDetection(position);
+    
+    if (getMode(VERTICAL_AXIS) == getMode(HORIZONTAL_AXIS))
+    { // Scrolling vertically or horizontally has the same effect... so scrolling can begin immediately.
+        m_currentDirection = Direction::Vertical;
+        beginScroll(position);
+    }
+    else 
+    {
+        m_currentDirection = Direction::Undefined;
+    }
     
     onMouseMove(position);
 }
@@ -163,60 +104,30 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
 {
     if (m_dragActive)
     {
-        QPoint azimuthVector = m_oldPosition - position ; 
-        double distance = hypot(azimuthVector.x(), azimuthVector.y());
-        double azimuth = atan2(azimuthVector.y(), azimuthVector.x()) + M_PI;
-        CardinalDirection direction = getDirection(azimuth);
-        CardinalDirection oppositeDirection = getDirection(azimuth - M_PI);
+        // *** Direction detection ***
+        // Varies as user moves the mouse...
+        Direction direction = directionDetection(m_directionStartPosition, position);
+        if (direction != Direction::Undefined)
+        {
+            beginDirectionDetection(position);
+            if (m_currentDirection != direction) 
+            {
+                m_currentDirection = direction;
+                beginScroll(position);
+            }
+        }
         
-        if (m_direction == CardinalDirection::Undefined) 
+        // *** Do the scrolling ***
+        if (m_currentDirection != Direction::Undefined)
         {
-            if (distance >= m_detectionDistance)
-            { // Moved sufficiently to determine the direction
-                m_direction = direction;
-                m_oldPosition = position;
-                m_unusedDistance = 0;
-            }
-            DEBUG_LOG(QString("UNDEFINED Azimuth: %0 Distance: %1 azv: %2 %3").arg(azimuth).arg(distance).arg(azimuthVector.x()).arg(azimuthVector.y()));
+            scroll(m_startPosition, position);
         }
-        else if (m_direction == direction || m_direction == oppositeDirection) 
-        {
-            int sign = m_direction == oppositeDirection ? -1 : 1;
-            int increment = (sign*distance + m_unusedDistance) / m_scrollDistance;
-            unsigned int axisNumber = 0;
-            if (m_direction == CardinalDirection::East || m_direction == CardinalDirection::West)
-            {
-                axisNumber = 1;
-            }
-            
-            m_scrollDistance = 8;
-            if (getRangeSize(axisNumber) < 32)
-            {
-                m_scrollDistance = 32;
-                
-            }
-            else if (getRangeSize(axisNumber) < 64)
-            {
-                m_scrollDistance = 16;
-                
-            }
-            
-            
-            if (increment) {
-                incrementLocation(axisNumber, increment);
-                m_unusedDistance = fmod(sign*distance, (double)m_scrollDistance);
-                m_oldPosition = position;
-            }
-            
-            
-            DEBUG_LOG(QString("DIR DEFINED Azimuth: %0 Distance: %1").arg(azimuth).arg(distance));
-        }
-        else 
-        { // User took a totally different direction.
-            DEBUG_LOG(QString("GOT OUT Azimuth: %0 Distance: %1").arg(azimuth).arg(distance));
-            m_unusedDistance = 0;
-            m_oldPosition = position;
-        }
+        
+        // *** Cursor ***
+        
+        // *** Mouse wrap arround ***
+        
+        
     }
 }
 
@@ -226,15 +137,98 @@ void SlicingMouseTool::onMouseRelease(const QPoint &position)
     m_dragActive = false;
 }
 
-void SlicingMouseTool::onCtrlPress()
+SlicingMouseTool::Direction SlicingMouseTool::directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const
+{    
+    if (m_currentDirection == Direction::Undefined) 
+    {
+        return getDirection(startPosition, currentPosition, m_directionStepLength, 1, 1);
+    }
+    else if (m_currentDirection == Direction::Horizontal) 
+    {
+        return getDirection(startPosition, currentPosition, m_directionStepLength, 1, 0.5);
+    }
+    else if (m_currentDirection == Direction::Vertical)
+    {
+        return getDirection(startPosition, currentPosition, m_directionStepLength, 0.5, 1);
+    }
+    Q_ASSERT(false);
+}
+
+void SlicingMouseTool::beginDirectionDetection(const QPoint& startPosition)
 {
-    m_verticalIsLikeHorizontal = true;
+    m_directionStartPosition = startPosition;
+    m_directionStepLength = 64;   
 }
 
-void SlicingMouseTool::onCtrlRelease()
+void SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& currentPosition)
 {
-    m_verticalIsLikeHorizontal = false;
+    Q_ASSERT(m_currentDirection != Direction::Undefined);
+    unsigned int axis; 
+    double shift;
+    if (m_currentDirection == Direction::Horizontal)
+    {
+        axis = HORIZONTAL_AXIS;
+        shift = currentPosition.x() - startPosition.x();
+    }
+    else if (m_currentDirection == Direction::Vertical)
+    {
+        axis = VERTICAL_AXIS;
+        shift = currentPosition.y() - startPosition.y();
+    }
+    
+    // Calculate the new location
+    double location = shift / m_stepLength;
+    if (isnan(location) || isinf(location)) 
+    {
+        location = 0;
+    }
+    location += m_startLocation;
+    
+    // Setting the location and reacting to overflow or underflow
+    double overflow = setLocation(axis, round(location));
+    if (overflow > 0.001 || overflow < -0.001) 
+    { // Overflow is not zero
+        if (m_loopEnabled) 
+        {
+            //signbit returns true if negative
+            setLocation(axis, signbit(overflow) ? getMaximum(axis) : getMinimum(axis)); 
+        }
+        beginScroll(currentPosition);
+    }
+    
+}
+
+void SlicingMouseTool::beginScroll(const QPoint& startPosition)
+{
+    Q_ASSERT(m_currentDirection != Direction::Undefined);
+    unsigned int axis = m_currentDirection == Direction::Horizontal ? HORIZONTAL_AXIS : VERTICAL_AXIS;
+    
+    m_startLocation = getLocation(axis);
+    m_startPosition = startPosition;
+    
+    m_stepLength = 32;
+}
+
+SlicingMouseTool::Direction SlicingMouseTool::getDirection(const QPointF& startPosition, const QPointF& currentPosition, double stepLength, double xWeight, double yWeight) const
+{
+    double vectorX = abs((currentPosition.x() - startPosition.x()) * xWeight);
+    double vectorY = abs((currentPosition.y() - startPosition.y()) * yWeight);
+    double vectorLength = hypot(vectorX, vectorY);
+    if (isgreater(vectorLength, stepLength))
+    {
+        if (isgreater(vectorX, vectorY))
+        {
+            return Direction::Horizontal;
+        }
+        else if (isgreater(vectorY, vectorX))
+        {
+            return Direction::Vertical;
+        }
+    }
+    return Direction::Undefined;
 }
 
 
 }
+
+

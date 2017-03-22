@@ -31,43 +31,67 @@ public:
     virtual void handleEvent(unsigned long eventID) override;
     
 public slots:
+    
+    // Que miri l'estat del control... i depenent d'aixo faci una cosa o una altra...
+    // Sempre hi han 2 exios
     virtual void reassignAxis() override;
 
 protected:
-    enum class CardinalDirection
-    {
-        Undefined,
-        North,
-        NorthWest,
-        West,
-        SouthWest,
-        South,
-        SouthEast,
-        East,
-        NorthEast
-    };
-    
-    static CardinalDirection getDirection(double radians);
-    
+    enum class Direction {Undefined, Vertical, Horizontal};
+   
 private:
+    /**
+     * 
+     */
     void onMousePress(const QPoint &position);
+    /**
+     * 
+     */
     void onMouseMove(const QPoint &position);
+    /**
+     * 
+     */
     void onMouseRelease(const QPoint &position);
     
-    void onCtrlPress();
-    void onCtrlRelease();
+    /**
+     * 
+     */
+    Direction directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const;
+    /**
+     * 
+     */
+    void beginDirectionDetection(const QPoint& startPosition);
+    
+    /**
+     * 
+     */
+    void scroll(const QPoint& startPosition, const QPoint& currentPosition);
+    //TODO: estic am el tema de beginDirectionDetection.... oju
     
     
-    bool m_dragActive;
-    bool m_verticalIsLikeHorizontal;
+    /**
+     * 
+     */
+    void beginScroll(const QPoint& startPosition);
+    
+    /**
+     * 
+     */
+    Direction getDirection(const QPointF &startPosition, const QPointF &currentPosition, double stepLength = 0, double xWeight = 1, double yWeight = 1) const;
     
     
-    CardinalDirection m_direction;
-    QPoint m_oldPosition = QPoint(0,0);
-    double m_unusedDistance = 0;
-    unsigned int m_detectionDistance = 16;
-    unsigned int m_scrollDistance = 4;
+    bool m_dragActive = false;
+    bool m_loopEnabled = false;
+    bool m_cursorWrapArround = false;
     
+    double m_stepLength = 0;
+    QPoint m_startPosition = QPoint(0,0);
+    double m_startLocation = 0;
+    
+    double m_directionStepLength = 0;
+    QPoint m_directionStartPosition = QPoint(0,0);
+    
+    Direction m_currentDirection = Direction::Undefined;
     
     static constexpr auto VERTICAL_AXIS = 0;
     static constexpr auto HORIZONTAL_AXIS = 1;
