@@ -40,43 +40,17 @@ protected:
     enum class Direction {Undefined, Vertical, Horizontal};
    
 private:
-    /**
-     * 
-     */
+    
     void onMousePress(const QPoint &position);
-    /**
-     * 
-     */
     void onMouseMove(const QPoint &position);
-    /**
-     * 
-     */
     void onMouseRelease(const QPoint &position);
     
-    /**
-     * 
-     */
     Direction directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const;
-    /**
-     * 
-     */
     void beginDirectionDetection(const QPoint& startPosition);
     
-    /**
-     * 
-     */
     void scroll(const QPoint& startPosition, const QPoint& currentPosition);
-    //TODO: estic am el tema de beginDirectionDetection.... oju
-    
-    
-    /**
-     * 
-     */
     void beginScroll(const QPoint& startPosition);
     
-    /**
-     * 
-     */
     Direction getDirection(const QPointF &startPosition, const QPointF &currentPosition, double stepLength = 0, double xWeight = 1, double yWeight = 1) const;
     
     
@@ -95,6 +69,10 @@ private:
     
     static constexpr auto VERTICAL_AXIS = 0;
     static constexpr auto HORIZONTAL_AXIS = 1;
+    
+    static constexpr unsigned int DEFAULT_MINIMUM_STEP_LENGTH = 2;
+    static constexpr unsigned int DEFAULT_MAXIMUM_STEP_LENGTH = 64;
+    static constexpr unsigned int DEFAULT_DETECTION_STEP_LENGTH = 16;
 };
 
 }

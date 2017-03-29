@@ -41,15 +41,21 @@ void SlicingMouseTool::handleEvent(unsigned long eventID)
 {
     if (eventID == vtkCommand::LeftButtonPressEvent)
     {
-        onMousePress(m_2DViewer->getEventPosition());
+        // To Qt device independant pixels
+        QPoint position = m_2DViewer->getEventPosition() / m_2DViewer->devicePixelRatioF();
+        onMousePress(position);
     }
     else if (eventID == vtkCommand::LeftButtonReleaseEvent)
     {
-        onMouseRelease(m_2DViewer->getEventPosition());
+        // To Qt device independant pixels
+        QPoint position = m_2DViewer->getEventPosition() / m_2DViewer->devicePixelRatioF();
+        onMouseRelease(position);
     }
     else if (eventID == vtkCommand::MouseMoveEvent)
     {
-        onMouseMove(m_2DViewer->getEventPosition());
+        // To Qt device independant pixels
+        QPoint position = m_2DViewer->getEventPosition() / m_2DViewer->devicePixelRatioF();
+        onMouseMove(position);
     }
 }
 
@@ -133,7 +139,6 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
 
 void SlicingMouseTool::onMouseRelease(const QPoint &position)
 {
-    onMouseMove(position);
     m_dragActive = false;
 }
 
@@ -157,7 +162,7 @@ SlicingMouseTool::Direction SlicingMouseTool::directionDetection(const QPoint& s
 void SlicingMouseTool::beginDirectionDetection(const QPoint& startPosition)
 {
     m_directionStartPosition = startPosition;
-    m_directionStepLength = 64;   
+    m_directionStepLength = DEFAULT_DETECTION_STEP_LENGTH;
 }
 
 void SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& currentPosition)
@@ -206,7 +211,21 @@ void SlicingMouseTool::beginScroll(const QPoint& startPosition)
     m_startLocation = getLocation(axis);
     m_startPosition = startPosition;
     
-    m_stepLength = 32;
+    // Step lenght determined by the viewer size.
+    {
+        unsigned int windowLength = std::max(1, m_currentDirection == Direction::Horizontal ? m_2DViewer->size().width() : m_2DViewer->size().height()); // Always greater than zero
+        unsigned int rangeSize = std::max((unsigned int)1, getRangeSize(axis)); // Always greater than zero
+        
+        m_stepLength = windowLength / rangeSize;
+        if (m_stepLength > DEFAULT_MAXIMUM_STEP_LENGTH)
+        {
+            m_stepLength = DEFAULT_MAXIMUM_STEP_LENGTH;
+        }
+        else if (m_stepLength < DEFAULT_MINIMUM_STEP_LENGTH)
+        {
+            m_stepLength = DEFAULT_MINIMUM_STEP_LENGTH;
+        }
+    }
 }
 
 SlicingMouseTool::Direction SlicingMouseTool::getDirection(const QPointF& startPosition, const QPointF& currentPosition, double stepLength, double xWeight, double yWeight) const
