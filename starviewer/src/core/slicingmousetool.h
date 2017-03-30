@@ -56,7 +56,14 @@ private:
     
     bool m_dragActive = false;
     bool m_loopEnabled = false;
-    bool m_cursorWrapArround = false;
+    bool m_cursorWrapAroundEnabled = false;
+    
+    bool m_cursorWrappedAroundToLeft = false;
+    bool m_cursorWrappedAroundToRight = false;
+    bool m_cursorWrappedAroundToTop = false;
+    bool m_cursorWrappedAroundToBottom = false;
+    QPoint m_positionBeforeWrappingAround;
+    
     
     double m_stepLength = 0;
     QPoint m_startPosition = QPoint(0,0);

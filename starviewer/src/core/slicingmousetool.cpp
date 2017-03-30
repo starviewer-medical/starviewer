@@ -64,10 +64,10 @@ void SlicingMouseTool::reassignAxis()
     setNumberOfAxes(2);
     bool sliceable = getRangeSize(SlicingMode::Slice) > 1;
     bool phaseable = getRangeSize(SlicingMode::Phase) > 1;
+    
     // TODO: Read configuration
     m_loopEnabled = false;
-    m_cursorWrapArround = false;
-    
+    m_cursorWrapAroundEnabled = true;
     
     if (sliceable && phaseable) 
     {
@@ -110,8 +110,64 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
 {
     if (m_dragActive)
     {
+        // *** Mouse wrap arround ***
+        if (m_cursorWrapAroundEnabled)
+        {
+            // Have we made a move wrap arround on the previous movement?
+            if (
+                (m_cursorWrappedAroundToLeft && position.x() < m_positionBeforeWrappingAround.x()) ||
+                (m_cursorWrappedAroundToRight && position.x() > m_positionBeforeWrappingAround.x()) ||
+                (m_cursorWrappedAroundToTop && position.y() > m_positionBeforeWrappingAround.y()) ||
+                (m_cursorWrappedAroundToBottom && position.y() < m_positionBeforeWrappingAround.y())
+            )
+            {
+                m_cursorWrappedAroundToLeft = false;
+                m_cursorWrappedAroundToRight = false;
+                m_cursorWrappedAroundToTop = false;
+                m_cursorWrappedAroundToBottom = false;
+                beginDirectionDetection(position);
+                if (m_currentDirection != Direction::Undefined)
+                {
+                    beginScroll(position);
+                }
+            }
+            
+            // Do we have to do a mouse wrap arround in the next movement?
+            QPoint cursor = QCursor::pos();
+            const QPoint& topLeft = m_2DViewer->mapToGlobal(m_2DViewer->rect().topLeft());
+            const QPoint& bottomRight = m_2DViewer->mapToGlobal(m_2DViewer->rect().bottomRight());
+            
+            if (cursor.x() < topLeft.x())
+            {
+                cursor.setX(bottomRight.x());
+                m_cursorWrappedAroundToRight = true;
+            }
+            else if (cursor.x() > bottomRight.x())
+            {
+                cursor.setX(topLeft.x());
+                m_cursorWrappedAroundToLeft = true;
+            }
+            
+            if (cursor.y() < topLeft.y())
+            {
+                cursor.setY(bottomRight.y());
+                m_cursorWrappedAroundToBottom = true;
+            }
+            else if (cursor.y() > bottomRight.y())
+            {
+                cursor.setY(topLeft.y());
+                m_cursorWrappedAroundToTop = true;
+            }
+            
+            if (m_cursorWrappedAroundToLeft || m_cursorWrappedAroundToRight || m_cursorWrappedAroundToTop ||m_cursorWrappedAroundToBottom) 
+            {
+                m_positionBeforeWrappingAround = position;
+                QCursor::setPos(cursor);
+            }
+        }
+        
         // *** Direction detection ***
-        // Varies as user moves the mouse...
+        // Direction varies and gets eventually defined as user moves the mouse...
         Direction direction = directionDetection(m_directionStartPosition, position);
         if (direction != Direction::Undefined)
         {
@@ -123,16 +179,13 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
             }
         }
         
-        // *** Do the scrolling ***
+        // *** Scrolling ***
         if (m_currentDirection != Direction::Undefined)
         {
             scroll(m_startPosition, position);
         }
         
-        // *** Cursor ***
-        
-        // *** Mouse wrap arround ***
-        
+        // *** Cursor icons ***
         
     }
 }
@@ -140,6 +193,10 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
 void SlicingMouseTool::onMouseRelease(const QPoint &position)
 {
     m_dragActive = false;
+    m_cursorWrappedAroundToLeft = false;
+    m_cursorWrappedAroundToRight = false;
+    m_cursorWrappedAroundToTop = false;
+    m_cursorWrappedAroundToBottom = false;
 }
 
 SlicingMouseTool::Direction SlicingMouseTool::directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const
