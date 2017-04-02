@@ -15,7 +15,8 @@
 #include "slicingmousetool.h"
 
 #include "q2dviewer.h"
-#include "logging.h"
+#include "settings.h"
+#include "coresettings.h"
 
 // Qt
 #include <QtMath>
@@ -64,10 +65,13 @@ void SlicingMouseTool::reassignAxis()
     setNumberOfAxes(2);
     bool sliceable = getRangeSize(SlicingMode::Slice) > 1;
     bool phaseable = getRangeSize(SlicingMode::Phase) > 1;
-    
-    // TODO: Read configuration
-    m_loopEnabled = false;
-    m_wrapAround_enabled = true;
+
+    {
+        Settings settings;
+        m_scrollLoop_enabledOnSlices = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
+        m_scrollLoop_enabledOnPhases = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
+        m_wrapAround_enabled = settings.getValue(CoreSettings::EnableQ2DViewerMouseWraparound).toBool();
+    }
     
     if (sliceable && phaseable) 
     {
@@ -341,7 +345,7 @@ double SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& curre
     double overflow = setLocation(axis, round(location));
     if (overflow > 0.001 || overflow < -0.001) 
     { // Overflow is not zero
-        if (m_loopEnabled) 
+        if (m_scrollLoopEnabled) 
         {
             //signbit returns true if negative
             overflow = setLocation(axis, signbit(overflow) ? getMaximum(axis) : getMinimum(axis));
@@ -358,6 +362,13 @@ void SlicingMouseTool::beginScroll(const QPoint& startPosition)
     
     m_startLocation = getLocation(axis);
     m_startPosition = startPosition;
+    
+    // Determine if closed loop scrolling must be enabled
+    {
+         m_scrollLoopEnabled = false;
+         m_scrollLoopEnabled = m_scrollLoopEnabled || (getMode(axis) == SlicingMode::Slice && m_scrollLoop_enabledOnSlices);
+         m_scrollLoopEnabled = m_scrollLoopEnabled || (getMode(axis) == SlicingMode::Phase && m_scrollLoop_enabledOnPhases);
+    }
     
     // Step lenght determined by the viewer size.
     {
@@ -394,7 +405,6 @@ SlicingMouseTool::Direction SlicingMouseTool::getDirection(const QPointF& startP
     }
     return Direction::Undefined;
 }
-
 
 }
 

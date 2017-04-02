@@ -115,6 +115,9 @@ public:
     static const QString EnableQ2DViewerSliceScrollLoop;
     static const QString EnableQ2DViewerPhaseScrollLoop;
 
+    static const QString EnableQ2DViewerWheelVolumeScroll;
+    static const QString EnableQ2DViewerMouseWraparound;
+
     /// Defineix si habilitem per defecte el reference lines per modalitats MR i/o CT
     static const QString EnableQ2DViewerReferenceLinesForMR;
     static const QString EnableQ2DViewerReferenceLinesForCT;

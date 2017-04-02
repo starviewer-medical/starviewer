@@ -55,10 +55,12 @@ private:
     void beginScroll(const QPoint& startPosition);
     
     Direction getDirection(const QPointF &startPosition, const QPointF &currentPosition, double stepLength = 0, double xWeight = 1, double yWeight = 1) const;
-    
+    bool shouldDoClosedLoop(unsigned int axis) const;
     
     bool m_dragActive = false;
-    bool m_loopEnabled = false;
+    
+    bool m_scrollLoop_enabledOnSlices = false;
+    bool m_scrollLoop_enabledOnPhases  = false;
     
     bool m_wrapAround_enabled = false;
     bool m_wrapAround_wrappedToLeft = false;
@@ -75,6 +77,7 @@ private:
     double m_stepLength = 0;
     QPoint m_startPosition = QPoint(0,0);
     double m_startLocation = 0;
+    bool m_scrollLoopEnabled = false;
     static constexpr unsigned int DEFAULT_MINIMUM_STEP_LENGTH = 2;
     static constexpr unsigned int DEFAULT_MAXIMUM_STEP_LENGTH = 64;
     

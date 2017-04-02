@@ -39,6 +39,10 @@ private:
     void onMiddleButtonPress();
     void onMiddleButtonRelease();
 
+    bool m_sliceScrollLoop = false;
+    bool m_phaseScroolLoop  = false;
+    bool m_volumeScroll  = false;
+    
     /** Some mouses produce unwanted scrolls when the wheel is clicked. This is
      *  used to cancel them until the wheel is released.
      */

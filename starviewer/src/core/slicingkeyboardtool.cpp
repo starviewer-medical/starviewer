@@ -13,7 +13,10 @@
  *************************************************************************************/
 
 #include "slicingkeyboardtool.h"
+
 #include "q2dviewer.h"
+#include "settings.h"
+#include "coresettings.h"
 
 // Vtk
 #include <vtkRenderWindowInteractor.h>
@@ -77,6 +80,13 @@ void SlicingKeyboardTool::reassignAxis()
     setNumberOfAxes(2);
     bool sliceable = getRangeSize(SlicingMode::Slice) > 1;
     bool phaseable = getRangeSize(SlicingMode::Phase) > 1;
+    
+    {
+        Settings settings;
+        m_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
+        m_phaseScroolLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
+    }
+    
     if (sliceable && phaseable) 
     {
         setMode(MAIN_AXIS, SlicingMode::Slice);

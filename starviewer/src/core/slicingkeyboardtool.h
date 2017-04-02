@@ -42,6 +42,9 @@ private:
     
     void incrementLocationWithVolumesLoop(int shift);
     
+    bool m_sliceScrollLoop = false;
+    bool m_phaseScroolLoop  = false;
+    
     static constexpr auto MAIN_AXIS = 0;
     static constexpr auto SECONDARY_AXIS = 1;
     

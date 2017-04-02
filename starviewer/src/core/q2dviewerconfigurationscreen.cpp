@@ -38,6 +38,8 @@ void Q2DViewerConfigurationScreen::initialize()
     
     m_sliceScrollLoopCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool());
     m_phaseScrollLoopCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool());
+    m_wheelVolumeScrollCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerWheelVolumeScroll).toBool());
+    m_mouseWraparoundCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerMouseWraparound).toBool());
     m_referenceLinesMRCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForMR).toBool());
     m_referenceLinesCTCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForCT).toBool());
     m_automaticSynchronizationMRCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForMR).toBool());
@@ -54,6 +56,8 @@ void Q2DViewerConfigurationScreen::createConnections()
 {
     connect(m_sliceScrollLoopCheckBox, SIGNAL(toggled(bool)), SLOT(updateSliceScrollLoopSetting(bool)));
     connect(m_phaseScrollLoopCheckBox, SIGNAL(toggled(bool)), SLOT(updatePhaseScrollLoopSetting(bool)));
+    connect(m_wheelVolumeScrollCheckBox, SIGNAL(toggled(bool)), SLOT(updateWheelVolumeScrollSetting(bool)));
+    connect(m_mouseWraparoundCheckBox, SIGNAL(toggled(bool)), SLOT(updateMouseWraparoundSetting(bool)));
     connect(m_referenceLinesMRCheckBox, SIGNAL(toggled(bool)), SLOT(updateReferenceLinesForMRSetting(bool)));
     connect(m_referenceLinesCTCheckBox, SIGNAL(toggled(bool)), SLOT(updateReferenceLinesForCTSetting(bool)));
     connect(m_automaticSynchronizationMRCheckBox,SIGNAL(toggled(bool)), SLOT(updateAutomaticSynchronizationForMRSetting(bool)));
@@ -184,6 +188,20 @@ void Q2DViewerConfigurationScreen::updatePhaseScrollLoopSetting(bool enable)
     Settings settings;
 
     settings.setValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop, enable);
+}
+
+void Q2DViewerConfigurationScreen::updateWheelVolumeScrollSetting(bool enable)
+{
+    Settings settings;
+
+    settings.setValue(CoreSettings::EnableQ2DViewerWheelVolumeScroll, enable);
+}
+
+void Q2DViewerConfigurationScreen::updateMouseWraparoundSetting(bool enable)
+{
+    Settings settings;
+
+    settings.setValue(CoreSettings::EnableQ2DViewerMouseWraparound, enable);
 }
 
 void Q2DViewerConfigurationScreen::updateReferenceLinesForMRSetting(bool enable)
