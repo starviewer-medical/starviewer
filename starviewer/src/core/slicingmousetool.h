@@ -59,13 +59,13 @@ private:
     
     bool m_dragActive = false;
     bool m_loopEnabled = false;
-    bool m_cursorWrapAroundEnabled = false;
     
-    bool m_cursorWrappedAroundToLeft = false;
-    bool m_cursorWrappedAroundToRight = false;
-    bool m_cursorWrappedAroundToTop = false;
-    bool m_cursorWrappedAroundToBottom = false;
-    QPoint m_positionBeforeWrappingAround;
+    bool m_wrapAround_enabled = false;
+    bool m_wrapAround_wrappedToLeft = false;
+    bool m_wrapAround_wrappedToRight = false;
+    bool m_wrapAround_wrappedToTop = false;
+    bool m_wrapAround_wrappedToBottom = false;
+    QPoint m_wrapAround_positionBeforeWrapping = QPoint(0,0);
     
     QPoint m_cursorIcon_lastPosition = QPoint(0,0);
     int m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
@@ -75,18 +75,18 @@ private:
     double m_stepLength = 0;
     QPoint m_startPosition = QPoint(0,0);
     double m_startLocation = 0;
+    static constexpr unsigned int DEFAULT_MINIMUM_STEP_LENGTH = 2;
+    static constexpr unsigned int DEFAULT_MAXIMUM_STEP_LENGTH = 64;
     
     double m_directionStepLength = 0;
     QPoint m_directionStartPosition = QPoint(0,0);
+    static constexpr unsigned int DEFAULT_DETECTION_STEP_LENGTH = 16;
     
     Direction m_currentDirection = Direction::Undefined;
     
     static constexpr auto VERTICAL_AXIS = 0;
     static constexpr auto HORIZONTAL_AXIS = 1;
     
-    static constexpr unsigned int DEFAULT_MINIMUM_STEP_LENGTH = 2;
-    static constexpr unsigned int DEFAULT_MAXIMUM_STEP_LENGTH = 64;
-    static constexpr unsigned int DEFAULT_DETECTION_STEP_LENGTH = 16;
 };
 
 }
