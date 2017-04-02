@@ -45,10 +45,13 @@ private:
     void onMouseMove(const QPoint &position);
     void onMouseRelease(const QPoint &position);
     
+    void updateCursorIcon(const QPoint &position);
+    void unsetCursorIcon();
+    
     Direction directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const;
     void beginDirectionDetection(const QPoint& startPosition);
     
-    void scroll(const QPoint& startPosition, const QPoint& currentPosition);
+    double scroll(const QPoint& startPosition, const QPoint& currentPosition);
     void beginScroll(const QPoint& startPosition);
     
     Direction getDirection(const QPointF &startPosition, const QPointF &currentPosition, double stepLength = 0, double xWeight = 1, double yWeight = 1) const;
@@ -64,6 +67,10 @@ private:
     bool m_cursorWrappedAroundToBottom = false;
     QPoint m_positionBeforeWrappingAround;
     
+    QPoint m_cursorIcon_lastPosition = QPoint(0,0);
+    int m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
+    /// Default value to avoid a cursor icon change.
+    static constexpr int CURSOR_ICON_DONT_UPDATE = -1;
     
     double m_stepLength = 0;
     QPoint m_startPosition = QPoint(0,0);

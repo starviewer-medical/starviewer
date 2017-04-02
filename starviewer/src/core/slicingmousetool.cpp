@@ -130,6 +130,7 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
                 {
                     beginScroll(position);
                 }
+                m_cursorIcon_lastPosition = position;
             }
             
             // Do we have to do a mouse wrap arround in the next movement?
@@ -186,7 +187,7 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
         }
         
         // *** Cursor icons ***
-        
+        updateCursorIcon(position);
     }
 }
 
@@ -197,6 +198,96 @@ void SlicingMouseTool::onMouseRelease(const QPoint &position)
     m_cursorWrappedAroundToRight = false;
     m_cursorWrappedAroundToTop = false;
     m_cursorWrappedAroundToBottom = false;
+    unsetCursorIcon();
+}
+
+void SlicingMouseTool::updateCursorIcon(const QPoint &position)
+{
+    int index = 0;
+    if (m_currentDirection != Direction::Undefined)
+    {
+        unsigned int axis;
+        double positionIncrement;
+        
+        if (m_currentDirection == Direction::Vertical)
+        {
+            index += 2;
+            axis = VERTICAL_AXIS;
+            positionIncrement = position.y() - m_cursorIcon_lastPosition.y();
+        }
+        else if (m_currentDirection == Direction::Horizontal)
+        {
+            index += 0;
+            axis = HORIZONTAL_AXIS;
+            positionIncrement = position.x() - m_cursorIcon_lastPosition.x();
+        }
+        else { Q_ASSERT(false); }
+        
+        if (getMode(axis) == SlicingMode::Phase)
+        { // Phase mode
+            index += 8;
+        }
+        
+        if (positionIncrement > 0.001) 
+        { // Positive increment
+            index += 1;
+            if (getLocation(axis) >= getMaximum(axis) - 0.001)
+            { // Maximum limit reached
+                index += 4;
+            }
+            
+        }
+        else if (positionIncrement < -0.001) 
+        { // Negative increment
+            index += 0;
+            if (getMinimum(axis) + 0.001  >= getLocation(axis))
+            { // Minimum limit reached
+                index += 4;
+            }
+        }
+        else
+        { // No increment
+            index = CURSOR_ICON_DONT_UPDATE; // Do not touch the icon...
+        }
+    }
+    else
+    {
+        index = 16;
+    }
+
+    if (m_cursorIcon_lastIndex != index)
+    { // Cursor modified only when it really changes, not on every little move.
+        switch (index)
+        {
+            case 0:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-slice-left.svg"))); break;
+            case 1:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-slice-right.svg"))); break;
+            case 2:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-slice-down.svg"))); break;
+            case 3:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-slice-up.svg"))); break;
+            case 4:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-slice-left-limit.svg"))); break;
+            case 5:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-slice-right-limit.svg"))); break;
+            case 6:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-slice-down-limit.svg"))); break;
+            case 7:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-slice-up-limit.svg"))); break;
+            case 8:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-phase-left.svg"))); break;
+            case 9:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-phase-right.svg"))); break;
+            case 10: m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-phase-down.svg"))); break;
+            case 11: m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-phase-up.svg"))); break;
+            case 12: m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-phase-left-limit.svg"))); break;
+            case 13: m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-phase-right-limit.svg"))); break;
+            case 14: m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-phase-down-limit.svg"))); break;
+            case 15: m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-phase-up-limit.svg"))); break;    
+            case 16: m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll.svg"))); break;
+            default: break;
+        }
+        m_cursorIcon_lastIndex = index;
+    }
+    m_cursorIcon_lastPosition = position;
+}
+
+void SlicingMouseTool::unsetCursorIcon()
+{
+    m_2DViewer->unsetCursor();
+    m_cursorIcon_lastPosition = QPoint(0,0);
+    m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
 }
 
 SlicingMouseTool::Direction SlicingMouseTool::directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const
@@ -222,7 +313,7 @@ void SlicingMouseTool::beginDirectionDetection(const QPoint& startPosition)
     m_directionStepLength = DEFAULT_DETECTION_STEP_LENGTH;
 }
 
-void SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& currentPosition)
+double SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& currentPosition)
 {
     Q_ASSERT(m_currentDirection != Direction::Undefined);
     unsigned int axis; 
@@ -253,11 +344,11 @@ void SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& current
         if (m_loopEnabled) 
         {
             //signbit returns true if negative
-            setLocation(axis, signbit(overflow) ? getMaximum(axis) : getMinimum(axis)); 
+            overflow = setLocation(axis, signbit(overflow) ? getMaximum(axis) : getMinimum(axis));
         }
         beginScroll(currentPosition);
     }
-    
+    return overflow;
 }
 
 void SlicingMouseTool::beginScroll(const QPoint& startPosition)
