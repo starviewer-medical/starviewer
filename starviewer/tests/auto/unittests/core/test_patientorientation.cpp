@@ -342,34 +342,255 @@ void test_PatientOrientation::setPatientOrientationFromImageOrientation_ShouldMa
     QTest::addColumn<QString>("patientOrientationString");
 
     QVector3D zeroVector(0, 0, 0);
-    QVector3D xVector(1, 0, 0);
-    QVector3D yVector(0, 1, 0);
-    QVector3D zVector(0, 0, 1);
-    QVector3D xMinusVector(-1, 0, 0);
-    QVector3D yMinusVector(0, -1, 0);
-    QVector3D zMinusVector(0, 0, -1);
-    
+    QVector3D pxVector( 1,  0,  0);
+    QVector3D nxVector(-1,  0,  0);
+    QVector3D pyVector( 0,  1,  0);
+    QVector3D nyVector( 0, -1,  0);
+    QVector3D pzVector( 0,  0,  1);
+    QVector3D nzVector( 0,  0, -1);
+
     QTest::newRow("Zero, Zero Vectors") << zeroVector << zeroVector << "";
-    QTest::newRow("Zero, X Vectors") << zeroVector << xVector << "";
-    QTest::newRow("X, Zero, Vectors") << xVector << zeroVector << "";
-    QTest::newRow("X, Y Vectors") << xVector << yVector << "L\\P\\H";
-    QTest::newRow("X, Z Vectors") << xVector << zVector << "L\\H\\A";
-    QTest::newRow("Y, X Vectors") << yVector << xVector << "P\\L\\F";
-    QTest::newRow("Y, Z Vectors") << yVector << zVector << "P\\H\\L";
-    QTest::newRow("Z, X Vectors") << zVector << xVector << "H\\L\\P";
-    QTest::newRow("Z, Y Vectors") << zVector << yVector << "H\\P\\R";
-    QTest::newRow("X, -Y Vectors") << xVector << yMinusVector << "L\\A\\F";
-    QTest::newRow("-X, -Y Vectors") << xMinusVector << yMinusVector << "R\\A\\H";
-    QTest::newRow("-X, Y Vectors") << xMinusVector << yVector << "R\\P\\F";
-    QTest::newRow("X, -Z Vectors") << xVector << zMinusVector << "L\\F\\P";
-    QTest::newRow("-X, -Z Vectors") << xMinusVector << zMinusVector << "R\\F\\A";
-    QTest::newRow("-X, Z Vectors") << xMinusVector << zVector << "R\\H\\P";
-    QTest::newRow("Y, -Z Vectors") << yVector << zMinusVector << "P\\F\\R";
-    QTest::newRow("-Y, -Z Vectors") << yMinusVector << zMinusVector << "A\\F\\L";
-    QTest::newRow("-Y, Z Vectors") << yMinusVector << zVector << "A\\H\\R";
-    QTest::newRow("Y, -X Vectors") << yVector << xMinusVector << "P\\R\\H";
-    QTest::newRow("-Y, -X Vectors") << yMinusVector << xMinusVector << "A\\R\\F";
-    QTest::newRow("-Y, X Vectors") << yMinusVector << xVector << "A\\L\\H";
+    QTest::newRow("Zero, X Vectors") << zeroVector << pxVector << "";
+    QTest::newRow("X, Zero, Vectors") << pxVector << zeroVector << "";
+    QTest::newRow("X, Y Vectors") << pxVector << pyVector << "L\\P\\H";
+    QTest::newRow("X, Z Vectors") << pxVector << pzVector << "L\\H\\A";
+    QTest::newRow("Y, X Vectors") << pyVector << pxVector << "P\\L\\F";
+    QTest::newRow("Y, Z Vectors") << pyVector << pzVector << "P\\H\\L";
+    QTest::newRow("Z, X Vectors") << pzVector << pxVector << "H\\L\\P";
+    QTest::newRow("Z, Y Vectors") << pzVector << pyVector << "H\\P\\R";
+    QTest::newRow("X, -Y Vectors") << pxVector << nyVector << "L\\A\\F";
+    QTest::newRow("-X, -Y Vectors") << nxVector << nyVector << "R\\A\\H";
+    QTest::newRow("-X, Y Vectors") << nxVector << pyVector << "R\\P\\F";
+    QTest::newRow("X, -Z Vectors") << pxVector << nzVector << "L\\F\\P";
+    QTest::newRow("-X, -Z Vectors") << nxVector << nzVector << "R\\F\\A";
+    QTest::newRow("-X, Z Vectors") << nxVector << pzVector << "R\\H\\P";
+    QTest::newRow("Y, -Z Vectors") << pyVector << nzVector << "P\\F\\R";
+    QTest::newRow("-Y, -Z Vectors") << nyVector << nzVector << "A\\F\\L";
+    QTest::newRow("-Y, Z Vectors") << nyVector << pzVector << "A\\H\\R";
+    QTest::newRow("Y, -X Vectors") << pyVector << nxVector << "P\\R\\H";
+    QTest::newRow("-Y, -X Vectors") << nyVector << nxVector << "A\\R\\F";
+    QTest::newRow("-Y, X Vectors") << nyVector << pxVector << "A\\L\\H";
+
+    QVector3D pxpyVector(QVector3D( 1,  1,  0).normalized());
+    QVector3D nxpyVector(QVector3D(-1,  1,  0).normalized());
+    QVector3D pxnyVector(QVector3D( 1, -1,  0).normalized());
+    QVector3D nxnyVector(QVector3D(-1, -1,  0).normalized());
+    QVector3D pxpzVector(QVector3D( 1,  0,  1).normalized());
+    QVector3D nxpzVector(QVector3D(-1,  0,  1).normalized());
+    QVector3D pxnzVector(QVector3D( 1,  0, -1).normalized());
+    QVector3D nxnzVector(QVector3D(-1,  0, -1).normalized());
+    QVector3D pypzVector(QVector3D( 0,  1,  1).normalized());
+    QVector3D nypzVector(QVector3D( 0, -1,  1).normalized());
+    QVector3D pynzVector(QVector3D( 0,  1, -1).normalized());
+    QVector3D nynzVector(QVector3D( 0, -1, -1).normalized());
+
+    // XY
+    {
+        QTest::newRow("+x+y, -x+y") << pxpyVector << nxpyVector << "LP\\RP\\H";
+        QTest::newRow("+x+y, +x-y") << pxpyVector << pxnyVector << "LP\\LA\\F";
+        QTest::newRow("+x+y, +x+z") << pxpyVector << pxpzVector << "LP\\LH\\LAF";
+        QTest::newRow("+x+y, -x+z") << pxpyVector << nxpzVector << "LP\\RH\\LAH";
+        QTest::newRow("+x+y, +x-z") << pxpyVector << pxnzVector << "LP\\LF\\RPF";
+        QTest::newRow("+x+y, -x-z") << pxpyVector << nxnzVector << "LP\\RF\\RPH";
+        QTest::newRow("+x+y, +y+z") << pxpyVector << pypzVector << "LP\\PH\\LAH";
+        QTest::newRow("+x+y, -y+z") << pxpyVector << nypzVector << "LP\\AH\\LAF";
+        QTest::newRow("+x+y, +y-z") << pxpyVector << pynzVector << "LP\\PF\\RPH";
+        QTest::newRow("+x+y, -y-z") << pxpyVector << nynzVector << "LP\\AF\\RPF";
+
+        QTest::newRow("-x+y, +x+y") << nxpyVector << pxpyVector << "RP\\LP\\F";
+        QTest::newRow("-x+y, -x-y") << nxpyVector << nxnyVector << "RP\\RA\\H";
+        QTest::newRow("-x+y, +x+z") << nxpyVector << pxpzVector << "RP\\LH\\LPF";
+        QTest::newRow("-x+y, -x+z") << nxpyVector << nxpzVector << "RP\\RH\\LPH";
+        QTest::newRow("-x+y, +x-z") << nxpyVector << pxnzVector << "RP\\LF\\RAF";
+        QTest::newRow("-x+y, -x-z") << nxpyVector << nxnzVector << "RP\\RF\\RAH";
+        QTest::newRow("-x+y, +y+z") << nxpyVector << pypzVector << "RP\\PH\\LPF";
+        QTest::newRow("-x+y, -y+z") << nxpyVector << nypzVector << "RP\\AH\\LPH";
+        QTest::newRow("-x+y, +y-z") << nxpyVector << pynzVector << "RP\\PF\\RAF";
+        QTest::newRow("-x+y, -y-z") << nxpyVector << nynzVector << "RP\\AF\\RAH";
+
+        QTest::newRow("+x-y, +x+y") << pxnyVector << pxpyVector << "LA\\LP\\H";
+        QTest::newRow("+x-y, -x-y") << pxnyVector << nxnyVector << "LA\\RA\\F";
+        QTest::newRow("+x-y, +x+z") << pxnyVector << pxpzVector << "LA\\LH\\RAH";
+        QTest::newRow("+x-y, -x+z") << pxnyVector << nxpzVector << "LA\\RH\\RAF";
+        QTest::newRow("+x-y, +x-z") << pxnyVector << pxnzVector << "LA\\LF\\LPH";
+        QTest::newRow("+x-y, -x-z") << pxnyVector << nxnzVector << "LA\\RF\\LPF";
+        QTest::newRow("+x-y, +y+z") << pxnyVector << pypzVector << "LA\\PH\\RAH";
+        QTest::newRow("+x-y, -y+z") << pxnyVector << nypzVector << "LA\\AH\\RAF";
+        QTest::newRow("+x-y, +y-z") << pxnyVector << pynzVector << "LA\\PF\\LPH";
+        QTest::newRow("+x-y, -y-z") << pxnyVector << nynzVector << "LA\\AF\\LPF";
+
+        QTest::newRow("-x-y, -x+y") << nxnyVector << nxpyVector << "RA\\RP\\F";
+        QTest::newRow("-x-y, +x-y") << nxnyVector << pxnyVector << "RA\\LA\\H";
+        QTest::newRow("-x-y, +x+z") << nxnyVector << pxpzVector << "RA\\LH\\RPH";
+        QTest::newRow("-x-y, -x+z") << nxnyVector << nxpzVector << "RA\\RH\\RPF";
+        QTest::newRow("-x-y, +x-z") << nxnyVector << pxnzVector << "RA\\LF\\LAH";
+        QTest::newRow("-x-y, -x-z") << nxnyVector << nxnzVector << "RA\\RF\\LAF";
+        QTest::newRow("-x-y, +y+z") << nxnyVector << pypzVector << "RA\\PH\\RPF";
+        QTest::newRow("-x-y, -y+z") << nxnyVector << nypzVector << "RA\\AH\\RPH";
+        QTest::newRow("-x-y, +y-z") << nxnyVector << pynzVector << "RA\\PF\\LAF";
+        QTest::newRow("-x-y, -y-z") << nxnyVector << nynzVector << "RA\\AF\\LAH";
+    }
+
+    // XZ
+    {
+        QTest::newRow("+x+z, +x+y") << pxpzVector << pxpyVector << "LH\\LP\\RPH";
+        QTest::newRow("+x+z, -x+y") << pxpzVector << nxpyVector << "LH\\RP\\RAH";
+        QTest::newRow("+x+z, +x-y") << pxpzVector << pxnyVector << "LH\\LA\\LPF";
+        QTest::newRow("+x+z, -x-y") << pxpzVector << nxnyVector << "LH\\RA\\LAF";
+        QTest::newRow("+x+z, -x+z") << pxpzVector << nxpzVector << "LH\\RH\\A";
+        QTest::newRow("+x+z, +x-z") << pxpzVector << pxnzVector << "LH\\LF\\P";
+        QTest::newRow("+x+z, +y+z") << pxpzVector << pypzVector << "LH\\PH\\RAH";
+        QTest::newRow("+x+z, -y+z") << pxpzVector << nypzVector << "LH\\AH\\LAF";
+        QTest::newRow("+x+z, +y-z") << pxpzVector << pynzVector << "LH\\PF\\RPH";
+        QTest::newRow("+x+z, -y-z") << pxpzVector << nynzVector << "LH\\AF\\LPF";
+
+        QTest::newRow("-x+z, +x+y") << nxpzVector << pxpyVector << "RH\\LP\\RPF";
+        QTest::newRow("-x+z, -x+y") << nxpzVector << nxpyVector << "RH\\RP\\RAF";
+        QTest::newRow("-x+z, +x-y") << nxpzVector << pxnyVector << "RH\\LA\\LPH";
+        QTest::newRow("-x+z, -x-y") << nxpzVector << nxnyVector << "RH\\RA\\LAH";
+        QTest::newRow("-x+z, +x+z") << nxpzVector << pxpzVector << "RH\\LH\\P";
+        QTest::newRow("-x+z, -x-z") << nxpzVector << nxnzVector << "RH\\RF\\A";
+        QTest::newRow("-x+z, +y+z") << nxpzVector << pypzVector << "RH\\PH\\RPF";
+        QTest::newRow("-x+z, -y+z") << nxpzVector << nypzVector << "RH\\AH\\LPH";
+        QTest::newRow("-x+z, +y-z") << nxpzVector << pynzVector << "RH\\PF\\RAF";
+        QTest::newRow("-x+z, -y-z") << nxpzVector << nynzVector << "RH\\AF\\LAH";
+
+        QTest::newRow("+x-z, +x+y") << pxnzVector << pxpyVector << "LF\\LP\\LAH";
+        QTest::newRow("+x-z, -x+y") << pxnzVector << nxpyVector << "LF\\RP\\LPH";
+        QTest::newRow("+x-z, +x-y") << pxnzVector << pxnyVector << "LF\\LA\\RAF";
+        QTest::newRow("+x-z, -x-y") << pxnzVector << nxnyVector << "LF\\RA\\RPF";
+        QTest::newRow("+x-z, +x+z") << pxnzVector << pxpzVector << "LF\\LH\\A";
+        QTest::newRow("+x-z, -x-z") << pxnzVector << nxnzVector << "LF\\RF\\P";
+        QTest::newRow("+x-z, +y+z") << pxnzVector << pypzVector << "LF\\PH\\LAH";
+        QTest::newRow("+x-z, -y+z") << pxnzVector << nypzVector << "LF\\AH\\RAF";
+        QTest::newRow("+x-z, +y-z") << pxnzVector << pynzVector << "LF\\PF\\LPH";
+        QTest::newRow("+x-z, -y-z") << pxnzVector << nynzVector << "LF\\AF\\RPF";
+
+        QTest::newRow("-x-z, +x+y") << nxnzVector << pxpyVector << "RF\\LP\\LAF";
+        QTest::newRow("-x-z, -x+y") << nxnzVector << nxpyVector << "RF\\RP\\LPF";
+        QTest::newRow("-x-z, +x-y") << nxnzVector << pxnyVector << "RF\\LA\\RAH";
+        QTest::newRow("-x-z, -x-y") << nxnzVector << nxnyVector << "RF\\RA\\RPH";
+        QTest::newRow("-x-z, -x+z") << nxnzVector << nxpzVector << "RF\\RH\\P";
+        QTest::newRow("-x-z, +x-z") << nxnzVector << pxnzVector << "RF\\LF\\A";
+        QTest::newRow("-x-z, +y+z") << nxnzVector << pypzVector << "RF\\PH\\LPF";
+        QTest::newRow("-x-z, -y+z") << nxnzVector << nypzVector << "RF\\AH\\RPH";
+        QTest::newRow("-x-z, +y-z") << nxnzVector << pynzVector << "RF\\PF\\LAF";
+        QTest::newRow("-x-z, -y-z") << nxnzVector << nynzVector << "RF\\AF\\RAH";
+    }
+
+    // YZ
+    {
+        QTest::newRow("+y+z, +x+y") << pypzVector << pxpyVector << "PH\\LP\\RPF";
+        QTest::newRow("+y+z, -x+y") << pypzVector << nxpyVector << "PH\\RP\\RAH";
+        QTest::newRow("+y+z, +x-y") << pypzVector << pxnyVector << "PH\\LA\\LPF";
+        QTest::newRow("+y+z, -x-y") << pypzVector << nxnyVector << "PH\\RA\\LAH";
+        QTest::newRow("+y+z, +x+z") << pypzVector << pxpzVector << "PH\\LH\\LPF";
+        QTest::newRow("+y+z, -x+z") << pypzVector << nxpzVector << "PH\\RH\\LAH";
+        QTest::newRow("+y+z, +x-z") << pypzVector << pxnzVector << "PH\\LF\\RPF";
+        QTest::newRow("+y+z, -x-z") << pypzVector << nxnzVector << "PH\\RF\\RAH";
+        QTest::newRow("+y+z, -y+z") << pypzVector << nypzVector << "PH\\AH\\L";
+        QTest::newRow("+y+z, +y-z") << pypzVector << pynzVector << "PH\\PF\\R";
+
+        QTest::newRow("-y+z, +x+y") << nypzVector << pxpyVector << "AH\\LP\\RPH";
+        QTest::newRow("-y+z, -x+y") << nypzVector << nxpyVector << "AH\\RP\\RAF";
+        QTest::newRow("-y+z, +x-y") << nypzVector << pxnyVector << "AH\\LA\\LPH";
+        QTest::newRow("-y+z, -x-y") << nypzVector << nxnyVector << "AH\\RA\\LAF";
+        QTest::newRow("-y+z, +x+z") << nypzVector << pxpzVector << "AH\\LH\\RPH";
+        QTest::newRow("-y+z, -x+z") << nypzVector << nxpzVector << "AH\\RH\\RAF";
+        QTest::newRow("-y+z, +x-z") << nypzVector << pxnzVector << "AH\\LF\\LPH";
+        QTest::newRow("-y+z, -x-z") << nypzVector << nxnzVector << "AH\\RF\\LAF";
+        QTest::newRow("-y+z, +y+z") << nypzVector << pypzVector << "AH\\PH\\R";
+        QTest::newRow("-y+z, -y-z") << nypzVector << nynzVector << "AH\\AF\\L";
+
+        QTest::newRow("+y-z, +x+y") << pynzVector << pxpyVector << "PF\\LP\\LAF";
+        QTest::newRow("+y-z, -x+y") << pynzVector << nxpyVector << "PF\\RP\\LPH";
+        QTest::newRow("+y-z, +x-y") << pynzVector << pxnyVector << "PF\\LA\\RAF";
+        QTest::newRow("+y-z, -x-y") << pynzVector << nxnyVector << "PF\\RA\\RPH";
+        QTest::newRow("+y-z, +x+z") << pynzVector << pxpzVector << "PF\\LH\\LAF";
+        QTest::newRow("+y-z, -x+z") << pynzVector << nxpzVector << "PF\\RH\\LPH";
+        QTest::newRow("+y-z, +x-z") << pynzVector << pxnzVector << "PF\\LF\\RAF";
+        QTest::newRow("+y-z, -x-z") << pynzVector << nxnzVector << "PF\\RF\\RPH";
+        QTest::newRow("+y-z, +y+z") << pynzVector << pypzVector << "PF\\PH\\L";
+        QTest::newRow("+y-z, -y-z") << pynzVector << nynzVector << "PF\\AF\\R";
+
+        QTest::newRow("-y-z, +x+y") << nynzVector << pxpyVector << "AF\\LP\\LAH";
+        QTest::newRow("-y-z, -x+y") << nynzVector << nxpyVector << "AF\\RP\\LPF";
+        QTest::newRow("-y-z, +x-y") << nynzVector << pxnyVector << "AF\\LA\\RAH";
+        QTest::newRow("-y-z, -x-y") << nynzVector << nxnyVector << "AF\\RA\\RPF";
+        QTest::newRow("-y-z, +x+z") << nynzVector << pxpzVector << "AF\\LH\\RAH";
+        QTest::newRow("-y-z, -x+z") << nynzVector << nxpzVector << "AF\\RH\\RPF";
+        QTest::newRow("-y-z, +x-z") << nynzVector << pxnzVector << "AF\\LF\\LAH";
+        QTest::newRow("-y-z, -x-z") << nynzVector << nxnzVector << "AF\\RF\\LPF";
+        QTest::newRow("-y-z, -y+z") << nynzVector << nypzVector << "AF\\AH\\R";
+        QTest::newRow("-y-z, +y-z") << nynzVector << pynzVector << "AF\\PF\\L";
+    }
+
+    QVector3D pxpypzVector(QVector3D( 1,  1,  1).normalized());
+    QVector3D nxpypzVector(QVector3D(-1,  1,  1).normalized());
+    QVector3D pxnypzVector(QVector3D( 1, -1,  1).normalized());
+    QVector3D nxnypzVector(QVector3D(-1, -1,  1).normalized());
+    QVector3D pxpynzVector(QVector3D( 1,  1, -1).normalized());
+    QVector3D nxpynzVector(QVector3D(-1,  1, -1).normalized());
+    QVector3D pxnynzVector(QVector3D( 1, -1, -1).normalized());
+    QVector3D nxnynzVector(QVector3D(-1, -1, -1).normalized());
+
+    // Below are all the orthogonal combinations of 3 and 2 components != 0 (there is none of 3 and 3)
+
+    QTest::newRow("+x+y+z, -x+y") << pxpypzVector << nxpyVector << "LPH\\RP\\HRA";
+    QTest::newRow("+x+y+z, +x-y") << pxpypzVector << pxnyVector << "LPH\\LA\\FLP";
+    QTest::newRow("+x+y+z, -x+z") << pxpypzVector << nxpzVector << "LPH\\RH\\ALH";
+    QTest::newRow("+x+y+z, +x-z") << pxpypzVector << pxnzVector << "LPH\\LF\\PRF";
+    QTest::newRow("+x+y+z, -y+z") << pxpypzVector << nypzVector << "LPH\\AH\\LAF";
+    QTest::newRow("+x+y+z, +y-z") << pxpypzVector << pynzVector << "LPH\\PF\\RPH";
+
+    QTest::newRow("-x+y+z, +x+y") << nxpypzVector << pxpyVector << "RPH\\LP\\FRP";
+    QTest::newRow("-x+y+z, -x-y") << nxpypzVector << nxnyVector << "RPH\\RA\\HLA";
+    QTest::newRow("-x+y+z, +x+z") << nxpypzVector << pxpzVector << "RPH\\LH\\PLF";
+    QTest::newRow("-x+y+z, -x-z") << nxpypzVector << nxnzVector << "RPH\\RF\\ARH";
+    QTest::newRow("-x+y+z, -y+z") << nxpypzVector << nypzVector << "RPH\\AH\\LPH";
+    QTest::newRow("-x+y+z, +y-z") << nxpypzVector << pynzVector << "RPH\\PF\\RAF";
+
+    QTest::newRow("+x-y+z, +x+y") << pxnypzVector << pxpyVector << "LAH\\LP\\HRP";
+    QTest::newRow("+x-y+z, -x-y") << pxnypzVector << nxnyVector << "LAH\\RA\\FLA";
+    QTest::newRow("+x-y+z, -x+z") << pxnypzVector << nxpzVector << "LAH\\RH\\ARF";
+    QTest::newRow("+x-y+z, +x-z") << pxnypzVector << pxnzVector << "LAH\\LF\\PLH";
+    QTest::newRow("+x-y+z, +y+z") << pxnypzVector << pypzVector << "LAH\\PH\\RAH";
+    QTest::newRow("+x-y+z, -y-z") << pxnypzVector << nynzVector << "LAH\\AF\\LPF";
+
+    QTest::newRow("-x-y+z, -x+y") << nxnypzVector << nxpyVector << "RAH\\RP\\FRA";
+    QTest::newRow("-x-y+z, +x-y") << nxnypzVector << pxnyVector << "RAH\\LA\\HLP";
+    QTest::newRow("-x-y+z, +x+z") << nxnypzVector << pxpzVector << "RAH\\LH\\PRH";
+    QTest::newRow("-x-y+z, -x-z") << nxnypzVector << nxnzVector << "RAH\\RF\\ALF";
+    QTest::newRow("-x-y+z, +y+z") << nxnypzVector << pypzVector << "RAH\\PH\\RPF";
+    QTest::newRow("-x-y+z, -y-z") << nxnypzVector << nynzVector << "RAH\\AF\\LAH";
+
+    QTest::newRow("+x+y-z, -x+y") << pxpynzVector << nxpyVector << "LPF\\RP\\HLP";
+    QTest::newRow("+x+y-z, +x-y") << pxpynzVector << pxnyVector << "LPF\\LA\\FRA";
+    QTest::newRow("+x+y-z, +x+z") << pxpynzVector << pxpzVector << "LPF\\LH\\ALF";
+    QTest::newRow("+x+y-z, -x-z") << pxpynzVector << nxnzVector << "LPF\\RF\\PRH";
+    QTest::newRow("+x+y-z, +y+z") << pxpynzVector << pypzVector << "LPF\\PH\\LAH";
+    QTest::newRow("+x+y-z, -y-z") << pxpynzVector << nynzVector << "LPF\\AF\\RPF";
+
+    QTest::newRow("-x+y-z, +x+y") << nxpynzVector << pxpyVector << "RPF\\LP\\FLA";
+    QTest::newRow("-x+y-z, -x-y") << nxpynzVector << nxnyVector << "RPF\\RA\\HRP";
+    QTest::newRow("-x+y-z, -x+z") << nxpynzVector << nxpzVector << "RPF\\RH\\PLH";
+    QTest::newRow("-x+y-z, +x-z") << nxpynzVector << pxnzVector << "RPF\\LF\\ARF";
+    QTest::newRow("-x+y-z, +y+z") << nxpynzVector << pypzVector << "RPF\\PH\\LPF";
+    QTest::newRow("-x+y-z, -y-z") << nxpynzVector << nynzVector << "RPF\\AF\\RAH";
+
+    QTest::newRow("+x-y-z, +x+y") << pxnynzVector << pxpyVector << "LAF\\LP\\HLA";
+    QTest::newRow("+x-y-z, -x-y") << pxnynzVector << nxnyVector << "LAF\\RA\\FRP";
+    QTest::newRow("+x-y-z, +x+z") << pxnynzVector << pxpzVector << "LAF\\LH\\ARH";
+    QTest::newRow("+x-y-z, -x-z") << pxnynzVector << nxnzVector << "LAF\\RF\\PLF";
+    QTest::newRow("+x-y-z, -y+z") << pxnynzVector << nypzVector << "LAF\\AH\\RAF";
+    QTest::newRow("+x-y-z, +y-z") << pxnynzVector << pynzVector << "LAF\\PF\\LPH";
+
+    QTest::newRow("-x-y-z, -x+y") << nxnynzVector << nxpyVector << "RAF\\RP\\FLP";
+    QTest::newRow("-x-y-z, +x-y") << nxnynzVector << pxnyVector << "RAF\\LA\\HRA";
+    QTest::newRow("-x-y-z, -x+z") << nxnynzVector << nxpzVector << "RAF\\RH\\PRF";
+    QTest::newRow("-x-y-z, +x-z") << nxnynzVector << pxnzVector << "RAF\\LF\\ALH";
+    QTest::newRow("-x-y-z, -y+z") << nxnynzVector << nypzVector << "RAF\\AH\\RPH";
+    QTest::newRow("-x-y-z, +y-z") << nxnynzVector << pynzVector << "RAF\\PF\\LAF";
 
     QTest::newRow("Sagittal Lumbar MR example") << QVector3D(-0.0488199964165, 0.99880760908126, 1.7226173612e-11) 
         << QVector3D(0.01777809672057, 0.00086896272841, -0.9998415708541) << "PR\\FLP\\RAF";

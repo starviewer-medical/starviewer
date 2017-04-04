@@ -191,17 +191,17 @@ QString PatientOrientation::getOrientationLabelFromDirectionVector(const QVector
 
     for (int i = 0; i < 3; ++i)
     {
-        if (absX > .0001 && absX > absY && absX > absZ)
+        if (absX > .0001 && absX >= absY && absX >= absZ)
         {
             orientation += orientationX;
             absX = 0;
         }
-        else if (absY > .0001 && absY > absX && absY > absZ)
+        else if (absY > .0001 && absY >= absX && absY >= absZ)
         {
             orientation += orientationY;
             absY = 0;
         }
-        else if (absZ > .0001 && absZ > absX && absZ > absY)
+        else if (absZ > .0001 && absZ >= absX && absZ >= absY)
         {
             orientation += orientationZ;
             absZ = 0;
