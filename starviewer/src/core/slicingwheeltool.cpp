@@ -17,6 +17,8 @@
 #include "q2dviewer.h"
 #include "settings.h"
 #include "coresettings.h"
+#include "volume.h"
+#include "patient.h"
 
 // Vtk
 #include <vtkCommand.h>
@@ -83,7 +85,7 @@ void SlicingWheelTool::reassignAxis()
     {
         Settings settings;
         m_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
-        m_phaseScroolLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
+        m_phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
         m_volumeScroll = settings.getValue(CoreSettings::EnableQ2DViewerWheelVolumeScroll).toBool();
     }
     
@@ -108,14 +110,52 @@ void SlicingWheelTool::onScroll(int steps)
 {
     if (!m_scrollDisabled)
     {
-        if (m_ctrlPressed != m_middleButtonToggled) // When true, do to alternative mode
-        {
-            incrementLocation(SECONDARY_AXIS, steps);
+        unsigned int axis;
+        if (m_ctrlPressed != m_middleButtonToggled) 
+        { // When true, do to alternative mode
+            axis = SECONDARY_AXIS; 
         }
         else
         {
-            incrementLocation(MAIN_AXIS, steps);
+            axis = MAIN_AXIS;
         }
+        
+        double overflow = incrementLocation(axis, steps);
+        
+        // *** Closed scroll loop of phases or slices ***
+        bool scrollLoopEnabled = false;
+        scrollLoopEnabled = scrollLoopEnabled || (m_sliceScrollLoop && getMode(axis) == SlicingMode::Slice);
+        scrollLoopEnabled = scrollLoopEnabled || (m_phaseScrollLoop && getMode(axis) == SlicingMode::Phase);
+        if (overflow > 0.001 || overflow < -0.001) 
+        { // Overflow is not zero
+            if (scrollLoopEnabled) 
+            {
+                //signbit returns true if negative
+                overflow = setLocation(axis, signbit(overflow) ? getMaximum(axis) : getMinimum(axis));
+            }
+        }
+        
+        // *** Change to next volume at the limits ***
+        
+        if (m_volumeScroll && axis == MAIN_AXIS)
+        {
+            //NOTE: Evaluation lazyness used to check null pointers before they are used.
+            //HACK: To avoid searching for a dummy volume that would not be found. getLocation (used by incrementLocation) does not expect this.
+            if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
+            {
+                if (overflow > 0.001 && getLocation(SlicingMode::Volume) < getMaximum(SlicingMode::Volume))
+                { // Maximum limit reached
+                    m_volumeInitialPosition = ChangeSliceQViewerCommand::SlicePosition::MinimumSlice;
+                    incrementLocation(SlicingMode::Volume, 1);
+                }
+                else if (overflow < -0.001 && getLocation(SlicingMode::Volume) > getMinimum(SlicingMode::Volume))
+                { // Minimum limit reached
+                    m_volumeInitialPosition = ChangeSliceQViewerCommand::SlicePosition::MaximumSlice;
+                    incrementLocation(SlicingMode::Volume, -1);
+                }
+            }
+        }
+        
     }
 }
 

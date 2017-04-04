@@ -95,7 +95,7 @@ int SlicingTool::getLocation(SlicingMode mode) const
         {
             QList<Volume*> volumes = m_2DViewer->getMainInput()->getPatient()->getVolumesList();
             int volumeIndex = volumes.indexOf(m_2DViewer->getMainInput());
-            Q_ASSERT(volumeIndex >= 0); // Volume must be found in the list.
+            Q_ASSERT(volumeIndex >= 0); // Volume must be found in the list. //BUG: Be careful if dummyvolume is loaded; you should control this externally.
             return volumeIndex;
         }
     }
