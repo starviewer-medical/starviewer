@@ -19,6 +19,10 @@
 #include "coresettings.h"
 #include "volume.h"
 #include "patient.h"
+#include "mathtools.h"
+
+// Std
+#include <cmath>
 
 // Vtk
 #include <vtkCommand.h>
@@ -126,12 +130,12 @@ void SlicingWheelTool::scroll(int steps)
         bool scrollLoopEnabled = false;
         scrollLoopEnabled = scrollLoopEnabled || (m_sliceScrollLoop && getMode(axis) == SlicingMode::Slice);
         scrollLoopEnabled = scrollLoopEnabled || (m_phaseScrollLoop && getMode(axis) == SlicingMode::Phase);
-        if (overflow > 0.001 || overflow < -0.001) 
+        if (overflow > MathTools::Epsilon || overflow < -MathTools::Epsilon) 
         { // Overflow is not zero
             if (scrollLoopEnabled) 
             {
                 //signbit returns true if negative
-                overflow = setLocation(axis, signbit(overflow) ? getMaximum(axis) : getMinimum(axis));
+                overflow = setLocation(axis, std::signbit(overflow) ? getMaximum(axis) : getMinimum(axis));
             }
         }
         
@@ -143,12 +147,12 @@ void SlicingWheelTool::scroll(int steps)
             //HACK: To avoid searching for a dummy volume that would not be found. getLocation (used by incrementLocation) does not expect this.
             if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
             {
-                if (overflow > 0.001 && getLocation(SlicingMode::Volume) < getMaximum(SlicingMode::Volume))
+                if (overflow > MathTools::Epsilon && getLocation(SlicingMode::Volume) < getMaximum(SlicingMode::Volume))
                 { // Maximum limit reached
                     m_volumeInitialPositionToMaximum = false;
                     incrementLocation(SlicingMode::Volume, 1);
                 }
-                else if (overflow < -0.001 && getLocation(SlicingMode::Volume) > getMinimum(SlicingMode::Volume))
+                else if (overflow < -MathTools::Epsilon && getLocation(SlicingMode::Volume) > getMinimum(SlicingMode::Volume))
                 { // Minimum limit reached
                     m_volumeInitialPositionToMaximum = true;
                     incrementLocation(SlicingMode::Volume, -1);
@@ -192,18 +196,18 @@ void SlicingWheelTool::updateCursorIcon(unsigned int axis, double increment)
         index += 4;
     }
     
-    if (increment > 0.001) 
+    if (increment > MathTools::Epsilon) 
     { // Positive increment
         index += 0;
-        if (getLocation(axis) >= getMaximum(axis) - 0.001)
+        if (getLocation(axis) >= getMaximum(axis) - MathTools::Epsilon)
         { // Maximum limit reached
             index += 2;
         }
     }
-    else if (increment < -0.001) 
+    else if (increment < -MathTools::Epsilon) 
     { // Negative increment
         index += 1;
-        if (getMinimum(axis) + 0.001  >= getLocation(axis))
+        if (getMinimum(axis) + MathTools::Epsilon  >= getLocation(axis))
         { // Minimum limit reached
             index += 2;
         }

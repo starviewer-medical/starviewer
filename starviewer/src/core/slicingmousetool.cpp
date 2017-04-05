@@ -17,9 +17,10 @@
 #include "q2dviewer.h"
 #include "settings.h"
 #include "coresettings.h"
+#include "mathtools.h"
 
-// Qt
-#include <QtMath>
+// Std
+#include <cmath>
 
 // Vtk
 #include <vtkCommand.h>
@@ -232,19 +233,19 @@ void SlicingMouseTool::updateCursorIcon(const QPoint &position)
             index += 8;
         }
         
-        if (positionIncrement > 0.001) 
+        if (positionIncrement > MathTools::Epsilon) 
         { // Positive increment
             index += 1;
-            if (getLocation(axis) >= getMaximum(axis) - 0.001)
+            if (getLocation(axis) >= getMaximum(axis) - MathTools::Epsilon)
             { // Maximum limit reached
                 index += 4;
             }
             
         }
-        else if (positionIncrement < -0.001) 
+        else if (positionIncrement < -MathTools::Epsilon) 
         { // Negative increment
             index += 0;
-            if (getMinimum(axis) + 0.001  >= getLocation(axis))
+            if (getMinimum(axis) + MathTools::Epsilon  >= getLocation(axis))
             { // Minimum limit reached
                 index += 4;
             }
@@ -343,12 +344,12 @@ double SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& curre
     
     // Setting the location and reacting to overflow or underflow
     double overflow = setLocation(axis, round(location));
-    if (overflow > 0.001 || overflow < -0.001) 
+    if (overflow > MathTools::Epsilon || overflow < -MathTools::Epsilon) 
     { // Overflow is not zero
         if (m_scrollLoopEnabled) 
         {
             //signbit returns true if negative
-            overflow = setLocation(axis, signbit(overflow) ? getMaximum(axis) : getMinimum(axis));
+            overflow = setLocation(axis, std::signbit(overflow) ? getMaximum(axis) : getMinimum(axis));
         }
         beginScroll(currentPosition);
     }
@@ -389,16 +390,16 @@ void SlicingMouseTool::beginScroll(const QPoint& startPosition)
 
 SlicingMouseTool::Direction SlicingMouseTool::getDirection(const QPointF& startPosition, const QPointF& currentPosition, double stepLength, double xWeight, double yWeight) const
 {
-    double vectorX = abs((currentPosition.x() - startPosition.x()) * xWeight);
-    double vectorY = abs((currentPosition.y() - startPosition.y()) * yWeight);
-    double vectorLength = hypot(vectorX, vectorY);
-    if (isgreater(vectorLength, stepLength))
+    double vectorX = std::abs((currentPosition.x() - startPosition.x()) * xWeight);
+    double vectorY = std::abs((currentPosition.y() - startPosition.y()) * yWeight);
+    double vectorLength = std::hypot(vectorX, vectorY);
+    if (std::isgreater(vectorLength, stepLength))
     {
-        if (isgreater(vectorX, vectorY))
+        if (std::isgreater(vectorX, vectorY))
         {
             return Direction::Horizontal;
         }
-        else if (isgreater(vectorY, vectorX))
+        else if (std::isgreater(vectorY, vectorX))
         {
             return Direction::Vertical;
         }
