@@ -31,13 +31,16 @@ public slots:
     virtual void reassignAxis() override;
     
 private:
-    void onScroll(int steps);
+    void scroll(int steps);
 
     void onCtrlPress();
     void onCtrlRelease();
 
     void onMiddleButtonPress();
     void onMiddleButtonRelease();
+    
+    void updateCursorIcon(unsigned int axis, double increment);
+    void unsetCursorIcon();
 
     bool m_sliceScrollLoop = false;
     bool m_phaseScrollLoop  = false;
@@ -50,6 +53,10 @@ private:
     bool m_ctrlPressed;
     bool m_middleButtonToggled;
     
+    int m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
+    /// Default value to avoid a cursor icon change.
+    static constexpr int CURSOR_ICON_DONT_UPDATE = -1;
+        
     static constexpr auto MAIN_AXIS = 0;
     static constexpr auto SECONDARY_AXIS = 1;
 };

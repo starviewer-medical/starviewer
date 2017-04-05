@@ -46,11 +46,11 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
 {
     if (eventID == vtkCommand::MouseWheelForwardEvent)
     {
-        onScroll(1);
+        scroll(1);
     }
     else if (eventID == vtkCommand::MouseWheelBackwardEvent)
     {
-        onScroll(-1);
+        scroll(-1);
     }
     else if (eventID == vtkCommand::MiddleButtonPressEvent)
     {
@@ -106,7 +106,7 @@ void SlicingWheelTool::reassignAxis()
     }
 }
 
-void SlicingWheelTool::onScroll(int steps)
+void SlicingWheelTool::scroll(int steps)
 {
     if (!m_scrollDisabled)
     {
@@ -156,6 +156,8 @@ void SlicingWheelTool::onScroll(int steps)
             }
         }
         
+        updateCursorIcon(axis, steps);
+        
     }
 }
 
@@ -178,7 +180,60 @@ void SlicingWheelTool::onMiddleButtonRelease()
 {
     m_middleButtonToggled = !m_middleButtonToggled;
     m_scrollDisabled = false;
+    unsetCursorIcon();
 }
 
+void SlicingWheelTool::updateCursorIcon(unsigned int axis, double increment)
+{
+    int index = 0;
+    
+    if (getMode(axis) == SlicingMode::Phase)
+    { // Phase mode
+        index += 4;
+    }
+    
+    if (increment > 0.001) 
+    { // Positive increment
+        index += 0;
+        if (getLocation(axis) >= getMaximum(axis) - 0.001)
+        { // Maximum limit reached
+            index += 2;
+        }
+    }
+    else if (increment < -0.001) 
+    { // Negative increment
+        index += 1;
+        if (getMinimum(axis) + 0.001  >= getLocation(axis))
+        { // Minimum limit reached
+            index += 2;
+        }
+    }
+    else
+    { // No increment
+        index = CURSOR_ICON_DONT_UPDATE; // Do not touch the icon...
+    }
+
+    if (m_cursorIcon_lastIndex != index)
+    { // Cursor modified only when it really changes, not on every little move.
+        switch (index)
+        {
+            case 0:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-up.svg"))); break;
+            case 1:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-down.svg"))); break;
+            case 2:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-up-limit.svg"))); break;
+            case 3:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-down-limit.svg"))); break;
+            case 4:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-up.svg"))); break;
+            case 5:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-down.svg"))); break;
+            case 6:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-up-limit.svg"))); break;
+            case 7:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-down-limit.svg"))); break;
+            default: break;
+        }
+        m_cursorIcon_lastIndex = index;
+    }
+}
+
+void SlicingWheelTool::unsetCursorIcon()
+{
+    m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
+}
 
 }
