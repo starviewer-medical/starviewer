@@ -17,8 +17,6 @@
 
 #include "tool.h"
 
-#include "changesliceqviewercommand.h"
-
 // Qt
 #include <QVector>
 
@@ -59,7 +57,7 @@ public slots:
     virtual void reassignAxis() = 0;
     
 protected:
-    ChangeSliceQViewerCommand::SlicePosition m_volumeInitialPosition;
+    bool m_volumeInitialPositionToMaximum;
     Q2DViewer* m_2DViewer;
 
 private:

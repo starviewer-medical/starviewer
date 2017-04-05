@@ -17,6 +17,8 @@
 #include "q2dviewer.h"
 #include "volume.h"
 #include "patient.h"
+#include "changesliceqviewercommand.h"
+#include "changephaseqviewercommand.h"
 
 namespace udg {
 
@@ -24,7 +26,7 @@ namespace udg {
 SlicingTool::SlicingTool(QViewer *viewer, QObject *parent) : 
 Tool(viewer, parent)
 {
-    m_volumeInitialPosition = ChangeSliceQViewerCommand::SlicePosition::MinimumSlice;
+    m_volumeInitialPositionToMaximum = false;
     m_2DViewer = Q2DViewer::castFromQViewer(viewer);
     setNumberOfAxes(0);
     
@@ -173,7 +175,15 @@ int SlicingTool::setLocation(SlicingMode mode, int location, bool dryRun)
                 {
                     QList<Volume*> volumes = m_2DViewer->getMainInput()->getPatient()->getVolumesList();
                     Volume* nextVolume = volumes.at(location); // Volume must be found in the list.
-                    QViewerCommand* command  = new ChangeSliceQViewerCommand(m_2DViewer, m_volumeInitialPosition);
+                    QViewerCommand* command;
+                    if (nextVolume->getNumberOfSlicesPerPhase() > 1)
+                    { // Multiple slices per phase
+                        command = new ChangeSliceQViewerCommand(m_2DViewer, m_volumeInitialPositionToMaximum ? ChangeSliceQViewerCommand::SlicePosition::MaximumSlice : ChangeSliceQViewerCommand::SlicePosition::MinimumSlice);
+                    }
+                    else
+                    { // One slice per phase
+                        command = new ChangePhaseQViewerCommand(m_2DViewer, m_volumeInitialPositionToMaximum ? ChangePhaseQViewerCommand::PhasePosition::MaximumPhase : ChangePhaseQViewerCommand::PhasePosition::MinimumPhase);
+                    }
                     m_2DViewer->setInputAsynchronously(nextVolume, command);
                 }
             }

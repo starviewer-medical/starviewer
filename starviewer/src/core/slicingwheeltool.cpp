@@ -145,12 +145,12 @@ void SlicingWheelTool::scroll(int steps)
             {
                 if (overflow > 0.001 && getLocation(SlicingMode::Volume) < getMaximum(SlicingMode::Volume))
                 { // Maximum limit reached
-                    m_volumeInitialPosition = ChangeSliceQViewerCommand::SlicePosition::MinimumSlice;
+                    m_volumeInitialPositionToMaximum = false;
                     incrementLocation(SlicingMode::Volume, 1);
                 }
                 else if (overflow < -0.001 && getLocation(SlicingMode::Volume) > getMinimum(SlicingMode::Volume))
                 { // Minimum limit reached
-                    m_volumeInitialPosition = ChangeSliceQViewerCommand::SlicePosition::MaximumSlice;
+                    m_volumeInitialPositionToMaximum = true;
                     incrementLocation(SlicingMode::Volume, -1);
                 }
             }

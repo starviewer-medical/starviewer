@@ -162,18 +162,18 @@ void SlicingKeyboardTool::incrementLocationWithVolumesLoop(int shift)
         if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
         {
             overflow = overflow > 0 ? 1 : -1; // Only -1 or 1 values allowed.
-            m_volumeInitialPosition = overflow > 0 ? ChangeSliceQViewerCommand::SlicePosition::MinimumSlice : ChangeSliceQViewerCommand::SlicePosition::MaximumSlice;
+            m_volumeInitialPositionToMaximum = overflow < 0;
             int volumeOverflow = incrementLocation(SlicingMode::Volume, overflow);
             if (volumeOverflow != 0) // At first or last volume
             {
                 if (volumeOverflow > 0)
                 { // Arrived to last volume
-                    m_volumeInitialPosition = ChangeSliceQViewerCommand::SlicePosition::MinimumSlice;
+                    m_volumeInitialPositionToMaximum = false;
                     setLocation(SlicingMode::Volume, getMinimum(SlicingMode::Volume));
                 }
                 else
                 { // Arrived to first volume
-                    m_volumeInitialPosition = ChangeSliceQViewerCommand::SlicePosition::MaximumSlice;
+                    m_volumeInitialPositionToMaximum = true;
                     setLocation(SlicingMode::Volume, getMaximum(SlicingMode::Volume));
                 }
             }
