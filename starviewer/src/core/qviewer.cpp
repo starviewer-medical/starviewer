@@ -58,6 +58,7 @@ QViewer::QViewer(QWidget *parent)
  : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_voiLutData(0),
    m_isRenderingEnabled(true), m_isActive(false)
 {
+    m_lastAngleDelta = QPoint();
     m_defaultFitIntoViewportMarginRate = 0.0;
     m_vtkWidget = new QVTKWidget(this);
     m_vtkWidget->setFocusPolicy(Qt::WheelFocus);
@@ -174,6 +175,11 @@ QPoint QViewer::getLastEventPosition() const
     return point;
 }
 
+QPoint QViewer::getWheelAngleDelta() const
+{
+    return m_lastAngleDelta;
+}
+
 bool QViewer::isActive() const
 {
     return m_isActive;
@@ -199,7 +205,7 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
         case vtkCommand::MouseWheelForwardEvent:
         case vtkCommand::MouseWheelBackwardEvent:
         {
-            QWheelEvent *e = (QWheelEvent*)callData;
+            QWheelEvent *e = (QWheelEvent*)callData; //WARNING: I don't like that casting here, may become dangerous.
             if (e)
             {
                 if (e->delta() == 0 || e->orientation() == Qt::Horizontal)
@@ -210,6 +216,15 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
         }
     }
 #endif
+
+    if (vtkEvent == vtkCommand::MouseWheelForwardEvent || vtkEvent == vtkCommand::MouseWheelBackwardEvent)
+    {
+        QWheelEvent *event = (QWheelEvent*)callData; //WARNING: I don't like that casting here, may become dangerous.
+        if (event)
+        {
+            m_lastAngleDelta = event->angleDelta();
+        }
+    }
 
     // Quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor.
     // TODO Ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
