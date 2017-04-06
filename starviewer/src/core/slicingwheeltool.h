@@ -17,6 +17,8 @@
 
 #include "slicingtool.h"
 
+class QTimer;
+
 namespace udg {
 
 class SlicingWheelTool : public SlicingTool {
@@ -30,8 +32,14 @@ public:
 public slots:
     virtual void reassignAxis() override;
     
+private slots:
+    void timeout();
+    
 private:
-    void scroll(int steps);
+    double scroll(double increment);
+    void beginScroll();
+    
+    void onWheelMoved(int angleDelta);
 
     void onCtrlPress();
     void onCtrlRelease();
@@ -39,19 +47,26 @@ private:
     void onMiddleButtonPress();
     void onMiddleButtonRelease();
     
-    void updateCursorIcon(unsigned int axis, double increment);
+    void updateCursorIcon(double increment);
     void unsetCursorIcon();
-
-    bool m_sliceScrollLoop = false;
-    bool m_phaseScrollLoop  = false;
-    bool m_volumeScroll  = false;
+    
+    QTimer* m_timer = 0;
+    
+    bool m_config_sliceScrollLoop = false;
+    bool m_config_phaseScrollLoop  = false;
+    bool m_config_volumeScroll  = false;
     
     /** Some mouses produce unwanted scrolls when the wheel is clicked. This is
      *  used to cancel them until the wheel is released.
      */
-    bool m_scrollDisabled;
-    bool m_ctrlPressed;
-    bool m_middleButtonToggled;
+    bool m_ignoreWheelMovement = false;
+    bool m_ctrlPressed = false;
+    bool m_middleButtonToggle = false;
+    
+    double m_increment = 0;
+    unsigned int m_currentAxis = MAIN_AXIS;
+    bool m_scrollLoop = false;
+    bool m_volumeScroll = false;
     
     int m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
     /// Default value to avoid a cursor icon change.
