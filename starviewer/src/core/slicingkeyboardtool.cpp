@@ -19,6 +19,10 @@
 #include "coresettings.h"
 #include "volume.h"
 #include "patient.h"
+#include "mathtools.h"
+
+// Qt
+#include <QTimer>
 
 // Vtk
 #include <vtkRenderWindowInteractor.h>
@@ -29,12 +33,19 @@ namespace udg {
 SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent)
  : SlicingTool(viewer, parent)
 {
+    m_timer = new QTimer();
+    m_timer->setSingleShot(true);
+    m_timer->setInterval(10); // Just enough to catch all accumulated keyboard events.
     m_toolName = "SlicingKeyboardTool";
+    
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
+    
     reassignAxis();
 }
 
 SlicingKeyboardTool::~SlicingKeyboardTool()
 {
+    delete m_timer;
 }
 
 void SlicingKeyboardTool::handleEvent(unsigned long eventID)
@@ -85,8 +96,8 @@ void SlicingKeyboardTool::reassignAxis()
     
     {
         Settings settings;
-        m_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
-        m_phaseScroolLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
+        m_config_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
+        m_config_phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
     }
     
     if (sliceable && phaseable) 
@@ -124,61 +135,123 @@ void SlicingKeyboardTool::onEndPress()
 
 void SlicingKeyboardTool::onUpPress()
 {
-    incrementLocation(MAIN_AXIS, 1);
+    m_keyAccumulator_up++;
+    m_timer->start();
 }
 
 void SlicingKeyboardTool::onDownPress()
 {
-    incrementLocation(MAIN_AXIS, -1);
+    m_keyAccumulator_down++;
+    m_timer->start();
 }
 
 void SlicingKeyboardTool::onLeftPress()
 {
-    incrementLocation(SECONDARY_AXIS, -1);
+    m_keyAccumulator_left++;
+    m_timer->start();
 }
 
 void SlicingKeyboardTool::onRightPress()
 {
-    incrementLocation(SECONDARY_AXIS, 1);
+    m_keyAccumulator_right++;
+    m_timer->start();
 }
 
 void SlicingKeyboardTool::onPlusPress()
 {
-    incrementLocationWithVolumesLoop(1);
+    m_keyAccumulator_plus++;
+    m_timer->start();
 }
 
 void SlicingKeyboardTool::onMinusPress()
 {
-    incrementLocationWithVolumesLoop(-1);
+    m_keyAccumulator_minus++;
+    m_timer->start();
 }
 
-void SlicingKeyboardTool::incrementLocationWithVolumesLoop(int shift)
+void SlicingKeyboardTool::timeout()
 {
-    int unusedIncrement = std::round(incrementLocation(MAIN_AXIS, shift));
-    if (unusedIncrement != 0) //TODO
+    int upDown = m_keyAccumulator_up - m_keyAccumulator_down;
+    int rightLeft = m_keyAccumulator_right - m_keyAccumulator_left;
+    int plusMinus = m_keyAccumulator_plus - m_keyAccumulator_minus;
+    
+    if (upDown != 0)
     {
-        //NOTE: Evaluation lazyness used to check null pointers before they are used.
-        //HACK: To avoid searching for a dummy volume that would not be found. getLocation (used by incrementLocation) does not expect this.
-        if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
+        bool loop = false;
+        loop = loop || (getMode(MAIN_AXIS) == SlicingMode::Slice && m_config_sliceScrollLoop);
+        loop = loop || (getMode(MAIN_AXIS) == SlicingMode::Phase && m_config_phaseScrollLoop);
+        scroll(upDown, MAIN_AXIS, loop);
+    }
+    
+    if (rightLeft != 0)
+    {
+        bool loop = false;
+        loop = loop || (getMode(SECONDARY_AXIS) == SlicingMode::Slice && m_config_sliceScrollLoop);
+        loop = loop || (getMode(SECONDARY_AXIS) == SlicingMode::Phase && m_config_phaseScrollLoop);
+        scroll(rightLeft, SECONDARY_AXIS, loop);
+    }
+    
+    if (plusMinus != 0)
+    {
+        scroll(plusMinus, MAIN_AXIS, false, true);
+    }
+    
+    m_keyAccumulator_up = 0;
+    m_keyAccumulator_down = 0;
+    m_keyAccumulator_left = 0;
+    m_keyAccumulator_right = 0;
+    m_keyAccumulator_plus = 0;
+    m_keyAccumulator_minus = 0;
+}
+
+double SlicingKeyboardTool::scroll(double increment, unsigned int axis, bool scrollLoopEnabled, bool volumeScrollEnabled)
+{
+    double unusedIncrement = incrementLocation(axis, increment);
+    // Increment should be 0, or at least something inside the [-0.5,0.5] (because of rounding to nearest slice).
+    // When different, means a limit is reached.
+    
+    
+    if (unusedIncrement < -0.5 -MathTools::Epsilon)
+    { // Lower limit reached
+        if (scrollLoopEnabled)
         {
-            unusedIncrement = unusedIncrement > 0 ? 1 : -1; // Only -1 or 1 values allowed.
-            m_volumeInitialPositionToMaximum = unusedIncrement < 0;
-            int volumeOverflow = incrementLocation(SlicingMode::Volume, unusedIncrement);
-            if (volumeOverflow != 0) // At first or last volume
+            unusedIncrement = setLocation(axis, getMaximum(axis));
+        }
+        else if (volumeScrollEnabled)
+        {
+            //NOTE: Evaluation lazyness used to check null pointers before they are used.
+            //HACK: To avoid searching for a dummy volume that would not be found. getLocation (used by incrementLocation) does not expect this.
+            if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
             {
-                if (volumeOverflow > 0)
-                { // Arrived to last volume
-                    m_volumeInitialPositionToMaximum = false;
-                    setLocation(SlicingMode::Volume, getMinimum(SlicingMode::Volume));
-                }
-                else
-                { // Arrived to first volume
+                if (getLocation(SlicingMode::Volume) > getMinimum(SlicingMode::Volume) +MathTools::Epsilon)
+                { // Not at first volume
                     m_volumeInitialPositionToMaximum = true;
-                    setLocation(SlicingMode::Volume, getMaximum(SlicingMode::Volume));
+                    unusedIncrement = incrementLocation(SlicingMode::Volume, -1);
                 }
             }
         }
     }
+    else if (unusedIncrement > +0.5 +MathTools::Epsilon)
+    { // Upper limit reached
+        if (scrollLoopEnabled)
+        {
+            unusedIncrement = setLocation(axis, getMinimum(axis));
+        }
+        else if (volumeScrollEnabled)
+        {
+            //NOTE: Evaluation lazyness used to check null pointers before they are used.
+            //HACK: To avoid searching for a dummy volume that would not be found. getLocation (used by incrementLocation) does not expect this.
+            if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
+            {
+                if (getLocation(SlicingMode::Volume) < getMaximum(SlicingMode::Volume) -MathTools::Epsilon)
+                { // Not at the last volume
+                    m_volumeInitialPositionToMaximum = false;
+                    unusedIncrement = incrementLocation(SlicingMode::Volume, +1);
+                }
+            }
+        }
+    }
+    return unusedIncrement;
 }
 
 }

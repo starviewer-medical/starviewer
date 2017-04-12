@@ -17,6 +17,8 @@
 
 #include "slicingtool.h"
 
+class QTimer;
+
 namespace udg {
 
 class SlicingKeyboardTool : public SlicingTool {
@@ -29,6 +31,9 @@ public:
     
 public slots:
     virtual void reassignAxis() override;
+    
+private slots:
+    void timeout();
 
 private:
     void onHomePress();
@@ -40,10 +45,19 @@ private:
     void onPlusPress();
     void onMinusPress();
     
-    void incrementLocationWithVolumesLoop(int shift);
+    double scroll(double increment, unsigned int axis = MAIN_AXIS, bool scrollLoopEnabled = false, bool volumeScrollEnabled = false);
     
-    bool m_sliceScrollLoop = false;
-    bool m_phaseScroolLoop  = false;
+    QTimer* m_timer = 0;
+    
+    int m_keyAccumulator_up = 0;
+    int m_keyAccumulator_down = 0;
+    int m_keyAccumulator_left = 0;
+    int m_keyAccumulator_right = 0;
+    int m_keyAccumulator_plus = 0;
+    int m_keyAccumulator_minus = 0;
+    
+    bool m_config_sliceScrollLoop = false;
+    bool m_config_phaseScrollLoop  = false;
     
     static constexpr auto MAIN_AXIS = 0;
     static constexpr auto SECONDARY_AXIS = 1;
