@@ -14,6 +14,7 @@
 
 #include "slicingtool.h"
 
+#include "mathtools.h"
 #include "q2dviewer.h"
 #include "volume.h"
 #include "patient.h"
@@ -45,7 +46,7 @@ SlicingTool::~SlicingTool()
 {
 }
 
-int SlicingTool::getMinimum(SlicingTool::SlicingMode mode) const
+double SlicingTool::getMinimum(SlicingTool::SlicingMode mode) const
 {
     if (mode == SlicingMode::Slice)
     { // Slices can be negative
@@ -54,7 +55,7 @@ int SlicingTool::getMinimum(SlicingTool::SlicingMode mode) const
     return 0;
 }
 
-int SlicingTool::getMaximum(SlicingTool::SlicingMode mode) const
+double SlicingTool::getMaximum(SlicingTool::SlicingMode mode) const
 {
     if (mode == SlicingMode::Slice)
     {
@@ -75,12 +76,12 @@ int SlicingTool::getMaximum(SlicingTool::SlicingMode mode) const
     return -1;
 }
 
-unsigned int SlicingTool::getRangeSize(SlicingTool::SlicingMode mode) const
+double SlicingTool::getRangeSize(SlicingTool::SlicingMode mode) const
 {
     return getMaximum(mode) - getMinimum(mode) + 1;
 }
 
-int SlicingTool::getLocation(SlicingMode mode) const
+double SlicingTool::getLocation(SlicingMode mode) const
 {
     if (mode == SlicingMode::Slice)
     {
@@ -104,97 +105,66 @@ int SlicingTool::getLocation(SlicingMode mode) const
     return 0;
 }
 
-int SlicingTool::setLocation(SlicingMode mode, int location, bool dryRun)
+double SlicingTool::setLocation(SlicingMode mode, double location)
 {
-    int min = getMinimum(mode);
-    int max = getMaximum(mode);
-    int overflow = location <= max ? 0 : location - max;
-    int underflow = location >= min ? 0 : location - min;
-    // Examples
-    // loc	min	max	uflow	oflow
-    // -2	 0	 5	-2	 0
-    //  0	 0	 5	 0	 0
-    //  5	 0	 5	 0	 0
-    //  7	 0	 5	 0	 2
-    // 
-    //  3	 5	 10	-2	 0
-    //  5	 5	 10	 0	 0
-    //  10	 5	 10	 0	 0
-    //  12	 5	 10	 0	 2
-    // 
-    // -7	-5	 5	-2	 0
-    // -5	-5	 5	 0	 0
-    //  5	-5	 5	 0	 0
-    //  7	-5	 5	 0	 2
-    // 
-    // -7	-5	 0	-2	 0
-    // -5	-5	 0	 0	 0
-    //  0	-5	 0	 0	 0
-    //  2	-5	 0	 0	 2
-    // 
-    // -12	-10	-5	-2	 0
-    // -10	-10	-5	 0	 0
-    // -5	-10	-5	 0	 0
-    // -3	-10	-5	 0	 2
-    // Zero width interval:
-    //  0	 0	-1	 0	 1
-    // -1	 0	-1	-1	 0
-    // Zero width interval:
-    //  4	 5	 4	-1	 0
-    //  5	 5	 4	 0	 1
+    const double min = getMinimum(mode);
+    const double max = getMaximum(mode);
+    double newLocation;
     
-    int returnValue = 0;
-    if (overflow != 0)
-    {
-        location = max;
-        returnValue = overflow;
+    if (location <= min + MathTools::Epsilon)
+    { // Underflow, or very close albeit not exceeding the lower bound.
+        newLocation = min;
     }
-    else if (underflow != 0)
-    {
-        location = min;
-        returnValue = underflow;
+    else if (location >= max - MathTools::Epsilon)
+    { // Overflow, or very close albeit not exceeding the upper bound.
+        newLocation = max;
     }
-    
-    if (!dryRun)
+    else
+    { // Within the limits
+        newLocation = location;
+    }
+
+    if (min <= max) // Interval width greater than zero. Changing position feasible.
     {
-        if (min <= max) // Interval width greater than zero. Changing position feasible.
+        if (mode == SlicingMode::Slice)
         {
-            if (mode == SlicingMode::Slice)
+            newLocation = std::round(newLocation);
+            m_2DViewer->setSlice(newLocation);
+        }
+        else if (mode == SlicingMode::Phase)
+        {
+            newLocation = std::round(newLocation);
+            m_2DViewer->setPhase(newLocation);
+        }
+        else if (mode == SlicingMode::Volume)
+        {
+            newLocation = std::round(newLocation);
+            //NOTE: Evaluation lazyness used to check null pointers before they are used.
+            if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient()) 
             {
-                m_2DViewer->setSlice(location);
-            }
-            else if (mode == SlicingMode::Phase)
-            {
-                m_2DViewer->setPhase(location);
-                
-            }
-            else if (mode == SlicingMode::Volume)
-            {
-                //NOTE: Evaluation lazyness used to check null pointers before they are used.
-                if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient()) 
-                {
-                    QList<Volume*> volumes = m_2DViewer->getMainInput()->getPatient()->getVolumesList();
-                    Volume* nextVolume = volumes.at(location); // Volume must be found in the list.
-                    QViewerCommand* command;
-                    if (nextVolume->getNumberOfSlicesPerPhase() > 1)
-                    { // Multiple slices per phase
-                        command = new ChangeSliceQViewerCommand(m_2DViewer, m_volumeInitialPositionToMaximum ? ChangeSliceQViewerCommand::SlicePosition::MaximumSlice : ChangeSliceQViewerCommand::SlicePosition::MinimumSlice);
-                    }
-                    else
-                    { // One slice per phase
-                        command = new ChangePhaseQViewerCommand(m_2DViewer, m_volumeInitialPositionToMaximum ? ChangePhaseQViewerCommand::PhasePosition::MaximumPhase : ChangePhaseQViewerCommand::PhasePosition::MinimumPhase);
-                    }
-                    m_2DViewer->setInputAsynchronously(nextVolume, command);
+                QList<Volume*> volumes = m_2DViewer->getMainInput()->getPatient()->getVolumesList();
+                Volume* nextVolume = volumes.at(newLocation); // Volume must be found in the list.
+                QViewerCommand* command;
+                if (nextVolume->getNumberOfSlicesPerPhase() > 1)
+                { // Multiple slices per phase
+                    command = new ChangeSliceQViewerCommand(m_2DViewer, m_volumeInitialPositionToMaximum ? ChangeSliceQViewerCommand::SlicePosition::MaximumSlice : ChangeSliceQViewerCommand::SlicePosition::MinimumSlice);
                 }
+                else
+                { // One slice per phase
+                    command = new ChangePhaseQViewerCommand(m_2DViewer, m_volumeInitialPositionToMaximum ? ChangePhaseQViewerCommand::PhasePosition::MaximumPhase : ChangePhaseQViewerCommand::PhasePosition::MinimumPhase);
+                }
+                m_2DViewer->setInputAsynchronously(nextVolume, command);
             }
         }
     }
-    return returnValue;
+    return newLocation;
 }
 
-int SlicingTool::incrementLocation(SlicingMode mode, int shift, bool dryRun)
+double SlicingTool::incrementLocation(SlicingMode mode, double shift)
 {
-    return setLocation(mode, getLocation(mode) + shift, dryRun);
+    double location = getLocation(mode) + shift;
+    double newLocation = setLocation(mode, location);
+    return  location - newLocation;
 }
 
 unsigned int SlicingTool::getNumberOfAxes() const
@@ -220,34 +190,34 @@ void SlicingTool::setMode(unsigned int axis, SlicingMode mode)
     }
 }
 
-int SlicingTool::getMinimum(unsigned int axis) const
+double SlicingTool::getMinimum(unsigned int axis) const
 {
     return getMinimum(getMode(axis));
 }
 
-int SlicingTool::getMaximum(unsigned int axis) const
+double SlicingTool::getMaximum(unsigned int axis) const
 {
     return getMaximum(getMode(axis));
 }
 
-unsigned int SlicingTool::getRangeSize(unsigned int axis) const
+double SlicingTool::getRangeSize(unsigned int axis) const
 {
     return getRangeSize(getMode(axis));
 }
 
-int SlicingTool::getLocation(unsigned int axis) const
+double SlicingTool::getLocation(unsigned int axis) const
 {
     return getLocation(getMode(axis));
 }
 
-int SlicingTool::setLocation(unsigned int axis, int location, bool dryRun)
+double SlicingTool::setLocation(unsigned int axis, double location)
 {
-    return setLocation(getMode(axis), location, dryRun);
+    return setLocation(getMode(axis), location);
 }
 
-int SlicingTool::incrementLocation(unsigned int axis, int shift, bool dryRun)
+double SlicingTool::incrementLocation(unsigned int axis, double shift)
 {
-    return incrementLocation(getMode(axis), shift, dryRun);
+    return incrementLocation(getMode(axis), shift);
 }
 
 

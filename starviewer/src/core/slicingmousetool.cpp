@@ -30,7 +30,7 @@ namespace udg {
 
 SlicingMouseTool::SlicingMouseTool(QViewer *viewer, QObject *parent)
 : SlicingTool(viewer, parent)
-{    
+{   
     m_toolName = "SlicingMouseTool";
     reassignAxis();
 }
@@ -318,7 +318,7 @@ void SlicingMouseTool::beginDirectionDetection(const QPoint& startPosition)
     m_directionStepLength = DEFAULT_DETECTION_STEP_LENGTH;
 }
 
-double SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& currentPosition)
+void SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& currentPosition)
 {
     Q_ASSERT(m_currentDirection != Direction::Undefined);
     unsigned int axis; 
@@ -334,7 +334,7 @@ double SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& curre
         shift = currentPosition.y() - startPosition.y();
     }
     
-    // Calculate the new location
+    // Calculate the destination location
     double location = shift / m_stepLength;
     if (isnan(location) || isinf(location)) 
     {
@@ -342,18 +342,26 @@ double SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& curre
     }
     location += m_startLocation;
     
-    // Setting the location and reacting to overflow or underflow
-    double overflow = setLocation(axis, round(location));
-    if (overflow > MathTools::Epsilon || overflow < -MathTools::Epsilon) 
-    { // Overflow is not zero
-        if (m_scrollLoopEnabled) 
+    // Setting the location and reacting when reaching limits
+    double newLocation = setLocation(axis, location);
+    
+    // Location and new location differ more than 1 (where rounding happens) this means a limit is reached.
+    if (location < newLocation -0.5 -MathTools::Epsilon)
+    { // Underflow
+        if (m_scrollLoopEnabled)
         {
-            //signbit returns true if negative
-            overflow = setLocation(axis, std::signbit(overflow) ? getMaximum(axis) : getMinimum(axis));
+            newLocation = setLocation(axis, getMaximum(axis));
         }
         beginScroll(currentPosition);
     }
-    return overflow;
+    else if (location > newLocation +0.5 +MathTools::Epsilon)
+    { // Overflow
+        if (m_scrollLoopEnabled)
+        {
+            newLocation = setLocation(axis, getMinimum(axis));
+        }
+        beginScroll(currentPosition);
+    }
 }
 
 void SlicingMouseTool::beginScroll(const QPoint& startPosition)
@@ -374,7 +382,7 @@ void SlicingMouseTool::beginScroll(const QPoint& startPosition)
     // Step lenght determined by the viewer size.
     {
         unsigned int windowLength = std::max(1, m_currentDirection == Direction::Horizontal ? m_2DViewer->size().width() : m_2DViewer->size().height()); // Always greater than zero
-        unsigned int rangeSize = std::max((unsigned int)1, getRangeSize(axis)); // Always greater than zero
+        unsigned int rangeSize = std::max(1.0, getRangeSize(axis)); // Always greater than zero
         
         m_stepLength = windowLength / rangeSize;
         if (m_stepLength > DEFAULT_MAXIMUM_STEP_LENGTH)

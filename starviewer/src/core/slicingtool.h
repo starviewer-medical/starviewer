@@ -32,12 +32,12 @@ public:
     explicit SlicingTool(QViewer *viewer, QObject *parent = 0);
     virtual ~SlicingTool();
     
-    int getMinimum(SlicingMode mode) const;
-    int getMaximum(SlicingMode mode) const;
-    unsigned int getRangeSize(SlicingMode mode) const;
-    int getLocation(SlicingMode mode) const;
-    int setLocation(SlicingMode mode, int location, bool dryRun = false);
-    int incrementLocation(SlicingMode mode, int shift, bool dryRun = false);
+    double getMinimum(SlicingMode mode) const;
+    double getMaximum(SlicingMode mode) const;
+    double getRangeSize(SlicingMode mode) const;
+    double getLocation(SlicingMode mode) const;
+    double setLocation(SlicingMode mode, double location);
+    double incrementLocation(SlicingMode mode, double shift);
     
     unsigned int getNumberOfAxes() const;
     void setNumberOfAxes(unsigned int numberOfAxes);
@@ -45,12 +45,12 @@ public:
     SlicingMode getMode(unsigned int axis) const;
     void setMode(unsigned int axis, SlicingMode mode);
     
-    int getMinimum(unsigned int axis) const;
-    int getMaximum(unsigned int axis) const;
-    unsigned int getRangeSize(unsigned int axis) const;
-    int getLocation(unsigned int axis) const;
-    int setLocation(unsigned int axis, int location, bool dryRun = false);
-    int incrementLocation(unsigned int axis, int shift, bool dryRun = false);
+    double getMinimum(unsigned int axis) const;
+    double getMaximum(unsigned int axis) const;
+    double getRangeSize(unsigned int axis) const;
+    double getLocation(unsigned int axis) const;
+    double setLocation(unsigned int axis, double location);
+    double incrementLocation(unsigned int axis, double shift);
     
 public slots:
     /// React to major changes that will alter the results of isUsable function, which is precondition to use others. (This is called when volume is changed)

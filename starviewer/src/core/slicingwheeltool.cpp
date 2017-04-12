@@ -120,39 +120,52 @@ void SlicingWheelTool::reassignAxis()
 
 double SlicingWheelTool::scroll(double increment)
 {
-    double unusedDecimalPart = increment - std::trunc(increment);
-    double overflow = incrementLocation(m_currentAxis, increment);
+    double unusedIncrement = incrementLocation(m_currentAxis, increment);
+    // Increment should be 0, or at least something inside the [-0.5,0.5] (because of rounding to nearest slice).
+    // When different, means a limit is reached.
     
-    // *** Current axis has scroll loop enabled ***
-    if (m_scrollLoop) 
-    {
-        if (overflow > MathTools::Epsilon || overflow < -MathTools::Epsilon) 
-        { // Overflow is not zero
-                //signbit returns true if negative
-                overflow = setLocation(m_currentAxis, std::signbit(overflow) ? getMaximum(m_currentAxis) : getMinimum(m_currentAxis));
-        }
-    }
     
-    // *** Change to next volume at the limits ***
-    if (m_volumeScroll)
-    {
-        //NOTE: Evaluation lazyness used to check null pointers before they are used.
-        //HACK: To avoid searching for a dummy volume that would not be found. getLocation (used by incrementLocation) does not expect this.
-        if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
+    if (unusedIncrement < -0.5 -MathTools::Epsilon)
+    { // Lower limit reached
+        if (m_scrollLoop)
         {
-            if (overflow > MathTools::Epsilon && getLocation(SlicingMode::Volume) < getMaximum(SlicingMode::Volume))
-            { // Maximum limit reached
-                m_volumeInitialPositionToMaximum = false;
-                overflow = incrementLocation(SlicingMode::Volume, 1);
-            }
-            else if (overflow < -MathTools::Epsilon && getLocation(SlicingMode::Volume) > getMinimum(SlicingMode::Volume))
-            { // Minimum limit reached
-                m_volumeInitialPositionToMaximum = true;
-                overflow = incrementLocation(SlicingMode::Volume, -1);
+            unusedIncrement = setLocation(m_currentAxis, getMaximum(m_currentAxis));
+        }
+        else if (m_volumeScroll)
+        {
+            //NOTE: Evaluation lazyness used to check null pointers before they are used.
+            //HACK: To avoid searching for a dummy volume that would not be found. getLocation (used by incrementLocation) does not expect this.
+            if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
+            {
+                if (getLocation(SlicingMode::Volume) > getMinimum(SlicingMode::Volume) +MathTools::Epsilon)
+                { // Not at first volume
+                    m_volumeInitialPositionToMaximum = true;
+                    unusedIncrement = incrementLocation(SlicingMode::Volume, -1);
+                }
             }
         }
     }
-    return overflow + unusedDecimalPart;
+    else if (unusedIncrement > +0.5 +MathTools::Epsilon)
+    { // Upper limit reached
+        if (m_scrollLoop)
+        {
+            unusedIncrement = setLocation(m_currentAxis, getMinimum(m_currentAxis));
+        }
+        else if (m_volumeScroll)
+        {
+            //NOTE: Evaluation lazyness used to check null pointers before they are used.
+            //HACK: To avoid searching for a dummy volume that would not be found. getLocation (used by incrementLocation) does not expect this.
+            if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
+            {
+                if (getLocation(SlicingMode::Volume) < getMaximum(SlicingMode::Volume) -MathTools::Epsilon)
+                { // Not at the last volume
+                    m_volumeInitialPositionToMaximum = false;
+                    unusedIncrement = incrementLocation(SlicingMode::Volume, +1);
+                }
+            }
+        }
+    }
+    return unusedIncrement;
 }
 
 void SlicingWheelTool::beginScroll()
@@ -174,19 +187,13 @@ void SlicingWheelTool::onWheelMoved(int angleDelta)
     {
         m_increment += angleDelta / 120.0;
         updateCursorIcon(m_increment);
-        if (m_increment > 1 || m_increment < -1)
-        { // Moved enough to consider an slice change.
-            double overflow = scroll(m_increment);
-            m_increment = overflow;
-        }
+        m_increment = scroll(m_increment);
         
-        if (m_increment > 1 || m_increment < -1)
-        {
-            DEBUG_LOG("********* OVERFLOW ");
+        if (m_increment > +0.5 +MathTools::Epsilon || m_increment < -0.5 -MathTools::Epsilon)
+        { // Upper or lower limit reached
             updateCursorIcon(m_increment);
             beginScroll();
         }
-        
     }
     m_timer->start(150 + 75); // human vision reaction time plus a margin
 }
@@ -219,8 +226,9 @@ void SlicingWheelTool::onMiddleButtonPress()
 
 void SlicingWheelTool::onMiddleButtonRelease()
 {
-    m_middleButtonToggle = !m_middleButtonToggle;
     m_ignoreWheelMovement = false;
+    
+    m_middleButtonToggle = !m_middleButtonToggle;
     beginScroll();
 }
 

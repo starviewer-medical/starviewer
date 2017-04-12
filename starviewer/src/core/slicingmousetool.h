@@ -51,7 +51,7 @@ private:
     Direction directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const;
     void beginDirectionDetection(const QPoint& startPosition);
     
-    double scroll(const QPoint& startPosition, const QPoint& currentPosition);
+    void scroll(const QPoint& startPosition, const QPoint& currentPosition);
     void beginScroll(const QPoint& startPosition);
     
     Direction getDirection(const QPointF &startPosition, const QPointF &currentPosition, double stepLength = 0, double xWeight = 1, double yWeight = 1) const;
