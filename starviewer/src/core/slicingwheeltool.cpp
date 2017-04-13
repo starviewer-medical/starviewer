@@ -78,7 +78,7 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
     }
     else if (eventID == vtkCommand::KeyReleaseEvent)
     {
-        if (!m_viewer->getInteractor()->GetControlKey())
+        if (m_ctrlPressed && !m_viewer->getInteractor()->GetControlKey())
         {
             onCtrlRelease();
         }
@@ -171,7 +171,7 @@ double SlicingWheelTool::scroll(double increment)
 void SlicingWheelTool::beginScroll()
 {
     DEBUG_LOG("*********BEGIN SCROLL");
-    m_currentAxis = m_ctrlPressed != m_middleButtonToggle ? SECONDARY_AXIS : MAIN_AXIS;
+    m_currentAxis = m_ctrlPressed || m_middleButtonToggle ? SECONDARY_AXIS : MAIN_AXIS;
     m_increment = 0;
     m_scrollLoop = false;
     m_scrollLoop = m_scrollLoop || (m_config_sliceScrollLoop && getMode(m_currentAxis) == SlicingMode::Slice);
