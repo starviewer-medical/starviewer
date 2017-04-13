@@ -120,6 +120,7 @@ Q_DECLARE_METATYPE(VolumePixelData*)
 Q_DECLARE_METATYPE(Image*)
 Q_DECLARE_METATYPE(OrthogonalPlane)
 Q_DECLARE_METATYPE(Corners)
+Q_DECLARE_METATYPE(Vector3)
 
 void test_Volume::constructor_ShouldCreateMinimalVolume()
 {
@@ -472,7 +473,7 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
     QTest::addColumn<AnatomicalPlane>("anatomicalPlane");
     QTest::addColumn<OrthogonalPlane>("expectedOrthogonalPlane");
 
-    PatientOrientation axialPatientOrientation = AnatomicalPlane(AnatomicalPlane::Axial).getDefaultRadiologicalOrienation();
+    PatientOrientation axialPatientOrientation = AnatomicalPlane(AnatomicalPlane::Axial).getDefaultRadiologicalOrientation();
     Image *axialImage = new Image(this);
     axialImage->setPatientOrientation(axialPatientOrientation);
     Volume *axialVolume = new Volume(this);
@@ -484,7 +485,7 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
     QTest::newRow("Axial volume, N/A plane") << axialVolume << AnatomicalPlane(AnatomicalPlane::NotAvailable) << OrthogonalPlane(OrthogonalPlane::XYPlane);
     QTest::newRow("Axial volume, Oblique plane") << axialVolume << AnatomicalPlane(AnatomicalPlane::Oblique) << OrthogonalPlane(OrthogonalPlane::XYPlane);
 
-    PatientOrientation sagittalPatientOrientation = AnatomicalPlane(AnatomicalPlane::Sagittal).getDefaultRadiologicalOrienation();
+    PatientOrientation sagittalPatientOrientation = AnatomicalPlane(AnatomicalPlane::Sagittal).getDefaultRadiologicalOrientation();
     Image *sagittalImage = new Image(this);
     sagittalImage->setPatientOrientation(sagittalPatientOrientation);
     Volume *sagittalVolume = new Volume(this);
@@ -496,7 +497,7 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
     QTest::newRow("Sagittal volume, N/A plane") << sagittalVolume << AnatomicalPlane(AnatomicalPlane::NotAvailable) << OrthogonalPlane(OrthogonalPlane::XYPlane);
     QTest::newRow("Sagittal volume, Oblique plane") << sagittalVolume << AnatomicalPlane(AnatomicalPlane::Oblique) << OrthogonalPlane(OrthogonalPlane::XYPlane);
 
-    PatientOrientation coronalPatientOrientation = AnatomicalPlane(AnatomicalPlane::Coronal).getDefaultRadiologicalOrienation();
+    PatientOrientation coronalPatientOrientation = AnatomicalPlane(AnatomicalPlane::Coronal).getDefaultRadiologicalOrientation();
     Image *coronalImage = new Image(this);
     coronalImage->setPatientOrientation(coronalPatientOrientation);
     Volume *coronalVolume = new Volume(this);
@@ -565,18 +566,18 @@ void test_Volume::getStackDirection_ShouldReturnNormalVector_data()
 {
     QTest::addColumn<QSharedPointer<Volume> >("volume");
     QTest::addColumn<ImageOrientation>("imageOrientation");
-    QTest::addColumn<QVector3D>("normal");
+    QTest::addColumn<Vector3>("normal");
 
     QSharedPointer<Volume> volume(new Volume());
     Image *image1 = new Image(volume.data());
     volume->addImage(image1);
     ImageOrientation imageOrientation;
-    QVector3D positiveX(+1.0, 0.0, 0.0);
-    QVector3D negativeX(-1.0, 0.0, 0.0);
-    QVector3D positiveY(0.0, +1.0, 0.0);
-    QVector3D negativeY(0.0, -1.0, 0.0);
-    QVector3D positiveZ(0.0, 0.0, +1.0);
-    QVector3D negativeZ(0.0, 0.0, -1.0);
+    Vector3 positiveX(+1.0, 0.0, 0.0);
+    Vector3 negativeX(-1.0, 0.0, 0.0);
+    Vector3 positiveY(0.0, +1.0, 0.0);
+    Vector3 negativeY(0.0, -1.0, 0.0);
+    Vector3 positiveZ(0.0, 0.0, +1.0);
+    Vector3 negativeZ(0.0, 0.0, -1.0);
 
     QTest::newRow("default orientation") << volume << imageOrientation << imageOrientation.getNormalVector();
 
@@ -634,32 +635,32 @@ void test_Volume::getStackDirection_ShouldReturnNormalVector_data()
     imageOrientation.setRowAndColumnVectors(negativeZ, negativeY);
     QTest::newRow("-z -y") << volume << imageOrientation << imageOrientation.getNormalVector();
 
-    QVector3D row, column;
+    Vector3 row, column;
 
-    row.setX(+3.9);
-    row.setY(+9.5);
-    row.setZ(+0.8);
-    column.setX(-6.0);
-    column.setY(-6.7);
-    column.setZ(-3.2);
+    row.x = +3.9;
+    row.y = +9.5;
+    row.z = +0.8;
+    column.x = -6.0;
+    column.y = -6.7;
+    column.z = -3.2;
     imageOrientation.setRowAndColumnVectors(row, column);
     QTest::newRow("oblique (1)") << volume << imageOrientation << imageOrientation.getNormalVector();
 
-    row.setX(+1.1);
-    row.setY(+8.0);
-    row.setZ(-4.7);
-    column.setX(+3.5);
-    column.setY(-8.4);
-    column.setZ(+6.7);
+    row.x = +1.1;
+    row.y = +8.0;
+    row.z = -4.7;
+    column.x = +3.5;
+    column.y = -8.4;
+    column.z = +6.7;
     imageOrientation.setRowAndColumnVectors(row, column);
     QTest::newRow("oblique (2)") << volume << imageOrientation << imageOrientation.getNormalVector();
 
-    row.setX(+3.0);
-    row.setY(-0.6);
-    row.setZ(+1.0);
-    column.setX(-8.6);
-    column.setY(+3.4);
-    column.setZ(+7.2);
+    row.x = +3.0;
+    row.y = -0.6;
+    row.z = +1.0;
+    column.x = -8.6;
+    column.y = +3.4;
+    column.z = +7.2;
     imageOrientation.setRowAndColumnVectors(row, column);
     QTest::newRow("oblique (3)") << volume << imageOrientation << imageOrientation.getNormalVector();
 }
@@ -668,12 +669,11 @@ void test_Volume::getStackDirection_ShouldReturnNormalVector()
 {
     QFETCH(QSharedPointer<Volume>, volume);
     QFETCH(ImageOrientation, imageOrientation);
-    QFETCH(QVector3D, normal);
+    QFETCH(Vector3, normal);
 
     volume->getImage(0)->setImageOrientationPatient(imageOrientation);
-    double dir[3];
-    volume->getStackDirection(dir);
-    QVector3D direction(dir[0], dir[1], dir[2]);
+    Vector3 direction;
+    volume->getStackDirection(direction.data());
 
     QCOMPARE(direction, normal);
 }

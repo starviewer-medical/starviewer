@@ -15,8 +15,7 @@
 #ifndef UGDIMAGEORIENTATION_H
 #define UGDIMAGEORIENTATION_H
 
-#include <QString>
-#include <QVector3D>
+#include "vector3.h"
 
 namespace udg {
 
@@ -29,12 +28,16 @@ namespace udg {
     Aquesta classe, a més a més guarda la normal del pla que formen aquests dos vectors.
   */
 class ImageOrientation {
+
 public:
+
+    /// Constructs an image orientation with null vectors.
     ImageOrientation();
-    ~ImageOrientation();
-    
-    /// Constructor a partir de dos vectors 3D
-    ImageOrientation(const QVector3D &rowVector, const QVector3D &columnVector);
+    /// Constructs an image orientation with the given row and column vectors.
+    ImageOrientation(Vector3 rowVector, Vector3 columnVector);
+
+    /// Returns true if the row and column vectors are not null, and false otherwise.
+    bool isValid() const;
     
     /// Assigna la orientació proporcionada en el format estipulat pel DICOM: 6 valors numèrics separats per '\' o una cadena buida. 
     /// Si la cadena no està en el format esperat, es re-inicialitzen els valors dels vectors i es retorna fals, cert altrament.
@@ -45,31 +48,27 @@ public:
     QString getDICOMFormattedImageOrientation() const;
 
     /// Assigna la orientació a través dels 2 vectors 3D corresponents a les direccions de la fila i de la columna respectivament
-    void setRowAndColumnVectors(const QVector3D &rowVector, const QVector3D &columnVector);
+    void setRowAndColumnVectors(Vector3 rowVector, Vector3 columnVector);
     
-    /// Ens retorna els vectors fila, columna i normal respectivament.
-    /// En cas que no s'hagi assignat cap orientació, els vectors no tindran cap element
-    QVector3D getRowVector() const;
-    QVector3D getColumnVector() const;
-    QVector3D getNormalVector() const;
+    /// Returns the row vector.
+    const Vector3& getRowVector() const;
+    /// Returns the column vector.
+    const Vector3& getColumnVector() const;
+    /// Returns the normal vector, computed as the cross product of the row and column vectors.
+    const Vector3& getNormalVector() const;
 
     /// Operador igualtat
     bool operator==(const ImageOrientation &imageOrientation) const;
 
 private:
-    /// Ens retorna la orientació dels dos vectors en una cadena en el format estipulat pel DICOM
-    QString convertToDICOMFormatString(const QVector3D &rowVector, const QVector3D &columnVector) const;
 
-    /// Inicialitza els vectors a (0,0,0)
-    void setVectorValuesToDefault();
+    /// The row vector.
+    Vector3 m_rowVector;
+    /// The column vector.
+    Vector3 m_columnVector;
+    /// The normal vector, computed as the cross product of the row and column vectors.
+    Vector3 m_normalVector;
 
-private:
-    /// Els 3 vectors de la orientació de la imatge.
-    /// Els vectors fila i columna els obtindrem directament a partir de la cadena assignada amb setDICOMFormattedImageOrientation()
-    /// El vector normal de la orientació de la imatge es calcularà fent el producte vectorial dels vectors fila i colummna
-    QVector3D m_rowVector;
-    QVector3D m_columnVector;
-    QVector3D m_normalVector;
 };
 
 } // End namespace udg

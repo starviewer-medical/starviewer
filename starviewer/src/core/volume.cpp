@@ -527,8 +527,8 @@ QSharedPointer<ImagePlane> Volume::getImagePlane(int sliceNumber, const Orthogon
             Image *image = getImage(0);
             if (image)
             {
-                QVector3D sagittalRowVector = image->getImageOrientationPatient().getColumnVector();
-                QVector3D sagittalColumnVector;
+                Vector3 sagittalRowVector = image->getImageOrientationPatient().getColumnVector();
+                Vector3 sagittalColumnVector;
                 if (vtkReconstructionHack)
                 {
                     // Returning a fake plane, regarding real world coords, but fits better to vtk world
@@ -537,11 +537,7 @@ QSharedPointer<ImagePlane> Volume::getImagePlane(int sliceNumber, const Orthogon
                 else
                 {
                     // This would be the norm, returning the real plane direction
-                    double sagittalColumnArray[3];
-                    getStackDirection(sagittalColumnArray, 0);
-                    sagittalColumnVector.setX(sagittalColumnArray[0]);
-                    sagittalColumnVector.setY(sagittalColumnArray[1]);
-                    sagittalColumnVector.setZ(sagittalColumnArray[2]);
+                    getStackDirection(sagittalColumnVector.data(), 0);
                 }
 
                 imagePlane.reset(new ImagePlane());
@@ -551,10 +547,8 @@ QSharedPointer<ImagePlane> Volume::getImagePlane(int sliceNumber, const Orthogon
                 imagePlane->setRowLength(dimensions[1] * spacing[1]);
                 imagePlane->setColumnLength(dimensions[2] * spacing[2]);
 
-                QVector3D sagittalNormalVector = image->getImageOrientationPatient().getRowVector();
-                imagePlane->setOrigin(origin[0] + sliceNumber * sagittalNormalVector.x() * spacing[0],
-                                        origin[1] + sliceNumber * sagittalNormalVector.y() * spacing[0],
-                                        origin[2] + sliceNumber * sagittalNormalVector.z() * spacing[0]);
+                Vector3 sagittalNormalVector = image->getImageOrientationPatient().getRowVector();
+                imagePlane->setOrigin(Vector3(origin) + sliceNumber * sagittalNormalVector * spacing[0]);
             }
         }
             break;
@@ -564,8 +558,8 @@ QSharedPointer<ImagePlane> Volume::getImagePlane(int sliceNumber, const Orthogon
             Image *image = getImage(0);
             if (image)
             {
-                QVector3D coronalRowVector = image->getImageOrientationPatient().getRowVector();
-                QVector3D coronalColumnVector;
+                Vector3 coronalRowVector = image->getImageOrientationPatient().getRowVector();
+                Vector3 coronalColumnVector;
                 if (vtkReconstructionHack)
                 {
                     // Returning a fake plane, regarding real world coords, but fits better to vtk world
@@ -574,11 +568,7 @@ QSharedPointer<ImagePlane> Volume::getImagePlane(int sliceNumber, const Orthogon
                 else
                 {
                     // This would be the norm, returning the real plane direction
-                    double coronalColumnArray[3];
-                    getStackDirection(coronalColumnArray, 0);
-                    coronalColumnVector.setX(coronalColumnArray[0]);
-                    coronalColumnVector.setY(coronalColumnArray[1]);
-                    coronalColumnVector.setZ(coronalColumnArray[2]);
+                    getStackDirection(coronalColumnVector.data(), 0);
                 }
 
                 imagePlane.reset(new ImagePlane());
@@ -588,10 +578,8 @@ QSharedPointer<ImagePlane> Volume::getImagePlane(int sliceNumber, const Orthogon
                 imagePlane->setRowLength(dimensions[0] * spacing[0]);
                 imagePlane->setColumnLength(dimensions[2] * spacing[2]);
 
-                QVector3D coronalNormalVector = image->getImageOrientationPatient().getColumnVector();
-                imagePlane->setOrigin(origin[0] + coronalNormalVector.x() * sliceNumber * spacing[1],
-                                        origin[1] + coronalNormalVector.y() * sliceNumber * spacing[1],
-                                        origin[2] + coronalNormalVector.z() * sliceNumber * spacing[1]);
+                Vector3 coronalNormalVector = image->getImageOrientationPatient().getColumnVector();
+                imagePlane->setOrigin(Vector3(origin) + coronalNormalVector * sliceNumber * spacing[1]);
             }
         }
             break;
@@ -645,10 +633,10 @@ void Volume::getStackDirection(double direction[3], int stack)
     if (!secondImage)
     {
         DEBUG_LOG("Només hi ha una imatge per stack! Retornem la normal del pla");
-        QVector3D normalVector = firstImage->getImageOrientationPatient().getNormalVector();
-        direction[0] = normalVector.x();
-        direction[1] = normalVector.y();
-        direction[2] = normalVector.z();
+        Vector3 normalVector = firstImage->getImageOrientationPatient().getNormalVector();
+        direction[0] = normalVector.x;
+        direction[1] = normalVector.y;
+        direction[2] = normalVector.z;
     }
     else
     {

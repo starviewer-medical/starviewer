@@ -197,10 +197,10 @@ void OrderImagesFillerStep::postProcessing()
 void OrderImagesFillerStep::processImage(Image *image)
 {
     // Obtenim el vector normal del pla, que ens determina també a quin "stack" pertany la imatge
-    QVector3D planeNormalVector3D = image->getImageOrientationPatient().getNormalVector();
+    Vector3 planeNormalVector3D = image->getImageOrientationPatient().getNormalVector();
     // El passem a string que ens serà més fàcil de comparar,perquè així és com es guarda a l'estructura d'ordenació
-    QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector3D.x(), 0, 'f', 5).arg(planeNormalVector3D.y(), 0, 'f', 5)
-                                   .arg(planeNormalVector3D.z(), 0, 'f', 5);
+    QString planeNormalString = QString("%1\\%2\\%3").arg(planeNormalVector3D.x, 0, 'f', 5).arg(planeNormalVector3D.y, 0, 'f', 5)
+                                                     .arg(planeNormalVector3D.z, 0, 'f', 5);
 
     QMap<double, QMap<unsigned long, Image*>*> *imagePositionSet;
     QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*> *orderedImageSet;
@@ -288,13 +288,13 @@ void OrderImagesFillerStep::processImage(Image *image)
         {
             if (m_orderedNormalsSet->size() == 1) // Busquem la normal per saber la direcció per on s'han d'ordenar
             {
-                m_direction = QVector3D::crossProduct(m_firstPlaneVector3D, planeNormalVector3D);
-                m_direction = QVector3D::crossProduct(m_direction, m_firstPlaneVector3D);
+                m_direction = Vector3::cross(m_firstPlaneVector3D, planeNormalVector3D);
+                m_direction = Vector3::cross(m_direction, m_firstPlaneVector3D);
             }
             
             angle = MathTools::angleInRadians(m_firstPlaneVector3D, planeNormalVector3D);
 
-            if (QVector3D::dotProduct(planeNormalVector3D, m_direction) <= 0) // Direcció d'ordenació
+            if (Vector3::dot(planeNormalVector3D, m_direction) <= 0) // Direcció d'ordenació
             {
                 angle = 2 * MathTools::PiNumber - angle;
             }

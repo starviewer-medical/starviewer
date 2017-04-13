@@ -102,10 +102,11 @@ AnatomicalPlane AnatomicalPlane::getPlaneFromPatientOrientation(const PatientOri
     }
 }
 
-PatientOrientation AnatomicalPlane::getDefaultRadiologicalOrienation() const
+PatientOrientation AnatomicalPlane::getDefaultRadiologicalOrientation() const
 {
     PatientOrientation orientation;
 
+    // We have to specify the labels for the right and down directions
     switch (m_plane)
     {
         case Axial:

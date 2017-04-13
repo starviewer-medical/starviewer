@@ -41,7 +41,7 @@ public:
     static AnatomicalPlane getPlaneFromPatientOrientation(const PatientOrientation &orientation);
 
     /// Returns the default patient orientation for this anatomical plane.
-    PatientOrientation getDefaultRadiologicalOrienation() const;
+    PatientOrientation getDefaultRadiologicalOrientation() const;
 
     /// Conversion operator: allows to use an AnatomicalPlane in a switch.
     operator Plane() const;

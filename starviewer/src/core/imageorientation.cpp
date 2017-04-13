@@ -14,46 +14,43 @@
 
 #include "imageorientation.h"
 
-#include <QStringList>
-
 #include "dicomvaluerepresentationconverter.h"
 #include "logging.h"
 
-namespace udg {
+#include <QStringList>
 
-// Constant per definir el que nosaltres considerem un vector buit
-const QVector3D EmptyVector(.0,.0,.0);
+namespace udg {
 
 ImageOrientation::ImageOrientation()
 {
-    setVectorValuesToDefault();
 }
 
-ImageOrientation::~ImageOrientation()
+ImageOrientation::ImageOrientation(Vector3 rowVector, Vector3 columnVector)
+    : m_rowVector(std::move(rowVector)), m_columnVector(std::move(columnVector))
 {
+    m_normalVector = Vector3::cross(m_rowVector, m_columnVector);
 }
 
-ImageOrientation::ImageOrientation(const QVector3D &rowVector, const QVector3D &columnVector)
+bool ImageOrientation::isValid() const
 {
-    setRowAndColumnVectors(rowVector, columnVector);
+    Vector3 nullVector;
+    return m_rowVector != nullVector && m_columnVector != nullVector;
 }
 
 bool ImageOrientation::setDICOMFormattedImageOrientation(const QString &imageOrientation)
 {
     if (imageOrientation.isEmpty())
     {
-        setVectorValuesToDefault();
-
+        m_rowVector = m_columnVector = m_normalVector = Vector3();
         return true;
     }
 
     // A partir d'aquí comprovem que hi hagi el número correcte d'elements
     QStringList list = imageOrientation.split(DICOMValueRepresentationConverter::ValuesSeparator);
+
     if (list.size() != 6)
     {
-        DEBUG_LOG("Image Orientation (Patient) no té els 6 elements esperats. Inconsistència DICOM.");
         ERROR_LOG("Image Orientation (Patient) no té els 6 elements esperats. Inconsistència DICOM.");
-
         return false;
     }
 
@@ -63,16 +60,14 @@ bool ImageOrientation::setDICOMFormattedImageOrientation(const QString &imageOri
 
     if (!validValues)
     {
-        DEBUG_LOG("Els valors d'Image Orientation (Patient) no són vàlids. Inconsistència DICOM.");
-        ERROR_LOG("Els valors d'Image Orientation (Patient) no són vàlids. Inconsistència DICOM.");
-        
+        ERROR_LOG("Els valors d'Image Orientation (Patient) no són vàlids. Inconsistència DICOM.");   
         return false;
     }
 
     // Arribats a aquest punt, tenim 6 valors i són vàlids
     // Assignem els valors convertits als corresponents vectors
-    QVector3D row(convertedValues.at(0), convertedValues.at(1), convertedValues.at(2));
-    QVector3D column(convertedValues.at(3), convertedValues.at(4), convertedValues.at(5));
+    Vector3 row(convertedValues.at(0), convertedValues.at(1), convertedValues.at(2));
+    Vector3 column(convertedValues.at(3), convertedValues.at(4), convertedValues.at(5));
     setRowAndColumnVectors(row, column);
 
     return true;
@@ -80,34 +75,39 @@ bool ImageOrientation::setDICOMFormattedImageOrientation(const QString &imageOri
 
 QString ImageOrientation::getDICOMFormattedImageOrientation() const
 {
-    if (m_rowVector == EmptyVector && m_columnVector == EmptyVector)
+    if (!isValid())
     {
         return QString();
     }
-    else
+
+    QStringList values;
+
+    for (double v : {m_rowVector.x, m_rowVector.y, m_rowVector.z, m_columnVector.x, m_columnVector.y, m_columnVector.z})
     {
-        return this->convertToDICOMFormatString(m_rowVector, m_columnVector);
+        values.append(QString::number(v));
     }
+
+    return values.join(DICOMValueRepresentationConverter::ValuesSeparator);
 }
 
-void ImageOrientation::setRowAndColumnVectors(const QVector3D &rowVector, const QVector3D &columnVector)
+void ImageOrientation::setRowAndColumnVectors(Vector3 rowVector, Vector3 columnVector)
 {
-    m_rowVector = rowVector;
-    m_columnVector = columnVector;
-    m_normalVector = QVector3D::crossProduct(m_rowVector, m_columnVector);
+    m_rowVector = std::move(rowVector);
+    m_columnVector = std::move(columnVector);
+    m_normalVector = Vector3::cross(m_rowVector, m_columnVector);
 }
 
-QVector3D ImageOrientation::getRowVector() const
+const Vector3& ImageOrientation::getRowVector() const
 {
     return m_rowVector;
 }
 
-QVector3D ImageOrientation::getColumnVector() const
+const Vector3& ImageOrientation::getColumnVector() const
 {
     return m_columnVector;
 }
 
-QVector3D ImageOrientation::getNormalVector() const
+const Vector3& ImageOrientation::getNormalVector() const
 {
     return m_normalVector;
 }
@@ -115,28 +115,6 @@ QVector3D ImageOrientation::getNormalVector() const
 bool ImageOrientation::operator==(const ImageOrientation &imageOrientation) const
 {
     return (m_rowVector == imageOrientation.m_rowVector) && (m_columnVector == imageOrientation.m_columnVector);
-}
-
-QString ImageOrientation::convertToDICOMFormatString(const QVector3D &rowVector, const QVector3D &columnVector) const
-{
-    QString imageOrientationString;
-
-    imageOrientationString = QString::number(rowVector.x()) + DICOMValueRepresentationConverter::ValuesSeparator;
-    imageOrientationString += QString::number(rowVector.y()) + DICOMValueRepresentationConverter::ValuesSeparator;
-    imageOrientationString += QString::number(rowVector.z()) + DICOMValueRepresentationConverter::ValuesSeparator;
-
-    imageOrientationString += QString::number(columnVector.x()) + DICOMValueRepresentationConverter::ValuesSeparator;
-    imageOrientationString += QString::number(columnVector.y()) + DICOMValueRepresentationConverter::ValuesSeparator;
-    imageOrientationString += QString::number(columnVector.z());
-
-    return imageOrientationString;
-}
-
-void ImageOrientation::setVectorValuesToDefault()
-{
-    m_rowVector = EmptyVector;
-    m_columnVector = EmptyVector;
-    m_normalVector = EmptyVector;
 }
 
 } // End namespace udg

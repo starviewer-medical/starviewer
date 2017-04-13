@@ -33,20 +33,22 @@ private:
     void setupVectorsData();
 };
 
+Q_DECLARE_METATYPE(Vector3)
+
 void test_ImageOrientation::setDICOMFormattedImageOrientation_ShouldModifyVectorValuesAndReturnTrue_data()
 {
     QTest::addColumn<QString>("dicomFormattedOrientation");
-    QTest::addColumn<QVector3D>("rowVector");
-    QTest::addColumn<QVector3D>("columnVector");
-    QTest::addColumn<QVector3D>("normalVector");
+    QTest::addColumn<Vector3>("rowVector");
+    QTest::addColumn<Vector3>("columnVector");
+    QTest::addColumn<Vector3>("normalVector");
 
-    QVector3D defaultVectorValues(.0, .0, .0);
+    Vector3 defaultVectorValues(.0, .0, .0);
 
-    QTest::newRow("six random number values correctly formatted") << "1\\2\\3\\0\\0\\0" << QVector3D(1.0, 2.0, 3.0) << QVector3D(.0, .0, .0) 
-        << QVector3D(.0, .0, .0);
+    QTest::newRow("six random number values correctly formatted") << "1\\2\\3\\0\\0\\0" << Vector3(1.0, 2.0, 3.0) << Vector3(.0, .0, .0) << Vector3(.0, .0, .0);
     
-    QTest::newRow("six random floating point number values correctly formatted") << "1.0\\2.1\\3.\\.0\\.0\\3.5" << QVector3D(1.0, 2.1, 3.0) 
-        << QVector3D(.0, .0, 3.5) << QVector3D::crossProduct(QVector3D(1.0, 2.1, 3.0), QVector3D(.0, .0, 3.5));
+    QTest::newRow("six random floating point number values correctly formatted") << "1.0\\2.1\\3.\\.0\\.0\\3.5" << Vector3(1.0, 2.1, 3.0)
+                                                                                 << Vector3(.0, .0, 3.5)
+                                                                                 << Vector3::cross(Vector3(1.0, 2.1, 3.0), Vector3(.0, .0, 3.5));
     
     QTest::newRow("empty string") << "" << defaultVectorValues << defaultVectorValues << defaultVectorValues;
 }
@@ -54,9 +56,9 @@ void test_ImageOrientation::setDICOMFormattedImageOrientation_ShouldModifyVector
 void test_ImageOrientation::setDICOMFormattedImageOrientation_ShouldModifyVectorValuesAndReturnTrue()
 {
     QFETCH(QString, dicomFormattedOrientation);
-    QFETCH(QVector3D, rowVector);
-    QFETCH(QVector3D, columnVector);
-    QFETCH(QVector3D, normalVector);
+    QFETCH(Vector3, rowVector);
+    QFETCH(Vector3, columnVector);
+    QFETCH(Vector3, normalVector);
 
     ImageOrientation imageOrientation;
     QCOMPARE(imageOrientation.setDICOMFormattedImageOrientation(dicomFormattedOrientation), true);
@@ -69,11 +71,11 @@ void test_ImageOrientation::setDICOMFormattedImageOrientation_ShouldModifyVector
 void test_ImageOrientation::setDICOMFormattedImageOrientation_ShouldResetVectorsToDefaultValuesAndReturnFalse_data()
 {
     QTest::addColumn<QString>("dicomFormattedOrientation");
-    QTest::addColumn<QVector3D>("rowVector");
-    QTest::addColumn<QVector3D>("columnVector");
-    QTest::addColumn<QVector3D>("normalVector");
+    QTest::addColumn<Vector3>("rowVector");
+    QTest::addColumn<Vector3>("columnVector");
+    QTest::addColumn<Vector3>("normalVector");
 
-    QVector3D defaultVectorValues(.0, .0, .0);
+    Vector3 defaultVectorValues(.0, .0, .0);
 
     QTest::newRow("six random string values") << "aaa\\bbbb\\ccc\\dddd\\eeee\\ffff" << defaultVectorValues << defaultVectorValues << defaultVectorValues;
     QTest::newRow("six elements with mixed alphanumeric and numeric values") << "aaa\\1\\bbbb\\.2\\cccc\\3.2" << defaultVectorValues << defaultVectorValues 
@@ -92,9 +94,9 @@ void test_ImageOrientation::setDICOMFormattedImageOrientation_ShouldResetVectors
 void test_ImageOrientation::setDICOMFormattedImageOrientation_ShouldResetVectorsToDefaultValuesAndReturnFalse()
 {
     QFETCH(QString, dicomFormattedOrientation);
-    QFETCH(QVector3D, rowVector);
-    QFETCH(QVector3D, columnVector);
-    QFETCH(QVector3D, normalVector);
+    QFETCH(Vector3, rowVector);
+    QFETCH(Vector3, columnVector);
+    QFETCH(Vector3, normalVector);
 
     ImageOrientation imageOrientation;
     QCOMPARE(imageOrientation.setDICOMFormattedImageOrientation(dicomFormattedOrientation), false);
@@ -111,10 +113,10 @@ void test_ImageOrientation::ImageOrientation_constructorInitialization_data()
 
 void test_ImageOrientation::ImageOrientation_constructorInitialization()
 {
-    QFETCH(QVector3D, inputRowVector);
-    QFETCH(QVector3D, inputColumnVector);
-    QFETCH(QVector3D, memberRowVector);
-    QFETCH(QVector3D, memberColumnVector);
+    QFETCH(Vector3, inputRowVector);
+    QFETCH(Vector3, inputColumnVector);
+    QFETCH(Vector3, memberRowVector);
+    QFETCH(Vector3, memberColumnVector);
 
     ImageOrientation imageOrientation(inputRowVector, inputColumnVector);
 
@@ -122,7 +124,7 @@ void test_ImageOrientation::ImageOrientation_constructorInitialization()
     QCOMPARE(imageOrientation.getColumnVector(), memberColumnVector);
 
     // Constructor sense paràmetres
-    QVector3D zeroValuedVector(0.0,0.0, 0.0);
+    Vector3 zeroValuedVector(0.0,0.0, 0.0);
     ImageOrientation imageOrientationDefault;
     
     QCOMPARE(imageOrientationDefault.getRowVector(), zeroValuedVector);
@@ -137,10 +139,10 @@ void test_ImageOrientation::setRowAndColumnVectors_UpdateVectorValues_data()
 
 void test_ImageOrientation::setRowAndColumnVectors_UpdateVectorValues()
 {
-    QFETCH(QVector3D, inputRowVector);
-    QFETCH(QVector3D, inputColumnVector);
-    QFETCH(QVector3D, memberRowVector);
-    QFETCH(QVector3D, memberColumnVector);
+    QFETCH(Vector3, inputRowVector);
+    QFETCH(Vector3, inputColumnVector);
+    QFETCH(Vector3, memberRowVector);
+    QFETCH(Vector3, memberColumnVector);
 
     ImageOrientation imageOrientation;
     imageOrientation.setRowAndColumnVectors(inputRowVector, inputColumnVector);
@@ -151,12 +153,12 @@ void test_ImageOrientation::setRowAndColumnVectors_UpdateVectorValues()
 
 void test_ImageOrientation::operatorEquality_ShouldReturnTrue_data()
 {
-    QTest::addColumn<QVector3D>("rowVector");
-    QTest::addColumn<QVector3D>("columnVector");
+    QTest::addColumn<Vector3>("rowVector");
+    QTest::addColumn<Vector3>("columnVector");
     QTest::addColumn<QString>("orientationString");
     
-    QVector3D row(2.0, 1.0, 3);
-    QVector3D column(5.3, 2e-12, 33);
+    Vector3 row(2.0, 1.0, 3);
+    Vector3 column(5.3, 2e-12, 33);
 
     QString orientationString("2\\1\\3\\5.3\\2e-12\\33");
 
@@ -165,8 +167,8 @@ void test_ImageOrientation::operatorEquality_ShouldReturnTrue_data()
 
 void test_ImageOrientation::operatorEquality_ShouldReturnTrue()
 {
-    QFETCH(QVector3D, rowVector);
-    QFETCH(QVector3D, columnVector);
+    QFETCH(Vector3, rowVector);
+    QFETCH(Vector3, columnVector);
     QFETCH(QString, orientationString);
 
     ImageOrientation imageOrientationConstructorInitialized(rowVector, columnVector);
@@ -182,12 +184,12 @@ void test_ImageOrientation::operatorEquality_ShouldReturnTrue()
 
 void test_ImageOrientation::operatorEquality_ShouldReturnFalse_data()
 {
-    QTest::addColumn<QVector3D>("rowVector");
-    QTest::addColumn<QVector3D>("columnVector");
+    QTest::addColumn<Vector3>("rowVector");
+    QTest::addColumn<Vector3>("columnVector");
     QTest::addColumn<QString>("orientationString");
     
-    QVector3D row(2.0, 1.0, 3);
-    QVector3D column(5.3, 2e-12, 33);
+    Vector3 row(2.0, 1.0, 3);
+    Vector3 column(5.3, 2e-12, 33);
 
     QString orientationString("0\\1\\2\\-6\\49\\0.3");
 
@@ -196,8 +198,8 @@ void test_ImageOrientation::operatorEquality_ShouldReturnFalse_data()
 
 void test_ImageOrientation::operatorEquality_ShouldReturnFalse()
 {
-    QFETCH(QVector3D, rowVector);
-    QFETCH(QVector3D, columnVector);
+    QFETCH(Vector3, rowVector);
+    QFETCH(Vector3, columnVector);
     QFETCH(QString, orientationString);
 
     ImageOrientation imageOrientationConstructorInitialized(rowVector, columnVector);
@@ -213,15 +215,15 @@ void test_ImageOrientation::operatorEquality_ShouldReturnFalse()
 
 void test_ImageOrientation::setupVectorsData()
 {
-    QTest::addColumn<QVector3D>("inputRowVector");
-    QTest::addColumn<QVector3D>("inputColumnVector");
-    QTest::addColumn<QVector3D>("memberRowVector");
-    QTest::addColumn<QVector3D>("memberColumnVector");
+    QTest::addColumn<Vector3>("inputRowVector");
+    QTest::addColumn<Vector3>("inputColumnVector");
+    QTest::addColumn<Vector3>("memberRowVector");
+    QTest::addColumn<Vector3>("memberColumnVector");
     
-    QVector3D defaultValueVector;
-    QVector3D zeroVector(0.0, 0.0, 0.0);
-    QVector3D randomValuedVector(0.1, 2.1, 0.3e15);
-    QVector3D randomValuedVector2(-3.875, .1e-3, 450.23);
+    Vector3 defaultValueVector;
+    Vector3 zeroVector(0.0, 0.0, 0.0);
+    Vector3 randomValuedVector(0.1, 2.1, 0.3e15);
+    Vector3 randomValuedVector2(-3.875, .1e-3, 450.23);
     
     QTest::newRow("initialize with empty vectors") << defaultValueVector << defaultValueVector << defaultValueVector << defaultValueVector;
     QTest::newRow("initialize with zero valued vectors") << zeroVector << zeroVector << zeroVector << zeroVector;

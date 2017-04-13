@@ -465,8 +465,8 @@ double Image::distance(Image *image)
     // Origen del pla
     const double *imagePosition = image->getImagePositionPatient();
     // Normal del pla sobre la qual projectarem l'origen
-    QVector3D normalVector = image->getImageOrientationPatient().getNormalVector();
-    distance = normalVector.x() * imagePosition[0] + normalVector.y() * imagePosition[1] + normalVector.z() * imagePosition[2];
+    Vector3 normalVector = image->getImageOrientationPatient().getNormalVector();
+    distance = normalVector.x * imagePosition[0] + normalVector.y * imagePosition[1] + normalVector.z * imagePosition[2];
 
     return distance;
 }

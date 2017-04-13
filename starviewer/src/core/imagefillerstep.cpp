@@ -439,10 +439,10 @@ void ImageFillerStep::processImage(Image *image, const DICOMTagReader *dicomRead
                 if (!imagePositionPatientString.isEmpty() && spacingBetweenSlices != 0.0)
                 {
                     QStringList values = imagePositionPatientString.split("\\");
-                    QVector3D firstFrameImagePositionPatient(values.at(0).toDouble(), values.at(1).toDouble(), values.at(2).toDouble());
-                    QVector3D imagePositionPatient = firstFrameImagePositionPatient + image->getFrameNumber() * spacingBetweenSlices * imageOrientation.getNormalVector();
-                    double position[3] = { imagePositionPatient.x(), imagePositionPatient.y(), imagePositionPatient.z() };
-                    image->setImagePositionPatient(position);
+                    Vector3 firstFrameImagePositionPatient(values.at(0).toDouble(), values.at(1).toDouble(), values.at(2).toDouble());
+                    Vector3 imagePositionPatient = firstFrameImagePositionPatient +
+                                                   image->getFrameNumber() * spacingBetweenSlices * imageOrientation.getNormalVector();
+                    image->setImagePositionPatient(imagePositionPatient.data());
                 }
             }
         }

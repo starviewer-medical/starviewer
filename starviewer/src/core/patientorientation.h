@@ -15,9 +15,7 @@
 #ifndef UDGPATIENTORIENTATION_H
 #define UDGPATIENTORIENTATION_H
 
-#include <QString>
-
-class QVector3D;
+#include "vector3.h"
 
 namespace udg {
 
@@ -79,7 +77,7 @@ private:
     bool validateDICOMFormattedPatientOrientationString(const QString &string);
 
     /// Donat un vector de direcció ens retorna l'etiqueta d'orientació corresponent
-    QString getOrientationLabelFromDirectionVector(const QVector3D &vector);
+    QString getOrientationLabelFromDirectionVector(const Vector3 &vector);
 
     /// Retorna l'n-éssima etiqueta d'orientació (Fila = 0, Columna = 1, Normal = 2).
     /// Si donem un índex fora de rang pel nombre d'etiquetes que hi ha, retornarà un string buit.

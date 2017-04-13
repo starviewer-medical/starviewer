@@ -511,10 +511,10 @@ void VtkDcmtkImageReader::readOrigin(const DICOMTagReader &dicomTagReader)
                     imageOrientation.setDICOMFormattedImageOrientation(imageOrientationString);
 
                     QStringList values = imagePositionPatientString.split("\\");
-                    QVector3D firstFrameImagePositionPatient(values.at(0).toDouble(), values.at(1).toDouble(), values.at(2).toDouble());
-                    QVector3D imagePosition = firstFrameImagePositionPatient + m_frameNumbers.first() * spacingBetweenSlices * imageOrientation.getNormalVector();
+                    Vector3 firstFrameImagePositionPatient(values.at(0).toDouble(), values.at(1).toDouble(), values.at(2).toDouble());
+                    Vector3 imagePosition = firstFrameImagePositionPatient + m_frameNumbers.first() * spacingBetweenSlices * imageOrientation.getNormalVector();
 
-                    imagePositionPatient = QString("%1\\%2\\%3").arg(imagePosition.x()).arg(imagePosition.y()).arg(imagePosition.z());
+                    imagePositionPatient = QString("%1\\%2\\%3").arg(imagePosition.x).arg(imagePosition.y).arg(imagePosition.z);
                     ERROR_LOG("Unexpected image position patient: " + imagePositionPatient);
                 }
             }

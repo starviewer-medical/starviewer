@@ -177,17 +177,17 @@ bool PatientOrientation::validateDICOMFormattedPatientOrientationString(const QS
     return validStringExpression.exactMatch(string);
 }
 
-QString PatientOrientation::getOrientationLabelFromDirectionVector(const QVector3D &vector)
+QString PatientOrientation::getOrientationLabelFromDirectionVector(const Vector3 &vector)
 {
     QString orientation;
 
-    QString orientationX = vector.x() < 0 ? RightLabel : LeftLabel;
-    QString orientationY = vector.y() < 0 ? AnteriorLabel : PosteriorLabel;
-    QString orientationZ = vector.z() < 0 ? FeetLabel : HeadLabel;
+    QString orientationX = vector.x < 0 ? RightLabel : LeftLabel;
+    QString orientationY = vector.y < 0 ? AnteriorLabel : PosteriorLabel;
+    QString orientationZ = vector.z < 0 ? FeetLabel : HeadLabel;
 
-    double absX = fabs(vector.x());
-    double absY = fabs(vector.y());
-    double absZ = fabs(vector.z());
+    double absX = fabs(vector.x);
+    double absY = fabs(vector.y);
+    double absZ = fabs(vector.z);
 
     for (int i = 0; i < 3; ++i)
     {

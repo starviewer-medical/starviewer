@@ -152,109 +152,148 @@ void Q2DViewer::verticalFlip()
     applyImageOrientationChanges();
 }
 
-PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
+PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation()
 {
     if (!getMainInput())
     {
         return PatientOrientation();
     }
-    
-    // Si no estem a la vista axial (adquisició original) obtindrem 
-    // la orientació a través de la primera imatge
-    int index = (getCurrentViewPlane() == OrthogonalPlane::XYPlane) ? getCurrentSlice() : 0;
 
-    PatientOrientation originalOrientation;
-    Image *image = getMainInput()->getImage(index);
-    if (image)
+    Image *image = this->getCurrentDisplayedImage();
+    if (!image)
     {
-        originalOrientation = image->getPatientOrientation();
-        if (originalOrientation.getDICOMFormattedPatientOrientation().isEmpty())
+        image = this->getMainInput()->getImage(0);  // TODO this isn't correct when images have different orientations
+    }
+    if (!image)
+    {
+        WARN_LOG("Input does not have image at index 0");
+        return PatientOrientation();
+    }
+
+    ImageOrientation originalImageOrientation = image->getImageOrientationPatient();
+
+    if (!originalImageOrientation.isValid())
+    {
+        // Doesn't have valid image orientation, compute it from patient orientation if possible
+        PatientOrientation patientOrientation = image->getPatientOrientation();
+
+        if (patientOrientation.getRowDirectionLabel().size() == 1 && patientOrientation.getColumnDirectionLabel().size() == 1)
         {
+            // Fine, we can compute image orientation from patient orientation
+
+            auto getVector = [](const QString &label) {
+                if (label == PatientOrientation::LeftLabel) return Vector3(1, 0, 0);
+                if (label == PatientOrientation::RightLabel) return Vector3(-1, 0, 0);
+                if (label == PatientOrientation::PosteriorLabel) return Vector3(0, 1, 0);
+                if (label == PatientOrientation::AnteriorLabel) return Vector3(0, -1, 0);
+                if (label == PatientOrientation::HeadLabel) return Vector3(0, 0, 1);
+                if (label == PatientOrientation::FeetLabel) return Vector3(0, 0, -1);
+                return Vector3();
+            };
+
+            originalImageOrientation.setRowAndColumnVectors(getVector(patientOrientation.getRowDirectionLabel()),
+                                                            getVector(patientOrientation.getColumnDirectionLabel()));
+        }
+        else if (!patientOrientation.getRowDirectionLabel().isEmpty() && !patientOrientation.getColumnDirectionLabel().isEmpty())
+        {
+            // We can compute patient orientation with rotations in multiples of 90º
+
+            auto round = [](double x) -> double {
+                constexpr double Epsilon = 0.0001;
+                if (std::abs(0 - x) < Epsilon) return 0;
+                else if (std::abs(1 - x) < Epsilon) return 1;
+                else if (std::abs(-1 - x) < Epsilon) return -1;
+                else return x;
+            };
+
+            vtkCamera *camera = this->getActiveCamera();
+            vtkMatrix4x4 *modelView = camera->GetModelViewTransformMatrix();
+            Vector3 right(round(modelView->GetElement(0, 0)), round(modelView->GetElement(0, 1)), round(modelView->GetElement(0, 2)));
+            Vector3 down(round(-modelView->GetElement(1, 0)), round(-modelView->GetElement(1, 1)), round(-modelView->GetElement(1, 2)));
+
+            Vector3 x(1, 0, 0), y(0, 1, 0);
+            QString row = patientOrientation.getRowDirectionLabel(), oppositeRow = PatientOrientation::getOppositeOrientationLabel(row);
+            QString column = patientOrientation.getColumnDirectionLabel(), oppositeColumn = PatientOrientation::getOppositeOrientationLabel(column);
+            PatientOrientation transformedPatientOrientation;
+
+            if (right == x && down == y) transformedPatientOrientation.setLabels(row, column);
+            else if (right == x && down == -y) transformedPatientOrientation.setLabels(row, oppositeColumn);
+            else if (right == -x && down == y) transformedPatientOrientation.setLabels(oppositeRow, column);
+            else if (right == -x && down == -y) transformedPatientOrientation.setLabels(oppositeRow, oppositeColumn);
+            else if (right == y && down == x) transformedPatientOrientation.setLabels(column, row);
+            else if (right == y && down == -x) transformedPatientOrientation.setLabels(column, oppositeRow);
+            else if (right == -y && down == x) transformedPatientOrientation.setLabels(oppositeColumn, row);
+            else if (right == -y && down == -x) transformedPatientOrientation.setLabels(oppositeColumn, oppositeRow);
+
+            return transformedPatientOrientation;
+        }
+        else
+        {
+            // We don't have any original orientation
             return PatientOrientation();
         }
     }
-    else
-    {
-        DEBUG_LOG("L'índex d'imatge actual és incorrecte o no hi ha imatges al volum. Això no hauria de passar en aquest mètode.");
-        return PatientOrientation();
-    }
-    
-    // Escollim les etiquetes que hem agafar com a referència segons la vista actual
-    QString baseRowLabel;
-    QString baseColumnLabel;
-    switch (getCurrentViewPlane())
-    {
-        case OrthogonalPlane::XYPlane:
-            baseRowLabel = originalOrientation.getRowDirectionLabel();
-            baseColumnLabel = originalOrientation.getColumnDirectionLabel();
-            break;
 
-        case OrthogonalPlane::YZPlane:
-            baseRowLabel = originalOrientation.getColumnDirectionLabel();
-             // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
-            baseColumnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
-            break;
+    // If we have reached this point, we have an image orientation with three vectors (row, column and normal).
+    // We now need to somehow transform these vectors according to the current camera.
+    // To achieve this, we need to put the vectors in a matrix (as columns) and multiply it by a similar matrix created from the orientation vectors of the
+    // camera (also as columns); this latter matrix is the inverse of the orientation part of the model view (*). With this product we get in the columns the
+    // right, up and out vectors, but we need the right and down vectors. Thus, we need to perform a vertical flip, which coincides with a 180º rotation around
+    // the current X axis, and is equivalent to inverting the Y and Z axes; thus we multiply by a diagonal matrix with (1, -1, -1, 1) in its diagonal. Finally,
+    // from the resulting matrix we can extract its first three columns as the row, column and normal vectors.
+    //
+    // (*) The model view matrix contains the X, Y and Z vectors of the camera as its first three rows. Since it's a rotation matrix (we remove the translation
+    //     part), its inverse coincides with its transpose, thus the X, Y and Z vectors become columns.
 
-        case OrthogonalPlane::XZPlane:
-            baseRowLabel = originalOrientation.getRowDirectionLabel();
-            // TODO Tenim la normal "al revés", en realitat hauria de ser el contrari
-            baseColumnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
-            break;
+    // Create matrix with orientation vectors as columns
+    auto orientationMatrix = vtkSmartPointer<vtkMatrix4x4>::New();
+    for (int i = 0; i < 3; i++)
+    {
+        orientationMatrix->SetElement(i, 0, originalImageOrientation.getRowVector()[i]);
+        orientationMatrix->SetElement(i, 1, originalImageOrientation.getColumnVector()[i]);
+        orientationMatrix->SetElement(i, 2, originalImageOrientation.getNormalVector()[i]);
     }
 
-    // Ara caldrà escollir les etiquetes corresponents en funció de les rotacions i flips
-    QString rowLabel;
-    QString columnLabel;
-    int absoluteRotateFactor = (4 + m_rotateFactor) % 4;
-    if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
+    // Rotate by the inverse of the model view (we extract only its orientation part)
+    vtkCamera *camera = this->getActiveCamera();
+    auto rotationMatrix = vtkSmartPointer<vtkMatrix4x4>::New();
+    auto *modelView = camera->GetModelViewTransformMatrix();
+    for (int i = 0; i < 3; i++)
     {
-        // HACK FLIP De moment necessitem fer aquest truc. Durant el refactoring caldria
-        // veure si es pot fer d'una manera millor
-        if (m_isImageFlipped)
+        for (int j = 0; j < 3; j++)
         {
-            absoluteRotateFactor = (absoluteRotateFactor + 2) % 4;
+            rotationMatrix->SetElement(i, j, modelView->GetElement(i, j));
         }
     }
-    switch (absoluteRotateFactor)
+    rotationMatrix->Invert();
+    vtkMatrix4x4::Multiply4x4(orientationMatrix, rotationMatrix, orientationMatrix);
+
+    // Perform a vertical flip (rotate 180º around X) because column direction vector must go down
+    rotationMatrix->Identity();
+    rotationMatrix->SetElement(1, 1, -1);
+    rotationMatrix->SetElement(2, 2, -1);
+    vtkMatrix4x4::Multiply4x4(orientationMatrix, rotationMatrix, orientationMatrix);
+
+    // Fill orientation vectors from columns of the final orientation matrix
+    Vector3 row, column;
+    for (int i = 0; i < 3; i++)
     {
-        case 0:
-            rowLabel = baseRowLabel;
-            columnLabel = baseColumnLabel;
-            break;
-
-        case 1:
-            rowLabel = PatientOrientation::getOppositeOrientationLabel(baseColumnLabel);
-            columnLabel = baseRowLabel;
-            break;
-
-        case 2:
-            rowLabel = PatientOrientation::getOppositeOrientationLabel(baseRowLabel);
-            columnLabel = PatientOrientation::getOppositeOrientationLabel(baseColumnLabel);
-            break;
-
-        case 3:
-            rowLabel = baseColumnLabel;
-            columnLabel = PatientOrientation::getOppositeOrientationLabel(baseRowLabel);
-            break;
+        row[i] = orientationMatrix->GetElement(i, 0);
+        column[i] = orientationMatrix->GetElement(i, 1);
     }
+    ImageOrientation finalImageOrientation(row, column);
+    PatientOrientation finalPatientOrientation;
+    finalPatientOrientation.setPatientOrientationFromImageOrientation(finalImageOrientation);
 
-    if (m_isImageFlipped)
-    {
-        rowLabel = PatientOrientation::getOppositeOrientationLabel(rowLabel);
-    }
-    
-    PatientOrientation patientOrientation;
-    patientOrientation.setLabels(rowLabel, columnLabel);
-
-    return patientOrientation;
+    return finalPatientOrientation;
 }
 
-QString Q2DViewer::getCurrentAnatomicalPlaneLabel() const
+QString Q2DViewer::getCurrentAnatomicalPlaneLabel()
 {
     return AnatomicalPlane::getLabelFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
 }
 
-AnatomicalPlane Q2DViewer::getCurrentAnatomicalPlane() const
+AnatomicalPlane Q2DViewer::getCurrentAnatomicalPlane()
 {
     return AnatomicalPlane::getPlaneFromPatientOrientation(getCurrentDisplayedImagePatientOrientation());
 }
@@ -269,9 +308,9 @@ void Q2DViewer::setDefaultOrientation(const AnatomicalPlane &anatomicalPlane)
     // We apply the standard orientation for the desired projection unless original acquisition is axial and is the same as the desired one
     // because when the patient is acquired in prono position we don't want to change the acquisition orientation and thus respect the acquired one
     AnatomicalPlane acquisitionPlane = getMainInput()->getAcquisitionPlane();
-    if (acquisitionPlane != AnatomicalPlane::Axial || acquisitionPlane != anatomicalPlane)
+    if ( ! (anatomicalPlane == AnatomicalPlane::Axial && acquisitionPlane == AnatomicalPlane::Axial))
     {
-        PatientOrientation desiredOrientation = anatomicalPlane.getDefaultRadiologicalOrienation();
+        PatientOrientation desiredOrientation = anatomicalPlane.getDefaultRadiologicalOrientation();
         setImageOrientation(desiredOrientation);
     }
 }

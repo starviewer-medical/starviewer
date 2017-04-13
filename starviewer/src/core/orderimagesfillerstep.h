@@ -16,10 +16,11 @@
 #define UDGORDERIMAGESFILLERSTEP_H
 
 #include "patientfillerstep.h"
+
+#include "vector3.h"
+
 #include <QMap>
 #include <QHash>
-#include <QString>
-#include <QVector3D>
 
 namespace udg {
 
@@ -60,8 +61,8 @@ private:
     //    Series       Volume     AcqNumber MultipleAcqNumbers?
     QHash<Series*, QHash<int, QPair<QString, bool>*> > m_acquisitionNumberEvaluation;
 
-    QVector3D m_firstPlaneVector3D;
-    QVector3D m_direction;
+    Vector3 m_firstPlaneVector3D;
+    Vector3 m_direction;
 
     /// Tipus per definir un hash per comptar les fases corresponents a cada posició
     /// La clau del hash és un string amb la posició de la imatge (ImagePositionPatient) i el valor associat compta les ocurrències (fases) d'aquesta posició.

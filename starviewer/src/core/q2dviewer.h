@@ -146,16 +146,16 @@ public:
     /// Retorna el thickness. En cas que no disposem del thickness, el valor retornat serà 0.0
     double getCurrentSliceThickness() const;
 
-    /// Retorna la orientació de pacient corresponent a la imatge que s'està visualitzant en aquell moment,
-    /// és a dir, tenint en compte rotacions, flips, reconstruccions, etc.
-    PatientOrientation getCurrentDisplayedImagePatientOrientation() const;
+    /// Returns the patient orientation corresponding to the currently displayed image, taking into account reconstructions, rotations and flips,
+    /// where +x (right) is the row direction, +y (up) is the column direction, and +z (out) is the normal direction.
+    PatientOrientation getCurrentDisplayedImagePatientOrientation();
 
     /// Ens diu quin és el pla de projecció de la imatge que es veu en aquell moment
     /// Valors: AXIAL, SAGITAL, CORONAL, OBLIQUE o N/A
-    QString getCurrentAnatomicalPlaneLabel() const;
+    QString getCurrentAnatomicalPlaneLabel();
 
     /// Returns current anatomical plane as AnatomicalPlaneType
-    AnatomicalPlane getCurrentAnatomicalPlane() const;
+    AnatomicalPlane getCurrentAnatomicalPlane();
 
     /// Retorna l'espai que hi ha entre les llesques segons la vista actual i si hi ha el thickness activat
     double getCurrentSpacingBetweenSlices();
