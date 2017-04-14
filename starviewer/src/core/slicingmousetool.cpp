@@ -46,7 +46,7 @@ void SlicingMouseTool::handleEvent(unsigned long eventID)
         QPoint position = m_2DViewer->getEventPosition() / m_2DViewer->devicePixelRatioF();
         onMousePress(position);
     }
-    else if (eventID == vtkCommand::LeftButtonReleaseEvent)
+    else if (eventID == vtkCommand::LeftButtonReleaseEvent || eventID == vtkCommand::RightButtonReleaseEvent)
     {
         // To Qt device independant pixels
         QPoint position = m_2DViewer->getEventPosition() / m_2DViewer->devicePixelRatioF();
