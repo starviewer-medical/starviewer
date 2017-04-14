@@ -45,13 +45,11 @@ private:
     void beginCursorIcon(const QPoint &position);
     void unsetCursorIcon();
     
-    void scroll(const QPoint& startPosition, const QPoint& currentPosition);
+    double scroll(const QPoint& currentPosition);
     void beginScroll(const QPoint& startPosition);
     
-    Direction directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const;
+    Direction directionDetection(const QPoint& currentPosition) const;
     void beginDirectionDetection(const QPoint& startPosition);
-    
-    Direction getDirection(const QPointF &startPosition, const QPointF &currentPosition, double stepLength = 0, double xWeight = 1, double yWeight = 1) const;
     
     bool m_config_sliceScrollLoop = false;
     bool m_config_phaseScrollLoop  = false;
@@ -77,8 +75,8 @@ private:
     static constexpr unsigned int DEFAULT_MINIMUM_STEP_LENGTH = 2;
     static constexpr unsigned int DEFAULT_MAXIMUM_STEP_LENGTH = 64;
     
-    double m_directionStepLength = 0;
-    QPoint m_directionStartPosition = QPoint(0,0);
+    double m_directionDetection_stepLength = 0;
+    QPoint m_directionDetection_startPosition = QPoint(0,0);
     static constexpr unsigned int DEFAULT_DETECTION_STEP_LENGTH = 16;
     
     Direction m_currentDirection = Direction::Undefined;

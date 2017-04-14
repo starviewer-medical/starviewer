@@ -174,7 +174,7 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
         
         // *** Direction detection ***
         // Direction varies and gets eventually defined as user moves the mouse...
-        Direction direction = directionDetection(m_directionStartPosition, position);
+        Direction direction = directionDetection(position);
         if (direction != Direction::Undefined)
         {
             beginDirectionDetection(position);
@@ -188,7 +188,7 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
         // *** Scrolling ***
         if (m_currentDirection != Direction::Undefined)
         {
-            scroll(m_startPosition, position);
+            scroll(position);
         }
         
         // *** Cursor icons ***
@@ -301,7 +301,7 @@ void SlicingMouseTool::unsetCursorIcon()
     m_cursorIcon_lastPosition = QPoint(0,0);
 }
 
-void SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& currentPosition)
+double SlicingMouseTool::scroll(const QPoint& currentPosition)
 {
     Q_ASSERT(m_currentDirection != Direction::Undefined);
     unsigned int axis; 
@@ -309,12 +309,12 @@ void SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& current
     if (m_currentDirection == Direction::Horizontal)
     {
         axis = HORIZONTAL_AXIS;
-        shift = currentPosition.x() - startPosition.x();
+        shift = currentPosition.x() - m_startPosition.x();
     }
     else if (m_currentDirection == Direction::Vertical)
     {
         axis = VERTICAL_AXIS;
-        shift = currentPosition.y() - startPosition.y();
+        shift = currentPosition.y() - m_startPosition.y();
     }
     
     // Calculate the destination location
@@ -345,6 +345,8 @@ void SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& current
         }
         beginScroll(currentPosition);
     }
+    
+    return newLocation;
 }
 
 void SlicingMouseTool::beginScroll(const QPoint& startPosition)
@@ -379,35 +381,25 @@ void SlicingMouseTool::beginScroll(const QPoint& startPosition)
     }
 }
 
-SlicingMouseTool::Direction SlicingMouseTool::directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const
+SlicingMouseTool::Direction SlicingMouseTool::directionDetection(const QPoint& currentPosition) const
 {
-    if (m_currentDirection == Direction::Undefined) 
+    double xWeight = 1;
+    double yWeight = 1;
+    if (m_currentDirection == Direction::Horizontal) 
     {
-        return getDirection(startPosition, currentPosition, m_directionStepLength, 1, 1);
-    }
-    else if (m_currentDirection == Direction::Horizontal) 
-    {
-        return getDirection(startPosition, currentPosition, m_directionStepLength, 1, 0.5);
+        xWeight = 1;
+        yWeight = 0.5;
     }
     else if (m_currentDirection == Direction::Vertical)
     {
-        return getDirection(startPosition, currentPosition, m_directionStepLength, 0.5, 1);
+        xWeight = 0.5;
+        yWeight = 1;
     }
-    Q_ASSERT(false);
-}
-
-void SlicingMouseTool::beginDirectionDetection(const QPoint& startPosition)
-{
-    m_directionStartPosition = startPosition;
-    m_directionStepLength = DEFAULT_DETECTION_STEP_LENGTH;
-}
-
-SlicingMouseTool::Direction SlicingMouseTool::getDirection(const QPointF& startPosition, const QPointF& currentPosition, double stepLength, double xWeight, double yWeight) const
-{
-    double vectorX = std::abs((currentPosition.x() - startPosition.x()) * xWeight);
-    double vectorY = std::abs((currentPosition.y() - startPosition.y()) * yWeight);
+    
+    double vectorX = std::abs((currentPosition.x() - m_directionDetection_startPosition.x()) * xWeight);
+    double vectorY = std::abs((currentPosition.y() - m_directionDetection_startPosition.y()) * yWeight);
     double vectorLength = std::hypot(vectorX, vectorY);
-    if (vectorLength > stepLength)
+    if (vectorLength > m_directionDetection_stepLength)
     {
         if (vectorX > vectorY)
         {
@@ -419,6 +411,12 @@ SlicingMouseTool::Direction SlicingMouseTool::getDirection(const QPointF& startP
         }
     }
     return Direction::Undefined;
+}
+
+void SlicingMouseTool::beginDirectionDetection(const QPoint& startPosition)
+{
+    m_directionDetection_startPosition = startPosition;
+    m_directionDetection_stepLength = DEFAULT_DETECTION_STEP_LENGTH;
 }
 
 }
