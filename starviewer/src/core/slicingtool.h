@@ -57,7 +57,7 @@ public slots:
     virtual void reassignAxis() = 0;
     
 protected:
-    bool m_volumeInitialPositionToMaximum;
+    bool m_volumeInitialPositionToMaximum = false;
     Q2DViewer* m_2DViewer;
 
 private:

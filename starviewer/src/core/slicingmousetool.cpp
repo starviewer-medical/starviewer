@@ -28,9 +28,8 @@
 
 namespace udg {
 
-SlicingMouseTool::SlicingMouseTool(QViewer *viewer, QObject *parent)
-: SlicingTool(viewer, parent)
-{   
+SlicingMouseTool::SlicingMouseTool(QViewer *viewer, QObject *parent) : SlicingTool(viewer, parent)
+{
     m_toolName = "SlicingMouseTool";
     reassignAxis();
 }
@@ -69,8 +68,8 @@ void SlicingMouseTool::reassignAxis()
 
     {
         Settings settings;
-        m_scrollLoop_enabledOnSlices = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
-        m_scrollLoop_enabledOnPhases = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
+        m_config_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
+        m_config_phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
         m_wrapAround_enabled = settings.getValue(CoreSettings::EnableQ2DViewerMouseWraparound).toBool();
     }
     
@@ -96,6 +95,7 @@ void SlicingMouseTool::onMousePress(const QPoint &position)
 {
     m_dragActive = true;
     
+    beginCursorIcon(position);
     beginDirectionDetection(position);
     
     if (getMode(VERTICAL_AXIS) == getMode(HORIZONTAL_AXIS))
@@ -130,12 +130,12 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
                 m_wrapAround_wrappedToRight = false;
                 m_wrapAround_wrappedToTop = false;
                 m_wrapAround_wrappedToBottom = false;
+                beginCursorIcon(position);
                 beginDirectionDetection(position);
                 if (m_currentDirection != Direction::Undefined)
                 {
                     beginScroll(position);
                 }
-                m_cursorIcon_lastPosition = position;
             }
             
             // Do we have to do a mouse wrap arround in the next movement?
@@ -166,7 +166,7 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
             }
             
             if (m_wrapAround_wrappedToLeft || m_wrapAround_wrappedToRight || m_wrapAround_wrappedToTop ||m_wrapAround_wrappedToBottom) 
-            {
+            { // Change the position of the mouseS
                 m_wrapAround_positionBeforeWrapping = position;
                 QCursor::setPos(cursor);
             }
@@ -192,7 +192,7 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
         }
         
         // *** Cursor icons ***
-        updateCursorIcon(position);
+        cursorIcon(position);
     }
 }
 
@@ -206,7 +206,7 @@ void SlicingMouseTool::onMouseRelease(const QPoint &position)
     unsetCursorIcon();
 }
 
-void SlicingMouseTool::updateCursorIcon(const QPoint &position)
+void SlicingMouseTool::cursorIcon(const QPoint &position)
 {
     int index = 0;
     if (m_currentDirection != Direction::Undefined)
@@ -288,15 +288,99 @@ void SlicingMouseTool::updateCursorIcon(const QPoint &position)
     m_cursorIcon_lastPosition = position;
 }
 
-void SlicingMouseTool::unsetCursorIcon()
+void SlicingMouseTool::beginCursorIcon(const QPoint &position)
 {
-    m_2DViewer->unsetCursor();
-    m_cursorIcon_lastPosition = QPoint(0,0);
+    m_cursorIcon_lastPosition = position;
     m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
 }
 
+void SlicingMouseTool::unsetCursorIcon()
+{
+    m_2DViewer->unsetCursor();
+    m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
+    m_cursorIcon_lastPosition = QPoint(0,0);
+}
+
+void SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& currentPosition)
+{
+    Q_ASSERT(m_currentDirection != Direction::Undefined);
+    unsigned int axis; 
+    double shift;
+    if (m_currentDirection == Direction::Horizontal)
+    {
+        axis = HORIZONTAL_AXIS;
+        shift = currentPosition.x() - startPosition.x();
+    }
+    else if (m_currentDirection == Direction::Vertical)
+    {
+        axis = VERTICAL_AXIS;
+        shift = currentPosition.y() - startPosition.y();
+    }
+    
+    // Calculate the destination location
+    double location = shift / m_stepLength;
+    if (std::isnan(location) || std::isinf(location)) 
+    {
+        location = 0;
+    }
+    location += m_startLocation;
+    
+    // Setting the location and reacting when reaching limits
+    double newLocation = setLocation(axis, location);
+    
+    // Location and new location differ more than 1 (where rounding happens) this means a limit is reached.
+    if (location < newLocation -0.5 -MathTools::Epsilon)
+    { // Underflow
+        if (m_scrollLoop)
+        {
+            newLocation = setLocation(axis, getMaximum(axis));
+        }
+        beginScroll(currentPosition);
+    }
+    else if (location > newLocation +0.5 +MathTools::Epsilon)
+    { // Overflow
+        if (m_scrollLoop)
+        {
+            newLocation = setLocation(axis, getMinimum(axis));
+        }
+        beginScroll(currentPosition);
+    }
+}
+
+void SlicingMouseTool::beginScroll(const QPoint& startPosition)
+{
+    Q_ASSERT(m_currentDirection != Direction::Undefined);
+    unsigned int axis = m_currentDirection == Direction::Horizontal ? HORIZONTAL_AXIS : VERTICAL_AXIS;
+    
+    m_startLocation = getLocation(axis);
+    m_startPosition = startPosition;
+    
+    // Determine if closed loop scrolling must be enabled
+    {
+         m_scrollLoop = false;
+         m_scrollLoop = m_scrollLoop || (getMode(axis) == SlicingMode::Slice && m_config_sliceScrollLoop);
+         m_scrollLoop = m_scrollLoop || (getMode(axis) == SlicingMode::Phase && m_config_phaseScrollLoop);
+    }
+    
+    // Step lenght determined by the viewer size.
+    {
+        unsigned int windowLength = std::max(1, m_currentDirection == Direction::Horizontal ? m_2DViewer->size().width() : m_2DViewer->size().height()); // Always greater than zero
+        unsigned int rangeSize = std::max(1.0, getRangeSize(axis)); // Always greater than zero
+        
+        m_stepLength = windowLength / rangeSize;
+        if (m_stepLength > DEFAULT_MAXIMUM_STEP_LENGTH)
+        {
+            m_stepLength = DEFAULT_MAXIMUM_STEP_LENGTH;
+        }
+        else if (m_stepLength < DEFAULT_MINIMUM_STEP_LENGTH)
+        {
+            m_stepLength = DEFAULT_MINIMUM_STEP_LENGTH;
+        }
+    }
+}
+
 SlicingMouseTool::Direction SlicingMouseTool::directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const
-{    
+{
     if (m_currentDirection == Direction::Undefined) 
     {
         return getDirection(startPosition, currentPosition, m_directionStepLength, 1, 1);
@@ -318,96 +402,18 @@ void SlicingMouseTool::beginDirectionDetection(const QPoint& startPosition)
     m_directionStepLength = DEFAULT_DETECTION_STEP_LENGTH;
 }
 
-void SlicingMouseTool::scroll(const QPoint& startPosition, const QPoint& currentPosition)
-{
-    Q_ASSERT(m_currentDirection != Direction::Undefined);
-    unsigned int axis; 
-    double shift;
-    if (m_currentDirection == Direction::Horizontal)
-    {
-        axis = HORIZONTAL_AXIS;
-        shift = currentPosition.x() - startPosition.x();
-    }
-    else if (m_currentDirection == Direction::Vertical)
-    {
-        axis = VERTICAL_AXIS;
-        shift = currentPosition.y() - startPosition.y();
-    }
-    
-    // Calculate the destination location
-    double location = shift / m_stepLength;
-    if (isnan(location) || isinf(location)) 
-    {
-        location = 0;
-    }
-    location += m_startLocation;
-    
-    // Setting the location and reacting when reaching limits
-    double newLocation = setLocation(axis, location);
-    
-    // Location and new location differ more than 1 (where rounding happens) this means a limit is reached.
-    if (location < newLocation -0.5 -MathTools::Epsilon)
-    { // Underflow
-        if (m_scrollLoopEnabled)
-        {
-            newLocation = setLocation(axis, getMaximum(axis));
-        }
-        beginScroll(currentPosition);
-    }
-    else if (location > newLocation +0.5 +MathTools::Epsilon)
-    { // Overflow
-        if (m_scrollLoopEnabled)
-        {
-            newLocation = setLocation(axis, getMinimum(axis));
-        }
-        beginScroll(currentPosition);
-    }
-}
-
-void SlicingMouseTool::beginScroll(const QPoint& startPosition)
-{
-    Q_ASSERT(m_currentDirection != Direction::Undefined);
-    unsigned int axis = m_currentDirection == Direction::Horizontal ? HORIZONTAL_AXIS : VERTICAL_AXIS;
-    
-    m_startLocation = getLocation(axis);
-    m_startPosition = startPosition;
-    
-    // Determine if closed loop scrolling must be enabled
-    {
-         m_scrollLoopEnabled = false;
-         m_scrollLoopEnabled = m_scrollLoopEnabled || (getMode(axis) == SlicingMode::Slice && m_scrollLoop_enabledOnSlices);
-         m_scrollLoopEnabled = m_scrollLoopEnabled || (getMode(axis) == SlicingMode::Phase && m_scrollLoop_enabledOnPhases);
-    }
-    
-    // Step lenght determined by the viewer size.
-    {
-        unsigned int windowLength = std::max(1, m_currentDirection == Direction::Horizontal ? m_2DViewer->size().width() : m_2DViewer->size().height()); // Always greater than zero
-        unsigned int rangeSize = std::max(1.0, getRangeSize(axis)); // Always greater than zero
-        
-        m_stepLength = windowLength / rangeSize;
-        if (m_stepLength > DEFAULT_MAXIMUM_STEP_LENGTH)
-        {
-            m_stepLength = DEFAULT_MAXIMUM_STEP_LENGTH;
-        }
-        else if (m_stepLength < DEFAULT_MINIMUM_STEP_LENGTH)
-        {
-            m_stepLength = DEFAULT_MINIMUM_STEP_LENGTH;
-        }
-    }
-}
-
 SlicingMouseTool::Direction SlicingMouseTool::getDirection(const QPointF& startPosition, const QPointF& currentPosition, double stepLength, double xWeight, double yWeight) const
 {
     double vectorX = std::abs((currentPosition.x() - startPosition.x()) * xWeight);
     double vectorY = std::abs((currentPosition.y() - startPosition.y()) * yWeight);
     double vectorLength = std::hypot(vectorX, vectorY);
-    if (std::isgreater(vectorLength, stepLength))
+    if (vectorLength > stepLength)
     {
-        if (std::isgreater(vectorX, vectorY))
+        if (vectorX > vectorY)
         {
             return Direction::Horizontal;
         }
-        else if (std::isgreater(vectorY, vectorX))
+        else if (vectorY > vectorX)
         {
             return Direction::Vertical;
         }
@@ -416,5 +422,3 @@ SlicingMouseTool::Direction SlicingMouseTool::getDirection(const QPointF& startP
 }
 
 }
-
-

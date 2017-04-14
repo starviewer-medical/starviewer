@@ -49,6 +49,9 @@ private:
     
     QTimer* m_timer = 0;
     
+    bool m_config_sliceScrollLoop = false;
+    bool m_config_phaseScrollLoop  = false;
+    
     int m_keyAccumulator_up = 0;
     int m_keyAccumulator_down = 0;
     int m_keyAccumulator_left = 0;
@@ -56,14 +59,10 @@ private:
     int m_keyAccumulator_plus = 0;
     int m_keyAccumulator_minus = 0;
     
-    bool m_config_sliceScrollLoop = false;
-    bool m_config_phaseScrollLoop  = false;
-    
-    static constexpr auto MAIN_AXIS = 0;
-    static constexpr auto SECONDARY_AXIS = 1;
-    
+    static constexpr unsigned int MAIN_AXIS = 0;
+    static constexpr unsigned int SECONDARY_AXIS = 1;
 };
 
 }
 
-#endif
+#endif //UDGSLICINGKEYBOARDTOOL_H

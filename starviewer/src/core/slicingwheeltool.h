@@ -36,25 +36,27 @@ private slots:
     void timeout();
     
 private:
-    double scroll(double increment);
-    void beginScroll();
-    
     void onWheelMoved(int angleDelta);
-
     void onCtrlPress();
     void onCtrlRelease();
-
     void onMiddleButtonPress();
     void onMiddleButtonRelease();
     
-    void updateCursorIcon(double increment);
+    void cursorIcon(double increment);
     void unsetCursorIcon();
+    
+    double scroll(double increment);
+    void beginScroll();
     
     QTimer* m_timer = 0;
     
     bool m_config_sliceScrollLoop = false;
     bool m_config_phaseScrollLoop  = false;
     bool m_config_volumeScroll  = false;
+    
+    int m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
+    /// Default value to avoid a cursor icon change.
+    static constexpr int CURSOR_ICON_DONT_UPDATE = -1;
     
     /** Some mouses produce unwanted scrolls when the wheel is clicked. This is
      *  used to cancel them until the wheel is released.
@@ -68,12 +70,8 @@ private:
     bool m_scrollLoop = false;
     bool m_volumeScroll = false;
     
-    int m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
-    /// Default value to avoid a cursor icon change.
-    static constexpr int CURSOR_ICON_DONT_UPDATE = -1;
-        
-    static constexpr auto MAIN_AXIS = 0;
-    static constexpr auto SECONDARY_AXIS = 1;
+    static constexpr unsigned int MAIN_AXIS = 0;
+    static constexpr unsigned int SECONDARY_AXIS = 1;
 };
 
 }

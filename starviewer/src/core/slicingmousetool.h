@@ -31,36 +31,37 @@ public:
     virtual void handleEvent(unsigned long eventID) override;
     
 public slots:
-    
-    // Que miri l'estat del control... i depenent d'aixo faci una cosa o una altra...
-    // Sempre hi han 2 exios
     virtual void reassignAxis() override;
 
 protected:
     enum class Direction {Undefined, Vertical, Horizontal};
    
 private:
-    
     void onMousePress(const QPoint &position);
     void onMouseMove(const QPoint &position);
     void onMouseRelease(const QPoint &position);
     
-    void updateCursorIcon(const QPoint &position);
+    void cursorIcon(const QPoint &position);
+    void beginCursorIcon(const QPoint &position);
     void unsetCursorIcon();
-    
-    Direction directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const;
-    void beginDirectionDetection(const QPoint& startPosition);
     
     void scroll(const QPoint& startPosition, const QPoint& currentPosition);
     void beginScroll(const QPoint& startPosition);
     
+    Direction directionDetection(const QPoint& startPosition, const QPoint& currentPosition) const;
+    void beginDirectionDetection(const QPoint& startPosition);
+    
     Direction getDirection(const QPointF &startPosition, const QPointF &currentPosition, double stepLength = 0, double xWeight = 1, double yWeight = 1) const;
-    bool shouldDoClosedLoop(unsigned int axis) const;
+    
+    bool m_config_sliceScrollLoop = false;
+    bool m_config_phaseScrollLoop  = false;
+    
+    QPoint m_cursorIcon_lastPosition = QPoint(0,0);
+    int m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
+    /// Default value to avoid a cursor icon change.
+    static constexpr int CURSOR_ICON_DONT_UPDATE = -1;
     
     bool m_dragActive = false;
-    
-    bool m_scrollLoop_enabledOnSlices = false;
-    bool m_scrollLoop_enabledOnPhases  = false;
     
     bool m_wrapAround_enabled = false;
     bool m_wrapAround_wrappedToLeft = false;
@@ -69,15 +70,10 @@ private:
     bool m_wrapAround_wrappedToBottom = false;
     QPoint m_wrapAround_positionBeforeWrapping = QPoint(0,0);
     
-    QPoint m_cursorIcon_lastPosition = QPoint(0,0);
-    int m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
-    /// Default value to avoid a cursor icon change.
-    static constexpr int CURSOR_ICON_DONT_UPDATE = -1;
-    
     double m_stepLength = 0;
     QPoint m_startPosition = QPoint(0,0);
     double m_startLocation = 0;
-    bool m_scrollLoopEnabled = false;
+    bool m_scrollLoop = false;
     static constexpr unsigned int DEFAULT_MINIMUM_STEP_LENGTH = 2;
     static constexpr unsigned int DEFAULT_MAXIMUM_STEP_LENGTH = 64;
     
@@ -87,8 +83,8 @@ private:
     
     Direction m_currentDirection = Direction::Undefined;
     
-    static constexpr auto VERTICAL_AXIS = 0;
-    static constexpr auto HORIZONTAL_AXIS = 1;
+    static constexpr unsigned int VERTICAL_AXIS = 0;
+    static constexpr unsigned int HORIZONTAL_AXIS = 1;
     
 };
 

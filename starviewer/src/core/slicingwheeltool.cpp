@@ -20,7 +20,6 @@
 #include "volume.h"
 #include "patient.h"
 #include "mathtools.h"
-#include "logging.h"
 
 // Std
 #include <cmath>
@@ -34,13 +33,13 @@
 
 namespace udg {
 
-SlicingWheelTool::SlicingWheelTool(QViewer *viewer, QObject *parent)
-    : SlicingTool(viewer, parent)
+SlicingWheelTool::SlicingWheelTool(QViewer *viewer, QObject *parent) : SlicingTool(viewer, parent)
 {
-    m_timer = new QTimer();
-    m_timer->setSingleShot(true);
     m_toolName = "SlicingWheelTool";
     
+    m_timer = new QTimer();
+    m_timer->setSingleShot(true);
+    m_timer->setInterval(150 + 75); // Human vision reaction time plus a margin
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
     
     reassignAxis();
@@ -113,9 +112,109 @@ void SlicingWheelTool::reassignAxis()
         setMode(MAIN_AXIS, SlicingMode::Phase);
         setMode(SECONDARY_AXIS, SlicingMode::Phase);
     }
-
-    DEBUG_LOG("********* AXIS REASSING");
     beginScroll();
+}
+
+void SlicingWheelTool::timeout()
+{
+    unsetCursorIcon();
+    beginScroll();
+}
+
+void SlicingWheelTool::onWheelMoved(int angleDelta)
+{
+    m_timer->stop();
+    if (!m_ignoreWheelMovement)
+    {
+        m_increment += angleDelta / 120.0;
+        cursorIcon(m_increment);
+        m_increment = scroll(m_increment);
+        
+        if (m_increment > +0.5 +MathTools::Epsilon || m_increment < -0.5 -MathTools::Epsilon)
+        { // Upper or lower limit reached
+            cursorIcon(m_increment);
+            beginScroll();
+        }
+    }
+    m_timer->start();
+}
+
+void SlicingWheelTool::onCtrlPress()
+{
+    m_ctrlPressed = true;
+    beginScroll();
+}
+
+void SlicingWheelTool::onCtrlRelease()
+{
+    m_ctrlPressed = false;
+    beginScroll();
+}
+
+void SlicingWheelTool::onMiddleButtonPress()
+{
+    m_ignoreWheelMovement = true;
+}
+
+void SlicingWheelTool::onMiddleButtonRelease()
+{
+    m_ignoreWheelMovement = false;
+    m_middleButtonToggle = !m_middleButtonToggle;
+    beginScroll();
+}
+
+void SlicingWheelTool::cursorIcon(double increment)
+{
+    int index = 0;
+    
+    if (getMode(m_currentAxis) == SlicingMode::Phase)
+    { // Phase mode
+        index += 4;
+    }
+    
+    if (increment > MathTools::Epsilon) 
+    { // Positive increment
+        index += 0;
+        if (getLocation(m_currentAxis) >= getMaximum(m_currentAxis) - MathTools::Epsilon)
+        { // Maximum limit reached
+            index += 2;
+        }
+    }
+    else if (increment < -MathTools::Epsilon) 
+    { // Negative increment
+        index += 1;
+        if (getMinimum(m_currentAxis) + MathTools::Epsilon  >= getLocation(m_currentAxis))
+        { // Minimum limit reached
+            index += 2;
+        }
+    }
+    else
+    { // No increment
+        index = CURSOR_ICON_DONT_UPDATE; // Do not touch the icon...
+    }
+
+    if (m_cursorIcon_lastIndex != index)
+    { // Cursor modified only when it really changes, not on every little move.
+        switch (index)
+        {
+            case 0:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-up.svg"))); break;
+            case 1:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-down.svg"))); break;
+            case 2:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-up-limit.svg"))); break;
+            case 3:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-down-limit.svg"))); break;
+            case 4:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-up.svg"))); break;
+            case 5:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-down.svg"))); break;
+            case 6:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-up-limit.svg"))); break;
+            case 7:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-down-limit.svg"))); break;
+            default: break;
+        }
+        m_cursorIcon_lastIndex = index;
+    }
+}
+
+void SlicingWheelTool::unsetCursorIcon()
+{
+    m_2DViewer->unsetCursor();
+    m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
 }
 
 double SlicingWheelTool::scroll(double increment)
@@ -123,7 +222,6 @@ double SlicingWheelTool::scroll(double increment)
     double unusedIncrement = incrementLocation(m_currentAxis, increment);
     // Increment should be 0, or at least something inside the [-0.5,0.5] (because of rounding to nearest slice).
     // When different, means a limit is reached.
-    
     
     if (unusedIncrement < -0.5 -MathTools::Epsilon)
     { // Lower limit reached
@@ -170,7 +268,6 @@ double SlicingWheelTool::scroll(double increment)
 
 void SlicingWheelTool::beginScroll()
 {
-    DEBUG_LOG("*********BEGIN SCROLL");
     m_currentAxis = m_ctrlPressed || m_middleButtonToggle ? SECONDARY_AXIS : MAIN_AXIS;
     m_increment = 0;
     m_scrollLoop = false;
@@ -178,114 +275,5 @@ void SlicingWheelTool::beginScroll()
     m_scrollLoop = m_scrollLoop || (m_config_phaseScrollLoop && getMode(m_currentAxis) == SlicingMode::Phase);
     m_volumeScroll = m_config_volumeScroll && m_currentAxis == MAIN_AXIS;
 }
-
-
-void SlicingWheelTool::onWheelMoved(int angleDelta)
-{
-    m_timer->stop();
-    if (!m_ignoreWheelMovement)
-    {
-        m_increment += angleDelta / 120.0;
-        updateCursorIcon(m_increment);
-        m_increment = scroll(m_increment);
-        
-        if (m_increment > +0.5 +MathTools::Epsilon || m_increment < -0.5 -MathTools::Epsilon)
-        { // Upper or lower limit reached
-            updateCursorIcon(m_increment);
-            beginScroll();
-        }
-    }
-    m_timer->start(150 + 75); // human vision reaction time plus a margin
-}
-
-
-void SlicingWheelTool::timeout()
-{
-    DEBUG_LOG("********* TIMER TRIGGERED");
-    unsetCursorIcon();
-    beginScroll();
-}
-
-
-void SlicingWheelTool::onCtrlPress()
-{
-    m_ctrlPressed = true;
-    beginScroll();
-}
-
-void SlicingWheelTool::onCtrlRelease()
-{
-    m_ctrlPressed = false;
-    beginScroll();
-}
-
-void SlicingWheelTool::onMiddleButtonPress()
-{
-    m_ignoreWheelMovement = true;
-}
-
-void SlicingWheelTool::onMiddleButtonRelease()
-{
-    m_ignoreWheelMovement = false;
-    
-    m_middleButtonToggle = !m_middleButtonToggle;
-    beginScroll();
-}
-
-void SlicingWheelTool::updateCursorIcon(double increment)
-{
-    int index = 0;
-    
-    if (getMode(m_currentAxis) == SlicingMode::Phase)
-    { // Phase mode
-        index += 4;
-    }
-    
-    if (increment > MathTools::Epsilon) 
-    { // Positive increment
-        index += 0;
-        if (getLocation(m_currentAxis) >= getMaximum(m_currentAxis) - MathTools::Epsilon)
-        { // Maximum limit reached
-            index += 2;
-        }
-    }
-    else if (increment < -MathTools::Epsilon) 
-    { // Negative increment
-        index += 1;
-        if (getMinimum(m_currentAxis) + MathTools::Epsilon  >= getLocation(m_currentAxis))
-        { // Minimum limit reached
-            index += 2;
-        }
-    }
-    else
-    { // No increment
-        index = CURSOR_ICON_DONT_UPDATE; // Do not touch the icon...
-    }
-
-    if (m_cursorIcon_lastIndex != index)
-    { // Cursor modified only when it really changes, not on every little move.
-        switch (index)
-        {
-            case 0:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-up.svg"))); DEBUG_LOG("********* CURSOR UPDATED"); break;
-            case 1:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-down.svg"))); DEBUG_LOG("********* CURSOR UPDATED"); break;
-            case 2:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-up-limit.svg"))); DEBUG_LOG("********* CURSOR UPDATED"); break;
-            case 3:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-down-limit.svg"))); DEBUG_LOG("********* CURSOR UPDATED"); break;
-            case 4:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-up.svg"))); DEBUG_LOG("********* CURSOR UPDATED"); break;
-            case 5:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-down.svg"))); DEBUG_LOG("********* CURSOR UPDATED"); break;
-            case 6:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-up-limit.svg"))); DEBUG_LOG("********* CURSOR UPDATED"); break;
-            case 7:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-phase-down-limit.svg"))); DEBUG_LOG("********* CURSOR UPDATED"); break;
-            default: break;
-        }
-        m_cursorIcon_lastIndex = index;
-    }
-}
-
-void SlicingWheelTool::unsetCursorIcon()
-{
-         DEBUG_LOG("********* CURSOR UNSET");
-    m_2DViewer->unsetCursor();
-    m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
-}
-
 
 }

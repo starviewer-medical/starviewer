@@ -23,18 +23,15 @@
 
 namespace udg {
 
-
-SlicingTool::SlicingTool(QViewer *viewer, QObject *parent) : 
-Tool(viewer, parent)
+SlicingTool::SlicingTool(QViewer *viewer, QObject *parent) : Tool(viewer, parent)
 {
-    m_volumeInitialPositionToMaximum = false;
-    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
-    setNumberOfAxes(0);
-    
     m_toolName = "SlicingTool";
     
+    m_2DViewer = Q2DViewer::castFromQViewer(viewer);
     // Must have a valid 2DViewer
     Q_ASSERT(m_2DViewer);
+    
+    setNumberOfAxes(0);
     
     // The number of axes might change on volume changed.
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reassignAxis()));
@@ -219,6 +216,5 @@ double SlicingTool::incrementLocation(unsigned int axis, double shift)
 {
     return incrementLocation(getMode(axis), shift);
 }
-
 
 }

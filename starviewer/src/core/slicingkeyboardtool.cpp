@@ -30,14 +30,13 @@
 
 namespace udg {
 
-SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent)
- : SlicingTool(viewer, parent)
+SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent) : SlicingTool(viewer, parent)
 {
+    m_toolName = "SlicingKeyboardTool";
+    
     m_timer = new QTimer();
     m_timer->setSingleShot(true);
     m_timer->setInterval(10); // Just enough to catch all accumulated keyboard events.
-    m_toolName = "SlicingKeyboardTool";
-    
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
     
     reassignAxis();
@@ -123,6 +122,41 @@ void SlicingKeyboardTool::reassignAxis()
 
 }
 
+void SlicingKeyboardTool::timeout()
+{
+    int upDown = m_keyAccumulator_up - m_keyAccumulator_down;
+    int rightLeft = m_keyAccumulator_right - m_keyAccumulator_left;
+    int plusMinus = m_keyAccumulator_plus - m_keyAccumulator_minus;
+    
+    if (upDown != 0)
+    {
+        bool loop = false;
+        loop = loop || (getMode(MAIN_AXIS) == SlicingMode::Slice && m_config_sliceScrollLoop);
+        loop = loop || (getMode(MAIN_AXIS) == SlicingMode::Phase && m_config_phaseScrollLoop);
+        scroll(upDown, MAIN_AXIS, loop);
+    }
+    
+    if (rightLeft != 0)
+    {
+        bool loop = false;
+        loop = loop || (getMode(SECONDARY_AXIS) == SlicingMode::Slice && m_config_sliceScrollLoop);
+        loop = loop || (getMode(SECONDARY_AXIS) == SlicingMode::Phase && m_config_phaseScrollLoop);
+        scroll(rightLeft, SECONDARY_AXIS, loop);
+    }
+    
+    if (plusMinus != 0)
+    {
+        scroll(plusMinus, MAIN_AXIS, false, true);
+    }
+    
+    m_keyAccumulator_up = 0;
+    m_keyAccumulator_down = 0;
+    m_keyAccumulator_left = 0;
+    m_keyAccumulator_right = 0;
+    m_keyAccumulator_plus = 0;
+    m_keyAccumulator_minus = 0;
+}
+
 void SlicingKeyboardTool::onHomePress()
 {
     setLocation(MAIN_AXIS, getMinimum(MAIN_AXIS));
@@ -169,47 +203,11 @@ void SlicingKeyboardTool::onMinusPress()
     m_timer->start();
 }
 
-void SlicingKeyboardTool::timeout()
-{
-    int upDown = m_keyAccumulator_up - m_keyAccumulator_down;
-    int rightLeft = m_keyAccumulator_right - m_keyAccumulator_left;
-    int plusMinus = m_keyAccumulator_plus - m_keyAccumulator_minus;
-    
-    if (upDown != 0)
-    {
-        bool loop = false;
-        loop = loop || (getMode(MAIN_AXIS) == SlicingMode::Slice && m_config_sliceScrollLoop);
-        loop = loop || (getMode(MAIN_AXIS) == SlicingMode::Phase && m_config_phaseScrollLoop);
-        scroll(upDown, MAIN_AXIS, loop);
-    }
-    
-    if (rightLeft != 0)
-    {
-        bool loop = false;
-        loop = loop || (getMode(SECONDARY_AXIS) == SlicingMode::Slice && m_config_sliceScrollLoop);
-        loop = loop || (getMode(SECONDARY_AXIS) == SlicingMode::Phase && m_config_phaseScrollLoop);
-        scroll(rightLeft, SECONDARY_AXIS, loop);
-    }
-    
-    if (plusMinus != 0)
-    {
-        scroll(plusMinus, MAIN_AXIS, false, true);
-    }
-    
-    m_keyAccumulator_up = 0;
-    m_keyAccumulator_down = 0;
-    m_keyAccumulator_left = 0;
-    m_keyAccumulator_right = 0;
-    m_keyAccumulator_plus = 0;
-    m_keyAccumulator_minus = 0;
-}
-
 double SlicingKeyboardTool::scroll(double increment, unsigned int axis, bool scrollLoopEnabled, bool volumeScrollEnabled)
 {
     double unusedIncrement = incrementLocation(axis, increment);
     // Increment should be 0, or at least something inside the [-0.5,0.5] (because of rounding to nearest slice).
     // When different, means a limit is reached.
-    
     
     if (unusedIncrement < -0.5 -MathTools::Epsilon)
     { // Lower limit reached
