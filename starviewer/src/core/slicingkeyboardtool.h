@@ -36,6 +36,8 @@ private slots:
     void timeout();
 
 private:
+    bool readConfiguration();
+    
     void onHomePress();
     void onEndPress();
     void onUpPress();

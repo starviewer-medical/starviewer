@@ -40,6 +40,12 @@ SlicingMouseTool::~SlicingMouseTool()
 
 void SlicingMouseTool::handleEvent(unsigned long eventID)
 {
+    //PERFORMANCE: configuration read on every little event...
+    if (readConfiguration()) 
+    { // configuration changed
+        reassignAxis();
+    }
+    
     if (eventID == vtkCommand::LeftButtonPressEvent)
     {
         // To Qt device independant pixels
@@ -65,13 +71,8 @@ void SlicingMouseTool::reassignAxis()
     setNumberOfAxes(2);
     bool sliceable = getRangeSize(SlicingMode::Slice) > 1;
     bool phaseable = getRangeSize(SlicingMode::Phase) > 1;
-
-    {
-        Settings settings;
-        m_config_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
-        m_config_phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
-        m_wrapAround_enabled = settings.getValue(CoreSettings::EnableQ2DViewerMouseWraparound).toBool();
-    }
+    
+    readConfiguration();
     
     if (sliceable && phaseable) 
     {
@@ -90,6 +91,26 @@ void SlicingMouseTool::reassignAxis()
     }
 }
 
+bool SlicingMouseTool::readConfiguration()
+{
+    Settings settings;
+    bool changed = false;
+    bool readValue = false;
+    
+    readValue = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
+    changed = changed || readValue != m_config_sliceScrollLoop;
+    m_config_sliceScrollLoop = readValue;
+    
+    readValue = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
+    changed = changed || readValue != m_config_phaseScrollLoop;
+    m_config_phaseScrollLoop = readValue;
+    
+    readValue = settings.getValue(CoreSettings::EnableQ2DViewerMouseWraparound).toBool();
+    changed = changed || readValue != m_config_wraparound;
+    m_config_wraparound = readValue;
+    
+    return changed;
+}
 
 void SlicingMouseTool::onMousePress(const QPoint &position)
 {
@@ -116,20 +137,20 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
     if (m_dragActive)
     {
         // *** Mouse wrap arround ***
-        if (m_wrapAround_enabled)
+        if (m_config_wraparound)
         {
             // Have we made a move wrap arround on the previous movement?
             if (
-                (m_wrapAround_wrappedToLeft && position.x() < m_wrapAround_positionBeforeWrapping.x()) ||
-                (m_wrapAround_wrappedToRight && position.x() > m_wrapAround_positionBeforeWrapping.x()) ||
-                (m_wrapAround_wrappedToTop && position.y() > m_wrapAround_positionBeforeWrapping.y()) ||
-                (m_wrapAround_wrappedToBottom && position.y() < m_wrapAround_positionBeforeWrapping.y())
+                (m_wraparound_wrappedToLeft && position.x() < m_wraparound_positionBeforeWrapping.x()) ||
+                (m_wraparound_wrappedToRight && position.x() > m_wraparound_positionBeforeWrapping.x()) ||
+                (m_wraparound_wrappedToTop && position.y() > m_wraparound_positionBeforeWrapping.y()) ||
+                (m_wraparound_wrappedToBottom && position.y() < m_wraparound_positionBeforeWrapping.y())
             )
             {
-                m_wrapAround_wrappedToLeft = false;
-                m_wrapAround_wrappedToRight = false;
-                m_wrapAround_wrappedToTop = false;
-                m_wrapAround_wrappedToBottom = false;
+                m_wraparound_wrappedToLeft = false;
+                m_wraparound_wrappedToRight = false;
+                m_wraparound_wrappedToTop = false;
+                m_wraparound_wrappedToBottom = false;
                 beginCursorIcon(position);
                 beginDirectionDetection(position);
                 if (m_currentDirection != Direction::Undefined)
@@ -146,28 +167,28 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
             if (cursor.x() < topLeft.x())
             {
                 cursor.setX(bottomRight.x());
-                m_wrapAround_wrappedToRight = true;
+                m_wraparound_wrappedToRight = true;
             }
             else if (cursor.x() > bottomRight.x())
             {
                 cursor.setX(topLeft.x());
-                m_wrapAround_wrappedToLeft = true;
+                m_wraparound_wrappedToLeft = true;
             }
             
             if (cursor.y() < topLeft.y())
             {
                 cursor.setY(bottomRight.y());
-                m_wrapAround_wrappedToBottom = true;
+                m_wraparound_wrappedToBottom = true;
             }
             else if (cursor.y() > bottomRight.y())
             {
                 cursor.setY(topLeft.y());
-                m_wrapAround_wrappedToTop = true;
+                m_wraparound_wrappedToTop = true;
             }
             
-            if (m_wrapAround_wrappedToLeft || m_wrapAround_wrappedToRight || m_wrapAround_wrappedToTop ||m_wrapAround_wrappedToBottom) 
+            if (m_wraparound_wrappedToLeft || m_wraparound_wrappedToRight || m_wraparound_wrappedToTop ||m_wraparound_wrappedToBottom) 
             { // Change the position of the mouseS
-                m_wrapAround_positionBeforeWrapping = position;
+                m_wraparound_positionBeforeWrapping = position;
                 QCursor::setPos(cursor);
             }
         }
@@ -199,10 +220,10 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
 void SlicingMouseTool::onMouseRelease(const QPoint &position)
 {
     m_dragActive = false;
-    m_wrapAround_wrappedToLeft = false;
-    m_wrapAround_wrappedToRight = false;
-    m_wrapAround_wrappedToTop = false;
-    m_wrapAround_wrappedToBottom = false;
+    m_wraparound_wrappedToLeft = false;
+    m_wraparound_wrappedToRight = false;
+    m_wraparound_wrappedToTop = false;
+    m_wraparound_wrappedToBottom = false;
     unsetCursorIcon();
 }
 

@@ -37,6 +37,8 @@ protected:
     enum class Direction {Undefined, Vertical, Horizontal};
    
 private:
+    bool readConfiguration();
+    
     void onMousePress(const QPoint &position);
     void onMouseMove(const QPoint &position);
     void onMouseRelease(const QPoint &position);
@@ -53,6 +55,7 @@ private:
     
     bool m_config_sliceScrollLoop = false;
     bool m_config_phaseScrollLoop  = false;
+    bool m_config_wraparound = false;
     
     QPoint m_cursorIcon_lastPosition = QPoint(0,0);
     int m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
@@ -61,12 +64,11 @@ private:
     
     bool m_dragActive = false;
     
-    bool m_wrapAround_enabled = false;
-    bool m_wrapAround_wrappedToLeft = false;
-    bool m_wrapAround_wrappedToRight = false;
-    bool m_wrapAround_wrappedToTop = false;
-    bool m_wrapAround_wrappedToBottom = false;
-    QPoint m_wrapAround_positionBeforeWrapping = QPoint(0,0);
+    bool m_wraparound_wrappedToLeft = false;
+    bool m_wraparound_wrappedToRight = false;
+    bool m_wraparound_wrappedToTop = false;
+    bool m_wraparound_wrappedToBottom = false;
+    QPoint m_wraparound_positionBeforeWrapping = QPoint(0,0);
     
     double m_stepLength = 0;
     QPoint m_startPosition = QPoint(0,0);

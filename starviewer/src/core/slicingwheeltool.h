@@ -36,6 +36,8 @@ private slots:
     void timeout();
     
 private:
+    bool readConfiguration();
+    
     void onWheelMoved(int angleDelta);
     void onCtrlPress();
     void onCtrlRelease();
