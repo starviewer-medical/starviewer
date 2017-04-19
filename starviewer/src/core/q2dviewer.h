@@ -448,16 +448,6 @@ private:
 
     /// Re-inicia els paràmetres de la càmera segons la vista actual.
     void resetCamera();
-
-    /// Aplica el factor de rotació adient segons els girs que li indiquem. No actualitza la càmera ni l'escena, simplement
-    /// es fa servir per posar els valors correctes a les variables internes que controlen com està girada la imatge.
-    void rotate(int times);
-
-    /// Sets if image should be flipped (horizontally) or not. It does not update the camera nor renders the scene.
-    void setFlip(bool flip);
-    
-    /// Updates the camera, renders and emits the current image orientataion
-    void applyImageOrientationChanges();
     
     /// Carrega un volum asíncronament
     void loadVolumeAsynchronously(Volume *volume);
@@ -502,9 +492,10 @@ private:
     /// Returns all the current display units. The list will be empty if we have no input.
     QList<VolumeDisplayUnit*> getDisplayUnits() const;
 
+    /// Performs the necessary actions after the camera has changed.
+    void onCameraChanged();
+
 private slots:
-    /// Actualitza les transformacions de càmera (de moment rotació i flip)
-    void updateCamera();
 
     /// Reimplementem per tal de que faci un setInputAsynchronously
     /// TODO: De moment es fa així de manera xapussa fins que no es traspassin els mètode de càrrega
@@ -537,15 +528,6 @@ private:
 
     /// Tipus de solapament dels volums en cas que en tinguem més d'un
     OverlapMethod m_overlapMethod;
-
-    /// Factor de rotació. En sentit de les agulles del rellotge 0: 0º, 1: 90º, 2: 180º, 3: 270º.
-    int m_rotateFactor;
-
-    /// Indica si cal aplicar un flip horitzontal o no sobre la càmera
-    bool m_applyFlip;
-
-    /// Aquesta variable controla si la imatge està flipada respecte la seva orientació original. Útil per controlar annotacions.
-    bool m_isImageFlipped;
 
     /// Especialista en dibuixar primitives
     Drawer *m_drawer;

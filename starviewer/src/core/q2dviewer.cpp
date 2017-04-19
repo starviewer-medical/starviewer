@@ -63,8 +63,7 @@ const QString Q2DViewer::OverlaysDrawerGroup("Overlays");
 const QString Q2DViewer::DummyVolumeObjectName("Dummy Volume");
 
 Q2DViewer::Q2DViewer(QWidget *parent)
-: QViewer(parent), m_overlayVolume(0), m_blender(0), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_applyFlip(false),
-  m_isImageFlipped(false), m_slabProjectionMode(VolumeDisplayUnit::Max), m_fusionBalance(50)
+: QViewer(parent), m_overlayVolume(0), m_blender(0), m_overlapMethod(Q2DViewer::Blend), m_slabProjectionMode(VolumeDisplayUnit::Max), m_fusionBalance(50)
 {
     m_displayUnitsFactory = new VolumeDisplayUnitHandlerFactory;
     initializeDummyDisplayUnit();
@@ -119,9 +118,11 @@ void Q2DViewer::rotateClockWise(int times)
         return;
     }
 
-    rotate(times);
+    vtkCamera *camera = getActiveCamera();
+    Q_ASSERT(camera);
+    camera->Roll(-90 * times);
 
-    applyImageOrientationChanges();
+    onCameraChanged();
 }
 
 void Q2DViewer::rotateCounterClockWise(int times)
@@ -132,24 +133,34 @@ void Q2DViewer::rotateCounterClockWise(int times)
         return;
     }
 
-    rotate(-times);
+    vtkCamera *camera = getActiveCamera();
+    Q_ASSERT(camera);
+    camera->Roll(90 * times);
 
-    applyImageOrientationChanges();
+    onCameraChanged();
 }
 
 void Q2DViewer::horizontalFlip()
 {
-    setFlip(true);
+    vtkCamera *camera = getActiveCamera();
+    Q_ASSERT(camera);
+    camera->Azimuth(180);
 
-    applyImageOrientationChanges();
+    onCameraChanged();
 }
 
 void Q2DViewer::verticalFlip()
 {
-    rotate(2);
-    setFlip(true);
+    // Note: Elevation(180) is effectively the same that Azimuth(180) because it doesn't change the view up vector, only the position.
+    //       Thus, we have to manually change the view up vector afterwards (we could also do it before, it doesn't matter).
+    vtkCamera *camera = getActiveCamera();
+    Q_ASSERT(camera);
+    camera->Elevation(180);
+    Vector3 up;
+    camera->GetViewUp(up.data());
+    camera->SetViewUp((-up).data());
 
-    applyImageOrientationChanges();
+    onCameraChanged();
 }
 
 PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation()
@@ -823,9 +834,6 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     m_annotationsHandler->updateAnnotations(VoiLutAnnotation);
     
     // Reiniciem valors per defecte de la càmera
-    m_rotateFactor = 0;
-    setFlip(false);
-    m_isImageFlipped = false;
     m_alignPosition = Q2DViewer::AlignCenter;
     
     resetCamera();
@@ -860,86 +868,6 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
 void Q2DViewer::resetView(const AnatomicalPlane &anatomicalPlane)
 {
     QViewer::resetView(anatomicalPlane);
-}
-
-void Q2DViewer::updateCamera()
-{
-    if (hasInput())
-    {
-        vtkCamera *camera = getActiveCamera();
-        Q_ASSERT(camera);
-
-        double roll = 0.0;
-        switch (getCurrentViewPlane())
-        {
-            case OrthogonalPlane::XYPlane:
-                if (m_isImageFlipped)
-                {
-                    roll = m_rotateFactor * 90. + 180.;
-                }
-                else
-                {
-                    roll = -m_rotateFactor * 90. + 180.;
-                }
-                break;
-
-            case OrthogonalPlane::YZPlane:
-                if (m_isImageFlipped)
-                {
-                    roll = m_rotateFactor * 90. - 90.;
-                }
-                else
-                {
-                    roll = -m_rotateFactor * 90. - 90.;
-                }
-                break;
-
-            case OrthogonalPlane::XZPlane:
-                if (m_isImageFlipped)
-                {
-                    roll = m_rotateFactor * 90.;
-                }
-                else
-                {
-                    roll = -m_rotateFactor * 90.;
-                }
-                break;
-        }
-        camera->SetRoll(roll);
-
-        if (m_applyFlip)
-        {
-            // Alternativa 1)
-            // TODO Així movem la càmera, però faltaria que la imatge no es mogués de lloc
-            // potser implementant a la nostra manera el metode Azimuth i prenent com a centre
-            // el centre de la imatge. Una altra possibilitat es contrarestar el desplaçament de la
-            // camera en l'eix en que s'ha produit
-            camera->Azimuth(180);
-            switch (getCurrentViewPlane())
-            {
-                // HACK Aquest hack esta relacionat amb els de getCurrentDisplayedImageOrientationLabels()
-                // és un petit truc perque la imatge quedi orientada correctament. Caldria
-                // veure si en el refactoring podem fer-ho d'una forma millor
-                case OrthogonalPlane::YZPlane:
-                case OrthogonalPlane::XZPlane:
-                    rotate(-2);
-                    break;
-
-                default:
-                    break;
-            }
-
-            getRenderer()->ResetCameraClippingRange();
-            setFlip(false);
-            m_isImageFlipped = !m_isImageFlipped;
-        }
-        emit cameraChanged();
-        m_annotationsHandler->updateAnnotations();
-    }
-    else
-    {
-        DEBUG_LOG("Intentant actualitzar rotació de càmera sense haver donat un input abans...");
-    }
 }
 
 void Q2DViewer::resetCamera()
@@ -1591,71 +1519,20 @@ void Q2DViewer::setAlignPosition(AlignPosition alignPosition)
         return;
     }
 
-    // Cas que sigui AlignRight o AlignLeft
-    double bounds[6];
-    getCurrentRenderedItemBounds(bounds);
-    double motionVector[4] = { 0.0, 0.0, 0.0, 0.0 };
-    
-    Vector3 alignmentPoint;
+    auto bounds = getCurrentImagePlaneDisplayBounds();  // bounds = [xmin, xmax, ymin, ymax, zmin, zmax]
+    double x = 0;
+
     if (alignPosition == AlignLeft)
     {
-        alignmentPoint = computeDisplayToWorld(Vector3());
+        x = bounds[0];
     }
     else if (alignPosition == AlignRight)
     {
-        alignmentPoint = computeDisplayToWorld(Vector3(getRenderer()->GetSize()[0], 0, 0));
+        x = bounds[1] - getRenderer()->GetSize()[0];
     }
-    
-    // Càlcul del desplaçament
-    int boundIndex = 0;
-    switch (getCurrentViewPlane())
-    {
-        case OrthogonalPlane::XYPlane:
-            // Si es dóna el cas que o bé està rotada 180º o bé està voltejada, cal agafar l'altre extrem
-            // L'operació realitzada és un XOR (!=)
-            if (m_isImageFlipped != (qAbs(m_rotateFactor) == 2))
-            {
-                if (alignPosition == AlignLeft)
-                {
-                    boundIndex = 1;
-                }
-            }
-            else
-            {
-                if (alignPosition == AlignRight)
-                {
-                    boundIndex = 1;
-                }
-            }
 
-            motionVector[0] = bounds[boundIndex] - alignmentPoint[0];
-            
-            break;
-
-        case OrthogonalPlane::YZPlane:
-            if (alignPosition == AlignLeft)
-            {
-                boundIndex = 2;
-            }
-            else if (alignPosition == AlignRight)
-            {
-                boundIndex = 3;
-            }
-            
-            motionVector[1] = bounds[boundIndex] - alignmentPoint[1];
-            
-            break;
-
-        case OrthogonalPlane::XZPlane:
-            if (alignPosition == AlignRight)
-            {
-                boundIndex = 1;
-            }
-            
-            motionVector[0] = bounds[boundIndex] - alignmentPoint[0];
-            
-            break;
-    }
+    Vector3 motionVectorDisplay(x, 0, 0);
+    Vector3 motionVector = computeDisplayToWorld(motionVectorDisplay) - computeDisplayToWorld(Vector3());
 
     pan(motionVector);
 }
@@ -1669,13 +1546,13 @@ void Q2DViewer::setImageOrientation(const PatientOrientation &desiredPatientOrie
     bool flip = m_imageOrientationOperationsMapper->requiresHorizontalFlip();
 
     // Update the obtained orientation parameters
-    rotate(turns);
-    setFlip(flip);
-
-    // Then, only update the camera and apply render if there have been changes on the orientation parameters
-    if (flip || turns > 0)
+    if (turns > 0)
     {
-        applyImageOrientationChanges();
+        rotateClockWise(turns);
+    }
+    if (flip)
+    {
+        horizontalFlip();
     }
 }
 
@@ -1698,36 +1575,6 @@ void Q2DViewer::showDisplayShutters(bool enable)
     m_showDisplayShutters = enable;
     updateDisplayShutterMask();
     render();
-}
-
-void Q2DViewer::rotate(int times)
-{
-    // Si és zero no cal fer res
-    if (times == 0)
-    {
-        return;
-    }
-
-    // Si la imatge està invertida per efecte mirall el sentit de les rotacions serà el contrari
-    if (m_isImageFlipped)
-    {
-        times = -times;
-    }
-
-    m_rotateFactor = (m_rotateFactor + times) % 4;
-}
-
-void Q2DViewer::setFlip(bool flip)
-{
-    m_applyFlip = flip;
-}
-
-void Q2DViewer::applyImageOrientationChanges()
-{
-    updateCamera();
-    render();
-    
-    emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
 }
 
 void Q2DViewer::getCurrentRenderedItemBounds(double bounds[6])
@@ -1892,6 +1739,14 @@ QList<VolumeDisplayUnit*> Q2DViewer::getDisplayUnits() const
     {
         return m_displayUnitsHandler->getVolumeDisplayUnitList();
     }
+}
+
+void Q2DViewer::onCameraChanged()
+{
+    emit cameraChanged();
+    m_annotationsHandler->updateAnnotations();
+    render();
+    emit imageOrientationChanged(getCurrentDisplayedImagePatientOrientation());
 }
 
 TransferFunctionModel* Q2DViewer::getTransferFunctionModel() const
