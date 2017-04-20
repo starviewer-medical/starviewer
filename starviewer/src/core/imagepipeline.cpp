@@ -13,11 +13,9 @@
  *************************************************************************************/
 
 #include "imagepipeline.h"
-#include "windowlevelfilter.h"
+
 #include "thickslabfilter.h"
 #include "displayshutterfilter.h"
-#include "transferfunction.h"
-#include "voilut.h"
 
 #include "vtkImageData.h"
 #include "vtkRunThroughFilter.h"
@@ -25,27 +23,20 @@
 namespace udg {
 
 ImagePipeline::ImagePipeline()
-    : m_hasTransferFunction(false)
+ : m_input(nullptr), m_shutterData(nullptr)
 {
     // Filtre de thick slab + grayscale
     m_thickSlabProjectionFilter = new ThickSlabFilter();
     m_thickSlabProjectionFilter->setSlabThickness(1);
 
-    m_windowLevelLUTFilter = new WindowLevelFilter();
-
     m_displayShutterFilter = new DisplayShutterFilter();
-    m_displayShutterFilter->setInput(m_windowLevelLUTFilter->getOutput());
 
     m_outputFilter = vtkRunThroughFilter::New();
-    m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
-
-    m_shutterData = 0;
 }
 
 ImagePipeline::~ImagePipeline()
 {
     delete m_displayShutterFilter;
-    delete m_windowLevelLUTFilter;
     delete m_thickSlabProjectionFilter;
     m_outputFilter->Delete();
 }
@@ -54,15 +45,7 @@ void ImagePipeline::setInput(vtkImageData *input)
 {
     m_input = input;
 
-    if (m_thickSlabProjectionFilter->getSlabThickness() > 1)
-    {
-        m_thickSlabProjectionFilter->setInput(m_input);
-        m_windowLevelLUTFilter->setInput(m_thickSlabProjectionFilter->getOutput());
-    }
-    else
-    {
-        m_windowLevelLUTFilter->setInput(m_input);
-    }
+    rebuild();
 }
 
 void ImagePipeline::setInput(FilterOutput input)
@@ -73,15 +56,13 @@ void ImagePipeline::setInput(FilterOutput input)
 void ImagePipeline::setShutterData(vtkImageData *shutterData)
 {
     m_shutterData = shutterData;
+
     if (m_shutterData)
     {
         m_displayShutterFilter->setDisplayShutter(m_shutterData);
-        m_outputFilter->SetInputConnection(m_displayShutterFilter->getOutput().getVtkAlgorithmOutput());
     }
-    else
-    {
-        m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
-    }
+
+    rebuild();
 }
 
 void ImagePipeline::setSlice(int slice)
@@ -106,18 +87,9 @@ void ImagePipeline::setProjectionAxis(const OrthogonalPlane &axis)
 
 void ImagePipeline::setSlabThickness(int numberOfSlices)
 {
-    int previousSlabThickness = m_thickSlabProjectionFilter->getSlabThickness();
     m_thickSlabProjectionFilter->setSlabThickness(numberOfSlices);
 
-    if (m_thickSlabProjectionFilter->getSlabThickness() > 1 && previousSlabThickness == 1)
-    {
-        m_thickSlabProjectionFilter->setInput(m_input);
-        m_windowLevelLUTFilter->setInput(m_thickSlabProjectionFilter->getOutput());
-    }
-    else if (m_thickSlabProjectionFilter->getSlabThickness() == 1)
-    {
-        m_windowLevelLUTFilter->setInput(m_input);
-    }
+    rebuild();
 }
 
 vtkImageData* ImagePipeline::getSlabProjectionOutput()
@@ -125,38 +97,33 @@ vtkImageData* ImagePipeline::getSlabProjectionOutput()
     return m_thickSlabProjectionFilter->getOutput().getVtkImageData();
 }
 
-void ImagePipeline::setVoiLut(const VoiLut &voiLut)
-{
-    m_windowLevelLUTFilter->setWindowLevel(voiLut.getWindowLevel());
-
-    if (!m_hasTransferFunction)
-    {
-        if (voiLut.isLut())
-        {
-            m_windowLevelLUTFilter->setTransferFunction(voiLut.getLut());
-        }
-        else
-        {
-            m_windowLevelLUTFilter->clearTransferFunction();
-        }
-    }
-}
-
-void ImagePipeline::setTransferFunction(const TransferFunction &transferFunction)
-{
-    m_windowLevelLUTFilter->setTransferFunction(transferFunction);
-    m_hasTransferFunction = true;
-}
-
-void ImagePipeline::clearTransferFunction()
-{
-    m_windowLevelLUTFilter->clearTransferFunction();
-    m_hasTransferFunction = false;
-}
-
 vtkAlgorithm* ImagePipeline::getVtkAlgorithm() const
 {
     return m_outputFilter;
+}
+
+void ImagePipeline::rebuild()
+{
+    if (m_thickSlabProjectionFilter->getSlabThickness() > 1 && m_shutterData)
+    {
+        m_thickSlabProjectionFilter->setInput(m_input);
+        m_displayShutterFilter->setInput(m_thickSlabProjectionFilter->getOutput());
+        m_outputFilter->SetInputConnection(m_displayShutterFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else if (m_thickSlabProjectionFilter->getSlabThickness() > 1)
+    {
+        m_thickSlabProjectionFilter->setInput(m_input);
+        m_outputFilter->SetInputConnection(m_thickSlabProjectionFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else if (m_shutterData)
+    {
+        m_displayShutterFilter->setInput(m_input);
+        m_outputFilter->SetInputConnection(m_displayShutterFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else
+    {
+        m_outputFilter->SetInputData(m_input);
+    }
 }
 
 }

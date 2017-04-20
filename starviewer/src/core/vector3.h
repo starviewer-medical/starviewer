@@ -15,6 +15,7 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
+#include <array>
 #include <cmath>
 
 #include <QDataStream>
@@ -40,7 +41,15 @@ public:
     TVector3(T x = 0.0, T y = 0.0, T z = 0.0);
     TVector3(const QVector3D &v);
     template <class C>
+    TVector3(C v[3]);
+    template <class C>
+    TVector3(const std::array<C, 3> &v);
+    template <class C>
     TVector3(const TVector3<C> &v);
+
+    template <class C>
+    operator std::array<C, 3>() const;
+    std::array<T, 3> toArray() const;
 
     /// Assigna els components del vector.
     void set(T x, T y, T z);
@@ -141,9 +150,36 @@ inline TVector3<T>::TVector3(const QVector3D &v)
 
 template <class T>
 template <class C>
+inline TVector3<T>::TVector3(C v[3])
+ : x(v[0]), y(v[1]), z(v[2])
+{
+}
+
+template <class T>
+template <class C>
+inline TVector3<T>::TVector3(const std::array<C, 3> &v)
+ : x(v[0]), y(v[1]), z(v[2])
+{
+}
+
+template <class T>
+template <class C>
 inline TVector3<T>::TVector3(const TVector3<C> &v)
  : x(v.x), y(v.y), z(v.z)
 {
+}
+
+template <class T>
+template <class C>
+inline TVector3<T>::operator std::array<C, 3>() const
+{
+    return std::array<C, 3>{{x, y, z}};
+}
+
+template <class T>
+inline std::array<T, 3> TVector3<T>::toArray() const
+{
+    return std::array<T, 3>(*this);
 }
 
 template <class T>

@@ -74,9 +74,6 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     Q2DViewerSettings().init();
 
 #ifdef STARVIEWER_LITE
-    m_roiButton->hide();
-    m_angleToolButton->hide();
-    m_openAngleToolButton->hide();
     m_axialViewToolButton->hide();
     m_coronalViewToolButton->hide();
     m_sagitalViewToolButton->hide();
@@ -156,9 +153,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_statsWatcher = new StatsWatcher("2D Extension", this);
     m_statsWatcher->addClicksCounter(m_slicingToolButton);
     m_statsWatcher->addClicksCounter(m_zoomToolButton);
-    m_statsWatcher->addClicksCounter(m_roiButton);
-    m_statsWatcher->addClicksCounter(m_distanceToolButton);
-    m_statsWatcher->addClicksCounter(m_angleToolButton);
+    m_statsWatcher->addClicksCounter(m_drawingToolButton);
     m_statsWatcher->addClicksCounter(m_eraserToolButton);
 
     m_statsWatcher->addClicksCounter(m_axialViewToolButton);
@@ -256,8 +251,8 @@ void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modal
     Settings settings;
     bool enableReferenceLinesForMR = settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForMR).toBool();
     bool enableReferenceLinesForCT = settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForCT).toBool();
-    
-    if (modalities.contains("MR") && enableReferenceLinesForMR || modalities.contains("CT") && enableReferenceLinesForCT)
+
+    if ((modalities.contains("MR") && enableReferenceLinesForMR) || (modalities.contains("CT") && enableReferenceLinesForCT))
     {
         m_referenceLinesToolButton->defaultAction()->setChecked(true);
     }
@@ -268,8 +263,8 @@ void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modal
 
     bool enableAutomaticSynchronizationForMR = settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForMR).toBool();
     bool enableAutomaticSynchronizationForCT = settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT).toBool();
-    
-    if (modalities.contains("MR") && enableAutomaticSynchronizationForMR || modalities.contains("CT") && enableAutomaticSynchronizationForCT)
+
+    if ((modalities.contains("MR") && enableAutomaticSynchronizationForMR) || (modalities.contains("CT") && enableAutomaticSynchronizationForCT))
     {
         m_automaticSynchronizationToolButton->defaultAction()->setChecked(true);
     }
@@ -420,52 +415,24 @@ void Q2DViewerExtension::initializeTools()
     m_toolManager->registerTool("WindowLevelTool");
     m_referenceLinesToolButton->setDefaultAction(m_toolManager->registerTool("ReferenceLinesTool"));
 
-    m_distanceToolButton->setDefaultAction(m_toolManager->registerTool("DistanceTool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("DistanceTool"));
 
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
 
 #ifndef STARVIEWER_LITE
-    // Afegim un menú al botó de zoom per incorporar la tool de zoom focalitzat
-    m_zoomToolButton->setPopupMode(QToolButton::MenuButtonPopup);
-    QMenu *zoomToolMenu = new QMenu(this);
-    m_zoomToolButton->setMenu(zoomToolMenu);
-    zoomToolMenu->addAction(m_toolManager->registerTool("MagnifyingGlassTool"));
+    m_zoomToolButton->addAction(m_toolManager->registerTool("MagnifyingGlassTool"));
 
-    connect(m_toolManager->getRegisteredToolAction("ZoomTool"), SIGNAL(triggered()), SLOT(rearrangeZoomToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("MagnifyingGlassTool"), SIGNAL(triggered()), SLOT(rearrangeZoomToolsMenu()));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("PerpendicularDistanceTool"));
 
-    // Afegim un menú al botó de distància per incorporar l'eina de distància perpendicular
-    m_distanceToolButton->setPopupMode(QToolButton::MenuButtonPopup);
-    QMenu *distanceToolMenu = new QMenu(this);
-    m_distanceToolButton->setMenu(distanceToolMenu);
-    distanceToolMenu->addAction(m_toolManager->registerTool("PerpendicularDistanceTool"));
-    connect(m_toolManager->getRegisteredToolAction("DistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("PerpendicularDistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("EllipticalROITool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("MagicROITool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("PolylineROITool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("CircleTool"));
 
-    m_roiButton->setDefaultAction(m_toolManager->registerTool("EllipticalROITool"));
-    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI el·líptica
-    m_roiButton->setPopupMode(QToolButton::MenuButtonPopup);
-    QMenu *roiToolMenu = new QMenu(this);
-    m_roiButton->setMenu(roiToolMenu);
-    roiToolMenu->addAction(m_toolManager->registerTool("MagicROITool"));
-    roiToolMenu->addAction(m_toolManager->registerTool("PolylineROITool"));
-    roiToolMenu->addAction(m_toolManager->registerTool("CircleTool"));
-    
-    connect(m_toolManager->getRegisteredToolAction("EllipticalROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("MagicROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("PolylineROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("CircleTool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
-    
     m_cursor3DToolButton->setDefaultAction(m_toolManager->registerTool("Cursor3DTool"));
-    
-    m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
-    // Afegim un menú al botó d'angle per incorporar la tool d'angles oberts
-    m_angleToolButton->setPopupMode(QToolButton::MenuButtonPopup);
-    QMenu *angleToolMenu = new QMenu(this);
-    m_angleToolButton->setMenu(angleToolMenu);
-    angleToolMenu->addAction(m_toolManager->registerTool("NonClosedAngleTool"));
-    connect(m_toolManager->getRegisteredToolAction("AngleTool"), SIGNAL(triggered()), SLOT(rearrangeAngleToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("NonClosedAngleTool"), SIGNAL(triggered()), SLOT(rearrangeAngleToolsMenu()));
+
+    m_drawingToolButton->addAction(m_toolManager->registerTool("AngleTool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("NonClosedAngleTool"));
 
     m_automaticSynchronizationToolButton->setDefaultAction(m_toolManager->registerTool("AutomaticSynchronizationTool"));
 #endif
@@ -772,30 +739,6 @@ void Q2DViewerExtension::showDicomDumpCurrentDisplayedImage()
     }
 }
 
-void Q2DViewerExtension::rearrangeToolsMenu(QToolButton *menuButton)
-{
-    QList<QAction*> actions;
-    actions << menuButton->defaultAction() << menuButton->menu()->actions();
-
-    bool found = false;
-    int i = 0;
-    while (!found && i < actions.count())
-    {
-        if (actions.at(i)->isChecked())
-        {
-            found = true;
-        }
-        ++i;
-    }
-
-    if (found)
-    {
-        menuButton->setDefaultAction(actions.takeAt(i - 1));
-        menuButton->menu()->clear();
-        menuButton->menu()->addActions(actions);
-    }
-}
-
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showScreenshotsExporterDialog()
 {
@@ -812,21 +755,6 @@ void Q2DViewerExtension::showScreenshotsExporterDialog()
             exporter.exec();
         }
     }
-}
-
-void Q2DViewerExtension::rearrangeROIToolsMenu()
-{
-    rearrangeToolsMenu(m_roiButton);
-}
-
-void Q2DViewerExtension::rearrangeAngleToolsMenu()
-{
-    rearrangeToolsMenu(m_angleToolButton);
-}
-
-void Q2DViewerExtension::rearrangeZoomToolsMenu()
-{
-    rearrangeToolsMenu(m_zoomToolButton);
 }
 
 void Q2DViewerExtension::validePhases()
@@ -846,11 +774,6 @@ void Q2DViewerExtension::validePhases()
     }
 }
 #endif
-
-void Q2DViewerExtension::rearrangeDistanceToolsMenu()
-{
-    rearrangeToolsMenu(m_distanceToolButton);
-}
 
 void Q2DViewerExtension::updateDICOMInformationButton()
 {
