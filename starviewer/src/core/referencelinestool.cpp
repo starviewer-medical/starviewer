@@ -60,7 +60,7 @@ ReferenceLinesTool::ReferenceLinesTool(QViewer *viewer, QObject *parent)
     // Cada cop que el viewer canvïi de llesca, hem d'actualitzar el pla de projecció
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateReferenceImagePlanesToProject()));
     // Cada cop que canvii l'slab thickness haurem d'actualitzar els plans a projectar
-    connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(updateReferenceImagePlanesToProject()));
+    connect(m_2DViewer, &Q2DViewer::slabThicknessChanged, this, &ReferenceLinesTool::updateReferenceImagePlanesToProject);
 
     connect(m_2DViewer, SIGNAL(selected()), SLOT(setAsReferenceViewer()));
 }
@@ -185,19 +185,19 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
         // Projecció de la intersecció dels plans
         /// Llegir http://fixunix.com/dicom/51195-scanogram-lines-mr.html
 
-        QList<int> boundsList;
+        QList<ImagePlane::CornersLocation> cornerLocations;
         if (m_showPlaneThickness)
         {
             // Cal que intersectin els dos plans del gruix perquè es mostrin les línies
-            boundsList << 0 << 1;
+            cornerLocations << ImagePlane::Upper << ImagePlane::Lower;
         }
         else
         {
             // Nomes agafem el pla "central"
-            boundsList << 2;
+            cornerLocations << ImagePlane::Central;
         }
 
-        if (computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane, boundsList, drawerLineOffset))
+        if (computeIntersectionAndUpdateProjectionLines(localizerPlane, referencePlane, cornerLocations, drawerLineOffset))
         {
             m_2DViewer->getDrawer()->enableGroup(ReferenceLinesDrawerGroup);
         }
@@ -212,17 +212,18 @@ void ReferenceLinesTool::projectIntersection(ImagePlane *referencePlane, ImagePl
     }
 }
 
-bool ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, ImagePlane *referencePlane, QList<int> boundsList, int lineOffset)
+bool ReferenceLinesTool::computeIntersectionAndUpdateProjectionLines(ImagePlane *localizerPlane, ImagePlane *referencePlane,
+                                                                     const QList<ImagePlane::CornersLocation> &cornerLocations, int lineOffset)
 {
     bool hasEnoughIntersections = true;
     int numberOfIntersections = 0;
-    for (int i = 0; i < boundsList.size(); ++i)
+    for (int i = 0; i < cornerLocations.size(); ++i)
     {
-        double firstIntersectionPoint[3], secondIntersectionPoint[3];
-        numberOfIntersections = referencePlane->getIntersections(localizerPlane, firstIntersectionPoint, secondIntersectionPoint, boundsList.at(i));
+        Vector3 firstIntersectionPoint, secondIntersectionPoint;
+        numberOfIntersections = referencePlane->getIntersections(localizerPlane, firstIntersectionPoint, secondIntersectionPoint, cornerLocations.at(i));
         if (numberOfIntersections)
         {
-            updateProjectionLinesFromIntersections(firstIntersectionPoint, secondIntersectionPoint, lineOffset + i);
+            updateProjectionLinesFromIntersections(firstIntersectionPoint.toArray().data(), secondIntersectionPoint.toArray().data(), lineOffset + i);
             hasEnoughIntersections = hasEnoughIntersections && true;
         }
         else
@@ -262,13 +263,13 @@ void ReferenceLinesTool::resetProjectedLine(int lineOffset)
 
 void ReferenceLinesTool::projectPlane(ImagePlane *planeToProject)
 {
-    QList<QVector<double> > planeBounds = planeToProject->getCentralBounds();
+    auto planeCorners = planeToProject->getCentralCorners();
     double projectedVertix1[3], projectedVertix2[3], projectedVertix3[3], projectedVertix4[3];
 
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(0).data(), projectedVertix1);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(1).data(), projectedVertix2);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(2).data(), projectedVertix3);
-    m_2DViewer->projectDICOMPointToCurrentDisplayedImage((double*)planeBounds.at(3).data(), projectedVertix4);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.topLeft.toArray().data(), projectedVertix1);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.topRight.toArray().data(), projectedVertix2);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.bottomRight.toArray().data(), projectedVertix3);
+    m_2DViewer->projectDICOMPointToCurrentDisplayedImage(planeCorners.bottomLeft.toArray().data(), projectedVertix4);
 
     // Donem els punts al poligon a dibuixar
     m_projectedReferencePlane->setVertix(0, projectedVertix1);
@@ -320,21 +321,13 @@ void ReferenceLinesTool::updateReferenceImagePlanesToProject()
     switch (m_planesToProject)
     {
         case SingleImage:
-            if (m_2DViewer->isThickSlabActive())
             {
-                QList<ImagePlane*> planes;
-                planes << m_2DViewer->getCurrentImagePlane();
-                Volume *currentInput = m_2DViewer->getMainInput();
-                if (currentInput)
+                ImagePlane *plane = m_2DViewer->getCurrentImagePlane();
+                if (m_2DViewer->isThickSlabActive())
                 {
-                    planes << currentInput->getImagePlane(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1, m_2DViewer->getView());
+                    plane->setThickness(m_2DViewer->getSlabThickness());
                 }
-
-                m_myData->setPlanesToProject(planes);
-            }
-            else
-            {
-                m_myData->setPlanesToProject(m_2DViewer->getCurrentImagePlane());
+                m_myData->setPlanesToProject(plane);
             }
             break;
 

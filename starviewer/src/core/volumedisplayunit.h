@@ -15,12 +15,14 @@
 #ifndef VOLUMEDISPLAYUNIT_H
 #define VOLUMEDISPLAYUNIT_H
 
-#include "accumulator.h"
-#include "transferfunction.h"
+#include "voilut.h"
+
+#include <vtkSystemIncludes.h>
 
 class vtkCamera;
 class vtkImageData;
 class vtkImageSlice;
+class vtkImageStack;
 class vtkPropPicker;
 
 namespace udg {
@@ -29,10 +31,11 @@ class Image;
 class ImagePipeline;
 class OrthogonalPlane;
 class SliceHandler;
+class SliceOrientedVolumePixelData;
 class Volume;
-class VoiLut;
 class VoiLutPresetsToolData;
 class VolumePixelData;
+class VtkImageResliceMapper2;
 
 /**
     This class groups together a Volume and the associated objects that a Q2DViewer needs to display a volume.
@@ -42,6 +45,9 @@ class VolumePixelData;
 class VolumeDisplayUnit {
 
 public:
+    /// Supported projection modes for thick slab.
+    enum SlabProjectionMode { Max = VTK_IMAGE_SLAB_MAX, Min = VTK_IMAGE_SLAB_MIN, Mean = VTK_IMAGE_SLAB_MEAN, Sum = VTK_IMAGE_SLAB_SUM };
+
     VolumeDisplayUnit();
     virtual ~VolumeDisplayUnit();
 
@@ -58,8 +64,11 @@ public:
     /// Returns the image pipeline.
     ImagePipeline* getImagePipeline() const;
 
-    /// Returns the vtkImageSlice.
+    /// Returns the main vtkImageSlice.
     vtkImageSlice* getImageSlice() const;
+
+    /// Returns the image stack.
+    vtkImageStack* getImageStack() const;
 
     /// Returns the configured point picker for this unit.
     vtkPropPicker* getImagePointPicker();
@@ -76,7 +85,10 @@ public:
     double getCurrentDisplayedImageDepth() const;
     
     /// Gets the current pixel data according to the current state.
-    VolumePixelData* getCurrentPixelData();
+    SliceOrientedVolumePixelData getCurrentPixelData();
+
+    /// Restores the standard rendering quality (resample to screen pixels on) of this volume display unit.
+    void restoreRenderingQuality();
     
     /// Returns current displayed image.
     /// If some orthogonal reconstruction different from original acquisition is applied, returns null
@@ -107,7 +119,7 @@ public:
 
     /// Returns the minimum slice index.
     int getMinimumSlice() const;
-    /// Returns the maximum slice index that could be set, so it takes into account the current slice thickness.
+    /// Returns the maximum slice index.
     int getMaximumSlice() const;
 
     /// Returns the total number of slices in the spatial dimension for the current view plane.
@@ -121,10 +133,13 @@ public:
     /// Returns the number of phases in the temporal dimension.
     int getNumberOfPhases() const;
 
-    /// Returns the number of slices that form a slab.
-    int getSlabThickness() const;
-    /// Sets the number of slices that form a slab.
-    void setSlabThickness(int thickness);
+    /// Returns the slab thickness in mm.
+    double getSlabThickness() const;
+    /// Sets the slab thickness in mm.
+    void setSlabThickness(double thickness);
+
+    /// Returns the maximum slab thickness that can be set.
+    double getMaximumSlabThickness() const;
 
     /// Returns true i slab thickness is greater than 1
     bool isThickSlabActive() const;
@@ -135,10 +150,18 @@ public:
     double getSliceThickness() const;
 
     /// Sets the slab projection mode for the thick slab.
-    void setSlabProjectionMode(AccumulatorFactory::AccumulatorType accumulatorType);
+    void setSlabProjectionMode(SlabProjectionMode mode);
 
     /// Sets the display shutter image data.
     void setShutterData(vtkImageData *shutterData);
+
+    /// Returns true if this volume display unit is visible and false otherwise.
+    bool isVisible() const;
+    /// Sets the visibility of this volume display unit to the given value.
+    void setVisible(bool visible);
+
+    /// Sets the opacity of this volume display unit.
+    void setOpacity(double opacity);
 
 protected:
     /// The volume.
@@ -146,6 +169,9 @@ protected:
 
     /// The image actor where the slices are rendered.
     vtkImageSlice *m_imageSlice;
+
+    /// The mapper for the slice.
+    VtkImageResliceMapper2 *m_mapper;
 
     /// The slice handler that controls slices, phases and slabs.
     SliceHandler *m_sliceHandler;
@@ -156,9 +182,19 @@ private:
 
     void setupPicker();
 
+    /// Applies the current VOI LUT taking into account the properties of the image, the VOI LUT and the transfer function.
+    void applyVoiLut();
+    /// Modifies the current transfer function according to the current window level and applies it.
+    void applyTransferFunction();
+
 private:
     /// The image pipeline that processes the volume.
     ImagePipeline *m_imagePipeline;
+
+    /// Used to render the shutter.
+    vtkImageSlice *m_shutterImageSlice;
+    /// Used to compose the shutter on top of the main image.
+    vtkImageStack *m_imageStack;
 
     /// Point picker to probe pixels from the image to display
     vtkPropPicker *m_imagePointPicker;
@@ -166,11 +202,15 @@ private:
     /// VOI LUT data.
     VoiLutPresetsToolData *m_voiLutData;
 
+    /// The current VOI LUT.
+    VoiLut m_voiLut;
+
     /// The current transfer function.
     TransferFunction m_transferFunction;
 
-    /// Holds the current thickslab pixel data
-    VolumePixelData *m_currentThickSlabPixelData;
+    /// Holds the current volume pixel data to return in case of thick slab or phases.
+    VolumePixelData *m_auxiliarCurrentVolumePixelData;
+
 };
 
 }

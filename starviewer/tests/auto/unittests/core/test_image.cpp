@@ -317,7 +317,6 @@ void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnExpectedV
     QTest::addColumn<double*>("imageOrigin");
     QTest::addColumn<double*>("imageSpacing");
     QTest::addColumn<DisplayShutter>("shutter");
-    QTest::addColumn<int>("zSlice");
 
     double *origin1 = new double[3];
     origin1[0] = 1.3;
@@ -332,7 +331,7 @@ void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnExpectedV
     DisplayShutter shutter1;
     shutter1.setPoints(QPoint(1,3), 2);
 
-    QTest::newRow("image1 with circular shutter, zSlice = 3") << 5 << 6 << origin1 << spacing1 << shutter1 << 3;
+    QTest::newRow("image1 with circular shutter") << 5 << 6 << origin1 << spacing1 << shutter1;
 }
 
 void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnExpectedValues()
@@ -342,7 +341,6 @@ void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnExpectedV
     QFETCH(double*, imageOrigin);
     QFETCH(double*, imageSpacing);
     QFETCH(DisplayShutter, shutter);
-    QFETCH(int, zSlice);
 
     Image *image = new Image;
 
@@ -352,7 +350,7 @@ void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnExpectedV
     image->setPixelSpacing(imageSpacing[0], imageSpacing[1]);
     image->addDisplayShutter(shutter);
 
-    vtkImageData *shutterData = image->getDisplayShutterForDisplayAsVtkImageData(zSlice);
+    vtkImageData *shutterData = image->getDisplayShutterForDisplayAsVtkImageData();
 
     int extent[6];
     shutterData->GetExtent(extent);
@@ -361,8 +359,8 @@ void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnExpectedV
     QCOMPARE(extent[2], 0);
     QCOMPARE(extent[1], columns - 1);
     QCOMPARE(extent[3], rows - 1);
-    QCOMPARE(extent[4], zSlice);
-    QCOMPARE(extent[5], zSlice);
+    QCOMPARE(extent[4], 0);
+    QCOMPARE(extent[5], 0);
 
     double shutterSpacing[3];
     shutterData->GetSpacing(shutterSpacing);

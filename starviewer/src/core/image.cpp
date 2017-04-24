@@ -579,7 +579,7 @@ DisplayShutter Image::getDisplayShutterForDisplay()
     return m_displayShutterForDisplay;
 }
 
-vtkImageData* Image::getDisplayShutterForDisplayAsVtkImageData(int zSlice)
+vtkImageData* Image::getDisplayShutterForDisplayAsVtkImageData()
 {
     if (!hasDisplayShutters())
     {
@@ -591,15 +591,15 @@ vtkImageData* Image::getDisplayShutterForDisplayAsVtkImageData(int zSlice)
         DisplayShutter shutter = this->getDisplayShutterForDisplay();
         if (shutter.getShape() != DisplayShutter::UndefinedShape)
         {
-            m_displayShutterForDisplayVtkImageData = shutter.getAsVtkImageData(m_columns, m_rows, zSlice);
+            m_displayShutterForDisplayVtkImageData = shutter.getAsVtkImageData(m_columns, m_rows);
             if (m_displayShutterForDisplayVtkImageData)
             {
                 m_displayShutterForDisplayVtkImageData->SetOrigin(m_imagePositionPatient);
-                m_displayShutterForDisplayVtkImageData->SetSpacing(m_pixelSpacing.x(), m_pixelSpacing.y(), 1);
+                PixelSpacing2D spacing(m_pixelSpacing.isValid() ? m_pixelSpacing : PixelSpacing2D(1, 1));
+                m_displayShutterForDisplayVtkImageData->SetSpacing(spacing.x(), spacing.y(), 1);
             }
         }
     }
-    // TODO Assuming that all calls to this method on the same Image object have all the same zSlice. What should we do otherwise?
 
     return m_displayShutterForDisplayVtkImageData;
 }

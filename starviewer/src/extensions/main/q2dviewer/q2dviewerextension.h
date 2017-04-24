@@ -93,9 +93,6 @@ private:
 
     /// Sets up layout manager and its connections properly
     void setupLayoutManager();
-    
-    /// Col·loca i ordena les icones i el menú de les eines del botó donat segons l'última eina seleccionada
-    void rearrangeToolsMenu(QToolButton *menuButton);
 
     /// Shows the given widget below the button, as if it was the button's menu
     void showWidgetBelowButton(QWidget *widget, QAbstractButton *button);
@@ -104,23 +101,6 @@ private:
     void updateTransferFunctionComboBox(TransferFunctionModel *transferFunctionModel);
 
 private slots:
-#ifndef STARVIEWER_LITE
-    /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
-    void validePhases();
-
-    /// Col·loca i ordena les icones i el menú de les eines de ROI segons l'última tool de ROI seleccionada
-    void rearrangeROIToolsMenu();
-
-    /// Col·loca i ordena les icones i el menu de les eines d'angles segons l'última tool d'angles seleccionada
-    void rearrangeAngleToolsMenu();
-
-    /// Col·loca i ordena les icones i el menu de les eines de zoom segons l'última tool de Zoom seleccionada
-    void rearrangeZoomToolsMenu();
-#endif
-
-    /// Col·loca i ordena les icones i el menú de les eines de distància segons l'última eina de distància seleccionada
-    void rearrangeDistanceToolsMenu();
-
     /// Habilita o deshabilita el botó de Dump d'info DICOM segons en la vista en la que es trobi
     /// l'actual visor seleccionat. Si no hi ha cap visor actiu, dehsabilitarà el botó.
     void updateDICOMInformationButton();

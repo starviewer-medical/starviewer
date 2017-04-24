@@ -11,6 +11,7 @@ VTKLIBS = \
     vtkCommonMisc \
     vtkCommonTransforms \
     vtkFiltersCore \
+    vtkFiltersGeneral \
     vtkFiltersSources \
     vtkGUISupportQt \
     vtkImagingCore \

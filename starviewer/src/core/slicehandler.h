@@ -40,9 +40,9 @@ public:
     void setSlice(int slice);
     int getCurrentSlice() const;
 
+    /// Returns the minimum slice that can be set taking into account current slice thickness.
     int getMinimumSlice() const;
-
-    /// Returns the maximum slice that could be set, so it takes into account current slice thickness
+    /// Returns the maximum slice that can be set taking into account current slice thickness.
     int getMaximumSlice() const;
     
     /// Returns the total number of slices on the spatial dimension for the current view plane
@@ -53,10 +53,14 @@ public:
 
     int getNumberOfPhases() const;
     
-    void setSlabThickness(int thickness);
-    int getSlabThickness() const;
+    void setSlabThickness(double thickness);
+    double getSlabThickness() const;
 
-    int getLastSlabSlice() const;
+    /// Returns the maximum slab thickness that can be set.
+    double getMaximumSlabThickness() const;
+
+    /// Returns the number of slices that fit in the current slab thickness.
+    int getNumberOfSlicesInSlabThickness() const;
 
     /// Returns slice thickness of the currently displayed image.
     /// On the acquisition plane, this depends on DICOM's slice thickness and slab thickness (if DICOM's slice thickness is not defined, the method returns 0).
@@ -77,12 +81,12 @@ private:
     void reset();
 
     /// Returns true if the given slab thickness value is valid and false otherwise.
-    bool isValidSlabThickness(int thickness);
+    bool isValidSlabThickness(double thickness);
 
 private:
     Volume *m_volume;
     OrthogonalPlane m_viewPlane;
-    int m_slabThickness;
+    double m_slabThickness;
     int m_currentSlice;
     int m_currentPhase;
 

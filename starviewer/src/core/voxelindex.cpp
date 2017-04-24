@@ -12,35 +12,55 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDG_SECONDARYVOLUMEDISPLAYUNIT_H
-#define UDG_SECONDARYVOLUMEDISPLAYUNIT_H
-
-#include "volumedisplayunit.h"
-
-class vtkImageSliceMapper;
+#include "voxelindex.h"
 
 namespace udg {
 
-/**
- * @brief The SecondaryVolumeDisplayUnit class is a subclass of VolumeDisplayUnit intended for secondary volumes (e.g. PET).
- *
- * This class uses a vtkImageSliceMapper instead of a vtkImageResliceMapper so that it is able to update the slice without modifying the camera, which should be
- * modified for the main volume.
- */
-class SecondaryVolumeDisplayUnit : public VolumeDisplayUnit
+VoxelIndex::VoxelIndex()
+    : VoxelIndex(-1, -1, -1)
 {
-public:
-    SecondaryVolumeDisplayUnit();
-    virtual ~SecondaryVolumeDisplayUnit();
+}
 
-    /// Updates the displayed image in the image slice.
-    virtual void updateImageSlice(vtkCamera *camera);
+VoxelIndex::VoxelIndex(int x, int y, int z)
+{
+    m_index[0] = x;
+    m_index[1] = y;
+    m_index[2] = z;
+}
 
-private:
-    vtkImageSliceMapper *m_mapper;
+bool VoxelIndex::isValid() const
+{
+    return x() >= 0 && y() >= 0 && z() >= 0;
+}
 
-};
+int VoxelIndex::x() const
+{
+    return m_index[0];
+}
+
+int VoxelIndex::y() const
+{
+    return m_index[1];
+}
+
+int VoxelIndex::z() const
+{
+    return m_index[2];
+}
+
+int VoxelIndex::operator[](int i) const
+{
+    return m_index[i];
+}
+
+int& VoxelIndex::operator[](int i)
+{
+    return m_index[i];
+}
+
+bool VoxelIndex::operator==(const VoxelIndex &index) const
+{
+    return this->x() == index.x() && this->y() == index.y() && this->z() == index.z();
+}
 
 } // namespace udg
-
-#endif // UDG_SECONDARYVOLUMEDISPLAYUNIT_H

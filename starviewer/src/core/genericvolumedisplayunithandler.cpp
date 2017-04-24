@@ -19,11 +19,11 @@
 #include "volumedisplayunit.h"
 #include "imagepipeline.h"
 #include "transferfunctionmodel.h"
-#include "secondaryvolumedisplayunit.h"
 #include "volume.h"
 
 #include <vtkImageProperty.h>
 #include <vtkImageSlice.h>
+#include <vtkImageSliceCollection.h>
 #include <vtkImageStack.h>
 
 namespace udg {
@@ -118,7 +118,7 @@ void GenericVolumeDisplayUnitHandler::removeDisplayUnits()
 {
     foreach (VolumeDisplayUnit *unit, m_displayUnits)
     {
-        m_imageStack->RemoveImage(unit->getImageSlice());
+        removeImageSliceFromStack(unit->getImageStack());
         delete unit;
     }
     m_displayUnits.clear();
@@ -131,24 +131,47 @@ void GenericVolumeDisplayUnitHandler::addDisplayUnit(Volume *input)
         return;
     }
 
-    const int LargeDimension = 1000;
-    int *dimensions = input->getDimensions();
-    VolumeDisplayUnit *displayUnit;
-
-    // Use VolumeDisplayUnit for the primary volume if it has large dimensions, and SecondaryVolumeDisplayUnit otherwise
-    if (m_displayUnits.isEmpty() && (dimensions[0] > LargeDimension || dimensions[1] > LargeDimension || dimensions[2] > LargeDimension))
-    {
-        displayUnit = new VolumeDisplayUnit();
-    }
-    else
-    {
-        displayUnit = new SecondaryVolumeDisplayUnit();
-    }
-
+    VolumeDisplayUnit *displayUnit = new VolumeDisplayUnit();
     // Add the vdu to the list before setting the volume to avoid a memory leak if setVolume throws a bad_alloc
     m_displayUnits << displayUnit;
     displayUnit->setVolume(input);
-    m_imageStack->AddImage(displayUnit->getImageSlice());
+    addImageSliceToStack(displayUnit->getImageStack());
+}
+
+void GenericVolumeDisplayUnitHandler::addImageSliceToStack(vtkImageSlice *imageSlice)
+{
+    if (auto stack = vtkImageStack::SafeDownCast(imageSlice))
+    {
+        vtkCollectionSimpleIterator it;
+        stack->GetImages()->InitTraversal(it);
+
+        while (auto *slice = stack->GetImages()->GetNextImage(it))
+        {
+            addImageSliceToStack(slice);
+        }
+    }
+    else
+    {
+        m_imageStack->AddImage(imageSlice);
+    }
+}
+
+void GenericVolumeDisplayUnitHandler::removeImageSliceFromStack(vtkImageSlice *imageSlice)
+{
+    if (auto stack = vtkImageStack::SafeDownCast(imageSlice))
+    {
+        vtkCollectionSimpleIterator it;
+        stack->GetImages()->InitTraversal(it);
+
+        while (auto *slice = stack->GetImages()->GetNextImage(it))
+        {
+            removeImageSliceFromStack(slice);
+        }
+    }
+    else
+    {
+        m_imageStack->RemoveImage(imageSlice);
+    }
 }
 
 void GenericVolumeDisplayUnitHandler::setupDisplayUnits()
@@ -161,9 +184,14 @@ void GenericVolumeDisplayUnitHandler::setupDisplayUnits()
 
 void GenericVolumeDisplayUnitHandler::updateLayerNumbers()
 {
-    for (int i = 0; i < m_displayUnits.size(); i++)
+    vtkCollectionSimpleIterator it;
+    m_imageStack->GetImages()->InitTraversal(it);
+    int i = 0;
+
+    while (auto *slice = m_imageStack->GetImages()->GetNextImage(it))
     {
-        m_displayUnits[i]->getImageSlice()->GetProperty()->SetLayerNumber(i);
+        slice->GetProperty()->SetLayerNumber(i);
+        i++;
     }
 }
 
@@ -172,8 +200,7 @@ void GenericVolumeDisplayUnitHandler::setupDefaultOpacities()
     // The default opacities will be 1 for the main volume and 0.5 for the others
     for (int i = 0; i < getNumberOfInputs(); i++)
     {
-        vtkImageSlice *imageSlice = m_displayUnits.at(i)->getImageSlice();
-        imageSlice->GetProperty()->SetOpacity(1.0);
+        m_displayUnits.at(i)->setOpacity(1.0);
     }
 }
 

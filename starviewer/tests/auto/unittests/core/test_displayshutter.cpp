@@ -353,38 +353,37 @@ void test_DisplayShutter::getAsQImage_ReturnsExpectedValues_data()
     int width = 10;
     int height = 10;
     
-    QImage undefinedShutterImage(width, height, QImage::Format_RGB32);
-    undefinedShutterImage.fill(Qt::black);
-    undefinedShutterImage.invertPixels();
+    QImage undefinedShutterImage(width, height, QImage::Format_RGBA8888);
+    undefinedShutterImage.fill(Qt::transparent);
     QTest::newRow("Undefined shutter") << DisplayShutter() << undefinedShutterImage << width << height;
 
     DisplayShutter rectangularShutter;
     rectangularShutter.setPoints(QPoint(1, 1), QPoint(5, 5));
     
-    QImage rectangularShutterImage(width, height, QImage::Format_RGB32);
+    QImage rectangularShutterImage(width, height, QImage::Format_ARGB32_Premultiplied);
     rectangularShutterImage.fill(Qt::black);
     
     QPainter rectangularPainter(&rectangularShutterImage);
-    rectangularPainter.setPen(Qt::white);
-    rectangularPainter.setBrush(Qt::white);
+    rectangularPainter.setPen(Qt::transparent);
+    rectangularPainter.setBrush(Qt::transparent);
+    rectangularPainter.setCompositionMode(QPainter::CompositionMode_Source);
     rectangularPainter.drawRect(1, 1, 4, 4);
-    rectangularShutterImage.invertPixels();
 
-    QTest::newRow("rectangular shutter") << rectangularShutter << rectangularShutterImage << width << height;
+    QTest::newRow("rectangular shutter") << rectangularShutter << rectangularShutterImage.convertToFormat(QImage::Format_RGBA8888) << width << height;
 
     DisplayShutter circularShutter;
     circularShutter.setPoints(QPoint(5, 5), 3);
 
-    QImage circularShutterImage(width, height, QImage::Format_RGB32);
+    QImage circularShutterImage(width, height, QImage::Format_ARGB32_Premultiplied);
     circularShutterImage.fill(Qt::black);
     
     QPainter circularPainter(&circularShutterImage);
-    circularPainter.setPen(Qt::white);
-    circularPainter.setBrush(Qt::white);
+    circularPainter.setPen(Qt::transparent);
+    circularPainter.setBrush(Qt::transparent);
+    circularPainter.setCompositionMode(QPainter::CompositionMode_Source);
     circularPainter.drawPolygon(circularShutter.getAsQPolygon());
-    circularShutterImage.invertPixels();
 
-    QTest::newRow("circular shutter") << circularShutter << circularShutterImage << width << height;
+    QTest::newRow("circular shutter") << circularShutter << circularShutterImage.convertToFormat(QImage::Format_RGBA8888) << width << height;
 
     QPolygon polygon;
     polygon << QPoint(1,1) << QPoint(6,2) << QPoint(3,8);
@@ -392,16 +391,16 @@ void test_DisplayShutter::getAsQImage_ReturnsExpectedValues_data()
     DisplayShutter polygonalShutter;
     polygonalShutter.setPoints(polygon);
 
-    QImage polygonalShutterImage(width, height, QImage::Format_RGB32);
+    QImage polygonalShutterImage(width, height, QImage::Format_ARGB32_Premultiplied);
     polygonalShutterImage.fill(Qt::black);
     
     QPainter polygonalPainter(&polygonalShutterImage);
-    polygonalPainter.setPen(Qt::white);
-    polygonalPainter.setBrush(Qt::white);
+    polygonalPainter.setPen(Qt::transparent);
+    polygonalPainter.setBrush(Qt::transparent);
+    polygonalPainter.setCompositionMode(QPainter::CompositionMode_Source);
     polygonalPainter.drawPolygon(polygon);
-    polygonalShutterImage.invertPixels();
 
-    QTest::newRow("polygonal shutter") << polygonalShutter << polygonalShutterImage << width << height;
+    QTest::newRow("polygonal shutter") << polygonalShutter << polygonalShutterImage.convertToFormat(QImage::Format_RGBA8888) << width << height;
 }
 
 void test_DisplayShutter::getAsQImage_ReturnsExpectedValues()
@@ -419,32 +418,34 @@ void test_DisplayShutter::getAsVtkImageData_ReturnsExpectedValues_data()
     QTest::addColumn<DisplayShutter>("shutter");
     QTest::addColumn<int>("width");
     QTest::addColumn<int>("height");
-    QTest::addColumn<int>("slice");
     QTest::addColumn< vtkSmartPointer<vtkImageData> >("expectedVtkImageData");
 
     VtkImageDataCreator creator;
+    creator.setNumberOfComponents(4);
 
-    unsigned char *data1 = new unsigned char[10 * 12];
-    memset(data1, 255, 10 * 12);
-    vtkSmartPointer<vtkImageData> imageData1 = creator.createVtkImageData(10, 12, 1, data1);
+    unsigned char *data1 = new unsigned char[10 * 12 * 4];
+    memset(data1, 0, 10 * 12 * 4);
+    vtkSmartPointer<vtkImageData> imageData1 = creator.setDimensions({{10, 12, 1}}).create(data1);
     delete[] data1;
-    QTest::newRow("Empty shutter") << DisplayShutter() << 10 << 12 << 0 << imageData1;
+    QTest::newRow("Empty shutter") << DisplayShutter() << 10 << 12 << imageData1;
 
     DisplayShutter rectangularShutter;
     rectangularShutter.setPoints(QPoint(2, 2), QPoint(4, 4));
-    unsigned char *data2 = new unsigned char[36];
-    memset(data2, 255, 36);
-    for (int i = 2; i < 5; ++i)
+    unsigned char *data2 = new unsigned char[6 * 6 * 4];
+    memset(data2, 0, 6 * 6 * 4);
+    for (int i = 0; i < 6; ++i)
     {
-        for (int j = 2; j < 5; ++j)
+        for (int j = 0; j < 6; ++j)
         {
-            data2[j + i * 6] = 0;
+            if (i < 2 || i > 4 || j < 2 || j > 4)
+            {
+                data2[(j + i * 6) * 4 + 3] = 255;   // set alpha channel of this region to 255
+            }
         }
     }
-    vtkSmartPointer<vtkImageData> imageData2 = creator.createVtkImageData(6, 6, 1, data2);
-    imageData2->SetExtent(0, 5, 0, 5, 1, 1);
+    vtkSmartPointer<vtkImageData> imageData2 = creator.setDimensions({{6, 6, 1}}).create(data2);
     delete[] data2;
-    QTest::newRow("Rectangular shutter") << rectangularShutter << 6 << 6 << 1 << imageData2;
+    QTest::newRow("Rectangular shutter") << rectangularShutter << 6 << 6 << imageData2;
 }
 
 void test_DisplayShutter::getAsVtkImageData_ReturnsExpectedValues()
@@ -452,10 +453,9 @@ void test_DisplayShutter::getAsVtkImageData_ReturnsExpectedValues()
     QFETCH(DisplayShutter, shutter);
     QFETCH(int, width);
     QFETCH(int, height);
-    QFETCH(int, slice);
     QFETCH(vtkSmartPointer<vtkImageData>, expectedVtkImageData);
 
-    vtkSmartPointer<vtkImageData> shutterVtkImageData = shutter.getAsVtkImageData(width, height, slice);
+    vtkSmartPointer<vtkImageData> shutterVtkImageData = shutter.getAsVtkImageData(width, height);
 
     QCOMPARE(shutterVtkImageData->GetNumberOfScalarComponents(), expectedVtkImageData->GetNumberOfScalarComponents());
 
@@ -474,9 +474,12 @@ void test_DisplayShutter::getAsVtkImageData_ReturnsExpectedValues()
     {
         for (int i = 0; i < width; ++i)
         {
-            QCOMPARE(*shutterDataPointer, *expectedDataPointer);
-            ++shutterDataPointer;
-            ++expectedDataPointer;
+            for (int c = 0; c < shutterVtkImageData->GetNumberOfScalarComponents(); c++)
+            {
+                QCOMPARE(*shutterDataPointer, *expectedDataPointer);
+                ++shutterDataPointer;
+                ++expectedDataPointer;
+            }
         }
     }
 }

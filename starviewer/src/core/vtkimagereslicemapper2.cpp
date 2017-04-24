@@ -12,32 +12,32 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGACCUMULATOR_H
-#define UDGACCUMULATOR_H
+#include "vtkimagereslicemapper2.h"
 
-#include <QString>
+#include <vtkImageResliceToColors.h>
+#include <vtkObjectFactory.h>
 
 namespace udg {
 
-template <class T> class Accumulator {
-public:
-    Accumulator() {}
-    virtual ~Accumulator() {}
+vtkStandardNewMacro(VtkImageResliceMapper2)
 
-    virtual void initialize() = 0;
-    virtual void accumulate(T input) = 0;
-    virtual T getValue() const = 0;
-};
-
-class AccumulatorFactory {
-public:
-    enum AccumulatorType { Maximum = 0, Minimum = 1, Average = 2 };
-    template <class T> static Accumulator<T>* getAccumulator(AccumulatorType type, unsigned long size);
-    template <class T> static Accumulator<T>* getAccumulator(const QString &type, unsigned long size);
-};
-
+vtkImageData* VtkImageResliceMapper2::getResliceOutput()
+{
+    this->ImageReslice->UpdateWholeExtent();
+    return this->ImageReslice->GetOutput();
 }
 
-#include "accumulator.cpp"
+vtkMatrix4x4* VtkImageResliceMapper2::getSliceToWorldMatrix() const
+{
+    return this->SliceToWorldMatrix;
+}
 
-#endif
+VtkImageResliceMapper2::VtkImageResliceMapper2()
+{
+}
+
+VtkImageResliceMapper2::~VtkImageResliceMapper2()
+{
+}
+
+} // namespace udg

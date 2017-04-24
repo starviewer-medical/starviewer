@@ -12,53 +12,49 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef THICKSLABFILTER_H
-#define THICKSLABFILTER_H
+#ifndef UDG_PHASEFILTER_H
+#define UDG_PHASEFILTER_H
 
 #include "filter.h"
-#include "orthogonalplane.h"
-
-#include "accumulator.h"
-
-class vtkImageData;
-class vtkProjectionImageFilter;
 
 namespace udg {
 
-class ThickSlabFilter : public Filter {
+class VtkImageExtractPhase;
 
+/**
+ * @brief The PhaseFilter class is a Filter that extracts one phase from a multi-phase volume.
+ */
+class PhaseFilter : public Filter
+{
 public:
-    ThickSlabFilter();
-    virtual ~ThickSlabFilter();
+    PhaseFilter();
+    virtual ~PhaseFilter();
 
-    /// Sets the given vtkImageData as input of the filter
+    /// Sets the given vtkImageData as input of the filter.
     void setInput(vtkImageData *input);
-    /// Sets the given filter output as input of the filter
+    /// Sets the given filter output as input of the filter.
     void setInput(FilterOutput input);
 
+    /// Returns the number of phases.
+    int getNumberOfPhases() const;
+    /// Sets the number of phases.
+    void setNumberOfPhases(int numberOfPhases);
 
-    void setProjectionAxis(const OrthogonalPlane &axis);
-    /// Sets the first slice
-    void setFirstSlice(int slice);
-    /// Sets the thickness (number of slices)
-    void setSlabThickness(int numberOfSlices);
-    /// Sets the stride
-    void setStride(int stride);
-    /// Sets the accumulator type
-    void setAccumulatorType(AccumulatorFactory::AccumulatorType type);
-
-    /// Get the thickness
-    int getSlabThickness();
+    /// Returns the current phase.
+    int getPhase() const;
+    /// Sets the current phase.
+    void setPhase(int phase);
 
 private:
     /// Returns the vtkAlgorithm used to implement the filter.
-    virtual vtkAlgorithm* getVtkAlgorithm() const;
+    virtual vtkAlgorithm* getVtkAlgorithm() const override;
 
 private:
-    vtkProjectionImageFilter* m_filter;
+    /// The VTK filter used to implement this filter.
+    VtkImageExtractPhase *m_filter;
 
 };
 
-}
+} // namespace udg
 
-#endif
+#endif // UDG_PHASEFILTER_H

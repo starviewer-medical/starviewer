@@ -13,56 +13,35 @@
  *************************************************************************************/
 
 #include "imagepipeline.h"
-#include "windowlevelfilter.h"
-#include "thickslabfilter.h"
-#include "displayshutterfilter.h"
-#include "transferfunction.h"
-#include "voilut.h"
 
-#include "vtkImageData.h"
+#include "phasefilter.h"
+#include "voilut.h"
 #include "vtkRunThroughFilter.h"
+#include "windowlevelfilter.h"
+
+#include <vtkImageData.h>
 
 namespace udg {
 
 ImagePipeline::ImagePipeline()
-    : m_hasTransferFunction(false)
+ : m_input(nullptr), m_enableColorMapping(false), m_hasTransferFunction(false)
 {
-    // Filtre de thick slab + grayscale
-    m_thickSlabProjectionFilter = new ThickSlabFilter();
-    m_thickSlabProjectionFilter->setSlabThickness(1);
-
+    m_phaseFilter = new PhaseFilter();
     m_windowLevelLUTFilter = new WindowLevelFilter();
-
-    m_displayShutterFilter = new DisplayShutterFilter();
-    m_displayShutterFilter->setInput(m_windowLevelLUTFilter->getOutput());
-
     m_outputFilter = vtkRunThroughFilter::New();
-    m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
-
-    m_shutterData = 0;
 }
 
 ImagePipeline::~ImagePipeline()
 {
-    delete m_displayShutterFilter;
+    delete m_phaseFilter;
     delete m_windowLevelLUTFilter;
-    delete m_thickSlabProjectionFilter;
     m_outputFilter->Delete();
 }
 
 void ImagePipeline::setInput(vtkImageData *input)
 {
     m_input = input;
-
-    if (m_thickSlabProjectionFilter->getSlabThickness() > 1)
-    {
-        m_thickSlabProjectionFilter->setInput(m_input);
-        m_windowLevelLUTFilter->setInput(m_thickSlabProjectionFilter->getOutput());
-    }
-    else
-    {
-        m_windowLevelLUTFilter->setInput(m_input);
-    }
+    rebuild();
 }
 
 void ImagePipeline::setInput(FilterOutput input)
@@ -70,59 +49,26 @@ void ImagePipeline::setInput(FilterOutput input)
     setInput(input.getVtkImageData());
 }
 
-void ImagePipeline::setShutterData(vtkImageData *shutterData)
+void ImagePipeline::setNumberOfPhases(int numberOfPhases)
 {
-    m_shutterData = shutterData;
-    if (m_shutterData)
-    {
-        m_displayShutterFilter->setDisplayShutter(m_shutterData);
-        m_outputFilter->SetInputConnection(m_displayShutterFilter->getOutput().getVtkAlgorithmOutput());
-    }
-    else
-    {
-        m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
-    }
+    m_phaseFilter->setNumberOfPhases(numberOfPhases);
+    rebuild();
 }
 
-void ImagePipeline::setSlice(int slice)
+void ImagePipeline::setPhase(int phase)
 {
-    m_thickSlabProjectionFilter->setFirstSlice(slice);
+    m_phaseFilter->setPhase(phase);
 }
 
-void ImagePipeline::setSlabProjectionMode(AccumulatorFactory::AccumulatorType type)
+vtkImageData* ImagePipeline::getPhaseOutput()
 {
-    m_thickSlabProjectionFilter->setAccumulatorType(static_cast<AccumulatorFactory::AccumulatorType>(type));
+    return m_phaseFilter->getOutput().getVtkImageData();
 }
 
-void ImagePipeline::setSlabStride(int step)
+void ImagePipeline::enableColorMapping(bool enable)
 {
-    m_thickSlabProjectionFilter->setStride(step);
-}
-
-void ImagePipeline::setProjectionAxis(const OrthogonalPlane &axis)
-{
-    m_thickSlabProjectionFilter->setProjectionAxis(axis);
-}
-
-void ImagePipeline::setSlabThickness(int numberOfSlices)
-{
-    int previousSlabThickness = m_thickSlabProjectionFilter->getSlabThickness();
-    m_thickSlabProjectionFilter->setSlabThickness(numberOfSlices);
-
-    if (m_thickSlabProjectionFilter->getSlabThickness() > 1 && previousSlabThickness == 1)
-    {
-        m_thickSlabProjectionFilter->setInput(m_input);
-        m_windowLevelLUTFilter->setInput(m_thickSlabProjectionFilter->getOutput());
-    }
-    else if (m_thickSlabProjectionFilter->getSlabThickness() == 1)
-    {
-        m_windowLevelLUTFilter->setInput(m_input);
-    }
-}
-
-vtkImageData* ImagePipeline::getSlabProjectionOutput()
-{
-    return m_thickSlabProjectionFilter->getOutput().getVtkImageData();
+    m_enableColorMapping = enable;
+    rebuild();
 }
 
 void ImagePipeline::setVoiLut(const VoiLut &voiLut)
@@ -157,6 +103,30 @@ void ImagePipeline::clearTransferFunction()
 vtkAlgorithm* ImagePipeline::getVtkAlgorithm() const
 {
     return m_outputFilter;
+}
+
+void ImagePipeline::rebuild()
+{
+    if (m_phaseFilter->getNumberOfPhases() > 1 && m_enableColorMapping)
+    {
+        m_phaseFilter->setInput(m_input);
+        m_windowLevelLUTFilter->setInput(m_phaseFilter->getOutput());
+        m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else if (m_phaseFilter->getNumberOfPhases() > 1)
+    {
+        m_phaseFilter->setInput(m_input);
+        m_outputFilter->SetInputConnection(m_phaseFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else if (m_enableColorMapping)
+    {
+        m_windowLevelLUTFilter->setInput(m_input);
+        m_outputFilter->SetInputConnection(m_windowLevelLUTFilter->getOutput().getVtkAlgorithmOutput());
+    }
+    else
+    {
+        m_outputFilter->SetInputData(m_input);
+    }
 }
 
 }

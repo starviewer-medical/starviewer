@@ -375,4 +375,9 @@ void DrawerPolygon::get2DPlaneIndices(int &xIndex, int &yIndex) const
     }
 }
 
+vtkPolyData* DrawerPolygon::getVtkPolyData() const
+{
+    return m_vtkPolyData;
+}
+
 }

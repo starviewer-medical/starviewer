@@ -14,7 +14,8 @@ HEADERS += q2dviewerextensionmediator.h \
         tablemenu.h \
         qhangingprotocolswidget.h \
         qhangingprotocolsgroupwidget.h \
-        resetviewtoanatomicalplaneqviewercommand.h
+        resetviewtoanatomicalplaneqviewercommand.h \
+        qmrusortedtoolbuttonwithmenu.h
 
 SOURCES += q2dviewerextensionmediator.cpp \
         q2dviewerextension.cpp \
@@ -23,7 +24,8 @@ SOURCES += q2dviewerextensionmediator.cpp \
         tablemenu.cpp \
         qhangingprotocolswidget.cpp \
         qhangingprotocolsgroupwidget.cpp \
-        resetviewtoanatomicalplaneqviewercommand.cpp
+        resetviewtoanatomicalplaneqviewercommand.cpp \
+        qmrusortedtoolbuttonwithmenu.cpp
 
 INCLUDEPATH += ../../../inputoutput
 DEPENDPATH += ../../../inputoutput

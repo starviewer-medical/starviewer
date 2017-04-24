@@ -13,6 +13,10 @@ Q_OBJECT
 
 private slots:
 
+    void create_ShouldReturnNull();
+
+    void create_ShouldReturnExpectedVtkImageData();
+
     void createVtkImageData_ShouldReturnNull();
 
     void createVtkImageData_ShouldReturnExpectedVtkImageData_data();
@@ -23,6 +27,40 @@ Q_DECLARE_METATYPE(QSharedPointer<VtkImageDataCreator>)
 Q_DECLARE_METATYPE(QVector<unsigned char>)
 Q_DECLARE_METATYPE(QVector<unsigned short>)
 Q_DECLARE_METATYPE(vtkSmartPointer<vtkImageData>)
+
+void test_VtkImageDataCreator::create_ShouldReturnNull()
+{
+    QCOMPARE(VtkImageDataCreator().create(static_cast<int*>(nullptr)), vtkSmartPointer<vtkImageData>());
+}
+
+void test_VtkImageDataCreator::create_ShouldReturnExpectedVtkImageData()
+{
+    double origin[3] = { 1.0, 0.0, -1.0 };
+    double spacing[3] = { 0.1, 0.1, 2.0 };
+    constexpr int dimX = 256, dimY = 256, dimZ = 500;
+    constexpr int nComponents = 2;
+    QVector<float> data(dimX * dimY * dimZ * nComponents);
+
+    for (int i = 0; i < data.size(); i++)
+    {
+        data[i] = i * 0.5f;
+    }
+
+    auto imageData = VtkImageDataCreator().setOrigin(origin).setSpacing(spacing).setDimensions({{dimX, dimY, dimZ}}).setNumberOfComponents(nComponents)
+            .create(data.constData());
+
+    auto expectedImageData = vtkSmartPointer<vtkImageData>::New();
+    expectedImageData->SetOrigin(origin);
+    expectedImageData->SetSpacing(spacing);
+    expectedImageData->SetDimensions(dimX, dimY, dimZ);
+    expectedImageData->AllocateScalars(VTK_FLOAT, nComponents);
+    memcpy(expectedImageData->GetScalarPointer(), data.constData(), static_cast<size_t>(data.size()) * sizeof(float));
+
+    bool equal;
+    ItkAndVtkImageTestHelper::compareVtkImageData(imageData, expectedImageData, equal);
+
+    QVERIFY2(equal, "compared vtkImageDatas are not equal");
+}
 
 void test_VtkImageDataCreator::createVtkImageData_ShouldReturnNull()
 {

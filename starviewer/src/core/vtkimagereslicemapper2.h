@@ -12,41 +12,37 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "orthogonalplane.h"
-#include "secondaryvolumedisplayunit.h"
-#include "slicehandler.h"
-#include "volume.h"
+#ifndef UDG_VTKIMAGERESLICEMAPPER2_H
+#define UDG_VTKIMAGERESLICEMAPPER2_H
 
-#include <vtkImageSlice.h>
-#include <vtkImageSliceMapper.h>
+#include <vtkImageResliceMapper.h>
 
 namespace udg {
 
-SecondaryVolumeDisplayUnit::SecondaryVolumeDisplayUnit()
+/**
+ * @brief The VtkImageResliceMapper2 class is a subclass of vtkImageResliceMapper with a few additional methods useful to Starviewer.
+ */
+class VtkImageResliceMapper2 : public vtkImageResliceMapper
 {
-    m_mapper = vtkImageSliceMapper::New();
-    m_mapper->StreamingOn();
-    m_imageSlice->SetMapper(m_mapper);
-}
+public:
+    static VtkImageResliceMapper2* New();
 
-SecondaryVolumeDisplayUnit::~SecondaryVolumeDisplayUnit()
-{
-    m_mapper->Delete();
-}
+    vtkTypeMacro(VtkImageResliceMapper2, vtkImageResliceMapper)
 
-void SecondaryVolumeDisplayUnit::updateImageSlice(vtkCamera *camera)
-{
-    Q_UNUSED(camera)
+    /// Returns the output of the reslice operation.
+    vtkImageData* getResliceOutput();
 
-    if (!m_volume || !m_volume->isPixelDataLoaded())
-    {
-        return;
-    }
+    /// Returns the slice to world matrix.
+    vtkMatrix4x4* getSliceToWorldMatrix() const;
 
-    int zIndex = this->getViewPlane().getZIndex();
-    m_mapper->SetOrientation(zIndex);
-    int imageIndex = m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
-    m_mapper->SetSliceNumber(imageIndex);
-}
+    using Superclass::Update;
+
+protected:
+    VtkImageResliceMapper2();
+    virtual ~VtkImageResliceMapper2();
+
+};
 
 } // namespace udg
+
+#endif // UDG_VTKIMAGERESLICEMAPPER2_H

@@ -87,7 +87,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_hangingprotocolimagesetrestrictionexpression.cpp \
            $$PWD/test_volumefillerstep.cpp \
            $$PWD/test_patientfillerinput.cpp \
-           $$PWD/test_externalapplication.cpp
+           $$PWD/test_externalapplication.cpp \
+           $$PWD/test_sliceorientedvolumepixeldata.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \

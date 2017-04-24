@@ -78,7 +78,7 @@ public slots:
     void resetCINEInformation(Volume *input);
 
     /// Actualitza la informació que té del volum actual
-    void updateThickness(int);
+    void updateSliceRange();
 
 protected:
     void timerEvent(QTimerEvent *event);

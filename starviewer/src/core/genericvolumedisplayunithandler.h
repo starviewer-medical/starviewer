@@ -82,6 +82,14 @@ private:
     /// Adds a new display unit with the given input
     void addDisplayUnit(Volume *input);
 
+    /// Adds the given imageSlice to the stack.
+    /// If the given imageSlice is itself a stack, all its images will be processed recursively and added to the stack.
+    void addImageSliceToStack(vtkImageSlice *imageSlice);
+
+    /// Removes the given imageSlice from the stack.
+    /// If the given imageSlice is itself a stack, all its images will be processed recursively and removed from the stack.
+    void removeImageSliceFromStack(vtkImageSlice *imageSlice);
+
     /// Sets up the display units once created
     void setupDisplayUnits();
 

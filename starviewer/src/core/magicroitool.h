@@ -26,6 +26,7 @@ class Volume;
 class DrawerText;
 class DrawerPolygon;
 class VolumePixelData;
+class VoxelIndex;
 
 /**
     Tool que serveix per editar el volum sobreposat en un visor 2D
@@ -48,20 +49,23 @@ protected:
     virtual void setTextPosition(DrawerText *text);
 
 private:
+    /// Returns the current pixel data from the selected input.
+    SliceOrientedVolumePixelData getPixelData();
+
     /// Crida a la generació de la regió màgica
     void generateRegion();
 
     /// Gets the index of the input where the magic ROI has to be drawn
     int getROIInputIndex() const;
     
-    /// Gets the index of the current picked position on the given pixel data
-    void getPickedPositionVoxelIndex(VolumePixelData *pixelData, int &x, int &y, int &z);
+    /// Returns the slice oriented voxel index in the selected pixel data corresponding to the current picked position.
+    VoxelIndex getPickedPositionVoxelIndex();
     
     /// Calcula el rang de valors d'intensitat vàlid a partir de \sa #m_magicSize i \see #m_magicFactor
-    void computeLevelRange(VolumePixelData *pixelData, int x, int y, int z);
+    void computeLevelRange();
 
     /// Versió iterativa del region Growing
-    void computeRegionMask(VolumePixelData *pixelData);
+    void computeRegionMask();
 
     /// Fer un moviment des d'un índex cap a una direcció
     /// @param a, @param b índex del volum de la màscara que estem mirant en cada crida
@@ -84,8 +88,7 @@ private:
     bool isLoopReached();
 
     /// Retorna la desviació estàndard dins la regió marcada per la magicSize
-    /// @param a, @param b, @param c índex del volum de la màscara que estem mirant
-    double getStandardDeviation(int x, int y, int z, VolumePixelData *pixelData);
+    double getStandardDeviation();
 
     /// Comença la generació de la regió màgica
     void startRegion();
@@ -99,8 +102,8 @@ private:
     /// Calcula els bounds de la màscara
     void computeMaskBounds();
 
-    ///Mini parche per obtenir el valor de Voxel depenent de si és Axial, Coronal o Sagital
-    double getVoxelValue(int x, int y, int z, VolumePixelData *pixelData);
+    /// Returns the value of the voxel at the given slice oriented voxel index. Only the first component is considered.
+    double getVoxelValue(const VoxelIndex &index);
 
     /// Elimina la representacio temporal de la tool
     void deleteTemporalRepresentation();

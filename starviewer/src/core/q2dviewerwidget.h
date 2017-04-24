@@ -111,9 +111,6 @@ private slots:
     /// Quan el visualitzador s'ha seleccionat, emet el senyal amb aquest widget
     void emitSelectedViewer();
 
-    /// Actualitza correctament el valor de l'slider quan hi ha thick slab
-    void updateSlider();
-
     /// Assigna el rang i el valor corresponent de l'slider segons l'input del viewer
     void resetSliderRangeAndValue();
 

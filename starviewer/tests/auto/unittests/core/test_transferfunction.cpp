@@ -94,6 +94,16 @@ void test_TransferFunction::toNewRange_ShouldReturnExpectedTransferFunction_data
     transferFunction7b.set(201.0, 0.0, 1.0, 0.0, 0.5);
     transferFunction7b.set(301.0, 0.0, 0.0, 1.0, 1.0);
     QTest::newRow("n points random range change") << transferFunction7 << -44.0 << -8.0 << 13.0 << 85.0 << transferFunction7b;
+
+    TransferFunction transferFunction8;
+    transferFunction8.set(0.0, 1.0, 0.0, 0.0, 1.0);
+    transferFunction8.set(50.0, 0.0, 1.0, 0.0, 0.5);
+    transferFunction8.set(100.0, 0.0, 0.0, 1.0, 1.0);
+    TransferFunction transferFunction8b;
+    transferFunction8b.set(100.0, 1.0, 0.0, 0.0, 1.0);
+    transferFunction8b.set(50.0, 0.0, 1.0, 0.0, 0.5);
+    transferFunction8b.set(0.0, 0.0, 0.0, 1.0, 1.0);
+    QTest::newRow("n points horizontal inversion") << transferFunction8 << 0.0 << 100.0 << 100.0 << 0.0 << transferFunction8b;
 }
 
 void test_TransferFunction::toNewRange_ShouldReturnExpectedTransferFunction()

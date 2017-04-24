@@ -21,7 +21,7 @@
 namespace udg {
 
 ThickSlabSyncAction::ThickSlabSyncAction()
- : SyncAction(), m_slabProjectionMode(0), m_slabThickness(0), m_volume(0)
+ : SyncAction(), m_slabProjectionMode(VolumeDisplayUnit::Max), m_slabThickness(0.0), m_volume(0)
 {
 }
 
@@ -29,14 +29,14 @@ ThickSlabSyncAction::~ThickSlabSyncAction()
 {
 }
 
-void ThickSlabSyncAction::setSlabProjectionMode(int slabProjectionMode)
+void ThickSlabSyncAction::setSlabProjectionMode(VolumeDisplayUnit::SlabProjectionMode slabProjectionMode)
 {
     m_slabProjectionMode = slabProjectionMode;
 }
 
-void ThickSlabSyncAction::setSlabThickness(int numberOfSlices)
+void ThickSlabSyncAction::setSlabThickness(double slabThickness)
 {
-    m_slabThickness = numberOfSlices;
+    m_slabThickness = slabThickness;
 }
 
 void ThickSlabSyncAction::setVolume(Volume *volume)

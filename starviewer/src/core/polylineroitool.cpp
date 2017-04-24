@@ -335,10 +335,9 @@ void PolylineROITool::initialize()
 
 void PolylineROITool::equalizeDepth()
 {
-    // Assignem a tots els punts la z de l'últim
     int zIndex = m_2DViewer->getView().getZIndex();
+    double z = m_2DViewer->getCurrentDisplayedImageDepth();
     int n = m_roiPolygon->getNumberOfPoints();
-    double z = m_roiPolygon->getVertix(n - 1)[zIndex];
     for (int i = 0; i < n - 1; i++)
     {
         const double *constPoint = m_roiPolygon->getVertix(i);

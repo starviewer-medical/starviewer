@@ -12,68 +12,57 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "thickslabfilter.h"
+#include "phasefilter.h"
 
-#include "filteroutput.h"
+#include "vtkimageextractphase.h"
 
 #include <vtkImageData.h>
-#include "vtkProjectionImageFilter.h"
 
 namespace udg {
 
-ThickSlabFilter::ThickSlabFilter()
+PhaseFilter::PhaseFilter()
 {
-    m_filter = vtkProjectionImageFilter::New();
+    m_filter = VtkImageExtractPhase::New();
 }
 
-ThickSlabFilter::~ThickSlabFilter()
+PhaseFilter::~PhaseFilter()
 {
     m_filter->Delete();
 }
 
-void ThickSlabFilter::setInput(vtkImageData *input)
+void PhaseFilter::setInput(vtkImageData *input)
 {
     m_filter->SetInputData(input);
 }
 
-void ThickSlabFilter::setInput(FilterOutput input)
+void PhaseFilter::setInput(FilterOutput input)
 {
     m_filter->SetInputConnection(input.getVtkAlgorithmOutput());
 }
 
-void ThickSlabFilter::setProjectionAxis(const OrthogonalPlane &axis)
+int PhaseFilter::getNumberOfPhases() const
 {
-    m_filter->SetProjectionDimension(static_cast<unsigned int>(axis));
+    return m_filter->getNumberOfPhases();
 }
 
-void ThickSlabFilter::setFirstSlice(int slice)
+void PhaseFilter::setNumberOfPhases(int numberOfPhases)
 {
-    m_filter->SetFirstSlice(slice);
+    m_filter->setNumberOfPhases(numberOfPhases);
 }
 
-void ThickSlabFilter::setSlabThickness(int numberOfSlices)
+int PhaseFilter::getPhase() const
 {
-    m_filter->SetNumberOfSlicesToProject(numberOfSlices);
+    return m_filter->getPhase();
 }
 
-int ThickSlabFilter::getSlabThickness()
+void PhaseFilter::setPhase(int phase)
 {
-    return m_filter->GetNumberOfSlicesToProject();
+    m_filter->setPhase(phase);
 }
 
-void ThickSlabFilter::setStride(int stride)
-{
-    m_filter->SetStep(stride);
-}
-
-void ThickSlabFilter::setAccumulatorType(AccumulatorFactory::AccumulatorType type)
-{
-    m_filter->SetAccumulatorType(type);
-}
-
-vtkAlgorithm* ThickSlabFilter::getVtkAlgorithm() const
+vtkAlgorithm* PhaseFilter::getVtkAlgorithm() const
 {
     return m_filter;
 }
 
-}
+} // namespace udg
