@@ -213,8 +213,6 @@ HEADERS += extensionfactory.h \
     standarduptakevaluemeasurehandler.h \
     statswatcher.h \
     clippingplanestool.h \
-    representationslayer.h \
-    toolrepresentation.h \
     settings.h \
     settingsregistry.h \
     settingsparser.h \
@@ -341,7 +339,6 @@ HEADERS += extensionfactory.h \
     itkDCMTKFileReader.h \
     itkDCMTKImageIO.h \
     itkDCMTKImageIOFactory.h \
-    itkDCMTKSeriesFileNames.h \
     volumepixeldatareaderitkdcmtk.h \
     postprocessor.h \
     computezspacingpostprocessor.h \
@@ -605,8 +602,6 @@ SOURCES += extensionmediator.cpp \
     standarduptakevaluemeasurehandler.cpp \
     statswatcher.cpp \
     clippingplanestool.cpp \
-    representationslayer.cpp \
-    toolrepresentation.cpp \
     settings.cpp \
     settingsregistry.cpp \
     settingsparser.cpp \
@@ -728,7 +723,6 @@ SOURCES += extensionmediator.cpp \
     itkDCMTKFileReader.cxx \
     itkDCMTKImageIO.cxx \
     itkDCMTKImageIOFactory.cxx \
-    itkDCMTKSeriesFileNames.cxx \
     volumepixeldatareaderitkdcmtk.cpp \
     postprocessor.cpp \
     computezspacingpostprocessor.cpp \
