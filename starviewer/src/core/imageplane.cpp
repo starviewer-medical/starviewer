@@ -217,17 +217,22 @@ bool ImagePlane::getIntersections(const ImagePlane *plane, Vector3 &intersection
     std::array<double, 3> otherOrigin = plane->getOrigin();
     double t;
     double p1[3], p2[3];
-    bool foundIntersection = false;
+    bool foundIntersection = true;
 
     // First try intersection with horizontal borders
-    foundIntersection |= vtkPlane::IntersectWithLine(topLeft.data(), topRight.data(), otherNormal.data(), otherOrigin.data(), t, p1) != 0;
-    foundIntersection |= vtkPlane::IntersectWithLine(bottomRight.data(), bottomLeft.data(), otherNormal.data(), otherOrigin.data(), t, p2) != 0;
+    foundIntersection &= vtkPlane::IntersectWithLine(topLeft.data(), topRight.data(), otherNormal.data(), otherOrigin.data(), t, p1) != 0
+            || t != VTK_DOUBLE_MAX;
+    foundIntersection &= vtkPlane::IntersectWithLine(bottomRight.data(), bottomLeft.data(), otherNormal.data(), otherOrigin.data(), t, p2) != 0
+            || t != VTK_DOUBLE_MAX;
 
     if (!foundIntersection)
     {
+        foundIntersection = true;
         // Now try intersection with vertical borders.
-        foundIntersection |= vtkPlane::IntersectWithLine(topRight.data(), bottomRight.data(), otherNormal.data(), otherOrigin.data(), t, p1) != 0;
-        foundIntersection |= vtkPlane::IntersectWithLine(bottomLeft.data(), topLeft.data(), otherNormal.data(), otherOrigin.data(), t, p2) != 0;
+        foundIntersection &= vtkPlane::IntersectWithLine(topRight.data(), bottomRight.data(), otherNormal.data(), otherOrigin.data(), t, p1) != 0
+                || t != VTK_DOUBLE_MAX;
+        foundIntersection &= vtkPlane::IntersectWithLine(bottomLeft.data(), topLeft.data(), otherNormal.data(), otherOrigin.data(), t, p2) != 0
+                || t != VTK_DOUBLE_MAX;
     }
 
     if (foundIntersection)
