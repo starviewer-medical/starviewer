@@ -59,6 +59,7 @@ ReferenceLinesTool::ReferenceLinesTool(QViewer *viewer, QObject *parent)
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(updateDataForCurrentInput()));
     // Cada cop que el viewer canvïi de llesca, hem d'actualitzar el pla de projecció
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(updateReferenceImagePlanesToProject()));
+    connect(m_2DViewer, &Q2DViewer::viewChanged, this, &ReferenceLinesTool::updateReferenceImagePlanesToProject);
     // Cada cop que canvii l'slab thickness haurem d'actualitzar els plans a projectar
     connect(m_2DViewer, &Q2DViewer::slabThicknessChanged, this, &ReferenceLinesTool::updateReferenceImagePlanesToProject);
 
