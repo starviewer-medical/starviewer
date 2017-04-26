@@ -22,6 +22,7 @@
 #include "slicingmousetool.h"
 #include "slicingkeyboardtool.h"
 #include "windowleveltool.h"
+#include "windowlevellefttool.h"
 #include "referencelinestool.h"
 #include "translatetool.h"
 #include "translatelefttool.h"
@@ -98,6 +99,10 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     else if (toolName == "WindowLevelTool")
     {
         tool = new WindowLevelTool(viewer);
+    }
+    else if (toolName == "WindowLevelLeftTool")
+    {
+        tool = new WindowLevelLeftTool(viewer);
     }
     else if (toolName == "SeedTool")
     {
@@ -218,6 +223,14 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolTip = toolAction->text();
     }
     else if (toolName == "WindowLevelTool")
+    {
+        toolAction->setText(tr("WW/WL"));
+        toolAction->setIcon(QIcon(":/images/icons/contrast.svg"));
+        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::WindowLevelTool));
+        statusTip = tr("Enable/Disable Window Level tool");
+        toolTip = toolAction->text();
+    }
+    else if (toolName == "WindowLevelLeftTool")
     {
         toolAction->setText(tr("WW/WL"));
         toolAction->setIcon(QIcon(":/images/icons/contrast.svg"));
