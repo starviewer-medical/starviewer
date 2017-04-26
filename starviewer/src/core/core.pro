@@ -105,6 +105,7 @@ HEADERS += extensionfactory.h \
     imageplane.h \
     slicingtool.h \
     translatetool.h \
+    translatelefttool.h \
     voxelinformationtool.h \
     windowleveltool.h \
     seedtool.h \
@@ -501,6 +502,7 @@ SOURCES += extensionmediator.cpp \
     referencelinestooldata.cpp \
     imageplane.cpp \
     translatetool.cpp \
+    translatelefttool.cpp \
     slicingtool.cpp \
     voxelinformationtool.cpp \
     windowleveltool.cpp \
