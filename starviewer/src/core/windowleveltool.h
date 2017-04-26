@@ -28,7 +28,7 @@ class WindowLevelTool : public Tool {
 Q_OBJECT
 public:
     /// Estats de la tool
-    enum { None, WindowLevelling };
+    enum { None, WindowLevelling, Burning };
 
     WindowLevelTool(QViewer *viewer, QObject *parent = 0);
     ~WindowLevelTool();
@@ -69,6 +69,10 @@ private:
     void avoidZeroAndNegative(double &window, double &level);
 
 private:
+
+    /// If the tool is linked to a Q2DViewer this field will point to it, otherwise it will be null.
+    Q2DViewer *m_2DViewer;
+
     /// Valors per controlar el mapeig del window level
     double m_initialWindow, m_initialLevel, m_currentWindow, m_currentLevel;
     /// Initial VOI LUT.

@@ -1082,6 +1082,21 @@ VoiLut Q2DViewer::getCurrentVoiLut() const
     return getVoiLutData()->getCurrentPreset();
 }
 
+VoiLut Q2DViewer::getCurrentVoiLutInVolume(int index) const
+{
+    VolumeDisplayUnit *unit = this->getDisplayUnit(index);
+
+    if (unit == m_dummyDisplayUnit)
+    {
+        WARN_LOG(QString("No volume at index %1. Returning default-constructed VOI LUT.").arg(index));
+        return VoiLut();
+    }
+    else
+    {
+        return unit->getVoiLutData()->getCurrentPreset();
+    }
+}
+
 int Q2DViewer::getCurrentSlice() const
 {
     return getMainDisplayUnit()->getSlice();

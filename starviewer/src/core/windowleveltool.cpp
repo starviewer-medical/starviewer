@@ -31,6 +31,8 @@ WindowLevelTool::WindowLevelTool(QViewer *viewer, QObject *parent)
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
 
+    m_2DViewer = dynamic_cast<Q2DViewer*>(m_viewer);
+
     reset();
 
     connect(m_viewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
@@ -50,7 +52,7 @@ void WindowLevelTool::handleEvent(unsigned long eventID)
             break;
 
         case vtkCommand::MouseMoveEvent:
-            if (m_state == WindowLevelling)
+            if (m_state != None)
             {
                 this->doWindowLevel();
             }
@@ -68,13 +70,25 @@ void WindowLevelTool::handleEvent(unsigned long eventID)
 void WindowLevelTool::reset()
 {
     m_state = None;
-    updateWindowLevellingBehaviour();
 }
 
 void WindowLevelTool::startWindowLevel()
 {
-    m_state = WindowLevelling;
-    VoiLut voiLut = m_viewer->getCurrentVoiLut();
+    VoiLut voiLut;
+
+    if (m_2DViewer && m_2DViewer->getNumberOfInputs() > 1 && m_viewer->getInteractor()->GetShiftKey())
+    {
+        m_state = Burning;
+        voiLut = m_2DViewer->getCurrentVoiLutInVolume(1);
+    }
+    else
+    {
+        m_state = WindowLevelling;
+        voiLut = m_viewer->getCurrentVoiLut();
+    }
+
+    updateWindowLevellingBehaviour();
+
     m_initialWindow = voiLut.getWindowLevel().getWidth();
     m_initialLevel = voiLut.getWindowLevel().getCenter();
     m_initialLut = voiLut.getLut();
@@ -127,9 +141,11 @@ void WindowLevelTool::doWindowLevel()
     double newLevel;
     computeWindowLevelValues(dx, dy, newWindow, newLevel);
 
+    VoiLut voiLut;
+
     if (m_viewer->getCurrentVoiLut().isWindowLevel())
     {
-        m_viewer->setVoiLut(WindowLevel(newWindow, newLevel));
+        voiLut = WindowLevel(newWindow, newLevel);
     }
     else
     {
@@ -137,7 +153,16 @@ void WindowLevelTool::doWindowLevel()
         double oldX2 = m_initialLut.keys().last();
         double newX1 = newLevel - newWindow / 2.0;
         double newX2 = newLevel + newWindow / 2.0;
-        m_viewer->setVoiLut(VoiLut(m_initialLut.toNewRange(oldX1, oldX2, newX1, newX2), m_initialLut.name()));
+        voiLut = VoiLut(m_initialLut.toNewRange(oldX1, oldX2, newX1, newX2), m_initialLut.name());
+    }
+
+    if (m_state == WindowLevelling)
+    {
+        m_viewer->setVoiLut(voiLut);
+    }
+    else if (m_state == Burning)
+    {
+        m_2DViewer->setVoiLutInVolume(1, voiLut);
     }
 }
 
@@ -164,7 +189,7 @@ void WindowLevelTool::updateWindowLevellingBehaviour()
         return;
     }
 
-    if (VolumeHelper::isPrimaryPET(m_viewer->getMainInput()) || VolumeHelper::isPrimaryNM(m_viewer->getMainInput()))
+    if (VolumeHelper::isPrimaryPET(m_viewer->getMainInput()) || VolumeHelper::isPrimaryNM(m_viewer->getMainInput()) || m_state == Burning)
     {
         m_windowLevellingBehaviour = FixedMinimum;
     }

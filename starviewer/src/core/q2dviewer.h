@@ -102,6 +102,8 @@ public:
 
     /// Returns the VOI LUT that is currently applied to the image in this viewer.
     virtual VoiLut getCurrentVoiLut() const;
+    /// Returns the VOI LUT that is currently applied to the specified volume, or a default-constructed VOI LUT if the index is out of range.
+    VoiLut getCurrentVoiLutInVolume(int index) const;
 
     /// Retorna la llesca/fase actual
     int getCurrentSlice() const;
