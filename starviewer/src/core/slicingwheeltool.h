@@ -154,9 +154,9 @@ private:
     //@}
     
     /// \brief Last cursor icon index used, this variable is used to avoid futile cursor updates.
-    int m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
+    int m_cursorIcon_lastIndex = CursorIconDontUpdate;
     /// \brief Default value to avoid a cursor icon change.
-    static constexpr int CURSOR_ICON_DONT_UPDATE = -1;
+    static constexpr int CursorIconDontUpdate = -1;
     
     /// \brief Some mouses produce unwanted scrolls when the wheel is clicked. This is used to cancel them until the wheel is released.
     bool m_ignoreWheelMovement = false;
@@ -168,15 +168,15 @@ private:
     /// \brief Accumulator for angular distance.
     double m_increment = 0;
     /// \brief Axis where the current increment is applied.
-    unsigned int m_currentAxis = MAIN_AXIS;
+    unsigned int m_currentAxis = MainAxis;
     /// \brief Closed loop scroll enabled for the current axis.
     bool m_scrollLoop = false;
     /// \brief Jump to next or previous volume enabled for the current axis.
     bool m_volumeScroll = false;
     //@}
     
-    static constexpr unsigned int MAIN_AXIS = 0;
-    static constexpr unsigned int SECONDARY_AXIS = 1;
+    static constexpr unsigned int MainAxis = 0;
+    static constexpr unsigned int SecondaryAxis = 1;
 };
 
 }

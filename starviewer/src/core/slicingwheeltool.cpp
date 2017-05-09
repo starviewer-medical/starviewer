@@ -92,18 +92,18 @@ void SlicingWheelTool::reassignAxes()
     
     if (sliceable && phaseable) 
     {
-        setMode(MAIN_AXIS, SlicingMode::Slice);
-        setMode(SECONDARY_AXIS, SlicingMode::Phase);
+        setMode(MainAxis, SlicingMode::Slice);
+        setMode(SecondaryAxis, SlicingMode::Phase);
     }
     else if (sliceable && !phaseable)
     {
-        setMode(MAIN_AXIS, SlicingMode::Slice);
-        setMode(SECONDARY_AXIS, SlicingMode::Slice);
+        setMode(MainAxis, SlicingMode::Slice);
+        setMode(SecondaryAxis, SlicingMode::Slice);
     }
     else if (!sliceable && phaseable)
     {
-        setMode(MAIN_AXIS, SlicingMode::Phase);
-        setMode(SECONDARY_AXIS, SlicingMode::Phase);
+        setMode(MainAxis, SlicingMode::Phase);
+        setMode(SecondaryAxis, SlicingMode::Phase);
     }
     beginScroll();
 }
@@ -191,7 +191,7 @@ void SlicingWheelTool::cursorIcon(double increment)
     }
     else
     { // No increment
-        index = CURSOR_ICON_DONT_UPDATE; // Do not touch the icon...
+        index = CursorIconDontUpdate; // Do not touch the icon...
     }
 
     if (m_cursorIcon_lastIndex != index)
@@ -215,7 +215,7 @@ void SlicingWheelTool::cursorIcon(double increment)
 void SlicingWheelTool::unsetCursorIcon()
 {
     m_2DViewer->unsetCursor();
-    m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
+    m_cursorIcon_lastIndex = CursorIconDontUpdate;
 }
 
 double SlicingWheelTool::scroll(double increment)
@@ -270,12 +270,12 @@ double SlicingWheelTool::scroll(double increment)
 void SlicingWheelTool::beginScroll()
 {
     readConfiguration();
-    m_currentAxis = m_ctrlPressed || m_middleButtonToggle ? SECONDARY_AXIS : MAIN_AXIS;
+    m_currentAxis = m_ctrlPressed || m_middleButtonToggle ? SecondaryAxis : MainAxis;
     m_increment = 0;
     m_scrollLoop = false;
     m_scrollLoop = m_scrollLoop || (m_config_sliceScrollLoop && getMode(m_currentAxis) == SlicingMode::Slice);
     m_scrollLoop = m_scrollLoop || (m_config_phaseScrollLoop && getMode(m_currentAxis) == SlicingMode::Phase);
-    m_volumeScroll = m_config_volumeScroll && m_currentAxis == MAIN_AXIS;
+    m_volumeScroll = m_config_volumeScroll && m_currentAxis == MainAxis;
 }
 
 }

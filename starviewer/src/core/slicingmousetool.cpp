@@ -68,18 +68,18 @@ void SlicingMouseTool::reassignAxes()
     
     if (sliceable && phaseable) 
     {
-        setMode(VERTICAL_AXIS, SlicingMode::Slice);
-        setMode(HORIZONTAL_AXIS, SlicingMode::Phase);
+        setMode(VerticalAxis, SlicingMode::Slice);
+        setMode(HorizontalAxis, SlicingMode::Phase);
     }
     else if (sliceable && !phaseable)
     {
-        setMode(VERTICAL_AXIS, SlicingMode::Slice);
-        setMode(HORIZONTAL_AXIS, SlicingMode::Slice);
+        setMode(VerticalAxis, SlicingMode::Slice);
+        setMode(HorizontalAxis, SlicingMode::Slice);
     }
     else if (!sliceable && phaseable)
     {
-        setMode(VERTICAL_AXIS, SlicingMode::Phase);
-        setMode(HORIZONTAL_AXIS, SlicingMode::Phase);
+        setMode(VerticalAxis, SlicingMode::Phase);
+        setMode(HorizontalAxis, SlicingMode::Phase);
     }
 }
 
@@ -99,7 +99,7 @@ void SlicingMouseTool::onMousePress(const QPoint &position)
     beginCursorIcon(position);
     beginDirectionDetection(position);
     
-    if (getMode(VERTICAL_AXIS) == getMode(HORIZONTAL_AXIS))
+    if (getMode(VerticalAxis) == getMode(HorizontalAxis))
     { // Scrolling vertically or horizontally has the same effect... so scrolling can begin immediately.
         m_currentDirection = Direction::Vertical;
         beginScroll(position);
@@ -218,13 +218,13 @@ void SlicingMouseTool::cursorIcon(const QPoint &currentPosition)
         if (m_currentDirection == Direction::Vertical)
         {
             index += 2;
-            axis = VERTICAL_AXIS;
+            axis = VerticalAxis;
             positionIncrement = currentPosition.y() - m_cursorIcon_lastPosition.y();
         }
         else if (m_currentDirection == Direction::Horizontal)
         {
             index += 0;
-            axis = HORIZONTAL_AXIS;
+            axis = HorizontalAxis;
             positionIncrement = currentPosition.x() - m_cursorIcon_lastPosition.x();
         }
         else { Q_ASSERT(false); }
@@ -253,7 +253,7 @@ void SlicingMouseTool::cursorIcon(const QPoint &currentPosition)
         }
         else
         { // No increment
-            index = CURSOR_ICON_DONT_UPDATE; // Do not touch the icon...
+            index = CursorIconDontUpdate; // Do not touch the icon...
         }
     }
     else
@@ -292,13 +292,13 @@ void SlicingMouseTool::cursorIcon(const QPoint &currentPosition)
 void SlicingMouseTool::beginCursorIcon(const QPoint &startPosition)
 {
     m_cursorIcon_lastPosition = startPosition;
-    m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
+    m_cursorIcon_lastIndex = CursorIconDontUpdate;
 }
 
 void SlicingMouseTool::unsetCursorIcon()
 {
     m_2DViewer->unsetCursor();
-    m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
+    m_cursorIcon_lastIndex = CursorIconDontUpdate;
     m_cursorIcon_lastPosition = QPoint(0,0);
 }
 
@@ -309,12 +309,12 @@ double SlicingMouseTool::scroll(const QPoint& currentPosition)
     double shift;
     if (m_currentDirection == Direction::Horizontal)
     {
-        axis = HORIZONTAL_AXIS;
+        axis = HorizontalAxis;
         shift = currentPosition.x() - m_startPosition.x();
     }
     else if (m_currentDirection == Direction::Vertical)
     {
-        axis = VERTICAL_AXIS;
+        axis = VerticalAxis;
         shift = currentPosition.y() - m_startPosition.y();
     }
     
@@ -353,7 +353,7 @@ double SlicingMouseTool::scroll(const QPoint& currentPosition)
 void SlicingMouseTool::beginScroll(const QPoint& startPosition)
 {
     Q_ASSERT(m_currentDirection != Direction::Undefined);
-    unsigned int axis = m_currentDirection == Direction::Horizontal ? HORIZONTAL_AXIS : VERTICAL_AXIS;
+    unsigned int axis = m_currentDirection == Direction::Horizontal ? HorizontalAxis : VerticalAxis;
     
     m_startLocation = getLocation(axis);
     m_startPosition = startPosition;
@@ -371,13 +371,13 @@ void SlicingMouseTool::beginScroll(const QPoint& startPosition)
         unsigned int rangeSize = std::max(1.0, getRangeSize(axis)); // Always greater than zero
         
         m_stepLength = windowLength / rangeSize;
-        if (m_stepLength > DEFAULT_MAXIMUM_STEP_LENGTH)
+        if (m_stepLength > DefaultMaximumStepLength)
         {
-            m_stepLength = DEFAULT_MAXIMUM_STEP_LENGTH;
+            m_stepLength = DefaultMaximumStepLength;
         }
-        else if (m_stepLength < DEFAULT_MINIMUM_STEP_LENGTH)
+        else if (m_stepLength < DefaultMinimumStepLength)
         {
-            m_stepLength = DEFAULT_MINIMUM_STEP_LENGTH;
+            m_stepLength = DefaultMinimumStepLength;
         }
     }
 }
@@ -417,7 +417,7 @@ SlicingMouseTool::Direction SlicingMouseTool::directionDetection(const QPoint& c
 void SlicingMouseTool::beginDirectionDetection(const QPoint& startPosition)
 {
     m_directionDetection_startPosition = startPosition;
-    m_directionDetection_stepLength = DEFAULT_DETECTION_STEP_LENGTH;
+    m_directionDetection_stepLength = DefaultDirectionStepLength;
 }
 
 }

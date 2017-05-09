@@ -47,7 +47,7 @@ There are two axes, accessed by the direction of the movement:
 The active axis can be chosen with the direction of the movement and the user may change the direction during the same drag movement (no button release) as many 
 times he or she wants.
 
-In the beginning the direction is not clear until a minimum distance (DEFAULT_DETECTION_STEP_LENGTH) is traveled. Nonetheless, when both axes are scrolling the 
+In the beginning the direction is not clear until a minimum distance (DefaultDirectionStepLength) is traveled. Nonetheless, when both axes are scrolling the 
 same thing, the vertical axis is assumed to be initially selected and thus the user can start scrolling immediately without having to travel the direction 
 detection distance.
 
@@ -64,7 +64,7 @@ One might find series with a few or many images; adapting to those situations is
 pixels required to travel in order to change an slice depend on the number of slices and the viewer size.
 
 The viewer size (width or length) is divided by the number of images of the current axis. Some situations may lead to very big or very small travel distances. 
-To overcome this, the value will always be within the bounds defined by DEFAULT_MINIMUM_STEP_LENGTH and DEFAULT_MAXIMUM_STEP_LENGTH.
+To overcome this, the value will always be within the bounds defined by DefaultMinimumStepLength and DefaultMaximumStepLength.
 
 See beginScroll().
 
@@ -114,7 +114,7 @@ They make use of a start position and a current position which is modified when:
         - When wrapping mouse around.
         - When direction detection transitions from undefined to vertical or 
           horizontal. \n
-          This means every time DEFAULT_DETECTION_STEP_LENGTH is traveled.
+          This means every time DefaultDirectionStepLength is traveled.
     - __Cursor icon__
         - On mouse press.
         - When wrapping mouse around.
@@ -156,7 +156,7 @@ See onMouseMove().
 
 Direction detection
 -------------------
-The direction vector from the start point to the current position is calculated. If its length is greater than the DEFAULT_DETECTION_STEP_LENGTH the direction 
+The direction vector from the start point to the current position is calculated. If its length is greater than the DefaultDirectionStepLength the direction 
 can be defined to be vertical or horizontal by looking at the greatest director vector component.
 
 However, if there's already a defined direction (m_currentDirection) the required travel distance on the opposite component is doubled. Thus, if the user 
@@ -282,9 +282,9 @@ private:
     /// \brief Last mouse or start position. Used to determine the scroll direction of the icon.
     QPoint m_cursorIcon_lastPosition = QPoint(0,0);
     /// \brief Last cursor icon index used, this variable is used to avoid futile cursor updates.
-    int m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
+    int m_cursorIcon_lastIndex = CursorIconDontUpdate;
     /// \brief Default value to avoid a cursor icon change.
-    static constexpr int CURSOR_ICON_DONT_UPDATE = -1;
+    static constexpr int CursorIconDontUpdate = -1;
     
     bool m_dragActive = false;
     
@@ -314,13 +314,13 @@ private:
     
     /// \name Distances in pixels
     //@{
-    static constexpr unsigned int DEFAULT_MINIMUM_STEP_LENGTH = 2;
-    static constexpr unsigned int DEFAULT_MAXIMUM_STEP_LENGTH = 64;
-    static constexpr unsigned int DEFAULT_DETECTION_STEP_LENGTH = 16;
+    static constexpr unsigned int DefaultMinimumStepLength = 2;
+    static constexpr unsigned int DefaultMaximumStepLength = 64;
+    static constexpr unsigned int DefaultDirectionStepLength = 16;
     //@}
     
-    static constexpr unsigned int VERTICAL_AXIS = 0;
-    static constexpr unsigned int HORIZONTAL_AXIS = 1;
+    static constexpr unsigned int VerticalAxis = 0;
+    static constexpr unsigned int HorizontalAxis = 1;
     
 };
 

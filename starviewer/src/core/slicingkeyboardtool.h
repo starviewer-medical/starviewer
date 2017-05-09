@@ -106,7 +106,7 @@ private:
      * 
      * \return Amount of unused scroll increment.
      */
-    double scroll(double increment, unsigned int axis = MAIN_AXIS, bool scrollLoopEnabled = false, bool volumeScrollEnabled = false);
+    double scroll(double increment, unsigned int axis = MainAxis, bool scrollLoopEnabled = false, bool volumeScrollEnabled = false);
     
     QTimer* m_timer = 0;
     
@@ -129,8 +129,8 @@ private:
     int m_keyAccumulator_minus = 0;
     //@}
     
-    static constexpr unsigned int MAIN_AXIS = 0;
-    static constexpr unsigned int SECONDARY_AXIS = 1;
+    static constexpr unsigned int MainAxis = 0;
+    static constexpr unsigned int SecondaryAxis = 1;
 };
 
 }

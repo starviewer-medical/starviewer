@@ -95,23 +95,23 @@ void SlicingKeyboardTool::reassignAxes()
     
     if (sliceable && phaseable) 
     {
-        setMode(MAIN_AXIS, SlicingMode::Slice);
-        setMode(SECONDARY_AXIS, SlicingMode::Phase);
+        setMode(MainAxis, SlicingMode::Slice);
+        setMode(SecondaryAxis, SlicingMode::Phase);
     }
     else if (sliceable && !phaseable)
     {
-        setMode(MAIN_AXIS, SlicingMode::Slice);
-        setMode(SECONDARY_AXIS, SlicingMode::None);
+        setMode(MainAxis, SlicingMode::Slice);
+        setMode(SecondaryAxis, SlicingMode::None);
     }
     else if (!sliceable && phaseable)
     {
-        setMode(MAIN_AXIS, SlicingMode::Phase);
-        setMode(SECONDARY_AXIS, SlicingMode::Phase);
+        setMode(MainAxis, SlicingMode::Phase);
+        setMode(SecondaryAxis, SlicingMode::Phase);
     }
     else
     {
-        setMode(MAIN_AXIS, SlicingMode::Slice);
-        setMode(SECONDARY_AXIS, SlicingMode::None);
+        setMode(MainAxis, SlicingMode::Slice);
+        setMode(SecondaryAxis, SlicingMode::None);
     }
 
 }
@@ -127,22 +127,22 @@ void SlicingKeyboardTool::processAccumulation()
     if (upDown != 0)
     {
         bool loop = false;
-        loop = loop || (getMode(MAIN_AXIS) == SlicingMode::Slice && m_config_sliceScrollLoop);
-        loop = loop || (getMode(MAIN_AXIS) == SlicingMode::Phase && m_config_phaseScrollLoop);
-        scroll(upDown, MAIN_AXIS, loop);
+        loop = loop || (getMode(MainAxis) == SlicingMode::Slice && m_config_sliceScrollLoop);
+        loop = loop || (getMode(MainAxis) == SlicingMode::Phase && m_config_phaseScrollLoop);
+        scroll(upDown, MainAxis, loop);
     }
     
     if (rightLeft != 0)
     {
         bool loop = false;
-        loop = loop || (getMode(SECONDARY_AXIS) == SlicingMode::Slice && m_config_sliceScrollLoop);
-        loop = loop || (getMode(SECONDARY_AXIS) == SlicingMode::Phase && m_config_phaseScrollLoop);
-        scroll(rightLeft, SECONDARY_AXIS, loop);
+        loop = loop || (getMode(SecondaryAxis) == SlicingMode::Slice && m_config_sliceScrollLoop);
+        loop = loop || (getMode(SecondaryAxis) == SlicingMode::Phase && m_config_phaseScrollLoop);
+        scroll(rightLeft, SecondaryAxis, loop);
     }
     
     if (plusMinus != 0)
     {
-        scroll(plusMinus, MAIN_AXIS, false, true);
+        scroll(plusMinus, MainAxis, false, true);
     }
     
     m_keyAccumulator_up = 0;
@@ -162,12 +162,12 @@ void SlicingKeyboardTool::readConfiguration()
 
 void SlicingKeyboardTool::onHomePress()
 {
-    setLocation(MAIN_AXIS, getMinimum(MAIN_AXIS));
+    setLocation(MainAxis, getMinimum(MainAxis));
 }
 
 void SlicingKeyboardTool::onEndPress()
 {
-    setLocation(MAIN_AXIS, getMaximum(MAIN_AXIS));
+    setLocation(MainAxis, getMaximum(MainAxis));
 }
 
 void SlicingKeyboardTool::onUpPress()
