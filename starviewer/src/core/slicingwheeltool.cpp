@@ -52,12 +52,6 @@ SlicingWheelTool::~SlicingWheelTool()
 
 void SlicingWheelTool::handleEvent(unsigned long eventID)
 {
-    //PERFORMANCE: configuration read on every little event...
-    if (readConfiguration()) 
-    { // configuration changed
-        reassignAxis();
-    }
-    
     if (eventID == vtkCommand::MouseWheelForwardEvent)
     {
         onWheelMoved(m_2DViewer->getWheelAngleDelta().y());
@@ -96,8 +90,6 @@ void SlicingWheelTool::reassignAxis()
     bool sliceable = getRangeSize(SlicingMode::Slice) > 1;
     bool phaseable = getRangeSize(SlicingMode::Phase) > 1;
     
-    readConfiguration();
-    
     if (sliceable && phaseable) 
     {
         setMode(MAIN_AXIS, SlicingMode::Slice);
@@ -122,25 +114,12 @@ void SlicingWheelTool::timeout()
     beginScroll();
 }
 
-bool SlicingWheelTool::readConfiguration()
+void SlicingWheelTool::readConfiguration()
 {
     Settings settings;
-    bool changed = false;
-    bool readValue = false;
-    
-    readValue = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
-    changed = changed || readValue != m_config_sliceScrollLoop;
-    m_config_sliceScrollLoop = readValue;
-    
-    readValue = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
-    changed = changed || readValue != m_config_phaseScrollLoop;
-    m_config_phaseScrollLoop = readValue;
-    
-    readValue = settings.getValue(CoreSettings::EnableQ2DViewerWheelVolumeScroll).toBool();
-    changed = changed || readValue != m_config_volumeScroll;
-    m_config_volumeScroll = readValue;
-    
-    return changed;
+    m_config_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
+    m_config_phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
+    m_config_volumeScroll = settings.getValue(CoreSettings::EnableQ2DViewerWheelVolumeScroll).toBool();
 }
 
 void SlicingWheelTool::onWheelMoved(int angleDelta)
@@ -290,6 +269,7 @@ double SlicingWheelTool::scroll(double increment)
 
 void SlicingWheelTool::beginScroll()
 {
+    readConfiguration();
     m_currentAxis = m_ctrlPressed || m_middleButtonToggle ? SECONDARY_AXIS : MAIN_AXIS;
     m_increment = 0;
     m_scrollLoop = false;

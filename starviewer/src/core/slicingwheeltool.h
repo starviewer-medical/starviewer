@@ -54,14 +54,11 @@ public:
     explicit SlicingWheelTool(QViewer *viewer, QObject *parent = 0);
     virtual ~SlicingWheelTool();
 
-    /// \brief Checks configuration changes and triggers wheel move events.
+    /// \brief Triggers wheel move event methods.
     virtual void handleEvent(unsigned long eventID) override;
 
 public slots:
-    /** \brief Reads configuration and sets the axes.
-     * 
-     * When called a reset is performed (beginScroll()).
-     */
+    /// \brief Assigns the axes modes for the current volume. A reset is performed (beginScroll()).
     virtual void reassignAxis() override;
     
 private slots:
@@ -69,11 +66,8 @@ private slots:
     void timeout();
     
 private:
-    /** \brief Reads settings and sets the m_config_* members.
-     * 
-     * \return true in case there has been a change in the m_config_* and the actual read settings.
-     */
-    bool readConfiguration();
+    /// \brief Reads settings and sets the m_config_* members.
+    void readConfiguration();
     
     /// \name Event handling
     //@{
@@ -142,7 +136,10 @@ private:
      *     - Loop configuration for the type of the selected axis.
      *     - Volume jump configuration.
      * 
+     * When called, the configuration is read.
+     * 
      * The accumulated increment is set to zero.
+     * 
      * This method shall be used when the movement finishes or when the behavior of the tool has to be changed.
      */
     void beginScroll();
