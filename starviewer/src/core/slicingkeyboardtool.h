@@ -61,26 +61,25 @@ public:
     explicit SlicingKeyboardTool(QViewer *viewer, QObject *parent = 0);
     virtual ~SlicingKeyboardTool();
     
-    /// \brief Checks for configuration changes and triggers key press event methods.
+    /// \brief Triggers key press event methods.
     virtual void handleEvent(unsigned long eventID) override;
     
 public slots:
-    /// \brief Reads configuration and sets the axes.
+    /// \brief Assigns the axes modes for the current volume.
     virtual void reassignAxis() override;
     
 private slots:
     /** \brief Process key accumulated events.
      * 
      * Call the scroll() for each key pair with the accumulated increment. Once executed the accumulated keys are zeroed and the timer stopped (single shot timer).
+     * 
+     * When called, the configuration is read.
      */
     void timeout();
 
 private:
-    /** \brief Reads settings and sets the m_config_* members.
-     * 
-     * \return true in case there has been a change in the m_config_* and the actual read settings.
-     */
-    bool readConfiguration();
+    /// \brief Reads settings and sets the m_config_* members.
+    void readConfiguration();
     
     /// \name Event handling
     /// Except home and end that trigger an immediate action. Key events are accumulated to a counter.

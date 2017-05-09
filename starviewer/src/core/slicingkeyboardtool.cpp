@@ -49,12 +49,6 @@ SlicingKeyboardTool::~SlicingKeyboardTool()
 
 void SlicingKeyboardTool::handleEvent(unsigned long eventID)
 {
-    //PERFORMANCE: configuration read on every little event...
-    if (readConfiguration()) 
-    { // configuration changed
-        reassignAxis();
-    }
-    
     if (eventID == vtkCommand::KeyPressEvent)
     {
         QString keySymbol = m_2DViewer->getInteractor()->GetKeySym();
@@ -99,8 +93,6 @@ void SlicingKeyboardTool::reassignAxis()
     bool sliceable = getRangeSize(SlicingMode::Slice) > 1;
     bool phaseable = getRangeSize(SlicingMode::Phase) > 1;
     
-    readConfiguration();
-    
     if (sliceable && phaseable) 
     {
         setMode(MAIN_AXIS, SlicingMode::Slice);
@@ -126,6 +118,8 @@ void SlicingKeyboardTool::reassignAxis()
 
 void SlicingKeyboardTool::timeout()
 {
+    readConfiguration();
+    
     int upDown = m_keyAccumulator_up - m_keyAccumulator_down;
     int rightLeft = m_keyAccumulator_right - m_keyAccumulator_left;
     int plusMinus = m_keyAccumulator_plus - m_keyAccumulator_minus;
@@ -159,21 +153,11 @@ void SlicingKeyboardTool::timeout()
     m_keyAccumulator_minus = 0;
 }
 
-bool SlicingKeyboardTool::readConfiguration()
+void SlicingKeyboardTool::readConfiguration()
 {
     Settings settings;
-    bool changed = false;
-    bool readValue = false;
-    
-    readValue = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
-    changed = changed || readValue != m_config_sliceScrollLoop;
-    m_config_sliceScrollLoop = readValue;
-    
-    readValue = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
-    changed = changed || readValue != m_config_phaseScrollLoop;
-    m_config_phaseScrollLoop = readValue;
-    
-    return changed;
+    m_config_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
+    m_config_phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
 }
 
 void SlicingKeyboardTool::onHomePress()
