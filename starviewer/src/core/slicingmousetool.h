@@ -241,9 +241,9 @@ private:
      * \sa beginCursorIcon()
      * \sa unsetCursorIcon()
     */
-    void cursorIcon(const QPoint &position);
-    /// \brief Changes the start po.
-    void beginCursorIcon(const QPoint &position);
+    void cursorIcon(const QPoint &currentPosition);
+    /// \brief Changes the start position.
+    void beginCursorIcon(const QPoint &startPosition);
     /// \brief Unsets the cursor icon and updates the index of the last cursor.
     void unsetCursorIcon();
     

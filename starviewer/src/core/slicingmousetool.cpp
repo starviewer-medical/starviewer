@@ -227,7 +227,7 @@ void SlicingMouseTool::onMouseRelease(const QPoint &position)
     unsetCursorIcon();
 }
 
-void SlicingMouseTool::cursorIcon(const QPoint &position)
+void SlicingMouseTool::cursorIcon(const QPoint &currentPosition)
 {
     int index = 0;
     if (m_currentDirection != Direction::Undefined)
@@ -239,13 +239,13 @@ void SlicingMouseTool::cursorIcon(const QPoint &position)
         {
             index += 2;
             axis = VERTICAL_AXIS;
-            positionIncrement = position.y() - m_cursorIcon_lastPosition.y();
+            positionIncrement = currentPosition.y() - m_cursorIcon_lastPosition.y();
         }
         else if (m_currentDirection == Direction::Horizontal)
         {
             index += 0;
             axis = HORIZONTAL_AXIS;
-            positionIncrement = position.x() - m_cursorIcon_lastPosition.x();
+            positionIncrement = currentPosition.x() - m_cursorIcon_lastPosition.x();
         }
         else { Q_ASSERT(false); }
         
@@ -306,12 +306,12 @@ void SlicingMouseTool::cursorIcon(const QPoint &position)
         }
         m_cursorIcon_lastIndex = index;
     }
-    m_cursorIcon_lastPosition = position;
+    m_cursorIcon_lastPosition = currentPosition;
 }
 
-void SlicingMouseTool::beginCursorIcon(const QPoint &position)
+void SlicingMouseTool::beginCursorIcon(const QPoint &startPosition)
 {
-    m_cursorIcon_lastPosition = position;
+    m_cursorIcon_lastPosition = startPosition;
     m_cursorIcon_lastIndex = CURSOR_ICON_DONT_UPDATE;
 }
 
