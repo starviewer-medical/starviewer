@@ -75,7 +75,7 @@ private slots:
      * 
      * When called, the configuration is read.
      */
-    void timeout();
+    void processAccumulation();
 
 private:
     /// \brief Reads settings and sets the m_config_* members.

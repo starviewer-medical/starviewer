@@ -37,7 +37,7 @@ SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent) : Sli
     m_timer = new QTimer();
     m_timer->setSingleShot(true);
     m_timer->setInterval(10); // Just enough to catch all accumulated keyboard events.
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(processAccumulation()));
     
     reassignAxes();
 }
@@ -116,7 +116,7 @@ void SlicingKeyboardTool::reassignAxes()
 
 }
 
-void SlicingKeyboardTool::timeout()
+void SlicingKeyboardTool::processAccumulation()
 {
     readConfiguration();
     
