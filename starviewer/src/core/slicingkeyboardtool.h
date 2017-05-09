@@ -116,18 +116,8 @@ private:
     bool m_config_phaseScrollLoop  = false;
     //@}
     
-    /** 
-     * \name Key accumulator counters
-     * Store the number of keys pressed until the timeout is expired and they are processed
-     */
-    //@{
-    int m_keyAccumulator_up = 0;
-    int m_keyAccumulator_down = 0;
-    int m_keyAccumulator_left = 0;
-    int m_keyAccumulator_right = 0;
-    int m_keyAccumulator_plus = 0;
-    int m_keyAccumulator_minus = 0;
-    //@}
+    /// \brief Store the number of keys pressed until the timeout is expired and they are processed
+    struct { int up, down, left, right, plus, minus; } m_keyAccumulator = {.up = 0, .down = 0, .left = 0, .right = 0, .plus = 0, .minus = 0};
     
     static constexpr unsigned int MainAxis = 0;
     static constexpr unsigned int SecondaryAxis = 1;

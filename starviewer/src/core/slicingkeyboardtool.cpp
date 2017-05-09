@@ -120,9 +120,9 @@ void SlicingKeyboardTool::processAccumulation()
 {
     readConfiguration();
     
-    int upDown = m_keyAccumulator_up - m_keyAccumulator_down;
-    int rightLeft = m_keyAccumulator_right - m_keyAccumulator_left;
-    int plusMinus = m_keyAccumulator_plus - m_keyAccumulator_minus;
+    int upDown = m_keyAccumulator.up - m_keyAccumulator.down;
+    int rightLeft = m_keyAccumulator.right - m_keyAccumulator.left;
+    int plusMinus = m_keyAccumulator.plus - m_keyAccumulator.minus;
     
     if (upDown != 0)
     {
@@ -145,12 +145,12 @@ void SlicingKeyboardTool::processAccumulation()
         scroll(plusMinus, MainAxis, false, true);
     }
     
-    m_keyAccumulator_up = 0;
-    m_keyAccumulator_down = 0;
-    m_keyAccumulator_left = 0;
-    m_keyAccumulator_right = 0;
-    m_keyAccumulator_plus = 0;
-    m_keyAccumulator_minus = 0;
+    m_keyAccumulator.up = 0;
+    m_keyAccumulator.down = 0;
+    m_keyAccumulator.left = 0;
+    m_keyAccumulator.right = 0;
+    m_keyAccumulator.plus = 0;
+    m_keyAccumulator.minus = 0;
 }
 
 void SlicingKeyboardTool::readConfiguration()
@@ -172,37 +172,37 @@ void SlicingKeyboardTool::onEndPress()
 
 void SlicingKeyboardTool::onUpPress()
 {
-    m_keyAccumulator_up++;
+    m_keyAccumulator.up++;
     m_timer->start();
 }
 
 void SlicingKeyboardTool::onDownPress()
 {
-    m_keyAccumulator_down++;
+    m_keyAccumulator.down++;
     m_timer->start();
 }
 
 void SlicingKeyboardTool::onLeftPress()
 {
-    m_keyAccumulator_left++;
+    m_keyAccumulator.left++;
     m_timer->start();
 }
 
 void SlicingKeyboardTool::onRightPress()
 {
-    m_keyAccumulator_right++;
+    m_keyAccumulator.right++;
     m_timer->start();
 }
 
 void SlicingKeyboardTool::onPlusPress()
 {
-    m_keyAccumulator_plus++;
+    m_keyAccumulator.plus++;
     m_timer->start();
 }
 
 void SlicingKeyboardTool::onMinusPress()
 {
-    m_keyAccumulator_minus++;
+    m_keyAccumulator.minus++;
     m_timer->start();
 }
 
