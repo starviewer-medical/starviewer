@@ -195,17 +195,14 @@ public:
     explicit SlicingMouseTool(QViewer *viewer, QObject *parent = 0);
     virtual ~SlicingMouseTool();
     
-    /** \brief Checks configuration changes and triggers move, press and release events.
+    /** \brief Triggers move, press and release events.
      * 
      * \warning The release event happens whenever the right or left mouse buttons are released in order overcome the situation where the patient menu opening blocks receiving the release event of the left button.
      */
     virtual void handleEvent(unsigned long eventID) override;
     
 public slots:
-    /** \brief Reads settings and sets the m_config_* members.
-     * 
-     * \return true in case there has been a change in the m_config_* and the actual read settings.
-     */
+    /// \brief Assigns the axes modes for the current volume.
     virtual void reassignAxis() override;
 
 protected:
@@ -213,11 +210,8 @@ protected:
     enum class Direction {Undefined, Vertical, Horizontal};
    
 private:
-    /** \brief Reads settings and sets the m_config_* members.
-     * 
-     * \return true in case there has been a change in the m_config_* and the actual read settings.
-     */
-    bool readConfiguration();
+    /// \brief Reads settings and sets the m_config_* members.
+    void readConfiguration();
     
     ///\name Event handling
     //@{

@@ -40,12 +40,6 @@ SlicingMouseTool::~SlicingMouseTool()
 
 void SlicingMouseTool::handleEvent(unsigned long eventID)
 {
-    //PERFORMANCE: configuration read on every little event...
-    if (readConfiguration()) 
-    { // configuration changed
-        reassignAxis();
-    }
-    
     if (eventID == vtkCommand::LeftButtonPressEvent)
     {
         // To Qt device independant pixels
@@ -72,8 +66,6 @@ void SlicingMouseTool::reassignAxis()
     bool sliceable = getRangeSize(SlicingMode::Slice) > 1;
     bool phaseable = getRangeSize(SlicingMode::Phase) > 1;
     
-    readConfiguration();
-    
     if (sliceable && phaseable) 
     {
         setMode(VERTICAL_AXIS, SlicingMode::Slice);
@@ -91,31 +83,19 @@ void SlicingMouseTool::reassignAxis()
     }
 }
 
-bool SlicingMouseTool::readConfiguration()
+void SlicingMouseTool::readConfiguration()
 {
     Settings settings;
-    bool changed = false;
-    bool readValue = false;
-    
-    readValue = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
-    changed = changed || readValue != m_config_sliceScrollLoop;
-    m_config_sliceScrollLoop = readValue;
-    
-    readValue = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
-    changed = changed || readValue != m_config_phaseScrollLoop;
-    m_config_phaseScrollLoop = readValue;
-    
-    readValue = settings.getValue(CoreSettings::EnableQ2DViewerMouseWraparound).toBool();
-    changed = changed || readValue != m_config_wraparound;
-    m_config_wraparound = readValue;
-    
-    return changed;
+    m_config_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();;
+    m_config_phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();;
+    m_config_wraparound = settings.getValue(CoreSettings::EnableQ2DViewerMouseWraparound).toBool();;
 }
 
 void SlicingMouseTool::onMousePress(const QPoint &position)
 {
     m_dragActive = true;
     
+    readConfiguration();
     beginCursorIcon(position);
     beginDirectionDetection(position);
     
