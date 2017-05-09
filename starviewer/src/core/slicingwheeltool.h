@@ -63,7 +63,7 @@ public slots:
     
 private slots:
     /// \brief Zeroes the increments and unsets cursor icon.
-    void timeout();
+    void resetTool();
     
 private:
     /// \brief Reads settings and sets the m_config_* members.

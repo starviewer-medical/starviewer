@@ -39,8 +39,8 @@ SlicingWheelTool::SlicingWheelTool(QViewer *viewer, QObject *parent) : SlicingTo
     
     m_timer = new QTimer();
     m_timer->setSingleShot(true);
-    m_timer->setInterval(150 + 75); // Human vision reaction time plus a margin
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
+    m_timer->setInterval(275); // Human vision reaction time plus a margin http://www.humanbenchmark.com/tests/reactiontime/
+    connect(m_timer, SIGNAL(timeout()), this, SLOT(resetTool()));
     
     reassignAxes();
 }
@@ -108,7 +108,7 @@ void SlicingWheelTool::reassignAxes()
     beginScroll();
 }
 
-void SlicingWheelTool::timeout()
+void SlicingWheelTool::resetTool()
 {
     unsetCursorIcon();
     beginScroll();
