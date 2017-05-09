@@ -121,16 +121,16 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
         {
             // Have we made a move wrap arround on the previous movement?
             if (
-                (m_wraparound_wrappedToLeft && position.x() < m_wraparound_positionBeforeWrapping.x()) ||
-                (m_wraparound_wrappedToRight && position.x() > m_wraparound_positionBeforeWrapping.x()) ||
-                (m_wraparound_wrappedToTop && position.y() > m_wraparound_positionBeforeWrapping.y()) ||
-                (m_wraparound_wrappedToBottom && position.y() < m_wraparound_positionBeforeWrapping.y())
+                (m_wraparound.wrappedToLeft && position.x() < m_wraparound.positionBeforeWrapping.x()) ||
+                (m_wraparound.wrappedToRight && position.x() > m_wraparound.positionBeforeWrapping.x()) ||
+                (m_wraparound.wrappedToTop && position.y() > m_wraparound.positionBeforeWrapping.y()) ||
+                (m_wraparound.wrappedToBottom && position.y() < m_wraparound.positionBeforeWrapping.y())
             )
             {
-                m_wraparound_wrappedToLeft = false;
-                m_wraparound_wrappedToRight = false;
-                m_wraparound_wrappedToTop = false;
-                m_wraparound_wrappedToBottom = false;
+                m_wraparound.wrappedToLeft = false;
+                m_wraparound.wrappedToRight = false;
+                m_wraparound.wrappedToTop = false;
+                m_wraparound.wrappedToBottom = false;
                 beginCursorIcon(position);
                 beginDirectionDetection(position);
                 if (m_currentDirection != Direction::Undefined)
@@ -147,28 +147,28 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
             if (cursor.x() < topLeft.x())
             {
                 cursor.setX(bottomRight.x());
-                m_wraparound_wrappedToRight = true;
+                m_wraparound.wrappedToRight = true;
             }
             else if (cursor.x() > bottomRight.x())
             {
                 cursor.setX(topLeft.x());
-                m_wraparound_wrappedToLeft = true;
+                m_wraparound.wrappedToLeft = true;
             }
             
             if (cursor.y() < topLeft.y())
             {
                 cursor.setY(bottomRight.y());
-                m_wraparound_wrappedToBottom = true;
+                m_wraparound.wrappedToBottom = true;
             }
             else if (cursor.y() > bottomRight.y())
             {
                 cursor.setY(topLeft.y());
-                m_wraparound_wrappedToTop = true;
+                m_wraparound.wrappedToTop = true;
             }
             
-            if (m_wraparound_wrappedToLeft || m_wraparound_wrappedToRight || m_wraparound_wrappedToTop ||m_wraparound_wrappedToBottom) 
+            if (m_wraparound.wrappedToLeft || m_wraparound.wrappedToRight || m_wraparound.wrappedToTop ||m_wraparound.wrappedToBottom) 
             { // Change the position of the mouseS
-                m_wraparound_positionBeforeWrapping = position;
+                m_wraparound.positionBeforeWrapping = position;
                 QCursor::setPos(cursor);
             }
         }
@@ -200,10 +200,10 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
 void SlicingMouseTool::onMouseRelease(const QPoint &position)
 {
     m_dragActive = false;
-    m_wraparound_wrappedToLeft = false;
-    m_wraparound_wrappedToRight = false;
-    m_wraparound_wrappedToTop = false;
-    m_wraparound_wrappedToBottom = false;
+    m_wraparound.wrappedToLeft = false;
+    m_wraparound.wrappedToRight = false;
+    m_wraparound.wrappedToTop = false;
+    m_wraparound.wrappedToBottom = false;
     unsetCursorIcon();
 }
 
@@ -397,10 +397,10 @@ SlicingMouseTool::Direction SlicingMouseTool::directionDetection(const QPoint& c
         yWeight = 1;
     }
     
-    double vectorX = std::abs((currentPosition.x() - m_directionDetection_startPosition.x()) * xWeight);
-    double vectorY = std::abs((currentPosition.y() - m_directionDetection_startPosition.y()) * yWeight);
+    double vectorX = std::abs((currentPosition.x() - m_directionDetection.startPosition.x()) * xWeight);
+    double vectorY = std::abs((currentPosition.y() - m_directionDetection.startPosition.y()) * yWeight);
     double vectorLength = std::hypot(vectorX, vectorY);
-    if (vectorLength > m_directionDetection_stepLength)
+    if (vectorLength > m_directionDetection.stepLength)
     {
         if (vectorX > vectorY)
         {
@@ -416,8 +416,8 @@ SlicingMouseTool::Direction SlicingMouseTool::directionDetection(const QPoint& c
 
 void SlicingMouseTool::beginDirectionDetection(const QPoint& startPosition)
 {
-    m_directionDetection_startPosition = startPosition;
-    m_directionDetection_stepLength = DefaultDirectionStepLength;
+    m_directionDetection.startPosition = startPosition;
+    m_directionDetection.stepLength = DefaultDirectionStepLength;
 }
 
 }

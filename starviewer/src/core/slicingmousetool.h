@@ -288,16 +288,22 @@ private:
     
     bool m_dragActive = false;
     
-    /** \name Mouse wraparound
-     * Variables used to detect the event resulting of having changed the cursor position.
-     */
-    //@{
-    bool m_wraparound_wrappedToLeft = false;
-    bool m_wraparound_wrappedToRight = false;
-    bool m_wraparound_wrappedToTop = false;
-    bool m_wraparound_wrappedToBottom = false;
-    QPoint m_wraparound_positionBeforeWrapping = QPoint(0,0);
-    //@}
+    /// \brief Mouse wraparaound information sed to detect the event resulting of having changed the cursor position.
+    struct 
+    {
+        bool wrappedToLeft; 
+        bool wrappedToRight;
+        bool wrappedToTop;
+        bool wrappedToBottom;
+        QPoint positionBeforeWrapping;
+    } 
+    m_wraparound = {
+        .wrappedToLeft = false, 
+        .wrappedToRight = false,
+        .wrappedToTop = false, 
+        .wrappedToBottom = false,
+        .positionBeforeWrapping = QPoint(0,0)
+    };
     
     /// \name Current scroll status
     //@{
@@ -306,8 +312,12 @@ private:
     double m_startLocation = 0;
     bool m_scrollLoop = false;
     
-    double m_directionDetection_stepLength = 0;
-    QPoint m_directionDetection_startPosition = QPoint(0,0);
+    struct 
+    {
+        double stepLength = 0;
+        QPoint startPosition = QPoint(0,0);
+    } 
+    m_directionDetection = {};
     
     Direction m_currentDirection = Direction::Undefined;
     //@}
