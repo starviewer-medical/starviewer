@@ -203,7 +203,7 @@ public:
     
 public slots:
     /// \brief Assigns the axes modes for the current volume.
-    virtual void reassignAxis() override;
+    virtual void reassignAxes() override;
 
 protected:
     /// \brief Direction of the mouse movement.

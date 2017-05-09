@@ -62,7 +62,7 @@ However if you need to direct interaction without dealing with axes, you may use
     - setLocation(SlicingMode mode, double location)
     - incrementLocation(SlicingMode mode, double shift)
 
-When a volume is loaded or there's another major change to the viewer like a change on thick slab, etc... you can react to it by implementing the reassignAxis
+When a volume is loaded or there's another major change to the viewer like a change on thick slab, etc... you can react to it by implementing the reassignAxes
 function. Then you can decide which function assign on each axis depending on the context (for example, in a series that has only phases you might want to 
 scroll phases on booth axes).
 
@@ -206,7 +206,7 @@ public:
     
 public slots:
     /// \brief Reimplement to react to major changes like having a new volume, changing thich slab thickness, view plane, etc...
-    virtual void reassignAxis() = 0;
+    virtual void reassignAxes() = 0;
     
 protected:
     /// \brief Showing the minimum or maximum when a new volume is loaded.

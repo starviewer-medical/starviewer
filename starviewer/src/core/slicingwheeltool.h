@@ -59,7 +59,7 @@ public:
 
 public slots:
     /// \brief Assigns the axes modes for the current volume. A reset is performed (beginScroll()).
-    virtual void reassignAxis() override;
+    virtual void reassignAxes() override;
     
 private slots:
     /// \brief Zeroes the increments and unsets cursor icon.

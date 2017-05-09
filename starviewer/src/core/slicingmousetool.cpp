@@ -31,7 +31,7 @@ namespace udg {
 SlicingMouseTool::SlicingMouseTool(QViewer *viewer, QObject *parent) : SlicingTool(viewer, parent)
 {
     m_toolName = "SlicingMouseTool";
-    reassignAxis();
+    reassignAxes();
 }
 
 SlicingMouseTool::~SlicingMouseTool()
@@ -60,7 +60,7 @@ void SlicingMouseTool::handleEvent(unsigned long eventID)
     }
 }
 
-void SlicingMouseTool::reassignAxis()
+void SlicingMouseTool::reassignAxes()
 {
     setNumberOfAxes(2);
     bool sliceable = getRangeSize(SlicingMode::Slice) > 1;

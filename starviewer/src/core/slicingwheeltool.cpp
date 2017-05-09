@@ -42,7 +42,7 @@ SlicingWheelTool::SlicingWheelTool(QViewer *viewer, QObject *parent) : SlicingTo
     m_timer->setInterval(150 + 75); // Human vision reaction time plus a margin
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
     
-    reassignAxis();
+    reassignAxes();
 }
 
 SlicingWheelTool::~SlicingWheelTool()
@@ -84,7 +84,7 @@ void SlicingWheelTool::handleEvent(unsigned long eventID)
     }
 }
 
-void SlicingWheelTool::reassignAxis()
+void SlicingWheelTool::reassignAxes()
 {
     setNumberOfAxes(2);
     bool sliceable = getRangeSize(SlicingMode::Slice) > 1;

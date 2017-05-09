@@ -39,7 +39,7 @@ SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent) : Sli
     m_timer->setInterval(10); // Just enough to catch all accumulated keyboard events.
     connect(m_timer, SIGNAL(timeout()), this, SLOT(timeout()));
     
-    reassignAxis();
+    reassignAxes();
 }
 
 SlicingKeyboardTool::~SlicingKeyboardTool()
@@ -87,7 +87,7 @@ void SlicingKeyboardTool::handleEvent(unsigned long eventID)
     }
 }
 
-void SlicingKeyboardTool::reassignAxis()
+void SlicingKeyboardTool::reassignAxes()
 {
     setNumberOfAxes(2);
     bool sliceable = getRangeSize(SlicingMode::Slice) > 1;

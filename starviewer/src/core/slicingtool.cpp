@@ -34,9 +34,9 @@ SlicingTool::SlicingTool(QViewer *viewer, QObject *parent) : Tool(viewer, parent
     setNumberOfAxes(0);
     
     // The number of axes might change on volume changed.
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reassignAxis()));
-    connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(reassignAxis()));
-    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(reassignAxis())); // Sagittal, axial, coronal, swivel orientation change...
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reassignAxes()));
+    connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(reassignAxes()));
+    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(reassignAxes())); // Sagittal, axial, coronal, swivel orientation change...
 }
 
 SlicingTool::~SlicingTool()
