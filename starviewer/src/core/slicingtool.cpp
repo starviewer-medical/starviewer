@@ -110,20 +110,24 @@ double SlicingTool::setLocation(SlicingMode mode, double location)
     double newLocation;
     
     if (location <= min + MathTools::Epsilon)
-    { // Underflow, or very close albeit not exceeding the lower bound.
+    { 
+        // Underflow, or very close albeit not exceeding the lower bound.
         newLocation = min;
     }
     else if (location >= max - MathTools::Epsilon)
-    { // Overflow, or very close albeit not exceeding the upper bound.
+    { 
+        // Overflow, or very close albeit not exceeding the upper bound.
         newLocation = max;
     }
     else
-    { // Within the limits
+    { 
+        // Within the limits
         newLocation = location;
     }
 
-    if (min <= max) // Interval width greater than zero. Changing position feasible.
+    if (min <= max)
     {
+        // Interval width greater than zero. Changing position feasible.
         if (mode == SlicingMode::Slice)
         {
             newLocation = std::round(newLocation);
@@ -144,11 +148,13 @@ double SlicingTool::setLocation(SlicingMode mode, double location)
                 Volume* nextVolume = volumes.at(newLocation); // Volume must be found in the list.
                 QViewerCommand* command;
                 if (nextVolume->getNumberOfSlicesPerPhase() > 1)
-                { // Multiple slices per phase
+                {
+                    // Multiple slices per phase
                     command = new ChangeSliceQViewerCommand(m_2DViewer, m_volumeInitialPositionToMaximum ? ChangeSliceQViewerCommand::SlicePosition::MaximumSlice : ChangeSliceQViewerCommand::SlicePosition::MinimumSlice);
                 }
                 else
-                { // One slice per phase
+                {
+                    // One slice per phase
                     command = new ChangePhaseQViewerCommand(m_2DViewer, m_volumeInitialPositionToMaximum ? ChangePhaseQViewerCommand::PhasePosition::MaximumPhase : ChangePhaseQViewerCommand::PhasePosition::MinimumPhase);
                 }
                 m_2DViewer->setInputAsynchronously(nextVolume, command);

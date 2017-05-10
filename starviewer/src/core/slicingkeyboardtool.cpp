@@ -214,7 +214,8 @@ double SlicingKeyboardTool::scroll(double increment, unsigned int axis, bool scr
     // When different, means a limit is reached.
     
     if (unusedIncrement < -0.5 -MathTools::Epsilon)
-    { // Lower limit reached
+    {
+        // Lower limit reached
         if (scrollLoopEnabled)
         {
             unusedIncrement = setLocation(axis, getMaximum(axis));
@@ -226,7 +227,8 @@ double SlicingKeyboardTool::scroll(double increment, unsigned int axis, bool scr
             if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
             {
                 if (getLocation(SlicingMode::Volume) > getMinimum(SlicingMode::Volume) +MathTools::Epsilon)
-                { // Not at first volume
+                {
+                    // Not at first volume
                     m_volumeInitialPositionToMaximum = true;
                     unusedIncrement = incrementLocation(SlicingMode::Volume, -1);
                 }
@@ -234,7 +236,8 @@ double SlicingKeyboardTool::scroll(double increment, unsigned int axis, bool scr
         }
     }
     else if (unusedIncrement > +0.5 +MathTools::Epsilon)
-    { // Upper limit reached
+    {
+        // Upper limit reached
         if (scrollLoopEnabled)
         {
             unusedIncrement = setLocation(axis, getMinimum(axis));

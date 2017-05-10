@@ -143,7 +143,8 @@ private:
      * This method shall be used when the movement finishes or when the behavior of the tool has to be changed.
      */
     void beginScroll();
-    
+
+private:
     QTimer* m_timer;
     
     /// \name Settings

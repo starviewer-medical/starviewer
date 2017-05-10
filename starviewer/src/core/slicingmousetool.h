@@ -271,7 +271,8 @@ private:
     Direction directionDetection(const QPoint& currentPosition) const;
     /// \brief Sets the start mouse position from where the direction will be detected.
     void beginDirectionDetection(const QPoint& startPosition);
-    
+
+private:    
     /// \name Settings
     //@{
     bool m_config_sliceScrollLoop;

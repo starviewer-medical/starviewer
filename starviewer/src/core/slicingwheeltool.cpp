@@ -135,7 +135,8 @@ void SlicingWheelTool::onWheelMoved(int angleDelta)
         m_increment = scroll(m_increment);
         
         if (m_increment > +0.5 +MathTools::Epsilon || m_increment < -0.5 -MathTools::Epsilon)
-        { // Upper or lower limit reached
+        {
+            // Upper or lower limit reached
             cursorIcon(m_increment);
             beginScroll();
         }
@@ -172,12 +173,14 @@ void SlicingWheelTool::cursorIcon(double increment)
     int index = 0;
     
     if (getMode(m_currentAxis) == SlicingMode::Phase)
-    { // Phase mode
+    {
+        // Phase mode
         index += 4;
     }
     
     if (increment > MathTools::Epsilon) 
-    { // Positive increment
+    {
+        // Positive increment
         index += 0;
         if (getLocation(m_currentAxis) >= getMaximum(m_currentAxis) - MathTools::Epsilon)
         { // Maximum limit reached
@@ -185,20 +188,24 @@ void SlicingWheelTool::cursorIcon(double increment)
         }
     }
     else if (increment < -MathTools::Epsilon) 
-    { // Negative increment
+    {
+        // Negative increment
         index += 1;
         if (getMinimum(m_currentAxis) + MathTools::Epsilon  >= getLocation(m_currentAxis))
-        { // Minimum limit reached
+        {
+            // Minimum limit reached
             index += 2;
         }
     }
     else
-    { // No increment
+    {
+        // No increment
         index = CursorIconDontUpdate; // Do not touch the icon...
     }
 
     if (m_cursorIcon_lastIndex != index)
-    { // Cursor modified only when it really changes, not on every little move.
+    {
+        // Cursor modified only when it really changes, not on every little move.
         switch (index)
         {
             case 0:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/wheel-slice-up.svg"))); break;
@@ -228,7 +235,8 @@ double SlicingWheelTool::scroll(double increment)
     // When different, means a limit is reached.
     
     if (unusedIncrement < -0.5 -MathTools::Epsilon)
-    { // Lower limit reached
+    {
+        // Lower limit reached
         if (m_scrollLoop)
         {
             unusedIncrement = setLocation(m_currentAxis, getMaximum(m_currentAxis));
@@ -240,7 +248,8 @@ double SlicingWheelTool::scroll(double increment)
             if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
             {
                 if (getLocation(SlicingMode::Volume) > getMinimum(SlicingMode::Volume) +MathTools::Epsilon)
-                { // Not at first volume
+                {
+                    // Not at first volume
                     m_volumeInitialPositionToMaximum = true;
                     unusedIncrement = incrementLocation(SlicingMode::Volume, -1);
                 }
@@ -248,7 +257,8 @@ double SlicingWheelTool::scroll(double increment)
         }
     }
     else if (unusedIncrement > +0.5 +MathTools::Epsilon)
-    { // Upper limit reached
+    {
+        // Upper limit reached
         if (m_scrollLoop)
         {
             unusedIncrement = setLocation(m_currentAxis, getMinimum(m_currentAxis));
@@ -260,7 +270,8 @@ double SlicingWheelTool::scroll(double increment)
             if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient() && m_2DViewer->getMainInput()->getPatient()->getVolumesList().indexOf(m_2DViewer->getMainInput()) >= 0) 
             {
                 if (getLocation(SlicingMode::Volume) < getMaximum(SlicingMode::Volume) -MathTools::Epsilon)
-                { // Not at the last volume
+                {
+                    // Not at the last volume
                     m_volumeInitialPositionToMaximum = false;
                     unusedIncrement = incrementLocation(SlicingMode::Volume, +1);
                 }

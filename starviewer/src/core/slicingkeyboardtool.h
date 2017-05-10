@@ -107,7 +107,8 @@ private:
      * \return Amount of unused scroll increment.
      */
     double scroll(double increment, unsigned int axis = MainAxis, bool scrollLoopEnabled = false, bool volumeScrollEnabled = false);
-    
+
+private:
     QTimer* m_timer;
     
     ///\name Settings

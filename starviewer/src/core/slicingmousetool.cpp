@@ -104,7 +104,8 @@ void SlicingMouseTool::onMousePress(const QPoint &position)
     beginDirectionDetection(position);
     
     if (getMode(VerticalAxis) == getMode(HorizontalAxis))
-    { // Scrolling vertically or horizontally has the same effect... so scrolling can begin immediately.
+    {
+        // Scrolling vertically or horizontally has the same effect... so scrolling can begin immediately.
         m_currentDirection = Direction::Vertical;
         beginScroll(position);
     }
@@ -171,7 +172,8 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
             }
             
             if (m_wraparound.wrappedToLeft || m_wraparound.wrappedToRight || m_wraparound.wrappedToTop ||m_wraparound.wrappedToBottom) 
-            { // Change the position of the mouseS
+            { 
+                // Change the position of the mouseS
                 m_wraparound.positionBeforeWrapping = position;
                 QCursor::setPos(cursor);
             }
@@ -231,15 +233,20 @@ void SlicingMouseTool::cursorIcon(const QPoint &currentPosition)
             axis = HorizontalAxis;
             positionIncrement = currentPosition.x() - m_cursorIcon_lastPosition.x();
         }
-        else { Q_ASSERT(false); }
+        else 
+        {
+            Q_ASSERT(false);
+        }
         
         if (getMode(axis) == SlicingMode::Phase)
-        { // Phase mode
+        {
+            // Phase mode
             index += 8;
         }
         
         if (positionIncrement > MathTools::Epsilon) 
-        { // Positive increment
+        {
+            // Positive increment
             index += 1;
             if (getLocation(axis) >= getMaximum(axis) - MathTools::Epsilon)
             { // Maximum limit reached
@@ -248,15 +255,18 @@ void SlicingMouseTool::cursorIcon(const QPoint &currentPosition)
             
         }
         else if (positionIncrement < -MathTools::Epsilon) 
-        { // Negative increment
+        {
+            // Negative increment
             index += 0;
             if (getMinimum(axis) + MathTools::Epsilon  >= getLocation(axis))
-            { // Minimum limit reached
+            {
+                // Minimum limit reached
                 index += 4;
             }
         }
         else
-        { // No increment
+        {
+            // No increment
             index = CursorIconDontUpdate; // Do not touch the icon...
         }
     }
@@ -266,7 +276,8 @@ void SlicingMouseTool::cursorIcon(const QPoint &currentPosition)
     }
 
     if (m_cursorIcon_lastIndex != index)
-    { // Cursor modified only when it really changes, not on every little move.
+    {
+        // Cursor modified only when it really changes, not on every little move.
         switch (index)
         {
             case 0:  m_2DViewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll-slice-left.svg"))); break;
@@ -335,7 +346,8 @@ double SlicingMouseTool::scroll(const QPoint& currentPosition)
     
     // Location and new location differ more than 1 (where rounding happens) this means a limit is reached.
     if (location < newLocation -0.5 -MathTools::Epsilon)
-    { // Underflow
+    {
+        // Underflow
         if (m_scrollLoop)
         {
             newLocation = setLocation(axis, getMaximum(axis));
@@ -343,7 +355,8 @@ double SlicingMouseTool::scroll(const QPoint& currentPosition)
         beginScroll(currentPosition);
     }
     else if (location > newLocation +0.5 +MathTools::Epsilon)
-    { // Overflow
+    {
+        // Overflow
         if (m_scrollLoop)
         {
             newLocation = setLocation(axis, getMinimum(axis));
