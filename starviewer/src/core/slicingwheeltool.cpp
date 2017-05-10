@@ -33,7 +33,10 @@
 
 namespace udg {
 
-SlicingWheelTool::SlicingWheelTool(QViewer *viewer, QObject *parent) : SlicingTool(viewer, parent)
+SlicingWheelTool::SlicingWheelTool(QViewer *viewer, QObject *parent)
+: SlicingTool(viewer, parent), m_config_sliceScrollLoop(false), m_config_phaseScrollLoop (false), m_config_volumeScroll(false),
+  m_cursorIcon_lastIndex(CursorIconDontUpdate), m_ignoreWheelMovement(false), m_ctrlPressed(false), m_middleButtonToggle(false), m_increment(0),
+  m_currentAxis(MainAxis), m_scrollLoop(false), m_volumeScroll(false)
 {
     m_toolName = "SlicingWheelTool";
     

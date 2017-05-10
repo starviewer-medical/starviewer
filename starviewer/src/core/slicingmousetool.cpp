@@ -28,7 +28,11 @@
 
 namespace udg {
 
-SlicingMouseTool::SlicingMouseTool(QViewer *viewer, QObject *parent) : SlicingTool(viewer, parent)
+SlicingMouseTool::SlicingMouseTool(QViewer *viewer, QObject *parent)
+ : SlicingTool(viewer, parent), m_config_sliceScrollLoop(false), m_config_phaseScrollLoop(false), m_config_wraparound{false},
+   m_cursorIcon_lastPosition(QPoint(0,0)), m_cursorIcon_lastIndex(CursorIconDontUpdate), m_dragActive(false),
+   m_wraparound{false, false, false, false, QPoint(0,0)}, m_stepLength(0), m_startPosition(QPoint(0,0)), m_startLocation(0), m_scrollLoop(false), 
+   m_directionDetection{0,QPoint(0,0)}, m_currentDirection(Direction::Undefined)
 {
     m_toolName = "SlicingMouseTool";
     reassignAxes();

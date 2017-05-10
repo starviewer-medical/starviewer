@@ -108,16 +108,16 @@ private:
      */
     double scroll(double increment, unsigned int axis = MainAxis, bool scrollLoopEnabled = false, bool volumeScrollEnabled = false);
     
-    QTimer* m_timer = 0;
+    QTimer* m_timer;
     
     ///\name Settings
     //@{
-    bool m_config_sliceScrollLoop = false;
-    bool m_config_phaseScrollLoop  = false;
+    bool m_config_sliceScrollLoop;
+    bool m_config_phaseScrollLoop;
     //@}
     
     /// \brief Store the number of keys pressed until the timeout is expired and they are processed
-    struct { int up, down, left, right, plus, minus; } m_keyAccumulator = {.up = 0, .down = 0, .left = 0, .right = 0, .plus = 0, .minus = 0};
+    struct { int up, down, left, right, plus, minus; } m_keyAccumulator;
     
     static constexpr unsigned int MainAxis = 0;
     static constexpr unsigned int SecondaryAxis = 1;

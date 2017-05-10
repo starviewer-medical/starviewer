@@ -30,7 +30,8 @@
 
 namespace udg {
 
-SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent) : SlicingTool(viewer, parent)
+SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent)
+: SlicingTool(viewer, parent), m_config_sliceScrollLoop(false), m_config_phaseScrollLoop(false), m_keyAccumulator{0, 0, 0, 0, 0, 0}
 {
     m_toolName = "SlicingKeyboardTool";
     

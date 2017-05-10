@@ -144,35 +144,35 @@ private:
      */
     void beginScroll();
     
-    QTimer* m_timer = 0;
+    QTimer* m_timer;
     
     /// \name Settings
     //@{
-    bool m_config_sliceScrollLoop = false;
-    bool m_config_phaseScrollLoop  = false;
-    bool m_config_volumeScroll  = false;
+    bool m_config_sliceScrollLoop;
+    bool m_config_phaseScrollLoop;
+    bool m_config_volumeScroll;
     //@}
     
     /// \brief Last cursor icon index used, this variable is used to avoid futile cursor updates.
-    int m_cursorIcon_lastIndex = CursorIconDontUpdate;
+    int m_cursorIcon_lastIndex;
     /// \brief Default value to avoid a cursor icon change.
     static constexpr int CursorIconDontUpdate = -1;
     
     /// \brief Some mouses produce unwanted scrolls when the wheel is clicked. This is used to cancel them until the wheel is released.
-    bool m_ignoreWheelMovement = false;
-    bool m_ctrlPressed = false;
-    bool m_middleButtonToggle = false;
+    bool m_ignoreWheelMovement;
+    bool m_ctrlPressed;
+    bool m_middleButtonToggle;
     
     ///\name Current scroll status
     //@{
     /// \brief Accumulator for angular distance.
-    double m_increment = 0;
+    double m_increment;
     /// \brief Axis where the current increment is applied.
-    unsigned int m_currentAxis = MainAxis;
+    unsigned int m_currentAxis;
     /// \brief Closed loop scroll enabled for the current axis.
-    bool m_scrollLoop = false;
+    bool m_scrollLoop;
     /// \brief Jump to next or previous volume enabled for the current axis.
-    bool m_volumeScroll = false;
+    bool m_volumeScroll;
     //@}
     
     static constexpr unsigned int MainAxis = 0;

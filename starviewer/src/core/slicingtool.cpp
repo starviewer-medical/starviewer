@@ -23,7 +23,8 @@
 
 namespace udg {
 
-SlicingTool::SlicingTool(QViewer *viewer, QObject *parent) : Tool(viewer, parent)
+SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
+ : Tool(viewer, parent), m_volumeInitialPositionToMaximum(false)
 {
     m_toolName = "SlicingTool";
     

@@ -210,7 +210,7 @@ public slots:
     
 protected:
     /// \brief Showing the minimum or maximum when a new volume is loaded.
-    bool m_volumeInitialPositionToMaximum = false;
+    bool m_volumeInitialPositionToMaximum;
     Q2DViewer* m_2DViewer;
 
 private:

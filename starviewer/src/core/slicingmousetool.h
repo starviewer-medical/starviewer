@@ -274,19 +274,19 @@ private:
     
     /// \name Settings
     //@{
-    bool m_config_sliceScrollLoop = false;
-    bool m_config_phaseScrollLoop  = false;
-    bool m_config_wraparound = false;
+    bool m_config_sliceScrollLoop;
+    bool m_config_phaseScrollLoop;
+    bool m_config_wraparound;
     //@}
     
     /// \brief Last mouse or start position. Used to determine the scroll direction of the icon.
-    QPoint m_cursorIcon_lastPosition = QPoint(0,0);
+    QPoint m_cursorIcon_lastPosition;
     /// \brief Last cursor icon index used, this variable is used to avoid futile cursor updates.
-    int m_cursorIcon_lastIndex = CursorIconDontUpdate;
+    int m_cursorIcon_lastIndex;
     /// \brief Default value to avoid a cursor icon change.
     static constexpr int CursorIconDontUpdate = -1;
     
-    bool m_dragActive = false;
+    bool m_dragActive;
     
     /// \brief Mouse wraparaound information sed to detect the event resulting of having changed the cursor position.
     struct 
@@ -297,29 +297,23 @@ private:
         bool wrappedToBottom;
         QPoint positionBeforeWrapping;
     } 
-    m_wraparound = {
-        .wrappedToLeft = false, 
-        .wrappedToRight = false,
-        .wrappedToTop = false, 
-        .wrappedToBottom = false,
-        .positionBeforeWrapping = QPoint(0,0)
-    };
+    m_wraparound;
     
     /// \name Current scroll status
     //@{
-    double m_stepLength = 0;
-    QPoint m_startPosition = QPoint(0,0);
-    double m_startLocation = 0;
-    bool m_scrollLoop = false;
+    double m_stepLength;
+    QPoint m_startPosition;
+    double m_startLocation;
+    bool m_scrollLoop;
     
     struct 
     {
-        double stepLength = 0;
-        QPoint startPosition = QPoint(0,0);
+        double stepLength;
+        QPoint startPosition;
     } 
-    m_directionDetection = {};
+    m_directionDetection;
     
-    Direction m_currentDirection = Direction::Undefined;
+    Direction m_currentDirection;
     //@}
     
     /// \name Distances in pixels
