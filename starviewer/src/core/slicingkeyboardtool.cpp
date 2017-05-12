@@ -31,7 +31,7 @@
 namespace udg {
 
 SlicingKeyboardTool::SlicingKeyboardTool(QViewer *viewer, QObject *parent)
-: SlicingTool(viewer, parent), m_config_sliceScrollLoop(false), m_config_phaseScrollLoop(false), m_keyAccumulator{0, 0, 0, 0, 0, 0}
+: SlicingTool(viewer, parent), m_keyAccumulator{0, 0, 0, 0, 0, 0}
 {
     m_toolName = "SlicingKeyboardTool";
     
@@ -119,7 +119,9 @@ void SlicingKeyboardTool::reassignAxes()
 
 void SlicingKeyboardTool::processAccumulation()
 {
-    readConfiguration();
+    Settings settings;
+    bool configSliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
+    bool configPhaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
     
     int upDown = m_keyAccumulator.up - m_keyAccumulator.down;
     int rightLeft = m_keyAccumulator.right - m_keyAccumulator.left;
@@ -128,16 +130,16 @@ void SlicingKeyboardTool::processAccumulation()
     if (upDown != 0)
     {
         bool loop = false;
-        loop = loop || (getMode(MainAxis) == SlicingMode::Slice && m_config_sliceScrollLoop);
-        loop = loop || (getMode(MainAxis) == SlicingMode::Phase && m_config_phaseScrollLoop);
+        loop = loop || (getMode(MainAxis) == SlicingMode::Slice && configSliceScrollLoop);
+        loop = loop || (getMode(MainAxis) == SlicingMode::Phase && configPhaseScrollLoop);
         scroll(upDown, MainAxis, loop);
     }
     
     if (rightLeft != 0)
     {
         bool loop = false;
-        loop = loop || (getMode(SecondaryAxis) == SlicingMode::Slice && m_config_sliceScrollLoop);
-        loop = loop || (getMode(SecondaryAxis) == SlicingMode::Phase && m_config_phaseScrollLoop);
+        loop = loop || (getMode(SecondaryAxis) == SlicingMode::Slice && configSliceScrollLoop);
+        loop = loop || (getMode(SecondaryAxis) == SlicingMode::Phase && configPhaseScrollLoop);
         scroll(rightLeft, SecondaryAxis, loop);
     }
     
@@ -152,13 +154,6 @@ void SlicingKeyboardTool::processAccumulation()
     m_keyAccumulator.right = 0;
     m_keyAccumulator.plus = 0;
     m_keyAccumulator.minus = 0;
-}
-
-void SlicingKeyboardTool::readConfiguration()
-{
-    Settings settings;
-    m_config_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
-    m_config_phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
 }
 
 void SlicingKeyboardTool::onHomePress()

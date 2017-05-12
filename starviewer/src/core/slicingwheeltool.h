@@ -66,9 +66,6 @@ private slots:
     void resetTool();
     
 private:
-    /// \brief Reads settings and sets the m_config_* members.
-    void readConfiguration();
-    
     /// \name Event handling
     //@{
     /** \brief Process angular wheel move event.
@@ -146,14 +143,7 @@ private:
 
 private:
     QTimer* m_timer;
-    
-    /// \name Settings
-    //@{
-    bool m_config_sliceScrollLoop;
-    bool m_config_phaseScrollLoop;
-    bool m_config_volumeScroll;
-    //@}
-    
+
     /// \brief Last cursor icon index used, this variable is used to avoid futile cursor updates.
     int m_cursorIcon_lastIndex;
     /// \brief Default value to avoid a cursor icon change.

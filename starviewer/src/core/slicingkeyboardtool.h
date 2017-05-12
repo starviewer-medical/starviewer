@@ -78,8 +78,6 @@ private slots:
     void processAccumulation();
 
 private:
-    /// \brief Reads settings and sets the m_config_* members.
-    void readConfiguration();
     
     /// \name Event handling
     /// Except home and end that trigger an immediate action. Key events are accumulated to a counter.
@@ -110,12 +108,6 @@ private:
 
 private:
     QTimer* m_timer;
-    
-    ///\name Settings
-    //@{
-    bool m_config_sliceScrollLoop;
-    bool m_config_phaseScrollLoop;
-    //@}
     
     /// \brief Store the number of keys pressed until the timeout is expired and they are processed
     struct { int up, down, left, right, plus, minus; } m_keyAccumulator;

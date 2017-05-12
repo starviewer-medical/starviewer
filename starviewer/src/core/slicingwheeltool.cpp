@@ -34,9 +34,8 @@
 namespace udg {
 
 SlicingWheelTool::SlicingWheelTool(QViewer *viewer, QObject *parent)
-: SlicingTool(viewer, parent), m_config_sliceScrollLoop(false), m_config_phaseScrollLoop (false), m_config_volumeScroll(false),
-  m_cursorIcon_lastIndex(CursorIconDontUpdate), m_ignoreWheelMovement(false), m_ctrlPressed(false), m_middleButtonToggle(false), m_increment(0),
-  m_currentAxis(MainAxis), m_scrollLoop(false), m_volumeScroll(false)
+: SlicingTool(viewer, parent), m_cursorIcon_lastIndex(CursorIconDontUpdate), m_ignoreWheelMovement(false), m_ctrlPressed(false), m_middleButtonToggle(false),
+  m_increment(0), m_currentAxis(MainAxis), m_scrollLoop(false), m_volumeScroll(false)
 {
     m_toolName = "SlicingWheelTool";
     
@@ -115,14 +114,6 @@ void SlicingWheelTool::resetTool()
 {
     unsetCursorIcon();
     beginScroll();
-}
-
-void SlicingWheelTool::readConfiguration()
-{
-    Settings settings;
-    m_config_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
-    m_config_phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
-    m_config_volumeScroll = settings.getValue(CoreSettings::EnableQ2DViewerWheelVolumeScroll).toBool();
 }
 
 void SlicingWheelTool::onWheelMoved(int angleDelta)
@@ -283,13 +274,17 @@ double SlicingWheelTool::scroll(double increment)
 
 void SlicingWheelTool::beginScroll()
 {
-    readConfiguration();
+    Settings settings;
+    bool configSliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
+    bool configPhaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
+    bool configVolumeScroll = settings.getValue(CoreSettings::EnableQ2DViewerWheelVolumeScroll).toBool();
+    
     m_currentAxis = m_ctrlPressed || m_middleButtonToggle ? SecondaryAxis : MainAxis;
     m_increment = 0;
     m_scrollLoop = false;
-    m_scrollLoop = m_scrollLoop || (m_config_sliceScrollLoop && getMode(m_currentAxis) == SlicingMode::Slice);
-    m_scrollLoop = m_scrollLoop || (m_config_phaseScrollLoop && getMode(m_currentAxis) == SlicingMode::Phase);
-    m_volumeScroll = m_config_volumeScroll && m_currentAxis == MainAxis;
+    m_scrollLoop = m_scrollLoop || (configSliceScrollLoop && getMode(m_currentAxis) == SlicingMode::Slice);
+    m_scrollLoop = m_scrollLoop || (configPhaseScrollLoop && getMode(m_currentAxis) == SlicingMode::Phase);
+    m_volumeScroll = configVolumeScroll && m_currentAxis == MainAxis;
 }
 
 }
