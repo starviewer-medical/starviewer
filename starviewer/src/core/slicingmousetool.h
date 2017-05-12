@@ -210,7 +210,7 @@ protected:
     enum class Direction {Undefined, Vertical, Horizontal};
    
 private:
-    /// \brief Reads settings and sets the m_config_* members.
+    /// \brief Reads settings and sets the m_config.
     void readConfiguration();
     
     ///\name Event handling
@@ -272,13 +272,14 @@ private:
     /// \brief Sets the start mouse position from where the direction will be detected.
     void beginDirectionDetection(const QPoint& startPosition);
 
-private:    
-    /// \name Settings
-    //@{
-    bool m_config_sliceScrollLoop;
-    bool m_config_phaseScrollLoop;
-    bool m_config_wraparound;
-    //@}
+private:
+    
+    /// \brief Store readed settings.
+    struct {
+        bool sliceScrollLoop;
+        bool phaseScrollLoop;
+        bool wraparound;
+    } m_config;
     
     /// \brief Last mouse or start position. Used to determine the scroll direction of the icon.
     QPoint m_cursorIcon_lastPosition;

@@ -29,10 +29,9 @@
 namespace udg {
 
 SlicingMouseTool::SlicingMouseTool(QViewer *viewer, QObject *parent)
- : SlicingTool(viewer, parent), m_config_sliceScrollLoop(false), m_config_phaseScrollLoop(false), m_config_wraparound{false},
-   m_cursorIcon_lastPosition(QPoint(0,0)), m_cursorIcon_lastIndex(CursorIconDontUpdate), m_dragActive(false),
-   m_wraparound{false, false, false, false, QPoint(0,0)}, m_stepLength(0), m_startPosition(QPoint(0,0)), m_startLocation(0), m_scrollLoop(false), 
-   m_directionDetection{0,QPoint(0,0)}, m_currentDirection(Direction::Undefined)
+ : SlicingTool(viewer, parent), m_config{false, false, false}, m_cursorIcon_lastPosition(QPoint(0,0)), m_cursorIcon_lastIndex(CursorIconDontUpdate),
+   m_dragActive(false), m_wraparound{false, false, false, false, QPoint(0,0)}, m_stepLength(0), m_startPosition(QPoint(0,0)), m_startLocation(0), 
+   m_scrollLoop(false), m_directionDetection{0,QPoint(0,0)}, m_currentDirection(Direction::Undefined)
 {
     m_toolName = "SlicingMouseTool";
     reassignAxes();
@@ -90,9 +89,9 @@ void SlicingMouseTool::reassignAxes()
 void SlicingMouseTool::readConfiguration()
 {
     Settings settings;
-    m_config_sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();;
-    m_config_phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();;
-    m_config_wraparound = settings.getValue(CoreSettings::EnableQ2DViewerMouseWraparound).toBool();;
+    m_config.sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();;
+    m_config.phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();;
+    m_config.wraparound = settings.getValue(CoreSettings::EnableQ2DViewerMouseWraparound).toBool();;
 }
 
 void SlicingMouseTool::onMousePress(const QPoint &position)
@@ -122,7 +121,7 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
     if (m_dragActive)
     {
         // *** Mouse wrap arround ***
-        if (m_config_wraparound)
+        if (m_config.wraparound)
         {
             // Have we made a move wrap arround on the previous movement?
             if (
@@ -378,8 +377,8 @@ void SlicingMouseTool::beginScroll(const QPoint& startPosition)
     // Determine if closed loop scrolling must be enabled
     {
          m_scrollLoop = false;
-         m_scrollLoop = m_scrollLoop || (getMode(axis) == SlicingMode::Slice && m_config_sliceScrollLoop);
-         m_scrollLoop = m_scrollLoop || (getMode(axis) == SlicingMode::Phase && m_config_phaseScrollLoop);
+         m_scrollLoop = m_scrollLoop || (getMode(axis) == SlicingMode::Slice && m_config.sliceScrollLoop);
+         m_scrollLoop = m_scrollLoop || (getMode(axis) == SlicingMode::Phase && m_config.phaseScrollLoop);
     }
     
     // Step lenght determined by the viewer size.
