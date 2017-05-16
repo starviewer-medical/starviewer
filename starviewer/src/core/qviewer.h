@@ -88,6 +88,8 @@ public:
     QPoint getEventPosition() const;
     QPoint getLastEventPosition() const;
 
+    QPoint getWheelAngleDelta() const;
+    
     /// Ens diu si el viewer és actiu en aquell moment
     /// @return Cert si actiu, fals altrament
     bool isActive() const;
@@ -352,6 +354,9 @@ private:
 
     /// Indica si el viewer és actiu o no
     bool m_isActive;
+    
+    /// Last wheel scroll event angle delta.
+    QPoint m_lastAngleDelta;
 
     /// Estats actual i previ del visor actual
     ViewerStatus m_viewerStatus;

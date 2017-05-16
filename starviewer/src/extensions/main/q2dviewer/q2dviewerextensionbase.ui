@@ -92,7 +92,7 @@
              </property>
              <property name="icon">
               <iconset resource="../../../main/main.qrc">
-               <normaloff>:/images/grid.png</normaloff>:/images/grid.png</iconset>
+               <normaloff>:/images/icons/view-list-icons.svg</normaloff>:/images/icons/view-list-icons.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -127,7 +127,7 @@
              </property>
              <property name="icon">
               <iconset resource="../../../main/main.qrc">
-               <normaloff>:/images/down.png</normaloff>:/images/down.png</iconset>
+               <normaloff>:/images/icons/view-list-details.svg</normaloff>:/images/icons/view-list-details.svg</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -170,7 +170,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/cal.png</normaloff>:/images/cal.png</iconset>
+           <normaloff>:/images/icons/view-calendar.svg</normaloff>:/images/icons/view-calendar.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -229,7 +229,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_zoomToolButton">
+        <widget class="udg::QMruSortedToolButtonWithMenu" name="m_zoomToolButton">
          <property name="text">
           <string>Zoom</string>
          </property>
@@ -258,17 +258,14 @@
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <property name="spacing">
-        <number>0</number>
-       </property>
        <item>
-        <widget class="QToolButton" name="m_roiButton">
+        <widget class="QToolButton" name="m_translateLeftToolButton">
          <property name="text">
-          <string>ROI</string>
+          <string>Pan</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
+          <iconset resource="../../../main/main.qrc">
+           <normaloff>:/images/icons/transform-move.svg</normaloff>:/images/icons/transform-move.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -288,13 +285,13 @@
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="m_distanceToolButton">
+        <widget class="QToolButton" name="m_windowLevelLeftToolButton">
          <property name="text">
-          <string>Distance</string>
+          <string>WW/WL</string>
          </property>
          <property name="icon">
-          <iconset>
-           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
+          <iconset resource="../../../main/main.qrc">
+           <normaloff>:/images/icons/contrast.svg</normaloff>:/images/icons/contrast.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -321,14 +318,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QToolButton" name="m_angleToolButton">
-         <property name="text">
-          <string>Angle</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../../../../../../../.designer/backup</normaloff>../../../../../../../.designer/backup</iconset>
-         </property>
+        <widget class="udg::QMruSortedToolButtonWithMenu" name="m_drawingToolButton">
          <property name="iconSize">
           <size>
            <width>32</width>
@@ -373,6 +363,16 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="udg::QThickSlabWidget" name="m_thickSlabWidget" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -637,7 +637,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/store.png</normaloff>:/images/store.png</iconset>
+           <normaloff>:/images/icons/upload-media.svg</normaloff>:/images/icons/upload-media.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -647,77 +647,6 @@
          </property>
          <property name="autoRaise">
           <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout">
-       <property name="spacing">
-        <number>6</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Minimum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>16</width>
-           <height>1</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="udg::QThickSlabWidget" name="m_thickSlabWidget" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer>
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Minimum</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>1</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="m_thickSlabLabel">
-         <property name="text">
-          <string>Thick Slab</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -758,7 +687,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/dicomDump.png</normaloff>:/images/dicomDump.png</iconset>
+           <normaloff>:/images/icons/dicom-tags.svg</normaloff>:/images/icons/dicom-tags.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -817,7 +746,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/voxelInformation.png</normaloff>:/images/voxelInformation.png</iconset>
+           <normaloff>:/images/icons/edit-select.svg</normaloff>:/images/icons/edit-select.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -926,7 +855,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/propagate.png</normaloff>:/images/propagate.png</iconset>
+           <normaloff>:/images/icons/feed-subscribe.svg</normaloff>:/images/icons/feed-subscribe.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -952,7 +881,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/synchronize.png</normaloff>:/images/synchronize.png</iconset>
+           <normaloff>:/images/icons/emblem-symbolic-link.svg</normaloff>:/images/icons/emblem-symbolic-link.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -975,7 +904,7 @@
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
+        <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
           <widget class="QToolButton" name="m_synchronizeAllViewersButton">
            <property name="sizePolicy">
@@ -989,7 +918,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../../main/main.qrc">
-             <normaloff>:/images/linkAll.png</normaloff>:/images/linkAll.png</iconset>
+             <normaloff>:/images/icons/insert-link.svg</normaloff>:/images/icons/insert-link.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1018,7 +947,7 @@
            </property>
            <property name="icon">
             <iconset resource="../../../main/main.qrc">
-             <normaloff>:/images/unlinkAll.png</normaloff>:/images/unlinkAll.png</iconset>
+             <normaloff>:/images/icons/remove-link.svg</normaloff>:/images/icons/remove-link.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -1095,9 +1024,13 @@
    <extends>QWidget</extends>
    <header>qthickslabwidget.h</header>
   </customwidget>
+  <customwidget>
+   <class>udg::QMruSortedToolButtonWithMenu</class>
+   <extends>QToolButton</extends>
+   <header>qmrusortedtoolbuttonwithmenu.h</header>
+  </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>

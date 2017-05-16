@@ -177,7 +177,7 @@ void DrawerLine::updateVtkActorProperties()
     // Assignem color
     QColor color = this->getColor();
     properties->SetColor(color.redF(), color.greenF(), color.blueF());
-    propertiesBackground->SetColor(255.0, 255.0, 255.0);
+    propertiesBackground->SetColor(0.0, 0.0, 0.0);
 }
 
 double DrawerLine::getDistanceToPoint(double *point3D, double closestPoint[3])

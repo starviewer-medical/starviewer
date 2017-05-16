@@ -28,14 +28,14 @@ class WindowLevelTool : public Tool {
 Q_OBJECT
 public:
     /// Estats de la tool
-    enum { None, WindowLevelling };
+    enum { None, WindowLevelling, Burning };
 
     WindowLevelTool(QViewer *viewer, QObject *parent = 0);
     ~WindowLevelTool();
 
     void handleEvent(unsigned long eventID);
 
-private slots:
+protected slots:
     /// Resets the tool to a valid initial state.
     void reset();
 
@@ -68,7 +68,11 @@ private:
     /// Avoids zero and negative values for window and level
     void avoidZeroAndNegative(double &window, double &level);
 
-private:
+protected:
+
+    /// If the tool is linked to a Q2DViewer this field will point to it, otherwise it will be null.
+    Q2DViewer *m_2DViewer;
+
     /// Valors per controlar el mapeig del window level
     double m_initialWindow, m_initialLevel, m_currentWindow, m_currentLevel;
     /// Initial VOI LUT.

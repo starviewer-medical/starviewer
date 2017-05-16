@@ -533,8 +533,8 @@ ImagePlane* Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane,
                 imagePlane->setImageOrientation(ImageOrientation(sagittalRowVector, sagittalColumnVector));
                 imagePlane->setSpacing(PixelSpacing2D(spacing[1], spacing[2]));
                 imagePlane->setThickness(spacing[0]);
-                imagePlane->setRows(dimensions[2]);
-                imagePlane->setColumns(dimensions[1]);
+                imagePlane->setRowLength(dimensions[1] * spacing[1]);
+                imagePlane->setColumnLength(dimensions[2] * spacing[2]);
 
                 QVector3D sagittalNormalVector = image->getImageOrientationPatient().getRowVector();
                 imagePlane->setOrigin(origin[0] + sliceNumber * sagittalNormalVector.x() * spacing[0],
@@ -570,8 +570,8 @@ ImagePlane* Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane,
                 imagePlane->setImageOrientation(ImageOrientation(coronalRowVector, coronalColumnVector));
                 imagePlane->setSpacing(PixelSpacing2D(spacing[0], spacing[2]));
                 imagePlane->setThickness(spacing[1]);
-                imagePlane->setRows(dimensions[2]);
-                imagePlane->setColumns(dimensions[0]);
+                imagePlane->setRowLength(dimensions[0] * spacing[0]);
+                imagePlane->setColumnLength(dimensions[2] * spacing[2]);
 
                 QVector3D coronalNormalVector = image->getImageOrientationPatient().getColumnVector();
                 imagePlane->setOrigin(origin[0] + coronalNormalVector.x() * sliceNumber * spacing[1],

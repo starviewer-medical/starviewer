@@ -51,6 +51,8 @@ private slots:
     /// Es cridaran quan es modifiquin els check box actualitzant els corresponents settings
     void updateSliceScrollLoopSetting(bool enable);
     void updatePhaseScrollLoopSetting(bool enable);
+    void updateWheelVolumeScrollSetting(bool enable);
+    void updateMouseWraparoundSetting(bool enable);
     void updateReferenceLinesForMRSetting(bool enable);
     void updateReferenceLinesForCTSetting(bool enable);
     void updateModalitiesWithZoomByDefaultSetting(const QStringList &modalities);

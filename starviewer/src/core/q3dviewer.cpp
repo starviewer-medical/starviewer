@@ -52,9 +52,6 @@
 #include <vtkDecimatePro.h>
 // IsoSurface
 #include <vtkVolumeRayCastIsosurfaceFunction.h>
-// Texture2D i Texture3D
-#include <vtkVolumeTextureMapper2D.h>
-#include <vtkVolumeTextureMapper3D.h>
 // LUT's
 #include <vtkColorTransferFunction.h>
 #include <vtkPiecewiseFunction.h>
@@ -343,16 +340,6 @@ void Q3DViewer::setRenderFunctionToIsoSurface()
     m_renderFunction = IsoSurface;
 }
 
-void Q3DViewer::setRenderFunctionToTexture2D()
-{
-    m_renderFunction = Texture2D;
-}
-
-void Q3DViewer::setRenderFunctionToTexture3D()
-{
-    m_renderFunction = Texture3D;
-}
-
 QString Q3DViewer::getRenderFunctionAsString()
 {
     QString result;
@@ -372,12 +359,6 @@ QString Q3DViewer::getRenderFunctionAsString()
             break;
         case IsoSurface:
             result = "IsoSurface";
-            break;
-        case Texture2D:
-            result = "Texture2D";
-            break;
-        case Texture3D:
-            result = "Texture3D";
             break;
         case Contouring:
             result = "Contouring";
@@ -469,12 +450,6 @@ void Q3DViewer::applyCurrentRenderingMethod()
                 break;
             case IsoSurface:
                 renderIsoSurface();
-                break;
-            case Texture2D:
-                renderTexture2D();
-                break;
-            case Texture3D:
-                renderTexture3D();
                 break;
         }
 
@@ -607,9 +582,9 @@ void Q3DViewer::setVolumeTransformation()
     Image *imageReference = getMainInput()->getImage(0);
     ImagePlane currentPlane;
     currentPlane.fillFromImage(imageReference);
-    double currentPlaneRowVector[3], currentPlaneColumnVector[3], stackDirection[3];
-    currentPlane.getRowDirectionVector(currentPlaneRowVector);
-    currentPlane.getColumnDirectionVector(currentPlaneColumnVector);
+    std::array<double, 3> currentPlaneRowVector = Vector3(currentPlane.getImageOrientation().getRowVector());
+    std::array<double, 3> currentPlaneColumnVector = Vector3(currentPlane.getImageOrientation().getColumnVector());
+    double stackDirection[3];
     getMainInput()->getStackDirection(stackDirection);
 
     DEBUG_LOG(QString("currentPlaneRowVector: %1 %2 %3").arg(currentPlaneRowVector[0]).arg(currentPlaneRowVector[1]).arg(currentPlaneRowVector[2]));
@@ -929,61 +904,6 @@ void Q3DViewer::renderIsoSurface()
     oTFun->Delete();
     cTFun->Delete();
     goTFun->Delete();
-
-    render();
-}
-
-void Q3DViewer::renderTexture2D()
-{
-    if (!m_renderer->HasViewProp(m_vtkVolume))
-    {
-        m_renderer->RemoveAllViewProps();
-        m_renderer->AddViewProp(m_vtkVolume);
-    }
-
-    /// \TODO Això és massa lent, potser l'hauríem de treure.
-    m_volumeProperty->DisableGradientOpacityOn();
-    // Nearest perquè vagi més ràpid
-    m_volumeProperty->SetInterpolationTypeToNearest();
-
-    vtkVolumeTextureMapper2D *volumeMapper = vtkVolumeTextureMapper2D::New();
-
-    // Target texture size: en teoria com més gran millor
-    // Màxim en una Quadro FX 4500 = 4096x4096
-//     volumeMapper->SetTargetTextureSize(4096, 4096);
-
-    // max number of planes: This is the maximum number of planes that will be created for texture mapping the volume. If the volume has more
-    // voxels than this along the viewing direction, then planes of the volume will be skipped to ensure that this maximum is not violated. A
-    // skip factor is used, and is incremented until the maximum condition is satisfied.
-    // 128 és el que té millor relació qualitat/preu amb un model determinat a l'ordinador de la uni
-//     volumeMapper->SetMaximumNumberOfPlanes(128);
-
-    volumeMapper->SetInputData(m_imageData);
-    m_vtkVolume->SetMapper(volumeMapper);
-    volumeMapper->Delete();
-
-    setTransferFunction(m_transferFunction);
-
-    render();
-}
-
-void Q3DViewer::renderTexture3D()
-{
-    if (!m_renderer->HasViewProp(m_vtkVolume))
-    {
-        m_renderer->RemoveAllViewProps();
-        m_renderer->AddViewProp(m_vtkVolume);
-    }
-
-    m_volumeProperty->DisableGradientOpacityOn();
-    m_volumeProperty->SetInterpolationTypeToLinear();
-
-    vtkVolumeTextureMapper3D *volumeMapper = vtkVolumeTextureMapper3D::New();
-    volumeMapper->SetInputData(m_imageData);
-    m_vtkVolume->SetMapper(volumeMapper);
-    volumeMapper->Delete();
-
-    setTransferFunction(m_transferFunction);
 
     render();
 }

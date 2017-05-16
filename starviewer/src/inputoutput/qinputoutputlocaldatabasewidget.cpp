@@ -106,11 +106,11 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(viewFromQStudyTreeWidget()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/icons/visibility.svg"), tr("&View"), this, SLOT(viewFromQStudyTreeWidget()));
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(viewFromQStudyTreeWidget()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromLocalDatabase()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/icons/edit-delete.svg"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromLocalDatabase()));
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::DeleteSelectedLocalDatabaseStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(deleteSelectedItemsFromLocalDatabase()));
 
@@ -119,7 +119,7 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SendSelectedStudiesToDICOMDIRList));
     (void) new QShortcut(action->shortcut(), this, SLOT(addSelectedStudiesToCreateDicomdirList()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/icons/upload-media.svg"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()));
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::StoreSelectedStudiesToPACS));
     (void) new QShortcut(action->shortcut(), this, SLOT(selectedStudiesStoreToPacs()));
 #endif

@@ -15,7 +15,6 @@
 #include "zoomtool.h"
 #include "qviewer.h"
 #include "logging.h"
-#include "q3dviewer.h"
 // Vtk
 #include <vtkRenderer.h>
 #include <vtkRenderWindow.h>
@@ -31,15 +30,6 @@ ZoomTool::ZoomTool(QViewer *viewer, QObject *parent)
     m_toolName = "ZoomTool";
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
-    // TODO This could be done better if we had some method that returns the type of the viewer
-    if (Q3DViewer::castFromQViewer(m_viewer))
-    {
-        m_mustRenderOnEnd = true;
-    }
-    else
-    {
-        m_mustRenderOnEnd = false;
-    }
 }
 
 ZoomTool::~ZoomTool()
@@ -78,7 +68,7 @@ void ZoomTool::doZoom()
 {
     if (m_state == Zooming)
     {
-        m_viewer->setCursor(QCursor(QPixmap(":/images/zoom.png")));
+        m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/zoom.svg")));
         double *center = m_viewer->getRenderer()->GetCenter();
         int dy = m_viewer->getEventPosition().y() - m_viewer->getLastEventPosition().y();
         // TODO el 10.0 és un valor constant que podria refinar-se si es volgués (motion factor)
@@ -94,12 +84,7 @@ void ZoomTool::endZoom()
         m_viewer->unsetCursor();
         m_state = None;
         m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetStillUpdateRate());
-
-        if (m_mustRenderOnEnd)
-        {
-            // Necessari perquè es torni a renderitzar a alta resolució en el 3D
-            m_viewer->render();
-        }
+        m_viewer->render();
     }
 }
 

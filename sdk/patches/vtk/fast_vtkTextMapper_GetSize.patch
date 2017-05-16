@@ -1,0 +1,42 @@
+diff --git a/Rendering/Core/vtkTextMapper.cxx b/Rendering/Core/vtkTextMapper.cxx
+index 78b9562..a089f0e 100644
+--- a/Rendering/Core/vtkTextMapper.cxx
++++ b/Rendering/Core/vtkTextMapper.cxx
+@@ -133,17 +133,33 @@ void vtkTextMapper::PrintSelf(ostream& os, vtkIndent indent)
+ //----------------------------------------------------------------------------
+ void vtkTextMapper::GetSize(vtkViewport *vp, int size[2])
+ {
++  size[0] = size[1] = 0;
++
++  vtkTextRenderer *tren = vtkTextRenderer::GetInstance();
++  if (!tren)
++    {
++    vtkErrorMacro(<<"Could not locate vtkTextRenderer object.");
++    return;
++    }
++
+   vtkWindow *win = vp ? vp->GetVTKWindow() : NULL;
+   if (!win)
+     {
+-    size[0] = size[1] = 0;
+     vtkErrorMacro(<<"No render window available: cannot determine DPI.");
+     return;
+     }
+ 
+-  this->UpdateImage(win->GetDPI());
+-  size[0] = this->TextDims[0];
+-  size[1] = this->TextDims[1];
++  int text_bbox[4];
++  if (!tren->GetBoundingBox(this->TextProperty,
++                            this->Input ? this->Input : std::string(),
++                            text_bbox, win->GetDPI()))
++    {
++    vtkErrorMacro(<<"Error calculating bounding box.");
++    return;
++    }
++
++  size[0] = text_bbox[1] - text_bbox[0] + 1;
++  size[1] = text_bbox[3] - text_bbox[2] + 1;
+ }
+ 
+ //----------------------------------------------------------------------------

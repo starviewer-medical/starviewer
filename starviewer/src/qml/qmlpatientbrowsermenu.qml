@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-import QtQuick 1.0
+import QtQuick 2.3
 
 Rectangle {
     id: browserMenu
@@ -25,7 +25,7 @@ Rectangle {
     property int computedContentHeight: calcContentHeight(browserModel, browserMenu)
     property int maxHeight: 1500000
     property int maxWidth: computedContentWidth + listview.anchors.leftMargin + listview.anchors.rightMargin;
-	property int scrollheight
+    property int scrollheight
     property string fusionMarkedItem1: "-1"
     property string fusionMarkedItem2: "-1"
     property string fusionLabelText: qsTr("Fusion")
@@ -36,7 +36,7 @@ Rectangle {
 
     signal selectedItem(string identifier)
     signal isActive(string identifier)
-	signal sizeChanged()
+    signal sizeChanged()
 
     function calcContentWidth(model, parent)
     {
@@ -48,7 +48,7 @@ Rectangle {
             {
                 var item = group[j];
                 var textElement = Qt.createQmlObject(
-                        'import QtQuick 1.0;'
+                        'import QtQuick 2.3;'
                         + 'Text {'
                         + '   text: "' + item.text.replace(/"/g, '\\"') + '"; visible: false; font.bold: ' + (browserMenu.markedItem === item.identifier) + '; font.pointSize: ' + applicationFontSize
                         + '}',
@@ -57,7 +57,7 @@ Rectangle {
                 textElement.destroy()
             }
             var captionElement = Qt.createQmlObject(
-                    'import QtQuick 1.0;'
+                    'import QtQuick 2.3;'
                     + 'Text {'
                         + '   text: "' + model[i].caption.replace(/"/g, '\\"') + '"; visible: false; font.pointSize: ' + applicationFontSize
                     + '}',
@@ -71,7 +71,7 @@ Rectangle {
     function calcContentHeight(model, parent)
     {
         var textElement = Qt.createQmlObject(
-                'import QtQuick 1.0;'
+                'import QtQuick 2.3;'
                 + 'Text {'
                 + '   text: "any text"; visible: false; font.pointSize: ' + applicationFontSize
                 + '}',
@@ -97,7 +97,7 @@ Rectangle {
         return height;
     }
 
-	ListView {
+    ListView {
         id: listview
         anchors.fill: parent
         anchors.topMargin: 3
@@ -192,7 +192,7 @@ Rectangle {
                             anchors {
                                 left: parent.left
                                 verticalCenter: parent.verticalCenter
-								leftMargin: 5
+                                leftMargin: 5
                             }
                             text: modelData.text
                             elide: Text.ElideMiddle
@@ -316,20 +316,20 @@ Rectangle {
                 }
             }
         }
-	}
+    }
 
     Rectangle {
-         id: scrollbar
-         anchors.right: browserMenu.right
-         width: 8
-		 color: "black"
-         radius: 3
-         y: listview.visibleArea.yPosition * listview.height + listview.anchors.topMargin
-         height:  listview.visibleArea.heightRatio * listview.height;
-         opacity: browserMenu.height + 10 < browserMenu.maxHeight? 0: 0.4
-     }
+        id: scrollbar
+        anchors.right: browserMenu.right
+        width: 8
+        color: "black"
+        radius: 3
+        y: listview.visibleArea.yPosition * listview.height + listview.anchors.topMargin
+        height:  listview.visibleArea.heightRatio * listview.height;
+        opacity: browserMenu.height + 10 < browserMenu.maxHeight? 0: 0.4
+    }
 
-	 onHeightChanged: {
-		browserMenu.sizeChanged()
-	}
+    onHeightChanged: {
+        browserMenu.sizeChanged()
+    }
 }

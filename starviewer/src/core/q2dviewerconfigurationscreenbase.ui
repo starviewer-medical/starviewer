@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>805</width>
-    <height>647</height>
+    <width>404</width>
+    <height>711</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,308 +15,212 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/q2dviewerconfiguration.png</normaloff>:/images/q2dviewerconfiguration.png</iconset>
+    <normaloff>:/images/icons/preferences-2dviewer.svg</normaloff>:/images/icons/preferences-2dviewer.svg</iconset>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QCheckBox" name="m_sliceScrollLoopCheckBox">
-         <property name="text">
-          <string>Enable slice scroll loop</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="m_phaseScrollLoopCheckBox">
-         <property name="text">
-          <string>Enable phase scroll loop</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+    <widget class="QCheckBox" name="m_sliceScrollLoopCheckBox">
+     <property name="text">
+      <string>Enable slice scroll loop</string>
+     </property>
+    </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QGroupBox" name="groupBox">
-       <property name="title">
-        <string>Reference Lines by default for these modalities</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QCheckBox" name="m_referenceLinesMRCheckBox">
-          <property name="text">
-           <string>MR</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="m_referenceLinesCTCheckBox">
-          <property name="text">
-           <string>CT</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_4">
-       <property name="title">
-        <string>Automatic Synchronization by default for these modalities</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <widget class="QCheckBox" name="m_automaticSynchronizationMRCheckBox">
-          <property name="text">
-           <string>MR</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="m_automaticSynchronizationCTCheckBox">
-          <property name="text">
-           <string>CT</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+    <widget class="QCheckBox" name="m_phaseScrollLoopCheckBox">
+     <property name="text">
+      <string>Enable phase scroll loop</string>
+     </property>
+    </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="udg::QModalitiesSelectorGroupBox" name="m_zoomByDefaultModalitiesGroupBox">
-       <property name="title">
-        <string>Zoom by default for these modalities</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+    <widget class="QCheckBox" name="m_wheelVolumeScrollCheckBox">
+     <property name="text">
+      <string>Volume scroll with mouse wheel</string>
+     </property>
+    </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_7">
-     <item>
-      <widget class="udg::QModalitiesSelectorGroupBox" name="m_propagationModalitiesByDefaultGroupBox">
-       <property name="title">
-        <string>Enable propagation by default on these modalities</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_5">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+    <widget class="QCheckBox" name="m_mouseWraparoundCheckBox">
+     <property name="text">
+      <string>Wraparound mouse on drag</string>
+     </property>
+    </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QGroupBox" name="groupBox_3">
-       <property name="title">
-        <string>Magnifying Glass tool zoom factor</string>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QRadioButton" name="m_1point5XZoomFactorRadioButton">
-          <property name="text">
-           <string>1.5x</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="m_2XZoomFactorRadioButton">
-          <property name="text">
-           <string>2x</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="m_4XZoomFactorRadioButton">
-          <property name="text">
-           <string>4x</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="m_6XZoomFactorRadioButton">
-          <property name="text">
-           <string>6x</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="m_8XZoomFactorRadioButton">
-          <property name="text">
-           <string>8x</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Reference Lines by default for these modalities</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QCheckBox" name="m_referenceLinesCTCheckBox">
+        <property name="text">
+         <string>CT</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="m_referenceLinesMRCheckBox">
+        <property name="text">
+         <string>MR</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_6">
-     <item>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="title">
-        <string>Measurements description verbosity</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QRadioButton" name="m_minimalVerbosityRadioButton">
-          <property name="text">
-           <string>Minimal</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="m_minimalExplicitVerbosityRadioButton">
-          <property name="text">
-           <string>Minimal Explicit</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="m_verboseVerbosityRadioButton">
-          <property name="text">
-           <string>Verbose</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="m_verboseExplicitVerbosityRadioButton">
-          <property name="text">
-           <string>Verbose Explicit</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_5">
-       <property name="title">
-        <string>Preferred SUV measurement normalization type</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QRadioButton" name="m_bodyWeightRadioButton">
-          <property name="text">
-           <string>Body Weight (bw) - g/ml</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QRadioButton" name="m_leanBodyMassRadioButton">
-          <property name="text">
-           <string>Lean Body Mass (lbm) - g/ml</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QRadioButton" name="m_bodySurfaceAreaRadioButton">
-          <property name="text">
-           <string>Body Surface Area (bsa) - cm²/ml</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="title">
+      <string>Automatic Synchronization by default for these modalities</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QCheckBox" name="m_automaticSynchronizationCTCheckBox">
+        <property name="text">
+         <string>CT</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="m_automaticSynchronizationMRCheckBox">
+        <property name="text">
+         <string>MR</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
-    <spacer>
+    <widget class="udg::QModalitiesSelectorGroupBox" name="m_zoomByDefaultModalitiesGroupBox">
+     <property name="title">
+      <string>Zoom by default for these modalities</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_4"/>
+    </widget>
+   </item>
+   <item>
+    <widget class="udg::QModalitiesSelectorGroupBox" name="m_propagationModalitiesByDefaultGroupBox">
+     <property name="title">
+      <string>Enable propagation by default on these modalities</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Magnifying Glass tool zoom factor</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item>
+       <widget class="QRadioButton" name="m_1point5XZoomFactorRadioButton">
+        <property name="text">
+         <string>1.5x</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="m_2XZoomFactorRadioButton">
+        <property name="text">
+         <string>2x</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="m_4XZoomFactorRadioButton">
+        <property name="text">
+         <string>4x</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="m_6XZoomFactorRadioButton">
+        <property name="text">
+         <string>6x</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="m_8XZoomFactorRadioButton">
+        <property name="text">
+         <string>8x</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Measurements description verbosity</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QRadioButton" name="m_minimalVerbosityRadioButton">
+        <property name="text">
+         <string>Minimal</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="m_minimalExplicitVerbosityRadioButton">
+        <property name="text">
+         <string>Minimal Explicit</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="m_verboseVerbosityRadioButton">
+        <property name="text">
+         <string>Verbose</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="m_verboseExplicitVerbosityRadioButton">
+        <property name="text">
+         <string>Verbose Explicit</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_5">
+     <property name="title">
+      <string>Preferred SUV measurement normalization type</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QRadioButton" name="m_bodyWeightRadioButton">
+        <property name="text">
+         <string>Body Weight (bw) - g/ml</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="m_leanBodyMassRadioButton">
+        <property name="text">
+         <string>Lean Body Mass (lbm) - g/ml</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="m_bodySurfaceAreaRadioButton">
+        <property name="text">
+         <string>Body Surface Area (bsa) - cm²/ml</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -339,6 +243,7 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
  <connections/>

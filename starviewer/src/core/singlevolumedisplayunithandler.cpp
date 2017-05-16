@@ -16,6 +16,8 @@
 
 #include "volumedisplayunit.h"
 
+#include <vtkImageStack.h>
+
 namespace udg {
 
 SingleVolumeDisplayUnitHandler::SingleVolumeDisplayUnitHandler()
@@ -30,11 +32,6 @@ SingleVolumeDisplayUnitHandler::~SingleVolumeDisplayUnitHandler()
 int SingleVolumeDisplayUnitHandler::getMaximumNumberOfInputs() const
 {
     return 1;
-}
-
-vtkImageSlice* SingleVolumeDisplayUnitHandler::getImageProp() const
-{
-    return m_displayUnits.first()->getImageSlice();
 }
 
 } // End namespace udg

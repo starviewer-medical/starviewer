@@ -15,6 +15,8 @@
 #ifndef VTKIMAGEDATACREATOR_H
 #define VTKIMAGEDATACREATOR_H
 
+#include <array>
+
 #include <vtkSmartPointer.h>
 
 class vtkImageData;
@@ -22,7 +24,7 @@ class vtkImageData;
 namespace udg {
 
 /**
- * Classe que permet crear un objecte vtkImageData amb les propietats desitjades. De moment sempre amb 1 component escalar només.
+ * @brief The VtkImageDataCreator class allows to create a vtkImageData instance using the builder pattern.
  */
 class VtkImageDataCreator {
 
@@ -31,16 +33,27 @@ public:
     VtkImageDataCreator();
 
     /// Assigna l'origen del vtkImageData que es crearà.
-    void setOrigin(double origin[3]);
+    VtkImageDataCreator& setOrigin(double origin[3]);
     /// Assigna l'spacing del vtkImageData que es crearà.
-    void setSpacing(double spacing[3]);
-    /// Crea i retorna l'objecte vtkImageData amb les dimensions donades. Funciona per tots els tipus de dades numèrics.
+    VtkImageDataCreator& setSpacing(double spacing[3]);
+    /// Sets the dimensions of the vtkImageData to be created.
+    VtkImageDataCreator& setDimensions(std::array<int, 3> dimensions);
+    /// Sets the number of components of the vtkImageData to be created.
+    VtkImageDataCreator& setNumberOfComponents(int numberOfComponents);
+
+    /// Creates and returns a vtkImageData instance with the current configuration and the given data.
+    template <class T>
+    vtkSmartPointer<vtkImageData> create(const T *data);
+    /// Creates and returns a vtkImageData instance with the current origin and spacing, the given dimensions, 1 component, and the given data.
+    /// Kept for backward compatibility, you should use create() instead.
     template <class T> vtkSmartPointer<vtkImageData> createVtkImageData(int width, int height, int depth, const T *data);
 
 private:
 
     double m_origin[3];
     double m_spacing[3];
+    std::array<int, 3> m_dimensions;
+    int m_numberOfComponents;
 
 };
 

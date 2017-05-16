@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 22 22">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3051">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+      .ColorScheme-Text {
+        color:#4d4d4d;
+      }
+      </style>
+  </defs>
+  <path
+     id="path6"
+     class="ColorScheme-Text"
+     d="M 3 3 L 3 7 L 3 18 L 3 19 L 4 19 L 13 19 L 18 19 L 19 19 L 19 18 L 19 13 L 19 7 L 19 3 L 3 3 z M 4 7 L 18 7 L 18 13 L 18 18 L 13 18 L 4 18 L 4 7 z "
+     style="fill:currentColor;fill-opacity:1;stroke:none" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 5.5006789,8.6919646 2.0868374,0"
+     id="path4158" />
+  <path
+     id="path4168"
+     d="m 10.572603,8.6919646 6.086838,0"
+     style="fill:none;fill-rule:evenodd;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  <path
+     id="path4170"
+     d="m 5.5006789,16.051152 4.0868374,0"
+     style="fill:none;fill-rule:evenodd;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 14.572603,16.051152 2.086838,0"
+     id="path4172" />
+  <path
+     style="fill:none;fill-rule:evenodd;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 12.572603,10.691965 4.086838,0"
+     id="path4174" />
+</svg>

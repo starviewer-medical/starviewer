@@ -51,8 +51,8 @@ bool AnatomicalRegionSyncCriterion::criterionIsMet(Q2DViewer *viewer1, Q2DViewer
             return false;
         }
 
-        QList<QVector<double> > planeBounds1 = imagePlane1->getCentralBounds();
-        QList<QVector<double> > planeBounds2 = imagePlane2->getCentralBounds();
+        auto planeCorners1 = imagePlane1->getCentralCorners();
+        auto planeCorners2 = imagePlane2->getCentralCorners();
 
         int yIndex1 = getYIndex(viewer1->getMainInput()->getAcquisitionPlane(), viewer1->getCurrentAnatomicalPlane());
         int yIndex2 = getYIndex(viewer2->getMainInput()->getAcquisitionPlane(), viewer2->getCurrentAnatomicalPlane());
@@ -62,10 +62,10 @@ bool AnatomicalRegionSyncCriterion::criterionIsMet(Q2DViewer *viewer1, Q2DViewer
             return false;
         }
 
-        double min1 = planeBounds1.at(3)[yIndex1];
-        double min2 = planeBounds2.at(3)[yIndex2];
-        double max1 = planeBounds1.at(0)[yIndex1];
-        double max2 = planeBounds2.at(0)[yIndex2];
+        double min1 = planeCorners1.bottomLeft.toArray()[yIndex1];
+        double min2 = planeCorners2.bottomLeft.toArray()[yIndex2];
+        double max1 = planeCorners1.topLeft.toArray()[yIndex1];
+        double max2 = planeCorners2.topLeft.toArray()[yIndex2];
 
         if (min1 > max1)
         {

@@ -37,31 +37,35 @@
 #include <map>
 #include <string>
 
+#include "common/using_std_string.h"
+
 namespace google_breakpad {
 
-using std::string;
 using std::map;
 
 class HTTPUpload {
  public:
-  // Sends the given set of parameters, along with the contents of
-  // upload_file, as a multipart POST request to the given URL.
-  // file_part_name contains the name of the file part of the request
+  // Sends the given sets of parameters and files as a multipart POST
+  // request to the given URL.
+  // Each key in |files| is the name of the file part of the request
   // (i.e. it corresponds to the name= attribute on an <input type="file">.
   // Parameter names must contain only printable ASCII characters,
   // and may not contain a quote (") character.
   // Only HTTP(S) URLs are currently supported.  Returns true on success.
   // If the request is successful and response_body is non-NULL,
   // the response body will be returned in response_body.
+  // If response_code is non-NULL, it will be set to the HTTP response code
+  // received (or 0 if the request failed before getting an HTTP response).
   // If the send fails, a description of the error will be
   // returned in error_description.
   static bool SendRequest(const string &url,
                           const map<string, string> &parameters,
-                          const string &upload_file,
-                          const string &file_part_name,
+                          const map<string, string> &files,
                           const string &proxy,
                           const string &proxy_user_pwd,
+                          const string &ca_certificate_file,
                           string *response_body,
+                          long *response_code,
                           string *error_description);
 
  private:

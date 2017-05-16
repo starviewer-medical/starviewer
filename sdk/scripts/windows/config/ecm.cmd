@@ -1,6 +1,5 @@
-set SourceDir=%SourceDirBase%\threadweaver-5.3.0\extra-cmake-modules-1.3.0
-
-set BuildDir=%SourceDir%
+set SourceDir=%SourceDirPrefix%\extra-cmake-modules-1.3.0
+set BuildDir=%BuildDirPrefix%\extra-cmake-modules-1.3.0-rel
 set InstallPrefix=%SourceDir%-%Arch%
 
 REM ============== Nothing should need to be changed below this line ==============

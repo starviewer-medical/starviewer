@@ -14,7 +14,7 @@
 
 
 #ifndef UDGQINPUTOUTPUTPACSWIDGET_H
-#define UDGQINPUTOUTPUCPACSWIDGET_H
+#define UDGQINPUTOUTPUTPACSWIDGET_H
 
 #include "ui_qinputoutputpacswidgetbase.h"
 

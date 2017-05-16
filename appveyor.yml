@@ -1,12 +1,14 @@
 version: 0.14-{build}-{branch}
 
 environment:
+  SDK_INSTALL_PREFIX: C:\
+
   matrix:
   - BITS: 32
-    QTDIR: C:\Qt\5.4\msvc2013_opengl
+    QTDIR: C:\Qt\5.6\msvc2015
     ARCH: x86
   - BITS: 64
-    QTDIR: C:\Qt\5.4\msvc2013_64_opengl
+    QTDIR: C:\Qt\5.6\msvc2015_64
     ARCH: amd64
 
 # Uncomment to enable RDP
@@ -17,13 +19,13 @@ install:
 - ps: |
     # Setup precompiled SDK
 
-    $source = "http://trueta.udg.edu/apt/windows/devel/0.13/Starviewer-sdk-win$env:BITS-0.13-0.7z"
-    $destination = "c:\Starviewer-sdk-win$env:BITS-0.13-0.7z"
+    $source = "http://trueta.udg.edu/apt/windows/devel/0.14/starviewer-sdk-win$env:BITS-0.14-5.7z"
+    $destination = "c:\starviewer-sdk-win$env:BITS-0.14-5.7z"
     Invoke-WebRequest $source -OutFile $destination
 
     7z x $destination -oc:\ > 7z-output.txt
 
-    $env:PATH = "$env:QTDIR\bin;c:\vtk\6.1.0-$env:BITS\bin;c:\gdcm\2.4.4-$env:BITS\bin;c:\ThreadWeaver\5.3.0-$env:BITS\bin;$env:PATH"
+    $env:PATH = "$env:QTDIR\bin;c:\vtk\7.0.0\bin;c:\gdcm\2.6.4\bin;c:\ThreadWeaver\5.3.0\bin;$env:PATH"
 
 
     # Setup jom
@@ -38,7 +40,7 @@ install:
 
 build_script:
 - cmd: |
-    call "%ProgramFiles(x86)%\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %ARCH%
+    call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %ARCH%
     cd starviewer
     qmake
     jom -j2

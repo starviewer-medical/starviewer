@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>771</width>
-    <height>154</height>
+    <height>156</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,16 @@
    <property name="spacing">
     <number>6</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>9</number>
+   </property>
+   <property name="topMargin">
+    <number>9</number>
+   </property>
+   <property name="rightMargin">
+    <number>9</number>
+   </property>
+   <property name="bottomMargin">
     <number>9</number>
    </property>
    <item>
@@ -183,7 +192,16 @@
        <string>Study</string>
       </attribute>
       <layout class="QGridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>9</number>
+       </property>
+       <property name="topMargin">
+        <number>9</number>
+       </property>
+       <property name="rightMargin">
+        <number>9</number>
+       </property>
+       <property name="bottomMargin">
         <number>9</number>
        </property>
        <property name="spacing">
@@ -304,7 +322,16 @@
        <string>Series</string>
       </attribute>
       <layout class="QGridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>9</number>
+       </property>
+       <property name="topMargin">
+        <number>9</number>
+       </property>
+       <property name="rightMargin">
+        <number>9</number>
+       </property>
+       <property name="bottomMargin">
         <number>9</number>
        </property>
        <property name="spacing">
@@ -421,7 +448,16 @@
        <string>Image</string>
       </attribute>
       <layout class="QGridLayout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>9</number>
+       </property>
+       <property name="topMargin">
+        <number>9</number>
+       </property>
+       <property name="rightMargin">
+        <number>9</number>
+       </property>
+       <property name="bottomMargin">
         <number>9</number>
        </property>
        <property name="spacing">

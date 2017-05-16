@@ -6,7 +6,8 @@
 
 include(../extensions.pri)
 
-extensionsFileName = extensions.h
+extensionsFileName = $$OUT_PWD/extensions.h
+INCLUDEPATH += $$OUT_PWD
 
 # Funció per afegir una llibreria estàtica com a dependència
 defineReplace(addExtensionInclude) {

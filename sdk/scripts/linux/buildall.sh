@@ -4,7 +4,7 @@ SCRIPTS_ROOT=$(readlink -f $(dirname $BASH_SOURCE))
 
 ### BEGIN: AUXILIARY FUNCTIONS ###
 
-download_and_verify() 
+download_and_verify()
 {
     EXPECTED_HASH=$1
     FILENAME=$2
@@ -25,25 +25,25 @@ download_and_verify()
 
 mkdir -p "${DOWNLOAD_PREFIX}"
 
-download_and_verify 497ece6ac3d8dfad70a92990b01f98a313c2189e5a0fad6c9f8cd5c4e408558e \
-                    'qt-opensource-linux-x64-5.4.1.run' \
-                    'http://download.qt.io/official_releases/qt/5.4/5.4.1/qt-opensource-linux-x64-5.4.1.run'
-                    
+download_and_verify 1fa2df848a25b900c87c7f7b98a34e3869b6ce9699fae0afd73a2da0f572bb89 \
+                    'qt-opensource-linux-x64-5.6.0.run' \
+                    'https://download.qt.io/official_releases/qt/5.6/5.6.0/qt-opensource-linux-x64-5.6.0.run'
+
 download_and_verify 09a97e82cf43672a4b16b162651f5bc0d86b9d7b8cfff58c345e5c97d6200937 \
                     'dcmtk-3.6.1_20120515.tar.gz' \
                     'http://support.dcmtk.org/redmine/attachments/download/8/dcmtk-3.6.1_20120515.tar.gz'
 
-download_and_verify bd7df10a479606d529a8b71f466c44a2bdd11fd534c62ce0aa44fad91883fa34 \
-                    'VTK-6.1.0.tar.gz' \
-                    'http://www.vtk.org/files/release/6.1/VTK-6.1.0.tar.gz'
+download_and_verify 78a990a15ead79cdc752e86b83cfab7dbf5b7ef51ba409db02570dbdd9ec32c3 \
+                    'VTK-7.0.0.tar.gz' \
+                    'http://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz'
 
-download_and_verify 3328145e79e693078be01c2ca96764e364d7ce399ccf92f9e9f45ec780dfb23d \
-                    'gdcm-2.4.4.tar.gz' \
-                    'http://downloads.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.4.4/gdcm-2.4.4.tar.gz'
+download_and_verify b116dc0b0e9f65dcd2196fa55d8815be215065ec537b15665afde0469bd47e91 \
+                    'gdcm-2.6.4.tar.bz2' \
+                    'http://downloads.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.6.4/gdcm-2.6.4.tar.bz2'
 
-download_and_verify 9f7b45ec57e01ca9ad89a05411752914f810fd70b7038fc48abd59e3ec13c6ee \
-                    'InsightToolkit-4.7.1.tar.xz' \
-                    'http://vorboss.dl.sourceforge.net/project/itk/itk/4.7/InsightToolkit-4.7.1.tar.xz'
+download_and_verify ea0011fc99a6303427b236c3ceaf54688224350ce1a216b64c9771ab3194b15f \
+                    'InsightToolkit-4.10.0.tar.xz' \
+                    'http://downloads.sourceforge.net/project/itk/itk/4.10/InsightToolkit-4.10.0.tar.xz'
 
 download_and_verify ea8b6a648b7b2dc313df709940813c22ed5b68d2f7bef30acbaf2a83a6e4c723 \
                     'extra-cmake-modules-1.3.0.tar.xz' \
@@ -54,18 +54,18 @@ download_and_verify c15818ec6e6320bea79a0d44e29cb4fc19a0e0d428cccb979d6c3104ec65
                     'http://download.kde.org/Attic/frameworks/5.3.0/threadweaver-5.3.0.tar.xz'
 
 
-chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.4.1.run"
+chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.0.run"
 echo "Please install Qt on ${INSTALL_QTDIR}"
-"${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.4.1.run"
+"${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.0.run"
 
 # Building SDK
 
 mkdir -p "${SOURCE_DIR_BASE}"
 
 tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/dcmtk-3.6.1_20120515.tar.gz"
-tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/VTK-6.1.0.tar.gz"
-tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/gdcm-2.4.4.tar.gz"
-tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-4.7.1.tar.xz"
+tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/VTK-7.0.0.tar.gz"
+tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/gdcm-2.6.4.tar.bz2"
+tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-4.10.0.tar.xz"
 tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/threadweaver-5.3.0.tar.xz"
 tar -C "${SOURCE_DIR_BASE}/threadweaver-5.3.0" -xvf "${DOWNLOAD_PREFIX}/extra-cmake-modules-1.3.0.tar.xz"
 

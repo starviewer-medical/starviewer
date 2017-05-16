@@ -601,19 +601,9 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
     switch (renderingStyle.getMethod())
     {
         case RenderingStyle::RayCasting:
-        case RenderingStyle::Texture3D:
-        case RenderingStyle::Texture2D:
             if (renderingStyle.getMethod() == RenderingStyle::RayCasting)
             {
                 m_renderingMethodComboBox->setCurrentIndex(renderingStyle.getObscurance() ? 1 : 0);
-            }
-            else if (renderingStyle.getMethod() == RenderingStyle::Texture3D)
-            {
-                m_renderingMethodComboBox->setCurrentIndex(3);
-            }
-            else
-            {
-                m_renderingMethodComboBox->setCurrentIndex(4);
             }
 
             applyClut(renderingStyle.getTransferFunction());
@@ -661,16 +651,16 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
             break;
 
         case RenderingStyle::MIP:
-            m_renderingMethodComboBox->setCurrentIndex(2);
+            m_renderingMethodComboBox->setCurrentIndex(3);
             break;
 
         case RenderingStyle::IsoSurface:
-            m_renderingMethodComboBox->setCurrentIndex(5);
+            m_renderingMethodComboBox->setCurrentIndex(4);
             m_isoValueSpinBox->setValue(static_cast<int>(qRound(renderingStyle.getIsoValue())));
             break;
 
         case RenderingStyle::Contouring:
-            m_renderingMethodComboBox->setCurrentIndex(6);
+            m_renderingMethodComboBox->setCurrentIndex(5);
             break;
 
         default:
@@ -720,21 +710,11 @@ void Q3DViewerExtension::updateUiForRenderingMethod(int index)
             break;
 
         case 4:
-            // Textures 3d
-            m_shadingGroupBox->show();
-            break;
-
-        case 5:
-            // Textures 2d
-            m_shadingGroupBox->show();
-            break;
-
-        case 6:
             // Isosuperfícies
             m_isosurfaceOptionsWidget->show();
             break;
 
-        case 7:
+        case 5:
             // Contouring
             break;
     }
@@ -765,20 +745,12 @@ void Q3DViewerExtension::updateView(bool fast)
             break;
 
         case 4:
-            m_3DView->setRenderFunctionToTexture3D();
-            break;
-
-        case 5:
-            m_3DView->setRenderFunctionToTexture2D();
-            break;
-
-        case 6:
             // Necessari per la primera vegada
             m_3DView->setIsoValue(m_isoValueSpinBox->value());
             m_3DView->setRenderFunctionToIsoSurface();
             break;
 
-        case 7:
+        case 5:
             m_3DView->setRenderFunctionToContouring();
             break;
     }

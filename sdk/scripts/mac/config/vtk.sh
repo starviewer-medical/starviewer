@@ -1,26 +1,30 @@
 #!/bin/bash
 
-SourceDir="$SourceDirBase/VTK-6.1.0/VTK-6.1.0"
+SourceDir="$SourceDirBase/VTK-7.0.0"
 
 if [ $BuildType = "debug" ]
 then
     CMakeBuildType="Debug"
     BuildDir="$SourceDir-build-debug"
-    InstallPrefix="/usr/local/"
 fi
 if [ $BuildType = "release" ]
 then
     CMakeBuildType="RelWithDebInfo"
     BuildDir="$SourceDir-build-release"
-    InstallPrefix="/usr/local/"
 fi
 
 # ============== Nothing should need to be changed below this line ==============
 
 CMakeOptions="-DCMAKE_BUILD_TYPE:STRING=$CMakeBuildType \
-			  -DVTK_Group_Qt:BOOL=TRUE \
-			  -DVTK_REQUIRED_OBJCXX_FLAGS:STRING=\"\" \
-			  -DCMAKE_INSTALL_PREFIX:PATH=$InstallPrefix \
-			  -DVTK_QT_VERSION:STRING=5"
+              -DCMAKE_INSTALL_PREFIX:PATH=$SdkInstallPrefix \
+              -DCMAKE_PREFIX_PATH:PATH=$QTDIR \
+              -DModule_vtkGUISupportQt:BOOL=TRUE \
+              -DModule_vtkGUISupportQtOpenGL:BOOL=TRUE \
+              -DModule_vtkGUISupportQtSQL:BOOL=TRUE \
+              -DModule_vtkGUISupportQtWebkit:BOOL=FALSE \
+              -DModule_vtkRenderingQt:BOOL=TRUE \
+              -DModule_vtkViewsQt:BOOL=TRUE \
+              -DVTK_REQUIRED_OBJCXX_FLAGS:STRING=\"\" \
+              -DVTK_QT_VERSION:STRING=5"
 
-VtkDir="$InstallPrefix/lib/cmake/vtk-6.1"
+VtkDir="$SdkInstallPrefix/lib/cmake/vtk-7.0"

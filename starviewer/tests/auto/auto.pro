@@ -12,12 +12,12 @@ SOURCES += autotests.cpp
 
 QT += testlib
 
-QT += xml opengl network webkit xmlpatterns gui declarative concurrent webkitwidgets qml quick sql
+QT += xml opengl network xmlpatterns gui concurrent qml quick quickwidgets sql webenginewidgets
 
-OBJECTS_DIR = ../../tmp/obj
-UI_DIR = ../../tmp/ui
-MOC_DIR = ../../tmp/moc
-RCC_DIR = ../../tmp/rcc
+OBJECTS_DIR = $$OUT_PWD/../../tmp/obj
+UI_DIR = $$OUT_PWD/../../tmp/ui
+MOC_DIR = $$OUT_PWD/../../tmp/moc
+RCC_DIR = $$OUT_PWD/../../tmp/rcc
 
 include(shared/shared.pri)
 include(unittests/unittests.pri)
@@ -25,6 +25,6 @@ include(../../sourcelibsdependencies.pri)
 include(../../src/makefixdebug.pri)
 
 #TODO: No afegeix la informacio de UI_DIR com a include a l'hora de compilar el testos
-INCLUDEPATH += ../../tmp/ui
+INCLUDEPATH += $$OUT_PWD/../../tmp/ui
 
-RESOURCES = ../../src/main/main.qrc
+RESOURCES = $$OUT_PWD/../../src/main/main.qrc

@@ -6,7 +6,7 @@ pushd $BuildDir
 if [ -d "$PatchesRoot/$Lib" ]
 then
     PatchedSourceDir="$SourceDir-patched"
-    rsync -auv $SourceDir/ $PatchedSourceDir
+    rsync -a --delete $SourceDir/ $PatchedSourceDir
     pushd $PatchedSourceDir
 
     for PATCH in $(ls "$PatchesRoot/$Lib")
@@ -18,9 +18,8 @@ then
     SourceDir=$PatchedSourceDir
 fi
 
-echo $CMake $CMakeOptions $SourceDir
-eval $CMake $CMakeGenerator $CMakeOptions -DCMAKE_PREFIX_PATH:STRING=$CMAKE_PREFIX_PATH $SourceDir
-make -j4
+$CMake -Wno-dev $CMakeOptions $SourceDir
+make -j$MakeConcurrency
 make install
 
 popd

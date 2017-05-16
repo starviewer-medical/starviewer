@@ -2,26 +2,12 @@
 <ui version="4.0">
  <class>udg::QLayoutOptionsWidgetBase</class>
  <widget class="QWidget" name="udg::QLayoutOptionsWidgetBase">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>400</width>
-    <height>206</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="title">
       <string>Layout according to these parameters when no Hanging Protocol is applied</string>
      </property>
@@ -29,100 +15,20 @@
       <bool>false</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" colspan="2">
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QGroupBox" name="groupBox_6">
-          <property name="title">
-           <string>Layout by</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_5">
-           <item row="0" column="0">
-            <widget class="QRadioButton" name="m_unfoldBySeriesRadioButton">
-             <property name="text">
-              <string>Series</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QRadioButton" name="m_unfoldByImagesRadioButton">
-             <property name="text">
-              <string>Images</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_7">
-          <property name="title">
-           <string>Layout direction</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_6">
-           <item row="0" column="0">
-            <widget class="QRadioButton" name="m_leftToRightRadioButton">
-             <property name="text">
-              <string>Left to right</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QRadioButton" name="m_topToBottomRadioButton">
-             <property name="text">
-              <string>Top to bottom</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_8">
-          <property name="title">
-           <string>Exclude from layout</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_7">
-           <item row="0" column="0">
-            <widget class="QCheckBox" name="m_localizerCheckBox">
-             <property name="text">
-              <string>CT Localizers</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="m_surveyCheckBox">
-             <property name="text">
-              <string>MR Surveys</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="2" column="1">
-       <widget class="QPushButton" name="m_restoreDefaultsButton">
-        <property name="text">
-         <string>Restore defaults</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <spacer name="horizontalSpacer">
+      <item row="4" column="0" colspan="2">
+       <spacer name="verticalSpacer">
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
-          <height>20</height>
+          <width>20</width>
+          <height>40</height>
          </size>
         </property>
        </spacer>
       </item>
-      <item row="1" column="0" colspan="2">
+      <item row="3" column="0" colspan="2">
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
          <widget class="QLabel" name="label_3">
@@ -135,7 +41,7 @@
          <widget class="QComboBox" name="m_maxViewersComboBox"/>
         </item>
         <item>
-         <spacer name="horizontalSpacer_5">
+         <spacer name="horizontalSpacer_2">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -149,6 +55,99 @@
         </item>
        </layout>
       </item>
+      <item row="5" column="1">
+       <widget class="QPushButton" name="m_restoreDefaultsButton">
+        <property name="text">
+         <string>Restore defaults</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../main/main.qrc">
+          <normaloff>:/images/icons/edit-clear.svg</normaloff>:/images/icons/edit-clear.svg</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QGroupBox" name="groupBox_8">
+        <property name="title">
+         <string>Exclude from layout</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="m_localizerCheckBox">
+           <property name="text">
+            <string>CT Localizers</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="m_surveyCheckBox">
+           <property name="text">
+            <string>MR Surveys</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QGroupBox" name="groupBox_7">
+        <property name="title">
+         <string>Layout direction</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="m_leftToRightRadioButton">
+           <property name="text">
+            <string>Left to right</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QRadioButton" name="m_topToBottomRadioButton">
+           <property name="text">
+            <string>Top to bottom</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QGroupBox" name="groupBox_6">
+        <property name="title">
+         <string>Layout by</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="m_unfoldBySeriesRadioButton">
+           <property name="text">
+            <string>Series</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QRadioButton" name="m_unfoldByImagesRadioButton">
+           <property name="text">
+            <string>Images</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </widget>
    </item>
@@ -161,6 +160,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../main/main.qrc"/>
+  <include location="../main/main.qrc"/>
+ </resources>
  <connections/>
 </ui>

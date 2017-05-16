@@ -7,7 +7,7 @@ Makefile*
 # Especial files
 src/core/i18n_release
 src/main/extensions.h
-src/core/executablesnames.h
+src/*/executablesnames.h
 
 # Temporals of Qt Single Application
 bin/*.dylib
@@ -58,6 +58,7 @@ ipch/*
 vcxproj.*
 fixdebug*
 *.tmp
+.qmake.stash
 
 # Manifests
 bin/*manifest*

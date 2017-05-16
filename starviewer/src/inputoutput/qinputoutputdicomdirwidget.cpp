@@ -52,7 +52,7 @@ QInputOutputDicomdirWidget::QInputOutputDicomdirWidget(QWidget *parent)
     m_statsWatcher = new StatsWatcher("QueryInputOutputDicomdirWidget", this);
     m_statsWatcher->addClicksCounter(m_viewButton);
     m_statsWatcher->addClicksCounter(m_retrieveButton);
-    m_statsWatcher->addClicksCounter(m_openDICOMDIRToolButton);
+    m_statsWatcher->addClicksCounter(m_openDICOMDIRPushButton);
 }
 
 QInputOutputDicomdirWidget::~QInputOutputDicomdirWidget()
@@ -67,7 +67,7 @@ QInputOutputDicomdirWidget::~QInputOutputDicomdirWidget()
 
 void QInputOutputDicomdirWidget::createConnections()
 {
-    connect (m_openDICOMDIRToolButton, SIGNAL(clicked()), SLOT(openDicomdir()));
+    connect (m_openDICOMDIRPushButton, SIGNAL(clicked()), SLOT(openDicomdir()));
 
     connect(m_studyTreeWidget, SIGNAL(requestedSeriesOfStudy(Study*)), SLOT(requestedSeriesOfStudy(Study*)));
     connect(m_studyTreeWidget, SIGNAL(requestedImagesOfSeries(Series*)), SLOT(requestedImagesOfSeries(Series*)));
@@ -83,11 +83,11 @@ void QInputOutputDicomdirWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(view()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/icons/visibility.svg"), tr("&View"), this, SLOT(view()));
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(view()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/retrieve.png"), tr("&Import"), this, SLOT(retrieveSelectedStudies()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/icons/document-import.svg"), tr("&Import"), this, SLOT(retrieveSelectedStudies()));
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ImportToLocalDatabaseSelectedDICOMDIRStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(retrieveSelectedStudies()));
 

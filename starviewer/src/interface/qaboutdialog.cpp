@@ -18,6 +18,8 @@
 #include "starviewerapplication.h"
 
 #include <QPushButton>
+#include <QMessageBox>
+#include <QDateTime>
 
 namespace udg {
 
@@ -60,6 +62,13 @@ QAboutDialog::QAboutDialog(QWidget *parent)
 
     QPushButton *licenseButton = m_buttonBox->addButton(tr("License information"), QDialogButtonBox::ActionRole);
     connect(licenseButton, &QPushButton::clicked, this, &QAboutDialog::showLicenseInformation);
+
+    m_crashBtn = 0;
+
+    m_okBtn = m_buttonBox->addButton(tr("Ok"), QDialogButtonBox::ActionRole);
+    connect(m_okBtn, &QPushButton::clicked, this, &QAboutDialog::btnOkClicked);
+    connect(m_okBtn, &QPushButton::pressed, this, &QAboutDialog::btnOkPressed);
+    connect(m_okBtn, &QPushButton::released, this, &QAboutDialog::btnOkReleased);
 }
 
 QAboutDialog::~QAboutDialog()
@@ -71,5 +80,42 @@ void QAboutDialog::showLicenseInformation()
     QLicenseDialog *licenseDialog = new QLicenseDialog(this);
     licenseDialog->open();
 }
+
+void QAboutDialog::btnCrashClicked()
+{
+    QMessageBox confirmMsgbox(QMessageBox::Icon::Warning, tr("Crash test"), tr("Are you sure do you want to crash Starviewer on purpose?"));
+    confirmMsgbox.addButton(QMessageBox::StandardButton::Yes);
+    confirmMsgbox.addButton(QMessageBox::StandardButton::No);
+    if (confirmMsgbox.exec() == QMessageBox::Yes) {
+        int* nowhere;
+        nowhere = 0x0;
+        *nowhere = 1;
+    }
+
+}
+
+void QAboutDialog::btnOkClicked()
+{
+    if (!m_crashBtn) { //Crash button not created
+        close();
+    }
+}
+
+void QAboutDialog::btnOkPressed()
+{
+    m_longClickStart = QDateTime::currentMSecsSinceEpoch();
+}
+
+void QAboutDialog::btnOkReleased()
+{
+    if ((QDateTime::currentMSecsSinceEpoch() - m_longClickStart) > msecsToShowCrash ) {
+        m_crashBtn = m_buttonBox->addButton(tr("Crash test"), QDialogButtonBox::ActionRole);
+        connect(m_crashBtn, &QPushButton::clicked, this, &QAboutDialog::btnCrashClicked);
+    }
+
+}
+
+
+
 
 }

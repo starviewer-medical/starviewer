@@ -35,10 +35,6 @@ public:
     static const QString UserDICOMDumpDefaultTagsPath;
     static const QString UserCustomWindowLevelsPath;
     static const QString RegisterStatLogs;
-    // Mida per defecte de la font de les annotacions, si no s'especifica, s'autocalcula.
-    static const QString ToolsFontSize;
-    // Mida per defecte del text dels widgets que s'autoescalen: PatientBrowserMenu, WorInProgress, Popup RIS... si no s'especifica, s'autocalcula.
-    static const QString ScaledUserInterfaceFontSize;
 
     static const QString NumberOfDirectionsForLowQualityObscurances;
     static const QString FunctionForLowQualityObscurances;
@@ -119,6 +115,9 @@ public:
     static const QString EnableQ2DViewerSliceScrollLoop;
     static const QString EnableQ2DViewerPhaseScrollLoop;
 
+    static const QString EnableQ2DViewerWheelVolumeScroll;
+    static const QString EnableQ2DViewerMouseWraparound;
+
     /// Defineix si habilitem per defecte el reference lines per modalitats MR i/o CT
     static const QString EnableQ2DViewerReferenceLinesForMR;
     static const QString EnableQ2DViewerReferenceLinesForCT;
@@ -149,6 +148,13 @@ public:
 
     /// Corresponding key to the enabled sync actions
     static const QString EnabledSyncActionsKey;
+
+    /// Multi-sampling is forced to 8 multi-samples in QViewer unless this is true.
+    static const QString DontForceMultiSampling;
+
+    /// Force a DPI scaling when not equal to 1.
+    static const QString ScaleFactor;
+
 };
 
 } // End namespace udg

@@ -16,6 +16,8 @@
 
 #include <QObject>
 #include <QImage>
+#include <QIcon>
+#include <QPixmap>
 #include <QString>
 #include <QPainter>
 
@@ -40,15 +42,15 @@ QImage ThumbnailCreator::getThumbnail(const Series *series, int resolution)
 
     if (series->getModality() == "KO")
     {
-        thumbnail.load(":/images/kinThumbnail.png");
+        thumbnail = createIconThumbnail(":/images/icons/mime-ko.svg", resolution);
     }
     else if (series->getModality() == "PR")
     {
-        thumbnail.load(":/images/presentationStateThumbnail.png");
+        thumbnail = createIconThumbnail(":/images/icons/mime-ps.svg", resolution);
     }
     else if (series->getModality() == "SR" || (!series->hasImages() && series->hasEncapsulatedDocuments()))
     {
-        thumbnail.load(":/images/structuredReportThumbnail.png");
+        thumbnail = createIconThumbnail(":/images/icons/mime-sr.svg", resolution);
     }
     else
     {
@@ -59,8 +61,10 @@ QImage ThumbnailCreator::getThumbnail(const Series *series, int resolution)
         }
         else
         {
+            thumbnail = createIconThumbnail(":/images/icons/mime-unknown.svg", resolution);
+
             // Si la sèrie no conté imatges en el thumbnail ho indicarem
-            thumbnail = makeEmptyThumbnailWithCustomText(QObject::tr("No Images Available"));
+            //thumbnail = makeEmptyThumbnailWithCustomText(QObject::tr("No Images Available"));
         }
     }
 
@@ -95,6 +99,14 @@ QImage ThumbnailCreator::createImageThumbnail(const QString &imageFileName, int 
 {
     DICOMTagReader reader(imageFileName);
     return createThumbnail(&reader, resolution);
+}
+
+QImage ThumbnailCreator::createIconThumbnail(const QString &iconFileName, int resolution)
+{
+    QImage thumbnail;
+    QIcon icon = QIcon(iconFileName);
+    thumbnail = icon.pixmap(resolution).toImage();
+    return thumbnail;
 }
 
 QImage ThumbnailCreator::createThumbnail(const DICOMTagReader *reader, int resolution)
@@ -167,14 +179,34 @@ QImage ThumbnailCreator::createThumbnail(DicomImage *dicomImage, int resolution)
         }
         else if (scaledImage->getStatus() == EIS_Normal)
         {
-            thumbnail = convertToQImage(scaledImage);
-            if (thumbnail.isNull())
+            QPixmap pixmap = convertToQPixmap(scaledImage);
+            if (pixmap.isNull())
             {
                 DEBUG_LOG("No s'ha pogut convertir la DicomImage a QImage. Es crea un thumbnail de Preview not available.");
                 ok = false;
             }
             else
             {
+                // The smallest side will be of "resolution" size.
+                pixmap = pixmap.scaled(resolution,resolution, Qt::AspectRatioMode::KeepAspectRatioByExpanding, Qt::TransformationMode::SmoothTransformation);
+
+                // By cropping the longer side, a squared image is made.
+                int width = pixmap.width();
+                int height = pixmap.height();
+                if (width > height) // heigth == resolution
+                {
+                    pixmap = pixmap.copy((width-resolution) / 2, 0, height, height);
+                }
+                else if (height > width) // width == resolution
+                {
+                    pixmap = pixmap.copy(0, (height-resolution) / 2, width, width);
+                }
+                else
+                {
+                    // A perfect square, nothing to do
+                }
+
+                thumbnail = pixmap.toImage();
                 ok = true;
             }
 
@@ -219,7 +251,7 @@ bool ThumbnailCreator::isSuitableForThumbnailCreation(const DICOMTagReader *read
     return true;
 }
 
-QImage ThumbnailCreator::convertToQImage(DicomImage *dicomImage)
+QPixmap ThumbnailCreator::convertToQPixmap(DicomImage *dicomImage)
 {
     Q_ASSERT(dicomImage);
 
@@ -247,8 +279,8 @@ QImage ThumbnailCreator::convertToQImage(DicomImage *dicomImage)
     const int height = (int)(dicomImage->getHeight());
     imageHeader += QString("\n%1 %2\n255\n").arg(width).arg(height);
 
-    // QImage en la que carregarem el buffer de dades
-    QImage thumbnail;
+    // QPixmap en la que carregarem el buffer de dades
+    QPixmap thumbnail;
     // Create output buffer for DicomImage class
     const int offset = imageHeader.size();
     const unsigned int length = (width * height) * bytesPerComponent + offset;

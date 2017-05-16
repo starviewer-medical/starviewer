@@ -138,6 +138,12 @@ public:
 
     /// Ens retorna la llista de Series que es poden visualitzar en un viewer
     QList<Series*> getViewableSeries();
+    
+    /// Returns a list of volumes that compose the study.
+    QList<Volume*> getVolumesList();
+
+    /// Returns the number of volumes that compose the study.
+    int getNumberOfVolumes();
 
     ///Retorna un DICOMSource que aglutina els diferents DICOMSource de les sèries que conté l'estudi i el de l'estudi si se n'hi ha assignat un.
     DICOMSource getDICOMSource() const;

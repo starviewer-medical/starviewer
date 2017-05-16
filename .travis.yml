@@ -20,36 +20,39 @@ env:
   global:
     - SDK_INSTALL_PREFIX="$HOME/uroot/usr/local"
     - LD_LIBRARY_PATH="$SDK_INSTALL_PREFIX/lib:$SDK_INSTALL_PREFIX/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH"
+    - DYLD_LIBRARY_PATH="$SDK_INSTALL_PREFIX/lib"
+    - DYLD_FRAMEWORK_PATH="/usr/local/opt/qt5/lib"
 
 before_install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      sudo apt-add-repository -y ppa:beineri/opt-qt542-trusty                           &&
-      sudo apt-get update -qq                                                           &&
-      sudo apt-get install -qq qt54base qt54quick1 qt54tools qt54webkit qt54xmlpatterns &&
-      sudo apt-get install -qq libwrap0 libwrap0-dev                                    ;
+      sudo apt-add-repository -y ppa:beineri/opt-qt562-trusty                                   &&
+      sudo apt-get update -qq                                                                   &&
+      sudo apt-get install -qq qt56base qt56declarative qt56tools qt56webengine qt56xmlpatterns &&
+      sudo apt-get install -qq libwrap0 libwrap0-dev                                            ;
     else
-      brew update > /dev/null                                                                                                                 &&
-      cd $(brew --prefix)/Library/Formula                                                                                                     &&
-      echo "Install Qt 5.4."                                                                                                                  &&
-      wget -O qt5.rb https://raw.githubusercontent.com/Homebrew/homebrew-core/00e46351980ad915424aad9316abffc19936809c/Library/Formula/qt5.rb &&
-      cd -                                                                                                                                    &&
-      brew install qt5                                                                                                                        &&
-      chmod -R 755 /usr/local/opt/qt5/*                                                                                                       ;
+      brew update > /dev/null                                                                        &&
+      cd $(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-core/Formula                       &&
+      echo "Install Qt 5.6."                                                                         &&
+      wget -O qt5.rb https://raw.githubusercontent.com/Homebrew/homebrew-core/89a9d5e/Formula/qt5.rb &&
+      cd -                                                                                           &&
+      brew install qt5                                                                               &&
+      chmod -R 755 /usr/local/opt/qt5/*                                                              ;
     fi
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      . /opt/qt54/bin/qt54-env.sh                                                                                  &&
-      wget --directory-prefix=$HOME http://trueta.udg.edu/apt/ubuntu/devel/0.13/Starviewer-sdk-linux-0.13-0.tar.xz &&
+      . /opt/qt56/bin/qt56-env.sh                                                                                  &&
+      wget --directory-prefix=$HOME http://trueta.udg.edu/apt/ubuntu/devel/0.14/starviewer-sdk-linux-0.14-4.tar.xz &&
       mkdir ~/uroot                                                                                                &&
-      tar xf ~/Starviewer-sdk-linux-0.13-0.tar.xz -C ~/uroot                                                       ;
+      tar xf ~/starviewer-sdk-linux-0.14-4.tar.xz -C ~/uroot                                                       ;
     else
-      QTDIR="/usr/local/opt/qt5"                                                                               &&
-      PATH="$QTDIR/bin:$PATH"                                                                                  &&
-      LDFLAGS=-L$QTDIR/lib                                                                                     &&
-      CPPFLAGS=-I$QTDIR/include                                                                                &&
-      wget --directory-prefix=$HOME http://trueta.udg.edu/apt/macosx/devel/Starviewer-sdk-macosx-0.13-0.tar.xz &&
-      tar xf ~/Starviewer-sdk-macosx-0.13-0.tar.xz -C /usr/local --strip-components 2                          ;
+      QTDIR="/usr/local/opt/qt5"                                                                                        &&
+      PATH="$QTDIR/bin:$PATH"                                                                                           &&
+      LDFLAGS=-L$QTDIR/lib                                                                                              &&
+      CPPFLAGS=-I$QTDIR/include                                                                                         &&
+      wget -nv --directory-prefix=$HOME http://trueta.udg.edu/apt/macosx/devel/0.14/starviewer-sdk-macosx-0.14-4.tar.xz &&
+      mkdir ~/uroot                                                                                                     &&
+      tar xf ~/starviewer-sdk-macosx-0.14-4.tar.xz -C ~/uroot                                                           ;
     fi
 
 before_script:
@@ -65,6 +68,6 @@ script:
     else
       qmake ;
     fi
-  - make -j3
+  - make -j3 | sed 's/\/Applications\/Xcode\.app\/Contents\/Developer/[xcode]/g' | sed -E 's/\/(Users|home)\/travis\/uroot/[uroot]/g'
   - cd tests/auto
   - ./autotests -silent

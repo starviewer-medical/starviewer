@@ -80,6 +80,7 @@ QString WindowsSystemInformation::getOperatingSystemVersion()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         if (getProperty(object, "Version", &variantProperty))
         {
             operatingSystemVersion = QString().fromWCharArray(variantProperty.bstrVal);
@@ -106,6 +107,7 @@ QString WindowsSystemInformation::getOperatingSystemServicePackVersion()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         if (getProperty(object, "CSDVersion", &variantProperty))
         {
             servicePackVersion = QString().fromWCharArray(variantProperty.bstrVal);
@@ -132,6 +134,7 @@ QString WindowsSystemInformation::getOperatingSystemName()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         if (getProperty(object, "Caption", &variantProperty))
         {
             operatingSystemVersion = QString().fromWCharArray(variantProperty.bstrVal);
@@ -190,6 +193,7 @@ QString WindowsSystemInformation::getOperatingSystemServicePackMajorVersion()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         if (getProperty(object, "ServicePackMajorVersion", &variantProperty))
         {
             servicePackMajorVersion = QString::number(variantProperty.uintVal);
@@ -216,6 +220,7 @@ QString WindowsSystemInformation::getOperatingSystemServicePackMinorVersion()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         if (getProperty(object, "ServicePackMinorVersion", &variantProperty))
         {
             servicePackMajorVersion = QString::number(variantProperty.uintVal);
@@ -243,6 +248,7 @@ unsigned int WindowsSystemInformation::getRAMTotalAmount()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         // Recuperar la memòria total del sistema en Bytes
         if (getProperty(object, "TotalPhysicalMemory", &variantProperty))
         {
@@ -272,6 +278,7 @@ QList<unsigned int> WindowsSystemInformation::getRAMModulesCapacity()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         // Recuperar la memòria de cada mòdul de RAM en Bytes
         if (getProperty(object, "Capacity", &variantProperty))
         {
@@ -300,6 +307,7 @@ QList<unsigned int> WindowsSystemInformation::getRAMModulesFrequency()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         // Recuperar la frequència de cada mòdul de RAM
         if (getProperty(object, "Speed", &variantProperty))
         {
@@ -328,6 +336,7 @@ unsigned int WindowsSystemInformation::getCPUNumberOfCores()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         // Recuperar el nombre de cores del processador
         if (getProperty(object, "NumberOfCores", &variantProperty))
         {
@@ -367,6 +376,7 @@ QList<unsigned int> WindowsSystemInformation::getCPUFrequencies()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         // Recuperar la frequència del processador.
         // S'utilitza el MaxClockSpeed ja que el CurrentClockSpeed retorna la càrrega de la CPU actual.
         if (getProperty(object, "MaxClockSpeed", &variantProperty))
@@ -395,6 +405,7 @@ unsigned int WindowsSystemInformation::getCPUL2CacheSize()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         // Recuperar la frequència del processador.
         if (getProperty(object, "L2CacheSize", &variantProperty))
         {
@@ -423,6 +434,7 @@ QStringList WindowsSystemInformation::getGPUBrand()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         if (getProperty(object, "AdapterCompatibility", &variantProperty))
         {
             GPUBrand << QString::fromWCharArray(variantProperty.bstrVal);
@@ -450,6 +462,7 @@ QStringList WindowsSystemInformation::getGPUModel()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
 
         if (getProperty(object, "Name", &variantProperty))
         {
@@ -477,6 +490,7 @@ QList<unsigned int> WindowsSystemInformation::getGPURAM()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         if (getProperty(object, "AdapterRAM", &variantProperty))
         {
             GPURAM << variantProperty.uintVal / (1024 * 1024);
@@ -514,6 +528,7 @@ QStringList WindowsSystemInformation::getGPUDriverVersion()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
         QString driverVersionString = "";
 
         if (getProperty(object, "DriverVersion", &variantProperty))
@@ -544,6 +559,7 @@ QStringList WindowsSystemInformation::getScreenVendors()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
 
         if (getProperty(object, "MonitorManufacturer", &variantProperty))
         {
@@ -571,6 +587,7 @@ QStringList WindowsSystemInformation::getHardDiskDevices()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
 
         if (getProperty(object, "DeviceID", &variantProperty))
         {
@@ -599,6 +616,7 @@ unsigned int WindowsSystemInformation::getHardDiskCapacity(const QString &device
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
 
         if (getProperty(object, "Size", &variantProperty))
         {
@@ -627,6 +645,7 @@ unsigned int WindowsSystemInformation::getHardDiskFreeSpace(const QString &devic
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
 
         if (getProperty(object, "FreeSpace", &variantProperty))
         {
@@ -656,6 +675,7 @@ bool WindowsSystemInformation::doesOpticalDriveHaveWriteCapabilities()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
 
         if (getProperty(object, "Capabilities", &variantProperty))
         {
@@ -700,6 +720,7 @@ unsigned int WindowsSystemInformation::getNetworkAdapterSpeed()
     while (object)
     {
         VARIANT variantProperty;
+        VariantInit(&variantProperty);
 
         if (getProperty(object, "Speed", &variantProperty))
         {

@@ -1,17 +1,18 @@
 REM Call vtk configuration script to make sure VtkDir is set
 call "%ScriptsRoot%\config\vtk.cmd"
 
-set SourceDir=%SourceDirBase%\gdcm-2.4.4\gdcm-2.4.4
+set SourceDir=%SourceDirPrefix%\gdcm-2.6.4
+set BuildDir=%BuildDirPrefix%\gdcm-2.6.4
 
 if %BuildType% == debug (
     set CMakeBuildType=Debug
-    set BuildDir=%SourceDir%-build-debug
-    set InstallPrefix=%SystemDrive%/gdcm/2.4.4d-%Arch%
+    set BuildDir=%BuildDir%-deb
+    set InstallPrefix=%SdkInstallPrefix%/gdcm/2.6.4d
 )
 if %BuildType% == release (
     set CMakeBuildType=RelWithDebInfo
-    set BuildDir=%SourceDir%-build-release
-    set InstallPrefix=%SystemDrive%/gdcm/2.4.4-%Arch%
+    set BuildDir=%BuildDir%-rel
+    set InstallPrefix=%SdkInstallPrefix%/gdcm/2.6.4
 )
 
 REM ============== Nothing should need to be changed below this line ==============
@@ -22,4 +23,4 @@ set CMakeOptions=-DCMAKE_BUILD_TYPE:STRING=%CMakeBuildType% ^
                  -DGDCM_USE_VTK:BOOL=TRUE ^
                  -DVTK_DIR="%VtkDir%"
 
-set GdcmDir=%InstallPrefix%/lib/gdcm-2.4
+set GdcmDir=%InstallPrefix%/lib/gdcm-2.6

@@ -122,6 +122,18 @@ void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
 
 int main(int argc, char *argv[])
 {
+    // Applying scale factor
+    {
+        QVariant cfgValue = udg::Settings().getValue(udg::CoreSettings::ScaleFactor);
+        bool exists;
+        int scaleFactor = cfgValue.toInt(&exists);
+        if (exists && scaleFactor != 1) { // Setting exists and is different than one
+            QString envVar = QString::number(1 + (scaleFactor * 0.125),'f', 3);
+            qputenv("QT_SCALE_FACTOR", envVar.toUtf8());
+            QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+        }
+    }
+
     // Utilitzem QtSingleApplication en lloc de QtApplication, ja que ens permet tenir executant sempre una sola instància d'Starviewer, si l'usuari executa
     // una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
 
@@ -141,11 +153,12 @@ int main(int argc, char *argv[])
 
     QPixmap splashPixmap;
     #ifdef STARVIEWER_LITE
-    splashPixmap.load(":/images/splashLite.png");
+    splashPixmap.load(":/images/splash-lite.svg");
     #else
-    splashPixmap.load(":/images/splash.png");
+    splashPixmap.load(":/images/splash.svg");
     #endif
-    QLabel splash(0, Qt::SplashScreen|Qt::FramelessWindowHint);
+    // Note: We use Qt::Tool instead of Qt::SplashScreen because in Mac with the latter if a message box was shown it appeared under the splash.
+    QLabel splash(0, Qt::Tool|Qt::FramelessWindowHint);
     splash.setAttribute(Qt::WA_TranslucentBackground);
     splash.setPixmap(splashPixmap);
     splash.resize(splashPixmap.size());
@@ -155,7 +168,6 @@ int main(int argc, char *argv[])
     {
         splash.show();
     }
-
     app.setOrganizationName(udg::OrganizationNameString);
     app.setOrganizationDomain(udg::OrganizationDomainString);
     app.setApplicationName(udg::ApplicationNameString);

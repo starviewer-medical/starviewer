@@ -97,7 +97,7 @@ void QPerfusionMapReconstructionExtension::initializeTools()
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
     m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
-    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
+    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingMouseTool"));
     m_translateToolButton->setDefaultAction(m_toolManager->registerTool("TranslateTool"));
     m_windowLevelToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelTool"));
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
@@ -108,12 +108,12 @@ void QPerfusionMapReconstructionExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "SlicingTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "SlicingKeyboardTool";
+    defaultTools << "SlicingMouseTool" << "TranslateTool" << "WindowLevelTool" << "ScreenShotTool" << "SlicingKeyboardTool";
     m_toolManager->triggerTools(defaultTools);
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "SeedTool" << "PolylineTemporalROITool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "SeedTool" << "PolylineTemporalROITool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -136,7 +136,7 @@ void QPerfusionMapReconstructionExtension::initializeTools()
     //Inicialitzem les dades de la seed tool
     m_toolManager->triggerTool("SeedTool");
     m_seedToolData = static_cast<SeedToolData*> (m_2DView->getViewer()->getToolProxy()->getTool("SeedTool")->getToolData());
-    m_toolManager->triggerTool("SlicingTool");
+    m_toolManager->triggerTool("SlicingMouseTool");
 }
 
 void QPerfusionMapReconstructionExtension::createConnections()
@@ -269,7 +269,7 @@ void QPerfusionMapReconstructionExtension::computePerfusionMap()
         connect(roiData, SIGNAL(dataChanged()), SLOT(paintROIData()));
     }
     roiData->setTemporalImage(m_mapCalculator->getDeltaRImage());
-    m_toolManager->triggerTool("SlicingTool");
+    m_toolManager->triggerTool("SlicingMouseTool");
 
 
     QApplication::restoreOverrideCursor();

@@ -18,6 +18,7 @@
 #include "qviewer.h"
 #include "annotationflags.h"
 #include "anatomicalplane.h"
+#include "volumedisplayunit.h"
 
 #include <QPointer>
 
@@ -101,6 +102,8 @@ public:
 
     /// Returns the VOI LUT that is currently applied to the image in this viewer.
     virtual VoiLut getCurrentVoiLut() const;
+    /// Returns the VOI LUT that is currently applied to the specified volume, or a default-constructed VOI LUT if the index is out of range.
+    VoiLut getCurrentVoiLutInVolume(int index) const;
 
     /// Retorna la llesca/fase actual
     int getCurrentSlice() const;
@@ -166,10 +169,13 @@ public:
     double getCurrentDisplayedImageDepthOnInput(int i) const;
 
     /// Gets the pixel data corresponding to the current rendered image
-    VolumePixelData* getCurrentPixelData();
+    SliceOrientedVolumePixelData getCurrentPixelData();
 
-    /// Gets the pixel data corresponding to the current rendered image from the specified input. If i is out of range, null will be returned.
-    VolumePixelData* getCurrentPixelDataFromInput(int i);
+    /// Gets the pixel data corresponding to the current rendered image from the specified input.
+    SliceOrientedVolumePixelData getCurrentPixelDataFromInput(int i);
+
+    /// Restores the standard rendering quality in this viewer.
+    void restoreRenderingQuality();
     
     /// Ens dóna la llesca mínima/màxima de llesques, tenint en compte totes les imatges,
     /// tant com si hi ha fases com si no
@@ -202,13 +208,14 @@ public:
     /// Ask is thickslab is active on the i-th input. If i is out of range, false will be returned
     bool isThickSlabActiveOnInput(int i) const;
 
-    /// Obtenim el mode de projecció del thickslab.
-    /// Si el thickslab no està actiu, el valor és indefinit
-    int getSlabProjectionMode() const;
+    /// Returns current slab projection mode.
+    VolumeDisplayUnit::SlabProjectionMode getSlabProjectionMode() const;
 
-    /// Obtenim el gruix de l'slab
-    /// Si el thickslab no està actiu, el valor és indefinit
-    int getSlabThickness() const;
+    /// Returns current slab thickness in mm. If thickslab is disabled, returns 0.
+    double getSlabThickness() const;
+
+    /// Returns the maximum slab thickness that can be set.
+    double getMaximumSlabThickness() const;
 
     /// Casts the given QViewer to a Q2DViewer object
     /// If casting is successful, casted pointer to Q2DViewer will be returned, null otherwise
@@ -350,16 +357,16 @@ public slots:
     // TODO aquests mètodes també haurien d'estar en versió QString!
 
     /// Sets the given slab projection mode to the main volume.
-    void setSlabProjectionMode(int projectionMode);
+    void setSlabProjectionMode(VolumeDisplayUnit::SlabProjectionMode projectionMode);
     /// Sets the given slab projection mode to the volume at the given index. If there isn't a volume at the given index, it does nothing.
-    void setSlabProjectionModeInVolume(int index, int slabProjectionMode);
+    void setSlabProjectionModeInVolume(int index, VolumeDisplayUnit::SlabProjectionMode slabProjectionMode);
 
-    /// Sets the given slab thickness (number of slices) to the main volume.
-    void setSlabThickness(int thickness);
-    /// Sets the given slab thickness (number of slices) to the volume at the given index. If there isn't a volume at the given index, it does nothing.
-    void setSlabThicknessInVolume(int index, int thickness);
+    /// Sets the given slab thickness in mm to the main volume.
+    void setSlabThickness(double thickness);
+    /// Sets the given slab thickness in mm to the volume at the given index. If there isn't a volume at the given index, it does nothing.
+    void setSlabThicknessInVolume(int index, double thickness);
 
-    /// Disables thick slab. Acts as a shortcut for setSlabThickness(1)
+    /// Disables thick slab. Acts as a shortcut for setSlabThickness(0.0).
     void disableThickSlab();
 
     /// Alineament de la imatge dins del visualitzador
@@ -401,11 +408,11 @@ signals:
     void seedPositionChanged(double x, double y, double z);
 
     /// Emitted when the slab projection mode has changed.
-    void slabProjectionModeChanged(int slabProjectionMode);
+    void slabProjectionModeChanged(VolumeDisplayUnit::SlabProjectionMode slabProjectionMode);
 
     /// S'emet quan canvia l'slab thickness
     /// @param thickness Nou valor de thickness
-    void slabThicknessChanged(int thickness);
+    void slabThicknessChanged(double thickness);
 
     /// Senyal que s'envia quan ha canviat l'overlay
     void overlayChanged();
@@ -563,7 +570,7 @@ private:
     Drawer *m_drawer;
 
     /// Indica quin tipus de projecció apliquem sobre l'slab
-    int m_slabProjectionMode;
+    VolumeDisplayUnit::SlabProjectionMode m_slabProjectionMode;
 
     /// Conté el mapeig d'operacions a fer quan voelm passar d'una orientació a un altre
     ImageOrientationOperationsMapper *m_imageOrientationOperationsMapper;

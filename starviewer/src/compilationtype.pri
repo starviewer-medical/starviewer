@@ -1,9 +1,5 @@
 CONFIG += debug_and_release c++11
 
-# TODO: remove once ITK is compiled with c++11
-clang:QMAKE_CXXFLAGS += -Wno-static-float-init -Wno-c++11-narrowing
-linux-g++:QMAKE_CXXFLAGS += -fpermissive
-
 # Use gold linker
 linux:QMAKE_LFLAGS += -fuse-ld=gold
 
@@ -27,24 +23,29 @@ win32 {
     else {
         CONFIG -= console
     }
+
+    # Required since Qt 5.6 to use OpenGl directly
+    LIBS += opengl32.lib glu32.lib
+    # Required since Qt 5.6 by ITKCommon
+    LIBS += gdi32.lib
+
+    # definim que per sistemes de compilació windows basats en visual studio
+    # la compilació es faci en tants cores com sigui possible
+    QMAKE_CXXFLAGS += /MP
+
+    # Indiquem que per compil·lacions en debug, Runtime Library sigui Multi-threaded DLL (com en release) i no Multi-threaded Debug DLL
+    QMAKE_CXXFLAGS_DEBUG -= -MDd
+    QMAKE_CXXFLAGS_DEBUG += -MD
+
+    QMAKE_CXXFLAGS -= -Zc:strictStrings
 }
 
 macx {
     QMAKE_CXXFLAGS += -stdlib=libc++
     QMAKE_LFLAGS += -stdlib=libc++
     LIBS += -framework Cocoa
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
 }
-
-# definim que per sistemes de compilació windows basats en visual studio 
-# la compilació es faci en tants cores com sigui possible
-
-win32-msvc2013:QMAKE_CXXFLAGS += /MP
-
-# Indiquem que per compil·lacions en debug, Runtime Library sigui Multi-threaded DLL (com en release) i no Multi-threaded Debug DLL
-win32-msvc2013:QMAKE_CXXFLAGS_DEBUG -= -MDd
-win32-msvc2013:QMAKE_CXXFLAGS_DEBUG += -MD
-
-win32-msvc2013:QMAKE_CXXFLAGS_RELEASE -= -Zc:strictStrings
 
 # Definim variable per construir versió lite en temps de compilació
 lite_version:DEFINES += STARVIEWER_LITE

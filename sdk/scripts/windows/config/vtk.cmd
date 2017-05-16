@@ -1,21 +1,27 @@
-set SourceDir=%SourceDirBase%\VTK-6.1.0\VTK-6.1.0
+set SourceDir=%SourceDirPrefix%\VTK-7.0.0
+set BuildDir=%BuildDirPrefix%\VTK-7.0.0
 
 if %BuildType% == debug (
     set CMakeBuildType=Debug
-    set BuildDir=%SourceDir%-build-debug
-    set InstallPrefix=%SystemDrive%/VTK/6.1.0d-%Arch%
+    set BuildDir=%BuildDir%-deb
+    set InstallPrefix=%SdkInstallPrefix%/VTK/7.0.0d
 )
 if %BuildType% == release (
     set CMakeBuildType=RelWithDebInfo
-    set BuildDir=%SourceDir%-build-release
-    set InstallPrefix=%SystemDrive%/VTK/6.1.0-%Arch%
+    set BuildDir=%BuildDir%-rel
+    set InstallPrefix=%SdkInstallPrefix%/VTK/7.0.0
 )
 
 REM ============== Nothing should need to be changed below this line ==============
 
 set CMakeOptions=-DCMAKE_BUILD_TYPE:STRING=%CMakeBuildType% ^
                  -DCMAKE_INSTALL_PREFIX:PATH="%InstallPrefix%" ^
-                 -DVTK_Group_Qt:BOOL=TRUE ^
+                 -DModule_vtkGUISupportQt:BOOL=TRUE ^
+                 -DModule_vtkGUISupportQtOpenGL:BOOL=TRUE ^
+                 -DModule_vtkGUISupportQtSQL:BOOL=TRUE ^
+                 -DModule_vtkGUISupportQtWebkit:BOOL=FALSE ^
+                 -DModule_vtkRenderingQt:BOOL=TRUE ^
+                 -DModule_vtkViewsQt:BOOL=TRUE ^
                  -DVTK_QT_VERSION:STRING=5
 
-set VtkDir=%InstallPrefix%/lib/cmake/vtk-6.1
+set VtkDir=%InstallPrefix%/lib/cmake/vtk-7.0

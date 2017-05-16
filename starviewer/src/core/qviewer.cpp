@@ -25,6 +25,7 @@
 #include "logging.h"
 #include "mathtools.h"
 #include "starviewerapplication.h"
+#include "coresettings.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de
 // interface, pacs, etc.etc.!!
@@ -35,6 +36,7 @@
 #include <QContextMenuEvent>
 #include <QMessageBox>
 #include <QDir>
+#include <QScreen>
 
 // Include's vtk
 #include <QVTKWidget.h>
@@ -56,6 +58,7 @@ QViewer::QViewer(QWidget *parent)
  : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_voiLutData(0),
    m_isRenderingEnabled(true), m_isActive(false)
 {
+    m_lastAngleDelta = QPoint();
     m_defaultFitIntoViewportMarginRate = 0.0;
     m_vtkWidget = new QVTKWidget(this);
     m_vtkWidget->setFocusPolicy(Qt::WheelFocus);
@@ -101,7 +104,7 @@ QViewer::~QViewer()
     // Cal que la eliminació del vtkWidget sigui al final ja que els altres
     // objectes que eliminem en poden fer ús durant la seva destrucció
     delete m_toolProxy;
-    delete m_patientBrowserMenu;
+    m_patientBrowserMenu->deleteLater();
     m_windowToImageFilter->Delete();
     delete m_vtkWidget;
     m_vtkQtConnections->Delete();
@@ -159,12 +162,22 @@ QSize QViewer::getRenderWindowSize() const
 
 QPoint QViewer::getEventPosition() const
 {
-    return QPoint(this->getInteractor()->GetEventPosition()[0], this->getInteractor()->GetEventPosition()[1]);
+    QPoint point(this->getInteractor()->GetEventPosition()[0], this->getInteractor()->GetEventPosition()[1]);
+    point *= this->devicePixelRatioF();
+    return point;
+
 }
 
 QPoint QViewer::getLastEventPosition() const
 {
-    return QPoint(this->getInteractor()->GetLastEventPosition()[0], this->getInteractor()->GetLastEventPosition()[1]);
+    QPoint point(this->getInteractor()->GetLastEventPosition()[0], this->getInteractor()->GetLastEventPosition()[1]);
+    point *= this->devicePixelRatioF();
+    return point;
+}
+
+QPoint QViewer::getWheelAngleDelta() const
+{
+    return m_lastAngleDelta;
 }
 
 bool QViewer::isActive() const
@@ -192,7 +205,7 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
         case vtkCommand::MouseWheelForwardEvent:
         case vtkCommand::MouseWheelBackwardEvent:
         {
-            QWheelEvent *e = (QWheelEvent*)callData;
+            QWheelEvent *e = (QWheelEvent*)callData; //WARNING: I don't like that casting here, may become dangerous.
             if (e)
             {
                 if (e->delta() == 0 || e->orientation() == Qt::Horizontal)
@@ -203,6 +216,15 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
         }
     }
 #endif
+
+    if (vtkEvent == vtkCommand::MouseWheelForwardEvent || vtkEvent == vtkCommand::MouseWheelBackwardEvent)
+    {
+        QWheelEvent *event = (QWheelEvent*)callData; //WARNING: I don't like that casting here, may become dangerous.
+        if (event)
+        {
+            m_lastAngleDelta = event->angleDelta();
+        }
+    }
 
     // Quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor.
     // TODO Ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
@@ -664,10 +686,14 @@ void QViewer::contextMenuRelease()
 
     // Obtenim la posició de l'event
     QPoint point = this->getEventPosition();
+    point /= this->devicePixelRatioF(); // Vtk pixels are real pixels, Qt wants logical pixels.
 
     // Remember to flip y
     QSize size = this->getRenderWindowSize();
+    size /= this->devicePixelRatioF(); // Vtk pixels are real pixels, Qt wants logical pixels.
     point.setY(size.height() - point.y());
+
+
 
     // Map to global
     QPoint globalPoint = this->mapToGlobal(point);
@@ -923,6 +949,14 @@ void QViewer::setupRenderWindow()
     renderWindow->AddRenderer(getRenderer());
     renderWindow->DoubleBufferOn();
     renderWindow->LineSmoothingOn();
+    renderWindow->SetDPI(QGuiApplication::primaryScreen()->logicalDotsPerInch());
+
+    if (!Settings().getValue(CoreSettings::DontForceMultiSampling).toBool())
+    {
+        // This is the default of VTK except on Mac due to some alleged problems in some models, and is needed to get smooth lines
+        // The setting will allow to avoid those problems if they arise, at the cost of getting aliased lines
+        renderWindow->SetMultiSamples(8);
+    }
 
     // TODO This is needed for the rendering process to work correctly if coming from handleNotEnoughMemoryForVisualizationError().
     //      Alternatively the rendering process also works correctly after a Q2DViewer::restore().

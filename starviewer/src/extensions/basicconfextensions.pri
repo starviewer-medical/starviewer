@@ -2,7 +2,7 @@ TRANSLATIONS += $$EXTENSION_DIR/translations_ca_ES.ts \
                 $$EXTENSION_DIR/translations_es_ES.ts \
                 $$EXTENSION_DIR/translations_en_GB.ts
 
-DESTDIR = ./
+DESTDIR = $$OUT_PWD
 
 INCLUDEPATH += ../../../core \
                ../../../inputoutput

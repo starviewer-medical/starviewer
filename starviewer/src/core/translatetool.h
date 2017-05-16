@@ -31,11 +31,7 @@ public:
 
     void handleEvent(unsigned long eventID);
 
-private:
-    /// Realitza la feina de desplaçament
-    void pan();
-
-private slots:
+protected slots:
     /// Comença el translate
     void startTranslate();
 
@@ -44,6 +40,10 @@ private slots:
 
     /// Atura l'estat de translate
     void endTranslate();
+
+private:
+    /// Realitza la feina de desplaçament
+    void pan();
 
 private:
     /// Estat de la tool

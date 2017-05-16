@@ -45,7 +45,7 @@ public:
     void reset();
     
     /// Returns the voxel values properly formatted as a string.
-    QString getAsQString();
+    QString getAsQString() const;
 
     /// Equality operator
     bool operator==(const Voxel &voxel) const;

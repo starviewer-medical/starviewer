@@ -8,7 +8,8 @@ TEMPLATE = app
 
 # CrashHandler
 SOURCES += crashhandler.cpp
-HEADERS += crashhandler.h
+HEADERS += crashhandler.h \
+           ../thirdparty/breakpad/client/linux/handler/exception_handler.h
 
 # End CrashHandler
 
@@ -29,7 +30,7 @@ win32{
 RC_FILE = starviewer.rc
 }
 macx {
-    ICON = images/starviewer.icns
+    ICON = images/logo/logo.icns
 }
 
 # Definim que per sistemes de compilació windows basats en visual studio 
@@ -40,7 +41,7 @@ win32-msvc2013:QMAKE_LFLAGS += /LARGEADDRESSAWARE
 include(../../sourcelibsdependencies.pri)
 
 # Thirdparty libraries
-DUMMY = $$addLibraryDependency(../thirdparty, breakpad)
+DUMMY = $$addLibraryDependency($$PWD/../thirdparty, $$OUT_PWD/../thirdparty, breakpad)
 
 include(../corelibsconfiguration.pri)
 include(../thirdparty/qtsingleapplication/src/qtsingleapplication.pri)
@@ -48,7 +49,7 @@ include(../breakpad.pri)
 
 include(installextensions.pri)
 
-QT += xml opengl network webkit xmlpatterns qml declarative concurrent webkitwidgets quick sql
+QT += xml opengl network xmlpatterns qml concurrent quick quickwidgets sql webenginewidgets
 
 #TODO: Qt 4.5.3 no afegeix la informacio de UI_DIR com a include a l'hora de compilar el main.cpp
 INCLUDEPATH += ../../tmp/ui

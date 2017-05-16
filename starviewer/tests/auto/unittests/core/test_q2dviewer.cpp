@@ -6,6 +6,8 @@
 #include "volume.h"
 #include "volumetesthelper.h"
 
+#include <QProcessEnvironment>
+
 using namespace udg;
 using namespace testing;
 
@@ -23,6 +25,13 @@ Q_DECLARE_METATYPE(Volume*)
 
 void test_Q2DViewer::canShowDisplayShutter_ShouldReturnExpectedValue_data()
 {
+    QProcessEnvironment environment = QProcessEnvironment::systemEnvironment();
+
+    if (environment.contains("APPVEYOR") || environment.value("TRAVIS_OS_NAME") == "linux")
+    {
+        QSKIP("Test crashes in AppVeyor and Travis CI Linux");
+    }
+
     QTest::addColumn<Q2DViewer*>("viewer");
     QTest::addColumn<bool>("expectedValue");
     QTest::addColumn<Volume*>("volumeToCleanup");

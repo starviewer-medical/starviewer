@@ -20,6 +20,7 @@
 #include "voxel.h"
 #include "logging.h"
 #include "standarduptakevaluemeasurehandler.h"
+#include "sliceorientedvolumepixeldata.h"
 // Vtk
 #include <vtkCommand.h>
 
@@ -62,6 +63,7 @@ void VoxelInformationTool::handleEvent(unsigned long eventID)
         case vtkCommand::LeaveEvent:
             m_caption->visibilityOff();
             m_caption->update();
+            m_2DViewer->restoreRenderingQuality();
             m_2DViewer->render();
             break;
 
@@ -134,14 +136,8 @@ void VoxelInformationTool::updateCaption()
 
 QString VoxelInformationTool::computeVoxelValueOnInput(double worldCoordinate[3], int i)
 {
-    int phaseIndex = 0;
-    if (m_2DViewer->getViewOnInput(i) == OrthogonalPlane::XYPlane && m_2DViewer->doesInputHavePhases(i))
-    {
-        phaseIndex = m_2DViewer->getCurrentPhaseOnInput(i);
-    }
-    
-    VolumePixelData *pixelData = m_2DViewer->getCurrentPixelDataFromInput(i);
-    Voxel voxel = pixelData->getVoxelValue(worldCoordinate, phaseIndex);
+    SliceOrientedVolumePixelData pixelData = m_2DViewer->getCurrentPixelDataFromInput(i);
+    Voxel voxel = pixelData.getVoxelValue(worldCoordinate);
     
     if (voxel.getNumberOfComponents() == 1 && m_2DViewer->getInput(i)->getModality() == "PT")
     {

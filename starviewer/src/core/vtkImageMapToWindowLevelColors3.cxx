@@ -41,7 +41,6 @@
 #include "vtkScalarsToColors.h"
 #include "vtkPointData.h"
 
-vtkCxxRevisionMacro(vtkImageMapToWindowLevelColors3, "$Revision: 1.3 $")
 vtkStandardNewMacro(vtkImageMapToWindowLevelColors3)
 
 // Constructor sets default values

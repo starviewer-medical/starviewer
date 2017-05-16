@@ -1,10 +1,26 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
 #include "logging.h"
 #include "easylogging++.h"
 #include "starviewerapplication.h"
-#include <QDir>
+
 #include <QApplication>
 
-void udg::beginLogging() 
+namespace udg {
+
+void beginLogging()
 {
     // Primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
     QDir logDir = udg::UserLogsPath;
@@ -25,59 +41,72 @@ void udg::beginLogging()
     el::Loggers::reconfigureAllLoggers(logConfig);
 }
 
-QString udg::getLogFilePath() 
+QString getLogFilePath()
 {
     return QDir::toNativeSeparators(udg::UserLogsFile);
 }
 
-QString udg::getLogConfFilePath() 
+QString getLogConfFilePath()
 {
     // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
     // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
-    QString configurationFile = "/etc/starviewer/log.conf";
-    if (!QFile::exists(configurationFile))
+
+    QString configurationFile;
+
+    if (qApp->applicationFilePath().contains("autotests"))
     {
-        configurationFile = qApp->applicationDirPath() + "/log.conf";
+        configurationFile = sourcePath() + "/tests/auto/log.conf";
     }
-    // Afegim localització per Mac OS X en desenvolupament
-    if (!QFile::exists(configurationFile))
+    else
     {
-        configurationFile = qApp->applicationDirPath() + "/../../../log.conf";
+        configurationFile = "/etc/starviewer/log.conf";
+
+        if (!QFile::exists(configurationFile))
+        {
+            configurationFile = installationPath() + "/log.conf";
+        }
+        if (!QFile::exists(configurationFile))
+        {
+            configurationFile = sourcePath() + "/bin/log.conf";
+        }
     }
+
     return configurationFile;
 }
 
-void udg::debugLog(const QString &msg, const QString &file, int line, const QString &function) 
+void debugLog(const QString &msg, const QString &file, int line, const QString &function)
 {
     LOG(DEBUG) << qPrintable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
 }
 
-void udg::infoLog(const QString &msg, const QString&, int, const QString&) 
+void infoLog(const QString &msg, const QString&, int, const QString&)
 {
     LOG(INFO) << qUtf8Printable(msg);
 }
 
-void udg::warnLog(const QString &msg, const QString &file, int line, const QString &function) 
+void warnLog(const QString &msg, const QString &file, int line, const QString &function)
 {
     LOG(WARNING) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
 }
 
-void udg::errorLog(const QString &msg, const QString &file, int line, const QString &function) 
+void errorLog(const QString &msg, const QString &file, int line, const QString &function)
 {
     LOG(ERROR) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
 }
 
-void udg::fatalLog(const QString &msg, const QString &file, int line, const QString &function) 
+void fatalLog(const QString &msg, const QString &file, int line, const QString &function)
 {
     LOG(FATAL) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
 }
 
-void udg::verboseLog(int vLevel, const QString &msg, const QString&, int, const QString&) 
+void verboseLog(int vLevel, const QString &msg, const QString&, int, const QString&)
 {
     VLOG(vLevel) << qUtf8Printable(msg);
 }
 
-void udg::traceLog(const QString &msg, const QString&, int, const QString&) 
+void traceLog(const QString &msg, const QString&, int, const QString&)
 {
     LOG(TRACE) << qUtf8Printable(msg);
+}
+
 }

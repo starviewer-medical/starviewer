@@ -7,14 +7,27 @@
     <x>0</x>
     <y>0</y>
     <width>545</width>
-    <height>106</height>
+    <height>113</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../../main/main.qrc">
+    <normaloff>:/images/icons/printer.svg</normaloff>:/images/icons/printer.svg</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <property name="horizontalSpacing">
@@ -106,6 +119,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../main/main.qrc"/>
+  <include location="../../../main/main.qrc"/>
+ </resources>
  <connections/>
 </ui>

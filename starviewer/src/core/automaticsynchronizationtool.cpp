@@ -125,8 +125,7 @@ void AutomaticSynchronizationTool::setPositionToToolData()
 {
     QString frameOfReference = m_2DViewer->getMainInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
     
-    double center[3];
-    m_2DViewer->getCurrentImagePlane()->getCenter(center);
+    Vector3 center = m_2DViewer->getCurrentImagePlane()->getCenter();
 
     int slice = m_2DViewer->getCurrentSlice();
     double currentSpacingBetweenSlices = m_2DViewer->getCurrentSpacingBetweenSlices();
@@ -141,7 +140,7 @@ void AutomaticSynchronizationTool::setPositionToToolData()
     double increment = (slice - m_lastSlice) * currentSpacingBetweenSlices;
     m_lastSlice = slice;
 
-    m_toolData->setPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel(), center, increment);
+    m_toolData->setPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel(), center.toArray().data(), increment);
 }
 
 void AutomaticSynchronizationTool::updatePosition()

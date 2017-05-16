@@ -454,10 +454,6 @@ QChar Series::getLaterality() const
     return m_laterality;
 }
 
-int Series::getNumberOfVolumes()
-{
-    return m_volumesList.size();
-}
 
 void Series::setDICOMSource(const DICOMSource &seriesDICOMSource)
 {
@@ -505,6 +501,11 @@ QList<Volume*> Series::getVolumesList()
         volumesList << VolumeRepository::getRepository()->getVolume(id);
     }
     return volumesList;
+}
+
+int Series::getNumberOfVolumes()
+{
+    return m_volumesList.size();
 }
 
 QList<Identifier> Series::getVolumesIDList() const

@@ -73,6 +73,9 @@ public:
     /// If the plane could not be determined, -1, -1 will be returned
     void get2DPlaneIndices(int &x, int &y) const;
 
+    /// Returns the vtkPolyData that represents this polygon.
+    vtkPolyData* getVtkPolyData() const;
+
 public slots:
     void update();
 

@@ -37,7 +37,7 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
 
     // Creació de l'acció del boto de sincronitzar.
     m_synchronizeButtonAction = new QAction(0);
-    m_synchronizeButtonAction->setIcon(QIcon(":/images/unlinked.png"));
+    m_synchronizeButtonAction->setIcon(QIcon(":/images/icons/emblem-symbolic-link.svg"));
     m_synchronizeButtonAction->setText(tr("Enable manual synchronization in this viewer"));
     m_synchronizeButtonAction->setStatusTip(m_synchronizeButtonAction->text());
     m_synchronizeButtonAction->setCheckable(true);
@@ -115,7 +115,7 @@ void Q2DViewerWidget::createConnections()
     connect(m_2DView, SIGNAL(sliceChanged(int)), SLOT(updateProjectionLabel()));
     connect(m_2DView, SIGNAL(anatomicalViewChanged(AnatomicalPlane)), SLOT(updateProjectionLabel()));
     connect(m_2DView, SIGNAL(viewChanged(int)), SLOT(resetSliderRangeAndValue()));
-    connect(m_2DView, SIGNAL(slabThicknessChanged(int)), SLOT(resetSliderRangeAndValue()));
+    connect(m_2DView, &Q2DViewer::slabThicknessChanged, this, &Q2DViewerWidget::resetSliderRangeAndValue);
 
     // Quan seleccionem l'slider, també volem que el viewer quedi com a actiu/seleccionat
     connect(m_slider, SIGNAL(sliderPressed()), SLOT(setAsActiveViewer()));
@@ -123,7 +123,6 @@ void Q2DViewerWidget::createConnections()
     connect(m_2DView, SIGNAL (selected()), SLOT(emitSelectedViewer()));
     connect(m_2DView, SIGNAL(volumeChanged(Volume*)), SLOT(updateInput(Volume*)));
 
-    connect(m_2DView, SIGNAL(slabThicknessChanged(int)), SLOT(updateSlider()));
     connect(m_synchronizeButtonAction, SIGNAL(toggled(bool)), SLOT(enableSynchronization(bool)));
 
     connect(m_2DView, SIGNAL(viewerStatusChanged()), SLOT(setSliderBarWidgetsEnabledFromViewerStatus()));
@@ -226,13 +225,13 @@ void Q2DViewerWidget::enableSynchronization(bool enable)
 {
     if (!enable)
     {
-        m_synchronizeButtonAction->setIcon(QIcon(":/images/unlinked.png"));
+        m_synchronizeButtonAction->setIcon(QIcon(":/images/icons/emblem-symbolic-unlink.svg"));
         m_synchronizeButtonAction->setText(tr("Enable manual synchronization in this viewer"));
         m_synchronizeButtonAction->setStatusTip(m_synchronizeButtonAction->text());
     }
     else
     {
-        m_synchronizeButtonAction->setIcon(QIcon(":/images/linked.png"));
+        m_synchronizeButtonAction->setIcon(QIcon(":/images/icons/emblem-symbolic-link.svg"));
         m_synchronizeButtonAction->setText(tr("Disable manual synchronization in this viewer"));
         m_synchronizeButtonAction->setStatusTip(m_synchronizeButtonAction->text());
     }
@@ -264,13 +263,9 @@ void Q2DViewerWidget::enableSynchronizationButton(bool enable)
     m_synchronizeButton->setEnabled(enable);
 }
 
-void Q2DViewerWidget::updateSlider()
-{
-    m_slider->setValue(m_2DView->getCurrentSlice());
-}
-
 void Q2DViewerWidget::resetSliderRangeAndValue()
 {
+    m_slider->setMinimum(m_2DView->getMinimumSlice());
     m_slider->setMaximum(m_2DView->getMaximumSlice());
     m_slider->setValue(m_2DView->getCurrentSlice());
 }

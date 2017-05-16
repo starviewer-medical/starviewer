@@ -83,8 +83,8 @@ public:
     /// Retorna el shutter com una QImage de mides width i height
     QImage getAsQImage(int width, int height) const;
 
-    /// Returns the shutter in vtkImageData format, with extent defined by given width, height and slice.
-    vtkSmartPointer<vtkImageData> getAsVtkImageData(int width, int height, int slice) const;
+    /// Returns the shutter in vtkImageData format, with extent defined by given width and height.
+    vtkSmartPointer<vtkImageData> getAsVtkImageData(int width, int height) const;
     
     /// Donada una llista de shutters, ens retorna el shutter resultant de la intersecció d'aquests. 
     /// En quant al color resultant, serà la mitjana de tots els shutters de la llista.

@@ -18,8 +18,7 @@
 
 #include <QCloseEvent>
 #include <QUrl>
-#include <QNetworkReply>
-#include <QWebHistory>
+#include <QWebEngineHistory>
 
 namespace udg {
 
@@ -35,7 +34,6 @@ QReleaseNotes::QReleaseNotes(QWidget *parent)
     setWindowModality(Qt::ApplicationModal);
 
     m_viewWebView->setContextMenuPolicy(Qt::NoContextMenu);
-    m_viewWebView->history()->setMaximumItemCount(0);
 }
 
 QReleaseNotes::~QReleaseNotes()
@@ -54,7 +52,7 @@ void QReleaseNotes::setDontShowVisible(bool visible)
 
 void QReleaseNotes::showIfUrlLoadsSuccessfully(const QUrl &url)
 {
-    connect(m_viewWebView->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(loadFinished(QNetworkReply*)));
+    connect(m_viewWebView, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
     m_viewWebView->setUrl(url);
 }
 
@@ -71,22 +69,22 @@ void QReleaseNotes::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
-void QReleaseNotes::loadFinished(QNetworkReply *reply)
+void QReleaseNotes::loadFinished(bool ok)
 {
     // Desconectar el manager
-    disconnect(m_viewWebView->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(loadFinished(QNetworkReply*)));
+    disconnect(m_viewWebView, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
 
-    if (reply->error() == QNetworkReply::NoError)
+    if (ok)
     {
         // Si no hi ha hagut error, mostrar
         show();
     }
     else
     {
-        ERROR_LOG(QString("Error en carregar la url, tipus ") + QString::number(reply->error())+
-                  QString(": ") + reply->errorString());
+        ERROR_LOG("Error while loading release notes.");
     }
-    reply->deleteLater();
+
+    m_viewWebView->history()->clear();
 }
 
-}; // End namespace udg
+} // End namespace udg

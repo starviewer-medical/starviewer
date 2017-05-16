@@ -10,11 +10,15 @@
     <x>0</x>
     <y>0</y>
     <width>541</width>
-    <height>135</height>
+    <height>150</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Add new DICOM printer</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../../main/main.qrc">
+    <normaloff>:/images/icons/printer.svg</normaloff>:/images/icons/printer.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -140,16 +144,24 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="m_cancelButton">
+      <widget class="QPushButton" name="m_addButton">
        <property name="text">
-        <string>Cancel</string>
+        <string>Add</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="m_addButton">
+      <widget class="QPushButton" name="m_cancelButton">
        <property name="text">
-        <string>Add</string>
+        <string>Cancel</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
        </property>
       </widget>
      </item>
@@ -159,9 +171,9 @@
  </widget>
  <tabstops>
   <tabstop>m_cancelButton</tabstop>
-  <tabstop>m_addButton</tabstop>
  </tabstops>
  <resources>
+  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>
  <connections/>

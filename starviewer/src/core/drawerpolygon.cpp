@@ -298,7 +298,7 @@ void DrawerPolygon::updateVtkActorProperties()
     // Assignem color
     QColor color = this->getColor();
     m_vtkActor->GetProperty()->SetColor(color.redF(), color.greenF(), color.blueF());
-    m_vtkBackgroundActor->GetProperty()->SetColor(255.0, 255.0, 255.0);
+    m_vtkBackgroundActor->GetProperty()->SetColor(0.0, 0.0, 0.0);
 }
 
 int DrawerPolygon::getNumberOfPoints() const
@@ -373,6 +373,11 @@ void DrawerPolygon::get2DPlaneIndices(int &xIndex, int &yIndex) const
         xIndex = -1;
         yIndex = -1;
     }
+}
+
+vtkPolyData* DrawerPolygon::getVtkPolyData() const
+{
+    return m_vtkPolyData;
 }
 
 }

@@ -239,9 +239,8 @@ public:
     DisplayShutter getDisplayShutterForDisplay();
 
     /// Returns display shutter for display in vtkImageData format, with the same dimensions as the image.
-    /// The z value of the extent can be specified with zSlice.
     /// The vtkImageData object is created only the first time, subsequent calls return the same object.
-    vtkImageData* getDisplayShutterForDisplayAsVtkImageData(int zSlice = 0);
+    vtkImageData* getDisplayShutterForDisplayAsVtkImageData();
 
     /// Assingar/Obtenir el DICOMSource de la imatge. Indica quin és l'origen dels fitxers DICOM que conté la imatge
     void setDICOMSource(const DICOMSource &imageDICOMSource);

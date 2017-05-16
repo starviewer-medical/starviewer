@@ -22,7 +22,9 @@ FORMS += qlogviewerbase.ui \
     qlayoutoptionswidgetbase.ui \
     qnotificationpopupbase.ui \
     qfusionlayoutwidgetbase.ui \
-    qexternalapplicationconfigurationscreenbase.ui
+    qexternalapplicationconfigurationscreenbase.ui \
+    qdpiconfigurationscreenbase.ui
+
 
 TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
@@ -103,8 +105,10 @@ HEADERS += extensionfactory.h \
     imageplane.h \
     slicingtool.h \
     translatetool.h \
+    translatelefttool.h \
     voxelinformationtool.h \
     windowleveltool.h \
+    windowlevellefttool.h \
     seedtool.h \
     magicroitool.h \
     rotate3dtool.h \
@@ -140,11 +144,6 @@ HEADERS += extensionfactory.h \
     transferfunctionio.h \
     qtransferfunctioneditor.h \
     qtransferfunctioneditorbygradient.h \
-    accumulator.h \
-    averageaccumulator.h \
-    minimumaccumulator.h \
-    maximumaccumulator.h \
-    vtkProjectionImageFilter.h \
     vtkRunThroughFilter.h \
     slicingkeyboardtool.h \
     qthickslabwidget.h \
@@ -211,8 +210,6 @@ HEADERS += extensionfactory.h \
     standarduptakevaluemeasurehandler.h \
     statswatcher.h \
     clippingplanestool.h \
-    representationslayer.h \
-    toolrepresentation.h \
     settings.h \
     settingsregistry.h \
     settingsparser.h \
@@ -271,6 +268,7 @@ HEADERS += extensionfactory.h \
     qcustomwindowleveleditwidget.h \
     applicationstylehelper.h \
     changesliceqviewercommand.h \
+    changephaseqviewercommand.h \
     qtransferfunctioneditor2.h \
     transferfunctioneditor.h \
     transferfunctioneditorcommands.h \
@@ -297,6 +295,7 @@ HEADERS += extensionfactory.h \
     firewallaccess.h \
     firewallaccesstest.h \
     slicingwheeltool.h \
+    slicingmousetool.h \
     qmessageboxautoclose.h \
     commandlineoption.h \
     applicationversiontest.h \
@@ -339,7 +338,6 @@ HEADERS += extensionfactory.h \
     itkDCMTKFileReader.h \
     itkDCMTKImageIO.h \
     itkDCMTKImageIOFactory.h \
-    itkDCMTKSeriesFileNames.h \
     volumepixeldatareaderitkdcmtk.h \
     postprocessor.h \
     computezspacingpostprocessor.h \
@@ -376,15 +374,12 @@ HEADERS += extensionfactory.h \
     orthogonalplane.h \
     filter.h \
     filteroutput.h \
-    displayshutterfilter.h \
     windowlevelfilter.h \
-    thickslabfilter.h \
     blendfilter.h \
     mammographyimagehelper.h \
     imagepipeline.h \
     volumereadermanager.h \
     volumedisplayunit.h \
-    secondaryvolumedisplayunit.h \
     volumedisplayunithandlerfactory.h \
     genericvolumedisplayunithandler.h \
     singlevolumedisplayunithandler.h \
@@ -434,7 +429,13 @@ HEADERS += extensionfactory.h \
     externalapplication.h \
     externalapplicationsmanager.h \
     encapsulateddocument.h \
-    encapsulateddocumentfillerstep.h
+    encapsulateddocumentfillerstep.h \
+    qdpiconfigurationscreen.h \
+    vtkimageextractphase.h \
+    phasefilter.h \
+    vtkimagereslicemapper2.h \
+    sliceorientedvolumepixeldata.h \
+    voxelindex.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -502,9 +503,11 @@ SOURCES += extensionmediator.cpp \
     referencelinestooldata.cpp \
     imageplane.cpp \
     translatetool.cpp \
+    translatelefttool.cpp \
     slicingtool.cpp \
     voxelinformationtool.cpp \
     windowleveltool.cpp \
+    windowlevellefttool.cpp \
     seedtool.cpp \
     magicroitool.cpp \
     rotate3dtool.cpp \
@@ -538,8 +541,6 @@ SOURCES += extensionmediator.cpp \
     transferfunctionio.cpp \
     qtransferfunctioneditor.cpp \
     qtransferfunctioneditorbygradient.cpp \
-    accumulator.cpp \
-    vtkProjectionImageFilter.cxx \
     vtkRunThroughFilter.cxx \
     slicingkeyboardtool.cpp \
     qthickslabwidget.cpp \
@@ -602,8 +603,6 @@ SOURCES += extensionmediator.cpp \
     standarduptakevaluemeasurehandler.cpp \
     statswatcher.cpp \
     clippingplanestool.cpp \
-    representationslayer.cpp \
-    toolrepresentation.cpp \
     settings.cpp \
     settingsregistry.cpp \
     settingsparser.cpp \
@@ -660,6 +659,7 @@ SOURCES += extensionmediator.cpp \
     qcustomwindowleveleditwidget.cpp \
     applicationstylehelper.cpp \
     changesliceqviewercommand.cpp \
+    changephaseqviewercommand.cpp \
     qtransferfunctioneditor2.cpp \
     transferfunctioneditor.cpp \
     transferfunctioneditorcommands.cpp \
@@ -683,6 +683,7 @@ SOURCES += extensionmediator.cpp \
     firewallaccess.cpp \
     firewallaccesstest.cpp \
     slicingwheeltool.cpp \
+    slicingmousetool.cpp \
     qmessageboxautoclose.cpp \
     commandlineoption.cpp \
     applicationversiontest.cpp \
@@ -725,7 +726,6 @@ SOURCES += extensionmediator.cpp \
     itkDCMTKFileReader.cxx \
     itkDCMTKImageIO.cxx \
     itkDCMTKImageIOFactory.cxx \
-    itkDCMTKSeriesFileNames.cxx \
     volumepixeldatareaderitkdcmtk.cpp \
     postprocessor.cpp \
     computezspacingpostprocessor.cpp \
@@ -758,15 +758,12 @@ SOURCES += extensionmediator.cpp \
     orthogonalplane.cpp \
     filter.cpp \
     filteroutput.cpp \
-    displayshutterfilter.cpp \
     windowlevelfilter.cpp \
-    thickslabfilter.cpp \
     blendfilter.cpp \
     mammographyimagehelper.cpp \
     imagepipeline.cpp \
     volumereadermanager.cpp \
     volumedisplayunit.cpp \
-    secondaryvolumedisplayunit.cpp \
     volumedisplayunithandlerfactory.cpp \
     genericvolumedisplayunithandler.cpp \
     singlevolumedisplayunithandler.cpp \
@@ -815,7 +812,14 @@ SOURCES += extensionmediator.cpp \
     externalapplication.cpp \
     externalapplicationsmanager.cpp \
     encapsulateddocument.cpp \
-    encapsulateddocumentfillerstep.cpp
+    encapsulateddocumentfillerstep.cpp \
+    starviewerapplication.cpp \
+    qdpiconfigurationscreen.cpp \
+    vtkimageextractphase.cpp \
+    phasefilter.cpp \
+    vtkimagereslicemapper2.cpp \
+    sliceorientedvolumepixeldata.cpp \
+    voxelindex.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
@@ -839,10 +843,10 @@ include(../translations.pri)
 include(../threadweaver.pri)
 QT += xml \
     network \
-    webkit \
     xmlpatterns \
     opengl \
     qml \
-    declarative \
+    quick \
+    quickwidgets \
     concurrent \
-    webkitwidgets
+    webenginewidgets
