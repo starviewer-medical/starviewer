@@ -266,6 +266,7 @@ HEADERS += extensionfactory.h \
     qcustomwindowleveleditwidget.h \
     applicationstylehelper.h \
     changesliceqviewercommand.h \
+    changephaseqviewercommand.h \
     qtransferfunctioneditor2.h \
     transferfunctioneditor.h \
     transferfunctioneditorcommands.h \
@@ -292,6 +293,7 @@ HEADERS += extensionfactory.h \
     firewallaccess.h \
     firewallaccesstest.h \
     slicingwheeltool.h \
+    slicingmousetool.h \
     qmessageboxautoclose.h \
     commandlineoption.h \
     applicationversiontest.h \
@@ -653,6 +655,7 @@ SOURCES += extensionmediator.cpp \
     qcustomwindowleveleditwidget.cpp \
     applicationstylehelper.cpp \
     changesliceqviewercommand.cpp \
+    changephaseqviewercommand.cpp \
     qtransferfunctioneditor2.cpp \
     transferfunctioneditor.cpp \
     transferfunctioneditorcommands.cpp \
@@ -676,6 +679,7 @@ SOURCES += extensionmediator.cpp \
     firewallaccess.cpp \
     firewallaccesstest.cpp \
     slicingwheeltool.cpp \
+    slicingmousetool.cpp \
     qmessageboxautoclose.cpp \
     commandlineoption.cpp \
     applicationversiontest.cpp \

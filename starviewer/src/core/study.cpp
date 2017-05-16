@@ -420,6 +420,26 @@ QList<Series*> Study::getViewableSeries()
     return result;
 }
 
+QList<Volume*> Study::getVolumesList()
+{
+    QList<Volume*> volumesList;
+    foreach (Series* serie, m_seriesSet)
+    {
+        volumesList << serie->getVolumesList();
+    }
+    return volumesList;
+}
+
+int Study::getNumberOfVolumes()
+{
+    int sum = 0;
+    foreach (Series* serie, m_seriesSet)
+    {
+        sum += serie->getNumberOfVolumes();
+    }
+    return sum;
+}
+
 void Study::setDICOMSource(const DICOMSource &studyDICOMSource)
 {
     m_studyDICOMSource = studyDICOMSource;

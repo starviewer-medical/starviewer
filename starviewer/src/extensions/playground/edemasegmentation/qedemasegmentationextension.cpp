@@ -105,7 +105,7 @@ void QEdemaSegmentationExtension::initializeTools()
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
     m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
-    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
+    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingMouseTool"));
     m_moveToolButton->setDefaultAction(m_toolManager->registerTool("TranslateTool"));
     m_windowLevelToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelTool"));
     m_seedToolButton->setDefaultAction(m_toolManager->registerTool("SeedTool"));
@@ -117,12 +117,12 @@ void QEdemaSegmentationExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingMouseTool" << "TranslateTool" << "WindowLevelTool";
     m_toolManager->triggerTools(defaultTools);
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "SeedTool" << "EditorTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "SeedTool" << "EditorTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -207,7 +207,7 @@ void QEdemaSegmentationExtension::setInput(Volume *input)
         m_edemaMaskVolume = 0;
     }
 
-    m_toolManager->triggerTool("SlicingTool");
+    m_toolManager->triggerTool("SlicingMouseTool");
 
     // \TODO ara ho fem "a saco" per?s'hauria de millorar
     m_2DView->setInput(m_mainVolume);

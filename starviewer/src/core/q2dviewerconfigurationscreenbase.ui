@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>udg::Q2DViewerConfigurationScreenBase</class>
  <widget class="QWidget" name="udg::Q2DViewerConfigurationScreenBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>404</width>
+    <height>711</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>2D Viewer Configuration</string>
   </property>
@@ -9,7 +17,7 @@
    <iconset resource="../main/main.qrc">
     <normaloff>:/images/icons/preferences-2dviewer.svg</normaloff>:/images/icons/preferences-2dviewer.svg</iconset>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QCheckBox" name="m_sliceScrollLoopCheckBox">
      <property name="text">
@@ -21,6 +29,20 @@
     <widget class="QCheckBox" name="m_phaseScrollLoopCheckBox">
      <property name="text">
       <string>Enable phase scroll loop</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="m_wheelVolumeScrollCheckBox">
+     <property name="text">
+      <string>Volume scroll with mouse wheel</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="m_mouseWraparoundCheckBox">
+     <property name="text">
+      <string>Wraparound mouse on drag</string>
      </property>
     </widget>
    </item>

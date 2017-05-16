@@ -97,6 +97,8 @@ const QString CoreSettings::ExternalApplicationsConfigurationSectionName = "Exte
 const QString Q2DViewerBase("2DViewer/");
 const QString CoreSettings::EnableQ2DViewerSliceScrollLoop(Q2DViewerBase + "enable2DViewerSliceScrollLoop");
 const QString CoreSettings::EnableQ2DViewerPhaseScrollLoop(Q2DViewerBase + "enable2DViewerPhaseScrollLoop");
+const QString CoreSettings::EnableQ2DViewerWheelVolumeScroll(Q2DViewerBase + "enable2DViewerWheelVolumeScroll");
+const QString CoreSettings::EnableQ2DViewerMouseWraparound(Q2DViewerBase + "enable2DViewerMouseWraparound");
 const QString CoreSettings::EnableQ2DViewerReferenceLinesForMR(Q2DViewerBase + "enable2DViewerReferenceLinesForMR");
 const QString CoreSettings::EnableQ2DViewerReferenceLinesForCT(Q2DViewerBase + "enable2DViewerReferenceLinesForCT");
 const QString CoreSettings::ModalitiesWithZoomToolByDefault(Q2DViewerBase + "ModalitiesWithZoomToolByDefault");
@@ -149,6 +151,8 @@ void CoreSettings::init()
     settingsRegistry->addSetting(MaximumNumberOfVisibleVoiLutComboItems, 50);
     settingsRegistry->addSetting(EnableQ2DViewerSliceScrollLoop, false);
     settingsRegistry->addSetting(EnableQ2DViewerPhaseScrollLoop, false);
+    settingsRegistry->addSetting(EnableQ2DViewerWheelVolumeScroll, false);
+    settingsRegistry->addSetting(EnableQ2DViewerMouseWraparound, true);
     settingsRegistry->addSetting(EnableQ2DViewerReferenceLinesForMR, true);
     settingsRegistry->addSetting(EnableQ2DViewerReferenceLinesForCT, false);
     settingsRegistry->addSetting(ModalitiesWithZoomToolByDefault, "MG;CR;RF;OP;DX;MR");

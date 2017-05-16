@@ -93,6 +93,12 @@ public:
 
     /// Ens retorna una llista amb les sèries que estiguin seleccionades
     QList<Series*> getSelectedSeries();
+    
+    /// Returns a list of volumes that compose the patient.
+    QList<Volume*> getVolumesList();
+
+    /// Returns the number of volumes that compose the patient.
+    int getNumberOfVolumes();
 
     /// Ens diu si aquest arxiu pertany a alguna series del pacient
     bool hasFile(const QString &filename);

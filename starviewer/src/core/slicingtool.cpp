@@ -13,257 +13,215 @@
  *************************************************************************************/
 
 #include "slicingtool.h"
-#include "logging.h"
+
+#include "mathtools.h"
 #include "q2dviewer.h"
 #include "volume.h"
-#include "statswatcher.h"
-
-// Vtk
-#include <vtkCommand.h>
-#include <vtkRenderWindowInteractor.h>
+#include "patient.h"
+#include "changesliceqviewercommand.h"
+#include "changephaseqviewercommand.h"
 
 namespace udg {
 
 SlicingTool::SlicingTool(QViewer *viewer, QObject *parent)
- : Tool(viewer, parent)
+ : Tool(viewer, parent), m_volumeInitialPositionToMaximum(false)
 {
-    m_slicingMode = SliceMode;
-    m_mouseMovement = false;
-    m_numberOfImages = 1;
-    m_inputHasPhases = false;
-    m_forcePhaseMode = false;
-    m_state = None;
     m_toolName = "SlicingTool";
-    m_startPosition = QPoint(0, 0);
-    m_currentPosition = QPoint(0, 0);
+    
     m_2DViewer = Q2DViewer::castFromQViewer(viewer);
-    // Ens assegurem que desde la creació tenim un viewer vàlid
+    // Must have a valid 2DViewer
     Q_ASSERT(m_2DViewer);
-
-    // Cada cop que canvïi l'input cal fer algunes inicialitzacions
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(inputChanged(Volume*)));
-    inputChanged(m_2DViewer->getMainInput());
+    
+    setNumberOfAxes(0);
+    
+    // The number of axes might change on volume changed.
+    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reassignAxes()));
+    connect(m_2DViewer, SIGNAL(slabThicknessChanged(int)), SLOT(reassignAxes()));
+    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(reassignAxes())); // Sagittal, axial, coronal, swivel orientation change...
 }
 
 SlicingTool::~SlicingTool()
 {
-    m_viewer->unsetCursor();
 }
 
-void SlicingTool::handleEvent(unsigned long eventID)
+double SlicingTool::getMinimum(SlicingTool::SlicingMode mode) const
 {
-    if (!m_2DViewer->hasInput())
-    {
-        return;
+    if (mode == SlicingMode::Slice)
+    { // Slices can be negative
+        return m_2DViewer->getMinimumSlice();
     }
+    return 0;
+}
 
-    switch (eventID)
+double SlicingTool::getMaximum(SlicingTool::SlicingMode mode) const
+{
+    if (mode == SlicingMode::Slice)
     {
-        case vtkCommand::LeftButtonPressEvent:
-            m_mouseMovement = false;
-            this->startSlicing();
-
-        case vtkCommand::MouseMoveEvent:
-            m_mouseMovement = true;
-            this->doSlicing();
-            break;
-
-        case vtkCommand::LeftButtonReleaseEvent:
-            m_mouseMovement = false;
-            this->endSlicing();
-            // Estadístiques
-            if (!m_scrollSteps.isEmpty())
-            {
-                StatsWatcher::log("Slicing Tool: Button Scroll Record: " + m_scrollSteps + " ::Over a total of " + QString::number(m_numberOfImages) + " images");
-                m_scrollSteps.clear();
-            }
-            break;
-
-        case vtkCommand::MiddleButtonPressEvent:
-            m_mouseMovement = false;
-            break;
-
-        case vtkCommand::MiddleButtonReleaseEvent:
-            // TODO aquest comportament de fer switch es podria eliminar ja que no és gaire usable
-            // de moment es manté perquè ja tenim un conjunt d'usuaris acostumats a aquest comportament
-            if (!m_mouseMovement)
-            {
-                switchSlicingMode();
-            }
-            break;
-
-        case vtkCommand::KeyPressEvent:
-            if (m_viewer->getInteractor()->GetControlKey() && m_inputHasPhases)
-            {
-                m_forcePhaseMode = true;
-                computeImagesForScrollMode();
-                StatsWatcher::log("FORCE phase mode with Ctrl key");
-            }
-            break;
-
-        case vtkCommand::KeyReleaseEvent:
-            m_forcePhaseMode = false;
-            computeImagesForScrollMode();
-            StatsWatcher::log("Disable FORCED phase mode releasing Ctrl key");
-            break;
-
-        default:
-            break;
+        return m_2DViewer->getMaximumSlice();
     }
-}
-
-void SlicingTool::startSlicing()
-{
-    m_state = Slicing;
-    m_startPosition = m_2DViewer->getEventPosition();
-    // Calculem el nombre d'imatges que manipulem
-    computeImagesForScrollMode();
-    m_screenSize = m_2DViewer->getRenderWindowSize();
-}
-
-void SlicingTool::doSlicing()
-{
-    if (m_state == Slicing)
+    else if (mode == SlicingMode::Phase)
     {
-        Q_ASSERT(m_screenSize.isValid());
-        m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/scroll.svg")));
-        m_currentPosition.setY(m_2DViewer->getEventPosition().y());
-
-        // Increment normalitzat segons la mida de la finestra i el nombre de llesques
-        double increase = (1.75 * (m_currentPosition.y() - m_startPosition.y()) / (double)m_screenSize.height()) * m_numberOfImages;
-        m_startPosition.setY(m_currentPosition.y());
-
-        // Canviem un nombre de llesques segons el desplaçament del mouse
-        int value = qRound(increase);
-        if (value == 0)
+        return m_2DViewer->getNumberOfPhases() - 1;
+    }
+    else if (mode == SlicingMode::Volume)
+    {
+        //NOTE: Evaluation lazyness used to check null pointers before they are used.
+        if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient()) 
         {
-            if (increase > 0)
-            {
-                value = 1;
-            }
-            else if (increase < 0)
-            {
-                value = -1;
-            }
+            return m_2DViewer->getMainInput()->getPatient()->getNumberOfVolumes() - 1;
         }
-        this->updateIncrement(value);
-        // Estadístiques
-        m_scrollSteps += QString::number(value) + " ";
     }
+    return -1;
 }
 
-void SlicingTool::endSlicing()
+double SlicingTool::getRangeSize(SlicingTool::SlicingMode mode) const
 {
-    m_viewer->unsetCursor();
-    m_state = None;
+    return getMaximum(mode) - getMinimum(mode) + 1;
 }
 
-void SlicingTool::inputChanged(Volume *input)
+double SlicingTool::getLocation(SlicingMode mode) const
 {
-    chooseBestDefaultScrollMode(input);
-    m_mouseMovement = false;
-    m_state = None;
-    m_inputHasPhases = false;
-    if (input)
+    if (mode == SlicingMode::Slice)
     {
-        if (input->getNumberOfPhases() > 1)
+        return m_2DViewer->getCurrentSlice();
+    }
+    else if (mode == SlicingMode::Phase)
+    {
+        return m_2DViewer->getCurrentPhase();
+    }
+    else if (mode == SlicingMode::Volume)
+    {
+        //NOTE: Evaluation lazyness used to check null pointers before they are used.
+        if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient()) 
         {
-            m_inputHasPhases = true;
+            QList<Volume*> volumes = m_2DViewer->getMainInput()->getPatient()->getVolumesList();
+            int volumeIndex = volumes.indexOf(m_2DViewer->getMainInput());
+            Q_ASSERT(volumeIndex >= 0); // Volume must be found in the list. //BUG: Be careful if dummyvolume is loaded; you should control this externally.
+            return volumeIndex;
         }
+    }
+    return 0;
+}
+
+double SlicingTool::setLocation(SlicingMode mode, double location)
+{
+    const double min = getMinimum(mode);
+    const double max = getMaximum(mode);
+    double newLocation;
+    
+    if (location <= min + MathTools::Epsilon)
+    { 
+        // Underflow, or very close albeit not exceeding the lower bound.
+        newLocation = min;
+    }
+    else if (location >= max - MathTools::Epsilon)
+    { 
+        // Overflow, or very close albeit not exceeding the upper bound.
+        newLocation = max;
     }
     else
+    { 
+        // Within the limits
+        newLocation = location;
+    }
+
+    if (min <= max)
     {
-        DEBUG_LOG("L'input introduit és NULL!");
+        // Interval width greater than zero. Changing position feasible.
+        if (mode == SlicingMode::Slice)
+        {
+            newLocation = std::round(newLocation);
+            m_2DViewer->setSlice(newLocation);
+        }
+        else if (mode == SlicingMode::Phase)
+        {
+            newLocation = std::round(newLocation);
+            m_2DViewer->setPhase(newLocation);
+        }
+        else if (mode == SlicingMode::Volume)
+        {
+            newLocation = std::round(newLocation);
+            //NOTE: Evaluation lazyness used to check null pointers before they are used.
+            if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient()) 
+            {
+                QList<Volume*> volumes = m_2DViewer->getMainInput()->getPatient()->getVolumesList();
+                Volume* nextVolume = volumes.at(newLocation); // Volume must be found in the list.
+                QViewerCommand* command;
+                if (nextVolume->getNumberOfSlicesPerPhase() > 1)
+                {
+                    // Multiple slices per phase
+                    command = new ChangeSliceQViewerCommand(m_2DViewer, m_volumeInitialPositionToMaximum ? ChangeSliceQViewerCommand::SlicePosition::MaximumSlice : ChangeSliceQViewerCommand::SlicePosition::MinimumSlice);
+                }
+                else
+                {
+                    // One slice per phase
+                    command = new ChangePhaseQViewerCommand(m_2DViewer, m_volumeInitialPositionToMaximum ? ChangePhaseQViewerCommand::PhasePosition::MaximumPhase : ChangePhaseQViewerCommand::PhasePosition::MinimumPhase);
+                }
+                m_2DViewer->setInputAsynchronously(nextVolume, command);
+            }
+        }
+    }
+    return newLocation;
+}
+
+double SlicingTool::incrementLocation(SlicingMode mode, double shift)
+{
+    double location = getLocation(mode) + shift;
+    double newLocation = setLocation(mode, location);
+    return  location - newLocation;
+}
+
+unsigned int SlicingTool::getNumberOfAxes() const
+{
+    return m_axes.size();
+}
+
+void SlicingTool::setNumberOfAxes(unsigned int numberOfAxes)
+{
+    m_axes.fill(SlicingMode::None, numberOfAxes);   
+}
+
+SlicingTool::SlicingMode SlicingTool::getMode(unsigned int axis) const
+{
+    return getNumberOfAxes() > axis ? m_axes[axis] : SlicingMode::None;
+}
+
+void SlicingTool::setMode(unsigned int axis, SlicingMode mode)
+{
+    if (getNumberOfAxes() > axis)
+    {
+        m_axes[axis] = mode;
     }
 }
 
-void SlicingTool::switchSlicingMode()
+double SlicingTool::getMinimum(unsigned int axis) const
 {
-    QString statMessage = "SlicingTool: ";
-    if (m_inputHasPhases)
-    {
-        if (m_slicingMode == SliceMode)
-        {
-            m_slicingMode = PhaseMode;
-            statMessage += "Switch from slice mode to phase mode";
-        }
-        else
-        {
-            m_slicingMode = SliceMode;
-            statMessage += "Switch from phase mode to slice mode";
-        }
-    }
-    else
-    {
-        statMessage += "Try to switch slicing mode with input with no phases";
-    }
-
-    StatsWatcher::log(statMessage);
+    return getMinimum(getMode(axis));
 }
 
-void SlicingTool::updateIncrement(int increment)
+double SlicingTool::getMaximum(unsigned int axis) const
 {
-    // Si mantenim control apretat sempe mourem fases independentment de l'slicing mode
-    if (m_forcePhaseMode)
-    {
-        m_2DViewer->setPhase(m_2DViewer->getCurrentPhase() + increment);
-    }
-    // Altrament continuem amb el comportament habitual
-    else
-    {
-        switch (m_slicingMode)
-        {
-            case SliceMode:
-                m_2DViewer->setSlice(m_2DViewer->getCurrentSlice() + increment);
-                break;
-
-            case PhaseMode:
-                m_2DViewer->setPhase(m_2DViewer->getCurrentPhase() + increment);
-                break;
-        }
-    }
+    return getMaximum(getMode(axis));
 }
 
-void SlicingTool::computeImagesForScrollMode()
+double SlicingTool::getRangeSize(unsigned int axis) const
 {
-    if (m_forcePhaseMode)
-    {
-        m_numberOfImages = m_2DViewer->getNumberOfPhases();
-    }
-    else
-    {
-        if (m_slicingMode == SliceMode)
-        {
-            m_numberOfImages = m_2DViewer->getMaximumSlice();
-        }
-        else
-        {
-            m_numberOfImages = m_2DViewer->getNumberOfPhases();
-        }
-    }
+    return getRangeSize(getMode(axis));
 }
 
-void SlicingTool::chooseBestDefaultScrollMode(Volume *input)
+double SlicingTool::getLocation(unsigned int axis) const
 {
-    // Per defecte sempre serà aquest excepte quan només tenim 1 imatge i tenim fases
-    m_slicingMode = SliceMode;
-    if (input)
-    {
-        if (input->getNumberOfPhases() > 1 && input->getNumberOfSlicesPerPhase() <= 1)
-        {
-            m_slicingMode = PhaseMode;
-            StatsWatcher::log("Slicing Tool: Default Scroll Mode = PHASE");
-        }
-        else
-        {
-            StatsWatcher::log("Slicing Tool: Default Scroll Mode = SLICE");
-        }
-    }
+    return getLocation(getMode(axis));
 }
 
-SlicingTool::SlicingMode SlicingTool::getSlicingMode()
+double SlicingTool::setLocation(unsigned int axis, double location)
 {
-    return m_slicingMode;
+    return setLocation(getMode(axis), location);
+}
+
+double SlicingTool::incrementLocation(unsigned int axis, double shift)
+{
+    return incrementLocation(getMode(axis), shift);
 }
 
 }

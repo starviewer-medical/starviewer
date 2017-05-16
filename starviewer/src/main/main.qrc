@@ -34,6 +34,30 @@
         <file>../../LICENSE</file>
         <file>../../NOTICE</file>
         <file>images/cursors/contrast.svg</file>
+        <file>images/cursors/wheel-slice-up.svg</file>
+        <file>images/cursors/wheel-slice-down.svg</file>
+        <file>images/cursors/wheel-slice-up-limit.svg</file>
+        <file>images/cursors/wheel-slice-down-limit.svg</file>
+        <file>images/cursors/wheel-phase-up.svg</file>
+        <file>images/cursors/wheel-phase-down.svg</file>
+        <file>images/cursors/wheel-phase-up-limit.svg</file>
+        <file>images/cursors/wheel-phase-down-limit.svg</file>
+        <file>images/cursors/scroll-phase-down-limit.svg</file>
+        <file>images/cursors/scroll-phase-down.svg</file>
+        <file>images/cursors/scroll-phase-left-limit.svg</file>
+        <file>images/cursors/scroll-phase-left.svg</file>
+        <file>images/cursors/scroll-phase-right-limit.svg</file>
+        <file>images/cursors/scroll-phase-right.svg</file>
+        <file>images/cursors/scroll-phase-up-limit.svg</file>
+        <file>images/cursors/scroll-phase-up.svg</file>
+        <file>images/cursors/scroll-slice-down-limit.svg</file>
+        <file>images/cursors/scroll-slice-down.svg</file>
+        <file>images/cursors/scroll-slice-left-limit.svg</file>
+        <file>images/cursors/scroll-slice-left.svg</file>
+        <file>images/cursors/scroll-slice-right-limit.svg</file>
+        <file>images/cursors/scroll-slice-right.svg</file>
+        <file>images/cursors/scroll-slice-up-limit.svg</file>
+        <file>images/cursors/scroll-slice-up.svg</file>
         <file>images/cursors/scroll.svg</file>
         <file>images/cursors/pan.svg</file>
         <file>images/splash.svg</file>

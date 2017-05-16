@@ -174,7 +174,7 @@ void QMPRExtension::init()
     m_pickedActorReslice = 0;
     m_mipViewer = 0;
 
-    m_extensionToolsList << "ZoomTool" << "SlicingTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool"
+    m_extensionToolsList << "ZoomTool" << "SlicingMouseTool" << "TranslateTool" << "VoxelInformationTool" << "WindowLevelTool" << "ScreenShotTool"
                          << "DistanceTool" << "PolylineROITool" << "EllipticalROITool" << "EraserTool";
 }
 
@@ -266,7 +266,7 @@ void QMPRExtension::initializeTools()
     initializeROITools();
     initializeDistanceTools();
     initializeAngleTools();
-    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
+    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingMouseTool"));
     m_toolManager->registerTool("TranslateTool");
     m_toolManager->registerTool("WindowLevelTool");
     m_voxelInformationToolButton->setDefaultAction(m_toolManager->registerTool("VoxelInformationTool"));
@@ -280,20 +280,20 @@ void QMPRExtension::initializeTools()
 
     // Definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" 
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" 
         << "NonClosedAngleTool" << "Cursor3DTool" << "EllipticalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "VoiLutPresetsTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool" << "ScreenShotTool" << "SlicingKeyboardTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingMouseTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool" << "ScreenShotTool" << "SlicingKeyboardTool";
     m_toolManager->triggerTools(defaultTools);
 
     // Registrem al manager les tools que van als diferents viewers
     m_toolManager->setupRegisteredTools(m_axial2DView);
     // On the other viewers we want all the registered tools but slicing (mouse and keyboard modes)
     QStringList toolsList = m_toolManager->getRegisteredToolsList();
-    toolsList.removeAt(toolsList.indexOf("SlicingTool"));
+    toolsList.removeAt(toolsList.indexOf("SlicingMouseTool"));
     toolsList.removeAt(toolsList.indexOf("SlicingKeyboardTool"));
     toolsList.removeAt(toolsList.indexOf("SlicingWheelTool"));
     m_toolManager->setViewerTools(m_sagital2DView, toolsList);
