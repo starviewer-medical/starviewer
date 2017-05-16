@@ -59,25 +59,51 @@
  </head>
  <body>
     <h1>Starviewer Changelog</h1>
-	<div class="majorRelease">
-		<div class="version">
-			<span class="versionNumber">Starviewer 0.14.0</span>
-			<span class="versionDate">(Publicat el xx de yyyy de 201z)</span>
-		</div>
-		<div class="new">
-			<ul>
-				<li>Es poden obrir PDFs encapsulats amb el visor de PDF per defecte del sistema. <span class="ticket">2121</span></li>
-			</ul>
-		</div>
-		<div class="improved">
-			<ul>
-				<li>Es mostren traduïts alguns textos que fins ara sortien en anglès. <span class="ticket">1730</span></li>
-				<li>Millora del tractament d'imatges multiframe. <span class="ticket">2114</span></li>
-				<li>Diverses millores internes. <span class="ticket">261, 1958</span></li>
-			</ul>
-		</div>
-	</div>
-	<div class="minorRelease">
+    <div class="majorRelease">
+        <div class="version">
+            <span class="versionNumber">Starviewer 0.14.0</span>
+            <span class="versionDate">(Publicat el xx de yyyy de 201z)</span>
+        </div>
+        <div class="new">
+            <ul>
+                <li>Es poden obrir PDFs encapsulats amb el visor de PDF per defecte del sistema. <span class="ticket">2121</span></li>
+                <li>Noves icones.</li>
+                <li>Es poden ampliar els texts i les icones de tota l'aplicació en pantalles grans. El nivell d'ampliació és configurable. <span class="ticket">1494, 1655, 1677</span></li>
+                <li>S'agrupen tots els botons d'eines de mesura (ROIs, distàncies i angles) en un de sol per poder adaptar la finestra a pantalles més petites.</li>
+                <li>S'afegeixen variants de les eines de desplaçament i contrast que funcionen amb el botó esquerre. <span class="ticket">1215, 2139</span></li>
+                <li>S'afegeix una opció perquè el ratolí faci la volta i torni al principi mentre es fa servir l'eina de canvi de tall.</li>
+                <li>S'afegeix la possibilitat de canviar de sèrie amb la roda quan s'arriba al final d'una sèrie. <span class="ticket">2133</span></li>
+                <li>Reconstruccions de sèries amb fases. <span class="ticket">1247</span></li>
+                <li>Nova interfície per definir el gruix de tall en un menú desplegable per poder ser més ampla i per poder-lo activar i desactivar amb un sol clic.</li>
+                <li>El gruix de tall es defineix en mm en lloc de talls.</li>
+                <li>Nou mode de projecció del gruix de tall: suma.</li>
+                <li>Es pot ajustar el cremat d'una visualització fusionada fent servir l'eina de contrast mentre es manté la tecla de majúscules. <span class="ticket">2110</span></li>
+                <li>S'afegeix una anotació amb el nom del metge sol·licitant. <span class="ticket">2134</span></li>
+                <li>Nova escala de color disponible.</li>
+                <li>Es canvia l'aparença de les línies de referència.</li>
+                <li>Es canvia lleugerament l'aparença de l'angle obert.</li>
+            </ul>
+        </div>
+        <div class="improved">
+            <ul>
+                <li>L'eina de canvi de tall permet canviar talls o fases segons la direcció del desplaçament. <span class="ticket">2137</span></li>
+                <li>Millora de la fluïdesa de les eines de canvi de tall amb teclat i roda.</li>
+                <li>S'aconsegueix un desplaçament més fi amb algunes rodes i ratolins tàctils.</li>
+                <li>Es mostren traduïts alguns textos que fins ara sortien en anglès. <span class="ticket">1730</span></li>
+                <li>Millora del tractament d'imatges multiframe. <span class="ticket">2114</span></li>
+                <li>Millora de la visualització d'imatges amb un rang de valors estret.</li>
+                <li>Millora de la qualitat amb què es visualitzen les imatges de poca resolució.</li>
+                <li>Diverses millores internes. <span class="ticket">261, 1958</span></li>
+            </ul>
+        </div>
+        <div class="fixed">
+            <ul>
+                <li>Se soluciona un problema que feia que en alguns casos es desactivés el gruix de tall en canviar entre projeccions axial, sagital o coronal. <span class="ticket">2009</span></li>
+                <li>Se soluciona un problema a Mac que feia que si es mostrava una finestra de missatge a l'inici quedés amagada darrere de la pantalla de presentació. <span class="ticket">2127</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="minorRelease">
         <div class="version">
             <span class="versionNumber">Starviewer 0.13.3</span>
             <span class="versionDate">(Publicat el 16 de juny de 2016)</span>
@@ -88,7 +114,7 @@
             </ul>
         </div>
     </div>
-	<div class="minorRelease">
+    <div class="minorRelease">
         <div class="version">
             <span class="versionNumber">Starviewer 0.13.2</span>
             <span class="versionDate">(Publicat el 3 de maig de 2016)</span>
@@ -196,7 +222,7 @@
                 <li>Es corregeix un error que provocava que el window/level automàtic estigués invertit en imatges de tipus MONOCHROME1.<span class="ticket">2075,s:322</span></li>
                 <li>Es resol un problema que feia que no es recarregués la distribució de visors en fer un "Descarregar i visualitzar" d'un altre estudi del mateix pacient que tenim carregat.<span class="ticket">2076,s:323</span></li>
                 <li>Es soluciona un error que provocava el tancament inesperat de l'Starviewer en obrir determinats estudis multiframe.<span class="ticket">2078</span></li>
-				<li>Es corregeix un problema que provocava el tancament inesperat de l'Starviewer en visualitzar un estudi nou mentre s'ha demanat un hanging protocol amb prèvies.<span class="ticket">2077</span></li>
+                <li>Es corregeix un problema que provocava el tancament inesperat de l'Starviewer en visualitzar un estudi nou mentre s'ha demanat un hanging protocol amb prèvies.<span class="ticket">2077</span></li>
             </ul>
         </div>
         <div class="removed">
