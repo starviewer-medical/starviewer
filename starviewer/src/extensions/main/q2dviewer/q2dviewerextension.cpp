@@ -155,6 +155,8 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_statsWatcher = new StatsWatcher("2D Extension", this);
     m_statsWatcher->addClicksCounter(m_slicingToolButton);
     m_statsWatcher->addClicksCounter(m_zoomToolButton);
+    m_statsWatcher->addClicksCounter(m_translateLeftToolButton);
+    m_statsWatcher->addClicksCounter(m_windowLevelLeftToolButton);
     m_statsWatcher->addClicksCounter(m_drawingToolButton);
     m_statsWatcher->addClicksCounter(m_eraserToolButton);
 
@@ -413,6 +415,8 @@ void Q2DViewerExtension::initializeTools()
     // Obtenim les accions de cada tool que volem
     m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
     m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingMouseTool"));
+    m_translateLeftToolButton->setDefaultAction(m_toolManager->registerTool("TranslateLeftTool"));
+    m_windowLevelLeftToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelLeftTool"));
     m_toolManager->registerTool("TranslateTool");
     m_toolManager->registerTool("WindowLevelTool");
     m_referenceLinesToolButton->setDefaultAction(m_toolManager->registerTool("ReferenceLinesTool"));
@@ -474,10 +478,12 @@ void Q2DViewerExtension::initializeTools()
     QStringList leftButtonExclusiveTools;
 
 #ifdef STARVIEWER_LITE
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "TranslateLeftTool" << "WindowLevelLeftTool" << "DistanceTool" << "PerpendicularDistanceTool"
+                             << "EraserTool";
 #else
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool"
-                             << "Cursor3DTool" << "EllipticalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "TranslateLeftTool" << "WindowLevelLeftTool" << "PolylineROITool" << "DistanceTool"
+                             << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool" << "EllipticalROITool"
+                             << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
 #endif
 
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);

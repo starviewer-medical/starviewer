@@ -12,44 +12,29 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGTRANSLATETOOL_H
-#define UDGTRANSLATETOOL_H
+#ifndef UDG_TRANSLATELEFTTOOL_H
+#define UDG_TRANSLATELEFTTOOL_H
 
-#include "tool.h"
+#include "translatetool.h"
 
 namespace udg {
 
 /**
-    Eina per moure la posició de la càmera en escena d'un viewer
-  */
-class TranslateTool : public Tool {
-Q_OBJECT
+ * @brief The TranslateLeftTool class is a variation of the TranslateTool that works with the left mouse button instead of the middle one.
+ */
+class TranslateLeftTool : public TranslateTool
+{
+
+    Q_OBJECT
+
 public:
-    enum { None, Translating };
-    TranslateTool(QViewer *viewer, QObject *parent = 0);
-    ~TranslateTool();
 
-    void handleEvent(unsigned long eventID);
+    TranslateLeftTool(QViewer *viewer, QObject *parent = nullptr);
 
-protected slots:
-    /// Comença el translate
-    void startTranslate();
+    void handleEvent(unsigned long eventID) override;
 
-    /// Calcula el nou translate
-    void doTranslate();
-
-    /// Atura l'estat de translate
-    void endTranslate();
-
-private:
-    /// Realitza la feina de desplaçament
-    void pan();
-
-private:
-    /// Estat de la tool
-    int m_state;
 };
 
-}
+} // namespace udg
 
-#endif
+#endif // UDG_TRANSLATELEFTTOOL_H

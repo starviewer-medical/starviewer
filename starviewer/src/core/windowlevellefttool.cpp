@@ -12,44 +12,40 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGTRANSLATETOOL_H
-#define UDGTRANSLATETOOL_H
+#include "windowlevellefttool.h"
 
-#include "tool.h"
+#include <vtkCommand.h>
 
 namespace udg {
 
-/**
-    Eina per moure la posició de la càmera en escena d'un viewer
-  */
-class TranslateTool : public Tool {
-Q_OBJECT
-public:
-    enum { None, Translating };
-    TranslateTool(QViewer *viewer, QObject *parent = 0);
-    ~TranslateTool();
-
-    void handleEvent(unsigned long eventID);
-
-protected slots:
-    /// Comença el translate
-    void startTranslate();
-
-    /// Calcula el nou translate
-    void doTranslate();
-
-    /// Atura l'estat de translate
-    void endTranslate();
-
-private:
-    /// Realitza la feina de desplaçament
-    void pan();
-
-private:
-    /// Estat de la tool
-    int m_state;
-};
-
+WindowLevelLeftTool::WindowLevelLeftTool(QViewer *viewer, QObject *parent)
+    : WindowLevelTool(viewer, parent)
+{
+    m_toolName = "WindowLevelLeftTool";
 }
 
-#endif
+void WindowLevelLeftTool::handleEvent(unsigned long eventID)
+{
+    switch (eventID)
+    {
+        case vtkCommand::LeftButtonPressEvent:
+            this->startWindowLevel();
+            break;
+
+        case vtkCommand::MouseMoveEvent:
+            if (m_state != None)
+            {
+                this->doWindowLevel();
+            }
+            break;
+
+        case vtkCommand::LeftButtonReleaseEvent:
+            this->endWindowLevel();
+            break;
+
+        default:
+            break;
+    }
+}
+
+} // namespace udg

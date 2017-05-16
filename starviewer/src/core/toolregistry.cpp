@@ -22,8 +22,10 @@
 #include "slicingmousetool.h"
 #include "slicingkeyboardtool.h"
 #include "windowleveltool.h"
+#include "windowlevellefttool.h"
 #include "referencelinestool.h"
 #include "translatetool.h"
+#include "translatelefttool.h"
 #include "voxelinformationtool.h"
 #include "seedtool.h"
 #include "magicroitool.h"
@@ -86,6 +88,10 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     {
         tool = new TranslateTool(viewer);
     }
+    else if (toolName == "TranslateLeftTool")
+    {
+        tool = new TranslateLeftTool(viewer);
+    }
     else if (toolName == "VoxelInformationTool")
     {
         tool = new VoxelInformationTool(viewer);
@@ -93,6 +99,10 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     else if (toolName == "WindowLevelTool")
     {
         tool = new WindowLevelTool(viewer);
+    }
+    else if (toolName == "WindowLevelLeftTool")
+    {
+        tool = new WindowLevelLeftTool(viewer);
     }
     else if (toolName == "SeedTool")
     {
@@ -220,6 +230,14 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         statusTip = tr("Enable/Disable Window Level tool");
         toolTip = toolAction->text();
     }
+    else if (toolName == "WindowLevelLeftTool")
+    {
+        toolAction->setText(tr("WW/WL"));
+        toolAction->setIcon(QIcon(":/images/icons/contrast.svg"));
+        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::WindowLevelTool));
+        statusTip = tr("Enable/Disable Window Level tool");
+        toolTip = toolAction->text();
+    }
     else if (toolName == "ZoomTool")
     {
         toolAction->setText(tr("Zoom"));
@@ -229,6 +247,13 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolTip = toolAction->text();
     }
     else if (toolName == "TranslateTool")
+    {
+        toolAction->setText(tr("Pan"));
+        toolAction->setIcon(QIcon(":/images/icons/transform-move.svg"));
+        statusTip = tr("Enable/Disable Move tool");
+        toolTip = toolAction->text();
+    }
+    else if (toolName == "TranslateLeftTool")
     {
         toolAction->setText(tr("Pan"));
         toolAction->setIcon(QIcon(":/images/icons/transform-move.svg"));
