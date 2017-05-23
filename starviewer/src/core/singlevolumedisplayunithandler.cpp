@@ -20,8 +20,8 @@
 
 namespace udg {
 
-SingleVolumeDisplayUnitHandler::SingleVolumeDisplayUnitHandler()
- : GenericVolumeDisplayUnitHandler()
+SingleVolumeDisplayUnitHandler::SingleVolumeDisplayUnitHandler(QObject *parent)
+ : GenericVolumeDisplayUnitHandler(parent)
 {
 }
 

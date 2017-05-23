@@ -24,8 +24,11 @@ namespace udg {
     Maximum number of inputs will be two.
 */
 class PairedVolumeDisplayUnitHandler : public GenericVolumeDisplayUnitHandler {
+
+    Q_OBJECT
+
 public:
-    PairedVolumeDisplayUnitHandler();
+    PairedVolumeDisplayUnitHandler(QObject *parent = nullptr);
     virtual ~PairedVolumeDisplayUnitHandler();
 
     virtual int getMaximumNumberOfInputs() const;

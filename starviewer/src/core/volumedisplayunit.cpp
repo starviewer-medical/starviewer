@@ -34,8 +34,8 @@
 
 namespace udg {
 
-VolumeDisplayUnit::VolumeDisplayUnit()
- : m_volume(nullptr), m_shutterImageSlice(nullptr), m_auxiliarCurrentVolumePixelData(nullptr)
+VolumeDisplayUnit::VolumeDisplayUnit(QObject *parent)
+ : QObject(parent), m_volume(nullptr), m_shutterImageSlice(nullptr), m_auxiliarCurrentVolumePixelData(nullptr)
 {
     m_imagePipeline = new ImagePipeline();
     m_imageSlice = vtkImageSlice::New();
@@ -487,11 +487,20 @@ void VolumeDisplayUnit::setShutterData(vtkImageData *shutterData)
         }
 
         m_shutterImageSlice->GetMapper()->SetInputData(shutterData);
-        m_imageStack->AddImage(m_shutterImageSlice);
+
+        if (!m_imageStack->HasImage(m_shutterImageSlice))
+        {
+            m_imageStack->AddImage(m_shutterImageSlice);
+            emit imageStackChanged();
+        }
     }
     else
     {
-        m_imageStack->RemoveImage(m_shutterImageSlice);
+        if (m_imageStack->HasImage(m_shutterImageSlice))
+        {
+            m_imageStack->RemoveImage(m_shutterImageSlice);
+            emit imageStackChanged();
+        }
     }
 }
 

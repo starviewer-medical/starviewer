@@ -15,7 +15,7 @@
 #ifndef UDGGENERICVOLUMEDISPLAYUNITHANDLER_H
 #define UDGGENERICVOLUMEDISPLAYUNITHANDLER_H
 
-#include <QList>
+#include <QObject>
 
 class vtkImageSlice;
 class vtkImageStack;
@@ -36,9 +36,12 @@ class VolumeDisplayUnit;
     If there are any specific criteria to put a certain display unit as the main one, different than the order that it was set on setInputs(), 
     this should be implemented in the virtual method updateMainDisplayUnitIndex().
  */
-class GenericVolumeDisplayUnitHandler {
+class GenericVolumeDisplayUnitHandler : public QObject {
+
+    Q_OBJECT
+
 public:
-    GenericVolumeDisplayUnitHandler();
+    GenericVolumeDisplayUnitHandler(QObject *parent = nullptr);
     virtual ~GenericVolumeDisplayUnitHandler();
 
     /// Sets single input
@@ -101,6 +104,10 @@ private:
 
     /// Initializes the transfer functions of the display units
     void initializeTransferFunctions();
+
+private slots:
+    /// Rebuilds the image stack from scratch.
+    void rebuildImageStack();
 
 protected:
     /// The list of the created display units

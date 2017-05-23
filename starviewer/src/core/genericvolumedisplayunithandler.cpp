@@ -28,7 +28,8 @@
 
 namespace udg {
 
-GenericVolumeDisplayUnitHandler::GenericVolumeDisplayUnitHandler()
+GenericVolumeDisplayUnitHandler::GenericVolumeDisplayUnitHandler(QObject *parent)
+    : QObject(parent)
 {
     m_transferFunctionModel = new TransferFunctionModel();
     m_imageStack = vtkImageStack::New();
@@ -134,8 +135,8 @@ void GenericVolumeDisplayUnitHandler::addDisplayUnit(Volume *input)
     VolumeDisplayUnit *displayUnit = new VolumeDisplayUnit();
     // Add the vdu to the list before setting the volume to avoid a memory leak if setVolume throws a bad_alloc
     m_displayUnits << displayUnit;
+    connect(displayUnit, &VolumeDisplayUnit::imageStackChanged, this, &GenericVolumeDisplayUnitHandler::rebuildImageStack);
     displayUnit->setVolume(input);
-    addImageSliceToStack(displayUnit->getImageStack());
 }
 
 void GenericVolumeDisplayUnitHandler::addImageSliceToStack(vtkImageSlice *imageSlice)
@@ -177,7 +178,7 @@ void GenericVolumeDisplayUnitHandler::removeImageSliceFromStack(vtkImageSlice *i
 void GenericVolumeDisplayUnitHandler::setupDisplayUnits()
 {
     updateMainDisplayUnitIndex();
-    updateLayerNumbers();
+    rebuildImageStack();
     setupDefaultOpacities();
     initializeTransferFunctions();
 }
@@ -213,6 +214,18 @@ void GenericVolumeDisplayUnitHandler::initializeTransferFunctions()
     }
 
     setupDefaultTransferFunctions();
+}
+
+void GenericVolumeDisplayUnitHandler::rebuildImageStack()
+{
+    m_imageStack->GetImages()->RemoveAllItems();
+
+    foreach (VolumeDisplayUnit *unit, m_displayUnits)
+    {
+        addImageSliceToStack(unit->getImageStack());
+    }
+
+    updateLayerNumbers();
 }
 
 } // End namespace udg

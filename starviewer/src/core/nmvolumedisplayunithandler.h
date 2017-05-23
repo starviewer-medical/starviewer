@@ -24,8 +24,11 @@ namespace udg {
 */
 class NMVolumeDisplayUnitHandler : public SingleVolumeDisplayUnitHandler
 {
+
+    Q_OBJECT
+
 public:
-    NMVolumeDisplayUnitHandler();
+    NMVolumeDisplayUnitHandler(QObject *parent = nullptr);
     virtual ~NMVolumeDisplayUnitHandler();
 
 protected:

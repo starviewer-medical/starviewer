@@ -15,6 +15,8 @@
 #ifndef VOLUMEDISPLAYUNIT_H
 #define VOLUMEDISPLAYUNIT_H
 
+#include <QObject>
+
 #include "voilut.h"
 
 #include <vtkSystemIncludes.h>
@@ -42,13 +44,15 @@ class VtkImageResliceMapper2;
     The ImagePipeline, the vtkImageSlice and the SliceHandler are created internally in the constructor and destroyed in the destructor, so only the Volume has
     to be supplied externally.
  */
-class VolumeDisplayUnit {
+class VolumeDisplayUnit : public QObject {
+
+    Q_OBJECT
 
 public:
     /// Supported projection modes for thick slab.
     enum SlabProjectionMode { Max = VTK_IMAGE_SLAB_MAX, Min = VTK_IMAGE_SLAB_MIN, Mean = VTK_IMAGE_SLAB_MEAN, Sum = VTK_IMAGE_SLAB_SUM };
 
-    VolumeDisplayUnit();
+    VolumeDisplayUnit(QObject *parent = nullptr);
     virtual ~VolumeDisplayUnit();
 
     /// Returns the volume.
@@ -162,6 +166,10 @@ public:
 
     /// Sets the opacity of this volume display unit.
     void setOpacity(double opacity);
+
+signals:
+    /// Emitted when the composition of the image stack has changed, i.e. when the shutter is enabled or disabled.
+    void imageStackChanged();
 
 protected:
     /// The volume.

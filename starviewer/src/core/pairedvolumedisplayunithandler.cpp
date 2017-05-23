@@ -16,8 +16,8 @@
 
 namespace udg {
 
-PairedVolumeDisplayUnitHandler::PairedVolumeDisplayUnitHandler()
- : GenericVolumeDisplayUnitHandler()
+PairedVolumeDisplayUnitHandler::PairedVolumeDisplayUnitHandler(QObject *parent)
+ : GenericVolumeDisplayUnitHandler(parent)
 {
 }
 
