@@ -26,6 +26,12 @@ TRANSLATIONS += main_ca_ES.ts \
 
 RESOURCES = main.qrc ../qml/qml.qrc
 
+official_release {
+    win32:RESOURCES += qtconf/win/qtconf.qrc
+    #macx:RESOURCES += qtconf/mac/qtconf.qrc    # For future use
+    #linux:RESOURCES += qtconf/linux/qtconf.qrc # For future use
+}
+
 win32{
 RC_FILE = starviewer.rc
 }

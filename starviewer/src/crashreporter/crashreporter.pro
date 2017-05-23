@@ -44,6 +44,12 @@ macx {
 
 RESOURCES = crashreporter.qrc ../main/main.qrc
 
+official_release {
+    win32:RESOURCES += ../main/qtconf/win/qtconf.qrc
+    #macx:RESOURCES += ../main/qtconf/mac/qtconf.qrc    # For future use
+    #linux:RESOURCES += ../main/qtconf/linux/qtconf.qrc # For future use
+}
+
 include(../corelibsconfiguration.pri)
 include(../compilationtype.pri)
 
