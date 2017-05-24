@@ -338,7 +338,7 @@ void PolylineROITool::equalizeDepth()
     int zIndex = m_2DViewer->getView().getZIndex();
     double z = m_2DViewer->getCurrentDisplayedImageDepth();
     int n = m_roiPolygon->getNumberOfPoints();
-    for (int i = 0; i < n - 1; i++)
+    for (int i = 0; i < n; i++)
     {
         const double *constPoint = m_roiPolygon->getVertix(i);
         double point[3] = { constPoint[0], constPoint[1], constPoint[2] };
