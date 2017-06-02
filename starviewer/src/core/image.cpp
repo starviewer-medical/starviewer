@@ -595,8 +595,6 @@ vtkImageData* Image::getDisplayShutterForDisplayAsVtkImageData()
             if (m_displayShutterForDisplayVtkImageData)
             {
                 m_displayShutterForDisplayVtkImageData->SetOrigin(m_imagePositionPatient);
-                PixelSpacing2D spacing(m_pixelSpacing.isValid() ? m_pixelSpacing : PixelSpacing2D(1, 1));
-                m_displayShutterForDisplayVtkImageData->SetSpacing(spacing.x(), spacing.y(), 1);
             }
         }
     }

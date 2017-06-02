@@ -486,6 +486,7 @@ void VolumeDisplayUnit::setShutterData(vtkImageData *shutterData)
             mapper->Delete();
         }
 
+        shutterData->SetSpacing(m_volume->getSpacing());
         m_shutterImageSlice->GetMapper()->SetInputData(shutterData);
 
         if (!m_imageStack->HasImage(m_shutterImageSlice))

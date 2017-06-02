@@ -362,13 +362,6 @@ void test_Image::getDisplayShutterForDisplayAsVtkImageData_ShouldReturnExpectedV
     QCOMPARE(extent[4], 0);
     QCOMPARE(extent[5], 0);
 
-    double shutterSpacing[3];
-    shutterData->GetSpacing(shutterSpacing);
-
-    QCOMPARE(shutterSpacing[0], imageSpacing[0]);
-    QCOMPARE(shutterSpacing[1], imageSpacing[1]);
-    QCOMPARE(shutterSpacing[2], 1.0);
-
     double shutterOrigin[3];
     shutterData->GetOrigin(shutterOrigin);
 
