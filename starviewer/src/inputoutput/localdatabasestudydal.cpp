@@ -146,7 +146,7 @@ void prepareSelectFromStudyPatient(QSqlQuery &query, const DicomMask &mask, cons
     }
     if (!mask.getPatientID().isEmpty() && mask.getPatientID() != "*")
     {
-        query.bindValue(":patient_dicomPatientId", QString("%%1%").arg(mask.getPatientID().replace("*", "")));
+        query.bindValue(":patient_dicomPatientId", QString("%1").arg(mask.getPatientID().replace("*", "%")));
     }
     if (!mask.getPatientName().isEmpty() && mask.getPatientName() != "*")
     {
