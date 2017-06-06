@@ -53,6 +53,7 @@ Cursor3DTool::Cursor3DTool(QViewer *viewer, QObject *parent)
     connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(handleImageChange()));
     connect(m_2DViewer, SIGNAL(anatomicalViewChanged(AnatomicalPlane)), SLOT(handleImageChange()));
     connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(handleImageChange()));
+    connect(m_2DViewer, &Q2DViewer::restored, this, &Cursor3DTool::handleImageChange);
 
     refreshReferenceViewerData();
 
