@@ -174,24 +174,18 @@ SliceOrientedVolumePixelData VolumeDisplayUnit::getCurrentPixelData()
     
     if (isThickSlabActive())
     {
-        if (!m_auxiliarCurrentVolumePixelData)
-        {
-            m_auxiliarCurrentVolumePixelData = new VolumePixelData();
-        }
-
         m_mapper->ResampleToScreenPixelsOff();
         m_mapper->Update();
+        delete m_auxiliarCurrentVolumePixelData;
+        m_auxiliarCurrentVolumePixelData = new VolumePixelData();
         m_auxiliarCurrentVolumePixelData->setData(m_mapper->getResliceOutput());
 
         return SliceOrientedVolumePixelData().setVolumePixelData(m_auxiliarCurrentVolumePixelData).setDataToWorldMatrix(m_mapper->getSliceToWorldMatrix());
     }
     else if (m_sliceHandler->getNumberOfPhases() > 1)
     {
-        if (!m_auxiliarCurrentVolumePixelData)
-        {
-            m_auxiliarCurrentVolumePixelData = new VolumePixelData();
-        }
-
+        delete m_auxiliarCurrentVolumePixelData;
+        m_auxiliarCurrentVolumePixelData = new VolumePixelData();
         m_auxiliarCurrentVolumePixelData->setData(m_imagePipeline->getPhaseOutput());
 
         return SliceOrientedVolumePixelData().setVolumePixelData(m_auxiliarCurrentVolumePixelData).setOrthogonalPlane(getViewPlane());
