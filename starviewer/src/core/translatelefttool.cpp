@@ -24,6 +24,11 @@ TranslateLeftTool::TranslateLeftTool(QViewer *viewer, QObject *parent)
     m_toolName = "TranslateLeftTool";
 }
 
+TranslateLeftTool::~TranslateLeftTool()
+{
+    endTranslate();
+}
+
 void TranslateLeftTool::handleEvent(unsigned long eventID)
 {
     switch (eventID)

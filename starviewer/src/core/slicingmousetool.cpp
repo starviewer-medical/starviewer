@@ -39,6 +39,7 @@ SlicingMouseTool::SlicingMouseTool(QViewer *viewer, QObject *parent)
 
 SlicingMouseTool::~SlicingMouseTool()
 {
+    unsetCursorIcon();
 }
 
 void SlicingMouseTool::handleEvent(unsigned long eventID)

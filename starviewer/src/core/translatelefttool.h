@@ -30,6 +30,7 @@ class TranslateLeftTool : public TranslateTool
 public:
 
     TranslateLeftTool(QViewer *viewer, QObject *parent = nullptr);
+    virtual ~TranslateLeftTool();
 
     void handleEvent(unsigned long eventID) override;
 
