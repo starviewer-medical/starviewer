@@ -50,7 +50,8 @@ class VolumeDisplayUnit : public QObject {
 
 public:
     /// Supported projection modes for thick slab.
-    enum SlabProjectionMode { Max = VTK_IMAGE_SLAB_MAX, Min = VTK_IMAGE_SLAB_MIN, Mean = VTK_IMAGE_SLAB_MEAN, Sum = VTK_IMAGE_SLAB_SUM };
+    enum SlabProjectionMode { Max = VTK_IMAGE_SLAB_MAX, Min = VTK_IMAGE_SLAB_MIN, Mean = VTK_IMAGE_SLAB_MEAN/*, Sum = VTK_IMAGE_SLAB_SUM*/ };
+                                                                                                            // Sum mode removed because of a bug in VTK
 
     VolumeDisplayUnit(QObject *parent = nullptr);
     virtual ~VolumeDisplayUnit();

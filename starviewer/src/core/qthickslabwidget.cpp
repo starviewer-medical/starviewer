@@ -36,7 +36,7 @@ QThickSlabWidget::QThickSlabWidget(QWidget *parent)
     m_projectionModeComboBox->addItem(tr("MIP"), VolumeDisplayUnit::Max);
     m_projectionModeComboBox->addItem(tr("MinIP"), VolumeDisplayUnit::Min);
     m_projectionModeComboBox->addItem(tr("Average"), VolumeDisplayUnit::Mean);
-    m_projectionModeComboBox->addItem(tr("Sum"), VolumeDisplayUnit::Sum);
+//    m_projectionModeComboBox->addItem(tr("Sum"), VolumeDisplayUnit::Sum);
 
     this->setEnabled(false);
 
