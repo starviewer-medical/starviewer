@@ -65,7 +65,7 @@ void prepareQueryWithMask(QSqlQuery &query, const DicomMask &mask, const QString
         {
             where += " AND ";
         }
-        where += "SeriesInstanceUID = :seriesInstanceUID";
+        where += "InstanceUID = :seriesInstanceUID";
     }
     if (!where.isEmpty())
     {
