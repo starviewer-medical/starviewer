@@ -68,6 +68,9 @@ private:
     /// S'executa quan es mostra el widget, fa que la primera vegada que es mostri es doni el focus al lineEdit PatientName
     void showEvent(QShowEvent *event);
 
+    /// Adds wildcards both front and back to the given string
+    void addWildCards(QString &string);
+
 private:
     /// Indica si s'ha mostra el widget
     bool m_widgetHasBeenShowed;
