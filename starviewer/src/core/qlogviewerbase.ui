@@ -68,16 +68,6 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="3">
-    <widget class="QTextBrowser" name="m_logBrowser">
-     <property name="lineWrapMode">
-      <enum>QTextEdit::NoWrap</enum>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0" colspan="3">
     <layout class="QHBoxLayout">
      <property name="spacing">
@@ -126,6 +116,16 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="QPlainTextEdit" name="m_logBrowser">
+     <property name="lineWrapMode">
+      <enum>QPlainTextEdit::NoWrap</enum>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
