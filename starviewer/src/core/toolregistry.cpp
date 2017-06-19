@@ -387,7 +387,7 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
     }
     else if (toolName == "NonClosedAngleTool")
     {
-        toolAction->setText(tr("Open Angle"));
+        toolAction->setText(tr("Cobb angle"));
         toolAction->setIcon(QIcon(":/images/icons/measure-open-angle.svg"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::NonClosedAngleTool));
         statusTip = tr("Enable/Disable open-angle tool");
