@@ -153,6 +153,8 @@ protected:
     /// Mostra el menu contextual
     void contextMenuEvent(QContextMenuEvent *event);
 
+    void keyPressEvent(QKeyEvent*) override;
+
 private:
     /// Crea les connexions dels signals i slots
     void createConnections();

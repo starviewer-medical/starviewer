@@ -79,7 +79,7 @@ bool QStudyTreeWidget::getUseDICOMSourceToDiscriminateStudies()
 
 void QStudyTreeWidget::createConnections()
 {
-    connect(m_studyTreeView, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), SLOT(doubleClicked(QTreeWidgetItem*, int)));
+    connect(m_studyTreeView, SIGNAL(itemActivated(QTreeWidgetItem*, int)), SLOT(doubleClicked(QTreeWidgetItem*, int)));
     connect(m_studyTreeView, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
             SLOT (currentItemChanged (QTreeWidgetItem*, QTreeWidgetItem*)));
     connect(m_studyTreeView, SIGNAL(itemExpanded(QTreeWidgetItem*)), SLOT (itemExpanded(QTreeWidgetItem*)));
@@ -746,6 +746,13 @@ void QStudyTreeWidget::doubleClicked(QTreeWidgetItem *item, int)
     // nosaltres pel doble click no volem que s'expendeixi o es col·lapsi, guardem per quin element s'ha fet el doble click, per anul·laro quan es detecti
     // un signal d'expand o collapse item
     m_qTreeWidgetItemHasBeenDoubleClicked = true;
+}
+
+void QStudyTreeWidget::keyPressEvent(QKeyEvent*)
+{
+    // Left empty to eat all key press events, especially for the Enter key.
+    // The Enter key press is handled with a connection to the itemActivated() signal but it's not consumed,
+    // and we don't want the event to be propagated to the parent widget.
 }
 
 }
