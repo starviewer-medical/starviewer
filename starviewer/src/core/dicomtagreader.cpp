@@ -433,6 +433,12 @@ DICOMValueAttribute* DICOMTagReader::convertToDICOMValueAttribute(DcmElement *dc
             }
 
             dicomValueAttribute->setValue(string);
+
+            // HACK for wrong VR (#2146)
+            if (dcmtkDICOMElement->getVR() == EVR_UN)
+            {
+                dicomValueAttribute->setValueRepresentation(DICOMValueAttribute::Unknown);
+            }
         }
         else
         {

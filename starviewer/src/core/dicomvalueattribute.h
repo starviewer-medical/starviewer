@@ -65,7 +65,6 @@ public:
     /// Retorna el tipus del valor
     ValueRepresentation getValueRepresentation();
 
-protected:
     /// Assigna el tipus del valor
     void setValueRepresentation(ValueRepresentation value);
 
