@@ -35,6 +35,9 @@ public:
     /// Returns the slice to world matrix.
     vtkMatrix4x4* getSliceToWorldMatrix() const;
 
+    /// Overriden to set a proper background level before the reslice.
+    void Render(vtkRenderer *renderer, vtkImageSlice *prop) override;
+
     using Superclass::Update;
 
 protected:
