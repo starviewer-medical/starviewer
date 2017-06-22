@@ -27,6 +27,7 @@ before_install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
       sudo apt-add-repository -y ppa:beineri/opt-qt562-trusty                                   &&
       sudo apt-get update -qq                                                                   &&
+      sudo apt-get install -qq libgl1-mesa-dev libglu1-mesa-dev                                 &&
       sudo apt-get install -qq qt56base qt56declarative qt56tools qt56webengine qt56xmlpatterns &&
       sudo apt-get install -qq libwrap0 libwrap0-dev                                            ;
     else
