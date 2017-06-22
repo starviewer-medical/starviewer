@@ -149,6 +149,8 @@ VoiLut DICOMFormattedValuesConverter::parseVoiLut(const QString &lutDescriptor, 
         inputValue++;
     }
 
+    lut = lut.simplify();
+
     // Explicitly set first and last points
     lut.setColor(0.0, lut.getColor(firstValueMapped));
     lut.setColor(lutMaximum, lut.getColor(inputValue - 1));
