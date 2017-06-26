@@ -24,7 +24,6 @@ namespace udg {
 PETVolumeDisplayUnitHandler::PETVolumeDisplayUnitHandler(QObject *parent)
     : SingleVolumeDisplayUnitHandler(parent)
 {
-    TransferFunctionModelFiller().add2DTransferFunctions(getTransferFunctionModel());
 }
 
 PETVolumeDisplayUnitHandler::~PETVolumeDisplayUnitHandler()

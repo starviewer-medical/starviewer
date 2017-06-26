@@ -24,7 +24,6 @@ namespace udg {
 NMVolumeDisplayUnitHandler::NMVolumeDisplayUnitHandler(QObject *parent)
     : SingleVolumeDisplayUnitHandler(parent)
 {
-    TransferFunctionModelFiller().add2DTransferFunctions(getTransferFunctionModel());
 }
 
 NMVolumeDisplayUnitHandler::~NMVolumeDisplayUnitHandler()

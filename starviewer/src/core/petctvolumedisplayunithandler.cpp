@@ -28,7 +28,6 @@ namespace udg {
 PETCTVolumeDisplayUnitHandler::PETCTVolumeDisplayUnitHandler(QObject *parent)
  : PairedVolumeDisplayUnitHandler(parent)
 {
-    TransferFunctionModelFiller().add2DTransferFunctions(getTransferFunctionModel());
 }
 
 PETCTVolumeDisplayUnitHandler::~PETCTVolumeDisplayUnitHandler()

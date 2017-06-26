@@ -19,6 +19,7 @@
 #include "volumedisplayunit.h"
 #include "imagepipeline.h"
 #include "transferfunctionmodel.h"
+#include "transferfunctionmodelfiller.h"
 #include "volume.h"
 
 #include <vtkImageProperty.h>
@@ -33,6 +34,7 @@ GenericVolumeDisplayUnitHandler::GenericVolumeDisplayUnitHandler(QObject *parent
 {
     m_transferFunctionModel = new TransferFunctionModel();
     m_imageStack = vtkImageStack::New();
+    TransferFunctionModelFiller().add2DTransferFunctions(getTransferFunctionModel());
 }
 
 GenericVolumeDisplayUnitHandler::~GenericVolumeDisplayUnitHandler()
