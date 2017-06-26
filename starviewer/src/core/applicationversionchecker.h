@@ -15,9 +15,9 @@
 #ifndef UDGAPPLICATIONVERSIONCHECKER_H
 #define UDGAPPLICATIONVERSIONCHECKER_H
 
-#include "qreleasenotes.h"
 #include <QObject>
-class QUrl;
+
+#include <QUrl>
 
 namespace udg {
     class ApplicationUpdateChecker;
@@ -108,8 +108,8 @@ private:
     /// Atribut per guardar temporalment la versió que s'esta comprobant
     QString m_checkedVersion;
 
-    /// Referencia a les QReleaseNotes que controlaran la finestra on es mostren les notes
-    QReleaseNotes *m_releaseNotes;
+    bool m_dontShowVisible;
+    QString m_releaseNotesWindowTitle;
 
     /// Settings
     QString m_lastReleaseNotesVersionShown;

@@ -26,6 +26,7 @@ QReleaseNotes::QReleaseNotes(QWidget *parent)
  : QWidget(parent)
 {
     setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
 
     // No cal fer un metode a part per les connexions si només en tenim una
     connect(m_closePushButton, SIGNAL(clicked()), this, SLOT(close()));
@@ -74,6 +75,8 @@ void QReleaseNotes::loadFinished(bool ok)
     // Desconectar el manager
     disconnect(m_viewWebView, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
 
+    m_viewWebView->history()->clear();
+
     if (ok)
     {
         // Si no hi ha hagut error, mostrar
@@ -82,9 +85,8 @@ void QReleaseNotes::loadFinished(bool ok)
     else
     {
         ERROR_LOG("Error while loading release notes.");
+        close();
     }
-
-    m_viewWebView->history()->clear();
 }
 
 } // End namespace udg

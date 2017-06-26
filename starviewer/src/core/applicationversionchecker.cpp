@@ -18,8 +18,8 @@
 #include "starviewerapplication.h"
 #include "logging.h"
 #include "machineidentifier.h"
+#include "qreleasenotes.h"
 
-#include <QUrl>
 #include <QFile>
 #include <QDate>
 #include <QStringList>
@@ -28,21 +28,18 @@
 namespace udg {
 
 ApplicationVersionChecker::ApplicationVersionChecker(QObject *parent)
-: QObject(parent)
+: QObject(parent), m_dontShowVisible(false)
 {
     // Per defecte diem que volem comprobar la nova versió, si no, ja es canvia
     m_checkNewVersion = true;
     // Inicialitzem la versio que ens retorna el servidor a cadena buida
     m_checkedVersion = QString("");
-    // Inicialitzem m_releaseNotes i el checker online
-    m_releaseNotes = new QReleaseNotes();
+    // Inicialitzem el checker online
     m_applicationUpdateChecker = new ApplicationUpdateChecker(this);
 }
 
 ApplicationVersionChecker::~ApplicationVersionChecker()
 {
-    // Destruir la finestra de les release notes
-    delete m_releaseNotes;
 }
 
 void ApplicationVersionChecker::checkReleaseNotes()
@@ -73,8 +70,8 @@ void ApplicationVersionChecker::checkReleaseNotes()
         QUrl url = createLocalUrl();
         if (checkLocalUrl(url))
         {
-            m_releaseNotes->setDontShowVisible(false);
-            m_releaseNotes->setWindowTitle(tr("Release Notes"));
+            m_dontShowVisible = false;
+            m_releaseNotesWindowTitle = tr("Release Notes");
             m_urlToShow = url;
         }
         else
@@ -97,8 +94,8 @@ void ApplicationVersionChecker::checkReleaseNotes()
         else
         {
             // Preparem les release notes i fem la crida online a través d'ApplicationVersionCheckerOnServer
-            m_releaseNotes->setDontShowVisible(true);
-            m_releaseNotes->setWindowTitle(tr("New Version Available"));
+            m_dontShowVisible = true;
+            m_releaseNotesWindowTitle = tr("New Version Available");
             connect(m_applicationUpdateChecker, 
                     SIGNAL(checkFinished()),
                     this, SLOT(onlineCheckFinished()));
@@ -122,7 +119,10 @@ void ApplicationVersionChecker::showIfCorrect()
         // Aqui basicament hi entra quan mostra les notes locals
         if (!m_urlToShow.isEmpty())
         {
-            m_releaseNotes->showIfUrlLoadsSuccessfully(m_urlToShow);
+            QReleaseNotes *releaseNotes = new QReleaseNotes();
+            releaseNotes->setDontShowVisible(m_dontShowVisible);
+            releaseNotes->setWindowTitle(m_releaseNotesWindowTitle);
+            releaseNotes->showIfUrlLoadsSuccessfully(m_urlToShow);
             m_urlToShow = QUrl("");
         }
     }
@@ -148,9 +148,10 @@ void ApplicationVersionChecker::showLocalReleaseNotes()
     QUrl url = createLocalUrl();
     if (checkLocalUrl(url))
     {
-        m_releaseNotes->setDontShowVisible(false);
-        m_releaseNotes->setWindowTitle(tr("Release Notes"));
-        m_releaseNotes->showIfUrlLoadsSuccessfully(url);
+        QReleaseNotes *releaseNotes = new QReleaseNotes();
+        releaseNotes->setDontShowVisible(false);
+        releaseNotes->setWindowTitle(tr("Release Notes"));
+        releaseNotes->showIfUrlLoadsSuccessfully(url);
     }
     else
     {
@@ -396,7 +397,10 @@ void ApplicationVersionChecker::showWhenCheckFinished()
 {
     if (!m_urlToShow.isEmpty())
     {
-        m_releaseNotes->showIfUrlLoadsSuccessfully(m_urlToShow);
+        QReleaseNotes *releaseNotes = new QReleaseNotes();
+        releaseNotes->setDontShowVisible(m_dontShowVisible);
+        releaseNotes->setWindowTitle(m_releaseNotesWindowTitle);
+        releaseNotes->showIfUrlLoadsSuccessfully(m_urlToShow);
         m_urlToShow = QUrl("");
     }
 }
