@@ -145,7 +145,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     m_progressDialog = new QProgressDialog(this);
     m_progressDialog->setModal(true);
     m_progressDialog->setRange(0, 100);
-    m_progressDialog->setMinimumDuration(0);
+    m_progressDialog->setMinimumDuration(1);
     m_progressDialog->setWindowTitle(tr("Loading"));
     m_progressDialog->setLabelText(tr("Loading data, please wait..."));
     m_progressDialog->setCancelButton(0);
