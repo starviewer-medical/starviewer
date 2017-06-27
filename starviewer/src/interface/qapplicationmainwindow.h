@@ -38,7 +38,6 @@ class ExtensionContext;
 class QLogViewer;
 class Patient;
 class StatsWatcher;
-class ApplicationVersionChecker;
 class ExternalApplication;
 
 class QApplicationMainWindow : public QMainWindow {
@@ -48,6 +47,9 @@ public:
     QApplicationMainWindow(QWidget *parent = 0);
 
     ~QApplicationMainWindow();
+
+    /// Checks for a new version and shows release notes, if applicable.
+    void checkNewVersionAndShowReleaseNotes();
 
     /// Assigna un pacient a la finestra.
     /// Farà les accions pertinents segons si ja es tenia un pacient o bé és el primer pacient que s'assigna
@@ -81,8 +83,6 @@ protected:
     virtual void closeEvent(QCloseEvent *event);
 
     virtual void resizeEvent(QResizeEvent *event);
-
-    virtual void showEvent(QShowEvent *event);
 
 private:
     /// Crea i inicialitza les accions de l'aplicació
@@ -243,8 +243,6 @@ private:
     /// Estadístiques d'usabilitat
     StatsWatcher *m_statsWatcher;
 
-    /// Les Release Notes o les notes de la nova versió
-    ApplicationVersionChecker *m_applicationVersionChecker;
 };
 
 }; // fi namespace udg

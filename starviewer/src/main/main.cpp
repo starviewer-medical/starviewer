@@ -257,6 +257,7 @@ int main(int argc, char *argv[])
             INFO_LOG("Creada finestra principal");
 
             mainWin->show();
+            mainWin->checkNewVersionAndShowReleaseNotes();
 
             QObject::connect(&app, SIGNAL(lastWindowClosed()),
                              &app, SLOT(quit()));
