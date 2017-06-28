@@ -13,392 +13,260 @@
  *************************************************************************************/
 
 #include "applicationversionchecker.h"
+
 #include "applicationupdatechecker.h"
 #include "coresettings.h"
-#include "starviewerapplication.h"
 #include "logging.h"
-#include "machineidentifier.h"
+#include "qreleasenotes.h"
+#include "starviewerapplication.h"
 
-#include <QUrl>
 #include <QFile>
 #include <QDate>
-#include <QStringList>
 #include <QMessageBox>
 
 namespace udg {
 
-ApplicationVersionChecker::ApplicationVersionChecker(QObject *parent)
-: QObject(parent)
+namespace {
+
+// Returns true if we are in development mode, i.e. this is a devel version, and false otherwise.
+bool isDevelopmentMode()
 {
-    // Per defecte diem que volem comprobar la nova versió, si no, ja es canvia
-    m_checkNewVersion = true;
-    // Inicialitzem la versio que ens retorna el servidor a cadena buida
-    m_checkedVersion = QString("");
-    // Inicialitzem m_releaseNotes i el checker online
-    m_releaseNotes = new QReleaseNotes();
-    m_applicationUpdateChecker = new ApplicationUpdateChecker(this);
+    return StarviewerVersionString.contains("devel");
 }
 
-ApplicationVersionChecker::~ApplicationVersionChecker()
+// Returns true if the current version is newer than the last for which release notes were shown, and false otherwise.
+bool isNewVersionInstalled()
 {
-    // Destruir la finestra de les release notes
-    delete m_releaseNotes;
+    QString lastReleaseNotesVersionShown = Settings().getValue(CoreSettings::LastReleaseNotesVersionShown).toString();
+    return ApplicationVersionChecker::isNewerVersion(StarviewerVersionString, lastReleaseNotesVersionShown);
 }
 
-void ApplicationVersionChecker::checkReleaseNotes()
+// Returns the local URL for the release notes.
+QUrl getLocalReleaseNotesUrl()
 {
-    m_checkNewVersion = true;
-    m_checkFinished = false;
-    m_urlToShow = QUrl("");
-    bool checkingOnlineNotes = false;
+    // Installed path (<installdir>/releasenotes/releasenotesX.Y.Z.html)
+    QString path = installationPath() + "/releasenotes/releasenotes" + StarviewerVersionString.section('-', 0, 0) + ".html";
 
-    // Precondició:
-    if (isDevelopmentMode())
+    if (!QFile::exists(path))
     {
-        // En mode desenvolupament no es mostraran les notes ni es faran comprovacions online
-        m_checkFinished = true;
-        return;
+        // Development path (<sourcedir>/releasenotes/changelog.html)
+        path = sourcePath() + "/releasenotes/changelog.html";
     }
 
-    // Utilitzar els settings
-    readSettings();
-    // En cas de que no hi hagi nova versió al server guardarem l'actual als settings
-    m_checkedVersion = m_lastVersionChecked;
+    return QUrl::fromLocalFile(path);
+}
+
+// Returns true if the file pointed to by the given URL exists, and false otherwise.
+bool checkLocalReleaseNotesUrl(const QUrl &url)
+{
+    return QFile::exists(url.toLocalFile());
+}
+
+// Returns the value of the setting to disable online version checks.
+bool isOnlineCheckDisabled()
+{
+    return Settings().getValue(CoreSettings::DontCheckNewVersionsOnline).toBool();
+}
+
+// Returns true if the check version interval allows to check for new versions today, and false otherwise.
+bool checkTimeInterval()
+{
+    Settings settings;
+    QString lastVersionCheckedDate = settings.getValue(CoreSettings::LastVersionCheckedDate).toString();
+    int checkVersionInterval = settings.getValue(CoreSettings::CheckVersionInterval).toInt();
+
+    QDate today = QDate::currentDate();
+    QDate lastTime = QDate::fromString(lastVersionCheckedDate, QString("yyyyMMdd"));
+
+    int daysElapsed = checkVersionInterval; // by default assume that enough days have elapsed
+
+    if (lastTime.isValid())
+    {
+        daysElapsed = lastTime.daysTo(today);
+    }
+
+    return daysElapsed >= checkVersionInterval;
+}
+
+// Checks online for newer versions and shows release notes if there is an update.
+void checkOnline()
+{
+    ApplicationUpdateChecker *updateChecker = new ApplicationUpdateChecker();
+
+    QObject::connect(updateChecker, &ApplicationUpdateChecker::checkFinished, [=] {
+        Settings settings;
+        settings.setValue(CoreSettings::LastVersionCheckedDate, QDate::currentDate().toString(QString("yyyyMMdd")));
+        QString lastVersionChecked = settings.getValue(CoreSettings::LastVersionChecked).toString();
+
+        if (updateChecker->isNewVersionAvailable())
+        {
+
+            if (lastVersionChecked != updateChecker->getVersion())
+            {
+                settings.setValue(CoreSettings::LastVersionChecked, updateChecker->getVersion());
+                bool neverShowNewVersionReleaseNotes = settings.getValue(CoreSettings::NeverShowNewVersionReleaseNotes).toBool();
+
+                if (neverShowNewVersionReleaseNotes)
+                {
+                    INFO_LOG("Not showing new version notes because the user doesn't want it.");
+                }
+                else
+                {
+                    INFO_LOG(QString("Showing new version notes from %1").arg(updateChecker->getReleaseNotesUrl()));
+
+                    QReleaseNotes *releaseNotes = new QReleaseNotes();
+                    releaseNotes->setDontShowVisible(true);
+                    releaseNotes->setWindowTitle(QObject::tr("New Version Available"));
+                    releaseNotes->showIfUrlLoadsSuccessfully(updateChecker->getReleaseNotesUrl());
+                }
+            }
+            else
+            {
+                INFO_LOG("Not showing new version notes because they have been previously shown.");
+            }
+
+        }
+        else
+        {
+            if (lastVersionChecked.isEmpty())
+            {
+                settings.setValue(CoreSettings::LastVersionChecked, StarviewerVersionString);
+            }
+
+            if (!updateChecker->isOnlineCheckOk())
+            {
+                ERROR_LOG("Error in version check:");
+                ERROR_LOG(updateChecker->getErrorDescription());
+            }
+        }
+
+        delete updateChecker;
+    });
+
+    updateChecker->checkForUpdates();
+}
+
+}
+
+void ApplicationVersionChecker::checkAndShowReleaseNotes()
+{
+    if (isDevelopmentMode())
+    {
+        return; // don't do anything in development mode
+    }
 
     if (isNewVersionInstalled())
     {
-        // Si hi ha una nova versió instalada, no fem un check online
-        m_checkNewVersion = false;
-        // Llegir el contingut dels fitxers HTML de les release notes
-        QUrl url = createLocalUrl();
-        if (checkLocalUrl(url))
+        // Show local release notes if possible
+
+        // In any case we save this version as the last version shown
+        Settings().setValue(CoreSettings::LastReleaseNotesVersionShown, StarviewerVersionString);
+
+        QUrl url = getLocalReleaseNotesUrl();
+        if (checkLocalReleaseNotesUrl(url))
         {
-            m_releaseNotes->setDontShowVisible(false);
-            m_releaseNotes->setWindowTitle(tr("Release Notes"));
-            m_urlToShow = url;
-        }
-        else
-        {
-            // Si no existeix el fitxer local de les notes, guardem als settings la versió actual
-            // per tal de que no es busquin més (no es trobaran) fins a la pròxima versió
-            writeSettings();
-            // Si en local no existeixen, ara sí que les buscarem online
-            m_checkNewVersion = true;
+            showLocalReleaseNotes();
+            return;
         }
     }
 
-    if (m_checkNewVersion && checkTimeInterval())
+    // If we haven't shown local release notes we may try an online check
+
+    if (isOnlineCheckDisabled())
     {
-        // Si no es mostra res en local, i hem de buscar versions on-line
-        if (m_dontCheckNewVersionsOnline)
-        {
-            INFO_LOG("No es busquen les release notes perquè les peticions online estan deshabilitades");
-        }
-        else
-        {
-            // Preparem les release notes i fem la crida online a través d'ApplicationVersionCheckerOnServer
-            m_releaseNotes->setDontShowVisible(true);
-            m_releaseNotes->setWindowTitle(tr("New Version Available"));
-            connect(m_applicationUpdateChecker, 
-                    SIGNAL(checkFinished()),
-                    this, SLOT(onlineCheckFinished()));
-            m_applicationUpdateChecker->checkForUpdates();
-            checkingOnlineNotes = true;
-        }
+        INFO_LOG("Online update check disabled in settings.");
+        return;
     }
 
-    if (!checkingOnlineNotes)
+    if (checkTimeInterval())
     {
-        // Si no es busquen actualitzacions online, el check ja ha acabat
-        m_checkFinished = true;
-        writeSettings();
-    }
-}
-
-void ApplicationVersionChecker::showIfCorrect()
-{
-    if (m_checkFinished)
-    {
-        // Aqui basicament hi entra quan mostra les notes locals
-        if (!m_urlToShow.isEmpty())
-        {
-            m_releaseNotes->showIfUrlLoadsSuccessfully(m_urlToShow);
-            m_urlToShow = QUrl("");
-        }
-    }
-    else
-    {
-        // Basicament hi entra quan mostra les notes d'una nova versió al server
-        connect(this, SIGNAL(checkFinished()), this, SLOT(showWhenCheckFinished()));
-    }
-}
-
-void ApplicationVersionChecker::setCheckVersionInterval(int interval)
-{
-    if (interval > 0)
-    {
-        Settings settings;
-        settings.setValue(CoreSettings::CheckVersionInterval, interval);
+        checkOnline();
     }
 }
 
 void ApplicationVersionChecker::showLocalReleaseNotes()
 {
-    // Llegir el contingut dels fitxers HTML de les release notes
-    QUrl url = createLocalUrl();
-    if (checkLocalUrl(url))
+    QUrl url = getLocalReleaseNotesUrl();
+
+    if (checkLocalReleaseNotesUrl(url))
     {
-        m_releaseNotes->setDontShowVisible(false);
-        m_releaseNotes->setWindowTitle(tr("Release Notes"));
-        m_releaseNotes->showIfUrlLoadsSuccessfully(url);
+        QReleaseNotes *releaseNotes = new QReleaseNotes();
+        releaseNotes->setDontShowVisible(false);
+        releaseNotes->setWindowTitle(QObject::tr("Release Notes"));
+        releaseNotes->showIfUrlLoadsSuccessfully(url);
     }
     else
     {
-        ERROR_LOG(QString("No s'ha pogut trobar les release notes de la versió actual al path %1").arg(url.toString()));
-        QMessageBox messageBox;
-        messageBox.setText(QString(tr("Release notes for the current version not found.")));
-        messageBox.setWindowTitle(QString(tr("Error")));
-        messageBox.addButton(tr("OK"), QMessageBox::YesRole);
-        messageBox.exec();
+        WARN_LOG(QString("Release notes for the current version not found at %1").arg(url.toString()));
+
+        QMessageBox::warning(nullptr, QObject::tr("Error"), QObject::tr("Release notes for the current version not found."),
+                             QMessageBox::Ok, QMessageBox::NoButton);
     }
 }
 
-void ApplicationVersionChecker::onlineCheckFinished()
+void ApplicationVersionChecker::setCheckVersionInterval(int days)
 {
-    m_checkFinished = true;
-    if (m_applicationUpdateChecker->isNewVersionAvailable())
+    if (days > 0)
     {
-        m_checkedVersion = m_applicationUpdateChecker->getVersion();
-        if (m_lastVersionChecked != m_checkedVersion)
-        {
-            if (m_neverShowNewVersionReleaseNotes)
-            {
-                INFO_LOG("No es mostren les release notes perquè l'usuari no ho vol");
-            }
-            else
-            {
-                m_urlToShow = m_applicationUpdateChecker->getReleaseNotesUrl();
-                INFO_LOG(QString("Es mostren les notes: %1").arg(m_applicationUpdateChecker->getReleaseNotesUrl()));
-            }
-        }
-        else
-        {
-            INFO_LOG("No es mostren les notes de la nova versió del servidor, per que ja s'han mostrat anteriorment");
-        }
-    }
-    else
-    {
-        if (m_applicationUpdateChecker->isOnlineCheckOk())
-        {
-            INFO_LOG("Starviewer està actualitzat. No s'ha trobat cap versió nova al servidor.");
-        }
-        // Si el check no ha anat bé, ja es fa un error log dins de l'application update checker.
-    }
-    writeSettings();
-    emit checkFinished();
-}
-
-QUrl ApplicationVersionChecker::createLocalUrl()
-{
-    // Agafar el path del fitxer
-    QString defaultPath = qApp->applicationDirPath() + "/releasenotes/";
-    if (!QFile::exists(defaultPath))
-    {
-        /// Mode desenvolupament (només es veuran notes locals des del menu ajuda -> mostrar notes de la versió)
-        defaultPath = qApp->applicationDirPath() + "/../releasenotes/";
-    }
-
-    QUrl result("");
-
-    QStringList versionList = StarviewerVersionString.split(QString("."));
-    if (versionList.count() > 2)
-    {
-        if (versionList[2].contains("-"))
-        {
-            versionList[2] = versionList[2].split("-")[0];
-        }
-        QString version(versionList[0] + "." + versionList[1] + "." + versionList[2]);
-        result = QUrl::fromLocalFile(defaultPath + "releasenotes" + version + ".html");
-    }
-
-    return result;
-}
-
-bool ApplicationVersionChecker::checkLocalUrl(const QUrl &url)
-{
-    // Comprobar si existeix localment el fitxer
-    return QFile::exists(url.toLocalFile());
-}
-
-bool ApplicationVersionChecker::checkTimeInterval()
-{
-    // S'utilitzen dues dates, l'actual i la última comprobada
-    QDate today = QDate::currentDate();
-    QDate lastTime = QDate::fromString(m_lastVersionCheckedDate, QString("yyyyMMdd"));
-
-    int i = m_checkVersionInterval;
-
-    // Si la data que hi ha guardada a les settings és correcte
-    if (lastTime.isValid())
-    {
-        // Calcular quans dies han passat des de que es va comprobar
-        i = lastTime.daysTo(today);
-    }
-    // Si la data no es correcte llavors i = interval i es tornarà a comprobar
-
-    // Retornar si fa tants dies o més com marca l'interval que no s'ha comprobat
-    return i >= m_checkVersionInterval;
-}
-
-void ApplicationVersionChecker::writeSettings()
-{
-    Settings settings;
-    if (!m_checkNewVersion)
-    {
-        // Ja no es mostren més fins la proxima actualització
-        QStringList version = StarviewerVersionString.split(".");
-        // Si la versió actual es de debug (això passa quan LastReleaseNotesVersionShown no te valor
-        // i es mostren les release notes per primer cop, podria ser que estiguessim en debug)
-        if (version.count() > 3)
-        {
-            settings.setValue(CoreSettings::LastReleaseNotesVersionShown,
-                              version[0] + "." + version[1] + "." + version[2]);
-        }
-        else
-        {
-            settings.setValue(CoreSettings::LastReleaseNotesVersionShown, StarviewerVersionString);
-        }
-    }
-    else
-    {
-        // Guardar la data en que hem comprobat la versió
-        settings.setValue(CoreSettings::LastVersionCheckedDate, QDate::currentDate().toString(QString("yyyyMMdd")));
-        // Guardar la versió que hem comprobat
-        settings.setValue(CoreSettings::LastVersionChecked, m_checkedVersion);
+        Settings().setValue(CoreSettings::CheckVersionInterval, days);
     }
 }
 
-void ApplicationVersionChecker::readSettings()
+bool ApplicationVersionChecker::isNewerVersion(const QString &currentVersion, const QString &oldVersion)
 {
-    Settings settings;
-    m_lastReleaseNotesVersionShown = settings.getValue(CoreSettings::LastReleaseNotesVersionShown).toString();
-    m_neverShowNewVersionReleaseNotes = settings.getValue(CoreSettings::NeverShowNewVersionReleaseNotes).toBool();
-    m_lastVersionCheckedDate = settings.getValue(CoreSettings::LastVersionCheckedDate).toString();
-    m_lastVersionChecked = settings.getValue(CoreSettings::LastVersionChecked).toString();
-    m_checkVersionInterval = settings.getValue(CoreSettings::CheckVersionInterval).toInt();
-    m_dontCheckNewVersionsOnline = settings.getValue(CoreSettings::DontCheckNewVersionsOnline).toBool();
-}
+    if (currentVersion.isEmpty()) return false;
+    if (oldVersion.isEmpty()) return true;
 
-bool ApplicationVersionChecker::isNewVersionInstalled()
-{
-    QStringList lastVersionShown = m_lastReleaseNotesVersionShown.split(".");
-    QStringList currentVersion = StarviewerVersionString.split(".");
+    // Initial: x.y.z-foo
+    // Split by '-'. If there is no '-' it will return the whole string, so we are guaranteed to get a non-empty vector
+    auto currentVersionParts = currentVersion.splitRef('-');
+    auto oldVersionParts = oldVersion.splitRef('-');
 
-    QRegExp regularExpression("^[0-9]+\\.[0-9]+\\.[0-9]+(\\-[a-zA-Z]+[0-9]*)?$", Qt::CaseSensitive);
+    // Get x.y.z[.w]
+    auto currentVersionNumber = currentVersionParts[0];
+    auto oldVersionNumber = oldVersionParts[0];
 
-    // Si lastVersionShown no és vàlida (buida o mal formada)
-    if (!regularExpression.exactMatch(m_lastReleaseNotesVersionShown))
+    // Get [x, y, z, ...]
+    auto currentVersionNumberParts = currentVersionNumber.split('.');
+    auto oldVersionNumberParts = oldVersionNumber.split('.');
+
+    for (int i = 0; i < std::min(currentVersionNumberParts.size(), oldVersionNumberParts.size()); i++)
     {
-        return true;
-    }
-    // Si la versió actual no s'ajusta a l'expressió regular, no farem res.
-    else if (!regularExpression.exactMatch(StarviewerVersionString))
-    {
-        return false;
+        int current = currentVersionNumberParts[i].toInt();
+        int old = oldVersionNumberParts[i].toInt();
+
+        if (current > old) return true;
+        if (current < old) return false;
     }
 
-    // Comparar la primera component
-    if (currentVersion[0].toInt() != lastVersionShown[0].toInt())
-    {
-        return currentVersion[0].toInt() > lastVersionShown[0].toInt();
-    }
-    // Si son iguals, comparar la segona component
-    if (currentVersion[1].toInt() != lastVersionShown[1].toInt())
-    {
-        return currentVersion[1].toInt() > lastVersionShown[1].toInt();
-    }
-    // Si també són iguals, comparar la tercera
-    // Si no tenen subversio (alpha, beta, RC, etc.)
-    if (!lastVersionShown[2].contains("-") && !currentVersion[2].contains("-"))
-    {
-        return currentVersion[2].toInt() > lastVersionShown[2].toInt();
-    }
-    else
-    {
-        return compareVersions(currentVersion[2], lastVersionShown[2]);
-    }
-}
+    // If we arrive here, it means that both versions have the same numbers at the beginning. Let's check if one of them has additional numbers
+    if (currentVersionNumberParts.size() > oldVersionNumberParts.size()) return true;
+    if (currentVersionNumberParts.size() < oldVersionNumberParts.size()) return false;
 
-bool ApplicationVersionChecker::compareVersions(const QString &current, const QString &lastShown)
-{
-    QStringList currentSplit = current.split("-");
-    QStringList lastShownSplit = lastShown.split("-");
-    // Comparar la primera component
-    if (currentSplit[0].toInt() != lastShownSplit[0].toInt())
-    {
-        return currentSplit[0].toInt() > lastShownSplit[0].toInt();
-    }
-    // Si algun té la segona part buida, llavors és major (0.9.1 > 0.9.1-RC1)
-    else if (currentSplit.count() != lastShownSplit.count())
-    {
-        return currentSplit.count() < lastShownSplit.count();
-    }
-    // Si no, comparar les subversions, alpha, beta, RC, etc.
-    else
-    {
-        QString currentSplitType = getVersionAttribute(currentSplit[1], ApplicationVersionChecker::VersionType).toLower();
-        QString lastShownSplitType = getVersionAttribute(lastShownSplit[1], ApplicationVersionChecker::VersionType).toLower();
-        // Si no son del mateix tipus, es retorna alfabèticament, es tenen en compte alpha, beta i rc
-        if (currentSplitType != lastShownSplitType)
-        {
-            return currentSplitType.compare(lastShownSplitType) > 0;
-        }
-        // Si són iguals, compararem el numero
-        return getVersionAttribute(currentSplit[1], ApplicationVersionChecker::VersionNumber).toInt()
-                > getVersionAttribute(lastShownSplit[1], ApplicationVersionChecker::VersionNumber).toInt();
-    }
-}
+    // The version number is exactly equal. Let's compare if there is some suffix
+    if (currentVersionParts.size() == 1 && oldVersionParts.size() == 1) return false;   // neither has suffix, so they are equal
+    if (currentVersionParts.size() == 1 && oldVersionParts.size() > 1) return true;     // currentVersion = x.y.z, oldVersion = x.y.z-(devel|alpha|beta|RC)...
+    if (currentVersionParts.size() > 1 && oldVersionParts.size() == 1) return false;    // reverse of above
 
-QString ApplicationVersionChecker::getVersionAttribute(const QString &version, ApplicationVersionChecker::VersionAttribute attribute)
-{
-    switch (attribute)
-    {
-        case ApplicationVersionChecker::VersionType:
-            return QString(version).remove(QRegExp("[0-9]"));
-        case ApplicationVersionChecker::VersionNumber:
-            // Si no hi ha numero no passa res, passar una string buida a int retorna 0.
-            return QString(version).remove(QRegExp("[a-zA-Z]"));
-        default:
-            // Cas improbable, l'atribut no és correcte
-            return version;
-    }
-}
+    // Both have suffix
+    QRegularExpression suffixRegularExpression("(devel|alpha|beta|RC)(\\d*)", QRegularExpression::CaseInsensitiveOption);
+    auto currentMatch = suffixRegularExpression.match(currentVersionParts[1]);
+    auto oldMatch = suffixRegularExpression.match(oldVersionParts[1]);
 
-bool ApplicationVersionChecker::isDevelopmentMode()
-{
-    QStringList currentVersion = StarviewerVersionString.split(".");
-    // Si la versio actual té tres o més parts i conté devel (0.9.1-devel o 0.9.1.devel)
-    if (currentVersion.count() > 3)
-    {
-        return true;
-    }
-    else if (currentVersion.count() == 3)
-    {
-        return getVersionAttribute(currentVersion[2], ApplicationVersionChecker::VersionType).toLower().contains("devel");
-    }
-    else
-    {
-        return false;
-    }
-}
+    if (!currentMatch.hasMatch() || !oldMatch.hasMatch()) return false; // unexpected suffix: we can't say that currentVersion is newer than oldVersion
 
-void ApplicationVersionChecker::showWhenCheckFinished()
-{
-    if (!m_urlToShow.isEmpty())
-    {
-        m_releaseNotes->showIfUrlLoadsSuccessfully(m_urlToShow);
-        m_urlToShow = QUrl("");
-    }
+    QVector<QString> suffixes{"devel", "alpha", "beta", "RC"};
+    int currentSuffixIndex = suffixes.indexOf(currentMatch.captured(1));
+    int oldSuffixIndex = suffixes.indexOf(oldMatch.captured(1));
+
+    if (currentSuffixIndex > oldSuffixIndex) return true;
+    if (currentSuffixIndex < oldSuffixIndex) return false;
+
+    // Same suffix type. Let's compare the number
+    int currentSuffixNumber = currentMatch.captured(2).toInt();
+    int oldSuffixNumber = oldMatch.captured(2).toInt();
+
+    return currentSuffixNumber > oldSuffixNumber;
 }
 
 } // End namespace udg

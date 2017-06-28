@@ -112,9 +112,6 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     createActions();
     createMenus();
 
-    m_applicationVersionChecker = new ApplicationVersionChecker(this);
-    m_applicationVersionChecker->checkReleaseNotes();
-
     // Llegim les configuracions de l'aplicació, estat de la finestra, posicio,etc
     readSettings();
     // Icona de l'aplicació
@@ -171,6 +168,11 @@ QApplicationMainWindow::~QApplicationMainWindow()
     this->killBill();
     delete m_extensionWorkspace;
     delete m_extensionHandler;
+}
+
+void QApplicationMainWindow::checkNewVersionAndShowReleaseNotes()
+{
+    ApplicationVersionChecker::checkAndShowReleaseNotes();
 }
 
 void QApplicationMainWindow::createActions()
@@ -673,12 +675,6 @@ void QApplicationMainWindow::resizeEvent(QResizeEvent *event)
     QMainWindow::resizeEvent(event);
 }
 
-void QApplicationMainWindow::showEvent(QShowEvent *event)
-{
-    m_applicationVersionChecker->showIfCorrect();
-    QMainWindow::showEvent(event);
-}
-
 void QApplicationMainWindow::about()
 {
     QAboutDialog *about = new QAboutDialog(this);
@@ -824,7 +820,7 @@ void QApplicationMainWindow::showDiagnosisTestDialog()
 
 void QApplicationMainWindow::openReleaseNotes()
 {
-    m_applicationVersionChecker->showLocalReleaseNotes();
+    ApplicationVersionChecker::showLocalReleaseNotes();
 }
 
-}; // end namespace udg
+} // end namespace udg
