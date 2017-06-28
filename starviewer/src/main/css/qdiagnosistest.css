@@ -179,9 +179,11 @@ li
 .error li
 {
     background-image: url(qrc:///images/icons/emblem-error.svg);
+    background-size: 16px;
 }
 
 .warning li
 {
     background-image: url(qrc:///images/icons/emblem-warning.svg);
+    background-size: 16px;
 }
