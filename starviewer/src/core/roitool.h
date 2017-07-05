@@ -44,7 +44,7 @@ public:
     virtual void handleEvent(long unsigned eventID) = 0;
 
 protected:
-    MeasureComputer* getMeasureComputer();
+    MeasureComputer* getMeasureComputer() const override;
     
     /// Mètode per escriure a pantalla les dades calculades.
     void printData();

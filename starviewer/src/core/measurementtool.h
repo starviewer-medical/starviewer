@@ -17,6 +17,8 @@
 
 #include "tool.h"
 
+#include "measurementmanager.h"
+
 namespace udg {
 
 class QViewer;
@@ -35,10 +37,16 @@ public:
 
 protected:
     /// Returns the specific measure computer for the implemented measurement tool
-    virtual MeasureComputer* getMeasureComputer() = 0;
+    virtual MeasureComputer* getMeasureComputer() const = 0;
     
     /// Gets the measurement string to display. The results will dependend on the specific MeasureComputer returned by the subclass
     QString getMeasurementString();
+
+    /// Returns the value of the measurement.
+    double getMeasurement() const;
+
+    /// Returns the units of the measurement.
+    MeasurementManager::MeasurementUnitsType getMeasurementUnits() const;
     
 private:
     /// Returns the image that should be used to compute the measurements

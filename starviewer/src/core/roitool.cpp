@@ -48,7 +48,7 @@ ROITool::~ROITool()
 {
 }
 
-MeasureComputer* ROITool::getMeasureComputer()
+MeasureComputer* ROITool::getMeasureComputer() const
 {
     return new AreaMeasureComputer(m_roiPolygon);
 }
@@ -313,6 +313,7 @@ QString ROITool::getAnnotation()
 
 AbstractROIDataPrinter* ROITool::getROIDataPrinter(const QMap<int, ROIData> &roiDataMap)
 {
+    double areaInMm2 = getMeasurementUnits() == MeasurementManager::Millimetres ? getMeasurement() : 0;
     AbstractROIDataPrinter *roiDataPrinter = 0;
 
     switch (roiDataMap.count())
@@ -324,7 +325,7 @@ AbstractROIDataPrinter* ROITool::getROIDataPrinter(const QMap<int, ROIData> &roi
             }
             else if (roiDataMap.value(0).getModality() == "NM")
             {
-                roiDataPrinter = new NMROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
+                roiDataPrinter = new NMROIDataPrinter(roiDataMap, areaInMm2, getMeasurementString(), m_2DViewer);
             }
             break;
 
@@ -338,7 +339,7 @@ AbstractROIDataPrinter* ROITool::getROIDataPrinter(const QMap<int, ROIData> &roi
                 }
                 else if (modalities.contains("CT") && modalities.contains("NM"))
                 {
-                    roiDataPrinter = new NMCTFusionROIDataPrinter(roiDataMap, getMeasurementString(), m_2DViewer);
+                    roiDataPrinter = new NMCTFusionROIDataPrinter(roiDataMap, areaInMm2, getMeasurementString(), m_2DViewer);
                 }
             }
             break;
