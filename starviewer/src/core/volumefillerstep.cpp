@@ -23,40 +23,6 @@
 
 namespace udg {
 
-namespace {
-
-// Ens diu si les imatges són de mides diferents
-bool areOfDifferentSize(Image *firstImage, Image *secondImage)
-{
-    Q_ASSERT(firstImage);
-    Q_ASSERT(secondImage);
-
-    return firstImage->getColumns() != secondImage->getColumns() || firstImage->getRows() != secondImage->getRows();
-}
-
-// Ens diu si les imatges tenen photometric interpretations diferents
-bool areOfDifferentPhotometricInterpretation(Image *firstImage, Image *secondImage)
-{
-    Q_ASSERT(firstImage);
-    Q_ASSERT(secondImage);
-
-    return firstImage->getPhotometricInterpretation() != secondImage->getPhotometricInterpretation();
-}
-
-// Ens diu si les imatges tenen pixel spacing diferents
-bool areOfDifferentPixelSpacing(Image *firstImage, Image *secondImage)
-{
-    Q_ASSERT(firstImage);
-    Q_ASSERT(secondImage);
-
-    PixelSpacing2D spacing1 = firstImage->getPreferredPixelSpacing();
-    PixelSpacing2D spacing2 = secondImage->getPreferredPixelSpacing();
-
-    return !spacing1.isEqual(spacing2);
-}
-
-}
-
 VolumeFillerStep::VolumeFillerStep()
 {
 }
@@ -72,32 +38,60 @@ bool VolumeFillerStep::fillIndividually()
     }
 
     Image *image = currentImages.first();
-    int currentImageIndex = m_input->getCurrentSeries()->getImages().indexOf(image);
     int volumeNumber = m_input->getCurrentVolumeNumber();
-    // We will need to create a thumbnail if this is the first image in a volume, i.e. if it's the first in the series or we increase the volume number
-    bool mustCreateThumbnail = currentImageIndex == 0;
+    bool mustCreateThumbnail = false;
+    Series *series = m_input->getCurrentSeries();
+    ImageProperties imageProperties(image);
 
-    // If this is not the first image in the series we may need to increase the volume number
-    if (currentImageIndex > 0)
+    if (numberOfFrames > 1)
     {
-        // If the series contains at least one file with more than one frame, we increase the volume number for each fill
-        if (m_input->currentSeriesContainsMultiframeImages())
-        {
-            volumeNumber++;
-            mustCreateThumbnail = true;
-        }
-        // Otherwise, we increase the volume number if the current image has different size, color or spacing than the previous
-        else
-        {
-            Image *previousImage = m_input->getCurrentSeries()->getImages().at(currentImageIndex - 1);
+        // This file has more than one frame: let's create a volume for it alone
+        imageProperties.multiframe = true;
 
-            if (areOfDifferentSize(previousImage, image) || areOfDifferentPhotometricInterpretation(previousImage, image)
-                || areOfDifferentPixelSpacing(previousImage, image))
+        if (m_imagesProperties.contains(series) && !m_imagesProperties[series].isEmpty())
+        {
+            // Give it a new volumeNumber
+            volumeNumber = m_imagesProperties[series].lastKey() + 1;
+        }
+        // else: First file of the series: no need to increment volumeNumber
+
+        m_imagesProperties[series][volumeNumber] = imageProperties;
+        mustCreateThumbnail = true;
+    }
+    else if (m_imagesProperties.contains(series) && m_imagesProperties[series].contains(volumeNumber))
+    {
+        // This file has one frame
+        // Current volumeNumber already contains images: let's find if they match the current one
+        if (m_imagesProperties[series][volumeNumber] != imageProperties)
+        {
+            // No match: let's find if there is some matching ImageProperties in current series
+            bool found = false;
+            foreach (int number, m_imagesProperties[series].keys())
             {
-                volumeNumber++;
+                if (m_imagesProperties[series][number] == imageProperties)
+                {
+                    // Found: reuse the volumeNumber
+                    found = true;
+                    volumeNumber = number;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                // Not found: insert imageProperties with a new volumeNumber
+                volumeNumber = m_imagesProperties[series].lastKey() + 1;
+                m_imagesProperties[series][volumeNumber] = imageProperties;
                 mustCreateThumbnail = true;
             }
         }
+        // else Match: no need to change volumeNumber nor create thumbnail
+    }
+    else
+    {
+        // First image of this volume: insert imageProperties at current series and volumeNumber
+        m_imagesProperties[series][volumeNumber] = imageProperties;
+        mustCreateThumbnail = true;
     }
 
     m_input->setCurrentVolumeNumber(volumeNumber);
@@ -130,6 +124,24 @@ void VolumeFillerStep::saveThumbnail(const Image *image)
     {
         thumbnail.save(QString("%1/thumbnail.png").arg(thumbnailPath), "PNG");
     }
+}
+
+VolumeFillerStep::ImageProperties::ImageProperties(const Image *image)
+    : multiframe(false), rows(image->getRows()), columns(image->getColumns()), photometricInterpretation(image->getPhotometricInterpretation()),
+      pixelSpacing(image->getPreferredPixelSpacing())
+{
+}
+
+bool VolumeFillerStep::ImageProperties::operator==(const ImageProperties &that) const
+{
+    // Multiframes are always considered different to avoid finding them in the search for a matching ImageProperties
+    return !this->multiframe && !that.multiframe && this->rows == that.rows && this->columns == that.columns
+            && this->photometricInterpretation == that.photometricInterpretation && this->pixelSpacing.isEqual(that.pixelSpacing);
+}
+
+bool VolumeFillerStep::ImageProperties::operator!=(const ImageProperties &that) const
+{
+    return !(*this == that);
 }
 
 } // namespace udg

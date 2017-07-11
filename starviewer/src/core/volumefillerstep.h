@@ -17,6 +17,11 @@
 
 #include "patientfillerstep.h"
 
+#include "photometricinterpretation.h"
+#include "pixelspacing2d.h"
+
+#include <QHash>
+
 namespace udg {
 
 class Image;
@@ -40,6 +45,27 @@ private:
     /// a memòria i aquí podem aprofitar que el dataset està a memòria evitant la càrrega posterior
     /// Tot i així es pot fer servir en altres casos que es cregui necessari avançar la creació del thumbnail
     void saveThumbnail(const Image *image);
+
+private:
+    /**
+     * @brief The ImageProperties struct holds a set of distinct image properties.
+     */
+    struct ImageProperties
+    {
+        ImageProperties() = default;    // required by QMap
+        ImageProperties(const Image *image);
+        bool operator==(const ImageProperties &that) const;
+        bool operator!=(const ImageProperties &that) const;
+
+        bool multiframe;
+        int rows;
+        int columns;
+        PhotometricInterpretation photometricInterpretation;
+        PixelSpacing2D pixelSpacing;
+    };
+
+    /// ImageProperties for each volume number in each series.
+    QHash<Series*, QMap<int, ImageProperties>> m_imagesProperties;
 
 };
 

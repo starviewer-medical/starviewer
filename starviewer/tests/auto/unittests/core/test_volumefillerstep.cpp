@@ -140,7 +140,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             reader->addTag(DICOMRows, 256);
             reader->addTag(DICOMColumns, 256);
             readers.append(reader);
-            volumeNumberInSeries.append(4);
+            volumeNumberInSeries.append(1);
         }
 
         QTest::newRow("different variations in size") << readers << volumeNumberInSeries;
@@ -226,7 +226,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPhotometricInterpretation, "MONOCHROME2");
             readers.append(reader);
-            volumeNumberInSeries.append(3);
+            volumeNumberInSeries.append(1);
         }
 
         QTest::newRow("4 MONO + 3 RGB + 3 MONO") << readers << volumeNumberInSeries;
@@ -312,7 +312,7 @@ void test_VolumeFillerStep::fillIndividually_ShouldCreateSeparateVolumesForDiffe
             TestingDICOMTagReader *reader = createReader(i);
             reader->addTag(DICOMPixelSpacing, "1\\1");
             readers.append(reader);
-            volumeNumberInSeries.append(3);
+            volumeNumberInSeries.append(1);
         }
 
         QTest::newRow("4 + 3 + 3") << readers << volumeNumberInSeries;
