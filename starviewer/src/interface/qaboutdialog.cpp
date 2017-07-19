@@ -17,16 +17,18 @@
 #include "qlicensedialog.h"
 #include "starviewerapplication.h"
 
-#include <QPushButton>
-#include <QMessageBox>
 #include <QDateTime>
+#include <QMessageBox>
+#include <QPushButton>
 
 namespace udg {
 
 QAboutDialog::QAboutDialog(QWidget *parent)
- : QDialog(parent)
+ : QDialog(parent), m_dontClose(false)
 {
     setupUi(this);
+
+    this->setAttribute(Qt::WA_DeleteOnClose);
 
     setWindowTitle(tr("About %1").arg(ApplicationNameString));
     m_applicationNameLabel->setText("<h2>" + ApplicationNameString + "</h2>");
@@ -60,19 +62,36 @@ QAboutDialog::QAboutDialog(QWidget *parent)
     m_aboutTextLabel->setText(aboutMessage);
     m_aboutTextLabel->setOpenExternalLinks(true);
 
+    m_crashButton = m_buttonBox->addButton(tr("Crash test"), QDialogButtonBox::ActionRole);
+    m_crashButton->setAutoDefault(false);
+    connect(m_crashButton, &QPushButton::clicked, this, &QAboutDialog::crash);
+
     QPushButton *licenseButton = m_buttonBox->addButton(tr("License information"), QDialogButtonBox::ActionRole);
+    licenseButton->setAutoDefault(false);
     connect(licenseButton, &QPushButton::clicked, this, &QAboutDialog::showLicenseInformation);
 
-    m_crashBtn = 0;
+    QPushButton *closeButton = m_buttonBox->button(QDialogButtonBox::Close);
+    connect(closeButton, &QPushButton::pressed, this, &QAboutDialog::onCloseButtonPressed);
+    connect(closeButton, &QPushButton::released, this, &QAboutDialog::onCloseButtonReleased);
 
-    m_okBtn = m_buttonBox->addButton(tr("Ok"), QDialogButtonBox::ActionRole);
-    connect(m_okBtn, &QPushButton::clicked, this, &QAboutDialog::btnOkClicked);
-    connect(m_okBtn, &QPushButton::pressed, this, &QAboutDialog::btnOkPressed);
-    connect(m_okBtn, &QPushButton::released, this, &QAboutDialog::btnOkReleased);
+    m_crashButton->hide();  // it has to be hidden at the end, otherwise it remains visible
 }
 
 QAboutDialog::~QAboutDialog()
 {
+}
+
+void QAboutDialog::reject()
+{
+    if (m_dontClose)
+    {
+        // Don't close this time, but do it the next
+        m_dontClose = false;
+    }
+    else
+    {
+        QDialog::reject();
+    }
 }
 
 void QAboutDialog::showLicenseInformation()
@@ -81,41 +100,34 @@ void QAboutDialog::showLicenseInformation()
     licenseDialog->open();
 }
 
-void QAboutDialog::btnCrashClicked()
+void QAboutDialog::crash()
 {
-    QMessageBox confirmMsgbox(QMessageBox::Icon::Warning, tr("Crash test"), tr("Are you sure do you want to crash Starviewer on purpose?"));
-    confirmMsgbox.addButton(QMessageBox::StandardButton::Yes);
-    confirmMsgbox.addButton(QMessageBox::StandardButton::No);
-    if (confirmMsgbox.exec() == QMessageBox::Yes) {
-        int* nowhere;
-        nowhere = 0x0;
+    QMessageBox confirmCrash(QMessageBox::Warning, tr("Crash test"), tr("Are you sure you want to crash %1 on purpose?").arg(ApplicationNameString));
+    confirmCrash.addButton(QMessageBox::Yes);
+    confirmCrash.addButton(QMessageBox::No);
+
+    if (confirmCrash.exec() == QMessageBox::Yes)
+    {
+        int *nowhere;
+        nowhere = nullptr;
         *nowhere = 1;
     }
-
 }
 
-void QAboutDialog::btnOkClicked()
-{
-    if (!m_crashBtn) { //Crash button not created
-        close();
-    }
-}
-
-void QAboutDialog::btnOkPressed()
+void QAboutDialog::onCloseButtonPressed()
 {
     m_longClickStart = QDateTime::currentMSecsSinceEpoch();
 }
 
-void QAboutDialog::btnOkReleased()
+void QAboutDialog::onCloseButtonReleased()
 {
-    if ((QDateTime::currentMSecsSinceEpoch() - m_longClickStart) > msecsToShowCrash ) {
-        m_crashBtn = m_buttonBox->addButton(tr("Crash test"), QDialogButtonBox::ActionRole);
-        connect(m_crashBtn, &QPushButton::clicked, this, &QAboutDialog::btnCrashClicked);
+    static constexpr qint64 MillisecondsToShowCrash = 5000;
+
+    if ((QDateTime::currentMSecsSinceEpoch() - m_longClickStart) > MillisecondsToShowCrash)
+    {
+        m_crashButton->show();
+        m_dontClose = true;
     }
-
 }
-
-
-
 
 }
