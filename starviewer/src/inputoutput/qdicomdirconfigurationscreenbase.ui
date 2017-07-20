@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>udg::QDICOMDIRConfigurationScreenBase</class>
  <widget class="QWidget" name="udg::QDICOMDIRConfigurationScreenBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>481</width>
+    <height>484</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>DICOMDIR Configuration</string>
   </property>
@@ -9,41 +17,142 @@
    <iconset resource="../main/main.qrc">
     <normaloff>:/images/icons/media-optical-dicom.svg</normaloff>:/images/icons/media-optical-dicom.svg</iconset>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="5" column="0">
-    <layout class="QGridLayout">
-     <item row="1" column="2">
-      <widget class="QLineEdit" name="m_textBurningApplicationCDParameters">
-       <property name="enabled">
-        <bool>false</bool>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>DICOMDIR creation configuration</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="m_checkBoxConvertDICOMDIRImagesToLittleEndian">
+     <property name="text">
+      <string>Convert all images to Explicit Little Endian</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Burning application configuration</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="m_burningApplicationDownloadURLLabel">
+       <property name="text">
+        <string>Download from:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QLineEdit" name="m_textBurningApplicationDVDParameters">
-       <property name="enabled">
-        <bool>false</bool>
+     <item row="0" column="1">
+      <widget class="QLabel" name="m_burningApplicationDownloadURL">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="textLabel1_9">
+       <property name="text">
+        <string>Application path:</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLabel" name="labelCDParameters">
+      <layout class="QHBoxLayout">
+       <item>
+        <widget class="QLineEdit" name="m_textBurningApplicationPath">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="m_buttonExaminateBurningApplication">
+         <property name="toolTip">
+          <string>Examine disk to find the application</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../main/main.qrc">
+           <normaloff>:/images/icons/document-open.svg</normaloff>:/images/icons/document-open.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="m_burningApplicationPathValidationIcon">
+         <property name="minimumSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">image: url(:/images/icons/emblem-warning.svg);</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="m_burningApplicationPathValidationLabel">
+         <property name="text">
+          <string>Validation Message</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="textLabel1_8">
        <property name="text">
-        <string>CD parameters:</string>
+        <string>Application parameters:</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLabel" name="labelDVDParameteres">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="text">
-        <string>DVD parameters:</string>
-       </property>
-      </widget>
+      <widget class="QLineEdit" name="m_textBurningApplicationParameters"/>
      </item>
-     <item row="1" column="0" rowspan="2">
+    </layout>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="m_checkBoxHasDifferentCDDVDParameteres">
+     <property name="text">
+      <string>Use different parameters for CD and DVD burning:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
       <spacer>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -54,14 +163,62 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
-         <height>20</height>
+         <height>48</height>
         </size>
        </property>
       </spacer>
      </item>
+     <item>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelCDParameters">
+         <property name="text">
+          <string>CD parameters:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="m_textBurningApplicationCDParameters">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelDVDParameteres">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>DVD parameters:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="m_textBurningApplicationDVDParameters">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
     </layout>
    </item>
-   <item row="7" column="0" colspan="2">
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Copy folder content to DICOMDIR</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Copy additional folder content when creating DICOMDIR on these supports</string>
@@ -138,152 +295,7 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
-    <layout class="QGridLayout">
-     <item row="1" column="0">
-      <widget class="QLabel" name="textLabel1_9">
-       <property name="text">
-        <string>Application path:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="m_textBurningApplicationParameters"/>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="m_burningApplicationDownloadURL">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-       <property name="openExternalLinks">
-        <bool>true</bool>
-       </property>
-       <property name="textInteractionFlags">
-        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="m_burningApplicationDownloadURLLabel">
-       <property name="text">
-        <string>Download from:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="textLabel1_8">
-       <property name="text">
-        <string>Application parameters:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <layout class="QHBoxLayout">
-       <item>
-        <widget class="QLineEdit" name="m_textBurningApplicationPath">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QToolButton" name="m_buttonExaminateBurningApplication">
-         <property name="toolTip">
-          <string>Examine disk to find the application</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../main/main.qrc">
-           <normaloff>:/images/icons/document-open.svg</normaloff>:/images/icons/document-open.svg</iconset>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="m_burningApplicationPathValidationIcon">
-         <property name="minimumSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">image: url(:/images/icons/emblem-warning.svg);</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="m_burningApplicationPathValidationLabel">
-         <property name="text">
-          <string>Validation Message</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Burning application configuration</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QCheckBox" name="m_checkBoxConvertDICOMDIRImagesToLittleEndian">
-     <property name="text">
-      <string>Convert all images to Explicit Little Endian</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>DICOMDIR creation configuration</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Copy folder content to DICOMDIR</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QCheckBox" name="m_checkBoxHasDifferentCDDVDParameteres">
-     <property name="text">
-      <string>Use different parameters for CD and DVD burning:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
+   <item>
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -298,14 +310,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
- <tabstops>
-  <tabstop>m_textBurningApplicationPath</tabstop>
-  <tabstop>m_buttonExaminateBurningApplication</tabstop>
-  <tabstop>m_textBurningApplicationParameters</tabstop>
-  <tabstop>m_textBurningApplicationCDParameters</tabstop>
-  <tabstop>m_textBurningApplicationDVDParameters</tabstop>
- </tabstops>
  <resources>
   <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>

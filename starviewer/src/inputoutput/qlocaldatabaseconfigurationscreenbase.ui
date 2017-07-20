@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>573</width>
-    <height>424</height>
+    <width>565</width>
+    <height>437</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,22 +17,33 @@
    <iconset resource="../main/main.qrc">
     <normaloff>:/images/icons/database.svg</normaloff>:/images/icons/database.svg</iconset>
   </property>
-  <layout class="QGridLayout" name="gridLayout_5">
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Database and Cache Location</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="0">
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="1" column="4">
-         <widget class="QLabel" name="m_cachePathWarningLabel">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="textLabel1_9">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Database Location:</string>
           </property>
-          <property name="wordWrap">
-           <bool>true</bool>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="m_textDatabaseRoot"/>
+        </item>
+        <item row="0" column="2">
+         <widget class="QToolButton" name="m_buttonExaminateDataBase">
+          <property name="toolTip">
+           <string>Browse disk to find the database</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../main/main.qrc">
+            <normaloff>:/images/icons/document-open.svg</normaloff>:/images/icons/document-open.svg</iconset>
           </property>
          </widget>
         </item>
@@ -55,16 +66,12 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="textLabel1_9">
+        <item row="0" column="4">
+         <widget class="QLabel" name="m_databasePathWarningLabel">
           <property name="text">
-           <string>Database Location:</string>
+           <string>TextLabel</string>
           </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="m_textCacheImagePath">
-          <property name="readOnly">
+          <property name="wordWrap">
            <bool>true</bool>
           </property>
          </widget>
@@ -76,6 +83,13 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="m_textCacheImagePath">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="2">
          <widget class="QToolButton" name="m_buttonExaminateCacheImage">
           <property name="toolTip">
@@ -84,16 +98,6 @@
           <property name="icon">
            <iconset resource="../main/main.qrc">
             <normaloff>:/images/icons/document-open.svg</normaloff>:/images/icons/document-open.svg</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="4">
-         <widget class="QLabel" name="m_databasePathWarningLabel">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -116,23 +120,19 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="m_textDatabaseRoot"/>
-        </item>
-        <item row="0" column="2">
-         <widget class="QToolButton" name="m_buttonExaminateDataBase">
-          <property name="toolTip">
-           <string>Browse disk to find the database</string>
+        <item row="1" column="4">
+         <widget class="QLabel" name="m_cachePathWarningLabel">
+          <property name="text">
+           <string>TextLabel</string>
           </property>
-          <property name="icon">
-           <iconset resource="../main/main.qrc">
-            <normaloff>:/images/icons/document-open.svg</normaloff>:/images/icons/document-open.svg</iconset>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QLabel" name="m_mustRestartToApplyWarningIcon">
@@ -174,13 +174,13 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Automatic Cache Management</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QLabel" name="textLabel3_7">
@@ -256,7 +256,7 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
+      <item>
        <layout class="QHBoxLayout">
         <property name="spacing">
          <number>6</number>
@@ -347,7 +347,7 @@
         </item>
        </layout>
       </item>
-      <item row="2" column="0">
+      <item>
        <layout class="QGridLayout" name="gridLayout_6">
         <item row="0" column="0">
          <widget class="QCheckBox" name="m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable">
@@ -439,27 +439,13 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
       <string>Local Database Maintenance</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="2">
-       <widget class="QPushButton" name="m_buttonCompactDatabase">
-        <property name="toolTip">
-         <string>Compact Database</string>
-        </property>
-        <property name="text">
-         <string>Compact database</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../main/main.qrc">
-          <normaloff>:/images/icons/package.svg</normaloff>:/images/icons/package.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
        <spacer>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -472,7 +458,7 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="1">
+      <item>
        <widget class="QPushButton" name="m_buttonDeleteStudies">
         <property name="toolTip">
          <string>Delete all studies from the cache</string>
@@ -486,10 +472,24 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="m_buttonCompactDatabase">
+        <property name="toolTip">
+         <string>Compact Database</string>
+        </property>
+        <property name="text">
+         <string>Compact database</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../main/main.qrc">
+          <normaloff>:/images/icons/package.svg</normaloff>:/images/icons/package.svg</iconset>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -504,17 +504,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
- <tabstops>
-  <tabstop>m_textDatabaseRoot</tabstop>
-  <tabstop>m_buttonExaminateDataBase</tabstop>
-  <tabstop>m_textCacheImagePath</tabstop>
-  <tabstop>m_buttonExaminateCacheImage</tabstop>
-  <tabstop>m_checkBoxDeletedOldStudies</tabstop>
-  <tabstop>m_textMaximumDaysNotViewed</tabstop>
-  <tabstop>m_checkBoxDeleteStudiesIfNotEnoughFreeSpaceAvailable</tabstop>
-  <tabstop>m_textSpaceToFreeIfNotEnoughSpaceAvailable</tabstop>
- </tabstops>
  <resources>
   <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
