@@ -67,19 +67,13 @@
       <number>6</number>
      </property>
      <item>
-      <widget class="QToolButton" name="m_viewButton">
+      <widget class="QPushButton" name="m_viewButton">
        <property name="text">
         <string>View</string>
        </property>
        <property name="icon">
         <iconset resource="../main/main.qrc">
          <normaloff>:/images/icons/visibility.svg</normaloff>:/images/icons/visibility.svg</iconset>
-       </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-       <property name="autoRaise">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
