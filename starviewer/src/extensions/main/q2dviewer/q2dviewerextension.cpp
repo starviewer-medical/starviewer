@@ -233,6 +233,7 @@ void Q2DViewerExtension::createConnections()
     connect(m_workingArea, SIGNAL(fusionLayout2x3FirstRequested(QList<Volume*>)), SLOT(setFusionLayout2x3First(QList<Volume*>)));
     connect(m_workingArea, SIGNAL(fusionLayout2x3SecondRequested(QList<Volume*>)), SLOT(setFusionLayout2x3Second(QList<Volume*>)));
     connect(m_workingArea, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SLOT(setFusionLayout3x3(QList<Volume*>)));
+    connect(m_workingArea, &ViewersLayout::fusionLayoutMprRightRequested, this, &Q2DViewerExtension::setFusionLayoutMprRight);
 }
 
 #ifdef STARVIEWER_LITE
@@ -1112,6 +1113,23 @@ void Q2DViewerExtension::setFusionLayout3x3(const QList<Volume*> &volumes)
     }
 
     m_layoutManager->setFusionLayout3x3(volumes);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayoutMprRight(const QList<Volume *> &volumes)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayoutMprRight(volumes);
 
     if (propagationEnabled)
     {

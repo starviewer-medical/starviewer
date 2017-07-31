@@ -625,6 +625,28 @@ void LayoutManager::setFusionLayout3x3(const QList<Volume*> &volumes)
     }
 }
 
+void LayoutManager::setFusionLayoutMprRight(const QList<Volume *> &volumes)
+{
+    if (volumes.size() != 2)
+    {
+        return;
+    }
+
+    QRectF geometry = prepareToChangeLayoutOfStudy(volumes[0]->getStudy());
+    m_layout->cleanUp(geometry);
+
+    Q2DViewerWidget *axial = m_layout->addViewer(m_layout->convertGeometry(QRectF(0.5, 0, 0.5, 1), geometry));
+    axial->getViewer()->setInputAsynchronously(volumes, new ResetViewToAnatomicalPlaneQViewerCommand(axial->getViewer(), AnatomicalPlane::Axial, axial));
+
+    Q2DViewerWidget *sagittal = m_layout->addViewer(m_layout->convertGeometry(QRectF(0, 0.5, 0.5, 0.5), geometry));
+    sagittal->getViewer()->setInputAsynchronously(volumes,
+                                                  new ResetViewToAnatomicalPlaneQViewerCommand(sagittal->getViewer(), AnatomicalPlane::Sagittal, sagittal));
+
+    Q2DViewerWidget *coronal = m_layout->addViewer(m_layout->convertGeometry(QRectF(0, 0, 0.5, 0.5), geometry));
+    coronal->getViewer()->setInputAsynchronously(volumes,
+                                                 new ResetViewToAnatomicalPlaneQViewerCommand(coronal->getViewer(), AnatomicalPlane::Coronal, coronal));
+}
+
 void LayoutManager::getHangingProtocolAppliedCandidatesAndSetterForSelectedViewer(HangingProtocol* &hangingProtocolApplied,
                                                                                   QList<HangingProtocol*> &hangingProtocolCandidates,
                                                                                   void (LayoutManager::* &setHangingProtocol)(int)) const

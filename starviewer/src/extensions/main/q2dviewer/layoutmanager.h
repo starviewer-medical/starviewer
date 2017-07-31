@@ -80,6 +80,8 @@ public slots:
     void setFusionLayout2x3Second(const QList<Volume*> &volumes);
     /// Sets a 3x3 fusion layout with the given volumes.
     void setFusionLayout3x3(const QList<Volume*> &volumes);
+    /// Sets a MPR R fusion layout with the given volumes.
+    void setFusionLayoutMprRight(const QList<Volume*> &volumes);
 
 signals:
     /// Emits this signal when new hanging protocols are found for the current patient

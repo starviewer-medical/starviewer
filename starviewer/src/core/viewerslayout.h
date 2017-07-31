@@ -110,6 +110,8 @@ signals:
     void fusionLayout2x3SecondRequested(const QList<Volume*> &volumes);
     /// Propagation of the matching signal in Q2DViewerWidget.
     void fusionLayout3x3Requested(const QList<Volume*> &volumes);
+    /// Propagation of the matching signal in Q2DViewerWidget.
+    void fusionLayoutMprRightRequested(const QList<Volume*> &volumes);
 
 private:
     /// Crea i retorna un nou visor configurat adequadament

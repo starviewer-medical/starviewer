@@ -64,6 +64,7 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     connect(m_fusionLayoutWidget, SIGNAL(layout2x3FirstRequested()), SLOT(requestFusionLayout2x3First()));
     connect(m_fusionLayoutWidget, SIGNAL(layout2x3SecondRequested()), SLOT(requestFusionLayout2x3Second()));
     connect(m_fusionLayoutWidget, SIGNAL(layout3x3Requested()), SLOT(requestFusionLayout3x3()));
+    connect(m_fusionLayoutWidget, &QFusionLayoutWidget::layoutMprRightRequested, this, &Q2DViewerWidget::requestFusionLayoutMprRight);
     widgetAction = new QWidgetAction(this);
     widgetAction->setDefaultWidget(m_fusionLayoutWidget);
     menu = new QMenu(this);
@@ -74,6 +75,7 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     connect(m_fusionLayoutWidget, SIGNAL(layout2x3FirstRequested()), menu, SLOT(close()));
     connect(m_fusionLayoutWidget, SIGNAL(layout2x3SecondRequested()), menu, SLOT(close()));
     connect(m_fusionLayoutWidget, SIGNAL(layout3x3Requested()), menu, SLOT(close()));
+    connect(m_fusionLayoutWidget, &QFusionLayoutWidget::layoutMprRightRequested, menu, &QMenu::close);
     m_fusionLayoutToolButton->setMenu(menu);
     m_fusionLayoutToolButton->setMenuPosition(QEnhancedMenuToolButton::Above);
     m_fusionLayoutToolButton->setMenuAlignment(QEnhancedMenuToolButton::AlignRight);
@@ -346,6 +348,14 @@ void Q2DViewerWidget::requestFusionLayout3x3()
     if (m_2DView->getNumberOfInputs() == 2)
     {
         emit fusionLayout3x3Requested(m_2DView->getInputs());
+    }
+}
+
+void Q2DViewerWidget::requestFusionLayoutMprRight()
+{
+    if (m_2DView->getNumberOfInputs() == 2)
+    {
+        emit fusionLayoutMprRightRequested(m_2DView->getInputs());
     }
 }
 
