@@ -280,7 +280,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
 
 QString SystemRequerimentsTest::getDescription()
 {
-    return tr("Hardware meets %1's minimum system requeriments").arg(ApplicationNameString);
+    return tr("Hardware meets %1's minimum system requirements").arg(ApplicationNameString);
 }
 
 SystemRequerimentsTest::VersionComparison SystemRequerimentsTest::compareVersions(QString version1, QString version2)

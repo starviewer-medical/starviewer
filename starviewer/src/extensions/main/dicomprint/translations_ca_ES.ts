@@ -9,44 +9,44 @@
         <translation>Afegiu una nova impressora DICOM</translation>
     </message>
     <message>
-        <location filename="qdicomaddprinterwidgetbase.ui" line="23"/>
+        <location filename="qdicomaddprinterwidgetbase.ui" line="27"/>
         <source>Printer Settings</source>
         <oldsource>New Printer Settings</oldsource>
         <translation>Paràmetres de la impressora</translation>
     </message>
     <message>
-        <location filename="qdicomaddprinterwidgetbase.ui" line="32"/>
+        <location filename="qdicomaddprinterwidgetbase.ui" line="36"/>
         <source>AE Title:</source>
         <oldsource>AETitle:</oldsource>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdicomaddprinterwidgetbase.ui" line="42"/>
+        <location filename="qdicomaddprinterwidgetbase.ui" line="46"/>
         <source>Hostname:</source>
         <translation>Adreça:</translation>
     </message>
     <message>
-        <location filename="qdicomaddprinterwidgetbase.ui" line="59"/>
+        <location filename="qdicomaddprinterwidgetbase.ui" line="63"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="qdicomaddprinterwidgetbase.ui" line="91"/>
+        <location filename="qdicomaddprinterwidgetbase.ui" line="95"/>
         <source>Description:</source>
         <translation>Descripció:</translation>
     </message>
     <message>
-        <location filename="qdicomaddprinterwidgetbase.ui" line="107"/>
+        <location filename="qdicomaddprinterwidgetbase.ui" line="111"/>
         <source>Default printer</source>
         <translation>Impressora predeterminada</translation>
     </message>
     <message>
-        <location filename="qdicomaddprinterwidgetbase.ui" line="145"/>
+        <location filename="qdicomaddprinterwidgetbase.ui" line="160"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="qdicomaddprinterwidgetbase.ui" line="152"/>
+        <location filename="qdicomaddprinterwidgetbase.ui" line="149"/>
         <source>Add</source>
         <translation>Afegeix</translation>
     </message>
@@ -76,80 +76,71 @@
         <translation>Configuració de les impressores DICOM</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="245"/>
+        <location filename="qdicomprintextensionbase.ui" line="239"/>
         <source>Number of copies:</source>
         <translation>Nombre de còpies:</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="385"/>
+        <location filename="qdicomprintextensionbase.ui" line="379"/>
         <source>Images to print</source>
         <translation>Imatges a imprimir</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="391"/>
+        <location filename="qdicomprintextensionbase.ui" line="385"/>
         <source>Current Image</source>
         <translation>Imatge actual</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="398"/>
+        <location filename="qdicomprintextensionbase.ui" line="392"/>
         <source>Selection</source>
         <translation>Selecció</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="587"/>
+        <location filename="qdicomprintextensionbase.ui" line="581"/>
         <source>Interval:</source>
         <translation>Interval:</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="442"/>
-        <location filename="qdicomprintextensionbase.ui" line="493"/>
-        <location filename="qdicomprintextensionbase.ui" line="574"/>
+        <location filename="qdicomprintextensionbase.ui" line="436"/>
+        <location filename="qdicomprintextensionbase.ui" line="487"/>
+        <location filename="qdicomprintextensionbase.ui" line="568"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="429"/>
+        <location filename="qdicomprintextensionbase.ui" line="423"/>
         <source>From:</source>
         <translation>Des de:</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="480"/>
+        <location filename="qdicomprintextensionbase.ui" line="474"/>
         <source>To:</source>
         <translation>Fins:</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="631"/>
+        <location filename="qdicomprintextensionbase.ui" line="625"/>
         <source>Add to print</source>
         <translation>Afegeix per imprimir</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="662"/>
+        <location filename="qdicomprintextensionbase.ui" line="686"/>
         <source>Remove selection</source>
         <oldsource>Remove selecteds</oldsource>
         <translation>Treu les imatges seleccionades</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="669"/>
+        <location filename="qdicomprintextensionbase.ui" line="697"/>
         <source>Clear</source>
         <translation>Treu-les totes</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="693"/>
+        <location filename="qdicomprintextensionbase.ui" line="656"/>
         <source>Pages to print:</source>
         <translation>Plaques a imprimir:</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="700"/>
+        <location filename="qdicomprintextensionbase.ui" line="663"/>
         <source>2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="qdicomprintextensionbase.ui" line="331"/>
-        <source>#m_noSupportedSeriesFrame {
-background-color: #dc8a8a;
-border-radius: 4px;
-border: 1px solid  #680000;
-}</source>
         <translation></translation>
     </message>
     <message>
@@ -158,28 +149,23 @@ border: 1px solid  #680000;
         <translation>Restaura</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="353"/>
-        <source>margin-right: 5px;</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="qdicomprintextensionbase.ui" line="372"/>
+        <location filename="qdicomprintextensionbase.ui" line="366"/>
         <source>This series cannot be printed.</source>
         <translation>No es pot imprimir aquesta sèrie.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="764"/>
+        <location filename="qdicomprintextensionbase.ui" line="749"/>
         <source>Images sent to DICOM print successfully.</source>
         <oldsource>Images sent to DICOM print successfully</oldsource>
         <translation>Les imatges s&apos;han enviat correctament a la impressora DICOM.</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="816"/>
+        <location filename="qdicomprintextensionbase.ui" line="805"/>
         <source>Print</source>
         <translation>Imprimeix</translation>
     </message>
     <message>
-        <location filename="qdicomprintextensionbase.ui" line="863"/>
+        <location filename="qdicomprintextensionbase.ui" line="856"/>
         <source>Slice:</source>
         <translation>Tall:</translation>
     </message>
@@ -192,42 +178,42 @@ border: 1px solid  #680000;
         <translation></translation>
     </message>
     <message>
-        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="26"/>
+        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="39"/>
         <source>Print Settings</source>
         <translation>Paràmetres d&apos;impressió</translation>
     </message>
     <message>
-        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="35"/>
+        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="48"/>
         <source>Print priority:</source>
         <translation>Prioritat d&apos;impressió:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="45"/>
+        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="58"/>
         <source>Medium:</source>
         <translation>Mitjà:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="55"/>
+        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="68"/>
         <source>Film Destination:</source>
         <translation>Safata de destinació:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="68"/>
+        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="81"/>
         <source>Film Settings</source>
         <translation>Format d&apos;impressió</translation>
     </message>
     <message>
-        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="77"/>
+        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="90"/>
         <source>Layout:</source>
         <translation>Distribució:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="87"/>
+        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="100"/>
         <source>Film Orientation:</source>
         <translation>Orientació de la placa:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="97"/>
+        <location filename="qdicomprinterbasicsettingswidgetbase.ui" line="110"/>
         <source>Film Size:</source>
         <translation>Mida de la placa:</translation>
     </message>
@@ -240,164 +226,164 @@ border: 1px solid  #680000;
         <translation>Configuració d&apos;impressores DICOM</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="42"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="46"/>
         <source>Id</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="47"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="51"/>
         <source>AE Title</source>
         <oldsource>AETitle</oldsource>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="52"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="56"/>
         <source>Hostname</source>
         <oldsource>HostName</oldsource>
         <translation>Adreça</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="57"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="61"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="62"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="66"/>
         <source>Description</source>
         <translation>Descripció</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="84"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="88"/>
         <source>Add New Printer</source>
         <translation>Afegeix una nova impressora</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="120"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="124"/>
         <source>Remove Printer</source>
         <translation>Elimina la impressora</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="137"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="141"/>
         <source>Test Printer</source>
         <translation>Comprova la impressora</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="159"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="163"/>
         <source>AE Title:</source>
         <oldsource>AETitle:</oldsource>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="169"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="173"/>
         <source>Hostname:</source>
         <translation>Adreça:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="179"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="183"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="205"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="209"/>
         <source>Description:</source>
         <translation>Descripció:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="215"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="219"/>
         <source>Default printer</source>
         <translation>Impressora predeterminada</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="321"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="325"/>
         <source>Magnification Type:</source>
         <translation>Tipus d&apos;ampliació:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="357"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="361"/>
         <source>Border Color:</source>
         <translation>Color de la vora:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="390"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="394"/>
         <source>Minimum Density:</source>
         <translation>Densitat mínima:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="423"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="427"/>
         <source>Polarity:</source>
         <translation>Polaritat:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="450"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="454"/>
         <source>Supports Annotation Box:</source>
         <oldsource>Supports Anotation Box:</oldsource>
         <translation>Admet anotacions:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="537"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="541"/>
         <source>Smoothing:</source>
         <translation>Suavitzat:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="570"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="574"/>
         <source>Empty Image Color:</source>
         <translation>Color d&apos;imatge buida:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="603"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="607"/>
         <source>Maximum Density:</source>
         <oldsource>Maximum Denstiy:</oldsource>
         <translation>Densitat màxima:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="714"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="718"/>
         <source>Configuration Information:</source>
         <translation>Informació de la configuració:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="150"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="154"/>
         <source>Printer Settings</source>
         <translation>Paràmetres de la impressora</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="462"/>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="642"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="466"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="646"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="469"/>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="649"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="473"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="653"/>
         <source>No</source>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="280"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="284"/>
         <source>Advanced Settings</source>
         <translation>Configuració avançada</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="630"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="634"/>
         <source>Trim:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="678"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="682"/>
         <source>Annotation Display Format:</source>
         <translation>Format de les anotacions:</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="776"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="780"/>
         <source>Accept</source>
         <translation>D&apos;acord</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="786"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="794"/>
         <source>Apply</source>
         <translation>Aplica</translation>
     </message>
     <message>
-        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="793"/>
+        <location filename="qdicomprinterconfigurationwidgetbase.ui" line="805"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>

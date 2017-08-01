@@ -68,21 +68,21 @@
         <source>3x3</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="qfusionlayoutwidgetbase.ui" line="540"/>
+        <source>MPR R</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="thumbnailcreator.cpp" line="63"/>
-        <source>No Images Available</source>
-        <translation>No hi ha imatges disponibles</translation>
-    </message>
-    <message>
-        <location filename="thumbnailcreator.cpp" line="35"/>
+        <location filename="thumbnailcreator.cpp" line="37"/>
         <source>Preview image not available</source>
         <translation>La previsualització no està disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="129"/>
+        <location filename="coresettings.cpp" line="132"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
@@ -413,52 +413,58 @@
         <translation>Fase</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="120"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="121"/>
         <source>Acc: %1</source>
         <translation>Acc: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="318"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="312"/>
         <source>Fusion: </source>
         <translation>Fusió: </translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="224"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="225"/>
         <source>Slice: %1</source>
         <translation>Tall: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="422"/>
-        <source>-%1</source>
-        <translation>-%1</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="239"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="233"/>
         <source> Phase: %1/%2</source>
         <translation> Fase: %1/%2</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="247"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="241"/>
         <source> Thickness: %1 mm</source>
         <translation> Gruix: %1 mm</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="198"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="199"/>
         <source>%1 x %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="376"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="320"/>
+        <source>Physician: %1</source>
+        <oldsource>Phyisician: %1</oldsource>
+        <translation>Metge: %1</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="379"/>
         <source>WW: %1 WL: %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="393"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="396"/>
         <source>Threshold: %1%</source>
         <translation>Llindar: %1%</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="412"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="419"/>
+        <source>Loc: %1-%2</source>
+        <translation>Loc: %1-%2</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="424"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
@@ -474,22 +480,22 @@
     </message>
     <message>
         <location filename="abstractroidataprinter.cpp" line="46"/>
-        <location filename="nmctfusionroidataprinter.cpp" line="54"/>
-        <location filename="nmroidataprinter.cpp" line="55"/>
+        <location filename="nmctfusionroidataprinter.cpp" line="64"/>
+        <location filename="nmroidataprinter.cpp" line="61"/>
         <source>Area: %1</source>
         <translation>Àrea: %1</translation>
     </message>
     <message>
         <location filename="abstractroidataprinter.cpp" line="50"/>
-        <location filename="nmctfusionroidataprinter.cpp" line="60"/>
-        <location filename="nmroidataprinter.cpp" line="61"/>
+        <location filename="nmctfusionroidataprinter.cpp" line="70"/>
+        <location filename="nmroidataprinter.cpp" line="67"/>
         <source>Mean: %1</source>
         <translation>Mitjana: %1</translation>
     </message>
     <message>
         <location filename="abstractroidataprinter.cpp" line="52"/>
-        <location filename="nmctfusionroidataprinter.cpp" line="62"/>
-        <location filename="nmroidataprinter.cpp" line="63"/>
+        <location filename="nmctfusionroidataprinter.cpp" line="72"/>
+        <location filename="nmroidataprinter.cpp" line="69"/>
         <source>Std.Dev.: %1</source>
         <translation>Desv. Est.: %1</translation>
     </message>
@@ -534,10 +540,16 @@
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="nmctfusionroidataprinter.cpp" line="58"/>
-        <location filename="nmroidataprinter.cpp" line="59"/>
+        <location filename="nmctfusionroidataprinter.cpp" line="68"/>
+        <location filename="nmroidataprinter.cpp" line="65"/>
         <source>Max: %1</source>
         <translation>Màx.: %1</translation>
+    </message>
+    <message>
+        <location filename="nmctfusionroidataprinter.cpp" line="74"/>
+        <location filename="nmroidataprinter.cpp" line="71"/>
+        <source>Total: %1</source>
+        <translation>Total: %1</translation>
     </message>
     <message>
         <location filename="hangingprotocolxmlreader.cpp" line="48"/>
@@ -560,6 +572,26 @@
         <location filename="voilutsyncaction.cpp" line="73"/>
         <source>VOI LUT</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="applicationversionchecker.cpp" line="119"/>
+        <source>New Version Available</source>
+        <translation>Hi ha una nova versió disponible</translation>
+    </message>
+    <message>
+        <location filename="applicationversionchecker.cpp" line="195"/>
+        <source>Release Notes</source>
+        <translation>Notes de la versió</translation>
+    </message>
+    <message>
+        <location filename="applicationversionchecker.cpp" line="202"/>
+        <source>Error</source>
+        <translation>Error</translation>
+    </message>
+    <message>
+        <location filename="applicationversionchecker.cpp" line="202"/>
+        <source>Release notes for the current version not found.</source>
+        <translation>Les notes de la versió no estan disponibles.</translation>
     </message>
 </context>
 <context>
@@ -665,35 +697,6 @@
     </message>
 </context>
 <context>
-    <name>udg::ApplicationVersionChecker</name>
-    <message>
-        <location filename="applicationversionchecker.cpp" line="77"/>
-        <location filename="applicationversionchecker.cpp" line="152"/>
-        <source>Release Notes</source>
-        <translation>Notes de la versió</translation>
-    </message>
-    <message>
-        <location filename="applicationversionchecker.cpp" line="101"/>
-        <source>New Version Available</source>
-        <translation>Hi ha una nova versió disponible</translation>
-    </message>
-    <message>
-        <location filename="applicationversionchecker.cpp" line="159"/>
-        <source>Release notes for the current version not found.</source>
-        <translation>Les notes de la versió no estan disponibles.</translation>
-    </message>
-    <message>
-        <location filename="applicationversionchecker.cpp" line="160"/>
-        <source>Error</source>
-        <translation>Error</translation>
-    </message>
-    <message>
-        <location filename="applicationversionchecker.cpp" line="161"/>
-        <source>OK</source>
-        <translation>D&apos;acord</translation>
-    </message>
-</context>
-<context>
     <name>udg::ApplicationVersionTest</name>
     <message>
         <location filename="applicationversiontest.cpp" line="47"/>
@@ -732,17 +735,17 @@
 <context>
     <name>udg::NonClosedAngleTool</name>
     <message>
-        <location filename="nonclosedangletool.cpp" line="321"/>
+        <location filename="nonclosedangletool.cpp" line="322"/>
         <source>%1 degrees</source>
         <translation>%1 graus</translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="312"/>
+        <location filename="nonclosedangletool.cpp" line="313"/>
         <source>0.0 degrees</source>
         <translation>0.0 graus</translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="317"/>
+        <location filename="nonclosedangletool.cpp" line="318"/>
         <source>Skew lines</source>
         <translation>Línies creuades</translation>
     </message>
@@ -750,18 +753,18 @@
 <context>
     <name>udg::PatientBrowserMenu</name>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="60"/>
+        <location filename="patientbrowsermenu.cpp" line="56"/>
         <source>Study %1 %2 [%3] %4</source>
         <translation>Estudi %1 %2 [%3] %4</translation>
     </message>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="71"/>
+        <location filename="patientbrowsermenu.cpp" line="67"/>
         <source> Series %1: %2 %3 %4 %5</source>
         <translation> Sèrie %1: %2 %3 %4 %5</translation>
     </message>
     <message>
-        <location filename="patientbrowsermenu.cpp" line="173"/>
-        <location filename="patientbrowsermenu.cpp" line="194"/>
+        <location filename="patientbrowsermenu.cpp" line="169"/>
+        <location filename="patientbrowsermenu.cpp" line="190"/>
         <source>%1
 %2
 %3
@@ -775,7 +778,7 @@
 <context>
     <name>udg::PatientBrowserMenuList</name>
     <message>
-        <location filename="patientbrowsermenulist.cpp" line="45"/>
+        <location filename="patientbrowsermenulist.cpp" line="44"/>
         <source>Fusion</source>
         <translation>Fusió</translation>
     </message>
@@ -788,119 +791,136 @@
         <translation>Configuració del visor 2D</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="28"/>
-        <source>Enable slice scroll loop</source>
-        <translation>Habilita el desplaçament cíclic d&apos;imatges</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="35"/>
-        <source>Enable phase scroll loop</source>
-        <translation>Habilita el desplaçament cíclic de fases</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="61"/>
-        <source>Reference Lines by default for these modalities</source>
-        <translation>Activa línies de referència per defecte per aquestes modalitats</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="67"/>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="93"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="76"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="99"/>
         <source>MR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="77"/>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="103"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="69"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="92"/>
         <source>CT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="87"/>
-        <source>Automatic Synchronization by default for these modalities</source>
-        <translation>Activa la sincronització automàtica per defecte per aquestes modalitats</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="130"/>
-        <source>Zoom by default for these modalities</source>
-        <translation>Activa el zoom per defecte per aquestes modalitats</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="154"/>
-        <source>Enable propagation by default on these modalities</source>
-        <translation>Activa la propagació per defecte en aquestes modalitats</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="239"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="131"/>
         <source>Measurements description verbosity</source>
         <translation>Nivell de detall en la descripció de les mesures</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="245"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="137"/>
         <source>Minimal</source>
         <translation>Mínim</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="252"/>
-        <source>Minimal Explicit</source>
-        <translation>Mínim explícit</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="259"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="151"/>
         <source>Verbose</source>
         <translation>Detallat</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="266"/>
-        <source>Verbose Explicit</source>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="24"/>
+        <source>Scroll</source>
+        <translation>Desplaçament</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="30"/>
+        <source>Slice scroll loop</source>
+        <translation>Desplaçament cíclic d&apos;imatges</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="37"/>
+        <source>Infinite mouse scroll</source>
+        <oldsource>Wraparound mouse on scroll</oldsource>
+        <translation>Desplaçament infinit del ratolí</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="44"/>
+        <source>Phase scroll loop</source>
+        <translation>Desplaçament cíclic de fases</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="51"/>
+        <source>Change series with mouse wheel</source>
+        <oldsource>Volume scroll with mouse wheel</oldsource>
+        <translation>Canvia de sèrie amb la roda</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="63"/>
+        <source>Enable reference lines for</source>
+        <translation>Activa les línies de referència per a</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="86"/>
+        <source>Enable automatic synchronization for</source>
+        <translation>Activa la sincronització automàtica per a</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="113"/>
+        <source>Zoom tool by default for</source>
+        <translation>Eina de zoom per defecte per a</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="120"/>
+        <source>Enable propagation for</source>
+        <translation>Activa la propagació per a</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="144"/>
+        <source>Minimal explicit</source>
+        <translation>Mínim explícit</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="158"/>
+        <source>Verbose explicit</source>
         <translation>Detallat explícit</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="276"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="168"/>
         <source>Preferred SUV measurement normalization type</source>
         <translation>Tipus preferit de normalització de la mesura SUV</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="282"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="174"/>
         <source>Body Weight (bw) - g/ml</source>
         <translation>Pes corporal (bw) - g/ml</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="289"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="181"/>
         <source>Lean Body Mass (lbm) - g/ml</source>
         <translation>Massa corporal magra (lbm) - g/ml</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="296"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="188"/>
         <source>Body Surface Area (bsa) - cm²/ml</source>
         <translation>Àrea de superfície corporal (bsa) - cm²/ml</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="191"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="213"/>
+        <source>Magnifying glass tool zoom factor</source>
+        <translation>Factor d&apos;ampliació de la lupa</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="226"/>
         <source>2x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="178"/>
-        <source>Magnifying Glass tool zoom factor</source>
-        <translation>Factor d&apos;ampliació de la lupa</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="184"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="219"/>
         <source>1.5x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="198"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="233"/>
         <source>4x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="205"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="240"/>
         <source>6x</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="212"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="247"/>
         <source>8x</source>
         <translation></translation>
     </message>
@@ -917,12 +937,12 @@
     <name>udg::Q2DViewerWidget</name>
     <message>
         <location filename="q2dviewerwidget.cpp" line="41"/>
-        <location filename="q2dviewerwidget.cpp" line="230"/>
+        <location filename="q2dviewerwidget.cpp" line="231"/>
         <source>Enable manual synchronization in this viewer</source>
         <translation>Activa la sincronització manual en aquest visor</translation>
     </message>
     <message>
-        <location filename="q2dviewerwidget.cpp" line="236"/>
+        <location filename="q2dviewerwidget.cpp" line="237"/>
         <source>Disable manual synchronization in this viewer</source>
         <translation>Desactiva la sincronització manual en aquest visor</translation>
     </message>
@@ -930,34 +950,34 @@
 <context>
     <name>udg::Q3DViewer</name>
     <message>
-        <location filename="q3dviewer.cpp" line="525"/>
+        <location filename="q3dviewer.cpp" line="500"/>
         <source>Unable to Apply Rendering Style</source>
         <translation>No es pot aplicar l&apos;estil de renderització</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="525"/>
+        <location filename="q3dviewer.cpp" line="500"/>
         <source>The system does not have enough memory to properly apply this rendering style with this volume.
 Shading will be disabled, it will not render as expected.</source>
         <translation>El sistema no té prou memòria per aplicar adequadament aquest estil de renderització amb aquest volum.
 S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apos;esperava.</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="1187"/>
+        <location filename="q3dviewer.cpp" line="1107"/>
         <source>Volume Not Supported</source>
         <translation>El volum no és admès</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="1187"/>
+        <location filename="q3dviewer.cpp" line="1107"/>
         <source>Current volume cannot be opened because its format is not supported.</source>
         <translation>El volum actual no es pot obrir perquè el seu format no és admès.</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="597"/>
+        <location filename="q3dviewer.cpp" line="572"/>
         <source>Volume Too Large</source>
         <translation>El volum és massa gran</translation>
     </message>
     <message>
-        <location filename="q3dviewer.cpp" line="598"/>
+        <location filename="q3dviewer.cpp" line="573"/>
         <source>Current volume is too large. Please select another volume or close other extensions and try again.</source>
         <translation>El volum actual és massa gran. Seleccioneu un altre volum o tanqueu altres extensions i torneu-ho a provar.</translation>
     </message>
@@ -1001,22 +1021,22 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="27"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="23"/>
         <source>Window Width</source>
         <translation>Contrast</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="44"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="43"/>
         <source>Window Level</source>
         <translation>Brillantor</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="94"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="96"/>
         <source>OK</source>
         <translation>D&apos;acord</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="101"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="85"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
@@ -1048,37 +1068,37 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
         <translation>Edita les finestres personalitzades</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveleditwidgetbase.ui" line="36"/>
+        <location filename="qcustomwindowleveleditwidgetbase.ui" line="59"/>
+        <source>Add</source>
+        <translation>Afegeix</translation>
+    </message>
+    <message>
+        <location filename="qcustomwindowleveleditwidgetbase.ui" line="110"/>
         <source>Width</source>
         <translation>Contrast</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveleditwidgetbase.ui" line="41"/>
+        <location filename="qcustomwindowleveleditwidgetbase.ui" line="115"/>
         <source>Level</source>
         <translation>Brillantor</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveleditwidgetbase.ui" line="46"/>
+        <location filename="qcustomwindowleveleditwidgetbase.ui" line="120"/>
         <source>Description</source>
         <translation>Descripció</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveleditwidgetbase.ui" line="68"/>
-        <source>Add New</source>
-        <translation>Afegeix</translation>
-    </message>
-    <message>
-        <location filename="qcustomwindowleveleditwidgetbase.ui" line="91"/>
+        <location filename="qcustomwindowleveleditwidgetbase.ui" line="70"/>
         <source>Remove</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveleditwidgetbase.ui" line="132"/>
+        <location filename="qcustomwindowleveleditwidgetbase.ui" line="46"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveleditwidgetbase.ui" line="139"/>
+        <location filename="qcustomwindowleveleditwidgetbase.ui" line="35"/>
         <source>OK</source>
         <translation>D&apos;acord</translation>
     </message>
@@ -1113,6 +1133,71 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     </message>
 </context>
 <context>
+    <name>udg::QDPIConfigurationScreenBase</name>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="14"/>
+        <source>Magnification</source>
+        <translation>Magnificació</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="30"/>
+        <source>If you have difficulties to read the text and distinguish the icons this option will make everything you see bigger.
+You will have to restart Starviewer in order to see the changes.</source>
+        <translation>Si teniu dificultats per llegir el text i distingir les icones aquesta opció ho farà tot més gran.
+Haureu de reiniciar l&apos;Starviewer per veure els canvis.</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="41"/>
+        <source>Enable magnification</source>
+        <translation>Activa la magnificació</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="70"/>
+        <source>0 dpi</source>
+        <translation>0 dpi</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="83"/>
+        <source>Preview</source>
+        <translation>Previsualització</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="117"/>
+        <source>Study</source>
+        <translation>Estudi</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="143"/>
+        <source>Series</source>
+        <translation>Sèrie</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="150"/>
+        <source>DICOM</source>
+        <translation>DICOM</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="199"/>
+        <source>Axial</source>
+        <translation>Axial</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="225"/>
+        <source>Sagittal</source>
+        <translation>Sagital</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="232"/>
+        <source>Coronal</source>
+        <translation>Coronal</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreenbase.ui" line="326"/>
+        <source>&lt;b&gt;Starviewer&lt;/b&gt;</source>
+        <translation>&lt;b&gt;Starviewer&lt;/b&gt;</translation>
+    </message>
+</context>
+<context>
     <name>udg::QDiagnosisTest</name>
     <message>
         <location filename="qdiagnosistest.cpp" line="99"/>
@@ -1126,8 +1211,8 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
     </message>
     <message>
         <location filename="qdiagnosistest.cpp" line="151"/>
-        <source>Text Files (*.txt)</source>
-        <translation>Fitxers de text (*.txt)</translation>
+        <source>HTML Files (*.html)</source>
+        <translation>Fitxers HTML (*.html)</translation>
     </message>
 </context>
 <context>
@@ -1138,40 +1223,40 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
         <translation>Tests de diagnosi</translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="46"/>
-        <location filename="qdiagnosistestbase.ui" line="59"/>
+        <location filename="qdiagnosistestbase.ui" line="55"/>
+        <location filename="qdiagnosistestbase.ui" line="68"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="178"/>
+        <location filename="qdiagnosistestbase.ui" line="175"/>
         <source>Tests completed successfully</source>
         <translation>S&apos;han superat els tests satisfactòriament</translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="220"/>
+        <location filename="qdiagnosistestbase.ui" line="217"/>
         <source>&lt;a href=&quot;ok&quot; style=&quot;color:#333333&quot;&gt;View tests&lt;/a&gt;</source>
         <translation>&lt;a href=&quot;ok&quot; style=&quot;color:#333333&quot;&gt;Visualitza els resultats&lt;/a&gt;</translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="236"/>
+        <location filename="qdiagnosistestbase.ui" line="233"/>
         <source>about:blank</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="276"/>
+        <location filename="qdiagnosistestbase.ui" line="269"/>
+        <source>Close</source>
+        <translation>Tanca</translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="280"/>
         <source>Save Results</source>
         <translation>Desa els resultats</translation>
     </message>
     <message>
-        <location filename="qdiagnosistestbase.ui" line="116"/>
+        <location filename="qdiagnosistestbase.ui" line="125"/>
         <source>Some tests have failed</source>
         <translation>Alguns tests han fallat</translation>
-    </message>
-    <message>
-        <location filename="qdiagnosistestbase.ui" line="269"/>
-        <source>OK</source>
-        <translation>D&apos;acord</translation>
     </message>
 </context>
 <context>
@@ -1197,48 +1282,48 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
 <context>
     <name>udg::QExternalApplicationConfigurationScreenBase</name>
     <message>
-        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="20"/>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="6"/>
         <source>External applications</source>
-        <translation type="unfinished">Aplicacions externes</translation>
+        <translation>Aplicacions externes</translation>
     </message>
     <message>
-        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="30"/>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="127"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="37"/>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="94"/>
         <source>Down</source>
         <translation>Baixa</translation>
     </message>
     <message>
-        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="44"/>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="116"/>
         <source>Add command</source>
         <translation>Afegeix ordre</translation>
     </message>
     <message>
-        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="70"/>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="35"/>
         <source>Type</source>
         <translation>Tipus</translation>
     </message>
     <message>
-        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="75"/>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="40"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="80"/>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="45"/>
         <source>URL</source>
         <oldsource>Url</oldsource>
         <translation>URL</translation>
     </message>
     <message>
-        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="88"/>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="83"/>
         <source>Up</source>
         <translation>Puja</translation>
     </message>
     <message>
-        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="101"/>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="53"/>
         <source>&lt;html&gt;
 &lt;head/&gt;
 &lt;body&gt;
@@ -1290,7 +1375,7 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="126"/>
+        <location filename="qexternalapplicationconfigurationscreenbase.ui" line="105"/>
         <source>Add URL</source>
         <translation>Afegeix URL</translation>
     </message>
@@ -1298,14 +1383,14 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
 <context>
     <name>udg::QFusionLayoutWidget</name>
     <message>
-        <location filename="qfusionlayoutwidget.cpp" line="64"/>
-        <location filename="qfusionlayoutwidget.cpp" line="65"/>
+        <location filename="qfusionlayoutwidget.cpp" line="69"/>
+        <location filename="qfusionlayoutwidget.cpp" line="70"/>
         <source>2x1 %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qfusionlayoutwidget.cpp" line="66"/>
-        <location filename="qfusionlayoutwidget.cpp" line="67"/>
+        <location filename="qfusionlayoutwidget.cpp" line="71"/>
+        <location filename="qfusionlayoutwidget.cpp" line="72"/>
         <source>2x3 %1</source>
         <translation></translation>
     </message>
@@ -1321,85 +1406,85 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
 <context>
     <name>udg::QLayoutOptionsWidgetBase</name>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="26"/>
-        <source>Layout according to these parameters when no Hanging Protocol is applied</source>
-        <translation>Distribueix segons aquests paràmetres quan no s&apos;aplica cap Hanging Protocol</translation>
+        <location filename="qlayoutoptionswidgetbase.ui" line="20"/>
+        <source>Use hanging protocols if available</source>
+        <translation>Utilitza hanging protocols si n&apos;hi ha</translation>
     </message>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="37"/>
+        <location filename="qlayoutoptionswidgetbase.ui" line="27"/>
+        <source>Automatic layout options</source>
+        <translation>Opcions de distribució automàtica</translation>
+    </message>
+    <message>
+        <location filename="qlayoutoptionswidgetbase.ui" line="38"/>
         <source>Layout by</source>
         <translation>Distribueix per</translation>
     </message>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="43"/>
+        <location filename="qlayoutoptionswidgetbase.ui" line="44"/>
         <source>Series</source>
         <translation>Sèries</translation>
     </message>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="50"/>
+        <location filename="qlayoutoptionswidgetbase.ui" line="51"/>
         <source>Images</source>
         <translation>Imatges</translation>
     </message>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="60"/>
+        <location filename="qlayoutoptionswidgetbase.ui" line="61"/>
         <source>Layout direction</source>
         <translation>Direcció de distribució</translation>
     </message>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="66"/>
+        <location filename="qlayoutoptionswidgetbase.ui" line="67"/>
         <source>Left to right</source>
         <translation>D&apos;esquerra a dreta</translation>
     </message>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="73"/>
+        <location filename="qlayoutoptionswidgetbase.ui" line="74"/>
         <source>Top to bottom</source>
         <translation>De dalt a baix</translation>
     </message>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="83"/>
+        <location filename="qlayoutoptionswidgetbase.ui" line="86"/>
         <source>Exclude from layout</source>
         <translation>Exclou de la distribució</translation>
     </message>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="89"/>
+        <location filename="qlayoutoptionswidgetbase.ui" line="92"/>
         <source>CT Localizers</source>
         <translation>Localitzadors CT</translation>
     </message>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="96"/>
+        <location filename="qlayoutoptionswidgetbase.ui" line="99"/>
         <source>MR Surveys</source>
         <translation>Surveys MR</translation>
     </message>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="108"/>
+        <location filename="qlayoutoptionswidgetbase.ui" line="167"/>
         <source>Restore defaults</source>
         <translation>Restaura els valors predeterminats</translation>
     </message>
     <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="130"/>
+        <location filename="qlayoutoptionswidgetbase.ui" line="111"/>
         <source>Maximum number of viewers</source>
         <translation>Nombre màxim de visors</translation>
-    </message>
-    <message>
-        <location filename="qlayoutoptionswidgetbase.ui" line="158"/>
-        <source>Apply Hanging Protocols as preferential layout option</source>
-        <translation>Aplica Hanging Protocols com a opció de distribució preferent</translation>
     </message>
 </context>
 <context>
     <name>udg::QLogViewer</name>
     <message>
-        <location filename="qlogviewer.cpp" line="71"/>
+        <location filename="qlogviewer.cpp" line="69"/>
         <source>Save As...</source>
         <translation>Anomena i desa...</translation>
     </message>
     <message>
-        <location filename="qlogviewer.cpp" line="71"/>
+        <location filename="qlogviewer.cpp" line="69"/>
         <source>Log Files (*.log)</source>
         <translation>Fitxers de registre (*.log)</translation>
     </message>
     <message>
-        <location filename="qlogviewer.cpp" line="52"/>
+        <location filename="qlogviewer.cpp" line="50"/>
         <source>ERROR: No Log file found at this path: %1
 Environment variable (logFilePath): %2</source>
         <translation>ERROR: No s&apos;ha trobat el fitxer de registre en aquesta ubicació: %1
@@ -1414,17 +1499,17 @@ Variable d&apos;entorn (logFilePath): %2</translation>
         <translation>Visualització del registre</translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="38"/>
+        <location filename="qlogviewerbase.ui" line="91"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#000000;&quot;&gt;Log View&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600; color:#000000;&quot;&gt;Visualització del registre&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="101"/>
+        <location filename="qlogviewerbase.ui" line="36"/>
         <source>Save</source>
         <translation>Desa</translation>
     </message>
     <message>
-        <location filename="qlogviewerbase.ui" line="108"/>
+        <location filename="qlogviewerbase.ui" line="60"/>
         <source>Close</source>
         <translation>Tanca</translation>
     </message>
@@ -1543,17 +1628,17 @@ Variable d&apos;entorn (logFilePath): %2</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="qnotificationpopupbase.ui" line="244"/>
+        <location filename="qnotificationpopupbase.ui" line="238"/>
         <source>Headline</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qnotificationpopupbase.ui" line="262"/>
+        <location filename="qnotificationpopupbase.ui" line="256"/>
         <source>ani</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qnotificationpopupbase.ui" line="298"/>
+        <location filename="qnotificationpopupbase.ui" line="292"/>
         <source>Secondary description</source>
         <translation></translation>
     </message>
@@ -1566,17 +1651,17 @@ Variable d&apos;entorn (logFilePath): %2</translation>
         <translation>Notes de la versió</translation>
     </message>
     <message>
-        <location filename="qreleasenotesbase.ui" line="36"/>
+        <location filename="qreleasenotesbase.ui" line="45"/>
         <source>about:blank</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qreleasenotesbase.ui" line="53"/>
+        <location filename="qreleasenotesbase.ui" line="62"/>
         <source>Don&apos;t show on future releases</source>
         <translation>No ho mostris en futures versions</translation>
     </message>
     <message>
-        <location filename="qreleasenotesbase.ui" line="73"/>
+        <location filename="qreleasenotesbase.ui" line="82"/>
         <source>Close</source>
         <translation>Tanca</translation>
     </message>
@@ -1584,27 +1669,17 @@ Variable d&apos;entorn (logFilePath): %2</translation>
 <context>
     <name>udg::QThickSlabWidget</name>
     <message>
-        <location filename="qthickslabwidget.cpp" line="30"/>
-        <location filename="qthickslabwidget.cpp" line="116"/>
-        <location filename="qthickslabwidget.cpp" line="244"/>
-        <source>Disabled</source>
-        <translation>Desactivat</translation>
-    </message>
-    <message>
-        <location filename="qthickslabwidget.cpp" line="30"/>
-        <location filename="qthickslabwidget.cpp" line="158"/>
+        <location filename="qthickslabwidget.cpp" line="36"/>
         <source>MIP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qthickslabwidget.cpp" line="30"/>
-        <location filename="qthickslabwidget.cpp" line="162"/>
+        <location filename="qthickslabwidget.cpp" line="37"/>
         <source>MinIP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qthickslabwidget.cpp" line="30"/>
-        <location filename="qthickslabwidget.cpp" line="166"/>
+        <location filename="qthickslabwidget.cpp" line="38"/>
         <source>Average</source>
         <translation>Mitjana</translation>
     </message>
@@ -1617,12 +1692,17 @@ Variable d&apos;entorn (logFilePath): %2</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="qthickslabwidgetbase.ui" line="91"/>
-        <source>2</source>
-        <translation></translation>
+        <location filename="qthickslabwidgetbase.ui" line="32"/>
+        <source>Thick Slab</source>
+        <translation>Gruix de tall</translation>
     </message>
     <message>
-        <location filename="qthickslabwidgetbase.ui" line="101"/>
+        <location filename="qthickslabwidgetbase.ui" line="88"/>
+        <source> mm</source>
+        <translation> mm</translation>
+    </message>
+    <message>
+        <location filename="qthickslabwidgetbase.ui" line="103"/>
         <source>Max. Thickness</source>
         <translation>Gruix màxim</translation>
     </message>
@@ -1638,33 +1718,33 @@ Variable d&apos;entorn (logFilePath): %2</translation>
 <context>
     <name>udg::QViewer</name>
     <message>
-        <location filename="qviewer.cpp" line="860"/>
+        <location filename="qviewer.cpp" line="886"/>
         <source>Downloading related study...</source>
         <translation>S&apos;està descarregant l&apos;estudi relacionat...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="868"/>
+        <location filename="qviewer.cpp" line="894"/>
         <source>Error downloading related study</source>
         <translation>S&apos;ha produït un error en descarregar l&apos;estudi relacionat</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="877"/>
+        <location filename="qviewer.cpp" line="903"/>
         <source>Error visualizing data</source>
         <translation>Error visualitzant dades</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="906"/>
+        <location filename="qviewer.cpp" line="932"/>
         <source>There&apos;s not enough memory for the rendering process. Try to close all the open %1 windows, restart the application and try again. If the problem persists, adding more RAM memory or switching to a 64-bit operating system may solve the problem.</source>
         <translation>No hi ha prou memòria per al procés de renderització. Intenteu tancar totes les finestres obertes de l&apos;%1, reinicieu l&apos;aplicació i torneu-ho a provar. Si el problema es manté, es podria solucionar afegint més memòria RAM o canviant a un sistema operatiu de 64 bits.</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="864"/>
+        <location filename="qviewer.cpp" line="890"/>
         <source>Loading data...</source>
         <translatorcomment>No hauria de ser igual que lo d&apos;Assynchronous loading ? En allà simplement s&apos;indica Loading... </translatorcomment>
         <translation>S&apos;estan carregant les dades...</translation>
     </message>
     <message>
-        <location filename="qviewer.cpp" line="873"/>
+        <location filename="qviewer.cpp" line="899"/>
         <source>Error loading data</source>
         <translation>S&apos;ha produït un error en carregar les dades</translation>
     </message>
@@ -1686,7 +1766,7 @@ Variable d&apos;entorn (logFilePath): %2</translation>
 <context>
     <name>udg::QViewerWorkInProgressWidget</name>
     <message>
-        <location filename="qviewerworkinprogresswidget.cpp" line="60"/>
+        <location filename="qviewerworkinprogresswidget.cpp" line="55"/>
         <source> (%1%)</source>
         <translation></translation>
     </message>
@@ -1876,434 +1956,439 @@ Es recomana que les deseu en una carpeta buida.</translation>
     </message>
     <message>
         <location filename="systemrequerimentstest.cpp" line="283"/>
-        <source>Hardware meets %1&apos;s minimum system requeriments</source>
+        <source>Hardware meets %1&apos;s minimum system requirements</source>
+        <oldsource>Hardware meets %1&apos;s minimum system requeriments</oldsource>
         <translation>El maquinari compleix els requeriments mínims de l&apos;%1</translation>
     </message>
 </context>
 <context>
     <name>udg::ToolRegistry</name>
     <message>
-        <location filename="toolregistry.cpp" line="220"/>
+        <location filename="toolregistry.cpp" line="230"/>
+        <location filename="toolregistry.cpp" line="238"/>
         <source>Enable/Disable Window Level tool</source>
         <translation>Activa/desactiva l&apos;eina de control de brillantor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="225"/>
+        <location filename="toolregistry.cpp" line="243"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="228"/>
+        <location filename="toolregistry.cpp" line="246"/>
         <source>Enable/Disable Zoom tool</source>
         <translation>Activa/desactiva l&apos;eina de zoom</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="235"/>
+        <location filename="toolregistry.cpp" line="253"/>
+        <location filename="toolregistry.cpp" line="260"/>
         <source>Enable/Disable Move tool</source>
         <translation>Activa/desactiva l&apos;eina de moure</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="240"/>
+        <location filename="toolregistry.cpp" line="265"/>
         <source>Seed</source>
         <translation>Llavor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="243"/>
+        <location filename="toolregistry.cpp" line="268"/>
         <source>Put Seed tool</source>
         <translation>Eina per posar la llavor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="251"/>
+        <location filename="toolregistry.cpp" line="276"/>
         <source>Enable/Disable Magic tool</source>
         <translation>Activa/desactiva l&apos;eina màgica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="256"/>
+        <location filename="toolregistry.cpp" line="281"/>
         <source>Screenshot</source>
         <translation>Captura de pantalla</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="258"/>
+        <location filename="toolregistry.cpp" line="283"/>
         <source>Enable/Disable Screenshot tool</source>
         <translation>Activa/desactiva l&apos;eina de captura de pantalla</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="259"/>
+        <location filename="toolregistry.cpp" line="284"/>
         <source>Export a viewer screenshot to an image file format</source>
         <translation>Exporta una captura de pantalla d&apos;un visor a un format de fitxer d&apos;imatge</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="263"/>
+        <location filename="toolregistry.cpp" line="288"/>
         <source>3D Rotation</source>
         <translation>Rotació 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="266"/>
+        <location filename="toolregistry.cpp" line="291"/>
         <source>Enable/Disable 3D Rotation tool</source>
         <translation>Activa/desactiva l&apos;eina de rotació 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="274"/>
+        <location filename="toolregistry.cpp" line="299"/>
         <source>Enable/Disable Distances tool</source>
         <translation>Activa/desactiva l&apos;eina de distàncies</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="279"/>
+        <location filename="toolregistry.cpp" line="304"/>
         <source>ROIs</source>
         <translation>ROIs</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="281"/>
+        <location filename="toolregistry.cpp" line="306"/>
         <source>Enable/Disable ROI tool</source>
         <translation>Activa/desactiva l&apos;eina de ROIs</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="288"/>
+        <location filename="toolregistry.cpp" line="313"/>
         <source>Enable/Disable Reference Lines tool</source>
         <translation>Activa/desactiva l&apos;eina de línies de referència</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="289"/>
+        <location filename="toolregistry.cpp" line="314"/>
         <source>Reference Lines</source>
         <translation>Línies de referència</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="293"/>
+        <location filename="toolregistry.cpp" line="318"/>
         <source>Voxel Information</source>
         <translation>Informació del vòxel</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="296"/>
+        <location filename="toolregistry.cpp" line="321"/>
         <source>Enable voxel information under cursor</source>
         <translation>Activa la informació del vòxel sota el cursor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="301"/>
+        <location filename="toolregistry.cpp" line="326"/>
         <source>Synchronize tool</source>
         <translation>Eina de sincronització</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="303"/>
+        <location filename="toolregistry.cpp" line="328"/>
         <source>Enable/Disable Synchronize tool</source>
         <translation>Activa/desactiva l&apos;eina de sincronització</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="304"/>
+        <location filename="toolregistry.cpp" line="329"/>
         <source>Synchronize</source>
         <translation>Sincronitza</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="309"/>
+        <location filename="toolregistry.cpp" line="334"/>
         <source>Enable/Disable VOI LUT Presets tool</source>
         <translation>Activa/desactiva l&apos;eina de valors predeterminats de VOI LUT</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="316"/>
-        <location filename="toolregistry.cpp" line="323"/>
+        <location filename="toolregistry.cpp" line="341"/>
+        <location filename="toolregistry.cpp" line="348"/>
         <source>Enable/Disable Polyline ROI tool</source>
         <translation>Activa/desactiva l&apos;eina de polilínies de ROIs</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="341"/>
+        <location filename="toolregistry.cpp" line="366"/>
         <source>3D Cursor</source>
         <translation>Cursor 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="373"/>
+        <location filename="toolregistry.cpp" line="390"/>
+        <source>Cobb angle</source>
+        <translation>Angle de Cobb</translation>
+    </message>
+    <message>
+        <location filename="toolregistry.cpp" line="398"/>
         <source>Clipping Planes</source>
         <translation>Plans de tall</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="376"/>
+        <location filename="toolregistry.cpp" line="401"/>
         <source>Enable/Disable the clipping planes tool</source>
         <translation>Activa/desactiva l&apos;eina de plans de tall</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="381"/>
+        <location filename="toolregistry.cpp" line="406"/>
         <source>Translation Difference</source>
         <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="384"/>
+        <location filename="toolregistry.cpp" line="409"/>
         <source>Enable/Disable the translation difference tool</source>
         <translatorcomment>No es tradueix perquè no es fa servir a la versió oficial</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="389"/>
+        <location filename="toolregistry.cpp" line="414"/>
         <source>Elliptical ROI</source>
         <translation>ROI el·líptica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="392"/>
+        <location filename="toolregistry.cpp" line="417"/>
         <source>Enable/Disable Elliptical ROI tool</source>
         <translation>Activa/desactiva l&apos;eina de ROI el·líptica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="397"/>
+        <location filename="toolregistry.cpp" line="422"/>
         <source>Auto-Sync</source>
         <translation>Sinc. Auto.</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="400"/>
+        <location filename="toolregistry.cpp" line="425"/>
         <source>Enable/Disable Automatic synchronization tool</source>
         <translation>Activa/desactiva l&apos;eina de sincronització automàtica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="405"/>
+        <location filename="toolregistry.cpp" line="430"/>
         <source>Magnify</source>
         <translation>Lupa</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="408"/>
+        <location filename="toolregistry.cpp" line="433"/>
         <source>Enable/Disable the magnifying glass tool</source>
         <translation>Activa/desactiva l&apos;eina de lupa</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="413"/>
+        <location filename="toolregistry.cpp" line="438"/>
         <source>Circle</source>
         <translation>Cercle</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="415"/>
+        <location filename="toolregistry.cpp" line="440"/>
         <source>Enable/Disable Circle tool</source>
         <translation>Activa/desactiva l&apos;eina de cercle</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="420"/>
+        <location filename="toolregistry.cpp" line="445"/>
         <source>TA-GT</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="422"/>
+        <location filename="toolregistry.cpp" line="447"/>
         <source>Enable/Disable TA-GT distance tool</source>
         <oldsource>Enable/disable TA-GT distance tool</oldsource>
         <translation>Activa/desactiva l&apos;eina de distància TA-GT</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="451"/>
+        <location filename="toolregistry.cpp" line="476"/>
         <source>Restore</source>
         <translation>Restableix</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="454"/>
+        <location filename="toolregistry.cpp" line="479"/>
         <source>Restore to initial state</source>
         <translation>Restableix a l&apos;estat inicial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="461"/>
+        <location filename="toolregistry.cpp" line="486"/>
         <source>All of current viewer</source>
         <translation>Tot del visor actual</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="464"/>
+        <location filename="toolregistry.cpp" line="489"/>
         <source>Clear primitives from viewer</source>
         <translation>Esborra les primitives del visor</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="481"/>
+        <location filename="toolregistry.cpp" line="506"/>
         <source>Axial</source>
         <translation>Axial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="484"/>
+        <location filename="toolregistry.cpp" line="509"/>
         <source>Switch to Axial View</source>
         <translation>Canvia a la vista axial</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="491"/>
+        <location filename="toolregistry.cpp" line="516"/>
         <source>Sagittal</source>
         <translation>Sagital</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="494"/>
+        <location filename="toolregistry.cpp" line="519"/>
         <source>Switch to Sagittal View</source>
         <translation>Canvia a la vista sagital</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="501"/>
+        <location filename="toolregistry.cpp" line="526"/>
         <source>Coronal</source>
         <translation>Coronal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="504"/>
+        <location filename="toolregistry.cpp" line="529"/>
         <source>Switch to Coronal View</source>
         <translation>Canvia a la vista coronal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="511"/>
+        <location filename="toolregistry.cpp" line="536"/>
         <source>Rotate</source>
         <translation>Rota</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="514"/>
+        <location filename="toolregistry.cpp" line="539"/>
         <source>Rotate the image in clockwise direction</source>
         <translation>Rota la imatge en sentit horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="515"/>
+        <location filename="toolregistry.cpp" line="540"/>
         <source>Clockwise rotation</source>
         <translation>Rotació en sentit horari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="521"/>
+        <location filename="toolregistry.cpp" line="546"/>
         <source>Rotate Counter Clockwise</source>
         <translation>Rota en sentit antihorari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="524"/>
+        <location filename="toolregistry.cpp" line="549"/>
         <source>Rotate the image in counter clockwise direction</source>
         <translation>Rota la imatge en sentit antihorari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="525"/>
+        <location filename="toolregistry.cpp" line="550"/>
         <source>Counter-clockwise rotation</source>
         <translation>Rotació en sentit antihorari</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="531"/>
+        <location filename="toolregistry.cpp" line="556"/>
         <source>Horizontal Flip</source>
         <translation>Inverteix horitzontalment</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="534"/>
+        <location filename="toolregistry.cpp" line="559"/>
         <source>Flip the image horizontally</source>
         <translation>Inverteix la imatge horitzontalment</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="541"/>
+        <location filename="toolregistry.cpp" line="566"/>
         <source>Vertical Flip</source>
         <translation>Inverteix verticalment</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="544"/>
+        <location filename="toolregistry.cpp" line="569"/>
         <source>Flip the image vertically</source>
         <translation>Inverteix la imatge verticalment</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="201"/>
-        <location filename="toolregistry.cpp" line="209"/>
+        <location filename="toolregistry.cpp" line="211"/>
+        <location filename="toolregistry.cpp" line="219"/>
         <source>Scroll</source>
         <translatorcomment>Desplaçament?</translatorcomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="204"/>
+        <location filename="toolregistry.cpp" line="214"/>
         <source>Enable/Disable scroll tool</source>
         <translatorcomment>Desplaçament?</translatorcomment>
         <translation>Activa/desactiva l&apos;eina d&apos;scroll</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="212"/>
+        <location filename="toolregistry.cpp" line="222"/>
         <source>Enable/Disable scroll wheel tool</source>
         <translatorcomment>Desplaçament?</translatorcomment>
         <translation>Activa/desactiva l&apos;eina d&apos;scroll amb la rodeta</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="217"/>
+        <location filename="toolregistry.cpp" line="227"/>
+        <location filename="toolregistry.cpp" line="235"/>
         <source>WW/WL</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="233"/>
+        <location filename="toolregistry.cpp" line="251"/>
+        <location filename="toolregistry.cpp" line="258"/>
         <source>Pan</source>
         <translation>Mou</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="248"/>
+        <location filename="toolregistry.cpp" line="273"/>
         <source>Magical ROI</source>
         <translation>ROI màgica</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="271"/>
+        <location filename="toolregistry.cpp" line="296"/>
         <source>Distance</source>
         <translation>Distància</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="285"/>
+        <location filename="toolregistry.cpp" line="310"/>
         <source>Ref. Lines</source>
         <translation>Línies de referència</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="308"/>
+        <location filename="toolregistry.cpp" line="333"/>
         <source>VOI LUT Presets tool</source>
         <translation>Eina de valors predeterminats de VOI LUT</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="313"/>
+        <location filename="toolregistry.cpp" line="338"/>
         <source>Polyline ROI</source>
         <translation>ROI polilínia</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="317"/>
-        <location filename="toolregistry.cpp" line="321"/>
+        <location filename="toolregistry.cpp" line="342"/>
+        <location filename="toolregistry.cpp" line="346"/>
         <source>ROI</source>
         <translation>ROI</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="324"/>
+        <location filename="toolregistry.cpp" line="349"/>
         <source>Temporal ROI</source>
         <translation>ROI temporal</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="328"/>
+        <location filename="toolregistry.cpp" line="353"/>
         <source>Keyboard slicing tool</source>
         <translation>Eina de canvi de llesca per teclat</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="329"/>
+        <location filename="toolregistry.cpp" line="354"/>
         <source>Enable/Disable keyboard slicing tool</source>
         <translation>Activa/desactivar l&apos;eina de canvi de llesca per teclat</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="333"/>
+        <location filename="toolregistry.cpp" line="358"/>
         <source>Erase</source>
         <translation>Esborra</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="336"/>
+        <location filename="toolregistry.cpp" line="361"/>
         <source>Enable/Disable eraser tool</source>
         <translation>Activa/desactiva l&apos;eina de esborrar</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="344"/>
+        <location filename="toolregistry.cpp" line="369"/>
         <source>Enable/Disable Cursor 3D tool</source>
         <translation>Activa/desactiva l&apos;eina de cursor 3D</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="349"/>
+        <location filename="toolregistry.cpp" line="374"/>
         <source>Angle</source>
         <translation>Angle</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="352"/>
+        <location filename="toolregistry.cpp" line="377"/>
         <source>Enable/Disable angle tool</source>
         <translation>Activa/desactiva l&apos;eina d&apos;angle</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="357"/>
+        <location filename="toolregistry.cpp" line="382"/>
         <source>Editor</source>
         <translation>Edició</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="360"/>
+        <location filename="toolregistry.cpp" line="385"/>
         <source>Enable/Disable editor tool</source>
         <translation>Activa/desactiva l&apos;eina d&apos;edició</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="365"/>
-        <source>Open Angle</source>
-        <translation>Angle obert</translation>
-    </message>
-    <message>
-        <location filename="toolregistry.cpp" line="368"/>
+        <location filename="toolregistry.cpp" line="393"/>
         <source>Enable/Disable open-angle tool</source>
         <translation>Activa/desactiva l&apos;eina d&apos;angle obert</translation>
     </message>
     <message>
-        <location filename="toolregistry.cpp" line="471"/>
-        <location filename="toolregistry.cpp" line="474"/>
+        <location filename="toolregistry.cpp" line="496"/>
+        <location filename="toolregistry.cpp" line="499"/>
         <source>Invert VOI LUT</source>
         <translation>Inverteix la VOI LUT</translation>
     </message>
@@ -2554,7 +2639,7 @@ Es recomana que les deseu en una carpeta buida.</translation>
 <context>
     <name>udg::VoxelInformationTool</name>
     <message>
-        <location filename="voxelinformationtool.cpp" line="159"/>
+        <location filename="voxelinformationtool.cpp" line="155"/>
         <source>SUV (%1)</source>
         <translation>SUV (%1)</translation>
     </message>

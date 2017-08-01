@@ -334,116 +334,116 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="36"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="45"/>
         <source>Patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="44"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="53"/>
         <source>Birth Date:</source>
         <oldsource>Birth date:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="56"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="65"/>
         <source>From</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="112"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="121"/>
         <source>To</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="147"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="156"/>
         <source>Age:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="183"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="192"/>
         <source>Study</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="201"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="219"/>
         <source>Study UID</source>
         <oldsource>UID Study</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="211"/>
-        <location filename="qadvancedsearchwidgetbase.ui" line="387"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="229"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="414"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="250"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="268"/>
         <source>Study Modalities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="260"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="278"/>
         <source>Referring Physician&apos;s Name</source>
         <oldsource>Referring Physicians Name</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="276"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="294"/>
         <source>Accession Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="286"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="304"/>
         <source>Study ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="304"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="322"/>
         <source>Series</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="322"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="349"/>
         <source>Series Number</source>
         <oldsource>Series number</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="332"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="359"/>
         <source>Requested Procedure ID</source>
         <oldsource>Req. Proc. ID</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="354"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="381"/>
         <source>Scheduled Procedure Step ID</source>
         <oldsource>Sche. Proc. Step ID</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="377"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="404"/>
         <source>Series UID</source>
         <oldsource>UID Series</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="397"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="424"/>
         <source>Performed Procedure Step Start Date</source>
         <oldsource>Proc. Perf. Start Date</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="421"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="448"/>
         <source>Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="433"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="469"/>
         <source>Instance Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="443"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="479"/>
         <source>SOP Instance UID</source>
         <translation type="unfinished"></translation>
     </message>
@@ -613,220 +613,219 @@ Be sure its IP and AE Title are correct.</oldsource>
 <context>
     <name>udg::QConfigurationScreenBase</name>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="26"/>
+        <location filename="qconfigurationscreenbase.ui" line="14"/>
         <source>PACS Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="58"/>
+        <location filename="qconfigurationscreenbase.ui" line="28"/>
         <source>PACS Servers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="89"/>
+        <location filename="qconfigurationscreenbase.ui" line="56"/>
         <source>PacsId</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="94"/>
+        <location filename="qconfigurationscreenbase.ui" line="61"/>
         <source>AE Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="99"/>
+        <location filename="qconfigurationscreenbase.ui" line="66"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="104"/>
+        <location filename="qconfigurationscreenbase.ui" line="71"/>
         <source>Institution</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="109"/>
+        <location filename="qconfigurationscreenbase.ui" line="76"/>
         <source>Q/R Port</source>
         <oldsource>Q/R port</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="114"/>
+        <location filename="qconfigurationscreenbase.ui" line="81"/>
         <source>Send Port</source>
         <oldsource>Send port</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="119"/>
-        <location filename="qconfigurationscreenbase.ui" line="334"/>
+        <location filename="qconfigurationscreenbase.ui" line="86"/>
+        <location filename="qconfigurationscreenbase.ui" line="242"/>
         <source>Default Query PACS</source>
         <oldsource>Default query PACS</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="153"/>
+        <location filename="qconfigurationscreenbase.ui" line="256"/>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="270"/>
+        <source>Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="281"/>
         <source>Delete selected PACS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="156"/>
+        <location filename="qconfigurationscreenbase.ui" line="284"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="496"/>
+        <location filename="qconfigurationscreenbase.ui" line="295"/>
         <source>Test if selected PACS is alive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="499"/>
+        <location filename="qconfigurationscreenbase.ui" line="298"/>
         <source>Test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="196"/>
+        <location filename="qconfigurationscreenbase.ui" line="105"/>
         <source>Modify Selected PACS Server/Add New PACS Server</source>
         <oldsource>Modify selected PACS Server/Add new PACS Server</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="241"/>
+        <location filename="qconfigurationscreenbase.ui" line="116"/>
         <source>AE Title:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="255"/>
-        <location filename="qconfigurationscreenbase.ui" line="955"/>
+        <location filename="qconfigurationscreenbase.ui" line="130"/>
+        <location filename="qconfigurationscreenbase.ui" line="465"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="265"/>
+        <location filename="qconfigurationscreenbase.ui" line="140"/>
         <source>Q/R Service:</source>
         <oldsource>Q/R service:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="274"/>
-        <location filename="qconfigurationscreenbase.ui" line="304"/>
+        <location filename="qconfigurationscreenbase.ui" line="157"/>
+        <location filename="qconfigurationscreenbase.ui" line="191"/>
         <source>Port:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="359"/>
+        <location filename="qconfigurationscreenbase.ui" line="174"/>
         <source>Send Service:</source>
         <oldsource>Send service:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="366"/>
-        <location filename="qconfigurationscreenbase.ui" line="376"/>
+        <location filename="qconfigurationscreenbase.ui" line="147"/>
+        <location filename="qconfigurationscreenbase.ui" line="181"/>
         <source>Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="412"/>
-        <location filename="qconfigurationscreenbase.ui" line="988"/>
+        <location filename="qconfigurationscreenbase.ui" line="212"/>
+        <location filename="qconfigurationscreenbase.ui" line="451"/>
         <source>Institution:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="422"/>
+        <location filename="qconfigurationscreenbase.ui" line="222"/>
         <source>Location:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="432"/>
+        <location filename="qconfigurationscreenbase.ui" line="232"/>
         <source>Description:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="522"/>
+        <location filename="qconfigurationscreenbase.ui" line="253"/>
         <source>Add the new PACS to the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="532"/>
+        <location filename="qconfigurationscreenbase.ui" line="267"/>
         <source>Update parameters of the selected PACS</source>
         <oldsource>Update the parameters of the selected PACS</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="525"/>
-        <source>Add as New PACS</source>
-        <oldsource>Add as new PACS</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="535"/>
-        <source>Update PACS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="545"/>
+        <location filename="qconfigurationscreenbase.ui" line="310"/>
         <source>Local Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="557"/>
+        <location filename="qconfigurationscreenbase.ui" line="322"/>
         <source>Local DICOM Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="600"/>
+        <location filename="qconfigurationscreenbase.ui" line="359"/>
         <source>Incoming Connections Port:</source>
         <oldsource>Incoming connections port:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="626"/>
+        <location filename="qconfigurationscreenbase.ui" line="373"/>
         <source>Max. Simultaneous Connections:</source>
         <oldsource>Max. simultaneous connections:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="682"/>
-        <source>&lt;b&gt;This port is in use by another application.&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="724"/>
+        <location filename="qconfigurationscreenbase.ui" line="345"/>
         <source>Max. Seconds for Timeout:</source>
         <oldsource>Max. seconds for Timeout:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="747"/>
+        <location filename="qconfigurationscreenbase.ui" line="331"/>
         <source>Local Machine AE Title:</source>
         <oldsource>AE Title Local Machine:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="820"/>
+        <location filename="qconfigurationscreenbase.ui" line="442"/>
         <source>Institution Contact Information</source>
         <oldsource>Institution contact information</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="882"/>
+        <location filename="qconfigurationscreenbase.ui" line="541"/>
         <source>Phone Number:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="915"/>
+        <location filename="qconfigurationscreenbase.ui" line="493"/>
         <source>ZIP Code:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="922"/>
+        <location filename="qconfigurationscreenbase.ui" line="421"/>
+        <source>This port is in use by another application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="479"/>
         <source>City:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="981"/>
+        <location filename="qconfigurationscreenbase.ui" line="513"/>
         <source>Country:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="995"/>
+        <location filename="qconfigurationscreenbase.ui" line="527"/>
         <source>Email:</source>
         <oldsource>EMail:</oldsource>
         <translation type="unfinished"></translation>
@@ -1149,58 +1148,58 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="63"/>
+        <location filename="qcreatedicomdirbase.ui" line="72"/>
         <source>Patient ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="58"/>
+        <location filename="qcreatedicomdirbase.ui" line="67"/>
         <source>Patient Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="78"/>
+        <location filename="qcreatedicomdirbase.ui" line="87"/>
         <source>Modality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="83"/>
+        <location filename="qcreatedicomdirbase.ui" line="92"/>
         <source>Study Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="88"/>
+        <location filename="qcreatedicomdirbase.ui" line="97"/>
         <source>Study Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="73"/>
+        <location filename="qcreatedicomdirbase.ui" line="82"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="93"/>
+        <location filename="qcreatedicomdirbase.ui" line="102"/>
         <source>Study UID</source>
         <oldsource>studyUID</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="122"/>
+        <location filename="qcreatedicomdirbase.ui" line="154"/>
         <source>Remove selected study of the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="125"/>
+        <location filename="qcreatedicomdirbase.ui" line="157"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="151"/>
+        <location filename="qcreatedicomdirbase.ui" line="143"/>
         <source>Remove All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="148"/>
+        <location filename="qcreatedicomdirbase.ui" line="140"/>
         <source>Remove all the studies from the list</source>
         <oldsource>Remove all the studies of the list</oldsource>
         <translation type="unfinished"></translation>
@@ -1211,102 +1210,102 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="182"/>
+        <location filename="qcreatedicomdirbase.ui" line="169"/>
         <source>Create DICOMDIR on...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="68"/>
+        <location filename="qcreatedicomdirbase.ui" line="77"/>
         <source>Age</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="400"/>
+        <location filename="qcreatedicomdirbase.ui" line="476"/>
         <source>Used space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="429"/>
+        <location filename="qcreatedicomdirbase.ui" line="486"/>
         <source>650 MB</source>
         <oldsource>650 Mb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="439"/>
-        <location filename="qcreatedicomdirbase.ui" line="511"/>
+        <location filename="qcreatedicomdirbase.ui" line="458"/>
+        <location filename="qcreatedicomdirbase.ui" line="589"/>
         <source>Copy folder content</source>
         <oldsource>Copy additional folder content</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="504"/>
+        <location filename="qcreatedicomdirbase.ui" line="582"/>
         <source>The size of the DICOMDIR is XX MB</source>
         <oldsource>The size of the DICOMDIR is XX Mb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="533"/>
+        <location filename="qcreatedicomdirbase.ui" line="606"/>
         <source>Anonymize DICOMDIR studies</source>
         <oldsource>Anonymize DICOMDIR</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="606"/>
+        <location filename="qcreatedicomdirbase.ui" line="644"/>
         <source>Patient name of anonymized studies:</source>
         <oldsource>Which patient name has to be assigned to anonymized studies?</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="639"/>
+        <location filename="qcreatedicomdirbase.ui" line="687"/>
         <source>Creates a DICOMDIR with the selected studies</source>
         <oldsource>Creates the DICOMDIR with the selected studies</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="642"/>
+        <location filename="qcreatedicomdirbase.ui" line="690"/>
         <source>Create</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="649"/>
+        <location filename="qcreatedicomdirbase.ui" line="701"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="204"/>
-        <location filename="qcreatedicomdirbase.ui" line="247"/>
-        <location filename="qcreatedicomdirbase.ui" line="330"/>
+        <location filename="qcreatedicomdirbase.ui" line="202"/>
+        <location filename="qcreatedicomdirbase.ui" line="238"/>
+        <location filename="qcreatedicomdirbase.ui" line="264"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="230"/>
+        <location filename="qcreatedicomdirbase.ui" line="421"/>
         <source>CD-ROM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="270"/>
+        <location filename="qcreatedicomdirbase.ui" line="411"/>
         <source>DVD-ROM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="287"/>
+        <location filename="qcreatedicomdirbase.ui" line="326"/>
         <source>disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="313"/>
+        <location filename="qcreatedicomdirbase.ui" line="401"/>
         <source>Hard Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="353"/>
+        <location filename="qcreatedicomdirbase.ui" line="391"/>
         <source>USB Flash Drive</source>
         <oldsource>Pen Drive</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="475"/>
+        <location filename="qcreatedicomdirbase.ui" line="553"/>
         <source>Location:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1347,103 +1346,103 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</oldsource>
 <context>
     <name>udg::QDICOMDIRConfigurationScreenBase</name>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="26"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="14"/>
         <source>DICOMDIR Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="42"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="30"/>
         <source>DICOMDIR creation configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="70"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="37"/>
         <source>Convert all images to Explicit Little Endian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="101"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="50"/>
         <source>Burning application configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="130"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="79"/>
         <source>Application path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="152"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="95"/>
         <source>Examine disk to find the application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="173"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="125"/>
         <source>Validation Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="188"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="137"/>
         <source>Application parameters:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="198"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="59"/>
         <source>Download from:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="205"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="66"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="243"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="149"/>
         <source>Use different parameters for CD and DVD burning:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="255"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="176"/>
         <source>CD parameters:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="284"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="193"/>
         <source>DVD parameters:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="334"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="217"/>
         <source>Copy folder content to DICOMDIR</source>
         <oldsource>Copy the content of folder to DICOMDIR</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="367"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="224"/>
         <source>Copy additional folder content when creating DICOMDIR on these supports</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="373"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="230"/>
         <source>USB Drive or Hard Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="380"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="237"/>
         <source>CD or DVD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="422"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="244"/>
         <source>Folder path to copy content:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="445"/>
-        <source>Examine disk to find the folder to copy to DICOMDIR</source>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="256"/>
+        <source>Browse disk to find the folder to copy to DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="477"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="286"/>
         <source>Wrong path</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1507,12 +1506,12 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qexporterbase.ui" line="213"/>
+        <location filename="qexporterbase.ui" line="227"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qexporterbase.ui" line="220"/>
+        <location filename="qexporterbase.ui" line="213"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1718,22 +1717,22 @@ It can be solved in Tools -&gt; Configuration -&gt; DICOMDIR menu.</oldsource>
 <context>
     <name>udg::QInputOutputDicomdirWidgetBase</name>
     <message>
-        <location filename="qinputoutputdicomdirwidgetbase.ui" line="13"/>
+        <location filename="qinputoutputdicomdirwidgetbase.ui" line="14"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidgetbase.ui" line="55"/>
+        <location filename="qinputoutputdicomdirwidgetbase.ui" line="44"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidgetbase.ui" line="74"/>
+        <location filename="qinputoutputdicomdirwidgetbase.ui" line="55"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidgetbase.ui" line="106"/>
+        <location filename="qinputoutputdicomdirwidgetbase.ui" line="79"/>
         <source>Open DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1873,7 +1872,7 @@ Close all the others %1 windows and try again.</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidgetbase.ui" line="63"/>
+        <location filename="qinputoutputlocaldatabasewidgetbase.ui" line="72"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1947,27 +1946,27 @@ Do you want continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidgetbase.ui" line="46"/>
+        <location filename="qinputoutputpacswidgetbase.ui" line="44"/>
         <source>Retrieve &amp;&amp; View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidgetbase.ui" line="66"/>
+        <location filename="qinputoutputpacswidgetbase.ui" line="75"/>
         <source>Retrieve</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidgetbase.ui" line="111"/>
+        <location filename="qinputoutputpacswidgetbase.ui" line="61"/>
         <source>Query in progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidgetbase.ui" line="118"/>
+        <location filename="qinputoutputpacswidgetbase.ui" line="68"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidgetbase.ui" line="130"/>
+        <location filename="qinputoutputpacswidgetbase.ui" line="89"/>
         <source>Cancel query</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1993,18 +1992,18 @@ Do you want continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="63"/>
+        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="106"/>
         <source>Automatically view the studies upon reception</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="80"/>
+        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="22"/>
         <source>Listen to RIS requests on port</source>
         <oldsource>Listen to RIS Requests on port</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="107"/>
+        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="61"/>
         <source>Warning message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2094,116 +2093,122 @@ Do you want continue?</source>
 <context>
     <name>udg::QLocalDatabaseConfigurationScreenBase</name>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="26"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="14"/>
         <source>Local Database Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="420"/>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="423"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="96"/>
+        <source>Browse disk to find the directory to save the retrieved DICOM files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="355"/>
+        <source>Delete studies to keep</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="407"/>
+        <source>GB of free space.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="414"/>
+        <source>When there is not enough free space to retrieve or import new studies, older studies will be deleted to mantain the specified free space.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="467"/>
+        <source>Delete all studies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="478"/>
         <source>Compact Database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="446"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="481"/>
+        <source>Compact database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="464"/>
         <source>Delete all studies from the cache</source>
         <oldsource>Delete all the studies of the cache</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="449"/>
-        <source>Delete All Studies</source>
-        <oldsource>Delete all Studies</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="168"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="162"/>
         <source>Changes on database location will be applied when the application is restarted</source>
         <oldsource>Changes on database path will be applied when the application restarts</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="199"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="180"/>
         <source>Automatic Cache Management</source>
         <oldsource>Automatic cache management</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="207"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="188"/>
         <source>Minimum space required in hard disk to retrieve DICOM objects:</source>
         <oldsource>Minimum space required in harddisk to retrieve DICOM objects:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="230"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="211"/>
         <source>GB</source>
         <oldsource>Gb</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="277"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="279"/>
         <source>Automatically delete studies not viewed in the last</source>
         <oldsource>Delete studies automatically that have not been viewed last</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="300"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="302"/>
         <source>days</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="341"/>
-        <source>When there is not enough free space to retrieve or import new studies, delete old studies until</source>
-        <oldsource>When there is not enough free space to retrieve or import new studies, delete old studies until obtaining</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="364"/>
-        <source>GB of free space are obtained.</source>
-        <oldsource>GB of free space.</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="406"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="445"/>
         <source>Local Database Maintenance</source>
         <oldsource>Local database maintenance</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="56"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="32"/>
         <source>Database Location:</source>
         <oldsource>Database Path:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="36"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="24"/>
         <source>Database and Cache Location</source>
         <oldsource>Database and cache location</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="96"/>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="147"/>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="247"/>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="317"/>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="381"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="109"/>
-        <source>DICOM Files Cache Location:</source>
-        <oldsource>Cache DICOM Files Path:</oldsource>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="123"/>
-        <source>Examine disk to find the directory to save the retrieved DICOM files</source>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="42"/>
+        <source>Browse disk to find the database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="72"/>
-        <source>Examine disk to find the database</source>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="126"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="237"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="328"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="397"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="82"/>
+        <source>DICOM Files Cache Location:</source>
+        <oldsource>Cache DICOM Files Path:</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2274,67 +2279,67 @@ Do you want continue?</source>
 <context>
     <name>udg::QOperationStateScreenBase</name>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="45"/>
+        <location filename="qoperationstatescreenbase.ui" line="65"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="50"/>
+        <location filename="qoperationstatescreenbase.ui" line="70"/>
         <source>Direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="55"/>
+        <location filename="qoperationstatescreenbase.ui" line="75"/>
         <source>From/To</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="60"/>
+        <location filename="qoperationstatescreenbase.ui" line="80"/>
         <source>Patient ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="65"/>
+        <location filename="qoperationstatescreenbase.ui" line="85"/>
         <source>Patient Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="70"/>
+        <location filename="qoperationstatescreenbase.ui" line="90"/>
         <source>Request Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="75"/>
+        <location filename="qoperationstatescreenbase.ui" line="95"/>
         <source>Started</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="80"/>
+        <location filename="qoperationstatescreenbase.ui" line="100"/>
         <source>Series</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="85"/>
+        <location filename="qoperationstatescreenbase.ui" line="105"/>
         <source>Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="90"/>
+        <location filename="qoperationstatescreenbase.ui" line="110"/>
         <source>PACSJobID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="119"/>
+        <location filename="qoperationstatescreenbase.ui" line="123"/>
         <source>Cancel Selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="126"/>
+        <location filename="qoperationstatescreenbase.ui" line="35"/>
         <source>Cancel All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="175"/>
+        <location filename="qoperationstatescreenbase.ui" line="140"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2426,37 +2431,37 @@ Do you want continue?</source>
 <context>
     <name>udg::QRelatedStudiesWidget</name>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Modality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Prior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="311"/>
+        <location filename="qrelatedstudieswidget.cpp" line="306"/>
         <source>Looking for related studies...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2488,6 +2493,11 @@ Do you want continue?</source>
         <source> Images</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="qseriesthumbnailpreviewwidget.cpp" line="110"/>
+        <source>%1 Encapsulated Document(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>udg::QSeriesThumbnailPreviewWidgetBase</name>
@@ -2500,17 +2510,17 @@ Do you want continue?</source>
 <context>
     <name>udg::QStudyTreeWidget</name>
     <message>
-        <location filename="qstudytreewidget.cpp" line="470"/>
+        <location filename="qstudytreewidget.cpp" line="472"/>
         <source>Series %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="153"/>
+        <location filename="qstudytreewidget.cpp" line="155"/>
         <source>File %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="439"/>
+        <location filename="qstudytreewidget.cpp" line="441"/>
         <source>Study %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2637,18 +2647,18 @@ Do you want continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="23"/>
+        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="74"/>
         <source>Select which PACS you want to send DICOM files to:</source>
         <oldsource>Select at which PACS the DICOM files have to be sent:</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="96"/>
+        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="47"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="119"/>
+        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="36"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2760,58 +2770,59 @@ Error details:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="186"/>
+        <location filename="queryscreenbase.ui" line="138"/>
+        <source>PACS nodes &gt;&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="165"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="176"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="234"/>
+        <location filename="queryscreenbase.ui" line="209"/>
         <source>Local Database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="408"/>
+        <location filename="queryscreenbase.ui" line="323"/>
         <source>Create DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="313"/>
+        <location filename="queryscreenbase.ui" line="285"/>
         <source>Operation List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="163"/>
-        <source>Clear Search Fields</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="276"/>
+        <location filename="queryscreenbase.ui" line="251"/>
         <source>DICOMDIR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="353"/>
+        <location filename="queryscreenbase.ui" line="296"/>
         <source>Operation in progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="360"/>
+        <location filename="queryscreenbase.ui" line="303"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="queryscreenbase.ui" line="124"/>
-        <source>Advanced Search &gt;&gt;</source>
+        <source>Advanced search &gt;&gt;</source>
+        <oldsource>Advanced Search &gt;&gt;</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="255"/>
+        <location filename="queryscreenbase.ui" line="230"/>
         <source>PACS Server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="382"/>
-        <source>PACS Nodes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

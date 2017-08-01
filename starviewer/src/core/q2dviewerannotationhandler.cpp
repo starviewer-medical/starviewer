@@ -317,7 +317,7 @@ QString Q2DViewerAnnotationHandler::getStandardAdditionalInformation() const
         QString physicianName = study->getReferringPhysiciansName();
         if (!physicianName.isEmpty())
         {
-            physicianName = QString(QObject::tr("Phyisician: %1")).arg(physicianName);
+            physicianName = QString(QObject::tr("Physician: %1")).arg(physicianName);
         }
 
         return QString("%1\n"

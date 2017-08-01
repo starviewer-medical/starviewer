@@ -4,227 +4,217 @@
 <context>
     <name>Q3DViewerExtensionBase</name>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="33"/>
+        <location filename="q3dviewerextensionbase.ui" line="51"/>
         <source>Axial</source>
         <translation>Axial</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="62"/>
+        <location filename="q3dviewerextensionbase.ui" line="80"/>
         <source>Sagital</source>
         <translation>Sagital</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="91"/>
+        <location filename="q3dviewerextensionbase.ui" line="109"/>
         <source>Coronal</source>
         <translation>Coronal</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="128"/>
+        <location filename="q3dviewerextensionbase.ui" line="146"/>
         <source>Orientation</source>
         <translation>Orientació</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="172"/>
+        <location filename="q3dviewerextensionbase.ui" line="208"/>
         <source>Zoom</source>
         <translation>Zoom</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="201"/>
+        <location filename="q3dviewerextensionbase.ui" line="237"/>
         <source>Rotate</source>
         <translation>Gira</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="230"/>
+        <location filename="q3dviewerextensionbase.ui" line="266"/>
         <source>W/L</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="264"/>
+        <location filename="q3dviewerextensionbase.ui" line="300"/>
         <source>Mouse Function</source>
         <translation>Funció del ratolí</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="297"/>
+        <location filename="q3dviewerextensionbase.ui" line="333"/>
         <source>Clip Planes</source>
         <translation>Plans de tall</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="329"/>
+        <location filename="q3dviewerextensionbase.ui" line="365"/>
         <source>Widgets</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="410"/>
+        <location filename="q3dviewerextensionbase.ui" line="464"/>
         <source>Rendering style</source>
         <translation>Estil de rendering</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="422"/>
+        <location filename="q3dviewerextensionbase.ui" line="476"/>
         <source>Custom style</source>
         <translation>Estil a mida</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="496"/>
+        <location filename="q3dviewerextensionbase.ui" line="577"/>
         <source>Rendering Method</source>
         <translation>Mètode de rendering</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="504"/>
+        <location filename="q3dviewerextensionbase.ui" line="585"/>
         <source>Ray Casting</source>
         <translation>Ray casting</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="509"/>
+        <location filename="q3dviewerextensionbase.ui" line="590"/>
         <source>Ray Casting with Obscurances</source>
         <translation>Rays casting amb obscurances</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="514"/>
+        <location filename="q3dviewerextensionbase.ui" line="595"/>
         <source>GPU Ray Casting</source>
         <translation>Ray casting per GPU</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="519"/>
+        <location filename="q3dviewerextensionbase.ui" line="600"/>
         <source>MIP</source>
         <translation>MIP</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="524"/>
-        <source>Texture 3D</source>
-        <translation>Textura 3D</translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextensionbase.ui" line="529"/>
-        <source>Texture 2D</source>
-        <translation>Textura 2D</translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextensionbase.ui" line="534"/>
+        <location filename="q3dviewerextensionbase.ui" line="605"/>
         <source>Iso Surface</source>
         <translation>Iso superfície</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="539"/>
+        <location filename="q3dviewerextensionbase.ui" line="610"/>
         <source>Contouring</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="549"/>
+        <location filename="q3dviewerextensionbase.ui" line="620"/>
         <source>Shading</source>
         <translation>Ombrejat</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="561"/>
+        <location filename="q3dviewerextensionbase.ui" line="632"/>
         <source>Ambient coefficient</source>
         <translation>Coeficient ambient</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="581"/>
+        <location filename="q3dviewerextensionbase.ui" line="652"/>
         <source>Diffuse coefficient</source>
         <translation>Coeficient difús</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="601"/>
+        <location filename="q3dviewerextensionbase.ui" line="672"/>
         <source>Specular coefficient</source>
         <translation>Coeficient especular</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="621"/>
+        <location filename="q3dviewerextensionbase.ui" line="692"/>
         <source>Specular power</source>
         <translation>Potència especular</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="656"/>
+        <location filename="q3dviewerextensionbase.ui" line="736"/>
         <source>Contour</source>
         <translation>Contorn</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="666"/>
+        <location filename="q3dviewerextensionbase.ui" line="746"/>
         <source>Threshold</source>
         <translation>Llindar</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="709"/>
+        <location filename="q3dviewerextensionbase.ui" line="807"/>
         <source>Obscurance quality</source>
         <translation>Qualitat de l&apos;obscurança</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="717"/>
+        <location filename="q3dviewerextensionbase.ui" line="815"/>
         <source>Low</source>
         <translation>Baixa</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="722"/>
+        <location filename="q3dviewerextensionbase.ui" line="820"/>
         <source>Medium</source>
         <translation>Mitjana</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="727"/>
+        <location filename="q3dviewerextensionbase.ui" line="825"/>
         <source>High</source>
         <translation>Alta</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="735"/>
+        <location filename="q3dviewerextensionbase.ui" line="833"/>
         <source>Compute</source>
         <translation>Calcula</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="768"/>
+        <location filename="q3dviewerextensionbase.ui" line="875"/>
         <source>Obscurance</source>
         <translation>Obscurança</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="778"/>
+        <location filename="q3dviewerextensionbase.ui" line="885"/>
         <source>Brightness</source>
         <translation>Brillantor</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="821"/>
+        <location filename="q3dviewerextensionbase.ui" line="937"/>
         <source>Iso-value</source>
         <translation>Iso-valor</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="870"/>
+        <location filename="q3dviewerextensionbase.ui" line="995"/>
         <source>Load transfer function</source>
         <translation>Carrega una funció de transferència</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="873"/>
+        <location filename="q3dviewerextensionbase.ui" line="998"/>
         <source>Load...</source>
         <translation>Carrega...</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="880"/>
+        <location filename="q3dviewerextensionbase.ui" line="1005"/>
         <source>Save transfer function</source>
         <translation>Desa la funció de transferència</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="883"/>
+        <location filename="q3dviewerextensionbase.ui" line="1008"/>
         <source>Save...</source>
         <translation>Desa...</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="890"/>
+        <location filename="q3dviewerextensionbase.ui" line="1015"/>
         <source>Switch editor</source>
         <translation>Canvia d&apos;editor</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="935"/>
+        <location filename="q3dviewerextensionbase.ui" line="1069"/>
         <source>Apply</source>
         <translation>Aplica</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="958"/>
+        <location filename="q3dviewerextensionbase.ui" line="1101"/>
         <source>Screen Shot</source>
         <translation>Captura de pantalla</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="981"/>
+        <location filename="q3dviewerextensionbase.ui" line="1124"/>
         <source>Exporter</source>
         <translation>Exporta</translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="1006"/>
+        <location filename="q3dviewerextensionbase.ui" line="1149"/>
         <source>Tools</source>
         <translation>Eines</translation>
     </message>

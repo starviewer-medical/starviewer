@@ -104,16 +104,16 @@
         <translation>Correcto</translation>
     </message>
     <message>
-        <source>The crash report has been sent successfully.</source>
-        <translation>El informe de error se ha enviado.</translation>
-    </message>
-    <message>
         <source>Send error</source>
         <translation>Error al enviar</translation>
     </message>
     <message>
         <source>The crash report could not be sent to Starviewer developers because [%1] error happened, do you want to try it again?</source>
         <translation>El informe de error no se ha conseguido enviar de forma correcta a los desarolladores de Starviewer debido al siguiente error [%1], quiere intentarlo de nuevo?</translation>
+    </message>
+    <message>
+        <source>The crash report has been sent.</source>
+        <translation>Informe de error enviado.</translation>
     </message>
 </context>
 </TS>

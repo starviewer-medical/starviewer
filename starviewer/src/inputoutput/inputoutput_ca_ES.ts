@@ -96,52 +96,52 @@
     <message>
         <location filename="databaseinstallation.cpp" line="147"/>
         <source>Can&apos;t reinstall database because the current database can&apos;t be removed.</source>
-        <translation type="unfinished"></translation>
+        <translation>No es pot reinstal·lar la base de dades perquè no es pot eliminar la base de dades actual.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="162"/>
         <source>Can&apos;t read database creation script. Can&apos;t create the database.</source>
-        <translation type="unfinished"></translation>
+        <translation>No es pot llegir l&apos;script de creació de la base de dades. No es pot crear la base de dades.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="180"/>
         <source>Database creation script failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat l&apos;script de creació de la base de dades.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="210"/>
         <source>You don&apos;t have write permission on cache image directory. Retrieval or importing of new studies will fail.</source>
-        <translation type="unfinished">No teniu permisos d&apos;escriptura en el directori de memòria cau d&apos;imatges. La descàrrega o importació de nous estudis fallarà.</translation>
+        <translation>No teniu permisos d&apos;escriptura en el directori de memòria cau d&apos;imatges. La descàrrega o importació de nous estudis fallarà.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="235"/>
         <source>You don&apos;t have write permission on the database directory. Can&apos;t create the database.</source>
-        <translation type="unfinished"></translation>
+        <translation>No teniu permís d&apos;escriptura al directori de la base de dades. No es pot crear la base de dades.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="257"/>
         <source>You don&apos;t have write permission on %1 database. Retrieval or importing of new studies will fail.</source>
-        <translation type="unfinished">No teniu permisos d&apos;escriptura a la base de dades de %1. La descàrrega o importació de nous estudis fallarà.</translation>
+        <translation>No teniu permisos d&apos;escriptura a la base de dades de l&apos;%1. La descàrrega o importació de nous estudis fallarà.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="342"/>
         <source>Unable to create the cache image directory. Please check user permissions.</source>
-        <translation type="unfinished">No s&apos;ha pogut crear el directori de meòria cau d&apos;imatges. Comproveu els permisos d&apos;usuari.</translation>
+        <translation>No s&apos;ha pogut crear el directori de memòria cau d&apos;imatges. Comproveu els permisos d&apos;usuari.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="360"/>
         <source>Unable to create the database directory. Please check user permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>No s&apos;ha pogut crear el directori de la base de dades. Comproveu els permisos de l&apos;usuari.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="378"/>
         <source>Reinstalling database</source>
-        <translation type="unfinished">S&apos;està reinstal·lant la base de dades</translation>
+        <translation>S&apos;està reinstal·lant la base de dades</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="394"/>
         <source>Current database is of a newer version. In order to run %1, local studies must be deleted and the database reinstalled. Do you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de dades actual és d&apos;una versió més nova. Per tal d&apos;executar l&apos;%1, s&apos;esborraran els estudis locals i es reinstal·larà la base de dades. Voleu continuar?</translation>
     </message>
 </context>
 <context>
@@ -329,116 +329,116 @@
         <translation>Cerca avançada</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="36"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="45"/>
         <source>Patient</source>
         <translation>Pacient</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="44"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="53"/>
         <source>Birth Date:</source>
         <oldsource>Birth date:</oldsource>
         <translation>Data de naixement:</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="56"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="65"/>
         <source>From</source>
         <translation>Des de</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="112"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="121"/>
         <source>To</source>
         <translation>Fins</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="147"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="156"/>
         <source>Age:</source>
         <translation>Edat:</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="183"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="192"/>
         <source>Study</source>
         <translation>Estudi</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="201"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="219"/>
         <source>Study UID</source>
         <oldsource>UID Study</oldsource>
         <translation>UID Estudi</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="211"/>
-        <location filename="qadvancedsearchwidgetbase.ui" line="387"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="229"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="414"/>
         <source>Time</source>
         <translation>Hora</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="250"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="268"/>
         <source>Study Modalities</source>
         <translation>Modalitats d&apos;estudi</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="260"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="278"/>
         <source>Referring Physician&apos;s Name</source>
         <oldsource>Referring Physicians Name</oldsource>
         <translation>Nom del metge de referència</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="276"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="294"/>
         <source>Accession Number</source>
         <translation>Número d&apos;accés</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="286"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="304"/>
         <source>Study ID</source>
         <translation>ID estudi</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="304"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="322"/>
         <source>Series</source>
         <translation>Sèrie</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="322"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="349"/>
         <source>Series Number</source>
         <oldsource>Series number</oldsource>
         <translation>Número de sèrie</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="332"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="359"/>
         <source>Requested Procedure ID</source>
         <oldsource>Req. Proc. ID</oldsource>
         <translation>ID del procediment sol·licitat</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="354"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="381"/>
         <source>Scheduled Procedure Step ID</source>
         <oldsource>Sche. Proc. Step ID</oldsource>
         <translation>ID del pas del procediment programat</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="377"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="404"/>
         <source>Series UID</source>
         <oldsource>UID Series</oldsource>
         <translation>UID sèrie</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="397"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="424"/>
         <source>Performed Procedure Step Start Date</source>
         <oldsource>Proc. Perf. Start Date</oldsource>
         <translation>Data d&apos;inici del pas del procediment realitzat</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="421"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="448"/>
         <source>Image</source>
         <translation>Imatge</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="433"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="469"/>
         <source>Instance Number</source>
         <translation>Número d&apos;instància</translation>
     </message>
     <message>
-        <location filename="qadvancedsearchwidgetbase.ui" line="443"/>
+        <location filename="qadvancedsearchwidgetbase.ui" line="479"/>
         <source>SOP Instance UID</source>
         <translation></translation>
     </message>
@@ -610,220 +610,219 @@ Assegureu-vos que la IP i l&apos;AETitle siguin correctes.</translation>
 <context>
     <name>udg::QConfigurationScreenBase</name>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="26"/>
+        <location filename="qconfigurationscreenbase.ui" line="14"/>
         <source>PACS Configuration</source>
         <translation>Configuració dels PACS</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="58"/>
+        <location filename="qconfigurationscreenbase.ui" line="28"/>
         <source>PACS Servers</source>
         <translation>Servidors PACS</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="89"/>
+        <location filename="qconfigurationscreenbase.ui" line="56"/>
         <source>PacsId</source>
         <translation>PacsId</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="94"/>
+        <location filename="qconfigurationscreenbase.ui" line="61"/>
         <source>AE Title</source>
         <translation>AE Title</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="99"/>
+        <location filename="qconfigurationscreenbase.ui" line="66"/>
         <source>Address</source>
         <translation>Adreça</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="104"/>
+        <location filename="qconfigurationscreenbase.ui" line="71"/>
         <source>Institution</source>
         <translation>Institució</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="109"/>
+        <location filename="qconfigurationscreenbase.ui" line="76"/>
         <source>Q/R Port</source>
         <oldsource>Q/R port</oldsource>
         <translation>Port Q/R</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="114"/>
+        <location filename="qconfigurationscreenbase.ui" line="81"/>
         <source>Send Port</source>
         <oldsource>Send port</oldsource>
         <translation>Port Send</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="119"/>
-        <location filename="qconfigurationscreenbase.ui" line="334"/>
+        <location filename="qconfigurationscreenbase.ui" line="86"/>
+        <location filename="qconfigurationscreenbase.ui" line="242"/>
         <source>Default Query PACS</source>
         <oldsource>Default query PACS</oldsource>
         <translation>Cerca per defecte al PACS</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="153"/>
+        <location filename="qconfigurationscreenbase.ui" line="256"/>
+        <source>Add</source>
+        <translation>Afegeix</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="270"/>
+        <source>Update</source>
+        <translation>Actualitza</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="281"/>
         <source>Delete selected PACS</source>
         <translation>Esborra el PACS seleccionat</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="156"/>
+        <location filename="qconfigurationscreenbase.ui" line="284"/>
         <source>Delete</source>
         <translation>Esborra</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="496"/>
+        <location filename="qconfigurationscreenbase.ui" line="295"/>
         <source>Test if selected PACS is alive</source>
         <translation>Comprova si el PACS respon</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="499"/>
+        <location filename="qconfigurationscreenbase.ui" line="298"/>
         <source>Test</source>
         <translation>Comprova</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="196"/>
+        <location filename="qconfigurationscreenbase.ui" line="105"/>
         <source>Modify Selected PACS Server/Add New PACS Server</source>
         <oldsource>Modify selected PACS Server/Add new PACS Server</oldsource>
         <translation>Modifica el PACS seleccionat/Afegeix nou PACS</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="241"/>
+        <location filename="qconfigurationscreenbase.ui" line="116"/>
         <source>AE Title:</source>
         <translation>AE Title:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="255"/>
-        <location filename="qconfigurationscreenbase.ui" line="955"/>
+        <location filename="qconfigurationscreenbase.ui" line="130"/>
+        <location filename="qconfigurationscreenbase.ui" line="465"/>
         <source>Address:</source>
         <translation>Adreça:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="265"/>
+        <location filename="qconfigurationscreenbase.ui" line="140"/>
         <source>Q/R Service:</source>
         <oldsource>Q/R service:</oldsource>
         <translation>Servei Q/R:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="274"/>
-        <location filename="qconfigurationscreenbase.ui" line="304"/>
+        <location filename="qconfigurationscreenbase.ui" line="157"/>
+        <location filename="qconfigurationscreenbase.ui" line="191"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="359"/>
+        <location filename="qconfigurationscreenbase.ui" line="174"/>
         <source>Send Service:</source>
         <oldsource>Send service:</oldsource>
         <translation>Servei Send:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="366"/>
-        <location filename="qconfigurationscreenbase.ui" line="376"/>
+        <location filename="qconfigurationscreenbase.ui" line="147"/>
+        <location filename="qconfigurationscreenbase.ui" line="181"/>
         <source>Enabled</source>
         <translation>Habilitat</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="412"/>
-        <location filename="qconfigurationscreenbase.ui" line="988"/>
+        <location filename="qconfigurationscreenbase.ui" line="212"/>
+        <location filename="qconfigurationscreenbase.ui" line="451"/>
         <source>Institution:</source>
         <translation>Institució:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="422"/>
+        <location filename="qconfigurationscreenbase.ui" line="222"/>
         <source>Location:</source>
         <translation>Localització:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="432"/>
+        <location filename="qconfigurationscreenbase.ui" line="232"/>
         <source>Description:</source>
         <translation>Descripció:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="522"/>
+        <location filename="qconfigurationscreenbase.ui" line="253"/>
         <source>Add the new PACS to the list</source>
         <translation>Afegeix el nou PACS a la llista</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="532"/>
+        <location filename="qconfigurationscreenbase.ui" line="267"/>
         <source>Update parameters of the selected PACS</source>
         <oldsource>Update the parameters of the selected PACS</oldsource>
         <translation>Actualitza els paràmetres del PACS seleccionat</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="525"/>
-        <source>Add as New PACS</source>
-        <oldsource>Add as new PACS</oldsource>
-        <translation>Afegeix com a PACS nou</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="535"/>
-        <source>Update PACS</source>
-        <translation>Actualitza el PACS</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="545"/>
+        <location filename="qconfigurationscreenbase.ui" line="310"/>
         <source>Local Configuration</source>
         <translation>Configuració local</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="557"/>
+        <location filename="qconfigurationscreenbase.ui" line="322"/>
         <source>Local DICOM Configuration</source>
         <translation>Configuració local DICOM</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="600"/>
+        <location filename="qconfigurationscreenbase.ui" line="359"/>
         <source>Incoming Connections Port:</source>
         <oldsource>Incoming connections port:</oldsource>
         <translation>Port de connexions entrants:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="626"/>
+        <location filename="qconfigurationscreenbase.ui" line="373"/>
         <source>Max. Simultaneous Connections:</source>
         <oldsource>Max. simultaneous connections:</oldsource>
         <translation>Màxim de connexions simultànies:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="682"/>
-        <source>&lt;b&gt;This port is in use by another application.&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Aquest port està sent utilitzat per una altra aplicació.&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationscreenbase.ui" line="724"/>
+        <location filename="qconfigurationscreenbase.ui" line="345"/>
         <source>Max. Seconds for Timeout:</source>
         <oldsource>Max. seconds for Timeout:</oldsource>
         <translation>Temps d&apos;espera màxim (segons):</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="747"/>
+        <location filename="qconfigurationscreenbase.ui" line="331"/>
         <source>Local Machine AE Title:</source>
         <oldsource>AE Title Local Machine:</oldsource>
         <translation>AE Title de la màquina local:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="820"/>
+        <location filename="qconfigurationscreenbase.ui" line="442"/>
         <source>Institution Contact Information</source>
         <oldsource>Institution contact information</oldsource>
         <translation>Informació de contacte de la institució</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="882"/>
+        <location filename="qconfigurationscreenbase.ui" line="541"/>
         <source>Phone Number:</source>
         <translation>Número de telèfon:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="915"/>
+        <location filename="qconfigurationscreenbase.ui" line="493"/>
         <source>ZIP Code:</source>
         <translation>Codi postal:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="922"/>
+        <location filename="qconfigurationscreenbase.ui" line="421"/>
+        <source>This port is in use by another application.</source>
+        <translation>Aquest port es troba en ús per part d&apos;una altra aplicació.</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationscreenbase.ui" line="479"/>
         <source>City:</source>
         <translation>Ciutat:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="981"/>
+        <location filename="qconfigurationscreenbase.ui" line="513"/>
         <source>Country:</source>
         <translation>País:</translation>
     </message>
     <message>
-        <location filename="qconfigurationscreenbase.ui" line="995"/>
+        <location filename="qconfigurationscreenbase.ui" line="527"/>
         <source>Email:</source>
         <oldsource>EMail:</oldsource>
         <translation>Adreça electrònica:</translation>
@@ -1150,58 +1149,58 @@ Configureu-la correctament a Eines -&gt; Configuració -&gt; DICOMDIR.</translat
         <translation>Crea un DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="63"/>
+        <location filename="qcreatedicomdirbase.ui" line="72"/>
         <source>Patient ID</source>
         <translation>ID pacient</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="58"/>
+        <location filename="qcreatedicomdirbase.ui" line="67"/>
         <source>Patient Name</source>
         <translation>Nom del pacient</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="78"/>
+        <location filename="qcreatedicomdirbase.ui" line="87"/>
         <source>Modality</source>
         <translation>Modalitat</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="83"/>
+        <location filename="qcreatedicomdirbase.ui" line="92"/>
         <source>Study Date</source>
         <translation>Data de l&apos;estudi</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="88"/>
+        <location filename="qcreatedicomdirbase.ui" line="97"/>
         <source>Study Time</source>
         <translation>Hora de l&apos;estudi</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="73"/>
+        <location filename="qcreatedicomdirbase.ui" line="82"/>
         <source>Description</source>
         <translation>Descripció</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="93"/>
+        <location filename="qcreatedicomdirbase.ui" line="102"/>
         <source>Study UID</source>
         <oldsource>studyUID</oldsource>
         <translation>UID estudi</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="122"/>
+        <location filename="qcreatedicomdirbase.ui" line="154"/>
         <source>Remove selected study of the list</source>
         <translation>Esborra l&apos;estudi seleccionat de la llista</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="125"/>
+        <location filename="qcreatedicomdirbase.ui" line="157"/>
         <source>Remove</source>
         <translation>Esborra</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="151"/>
+        <location filename="qcreatedicomdirbase.ui" line="143"/>
         <source>Remove All</source>
         <translation>Esborra&apos;ls tots</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="148"/>
+        <location filename="qcreatedicomdirbase.ui" line="140"/>
         <source>Remove all the studies from the list</source>
         <oldsource>Remove all the studies of the list</oldsource>
         <translation>Esborra tots els estudis de la llista</translation>
@@ -1212,102 +1211,102 @@ Configureu-la correctament a Eines -&gt; Configuració -&gt; DICOMDIR.</translat
         <translation>Llista de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="182"/>
+        <location filename="qcreatedicomdirbase.ui" line="169"/>
         <source>Create DICOMDIR on...</source>
         <translation>Crea DICOMDIR a...</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="68"/>
+        <location filename="qcreatedicomdirbase.ui" line="77"/>
         <source>Age</source>
         <translation>Edat</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="400"/>
+        <location filename="qcreatedicomdirbase.ui" line="476"/>
         <source>Used space</source>
         <translation>Espai utilitzat</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="429"/>
+        <location filename="qcreatedicomdirbase.ui" line="486"/>
         <source>650 MB</source>
         <oldsource>650 Mb</oldsource>
         <translation>650 MB</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="439"/>
-        <location filename="qcreatedicomdirbase.ui" line="511"/>
+        <location filename="qcreatedicomdirbase.ui" line="458"/>
+        <location filename="qcreatedicomdirbase.ui" line="589"/>
         <source>Copy folder content</source>
         <oldsource>Copy additional folder content</oldsource>
         <translation>Copia el contingut del directori</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="504"/>
+        <location filename="qcreatedicomdirbase.ui" line="582"/>
         <source>The size of the DICOMDIR is XX MB</source>
         <oldsource>The size of the DICOMDIR is XX Mb</oldsource>
         <translation></translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="533"/>
+        <location filename="qcreatedicomdirbase.ui" line="606"/>
         <source>Anonymize DICOMDIR studies</source>
         <oldsource>Anonymize DICOMDIR</oldsource>
         <translation>Anonimitza el estudis del DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="606"/>
+        <location filename="qcreatedicomdirbase.ui" line="644"/>
         <source>Patient name of anonymized studies:</source>
         <oldsource>Which patient name has to be assigned to anonymized studies?</oldsource>
         <translation>Nom de pacient que tindran els estudis anonimizats:</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="639"/>
+        <location filename="qcreatedicomdirbase.ui" line="687"/>
         <source>Creates a DICOMDIR with the selected studies</source>
         <oldsource>Creates the DICOMDIR with the selected studies</oldsource>
         <translation>Crea un DICOMDIR amb els estudis seleccionats</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="642"/>
+        <location filename="qcreatedicomdirbase.ui" line="690"/>
         <source>Create</source>
         <translation>Crea</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="649"/>
+        <location filename="qcreatedicomdirbase.ui" line="701"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="204"/>
-        <location filename="qcreatedicomdirbase.ui" line="247"/>
-        <location filename="qcreatedicomdirbase.ui" line="330"/>
+        <location filename="qcreatedicomdirbase.ui" line="202"/>
+        <location filename="qcreatedicomdirbase.ui" line="238"/>
+        <location filename="qcreatedicomdirbase.ui" line="264"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="230"/>
+        <location filename="qcreatedicomdirbase.ui" line="421"/>
         <source>CD-ROM</source>
         <translation>CD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="270"/>
+        <location filename="qcreatedicomdirbase.ui" line="411"/>
         <source>DVD-ROM</source>
         <translation>DVD-ROM</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="287"/>
+        <location filename="qcreatedicomdirbase.ui" line="326"/>
         <source>disk</source>
         <translation>disc</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="313"/>
+        <location filename="qcreatedicomdirbase.ui" line="401"/>
         <source>Hard Disk</source>
         <translation>Disc dur</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="353"/>
+        <location filename="qcreatedicomdirbase.ui" line="391"/>
         <source>USB Flash Drive</source>
         <oldsource>Pen Drive</oldsource>
         <translation>Memòria USB</translation>
     </message>
     <message>
-        <location filename="qcreatedicomdirbase.ui" line="475"/>
+        <location filename="qcreatedicomdirbase.ui" line="553"/>
         <source>Location:</source>
         <translation>Ubicació:</translation>
     </message>
@@ -1348,103 +1347,103 @@ Configureu-la correctament a Eines -&gt; Configuració -&gt; DICOMDIR.</translat
 <context>
     <name>udg::QDICOMDIRConfigurationScreenBase</name>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="26"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="14"/>
         <source>DICOMDIR Configuration</source>
         <translation>Configuració de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="42"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="30"/>
         <source>DICOMDIR creation configuration</source>
         <translation>Configuració de la creació de DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="70"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="37"/>
         <source>Convert all images to Explicit Little Endian</source>
         <translation>Converteix totes les imatges a Explicit Little Endian</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="101"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="50"/>
         <source>Burning application configuration</source>
         <translation>Configuració de l&apos;aplicació d&apos;enregistrament de CD/DVD</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="130"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="79"/>
         <source>Application path:</source>
         <translation>Camí de l&apos;aplicació:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="152"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="95"/>
         <source>Examine disk to find the application</source>
         <translation>Examina el disc per trobar l&apos;aplicació</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="173"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="125"/>
         <source>Validation Message</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="188"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="137"/>
         <source>Application parameters:</source>
         <translation>Paràmetres de l&apos;aplicació:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="198"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="59"/>
         <source>Download from:</source>
         <translation>Descarrega&apos;l des de:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="205"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="66"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="243"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="149"/>
         <source>Use different parameters for CD and DVD burning:</source>
         <translation>Utilitza paràmetres diferents per enregistrar CD i DVD:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="255"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="176"/>
         <source>CD parameters:</source>
         <translation>Paràmetres per a CD:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="284"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="193"/>
         <source>DVD parameters:</source>
         <translation>Paràmetres per a DVD:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="334"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="217"/>
         <source>Copy folder content to DICOMDIR</source>
         <oldsource>Copy the content of folder to DICOMDIR</oldsource>
         <translation>Copia el contingut d&apos;una carpeta al DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="367"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="224"/>
         <source>Copy additional folder content when creating DICOMDIR on these supports</source>
         <translation>Copia contingut addicional d&apos;una carpeta quan es creï un DICOMDIR en aquests suports</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="373"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="230"/>
         <source>USB Drive or Hard Disk</source>
         <translation>Memòria USB o disc dur</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="380"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="237"/>
         <source>CD or DVD</source>
         <translation>CD o DVD</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="422"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="244"/>
         <source>Folder path to copy content:</source>
         <translation>Camí de la carpeta d&apos;on copiar el contingut:</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="445"/>
-        <source>Examine disk to find the folder to copy to DICOMDIR</source>
-        <translation>Examina el disc per trobar la carpeta a copiar al DICOMDIR</translation>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="256"/>
+        <source>Browse disk to find the folder to copy to DICOMDIR</source>
+        <translation>Navega pel disc per trobar el directori a copiar al DICOMDIR</translation>
     </message>
     <message>
-        <location filename="qdicomdirconfigurationscreenbase.ui" line="477"/>
+        <location filename="qdicomdirconfigurationscreenbase.ui" line="286"/>
         <source>Wrong path</source>
         <translation></translation>
     </message>
@@ -1508,12 +1507,12 @@ Configureu-la correctament a Eines -&gt; Configuració -&gt; DICOMDIR.</translat
         <translation>Addicionalment, envia les sèries exportades als PACS seleccionats:</translation>
     </message>
     <message>
-        <location filename="qexporterbase.ui" line="213"/>
+        <location filename="qexporterbase.ui" line="227"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="qexporterbase.ui" line="220"/>
+        <location filename="qexporterbase.ui" line="213"/>
         <source>Export</source>
         <translation>Exporta</translation>
     </message>
@@ -1719,22 +1718,22 @@ Configureu-la correctament a Eines -&gt; Configuració -&gt; DICOMDIR.</translat
 <context>
     <name>udg::QInputOutputDicomdirWidgetBase</name>
     <message>
-        <location filename="qinputoutputdicomdirwidgetbase.ui" line="13"/>
+        <location filename="qinputoutputdicomdirwidgetbase.ui" line="14"/>
         <source>Form</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidgetbase.ui" line="55"/>
+        <location filename="qinputoutputdicomdirwidgetbase.ui" line="44"/>
         <source>View</source>
         <translation>Visualitza</translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidgetbase.ui" line="74"/>
+        <location filename="qinputoutputdicomdirwidgetbase.ui" line="55"/>
         <source>Import</source>
         <translation>Importa</translation>
     </message>
     <message>
-        <location filename="qinputoutputdicomdirwidgetbase.ui" line="106"/>
+        <location filename="qinputoutputdicomdirwidgetbase.ui" line="79"/>
         <source>Open DICOMDIR</source>
         <translation>Obre un DICOMDIR</translation>
     </message>
@@ -1874,7 +1873,7 @@ Close all the others %1 windows and try again.</oldsource>
         <translation></translation>
     </message>
     <message>
-        <location filename="qinputoutputlocaldatabasewidgetbase.ui" line="63"/>
+        <location filename="qinputoutputlocaldatabasewidgetbase.ui" line="72"/>
         <source>View</source>
         <translation>Visualitza</translation>
     </message>
@@ -1951,27 +1950,27 @@ Voleu continuar?</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidgetbase.ui" line="46"/>
+        <location filename="qinputoutputpacswidgetbase.ui" line="44"/>
         <source>Retrieve &amp;&amp; View</source>
         <translation>Descarrega i visualitza</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidgetbase.ui" line="66"/>
+        <location filename="qinputoutputpacswidgetbase.ui" line="75"/>
         <source>Retrieve</source>
         <translation>Descarrega</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidgetbase.ui" line="111"/>
+        <location filename="qinputoutputpacswidgetbase.ui" line="61"/>
         <source>Query in progress</source>
         <translation>S&apos;està cercant</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidgetbase.ui" line="118"/>
+        <location filename="qinputoutputpacswidgetbase.ui" line="68"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidgetbase.ui" line="130"/>
+        <location filename="qinputoutputpacswidgetbase.ui" line="89"/>
         <source>Cancel query</source>
         <translation>Cancel·la la cerca</translation>
     </message>
@@ -1997,18 +1996,18 @@ Voleu continuar?</translation>
         <translation>Configuració del servei d&apos;escolta de peticions del RIS</translation>
     </message>
     <message>
-        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="63"/>
+        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="106"/>
         <source>Automatically view the studies upon reception</source>
         <translation>Visualitza automàticament els estudis quan s&apos;hagin descarregat</translation>
     </message>
     <message>
-        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="80"/>
+        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="22"/>
         <source>Listen to RIS requests on port</source>
         <oldsource>Listen to RIS Requests on port</oldsource>
         <translation>Escolta peticions del RIS al port</translation>
     </message>
     <message>
-        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="107"/>
+        <location filename="qlistenrisrequestsconfigurationscreenbase.ui" line="61"/>
         <source>Warning message</source>
         <translation></translation>
     </message>
@@ -2098,117 +2097,123 @@ Voleu continuar?</translation>
 <context>
     <name>udg::QLocalDatabaseConfigurationScreenBase</name>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="26"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="14"/>
         <source>Local Database Configuration</source>
         <translation>Configuració de la base de dades local</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="420"/>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="423"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="96"/>
+        <source>Browse disk to find the directory to save the retrieved DICOM files</source>
+        <translation>Navega pel disc per trobar el directori on desar els fitxer DICOM rebuts</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="355"/>
+        <source>Delete studies to keep</source>
+        <translation>Esborra estudis per mantenir</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="407"/>
+        <source>GB of free space.</source>
+        <translation>GB d&apos;espai lliure.</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="414"/>
+        <source>When there is not enough free space to retrieve or import new studies, older studies will be deleted to mantain the specified free space.</source>
+        <translation>Quan no hi hagi prou espai lliure per descarregar o importar nous estudis, s&apos;esborraran estudis vells per mantenir l&apos;espai lliure especificat.</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="467"/>
+        <source>Delete all studies</source>
+        <translation>Esborra tots els estudis</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="478"/>
         <source>Compact Database</source>
         <translation>Compacta la base de dades</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="446"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="481"/>
+        <source>Compact database</source>
+        <translation>Compacta la base de dades</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="464"/>
         <source>Delete all studies from the cache</source>
         <oldsource>Delete all the studies of the cache</oldsource>
         <translation>Esborra tots els estudis de la memòria cau</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="449"/>
-        <source>Delete All Studies</source>
-        <oldsource>Delete all Studies</oldsource>
-        <translation>Esborra tots els estudis</translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="168"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="162"/>
         <source>Changes on database location will be applied when the application is restarted</source>
         <oldsource>Changes on database path will be applied when the application restarts</oldsource>
         <translation>Els canvis en la ubicació de la base de dades s&apos;aplicaran quan l&apos;aplicació es reiniciï</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="199"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="180"/>
         <source>Automatic Cache Management</source>
         <oldsource>Automatic cache management</oldsource>
         <translation>Gestió automàtica de la memòria cau</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="207"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="188"/>
         <source>Minimum space required in hard disk to retrieve DICOM objects:</source>
         <oldsource>Minimum space required in harddisk to retrieve DICOM objects:</oldsource>
         <translation>Espai mínim necessari al disc dur per descarregar objectes DICOM:</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="230"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="211"/>
         <source>GB</source>
         <oldsource>Gb</oldsource>
         <translation>GB</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="277"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="279"/>
         <source>Automatically delete studies not viewed in the last</source>
         <oldsource>Delete studies automatically that have not been viewed last</oldsource>
         <translation>Esborra automàticament els estudis que no han estat visualitzats en els últims</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="300"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="302"/>
         <source>days</source>
         <translation>dies</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="341"/>
-        <source>When there is not enough free space to retrieve or import new studies, delete old studies until</source>
-        <oldsource>When there is not enough free space to retrieve or import new studies, delete old studies until obtaining</oldsource>
-        <translation>Quan no hi hagi prou espai lliure per descarregar o importar nous estudis, esborra estudis vells fins aconseguir</translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="364"/>
-        <source>GB of free space are obtained.</source>
-        <oldsource>GB of free space.</oldsource>
-        <translation>GB d&apos;espai lliure.</translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="406"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="445"/>
         <source>Local Database Maintenance</source>
         <oldsource>Local database maintenance</oldsource>
         <translation>Manteniment de la base de dades local</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="56"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="32"/>
         <source>Database Location:</source>
         <oldsource>Database Path:</oldsource>
         <translation>Ubicació de la base de dades:</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="36"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="24"/>
         <source>Database and Cache Location</source>
         <oldsource>Database and cache location</oldsource>
         <translation>Ubicació de la base de dades i la memòria cau</translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="96"/>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="147"/>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="247"/>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="317"/>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="381"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="42"/>
+        <source>Browse disk to find the database</source>
+        <translation>Navega pel disc per trobar la base de dades</translation>
+    </message>
+    <message>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="72"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="126"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="237"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="328"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="397"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="109"/>
+        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="82"/>
         <source>DICOM Files Cache Location:</source>
         <oldsource>Cache DICOM Files Path:</oldsource>
         <translation>Ubicació de la memòria cau de fitxers DICOM:</translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="123"/>
-        <source>Examine disk to find the directory to save the retrieved DICOM files</source>
-        <translation>Examina el disc per trobar el directori on desar els fitxers DICOM descarregats</translation>
-    </message>
-    <message>
-        <location filename="qlocaldatabaseconfigurationscreenbase.ui" line="72"/>
-        <source>Examine disk to find the database</source>
-        <translation>Examina el disc per trobar la base de dades</translation>
     </message>
 </context>
 <context>
@@ -2278,67 +2283,67 @@ Voleu continuar?</translation>
 <context>
     <name>udg::QOperationStateScreenBase</name>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="45"/>
+        <location filename="qoperationstatescreenbase.ui" line="65"/>
         <source>Status</source>
         <translation>Estat</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="50"/>
+        <location filename="qoperationstatescreenbase.ui" line="70"/>
         <source>Direction</source>
         <translation>Direcció</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="55"/>
+        <location filename="qoperationstatescreenbase.ui" line="75"/>
         <source>From/To</source>
         <translation>De/A</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="60"/>
+        <location filename="qoperationstatescreenbase.ui" line="80"/>
         <source>Patient ID</source>
         <translation>ID pacient</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="65"/>
+        <location filename="qoperationstatescreenbase.ui" line="85"/>
         <source>Patient Name</source>
         <translation>Nom del pacient</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="70"/>
+        <location filename="qoperationstatescreenbase.ui" line="90"/>
         <source>Request Date</source>
         <translation>Data de sol·licitud</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="75"/>
+        <location filename="qoperationstatescreenbase.ui" line="95"/>
         <source>Started</source>
         <translation>Començat</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="80"/>
+        <location filename="qoperationstatescreenbase.ui" line="100"/>
         <source>Series</source>
         <translation>Sèries</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="85"/>
+        <location filename="qoperationstatescreenbase.ui" line="105"/>
         <source>Files</source>
         <translation>Fitxers</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="90"/>
+        <location filename="qoperationstatescreenbase.ui" line="110"/>
         <source>PACSJobID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="119"/>
+        <location filename="qoperationstatescreenbase.ui" line="123"/>
         <source>Cancel Selected</source>
         <translation>Cancel·la les seleccionades</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="126"/>
+        <location filename="qoperationstatescreenbase.ui" line="35"/>
         <source>Cancel All</source>
         <translation>Cancel·la-les totes</translation>
     </message>
     <message>
-        <location filename="qoperationstatescreenbase.ui" line="175"/>
+        <location filename="qoperationstatescreenbase.ui" line="140"/>
         <source>Clear</source>
         <translation>Neteja</translation>
     </message>
@@ -2430,37 +2435,37 @@ Voleu continuar?</translation>
 <context>
     <name>udg::QRelatedStudiesWidget</name>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Modality</source>
         <translation>Modalitat</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Description</source>
         <translation>Descripció</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Date</source>
         <translation>Data</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Current</source>
         <translation>Actual</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="278"/>
+        <location filename="qrelatedstudieswidget.cpp" line="273"/>
         <source>Prior</source>
         <translation>Previ</translation>
     </message>
     <message>
-        <location filename="qrelatedstudieswidget.cpp" line="311"/>
+        <location filename="qrelatedstudieswidget.cpp" line="306"/>
         <source>Looking for related studies...</source>
         <translation>S&apos;estan cercant estudis relacionats...</translation>
     </message>
@@ -2492,6 +2497,11 @@ Voleu continuar?</translation>
         <source> Images</source>
         <translation> Imatges</translation>
     </message>
+    <message>
+        <location filename="qseriesthumbnailpreviewwidget.cpp" line="110"/>
+        <source>%1 Encapsulated Document(s)</source>
+        <translation>%1 document/s encapsulat/s</translation>
+    </message>
 </context>
 <context>
     <name>udg::QSeriesThumbnailPreviewWidgetBase</name>
@@ -2504,17 +2514,17 @@ Voleu continuar?</translation>
 <context>
     <name>udg::QStudyTreeWidget</name>
     <message>
-        <location filename="qstudytreewidget.cpp" line="470"/>
+        <location filename="qstudytreewidget.cpp" line="472"/>
         <source>Series %1</source>
         <translation>Sèrie %1</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="153"/>
+        <location filename="qstudytreewidget.cpp" line="155"/>
         <source>File %1</source>
         <translation>Fitxer %1</translation>
     </message>
     <message>
-        <location filename="qstudytreewidget.cpp" line="439"/>
+        <location filename="qstudytreewidget.cpp" line="441"/>
         <source>Study %1</source>
         <translation>Estudi %1</translation>
     </message>
@@ -2641,18 +2651,18 @@ Voleu continuar?</translation>
         <translation>Envia objectes DICOM a PACS</translation>
     </message>
     <message>
-        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="23"/>
+        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="74"/>
         <source>Select which PACS you want to send DICOM files to:</source>
         <oldsource>Select at which PACS the DICOM files have to be sent:</oldsource>
         <translation>Seleccioneu a quins PACS s&apos;han d&apos;enviar els fitxers DICOM:</translation>
     </message>
     <message>
-        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="96"/>
+        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="47"/>
         <source>Send</source>
         <translation>Envia</translation>
     </message>
     <message>
-        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="119"/>
+        <location filename="qwidgetselectpacstostoredicomimagebase.ui" line="36"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
@@ -2765,59 +2775,60 @@ Error details:
         <translation>Cerca estudis</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="186"/>
+        <location filename="queryscreenbase.ui" line="138"/>
+        <source>PACS nodes &gt;&gt;</source>
+        <translation>Nodes PACS &gt;&gt;</translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="165"/>
+        <source>Clear</source>
+        <translation>Neteja</translation>
+    </message>
+    <message>
+        <location filename="queryscreenbase.ui" line="176"/>
         <source>Search</source>
         <translation>Cerca</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="234"/>
+        <location filename="queryscreenbase.ui" line="209"/>
         <source>Local Database</source>
         <translation>Base de dades local</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="408"/>
+        <location filename="queryscreenbase.ui" line="323"/>
         <source>Create DICOMDIR</source>
         <translation>Crea un DICOMDIR</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="313"/>
+        <location filename="queryscreenbase.ui" line="285"/>
         <source>Operation List</source>
         <translation>Llista de peticions</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="163"/>
-        <source>Clear Search Fields</source>
-        <translation>Neteja els camps de cerca</translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="276"/>
+        <location filename="queryscreenbase.ui" line="251"/>
         <source>DICOMDIR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="353"/>
+        <location filename="queryscreenbase.ui" line="296"/>
         <source>Operation in progress</source>
         <translation>S&apos;està executant l&apos;operació</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="360"/>
+        <location filename="queryscreenbase.ui" line="303"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
     <message>
         <location filename="queryscreenbase.ui" line="124"/>
-        <source>Advanced Search &gt;&gt;</source>
+        <source>Advanced search &gt;&gt;</source>
+        <oldsource>Advanced Search &gt;&gt;</oldsource>
         <translation>Cerca avançada &gt;&gt;</translation>
     </message>
     <message>
-        <location filename="queryscreenbase.ui" line="255"/>
+        <location filename="queryscreenbase.ui" line="230"/>
         <source>PACS Server</source>
         <translation>Servidor PACS</translation>
-    </message>
-    <message>
-        <location filename="queryscreenbase.ui" line="382"/>
-        <source>PACS Nodes</source>
-        <translation>Nodes PACS</translation>
     </message>
 </context>
 <context>

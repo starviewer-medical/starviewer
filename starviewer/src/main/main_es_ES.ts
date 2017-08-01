@@ -4,12 +4,12 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="main.cpp" line="113"/>
+        <location filename="main.cpp" line="114"/>
         <source>%1 is already running, but is not responding. To open %1, you must first close the existing %1 process, or restart your system.</source>
         <translation>%1 ya se está ejecutando pero no responde. Para abrir %1, primero debe cerrar el proceso de %1 existente o reiniciar el sistema.</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="209"/>
+        <location filename="main.cpp" line="222"/>
         <source>There were errors invoking %1 from the command line with the following call:
 
 %2</source>
@@ -18,7 +18,7 @@
 %2</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="211"/>
+        <location filename="main.cpp" line="224"/>
         <source>Detected errors: </source>
         <translation>Errores detectados: </translation>
     </message>

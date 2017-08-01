@@ -32,116 +32,116 @@
 <context>
     <name>udg::Q2DViewerExtension</name>
     <message>
-        <location filename="q2dviewerextension.cpp" line="109"/>
+        <location filename="q2dviewerextension.cpp" line="108"/>
         <source>Search related studies</source>
         <oldsource>Search prior studies</oldsource>
         <translation>Buscar estudios relacionados</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="110"/>
+        <location filename="q2dviewerextension.cpp" line="109"/>
         <source>Export viewer image(s) to DICOM and send them to a PACS server</source>
         <translation>Exportar imágenes del visor a DICOM y enviarlas a un servidor PACS</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="116"/>
+        <location filename="q2dviewerextension.cpp" line="115"/>
         <source>Text</source>
         <translation>Texto</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="117"/>
+        <location filename="q2dviewerextension.cpp" line="116"/>
         <source>Show/Hide viewer&apos;s textual information</source>
         <translation>Mostrar/esconder la información textual de los visores</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="125"/>
+        <location filename="q2dviewerextension.cpp" line="124"/>
         <source>Overlays</source>
         <translation>Overlays</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="126"/>
+        <location filename="q2dviewerextension.cpp" line="125"/>
         <source>Show/Hide image overlays</source>
         <translation>Mostrar/esconder los overlays de las imágenes</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="134"/>
+        <location filename="q2dviewerextension.cpp" line="133"/>
         <source>Shutters</source>
         <translation>Shutters</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="135"/>
+        <location filename="q2dviewerextension.cpp" line="134"/>
         <source>Show/Hide shutter layer</source>
         <translation>Mostrar/esconder los shutters</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="148"/>
+        <location filename="q2dviewerextension.cpp" line="147"/>
         <source>Dump DICOM information of the current image</source>
         <translation>Volcar información DICOM de la imagen actual</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="561"/>
+        <location filename="q2dviewerextension.cpp" line="535"/>
         <source>Propagate properties between viewers (%1)</source>
         <translation>Propagar propiedades entre visores (%1)</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="563"/>
+        <location filename="q2dviewerextension.cpp" line="537"/>
         <source>Propagate</source>
         <translation>Propagar</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="585"/>
+        <location filename="q2dviewerextension.cpp" line="559"/>
         <source>Save current series image...</source>
         <translation>Guardar la imagen de la serie actual...</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="590"/>
+        <location filename="q2dviewerextension.cpp" line="564"/>
         <source>Save all images of the current series...</source>
         <oldsource>Save all images from current series...</oldsource>
         <translation>Guardar todas las imágenes de la serie actual...</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="534"/>
+        <location filename="q2dviewerextension.cpp" line="508"/>
         <source>All</source>
         <translation>Todos</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="149"/>
+        <location filename="q2dviewerextension.cpp" line="148"/>
         <source>Choose a VOI LUT preset</source>
         <oldsource>Choose VOI LUT Presets</oldsource>
         <translation>Elegir una VOI LUT predeterminada</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="545"/>
+        <location filename="q2dviewerextension.cpp" line="519"/>
         <source>Deactivate manual synchronization in all viewers (%1)</source>
         <translation>Desactivar la sincronización manual en todos los visores (%1)</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="547"/>
+        <location filename="q2dviewerextension.cpp" line="521"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="587"/>
+        <location filename="q2dviewerextension.cpp" line="561"/>
         <source>Save the current image in a standard image format</source>
         <translation>Guardar la imagen actual en un formato estándar</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="591"/>
+        <location filename="q2dviewerextension.cpp" line="565"/>
         <source>Save all the images in the selected viewer in a standard image format</source>
         <translation>Guardar todas la imágenes del visualizador seleccionado en un formato estándar</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="532"/>
+        <location filename="q2dviewerextension.cpp" line="506"/>
         <source>Activate manual synchronization in all viewers (%1)</source>
         <oldsource>Activate manual synchronization all viewers</oldsource>
         <translation>Activar la sincronización manual en todos los visores (%1)</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="807"/>
+        <location filename="q2dviewerextension.cpp" line="748"/>
         <source>Export to DICOM</source>
         <translation>Exportar a DICOM</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="807"/>
+        <location filename="q2dviewerextension.cpp" line="748"/>
         <source>This action is not allowed because the selected viewer is empty.</source>
         <translation>No se permite esta acción porque el visor está vacío.</translation>
     </message>
@@ -151,8 +151,8 @@
     <message>
         <location filename="q2dviewerextensionbase.ui" line="91"/>
         <location filename="q2dviewerextensionbase.ui" line="126"/>
-        <location filename="q2dviewerextensionbase.ui" line="590"/>
-        <location filename="q2dviewerextensionbase.ui" line="836"/>
+        <location filename="q2dviewerextensionbase.ui" line="534"/>
+        <location filename="q2dviewerextensionbase.ui" line="709"/>
         <source>...</source>
         <translation>...</translation>
     </message>
@@ -168,42 +168,37 @@
         <translation>Previas</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="267"/>
-        <source>ROI</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="402"/>
+        <location filename="q2dviewerextensionbase.ui" line="346"/>
         <source>Axial</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="425"/>
+        <location filename="q2dviewerextensionbase.ui" line="369"/>
         <source>Sagital</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="448"/>
+        <location filename="q2dviewerextensionbase.ui" line="392"/>
         <source>Coronal</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="478"/>
+        <location filename="q2dviewerextensionbase.ui" line="422"/>
         <source>-90</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="518"/>
+        <location filename="q2dviewerextensionbase.ui" line="462"/>
         <source>FlipH</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="538"/>
+        <location filename="q2dviewerextensionbase.ui" line="482"/>
         <source>FlipV</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="879"/>
+        <location filename="q2dviewerextensionbase.ui" line="752"/>
         <source>VOI LUT</source>
         <translation></translation>
     </message>
@@ -223,84 +218,69 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="498"/>
+        <location filename="q2dviewerextensionbase.ui" line="442"/>
         <source>Rotate</source>
         <translation>Rotar</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="293"/>
-        <source>Distance</source>
-        <translation>Distancia</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="352"/>
+        <location filename="q2dviewerextensionbase.ui" line="286"/>
         <source>Erase</source>
         <translation>Borrar</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="567"/>
+        <location filename="q2dviewerextensionbase.ui" line="511"/>
         <source>Restore</source>
         <translation>Restablecer</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="613"/>
+        <location filename="q2dviewerextensionbase.ui" line="557"/>
         <source>Invert</source>
         <translation>Invertir</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="636"/>
+        <location filename="q2dviewerextensionbase.ui" line="580"/>
         <source>Exporter</source>
         <translation>Exportar</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="717"/>
-        <source>Thick Slab</source>
-        <translation>Grosor de corte</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="757"/>
-        <location filename="q2dviewerextensionbase.ui" line="816"/>
+        <location filename="q2dviewerextensionbase.ui" line="630"/>
+        <location filename="q2dviewerextensionbase.ui" line="689"/>
         <source>Info</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="906"/>
+        <location filename="q2dviewerextensionbase.ui" line="779"/>
         <source>CLUT</source>
         <translation>Color</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="925"/>
+        <location filename="q2dviewerextensionbase.ui" line="798"/>
         <source>Propagate</source>
         <translation>Propagar</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="951"/>
+        <location filename="q2dviewerextensionbase.ui" line="824"/>
         <source>Auto-Sync</source>
         <oldsource>Automatic</oldsource>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="988"/>
+        <location filename="q2dviewerextensionbase.ui" line="861"/>
         <source>All</source>
         <translation>Todos</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="1017"/>
+        <location filename="q2dviewerextensionbase.ui" line="890"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="734"/>
+        <location filename="q2dviewerextensionbase.ui" line="607"/>
         <source>Ref.Lines</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerextensionbase.ui" line="326"/>
-        <source>Angle</source>
-        <translation>Ángulo</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerextensionbase.ui" line="793"/>
+        <location filename="q2dviewerextensionbase.ui" line="666"/>
         <source>3D cursor</source>
         <translation>Cursor 3D</translation>
     </message>

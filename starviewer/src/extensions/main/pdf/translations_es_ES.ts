@@ -6,15 +6,23 @@
     <message>
         <location filename="qpdfextensionbase.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>udg::PdfExtensionMediator</name>
     <message>
-        <location filename="pdfextensionmediator.cpp" line="44"/>
+        <location filename="pdfextensionmediator.cpp" line="46"/>
         <source>PDF</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>udg::QPdfExtension</name>
+    <message>
+        <location filename="qpdfextension.cpp" line="64"/>
+        <source>Document %1</source>
+        <translation>Documento %1</translation>
     </message>
 </context>
 </TS>

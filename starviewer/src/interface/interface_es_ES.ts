@@ -4,19 +4,14 @@
 <context>
     <name>QConfigurationDialogBase</name>
     <message>
-        <location filename="qconfigurationdialogbase.ui" line="113"/>
+        <location filename="qconfigurationdialogbase.ui" line="42"/>
         <source>Show Advanced Options</source>
         <translation>Mostrar opciones avanzadas</translation>
     </message>
     <message>
-        <location filename="qconfigurationdialogbase.ui" line="136"/>
+        <location filename="qconfigurationdialogbase.ui" line="49"/>
         <source>Close</source>
         <translation>Cerrar</translation>
-    </message>
-    <message>
-        <location filename="qconfigurationdialogbase.ui" line="139"/>
-        <source>Alt+B</source>
-        <translation>Alt+B</translation>
     </message>
 </context>
 <context>
@@ -129,50 +124,61 @@
 <context>
     <name>udg::QAboutDialog</name>
     <message>
-        <location filename="qaboutdialog.cpp" line="29"/>
+        <location filename="qaboutdialog.cpp" line="33"/>
         <source>About %1</source>
         <translation>Acerca de %1</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="32"/>
+        <location filename="qaboutdialog.cpp" line="36"/>
         <source>&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab) and Institut de Diagnòstic per la Imatge (IDI), Girona.&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG, ...) fully compliant with the DICOM standard for image communication and image file formats. It can also read many other file formats specified by the MetaIO standard (*.mhd files). </source>
         <oldsource>&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab) and Institut de Diagnòstic per la Imatge (IDI), Girona.&lt;p align=&apos;justify&apos;&gt;%1 is a basic but fully featured image review software dedicated to DICOM images produced by medical equipment (MRI, CT, PET, PET-CT, CR, MG,...) fully compliant with the DICOM standard for image communication and image file formats. It can also read many other file formats specified by the MetaIO standard (*.mhd files). </oldsource>
         <translation>&lt;p&gt;Copyright &amp;copy; 2005-%2 Graphics &amp; Imaging Laboratory (GILab) e Institut de Diagnòstic per la Imatge (IDI), Girona.&lt;p align=&apos;justify&apos;&gt;%1 es un programa de revisión de imagen básico pero completo dedicado a imágenes DICOM producidas por equipamiento médico (MRI, CT, PET, PET-CT, CR, MG, ...) totalmente compatible con el estándar DICOM para la comunicación de imagen y formatos de archivo de imagen. También puede leer otros formatos establecidos por el estándar MetaIO (archivos *.mhd). </translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="39"/>
+        <location filename="qaboutdialog.cpp" line="43"/>
         <source>&lt;p align=&apos;justify&apos;&gt;%1 has been specifically designed for navigation and visualization of multimodality and multidimensional images</source>
         <translation>&lt;p align=&apos;justify&apos;&gt;%1 ha sido diseñado especialmente para la navegación y visualización de imágenes multimodales y multidimensionales</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="42"/>
+        <location filename="qaboutdialog.cpp" line="46"/>
         <source>%1 is able to receive images transferred by DICOM communication protocol from any PACS or medical imaging modality (STORE SCP - Service Class Provider, STORE SCU - Service Class User, and Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 enables navigation and visualization of multimodality and multidimensional images through a complete 2D Viewer which integrates advanced reconstruction techniques such as Thick Slab (including Maximum Intensity Projection (MIP), Minimum Intensity Projection (MinIP) and average projection), fast orthogonal reconstruction and 3D navigation tools such as 3D-Cursor. It also incorporates Multi-Planar Reconstruction (MPR) and 3D Viewer for volume rendering.&lt;p align=&apos;justify&apos;&gt;%1 is at the same time a DICOM workstation for medical imaging and an image processing software for medical research (radiology and nuclear imaging), functional imaging and 3D imaging.</source>
         <translation>%1 puede recibir imágenes enviadas siguiendo el protocolo de comunicación DICOM desde cualquier PACS o equipamiento de imagen médica (STORE SCP - Service Class Provider, STORE SCU - Service Class User, y Query/Retrieve).&lt;p align=&apos;justify&apos;&gt;%1 permite la exploración y visualización de imágenes multimodalidad y multidimensionales a través de un completo visor 2D que integra técnicas avanzadas de reconstrucción tales como Thick Slab (incluyendo Proyección de Máxima Intensidad (MIP), Proyección de Mínima Intensidad (MinIP) y proyección del promedio), reconstrucción ortogonal rápida y herramientas de navegación tridimensionales como el Cursor 3D. También incorpora Reconstrucción Multi-Planar (MPR) y un visor 3D para renderización de volúmenes.&lt;p align=&apos;justify&apos;&gt;%1 es una estación de trabajo DICOM para imagen médica y a la vez un software de procesamiento de imágenes para investigación médica (radiología y medicina nuclear), imagen funcional e imagen 3D.</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="53"/>
+        <location filename="qaboutdialog.cpp" line="57"/>
         <source>&lt;p align=&apos;justify&apos;&gt;%1 is the result of the close collaboration between IDI and GiLab and experience of both entities in the fields of radiology, medical imaging and image processing.</source>
         <translation>&lt;p align=&apos;justify&apos;&gt;%1 es fruto de la estrecha colaboración entre IDI y GiLab y la experiencia de ambas entidades en los ámbitos de la radiología, imagen médica y procesamiento de imagen.</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="55"/>
+        <location filename="qaboutdialog.cpp" line="59"/>
         <source>&lt;p&gt;Version: %1 &lt;/p&gt;</source>
         <translation>&lt;p&gt;Versión: %1 &lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="56"/>
+        <location filename="qaboutdialog.cpp" line="60"/>
         <source>&lt;p&gt;Support email: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;Correo electrónico de soporte: &lt;a href=&quot;mailto:%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="57"/>
+        <location filename="qaboutdialog.cpp" line="61"/>
         <source>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;Web: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="61"/>
+        <location filename="qaboutdialog.cpp" line="65"/>
+        <location filename="qaboutdialog.cpp" line="105"/>
+        <source>Crash test</source>
+        <translation>Prueba de fallo</translation>
+    </message>
+    <message>
+        <location filename="qaboutdialog.cpp" line="69"/>
         <source>License information</source>
         <translation>Información de la licencia</translation>
+    </message>
+    <message>
+        <location filename="qaboutdialog.cpp" line="105"/>
+        <source>Are you sure you want to crash %1 on purpose?</source>
+        <translation>¿Está seguro de querer hacer fallar %1 a propósito?</translation>
     </message>
 </context>
 <context>
@@ -484,30 +490,30 @@
         <translation>Ha ocurrido un error en lanzar la aplicación externa.</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="721"/>
+        <location filename="qapplicationmainwindow.cpp" line="715"/>
         <source>Beta Version</source>
         <oldsource>Beta version</oldsource>
         <translation>Versión beta</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="722"/>
+        <location filename="qapplicationmainwindow.cpp" line="716"/>
         <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 used exclusively for testing purposes.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our test-team members. Users of this version should not expect extensions to function properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve %1, please report any found bug or any feature request you may have by sending an e-mail to: &lt;a href=&quot;mailto:%2&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;We really appreciate your feedback!&lt;/h3&gt;</source>
         <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 used exclusively for testing purposes.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our test-team members. Users of this version should not expect the extensions function properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve %1, please report any found bug or any feature request you may have by sending an e-mail to: &lt;a href=&quot;mailto:%2&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;We really appreciate your feedback!&lt;/h3&gt;</oldsource>
         <translation>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;Esta es una versión preliminar de %1, que se tendría que utilizar exclusivamente con fines de verificación.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Esta versión está dirigida a los radiólogos y a nuestro equipo de pruebas. En esta versión es posible que las extensiones no funcionen correctamente.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;Si quiere ayudarnos a mejorar %1 infórmenos de cualquier error o funcionalidad que necesite enviando un correo electrónico a: &lt;a href=&quot;mailto:%2&quot;&gt;%2.&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;Agradecemos mucho su colaboración.&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="793"/>
+        <location filename="qapplicationmainwindow.cpp" line="787"/>
         <source>Please activate &quot;Listen to RIS requests&quot; option in %1 configuration to retrieve studies from SAP.</source>
         <oldsource>Please activate &quot;Listen RIS Request&quot; option in %1 configuration to retrieve studies from SAP.</oldsource>
         <translation>Active la opción «Escuchar peticiones del RIS» en la configuración de %1 para poder recibir estudios del SAP.</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="150"/>
+        <location filename="qapplicationmainwindow.cpp" line="146"/>
         <source>Loading</source>
         <translation>Cargando</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="151"/>
+        <location filename="qapplicationmainwindow.cpp" line="147"/>
         <source>Loading data, please wait...</source>
         <translation>Cargando los datos, espere...</translation>
     </message>
@@ -527,7 +533,7 @@
         <translation>Modificar la configuración de %1</translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="105"/>
+        <location filename="qapplicationmainwindow.cpp" line="104"/>
         <source>There have been some errors:</source>
         <oldsource>There have been some errors:
 </oldsource>
@@ -535,7 +541,7 @@
 </translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="106"/>
+        <location filename="qapplicationmainwindow.cpp" line="105"/>
         <source>You can resolve this error at Tools &gt; Configuration &gt; Local Database.</source>
         <oldsource>
 
@@ -546,42 +552,47 @@ You can resolve this error at Tools &gt; Configuration &gt; Local Database.</old
 <context>
     <name>udg::QConfigurationDialog</name>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="35"/>
+        <location filename="qconfigurationdialog.cpp" line="37"/>
         <source>%1 Configuration</source>
         <translation>Configuración de %1</translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="44"/>
+        <location filename="qconfigurationdialog.cpp" line="46"/>
         <source>2D Viewer Layout</source>
         <translation>Distribución de los visores 2D</translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="49"/>
+        <location filename="qconfigurationdialog.cpp" line="51"/>
         <source>PACS</source>
         <translation>PACS</translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="54"/>
+        <location filename="qconfigurationdialog.cpp" line="56"/>
         <source>Local Database</source>
         <translation>Base de datos local</translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="59"/>
+        <location filename="qconfigurationdialog.cpp" line="61"/>
         <source>RIS Listener</source>
         <translation>Escuchar peticiones del RIS</translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="64"/>
+        <location filename="qconfigurationdialog.cpp" line="66"/>
         <source>DICOMDIR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="68"/>
+        <location filename="qconfigurationdialog.cpp" line="70"/>
         <source>External application</source>
         <translation>Aplicacion externa</translation>
     </message>
     <message>
-        <location filename="qconfigurationdialog.cpp" line="40"/>
+        <location filename="qconfigurationdialog.cpp" line="74"/>
+        <source>Magnification</source>
+        <translation>Magnificación</translation>
+    </message>
+    <message>
+        <location filename="qconfigurationdialog.cpp" line="42"/>
         <source>2D Viewer</source>
         <translation>Visor 2D</translation>
     </message>

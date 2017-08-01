@@ -104,16 +104,16 @@
         <translation>Correcte</translation>
     </message>
     <message>
-        <source>The crash report has been sent successfully.</source>
-        <translation>L&apos;informe de fallada s&apos;ha enviat.</translation>
-    </message>
-    <message>
         <source>Send error</source>
         <translation>Error en enviar</translation>
     </message>
     <message>
         <source>The crash report could not be sent to Starviewer developers because [%1] error happened, do you want to try it again?</source>
         <translation>L&apos;informe de fallada no s&apos;ha pogut enviar correctament als desenvolupadors de Starviewer degut al següent error [%1], voleu intentar-ho de nou?</translation>
+    </message>
+    <message>
+        <source>The crash report has been sent.</source>
+        <translation>S&apos;ha enviat l&apos;informe de fallada.</translation>
     </message>
 </context>
 </TS>
