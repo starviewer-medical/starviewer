@@ -55,11 +55,14 @@ QDiagnosisTest::QDiagnosisTest(QWidget *parent)
 
 QDiagnosisTest::~QDiagnosisTest()
 {
-    qDeleteAll(m_runDiagnosisTest->getDiagnosisTestToRun());
-    delete m_runDiagnosisTest;
-
+    // TODO Should finish in a cleaner way. Calling terminate() is dangerous.
+    //      Instead, should stop running the tests (in particular, cancel PACS echoes) and call m_threadRunningDiagnosisTest->quit()
+    //      And should not need to wait for the thread to finish: just connect to the finished() signal and destroy thread and tests there
+    //      Exception: if the application quits, should the thread be terminated?
     m_threadRunningDiagnosisTest->terminate();
     m_threadRunningDiagnosisTest->wait();
+    qDeleteAll(m_runDiagnosisTest->getDiagnosisTestToRun());
+    delete m_runDiagnosisTest;
     delete m_threadRunningDiagnosisTest;
 }
 
