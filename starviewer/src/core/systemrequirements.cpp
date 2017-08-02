@@ -20,14 +20,14 @@ namespace udg {
 SystemRequirements::SystemRequirements()
 {
     m_minimumNumberOfCores = 4;
-    m_minimumCoreSpeed = 2457; //2.4GHz
+    m_minimumCoreSpeed = 2100; //2.1GHz
     m_minimumGPURAM = 256; // Mbytes
-    m_minimumGPUOpenGLVersion = "2.1";
-    m_minimumOSVersion = "5.0"; // XP
-    m_minimum32bitServicePackVersion = 3; // XP service pack 3
-    m_minimum64bitServicePackVersion = 2; // XP service pack 2
+    m_minimumGPUOpenGLVersion = "3.2";
+    m_minimumOSVersion = "6.1"; // 7
+    m_minimum32bitServicePackVersion = 1; // 7 SP1
+    m_minimum64bitServicePackVersion = 1; // 7 SP1
     m_minimumRAM = 4000; // 4Gb
-    m_minimumScreenWidth = 1185; // La mínima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
+    m_minimumScreenWidth = 1280; // La mínima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
 
     // Quan s'estableixin quines són les extensions d'openGL que es necessiten per cada cosa, es poden afegir aquí
     //m_minimumOpenGLExtensions << "GL_ARB_flux_capacitor";
