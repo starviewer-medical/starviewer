@@ -25,7 +25,7 @@ namespace udg {
 class SystemRequirements {
 public:
     SystemRequirements();
-    ~SystemRequirements();
+    virtual ~SystemRequirements();
 
     virtual unsigned int getMinimumCPUNumberOfCores();
     virtual unsigned int getMinimumCPUFrequency();
