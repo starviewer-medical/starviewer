@@ -1,18 +1,18 @@
 #include "autotest.h"
-#include "systemrequerimentstest.h"
+#include "systemrequirementstest.h"
 #include "diagnosistestresult.h"
-#include "systemrequeriments.h"
+#include "systemrequirements.h"
 
 using namespace udg;
 
 typedef QList<unsigned int> UnsignedIntList;
 typedef QList<QSize> SizeList;
 
-class TestingSystemRequeriments : public SystemRequeriments {
+class TestingSystemRequirements : public SystemRequirements {
 public:
     // Els requeriments mínims s'especifiquen aquí. S'enten que són constants, així que no s'assignen a cada test, però és necessari
     // tenir-los aquí, per si la classe pare canvia, que el test no es vegi afectat.
-    void setRequerimentsForTesting()
+    void setRequirementsForTesting()
     {
         m_minimumNumberOfCores = 4;
         m_minimumCoreSpeed = 2457; //2.4GHz
@@ -34,7 +34,7 @@ public:
     }
 };
 
-class TestingSystemRequerimentsTest : public SystemRequerimentsTest {
+class TestingSystemRequirementsTest : public SystemRequirementsTest {
 public:
     unsigned int m_testingCPUNumberOfCores;
     UnsignedIntList m_testingCPUFrequencies;
@@ -124,11 +124,11 @@ protected:
         return m_testingWriteCapability;
     }
 
-    virtual SystemRequeriments* getSystemRequeriments()
+    virtual SystemRequirements* getSystemRequirements()
     {
-        TestingSystemRequeriments *requeriments = new TestingSystemRequeriments();
-        requeriments->setRequerimentsForTesting();
-        return requeriments;
+        TestingSystemRequirements *requirements = new TestingSystemRequirements();
+        requirements->setRequirementsForTesting();
+        return requirements;
     }
 };
 
@@ -137,15 +137,15 @@ Q_DECLARE_METATYPE(SystemInformation::OperatingSystem)
 Q_DECLARE_METATYPE(UnsignedIntList)
 Q_DECLARE_METATYPE(SizeList)
 
-class test_SystemRequerimentsTest : public QObject {
+class test_SystemRequirementsTest : public QObject {
 Q_OBJECT
 
 private slots:
-    void run_ShouldTestIfSystemHasTheMinimumRequeriments_data();
-    void run_ShouldTestIfSystemHasTheMinimumRequeriments();
+    void run_ShouldTestIfSystemHasTheMinimumRequirements_data();
+    void run_ShouldTestIfSystemHasTheMinimumRequirements();
 };
 
-void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriments_data()
+void test_SystemRequirementsTest::run_ShouldTestIfSystemHasTheMinimumRequirements_data()
 {
     // Entrada
     QTest::addColumn<unsigned int>("testingCPUNumberOfCores");
@@ -195,8 +195,8 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     unsigned int zero = 0;
 
     // Requeriments mínims
-    TestingSystemRequeriments requeriments;
-    requeriments.setRequerimentsForTesting();
+    TestingSystemRequirements requirements;
+    requirements.setRequirementsForTesting();
 
 
     QTest::newRow("ok windows") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
@@ -214,7 +214,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("not enough cores") << zero << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                       << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                       << DiagnosisTestResult::Error
-                                      << QString("The computer has %1 cores, and the minimum required is %2").arg(zero).arg(requeriments.getMinimumCPUNumberOfCores())
+                                      << QString("The computer has %1 cores, and the minimum required is %2").arg(zero).arg(requirements.getMinimumCPUNumberOfCores())
                                       << "Update computer's hardware";
 
     UnsignedIntList cpuFrequenciesTooSlow;
@@ -222,7 +222,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("CPU frequency too slow") << cpuNumberOfCores << cpuFrequenciesTooSlow << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                             << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                             << DiagnosisTestResult::Error
-                                            << QString("The fastest CPU runs at %1 MHz, and the minimum required is %2 MHz").arg(zero).arg(requeriments.getMinimumCPUFrequency())
+                                            << QString("The fastest CPU runs at %1 MHz, and the minimum required is %2 MHz").arg(zero).arg(requirements.getMinimumCPUFrequency())
                                             << "Update computer's hardware";
 
     QStringList missingOpenGLExtensions;
@@ -237,7 +237,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("Old openGL version") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << "1.0" << gpuRAM << gpuModel << hardDiskFreeSpace
                                         << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                         << DiagnosisTestResult::Error
-                                        << QString("Current OpenGL version is %1, and the minimum required is %2").arg("1.0").arg(requeriments.getMinimumGPUOpenGLVersion())
+                                        << QString("Current OpenGL version is %1, and the minimum required is %2").arg("1.0").arg(requirements.getMinimumGPUOpenGLVersion())
                                         << "Update your graphics card driver";
 
     QTest::newRow("OK openGL version with vendor info") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion+" ATI-1.0" << gpuRAM << gpuModel << hardDiskFreeSpace
@@ -253,7 +253,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("not enough GPU RAM") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << notEnoughRAM << gpuModel << hardDiskFreeSpace
                                         << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                         << DiagnosisTestResult::Error
-                                        << QString("The graphics card %1 has %2 MB of RAM, and the minimum required is %3 MB").arg(gpuModel.at(0)).arg(zero).arg(requeriments.getMinimumGPURAM())
+                                        << QString("The graphics card %1 has %2 MB of RAM, and the minimum required is %3 MB").arg(gpuModel.at(0)).arg(zero).arg(requirements.getMinimumGPURAM())
                                         << "Change the graphics card";
 
     QTest::newRow("not enough space on disk") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << zero
@@ -271,19 +271,19 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QTest::newRow("windows version error") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                            << operatingSystem << "4.1" << servicePackVersion << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                            << DiagnosisTestResult::Error
-                                           << QString("Current operating system version is %1, and the minimum required is %2").arg("4.1").arg(requeriments.getMinimumOperatingSystemVersion())
+                                           << QString("Current operating system version is %1, and the minimum required is %2").arg("4.1").arg(requirements.getMinimumOperatingSystemVersion())
                                            << "Update operating system to a newer version";
 
     QTest::newRow("windows service pack version error") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                                         << operatingSystem << operatingSystemVersion << "Service Pack 1" << isOperatingSystem64BitArchitecture << ramTotalAmount << screenResolutions << writeCapability
                                                         << DiagnosisTestResult::Error
-                                                        << QString("Current Service Pack version is %1, and the minimum required is Service Pack %2").arg("Service Pack 1").arg(requeriments.getMinimum64bitOperatingSystemServicePackVersion())
+                                                        << QString("Current Service Pack version is %1, and the minimum required is Service Pack %2").arg("Service Pack 1").arg(requirements.getMinimum64bitOperatingSystemServicePackVersion())
                                                         << "Install a newer Service Pack";
 
     QTest::newRow("not enough RAM") << cpuNumberOfCores << cpuFrequencies << openGLExtensions << openGLVersion << gpuRAM << gpuModel << hardDiskFreeSpace
                                     << operatingSystem << operatingSystemVersion << servicePackVersion << isOperatingSystem64BitArchitecture << zero << screenResolutions << writeCapability
                                     << DiagnosisTestResult::Error
-                                    << QString("The total amount of RAM memory is %1 MB, and the minimum required is %2 MB").arg(zero).arg(requeriments.getMinimumRAMTotalAmount())
+                                    << QString("The total amount of RAM memory is %1 MB, and the minimum required is %2 MB").arg(zero).arg(requirements.getMinimumRAMTotalAmount())
                                     << "Upgrade computer's RAM memory";
 
     SizeList screenResolutionsTooSmall;
@@ -319,7 +319,7 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
                          << "Change the optical drive to a CD-RW/DVD-RW";
 }
 
-void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriments()
+void test_SystemRequirementsTest::run_ShouldTestIfSystemHasTheMinimumRequirements()
 {
     QFETCH(unsigned int, testingCPUNumberOfCores);
     QFETCH(UnsignedIntList, testingCPUFrequencies);
@@ -340,23 +340,23 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     QFETCH(QString, testingDiagnosisTestResultDescription);
     QFETCH(QString, testingDiagnosisTestResultSolution);
 
-    TestingSystemRequerimentsTest systemRequerimentsTest;
-    systemRequerimentsTest.m_testingCPUNumberOfCores = testingCPUNumberOfCores;
-    systemRequerimentsTest.m_testingCPUFrequencies = testingCPUFrequencies;
-    systemRequerimentsTest.m_testingGPUOpenGLCompatibilities = testingGPUOpenGLCompatibilities;
-    systemRequerimentsTest.m_testingGPUOpenGLVersion = testingGPUOpenGLVersion;
-    systemRequerimentsTest.m_testingGPURAM = testingGPURAM;
-    systemRequerimentsTest.m_testingGPUModel = testingGPUModel;
-    systemRequerimentsTest.m_testingHardDiskFreeSpace = testingHardDiskFreeSpace;
-    systemRequerimentsTest.m_testingOperatingSystem = testingOperatingSystem;
-    systemRequerimentsTest.m_testingOperatingSystemVersion = testingOperatingSystemVersion;
-    systemRequerimentsTest.m_testingOperatingSystemServicePackVersion = testingOperatingSystemServicePackVersion;
-    systemRequerimentsTest.m_testingIsOperatingSystem64BitArchitecutre = testingIsOperatingSystem64BitArchitecture;
-    systemRequerimentsTest.m_testingRAMTotalAmount = testingRAMTotalAmount;
-    systemRequerimentsTest.m_testingScreenResolutions = testingScreenResolutions;
-    systemRequerimentsTest.m_testingWriteCapability = testingWriteCapability;
+    TestingSystemRequirementsTest systemRequirementsTest;
+    systemRequirementsTest.m_testingCPUNumberOfCores = testingCPUNumberOfCores;
+    systemRequirementsTest.m_testingCPUFrequencies = testingCPUFrequencies;
+    systemRequirementsTest.m_testingGPUOpenGLCompatibilities = testingGPUOpenGLCompatibilities;
+    systemRequirementsTest.m_testingGPUOpenGLVersion = testingGPUOpenGLVersion;
+    systemRequirementsTest.m_testingGPURAM = testingGPURAM;
+    systemRequirementsTest.m_testingGPUModel = testingGPUModel;
+    systemRequirementsTest.m_testingHardDiskFreeSpace = testingHardDiskFreeSpace;
+    systemRequirementsTest.m_testingOperatingSystem = testingOperatingSystem;
+    systemRequirementsTest.m_testingOperatingSystemVersion = testingOperatingSystemVersion;
+    systemRequirementsTest.m_testingOperatingSystemServicePackVersion = testingOperatingSystemServicePackVersion;
+    systemRequirementsTest.m_testingIsOperatingSystem64BitArchitecutre = testingIsOperatingSystem64BitArchitecture;
+    systemRequirementsTest.m_testingRAMTotalAmount = testingRAMTotalAmount;
+    systemRequirementsTest.m_testingScreenResolutions = testingScreenResolutions;
+    systemRequirementsTest.m_testingWriteCapability = testingWriteCapability;
 
-    DiagnosisTestResult result = systemRequerimentsTest.run();
+    DiagnosisTestResult result = systemRequirementsTest.run();
     
     QCOMPARE(result.getState(), testingDiagnosisTestResultState);
     if (result.getState() != DiagnosisTestResult::Ok)
@@ -368,6 +368,6 @@ void test_SystemRequerimentsTest::run_ShouldTestIfSystemHasTheMinimumRequeriment
     }
 }
 
-DECLARE_TEST(test_SystemRequerimentsTest)
+DECLARE_TEST(test_SystemRequirementsTest)
 
-#include "test_systemrequerimentstest.moc"
+#include "test_systemrequirementstest.moc"

@@ -31,7 +31,6 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_applicationversiontest.cpp \
            $$PWD/test_imageoverlayregionfinder.cpp \
            $$PWD/test_hangingprotocolmanager.cpp \
-           $$PWD/test_systemrequerimentstest.cpp \
            $$PWD/test_drawerpolygon.cpp \
            $$PWD/test_drawerline.cpp \
            $$PWD/test_diagnosistestresultwriter.cpp \
@@ -89,7 +88,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_patientfillerinput.cpp \
            $$PWD/test_externalapplication.cpp \
            $$PWD/test_sliceorientedvolumepixeldata.cpp \
-           $$PWD/test_applicationversionchecker.cpp
+           $$PWD/test_applicationversionchecker.cpp \
+           $$PWD/test_systemrequirementstest.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \

@@ -13,8 +13,8 @@
  *************************************************************************************/
 
 // Starviewer
-#include "systemrequerimentstest.h"
-#include "systemrequeriments.h"
+#include "systemrequirementstest.h"
+#include "systemrequirements.h"
 #include "starviewerapplication.h"
 
 // Qt
@@ -25,28 +25,28 @@
 
 namespace udg {
 
-SystemRequerimentsTest::SystemRequerimentsTest(QObject *parent)
+SystemRequirementsTest::SystemRequirementsTest(QObject *parent)
  : DiagnosisTest(parent)
 {
 }
 
-SystemRequerimentsTest::~SystemRequerimentsTest()
+SystemRequirementsTest::~SystemRequirementsTest()
 {
 }
 
-DiagnosisTestResult SystemRequerimentsTest::run()
+DiagnosisTestResult SystemRequirementsTest::run()
 {
     /// Requeriments mínims
-    SystemRequeriments *requeriments = getSystemRequeriments();
-    const unsigned int MinimumNumberOfCores = requeriments->getMinimumCPUNumberOfCores();
-    const unsigned int MinimumCoreSpeed = requeriments->getMinimumCPUFrequency();
-    const unsigned int MinimumGPURAM = requeriments->getMinimumGPURAM();
-    const QStringList MinimumGPUOpenGLExtensions = requeriments->getMinimumGPUOpenGLCompatibilities();
-    const QString MinimumGPUOpenGLVersion = requeriments->getMinimumGPUOpenGLVersion();
-    const QString MinimumOSVersion = requeriments->getMinimumOperatingSystemVersion();
-    const unsigned int MinimumRAM = requeriments->getMinimumRAMTotalAmount();
-    const unsigned int MinimumScreenWidth = requeriments->getMinimumScreenWidth();
-    const unsigned int MinimumDiskSpace = requeriments->getMinimumHardDiskFreeSpace();
+    SystemRequirements *requirements = getSystemRequirements();
+    const unsigned int MinimumNumberOfCores = requirements->getMinimumCPUNumberOfCores();
+    const unsigned int MinimumCoreSpeed = requirements->getMinimumCPUFrequency();
+    const unsigned int MinimumGPURAM = requirements->getMinimumGPURAM();
+    const QStringList MinimumGPUOpenGLExtensions = requirements->getMinimumGPUOpenGLCompatibilities();
+    const QString MinimumGPUOpenGLVersion = requirements->getMinimumGPUOpenGLVersion();
+    const QString MinimumOSVersion = requirements->getMinimumOperatingSystemVersion();
+    const unsigned int MinimumRAM = requirements->getMinimumRAMTotalAmount();
+    const unsigned int MinimumScreenWidth = requirements->getMinimumScreenWidth();
+    const unsigned int MinimumDiskSpace = requirements->getMinimumHardDiskFreeSpace();
 
     // TODO Temporal, s'ha de treure i veure com obtenir la unitat on està starviewer
     const QString whichHardDisk = "C:";
@@ -91,7 +91,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
 
     // Comprovar si la versió d'openGL del sistema és suficient
     QString openGLVersion = getGPUOpenGLVersion(system);
-    if (compareVersions(openGLVersion, MinimumGPUOpenGLVersion) == SystemRequerimentsTest::Older)
+    if (compareVersions(openGLVersion, MinimumGPUOpenGLVersion) == SystemRequirementsTest::Older)
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
@@ -146,7 +146,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     }
 
     // Arquitectura de la màquina (32 o 64 bits)
-    if (requeriments->doesOperatingSystemNeedToBe64BitArchitecutre() && !isOperatingSystem64BitArchitecture(system))
+    if (requirements->doesOperatingSystemNeedToBe64BitArchitecutre() && !isOperatingSystem64BitArchitecture(system))
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Error);
@@ -163,7 +163,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
         case SystemInformation::OSWindows:
             // Si el SO és windows, quina ha de ser la mínima versió??
             version = getOperatingSystemVersion(system);
-            if (compareVersions(version, MinimumOSVersion) == SystemRequerimentsTest::Older)
+            if (compareVersions(version, MinimumOSVersion) == SystemRequirementsTest::Older)
             {
                 DiagnosisTestProblem problem;
                 problem.setState(DiagnosisTestProblem::Error);
@@ -178,11 +178,11 @@ DiagnosisTestResult SystemRequerimentsTest::run()
                 unsigned int minimumServicePackVersion;
                 if (isOperatingSystem64BitArchitecture(system))
                 {
-                    minimumServicePackVersion = requeriments->getMinimum64bitOperatingSystemServicePackVersion();
+                    minimumServicePackVersion = requirements->getMinimum64bitOperatingSystemServicePackVersion();
                 }
                 else
                 {
-                    minimumServicePackVersion = requeriments->getMinimum32bitOperatingSystemServicePackVersion();
+                    minimumServicePackVersion = requirements->getMinimum32bitOperatingSystemServicePackVersion();
                 }
                 
                 if (servicePack.right(servicePack.count() - 13).toUInt() < minimumServicePackVersion)
@@ -265,7 +265,7 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     }
 
     // Que la unitat de CD/DVD no pugui grabar
-    if (requeriments->doesOpticalDriveNeedWriteCapabilities() && !doesOpticalDriveHaveWriteCapabilities(system))
+    if (requirements->doesOpticalDriveNeedWriteCapabilities() && !doesOpticalDriveHaveWriteCapabilities(system))
     {
         DiagnosisTestProblem problem;
         problem.setState(DiagnosisTestProblem::Warning);
@@ -278,12 +278,12 @@ DiagnosisTestResult SystemRequerimentsTest::run()
     return result;
 }
 
-QString SystemRequerimentsTest::getDescription()
+QString SystemRequirementsTest::getDescription()
 {
     return tr("Hardware meets %1's minimum system requirements").arg(ApplicationNameString);
 }
 
-SystemRequerimentsTest::VersionComparison SystemRequerimentsTest::compareVersions(QString version1, QString version2)
+SystemRequirementsTest::VersionComparison SystemRequirementsTest::compareVersions(QString version1, QString version2)
 {
     // TODO de moment només estar pensat per windows. S'ha d'estendre a més S.O.
     
@@ -297,11 +297,11 @@ SystemRequerimentsTest::VersionComparison SystemRequerimentsTest::compareVersion
     {
         if (version1List.at(index).toInt() < version2List.at(index).toInt())
         {
-            return SystemRequerimentsTest::Older;
+            return SystemRequirementsTest::Older;
         }
         else if (version1List.at(index).toInt() > version2List.at(index).toInt())
         {
-            return SystemRequerimentsTest::Newer;
+            return SystemRequirementsTest::Newer;
         }
         index++;
     }
@@ -309,89 +309,89 @@ SystemRequerimentsTest::VersionComparison SystemRequerimentsTest::compareVersion
     // Si totes les parts són iguals, la versió que en tingui més serà la major, ja que suposarem que la altra és .0
     if (version1List.count() < version2List.count())
     {
-        return SystemRequerimentsTest::Older;
+        return SystemRequirementsTest::Older;
     }
     else if (version1List.count() > version2List.count())
     {
-        return SystemRequerimentsTest::Newer;
+        return SystemRequirementsTest::Newer;
     }
 
-    return SystemRequerimentsTest::Same;
+    return SystemRequirementsTest::Same;
 }
 
-unsigned int SystemRequerimentsTest::getCPUNumberOfCores(SystemInformation *system)
+unsigned int SystemRequirementsTest::getCPUNumberOfCores(SystemInformation *system)
 {
     return system->getCPUNumberOfCores();
 }
 
-QList<unsigned int> SystemRequerimentsTest::getCPUFrequencies(SystemInformation *system)
+QList<unsigned int> SystemRequirementsTest::getCPUFrequencies(SystemInformation *system)
 {
     return system->getCPUFrequencies();
 }
 
-QStringList SystemRequerimentsTest::getGPUOpenGLCompatibilities(SystemInformation *system)
+QStringList SystemRequirementsTest::getGPUOpenGLCompatibilities(SystemInformation *system)
 {
     return system->getGPUOpenGLCompatibilities();
 }
 
-QString SystemRequerimentsTest::getGPUOpenGLVersion(SystemInformation *system)
+QString SystemRequirementsTest::getGPUOpenGLVersion(SystemInformation *system)
 {
     return system->getGPUOpenGLVersion();
 }
 
-QList<unsigned int> SystemRequerimentsTest::getGPURAM(SystemInformation *system)
+QList<unsigned int> SystemRequirementsTest::getGPURAM(SystemInformation *system)
 {
     return system->getGPURAM();
 }
 
-QStringList SystemRequerimentsTest::getGPUModel(SystemInformation *system)
+QStringList SystemRequirementsTest::getGPUModel(SystemInformation *system)
 {
     return system->getGPUModel();
 }
 
-unsigned int SystemRequerimentsTest::getHardDiskFreeSpace(SystemInformation *system, const QString &device)
+unsigned int SystemRequirementsTest::getHardDiskFreeSpace(SystemInformation *system, const QString &device)
 {
     return system->getHardDiskFreeSpace(device);
 }
 
-SystemInformation::OperatingSystem SystemRequerimentsTest::getOperatingSystem(SystemInformation *system)
+SystemInformation::OperatingSystem SystemRequirementsTest::getOperatingSystem(SystemInformation *system)
 {
     return system->getOperatingSystem();
 }
 
-QString SystemRequerimentsTest::getOperatingSystemVersion(SystemInformation *system)
+QString SystemRequirementsTest::getOperatingSystemVersion(SystemInformation *system)
 {
     return system->getOperatingSystemVersion();
 }
 
-QString SystemRequerimentsTest::getOperatingSystemServicePackVersion(SystemInformation *system)
+QString SystemRequirementsTest::getOperatingSystemServicePackVersion(SystemInformation *system)
 {
     return system->getOperatingSystemServicePackVersion();
 }
 
-bool SystemRequerimentsTest::isOperatingSystem64BitArchitecture(SystemInformation *system)
+bool SystemRequirementsTest::isOperatingSystem64BitArchitecture(SystemInformation *system)
 {
     return system->isOperatingSystem64BitArchitecture();
 }
 
-unsigned int SystemRequerimentsTest::getRAMTotalAmount(SystemInformation *system)
+unsigned int SystemRequirementsTest::getRAMTotalAmount(SystemInformation *system)
 {
     return system->getRAMTotalAmount();
 }
 
-QList<QSize> SystemRequerimentsTest::getScreenResolutions(SystemInformation *system)
+QList<QSize> SystemRequirementsTest::getScreenResolutions(SystemInformation *system)
 {
     return system->getScreenResolutions();
 }
 
-bool SystemRequerimentsTest::doesOpticalDriveHaveWriteCapabilities(SystemInformation *system)
+bool SystemRequirementsTest::doesOpticalDriveHaveWriteCapabilities(SystemInformation *system)
 {
     return system->doesOpticalDriveHaveWriteCapabilities();
 }
 
-SystemRequeriments* SystemRequerimentsTest::getSystemRequeriments()
+SystemRequirements* SystemRequirementsTest::getSystemRequirements()
 {
-    return new SystemRequeriments();
+    return new SystemRequirements();
 }
 
 }

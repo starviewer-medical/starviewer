@@ -13,11 +13,11 @@
  *************************************************************************************/
 
 // Starviewer
-#include "systemrequeriments.h"
+#include "systemrequirements.h"
 
 namespace udg {
 
-SystemRequeriments::SystemRequeriments()
+SystemRequirements::SystemRequirements()
 {
     m_minimumNumberOfCores = 4;
     m_minimumCoreSpeed = 2457; //2.4GHz
@@ -37,71 +37,71 @@ SystemRequeriments::SystemRequeriments()
     m_doesOpticalDriveNeedsToWrite = true;
 }
 
-SystemRequeriments::~SystemRequeriments()
+SystemRequirements::~SystemRequirements()
 {
 }
 
-unsigned int SystemRequeriments::getMinimumCPUNumberOfCores()
+unsigned int SystemRequirements::getMinimumCPUNumberOfCores()
 {
     return m_minimumNumberOfCores;
 }
 
-unsigned int SystemRequeriments::getMinimumCPUFrequency()
+unsigned int SystemRequirements::getMinimumCPUFrequency()
 {
     return m_minimumCoreSpeed;
 }
 
-QStringList SystemRequeriments::getMinimumGPUOpenGLCompatibilities()
+QStringList SystemRequirements::getMinimumGPUOpenGLCompatibilities()
 {
     return m_minimumOpenGLExtensions;
 }
 
-QString SystemRequeriments::getMinimumGPUOpenGLVersion()
+QString SystemRequirements::getMinimumGPUOpenGLVersion()
 {
     return m_minimumGPUOpenGLVersion;
 }
 
-unsigned int SystemRequeriments::getMinimumGPURAM()
+unsigned int SystemRequirements::getMinimumGPURAM()
 {
     return m_minimumGPURAM;
 }
 
-unsigned int SystemRequeriments::getMinimumHardDiskFreeSpace()
+unsigned int SystemRequirements::getMinimumHardDiskFreeSpace()
 {
     return m_minimumDiskSpace;
 }
 
-QString SystemRequeriments::getMinimumOperatingSystemVersion()
+QString SystemRequirements::getMinimumOperatingSystemVersion()
 {
     return m_minimumOSVersion;
 }
 
-unsigned int SystemRequeriments::getMinimum32bitOperatingSystemServicePackVersion()
+unsigned int SystemRequirements::getMinimum32bitOperatingSystemServicePackVersion()
 {
     return m_minimum32bitServicePackVersion;
 }
 
-unsigned int SystemRequeriments::getMinimum64bitOperatingSystemServicePackVersion()
+unsigned int SystemRequirements::getMinimum64bitOperatingSystemServicePackVersion()
 {
     return m_minimum64bitServicePackVersion;
 }
 
-bool SystemRequeriments::doesOperatingSystemNeedToBe64BitArchitecutre()
+bool SystemRequirements::doesOperatingSystemNeedToBe64BitArchitecutre()
 {
     return m_doesOperatingSystemNeedToBe64BitArchitecutre;
 }
 
-unsigned int SystemRequeriments::getMinimumRAMTotalAmount()
+unsigned int SystemRequirements::getMinimumRAMTotalAmount()
 {
     return m_minimumRAM;
 }
 
-unsigned int SystemRequeriments::getMinimumScreenWidth()
+unsigned int SystemRequirements::getMinimumScreenWidth()
 {
     return m_minimumScreenWidth;
 }
 
-bool SystemRequeriments::doesOpticalDriveNeedWriteCapabilities()
+bool SystemRequirements::doesOpticalDriveNeedWriteCapabilities()
 {
     return m_doesOpticalDriveNeedsToWrite;
 }

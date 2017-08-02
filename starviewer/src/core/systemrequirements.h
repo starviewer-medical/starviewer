@@ -12,8 +12,8 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGSYSTEMREQUERIMENTS_H
-#define UDGSYSTEMREQUERIMENTS_H
+#ifndef UDGSYSTEMREQUIREMENTS_H
+#define UDGSYSTEMREQUIREMENTS_H
 
 #include <QStringList>
 
@@ -22,10 +22,10 @@ namespace udg {
 /**
     Guarda els requeriments mínims i recomenats de Starviewer. Conté purament els mètodes per obtenir-los.
 */
-class SystemRequeriments {
+class SystemRequirements {
 public:
-    SystemRequeriments();
-    ~SystemRequeriments();
+    SystemRequirements();
+    ~SystemRequirements();
 
     virtual unsigned int getMinimumCPUNumberOfCores();
     virtual unsigned int getMinimumCPUFrequency();

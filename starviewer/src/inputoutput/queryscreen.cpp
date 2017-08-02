@@ -53,7 +53,7 @@ QueryScreen::QueryScreen(QWidget *parent)
     // Connectem signals i slots
     createConnections();
     // Fa les comprovacions necessaries per poder executar la QueryScreen de forma correcte
-    checkRequeriments();
+    checkRequirements();
 
     readSettings();
     // Fem que per defecte mostri els estudis de la cache
@@ -189,7 +189,7 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveCancelled(QString)), SLOT(studyRetrieveCancelledSlot(QString)));
 }
 
-void QueryScreen::checkRequeriments()
+void QueryScreen::checkRequirements()
 {
     // Comprova que la base de dades d'imatges estigui consistent, comprovant que no haguessin quedat estudis a mig descarregar l'última
     // vegada que es va tancar l'starviewer, i si és així esborra les imatges i deixa la base de dades en un estat consistent

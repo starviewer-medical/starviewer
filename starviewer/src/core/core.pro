@@ -301,8 +301,6 @@ HEADERS += extensionfactory.h \
     applicationversiontest.h \
     imageoverlayregionfinder.h \
     systeminformation.h \
-    systemrequeriments.h \
-    systemrequerimentstest.h \
     magnifyingglasstool.h \
     qdiagnosistest.h \
     rundiagnosistest.h \
@@ -435,7 +433,9 @@ HEADERS += extensionfactory.h \
     phasefilter.h \
     vtkimagereslicemapper2.h \
     sliceorientedvolumepixeldata.h \
-    voxelindex.h
+    voxelindex.h \
+    systemrequirements.h \
+    systemrequirementstest.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -689,8 +689,6 @@ SOURCES += extensionmediator.cpp \
     applicationversiontest.cpp \
     imageoverlayregionfinder.cpp \
     systeminformation.cpp \
-    systemrequeriments.cpp \
-    systemrequerimentstest.cpp \
     magnifyingglasstool.cpp \
     qdiagnosistest.cpp \
     rundiagnosistest.cpp \
@@ -819,7 +817,9 @@ SOURCES += extensionmediator.cpp \
     phasefilter.cpp \
     vtkimagereslicemapper2.cpp \
     sliceorientedvolumepixeldata.cpp \
-    voxelindex.cpp
+    voxelindex.cpp \
+    systemrequirements.cpp \
+    systemrequirementstest.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

@@ -168,7 +168,7 @@ private:
     DicomMask buildDicomMask();
 
     /// Comprova els requeriments necessaris per poder utilitzar la QueryScreen
-    void checkRequeriments();
+    void checkRequirements();
 
     /// Es comprova la integritat de la base de dades i les imatges, comprovant que la última vegada l'starviewer
     /// no s'hagués tancat amb un estudi a mig baixar, i si és així esborra l'estudi a mig descarregar i deixa la base de dades en un estat integre

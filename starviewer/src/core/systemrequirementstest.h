@@ -12,8 +12,8 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGSYSTEMREQUERIMENTSTEST_H
-#define UDGSYSTEMREQUERIMENTSTEST_H
+#ifndef UDGSYSTEMREQUIREMENTSTEST_H
+#define UDGSYSTEMREQUIREMENTSTEST_H
 
 #include "diagnosistest.h"
 #include "diagnosistestresult.h"
@@ -25,16 +25,16 @@ class QSize;
 
 namespace udg {
 
-class SystemRequeriments;
+class SystemRequirements;
 
 /**
     Test de diagnosis de l'aplicació que comprova si el sistema compleix els requeriments mínims per que Starviewer funcioni correctament.
 */
-class SystemRequerimentsTest : public DiagnosisTest {
+class SystemRequirementsTest : public DiagnosisTest {
 Q_OBJECT
 public:
-    SystemRequerimentsTest(QObject *parent = 0);
-    ~SystemRequerimentsTest();
+    SystemRequirementsTest(QObject *parent = 0);
+    ~SystemRequirementsTest();
 
     DiagnosisTestResult run();
 
@@ -62,10 +62,10 @@ protected:
     virtual QList<QSize> getScreenResolutions(SystemInformation *system);
     virtual bool doesOpticalDriveHaveWriteCapabilities(SystemInformation *system);
 
-    virtual SystemRequeriments* getSystemRequeriments();
+    virtual SystemRequirements* getSystemRequirements();
 };
 
-static DiagnosisTestFactoryRegister<SystemRequerimentsTest> registerSystemRequerimentsTest("SystemRequerimentsTest");
+static DiagnosisTestFactoryRegister<SystemRequirementsTest> registerSystemRequirementsTest("SystemRequirementsTest");
 
 }
 
