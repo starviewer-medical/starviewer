@@ -66,6 +66,12 @@ private:
     /// Returns true if the connection is open and false otherwise.
     bool isConnected();
 
+    // Disable copy and move
+    DatabaseConnection(const DatabaseConnection&) = delete;
+    DatabaseConnection(DatabaseConnection&&) = delete;
+    DatabaseConnection& operator =(const DatabaseConnection&) = delete;
+    DatabaseConnection&& operator =(DatabaseConnection&&) = delete;
+
 private:
     /// Path to the database file.
     QString m_databasePath;
