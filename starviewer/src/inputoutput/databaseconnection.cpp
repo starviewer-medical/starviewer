@@ -24,7 +24,11 @@ namespace udg {
 
 DatabaseConnection::DatabaseConnection()
 {
+    static const QString ConnectionNamePrefix = "starviewer";
+    static QAtomicInt connectionNumber = 0;
+
     m_databasePath = LocalDatabaseManager::getDatabaseFilePath();
+    m_connectionName = ConnectionNamePrefix + connectionNumber++;
 }
 
 DatabaseConnection::~DatabaseConnection()
@@ -44,7 +48,7 @@ QSqlDatabase DatabaseConnection::getConnection()
         open();
     }
 
-    return QSqlDatabase::database();
+    return QSqlDatabase::database(m_connectionName);
 }
 
 QSqlError DatabaseConnection::getLastError()
@@ -83,7 +87,7 @@ void DatabaseConnection::open()
         return;
     }
 
-    QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE");
+    QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
     database.setDatabaseName(m_databasePath);
     database.setConnectOptions("QSQLITE_BUSY_TIMEOUT=15000");
 
@@ -97,21 +101,13 @@ void DatabaseConnection::close()
 {
     if (isConnected())
     {
-        QString name;
-
-        {
-            QSqlDatabase database = QSqlDatabase::database();
-            name = database.connectionName();
-            database.close();
-        }
-
-        QSqlDatabase::removeDatabase(name);
+        QSqlDatabase::removeDatabase(m_connectionName);
     }
 }
 
 bool DatabaseConnection::isConnected()
 {
-    return QSqlDatabase::database().isOpen();
+    return QSqlDatabase::database(m_connectionName).isOpen();
 }
 
 }

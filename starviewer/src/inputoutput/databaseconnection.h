@@ -66,9 +66,17 @@ private:
     /// Returns true if the connection is open and false otherwise.
     bool isConnected();
 
+    // Disable copy and move
+    DatabaseConnection(const DatabaseConnection&) = delete;
+    DatabaseConnection(DatabaseConnection&&) = delete;
+    DatabaseConnection& operator =(const DatabaseConnection&) = delete;
+    DatabaseConnection&& operator =(DatabaseConnection&&) = delete;
+
 private:
     /// Path to the database file.
     QString m_databasePath;
+    /// Auto-generated connection name, different for each instance.
+    QString m_connectionName;
 
     /// SQLite doesn't support simultaneous transactions with the same connection, thus a mutex is needed for transactions.
     QMutex m_mutex;
