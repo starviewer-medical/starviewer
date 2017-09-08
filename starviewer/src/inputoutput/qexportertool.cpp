@@ -137,8 +137,6 @@ void QExporterTool::generateAndStoreNewSeries()
     progress.setValue(0);
     qApp->processEvents();
 
-    m_viewer->getRenderWindow()->OffScreenRenderingOn();
-
     if (m_currentImageRadioButton->isChecked())
     {
         // Capturem la vista
@@ -215,8 +213,6 @@ void QExporterTool::generateAndStoreNewSeries()
         DEBUG_LOG(QString("Radio Button no identificat!"));
         return;
     }
-
-    m_viewer->getRenderWindow()->OffScreenRenderingOff();
 
     builder->setSeriesDescription(m_seriesDescription->text());
 
@@ -353,8 +349,6 @@ void QExporterTool::generate2DPreview(int slice, int phase)
     int currentSlice = viewer2D->getCurrentSlice();
     int currentPhase = viewer2D->getCurrentPhase();
 
-    m_viewer->getRenderWindow()->OffScreenRenderingOn();
-
     // Assignem la llesca i la fase
     viewer2D->setSlice(slice);
     viewer2D->setPhase(phase);
@@ -364,17 +358,11 @@ void QExporterTool::generate2DPreview(int slice, int phase)
     // Restaurem
     viewer2D->setSlice(currentSlice);
     viewer2D->setPhase(currentPhase);
-
-    m_viewer->getRenderWindow()->OffScreenRenderingOff();
 }
 
 void QExporterTool::generateCurrentPreview()
 {
-    m_viewer->getRenderWindow()->OffScreenRenderingOn();
-
     this->generatePreview();
-
-    m_viewer->getRenderWindow()->OffScreenRenderingOff();
 }
 
 void QExporterTool::generatePreview()
