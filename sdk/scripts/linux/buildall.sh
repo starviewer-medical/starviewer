@@ -25,9 +25,9 @@ download_and_verify()
 
 mkdir -p "${DOWNLOAD_PREFIX}"
 
-download_and_verify 1fa2df848a25b900c87c7f7b98a34e3869b6ce9699fae0afd73a2da0f572bb89 \
-                    'qt-opensource-linux-x64-5.6.0.run' \
-                    'https://download.qt.io/official_releases/qt/5.6/5.6.0/qt-opensource-linux-x64-5.6.0.run'
+download_and_verify f1fbd6b7ee067f6af6412d16c33c5478aed230c655c888d9cc7b1037f8048ec5 \
+                    'qt-opensource-linux-x64-5.6.3.run' \
+                    'https://download.qt.io/official_releases/qt/5.6/5.6.0/qt-opensource-linux-x64-5.6.3.run'
 
 download_and_verify 09a97e82cf43672a4b16b162651f5bc0d86b9d7b8cfff58c345e5c97d6200937 \
                     'dcmtk-3.6.1_20120515.tar.gz' \
@@ -54,9 +54,9 @@ download_and_verify c15818ec6e6320bea79a0d44e29cb4fc19a0e0d428cccb979d6c3104ec65
                     'http://download.kde.org/Attic/frameworks/5.3.0/threadweaver-5.3.0.tar.xz'
 
 
-chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.0.run"
+chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.3.run"
 echo "Please install Qt on ${INSTALL_QTDIR}"
-"${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.0.run"
+"${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.3.run"
 
 # Building SDK
 

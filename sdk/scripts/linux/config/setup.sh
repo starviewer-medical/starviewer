@@ -12,10 +12,10 @@ DOWNLOAD_PREFIX=~/uroot/downloads
 SDK_INSTALL_PREFIX=~/uroot/usr/local
 
 # Only used to tell the user where to install Qt on buildall.sh
-INSTALL_QTDIR=$SDK_INSTALL_PREFIX/lib/Qt5.6.0
+INSTALL_QTDIR=$SDK_INSTALL_PREFIX/lib/Qt5.6.3
 
 # If you use a local Qt installaton, the path where it is installed
-QTDIR=$INSTALL_QTDIR/5.6/gcc_64
+QTDIR=$INSTALL_QTDIR/5.6.3/gcc_64
 
 # Starviewer source code location
 STARVIEWER_SOURCE_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer
