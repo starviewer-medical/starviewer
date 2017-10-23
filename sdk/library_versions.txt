@@ -4,7 +4,7 @@ Library Versions
 Per saber si al compilar una llibreria cal aplicar-li patches cal mirar si existeix un directori sdk/patches/[nomLlibreria].
 Si existeix vol dir que cal aplicar tots els patch que hi hagi en aquest directori. Si no, no s'ha d'aplicar cap patch.
 
-- Qt 5.6.0
+- Qt 5.6.3
 - DCMTK 3.6.1-20120515
 - ITK 4.10.0
 - VTK 7.0.0
