@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=0.14-devel
+Type=Application
+Name=Starviewer
+Comment=Medical DICOM image viewer.
+Exec=starviewer
+Icon=/opt/starviewer/starviewer.png
+Categories=Graphics;Science;Biology;Medical;
+

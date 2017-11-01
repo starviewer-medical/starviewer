@@ -1,0 +1,9 @@
+Package: starviewer
+Version: 0.14.0-unstable
+Section: medical
+Priority: optional
+Architecture: amd64
+Depends:
+Installed-Size: 7874
+Maintainer: Starviewer Team <suport@starviewer.udg.edu>
+Description: DICOM medical viewer with advanced features. 

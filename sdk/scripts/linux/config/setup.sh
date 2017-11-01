@@ -29,6 +29,12 @@ STARVIEWER_BUILD_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-build
 # Location of SDK sources to build
 SOURCE_DIR_BASE=$SDK_INSTALL_PREFIX/src
 
+# Temporary directory for package creation
+DPKG_TMP=/tmp/starviewer-dpkg
+
+# Where to place the packages
+DPKG_DESTINATION=$SCRIPTS_ROOT/../../../
+
 # Location of the pathes to apply on SDK libraries
 PATCHES_ROOT=$SCRIPTS_ROOT/../../patches
 
@@ -42,10 +48,10 @@ CMAKE_CPP11='-DCMAKE_CXX_STANDARD:STRING=11 -DCMAKE_CXX_STANDARD_REQUIRED:BOOL=O
 #CMAKE_COMPILER='-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang'
 
 # Verbose compilation: Uncomment to output the compiler calls.
-#MAKE_VERBOSE='VERBOSE=yes'
+MAKE_VERBOSE='VERBOSE=yes'
 
 # Number of simultaneous make jobs (-j8)
-MAKE_CONCURRENCY=8
+MAKE_CONCURRENCY=4
 
 # Because SDK libraries binares are not on a standard location.
 # This environment variable has to be set when starting starviewer binary or

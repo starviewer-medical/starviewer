@@ -30,7 +30,7 @@ Getting started: the quick way
     environment.sh file (created at starviewer source directory) and follow the
     instructions of the section 'Setting up QtCreator'.
 
-5.  Run Starviewer.
+5.  Run Starviewer or install the generated .deb package.
 
 Running Starviewer
 ------------------
