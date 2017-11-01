@@ -11,6 +11,9 @@ DOWNLOAD_PREFIX=~/uroot/downloads
 # Where to install the SDK libraries once compiled
 SDK_INSTALL_PREFIX=~/uroot/usr/local
 
+# Where to write the SDK environment configuration script.
+SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../environment.sh
+
 # Only used to tell the user where to install Qt on buildall.sh
 INSTALL_QTDIR=$SDK_INSTALL_PREFIX/lib/Qt5.6.3
 
@@ -19,6 +22,9 @@ QTDIR=$INSTALL_QTDIR/5.6.3/gcc_64
 
 # Starviewer source code location
 STARVIEWER_SOURCE_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer
+
+# Starviwer shadow build directory
+STARVIEWER_BUILD_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-build
 
 # Location of SDK sources to build
 SOURCE_DIR_BASE=$SDK_INSTALL_PREFIX/src

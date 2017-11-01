@@ -17,7 +17,7 @@ will become a system wide setup.
 Getting started: the quick way
 ------------------------------
 
-1.  Use the script 'buildall.sh' located at (starviewer/sdk/scripts/linux) to
+1.  Use the script 'all.sh' located at (starviewer/sdk/scripts/linux) to
     do the explained steps automatically. Remember to install Qt on the proper
     location (the script will tell you).
 
@@ -26,8 +26,9 @@ Getting started: the quick way
 3.  Install dependencies if necessary (see 'system dependencies') section.
 
 4.  Once the SDK is compiled it will build Starviewer, however you may want to
-    set up the QtCreator IDE. Then copy the environment variables and follow
-    the instructions of the section 'Setting up QtCreator'.
+    set up the QtCreator IDE. Then copy the environment variables written on
+    environment.sh file (created at starviewer source directory) and follow the
+    instructions of the section 'Setting up QtCreator'.
 
 5.  Run Starviewer.
 
@@ -188,7 +189,10 @@ Edit the 'starviewer/sdk/scripts/linux/config/setup.sh'
 
 ### Building the SDK
 
-Run the following script: 'starviewer/sdk/scripts/linux/build.sh'
+Run the following scripts: 
+    1. starviewer/sdk/scripts/linux/sdk_download.sh
+    2. starviewer/sdk/scripts/linux/sdk_extract.sh
+    3. starviewer/sdk/scripts/linux/sdk_build.sh
 
 ### Saving the environment variables
 
