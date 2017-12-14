@@ -15,6 +15,7 @@
 #include "qexampleextension.h"
 
 #include "patient.h"
+#include "toolmanager.h"
 
 namespace udg {
 
@@ -22,6 +23,22 @@ QExampleExtension::QExampleExtension(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
+
+    ToolManager *toolManager2D = new ToolManager(this);
+    toolManager2D->registerTool("ZoomTool");            // left button
+    toolManager2D->registerTool("TranslateTool");       // middle button
+    toolManager2D->registerTool("WindowLevelTool");     // right button
+    toolManager2D->registerTool("SlicingKeyboardTool"); // keyboard
+    toolManager2D->registerTool("SlicingWheelTool");    // wheel
+    toolManager2D->setupRegisteredTools(m_2DViewer->getViewer());
+    toolManager2D->triggerTools({"ZoomTool", "TranslateTool", "WindowLevelTool", "SlicingKeyboardTool", "SlicingWheelTool"});
+
+    ToolManager *toolManager3D = new ToolManager(this);
+    toolManager3D->registerTool("ZoomTool");        // left button
+    toolManager3D->registerTool("TranslateTool");   // middle button
+    toolManager3D->registerTool("Rotate3DTool");    // right button
+    toolManager3D->setupRegisteredTools(m_3DViewer);
+    toolManager3D->triggerTools({"ZoomTool", "TranslateTool", "Rotate3DTool"});
 }
 
 void QExampleExtension::setPatient(Patient *patient)
