@@ -14,12 +14,25 @@
 
 #include "qexampleextension.h"
 
+#include "patient.h"
+
 namespace udg {
 
 QExampleExtension::QExampleExtension(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
+}
+
+void QExampleExtension::setPatient(Patient *patient)
+{
+    if (patient->getNumberOfVolumes() == 0)
+    {
+        return;
+    }
+
+    m_2DViewer->setInputAsynchronously(patient->getVolumesList().first());
+    m_3DViewer->setInput(patient->getVolumesList().first());
 }
 
 } // namespace udg

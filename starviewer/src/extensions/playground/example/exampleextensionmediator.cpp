@@ -14,6 +14,8 @@
 
 #include "exampleextensionmediator.h"
 
+#include "extensioncontext.h"
+
 namespace udg {
 
 ExampleExtensionMediator::ExampleExtensionMediator(QObject *parent)
@@ -30,7 +32,7 @@ bool ExampleExtensionMediator::initializeExtension(QWidget *extension, const Ext
         return false;
     }
 
-    //exampleExtension->setPatient(extensionContext.getPatient());
+    exampleExtension->setPatient(extensionContext.getPatient());
 
     return true;
 }

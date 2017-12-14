@@ -13,20 +13,29 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>120</y>
-     <width>56</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Example</string>
-   </property>
-  </widget>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="udg::Q2DViewerWidget" name="m_2DViewer" native="true"/>
+   </item>
+   <item>
+    <widget class="udg::Q3DViewer" name="m_3DViewer" native="true"/>
+   </item>
+  </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>udg::Q2DViewerWidget</class>
+   <extends>QWidget</extends>
+   <header>q2dviewerwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>udg::Q3DViewer</class>
+   <extends>QWidget</extends>
+   <header>q3dviewer.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

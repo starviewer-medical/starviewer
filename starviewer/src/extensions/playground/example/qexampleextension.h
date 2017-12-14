@@ -20,6 +20,8 @@
 
 namespace udg {
 
+class Patient;
+
 class QExampleExtension : public QWidget, private ::Ui::QExampleExtensionBase
 {
 
@@ -28,6 +30,8 @@ class QExampleExtension : public QWidget, private ::Ui::QExampleExtensionBase
 public:
 
     explicit QExampleExtension(QWidget *parent = nullptr);
+
+    void setPatient(Patient *patient);
 
 };
 
