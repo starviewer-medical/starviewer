@@ -8,7 +8,8 @@ SUBDIRS += diffusionperfusionsegmentation \
            angiosubstraction \
            perfusionmapreconstruction \
            rectumsegmentation \
-           experimental3d
+           experimental3d \
+           example
 include(../../extensions.pri)
 TEMPLATE = subdirs
 include(../../compilationtype.pri)
