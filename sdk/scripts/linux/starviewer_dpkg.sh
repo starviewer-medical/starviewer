@@ -23,25 +23,25 @@ cp $STARVIEWER_BUILD_DIR_BASE/bin/starviewer_sapwrapper $DPKG_TMP/data/opt/starv
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$STARVIEWER_BUILD_DIR_BASE/bin/
 export LD_LIBRARY_PATH
 
-cp -Rd $QTDIR/libexec $DPKG_TMP/data/opt/starviewer/
-cp -Rd $QTDIR/plugins $DPKG_TMP/data/opt/starviewer/
-cp -Rd $QTDIR/qml $DPKG_TMP/data/opt/starviewer/
+#cp -Rd $QTDIR/libexec $DPKG_TMP/data/opt/starviewer/
+#cp -Rd $QTDIR/plugins $DPKG_TMP/data/opt/starviewer/
+#cp -Rd $QTDIR/qml $DPKG_TMP/data/opt/starviewer/
 
 ldd \
 $STARVIEWER_BUILD_DIR_BASE/bin/starviewer \
 $STARVIEWER_BUILD_DIR_BASE/bin/starviewer_sapwrapper \
 $STARVIEWER_BUILD_DIR_BASE/bin/starviewer_crashreporter \
-| grep -e $STARVIEWER_BUILD_DIR_BASE/bin/ -e $QTDIR/lib -e $SDK_INSTALL_PREFIX/lib \
+| grep -e $STARVIEWER_BUILD_DIR_BASE/bin/ -e $SDK_INSTALL_PREFIX/lib \
 | awk '{print $3}' \
 > $DPKG_TMP/deps
 
-ldd \
-$QTDIR/libexec/* \
-$QTDIR/plugins/*/*.so* \
-$QTDIR/qml/*/*.so* \
-| grep -e $QTDIR/lib \
-| awk '{print $3}' \
->> $DPKG_TMP/deps
+#ldd \
+#$QTDIR/libexec/* \
+#$QTDIR/plugins/*/*.so* \
+#$QTDIR/qml/*/*.so* \
+#| grep -e $QTDIR/lib \
+#| awk '{print $3}' \
+#>> $DPKG_TMP/deps
 
 # Delete empty lines
 grep -v '^$' $DPKG_TMP/deps > $DPKG_TMP/deps_noempty

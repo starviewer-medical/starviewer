@@ -10,9 +10,14 @@ then
     CMAKE_BUILD_TYPE=Debug
     BUILD_DIR=$SOURCE_DIR-build-debug
 fi
-if [ $BUILD_TYPE = release ]
+if [ $BUILD_TYPE = releasewithdebinfo ]
 then
     CMAKE_BUILD_TYPE=RelWithDebInfo
+    BUILD_DIR=$SOURCE_DIR-build-releasewithdebinfo
+fi
+if [ $BUILD_TYPE = release ]
+then
+    CMAKE_BUILD_TYPE=Release
     BUILD_DIR=$SOURCE_DIR-build-release
 fi
 
@@ -20,7 +25,6 @@ fi
 
 CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
                -DCMAKE_INSTALL_PREFIX:PATH=$SDK_INSTALL_PREFIX \
-               -DCMAKE_PREFIX_PATH:PATH=$QTDIR \
                -DGDCM_BUILD_SHARED_LIBS:BOOL=TRUE \
                -DGDCM_USE_VTK:BOOL=TRUE \
                -DVTK_DIR:PATH=$VTKCMAKEDIR"

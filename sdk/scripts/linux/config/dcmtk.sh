@@ -7,9 +7,14 @@ then
     CMAKE_BUILD_TYPE=Debug
     BUILD_DIR=$SOURCE_DIR-build-debug
 fi
-if [ $BUILD_TYPE = release ]
+if [ $BUILD_TYPE = releasewithdebinfo ]
 then
     CMAKE_BUILD_TYPE=RelWithDebInfo
+    BUILD_DIR=$SOURCE_DIR-build-releasewithdebinfo
+fi
+if [ $BUILD_TYPE = release ]
+then
+    CMAKE_BUILD_TYPE=Release
     BUILD_DIR=$SOURCE_DIR-build-release
 fi
 
@@ -17,7 +22,6 @@ fi
 
 CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
                -DCMAKE_INSTALL_PREFIX:PATH=$SDK_INSTALL_PREFIX \
-               -DCMAKE_PREFIX_PATH:PATH=$QTDIR \
                -DDCMTK_WITH_PRIVATE_TAGS:BOOL=TRUE \
                -DDCMTK_WITH_ZLIB:BOOL=TRUE \
                -DDCMTK_WITH_SNDFILE:BOOL=FALSE \

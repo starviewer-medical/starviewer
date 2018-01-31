@@ -20,9 +20,9 @@ download_and_verify()
 
 mkdir -p "${DOWNLOAD_PREFIX}"
 
-download_and_verify f1fbd6b7ee067f6af6412d16c33c5478aed230c655c888d9cc7b1037f8048ec5 \
-                    'qt-opensource-linux-x64-5.6.3.run' \
-                    'https://download.qt.io/official_releases/qt/5.6/5.6.0/qt-opensource-linux-x64-5.6.3.run'
+#download_and_verify f1fbd6b7ee067f6af6412d16c33c5478aed230c655c888d9cc7b1037f8048ec5 \
+#                   'qt-opensource-linux-x64-5.6.3.run' \
+#                    'https://download.qt.io/official_releases/qt/5.6/5.6.0/qt-opensource-linux-x64-5.6.3.run'
 
 download_and_verify 09a97e82cf43672a4b16b162651f5bc0d86b9d7b8cfff58c345e5c97d6200937 \
                     'dcmtk-3.6.1_20120515.tar.gz' \

@@ -9,6 +9,6 @@ export LD_LIBRARY_PATH
 
 mkdir -p $STARVIEWER_BUILD_DIR_BASE
 cd $STARVIEWER_BUILD_DIR_BASE
-$QTDIR/bin/qmake $STARVIEWER_SOURCE_DIR_BASE/starviewer.pro -r -spec linux-g++
+qmake $STARVIEWER_SOURCE_DIR_BASE/starviewer.pro -r -spec linux-g++ CONFIG+=official_release DEFINES+=BETA_VERSION
 make -j$MAKE_CONCURRENCY $MAKE_VERBOSE
 

@@ -2,9 +2,9 @@
 SCRIPTS_ROOT=$(readlink -f $(dirname $BASH_SOURCE))
 . $SCRIPTS_ROOT/config/setup.sh
 
-chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.3.run"
-echo "Please install Qt on ${INSTALL_QTDIR}"
-"${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.3.run"
+#chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.3.run"
+#echo "Please install Qt on ${INSTALL_QTDIR}"
+#"${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.3.run"
 
 # Building SDK
 
