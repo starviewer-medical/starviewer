@@ -51,7 +51,6 @@ DUMMY = $$addLibraryDependency($$PWD/../thirdparty, $$OUT_PWD/../thirdparty, bre
 
 include(../corelibsconfiguration.pri)
 include(../thirdparty/qtsingleapplication/src/qtsingleapplication.pri)
-include(../breakpad.pri)
 
 include(installextensions.pri)
 

@@ -1,3 +1,0 @@
-macx {
-    LIBS += -lcrypto
-}

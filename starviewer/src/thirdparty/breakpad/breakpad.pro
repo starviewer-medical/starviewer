@@ -23,8 +23,6 @@ UI_DIR = ../../../tmp/ui
 MOC_DIR = ../../../tmp/moc
 RCC_DIR = ../../../tmp/rcc
 
-include(../../breakpad.pri)
-
 HEADERS += common/scoped_ptr.h
 
 unix {
