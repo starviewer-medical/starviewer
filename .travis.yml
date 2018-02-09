@@ -34,7 +34,7 @@ before_install:
       brew update > /dev/null                                                                        &&
       cd $(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-core/Formula                       &&
       echo "Install Qt 5.6."                                                                         &&
-      wget -O qt5.rb https://raw.githubusercontent.com/Homebrew/homebrew-core/89a9d5e/Formula/qt5.rb &&
+      wget -O qt5.rb https://raw.githubusercontent.com/Homebrew/homebrew-core/fdfc724/Formula/qt5.rb &&
       cd -                                                                                           &&
       brew install qt5                                                                               &&
       chmod -R 755 /usr/local/opt/qt5/*                                                              ;
