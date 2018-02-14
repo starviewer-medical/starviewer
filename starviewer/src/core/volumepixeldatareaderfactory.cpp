@@ -18,7 +18,6 @@
 #include "pixelspacingamenderpostprocessor.h"
 #include "coresettings.h"
 #include "image.h"
-#include "itkgdcmbydefaultvolumepixeldatareaderselector.h"
 #include "logging.h"
 #include "series.h"
 #include "volume.h"
@@ -97,17 +96,7 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
     if (!mustForceReaderLibraryBackdoor(volume, readerType))
     {
         // If the reader type is not forced by settings, use the selector
-        VolumePixelDataReaderSelector *selector;
-
-        if (settings->getValue(CoreSettings::UseItkGdcmImageReaderByDefault).toBool())
-        {
-            selector = new ItkGdcmByDefaultVolumePixelDataReaderSelector();
-        }
-        else
-        {
-            selector = new VtkDcmtkByDefaultVolumePixelDataReaderSelector();
-        }
-
+        VolumePixelDataReaderSelector *selector = new VtkDcmtkByDefaultVolumePixelDataReaderSelector();
         readerType = selector->selectVolumePixelDataReader(volume);
         delete selector;
     }

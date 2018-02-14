@@ -64,9 +64,6 @@ public:
     static const QString ForceITKImageReaderForSpecifiedModalities;
     static const QString ForceVTKImageReaderForSpecifiedModalities;
 
-    /// If true, the ITK-GDCM image reader will be the default, instead of the new VTK-DCMTK.
-    static const QString UseItkGdcmImageReaderByDefault;
-
     /// La última versió comprobada de les Release Notes
     static const QString LastReleaseNotesVersionShown;
 

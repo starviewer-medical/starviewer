@@ -132,14 +132,6 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
         QTest::newRow("modality-force itk has precedence over modality-force vtk -> ITK-GDCM")
             << volume << testingSettings << QString(typeid(VolumePixelDataReaderITKGDCM).name());
     }
-
-    {
-        Volume *volume = VolumeTestHelper::createVolume(2);
-        TestingSettings testingSettings;
-        testingSettings.setValue(CoreSettings::UseItkGdcmImageReaderByDefault, "true");
-        QTest::newRow("use old (itk-gdcm by default) selector -> ITK-GDCM")
-            << volume << testingSettings << QString(typeid(VolumePixelDataReaderITKGDCM).name());
-    }
 }
 
 void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType()
