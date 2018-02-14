@@ -365,8 +365,6 @@ HEADERS += extensionfactory.h \
     syncactionsconfigurationhandler.h \
     syncactionmanager.h \
     viewerslayouttosyncactionmanageradapter.h \
-    volumepixeldatareaderselector.h \
-    vtkdcmtkbydefaultvolumepixeldatareaderselector.h \
     settingsinterface.h \
     orthogonalplane.h \
     filter.h \
@@ -750,7 +748,6 @@ SOURCES += extensionmediator.cpp \
     syncactionsconfigurationhandler.cpp \
     syncactionmanager.cpp \
     viewerslayouttosyncactionmanageradapter.cpp \
-    vtkdcmtkbydefaultvolumepixeldatareaderselector.cpp \
     orthogonalplane.cpp \
     filter.cpp \
     filteroutput.cpp \

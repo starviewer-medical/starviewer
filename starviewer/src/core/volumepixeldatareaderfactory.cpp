@@ -15,6 +15,7 @@
 #include "volumepixeldatareaderfactory.h"
 
 #include "computezspacingpostprocessor.h"
+#include "dicomtagreader.h"
 #include "pixelspacingamenderpostprocessor.h"
 #include "coresettings.h"
 #include "image.h"
@@ -23,13 +24,49 @@
 #include "volume.h"
 #include "volumepixeldatareaderitkdcmtk.h"
 #include "volumepixeldatareaderitkgdcm.h"
-#include "vtkdcmtkbydefaultvolumepixeldatareaderselector.h"
 #include "volumepixeldatareadervtkdcmtk.h"
 #include "volumepixeldatareadervtkgdcm.h"
 
 #include <QList>
 
 namespace udg {
+
+namespace {
+
+// Returns true if the volume contains at least one image with a JPEG2000 transfer syntax.
+bool hasJPEG2000TransferSyntax(const Volume *volume)
+{
+    const QString JPEG2000LosslessOnlyTransferSyntax = "1.2.840.10008.1.2.4.90";
+    const QString JPEG2000TransferSyntax = "1.2.840.10008.1.2.4.91";
+
+    foreach (Image *image, volume->getImages())
+    {
+        if (image->getTransferSyntaxUID() == JPEG2000LosslessOnlyTransferSyntax || image->getTransferSyntaxUID() == JPEG2000TransferSyntax)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// Returns true if the images in the volume have a segmented palette attribute.
+// For speed reasons, it just checks for the presence of the segmented red palette in the first image.
+bool hasSegmentedPalette(const Volume *volume)
+{
+    // We only need to check for the tag if the photometric interpretion is palette color
+    if (volume->getImage(0)->getPhotometricInterpretation() == PhotometricInterpretation::Palette_Color)
+    {
+        DICOMTagReader tagReader(volume->getImage(0)->getPath());
+        return tagReader.tagExists(DICOMSegmentedRedPaletteColorLookupTableData);
+    }
+    else
+    {
+        return false;
+    }
+}
+
+}
 
 void VolumePixelDataReaderFactory::setVolume(Volume *volume)
 {
@@ -95,10 +132,22 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
     // This is intended as a kind of backdoor to be able to provide a workaround in case there is a bug with the usually chosen reader
     if (!mustForceReaderLibraryBackdoor(volume, readerType))
     {
-        // If the reader type is not forced by settings, use the selector
-        VolumePixelDataReaderSelector *selector = new VtkDcmtkByDefaultVolumePixelDataReaderSelector();
-        readerType = selector->selectVolumePixelDataReader(volume);
-        delete selector;
+        // If the reader type is not forced by settings, decide
+        if (volume->getImage(0)->getSOPInstanceUID().contains("MHDImage"))
+        {
+            // MetaImages currently must be read with ITK-GDCM
+            return VolumePixelDataReaderFactory::ITKGDCMPixelDataReader;
+        }
+        else if (hasJPEG2000TransferSyntax(volume) || hasSegmentedPalette(volume))
+        {
+            // DCMTK doesn't support JPEG2000 for free, and doesn't support segmented palettes either
+            return VolumePixelDataReaderFactory::VTKGDCMPixelDataReader;
+        }
+        else
+        {
+            // Read with VTK-DCMTK by default
+            return VolumePixelDataReaderFactory::VTKDCMTKPixelDataReader;
+        }
     }
 
     return readerType;
