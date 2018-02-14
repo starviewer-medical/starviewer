@@ -27,7 +27,7 @@ class PatientFillerInput;
 class PatientFillerStep;
 
 /**
- * @brief The PatientFiller class generates patients, studies, series, images and volumes from a list of DICOM or MHD files.
+ * @brief The PatientFiller class generates patients, studies, series, images and volumes from a list of DICOM or non-DICOM files.
  *
  * Files can be given to it one by one (e.g. as they arrive from PACS) in processDICOMFile() and then call finishDICOMFilesProcess() after the last file.
  * Alternatively, files can be given to it all at once (e.g. when reading fils from a directory) in processFiles().
@@ -48,7 +48,7 @@ public slots:
 
     /// Executes the second stage steps with all the images generated in the first stage and then executes the post-processing.
     /// Emits the patientProcessed() signal at the end.
-    void finishDICOMFilesProcess();
+    void finishFilesProcessing();
 
     /// Processes the given files executing both stages and post-processing. Returns the generated patients.
     QList<Patient*> processFiles(const QStringList &files);
@@ -62,16 +62,16 @@ signals:
     void patientProcessed(Patient *patient);
 
 private:
-    /// Creates the steps of the patient filler.
+    /// Creates the steps of the patient filler. Different steps are created for DICOM vs non-DICOM files.
     void createSteps();
 
-    /// Processes the given MHD files and returns the generated patients.
-    QList<Patient*> processMHDFiles(const QStringList &files);
-
-    /// Processes the given DICOM files and returns the generated patients.
-    QList<Patient*> processDICOMFiles(const QStringList &files);
+    /// Applies the first stage steps to the current file in the patient filler input.
+    void processCurrentFile();
 
 private:
+    /// If true, all files will be considered as DICOM, otherwise as non-DICOM.
+    bool m_dicomMode;
+
     /// Steps that are executed in the first stage of processing.
     QList<PatientFillerStep*> m_firstStageSteps;
     /// Steps that are executed in the second stage of processing.

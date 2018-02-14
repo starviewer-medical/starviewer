@@ -33,30 +33,19 @@ namespace udg {
 
 namespace {
 
-// Returns true if the list contains MHD files and false otherwise. Only the first file is checked.
-bool containsMHDFiles(const QStringList &files)
+// Returns true if the given file name is recognized as non-DICOM
+bool isNonDicom(const QString& fileName)
 {
-    return !files.isEmpty() && files.first().endsWith(".mhd", Qt::CaseInsensitive);
+    return fileName.endsWith(".mhd", Qt::CaseInsensitive);
 }
 
 }
 
 PatientFiller::PatientFiller(DICOMSource dicomSource, QObject *parent)
- : QObject(parent), m_numberOfProcessedFiles(0)
+ : QObject(parent), m_dicomMode(true), m_numberOfProcessedFiles(0)
 {
-    createSteps();
-
     m_patientFillerInput = new PatientFillerInput();
     m_patientFillerInput->setDICOMSource(std::move(dicomSource));
-
-    foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
-    {
-        fillerStep->setInput(m_patientFillerInput);
-    }
-    foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
-    {
-        fillerStep->setInput(m_patientFillerInput);
-    }
 }
 
 PatientFiller::~PatientFiller()
@@ -77,24 +66,17 @@ void PatientFiller::processDICOMFile(const DICOMTagReader *dicomTagReader)
 {
     Q_ASSERT(dicomTagReader);
 
-    m_patientFillerInput->setDICOMFile(dicomTagReader);
-
-    foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
+    if (m_firstStageSteps.isEmpty())
     {
-        // If some step fails to fill we can skip the rest of steps.
-        // This is done in order to skip further processing of non-DICOM files (e.g. thumbnails when opening files from a directory).
-        // Note: this is done thinking that the first stage steps are DICOMFileClassifierFillerStep and ImageFillerStep;
-        // the condition may have to change if this circumstance changes.
-        if (!fillerStep->fillIndividually())
-        {
-            break;
-        }
+        createSteps();
     }
 
-    emit progress(++m_numberOfProcessedFiles);
+    m_patientFillerInput->setDICOMFile(dicomTagReader);
+
+    processCurrentFile();
 }
 
-void PatientFiller::finishDICOMFilesProcess()
+void PatientFiller::finishFilesProcessing()
 {
     foreach (Patient *patient, m_patientFillerInput->getPatientList())
     {
@@ -124,54 +106,78 @@ void PatientFiller::finishDICOMFilesProcess()
 
 QList<Patient*> PatientFiller::processFiles(const QStringList &files)
 {
-    if (containsMHDFiles(files))
+    if (files.isEmpty())
     {
-        return processMHDFiles(files);
+        return QList<Patient*>();
     }
-    else
+
+    m_dicomMode = !isNonDicom(files.first());
+
+    createSteps();
+
+    foreach (const QString &file, files)
     {
-        return processDICOMFiles(files);
+        if (m_dicomMode)
+        {
+            // The DICOMTagReader is deleted by the PatientFillerInput
+            DICOMTagReader *dicomTagReader = new DICOMTagReader(file);
+            m_patientFillerInput->setDICOMFile(dicomTagReader);
+        }
+        else
+        {
+            m_patientFillerInput->setFile(file);
+        }
+
+        processCurrentFile();
     }
+
+    this->finishFilesProcessing();
+
+    return m_patientFillerInput->getPatientList();
 }
 
 void PatientFiller::createSteps()
 {
-    m_firstStageSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep() << new EncapsulatedDocumentFillerStep();
-    m_secondStageSteps << new VolumeFillerStep() << new OrderImagesFillerStep() << new TemporalDimensionFillerStep();
+    if (m_dicomMode)
+    {
+        m_firstStageSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep() << new EncapsulatedDocumentFillerStep();
+        m_secondStageSteps << new VolumeFillerStep() << new OrderImagesFillerStep() << new TemporalDimensionFillerStep();
+    }
+    else
+    {
+        m_firstStageSteps << new MHDFileClassifierStep();
+    }
+
+    foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
+    {
+        fillerStep->setInput(m_patientFillerInput);
+    }
+
+    foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
+    {
+        fillerStep->setInput(m_patientFillerInput);
+    }
 }
 
-QList<Patient*> PatientFiller::processMHDFiles(const QStringList &files)
+void PatientFiller::processCurrentFile()
 {
-    MHDFileClassifierStep mhdFileClassiferStep;
-    mhdFileClassiferStep.setInput(m_patientFillerInput);
-
-    foreach (const QString &file, files)
+    foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
     {
-        m_patientFillerInput->setFile(file);
-
-        if (!mhdFileClassiferStep.fillIndividually())
+        // If some step fails to fill we can skip the rest of steps.
+        // This is done in order to skip further processing of files when some error is found
+        // (e.g. trying to process thumbnails as DICOM when opening files from a directory or finding an unrecognized file type in non-DICOM mode).
+        // Note: this works as long as the first step is used to determine the file type, as is now the case;
+        // the condition may have to change if this circumstance changes.
+        if (!fillerStep->fillIndividually())
         {
-            ERROR_LOG("Can't process MHD file " + file);
+            WARN_LOG(QString("Can't process file %1 as %2")
+                     .arg(m_dicomMode ? m_patientFillerInput->getDICOMFile()->getFileName() : m_patientFillerInput->getFile())
+                     .arg(m_dicomMode ? "DICOM" : "non-DICOM"));
+            break;
         }
-
-        emit progress(++m_numberOfProcessedFiles);
     }
 
-    return m_patientFillerInput->getPatientList();
-}
-
-QList<Patient*> PatientFiller::processDICOMFiles(const QStringList &files)
-{
-    foreach (const QString &dicomFile, files)
-    {
-        // The DICOMTagReader is deleted by the PatientFillerInput
-        DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFile);
-        this->processDICOMFile(dicomTagReader);
-    }
-
-    this->finishDICOMFilesProcess();
-
-    return m_patientFillerInput->getPatientList();
+    emit progress(++m_numberOfProcessedFiles);
 }
 
 }

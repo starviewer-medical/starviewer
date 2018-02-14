@@ -289,7 +289,7 @@ void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalData
 {
     // Connexions entre la descarrega i el processat dels fitxers
     connect(this, &DICOMDIRImporter::imageImportedToDisk, patientFiller, &PatientFiller::processDICOMFile);
-    connect(this, SIGNAL(importFinished()), patientFiller, SLOT(finishDICOMFilesProcess()));
+    connect(this, &DICOMDIRImporter::importFinished, patientFiller, &PatientFiller::finishFilesProcessing);
 
     // Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
     // el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan en surt
