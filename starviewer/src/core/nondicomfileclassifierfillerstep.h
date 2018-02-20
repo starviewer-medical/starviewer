@@ -12,26 +12,26 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGMHDFILECLASSIFIERSTEP_H
-#define UDGMHDFILECLASSIFIERSTEP_H
+#ifndef UDG_NONDICOMFILECLASSIFIERFILLERSTEP_H
+#define UDG_NONDICOMFILECLASSIFIERFILLERSTEP_H
 
 #include "patientfillerstep.h"
 
 namespace udg {
 
 /**
-    Classificador d'arxius mhd. Crea tota l'estructura de pacient i en un estudi coloca tantes series com volums tinguem
-  */
-class MHDFileClassifierStep : public PatientFillerStep {
+ *  @brief The NonDicomFileClassifierFillerStep class creates patients, studies and series for non-DICOM files.
+ */
+class NonDicomFileClassifierFillerStep : public PatientFillerStep {
+
 public:
-    MHDFileClassifierStep();
+    NonDicomFileClassifierFillerStep();
+    virtual ~NonDicomFileClassifierFillerStep();
 
-    ~MHDFileClassifierStep();
-
-    bool fillIndividually();
+    bool fillIndividually() override;
 
 };
 
-}
+} // namespace udg
 
-#endif
+#endif // UDG_NONDICOMFILECLASSIFIERFILLERSTEP_H

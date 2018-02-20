@@ -23,7 +23,8 @@
 
 namespace udg {
 
-VolumeFillerStep::VolumeFillerStep()
+VolumeFillerStep::VolumeFillerStep(bool dontCreateThumbnails)
+    : m_dontCreateThumbnails(dontCreateThumbnails)
 {
 }
 
@@ -102,7 +103,7 @@ bool VolumeFillerStep::fillIndividually()
         image->setVolumeNumberInSeries(volumeNumber);
     }
 
-    if (mustCreateThumbnail)
+    if (!m_dontCreateThumbnails && mustCreateThumbnail)
     {
         saveThumbnail(currentImages.first());
     }

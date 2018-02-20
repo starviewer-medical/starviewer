@@ -90,7 +90,6 @@ HEADERS += extensionfactory.h \
     patientbrowsermenuextendedinfo.h \
     patientbrowsermenulist.h \
     qcustomwindowleveldialog.h \
-    mhdfileclassifierstep.h \
     orderimagesfillerstep.h \
     toolregistry.h \
     toolmanager.h \
@@ -432,7 +431,8 @@ HEADERS += extensionfactory.h \
     sliceorientedvolumepixeldata.h \
     voxelindex.h \
     systemrequirements.h \
-    systemrequirementstest.h
+    systemrequirementstest.h \
+    nondicomfileclassifierfillerstep.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -486,7 +486,6 @@ SOURCES += extensionmediator.cpp \
     patientbrowsermenuextendedinfo.cpp \
     patientbrowsermenulist.cpp \
     qcustomwindowleveldialog.cpp \
-    mhdfileclassifierstep.cpp \
     orderimagesfillerstep.cpp \
     toolregistry.cpp \
     toolmanager.cpp \
@@ -814,7 +813,8 @@ SOURCES += extensionmediator.cpp \
     sliceorientedvolumepixeldata.cpp \
     voxelindex.cpp \
     systemrequirements.cpp \
-    systemrequirementstest.cpp
+    systemrequirementstest.cpp \
+    nondicomfileclassifierfillerstep.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

@@ -20,7 +20,7 @@
 #include "imagefillerstep.h"
 //#include "keyimagenotefillerstep.h"       // future use
 #include "logging.h"
-#include "mhdfileclassifierstep.h"
+#include "nondicomfileclassifierfillerstep.h"
 #include "orderimagesfillerstep.h"
 #include "patient.h"
 #include "patientfillerinput.h"
@@ -33,10 +33,10 @@ namespace udg {
 
 namespace {
 
-// Returns true if the given file name is recognized as non-DICOM
-bool isNonDicom(const QString& fileName)
+// Returns true if the given file is a DICOM file.
+bool isDicom(const QString& fileName)
 {
-    return fileName.endsWith(".mhd", Qt::CaseInsensitive);
+    return DICOMTagReader(fileName).canReadFile();
 }
 
 }
@@ -111,7 +111,7 @@ QList<Patient*> PatientFiller::processFiles(const QStringList &files)
         return QList<Patient*>();
     }
 
-    m_dicomMode = !isNonDicom(files.first());
+    m_dicomMode = isDicom(files.first());
 
     createSteps();
 
@@ -145,7 +145,8 @@ void PatientFiller::createSteps()
     }
     else
     {
-        m_firstStageSteps << new MHDFileClassifierStep();
+        m_firstStageSteps << new NonDicomFileClassifierFillerStep();
+        m_secondStageSteps << new VolumeFillerStep(true);
     }
 
     foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
