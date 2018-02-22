@@ -20,10 +20,11 @@
 #include "coresettings.h"
 #include "image.h"
 #include "logging.h"
-#include "series.h"
+#include "patient.h"
 #include "volume.h"
 #include "volumepixeldatareaderitkdcmtk.h"
 #include "volumepixeldatareaderitkgdcm.h"
+#include "volumepixeldatareadervtk.h"
 #include "volumepixeldatareadervtkdcmtk.h"
 #include "volumepixeldatareadervtkgdcm.h"
 
@@ -98,6 +99,11 @@ VolumePixelDataReader* VolumePixelDataReaderFactory::getReader() const
             reader = new VolumePixelDataReaderVTKGDCM();
             DEBUG_LOG("Volume pixel data will be read using VTK-GDCM");
             break;
+
+        case VTKPixelDataReader:
+            reader = new VolumePixelDataReaderVtk();
+            DEBUG_LOG("Volume pixel data will be read using VTK");
+            break;
     }
 
     return reader;
@@ -133,10 +139,10 @@ VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::
     if (!mustForceReaderLibraryBackdoor(volume, readerType))
     {
         // If the reader type is not forced by settings, decide
-        if (volume->getImage(0)->getSOPInstanceUID().contains("MHDImage"))
+        if (volume->getPatient()->getID().startsWith("Non-DICOM"))
         {
-            // MetaImages currently must be read with ITK-GDCM
-            return VolumePixelDataReaderFactory::ITKGDCMPixelDataReader;
+            // Non-DICOM images will be cread using only VTK
+            return VolumePixelDataReaderFactory::VTKPixelDataReader;
         }
         else if (hasJPEG2000TransferSyntax(volume) || hasSegmentedPalette(volume))
         {

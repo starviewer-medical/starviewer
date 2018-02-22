@@ -432,7 +432,8 @@ HEADERS += extensionfactory.h \
     voxelindex.h \
     systemrequirements.h \
     systemrequirementstest.h \
-    nondicomfileclassifierfillerstep.h
+    nondicomfileclassifierfillerstep.h \
+    volumepixeldatareadervtk.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -814,7 +815,8 @@ SOURCES += extensionmediator.cpp \
     voxelindex.cpp \
     systemrequirements.cpp \
     systemrequirementstest.cpp \
-    nondicomfileclassifierfillerstep.cpp
+    nondicomfileclassifierfillerstep.cpp \
+    volumepixeldatareadervtk.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \
