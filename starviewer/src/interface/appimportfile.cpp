@@ -45,14 +45,11 @@ AppImportFile::~AppImportFile()
 
 void AppImportFile::open()
 {
-    const QString MetaIOImageFilter("MetaIO Image (*.mhd)"), DICOMImageFilter("DICOM Images (*.dcm)"), AllFilesFilter("All Files (*)");
-    QStringList imagesFilter;
-    imagesFilter << MetaIOImageFilter << DICOMImageFilter << AllFilesFilter;
-
     QFileDialog *openDialog = new QFileDialog(0);
     openDialog->setWindowTitle(tr("Select files to open..."));
     openDialog->setDirectory(m_workingDirectory);
-    openDialog->setNameFilters(imagesFilter);
+    openDialog->setNameFilters({tr("DICOM images (*.dcm)"), tr("MetaImages (*.mhd *.mha)"), tr("TIFF images (*.tif *.tiff)"), tr("JPEG images (*.jpg *.jpeg)"),
+                                tr("PNG images (*.png)"), tr("All files (*)")});
     openDialog->selectNameFilter (m_lastExtension);
     openDialog->setFileMode(QFileDialog::ExistingFiles);
     openDialog->setAcceptMode(QFileDialog::AcceptOpen);
