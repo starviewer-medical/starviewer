@@ -157,6 +157,7 @@ bool NonDicomFileClassifierFillerStep::fillIndividually()
         series->setDate(fileInfo.lastModified().date());
         series->setTime(fileInfo.lastModified().time());
         series->setDescription(fileInfo.fileName());
+        series->setFrameOfReferenceUID(seriesUid);
         study->addSeries(series);
     }
 
