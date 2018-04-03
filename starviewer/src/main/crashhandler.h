@@ -17,7 +17,7 @@
 
 #ifndef NO_CRASH_REPORTER
 
-#include <QString>
+#include <QByteArray>
 
 namespace google_breakpad {
 class ExceptionHandler;
@@ -27,7 +27,7 @@ class CrashHandler {
 public:
     CrashHandler();
 
-    ~CrashHandler(){};
+    ~CrashHandler(){}
 
     void setCrashReporterPath(const char *path);
     const char* getCrashReporterPath() const;
