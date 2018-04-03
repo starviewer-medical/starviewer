@@ -8,8 +8,7 @@ TEMPLATE = app
 
 # CrashHandler
 SOURCES += crashhandler.cpp
-HEADERS += crashhandler.h \
-           ../thirdparty/breakpad/client/linux/handler/exception_handler.h
+HEADERS += crashhandler.h
 
 # End CrashHandler
 
