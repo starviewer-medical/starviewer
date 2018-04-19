@@ -163,11 +163,23 @@ bool NonDicomFileClassifierFillerStep::fillIndividually()
 
     QString imageUid(QString("%1.%2").arg(seriesUid).arg(series->getNumberOfImages()));
     Vector3 origin(reader->GetDataOrigin());
+
+    // Origin correction when reading multiple files from a directory
+    if (series->hasImages())
+    {
+        Image *previousImage = series->getImages().last();
+
+        if (origin == Vector3(previousImage->getImagePositionPatient()))
+        {
+            origin.z += image->getSliceThickness();
+        }
+    }
+
     QList<Image*> generatedImages;
 
     for (int i = extent[4]; i <= extent[5]; i++)
     {
-        // Reuse the already reated image for the first frame, create new images starting from the second frame
+        // Reuse the already created image for the first frame, create new images starting from the second frame
         if (i > extent[4])
         {
             image = createImage(fileName, reader);
