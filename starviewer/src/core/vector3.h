@@ -38,7 +38,8 @@ public:
     /// Retorna el producte vectorial dels vectors.
     static TVector3<T> cross(const TVector3<T> &v1, const TVector3<T> &v2);
 
-    TVector3(T x = 0.0, T y = 0.0, T z = 0.0);
+    TVector3();
+    TVector3(T x, T y, T z);
     TVector3(const QVector3D &v);
     template <class C>
     TVector3(C v[3]);
@@ -134,6 +135,12 @@ template <class T>
 inline TVector3<T> TVector3<T>::cross(const TVector3<T> &v1, const TVector3<T> &v2)
 {
     return v1 ^ v2;
+}
+
+template <class T>
+inline TVector3<T>::TVector3()
+ : x(0.0), y(0.0), z(0.0)
+{
 }
 
 template <class T>
