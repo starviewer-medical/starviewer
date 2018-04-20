@@ -30,7 +30,7 @@ namespace udg {
 Image::Image(QObject *parent)
  : QObject(parent), m_sliceThickness(0.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16),
  m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_frameNumber(0), m_phaseNumber(0), m_volumeNumberInSeries(0),
- m_orderNumberInVolume(0), m_parentSeries(NULL)
+ m_orderNumberInVolume(0), m_overlaysSplitComputed(false), m_parentSeries(NULL)
 {
     m_estimatedRadiographicMagnificationFactor = 1.0;
     
@@ -505,9 +505,10 @@ QList<ImageOverlay> Image::getOverlaysSplit()
 {
     if (hasOverlays())
     {
-        if (m_overlaysSplit.isEmpty())
+        if (!m_overlaysSplitComputed)
         {
             readOverlays(true);
+            m_overlaysSplitComputed = true;
         }
     }
 
