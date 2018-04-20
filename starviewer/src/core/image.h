@@ -422,6 +422,8 @@ private:
 
     /// Llista que conté la partició en regions òptimes de la fusió de tots els overlays
     QList<ImageOverlay> m_overlaysSplit;
+    /// Remembers if m_overlaysSplit has been calculated.
+    bool m_overlaysSplitComputed;
 
     /// Llista de display shutters
     QList<DisplayShutter> m_shuttersList;
