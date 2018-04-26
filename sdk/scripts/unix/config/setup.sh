@@ -6,19 +6,22 @@ SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$HOME/starviewer-sdk-0.15"}
 # Where the libraries are dowloaded.
 DOWNLOAD_PREFIX=${DOWNLOAD_PREFIX:-"$SDK_BASE_PREFIX/downloads"}
 
+# Where the user will be asked to install Qt.
+INSTALL_QTDIR=${INSTALL_QTDIR:-"$HOME/Qt5.6.3"}
+
+# Where to install the SDK libraries once compiled.
+SDK_INSTALL_PREFIX=${SDK_INSTALL_PREFIX:-"$SDK_BASE_PREFIX/usr/local"}
+
+# Location of SDK sources to build.
+SOURCE_DIR_BASE=${SOURCE_DIR_BASE:-"$SDK_INSTALL_PREFIX/src"}
+
 # List of build types to use. Possible values: debug, release.
 BUILD_TYPES="release"
 # List of libs to build. Possible values: dcmtk, vtk, gdcm, itk, ecm, threadweaver.
 LIBS="dcmtk vtk gdcm itk ecm threadweaver"
 
-# Where to install the SDK libraries once compiled
-SDK_INSTALL_PREFIX=~/uroot/usr/local
-
 # Where to write the SDK environment configuration script.
 SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../environment.sh
-
-# Only used to tell the user where to install Qt on buildall.sh
-INSTALL_QTDIR=$SDK_INSTALL_PREFIX/lib/Qt5.6.3
 
 # If you use a local Qt installaton, the path where it is installed
 QTDIR=$INSTALL_QTDIR/5.6.3/gcc_64
@@ -28,9 +31,6 @@ STARVIEWER_SOURCE_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer
 
 # Starviwer shadow build directory
 STARVIEWER_BUILD_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-build
-
-# Location of SDK sources to build
-SOURCE_DIR_BASE=$SDK_INSTALL_PREFIX/src
 
 # Temporary directory for package creation
 DPKG_TMP=/tmp/starviewer-dpkg
