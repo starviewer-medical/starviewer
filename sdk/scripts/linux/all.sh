@@ -1,11 +1,10 @@
 #!/bin/bash
-SCRIPTS_ROOT=$(readlink -f $(dirname $BASH_SOURCE))
-. $SCRIPTS_ROOT/config/setup.sh
 
+SCRIPTS_ROOT=$(cd $(dirname $BASH_SOURCE) && pwd)
+UNIX_SCRIPTS_ROOT="$SCRIPTS_ROOT/../unix"
+. "$UNIX_SCRIPTS_ROOT/config/setup.sh"
 
-. $SCRIPTS_ROOT/sdk_download.sh
-. $SCRIPTS_ROOT/sdk_extract.sh
-. $SCRIPTS_ROOT/sdk_build.sh
+. "$UNIX_SCRIPTS_ROOT/sdk_all.sh"
 
 # Building starviewer
 . $SCRIPTS_ROOT/starviewer_build.sh
