@@ -56,6 +56,26 @@ MAKE_VERBOSE=${MAKE_VERBOSE:-}
 # Where to write the SDK environment configuration script.
 SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../environment.sh
 
+# Currently only used to know the location of the ThreadWeaver lib dir.
+if [[ $(uname) == 'Linux' ]]
+then
+    if [[ -d /etc/debian_version ]]
+    then
+        LIB64DIR=lib/x86_64-linux-gnu
+    else
+        LIB64DIR=lib64
+    fi
+elif [[ $(uname) == 'Darwin' ]]
+then
+    LIB64DIR=lib
+fi
+
+# Because SDK libraries binares are not on a standard location.
+# This environment variable has to be set when starting starviewer binary or
+# when you compile it (if not the linker will fail).
+# It will be written to the SDK environment configuration script.
+LD_LIBRARY_PATH="$SDK_INSTALL_PREFIX/lib:$SDK_INSTALL_PREFIX/$LIB64DIR:$QTDIR/lib"
+
 # Starviewer source code location
 STARVIEWER_SOURCE_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer
 
@@ -70,8 +90,3 @@ DPKG_DESTINATION=$SCRIPTS_ROOT/../../../
 
 # c++11 support
 CMAKE_CPP11='-DCMAKE_CXX_STANDARD:STRING=11 -DCMAKE_CXX_STANDARD_REQUIRED:BOOL=ON -DCMAKE_C_STANDARD:STRING=11 -DCMAKE_C_STANDARD_REQUIRED:BOOL=ON'
-
-# Because SDK libraries binares are not on a standard location.
-# This environment variable has to be set when starting starviewer binary or
-# when you compile it. (if not the linker will fail).
-LD_LIBRARY_PATH=$SDK_INSTALL_PREFIX/lib:$SDK_INSTALL_PREFIX/lib/x86_64-linux-gnu:$QTDIR/lib/
