@@ -1,16 +1,16 @@
 #!/bin/bash
 
-SOURCE_DIR=$SOURCE_DIR_BASE/VTK-7.0.0
+SOURCE_DIR="$SOURCE_DIR_BASE/VTK-7.0.0"
 
 if [ $BUILD_TYPE = debug ]
 then
     CMAKE_BUILD_TYPE=Debug
-    BUILD_DIR=$SOURCE_DIR-build-debug
+    BUILD_DIR="$SOURCE_DIR-build-debug"
 fi
 if [ $BUILD_TYPE = release ]
 then
     CMAKE_BUILD_TYPE=RelWithDebInfo
-    BUILD_DIR=$SOURCE_DIR-build-release
+    BUILD_DIR="$SOURCE_DIR-build-release"
 fi
 
 ################ Nothing should need to be changed below this line ################
@@ -26,6 +26,6 @@ CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
                -DModule_vtkViewsQt:BOOL=TRUE \
                -DVTK_QT_VERSION:STRING=5"
 
-VTKCMAKEDIR=$SDK_INSTALL_PREFIX/lib/cmake/vtk-7.0
-VTKLIBDIR=$SDK_INSTALL_PREFIX/lib
-VTKINCLUDEDIR=$SDK_INSTALL_PREFIX/include/vtk-7.0
+VTKCMAKEDIR="$SDK_INSTALL_PREFIX/lib/cmake/vtk-7.0"
+VTKLIBDIR="$SDK_INSTALL_PREFIX/lib"
+VTKINCLUDEDIR="$SDK_INSTALL_PREFIX/include/vtk-7.0"

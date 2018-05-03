@@ -11,16 +11,17 @@ ITKLIBS = \
         ITKStatistics \
         itkjpeg \
         itksys \
-        itkvcl \
-        itkvnl \
         itkvnl_algo \
+        itkvnl \
+        itkvcl \
+        itkv3p_netlib \
         ITKVNLInstantiation \
         ITKniftiio \
         ITKznz \
         ITKOptimizers \
-        ITKIOImageBase \
         ITKVTK \
         ITKIOGDCM \
+        ITKIOImageBase \
         itksys \
         itkdouble-conversion \
         ITKTransform
@@ -28,14 +29,9 @@ ITKLIBS = \
 win32 {
  ITKLIBS += itktiff \
          itkpng \
-         itkv3p_netlib \
          itkzlib
 
  LIBS += -lShell32
-}
-
-macx {
- ITKLIBS += itkv3p_netlib
 }
 
 LIBS += -L$${ITKLIBDIR}
@@ -44,4 +40,6 @@ for(lib, ITKLIBS) {
     LIBS += -l$${lib}$${ITKLIBSUFFIX}
 }
 
-
+unix {
+    LIBS += -ldl
+}
