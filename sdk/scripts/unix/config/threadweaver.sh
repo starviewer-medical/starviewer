@@ -25,19 +25,6 @@ CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
                -DBUILD_TESTING:BOOL=FALSE \
                -DECM_DIR:PATH=$ECMCMAKEDIR"
 
-if [[ $(uname) == 'Linux' ]]
-then
-    if [[ -d /etc/debian_version ]]
-    then
-        LIBDIR=lib/x86_64-linux-gnu
-    else
-        LIBDIR=lib64
-    fi
-elif [[ $(uname) == 'Darwin' ]]
-then
-    LIBDIR=lib
-fi
-
-THREADWEAVERCMAKEDIR="$SDK_INSTALL_PREFIX/$LIBDIR/cmake/KF5ThreadWeaver/"
-THREADWEAVERLIBDIR="$SDK_INSTALL_PREFIX/$LIBDIR"
+THREADWEAVERCMAKEDIR="$SDK_INSTALL_PREFIX/$LIB64DIR/cmake/KF5ThreadWeaver/"
+THREADWEAVERLIBDIR="$SDK_INSTALL_PREFIX/$LIB64DIR"
 THREADWEAVERINCLUDEDIR="$SDK_INSTALL_PREFIX/include/KF5"
