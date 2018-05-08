@@ -1,73 +1,67 @@
 language: cpp
 
-os:
-  - linux
-  - osx
-
-sudo: required
-dist: trusty
-osx_image: xcode8.3
-
-compiler:
-  - gcc
-  - clang
-
 matrix:
-  exclude:
-    - os: osx
+  include:
+    # Linux (gcc)
+    - os: linux
+      dist: trusty
+      sudo: required
+      services: docker
       compiler: gcc
 
-env:
-  global:
-    - SDK_INSTALL_PREFIX="$HOME/uroot/usr/local"
-    - LD_LIBRARY_PATH="$SDK_INSTALL_PREFIX/lib:$SDK_INSTALL_PREFIX/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH"
-    - DYLD_LIBRARY_PATH="$SDK_INSTALL_PREFIX/lib"
-    - DYLD_FRAMEWORK_PATH="/usr/local/opt/qt5/lib"
+      install:
+        - docker build -t ubuntu - < Dockerfile
 
-before_install:
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      sudo apt-add-repository -y ppa:beineri/opt-qt562-trusty                                   &&
-      sudo apt-get update -qq                                                                   &&
-      sudo apt-get install -qq libgl1-mesa-dev libglu1-mesa-dev                                 &&
-      sudo apt-get install -qq qt56base qt56declarative qt56tools qt56webengine qt56xmlpatterns &&
-      sudo apt-get install -qq libwrap0 libwrap0-dev                                            ;
-    else
-      brew update > /dev/null                                                           &&
-      echo "Install Qt 5.6."                                                            &&
-      cp qt5.rb $(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-core/Formula   &&
-      brew install qt5                                                                  &&
-      chmod -R 755 /usr/local/opt/qt5/*                                                 ;
-    fi
+      script:
+        - docker run --rm -v $(pwd):/starviewer -e CC -e CXX ubuntu bash -c ". /opt/qt56/bin/qt56-env.sh && qmake"
+        - docker run --rm -v $(pwd):/starviewer -e CC -e CXX ubuntu bash -c ". /opt/qt56/bin/qt56-env.sh && make -j3"
+        - docker run --rm -v $(pwd):/starviewer -e TRAVIS_OS_NAME -w /starviewer/starviewer/tests/auto ubuntu
+            bash -c ". /opt/qt56/bin/qt56-env.sh && sh -c 'xvfb-run -s \"-screen 0 640x480x24\" ./autotests -silent'"
 
-install:
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      . /opt/qt56/bin/qt56-env.sh                                                                                  &&
-      wget --directory-prefix=$HOME http://trueta.udg.edu/apt/ubuntu/devel/0.14/starviewer-sdk-linux-0.14-4.tar.xz &&
-      mkdir ~/uroot                                                                                                &&
-      tar xf ~/starviewer-sdk-linux-0.14-4.tar.xz -C ~/uroot                                                       ;
-    else
-      QTDIR="/usr/local/opt/qt5"                                                                                        &&
-      PATH="$QTDIR/bin:$PATH"                                                                                           &&
-      LDFLAGS=-L$QTDIR/lib                                                                                              &&
-      CPPFLAGS=-I$QTDIR/include                                                                                         &&
-      wget -nv --directory-prefix=$HOME http://trueta.udg.edu/apt/macosx/devel/0.14/starviewer-sdk-macosx-0.14-4.tar.xz &&
-      mkdir ~/uroot                                                                                                     &&
-      tar xf ~/starviewer-sdk-macosx-0.14-4.tar.xz -C ~/uroot                                                           ;
-    fi
+    # Linux (clang)
+    - os: linux
+      dist: trusty
+      sudo: required
+      services: docker
+      compiler: clang
 
-before_script:
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-      export DISPLAY=:99.0         &&
-      sh -e /etc/init.d/xvfb start ;
-    fi
+      install:
+        - docker build -t ubuntu - < Dockerfile
 
-script:
-  - cd starviewer
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${CC}" = "clang" ]; then
-      qmake -spec linux-clang ;
-    else
-      qmake ;
-    fi
-  - make -j3 | sed 's/\/Applications\/Xcode\.app\/Contents\/Developer/[xcode]/g' | sed -E 's/\/(Users|home)\/travis\/uroot/[uroot]/g'
-  - cd tests/auto
-  - ./autotests -silent
+      script:
+        - docker run --rm -v $(pwd):/starviewer -e CC -e CXX ubuntu bash -c ". /opt/qt56/bin/qt56-env.sh && qmake -spec linux-clang"
+        - docker run --rm -v $(pwd):/starviewer -e CC -e CXX ubuntu bash -c ". /opt/qt56/bin/qt56-env.sh && make -j3"
+        - docker run --rm -v $(pwd):/starviewer -e TRAVIS_OS_NAME -w /starviewer/starviewer/tests/auto ubuntu
+            bash -c ". /opt/qt56/bin/qt56-env.sh && sh -c 'xvfb-run -s \"-screen 0 640x480x24\" ./autotests -silent'"
+
+    # Mac (clang)
+    - os: osx
+      osx_image: xcode8.3
+      compiler: clang
+      env:
+      - SDK_INSTALL_PREFIX="$HOME/uroot/usr/local"
+      - DYLD_LIBRARY_PATH="$SDK_INSTALL_PREFIX/lib"
+      - DYLD_FRAMEWORK_PATH="/usr/local/opt/qt5/lib"
+
+      before_install:
+        - brew update > /dev/null
+        - echo "Install Qt 5.6."
+        - cp qt5.rb $(brew --prefix)/Homebrew/Library/Taps/homebrew/homebrew-core/Formula
+        - brew install qt5
+        - chmod -R 755 /usr/local/opt/qt5/*
+
+      install:
+        - QTDIR="/usr/local/opt/qt5"
+        - PATH="$QTDIR/bin:$PATH"
+        - LDFLAGS=-L$QTDIR/lib
+        - CPPFLAGS=-I$QTDIR/include
+        - wget -nv --directory-prefix=$HOME http://trueta.udg.edu/apt/macosx/devel/0.14/starviewer-sdk-macosx-0.14-4.tar.xz
+        - mkdir ~/uroot
+        - tar xf ~/starviewer-sdk-macosx-0.14-4.tar.xz -C ~/uroot
+
+      script:
+        - cd starviewer
+        - qmake
+        - make -j3 | sed 's/\/Applications\/Xcode\.app\/Contents\/Developer/[xcode]/g' | sed -E 's/\/(Users|home)\/travis\/uroot/[uroot]/g'
+        - cd tests/auto
+        - ./autotests -silent

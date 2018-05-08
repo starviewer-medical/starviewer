@@ -209,9 +209,6 @@ static unsigned int roundUpToPowerOf2(unsigned int v);
 /// Retorna el primer múltiple de multiple més gran o igual que i. Només funciona si múltiple > 0, però no es comproven els paràmetres.
 static unsigned int roundUpToMultipleOfNumber(unsigned int i, unsigned int multiple);
 
-/// Retorna un double amb la magnitud d'x i el signe d'y. La mateixa funcionalitat que std::copysign de C++11.
-static double copySign(double x, double y);
-
 private:
     /// Initializes random seed if needed
     static void initializeRandomSeed();
