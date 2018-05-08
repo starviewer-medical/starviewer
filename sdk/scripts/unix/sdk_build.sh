@@ -7,8 +7,11 @@ for BUILD_TYPE in $BUILD_TYPES
 do
     for LIB in $LIBS
     do
-        . "$SCRIPTS_ROOT/config/$LIB.sh"
-        . "$SCRIPTS_ROOT/libs/$LIB.sh"
+        if [[ -f "$SCRIPTS_ROOT/libs/$LIB.sh" ]]
+        then
+            . "$SCRIPTS_ROOT/config/$LIB.sh"
+            . "$SCRIPTS_ROOT/libs/$LIB.sh"
+        fi
     done
 done
 
