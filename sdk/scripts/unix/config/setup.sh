@@ -27,8 +27,8 @@ SOURCE_DIR_BASE=${SOURCE_DIR_BASE:-"$SDK_INSTALL_PREFIX/src"}
 # List of build types to use. Possible values: debug, release.
 BUILD_TYPES=${BUILD_TYPES:-"release"}
 
-# List of libs to build. Possible values: dcmtk, vtk, gdcm, itk, ecm, threadweaver.
-LIBS=${LIBS:-"dcmtk vtk gdcm itk ecm threadweaver"}
+# List of libs to build. Possible values: qt, dcmtk, vtk, gdcm, itk, ecm, threadweaver.
+LIBS=${LIBS:-"qt dcmtk vtk gdcm itk ecm threadweaver"}
 
 # CMake executable
 if [[ $(uname) == 'Linux' ]]
