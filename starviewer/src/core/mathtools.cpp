@@ -389,18 +389,6 @@ unsigned int MathTools::roundUpToMultipleOfNumber(unsigned int i, unsigned int m
     return i;
 }
 
-double MathTools::copySign(double x, double y)
-{
-    if ((x >= +0.0 && y >= +0.0) || (x <= -0.0 && y <= -0.0))
-    {
-        return x;
-    }
-    else
-    {
-        return -x;
-    }
-}
-
 void MathTools::initializeRandomSeed()
 {
     static bool seedInit = false;

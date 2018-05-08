@@ -1,0 +1,24 @@
+FROM ubuntu:14.04
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN cat /etc/lsb-release
+RUN apt-get -qq update
+RUN apt-get install -qq software-properties-common
+RUN apt-add-repository -y ppa:beineri/opt-qt563-trusty
+RUN apt-get update -qq
+RUN apt-get install -qq build-essential clang libgl1-mesa-dev libglu1-mesa-dev xvfb wget
+RUN apt-get install -qq qt56base qt56declarative qt56tools qt56webengine qt56xmlpatterns
+RUN apt-get install -qq libwrap0 libwrap0-dev zlib1g zlib1g-dev libssl-dev
+RUN rm -rf /var/lib/apt/lists/*
+RUN unset DEBIAN_FRONTEND
+
+RUN wget -nv --directory-prefix=/ http://trueta.udg.edu/apt/ubuntu/devel/0.14/starviewer-sdk-linux-0.14-4.tar.xz
+RUN mkdir /sdk-0.14
+RUN tar xf /starviewer-sdk-linux-0.14-4.tar.xz -C /sdk-0.14
+
+ENV SDK_INSTALL_PREFIX /sdk-0.14/usr/local
+ENV LD_LIBRARY_PATH /sdk-0.14/usr/local/lib:/sdk-0.14/usr/local/lib/x86_64-linux-gnu
+
+WORKDIR /starviewer/starviewer
+CMD ["bash"]
