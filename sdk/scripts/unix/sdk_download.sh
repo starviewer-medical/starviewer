@@ -48,9 +48,9 @@ do
                                 'https://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz'
             ;;
         gdcm)
-            download_and_verify bbf7eeda622cf18499bd162f3b06d0c937a5379f6f3d1445d57b3d4d0070f97e \
-                                'gdcm-2.6.4.tar.gz' \
-                                'https://github.com/malaterre/GDCM/archive/v2.6.4.tar.gz'
+            download_and_verify f4e611c74ea2b16c9aa28d7fdf3a8678ce926909606705b7cd08c9a5b05d34fc \
+                                'GDCM-2.8.6.tar.gz' \
+                                'https://github.com/malaterre/GDCM/archive/v2.8.6.tar.gz'
             ;;
         itk)
             download_and_verify ea0011fc99a6303427b236c3ceaf54688224350ce1a216b64c9771ab3194b15f \

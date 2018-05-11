@@ -4,9 +4,9 @@
 # Default install prefix is /usr/local
 SDK_INSTALL_PREFIX = $$(SDK_INSTALL_PREFIX)
 isEmpty(SDK_INSTALL_PREFIX){
-    unix:SDK_INSTALL_PREFIX = /usr/local
-    win32:SDK_INSTALL_PREFIX = $$(USERPROFILE)/starviewer-sdk/32
-    win32:contains(QMAKE_TARGET.arch, x86_64):SDK_INSTALL_PREFIX = $$(USERPROFILE)/starviewer-sdk/64
+    unix:SDK_INSTALL_PREFIX = $$(HOME)/starviewer-sdk-0.15/usr/local
+    win32:SDK_INSTALL_PREFIX = $$(USERPROFILE)/starviewer-sdk-0.15/32
+    win32:contains(QMAKE_TARGET.arch, x86_64):SDK_INSTALL_PREFIX = $$(USERPROFILE)/starviewer-sdk-0.15/64
 }
 
 # DCMTK Libraries
@@ -55,12 +55,12 @@ isEmpty(ITKINCLUDEDIR){
 GDCMLIBDIR = $$(GDCMLIBDIR)
 isEmpty(GDCMLIBDIR){
     unix:GDCMLIBDIR = $$SDK_INSTALL_PREFIX/lib
-    win32:GDCMLIBDIR = $$SDK_INSTALL_PREFIX/gdcm/2.6.4/lib
+    win32:GDCMLIBDIR = $$SDK_INSTALL_PREFIX/gdcm/2.8.6/lib
 }
 GDCMINCLUDEDIR = $$(GDCMINCLUDEDIR)
 isEmpty(GDCMINCLUDEDIR){
-    unix:GDCMINCLUDEDIR = $$SDK_INSTALL_PREFIX/include/gdcm-2.6
-    win32:GDCMINCLUDEDIR = $$SDK_INSTALL_PREFIX/gdcm/2.6.4/include/gdcm-2.6
+    unix:GDCMINCLUDEDIR = $$SDK_INSTALL_PREFIX/include/gdcm-2.8
+    win32:GDCMINCLUDEDIR = $$SDK_INSTALL_PREFIX/gdcm/2.8.6/include/gdcm-2.8
 }
 
 # Threadweaver libraries

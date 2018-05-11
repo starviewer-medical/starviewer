@@ -1,6 +1,14 @@
---- gdcm-2.0.19/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx	Tue Jun 12 12:16:11 2012
-+++ gdcm-2.0.19_with_modifications/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx	Tue Jun 12 11:39:31 2012
-@@ -657,6 +657,7 @@
+diff --git a/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx b/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx
+index 5c5edf7..93c2a61 100644
+--- a/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx
++++ b/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx
+@@ -671,11 +671,13 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
+         {
+         gdcmDebugMacro( "No way this is DICOM" );
+         success = false;
++        throw ex;
+         }
+       }
  #else
      gdcmDebugMacro( ex.what() ); (void)ex;
      success = false;
@@ -8,8 +16,8 @@
  #endif /* GDCM_SUPPORT_BROKEN_IMPLEMENTATION */
      }
    catch( Exception &ex )
-@@ -664,11 +665,13 @@
- 	(void)ex;  //to avoid unreferenced variable warning on release
+@@ -683,11 +685,13 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
+     (void)ex;  //to avoid unreferenced variable warning on release
      gdcmDebugMacro( ex.what() );
      success = false;
 +    throw ex;
@@ -22,8 +30,8 @@
      }
  
    //if( success ) assert( Stream->eof() );
-@@ -679,11 +682,13 @@
- 	(void)ex;  //to avoid unreferenced variable warning on release
+@@ -698,11 +702,13 @@ bool Reader::InternalReadCommon(const T_Caller &caller)
+     (void)ex;  //to avoid unreferenced variable warning on release
      gdcmDebugMacro( ex.what() );
      success = false;
 +    throw ex;
@@ -34,5 +42,5 @@
      success = false;
 +    throw;
      }
-   //  if( !success )
-   //    {
+ 
+   // FIXME : call this function twice...
