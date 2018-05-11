@@ -39,7 +39,7 @@ matrix:
       osx_image: xcode8.3
       compiler: clang
       env:
-      - SDK_INSTALL_PREFIX="$HOME/uroot/usr/local"
+      - SDK_INSTALL_PREFIX="$HOME/sdk-0.15/usr/local"
       - DYLD_LIBRARY_PATH="$SDK_INSTALL_PREFIX/lib"
       - DYLD_FRAMEWORK_PATH="/usr/local/opt/qt5/lib"
 
@@ -55,13 +55,13 @@ matrix:
         - PATH="$QTDIR/bin:$PATH"
         - LDFLAGS=-L$QTDIR/lib
         - CPPFLAGS=-I$QTDIR/include
-        - wget -nv --directory-prefix=$HOME http://trueta.udg.edu/apt/macosx/devel/0.14/starviewer-sdk-macosx-0.14-4.tar.xz
-        - mkdir ~/uroot
-        - tar xf ~/starviewer-sdk-macosx-0.14-4.tar.xz -C ~/uroot
+        - wget -nv --directory-prefix=$HOME http://trueta.udg.edu/apt/macos/devel/0.15/starviewer-sdk-macos-0.15-0.tar.xz
+        - mkdir ~/sdk-0.15
+        - tar xf ~/starviewer-sdk-macos-0.15-0.tar.xz -C ~/sdk-0.15
 
       script:
         - cd starviewer
         - qmake
-        - make -j3 | sed 's/\/Applications\/Xcode\.app\/Contents\/Developer/[xcode]/g' | sed -E 's/\/(Users|home)\/travis\/uroot/[uroot]/g'
+        - make -j3 | sed 's/\/Applications\/Xcode\.app\/Contents\/Developer/[xcode]/g' | sed -E 's/\/(Users|home)\/travis\/sdk-0.15/[sdk]/g'
         - cd tests/auto
         - ./autotests -silent

@@ -15,7 +15,7 @@ if exist "%PatchesRoot%\%BuildLib%" (
 )
 
 %CMake% -Wno-dev %CMakeOptions% "%SourceDir%"
-nmake
-nmake install
+%Jom% -j2
+%Jom% install
 
 popd
