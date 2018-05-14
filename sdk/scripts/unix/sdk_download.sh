@@ -43,9 +43,9 @@ do
                                 'https://support.dcmtk.org/redmine/attachments/download/8/dcmtk-3.6.1_20120515.tar.gz'
             ;;
         vtk)
-            download_and_verify 78a990a15ead79cdc752e86b83cfab7dbf5b7ef51ba409db02570dbdd9ec32c3 \
-                                'VTK-7.0.0.tar.gz' \
-                                'https://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz'
+            download_and_verify 71a09b4340f0a9c58559fe946dc745ab68a866cf20636a41d97b6046cb736324 \
+                                'VTK-8.1.1.tar.gz' \
+                                'https://www.vtk.org/files/release/8.1/VTK-8.1.1.tar.gz'
             ;;
         gdcm)
             download_and_verify f4e611c74ea2b16c9aa28d7fdf3a8678ce926909606705b7cd08c9a5b05d34fc \

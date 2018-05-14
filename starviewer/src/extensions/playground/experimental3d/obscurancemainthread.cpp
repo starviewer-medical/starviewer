@@ -20,7 +20,7 @@
 #include <vtkMultiThreader.h>
 #include <vtkPointData.h>
 #include <vtkVolume.h>
-#include <vtkVolumeRayCastMapper.h>
+#include "vtkVolumeRayCastMapper.h"
 
 #include "logging.h"
 #include "obscurancethread.h"

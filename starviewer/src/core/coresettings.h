@@ -36,21 +36,6 @@ public:
     static const QString UserCustomWindowLevelsPath;
     static const QString RegisterStatLogs;
 
-    static const QString NumberOfDirectionsForLowQualityObscurances;
-    static const QString FunctionForLowQualityObscurances;
-    static const QString VariantForLowQualityObscurances;
-    static const QString GradientRadiusForLowQualityObscurances;
-
-    static const QString NumberOfDirectionsForMediumQualityObscurances;
-    static const QString FunctionForMediumQualityObscurances;
-    static const QString VariantForMediumQualityObscurances;
-    static const QString GradientRadiusForMediumQualityObscurances;
-
-    static const QString NumberOfDirectionsForHighQualityObscurances;
-    static const QString FunctionForHighQualityObscurances;
-    static const QString VariantForHighQualityObscurances;
-    static const QString GradientRadiusForHighQualityObscurances;
-
     static const QString LanguageLocale;
 
     /// Els 3 següents settings són "backdoors" que *només* s'haurien de fer servir en casos molt específics i controlats

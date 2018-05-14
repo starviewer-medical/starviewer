@@ -1,0 +1,43 @@
+diff --git a/Utilities/VTK/vtkGDCMPolyDataWriter.cxx b/Utilities/VTK/vtkGDCMPolyDataWriter.cxx
+index e2c661c..290ca4a 100644
+--- a/Utilities/VTK/vtkGDCMPolyDataWriter.cxx
++++ b/Utilities/VTK/vtkGDCMPolyDataWriter.cxx
+@@ -586,7 +586,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
+   if( darray )
+     {
+     double tuple[3];
+-    darray->GetTupleValue( 0, tuple );
++    darray->GetTypedTuple( 0, tuple );
+     intcolor[0] = (int32_t)(tuple[0] * 255.);
+     intcolor[1] = (int32_t)(tuple[1] * 255.);
+     intcolor[2] = (int32_t)(tuple[2] * 255.);
+@@ -594,7 +594,7 @@ void vtkGDCMPolyDataWriter::WriteRTSTRUCTData(gdcm::File &file, int pdidx )
+   else if( farray )
+     {
+     float ftuple[3];
+-    farray->GetTupleValue( 0, ftuple );
++    farray->GetTypedTuple( 0, ftuple );
+     intcolor[0] = (int32_t)(ftuple[0] * 255.);
+     intcolor[1] = (int32_t)(ftuple[1] * 255.);
+     intcolor[2] = (int32_t)(ftuple[2] * 255.);
+diff --git a/Utilities/VTK/vtkImageColorViewer.cxx b/Utilities/VTK/vtkImageColorViewer.cxx
+index 3d6df39..b7fc7ed 100644
+--- a/Utilities/VTK/vtkImageColorViewer.cxx
++++ b/Utilities/VTK/vtkImageColorViewer.cxx
+@@ -539,7 +539,15 @@ public:
+ 
+       if (event == vtkCommand::ResetWindowLevelEvent)
+         {
+-#if (VTK_MAJOR_VERSION >= 6)
++#if (VTK_MAJOR_VERSION >= 8)
++        this->IV->GetInputAlgorithm()->UpdateInformation();
++        this->IV->GetInputAlgorithm()->GetOutputInformation(0)->Set(
++          vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(),
++          this->IV->GetInputAlgorithm()->GetOutputInformation(0)->Get(
++            vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT()),
++          6);
++        this->IV->GetInputAlgorithm()->Update();
++#elif (VTK_MAJOR_VERSION >= 6)
+         this->IV->GetInputAlgorithm()->UpdateInformation();
+         vtkStreamingDemandDrivenPipeline::SetUpdateExtent(
+           this->IV->GetInputInformation(),

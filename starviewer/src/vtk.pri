@@ -2,13 +2,14 @@ include(defaultdirectories.pri)
 
 INCLUDEPATH += $${VTKINCLUDEDIR}
 
-VTKLIBSUFFIX = -7.0
+VTKLIBSUFFIX = -8.1
 VTKLIBS = \
     vtkCommonCore \
     vtkCommonDataModel \
     vtkCommonExecutionModel \
     vtkCommonMath \
     vtkCommonMisc \
+    vtkCommonSystem \
     vtkCommonTransforms \
     vtkFiltersCore \
     vtkFiltersGeneral \

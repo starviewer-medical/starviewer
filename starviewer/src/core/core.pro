@@ -175,15 +175,9 @@ HEADERS += extensionfactory.h \
     hdrcolor.h \
     trilinearinterpolator.h \
     vector3.h \
-    vtkVolumeRayCastVoxelShaderCompositeFunction.h \
     sphereuniformpointcloudgenerator.h \
-    obscurancemainthread.h \
-    obscurancethread.h \
-    obscurancevoxelshader.h \
     vtk4dlinearregressiongradientestimator.h \
     combiningvoxelshader.h \
-    vtkVolumeRayCastSingleVoxelShaderCompositeFunction.h \
-    obscurance.h \
     viewpointgenerator.h \
     thumbnailcreator.h \
     nonclosedangletool.h \
@@ -568,15 +562,9 @@ SOURCES += extensionmediator.cpp \
     directilluminationvoxelshader.cpp \
     voxelshader.cpp \
     trilinearinterpolator.cpp \
-    vtkVolumeRayCastVoxelShaderCompositeFunction.cxx \
     sphereuniformpointcloudgenerator.cpp \
-    obscurancemainthread.cpp \
-    obscurancethread.cpp \
-    obscurancevoxelshader.cpp \
     vtk4dlinearregressiongradientestimator.cpp \
     combiningvoxelshader.cpp \
-    vtkVolumeRayCastSingleVoxelShaderCompositeFunction.cxx \
-    obscurance.cpp \
     viewpointgenerator.cpp \
     thumbnailcreator.cpp \
     nonclosedangletool.cpp \

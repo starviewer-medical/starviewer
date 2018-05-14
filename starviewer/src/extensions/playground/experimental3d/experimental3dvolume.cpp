@@ -34,8 +34,8 @@
 #include <vtkPointData.h>
 #include <vtkVolume.h>
 #include <vtkVolumeProperty.h>
-#include <vtkVolumeRayCastCompositeFunction.h>
-#include <vtkVolumeRayCastMapper.h>
+#include "vtkVolumeRayCastCompositeFunction.h"
+#include "vtkVolumeRayCastMapper.h"
 
 namespace udg {
 
