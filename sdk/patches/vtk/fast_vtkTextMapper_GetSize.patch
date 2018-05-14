@@ -15,7 +15,7 @@ index 78b9562..a089f0e 100644
 +    return;
 +    }
 +
-   vtkWindow *win = vp ? vp->GetVTKWindow() : NULL;
+   vtkWindow *win = vp ? vp->GetVTKWindow() : nullptr;
    if (!win)
      {
 -    size[0] = size[1] = 0;

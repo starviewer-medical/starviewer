@@ -494,7 +494,7 @@ void QMPRExtension::switchToMIPLayout(bool isMIPChecked)
         {
             m_mipViewer = new Q3DViewer;
             m_mipViewer->orientationMarkerOff();
-            m_mipViewer->setRenderFunctionToMIP3D();
+            m_mipViewer->setBlendMode(Q3DViewer::BlendMode::MaximumIntensity);
         }
         Volume *mipInput = new Volume;
         // TODO Això es necessari perquè tingui la informació de la sèrie, estudis, pacient...

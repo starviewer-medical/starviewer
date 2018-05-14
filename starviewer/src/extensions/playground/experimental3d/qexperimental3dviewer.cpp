@@ -12,7 +12,7 @@
 #include <vtkRenderWindow.h>
 #include <vtkRenderer.h>
 #include <vtkUnsignedCharArray.h>
-#include <vtkVolumeRayCastMapper.h>
+#include "vtkVolumeRayCastMapper.h"
 
 namespace udg {
 

@@ -7,6 +7,6 @@ Si existeix vol dir que cal aplicar tots els patch que hi hagi en aquest directo
 - Qt 5.6.3
 - DCMTK 3.6.1-20120515
 - ITK 4.10.0
-- VTK 7.0.0
+- VTK 8.1.1
 - gdcm 2.8.6
 - ThreadWeaver 5.3.0
