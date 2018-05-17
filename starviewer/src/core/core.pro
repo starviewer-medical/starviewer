@@ -394,7 +394,6 @@ HEADERS += extensionfactory.h \
     nmroidataprinter.h \
     nmctfusionroidataprinter.h \
     vtkcorrectimageblend.h \
-    vtktextactorwithbackground.h \
     volumereaderjobfactory.h \
     relativegeometrylayout.h \
     griditerator.h \
@@ -771,7 +770,6 @@ SOURCES += extensionmediator.cpp \
     nmroidataprinter.cpp \
     nmctfusionroidataprinter.cpp \
     vtkcorrectimageblend.cpp \
-    vtktextactorwithbackground.cpp \
     volumereaderjobfactory.cpp \
     relativegeometrylayout.cpp \
     griditerator.cpp \

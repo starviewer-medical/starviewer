@@ -17,9 +17,9 @@
 
 #include "drawerprimitive.h"
 
-namespace udg {
+class vtkTextActor;
 
-class VtkTextActorWithBackground;
+namespace udg {
 
 /**
     Primitiva de text per al Drawer
@@ -179,7 +179,7 @@ private:
     bool m_scaled;
 
     /// Estructures de vtk, per construir el text
-    VtkTextActorWithBackground *m_vtkActor;
+    vtkTextActor *m_vtkActor;
 
     /// Punt on es mostrarà el text
     double m_attachPoint[3];
