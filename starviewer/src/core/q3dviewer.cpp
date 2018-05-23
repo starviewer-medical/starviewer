@@ -344,11 +344,20 @@ void Q3DViewer::setVolumeTransformation()
     vtkMatrix4x4 *projectionMatrix = vtkMatrix4x4::New();
     projectionMatrix->Identity();
 
-    for (int row = 0; row < 3; row++)
+    if ((   currentPlaneRowVector[0] == 0.0 &&    currentPlaneRowVector[1] == 0.0 &&    currentPlaneRowVector[2] == 0.0) ||
+        (currentPlaneColumnVector[0] == 0.0 && currentPlaneColumnVector[1] == 0.0 && currentPlaneColumnVector[2] == 0.0) ||
+        (          stackDirection[0] == 0.0 &&           stackDirection[1] == 0.0 &&           stackDirection[2] == 0.0))
     {
-        projectionMatrix->SetElement(row, 0, currentPlaneRowVector[row]);
-        projectionMatrix->SetElement(row, 1, currentPlaneColumnVector[row]);
-        projectionMatrix->SetElement(row, 2, stackDirection[row]);
+        DEBUG_LOG("One of the vectors is null: setting an identity projection matrix.");
+    }
+    else
+    {
+        for (int row = 0; row < 3; row++)
+        {
+            projectionMatrix->SetElement(row, 0, currentPlaneRowVector[row]);
+            projectionMatrix->SetElement(row, 1, currentPlaneColumnVector[row]);
+            projectionMatrix->SetElement(row, 2, stackDirection[row]);
+        }
     }
 
     m_vtkVolume->SetUserMatrix(projectionMatrix);
