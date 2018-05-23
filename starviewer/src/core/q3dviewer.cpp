@@ -163,6 +163,7 @@ void Q3DViewer::setInput(Volume *volume)
     }
 
     m_mainVolume = volume;
+    m_mainVolume->getVtkData()->Modified(); // Workaround for vtkSmartVolumeMapper bug (https://gitlab.kitware.com/vtk/vtk/issues/17328)
     m_volumeMapper->SetInputData(m_mainVolume->getVtkData());
     m_isosurfaceFilter->SetInputData(m_mainVolume->getVtkData());
 
