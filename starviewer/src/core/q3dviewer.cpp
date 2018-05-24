@@ -64,6 +64,7 @@ Q3DViewer::Q3DViewer(QWidget *parent)
     m_orientationMarker = new Q3DOrientationMarker(this->getInteractor(), this);
 
     m_volumeMapper = vtkSmartVolumeMapper::New();
+    m_volumeMapper->InteractiveAdjustSampleDistancesOff();  // Workaround for vtkSmartVolumeMapper bug (https://gitlab.kitware.com/vtk/vtk/issues/17323)
     m_volumeProperty = vtkVolumeProperty::New();
     m_volumeProperty->SetInterpolationTypeToLinear();
     m_vtkVolume = vtkVolume::New();
