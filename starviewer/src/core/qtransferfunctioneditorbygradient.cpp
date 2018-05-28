@@ -120,7 +120,7 @@ void QTransferFunctionEditorByGradient::setTransferFunction(const TransferFuncti
 
     foreach (double x, points)
     {
-        gradientStops << QGradientStop(x / m_maximum, transferFunction.get(x));
+        gradientStops << QGradientStop((x - m_minimum) / (m_maximum - m_minimum), transferFunction.get(x));
     }
 
     setGradientStops(gradientStops);
@@ -219,7 +219,7 @@ void QTransferFunctionEditorByGradient::setTransferFunction(const QGradientStops
 
     for (int i = 0; i < stops.size(); i++)
     {
-        m_transferFunction.set(stops.at(i).first * m_maximum, stops.at(i).second, stops.at(i).second.alphaF());
+        m_transferFunction.set(m_minimum + stops.at(i).first * (m_maximum - m_minimum), stops.at(i).second, stops.at(i).second.alphaF());
     }
 }
 

@@ -332,9 +332,13 @@ void Q3DViewerExtension::setInput(Volume *input)
 
 void Q3DViewerExtension::setScalarRange(double min, double max)
 {
-    unsigned short maximum = static_cast<unsigned short>(qRound(max));
+    int minimum = qRound(min);
+    int maximum = qRound(max);
+    m_gradientEditor->setMinimum(minimum);
     m_gradientEditor->setMaximum(maximum);
+    m_editorByValues->setMinimum(minimum);
     m_editorByValues->setMaximum(maximum);
+    m_isoValueSpinBox->setMinimum(minimum);
     m_isoValueSpinBox->setMaximum(maximum);
 
     if (m_firstInput)
