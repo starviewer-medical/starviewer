@@ -548,6 +548,7 @@ void Q3DViewerExtension::updateView(bool fast)
 
     m_3DView->setBlendMode(Q3DViewer::BlendMode(m_blendModeComboBox->currentIndex()));
     m_3DView->setRenderMode(Q3DViewer::RenderMode(m_renderModeComboBox->currentIndex()));
+    m_3DView->setIndependentComponents(!m_colorImageCheckBox->isChecked());
     m_3DView->setShading(m_shadingGroupBox->isChecked());
     m_3DView->setAmbientCoefficient(m_ambientCoefficientDoubleSpinBox->value());
     m_3DView->setDiffuseCoefficient(m_diffuseCoefficientDoubleSpinBox->value());
@@ -576,6 +577,7 @@ void Q3DViewerExtension::enableAutoUpdate()
 {
     connect(m_blendModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateView);
     connect(m_renderModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateView);
+    connect(m_colorImageCheckBox, &QCheckBox::toggled, this, &Q3DViewerExtension::updateView);
 
     // Shading
     connect(m_shadingGroupBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
@@ -592,6 +594,7 @@ void Q3DViewerExtension::disableAutoUpdate()
 {
     disconnect(m_blendModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateView);
     disconnect(m_renderModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateView);
+    disconnect(m_colorImageCheckBox, &QCheckBox::toggled, this, &Q3DViewerExtension::updateView);
 
     // Shading
     disconnect(m_shadingGroupBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
