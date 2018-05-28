@@ -74,7 +74,22 @@ QTransferFunctionEditorByValues::~QTransferFunctionEditorByValues()
 {
 }
 
-void QTransferFunctionEditorByValues::setMaximum(unsigned short maximum)
+void QTransferFunctionEditorByValues::setMinimum(int minimum)
+{
+    QTransferFunctionEditor::setMinimum(minimum);
+
+    QList<QTransferFunctionIntervalEditor*> intervalList = m_intervalEditorsWidget->findChildren<QTransferFunctionIntervalEditor*>();
+    QTransferFunctionIntervalEditor *interval;
+
+    foreach (interval, intervalList)
+    {
+        interval->setMinimum(m_minimum);
+    }
+
+    m_changed = true;
+}
+
+void QTransferFunctionEditorByValues::setMaximum(int maximum)
 {
     QTransferFunctionEditor::setMaximum(maximum);
 
@@ -212,7 +227,7 @@ void QTransferFunctionEditorByValues::removeInterval()
 
 QTransferFunctionIntervalEditor *QTransferFunctionEditorByValues::addIntervalAndReturnIt()
 {
-    if (m_numberOfIntervals == m_maximum + 1u)
+    if (m_numberOfIntervals == m_maximum - m_minimum + 1)
     {
         return 0;
     }
@@ -222,6 +237,7 @@ QTransferFunctionIntervalEditor *QTransferFunctionEditorByValues::addIntervalAnd
             QString("interval%1").arg(m_numberOfIntervals - 1));
     QTransferFunctionIntervalEditor *afterLast
             = new QTransferFunctionIntervalEditor(m_intervalEditorsWidget);
+    afterLast->setMinimum(m_minimum);
     afterLast->setMaximum(m_maximum);
 
     connect(last, SIGNAL(endChanged(int)), afterLast, SLOT(setPreviousEnd(int)));

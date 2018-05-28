@@ -54,9 +54,14 @@ public:
     QTransferFunctionIntervalEditor(int maximum, QWidget *parent = 0);
     virtual ~QTransferFunctionIntervalEditor();
 
-    /// Retorna el màxim de l'interval.
+    /// Returns the minimum of this interval.
+    int minimum() const;
+    /// Sets the minimum of this interval.
+    void setMinimum(int minimum);
+
+    /// Returns the maximum of this interval.
     int maximum() const;
-    /// Assigna el màxim de l'interval.
+    /// Sets the maximum of this interval.
     void setMaximum(int maximum);
 
     /// Assigna la propietat isFirst.
@@ -114,7 +119,9 @@ private slots:
     void selectColor();
 
 private:
-    /// Màxim de l'interval.
+    /// Minimum of the interval.
+    int m_minimum;
+    /// Maximum of the interval.
     int m_maximum;
     /// Propietats isFirst i isLast.
     bool m_isFirst, m_isLast;

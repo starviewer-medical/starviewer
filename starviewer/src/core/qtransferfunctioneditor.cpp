@@ -17,21 +17,30 @@
 namespace udg {
 
 QTransferFunctionEditor::QTransferFunctionEditor(QWidget *parent)
- : QWidget(parent)
+ : QWidget(parent), m_minimum(0), m_maximum(255)
 {
-    m_maximum = 255;
 }
 
 QTransferFunctionEditor::~QTransferFunctionEditor()
 {
 }
 
-unsigned short QTransferFunctionEditor::maximum() const
+int QTransferFunctionEditor::minimum() const
+{
+    return m_minimum;
+}
+
+void QTransferFunctionEditor::setMinimum(int minimum)
+{
+    m_minimum = minimum;
+}
+
+int QTransferFunctionEditor::maximum() const
 {
     return m_maximum;
 }
 
-void QTransferFunctionEditor::setMaximum(unsigned short maximum)
+void QTransferFunctionEditor::setMaximum(int maximum)
 {
     m_maximum = maximum;
 }
