@@ -230,6 +230,11 @@ void Q3DViewer::setInterpolationMode(const InterpolationMode &mode)
     }
 }
 
+void Q3DViewer::setIndependentComponents(bool independent)
+{
+    m_volumeProperty->SetIndependentComponents(independent);
+}
+
 void Q3DViewer::applyCurrentRenderingMethod()
 {
     if (m_firstRender)

@@ -78,6 +78,10 @@ public slots:
     /// Sets the interpolation mode to use.
     void setInterpolationMode(const InterpolationMode &mode);
 
+    /// Sets the "independent components" property of the volume. The default is true and this should be set to false for a color image.
+    /// In a 4-component image with non-independent components, the first 3 represent RGB and the fourth will be mapped through the opacity transfer function.
+    void setIndependentComponents(bool independent);
+
     /// Aplica el mètode de rendering actual.
     void applyCurrentRenderingMethod();
 
