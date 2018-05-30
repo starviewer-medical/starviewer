@@ -110,6 +110,7 @@ vtkLookupTable* WindowLevel::toVtkLookupTable() const
     lut->SetLevel(m_center);
     lut->SetInverseVideo(std::signbit(m_width));
     lut->Build();
+    lut->BuildSpecialColors();
     return lut;
 }
 
