@@ -69,38 +69,17 @@ double WindowLevel::getCenter() const
 
 bool WindowLevel::isValid() const
 {
-    if (qAbs(m_width) < 1.0)
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
+    return qAbs(m_width) >= 1.0;
 }
 
 bool WindowLevel::valuesAreEqual(const WindowLevel &windowLevel) const
 {
-    if (m_width == windowLevel.getWidth() && m_center == windowLevel.getCenter())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return m_width == windowLevel.getWidth() && m_center == windowLevel.getCenter();
 }
 
 bool WindowLevel::operator==(const WindowLevel &windowLevelToCompare) const
 {
-    if (m_width == windowLevelToCompare.getWidth() && m_center == windowLevelToCompare.getCenter() && m_name == windowLevelToCompare.getName())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return m_width == windowLevelToCompare.getWidth() && m_center == windowLevelToCompare.getCenter() && m_name == windowLevelToCompare.getName();
 }
 
 vtkLookupTable* WindowLevel::toVtkLookupTable() const
