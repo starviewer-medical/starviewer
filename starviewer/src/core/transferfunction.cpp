@@ -444,7 +444,7 @@ vtkLookupTable* TransferFunction::toVtkLookupTable() const
     updateKeys();
 
     vtkLookupTable *table = vtkLookupTable::New();
-    table->SetNumberOfTableValues(std::max(static_cast<int>(m_keys.last() - m_keys.first()) + 1, 256));
+    table->SetNumberOfTableValues(qBound(256, static_cast<int>(m_keys.last() - m_keys.first()) + 1, 1024));
     table->Build();
     table->SetTableRange(m_keys.first(), m_keys.last());
 
