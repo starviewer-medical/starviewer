@@ -834,4 +834,3 @@ QT += xml \
     webenginewidgets
 
 INCLUDEPATH += ../thirdparty/easylogging++
-DEPENDPATH += ../thirdparty/easylogging++

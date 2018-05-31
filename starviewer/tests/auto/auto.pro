@@ -6,7 +6,6 @@ TEMPLATE = app
 CONFIG -= app_bundle
 
 INCLUDEPATH += shared
-DEPENDPATH += shared
 
 SOURCES += autotests.cpp
 
