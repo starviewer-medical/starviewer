@@ -1,6 +1,6 @@
 # Function to add an internal static library as a dependency
-# Usage: $$addLibraryDependency(<librarySourceDir>, <libraryOutputDir>, <libraryName>)
-defineReplace(addLibraryDependency) {
+# Usage: addLibraryDependency(<librarySourceDir>, <libraryOutputDir>, <libraryName>)
+defineTest(addLibraryDependency) {
     directoryName = $$1
     outputDirectoryName = $$2
     libraryName = $$3
@@ -19,5 +19,5 @@ defineReplace(addLibraryDependency) {
     export(INCLUDEPATH)
     export(DEPENDPATH)
 
-    return(0)
+    return(true)
 }
