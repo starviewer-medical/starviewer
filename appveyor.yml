@@ -19,8 +19,8 @@ install:
 - ps: |
     # Setup precompiled SDK
 
-    $source = "http://trueta.udg.edu/apt/windows/devel/0.15/starviewer-sdk-win$env:BITS-0.15-1.7z"
-    $destination = "c:\starviewer-sdk-win$env:BITS-0.15-1.7z"
+    $source = "http://trueta.udg.edu/apt/windows/devel/0.15/starviewer-sdk-win$env:BITS-0.15-2.7z"
+    $destination = "c:\starviewer-sdk-win$env:BITS-0.15-2.7z"
     Invoke-WebRequest $source -OutFile $destination
 
     7z x $destination -oc:\ > 7z-output.txt

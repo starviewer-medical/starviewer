@@ -53,9 +53,9 @@ do
                                 'https://github.com/malaterre/GDCM/archive/v2.8.6.tar.gz'
             ;;
         itk)
-            download_and_verify ea0011fc99a6303427b236c3ceaf54688224350ce1a216b64c9771ab3194b15f \
-                                'InsightToolkit-4.10.0.tar.xz' \
-                                'http://downloads.sourceforge.net/project/itk/itk/4.10/InsightToolkit-4.10.0.tar.xz'    # https fails in mac
+            download_and_verify feb3fce3cd3bf08405e49da30876dc766e5145c821e5e3f8736df1d1717da125 \
+                                'InsightToolkit-4.13.0.tar.xz' \
+                                'https://freefr.dl.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.0.tar.xz'
             ;;
         ecm)
             download_and_verify ea8b6a648b7b2dc313df709940813c22ed5b68d2f7bef30acbaf2a83a6e4c723 \
