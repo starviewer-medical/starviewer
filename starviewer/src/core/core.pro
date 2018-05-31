@@ -414,7 +414,6 @@ HEADERS += extensionfactory.h \
     qfusionlayoutwidget.h \
     gridicon.h \
     itemmenu.h \
-    easylogging++.h \
     volumefillerstep.h \
     qexternalapplicationconfigurationscreen.h \
     externalapplication.h \
@@ -836,3 +835,6 @@ QT += xml \
     quickwidgets \
     concurrent \
     webenginewidgets
+
+INCLUDEPATH += ../thirdparty/easylogging++
+DEPENDPATH += ../thirdparty/easylogging++

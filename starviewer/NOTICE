@@ -263,18 +263,17 @@ met: http://www.gnu.org/copyleft/gpl.html.
 EASYLOGGING++
 =============
 
-Easylogging++ v9.80
+Easylogging++ v9.96.4
 Single-header only, cross-platform logging library for C++ applications
 
-Copyright (c) 2015 muflihun.com
+Copyright (c) 2012-2018 Muflihun Labs
+Copyright (c) 2012-2018 @abumusamq
 
 This library is released under the MIT Licence.
-http://easylogging.muflihun.com/licence.php
+https://github.com/muflihun/easyloggingpp/blob/master/LICENSE
 
-easylogging@muflihun.com
-
-https://github.com/easylogging/easyloggingpp
-http://easylogging.muflihun.com
+https://github.com/muflihun/easyloggingpp
+https://muflihun.github.io/easyloggingpp
 http://muflihun.com
 
 
