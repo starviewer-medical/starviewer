@@ -10,14 +10,12 @@ defineTest(addLibraryDependency) {
         win32:PRE_TARGETDEPS += $$outputDirectoryName/$$libraryName/$${libraryName}.lib
         LIBS += -L$$outputDirectoryName/$$libraryName -l$${libraryName}
         INCLUDEPATH += $$directoryName/$$libraryName
-        DEPENDPATH += $$outputDirectoryName/$$libraryName
     }
 
     # Propagate changes to the outside
     export(PRE_TARGETDEPS)
     export(LIBS)
     export(INCLUDEPATH)
-    export(DEPENDPATH)
 
     return(true)
 }

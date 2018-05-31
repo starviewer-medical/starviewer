@@ -6,8 +6,6 @@ DESTDIR = $$OUT_PWD
 
 INCLUDEPATH += ../../../core \
                ../../../inputoutput
-DEPENDPATH += ../../../core \
-               ../../../inputoutput
 MOC_DIR = ../../../../tmp/moc
 UI_DIR = ../../../../tmp/ui
 win32-msvc2013 {
