@@ -27,14 +27,14 @@ do
         qt)
             if [[ $(uname) == 'Linux' ]]
             then
-                download_and_verify f1fbd6b7ee067f6af6412d16c33c5478aed230c655c888d9cc7b1037f8048ec5 \
-                                    'qt-opensource-linux-x64-5.6.3.run' \
-                                    'https://download.qt.io/official_releases/qt/5.6/5.6.3/qt-opensource-linux-x64-5.6.3.run'
+                download_and_verify 4f4ebd19051913e90a72b87a4397b0791ba50d81d26596b149867a11ffae0b16 \
+                                    'qt-opensource-linux-x64-5.9.5.run' \
+                                    'https://download.qt.io/official_releases/qt/5.9/5.9.5/qt-opensource-linux-x64-5.9.5.run'
             elif [[ $(uname) == 'Darwin' ]]
             then
-                download_and_verify e12174b4a128ef34900527487d7ad147fad56e081fe4e0ff667737decd27b6b5 \
-                                    'qt-opensource-mac-x64-clang-5.6.3.dmg' \
-                                    'https://download.qt.io/official_releases/qt/5.6/5.6.3/qt-opensource-mac-x64-clang-5.6.3.dmg'
+                download_and_verify eda679eeb801a03f3b52c4870214f73fae13a851ec230cf356420789837d5a80 \
+                                    'qt-opensource-mac-x64-5.9.5.dmg' \
+                                    'https://download.qt.io/official_releases/qt/5.9/5.9.5/qt-opensource-mac-x64-5.9.5.dmg'
             fi
             ;;
         dcmtk)

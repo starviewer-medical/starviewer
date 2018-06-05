@@ -7,15 +7,15 @@ SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$HOME/starviewer-sdk-0.15"}
 DOWNLOAD_PREFIX=${DOWNLOAD_PREFIX:-"$SDK_BASE_PREFIX/downloads"}
 
 # Where the user will be asked to install Qt.
-INSTALL_QTDIR=${INSTALL_QTDIR:-"$HOME/Qt5.6.3"}
+INSTALL_QTDIR=${INSTALL_QTDIR:-"$HOME/Qt"}
 
 # Directory where the specific version of Qt is installed.
 if [[ $(uname) == 'Linux' ]]
 then
-    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.6.3/gcc_64"}
+    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.9.5/gcc_64"}
 elif [[ $(uname) == 'Darwin' ]]
 then
-    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.6.3/clang_64"}
+    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.9.5/clang_64"}
 fi
 
 # Where to install the SDK libraries once compiled.
@@ -46,6 +46,9 @@ CMAKE_DISTCC=${CMAKE_DISTCC:-}
 # Set to appropriate value (example below) to compile with non-default compiler (default is gcc on Linux and clang in Mac).
 CMAKE_COMPILER=${CMAKE_COMPILER:-}
 #CMAKE_COMPILER='-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang'
+
+# C++11 support
+CMAKE_CPP11='-DCMAKE_CXX_STANDARD:STRING=11 -DCMAKE_CXX_STANDARD_REQUIRED:BOOL=ON -DCMAKE_C_STANDARD:STRING=11 -DCMAKE_C_STANDARD_REQUIRED:BOOL=ON'
 
 # Number of simultaneous make jobs.
 MAKE_CONCURRENCY=${MAKE_CONCURRENCY:--j4}
@@ -87,6 +90,3 @@ DPKG_TMP=/tmp/starviewer-dpkg
 
 # Where to place the packages
 DPKG_DESTINATION=$SCRIPTS_ROOT/../../../
-
-# c++11 support
-CMAKE_CPP11='-DCMAKE_CXX_STANDARD:STRING=11 -DCMAKE_CXX_STANDARD_REQUIRED:BOOL=ON -DCMAKE_C_STANDARD:STRING=11 -DCMAKE_C_STANDARD_REQUIRED:BOOL=ON'

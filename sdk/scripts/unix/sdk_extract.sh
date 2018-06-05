@@ -13,13 +13,13 @@ do
 
             if [[ $(uname) == 'Linux' ]]
             then
-                chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.3.run"
-                "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.6.3.run"
+                chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.9.5.run"
+                "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.9.5.run"
             elif [[ $(uname) == 'Darwin' ]]
             then
-                hdiutil mount "${DOWNLOAD_PREFIX}/qt-opensource-mac-x64-clang-5.6.3.dmg"
-                open -W /Volumes/qt-opensource-mac-x64-clang-5.6.3/qt-opensource-mac-x64-clang-5.6.3.app
-                hdiutil unmount /Volumes/qt-opensource-mac-x64-clang-5.6.3
+                hdiutil mount "${DOWNLOAD_PREFIX}/qt-opensource-mac-x64-5.9.5.dmg"
+                open -W /Volumes/qt-opensource-mac-x64-5.9.5/qt-opensource-mac-x64-5.9.5.app
+                hdiutil unmount /Volumes/qt-opensource-mac-x64-5.9.5
             fi
             ;;
         dcmtk)
