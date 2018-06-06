@@ -55,9 +55,9 @@ matrix:
         - PATH="$QTDIR/bin:$PATH"
         - LDFLAGS=-L$QTDIR/lib
         - CPPFLAGS=-I$QTDIR/include
-        - wget -nv --directory-prefix=$HOME http://trueta.udg.edu/apt/macos/devel/0.15/starviewer-sdk-macos-0.15-3.tar.xz
+        - wget -nv --directory-prefix=$HOME http://trueta.udg.edu/apt/macos/devel/0.15/starviewer-sdk-macos-0.15-4.tar.xz
         - mkdir ~/sdk-0.15
-        - tar xf ~/starviewer-sdk-macos-0.15-3.tar.xz -C ~/sdk-0.15
+        - tar xf ~/starviewer-sdk-macos-0.15-4.tar.xz -C ~/sdk-0.15
 
       script:
         - cd starviewer
