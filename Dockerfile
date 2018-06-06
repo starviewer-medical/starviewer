@@ -10,9 +10,9 @@ RUN apt-get install -qq libwrap0 libwrap0-dev zlib1g zlib1g-dev libssl-dev
 RUN rm -rf /var/lib/apt/lists/*
 RUN unset DEBIAN_FRONTEND
 
-RUN wget -nv --directory-prefix=/ http://trueta.udg.edu/apt/ubuntu/devel/0.15/starviewer-sdk-linux-0.15-3.tar.xz
+RUN wget -nv --directory-prefix=/ http://trueta.udg.edu/apt/ubuntu/devel/0.15/starviewer-sdk-linux-0.15-4.tar.xz
 RUN mkdir /sdk-0.15
-RUN tar xf /starviewer-sdk-linux-0.15-3.tar.xz -C /sdk-0.15
+RUN tar xf /starviewer-sdk-linux-0.15-4.tar.xz -C /sdk-0.15
 
 ENV SDK_INSTALL_PREFIX /sdk-0.15/usr/local
 ENV LD_LIBRARY_PATH /sdk-0.15/usr/local/lib:/sdk-0.15/usr/local/lib/x86_64-linux-gnu
