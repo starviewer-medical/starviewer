@@ -7,6 +7,21 @@
 
 using namespace udg;
 
+namespace {
+
+// Relying on QObject trees to destroy the VolumePixelData (i.e. creating it with VolumePixelData(this) and forgetting about it) produces random crashes in Mac,
+// so we create this auxiliar struct to keep it with the iterator and destroy both at the same time; this struct will be hold by a QSharedPointer.
+struct DataIterator {
+    VolumePixelData *data = nullptr;
+    VolumePixelDataIterator *iterator = nullptr;
+    ~DataIterator() {
+        delete data;
+        delete iterator;
+    }
+};
+
+}
+
 class test_VolumePixelDataIterator : public QObject {
 
     Q_OBJECT
@@ -65,7 +80,7 @@ private slots:
     void operatorSubtractAndAssign_ShouldSubtractAndReturnExpectedValue();
 
 private:
-
+    QSharedPointer<DataIterator> createDataIterator(int x, int y, int z);
     QSharedPointer<VolumePixelDataIterator> createIterator(int x, int y, int z);
     void setupTestDataForAddOperators();
     void setupTestDataForSubtractOperators();
@@ -73,6 +88,7 @@ private:
 
 };
 
+Q_DECLARE_METATYPE(QSharedPointer<DataIterator>)
 Q_DECLARE_METATYPE(QSharedPointer<VolumePixelDataIterator>)
 
 void test_VolumePixelDataIterator::isNull_ShouldReturnExpectedValue_data()
@@ -96,7 +112,7 @@ void test_VolumePixelDataIterator::isNull_ShouldReturnExpectedValue()
 
 void test_VolumePixelDataIterator::get_ShouldReturnExpectedValue_data()
 {
-    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
+    QTest::addColumn<QSharedPointer<DataIterator>>("dataIterator");
     QTest::addColumn<qint8>("expectedValueInt8");
     QTest::addColumn<quint8>("expectedValueUint8");
     QTest::addColumn<qint16>("expectedValueInt16");
@@ -108,20 +124,20 @@ void test_VolumePixelDataIterator::get_ShouldReturnExpectedValue_data()
     QTest::addColumn<float>("expectedValueFloat");
     QTest::addColumn<double>("expectedValueDouble");
 
-    QTest::newRow("get(3, 0, 1)") << createIterator(3, 0, 1) << qint8(245) << quint8(245) << qint16(1781) << quint16(1781)
-                                                             << qint32(819267317) << quint32(819267317) << qint64(819267317) << quint64(819267317)
-                                                             << 819267317.0f << 819267317.0;
-    QTest::newRow("get(3, 1, 2)") << createIterator(3, 1, 2) << qint8(111) << quint8(111) << qint16(39279) << quint16(39279)
-                                                             << qint32(2333039) << quint32(2333039) << qint64(2333039) << quint64(2333039)
-                                                             << 2333039.0f << 2333039.0;
-    QTest::newRow("get(1, 0, 1)") << createIterator(1, 0, 1) << qint8(17) << quint8(17) << qint16(49169) << quint16(49169)
-                                                             << qint32(408141841) << quint32(408141841) << qint64(408141841) << quint64(408141841)
-                                                             << 408141841.0f << 408141841.0;
+    QTest::newRow("get(3, 0, 1)") << createDataIterator(3, 0, 1) << qint8(245) << quint8(245) << qint16(1781) << quint16(1781)
+                                                                 << qint32(819267317) << quint32(819267317) << qint64(819267317) << quint64(819267317)
+                                                                 << 819267317.0f << 819267317.0;
+    QTest::newRow("get(3, 1, 2)") << createDataIterator(3, 1, 2) << qint8(111) << quint8(111) << qint16(39279) << quint16(39279)
+                                                                 << qint32(2333039) << quint32(2333039) << qint64(2333039) << quint64(2333039)
+                                                                 << 2333039.0f << 2333039.0;
+    QTest::newRow("get(1, 0, 1)") << createDataIterator(1, 0, 1) << qint8(17) << quint8(17) << qint16(49169) << quint16(49169)
+                                                                 << qint32(408141841) << quint32(408141841) << qint64(408141841) << quint64(408141841)
+                                                                 << 408141841.0f << 408141841.0;
 }
 
 void test_VolumePixelDataIterator::get_ShouldReturnExpectedValue()
 {
-    QFETCH(QSharedPointer<VolumePixelDataIterator>, iterator);
+    QFETCH(QSharedPointer<DataIterator>, dataIterator);
     QFETCH(qint8, expectedValueInt8);
     QFETCH(quint8, expectedValueUint8);
     QFETCH(qint16, expectedValueInt16);
@@ -133,21 +149,21 @@ void test_VolumePixelDataIterator::get_ShouldReturnExpectedValue()
     QFETCH(float, expectedValueFloat);
     QFETCH(double, expectedValueDouble);
 
-    QCOMPARE(iterator->get<qint8>(), expectedValueInt8);
-    QCOMPARE(iterator->get<quint8>(), expectedValueUint8);
-    QCOMPARE(iterator->get<qint16>(), expectedValueInt16);
-    QCOMPARE(iterator->get<quint16>(), expectedValueUint16);
-    QCOMPARE(iterator->get<qint32>(), expectedValueInt32);
-    QCOMPARE(iterator->get<quint32>(), expectedValueUint32);
-    QCOMPARE(iterator->get<qint64>(), expectedValueInt64);
-    QCOMPARE(iterator->get<quint64>(), expectedValueUint64);
-    QCOMPARE(iterator->get<float>(), expectedValueFloat);
-    QCOMPARE(iterator->get<double>(), expectedValueDouble);
+    QCOMPARE(dataIterator->iterator->get<qint8>(), expectedValueInt8);
+    QCOMPARE(dataIterator->iterator->get<quint8>(), expectedValueUint8);
+    QCOMPARE(dataIterator->iterator->get<qint16>(), expectedValueInt16);
+    QCOMPARE(dataIterator->iterator->get<quint16>(), expectedValueUint16);
+    QCOMPARE(dataIterator->iterator->get<qint32>(), expectedValueInt32);
+    QCOMPARE(dataIterator->iterator->get<quint32>(), expectedValueUint32);
+    QCOMPARE(dataIterator->iterator->get<qint64>(), expectedValueInt64);
+    QCOMPARE(dataIterator->iterator->get<quint64>(), expectedValueUint64);
+    QCOMPARE(dataIterator->iterator->get<float>(), expectedValueFloat);
+    QCOMPARE(dataIterator->iterator->get<double>(), expectedValueDouble);
 }
 
 void test_VolumePixelDataIterator::set_ShouldSetExpectedValue_data()
 {
-    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
+    QTest::addColumn<QSharedPointer<DataIterator>>("dataIterator");
     QTest::addColumn<qint8>("setValueInt8");
     QTest::addColumn<unsigned int>("expectedValueInt8");
     QTest::addColumn<quint8>("setValueUint8");
@@ -169,16 +185,16 @@ void test_VolumePixelDataIterator::set_ShouldSetExpectedValue_data()
     QTest::addColumn<double>("setValueDouble");
     QTest::addColumn<unsigned int>("expectedValueDouble");
 
-    QTest::newRow("set") << createIterator(0, 0, 0) << qint8(-55) << 4294967241u << quint8(168) << 168u
-                                                    << qint16(-14160) << 4294953136u << quint16(26213) << 26213u
-                                                    << qint32(-21140511) << 4273826785u << quint32(754190776) << 754190776u
-                                                    << qint64(-193498463462335766) << 884890346u << quint64(10509583164190741238) << 2802045686u
-                                                    << 255565.98f << 255565u << 7.3271E85 << 0u;
+    QTest::newRow("set") << createDataIterator(0, 0, 0) << qint8(-55) << 4294967241u << quint8(168) << 168u
+                                                        << qint16(-14160) << 4294953136u << quint16(26213) << 26213u
+                                                        << qint32(-21140511) << 4273826785u << quint32(754190776) << 754190776u
+                                                        << qint64(-193498463462335766) << 884890346u << quint64(10509583164190741238u) << 2802045686u
+                                                        << 255565.98f << 255565u << 7.3271E85 << 0u;
 }
 
 void test_VolumePixelDataIterator::set_ShouldSetExpectedValue()
 {
-    QFETCH(QSharedPointer<VolumePixelDataIterator>, iterator);
+    QFETCH(QSharedPointer<DataIterator>, dataIterator);
     QFETCH(qint8, setValueInt8);
     QFETCH(unsigned int, expectedValueInt8);
     QFETCH(quint8, setValueUint8);
@@ -200,26 +216,26 @@ void test_VolumePixelDataIterator::set_ShouldSetExpectedValue()
     QFETCH(double, setValueDouble);
     QFETCH(unsigned int, expectedValueDouble);
 
-    iterator->set(setValueInt8);
-    QCOMPARE(iterator->get<unsigned int>(), expectedValueInt8);
-    iterator->set(setValueUint8);
-    QCOMPARE(iterator->get<unsigned int>(), expectedValueUint8);
-    iterator->set(setValueInt16);
-    QCOMPARE(iterator->get<unsigned int>(), expectedValueInt16);
-    iterator->set(setValueUint16);
-    QCOMPARE(iterator->get<unsigned int>(), expectedValueUint16);
-    iterator->set(setValueInt32);
-    QCOMPARE(iterator->get<unsigned int>(), expectedValueInt32);
-    iterator->set(setValueUint32);
-    QCOMPARE(iterator->get<unsigned int>(), expectedValueUint32);
-    iterator->set(setValueInt64);
-    QCOMPARE(iterator->get<unsigned int>(), expectedValueInt64);
-    iterator->set(setValueUint64);
-    QCOMPARE(iterator->get<unsigned int>(), expectedValueUint64);
-    iterator->set(setValueFloat);
-    QCOMPARE(iterator->get<unsigned int>(), expectedValueFloat);
-    iterator->set(setValueDouble);
-    QCOMPARE(iterator->get<unsigned int>(), expectedValueDouble);
+    dataIterator->iterator->set(setValueInt8);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedValueInt8);
+    dataIterator->iterator->set(setValueUint8);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedValueUint8);
+    dataIterator->iterator->set(setValueInt16);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedValueInt16);
+    dataIterator->iterator->set(setValueUint16);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedValueUint16);
+    dataIterator->iterator->set(setValueInt32);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedValueInt32);
+    dataIterator->iterator->set(setValueUint32);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedValueUint32);
+    dataIterator->iterator->set(setValueInt64);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedValueInt64);
+    dataIterator->iterator->set(setValueUint64);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedValueUint64);
+    dataIterator->iterator->set(setValueFloat);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedValueFloat);
+    dataIterator->iterator->set(setValueDouble);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedValueDouble);
 }
 
 void test_VolumePixelDataIterator::operatorAdd_ShouldReturnExpectedValue_data()
@@ -229,11 +245,11 @@ void test_VolumePixelDataIterator::operatorAdd_ShouldReturnExpectedValue_data()
 
 void test_VolumePixelDataIterator::operatorAdd_ShouldReturnExpectedValue()
 {
-    QFETCH(QSharedPointer<VolumePixelDataIterator>, iterator);
+    QFETCH(QSharedPointer<DataIterator>, dataIterator);
     QFETCH(int, delta);
     QFETCH(unsigned int, expectedVoxelValue);
 
-    QCOMPARE((*iterator + delta).get<unsigned int>(), expectedVoxelValue);
+    QCOMPARE((*dataIterator->iterator + delta).get<unsigned int>(), expectedVoxelValue);
 }
 
 void test_VolumePixelDataIterator::operatorSubtract_ShouldReturnExpectedValue_data()
@@ -243,90 +259,90 @@ void test_VolumePixelDataIterator::operatorSubtract_ShouldReturnExpectedValue_da
 
 void test_VolumePixelDataIterator::operatorSubtract_ShouldReturnExpectedValue()
 {
-    QFETCH(QSharedPointer<VolumePixelDataIterator>, iterator);
+    QFETCH(QSharedPointer<DataIterator>, dataIterator);
     QFETCH(int, delta);
     QFETCH(unsigned int, expectedVoxelValue);
 
-    QCOMPARE((*iterator - delta).get<unsigned int>(), expectedVoxelValue);
+    QCOMPARE((*dataIterator->iterator - delta).get<unsigned int>(), expectedVoxelValue);
 }
 
 void test_VolumePixelDataIterator::operatorPreIncrement_ShouldIncrementAndReturnNewIterator_data()
 {
-    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
+    QTest::addColumn<QSharedPointer<DataIterator>>("dataIterator");
     QTest::addColumn<unsigned int>("newVoxelValue");
 
-    QTest::newRow("++it") << createIterator(0, 3, 1) << 584932269u;
+    QTest::newRow("++it") << createDataIterator(0, 3, 1) << 584932269u;
 }
 
 void test_VolumePixelDataIterator::operatorPreIncrement_ShouldIncrementAndReturnNewIterator()
 {
-    QFETCH(QSharedPointer<VolumePixelDataIterator>, iterator);
+    QFETCH(QSharedPointer<DataIterator>, dataIterator);
     QFETCH(unsigned int, newVoxelValue);
 
-    VolumePixelDataIterator incremented = ++(*iterator);
+    VolumePixelDataIterator incremented = ++(*dataIterator->iterator);
 
-    QCOMPARE(iterator->get<unsigned int>(), newVoxelValue);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), newVoxelValue);
     QCOMPARE(incremented.get<unsigned int>(), newVoxelValue);
 }
 
 void test_VolumePixelDataIterator::operatorPostIncrement_ShouldIncrementAndReturnOldIterator_data()
 {
-    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
+    QTest::addColumn<QSharedPointer<DataIterator>>("dataIterator");
     QTest::addColumn<unsigned int>("newVoxelValue");
     QTest::addColumn<unsigned int>("oldVoxelValue");
 
-    QTest::newRow("it++") << createIterator(3, 1, 2) << 626138607u << 2333039u;
+    QTest::newRow("it++") << createDataIterator(3, 1, 2) << 626138607u << 2333039u;
 }
 
 void test_VolumePixelDataIterator::operatorPostIncrement_ShouldIncrementAndReturnOldIterator()
 {
-    QFETCH(QSharedPointer<VolumePixelDataIterator>, iterator);
+    QFETCH(QSharedPointer<DataIterator>, dataIterator);
     QFETCH(unsigned int, newVoxelValue);
     QFETCH(unsigned int, oldVoxelValue);
 
-    VolumePixelDataIterator notIncremented = (*iterator)++;
+    VolumePixelDataIterator notIncremented = (*dataIterator->iterator)++;
 
-    QCOMPARE(iterator->get<unsigned int>(), newVoxelValue);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), newVoxelValue);
     QCOMPARE(notIncremented.get<unsigned int>(), oldVoxelValue);
 }
 
 void test_VolumePixelDataIterator::operatorPreDecrement_ShouldDecrementAndReturnNewIterator_data()
 {
-    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
+    QTest::addColumn<QSharedPointer<DataIterator>>("dataIterator");
     QTest::addColumn<unsigned int>("newVoxelValue");
 
-    QTest::newRow("--it") << createIterator(2, 1, 0) << 451505799u;
+    QTest::newRow("--it") << createDataIterator(2, 1, 0) << 451505799u;
 }
 
 void test_VolumePixelDataIterator::operatorPreDecrement_ShouldDecrementAndReturnNewIterator()
 {
-    QFETCH(QSharedPointer<VolumePixelDataIterator>, iterator);
+    QFETCH(QSharedPointer<DataIterator>, dataIterator);
     QFETCH(unsigned int, newVoxelValue);
 
-    VolumePixelDataIterator decremented = --(*iterator);
+    VolumePixelDataIterator decremented = --(*dataIterator->iterator);
 
-    QCOMPARE(iterator->get<unsigned int>(), newVoxelValue);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), newVoxelValue);
     QCOMPARE(decremented.get<unsigned int>(), newVoxelValue);
 }
 
 void test_VolumePixelDataIterator::operatorPostDecrement_ShouldDecrementAndReturnOldIterator_data()
 {
-    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
+    QTest::addColumn<QSharedPointer<DataIterator>>("dataIterator");
     QTest::addColumn<unsigned int>("newVoxelValue");
     QTest::addColumn<unsigned int>("oldVoxelValue");
 
-    QTest::newRow("it--") << createIterator(3, 1, 0) << 99830523u << 680556899u;
+    QTest::newRow("it--") << createDataIterator(3, 1, 0) << 99830523u << 680556899u;
 }
 
 void test_VolumePixelDataIterator::operatorPostDecrement_ShouldDecrementAndReturnOldIterator()
 {
-    QFETCH(QSharedPointer<VolumePixelDataIterator>, iterator);
+    QFETCH(QSharedPointer<DataIterator>, dataIterator);
     QFETCH(unsigned int, newVoxelValue);
     QFETCH(unsigned int, oldVoxelValue);
 
-    VolumePixelDataIterator notDecremented = (*iterator)--;
+    VolumePixelDataIterator notDecremented = (*dataIterator->iterator)--;
 
-    QCOMPARE(iterator->get<unsigned int>(), newVoxelValue);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), newVoxelValue);
     QCOMPARE(notDecremented.get<unsigned int>(), oldVoxelValue);
 }
 
@@ -421,13 +437,13 @@ void test_VolumePixelDataIterator::operatorAddAndAssign_ShouldAddAndReturnExpect
 
 void test_VolumePixelDataIterator::operatorAddAndAssign_ShouldAddAndReturnExpectedValue()
 {
-    QFETCH(QSharedPointer<VolumePixelDataIterator>, iterator);
+    QFETCH(QSharedPointer<DataIterator>, dataIterator);
     QFETCH(int, delta);
     QFETCH(unsigned int, expectedVoxelValue);
 
-    VolumePixelDataIterator returned = *iterator += delta;
+    VolumePixelDataIterator returned = *dataIterator->iterator += delta;
 
-    QCOMPARE(iterator->get<unsigned int>(), expectedVoxelValue);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedVoxelValue);
     QCOMPARE(returned.get<unsigned int>(), expectedVoxelValue);
 }
 
@@ -438,17 +454,17 @@ void test_VolumePixelDataIterator::operatorSubtractAndAssign_ShouldSubtractAndRe
 
 void test_VolumePixelDataIterator::operatorSubtractAndAssign_ShouldSubtractAndReturnExpectedValue()
 {
-    QFETCH(QSharedPointer<VolumePixelDataIterator>, iterator);
+    QFETCH(QSharedPointer<DataIterator>, dataIterator);
     QFETCH(int, delta);
     QFETCH(unsigned int, expectedVoxelValue);
 
-    VolumePixelDataIterator returned = *iterator -= delta;
+    VolumePixelDataIterator returned = *dataIterator->iterator -= delta;
 
-    QCOMPARE(iterator->get<unsigned int>(), expectedVoxelValue);
+    QCOMPARE(dataIterator->iterator->get<unsigned int>(), expectedVoxelValue);
     QCOMPARE(returned.get<unsigned int>(), expectedVoxelValue);
 }
 
-QSharedPointer<VolumePixelDataIterator> test_VolumePixelDataIterator::createIterator(int x, int y, int z)
+QSharedPointer<DataIterator> test_VolumePixelDataIterator::createDataIterator(int x, int y, int z)
 {
     unsigned int data[64] =
     {
@@ -477,32 +493,43 @@ QSharedPointer<VolumePixelDataIterator> test_VolumePixelDataIterator::createIter
     imageData->SetExtent(0, 3, 0, 3, 0, 3);
     imageData->AllocateScalars(VTK_UNSIGNED_INT, 1);
     memcpy(imageData->GetScalarPointer(), data, sizeof(data));
-    VolumePixelData *volumePixelData = new VolumePixelData(this);
-    volumePixelData->setData(imageData);
+    QSharedPointer<DataIterator> dataIterator(new DataIterator());
+    dataIterator->data = new VolumePixelData();
+    dataIterator->data->setData(imageData);
+    dataIterator->iterator = new VolumePixelDataIterator(dataIterator->data, x, y, z);
     imageData->Delete();
-    return QSharedPointer<VolumePixelDataIterator>(new VolumePixelDataIterator(volumePixelData, x, y, z));
+    return dataIterator;
+}
+
+QSharedPointer<VolumePixelDataIterator> test_VolumePixelDataIterator::createIterator(int x, int y, int z)
+{
+    // Create a DataIterator and keep only the iterator
+    auto dataIterator = createDataIterator(x, y, z);
+    QSharedPointer<VolumePixelDataIterator> iterator(dataIterator->iterator);
+    dataIterator->iterator = nullptr;
+    return iterator;
 }
 
 void test_VolumePixelDataIterator::setupTestDataForAddOperators()
 {
-    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
+    QTest::addColumn<QSharedPointer<DataIterator>>("dataIterator");
     QTest::addColumn<int>("delta");
     QTest::addColumn<unsigned int>("expectedVoxelValue");
 
-    QTest::newRow("positive add") << createIterator(2, 2, 1) << 14 << 626138607u;
-    QTest::newRow("negative add") << createIterator(0, 1, 3) << -24 << 234022016u;
-    QTest::newRow("zero add") << createIterator(2, 3, 3) << 0 << 55445813u;
+    QTest::newRow("positive add") << createDataIterator(2, 2, 1) << 14 << 626138607u;
+    QTest::newRow("negative add") << createDataIterator(0, 1, 3) << -24 << 234022016u;
+    QTest::newRow("zero add") << createDataIterator(2, 3, 3) << 0 << 55445813u;
 }
 
 void test_VolumePixelDataIterator::setupTestDataForSubtractOperators()
 {
-    QTest::addColumn< QSharedPointer<VolumePixelDataIterator> >("iterator");
+    QTest::addColumn<QSharedPointer<DataIterator>>("dataIterator");
     QTest::addColumn<int>("delta");
     QTest::addColumn<unsigned int>("expectedVoxelValue");
 
-    QTest::newRow("positive subtract") << createIterator(2, 0, 1) << 5 << 301263477u;
-    QTest::newRow("negative subtract") << createIterator(2, 1, 2) << -1 << 2333039u;
-    QTest::newRow("zero subtract") << createIterator(1, 0, 0) << 0 << 811525129u;
+    QTest::newRow("positive subtract") << createDataIterator(2, 0, 1) << 5 << 301263477u;
+    QTest::newRow("negative subtract") << createDataIterator(2, 1, 2) << -1 << 2333039u;
+    QTest::newRow("zero subtract") << createDataIterator(1, 0, 0) << 0 << 811525129u;
 }
 
 void test_VolumePixelDataIterator::setupTestDataForComparisonOperators()
