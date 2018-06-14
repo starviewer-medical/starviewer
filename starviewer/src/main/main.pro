@@ -48,7 +48,7 @@ win32-msvc2013:QMAKE_LFLAGS += /LARGEADDRESSAWARE
 include(../../sourcelibsdependencies.pri)
 
 # Thirdparty libraries
-DUMMY = $$addLibraryDependency($$PWD/../thirdparty, $$OUT_PWD/../thirdparty, breakpad)
+addLibraryDependency($$PWD/../thirdparty, $$OUT_PWD/../thirdparty, breakpad)
 
 include(../corelibsconfiguration.pri)
 include(../thirdparty/qtsingleapplication/src/qtsingleapplication.pri)

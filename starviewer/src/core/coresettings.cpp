@@ -38,27 +38,6 @@ const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics")
 const QString ToolsBase("Tools/");
 const QString CoreSettings::MagnifyingGlassZoomFactor(ToolsBase + "MagnifyingGlassZoomFactor");
 
-// Paràmetres d'obscurances
-const QString ObscurancesBase("3DViewer/obscurances/");
-const QString LowQualityObscurancesBase(ObscurancesBase + "low/");
-const QString MediumQualityObscurancesBase(ObscurancesBase + "medium/");
-const QString HighQualityObscurancesBase(ObscurancesBase + "high/");
-
-const QString CoreSettings::NumberOfDirectionsForLowQualityObscurances(LowQualityObscurancesBase + "numberOfDirections");
-const QString CoreSettings::FunctionForLowQualityObscurances(LowQualityObscurancesBase + "function");
-const QString CoreSettings::VariantForLowQualityObscurances(LowQualityObscurancesBase + "variant");
-const QString CoreSettings::GradientRadiusForLowQualityObscurances(LowQualityObscurancesBase + "gradientRadius");
-
-const QString CoreSettings::NumberOfDirectionsForMediumQualityObscurances(MediumQualityObscurancesBase + "numberOfDirections");
-const QString CoreSettings::FunctionForMediumQualityObscurances(MediumQualityObscurancesBase + "function");
-const QString CoreSettings::VariantForMediumQualityObscurances(MediumQualityObscurancesBase + "variant");
-const QString CoreSettings::GradientRadiusForMediumQualityObscurances(MediumQualityObscurancesBase + "gradientRadius");
-
-const QString CoreSettings::NumberOfDirectionsForHighQualityObscurances(HighQualityObscurancesBase + "numberOfDirections");
-const QString CoreSettings::FunctionForHighQualityObscurances(HighQualityObscurancesBase + "function");
-const QString CoreSettings::VariantForHighQualityObscurances(HighQualityObscurancesBase + "variant");
-const QString CoreSettings::GradientRadiusForHighQualityObscurances(HighQualityObscurancesBase + "gradientRadius");
-
 const QString CoreSettings::LanguageLocale("Starviewer-Language/languageLocale");
 
 const QString CoreSettings::ForcedImageReaderLibrary("Input/ForcedImageReaderLibrary");

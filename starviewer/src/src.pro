@@ -34,3 +34,5 @@ addSubdirs(extensions, core inputoutput)
 addSubdirs(main, interface extensions thirdparty)
 addSubdirs(starviewersapwrapper)
 addSubdirs(crashreporter, main core)
+
+starviewersapwrapper.depends = thirdparty

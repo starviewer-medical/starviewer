@@ -368,9 +368,9 @@ void QPerfusionMapReconstructionExtension::createColorMap()
 
     vtkUnsignedCharArray * table = mapHueLut->GetTable();
     unsigned char tuple[4] = { 0, 0, 0, 0 };
-    table->SetTupleValue(0, tuple);
+    table->SetTypedTuple(0, tuple);
     unsigned char tuple2[4] = { 1, 1, 1, 1 };
-    table->SetTupleValue(table->GetNumberOfTuples() - 1, tuple2);
+    table->SetTypedTuple(table->GetNumberOfTuples() - 1, tuple2);
 
     TransferFunction hueTransferFunction(mapHueLut);
     m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
@@ -411,9 +411,9 @@ void QPerfusionMapReconstructionExtension::createColorMap2()
 
     vtkUnsignedCharArray * table = mapHueLut->GetTable();
     unsigned char tuple[4] = { 0, 0, 0, 0 };
-    table->SetTupleValue(0, tuple);
+    table->SetTypedTuple(0, tuple);
     //unsigned char tuple2[4] = { 1.0, 1.0, 1.0, 1.0 };
-    table->SetTupleValue(table->GetNumberOfTuples() - 1, tuple);
+    table->SetTypedTuple(table->GetNumberOfTuples() - 1, tuple);
 
     TransferFunction hueTransferFunction(mapHueLut);
     m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
@@ -448,8 +448,8 @@ void QPerfusionMapReconstructionExtension::createColorMap(double window, double 
 
     vtkUnsignedCharArray * table = mapHueLut->GetTable();
     unsigned char tuple[4] = { 0, 0, 0, 0 };
-    table->SetTupleValue(0, tuple);
-    table->SetTupleValue(table->GetNumberOfTuples() - 1, tuple);
+    table->SetTypedTuple(0, tuple);
+    table->SetTypedTuple(table->GetNumberOfTuples() - 1, tuple);
 
     TransferFunction hueTransferFunction(mapHueLut);
     m_2DView->getViewer()->setTransferFunction(hueTransferFunction);
@@ -876,7 +876,7 @@ void QPerfusionMapReconstructionExtension::getPerfusionColormapTable(vtkUnsigned
         tuple[1]=green[i];
         tuple[2]=blue[i];
         tuple[3]=0;
-        table->SetTupleValue(i, tuple);
+        table->SetTypedTuple(i, tuple);
     }
 
 }

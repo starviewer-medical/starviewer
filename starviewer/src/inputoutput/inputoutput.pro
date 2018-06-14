@@ -181,7 +181,6 @@ win32 {
     SOURCES += windowsportinusebyanotherapplication.cpp
 }
 INCLUDEPATH += ../core
-DEPENDPATH += ../core
 TEMPLATE = lib
 DESTDIR = ./
 CONFIG += staticlib

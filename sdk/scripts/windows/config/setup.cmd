@@ -5,7 +5,7 @@ REM List of libs to build. Possible values: zlib, dcmtk, vtk, gdcm, itk, ecm, th
 set Libs=zlib dcmtk vtk gdcm itk ecm threadweaver
 
 REM Global prefix of the Starviewer SDK files.
-set Prefix=D:\starviewer-sdk-0.14
+set Prefix=E:\starviewer-sdk-0.15
 
 REM Where the libraries are downloaded.
 set DownloadPrefix=%Prefix%\downloads
@@ -24,17 +24,20 @@ set SdkInstallPrefix=%Prefix%\%Arch%
 
 REM The path where Qt is installed.
 if %Arch% == 32 (
-    set QtInstallPrefix=%SystemDrive%\Qt\5.6\msvc2015
+    set QtInstallPrefix=%SystemDrive%\Qt\5.9.5\msvc2015
 ) else (
-    set QtInstallPrefix=%SystemDrive%\Qt\5.6\msvc2015_64
+    set QtInstallPrefix=%SystemDrive%\Qt\5.9.5\msvc2017_64
 )
 
 REM How to call CMake.
 set CMakeGenerator=-G "NMake Makefiles"
-set CMake="%ProgramFiles(x86)%\CMake\bin\cmake.exe" %CMakeGenerator%
+set CMake="%ProgramFiles%\CMake\bin\cmake.exe" %CMakeGenerator%
 
 REM How to call git.
 set Git="%ProgramFiles%\Git\bin\git.exe"
 
 REM Needed by CMake to find Qt.
 set CMAKE_PREFIX_PATH=%QtInstallPrefix%
+
+REM How to call jom.
+set Jom="%SystemDrive%\Qt\Tools\QtCreator\bin\jom.exe"

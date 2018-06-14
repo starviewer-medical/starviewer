@@ -2,7 +2,7 @@ include(defaultdirectories.pri)
 
 INCLUDEPATH += $${ITKINCLUDEDIR}
 
-ITKLIBSUFFIX = -4.10
+ITKLIBSUFFIX = -4.13
 ITKLIBS = \
         ITKCommon \
         ITKMetaIO \
@@ -26,13 +26,6 @@ ITKLIBS = \
         itkdouble-conversion \
         ITKTransform
 
-win32 {
- ITKLIBS += itktiff \
-         itkpng \
-         itkzlib
-
- LIBS += -lShell32
-}
 
 LIBS += -L$${ITKLIBDIR}
 
@@ -40,6 +33,5 @@ for(lib, ITKLIBS) {
     LIBS += -l$${lib}$${ITKLIBSUFFIX}
 }
 
-unix {
-    LIBS += -ldl
-}
+win32:LIBS += -lShell32
+unix:LIBS += -ldl

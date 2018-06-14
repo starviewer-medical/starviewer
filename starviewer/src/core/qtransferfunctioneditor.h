@@ -35,10 +35,15 @@ public:
     QTransferFunctionEditor(QWidget *parent = 0);
     virtual ~QTransferFunctionEditor();
 
-    /// Retorna el valor de propietat màxim mapat per aquest editor.
-    virtual unsigned short maximum() const;
-    /// Assigna el valor de propietat màxim mapat per aquest editor.
-    virtual void setMaximum(unsigned short maximum);
+    /// Returns the minimum input value mapped by this editor.
+    virtual int minimum() const;
+    /// Sets the minimum input value mapped by this editor.
+    virtual void setMinimum(int minimum);
+
+    /// Returns the minimum input value mapped by this editor.
+    virtual int maximum() const;
+    /// Sets the minimum input value mapped by this editor.
+    virtual void setMaximum(int maximum);
 
     /// Assigna una funció de transferència a l'editor.
     virtual void setTransferFunction(const TransferFunction &transferFunction) = 0;
@@ -46,8 +51,10 @@ public:
     virtual const TransferFunction& getTransferFunction() const = 0;
 
 protected:
-    /// Valor de propietat màxim mapat per aquest editor.
-    unsigned short m_maximum;
+    /// Minimum mapped input value.
+    int m_minimum;
+    /// Maximum mapped input value.
+    int m_maximum;
 
 };
 

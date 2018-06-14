@@ -28,7 +28,6 @@ SOURCES += q2dviewerextensionmediator.cpp \
         qmrusortedtoolbuttonwithmenu.cpp
 
 INCLUDEPATH += ../../../inputoutput
-DEPENDPATH += ../../../inputoutput
 
 RESOURCES += q2dviewer.qrc
 

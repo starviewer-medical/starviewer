@@ -46,8 +46,6 @@ ce_marking {
 
 INCLUDEPATH += ../inputoutput \
                ../core
-DEPENDPATH += ../inputoutput \
-              ../core
 TEMPLATE = lib
 
 DESTDIR = ./
