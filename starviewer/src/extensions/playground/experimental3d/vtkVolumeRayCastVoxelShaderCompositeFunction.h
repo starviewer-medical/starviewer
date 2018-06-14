@@ -23,27 +23,28 @@
        PURPOSE.  See the above copyright notice for more information.
  *************************************************************************************/
 
-#ifndef UDGVTKVOLUMERAYCASTSINGLEVOXELSHADERCOMPOSITEFUNCTION_H
-#define UDGVTKVOLUMERAYCASTSINGLEVOXELSHADERCOMPOSITEFUNCTION_H
+#ifndef UDGVTKVOLUMERAYCASTVOXELSHADERCOMPOSITEFUNCTION_H
+#define UDGVTKVOLUMERAYCASTVOXELSHADERCOMPOSITEFUNCTION_H
 
-#include <vtkVolumeRayCastFunction.h>
+#include "vtkVolumeRayCastFunction.h"
+
+#include <QList>
 
 namespace udg {
 
 class TrilinearInterpolator;
+class VoxelShader;
 
 /**
- * Classe que fa un ray casting permetent aplicar un voxel shader per decidir el color de cada vòxel. El tipus del voxel shader és un paràmetre de template per
- * evitar cridar mètodes virtuals.
- */
-template <class VS>
-class vtkVolumeRayCastSingleVoxelShaderCompositeFunction : public vtkVolumeRayCastFunction {
+    Classe que fa un ray casting permetent aplicar un voxel shader per decidir el color de cada vòxel.
+  */
+class vtkVolumeRayCastVoxelShaderCompositeFunction : public vtkVolumeRayCastFunction {
 
 public:
     enum CompositeMethod { ClassifyInterpolate, InterpolateClassify };
 
-    static vtkVolumeRayCastSingleVoxelShaderCompositeFunction* New();
-    vtkTypeMacro(vtkVolumeRayCastSingleVoxelShaderCompositeFunction, vtkVolumeRayCastFunction)
+    static vtkVolumeRayCastVoxelShaderCompositeFunction* New();
+    vtkTypeMacro(vtkVolumeRayCastVoxelShaderCompositeFunction, vtkVolumeRayCastFunction)
     void PrintSelf(ostream &os, vtkIndent indent);
 
     void SetCompositeMethod(CompositeMethod compositeMethod) { m_compositeMethod = qBound(ClassifyInterpolate, compositeMethod, InterpolateClassify); }
@@ -58,31 +59,34 @@ public:
     float GetZeroOpacityThreshold(vtkVolume *volume);
     //ETX
 
-    void SetVoxelShader(VS *voxelShader);
+    void AddVoxelShader(VoxelShader *voxelShader);
+    void InsertVoxelShader(int i, VoxelShader *voxelShader);
+    int IndexOfVoxelShader(VoxelShader *voxelShader);
+    void RemoveVoxelShader(int i);
+    void RemoveVoxelShader(VoxelShader *voxelShader);
+    void RemoveAllVoxelShaders();
 
 protected:
-    vtkVolumeRayCastSingleVoxelShaderCompositeFunction();
-    ~vtkVolumeRayCastSingleVoxelShaderCompositeFunction();
+    vtkVolumeRayCastVoxelShaderCompositeFunction();
+    ~vtkVolumeRayCastVoxelShaderCompositeFunction();
 
     //BTX
     void SpecificFunctionInitialize(vtkRenderer *renderer, vtkVolume *volume, vtkVolumeRayCastStaticInfo *staticInfo, vtkVolumeRayCastMapper *mapper);
     //ETX
 
     CompositeMethod m_compositeMethod;
-    VS *m_voxelShader;
+    QList<VoxelShader*> m_voxelShaderList;
     TrilinearInterpolator *m_interpolator;
 
 private:
     /// Opacitat mínima que ha de restar per continuar el ray casting.
     static const float MINIMUM_REMAINING_OPACITY;
 
-    vtkVolumeRayCastSingleVoxelShaderCompositeFunction(const vtkVolumeRayCastSingleVoxelShaderCompositeFunction&);    // Not implemented.
-    void operator=(const vtkVolumeRayCastSingleVoxelShaderCompositeFunction&);                                        // Not implemented.
+    vtkVolumeRayCastVoxelShaderCompositeFunction(const vtkVolumeRayCastVoxelShaderCompositeFunction&);    // Not implemented.
+    void operator=(const vtkVolumeRayCastVoxelShaderCompositeFunction&);                                  // Not implemented.
 
 };
 
 }
-
-#include "vtkVolumeRayCastSingleVoxelShaderCompositeFunction.cxx"
 
 #endif

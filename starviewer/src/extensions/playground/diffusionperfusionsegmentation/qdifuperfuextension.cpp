@@ -383,8 +383,8 @@ void QDifuPerfuSegmentationExtension::setPerfusionLut(int threshold)
 
     vtkUnsignedCharArray * table = m_perfusionHueLut->GetTable();
     unsigned char tuple[4] = { 0, 0, 0, 0 };
-    table->SetTupleValue(0, tuple);
-    table->SetTupleValue(table->GetNumberOfTuples() - 1, tuple);
+    table->SetTypedTuple(0, tuple);
+    table->SetTypedTuple(table->GetNumberOfTuples() - 1, tuple);
 
     // Transformem la vtkLookupTable a TransferFunction
     TransferFunction transferFunction(m_perfusionHueLut);
@@ -673,8 +673,8 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
 
         vtkUnsignedCharArray * table = hueLut->GetTable();
         unsigned char tuple[4] = { 0, 0, 0, 0 };
-        table->SetTupleValue(0, tuple);
-        table->SetTupleValue(table->GetNumberOfTuples() - 1, tuple);
+        table->SetTypedTuple(0, tuple);
+        table->SetTypedTuple(table->GetNumberOfTuples() - 1, tuple);
 
         TransferFunction hueTransferFunction(hueLut);
         m_perfusion2DView->setTransferFunction(hueTransferFunction);

@@ -53,11 +53,6 @@ void test_RenderingStyle::fromVariant_ShouldReturnCorrectRenderingStyle()
     QCOMPARE(fromVariant.getSpecularCoefficient(), renderingStyle.getSpecularCoefficient());
     QCOMPARE(fromVariant.getSpecularPower(), renderingStyle.getSpecularPower());
     QCOMPARE(fromVariant.getTransferFunction(), renderingStyle.getTransferFunction());
-    QCOMPARE(fromVariant.getContour(), renderingStyle.getContour());
-    QCOMPARE(fromVariant.getContourThreshold(), renderingStyle.getContourThreshold());
-    QCOMPARE(fromVariant.getObscurance(), renderingStyle.getObscurance());
-    QCOMPARE(fromVariant.getObscuranceQuality(), renderingStyle.getObscuranceQuality());
-    QCOMPARE(fromVariant.getObscuranceFactor(), renderingStyle.getObscuranceFactor());
     QCOMPARE(fromVariant.getIsoValue(), renderingStyle.getIsoValue());
 }
 
@@ -66,23 +61,16 @@ void test_RenderingStyle::setupData()
     QTest::addColumn<RenderingStyle>("renderingStyle");
     QTest::addColumn<QVariant>("variant");
 
-    const int NumberOfRows = 6;
+    const int NumberOfRows = 3;
 
-    RenderingStyle::Method methods[NumberOfRows] = { RenderingStyle::MIP, RenderingStyle::RayCasting, RenderingStyle::IsoSurface,
-                                                     RenderingStyle::Contouring, RenderingStyle::Texture2D, RenderingStyle::Texture3D };
-    bool shadings[NumberOfRows] = { false, false, false, false, false, true };
-    double ambientCoefficients[NumberOfRows] = { 0.26, 0.74, 1.0, 0.66, 0.72, 0.75 };
-    double diffuseCoefficients[NumberOfRows] = { 0.65, 0.57, 0.88, 0.89, 0.21, 0.12 };
-    double specularCoefficients[NumberOfRows] = { 0.79, 0.77, 0.07, 0.85, 0.42, 0.26 };
-    double specularPowers[NumberOfRows] = { 35.2, 109.9, 90.3, 29.8, 125.0, 838.0 };
+    RenderingStyle::Method methods[NumberOfRows] = { RenderingStyle::MIP, RenderingStyle::RayCasting, RenderingStyle::IsoSurface };
+    bool shadings[NumberOfRows] = { false, false, true };
+    double ambientCoefficients[NumberOfRows] = { 0.26, 0.74, 1.0 };
+    double diffuseCoefficients[NumberOfRows] = { 0.65, 0.57, 0.88 };
+    double specularCoefficients[NumberOfRows] = { 0.79, 0.77, 0.07 };
+    double specularPowers[NumberOfRows] = { 35.2, 109.9, 90.3 };
     TransferFunction transferFunctions[NumberOfRows];
-    bool contours[NumberOfRows] = { false, false, false, false, true, false };
-    double contourThresholds[NumberOfRows] = { 0.61, 0.78, 0.25, 0.46, 0.25, 0.27 };
-    bool obscurances[NumberOfRows] = { false, false, true, true, true, false };
-    RenderingStyle::ObscuranceQuality obscuranceQualities[NumberOfRows] = { RenderingStyle::High, RenderingStyle::Low, RenderingStyle::Low,
-                                                                            RenderingStyle::Medium, RenderingStyle::Medium, RenderingStyle::Low };
-    double obscuranceFactors[NumberOfRows] = { 6.97, 9.04, 2.81, 6.60, 5.31, 5.96 };
-    double isoValues[NumberOfRows] = { -202.3, -3058.7, -4874.5, -732.5, -3984.9, 2574.8 };
+    double isoValues[NumberOfRows] = { -202.3, -3058.7, -4874.5 };
 
     transferFunctions[0].setColor(387.4, 0.633, 0.942, 0.967);
     transferFunctions[0].setScalarOpacity(-2752.2, 0.175);
@@ -116,29 +104,6 @@ void test_RenderingStyle::setupData()
     transferFunctions[2].setGradientOpacity(151.5, 0.432);
     transferFunctions[2].setGradientOpacity(4893.8, 0.737);
 
-    transferFunctions[3].setColor(-3995.1, 0.096, 0.969, 0.176);
-    transferFunctions[3].setColor(-3403.6, 0.380, 0.761, 0.794);
-    transferFunctions[3].setColor(2396.9, 0.040, 0.888, 0.309);
-    transferFunctions[3].setColor(2618.3, 0.820, 0.106, 0.306);
-    transferFunctions[3].setColor(2436.1, 0.297, 0.829, 0.145);
-    transferFunctions[3].setScalarOpacity(-2972.8, 0.769);
-    transferFunctions[3].setScalarOpacity(-1387.0, 0.567);
-
-    transferFunctions[4].setColor(882.6, 0.117, 0.328, 0.172);
-    transferFunctions[4].setColor(4921.7, 0.988, 0.510, 0.196);
-    transferFunctions[4].setScalarOpacity(2971.1, 0.532);
-    transferFunctions[4].setScalarOpacity(-4835.2, 0.513);
-    transferFunctions[4].setScalarOpacity(1610.8, 0.311);
-    transferFunctions[4].setScalarOpacity(-173.6, 0.134);
-    transferFunctions[4].setScalarOpacity(1288.5, 0.014);
-    transferFunctions[4].setScalarOpacity(2786.0, 0.061);
-    transferFunctions[4].setGradientOpacity(-4923.5, 0.344);
-    transferFunctions[4].setGradientOpacity(-922.2, 0.210);
-    transferFunctions[4].setGradientOpacity(2833.1, 0.913);
-    transferFunctions[4].setGradientOpacity(-890.9, 0.339);
-
-    transferFunctions[5].setGradientOpacity(2518.4, 0.119);
-
     for (int i = 0; i < NumberOfRows; i++)
     {
         RenderingStyle renderingStyle;
@@ -157,16 +122,6 @@ void test_RenderingStyle::setupData()
         map["specularPower"] = specularPowers[i];
         renderingStyle.setTransferFunction(transferFunctions[i]);
         map["transferFunction"] = transferFunctions[i].toVariant();
-        renderingStyle.setContour(contours[i]);
-        map["contour"] = contours[i];
-        renderingStyle.setContourThreshold(contourThresholds[i]);
-        map["contourThreshold"] = contourThresholds[i];
-        renderingStyle.setObscurance(obscurances[i]);
-        map["obscurance"] = obscurances[i];
-        renderingStyle.setObscuranceQuality(obscuranceQualities[i]);
-        map["obscuranceQuality"] = obscuranceQualities[i];
-        renderingStyle.setObscuranceFactor(obscuranceFactors[i]);
-        map["obscuranceFactor"] = obscuranceFactors[i];
         renderingStyle.setIsoValue(isoValues[i]);
         map["isoValue"] = isoValues[i];
         QTest::newRow(qPrintable(QString("random (%1)").arg(i))) << renderingStyle << QVariant(map);

@@ -63,7 +63,7 @@ diff -upr gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx gdcm-2.4.
    delete[] mybuffer;
    std::stringstream os;
 +  os.exceptions(std::ostream::failbit | std::ostream::badbit);
-   SetLength( llen );
+   SetLength( (unsigned long)llen );
  #if !defined(NDEBUG)
    const unsigned int * const dimensions = this->GetDimensions();
 @@ -610,6 +611,7 @@ bool RLECodec::Decode(DataElement const
@@ -72,5 +72,5 @@ diff -upr gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx gdcm-2.4.
      std::stringstream os;
 +    os.exceptions(std::ostream::failbit | std::ostream::badbit);
      bool r = DecodeByStreams(is, os);
-     assert( r ); (void)r; //warning removal
-     std::string str = os.str();
+     if( !r )
+     {

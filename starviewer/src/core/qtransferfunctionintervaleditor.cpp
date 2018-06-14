@@ -19,11 +19,10 @@
 namespace udg {
 
 QTransferFunctionIntervalEditor::QTransferFunctionIntervalEditor(QWidget *parent)
- : QWidget(parent)
+ : QWidget(parent), m_minimum(0), m_maximum(255)
 {
     setupUi(this);
 
-    m_maximum = 255;
     m_isFirst = m_isLast = false;
 
     m_intervalEndSpinBox->setVisible(m_isIntervalCheckBox->isChecked());
@@ -63,6 +62,23 @@ QTransferFunctionIntervalEditor::~QTransferFunctionIntervalEditor()
 {
 }
 
+int QTransferFunctionIntervalEditor::minimum() const
+{
+    return m_minimum;
+}
+
+void QTransferFunctionIntervalEditor::setMinimum(int minimum)
+{
+    m_minimum = minimum;
+    m_intervalStartSpinBox->setMinimum(m_minimum);
+    m_intervalEndSpinBox->setMinimum(m_minimum);
+
+    if (m_isFirst)
+    {
+        this->setStart(m_minimum);
+    }
+}
+
 int QTransferFunctionIntervalEditor::maximum() const
 {
     return m_maximum;
@@ -99,7 +115,7 @@ void QTransferFunctionIntervalEditor::setIsFirst(bool isFirst)
         m_isIntervalCheckBox->setEnabled(true);
         if (m_isFirst)
         {
-            this->setStart(0);
+            this->setStart(m_minimum);
         }
         m_intervalStartSpinBox->setReadOnly(m_isFirst);
     }
@@ -203,7 +219,7 @@ void QTransferFunctionIntervalEditor::firstAndLast()
 {
     m_isIntervalCheckBox->setChecked(true);
     m_isIntervalCheckBox->setDisabled(true);
-    this->setStart(0);
+    this->setStart(m_minimum);
     m_intervalStartSpinBox->setReadOnly(true);
     this->setEnd(m_maximum);
     m_intervalEndSpinBox->setReadOnly(true);

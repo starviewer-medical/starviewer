@@ -44,6 +44,9 @@ macx {
 
 RESOURCES = crashreporter.qrc ../main/main.qrc
 
+include(../../addlibrarydependency.pri)
+addLibraryDependency(../thirdparty, ../thirdparty, easylogging++)
+
 official_release {
     win32:RESOURCES += ../main/qtconf/win/qtconf.qrc
     #macx:RESOURCES += ../main/qtconf/mac/qtconf.qrc    # For future use

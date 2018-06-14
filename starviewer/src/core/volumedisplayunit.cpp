@@ -368,15 +368,11 @@ void VolumeDisplayUnit::applyVoiLut()
         {
             applyTransferFunction();
         }
-        else if (m_voiLut.isWindowLevel())
+        else
         {
             vtkLookupTable *lut = m_voiLut.toVtkLookupTable();
             m_imageSlice->GetProperty()->SetLookupTable(lut);
             lut->Delete();
-        }
-        else
-        {
-            m_imageSlice->GetProperty()->SetLookupTable(m_voiLut.toVtkLookupTable());
         }
     }
 }

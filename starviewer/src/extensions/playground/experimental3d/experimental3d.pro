@@ -38,7 +38,16 @@ HEADERS += experimental3dextensionmediator.h \
     camera.h \
     matrix3.h \
     matrix4.h \
-    quaternion.h
+    quaternion.h \
+    obscurance.h \
+    obscurancemainthread.h \
+    obscurancethread.h \
+    obscurancevoxelshader.h \
+    vtkVolumeRayCastVoxelShaderCompositeFunction.h \
+    vtkVolumeRayCastMapper.h \
+    vtkVolumeRayCastFunction.h \
+    vtkVolumeRayCastCompositeFunction.h
+
 SOURCES += experimental3dextensionmediator.cpp \
     qexperimental3dextension.cpp \
     experimental3dsettings.cpp \
@@ -72,7 +81,16 @@ SOURCES += experimental3dextensionmediator.cpp \
     camera.cpp \
     matrix3.cpp \
     matrix4.cpp \
-    quaternion.cpp
+    quaternion.cpp \
+    obscurance.cpp \
+    obscurancemainthread.cpp \
+    obscurancethread.cpp \
+    obscurancevoxelshader.cpp \
+    vtkVolumeRayCastVoxelShaderCompositeFunction.cxx \
+    vtkVolumeRayCastMapper.cxx \
+    vtkVolumeRayCastFunction.cxx \
+    vtkVolumeRayCastCompositeFunction.cxx
+
 RESOURCES += experimental3d.qrc
 EXTENSION_DIR = $$PWD
 cuda { 

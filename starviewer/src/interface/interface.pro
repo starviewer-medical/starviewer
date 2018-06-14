@@ -33,8 +33,6 @@ SOURCES += qapplicationmainwindow.cpp \
 
 INCLUDEPATH += ../inputoutput \
                ../core
-DEPENDPATH += ../inputoutput \
-              ../core
 TEMPLATE = lib
 
 DESTDIR = ./

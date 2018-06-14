@@ -27,14 +27,14 @@ do
         qt)
             if [[ $(uname) == 'Linux' ]]
             then
-                download_and_verify f1fbd6b7ee067f6af6412d16c33c5478aed230c655c888d9cc7b1037f8048ec5 \
-                                    'qt-opensource-linux-x64-5.6.3.run' \
-                                    'https://download.qt.io/official_releases/qt/5.6/5.6.3/qt-opensource-linux-x64-5.6.3.run'
+                download_and_verify 4f4ebd19051913e90a72b87a4397b0791ba50d81d26596b149867a11ffae0b16 \
+                                    'qt-opensource-linux-x64-5.9.5.run' \
+                                    'https://download.qt.io/official_releases/qt/5.9/5.9.5/qt-opensource-linux-x64-5.9.5.run'
             elif [[ $(uname) == 'Darwin' ]]
             then
-                download_and_verify e12174b4a128ef34900527487d7ad147fad56e081fe4e0ff667737decd27b6b5 \
-                                    'qt-opensource-mac-x64-clang-5.6.3.dmg' \
-                                    'https://download.qt.io/official_releases/qt/5.6/5.6.3/qt-opensource-mac-x64-clang-5.6.3.dmg'
+                download_and_verify eda679eeb801a03f3b52c4870214f73fae13a851ec230cf356420789837d5a80 \
+                                    'qt-opensource-mac-x64-5.9.5.dmg' \
+                                    'https://download.qt.io/official_releases/qt/5.9/5.9.5/qt-opensource-mac-x64-5.9.5.dmg'
             fi
             ;;
         dcmtk)
@@ -43,29 +43,29 @@ do
                                 'https://support.dcmtk.org/redmine/attachments/download/8/dcmtk-3.6.1_20120515.tar.gz'
             ;;
         vtk)
-            download_and_verify 78a990a15ead79cdc752e86b83cfab7dbf5b7ef51ba409db02570dbdd9ec32c3 \
-                                'VTK-7.0.0.tar.gz' \
-                                'https://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz'
+            download_and_verify 71a09b4340f0a9c58559fe946dc745ab68a866cf20636a41d97b6046cb736324 \
+                                'VTK-8.1.1.tar.gz' \
+                                'https://www.vtk.org/files/release/8.1/VTK-8.1.1.tar.gz'
             ;;
         gdcm)
-            download_and_verify bbf7eeda622cf18499bd162f3b06d0c937a5379f6f3d1445d57b3d4d0070f97e \
-                                'gdcm-2.6.4.tar.gz' \
-                                'https://github.com/malaterre/GDCM/archive/v2.6.4.tar.gz'
+            download_and_verify f4e611c74ea2b16c9aa28d7fdf3a8678ce926909606705b7cd08c9a5b05d34fc \
+                                'GDCM-2.8.6.tar.gz' \
+                                'https://github.com/malaterre/GDCM/archive/v2.8.6.tar.gz'
             ;;
         itk)
-            download_and_verify ea0011fc99a6303427b236c3ceaf54688224350ce1a216b64c9771ab3194b15f \
-                                'InsightToolkit-4.10.0.tar.xz' \
-                                'http://downloads.sourceforge.net/project/itk/itk/4.10/InsightToolkit-4.10.0.tar.xz'    # https fails in mac
+            download_and_verify feb3fce3cd3bf08405e49da30876dc766e5145c821e5e3f8736df1d1717da125 \
+                                'InsightToolkit-4.13.0.tar.xz' \
+                                'https://freefr.dl.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.0.tar.xz'
             ;;
         ecm)
-            download_and_verify ea8b6a648b7b2dc313df709940813c22ed5b68d2f7bef30acbaf2a83a6e4c723 \
-                                'extra-cmake-modules-1.3.0.tar.xz' \
-                                'https://download.kde.org/Attic/frameworks/5.3.0/extra-cmake-modules-1.3.0.tar.xz'
+            download_and_verify e5da3e1b67e19d7b8b5b1d867bb1e9a54d902d718e55148f3296da9f9a18c275 \
+                                'extra-cmake-modules-5.46.0.tar.xz' \
+                                'https://download.kde.org/stable/frameworks/5.46/extra-cmake-modules-5.46.0.tar.xz'
             ;;
         threadweaver)
-            download_and_verify c15818ec6e6320bea79a0d44e29cb4fc19a0e0d428cccb979d6c3104ec65a838 \
-                                'threadweaver-5.3.0.tar.xz' \
-                                'https://download.kde.org/Attic/frameworks/5.3.0/threadweaver-5.3.0.tar.xz'
+            download_and_verify f858d1f4b7d567e0cfba00b56e15af75e0552a1d6e7afb6925bacf3964f7cd7e \
+                                'threadweaver-5.46.0.tar.xz' \
+                                'https://download.kde.org/stable/frameworks/5.46/threadweaver-5.46.0.tar.xz'
             ;;
     esac
 done

@@ -57,9 +57,7 @@
 namespace udg {
 
 VolumePixelDataIterator::VolumePixelDataIterator(VolumePixelData *volumePixelData)
-    : m_pointer(volumePixelData->getVtkData()->GetScalarPointerForExtent(volumePixelData->getVtkData()->GetExtent())),
-      // ^ HACK: a simple GetScalarPointer() will abort in VTK 6.1 if there is no data allocated, while a GetScalarPointerForExtent() won't.
-      m_scalarType(volumePixelData->getVtkData()->GetScalarType())
+    : m_pointer(volumePixelData->getVtkData()->GetScalarPointer()), m_scalarType(volumePixelData->getVtkData()->GetScalarType())
 {
 }
 

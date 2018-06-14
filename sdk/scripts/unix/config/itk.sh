@@ -1,10 +1,9 @@
 #!/bin/bash
 
 # Call gdcm configuration script to make sure GDCMCMAKEDIR is set
-# This script in turn calls vtk configuration script, so VTKCMAKEDIR will also be set
 . "$SCRIPTS_ROOT/config/gdcm.sh"
 
-SOURCE_DIR="$SOURCE_DIR_BASE/InsightToolkit-4.10.0"
+SOURCE_DIR="$SOURCE_DIR_BASE/InsightToolkit-4.13.0"
 
 if [ $BUILD_TYPE = debug ]
 then
@@ -33,9 +32,8 @@ CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
                -DModule_ITKRegistrationCommon:BOOL=TRUE \
                -DModule_ITKVTK:BOOL=TRUE \
                -DITK_USE_SYSTEM_GDCM:BOOL=TRUE \
-               -DGDCM_DIR:PATH=$GDCMCMAKEDIR \
-               -DVTK_DIR:PATH=$VTKCMAKEDIR"
+               -DGDCM_DIR:PATH=$GDCMCMAKEDIR"
 
-ITKCMAKEDIR="$SDK_INSTALL_PREFIX/lib/cmake/ITK-4.10"
+ITKCMAKEDIR="$SDK_INSTALL_PREFIX/lib/cmake/ITK-4.13"
 ITKLIBDIR="$SDK_INSTALL_PREFIX/lib"
-ITKINCLUDEDIR="$SDK_INSTALL_PREFIX/include/ITK-4.10"
+ITKINCLUDEDIR="$SDK_INSTALL_PREFIX/include/ITK-4.13"

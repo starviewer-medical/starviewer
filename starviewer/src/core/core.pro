@@ -175,15 +175,9 @@ HEADERS += extensionfactory.h \
     hdrcolor.h \
     trilinearinterpolator.h \
     vector3.h \
-    vtkVolumeRayCastVoxelShaderCompositeFunction.h \
     sphereuniformpointcloudgenerator.h \
-    obscurancemainthread.h \
-    obscurancethread.h \
-    obscurancevoxelshader.h \
     vtk4dlinearregressiongradientestimator.h \
     combiningvoxelshader.h \
-    vtkVolumeRayCastSingleVoxelShaderCompositeFunction.h \
-    obscurance.h \
     viewpointgenerator.h \
     thumbnailcreator.h \
     nonclosedangletool.h \
@@ -404,7 +398,6 @@ HEADERS += extensionfactory.h \
     nmroidataprinter.h \
     nmctfusionroidataprinter.h \
     vtkcorrectimageblend.h \
-    vtktextactorwithbackground.h \
     volumereaderjobfactory.h \
     relativegeometrylayout.h \
     griditerator.h \
@@ -421,7 +414,6 @@ HEADERS += extensionfactory.h \
     qfusionlayoutwidget.h \
     gridicon.h \
     itemmenu.h \
-    easylogging++.h \
     volumefillerstep.h \
     qexternalapplicationconfigurationscreen.h \
     externalapplication.h \
@@ -568,15 +560,9 @@ SOURCES += extensionmediator.cpp \
     directilluminationvoxelshader.cpp \
     voxelshader.cpp \
     trilinearinterpolator.cpp \
-    vtkVolumeRayCastVoxelShaderCompositeFunction.cxx \
     sphereuniformpointcloudgenerator.cpp \
-    obscurancemainthread.cpp \
-    obscurancethread.cpp \
-    obscurancevoxelshader.cpp \
     vtk4dlinearregressiongradientestimator.cpp \
     combiningvoxelshader.cpp \
-    vtkVolumeRayCastSingleVoxelShaderCompositeFunction.cxx \
-    obscurance.cpp \
     viewpointgenerator.cpp \
     thumbnailcreator.cpp \
     nonclosedangletool.cpp \
@@ -788,7 +774,6 @@ SOURCES += extensionmediator.cpp \
     nmroidataprinter.cpp \
     nmctfusionroidataprinter.cpp \
     vtkcorrectimageblend.cpp \
-    vtktextactorwithbackground.cpp \
     volumereaderjobfactory.cpp \
     relativegeometrylayout.cpp \
     griditerator.cpp \
@@ -850,3 +835,5 @@ QT += xml \
     quickwidgets \
     concurrent \
     webenginewidgets
+
+INCLUDEPATH += ../thirdparty/easylogging++
