@@ -14,11 +14,11 @@ do
             if [[ $(uname) == 'Linux' ]]
             then
                 chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.9.5.run"
-                "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.9.5.run"
+                "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.9.5.run" --no-force-installations TargetDir="${INSTALL_QTDIR}"
             elif [[ $(uname) == 'Darwin' ]]
             then
                 hdiutil mount "${DOWNLOAD_PREFIX}/qt-opensource-mac-x64-5.9.5.dmg"
-                open -W /Volumes/qt-opensource-mac-x64-5.9.5/qt-opensource-mac-x64-5.9.5.app
+                open -W /Volumes/qt-opensource-mac-x64-5.9.5/qt-opensource-mac-x64-5.9.5.app --no-force-installations TargetDir="${INSTALL_QTDIR}"
                 hdiutil unmount /Volumes/qt-opensource-mac-x64-5.9.5
             fi
             ;;
