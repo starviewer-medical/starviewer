@@ -62,7 +62,7 @@ SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../environment.sh
 # Currently only used to know the location of the ThreadWeaver lib dir.
 if [[ $(uname) == 'Linux' ]]
 then
-    if [[ -d /etc/debian_version ]]
+    if [[ -e /etc/debian_version ]]
     then
         LIB64DIR=lib/x86_64-linux-gnu
     else
