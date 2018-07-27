@@ -8,7 +8,8 @@
                             angiosubstraction \
                             perfusionmapreconstruction \
                             rectumsegmentation \
-                            experimental3d
+                            experimental3d \
+                            example
 }
 
 #CONTRIB_EXTENSIONS =
