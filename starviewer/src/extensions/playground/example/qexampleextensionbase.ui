@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QExampleExtensionBase</class>
+ <widget class="QWidget" name="QExampleExtensionBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="udg::Q2DViewerWidget" name="m_2DViewer" native="true"/>
+   </item>
+   <item>
+    <widget class="udg::Q3DViewer" name="m_3DViewer" native="true"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>udg::Q2DViewerWidget</class>
+   <extends>QWidget</extends>
+   <header>q2dviewerwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>udg::Q3DViewer</class>
+   <extends>QWidget</extends>
+   <header>q3dviewer.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
