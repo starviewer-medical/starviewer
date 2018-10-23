@@ -26,6 +26,7 @@ ITKLIBS = \
         itkdouble-conversion \
         ITKTransform
 
+macx:official_release:ITKLIBS += itkzlib
 
 LIBS += -L$${ITKLIBDIR}
 
