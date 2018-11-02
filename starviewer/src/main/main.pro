@@ -36,6 +36,7 @@ RC_FILE = starviewer.rc
 }
 macx {
     ICON = images/logo/logo.icns
+    QMAKE_INFO_PLIST = Info.plist
 }
 
 # Definim que per sistemes de compilació windows basats en visual studio 
