@@ -63,7 +63,7 @@ QString getLogConfFilePath()
 
         if (!QFile::exists(configurationFile))
         {
-            configurationFile = installationPath() + "/log.conf";
+            configurationFile = additionalResourcesPath() + "/log.conf";
         }
         if (!QFile::exists(configurationFile))
         {

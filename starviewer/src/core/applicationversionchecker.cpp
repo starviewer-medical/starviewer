@@ -45,7 +45,7 @@ bool isNewVersionInstalled()
 QUrl getLocalReleaseNotesUrl()
 {
     // Installed path (<installdir>/releasenotes/releasenotesX.Y.Z.html)
-    QString path = installationPath() + "/releasenotes/releasenotes" + StarviewerVersionString.section('-', 0, 0) + ".html";
+    QString path = additionalResourcesPath() + "/releasenotes/releasenotes" + StarviewerVersionString.section('-', 0, 0) + ".html";
 
     if (!QFile::exists(path))
     {

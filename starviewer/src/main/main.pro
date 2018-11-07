@@ -37,6 +37,15 @@ RC_FILE = starviewer.rc
 macx {
     ICON = images/logo/logo.icns
     QMAKE_INFO_PLIST = Info.plist
+
+    MAC_RESOURCES.files = \
+        $$PWD/../../bin/log.conf \
+        $$PWD/../../bin/Part3.xml \
+        $$PWD/../../dicomdumpdefaulttags \
+        $$PWD/../../hangingprotocols \
+        $$PWD/../../releasenotes
+    MAC_RESOURCES.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += MAC_RESOURCES
 }
 
 # Definim que per sistemes de compilació windows basats en visual studio 

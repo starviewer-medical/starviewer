@@ -796,19 +796,19 @@ void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
 
 void QApplicationMainWindow::openUserGuide()
 {
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_User_guide.pdf";
+    QString userGuideFilePath = additionalResourcesPath() + "/Starviewer_User_guide.pdf";
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 
 void QApplicationMainWindow::openQuickStartGuide()
 {
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_Quick_start_guide.pdf";
+    QString userGuideFilePath = additionalResourcesPath() + "/Starviewer_Quick_start_guide.pdf";
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 
 void QApplicationMainWindow::openShortcutsGuide()
 {
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_Shortcuts_guide.pdf";
+    QString userGuideFilePath = additionalResourcesPath() + "/Starviewer_Shortcuts_guide.pdf";
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 

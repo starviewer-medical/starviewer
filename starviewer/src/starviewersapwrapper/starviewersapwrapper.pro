@@ -17,6 +17,12 @@ SOURCES = starviewersapwrapper.cpp \
 
 INCLUDEPATH += ../core
 
+macx {
+    MAC_RESOURCES.files = $$PWD/../../bin/log.conf
+    MAC_RESOURCES.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += MAC_RESOURCES
+}
+
 include(../../addlibrarydependency.pri)
 addLibraryDependency(../thirdparty, ../thirdparty, easylogging++)
 

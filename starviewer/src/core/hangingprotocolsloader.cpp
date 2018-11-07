@@ -50,7 +50,7 @@ void HangingProtocolsLoader::loadDefaults()
     QString defaultPath = "/etc/xdg/" + OrganizationNameString + "/" + ApplicationNameString + "/hangingprotocols/";
     if (!QFile::exists(defaultPath))
     {
-        defaultPath = installationPath() + "/hangingprotocols/";
+        defaultPath = additionalResourcesPath() + "/hangingprotocols/";
     }
     if (!QFile::exists(defaultPath))
     {

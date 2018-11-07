@@ -40,6 +40,10 @@ INCLUDEPATH += ../core
 
 macx {
     ICON = ../main/images/logo/logo.icns
+
+    MAC_RESOURCES.files = $$PWD/../../bin/log.conf
+    MAC_RESOURCES.path = Contents/Resources
+    QMAKE_BUNDLE_DATA += MAC_RESOURCES
 }
 
 RESOURCES = crashreporter.qrc ../main/main.qrc

@@ -40,7 +40,7 @@ void DICOMDumpDefaultTagsLoader::loadDefaults()
 
     if (!QFile::exists(defaultPath))
     {
-        defaultPath = installationPath() + "/dicomdumpdefaulttags/";
+        defaultPath = additionalResourcesPath() + "/dicomdumpdefaulttags/";
     }
     if (!QFile::exists(defaultPath))
     {

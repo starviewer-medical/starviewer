@@ -14,6 +14,8 @@
 
 #include "dicomanonymizer.h"
 
+#include "starviewerapplication.h"
+
 #include <gdcmGlobal.h>
 #include <gdcmUIDGenerator.h>
 #include <gdcmReader.h>
@@ -90,7 +92,12 @@ void DICOMAnonymizer::initializeGDCM()
 
     // Indiquem el directori on pot trobar el fitxer part3.xml que és un diccionari DICOM.
     // TODO: On posem el fitxer part3.xml
-    gdcmGlobalInstance->Prepend(qPrintable(QCoreApplication::applicationDirPath()));
+    QString part3Path = additionalResourcesPath();
+    if (!QFile::exists(part3Path))
+    {
+        part3Path = sourcePath() + "/bin";
+    }
+    gdcmGlobalInstance->Prepend(qPrintable(part3Path));
 
     // Carrega el fitxer part3.xml
     if (!gdcmGlobalInstance->LoadResourcesFiles())

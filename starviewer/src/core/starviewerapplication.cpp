@@ -61,4 +61,13 @@ QString sourcePath()
     return sourceDirPath;
 }
 
+QString additionalResourcesPath()
+{
+#ifdef Q_OS_OSX
+    return installationPath() + "/../Resources";
+#else
+    return installationPath();
+#endif
+}
+
 }
