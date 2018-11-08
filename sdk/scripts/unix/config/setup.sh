@@ -83,7 +83,19 @@ LD_LIBRARY_PATH="$SDK_INSTALL_PREFIX/lib:$SDK_INSTALL_PREFIX/$LIB64DIR:$QTDIR/li
 STARVIEWER_SOURCE_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer
 
 # Starviwer shadow build directory
-STARVIEWER_BUILD_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-build
+STARVIEWER_BUILD_DIR_BASE=${STARVIEWER_BUILD_DIR_BASE:-"$SCRIPTS_ROOT/../../../starviewer-build"}
+
+# qmake executable
+QMAKE=${QMAKE:-"$QTDIR/bin/qmake"}
+
+# qmake spec to build Starviewer
+if [[ $(uname) == 'Linux' ]]
+then
+    SPEC=${SPEC:-linux-g++}
+elif [[ $(uname) == 'Darwin' ]]
+then
+    SPEC=${SPEC:-macx-clang}
+fi
 
 # Temporary directory for package creation
 DPKG_TMP=/tmp/starviewer-dpkg

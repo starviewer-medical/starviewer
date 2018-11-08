@@ -7,7 +7,7 @@ UNIX_SCRIPTS_ROOT="$SCRIPTS_ROOT/../unix"
 . "$UNIX_SCRIPTS_ROOT/sdk_all.sh"
 
 # Building starviewer
-. $SCRIPTS_ROOT/starviewer_build.sh
+. "$UNIX_SCRIPTS_ROOT/starviewer_build.sh"
 . $SCRIPTS_ROOT/starviewer_dpkg.sh
 
 

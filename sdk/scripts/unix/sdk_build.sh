@@ -20,7 +20,14 @@ echo "#!/bin/bash" > $SDK_ENVIRONMENT_FILE
 echo "# Environment variables to compile with the SDK." >> $SDK_ENVIRONMENT_FILE
 echo "# To enter inside the environment run this file using 'source' command." >> $SDK_ENVIRONMENT_FILE
 echo "SDK_INSTALL_PREFIX=$SDK_INSTALL_PREFIX" >> $SDK_ENVIRONMENT_FILE
-echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $SDK_ENVIRONMENT_FILE
+if [[ $(uname) == 'Linux' ]]
+then
+    echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $SDK_ENVIRONMENT_FILE
+elif [[ $(uname) == 'Darwin' ]]
+then
+    echo "DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $SDK_ENVIRONMENT_FILE
+    echo "DYLD_FRAMEWORK_PATH=$LD_LIBRARY_PATH" >> $SDK_ENVIRONMENT_FILE
+fi
 echo "QTDIR=$QTDIR" >> $SDK_ENVIRONMENT_FILE
 echo "DCMTKLIBDIR=$DCMTKLIBDIR" >> $SDK_ENVIRONMENT_FILE
 echo "DCMTKINCLUDEDIR=$DCMTKINCLUDEDIR" >> $SDK_ENVIRONMENT_FILE
@@ -35,6 +42,14 @@ echo "THREADWEAVERINCLUDEDIR=$THREADWEAVERINCLUDEDIR" >> $SDK_ENVIRONMENT_FILE
 
 echo "export SDK_INSTALL_PREFIX" >> $SDK_ENVIRONMENT_FILE
 echo "export LD_LIBRARY_PATH" >> $SDK_ENVIRONMENT_FILE
+if [[ $(uname) == 'Linux' ]]
+then
+    echo "export LD_LIBRARY_PATH" >> $SDK_ENVIRONMENT_FILE
+elif [[ $(uname) == 'Darwin' ]]
+then
+    echo "export DYLD_LIBRARY_PATH" >> $SDK_ENVIRONMENT_FILE
+    echo "export DYLD_FRAMEWORK_PATH" >> $SDK_ENVIRONMENT_FILE
+fi
 echo "export QTDIR" >> $SDK_ENVIRONMENT_FILE
 echo "export DCMTKLIBDIR" >> $SDK_ENVIRONMENT_FILE
 echo "export DCMTKINCLUDEDIR" >> $SDK_ENVIRONMENT_FILE
