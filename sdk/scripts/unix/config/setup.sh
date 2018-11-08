@@ -102,3 +102,27 @@ DPKG_TMP=/tmp/starviewer-dpkg
 
 # Where to place the packages
 DPKG_DESTINATION=$SCRIPTS_ROOT/../../../
+
+# Where to place the app bundle and the dmg
+APP_BUNDLE_DESTINATION_DIR=${APP_BUNDLE_DESTINATION:-}
+
+# New name for the app bundle
+APP_BUNDLE_NAME=${APP_BUNDLE_NAME:-Starviewer.app}
+
+# Name for the .dmg file
+DMG_NAME=${DMG_NAME:-Starviewer.dmg}
+
+# Current version without suffix, i.e. the following stable version. Will be used to rename the release notes
+STABLE_VERSION=${STABLE_VERSION:-0.15.0}
+
+# Directory wher to find the user manuals in pdf
+PDF_MANUALS_DIR=${PDF_MANUALS_DIR:-}
+
+# Custom script that will be run after completing the app bundle and before creating the dmg. It can be used to add additional resources to the app bundle
+CUSTOM_SCRIPT=${CUSTOM_SCRIPT:-}
+
+# madeployqt executable
+MACDEPLOYQT=${MACDEPLOYQT:-"$QTDIR/bin/macdeployqt"}
+
+# dylibbundler executable (can be installed with brew)
+DYLIBBUNDLER=${DYLIBBUNDLER:-dylibbundler}
