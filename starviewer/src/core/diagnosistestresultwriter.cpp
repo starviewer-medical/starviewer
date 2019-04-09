@@ -14,9 +14,12 @@
 
 #include "diagnosistest.h"
 #include "diagnosistestresultwriter.h"
-#include "systeminformation.h"
+#include "machineinformation.h"
 #include "screenmanager.h"
+#include "starviewerapplication.h"
+#include "systeminformation.h"
 
+#include <QDateTime>
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
@@ -193,6 +196,7 @@ void DiagnosisTestResultWriter::writeTests(QXmlStreamWriter &writer)
     writer.writeStartElement("div");
     writer.writeAttribute("class", "tests");
 
+    writeTestDetails(writer);
     writeSystemInformation(writer);
 
     // Per cada test
@@ -207,11 +211,32 @@ void DiagnosisTestResultWriter::writeTests(QXmlStreamWriter &writer)
     writer.writeEndElement();
 }
 
+void DiagnosisTestResultWriter::writeTestDetails(QXmlStreamWriter &writer)
+{
+    writer.writeStartElement("div");
+    writer.writeAttribute("class", "information");
+    writer.writeStartElement("div");
+    writer.writeAttribute("class", "result");
+    writer.writeStartElement("div");
+    writer.writeAttribute("class", "description");
+    writer.writeCharacters(QObject::tr("Test details"));
+    writer.writeEndElement();
+    writer.writeEndElement();
+    writer.writeStartElement("div");
+    writer.writeAttribute("class", "info");
+    writer.writeStartElement("ul");
+    writer.writeTextElement("li", QString("%1 %2").arg(ApplicationNameString).arg(StarviewerVersionString));
+    writer.writeTextElement("li", QString("Timestamp: %1").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+    writer.writeEndElement(); //end ul
+    writer.writeEndElement(); //end div result
+    writer.writeEndElement(); //end div information
+}
+
 void DiagnosisTestResultWriter::writeSystemInformation(QXmlStreamWriter &writer)
 {
     SystemInformation *systemInformation = SystemInformation::newInstance();
     writer.writeStartElement("div");
-    writer.writeAttribute("id", "systemInformation");
+    writer.writeAttribute("class", "information");
     writer.writeStartElement("div");
     writer.writeAttribute("class", "result");
     writer.writeStartElement("div");
@@ -277,9 +302,11 @@ void DiagnosisTestResultWriter::writeSystemInformation(QXmlStreamWriter &writer)
         writer.writeTextElement("li", screen);
     }
 
+    writer.writeTextElement("li", QObject::tr("MAC address: %1").arg(MachineInformation().getMACAddress()));
+
     writer.writeEndElement(); //end ul
     writer.writeEndElement(); //end div result
-    writer.writeEndElement(); //end div systemInformation
+    writer.writeEndElement(); //end div information
 
     delete systemInformation;
 }
