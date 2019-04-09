@@ -19,6 +19,7 @@ HEADERS += qapplicationmainwindow.h \
            applicationcommandlineoptions.h \
            qaboutdialog.h \
            qlicensedialog.h
+
 SOURCES += qapplicationmainwindow.cpp \
            interfacesettings.cpp \
            appimportfile.cpp \
@@ -29,7 +30,12 @@ SOURCES += qapplicationmainwindow.cpp \
            applicationcommandlineoptions.cpp \
            qaboutdialog.cpp \
            qlicensedialog.cpp
-           
+
+ce_marking {
+    FORMS += qceaboutcontentbase.ui
+    HEADERS += qceaboutcontent.h
+    SOURCES += qceaboutcontent.cpp
+}
 
 INCLUDEPATH += ../inputoutput \
                ../core
