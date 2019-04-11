@@ -76,6 +76,15 @@ public:
     /// Connecta els volums d'un pacient al mètode que notifica la càrrega de volums
     void connectPatientVolumesToNotifier(Patient *patient);
 
+#ifdef STARVIEWER_CE
+    /// Shows the information regarding the use of the application as a medical device (if not disabled by the user).
+    void showMedicalDeviceInformationDialog();
+
+public slots:
+    /// Shows the information regarding the use of the application as a medical device (always).
+    void showMedicalDeviceInformationDialogUnconditionally();
+#endif // STARVIEWER_CE
+
 protected:
     /// Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
     virtual void closeEvent(QCloseEvent *event);
@@ -223,6 +232,9 @@ private:
     QAction *m_openUserGuideAction;
     QAction *m_openQuickStartGuideAction;
     QAction *m_openShortcutsGuideAction;
+#ifdef STARVIEWER_CE
+    QAction *m_showMedicalDeviceInformationAction;
+#endif // STARVIEWER_CE
     QAction *m_openReleaseNotesAction;
     QAction *m_runDiagnosisTestsAction;
 

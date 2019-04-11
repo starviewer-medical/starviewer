@@ -267,6 +267,10 @@ int main(int argc, char *argv[])
 
         mainWin->show();
 
+#ifdef STARVIEWER_CE
+        mainWin->showMedicalDeviceInformationDialog();
+#endif // STARVIEWER_CE
+
         QObject::connect(&app, SIGNAL(lastWindowClosed()),
                          &app, SLOT(quit()));
         splash.close();

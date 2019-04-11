@@ -12,32 +12,26 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGINTERFACESETTINGS_H
-#define UDGINTERFACESETTINGS_H
+#ifndef UDG_QMEDICALDEVICEINFORMATIONDIALOG_H
+#define UDG_QMEDICALDEVICEINFORMATIONDIALOG_H
 
-#include "defaultsettings.h"
+#include "ui_qmedicaldeviceinformationdialogbase.h"
 
 namespace udg {
 
-class InterfaceSettings : public DefaultSettings {
+/**
+ *  @brief The QMedicalDeviceInformationDialog class is a dialog containing important information regarding the use of the application as medical device.
+ */
+class QMedicalDeviceInformationDialog : public QDialog, private ::Ui::QMedicalDeviceInformationDialogBase
+{
+    Q_OBJECT
+
 public:
-    InterfaceSettings();
-    ~InterfaceSettings();
+    explicit QMedicalDeviceInformationDialog(QWidget *parent = nullptr);
+    ~QMedicalDeviceInformationDialog();
 
-    void init();
-
-    /// Declaració de claus
-    static const QString OpenFileLastPath;
-    static const QString OpenDirectoryLastPath;
-    static const QString OpenFileLastFileExtension;
-    static const QString ApplicationMainWindowGeometry;
-    // Indicarà si permetem tenir més d'una instància de cada extensió (true) o únicament una (false)
-    static const QString AllowMultipleInstancesPerExtension;
-    // Defineix quina és l'extensió que s'obrirà per defecte
-    static const QString DefaultExtension;
-    static const QString DontShowMedicalDeviceInformationDialog;
 };
 
-} // end namespace udg
+} // namespace udg
 
-#endif
+#endif // UDG_QMEDICALDEVICEINFORMATIONDIALOG_H
