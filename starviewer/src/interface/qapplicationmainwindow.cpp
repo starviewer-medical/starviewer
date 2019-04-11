@@ -834,19 +834,28 @@ void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
 
 void QApplicationMainWindow::openUserGuide()
 {
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_User_guide.pdf";
+    Settings settings;
+    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
+    QString prefix = defaultLocale.left(2).toUpper();
+    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_User_guide.pdf";
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 
 void QApplicationMainWindow::openQuickStartGuide()
 {
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_Quick_start_guide.pdf";
+    Settings settings;
+    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
+    QString prefix = defaultLocale.left(2).toUpper();
+    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_Quick_start_guide.pdf";
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 
 void QApplicationMainWindow::openShortcutsGuide()
 {
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_Shortcuts_guide.pdf";
+    Settings settings;
+    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
+    QString prefix = defaultLocale.left(2).toUpper();
+    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_Shortcuts_guide.pdf";
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 
