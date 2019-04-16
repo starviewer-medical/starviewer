@@ -93,56 +93,6 @@
         <source>Close all %1 windows and try again.</source>
         <translation>Cierre todas las ventanas de %1 e inténtelo de nuevo.</translation>
     </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="147"/>
-        <source>Can&apos;t reinstall database because the current database can&apos;t be removed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="162"/>
-        <source>Can&apos;t read database creation script. Can&apos;t create the database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="180"/>
-        <source>Database creation script failed.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="210"/>
-        <source>You don&apos;t have write permission on cache image directory. Retrieval or importing of new studies will fail.</source>
-        <translation type="unfinished">No tiene permisos de escritura en el directorio de caché de imágenes. La descarga o importación de nuevos estudios fallará.</translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="235"/>
-        <source>You don&apos;t have write permission on the database directory. Can&apos;t create the database.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="257"/>
-        <source>You don&apos;t have write permission on %1 database. Retrieval or importing of new studies will fail.</source>
-        <translation type="unfinished">No tiene permisos de escritura en la base de datos de %1. La descarga o importación de nuevos estudios fallará.</translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="342"/>
-        <source>Unable to create the cache image directory. Please check user permissions.</source>
-        <translation type="unfinished">No se ha podido crear el directorio de caché de imágenes. Compruebe los permisos de usuario.</translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="360"/>
-        <source>Unable to create the database directory. Please check user permissions.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="378"/>
-        <source>Reinstalling database</source>
-        <translation type="unfinished">Reinstalando la base de datos</translation>
-    </message>
-    <message>
-        <location filename="databaseinstallation.cpp" line="394"/>
-        <source>Current database is of a newer version. In order to run %1, local studies must be deleted and the database reinstalled. Do you want to continue?</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>udg::CacheTest</name>
@@ -224,28 +174,72 @@
 <context>
     <name>udg::DICOMDIRImporter</name>
     <message>
-        <location filename="dicomdirimporter.cpp" line="347"/>
+        <location filename="dicomdirimporter.cpp" line="346"/>
         <source>Importing image %1 of series %2 from study %3, %4</source>
         <oldsource>Importing Image %1 of Series %2 from Study %3, %4</oldsource>
         <translation>Importando imagen %1 de la serie %2 del estudio %3, %4</translation>
     </message>
     <message>
-        <location filename="dicomdirimporter.cpp" line="352"/>
+        <location filename="dicomdirimporter.cpp" line="351"/>
         <source>Importing series %1 of study %2, %3</source>
         <oldsource>Importing Series %1 of Study %2, %3</oldsource>
         <translation>Importando serie %1 del estudio %2, %3</translation>
     </message>
     <message>
-        <location filename="dicomdirimporter.cpp" line="357"/>
+        <location filename="dicomdirimporter.cpp" line="356"/>
         <source>Importing study %1, %2</source>
         <oldsource>Importing Study %1, %2</oldsource>
         <translation>Importando estudio %1, %2</translation>
     </message>
     <message>
-        <location filename="dicomdirimporter.cpp" line="362"/>
+        <location filename="dicomdirimporter.cpp" line="361"/>
         <source>Importing images from DICOMDIR</source>
         <oldsource>Importing Images from DICOMDIR</oldsource>
         <translation>Importando imágenes del DICOMDIR</translation>
+    </message>
+</context>
+<context>
+    <name>udg::DatabaseInstallation</name>
+    <message>
+        <location filename="databaseinstallation.cpp" line="57"/>
+        <source>Unable to create database, be sure you have write permission on the database directory.</source>
+        <translation>No se ha podido crear la base de datos, asegúrese de tener permiso de escritura en el directorio de la base de datos.</translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="70"/>
+        <source>You don&apos;t have write permission on %1 database. Retrieval or importing of new studies will fail.</source>
+        <translation>No tiene permiso de escritura en la base de datos de %1. La descarga o importación de nuevos estudios fallará.</translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="77"/>
+        <source>Unable to upgrade database file, be sure you have write permission on the database directory.</source>
+        <translation>No se ha podido actualizar el archivo de la base de datos, asegúrese de tener permiso de escritura en el directorio de la base de datos.</translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="100"/>
+        <source>Unable to create the cache image directory. Please check user permissions.</source>
+        <translation>No se ha podido crear el directorio de caché de imágenes. Compruebe los permisos de usuario.</translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="112"/>
+        <source>You don&apos;t have write permission on cache image directory. Retrieval or importing of new studies will fail.</source>
+        <translation>No tiene permiso de escritura en el directorio de caché de imágenes. La descarga o importación de nuevos estudios fallará.</translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="210"/>
+        <source>Reinstalling database</source>
+        <translation>Reinstalando la base de datos</translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="232"/>
+        <source>Updating database</source>
+        <translation>Actualizando la base de datos</translation>
+    </message>
+    <message>
+        <location filename="databaseinstallation.cpp" line="458"/>
+        <source>Current database is from a newer version. In order to run %1 local studies will be deleted and the database will be reinstalled. Do you want to continue?</source>
+        <oldsource>Current database is of newer version. In order to run %1, local studies must be deleted and the database will be reinstalled. Do you want to continue?</oldsource>
+        <translation>La base de datos actual es de una versión más nueva. Para poder ejecutar %1 se borrarán los estudios locales y se reinstalará la base de datos. Quiere continuar?</translation>
     </message>
 </context>
 <context>
@@ -1936,16 +1930,14 @@ Do you want continue?</source>
         <source>No series match for this study %1.</source>
         <oldsource>No series match for this study %1.
 </oldsource>
-        <translation>No se han encontrado series del estudio %1.
-</translation>
+        <translation>No se han encontrado series del estudio %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="232"/>
         <source>No images match series %1.</source>
         <oldsource>No images match series %1.
 </oldsource>
-        <translation>No se han encontrado imágenes de la serie %1.
-</translation>
+        <translation>No se han encontrado imágenes de la serie %1.</translation>
     </message>
 </context>
 <context>
@@ -2681,8 +2673,7 @@ Do you want continue?</source>
         <source>Query failed: Unable to connect to PACS %1.</source>
         <oldsource>Query failed: Unable to connect to PACS %1.
 </oldsource>
-        <translation>La consulta ha fallado: No se ha podido conectar con el PACS %1.
-</translation>
+        <translation>La consulta ha fallado: No se ha podido conectar con el PACS %1.</translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="110"/>

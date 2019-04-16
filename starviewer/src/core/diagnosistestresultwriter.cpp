@@ -226,7 +226,7 @@ void DiagnosisTestResultWriter::writeTestDetails(QXmlStreamWriter &writer)
     writer.writeAttribute("class", "info");
     writer.writeStartElement("ul");
     writer.writeTextElement("li", QString("%1 %2").arg(ApplicationNameString).arg(StarviewerVersionString));
-    writer.writeTextElement("li", QString("Timestamp: %1").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+    writer.writeTextElement("li", QObject::tr("Timestamp: %1").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
     writer.writeEndElement(); //end ul
     writer.writeEndElement(); //end div result
     writer.writeEndElement(); //end div information
