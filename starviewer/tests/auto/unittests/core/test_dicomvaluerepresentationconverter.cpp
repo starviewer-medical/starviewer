@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DICOMValueRepresentationConverter",
+    "requirements": ["archive.dicom_format"]
+ */
+
 #include "autotest.h"
 
 #include <QVector2D>

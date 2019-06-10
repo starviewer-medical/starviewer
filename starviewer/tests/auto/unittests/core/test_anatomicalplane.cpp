@@ -1,3 +1,8 @@
+/*@
+    "name": "test_AnatomicalPlane",
+    "requirements": ["visualization.mpr.orthogonal", "visualization.information.orientation"]
+ */
+
 #include "autotest.h"
 #include "anatomicalplane.h"
 #include "patientorientation.h"

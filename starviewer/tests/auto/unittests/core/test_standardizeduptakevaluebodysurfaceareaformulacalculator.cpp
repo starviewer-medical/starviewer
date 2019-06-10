@@ -1,3 +1,8 @@
+/*@
+    "name": "test_StandardizedUptakeValueBodySurfaceAreaFormulaCalculator",
+    "requirements": ["tools.suv.body_surface_area"]
+ */
+
 #include "autotest.h"
 #include "standardizeduptakevaluebodysurfaceareaformulacalculator.h"
 #include "testingdecaycorrectionfactorformulacalculator.h"

@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ApplicationUpdateChecker",
+    "requirements": ["technical.update_checking"]
+ */
+
 #include "autotest.h"
 #include "applicationupdatechecker.h"
 #include <QNetworkReply>

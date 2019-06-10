@@ -1,3 +1,8 @@
+/*@
+    "name": "test_Volume",
+    "requirements": []
+ */
+
 #include "autotest.h"
 
 #include "volume.h"

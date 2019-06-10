@@ -1,3 +1,8 @@
+/*@
+    "name": "test_CacheTest",
+    "requirements": ["other_features.diagnosis_tests"]
+ */
+
 #include "autotest.h"
 #include "cachetest.h"
 #include "diagnosistestresult.h"

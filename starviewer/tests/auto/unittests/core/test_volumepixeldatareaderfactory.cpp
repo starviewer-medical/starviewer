@@ -1,3 +1,8 @@
+/*@
+    "name": "test_VolumePixelDataReaderFactory",
+    "requirements": ["archive.dicom_format", "archive.other_formats"]
+ */
+
 #include "autotest.h"
 #include "volumepixeldatareaderfactory.h"
 

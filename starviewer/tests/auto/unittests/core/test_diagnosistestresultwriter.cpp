@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DiagnosisTestResultWriter",
+    "requirements": ["other_features.diagnosis_tests"]
+ */
+
 #include "autotest.h"
 #include "diagnosistest.h"
 #include "diagnosistestresult.h"

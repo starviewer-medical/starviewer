@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DICOMFormattedValuesConverter",
+    "requirements": ["visualization.voi_lut.dicom"]
+ */
+
 #include "autotest.h"
 #include "dicomformattedvaluesconverter.h"
 

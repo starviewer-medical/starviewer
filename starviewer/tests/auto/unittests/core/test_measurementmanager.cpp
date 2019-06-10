@@ -1,3 +1,8 @@
+/*@
+    "name": "test_MeasurementManager",
+    "requirements": ["tools.measure"]
+ */
+
 #include "autotest.h"
 #include "measurementmanager.h"
 

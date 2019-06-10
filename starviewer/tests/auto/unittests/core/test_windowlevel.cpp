@@ -1,3 +1,8 @@
+/*@
+    "name": "test_WindowLevel",
+    "requirements": ["visualization.voi_lut", "workflow.synchronization.voi_lut"]
+ */
+
 #include "autotest.h"
 #include "windowlevel.h"
 

@@ -1,3 +1,8 @@
+/*@
+    "name": "test_StandardizedUptakeValueBodyWeightFormulaCalculator",
+    "requirements": ["tools.suv.body_weight"]
+ */
+
 #include "autotest.h"
 #include "standardizeduptakevaluebodyweightformulacalculator.h"
 #include "testingdecaycorrectionfactorformulacalculator.h"

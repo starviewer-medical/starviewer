@@ -1,3 +1,8 @@
+/*@
+    "name": "test_OrthogonalPlane",
+    "requirements": ["visualization.information.orientation", "visualization.rotations_and_flips.orthogonal_rotation", "visualization.mpr.orthogonal"]
+ */
+
 #include "autotest.h"
 #include "orthogonalplane.h"
 

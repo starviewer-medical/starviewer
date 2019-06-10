@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DrawerPolygon",
+    "requirements": ["tools.drawing.circle", "tools.roi"]
+ */
+
 #include "autotest.h"
 #include "drawerpolygon.h"
 

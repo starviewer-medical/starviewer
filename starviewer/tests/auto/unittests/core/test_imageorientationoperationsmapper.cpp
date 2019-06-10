@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ImageOrientationOperationsMapper",
+    "requirements": ["visualization.information.orientation", "visualization.rotations_and_flips.orthogonal_rotation", "visualization.rotations_and_flips.flip"]
+ */
+
 #include "autotest.h"
 
 #include "imageorientationoperationsmapper.h"

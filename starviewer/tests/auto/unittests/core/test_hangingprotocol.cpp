@@ -1,3 +1,8 @@
+/*@
+    "name": "test_HangingProtocol",
+    "requirements": ["workflow.hanging_protocols"]
+ */
+
 #include "autotest.h"
 #include "hangingprotocol.h"
 #include "hangingprotocolimageset.h"

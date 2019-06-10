@@ -1,3 +1,8 @@
+/*@
+    "name": "test_VtkImageDataCreator",
+    "requirements": ["archive.other_formats.special"]
+ */
+
 #include "autotest.h"
 #include "vtkimagedatacreator.h"
 

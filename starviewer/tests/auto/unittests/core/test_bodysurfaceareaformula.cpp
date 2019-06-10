@@ -1,3 +1,8 @@
+/*@
+    "name": "test_BodySurfaceAreaFormula",
+    "requirements": ["tools.suv.body_surface_area"]
+ */
+
 #include "autotest.h"
 #include "bodysurfaceareaformula.h"
 #include <QtCore/qmath.h>

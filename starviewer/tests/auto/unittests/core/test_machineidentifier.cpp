@@ -1,3 +1,8 @@
+/*@
+    "name": "test_MachineIdentifier",
+    "requirements": ["technical.update_checking"]
+ */
+
 #include "autotest.h"
 #include "machineidentifier.h"
 

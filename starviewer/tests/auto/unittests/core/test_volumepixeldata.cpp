@@ -1,3 +1,8 @@
+/*@
+    "name": "test_VolumePixelData",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "volumepixeldata.h"
 

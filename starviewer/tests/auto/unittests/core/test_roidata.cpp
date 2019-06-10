@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ROIData",
+    "requirements": ["tools.roi", "tools.measure.voxel", "tools.statistics"]
+ */
+
 #include "autotest.h"
 #include "roidata.h"
 

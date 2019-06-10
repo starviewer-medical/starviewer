@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ImageOrientation",
+    "requirements": ["visualization.information.orientation"]
+ */
+
 #include "autotest.h"
 #include "imageorientation.h"
 

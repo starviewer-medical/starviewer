@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ImageOverlayRegionFinder",
+    "requirements": ["visualization.overlays"]
+ */
+
 #include "autotest.h"
 #include "imageoverlayregionfinder.h"
 

@@ -1,3 +1,8 @@
+/*@
+    "name": "test_FirewallAccessTest",
+    "requirements": ["other_features.diagnosis_tests", "archive.ris", "archive.dimse"]
+ */
+
 #include "autotest.h"
 #include "firewallaccess.h"
 #include "firewallaccesstest.h"

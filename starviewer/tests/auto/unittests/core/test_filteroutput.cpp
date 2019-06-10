@@ -1,3 +1,8 @@
+/*@
+    "name": "test_FilterOutput",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "filteroutput.h"
 

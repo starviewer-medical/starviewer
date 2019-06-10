@@ -1,3 +1,8 @@
+/*@
+    "name": "test_SendDICOMFilesToPACS",
+    "requirements": ["archive.dimse.upload"]
+ */
+
 #include "autotest.h"
 #include "testingsenddicomfilestopacs.h"
 

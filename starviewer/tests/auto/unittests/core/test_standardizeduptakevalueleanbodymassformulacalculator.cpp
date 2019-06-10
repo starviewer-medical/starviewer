@@ -1,3 +1,8 @@
+/*@
+    "name": "test_StandardizedUptakeValueLeanBodyMassFormulaCalculator",
+    "requirements": ["tools.suv.lean_body_mass"]
+ */
+
 #include "autotest.h"
 #include "standardizeduptakevalueleanbodymassformulacalculator.h"
 #include "leanbodymassformulacalculator.h"

@@ -1,3 +1,8 @@
+/*@
+    "name": "test_Patient",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "patient.h"
 #include "patienttesthelper.h"

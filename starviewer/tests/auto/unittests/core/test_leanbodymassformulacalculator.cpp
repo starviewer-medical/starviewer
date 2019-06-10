@@ -1,3 +1,8 @@
+/*@
+    "name": "test_LeanBodyMassFormulaCalculator",
+    "requirements": ["tools.suv.lean_body_mass"]
+ */
+
 #include "autotest.h"
 #include "leanbodymassformulacalculator.h"
 #include "testingdicomtagreader.h"

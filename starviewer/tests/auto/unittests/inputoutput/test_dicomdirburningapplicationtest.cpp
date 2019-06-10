@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DICOMDIRBurningApplicationTest",
+    "requirements": ["archive.burn_disc"]
+ */
+
 #include "autotest.h"
 #include "dicomdirburningapplicationtest.h"
 #include "diagnosistestresult.h"
