@@ -1,6 +1,6 @@
 /*@
     "name": "test_StandardizedUptakeValueBodySurfaceAreaFormulaCalculator",
-    "requirements": ["tools.suv.body_surface_area"]
+    "requirements": ["tools.suv.body_surface_area", "tools.units.pixel_values"]
  */
 
 #include "autotest.h"

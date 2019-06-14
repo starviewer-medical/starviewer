@@ -1,6 +1,6 @@
 /*@
     "name": "test_MeasurementManager",
-    "requirements": ["tools.measure"]
+    "requirements": ["tools.measure", "tools.units.spatial"]
  */
 
 #include "autotest.h"

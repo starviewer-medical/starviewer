@@ -1,6 +1,6 @@
 /*@
     "name": "test_StandardizedUptakeValueBodyWeightFormulaCalculator",
-    "requirements": ["tools.suv.body_weight"]
+    "requirements": ["tools.suv.body_weight", "tools.units.pixel_values"]
  */
 
 #include "autotest.h"
