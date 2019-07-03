@@ -32,48 +32,48 @@
 <context>
     <name>udg::Q2DViewerExtension</name>
     <message>
-        <location filename="q2dviewerextension.cpp" line="108"/>
+        <location filename="q2dviewerextension.cpp" line="109"/>
         <source>Search related studies</source>
         <oldsource>Search prior studies</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="109"/>
+        <location filename="q2dviewerextension.cpp" line="110"/>
         <source>Export viewer image(s) to DICOM and send them to a PACS server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="115"/>
+        <location filename="q2dviewerextension.cpp" line="116"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="116"/>
+        <location filename="q2dviewerextension.cpp" line="117"/>
         <source>Show/Hide viewer&apos;s textual information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="124"/>
+        <location filename="q2dviewerextension.cpp" line="125"/>
         <source>Overlays</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="125"/>
+        <location filename="q2dviewerextension.cpp" line="126"/>
         <source>Show/Hide image overlays</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="133"/>
+        <location filename="q2dviewerextension.cpp" line="134"/>
         <source>Shutters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="134"/>
+        <location filename="q2dviewerextension.cpp" line="135"/>
         <source>Show/Hide shutter layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="147"/>
+        <location filename="q2dviewerextension.cpp" line="148"/>
         <source>Dump DICOM information of the current image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -104,7 +104,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="148"/>
+        <location filename="q2dviewerextension.cpp" line="149"/>
         <source>Choose a VOI LUT preset</source>
         <oldsource>Choose VOI LUT Presets</oldsource>
         <translation type="unfinished"></translation>

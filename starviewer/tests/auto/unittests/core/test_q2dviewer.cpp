@@ -1,3 +1,8 @@
+/*@
+    "name": "test_Q2DViewer",
+    "requirements": []
+ */
+
 #include "autotest.h"
 
 #include "q2dviewer.h"

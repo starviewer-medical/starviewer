@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ImageOverlay",
+    "requirements": ["visualization.overlays"]
+ */
+
 #include "autotest.h"
 #include "imageoverlay.h"
 

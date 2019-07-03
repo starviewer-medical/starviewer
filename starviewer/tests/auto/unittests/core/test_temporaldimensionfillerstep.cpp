@@ -1,3 +1,8 @@
+/*@
+    "name": "test_TemporalDimensionFillerStep",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "temporaldimensionfillerstep.h"
 

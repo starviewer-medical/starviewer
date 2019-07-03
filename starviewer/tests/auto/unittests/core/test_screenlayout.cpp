@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ScreenLayout",
+    "requirements": ["workflow.screen"]
+ */
+
 #include "autotest.h"
 #include "screenlayout.h"
 #include "screen.h"

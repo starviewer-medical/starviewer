@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DICOMTagReader",
+    "requirements": ["archive.metadata.tag_viewer"]
+ */
+
 #include "autotest.h"
 
 #include "dicomtagreader.h"

@@ -1,3 +1,8 @@
+/*@
+    "name": "test_HangingProtocolImageSetRestriction",
+    "requirements": ["workflow.hanging_protocols"]
+ */
+
 #include "autotest.h"
 #include "hangingprotocolimagesetrestriction.h"
 

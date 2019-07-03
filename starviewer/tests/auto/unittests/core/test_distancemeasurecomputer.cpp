@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DistanceMeasureComputer",
+    "requirements": ["tools.measure.distance"]
+ */
+
 #include "autotest.h"
 
 #include "distancemeasurecomputer.h"

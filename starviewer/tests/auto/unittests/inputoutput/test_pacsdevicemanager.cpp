@@ -1,3 +1,8 @@
+/*@
+    "name": "test_PacsDeviceManager",
+    "requirements": ["archive.dimse"]
+ */
+
 #include "autotest.h"
 
 #include "pacsdevicemanager.h"

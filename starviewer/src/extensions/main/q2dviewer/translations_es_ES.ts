@@ -32,48 +32,48 @@
 <context>
     <name>udg::Q2DViewerExtension</name>
     <message>
-        <location filename="q2dviewerextension.cpp" line="108"/>
+        <location filename="q2dviewerextension.cpp" line="109"/>
         <source>Search related studies</source>
         <oldsource>Search prior studies</oldsource>
         <translation>Buscar estudios relacionados</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="109"/>
+        <location filename="q2dviewerextension.cpp" line="110"/>
         <source>Export viewer image(s) to DICOM and send them to a PACS server</source>
         <translation>Exportar imágenes del visor a DICOM y enviarlas a un servidor PACS</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="115"/>
+        <location filename="q2dviewerextension.cpp" line="116"/>
         <source>Text</source>
         <translation>Texto</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="116"/>
+        <location filename="q2dviewerextension.cpp" line="117"/>
         <source>Show/Hide viewer&apos;s textual information</source>
         <translation>Mostrar/esconder la información textual de los visores</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="124"/>
+        <location filename="q2dviewerextension.cpp" line="125"/>
         <source>Overlays</source>
         <translation>Overlays</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="125"/>
+        <location filename="q2dviewerextension.cpp" line="126"/>
         <source>Show/Hide image overlays</source>
         <translation>Mostrar/esconder los overlays de las imágenes</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="133"/>
+        <location filename="q2dviewerextension.cpp" line="134"/>
         <source>Shutters</source>
         <translation>Shutters</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="134"/>
+        <location filename="q2dviewerextension.cpp" line="135"/>
         <source>Show/Hide shutter layer</source>
         <translation>Mostrar/esconder los shutters</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="147"/>
+        <location filename="q2dviewerextension.cpp" line="148"/>
         <source>Dump DICOM information of the current image</source>
         <translation>Volcar información DICOM de la imagen actual</translation>
     </message>
@@ -104,7 +104,7 @@
         <translation>Todos</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="148"/>
+        <location filename="q2dviewerextension.cpp" line="149"/>
         <source>Choose a VOI LUT preset</source>
         <oldsource>Choose VOI LUT Presets</oldsource>
         <translation>Elegir una VOI LUT predeterminada</translation>

@@ -391,9 +391,8 @@ bool DatabaseInstallation::deleteLocalImagesAndReinstallDatabase()
 
 bool DatabaseInstallation::userWantsToReinstallDatabase() const
 {
-    QString questionMessage = QObject::tr("Current database is of a newer version. "
-                                          "In order to run %1, local studies must be deleted and the database reinstalled. Do you want to continue?")
-            .arg(ApplicationNameString);
+    QString questionMessage = QObject::tr("Current database is from a newer version. In order to run %1 local studies will be deleted and the database will be "
+                                          "reinstalled. Do you want to continue?").arg(ApplicationNameString);
 
     return QMessageBox::question(0, ApplicationNameString, questionMessage, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes;
 }

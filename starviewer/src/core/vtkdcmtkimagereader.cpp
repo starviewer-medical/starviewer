@@ -406,7 +406,8 @@ void VtkDcmtkImageReader::readExtent(const DICOMTagReader &dicomTagReader)
         frames = dicomTagReader.getValueAttributeAsQString(DICOMNumberOfFrames).toInt();
         m_isMultiframe = true;
     }
-    else if (this->FileNames && this->FileNames->GetNumberOfValues() > 1)
+    // HACK Hitachi
+    if (frames == 1 && this->FileNames && this->FileNames->GetNumberOfValues() > 1)
     {
         frames = this->FileNames->GetNumberOfValues();
     }

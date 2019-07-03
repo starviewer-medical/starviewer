@@ -1,3 +1,8 @@
+/*@
+    "name": "test_VoiLut",
+    "requirements": ["visualization.voi_lut"]
+ */
+
 #include "autotest.h"
 #include "voilut.h"
 

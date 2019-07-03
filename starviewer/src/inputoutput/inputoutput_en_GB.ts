@@ -140,7 +140,8 @@
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="394"/>
-        <source>Current database is of a newer version. In order to run %1, local studies must be deleted and the database reinstalled. Do you want to continue?</source>
+        <source>Current database is from a newer version. In order to run %1 local studies will be deleted and the database will be reinstalled. Do you want to continue?</source>
+        <oldsource>Current database is of a newer version. In order to run %1, local studies must be deleted and the database reinstalled. Do you want to continue?</oldsource>
         <translation type="unfinished"></translation>
     </message>
 </context>

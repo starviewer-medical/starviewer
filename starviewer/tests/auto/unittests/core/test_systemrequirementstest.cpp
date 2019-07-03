@@ -1,3 +1,8 @@
+/*@
+    "name": "test_SystemRequerimentsTest",
+    "requirements": ["other_features.diagnosis_tests"]
+ */
+
 #include "autotest.h"
 #include "systemrequirementstest.h"
 #include "diagnosistestresult.h"

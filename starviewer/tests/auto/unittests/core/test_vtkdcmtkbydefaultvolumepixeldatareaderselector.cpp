@@ -1,3 +1,8 @@
+/*@
+    "name": "test_VtkDcmtkByDefaultVolumePixelDataReaderSelector",
+    "requirements": ["archive.dicom_format", "archive.other_formats"]
+ */
+
 #include "autotest.h"
 #include "vtkdcmtkbydefaultvolumepixeldatareaderselector.h"
 

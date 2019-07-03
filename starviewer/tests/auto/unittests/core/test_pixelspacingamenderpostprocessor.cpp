@@ -1,3 +1,8 @@
+/*@
+    "name": "test_PixelSpacingAmenderPostProcessor",
+    "requirements": ["tools.measure.distance", "tools.measure.ta_gt", "tools.statistics.area"]
+ */
+
 #include "autotest.h"
 #include "pixelspacingamenderpostprocessor.h"
 

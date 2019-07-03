@@ -111,7 +111,7 @@
     <message>
         <location filename="databaseinstallation.cpp" line="210"/>
         <source>You don&apos;t have write permission on cache image directory. Retrieval or importing of new studies will fail.</source>
-        <translation>No teniu permisos d&apos;escriptura en el directori de memòria cau d&apos;imatges. La descàrrega o importació de nous estudis fallarà.</translation>
+        <translation>No teniu permís d&apos;escriptura al directori de memòria cau d&apos;imatges. La descàrrega o importació de nous estudis fallarà.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="235"/>
@@ -121,7 +121,7 @@
     <message>
         <location filename="databaseinstallation.cpp" line="257"/>
         <source>You don&apos;t have write permission on %1 database. Retrieval or importing of new studies will fail.</source>
-        <translation>No teniu permisos d&apos;escriptura a la base de dades de l&apos;%1. La descàrrega o importació de nous estudis fallarà.</translation>
+        <translation>No teniu permís d&apos;escriptura a la base de dades de l&apos;%1. La descàrrega o importació de nous estudis fallarà.</translation>
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="342"/>
@@ -140,8 +140,9 @@
     </message>
     <message>
         <location filename="databaseinstallation.cpp" line="394"/>
-        <source>Current database is of a newer version. In order to run %1, local studies must be deleted and the database reinstalled. Do you want to continue?</source>
-        <translation>La base de dades actual és d&apos;una versió més nova. Per tal d&apos;executar l&apos;%1, s&apos;esborraran els estudis locals i es reinstal·larà la base de dades. Voleu continuar?</translation>
+        <source>Current database is from a newer version. In order to run %1 local studies will be deleted and the database will be reinstalled. Do you want to continue?</source>
+        <oldsource>Current database is from a newer version. In order to run %1 local studies will be deleted and the database will be reinstalled. Do you want to continue?</oldsource>
+        <translation>La base de dades actual és d&apos;una versió més nova. Per poder executar l&apos;%1 s&apos;esborraran els estudis locals i es reinstal·larà la base de dades. Voleu continuar?</translation>
     </message>
 </context>
 <context>
@@ -1930,16 +1931,14 @@ Voleu continuar?</translation>
         <source>No series match for this study %1.</source>
         <oldsource>No series match for this study %1.
 </oldsource>
-        <translation>No s&apos;han trobat sèries de l&apos;estudi %1.
-</translation>
+        <translation>No s&apos;han trobat sèries de l&apos;estudi %1.</translation>
     </message>
     <message>
         <location filename="qinputoutputpacswidget.cpp" line="232"/>
         <source>No images match series %1.</source>
         <oldsource>No images match series %1.
 </oldsource>
-        <translation>No s&apos;han trobat imatges de la sèrie %1.
-</translation>
+        <translation>No s&apos;han trobat imatges de la sèrie %1.</translation>
     </message>
 </context>
 <context>
@@ -2686,8 +2685,7 @@ Voleu continuar?</translation>
         <source>Query failed: Unable to connect to PACS %1.</source>
         <oldsource>Query failed: Unable to connect to PACS %1.
 </oldsource>
-        <translation>La consulta ha fallat: No s&apos;ha pogut connectar amb el PACS %1.
-</translation>
+        <translation>La consulta ha fallat: No s&apos;ha pogut connectar amb el PACS %1.</translation>
     </message>
     <message>
         <location filename="querypacsjob.cpp" line="110"/>

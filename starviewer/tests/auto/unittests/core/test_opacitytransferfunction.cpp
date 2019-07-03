@@ -1,3 +1,8 @@
+/*@
+    "name": "test_OpacityTransferFunction",
+    "requirements": ["visualization.transfer_functions"]
+ */
+
 #include "autotest.h"
 
 #include "opacitytransferfunction.h"

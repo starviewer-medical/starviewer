@@ -26,6 +26,8 @@ TRANSLATIONS += main_ca_ES.ts \
 
 RESOURCES = main.qrc ../qml/qml.qrc
 
+ce_marking:RESOURCES += ../external/external.qrc
+
 official_release {
     win32:RESOURCES += qtconf/win/qtconf.qrc
     #macx:RESOURCES += qtconf/mac/qtconf.qrc    # For future use

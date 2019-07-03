@@ -1,3 +1,8 @@
+/*@
+    "name": "test_Image",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "image.h"
 

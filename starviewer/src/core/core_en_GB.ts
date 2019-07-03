@@ -160,93 +160,108 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="169"/>
+        <location filename="diagnosistestresultwriter.cpp" line="172"/>
         <source>%1 succeeded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="170"/>
+        <location filename="diagnosistestresultwriter.cpp" line="173"/>
         <source>%1 errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="171"/>
+        <location filename="diagnosistestresultwriter.cpp" line="174"/>
         <source>%1 warnings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="219"/>
-        <source>System Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="diagnosistestresultwriter.cpp" line="225"/>
-        <source>Operating System: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="diagnosistestresultwriter.cpp" line="226"/>
-        <source>Desktop composition: </source>
+        <location filename="diagnosistestresultwriter.cpp" line="222"/>
+        <source>Test details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="diagnosistestresultwriter.cpp" line="229"/>
+        <source>Timestamp: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="244"/>
+        <source>System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="250"/>
+        <source>Operating System: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="251"/>
+        <source>Desktop composition: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="254"/>
         <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="233"/>
+        <location filename="diagnosistestresultwriter.cpp" line="258"/>
         <source> and enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="237"/>
+        <location filename="diagnosistestresultwriter.cpp" line="262"/>
         <source> but disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="242"/>
+        <location filename="diagnosistestresultwriter.cpp" line="267"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="245"/>
+        <location filename="diagnosistestresultwriter.cpp" line="270"/>
         <source>RAM Memory: %1 MB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="252"/>
+        <location filename="diagnosistestresultwriter.cpp" line="277"/>
         <source>CPU Clock Speed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="253"/>
+        <location filename="diagnosistestresultwriter.cpp" line="278"/>
         <source>Number of cores: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="257"/>
+        <location filename="diagnosistestresultwriter.cpp" line="282"/>
         <source>GPU %1: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="260"/>
+        <location filename="diagnosistestresultwriter.cpp" line="285"/>
         <source>Driver: %1. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="264"/>
+        <location filename="diagnosistestresultwriter.cpp" line="289"/>
         <source>OpenGL: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="272"/>
+        <location filename="diagnosistestresultwriter.cpp" line="297"/>
         <source>Screen %1: %2x%3 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="275"/>
+        <location filename="diagnosistestresultwriter.cpp" line="300"/>
         <source>Primary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="305"/>
+        <source>MAC address: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1247,6 +1262,11 @@ You will have to restart Starviewer in order to see the changes.</source>
     <message>
         <location filename="qdiagnosistestbase.ui" line="125"/>
         <source>Some tests have failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="269"/>
+        <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

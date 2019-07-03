@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ComputeZSpacingPostprocessor",
+    "requirements": ["workflow.synchronization.absolute_slicing", "workflow.synchronization.relative_slicing", "visualization.thick_slab", "visualization.3d_cursor", "visualization.reference_lines"]
+ */
+
 #include "autotest.h"
 #include "computezspacingpostprocessor.h"
 

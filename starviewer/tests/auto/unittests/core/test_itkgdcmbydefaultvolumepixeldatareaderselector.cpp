@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ItkGdcmByDefaultVolumePixelDataReaderSelector",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "itkgdcmbydefaultvolumepixeldatareaderselector.h"
 

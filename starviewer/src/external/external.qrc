@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>celabelsymbols/ce.svg</file>
+        <file>celabelsymbols/instruction.svg</file>
+        <file>celabelsymbols/manufacture-date.svg</file>
+        <file>celabelsymbols/manufacturer.svg</file>
+        <file>celabelsymbols/md.svg</file>
+        <file>celabelsymbols/ref.svg</file>
+    </qresource>
+</RCC>

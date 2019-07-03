@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DisplayShutter",
+    "requirements": ["visualization.shutters"]
+ */
+
 #include "autotest.h"
 
 #include "displayshutter.h"

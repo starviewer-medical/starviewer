@@ -1,3 +1,8 @@
+/*@
+    "name": "test_CommandLineOption",
+    "requirements": ["archive.ris"]
+ */
+
 #include "autotest.h"
 
 #include "commandlineoption.h"

@@ -1,3 +1,8 @@
+/*@
+    "name": "test_MachineInformation",
+    "requirements": ["other_features.diagnosis_tests"]
+ */
+
 #include "autotest.h"
 #include "machineinformation.h"
 

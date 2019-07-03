@@ -9,6 +9,7 @@ TRANSLATIONS += interface_ca_ES.ts \
 FORMS += qconfigurationdialogbase.ui \
         qaboutdialogbase.ui \
         qlicensedialogbase.ui
+
 HEADERS += qapplicationmainwindow.h \
            interfacesettings.h \
            appimportfile.h \
@@ -19,6 +20,7 @@ HEADERS += qapplicationmainwindow.h \
            applicationcommandlineoptions.h \
            qaboutdialog.h \
            qlicensedialog.h
+
 SOURCES += qapplicationmainwindow.cpp \
            interfacesettings.cpp \
            appimportfile.cpp \
@@ -29,7 +31,18 @@ SOURCES += qapplicationmainwindow.cpp \
            applicationcommandlineoptions.cpp \
            qaboutdialog.cpp \
            qlicensedialog.cpp
-           
+
+ce_marking {
+    FORMS += \
+        qceaboutcontentbase.ui \
+        qmedicaldeviceinformationdialogbase.ui
+    HEADERS += \
+        qceaboutcontent.h \
+        qmedicaldeviceinformationdialog.h
+    SOURCES += \
+        qceaboutcontent.cpp \
+        qmedicaldeviceinformationdialog.cpp
+}
 
 INCLUDEPATH += ../inputoutput \
                ../core

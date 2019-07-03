@@ -1,3 +1,8 @@
+/*@
+    "name": "test_Vector3Float",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "vector3.h"
 

@@ -1,3 +1,8 @@
+/*@
+    "name": "test_SyncActionsConfiguration",
+    "requirements": ["workflow.synchronization"]
+ */
+
 #include "autotest.h"
 #include "syncactionsconfiguration.h"
 

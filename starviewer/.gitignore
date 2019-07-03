@@ -19,6 +19,7 @@ bin/starviewer.app/
 src/main/starviewer.xcodeproj
 src/main/Info.plist
 linuxpackage
+src/external/celabelsymbols
 
 # QtCreator generated files
 *.pro.user*

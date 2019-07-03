@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DICOMServiceResponseStatus",
+    "requirements": ["archive.dimse.operations_list"]
+ */
+
 #include "autotest.h"
 #include "dicomserviceresponsestatus.h"
 #include "mathtools.h"

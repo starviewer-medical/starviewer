@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ExternalApplication",
+    "requirements": ["other_features.external_applications"]
+ */
+
 #include "autotest.h"
 
 #include "externalapplication.h"

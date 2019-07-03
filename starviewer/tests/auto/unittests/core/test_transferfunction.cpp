@@ -1,3 +1,8 @@
+/*@
+    "name": "test_TransferFunction",
+    "requirements": ["visualization.transfer_functions"]
+ */
+
 #include "autotest.h"
 
 #include "transferfunction.h"

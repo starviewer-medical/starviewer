@@ -1,3 +1,8 @@
+/*@
+    "name": "test_HangingProtocolManager",
+    "requirements": ["workflow.hanging_protocols"]
+ */
+
 #include "autotest.h"
 
 #include <QRegExp>

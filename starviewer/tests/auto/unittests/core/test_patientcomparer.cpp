@@ -1,3 +1,8 @@
+/*@
+    "name": "test_PatientComparer",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "patientcomparer.h"
 

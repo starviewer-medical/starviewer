@@ -1,3 +1,13 @@
+/*@
+    "name": "test_MathTools",
+    "requirements": ["workflow.synchronization", "tools.measure", "workflow.screen.hidpi", "visualization.information.annotations", "tools.drawing",
+                     "visualization.transfer_functions", "workflow.synchronization.absolute_slicing", "workflow.synchronization.relative_slicing",
+				 "visualization.thick_slab", "visualization.3d_cursor", "visualization.reference_lines", "visualization.voi_lut",
+				 "visualization.modality_lut", "visualization.shutters", "visualization.overlays", "tools.roi", "tools.erase",
+				 "visualization.information.orientation", "visualization.mpr", "workflow.viewers_layout.regular_grid", "visualization.slicing",
+				 "archive.dicom_format"]
+ */
+
 #include "autotest.h"
 
 #include <bitset>

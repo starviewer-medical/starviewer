@@ -1,3 +1,8 @@
+/*@
+    "name": "test_BodySurfaceAreaFormulaCalculator",
+    "requirements": ["tools.suv.body_surface_area"]
+ */
+
 #include "autotest.h"
 #include "bodysurfaceareaformulacalculator.h"
 #include "testingdicomtagreader.h"

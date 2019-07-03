@@ -19,8 +19,16 @@
 
 namespace udg {
 
-const QString StarviewerVersionString("0.14.0-alpha1");
-const QString StarviewerBuildID("2016051100");
+#ifdef STARVIEWER_CE
+    #define CE_SUFFIX "-CE"
+#else
+    #define CE_SUFFIX ""
+#endif
+
+const QString StarviewerVersionString("1.1.0-devel" CE_SUFFIX);
+const QString StarviewerBuildID("2019070200");
+
+#undef CE_SUFFIX
 
 #ifdef Q_OS_WIN
 const QString StarviewerBuildPlatform("Windows");

@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ImagePlane",
+    "requirements": ["visualization.information.orientation", "visualization.mpr"]
+ */
+
 #include "autotest.h"
 #include "imageplane.h"
 

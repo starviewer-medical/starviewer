@@ -161,94 +161,109 @@
         <translation>S&apos;ha produït un error en inicialitzar la biblioteca del tallafocs</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="169"/>
+        <location filename="diagnosistestresultwriter.cpp" line="172"/>
         <source>%1 succeeded</source>
         <translation>%1 correctes</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="170"/>
+        <location filename="diagnosistestresultwriter.cpp" line="173"/>
         <source>%1 errors</source>
         <translation>%1 errors</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="171"/>
+        <location filename="diagnosistestresultwriter.cpp" line="174"/>
         <source>%1 warnings</source>
         <translation>%1 avisos</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="219"/>
+        <location filename="diagnosistestresultwriter.cpp" line="222"/>
+        <source>Test details</source>
+        <translation>Detalls dels tests</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="229"/>
+        <source>Timestamp: %1</source>
+        <translation>Marca temporal: %1</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="244"/>
         <source>System Information</source>
         <translation>Informació del sistema</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="225"/>
+        <location filename="diagnosistestresultwriter.cpp" line="250"/>
         <source>Operating System: %1</source>
         <translation>Sistema operatiu: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="226"/>
+        <location filename="diagnosistestresultwriter.cpp" line="251"/>
         <source>Desktop composition: </source>
         <translation>Composició de l&apos;escriptori: </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="229"/>
+        <location filename="diagnosistestresultwriter.cpp" line="254"/>
         <source>Available</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="233"/>
+        <location filename="diagnosistestresultwriter.cpp" line="258"/>
         <source> and enabled</source>
         <translation> i activada</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="237"/>
+        <location filename="diagnosistestresultwriter.cpp" line="262"/>
         <source> but disabled</source>
         <translation> però desactivada</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="242"/>
+        <location filename="diagnosistestresultwriter.cpp" line="267"/>
         <source>Not available</source>
         <translation>No disponible</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="245"/>
+        <location filename="diagnosistestresultwriter.cpp" line="270"/>
         <source>RAM Memory: %1 MB</source>
         <translation>Memòria RAM: %1 MB</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="252"/>
+        <location filename="diagnosistestresultwriter.cpp" line="277"/>
         <source>CPU Clock Speed: %1</source>
         <translation>Velocitat de rellotge de la CPU: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="253"/>
+        <location filename="diagnosistestresultwriter.cpp" line="278"/>
         <source>Number of cores: %1</source>
         <translation>Nombre de nuclis: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="257"/>
+        <location filename="diagnosistestresultwriter.cpp" line="282"/>
         <source>GPU %1: </source>
         <translation>Targeta gràfica %1: </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="260"/>
+        <location filename="diagnosistestresultwriter.cpp" line="285"/>
         <source>Driver: %1. </source>
         <translation>Controlador: %1. </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="264"/>
+        <location filename="diagnosistestresultwriter.cpp" line="289"/>
         <source>OpenGL: %1</source>
         <translation>OpenGL: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="272"/>
+        <location filename="diagnosistestresultwriter.cpp" line="297"/>
         <source>Screen %1: %2x%3 </source>
         <translation>Pantalla %1: %2x%3 </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="275"/>
+        <location filename="diagnosistestresultwriter.cpp" line="300"/>
         <source>Primary</source>
         <translation>Principal</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="305"/>
+        <source>MAC address: %1</source>
+        <translation>Adreça MAC: %1</translation>
     </message>
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="76"/>
@@ -1258,6 +1273,11 @@ Haureu de reiniciar l&apos;Starviewer per veure els canvis.</translation>
         <source>Some tests have failed</source>
         <translation>Alguns tests han fallat</translation>
     </message>
+    <message>
+        <location filename="qdiagnosistestbase.ui" line="269"/>
+        <source>OK</source>
+        <translation>D&apos;acord</translation>
+    </message>
 </context>
 <context>
     <name>udg::QExternalApplicationConfigurationScreen</name>
@@ -1299,7 +1319,7 @@ Haureu de reiniciar l&apos;Starviewer per veure els canvis.</translation>
     <message>
         <location filename="qexternalapplicationconfigurationscreenbase.ui" line="116"/>
         <source>Add command</source>
-        <translation>Afegeix ordre</translation>
+        <translation>Afegeix una ordre</translation>
     </message>
     <message>
         <location filename="qexternalapplicationconfigurationscreenbase.ui" line="35"/>
@@ -1370,14 +1390,14 @@ Haureu de reiniciar l&apos;Starviewer per veure els canvis.</translation>
 &lt;li&gt;&lt;b&gt;{%AccessionNumber%}&lt;/b&gt; Nombre d&apos;adhesió.&lt;/li&gt;
 &lt;li&gt;&lt;b&gt;{%PatientID%}&lt;/b&gt; ID del pacient.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Tingueu en compte els riscs en definir aplicacions externes. A través d&apos;un fitxer DICOM maligne es poden produïr atacs d&apos;injecció de codi a través de l&apos;invocació d&apos;ordres. Els fitxers també poden veure&apos;s alterats per mitjà d&apos;atacs MITM entre l&apos;usuari i el servidor PACS.&lt;/p&gt;
+&lt;p&gt;Tingueu en compte els riscs en definir aplicacions externes. A través d&apos;un fitxer DICOM maligne es poden produir atacs d&apos;injecció de codi a través de la invocació d&apos;ordres. Els fitxers també poden veure&apos;s alterats per mitjà d&apos;atacs MITM entre l&apos;usuari i el servidor PACS.&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="qexternalapplicationconfigurationscreenbase.ui" line="105"/>
         <source>Add URL</source>
-        <translation>Afegeix URL</translation>
+        <translation>Afegeix un URL</translation>
     </message>
 </context>
 <context>

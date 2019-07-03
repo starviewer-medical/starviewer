@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DrawerText",
+    "requirements": ["tools.drawing"]
+ */
+
 #include "autotest.h"
 
 #include "drawertext.h"

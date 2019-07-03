@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DecayCorrectionFactorFormula",
+    "requirements": ["tools.suv"]
+ */
+
 #include "autotest.h"
 #include "decaycorrectionfactorformula.h"
 #include <QtCore/qmath.h>

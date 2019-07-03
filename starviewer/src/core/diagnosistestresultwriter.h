@@ -65,6 +65,7 @@ protected:
     void writeTestProblems(QXmlStreamWriter &writer, const QPair<DiagnosisTest *, DiagnosisTestResult> &test);
     void writeTestProblems(QXmlStreamWriter &writer, const QList<DiagnosisTestProblem> &problems);
     int countDiagnosisTestsOfState(DiagnosisTestResult::DiagnosisTestResultState state);
+    void writeTestDetails(QXmlStreamWriter &writer);
     virtual void writeSystemInformation(QXmlStreamWriter &writer);
 
 private:

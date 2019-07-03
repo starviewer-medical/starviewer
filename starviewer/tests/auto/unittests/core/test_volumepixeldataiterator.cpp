@@ -1,3 +1,8 @@
+/*@
+    "name": "test_VolumePixelDataIterator",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "volumepixeldataiterator.h"
 
