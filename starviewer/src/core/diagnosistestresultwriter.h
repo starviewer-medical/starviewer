@@ -17,6 +17,7 @@
 
 #include "diagnosistestresult.h"
 
+#include <QDateTime>
 #include <QList>
 #include <QPair>
 #include <QString>
@@ -35,8 +36,7 @@ class DiagnosisTest;
 class DiagnosisTestResultWriter {
 public:
     DiagnosisTestResultWriter();
-
-    ~DiagnosisTestResultWriter();
+    virtual ~DiagnosisTestResultWriter();
 
     /// Mètode que crea i escriu un fitxer txt per guardar resultats dels testos de diagnosi.
     void write(const QString &pathFile);
@@ -44,7 +44,7 @@ public:
     QString getAsQString();
 
     /// Afegeix els testos a gravar al fitxer
-    void setDiagnosisTests(QList<QPair<DiagnosisTest*, DiagnosisTestResult> > diagnosisTests);
+    void setDiagnosisTests(QList<QPair<DiagnosisTest*, DiagnosisTestResult>> diagnosisTests, QDateTime timestamp);
 
 protected:
     // Crea el fitxer per poder-hi escriure, si ja existeix l'esborra i el torna a crear perquè quedi net.
@@ -69,7 +69,8 @@ protected:
     virtual void writeSystemInformation(QXmlStreamWriter &writer);
 
 private:
-    QList<QPair<DiagnosisTest*, DiagnosisTestResult> > m_diagnosisTests;
+    QList<QPair<DiagnosisTest*, DiagnosisTestResult>> m_diagnosisTests;
+    QDateTime m_timestamp;
     bool m_modified;
     QString m_generatedData;
 };

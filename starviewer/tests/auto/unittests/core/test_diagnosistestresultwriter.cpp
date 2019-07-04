@@ -4,13 +4,15 @@
  */
 
 #include "autotest.h"
-#include "diagnosistest.h"
-#include "diagnosistestresult.h"
 #include "diagnosistestresultwriter.h"
 
+#include "diagnosistest.h"
+#include "diagnosistestresult.h"
+#include "starviewerapplication.h"
+
+#include <QFile>
 #include <QObject>
 #include <QStringList>
-#include <QFile>
 #include <QTextStream>
 
 using namespace udg;
@@ -62,7 +64,7 @@ public:
     QString m_description;
 
 public:
-    TestingDiagnosisTest(QObject *parent = 0)
+    TestingDiagnosisTest(QObject *parent = nullptr)
         : DiagnosisTest(parent)
     {
     }
@@ -121,7 +123,21 @@ void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice_da
     errorAndWarningResult.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Error during the course of the test", "No solution available"));
     testsResults << errorAndWarningResult;
 
-    QString result = "<?xml version=\"1.0\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\"><html><head/><body><div class=\"buttons\"><span id=\"succeededButton\" class=\"button\"><span class=\"buttonDescription\">1 succeeded</span></span><span id=\"errorButton\" class=\"button\"><span class=\"buttonDescription\">2 errors</span></span><span id=\"warningButton\" class=\"button\"><span class=\"buttonDescription\">1 warnings</span></span></div><div class=\"tests\"><div class=\"succeededTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: OK</div></div></div><div class=\"warningTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: 1 Warning</div></div><div class=\"problems\"><ul class=\"error\"/><ul class=\"warning\"><li><strong>Warning during the course of the test</strong><br/>Try to solve the warning</li></ul></div></div><div class=\"errorTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: 1 Error</div></div><div class=\"problems\"><ul class=\"error\"><li><strong>Error during the course of the test</strong><br/>No solution available</li></ul><ul class=\"warning\"/></div></div><div class=\"errorTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: 1 Error &amp; 1 Warning</div></div><div class=\"problems\"><ul class=\"error\"><li><strong>Error during the course of the test</strong><br/>No solution available</li></ul><ul class=\"warning\"><li><strong>Warning during the course of the test</strong><br/>Try to solve the warning</li></ul></div></div></div></body></html>";
+    QString result(R"(<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"><html><head/>)"
+                   R"(<body><div class="buttons"><span id="succeededButton" class="button"><span class="buttonDescription">1 succeeded</span></span>)"
+                   R"(<span id="errorButton" class="button"><span class="buttonDescription">2 errors</span></span><span id="warningButton" class="button">)"
+                   R"(<span class="buttonDescription">1 warnings</span></span></div><div class="tests"><div class="information"><div class="result">)"
+                   R"(<div class="description">Test details</div></div><div class="info"><ul><li>Starviewer %1</li><li>Timestamp: 2017-10-01T17:14:00</li>)"
+                   R"(</ul></div></div><div class="succeededTest"><div class="result"><div class="description">Diagnosis test: OK</div></div></div>)"
+                   R"(<div class="warningTest"><div class="result"><div class="description">Diagnosis test: 1 Warning</div></div><div class="problems">)"
+                   R"(<ul class="error"/><ul class="warning"><li><strong>Warning during the course of the test</strong><br/>Try to solve the warning</li></ul>)"
+                   R"(</div></div><div class="errorTest"><div class="result"><div class="description">Diagnosis test: 1 Error</div></div>)"
+                   R"(<div class="problems"><ul class="error"><li><strong>Error during the course of the test</strong><br/>No solution available</li></ul>)"
+                   R"(<ul class="warning"/></div></div><div class="errorTest"><div class="result">)"
+                   R"(<div class="description">Diagnosis test: 1 Error &amp; 1 Warning</div></div><div class="problems"><ul class="error"><li>)"
+                   R"(<strong>Error during the course of the test</strong><br/>No solution available</li></ul><ul class="warning"><li>)"
+                   R"(<strong>Warning during the course of the test</strong><br/>Try to solve the warning</li></ul></div></div></div></body></html>)");
+    result = result.arg(StarviewerVersionString);
     
     QTest::newRow("ok") << descriptions << testsResults << result;
 }
@@ -142,7 +158,7 @@ void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice()
         diagnosisTestsToWrite << QPair<DiagnosisTest*, DiagnosisTestResult>(test, diagnosisTestResults.at(i));
     }
 
-    writer.setDiagnosisTests(diagnosisTestsToWrite);
+    writer.setDiagnosisTests(std::move(diagnosisTestsToWrite), std::move(QDateTime(QDate(2017, 10, 1), QTime(17, 14))));
     writer.write("");
 
     QRegExp enters("\\s*\n\\s*");

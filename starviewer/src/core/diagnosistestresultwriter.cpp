@@ -71,9 +71,10 @@ void DiagnosisTestResultWriter::write(const QString &pathFile)
     delete file;
 }
 
-void DiagnosisTestResultWriter::setDiagnosisTests(QList<QPair<DiagnosisTest*, DiagnosisTestResult> > diagnosisTests)
+void DiagnosisTestResultWriter::setDiagnosisTests(QList<QPair<DiagnosisTest*, DiagnosisTestResult>> diagnosisTests, QDateTime timestamp)
 {
-    m_diagnosisTests = diagnosisTests;
+    m_diagnosisTests = std::move(diagnosisTests);
+    m_timestamp = std::move(timestamp);
     m_modified = true;
 }
 
@@ -81,7 +82,7 @@ QFile* DiagnosisTestResultWriter::createFile(const QString &pathFile)
 {
     if (pathFile.isEmpty() || QFileInfo(pathFile).isDir())
     {
-        return NULL;
+        return nullptr;
     }
 
     QFile *file = new QFile(pathFile);
@@ -92,7 +93,7 @@ QFile* DiagnosisTestResultWriter::createFile(const QString &pathFile)
     }
     if (!file->open(QFile::ReadWrite | QFile::Text))
     {
-        return NULL;
+        return nullptr;
     }
     return file;
 }
@@ -226,7 +227,7 @@ void DiagnosisTestResultWriter::writeTestDetails(QXmlStreamWriter &writer)
     writer.writeAttribute("class", "info");
     writer.writeStartElement("ul");
     writer.writeTextElement("li", QString("%1 %2").arg(ApplicationNameString).arg(StarviewerVersionString));
-    writer.writeTextElement("li", QObject::tr("Timestamp: %1").arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+    writer.writeTextElement("li", QObject::tr("Timestamp: %1").arg(m_timestamp.toString(Qt::ISODate)));
     writer.writeEndElement(); //end ul
     writer.writeEndElement(); //end div result
     writer.writeEndElement(); //end div information

@@ -106,7 +106,8 @@ void QDiagnosisTest::updateRunningDiagnosisTestProgress(DiagnosisTest * diagnosi
 void QDiagnosisTest::finishedRunningDiagnosisTest()
 {
     groupDiagnosisTestFromRunDiagnosisTestByState();
-    m_diagnosisTestResultWriter.setDiagnosisTests(m_errorExecutedDiagnosisTests + m_warningExecutedDiagnosisTests + m_okExecutedDiagnosisTests);
+    m_diagnosisTestResultWriter.setDiagnosisTests(m_errorExecutedDiagnosisTests + m_warningExecutedDiagnosisTests + m_okExecutedDiagnosisTests,
+                                                  std::move(QDateTime::currentDateTime()));
     fillDiagnosisTestsResultTable();
 
     if (allDiagnosisTestResultAreOk())
