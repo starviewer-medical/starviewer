@@ -138,14 +138,103 @@ private slots:
     void postProcessing_ShouldOrderImagesAsExpected_data();
     void postProcessing_ShouldOrderImagesAsExpected();
 
+    void canBeSpatiallySorted_ShouldReturnExpectedValue_data();
+    void canBeSpatiallySorted_ShouldReturnExpectedValue();
+
+private:
+
+    void setupData();
+
 };
 
 void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data()
 {
-    QTest::addColumn<QList<QList<Image*>>>("arrivingImages");   // for each processed file (outer list), list of generated images (inner list)
+    setupData();
+}
+
+void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected()
+{
+    QFETCH(QList<QList<Image*>>, arrivingImages);
+    QFETCH(QList<Series*>, seriesList);
+    QFETCH(QList<QList<Image*>>, sortedImages);
+    QFETCH(QList<QList<int>>, orderNumbers);
+
+    PatientFillerInput *input = new PatientFillerInput();
+    OrderImagesFillerStep orderImages;
+    orderImages.setInput(input);
+
+    foreach (const QList<Image*> &images, arrivingImages)
+    {
+        input->setCurrentSeries(images.first()->getParentSeries());
+        input->setCurrentVolumeNumber(images.first()->getVolumeNumberInSeries());
+        input->setCurrentImages(images, false);
+
+        QVERIFY(orderImages.fillIndividually());
+    }
+
+    orderImages.postProcessing();
+
+    delete input;
+
+    for (int i = 0; i < seriesList.size(); i++)
+    {
+        QCOMPARE(seriesList[i]->getImages(), sortedImages[i]);
+
+        for (int j = 0; j < sortedImages[i].size(); j++)
+        {
+            QCOMPARE(sortedImages[i][j]->getOrderNumberInVolume(), orderNumbers[i][j]);
+        }
+
+        delete seriesList[i];
+    }
+}
+
+void test_OrderImagesFillerStep::canBeSpatiallySorted_ShouldReturnExpectedValue_data()
+{
+    setupData();
+}
+
+void test_OrderImagesFillerStep::canBeSpatiallySorted_ShouldReturnExpectedValue()
+{
+    QFETCH(QList<QList<Image*>>, arrivingImages);
+    QFETCH(QList<Series*>, seriesList);
+    QFETCH(QList<QList<bool>>, canBeSpatiallySorted);
+
+    PatientFillerInput *input = new PatientFillerInput();
+    OrderImagesFillerStep orderImages;
+    orderImages.setInput(input);
+
+    foreach (const QList<Image*> &images, arrivingImages)
+    {
+        input->setCurrentSeries(images.first()->getParentSeries());
+        input->setCurrentVolumeNumber(images.first()->getVolumeNumberInSeries());
+        input->setCurrentImages(images, false);
+
+        QVERIFY(orderImages.fillIndividually());
+    }
+
+    orderImages.postProcessing();
+
+    delete input;
+
+    for (int i = 0; i < seriesList.size(); i++)
+    {
+        for (int j = 1; j <= canBeSpatiallySorted[i].size(); j++)
+        {
+            QCOMPARE(orderImages.canBeSpatiallySorted(seriesList[i], j), canBeSpatiallySorted[i][j-1]);
+        }
+
+        delete seriesList[i];
+    }
+}
+
+void test_OrderImagesFillerStep::setupData()
+{
+    QTest::addColumn<QList<QList<Image*>>>("arrivingImages");       // for each processed file (outer list), list of generated images (inner list)
     QTest::addColumn<QList<Series*>>("seriesList");
-    QTest::addColumn<QList<QList<Image*>>>("sortedImages");     // for each series (outer list), list of sorted images (inner list)
-    QTest::addColumn<QList<QList<int>>>("orderNumbers");        // for each series (outer list) and image in it (inner list), order number in volume
+    QTest::addColumn<QList<QList<Image*>>>("sortedImages");         // for each series (outer list), list of sorted images (inner list)
+    QTest::addColumn<QList<QList<int>>>("orderNumbers");            // for each series (outer list) and image in it (inner list), order number in volume
+    QTest::addColumn<QList<QList<bool>>>("canBeSpatiallySorted");   // for each series (outer list) and volume (inner), expected result of canBeSpatiallySorted
 
     // Note: image attributes are set in a clever way so that only the expected sorting criteria produce the correct order, thus if images are accidentally
     // sorted with different criteria they will be in a completely different and wrong order.
@@ -160,8 +249,9 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         QList<Series*> seriesList{series};
         QList<QList<Image*>> sortedImages{{image}};
         QList<QList<int>> orderNumbers{{0}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
-        QTest::newRow("Case 0: 1 image") << arrivingImages << seriesList << sortedImages << orderNumbers;
+        QTest::newRow("Case 0: 1 image") << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -179,8 +269,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
 
-        QTest::newRow("Case 1: n images, nothing strange -> order by 'distance'") << arrivingImages << seriesList << sortedImages << orderNumbers;
+        QTest::newRow("Case 1: n images, nothing strange -> order by 'distance'")
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -200,9 +292,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
 
         QTest::newRow("Case 2: 3 positions, 3 phases -> order by 'distance' and instance number")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -216,8 +309,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
-        QTest::newRow("Case 3: irregular phases -> order by instance number") << arrivingImages << seriesList << sortedImages << orderNumbers;
+        QTest::newRow("Case 3: irregular phases -> order by instance number")
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -231,10 +326,11 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 4: [bug or feature?] irregular phases only in position (0,0,0) "
                       "-> order by minimum 'distance' in the normal, 'distance' and instance number")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -247,8 +343,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
 
-        QTest::newRow("Case 5: multiple acquisitions -> order by instance number") << arrivingImages << seriesList << sortedImages << orderNumbers;
+        QTest::newRow("Case 5: multiple acquisitions -> order by instance number")
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -262,8 +360,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
 
-        QTest::newRow("Case 6: aligned stacks with the same normal -> order by 'distance'") << arrivingImages << seriesList << sortedImages << orderNumbers;
+        QTest::newRow("Case 6: aligned stacks with the same normal -> order by 'distance'")
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -277,9 +377,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 7: parallel stacks with the same normal -> order by 'distance' and instance number")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -293,8 +394,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
-        QTest::newRow("Case 8: zig-zag stacks with the same normal -> order by 'distance'") << arrivingImages << seriesList << sortedImages << orderNumbers;
+        QTest::newRow("Case 8: zig-zag stacks with the same normal -> order by 'distance'")
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -322,10 +425,11 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
 
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
 
         QTest::newRow("Case 9: small stacks (distance <= 1) with different normals (varying progressively) (detected as rotationals) "
                       "-> order by 'angle', minimum 'distance' in the normal and 'distance'")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -351,10 +455,11 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
 
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
 
         QTest::newRow("Case 10: big stacks (distance > 1) with different normals (varying progressively) "
                       "-> order by minimum 'distance' in the normal and 'distance'")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -383,9 +488,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
 
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7, 8}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 11: big stacks with different normals (varying randomly) -> order by minimum 'distance' in the normal and 'distance'")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -430,8 +536,9 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
 
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7, 8}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
-        QTest::newRow("Case 12: rotational -> order by 'angle'") << arrivingImages << seriesList << sortedImages << orderNumbers;
+        QTest::newRow("Case 12: rotational -> order by 'angle'") << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -455,9 +562,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
 
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 13: multiframe volume with parallel stacks with the same normal -> order by 'distance' and instance number and frame number")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -489,8 +597,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5}};
+        QList<QList<bool>> canBeSpatiallySorted{{true, false}};
 
-        QTest::newRow("Case 14: multi-volume, each volume with different criteria") << arrivingImages << seriesList << sortedImages << orderNumbers;
+        QTest::newRow("Case 14: multi-volume, each volume with different criteria")
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -558,9 +668,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
 
         QList<Series*> seriesList{series1, series2};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 0, 1, 2, 3}, {0, 1, 2, 3, 4, 5, 6, 7, 8}};
+        QList<QList<bool>> canBeSpatiallySorted{{false, true}, {false}};
 
         QTest::newRow("Case 15: multi-series and multi-volume, each case with different criteria")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -580,9 +691,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
 
         QTest::newRow("Case 16: [bug] different instance numbers, frame numbers and acquisitions -> order by instance number and frame number")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
         // Note that this is an unrealistic case, it can't happen at this moment because VolumeFillerStep would create separate volumes, but better to have it
         // covered just in case it becomes possible in the future
     }
@@ -628,10 +740,11 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
 
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 17: stacks and rotational in the same series (stacks with a normal not contained in the rotational) "
                       "-> stacks come first, then rotationals")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -674,10 +787,11 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
 
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 18: stacks and rotational in the same series (stacks with a normal contained in the rotational) -> "
                       "stacks come first, then rotationals (the rotational image with the same normal as the stacks is mixed with them)")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -693,9 +807,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 19: 1 position, 3 phases -> order by instance number and frame number")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -711,9 +826,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         series->addImage(arrivingImages[1][0]);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 20: 2 images with same instance number and different acquisition number and orientation -> order by reverse arrival order")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -756,9 +872,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
                                            arrivingImages[0][0], arrivingImages[0][1], arrivingImages[0][2],
                                            arrivingImages[0][3], arrivingImages[0][4], arrivingImages[0][5]}};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7, 8}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 21: different orientations not rotational, detected as stacks -> order by minimum 'distance' in the normal and 'distance'")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -825,9 +942,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
                                            arrivingImages[0][6], arrivingImages[0][12], arrivingImages[0][7], arrivingImages[0][2], arrivingImages[0][13],
                                            arrivingImages[0][3], arrivingImages[0][8], arrivingImages[0][14], arrivingImages[0][9], arrivingImages[0][4]}};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 22: 3 parallel stacks -> order by minimum 'distance' in the normal and 'distance' (affected by numerical precision)")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -839,10 +957,11 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 23: 1 position with 2 phases, another position with 2 orientations but same normal "
                       "-> detected as 2 regular phases, order by position and instance number")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -865,10 +984,11 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
 
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 24: 1 position with 2 phases, another position with 2 orientations and different normal "
                       "-> detected as 2 regular phases, order by position and instance number")
-                << arrivingImages << seriesList << sortedImages << orderNumbers;
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
@@ -908,45 +1028,10 @@ void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected_data
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
 
-        QTest::newRow("Case 25: very slight variation in orientation -> order by 'distance'") << arrivingImages << seriesList << sortedImages << orderNumbers;
-    }
-}
-
-void test_OrderImagesFillerStep::postProcessing_ShouldOrderImagesAsExpected()
-{
-    QFETCH(QList<QList<Image*>>, arrivingImages);
-    QFETCH(QList<Series*>, seriesList);
-    QFETCH(QList<QList<Image*>>, sortedImages);
-    QFETCH(QList<QList<int>>, orderNumbers);
-
-    PatientFillerInput *input = new PatientFillerInput();
-    OrderImagesFillerStep orderImages;
-    orderImages.setInput(input);
-
-    foreach (const QList<Image*> &images, arrivingImages)
-    {
-        input->setCurrentSeries(images.first()->getParentSeries());
-        input->setCurrentVolumeNumber(images.first()->getVolumeNumberInSeries());
-        input->setCurrentImages(images, false);
-
-        QVERIFY(orderImages.fillIndividually());
-    }
-
-    orderImages.postProcessing();
-
-    delete input;
-
-    for (int i = 0; i < seriesList.size(); i++)
-    {
-        QCOMPARE(seriesList[i]->getImages(), sortedImages[i]);
-
-        for (int j = 0; j < sortedImages[i].size(); j++)
-        {
-            QCOMPARE(sortedImages[i][j]->getOrderNumberInVolume(), orderNumbers[i][j]);
-        }
-
-        delete seriesList[i];
+        QTest::newRow("Case 25: very slight variation in orientation -> order by 'distance'")
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 }
 

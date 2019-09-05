@@ -16,30 +16,32 @@
 #define UDGORDERIMAGESFILLERSTEP_H
 
 #include "patientfillerstep.h"
-#include <QMap>
+
 #include <QHash>
-#include <QString>
+#include <QMap>
 #include <QVector3D>
 
 namespace udg {
 
-class Patient;
-class Series;
 class Image;
 
 /**
-    Mòdul que s'encarrega d'ordenar correctament les imatges de les sèries. Un dels seus requisits és que es tingui l'etiqueta de DICOMClassified,
-    la ImageFillerStep i el TemporalDimensionFillerStep.
-  */
-class OrderImagesFillerStep : public PatientFillerStep {
+ * @brief The OrderImagesFillerStep class orders images inside each volume.
+ *
+ * To achieve this it decides the order and then calls setOrderNumberInVolume() for each image and setImages() for each series (so that the series has the list
+ * of images in the correct order). For more information read qms://doc/065875b1.
+ */
+class OrderImagesFillerStep : public PatientFillerStep
+{
 public:
     OrderImagesFillerStep();
+    ~OrderImagesFillerStep() override;
 
-    ~OrderImagesFillerStep();
+    bool fillIndividually() override;
+    void postProcessing() override;
 
-    bool fillIndividually();
-
-    void postProcessing();
+    /// Returns true if the given volume of the given series can be spatially sorted. It's public to allow testing.
+    bool canBeSpatiallySorted(Series *series, int volume) const;
 
 private:
     /// Mètodes per processar la informació específica de series
@@ -50,6 +52,34 @@ private:
     
     /// Mètode que transforma l'estructura d'imatges ordenades a una llista i l'insereix a la sèrie.
     void setOrderedImagesIntoSeries(Series *series);
+
+private:
+    /// Auxiliary struct that holds a sample image and the number of images with a specific position and orientation.
+    struct ImageAndCounter
+    {
+        /// One of the images in the represented position and orientation.
+        Image *image;
+        /// Number of images in the represented position and orientation.
+        int count;
+    };
+
+    /**
+     * @brief A hash that stores an ImageAndCounter for each encountered position and orientation.
+     *
+     * The key is a string constructed from the position and the orientation.
+     */
+    struct ImageAndCounterPerPosition : public QHash<QString, ImageAndCounter>
+    {
+        /// Returns the key to be used to insert the given image into the hash, created from its position and orientation.
+        static QString hashKey(const Image *image);
+        /// Updates this hash with the given image.
+        void add(Image *image);
+        /// Returns true if there are the same number of images in each position and orientation, and false otherwise.
+        bool hasRegularPhases() const;
+    };
+
+    /// Stores an instance of ImageAndCounterPerPosition for each series and volume.
+    QHash<Series*, QHash<int, ImageAndCounterPerPosition>> m_imageAndCounterPerPositionPerVolume;
 
     //  Angle       NormalVector    Distance    InstanceNumber0FrameNumber
     QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> *m_orderedNormalsSet;

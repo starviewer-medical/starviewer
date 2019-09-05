@@ -13,13 +13,21 @@
  *************************************************************************************/
 
 #include "orderimagesfillerstep.h"
-#include "logging.h"
-#include "patientfillerinput.h"
-#include "patient.h"
-#include "study.h"
-#include "series.h"
+
 #include "image.h"
+#include "imageplane.h"
+#include "logging.h"
 #include "mathtools.h"
+#include "patient.h"
+#include "patientfillerinput.h"
+#include "series.h"
+#include "study.h"
+
+#include <functional>
+
+#include <QtConcurrent>
+
+#include <vtkPlane.h>
 
 namespace udg {
 
@@ -91,6 +99,21 @@ OrderImagesFillerStep::~OrderImagesFillerStep()
 
 bool OrderImagesFillerStep::fillIndividually()
 {
+    QList<Image*> currentImages = m_input->getCurrentImages();
+
+    if (!currentImages.isEmpty())
+    {
+        // If the hash contains no item with the key, the function inserts a default-constructed value into the hash with the key, and returns a reference to
+        // it. Thus the first time each series and volume are processed new entries will be created but the next times they will be reused.
+        ImageAndCounterPerPosition &imageAndCounterPerPosition =
+                m_imageAndCounterPerPositionPerVolume[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
+
+        foreach (Image *image, m_input->getCurrentImages())
+        {
+            imageAndCounterPerPosition.add(image);
+        }
+    }
+
     QMap<int, QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*>*> *volumesInSeries;
 
     if (m_orderImagesInternalInfo.contains(m_input->getCurrentSeries()))
@@ -191,6 +214,86 @@ void OrderImagesFillerStep::postProcessing()
     {
         setOrderedImagesIntoSeries(key);
     }
+}
+
+bool OrderImagesFillerStep::canBeSpatiallySorted(Series *series, int volume) const
+{
+    if (!series)
+    {
+        return false;
+    }
+
+    const ImageAndCounterPerPosition &imageAndCounterPerPosition = m_imageAndCounterPerPositionPerVolume[series][volume];
+
+    if (imageAndCounterPerPosition.size() <= 1)
+    {
+        DEBUG_LOG("Only phases or less than 2 images");
+        return false;
+    }
+
+    if (!imageAndCounterPerPosition.hasRegularPhases())
+    {
+        DEBUG_LOG("Irregular phases");
+        return false;
+    }
+
+    // If we reach this point we have either no phases or regular phases.
+    // Now we need a list of different ImagePlanes sorted by Image::distance to later check for spatial consistence.
+
+    QList<ImageAndCounter> imagesAndCounters = imageAndCounterPerPosition.values();
+
+    std::sort(imagesAndCounters.begin(), imagesAndCounters.end(), [](const ImageAndCounter &imageAndCounter1, const ImageAndCounter &imageAndCounter2) {
+        return Image::distance(imageAndCounter1.image) < Image::distance(imageAndCounter2.image);
+    });
+
+    std::function<ImagePlane(const ImageAndCounter&)> mapFunction = [](const ImageAndCounter &imageAndCounter)
+    {
+        ImagePlane imagePlane;
+        imagePlane.fillFromImage(imageAndCounter.image);
+        return imagePlane;
+    };
+
+    QList<ImagePlane> imagePlanes = QtConcurrent::blockingMapped(imagesAndCounters, mapFunction);
+
+    // Here we check for "spatial consistence". Two consecutive images are considered spatially consistent if a line perpendicular to the first image and
+    // passing through its center intersects the rectangle of the second image.
+
+    for (int i = 0; i < imagePlanes.size() - 1; i++)
+    {
+        const ImagePlane &imagePlane1 = imagePlanes[i];
+        const ImagePlane &imagePlane2 = imagePlanes[i+1];
+
+        Vector3 lineP1 = imagePlane1.getCenter();
+        Vector3 lineP2 = lineP1 + imagePlane1.getImageOrientation().getNormalVector();
+        Vector3 planeNormal = imagePlane2.getImageOrientation().getNormalVector();
+        Vector3 planeP0 = imagePlane2.getCenter();
+        double t;
+        double x[3];
+        int intersect = vtkPlane::IntersectWithLine(lineP1.toArray().data(), lineP2.toArray().data(), planeNormal.toArray().data(), planeP0.toArray().data(),
+                                                    t, x);
+
+        if (intersect == 0 && t == VTK_DOUBLE_MAX)
+        {
+            DEBUG_LOG("Spatially inconsistent because line and plane are parallel");
+            return false;
+        }
+        else
+        {
+            // Check if intersection is inside imagePlane2
+            Vector3 intersection(x);
+            Vector3 projectedIntersection = imagePlane2.projectPoint(intersection);
+
+            if (projectedIntersection.x < 0 || projectedIntersection.x > imagePlane2.getRowLength() ||
+                    projectedIntersection.y < 0 || projectedIntersection.y > imagePlane2.getColumnLength())
+            {
+                DEBUG_LOG("Spatially inconsistent because intersection is out of rectangle");
+                return false;
+            }
+        }
+    }
+
+    DEBUG_LOG("Spatially consistent");
+    return true;
 }
 
 void OrderImagesFillerStep::processImage(Image *image)
@@ -530,6 +633,54 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
         }
     }
     series->setImages(imageSet);
+}
+
+QString OrderImagesFillerStep::ImageAndCounterPerPosition::hashKey(const Image *image)
+{
+    constexpr int Width = 0;
+    constexpr char Format = 'f';
+    constexpr int Precision = 9;
+
+    Vector3 position(image->getImagePositionPatient());
+    ImageOrientation orientation = image->getImageOrientationPatient();
+    QVector3D rowVector = orientation.getRowVector();
+    QVector3D columnVector = orientation.getColumnVector();
+
+    return QString("%1\\%2\\%3\\%4\\%5\\%6\\%7\\%8\\%9")
+            .arg(    position.x,   Width, Format, Precision).arg(    position.y,   Width, Format, Precision).arg(    position.z,   Width, Format, Precision)
+            .arg(   rowVector.x(), Width, Format, Precision).arg(   rowVector.y(), Width, Format, Precision).arg(   rowVector.z(), Width, Format, Precision)
+            .arg(columnVector.x(), Width, Format, Precision).arg(columnVector.y(), Width, Format, Precision).arg(columnVector.z(), Width, Format, Precision);
+}
+
+void OrderImagesFillerStep::ImageAndCounterPerPosition::add(Image *image)
+{
+    QString key = hashKey(image);
+
+    if (this->contains(key))
+    {
+        (*this)[key].count++;
+    }
+    else
+    {
+        ImageAndCounter imageAndCounter{image, 1};
+        this->insert(key, imageAndCounter);
+    }
+}
+
+bool OrderImagesFillerStep::ImageAndCounterPerPosition::hasRegularPhases() const
+{
+    auto it = this->begin();
+    int count = it->count;
+
+    for (; it != this->end(); ++it)
+    {
+        if (it->count != count)
+        {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 }
