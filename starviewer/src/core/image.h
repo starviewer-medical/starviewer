@@ -206,6 +206,16 @@ public:
     /// Returns the transfer syntax UID.
     const QString& getTransferSyntaxUID() const;
 
+    /// Sets the stack id.
+    void setStackId(QString stackId);
+    /// Returns the stack id.
+    const QString& getStackId() const;
+
+    /// Sets the dimension index values.
+    void setDimensionIndexValues(QVector<uint> dimensionIndexValues);
+    /// Returns the dimension index values.
+    const QVector<uint>& getDimensionIndexValues() const;
+
     /// Ens retorna la distància de l'orígen de la imatge passada per paràmetre respecte a un orígen 0, 0, 0, segons la normal del pla
     /// TODO Assignar-li un nom més entenedor
     static double distance(Image *image);
@@ -400,6 +410,12 @@ private:
     /// Transfer Syntax UID (0002,0010)
     /// Transfer syntax defines how DICOM objects are serialized.
     QString m_transferSyntaxUID;
+
+    /// Stack ID (0020,9056).
+    QString m_stackId;
+
+    /// Dimension Index Values (0020,9157).
+    QVector<uint> m_dimensionIndexValues;
 
     /// Atributs NO-DICOM
 

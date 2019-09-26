@@ -457,6 +457,26 @@ const QString& Image::getTransferSyntaxUID() const
     return m_transferSyntaxUID;
 }
 
+void Image::setStackId(QString stackId)
+{
+    m_stackId = std::move(stackId);
+}
+
+const QString& Image::getStackId() const
+{
+    return m_stackId;
+}
+
+void Image::setDimensionIndexValues(QVector<uint> dimensionIndexValues)
+{
+    m_dimensionIndexValues = std::move(dimensionIndexValues);
+}
+
+const QVector<uint>& Image::getDimensionIndexValues() const
+{
+    return m_dimensionIndexValues;
+}
+
 double Image::distance(Image *image)
 {
     // Càlcul de la distància (basat en l'algorisme de Jolinda Smith)

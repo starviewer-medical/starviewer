@@ -44,6 +44,9 @@ public:
     /// ok will be false and a 0 initialized vector will be returned. It's an specific merthod for decimal strings with two values
     static QVector2D decimalStringTo2DDoubleVector(const QString &decimalString, bool *ok = 0);
 
+    /// Given a string containing multiple unsigned longs (DICOM VR UL), converts it to a vector of unsigned ints.
+    static QVector<uint> unsignedLongStringToUintVector(const QString &unsignedLongString);
+
     /// Maximum resolution conversion are milliseconds (DICOM Time can have a resolution of a millionth of a second (6 digits).
     static QTime timeToQTime(const QString &timeString);
 };

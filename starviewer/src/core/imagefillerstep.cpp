@@ -19,6 +19,7 @@
 #include "dicomsequenceitem.h"
 #include "dicomtagreader.h"
 #include "dicomvalueattribute.h"
+#include "dicomvaluerepresentationconverter.h"
 #include "image.h"
 #include "patientfillerinput.h"
 #include "series.h"
@@ -371,7 +372,7 @@ void ImageFillerStep::fillCommonImageInformation(Image *image, const DICOMTagRea
     // C.7.6.16 Multi-Frame Functional Groups Module
     image->setImageTime(dicomReader->getValueAttributeAsQString(DICOMContentTime));
 
-    image->setAcquisitionNumber(std::move(dicomReader->getValueAttributeAsQString(DICOMAcquisitionNumber)));
+    image->setAcquisitionNumber(dicomReader->getValueAttributeAsQString(DICOMAcquisitionNumber));
 
     // C.9 Overlays
     image->setNumberOfOverlays(getNumberOfOverlays(dicomReader));
@@ -523,6 +524,8 @@ void ImageFillerStep::processImage(Image *image, const DICOMTagReader *dicomRead
     // Display Shutter Module (C.7.6.11)
     // Omple la informació referent als Display Shutters que podem trobar en imatges de modalitat CR, XA, RF, DX, MG i IO
     fillDisplayShutterInformation(image, dicomReader);
+
+    image->setStackId(dicomReader->getValueAttributeAsQString(DICOMStackID));
 }
 
 QList<Image*> ImageFillerStep::processEnhancedDICOMFile(const DICOMTagReader *dicomReader)
@@ -645,6 +648,23 @@ void ImageFillerStep::fillFunctionalGroupsInformation(Image *image, DICOMSequenc
             if (dicomValue)
             {
                 image->setSliceThickness(dicomValue->getValueAsDouble());
+            }
+        }
+
+        // Frame Content Macro - C.7.6.16.2.2
+        // This Functional Group Macro may only be part of the Per-frame Functional Groups Sequence (5200,9230) Attribute.
+        if (DICOMSequenceItem *item = frameItem->getFirstSequenceItem(DICOMFrameContentSequence))
+        {
+            DICOMValueAttribute *dicomValue = item->getValueAttribute(DICOMStackID);
+            if (dicomValue)
+            {
+                image->setStackId(dicomValue->getValueAsQString());
+            }
+
+            dicomValue = item->getValueAttribute(DICOMDimensionIndexValues);
+            if (dicomValue)
+            {
+                image->setDimensionIndexValues(DICOMValueRepresentationConverter::unsignedLongStringToUintVector(dicomValue->getValueAsQString()));
             }
         }
 

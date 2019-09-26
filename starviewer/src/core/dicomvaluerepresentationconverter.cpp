@@ -125,6 +125,25 @@ QVector2D DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector(const
     return vector2DValue;
 }
 
+QVector<uint> DICOMValueRepresentationConverter::unsignedLongStringToUintVector(const QString &unsignedLongString)
+{
+    // This is necessary because splitRef on an empty string returns a vector with an empty string
+    if (unsignedLongString.isEmpty())
+    {
+        return QVector<uint>();
+    }
+
+    QVector<QStringRef> strings = unsignedLongString.splitRef(ValuesSeparator);
+    QVector<uint> values(strings.size());
+
+    for (int i = 0; i < strings.size(); i++)
+    {
+        values[i] = strings[i].toUInt();
+    }
+
+    return values;
+}
+
 QTime DICOMValueRepresentationConverter::timeToQTime(const QString &timeString)
 {
     // Allowed format is HHMMSS.FFFFFF, where .FFFFFF is optional (and up to 6 digits)
