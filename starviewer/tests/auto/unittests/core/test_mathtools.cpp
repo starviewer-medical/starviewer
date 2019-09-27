@@ -63,6 +63,15 @@ private slots:
     void closeEnough_ShouldReturnExpectedValue_data();
     void closeEnough_ShouldReturnExpectedValue();
 
+    void almostEqual_float_ShouldReturnExpectedValue_data();
+    void almostEqual_float_ShouldReturnExpectedValue();
+
+    void almostEqual_double_ShouldReturnExpectedValue_data();
+    void almostEqual_double_ShouldReturnExpectedValue();
+
+    void almostEqual_Vector3_ShouldReturnExpectedValue_data();
+    void almostEqual_Vector3_ShouldReturnExpectedValue();
+
     void angleInRadians_QVector2D_ShouldComputeAngleInRadians_data();
     void angleInRadians_QVector2D_ShouldComputeAngleInRadians();
 
@@ -436,6 +445,154 @@ void test_MathTools::closeEnough_ShouldReturnExpectedValue()
     QFETCH(bool, expectedResult);
 
     QCOMPARE(MathTools::closeEnough(value1, value2), expectedResult);
+}
+
+void test_MathTools::almostEqual_float_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<float>("x");
+    QTest::addColumn<float>("y");
+    QTest::addColumn<float>("absoluteEpsilon");
+    QTest::addColumn<float>("relativeEpsilon");
+    QTest::addColumn<bool>("expectedResult");
+
+    constexpr float DefaultAbsoluteEpsilon = std::numeric_limits<float>::epsilon();
+    constexpr float DefaultRelativeEpsilon = static_cast<float>(MathTools::Epsilon);
+
+    QTest::newRow("equal (positive)") << 36.29f << 36.29f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (negative)") << -49.4f << -49.4f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (+0)") << 0.0f << 0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (-0)") << -0.0f << -0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (+0, -0)") << 0.0f << -0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (-0, +0)") << -0.0f << 0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (1)") << 0.0f << DefaultAbsoluteEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (2)") << DefaultAbsoluteEpsilon << 0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (3)") << 0.0f << -DefaultAbsoluteEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (4)") << -DefaultAbsoluteEpsilon << 0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (5)") << -DefaultAbsoluteEpsilon / 2.0f << DefaultAbsoluteEpsilon / 2.0f
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (6)") << DefaultAbsoluteEpsilon / 2.0f << -DefaultAbsoluteEpsilon / 2.0f
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("not almost equal (absolute) (1)") << 0.0f << std::nextafter(DefaultAbsoluteEpsilon, 1.0f)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (2)") << std::nextafter(DefaultAbsoluteEpsilon, 1.0f) << 0.0f
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (3)") << 0.0f << -std::nextafter(DefaultAbsoluteEpsilon, 1.0f)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (4)") << -std::nextafter(DefaultAbsoluteEpsilon, 1.0f) << 0.0f
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (5)") << std::nextafter(-DefaultAbsoluteEpsilon / 2.0f, -1.0f)
+                                                     << std::nextafter(DefaultAbsoluteEpsilon / 2.0f, 1.0f)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (6)") << std::nextafter(DefaultAbsoluteEpsilon / 2.0f, 1.0f)
+                                                     << std::nextafter(-DefaultAbsoluteEpsilon / 2.0f, -1.0f)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    constexpr float BigNumber = 19660.652f;
+    constexpr float BigNumberEpsilon = BigNumber * DefaultRelativeEpsilon;
+    QTest::newRow("almost equal (relative) (1)") << BigNumber << BigNumber - BigNumberEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (relative) (2)") << BigNumber - BigNumberEpsilon << BigNumber << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("not almost equal (relative) (1)") << BigNumber << std::nextafter(BigNumber + BigNumberEpsilon, 20000.0f)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (relative) (2)") << std::nextafter(BigNumber + BigNumberEpsilon, 20000.0f) << BigNumber
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+}
+
+void test_MathTools::almostEqual_float_ShouldReturnExpectedValue()
+{
+    QFETCH(float, x);
+    QFETCH(float, y);
+    QFETCH(float, absoluteEpsilon);
+    QFETCH(float, relativeEpsilon);
+    QFETCH(bool, expectedResult);
+
+    QCOMPARE(MathTools::almostEqual(x, y, absoluteEpsilon, relativeEpsilon), expectedResult);
+}
+
+void test_MathTools::almostEqual_double_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<double>("x");
+    QTest::addColumn<double>("y");
+    QTest::addColumn<double>("absoluteEpsilon");
+    QTest::addColumn<double>("relativeEpsilon");
+    QTest::addColumn<bool>("expectedResult");
+
+    constexpr double DefaultAbsoluteEpsilon = std::numeric_limits<double>::epsilon();
+    constexpr double DefaultRelativeEpsilon = MathTools::Epsilon;
+
+    QTest::newRow("equal (positive)") << 36.29 << 36.29 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (negative)") << -49.4 << -49.4 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (+0)") << 0.0 << 0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (-0)") << -0.0 << -0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (+0, -0)") << 0.0 << -0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (-0, +0)") << -0.0 << 0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (1)") << 0.0 << DefaultAbsoluteEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (2)") << DefaultAbsoluteEpsilon << 0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (3)") << 0.0 << -DefaultAbsoluteEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (4)") << -DefaultAbsoluteEpsilon << 0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (5)") << -DefaultAbsoluteEpsilon / 2.0 << DefaultAbsoluteEpsilon / 2.0
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (6)") << DefaultAbsoluteEpsilon / 2.0 << -DefaultAbsoluteEpsilon / 2.0
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("not almost equal (absolute) (1)") << 0.0 << std::nextafter(DefaultAbsoluteEpsilon, 1.0)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (2)") << std::nextafter(DefaultAbsoluteEpsilon, 1.0) << 0.0
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (3)") << 0.0 << -std::nextafter(DefaultAbsoluteEpsilon, 1.0)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (4)") << -std::nextafter(DefaultAbsoluteEpsilon, 1.0) << 0.0
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (5)") << std::nextafter(-DefaultAbsoluteEpsilon / 2.0, -1.0) << std::nextafter(DefaultAbsoluteEpsilon / 2.0, 1.0)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (6)") << std::nextafter(DefaultAbsoluteEpsilon / 2.0, 1.0) << std::nextafter(-DefaultAbsoluteEpsilon / 2.0, -1.0)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    constexpr double BigNumber = 19660.652;
+    constexpr double BigNumberEpsilon = BigNumber * DefaultRelativeEpsilon;
+    QTest::newRow("almost equal (relative) (1)") << BigNumber << std::nextafter(BigNumber - BigNumberEpsilon, BigNumber)
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (relative) (2)") << std::nextafter(BigNumber - BigNumberEpsilon, BigNumber) << BigNumber
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("not almost equal (relative) (1)") << BigNumber << BigNumber + BigNumberEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (relative) (2)") << BigNumber + BigNumberEpsilon << BigNumber << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+}
+
+void test_MathTools::almostEqual_double_ShouldReturnExpectedValue()
+{
+    QFETCH(double, x);
+    QFETCH(double, y);
+    QFETCH(double, absoluteEpsilon);
+    QFETCH(double, relativeEpsilon);
+    QFETCH(bool, expectedResult);
+
+    QCOMPARE(MathTools::almostEqual(x, y, absoluteEpsilon, relativeEpsilon), expectedResult);
+}
+
+void test_MathTools::almostEqual_Vector3_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<Vector3>("v1");
+    QTest::addColumn<Vector3>("v2");
+    QTest::addColumn<double>("absoluteEpsilon");
+    QTest::addColumn<double>("relativeEpsilon");
+    QTest::addColumn<bool>("expectedResult");
+
+    constexpr double DefaultAbsoluteEpsilon = std::numeric_limits<double>::epsilon();
+    constexpr double DefaultRelativeEpsilon = MathTools::Epsilon;
+
+    QTest::newRow("equal vectors") << Vector3(0, -1, 0) << Vector3(0, -1, 0) << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("one different component") << Vector3(0, -1, 0) << Vector3(0, 1, 0) << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("two different components") << Vector3(0, -1, 0) << Vector3(0, 0, 1) << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("three different components") << Vector3(0, -1, 0) << Vector3(1, 0, 1) << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("almost equal") << Vector3(3.748e-40, 1.2117287631178519e216, 7.728e-216) << Vector3(5.748e-152, 1.211728763221107e216, 1.94e-210)
+                                  << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+}
+
+void test_MathTools::almostEqual_Vector3_ShouldReturnExpectedValue()
+{
+    QFETCH(Vector3, v1);
+    QFETCH(Vector3, v2);
+    QFETCH(double, absoluteEpsilon);
+    QFETCH(double, relativeEpsilon);
+    QFETCH(bool, expectedResult);
+
+    QCOMPARE(MathTools::almostEqual(v1, v2, absoluteEpsilon, relativeEpsilon), expectedResult);
 }
 
 void test_MathTools::angleInRadians_QVector2D_ShouldComputeAngleInRadians_data()
