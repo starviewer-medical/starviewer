@@ -477,7 +477,7 @@ const QVector<uint>& Image::getDimensionIndexValues() const
     return m_dimensionIndexValues;
 }
 
-double Image::distance(Image *image)
+double Image::distance(const Image *image)
 {
     // Càlcul de la distància (basat en l'algorisme de Jolinda Smith)
     double distance = 0.0;

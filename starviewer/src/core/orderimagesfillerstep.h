@@ -19,7 +19,6 @@
 
 #include <QHash>
 #include <QMap>
-#include <QVector3D>
 
 namespace udg {
 
@@ -29,7 +28,14 @@ class Image;
  * @brief The OrderImagesFillerStep class orders images inside each volume.
  *
  * To achieve this it decides the order and then calls setOrderNumberInVolume() for each image and setImages() for each series (so that the series has the list
- * of images in the correct order). For more information read qms://doc/065875b1.
+ * of images in the correct order).
+ *
+ * Images that can be spatially sorted are separated by acquisition number and stack id, then sorted by Image::distance inside each group; then stacks inside
+ * each acquisition are sorted by minimum Image::distance and finally acquisitions are also sorted by minimum Image::distance. Images with the same position are
+ * sorted with the same criteria as images that can't be spatially sorted, according to a set of more or less abstract values; these are, in order of
+ * preference, dimension index values, instance number SOP instance UID, and frame number.
+ *
+ * For more information read qms://doc/065875b1.
  */
 class OrderImagesFillerStep : public PatientFillerStep
 {
@@ -43,18 +49,25 @@ public:
     /// Returns true if the given volume of the given series can be spatially sorted. It's public to allow testing.
     bool canBeSpatiallySorted(Series *series, int volume) const;
 
-private:
-    /// Mètodes per processar la informació específica de series
-    void processImage(Image *image);
+    /// Returns true if the Image::distance of \a image1 is lower than that of \a image2, and false if it is greater. If they are equal it calls and returns the
+    /// value of lesserAbstractValues. It is used as the comparator function of std::sort. It's public to allow testing.
+    static bool lesserSpatialPosition(const Image *image1, const Image *image2);
 
-    /// Mètode per calcular quantes fases per posició té realment cada imatge dins de cada sèrie i subvolum.
-    void processPhasesPerPositionEvaluation(Image *image);
-    
-    /// Mètode que transforma l'estructura d'imatges ordenades a una llista i l'insereix a la sèrie.
-    void setOrderedImagesIntoSeries(Series *series);
+    /// Returns true if \a image1 must be ordered before \a image2 according to several abstract values (see class description or qms://doc/065875b1). It is
+    /// used as the comparator function of std::sort. It's public to allow testing.
+    static bool lesserAbstractValues(const Image *image1, const Image *image2);
 
 private:
-    /// Auxiliary struct that holds a sample image and the number of images with a specific position and orientation.
+    /// Sorts spatially the given list of images. See class description or qms://doc/065875b1 for criteria.
+    static void spatialSort(QList<Image*> &images);
+
+    /// Sorts the given list images according to lesserAbstractValues.
+    static void basicSort(QList<Image*> &images);
+
+private:
+    /**
+     * @brief Auxiliary struct that holds a sample image and the number of images with a specific position and orientation.
+     */
     struct ImageAndCounter
     {
         /// One of the images in the represented position and orientation.
@@ -80,35 +93,9 @@ private:
 
     /// Stores an instance of ImageAndCounterPerPosition for each series and volume.
     QHash<Series*, QHash<int, ImageAndCounterPerPosition>> m_imageAndCounterPerPositionPerVolume;
+    /// Stores the list of images in each series and volume, for easy access. The inner one is a map to have volume numbers ordered.
+    QHash<Series*, QMap<int, QList<Image*>>> m_imagesPerVolume;
 
-    //  Angle       NormalVector    Distance    InstanceNumber0FrameNumber
-    QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*> *m_orderedNormalsSet;
-
-    //    Series        Volume     Angle     NormalVector    Distance  InstanceNumber0FrameNumber
-    QHash<Series*, QMap<int, QMap<double, QMap<QString, QMap<double, QMap<unsigned long, Image*>*>*>*>*>*> m_orderImagesInternalInfo;
-   
-    //    Series       Volume     AcqNumber MultipleAcqNumbers?
-    QHash<Series*, QHash<int, QPair<QString, bool>*> > m_acquisitionNumberEvaluation;
-
-    QVector3D m_firstPlaneVector3D;
-    QVector3D m_direction;
-
-    /// Tipus per definir un hash per comptar les fases corresponents a cada posició
-    /// La clau del hash és un string amb la posició de la imatge (ImagePositionPatient) i el valor associat compta les ocurrències (fases) d'aquesta posició.
-    /// Si tenim igual nombre de fases a totes les posicions, podem dir que és un volum amb fases
-    typedef QHash<QString, int> PhasesPerPositionHashType;
-
-    /// Hash en el que per cada sèrie, mapejem un hash que indica per cada volume number, quantes fases per posició té
-    /// Aquest ens servirà en el post processat per decidir quins subvolums s'han d'ordenar per instance number 
-    /// en cas que no totes les imatges d'un mateix subvolum no tinguin el mateix nombre de fases
-    /// <Sèrie, <VolumeNumber, <PhasesPerPositionHash> > >
-    QHash<Series*, QHash<int, PhasesPerPositionHashType*>*> m_phasesPerPositionEvaluation;
-
-    /// Hash amb que per cada sèrie mapejem un hash on s'indica per cada número de subvolum, si totes les posicions tenen el mateix nombre de fases.
-    /// En cas que no, cal ordenar el corresponent subvolum per instance number com en el cas dels m_acquisitionNumberEvaluation
-    /// TODO Potser amb aquesta avaluació seria suficient i la que es fa per Acquisition Number es podria eliminar
-    /// <Sèrie, <VolumeNumber, SameNumberOfPhasesPerPosition?> >
-    QHash<Series*, QHash<int, bool>*> m_sameNumberOfPhasesPerPositionPerVolumeInSeriesHash;
 };
 
 }
