@@ -45,13 +45,12 @@ bool OrderImagesFillerStep::fillIndividually()
     {
         // If the hash contains no item with the key, the function inserts a default-constructed value into the hash with the key, and returns a reference to
         // it. Thus the first time each series and volume are processed new entries will be created but the next times they will be reused.
-        ImageAndCounterPerPosition &imageAndCounterPerPosition =
-                m_imageAndCounterPerPositionPerVolume[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
+        SampleImagePerPosition &sampleImagePerPosition = m_sampleImagePerPositionPerVolume[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
         QList<Image*> &volumeImages = m_imagesPerVolume[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
 
         foreach (Image *image, m_input->getCurrentImages())
         {
-            imageAndCounterPerPosition.add(image);
+            sampleImagePerPosition.add(image);
             volumeImages.append(image);
         }
     }
@@ -97,37 +96,31 @@ bool OrderImagesFillerStep::canBeSpatiallySorted(Series *series, int volume) con
         return false;
     }
 
-    const ImageAndCounterPerPosition &imageAndCounterPerPosition = m_imageAndCounterPerPositionPerVolume[series][volume];
+    const SampleImagePerPosition &sampleImagePerPosition = m_sampleImagePerPositionPerVolume[series][volume];
 
-    if (imageAndCounterPerPosition.size() <= 1)
+    if (sampleImagePerPosition.size() <= 1)
     {
         DEBUG_LOG("Only phases or less than 2 images");
         return false;
     }
 
-    if (!imageAndCounterPerPosition.hasRegularPhases())
-    {
-        DEBUG_LOG("Irregular phases");
-        return false;
-    }
-
-    // If we reach this point we have either no phases or regular phases.
+    // If we reach this point we know that we have at least two different ImagePlanes.
     // Now we need a list of different ImagePlanes sorted by Image::distance to later check for spatial consistence.
 
-    QList<ImageAndCounter> imagesAndCounters = imageAndCounterPerPosition.values();
+    QList<Image*> sampleImages = sampleImagePerPosition.values();
 
-    std::sort(imagesAndCounters.begin(), imagesAndCounters.end(), [](const ImageAndCounter &imageAndCounter1, const ImageAndCounter &imageAndCounter2) {
-        return Image::distance(imageAndCounter1.image) < Image::distance(imageAndCounter2.image);
+    std::sort(sampleImages.begin(), sampleImages.end(), [](const Image *image1, const Image *image2) {
+        return Image::distance(image1) < Image::distance(image2);
     });
 
-    std::function<ImagePlane(const ImageAndCounter&)> mapFunction = [](const ImageAndCounter &imageAndCounter)
+    std::function<ImagePlane(const Image*)> mapFunction = [](const Image *image)
     {
         ImagePlane imagePlane;
-        imagePlane.fillFromImage(imageAndCounter.image);
+        imagePlane.fillFromImage(image);
         return imagePlane;
     };
 
-    QList<ImagePlane> imagePlanes = QtConcurrent::blockingMapped(imagesAndCounters, mapFunction);
+    QList<ImagePlane> imagePlanes = QtConcurrent::blockingMapped(sampleImages, mapFunction);
 
     // Here we check for "spatial consistence". Two consecutive images are considered spatially consistent if a line perpendicular to the first image and
     // passing through its center intersects the rectangle of the second image.
@@ -294,7 +287,7 @@ void OrderImagesFillerStep::basicSort(QList<Image*> &images)
     std::sort(images.begin(), images.end(), lesserAbstractValues);
 }
 
-QString OrderImagesFillerStep::ImageAndCounterPerPosition::hashKey(const Image *image)
+QString OrderImagesFillerStep::SampleImagePerPosition::hashKey(const Image *image)
 {
     constexpr int Width = 0;
     constexpr char Format = 'f';
@@ -311,35 +304,14 @@ QString OrderImagesFillerStep::ImageAndCounterPerPosition::hashKey(const Image *
             .arg(columnVector.x(), Width, Format, Precision).arg(columnVector.y(), Width, Format, Precision).arg(columnVector.z(), Width, Format, Precision);
 }
 
-void OrderImagesFillerStep::ImageAndCounterPerPosition::add(Image *image)
+void OrderImagesFillerStep::SampleImagePerPosition::add(Image *image)
 {
     QString key = hashKey(image);
 
-    if (this->contains(key))
+    if (!this->contains(key))
     {
-        (*this)[key].count++;
+        this->insert(key, image);
     }
-    else
-    {
-        ImageAndCounter imageAndCounter{image, 1};
-        this->insert(key, imageAndCounter);
-    }
-}
-
-bool OrderImagesFillerStep::ImageAndCounterPerPosition::hasRegularPhases() const
-{
-    auto it = this->begin();
-    int count = it->count;
-
-    for (; it != this->end(); ++it)
-    {
-        if (it->count != count)
-        {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 }

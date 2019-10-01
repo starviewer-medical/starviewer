@@ -66,33 +66,20 @@ private:
 
 private:
     /**
-     * @brief Auxiliary struct that holds a sample image and the number of images with a specific position and orientation.
-     */
-    struct ImageAndCounter
-    {
-        /// One of the images in the represented position and orientation.
-        Image *image;
-        /// Number of images in the represented position and orientation.
-        int count;
-    };
-
-    /**
-     * @brief A hash that stores an ImageAndCounter for each encountered position and orientation.
+     * @brief A hash that stores an Image for each encountered position and orientation.
      *
      * The key is a string constructed from the position and the orientation.
      */
-    struct ImageAndCounterPerPosition : public QHash<QString, ImageAndCounter>
+    struct SampleImagePerPosition : public QHash<QString, Image*>
     {
         /// Returns the key to be used to insert the given image into the hash, created from its position and orientation.
         static QString hashKey(const Image *image);
         /// Updates this hash with the given image.
         void add(Image *image);
-        /// Returns true if there are the same number of images in each position and orientation, and false otherwise.
-        bool hasRegularPhases() const;
     };
 
-    /// Stores an instance of ImageAndCounterPerPosition for each series and volume.
-    QHash<Series*, QHash<int, ImageAndCounterPerPosition>> m_imageAndCounterPerPositionPerVolume;
+    /// Stores an instance of SampleImagePerPosition for each series and volume.
+    QHash<Series*, QHash<int, SampleImagePerPosition>> m_sampleImagePerPositionPerVolume;
     /// Stores the list of images in each series and volume, for easy access. The inner one is a map to have volume numbers ordered.
     QHash<Series*, QMap<int, QList<Image*>>> m_imagesPerVolume;
 

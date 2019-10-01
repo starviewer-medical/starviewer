@@ -435,34 +435,34 @@ void test_OrderImagesFillerStep::setupData()
     }
 
     {
-        QList<QList<Image*>> sortedImages{{ImageBuilder().instance(0).position(Vector3(0, 0, 0)).get(),
+        QList<QList<Image*>> sortedImages{{ImageBuilder().instance(5).position(Vector3(0, 0, -1)).get(),
+                                           ImageBuilder().instance(0).position(Vector3(0, 0, 0)).get(),
                                            ImageBuilder().instance(1).position(Vector3(1, 0, 0)).get(),
                                            ImageBuilder().instance(2).position(Vector3(1, 0, 0)).get(),
                                            ImageBuilder().instance(3).position(Vector3(0, 0, 0)).get(),
-                                           ImageBuilder().instance(4).position(Vector3(0, 0, 1)).get(),
-                                           ImageBuilder().instance(5).position(Vector3(0, 0, -1)).get()}};
+                                           ImageBuilder().instance(4).position(Vector3(0, 0, 1)).get()}};
         QList<QList<Image*>> arrivingImages = imagesOneByOne(sortedImages);
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5}};
-        QList<QList<bool>> canBeSpatiallySorted{{false}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
 
-        QTest::newRow("Case 3: irregular phases -> order by instance number")
+        QTest::newRow("Case 3: irregular phases -> order by 'distance' and instance number")
                 << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 
     {
-        QList<QList<Image*>> sortedImages{{ImageBuilder().instance(0).position(Vector3(0, 0, 0)).get(),
+        QList<QList<Image*>> sortedImages{{ImageBuilder().instance(5).position(Vector3(0, 0, -1)).get(),
+                                           ImageBuilder().instance(0).position(Vector3(0, 0, 0)).get(),
                                            ImageBuilder().instance(1).position(Vector3(0, 0, 0)).get(),
                                            ImageBuilder().instance(2).position(Vector3(1, 0, 0)).get(),
                                            ImageBuilder().instance(3).position(Vector3(0, 0, 0)).get(),
-                                           ImageBuilder().instance(4).position(Vector3(0, 0, 1)).get(),
-                                           ImageBuilder().instance(5).position(Vector3(0, 0, -1)).get()}};
+                                           ImageBuilder().instance(4).position(Vector3(0, 0, 1)).get()}};
         QList<QList<Image*>> arrivingImages = imagesOneByOne(sortedImages);
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5}};
-        QList<QList<bool>> canBeSpatiallySorted{{false}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
 
         QTest::newRow("Case 4: irregular phases only in position (0,0,0) -> order by instance number")
                 << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
@@ -665,12 +665,12 @@ void test_OrderImagesFillerStep::setupData()
                              ImageBuilder().uid(3).instance(2).frame(0).position(Vector3(0, 0, 10)).volume(1).get(),
                              ImageBuilder().uid(5).instance(0).frame(0).position(Vector3(0, 0, 11)).volume(1).get(),
                              ImageBuilder().uid(4).instance(8).frame(0).position(Vector3(0, 0, 12)).volume(1).get(),
+                             ImageBuilder().uid(10).instance(1).frame(5).position(Vector3(0, 0, -1)).volume(2).get(),
                              ImageBuilder().uid(10).instance(1).frame(0).position(Vector3(0, 0, 0)).volume(2).get(),
                              ImageBuilder().uid(10).instance(1).frame(1).position(Vector3(1, 0, 0)).volume(2).get(),
                              ImageBuilder().uid(10).instance(1).frame(2).position(Vector3(1, 0, 0)).volume(2).get(),
                              ImageBuilder().uid(10).instance(1).frame(3).position(Vector3(0, 0, 0)).volume(2).get(),
-                             ImageBuilder().uid(10).instance(1).frame(4).position(Vector3(0, 0, 1)).volume(2).get(),
-                             ImageBuilder().uid(10).instance(1).frame(5).position(Vector3(0, 0, -1)).volume(2).get()};
+                             ImageBuilder().uid(10).instance(1).frame(4).position(Vector3(0, 0, 1)).volume(2).get()};
         QList<QList<Image*>> sortedImages{images};
         QList<QList<Image*>> arrivingImages;
         auto it = images.begin();
@@ -687,7 +687,7 @@ void test_OrderImagesFillerStep::setupData()
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
         QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5}};
-        QList<QList<bool>> canBeSpatiallySorted{{true, false}};
+        QList<QList<bool>> canBeSpatiallySorted{{true, true}};
 
         QTest::newRow("Case 14: multi-volume, each volume with different criteria (1 distance, 2 frame number)")
                 << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
