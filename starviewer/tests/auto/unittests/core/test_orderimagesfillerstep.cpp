@@ -59,6 +59,12 @@ public:
         return *this;
     }
 
+    ImageBuilder& stackId(QString stackId)
+    {
+        m_image->setStackId(std::move(stackId));
+        return *this;
+    }
+
     ImageBuilder& position(const Vector3 &position)
     {
         m_image->setImagePositionPatient(position.toArray().data());
@@ -1182,6 +1188,28 @@ void test_OrderImagesFillerStep::setupData()
         QList<QList<bool>> canBeSpatiallySorted{{false}};
 
         QTest::newRow("Case 27: rotational with all images with the same center -> order by instance number")
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
+    }
+
+    {
+        QList<QList<Image*>> sortedImages{{
+                ImageBuilder().instance(1).acquisition(2).stackId("asdf").position(Vector3(0, 0, 0)).get(),
+                ImageBuilder().instance(5).acquisition(1).stackId("foo").position(Vector3(0, 0, 0)).get(),
+                ImageBuilder().instance(2).acquisition(1).stackId("foo").position(Vector3(0, 0, 6)).get(),
+                ImageBuilder().instance(4).acquisition(1).stackId("1").position(Vector3(0, 0, 1)).get(),
+                ImageBuilder().instance(8).acquisition(1).stackId("_").position(Vector3(0, 0, 3)).get(),
+                ImageBuilder().instance(9).acquisition(1).stackId("<( -'.'- )>").position(Vector3(0, 0, 3)).get(),
+                ImageBuilder().instance(0).acquisition(1).stackId("<( -'.'- )>").position(Vector3(0, 0, 5)).get(),
+                ImageBuilder().instance(3).acquisition(1).stackId("<( -'.'- )>").position(Vector3(0, 0, 7)).get()
+        }};
+        QList<QList<Image*>> arrivingImages = imagesOneByOne(sortedImages);
+        Series *series = shuffleAndCreateSeries(arrivingImages);
+        QList<Series*> seriesList{series};
+        QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
+
+        QTest::newRow("Case 28: multiple acquisitions and stacks with intersection "
+                      "-> order images spatially in each stack, then stacks spatially in each acquistion, then acquisitions spatially")
                 << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 }

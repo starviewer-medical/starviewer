@@ -247,6 +247,17 @@ bool OrderImagesFillerStep::lesserAbstractValues(const Image *image1, const Imag
 
 void OrderImagesFillerStep::spatialSort(QList<Image*> &images)
 {
+    // Used to use the first image of each group as map key
+    struct ImageWrapper
+    {
+        Image *image;
+        ImageWrapper(Image *image = nullptr) : image(image) {}
+        bool operator <(const ImageWrapper &that) const
+        {
+            return lesserSpatialPosition(this->image, that.image);
+        }
+    };
+
     QHash<int, QHash<QString, QList<Image*>>> imagesPerStackAndAcquisition;
 
     while (!images.isEmpty())
@@ -258,8 +269,8 @@ void OrderImagesFillerStep::spatialSort(QList<Image*> &images)
         imagesPerStackAndAcquisition[acquisitionNumber][stackId].append(image);
     }
 
-    QMultiMap<double, int> sortedAcquisitions;
-    QHash<int, QMultiMap<double, QString>> sortedStacksPerAcquisition;
+    QMap<ImageWrapper, int> sortedAcquisitions;
+    QHash<int, QMap<ImageWrapper, QString>> sortedStacksPerAcquisition;
 
     foreach (int acquisitionNumber, imagesPerStackAndAcquisition.keys())
     {
@@ -267,7 +278,7 @@ void OrderImagesFillerStep::spatialSort(QList<Image*> &images)
         {
             QList<Image*> &localImages = imagesPerStackAndAcquisition[acquisitionNumber][stackId];
             std::sort(localImages.begin(), localImages.end(), lesserSpatialPosition);
-            sortedStacksPerAcquisition[acquisitionNumber].insert(Image::distance(localImages.first()), stackId);
+            sortedStacksPerAcquisition[acquisitionNumber].insert(localImages.first(), stackId);
         }
 
         sortedAcquisitions.insert(sortedStacksPerAcquisition[acquisitionNumber].firstKey(), acquisitionNumber);
