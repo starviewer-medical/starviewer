@@ -89,7 +89,8 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_externalapplication.cpp \
            $$PWD/test_sliceorientedvolumepixeldata.cpp \
            $$PWD/test_applicationversionchecker.cpp \
-           $$PWD/test_systemrequirementstest.cpp
+           $$PWD/test_systemrequirementstest.cpp \
+           $$PWD/test_orderimagesfillerstep.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \

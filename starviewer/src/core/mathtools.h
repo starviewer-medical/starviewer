@@ -45,7 +45,7 @@ static const long double PiNumberDivBy2Long;
 static const double DegreesToRadiansAsDouble;
 static const double RadiansToDegreesAsDouble;
 /// Epsilon, nombre extremadament petit
-static const double Epsilon;
+static constexpr double Epsilon = 1e-9;
 /// Valor màxim d'un tipus double
 static const double DoubleMaximumValue;
 
@@ -114,6 +114,28 @@ static double cubeRoot(double x);
 /// Determina si podem considerar pràcticament iguals els dos
 /// valors passats per paràmetre si la seva diferència és menor al valor d'Epsilon
 static bool closeEnough(float f1, float f2);
+
+/// Returns true if difference between \a x and \a y is smaller than or equal to \a absoluteEpsilon, or smaller than or equal to the maximum of them multiplied
+/// by \a relativeEpsilon, and false otherwise.
+template <class T>
+static bool almostEqual(T x, T y, T absoluteEpsilon = std::numeric_limits<T>::epsilon(), T relativeEpsilon = Epsilon)
+{
+    // Source: https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
+    T difference = std::abs(x - y);
+
+    if (difference <= absoluteEpsilon)
+    {
+        return true;
+    }
+    else
+    {
+        return difference <= std::max(std::abs(x), std::abs(y)) * relativeEpsilon;
+    }
+}
+
+/// Returns true if almostEqual returns true for each component of \a v1 and \a v2, and false otherwise.
+static bool almostEqual(const Vector3 &v1, const Vector3 &v2, double absoluteEpsilon = std::numeric_limits<double>::epsilon(),
+                        double relativeEpsilon = Epsilon);
 
 /// Distància entre punts 3D
 static double getDistance3D(const double firstPoint[3], const double secondPoint[3]);

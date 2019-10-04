@@ -38,7 +38,6 @@ const double MathTools::PiNumber = 3.14159265358979323846;
 const long double MathTools::PiNumberLong = 3.14159265358979323846;
 // pi/2
 const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916397514L;
-const double MathTools::Epsilon = 1E-9;
 const double MathTools::DegreesToRadiansAsDouble = 0.017453292519943295;
 const double MathTools::RadiansToDegreesAsDouble = 57.29577951308232;
 // TODO Potser seria més conevnient fer servir std::numeric_limits<double>::max(). Caldria incloure <limits>
@@ -348,6 +347,13 @@ int MathTools::roundToNearestInteger(double x)
 bool MathTools::closeEnough(float f1, float f2)
 {
     return fabsf((f1 - f2) / ((f2 == 0.0f) ? 1.0f : f2)) < Epsilon;
+}
+
+bool MathTools::almostEqual(const Vector3 &v1, const Vector3 &v2, double absoluteEpsilon, double relativeEpsilon)
+{
+    return almostEqual(v1.x, v2.x, absoluteEpsilon, relativeEpsilon) &&
+            almostEqual(v1.y, v2.y, absoluteEpsilon, relativeEpsilon) &&
+            almostEqual(v1.z, v2.z, absoluteEpsilon, relativeEpsilon);
 }
 
 float MathTools::degreesToRadians(float degrees)
