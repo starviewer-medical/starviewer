@@ -1,6 +1,6 @@
 /*@
     "name": "test_OrderImagesFillerStep",
-    "requirements": ["archive.order_images"]
+    "requirements": ["archive.image_order"]
  */
 
 #include "autotest.h"
