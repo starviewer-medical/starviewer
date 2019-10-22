@@ -22,6 +22,8 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderWindow.h>
 
+static constexpr double MinimumValue = 0.01;
+
 namespace udg {
 
 WindowLevelTool::WindowLevelTool(QViewer *viewer, QObject *parent)
@@ -95,21 +97,21 @@ void WindowLevelTool::doWindowLevel()
     double dy = 4.0 * (m_windowLevelStartPosition.y() - m_windowLevelCurrentPosition.y()) / size.height();
 
     // Scale by current values
-    if (fabs(m_initialWindow) > 0.01)
+    if (fabs(m_initialWindow) > MinimumValue)
     {
         dx = dx * m_initialWindow;
     }
     else
     {
-        dx = dx * (m_initialWindow < 0 ? -0.01 : 0.01);
+        dx = dx * (m_initialWindow < 0 ? -MinimumValue : MinimumValue);
     }
-    if (fabs(m_initialLevel) > 0.01)
+    if (fabs(m_initialLevel) > MinimumValue)
     {
         dy = dy * m_initialLevel;
     }
     else
     {
-        dy = dy * (m_initialLevel < 0 ? -0.01 : 0.01);
+        dy = dy * (m_initialLevel < 0 ? -MinimumValue : MinimumValue);
     }
 
     // Abs so that direction does not flip
@@ -213,23 +215,23 @@ void WindowLevelTool::computeWindowLevelValuesWithDefaultBehaviour(double deltaX
 void WindowLevelTool::avoidZero(double &window, double &level)
 {
     // Stay away from zero and really
-    if (fabs(window) < 0.01)
+    if (fabs(window) < MinimumValue)
     {
-        window = 0.01 * (window < 0 ? -1 : 1);
+        window = MinimumValue * (window < 0 ? -1 : 1);
     }
-    if (fabs(level) < 0.01)
+    if (fabs(level) < MinimumValue)
     {
-        level = 0.01 * (level < 0 ? -1 : 1);
+        level = MinimumValue * (level < 0 ? -1 : 1);
     }
 }
 
 void WindowLevelTool::avoidZeroAndNegative(double &window, double &level)
 {
-    if (window < 0.01)
+    if (window < MinimumValue)
     {
         window =  1;
     }
-    if (level < 0.01)
+    if (level < MinimumValue)
     {
         level = 1;
     }
