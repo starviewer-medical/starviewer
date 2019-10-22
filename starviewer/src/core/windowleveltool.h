@@ -62,12 +62,6 @@ private:
     /// Computes the new window level from each delta. deltaX sets the window, and deltaY the level.
     void computeWindowLevelValuesWithDefaultBehaviour(double deltaX, double deltaY, double &window, double &level);
 
-    /// Avoids zero values for window and level
-    void avoidZero(double &window, double &level);
-    
-    /// Avoids zero and negative values for window and level
-    void avoidZeroAndNegative(double &window, double &level);
-
 protected:
 
     /// If the tool is linked to a Q2DViewer this field will point to it, otherwise it will be null.
