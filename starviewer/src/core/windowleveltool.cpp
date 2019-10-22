@@ -22,7 +22,7 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderWindow.h>
 
-static constexpr double MinimumValue = 0.01;
+static constexpr double MinimumWindowWidth = 0.01;
 
 namespace udg {
 
@@ -96,33 +96,12 @@ void WindowLevelTool::doWindowLevel()
     double dx = 4.0 * (m_windowLevelCurrentPosition.x() - m_windowLevelStartPosition.x()) / size.width();
     double dy = 4.0 * (m_windowLevelStartPosition.y() - m_windowLevelCurrentPosition.y()) / size.height();
 
-    // Scale by current values
-    if (fabs(m_initialWindow) > MinimumValue)
-    {
-        dx = dx * m_initialWindow;
-    }
-    else
-    {
-        dx = dx * (m_initialWindow < 0 ? -MinimumValue : MinimumValue);
-    }
-    if (fabs(m_initialLevel) > MinimumValue)
-    {
-        dy = dy * m_initialLevel;
-    }
-    else
-    {
-        dy = dy * (m_initialLevel < 0 ? -MinimumValue : MinimumValue);
-    }
+    // Obtain absolute (to preserve sign of dx and dy) initial window width and ensure that it's not smaller than MinimumWindowWidth.
+    double initialWindowWidth = std::max(std::abs(m_initialWindow), MinimumWindowWidth);
 
-    // Abs so that direction does not flip
-    if (m_initialWindow < 0.0)
-    {
-        dx = -1 * dx;
-    }
-    if (m_initialLevel < 0.0)
-    {
-        dy = -1 * dy;
-    }
+    // Scale by current values
+    dx *= initialWindowWidth;
+    dy *= initialWindowWidth;
 
     // Compute new window level
     double newWindow;
@@ -215,23 +194,23 @@ void WindowLevelTool::computeWindowLevelValuesWithDefaultBehaviour(double deltaX
 void WindowLevelTool::avoidZero(double &window, double &level)
 {
     // Stay away from zero and really
-    if (fabs(window) < MinimumValue)
+    if (fabs(window) < MinimumWindowWidth)
     {
-        window = MinimumValue * (window < 0 ? -1 : 1);
+        window = MinimumWindowWidth * (window < 0 ? -1 : 1);
     }
-    if (fabs(level) < MinimumValue)
+    if (fabs(level) < MinimumWindowWidth)
     {
-        level = MinimumValue * (level < 0 ? -1 : 1);
+        level = MinimumWindowWidth * (level < 0 ? -1 : 1);
     }
 }
 
 void WindowLevelTool::avoidZeroAndNegative(double &window, double &level)
 {
-    if (window < MinimumValue)
+    if (window < MinimumWindowWidth)
     {
         window =  1;
     }
-    if (level < MinimumValue)
+    if (level < MinimumWindowWidth)
     {
         level = 1;
     }
