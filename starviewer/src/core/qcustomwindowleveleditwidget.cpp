@@ -72,13 +72,18 @@ void QCustomWindowLevelEditWidget::addNewWindowLevel()
 
 QTreeWidgetItem* QCustomWindowLevelEditWidget::addWindowLevelItem(const WindowLevel &windowLevel)
 {
+    constexpr double Limit = 1e9;
+    constexpr int NumberOfDecimals = 4;
+
     QTreeWidgetItem *item = new QTreeWidgetItem(m_customWindowLevelTreeWidget);
     item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 
     QDoubleSpinBox *widthSpinBox = new QDoubleSpinBox(this);
     QDoubleSpinBox *levelSpinBox = new QDoubleSpinBox(this);
-    widthSpinBox->setRange(-131070, 131070);
-    levelSpinBox->setRange(-131070, 131070);
+    widthSpinBox->setRange(-Limit, Limit);
+    widthSpinBox->setDecimals(NumberOfDecimals);
+    levelSpinBox->setRange(-Limit, Limit);
+    levelSpinBox->setDecimals(NumberOfDecimals);
     widthSpinBox->setValue(windowLevel.getWidth());
     levelSpinBox->setValue(windowLevel.getCenter());
 
