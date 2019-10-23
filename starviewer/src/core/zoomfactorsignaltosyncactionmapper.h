@@ -17,6 +17,8 @@
 
 #include "signaltosyncactionmapper.h"
 
+#include <QPoint>
+
 namespace udg {
 
 /**
@@ -36,9 +38,9 @@ protected:
     void unmapSignal();
 
 protected slots:
-    /// Maps given factor to a ZoomFactorSyncAction with the corresponding values
+    /// Maps given factor and center to a ZoomFactorSyncAction with the corresponding values
     /// Should be connected to the corresponding signals on Q*Viewer
-    void mapToSyncAction(double factor);
+    void mapToSyncAction(double factor, QPoint zoomCenter);
 };
 
 } // End namespace udg

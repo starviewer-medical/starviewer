@@ -17,6 +17,8 @@
 
 #include "syncaction.h"
 
+#include <QPoint>
+
 namespace udg {
 
 /**
@@ -30,6 +32,8 @@ public:
 
     /// Sets zoom factor to be synched
     void setZoomFactor(double factor);
+    /// Sets the zoom center to be synced.
+    void setZoomCenter(QPoint zoomCenter);
     
     void run(QViewer *viewer);
 
@@ -40,6 +44,8 @@ protected:
 protected:
     /// Zoom factor that will be applied on run()
     double m_zoomFactor;
+    /// Zoom center that will be applied in run().
+    QPoint m_zoomCenter;
 };
 
 } // End namespace udg
