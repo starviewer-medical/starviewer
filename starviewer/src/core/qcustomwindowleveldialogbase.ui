@@ -46,21 +46,27 @@
    </item>
    <item row="0" column="1">
     <widget class="QDoubleSpinBox" name="m_windowSpinBox">
+     <property name="decimals">
+      <number>4</number>
+     </property>
      <property name="minimum">
-      <double>-131070.000000000000000</double>
+      <double>-1000000000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>131070.000000000000000</double>
+      <double>1000000000.000000000000000</double>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
     <widget class="QDoubleSpinBox" name="m_levelSpinBox">
+     <property name="decimals">
+      <number>4</number>
+     </property>
      <property name="minimum">
-      <double>-131070.000000000000000</double>
+      <double>-1000000000.000000000000000</double>
      </property>
      <property name="maximum">
-      <double>131070.000000000000000</double>
+      <double>1000000000.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -85,7 +91,7 @@
         <string>Cancel</string>
        </property>
        <property name="icon">
-        <iconset resource="../main/main.qrc">
+        <iconset>
          <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
        </property>
       </widget>
@@ -96,7 +102,7 @@
         <string>OK</string>
        </property>
        <property name="icon">
-        <iconset resource="../main/main.qrc">
+        <iconset>
          <normaloff>:/images/icons/dialog-ok-apply.svg</normaloff>:/images/icons/dialog-ok-apply.svg</iconset>
        </property>
       </widget>
@@ -105,10 +111,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../main/main.qrc"/>
-  <include location="../main/main.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>m_okButton</sender>
