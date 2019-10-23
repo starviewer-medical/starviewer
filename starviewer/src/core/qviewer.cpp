@@ -455,11 +455,11 @@ void QViewer::render()
     }
 }
 
-void QViewer::absoluteZoom(double factor)
+void QViewer::absoluteZoom(double factor, QPoint zoomCenter)
 {
     double currentFactor = getCurrentZoomFactor();
 
-    zoom(currentFactor / (factor * getRenderWindowSize().height()));
+    zoom(currentFactor / (factor * getRenderWindowSize().height()), zoomCenter);
 }
 
 double QViewer::getCurrentZoomFactor()
@@ -478,14 +478,27 @@ double QViewer::getCurrentZoomFactor()
     return zoomFactor;
 }
 
-void QViewer::zoom(double factor)
+void QViewer::zoom(double factor, QPoint zoomCenter)
 {
+    double worldCenter1[3];
+    computeDisplayToWorld(zoomCenter.x(), zoomCenter.y(), 0, worldCenter1);
+
     if (adjustCameraScaleFactor(factor))
     {
+        double worldCenter2[3];
+        computeDisplayToWorld(zoomCenter.x(), zoomCenter.y(), 0, worldCenter2);
+        Vector3 difference = Vector3(worldCenter1) - Vector3(worldCenter2);
+        Vector3 position(getActiveCamera()->GetPosition());
+        Vector3 focalPoint(getActiveCamera()->GetFocalPoint());
+        position += difference;
+        focalPoint += difference;
+        getActiveCamera()->SetPosition(position.x, position.y, position.z);
+        getActiveCamera()->SetFocalPoint(focalPoint.x, focalPoint.y, focalPoint.z);
+
         double zoomFactor = getCurrentZoomFactor();
 
         emit cameraChanged();
-        emit zoomFactorChanged(zoomFactor / getRenderWindowSize().height());
+        emit zoomChanged(zoomFactor / getRenderWindowSize().height(), zoomCenter);
         this->render();
     }
 }

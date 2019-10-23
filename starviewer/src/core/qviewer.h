@@ -118,12 +118,11 @@ public:
         return m_grabList.size();
     }
 
-    /// Fa zoom sobre l'escena amb el factor donat
-    /// @param factor Factor de zoom que volem aplicar a la càmera
-    void zoom(double factor);
+    /// Zooms the viewer with the given \a factor and centered in the given \a zoomCenter (in display coordinates).
+    void zoom(double factor, QPoint zoomCenter);
 
-    /// Absolute zoom to the scene based on the factor value
-    void absoluteZoom(double factor);
+    /// Absolute zoom to the scene based on the factor value and zoom center.
+    void absoluteZoom(double factor, QPoint zoomCenter);
 
     /// Desplaça la càmera segons el vector de moviment que li passem
     /// @param motionVector[] Vector de moviment que determina cap on i quant es mou la càmera
@@ -229,7 +228,7 @@ signals:
     void selected(void);
 
     /// Informa que s'ha canviat el zoom
-    void zoomFactorChanged(double factor);
+    void zoomChanged(double factor, QPoint zoomCenter);
 
     /// Informa que s'ha mogut la imatge
     void panChanged(double *translation);

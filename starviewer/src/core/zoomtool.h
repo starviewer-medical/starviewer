@@ -17,6 +17,8 @@
 
 #include "tool.h"
 
+#include <QPoint>
+
 namespace udg {
 
 class QViewer;
@@ -43,6 +45,8 @@ private slots:
 
 private:
     int m_state;
+    /// Point around which zoom is centered.
+    QPoint m_zoomCenter;
 
 };
 
