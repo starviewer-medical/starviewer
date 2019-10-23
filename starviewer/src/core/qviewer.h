@@ -118,9 +118,8 @@ public:
         return m_grabList.size();
     }
 
-    /// Fa zoom sobre l'escena amb el factor donat
-    /// @param factor Factor de zoom que volem aplicar a la càmera
-    void zoom(double factor);
+    /// Zooms the viewer with the given \a factor and centered in the given \a zoomCenter (in display coordinates).
+    void zoom(double factor, QPoint zoomCenter);
 
     /// Absolute zoom to the scene based on the factor value
     void absoluteZoom(double factor);

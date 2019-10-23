@@ -61,6 +61,7 @@ void ZoomTool::handleEvent(unsigned long eventID)
 void ZoomTool::startZoom()
 {
     m_state = Zooming;
+    m_zoomCenter = m_viewer->getEventPosition();
     m_viewer->getInteractor()->GetRenderWindow()->SetDesiredUpdateRate(m_viewer->getInteractor()->GetDesiredUpdateRate());
 }
 
@@ -72,7 +73,7 @@ void ZoomTool::doZoom()
         m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/zoom.svg")));
         int dy = m_viewer->getEventPosition().y() - m_viewer->getLastEventPosition().y();
         double dyf = MotionFactor * dy / (m_viewer->height() / 2);
-        m_viewer->zoom(pow(1.1, dyf));
+        m_viewer->zoom(pow(1.1, dyf), m_zoomCenter);
     }
 }
 
