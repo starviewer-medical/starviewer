@@ -174,11 +174,10 @@ void DrawerPrimitive::setModified(bool modified)
 
 vtkCoordinate* DrawerPrimitive::getVtkCoordinateObject()
 {
-    if (m_coordinate)
+    if (!m_coordinate)
     {
-        m_coordinate->Delete();
+        m_coordinate = vtkCoordinate::New();
     }
-    m_coordinate = vtkCoordinate::New();
     switch (m_coordinateSystem)
     {
         case WorldCoordinateSystem:

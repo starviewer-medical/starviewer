@@ -147,7 +147,7 @@ protected slots:
     /// @param modified
     void setModified(bool modified = true);
 
-protected:
+public:
     /// Ens retorna un objecte vtkCoordinate configurat a partir del sistema de coordenades
     /// que té especificada la primitiva. Aquest mètode ens és útil per quan es vol construir
     /// la primitiva en format vtk

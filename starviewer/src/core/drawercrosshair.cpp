@@ -19,26 +19,35 @@
 #include "drawerline.h"
 #include "mathtools.h"
 // Vtk
-#include <vtkActor2D.h>
+#include <vtkCoordinate.h>
 #include <vtkPropAssembly.h>
 
 namespace udg {
 
 DrawerCrossHair::DrawerCrossHair(QObject *parent)
-: DrawerPrimitive(parent)
+: DrawerPrimitive(parent), m_vtkPropAssembly(nullptr)
 {
-    m_vtkPropAssembly = NULL;
+    m_worldCoordinate = vtkCoordinate::New();
+    m_worldCoordinate->SetCoordinateSystemToWorld();
     m_lineUp = new DrawerLine();
+    m_lineUp->setCoordinateSystem(DisplayCoordinateSystem);
+    m_lineUp->getVtkCoordinateObject()->SetReferenceCoordinate(m_worldCoordinate);
     m_lineDown = new DrawerLine();
+    m_lineDown->setCoordinateSystem(DisplayCoordinateSystem);
+    m_lineDown->getVtkCoordinateObject()->SetReferenceCoordinate(m_worldCoordinate);
     m_lineLeft = new DrawerLine();
+    m_lineLeft->setCoordinateSystem(DisplayCoordinateSystem);
+    m_lineLeft->getVtkCoordinateObject()->SetReferenceCoordinate(m_worldCoordinate);
     m_lineRight = new DrawerLine();
-    m_lineFront = new DrawerLine();
-    m_lineBack = new DrawerLine();
+    m_lineRight->setCoordinateSystem(DisplayCoordinateSystem);
+    m_lineRight->getVtkCoordinateObject()->SetReferenceCoordinate(m_worldCoordinate);
 }
 
 DrawerCrossHair::~DrawerCrossHair()
 {
     emit dying(this);
+
+    m_worldCoordinate->Delete();
 
     if (m_vtkPropAssembly)
     {
@@ -48,33 +57,30 @@ DrawerCrossHair::~DrawerCrossHair()
 
 void DrawerCrossHair::setCentrePoint(double x, double y, double z)
 {
+    constexpr double Point1 = 10;
+    constexpr double Point2 = 30;
+
     m_centrePoint[0] = x;
     m_centrePoint[1] = y;
     m_centrePoint[2] = z;
 
+    m_worldCoordinate->SetValue(x, y, z);
+
     // Assignem els punts a la línia 1
-    m_lineUp->setFirstPoint(m_centrePoint[0], m_centrePoint[1] - 6, m_centrePoint[2]);
-    m_lineUp->setSecondPoint(m_centrePoint[0], m_centrePoint[1] - 1, m_centrePoint[2]);
+    m_lineUp->setFirstPoint(0, Point1, 0);
+    m_lineUp->setSecondPoint(0, Point2, 0);
 
     // Assignem els punts a la línia 2
-    m_lineDown->setFirstPoint(m_centrePoint[0], m_centrePoint[1] + 6, m_centrePoint[2]);
-    m_lineDown->setSecondPoint(m_centrePoint[0], m_centrePoint[1] + 1, m_centrePoint[2]);
+    m_lineDown->setFirstPoint(0, -Point1, 0);
+    m_lineDown->setSecondPoint(0, -Point2, 0);
 
     // Assignem els punts a la línia 3
-    m_lineLeft->setFirstPoint(m_centrePoint[0] - 6, m_centrePoint[1], m_centrePoint[2]);
-    m_lineLeft->setSecondPoint(m_centrePoint[0] - 1, m_centrePoint[1], m_centrePoint[2]);
+    m_lineLeft->setFirstPoint(-Point1, 0, 0);
+    m_lineLeft->setSecondPoint(-Point2, 0, 0);
 
     // Assignem els punts a la línia 4
-    m_lineRight->setFirstPoint(m_centrePoint[0] + 6, m_centrePoint[1], m_centrePoint[2]);
-    m_lineRight->setSecondPoint(m_centrePoint[0] + 1, m_centrePoint[1], m_centrePoint[2]);
-
-    // Assignem els punts a la línia 5
-    m_lineBack->setFirstPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2] - 6);
-    m_lineBack->setSecondPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2] - 1);
-
-    // Assignem els punts a la línia 6
-    m_lineFront->setFirstPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2] + 6);
-    m_lineFront->setSecondPoint(m_centrePoint[0], m_centrePoint[1], m_centrePoint[2] + 1);
+    m_lineRight->setFirstPoint(Point1, 0, 0);
+    m_lineRight->setSecondPoint(Point2, 0, 0);
 
     emit changed();
 }
@@ -92,8 +98,6 @@ vtkPropAssembly* DrawerCrossHair::getAsVtkPropAssembly()
         m_vtkPropAssembly->AddPart(m_lineDown->getAsVtkProp());
         m_vtkPropAssembly->AddPart(m_lineLeft->getAsVtkProp());
         m_vtkPropAssembly->AddPart(m_lineRight->getAsVtkProp());
-        m_vtkPropAssembly->AddPart(m_lineBack->getAsVtkProp());
-        m_vtkPropAssembly->AddPart(m_lineFront->getAsVtkProp());
     }
     return m_vtkPropAssembly;
 }
@@ -109,8 +113,6 @@ void DrawerCrossHair::update()
     m_lineDown->update();
     m_lineLeft->update();
     m_lineRight->update();
-    m_lineBack->update();
-    m_lineFront->update();
 }
 
 void DrawerCrossHair::updateVtkProp()
@@ -121,8 +123,6 @@ void DrawerCrossHair::updateVtkProp()
         m_lineDown->update();
         m_lineLeft->update();
         m_lineRight->update();
-        m_lineBack->update();
-        m_lineFront->update();
 
         this->setModified(false);
     }
@@ -138,8 +138,6 @@ void DrawerCrossHair::updateVtkActorProperties()
     m_lineDown->setLineWidth(2.0);
     m_lineLeft->setLineWidth(2.0);
     m_lineRight->setLineWidth(2.0);
-    m_lineBack->setLineWidth(2.0);
-    m_lineFront->setLineWidth(2.0);
 }
 
 double DrawerCrossHair::getDistanceToPoint(double *point3D, double closestPoint[3])
@@ -152,12 +150,13 @@ double DrawerCrossHair::getDistanceToPoint(double *point3D, double closestPoint[
 
 void DrawerCrossHair::getBounds(double bounds[6])
 {
-    bounds[0] = m_lineLeft->getFirstPoint()[0];
-    bounds[1] = m_lineRight->getFirstPoint()[0];
-    bounds[2] = m_lineUp->getFirstPoint()[1];
-    bounds[3] = m_lineDown->getFirstPoint()[1];
-    bounds[4] = m_lineBack->getFirstPoint()[2];
-    bounds[5] = m_lineFront->getFirstPoint()[2];
+    // TODO This is the best we can do for now, we don't have access to enough information here to convert between display and world coordinates.
+    bounds[0] = m_centrePoint[0];
+    bounds[1] = m_centrePoint[0];
+    bounds[2] = m_centrePoint[1];
+    bounds[3] = m_centrePoint[1];
+    bounds[4] = m_centrePoint[2];
+    bounds[5] = m_centrePoint[2];
 }
 
 void DrawerCrossHair::setVisibility(bool visible)
@@ -167,8 +166,6 @@ void DrawerCrossHair::setVisibility(bool visible)
     m_lineDown->setVisibility(visible);
     m_lineLeft->setVisibility(visible);
     m_lineRight->setVisibility(visible);
-    m_lineBack->setVisibility(visible);
-    m_lineFront->setVisibility(visible);
     emit changed();
 }
 
