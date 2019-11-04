@@ -22,7 +22,7 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderWindow.h>
 
-static constexpr double MinimumWindowWidth = 0.0001;
+static const double MinimumWindowWidth = 0.0001;
 
 namespace udg {
 
