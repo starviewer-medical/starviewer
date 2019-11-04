@@ -18,6 +18,9 @@
 #include "measurementmanager.h"
 #include "standarduptakevaluemeasurehandler.h"
 
+#include <QBitmap>
+#include <QPainter>
+
 namespace udg {
 
 Q2DViewerConfigurationScreen::Q2DViewerConfigurationScreen(QWidget *parent)
@@ -50,6 +53,7 @@ void Q2DViewerConfigurationScreen::initialize()
     initializeMagnifyingGlassToolZoomFactor();
     initializeMeasurementsVerbosity();
     initializeSUVMeasurementType();
+    initializeCrosshairSize();
 }
 
 void Q2DViewerConfigurationScreen::createConnections()
@@ -80,6 +84,11 @@ void Q2DViewerConfigurationScreen::createConnections()
     connect(m_bodyWeightRadioButton, SIGNAL(clicked()), SLOT(updateSUVMeasurementTypeSetting()));
     connect(m_leanBodyMassRadioButton, SIGNAL(clicked()), SLOT(updateSUVMeasurementTypeSetting()));
     connect(m_bodySurfaceAreaRadioButton, SIGNAL(clicked()), SLOT(updateSUVMeasurementTypeSetting()));
+
+    connect(m_crosshairInnerDiameterSpinBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &Q2DViewerConfigurationScreen::updateCrosshairInnerDiameter);
+    connect(m_crosshairOuterDiameterSpinBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this, &Q2DViewerConfigurationScreen::updateCrosshairOuterDiameter);
 }
 
 void Q2DViewerConfigurationScreen::initializeModalitiesGroupBox(const QString &settingName, QModalitiesSelectorGroupBox *groupBox)
@@ -174,6 +183,14 @@ void Q2DViewerConfigurationScreen::initializeSUVMeasurementType()
             m_bodySurfaceAreaRadioButton->setChecked(true);
             break;
     }
+}
+
+void Q2DViewerConfigurationScreen::initializeCrosshairSize()
+{
+    Settings settings;
+    m_crosshairInnerDiameterSpinBox->setValue(settings.getValue(CoreSettings::CrosshairInnerDiameter).toInt());
+    m_crosshairOuterDiameterSpinBox->setValue(settings.getValue(CoreSettings::CrosshairOuterDiameter).toInt());
+    updateCrosshairPreview();
 }
 
 void Q2DViewerConfigurationScreen::updateSliceScrollLoopSetting(bool enable)
@@ -321,6 +338,51 @@ void Q2DViewerConfigurationScreen::updateSUVMeasurementTypeSetting()
     {
         suvHandler.setPreferredFormula(StandardUptakeValueMeasureHandler::BodySurfaceArea);
     }
+}
+
+void Q2DViewerConfigurationScreen::updateCrosshairInnerDiameter(int value)
+{
+    if (m_crosshairOuterDiameterSpinBox->value() < value + 2)
+    {
+        m_crosshairOuterDiameterSpinBox->setValue(value + 2);
+    }
+
+    Settings settings;
+    settings.setValue(CoreSettings::CrosshairInnerDiameter, value);
+    updateCrosshairPreview();
+}
+
+void Q2DViewerConfigurationScreen::updateCrosshairOuterDiameter(int value)
+{
+    if (m_crosshairInnerDiameterSpinBox->value() > value - 2)
+    {
+        m_crosshairInnerDiameterSpinBox->setValue(value - 2);
+    }
+
+    Settings settings;
+    settings.setValue(CoreSettings::CrosshairOuterDiameter, value);
+    updateCrosshairPreview();
+}
+
+void Q2DViewerConfigurationScreen::updateCrosshairPreview()
+{
+    int bitmapSize = m_crosshairOuterDiameterSpinBox->maximum();
+    QBitmap bitmap(bitmapSize, bitmapSize);
+    QPainter painter(&bitmap);
+    QPen pen;
+    pen.setColor(Qt::color1);
+    pen.setWidth(2);
+    pen.setCapStyle(Qt::FlatCap);
+    painter.setPen(pen);
+    int innerRadius = m_crosshairInnerDiameterSpinBox->value() / 2;
+    int outerRadius = m_crosshairOuterDiameterSpinBox->value() / 2;
+    int center = bitmapSize / 2;
+    painter.eraseRect(0, 0, bitmapSize, bitmapSize);
+    painter.drawLines(QVector<QLine>{QLine(center, center - innerRadius, center, center - outerRadius),
+                                     QLine(center + innerRadius, center, center + outerRadius, center),
+                                     QLine(center, center + innerRadius, center, center + outerRadius),
+                                     QLine(center - innerRadius, center, center - outerRadius, center)});
+    m_crosshairPreviewLabel->setPixmap(bitmap);
 }
 
 }

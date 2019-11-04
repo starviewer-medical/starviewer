@@ -14,6 +14,7 @@
 
 #include "drawercrosshair.h"
 
+#include "coresettings.h"
 #include "q2dviewer.h"
 #include "logging.h"
 #include "drawerline.h"
@@ -57,8 +58,9 @@ DrawerCrossHair::~DrawerCrossHair()
 
 void DrawerCrossHair::setCentrePoint(double x, double y, double z)
 {
-    constexpr double Point1 = 10;
-    constexpr double Point2 = 30;
+    Settings settings;
+    double point1 = settings.getValue(CoreSettings::CrosshairInnerDiameter).toInt() / 2;
+    double point2 = settings.getValue(CoreSettings::CrosshairOuterDiameter).toInt() / 2;
 
     m_centrePoint[0] = x;
     m_centrePoint[1] = y;
@@ -67,20 +69,20 @@ void DrawerCrossHair::setCentrePoint(double x, double y, double z)
     m_worldCoordinate->SetValue(x, y, z);
 
     // Assignem els punts a la línia 1
-    m_lineUp->setFirstPoint(0, Point1, 0);
-    m_lineUp->setSecondPoint(0, Point2, 0);
+    m_lineUp->setFirstPoint(0, point1, 0);
+    m_lineUp->setSecondPoint(0, point2, 0);
 
     // Assignem els punts a la línia 2
-    m_lineDown->setFirstPoint(0, -Point1, 0);
-    m_lineDown->setSecondPoint(0, -Point2, 0);
+    m_lineDown->setFirstPoint(0, -point1, 0);
+    m_lineDown->setSecondPoint(0, -point2, 0);
 
     // Assignem els punts a la línia 3
-    m_lineLeft->setFirstPoint(-Point1, 0, 0);
-    m_lineLeft->setSecondPoint(-Point2, 0, 0);
+    m_lineLeft->setFirstPoint(-point1, 0, 0);
+    m_lineLeft->setSecondPoint(-point2, 0, 0);
 
     // Assignem els punts a la línia 4
-    m_lineRight->setFirstPoint(Point1, 0, 0);
-    m_lineRight->setSecondPoint(Point2, 0, 0);
+    m_lineRight->setFirstPoint(point1, 0, 0);
+    m_lineRight->setSecondPoint(point2, 0, 0);
 
     emit changed();
 }

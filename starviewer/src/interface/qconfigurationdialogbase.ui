@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>576</height>
+    <height>663</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowIcon">
-   <iconset resource="../main/main.qrc">
+   <iconset>
     <normaloff>:/images/icons/configuration.svg</normaloff>:/images/icons/configuration.svg</iconset>
   </property>
   <property name="sizeGripEnabled">
@@ -49,7 +49,7 @@
       <string>Close</string>
      </property>
      <property name="icon">
-      <iconset resource="../main/main.qrc">
+      <iconset>
        <normaloff>:/images/icons/window-close.svg</normaloff>:/images/icons/window-close.svg</iconset>
      </property>
      <property name="autoDefault">
@@ -169,6 +169,14 @@
         <bool>true</bool>
        </property>
        <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>838</width>
+          <height>614</height>
+         </rect>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <property name="spacing">
           <number>0</number>
@@ -206,10 +214,7 @@
  <tabstops>
   <tabstop>m_optionsList</tabstop>
  </tabstops>
- <resources>
-  <include location="../main/main.qrc"/>
-  <include location="../main/main.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>m_okButton</sender>
