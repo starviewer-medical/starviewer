@@ -388,9 +388,9 @@ QString Q2DViewerAnnotationHandler::getVoiLutString() const
         {
             return QString::number(x, 'g', 3);
         }
-        else                        // for |x| < 1 -> 4 decimals
+        else                        // for |x| < 1 -> 5 decimals
         {
-            return QString::number(x, 'f', 4);
+            return QString::number(x, 'f', 5);
         }
     };
 

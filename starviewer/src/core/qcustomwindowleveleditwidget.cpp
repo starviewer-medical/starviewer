@@ -73,7 +73,7 @@ void QCustomWindowLevelEditWidget::addNewWindowLevel()
 QTreeWidgetItem* QCustomWindowLevelEditWidget::addWindowLevelItem(const WindowLevel &windowLevel)
 {
     constexpr double Limit = 1e9;
-    constexpr int NumberOfDecimals = 4;
+    constexpr int NumberOfDecimals = 5;
 
     QTreeWidgetItem *item = new QTreeWidgetItem(m_customWindowLevelTreeWidget);
     item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
