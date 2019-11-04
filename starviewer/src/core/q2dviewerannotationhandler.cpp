@@ -372,9 +372,27 @@ QString Q2DViewerAnnotationHandler::getVoiLutString() const
         lutPart = voiLut.getOriginalLutExplanation() + " ";
     }
 
+    auto printWindowLevel = [](double x) {
+        if (std::abs(x) >= 100)     // for |x| >= 100 -> 0 decimals
+        {
+            return QString::number(MathTools::roundToNearestInteger(x));
+        }
+        else if (std::abs(x) >= 10) // for 10 <= |x| < 100 -> at most 2 decimals
+        {
+            return QString::number(x, 'g', 4);
+        }
+        else if (std::abs(x) >= 1)  // for 1 <= |x| < 10 -> at most 2 decimals
+        {
+            return QString::number(x, 'g', 3);
+        }
+        else                        // for |x| < 1 -> 5 decimals
+        {
+            return QString::number(x, 'f', 5);
+        }
+    };
+
     WindowLevel windowLevel = voiLut.getWindowLevel();
-    QString windowLevelPart = QObject::tr("WW: %1 WL: %2").arg(MathTools::roundToNearestInteger(windowLevel.getWidth()))
-                                                          .arg(MathTools::roundToNearestInteger(windowLevel.getCenter()));
+    QString windowLevelPart = QObject::tr("WW: %1 WL: %2").arg(printWindowLevel(windowLevel.getWidth())).arg(printWindowLevel(windowLevel.getCenter()));
 
     QString thresholdPart;
 
