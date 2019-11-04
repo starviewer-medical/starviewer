@@ -155,6 +155,11 @@ public:
     /// Force a DPI scaling when not equal to 1.
     static const QString ScaleFactor;
 
+    /// Empty horizontal and vertical space in the center of the DrawerCrosshair in pixels.
+    static const QString CrosshairInnerDiameter;
+    /// Horizontal and vertical span of the DrawerCrosshair in pixels.
+    static const QString CrosshairOuterDiameter;
+
 };
 
 } // End namespace udg

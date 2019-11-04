@@ -117,6 +117,9 @@ const QString CoreSettings::DontForceMultiSampling("DontForceMultiSampling");
 
 const QString CoreSettings::ScaleFactor("scaleFactor");
 
+const QString CoreSettings::CrosshairInnerDiameter("CrosshairInnerDiameter");
+const QString CoreSettings::CrosshairOuterDiameter("CrosshairOuterDiameter");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -165,6 +168,9 @@ void CoreSettings::init()
     settingsRegistry->addSetting(DontForceMultiSampling, false);
 
     settingsRegistry->addSetting(ScaleFactor, "0");
+
+    settingsRegistry->addSetting(CrosshairInnerDiameter, 20);
+    settingsRegistry->addSetting(CrosshairOuterDiameter, 60);
 }
 
 } // End namespace udg

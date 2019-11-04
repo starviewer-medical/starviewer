@@ -16,12 +16,13 @@
 #define UDGDRAWERCROSSHAIR_H
 
 #include "drawerprimitive.h"
-#include "drawerline.h"
 
 // Forward declarations
 class vtkPropAssembly;
 
 namespace udg {
+
+class DrawerLine;
 
 /**
     Primitiva que dibuixa un "Crosshair", és a dir, una creueta per situar un punt.
@@ -64,9 +65,9 @@ private:
     DrawerLine *m_lineDown;
     DrawerLine *m_lineLeft;
     DrawerLine *m_lineRight;
-    DrawerLine *m_lineFront;
-    DrawerLine *m_lineBack;
 
+    /// Used to set the crosshair center in world coordinates.
+    vtkCoordinate *m_worldCoordinate;
     vtkPropAssembly *m_vtkPropAssembly;
 };
 
