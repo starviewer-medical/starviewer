@@ -93,6 +93,8 @@ public:
     static const QString MoveToNextDesktop;
     static const QString MaximizeMultipleScreens;
 
+    static const QString ToggleViewersTextualInformation;
+
     static const QString ExternalApplication1;
     static const QString ExternalApplication2;
     static const QString ExternalApplication3;

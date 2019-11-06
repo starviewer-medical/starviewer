@@ -113,7 +113,9 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_showViewersTextualInformationAction->setCheckable(true);
     m_showViewersTextualInformationAction->setChecked(true);
     m_showViewersTextualInformationAction->setText(tr("Text"));
-    m_showViewersTextualInformationAction->setToolTip(tr("Show/Hide viewer's textual information"));
+    m_showViewersTextualInformationAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ToggleViewersTextualInformation));
+    m_showViewersTextualInformationAction->setToolTip(tr("Show/hide viewer's textual information (%1)")
+                                                      .arg(m_showViewersTextualInformationAction->shortcut().toString()));
     m_showViewersTextualInformationAction->setStatusTip(m_showViewersTextualInformationAction->toolTip());
     m_showViewersTextualInformationAction->setIcon(QIcon(":/images/icons/annotations.svg"));
     connect(m_showViewersTextualInformationAction, SIGNAL(toggled(bool)), SLOT(showViewersTextualInformation(bool)));
