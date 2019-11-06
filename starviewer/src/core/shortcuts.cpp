@@ -87,6 +87,8 @@ const QString Shortcuts::MoveToPreviousDesktop(ShortcutsBase + "MoveToPreviousDe
 const QString Shortcuts::MoveToNextDesktop(ShortcutsBase + "MoveToNextDesktop");
 const QString Shortcuts::MaximizeMultipleScreens(ShortcutsBase + "MaximizeMultipleScreens");
 
+const QString Shortcuts::ToggleViewersTextualInformation(ShortcutsBase + "ToggleViewersTextualInformation");
+
 const QString Shortcuts::ExternalApplication1(ShortcutsBase + "ExternalApplication1");
 const QString Shortcuts::ExternalApplication2(ShortcutsBase + "ExternalApplication2");
 const QString Shortcuts::ExternalApplication3(ShortcutsBase + "ExternalApplication3");
@@ -359,6 +361,10 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("F10"));
     settingsRegistry->addSetting(ToggleComparativeStudiesMode, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("."));
+    settingsRegistry->addSetting(ToggleViewersTextualInformation, shortcutsList);
 
     shortcutsList.clear();
     shortcutsList.append(QString("Shift+F1"));
