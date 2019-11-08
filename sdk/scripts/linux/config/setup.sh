@@ -50,8 +50,11 @@ CMAKE_CPP11='-DCMAKE_CXX_STANDARD:STRING=11 -DCMAKE_CXX_STANDARD_REQUIRED:BOOL=O
 # Verbose compilation: Uncomment to output the compiler calls.
 MAKE_VERBOSE='VERBOSE=yes'
 
-# Number of simultaneous make jobs (-j8)
-MAKE_CONCURRENCY=4
+# Force the number of simultaneous make jobs (-j8)
+# MAKE_CONCURRENCY=8
+
+# By default it takes the number of available virtual CPUs in the system.
+MAKE_CONCURRENCY=${MAKE_CONCURRENCY:-`nproc`}
 
 # Because SDK libraries binares are not on a standard location.
 # This environment variable has to be set when starting starviewer binary or
