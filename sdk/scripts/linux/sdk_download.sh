@@ -7,8 +7,12 @@ download_and_verify()
     EXPECTED_HASH=$1
     FILENAME=$2
     URL=$3
-
-    wget -nc --directory-prefix="${DOWNLOAD_PREFIX}" "${URL}"
+    if [ ! -e "${DOWNLOAD_PREFIX}/${FILENAME}" ]
+    then
+        wget -O "${DOWNLOAD_PREFIX}/${FILENAME}" -nc --directory-prefix="${DOWNLOAD_PREFIX}" "${URL}"
+    else
+	echo "The ${DOWNLOAD_PREFIX}/${FILENAME} exists, skipping the download."
+    fi
     HASH=`sha256sum "${DOWNLOAD_PREFIX}/${FILENAME}" | cut -f 1 -d " "`
 
     if [ "${EXPECTED_HASH}" != "${HASH}" ]
