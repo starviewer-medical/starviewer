@@ -6,13 +6,13 @@ BUILD_TYPES="release"
 LIBS="dcmtk vtk gdcm itk ecm threadweaver"
 
 # Where buildall.sh downloads the libraries
-DOWNLOAD_PREFIX=~/uroot/downloads
+DOWNLOAD_PREFIX=$SCRIPTS_ROOT/../../../sdk-download
 
 # Where to install the SDK libraries once compiled
-SDK_INSTALL_PREFIX=~/uroot/usr/local
+SDK_INSTALL_PREFIX=$SCRIPTS_ROOT/../../../sdk-build
 
 # Where to write the SDK environment configuration script.
-SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../environment.sh
+SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../prefix.sh
 
 # Only used to tell the user where to install Qt on buildall.sh
 INSTALL_QTDIR=$SDK_INSTALL_PREFIX/lib/Qt5.6.3
