@@ -22,7 +22,7 @@ mkdir -p "${DOWNLOAD_PREFIX}"
 
 download_and_verify f1fbd6b7ee067f6af6412d16c33c5478aed230c655c888d9cc7b1037f8048ec5 \
                     'qt-opensource-linux-x64-5.6.3.run' \
-                    'https://download.qt.io/official_releases/qt/5.6/5.6.0/qt-opensource-linux-x64-5.6.3.run'
+                    'https://download.qt.io/archive/qt/5.6/5.6.3/qt-opensource-linux-x64-5.6.3.run'
 
 download_and_verify 09a97e82cf43672a4b16b162651f5bc0d86b9d7b8cfff58c345e5c97d6200937 \
                     'dcmtk-3.6.1_20120515.tar.gz' \
@@ -32,9 +32,9 @@ download_and_verify 78a990a15ead79cdc752e86b83cfab7dbf5b7ef51ba409db02570dbdd9ec
                     'VTK-7.0.0.tar.gz' \
                     'http://www.vtk.org/files/release/7.0/VTK-7.0.0.tar.gz'
 
-download_and_verify b116dc0b0e9f65dcd2196fa55d8815be215065ec537b15665afde0469bd47e91 \
-                    'gdcm-2.6.4.tar.bz2' \
-                    'http://downloads.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.6.4/gdcm-2.6.4.tar.bz2'
+download_and_verify bbf7eeda622cf18499bd162f3b06d0c937a5379f6f3d1445d57b3d4d0070f97e \
+                    'GDCM-2.6.4.tar.gz' \
+                    'https://github.com/malaterre/GDCM/archive/v2.6.4.tar.gz'
 
 download_and_verify ea0011fc99a6303427b236c3ceaf54688224350ce1a216b64c9771ab3194b15f \
                     'InsightToolkit-4.10.0.tar.xz' \
