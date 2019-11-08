@@ -1,5 +1,3 @@
-Index: CMake/GenerateExportHeader.cmake
-===================================================================
 --- a/CMake/GenerateExportHeader.cmake
 +++ b/CMake/GenerateExportHeader.cmake
 @@ -163,19 +163,7 @@ endmacro()
@@ -23,8 +21,7 @@ Index: CMake/GenerateExportHeader.cmake
        set(GCC_TOO_OLD TRUE)
      endif()
    endif()
-Index: CMake/vtkCompilerExtras.cmake
-===================================================================
+a/CMake/vtkCompilerExtras.cmake
 --- a/CMake/vtkCompilerExtras.cmake
 +++ b/CMake/vtkCompilerExtras.cmake
 @@ -27,24 +27,12 @@ if(CMAKE_COMPILER_IS_GNUCXX)
