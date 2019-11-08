@@ -39,21 +39,19 @@ bool EncapsulatedDocumentFillerStep::fillIndividually()
     }
 
     // TODO Support UIDEncapsulatedCDAStorage?
-    if (dicomReader->getValueAttributeAsQString(DICOMSOPClassUID) != UIDEncapsulatedPDFStorage)
+    if (dicomReader->getValueAttributeAsQString(DICOMSOPClassUID) == UIDEncapsulatedPDFStorage)
     {
-        return false;
+        EncapsulatedDocument *document = new EncapsulatedDocument();
+        document->setTransferSyntaxUid(dicomReader->getValueAttributeAsQString(DICOMTransferSyntaxUID));
+        document->setSopInstanceUid(dicomReader->getValueAttributeAsQString(DICOMSOPInstanceUID));
+        document->setInstanceNumber(dicomReader->getValueAttributeAsQString(DICOMInstanceNumber));
+        document->setDocumentTitle(dicomReader->getValueAttributeAsQString(DICOMDocumentTitle));
+        document->setMimeTypeOfEncapsulatedDocument(dicomReader->getValueAttributeAsQString(DICOMMIMETypeOfEncapsulatedDocument));
+        document->setPath(dicomReader->getFileName());
+        document->setDicomSource(m_input->getDICOMSource());
+
+        m_input->getCurrentSeries()->addEncapsulatedDocument(document);
     }
-
-    EncapsulatedDocument *document = new EncapsulatedDocument();
-    document->setTransferSyntaxUid(dicomReader->getValueAttributeAsQString(DICOMTransferSyntaxUID));
-    document->setSopInstanceUid(dicomReader->getValueAttributeAsQString(DICOMSOPInstanceUID));
-    document->setInstanceNumber(dicomReader->getValueAttributeAsQString(DICOMInstanceNumber));
-    document->setDocumentTitle(dicomReader->getValueAttributeAsQString(DICOMDocumentTitle));
-    document->setMimeTypeOfEncapsulatedDocument(dicomReader->getValueAttributeAsQString(DICOMMIMETypeOfEncapsulatedDocument));
-    document->setPath(dicomReader->getFileName());
-    document->setDicomSource(m_input->getDICOMSource());
-
-    m_input->getCurrentSeries()->addEncapsulatedDocument(document);
 
     return true;
 }

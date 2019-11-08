@@ -34,7 +34,7 @@ class Image;
 class VolumeFillerStep : public PatientFillerStep
 {
 public:
-    VolumeFillerStep();
+    VolumeFillerStep(bool dontCreateThumbnails = false);
 
     virtual bool fillIndividually() override;
 
@@ -66,6 +66,8 @@ private:
 
     /// ImageProperties for each volume number in each series.
     QHash<Series*, QMap<int, ImageProperties>> m_imagesProperties;
+    /// If true, thumbnails won't be created.
+    bool m_dontCreateThumbnails;
 
 };
 

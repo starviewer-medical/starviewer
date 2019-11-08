@@ -90,7 +90,6 @@ HEADERS += extensionfactory.h \
     patientbrowsermenuextendedinfo.h \
     patientbrowsermenulist.h \
     qcustomwindowleveldialog.h \
-    mhdfileclassifierstep.h \
     orderimagesfillerstep.h \
     toolregistry.h \
     toolmanager.h \
@@ -365,9 +364,6 @@ HEADERS += extensionfactory.h \
     syncactionsconfigurationhandler.h \
     syncactionmanager.h \
     viewerslayouttosyncactionmanageradapter.h \
-    volumepixeldatareaderselector.h \
-    vtkdcmtkbydefaultvolumepixeldatareaderselector.h \
-    itkgdcmbydefaultvolumepixeldatareaderselector.h \
     settingsinterface.h \
     orthogonalplane.h \
     filter.h \
@@ -435,7 +431,9 @@ HEADERS += extensionfactory.h \
     sliceorientedvolumepixeldata.h \
     voxelindex.h \
     systemrequirements.h \
-    systemrequirementstest.h
+    systemrequirementstest.h \
+    nondicomfileclassifierfillerstep.h \
+    volumepixeldatareadervtk.h
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
@@ -489,7 +487,6 @@ SOURCES += extensionmediator.cpp \
     patientbrowsermenuextendedinfo.cpp \
     patientbrowsermenulist.cpp \
     qcustomwindowleveldialog.cpp \
-    mhdfileclassifierstep.cpp \
     orderimagesfillerstep.cpp \
     toolregistry.cpp \
     toolmanager.cpp \
@@ -751,8 +748,6 @@ SOURCES += extensionmediator.cpp \
     syncactionsconfigurationhandler.cpp \
     syncactionmanager.cpp \
     viewerslayouttosyncactionmanageradapter.cpp \
-    vtkdcmtkbydefaultvolumepixeldatareaderselector.cpp \
-    itkgdcmbydefaultvolumepixeldatareaderselector.cpp \
     orthogonalplane.cpp \
     filter.cpp \
     filteroutput.cpp \
@@ -819,7 +814,9 @@ SOURCES += extensionmediator.cpp \
     sliceorientedvolumepixeldata.cpp \
     voxelindex.cpp \
     systemrequirements.cpp \
-    systemrequirementstest.cpp
+    systemrequirementstest.cpp \
+    nondicomfileclassifierfillerstep.cpp \
+    volumepixeldatareadervtk.cpp
 
 win32 {
     HEADERS += windowsfirewallaccess.h \

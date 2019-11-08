@@ -12,25 +12,26 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef VTKDCMTKBYDEFAULTVOLUMEPIXELDATAREADERSELECTOR_H
-#define VTKDCMTKBYDEFAULTVOLUMEPIXELDATAREADERSELECTOR_H
+#ifndef UDG_NONDICOMFILECLASSIFIERFILLERSTEP_H
+#define UDG_NONDICOMFILECLASSIFIERFILLERSTEP_H
 
-#include "volumepixeldatareaderselector.h"
+#include "patientfillerstep.h"
 
 namespace udg {
 
 /**
- * This class is used by VolumePixelDataReaderFactory to select the appropriate VolumePixelDataReader for a given volume.
- * This selector chooses VTK-DCMTK by default.
+ *  @brief The NonDicomFileClassifierFillerStep class creates patients, studies and series for non-DICOM files.
  */
-class VtkDcmtkByDefaultVolumePixelDataReaderSelector : public VolumePixelDataReaderSelector {
+class NonDicomFileClassifierFillerStep : public PatientFillerStep {
 
 public:
-    /// Chooses and returns the reader implementation most suitable to the given volume.
-    virtual VolumePixelDataReaderFactory::PixelDataReaderType selectVolumePixelDataReader(Volume *volume) const;
+    NonDicomFileClassifierFillerStep();
+    virtual ~NonDicomFileClassifierFillerStep();
+
+    bool fillIndividually() override;
 
 };
 
 } // namespace udg
 
-#endif
+#endif // UDG_NONDICOMFILECLASSIFIERFILLERSTEP_H
