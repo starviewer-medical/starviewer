@@ -6,13 +6,13 @@ BUILD_TYPES="release"
 LIBS="dcmtk vtk gdcm itk ecm threadweaver"
 
 # Where buildall.sh downloads the libraries
-DOWNLOAD_PREFIX=~/uroot/downloads
+DOWNLOAD_PREFIX=$SCRIPTS_ROOT/../../../sdk-download
 
 # Where to install the SDK libraries once compiled
-SDK_INSTALL_PREFIX=~/uroot/usr/local
+SDK_INSTALL_PREFIX=$SCRIPTS_ROOT/../../../sdk-build
 
 # Where to write the SDK environment configuration script.
-SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../environment.sh
+SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../prefix.sh
 
 # Only used to tell the user where to install Qt on buildall.sh
 INSTALL_QTDIR=$SDK_INSTALL_PREFIX/lib/Qt5.6.3
@@ -50,8 +50,11 @@ CMAKE_CPP11='-DCMAKE_CXX_STANDARD:STRING=11 -DCMAKE_CXX_STANDARD_REQUIRED:BOOL=O
 # Verbose compilation: Uncomment to output the compiler calls.
 MAKE_VERBOSE='VERBOSE=yes'
 
-# Number of simultaneous make jobs (-j8)
-MAKE_CONCURRENCY=4
+# Force the number of simultaneous make jobs (-j8)
+# MAKE_CONCURRENCY=8
+
+# By default it takes the number of available virtual CPUs in the system.
+MAKE_CONCURRENCY=${MAKE_CONCURRENCY:-`nproc`}
 
 # Because SDK libraries binares are not on a standard location.
 # This environment variable has to be set when starting starviewer binary or

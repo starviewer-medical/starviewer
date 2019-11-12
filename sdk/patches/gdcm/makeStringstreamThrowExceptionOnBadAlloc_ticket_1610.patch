@@ -1,6 +1,5 @@
-diff -upr gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx
---- gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx	2014-07-26 17:19:49.000000000 +0200
-+++ gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx	2014-08-06 11:07:45.873851600 +0200
+--- a/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx
++++ b/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx
 @@ -339,6 +339,7 @@ bool JPEG2000Codec::Decode(DataElement c
      is.write(buffer, totalLen);
      delete[] buffer;
@@ -17,9 +16,8 @@ diff -upr gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmJPEG2000Codec.cxx gdcm
      if( sf->GetNumberOfFragments() != Dimensions[2] )
        {
        gdcmErrorMacro( "Not handled" );
-diff -upr gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx
---- gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx	2014-07-26 17:19:49.000000000 +0200
-+++ gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx	2014-08-06 11:10:38.938750300 +0200
+--- a/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx
++++ b/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx
 @@ -155,6 +155,7 @@ bool JPEGCodec::Decode(DataElement const
    const ByteValue *jpegbv = in.GetByteValue();
    if( !sf0 && !jpegbv ) return false;
@@ -36,9 +34,8 @@ diff -upr gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmJPEGCodec.cxx gdcm-2.4
    if ( !Internal->DecodeByStreams(is,tmpos) )
      {
  #ifdef GDCM_SUPPORT_BROKEN_IMPLEMENTATION
-diff -upr gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx
---- gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx	2014-07-26 17:19:49.000000000 +0200
-+++ gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx	2014-08-06 11:12:33.706314700 +0200
+--- a/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx
++++ b/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx
 @@ -107,6 +107,7 @@ bool RAWCodec::DecodeBytes(const char* i
    std::stringstream is;
    is.write(inBytes, inBufferLength);
@@ -55,9 +52,8 @@ diff -upr gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmRAWCodec.cxx gdcm-2.4.
    bool r = DecodeByStreams(is, os);
    if(!r) return false;
    assert( r );
-diff -upr gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx
---- gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx	2014-07-26 17:19:49.000000000 +0200
-+++ gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx	2014-08-06 11:49:04.347612200 +0200
+--- a/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx
++++ b/Source/MediaStorageAndFileFormat/gdcmRLECodec.cxx
 @@ -566,6 +566,7 @@ size_t RLECodec::DecodeFragment(Fragment
    is.write(mybuffer, bv.GetLength());
    delete[] mybuffer;

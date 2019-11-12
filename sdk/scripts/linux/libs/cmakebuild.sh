@@ -12,6 +12,11 @@ then
     for PATCH in $PATCHES_ROOT/$LIB/*
     do
         git apply $PATCH --ignore-whitespace -v
+	if [ $? -ne 0 ]
+	then
+		echo "ERROR: The \""$PATCH\"" patch could not be applied."
+		exit $?
+	fi
     done
 
     popd

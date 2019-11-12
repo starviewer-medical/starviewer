@@ -3,7 +3,7 @@
 # Call vtk configuration script to make sure VTKCMAKEDIR is set
 . $SCRIPTS_ROOT/config/vtk.sh
 
-SOURCE_DIR=$SOURCE_DIR_BASE/gdcm-2.6.4
+SOURCE_DIR=$SOURCE_DIR_BASE/GDCM-2.6.4
 
 if [ $BUILD_TYPE = debug ]
 then
@@ -22,6 +22,7 @@ CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
                -DCMAKE_INSTALL_PREFIX:PATH=$SDK_INSTALL_PREFIX \
                -DCMAKE_PREFIX_PATH:PATH=$QTDIR \
                -DGDCM_BUILD_SHARED_LIBS:BOOL=TRUE \
+               -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=FALSE \
                -DGDCM_USE_VTK:BOOL=TRUE \
                -DVTK_DIR:PATH=$VTKCMAKEDIR"
 
