@@ -796,11 +796,11 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
     {
         switch (optionValue.first)
         {
-            case StarviewerApplicationCommandLine::openBlankWindow:
+            case StarviewerApplicationCommandLine::OpenBlankWindow:
                 INFO_LOG("Rebut argument de linia de comandes per obrir nova finestra");
                 openBlankWindow();
                 break;
-            case StarviewerApplicationCommandLine::retrieveStudyFromAccessioNumber:
+            case StarviewerApplicationCommandLine::RetrieveStudyByAccessionNumber:
                 INFO_LOG("Rebut argument de linia de comandes per descarregar un estudi a traves del seu accession number");
                 sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(optionValue.second);
                 break;
