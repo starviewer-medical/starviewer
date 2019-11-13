@@ -21,6 +21,7 @@ namespace udg {
 
 namespace {
 
+const QString StudyInstanceUidOption("studyinstanceuid");
 const QString AccessionNumberOption("accessionnumber");
 
 }
@@ -32,6 +33,10 @@ StarviewerApplicationCommandLine::StarviewerApplicationCommandLine(QObject *pare
     m_parser.setApplicationDescription(ApplicationNameString);
 
 #ifndef STARVIEWER_LITE
+    QCommandLineOption studyInstanceUidOption(StudyInstanceUidOption, tr("Retrieve the study with the given Study Instance UID from the query default PACS."),
+                                              "studyInstanceUid");
+    m_parser.addOption(studyInstanceUidOption);
+
     // Starviewer Lite can't connect to PACS so it won't have these options
     QCommandLineOption accessionNumberOption(AccessionNumberOption, tr("Retrieve the study with the given Accession Number from the query default PACS."),
                                              "accessionNumber");
@@ -61,7 +66,11 @@ bool StarviewerApplicationCommandLine::parseAndRun(QStringList arguments, QStrin
 {
     if (m_parser.parse(arguments))
     {
-        if (m_parser.isSet(AccessionNumberOption))
+        if (m_parser.isSet(StudyInstanceUidOption))
+        {
+            addOptionToListToProcess(qMakePair(RetrieveStudyByUid, m_parser.value(StudyInstanceUidOption)));
+        }
+        else if (m_parser.isSet(AccessionNumberOption))
         {
             addOptionToListToProcess(qMakePair(RetrieveStudyByAccessionNumber, m_parser.value(AccessionNumberOption)));
         }
