@@ -34,7 +34,6 @@ INITIALIZE_EASYLOGGINGPP
 #include "interfacesettings.h"
 #include "shortcuts.h"
 #include "starviewerapplicationcommandline.h"
-#include "applicationcommandlineoptions.h"
 #include "loggingoutputwindow.h"
 #include "vtkinit.h"
 
@@ -171,6 +170,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName(udg::OrganizationNameString);
     app.setOrganizationDomain(udg::OrganizationDomainString);
     app.setApplicationName(udg::ApplicationNameString);
+    app.setApplicationVersion(udg::StarviewerVersionString);
 
 #ifndef NO_CRASH_REPORTER
     // Inicialitzem el crash handler en el cas que ho suportem.
@@ -221,8 +221,8 @@ int main(int argc, char *argv[])
         {
             QString invalidCommandLine = QObject::tr("There were errors invoking %1 from the command line with the following call:\n\n%2")
                                                      .arg(udg::ApplicationNameString).arg(commandLineCall) + "\n\n";
-            invalidCommandLine += QObject::tr("Detected errors: ") + errorInvalidCommanLineArguments + "\n";
-            invalidCommandLine += StarviewerSingleApplicationCommandLineSingleton::instance()->getStarviewerApplicationCommandLineOptions().getSynopsis();
+            invalidCommandLine += QObject::tr("Detected errors: ") + errorInvalidCommanLineArguments + "\n\n";
+            invalidCommandLine += StarviewerSingleApplicationCommandLineSingleton::instance()->getStarviewerApplicationCommandLineParser().helpText();
             QMessageBox::warning(NULL, udg::ApplicationNameString, invalidCommandLine);
 
             ERROR_LOG("Arguments de linia de comandes invalids, error : " + errorInvalidCommanLineArguments);
