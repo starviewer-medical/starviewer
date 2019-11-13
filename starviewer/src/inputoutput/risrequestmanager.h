@@ -50,6 +50,10 @@ public:
     /// Iniciem l'escolta de les peticions del RIS pel port especificat a la configuració
     void listen();
 
+public slots:
+    /// Processa una petició del RIS per descarregar l'estudi que compleixi la màscara de cerca
+    void processRISRequest(DicomMask mask);
+
 signals:
     /// Signal que s'emet per indicar que ja es pot començar a escoltar peticions a través de la classe ListenRISRequests que s'executa en un altre Thread
     void listenRISRequests();
@@ -64,8 +68,6 @@ signals:
     void loadStudyRetrievedFromRISRequest(QString studyInstanceUID);
 
 private slots:
-    /// Processa una petició del RIS per descarregar l'estudi que compleixi la màscara de cerca
-    void processRISRequest(DicomMask mask);
 
     /// Slot que s'activa quan finalitza un job de consulta al PACS
     void queryPACSJobFinished(PACSJobPointer pacsJob);

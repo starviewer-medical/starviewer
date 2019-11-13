@@ -30,6 +30,7 @@ class ApplicationCommandLineOptions;
  *
  * Current accepted options are:
  *
+ * -studyinstanceuid <studyInstanceUid>:    Queries default PACS servers with the given Study Instance UID and downloads the study if found.
  * -accessionnumber <accessionNumberValue>: Queries default PACS servers with the given Accession Number and downloads the study if found.
  * <blank>:                                 Opens a new Starviewer window.
  */
@@ -39,7 +40,7 @@ class StarviewerApplicationCommandLine : public QObject {
 
 public:
     /// Possible option effects.
-    enum StarviewerCommandLineOption { OpenBlankWindow, RetrieveStudyByAccessionNumber };
+    enum StarviewerCommandLineOption { OpenBlankWindow, RetrieveStudyByUid, RetrieveStudyByAccessionNumber };
 
     /// Initializes the parser with valid options.
     StarviewerApplicationCommandLine(QObject *parent = 0);

@@ -126,6 +126,9 @@ private:
     /// Actualitza la informació que es mostra a l'usuari en el menú com a versió beta.
     void updateBetaVersionTextPosition();
 
+    /// Sents a request to retrieve a study given its Study Instance UID.
+    void sendRequestRetrieveStudyByUidToLocalStarviewer(QString studyInstanceUid);
+
     /// Envia una petició per descarregar un estudi a través del seu accession number
     void sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber);
 
