@@ -33,6 +33,8 @@
 #include "qaboutdialog.h"
 #include "externalapplication.h"
 #include "externalapplicationsmanager.h"
+#include "queryscreen.h"
+#include "risrequestmanager.h"
 
 // Pel LanguageLocale
 #include "coresettings.h"
@@ -72,6 +74,8 @@
 #include "shortcutmanager.h"
 
 namespace udg {
+
+typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 
 // Per processar les opcions entrades per línia de comandes hem d'utilitzar un Singleton de StarviewerApplicationCommandLine, això ve degut a que
 // d'instàncies de QApplicationMainWindow en tenim tantes com finestres obertes d'Starviewer tinguem. Instàncies deQApplicationMainWindow es crees
@@ -790,11 +794,15 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
     {
         switch (optionValue.first)
         {
-            case StarviewerApplicationCommandLine::openBlankWindow:
+            case StarviewerApplicationCommandLine::OpenBlankWindow:
                 INFO_LOG("Rebut argument de linia de comandes per obrir nova finestra");
                 openBlankWindow();
                 break;
-            case StarviewerApplicationCommandLine::retrieveStudyFromAccessioNumber:
+            case StarviewerApplicationCommandLine::RetrieveStudyByUid:
+                INFO_LOG("Received command line argument to retrieve a study by its UID");
+                sendRequestRetrieveStudyByUidToLocalStarviewer(optionValue.second);
+                break;
+            case StarviewerApplicationCommandLine::RetrieveStudyByAccessionNumber:
                 INFO_LOG("Rebut argument de linia de comandes per descarregar un estudi a traves del seu accession number");
                 sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(optionValue.second);
                 break;
@@ -802,6 +810,24 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
                 INFO_LOG("Argument de linia de comandes invalid");
                 break;
         }
+    }
+}
+
+void QApplicationMainWindow::sendRequestRetrieveStudyByUidToLocalStarviewer(QString studyInstanceUid)
+{
+    Settings settings;
+    if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool())
+    {
+        // TODO Ugly shortcut for #2643. Major refactoring needed to clean this (see #2764).
+        DicomMask mask;
+        mask.setStudyInstanceUID(studyInstanceUid);
+        QueryScreenSingleton::instance()->getRISRequestManager()->processRISRequest(mask);
+    }
+    else
+    {
+        QMessageBox::information(this, ApplicationNameString,
+                                 tr("Please activate \"Listen to RIS requests\" option in %1 configuration to retrieve studies from SAP.")
+                                 .arg(ApplicationNameString));
     }
 }
 
