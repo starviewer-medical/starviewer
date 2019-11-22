@@ -448,10 +448,46 @@ void OrderImagesFillerStep::setOrderedImagesIntoSeries(Series *series)
                 }
             }
 
+            // HACK for #2152: under certain circumstances we will reverse the instance number order:
+            // - if modality is CT or PT
+            // - and acquisition is axial
+            // - and the first image has a bigger z than the second (thus with reverse order we achieve increasing z)
+            bool reverse = false;
+            QList<Image*> imagesSortedByInstanceNumber = sortedImagesByInstanceNumber.values();
+
+            if ((series->getModality() == "CT" || series->getModality() == "PT") && imagesSortedByInstanceNumber.size() >= 2)
+            {
+                Image *first = imagesSortedByInstanceNumber[0];
+                Image *second = imagesSortedByInstanceNumber[1];
+
+                if (first->getImageOrientationPatient().getNormalVector() == QVector3D(0, 0, 1) &&
+                    second->getImageOrientationPatient().getNormalVector() == QVector3D(0, 0, 1) &&
+                    first->getImagePositionPatient()[2] > second->getImagePositionPatient()[2])
+                {
+                    INFO_LOG(QString("Hack for #2152 applied to series %1 of study %2")
+                             .arg(series->getSeriesNumber()).arg(series->getParentStudy()->getInstanceUID()));
+                    reverse = true;
+                }
+            }
+
+            int start, end, increment;
+
+            if (!reverse) {
+                start = 0;
+                end = imagesSortedByInstanceNumber.size();
+                increment = 1;
+            }
+            else {
+                start = imagesSortedByInstanceNumber.size() - 1;
+                end = -1;
+                increment = -1;
+            }
+
             orderNumberInVolume = 0;
 
-            foreach (Image *image, sortedImagesByInstanceNumber.values())
+            for (int i = start; i != end; i += increment)
             {
+                Image *image = imagesSortedByInstanceNumber[i];
                 image->setOrderNumberInVolume(orderNumberInVolume);
                 image->setVolumeNumberInSeries(currentVolumeNumber);
                 orderNumberInVolume++;
