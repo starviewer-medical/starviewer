@@ -8,11 +8,15 @@ download_and_verify()
     EXPECTED_HASH=$1
     FILENAME=$2
     URL=$3
+    if [ ! -e "${DOWNLOAD_PREFIX}/${FILENAME}" ]
+    then
+        wget -O "${DOWNLOAD_PREFIX}/${FILENAME}" -nc --directory-prefix="${DOWNLOAD_PREFIX}" "${URL}"
+    else
+	echo "The ${DOWNLOAD_PREFIX}/${FILENAME} exists, skipping the download."
+    fi
+    HASH=`sha256sum "${DOWNLOAD_PREFIX}/${FILENAME}" | cut -f 1 -d " "`
 
-    wget -nc -O "${DOWNLOAD_PREFIX}/${FILENAME}" "${URL}"
-    HASH=`shasum -a 256 "${DOWNLOAD_PREFIX}/${FILENAME}" | cut -f 1 -d " "`
-
-    if [[ "${EXPECTED_HASH}" != "${HASH}" ]]
+    if [ "${EXPECTED_HASH}" != "${HASH}" ]
     then
         echo "ERROR: Checksum verification failed for ${FILENAME}."
         exit
