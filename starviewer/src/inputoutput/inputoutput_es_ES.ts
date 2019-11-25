@@ -2742,12 +2742,12 @@ Error details:
 <context>
     <name>udg::QueryScreen</name>
     <message>
-        <location filename="queryscreen.cpp" line="207"/>
+        <location filename="queryscreen.cpp" line="212"/>
         <source>Port %1 for incoming connections from PACS is already in use by another application.</source>
         <translation>El puerto %1 para las conexiones entrantes del PACS está siendo utilizado por otra aplicación.</translation>
     </message>
     <message>
-        <location filename="queryscreen.cpp" line="209"/>
+        <location filename="queryscreen.cpp" line="214"/>
         <source>Unable to retrieve studies from PACS if the port is in use, please close the application that is using port %1 or change the port for incoming connections from PACS in the configuration screen.</source>
         <translation>No se pueden descargar estudios del PACS si el puerto está en uso, cierre la aplicación que está usando el puerto %1 o cambie el puerto de conexions entrantes del PACS en la pantalla de configuración.</translation>
     </message>

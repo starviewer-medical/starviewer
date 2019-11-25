@@ -121,11 +121,6 @@
         <translation>N/D</translation>
     </message>
     <message>
-        <location filename="commandlineoption.cpp" line="60"/>
-        <source>value</source>
-        <translation>valor</translation>
-    </message>
-    <message>
         <location filename="windowsfirewallaccess.cpp" line="84"/>
         <source>Application is not in the firewall exceptions list</source>
         <translation>L&apos;aplicació no és a la llista d&apos;excepcions del tallafocs</translation>
@@ -443,7 +438,7 @@
         <translation>Tall: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="422"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="440"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -463,17 +458,17 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="376"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="395"/>
         <source>WW: %1 WL: %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="393"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="411"/>
         <source>Threshold: %1%</source>
         <translation>Llindar: %1%</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="412"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="430"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
@@ -1016,22 +1011,22 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="27"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="23"/>
         <source>Window Width</source>
         <translation>Contrast</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="44"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="43"/>
         <source>Window Level</source>
         <translation>Brillantor</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="94"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="98"/>
         <source>OK</source>
         <translation>D&apos;acord</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="101"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="91"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
@@ -1044,13 +1039,13 @@ S&apos;inhabilitarà l&apos;ombreig, de manera que no es visualitzarà com s&apo
 <context>
     <name>udg::QCustomWindowLevelEditWidget</name>
     <message>
-        <location filename="qcustomwindowleveleditwidget.cpp" line="98"/>
+        <location filename="qcustomwindowleveleditwidget.cpp" line="103"/>
         <source>Selected Custom WW/WL will be deleted.</source>
         <translatorcomment>Estem fent servir &quot;WW&quot; i &quot;WL&quot; per referir-nos al que hem traduït com a &quot;contrast&quot; i &quot;brillantor&quot;.</translatorcomment>
         <translation>S&apos;esborrarà la finestra personalitzada seleccionada.</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveleditwidget.cpp" line="99"/>
+        <location filename="qcustomwindowleveleditwidget.cpp" line="104"/>
         <source>Do you want to continue?</source>
         <translation>Voleu continuar?</translation>
     </message>

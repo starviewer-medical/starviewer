@@ -121,11 +121,6 @@
         <translation>N/D</translation>
     </message>
     <message>
-        <location filename="commandlineoption.cpp" line="60"/>
-        <source>value</source>
-        <translation>valor</translation>
-    </message>
-    <message>
         <location filename="windowsfirewallaccess.cpp" line="84"/>
         <source>Application is not in the firewall exceptions list</source>
         <translation>La aplicación no está en la lista de excepciones del cortafuegos</translation>
@@ -443,7 +438,7 @@
         <translation>Corte: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="422"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="440"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -463,17 +458,17 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="376"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="395"/>
         <source>WW: %1 WL: %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="393"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="411"/>
         <source>Threshold: %1%</source>
         <translation>Umbral: %1%</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="412"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="430"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
@@ -1016,22 +1011,22 @@ Se deshabilitará el sombreado, de manera que no se visualizará como se esperab
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="27"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="23"/>
         <source>Window Width</source>
         <translation>Contraste</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="44"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="43"/>
         <source>Window Level</source>
         <translation>Brillo</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="94"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="98"/>
         <source>OK</source>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="101"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="91"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
@@ -1044,12 +1039,12 @@ Se deshabilitará el sombreado, de manera que no se visualizará como se esperab
 <context>
     <name>udg::QCustomWindowLevelEditWidget</name>
     <message>
-        <location filename="qcustomwindowleveleditwidget.cpp" line="98"/>
+        <location filename="qcustomwindowleveleditwidget.cpp" line="103"/>
         <source>Selected Custom WW/WL will be deleted.</source>
         <translation>Se borrará la ventana personalizada seleccionada.</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveleditwidget.cpp" line="99"/>
+        <location filename="qcustomwindowleveleditwidget.cpp" line="104"/>
         <source>Do you want to continue?</source>
         <translatorcomment>No em sona gaire correcte en castellà en software utitlitzar el Quiere Continuar</translatorcomment>
         <translation>¿Desea continuar?</translation>
