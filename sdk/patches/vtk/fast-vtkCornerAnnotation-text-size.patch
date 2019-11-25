@@ -1,5 +1,3 @@
-diff --git a/Rendering/Annotation/vtkCornerAnnotation.cxx b/Rendering/Annotation/vtkCornerAnnotation.cxx
-index d4bca8b..f908945 100644
 --- a/Rendering/Annotation/vtkCornerAnnotation.cxx
 +++ b/Rendering/Annotation/vtkCornerAnnotation.cxx
 @@ -500,98 +500,15 @@ int vtkCornerAnnotation::RenderOpaqueGeometry(vtkViewport *viewport)

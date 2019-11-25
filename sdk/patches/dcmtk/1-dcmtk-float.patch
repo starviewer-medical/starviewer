@@ -1,18 +1,3 @@
-From 89e4474cfec7143e3d65b60520bb0d94aeed61ad Mon Sep 17 00:00:00 2001
-From: Alan Antonuk <aega@med.umich.edu>
-Date: Mon, 13 Aug 2012 15:48:02 -0400
-Subject: [PATCH] Add ability to use floating-point internal representation in
- dcmimgle
-
----
- dcmimgle/include/dcmtk/dcmimgle/dipxrept.h | 10 +++++++
- dcmimgle/include/dcmtk/dcmimgle/diutils.h  |  7 ++++-
- dcmimgle/libsrc/dimoimg.cc                 | 43 ++++++++++++++++++++++++++++++
- dcmimgle/libsrc/dimomod.cc                 |  4 ++-
- 4 files changed, 62 insertions(+), 2 deletions(-)
-
-diff --git a/dcmimgle/include/dcmtk/dcmimgle/dipxrept.h b/dcmimgle/include/dcmtk/dcmimgle/dipxrept.h
-index 123f799..17d79d5 100644
 --- a/dcmimgle/include/dcmtk/dcmimgle/dipxrept.h
 +++ b/dcmimgle/include/dcmtk/dcmimgle/dipxrept.h
 @@ -113,6 +113,11 @@ inline EP_Representation DiPixelRepresentationTemplate<Sint32>::getRepresentatio
@@ -38,8 +23,6 @@ index 123f799..17d79d5 100644
 +}
  
  #endif
-diff --git a/dcmimgle/include/dcmtk/dcmimgle/diutils.h b/dcmimgle/include/dcmtk/dcmimgle/diutils.h
-index f24157b..911d3f8 100644
 --- a/dcmimgle/include/dcmtk/dcmimgle/diutils.h
 +++ b/dcmimgle/include/dcmtk/dcmimgle/diutils.h
 @@ -91,6 +91,9 @@ const unsigned long CIF_DecompressCompletePixelData  = 0x0000800;
@@ -63,8 +46,6 @@ index f24157b..911d3f8 100644
  };
  
  
-diff --git a/dcmimgle/libsrc/dimoimg.cc b/dcmimgle/libsrc/dimoimg.cc
-index abf617c..22f192a 100644
 --- a/dcmimgle/libsrc/dimoimg.cc
 +++ b/dcmimgle/libsrc/dimoimg.cc
 @@ -250,6 +250,9 @@ DiMonoImage::DiMonoImage(const DiMonoImage *image,
@@ -194,8 +175,6 @@ index abf617c..22f192a 100644
          }
      }
      for (int i = 0; i < 2; ++i)
-diff --git a/dcmimgle/libsrc/dimomod.cc b/dcmimgle/libsrc/dimomod.cc
-index ef8f27d..eb3f23e 100644
 --- a/dcmimgle/libsrc/dimomod.cc
 +++ b/dcmimgle/libsrc/dimomod.cc
 @@ -283,7 +283,9 @@ void DiMonoModality::checkRescaling(const DiInputPixel *pixel)

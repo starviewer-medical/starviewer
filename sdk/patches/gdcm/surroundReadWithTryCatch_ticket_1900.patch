@@ -1,6 +1,5 @@
-diff -upr gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx
---- gdcm-2.4.3/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx	2014-07-26 17:19:49.000000000 +0200
-+++ gdcm-2.4.3-patched/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx	2014-08-06 12:22:31.626422000 +0200
+--- a/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx
++++ b/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx
 @@ -406,30 +406,50 @@ bool ImageCodec::DoOverlayCleanup(std::i
        nmask = (int16_t)(nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 ));
  
