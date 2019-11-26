@@ -26,7 +26,7 @@ namespace udg {
 #endif
 
 const QString StarviewerVersionString("1.0.0" CE_SUFFIX);
-const QString StarviewerBuildID("2019070200");
+const QString StarviewerBuildID("2019112600");
 
 #undef CE_SUFFIX
 
