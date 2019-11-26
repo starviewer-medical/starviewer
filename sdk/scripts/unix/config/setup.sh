@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Base directory for everything related to the SDK.
-SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$HOME/starviewer-sdk-0.15"}
+SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$SCRIPTS_ROOT/../../../sdk-build"}
 
 # Where the libraries are dowloaded.
-DOWNLOAD_PREFIX=${DOWNLOAD_PREFIX:-"$SDK_BASE_PREFIX/downloads"}
+DOWNLOAD_PREFIX=${DOWNLOAD_PREFIX:-"$SCRIPTS_ROOT/../../../sdk-download"}
 
 # Where the user will be asked to install Qt.
-INSTALL_QTDIR=${INSTALL_QTDIR:-"$HOME/Qt"}
+INSTALL_QTDIR=${INSTALL_QTDIR:-"$SDK_BASE_PREFIX/lib/qt"}
 
 # Directory where the specific version of Qt is installed.
 if [[ $(uname) == 'Linux' ]]
@@ -22,7 +22,7 @@ else
 fi
 
 # Where to install the SDK libraries once compiled.
-SDK_INSTALL_PREFIX=${SDK_INSTALL_PREFIX:-"$SDK_BASE_PREFIX/usr/local"}
+SDK_INSTALL_PREFIX=${SDK_INSTALL_PREFIX:-"$SDK_BASE_PREFIX"}
 
 # Location of SDK sources to build.
 SOURCE_DIR_BASE=${SOURCE_DIR_BASE:-"$SDK_INSTALL_PREFIX/src"}
@@ -54,13 +54,13 @@ CMAKE_COMPILER=${CMAKE_COMPILER:-}
 CMAKE_CPP11='-DCMAKE_CXX_STANDARD:STRING=11 -DCMAKE_CXX_STANDARD_REQUIRED:BOOL=ON -DCMAKE_C_STANDARD:STRING=11 -DCMAKE_C_STANDARD_REQUIRED:BOOL=ON'
 
 # Number of simultaneous make jobs.
-MAKE_CONCURRENCY=${MAKE_CONCURRENCY:--j4}
+MAKE_CONCURRENCY=${MAKE_CONCURRENCY:--j1}
 
 # Verbose compilation: set to 'VERBOSE=yes' to output the compiler calls.
 MAKE_VERBOSE=${MAKE_VERBOSE:-}
 
 # Where to write the SDK environment configuration script.
-SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../environment.sh
+SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../prefix.sh
 
 # Currently only used to know the location of the ThreadWeaver lib dir.
 if [[ $(uname) == 'Linux' ]]
@@ -92,4 +92,4 @@ STARVIEWER_BUILD_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-build
 DPKG_TMP=/tmp/starviewer-dpkg
 
 # Where to place the packages
-DPKG_DESTINATION=$SCRIPTS_ROOT/../../../
+DPKG_DESTINATION=$SCRIPTS_ROOT/../../../starviewer-packaging
