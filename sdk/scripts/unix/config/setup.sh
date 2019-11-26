@@ -67,7 +67,7 @@ if [[ $(uname) == 'Linux' ]]
 then
     if [[ -e /etc/debian_version ]]
     then
-        LIB64DIR=lib/x86_64-linux-gnu
+        LIB64DIR=lib/`dpkg-architecture -q DEB_BUILD_GNU_TYPE`
     else
         LIB64DIR=lib64
     fi
