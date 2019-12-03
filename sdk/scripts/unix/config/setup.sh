@@ -54,10 +54,10 @@ CMAKE_COMPILER=${CMAKE_COMPILER:-}
 CMAKE_CPP11='-DCMAKE_CXX_STANDARD:STRING=11 -DCMAKE_CXX_STANDARD_REQUIRED:BOOL=ON -DCMAKE_C_STANDARD:STRING=11 -DCMAKE_C_STANDARD_REQUIRED:BOOL=ON'
 
 # Number of simultaneous make jobs.
-MAKE_CONCURRENCY=${MAKE_CONCURRENCY:--j1}
+MAKE_CONCURRENCY=${MAKE_CONCURRENCY:-1}
 
-# Verbose compilation: set to 'VERBOSE=yes' to output the compiler calls.
-MAKE_VERBOSE=${MAKE_VERBOSE:-}
+# Verbose compilation: set to 'yes' to output the compiler calls.
+MAKE_VERBOSE=${MAKE_VERBOSE:-yes}
 
 # Where to write the SDK environment configuration script.
 SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../prefix.sh
