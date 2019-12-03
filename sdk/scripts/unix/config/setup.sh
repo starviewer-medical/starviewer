@@ -12,10 +12,13 @@ INSTALL_QTDIR=${INSTALL_QTDIR:-"$HOME/Qt"}
 # Directory where the specific version of Qt is installed.
 if [[ $(uname) == 'Linux' ]]
 then
-    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.9.5/gcc_64"}
+    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.12.6/gcc_64"}
 elif [[ $(uname) == 'Darwin' ]]
 then
-    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.9.5/clang_64"}
+    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.12.6/clang_64"}
+else
+    echo "Error: Qt platform not considered."
+    exit 1
 fi
 
 # Where to install the SDK libraries once compiled.

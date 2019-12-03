@@ -20,6 +20,8 @@
 // Qt
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QAction>
+#include <QActionGroup>
 // VTK
 #include <vtkActor.h>
 #include <vtkImageActor.h>

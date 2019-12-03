@@ -24,6 +24,8 @@
 #include <itkGradientDescentOptimizer.h>
 #include <itkNormalizeImageFilter.h>
 #include <itkDiscreteGaussianImageFilter.h>
+//Qt
+#include <QAction>
 
 namespace udg {
 
