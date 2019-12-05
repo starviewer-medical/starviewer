@@ -8,5 +8,5 @@ Si existeix vol dir que cal aplicar tots els patch que hi hagi en aquest directo
 - DCMTK 3.6.1-20120515
 - ITK 4.13.0
 - VTK 8.1.1
-- gdcm 2.8.6
+- gdcm 3.0.4
 - ThreadWeaver 5.46.0

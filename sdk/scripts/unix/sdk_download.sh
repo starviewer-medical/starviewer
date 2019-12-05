@@ -48,9 +48,9 @@ do
                                 'https://www.vtk.org/files/release/8.1/VTK-8.1.1.tar.gz'
             ;;
         gdcm)
-            download_and_verify f4e611c74ea2b16c9aa28d7fdf3a8678ce926909606705b7cd08c9a5b05d34fc \
-                                'GDCM-2.8.6.tar.gz' \
-                                'https://github.com/malaterre/GDCM/archive/v2.8.6.tar.gz'
+            download_and_verify 9e460e5aae0082e5bb0cb4e6cb1293f4ea902394406e2260cc92674f7bd481b2 \
+                                'GDCM-3.0.4.tar.gz' \
+                                'https://github.com/malaterre/GDCM/archive/v3.0.4.tar.gz'
             ;;
         itk)
             download_and_verify feb3fce3cd3bf08405e49da30876dc766e5145c821e5e3f8736df1d1717da125 \
