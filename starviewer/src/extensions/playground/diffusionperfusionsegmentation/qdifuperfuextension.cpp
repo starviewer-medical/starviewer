@@ -48,7 +48,7 @@ const double QDifuPerfuSegmentationExtension::RegistrationMinimumStep = 0.001;
 const int QDifuPerfuSegmentationExtension::RegistrationNumberOfIterations = 300;
 
 QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension(QWidget * parent)
- : QWidget(parent), m_diffusionInputVolume(0), m_perfusionInputVolume(0), m_diffusionMainVolume(0), m_perfusionMainVolume(0), m_diffusionRescaledVolume(0), m_perfusionRescaledVolume(0), m_activedMaskVolume(0), m_strokeMaskVolume(0), m_ventriclesMaskVolume(0), m_blackpointEstimatedVolume(0), m_penombraMaskVolume(0), m_penombraMaskMinValue(0), m_penombraMaskMaxValue(254), m_perfusionOverlay(0), m_strokeSegmentationMethod(0), m_strokeVolume(0.0), m_registerTransform(0), m_penombraVolume(0.0)
+ : QWidget(parent), m_diffusionInputVolume(0), m_perfusionInputVolume(0), m_diffusionMainVolume(0), m_perfusionMainVolume(0), m_diffusionRescaledVolume(0), m_perfusionRescaledVolume(0), m_activedMaskVolume(0), m_strokeMaskVolume(0), m_ventriclesMaskVolume(0), m_blackpointEstimatedVolume(0), m_penombraMaskVolume(0), m_penombraMaskMinValue(0), m_penombraMaskMaxValue(254), m_perfusionOverlay(0), m_strokeSegmentationMethod(0), m_strokeVolume(0.0), m_registerTransform(nullptr), m_penombraVolume(0.0)
 {
     setupUi(this);
     DiffusionPerfusionSegmentationSettings().init();

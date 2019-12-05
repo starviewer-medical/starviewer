@@ -53,9 +53,9 @@ do
                                 'https://github.com/malaterre/GDCM/archive/v3.0.4.tar.gz'
             ;;
         itk)
-            download_and_verify feb3fce3cd3bf08405e49da30876dc766e5145c821e5e3f8736df1d1717da125 \
-                                'InsightToolkit-4.13.0.tar.xz' \
-                                'https://freefr.dl.sourceforge.net/project/itk/itk/4.13/InsightToolkit-4.13.0.tar.xz'
+            download_and_verify 613b125cbf58481e8d1e36bdeacf7e21aba4b129b4e524b112f70c4d4e6d15a6 \
+                                'InsightToolkit-5.0.1.tar.gz' \
+                                'https://github.com/InsightSoftwareConsortium/ITK/releases/download/v5.0.1/InsightToolkit-5.0.1.tar.gz'
             ;;
         ecm)
             download_and_verify e5da3e1b67e19d7b8b5b1d867bb1e9a54d902d718e55148f3296da9f9a18c275 \
