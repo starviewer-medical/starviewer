@@ -18,8 +18,21 @@ download_and_verify()
 
     if [ "${EXPECTED_HASH}" != "${HASH}" ]
     then
-        echo "ERROR: Checksum verification failed for ${FILENAME}."
-        exit
+	echo "ERROR: Checksum verification failed for ${FILENAME}."
+	echo ''
+	echo '[!] WARNING [!]'
+	echo ''
+	echo 'If the download has been over HTTPS then:'
+	echo '   (i) the originating server has altered files that ought to be immutable;'
+	echo '  (ii) your system is affected by some sort of security bug;'
+	echo ' (iii) you have trusted bogus root certificates;'
+	echo '  (iv) some powerful attacker has control over the PKI (public key infraestructure); or'
+	echo '   (v) your computer has been hit by a cosmic ray.'
+	echo ''
+	echo 'DO NOT USE THE DOWNLOADED FILE; delete it.'
+	echo ''
+	rm -i "${DOWNLOAD_PREFIX}/${FILENAME}"
+	exit
     fi
 }
 
