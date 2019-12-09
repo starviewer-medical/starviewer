@@ -38,9 +38,9 @@ do
             fi
             ;;
         dcmtk)
-            download_and_verify 09a97e82cf43672a4b16b162651f5bc0d86b9d7b8cfff58c345e5c97d6200937 \
-                                'dcmtk-3.6.1_20120515.tar.gz' \
-                                'https://support.dcmtk.org/redmine/attachments/download/8/dcmtk-3.6.1_20120515.tar.gz'
+            download_and_verify 37dad355d5513b4de4a86b5b7b0c3e9ec059860d88781b80916bba2a04e6d5b8 \
+                                'dcmtk-DCMTK-3.6.5.tar.gz' \
+                                'https://github.com/DCMTK/dcmtk/archive/DCMTK-3.6.5.tar.gz'
             ;;
         vtk)
             download_and_verify 71a09b4340f0a9c58559fe946dc745ab68a866cf20636a41d97b6046cb736324 \

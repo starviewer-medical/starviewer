@@ -5,7 +5,7 @@ Per saber si al compilar una llibreria cal aplicar-li patches cal mirar si exist
 Si existeix vol dir que cal aplicar tots els patch que hi hagi en aquest directori. Si no, no s'ha d'aplicar cap patch.
 
 - Qt 5.12.6
-- DCMTK 3.6.1-20120515
+- DCMTK 3.6.5
 - ITK 5.0.1
 - VTK 8.1.1
 - gdcm 3.0.4
