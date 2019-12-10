@@ -35,11 +35,11 @@ do
             tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-5.0.1.tar.gz"
             ;;
         ecm)
-            mkdir -p "${SOURCE_DIR_BASE}/threadweaver-5.46.0"
-            tar -C "${SOURCE_DIR_BASE}/threadweaver-5.46.0" -xvf "${DOWNLOAD_PREFIX}/extra-cmake-modules-5.46.0.tar.xz"
+            mkdir -p "${SOURCE_DIR_BASE}/threadweaver-5.64.0"
+            tar -C "${SOURCE_DIR_BASE}/threadweaver-5.64.0" -xvf "${DOWNLOAD_PREFIX}/extra-cmake-modules-5.64.0.tar.gz"
             ;;
         threadweaver)
-            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/threadweaver-5.46.0.tar.xz"
+            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/threadweaver-5.64.0.tar.gz"
             ;;
     esac
 done

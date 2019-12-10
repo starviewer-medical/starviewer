@@ -3,7 +3,7 @@
 # Call ecm configuration script to make sure ECMCMAKEDIR is set
 . "$SCRIPTS_ROOT/config/ecm.sh"
 
-SOURCE_DIR="$SOURCE_DIR_BASE/threadweaver-5.46.0"
+SOURCE_DIR="$SOURCE_DIR_BASE/threadweaver-5.64.0"
 
 if [ $BUILD_TYPE = debug ]
 then

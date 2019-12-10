@@ -9,4 +9,4 @@ Si existeix vol dir que cal aplicar tots els patch que hi hagi en aquest directo
 - ITK 5.0.1
 - VTK 8.2.0
 - gdcm 3.0.4
-- ThreadWeaver 5.46.0
+- ThreadWeaver 5.64.0

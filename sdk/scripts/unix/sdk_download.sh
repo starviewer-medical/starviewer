@@ -58,14 +58,14 @@ do
                                 'https://github.com/InsightSoftwareConsortium/ITK/releases/download/v5.0.1/InsightToolkit-5.0.1.tar.gz'
             ;;
         ecm)
-            download_and_verify e5da3e1b67e19d7b8b5b1d867bb1e9a54d902d718e55148f3296da9f9a18c275 \
-                                'extra-cmake-modules-5.46.0.tar.xz' \
-                                'https://download.kde.org/stable/frameworks/5.46/extra-cmake-modules-5.46.0.tar.xz'
+            download_and_verify 6495fb18f8736cc3411fe3a6aab1f6f04c26e3a574ef1725378b7cb1c508a388 \
+                                'extra-cmake-modules-5.64.0.tar.gz' \
+                                'https://github.com/KDE/extra-cmake-modules/archive/v5.64.0.tar.gz'
             ;;
         threadweaver)
-            download_and_verify f858d1f4b7d567e0cfba00b56e15af75e0552a1d6e7afb6925bacf3964f7cd7e \
-                                'threadweaver-5.46.0.tar.xz' \
-                                'https://download.kde.org/stable/frameworks/5.46/threadweaver-5.46.0.tar.xz'
+            download_and_verify 3c0051535d1d0755c64394d6a7bcd6f0dd4ccdfeaa292dfe80feef4916b2bac8 \
+                                'threadweaver-5.64.0.tar.gz' \
+                                'https://github.com/KDE/threadweaver/archive/v5.64.0.tar.gz'
             ;;
     esac
 done
