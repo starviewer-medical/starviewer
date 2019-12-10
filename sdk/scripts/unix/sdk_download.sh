@@ -43,9 +43,9 @@ do
                                 'https://github.com/DCMTK/dcmtk/archive/DCMTK-3.6.5.tar.gz'
             ;;
         vtk)
-            download_and_verify 71a09b4340f0a9c58559fe946dc745ab68a866cf20636a41d97b6046cb736324 \
-                                'VTK-8.1.1.tar.gz' \
-                                'https://www.vtk.org/files/release/8.1/VTK-8.1.1.tar.gz'
+            download_and_verify 96acfe0b4304218561bf2a88ca23aa35df51293d7ed9c3232c1d05a2012f405b \
+                                'VTK-8.2.0.tar.gz' \
+                                'https://github.com/Kitware/VTK/archive/v8.2.0.tar.gz'
             ;;
         gdcm)
             download_and_verify 9e460e5aae0082e5bb0cb4e6cb1293f4ea902394406e2260cc92674f7bd481b2 \

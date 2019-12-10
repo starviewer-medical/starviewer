@@ -2,15 +2,15 @@ diff --git a/Rendering/Annotation/vtkCornerAnnotation.cxx b/Rendering/Annotation
 index d4bca8b..f908945 100644
 --- a/Rendering/Annotation/vtkCornerAnnotation.cxx
 +++ b/Rendering/Annotation/vtkCornerAnnotation.cxx
-@@ -499,98 +499,15 @@ int vtkCornerAnnotation::RenderOpaqueGeometry(vtkViewport *viewport)
+@@ -500,98 +500,15 @@ int vtkCornerAnnotation::RenderOpaqueGeometry(vtkViewport *viewport)
          return 0;
-         }
+       }
  
 -      int height_02 = tempi[1] + tempi[5];  // total height of text in left top/bottom corners
 -      int height_13 = tempi[3] + tempi[7];  // total height of text in right top/bottom corners
 -      int height_47 = tempi[9] + tempi[15]; // total height of text at center of top/bottom edges
 -
--      int width_01 = tempi[0] + tempi[2];   // total width of text on botttom left/right corners
+-      int width_01 = tempi[0] + tempi[2];   // total width of text on bottom left/right corners
 -      int width_23 = tempi[4] + tempi[6];   // total width of text on top left/right corners
 -      int width_56 = tempi[10] + tempi[12]; // total width of text at center of left/right edges
 -
@@ -52,13 +52,13 @@ index d4bca8b..f908945 100644
 -             height_13 < line_max_13 &&
 -             height_47 < line_max_47 &&
 -             fontSize < 100)
--        {
+-      {
 -        fontSize++;
 -        for (int i = 0; i < NumTextPositions; i++)
--          {
+-        {
 -          this->TextMapper[i]->GetTextProperty()->SetFontSize(fontSize);
 -          this->TextMapper[i]->GetSize(viewport, tempi + i * 2);
--          }
+-        }
 -        height_02 = tempi[1] + tempi[5];
 -        height_13 = tempi[3] + tempi[7];
 -        height_47 = tempi[9] + tempi[15];
@@ -69,10 +69,12 @@ index d4bca8b..f908945 100644
 -
 -        max_width_corners = (width_01 > width_23) ? width_01 : width_23;
 -        max_width         = (width_56 > max_width_corners) ? width_56 : max_width_corners;
--        }
--
+-      }
+ 
 -      // While the size is too large decrease it
--
++      tSize[0] = (int)(0.5*vSize[0]);
++      tSize[1] = (int)(0.5*vSize[1]);
+ 
 -      while ((height_02 > tSize[1] ||
 -              height_13 > tSize[1] ||
 -              height_47 > tSize[1] ||
@@ -81,13 +83,13 @@ index d4bca8b..f908945 100644
 -              height_13 > line_max_13 ||
 -              height_47 > line_max_47) &&
 -             fontSize > 0)
--        {
+-      {
 -        fontSize--;
 -        for (int i = 0; i < NumTextPositions; i++)
--          {
+-        {
 -          this->TextMapper[i]->GetTextProperty()->SetFontSize(fontSize);
 -          this->TextMapper[i]->GetSize(viewport, tempi + i * 2);
--          }
+-        }
 -        height_02 = tempi[1] + tempi[5];
 -        height_13 = tempi[3] + tempi[7];
 -        height_47 = tempi[9] + tempi[15];
@@ -95,15 +97,12 @@ index d4bca8b..f908945 100644
 -        width_01 = tempi[0] + tempi[2];
 -        width_23 = tempi[4] + tempi[6];
 -        width_56 = tempi[10] + tempi[12];
-+      tSize[0] = (int)(0.5*vSize[0]);
-+      tSize[1] = (int)(0.5*vSize[1]);
- 
+-
 -        max_width_corners = (width_01 > width_23) ? width_01 : width_23;
 -        max_width         = (width_56 > max_width_corners) ? width_56 : max_width_corners;
--        }
+-      }
 +      int maxSize[2];
-+      fontSize = vtkTextMapper::SetMultipleConstrainedFontSize(viewport,
-+              tSize[0], tSize[1], this->TextMapper, NumTextPositions, maxSize);
++      fontSize = vtkTextMapper::SetMultipleConstrainedFontSize(viewport, tSize[0], tSize[1], this->TextMapper, NumTextPositions, maxSize);
  
        fontSize = static_cast<int>(pow((double)fontSize,
                NonlinearFontScaleFactor)*LinearFontScaleFactor);
