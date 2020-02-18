@@ -44,6 +44,7 @@ void QLayoutOptionsWidget::populateMaxViewersComboBox()
 {
     // TODO Should be filled according with the possible results returned by OptimalViewersGridEstimator
     m_maxViewersComboBox->addItem(tr("As many as possible"));
+    m_maxViewersComboBox->addItem("1");
     m_maxViewersComboBox->addItem("2");
     m_maxViewersComboBox->addItem("4");
     m_maxViewersComboBox->addItem("6");

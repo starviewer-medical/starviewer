@@ -39,22 +39,32 @@ void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayo
 
 QPair<int, int> StudyLayoutMapper::getOptimalViewersGrid(const StudyLayoutConfig &config, const QList<QPair<Volume *, int> > &candidateImages)
 {
-    int numberOfMinimumViewersRequired = candidateImages.count();
-
-    // Si el nombre màxim de visors per configuració és menor al nombre mínim de visors requerits, haurem d'actualitzar aquest paràmetre abans de crear el grid
-    int maxNumbersOfViewersByConfig = config.getMaximumNumberOfViewers();
-    if (maxNumbersOfViewersByConfig > 0)
+    // Special case for #2777: if the user has set a maximum of 1 viewer return directly 1x1. Otherwise follow the old route where the minimum is 2 viewers.
+    // This keeps the minimum of 2 viewers for everyone else so they won't get unexpected changes.
+    // TODO The overall process should be improved taking into account how many screens the Starviewer window spans.
+    if (config.getMaximumNumberOfViewers() == 1)
     {
-        if (maxNumbersOfViewersByConfig < numberOfMinimumViewersRequired)
-        {
-            numberOfMinimumViewersRequired = maxNumbersOfViewersByConfig;
-        }
+        return QPair<int, int>(1, 1);
     }
-    // Ara ja sabem el nombre mínim de visors requerits, ara cal calcular quina és la distribució idònia en graella
-    OptimalViewersGridEstimator gridEstimator;
-    QPair<int, int> grid = gridEstimator.getOptimalGrid(numberOfMinimumViewersRequired);
+    else
+    {
+        int numberOfMinimumViewersRequired = candidateImages.count();
 
-    return grid;
+        // Si el nombre màxim de visors per configuració és menor al nombre mínim de visors requerits, haurem d'actualitzar aquest paràmetre abans de crear el grid
+        int maxNumbersOfViewersByConfig = config.getMaximumNumberOfViewers();
+        if (maxNumbersOfViewersByConfig > 0)
+        {
+            if (maxNumbersOfViewersByConfig < numberOfMinimumViewersRequired)
+            {
+                numberOfMinimumViewersRequired = maxNumbersOfViewersByConfig;
+            }
+        }
+        // Ara ja sabem el nombre mínim de visors requerits, ara cal calcular quina és la distribució idònia en graella
+        OptimalViewersGridEstimator gridEstimator;
+        QPair<int, int> grid = gridEstimator.getOptimalGrid(numberOfMinimumViewersRequired);
+
+        return grid;
+    }
 }
 
 void StudyLayoutMapper::applyConfig(const StudyLayoutConfig &config, ViewersLayout *layout, Study *study, const QRectF &geometry, int rows, int columns)
