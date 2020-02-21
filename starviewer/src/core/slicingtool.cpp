@@ -66,9 +66,9 @@ double SlicingTool::getMaximum(SlicingTool::SlicingMode mode) const
     else if (mode == SlicingMode::Volume)
     {
         //NOTE: Evaluation lazyness used to check null pointers before they are used.
-        if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient()) 
+        if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getStudy())
         {
-            return m_2DViewer->getMainInput()->getPatient()->getNumberOfVolumes() - 1;
+            return m_2DViewer->getMainInput()->getStudy()->getNumberOfVolumes() - 1;
         }
     }
     return -1;
@@ -92,9 +92,9 @@ double SlicingTool::getLocation(SlicingMode mode) const
     else if (mode == SlicingMode::Volume)
     {
         //NOTE: Evaluation lazyness used to check null pointers before they are used.
-        if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient()) 
+        if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getStudy())
         {
-            QList<Volume*> volumes = m_2DViewer->getMainInput()->getPatient()->getVolumesList();
+            QList<Volume*> volumes = m_2DViewer->getMainInput()->getStudy()->getVolumesList();
             int volumeIndex = volumes.indexOf(m_2DViewer->getMainInput());
             Q_ASSERT(volumeIndex >= 0); // Volume must be found in the list. //BUG: Be careful if dummyvolume is loaded; you should control this externally.
             return volumeIndex;
@@ -142,9 +142,9 @@ double SlicingTool::setLocation(SlicingMode mode, double location)
         {
             newLocation = std::round(newLocation);
             //NOTE: Evaluation lazyness used to check null pointers before they are used.
-            if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getPatient()) 
+            if (m_2DViewer->getMainInput() && m_2DViewer->getMainInput()->getStudy())
             {
-                QList<Volume*> volumes = m_2DViewer->getMainInput()->getPatient()->getVolumesList();
+                QList<Volume*> volumes = m_2DViewer->getMainInput()->getStudy()->getVolumesList();
                 Volume* nextVolume = volumes.at(newLocation); // Volume must be found in the list.
                 QViewerCommand* command;
                 if (nextVolume->getNumberOfSlicesPerPhase() > 1)
