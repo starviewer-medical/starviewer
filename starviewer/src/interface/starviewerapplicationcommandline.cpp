@@ -14,125 +14,120 @@
 
 #include "starviewerapplicationcommandline.h"
 
-#include "applicationcommandlineoptions.h"
 #include "logging.h"
 #include "starviewerapplication.h"
 
-#ifndef STARVIEWER_LITE
-#include "commandlineoption.h"
-#endif
-
 namespace udg {
 
-const QString StarviewerApplicationCommandLine::accessionNumberOption("accessionnumber");
+namespace {
 
-ApplicationCommandLineOptions StarviewerApplicationCommandLine::getStarviewerApplicationCommandLineOptions()
-{
-    ApplicationCommandLineOptions starviewerCommandLineOptions(ApplicationNameString);
+const QString StudyInstanceUidOption("studyinstanceuid");
+const QString AccessionNumberOption("accessionnumber");
 
-    // Configurem les opcions que Starviewer accepta des de línia de comandes
-    #ifndef STARVIEWER_LITE
-    // Opció no disponible Starviewer Lite
-    starviewerCommandLineOptions.addOption(CommandLineOption(accessionNumberOption, true, QObject::tr("Retrieve the study with the given accession number from the query default PACS.")));
-    #endif
-
-    return starviewerCommandLineOptions;
 }
 
-bool StarviewerApplicationCommandLine::parse(QStringList argumentsList, QString &errorInvalidCommanLineArguments)
+StarviewerApplicationCommandLine::StarviewerApplicationCommandLine(QObject *parent)
+    : QObject(parent)
 {
-    ApplicationCommandLineOptions commandLineOptions = getStarviewerApplicationCommandLineOptions();
-    bool ok = commandLineOptions.parseArgumentList(argumentsList);
+    m_parser.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
+    m_parser.setApplicationDescription(ApplicationNameString);
 
-    if (ok)
-    {
-        errorInvalidCommanLineArguments = "";
-    }
-    else
-    {
-        errorInvalidCommanLineArguments = commandLineOptions.getParserErrorMessage();
-    }
+#ifndef STARVIEWER_LITE
+    QCommandLineOption studyInstanceUidOption(StudyInstanceUidOption, tr("Retrieve the study with the given Study Instance UID from the query default PACS."),
+                                              "studyInstanceUid");
+    m_parser.addOption(studyInstanceUidOption);
 
-    return ok;
+    // Starviewer Lite can't connect to PACS so it won't have these options
+    QCommandLineOption accessionNumberOption(AccessionNumberOption, tr("Retrieve the study with the given Accession Number from the query default PACS."),
+                                             "accessionNumber");
+    m_parser.addOption(accessionNumberOption);
+#endif
 }
 
-bool StarviewerApplicationCommandLine::parseAndRun(const QString &argumentsListAsQString, QString &errorInvalidCommanLineArguments)
+const QCommandLineParser& StarviewerApplicationCommandLine::getStarviewerApplicationCommandLineParser() const
 {
-    return parseAndRun(argumentsListAsQString.split(";"), errorInvalidCommanLineArguments);
+    return m_parser;
 }
 
-bool StarviewerApplicationCommandLine::parseAndRun(const QString &argumentsListAsQString)
+bool StarviewerApplicationCommandLine::parse(QStringList arguments, QString &errorText)
 {
-    QString errorInvalidCommanLineArguments;
-    bool ok;
-
-    ok = parseAndRun(argumentsListAsQString, errorInvalidCommanLineArguments);
-
-    if (!ok)
+    if (m_parser.parse(arguments))
     {
-        ERROR_LOG("Arguments de linia de comandes invalids: " + errorInvalidCommanLineArguments);
-    }
-
-    return ok;
-}
-
-bool StarviewerApplicationCommandLine::parseAndRun(QStringList arguments, QString &errorInvalidCommanLineArguments)
-{
-    ApplicationCommandLineOptions commandLineOptions = getStarviewerApplicationCommandLineOptions();
-
-    if (commandLineOptions.parseArgumentList(arguments))
-    {
-        if (commandLineOptions.getNumberOfParsedOptions() == 0)
-        {
-            // Vol dir que han executat una nova instància del Starviewer que ha detectat que hi havia una altra instància executant-se
-            // i ens ha enviat un missatge en blanc perquè obrim un nova finestra d'Starviewer
-            QPair<StarviewerCommandLineOption, QString> commandLineOptionValue(openBlankWindow, "");
-            AddOptionToCommandLineOptionListToProcess(commandLineOptionValue);
-        }
-        else
-        {
-            if (commandLineOptions.isSet(accessionNumberOption))
-            {
-                QPair<StarviewerCommandLineOption, QString>
-                    commandLineOptionValue(retrieveStudyFromAccessioNumber, commandLineOptions.getOptionArgument(accessionNumberOption));
-
-                AddOptionToCommandLineOptionListToProcess(commandLineOptionValue);
-            }
-        }
-
-        emit newOptionsToRun();
-        errorInvalidCommanLineArguments = "";
-
         return true;
     }
     else
     {
-        errorInvalidCommanLineArguments = commandLineOptions.getParserErrorMessage();
+        errorText = m_parser.errorText();
         return false;
     }
 }
 
-bool StarviewerApplicationCommandLine::takeOptionToRun(QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption, QString> &optionValue)
+bool StarviewerApplicationCommandLine::parseAndRun(QStringList arguments, QString &errorText)
 {
-    bool optionValueTaken = false;
+    if (m_parser.parse(arguments))
+    {
+        if (m_parser.isSet(StudyInstanceUidOption))
+        {
+            addOptionToListToProcess(qMakePair(RetrieveStudyByUid, m_parser.value(StudyInstanceUidOption)));
+        }
+        else if (m_parser.isSet(AccessionNumberOption))
+        {
+            addOptionToListToProcess(qMakePair(RetrieveStudyByAccessionNumber, m_parser.value(AccessionNumberOption)));
+        }
+        else // no option
+        {
+            addOptionToListToProcess(qMakePair(OpenBlankWindow, QString()));
+        }
 
-    m_mutexCommandLineOptionListToProcess.lock();
+        emit newOptionsToRun();
+        return true;
+    }
+    else
+    {
+        errorText = m_parser.errorText();
+        return false;
+    }
+}
+
+bool StarviewerApplicationCommandLine::parseAndRun(const QString &arguments, QString &errorText)
+{
+    return parseAndRun(arguments.split(";"), errorText);
+}
+
+bool StarviewerApplicationCommandLine::takeOptionToRun(QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption, QString> &optionAndValue)
+{
+    QMutexLocker locker(&m_mutexCommandLineOptionListToProcess);
+
     if (!m_commandLineOptionListToProcess.isEmpty())
     {
-        optionValue = m_commandLineOptionListToProcess.takeFirst();
-
-        optionValueTaken = true;
+        optionAndValue = m_commandLineOptionListToProcess.takeFirst();
+        return true;
     }
-    m_mutexCommandLineOptionListToProcess.unlock();
-
-    return optionValueTaken;
+    else
+    {
+        return false;
+    }
 }
 
-void StarviewerApplicationCommandLine::AddOptionToCommandLineOptionListToProcess(QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption,
-                                                                                 QString> optionValue)
+bool StarviewerApplicationCommandLine::parseAndRun(const QString &arguments)
 {
-    m_mutexCommandLineOptionListToProcess.lock();
-    m_commandLineOptionListToProcess.append(optionValue);
-    m_mutexCommandLineOptionListToProcess.unlock();
+    QString errorText;
+
+    if (parseAndRun(arguments, errorText))
+    {
+        return true;
+    }
+    else
+    {
+        ERROR_LOG("Invalid command line arguments: " + errorText);
+        return false;
+    }
 }
+
+void StarviewerApplicationCommandLine::addOptionToListToProcess(QPair<StarviewerCommandLineOption, QString> optionAndValue)
+{
+    QMutexLocker locker(&m_mutexCommandLineOptionListToProcess);
+    m_commandLineOptionListToProcess.append(optionAndValue);
+}
+
 }

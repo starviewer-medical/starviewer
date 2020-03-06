@@ -37,6 +37,9 @@ public:
     QueryScreen(QWidget *parent = 0);
     ~QueryScreen();
 
+    // TODO Ugly shortcut for #2643. Major refactoring needed to clean this (see #2764).
+    RISRequestManager* getRISRequestManager() const;
+
     /// Descarrega l'estudi sol·licitat en el PACS Indicat.
     /// Mitjançant signal s'indica l'estat del la descarregar
     ///     signal: studyRetrieveStarted(QString studyInstanceUID) -> Indica que ha començat la descàrrega de l'estudi

@@ -290,7 +290,6 @@ HEADERS += extensionfactory.h \
     slicingwheeltool.h \
     slicingmousetool.h \
     qmessageboxautoclose.h \
-    commandlineoption.h \
     applicationversiontest.h \
     imageoverlayregionfinder.h \
     systeminformation.h \
@@ -668,7 +667,6 @@ SOURCES += extensionmediator.cpp \
     slicingwheeltool.cpp \
     slicingmousetool.cpp \
     qmessageboxautoclose.cpp \
-    commandlineoption.cpp \
     applicationversiontest.cpp \
     imageoverlayregionfinder.cpp \
     systeminformation.cpp \

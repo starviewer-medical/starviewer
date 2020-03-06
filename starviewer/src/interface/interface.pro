@@ -17,7 +17,6 @@ HEADERS += qapplicationmainwindow.h \
            extensionworkspace.h \
            qconfigurationdialog.h \
            starviewerapplicationcommandline.h \
-           applicationcommandlineoptions.h \
            qaboutdialog.h \
            qlicensedialog.h
 
@@ -28,7 +27,6 @@ SOURCES += qapplicationmainwindow.cpp \
            extensionworkspace.cpp \
            qconfigurationdialog.cpp \
            starviewerapplicationcommandline.cpp \
-           applicationcommandlineoptions.cpp \
            qaboutdialog.cpp \
            qlicensedialog.cpp
 

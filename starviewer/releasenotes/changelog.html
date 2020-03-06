@@ -72,7 +72,7 @@
                 <li>S'agrupen tots els botons d'eines de mesura (ROIs, distàncies i angles) en un de sol per poder adaptar la finestra a pantalles més petites.</li>
                 <li>S'afegeixen variants de les eines de desplaçament i contrast que funcionen amb el botó esquerre. <span class="ticket">1215, 2139</span></li>
                 <li>S'afegeix una opció perquè el ratolí faci la volta i torni al principi mentre es fa servir l'eina de canvi de tall.</li>
-                <li>S'afegeix la possibilitat de canviar de sèrie amb la roda quan s'arriba al final d'una sèrie. <span class="ticket">2133</span></li>
+                <li>S'afegeix la possibilitat de canviar de sèrie amb la roda quan s'arriba al final d'una sèrie. <span class="ticket">2133, 2815</span></li>
                 <li>Reconstruccions de sèries amb fases. <span class="ticket">1247</span></li>
                 <li>Nova interfície per definir el gruix de tall en un menú desplegable per poder ser més ampla i per poder-lo activar i desactivar amb un sol clic.</li>
                 <li>El gruix de tall es defineix en mm en lloc de talls.</li>
@@ -91,6 +91,8 @@
                 <li>Millora de la fluïdesa de les eines de canvi de tall amb teclat i roda.</li>
                 <li>S'aconsegueix un desplaçament més fi amb algunes rodes i ratolins tàctils.</li>
                 <li>Millora de la usabilitat de l'eina de cercle.</li>
+                <li>Millora en l'ordenació d'imatges per fer-la totalment determinista i tractant correctament tots els casos, tant els habituals com els més
+                    rars, oferint una experiència d'usuari molt més satisfactòria. <span class="ticket">2152, 741, 2028, 2700</span></li>
                 <li>Es mostren traduïts alguns textos que fins ara sortien en anglès. <span class="ticket">1730</span></li>
                 <li>Millora del tractament d'imatges multiframe. <span class="ticket">2114</span></li>
                 <li>Millora de la qualitat amb què es visualitzen les imatges de poca resolució.</li>
@@ -109,20 +111,19 @@
                 <li>Se soluciona un problema que feia que en alguns casos es desactivés el gruix de tall en canviar entre projeccions axial, sagital o coronal. <span class="ticket">2009</span></li>
                 <li>Es resol un problema pel qual no es calculava el SUV en algunes images de PET d'un centre específic. <span class="ticket">2146</span></li>
                 <li>Se soluciona un problema a Mac que feia que si es mostrava una finestra de missatge a l'inici quedés amagada darrere de la pantalla de presentació. <span class="ticket">2127</span></li>
-                <li>Se solucionen diversos problemes d'ordenació d'imatges que afectaven sobretot sèries amb múltiples adquisicions o amb stacks paral·lels, i que
-                    provocaven que els talls sortissin en ordre invers o barrejats. <span class="ticket">2152, 741, 2028, 2700</span></li>
             </ul>
         </div>
     </div>
     <div class="majorRelease">
         <div class="version">
             <span class="versionNumber">Starviewer 1.0.0</span>
-            <span class="versionDate">(Publicat el 2 de juliol de 2019)</span>
+            <span class="versionDate">(Publicat el 21 de febrer de 2020)</span>
         </div>
         <div class="new">
             <ul>
                 <li>Es pot ajustar el cremat d'una visualització fusionada fent servir l'eina de contrast mentre es manté la tecla de majúscules. <span class="ticket">2110</span></li>
                 <li>S'afegeix una drecera de teclat per mostrar i amagar les anotacions textuals dels visors. <span class="ticket">2726</span></li>
+                <li>S'afegeix una nova opció de línia d'ordres per descarregar un estudi per Study Instance UID. <span class="ticket">2643</span></li>
                 <li>Marcatge CE com a dispositiu mèdic.</li>
                 <li>S'afegeixen detalls pel marcatge CE: informació al quadre "Quant a", avisos d'ús, etc.</li>
                 <li>S'afegeixen versions traduïdes dels manuals.</li>
@@ -131,7 +132,15 @@
         <div class="improved">
             <ul>
                 <li>Millora de les eines de finestra (brillantor i contrast) per permetre finestres més estretes (útil per a alguns PETs sense correcció d'atenuació). <span class="ticket">2625</span></li>
+                <li>Es permet triar un màxim d'un visor a les opcions de distribució dels visors 2D. <span class="ticket">2777</span></li>
+                <li>La navegació d'imatges amb + i - ara passa per totes les imatges de l'estudi en comptes de les del pacient. <span class="ticket">2778</span></li>
                 <li>S'afegeix informació addicional als tests de diagnosi.</li>
+            </ul>
+        </div>
+        <div class="fixed">
+            <ul>
+                <li>Se solucionen diversos problemes d'ordenació d'imatges que afectaven sobretot sèries amb múltiples adquisicions o amb stacks paral·lels.
+                    <span class="ticket">2152</span></li>
             </ul>
         </div>
     </div>

@@ -1,6 +1,9 @@
 *~
 
 # Shadow build directories
-build-starviewer*
+prefix.sh
+starviewer.deb
+sdk-download*
+sdk-build*
 starviewer-build*
-
+build-starviewer*
