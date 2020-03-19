@@ -14,8 +14,10 @@
 
 #include "roidata.h"
 
-#include <QtCore/qmath.h>
 #include <cfloat>
+
+#include <QtCore/qmath.h>
+#include <QList>
 
 namespace udg {
 
