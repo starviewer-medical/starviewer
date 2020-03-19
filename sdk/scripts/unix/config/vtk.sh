@@ -18,6 +18,7 @@ fi
 CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
                -DCMAKE_INSTALL_PREFIX:PATH=$SDK_INSTALL_PREFIX \
                -DCMAKE_PREFIX_PATH:PATH=$QTDIR \
+               -DBUILD_TESTING:BOOL=FALSE \
                -DModule_vtkGUISupportQt:BOOL=TRUE \
                -DModule_vtkGUISupportQtOpenGL:BOOL=TRUE \
                -DModule_vtkGUISupportQtSQL:BOOL=TRUE \
