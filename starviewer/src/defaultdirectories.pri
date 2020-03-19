@@ -9,11 +9,16 @@ isEmpty(SDK_INSTALL_PREFIX){
     win32:contains(QMAKE_TARGET.arch, x86_64):SDK_INSTALL_PREFIX = $$(USERPROFILE)/starviewer-sdk-0.15/64
 }
 
+exists(/etc/debian_version):linux:LIB64 = lib/x86_64-linux-gnu  # Debian-based systems
+!exists(/etc/debian_version):linux:LIB64 = lib64                # Other systems
+macx:LIB64 = lib
+
+
 # DCMTK Libraries
 
 DCMTKLIBDIR = $$(DCMTKLIBDIR)
 isEmpty(DCMTKLIBDIR){
-    unix:DCMTKLIBDIR = $$SDK_INSTALL_PREFIX/lib
+    unix:DCMTKLIBDIR = $$SDK_INSTALL_PREFIX/$$LIB64
     win32:DCMTKLIBDIR = $$SDK_INSTALL_PREFIX/dcmtk/3.6.5/lib
 }
 DCMTKINCLUDEDIR = $$(DCMTKINCLUDEDIR)
@@ -27,7 +32,7 @@ isEmpty(DCMTKINCLUDEDIR){
 
 VTKLIBDIR = $$(VTKLIBDIR)
 isEmpty(VTKLIBDIR){
-    unix:VTKLIBDIR = $$SDK_INSTALL_PREFIX/lib
+    unix:VTKLIBDIR = $$SDK_INSTALL_PREFIX/$$LIB64
     win32:VTKLIBDIR = $$SDK_INSTALL_PREFIX/VTK/8.2.0/lib
 }
 VTKINCLUDEDIR = $$(VTKINCLUDEDIR)
@@ -67,9 +72,7 @@ isEmpty(GDCMINCLUDEDIR){
 
 THREADWEAVERLIBDIR = $$(THREADWEAVERLIBDIR)
 isEmpty(THREADWEAVERLIBDIR){
-    exists(/etc/debian_version):unix:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/lib/x86_64-linux-gnu # Debian-based systems
-    !exists(/etc/debian_version):unix:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/lib64               # Other systems
-    macx:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/lib
+    unix:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/$$LIB64
     win32:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/ThreadWeaver/5.64.0/lib
 }
 THREADWEAVERINCLUDEDIR = $$(THREADWEAVERINCLUDEDIR)
