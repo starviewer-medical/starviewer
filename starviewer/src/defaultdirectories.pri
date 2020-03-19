@@ -1,10 +1,9 @@
 # Directoris per defecte de les diferents llibreries. Si vols que siguin uns altres, simplement has de declarar
 # com a variables de sistema les que vulguis substituir. Ex.: export ITKLIBDIR=/usr/lib64/InsightToolkit
 
-# Default install prefix is /usr/local
 SDK_INSTALL_PREFIX = $$(SDK_INSTALL_PREFIX)
 isEmpty(SDK_INSTALL_PREFIX){
-    unix:SDK_INSTALL_PREFIX = $$(HOME)/starviewer-sdk-0.15/usr/local
+    unix:SDK_INSTALL_PREFIX = $$PWD/../../sdk-build
     win32:SDK_INSTALL_PREFIX = $$(USERPROFILE)/starviewer-sdk-0.15/32
     win32:contains(QMAKE_TARGET.arch, x86_64):SDK_INSTALL_PREFIX = $$(USERPROFILE)/starviewer-sdk-0.15/64
 }
