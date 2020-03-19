@@ -36,9 +36,7 @@ unix {
     LIBS += -lz
 }
 
-unix:!macx {
-    LIBS += -lwrap -lssl
-}
+linux:LIBS += -lssl
 
 win32 {
     LIBS += -lNetAPI32 -lWSock32 -lSnmpAPI
