@@ -15,6 +15,7 @@ VTKLIBS = \
     vtkFiltersGeneral \
     vtkFiltersSources \
     vtkGUISupportQt \
+    vtkGUISupportQtOpenGL \
     vtkImagingCore \
     vtkImagingGeneral \
     vtkImagingHybrid \

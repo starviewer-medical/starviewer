@@ -51,7 +51,7 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkCamera.h>
 #include <vtkPropPicker.h>
-#include <QVTKWidget.h>
+#include <QVTKWidget2.h>
 #include <vtkWindowToImageFilter.h>
 #include <vtkImageProperty.h>
 #include <vtkImageSlice.h>
@@ -549,9 +549,9 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
         return;
     }
 
-    // Cal que primer posem l'estatus en VisualizingVolume per tal de que el QVTKWidget pugui obtenir el tamany que li correspon
+    // Cal que primer posem l'estatus en VisualizingVolume per tal de que el QVTKWidget2 pugui obtenir el tamany que li correspon
     // si no, ens podem trobar que encara no s'hagi mostrat i tingui tamanys no definits fent que la imatge no es mostri completa #1434
-    // TODO: Caldria que fitRenderingIntoViewport() fos indepdent de si s'està visualitzant o no el QVTKWidget
+    // TODO: Caldria que fitRenderingIntoViewport() fos indepdent de si s'està visualitzant o no el QVTKWidget2
     if (setViewerStatusToVisualizingVolume)
     {
         setViewerStatus(VisualizingVolume);
