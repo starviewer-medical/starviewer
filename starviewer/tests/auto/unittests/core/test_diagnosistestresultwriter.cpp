@@ -78,7 +78,7 @@ public:
         return DiagnosisTestResult();
     }
 
-    QString getDescription()
+    QString getDescription() const override
     {
         return m_description;
     }

@@ -14,20 +14,86 @@
 
 #include "qdiagnosistest.h"
 
-#include <QTableWidget>
-#include <QTableWidgetItem>
-#include <QThread>
-#include <QMovie>
-#include <QFileDialog>
-#include <QScrollBar>
-#include <QWebEngineHistory>
-
-#include "diagnosistestfactory.h"
 #include "diagnosistest.h"
-#include "rundiagnosistest.h"
+#include "diagnosistestfactory.h"
 #include "diagnosistestresultwriter.h"
+#include "machineinformation.h"
+#include "qdiagnosistestsresultsitem.h"
+#include "rundiagnosistest.h"
+#include "screenmanager.h"
+#include "starviewerapplication.h"
+#include "systeminformation.h"
+
+#include <QFileDialog>
+#include <QMovie>
+#include <QScrollBar>
+#include <QStyle>
+#include <QThread>
 
 namespace udg {
+
+namespace {
+
+QStringList getSystemInformation()
+{
+    std::unique_ptr<SystemInformation> systemInformation(SystemInformation::newInstance());
+    QStringList systemDetails{QObject::tr("Operating system: %1").arg(systemInformation->getOperatingSystemAsString())};
+    QString desktopComposition(QObject::tr("Desktop composition: %1"));
+
+    if (systemInformation->isDesktopCompositionAvailable())
+    {
+        if (systemInformation->isDesktopCompositionEnabled())
+        {
+            desktopComposition = desktopComposition.arg(QObject::tr("Available and enabled"));
+        }
+        else
+        {
+            desktopComposition = desktopComposition.arg(QObject::tr("Available but disabled"));
+        }
+    }
+    else
+    {
+        desktopComposition = desktopComposition.arg(QObject::tr("Not available"));
+    }
+
+    systemDetails << desktopComposition
+                  << QObject::tr("RAM memory: %1 MB").arg(systemInformation->getRAMTotalAmount());
+    QStringList cpus;
+
+    foreach (unsigned int frequency, systemInformation->getCPUFrequencies())
+    {
+        cpus.append(QObject::tr("%1 MHz").arg(frequency));
+    }
+
+    systemDetails << QObject::tr("CPU clock speed: %1").arg(cpus.join(", "))
+                  << QObject::tr("Number of cores: %1").arg(systemInformation->getCPUNumberOfCores());
+    QStringList gpuModels = systemInformation->getGPUModel();
+    QList<unsigned int> gpuRams = systemInformation->getGPURAM();
+    QStringList gpuDrivers = systemInformation->getGPUDriverVersion();
+
+    for (int i = 0; i < gpuRams.size(); i++)
+    {
+        systemDetails.append(QObject::tr("GPU %1: %2 %3 MB. Driver: %4.").arg(i + 1).arg(gpuModels.at(i)).arg(gpuRams.at(i)).arg(gpuDrivers.at(i)));
+    }
+
+    systemDetails.append(QObject::tr("OpenGL: %1").arg(systemInformation->getGPUOpenGLVersion()));
+    ScreenManager screenManager;
+    ScreenLayout layout = screenManager.getScreenLayout();
+    int primaryID = layout.getPrimaryScreenID();
+
+    for (int i = 0; i < layout.getNumberOfScreens(); i++)
+    {
+        QSize size = layout.getScreen(i).getGeometry().size();
+        systemDetails.append(QObject::tr("Screen %1: %2×%3%4").arg(i + 1).arg(size.width()).arg(size.height())
+                                                              .arg(i == primaryID ? QObject::tr(" Primary") : QString()));
+    }
+
+    systemDetails.append(QObject::tr("MAC address: %1").arg(MachineInformation().getMACAddress()));
+
+    return systemDetails;
+}
+
+}
 
 QDiagnosisTest::QDiagnosisTest(QWidget *parent)
  : QDialog(parent)
@@ -49,8 +115,8 @@ QDiagnosisTest::QDiagnosisTest(QWidget *parent)
 
     //Treiem icona amb ? que apareix al costat del botó de tancar
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    
-    m_diagnosisTestsResults->setContextMenuPolicy(Qt::NoContextMenu);
+
+    m_diagnosisTestsResultsScrollArea->verticalScrollBar()->installEventFilter(new ScrollBarEventFilter(this));
 }
 
 QDiagnosisTest::~QDiagnosisTest()
@@ -83,8 +149,6 @@ void QDiagnosisTest::createConnections()
     connect(this, SIGNAL(start()), m_runDiagnosisTest, SLOT(run()));
     connect(m_runDiagnosisTest, SIGNAL(runningDiagnosisTest(DiagnosisTest*)), this, SLOT(updateRunningDiagnosisTestProgress(DiagnosisTest*)));
     connect(m_runDiagnosisTest, SIGNAL(finished()), this, SLOT(finishedRunningDiagnosisTest()));
-
-    connect(m_diagnosisTestsResults, &QWebEngineView::loadFinished, [this] { m_diagnosisTestsResults->history()->clear(); });
 }
 
 void QDiagnosisTest::runDiagnosisTest()
@@ -112,41 +176,101 @@ void QDiagnosisTest::finishedRunningDiagnosisTest()
 
     if (allDiagnosisTestResultAreOk())
     {
-        m_allTestSuccededFrame->setVisible(true);
+        m_resultsIconLabel->setPixmap(QPixmap(":/images/icons/emblem-success.svg"));
+        m_resultsTitleLabel->setText(tr("All tests completed successfully"));
+        m_buttonsAndScrollAreaWidget->hide();
     }
     else
     {
-        m_someTestsFailedFrame->setVisible(true);
-        m_diagnosisTestsResults->setVisible(true);
+        m_resultsIconLabel->setPixmap(QPixmap(":/images/icons/emblem-warning.svg"));
+        m_resultsTitleLabel->setText(tr("Some tests have failed"));
+        m_viewTestsLabel->hide();
+        m_correctPushButton->setChecked(false);
     }
 
-    m_progressBarFrame->setVisible(false);
-    m_closeButtonFrame->setVisible(true);
-
-    this->adjustSize();
+    m_progressBarWidget->hide();
+    m_resultsWidget->show();
+    this->resize(640, 540); // hardcoded default size to show results (don't worry, used only here)
 }
 
 void QDiagnosisTest::viewTestsLabelClicked()
 {
-    m_diagnosisTestsResults->page()->runJavaScript("showAllTests(); null");
-    m_diagnosisTestsResults->setVisible(true);
-    m_viewTestsLabel->setVisible(false);
-    this->adjustSize();
+    m_buttonsAndScrollAreaWidget->show();
+    m_viewTestsLabel->show();
 }
 
 void QDiagnosisTest::fillDiagnosisTestsResultTable()
 {
-    QString html = m_diagnosisTestResultWriter.getAsQString();
-    m_diagnosisTestsResults->page()->setHtml(html);
+    // Information
+    QStringList testDetails{QString("%1 %2").arg(ApplicationNameString).arg(StarviewerVersionString),
+                            tr("Timestamp: %1").arg(QDateTime::currentDateTime().toString(Qt::ISODate))};
+    QDiagnosisTestsResultsItem *item = new QDiagnosisTestsResultsItem(tr("Test details"), testDetails);
+    connect(m_informationPushButton, &QPushButton::toggled, item, &QWidget::setVisible);
+    m_diagnosisTestsResults->layout()->addWidget(item);
+
+    item = new QDiagnosisTestsResultsItem(tr("System information"), getSystemInformation());
+    connect(m_informationPushButton, &QPushButton::toggled, item, &QWidget::setVisible);
+    m_diagnosisTestsResults->layout()->addWidget(item);
+
+    m_informationPushButton->setText(m_informationPushButton->text().arg(2));
+
+    // Errors
+    foreach (auto pair, m_errorExecutedDiagnosisTests)
+    {
+        item = new QDiagnosisTestsResultsItem(*pair.first, pair.second);
+        connect(m_errorsPushButton, &QPushButton::toggled, item, &QWidget::setVisible);
+        m_diagnosisTestsResults->layout()->addWidget(item);
+    }
+
+    if (m_errorExecutedDiagnosisTests.isEmpty())
+    {
+        m_errorsPushButton->hide();
+    }
+    else
+    {
+        m_errorsPushButton->setText(m_errorsPushButton->text().arg(m_errorExecutedDiagnosisTests.size()));
+    }
+
+    // Warnings
+    foreach (auto pair, m_warningExecutedDiagnosisTests)
+    {
+        item = new QDiagnosisTestsResultsItem(*pair.first, pair.second);
+        connect(m_warningsPushButton, &QPushButton::toggled, item, &QWidget::setVisible);
+        m_diagnosisTestsResults->layout()->addWidget(item);
+    }
+
+    if (m_warningExecutedDiagnosisTests.isEmpty())
+    {
+        m_warningsPushButton->hide();
+    }
+    else
+    {
+        m_warningsPushButton->setText(m_warningsPushButton->text().arg(m_warningExecutedDiagnosisTests.size()));
+    }
+
+    // Correct
+    foreach (auto pair, m_okExecutedDiagnosisTests)
+    {
+        item = new QDiagnosisTestsResultsItem(*pair.first, pair.second);
+        connect(m_correctPushButton, &QPushButton::toggled, item, &QWidget::setVisible);
+        m_diagnosisTestsResults->layout()->addWidget(item);
+    }
+
+    if (m_okExecutedDiagnosisTests.isEmpty())
+    {
+        m_correctPushButton->hide();
+    }
+    else
+    {
+        m_correctPushButton->setText(m_correctPushButton->text().arg(m_okExecutedDiagnosisTests.size()));
+    }
+
+    m_diagnosisTestsResults->layout()->addItem(new QSpacerItem(0, 0, QSizePolicy::Preferred, QSizePolicy::Expanding));
 }
 
 void QDiagnosisTest::updateWidgetToRunDiagnosisTest()
 {
-    m_diagnosisTestsResults->setVisible(false);
-    m_allTestSuccededFrame->setVisible(false);
-    m_closeButtonFrame->setVisible(false);
-    m_someTestsFailedFrame->setVisible(false);
-
+    m_resultsWidget->hide();
     this->adjustSize();
 }
 
@@ -198,6 +322,25 @@ void QDiagnosisTest::groupDiagnosisTestFromRunDiagnosisTestByState()
             m_errorExecutedDiagnosisTests.append(runDiagnosisTest);
         }
     }
+}
+
+QDiagnosisTest::ScrollBarEventFilter::ScrollBarEventFilter(QDiagnosisTest *parent)
+    : QObject(parent), m_diagnosisTest(parent)
+{
+}
+
+bool QDiagnosisTest::ScrollBarEventFilter::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::Show)
+    {
+        m_diagnosisTest->m_diagnosisTestsResults->layout()->setContentsMargins(0, 0, m_diagnosisTest->style()->pixelMetric(QStyle::PM_LayoutRightMargin), 0);
+    }
+    else if (event->type() == QEvent::Hide)
+    {
+        m_diagnosisTest->m_diagnosisTestsResults->layout()->setContentsMargins(0, 0, 0, 0);
+    }
+
+    return QObject::eventFilter(watched, event);
 }
 
 }

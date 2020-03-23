@@ -12,37 +12,29 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGPORTINUSETEST_H
-#define UDGPORTINUSETEST_H
+#ifndef UDG_QDIAGNOSISTESTSRESULTSITEM_H
+#define UDG_QDIAGNOSISTESTSRESULTSITEM_H
 
-#include "diagnosistest.h"
-#include "diagnosistestresult.h"
-#include "diagnosistestfactoryregister.h"
+#include "ui_qdiagnosistestsresultsitembase.h"
 
 namespace udg {
 
-class PortInUse;
+class DiagnosisTest;
+class DiagnosisTestResult;
 
-class PortInUseTest : public DiagnosisTest {
-Q_OBJECT
+class QDiagnosisTestsResultsItem : public QWidget, private Ui::QDiagnosisTestsResultsItemBase
+{
+    Q_OBJECT
+
 public:
-    virtual ~PortInUseTest();
+    QDiagnosisTestsResultsItem(const DiagnosisTest &test, const DiagnosisTestResult &result, QWidget *parent = nullptr);
+    QDiagnosisTestsResultsItem(const QString &title, const QStringList &content, QWidget *parent = nullptr);
 
-    DiagnosisTestResult run();
+private:
+    void init();
 
-    ///Retorna descripcio del test
-    virtual QString getDescription() const override;
-
-protected:
-    PortInUseTest(QObject *parent = 0);
-    virtual PortInUse* createPortInUse();
-    virtual void checkIfPortIsInUse(PortInUse *portInUse);
-
-protected:
-    /// Port que es comprovarà si està en ús.
-    int m_port;
 };
 
-} // end namespace udg
+} // namespace udg
 
-#endif
+#endif // UDG_QDIAGNOSISTESTSRESULTSITEM_H

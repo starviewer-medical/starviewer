@@ -70,7 +70,7 @@ DiagnosisTestResult EchoToPACSTest::run()
     return testResults;
 }
 
-QString EchoToPACSTest::getDescription()
+QString EchoToPACSTest::getDescription() const
 {
     return tr("All PACS are correctly configured");
 }

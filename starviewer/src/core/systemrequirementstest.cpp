@@ -278,7 +278,7 @@ DiagnosisTestResult SystemRequirementsTest::run()
     return result;
 }
 
-QString SystemRequirementsTest::getDescription()
+QString SystemRequirementsTest::getDescription() const
 {
     return tr("Hardware meets %1's minimum system requirements").arg(ApplicationNameString);
 }

@@ -4,6 +4,7 @@
 # L'objectiu és una biblioteca:
 FORMS += qlogviewerbase.ui \
     qcustomwindowleveldialogbase.ui \
+    qdiagnosistestsresultsitembase.ui \
     qtransferfunctioneditorbyvaluesbase.ui \
     qtransferfunctionintervaleditorbase.ui \
     qcinecontrollerbase.ui \
@@ -31,6 +32,7 @@ TRANSLATIONS += core_ca_ES.ts \
     core_en_GB.ts
 HEADERS += extensionfactory.h \
     genericfactory.h \
+    qdiagnosistestsresultsitem.h \
     singleton.h \
     genericsingletonfactoryregister.h \
     extensionfactoryregister.h \
@@ -431,6 +433,7 @@ SOURCES += extensionmediator.cpp \
     mathtools.cpp \
     harddiskinformation.cpp \
     logging.cpp \
+    qdiagnosistestsresultsitem.cpp \
     volume.cpp \
     volumehelper.cpp \
     volumereader.cpp \

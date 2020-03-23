@@ -31,9 +31,8 @@ class DiagnosisTest;
 class RunDiagnosisTest;
 
 /**
-    Aquest classe és l'encarregada de realitzar el dicomdump de la imatge que s'està visualizant per part de l'usuari.
-    Totes les imatges tenen una sèrie de tags que es descodifiquen en aquesta classe i es visualitzen en forma d'arbre mitjançant un QTreeWidget
-  */
+ * @brief The QDiagnosisTest class runs all the diagnosis tests and shows their results.
+ */
 class QDiagnosisTest : public QDialog, private Ui::QDiagnosisTestBase {
 Q_OBJECT
 public:
@@ -85,6 +84,21 @@ private:
 
     /// Retorna els testos a executar
     QList<DiagnosisTest*> getDiagnosisTestsToRun() const;
+
+private:
+    /// This class is used to detect when the scroll bar appears in the list of tests and react accordingly.
+    class ScrollBarEventFilter : public QObject
+    {   // Q_OBJECT macro not needed
+    public:
+        explicit ScrollBarEventFilter(QDiagnosisTest *parent);
+
+    protected:
+        bool eventFilter(QObject *watched, QEvent *event) override;
+
+    private:
+        QDiagnosisTest *m_diagnosisTest;
+
+    };
 
 private:
     RunDiagnosisTest *m_runDiagnosisTest;

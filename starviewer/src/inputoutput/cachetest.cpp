@@ -74,7 +74,7 @@ DiagnosisTestResult CacheTest::run()
     return problems;
 }
 
-QString CacheTest::getDescription()
+QString CacheTest::getDescription() const
 {
     return tr("%1 local database is correctly configured").arg(ApplicationNameString);
 }
