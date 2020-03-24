@@ -24,6 +24,7 @@
 #include "starviewerapplication.h"
 #include "systeminformation.h"
 
+#include <QDateTime>
 #include <QFileDialog>
 #include <QMovie>
 #include <QScrollBar>
@@ -170,8 +171,6 @@ void QDiagnosisTest::updateRunningDiagnosisTestProgress(DiagnosisTest * diagnosi
 void QDiagnosisTest::finishedRunningDiagnosisTest()
 {
     groupDiagnosisTestFromRunDiagnosisTestByState();
-    m_diagnosisTestResultWriter.setDiagnosisTests(m_errorExecutedDiagnosisTests + m_warningExecutedDiagnosisTests + m_okExecutedDiagnosisTests,
-                                                  std::move(QDateTime::currentDateTime()));
     fillDiagnosisTestsResultTable();
 
     if (allDiagnosisTestResultAreOk())
@@ -204,20 +203,29 @@ void QDiagnosisTest::fillDiagnosisTestsResultTable()
     // Information
     QStringList testDetails{QString("%1 %2").arg(ApplicationNameString).arg(StarviewerVersionString),
                             tr("Timestamp: %1").arg(QDateTime::currentDateTime().toString(Qt::ISODate))};
-    QDiagnosisTestsResultsItem *item = new QDiagnosisTestsResultsItem(tr("Test details"), testDetails);
-    connect(m_informationPushButton, &QPushButton::toggled, item, &QWidget::setVisible);
-    m_diagnosisTestsResults->layout()->addWidget(item);
+    m_informationItems << qMakePair(tr("Test details"), testDetails)
+                       << qMakePair(tr("System information"), getSystemInformation());
 
-    item = new QDiagnosisTestsResultsItem(tr("System information"), getSystemInformation());
-    connect(m_informationPushButton, &QPushButton::toggled, item, &QWidget::setVisible);
-    m_diagnosisTestsResults->layout()->addWidget(item);
+    foreach (auto pair, m_informationItems)
+    {
+        auto item = new QDiagnosisTestsResultsItem(pair.first, pair.second);
+        connect(m_informationPushButton, &QPushButton::toggled, item, &QWidget::setVisible);
+        m_diagnosisTestsResults->layout()->addWidget(item);
+    }
 
-    m_informationPushButton->setText(m_informationPushButton->text().arg(2));
+    if (m_informationItems.isEmpty())
+    {
+        m_informationPushButton->hide();
+    }
+    else
+    {
+        m_informationPushButton->setText(m_informationPushButton->text().arg(m_informationItems.size()));
+    }
 
     // Errors
     foreach (auto pair, m_errorExecutedDiagnosisTests)
     {
-        item = new QDiagnosisTestsResultsItem(*pair.first, pair.second);
+        auto item = new QDiagnosisTestsResultsItem(*pair.first, pair.second);
         connect(m_errorsPushButton, &QPushButton::toggled, item, &QWidget::setVisible);
         m_diagnosisTestsResults->layout()->addWidget(item);
     }
@@ -234,7 +242,7 @@ void QDiagnosisTest::fillDiagnosisTestsResultTable()
     // Warnings
     foreach (auto pair, m_warningExecutedDiagnosisTests)
     {
-        item = new QDiagnosisTestsResultsItem(*pair.first, pair.second);
+        auto item = new QDiagnosisTestsResultsItem(*pair.first, pair.second);
         connect(m_warningsPushButton, &QPushButton::toggled, item, &QWidget::setVisible);
         m_diagnosisTestsResults->layout()->addWidget(item);
     }
@@ -251,7 +259,7 @@ void QDiagnosisTest::fillDiagnosisTestsResultTable()
     // Correct
     foreach (auto pair, m_okExecutedDiagnosisTests)
     {
-        item = new QDiagnosisTestsResultsItem(*pair.first, pair.second);
+        auto item = new QDiagnosisTestsResultsItem(*pair.first, pair.second);
         connect(m_correctPushButton, &QPushButton::toggled, item, &QWidget::setVisible);
         m_diagnosisTestsResults->layout()->addWidget(item);
     }
@@ -276,11 +284,14 @@ void QDiagnosisTest::updateWidgetToRunDiagnosisTest()
 
 void QDiagnosisTest::saveDiagnosisTestResultsAsFile()
 {
-    QString pathFile = QFileDialog::getSaveFileName(this, tr("Save Diagnosis Tests Results"), QDir::homePath(), tr("HTML Files (*.html)"));
+    QString pathFile = QFileDialog::getSaveFileName(this, tr("Save diagnosis tests results"), QDir::homePath(), tr("JSON files (*.json)"));
 
     if (!pathFile.isEmpty())
     {
-        m_diagnosisTestResultWriter.write(pathFile);
+        DiagnosisTestResultWriter writer;
+        writer.setInformations(m_informationItems);
+        writer.setDiagnosisTests(m_errorExecutedDiagnosisTests + m_warningExecutedDiagnosisTests + m_okExecutedDiagnosisTests);
+        writer.write(pathFile);
     }
 }
 

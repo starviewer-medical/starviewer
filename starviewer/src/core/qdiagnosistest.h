@@ -21,7 +21,6 @@
 #include <QPair>
 
 #include "diagnosistestresult.h"
-#include "diagnosistestresultwriter.h"
 
 class QThread;
 
@@ -104,11 +103,11 @@ private:
     RunDiagnosisTest *m_runDiagnosisTest;
     QThread *m_threadRunningDiagnosisTest;
 
+    QList<QPair<QString, QStringList>> m_informationItems;
     QList<QPair<DiagnosisTest*, DiagnosisTestResult> > m_errorExecutedDiagnosisTests;
     QList<QPair<DiagnosisTest*, DiagnosisTestResult> > m_okExecutedDiagnosisTests;
     QList<QPair<DiagnosisTest*, DiagnosisTestResult> > m_warningExecutedDiagnosisTests;
 
-    DiagnosisTestResultWriter m_diagnosisTestResultWriter;
 };
 
 }
