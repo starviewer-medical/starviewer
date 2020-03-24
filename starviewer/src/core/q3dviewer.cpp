@@ -20,7 +20,7 @@
 #include "voilut.h"
 #include "volume.h"
 
-#include <QVTKWidget2.h>
+#include <QVTKOpenGLNativeWidget.h>
 #include <vtkActor.h>
 #include <vtkImageMarchingCubes.h>
 #include <vtkMatrix4x4.h>

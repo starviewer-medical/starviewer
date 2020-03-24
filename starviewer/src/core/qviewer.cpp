@@ -39,7 +39,7 @@
 #include <QScreen>
 
 // Include's vtk
-#include <QVTKWidget2.h>
+#include <QVTKOpenGLNativeWidget.h>
 #include <QVTKInteractor.h>
 #include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkRenderer.h>
@@ -61,7 +61,7 @@ QViewer::QViewer(QWidget *parent)
 {
     m_lastAngleDelta = QPoint();
     m_defaultFitIntoViewportMarginRate = 0.0;
-    m_vtkWidget = new QVTKWidget2(this);
+    m_vtkWidget = new QVTKOpenGLNativeWidget(this);
     m_vtkWidget->setFocusPolicy(Qt::WheelFocus);
     m_renderer = vtkRenderer::New();
 

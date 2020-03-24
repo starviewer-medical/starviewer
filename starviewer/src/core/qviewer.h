@@ -25,7 +25,7 @@
 
 // Fordward declarations
 class QStackedLayout;
-class QVTKWidget2;
+class QVTKOpenGLNativeWidget;
 class vtkCamera;
 class vtkRenderer;
 class vtkRenderWindow;
@@ -309,7 +309,7 @@ protected:
     Volume *m_mainVolume;
 
     /// El widget per poder mostrar una finestra vtk amb qt
-    QVTKWidget2 *m_vtkWidget;
+    QVTKOpenGLNativeWidget *m_vtkWidget;
 
     /// La llista de captures de pantalla
     QList<vtkImageData*> m_grabList;

@@ -3,7 +3,7 @@
 #include "abortrendercommand.h"
 #include "experimental3dvolume.h"
 
-#include <QVTKWidget2.h>
+#include <QVTKOpenGLNativeWidget.h>
 
 #include <vtkCamera.h>
 #include <vtkEncodedGradientEstimator.h>
@@ -94,7 +94,7 @@ void QExperimental3DViewer::setCamera(const Vector3 &position, const Vector3 &fo
 void QExperimental3DViewer::screenshot(const QString &fileName)
 {
     Q_ASSERT(0);
-    // Difficult to reimplement in this way when we transitioned from QVtkWidget to QVtkWidget2
+    // Difficult to reimplement in this way when we transitioned from QVtkWidget to QVTKOpenGLNativeWidget
 
 //    uchar *rawImage = reinterpret_cast<uchar*>(m_vtkWidget->cachedImage()->GetScalarPointer());
 //    QImage image(rawImage, m_vtkWidget->width(), m_vtkWidget->height(), QImage::Format_RGB888);
