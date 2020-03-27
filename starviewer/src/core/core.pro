@@ -831,7 +831,6 @@ QT += xml \
     qml \
     quick \
     quickwidgets \
-    concurrent \
-    webenginewidgets
+    concurrent
 
 INCLUDEPATH += ../thirdparty/easylogging++

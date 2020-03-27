@@ -55,7 +55,7 @@ include(../thirdparty/qtsingleapplication/src/qtsingleapplication.pri)
 
 include(installextensions.pri)
 
-QT += xml opengl network xmlpatterns qml concurrent quick quickwidgets sql webenginewidgets
+QT += xml opengl network xmlpatterns qml concurrent quick quickwidgets sql
 
 #TODO: Qt 4.5.3 no afegeix la informacio de UI_DIR com a include a l'hora de compilar el main.cpp
 INCLUDEPATH += ../../tmp/ui
