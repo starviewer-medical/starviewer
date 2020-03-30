@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SOURCE_DIR="$SOURCE_DIR_BASE/threadweaver-5.46.0/extra-cmake-modules-5.46.0"
+SOURCE_DIR="$SOURCE_DIR_BASE/threadweaver-5.64.0/extra-cmake-modules-5.64.0"
 BUILD_DIR=$SOURCE_DIR
 
 ################ Nothing should need to be changed below this line ################

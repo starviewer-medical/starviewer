@@ -13,33 +13,33 @@ do
 
             if [[ $(uname) == 'Linux' ]]
             then
-                chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.9.5.run"
-                "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.9.5.run" --no-force-installations TargetDir="${INSTALL_QTDIR}"
+                chmod u+x "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.12.6.run"
+                https_proxy="http://0.0.0.0" "${DOWNLOAD_PREFIX}/qt-opensource-linux-x64-5.12.6.run" --no-force-installations TargetDir="${INSTALL_QTDIR}"
             elif [[ $(uname) == 'Darwin' ]]
             then
-                hdiutil mount "${DOWNLOAD_PREFIX}/qt-opensource-mac-x64-5.9.5.dmg"
-                open -W /Volumes/qt-opensource-mac-x64-5.9.5/qt-opensource-mac-x64-5.9.5.app --args --no-force-installations TargetDir="${INSTALL_QTDIR}"
-                hdiutil unmount /Volumes/qt-opensource-mac-x64-5.9.5
+                hdiutil mount "${DOWNLOAD_PREFIX}/qt-opensource-mac-x64-5.12.6.dmg"
+                https_proxy="http://0.0.0.0" open -W /Volumes/qt-opensource-mac-x64-5.12.6/qt-opensource-mac-x64-5.12.6.app --args --no-force-installations TargetDir="${INSTALL_QTDIR}"
+                hdiutil unmount /Volumes/qt-opensource-mac-x64-5.12.6
             fi
             ;;
         dcmtk)
-            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/dcmtk-3.6.1_20120515.tar.gz"
+            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/dcmtk-DCMTK-3.6.5.tar.gz"
             ;;
         vtk)
-            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/VTK-8.1.1.tar.gz"
+            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/VTK-8.2.0.tar.gz"
             ;;
         gdcm)
-            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/GDCM-2.8.6.tar.gz"
+            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/GDCM-3.0.4.tar.gz"
             ;;
         itk)
-            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-4.13.0.tar.xz"
+            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-5.0.1.tar.gz"
             ;;
         ecm)
-            mkdir -p "${SOURCE_DIR_BASE}/threadweaver-5.46.0"
-            tar -C "${SOURCE_DIR_BASE}/threadweaver-5.46.0" -xvf "${DOWNLOAD_PREFIX}/extra-cmake-modules-5.46.0.tar.xz"
+            mkdir -p "${SOURCE_DIR_BASE}/threadweaver-5.64.0"
+            tar -C "${SOURCE_DIR_BASE}/threadweaver-5.64.0" -xvf "${DOWNLOAD_PREFIX}/extra-cmake-modules-5.64.0.tar.gz"
             ;;
         threadweaver)
-            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/threadweaver-5.46.0.tar.xz"
+            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/threadweaver-5.64.0.tar.gz"
             ;;
     esac
 done

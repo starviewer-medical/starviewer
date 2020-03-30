@@ -11,6 +11,7 @@
 
 // FWD declarations
 class QAction;
+class QActionGroup;
 class vtkImageMask;
 class vtkImageThreshold;
 class vtkActor;

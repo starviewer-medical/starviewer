@@ -18,6 +18,7 @@
 
 #include <QBoxLayout>
 #include <QScrollArea>
+#include <QStyle>
 
 #include "qtransferfunctionintervaleditor.h"
 

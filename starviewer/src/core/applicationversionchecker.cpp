@@ -23,6 +23,7 @@
 #include <QFile>
 #include <QDate>
 #include <QMessageBox>
+#include <QRegularExpression>
 
 namespace udg {
 

@@ -1,25 +1,29 @@
 # Directoris per defecte de les diferents llibreries. Si vols que siguin uns altres, simplement has de declarar
 # com a variables de sistema les que vulguis substituir. Ex.: export ITKLIBDIR=/usr/lib64/InsightToolkit
 
-# Default install prefix is /usr/local
 SDK_INSTALL_PREFIX = $$(SDK_INSTALL_PREFIX)
 isEmpty(SDK_INSTALL_PREFIX){
-    unix:SDK_INSTALL_PREFIX = $$(HOME)/starviewer-sdk-0.15/usr/local
+    unix:SDK_INSTALL_PREFIX = $$PWD/../../sdk-build
     win32:SDK_INSTALL_PREFIX = $$(USERPROFILE)/starviewer-sdk-0.15/32
     win32:contains(QMAKE_TARGET.arch, x86_64):SDK_INSTALL_PREFIX = $$(USERPROFILE)/starviewer-sdk-0.15/64
 }
+
+exists(/etc/debian_version):linux:LIB64 = lib/x86_64-linux-gnu  # Debian-based systems
+!exists(/etc/debian_version):linux:LIB64 = lib64                # Other systems
+macx:LIB64 = lib
+
 
 # DCMTK Libraries
 
 DCMTKLIBDIR = $$(DCMTKLIBDIR)
 isEmpty(DCMTKLIBDIR){
-    unix:DCMTKLIBDIR = $$SDK_INSTALL_PREFIX/lib
-    win32:DCMTKLIBDIR = $$SDK_INSTALL_PREFIX/dcmtk/3.6.1_20120515/lib
+    unix:DCMTKLIBDIR = $$SDK_INSTALL_PREFIX/$$LIB64
+    win32:DCMTKLIBDIR = $$SDK_INSTALL_PREFIX/dcmtk/3.6.5/lib
 }
 DCMTKINCLUDEDIR = $$(DCMTKINCLUDEDIR)
 isEmpty(DCMTKINCLUDEDIR){
     unix:DCMTKINCLUDEDIR = $$SDK_INSTALL_PREFIX/include/dcmtk
-    win32:DCMTKINCLUDEDIR = $$SDK_INSTALL_PREFIX/dcmtk/3.6.1_20120515/include/dcmtk
+    win32:DCMTKINCLUDEDIR = $$SDK_INSTALL_PREFIX/dcmtk/3.6.5/include/dcmtk
 }
 
 
@@ -27,13 +31,13 @@ isEmpty(DCMTKINCLUDEDIR){
 
 VTKLIBDIR = $$(VTKLIBDIR)
 isEmpty(VTKLIBDIR){
-    unix:VTKLIBDIR = $$SDK_INSTALL_PREFIX/lib
-    win32:VTKLIBDIR = $$SDK_INSTALL_PREFIX/VTK/8.1.1/lib
+    unix:VTKLIBDIR = $$SDK_INSTALL_PREFIX/$$LIB64
+    win32:VTKLIBDIR = $$SDK_INSTALL_PREFIX/VTK/8.2.0/lib
 }
 VTKINCLUDEDIR = $$(VTKINCLUDEDIR)
 isEmpty(VTKINCLUDEDIR){
-    unix:VTKINCLUDEDIR = $$SDK_INSTALL_PREFIX/include/vtk-8.1
-    win32:VTKINCLUDEDIR = $$SDK_INSTALL_PREFIX/VTK/8.1.1/include/vtk-8.1
+    unix:VTKINCLUDEDIR = $$SDK_INSTALL_PREFIX/include/vtk-8.2
+    win32:VTKINCLUDEDIR = $$SDK_INSTALL_PREFIX/VTK/8.2.0/include/vtk-8.2
 }
 
 
@@ -42,12 +46,12 @@ isEmpty(VTKINCLUDEDIR){
 ITKLIBDIR = $$(ITKLIBDIR)
 isEmpty(ITKLIBDIR){
     unix:ITKLIBDIR = $$SDK_INSTALL_PREFIX/lib
-    win32:ITKLIBDIR = $$SDK_INSTALL_PREFIX/InsightToolkit/4.13.0/lib
+    win32:ITKLIBDIR = $$SDK_INSTALL_PREFIX/InsightToolkit/5.0.1/lib
 }
 ITKINCLUDEDIR = $$(ITKINCLUDEDIR)
 isEmpty(ITKINCLUDEDIR){
-    unix:ITKINCLUDEDIR = $$SDK_INSTALL_PREFIX/include/ITK-4.13
-    win32:ITKINCLUDEDIR = $$SDK_INSTALL_PREFIX/InsightToolkit/4.13.0/include/ITK-4.13
+    unix:ITKINCLUDEDIR = $$SDK_INSTALL_PREFIX/include/ITK-5.0
+    win32:ITKINCLUDEDIR = $$SDK_INSTALL_PREFIX/InsightToolkit/5.0.1/include/ITK-5.0
 }
 
 # GDCM Libraries
@@ -55,27 +59,25 @@ isEmpty(ITKINCLUDEDIR){
 GDCMLIBDIR = $$(GDCMLIBDIR)
 isEmpty(GDCMLIBDIR){
     unix:GDCMLIBDIR = $$SDK_INSTALL_PREFIX/lib
-    win32:GDCMLIBDIR = $$SDK_INSTALL_PREFIX/gdcm/2.8.6/lib
+    win32:GDCMLIBDIR = $$SDK_INSTALL_PREFIX/gdcm/3.0.4/lib
 }
 GDCMINCLUDEDIR = $$(GDCMINCLUDEDIR)
 isEmpty(GDCMINCLUDEDIR){
-    unix:GDCMINCLUDEDIR = $$SDK_INSTALL_PREFIX/include/gdcm-2.8
-    win32:GDCMINCLUDEDIR = $$SDK_INSTALL_PREFIX/gdcm/2.8.6/include/gdcm-2.8
+    unix:GDCMINCLUDEDIR = $$SDK_INSTALL_PREFIX/include/gdcm-3.0
+    win32:GDCMINCLUDEDIR = $$SDK_INSTALL_PREFIX/gdcm/3.0.4/include/gdcm-3.0
 }
 
 # Threadweaver libraries
 
 THREADWEAVERLIBDIR = $$(THREADWEAVERLIBDIR)
 isEmpty(THREADWEAVERLIBDIR){
-    exists(/etc/debian_version):unix:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/lib/x86_64-linux-gnu # Debian-based systems
-    !exists(/etc/debian_version):unix:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/lib64               # Other systems
-    macx:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/lib
-    win32:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/ThreadWeaver/5.46.0/lib
+    unix:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/$$LIB64
+    win32:THREADWEAVERLIBDIR = $$SDK_INSTALL_PREFIX/ThreadWeaver/5.64.0/lib
 }
 THREADWEAVERINCLUDEDIR = $$(THREADWEAVERINCLUDEDIR)
 isEmpty(THREADWEAVERINCLUDEDIR){
     unix:THREADWEAVERINCLUDEDIR = $$SDK_INSTALL_PREFIX/include/KF5
-    win32:THREADWEAVERINCLUDEDIR = $$SDK_INSTALL_PREFIX/ThreadWeaver/5.46.0/include/KF5
+    win32:THREADWEAVERINCLUDEDIR = $$SDK_INSTALL_PREFIX/ThreadWeaver/5.64.0/include/KF5
 }
 
 

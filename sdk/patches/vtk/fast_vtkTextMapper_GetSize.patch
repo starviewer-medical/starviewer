@@ -1,5 +1,3 @@
-diff --git a/Rendering/Core/vtkTextMapper.cxx b/Rendering/Core/vtkTextMapper.cxx
-index 78b9562..a089f0e 100644
 --- a/Rendering/Core/vtkTextMapper.cxx
 +++ b/Rendering/Core/vtkTextMapper.cxx
 @@ -133,17 +133,33 @@ void vtkTextMapper::PrintSelf(ostream& os, vtkIndent indent)

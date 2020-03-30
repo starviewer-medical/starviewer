@@ -85,7 +85,7 @@ void DicomMaskToDcmDataset::addTagToDcmDatasetAsString(DcmDataset *dcmDataset, c
 {
     if (!tagValue.isNull())
     {
-        DcmElement *elem = newDicomElement(dcmTagKey);
+        DcmElement *elem = DcmItem::newDicomElement(dcmTagKey);
         elem->putString(tagValue.toLatin1().data());
         dcmDataset->insert(elem, OFTrue);
     }

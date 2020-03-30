@@ -1,46 +1,32 @@
 include(defaultdirectories.pri)
 
-INCLUDEPATH += $${DCMTKINCLUDEDIR} \
-    $${DCMTKINCLUDEDIR}/../ \
-    $${DCMTKINCLUDEDIR}/dcmdata/ \
-    $${DCMTKINCLUDEDIR}/dcmimgle/ \
-    $${DCMTKINCLUDEDIR}/dcmnet/ \
-    $${DCMTKINCLUDEDIR}/dcmsign/ \
-    $${DCMTKINCLUDEDIR}/ofstd/ \
-    $${DCMTKINCLUDEDIR}/oflog/ \
-    $${DCMTKINCLUDEDIR}/dcmimage/ \
+INCLUDEPATH += \
+    $${DCMTKINCLUDEDIR} \
+    $${DCMTKINCLUDEDIR}/.. \
     $${DCMTKINCLUDEDIR}/config \
+    $${DCMTKINCLUDEDIR}/dcmdata \
+    $${DCMTKINCLUDEDIR}/dcmimage \
+    $${DCMTKINCLUDEDIR}/dcmimgle \
+    $${DCMTKINCLUDEDIR}/dcmjpeg \
+    $${DCMTKINCLUDEDIR}/dcmnet \
     $${DCMTKINCLUDEDIR}/dcmpstat \
-    $${DCMTKINCLUDEDIR}/dcmsr \
-    $${DCMTKINCLUDEDIR}/dcmjpeg
+    $${DCMTKINCLUDEDIR}/ofstd
 
-LIBS += -L$${DCMTKLIBDIR} \
+LIBS += \
+    -L$${DCMTKLIBDIR} \
+    -ldcmimage \
+    -ldcmimgle \
+    -ldcmjpeg \
     -ldcmpstat \
     -ldcmnet \
     -ldcmdata \
-    -ldcmimgle \
-    -ldcmimage \
-    -ldcmsr \
-    -ldcmqrdb \
-    -ldcmtls \
-    -ldcmdsig \
-    -ldcmjpeg \
-    -lijg8 \ 
-    -lijg12 \ 
+    -lijg8 \
+    -lijg12 \
     -lijg16 \
     -loflog \
-    -lofstd
+    -lofstd \
+    -lz
 
-unix {
-    DEFINES += HAVE_CONFIG_H
-    LIBS += -lz
-}
+macx:LIBS += -lcharset -liconv
 
-unix:!macx {
-    LIBS += -lwrap -lssl
-}
-
-win32 {
-    LIBS += -lNetAPI32 -lWSock32 -lSnmpAPI
-    LIBS -= -lxml2
-}
+#win32:LIBS += -lNetAPI32 -lWSock32 -lSnmpAPI

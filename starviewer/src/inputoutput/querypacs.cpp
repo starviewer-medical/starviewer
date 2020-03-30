@@ -124,6 +124,7 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
     m_pacsConnection = new PACSConnection(m_pacsDevice);
     T_DIMSE_C_FindRQ findRequest;
     T_DIMSE_C_FindRSP findResponse;
+    int responseCount = 0;
 
     if (!m_pacsConnection->connectToPACS(PACSConnection::Query))
     {
@@ -149,9 +150,8 @@ PACSRequestStatus::QueryRequestStatus QueryPacs::query()
 
     DcmDataset *statusDetail = NULL;
     DcmDataset *dcmDatasetToQuery = DicomMaskToDcmDataset().getDicomMaskAsDcmDataset(m_dicomMask);
-
     // Finally conduct transmission of data
-    OFCondition condition = DIMSE_findUser(m_pacsConnection->getConnection(), m_presId, &findRequest, dcmDatasetToQuery, foundMatchCallback, this, DIMSE_NONBLOCKING,
+    OFCondition condition = DIMSE_findUser(m_pacsConnection->getConnection(), m_presId, &findRequest, dcmDatasetToQuery,  responseCount, foundMatchCallback, this, DIMSE_NONBLOCKING,
                                            Settings().getValue(InputOutputSettings::PACSConnectionTimeout).toInt(), &findResponse, &statusDetail);
 
     m_pacsConnection->disconnect();

@@ -1,25 +1,28 @@
 #!/bin/bash
 
 # Base directory for everything related to the SDK.
-SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$HOME/starviewer-sdk-0.15"}
+SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$SCRIPTS_ROOT/../../../sdk-build"}
 
 # Where the libraries are dowloaded.
-DOWNLOAD_PREFIX=${DOWNLOAD_PREFIX:-"$SDK_BASE_PREFIX/downloads"}
+DOWNLOAD_PREFIX=${DOWNLOAD_PREFIX:-"$SCRIPTS_ROOT/../../../sdk-download"}
 
 # Where the user will be asked to install Qt.
-INSTALL_QTDIR=${INSTALL_QTDIR:-"$HOME/Qt"}
+INSTALL_QTDIR=${INSTALL_QTDIR:-"$SDK_BASE_PREFIX/lib/qt"}
 
 # Directory where the specific version of Qt is installed.
 if [[ $(uname) == 'Linux' ]]
 then
-    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.9.5/gcc_64"}
+    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.12.6/gcc_64"}
 elif [[ $(uname) == 'Darwin' ]]
 then
-    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.9.5/clang_64"}
+    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.12.6/clang_64"}
+else
+    echo "Error: Qt platform not considered."
+    exit 1
 fi
 
 # Where to install the SDK libraries once compiled.
-SDK_INSTALL_PREFIX=${SDK_INSTALL_PREFIX:-"$SDK_BASE_PREFIX/usr/local"}
+SDK_INSTALL_PREFIX=${SDK_INSTALL_PREFIX:-"$SDK_BASE_PREFIX"}
 
 # Location of SDK sources to build.
 SOURCE_DIR_BASE=${SOURCE_DIR_BASE:-"$SDK_INSTALL_PREFIX/src"}
@@ -31,13 +34,7 @@ BUILD_TYPES=${BUILD_TYPES:-"release"}
 LIBS=${LIBS:-"qt dcmtk vtk gdcm itk ecm threadweaver"}
 
 # CMake executable
-if [[ $(uname) == 'Linux' ]]
-then
-    CMAKE=${CMAKE:-cmake}
-elif [[ $(uname) == 'Darwin' ]]
-then
-    CMAKE=${CMAKE:-"/Applications/CMake.app/Contents/bin/cmake"}
-fi
+CMAKE=${CMAKE:-cmake}
 
 # Set to appropriate value (example below) if you want to use distcc (distributed C compiler) on CMake.
 CMAKE_DISTCC=${CMAKE_DISTCC:-}
@@ -51,20 +48,20 @@ CMAKE_COMPILER=${CMAKE_COMPILER:-}
 CMAKE_CPP11='-DCMAKE_CXX_STANDARD:STRING=11 -DCMAKE_CXX_STANDARD_REQUIRED:BOOL=ON -DCMAKE_C_STANDARD:STRING=11 -DCMAKE_C_STANDARD_REQUIRED:BOOL=ON'
 
 # Number of simultaneous make jobs.
-MAKE_CONCURRENCY=${MAKE_CONCURRENCY:--j4}
+MAKE_CONCURRENCY=${MAKE_CONCURRENCY:-1}
 
-# Verbose compilation: set to 'VERBOSE=yes' to output the compiler calls.
-MAKE_VERBOSE=${MAKE_VERBOSE:-}
+# Verbose compilation: set to 'yes' to output the compiler calls.
+MAKE_VERBOSE=${MAKE_VERBOSE:-yes}
 
 # Where to write the SDK environment configuration script.
-SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../environment.sh
+SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../prefix.sh
 
 # Currently only used to know the location of the ThreadWeaver lib dir.
 if [[ $(uname) == 'Linux' ]]
 then
     if [[ -e /etc/debian_version ]]
     then
-        LIB64DIR=lib/x86_64-linux-gnu
+        LIB64DIR=lib/`dpkg-architecture -q DEB_BUILD_GNU_TYPE`
     else
         LIB64DIR=lib64
     fi
@@ -89,4 +86,4 @@ STARVIEWER_BUILD_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-build
 DPKG_TMP=/tmp/starviewer-dpkg
 
 # Where to place the packages
-DPKG_DESTINATION=$SCRIPTS_ROOT/../../../
+DPKG_DESTINATION=$SCRIPTS_ROOT/../../../starviewer-packaging

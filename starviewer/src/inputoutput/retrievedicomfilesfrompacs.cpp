@@ -88,7 +88,7 @@ OFCondition RetrieveDICOMFilesFromPACS::acceptSubAssociation(T_ASC_Network *asso
         if (condition.good())
         {
             // The array of Storage SOP Class UIDs comes from dcuid.h
-            condition = ASC_acceptContextsWithPreferredTransferSyntaxes((*association)->params, dcmAllStorageSOPClassUIDs, numberOfAllDcmStorageSOPClassUIDs,
+            condition = ASC_acceptContextsWithPreferredTransferSyntaxes((*association)->params, dcmAllStorageSOPClassUIDs, numberOfDcmAllStorageSOPClassUIDs,
                                                                         transferSyntaxes, numTransferSyntaxes);
         }
     }
@@ -187,7 +187,7 @@ void RetrieveDICOMFilesFromPACS::storeSCPCallback(void *callbackData, T_DIMSE_St
                 if (storeResponse->DimseStatus == STATUS_Success)
                 {
                     // Which SOP class and SOP instance?
-                    if (!DU_findSOPClassAndInstanceInDataSet(*imageDataSet, sopClass, sopInstance, correctUIDPadding))
+                    if (!DU_findSOPClassAndInstanceInDataSet(*imageDataSet, sopClass, sizeof(sopClass), sopInstance, sizeof(sopInstance), correctUIDPadding))
                     {
                         storeResponse->DimseStatus = STATUS_STORE_Error_CannotUnderstand;
                         ERROR_LOG(QString("No s'ha trobat la sop class i la sop instance per la imatge %1").arg(storeSCPCallbackData->fileName));
@@ -393,7 +393,7 @@ PACSRequestStatus::RetrieveRequestStatus RetrieveDICOMFilesFromPACS::retrieve(co
 
     // Set the destination of the images to us
     T_DIMSE_C_MoveRQ moveRequest = getConfiguredMoveRequest(association);
-    ASC_getAPTitles(association->params, moveRequest.MoveDestination, NULL, NULL);
+    ASC_getAPTitles(association->params, moveRequest.MoveDestination, sizeof(moveRequest.MoveDestination), NULL, 0, NULL, 0);
 
     OFCondition condition = DIMSE_moveUser(association, presentationContextID, &moveRequest, dcmDatasetToRetrieve, moveCallback, &moveSCPCallbackData,
                                            DIMSE_BLOCKING, 0, m_pacsConnection->getNetwork(), subOperationCallback, this, &moveResponse, &statusDetail,
@@ -450,18 +450,18 @@ DcmDataset* RetrieveDICOMFilesFromPACS::getDcmDatasetOfImagesToRetrieve(const QS
     DcmDataset *dcmDatasetToRetrieve = new DcmDataset();
     QString retrieveLevel = "STUDY";
 
-    DcmElement *elemSpecificCharacterSet = newDicomElement(DCM_SpecificCharacterSet);
+    DcmElement *elemSpecificCharacterSet = DcmItem::newDicomElement(DCM_SpecificCharacterSet);
     // ISO_IR 100 és Latin1
     elemSpecificCharacterSet->putString("ISO_IR 100");
     dcmDatasetToRetrieve->insert(elemSpecificCharacterSet, OFTrue);
 
-    DcmElement *elem = newDicomElement(DCM_StudyInstanceUID);
+    DcmElement *elem = DcmItem::newDicomElement(DCM_StudyInstanceUID);
     elem->putString(qPrintable(studyInstanceUID));
     dcmDatasetToRetrieve->insert(elem, OFTrue);
 
     if (!seriesInstanceUID.isEmpty())
     {
-        DcmElement *elem = newDicomElement(DCM_SeriesInstanceUID);
+        DcmElement *elem = DcmItem::newDicomElement(DCM_SeriesInstanceUID);
         elem->putString(qPrintable(seriesInstanceUID));
         dcmDatasetToRetrieve->insert(elem, OFTrue);
         retrieveLevel = "SERIES";
@@ -469,14 +469,14 @@ DcmDataset* RetrieveDICOMFilesFromPACS::getDcmDatasetOfImagesToRetrieve(const QS
 
     if (!sopInstanceUID.isEmpty())
     {
-        DcmElement *elem = newDicomElement(DCM_SOPInstanceUID);
+        DcmElement *elem = DcmItem::newDicomElement(DCM_SOPInstanceUID);
         elem->putString(qPrintable(sopInstanceUID));
         dcmDatasetToRetrieve->insert(elem, OFTrue);
         retrieveLevel = "IMAGE";
     }
 
     // Especifiquem a quin nivell es fa el QueryRetrieve
-    DcmElement *elemQueryRetrieveLevel = newDicomElement(DCM_QueryRetrieveLevel);
+    DcmElement *elemQueryRetrieveLevel = DcmItem::newDicomElement(DCM_QueryRetrieveLevel);
     elemQueryRetrieveLevel->putString(qPrintable(retrieveLevel));
     dcmDatasetToRetrieve->insert(elemQueryRetrieveLevel, OFTrue);
 

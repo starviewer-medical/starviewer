@@ -1,5 +1,3 @@
-diff --git a/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx b/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx
-index 5c5edf7..93c2a61 100644
 --- a/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx
 +++ b/Source/DataStructureAndEncodingDefinition/gdcmReader.cxx
 @@ -671,11 +671,13 @@ bool Reader::InternalReadCommon(const T_Caller &caller)

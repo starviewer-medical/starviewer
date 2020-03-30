@@ -1465,7 +1465,7 @@ DCMTKFileReader
 {
   DcmDataDictionary &dict = dcmDataDict.wrlock();
   dict.addEntry(entry);
-  dcmDataDict.unlock();
+  dcmDataDict.rdunlock();
 }
 
 bool CompareDCMTKFileReaders(DCMTKFileReader *a, DCMTKFileReader *b)
