@@ -8,6 +8,8 @@ Makefile*
 src/core/i18n_release
 src/main/extensions.h
 src/*/executablesnames.h
+releasenotes/changelog.html
+releasenotes/recentchangelog.html
 
 # Temporals of Qt Single Application
 bin/*.dylib

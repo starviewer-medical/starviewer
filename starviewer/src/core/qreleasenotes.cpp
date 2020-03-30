@@ -13,12 +13,12 @@
  *************************************************************************************/
 
 #include "qreleasenotes.h"
+
 #include "coresettings.h"
 #include "logging.h"
 
 #include <QCloseEvent>
 #include <QUrl>
-#include <QWebEngineHistory>
 
 namespace udg {
 
@@ -34,7 +34,7 @@ QReleaseNotes::QReleaseNotes(QWidget *parent)
     // Fer que la finestra sempre quedi davant i no es pugui fer res fins que no es tanqui
     setWindowModality(Qt::ApplicationModal);
 
-    m_viewWebView->setContextMenuPolicy(Qt::NoContextMenu);
+    m_textBrowser->setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 QReleaseNotes::~QReleaseNotes()
@@ -53,8 +53,8 @@ void QReleaseNotes::setDontShowVisible(bool visible)
 
 void QReleaseNotes::showIfUrlLoadsSuccessfully(const QUrl &url)
 {
-    connect(m_viewWebView, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
-    m_viewWebView->setUrl(url);
+    connect(m_textBrowser, &QTextBrowser::sourceChanged, this, &QReleaseNotes::loadFinished);
+    m_textBrowser->setSource(url);
 }
 
 void QReleaseNotes::closeEvent(QCloseEvent *event)
@@ -70,23 +70,13 @@ void QReleaseNotes::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
-void QReleaseNotes::loadFinished(bool ok)
+void QReleaseNotes::loadFinished()
 {
     // Desconectar el manager
-    disconnect(m_viewWebView, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
+    disconnect(m_textBrowser, &QTextBrowser::sourceChanged, this, &QReleaseNotes::loadFinished);
 
-    m_viewWebView->history()->clear();
-
-    if (ok)
-    {
-        // Si no hi ha hagut error, mostrar
-        show();
-    }
-    else
-    {
-        ERROR_LOG("Error while loading release notes.");
-        close();
-    }
+    m_textBrowser->clearHistory();
+    show();
 }
 
 } // End namespace udg

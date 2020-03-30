@@ -18,9 +18,6 @@
         <file>cache/database.sql</file>
         <file>images/gilabLogoAbout.png</file>
         <file>images/idiLogoAbout.png</file>
-        <file>javascript/jquery-min.js</file>
-        <file>javascript/qdiagnosistest.js</file>
-        <file>css/qdiagnosistest.css</file>
         <file>cluts/2d/blackandwhiteinverse.xml</file>
         <file>cluts/2d/hotbody.xml</file>
         <file>cluts/2d/hotiron.xml</file>

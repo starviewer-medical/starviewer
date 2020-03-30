@@ -45,13 +45,13 @@ bool isNewVersionInstalled()
 // Returns the local URL for the release notes.
 QUrl getLocalReleaseNotesUrl()
 {
-    // Installed path (<installdir>/releasenotes/releasenotesX.Y.Z.html)
-    QString path = installationPath() + "/releasenotes/releasenotes" + StarviewerVersionString.section('-', 0, 0) + ".html";
+    // Installed path (<installdir>/releasenotes/recentchangelog.html)
+    QString path = installationPath() + "/releasenotes/recentchangelog.html";
 
     if (!QFile::exists(path))
     {
-        // Development path (<sourcedir>/releasenotes/changelog.html)
-        path = sourcePath() + "/releasenotes/changelog.html";
+        // Development path (<sourcedir>/releasenotes/recentchangelog.html)
+        path = sourcePath() + "/releasenotes/recentchangelog.html";
     }
 
     return QUrl::fromLocalFile(path);

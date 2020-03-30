@@ -50,7 +50,7 @@ protected:
 
 protected slots:
     /// comprova si l'url que se li passa relament existeix
-    void loadFinished(bool ok);
+    void loadFinished();
 };
 
 } // End namespace udg

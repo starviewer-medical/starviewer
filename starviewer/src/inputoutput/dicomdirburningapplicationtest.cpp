@@ -60,7 +60,7 @@ DiagnosisTestResult DICOMDIRBurningApplicationTest::run()
     return result;
 }
 
-QString DICOMDIRBurningApplicationTest::getDescription()
+QString DICOMDIRBurningApplicationTest::getDescription() const
 {
     return tr("The application to burn DICOMDIRs to CD/DVD is correctly configured");
 }

@@ -55,7 +55,7 @@ DiagnosisTestResult PortInUseTest::run()
     return result;
 }
 
-QString PortInUseTest::getDescription()
+QString PortInUseTest::getDescription() const
 {
     return tr("Port %1 is in use by another application").arg(m_port);
 }

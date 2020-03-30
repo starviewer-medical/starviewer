@@ -1,0 +1,1479 @@
+<?xml version="1.0"?>
+<releasenotes version="1">
+
+ <release magnitude="major">
+  <version>1.1.0</version>
+  <date>YYYY-MM-DD</date>
+  <changes>
+   <nw>
+    <d>Es poden obrir PDFs encapsulats amb el visor de PDF per defecte del sistema.</d>
+    <t>2121</t>
+   </nw>
+   <nw>
+    <d>Noves icones.</d>
+   </nw>
+   <nw>
+    <d>Es poden ampliar els texts i les icones de tota l'aplicació en pantalles grans. El nivell d'ampliació és configurable.</d>
+    <t>1494</t>
+    <t>1655</t>
+    <t>1677</t>
+   </nw>
+   <nw>
+    <d>S'agrupen tots els botons d'eines de mesura (ROIs, distàncies i angles) en un de sol per poder adaptar la finestra a pantalles més petites.</d>
+   </nw>
+   <nw>
+    <d>S'afegeixen variants de les eines de desplaçament i contrast que funcionen amb el botó esquerre.</d>
+    <t>1215</t>
+    <t>2139</t>
+   </nw>
+   <nw>
+    <d>S'afegeix una opció perquè el ratolí faci la volta i torni al principi mentre es fa servir l'eina de canvi de tall.</d>
+   </nw>
+   <nw>
+    <d>S'afegeix la possibilitat de canviar de sèrie amb la roda quan s'arriba al final d'una sèrie.</d>
+    <t>2133</t>
+    <t>2815</t>
+   </nw>
+   <nw>
+    <d>Reconstruccions de sèries amb fases.</d>
+    <t>1247</t>
+   </nw>
+   <nw>
+    <d>Nova interfície per definir el gruix de tall en un menú desplegable per poder ser més ampla i per poder-lo activar i desactivar amb un sol clic.</d>
+   </nw>
+   <nw>
+    <d>El gruix de tall es defineix en mm en lloc de talls.</d>
+   </nw>
+   <nw>
+    <d>S'afegeix una anotació amb el nom del metge sol·licitant.</d>
+    <t>2134</t>
+   </nw>
+   <nw>
+    <d>Es pot aplicar una escala de color a qualsevol imatge.</d>
+    <t>2138</t>
+   </nw>
+   <nw>
+    <d>Nova escala de color disponible.</d>
+   </nw>
+   <nw>
+    <d>En imatges NM es mostren els counts totals i els counts per mm² de les ROIs.</d>
+    <t>2118</t>
+   </nw>
+   <nw>
+    <d>Nova distribució de fusió MPR R.</d>
+   </nw>
+   <nw>
+    <d>Es canvia l'aparença de les línies de referència.</d>
+   </nw>
+   <nw>
+    <d>Es canvia lleugerament l'aparença de l'angle obert.</d>
+   </nw>
+   <im>
+    <d>L'eina de canvi de tall permet canviar talls o fases segons la direcció del desplaçament.</d>
+    <t>2137</t>
+   </im>
+   <im>
+    <d>Millora de la fluïdesa de les eines de canvi de tall amb teclat i roda.</d>
+   </im>
+   <im>
+    <d>S'aconsegueix un desplaçament més fi amb algunes rodes i ratolins tàctils.</d>
+   </im>
+   <im>
+    <d>Millora de la usabilitat de l'eina de cercle.</d>
+    <t>1968</t>
+   </im>
+   <im>
+    <d>Millora en l'ordenació d'imatges per fer-la totalment determinista i tractant correctament tots els casos, tant els habituals com els més rars, oferint
+       una experiència d'usuari molt més satisfactòria.</d>
+    <t>2152</t>
+    <t>741</t>
+    <t>2028</t>
+    <t>2700</t>
+   </im>
+   <im>
+    <d>Es mostren traduïts alguns textos que fins ara sortien en anglès.</d>
+    <t>1730</t>
+   </im>
+   <im>
+    <d>Millora del tractament d'imatges multiframe.</d>
+    <t>2114</t>
+   </im>
+   <im>
+    <d>Millora de la qualitat amb què es visualitzen les imatges de poca resolució.</d>
+   </im>
+   <im>
+    <d>Millora de rendiment a l'hora de variar la brillantor i el contrast d'imatges amb VOI LUT.</d>
+    <t>2143</t>
+   </im>
+   <im>
+    <d>El visor del fitxer de registre s'obre més ràpid i es situa directament al final.</d>
+   </im>
+   <im>
+    <d>Es millora la funcionalitat del teclat a la finestra de consultes.</d>
+   </im>
+   <im>
+    <d>Es millora la distribució i la navegació amb teclat a la finestra de configuració.</d>
+    <t>2141</t>
+   </im>
+   <im>
+    <d>Zoom centrat al ratolí.</d>
+    <t>1356</t>
+   </im>
+   <im>
+    <d>Mida de la creu del cursor 3D i el cercle independent del zoom i configurable.</d>
+    <t>2752</t>
+   </im>
+   <im>
+    <d>Diverses millores internes.</d>
+    <t>261</t>
+    <t>1958</t>
+   </im>
+   <fx>
+    <d>Se soluciona un problema que feia algunes sèries es dividissin en moltes parts segons l'ordre en què es llegissin els fitxers.</d>
+    <t>2130</t>
+   </fx>
+   <fx>
+    <d>Se soluciona un problema que feia que en alguns casos es desactivés el gruix de tall en canviar entre projeccions axial, sagital o coronal.</d>
+    <t>2009</t>
+   </fx>
+   <fx>
+    <d>Es resol un problema pel qual no es calculava el SUV en algunes images de PET d'un centre específic.</d>
+    <t>2146</t>
+   </fx>
+   <fx>
+    <d>Se soluciona un problema a Mac que feia que si es mostrava una finestra de missatge a l'inici quedés amagada darrere de la pantalla de presentació.</d>
+    <t>2127</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="major">
+  <version>1.0.0</version>
+  <date>2020-02-21</date>
+  <changes>
+   <nw>
+    <d>Es pot ajustar el cremat d'una visualització fusionada fent servir l'eina de contrast mentre es manté la tecla de majúscules.</d>
+    <t>2110</t>
+   </nw>
+   <nw>
+    <d>S'afegeix una drecera de teclat per mostrar i amagar les anotacions textuals dels visors.</d>
+    <t>2726</t>
+   </nw>
+   <nw>
+    <d>S'afegeix una nova opció de línia d'ordres per descarregar un estudi per Study Instance UID.</d>
+    <t>2643</t>
+   </nw>
+   <nw>
+    <d>Marcatge CE com a dispositiu mèdic.</d>
+   </nw>
+   <nw>
+    <d>S'afegeixen detalls pel marcatge CE: informació al quadre "Quant a", avisos d'ús, etc.</d>
+   </nw>
+   <nw>
+    <d>S'afegeixen versions traduïdes dels manuals.</d>
+   </nw>
+   <im>
+    <d>Millora de les eines de finestra (brillantor i contrast) per permetre finestres més estretes (útil per a alguns PETs sense correcció d'atenuació).</d>
+    <t>2625</t>
+   </im>
+   <im>
+    <d>Es permet triar un màxim d'un visor a les opcions de distribució dels visors 2D.</d>
+    <t>2777</t>
+   </im>
+   <im>
+    <d>La navegació d'imatges amb + i - ara passa per totes les imatges de l'estudi en comptes de les del pacient.</d>
+    <t>2778</t>
+   </im>
+   <im>
+    <d>S'afegeix informació addicional als tests de diagnosi.</d>
+   </im>
+   <fx>
+    <d>Se solucionen diversos problemes d'ordenació d'imatges que afectaven sobretot sèries amb múltiples adquisicions o amb stacks paral·lels.</d>
+    <t>2152</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>0.13.3</version>
+  <date>2016-06-16</date>
+  <changes>
+   <im>
+    <d>Les cerques per nom i id de pacient al PACS i a la base de dades es fan sense comodins per defecte. Per fer servir comodins ara cal posar els asteriscs
+       explícitament.</d>
+    <t>1752</t>
+   </im>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>0.13.2</version>
+  <date>2016-05-03</date>
+  <changes>
+   <nw>
+    <d>S'afegeix la possibilitat de configurar aplicacions externes per obrir l'estudi i sèrie actuals.</d>
+    <t>2115</t>
+   </nw>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>0.13.1</version>
+  <date>2016-02-01</date>
+  <changes>
+   <fx>
+    <d>Es soluciona el tractament de les sèries i imatges d'una màquina de RM específica.</d>
+    <t>2112</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="major">
+  <version>0.13.0</version>
+  <date>2015-12-23</date>
+  <changes>
+   <nw>
+    <d>Versió 64 bits per Windows eliminant així la limitació d'ús de memòria RAM.</d>
+    <t>871</t>
+   </nw>
+   <nw>
+    <d>S'afegeix la possibilitat d'ampliar un visor fent doble clic.</d>
+    <t>1344</t>
+   </nw>
+   <nw>
+    <d>S'introdueix l'opció de comparar estudis oferint la possibilitat d'aplicar una distribució independent per cada estudi.</d>
+   </nw>
+   <nw>
+    <d>Suport a VOI LUT.</d>
+    <t>480</t>
+   </nw>
+   <nw>
+    <d>Si ja tenim un estudi descarregat no es tornarà a descarregar en demanar-lo des del widget d'estudis relacionats.</d>
+   </nw>
+   <nw>
+    <d>Si es visualitzen dues imatges amb fusió s'afegeix l'opció d'aplicar una distribució de fusió predeterminada.</d>
+   </nw>
+   <nw>
+    <d>S'afegeixen dreceres del teclat per canviar al hanging protocol anterior o següent.</d>
+   </nw>
+   <im>
+    <d>Es millora el rendiment del visor 2D sobretot en imatges d'alta resolució.</d>
+    <t>2085</t>
+   </im>
+   <im>
+    <d>Es millora el rendiment de l'eina Lupa.</d>
+    <t>1789</t>
+   </im>
+   <im>
+    <d>Es millora la qualitat amb què es visualitzen les imatges de poca resolució.</d>
+    <t>1836</t>
+   </im>
+   <im>
+    <d>S'adapta la posició de les anotacions per estudis de mamografia perquè no molestin a l'hora d'informar.</d>
+    <t>1349</t>
+   </im>
+   <im>
+    <d>En aplicar una distribució regular s'omplen automàticament tots els visors.</d>
+   </im>
+   <im>
+    <d>Es milloren els Hanging Protocols de mamografia per tractar indistintament les mamografies de modalitat MG i CR.</d>
+   </im>
+   <fx>
+    <d>Se soluciona un problema que podia provocar que els Hanging Protocols amb prèvies posicionessin imatges d'un previ en el lloc de l'actual.</d>
+   </fx>
+   <fx>
+    <d>Es resol un problema que provocava que la mida del menú de pacient fos incorrecte quan el text contenia caràcters especials.</d>
+    <t>2102</t>
+   </fx>
+   <fx>
+    <d>Se soluciona un problema que podia provocar el tancament inesperat de l'Starviewer si mentre s'estava carregant un estudi se n'obria un altre.</d>
+    <t>2004</t>
+   </fx>
+   <fx>
+    <d>Es resol un problema que feia que no es poguessin veure imatges amb spacing 0.</d>
+    <t>2066</t>
+   </fx>
+   <fx>
+    <d>L'eina d'informació del vòxel ja no mostra unitats HU en imatges de CT de color.</d>
+    <t>2080</t>
+   </fx>
+   <fx>
+    <d>Se soluciona un problema que podia provocar el tancament inesperat de l'Starviewer quan s'obrien determinades imatges multiframe.</d>
+    <t>2105</t>
+   </fx>
+   <fx>
+    <d>Es corregeix un error que feia que algunes imatges de mamografia poguessin desaparèixer del visor si aquest canviava de mida.</d>
+    <t>2106</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>0.12.2</version>
+  <date>2014-12-02</date>
+  <changes>
+   <nw>
+    <d>Fusió NM-CT. S'habilita la fusió automàtica d'imatges de NM-CT (SPECT-CT) dins del mateix estudi.</d>
+    <t>2084</t>
+   </nw>
+   <nw>
+    <d>S'afegeixen dreceres de teclat per poder canviar els hanging protocols des de teclat.</d>
+    <t>894</t>
+   </nw>
+   <im>
+    <d>Es millora el rendiment general del lector de fitxers DICOM.</d>
+    <t>2091</t>
+   </im>
+   <im>
+    <d>Es milloren les funcions de color per la fusió PET-CT i NM-CT.</d>
+    <t>2099</t>
+   </im>
+   <im>
+    <d>Es millora el suport i el tractament d'estudis de modalitat NM.</d>
+    <t>2083</t>
+   </im>
+   <im>
+    <d>Es millora el tractament d'estudis de PET fent que s'apliqui el window level automàtic per defecte per evitar que la finestra canviï per cada imatge.</d>
+    <t>2098</t>
+   </im>
+   <im>
+    <d>S'augmenta la mida de la lletra en el menú d'estudis relacionats en pantalles de molta resolució (3Mpx, 5Mpx).</d>
+    <t>2082</t>
+   </im>
+   <im>
+    <d>Es milloren els criteris per decidir quan es propaguen els canvis d'orientació.</d>
+    <t>2090</t>
+   </im>
+   <fx>
+    <d>Es corregeix un error que provocava que certs estudis dinàmics de modalitat MR no es visualitzessin correctament.</d>
+    <t>2092</t>
+   </fx>
+   <fx>
+    <d>Es resol un problema que provocava que la mida de la lletra en el menú de botó dret no s'augmentés correctament en pantalles de molta resolució (3Mpx,
+       5Mpx).</d>
+    <t>2081</t>
+   </fx>
+   <fx>
+    <d>Se soluciona un problema que provocava que els thumbnails no es generessin correctament.</d>
+    <t>2088</t>
+   </fx>
+   <fx>
+    <d>Es corregeix un problema en el tractament de shutters poligonals.</d>
+    <t>2100</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>0.12.1</version>
+  <date>2014-06-26</date>
+  <changes>
+   <fx>
+    <d>Es corregeix un error que provocava que el window/level automàtic estigués invertit en imatges de tipus MONOCHROME1.</d>
+    <t>2075</t>
+    <t>2477</t>
+   </fx>
+   <fx>
+    <d>Es resol un problema que feia que no es recarregués la distribució de visors en fer un "Descarregar i visualitzar" d'un altre estudi del mateix pacient
+       que tenim carregat.</d>
+    <t>2076</t>
+    <t>2478</t>
+   </fx>
+   <fx>
+    <d>Es soluciona un error que provocava el tancament inesperat de l'Starviewer en obrir determinats estudis multiframe.</d>
+    <t>2078</t>
+   </fx>
+   <fx>
+    <d>Es corregeix un problema que provocava el tancament inesperat de l'Starviewer en visualitzar un estudi nou mentre s'ha demanat un hanging protocol amb
+       prèvies.</d>
+    <t>2077</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="major">
+  <version>0.12.0</version>
+  <date>2014-05-12</date>
+  <changes>
+   <nw>
+    <d>Fusió PET-CT. S'habilita la fusió automàtica d'imatges de PET-CT dins del mateix estudi, acompanyat de diverses eines per a la seva manipulació.</d>
+    <t>1640</t>
+   </nw>
+   <nw>
+    <d>Es permet escollir el balanç de fusió entre imatges fusionades de PET-CT.</d>
+    <t>1640</t>
+   </nw>
+   <nw>
+    <d>S'afegeixen funcions de color per imatges de PET.</d>
+    <t>1640</t>
+   </nw>
+   <nw>
+    <d>Aplicació automàtica de funció monocrom inversa en imatges de PET.</d>
+    <t>1640</t>
+   </nw>
+   <nw>
+    <d>S'afegeix el càlcul del valor màxim i mitjana del Standardized Uptake Value (SUV) en els resultats de les ROI fetes sobre imatges de PET i PET-CT.</d>
+    <t>1986</t>
+   </nw>
+   <nw>
+    <d>L'eina d'informació de vòxel mostra el Standardized Uptake Value (SUV) per imatges de PET i PET-CT sempre que sigui possible el seu càlcul.</d>
+    <t>1986</t>
+    <t>1392</t>
+   </nw>
+   <nw>
+    <d>S'habilita un nou comportament de modificació de finestra adaptat a les característiques d'imatges PET.</d>
+    <t>1991</t>
+   </nw>
+   <nw>
+    <d>S'afegeix eina de propagació. Permet que una acció realitzada sobre un visor es propagui i es sincronitzi amb la resta (zoom, canvi de finestra,
+       desplaçament, canvi d'orientació...).</d>
+    <t>1628</t>
+   </nw>
+   <nw>
+    <d>Distribució automàtica de visors segons modalitat. S'afegeix la possibilitat de que en obrir un estudi s'apliqui una distribució de visors automàtica en
+       la que es puguin veure totes les sèries o imatges, en comptes d'aplicar-se un hanging protocol, podent configurar el nombre de visors màxims i per quines
+       modalitats s'aplica.</d>
+    <t>1623</t>
+    <t>913</t>
+   </nw>
+   <nw>
+    <d>S'afegeix un nou motor de lectura d'arxius DICOM més robust i eficient.</d>
+   </nw>
+   <nw>
+    <d>Si es té el thick slab activat, es manté el gruix de tall aplicat quan es canvia de projecció.</d>
+    <t>1965</t>
+   </nw>
+   <nw>
+    <d>S'afegeix suport a la lectura d'imatges de tipus Breast Tomosynthesis Image Storage.</d>
+    <t>1980</t>
+   </nw>
+   <nw>
+    <d>S'afegeixen les opcions de desplaçament a pantalla anterior i següent al menú Finestra.</d>
+    <t>2057</t>
+   </nw>
+   <nw>
+    <d>S'afegeixen nous hanging protocols de ressonància magnètica especialitzats per centre.</d>
+   </nw>
+   <im>
+    <d>Es millora el menú contextual de selecció de sèries: millor distribució d'elements i disposició d'scroll quan el contingut del menú excedeix la mida de
+       la pantalla.</d>
+    <t>1969</t>
+   </im>
+   <im>
+    <d>Es millora el tractament de les mesures en imatges de projecció radiogràfica i del nivell de descripció addicional que es pot arribar a mostrar
+       d'aquestes.</d>
+    <t>1948</t>
+    <t>1171</t>
+    <t>1591</t>
+   </im>
+   <im>
+    <d>Es mostren les unitats corresponents amb l'eina d'informació de vòxel per imatges de CT, PET i fusió PET-CT.</d>
+    <t>1392</t>
+   </im>
+   <im>
+    <d>Es redueix el consum de memòria a l'hora d'obrir imatges multiframe, de manera que algunes imatges que abans no es podien obrir, ara sí.</d>
+    <t>1516</t>
+    <t>1843</t>
+   </im>
+   <im>
+    <d>Es mostra el progrés en carregar volums multiframe.</d>
+    <t>1511</t>
+   </im>
+   <im>
+    <d>Es fa que quan s'envia un estudi multiframe al PACS s'enviï cada fitxer un sol cop, i no una vegada per cada frame com fins ara.</d>
+    <t>1973</t>
+   </im>
+   <im>
+    <d>Es poden exportar captures a més d'un PACS alhora.</d>
+    <t>1972</t>
+   </im>
+   <im>
+    <d>Es fa que si no s'ha especificat l'edat del pacient, aquesta es calculi en base a la data de naixement del pacient i la data de l'estudi.</d>
+    <t>2071</t>
+   </im>
+   <im>
+    <d>Es millora el tractament dels camps de cerca Nom de pacient i ID de pacient en els casos que els espais en blanc extra podien interferir en el
+       resultat.</d>
+    <t>1984</t>
+   </im>
+   <im>
+    <d>En desplegar un estudi en la finestra de consulta de PACS, es mostra la informació de descripció i nom de protocol per cada sèrie, sempre i quan aquesta
+       estigui disponible.</d>
+    <t>1985</t>
+   </im>
+   <im>
+    <d>Es milloren els missatges d'error de les operacions amb el PACS (consulta, descàrrega, enviament) afegint informació més detallada sobre l'error
+       donat.</d>
+    <t>1955</t>
+   </im>
+   <im>
+    <d>Es millora el sistema de configuració d'opcions d'usuari. Els canvis s'apliquen automàticament sense haver de confirmar-los posteriorment.</d>
+    <t>1766</t>
+   </im>
+   <im>
+    <d>S'afegeix informació sobre les característiques de composició d'escriptori en l'informe de propietats del sistema.</d>
+    <t>1977</t>
+   </im>
+   <im>
+    <d>Es millora la distribució d'espai i d'icones de la barra d'eines en el visor 2D, especialment en amplades de pantalla reduïdes.</d>
+   </im>
+   <im>
+    <d>Es fa que si el visor actiu queda amagat en canviar de distribució, el primer visor de la nova distribució passi a ser l'actiu.</d>
+    <t>2030</t>
+   </im>
+   <im>
+    <d>Es millora la ordenació de les columnes dels resultats en la finestra de consulta (local, PACS, DICOMDIR) donant preferència a la data de l'estudi i la
+       descripció davant d'altres propietats de l'estudi.</d>
+    <t>2068</t>
+   </im>
+   <im>
+    <d>Es milloren els criteris de restricció de diversos hanging protocols per evitar que s'apliquin sobre estudis que no pertoquen.</d>
+   </im>
+   <fx>
+    <d>Es corregeix cas en que la projecció de l'eina de cursor 3D no s'actualitzava correctament.</d>
+    <t>2048</t>
+   </fx>
+   <fx>
+    <d>Es corregeix cas en que la projecció de l'eina de línies de referència no s'actualitzava correctament.</d>
+    <t>2031</t>
+   </fx>
+   <fx>
+    <d>Es corregeix que l'eina de Magic ROI fes tancar l'aplicació quan s'iniciava una regió en la vora de la imatge.</d>
+    <t>1949</t>
+   </fx>
+   <fx>
+    <d>Es corregeix que l'eina de Magic ROI fes tancar l'aplicació quan teníem thick slab en un volum amb fases i la imatge no era la primera.</d>
+    <t>2040</t>
+   </fx>
+   <fx>
+    <d>Es corregeixen diversos errors a l'eina d'informació del vòxel i les ROI quan fèiem servir thick slab en imatges amb fases.</d>
+    <t>2038</t>
+    <t>2039</t>
+    <t>2030</t>
+   </fx>
+   <fx>
+    <d>Es corregeix que l'aplicació es tanqui si no queda prou memòria per realitzar una operació de renderitzat.</d>
+    <t>2053</t>
+   </fx>
+   <fx>
+    <d>Es corregeixen els casos en què l'ordenació per imatges de tipus enhanced era errònia.</d>
+    <t>1850</t>
+   </fx>
+   <fx>
+    <d>Es corregeixen els casos en què en obrir un estudi o aplicar un hanging protocol, els reference lines no es mostraven fins que no s'interactuava amb un
+       visor.</d>
+    <t>1830</t>
+    <t>1888</t>
+   </fx>
+   <fx>
+    <d>Es corregeix cas en què la sincronització manual no funcionava en el primer visor després d'haver-se activat.</d>
+    <t>1862</t>
+   </fx>
+   <fx>
+    <d>Es corregeixen comportaments erronis de l'scroll universal en l'extensió d'MPR 2D.</d>
+    <t>2018</t>
+    <t>2019</t>
+   </fx>
+   <fx>
+    <d>Es corregeix cas que podia provocar que en el càlcul de les dades estadístiques (mitjana i desviació estàndard) d'una ROI feta amb l'eina de Magic ROI no
+       es contemplessin tots els píxels del polígon.</d>
+   </fx>
+   <fx>
+    <d>Es corregeix que en sistemes Windows 7 amb AERO desactivat pugui aparèixer un flash blanc en alguns visors quan la finestra de notificació del RIS es
+       tanca.</d>
+    <t>1959</t>
+   </fx>
+   <fx>
+    <d>Es corregeix cas en què es tancava l'aplicació esporàdicament quan es canviava de volum amb la tecla - sobre un volum al que s'havia aplicat alguna
+       projecció de thick slab.</d>
+    <t>1950</t>
+   </fx>
+   <fx>
+    <d>Es fa que s'apliquin les reconstruccions ortogonals MPR correctes quan el pla original d'adquisició és diferent a l'axial.</d>
+    <t>485</t>
+    <t>355</t>
+   </fx>
+   <fx>
+    <d>Es fa que en descarregar un estudi previ a través d'un hanging protocol, aquest aparegui com a carregat en el menú d'estudis relacionats.</d>
+    <t>1664</t>
+   </fx>
+   <fx>
+    <d>Es corregeixen casos en què les imatges es veien malament perquè tenien un rang de valors incorrecte.</d>
+    <t>1414</t>
+    <t>1880</t>
+    <t>1954</t>
+   </fx>
+   <fx>
+    <d>Es corregeixen casos en què es tancava l'aplicació esporàdicament quan s'obrien alguns estudis.</d>
+    <t>1861</t>
+    <t>1875</t>
+    <t>1956</t>
+   </fx>
+   <fx>
+    <d>Es corregeixen casos en què les imatges es podien veure distorsionades perquè l'espaiat entre imatges no era correcte.</d>
+    <t>1436</t>
+   </fx>
+   <fx>
+    <d>Es corregeix un error que es produïa si s'activava l'eina d'exportar captures mentre s'estava carregant un volum.</d>
+    <t>1976</t>
+   </fx>
+   <fx>
+    <d>Es corregeix cas en què un rendering 3D podria mostrar-se "pla" en comptes de volumètric.</d>
+    <t>1967</t>
+   </fx>
+   <fx>
+    <d>Es corregeixen els casos en què l'ordenació d'imatges enhanced era incorrecta. Aquests casos afectaven principalment al funcionament de les eines de
+       cursor 3D i línies de referència.</d>
+    <t>2001</t>
+   </fx>
+   <fx>
+    <d>Es corregeix un error a l'eina de Magic ROI que feia que no es pogués esborrar si s'obria el menú de pacient mentre s'estava fent la ROI.</d>
+    <t>2013</t>
+   </fx>
+   <fx>
+    <d>Es corregeix un error a l'eina de cercle que feia que funcionés malament si s'obria el menú de pacient mentre s'estava fent el cercle.</d>
+    <t>2037</t>
+   </fx>
+   <fx>
+    <d>Es corregeix un error a l'eina d'informació del vòxel que feia que pogués aparèixer en un visor encara que no hi hagués el cursor a sobre.</d>
+    <t>2014</t>
+   </fx>
+   <fx>
+    <d>Es corregeix un error que feia que no poguéssim alternar les finestres predeterminades a través de teclat en l'extensió MPR 2D després d'haver manipulat
+       els plans.</d>
+    <t>2067</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>0.11.3</version>
+  <date>2013-06-03</date>
+  <changes>
+   <fx>
+    <d>Es corregeix defecte que provocava que en certes ocasions l'aplicació es tanqués esporàdicament en canviar de sèrie.</d>
+    <t>1902</t>
+   </fx>
+   <fx>
+    <d>Es corregeix defecte que provocava que l'aplicació es tanqués esporàdicament si anàvem al volum anterior carregat en memòria amb la tecla '-' des d'un
+       visor amb el MIP activat.</d>
+    <t>1950</t>
+   </fx>
+   <fx>
+    <d>Es corregeix defecte que provocava que es donessin falsos positius en la detecció dels ports en ús.</d>
+    <t>1951</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>0.11.2</version>
+  <date>2013-03-14</date>
+  <changes>
+   <nw>
+    <d>S'afegeix l'anotació de lateralitat en el visor si l'estudi conté aquesta informació.</d>
+    <t>1923</t>
+   </nw>
+   <fx>
+    <d>Es corregeix defecte que provocava que certes sèries de RM Lumbar quedessin mal ordenades.</d>
+    <t>1933</t>
+   </fx>
+   <fx>
+    <d>Es corregeix defecte que provocava que es donessin mesures incorrectes en el cas que dins d'una mateixa sèrie hi hagués imatges amb diferents espaiats de
+       píxel.</d>
+    <t>1935</t>
+   </fx>
+   <fx>
+    <d>Es corregeixen els problemes de rendering (bloquejos, no refresc de les imatges, etc.) apareguts en sistemes Windows XP amb pantalles i targetes
+       BARCO.</d>
+    <t>1929</t>
+   </fx>
+   <fx>
+    <d>Es corregeix que en sistemes Windows XP els visors facin un parpelleig blanc quan es passa una finestra per sobre d'aquests.</d>
+    <t>1925</t>
+   </fx>
+   <fx>
+    <d>Es corregeix cas en que en aplicar un hanging protocol de mamografia una de les imatges quedava alineada fora del camp de visió del visor.</d>
+    <t>1934</t>
+   </fx>
+   <fx>
+    <d>Es fa que en obrir imatges de mamografia aquestes apareguin ja col·locades correctament i que no es vegi com es fa el volteig i alineament de
+       cadascuna.</d>
+    <t>1928</t>
+   </fx>
+   <fx>
+    <d>Es corregeix defecte que feia que en certs casos la funció de reset no es reflexés fins que no s'interactuava amb la imatge.</d>
+    <t>1940</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>0.11.1</version>
+  <date>2012-11-15</date>
+  <changes>
+   <im>
+    <d>Es redueix dràsticament el consum de memòria en crear thumbnails d'imatges multiframe.</d>
+    <t>1159</t>
+   </im>
+   <im>
+    <d>Es millora el temps de cancel·lació de descàrregues en curs en tancar l'aplicació.</d>
+    <t>1579</t>
+   </im>
+   <im>
+    <d>Es millora la distribució dels elements del menú contextual perquè no excedeixi l'alçada de la pantalla on es mostra i es puguin veure tots els seus
+       elements sempre que l'amplada de les pantalles ho permetin.</d>
+    <t>1495</t>
+   </im>
+   <im>
+    <d>S'afegeix l'scroll per rodeta de mouse en l'extensió DICOMPrint.</d>
+    <t>1910</t>
+   </im>
+   <im>
+    <d>S'afegeix hanging protocol per cas concret de mamografia CR.</d>
+   </im>
+   <fx>
+    <d>Es resol que només es pugui escollir la sèrie a reconstruir des de la vista axial en l'MPR 2D.</d>
+    <t>1913</t>
+   </fx>
+   <fx>
+    <d>Es resol cas en que l'eina de Voxel Information podia fer tancar inesperadament l'aplicació amb sèries amb fases.</d>
+    <t>1905</t>
+   </fx>
+   <fx>
+    <d>Es resol la ordenació incorrecta de reconstruccions rotacionals.</d>
+    <t>1901</t>
+   </fx>
+   <fx>
+    <d>Es resol que en cas que tinguem el port de descàrrega bloquejat pel firewall, la descàrrega no quedi en espera indefinida i es mostri error.</d>
+    <t>1262</t>
+   </fx>
+   <fx>
+    <d>Es resolen casos en que no es podien obrir sèries amb reconstruccions de certs estudis.</d>
+    <t>1900</t>
+   </fx>
+   <fx>
+    <d>Es resolen problemes de renderitzat en sistemes Windows 7 quan AERO està desactivat.</d>
+    <t>1838</t>
+   </fx>
+   <fx>
+    <d>Es resol que en cas que es perdi la connexió amb el PACS es detecti i l'aplicació no es quedi en estat d'espera indefinit.</d>
+    <t>929</t>
+   </fx>
+   <fx>
+    <d>Es resol cas en que la descàrrega de certes sèries provocava que l'aplicació es tanqués inesperadament.</d>
+    <t>1892</t>
+   </fx>
+   <fx>
+    <d>Es resol que es puguin crear els thumbnails d'imatges que continguin overlays.</d>
+    <t>1121</t>
+    <t>1280</t>
+   </fx>
+   <fx>
+    <d>Es resol funcionament incorrecte de la cerca d'estudis relacionats que feia que sota certes condicions es cerquessin els estudis en un PACS erroni.</d>
+    <t>1894</t>
+   </fx>
+   <fx>
+    <d>Es resol funcionament incorrecte de la funció de maximitzar a múltiples pantalles en sistemes Windows 7.</d>
+    <t>1814</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>0.11.0.1</version>
+  <date>2012-06-05</date>
+  <changes>
+   <nw>
+    <d>S'afegeix el logotip de l'IDI al fons de pantalla.</d>
+   </nw>
+   <nw>
+    <d>S'afegeixen els logotips de l'IDI i GiLab al diàleg d'informació de l'aplicació.</d>
+   </nw>
+  </changes>
+ </release>
+
+ <release magnitude="major">
+  <version>0.11.0</version>
+  <date>2012-05-21</date>
+  <changes>
+   <nw>
+    <d>S'afegeix suport a Overlays. Això permet mostrar les annotacions fetes en l'adquisició d'estudis de tot tipus, emprat habitualment en estudis de placa
+       simple.</d>
+    <t>1358</t>
+   </nw>
+   <nw>
+    <d>S'afegeix suport a Display Shutters. Això permet, per exemple, eliminar automàticament el fons blanc que envolta la imatge en estudis de tipus RF.</d>
+    <t>1318</t>
+   </nw>
+   <nw>
+    <d>S'afegeix una nova eina de diagnosi del sistema per comprovar la correcta configuració i poder detectar possibles causes en cas de mal funcionament de
+       l'aplicació.</d>
+    <t>935</t>
+   </nw>
+   <nw>
+    <d>Es crea un nou logotip i nova estètica corporativa.</d>
+    <t>1645</t>
+   </nw>
+   <nw>
+    <d>S'afegeix una nova eina que permet sincronitzar automàticament les sèries d'un mateix estudi.</d>
+    <t>1629</t>
+   </nw>
+   <nw>
+    <d>S'afegeixen dos nous botons per activar i desactivar la sincronització manual en tots els visors.</d>
+    <t>1629</t>
+   </nw>
+   <nw>
+    <d>S'afegeix l'eina de Lupa per poder ampliar regions de la imatge.</d>
+    <t>176</t>
+   </nw>
+   <nw>
+    <d>S'afegeix una nova eina de ROI, la "Magic ROI" que permet seleccionar àrees d'interès de forma molt més ajustada, ràpida i fàcil utilitzant algorismes de
+       segmentació.</d>
+    <t>1590</t>
+   </nw>
+   <nw>
+    <d>S'afegeix una eina de cercle que permet dibuixar un cercle amb una creu marcant-ne el centre.</d>
+    <t>1746</t>
+   </nw>
+   <nw>
+    <d>S'afegeix una eina per fer mesures de TA-GT.</d>
+    <t>1747</t>
+   </nw>
+   <nw>
+    <d>Per peticions a través del RIS, es dóna l'opció d'escollir si tornar a descarregar un estudi o no en cas que aquest ja el tinguem en local.</d>
+    <t>1620</t>
+   </nw>
+   <nw>
+    <d>Es fa que els estudis locals es conservin quan s'actualitza a una nova versió i que no s'esborrin com passava fins la versió 0.10.</d>
+    <t>1597</t>
+   </nw>
+   <nw>
+    <d>S'afegeix que l'eina d'Scroll sempre estigui disponible en la rodeta del ratolí. Això fa que es pugui canviar d'imatge al tenir altres eines
+       seleccionades, com el zoom, cursor 3D, ROI's, distàncies, etc.</d>
+    <t>1635</t>
+    <t>625</t>
+   </nw>
+   <nw>
+    <d>S'afegeix que l'eina de zoom s'activi per defecte per estudis de modalitat CR, DX, MG, MR i RF i que es pugui configurar per qualsevol modalitat. Això fa
+       que poguem tenir totes les eines bàsiques disponibles al mouse.</d>
+    <t>1751</t>
+    <t>1649</t>
+   </nw>
+   <nw>
+    <d>S'afegeix que l'eina de sincronització automàtica s'activi per defecte per estudis de MR i CT, amb la possibilitat de configurar-ho.</d>
+    <t>1630</t>
+   </nw>
+   <nw>
+    <d>S'afegeix la possibilitat de recòrrer les imatges i/o fases de manera cíclica dins d'una mateixa sèrie.</d>
+    <t>370</t>
+    <t>1754</t>
+   </nw>
+   <nw>
+    <d>S'afegeix que l'eina de Reference Lines s'activi per defecte per estudis d'MR i que es pugui configurar també per CT.</d>
+    <t>1750</t>
+   </nw>
+   <nw>
+    <d>S'afegeix la possibilitat de cancel·lar la creació d'una mesura prement la tecla ESC.</d>
+    <t>1475</t>
+   </nw>
+   <nw>
+    <d>S'afegeix nova pantalla de configuració per als paràmetres del visor 2D, com per exemple quines eines s'activen per defecte segons la modalitat de
+       l'estudi o paràmetres d'eines concretes.</d>
+    <t>1754</t>
+    <t>1751</t>
+    <t>1649</t>
+    <t>1750</t>
+    <t>1754</t>
+    <t>1630</t>
+   </nw>
+   <nw>
+    <d>S'afegeix l'opció de cercar per data naixament o edat del pacient a la cerca avançada al PACS.</d>
+    <t>1617</t>
+   </nw>
+   <nw>
+    <d>S'afegeix la modalitat OP al llistat de modalitats per cercar.</d>
+    <t>1568</t>
+   </nw>
+   <nw>
+    <d>S'afegeixen nous hanging protocols de mamografia, tomografia computeritzada i ressonància magnètica demanats durant diverses visites.</d>
+    <t>1611</t>
+    <t>1558</t>
+    <t>1748</t>
+   </nw>
+   <nw>
+    <d>S'afegeix la funcionalitat de poder imprimir imatges de diverses sèries en una mateixa placa.</d>
+    <t>1675</t>
+   </nw>
+   <nw>
+    <d>S'afegeix la funcionalitat de poder modificar la finestra de les imatges a imprimir.</d>
+    <t>1651</t>
+   </nw>
+   <nw>
+    <d>S'afegeix botó per restaurar la imatge i per poder escollir la finestra a l'extensió d'impressió DICOM.</d>
+    <t>1718</t>
+   </nw>
+   <im>
+    <d>Es fa que es recordi si el llistat de PACS ha de ser visible o no en la finestra de cerques a PACS.</d>
+    <t>1801</t>
+   </im>
+   <im>
+    <d>La consulta d'estudis relacionats, a part de cercar en els PACS marcats per defecte, sempre cerca en el PACS del qual s'ha descarregat l'estudi,
+       independentment de si està seleccionat o no.</d>
+    <t>1697</t>
+   </im>
+   <im>
+    <d>Es millora el procés de decidir si dos estudis pertanyen al mateix pacient.</d>
+    <t>1736</t>
+   </im>
+   <im>
+    <d>Es millora la sincronització manual perquè només sincronitzi imatges que estan en el mateix pla d'adquisició.</d>
+    <t>1629</t>
+   </im>
+   <im>
+    <d>Es millora el dibuix de la línia discontínua de l'eina de ROI polilínia.</d>
+    <t>1803</t>
+   </im>
+   <im>
+    <d>Es millora i es fa més fàcil l'esborrar amb un clic per les anotacions textuals.</d>
+    <t>1576</t>
+   </im>
+   <im>
+    <d>Es millora la llegibilitat de les mesures i les seves anotacions.</d>
+    <t>779</t>
+    <t>1233</t>
+   </im>
+   <im>
+    <d>Es millora el posicionament de les anotacions de les eines de mesura per millorar-ne la visibilitat.</d>
+    <t>1252</t>
+   </im>
+   <im>
+    <d>Es té en compte que es pugui canviar d'imatge o fase mentre es fan anotacions, mostrant aquestes correctament sobre la imatge que correspongui.</d>
+    <t>1448</t>
+   </im>
+   <im>
+    <d>Es milloren les icones de la sincronització manual, canviant d'aspecte segons l'estat.</d>
+    <t>1776</t>
+   </im>
+   <im>
+    <d>Es millora la distribució de la barra d'eines fent-la més compacta.</d>
+    <t>1706</t>
+    <t>1760</t>
+   </im>
+   <im>
+    <d>Es fa que el format de l'any sigui de 4 dígits a les dates mostrades al visor 2D i al menú contextual de pacient.</d>
+    <t>1745</t>
+   </im>
+   <im>
+    <d>Es fa que els estudis del menú contextual, llistat d'estudis relacionats i resultats de cerca estiguin ordenats de més recent a més antic.</d>
+    <t>1743</t>
+   </im>
+   <im>
+    <d>Es fa que en el llistat d'estudis relacionats es ressaltin amb fons de color blau els estudis de la mateixa modalitat que la de l'estudi que s'estigui
+       visualitzant.</d>
+    <t>1741</t>
+   </im>
+   <im>
+    <d>Es fa que el llistat d'estudis relacionats mostri el màxim de resultats possibles sense haver d'aparèixer l'scroll bar, adaptant la seva alçada segons
+       els resultats i l'alçada de pantalla.</d>
+    <t>1740</t>
+   </im>
+   <im>
+    <d>Es ressalta quina eina de ROI està activada canviant la icona de la barra d'eines segons l'última eina de ROI escollida.</d>
+   </im>
+   <im>
+    <d>Es fa que el camp de cerca del bolcat DICOM sempre tingui el focus.</d>
+    <t>1835</t>
+   </im>
+   <im>
+    <d>S'afegeixen els tags Exposure, ExposureTime, ExposureTimeInMs i ExposureInmAs en els tags rellevants del bolcat DICOM de CT.</d>
+    <t>1608</t>
+   </im>
+   <im>
+    <d>S'afegeixen els tags DiffusionGradientDirectionSequence, DiffusionGradientOrientation, GradientOutputType, GradientOutput i GradientEchoTrainLength en
+       els tags rellevants del bolcat DICOM de MR.</d>
+    <t>1622</t>
+   </im>
+   <im>
+    <d>Es permet importar DICOMDIR a nivell de sèries o imatges.</d>
+    <t>712</t>
+   </im>
+   <im>
+    <d>Es millora el tractament d'errors en la creació de DICOMDIR.</d>
+    <t>1824</t>
+    <t>1825</t>
+    <t>1824</t>
+   </im>
+   <im>
+    <d>S'eliminen els arxius temporals creats immeditament després de crear un DICOMDIR.</d>
+    <t>1198</t>
+   </im>
+   <im>
+    <d>Si en acabar de descarregar un estudi demanat a través del SAP, la finestra d'Starviewer està minimitzada, aquesta es restaura al seu estat original.</d>
+    <t>1658</t>
+   </im>
+   <im>
+    <d>Es permet afegir el tag opcional "institutions" als hanging protocols per definir pels estudis de quines institucions són aplicables.</d>
+    <t>1721</t>
+   </im>
+   <im>
+    <d>Millora dels hanging protocols per ecografia amb estudis amb volums.</d>
+    <t>1615</t>
+   </im>
+   <im>
+    <d>Es millora la gestió de la memòria.</d>
+    <t>839</t>
+   </im>
+   <im>
+    <d>S'afegeix la possibilitat de canviar els paràmetres d'il·luminació del visor 3D.</d>
+   </im>
+   <im>
+    <d>Es permet la impressió de sèries Multiframe.</d>
+    <t>1094</t>
+   </im>
+   <fx>
+    <d>Es corregeix el missatge d'error mostrat en cas que fem la petició de descàrrega a través del RIS i l'estudi existeixi però no es pugui baixar.</d>
+    <t>1867</t>
+   </fx>
+   <fx>
+    <d>Es corregeix error que es podia donar quan es demanava un estudi a través del RIS o de la pantalla de cerca amb diverses finestres obertes, podent fer
+       tancar l'aplicació o obrint el nou estudi en totes els finestres obertes.</d>
+    <t>1018</t>
+    <t>1858</t>
+   </fx>
+   <fx>
+    <d>Es corregeix que la barra de progrés no s'amagués si fallava la descàrrega d'un estudi previ a través d'un hanging protocol.</d>
+    <t>1860</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema de l'eina d'informació de vòxel que podia no mostrar els valors correctes amb volums amb fases o quan s'aplicava un thick slab.</d>
+    <t>1848</t>
+    <t>1851</t>
+    <t>1775</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema de l'eina Cursor 3D que provocava que l'aplicació es tanqués si s'obria un nou volum en un visor buit.</d>
+    <t>1873</t>
+   </fx>
+   <fx>
+    <d>Es corregeix el valor inicial en l'edició de finestra fent que mostri els valors actuals del visor seleccionat.</d>
+    <t>1833</t>
+    <t>1809</t>
+   </fx>
+   <fx>
+    <d>Es corregeix cas en el que al canviar de volum en un visor podia no aplicar-se la finestra predeterminada corresponent.</d>
+    <t>1878</t>
+   </fx>
+   <fx>
+    <d>Es corregeix el comportament de l'eina de Reference Lines evitant casos en els que es mostraven línies que no s'havien de mostrar.</d>
+    <t>1806</t>
+   </fx>
+   <fx>
+    <d>Es fa que l'eina d'informació de vòxel s'actualitzi correctament quan es fa un canvi de la càmera (rotació, flip, reconstrucció, etc.).</d>
+   </fx>
+   <fx>
+    <d>Es solucionen problemes de càlcul d'espaiat de la sincronització manual.</d>
+    <t>1598</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema que feia que el cursor 3D no es pogués posicionar sobre la imatge corresponent quan aquesta era la última del volum.</d>
+    <t>1731</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema que feia que el mode d'scroll per fases s'activés per defecte per un cas en que no havia de ser així.</d>
+   </fx>
+   <fx>
+    <d>Es resol que si es troba un mateix estudi a més d'un PACS es descarregui l'estudi del PACS corresponent a la selecció de l'usuari.</d>
+    <t>1023</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema que provocava que l'aplicació es tanqués en algunes ocasions en eliminar estudis des de la pantalla de base de dades local.</d>
+   </fx>
+   <fx>
+    <d>Es corregeix que els estudis de la base de dades local es reordenessin en ordre ascendent si al descarregar un nou estudi del PACS els teníem ordenats en
+       ordre descendent.</d>
+   </fx>
+   <fx>
+    <d>Es soluciona problema que podia provocar que pacients bessons es tractessin com un mateix pacient.</d>
+    <t>1696</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema que provocava que una sèrie es divididís erròniament en varis volums.</d>
+    <t>1589</t>
+   </fx>
+   <fx>
+    <d>Es resol un error que feia que no s'afegissin determinades finestres predeterminades de la imatge.</d>
+    <t>1716</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema que feia que l'eina d'esborrar no funcionés del tot correctament en determinades situacions.</d>
+    <t>1574</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema que deixava desplegar les imatges d'una sèrie en la base de dades local quan aquesta acció no tenia sentit.</d>
+    <t>1687</t>
+   </fx>
+   <fx>
+    <d>Es resol un error que podia fer que la consulta de xarxa no es tanqués mai si es produïa un error.</d>
+    <t>1704</t>
+   </fx>
+   <fx>
+    <d>Es solucionen problemes que es produïen en esborrar estudis vells on no s'informava de determinats errors a l'usuari.</d>
+    <t>1711</t>
+   </fx>
+   <fx>
+    <d>Es resol un error que hi havia amb l'assignació de finestres a través de hanging protocol.</d>
+    <t>1695</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema de l'eina d'angle que feia que no es calculés bé l'angle ni es dibuixés bé l'arc quan es començava l'angle en una imatge i
+       s'acabava en una altra.</d>
+    <t>1724</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema que no permetia esborrar anotacions amb un clic quan es feia un flip de la imatge.</d>
+    <t>1147</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema que no permetia esborrar anotacions amb un clic quan es començava l'anotació en una imatge i s'acabava en una altra.</d>
+    <t>1777</t>
+   </fx>
+   <fx>
+    <d>Es soluciona problema que feia que l'aplicació es tanqués si cercàvem en un DICOMDIR amb més d'un estudi del mateix pacient.</d>
+    <t>1815</t>
+   </fx>
+   <rm>
+    <d>S'elimina la funcionalitat de zoom amb la rodeta del mouse per poder fer scroll permanentment.</d>
+    <t>1635</t>
+   </rm>
+   <rm>
+    <d>S'eliminen les funcionalitats de refresc i historial a la vista de les notes de versió.</d>
+    <t>1871</t>
+   </rm>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>0.10.1</version>
+  <date>2011-07-20</date>
+  <changes>
+   <im>
+    <d>Es millora la gestió de la memòria per poder carregar més estudis alhora.</d>
+    <t>1684</t>
+   </im>
+   <im>
+    <d>Es millora el mecanisme de càrrega d'estudis per minimitzar els problemes de memòria en sistemes Windows 32bits.</d>
+   </im>
+   <im>
+    <d>Millores en els hanging protocols d'ecografia.</d>
+    <t>1615</t>
+   </im>
+   <fx>
+    <d>Es soluciona un error que feia que quan s'aplicava una reconstrucció sobre una imatge de placa simple sota determinades circumstàncies es podia arribar a
+       mostrar etiquetes d'orientació sense sentit.</d>
+   </fx>
+   <fx>
+    <d>Es resol un problema que provocava el tancament inesperat d'Starviewer al intentar carregar estudis que requerien molta memòria, com per exemple
+       determinades mamografies.</d>
+    <t>1487</t>
+    <t>1610</t>
+    <t>1686</t>
+    <t>1688</t>
+   </fx>
+   <fx>
+    <d>Es soluciona un problema que provocava el tancament inesperat d'Starviewer al obrir determinats estudis de modalitat XA.</d>
+    <t>1693</t>
+   </fx>
+   <fx>
+    <d>S'han fet correccions menors a la documentació d'ajuda.</d>
+    <t>1602</t>
+    <t>1603</t>
+    <t>1653</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="major">
+  <version>0.10.0</version>
+  <date>2011-04-10</date>
+  <changes>
+   <nw>
+    <d>S'afegeix l'eina ROI elíptica (càlcul de l'àrea d'una regió elíptica).</d>
+    <t>930</t>
+   </nw>
+   <nw>
+    <d>S'afegeix l'opció de carregar diversos estudis de forma simultània de manera que s'obrin més ràpidament.</d>
+   </nw>
+   <nw>
+    <d>S'afegeix l'opció d'anonimitzar els estudis al crear un DICOMDIR. Es permet indicar el nom del pacient dels estudis anonimitzats.</d>
+    <t>188</t>
+    <t>1418</t>
+   </nw>
+   <nw>
+    <d>S'afegeix suport a la visualització d'imatges DICOM en color.</d>
+   </nw>
+   <nw>
+    <d>S'afegeix l'opció de ser informat quan es publica una nova versió d'Starviewer i quines novetats incorpora.</d>
+   </nw>
+   <nw>
+    <d>S'afegeix l'opció per veure les novetats que incorpora Starviewer després d'instal·lar una nova versió. Si es vol tornar a veure es pot anar al menú
+       Ajuda-&gt;Notes de la versió.</d>
+   </nw>
+   <nw>
+    <d>S'afegeixen nous hanging protocols, entre els que destaquem els de MG, CR, DX, RF, estudis amb bilateralitat...</d>
+    <t>1384</t>
+    <t>1350</t>
+    <t>1382</t>
+   </nw>
+   <nw>
+    <d>S'afegeix el format TIFF com a format d'exportació de captures de pantalla.</d>
+    <t>1306</t>
+   </nw>
+   <nw>
+    <d>Es permet cancel·lar la descàrrega o enviament de fitxers DICOM a un PACS. Aquesta acció es pot realitzar des de la llista de peticions en qualsevol
+       moment.</d>
+   </nw>
+   <nw>
+    <d>S'afegeix un editor per les finestres predefinides (WW/WL) de manera que se'n puguin afegir i quedin guardades.</d>
+    <t>974</t>
+   </nw>
+   <nw>
+    <d>S'afegeixen opcions per gestionar les finestres d'Starviewer al menú Finestra: maximitzar a múltiples pantalles (amb tecles Ctrl+Shift+M) i moure la
+       finestra actual entre les diferents pantalles (amb tecles Ctrl+Shift+→).</d>
+    <t>1364</t>
+   </nw>
+   <nw>
+    <d>S'afegeix l'opció de poder fer cerques d'estudis locals filtrant per modalitat.</d>
+    <t>1354</t>
+   </nw>
+   <nw>
+    <d>S'afegeix l'opció als hanging protocols de definir el número d'imatge a mostrar a cada visor de forma absoluta respecte el total d'imatges de
+       l'estudi.</d>
+    <t>1425</t>
+   </nw>
+   <nw>
+    <d>S'afegeix l'opció de permetre definir el WW/WL que aplicarà un hanging protocol a cada visor.</d>
+    <t>1426</t>
+   </nw>
+   <nw>
+    <d>S'afegeix la guia ràpida i l'esquema de shortcuts al menú Ajuda.</d>
+    <t>1372</t>
+   </nw>
+   <nw>
+    <d>S'afegeix suport a descompressió d'imatges comprimides en el format RLE.</d>
+   </nw>
+   <im>
+    <d>S'augmenta la mida de la lletra en pantalles de molta resolució (3Mpx, 5Mpx) per facilitar la lectura de les eines de mesura, el menú de botó dret i la
+       càrrega d'estudis.</d>
+   </im>
+   <im>
+    <d>Es fan millores considerables a l'MPR i es resolen diversos bugs.</d>
+   </im>
+   <im>
+    <d>Es canvia l'eina "d'estudis previs" a "estudis relacionats" perquè es puguin consultar tots els estudis del pacient i no només els més vells.</d>
+    <t>1296</t>
+    <t>1311</t>
+   </im>
+   <im>
+    <d>Es millora la velocitat amb la que es carreguen els estudis.</d>
+   </im>
+   <im>
+    <d>S'afegeix la possibilitat d'enviar diversos fitxers DICOM a un PACS de forma simultània i mentre se'n descarreguen d'altres.</d>
+   </im>
+   <im>
+    <d>Es millora l'eina d'esborrar anotacions permetent esborrar una ROI clicant sobre qualsevol part d'aquesta.</d>
+    <t>1283</t>
+   </im>
+   <im>
+    <d>Es millora el tractament del WW/WL aplicant-lo per cada imatge de forma individual, si aquesta el té definit.</d>
+    <t>478</t>
+    <t>1312</t>
+   </im>
+   <im>
+    <d>S'habilita l'ordenació per columna del llistat de la finestra d'estudis relacionats.</d>
+    <t>1297</t>
+   </im>
+   <im>
+    <d>Es millora el temps d'arrancada d'Starviewer en el casos que la base de dades local fos molt gran.</d>
+    <t>1369</t>
+   </im>
+   <im>
+    <d>Es permet ordenar per data i hora, alhora, en les pantalles de cerca d'estudis del PACS i d'estudis relacionats, fusionant aquestes dues columnes.</d>
+    <t>1355</t>
+   </im>
+   <im>
+    <d>S'afegeix l'opció d'amagar la finestra que notifica quan s'ha rebut una petició del RIS fent-li un clic.</d>
+    <t>1459</t>
+   </im>
+   <im>
+    <d>Es millora l'opció d'imprimir plaques afegint la possibilitat d'afegir informació relativa al pacient i l'estudi al utilitzar impressores que suportin
+       anotacions.</d>
+    <t>1415</t>
+   </im>
+   <im>
+    <d>Es milloren els hanging protocols, simplificant el menú per escollir-los i poder escollir-ne un de forma més ràpida.</d>
+    <t>1383</t>
+    <t>1351</t>
+   </im>
+   <im>
+    <d>Es fa que es recordi l'ordenació dels estudis en la pantalla de cerca d'estudis al PACS.</d>
+    <t>1021</t>
+    <t>1272</t>
+   </im>
+   <im>
+    <d>Es millora l'eina d'Informació de vòxel fent que no mostri informació supèrflua.</d>
+    <t>1375</t>
+   </im>
+   <im>
+    <d>Es millora el calendari de cercar estudis al PACS entre dates.</d>
+    <t>1393</t>
+   </im>
+   <im>
+    <d>Es reorganitzen les columnes del menú d'estudis relacionats per fer-lo més usable.</d>
+    <t>1491</t>
+   </im>
+   <im>
+    <d>Es millora el menú de finestres predefinides (WW/WL) fent que sempre sigui visible tots els WW/WL disponibles per facilitar-ne la tria.</d>
+    <t>2215</t>
+   </im>
+   <im>
+    <d>Es mostra la pantalla inicial el més aviat possible per informar que Starviewer està arrencant.</d>
+   </im>
+   <im>
+    <d>Es millora la pantalla de descàrrega d'estudis previs per tal de que sigui més estilitzada i similar a la de càrrega simultània d'estudis.</d>
+   </im>
+   <im>
+    <d>Es millora la informació dels reports de petades per tal de facilitar la resolució de problemes.</d>
+   </im>
+   <im>
+    <d>Es milloren, de forma general, els missatges d'error que es donen a l'usuari per tal de fer-los més informatius.</d>
+   </im>
+   <im>
+    <d>Es millora la gestió de visors en aplicar un hanging protocol.</d>
+    <t>1263</t>
+   </im>
+   <im>
+    <d>Es realitzen millores en el mòdul de comunicació amb el PACS.</d>
+   </im>
+   <im>
+    <d>S'actualitzen i es milloren els manuals, guies ràpides i document de shortcuts.</d>
+   </im>
+   <im>
+    <d>Es millora el tractament de sèries amb imatges de mides diferents.</d>
+   </im>
+   <im>
+    <d>Es millora el rendiment de l'aplicació al canviar de visor actiu.</d>
+   </im>
+   <im>
+    <d>Es millora la informació que es dona a l'usuari si intenta obrir un altre Starviewer i aquest no respon.</d>
+   </im>
+   <im>
+    <d>Es milloren les traduccions.</d>
+   </im>
+   <im>
+    <d>Es millora la generació de DICOMDIR's.</d>
+   </im>
+   <im>
+    <d>Es milloren els menús.</d>
+   </im>
+   <im>
+    <d>Es realitzen millores en la gestió dels recursos de memòria i targeta gràfica.</d>
+   </im>
+   <fx>
+    <d>Es resol el problema de que sota determinades circumstàncies les etiquetes podien ser errònies.</d>
+    <t>1241</t>
+    <t>1248</t>
+   </fx>
+   <fx>
+    <d>Es resol un problema que podia impedir crear un DICOMDIR.</d>
+    <t>1529</t>
+   </fx>
+   <fx>
+    <d>Es millora la fusió de pacients.</d>
+    <t>1381</t>
+   </fx>
+   <fx>
+    <d>Es resolen diversos errors que es donaven al carregar imatges amb un z-spacing de 0.</d>
+    <t>1444</t>
+    <t>1429</t>
+   </fx>
+   <fx>
+    <d>Es soluciona un problema en que el menú de pacient es podia situar parcialment fora de la pantalla en un entorn multipantalla.</d>
+   </fx>
+   <fx>
+    <d>Es solucionen diversos bugs que es podien donar al inserir estudis a la base de dades local.</d>
+    <t>1254</t>
+   </fx>
+   <fx>
+    <d>Es resol un problema de suport a variables parsejables de configuració en sistemes Windows Vista/7.</d>
+    <t>1270</t>
+   </fx>
+   <fx>
+    <d>S'elimina la possibilitat de que el 3D fes tancar l'aplicació si s'activava el shading en volums d'una sola imatge.</d>
+    <t>1251</t>
+   </fx>
+   <fx>
+    <d>Es soluciona un bug que podia fer que certs estudis RF no es visualitzessin amb l'escala de colors correcta.</d>
+    <t>1257</t>
+   </fx>
+   <fx>
+    <d>Es soluciona l'ordre de les tabulacions de les opcions de cerca avançada del PACS.</d>
+   </fx>
+   <fx>
+    <d>Es soluciona el fet de que no es permetia tenir estudis de diferents pacients si aquests tenien el mateix DICOM Patient ID a la base de dades local.</d>
+    <t>1325</t>
+   </fx>
+   <fx>
+    <d>Es solucionen diferents problemes a l'hora de treballar amb més d'una finestra alhora.</d>
+    <t>1244</t>
+   </fx>
+   <fx>
+    <d>Es corregeix un problema que provocava una visualització incorrecta de certs estudis de modalitat RF.</d>
+    <t>1257</t>
+   </fx>
+   <fx>
+    <d>Es soluciona el problema que provocava el tancament inesperat d'Starviewer al generar les vistes prèvies d'alguns estudis multiframe.</d>
+    <t>1258</t>
+   </fx>
+   <fx>
+    <d>Es soluciona el problema que provocava que no s'imprimissin correctament les imatges que no eren quadrades.</d>
+    <t>1410</t>
+   </fx>
+   <fx>
+    <d>Es corregeix un problema que provocava una visualització incorrecta de les biòpsies d'abstracció al buit (BAV).</d>
+    <t>1312</t>
+   </fx>
+   <fx>
+    <d>Es soluciona un problema per evitar que l'element "Custom" aparegui duplicat a la llista de WW/WL predefinits del visor 2D.</d>
+    <t>1403</t>
+   </fx>
+   <fx>
+    <d>Es corregeix el problema que hi havia amb Windows Vista i Windows 7 on, al canviar de volum, el visor quedava de color negre al no renderitzar
+       correctament.</d>
+    <t>1340</t>
+   </fx>
+   <fx>
+    <d>Es solucionen casos de CR i RF on el hanging protocol que s'aplicava era incorrecte.</d>
+    <t>1396</t>
+    <t>1397</t>
+   </fx>
+   <fx>
+    <d>Es soluciona un problema que podia provocar que Starviewer deixés de respondre al cercar estudis relacionats d'un pacient sense nom o sense ID de
+       pacient.</d>
+    <t>1542</t>
+   </fx>
+   <fx>
+    <d>Es soluciona el problema que feia que a vegades no aparegués el cursor amb forma de mà quan s'arrossega un pla a l'extensió d'MPR.</d>
+    <t>794</t>
+    <t>1557</t>
+   </fx>
+   <rm>
+    <d>S'elimina l'opció de visualitzar Starviewer a pantalla completa ja que queda substituït per les noves opcions del menú Finestra.</d>
+    <t>1370</t>
+   </rm>
+   <rm>
+    <d>S'eliminen els "rulers" dels visors 2D per tal de que no molestin a l'hora de visualitzar les imatges.</d>
+   </rm>
+  </changes>
+ </release>
+</releasenotes>
