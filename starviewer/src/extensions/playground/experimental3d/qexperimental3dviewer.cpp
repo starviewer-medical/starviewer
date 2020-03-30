@@ -3,13 +3,14 @@
 #include "abortrendercommand.h"
 #include "experimental3dvolume.h"
 
-#include <QVTKWidget.h>
+#include <QVTKOpenGLNativeWidget.h>
 
 #include <vtkCamera.h>
 #include <vtkEncodedGradientEstimator.h>
 #include <vtkEncodedGradientShader.h>
 #include <vtkInteractorStyleSwitch.h>
-#include <vtkRenderWindow.h>
+#include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
 #include <vtkUnsignedCharArray.h>
 #include "vtkVolumeRayCastMapper.h"
@@ -25,8 +26,6 @@ QExperimental3DViewer::QExperimental3DViewer(QWidget *parent)
     style->Delete();
 
     m_renderer->SetBackground(1.0, 1.0, 1.0);
-
-    m_vtkWidget->setAutomaticImageCacheEnabled(true);
 
     // avortar render
     AbortRenderCommand *abortRenderCommand = AbortRenderCommand::New();
@@ -94,10 +93,14 @@ void QExperimental3DViewer::setCamera(const Vector3 &position, const Vector3 &fo
 
 void QExperimental3DViewer::screenshot(const QString &fileName)
 {
-    uchar *rawImage = reinterpret_cast<uchar*>(m_vtkWidget->cachedImage()->GetScalarPointer());
-    QImage image(rawImage, m_vtkWidget->width(), m_vtkWidget->height(), QImage::Format_RGB888);
-    QImage mirroredImage = image.mirrored();
-    mirroredImage.save(fileName);
+    Q_ASSERT(0);
+    // Difficult to reimplement in this way when we transitioned from QVtkWidget to QVTKOpenGLNativeWidget
+
+//    uchar *rawImage = reinterpret_cast<uchar*>(m_vtkWidget->cachedImage()->GetScalarPointer());
+//    QImage image(rawImage, m_vtkWidget->width(), m_vtkWidget->height(), QImage::Format_RGB888);
+//    QImage mirroredImage = image.mirrored();
+//    mirroredImage.save(fileName);
+
 }
 
 void QExperimental3DViewer::render()

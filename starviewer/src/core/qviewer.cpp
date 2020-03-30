@@ -39,8 +39,9 @@
 #include <QScreen>
 
 // Include's vtk
-#include <QVTKWidget.h>
-#include <vtkRenderWindow.h>
+#include <QVTKOpenGLNativeWidget.h>
+#include <QVTKInteractor.h>
+#include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkRenderer.h>
 #include <vtkBMPWriter.h>
 #include <vtkPNGWriter.h>
@@ -60,7 +61,7 @@ QViewer::QViewer(QWidget *parent)
 {
     m_lastAngleDelta = QPoint();
     m_defaultFitIntoViewportMarginRate = 0.0;
-    m_vtkWidget = new QVTKWidget(this);
+    m_vtkWidget = new QVTKOpenGLNativeWidget(this);
     m_vtkWidget->setFocusPolicy(Qt::WheelFocus);
     m_renderer = vtkRenderer::New();
 
@@ -95,6 +96,8 @@ QViewer::QViewer(QWidget *parent)
 
     this->setMouseTracking(false);
     m_patientBrowserMenu = new PatientBrowserMenu(0);
+    // We do not want Qt to generate context menu events, we do our own detection through VTK events and then we call the overridable method QWidget::contextMenuEvent()
+    this->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
     // Ara mateix el comportament per defecte serà que un cop seleccionat un volum li assignem immediatament com a input
     this->setAutomaticallyLoadPatientBrowserMenuSelectedInput(true);
 }
@@ -113,7 +116,7 @@ QViewer::~QViewer()
 
 vtkRenderWindowInteractor* QViewer::getInteractor() const
 {
-    return m_vtkWidget->GetRenderWindow()->GetInteractor();
+    return m_vtkWidget->GetInteractor();
 }
 
 vtkRenderer* QViewer::getRenderer() const
@@ -230,7 +233,7 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
     // TODO Ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
     switch (vtkEvent)
     {
-        case QVTKWidget::ContextMenuEvent:
+        case QVTKInteractor::vtkCustomEvents::ContextMenuEvent:
         case vtkCommand::LeftButtonPressEvent:
         case vtkCommand::RightButtonPressEvent:
         case vtkCommand::MiddleButtonPressEvent:
@@ -955,7 +958,7 @@ void QViewer::handleNotEnoughMemoryForVisualizationError()
 
 void QViewer::setupRenderWindow()
 {
-    vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+    vtkSmartPointer<vtkGenericOpenGLRenderWindow> renderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
     // TODO getInteractor() forces m_vtkWiget to create a render window the first time just to return the interactor, that render window is unused afterwards.
     //      Could this be improved?
     renderWindow->SetInteractor(getInteractor());
