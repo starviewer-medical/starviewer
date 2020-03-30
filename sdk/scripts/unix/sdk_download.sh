@@ -14,7 +14,7 @@ download_and_verify()
     else
 	echo "The ${DOWNLOAD_PREFIX}/${FILENAME} exists, skipping the download."
     fi
-    HASH=`sha256sum "${DOWNLOAD_PREFIX}/${FILENAME}" | cut -f 1 -d " "`
+    HASH=`shasum -a 256 "${DOWNLOAD_PREFIX}/${FILENAME}" | cut -f 1 -d " "`
 
     if [ "${EXPECTED_HASH}" != "${HASH}" ]
     then

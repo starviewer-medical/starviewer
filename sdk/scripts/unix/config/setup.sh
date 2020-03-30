@@ -34,13 +34,7 @@ BUILD_TYPES=${BUILD_TYPES:-"release"}
 LIBS=${LIBS:-"qt dcmtk vtk gdcm itk ecm threadweaver"}
 
 # CMake executable
-if [[ $(uname) == 'Linux' ]]
-then
-    CMAKE=${CMAKE:-cmake}
-elif [[ $(uname) == 'Darwin' ]]
-then
-    CMAKE=${CMAKE:-"/Applications/CMake.app/Contents/bin/cmake"}
-fi
+CMAKE=${CMAKE:-cmake}
 
 # Set to appropriate value (example below) if you want to use distcc (distributed C compiler) on CMake.
 CMAKE_DISTCC=${CMAKE_DISTCC:-}

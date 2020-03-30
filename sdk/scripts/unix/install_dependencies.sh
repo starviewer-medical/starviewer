@@ -1,5 +1,5 @@
 #!/bin/bash
-SCRIPTS_ROOT=$(readlink -f $(dirname $BASH_SOURCE))
+SCRIPTS_ROOT=$(cd $(dirname $BASH_SOURCE) && pwd)
 . $SCRIPTS_ROOT/config/setup.sh
 
 # This script detects the unix operating system type and then installs the required dependencies
