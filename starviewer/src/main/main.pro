@@ -59,3 +59,14 @@ QT += xml opengl network xmlpatterns qml concurrent quick quickwidgets sql
 
 #TODO: Qt 4.5.3 no afegeix la informacio de UI_DIR com a include a l'hora de compilar el main.cpp
 INCLUDEPATH += ../../tmp/ui
+
+# Generate release notes HTML files
+unix {
+    RELNOTESDIR = $$PWD/../../releasenotes/
+    releasenoteshtml.target = releasenoteshtml
+    releasenoteshtml.commands = xsltproc $$RELNOTESDIR/changelog.xsl $$RELNOTESDIR/changelog.xml > $$RELNOTESDIR/changelog.html ; \
+                                xsltproc --stringparam fullChangelog changelog.html $$RELNOTESDIR/recentchangelog.xsl $$RELNOTESDIR/changelog.xml > $$RELNOTESDIR/recentchangelog.html
+
+    QMAKE_EXTRA_TARGETS += releasenoteshtml
+    POST_TARGETDEPS += releasenoteshtml
+}
