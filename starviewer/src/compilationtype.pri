@@ -29,6 +29,8 @@ win32 {
     # Required since Qt 5.6 by ITKCommon
     LIBS += gdi32.lib
 
+    LIBS += -lWSock32
+
     # definim que per sistemes de compilació windows basats en visual studio
     # la compilació es faci en tants cores com sigui possible
     QMAKE_CXXFLAGS += /MP

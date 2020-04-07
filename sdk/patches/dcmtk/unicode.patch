@@ -1,0 +1,1310 @@
+From 621d553e8c6eea96dc88414a024152e2fac5bc2e Mon Sep 17 00:00:00 2001
+From: Marco Eichelberg <dicom@offis.de>
+Date: Mon, 2 Mar 2020 15:42:00 +0100
+Subject: [PATCH] DCMTK now compiles when UNICODE/_UNICODE is defined.
+
+DCMTK will now successfully compile when the UNICODE and _UNICODE macros
+are defined on Windows. We now explicitly call the Windows API functions
+that are not remapped to wide-char versions depending on the presence of
+the UNICODE defines.
+
+This closes DCMTK issue #425.
+---
+ INSTALL                                      |   4 -
+ dcmdata/libsrc/dcencdoc.cc                   |   3 +-
+ dcmdata/libsrc/dcuid.cc                      |   4 +-
+ dcmnet/apps/storescp.cc                      |   4 +-
+ dcmnet/libsrc/dul.cc                         |   6 +-
+ dcmpstat/apps/dcmprscu.cc                    |   8 +-
+ dcmpstat/apps/dcmpsrcv.cc                    |   8 +-
+ dcmpstat/libsrc/dviface.cc                   |  42 +++----
+ oflog/include/dcmtk/oflog/clogger.h          |   4 +-
+ oflog/include/dcmtk/oflog/config.h           |   6 +-
+ oflog/include/dcmtk/oflog/configrt.h         |   6 +-
+ oflog/include/dcmtk/oflog/fstreams.h         |   2 +-
+ oflog/include/dcmtk/oflog/helpers/property.h |   6 +-
+ oflog/include/dcmtk/oflog/socketap.h         |   2 +-
+ oflog/include/dcmtk/oflog/streams.h          |   2 +-
+ oflog/include/dcmtk/oflog/tchar.h            |   6 +-
+ oflog/include/dcmtk/oflog/tstring.h          |   6 +-
+ oflog/libsrc/config.cc                       |   6 +-
+ oflog/libsrc/env.cc                          |   2 +-
+ oflog/libsrc/fileap.cc                       |   4 +-
+ oflog/libsrc/fileinfo.cc                     |   6 +
+ oflog/libsrc/globinit.cc                     |   2 +-
+ oflog/libsrc/log4judp.cc                     |   6 +-
+ oflog/libsrc/ntelogap.cc                     | 109 +++++++++++--------
+ oflog/libsrc/property.cc                     |  12 +-
+ oflog/libsrc/snprintf.cc                     |   8 +-
+ oflog/libsrc/sockbuff.cc                     |   6 +-
+ oflog/libsrc/socketap.cc                     |   2 +-
+ oflog/libsrc/strhelp.cc                      |   6 +-
+ oflog/libsrc/timehelp.cc                     |   6 +-
+ oflog/libsrc/winconap.cc                     |   2 +-
+ oflog/libsrc/windebap.cc                     |   4 +
+ oflog/libsrc/winsock.cc                      |   6 +
+ ofstd/include/dcmtk/ofstd/ofxml.h            |  17 +--
+ ofstd/libsrc/ofstd.cc                        |   4 +-
+ ofstd/libsrc/oftempf.cc                      |   2 +-
+ ofstd/tests/tests.cc                         |   3 +
+ ofstd/tests/txml.cc                          |  12 +-
+ 38 files changed, 193 insertions(+), 151 deletions(-)
+
+diff --git a/INSTALL b/INSTALL
+index ff5b363d6..105495d41 100644
+--- a/INSTALL
++++ b/INSTALL
+@@ -637,10 +637,6 @@ Known limitations of DCMTK on the Windows platform.
+    DCMTK can be configured to use either of the two interfaces.  This behavior
+    can be changed in "config/include/dcmtk/config/osconfig.h" in the build
+    directory where the symbol USE_STD_CXX_INCLUDES is declared.
+-3. DCMTK does not compile when UNICODE or _UNICODE is defined because the
+-   VisualStudio compiler then uses the Unicode version instead of the ANSI
+-   version for all Windows API functions (i.e. type wchar_t instead of char
+-   for all character string parameters and return values).
+ 
+ 
+ Unix with CMake
+diff --git a/dcmdata/libsrc/dcencdoc.cc b/dcmdata/libsrc/dcencdoc.cc
+index d83430dcd..0f470a2bd 100644
+--- a/dcmdata/libsrc/dcencdoc.cc
++++ b/dcmdata/libsrc/dcencdoc.cc
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 2018-2019, OFFIS e.V.
++ *  Copyright (C) 2018-2020, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -265,6 +265,7 @@ int DcmEncapsulatedDocument::getCDAData(
+   OFLogger &appLogger)
+ {
+ #ifdef _XMLWIDECHAR
++#warning "DCMTK compiled with 'wide char XML parser'. cda2dcm will be unable to read and encapsulate CDA documents."
+   OFLOG_ERROR(appLogger, "DCMTK compiled with \"wide char XML parser\". Cannot parse CDA data because of incompatible API.");
+   return 99;
+ #else
+diff --git a/dcmdata/libsrc/dcuid.cc b/dcmdata/libsrc/dcuid.cc
+index bb10a9318..d398b5260 100644
+--- a/dcmdata/libsrc/dcuid.cc
++++ b/dcmdata/libsrc/dcuid.cc
+@@ -1617,14 +1617,14 @@ static long gethostid(void)
+     /* get volume information of the system drive */
+     char systemDrive[MAX_PATH];
+     DWORD serialNumber = 0;
+-    if (GetSystemDirectory(systemDrive, OFstatic_cast(UINT, sizeof(systemDrive))) >= 0)
++    if (GetSystemDirectoryA(systemDrive, OFstatic_cast(UINT, sizeof(systemDrive))) >= 0)
+     {
+         /* check for proper pathname */
+         if ((strlen(systemDrive) >= 3) && (systemDrive[1] == ':') && (systemDrive[2] == '\\'))
+         {
+             /* truncate the pathname directly after the drive specification */
+             systemDrive[3] = 0;
+-            if (!GetVolumeInformation(systemDrive, NULL, 0, &serialNumber, NULL, NULL, NULL, 0))
++            if (!GetVolumeInformationA(systemDrive, NULL, 0, &serialNumber, NULL, NULL, NULL, 0))
+                 serialNumber = 0;
+         }
+     }
+diff --git a/dcmnet/apps/storescp.cc b/dcmnet/apps/storescp.cc
+index 3878e4433..8974a2303 100644
+--- a/dcmnet/apps/storescp.cc
++++ b/dcmnet/apps/storescp.cc
+@@ -2408,13 +2408,13 @@ static void executeCommand( const OFString &cmd )
+   }
+ #else
+   PROCESS_INFORMATION procinfo;
+-  STARTUPINFO sinfo;
++  STARTUPINFOA sinfo;
+   OFBitmanipTemplate<char>::zeroMem((char *)&sinfo, sizeof(sinfo));
+   sinfo.cb = sizeof(sinfo);
+ 
+   // execute command (Attention: Do not pass DETACHED_PROCESS as sixth argument to the below
+   // called function because in such a case the execution of batch-files is not going to work.)
+-  if( !CreateProcess(NULL, OFconst_cast(char *, cmd.c_str()), NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo) )
++  if( !CreateProcessA(NULL, OFconst_cast(char *, cmd.c_str()), NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo) )
+     OFLOG_ERROR(storescpLogger, "cannot execute command '" << cmd << "'");
+ 
+   if (opt_execSync)
+diff --git a/dcmnet/libsrc/dul.cc b/dcmnet/libsrc/dul.cc
+index 526fe60fb..b8e9cc044 100644
+--- a/dcmnet/libsrc/dul.cc
++++ b/dcmnet/libsrc/dul.cc
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1994-2019, OFFIS e.V.
++ *  Copyright (C) 1994-2020, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were partly developed by
+@@ -1803,7 +1803,7 @@ receiveTransportConnectionTCP(PRIVATE_NETWORKKEY ** network,
+         CloseHandle(hChildStdInWrite);
+ 
+         // we need a STARTUPINFO and a PROCESS_INFORMATION structure for CreateProcess.
+-        STARTUPINFO si;
++        STARTUPINFOA si;
+         PROCESS_INFORMATION pi;
+         memset(&pi,0,sizeof(pi));
+         memset(&si,0,sizeof(si));
+@@ -1818,7 +1818,7 @@ receiveTransportConnectionTCP(PRIVATE_NETWORKKEY ** network,
+         si.hStdInput = hChildStdInRead;
+ 
+         // create child process.
+-        if (!CreateProcess(NULL,OFconst_cast(char *, cmdLine.c_str()), NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi))
++        if (!CreateProcessA(NULL,OFconst_cast(char *, cmdLine.c_str()), NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi))
+         {
+             OFOStringStream stream;
+             stream << "Multi-Process Error: Creating process failed with error code "
+diff --git a/dcmpstat/apps/dcmprscu.cc b/dcmpstat/apps/dcmprscu.cc
+index fa608cc63..15644d257 100644
+--- a/dcmpstat/apps/dcmprscu.cc
++++ b/dcmpstat/apps/dcmprscu.cc
+@@ -1,5 +1,5 @@
+ /*
+- *  Copyright (C) 1999-2019, OFFIS e.V.
++ *  Copyright (C) 1999-2020, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -543,11 +543,11 @@ static OFCondition updateJobList(
+   const char *spoolFolder = dvi.getSpoolFolder();
+ 
+ #ifdef HAVE_WINDOWS_H
+-  WIN32_FIND_DATA stWin32FindData;
++  WIN32_FIND_DATAA stWin32FindData;
+   OFString currentdir = spoolFolder;
+   currentdir += "\\*";
+ 
+-  HANDLE hFile = FindFirstFile(currentdir.c_str(), &stWin32FindData);
++  HANDLE hFile = FindFirstFileA(currentdir.c_str(), &stWin32FindData);
+   int ret = (hFile != INVALID_HANDLE_VALUE);
+   while (ret)
+   {
+@@ -595,7 +595,7 @@ static OFCondition updateJobList(
+       }
+ 
+ #ifdef HAVE_WINDOWS_H
+-      ret = FindNextFile(hFile, &stWin32FindData);
++      ret = FindNextFileA(hFile, &stWin32FindData);
+   } /* while */
+   if(hFile != INVALID_HANDLE_VALUE)
+   {
+diff --git a/dcmpstat/apps/dcmpsrcv.cc b/dcmpstat/apps/dcmpsrcv.cc
+index 93307dd84..3ad9f37d0 100644
+--- a/dcmpstat/apps/dcmpsrcv.cc
++++ b/dcmpstat/apps/dcmpsrcv.cc
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 1999-2019, OFFIS e.V.
++ *  Copyright (C) 1999-2020, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -1349,15 +1349,15 @@ int main(int argc, char *argv[])
+             // initialize startup info
+             const char *receiver_application = dvi.getReceiverName();
+             PROCESS_INFORMATION procinfo;
+-            STARTUPINFO sinfo;
++            STARTUPINFOA sinfo;
+             OFBitmanipTemplate<char>::zeroMem((char *)&sinfo, sizeof(sinfo));
+             sinfo.cb = sizeof(sinfo);
+             char commandline[4096];
+             sprintf(commandline, "%s %s %s", receiver_application, opt_cfgName, opt_cfgID);
+ #ifdef DEBUG
+-            if (CreateProcess(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
++            if (CreateProcessA(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
+ #else
+-            if (CreateProcess(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
++            if (CreateProcessA(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
+ #endif
+             {
+ #ifdef WITH_OPENSSL
+diff --git a/dcmpstat/libsrc/dviface.cc b/dcmpstat/libsrc/dviface.cc
+index 676283b67..3cab3c810 100644
+--- a/dcmpstat/libsrc/dviface.cc
++++ b/dcmpstat/libsrc/dviface.cc
+@@ -2236,7 +2236,7 @@ OFCondition DVInterface::sendIOD(const char * targetID,
+ 
+   // initialize startup info
+   PROCESS_INFORMATION procinfo;
+-  STARTUPINFO sinfo;
++  STARTUPINFOA sinfo;
+   OFBitmanipTemplate<char>::zeroMem((char *)&sinfo, sizeof(sinfo));
+   sinfo.cb = sizeof(sinfo);
+   char commandline[4096];
+@@ -2246,9 +2246,9 @@ OFCondition DVInterface::sendIOD(const char * targetID,
+       studyUID, seriesUID);
+   else sprintf(commandline, "%s %s %s %s", sender_application, configPath.c_str(), targetID, studyUID);
+ #ifdef DEBUG
+-  if (CreateProcess(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
++  if (CreateProcessA(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
+ #else
+-  if (CreateProcess(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
++  if (CreateProcessA(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
+ #endif
+   {
+     return EC_Normal;
+@@ -2298,15 +2298,15 @@ OFCondition DVInterface::startReceiver()
+     // Windows version - call CreateProcess()
+     // initialize startup info
+     PROCESS_INFORMATION procinfo;
+-    STARTUPINFO sinfo;
++    STARTUPINFOA sinfo;
+     OFBitmanipTemplate<char>::zeroMem((char *)&sinfo, sizeof(sinfo));
+     sinfo.cb = sizeof(sinfo);
+     char commandline[4096];
+     sprintf(commandline, "%s %s %s", receiver_application, configPath.c_str(), getTargetID(i, DVPSE_receiver));
+ #ifdef DEBUG
+-    if (CreateProcess(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
++    if (CreateProcessA(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
+ #else
+-    if (CreateProcess(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
++    if (CreateProcessA(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
+ #endif
+     {
+       // continue loop
+@@ -2353,15 +2353,15 @@ OFCondition DVInterface::terminateReceiver()
+   // Windows version - call CreateProcess()
+   // initialize startup info
+   PROCESS_INFORMATION procinfo;
+-  STARTUPINFO sinfo;
++  STARTUPINFOA sinfo;
+   OFBitmanipTemplate<char>::zeroMem((char *)&sinfo, sizeof(sinfo));
+   sinfo.cb = sizeof(sinfo);
+   char commandline[4096];
+   sprintf(commandline, "%s %s %s", receiver_application, configPath.c_str(), "--terminate");
+ #ifdef DEBUG
+-  if (CreateProcess(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
++  if (CreateProcessA(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
+ #else
+-  if (CreateProcess(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
++  if (CreateProcessA(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
+ #endif
+   {
+     // continue loop
+@@ -2426,7 +2426,7 @@ OFCondition DVInterface::startQueryRetrieveServer()
+   // Windows version - call CreateProcess()
+   // initialize startup info
+   PROCESS_INFORMATION procinfo;
+-  STARTUPINFO sinfo;
++  STARTUPINFOA sinfo;
+   OFBitmanipTemplate<char>::zeroMem((char *)&sinfo, sizeof(sinfo));
+   sinfo.cb = sizeof(sinfo);
+   char commandline[4096];
+@@ -2442,9 +2442,9 @@ OFCondition DVInterface::startQueryRetrieveServer()
+   }
+ 
+ #ifdef DEBUG
+-  if (CreateProcess(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
++  if (CreateProcessA(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
+ #else
+-  if (CreateProcess(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
++  if (CreateProcessA(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
+ #endif
+   {
+     return EC_Normal;
+@@ -3432,7 +3432,7 @@ OFCondition DVInterface::startPrintSpooler()
+     // Windows version - call CreateProcess()
+     // initialize startup info
+     PROCESS_INFORMATION procinfo;
+-    STARTUPINFO sinfo;
++    STARTUPINFOA sinfo;
+     OFBitmanipTemplate<char>::zeroMem((char *)&sinfo, sizeof(sinfo));
+     sinfo.cb = sizeof(sinfo);
+     char commandline[4096];
+@@ -3445,9 +3445,9 @@ OFCondition DVInterface::startPrintSpooler()
+         printJobIdentifier.c_str(), printer, configPath.c_str(), sleepStr);
+     }
+ #ifdef DEBUG
+-    if (0 == CreateProcess(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
++    if (0 == CreateProcessA(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
+ #else
+-    if (0 == CreateProcess(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
++    if (0 == CreateProcessA(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
+ #endif
+     {
+       DCMPSTAT_ERROR("Unable to execute '" << spooler_application << "'");
+@@ -3567,7 +3567,7 @@ OFCondition DVInterface::startPrintServer()
+     // Windows version - call CreateProcess()
+     // initialize startup info
+     PROCESS_INFORMATION procinfo;
+-    STARTUPINFO sinfo;
++    STARTUPINFOA sinfo;
+     OFBitmanipTemplate<char>::zeroMem((char *)&sinfo, sizeof(sinfo));
+     sinfo.cb = sizeof(sinfo);
+     char commandline[4096];
+@@ -3578,9 +3578,9 @@ OFCondition DVInterface::startPrintServer()
+       sprintf(commandline, "%s --logfile --printer %s --config %s", application, printer, configPath.c_str());
+     }
+ #ifdef DEBUG
+-    if (0 == CreateProcess(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
++    if (0 == CreateProcessA(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
+ #else
+-    if (0 == CreateProcess(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
++    if (0 == CreateProcessA(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
+ #endif
+     {
+       DCMPSTAT_ERROR("Unable to execute '" << application << "'");
+@@ -3922,15 +3922,15 @@ OFCondition DVInterface::startExternalApplication(const char *application, const
+ 
+   // initialize startup info
+   PROCESS_INFORMATION procinfo;
+-  STARTUPINFO sinfo;
++  STARTUPINFOA sinfo;
+   OFBitmanipTemplate<char>::zeroMem((char *)&sinfo, sizeof(sinfo));
+   sinfo.cb = sizeof(sinfo);
+   char commandline[4096];
+   sprintf(commandline, "%s %s", application, filename);
+ #ifdef DEBUG
+-  if (CreateProcess(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
++  if (CreateProcessA(NULL, commandline, NULL, NULL, 0, 0, NULL, NULL, &sinfo, &procinfo))
+ #else
+-  if (CreateProcess(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
++  if (CreateProcessA(NULL, commandline, NULL, NULL, 0, DETACHED_PROCESS, NULL, NULL, &sinfo, &procinfo))
+ #endif
+   {
+     return EC_Normal;
+diff --git a/oflog/include/dcmtk/oflog/clogger.h b/oflog/include/dcmtk/oflog/clogger.h
+index 9508dd00d..c8dba6bce 100644
+--- a/oflog/include/dcmtk/oflog/clogger.h
++++ b/oflog/include/dcmtk/oflog/clogger.h
+@@ -54,13 +54,13 @@ typedef int loglevel_t;
+ #define L4CP_ALL_LOG_LEVEL TRACE_LOG_LEVEL
+ #define L4CP_NOT_SET_LOG_LEVEL -1
+ 
+-#ifdef UNICODE
++#ifdef DCMTK_OFLOG_UNICODE
+ #  define DCMTK_LOG4CPLUS_TEXT2(STRING) L##STRING
+ typedef wchar_t log4cplus_char_t;
+ #else
+ #  define DCMTK_LOG4CPLUS_TEXT2(STRING) STRING
+ typedef char log4cplus_char_t;
+-#endif // UNICODE
++#endif // DCMTK_OFLOG_UNICODE
+ #define DCMTK_LOG4CPLUS_TEXT(STRING) DCMTK_LOG4CPLUS_TEXT2(STRING)
+ 
+ DCMTK_LOG4CPLUS_EXPORT int log4cplus_file_configure(const log4cplus_char_t *pathname);
+diff --git a/oflog/include/dcmtk/oflog/config.h b/oflog/include/dcmtk/oflog/config.h
+index 835e7d240..8e21275c2 100644
+--- a/oflog/include/dcmtk/oflog/config.h
++++ b/oflog/include/dcmtk/oflog/config.h
+@@ -40,7 +40,7 @@
+ #  include "dcmtk/oflog/config/defines.h"
+ #endif
+ 
+-#if ! defined (UNICODE) && ! defined (DCMTK_LOG4CPLUS_HAVE_VSNPRINTF_S) \
++#if ! defined (DCMTK_OFLOG_UNICODE) && ! defined (DCMTK_LOG4CPLUS_HAVE_VSNPRINTF_S) \
+     && ! defined (DCMTK_LOG4CPLUS_HAVE__VSNPRINTF_S) \
+     && ! defined (DCMTK_LOG4CPLUS_HAVE_VSNPRINTF) \
+     && ! defined (DCMTK_LOG4CPLUS_HAVE__VSNPRINTF)
+@@ -90,7 +90,7 @@
+ #  define DCMTK_LOG4CPLUS_INLINE_EXPORT
+ #endif
+ 
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+ #  if defined (_MSC_VER) && _MSC_VER >= 1400
+ #    define DCMTK_LOG4CPLUS_FSTREAM_ACCEPTS_WCHAR_T
+ #  endif
+@@ -118,7 +118,7 @@
+ #  define DCMTK_LOG4CPLUS_HAVE_RVALUE_REFS
+ #endif
+ 
+-#if ! defined (UNICODE) && defined (__GNUC__) && __GNUC__ >= 3
++#if ! defined (DCMTK_OFLOG_UNICODE) && defined (__GNUC__) && __GNUC__ >= 3
+ #  define DCMTK_LOG4CPLUS_FORMAT_ATTRIBUTE(archetype, format_index, first_arg_index) \
+     __attribute__ ((format (archetype, format_index, first_arg_index)))
+ #else
+diff --git a/oflog/include/dcmtk/oflog/configrt.h b/oflog/include/dcmtk/oflog/configrt.h
+index e155c8b3e..049569790 100644
+--- a/oflog/include/dcmtk/oflog/configrt.h
++++ b/oflog/include/dcmtk/oflog/configrt.h
+@@ -77,14 +77,14 @@ namespace log4cplus
+             , fEncodingShift      = 3
+             , fEncodingMask       = 0x3
+             , fUnspecEncoding     = (0 << fEncodingShift)
+-#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF8_FACET) && defined (UNICODE)
++#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF8_FACET) && defined (DCMTK_OFLOG_UNICODE)
+             , fUTF8               = (1 << fEncodingShift)
+ #endif
+ #if (defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF16_FACET) || defined (_WIN32)) \
+-    && defined (UNICODE)
++    && defined (DCMTK_OFLOG_UNICODE)
+             , fUTF16              = (2 << fEncodingShift)
+ #endif
+-#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF32_FACET) && defined (UNICODE)
++#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF32_FACET) && defined (DCMTK_OFLOG_UNICODE)
+             , fUTF32              = (3 << fEncodingShift)
+ #endif
+         };
+diff --git a/oflog/include/dcmtk/oflog/fstreams.h b/oflog/include/dcmtk/oflog/fstreams.h
+index 7b30bc188..136a531d7 100644
+--- a/oflog/include/dcmtk/oflog/fstreams.h
++++ b/oflog/include/dcmtk/oflog/fstreams.h
+@@ -46,7 +46,7 @@ typedef STD_NAMESPACE basic_ifstream<tchar> tifstream;
+ //! \def DCMTK_LOG4CPLUS_FSTREAM_PREFERED_FILE_NAME(X)
+ //! \brief Expands into expression that picks the right type for
+ //! STD_NAMESPACE fstream file name parameter.
+-#if defined (DCMTK_LOG4CPLUS_FSTREAM_ACCEPTS_WCHAR_T) && defined (UNICODE)
++#if defined (DCMTK_LOG4CPLUS_FSTREAM_ACCEPTS_WCHAR_T) && defined (DCMTK_OFLOG_UNICODE)
+ #  define DCMTK_LOG4CPLUS_FSTREAM_PREFERED_FILE_NAME(X) (X)
+ #else
+ #  define DCMTK_LOG4CPLUS_FSTREAM_PREFERED_FILE_NAME(X) (DCMTK_LOG4CPLUS_TSTRING_TO_STRING(X))
+diff --git a/oflog/include/dcmtk/oflog/helpers/property.h b/oflog/include/dcmtk/oflog/helpers/property.h
+index 3e42c4c7a..7b0c941ed 100644
+--- a/oflog/include/dcmtk/oflog/helpers/property.h
++++ b/oflog/include/dcmtk/oflog/helpers/property.h
+@@ -51,14 +51,14 @@ namespace log4cplus {
+                 fEncodingShift      = 3
+                 , fEncodingMask     = 0x3
+                 , fUnspecEncoding   = (0 << fEncodingShift)
+-#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF8_FACET) && defined (UNICODE)
++#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF8_FACET) && defined (DCMTK_OFLOG_UNICODE)
+                 , fUTF8             = (1 << fEncodingShift)
+ #endif
+ #if (defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF16_FACET) || defined (_WIN32)) \
+-    && defined (UNICODE)
++    && defined (DCMTK_OFLOG_UNICODE)
+                 , fUTF16            = (2 << fEncodingShift)
+ #endif
+-#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF32_FACET) && defined (UNICODE)
++#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF32_FACET) && defined (DCMTK_OFLOG_UNICODE)
+                 , fUTF32            = (3 << fEncodingShift)
+ #endif
+             };
+diff --git a/oflog/include/dcmtk/oflog/socketap.h b/oflog/include/dcmtk/oflog/socketap.h
+index c107782a6..9ec675e0d 100644
+--- a/oflog/include/dcmtk/oflog/socketap.h
++++ b/oflog/include/dcmtk/oflog/socketap.h
+@@ -42,7 +42,7 @@ namespace log4cplus
+ {
+  
+ 
+-#ifndef UNICODE
++#ifndef DCMTK_OFLOG_UNICODE
+     size_t const DCMTK_LOG4CPLUS_MAX_MESSAGE_SIZE = 8*1024;
+ #else
+     size_t const DCMTK_LOG4CPLUS_MAX_MESSAGE_SIZE = 2*8*1024;
+diff --git a/oflog/include/dcmtk/oflog/streams.h b/oflog/include/dcmtk/oflog/streams.h
+index 4f6c5fb1d..9f161e5ef 100644
+--- a/oflog/include/dcmtk/oflog/streams.h
++++ b/oflog/include/dcmtk/oflog/streams.h
+@@ -49,7 +49,7 @@ namespace log4cplus
+ }
+ }
+ 
+-#if defined (UNICODE) && defined (DCMTK_LOG4CPLUS_ENABLE_GLOBAL_C_STRING_STREAM_INSERTER)
++#if defined (DCMTK_OFLOG_UNICODE) && defined (DCMTK_LOG4CPLUS_ENABLE_GLOBAL_C_STRING_STREAM_INSERTER)
+ 
+ DCMTK_LOG4CPLUS_EXPORT log4cplus::tostream& operator <<(log4cplus::tostream&, const char* psz );
+ 
+diff --git a/oflog/include/dcmtk/oflog/tchar.h b/oflog/include/dcmtk/oflog/tchar.h
+index c3655d0e5..643d52aae 100644
+--- a/oflog/include/dcmtk/oflog/tchar.h
++++ b/oflog/include/dcmtk/oflog/tchar.h
+@@ -38,11 +38,11 @@
+ #endif
+ 
+ 
+-#ifdef UNICODE
++#ifdef DCMTK_OFLOG_UNICODE
+ #  define DCMTK_LOG4CPLUS_TEXT2(STRING) L##STRING
+ #else
+ #  define DCMTK_LOG4CPLUS_TEXT2(STRING) STRING
+-#endif // UNICODE
++#endif // DCMTK_OFLOG_UNICODE
+ #define DCMTK_LOG4CPLUS_TEXT(STRING) DCMTK_LOG4CPLUS_TEXT2(STRING)
+ 
+ 
+@@ -51,7 +51,7 @@ namespace dcmtk
+ namespace log4cplus
+ {
+ 
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+ typedef wchar_t tchar;
+ 
+ #else
+diff --git a/oflog/include/dcmtk/oflog/tstring.h b/oflog/include/dcmtk/oflog/tstring.h
+index 7ca173c44..d1c56abd5 100644
+--- a/oflog/include/dcmtk/oflog/tstring.h
++++ b/oflog/include/dcmtk/oflog/tstring.h
+@@ -83,19 +83,19 @@ DCMTK_LOG4CPLUS_EXPORT STD_NAMESPACE wstring towstring(char const *);
+ 
+ } // namespace helpers
+ 
+-#ifdef UNICODE
++#ifdef DCMTK_OFLOG_UNICODE
+ 
+ #define DCMTK_LOG4CPLUS_C_STR_TO_TSTRING(STRING) log4cplus::helpers::towstring(STRING)
+ #define DCMTK_LOG4CPLUS_STRING_TO_TSTRING(STRING) log4cplus::helpers::towstring(STRING)
+ #define DCMTK_LOG4CPLUS_TSTRING_TO_STRING(STRING) log4cplus::helpers::tostring(STRING)
+ 
+-#else // UNICODE
++#else // DCMTK_OFLOG_UNICODE
+ 
+ #define DCMTK_LOG4CPLUS_C_STR_TO_TSTRING(STRING) OFString(STRING)
+ #define DCMTK_LOG4CPLUS_STRING_TO_TSTRING(STRING) STRING
+ #define DCMTK_LOG4CPLUS_TSTRING_TO_STRING(STRING) STRING
+ 
+-#endif // UNICODE
++#endif // DCMTK_OFLOG_UNICODE
+ 
+ } // namespace log4cplus
+ } // end namespace dcmtk
+diff --git a/oflog/libsrc/config.cc b/oflog/libsrc/config.cc
+index 689eb5a12..c755d39d1 100644
+--- a/oflog/libsrc/config.cc
++++ b/oflog/libsrc/config.cc
+@@ -183,18 +183,18 @@ namespace
+             & (PropertyConfigurator::fEncodingMask
+                 << PropertyConfigurator::fEncodingShift))
+         {
+-#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF8_FACET) && defined (UNICODE)
++#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF8_FACET) && defined (DCMTK_OFLOG_UNICODE)
+         case PropertyConfigurator::fUTF8:
+             return helpers::Properties::fUTF8;
+ #endif
+ 
+ #if (defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF16_FACET) || defined (WIN32)) \
+-    && defined (UNICODE)
++    && defined (DCMTK_OFLOG_UNICODE)
+         case PropertyConfigurator::fUTF16:
+             return helpers::Properties::fUTF16;
+ #endif
+ 
+-#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF32_FACET) && defined (UNICODE)
++#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF32_FACET) && defined (DCMTK_OFLOG_UNICODE)
+         case PropertyConfigurator::fUTF32:
+             return helpers::Properties::fUTF32;
+ #endif
+diff --git a/oflog/libsrc/env.cc b/oflog/libsrc/env.cc
+index d8ffd584c..b6030edaa 100644
+--- a/oflog/libsrc/env.cc
++++ b/oflog/libsrc/env.cc
+@@ -46,7 +46,7 @@ namespace log4cplus { namespace internal {
+ bool
+ get_env_var (tstring & value, tstring const & name)
+ {
+-#if defined (_WIN32) && defined (UNICODE)
++#if defined (_WIN32) && defined (DCMTK_OFLOG_UNICODE)
+     tchar const * val = _wgetenv (name.c_str ());
+     if (val)
+         value = val;
+diff --git a/oflog/libsrc/fileap.cc b/oflog/libsrc/fileap.cc
+index 1e3461590..7c5a2ee75 100644
+--- a/oflog/libsrc/fileap.cc
++++ b/oflog/libsrc/fileap.cc
+@@ -77,7 +77,7 @@ static
+ long
+ file_rename (tstring const & src, tstring const & target)
+ {
+-#if defined (UNICODE) && defined (_WIN32)
++#if defined (DCMTK_OFLOG_UNICODE) && defined (_WIN32)
+     if (_wrename (src.c_str (), target.c_str ()) == 0)
+         return 0;
+     else
+@@ -98,7 +98,7 @@ static
+ long
+ file_remove (tstring const & src)
+ {
+-#if defined (UNICODE) && defined (_WIN32)
++#if defined (DCMTK_OFLOG_UNICODE) && defined (_WIN32)
+     if (_wremove (src.c_str ()) == 0)
+         return 0;
+     else
+diff --git a/oflog/libsrc/fileinfo.cc b/oflog/libsrc/fileinfo.cc
+index b8cd1893f..cb225681c 100644
+--- a/oflog/libsrc/fileinfo.cc
++++ b/oflog/libsrc/fileinfo.cc
+@@ -48,8 +48,14 @@ getFileInfo (FileInfo * fi, tstring const & name)
+ {
+ #if defined (_WIN32)
+     struct _stat fileStatus;
++
++#if defined (DCMTK_OFLOG_UNICODE)
+     if (_tstat (name.c_str (), &fileStatus) == -1)
+         return -1;
++#else
++    if (_stat (name.c_str (), &fileStatus) == -1)
++        return -1;
++#endif
+     
+     fi->mtime = helpers::Time (fileStatus.st_mtime);
+     fi->is_link = false;
+diff --git a/oflog/libsrc/globinit.cc b/oflog/libsrc/globinit.cc
+index 8227e5322..6da22c800 100644
+--- a/oflog/libsrc/globinit.cc
++++ b/oflog/libsrc/globinit.cc
+@@ -42,7 +42,7 @@ namespace dcmtk
+ namespace log4cplus
+ {
+ 
+-#ifdef UNICODE
++#ifdef DCMTK_OFLOG_UNICODE
+ DCMTK_LOG4CPLUS_EXPORT tostream & tcout = STD_NAMESPACE wcout;
+ DCMTK_LOG4CPLUS_EXPORT tostream & tcerr = STD_NAMESPACE wcerr;
+ 
+diff --git a/oflog/libsrc/log4judp.cc b/oflog/libsrc/log4judp.cc
+index 803fcb729..c79831ea3 100644
+--- a/oflog/libsrc/log4judp.cc
++++ b/oflog/libsrc/log4judp.cc
+@@ -29,7 +29,7 @@
+ #include "dcmtk/oflog/thread/syncpub.h"
+ #include <iomanip>
+ #include <cstring>
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+ #include <cwctype>
+ #else
+ #include <cctype>
+@@ -48,7 +48,7 @@ namespace
+ static inline bool
+ is_control (tchar ch)
+ {
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+     return !! STD_NAMESPACE iswcntrl (STD_NAMESPACE char_traits<tchar>::to_int_type (ch));
+ #elif defined (_MSC_VER) && _MSC_VER <= 1200 /* MSC6 and older */
+     return !! iscntrl (STD_NAMESPACE char_traits<tchar>::to_int_type (ch));
+@@ -175,7 +175,7 @@ Log4jUdpAppender::~Log4jUdpAppender()
+ // Log4jUdpAppender public methods
+ //////////////////////////////////////////////////////////////////////////////
+ 
+-void 
++void
+ Log4jUdpAppender::close()
+ {
+     helpers::getLogLog().debug(
+diff --git a/oflog/libsrc/ntelogap.cc b/oflog/libsrc/ntelogap.cc
+index 6d009d5dd..e39475357 100644
+--- a/oflog/libsrc/ntelogap.cc
++++ b/oflog/libsrc/ntelogap.cc
+@@ -46,7 +46,7 @@ namespace {
+ 
+     static
+     bool
+-    copySID(SID** ppDstSid, SID* pSrcSid) 
++    copySID(SID** ppDstSid, SID* pSrcSid)
+     {
+         DWORD dwLength = ::GetLengthSid(pSrcSid);
+ 
+@@ -68,8 +68,8 @@ namespace {
+ 
+ 
+     static
+-    bool 
+-    GetCurrentUserSID(SID** ppSid) 
++    bool
++    GetCurrentUserSID(SID** ppSid)
+     {
+         bool bSuccess = false;
+         TOKEN_USER * ptu = 0;
+@@ -102,44 +102,56 @@ namespace {
+ 
+ 
+     static
+-    HKEY 
++    HKEY
+     regGetKey(const tstring& subkey, DWORD* disposition)
+     {
+         HKEY hkey = 0;
+-        RegCreateKeyEx(HKEY_LOCAL_MACHINE, 
+-                       subkey.c_str(), 
+-                       0, 
+-                       NULL, 
+-                       REG_OPTION_NON_VOLATILE, 
+-                       KEY_SET_VALUE, 
+-                       NULL, 
+-                       &hkey, 
++#if defined (DCMTK_OFLOG_UNICODE)
++        RegCreateKeyEx(HKEY_LOCAL_MACHINE,
++#else
++        RegCreateKeyExA(HKEY_LOCAL_MACHINE,
++#endif
++                       subkey.c_str(),
++                       0,
++                       NULL,
++                       REG_OPTION_NON_VOLATILE,
++                       KEY_SET_VALUE,
++                       NULL,
++                       &hkey,
+                        disposition);
+         return hkey;
+     }
+ 
+ 
+     static
+-    void 
++    void
+     regSetString(HKEY hkey, const tstring& name, const tstring& value)
+     {
+-        RegSetValueEx(hkey, 
+-                      name.c_str(), 
+-                      0, 
+-                      REG_SZ, 
++#if defined (DCMTK_OFLOG_UNICODE)
++        RegSetValueEx(hkey,
++#else
++        RegSetValueExA(hkey,
++#endif
++                      name.c_str(),
++                      0,
++                      REG_SZ,
+                       OFreinterpret_cast(BYTE const *, value.c_str()),
+                       OFstatic_cast(DWORD, value.length() * sizeof(tchar)));
+     }
+ 
+ 
+     static
+-    void 
++    void
+     regSetDword(HKEY hkey, const tstring& name, DWORD value)
+     {
+-        RegSetValueEx(hkey, 
+-                      name.c_str(), 
+-                      0, 
+-                      REG_DWORD, 
++#if defined (DCMTK_OFLOG_UNICODE)
++        RegSetValueEx(hkey,
++#else
++        RegSetValueExA(hkey,
++#endif
++                      name.c_str(),
++                      0,
++                      REG_DWORD,
+                       OFreinterpret_cast(LPBYTE, &value),
+                       OFstatic_cast(DWORD, sizeof(DWORD)));
+     }
+@@ -152,13 +164,13 @@ namespace {
+ // NTEventLogAppender ctor and dtor
+ //////////////////////////////////////////////////////////////////////////////
+ 
+-NTEventLogAppender::NTEventLogAppender(const tstring& server, 
+-                                       const tstring& log, 
++NTEventLogAppender::NTEventLogAppender(const tstring& server,
++                                       const tstring& log,
+                                        const tstring& source)
+-: server(server), 
+-  log(log), 
+-  source(source), 
+-  hEventLog(NULL), 
++: server(server),
++  log(log),
++  source(source),
++  hEventLog(NULL),
+   pCurrentUserSID(NULL)
+ {
+     init();
+@@ -171,7 +183,7 @@ NTEventLogAppender::NTEventLogAppender(const helpers::Properties & properties)
+   server(properties.getProperty( DCMTK_LOG4CPLUS_TEXT("server") )),
+   log(properties.getProperty( DCMTK_LOG4CPLUS_TEXT("log") )),
+   source(properties.getProperty( DCMTK_LOG4CPLUS_TEXT("source") )),
+-  hEventLog(NULL), 
++  hEventLog(NULL),
+   pCurrentUserSID(NULL)
+ {
+     init();
+@@ -179,13 +191,13 @@ NTEventLogAppender::NTEventLogAppender(const helpers::Properties & properties)
+ 
+ 
+ 
+-void 
++void
+ NTEventLogAppender::init()
+ {
+     if(source.empty()) {
+         helpers::getLogLog().warn(
+             DCMTK_LOG4CPLUS_TEXT("Source option not set for appender [")
+-            + name 
++            + name
+             + DCMTK_LOG4CPLUS_TEXT("]."));
+         return;
+     }
+@@ -199,8 +211,13 @@ NTEventLogAppender::init()
+ 
+     addRegistryInfo();
+ 
++#if defined (DCMTK_OFLOG_UNICODE)
+     hEventLog = ::RegisterEventSource(server.empty () ? 0 : server.c_str(),
+         source.c_str());
++#else
++    hEventLog = ::RegisterEventSourceA(server.empty () ? 0 : server.c_str(),
++        source.c_str());
++#endif
+     if (! hEventLog || hEventLog == HANDLE(ERROR_INVALID_HANDLE))
+         helpers::getLogLog().warn (
+             DCMTK_LOG4CPLUS_TEXT("Event source registration failed."));
+@@ -224,7 +241,7 @@ NTEventLogAppender::~NTEventLogAppender()
+ // NTEventLogAppender public methods
+ //////////////////////////////////////////////////////////////////////////////
+ 
+-void 
++void
+ NTEventLogAppender::close()
+ {
+     if(hEventLog != NULL) {
+@@ -240,7 +257,7 @@ NTEventLogAppender::close()
+ // NTEventLogAppender protected methods
+ //////////////////////////////////////////////////////////////////////////////
+ 
+-void 
++void
+ NTEventLogAppender::append(const spi::InternalLoggingEvent& event)
+ {
+     if(hEventLog == NULL) {
+@@ -256,7 +273,11 @@ NTEventLogAppender::append(const spi::InternalLoggingEvent& event)
+         str.resize (31839);
+ 
+     const tchar * s = str.c_str ();
++#if defined (DCMTK_OFLOG_UNICODE)
+     BOOL bSuccess = ::ReportEvent(hEventLog,
++#else
++    BOOL bSuccess = ::ReportEventA(hEventLog,
++#endif
+                                   getEventType(event),
+                                   getEventCategory(event),
+                                   0x1000,
+@@ -275,7 +296,7 @@ NTEventLogAppender::append(const spi::InternalLoggingEvent& event)
+ 
+ 
+ 
+-WORD 
++WORD
+ NTEventLogAppender::getEventType(const spi::InternalLoggingEvent& event)
+ {
+     WORD ret_val;
+@@ -293,7 +314,7 @@ NTEventLogAppender::getEventType(const spi::InternalLoggingEvent& event)
+ 
+ 
+ 
+-WORD 
++WORD
+ NTEventLogAppender::getEventCategory(const spi::InternalLoggingEvent& event)
+ {
+     WORD ret_val;
+@@ -317,28 +338,28 @@ NTEventLogAppender::getEventCategory(const spi::InternalLoggingEvent& event)
+ 
+ 
+ // Add this source with appropriate configuration keys to the registry.
+-void 
++void
+ NTEventLogAppender::addRegistryInfo()
+ {
+     DWORD disposition;
+     HKEY hkey = 0;
+     tstring subkey =   DCMTK_LOG4CPLUS_TEXT("SYSTEM\\CurrentControlSet\\Services\\EventLog\\")
+-                     + log 
+-                     + DCMTK_LOG4CPLUS_TEXT("\\") 
++                     + log
++                     + DCMTK_LOG4CPLUS_TEXT("\\")
+                      + source;
+-    
++
+     hkey = regGetKey(subkey, &disposition);
+     if(disposition == REG_CREATED_NEW_KEY) {
+-        regSetString(hkey, 
+-                     DCMTK_LOG4CPLUS_TEXT("EventMessageFile"), 
++        regSetString(hkey,
++                     DCMTK_LOG4CPLUS_TEXT("EventMessageFile"),
+                      DCMTK_LOG4CPLUS_TEXT("NTEventLogAppender.dll"));
+-        regSetString(hkey, 
+-                     DCMTK_LOG4CPLUS_TEXT("CategoryMessageFile"), 
++        regSetString(hkey,
++                     DCMTK_LOG4CPLUS_TEXT("CategoryMessageFile"),
+                      DCMTK_LOG4CPLUS_TEXT("NTEventLogAppender.dll"));
+         regSetDword(hkey, DCMTK_LOG4CPLUS_TEXT("TypesSupported"), OFstatic_cast(DWORD, 7));
+         regSetDword(hkey, DCMTK_LOG4CPLUS_TEXT("CategoryCount"), OFstatic_cast(DWORD, 5));
+     }
+-    
++
+     RegCloseKey(hkey);
+     return;
+ }
+diff --git a/oflog/libsrc/property.cc b/oflog/libsrc/property.cc
+index 85b55d880..ba47a7d8b 100644
+--- a/oflog/libsrc/property.cc
++++ b/oflog/libsrc/property.cc
+@@ -21,7 +21,7 @@
+ #include "dcmtk/oflog/config.h"
+ 
+ #include <cstring>
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+ #  include <cwctype>
+ #else
+ #  include <cctype>
+@@ -58,7 +58,7 @@ static
+ int
+ is_space (tchar ch)
+ {
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+     return STD_NAMESPACE iswspace (ch);
+ #else
+     return isspace (OFstatic_cast(unsigned char, ch));
+@@ -133,7 +133,7 @@ Properties::Properties(const tstring& inputFile, unsigned flags) : data()
+ 
+     switch (flags & fEncodingMask)
+     {
+-#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF8_FACET) && defined (UNICODE)
++#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF8_FACET) && defined (DCMTK_OFLOG_UNICODE)
+     case fUTF8:
+         file.imbue (
+             STD_NAMESPACE locale (file.getloc (),
+@@ -142,7 +142,7 @@ Properties::Properties(const tstring& inputFile, unsigned flags) : data()
+         break;
+ #endif
+ 
+-#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF16_FACET) && defined (UNICODE)
++#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF16_FACET) && defined (DCMTK_OFLOG_UNICODE)
+     case fUTF16:
+         file.imbue (
+             STD_NAMESPACE locale (file.getloc (),
+@@ -150,7 +150,7 @@ Properties::Properties(const tstring& inputFile, unsigned flags) : data()
+                     OFstatic_cast(STD_NAMESPACE codecvt_mode, STD_NAMESPACE consume_header | STD_NAMESPACE little_endian)>));
+         break;
+ 
+-#elif defined (UNICODE) && defined (WIN32)
++#elif defined (DCMTK_OFLOG_UNICODE) && defined (WIN32)
+     case fUTF16:
+         file.imbue (
+             STD_NAMESPACE locale (file.getloc (),
+@@ -159,7 +159,7 @@ Properties::Properties(const tstring& inputFile, unsigned flags) : data()
+ 
+ #endif
+ 
+-#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF32_FACET) && defined (UNICODE)
++#if defined (DCMTK_LOG4CPLUS_HAVE_CODECVT_UTF32_FACET) && defined (DCMTK_OFLOG_UNICODE)
+     case fUTF32:
+         file.imbue (
+             STD_NAMESPACE locale (file.getloc (),
+diff --git a/oflog/libsrc/snprintf.cc b/oflog/libsrc/snprintf.cc
+index bbf59cb20..7602942a1 100644
+--- a/oflog/libsrc/snprintf.cc
++++ b/oflog/libsrc/snprintf.cc
+@@ -26,7 +26,7 @@
+ #include "dcmtk/oflog/internal/internal.h"
+ #include <cstdarg>
+ #include <cstdio>
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+ #include <cwchar>
+ #endif
+ #if defined (DCMTK_LOG4CPLUS_HAVE_STDARG_H)
+@@ -66,7 +66,7 @@ static inline
+ int
+ vftprintf (STD_NAMESPACE FILE * file, tchar const * fmt, va_list args)
+ {
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+ #  if defined (DCMTK_LOG4CPLUS_HAVE_VFWPRINTF_S)
+     return vfwprintf_s (file, fmt, args);
+ #  else
+@@ -92,7 +92,7 @@ vstprintf (tchar * dest, size_t dest_size, tchar const * fmt,
+     va_list args)
+ {
+     int ret;
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+ #  if defined (DCMTK_LOG4CPLUS_HAVE_VSWPRINTF_S)
+     ret = vswprintf_s (dest, dest_size, fmt, args);
+ #  else
+@@ -125,7 +125,7 @@ vsntprintf (tchar * dest, size_t dest_size, tchar const * fmt,
+ {
+     int ret;
+ 
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+ #  if defined (DCMTK_LOG4CPLUS_HAVE__VSNWPRINTF_S) && defined (_TRUNCATE)
+     ret = _vsnwprintf_s (dest, dest_size, _TRUNCATE, fmt, args);
+ #  else
+diff --git a/oflog/libsrc/sockbuff.cc b/oflog/libsrc/sockbuff.cc
+index 52bb25060..f17bf4fdc 100644
+--- a/oflog/libsrc/sockbuff.cc
++++ b/oflog/libsrc/sockbuff.cc
+@@ -150,7 +150,7 @@ SocketBuffer::readString(unsigned char sizeOfChar)
+         strlen = bufferLen / sizeOfChar;
+     }
+ 
+-#ifndef UNICODE
++#ifndef DCMTK_OFLOG_UNICODE
+     if(sizeOfChar == 1) {
+         tstring ret(&buffer[pos], strlen);
+         pos += strlen;
+@@ -168,7 +168,7 @@ SocketBuffer::readString(unsigned char sizeOfChar)
+         getLogLog().error(DCMTK_LOG4CPLUS_TEXT("SocketBuffer::readString()- Invalid sizeOfChar!!!!"));
+     }
+ 
+-#else /* UNICODE */
++#else /* DCMTK_OFLOG_UNICODE */
+     if(sizeOfChar == 1) {
+         STD_NAMESPACE string ret(&buffer[pos], strlen);
+         pos += strlen;
+@@ -252,7 +252,7 @@ SocketBuffer::appendString(const tstring& str)
+     }
+ 
+     appendInt(OFstatic_cast(unsigned, strlen));
+-#ifndef UNICODE
++#ifndef DCMTK_OFLOG_UNICODE
+     memcpy(&buffer[pos], str.data(), strlen);
+     pos += strlen;
+     size = pos;
+diff --git a/oflog/libsrc/socketap.cc b/oflog/libsrc/socketap.cc
+index 6b9596aa9..4e81da7ec 100644
+--- a/oflog/libsrc/socketap.cc
++++ b/oflog/libsrc/socketap.cc
+@@ -276,7 +276,7 @@ convertToBuffer(SocketBuffer & buffer,
+     const tstring& serverName)
+ {
+     buffer.appendByte(DCMTK_LOG4CPLUS_MESSAGE_VERSION);
+-#ifndef UNICODE
++#ifndef DCMTK_OFLOG_UNICODE
+     buffer.appendByte(1);
+ #else
+     buffer.appendByte(2);
+diff --git a/oflog/libsrc/strhelp.cc b/oflog/libsrc/strhelp.cc
+index ef1a3a511..859555b07 100644
+--- a/oflog/libsrc/strhelp.cc
++++ b/oflog/libsrc/strhelp.cc
+@@ -52,7 +52,7 @@ tstring const empty_str;
+ // Global Methods
+ //////////////////////////////////////////////////////////////////////////////
+ 
+-#if defined (UNICODE) && defined (DCMTK_LOG4CPLUS_ENABLE_GLOBAL_C_STRING_STREAM_INSERTER)
++#if defined (DCMTK_OFLOG_UNICODE) && defined (DCMTK_LOG4CPLUS_ENABLE_GLOBAL_C_STRING_STREAM_INSERTER)
+ 
+ log4cplus::tostream& 
+ operator <<(log4cplus::tostream& stream, const char* str)
+@@ -171,7 +171,7 @@ struct toupper_func
+     operator () (tchar ch) const
+     {
+         return STD_NAMESPACE char_traits<tchar>::to_char_type (
+-#ifdef UNICODE
++#ifdef DCMTK_OFLOG_UNICODE
+             STD_NAMESPACE towupper
+ #else
+             toupper
+@@ -187,7 +187,7 @@ struct tolower_func
+     operator () (tchar ch) const
+     {
+         return STD_NAMESPACE char_traits<tchar>::to_char_type (
+-#ifdef UNICODE
++#ifdef DCMTK_OFLOG_UNICODE
+             STD_NAMESPACE towlower
+ #else
+             tolower
+diff --git a/oflog/libsrc/timehelp.cc b/oflog/libsrc/timehelp.cc
+index d53373ccf..993f298e8 100644
+--- a/oflog/libsrc/timehelp.cc
++++ b/oflog/libsrc/timehelp.cc
+@@ -29,7 +29,7 @@
+ #include <iomanip>
+ #include <cassert>
+ #include <cerrno>
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+ #include <cwchar>
+ #endif
+ 
+@@ -69,7 +69,7 @@ const int ONE_SEC_IN_USEC = 1000000;
+ using STD_NAMESPACE mktime;
+ using STD_NAMESPACE gmtime;
+ using STD_NAMESPACE localtime;
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+ using STD_NAMESPACE wcsftime;
+ #else
+ using STD_NAMESPACE strftime;
+@@ -368,7 +368,7 @@ Time::getFormattedTime(const log4cplus::tstring& fmt_orig, bool use_gmtime) cons
+     {
+         gft_sp.buffer.resize (buffer_size);
+         errno = 0;
+-#ifdef UNICODE
++#ifdef DCMTK_OFLOG_UNICODE
+         len = wcsftime(&gft_sp.buffer[0], buffer_size,
+             gft_sp.fmt.c_str(), &time);
+ #else
+diff --git a/oflog/libsrc/winconap.cc b/oflog/libsrc/winconap.cc
+index e6269a87a..45d2b44e3 100644
+--- a/oflog/libsrc/winconap.cc
++++ b/oflog/libsrc/winconap.cc
+@@ -119,7 +119,7 @@ Win32ConsoleAppender::write_handle (void * outvoid, tchar const * s,
+     size_t str_len)
+ {
+     HANDLE out = OFstatic_cast(HANDLE, outvoid);
+-#if defined (UNICODE)
++#if defined (DCMTK_OFLOG_UNICODE)
+     STD_NAMESPACE wstring wstr (s, str_len);
+     STD_NAMESPACE string str (helpers::tostring (wstr));
+     str_len = str.size ();
+diff --git a/oflog/libsrc/windebap.cc b/oflog/libsrc/windebap.cc
+index acf564bcf..47108a434 100644
+--- a/oflog/libsrc/windebap.cc
++++ b/oflog/libsrc/windebap.cc
+@@ -79,7 +79,11 @@ void
+ Win32DebugAppender::append(const spi::InternalLoggingEvent& event)
+ {
+     const tchar * s = formatEvent (event).c_str();
++#if defined (DCMTK_OFLOG_UNICODE)
+     ::OutputDebugString(s);
++#else
++    ::OutputDebugStringA(s);
++#endif
+ }
+ 
+ 
+diff --git a/oflog/libsrc/winsock.cc b/oflog/libsrc/winsock.cc
+index f67fdb344..bf13596b0 100644
+--- a/oflog/libsrc/winsock.cc
++++ b/oflog/libsrc/winsock.cc
+@@ -235,9 +235,15 @@ connectSocket(const tstring& hostn, unsigned short port, bool udp, SocketState&
+     {
+         insock.sin_family = AF_INET;
+         INT insock_size = OFstatic_cast(int, sizeof (insock));
++#if defined (DCMTK_OFLOG_UNICODE)
+         INT ret = WSAStringToAddress (OFconst_cast(LPTSTR, hostn.c_str ()),
+             AF_INET, 0, OFreinterpret_cast(struct sockaddr *, &insock),
+             &insock_size);
++#else
++        INT ret = WSAStringToAddressA (OFconst_cast(LPSTR, hostn.c_str ()),
++            AF_INET, 0, OFreinterpret_cast(struct sockaddr *, &insock),
++            &insock_size);
++#endif
+         if (ret == SOCKET_ERROR || insock_size != sizeof (insock)) 
+         {
+             state = bad_address;
+diff --git a/ofstd/include/dcmtk/ofstd/ofxml.h b/ofstd/include/dcmtk/ofstd/ofxml.h
+index f74dac8ff..06d2e85a4 100644
+--- a/ofstd/include/dcmtk/ofstd/ofxml.h
++++ b/ofstd/include/dcmtk/ofstd/ofxml.h
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 2011-2019, OFFIS e.V.
++ *  Copyright (C) 2011-2020, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were slightly modified by
+@@ -78,9 +78,8 @@
+  * full-fledged HTML documentation using the DOXYGEN software: simply type: "doxygen doxy.cfg"
+  *
+  * By default, the XMLParser library uses (char*) for string representation.To use the (wchar_t*)
+- * version of the library, you need to define the "_UNICODE" preprocessor definition variable
+- * (this is usually done inside your project definition file) (This is done automatically for you
+- * when using Visual Studio).
++ * version of the library, you need to define the "WIDE_CHAR_XML_PARSER" preprocessor definition variable
++ * (this is usually done inside your project definition file)
+  *
+  * \section example Advanced Tutorial and Many Examples of usage.
+  *
+@@ -144,13 +143,9 @@
+ #include "dcmtk/ofstd/ofstdinc.h"
+ #include "dcmtk/ofstd/ofdefine.h"
+ 
+-// DCMTK: we might want to enable wide characters without the "official" defines
+-#if defined(UNICODE) || defined(_UNICODE) || defined(WIDE_CHAR_XML_PARSER)
+-// If you comment the next "define" line then the library will never "switch to" _UNICODE (wchar_t*) mode (16/32 bits per characters).
+-// This is useful when you get error messages like:
+-//    'XMLNode::openFileHelper' : cannot convert parameter 2 from 'const char [5]' to 'const wchar_t *'
+-// The _XMLWIDECHAR preprocessor variable force the XMLParser library into either utf16/32-mode (the preprocessor variable
+-// must be defined) or utf8-mode (the pre-processor variable must be undefined).
++// DCMTK: The XML parser is compiled in wide char (UTF-16) mode if and only if this macro is defined.
++// We want this to be independent from the UNICODE/_UNICODE macros.
++#ifdef WIDE_CHAR_XML_PARSER
+ #define _XMLWIDECHAR
+ #endif
+ 
+diff --git a/ofstd/libsrc/ofstd.cc b/ofstd/libsrc/ofstd.cc
+index 3986939a3..6435f21f6 100644
+--- a/ofstd/libsrc/ofstd.cc
++++ b/ofstd/libsrc/ofstd.cc
+@@ -471,7 +471,7 @@ OFBool OFStandard::fileExists(const OFFilename &fileName)
+             fileAttr = GetFileAttributesW(fileName.getWideCharPointer());
+         else
+ #endif
+-            fileAttr = GetFileAttributes(fileName.getCharPointer());
++            fileAttr = GetFileAttributesA(fileName.getCharPointer());
+         if (fileAttr != 0xffffffff)
+         {
+             /* check file type (not a directory?) */
+@@ -501,7 +501,7 @@ OFBool OFStandard::dirExists(const OFFilename &dirName)
+             fileAttr = GetFileAttributesW(dirName.getWideCharPointer());
+         else
+ #endif
+-            fileAttr = GetFileAttributes(dirName.getCharPointer());
++            fileAttr = GetFileAttributesA(dirName.getCharPointer());
+         if (fileAttr != 0xffffffff)
+         {
+             /* check file type (is a directory?) */
+diff --git a/ofstd/libsrc/oftempf.cc b/ofstd/libsrc/oftempf.cc
+index 9fd23db69..a3761f7c7 100644
+--- a/ofstd/libsrc/oftempf.cc
++++ b/ofstd/libsrc/oftempf.cc
+@@ -128,7 +128,7 @@ void OFTempFile::getTempPath(OFString& sPath)
+ #ifdef _WIN32
+ #define BUFFER_SIZE 1024
+     char buffer[BUFFER_SIZE];
+-    GetTempPath(BUFFER_SIZE, buffer);
++    GetTempPathA(BUFFER_SIZE, buffer);
+     sPath = buffer;
+ #elif defined(__ANDROID__)
+     sPath = ANDROID_TEMPORARY_FILES_LOCATION;
+diff --git a/ofstd/tests/tests.cc b/ofstd/tests/tests.cc
+index a419911bf..1cf9ef062 100644
+--- a/ofstd/tests/tests.cc
++++ b/ofstd/tests/tests.cc
+@@ -23,6 +23,7 @@
+ 
+ #define OFTEST_OFSTD_ONLY
+ #include "dcmtk/ofstd/oftest.h"
++#include "dcmtk/ofstd/ofxml.h"
+ 
+ OFTEST_REGISTER(ofstd_OFCharacterEncoding_1);
+ OFTEST_REGISTER(ofstd_OFCharacterEncoding_2);
+@@ -72,7 +73,9 @@ OFTEST_REGISTER(ofstd_testPaths_2);
+ #ifdef WITH_THREADS
+ OFTEST_REGISTER(ofstd_thread);
+ #endif // WITH_THREADS
++#ifndef _XMLWIDECHAR
+ OFTEST_REGISTER(ofstd_xmlParser);
++#endif
+ OFTEST_REGISTER(ofstd_memory);
+ OFTEST_REGISTER(ofstd_optional);
+ OFTEST_REGISTER(ofstd_tuple);
+diff --git a/ofstd/tests/txml.cc b/ofstd/tests/txml.cc
+index cfa44e1c2..45082fd07 100644
+--- a/ofstd/tests/txml.cc
++++ b/ofstd/tests/txml.cc
+@@ -1,6 +1,6 @@
+ /*
+  *
+- *  Copyright (C) 2011-2018, OFFIS e.V.
++ *  Copyright (C) 2011-2020, OFFIS e.V.
+  *  All rights reserved.  See COPYRIGHT file for details.
+  *
+  *  This software and supporting documentation were developed by
+@@ -37,6 +37,10 @@
+       "</parent>"                                                       \
+     "</root>"
+ 
++// we cannot run this test if the XML parser is configured for wide characters
++// because the OFTest classes and macros do not support wide strings.
++#ifndef _XMLWIDECHAR
++
+ OFTEST(ofstd_xmlParser)
+ {
+     int i = 0;
+@@ -78,3 +82,9 @@ OFTEST(ofstd_xmlParser)
+     OFCHECK(rootNode.getChildNode("parent").getChildNode("child" ,2).isEmpty());
+     OFCHECK(rootNode.getChildNode("element").isAttributeSet("attribute"));
+ }
++
++#else
++
++int ofstd_txml_cc_dummy_to_keep_linker_from_moaning = 0;
++
++#endif
+\ No newline at end of file

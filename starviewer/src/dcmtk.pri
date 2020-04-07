@@ -24,9 +24,8 @@ LIBS += \
     -lijg12 \
     -lijg16 \
     -loflog \
-    -lofstd \
-    -lz
+    -lofstd
 
+unix:LIBS += -lz
 macx:LIBS += -lcharset -liconv
-
-#win32:LIBS += -lNetAPI32 -lWSock32 -lSnmpAPI
+win32:LIBS += -lWS2_32 -lNetAPI32 -llibiconv_o -lcharset_o

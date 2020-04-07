@@ -25,6 +25,17 @@ then
     ICONV=TRUE
     STDLIBC_ICONV=FALSE
     CMAKE_EXTRA_OPTIONS=-DCMAKE_PREFIX_PATH:PATH=/usr/local/opt/openssl
+elif [[ $(uname) == 'MSYS_NT'* ]]
+then
+    SUPPORT_LIBS_PATH="$SOURCE_DIR_BASE/dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8"
+
+    cp "$SUPPORT_LIBS_PATH/libiconv-1.15/lib/charset_o.lib" "$SDK_INSTALL_PREFIX/lib"
+    cp "$SUPPORT_LIBS_PATH/libiconv-1.15/lib/libiconv_o.lib" "$SDK_INSTALL_PREFIX/lib"
+
+    ICONV=TRUE
+    STDLIBC_ICONV=FALSE
+    CMAKE_EXTRA_OPTIONS="-DWITH_ZLIBINC:PATH=$SUPPORT_LIBS_PATH/zlib-1.2.11 \
+                         -DWITH_LIBICONVINC:PATH=$SUPPORT_LIBS_PATH/libiconv-1.15"
 fi
 
 CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \

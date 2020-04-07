@@ -20,9 +20,16 @@ do
                 hdiutil mount "${DOWNLOAD_PREFIX}/qt-opensource-mac-x64-5.12.6.dmg"
                 https_proxy="http://0.0.0.0" open -W /Volumes/qt-opensource-mac-x64-5.12.6/qt-opensource-mac-x64-5.12.6.app --args --no-force-installations TargetDir="${INSTALL_QTDIR}"
                 hdiutil unmount /Volumes/qt-opensource-mac-x64-5.12.6
+            elif [[ $(uname) == 'MSYS_NT'* ]]
+            then
+                "${DOWNLOAD_PREFIX}/qt-opensource-windows-x86-5.12.6.exe" --no-force-installations TargetDir="${INSTALL_QTDIR}"
             fi
             ;;
         dcmtk)
+            if [[ $(uname) == 'MSYS_NT'* ]]
+            then
+                unzip -o "${DOWNLOAD_PREFIX}/dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8.zip" -d "${SOURCE_DIR_BASE}"
+            fi
             tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/dcmtk-DCMTK-3.6.5.tar.gz"
             ;;
         vtk)

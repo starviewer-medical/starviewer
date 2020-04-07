@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [[ $(uname) == 'MSYS_NT'* ]]
+then
+    echo It is strongly recommended that you lift path length limit to avoid problems with ITK. If you have not done it already check this link: https://www.howtogeek.com/266621/how-to-make-windows-10-accept-file-paths-over-260-characters/
+    read -p "Press enter to continue or Ctrl+C to stop"
+fi
+
 # Base directory for everything related to the SDK.
 SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$SCRIPTS_ROOT/../../../sdk-build"}
 
@@ -16,6 +22,9 @@ then
 elif [[ $(uname) == 'Darwin' ]]
 then
     QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.12.6/clang_64"}
+elif [[ $(uname) == 'MSYS_NT'* ]]
+then
+    QTDIR=${QTDIR:-"$INSTALL_QTDIR/5.12.6/msvc2017_64"}
 else
     echo "Error: Qt platform not considered."
     exit 1
@@ -33,8 +42,18 @@ BUILD_TYPES=${BUILD_TYPES:-"release"}
 # List of libs to build. Possible values: qt, dcmtk, vtk, gdcm, itk, ecm, threadweaver.
 LIBS=${LIBS:-"qt dcmtk vtk gdcm itk ecm threadweaver"}
 
-# CMake executable
-CMAKE=${CMAKE:-cmake}
+# CMake and make
+if [[ $(uname) == 'MSYS_NT'* ]]
+then
+    CMAKE=${CMAKE:-$PROGRAMFILES/CMake/bin/cmake.exe}
+    # jom path in PATH needed by CMake
+    JOM_PATH=${JOM_PATH:-"$INSTALL_QTDIR/Tools/QtCreator/bin"}
+    PATH=$PATH:$JOM_PATH
+    MAKE=jom
+else
+    CMAKE=${CMAKE:-cmake}
+    MAKE=make
+fi
 
 # Set to appropriate value (example below) if you want to use distcc (distributed C compiler) on CMake.
 CMAKE_DISTCC=${CMAKE_DISTCC:-}
@@ -66,6 +85,9 @@ then
         LIB64DIR=lib64
     fi
 elif [[ $(uname) == 'Darwin' ]]
+then
+    LIB64DIR=lib
+elif [[ $(uname) == 'MSYS_NT'* ]]
 then
     LIB64DIR=lib
 fi

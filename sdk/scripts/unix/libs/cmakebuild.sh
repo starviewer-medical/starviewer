@@ -5,13 +5,13 @@ PATCHES_ROOT="$SCRIPTS_ROOT/../../patches"
 mkdir -p "$BUILD_DIR"
 pushd "$BUILD_DIR"
 
-if [[ -d "$PATCHES_ROOT/$LIB" ]]
+if [[ -d "$PATCHES_ROOT/$ALIB" ]]
 then
     PATCHED_SOURCE_DIR="$SOURCE_DIR-patched"
     rsync -a --delete "$SOURCE_DIR/" "$PATCHED_SOURCE_DIR"
     pushd "$PATCHED_SOURCE_DIR"
 
-    for PATCH in "$PATCHES_ROOT/$LIB"/*
+    for PATCH in "$PATCHES_ROOT/$ALIB"/*
     do
         git apply "$PATCH" --ignore-whitespace -v
         if [ $? -ne 0 ]
@@ -25,24 +25,31 @@ then
     SOURCE_DIR="$PATCHED_SOURCE_DIR"
 fi
 
-$CMAKE -Wno-dev $CMAKE_OPTIONS $CMAKE_DISTCC $CMAKE_COMPILER $CMAKE_CPP11 "$SOURCE_DIR"
+if [[ $(uname) == 'MSYS_NT'* ]]
+then
+    CMAKE_GENERATOR="NMake Makefiles JOM"
+else
+    CMAKE_GENERATOR="Unix Makefiles"
+fi
+
+"$CMAKE" -G "$CMAKE_GENERATOR" -Wno-dev $CMAKE_OPTIONS $CMAKE_DISTCC $CMAKE_COMPILER $CMAKE_CPP11 "$SOURCE_DIR"
 if [[ $? -ne 0 ]]
 then
-    echo "ERROR: CMake of $LIB failed"
+    echo "ERROR: CMake of $ALIB failed"
     exit
 fi
 
-make -j$MAKE_CONCURRENCY VERBOSE=$MAKE_VERBOSE
+$MAKE -j$MAKE_CONCURRENCY VERBOSE=$MAKE_VERBOSE
 if [[ $? -ne 0 ]]
 then
-    echo "ERROR: Compilation of $LIB failed"
+    echo "ERROR: Compilation of $ALIB failed"
     exit
 fi
 
-make VERBOSE=$MAKE_VERBOSE install
+$MAKE VERBOSE=$MAKE_VERBOSE install
 if [[ $? -ne 0 ]]
 then
-    echo "ERROR: Installation phase of $LIB failed"
+    echo "ERROR: Installation phase of $ALIB failed"
     exit
 fi
 

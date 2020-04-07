@@ -23,6 +23,7 @@ CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
                -DBUILD_EXAMPLES:BOOL=FALSE \
                -DBUILD_TESTING:BOOL=FALSE \
                -DITK_BUILD_DEFAULT_MODULES:BOOL=FALSE \
+               -DITK_SKIP_PATH_LENGTH_CHECKS:BOOL=TRUE \
                -DModule_ITKCommon:BOOL=TRUE \
                -DModule_ITKFFT:BOOL=TRUE \
                -DModule_ITKImageGrid:BOOL=TRUE \

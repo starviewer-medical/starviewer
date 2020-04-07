@@ -5,12 +5,13 @@ SCRIPTS_ROOT=$(cd $(dirname $BASH_SOURCE) && pwd)
 
 for BUILD_TYPE in $BUILD_TYPES
 do
-    for LIB in $LIBS
+    # Dont' use LIB to not overwrite LIB variable in Windows (note if variable name is changed it must be changed accordingly in cmakebuild.sh)
+    for ALIB in $LIBS
     do
-        if [[ -f "$SCRIPTS_ROOT/libs/$LIB.sh" ]]
+        if [[ -f "$SCRIPTS_ROOT/libs/$ALIB.sh" ]]
         then
-            . "$SCRIPTS_ROOT/config/$LIB.sh"
-            . "$SCRIPTS_ROOT/libs/$LIB.sh"
+            . "$SCRIPTS_ROOT/config/$ALIB.sh"
+            . "$SCRIPTS_ROOT/libs/$ALIB.sh"
         fi
     done
 done
