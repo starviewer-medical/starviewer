@@ -2,17 +2,6 @@
 
 SOURCE_DIR="$SOURCE_DIR_BASE/dcmtk-DCMTK-3.6.5"
 
-if [ $BUILD_TYPE = debug ]
-then
-    CMAKE_BUILD_TYPE=Debug
-    BUILD_DIR="$SOURCE_DIR-build-debug"
-fi
-if [ $BUILD_TYPE = release ]
-then
-    CMAKE_BUILD_TYPE=RelWithDebInfo
-    BUILD_DIR="$SOURCE_DIR-build-release"
-fi
-
 ################ Nothing should need to be changed below this line ################
 
 if [[ $(uname) == 'Linux' ]]
@@ -38,7 +27,7 @@ then
                          -DWITH_LIBICONVINC:PATH=$SUPPORT_LIBS_PATH/libiconv-1.15"
 fi
 
-CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$CMAKE_BUILD_TYPE \
+CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
                -DCMAKE_INSTALL_PREFIX:PATH=$SDK_INSTALL_PREFIX \
                -DDCMTK_WITH_TIFF:BOOL=FALSE \
                -DDCMTK_WITH_PNG:BOOL=FALSE \

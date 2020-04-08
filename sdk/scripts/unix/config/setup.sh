@@ -36,8 +36,8 @@ else
     exit 1
 fi
 
-# List of build types to use. Possible values: debug, release.
-BUILD_TYPES=${BUILD_TYPES:-"release"}
+# List of build types to use. Possible values: Debug, Release, RelWithDebInfo.
+BUILD_TYPES=${BUILD_TYPES:-"Release"}
 
 # List of libs to build. Possible values: qt, dcmtk, vtk, gdcm, itk, ecm, threadweaver.
 LIBS=${LIBS:-"qt dcmtk vtk gdcm itk ecm threadweaver"}

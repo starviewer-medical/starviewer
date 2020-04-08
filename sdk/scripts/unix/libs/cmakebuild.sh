@@ -1,6 +1,7 @@
 #!/bin/bash
 
 PATCHES_ROOT="$SCRIPTS_ROOT/../../patches"
+BUILD_DIR="$SOURCE_DIR-$BUILD_TYPE"
 
 mkdir -p "$BUILD_DIR"
 pushd "$BUILD_DIR"
