@@ -3,7 +3,7 @@
 
 SDK_INSTALL_PREFIX = $$(SDK_INSTALL_PREFIX)
 isEmpty(SDK_INSTALL_PREFIX){
-    SDK_INSTALL_PREFIX = $$PWD/../../sdk-build
+    SDK_INSTALL_PREFIX = $$PWD/../../sdk-install
 }
 
 exists(/etc/debian_version):linux:LIB64 = lib/x86_64-linux-gnu  # Debian-based systems

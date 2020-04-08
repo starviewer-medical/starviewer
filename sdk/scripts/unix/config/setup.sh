@@ -7,13 +7,19 @@ then
 fi
 
 # Base directory for everything related to the SDK.
-SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$SCRIPTS_ROOT/../../../sdk-build"}
+SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$SCRIPTS_ROOT/../../.."}
 
 # Where the libraries are dowloaded.
-DOWNLOAD_PREFIX=${DOWNLOAD_PREFIX:-"$SCRIPTS_ROOT/../../../sdk-download"}
+DOWNLOAD_PREFIX=${DOWNLOAD_PREFIX:-"$SDK_BASE_PREFIX/sdk-download"}
+
+# Location of SDK sources to build.
+SOURCE_DIR_BASE=${SOURCE_DIR_BASE:-"$SDK_BASE_PREFIX/sdk-build"}
+
+# Where to install the SDK libraries once compiled.
+SDK_INSTALL_PREFIX=${SDK_INSTALL_PREFIX:-"$SDK_BASE_PREFIX/sdk-install"}
 
 # Where the user will be asked to install Qt.
-INSTALL_QTDIR=${INSTALL_QTDIR:-"$SDK_BASE_PREFIX/lib/qt"}
+INSTALL_QTDIR=${INSTALL_QTDIR:-"$SDK_INSTALL_PREFIX/qt"}
 
 # Directory where the specific version of Qt is installed.
 if [[ $(uname) == 'Linux' ]]
@@ -29,12 +35,6 @@ else
     echo "Error: Qt platform not considered."
     exit 1
 fi
-
-# Where to install the SDK libraries once compiled.
-SDK_INSTALL_PREFIX=${SDK_INSTALL_PREFIX:-"$SDK_BASE_PREFIX"}
-
-# Location of SDK sources to build.
-SOURCE_DIR_BASE=${SOURCE_DIR_BASE:-"$SDK_INSTALL_PREFIX/src"}
 
 # List of build types to use. Possible values: debug, release.
 BUILD_TYPES=${BUILD_TYPES:-"release"}
