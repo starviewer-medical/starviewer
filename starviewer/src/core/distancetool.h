@@ -44,13 +44,13 @@ namespace udg {
 class DistanceTool : public GenericDistanceTool {
 Q_OBJECT
 public:
-    DistanceTool(QViewer *viewer, QObject *parent = 0);
-    ~DistanceTool();
+    explicit DistanceTool(QViewer *viewer, QObject *parent = nullptr);
+    ~DistanceTool() override;
 
 protected:
-    void handleLeftButtonPress();
-    void handleMouseMove();
-    void abortDrawing();
+    void handleLeftButtonPress() override;
+    void handleMouseMove() override;
+    void abortDrawing() override;
 
 private:
     /// Gestiona quin punt de la distància estem dibuixant. Es cridarà cada cop que

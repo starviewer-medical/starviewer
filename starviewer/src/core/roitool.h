@@ -38,10 +38,8 @@ class SliceOrientedVolumePixelData;
 class ROITool : public MeasurementTool {
 Q_OBJECT
 public:
-    ROITool(QViewer *viewer, QObject *parent = 0);
-    ~ROITool();
-
-    virtual void handleEvent(long unsigned eventID) = 0;
+    explicit ROITool(QViewer *viewer, QObject *parent = nullptr);
+    ~ROITool() override;
 
 protected:
     MeasureComputer* getMeasureComputer() const override;

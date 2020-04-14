@@ -88,8 +88,8 @@ public:
     };
 
     /// \brief Sets the number of axes to zero.
-    explicit SlicingTool(QViewer *viewer, QObject *parent = 0);
-    virtual ~SlicingTool();
+    explicit SlicingTool(QViewer *viewer, QObject *parent = nullptr);
+    ~SlicingTool() override;
     
     /// \name Without axes
     //@{

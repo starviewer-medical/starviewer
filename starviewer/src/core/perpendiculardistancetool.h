@@ -53,13 +53,13 @@ Q_OBJECT
 
 public:
 
-    PerpendicularDistanceTool(QViewer *viewer, QObject *parent = 0);
-    ~PerpendicularDistanceTool();
+    explicit PerpendicularDistanceTool(QViewer *viewer, QObject *parent = nullptr);
+    ~PerpendicularDistanceTool() override;
 
 protected:
-    void handleLeftButtonPress();
-    void handleMouseMove();
-    void abortDrawing();
+    void handleLeftButtonPress() override;
+    void handleMouseMove() override;
+    void abortDrawing() override;
 
 private:
 

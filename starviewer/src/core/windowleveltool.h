@@ -30,10 +30,10 @@ public:
     /// Estats de la tool
     enum { None, WindowLevelling, Burning };
 
-    WindowLevelTool(QViewer *viewer, QObject *parent = 0);
-    ~WindowLevelTool();
+    explicit WindowLevelTool(QViewer *viewer, QObject *parent = nullptr);
+    ~WindowLevelTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
 protected slots:
     /// Resets the tool to a valid initial state.

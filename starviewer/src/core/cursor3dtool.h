@@ -33,12 +33,12 @@ public:
     /// Estats de la tool
     enum { None, Computing };
 
-    Cursor3DTool(QViewer *viewer, QObject *parent = 0);
-    ~Cursor3DTool();
+    explicit Cursor3DTool(QViewer *viewer, QObject *parent = nullptr);
+    ~Cursor3DTool() override;
 
-    void setToolData(ToolData *data);
+    void setToolData(ToolData *data) override;
 
-    void handleEvent(long unsigned eventID);
+    void handleEvent(long unsigned eventID) override;
 
     void setVisibility(bool visible);
 

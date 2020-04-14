@@ -30,8 +30,8 @@ class Q2DViewer;
 class Tool : public QObject {
 Q_OBJECT
 public:
-    Tool(QViewer *viewer, QObject *parent = 0);
-    ~Tool();
+    explicit Tool(QViewer *viewer, QObject *parent = nullptr);
+    ~Tool() override;
 
     /// Li assignem una configuracio, si la que te per defecte no ens val
     /// @param configuration Configuracio que li volem assignar
@@ -66,7 +66,7 @@ public:
     QString toolName();
 
     /// Decideix què s'ha de fer per cada event rebut
-    virtual void handleEvent(unsigned long eventID) = 0;
+    virtual void handleEvent(unsigned long eventID);
 
 protected:
     /// Viewer sobre el que s'executa la tool

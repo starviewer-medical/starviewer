@@ -31,10 +31,10 @@ Q_OBJECT
 public:
     enum { None, Rotating, Spinning };
 
-    Rotate3DTool(QViewer *viewer, QObject *parent = 0);
-    ~Rotate3DTool();
+    explicit Rotate3DTool(QViewer *viewer, QObject *parent = nullptr);
+    ~Rotate3DTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
 private slots:
     /// Comença el translate

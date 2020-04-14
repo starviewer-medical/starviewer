@@ -30,10 +30,10 @@ class DrawerText;
 class GenericDistanceTool : public MeasurementTool {
 Q_OBJECT
 public:
-    GenericDistanceTool(QViewer *viewer, QObject *parent = 0);
-    ~GenericDistanceTool();
+    explicit GenericDistanceTool(QViewer *viewer, QObject *parent = nullptr);
+    ~GenericDistanceTool() override;
 
-    void handleEvent(long unsigned eventID);
+    void handleEvent(long unsigned eventID) override;
 
 protected:
     /// These methods should be implemented by its subclasses giving the desired behaviour for each event

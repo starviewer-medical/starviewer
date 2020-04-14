@@ -29,7 +29,7 @@ class WindowLevelLeftTool : public WindowLevelTool
 
 public:
 
-    WindowLevelLeftTool(QViewer *viewer, QObject *parent = nullptr);
+    explicit WindowLevelLeftTool(QViewer *viewer, QObject *parent = nullptr);
 
     void handleEvent(unsigned long eventID) override;
 

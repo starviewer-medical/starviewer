@@ -192,18 +192,18 @@ See cursorIcon().
 class SlicingMouseTool : public SlicingTool {
 Q_OBJECT
 public:
-    explicit SlicingMouseTool(QViewer *viewer, QObject *parent = 0);
-    virtual ~SlicingMouseTool();
+    explicit SlicingMouseTool(QViewer *viewer, QObject *parent = nullptr);
+    ~SlicingMouseTool() override;
     
     /** \brief Triggers move, press and release events.
      * 
      * \warning The release event happens whenever the right or left mouse buttons are released in order overcome the situation where the patient menu opening blocks receiving the release event of the left button.
      */
-    virtual void handleEvent(unsigned long eventID) override;
+    void handleEvent(unsigned long eventID) override;
     
 public slots:
     /// \brief Assigns the axes modes for the current volume.
-    virtual void reassignAxes() override;
+    void reassignAxes() override;
 
 protected:
     /// \brief Direction of the mouse movement.

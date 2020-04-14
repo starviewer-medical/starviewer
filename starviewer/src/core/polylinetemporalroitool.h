@@ -28,19 +28,18 @@ class PolylineTemporalROIToolData;
 class PolylineTemporalROITool : public PolylineROITool {
 Q_OBJECT
 public:
-    PolylineTemporalROITool(QViewer *viewer, QObject *parent = 0);
-
-    ~PolylineTemporalROITool();
+    explicit PolylineTemporalROITool(QViewer *viewer, QObject *parent = nullptr);
+    ~PolylineTemporalROITool() override;
 
     // Declaració de tipus
     // typedef PolylineTemporalROIToolData::TemporalImageType TemporalImageType;
     typedef itk::Image<double, 4> TemporalImageType;
 
     /// Retorna les dades pròpies de la seed
-    ToolData* getToolData() const;
+    ToolData* getToolData() const override;
 
     /// Assigna les dades pròpies de l'eina (persistent data)
-    void setToolData(ToolData *data);
+    void setToolData(ToolData *data) override;
 
 private slots:
     /// Metode que es crida quan s'acaba de definir la roi

@@ -30,16 +30,16 @@ public:
     /// Estats de la tool
     enum { None, Moving };
 
-    TransDifferenceTool(QViewer *viewer, QObject *parent = 0);
-    ~TransDifferenceTool();
+    explicit TransDifferenceTool(QViewer *viewer, QObject *parent = nullptr);
+    ~TransDifferenceTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
     /// Retorna les dades pròpies de la seed
-    ToolData* getToolData() const;
+    ToolData* getToolData() const override;
 
     /// Assigna les dades pròpies de la seed (persistent data)
-    void setToolData(ToolData *data);
+    void setToolData(ToolData *data) override;
 
     /// Inicialitza i calcula tota la imatge diferència
     void initializeDifferenceImage();

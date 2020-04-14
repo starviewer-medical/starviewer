@@ -34,10 +34,10 @@ class QViewer;
 class ScreenShotTool : public Tool {
 Q_OBJECT
 public:
-    ScreenShotTool(QViewer *viewer, QObject *parent = 0);
-    ~ScreenShotTool();
+    explicit ScreenShotTool(QViewer *viewer, QObject *parent = nullptr);
+    ~ScreenShotTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
 public slots:
     /// Només fa captura de la imatge actual

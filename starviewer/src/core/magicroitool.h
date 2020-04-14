@@ -40,13 +40,13 @@ public:
     // Moviments
     enum { MoveRight, MoveLeft, MoveUp, MoveDown };
 
-    MagicROITool(QViewer *viewer, QObject *parent = 0);
-    ~MagicROITool();
+    explicit MagicROITool(QViewer *viewer, QObject *parent = nullptr);
+    ~MagicROITool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
 protected:
-    virtual void setTextPosition(DrawerText *text);
+    void setTextPosition(DrawerText *text) override;
 
 private:
     /// Returns the current pixel data from the selected input.

@@ -31,16 +31,16 @@ public:
     /// Estats de la tool
     enum { None, Seeding };
 
-    SeedTool(QViewer *viewer, QObject *parent = 0);
-    ~SeedTool();
+    explicit SeedTool(QViewer *viewer, QObject *parent = nullptr);
+    ~SeedTool() override;
 
-    void handleEvent(long unsigned eventID);
+    void handleEvent(long unsigned eventID) override;
 
     /// Retorna les dades pròpies de la seed
-    ToolData* getToolData() const;
+    ToolData* getToolData() const override;
 
     /// Assigna les dades pròpies de la seed (persistent data)
-    void setToolData(ToolData *data);
+    void setToolData(ToolData *data) override;
 
     /// Posem la llavor i li passem la posició i la llesca: útil per fer-ho per codi
     void setSeed(QVector<double> seedPosition, int slice);

@@ -58,15 +58,15 @@ Note that a timer hack is used in order to catch the accumulation of key events;
 class SlicingKeyboardTool : public SlicingTool {
 Q_OBJECT
 public:
-    explicit SlicingKeyboardTool(QViewer *viewer, QObject *parent = 0);
-    virtual ~SlicingKeyboardTool();
+    explicit SlicingKeyboardTool(QViewer *viewer, QObject *parent = nullptr);
+    ~SlicingKeyboardTool() override;
     
     /// \brief Triggers key press event methods.
-    virtual void handleEvent(unsigned long eventID) override;
+    void handleEvent(unsigned long eventID) override;
     
 public slots:
     /// \brief Assigns the axes modes for the current volume.
-    virtual void reassignAxes() override;
+    void reassignAxes() override;
     
 private slots:
     /** \brief Process key accumulated events.

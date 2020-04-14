@@ -28,10 +28,10 @@ Q_OBJECT
 public:
     enum { None, Zooming };
 
-    ZoomTool(QViewer *viewer, QObject *parent = 0);
-    ~ZoomTool();
+    explicit ZoomTool(QViewer *viewer, QObject *parent = nullptr);
+    ~ZoomTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
 private slots:
     /// Comença el zoom

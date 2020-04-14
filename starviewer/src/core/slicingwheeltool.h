@@ -51,15 +51,15 @@ Note that a timer is used to unset the cursor icon and reset the remaining incre
 class SlicingWheelTool : public SlicingTool {
 Q_OBJECT
 public:
-    explicit SlicingWheelTool(QViewer *viewer, QObject *parent = 0);
-    virtual ~SlicingWheelTool();
+    explicit SlicingWheelTool(QViewer *viewer, QObject *parent = nullptr);
+    ~SlicingWheelTool() override;
 
     /// \brief Triggers wheel move event methods.
-    virtual void handleEvent(unsigned long eventID) override;
+    void handleEvent(unsigned long eventID) override;
 
 public slots:
     /// \brief Assigns the axes modes for the current volume. A reset is performed (beginScroll()).
-    virtual void reassignAxes() override;
+    void reassignAxes() override;
     
 private slots:
     /// \brief Zeroes the increments and unsets cursor icon.

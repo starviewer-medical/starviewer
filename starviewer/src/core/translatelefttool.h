@@ -29,8 +29,8 @@ class TranslateLeftTool : public TranslateTool
 
 public:
 
-    TranslateLeftTool(QViewer *viewer, QObject *parent = nullptr);
-    virtual ~TranslateLeftTool();
+    explicit TranslateLeftTool(QViewer *viewer, QObject *parent = nullptr);
+    virtual ~TranslateLeftTool() override;
 
     void handleEvent(unsigned long eventID) override;
 

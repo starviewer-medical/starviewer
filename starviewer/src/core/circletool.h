@@ -35,11 +35,11 @@ class CircleTool : public Tool {
 
 public:
 
-    CircleTool(QViewer *viewer, QObject *parent = 0);
-    ~CircleTool();
+    explicit CircleTool(QViewer *viewer, QObject *parent = nullptr);
+    ~CircleTool() override;
 
     /// Decideix què s'ha de fer per cada event rebut.
-    virtual void handleEvent(unsigned long eventId);
+    virtual void handleEvent(unsigned long eventId) override;
 
 private:
 

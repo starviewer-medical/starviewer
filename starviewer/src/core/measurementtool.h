@@ -32,8 +32,8 @@ class MeasureComputer;
 class MeasurementTool : public Tool {
 Q_OBJECT
 public:
-    MeasurementTool(QViewer *viewer, QObject *parent = 0);
-    ~MeasurementTool();
+    explicit MeasurementTool(QViewer *viewer, QObject *parent = nullptr);
+    ~MeasurementTool() override;
 
 protected:
     /// Returns the specific measure computer for the implemented measurement tool

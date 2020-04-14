@@ -90,9 +90,9 @@ void SlicingMouseTool::reassignAxes()
 void SlicingMouseTool::readConfiguration()
 {
     Settings settings;
-    m_config.sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();;
-    m_config.phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();;
-    m_config.wraparound = settings.getValue(CoreSettings::EnableQ2DViewerMouseWraparound).toBool();;
+    m_config.sliceScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerSliceScrollLoop).toBool();
+    m_config.phaseScrollLoop = settings.getValue(CoreSettings::EnableQ2DViewerPhaseScrollLoop).toBool();
+    m_config.wraparound = settings.getValue(CoreSettings::EnableQ2DViewerMouseWraparound).toBool();
 }
 
 void SlicingMouseTool::onMousePress(const QPoint &position)
@@ -205,6 +205,8 @@ void SlicingMouseTool::onMouseMove(const QPoint &position)
 
 void SlicingMouseTool::onMouseRelease(const QPoint &position)
 {
+    Q_UNUSED(position)
+
     m_dragActive = false;
     m_wraparound.wrappedToLeft = false;
     m_wraparound.wrappedToRight = false;
@@ -218,8 +220,8 @@ void SlicingMouseTool::cursorIcon(const QPoint &currentPosition)
     int index = 0;
     if (m_currentDirection != Direction::Undefined)
     {
-        unsigned int axis;
-        double positionIncrement;
+        unsigned int axis = VerticalAxis;
+        double positionIncrement = 0;
         
         if (m_currentDirection == Direction::Vertical)
         {
@@ -320,8 +322,8 @@ void SlicingMouseTool::unsetCursorIcon()
 double SlicingMouseTool::scroll(const QPoint& currentPosition)
 {
     Q_ASSERT(m_currentDirection != Direction::Undefined);
-    unsigned int axis; 
-    double shift;
+    unsigned int axis = VerticalAxis;
+    double shift = 0;
     if (m_currentDirection == Direction::Horizontal)
     {
         axis = HorizontalAxis;
@@ -382,20 +384,12 @@ void SlicingMouseTool::beginScroll(const QPoint& startPosition)
          m_scrollLoop = m_scrollLoop || (getMode(axis) == SlicingMode::Phase && m_config.phaseScrollLoop);
     }
     
-    // Step lenght determined by the viewer size.
+    // Step length determined by the viewer size.
     {
-        unsigned int windowLength = std::max(1, m_currentDirection == Direction::Horizontal ? m_2DViewer->size().width() : m_2DViewer->size().height()); // Always greater than zero
-        unsigned int rangeSize = std::max(1.0, getRangeSize(axis)); // Always greater than zero
-        
-        m_stepLength = windowLength / rangeSize;
-        if (m_stepLength > DefaultMaximumStepLength)
-        {
-            m_stepLength = DefaultMaximumStepLength;
-        }
-        else if (m_stepLength < DefaultMinimumStepLength)
-        {
-            m_stepLength = DefaultMinimumStepLength;
-        }
+        // Window length and range size always greater than zero
+        int windowLength = std::max(1, m_currentDirection == Direction::Horizontal ? m_2DViewer->size().width() : m_2DViewer->size().height());
+        double rangeSize = std::max(1.0, getRangeSize(axis));
+        m_stepLength = qBound<double>(DefaultMinimumStepLength, windowLength / rangeSize, DefaultMaximumStepLength);
     }
 }
 
