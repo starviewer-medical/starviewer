@@ -45,7 +45,6 @@ void EllipticalROITool::deleteTemporalRepresentation()
     {
         m_roiPolygon->decreaseReferenceCount();
         delete m_roiPolygon;
-        m_2DViewer->render();
     }
 
     m_roiPolygon = 0;

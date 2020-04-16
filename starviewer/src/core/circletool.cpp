@@ -224,7 +224,6 @@ void CircleTool::initialize()
     {
         m_circle->decreaseReferenceCount();
         delete m_circle;
-        m_2DViewer->render();
     }
 
     m_circle = 0;

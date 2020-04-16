@@ -72,13 +72,11 @@ void MagicROITool::deleteTemporalRepresentation()
     {
         m_roiPolygon->decreaseReferenceCount();
         delete m_roiPolygon;
-        m_2DViewer->render();
     }
     if (!m_filledRoiPolygon.isNull())
     {
         m_filledRoiPolygon->decreaseReferenceCount();
         delete m_filledRoiPolygon;
-        m_2DViewer->render();
     }
 
     m_state = Ready;
