@@ -118,7 +118,7 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="page">
+  <widget class="QWidget" name="page1">
    <property name="palette">
     <palette>
      <active>
