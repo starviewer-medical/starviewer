@@ -92,7 +92,7 @@ int VolumePixelDataReaderITKDCMTK::readMultipleFiles(const QStringList &filename
     {
         m_seriesReader->Update();
     }
-    catch (itk::ProcessAborted)
+    catch (const itk::ProcessAborted&)
     {
         errorCode = ReadAborted;
     }
@@ -105,7 +105,7 @@ int VolumePixelDataReaderITKDCMTK::readMultipleFiles(const QStringList &filename
         // Llegim el missatge d'error per esbrinar de quin error es tracta
         errorCode = identifyErrorMessage(QString(e.GetDescription()));
     }
-    catch (std::bad_alloc)
+    catch (const std::bad_alloc&)
     {
         errorCode = OutOfMemory;
     }
@@ -152,7 +152,7 @@ int VolumePixelDataReaderITKDCMTK::readSingleFile(const QString &fileName)
     {
         reader->Update();
     }
-    catch (itk::ProcessAborted)
+    catch (const itk::ProcessAborted&)
     {
         errorCode = ReadAborted;
     }
@@ -163,7 +163,7 @@ int VolumePixelDataReaderITKDCMTK::readSingleFile(const QString &fileName)
         // Llegim el missatge d'error per esbrinar de quin error es tracta
         errorCode = identifyErrorMessage(QString(e.GetDescription()));
     }
-    catch (std::bad_alloc)
+    catch (const std::bad_alloc&)
     {
         errorCode = OutOfMemory;
     }
@@ -235,7 +235,7 @@ void VolumePixelDataReaderITKDCMTK::readDifferentSizeImagesIntoOneVolume(const Q
             // Llegim el missatge d'error per esbrinar de quin error es tracta
             errorCode = identifyErrorMessage(QString(e.GetDescription()));
         }
-        catch (std::bad_alloc)
+        catch (const std::bad_alloc&)
         {
             errorCode = OutOfMemory;
         }
