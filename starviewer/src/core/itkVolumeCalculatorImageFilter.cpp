@@ -106,7 +106,7 @@ void
 VolumeCalculatorImageFilter<TInputImage>
 ::BeforeThreadedGenerateData()
 {
-  int numberOfThreads = this->GetNumberOfThreads();
+  int numberOfThreads = this->GetNumberOfWorkUnits();
 
   // Create the thread temporaries
   m_ThreadVol = std::vector<unsigned int>(numberOfThreads, 0);

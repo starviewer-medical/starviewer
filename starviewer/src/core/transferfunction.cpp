@@ -280,7 +280,7 @@ QList<double> TransferFunction::keys(double begin, double end) const
 
     updateKeys();
 
-    QList<double>::const_iterator lowerBound = qLowerBound(m_keys, begin);
+    QList<double>::const_iterator lowerBound = std::lower_bound(m_keys.begin(), m_keys.end(), begin);
     QList<double>::const_iterator itEnd = m_keys.constEnd();
     QList<double> keys;
 
@@ -514,7 +514,7 @@ void TransferFunction::updateKeys() const
 
     m_keys = m_color.keys();
     m_keys << m_scalarOpacity.keys();
-    qSort(m_keys);
+    std::sort(m_keys.begin(), m_keys.end());
 
     for (int i = 0; i < m_keys.size() - 1; i++)
     {

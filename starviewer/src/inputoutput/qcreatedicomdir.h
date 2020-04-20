@@ -19,7 +19,6 @@
 #include <ui_qcreatedicomdirbase.h>
 #include "createdicomdir.h"
 
-class QSignalMapper;
 class QProcess;
 class QProgressDialog;
 
@@ -160,9 +159,6 @@ private:
 
     /// Agrupa les accions dels dispositius on gravarem el DICOMDIR
     QActionGroup *m_devicesActionGroup;
-
-    /// Mapejador d'accions
-    QSignalMapper *m_signalMapper;
 
     /// Accions
     QAction *m_cdromAction;

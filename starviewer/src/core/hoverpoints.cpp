@@ -372,16 +372,6 @@ void HoverPoints::movePoint(int index, const QPointF &point, bool emitUpdate)
     }
 }
 
-inline static bool x_less_than(const QPointF &p1, const QPointF &p2)
-{
-    return p1.x() < p2.x();
-}
-
-inline static bool y_less_than(const QPointF &p1, const QPointF &p2)
-{
-    return p1.y() < p2.y();
-}
-
 void HoverPoints::firePointChange()
 {
 //    printf("HoverPoints::firePointChange(), current=%d\n", m_currentIndex);
@@ -396,11 +386,15 @@ void HoverPoints::firePointChange()
 
         if (m_sortType == XSort)
         {
-            qSort(m_points.begin(), m_points.end(), x_less_than);
+            std::sort(m_points.begin(), m_points.end(), [](const QPointF &p1, const QPointF &p2) {
+                return p1.x() < p2.x();
+            });
         }
         else if (m_sortType == YSort)
         {
-            qSort(m_points.begin(), m_points.end(), y_less_than);
+            std::sort(m_points.begin(), m_points.end(), [](const QPointF &p1, const QPointF &p2) {
+                return p1.y() < p2.y();
+            });
         }
 
         // Compensate for changed order...

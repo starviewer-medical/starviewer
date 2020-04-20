@@ -14,15 +14,15 @@
 
 #include "qscreendistribution.h"
 
+#include <QGuiApplication>
 #include <QPainter>
-#include <QDesktopWidget>
-#include <QApplication>
 #include <QSize>
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QWidgetAction>
 #include <QLinearGradient>
 #include <QRadialGradient>
+#include <QScreen>
 
 namespace udg {
 
@@ -181,19 +181,17 @@ void QScreenDistribution::paintEvent(QPaintEvent *event)
 
 void QScreenDistribution::computeSizesAndPositions()
 {
-    QDesktopWidget *desktop = QApplication::desktop();
-
     int minimumX = 0;
     int minimumY = 0;
     int maximumX = 0;
     int maximumY = 0;
 
     // Per cada pantalla
-    for (int i = 0; i < desktop->screenCount(); i++)
+    foreach (QScreen *screen, QGuiApplication::screens())
     {
         // Agafem les seves coordenades
-        QPoint topLeft = desktop->screenGeometry(i).topLeft();
-        QPoint bottomRight = desktop->screenGeometry(i).bottomRight();
+        QPoint topLeft = screen->geometry().topLeft();
+        QPoint bottomRight = screen->geometry().bottomRight();
 
         m_screens.append(QRect(topLeft, bottomRight));
 

@@ -19,7 +19,6 @@
 #include <QProgressDialog>
 #include <QProcess>
 #include <QCloseEvent>
-#include <QSignalMapper>
 #include <QTimer>
 
 #include "converttodicomdir.h"
@@ -106,16 +105,12 @@ void QCreateDicomdir::initializeControls()
 
 void QCreateDicomdir::createActions()
 {
-    m_signalMapper = new QSignalMapper;
-    connect(m_signalMapper, SIGNAL(mapped(int)), this, SLOT(deviceChanged(int)));
-
     m_cdromAction = new QAction(0);
     m_cdromAction->setText(tr("CD-ROM"));
     m_cdromAction->setStatusTip(tr("Record DICOMDIR on a CD-ROM"));
     m_cdromAction->setIcon(QIcon(":/images/icons/media-optical.svg"));
     m_cdromAction->setCheckable(true);
-    m_signalMapper->setMapping(m_cdromAction, CreateDicomdir::CdRom);
-    connect(m_cdromAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_cdromAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::CdRom); });
     m_cdromDeviceToolButton->setDefaultAction(m_cdromAction);
 
     m_dvdromAction = new QAction(0);
@@ -123,8 +118,7 @@ void QCreateDicomdir::createActions()
     m_dvdromAction->setStatusTip(tr("Record DICOMDIR on a DVD-ROM"));
     m_dvdromAction->setIcon(QIcon(":/images/icons/media-optical-dvd.svg"));
     m_dvdromAction->setCheckable(true);
-    m_signalMapper->setMapping(m_dvdromAction, CreateDicomdir::DvdRom);
-    connect(m_dvdromAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_dvdromAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::DvdRom); });
     m_dvdromDeviceToolButton->setDefaultAction(m_dvdromAction);
 
     m_hardDiskAction = new QAction(0);
@@ -132,8 +126,7 @@ void QCreateDicomdir::createActions()
     m_hardDiskAction->setStatusTip(tr("Record DICOMDIR on the Hard Disk"));
     m_hardDiskAction->setIcon(QIcon(":/images/icons/drive-harddisk.svg"));
     m_hardDiskAction->setCheckable(true);
-    m_signalMapper->setMapping(m_hardDiskAction, CreateDicomdir::HardDisk);
-    connect(m_hardDiskAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_hardDiskAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::HardDisk); });
     m_hardDiskDeviceToolButton->setDefaultAction(m_hardDiskAction);
 
     m_pendriveAction = new QAction(0);
@@ -141,8 +134,7 @@ void QCreateDicomdir::createActions()
     m_pendriveAction->setStatusTip(tr("Record DICOMDIR on a USB Flash Drive"));
     m_pendriveAction->setIcon(QIcon(":/images/icons/drive-removable-media.svg"));
     m_pendriveAction->setCheckable(true);
-    m_signalMapper->setMapping(m_pendriveAction, CreateDicomdir::UsbPen);
-    connect(m_pendriveAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_pendriveAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::UsbPen); });
     m_pendriveDeviceToolButton->setDefaultAction(m_pendriveAction);
 
     m_devicesActionGroup = new QActionGroup(0);

@@ -43,12 +43,12 @@ INITIALIZE_EASYLOGGINGPP
 
 #include <QApplication>
 #include <QLabel>
-#include <QDesktopWidget>
 #include <QLocale>
 #include <QTextCodec>
 #include <QDir>
 #include <QMessageBox>
 #include <QLibraryInfo>
+#include <QScreen>
 #include <qtsingleapplication.h>
 
 #include <vtkNew.h>
@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
     splash.setAttribute(Qt::WA_TranslucentBackground);
     splash.setPixmap(splashPixmap);
     splash.resize(splashPixmap.size());
-    splash.move(QApplication::desktop()->screenGeometry().center() - splash.rect().center());
+    splash.move(QGuiApplication::primaryScreen()->geometry().center() - splash.rect().center());
 
     if (!app.isRunning())
     {

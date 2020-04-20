@@ -15,19 +15,14 @@
 #include "qmrusortedtoolbuttonwithmenu.h"
 
 #include <QMenu>
-#include <QSignalMapper>
 
 namespace udg {
 
 QMruSortedToolButtonWithMenu::QMruSortedToolButtonWithMenu(QWidget *parent)
-    : QToolButton(parent), m_signalMapper(new QSignalMapper(this))
+    : QToolButton(parent)
 {
     setPopupMode(QToolButton::MenuButtonPopup);
     setMenu(new QMenu(this));
-
-    connect(m_signalMapper, static_cast<void(QSignalMapper::*)(QObject*)>(&QSignalMapper::mapped), [this](QObject *object) {
-        setDefaultAction(static_cast<QAction*>(object));
-    });
 }
 
 void QMruSortedToolButtonWithMenu::addAction(QAction *action)
@@ -47,8 +42,7 @@ void QMruSortedToolButtonWithMenu::addAction(QAction *action)
         menu()->addAction(action);
     }
 
-    connect(action, &QAction::triggered, m_signalMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    m_signalMapper->setMapping(action, action);
+    connect(action, &QAction::triggered, [=] { setDefaultAction(action); });
 }
 
 void QMruSortedToolButtonWithMenu::addActions(const QList<QAction *> &actions)

@@ -485,16 +485,6 @@ bool Study::operator>(const Study &study)
     return getDateTime() > study.getDateTime();
 }
 
-bool studyIsLessThan(Study *study1, Study *study2)
-{
-    return *study1 < *study2;
-}
-
-bool studyIsGreaterThan(Study *study1, Study *study2)
-{
-    return *study1 > *study2;
-}
-
 QList<Study*> Study::sortStudies(const QList<Study*> &studiesList, StudySortType sortCriteria)
 {
     QList<Study*> sortedStudies = studiesList;
@@ -502,11 +492,15 @@ QList<Study*> Study::sortStudies(const QList<Study*> &studiesList, StudySortType
     switch (sortCriteria)
     {
         case RecentStudiesFirst:
-            qSort(sortedStudies.begin(), sortedStudies.end(), studyIsGreaterThan);
+            std::sort(sortedStudies.begin(), sortedStudies.end(), [](Study *study1, Study *study2) {
+                return *study1 > *study2;
+            });
             break;
 
         case OlderStudiesFirst:
-            qSort(sortedStudies.begin(), sortedStudies.end(), studyIsLessThan);
+            std::sort(sortedStudies.begin(), sortedStudies.end(), [](Study *study1, Study *study2) {
+                return *study1 < *study2;
+            });
             break;
     }
 

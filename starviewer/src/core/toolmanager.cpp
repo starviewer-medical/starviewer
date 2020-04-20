@@ -23,7 +23,6 @@
 #include "logging.h"
 
 #include <QStringList>
-#include <QSignalMapper>
 #include <QAction>
 #include <QActionGroup>
 
@@ -35,8 +34,6 @@ ToolManager::ToolManager(QObject *parent)
     // TODO De moment ToolRegistry és una classe normal, però si es passa a singleton
     // El "new" s'haurà de canviar per un ::instance()
     m_toolRegistry = new ToolRegistry(this);
-    m_toolsActionSignalMapper = new QSignalMapper(this);
-    connect(m_toolsActionSignalMapper, SIGNAL(mapped(const QString&)), SLOT(triggeredToolAction(const QString&)));
 }
 
 ToolManager::~ToolManager()
@@ -326,8 +323,7 @@ QAction* ToolManager::registerTool(const QString &toolName)
     {
         // Altrament, creem l'acció associada, la connectem amb l'estructura interna i la registrem
         toolAction = m_toolRegistry->getToolAction(toolName);
-        m_toolsActionSignalMapper->setMapping(toolAction, toolName);
-        connect(toolAction, SIGNAL(triggered()), m_toolsActionSignalMapper, SLOT(map()));
+        connect(toolAction, &QAction::triggered, this, [=] { triggeredToolAction(toolName); });
         m_toolsActionsRegistry.insert(toolName, toolAction);
     }
     // Retornem l'acció associada

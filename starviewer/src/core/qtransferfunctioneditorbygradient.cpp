@@ -132,11 +132,6 @@ const TransferFunction &QTransferFunctionEditorByGradient::getTransferFunction()
     return m_transferFunction;
 }
 
-inline static bool x_less_than(const QPointF &p1, const QPointF &p2)
-{
-    return p1.x() < p2.x();
-}
-
 void QTransferFunctionEditorByGradient::pointsUpdated()
 {
     double w = m_alpha_shade->width();
@@ -150,7 +145,9 @@ void QTransferFunctionEditorByGradient::pointsUpdated()
     points += m_blue_shade->points();
     points += m_alpha_shade->points();
 
-    qSort(points.begin(), points.end(), x_less_than);
+    std::sort(points.begin(), points.end(), [](const QPointF &p1, const QPointF &p2) {
+        return p1.x() < p2.x();
+    });
 
     for (int i = 0; i < points.size(); ++i)
     {

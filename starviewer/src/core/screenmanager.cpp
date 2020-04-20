@@ -15,8 +15,8 @@
 #include "screenmanager.h"
 #include "dynamicmatrix.h"
 
-#include <QDesktopWidget>
-#include <QApplication>
+#include <QGuiApplication>
+#include <QScreen>
 #include <QWidget>
 
 namespace udg {
@@ -29,15 +29,15 @@ ScreenManager::ScreenManager()
 void ScreenManager::setupCurrentScreenLayout()
 {
     m_screenLayout.clear();
-    m_applicationDesktop = QApplication::desktop();
+    const QList<QScreen*> &qscreens = QGuiApplication::screens();
 
-    Screen screen;
-    for (int i = 0; i < m_applicationDesktop->screenCount(); ++i)
+    for (int i = 0; i < qscreens.size(); i++)
     {
+        Screen screen;
         screen.setID(i);
-        screen.setGeometry(m_applicationDesktop->screenGeometry(i));
-        screen.setAvailableGeometry(m_applicationDesktop->availableGeometry(i));
-        screen.setAsPrimary(m_applicationDesktop->primaryScreen() == i);
+        screen.setGeometry(qscreens[i]->geometry());
+        screen.setAvailableGeometry(qscreens[i]->availableGeometry());
+        screen.setAsPrimary(qscreens[i] == QGuiApplication::primaryScreen());
         
         m_screenLayout.addScreen(screen);
     }
@@ -132,12 +132,12 @@ void ScreenManager::restoreFromMinimized(QWidget *window)
 
 int ScreenManager::getScreenID(QWidget *window) const
 {
-    return m_applicationDesktop->screenNumber(window);
+    return getScreenID(window->mapToGlobal(QPoint(window->width() / 2, window->height() / 2))); // use widget central point
 }
 
 int ScreenManager::getScreenID(const QPoint &point) const
 {
-    return m_applicationDesktop->screenNumber(point);
+    return QGuiApplication::screens().indexOf(QGuiApplication::screenAt(point));
 }
 
 DynamicMatrix ScreenManager::computeScreenMatrix(QWidget *window) const

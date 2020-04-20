@@ -16,7 +16,6 @@
 #define UDGQRELATEDSTUDIESWIDGET_H
 
 #include <QWidget>
-#include <QSignalMapper>
 #include <QPushButton>
 #include <QLabel>
 #include <QHash>
@@ -152,12 +151,6 @@ private:
     QWidget *m_lookingForStudiesWidget;
     /// Objecte encarregat de cercar estudis relacionats
     RelatedStudiesManager *m_relatedStudiesManager;
-    /// Mapper utilitzat per saber cada botó de descàrrega a quin estudi està associat.
-    QSignalMapper *m_signalMapper;
-    /// Mapper utilitzat per saber cada botó de descàrrega a quin estudi està associat.
-    QSignalMapper *m_currentStudySignalMapper;
-    /// Mapper utilitzat per saber cada botó de descàrrega a quin estudi està associat.
-    QSignalMapper *m_priorStudySignalMapper;
     /// Objecte utilitzat per invocar la descàrrega d'estudis.
     QueryScreen *m_queryScreen;
     /// Ens permet saber els estudis que s'estan descarregant.

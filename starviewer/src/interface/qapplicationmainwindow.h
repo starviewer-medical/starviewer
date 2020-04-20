@@ -24,7 +24,6 @@ class QAction;
 class QMenu;
 class QCloseEvent;
 class QShowEvent;
-class QSignalMapper;
 class QLabel;
 class QProgressDialog;
 class QWidgetAction;
@@ -241,8 +240,6 @@ private:
 
     QLabel *m_betaVersionMenuText;
 
-    /// Mapeig de signals
-    QSignalMapper *m_signalMapper;
     QList<QAction*> m_actionsList;
 
     /// Per veure els logs

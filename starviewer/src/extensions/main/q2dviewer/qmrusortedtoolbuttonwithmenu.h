@@ -17,8 +17,6 @@
 
 #include <QToolButton>
 
-class QSignalMapper;
-
 namespace udg {
 
 /**
@@ -48,10 +46,6 @@ public:
 public slots:
     /// Sets the given action as the default action and moves the previous default action to the first position in the menu.
     void setDefaultAction(QAction *action);
-
-private:
-    /// Used to call setDefaultAction() with the triggered action.
-    QSignalMapper *m_signalMapper;
 
 };
 

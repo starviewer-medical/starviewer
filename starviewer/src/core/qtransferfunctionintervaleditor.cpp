@@ -260,9 +260,8 @@ void QTransferFunctionIntervalEditor::adjustWithNewEnd(int end)
 void QTransferFunctionIntervalEditor::selectColor()
 {
     QColor color = this->color();
-    bool ok;
-    color = QColor::fromRgba(QColorDialog::getRgba(color.rgba(), &ok, this));
-    if (ok)
+    color = QColorDialog::getColor(color, this, QString(), QColorDialog::ShowAlphaChannel);
+    if (color.isValid())
     {
         this->setColor(color);
     }

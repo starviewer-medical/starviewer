@@ -58,7 +58,6 @@
 
 // Qt
 #include <QAction>
-#include <QSignalMapper>
 #include <QMenuBar>
 #include <QCloseEvent>
 #include <QMessageBox>
@@ -185,10 +184,6 @@ void QApplicationMainWindow::checkNewVersionAndShowReleaseNotes()
 
 void QApplicationMainWindow::createActions()
 {
-    m_signalMapper = new QSignalMapper(this);
-    connect(m_signalMapper, SIGNAL(mapped(int)), m_extensionHandler, SLOT(request(int)));
-    connect(m_signalMapper, SIGNAL(mapped(const QString)), m_extensionHandler, SLOT(request(const QString)));
-
     m_newAction = new QAction(this);
     m_newAction->setText(tr("&New Window"));
     m_newAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::NewWindow));
@@ -201,16 +196,14 @@ void QApplicationMainWindow::createActions()
     m_openAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenFile));
     m_openAction->setStatusTip(tr("Open one or several existing volume files"));
     m_openAction->setIcon(QIcon(":/images/icons/document-open.svg"));
-    m_signalMapper->setMapping(m_openAction, 1);
-    connect(m_openAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_openAction, &QAction::triggered, [this] { m_extensionHandler->request(1); });
 
     m_openDirAction = new QAction(this);
     m_openDirAction->setText(tr("Open Files from a Directory..."));
     m_openDirAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenDirectory));
     m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
     m_openDirAction->setIcon(QIcon(":/images/icons/document-open.svg"));
-    m_signalMapper->setMapping(m_openDirAction, 6);
-    connect(m_openDirAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_openDirAction, &QAction::triggered, [this] { m_extensionHandler->request(6); });
 
     m_pacsAction = new QAction(this);
 #ifdef STARVIEWER_LITE
@@ -228,21 +221,18 @@ void QApplicationMainWindow::createActions()
     m_localDatabaseAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenLocalDatabaseStudies));
     m_localDatabaseAction->setStatusTip(tr("Browse local database studies"));
     m_localDatabaseAction->setIcon(QIcon(":/images/icons/database-local.svg"));
-    m_signalMapper->setMapping(m_localDatabaseAction, 10);
-    connect(m_localDatabaseAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_localDatabaseAction, &QAction::triggered, [this] { m_extensionHandler->request(10); });
 #endif
     // TODO potser almenys per la versió Lite caldria canviar la icona
     m_pacsAction->setIcon(QIcon(":/images/icons/document-open-remote.svg"));
-    m_signalMapper->setMapping(m_pacsAction, 7);
-    connect(m_pacsAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_pacsAction, &QAction::triggered, [this] { m_extensionHandler->request(7); });
 
     m_openDICOMDIRAction = new QAction(this);
     m_openDICOMDIRAction->setText(tr("Open DICOMDIR..."));
     m_openDICOMDIRAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenDICOMDIR));
     m_openDICOMDIRAction->setStatusTip(tr("Open DICOMDIR from CD, DVD, USB flash drive or hard disk"));
     m_openDICOMDIRAction->setIcon(QIcon(":/images/icons/document-open-dicomdir.svg"));
-    m_signalMapper->setMapping(m_openDICOMDIRAction, 8);
-    connect(m_openDICOMDIRAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_openDICOMDIRAction, &QAction::triggered, [this] { m_extensionHandler->request(8); });
 
     QStringList extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryIdentifiersList();
     foreach (const QString &name, extensionsMediatorNames)
@@ -251,12 +241,12 @@ void QApplicationMainWindow::createActions()
 
         if (mediator)
         {
+            const DisplayableID &extensionId = mediator->getExtensionID();
             QAction *action = new QAction(this);
-            action->setText(mediator->getExtensionID().getLabel());
-            action->setStatusTip(tr("Open the %1 Application").arg(mediator->getExtensionID().getLabel()));
+            action->setText(extensionId.getLabel());
+            action->setStatusTip(tr("Open the %1 Application").arg(extensionId.getLabel()));
             action->setEnabled(false);
-            m_signalMapper->setMapping(action, mediator->getExtensionID().getID());
-            connect(action, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+            connect(action, &QAction::triggered, [=] { m_extensionHandler->request(extensionId.getID()); });
             m_actionsList.append(action);
 
             delete mediator;
@@ -464,9 +454,6 @@ void QApplicationMainWindow::createLanguageMenu()
     languages.insert("es_ES", tr("Spanish"));
     languages.insert("en_GB", tr("English"));
 
-    QSignalMapper *signalMapper = new QSignalMapper(this);
-    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(switchToLanguage(QString)));
-
     QActionGroup *actionGroup = new QActionGroup(this);
 
     QMapIterator<QString, QString> i(languages);
@@ -474,9 +461,9 @@ void QApplicationMainWindow::createLanguageMenu()
     {
         i.next();
 
-        QAction *action = createLanguageAction(i.value(), i.key());
-        signalMapper->setMapping(action, i.key());
-        connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
+        const QString &key = i.key();
+        QAction *action = createLanguageAction(i.value(), key);
+        connect(action, &QAction::triggered, [=] { switchToLanguage(key); });
 
         actionGroup->addAction(action);
         m_languageMenu->addAction(action);
@@ -496,9 +483,6 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
 
     m_externalApplicationsMenu = m_toolsMenu->addMenu(tr("&External applications"));
     m_externalApplicationsMenu->setIcon(QIcon(":/images/icons/system-run.svg"));
-
-    QSignalMapper *signalMapper = new QSignalMapper(m_externalApplicationsMenu);
-    connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(launchExternalApplication(int)));
 
     QVector<QList<QKeySequence>> shortcutVector(12);
     shortcutVector[0] = ShortcutManager::getShortcuts(Shortcuts::ExternalApplication1);
@@ -526,8 +510,7 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
         }
 
         m_externalApplicationsMenu->addAction(action);
-        signalMapper->setMapping(action, position);
-        connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
+        connect(action, &QAction::triggered, [=] { launchExternalApplication(position); });
         position++;
     }
 }

@@ -20,7 +20,7 @@
 
 namespace udg {
 
-const QRegExp QAdvancedSearchWidget::regExpGetMemberWidgets("^m_*");
+static const QRegularExpression regExpGetMemberWidgets("^m_*");
 
 QAdvancedSearchWidget::QAdvancedSearchWidget(QWidget *parent)
  : QWidget(parent)
@@ -156,7 +156,7 @@ void QAdvancedSearchWidget::updateAdvancedSearchModifiedStatus()
         //el mètode findChildren ens retornaria tots els objectes de Qt que composen el tab, per exemple pel tab patient el QDateEdit està format 
         //per entre altres controls per QLineEdit, això ens pot generar problemes per saber si en aquell tab tenim algun valor per filtrar a les cerques
         //perquè trobaríem un QLineEdit amb valor
-        foreach (QObject *child, tab->findChildren<QObject*>(QRegExp(regExpGetMemberWidgets)))
+        foreach (QObject *child, tab->findChildren<QObject*>(regExpGetMemberWidgets))
         {
             if (isQLineEditEnabledAndIsNotEmpty(child) || isQCheckboxAndIsChecked(child))
             {

@@ -20,11 +20,11 @@
 #include "relatedstudiesmanager.h"
 #include "queryscreen.h"
 #include "singleton.h"
-#include "screenmanager.h"
 #include "qtreewidgetwithseparatorline.h"
 
 #include <QVBoxLayout>
 #include <QMovie>
+#include <QScreen>
 #include <QTreeWidgetItem>
 #include <QScrollBar>
 
@@ -42,9 +42,6 @@ QRelatedStudiesWidget::QRelatedStudiesWidget(RelatedStudiesManager *relatedStudi
 
     m_lookingForStudiesWidget = new QWidget(this);
     m_relatedStudiesTree = new QTreeWidgetWithSeparatorLine(this);
-    m_signalMapper = new QSignalMapper(this);
-    m_currentStudySignalMapper = new QSignalMapper(this);
-    m_priorStudySignalMapper = new QSignalMapper(this);
     m_queryScreen = SingletonPointer<QueryScreen>::instance();
     m_numberOfDownloadingStudies = 0;
 
@@ -67,7 +64,6 @@ QRelatedStudiesWidget::~QRelatedStudiesWidget()
         delete m_infomationPerStudy.take(key);
     }
     delete m_lookingForStudiesWidget;
-    delete m_signalMapper;
 }
 
 void QRelatedStudiesWidget::updateList()
@@ -256,9 +252,6 @@ void QRelatedStudiesWidget::initializeSearch()
 void QRelatedStudiesWidget::createConnections()
 {
     connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(queryStudiesFinished(QList<Study*>)));
-    connect(m_signalMapper, SIGNAL(mapped(const QString&)), SLOT(retrieveAndLoadStudy(const QString&)));
-    connect(m_currentStudySignalMapper, SIGNAL(mapped(const QString&)), SLOT(currentStudyRadioButtonClicked(const QString&)));
-    connect(m_priorStudySignalMapper, SIGNAL(mapped(const QString&)), SLOT(priorStudyRadioButtonClicked(const QString&)));
     connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStarted(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinished(QString)));
     connect(m_queryScreen, SIGNAL(studyRetrieveFailed(QString)), SLOT(studyRetrieveFailed(QString)));
@@ -310,6 +303,7 @@ void QRelatedStudiesWidget::initializeLookingForStudiesWidget()
 
 void QRelatedStudiesWidget::insertStudyToTree(Study *study)
 {
+    const QString &studyInstanceUid = study->getInstanceUID();
     QTreeWidgetItem *item = new QTreeWidgetItem();
 
     // Afegim l'item al widget
@@ -331,8 +325,7 @@ void QRelatedStudiesWidget::insertStudyToTree(Study *study)
     currentStudyLayout->setMargin(0);
     m_currentStudyRadioGroup.addButton(currentRadioButton);
     m_relatedStudiesTree->setItemWidget(item, CurrentStudy, currentStudyWidget);
-    connect(currentRadioButton, SIGNAL(clicked()), m_currentStudySignalMapper, SLOT(map()));
-    m_currentStudySignalMapper->setMapping(currentRadioButton, study->getInstanceUID());
+    connect(currentRadioButton, &QRadioButton::clicked, [=] { currentStudyRadioButtonClicked(studyInstanceUid); });
 
     // Add Radio Button to select prior study
     QWidget *priorStudyWidget = new QWidget(m_relatedStudiesTree);
@@ -344,8 +337,7 @@ void QRelatedStudiesWidget::insertStudyToTree(Study *study)
     priorStudyLayout->setMargin(0);
     m_priorStudyRadioGroup.addButton(priorRadioButton);
     m_relatedStudiesTree->setItemWidget(item, PriorStudy, priorStudyWidget);
-    connect(priorRadioButton, SIGNAL(clicked()), m_priorStudySignalMapper, SLOT(map()));
-    m_priorStudySignalMapper->setMapping(priorRadioButton, study->getInstanceUID());
+    connect(priorRadioButton, &QRadioButton::clicked, [=] { priorStudyRadioButtonClicked(studyInstanceUid); });
 
     QWidget *statusWidget = new QWidget(m_relatedStudiesTree);
     QHBoxLayout *statusLayout = new QHBoxLayout(statusWidget);
@@ -366,8 +358,7 @@ void QRelatedStudiesWidget::insertStudyToTree(Study *study)
     downloadButtonLayout->setContentsMargins(0, 2, 0, 1);
     downloadButtonLayout->addWidget(downloadButton);
 
-    connect(downloadButton, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
-    m_signalMapper->setMapping(downloadButton, study->getInstanceUID());
+    connect(downloadButton, &QPushButton::clicked, [=] { retrieveAndLoadStudy(studyInstanceUid); });
 
     if (hasToHighlightStudy(study))
     {
@@ -409,8 +400,7 @@ void QRelatedStudiesWidget::updateWidgetWidth()
 
 void QRelatedStudiesWidget::updateWidgetHeight()
 {
-    ScreenManager screen;
-    int screenAvailableHeight = screen.getScreenLayout().getScreen(screen.getScreenID(this)).getAvailableGeometry().height();
+    int screenAvailableHeight = QGuiApplication::screenAt(this->mapToGlobal(QPoint(0, 0)))->availableSize().height();
     int topAndMargins = this->geometry().top() + m_relatedStudiesTree->geometry().top() * 2; // Es multiplica per 2 pel marge inferior.
     int maxHeight = screenAvailableHeight - topAndMargins;
     int minHeight = m_relatedStudiesTree->sizeHint().height();
