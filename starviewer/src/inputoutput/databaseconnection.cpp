@@ -89,7 +89,7 @@ void DatabaseConnection::open()
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
     database.setDatabaseName(m_databasePath);
-    database.setConnectOptions("QSQLITE_BUSY_TIMEOUT=15000");
+    database.setConnectOptions("QSQLITE_BUSY_TIMEOUT=20000");
 
     if (!database.open())
     {
