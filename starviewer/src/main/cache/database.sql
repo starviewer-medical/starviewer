@@ -4,6 +4,8 @@
 -- DE REVISIO DE BASE DE DADES NECESSARIA PER LA COMPILACIÓ D'STARVIEWER ACTUA A core/starviewerapplication.h
 -- A LA CONSTANT StarviewerDatabaseRevisionRequired
 
+PRAGMA journal_mode=WAL;
+
 CREATE TABLE DatabaseRevision
 (
   Revision                      TEXT
@@ -12,7 +14,7 @@ CREATE TABLE DatabaseRevision
 -- IMPORTANT!!! Cal canviar el número de revisió per un de superior cada vegada que es faci un canvi a aquest fitxer i calgui
 -- que la BD s'actualitzi
 
-INSERT INTO DatabaseRevision (Revision) VALUES ('9593');
+INSERT INTO DatabaseRevision (Revision) VALUES ('9594');
 
 CREATE TABLE PACSRetrievedImages
 (
