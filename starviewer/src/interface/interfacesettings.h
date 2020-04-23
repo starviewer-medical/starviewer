@@ -35,6 +35,7 @@ public:
     static const QString AllowMultipleInstancesPerExtension;
     // Defineix quina és l'extensió que s'obrirà per defecte
     static const QString DefaultExtension;
+    static const QString DontShowMedicalDeviceInformationDialog;
 };
 
 } // end namespace udg

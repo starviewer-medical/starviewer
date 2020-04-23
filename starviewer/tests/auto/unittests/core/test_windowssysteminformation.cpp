@@ -1,3 +1,8 @@
+/*@
+    "name": "test_WindowsSystemInformation",
+    "requirements": ["other_features.diagnosis_tests", "technical.platforms.windows", "archive.ris", "archive.dimse"]
+ */
+
 //Starviewer
 #include "autotest.h"
 #include "windowssysteminformation.h"

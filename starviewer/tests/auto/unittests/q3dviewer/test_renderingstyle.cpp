@@ -1,3 +1,8 @@
+/*@
+    "name": "test_RenderingStyle",
+    "requirements": ["visualization.3d_specific_features.rendering_parameters"]
+ */
+
 #include "autotest.h"
 #include "renderingstyle.h"
 #include <QMap>

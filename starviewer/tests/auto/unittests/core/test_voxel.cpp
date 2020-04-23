@@ -1,3 +1,8 @@
+/*@
+    "name": "test_Voxel",
+    "requirements": ["tools.measure.voxel"]
+ */
+
 #include "autotest.h"
 #include "voxel.h"
 

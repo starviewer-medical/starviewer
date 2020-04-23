@@ -121,11 +121,6 @@
         <translation>N/D</translation>
     </message>
     <message>
-        <location filename="commandlineoption.cpp" line="60"/>
-        <source>value</source>
-        <translation>valor</translation>
-    </message>
-    <message>
         <location filename="windowsfirewallaccess.cpp" line="84"/>
         <source>Application is not in the firewall exceptions list</source>
         <translation>La aplicación no está en la lista de excepciones del cortafuegos</translation>
@@ -161,94 +156,109 @@
         <translation>Error al inicializar la biblioteca del cortafuegos</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="169"/>
+        <location filename="diagnosistestresultwriter.cpp" line="172"/>
         <source>%1 succeeded</source>
         <translation>%1 correctos</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="170"/>
+        <location filename="diagnosistestresultwriter.cpp" line="173"/>
         <source>%1 errors</source>
         <translation>%1 errores</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="171"/>
+        <location filename="diagnosistestresultwriter.cpp" line="174"/>
         <source>%1 warnings</source>
         <translation>%1 avisos</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="219"/>
+        <location filename="diagnosistestresultwriter.cpp" line="222"/>
+        <source>Test details</source>
+        <translation>Detalles de los tests</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="229"/>
+        <source>Timestamp: %1</source>
+        <translation>Marca temporal: %1</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="244"/>
         <source>System Information</source>
         <translation>Información del sistema</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="225"/>
+        <location filename="diagnosistestresultwriter.cpp" line="250"/>
         <source>Operating System: %1</source>
         <translation>Sistema operativo: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="226"/>
+        <location filename="diagnosistestresultwriter.cpp" line="251"/>
         <source>Desktop composition: </source>
         <translation>Composición del escritorio: </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="229"/>
+        <location filename="diagnosistestresultwriter.cpp" line="254"/>
         <source>Available</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="233"/>
+        <location filename="diagnosistestresultwriter.cpp" line="258"/>
         <source> and enabled</source>
         <translation> y activada</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="237"/>
+        <location filename="diagnosistestresultwriter.cpp" line="262"/>
         <source> but disabled</source>
         <translation> pero desactivada</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="242"/>
+        <location filename="diagnosistestresultwriter.cpp" line="267"/>
         <source>Not available</source>
         <translation>No disponible</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="245"/>
+        <location filename="diagnosistestresultwriter.cpp" line="270"/>
         <source>RAM Memory: %1 MB</source>
         <translation>Memoria RAM: %1 MB</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="252"/>
+        <location filename="diagnosistestresultwriter.cpp" line="277"/>
         <source>CPU Clock Speed: %1</source>
         <translation>Velocidad de reloj de la CPU: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="253"/>
+        <location filename="diagnosistestresultwriter.cpp" line="278"/>
         <source>Number of cores: %1</source>
         <translation>Número de núcleos: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="257"/>
+        <location filename="diagnosistestresultwriter.cpp" line="282"/>
         <source>GPU %1: </source>
         <translation>Tarjeta gráfica %1: </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="260"/>
+        <location filename="diagnosistestresultwriter.cpp" line="285"/>
         <source>Driver: %1. </source>
         <translation>Controlador: %1. </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="264"/>
+        <location filename="diagnosistestresultwriter.cpp" line="289"/>
         <source>OpenGL: %1</source>
         <translation>OpenGL: %1</translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="272"/>
+        <location filename="diagnosistestresultwriter.cpp" line="297"/>
         <source>Screen %1: %2x%3 </source>
         <translation>Pantalla %1: %2x%3 </translation>
     </message>
     <message>
-        <location filename="diagnosistestresultwriter.cpp" line="275"/>
+        <location filename="diagnosistestresultwriter.cpp" line="300"/>
         <source>Primary</source>
         <translation>Principal</translation>
+    </message>
+    <message>
+        <location filename="diagnosistestresultwriter.cpp" line="305"/>
+        <source>MAC address: %1</source>
+        <translation>Dirección MAC: %1</translation>
     </message>
     <message>
         <location filename="dicomserviceresponsestatus.cpp" line="76"/>
@@ -428,7 +438,7 @@
         <translation>Corte: %1</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="422"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="440"/>
         <source>-%1</source>
         <translation>-%1</translation>
     </message>
@@ -448,17 +458,17 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="376"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="395"/>
         <source>WW: %1 WL: %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="393"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="411"/>
         <source>Threshold: %1%</source>
         <translation>Umbral: %1%</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="412"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="430"/>
         <source>Loc: %1</source>
         <translation>Loc: %1</translation>
     </message>
@@ -1001,22 +1011,22 @@ Se deshabilitará el sombreado, de manera que no se visualizará como se esperab
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="27"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="23"/>
         <source>Window Width</source>
         <translation>Contraste</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="44"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="43"/>
         <source>Window Level</source>
         <translation>Brillo</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="94"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="98"/>
         <source>OK</source>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="101"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="91"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
@@ -1029,12 +1039,12 @@ Se deshabilitará el sombreado, de manera que no se visualizará como se esperab
 <context>
     <name>udg::QCustomWindowLevelEditWidget</name>
     <message>
-        <location filename="qcustomwindowleveleditwidget.cpp" line="98"/>
+        <location filename="qcustomwindowleveleditwidget.cpp" line="103"/>
         <source>Selected Custom WW/WL will be deleted.</source>
         <translation>Se borrará la ventana personalizada seleccionada.</translation>
     </message>
     <message>
-        <location filename="qcustomwindowleveleditwidget.cpp" line="99"/>
+        <location filename="qcustomwindowleveleditwidget.cpp" line="104"/>
         <source>Do you want to continue?</source>
         <translatorcomment>No em sona gaire correcte en castellà en software utitlitzar el Quiere Continuar</translatorcomment>
         <translation>¿Desea continuar?</translation>

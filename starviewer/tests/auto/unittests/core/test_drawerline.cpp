@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DrawerLine",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "drawerline.h"
 

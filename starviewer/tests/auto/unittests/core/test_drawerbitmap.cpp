@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DrawerBitmap",
+    "requirements": ["visualization.overlays"]
+ */
+
 #include "autotest.h"
 
 #include "drawerbitmap.h"

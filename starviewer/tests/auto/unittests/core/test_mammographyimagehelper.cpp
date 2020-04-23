@@ -1,3 +1,8 @@
+/*@
+    "name": "test_MammographyImageHelper",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "patientorientation.h"
 

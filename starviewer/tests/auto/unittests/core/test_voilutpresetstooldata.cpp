@@ -1,3 +1,8 @@
+/*@
+    "name": "test_VoiLutPresetsToolData",
+    "requirements": ["visualization.voi_lut.defaults"]
+ */
+
 #include "autotest.h"
 #include "voilutpresetstooldata.h"
 #include "windowlevel.h"

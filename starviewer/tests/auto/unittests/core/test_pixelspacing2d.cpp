@@ -1,3 +1,8 @@
+/*@
+    "name": "test_PixelSpacing2D",
+    "requirements": ["tools.measure.distance", "tools.measure.ta_gt", "tools.statistics.area"]
+ */
+
 #include "autotest.h"
 
 #include "pixelspacing2d.h"

@@ -1,3 +1,8 @@
+/*@
+    "name": "test_PatientOrientation",
+    "requirements": ["visualization.information.orientation"]
+ */
+
 #include "autotest.h"
 #include "patientorientation.h"
 

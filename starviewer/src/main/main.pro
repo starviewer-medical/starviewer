@@ -21,6 +21,8 @@ HEADERS += applicationtranslationsloader.h \
            vtkinit.h
 RESOURCES = main.qrc ../qml/qml.qrc
 
+ce_marking:RESOURCES += ../external/external.qrc
+
 win32{
 RC_FILE = starviewer.rc
 }

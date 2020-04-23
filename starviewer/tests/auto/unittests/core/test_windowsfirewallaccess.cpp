@@ -1,3 +1,8 @@
+/*@
+    "name": "test_WindowsFirewallAccess",
+    "requirements": ["other_features.diagnosis_tests", "technical.platforms.windows", "archive.ris", "archive.dimse"]
+ */
+
 #include "autotest.h"
 #include "windowsfirewallaccess.h"
 

@@ -1,3 +1,8 @@
+/*@
+    "name": "test_LeanBodyMassFormula",
+    "requirements": ["tools.suv.lean_body_mass"]
+ */
+
 #include "autotest.h"
 #include "leanbodymassformula.h"
 #include <QtCore/qmath.h>

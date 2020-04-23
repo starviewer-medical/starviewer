@@ -1,3 +1,8 @@
+/*@
+    "name": "test_SliceHandler",
+    "requirements": ["visualization.slicing", "visualization.phases", "visualization.thick_slab"]
+ */
+ 
 #include "autotest.h"
 #include "slicehandler.h"
 

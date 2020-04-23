@@ -1,3 +1,8 @@
+/*@
+    "name": "test_StudyLayoutConfigSettingsConverter",
+    "requirements": ["workflow.viewers_layout.regular_grid"]
+ */
+
 #include "autotest.h"
 
 #include "studylayoutconfigsettingsconverter.h"

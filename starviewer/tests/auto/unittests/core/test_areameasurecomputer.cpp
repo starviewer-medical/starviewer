@@ -1,3 +1,8 @@
+/*@
+    "name": "test_AreaMeasureComputer",
+    "requirements": ["tools.statistics.area"]
+ */
+
 #include "autotest.h"
 
 #include "areameasurecomputer.h"

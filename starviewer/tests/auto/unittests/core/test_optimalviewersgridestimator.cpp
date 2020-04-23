@@ -1,3 +1,8 @@
+/*@
+    "name": "test_OptimalViewersGridEstimator",
+    "requirements": ["workflow.viewers_layout"]
+ */
+
 #include "autotest.h"
 #include "optimalviewersgridestimator.h"
 

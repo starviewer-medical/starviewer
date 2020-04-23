@@ -1,3 +1,8 @@
+/*@
+    "name": "test_GridIterator",
+    "requirements": ["workflow.viewers_layout", "workflow.hanging_protocols.selector"]
+ */
+
 #include "autotest.h"
 #include "griditerator.h"
 

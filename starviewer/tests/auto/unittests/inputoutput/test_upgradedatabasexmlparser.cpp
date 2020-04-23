@@ -1,3 +1,8 @@
+/*@
+    "name": "test_UpgradeDatabaseXMLParser",
+    "requirements": ["archive.local_storage"]
+ */
+
 #include "autotest.h"
 
 #include <QList>

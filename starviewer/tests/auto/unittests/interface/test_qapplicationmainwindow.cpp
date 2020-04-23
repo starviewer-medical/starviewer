@@ -1,3 +1,8 @@
+/*@
+    "name": "test_QApplicationMainWindow",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "qapplicationmainwindow.h"
 #include "inputoutputsettings.h"

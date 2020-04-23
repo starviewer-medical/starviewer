@@ -1,3 +1,8 @@
+/*@
+    "name": "test_PatientFillerInput",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "patientfillerinput.h"
 #include "series.h"

@@ -1,3 +1,8 @@
+/*@
+    "name": "test_QStudyTreeWidget",
+    "requirements": []
+ */
+
 #include "autotest.h"
 
 #include <QList>

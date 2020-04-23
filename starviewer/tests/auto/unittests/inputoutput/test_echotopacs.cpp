@@ -1,3 +1,8 @@
+/*@
+    "name": "test_EchoToPACS",
+    "requirements": ["archive.dimse"]
+ */
+
 #include "autotest.h"
 #include "echotopacs.h"
 #include "pacsdevice.h"

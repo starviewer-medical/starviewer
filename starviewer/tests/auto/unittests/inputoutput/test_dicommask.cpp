@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DicomMask",
+    "requirements": ["archive.dimse.query", "archive.local_storage.query", "archive.offline_data"]
+ */
+
 #include "autotest.h"
 
 #include <QDate>

@@ -19,8 +19,16 @@
 
 namespace udg {
 
-const QString StarviewerVersionString("0.13.3");
-const QString StarviewerBuildID("2016061600");
+#ifdef STARVIEWER_CE
+    #define CE_SUFFIX "-CE"
+#else
+    #define CE_SUFFIX ""
+#endif
+
+const QString StarviewerVersionString("1.0.0" CE_SUFFIX);
+const QString StarviewerBuildID("2020022100");
+
+#undef CE_SUFFIX
 
 // Indica per aquesta versió d'starviewer quina és la revisió de bd necessària
 const int StarviewerDatabaseRevisionRequired(9592);

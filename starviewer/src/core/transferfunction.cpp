@@ -444,15 +444,16 @@ vtkLookupTable* TransferFunction::toVtkLookupTable() const
     updateKeys();
 
     vtkLookupTable *table = vtkLookupTable::New();
-    table->SetNumberOfTableValues((int)(m_keys.last() - m_keys.first()) + 1);
+    table->SetNumberOfTableValues(std::max(static_cast<int>(m_keys.last() - m_keys.first()) + 1, 256));
     table->Build();
     table->SetTableRange(m_keys.first(), m_keys.last());
 
     double min = m_keys.first();
+    double d = (m_keys.last() - m_keys.first()) / (table->GetNumberOfTableValues() - 1);
 
     for (int i = 0; i < table->GetNumberOfTableValues(); ++i)
     {
-        double x = i + min;
+        double x = i * d + min;
         QColor color = getColor(x);
         double opacity = getScalarOpacity(x);
         table->SetTableValue(i, color.redF(), color.greenF(), color.blueF(), opacity);

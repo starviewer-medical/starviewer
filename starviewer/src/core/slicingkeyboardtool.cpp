@@ -85,21 +85,17 @@ void SlicingKeyboardTool::handleEvent(unsigned long eventID)
                         Study *currentStudy = currentVolume->getStudy();
                         if (currentStudy != NULL)
                         {
-                            Patient *currentPatient = currentStudy->getParentPatient();
-                            foreach (Study *study, currentPatient->getStudies())
+                            foreach (Series *series, currentStudy->getSeries())
                             {
-                                foreach (Series *series, study->getSeries())
+                                foreach (Volume *volume, series->getVolumesList())
                                 {
-                                    foreach (Volume *volume, series->getVolumesList())
+                                    if (volume->getIdentifier() == currentVolume->getIdentifier())
                                     {
-                                        if (volume->getIdentifier() == currentVolume->getIdentifier())
-                                        {
-                                            // Encara no hem afegit el nou volume, si no, seria size - 1
-                                            currentVolumeIndex = volumesList.size();
-                                        }
-
-                                        volumesList << volume;
+                                        // Encara no hem afegit el nou volume, si no, seria size - 1
+                                        currentVolumeIndex = volumesList.size();
                                     }
+
+                                    volumesList << volume;
                                 }
                             }
                             int nextVolumeIndex = 0;

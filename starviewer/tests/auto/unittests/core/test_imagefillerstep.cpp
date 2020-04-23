@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ImageFillerStep",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "imagefillerstep.h"
 

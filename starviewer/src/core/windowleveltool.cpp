@@ -22,6 +22,8 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderWindow.h>
 
+static const double MinimumWindowWidth = 0.0001;
+
 namespace udg {
 
 WindowLevelTool::WindowLevelTool(QViewer *viewer, QObject *parent)
@@ -30,6 +32,8 @@ WindowLevelTool::WindowLevelTool(QViewer *viewer, QObject *parent)
     m_toolName = "WindowLevelTool";
     // Ens assegurem que desde la creació tenim un viewer vàlid
     Q_ASSERT(m_viewer);
+
+    m_2DViewer = dynamic_cast<Q2DViewer*>(m_viewer);
 
     reset();
 
@@ -50,7 +54,7 @@ void WindowLevelTool::handleEvent(unsigned long eventID)
             break;
 
         case vtkCommand::MouseMoveEvent:
-            if (m_state == WindowLevelling)
+            if (m_state != None)
             {
                 this->doWindowLevel();
             }
@@ -68,13 +72,25 @@ void WindowLevelTool::handleEvent(unsigned long eventID)
 void WindowLevelTool::reset()
 {
     m_state = None;
-    updateWindowLevellingBehaviour();
 }
 
 void WindowLevelTool::startWindowLevel()
 {
-    m_state = WindowLevelling;
-    VoiLut voiLut = m_viewer->getCurrentVoiLut();
+    VoiLut voiLut;
+
+    if (m_2DViewer && m_2DViewer->getNumberOfInputs() > 1 && m_viewer->getInteractor()->GetShiftKey())
+    {
+        m_state = Burning;
+        voiLut = m_2DViewer->getCurrentVoiLutInVolume(1);
+    }
+    else
+    {
+        m_state = WindowLevelling;
+        voiLut = m_viewer->getCurrentVoiLut();
+    }
+
+    updateWindowLevellingBehaviour();
+
     m_initialWindow = voiLut.getWindowLevel().getWidth();
     m_initialLevel = voiLut.getWindowLevel().getCenter();
     m_initialLut = voiLut.getLut();
@@ -94,42 +110,23 @@ void WindowLevelTool::doWindowLevel()
     double dx = 4.0 * (m_windowLevelCurrentPosition.x() - m_windowLevelStartPosition.x()) / size.width();
     double dy = 4.0 * (m_windowLevelStartPosition.y() - m_windowLevelCurrentPosition.y()) / size.height();
 
-    // Scale by current values
-    if (fabs(m_initialWindow) > 0.01)
-    {
-        dx = dx * m_initialWindow;
-    }
-    else
-    {
-        dx = dx * (m_initialWindow < 0 ? -0.01 : 0.01);
-    }
-    if (fabs(m_initialLevel) > 0.01)
-    {
-        dy = dy * m_initialLevel;
-    }
-    else
-    {
-        dy = dy * (m_initialLevel < 0 ? -0.01 : 0.01);
-    }
+    // Obtain absolute (to preserve sign of dx and dy) initial window width and ensure that it's not smaller than MinimumWindowWidth.
+    double initialWindowWidth = std::max(std::abs(m_initialWindow), MinimumWindowWidth);
 
-    // Abs so that direction does not flip
-    if (m_initialWindow < 0.0)
-    {
-        dx = -1 * dx;
-    }
-    if (m_initialLevel < 0.0)
-    {
-        dy = -1 * dy;
-    }
+    // Scale by current values
+    dx *= initialWindowWidth;
+    dy *= initialWindowWidth;
 
     // Compute new window level
     double newWindow;
     double newLevel;
     computeWindowLevelValues(dx, dy, newWindow, newLevel);
 
+    VoiLut voiLut;
+
     if (m_viewer->getCurrentVoiLut().isWindowLevel())
     {
-        m_viewer->setVoiLut(WindowLevel(newWindow, newLevel));
+        voiLut = WindowLevel(newWindow, newLevel);
     }
     else
     {
@@ -137,7 +134,16 @@ void WindowLevelTool::doWindowLevel()
         double oldX2 = m_initialLut.keys().last();
         double newX1 = newLevel - newWindow / 2.0;
         double newX2 = newLevel + newWindow / 2.0;
-        m_viewer->setVoiLut(VoiLut(m_initialLut.toNewRange(oldX1, oldX2, newX1, newX2), m_initialLut.name()));
+        voiLut = VoiLut(m_initialLut.toNewRange(oldX1, oldX2, newX1, newX2), m_initialLut.name());
+    }
+
+    if (m_state == WindowLevelling)
+    {
+        m_viewer->setVoiLut(voiLut);
+    }
+    else if (m_state == Burning)
+    {
+        m_2DViewer->setVoiLutInVolume(1, voiLut);
     }
 }
 
@@ -164,7 +170,7 @@ void WindowLevelTool::updateWindowLevellingBehaviour()
         return;
     }
 
-    if (VolumeHelper::isPrimaryPET(m_viewer->getMainInput()) || VolumeHelper::isPrimaryNM(m_viewer->getMainInput()))
+    if (VolumeHelper::isPrimaryPET(m_viewer->getMainInput()) || VolumeHelper::isPrimaryNM(m_viewer->getMainInput()) || m_state == Burning)
     {
         m_windowLevellingBehaviour = FixedMinimum;
     }
@@ -187,52 +193,26 @@ void WindowLevelTool::computeWindowLevelValues(double deltaX, double deltaY, dou
 
 void WindowLevelTool::computeWindowLevelValuesWithFixedMinimumBehaviour(double deltaX, double &window, double &level)
 {
-    // HACK We use absolute window value to properly handle the windowlevelling when 
-    // values have been inverted with the invert tool (window value is negative)
-    window = deltaX + fabs(m_initialWindow);
-    level = window * 0.5;
-
-    avoidZeroAndNegative(window, level);
-    
-    // HACK We use this little hack to properly handle the windowlevelling when 
-    // values have been inverted with the invert tool (window value is negative)
-    if (m_initialWindow < 0)
-    {
-        window = -window;
-    }
+    // Increase or decrease absolute initial window width according to deltaX, then keep it above MinimumWindowWidth, then preserve original sign.
+    // The effect is that moving mouse to the right always increases absolute width and to the left always decreases absolute width.
+    // Level must be half of absolute window width.
+    window = deltaX + std::abs(m_initialWindow);
+    window = std::max(window, MinimumWindowWidth);
+    level = window * 0.5;   // done here because window is guaranteed to be positive
+    window = std::copysign(window, m_initialWindow);
 }
 
 void WindowLevelTool::computeWindowLevelValuesWithDefaultBehaviour(double deltaX, double deltaY, double &window, double &level)
 {
     window = deltaX + m_initialWindow;
+
+    // If window is too close to 0, change its magnitude to be at least MinimumWindowWidth
+    if (window > -MinimumWindowWidth && window < MinimumWindowWidth)
+    {
+        window = std::copysign(MinimumWindowWidth, window);
+    }
+
     level = m_initialLevel - deltaY;
-
-    avoidZero(window, level);
-}
-
-void WindowLevelTool::avoidZero(double &window, double &level)
-{
-    // Stay away from zero and really
-    if (fabs(window) < 0.01)
-    {
-        window = 0.01 * (window < 0 ? -1 : 1);
-    }
-    if (fabs(level) < 0.01)
-    {
-        level = 0.01 * (level < 0 ? -1 : 1);
-    }
-}
-
-void WindowLevelTool::avoidZeroAndNegative(double &window, double &level)
-{
-    if (window < 0.01)
-    {
-        window =  1;
-    }
-    if (level < 0.01)
-    {
-        level = 1;
-    }
 }
 
 }

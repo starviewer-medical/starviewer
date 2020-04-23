@@ -1,3 +1,8 @@
+/*@
+    "name": "test_QString",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include <QString>
 

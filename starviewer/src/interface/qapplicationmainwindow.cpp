@@ -33,6 +33,8 @@
 #include "qaboutdialog.h"
 #include "externalapplication.h"
 #include "externalapplicationsmanager.h"
+#include "queryscreen.h"
+#include "risrequestmanager.h"
 
 // Pel LanguageLocale
 #include "coresettings.h"
@@ -50,6 +52,10 @@
 #include "customwindowlevelsloader.h"
 #include "studylayoutconfigsloader.h"
 #endif
+
+#ifdef STARVIEWER_CE
+#include "qmedicaldeviceinformationdialog.h"
+#endif // STARVIEWER_CE
 
 // Qt
 #include <QAction>
@@ -69,6 +75,8 @@
 #include "shortcutmanager.h"
 
 namespace udg {
+
+typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 
 // Per processar les opcions entrades per línia de comandes hem d'utilitzar un Singleton de StarviewerApplicationCommandLine, això ve degut a que
 // d'instàncies de QApplicationMainWindow en tenim tantes com finestres obertes d'Starviewer tinguem. Instàncies deQApplicationMainWindow es crees
@@ -303,6 +311,12 @@ void QApplicationMainWindow::createActions()
     m_openShortcutsGuideAction->setStatusTip(tr("Open shortcuts guide"));
     connect(m_openShortcutsGuideAction, SIGNAL(triggered()), this, SLOT(openShortcutsGuide()));
 
+#ifdef STARVIEWER_CE
+    m_showMedicalDeviceInformationAction = new QAction(this);
+    m_showMedicalDeviceInformationAction->setText(tr("Information about use as medical device"));
+    connect(m_showMedicalDeviceInformationAction, &QAction::triggered, this, &QApplicationMainWindow::showMedicalDeviceInformationDialogUnconditionally);
+#endif // STARVIEWER_CE
+
     m_logViewerAction = new QAction(this);
     m_logViewerAction->setText(tr("Show Log File"));
     m_logViewerAction->setStatusTip(tr("Show log file"));
@@ -432,6 +446,10 @@ void QApplicationMainWindow::createMenus()
     m_helpMenu->addAction(m_openQuickStartGuideAction);
     m_helpMenu->addAction(m_openShortcutsGuideAction);
     m_helpMenu->addSeparator();
+#ifdef STARVIEWER_CE
+    m_helpMenu->addAction(m_showMedicalDeviceInformationAction);
+    m_helpMenu->addSeparator();
+#endif // STARVIEWER_CE
     m_helpMenu->addAction(m_logViewerAction);
     m_helpMenu->addSeparator();
     m_helpMenu->addAction(m_openReleaseNotesAction);
@@ -755,6 +773,24 @@ void QApplicationMainWindow::connectPatientVolumesToNotifier(Patient *patient)
     }
 }
 
+#ifdef STARVIEWER_CE
+void QApplicationMainWindow::showMedicalDeviceInformationDialog()
+{
+    Settings settings;
+
+    if (!settings.getValue(InterfaceSettings::DontShowMedicalDeviceInformationDialog).toBool())
+    {
+        showMedicalDeviceInformationDialogUnconditionally();
+    }
+}
+
+void QApplicationMainWindow::showMedicalDeviceInformationDialogUnconditionally()
+{
+    QMedicalDeviceInformationDialog *dialog = new QMedicalDeviceInformationDialog(this);
+    dialog->exec();
+}
+#endif // STARVIEWER_CE
+
 void QApplicationMainWindow::newCommandLineOptionsToRun()
 {
     QPair<StarviewerApplicationCommandLine::StarviewerCommandLineOption, QString> optionValue;
@@ -764,11 +800,15 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
     {
         switch (optionValue.first)
         {
-            case StarviewerApplicationCommandLine::openBlankWindow:
+            case StarviewerApplicationCommandLine::OpenBlankWindow:
                 INFO_LOG("Rebut argument de linia de comandes per obrir nova finestra");
                 openBlankWindow();
                 break;
-            case StarviewerApplicationCommandLine::retrieveStudyFromAccessioNumber:
+            case StarviewerApplicationCommandLine::RetrieveStudyByUid:
+                INFO_LOG("Received command line argument to retrieve a study by its UID");
+                sendRequestRetrieveStudyByUidToLocalStarviewer(optionValue.second);
+                break;
+            case StarviewerApplicationCommandLine::RetrieveStudyByAccessionNumber:
                 INFO_LOG("Rebut argument de linia de comandes per descarregar un estudi a traves del seu accession number");
                 sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(optionValue.second);
                 break;
@@ -776,6 +816,24 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
                 INFO_LOG("Argument de linia de comandes invalid");
                 break;
         }
+    }
+}
+
+void QApplicationMainWindow::sendRequestRetrieveStudyByUidToLocalStarviewer(QString studyInstanceUid)
+{
+    Settings settings;
+    if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool())
+    {
+        // TODO Ugly shortcut for #2643. Major refactoring needed to clean this (see #2764).
+        DicomMask mask;
+        mask.setStudyInstanceUID(studyInstanceUid);
+        QueryScreenSingleton::instance()->getRISRequestManager()->processRISRequest(mask);
+    }
+    else
+    {
+        QMessageBox::information(this, ApplicationNameString,
+                                 tr("Please activate \"Listen to RIS requests\" option in %1 configuration to retrieve studies from SAP.")
+                                 .arg(ApplicationNameString));
     }
 }
 
@@ -802,19 +860,28 @@ void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
 
 void QApplicationMainWindow::openUserGuide()
 {
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_User_guide.pdf";
+    Settings settings;
+    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
+    QString prefix = defaultLocale.left(2).toUpper();
+    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_User_guide.pdf";
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 
 void QApplicationMainWindow::openQuickStartGuide()
 {
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_Quick_start_guide.pdf";
+    Settings settings;
+    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
+    QString prefix = defaultLocale.left(2).toUpper();
+    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_Quick_start_guide.pdf";
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 
 void QApplicationMainWindow::openShortcutsGuide()
 {
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/Starviewer_Shortcuts_guide.pdf";
+    Settings settings;
+    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
+    QString prefix = defaultLocale.left(2).toUpper();
+    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_Shortcuts_guide.pdf";
     QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
 }
 

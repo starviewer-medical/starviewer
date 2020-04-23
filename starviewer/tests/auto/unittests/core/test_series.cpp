@@ -1,3 +1,8 @@
+/*@
+    "name": "test_Series",
+    "requirements": []
+ */
+
 #include "autotest.h"
 
 #include "series.h"

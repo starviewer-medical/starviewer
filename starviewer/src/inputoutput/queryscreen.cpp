@@ -111,6 +111,11 @@ QueryScreen::~QueryScreen()
     this->close();
 }
 
+RISRequestManager* QueryScreen::getRISRequestManager() const
+{
+    return m_risRequestManager;
+}
+
 void QueryScreen::initialize()
 {
     m_qcreateDicomdir = new udg::QCreateDicomdir(this);

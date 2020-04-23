@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DefaultMeasurementTypeSelector",
+    "requirements": ["tools.measure"]
+ */
+
 #include "autotest.h"
 #include "defaultmeasurementtypeselector.h"
 

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QCeAboutContentBase</class>
+ <widget class="QWidget" name="QCeAboutContentBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>373</width>
+    <height>411</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QLabel" name="m_applicationNameLabel">
+           <property name="text">
+            <string>&lt;h2&gt;%1&lt;/h2&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="pixmap">
+              <pixmap resource="../external/external.qrc">:/celabelsymbols/ref.svg</pixmap>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="m_versionLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>1</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Version: %1</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="toolTip">
+          <string>Medical device</string>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="../external/external.qrc">:/celabelsymbols/md.svg</pixmap>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_ceAboutTextLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>&lt;p align=&quot;justify&quot;&gt;Copyright © 2005-%2 Graphics &amp;amp; Imaging Laboratory (GILab) and Institut de Diagnòstic per la Imatge (IDI), Girona.&lt;/p&gt;
+&lt;p align=&quot;justify&quot;&gt;%1 is a DICOM viewer that integrates image visualisation and assessment tools for medical image diagnosis, reconstruction techniques, 3D navigation tools and image fusion support. It adds functional modules and it may be integrated with healthcare information systems such as PACS and RIS servers.&lt;/p&gt;
+&lt;p align=&quot;justify&quot;&gt;%1 is a collaborative effort between GILab and IDI.&lt;/p&gt;
+&lt;p&gt;Support email: &lt;a href=&quot;mailto:%3&quot;&gt;%3&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Web: &lt;a href=&quot;%4&quot;&gt;%4&lt;/a&gt;&lt;/p&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="toolTip">
+        <string>Build date</string>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="../external/external.qrc">:/celabelsymbols/manufacture-date.svg</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_buildDateLabel">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>%1</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Consult instructions</string>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="../external/external.qrc">:/celabelsymbols/instruction.svg</pixmap>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="m_manufacturerSymbolLabel">
+         <property name="toolTip">
+          <string>Manufacturer</string>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="../external/external.qrc">:/celabelsymbols/manufacturer.svg</pixmap>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="m_ceManufacturerLabel">
+         <property name="text">
+          <string>&lt;p&gt;Institut de Diagnòstic per la Imatge&lt;br&gt;
+Parc Sanitari Pere Virgili&lt;br&gt;
+Esteve Terradas, 30 — Edifici Mestral 2a planta&lt;br&gt;
+08023 Barcelona, Spain&lt;br&gt;
+&lt;a href=&quot;http://idiweb.gencat.cat&quot;&gt;http://idiweb.gencat.cat&lt;/a&gt;&lt;br&gt;
+&lt;a href=&quot;mailto:idi@idi.gencat.cat&quot;&gt;idi@idi.gencat.cat&lt;/a&gt;&lt;br&gt;
+Tel. +34 93 259 41 75&lt;br&gt;
+Fax +34 93 259 41 85&lt;/p&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QLabel" name="m_ceMarkLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="../external/external.qrc">:/celabelsymbols/ce.svg</pixmap>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="m_ceNumberLabel">
+         <property name="text">
+          <string>&lt;h1&gt;2797&lt;/h1&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignHCenter|Qt::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../external/external.qrc"/>
+ </resources>
+ <connections/>
+</ui>

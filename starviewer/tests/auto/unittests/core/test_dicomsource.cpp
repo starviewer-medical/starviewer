@@ -1,3 +1,8 @@
+/*@
+    "name": "test_DICOMSource",
+    "requirements": ["archive.dimse.retrieve"]
+ */
+
 #include "autotest.h"
 
 #include "dicomsource.h"

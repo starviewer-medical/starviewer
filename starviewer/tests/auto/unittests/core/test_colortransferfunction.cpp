@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ColorTransferFunction",
+    "requirements": ["visualization.transfer_functions.interactive_modification"]
+ */
+
 #include "autotest.h"
 
 #include "colortransferfunction.h"

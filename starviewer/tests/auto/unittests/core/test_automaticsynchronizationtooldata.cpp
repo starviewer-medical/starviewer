@@ -1,3 +1,8 @@
+/*@
+    "name": "test_AutomaticSynchronizationToolData",
+    "requirements": ["workflow.synchronization.automation", "workflow.synchronization.absolute_slicing"]
+ */
+
 #include "autotest.h"
 #include "automaticsynchronizationtooldata.h"
 #include <iostream>

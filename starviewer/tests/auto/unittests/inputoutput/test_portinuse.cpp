@@ -1,3 +1,8 @@
+/*@
+    "name": "test_PortInUse",
+    "requirements": ["other_features.diagnosis_tests", "archive.ris", "archive.dimse"]
+ */
+
 #include "autotest.h"
 #include "portinuse.h"
 #include "portinusebyanotherapplication.h"
