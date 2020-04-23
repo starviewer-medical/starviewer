@@ -24,11 +24,10 @@ namespace udg {
 
 DatabaseConnection::DatabaseConnection()
 {
-    static const QString ConnectionNamePrefix = "starviewer";
     static QAtomicInt connectionNumber = 0;
 
     m_databasePath = LocalDatabaseManager::getDatabaseFilePath();
-    m_connectionName = ConnectionNamePrefix + connectionNumber++;
+    m_connectionName = QString("starviewer%1").arg(connectionNumber++);
 }
 
 DatabaseConnection::~DatabaseConnection()
