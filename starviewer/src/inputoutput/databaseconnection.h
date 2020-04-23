@@ -15,7 +15,6 @@
 #ifndef UDGDATABASECONNECTION_H
 #define UDGDATABASECONNECTION_H
 
-#include <QMutex>
 #include <QString>
 
 class QSqlDatabase;
@@ -77,9 +76,6 @@ private:
     QString m_databasePath;
     /// Auto-generated connection name, different for each instance.
     QString m_connectionName;
-
-    /// SQLite doesn't support simultaneous transactions with the same connection, thus a mutex is needed for transactions.
-    QMutex m_mutex;
 
 };
 

@@ -64,4 +64,7 @@
             );
         </upgradeCommand>
     </upgradeDatabaseToRevision>
+    <upgradeDatabaseToRevision updateToRevision="9594">
+        <upgradeCommand>PRAGMA journal_mode=WAL;</upgradeCommand>
+    </upgradeDatabaseToRevision>
 </upgradeDatabase>

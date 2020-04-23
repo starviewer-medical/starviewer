@@ -137,19 +137,27 @@ bool DatabaseInstallation::checkDatabase()
 
 bool DatabaseInstallation::reinstallDatabase()
 {
-    QFileInfo databaseFileInfo(LocalDatabaseManager::getDatabaseFilePath());
+    QString dbFileName = LocalDatabaseManager::getDatabaseFilePath();
+    QString walFileName = dbFileName + "-wal";
+    QString shmFileName = dbFileName + "-shm";
+    bool ok = true;
 
-    if (databaseFileInfo.exists())
+    for (const QString &fileName : { dbFileName, walFileName, shmFileName })
     {
-        if (!QFile().remove(LocalDatabaseManager::getDatabaseFilePath()))
+        QFileInfo databaseFileInfo(fileName);
+
+        if (databaseFileInfo.exists())
         {
-            ERROR_LOG("Can't remove database file " + LocalDatabaseManager::getDatabaseFilePath());
-            m_errorMessage = QObject::tr("Can't reinstall database because the current database can't be removed.");
-            return false;
+            if (!QFile::remove(fileName))
+            {
+                ERROR_LOG(QString("Can't remove database file %1").arg(fileName));
+                m_errorMessage = QObject::tr("Can't reinstall database because the current database can't be removed.");
+                ok = false;
+            }
         }
     }
 
-    return createDatabaseFile();
+    return ok && createDatabaseFile();  // Database will only be created if ok is true
 }
 
 bool DatabaseInstallation::createDatabase(DatabaseConnection &databaseConnection)

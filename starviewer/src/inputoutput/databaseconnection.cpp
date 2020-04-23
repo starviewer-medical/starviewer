@@ -24,15 +24,15 @@ namespace udg {
 
 DatabaseConnection::DatabaseConnection()
 {
-    static const QString ConnectionNamePrefix = "starviewer";
     static QAtomicInt connectionNumber = 0;
 
     m_databasePath = LocalDatabaseManager::getDatabaseFilePath();
-    m_connectionName = ConnectionNamePrefix + connectionNumber++;
+    m_connectionName = QString("starviewer%1").arg(connectionNumber++);
 }
 
 DatabaseConnection::~DatabaseConnection()
 {
+    // If there is an active transaction it is automatically rolled back on close according to sqlite documentation
     close();
 }
 
@@ -63,20 +63,17 @@ QString DatabaseConnection::getLastErrorMessage()
 
 void DatabaseConnection::beginTransaction()
 {
-    m_mutex.lock();
     getConnection().transaction();
 }
 
 void DatabaseConnection::commitTransaction()
 {
     getConnection().commit();
-    m_mutex.unlock();
 }
 
 void DatabaseConnection::rollbackTransaction()
 {
     getConnection().rollback();
-    m_mutex.unlock();
     INFO_LOG("Transaction in the database rolled back.");
 }
 
@@ -89,7 +86,7 @@ void DatabaseConnection::open()
 
     QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
     database.setDatabaseName(m_databasePath);
-    database.setConnectOptions("QSQLITE_BUSY_TIMEOUT=15000");
+    database.setConnectOptions("QSQLITE_BUSY_TIMEOUT=20000");
 
     if (!database.open())
     {
