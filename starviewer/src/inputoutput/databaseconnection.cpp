@@ -32,6 +32,7 @@ DatabaseConnection::DatabaseConnection()
 
 DatabaseConnection::~DatabaseConnection()
 {
+    // If there is an active transaction it is automatically rolled back on close according to sqlite documentation
     close();
 }
 
@@ -62,20 +63,17 @@ QString DatabaseConnection::getLastErrorMessage()
 
 void DatabaseConnection::beginTransaction()
 {
-    m_mutex.lock();
     getConnection().transaction();
 }
 
 void DatabaseConnection::commitTransaction()
 {
     getConnection().commit();
-    m_mutex.unlock();
 }
 
 void DatabaseConnection::rollbackTransaction()
 {
     getConnection().rollback();
-    m_mutex.unlock();
     INFO_LOG("Transaction in the database rolled back.");
 }
 
