@@ -38,8 +38,8 @@ class Voxel;
     Classe que té com a responsabilitat mantenir el pixel data d'un Volume.
     El pixel data d'un volume és el lloc de memòria on es guarden els diferents valors de voxel d'un Volume.
   */
-class VolumePixelData : public QObject {
-Q_OBJECT
+class VolumePixelData {
+
 public:
 
     /// Tipus d'imatge intern per defecte d'itk
@@ -49,7 +49,7 @@ public:
     typedef itk::Image<ItkPixelType, VDimension> ItkImageType;
     typedef ItkImageType::Pointer ItkImageTypePointer;
 
-    explicit VolumePixelData(QObject *parent = 0);
+    VolumePixelData();
 
     /// Assignem/Retornem les dades en format ITK
     void setData(ItkImageTypePointer itkImage);

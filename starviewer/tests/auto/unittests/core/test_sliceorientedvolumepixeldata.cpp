@@ -53,6 +53,7 @@ typedef std::array<int, 6> Extent;
 Q_DECLARE_METATYPE(Extent)
 Q_DECLARE_METATYPE(OrthogonalPlane)
 Q_DECLARE_METATYPE(Vector3)
+Q_DECLARE_METATYPE(VolumePixelData*)
 Q_DECLARE_METATYPE(Voxel)
 Q_DECLARE_METATYPE(VoxelIndex)
 Q_DECLARE_METATYPE(vtkSmartPointer<vtkMatrix4x4>)

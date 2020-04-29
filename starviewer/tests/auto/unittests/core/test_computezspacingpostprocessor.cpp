@@ -36,7 +36,6 @@ void test_ComputeZSpacingPostprocessor::postprocess_ShouldAssignCorrectZSpacing_
 
     {
         Volume *volume = VolumeTestHelper::createVolume(2, 1, 2);
-        volume->setParent(this);
         volume->getPixelData()->setSpacing(1.0, 1.0, 3.0);
         double position[3] = { 0.0, 0.0, 0.0 };
         volume->getImage(0)->setImagePositionPatient(position);
@@ -51,7 +50,6 @@ void test_ComputeZSpacingPostprocessor::postprocess_ShouldAssignCorrectZSpacing_
 
     {
         Volume *volume = VolumeTestHelper::createVolume(4, 2, 2);
-        volume->setParent(this);
         volume->getPixelData()->setSpacing(1.0, 1.0, 3.0);
         double position[3] = { 0.0, 0.0, 0.0 };
         volume->getImage(0)->setImagePositionPatient(position);
@@ -74,6 +72,8 @@ void test_ComputeZSpacingPostprocessor::postprocess_ShouldAssignCorrectZSpacing(
     postprocessor.postprocess(volume);
 
     QCOMPARE(volume->getSpacing()[2], expectedZSpacing);
+
+    delete volume;
 }
 
 void test_ComputeZSpacingPostprocessor::postprocess_ShouldNotChangeZSpacing_data()
@@ -83,21 +83,18 @@ void test_ComputeZSpacingPostprocessor::postprocess_ShouldNotChangeZSpacing_data
 
     {
         Volume *volume = VolumeTestHelper::createVolume(1, 1, 1);
-        volume->setParent(this);
         volume->getPixelData()->setSpacing(1.0, 1.0, 3.0);
         QTest::newRow("1 slice") << volume << 3.0;
     }
 
     {
         Volume *volume = VolumeTestHelper::createVolume(2, 2, 1);
-        volume->setParent(this);
         volume->getPixelData()->setSpacing(1.0, 1.0, 3.0);
         QTest::newRow("1 slice per phase") << volume << 3.0;
     }
 
     {
         Volume *volume = VolumeTestHelper::createVolume(2, 1, 2);
-        volume->setParent(this);
         volume->getPixelData()->setSpacing(1.0, 1.0, 3.0);
         double position[3] = { 0.0, 0.0, 0.0 };
         volume->getImage(0)->setImagePositionPatient(position);
@@ -119,6 +116,8 @@ void test_ComputeZSpacingPostprocessor::postprocess_ShouldNotChangeZSpacing()
     postprocessor.postprocess(volume);
 
     QCOMPARE(volume->getSpacing()[2], expectedZSpacing);
+
+    delete volume;
 }
 
 DECLARE_TEST(test_ComputeZSpacingPostprocessor)

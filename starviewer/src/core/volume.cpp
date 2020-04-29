@@ -33,7 +33,7 @@ Volume::Volume(QObject *parent)
     m_numberOfPhases = 1;
     m_numberOfSlicesPerPhase = 1;
 
-    m_volumePixelData = new VolumePixelData(this);
+    m_volumePixelData = new VolumePixelData();
 }
 
 Volume::~Volume()
@@ -65,6 +65,7 @@ void Volume::setData(vtkImageData *vtkImage)
 void Volume::setPixelData(VolumePixelData *pixelData)
 {
     Q_ASSERT(pixelData != 0);
+    delete m_volumePixelData;
     m_volumePixelData = pixelData;
     // Set the number of phases to the new pixel data
     m_volumePixelData->setNumberOfPhases(m_numberOfPhases);
@@ -239,9 +240,7 @@ void Volume::addImage(Image *image)
         // Si tenim dades carregades passen a ser invàlides
         if (isPixelDataLoaded())
         {
-            // WARNING Possible memory leak temporal: el VolumePixelData anterior quedarà penjat sense destruir fins que es destruixi el seu pare (si en té,
-            // sinó per sempre).
-            m_volumePixelData = new VolumePixelData(this);
+            setPixelData(new VolumePixelData());
         }
 
         m_checkedImagesAnatomicalPlane = false;
@@ -255,9 +254,7 @@ void Volume::setImages(const QList<Image*> &imageList)
     // Si tenim dades carregades passen a ser invàlides
     if (isPixelDataLoaded())
     {
-        // WARNING Possible memory leak temporal: el VolumePixelData anterior quedarà penjat sense destruir fins que es destruixi el seu pare (si en té, sinó
-        // per sempre).
-        m_volumePixelData = new VolumePixelData(this);
+        setPixelData(new VolumePixelData());
     }
 
     m_checkedImagesAnatomicalPlane = false;

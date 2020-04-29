@@ -222,8 +222,8 @@ void test_Volume::setPixelData_ShouldBehaveAsExpected_data()
     QTest::addColumn<VolumePixelData*>("pixelData");
     QTest::addColumn<bool>("pixelDataLoaded");
 
-    QTest::newRow("empty pixel data") << new VolumePixelData(this) << false;
-    VolumePixelData *pixelData = new VolumePixelData(this);
+    QTest::newRow("empty pixel data") << new VolumePixelData() << false;
+    VolumePixelData *pixelData = new VolumePixelData();
     pixelData->setData(vtkImageData::New());
     QTest::newRow("\"filled\" pixel data") << pixelData << true;
 }
@@ -249,15 +249,13 @@ void test_Volume::getPixelData_ShouldReturnCurrentPixelData_data()
     QTest::addColumn<bool>("returnedPixelDataLoaded");
 
     {
-        VolumePixelData *readPixelData = new VolumePixelData(this);
+        VolumePixelData *readPixelData = new VolumePixelData();
         readPixelData->setData(vtkImageData::New());
-        QTest::newRow("empty pixel data") << new VolumePixelData(this) << false << readPixelData << true << true;
+        QTest::newRow("empty pixel data") << new VolumePixelData() << false << readPixelData << true << true;
     }
 
     {
-        VolumePixelData *readPixelData = new VolumePixelData(this);
-        readPixelData->setData(vtkImageData::New());
-        VolumePixelData *pixelData = new VolumePixelData(this);
+        VolumePixelData *pixelData = new VolumePixelData();
         pixelData->setData(vtkImageData::New());
         QTest::newRow("\"filled\" pixel data") << pixelData << true << pixelData << false << true;
     }
@@ -467,14 +465,14 @@ void test_Volume::getAcquisitionPlane_ShouldReturnExpectedPlane()
 
 void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_data()
 {
-    QTest::addColumn<Volume*>("volume");
+    QTest::addColumn<QSharedPointer<Volume>>("volume");
     QTest::addColumn<AnatomicalPlane>("anatomicalPlane");
     QTest::addColumn<OrthogonalPlane>("expectedOrthogonalPlane");
 
     PatientOrientation axialPatientOrientation = AnatomicalPlane(AnatomicalPlane::Axial).getDefaultRadiologicalOrienation();
     Image *axialImage = new Image(this);
     axialImage->setPatientOrientation(axialPatientOrientation);
-    Volume *axialVolume = new Volume(this);
+    QSharedPointer<Volume> axialVolume(new Volume());
     axialVolume->addImage(axialImage);
 
     QTest::newRow("Axial volume, axial plane") << axialVolume << AnatomicalPlane(AnatomicalPlane::Axial) << OrthogonalPlane(OrthogonalPlane::XYPlane);
@@ -486,7 +484,7 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
     PatientOrientation sagittalPatientOrientation = AnatomicalPlane(AnatomicalPlane::Sagittal).getDefaultRadiologicalOrienation();
     Image *sagittalImage = new Image(this);
     sagittalImage->setPatientOrientation(sagittalPatientOrientation);
-    Volume *sagittalVolume = new Volume(this);
+    QSharedPointer<Volume> sagittalVolume(new Volume());
     sagittalVolume->addImage(sagittalImage);
 
     QTest::newRow("Sagittal volume, axial plane") << sagittalVolume << AnatomicalPlane(AnatomicalPlane::Axial) << OrthogonalPlane(OrthogonalPlane::XZPlane);
@@ -498,7 +496,7 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
     PatientOrientation coronalPatientOrientation = AnatomicalPlane(AnatomicalPlane::Coronal).getDefaultRadiologicalOrienation();
     Image *coronalImage = new Image(this);
     coronalImage->setPatientOrientation(coronalPatientOrientation);
-    Volume *coronalVolume = new Volume(this);
+    QSharedPointer<Volume> coronalVolume(new Volume());
     coronalVolume->addImage(coronalImage);
 
     QTest::newRow("Coronal volume, axial plane") << coronalVolume << AnatomicalPlane(AnatomicalPlane::Axial) << OrthogonalPlane(OrthogonalPlane::XZPlane);
@@ -511,7 +509,7 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
     obliquePatientOrientation.setLabels("L", "L");
     Image *obliqueImage = new Image(this);
     obliqueImage->setPatientOrientation(obliquePatientOrientation);
-    Volume *obliqueVolume = new Volume(this);
+    QSharedPointer<Volume> obliqueVolume(new Volume());
     obliqueVolume->addImage(obliqueImage);
 
     QTest::newRow("Oblique volume, axial plane") << obliqueVolume << AnatomicalPlane(AnatomicalPlane::Axial) << OrthogonalPlane(OrthogonalPlane::XYPlane);
@@ -521,7 +519,7 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
     QTest::newRow("Oblique volume, Oblique plane") << obliqueVolume << AnatomicalPlane(AnatomicalPlane::Oblique) << OrthogonalPlane(OrthogonalPlane::XYPlane);
 
     Image *naImage = new Image(this);
-    Volume *naVolume = new Volume(this);
+    QSharedPointer<Volume> naVolume(new Volume());
     naVolume->addImage(naImage);
 
     QTest::newRow("Not Available Plane volume, axial plane") << naVolume << AnatomicalPlane(AnatomicalPlane::Axial) << OrthogonalPlane(OrthogonalPlane::XYPlane);
@@ -533,7 +531,7 @@ void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues_dat
 
 void test_Volume::getCorrespondingOrthogonalPlane_ShouldReturnExpectedValues()
 {
-    QFETCH(Volume*, volume);
+    QFETCH(QSharedPointer<Volume>, volume);
     QFETCH(AnatomicalPlane, anatomicalPlane);
     QFETCH(OrthogonalPlane, expectedOrthogonalPlane);
     
@@ -1038,7 +1036,7 @@ void test_Volume::convertToNeutralVolume_ShouldBehaveAsExpected_data()
     QTest::addColumn<Volume*>("volume");
 
     {
-        QTest::newRow("default") << new Volume(this);
+        QTest::newRow("default") << new Volume();
     }
 
     {
@@ -1047,7 +1045,7 @@ void test_Volume::convertToNeutralVolume_ShouldBehaveAsExpected_data()
         double spacing[3] = { 0.33, 0.33, 1.20 };
         double origin[3] = { 0.0, 0.0, 0.0 };
         VolumePixelData *pixelData = VolumePixelDataTestHelper::createVolumePixelData(dimensions, extent, spacing, origin);
-        Volume *volume = new Volume(this);
+        Volume *volume = new Volume();
         volume->setPixelData(pixelData);
         QTest::newRow("random #1") << volume;
     }
@@ -1058,7 +1056,7 @@ void test_Volume::convertToNeutralVolume_ShouldBehaveAsExpected_data()
         double spacing[3] = { 2.2, 0.74, 1.44 };
         double origin[3] = { 48.0, 41.0, -68.0 };
         VolumePixelData *pixelData = VolumePixelDataTestHelper::createVolumePixelData(dimensions, extent, spacing, origin);
-        Volume *volume = new Volume(this);
+        Volume *volume = new Volume();
         volume->setPixelData(pixelData);
         volume->setNumberOfPhases(42);
         QTest::newRow("random #2") << volume;
@@ -1120,6 +1118,8 @@ void test_Volume::convertToNeutralVolume_ShouldBehaveAsExpected()
 
     QCOMPARE(volume->getNumberOfPhases(), 1);
     QCOMPARE(volume->isPixelDataLoaded(), true);
+
+    delete volume;
 }
 
 void test_Volume::getImage_ShouldReturnExpectedImage_data()
@@ -1173,12 +1173,12 @@ void test_Volume::getPixelUnits_ShouldReturnExpectedValue()
     QFETCH(QString, expectedUnits);
     
     Series *series = SeriesTestHelper::createSeriesByModality(modality, 1);
-    Volume *volume = new Volume(this);
+    Volume *volume = new Volume();
     volume->setImages(series->getImages());
 
     QCOMPARE(volume->getPixelUnits(), expectedUnits);
     
-    SeriesTestHelper::cleanUp(series);
+    VolumeTestHelper::cleanUp(volume);
 }
 
 void test_Volume::getImageIndex_ShouldReturnExpectedImageIndex_data()
@@ -1216,14 +1216,14 @@ void test_Volume::toString_ShouldReturnExpectedString_data()
     QTest::addColumn<Volume*>("volume");
     QTest::addColumn<QString>("expectedString");
 
-    QTest::newRow("data not loaded") << new Volume(this) << "Data are not loaded yet";
+    QTest::newRow("data not loaded") << new Volume() << "Data are not loaded yet";
 
     int dimensions[3] = { 66, 66, 57 };
     int extent[6] = { 0, 65, 0, 65, 0, 56 };
     double spacing[3] = { 3.9, 3.9, 0.8 };
     double origin[3] = { -90.4, -48.7, -8.7 };
     VolumePixelData *pixelData = VolumePixelDataTestHelper::createVolumePixelData(dimensions, extent, spacing, origin);
-    Volume *volume = new Volume(this);
+    Volume *volume = new Volume();
     volume->setPixelData(pixelData);
     QString expectedString = "Dimensions: 66, 66, 57\nOrigin: -90.4, -48.7, -8.7\nSpacing: 3.9, 3.9, 0.8\nExtent: 0..65, 0..65, 0..56\nBounds: -90.4..163.1, -48.7..204.8, -8.7..36.1";
     QTest::newRow("data loaded") << volume << expectedString;
@@ -1235,6 +1235,8 @@ void test_Volume::toString_ShouldReturnExpectedString()
     QFETCH(QString, expectedString);
 
     QCOMPARE(volume->toString(), expectedString);
+
+    delete volume;
 }
 
 void test_Volume::getScalarPointer_ShouldReturnCorrectScalarPointer_data()

@@ -25,8 +25,8 @@
 
 namespace udg {
 
-VolumePixelData::VolumePixelData(QObject *parent) :
-    QObject(parent), m_loaded(false)
+VolumePixelData::VolumePixelData() :
+    m_loaded(false)
 {
     setNumberOfPhases(1);
     
