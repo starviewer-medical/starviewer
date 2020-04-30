@@ -45,7 +45,7 @@ public:
     /// Per contruir l'objecte status
     /// @param OFCodition resultant d'una crida
     /// @return retorna l'objecte status
-    Status setStatus(const OFCondition);
+    Status setStatus(const OFCondition&);
 
     /// Crea un objecte Status
     /// @param descripció de l'status

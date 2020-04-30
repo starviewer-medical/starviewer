@@ -49,7 +49,7 @@ private:
     /// Indica si està afegit ja un mateix PACS, docs pacs són el mateix quan tenen el mateix AETitle, Address i QueryPort
     //TODO: Aquest codi està duplicat a PacsDeviceManager, però com PacsDeviceManager (isContainedSamePacsDevice) està a inputoutput no pot
     //utilitzar aquest mètode, sinó tindríem dependència cíclica
-    bool isAddedSamePacsDevice(const PacsDevice pacsDevice) const;
+    bool isAddedSamePacsDevice(const PacsDevice &pacsDevice) const;
 
 private:
     QList<PacsDevice> m_retrievePACS;

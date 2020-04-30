@@ -106,7 +106,7 @@ static float radiansToDegrees(float radians);
 /// @param x Valor del que es calcula el logaritme
 /// @param zero Si cert, en cas que x sigui 0, ens retornarà 0, altrament
 ///             farà el càlcul igualment del logaritme sense fer aquesta comprovació
-static double logTwo(const double x, const bool zero = true);
+static double logTwo(double x, bool zero = true);
 
 /// Arrel cúbica
 static double cubeRoot(double x);

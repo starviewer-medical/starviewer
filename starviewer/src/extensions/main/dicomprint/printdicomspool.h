@@ -46,7 +46,7 @@ private:
 
     DVPSStoredPrint* loadStoredPrintFileDcmtk(const QString &pathStoredPrintDcmtkFile);
 
-    void printStoredPrintDcmtkContent(DVPSPrintMessageHandler &printerConnection, const QString storedPrintDcmtkFilePath, const QString &spoolDirectoryPath);
+    void printStoredPrintDcmtkContent(DVPSPrintMessageHandler &printerConnection, const QString &storedPrintDcmtkFilePath, const QString &spoolDirectoryPath);
 
     // Retorna els atributs del FilmSession en un Dataset
     DcmDataset getAttributesBasicFilmSession();

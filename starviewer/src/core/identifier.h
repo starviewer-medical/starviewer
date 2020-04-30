@@ -51,15 +51,15 @@ public:
     bool operator >=(const Identifier &id);
     bool operator <(const Identifier &id) const;
     Identifier& operator =(const Identifier &id);
-    Identifier& operator=(const int id);
+    Identifier& operator=(int id);
     Identifier operator+(const Identifier &id);
-    Identifier operator+(const int id);
+    Identifier operator+(int id);
     Identifier operator+=(const Identifier &id);
-    Identifier operator+=(const int id);
+    Identifier operator+=(int id);
     Identifier operator-(const Identifier &id);
-    Identifier operator-(const int id);
+    Identifier operator-(int id);
     Identifier operator-=(const Identifier &id);
-    Identifier operator-=(const int id);
+    Identifier operator-=(int id);
 
     friend std::ostream& operator << (std::ostream &out, const Identifier &id);
     friend bool operator==(const Identifier &id1, const Identifier &id2);
