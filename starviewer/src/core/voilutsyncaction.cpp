@@ -17,7 +17,7 @@
 #include "qviewer.h"
 #include "q2dviewer.h"
 #include "voilutpresetstooldata.h"
-#include "inputsynccriterion.h"
+#include "maininputsynccriterion.h"
 
 namespace udg {
 
@@ -75,7 +75,7 @@ void VoiLutSyncAction::setupMetaData()
 
 void VoiLutSyncAction::setupDefaultSyncCriteria()
 {
-    m_defaultSyncCriteria << new InputSyncCriterion();
+    m_defaultSyncCriteria << new MainInputSyncCriterion();
 }
 
 } // End namespace udg

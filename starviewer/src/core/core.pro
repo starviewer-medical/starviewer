@@ -32,6 +32,7 @@ TRANSLATIONS += core_ca_ES.ts \
     core_en_GB.ts
 HEADERS += extensionfactory.h \
     genericfactory.h \
+    maininputsynccriterion.h \
     qdiagnosistestsresultsitem.h \
     singleton.h \
     genericsingletonfactoryregister.h \
@@ -341,7 +342,6 @@ HEADERS += extensionfactory.h \
     patientcomparer.h \
     synccriterion.h \
     anatomicalplanesynccriterion.h \
-    inputsynccriterion.h \
     modalitysynccriterion.h \
     syncaction.h \
     zoomfactorsyncaction.h \
@@ -430,6 +430,7 @@ HEADERS += extensionfactory.h \
 
 SOURCES += extensionmediator.cpp \
     displayableid.cpp \
+    maininputsynccriterion.cpp \
     mathtools.cpp \
     harddiskinformation.cpp \
     logging.cpp \
@@ -719,7 +720,6 @@ SOURCES += extensionmediator.cpp \
     patientcomparer.cpp \
     synccriterion.cpp \
     anatomicalplanesynccriterion.cpp \
-    inputsynccriterion.cpp \
     modalitysynccriterion.cpp \
     syncaction.cpp \
     zoomfactorsyncaction.cpp \

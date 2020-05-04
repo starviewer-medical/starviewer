@@ -12,37 +12,21 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "synccriterion.h"
+#ifndef UDG_MAININPUTSYNCCRITERION_H
+#define UDG_MAININPUTSYNCCRITERION_H
 
-#include "qviewer.h"
+#include "synccriterion.h"
 
 namespace udg {
 
-SyncCriterion::SyncCriterion()
-{
+/**
+ * @brief The MainInputSyncCriterion class implements a SyncCriterion that is met when the main input from the source viewer is contained in the target viewer.
+ */
+class MainInputSyncCriterion : public SyncCriterion {
+protected:
+    bool criterionIsMet(QViewer *sourceViewer, QViewer *targetViewer) override;
+};
+
 }
 
-SyncCriterion::~SyncCriterion()
-{
-}
-
-bool SyncCriterion::isCriterionSatisfied(QViewer *sourceViewer, QViewer *targetViewer)
-{
-    if (sourceViewer && targetViewer)
-    {
-        if (!sourceViewer->hasInput() || !targetViewer->hasInput())
-        {
-            return false;
-        }
-        else
-        {
-            return criterionIsMet(sourceViewer, targetViewer);
-        }
-    }
-    else
-    {
-        return false;
-    }
-}
-
-} // End namespace udg
+#endif

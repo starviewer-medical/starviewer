@@ -14,7 +14,7 @@
 
 #include "phasesyncaction.h"
 
-#include "inputsynccriterion.h"
+#include "maininputsynccriterion.h"
 #include "q2dviewer.h"
 
 namespace udg {
@@ -56,7 +56,7 @@ void PhaseSyncAction::setupMetaData()
 
 void PhaseSyncAction::setupDefaultSyncCriteria()
 {
-    m_defaultSyncCriteria << new InputSyncCriterion();
+    m_defaultSyncCriteria << new MainInputSyncCriterion();
 }
 
 }

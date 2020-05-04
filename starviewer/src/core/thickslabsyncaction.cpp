@@ -15,7 +15,7 @@
 #include "thickslabsyncaction.h"
 
 #include "anatomicalplanesynccriterion.h"
-#include "inputsynccriterion.h"
+#include "maininputsynccriterion.h"
 #include "q2dviewer.h"
 
 namespace udg {
@@ -63,7 +63,7 @@ void ThickSlabSyncAction::setupMetaData()
 
 void ThickSlabSyncAction::setupDefaultSyncCriteria()
 {
-    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new InputSyncCriterion();
+    m_defaultSyncCriteria << new AnatomicalPlaneSyncCriterion() << new MainInputSyncCriterion();
 }
 
 }
