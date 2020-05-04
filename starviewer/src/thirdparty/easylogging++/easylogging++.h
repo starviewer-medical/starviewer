@@ -1,17 +1,16 @@
 //
 //  Bismillah ar-Rahmaan ar-Raheem
 //
-//  Easylogging++ v9.96.4
+//  Easylogging++ v9.96.7
 //  Single-header only, cross-platform logging library for C++ applications
 //
-//  Copyright (c) 2012-2018 Muflihun Labs
+//  Copyright (c) 2012-2018 Zuhd Web Services
 //  Copyright (c) 2012-2018 @abumusamq
 //
 //  This library is released under the MIT Licence.
-//  https://github.com/muflihun/easyloggingpp/blob/master/LICENSE
+//  https://github.com/zuhd-org/easyloggingpp/blob/master/LICENSE
 //
-//  https://github.com/muflihun/easyloggingpp
-//  https://muflihun.github.io/easyloggingpp
+//  https://zuhd.org
 //  http://muflihun.com
 //
 
@@ -115,8 +114,13 @@
 #else
 #  define ELPP_OS_NETBSD 0
 #endif
+#if defined(__EMSCRIPTEN__)
+#  define ELPP_OS_EMSCRIPTEN 1
+#else
+#  define ELPP_OS_EMSCRIPTEN 0
+#endif
 // Unix
-#if ((ELPP_OS_LINUX || ELPP_OS_MAC || ELPP_OS_FREEBSD || ELPP_OS_NETBSD || ELPP_OS_SOLARIS || ELPP_OS_AIX) && (!ELPP_OS_WINDOWS))
+#if ((ELPP_OS_LINUX || ELPP_OS_MAC || ELPP_OS_FREEBSD || ELPP_OS_NETBSD || ELPP_OS_SOLARIS || ELPP_OS_AIX || ELPP_OS_EMSCRIPTEN) && (!ELPP_OS_WINDOWS))
 #  define ELPP_OS_UNIX 1
 #else
 #  define ELPP_OS_UNIX 0
@@ -201,7 +205,7 @@ ELPP_INTERNAL_DEBUGGING_OUT_INFO << ELPP_INTERNAL_DEBUGGING_MSG(internalInfoStre
 #  define ELPP_INTERNAL_INFO(lvl, msg)
 #endif  // (defined(ELPP_DEBUG_INFO))
 #if (defined(ELPP_FEATURE_ALL)) || (defined(ELPP_FEATURE_CRASH_LOG))
-#  if (ELPP_COMPILER_GCC && !ELPP_MINGW && !ELPP_OS_ANDROID)
+#  if (ELPP_COMPILER_GCC && !ELPP_MINGW && !ELPP_OS_ANDROID && !ELPP_OS_EMSCRIPTEN)
 #    define ELPP_STACKTRACE 1
 #  else
 #      if ELPP_COMPILER_MSVC
@@ -717,7 +721,9 @@ enum class LoggingFlag : base::type::EnumType {
   /// @brief Adds spaces b/w logs that separated by left-shift operator
   AutoSpacing = 8192,
   /// @brief Preserves time format and does not convert it to sec, hour etc (performance tracking only)
-  FixedTimeFormat = 16384
+  FixedTimeFormat = 16384,
+  // @brief Ignore SIGINT or crash
+  IgnoreSigInt = 32768,
 };
 namespace base {
 /// @brief Namespace containing constants used internally.
@@ -734,10 +740,12 @@ static const char* kDefaultLoggerId                        =      ELPP_DEFAULT_L
 static const char* kDefaultLoggerId                        =      "default";
 #endif
 
+#if defined(ELPP_FEATURE_ALL) || defined(ELPP_FEATURE_PERFORMANCE_TRACKING)
 #ifdef ELPP_DEFAULT_PERFORMANCE_LOGGER
 static const char* kPerformanceLoggerId                    =      ELPP_DEFAULT_PERFORMANCE_LOGGER;
 #else
 static const char* kPerformanceLoggerId                    =      "performance";
+#endif // ELPP_DEFAULT_PERFORMANCE_LOGGER
 #endif
 
 #if defined(ELPP_SYSLOG)
@@ -3187,7 +3195,8 @@ class Writer : base::NoCopy {
   }
 
   Writer(LogMessage* msg, base::DispatchAction dispatchAction = base::DispatchAction::NormalLog) :
-    m_msg(msg), m_line(0), m_logger(nullptr), m_proceed(false), m_dispatchAction(dispatchAction) {
+    m_msg(msg), m_level(msg != nullptr ? msg->level() : Level::Unknown),
+    m_line(0), m_logger(nullptr), m_proceed(false), m_dispatchAction(dispatchAction) {
   }
 
   virtual ~Writer(void) {
@@ -3763,7 +3772,7 @@ class Helpers : base::StaticClass {
     return ELPP->hasCustomFormatSpecifier(formatSpecifier);
   }
   static inline void validateFileRolling(Logger* logger, Level level) {
-    if (logger == nullptr) return;
+    if (ELPP == nullptr || logger == nullptr) return;
     logger->m_typedConfigurations->validateFileRolling(level, ELPP->preRollOutCallback());
   }
 };
