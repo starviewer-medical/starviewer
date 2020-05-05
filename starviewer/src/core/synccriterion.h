@@ -29,12 +29,13 @@ public:
     SyncCriterion();
     virtual ~SyncCriterion();
 
-    /// Returns true if the given viewers meet the specified criteria
-    bool isCriterionSatisfied(QViewer *viewer1, QViewer *viewer2);
+    /// Returns true when the criterion to propagate from \a sourceViewer to \a targetViewer is met and false otherwise.
+    /// It checks that both viewers exist and have input and then calls \ref criterionIsMet.
+    bool isCriterionSatisfied(QViewer *sourceViewer, QViewer *targetViewer);
 
 protected:
-    /// To be implemented by each subclass
-    virtual bool criterionIsMet(QViewer *viewer1, QViewer *viewer2) = 0;
+    /// Returns true when the criterion to propagate from \a sourceViewer to \a targetViewer is met and false otherwise. Must be implemented by each subclass.
+    virtual bool criterionIsMet(QViewer *sourceViewer, QViewer *targetViewer) = 0;
 };
 
 } // End namespace udg

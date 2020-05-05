@@ -12,51 +12,37 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "phasesyncaction.h"
+#include "anyinputsynccriterion.h"
 
-#include "maininputsynccriterion.h"
 #include "q2dviewer.h"
 
 namespace udg {
 
-PhaseSyncAction::PhaseSyncAction()
- : SyncAction(), m_phase(0), m_volume(0)
+bool AnyInputSyncCriterion::criterionIsMet(QViewer *sourceViewer, QViewer *targetViewer)
 {
-}
+    QList<Volume*> sourceInputs, targetInputs;
+    Q2DViewer *source2D = Q2DViewer::castFromQViewer(sourceViewer);
+    Q2DViewer *target2D = Q2DViewer::castFromQViewer(targetViewer);
 
-PhaseSyncAction::~PhaseSyncAction()
-{
-}
-
-void PhaseSyncAction::setPhase(int phase)
-{
-    m_phase = phase;
-}
-
-void PhaseSyncAction::setVolume(Volume *volume)
-{
-    m_volume = volume;
-}
-
-void PhaseSyncAction::run(QViewer *viewer)
-{
-    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer);
-
-    // Limit action to 2D viewers and to secondary inputs
-    if (viewer2D && viewer2D->getMainInput() != m_volume)
+    if (source2D)
     {
-        viewer2D->setPhaseInVolume(viewer2D->indexOfVolume(m_volume), m_phase);
+        sourceInputs = source2D->getInputs();
     }
+    else
+    {
+        sourceInputs.append(sourceViewer->getMainInput());
+    }
+
+    if (target2D)
+    {
+        targetInputs = target2D->getInputs();
+    }
+    else
+    {
+        targetInputs.append(targetViewer->getMainInput());
+    }
+
+    return sourceInputs.toSet().intersects(targetInputs.toSet());
 }
 
-void PhaseSyncAction::setupMetaData()
-{
-    m_metaData = SyncActionMetaData("PhaseSyncAction", QObject::tr("Phase"), "phase");
-}
-
-void PhaseSyncAction::setupDefaultSyncCriteria()
-{
-    m_defaultSyncCriteria << new MainInputSyncCriterion();
-}
-
-}
+} // namespace udg

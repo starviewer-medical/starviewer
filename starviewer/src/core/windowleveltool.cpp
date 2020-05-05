@@ -137,6 +137,10 @@ void WindowLevelTool::doWindowLevel()
         voiLut = VoiLut(m_initialLut.toNewRange(oldX1, oldX2, newX1, newX2), m_initialLut.name());
     }
 
+    // This is really only needed when burning (because in the other case it's eventually set in another place) but it's more consistent to do it in both cases.
+    // It ensures that the new VOI LUT is detected as custom.
+    voiLut.setExplanation(VoiLutPresetsToolData::getCustomPresetName());
+
     if (m_state == WindowLevelling)
     {
         m_viewer->setVoiLut(voiLut);

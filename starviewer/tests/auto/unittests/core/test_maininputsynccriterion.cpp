@@ -11,38 +11,3 @@
   may be copied, modified, propagated, or distributed except according to the
   terms contained in the LICENSE file.
  *************************************************************************************/
-
-#include "synccriterion.h"
-
-#include "qviewer.h"
-
-namespace udg {
-
-SyncCriterion::SyncCriterion()
-{
-}
-
-SyncCriterion::~SyncCriterion()
-{
-}
-
-bool SyncCriterion::isCriterionSatisfied(QViewer *sourceViewer, QViewer *targetViewer)
-{
-    if (sourceViewer && targetViewer)
-    {
-        if (!sourceViewer->hasInput() || !targetViewer->hasInput())
-        {
-            return false;
-        }
-        else
-        {
-            return criterionIsMet(sourceViewer, targetViewer);
-        }
-    }
-    else
-    {
-        return false;
-    }
-}
-
-} // End namespace udg

@@ -12,26 +12,24 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGINPUTSYNCCRITERIA_H
-#define UDGINPUTSYNCCRITERIA_H
+#include "maininputsynccriterion.h"
 
-#include "synccriterion.h"
+#include "q2dviewer.h"
 
 namespace udg {
 
-/**
-    Implements the SyncCriterion for the viewers input.
-    The inputs have to be the same to meet the criterion.
- */
-class InputSyncCriterion : public SyncCriterion {
-public:
-    InputSyncCriterion();
-    ~InputSyncCriterion();
+bool MainInputSyncCriterion::criterionIsMet(QViewer *sourceViewer, QViewer *targetViewer)
+{
+    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(targetViewer);
 
-protected:
-    bool criterionIsMet(QViewer *viewer1, QViewer *viewer2);
-};
+    if (viewer2D)
+    {
+        return viewer2D->containsVolume(sourceViewer->getMainInput());
+    }
+    else
+    {
+        return sourceViewer->getMainInput() == targetViewer->getMainInput();
+    }
+}
 
 } // End namespace udg
-
-#endif

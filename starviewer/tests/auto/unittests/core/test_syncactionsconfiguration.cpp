@@ -9,7 +9,7 @@
 #include "zoomfactorsyncaction.h"
 #include "voilutsyncaction.h"
 #include "anatomicalplanesynccriterion.h"
-#include "inputsynccriterion.h"
+#include "maininputsynccriterion.h"
 
 using namespace udg;
 
@@ -128,7 +128,7 @@ void test_SyncActionsConfiguration::removeSyncCriteria_RemovesCriteriaCorrectly_
     QTest::addColumn<QList<SyncCriterion*> >("criteriaListToConfigure");
 
     QList<SyncCriterion*> criteria;
-    criteria << new AnatomicalPlaneSyncCriterion() << new InputSyncCriterion();
+    criteria << new AnatomicalPlaneSyncCriterion() << new MainInputSyncCriterion();
 
     SyncAction *windowLevelAction = new VoiLutSyncAction();
     QTest::newRow("Configuration with added criteria for a particular sync action") << windowLevelAction << criteria;

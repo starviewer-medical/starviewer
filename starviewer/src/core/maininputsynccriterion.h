@@ -12,41 +12,21 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGVOILUTSIGNALTOSYNCACTIONMAPPER_H
-#define UDGVOILUTSIGNALTOSYNCACTIONMAPPER_H
+#ifndef UDG_MAININPUTSYNCCRITERION_H
+#define UDG_MAININPUTSYNCCRITERION_H
 
-#include "signaltosyncactionmapper.h"
+#include "synccriterion.h"
 
 namespace udg {
 
-class VoiLut;
-class Volume;
-
 /**
-    Implementation of SignalToSyncActionMapper to map VOI LUT changes to VoiLutSyncAction
+ * @brief The MainInputSyncCriterion class implements a SyncCriterion that is met when the main input from the source viewer is contained in the target viewer.
  */
-class VoiLutSignalToSyncActionMapper : public SignalToSyncActionMapper {
-Q_OBJECT
-public:
-    VoiLutSignalToSyncActionMapper(QObject *parent = 0);
-    ~VoiLutSignalToSyncActionMapper();
-
-    /// Maps current VOI LUT of the viewer
-    virtual void mapProperty();
-
+class MainInputSyncCriterion : public SyncCriterion {
 protected:
-    void mapSignal();
-    void unmapSignal();
-
-protected slots:
-    /// Maps given VoiLut to a VoiLutSyncAction with the corresponding values
-    /// Should be connected to the corresponding signals on Q*Viewer
-    void mapToSyncAction(Volume *volume, const VoiLut &voiLut);
-
-private:
-    QList<QMetaObject::Connection> connections;
+    bool criterionIsMet(QViewer *sourceViewer, QViewer *targetViewer) override;
 };
 
-} // End namespace udg
+}
 
 #endif

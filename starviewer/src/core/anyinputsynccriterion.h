@@ -12,36 +12,22 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "inputsynccriterion.h"
+#ifndef UDG_ANYINPUTSYNCCRITERION_H
+#define UDG_ANYINPUTSYNCCRITERION_H
 
-#include "volume.h"
-#include "qviewer.h"
-#include "q2dviewer.h"
+#include "synccriterion.h"
 
 namespace udg {
 
-InputSyncCriterion::InputSyncCriterion()
- : SyncCriterion()
+/**
+ * @brief The AnyInputSyncCriterion class implements a SyncCriterion that is met when any input from the source viewer is contained in the target viewer.
+ */
+class AnyInputSyncCriterion : public SyncCriterion
 {
-}
+protected:
+    bool criterionIsMet(QViewer *sourceViewer, QViewer *targetViewer) override;
+};
 
-InputSyncCriterion::~InputSyncCriterion()
-{
-}
+} // namespace udg
 
-bool InputSyncCriterion::criterionIsMet(QViewer *viewer1, QViewer *viewer2)
-{
-    // TODO Should also check if some reconstruction is applied, i.e. thick slab?
-    Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(viewer2);
-
-    if (viewer2D)
-    {
-        return viewer2D->containsVolume(viewer1->getMainInput());
-    }
-    else
-    {
-        return viewer1->getMainInput() == viewer2->getMainInput();
-    }
-}
-
-} // End namespace udg
+#endif // UDG_ANYINPUTSYNCCRITERION_H
