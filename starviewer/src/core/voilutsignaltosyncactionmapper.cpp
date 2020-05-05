@@ -34,7 +34,10 @@ void VoiLutSignalToSyncActionMapper::mapProperty()
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     if (viewer2D)
     {
-        mapToSyncAction(viewer2D->getVoiLutData()->getCurrentPreset());
+        for (int i = 0; i < viewer2D->getNumberOfInputs(); i++)
+        {
+            mapToSyncAction(viewer2D->getInput(i), viewer2D->getVoiLutDataForVolume(i)->getCurrentPreset());
+        }
     }
 }
 
@@ -43,8 +46,16 @@ void VoiLutSignalToSyncActionMapper::mapSignal()
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     if (viewer2D)
     {
-        connect(viewer2D->getVoiLutData(), SIGNAL(currentPresetChanged(VoiLut)), SLOT(mapToSyncAction(VoiLut)));
-        connect(viewer2D->getVoiLutData(), SIGNAL(presetSelected(VoiLut)), SLOT(mapToSyncAction(VoiLut)));
+        for (int i = 0; i < viewer2D->getNumberOfInputs(); i++)
+        {
+            Volume *volume = viewer2D->getInput(i);
+            connections.append(connect(viewer2D->getVoiLutDataForVolume(i), &VoiLutPresetsToolData::currentPresetChanged, [=](const VoiLut &voiLut) {
+                mapToSyncAction(volume, voiLut);
+            }));
+            connections.append(connect(viewer2D->getVoiLutDataForVolume(i), &VoiLutPresetsToolData::presetSelected, [=](const VoiLut &voiLut) {
+                mapToSyncAction(volume, voiLut);
+            }));
+        }
     }
 }
 
@@ -53,18 +64,20 @@ void VoiLutSignalToSyncActionMapper::unmapSignal()
     Q2DViewer *viewer2D = Q2DViewer::castFromQViewer(m_viewer);
     if (viewer2D)
     {
-        disconnect(viewer2D->getVoiLutData(), SIGNAL(currentPresetChanged(VoiLut)), this, SLOT(mapToSyncAction(VoiLut)));
-        disconnect(viewer2D->getVoiLutData(), SIGNAL(presetSelected(VoiLut)), this, SLOT(mapToSyncAction(VoiLut)));
+        while (!connections.isEmpty())
+        {
+            disconnect(connections.takeLast());
+        }
     }
 }
 
-void VoiLutSignalToSyncActionMapper::mapToSyncAction(const VoiLut &voiLut)
+void VoiLutSignalToSyncActionMapper::mapToSyncAction(Volume *volume, const VoiLut &voiLut)
 {
     if (!m_mappedSyncAction)
     {
         m_mappedSyncAction = new VoiLutSyncAction();
     }
-    static_cast<VoiLutSyncAction*>(m_mappedSyncAction)->setVolume(m_viewer->getMainInput());
+    static_cast<VoiLutSyncAction*>(m_mappedSyncAction)->setVolume(volume);
     static_cast<VoiLutSyncAction*>(m_mappedSyncAction)->setVoiLut(voiLut);
     
     emit actionMapped(m_mappedSyncAction);

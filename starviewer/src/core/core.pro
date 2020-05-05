@@ -31,6 +31,7 @@ TRANSLATIONS += core_ca_ES.ts \
     core_es_ES.ts \
     core_en_GB.ts
 HEADERS += extensionfactory.h \
+    anyinputsynccriterion.h \
     genericfactory.h \
     maininputsynccriterion.h \
     qdiagnosistestsresultsitem.h \
@@ -429,6 +430,7 @@ HEADERS += extensionfactory.h \
     volumepixeldatareadervtk.h
 
 SOURCES += extensionmediator.cpp \
+    anyinputsynccriterion.cpp \
     displayableid.cpp \
     maininputsynccriterion.cpp \
     mathtools.cpp \

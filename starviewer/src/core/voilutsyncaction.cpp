@@ -14,10 +14,9 @@
 
 #include "voilutsyncaction.h"
 
-#include "qviewer.h"
+#include "anyinputsynccriterion.h"
 #include "q2dviewer.h"
 #include "voilutpresetstooldata.h"
-#include "maininputsynccriterion.h"
 
 namespace udg {
 
@@ -46,24 +45,30 @@ void VoiLutSyncAction::run(QViewer *viewer)
 
     if (viewer2D)
     {
-        int index = viewer2D->indexOfVolume(m_volume);
-        VoiLutPresetsToolData *currentVoiLutPresetsToolData = viewer2D->getVoiLutDataForVolume(index);
+        if (viewer2D->containsVolume(m_volume))
+        {
+            int index = viewer2D->indexOfVolume(m_volume);
+            VoiLutPresetsToolData *currentVoiLutPresetsToolData = viewer2D->getVoiLutDataForVolume(index);
 
-        // If the stored VOI LUT is in a group and isn't custom, then select it; otherwise, just set it
-        if (currentVoiLutPresetsToolData->containsPreset(m_voiLut.getExplanation()) &&
-                currentVoiLutPresetsToolData->getGroup(m_voiLut.getExplanation()) != VoiLutPresetsToolData::CustomPreset)
-        {
-            VoiLut voiLut = currentVoiLutPresetsToolData->getFromDescription(m_voiLut.getExplanation());
-            viewer2D->setVoiLutInVolume(index, voiLut);
-        }
-        else
-        {
-            viewer2D->setVoiLutInVolume(index, m_voiLut);
+            // If the stored VOI LUT is in a group and isn't custom, then select it; otherwise, just set it
+            if (currentVoiLutPresetsToolData->containsPreset(m_voiLut.getExplanation()) &&
+                    currentVoiLutPresetsToolData->getGroup(m_voiLut.getExplanation()) != VoiLutPresetsToolData::CustomPreset)
+            {
+                VoiLut voiLut = currentVoiLutPresetsToolData->getFromDescription(m_voiLut.getExplanation());
+                viewer2D->setVoiLutInVolume(index, voiLut);
+            }
+            else
+            {
+                viewer2D->setVoiLutInVolume(index, m_voiLut);
+            }
         }
     }
     else
     {
-        viewer->getVoiLutData()->setCurrentPreset(m_voiLut);
+        if (viewer->getMainInput() == m_volume)
+        {
+            viewer->getVoiLutData()->setCurrentPreset(m_voiLut);
+        }
     }
 }
 
@@ -75,7 +80,7 @@ void VoiLutSyncAction::setupMetaData()
 
 void VoiLutSyncAction::setupDefaultSyncCriteria()
 {
-    m_defaultSyncCriteria << new MainInputSyncCriterion();
+    m_defaultSyncCriteria << new AnyInputSyncCriterion();
 }
 
 } // End namespace udg
