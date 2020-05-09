@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# NOTES REGARDING SETUP.SH
+# ========================
+# - Feel free to change default values in this file, but be careful with the functions and conditions.
+# - Many variables can be externally set when they are already specified as an environment variable.
+# - The two commas in ${SOMETHING,,} convert the variable value to lower case.
 # VCVARSALL if not done before
 # ============================
 # Assuming you are on Windows then VCVARSALL is only applied once.
@@ -33,6 +38,42 @@ fi
     # PATH=$PATH_REVERSED	
     # IFS=$UNTOUCHED_IFS
 # fi
+
+# Auxiliary function
+# =================
+download_and_verify()
+{
+    EXPECTED_HASH=$1
+    FILENAME=$2
+    URL=$3
+    if [ ! -e "${DOWNLOAD_PREFIX}/${FILENAME}" ]
+    then
+        wget -O "${DOWNLOAD_PREFIX}/${FILENAME}" -nc --directory-prefix="${DOWNLOAD_PREFIX}" "${URL}"
+    else
+    echo "The ${DOWNLOAD_PREFIX}/${FILENAME} exists, skipping the download."
+    fi
+    HASH=`shasum -a 256 "${DOWNLOAD_PREFIX}/${FILENAME}" | cut -f 1 -d " "`
+
+    if [ "${EXPECTED_HASH}" != "${HASH}" ]
+    then
+    echo "ERROR: Checksum verification failed for ${FILENAME}."
+    echo ''
+    echo '[!] WARNING [!]'
+    echo ''
+    echo 'If the download has been over HTTPS then:'
+    echo '   (i) the originating server has altered files that ought to be immutable;'
+    echo '  (ii) your system is affected by some sort of security bug;'
+    echo ' (iii) you have trusted bogus root certificates;'
+    echo '  (iv) some powerful attacker has control over the PKI (public key infraestructure); or'
+    echo '   (v) your computer has been hit by a cosmic ray.'
+    echo ''
+    echo 'DO NOT USE THE DOWNLOADED FILE; delete it.'
+    echo ''
+    rm -i "${DOWNLOAD_PREFIX}/${FILENAME}"
+    exit
+    fi
+}
+
 # Base directory for everything related to the SDK.
 SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$SCRIPTS_ROOT/../../.."}
 
