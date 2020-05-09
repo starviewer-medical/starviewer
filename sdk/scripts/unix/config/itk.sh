@@ -1,13 +1,10 @@
 #!/bin/bash
-
 # Call gdcm configuration script to make sure GDCMCMAKEDIR is set
 . "$SCRIPTS_ROOT/config/gdcm.sh"
 
-SOURCE_DIR="$SOURCE_DIR_BASE/InsightToolkit-5.0.1"
+SOURCE_DIR="$SDK_SOURCE_DIR_BASE/InsightToolkit-5.0.1"
 
-################ Nothing should need to be changed below this line ################
-
-CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
+CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$SDK_BUILD_TYPE \
                -DCMAKE_INSTALL_PREFIX:PATH=$SDK_INSTALL_PREFIX \
                -DBUILD_EXAMPLES:BOOL=FALSE \
                -DBUILD_TESTING:BOOL=FALSE \
@@ -26,4 +23,5 @@ CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
 
 ITKCMAKEDIR="$SDK_INSTALL_PREFIX/lib/cmake/ITK-5.0"
 ITKLIBDIR="$SDK_INSTALL_PREFIX/lib"
+ITKBINDIR="$SDK_INSTALL_PREFIX/bin"
 ITKINCLUDEDIR="$SDK_INSTALL_PREFIX/include/ITK-5.0"

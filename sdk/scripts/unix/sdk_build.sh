@@ -1,19 +1,15 @@
 #!/bin/bash
-
 SCRIPTS_ROOT=$(cd $(dirname $BASH_SOURCE) && pwd)
 . "$SCRIPTS_ROOT/config/setup.sh"
 
-for BUILD_TYPE in $BUILD_TYPES
+# ALIB instead of LIB to avoid an enviroment variable naming conflict with MSVC
+for ALIB in $LIBS
 do
-    # Dont' use LIB to not overwrite LIB variable in Windows (note if variable name is changed it must be changed accordingly in cmakebuild.sh)
-    for ALIB in $LIBS
-    do
-        if [[ -f "$SCRIPTS_ROOT/libs/$ALIB.sh" ]]
-        then
-            . "$SCRIPTS_ROOT/config/$ALIB.sh"
-            . "$SCRIPTS_ROOT/libs/$ALIB.sh"
-        fi
-    done
+    if [[ -f "$SCRIPTS_ROOT/libs/$ALIB.sh" ]]
+    then
+        . "$SCRIPTS_ROOT/config/$ALIB.sh"
+        . "$SCRIPTS_ROOT/libs/$ALIB.sh"
+    fi
 done
 
 # Generate SDK enviornment configuration file

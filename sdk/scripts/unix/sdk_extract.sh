@@ -1,13 +1,13 @@
 #!/bin/bash
-
 SCRIPTS_ROOT=$(cd $(dirname $BASH_SOURCE) && pwd)
 . "$SCRIPTS_ROOT/config/setup.sh"
 
-mkdir -p "${SOURCE_DIR_BASE}"
+mkdir -p $SDK_SOURCE_DIR_BASE
 
-for LIB in $LIBS
+# ALIB instead of LIB to avoid an enviroment variable naming conflict with MSVC
+for ALIB in $LIBS
 do
-    case $LIB in
+    case $ALIB in
         qt)
             echo "Please install Qt on ${INSTALL_QTDIR}"
 
@@ -28,25 +28,25 @@ do
         dcmtk)
             if [[ $(uname) == 'MSYS_NT'* ]]
             then
-                unzip -o "${DOWNLOAD_PREFIX}/dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8.zip" -d "${SOURCE_DIR_BASE}"
+                unzip -o "${DOWNLOAD_PREFIX}/dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8.zip" -d $SDK_SOURCE_DIR_BASE
             fi
-            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/dcmtk-DCMTK-3.6.5.tar.gz"
+            tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/dcmtk-DCMTK-3.6.5.tar.gz"
             ;;
         vtk)
-            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/VTK-8.2.0.tar.gz"
+            tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/VTK-8.2.0.tar.gz"
             ;;
         gdcm)
-            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/GDCM-3.0.4.tar.gz"
+            tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/GDCM-3.0.4.tar.gz"
             ;;
         itk)
-            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-5.0.1.tar.gz"
+            tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-5.0.1.tar.gz"
             ;;
         ecm)
-            mkdir -p "${SOURCE_DIR_BASE}/threadweaver-5.64.0"
-            tar -C "${SOURCE_DIR_BASE}/threadweaver-5.64.0" -xvf "${DOWNLOAD_PREFIX}/extra-cmake-modules-5.64.0.tar.gz"
+            mkdir -p $SDK_SOURCE_DIR_BASE/threadweaver-5.64.0
+            tar -C $SDK_SOURCE_DIR_BASE/threadweaver-5.64.0 -xvf "${DOWNLOAD_PREFIX}/extra-cmake-modules-5.64.0.tar.gz"
             ;;
         threadweaver)
-            tar -C "${SOURCE_DIR_BASE}" -xvf "${DOWNLOAD_PREFIX}/threadweaver-5.64.0.tar.gz"
+            tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/threadweaver-5.64.0.tar.gz"
             ;;
     esac
 done

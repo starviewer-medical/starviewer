@@ -81,10 +81,11 @@ SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$SCRIPTS_ROOT/../../.."}
 DOWNLOAD_PREFIX=${DOWNLOAD_PREFIX:-"$SDK_BASE_PREFIX/sdk-download"}
 
 # Location of SDK sources to build.
-SOURCE_DIR_BASE=${SOURCE_DIR_BASE:-"$SDK_BASE_PREFIX/sdk-build"}
+SDK_SOURCE_DIR_BASE=${SDK_SOURCE_DIR_BASE:-"$SDK_BASE_PREFIX/sdk-build"}
 
 # Where to install the SDK libraries once compiled.
 SDK_INSTALL_PREFIX=${SDK_INSTALL_PREFIX:-"$SDK_BASE_PREFIX/sdk-install"}
+SDK_BUILD_TYPE=${SDK_BUILD_TYPE:-"RelWithDebInfo"}
 
 # Where the user will be asked to install Qt.
 INSTALL_QTDIR=${INSTALL_QTDIR:-"$SDK_INSTALL_PREFIX/qt"}
@@ -104,8 +105,6 @@ else
     exit 1
 fi
 
-# List of build types to use. Possible values: Debug, Release, RelWithDebInfo.
-BUILD_TYPES=${BUILD_TYPES:-"Release"}
 
 # List of libs to build. Possible values: qt, dcmtk, vtk, gdcm, itk, ecm, threadweaver.
 LIBS=${LIBS:-"qt dcmtk vtk gdcm itk ecm threadweaver"}

@@ -1,8 +1,5 @@
 #!/bin/bash
-
-SOURCE_DIR="$SOURCE_DIR_BASE/dcmtk-DCMTK-3.6.5"
-
-################ Nothing should need to be changed below this line ################
+SOURCE_DIR="$SDK_SOURCE_DIR_BASE/dcmtk-DCMTK-3.6.5"
 
 if [[ $(uname) == 'Linux' ]]
 then
@@ -16,8 +13,8 @@ then
     CMAKE_EXTRA_OPTIONS=-DCMAKE_PREFIX_PATH:PATH=/usr/local/opt/openssl
 elif [[ $(uname) == 'MSYS_NT'* ]]
 then
-    SUPPORT_LIBS_PATH="$SOURCE_DIR_BASE/dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8"
-
+    SUPPORT_LIBS_PATH="$SDK_SOURCE_DIR_BASE/dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8"
+    mkdir -p "$SDK_INSTALL_PREFIX/lib"
     cp "$SUPPORT_LIBS_PATH/libiconv-1.15/lib/charset_o.lib" "$SDK_INSTALL_PREFIX/lib"
     cp "$SUPPORT_LIBS_PATH/libiconv-1.15/lib/libiconv_o.lib" "$SDK_INSTALL_PREFIX/lib"
 
@@ -27,7 +24,7 @@ then
                          -DWITH_LIBICONVINC:PATH=$SUPPORT_LIBS_PATH/libiconv-1.15"
 fi
 
-CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
+CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$SDK_BUILD_TYPE \
                -DCMAKE_INSTALL_PREFIX:PATH=$SDK_INSTALL_PREFIX \
                -DDCMTK_WITH_TIFF:BOOL=FALSE \
                -DDCMTK_WITH_PNG:BOOL=FALSE \
@@ -48,4 +45,5 @@ CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$BUILD_TYPE \
                $CMAKE_EXTRA_OPTIONS"
 
 DCMTKLIBDIR="$SDK_INSTALL_PREFIX/$LIB64DIR"
+DCMTKBINDIR="$SDK_INSTALL_PREFIX/bin"
 DCMTKINCLUDEDIR="$SDK_INSTALL_PREFIX/include/dcmtk"

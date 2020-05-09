@@ -1,13 +1,12 @@
 #!/bin/bash
-
 SCRIPTS_ROOT=$(cd $(dirname $BASH_SOURCE) && pwd)
 . "$SCRIPTS_ROOT/config/setup.sh"
 
 mkdir -p "${DOWNLOAD_PREFIX}"
-
-for LIB in $LIBS
+# ALIB instead of LIB to avoid an enviroment variable naming conflict with MSVC
+for ALIB in $LIBS
 do
-    case $LIB in
+    case $ALIB in
         qt)
             if [[ $(uname) == 'Linux' ]]
             then
