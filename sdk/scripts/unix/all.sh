@@ -9,5 +9,6 @@ then
 else
     . "$SCRIPTS_ROOT/configure_system.sh"
 fi
+. "$SCRIPTS_ROOT/generate_prefixfiles.sh"
 . "$SCRIPTS_ROOT/sdk_all.sh"
 . "$SCRIPTS_ROOT/starviewer_all.sh"

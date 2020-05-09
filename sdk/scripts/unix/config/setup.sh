@@ -5,6 +5,13 @@
 # - Feel free to change default values in this file, but be careful with the functions and conditions.
 # - Many variables can be externally set when they are already specified as an environment variable.
 # - The two commas in ${SOMETHING,,} convert the variable value to lower case.
+
+# Exportable variables
+# ====================
+# The following variable collects a list of variables of interest when setting the environment and to generate the prefix files.
+# The list is expanded as variables are set...
+VARS_TO_EXPORT=()
+
 # VCVARSALL if not done before
 # ============================
 # Assuming you are on Windows then VCVARSALL is only applied once.
@@ -96,16 +103,22 @@ download_and_verify()
 
 # Base directory for everything related to the SDK.
 SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$SCRIPTS_ROOT/../../.."}
+VARS_TO_EXPORT+=("SDK_BASE_PREFIX")
 
 # Where the libraries are dowloaded.
 DOWNLOAD_PREFIX=${DOWNLOAD_PREFIX:-"$SDK_BASE_PREFIX/sdk-download"}
 
 # Location of SDK sources to build.
 SDK_SOURCE_DIR_BASE=${SDK_SOURCE_DIR_BASE:-"$SDK_BASE_PREFIX/sdk-build"}
+VARS_TO_EXPORT+=("SDK_SOURCE_DIR_BASE")
 
 # Where to install the SDK libraries once compiled.
 SDK_INSTALL_PREFIX=${SDK_INSTALL_PREFIX:-"$SDK_BASE_PREFIX/sdk-install"}
+VARS_TO_EXPORT+=("SDK_INSTALL_PREFIX")
+
+# List of build types to use. Possible values: Debug, Release, RelWithDebInfo.
 SDK_BUILD_TYPE=${SDK_BUILD_TYPE:-"RelWithDebInfo"}
+VARS_TO_EXPORT+=("SDK_BUILD_TYPE")
 
 # Where the user will be asked to install Qt.
 INSTALL_QTDIR=${INSTALL_QTDIR:-"$SDK_INSTALL_PREFIX/qt"}
@@ -130,6 +143,10 @@ QTLIBDIR=${QTLIBDIR:-$QTDIR/lib}
 QTPLUGINSDIR=${QTPLUGINSDIR:-$QTDIR/plugins}
 QTQMLDIR=${QTQMLDIR:-$QTDIR/qml}
 
+VARS_TO_EXPORT+=("QTBINDIR")
+VARS_TO_EXPORT+=("QTLIBDIR")
+VARS_TO_EXPORT+=("QTPLUGINSDIR")
+VARS_TO_EXPORT+=("QTQMLDIR")
 
 # List of libs to build. Possible values: qt, dcmtk, vtk, gdcm, itk, ecm, threadweaver.
 LIBS=${LIBS:-"qt dcmtk vtk gdcm itk ecm threadweaver"}
@@ -147,6 +164,7 @@ then
     MAKE=${MAKE:-jom}
     CMAKE=${CMAKE:-/mingw64/bin/cmake}
     QMAKE_SPEC=${QMAKE_SPEC:-msvc-win32}
+    VARS_TO_EXPORT+=("QMAKE_SPEC")
 fi
 CMAKE=${CMAKE:-cmake}
 MAKE=${MAKE:-make}
@@ -170,6 +188,7 @@ MAKE_VERBOSE=${MAKE_VERBOSE:-yes}
 
 # Where to write the SDK environment configuration script.
 SDK_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../prefix.sh
+SDK_WINDOWS_ENVIRONMENT_FILE=$SCRIPTS_ROOT/../../../prefix.bat
 
 # Currently only used to know the location of the ThreadWeaver lib dir.
 if [[ $(uname) == 'Linux' ]]
@@ -188,11 +207,6 @@ then
     LIB64DIR=lib
 fi
 
-# Because SDK libraries binares are not on a standard location.
-# This environment variable has to be set when starting starviewer binary or
-# when you compile it (if not the linker will fail).
-# It will be written to the SDK environment configuration script.
-LD_LIBRARY_PATH="$SDK_INSTALL_PREFIX/lib:$SDK_INSTALL_PREFIX/$LIB64DIR:$QTDIR/lib"
 
 # Build type specified when compiling starviewer. Can be: debug release
 STARVIEWER_BUILD_TYPE=${STARVIEWER_BUILD_TYPE:-release}
@@ -205,6 +219,9 @@ STARVIEWER_SOURCE_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer
 
 # Starviwer shadow build directory
 STARVIEWER_BUILD_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-build
+
+# Starviwer install prefix directory
+STARVIEWER_INSTALL_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-install
 
 # Starviewer QMake arguments composition
 STARVIEWER_QMAKE_ARGUMENTS=()
@@ -224,3 +241,76 @@ DPKG_TMP=/tmp/starviewer-dpkg
 
 # Where to place the packages
 DPKG_DESTINATION=$SCRIPTS_ROOT/../../../starviewer-packaging
+
+
+# PATH-like and exportable Variables
+# ==================================
+PREPEND_TO_LD_LIBRARY_PATH="$STARVIEWER_BUILD_DIR_BASE/bin"
+PREPEND_TO_PATH="$STARVIEWER_BUILD_DIR_BASE/bin"
+
+PREPEND_TO_LD_LIBRARY_PATH=$QTLIBDIR${PREPEND_TO_LD_LIBRARY_PATH:+:${PREPEND_TO_LD_LIBRARY_PATH}}
+PREPEND_TO_PATH=$QTBINDIR${PREPEND_TO_PATH:+:${PREPEND_TO_PATH}}
+
+# Get the variables of the libraries in order to compose the PATH and LD_LIBRARY_PATH
+for ALIB in $LIBS
+do
+    if [[ -f "$SCRIPTS_ROOT/libs/$ALIB.sh" ]]
+    then
+        . "$SCRIPTS_ROOT/config/$ALIB.sh"
+    fi
+done
+
+PREPEND_TO_LD_LIBRARY_PATH=$DCMTKLIBDIR${PREPEND_TO_LD_LIBRARY_PATH:+:${PREPEND_TO_LD_LIBRARY_PATH}}
+PREPEND_TO_PATH=$DCMTKBINDIR${PREPEND_TO_PATH:+:${PREPEND_TO_PATH}}
+VARS_TO_EXPORT+=("DCMTKLIBDIR")
+VARS_TO_EXPORT+=("DCMTKBINDIR")
+VARS_TO_EXPORT+=("DCMTKINCLUDEDIR")
+
+VARS_TO_EXPORT+=("ECMCMAKEDIR")
+
+PREPEND_TO_LD_LIBRARY_PATH=$GDCMLIBDIR${PREPEND_TO_LD_LIBRARY_PATH:+:${PREPEND_TO_LD_LIBRARY_PATH}}
+PREPEND_TO_PATH=$GDCMBINDIR${PREPEND_TO_PATH:+:${PREPEND_TO_PATH}}
+VARS_TO_EXPORT+=("GDCMCMAKEDIR")
+VARS_TO_EXPORT+=("GDCMLIBDIR")
+VARS_TO_EXPORT+=("GDCMBINDIR")
+VARS_TO_EXPORT+=("GDCMINCLUDEDIR")
+
+PREPEND_TO_LD_LIBRARY_PATH=$ITKLIBDIR${PREPEND_TO_LD_LIBRARY_PATH:+:${PREPEND_TO_LD_LIBRARY_PATH}}
+PREPEND_TO_PATH=$ITKBINDIR${PREPEND_TO_PATH:+:${PREPEND_TO_PATH}}
+VARS_TO_EXPORT+=("ITKCMAKEDIR")
+VARS_TO_EXPORT+=("ITKLIBDIR")
+VARS_TO_EXPORT+=("ITKBINDIR")
+VARS_TO_EXPORT+=("ITKINCLUDEDIR")
+
+PREPEND_TO_LD_LIBRARY_PATH=$THREADWEAVERLIBDIR${PREPEND_TO_LD_LIBRARY_PATH:+:${PREPEND_TO_LD_LIBRARY_PATH}}
+PREPEND_TO_PATH=$THREADWEAVERBINDIR${PREPEND_TO_PATH:+:${PREPEND_TO_PATH}}
+VARS_TO_EXPORT+=("THREADWEAVERCMAKEDIR")
+VARS_TO_EXPORT+=("THREADWEAVERLIBDIR")
+VARS_TO_EXPORT+=("THREADWEAVERBINDIR")
+VARS_TO_EXPORT+=("THREADWEAVERINCLUDEDIR")
+
+PREPEND_TO_LD_LIBRARY_PATH=$VTKLIBDIR${PREPEND_TO_LD_LIBRARY_PATH:+:${PREPEND_TO_LD_LIBRARY_PATH}}
+PREPEND_TO_PATH=$VTKBINDIR${PREPEND_TO_PATH:+:${PREPEND_TO_PATH}}
+VARS_TO_EXPORT+=("VTKCMAKEDIR")
+VARS_TO_EXPORT+=("VTKLIBDIR")
+VARS_TO_EXPORT+=("VTKBINDIR")
+VARS_TO_EXPORT+=("VTKINCLUDEDIR")
+
+# Because SDK libraries binares are not on a standard location.
+# This environment variable has to be set when starting starviewer binary or
+# when you compile it (if not the linker will fail).
+# It will be written to the SDK environment configuration script.
+declare -x LD_LIBRARY_PATH=$PREPEND_TO_LD_LIBRARY_PATH${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+
+# What you neet to put at the beginning of your current path. On Windows the PATH also works a little bit like LD_LIBRARY_PATH in order search .dll files.
+declare -x PATH=$PREPEND_TO_PATH${PATH:+:${PATH}}
+
+
+# Export exportable variables
+# ===========================
+
+for VARIABLE in ${VARS_TO_EXPORT[@]}
+do
+    export $VARIABLE
+done
