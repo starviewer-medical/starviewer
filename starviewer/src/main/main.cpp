@@ -95,14 +95,6 @@ void initializeTranslations(QApplication &app)
     }
 }
 
-/// Afegeix els directoris on s'han de buscar els plugins de Qt. Útil a windows.
-void initQtPluginsDirectory()
-{
-#ifdef Q_OS_WIN32
-    QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath() + "/plugins");
-#endif
-}
-
 void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
 {
     QString errorInvalidCommanLineArguments;
@@ -192,7 +184,6 @@ int main(int argc, char *argv[])
     interfaceSettings.init();
     shortcuts.init();
 
-    initQtPluginsDirectory();
     initializeTranslations(app);
 
     // Registering the available sync actions
