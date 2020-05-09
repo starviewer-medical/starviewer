@@ -23,9 +23,17 @@ win32 {
     else {
         CONFIG -= console
     }
+    
+    # Indiquem que per compilacions en debug, Runtime Library sigui Multi-threaded DLL (com en release) i no Multi-threaded Debug DLL
+    # TL;DR do fixdebug unless nofixdebug is specified in CONFIG+=nofixdebug
+    !nofixdebug:CONFIG(debug, debug|release) {
+        QMAKE_CXXFLAGS_DEBUG -= -MDd
+        QMAKE_CXXFLAGS_DEBUG += -MD
+    }
 
     # Required since Qt 5.6 to use OpenGl directly
     LIBS += opengl32.lib glu32.lib
+    
     # Required since Qt 5.6 by ITKCommon
     LIBS += gdi32.lib
 
@@ -34,10 +42,6 @@ win32 {
     # definim que per sistemes de compilació windows basats en visual studio
     # la compilació es faci en tants cores com sigui possible
     QMAKE_CXXFLAGS += /MP
-
-    # Indiquem que per compil·lacions en debug, Runtime Library sigui Multi-threaded DLL (com en release) i no Multi-threaded Debug DLL
-    QMAKE_CXXFLAGS_DEBUG -= -MDd
-    QMAKE_CXXFLAGS_DEBUG += -MD
 
     QMAKE_CXXFLAGS -= -Zc:strictStrings
 }

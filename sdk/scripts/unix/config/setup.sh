@@ -186,6 +186,19 @@ STARVIEWER_SOURCE_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer
 # Starviwer shadow build directory
 STARVIEWER_BUILD_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-build
 
+# Starviewer QMake arguments composition
+STARVIEWER_QMAKE_ARGUMENTS=()
+STARVIEWER_QMAKE_ARGUMENTS+=( "CONFIG+=$STARVIEWER_BUILD_TYPE" )
+if [[ $STARVIEWER_DEBUGINFO ]]
+then
+    STARVIEWER_QMAKE_ARGUMENTS+=( "CONFIG+=force_debug_info" )
+fi
+if [[ $(uname) == 'MSYS_NT'* && ${SDK_BUILD_TYPE,,} == "debug" && ${STARVIEWER_BUILD_TYPE,,} == "debug" ]]
+then
+    # On Windows if your SDK is compiled in debug mode, you must NOT apply fixdebug.
+    STARVIEWER_QMAKE_ARGUMENTS+=( "CONFIG+=nofixdebug" )
+fi
+
 # Temporary directory for package creation
 DPKG_TMP=/tmp/starviewer-dpkg
 
