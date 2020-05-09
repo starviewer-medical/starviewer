@@ -50,8 +50,6 @@ This closes DCMTK issue #425.
  ofstd/tests/txml.cc                          |  12 +-
  38 files changed, 193 insertions(+), 151 deletions(-)
 
-diff --git a/INSTALL b/INSTALL
-index ff5b363d6..105495d41 100644
 --- a/INSTALL
 +++ b/INSTALL
 @@ -637,10 +637,6 @@ Known limitations of DCMTK on the Windows platform.
@@ -65,8 +63,6 @@ index ff5b363d6..105495d41 100644
  
  
  Unix with CMake
-diff --git a/dcmdata/libsrc/dcencdoc.cc b/dcmdata/libsrc/dcencdoc.cc
-index d83430dcd..0f470a2bd 100644
 --- a/dcmdata/libsrc/dcencdoc.cc
 +++ b/dcmdata/libsrc/dcencdoc.cc
 @@ -1,6 +1,6 @@
@@ -85,8 +81,6 @@ index d83430dcd..0f470a2bd 100644
    OFLOG_ERROR(appLogger, "DCMTK compiled with \"wide char XML parser\". Cannot parse CDA data because of incompatible API.");
    return 99;
  #else
-diff --git a/dcmdata/libsrc/dcuid.cc b/dcmdata/libsrc/dcuid.cc
-index bb10a9318..d398b5260 100644
 --- a/dcmdata/libsrc/dcuid.cc
 +++ b/dcmdata/libsrc/dcuid.cc
 @@ -1617,14 +1617,14 @@ static long gethostid(void)
@@ -106,8 +100,6 @@ index bb10a9318..d398b5260 100644
                  serialNumber = 0;
          }
      }
-diff --git a/dcmnet/apps/storescp.cc b/dcmnet/apps/storescp.cc
-index 3878e4433..8974a2303 100644
 --- a/dcmnet/apps/storescp.cc
 +++ b/dcmnet/apps/storescp.cc
 @@ -2408,13 +2408,13 @@ static void executeCommand( const OFString &cmd )
@@ -126,8 +118,6 @@ index 3878e4433..8974a2303 100644
      OFLOG_ERROR(storescpLogger, "cannot execute command '" << cmd << "'");
  
    if (opt_execSync)
-diff --git a/dcmnet/libsrc/dul.cc b/dcmnet/libsrc/dul.cc
-index 526fe60fb..b8e9cc044 100644
 --- a/dcmnet/libsrc/dul.cc
 +++ b/dcmnet/libsrc/dul.cc
 @@ -1,6 +1,6 @@
@@ -156,8 +146,6 @@ index 526fe60fb..b8e9cc044 100644
          {
              OFOStringStream stream;
              stream << "Multi-Process Error: Creating process failed with error code "
-diff --git a/dcmpstat/apps/dcmprscu.cc b/dcmpstat/apps/dcmprscu.cc
-index fa608cc63..15644d257 100644
 --- a/dcmpstat/apps/dcmprscu.cc
 +++ b/dcmpstat/apps/dcmprscu.cc
 @@ -1,5 +1,5 @@
@@ -190,8 +178,6 @@ index fa608cc63..15644d257 100644
    } /* while */
    if(hFile != INVALID_HANDLE_VALUE)
    {
-diff --git a/dcmpstat/apps/dcmpsrcv.cc b/dcmpstat/apps/dcmpsrcv.cc
-index 93307dd84..3ad9f37d0 100644
 --- a/dcmpstat/apps/dcmpsrcv.cc
 +++ b/dcmpstat/apps/dcmpsrcv.cc
 @@ -1,6 +1,6 @@
@@ -221,8 +207,6 @@ index 93307dd84..3ad9f37d0 100644
  #endif
              {
  #ifdef WITH_OPENSSL
-diff --git a/dcmpstat/libsrc/dviface.cc b/dcmpstat/libsrc/dviface.cc
-index 676283b67..3cab3c810 100644
 --- a/dcmpstat/libsrc/dviface.cc
 +++ b/dcmpstat/libsrc/dviface.cc
 @@ -2236,7 +2236,7 @@ OFCondition DVInterface::sendIOD(const char * targetID,
@@ -366,8 +350,6 @@ index 676283b67..3cab3c810 100644
  #endif
    {
      return EC_Normal;
-diff --git a/oflog/include/dcmtk/oflog/clogger.h b/oflog/include/dcmtk/oflog/clogger.h
-index 9508dd00d..c8dba6bce 100644
 --- a/oflog/include/dcmtk/oflog/clogger.h
 +++ b/oflog/include/dcmtk/oflog/clogger.h
 @@ -54,13 +54,13 @@ typedef int loglevel_t;
@@ -386,8 +368,6 @@ index 9508dd00d..c8dba6bce 100644
  #define DCMTK_LOG4CPLUS_TEXT(STRING) DCMTK_LOG4CPLUS_TEXT2(STRING)
  
  DCMTK_LOG4CPLUS_EXPORT int log4cplus_file_configure(const log4cplus_char_t *pathname);
-diff --git a/oflog/include/dcmtk/oflog/config.h b/oflog/include/dcmtk/oflog/config.h
-index 835e7d240..8e21275c2 100644
 --- a/oflog/include/dcmtk/oflog/config.h
 +++ b/oflog/include/dcmtk/oflog/config.h
 @@ -40,7 +40,7 @@
@@ -417,8 +397,6 @@ index 835e7d240..8e21275c2 100644
  #  define DCMTK_LOG4CPLUS_FORMAT_ATTRIBUTE(archetype, format_index, first_arg_index) \
      __attribute__ ((format (archetype, format_index, first_arg_index)))
  #else
-diff --git a/oflog/include/dcmtk/oflog/configrt.h b/oflog/include/dcmtk/oflog/configrt.h
-index e155c8b3e..049569790 100644
 --- a/oflog/include/dcmtk/oflog/configrt.h
 +++ b/oflog/include/dcmtk/oflog/configrt.h
 @@ -77,14 +77,14 @@ namespace log4cplus
@@ -439,8 +417,6 @@ index e155c8b3e..049569790 100644
              , fUTF32              = (3 << fEncodingShift)
  #endif
          };
-diff --git a/oflog/include/dcmtk/oflog/fstreams.h b/oflog/include/dcmtk/oflog/fstreams.h
-index 7b30bc188..136a531d7 100644
 --- a/oflog/include/dcmtk/oflog/fstreams.h
 +++ b/oflog/include/dcmtk/oflog/fstreams.h
 @@ -46,7 +46,7 @@ typedef STD_NAMESPACE basic_ifstream<tchar> tifstream;
@@ -452,8 +428,6 @@ index 7b30bc188..136a531d7 100644
  #  define DCMTK_LOG4CPLUS_FSTREAM_PREFERED_FILE_NAME(X) (X)
  #else
  #  define DCMTK_LOG4CPLUS_FSTREAM_PREFERED_FILE_NAME(X) (DCMTK_LOG4CPLUS_TSTRING_TO_STRING(X))
-diff --git a/oflog/include/dcmtk/oflog/helpers/property.h b/oflog/include/dcmtk/oflog/helpers/property.h
-index 3e42c4c7a..7b0c941ed 100644
 --- a/oflog/include/dcmtk/oflog/helpers/property.h
 +++ b/oflog/include/dcmtk/oflog/helpers/property.h
 @@ -51,14 +51,14 @@ namespace log4cplus {
@@ -474,8 +448,6 @@ index 3e42c4c7a..7b0c941ed 100644
                  , fUTF32            = (3 << fEncodingShift)
  #endif
              };
-diff --git a/oflog/include/dcmtk/oflog/socketap.h b/oflog/include/dcmtk/oflog/socketap.h
-index c107782a6..9ec675e0d 100644
 --- a/oflog/include/dcmtk/oflog/socketap.h
 +++ b/oflog/include/dcmtk/oflog/socketap.h
 @@ -42,7 +42,7 @@ namespace log4cplus
@@ -487,8 +459,6 @@ index c107782a6..9ec675e0d 100644
      size_t const DCMTK_LOG4CPLUS_MAX_MESSAGE_SIZE = 8*1024;
  #else
      size_t const DCMTK_LOG4CPLUS_MAX_MESSAGE_SIZE = 2*8*1024;
-diff --git a/oflog/include/dcmtk/oflog/streams.h b/oflog/include/dcmtk/oflog/streams.h
-index 4f6c5fb1d..9f161e5ef 100644
 --- a/oflog/include/dcmtk/oflog/streams.h
 +++ b/oflog/include/dcmtk/oflog/streams.h
 @@ -49,7 +49,7 @@ namespace log4cplus
@@ -500,8 +470,6 @@ index 4f6c5fb1d..9f161e5ef 100644
  
  DCMTK_LOG4CPLUS_EXPORT log4cplus::tostream& operator <<(log4cplus::tostream&, const char* psz );
  
-diff --git a/oflog/include/dcmtk/oflog/tchar.h b/oflog/include/dcmtk/oflog/tchar.h
-index c3655d0e5..643d52aae 100644
 --- a/oflog/include/dcmtk/oflog/tchar.h
 +++ b/oflog/include/dcmtk/oflog/tchar.h
 @@ -38,11 +38,11 @@
@@ -527,8 +495,6 @@ index c3655d0e5..643d52aae 100644
  typedef wchar_t tchar;
  
  #else
-diff --git a/oflog/include/dcmtk/oflog/tstring.h b/oflog/include/dcmtk/oflog/tstring.h
-index 7ca173c44..d1c56abd5 100644
 --- a/oflog/include/dcmtk/oflog/tstring.h
 +++ b/oflog/include/dcmtk/oflog/tstring.h
 @@ -83,19 +83,19 @@ DCMTK_LOG4CPLUS_EXPORT STD_NAMESPACE wstring towstring(char const *);
@@ -554,8 +520,6 @@ index 7ca173c44..d1c56abd5 100644
  
  } // namespace log4cplus
  } // end namespace dcmtk
-diff --git a/oflog/libsrc/config.cc b/oflog/libsrc/config.cc
-index 689eb5a12..c755d39d1 100644
 --- a/oflog/libsrc/config.cc
 +++ b/oflog/libsrc/config.cc
 @@ -183,18 +183,18 @@ namespace
@@ -580,8 +544,6 @@ index 689eb5a12..c755d39d1 100644
          case PropertyConfigurator::fUTF32:
              return helpers::Properties::fUTF32;
  #endif
-diff --git a/oflog/libsrc/env.cc b/oflog/libsrc/env.cc
-index d8ffd584c..b6030edaa 100644
 --- a/oflog/libsrc/env.cc
 +++ b/oflog/libsrc/env.cc
 @@ -46,7 +46,7 @@ namespace log4cplus { namespace internal {
@@ -593,8 +555,6 @@ index d8ffd584c..b6030edaa 100644
      tchar const * val = _wgetenv (name.c_str ());
      if (val)
          value = val;
-diff --git a/oflog/libsrc/fileap.cc b/oflog/libsrc/fileap.cc
-index 1e3461590..7c5a2ee75 100644
 --- a/oflog/libsrc/fileap.cc
 +++ b/oflog/libsrc/fileap.cc
 @@ -77,7 +77,7 @@ static
@@ -615,8 +575,6 @@ index 1e3461590..7c5a2ee75 100644
      if (_wremove (src.c_str ()) == 0)
          return 0;
      else
-diff --git a/oflog/libsrc/fileinfo.cc b/oflog/libsrc/fileinfo.cc
-index b8cd1893f..cb225681c 100644
 --- a/oflog/libsrc/fileinfo.cc
 +++ b/oflog/libsrc/fileinfo.cc
 @@ -48,8 +48,14 @@ getFileInfo (FileInfo * fi, tstring const & name)
@@ -634,8 +592,6 @@ index b8cd1893f..cb225681c 100644
      
      fi->mtime = helpers::Time (fileStatus.st_mtime);
      fi->is_link = false;
-diff --git a/oflog/libsrc/globinit.cc b/oflog/libsrc/globinit.cc
-index 8227e5322..6da22c800 100644
 --- a/oflog/libsrc/globinit.cc
 +++ b/oflog/libsrc/globinit.cc
 @@ -42,7 +42,7 @@ namespace dcmtk
@@ -647,8 +603,6 @@ index 8227e5322..6da22c800 100644
  DCMTK_LOG4CPLUS_EXPORT tostream & tcout = STD_NAMESPACE wcout;
  DCMTK_LOG4CPLUS_EXPORT tostream & tcerr = STD_NAMESPACE wcerr;
  
-diff --git a/oflog/libsrc/log4judp.cc b/oflog/libsrc/log4judp.cc
-index 803fcb729..c79831ea3 100644
 --- a/oflog/libsrc/log4judp.cc
 +++ b/oflog/libsrc/log4judp.cc
 @@ -29,7 +29,7 @@
@@ -678,8 +632,6 @@ index 803fcb729..c79831ea3 100644
  Log4jUdpAppender::close()
  {
      helpers::getLogLog().debug(
-diff --git a/oflog/libsrc/ntelogap.cc b/oflog/libsrc/ntelogap.cc
-index 6d009d5dd..e39475357 100644
 --- a/oflog/libsrc/ntelogap.cc
 +++ b/oflog/libsrc/ntelogap.cc
 @@ -46,7 +46,7 @@ namespace {
@@ -923,8 +875,6 @@ index 6d009d5dd..e39475357 100644
      RegCloseKey(hkey);
      return;
  }
-diff --git a/oflog/libsrc/property.cc b/oflog/libsrc/property.cc
-index 85b55d880..ba47a7d8b 100644
 --- a/oflog/libsrc/property.cc
 +++ b/oflog/libsrc/property.cc
 @@ -21,7 +21,7 @@
@@ -981,8 +931,6 @@ index 85b55d880..ba47a7d8b 100644
      case fUTF32:
          file.imbue (
              STD_NAMESPACE locale (file.getloc (),
-diff --git a/oflog/libsrc/snprintf.cc b/oflog/libsrc/snprintf.cc
-index bbf59cb20..7602942a1 100644
 --- a/oflog/libsrc/snprintf.cc
 +++ b/oflog/libsrc/snprintf.cc
 @@ -26,7 +26,7 @@
@@ -1021,8 +969,6 @@ index bbf59cb20..7602942a1 100644
  #  if defined (DCMTK_LOG4CPLUS_HAVE__VSNWPRINTF_S) && defined (_TRUNCATE)
      ret = _vsnwprintf_s (dest, dest_size, _TRUNCATE, fmt, args);
  #  else
-diff --git a/oflog/libsrc/sockbuff.cc b/oflog/libsrc/sockbuff.cc
-index 52bb25060..f17bf4fdc 100644
 --- a/oflog/libsrc/sockbuff.cc
 +++ b/oflog/libsrc/sockbuff.cc
 @@ -150,7 +150,7 @@ SocketBuffer::readString(unsigned char sizeOfChar)
@@ -1052,8 +998,6 @@ index 52bb25060..f17bf4fdc 100644
      memcpy(&buffer[pos], str.data(), strlen);
      pos += strlen;
      size = pos;
-diff --git a/oflog/libsrc/socketap.cc b/oflog/libsrc/socketap.cc
-index 6b9596aa9..4e81da7ec 100644
 --- a/oflog/libsrc/socketap.cc
 +++ b/oflog/libsrc/socketap.cc
 @@ -276,7 +276,7 @@ convertToBuffer(SocketBuffer & buffer,
@@ -1065,8 +1009,6 @@ index 6b9596aa9..4e81da7ec 100644
      buffer.appendByte(1);
  #else
      buffer.appendByte(2);
-diff --git a/oflog/libsrc/strhelp.cc b/oflog/libsrc/strhelp.cc
-index ef1a3a511..859555b07 100644
 --- a/oflog/libsrc/strhelp.cc
 +++ b/oflog/libsrc/strhelp.cc
 @@ -52,7 +52,7 @@ tstring const empty_str;
@@ -1096,8 +1038,6 @@ index ef1a3a511..859555b07 100644
              STD_NAMESPACE towlower
  #else
              tolower
-diff --git a/oflog/libsrc/timehelp.cc b/oflog/libsrc/timehelp.cc
-index d53373ccf..993f298e8 100644
 --- a/oflog/libsrc/timehelp.cc
 +++ b/oflog/libsrc/timehelp.cc
 @@ -29,7 +29,7 @@
@@ -1127,8 +1067,6 @@ index d53373ccf..993f298e8 100644
          len = wcsftime(&gft_sp.buffer[0], buffer_size,
              gft_sp.fmt.c_str(), &time);
  #else
-diff --git a/oflog/libsrc/winconap.cc b/oflog/libsrc/winconap.cc
-index e6269a87a..45d2b44e3 100644
 --- a/oflog/libsrc/winconap.cc
 +++ b/oflog/libsrc/winconap.cc
 @@ -119,7 +119,7 @@ Win32ConsoleAppender::write_handle (void * outvoid, tchar const * s,
@@ -1140,8 +1078,6 @@ index e6269a87a..45d2b44e3 100644
      STD_NAMESPACE wstring wstr (s, str_len);
      STD_NAMESPACE string str (helpers::tostring (wstr));
      str_len = str.size ();
-diff --git a/oflog/libsrc/windebap.cc b/oflog/libsrc/windebap.cc
-index acf564bcf..47108a434 100644
 --- a/oflog/libsrc/windebap.cc
 +++ b/oflog/libsrc/windebap.cc
 @@ -79,7 +79,11 @@ void
@@ -1156,8 +1092,6 @@ index acf564bcf..47108a434 100644
  }
  
  
-diff --git a/oflog/libsrc/winsock.cc b/oflog/libsrc/winsock.cc
-index f67fdb344..bf13596b0 100644
 --- a/oflog/libsrc/winsock.cc
 +++ b/oflog/libsrc/winsock.cc
 @@ -235,9 +235,15 @@ connectSocket(const tstring& hostn, unsigned short port, bool udp, SocketState&
@@ -1176,8 +1110,6 @@ index f67fdb344..bf13596b0 100644
          if (ret == SOCKET_ERROR || insock_size != sizeof (insock)) 
          {
              state = bad_address;
-diff --git a/ofstd/include/dcmtk/ofstd/ofxml.h b/ofstd/include/dcmtk/ofstd/ofxml.h
-index f74dac8ff..06d2e85a4 100644
 --- a/ofstd/include/dcmtk/ofstd/ofxml.h
 +++ b/ofstd/include/dcmtk/ofstd/ofxml.h
 @@ -1,6 +1,6 @@
@@ -1217,8 +1149,6 @@ index f74dac8ff..06d2e85a4 100644
  #define _XMLWIDECHAR
  #endif
  
-diff --git a/ofstd/libsrc/ofstd.cc b/ofstd/libsrc/ofstd.cc
-index 3986939a3..6435f21f6 100644
 --- a/ofstd/libsrc/ofstd.cc
 +++ b/ofstd/libsrc/ofstd.cc
 @@ -471,7 +471,7 @@ OFBool OFStandard::fileExists(const OFFilename &fileName)
@@ -1239,8 +1169,6 @@ index 3986939a3..6435f21f6 100644
          if (fileAttr != 0xffffffff)
          {
              /* check file type (is a directory?) */
-diff --git a/ofstd/libsrc/oftempf.cc b/ofstd/libsrc/oftempf.cc
-index 9fd23db69..a3761f7c7 100644
 --- a/ofstd/libsrc/oftempf.cc
 +++ b/ofstd/libsrc/oftempf.cc
 @@ -128,7 +128,7 @@ void OFTempFile::getTempPath(OFString& sPath)
@@ -1252,8 +1180,6 @@ index 9fd23db69..a3761f7c7 100644
      sPath = buffer;
  #elif defined(__ANDROID__)
      sPath = ANDROID_TEMPORARY_FILES_LOCATION;
-diff --git a/ofstd/tests/tests.cc b/ofstd/tests/tests.cc
-index a419911bf..1cf9ef062 100644
 --- a/ofstd/tests/tests.cc
 +++ b/ofstd/tests/tests.cc
 @@ -23,6 +23,7 @@
@@ -1274,8 +1200,6 @@ index a419911bf..1cf9ef062 100644
  OFTEST_REGISTER(ofstd_memory);
  OFTEST_REGISTER(ofstd_optional);
  OFTEST_REGISTER(ofstd_tuple);
-diff --git a/ofstd/tests/txml.cc b/ofstd/tests/txml.cc
-index cfa44e1c2..45082fd07 100644
 --- a/ofstd/tests/txml.cc
 +++ b/ofstd/tests/txml.cc
 @@ -1,6 +1,6 @@
