@@ -105,22 +105,31 @@ else
     exit 1
 fi
 
+QTBINDIR=${QTBINDIR:-$QTDIR/bin}
+QTLIBDIR=${QTLIBDIR:-$QTDIR/lib}
+QTPLUGINSDIR=${QTPLUGINSDIR:-$QTDIR/plugins}
+QTQMLDIR=${QTQMLDIR:-$QTDIR/qml}
+
 
 # List of libs to build. Possible values: qt, dcmtk, vtk, gdcm, itk, ecm, threadweaver.
 LIBS=${LIBS:-"qt dcmtk vtk gdcm itk ecm threadweaver"}
 
-# CMake and make
+# CMake, QMake and make
 if [[ $(uname) == 'MSYS_NT'* ]]
 then
-    CMAKE=${CMAKE:-$PROGRAMFILES/CMake/bin/cmake.exe}
     # jom path in PATH needed by CMake
     JOM_PATH=${JOM_PATH:-"$INSTALL_QTDIR/Tools/QtCreator/bin"}
-    PATH=$PATH:$JOM_PATH
-    MAKE=jom
-else
-    CMAKE=${CMAKE:-cmake}
-    MAKE=make
+    if [[ ! -d $JOM_PATH ]]
+    then
+        echo "[!] JOM path $JOM_PATH not found [!]"
+    fi
+    PATH=$JOM_PATH${PATH:+:${PATH}}
+    MAKE=${MAKE:-jom}
+    CMAKE=${CMAKE:-/mingw64/bin/cmake}
+    QMAKE_SPEC=${QMAKE_SPEC:-msvc-win32}
 fi
+CMAKE=${CMAKE:-cmake}
+MAKE=${MAKE:-make}
 
 # Set to appropriate value (example below) if you want to use distcc (distributed C compiler) on CMake.
 CMAKE_DISTCC=${CMAKE_DISTCC:-}
@@ -164,6 +173,12 @@ fi
 # when you compile it (if not the linker will fail).
 # It will be written to the SDK environment configuration script.
 LD_LIBRARY_PATH="$SDK_INSTALL_PREFIX/lib:$SDK_INSTALL_PREFIX/$LIB64DIR:$QTDIR/lib"
+
+# Build type specified when compiling starviewer. Can be: debug release
+STARVIEWER_BUILD_TYPE=${STARVIEWER_BUILD_TYPE:-release}
+
+# If set with something, then generate the equivalent of CMake's RelWithDebInfo
+STARVIEWER_DEBUGINFO=${STARVIEWER_DEBUGINFO:-1}
 
 # Starviewer source code location
 STARVIEWER_SOURCE_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer
