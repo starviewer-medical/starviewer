@@ -28,9 +28,9 @@ do
         dcmtk)
             if [[ $(uname) == 'MSYS_NT'* ]]
             then
-                download_and_verify 4fa47885833d3fbe51173f40397eb7c92d84580ddd39be4e316d653dfb1449d1 \
-                                    'dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8.zip' \
-                                    'https://dicom.offis.de/download/dcmtk/dcmtk365/support/dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8.zip'
+                download_and_verify b43b3863e96e8d4612c2d26c3d37e644c44917b380dd229f24cc446f7f4c5b77 \
+                                    'dcmtk-3.6.5-win64-support-MD-iconv-msvc-15.8.zip' \
+                                    'https://dicom.offis.de/download/dcmtk/dcmtk365/support/dcmtk-3.6.5-win64-support-MD-iconv-msvc-15.8.zip'
             fi
             download_and_verify 37dad355d5513b4de4a86b5b7b0c3e9ec059860d88781b80916bba2a04e6d5b8 \
                                 'dcmtk-DCMTK-3.6.5.tar.gz' \

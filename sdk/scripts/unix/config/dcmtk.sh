@@ -13,7 +13,7 @@ then
     CMAKE_EXTRA_OPTIONS=-DCMAKE_PREFIX_PATH:PATH=/usr/local/opt/openssl
 elif [[ $(uname) == 'MSYS_NT'* ]]
 then
-    SUPPORT_LIBS_PATH="$SDK_SOURCE_DIR_BASE/dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8"
+    SUPPORT_LIBS_PATH="$SDK_SOURCE_DIR_BASE/dcmtk-3.6.5-win64-support-MD-iconv-msvc-15.8"
     mkdir -p "$SDK_INSTALL_PREFIX/lib"
     cp "$SUPPORT_LIBS_PATH/libiconv-1.15/lib/charset_o.lib" "$SDK_INSTALL_PREFIX/lib"
     cp "$SUPPORT_LIBS_PATH/libiconv-1.15/lib/libiconv_o.lib" "$SDK_INSTALL_PREFIX/lib"

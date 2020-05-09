@@ -28,7 +28,7 @@ do
         dcmtk)
             if [[ $(uname) == 'MSYS_NT'* ]]
             then
-                unzip -o "${DOWNLOAD_PREFIX}/dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8.zip" -d $SDK_SOURCE_DIR_BASE
+                unzip -o "${DOWNLOAD_PREFIX}/dcmtk-3.6.5-win64-support-MD-iconv-msvc-15.8.zip" -d $SDK_SOURCE_DIR_BASE
             fi
             tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/dcmtk-DCMTK-3.6.5.tar.gz"
             ;;
