@@ -12,8 +12,8 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef MPREXTENSIONMEDIATOR_H
-#define MPREXTENSIONMEDIATOR_H
+#ifndef MPR2DExtensionMediator_H
+#define MPR2DExtensionMediator_H
 
 #include "extensionmediator.h"
 
@@ -22,19 +22,19 @@
 
 namespace udg {
 
-class MPRExtensionMediator : public ExtensionMediator {
+class MPR2DExtensionMediator : public ExtensionMediator {
 Q_OBJECT
 public:
-    MPRExtensionMediator(QObject *parent = 0);
+    MPR2DExtensionMediator(QObject *parent = 0);
 
-    ~MPRExtensionMediator();
+    ~MPR2DExtensionMediator();
 
     virtual bool initializeExtension(QWidget *extension, const ExtensionContext &extensionContext);
 
     virtual DisplayableID getExtensionID() const;
 };
 
-static InstallExtension<QMPRExtension, MPRExtensionMediator> registerMPRExtension;
+static InstallExtension<QMPRExtension, MPR2DExtensionMediator> registerMPRExtension;
 
 } // End udg namespace
 

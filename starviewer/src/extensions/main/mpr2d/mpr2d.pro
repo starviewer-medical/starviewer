@@ -7,13 +7,13 @@ FORMS += qmprextensionbase.ui
 
 HEADERS += qmprextension.h \
            mprsettings.h \
-           mprextensionmediator.h
+           mpr2dextensionmediator.h
 
 SOURCES += qmprextension.cpp \
            mprsettings.cpp \
-           mprextensionmediator.cpp
+           mpr2dextensionmediator.cpp
 
-RESOURCES += mpr.qrc
+RESOURCES += mpr2d.qrc
 
 EXTENSION_DIR = $$PWD
 include(../../basicconfextensions.pri)
