@@ -20,6 +20,26 @@ then
     fi
 fi
 
+# LD_LIBRARY_PATH preservation
+# ============================
+# Used to avoid duplications when this script is invoked multiple times
+if [[ -z "$UNTOUCHED_LD_LIBRARY_PATH" ]]
+then
+    UNTOUCHED_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+fi
+# LD_LIBRARY_PATH variable is exported to prefix.sh, but is treated in a special way.
+LD_LIBRARY_PATH=$UNTOUCHED_LD_LIBRARY_PATH
+
+# PATH preservation
+# =================
+# Used to avoid duplications when this script is invoked multiple times
+if [[ -z "$UNTOUCHED_PATH" ]]
+then
+    UNTOUCHED_PATH=$PATH
+fi
+# PATH variable is exportedto prefix.sh, but is treated in a special way.
+PATH=$UNTOUCHED_PATH
+
 # Reversing PATH variable
 # =======================
 # Done in order to make the executables established by vcvarsall.bat PATH prevail over the MSYS ones.
