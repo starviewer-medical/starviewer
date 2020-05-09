@@ -14,7 +14,7 @@
 
 #CONTRIB_EXTENSIONS =
 
-MAIN_EXTENSIONS = mpr \
+MAIN_EXTENSIONS = mpr2d \
                   dicomprint \
                   q2dviewer \
                   q3dviewer \

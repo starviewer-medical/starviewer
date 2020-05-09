@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "mprextensionmediator.h"
+#include "mpr2dextensionmediator.h"
 
 #include "extensioncontext.h"
 
@@ -21,21 +21,21 @@
 
 namespace udg {
 
-MPRExtensionMediator::MPRExtensionMediator(QObject *parent)
+MPR2DExtensionMediator::MPR2DExtensionMediator(QObject *parent)
  : ExtensionMediator(parent)
 {
 }
 
-MPRExtensionMediator::~MPRExtensionMediator()
+MPR2DExtensionMediator::~MPR2DExtensionMediator()
 {
 }
 
-DisplayableID MPRExtensionMediator::getExtensionID() const
+DisplayableID MPR2DExtensionMediator::getExtensionID() const
 {
     return DisplayableID("MPRExtension", tr("MPR 2D"));
 }
 
-bool MPRExtensionMediator::initializeExtension(QWidget *extension, const ExtensionContext &extensionContext)
+bool MPR2DExtensionMediator::initializeExtension(QWidget *extension, const ExtensionContext &extensionContext)
 {
     QMPRExtension *mprExtension;
 
