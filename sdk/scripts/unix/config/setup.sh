@@ -1,11 +1,38 @@
 #!/bin/bash
 
+# VCVARSALL if not done before
+# ============================
+# Assuming you are on Windows then VCVARSALL is only applied once.
+# The existance of VCToolsVersion is checked to know if the application had been successful.
 if [[ $(uname) == 'MSYS_NT'* ]]
 then
-    echo It is strongly recommended that you lift path length limit to avoid problems with ITK. If you have not done it already check this link: https://www.howtogeek.com/266621/how-to-make-windows-10-accept-file-paths-over-260-characters/
-    read -p "Press enter to continue or Ctrl+C to stop"
+    if [[ -z $VCToolsVersion ]]
+    then
+        echo "Trying to apply VCVARSALL."
+        . "$SCRIPTS_ROOT/config/vcvarsall.sh" x64
+    else
+        echo "VCVARSALL already applied."
+    fi
 fi
 
+# Reversing PATH variable
+# =======================
+# Done in order to make the executables established by vcvarsall.bat PATH prevail over the MSYS ones.
+# The IFS is an internal bash variable that establishes the bash interpreter separator.
+# if [[ $(uname) == 'MSYS_NT'* ]]
+# then
+    # UNTOUCHED_IFS=$IFS
+    # IFS=':'
+    #We put /c/ /d/ etc. paths on top.
+    # unset PATH_REVERSED
+    # for PATH_ITEM in $PATH
+    # do
+        # PATH_REVERSED=$PATH_ITEM${PATH_REVERSED:+:${PATH_REVERSED}}
+        # echo "     -> $PATH_ITEM"
+    # done
+    # PATH=$PATH_REVERSED	
+    # IFS=$UNTOUCHED_IFS
+# fi
 # Base directory for everything related to the SDK.
 SDK_BASE_PREFIX=${SDK_BASE_PREFIX:-"$SCRIPTS_ROOT/../../.."}
 
