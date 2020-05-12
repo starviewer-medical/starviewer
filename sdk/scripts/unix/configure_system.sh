@@ -33,6 +33,7 @@ then
 
     # MSVC
     # ----
+	mkdir -p "${DOWNLOAD_PREFIX}"
     download_and_verify 2f9a69561f6678f745b55ea38a606180b3941637d7e8cbbb65acae6933152d3e \
                     'vs_BuildTools.exe' \
                     'https://download.visualstudio.microsoft.com/download/pr/dfb60031-5f2b-4236-a36b-25a0197459bc/2f9a69561f6678f745b55ea38a606180b3941637d7e8cbbb65acae6933152d3e/vs_BuildTools.exe'
@@ -44,7 +45,7 @@ then
             echo "A file named 'vs_BuildTools_offlinePackager.bat' has been created at the downloads directory."
             echo "1. Run the 'vs_BuildTools_offlinePackager.bat' on a internet connected machine."
             echo "2. If the execution was performed on a different machine, copy the created 'vs' directory to the downloads folder."
-            read -p "Press any key when ready to continue..."
+            read -p "Press enter key when ready to continue..."
     else
             echo "Visual Studio Build Tools offline installation directory detected."
     fi
