@@ -182,6 +182,7 @@ if [[ $(uname) == 'Linux' || $(uname) == 'Darwin' ]]
 then
     # Strips debug information for files immediately in the same directory
     find -P -type f -exec strip {} \;
+    find -P -type f -name '*.so*' -exec chmod ugo-x {} \;
 fi
 
 popd
