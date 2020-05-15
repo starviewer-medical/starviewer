@@ -57,6 +57,8 @@ then
     cp $STARVIEWER_SOURCE_DIR_BASE/bin/starviewer.sh .
 fi
 
+cp -r $STARVIEWER_SOURCE_DIR_BASE/src/main/images/logo .
+
 cp $STARVIEWER_SOURCE_DIR_BASE/bin/log.conf .
 
 # File used for the anonymization feature
