@@ -19,8 +19,8 @@ cp -r $STARVIEWER_INSTALL_DIR_BASE/* .
 
 # Packaging
 # =========
-tar czf $OUTPUT_DIR.tar.gz .
-tar cJf $OUTPUT_DIR.tar.xz .
+tar czf $OUTPUT_DIR.tar.gz --no-acls --no-selinux --no-xattrs --no-same-owner --owner=0 --group=0 .
+tar cJf $OUTPUT_DIR.tar.xz --no-acls --no-selinux --no-xattrs --no-same-owner --owner=0 --group=0 .
 zip -r  $OUTPUT_DIR.zip .
 
 popd

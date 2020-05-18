@@ -2,7 +2,7 @@
 # Those variables are meant to be set externally by starviewer_packaging.sh
 # If not those "generalistic" defaults are picked to create a .deb that can be put anywhere, although it will probably not run smoothly as no system dependencies are specified.
 PACKAGER_DIST_NAME=${PACKAGER_DIST_NAME:-anydist}
-PACKAGER_DIST_ARCH=${PACKAGER_DIST_ARCH:-'none'}
+PACKAGER_DIST_ARCH=${PACKAGER_DIST_ARCH:-'all'}
 PACKAGER_DEPENDS=${PACKAGER_DEPENDS:-''}
 
 PACKAGER_PROD_NAME=${PACKAGER_PROD_NAME:-product}
@@ -28,7 +28,7 @@ echo "[Desktop Entry]
 Version=$PACKAGER_PROD_VERSION
 Type=Application
 Name=$PACKAGER_PROD_NAME (${PACKAGER_PROD_VERSION})
-Comment=Medical DICOM image viewer.
+Comment=Medical imaging DICOM image viewer.
 Exec=../../../opt/starviewer/starviewer.sh
 Icon=../../../opt/starviewer/logo/64.svg
 Categories=Graphics;Science;Biology;Medical;
@@ -55,8 +55,8 @@ Description: DICOM medical viewer with advanced features.
 # =========
 
 echo '2.0' > debian-binary
-tar czf data.tar.gz -C data .
-tar czf control.tar.gz -C control .
+tar czf data.tar.gz --no-acls --no-selinux --no-xattrs --no-same-owner --owner=0 --group=0 -C data .
+tar czf control.tar.gz --no-acls --no-selinux --no-xattrs --no-same-owner --owner=0 --group=0 -C control .
 
 ar -r $OUTPUT_DIR.deb debian-binary control.tar.gz data.tar.gz
 
