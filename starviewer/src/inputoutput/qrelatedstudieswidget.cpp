@@ -400,7 +400,14 @@ void QRelatedStudiesWidget::updateWidgetWidth()
 
 void QRelatedStudiesWidget::updateWidgetHeight()
 {
-    int screenAvailableHeight = QGuiApplication::screenAt(this->mapToGlobal(QPoint(0, 0)))->availableSize().height();
+    QScreen *screen = QGuiApplication::screenAt(this->mapToGlobal(QPoint(0, 0)));
+
+    if (!screen)    // screen may be null if the widget is not visible
+    {
+        return;
+    }
+
+    int screenAvailableHeight = screen->availableSize().height();
     int topAndMargins = this->geometry().top() + m_relatedStudiesTree->geometry().top() * 2; // Es multiplica per 2 pel marge inferior.
     int maxHeight = screenAvailableHeight - topAndMargins;
     int minHeight = m_relatedStudiesTree->sizeHint().height();
