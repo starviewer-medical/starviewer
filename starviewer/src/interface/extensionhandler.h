@@ -78,10 +78,6 @@ private:
     /// Also displays the new studies unless \a loadOnly is true, in which case it only makes them selectable.
     void mergeIntoCurrentPatient(Patient *patient, bool loadOnly = false);
 
-    /// Processa el pacient donat per tal que pugui ser usat per les extensions
-    //  Li crea els volums al repositori i assigna quina és la sèrie per defecte
-    void generatePatientVolumes(Patient *patient, const QString &defaultSeriesUID);
-
     /// Scans the list and returns a list where the patients which are the same are merged.
     /// Patients are only considered to be the same if Patient::compareTo() returns SamePatients value.
     QList<Patient*> mergePatients(const QList<Patient*> &patientList);

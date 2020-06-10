@@ -38,6 +38,57 @@
 
 namespace udg {
 
+namespace {
+
+// Creates all the volumes for the given patient
+void generatePatientVolumes(Patient *patient)
+{
+    foreach (Study *study, patient->getStudies())
+    {
+        foreach (Series *series, study->getViewableSeries())
+        {
+            using VolumeNumber = int;
+            QMap<VolumeNumber, QList<Image*>> volumesImages;    // map from each volume to its images
+
+            foreach (Image *image, series->getImages())
+            {
+                VolumeNumber volumeNumber = image->getVolumeNumberInSeries();
+                volumesImages[volumeNumber].append(image);  // this will create a new item (a list) at volumeNumber if it doesn't exist
+            }
+
+            foreach (auto imageList, volumesImages)
+            {
+                // Count phases assuming that all phases for each slice are consecutive images and that first phase is numbered 0
+                // We only need to find the second occurrence of phase 0 in the list
+
+                Q_ASSERT(!imageList.isEmpty());
+                Q_ASSERT(imageList[0]->getPhaseNumber() == 0);
+
+                int i = 1;
+
+                while (i < imageList.size() && imageList[i]->getPhaseNumber() > 0)
+                {
+                    i++;
+                }
+
+                int numberOfPhases = i;
+                int numberOfSlicesPerPhase = imageList.size() / numberOfPhases;
+
+                Volume *volume = new Volume();
+                volume->setImages(imageList);
+                volume->setNumberOfPhases(numberOfPhases);
+                volume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
+                volume->setThumbnail(imageList.at(imageList.count() / 2)->getThumbnail(true));
+                series->addVolume(volume);
+            }
+        }
+    }
+
+    DEBUG_LOG(QString("Patient:\n%1").arg(patient->toString()));
+}
+
+}
+
 typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 typedef Singleton<PatientComparer> PatientComparerSingleton;
 
@@ -340,7 +391,7 @@ void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
     for (int i = 0; i < patientsList.size(); i++)
     {
         Patient *patient = patientsList[i];
-        generatePatientVolumes(patient, QString());
+        generatePatientVolumes(patient);
 
         if (i == 0)
         {
@@ -389,62 +440,6 @@ QList<Patient*> ExtensionHandler::mergePatients(const QList<Patient*> &patientLi
     }
 
     return mergedList;
-}
-
-void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &defaultSeriesUID)
-{
-    Q_UNUSED(defaultSeriesUID);
-    foreach (Study *study, patient->getStudies())
-    {
-        // Per cada sèrie, si les seves imatges són multiframe o de mides diferents entre sí aniran en volums separats
-        foreach (Series *series, study->getViewableSeries())
-        {
-            int currentVolumeNumber;
-            QMap<int, QList<Image*> > volumesImages;
-            foreach (Image *image, series->getImages())
-            {
-                currentVolumeNumber = image->getVolumeNumberInSeries();
-                if (volumesImages.contains(currentVolumeNumber))
-                {
-                    volumesImages[currentVolumeNumber] << image;
-                }
-                else
-                {
-                    QList<Image*> newImageList;
-                    newImageList << image;
-                    volumesImages.insert(currentVolumeNumber, newImageList);
-                }
-            }
-            typedef QList<Image*> ImageListType;
-            foreach (ImageListType imageList, volumesImages)
-            {
-                int numberOfPhases = 1;
-                bool found = false;
-                int i = 0;
-                while (!found && i<imageList.count() - 1)
-                {
-                    if (imageList.at(i + 1)->getPhaseNumber() > imageList.at(i)->getPhaseNumber())
-                    {
-                        numberOfPhases++;
-                    }
-                    else
-                    {
-                        found = true;
-                    }
-                    i++;
-                }
-                int numberOfSlicesPerPhase = imageList.count() / numberOfPhases;
-
-                Volume *volume = new Volume;
-                volume->setImages(imageList);
-                volume->setNumberOfPhases(numberOfPhases);
-                volume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
-                volume->setThumbnail(imageList.at(imageList.count() / 2)->getThumbnail(true));
-                series->addVolume(volume);
-            }
-        }
-    }
-    DEBUG_LOG(QString("Patient:\n%1").arg(patient->toString()));
 }
 
 void ExtensionHandler::mergeIntoCurrentPatient(Patient *patient, bool loadOnly)
