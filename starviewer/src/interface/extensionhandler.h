@@ -18,7 +18,6 @@
 #include <QObject>
 #include <QString>
 #include <QList>
-#include <QMutex>
 
 #include "extensioncontext.h"
 #include "appimportfile.h"
@@ -100,9 +99,6 @@ private:
 
     /// Indica si a aquesta finestra li pertoca o no tancar la QueryScreen
     bool m_haveToCloseQueryScreen;
-
-    /// Mutex to avoid concurrent access to the patient comparer singleton.
-    QMutex m_patientComparerMutex;
 
 };
 

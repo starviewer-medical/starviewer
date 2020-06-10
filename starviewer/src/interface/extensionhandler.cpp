@@ -326,9 +326,7 @@ void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
             while (canReplaceActualPatient && mainAppsIterator.hasNext())
             {
                 QApplicationMainWindow *mainApp = mainAppsIterator.next();
-                m_patientComparerMutex.lock();
                 canReplaceActualPatient = !PatientComparerSingleton::instance()->areSamePatient(mainApp->getCurrentPatient(), patient);
-                m_patientComparerMutex.unlock();
             }
         }
     }
@@ -458,9 +456,7 @@ QApplicationMainWindow* ExtensionHandler::addPatientToWindow(Patient *patient, b
         while (!found && mainAppsIterator.hasNext())
         {
             mainApp = mainAppsIterator.next();
-            m_patientComparerMutex.lock();
             found = PatientComparerSingleton::instance()->areSamePatient(mainApp->getCurrentPatient(), patient);
-            m_patientComparerMutex.unlock();
         }
 
         if (found)
