@@ -74,10 +74,9 @@ private:
     /// Crea les connexions de signals i slots
     void createConnections();
 
-    /// Afegeix un pacient a una mainwindow tenint en compte si cal fusionar o no i si es pot reemplaçar el pacient actual ja carregat
-    /// Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
-    /// Retorna la mainwindow a on s'ha afegit el pacient.
-    QApplicationMainWindow* addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly = false);
+    /// Merges the given \a patient into the current patient of this ExtensionHandler's window.
+    /// Also displays the new studies unless \a loadOnly is true, in which case it only makes them selectable.
+    void mergeIntoCurrentPatient(Patient *patient, bool loadOnly = false);
 
     /// Processa el pacient donat per tal que pugui ser usat per les extensions
     //  Li crea els volums al repositori i assigna quina és la sèrie per defecte

@@ -15,8 +15,6 @@
 #include "extensionhandler.h"
 
 // Qt
-#include <QFileInfo>
-#include <QDir>
 #include <QProgressDialog>
 #include <QMessageBox>
 // Recursos
@@ -26,7 +24,6 @@
 #include "volume.h"
 #include "extensionmediatorfactory.h"
 #include "extensionfactory.h"
-#include "extensioncontext.h"
 #include "singleton.h"
 #include "starviewerapplication.h"
 #include "interfacesettings.h"
@@ -313,49 +310,61 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
 
 void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
 {
-    QList<Patient*> mergedPatientsList = mergePatients(patientsList);
-    // Si de tots els pacients que es carreguen intentem carregar-ne un d'igual al que ja tenim carregat, el mantenim
-    bool canReplaceActualPatient = true;
-    if (m_mainApp->getCurrentPatient())
+    if (patientsList.isEmpty())
     {
-        QListIterator<Patient*> patientsIterator(mergedPatientsList);
-        while (canReplaceActualPatient && patientsIterator.hasNext())
+        return;
+    }
+
+    // First merge Patients so that all studies from the same real patient are in the same Patient object
+    patientsList = mergePatients(patientsList);
+
+    // Now assign the patients to windows. One will be assigned to this window and the others to new windows, we don't care about other existing windows.
+    // If one patient in the list matches the current one in this window it will be merged into it.
+    // Otherwise the current patient in this window will be replaced by the first one in the list.
+    // We assume that loadOnly can only be true if there's a match.
+
+    // Check if the list contains the same patient as the current one in this ExtensionsHandler's window;
+    // if that's the case, it will be moved to the beginning of the list so it gets assigned to this window
+    bool merge = false;
+
+    for (int i = 0; i < patientsList.size(); i++)
+    {
+        if (PatientComparerSingleton::instance()->areSamePatient(m_mainApp->getCurrentPatient(), patientsList[i]))  // this works if current patient is null
         {
-            Patient *patient = patientsIterator.next();
-            QListIterator<QApplicationMainWindow*> mainAppsIterator(QApplicationMainWindow::getQApplicationMainWindows());
-            while (canReplaceActualPatient && mainAppsIterator.hasNext())
-            {
-                QApplicationMainWindow *mainApp = mainAppsIterator.next();
-                canReplaceActualPatient = !PatientComparerSingleton::instance()->areSamePatient(mainApp->getCurrentPatient(), patient);
-            }
+            patientsList.move(i, 0);
+            merge = true;
+            break;
         }
     }
 
-    bool firstPatient = true;
-
-    // Afegim els pacients carregats correctament
-    foreach (Patient *patient, mergedPatientsList)
+    for (int i = 0; i < patientsList.size(); i++)
     {
+        Patient *patient = patientsList[i];
         generatePatientVolumes(patient, QString());
-        QApplicationMainWindow *mainApp = this->addPatientToWindow(patient, canReplaceActualPatient, loadOnly);
 
-        if (mainApp)
+        if (i == 0)
         {
-            if (mainApp->isMinimized())
+            if (merge)
             {
-                //Si la finestra d'Starviewer està minimitzada la tornem al seu estat original al visualitzar l'estudi
-                ScreenManager().restoreFromMinimized(mainApp);
+                mergeIntoCurrentPatient(patient, loadOnly);
+            }
+            else
+            {
+                // Replace current patient
+                m_mainApp->setPatient(patient);
             }
 
-            if (firstPatient)
+            if (m_mainApp->isMinimized())
             {
-                mainApp->activateWindow();
+                ScreenManager().restoreFromMinimized(m_mainApp);
             }
+
+            m_mainApp->activateWindow();
         }
-        firstPatient = false;
-
-        // Un cop carregat un pacient, ja no el podem reemplaçar
-        canReplaceActualPatient = false;
+        else
+        {
+            m_mainApp->setPatientInNewWindow(patient);
+        }
     }
 }
 
@@ -438,71 +447,28 @@ void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &d
     DEBUG_LOG(QString("Patient:\n%1").arg(patient->toString()));
 }
 
-QApplicationMainWindow* ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly)
+void ExtensionHandler::mergeIntoCurrentPatient(Patient *patient, bool loadOnly)
 {
-    QApplicationMainWindow *usedMainApp = NULL;
+    m_mainApp->connectPatientVolumesToNotifier(patient);
+    *m_mainApp->getCurrentPatient() += *patient;
 
-    if (canReplaceActualPatient && !loadOnly)
+    if (m_mainApp->getExtensionWorkspace()->count() == 0)
     {
-        m_mainApp->setPatient(patient);
-        usedMainApp = m_mainApp;
-    }
-    else
-    {
-        QApplicationMainWindow *mainApp;
-        bool found = false;
-
-        QListIterator<QApplicationMainWindow*> mainAppsIterator(QApplicationMainWindow::getQApplicationMainWindows());
-        while (!found && mainAppsIterator.hasNext())
-        {
-            mainApp = mainAppsIterator.next();
-            found = PatientComparerSingleton::instance()->areSamePatient(mainApp->getCurrentPatient(), patient);
-        }
-
-        if (found)
-        {
-            mainApp->connectPatientVolumesToNotifier(patient);
-            *(mainApp->getCurrentPatient()) += *patient;
-            DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
-
-            // Mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
-            if (mainApp->getExtensionWorkspace()->count() == 0)
-            {
-                openDefaultExtension();
-            }
-
-            if (!loadOnly)
-            {
-                QMap<QWidget*, QString> extensions = mainApp->getExtensionWorkspace()->getActiveExtensions();
-                QMapIterator<QWidget*, QString> iterator(extensions);
-
-                while (iterator.hasNext())
-                {
-                    iterator.next();
-                    ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(iterator.value());
-                    mediator->viewNewStudiesFromSamePatient(iterator.key(), patient->getStudies().first()->getInstanceUID());
-                }
-            }
-
-            usedMainApp = mainApp;
-        }
-        else
-        {
-            if (!loadOnly)
-            {
-                usedMainApp = m_mainApp->setPatientInNewWindow(patient);
-                DEBUG_LOG("Tenim pacient i no ens deixen substituir-lo. L'obrim en una finestra nova.");
-            }
-            else
-            {
-                // \TODO Tenint en compte els problemes explicats al tiquet #1087, eliminar els objectes aquí pot fer petar l'aplicació en cas de demanar estudis
-                //       sense passar explícitament per la QueryScreen. Donat que en aquest punt encara no s'ha carregat cap volum a memòria,
-                //       per tant no hi haurà fugues importants de memòria si no ho eliminem, obtem per no esborrar cap objecte i així minimitzem el problema.
-            }
-        }
+        openDefaultExtension();
     }
 
-    return usedMainApp;
+    if (!loadOnly)
+    {
+        QMap<QWidget*, QString> extensions = m_mainApp->getExtensionWorkspace()->getActiveExtensions();
+        QMapIterator<QWidget*, QString> iterator(extensions);
+
+        while (iterator.hasNext())
+        {
+            iterator.next();
+            ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(iterator.value());
+            mediator->viewNewStudiesFromSamePatient(iterator.key(), patient->getStudies().first()->getInstanceUID());
+        }
+    }
 }
 
 void ExtensionHandler::openDefaultExtension()
