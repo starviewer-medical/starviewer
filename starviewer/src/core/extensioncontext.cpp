@@ -80,7 +80,6 @@ Volume *ExtensionContext::getDefaultVolume() const
         }
         if (!ok)
         {
-            DEBUG_LOG("No hi ha cap serie de l'actual pacient que sigui visualitzable. Retornem volum NUL.");
             ERROR_LOG("No hi ha cap serie de l'actual pacient que sigui visualitzable. Retornem volum NUL.");
         }
     }
@@ -88,46 +87,34 @@ Volume *ExtensionContext::getDefaultVolume() const
     return defaultVolume;
 }
 
-bool ExtensionContext::hasImages() const
+DicomEntityFlags ExtensionContext::getDicomEntities(QList<Study*> studies) const
 {
-    if (!m_patient)
+    if (studies.isEmpty())
     {
-        return false;
+        if (m_patient)
+        {
+            studies = m_patient->getStudies();
+        }
     }
 
-    foreach (Study *study, m_patient->getStudies())
+    DicomEntityFlags entities;
+
+    foreach (Study *study, studies)
     {
         foreach (Series *series, study->getSeries())
         {
             if (series->hasImages())
             {
-                return true;
+                entities.setFlag(DicomEntity::Image);
             }
-        }
-    }
-
-    return false;
-}
-
-bool ExtensionContext::hasEncapsulatedDocuments() const
-{
-    if (!m_patient)
-    {
-        return false;
-    }
-
-    foreach (Study *study, m_patient->getStudies())
-    {
-        foreach (Series *series, study->getSeries())
-        {
             if (series->hasEncapsulatedDocuments())
             {
-                return true;
+                entities.setFlag(DicomEntity::EncapsulatedDocument);
             }
         }
     }
 
-    return false;
+    return entities;
 }
 
 }

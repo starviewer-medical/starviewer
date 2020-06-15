@@ -12,43 +12,26 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "pdfextensionmediator.h"
+#ifndef DICOMENTITYFLAGS_H
+#define DICOMENTITYFLAGS_H
 
-#include "extensioncontext.h"
+#include <QFlags>
 
 namespace udg {
 
-PdfExtensionMediator::PdfExtensionMediator(QObject *parent)
-    : ExtensionMediator(parent)
+/**
+ * @brief The DicomEntityFlag struct acts as an envelop an enum to represent flags corresponding to different types of DICOM entities.
+ *
+ * This flags are used by other classes to declare the supported DICOM entities.
+ */
+struct DicomEntity
 {
+    enum Flag { Image = 0x1, EncapsulatedDocument = 0x2 };
+};
+
+Q_DECLARE_FLAGS(DicomEntityFlags, DicomEntity::Flag)
+Q_DECLARE_OPERATORS_FOR_FLAGS(DicomEntityFlags)
+
 }
 
-PdfExtensionMediator::~PdfExtensionMediator()
-{
-}
-
-bool PdfExtensionMediator::initializeExtension(QWidget *extension, const ExtensionContext &extensionContext)
-{
-    QPdfExtension *pdfExtension;
-
-    if (!(pdfExtension = qobject_cast<QPdfExtension*>(extension)))
-    {
-        return false;
-    }
-
-    pdfExtension->setPatient(extensionContext.getPatient());
-
-    return true;
-}
-
-DisplayableID PdfExtensionMediator::getExtensionID() const
-{
-    return DisplayableID("PdfExtension", tr("PDF"));
-}
-
-DicomEntityFlags PdfExtensionMediator::getSupportedDicomEntities() const
-{
-    return DicomEntity::EncapsulatedDocument;
-}
-
-} // namespace udg
+#endif // DICOMENTITYFLAGS_H

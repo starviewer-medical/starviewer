@@ -13,7 +13,6 @@
  *************************************************************************************/
 
 #include "extensionmediator.h"
-#include "logging.h"
 
 namespace udg {
 
@@ -30,6 +29,11 @@ void ExtensionMediator::viewNewStudiesFromSamePatient(QWidget *extension, const 
 {
     Q_UNUSED(extension)
     Q_UNUSED(newStudyUID)
+}
+
+DicomEntityFlags ExtensionMediator::getSupportedDicomEntities() const
+{
+    return DicomEntity::Image;
 }
 
 };

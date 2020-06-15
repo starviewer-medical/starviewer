@@ -398,6 +398,7 @@ void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
             if (merge)
             {
                 mergeIntoCurrentPatient(patient, loadOnly);
+                delete patient; // the studies are now under the current patient, we can delete this one
             }
             else
             {
@@ -447,50 +448,84 @@ void ExtensionHandler::mergeIntoCurrentPatient(Patient *patient, bool loadOnly)
     m_mainApp->connectPatientVolumesToNotifier(patient);
     *m_mainApp->getCurrentPatient() += *patient;
 
-    if (m_mainApp->getExtensionWorkspace()->count() == 0)
-    {
-        openDefaultExtension();
-    }
+    openDefaultExtensions(patient->getStudies());
 
     if (!loadOnly)
     {
+        // Notify open extensions about the new studies
+        // TODO This should be merged with the request for newly instanced extensions to improve performance, but it would be too much rework for now, so it's
+        //      left as future work
+        QList<Study*> newStudies = patient->getStudies();
+        DicomEntityFlags newDicomEntities = m_extensionContext.getDicomEntities(newStudies);
         QMap<QWidget*, QString> extensions = m_mainApp->getExtensionWorkspace()->getActiveExtensions();
         QMapIterator<QWidget*, QString> iterator(extensions);
 
         while (iterator.hasNext())
         {
             iterator.next();
-            ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(iterator.value());
-            mediator->viewNewStudiesFromSamePatient(iterator.key(), patient->getStudies().first()->getInstanceUID());
+            std::unique_ptr<ExtensionMediator> mediator(ExtensionMediatorFactory::instance()->create(iterator.value()));
+            DicomEntityFlags supportedDicomEntities = mediator->getSupportedDicomEntities();
+            DicomEntityFlags matchedEntities = newDicomEntities & supportedDicomEntities;
+
+            if (matchedEntities)  // if any entity matches
+            {
+                // Find the first of the new studies to assign to the extension
+                bool found = false;
+
+                for (int i = 0; !found && i < newStudies.size(); i++)
+                {
+                    Study *study = newStudies[i];
+                    DicomEntityFlags studyEntities = m_extensionContext.getDicomEntities({study});
+
+                    if (matchedEntities & studyEntities)    // if this study is supported by this extension
+                    {
+                        mediator->viewNewStudiesFromSamePatient(iterator.key(), study->getInstanceUID());
+                        found = true;
+                    }
+                }
+            }
         }
     }
 }
 
-void ExtensionHandler::openDefaultExtension()
+void ExtensionHandler::openDefaultExtensions(QList<Study*> newStudies)
 {
-    if (m_mainApp->getCurrentPatient())
+    if (newStudies.isEmpty() && (!m_mainApp->getCurrentPatient() || m_mainApp->getCurrentPatient()->getNumberOfStudies() == 0))
     {
-        // TODO If there are no images nor documents it would be better to inform the user than to open an extension, but a message box doesn't let the tests
-        //      continue, so for the moment we keep the old behaviour for this scenario.
-        if (m_extensionContext.hasImages() || !m_extensionContext.hasEncapsulatedDocuments())
-        {
-            Settings settings;
-            QString defaultExtension = settings.getValue(InterfaceSettings::DefaultExtension).toString();
-            if (!request(defaultExtension))
-            {
-                WARN_LOG("Ha fallat la petició per la default extension anomenada: " + defaultExtension + ". Engeguem extensió 2D per defecte(hardcoded)");
-                request("Q2DViewerExtension");
-            }
-        }
+        DEBUG_LOG("No studies or patient to visualize");
+        return;
+    }
 
-        if (m_extensionContext.hasEncapsulatedDocuments())
+    DicomEntityFlags dicomEntities = newStudies.isEmpty() ? m_extensionContext.getDicomEntities() : m_extensionContext.getDicomEntities(newStudies);
+    Settings settings;
+
+    if (dicomEntities.testFlag(DicomEntity::EncapsulatedDocument))
+    {
+        QString defaultExtension = settings.getValue(InterfaceSettings::DefaultEncapsulatedDocumentExtension).toString();
+
+        if (!request(defaultExtension))
         {
+            WARN_LOG(QString("Request for default encapsulated document extension '%1' failed. Requesting hardcoded default.").arg(defaultExtension));
             request("PdfExtension");
         }
     }
-    else
+
+    // Images are done the last so that their extension gets the focus if requested, so that they have priority over other entities
+    if (dicomEntities.testFlag(DicomEntity::Image))
     {
-        DEBUG_LOG("No hi ha dades de pacient!");
+        QString defaultExtension = settings.getValue(InterfaceSettings::DefaultImageExtension).toString();
+
+        if (!request(defaultExtension))
+        {
+            WARN_LOG(QString("Request for default image extension '%1' failed. Requesting hardcoded default.").arg(defaultExtension));
+            request("Q2DViewerExtension");
+        }
+    }
+
+    if (m_mainApp->getExtensionWorkspace()->count() == 0)
+    {
+        WARN_LOG(QString("No extension has been open yet. Requesting 2d viewer extension by default."));
+        request("Q2DViewerExtension");
     }
 }
 

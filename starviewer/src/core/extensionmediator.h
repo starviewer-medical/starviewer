@@ -16,6 +16,8 @@
 #define EXTENSIONMEDIATOR_H
 
 #include <QObject>
+
+#include "dicomentityflags.h"
 #include "displayableid.h"
 #include "identifier.h"
 
@@ -37,9 +39,9 @@ class ExtensionContext;
 class ExtensionMediator : public QObject {
 Q_OBJECT
 public:
-    ExtensionMediator(QObject *parent = 0);
 
-    virtual ~ExtensionMediator();
+    explicit ExtensionMediator(QObject *parent = nullptr);
+    ~ExtensionMediator() override;
 
     /// Mètode que ens serveix per, un cop creada l'extensió, inicialitzar-la amb els paràmetres necessàris a partir del seu contexte.
     /// Per poder tractar l'extensió, el primer que caldrà serà realitzar un cast de QWidget a la classe concreta
@@ -56,6 +58,9 @@ public:
 
     /// Orders the extension to view newly loaded studies from the current patient.
     virtual void viewNewStudiesFromSamePatient(QWidget *extension, const QString &newStudyUID);
+
+    /// Returns the DICOM entites that the corresponding extension supports. This default implementation returns Image.
+    virtual DicomEntityFlags getSupportedDicomEntities() const;
 
 };
 

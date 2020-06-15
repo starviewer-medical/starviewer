@@ -613,7 +613,7 @@ void QApplicationMainWindow::setPatient(Patient *patient)
     this->setWindowTitle(m_patient->getID() + " : " + m_patient->getFullName());
     enableExtensions();
     m_extensionHandler->getContext().setPatient(patient);
-    m_extensionHandler->openDefaultExtension();
+    m_extensionHandler->openDefaultExtensions();
 }
 
 Patient* QApplicationMainWindow::getCurrentPatient()

@@ -26,6 +26,7 @@ namespace udg {
 
 // Fordward Declarations
 class QApplicationMainWindow;
+class Study;
 
 /**
     Gestor de mini-aplicacions i serveis de l'aplicació principal
@@ -42,8 +43,9 @@ public slots:
     void request(int who);
     bool request(const QString &who);
 
-    /// Obrirà l'extensió per defecte. Si no hi ha dades de pacient vàlides, no farà res.
-    void openDefaultExtension();
+    /// Opens the default extensions for the studies in the patient in the current context.
+    /// If the optional \a newStudies is provided, it opens the default extensions for those studies.
+    void openDefaultExtensions(QList<Study*> newStudies = {});
 
     /// Assigna el contexte de l'extensió
     /// @param context contexte
