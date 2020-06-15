@@ -67,9 +67,6 @@ public:
     /// Indica si s'està executant algun PACSJob
     bool isIdle();
 
-    /// Espera a que hagin acabat tots els job
-    bool waitForAllPACSJobsFinished(int msec = INT_MAX);
-
 signals:
     /// Signal que s'emet per indicar que s'ha encuat un nou PACSJob
     void newPACSJobEnqueued(PACSJobPointer pacsJob);

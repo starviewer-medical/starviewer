@@ -26,15 +26,6 @@
 
 namespace udg {
 
-/// Classe utilitza per adormir el Thread al mètode waitForAllPACSJobsFinished, m'entre s'espera que hagin finalitzat totes les operacions.
-class Sleeper : public QThread {
-public:
-    static void msleep(unsigned long msecs)
-    {
-        QThread::msleep(msecs);
-    }
-};
-
 PacsManager::PacsManager()
 {
     Settings settings;
@@ -139,24 +130,6 @@ void PacsManager::requestCancelAllPACSJobs()
     m_retrieveDICOMFilesFromPACSQueue->requestAbort();
     m_queryQueue->dequeue();
     m_queryQueue->requestAbort();
-}
-
-bool PacsManager::waitForAllPACSJobsFinished(int msec)
-{
-    if (!isExecutingPACSJob())
-    {
-        return true;
-    }
-
-    QTime timer;
-    timer.start();
-
-    while (isExecutingPACSJob() && timer.elapsed() < msec)
-    {
-        Sleeper().msleep(50);
-    }
-
-    return !isExecutingPACSJob();
 }
 
 }; // End udg namespace
