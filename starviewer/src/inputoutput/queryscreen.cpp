@@ -96,14 +96,13 @@ QueryScreen::~QueryScreen()
     Settings settings;
     settings.setValue(InputOutputSettings::QueryScreenPACSListIsVisible, m_showPACSNodesPushButton->isChecked());
 
-    if (m_pacsManager->isExecutingPACSJob())
+    if (PacsManagerSingleton::instance()->isExecutingPACSJob())
     {
         // Si hi ha PacsJob executant-se demanem cancel·lar
-        m_pacsManager->requestCancelAllPACSJobs();
+        PacsManagerSingleton::instance()->requestCancelAllPACSJobs();
     }
 
     delete m_risRequestManager;
-    delete m_pacsManager;
 #endif
 
     // Sinó fem un this.close i tenim la finestra queryscreen oberta al tancar l'starviewer, l'starviewer no finalitza
@@ -120,16 +119,13 @@ void QueryScreen::initialize()
 {
     m_qcreateDicomdir = new udg::QCreateDicomdir(this);
 #ifndef STARVIEWER_LITE
-    m_pacsManager = new PacsManager();
     // Posem com a pare el pare de la queryscreen, d'aquesta manera quan es tanqui el pare de la queryscreen
     // el QOperationStateScreen també es tancarà
     m_operationStateScreen = new udg::QOperationStateScreen(this);
-    m_qInputOutputLocalDatabaseWidget->setPacsManager(m_pacsManager);
-    m_qInputOutputPacsWidget->setPacsManager(m_pacsManager);
-    m_operationStateScreen->setPacsManager(m_pacsManager);
+
     if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool())
     {
-        m_risRequestManager = new RISRequestManager(m_pacsManager);
+        m_risRequestManager = new RISRequestManager();
     }
     else
     {
@@ -160,7 +156,7 @@ void QueryScreen::createConnections()
 #ifndef STARVIEWER_LITE
     connect(m_operationListPushButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
     connect(m_showPACSNodesPushButton, SIGNAL(toggled(bool)), SLOT(updatePACSNodesVisibility()));
-    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJobPointer)), SLOT(newPACSJobEnqueued(PACSJobPointer)));
+    connect(PacsManagerSingleton::instance(), &PacsManager::newPACSJobEnqueued, this, &QueryScreen::newPACSJobEnqueued);
     if (m_risRequestManager != NULL)
     {
         // Potser que no tinguem activat escoltar peticions del RIS

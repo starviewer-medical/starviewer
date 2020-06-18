@@ -61,19 +61,14 @@ QOperationStateScreen::~QOperationStateScreen()
     settings.setValue(InputOutputSettings::OperationStateListSortOrder, m_treeRetrieveStudy->header()->sortIndicatorOrder());
 }
 
-void QOperationStateScreen::setPacsManager(PacsManager *pacsManager)
-{
-    m_pacsManager = pacsManager;
-
-    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJobPointer)), SLOT(newPACSJobEnqueued(PACSJobPointer)));
-    connect(m_pacsManager, SIGNAL(requestedCancelPACSJob(PACSJobPointer)), SLOT(requestedCancelPACSJob(PACSJobPointer)));
-}
-
 void QOperationStateScreen::createConnections()
 {
     connect(m_buttonClear, SIGNAL(clicked()), this, SLOT(clearList()));
     connect(m_cancellAllRequestsButton, SIGNAL(clicked()), this, SLOT(cancelAllRequests()));
     connect(m_cancelSelectedRequestsButton, SIGNAL(clicked()), this, SLOT(cancelSelectedRequests()));
+
+    connect(PacsManagerSingleton::instance(), &PacsManager::newPACSJobEnqueued, this, &QOperationStateScreen::newPACSJobEnqueued);
+    connect(PacsManagerSingleton::instance(), &PacsManager::requestedCancelPACSJob, this, &QOperationStateScreen::requestedCancelPACSJob);
 }
 
 void QOperationStateScreen::newPACSJobEnqueued(PACSJobPointer pacsJob)
@@ -183,7 +178,7 @@ void QOperationStateScreen::cancelAllRequests()
 {
     foreach (PACSJobPointer pacsJob, m_PACSJobPendingToFinish.values())
     {
-        m_pacsManager->requestCancelPACSJob(pacsJob);
+        PacsManagerSingleton::instance()->requestCancelPACSJob(pacsJob);
     }
 }
 
@@ -195,7 +190,7 @@ void QOperationStateScreen::cancelSelectedRequests()
         {
             if (m_PACSJobPendingToFinish.contains(item->text(QOperationStateScreen::PACSJobID).toInt()))
             {
-                m_pacsManager->requestCancelPACSJob(m_PACSJobPendingToFinish[item->text(QOperationStateScreen::PACSJobID).toInt()]);
+                PacsManagerSingleton::instance()->requestCancelPACSJob(m_PACSJobPendingToFinish[item->text(QOperationStateScreen::PACSJobID).toInt()]);
             }
         }
     }

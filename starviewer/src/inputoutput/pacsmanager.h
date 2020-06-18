@@ -16,6 +16,7 @@
 #define UDGPACSMANAGER_H
 
 #include "pacsjob.h"
+#include "singleton.h"
 
 namespace ThreadWeaver {
 class Queue;
@@ -74,6 +75,8 @@ private:
     ThreadWeaver::Queue *m_sendDICOMFilesToPACSQueue;
     ThreadWeaver::Queue *m_retrieveDICOMFilesFromPACSQueue;
 };
+
+typedef Singleton<PacsManager> PacsManagerSingleton;
 
 }
 

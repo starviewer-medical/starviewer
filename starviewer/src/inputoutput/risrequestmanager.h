@@ -30,7 +30,6 @@ class QThread;
 namespace udg {
 
 class DicomMask;
-class PacsManager;
 class Patient;
 class Study;
 class QPopUpRISRequestsScreen;
@@ -43,7 +42,7 @@ class RetrieveDICOMFilesFromPACSJob;
 class RISRequestManager : public QObject {
 Q_OBJECT
 public:
-    RISRequestManager(PacsManager *pacsManager);
+    RISRequestManager();
     /// Destructor de la classe
     ~RISRequestManager();
 
@@ -148,8 +147,6 @@ private:
     ListenRISRequests *m_listenRISRequests;
 
     QPopUpRISRequestsScreen *m_qpopUpRISRequestsScreen;
-
-    PacsManager *m_pacsManager;
 
     /// QThread que s'encarrega d'executar la classe escolta si arriben peticions del RIS
     QThread *m_listenRISRequestsQThread;
