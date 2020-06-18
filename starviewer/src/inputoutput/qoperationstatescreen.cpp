@@ -20,6 +20,7 @@
 #include "inputoutputsettings.h"
 #include "pacsmanager.h"
 #include "pacsjob.h"
+#include "patient.h"
 #include "senddicomfilestopacsjob.h"
 #include "retrievedicomfilesfrompacsjob.h"
 #include "study.h"

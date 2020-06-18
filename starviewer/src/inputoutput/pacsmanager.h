@@ -12,21 +12,16 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-
 #ifndef UDGPACSMANAGER_H
 #define UDGPACSMANAGER_H
 
-#include <QList>
-#include <QHash>
-#include <ThreadWeaver/Queue>
-
-#include "patient.h"
-#include "pacsdevice.h"
 #include "pacsjob.h"
 
-namespace udg {
+namespace ThreadWeaver {
+class Queue;
+}
 
-class DicomMask;
+namespace udg {
 
 /**
     Classe manager que ens permet comunicar-nos amb el PACS
@@ -80,6 +75,6 @@ private:
     ThreadWeaver::Queue *m_retrieveDICOMFilesFromPACSQueue;
 };
 
-};  //  end  namespace udg
+}
 
 #endif

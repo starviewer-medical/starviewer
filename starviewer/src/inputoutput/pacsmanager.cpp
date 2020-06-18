@@ -14,15 +14,10 @@
 
 #include "pacsmanager.h"
 
-#include <QThread>
-#include <QTime>
-
-#include "dicommask.h"
-#include "pacsdevice.h"
-#include "logging.h"
-#include "querypacsjob.h"
-#include "pacsjob.h"
 #include "inputoutputsettings.h"
+#include "logging.h"
+
+#include <ThreadWeaver/Queue>
 
 namespace udg {
 
