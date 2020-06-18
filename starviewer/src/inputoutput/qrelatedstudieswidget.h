@@ -117,6 +117,9 @@ private slots:
     void studyRetrieveFailed(QString studyInstanceUID);
     void studyRetrieveCancelled(QString studyInstanceUID);
 
+    /// Adds the study to the patient.
+    void addLoadedStudy(Study *study);
+
     /// Slot executed when a radio button is clicked.
     /// It will proceed to load the selected study an notify the working studies has changed.
     void currentStudyRadioButtonClicked(const QString &studyInstanceUID);

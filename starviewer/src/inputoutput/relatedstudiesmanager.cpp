@@ -24,6 +24,7 @@
 #include "logging.h"
 #include "querypacsjob.h"
 #include "inputoutputsettings.h"
+#include "volumehelper.h"
 
 namespace udg {
 
@@ -332,10 +333,25 @@ DicomMask RelatedStudiesManager::getBasicDicomMask()
 
 RelatedStudiesManager::LoadStatus RelatedStudiesManager::loadStudy(Study *study)
 {
-    if (LocalDatabaseManager().studyExists(study->getInstanceUID()))
+    LocalDatabaseManager localDatabaseManager;
+
+    if (localDatabaseManager.studyExists(study->getInstanceUID()))
     {
-        SingletonPointer<QueryScreen>::instance()->loadStudyFromDatabase(study->getInstanceUID());
-        return Loaded;
+        DicomMask mask;
+        mask.setStudyInstanceUID(study->getInstanceUID());
+        Patient *patient = localDatabaseManager.retrieve(mask);
+
+        if (patient && patient->getNumberOfStudies() > 0)
+        {
+            VolumeHelper::generatePatientVolumes(patient);
+            emit studyLoaded(patient->getStudies().first());
+            return Loaded;
+        }
+        else
+        {
+            ERROR_LOG(QString("Error loading study %1 from database despite it existed a moment before.").arg(study->getInstanceUID()));
+            return Failed;
+        }
     }
     else if (study->getDICOMSource().getRetrievePACS().count() > 0)
     {

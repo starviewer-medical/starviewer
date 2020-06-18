@@ -256,6 +256,7 @@ void QRelatedStudiesWidget::createConnections()
     connect(m_relatedStudiesManager, &RelatedStudiesManager::studyRetrieveFinished, this, &QRelatedStudiesWidget::studyRetrieveFinished);
     connect(m_relatedStudiesManager, &RelatedStudiesManager::studyRetrieveFailed, this, &QRelatedStudiesWidget::studyRetrieveFailed);
     connect(m_relatedStudiesManager, &RelatedStudiesManager::studyRetrieveCancelled, this, &QRelatedStudiesWidget::studyRetrieveCancelled);
+    connect(m_relatedStudiesManager, &RelatedStudiesManager::studyLoaded, this, &QRelatedStudiesWidget::addLoadedStudy);
 }
 
 void QRelatedStudiesWidget::initializeTree()
@@ -559,6 +560,11 @@ void QRelatedStudiesWidget::studyRetrieveCancelled(QString studyInstanceUID)
             this->decreaseNumberOfDownladingStudies();
         }
     }
+}
+
+void QRelatedStudiesWidget::addLoadedStudy(Study *study)
+{
+    m_patient->addStudy(study);
 }
 
 void QRelatedStudiesWidget::currentStudyRadioButtonClicked(const QString &studyInstanceUID)

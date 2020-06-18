@@ -100,6 +100,9 @@ signals:
     /// Emitted when any study retrieve is cancelled.
     void studyRetrieveCancelled(QString studyInstanceUid);
 
+    /// Emitted when loadStudy finishes to load a study successfully.
+    void studyLoaded(Study *study);
+
 private:
     /// Creates the permanent connections.
     void createConnections();

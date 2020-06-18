@@ -17,6 +17,7 @@
 
 namespace udg {
 
+class Patient;
 class Volume;
 
 /**
@@ -24,8 +25,7 @@ class Volume;
  */
 class VolumeHelper {
 public:
-    VolumeHelper();
-    ~VolumeHelper();
+    VolumeHelper() = delete;
 
     /// Returns true if the volume is a primary CT acquisition.
     static bool isPrimaryCT(Volume *volume);
@@ -35,6 +35,10 @@ public:
 
     /// Returns true if the volume is a primary NM acquisition
     static bool isPrimaryNM(Volume *volume);
+
+    /// Creates all the volumes for the given patient.
+    static void generatePatientVolumes(Patient *patient);
+
 };
 
 } // End namespace udg
