@@ -60,9 +60,6 @@ public:
     /// que s'estan executant no s'aborten immeditament, el mètode és assíncron.
     void requestCancelAllPACSJobs();
 
-    /// Indica si s'està executant algun PACSJob
-    bool isIdle();
-
 signals:
     /// Signal que s'emet per indicar que s'ha encuat un nou PACSJob
     void newPACSJobEnqueued(PACSJobPointer pacsJob);
