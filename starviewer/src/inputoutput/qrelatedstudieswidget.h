@@ -28,7 +28,6 @@ namespace udg {
 
 class Study;
 class RelatedStudiesManager;
-class QueryScreen;
 class Patient;
 class QTreeWidgetWithSeparatorLine;
 
@@ -151,8 +150,6 @@ private:
     QWidget *m_lookingForStudiesWidget;
     /// Objecte encarregat de cercar estudis relacionats
     RelatedStudiesManager *m_relatedStudiesManager;
-    /// Objecte utilitzat per invocar la descàrrega d'estudis.
-    QueryScreen *m_queryScreen;
     /// Ens permet saber els estudis que s'estan descarregant.
     int m_numberOfDownloadingStudies;
     /// Pacient associat a la última cerca feta.

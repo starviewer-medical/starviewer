@@ -18,10 +18,11 @@
 #include "study.h"
 #include "patient.h"
 #include "relatedstudiesmanager.h"
-#include "queryscreen.h"
 #include "singleton.h"
 #include "qtreewidgetwithseparatorline.h"
 
+#include <QGuiApplication>
+#include <QHeaderView>
 #include <QVBoxLayout>
 #include <QMovie>
 #include <QScreen>
@@ -42,7 +43,6 @@ QRelatedStudiesWidget::QRelatedStudiesWidget(RelatedStudiesManager *relatedStudi
 
     m_lookingForStudiesWidget = new QWidget(this);
     m_relatedStudiesTree = new QTreeWidgetWithSeparatorLine(this);
-    m_queryScreen = SingletonPointer<QueryScreen>::instance();
     m_numberOfDownloadingStudies = 0;
 
     initializeLookingForStudiesWidget();
@@ -252,10 +252,10 @@ void QRelatedStudiesWidget::initializeSearch()
 void QRelatedStudiesWidget::createConnections()
 {
     connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(queryStudiesFinished(QList<Study*>)));
-    connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStarted(QString)));
-    connect(m_queryScreen, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinished(QString)));
-    connect(m_queryScreen, SIGNAL(studyRetrieveFailed(QString)), SLOT(studyRetrieveFailed(QString)));
-    connect(m_queryScreen, SIGNAL(studyRetrieveCancelled(QString)), SLOT(studyRetrieveCancelled(QString)));
+    connect(m_relatedStudiesManager, &RelatedStudiesManager::studyRetrieveStarted, this, &QRelatedStudiesWidget::studyRetrieveStarted);
+    connect(m_relatedStudiesManager, &RelatedStudiesManager::studyRetrieveFinished, this, &QRelatedStudiesWidget::studyRetrieveFinished);
+    connect(m_relatedStudiesManager, &RelatedStudiesManager::studyRetrieveFailed, this, &QRelatedStudiesWidget::studyRetrieveFailed);
+    connect(m_relatedStudiesManager, &RelatedStudiesManager::studyRetrieveCancelled, this, &QRelatedStudiesWidget::studyRetrieveCancelled);
 }
 
 void QRelatedStudiesWidget::initializeTree()
