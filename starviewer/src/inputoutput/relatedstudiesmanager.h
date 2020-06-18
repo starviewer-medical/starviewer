@@ -91,7 +91,19 @@ signals:
     /// Signal que s'emet per indicar que s'ha produït un error durant la descarrega d'un estudi (pot ser previ o no)
     void errorDownloadingStudy(QString studyUID);
 
+    /// Emitted when any study retrieve starts.
+    void studyRetrieveStarted(QString studyInstanceUid);
+    /// Emitted when any study retrieve finishes successfully.
+    void studyRetrieveFinished(QString studyInstanceUid);
+    /// Emitted when any study retrieve finishes with error.
+    void studyRetrieveFailed(QString studyInstanceUid);
+    /// Emitted when any study retrieve is cancelled.
+    void studyRetrieveCancelled(QString studyInstanceUid);
+
 private:
+    /// Creates the permanent connections.
+    void createConnections();
+
     /// Realitza una consulta dels estudis del pacient "patient" als PACS marcats per defecte.
     /// Si s'especifica una data "until" només cercarà els estudis fins la data especificada (aquesta inclosa).
     /// Si no es passa cap data per paràmetre cercarà tots els estudis, independentment de la data.

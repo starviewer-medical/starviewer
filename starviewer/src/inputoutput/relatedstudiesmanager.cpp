@@ -34,6 +34,8 @@ RelatedStudiesManager::RelatedStudiesManager()
 
     Settings settings;
     m_searchRelatedStudiesByName = settings.getValue(InputOutputSettings::SearchRelatedStudiesByName).toBool();
+
+    createConnections();
 }
 
 RelatedStudiesManager::~RelatedStudiesManager()
@@ -57,6 +59,27 @@ void RelatedStudiesManager::queryMergedPreviousStudies(Study *study)
     m_studyInstanceUIDOfStudyToFindRelated = study->getInstanceUID();
 
     this->makeAsynchronousStudiesQuery(study->getParentPatient(), study->getDate());
+}
+
+void RelatedStudiesManager::createConnections()
+{
+    // Since a related study could be requested from anywhere, we just adapt all signals ignoring the requester
+    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveStarted, [this](void*, PACSJobPointer pacsJob)
+    {
+        emit studyRetrieveStarted(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    });
+    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveFinished, [this](void*, PACSJobPointer pacsJob)
+    {
+        emit studyRetrieveFinished(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    });
+    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveFailed, [this](void*, PACSJobPointer pacsJob)
+    {
+        emit studyRetrieveFailed(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    });
+    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveCancelled, [this](void*, PACSJobPointer pacsJob)
+    {
+        emit studyRetrieveCancelled(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    });
 }
 
 void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate untilDate)
