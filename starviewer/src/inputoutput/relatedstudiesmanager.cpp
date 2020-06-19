@@ -247,6 +247,15 @@ void RelatedStudiesManager::queryPACSJobFinished(PACSJobPointer pacsJob)
     }
 }
 
+void RelatedStudiesManager::onStudyRetrieveFinished(void *requester, PACSJobPointer pacsJob)
+{
+    if (requester == this)
+    {
+        // Now that the study is downloaded and saved in the database this should go through the first branch
+        loadStudy(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles());
+    }
+}
+
 void RelatedStudiesManager::mergeFoundStudiesInQuery(PACSJobPointer queryPACSJob)
 {
     if (queryPACSJob.objectCast<QueryPacsJob>()->getQueryLevel() != QueryPacsJob::study)
@@ -365,42 +374,12 @@ RelatedStudiesManager::LoadStatus RelatedStudiesManager::loadStudy(Study *study)
     }
 }
 
-void RelatedStudiesManager::retrieve(Study *study, const PacsDevice &pacsDevice)
-{
-    retrieveAndApplyAction(study, pacsDevice, None);
-}
-
 void RelatedStudiesManager::retrieveAndLoad(Study *study, const PacsDevice &pacsDevice)
 {
-    retrieveAndApplyAction(study, pacsDevice, Load);
-}
-
-void RelatedStudiesManager::retrieveAndView(Study *study, const PacsDevice &pacsDevice)
-{
-    retrieveAndApplyAction(study, pacsDevice, View);
-}
-
-void RelatedStudiesManager::retrieveAndApplyAction(Study *study, const PacsDevice &pacsDevice, ActionsAfterRetrieve action)
-{
-    QInputOutputPacsWidget::ActionsAfterRetrieve queryScreenAction = QInputOutputPacsWidget::None;
-    switch (action)
-    {
-        case None:
-            queryScreenAction = QInputOutputPacsWidget::None;
-            break;
-
-        case View:
-            queryScreenAction = QInputOutputPacsWidget::View;
-            break;
-
-        case Load:
-            queryScreenAction = QInputOutputPacsWidget::Load;
-            break;
-    }
-    
-    QueryScreen *queryScreen = SingletonPointer<QueryScreen>::instance();
-    queryScreen->retrieveStudy(queryScreenAction, pacsDevice, study);
-    connect(queryScreen, SIGNAL(studyRetrieveFailed(QString)), SIGNAL(errorDownloadingStudy(QString)));
+    // We use a private slot so that we can specify Qt::UniqueConnection to avoid duplicate connections
+    // It will be automatically disconnected when this RelatedStudiesManager is destroyed
+    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveFinished, this, &RelatedStudiesManager::onStudyRetrieveFinished, Qt::UniqueConnection);
+    PacsManagerSingleton::instance()->retrieveStudy(this, pacsDevice, RetrieveDICOMFilesFromPACSJob::Medium, study);
 }
 
 void RelatedStudiesManager::deleteQueryResults()
