@@ -85,22 +85,19 @@ signals:
     /// Signal que s'emet per indicar que s'ha produït un error durant la descarrega d'un estudi (pot ser previ o no)
     void errorDownloadingStudy(QString studyUID);
 
-    /// Emitted when any study retrieve starts.
+    /// Emitted when a requested study retrieve starts.
     void studyRetrieveStarted(QString studyInstanceUid);
-    /// Emitted when any study retrieve finishes successfully.
+    /// Emitted when a requested study retrieve finishes successfully.
     void studyRetrieveFinished(QString studyInstanceUid);
-    /// Emitted when any study retrieve finishes with error.
+    /// Emitted when a requested study retrieve finishes with error.
     void studyRetrieveFailed(QString studyInstanceUid);
-    /// Emitted when any study retrieve is cancelled.
+    /// Emitted when a requested study retrieve is cancelled.
     void studyRetrieveCancelled(QString studyInstanceUid);
 
     /// Emitted when loadStudy finishes to load a study successfully.
     void studyLoaded(Study *study);
 
 private:
-    /// Creates the permanent connections.
-    void createConnections();
-
     /// Realitza una consulta dels estudis del pacient "patient" als PACS marcats per defecte.
     /// Si s'especifica una data "until" només cercarà els estudis fins la data especificada (aquesta inclosa).
     /// Si no es passa cap data per paràmetre cercarà tots els estudis, independentment de la data.
@@ -151,8 +148,14 @@ private slots:
     /// Slot que s'activa quan un job de consulta al PACS és cancel·lat
     void queryPACSJobCancelled(PACSJobPointer pacsJob);
 
-    /// Called when PacsManager successfully retrieves the requested study.
+    /// Called when PacsManager successfully starts to retrieve a requested study.
+    void onStudyRetrieveStarted(void *requester, PACSJobPointer pacsJob);
+    /// Called when PacsManager successfully retrieves a requested study.
     void onStudyRetrieveFinished(void *requester, PACSJobPointer pacsJob);
+    /// Called when PacsManager fails to retrieve a requested study.
+    void onStudyRetrieveFailed(void *requester, PACSJobPointer pacsJob);
+    /// Called when PacsManager cancels the request of a study.
+    void onStudyRetrieveCancelled(void *requester, PACSJobPointer pacsJob);
 
 private:
     PacsManager *m_pacsManager;
