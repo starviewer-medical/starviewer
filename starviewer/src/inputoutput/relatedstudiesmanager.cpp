@@ -14,16 +14,15 @@
 
 #include "relatedstudiesmanager.h"
 
-#include "study.h"
 #include "dicommask.h"
-#include "patient.h"
-#include "pacsmanager.h"
-#include "queryscreen.h"
-#include "singleton.h"
-#include "pacsdevicemanager.h"
-#include "logging.h"
-#include "querypacsjob.h"
 #include "inputoutputsettings.h"
+#include "localdatabasemanager.h"
+#include "logging.h"
+#include "pacsdevicemanager.h"
+#include "pacsmanager.h"
+#include "patient.h"
+#include "querypacsjob.h"
+#include "study.h"
 #include "volumehelper.h"
 
 namespace udg {
