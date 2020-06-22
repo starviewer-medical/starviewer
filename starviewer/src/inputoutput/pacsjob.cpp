@@ -22,7 +22,7 @@ int PACSJobPointerMetaTypeId = qRegisterMetaType<PACSJobPointer>("PACSJobPointer
 
 }
 
-int PACSJob::m_jobIDCounter = 0;
+QAtomicInt PACSJob::m_jobIDCounter(0);
 
 PACSJob::PACSJob(PacsDevice pacsDevice)
 {

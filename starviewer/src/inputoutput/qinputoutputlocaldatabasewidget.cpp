@@ -100,6 +100,8 @@ void QInputOutputLocalDatabaseWidget::createConnections()
     /// Si movem el QSplitter capturem el signal per guardar la seva posició
     connect(m_StudyTreeSeriesListQSplitter, SIGNAL(splitterMoved (int, int)), SLOT(qSplitterPositionChanged()));
     connect(m_qwidgetSelectPacsToStoreDicomImage, SIGNAL(selectedPacsToStore()), SLOT(sendSelectedStudiesToSelectedPacs()));
+
+    connect(PacsManagerSingleton::instance(), &PacsManager::newPACSJobEnqueued, this, &QInputOutputLocalDatabaseWidget::newPACSJobEnqueued);
 }
 
 void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
@@ -137,12 +139,6 @@ void QInputOutputLocalDatabaseWidget::clear()
 {
     m_studyTreeWidget->clear();
     m_seriesThumbnailPreviewWidget->clear();
-}
-
-void QInputOutputLocalDatabaseWidget::setPacsManager(PacsManager *pacsManager)
-{
-    m_pacsManager = pacsManager;
-    connect(pacsManager, SIGNAL(newPACSJobEnqueued(PACSJobPointer)), SLOT(newPACSJobEnqueued(PACSJobPointer)));
 }
 
 void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
@@ -555,7 +551,7 @@ void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACS(PacsDevice pacsDevice
 {
     PACSJobPointer sendDICOMFilesToPACSJob(new SendDICOMFilesToPACSJob(pacsDevice, images));
     connect(sendDICOMFilesToPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(sendDICOMFilesToPACSJobFinished(PACSJobPointer)));
-    m_pacsManager->enqueuePACSJob(sendDICOMFilesToPACSJob);
+    PacsManagerSingleton::instance()->enqueuePACSJob(sendDICOMFilesToPACSJob);
 }
 
 void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJobPointer pacsJob)

@@ -109,11 +109,6 @@ void QInputOutputPacsWidget::createContextMenuQStudyTreeWidget()
     m_studyTreeWidget->setContextMenu(& m_contextMenuQStudyTreeWidget);
 }
 
-void QInputOutputPacsWidget::setPacsManager(PacsManager *pacsManager)
-{
-    m_pacsManager = pacsManager;
-}
-
 void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> pacsToQueryList)
 {
     if (pacsToQueryList.count() == 0)
@@ -140,7 +135,7 @@ void QInputOutputPacsWidget::enqueueQueryPACSJobToPACSManagerAndConnectSignals(P
     connect(queryPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(queryPACSJobFinished(PACSJobPointer)));
     connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(queryPACSJobCancelled(PACSJobPointer)));
 
-    m_pacsManager->enqueuePACSJob(queryPACSJob);
+    PacsManagerSingleton::instance()->enqueuePACSJob(queryPACSJob);
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
     setQueryInProgress(true);
 }
@@ -149,7 +144,7 @@ void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
 {
     foreach (PACSJobPointer queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
     {
-        m_pacsManager->requestCancelPACSJob(queryPACSJob);
+        PacsManagerSingleton::instance()->requestCancelPACSJob(queryPACSJob);
         m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
     }
 
@@ -395,7 +390,7 @@ void QInputOutputPacsWidget::retrieve(const PacsDevice &pacsDevice, ActionsAfter
     connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobStarted(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobStarted(PACSJobPointer)));
     connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer)));
     connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer)));
-    m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
+    PacsManagerSingleton::instance()->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
 
     m_actionsWhenRetrieveJobFinished.insert(retrieveDICOMFilesFromPACSJob->getPACSJobID(), actionAfterRetrieve);
 }

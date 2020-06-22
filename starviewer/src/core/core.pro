@@ -32,6 +32,7 @@ TRANSLATIONS += core_ca_ES.ts \
     core_en_GB.ts
 HEADERS += extensionfactory.h \
     anyinputsynccriterion.h \
+    dicomentityflags.h \
     genericfactory.h \
     maininputsynccriterion.h \
     qdiagnosistestsresultsitem.h \

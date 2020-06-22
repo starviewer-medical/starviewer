@@ -22,17 +22,21 @@
 
 namespace udg {
 
+/**
+ * @brief The PdfExtensionMediator class is the mediator for the PDF extension.
+ */
 class PdfExtensionMediator : public ExtensionMediator {
 
     Q_OBJECT
 
 public:
 
-    explicit PdfExtensionMediator(QObject *parent = 0);
-    virtual ~PdfExtensionMediator();
+    explicit PdfExtensionMediator(QObject *parent = nullptr);
+    ~PdfExtensionMediator() override;
 
-    virtual bool initializeExtension(QWidget *extension, const ExtensionContext &extensionContext) override;
-    virtual DisplayableID getExtensionID() const override;
+    bool initializeExtension(QWidget *extension, const ExtensionContext &extensionContext) override;
+    DisplayableID getExtensionID() const override;
+    DicomEntityFlags getSupportedDicomEntities() const override;
 
 };
 

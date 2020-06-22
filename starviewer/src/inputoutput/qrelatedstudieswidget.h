@@ -28,7 +28,6 @@ namespace udg {
 
 class Study;
 class RelatedStudiesManager;
-class QueryScreen;
 class Patient;
 class QTreeWidgetWithSeparatorLine;
 
@@ -118,6 +117,9 @@ private slots:
     void studyRetrieveFailed(QString studyInstanceUID);
     void studyRetrieveCancelled(QString studyInstanceUID);
 
+    /// Adds the study to the patient.
+    void addLoadedStudy(Study *study);
+
     /// Slot executed when a radio button is clicked.
     /// It will proceed to load the selected study an notify the working studies has changed.
     void currentStudyRadioButtonClicked(const QString &studyInstanceUID);
@@ -151,8 +153,6 @@ private:
     QWidget *m_lookingForStudiesWidget;
     /// Objecte encarregat de cercar estudis relacionats
     RelatedStudiesManager *m_relatedStudiesManager;
-    /// Objecte utilitzat per invocar la descàrrega d'estudis.
-    QueryScreen *m_queryScreen;
     /// Ens permet saber els estudis que s'estan descarregant.
     int m_numberOfDownloadingStudies;
     /// Pacient associat a la última cerca feta.

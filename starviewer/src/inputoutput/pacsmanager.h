@@ -12,21 +12,18 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-
 #ifndef UDGPACSMANAGER_H
 #define UDGPACSMANAGER_H
 
-#include <QList>
-#include <QHash>
-#include <ThreadWeaver/Queue>
-
-#include "patient.h"
-#include "pacsdevice.h"
 #include "pacsjob.h"
+#include "retrievedicomfilesfrompacsjob.h"
+#include "singleton.h"
+
+namespace ThreadWeaver {
+class Queue;
+}
 
 namespace udg {
-
-class DicomMask;
 
 /**
     Classe manager que ens permet comunicar-nos amb el PACS
@@ -64,11 +61,16 @@ public:
     /// que s'estan executant no s'aborten immeditament, el mètode és assíncron.
     void requestCancelAllPACSJobs();
 
-    /// Indica si s'està executant algun PACSJob
-    bool isIdle();
-
-    /// Espera a que hagin acabat tots els job
-    bool waitForAllPACSJobsFinished(int msec = INT_MAX);
+    /**
+     * @brief retrieveStudy Makes an asynchronous request to download a given study from a given PACS.
+     * There are four corresponding signals that are emitted. Since PacsManager is a singleton, both the slot and the signals have a requestes parameter that is
+     * used to distinguish different calls.
+     * @param requester Pointer to the object that makes the request. It will be given back in the corresponding signals.
+     * @param pacsDevice The PACS to which the request is made.
+     * @param study The study to retrieve. It must contain the StudyInstanceUID.
+     * \todo Maybe a StudyInstanceUID should be enough instead of a Study instance.
+     */
+    void retrieveStudy(void *requester, PacsDevice pacsDevice, RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob priority, Study *study);
 
 signals:
     /// Signal que s'emet per indicar que s'ha encuat un nou PACSJob
@@ -77,12 +79,23 @@ signals:
     /// Signal que indica que ens han demanat cancel·lar un PACSJob
     void requestedCancelPACSJob(PACSJobPointer pacsJob);
 
+    /// Emitted when the job from the corresponding retrieveStudy call starts.
+    void studyRetrieveStarted(void *requester, PACSJobPointer pacsJob);
+    /// Emitted when the job from the corresponding retrieveStudy call finishes successfully.
+    void studyRetrieveFinished(void *requester, PACSJobPointer pacsJob);
+    /// Emitted when the job from the corresponding retrieveStudy call finishes with error.
+    void studyRetrieveFailed(void *requester, PACSJobPointer pacsJob);
+    /// Emitted when the job from the corresponding retrieveStudy call is cancelled.
+    void studyRetrieveCancelled(void *requester, PACSJobPointer pacsJob);
+
 private:
     ThreadWeaver::Queue *m_queryQueue;
     ThreadWeaver::Queue *m_sendDICOMFilesToPACSQueue;
     ThreadWeaver::Queue *m_retrieveDICOMFilesFromPACSQueue;
 };
 
-};  //  end  namespace udg
+typedef Singleton<PacsManager> PacsManagerSingleton;
+
+}
 
 #endif

@@ -18,7 +18,6 @@
 #include <QObject>
 #include <QString>
 #include <QList>
-#include <QMutex>
 
 #include "extensioncontext.h"
 #include "appimportfile.h"
@@ -27,6 +26,7 @@ namespace udg {
 
 // Fordward Declarations
 class QApplicationMainWindow;
+class Study;
 
 /**
     Gestor de mini-aplicacions i serveis de l'aplicació principal
@@ -43,8 +43,9 @@ public slots:
     void request(int who);
     bool request(const QString &who);
 
-    /// Obrirà l'extensió per defecte. Si no hi ha dades de pacient vàlides, no farà res.
-    void openDefaultExtension();
+    /// Opens the default extensions for the studies in the patient in the current context.
+    /// If the optional \a newStudies is provided, it opens the default extensions for those studies.
+    void openDefaultExtensions(QList<Study*> newStudies = {});
 
     /// Assigna el contexte de l'extensió
     /// @param context contexte
@@ -75,14 +76,9 @@ private:
     /// Crea les connexions de signals i slots
     void createConnections();
 
-    /// Afegeix un pacient a una mainwindow tenint en compte si cal fusionar o no i si es pot reemplaçar el pacient actual ja carregat
-    /// Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
-    /// Retorna la mainwindow a on s'ha afegit el pacient.
-    QApplicationMainWindow* addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly = false);
-
-    /// Processa el pacient donat per tal que pugui ser usat per les extensions
-    //  Li crea els volums al repositori i assigna quina és la sèrie per defecte
-    void generatePatientVolumes(Patient *patient, const QString &defaultSeriesUID);
+    /// Merges the given \a patient into the current patient of this ExtensionHandler's window.
+    /// Also displays the new studies unless \a loadOnly is true, in which case it only makes them selectable.
+    void mergeIntoCurrentPatient(Patient *patient, bool loadOnly = false);
 
     /// Scans the list and returns a list where the patients which are the same are merged.
     /// Patients are only considered to be the same if Patient::compareTo() returns SamePatients value.
@@ -100,9 +96,6 @@ private:
 
     /// Indica si a aquesta finestra li pertoca o no tancar la QueryScreen
     bool m_haveToCloseQueryScreen;
-
-    /// Mutex to avoid concurrent access to the patient comparer singleton.
-    QMutex m_patientComparerMutex;
 
 };
 

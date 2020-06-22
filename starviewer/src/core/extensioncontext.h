@@ -15,11 +15,14 @@
 #ifndef UDGEXTENSIONCONTEXT_H
 #define UDGEXTENSIONCONTEXT_H
 
+#include "dicomentityflags.h"
+
 #include <QStringList>
 
 namespace udg {
 
 class Patient;
+class Study;
 class Volume;
 
 /**
@@ -40,10 +43,9 @@ public:
     /// tenim pacient (cas mhd's) fer-ho amb el volumeIdentifier
     Volume* getDefaultVolume() const;
 
-    /// Returns true if the patient of this context contains at least one image and false otherwise.
-    bool hasImages() const;
-    /// Returns true if the patient of this context contains at least one encapsulated document and false otherwise.
-    bool hasEncapsulatedDocuments() const;
+    /// Returns flags to indicate which DICOM entities are contained in the patient.
+    /// If the optional study list is provided, then it returns the DICOM entities in them instead of all the patient's studies.
+    DicomEntityFlags getDicomEntities(QList<Study*> studies = {}) const;
 
 private:
     Patient* m_patient;

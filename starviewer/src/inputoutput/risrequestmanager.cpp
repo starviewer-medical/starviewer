@@ -37,9 +37,8 @@ namespace udg {
 
 const int RISRequestManager::secondsTimeOutToHidePopUpAndAutoCloseQMessageBox = 5;
 
-RISRequestManager::RISRequestManager(PacsManager *pacsManager)
+RISRequestManager::RISRequestManager()
 {
-    m_pacsManager = pacsManager;
 }
 
 RISRequestManager::~RISRequestManager()
@@ -149,7 +148,7 @@ void RISRequestManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJo
     connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(queryPACSJobCancelled(PACSJobPointer)));
     m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
 
-    m_pacsManager->enqueuePACSJob(queryPACSJob);
+    PacsManagerSingleton::instance()->enqueuePACSJob(queryPACSJob);
 }
 
 void RISRequestManager::queryPACSJobFinished(PACSJobPointer pacsJob)
@@ -316,7 +315,7 @@ PACSJobPointer RISRequestManager::retrieveStudyFromPACS(Study *study)
     connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer)));
     connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer)));
 
-    m_pacsManager->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
+    PacsManagerSingleton::instance()->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
 
     return retrieveDICOMFilesFromPACSJob;
 }

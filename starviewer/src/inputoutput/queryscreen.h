@@ -26,7 +26,6 @@ class QOperationStateScreen;
 class StatsWatcher;
 class RISRequestManager;
 class PacsDevice;
-class PacsManager;
 
 /**
     Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
@@ -200,7 +199,6 @@ private:
 #ifndef STARVIEWER_LITE
     QOperationStateScreen *m_operationStateScreen;
     RISRequestManager *m_risRequestManager;
-    PacsManager *m_pacsManager;
 #endif
 
     /// Indica quans jobs tenim pendents de finalitzar (s'estan esperant per executar o s'estan executant)

@@ -14,16 +14,16 @@
 
 #include "relatedstudiesmanager.h"
 
-#include "study.h"
 #include "dicommask.h"
-#include "patient.h"
-#include "pacsmanager.h"
-#include "queryscreen.h"
-#include "singleton.h"
-#include "pacsdevicemanager.h"
-#include "logging.h"
-#include "querypacsjob.h"
 #include "inputoutputsettings.h"
+#include "localdatabasemanager.h"
+#include "logging.h"
+#include "pacsdevicemanager.h"
+#include "pacsmanager.h"
+#include "patient.h"
+#include "querypacsjob.h"
+#include "study.h"
+#include "volumehelper.h"
 
 namespace udg {
 
@@ -223,6 +223,40 @@ void RelatedStudiesManager::queryPACSJobFinished(PACSJobPointer pacsJob)
     }
 }
 
+void RelatedStudiesManager::onStudyRetrieveStarted(void *requester, PACSJobPointer pacsJob)
+{
+    if (requester == this)
+    {
+        emit studyRetrieveStarted(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    }
+}
+
+void RelatedStudiesManager::onStudyRetrieveFinished(void *requester, PACSJobPointer pacsJob)
+{
+    if (requester == this)
+    {
+        emit studyRetrieveFinished(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+        // Now that the study is downloaded and saved in the database this should go through the first branch
+        loadStudy(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles());
+    }
+}
+
+void RelatedStudiesManager::onStudyRetrieveFailed(void *requester, PACSJobPointer pacsJob)
+{
+    if (requester == this)
+    {
+        emit studyRetrieveFailed(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    }
+}
+
+void RelatedStudiesManager::onStudyRetrieveCancelled(void *requester, PACSJobPointer pacsJob)
+{
+    if (requester == this)
+    {
+        emit studyRetrieveCancelled(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    }
+}
+
 void RelatedStudiesManager::mergeFoundStudiesInQuery(PACSJobPointer queryPACSJob)
 {
     if (queryPACSJob.objectCast<QueryPacsJob>()->getQueryLevel() != QueryPacsJob::study)
@@ -309,10 +343,25 @@ DicomMask RelatedStudiesManager::getBasicDicomMask()
 
 RelatedStudiesManager::LoadStatus RelatedStudiesManager::loadStudy(Study *study)
 {
-    if (LocalDatabaseManager().studyExists(study->getInstanceUID()))
+    LocalDatabaseManager localDatabaseManager;
+
+    if (localDatabaseManager.studyExists(study->getInstanceUID()))
     {
-        SingletonPointer<QueryScreen>::instance()->loadStudyFromDatabase(study->getInstanceUID());
-        return Loaded;
+        DicomMask mask;
+        mask.setStudyInstanceUID(study->getInstanceUID());
+        Patient *patient = localDatabaseManager.retrieve(mask);
+
+        if (patient && patient->getNumberOfStudies() > 0)
+        {
+            VolumeHelper::generatePatientVolumes(patient);
+            emit studyLoaded(patient->getStudies().first());
+            return Loaded;
+        }
+        else
+        {
+            ERROR_LOG(QString("Error loading study %1 from database despite it existed a moment before.").arg(study->getInstanceUID()));
+            return Failed;
+        }
     }
     else if (study->getDICOMSource().getRetrievePACS().count() > 0)
     {
@@ -326,42 +375,17 @@ RelatedStudiesManager::LoadStatus RelatedStudiesManager::loadStudy(Study *study)
     }
 }
 
-void RelatedStudiesManager::retrieve(Study *study, const PacsDevice &pacsDevice)
-{
-    retrieveAndApplyAction(study, pacsDevice, None);
-}
-
 void RelatedStudiesManager::retrieveAndLoad(Study *study, const PacsDevice &pacsDevice)
 {
-    retrieveAndApplyAction(study, pacsDevice, Load);
-}
+    // We defer the connections until the first request to avoid unnecessary connections before
+    // We use private slots so that we can specify Qt::UniqueConnection to avoid duplicate connections
+    // They will be automatically disconnected when this RelatedStudiesManager is destroyed
+    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveStarted, this, &RelatedStudiesManager::onStudyRetrieveStarted, Qt::UniqueConnection);
+    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveFinished, this, &RelatedStudiesManager::onStudyRetrieveFinished, Qt::UniqueConnection);
+    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveFailed, this, &RelatedStudiesManager::onStudyRetrieveFailed, Qt::UniqueConnection);
+    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveCancelled, this, &RelatedStudiesManager::onStudyRetrieveCancelled, Qt::UniqueConnection);
 
-void RelatedStudiesManager::retrieveAndView(Study *study, const PacsDevice &pacsDevice)
-{
-    retrieveAndApplyAction(study, pacsDevice, View);
-}
-
-void RelatedStudiesManager::retrieveAndApplyAction(Study *study, const PacsDevice &pacsDevice, ActionsAfterRetrieve action)
-{
-    QInputOutputPacsWidget::ActionsAfterRetrieve queryScreenAction = QInputOutputPacsWidget::None;
-    switch (action)
-    {
-        case None:
-            queryScreenAction = QInputOutputPacsWidget::None;
-            break;
-
-        case View:
-            queryScreenAction = QInputOutputPacsWidget::View;
-            break;
-
-        case Load:
-            queryScreenAction = QInputOutputPacsWidget::Load;
-            break;
-    }
-    
-    QueryScreen *queryScreen = SingletonPointer<QueryScreen>::instance();
-    queryScreen->retrieveStudy(queryScreenAction, pacsDevice, study);
-    connect(queryScreen, SIGNAL(studyRetrieveFailed(QString)), SIGNAL(errorDownloadingStudy(QString)));
+    PacsManagerSingleton::instance()->retrieveStudy(this, pacsDevice, RetrieveDICOMFilesFromPACSJob::Medium, study);
 }
 
 void RelatedStudiesManager::deleteQueryResults()

@@ -66,14 +66,8 @@ public:
     /// Indica si s'executen queries en aquest moment
     bool isExecutingQueries();
 
-    /// Retrieves (only) the given study from the specified PACS
-    void retrieve(Study *study, const PacsDevice &pacsDevice);
-
     /// Retrieves and loads the given study from the specified PACS
     void retrieveAndLoad(Study *study, const PacsDevice &pacsDevice);
-
-    /// Retrieves and views the given study from the specified PACS
-    void retrieveAndView(Study *study, const PacsDevice &pacsDevice);
 
     /// Load study from the database. If it is not in the database it is retrieved from PACS before being loaded.
     RelatedStudiesManager::LoadStatus loadStudy(Study *study);
@@ -90,6 +84,18 @@ signals:
 
     /// Signal que s'emet per indicar que s'ha produït un error durant la descarrega d'un estudi (pot ser previ o no)
     void errorDownloadingStudy(QString studyUID);
+
+    /// Emitted when a requested study retrieve starts.
+    void studyRetrieveStarted(QString studyInstanceUid);
+    /// Emitted when a requested study retrieve finishes successfully.
+    void studyRetrieveFinished(QString studyInstanceUid);
+    /// Emitted when a requested study retrieve finishes with error.
+    void studyRetrieveFailed(QString studyInstanceUid);
+    /// Emitted when a requested study retrieve is cancelled.
+    void studyRetrieveCancelled(QString studyInstanceUid);
+
+    /// Emitted when loadStudy finishes to load a study successfully.
+    void studyLoaded(Study *study);
 
 private:
     /// Realitza una consulta dels estudis del pacient "patient" als PACS marcats per defecte.
@@ -130,13 +136,6 @@ private:
 
     /// Retorna una llista indicant de quins PACS s'han descarregat els estudis que conté el pacient, sempre que continguin aquesta informació al DICOMSource
     QList<PacsDevice> getPACSRetrievedStudiesOfPatient(Patient *patient);
-    
-    /// TODO This enum is the very same as QInputOutputPacsWidget::ActionsAfterRetrieve. We don't use that to avoid dependencies in the header file.
-    /// Maybe a common enum for both classes could improve this.
-    enum ActionsAfterRetrieve { None, View, Load };
-    
-    /// Retrieves the given study from the specified PACS and applies the given action upon retrieval
-    void retrieveAndApplyAction(Study *study, const PacsDevice &pacsDevice, ActionsAfterRetrieve action);
 
     /// Return DICOM Masks to know what to query. It takes into accound
     /// the PatientID and PatientName properties of the patient and the value of m_searchRelatedStudiesByName
@@ -148,6 +147,15 @@ private slots:
 
     /// Slot que s'activa quan un job de consulta al PACS és cancel·lat
     void queryPACSJobCancelled(PACSJobPointer pacsJob);
+
+    /// Called when PacsManager successfully starts to retrieve a requested study.
+    void onStudyRetrieveStarted(void *requester, PACSJobPointer pacsJob);
+    /// Called when PacsManager successfully retrieves a requested study.
+    void onStudyRetrieveFinished(void *requester, PACSJobPointer pacsJob);
+    /// Called when PacsManager fails to retrieve a requested study.
+    void onStudyRetrieveFailed(void *requester, PACSJobPointer pacsJob);
+    /// Called when PacsManager cancels the request of a study.
+    void onStudyRetrieveCancelled(void *requester, PACSJobPointer pacsJob);
 
 private:
     PacsManager *m_pacsManager;

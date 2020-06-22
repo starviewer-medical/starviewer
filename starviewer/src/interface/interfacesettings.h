@@ -33,8 +33,11 @@ public:
     static const QString ApplicationMainWindowGeometry;
     // Indicarà si permetem tenir més d'una instància de cada extensió (true) o únicament una (false)
     static const QString AllowMultipleInstancesPerExtension;
-    // Defineix quina és l'extensió que s'obrirà per defecte
-    static const QString DefaultExtension;
+
+    // Default extensions for each DICOM entity type
+    static const QString DefaultImageExtension;
+    static const QString DefaultEncapsulatedDocumentExtension;
+
     static const QString DontShowMedicalDeviceInformationDialog;
 };
 
