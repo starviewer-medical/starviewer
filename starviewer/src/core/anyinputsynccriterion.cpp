@@ -16,6 +16,8 @@
 
 #include "q2dviewer.h"
 
+#include <QSet>
+
 namespace udg {
 
 bool AnyInputSyncCriterion::criterionIsMet(QViewer *sourceViewer, QViewer *targetViewer)

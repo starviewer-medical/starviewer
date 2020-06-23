@@ -20,6 +20,8 @@
 #include <QList>
 #include <QPair>
 
+class QIODevice;
+
 namespace udg {
 
 class DiagnosisTest;

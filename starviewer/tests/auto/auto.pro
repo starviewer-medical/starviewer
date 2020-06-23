@@ -26,4 +26,4 @@ include(../../src/makefixdebug.pri)
 #TODO: No afegeix la informacio de UI_DIR com a include a l'hora de compilar el testos
 INCLUDEPATH += $$OUT_PWD/../../tmp/ui
 
-RESOURCES = $$OUT_PWD/../../src/main/main.qrc
+RESOURCES = $$PWD/../../src/main/main.qrc
