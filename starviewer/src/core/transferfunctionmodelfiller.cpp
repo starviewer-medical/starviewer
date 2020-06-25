@@ -17,7 +17,10 @@
 #include "transferfunctionio.h"
 #include "transferfunctionmodel.h"
 
+#include <memory>
+
 #include <QDirIterator>
+#include <QMutex>
 
 namespace udg {
 
@@ -42,14 +45,31 @@ void TransferFunctionModelFiller::add2DTransferFunctions(TransferFunctionModel *
 {
     if (model)
     {
-        QDirIterator it(":/cluts/2d");
+        static std::vector<std::unique_ptr<TransferFunction>> static2DTransferFunctions;
+        static bool filled = false;
+        static QMutex mutex;
 
-        while (it.hasNext())
+        if (!filled)
         {
-            TransferFunction *transferFunction = TransferFunctionIO::fromXmlFile(it.next());
+            QMutexLocker mutexLocker(&mutex);
+
+            if (!filled)
+            {
+                QDirIterator it(":/cluts/2d");
+
+                while (it.hasNext())
+                {
+                    static2DTransferFunctions.push_back(std::unique_ptr<TransferFunction>(TransferFunctionIO::fromXmlFile(it.next())));
+                }
+
+                filled = true;
+            }
+        }
+
+        for (unsigned i = 0; i < static2DTransferFunctions.size(); i++)
+        {
             model->insertRow(model->rowCount());
-            model->setTransferFunction(model->rowCount() - 1, *transferFunction);
-            delete transferFunction;
+            model->setTransferFunction(model->rowCount() - 1, *static2DTransferFunctions[i]);
         }
     }
 }
