@@ -168,11 +168,7 @@ bool NonDicomFileClassifierFillerStep::fillIndividually()
     if (series->hasImages())
     {
         Image *previousImage = series->getImages().last();
-
-        if (origin == Vector3(previousImage->getImagePositionPatient()))
-        {
-            origin.z += image->getSliceThickness();
-        }
+        origin.z = previousImage->getImagePositionPatient()[2] + previousImage->getSliceThickness();
     }
 
     QList<Image*> generatedImages;
