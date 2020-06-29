@@ -40,20 +40,20 @@ bool mayHavePattern(const QFileInfo &fileInfo)
     return patternRegularExpression.match(fileInfo.completeBaseName()).hasMatch();
 }
 
-// Returns the canonical file path having changed the pattern part by asterisks.
+// Returns the absolute file path having changed the pattern part by asterisks.
 QString markPattern(const QFileInfo &fileInfo)
 {
     QString base = fileInfo.completeBaseName();
     auto match = patternRegularExpression.match(base);
     base.remove(patternRegularExpression).append(match.captured(0).fill('*'));  // remove the pattern part and append the same number of asterisks in its place
     QString newFileName = fileInfo.fileName().replace(0, base.length(), base);
-    return fileInfo.canonicalPath() + "/" + newFileName;    // in Windows canonicalPath() uses '/' as a separator too
+    return fileInfo.absolutePath() + "/" + newFileName; // in Windows absolutePath() uses '/' as a separator too
 }
 
-// Returns a series number derived from the file name: currently the first 4 characters of the MD4 digest of the canonical file path.
+// Returns a series number derived from the file name: currently the first 4 characters of the MD4 digest of the absolute file path.
 QString seriesNumber(const QFileInfo &fileInfo)
 {
-    return QCryptographicHash::hash(qPrintable(fileInfo.canonicalFilePath()), QCryptographicHash::Md4).toHex().left(4);
+    return QCryptographicHash::hash(qPrintable(fileInfo.absoluteFilePath()), QCryptographicHash::Md4).toHex().left(4);
 }
 
 // Creates an image and fills it from the given file name and reader.
@@ -144,7 +144,7 @@ bool NonDicomFileClassifierFillerStep::fillIndividually()
     else
     {
         // Create new series for the single file
-        seriesUid = fileInfo.canonicalFilePath();
+        seriesUid = fileInfo.absoluteFilePath();
     }
 
     Series *series = study->getSeries(seriesUid);
