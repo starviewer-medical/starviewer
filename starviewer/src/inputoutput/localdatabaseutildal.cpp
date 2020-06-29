@@ -50,7 +50,7 @@ bool LocalDatabaseUtilDAL::updateDatabaseRevision(int databaseRevision)
 {
     QSqlQuery query = getNewQuery();
     query.prepare("UPDATE DatabaseRevision SET Revision = :revision");
-    query.bindValue(0, databaseRevision);
+    query.bindValue(":revision", databaseRevision);
     return executeQueryAndLogError(query);
 }
 
