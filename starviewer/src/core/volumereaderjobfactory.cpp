@@ -28,43 +28,6 @@
 
 #include <QApplication>
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-namespace {
-
-bool is32BitWindows()
-{
-#if defined(_WIN64)
-    return false;  // 64-bit programs run only on Win64
-#elif defined(_WIN32)
-    // 32-bit programs run on both 32-bit and 64-bit Windows
-    // so must sniff
-    BOOL f64 = false;
-    typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
-    LPFN_ISWOW64PROCESS fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
-
-    return !(fnIsWow64Process(GetCurrentProcess(), &f64) && f64);
-#else
-    return false; // Win64 does not support Win16
-#endif
-}
-
-bool is32BitProgramOnWindows()
-{
-#if defined(_WIN64)
-    return false;  // 64-bit programs run only on Win64
-#elif defined(_WIN32)
-    // 32-bit programs run on both 32-bit and 64-bit Windows
-    return true;
-#else
-    return false; // Win64 does not support Win16
-#endif
-}
-
-}
-
 namespace udg {
 
 VolumeReaderJobFactory::VolumeReaderJobFactory(QObject *parent)
@@ -116,97 +79,21 @@ QSharedPointer<VolumeReaderJob> VolumeReaderJobFactory::read(Volume *volume)
 
 void VolumeReaderJobFactory::assignResourceRestrictionPolicy(VolumeReaderJob *volumeReaderJob)
 {
-    QSettings settings;
-    if (settings.contains(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently))
-    {
-        int maximumNumberOfVolumesLoadingConcurrently = Settings().getValue(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently).toInt();
-        if (maximumNumberOfVolumesLoadingConcurrently > 0)
-        {
-            m_resourceRestrictionPolicy.setCap(maximumNumberOfVolumesLoadingConcurrently);
-            volumeReaderJob->assignQueuePolicy(&m_resourceRestrictionPolicy);
-            INFO_LOG(QString("Limitem a %1 la quantitat de volums carregant-se simultàniament.").arg(m_resourceRestrictionPolicy.cap()));
-        }
-        else
-        {
-            ERROR_LOG("El valor per limitar la quantitat de volums carregant-se simultàniament ha de ser més gran de 0.");
-        }
-    }
-    else 
-    {
-        QStringList allowedModalities;
-        bool checkMultiframeImages = false;
+    Settings settings;
+    int maximumNumberOfVolumesLoadingConcurrently = settings.getValue(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently).toInt();
 
-        // If it's a 32 bit build, concurrence is disabled on multiframe volumes.
-        // Moreover, if it's running on a 32bit Win, concurrence is only allowed for CT and MR volumes.
-        if (is32BitProgramOnWindows())
-        {
-            checkMultiframeImages = true;
-
-            if (is32BitWindows())
-            {
-                allowedModalities << QString("CT") << QString("MR");
-            }
-        }
-        
-        bool foundRestrictions = checkForResourceRestrictions(checkMultiframeImages, allowedModalities);
-        
-        int numberOfVolumesLoadingConcurrently;
-        if (foundRestrictions)
-        {
-            numberOfVolumesLoadingConcurrently = 1;
-            if (is32BitWindows())
-            {
-                INFO_LOG(QString("Windows 32 bits amb volums que poden requerir molta memòria. Limitem a %1 la quantitat de volums carregant-se simultàniament.")
-                    .arg(numberOfVolumesLoadingConcurrently));
-            }
-            else
-            {
-                INFO_LOG(QString("Windows 64 bits amb volums multiframe que poden requerir molta memòria. Limitem a %1 la quantitat de volums carregant-se "
-                    "simultàniament.").arg(numberOfVolumesLoadingConcurrently));
-            }
-        }
-        else
-        {
-            numberOfVolumesLoadingConcurrently = getWeaverInstance()->maximumNumberOfThreads();
-        }
-        m_resourceRestrictionPolicy.setCap(numberOfVolumesLoadingConcurrently);
-        volumeReaderJob->assignQueuePolicy(&m_resourceRestrictionPolicy);
-    }
-}
-
-bool VolumeReaderJobFactory::checkForResourceRestrictions(bool checkMultiframeImages, const QStringList &modalitiesWithoutRestriction)
-{
-    if (!checkMultiframeImages && modalitiesWithoutRestriction.isEmpty())
+    if (maximumNumberOfVolumesLoadingConcurrently <= 0)
     {
-        return false;
-    }
-    
-    bool foundRestriction = false;
-    QListIterator<Volume*> iterator(VolumeRepository::getRepository()->getItems());
-    while (iterator.hasNext() && !foundRestriction)
-    {
-        Volume *currentVolume = iterator.next();
-        // Mirem si és multiframe
-        if (checkMultiframeImages)
-        {
-            if (currentVolume->isMultiframe())
-            {
-                foundRestriction = true;
-            }
-        }
-
-        // Mirem si és una modalitat a la que cal aplicar restricció o no
-        if (!modalitiesWithoutRestriction.isEmpty())
-        {
-            QString modality = currentVolume->getModality();
-            if (!modalitiesWithoutRestriction.contains(modality))
-            {
-                foundRestriction = true;
-            }
-        }
+        WARN_LOG(QString("Invalid value in \"%1\" setting: %2. Resetting it to default.").arg(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently)
+                                                                                         .arg(maximumNumberOfVolumesLoadingConcurrently));
+        settings.remove(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently);
+        maximumNumberOfVolumesLoadingConcurrently = settings.getValue(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently).toInt();
+        DEBUG_LOG(QString("Default maximumNumberOfVolumesLoadingConcurrently: %1").arg(maximumNumberOfVolumesLoadingConcurrently));
     }
 
-    return foundRestriction;
+    m_resourceRestrictionPolicy.setCap(maximumNumberOfVolumesLoadingConcurrently);
+    volumeReaderJob->assignQueuePolicy(&m_resourceRestrictionPolicy);
+    INFO_LOG(QString("Limitem a %1 la quantitat de volums carregant-se simultàniament.").arg(m_resourceRestrictionPolicy.cap()));
 }
 
 void VolumeReaderJobFactory::unmarkVolumeFromJobAsLoading(ThreadWeaver::JobPointer job)

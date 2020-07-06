@@ -128,7 +128,7 @@ void CoreSettings::init()
 #endif
     settingsRegistry->addSetting(MammographyAutoOrientationExceptions, (QStringList() << "BAV" << "BAG" << "estereot"));
     settingsRegistry->addSetting(AllowAsynchronousVolumeLoading, true);
-    settingsRegistry->addSetting(MaximumNumberOfVolumesLoadingConcurrently, 1);
+    settingsRegistry->addSetting(MaximumNumberOfVolumesLoadingConcurrently, 3);
     settingsRegistry->addSetting(MaximumNumberOfVisibleVoiLutComboItems, 50);
     settingsRegistry->addSetting(EnableQ2DViewerSliceScrollLoop, false);
     settingsRegistry->addSetting(EnableQ2DViewerPhaseScrollLoop, false);

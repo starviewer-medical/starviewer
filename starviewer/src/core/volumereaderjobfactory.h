@@ -79,12 +79,6 @@ private:
     /// estem a windows 32 bits i hi ha possibilitat d'obrir volums que requereixin molta memòria.
     void assignResourceRestrictionPolicy(VolumeReaderJob *volumeReaderJob);
 
-    /// Comprova si els volums del repositori compleixen alguna de les restriccions
-    /// Si checkMultiframeImages és true, es comprova si existeixen imatges multiframe com a restricció
-    /// Si modalitiesWithoutRestriction no és buit, qualsevol modalitat trobada que no es trobi a la llista es considerarà restricció
-    /// Si retorna cert vol dir que s'han trobar les restriccions, fals altrament
-    bool checkForResourceRestrictions(bool checkMultiframeImages, const QStringList &modalitiesWithoutRestriction);
-
 private:
     /// Llista dels volums que s'estan carregant
     QHash<int, QSharedPointer<VolumeReaderJob> > m_volumesLoading;
