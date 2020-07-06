@@ -16,10 +16,8 @@
 #define UDG_VOLUMEREADERMANAGER_H
 
 #include <QObject>
-#include <QPointer>
-#include <QHash>
 
-#include "volumereaderjob.h"
+#include <QHash>
 
 namespace udg {
 
@@ -64,22 +62,19 @@ signals:
 
 private slots:
     /// Updates the progress of the job and emits the global progress
-    void updateProgress(ThreadWeaver::JobPointer, int);
+    void updateProgress(void *requester, Volume *volume, int progressValue);
     /// Slot executed when a job finished. It emits the signal readingFinished() if no jobs are reading.
-    void jobFinished(ThreadWeaver::JobPointer job);
+    void jobFinished(void *requester, VolumeReaderJob *job);
 
 private:
     /// Initialize internal helpers
     void initialize();
 
 private:
-    /// List of jobs to read volumes.
-    QList<QWeakPointer<ThreadWeaver::JobInterface> > m_volumeReaderJobs;
+    /// List to control the reading progress of all volumes
+    QHash<Volume*, int> m_volumesProgress;
 
-    /// List to control the progress of all jobs
-    QHash<VolumeReaderJob*, int> m_jobsProgress;
-
-    /// List of readed volumes
+    /// List of read volumes
     QList<Volume*> m_volumes;
 
     /// It says if the reading ended successfully
