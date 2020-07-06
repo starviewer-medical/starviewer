@@ -55,7 +55,7 @@ public:
 
 signals:
     /// Signal que s'emet amb el progrés de lectura
-    void progress(VolumeReaderJob*, int progress);
+    void progress(ThreadWeaver::JobPointer, int progress);
     void done(ThreadWeaver::JobPointer);
 
 protected:
@@ -63,9 +63,6 @@ protected:
     virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread);
     virtual void defaultEnd(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread);
 
-private slots:
-    /// Slot to emit the current progress
-    void updateProgress(int value);
 private:
     Volume *m_volumeToRead;
     VolumeReader *m_volumeReader;

@@ -64,7 +64,7 @@ signals:
 
 private slots:
     /// Updates the progress of the job and emits the global progress
-    void updateProgress(VolumeReaderJob*, int);
+    void updateProgress(ThreadWeaver::JobPointer, int);
     /// Slot executed when a job finished. It emits the signal readingFinished() if no jobs are reading.
     void jobFinished(ThreadWeaver::JobPointer job);
 

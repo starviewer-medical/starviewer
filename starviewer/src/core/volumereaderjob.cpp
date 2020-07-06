@@ -66,15 +66,17 @@ const Identifier& VolumeReaderJob::getVolumeIdentifier() const
 
 void VolumeReaderJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread)
 {
-    Q_UNUSED(self)
     Q_UNUSED(thread)
 
     Q_ASSERT(m_volumeToRead);
 
     DEBUG_LOG(QString("VolumeReaderJob::run() with Volume: %1").arg(m_volumeIdentifier.getValue()));
 
-    connect(m_volumeReader, SIGNAL(progress(int)), SLOT(updateProgress(int)));
+    auto connection = connect(m_volumeReader, &VolumeReader::progress, [=](int value) {
+        emit progress(self, value);
+    });
     m_volumeReadSuccessfully = m_volumeReader->readWithoutShowingError(m_volumeToRead);
+    disconnect(connection); // it's important to disconnect so that the lambda with its captured shared pointer is destroyed at the end of the method
     m_lastErrorMessageToUser = m_volumeReader->getLastErrorMessageToUser();
 
     DEBUG_LOG(QString("End VolumeReaderJob::run() with Volume: %1 and result %2").arg(m_volumeIdentifier.getValue()).arg(m_volumeReadSuccessfully));
@@ -89,11 +91,6 @@ void VolumeReaderJob::defaultEnd(const ThreadWeaver::JobPointer &job, ThreadWeav
     emit done(job);
 
     Job::defaultEnd(job, thread);
-}
-
-void VolumeReaderJob::updateProgress(int value)
-{
-    emit progress(this, value);
 }
 
 } // End namespace udg

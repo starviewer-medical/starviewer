@@ -60,7 +60,7 @@ void VolumeReaderManager::readVolumes(const QList<Volume*> &volumes)
         m_jobsProgress.insert(job.data(), 0);
         m_volumes << NULL;
         connect(job.data(), SIGNAL(done(ThreadWeaver::JobPointer)), SLOT(jobFinished(ThreadWeaver::JobPointer)));
-        connect(job.data(), SIGNAL(progress(VolumeReaderJob*, int)), SLOT(updateProgress(VolumeReaderJob*, int)));
+        connect(job.data(), SIGNAL(progress(ThreadWeaver::JobPointer, int)), SLOT(updateProgress(ThreadWeaver::JobPointer, int)));
     }
 }
 
@@ -107,9 +107,10 @@ bool VolumeReaderManager::isReading()
     return m_numberOfFinishedJobs < m_volumeReaderJobs.size();
 }
 
-void VolumeReaderManager::updateProgress(VolumeReaderJob *job, int value)
+void VolumeReaderManager::updateProgress(ThreadWeaver::JobPointer job, int value)
 {
-    m_jobsProgress.insert(job, value);
+    QSharedPointer<VolumeReaderJob> volumeReaderJob = job.dynamicCast<VolumeReaderJob>();
+    m_jobsProgress.insert(volumeReaderJob.get(), value);
 
     int currentProgress = 0;
     foreach (int volumeProgressValue, m_jobsProgress)
