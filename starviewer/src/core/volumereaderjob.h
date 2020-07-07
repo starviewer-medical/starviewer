@@ -19,9 +19,6 @@
 
 #include "identifier.h"
 
-#include <QPointer>
-#include <QMutex>
-
 namespace udg {
 
 class Volume;
@@ -58,7 +55,7 @@ public:
 
 signals:
     /// Signal que s'emet amb el progrés de lectura
-    void progress(VolumeReaderJob*, int progress);
+    void progress(ThreadWeaver::JobPointer, int progress);
     void done(ThreadWeaver::JobPointer);
 
 protected:
@@ -66,11 +63,10 @@ protected:
     virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread);
     virtual void defaultEnd(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread);
 
-private slots:
-    /// Slot to emit the current progress
-    void updateProgress(int value);
 private:
     Volume *m_volumeToRead;
+    VolumeReader *m_volumeReader;
+
     /// Keeps the identifier of the volume to have access to it even if the volume is deleted.
     Identifier m_volumeIdentifier;
     bool m_volumeReadSuccessfully;
@@ -79,13 +75,6 @@ private:
     /// Ens indica si s'ha fet o no un requestAbort
     bool m_abortRequested;
 
-    /// Referència al volume reader per poder fer un requestAbort. Només serà vàlid mentre s'estigui executant "run()", a fora d'aquest no ho serà.
-    /// Nota: no es pot fer el volumeReader membre de la classe ja que aquest crea objectes de Qt fills de "this" i this apuntaria a threads diferents
-    /// (un a apuntaria al de gui, per ser crear al constructor, i els altres al del thread de threadweaver, per ser creats al run()).
-    QPointer<VolumeReader> m_volumeReaderToAbort;
-
-    /// Mutex per protegir els canvis de referència a m_volumeReaderToAbort en escenaris de multithreading.
-    QMutex m_volumeReaderToAbortMutex;
 };
 
 } // End namespace udg

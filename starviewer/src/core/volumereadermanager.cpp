@@ -14,9 +14,9 @@
 
 #include "volumereadermanager.h"
 
-#include "volumereaderjobfactory.h"
-#include "volumereaderjob.h"
 #include "volume.h"
+#include "volumereaderjob.h"
+#include "volumereaderjobfactory.h"
 
 namespace udg {
 
@@ -32,8 +32,7 @@ VolumeReaderManager::~VolumeReaderManager()
 
 void VolumeReaderManager::initialize()
 {
-    m_volumeReaderJobs.clear();
-    m_jobsProgress.clear();
+    m_volumesProgress.clear();
     m_volumes.clear();
     m_success = true;
     m_lastError = "";
@@ -51,33 +50,29 @@ void VolumeReaderManager::readVolume(Volume *volume)
 void VolumeReaderManager::readVolumes(const QList<Volume*> &volumes)
 {
     initialize();
+    VolumeReaderJobFactory *volumeReaderFactory = VolumeReaderJobFactory::instance();
+
+    connect(volumeReaderFactory, &VolumeReaderJobFactory::volumeReadingProgress, this, &VolumeReaderManager::updateProgress);
+    connect(volumeReaderFactory, &VolumeReaderJobFactory::volumeReadingFinished, this, &VolumeReaderManager::jobFinished);
 
     foreach (Volume *volume, volumes)
     {
-        VolumeReaderJobFactory *volumeReader = VolumeReaderJobFactory::instance();
-        QSharedPointer<VolumeReaderJob> job = volumeReader->read(volume);
-        m_volumeReaderJobs << job;
-        m_jobsProgress.insert(job.data(), 0);
-        m_volumes << NULL;
-        connect(job.data(), SIGNAL(done(ThreadWeaver::JobPointer)), SLOT(jobFinished(ThreadWeaver::JobPointer)));
-        connect(job.data(), SIGNAL(progress(VolumeReaderJob*, int)), SLOT(updateProgress(VolumeReaderJob*, int)));
+        m_volumesProgress.insert(volume, 0);
+        m_volumes.append(volume);
+        volumeReaderFactory->read(this, volume);
     }
 }
 
 void VolumeReaderManager::cancelReading()
 {
-    // TODO: Aquí s'hauria de cancel·lar realment el current job. De moment no podem fer-ho i simplement el desconnectem
-    // Quan es faci bé, tenir en compte què passa si algun altre visor el vol continuar descarregant igualment i nosaltres aquí el cancelem?
-    for (int i = 0; i < m_volumeReaderJobs.size(); ++i)
+    VolumeReaderJobFactory *volumeReaderFactory = VolumeReaderJobFactory::instance();
+
+    foreach (Volume *volume, m_volumes)
     {
-        QSharedPointer<VolumeReaderJob> job = m_volumeReaderJobs[i].toStrongRef().dynamicCast<VolumeReaderJob>();
-        if (!job.isNull())
-        {
-            disconnect(job.data(), SIGNAL(done(ThreadWeaver::JobPointer)), this, SLOT(jobFinished(ThreadWeaver::JobPointer)));
-            disconnect(job.data(), SIGNAL(progress(VolumeReaderJob*, int)), this, SLOT(updateProgress(VolumeReaderJob*, int)));
-        }
-        m_volumeReaderJobs[i].clear();
+        volumeReaderFactory->cancelRead(this, volume);
     }
+
+    disconnect(volumeReaderFactory, nullptr, this, nullptr); // disconnect everything
     initialize();
 }
 
@@ -104,44 +99,44 @@ QString VolumeReaderManager::getLastErrorMessageToUser()
 
 bool VolumeReaderManager::isReading()
 {
-    return m_numberOfFinishedJobs < m_volumeReaderJobs.size();
+    return m_numberOfFinishedJobs < m_volumesProgress.size();
 }
 
-void VolumeReaderManager::updateProgress(VolumeReaderJob *job, int value)
+void VolumeReaderManager::updateProgress(void *requester, Volume *volume, int progressValue)
 {
-    m_jobsProgress.insert(job, value);
-
-    int currentProgress = 0;
-    foreach (int volumeProgressValue, m_jobsProgress)
+    if (requester == this && m_volumes.contains(volume))    // check also the volume just in case this comes from a previous cancelled request
     {
-        currentProgress += volumeProgressValue;
+        m_volumesProgress[volume] = progressValue;
+        int currentProgress = 0;
+
+        foreach (int volumeProgressValue, m_volumesProgress)
+        {
+            currentProgress += volumeProgressValue;
+        }
+
+        currentProgress /= m_volumesProgress.size();
+        emit progress(currentProgress);
     }
-
-    currentProgress /= m_jobsProgress.size();
-
-    emit progress(currentProgress);
 }
 
-void VolumeReaderManager::jobFinished(ThreadWeaver::JobPointer job)
+void VolumeReaderManager::jobFinished(void *requester, VolumeReaderJob *job)
 {
-    QSharedPointer<VolumeReaderJob> volumeReaderJob = job.dynamicCast<VolumeReaderJob>();
-    m_volumes[m_volumeReaderJobs.indexOf(job)] = volumeReaderJob->getVolume();
-
-    if (m_success)
+    if (requester == this && m_volumes.contains(job->getVolume()))  // check also the volume just in case this comes from a previous cancelled request
     {
-        m_success = job->success();
+        m_success &= job->success();
 
         if (!m_success)
         {
-            m_lastError = volumeReaderJob->getLastErrorMessageToUser();
+            m_lastError = job->getLastErrorMessageToUser();
         }
-    }
 
-    m_numberOfFinishedJobs++;
+        m_numberOfFinishedJobs++;
 
-    if (!isReading())
-    {
-        emit readingFinished();
+        if (!isReading())
+        {
+            emit readingFinished();
+            disconnect(VolumeReaderJobFactory::instance(), nullptr, this, nullptr); // disconnect everything
+        }
     }
 }
 
