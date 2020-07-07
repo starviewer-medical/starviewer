@@ -51,6 +51,9 @@ public:
     /// Returns true if the given image satisfies this restriction, and false otherwise.
     bool test(const Image *image) const;
 
+    /// Returns true if all member are equal and false otherwise.
+    bool operator==(const HangingProtocolImageSetRestriction &that) const;
+
 private:
     /// Identifier of this restriction. Must be unique in a hanging protocol.
     int m_identifier;

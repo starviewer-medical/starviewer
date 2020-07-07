@@ -51,6 +51,7 @@ public:
 
     void setInput(Volume *input);
     void setInputAsynchronously(Volume *input, QViewerCommand *command = 0);
+    void setInputAsynchronously(const QList<Volume*> &inputList, QViewerCommand *command = nullptr);
 
     /// Habilita o deshabilita el botó que permet activar o desactivar l'eina de sincronització
     void enableSynchronizationButton(bool enable);

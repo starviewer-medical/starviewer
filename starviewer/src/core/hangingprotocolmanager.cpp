@@ -368,51 +368,69 @@ void HangingProtocolManager::cancelHangingProtocolDownloading(HangingProtocol *h
 
 void HangingProtocolManager::setInputToViewer(Q2DViewerWidget *viewerWidget, HangingProtocolDisplaySet *displaySet)
 {
-    Series *series = displaySet->getImageSet()->getSeriesToDisplay();
+    QVector<Series*> seriesVector = displaySet->getImageSet()->getSeriesToDisplay();
 
-    if (series)
+    if (seriesVector.isEmpty())
     {
-        if (series->isViewable() && series->getFirstVolume())
+        return;
+    }
+
+    // Remove series that are not viewable or do not have a volume
+    seriesVector.erase(std::remove_if(seriesVector.begin(),
+                                      seriesVector.end(),
+                                      [](Series *series) {
+                                            return !series->isViewable() || !series->getFirstVolume();
+                                      }),
+                       seriesVector.end());
+
+
+    if (seriesVector.isEmpty())
+    {
+        WARN_LOG("No valid series (viewable and with a volume) left after filtering. Can't set input to the display set.");
+        return;
+    }
+
+    Series *firstSeries = seriesVector.first();
+    Image *specificImage = nullptr; // specific image to display (if specified); in fusion it will refer to the primary series
+
+    if (displaySet->getSlice() > -1)
+    {
+        // TODO This index is wrong in series with phases
+        specificImage = firstSeries->getImageByIndex(displaySet->getSlice());
+    }
+    else if (displaySet->getImageSet()->getType() == HangingProtocolImageSet::Type::Image)
+    {
+        specificImage = firstSeries->getImageByIndex(displaySet->getImageSet()->getImageToDisplay());
+    }
+
+    Volume *firstVolume = nullptr;
+
+    if (specificImage)  // if we have a specific image to display, find its volume
+    {
+        firstVolume = firstSeries->getVolumeOfImage(specificImage); // could return null
+
+        if (firstVolume)    // if we have found its volume find the corrected index and set it in the display set; otherwise we will enter the next if below
         {
-            Volume *inputVolume = NULL;
-            if ((displaySet->getSlice() > -1 && series->getVolumesList().size() > 1) || displaySet->getImageSet()->getTypeOfItem() == "image")
-            {
-                Image *image;
-                // TODO En el cas de fases no funcionaria, perquè l'índex no és correcte
-                if (displaySet->getSlice() > -1)
-                {
-                    image = series->getImageByIndex(displaySet->getSlice());
-                }
-                else if (displaySet->getImageSet()->getTypeOfItem() == "image")
-                {
-                    image = series->getImageByIndex(displaySet->getImageSet()->getImageToDisplay());
-                }
-
-                Volume *volumeContainsImage = series->getVolumeOfImage(image);
-
-                if (!volumeContainsImage)
-                {
-                    // No existeix cap imatge al tall corresponent, agafem el volum per defecte
-                    inputVolume = series->getFirstVolume();
-                }
-                else
-                {
-                    // Tenim nou volum, i per tant, cal calcular el nou número de llesca
-                    int slice = volumeContainsImage->getImages().indexOf(image);
-                    displaySet->setSliceModifiedForVolumes(slice);
-
-                    inputVolume = volumeContainsImage;
-                }
-            }
-            else
-            {
-                inputVolume = series->getFirstVolume();
-            }
-
-            ApplyHangingProtocolQViewerCommand *command = new ApplyHangingProtocolQViewerCommand(viewerWidget, displaySet);
-            viewerWidget->setInputAsynchronously(inputVolume, command);
+            int slice = firstVolume->getImages().indexOf(specificImage);
+            displaySet->setSliceModifiedForVolumes(slice);
         }
     }
+
+    if (!firstVolume)   // if it has not been filled yet, assign the first volume by default
+    {
+        firstVolume = firstSeries->getFirstVolume();    // this is guaranteed to not return null because we have filtered out series without volumes
+        Q_ASSERT(firstVolume);
+    }
+
+    QList<Volume*> volumeList{firstVolume}; // build a volume list for the viewer starting with the first volume
+
+    for (int i = 1; i < seriesVector.size(); i++)   // in the case of fusion, for the rest of series we always choose their first volume
+    {
+        volumeList.append(seriesVector[i]->getFirstVolume());
+    }
+
+    ApplyHangingProtocolQViewerCommand *command = new ApplyHangingProtocolQViewerCommand(viewerWidget, displaySet);
+    viewerWidget->setInputAsynchronously(volumeList, command);
 }
 
 }

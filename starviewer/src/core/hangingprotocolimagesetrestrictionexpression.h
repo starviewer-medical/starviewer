@@ -42,6 +42,9 @@ public:
     /// Evaluates the expression for the given image and returns the result.
     bool test(const Image *image) const;
 
+    /// Returns true if this and that have the expression and restrictions and false otherwise.
+    bool operator==(const HangingProtocolImageSetRestrictionExpression &that) const;
+
 private:
     /// Removes unwanted characters from the expression.
     void sanitize();

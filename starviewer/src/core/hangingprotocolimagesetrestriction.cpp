@@ -157,4 +157,12 @@ bool HangingProtocolImageSetRestriction::test(const Image *image) const
     return true;
 }
 
+bool HangingProtocolImageSetRestriction::operator==(const HangingProtocolImageSetRestriction &that) const
+{
+    return this->m_identifier == that.m_identifier
+        && this->m_selectorAttribute == that.m_selectorAttribute
+        && this->m_selectorValue == that.m_selectorValue
+        && this->m_selectorValueNumber == that.m_selectorValueNumber;
+}
+
 } // namespace udg

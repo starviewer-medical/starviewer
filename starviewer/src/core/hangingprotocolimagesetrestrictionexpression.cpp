@@ -65,6 +65,11 @@ bool HangingProtocolImageSetRestrictionExpression::test(const Image *image) cons
     return evaluate(results);
 }
 
+bool HangingProtocolImageSetRestrictionExpression::operator==(const HangingProtocolImageSetRestrictionExpression &that) const
+{
+    return this->m_expression == that.m_expression && this->m_restrictions == that.m_restrictions;
+}
+
 void HangingProtocolImageSetRestrictionExpression::sanitize()
 {
     m_expression.replace(QRegularExpression("[^\\dandort()]"), "");
