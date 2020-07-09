@@ -55,6 +55,12 @@ public:
     bool operator==(const HangingProtocolImageSetRestriction &that) const;
 
 private:
+    /// Returns true if the given series satisfies this restriction, and false otherwise. It also tests the first image for image attributes.
+    bool testSeries(const Series *series) const;
+    /// Returns true if the given image satisfies this restriction, and false otherwise. It also tests the parent series for series attributes.
+    bool testImage(const Image *image) const;
+
+private:
     /// Identifier of this restriction. Must be unique in a hanging protocol.
     int m_identifier;
     /// Attribute whose value must match the selector value.

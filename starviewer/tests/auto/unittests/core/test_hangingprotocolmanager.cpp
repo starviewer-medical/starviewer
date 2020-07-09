@@ -91,6 +91,15 @@ void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHan
     CTUSPatient->getStudies().at(1)->addModality("US");
     CTUSPatient->getStudies().at(1)->getSeries().at(0)->setModality("US");
     CTUSPatient->getStudies().at(1)->getSeries().at(1)->setModality("US");
+    // PET-CT
+    Patient *petCtPatient = PatientTestHelper::create(1, 2, 1);
+    {
+        Study *study = petCtPatient->getStudies().first();
+        study->addModality("CT");
+        study->addModality("PT");
+        study->getSeries()[0]->setModality("CT");
+        study->getSeries()[1]->setModality("PT");
+    }
 
     QList<HangingProtocol*> repositoryHangingProtocolsMG = getHangingProtocolsRepository();
     QList<HangingProtocol*> expectedHangingProtocolsMG;
@@ -103,11 +112,14 @@ void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHan
     QList<HangingProtocol*> repositoryHangingProtocolsCTUS = getHangingProtocolsRepository();
     QList<HangingProtocol*> expectedHangingProtocolsCTUS;
     expectedHangingProtocolsCTUS << repositoryHangingProtocolsCTUS.at(1);   // only hanging protocols for the first study are searched
+    QList<HangingProtocol*> repositoryHangingProtocolsPetCt = getHangingProtocolsRepository();
+    QList<HangingProtocol*> expectedHangingProtocolsPetCt{repositoryHangingProtocolsPetCt[1], repositoryHangingProtocolsPetCt[4]};
 
     QTest::newRow("Patient with strict hanging protocol") << repositoryHangingProtocolsMG << MGPatient << expectedHangingProtocolsMG;
     QTest::newRow("Patient with non-strict hanging protocol") << repositoryHangingProtocolsCT << CTPatient << expectedHangingProtocolsCT;
     QTest::newRow("Patient without hanging") << repositoryHangingProtocolsMR << MRPatient << expectedHangingProtocolsMR;
     QTest::newRow("Patient with multiple hangings") << repositoryHangingProtocolsCTUS << CTUSPatient << expectedHangingProtocolsCTUS;
+    QTest::newRow("Patient with fusion") << repositoryHangingProtocolsPetCt << petCtPatient << expectedHangingProtocolsPetCt;
 }
 
 void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHangingProtocols()
@@ -226,8 +238,36 @@ QList<HangingProtocol*> test_HangingProtocolManager::getHangingProtocolsReposito
     HangingProtocolDisplaySet *displaySetUS_2 = UShangingProtocol->getDisplaySet(2);
     displaySetUS_2->setImageSet(imageSetUS_1);
 
+    // PET-CT fusion
+    HangingProtocol *petCtHangingProtocol = HangingProtocolTestHelper::createHangingProtocolWithAttributes("PET-CT", 10, true, false, 0, 5, 3, 3);
+    {
+        petCtHangingProtocol->setProtocolsList({"CT", "PT"});
+        // Restrictions
+        HangingProtocolImageSetRestriction restriction1 = createRestriction("Modality", "CT");
+        HangingProtocolImageSetRestriction restriction2 = createRestriction("Modality", "PT");
+        QMap<int, HangingProtocolImageSetRestriction> restrictions{{1, restriction1}, {2, restriction2}};
+        // Image sets
+        HangingProtocolImageSet *imageSet1 = petCtHangingProtocol->getImageSet(1);
+        imageSet1->addRestrictionExpression(HangingProtocolImageSetRestrictionExpression("1", restrictions));
+        imageSet1->setType(HangingProtocolImageSet::Type::Series);
+        HangingProtocolImageSet *imageSet2 = petCtHangingProtocol->getImageSet(2);
+        imageSet2->addRestrictionExpression(HangingProtocolImageSetRestrictionExpression("1", restrictions));
+        imageSet2->addRestrictionExpression(HangingProtocolImageSetRestrictionExpression("2", restrictions));
+        imageSet2->setType(HangingProtocolImageSet::Type::Fusion);
+        HangingProtocolImageSet *imageSet3 = petCtHangingProtocol->getImageSet(3);
+        imageSet3->addRestrictionExpression(HangingProtocolImageSetRestrictionExpression("2", restrictions));
+        imageSet3->setType(HangingProtocolImageSet::Type::Series);
+        // Display sets
+        HangingProtocolDisplaySet *displaySet1 = petCtHangingProtocol->getDisplaySet(1);
+        displaySet1->setImageSet(imageSet1);
+        HangingProtocolDisplaySet *displaySet2 = petCtHangingProtocol->getDisplaySet(2);
+        displaySet2->setImageSet(imageSet2);
+        HangingProtocolDisplaySet *displaySet3 = petCtHangingProtocol->getDisplaySet(3);
+        displaySet3->setImageSet(imageSet3);
+    }
+
     QList<HangingProtocol*> hangingProtocolRepository;
-    hangingProtocolRepository << MGhangingProtocol << CThangingProtocol << MRhangingProtocol << UShangingProtocol;
+    hangingProtocolRepository << MGhangingProtocol << CThangingProtocol << MRhangingProtocol << UShangingProtocol << petCtHangingProtocol;
 
     return hangingProtocolRepository;
 }

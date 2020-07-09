@@ -81,80 +81,16 @@ void HangingProtocolImageSetRestriction::setSelectorValueNumber(int selectorValu
 
 bool HangingProtocolImageSetRestriction::test(const Series *series) const
 {
-    if (getSelectorAttribute() == "BodyPartExamined")
-    {
-        return series->getBodyPartExamined() == getSelectorValue();
-    }
-    else if (getSelectorAttribute() == "ProtocolName")
-    {
-        return series->getProtocolName().contains(QRegularExpression(getSelectorValue()));
-    }
-    else if (getSelectorAttribute() == "ViewPosition")
-    {
-        return series->getViewPosition() == getSelectorValue();
-    }
-    else if (getSelectorAttribute() == "SeriesDescription")
-    {
-        return series->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
-    }
-    else if (getSelectorAttribute() == "StudyDescription")
-    {
-        return series->getParentStudy()->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
-    }
-    else if (getSelectorAttribute() == "PatientName")
-    {
-        return series->getParentStudy()->getParentPatient()->getFullName() == getSelectorValue();
-    }
-    else if (getSelectorAttribute() == "SeriesNumber")
-    {
-        return series->getSeriesNumber() == getSelectorValue();
-    }
-    else if (getSelectorAttribute() == "MinimumNumberOfImages")
-    {
-        return series->getFirstVolume()->getImages().size() >= getSelectorValue().toInt();
-    }
-
-    return true;
+    // Logic: if test for either series or image is false we must return false, but if selector attribute is ViewPosition it must be tested only for series
+    // because it has different semantic for image.
+    return testSeries(series) && (getSelectorAttribute() == "ViewPosition" || testImage(series->getImageByIndex(0)));
 }
 
 bool HangingProtocolImageSetRestriction::test(const Image *image) const
 {
-    if (getSelectorAttribute() == "ViewPosition")
-    {
-        return image->getViewPosition().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
-    }
-    else if (getSelectorAttribute() == "ImageLaterality")
-    {
-        return image->getImageLaterality() == getSelectorValue().at(0);
-    }
-    else if (getSelectorAttribute() == "Laterality")
-    {
-        // Atenció! Aquest atribut està definit a nivell de sèries
-        return QString(image->getParentSeries()->getLaterality()) == getSelectorValue();
-    }
-    else if (getSelectorAttribute() == "PatientOrientation")
-    {
-        return image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(QRegularExpression(getSelectorValue()));
-    }
-    // TODO Es podria canviar el nom, ja que és massa genèric. Seria més adequat ViewCodeMeaning per exemple
-    else if (getSelectorAttribute() == "CodeMeaning")
-    {
-        return image->getViewCodeMeaning().contains(QRegularExpression(getSelectorValue()));
-    }
-    else if (getSelectorAttribute() == "ImageType")
-    {
-        return image->getImageType().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
-    }
-    else if (getSelectorAttribute() == "MinimumNumberOfImages")
-    {
-        return image->getParentSeries()->getFirstVolume()->getImages().size() >= getSelectorValue().toInt();
-    }
-    else if (getSelectorAttribute() == "SeriesDescription")
-    {
-        return image->getParentSeries()->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
-    }
-
-    return true;
+    // Logic: if test for either image or series is false we must return false, but if selector attribute is ViewPosition it must be tested only for image
+    // because it has different semantic for series.
+    return testImage(image) && (getSelectorAttribute() == "ViewPosition" || testSeries(image->getParentSeries()));
 }
 
 bool HangingProtocolImageSetRestriction::operator==(const HangingProtocolImageSetRestriction &that) const
@@ -163,6 +99,94 @@ bool HangingProtocolImageSetRestriction::operator==(const HangingProtocolImageSe
         && this->m_selectorAttribute == that.m_selectorAttribute
         && this->m_selectorValue == that.m_selectorValue
         && this->m_selectorValueNumber == that.m_selectorValueNumber;
+}
+
+bool HangingProtocolImageSetRestriction::testSeries(const Series *series) const
+{
+    if (getSelectorAttribute() == "PatientName")
+    {
+        return series->getParentStudy()->getParentPatient()->getFullName() == getSelectorValue();
+    }
+    else if (getSelectorAttribute() == "StudyDescription")
+    {
+        return series->getParentStudy()->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
+    }
+    else if (getSelectorAttribute() == "Modality")
+    {
+        return series->getModality() == getSelectorValue();
+    }
+    else if (getSelectorAttribute() == "SeriesDescription")
+    {
+        return series->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
+    }
+    else if (getSelectorAttribute() == "BodyPartExamined")
+    {
+        return series->getBodyPartExamined() == getSelectorValue();
+    }
+    else if (getSelectorAttribute() == "ProtocolName")
+    {
+        return series->getProtocolName().contains(QRegularExpression(getSelectorValue()));
+    }
+    else if (getSelectorAttribute() == "PatientPosition")
+    {
+        return series->getPatientPosition() == getSelectorValue();
+    }
+    else if (getSelectorAttribute() == "SeriesNumber")
+    {
+        return series->getSeriesNumber() == getSelectorValue();
+    }
+    else if (getSelectorAttribute() == "Laterality")
+    {
+        return QString(series->getLaterality()) == getSelectorValue();
+    }
+    else if (getSelectorAttribute() == "ViewPosition")
+    {
+        return series->getViewPosition() == getSelectorValue();
+    }
+    else if (getSelectorAttribute() == "Manufacturer")
+    {
+        return series->getManufacturer().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
+    }
+    else if (getSelectorAttribute() == "MinimumNumberOfImages")
+    {
+        return series->getFirstVolume()->getImages().size() >= getSelectorValue().toInt();
+    }
+    else
+    {
+        return true;
+    }
+}
+
+bool HangingProtocolImageSetRestriction::testImage(const Image *image) const
+{
+    if (getSelectorAttribute() == "ImageType")
+    {
+        return image->getImageType().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
+    }
+    else if (getSelectorAttribute() == "CodeMeaning")
+    {
+        return image->getViewCodeMeaning().contains(QRegularExpression(getSelectorValue()));
+    }
+    else if (getSelectorAttribute() == "ViewPosition")
+    {
+        return image->getViewPosition().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
+    }
+    else if (getSelectorAttribute() == "PatientOrientation")
+    {
+        return image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(QRegularExpression(getSelectorValue()));
+    }
+    else if (getSelectorAttribute() == "ImageLaterality")
+    {
+        return image->getImageLaterality() == getSelectorValue().at(0);
+    }
+    else if (getSelectorAttribute() == "PhotometricInterpretation")
+    {
+        return image->getPhotometricInterpretation() == getSelectorValue();
+    }
+    else
+    {
+        return true;
+    }
 }
 
 } // namespace udg
