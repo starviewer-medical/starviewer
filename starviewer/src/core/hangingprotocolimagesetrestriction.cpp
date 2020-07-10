@@ -14,6 +14,7 @@
 
 #include "hangingprotocolimagesetrestriction.h"
 
+#include "dicomvalueattribute.h"
 #include "image.h"
 #include "patient.h"
 #include "series.h"
@@ -81,16 +82,22 @@ void HangingProtocolImageSetRestriction::setSelectorValueNumber(int selectorValu
 
 bool HangingProtocolImageSetRestriction::test(const Series *series) const
 {
+    // TODO std::optional<bool> could be used in the private methods when upgrading to C++17 to distinguish between "true == found and matches" and
+    //      "true == not found" and avoid unnecessary subsequent tests when already found
     // Logic: if test for either series or image is false we must return false, but if selector attribute is ViewPosition it must be tested only for series
-    // because it has different semantic for image.
-    return testSeries(series) && (getSelectorAttribute() == "ViewPosition" || testImage(series->getImageByIndex(0)));
+    // because it has different semantic for image. Custom attribute is testes as a last resort.
+    return testSeries(series)
+        && (getSelectorAttribute() == "ViewPosition" || testImage(series->getImageByIndex(0)))
+        && testCustomAttribute(series->getImageByIndex(0));
 }
 
-bool HangingProtocolImageSetRestriction::test(const Image *image) const
+bool HangingProtocolImageSetRestriction::test(Image *image) const
 {
     // Logic: if test for either image or series is false we must return false, but if selector attribute is ViewPosition it must be tested only for image
-    // because it has different semantic for series.
-    return testImage(image) && (getSelectorAttribute() == "ViewPosition" || testSeries(image->getParentSeries()));
+    // because it has different semantic for series. Custom attribute is testes as a last resort.
+    return testImage(image)
+        && (getSelectorAttribute() == "ViewPosition" || testSeries(image->getParentSeries()))
+        && testCustomAttribute(image);
 }
 
 bool HangingProtocolImageSetRestriction::operator==(const HangingProtocolImageSetRestriction &that) const
@@ -157,7 +164,7 @@ bool HangingProtocolImageSetRestriction::testSeries(const Series *series) const
     }
 }
 
-bool HangingProtocolImageSetRestriction::testImage(const Image *image) const
+bool HangingProtocolImageSetRestriction::testImage(Image *image) const
 {
     if (getSelectorAttribute() == "ImageType")
     {
@@ -182,6 +189,36 @@ bool HangingProtocolImageSetRestriction::testImage(const Image *image) const
     else if (getSelectorAttribute() == "PhotometricInterpretation")
     {
         return image->getPhotometricInterpretation() == getSelectorValue();
+    }
+    else
+    {
+        return true;
+    }
+}
+
+bool HangingProtocolImageSetRestriction::testCustomAttribute(Image *image) const
+{
+    static const QRegularExpression TagRegex("^\\(([0-9a-f]{4}),([0-9a-f]{4})\\)$", QRegularExpression::CaseInsensitiveOption);
+    auto match = TagRegex.match(getSelectorAttribute());
+
+    if (match.hasMatch())
+    {
+        unsigned short group = match.captured(1).toUShort(nullptr, 16);
+        unsigned short element = match.captured(2).toUShort(nullptr, 16);
+        DICOMTag tag(group, element);
+        const DICOMTagReader &dicomTagReader = image->getDicomTagReader();
+
+        if (dicomTagReader.hasAttribute(tag))
+        {
+            // Getting the attribute object and then getting the string from it we can get more useful values from private tags with unknown VR than if we got
+            // the string directly from dicomTagReader, thanks to the hack for #2146
+            std::unique_ptr<DICOMValueAttribute> attribute(dicomTagReader.getValueAttribute(tag));
+            return attribute->getValueAsQString().contains(QRegularExpression(getSelectorValue()));
+        }
+        else
+        {
+            return false;
+        }
     }
     else
     {

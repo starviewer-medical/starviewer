@@ -53,7 +53,7 @@ bool HangingProtocolImageSetRestrictionExpression::test(const Series *series) co
     return evaluate(results);
 }
 
-bool HangingProtocolImageSetRestrictionExpression::test(const Image *image) const
+bool HangingProtocolImageSetRestrictionExpression::test(Image *image) const
 {
     QList<bool> results;
 

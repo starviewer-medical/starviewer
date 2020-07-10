@@ -52,7 +52,7 @@ Image* getImageByIndexInStudyModality(const Study *study, int index, const QStri
 }
 
 // Cert si la imatge compleix les restriccions
-bool isValidImage(const Image *image, const HangingProtocolImageSet *imageSet)
+bool isValidImage(Image *image, const HangingProtocolImageSet *imageSet)
 {
     if (!image)
     {
@@ -231,7 +231,7 @@ void HangingProtocolFiller::fillImageSetWithSeries(HangingProtocolImageSet *imag
 
                 for (int i = 0; i < series->getNumberOfImages() && !found; i++)
                 {
-                    const Image *image = series->getImageByIndex(i);
+                    Image *image = series->getImageByIndex(i);
 
                     if (nextExpression.test(image))
                     {

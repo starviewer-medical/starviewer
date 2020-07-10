@@ -702,6 +702,15 @@ QPixmap Image::getThumbnail(bool getFromCache, int resolution)
     return m_thumbnail;
 }
 
+const DICOMTagReader& Image::getDicomTagReader()
+{
+    if (m_dicomTagReader.getFileName().isNull())
+    {
+        m_dicomTagReader.setFile(m_path);
+    }
+    return m_dicomTagReader;
+}
+
 QStringList Image::getSupportedModalities()
 {
     // Modalitats extretes de DICOM PS 3.3 C.7.3.1.1.1

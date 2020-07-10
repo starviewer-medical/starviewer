@@ -23,6 +23,7 @@
 #include <QPixmap>
 
 #include "dicomsource.h"
+#include "dicomtagreader.h"
 #include "imageorientation.h"
 #include "patientorientation.h"
 #include "photometricinterpretation.h"
@@ -266,6 +267,9 @@ public:
     /// @return Un QPixmap amb el thumbnail
     QPixmap getThumbnail(bool getFromCache = false, int resolution = 100);
 
+    /// Returns a DICOMTagReader initialized with this image's file. It is initialized on the first call of this method, that's why it's not const.
+    const DICOMTagReader& getDicomTagReader();
+
     /// Ens retorna una llista amb les modalitats que suportem com a Image
     static QStringList getSupportedModalities();
 
@@ -461,6 +465,9 @@ private:
 
     //Indica quin és l'origen de les imatges DICOM
     DICOMSource m_imageDICOMSource;
+
+    /// It will be initialized with this image's corresponding file on first use.
+    DICOMTagReader m_dicomTagReader;
 };
 
 }
