@@ -18,6 +18,7 @@
 
 #include <QVariant>
 #include <QDate>
+#include <QVector>
 
 namespace udg {
 
@@ -119,7 +120,23 @@ double DICOMValueAttribute::getValueAsDouble()
 
 QString DICOMValueAttribute::getValueAsQString()
 {
-    return m_value.toString();
+    // HACK for wrong VR (#2146)
+    if (m_valueRepresentation == Unknown)
+    {
+        QString hexString = m_value.toString();
+        const auto &hexBytes = hexString.splitRef("\\");
+        QByteArray byteArray;
+        byteArray.reserve(hexBytes.size());
+        foreach (const auto &hexByte, hexBytes)
+        {
+            byteArray.append(hexByte.toInt(nullptr, 16));
+        }
+        return QString::fromLatin1(byteArray);  // most likely Latin-1
+    }
+    else
+    {
+        return m_value.toString();
+    }
 }
 
 QByteArray DICOMValueAttribute::getValueAsByteArray()
