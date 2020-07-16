@@ -137,12 +137,19 @@
     <t>2009</t>
    </fx>
    <fx>
-    <d>Es resol un problema pel qual no es calculava el SUV en algunes images de PET d'un centre específic.</d>
-    <t>2146</t>
-   </fx>
-   <fx>
     <d>Se soluciona un problema a Mac que feia que si es mostrava una finestra de missatge a l'inici quedés amagada darrere de la pantalla de presentació.</d>
     <t>2127</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>1.0.1</version>
+  <date>2020-07-14</date>
+  <changes>
+   <fx>
+    <d>Es resol un problema pel qual no es calculava el SUV en algunes images de PET d'un centre específic.</d>
+    <t>2146</t>
    </fx>
   </changes>
  </release>
