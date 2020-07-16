@@ -55,13 +55,16 @@ public:
     bool operator==(const HangingProtocolImageSetRestriction &that) const;
 
 private:
+    /// Represents a test result: Pass means that the restriction is recognized and satisfied; Fail means that the restriction is recognized and not satisfied;
+    /// Undecided means that the restriction is not recognized.
+    enum class TestResult { Pass, Fail, Undecided };
     /// Returns true if the given series satisfies this restriction, and false otherwise.
-    bool testSeries(const Series *series) const;
+    TestResult testSeries(const Series *series) const;
     /// Returns true if the given image satisfies this restriction, and false otherwise.
-    bool testImage(Image *image) const;
+    TestResult testImage(Image *image) const;
     /// Tests the given image for a custom selector attribute of the form "(xxxx,yyyy)". If the selector attribute does not match this syntax, returns true.
     /// Otherwise it returns true if the attribute is found and matches the selector value, and false otherwise.
-    bool testCustomAttribute(Image *image) const;
+    TestResult testCustomAttribute(Image *image) const;
 
 private:
     /// Identifier of this restriction. Must be unique in a hanging protocol.

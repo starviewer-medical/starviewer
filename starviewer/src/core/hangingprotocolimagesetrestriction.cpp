@@ -82,22 +82,68 @@ void HangingProtocolImageSetRestriction::setSelectorValueNumber(int selectorValu
 
 bool HangingProtocolImageSetRestriction::test(const Series *series) const
 {
-    // TODO std::optional<bool> could be used in the private methods when upgrading to C++17 to distinguish between "true == found and matches" and
-    //      "true == not found" and avoid unnecessary subsequent tests when already found
-    // Logic: if test for either series or image is false we must return false, but if selector attribute is ViewPosition it must be tested only for series
-    // because it has different semantic for image. Custom attribute is testes as a last resort.
-    return testSeries(series)
-        && (getSelectorAttribute() == "ViewPosition" || testImage(series->getImageByIndex(0)))
-        && testCustomAttribute(series->getImageByIndex(0));
+    // TODO std::optional<bool> could be used instead of the enum when upgrading to C++17 to make code more readable
+    TestResult result = testSeries(series);
+
+    if (result == TestResult::Pass)
+    {
+        return true;
+    }
+    else if (result == TestResult::Fail)
+    {
+        return false;
+    }
+    else
+    {
+        result = testImage(series->getImageByIndex(0));
+
+        if (result == TestResult::Pass)
+        {
+            return true;
+        }
+        else if (result == TestResult::Fail)
+        {
+            return false;
+        }
+        else
+        {
+            result = testCustomAttribute(series->getImageByIndex(0));
+            return result != TestResult::Fail;
+        }
+    }
 }
 
 bool HangingProtocolImageSetRestriction::test(Image *image) const
 {
-    // Logic: if test for either image or series is false we must return false, but if selector attribute is ViewPosition it must be tested only for image
-    // because it has different semantic for series. Custom attribute is testes as a last resort.
-    return testImage(image)
-        && (getSelectorAttribute() == "ViewPosition" || testSeries(image->getParentSeries()))
-        && testCustomAttribute(image);
+    // TODO std::optional<bool> could be used instead of the enum when upgrading to C++17 to make code more readable
+    TestResult result = testImage(image);
+
+    if (result == TestResult::Pass)
+    {
+        return true;
+    }
+    else if (result == TestResult::Fail)
+    {
+        return false;
+    }
+    else
+    {
+        result = testSeries(image->getParentSeries());
+
+        if (result == TestResult::Pass)
+        {
+            return true;
+        }
+        else if (result == TestResult::Fail)
+        {
+            return false;
+        }
+        else
+        {
+            result = testCustomAttribute(image);
+            return result != TestResult::Fail;
+        }
+    }
 }
 
 bool HangingProtocolImageSetRestriction::operator==(const HangingProtocolImageSetRestriction &that) const
@@ -108,95 +154,101 @@ bool HangingProtocolImageSetRestriction::operator==(const HangingProtocolImageSe
         && this->m_selectorValueNumber == that.m_selectorValueNumber;
 }
 
-bool HangingProtocolImageSetRestriction::testSeries(const Series *series) const
+HangingProtocolImageSetRestriction::TestResult HangingProtocolImageSetRestriction::testSeries(const Series *series) const
 {
     if (getSelectorAttribute() == "PatientName")
     {
-        return series->getParentStudy()->getParentPatient()->getFullName() == getSelectorValue();
+        return series->getParentStudy()->getParentPatient()->getFullName() == getSelectorValue() ? TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "StudyDescription")
     {
-        return series->getParentStudy()->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
+        return series->getParentStudy()->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption)) ?
+                    TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "Modality")
     {
-        return series->getModality() == getSelectorValue();
+        return series->getModality() == getSelectorValue() ? TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "SeriesDescription")
     {
-        return series->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
+        return series->getDescription().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption)) ?
+                    TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "BodyPartExamined")
     {
-        return series->getBodyPartExamined() == getSelectorValue();
+        return series->getBodyPartExamined() == getSelectorValue() ? TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "ProtocolName")
     {
-        return series->getProtocolName().contains(QRegularExpression(getSelectorValue()));
+        return series->getProtocolName().contains(QRegularExpression(getSelectorValue())) ? TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "PatientPosition")
     {
-        return series->getPatientPosition() == getSelectorValue();
+        return series->getPatientPosition() == getSelectorValue() ? TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "SeriesNumber")
     {
-        return series->getSeriesNumber() == getSelectorValue();
+        return series->getSeriesNumber() == getSelectorValue() ? TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "Laterality")
     {
-        return QString(series->getLaterality()) == getSelectorValue();
+        return QString(series->getLaterality()) == getSelectorValue() ? TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "ViewPosition")
     {
-        return series->getViewPosition() == getSelectorValue();
+        return series->getViewPosition() == getSelectorValue() ? TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "Manufacturer")
     {
-        return series->getManufacturer().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
+        return series->getManufacturer().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption)) ?
+                    TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "MinimumNumberOfImages")
     {
-        return series->getFirstVolume()->getImages().size() >= getSelectorValue().toInt();
+        return series->getFirstVolume()->getImages().size() >= getSelectorValue().toInt() ? TestResult::Pass : TestResult::Fail;
     }
     else
     {
-        return true;
+        return TestResult::Undecided;
     }
 }
 
-bool HangingProtocolImageSetRestriction::testImage(Image *image) const
+HangingProtocolImageSetRestriction::TestResult HangingProtocolImageSetRestriction::testImage(Image *image) const
 {
     if (getSelectorAttribute() == "ImageType")
     {
-        return image->getImageType().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
+        return image->getImageType().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption)) ?
+                    TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "CodeMeaning")
     {
-        return image->getViewCodeMeaning().contains(QRegularExpression(getSelectorValue()));
+        return image->getViewCodeMeaning().contains(QRegularExpression(getSelectorValue())) ? TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "ViewPosition")
     {
-        return image->getViewPosition().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption));
+        return image->getViewPosition().contains(QRegularExpression(getSelectorValue(), QRegularExpression::CaseInsensitiveOption)) ?
+                    TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "PatientOrientation")
     {
-        return image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(QRegularExpression(getSelectorValue()));
+        return image->getPatientOrientation().getDICOMFormattedPatientOrientation().contains(QRegularExpression(getSelectorValue())) ?
+                    TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "ImageLaterality")
     {
-        return image->getImageLaterality() == getSelectorValue().at(0);
+        return image->getImageLaterality() == getSelectorValue().at(0) ? TestResult::Pass : TestResult::Fail;
     }
     else if (getSelectorAttribute() == "PhotometricInterpretation")
     {
-        return image->getPhotometricInterpretation() == getSelectorValue();
+        return image->getPhotometricInterpretation() == getSelectorValue() ? TestResult::Pass : TestResult::Fail;
     }
     else
     {
-        return true;
+        return TestResult::Undecided;
     }
 }
 
-bool HangingProtocolImageSetRestriction::testCustomAttribute(Image *image) const
+HangingProtocolImageSetRestriction::TestResult HangingProtocolImageSetRestriction::testCustomAttribute(Image *image) const
 {
     static const QRegularExpression TagRegex("^\\(([0-9a-f]{4}),([0-9a-f]{4})\\)$", QRegularExpression::CaseInsensitiveOption);
     auto match = TagRegex.match(getSelectorAttribute());
@@ -213,16 +265,16 @@ bool HangingProtocolImageSetRestriction::testCustomAttribute(Image *image) const
             // Getting the attribute object and then getting the string from it we can get more useful values from private tags with unknown VR than if we got
             // the string directly from dicomTagReader, thanks to the hack for #2146
             std::unique_ptr<DICOMValueAttribute> attribute(dicomTagReader.getValueAttribute(tag));
-            return attribute->getValueAsQString().contains(QRegularExpression(getSelectorValue()));
+            return attribute->getValueAsQString().contains(QRegularExpression(getSelectorValue())) ? TestResult::Pass : TestResult::Fail;
         }
         else
         {
-            return false;
+            return TestResult::Fail;
         }
     }
     else
     {
-        return true;
+        return TestResult::Undecided;
     }
 }
 
