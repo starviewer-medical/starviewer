@@ -43,14 +43,19 @@ void test_HangingProtocolImageSetRestriction::test_Series_ShouldReturnExpectedVa
 
     Series *series = new Series();
     series->setParentStudy(study);
+    series->setModality("CT");
     series->setBodyPartExamined("CHEST");
     series->setProtocolName("this is protocol1");
+    series->setPatientPosition("HFP");
     series->setViewPosition("LATERAL");
     series->setDescription("A Fancy Description");
     series->setSeriesNumber("1");
+    series->setManufacturer("MegaCorp");
 
     Image *image = new Image();
-    image->setParentSeries(series);
+    series->addImage(image);
+    image->setImageType("LOCALIZER");
+    image->setViewPosition("AP");
 
     Volume *volume = new Volume(this);
     volume->addImage(image);
@@ -58,10 +63,14 @@ void test_HangingProtocolImageSetRestriction::test_Series_ShouldReturnExpectedVa
 
     QTest::newRow("empty selector attribute") << HangingProtocolImageSetRestriction() << series << true;
     QTest::newRow("unsupported selector attribute") << HangingProtocolImageSetRestriction(0, "foo", "", 0) << series << true;
+    QTest::newRow("modality, match") << HangingProtocolImageSetRestriction(0, "Modality", "CT", 0) << series << true;
+    QTest::newRow("modality, no match") << HangingProtocolImageSetRestriction(0, "Modality", "MR", 0) << series << false;
     QTest::newRow("body part examined, match") << HangingProtocolImageSetRestriction(0, "BodyPartExamined", "CHEST", 0) << series << true;
     QTest::newRow("body part examined, no match") << HangingProtocolImageSetRestriction(0, "BodyPartExamined", "HEAD", 0) << series << false;
     QTest::newRow("protocol name, match") << HangingProtocolImageSetRestriction(0, "ProtocolName", "protocol[0-9]", 0) << series << true;
     QTest::newRow("protocol name, no match") << HangingProtocolImageSetRestriction(0, "ProtocolName", "bar", 0) << series << false;
+    QTest::newRow("patient position, match") << HangingProtocolImageSetRestriction(0, "PatientPosition", "HFP", 0) << series << true;
+    QTest::newRow("patient position, no match") << HangingProtocolImageSetRestriction(0, "PatientPosition", "HFS", 0) << series << false;
     QTest::newRow("view position, match") << HangingProtocolImageSetRestriction(0, "ViewPosition", "LATERAL", 0) << series << true;
     QTest::newRow("view position, no match") << HangingProtocolImageSetRestriction(0, "ViewPosition", "AP", 0) << series << false;
     QTest::newRow("series description, match") << HangingProtocolImageSetRestriction(0, "SeriesDescription", "a.* desc", 0) << series << true;
@@ -72,8 +81,13 @@ void test_HangingProtocolImageSetRestriction::test_Series_ShouldReturnExpectedVa
     QTest::newRow("patient name, no match") << HangingProtocolImageSetRestriction(0, "PatientName", "Smith", 0) << series << false;
     QTest::newRow("series number, match") << HangingProtocolImageSetRestriction(0, "SeriesNumber", "1", 0) << series << true;
     QTest::newRow("series number, no match") << HangingProtocolImageSetRestriction(0, "SeriesNumber", "4", 0) << series << false;
+    QTest::newRow("manufacturer, match") << HangingProtocolImageSetRestriction(0, "Manufacturer", "Megacorp", 0) << series << true;
+    QTest::newRow("manufacturer, no match") << HangingProtocolImageSetRestriction(0, "Manufacturer", "Capsule Corp", 0) << series << false;
     QTest::newRow("minimum number of images, match") << HangingProtocolImageSetRestriction(0, "MinimumNumberOfImages", "1", 0) << series << true;
     QTest::newRow("minimum number of images, no match") << HangingProtocolImageSetRestriction(0, "MinimumNumberOfImages", "2", 0) << series << false;
+    // Image attributes
+    QTest::newRow("image type, match") << HangingProtocolImageSetRestriction(0, "ImageType", "LOCALIZER", 0) << series << true;
+    QTest::newRow("image type, no match") << HangingProtocolImageSetRestriction(0, "ImageType", "SURVEY", 0) << series << false;
 }
 
 void test_HangingProtocolImageSetRestriction::test_Series_ShouldReturnExpectedValue()
@@ -93,6 +107,7 @@ void test_HangingProtocolImageSetRestriction::test_Image_ShouldReturnExpectedVal
 
     Series *series = new Series(this);
     series->setLaterality('R');
+    series->setViewPosition("AP");
 
     Image *image = new Image();
     image->setParentSeries(series);
@@ -103,6 +118,7 @@ void test_HangingProtocolImageSetRestriction::test_Image_ShouldReturnExpectedVal
     image->setPatientOrientation(patientOrientation);
     image->setViewCodeMeaning("cranio-caudal");
     image->setImageType("LOCALIZER");
+    image->setPhotometricInterpretation("MONOCHROME1");
 
     Volume *volume = new Volume(this);
     volume->addImage(image);
@@ -114,14 +130,17 @@ void test_HangingProtocolImageSetRestriction::test_Image_ShouldReturnExpectedVal
     QTest::newRow("view position, no match") << HangingProtocolImageSetRestriction(0, "ViewPosition", "AP", 0) << image << false;
     QTest::newRow("image laterality, match") << HangingProtocolImageSetRestriction(0, "ImageLaterality", "R", 0) << image << true;
     QTest::newRow("image laterality, no match") << HangingProtocolImageSetRestriction(0, "ImageLaterality", "L", 0) << image << false;
-    QTest::newRow("laterality, match") << HangingProtocolImageSetRestriction(0, "Laterality", "R", 0) << image << true;
-    QTest::newRow("laterality, no match") << HangingProtocolImageSetRestriction(0, "Laterality", "L", 0) << image << false;
     QTest::newRow("patient orientation, match") << HangingProtocolImageSetRestriction(0, "PatientOrientation", "[RL]\\\\[FH]", 0) << image << true;
     QTest::newRow("patient orientation, no match") << HangingProtocolImageSetRestriction(0, "PatientOrientation", "[AP]\\\\[HF]", 0) << image << false;
     QTest::newRow("code meaning, match") << HangingProtocolImageSetRestriction(0, "CodeMeaning", "cranio-caudal", 0) << image << true;
     QTest::newRow("code meaning, no match") << HangingProtocolImageSetRestriction(0, "CodeMeaning", "lateral|oblique", 0) << image << false;
     QTest::newRow("image type, match") << HangingProtocolImageSetRestriction(0, "ImageType", "localizer|secondary", 0) << image << true;
     QTest::newRow("image type, no match") << HangingProtocolImageSetRestriction(0, "ImageType", "original", 0) << image << false;
+    QTest::newRow("photometric interpretation, match") << HangingProtocolImageSetRestriction(0, "PhotometricInterpretation", "MONOCHROME1", 0) << image << true;
+    QTest::newRow("photometric interpretation, no match") << HangingProtocolImageSetRestriction(0, "PhotometricInterpretation", "RGB", 0) << image << false;
+    // Series attributes or properties
+    QTest::newRow("laterality, match") << HangingProtocolImageSetRestriction(0, "Laterality", "R", 0) << image << true;
+    QTest::newRow("laterality, no match") << HangingProtocolImageSetRestriction(0, "Laterality", "L", 0) << image << false;
     QTest::newRow("minimum number of images, match") << HangingProtocolImageSetRestriction(0, "MinimumNumberOfImages", "1", 0) << image << true;
     QTest::newRow("minimum number of images, no match") << HangingProtocolImageSetRestriction(0, "MinimumNumberOfImages", "2", 0) << image << false;
 }

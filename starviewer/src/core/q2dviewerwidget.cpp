@@ -167,6 +167,15 @@ void Q2DViewerWidget::setInputAsynchronously(Volume *input, QViewerCommand *comm
     }
 }
 
+void Q2DViewerWidget::setInputAsynchronously(const QList<Volume*> &inputList, QViewerCommand *command)
+{
+    if (!inputList.isEmpty())
+    {
+        m_2DView->setInputAsynchronously(inputList, command);
+        updateProjectionLabel();
+    }
+}
+
 void Q2DViewerWidget::updateInput(Volume *input)
 {
     Q_UNUSED(input)

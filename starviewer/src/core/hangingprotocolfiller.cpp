@@ -52,7 +52,7 @@ Image* getImageByIndexInStudyModality(const Study *study, int index, const QStri
 }
 
 // Cert si la imatge compleix les restriccions
-bool isValidImage(const Image *image, const HangingProtocolImageSet *imageSet)
+bool isValidImage(Image *image, const HangingProtocolImageSet *imageSet)
 {
     if (!image)
     {
@@ -60,7 +60,7 @@ bool isValidImage(const Image *image, const HangingProtocolImageSet *imageSet)
         return false;
     }
 
-    return imageSet->getRestrictionExpression().test(image);
+    return imageSet->getRestrictionExpressions().first().test(image);
 }
 
 // This method is to temporally preserve backwards compatibility with the imageNumberInStudyModality tag. Should be removed when it isn't needed anymore.
@@ -73,13 +73,12 @@ void fillImageSetWithImageNumberInStudyModality(HangingProtocolImageSet *imageSe
     {
         Series *selectedSeries = image->getParentSeries();
         imageSet->setImageToDisplay(selectedSeries->getImages().indexOf(image));
-        imageSet->setSeriesToDisplay(selectedSeries);
+        imageSet->addSeriesToDisplay(selectedSeries);
     }
     else
     {
         // Segur que no hi ha cap més imatge vàlida
         // Important, no hi posem cap serie!
-        imageSet->setSeriesToDisplay(0);
         imageSet->setImageToDisplay(0);
     }
 }
@@ -177,65 +176,97 @@ void HangingProtocolFiller::fillImageSet(HangingProtocolImageSet *imageSet, Stud
 
 void HangingProtocolFiller::fillImageSetWithStudyPrivate(HangingProtocolImageSet *imageSet, const Study *study)
 {
+    Q_ASSERT((imageSet->getType() == HangingProtocolImageSet::Type::Fusion && imageSet->getNumberOfRestrictionExpressions() >= 2) ||
+             imageSet->getNumberOfRestrictionExpressions() == 1);
+
     foreach (Series *series, study->getSeries())
     {
-        if (fillImageSetWithSeries(imageSet, series))
+        fillImageSetWithSeries(imageSet, series);
+
+        if (imageSet->getNumberOfSeriesToDisplay() == imageSet->getNumberOfRestrictionExpressions())
         {
-            return;
+            return; // already filled
         }
+    }
+
+    // If we reach this point it means that the image set has not been fully filled.
+    // If it's a fusion image set and it's partially filled we have to reconstruct m_usedSeries.
+    Q_ASSERT(imageSet->getNumberOfSeriesToDisplay() < imageSet->getNumberOfRestrictionExpressions());
+
+    if (imageSet->getType() == HangingProtocolImageSet::Type::Fusion && imageSet->getNumberOfSeriesToDisplay() > 0)
+    {
+        imageSet->clearSeriesToDisplay();
+        m_usedSeries.clear();
+        findUsedSeries(imageSet->getHangingProtocol());
     }
 }
 
-bool HangingProtocolFiller::fillImageSetWithSeries(HangingProtocolImageSet *imageSet, Series *series)
+void HangingProtocolFiller::fillImageSetWithSeries(HangingProtocolImageSet *imageSet, Series *series)
 {
     if (imageSet->getHangingProtocol()->getAllDifferent() && m_usedSeries.contains(series))
     {
-        return false;
+        return;
     }
 
     if (!isModalityCompatible(imageSet->getHangingProtocol(), series->getModality()))
     {
-        return false;
+        return;
     }
 
-    if (imageSet->getTypeOfItem() != "image" && !imageSet->getRestrictionExpression().test(series))
-    {
-        return false;
-    }
-    else
-    {
-        bool found = false;
+    int numberOffilledSeries = imageSet->getNumberOfSeriesToDisplay();
+    auto nextExpression = imageSet->getRestrictionExpressions()[numberOffilledSeries];
 
-        for (int i = 0; i < series->getNumberOfImages() && !found; i++)
-        {
-            const Image *image = series->getImageByIndex(i);
-
-            if (imageSet->getRestrictionExpression().test(image))
+    switch (imageSet->getType())
+    {
+        case HangingProtocolImageSet::Type::Series:
+            if (!nextExpression.test(series))
             {
-                found = true;
-                imageSet->setImageToDisplay(i);
+                return;
             }
-        }
+            break;
 
-        if (!found)
-        {
-            return false;
-        }
+        case HangingProtocolImageSet::Type::Image:
+            {
+                bool found = false;
+
+                for (int i = 0; i < series->getNumberOfImages() && !found; i++)
+                {
+                    Image *image = series->getImageByIndex(i);
+
+                    if (nextExpression.test(image))
+                    {
+                        found = true;
+                        imageSet->setImageToDisplay(i);
+                    }
+                }
+
+                if (!found)
+                {
+                    return;
+                }
+            }
+            break;
+
+        case HangingProtocolImageSet::Type::Fusion:
+            if (!nextExpression.test(series))
+            {
+                return;
+            }
+            break;
     }
 
-    imageSet->setSeriesToDisplay(series);
+    // If we reach this point the series has passed all tests
+    imageSet->addSeriesToDisplay(series);
     m_usedSeries << series;
-
-    return true;
 }
 
 void HangingProtocolFiller::findUsedSeries(HangingProtocol *hangingProtocol)
 {
     foreach (HangingProtocolImageSet *imageSet, hangingProtocol->getImageSets())
     {
-        const Series *series = imageSet->getSeriesToDisplay();
+        const QVector<Series*> seriesVector = imageSet->getSeriesToDisplay();
 
-        if (series)
+        foreach (Series *series, seriesVector)
         {
             m_usedSeries << series;
         }
