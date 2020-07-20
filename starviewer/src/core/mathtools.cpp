@@ -27,22 +27,6 @@
 
 namespace udg {
 
-/// Definició de constants
-// log_2 e
-const double MathTools::NumberEBase2Logarithm = 1.4426950408889634074;
-// 1/pi
-const long double MathTools::ReversePiNumberLong = 0.3183098861837906715377675267450287L;
-// pi
-const double MathTools::PiNumber = 3.14159265358979323846;
-// pi
-const long double MathTools::PiNumberLong = 3.14159265358979323846;
-// pi/2
-const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916397514L;
-const double MathTools::DegreesToRadiansAsDouble = 0.017453292519943295;
-const double MathTools::RadiansToDegreesAsDouble = 57.29577951308232;
-// TODO Potser seria més conevnient fer servir std::numeric_limits<double>::max(). Caldria incloure <limits>
-const double MathTools::DoubleMaximumValue = VTK_DOUBLE_MAX;
-
 double MathTools::logTwo(const double x, const bool zero)
 {
     if (x < 0)

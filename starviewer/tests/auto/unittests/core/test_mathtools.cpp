@@ -1296,7 +1296,7 @@ void test_MathTools::setupComputeAngleOfAVectorData()
     QTest::newRow("+X+Y / pi/4 rad / 45º") << QVector2D(1.0, 1.0) << MathTools::PiNumber / 4.0;
     QTest::newRow("+Y / pi/2 rad / 90º") << QVector2D(0.0, 1.0) << MathTools::PiNumber / 2.0;
     QTest::newRow("-X+Y / 3pi/4 rad / 135º") << QVector2D(-1.0, 1.0) << 3.0 * MathTools::PiNumber / 4.0;
-    QTest::newRow("-X / pi rad / 180º") << QVector2D(-1.0, 0.0) << MathTools::PiNumber;
+    QTest::newRow("-X / pi rad / 180º") << QVector2D(-1.0, 0.0) << +MathTools::PiNumber;
 
     QTest::newRow("random Q1") << QVector2D(1.1, 4.0) << 1.30243;
     QTest::newRow("random Q2") << QVector2D(-9.7, 4.2) << 2.73297;
@@ -1304,7 +1304,7 @@ void test_MathTools::setupComputeAngleOfAVectorData()
     QTest::newRow("random Q4") << QVector2D(9.4, -9.3) << -0.78005;
 
     QTest::newRow("+0+0") << QVector2D(+0.0, +0.0) << +0.0;
-    QTest::newRow("-0+0") << QVector2D(-0.0, +0.0) << MathTools::PiNumber;
+    QTest::newRow("-0+0") << QVector2D(-0.0, +0.0) << +MathTools::PiNumber;
     QTest::newRow("-0-0") << QVector2D(-0.0, -0.0) << -MathTools::PiNumber;
     QTest::newRow("+0-0") << QVector2D(+0.0, -0.0) << -0.0;
 }

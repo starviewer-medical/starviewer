@@ -15,6 +15,8 @@
 #ifndef UDGMATHTOOLS_H
 #define UDGMATHTOOLS_H
 
+#include <limits>
+
 #include <QList>
 #include <QVector>
 
@@ -34,20 +36,18 @@ class MathTools {
 public:
     enum IntersectionResults { ParallelLines, SkewIntersection, LinesIntersect };
 
-///
-/// Declaració de constants
-///
-static const double NumberEBase2Logarithm;
-static const long double ReversePiNumberLong;
-static const double PiNumber;
-static const long double PiNumberLong;
-static const long double PiNumberDivBy2Long;
-static const double DegreesToRadiansAsDouble;
-static const double RadiansToDegreesAsDouble;
+/**
+ *  Constant declarations.
+ *  \todo Use constants from <numbers> header when upgrading to C++20.
+ */
+static constexpr double NumberEBase2Logarithm = 1.4426950408889634074;                      // log_2 e
+static constexpr double PiNumber = 3.14159265358979323846;                                  // pi
+static constexpr long double PiNumberDivBy2Long = 1.5707963267948966192313216916397514L;    // pi/2
+static constexpr double RadiansToDegreesAsDouble = 57.29577951308232;
 /// Epsilon, nombre extremadament petit
 static constexpr double Epsilon = 1e-9;
 /// Valor màxim d'un tipus double
-static const double DoubleMaximumValue;
+static constexpr double DoubleMaximumValue = std::numeric_limits<double>::max();
 
 ///
 /// Operacions aritmètiques
