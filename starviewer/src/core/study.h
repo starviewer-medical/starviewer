@@ -63,6 +63,9 @@ public:
     /// Gets the age of the patient at study date. If it's not set, it will be computed from birth and study date if both are valid.
     QString getPatientAge() const;
 
+    /// Returns the patient's age calculated from the patient's birth date and study date. Returns a null string if it can't be calculated.
+    QString getCalculatedPatientAge() const;
+
     /// Assignar/Obtenir el pes del pacient
     void setWeight(double weight);
     double getWeight() const;

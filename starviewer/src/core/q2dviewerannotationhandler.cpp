@@ -112,6 +112,13 @@ void Q2DViewerAnnotationHandler::updateMainInformationAnnotation()
         QString institutionName = series->getInstitutionName();
         QString patientName = patient->getFullName();
         QString age = study->getPatientAge();
+        QString calculatedAge = study->getCalculatedPatientAge();
+
+        if (!calculatedAge.isEmpty() && age != calculatedAge)
+        {
+            age = QString(QObject::tr("WARNING: age mismatch\n%1 (stored) / %2 (calculated)\n").arg(age).arg(calculatedAge));
+        }
+
         QString sex = patient->getSex();
         QString patientId = patient->getID();
         QString accessionNumber = study->getAccessionNumber();
