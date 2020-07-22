@@ -13,56 +13,25 @@
  *************************************************************************************/
 
 #include "mathtools.h"
-#include "logging.h"
-#include "vector3.h"
 
-#include <cmath>
-#include <ctime>
-#include <vtkMath.h>
-#include <vtkPlane.h>
+#include "logging.h"
+
 #include <vtkLine.h>
+#include <vtkMath.h>
 
 #include <QVector2D>
 #include <QVector3D>
 
 namespace udg {
 
-/// Definició de constants
-// log_2 e
-const double MathTools::NumberEBase2Logarithm = 1.4426950408889634074;
-// 1/pi
-const long double MathTools::ReversePiNumberLong = 0.3183098861837906715377675267450287L;
-// pi
-const double MathTools::PiNumber = 3.14159265358979323846;
-// pi
-const long double MathTools::PiNumberLong = 3.14159265358979323846;
-// pi/2
-const long double MathTools::PiNumberDivBy2Long = 1.5707963267948966192313216916397514L;
-const double MathTools::DegreesToRadiansAsDouble = 0.017453292519943295;
-const double MathTools::RadiansToDegreesAsDouble = 57.29577951308232;
-// TODO Potser seria més conevnient fer servir std::numeric_limits<double>::max(). Caldria incloure <limits>
-const double MathTools::DoubleMaximumValue = VTK_DOUBLE_MAX;
-
-double MathTools::logTwo(const double x, const bool zero)
+double MathTools::logTwo(const double x)
 {
     if (x < 0)
     {
         WARN_LOG("MathTools::logTwo >> Log of negative number");
     }
 
-    if (zero)
-    {
-        return (x == 0) ? 0 : double(log(double(x))) * NumberEBase2Logarithm;
-    }
-    else
-    {
-        if (x == 0)
-        {
-            WARN_LOG("MathTools::logTwo >> Log of zero");
-        }
-
-        return double(log(double(x))) * NumberEBase2Logarithm;
-    }
+    return (x == 0) ? 0 : std::log2(x);
 }
 
 double MathTools::angleInRadians(const QVector2D &vector)
@@ -157,28 +126,9 @@ double MathTools::normalize(double vector[3])
     return vtkMath::Normalize(vector);
 }
 
-bool MathTools::isOdd(int x)
+double MathTools::getDistance3D(const Vector3 &firstPoint, const Vector3 &secondPoint)
 {
-    return (x % 2);
-}
-
-bool MathTools::isEven(int x)
-{
-    return !isOdd(x);
-}
-
-double MathTools::cubeRoot(double x)
-{
-    return std::pow(x, 1.0 / 3.0);
-}
-
-double MathTools::getDistance3D(const double firstPoint[3], const double secondPoint[3])
-{
-    double xx = firstPoint[0] - secondPoint[0];
-    double yy = firstPoint[1] - secondPoint[1];
-    double zz = firstPoint[2] - secondPoint[2];
-    double value = pow(xx, 2) + pow(yy, 2) + pow(zz, 2);
-    return sqrt(value);
+    return (firstPoint - secondPoint).length();
 }
 
 double MathTools::randomDouble(double minimum, double maximum)
@@ -291,7 +241,7 @@ double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
     double cross[3];
     MathTools::crossProduct(dv1, dv2, cross);
 
-    double dot = MathTools::dotProduct(dv1, cross);
+    double dot = MathTools::dotProduct(dv1, cross); // TODO first parameter should be dv3 but ROIs currently depend on this error (see #1896)
 
     // Coplanarity check
     if (MathTools::closeEnough(dot, 0.0))
@@ -334,36 +284,9 @@ double* MathTools::infiniteLinesIntersection(double *p1, double *p2, double *p3,
 
 }
 
-double MathTools::truncate(double x)
-{
-    return x > 0.0 ? std::floor(x) : std::ceil(x);
-}
-
-int MathTools::roundToNearestInteger(double x)
-{
-    return vtkMath::Round(x);
-}
-
 bool MathTools::closeEnough(float f1, float f2)
 {
     return fabsf((f1 - f2) / ((f2 == 0.0f) ? 1.0f : f2)) < Epsilon;
-}
-
-bool MathTools::almostEqual(const Vector3 &v1, const Vector3 &v2, double absoluteEpsilon, double relativeEpsilon)
-{
-    return almostEqual(v1.x, v2.x, absoluteEpsilon, relativeEpsilon) &&
-            almostEqual(v1.y, v2.y, absoluteEpsilon, relativeEpsilon) &&
-            almostEqual(v1.z, v2.z, absoluteEpsilon, relativeEpsilon);
-}
-
-float MathTools::degreesToRadians(float degrees)
-{
-    return (degrees * PiNumber) / 180.0f;
-}
-
-float MathTools::radiansToDegrees(float radians)
-{
-    return (radians * 180.0f) / PiNumber;
 }
 
 bool MathTools::isNaN(double x)

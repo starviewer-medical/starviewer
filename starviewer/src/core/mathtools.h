@@ -15,10 +15,12 @@
 #ifndef UDGMATHTOOLS_H
 #define UDGMATHTOOLS_H
 
+#include "vector3.h"
+
+#include <limits>
+
 #include <QList>
 #include <QVector>
-
-#include "vector3.h"
 
 class QVector2D;
 class QVector3D;
@@ -34,20 +36,17 @@ class MathTools {
 public:
     enum IntersectionResults { ParallelLines, SkewIntersection, LinesIntersect };
 
-///
-/// Declaració de constants
-///
-static const double NumberEBase2Logarithm;
-static const long double ReversePiNumberLong;
-static const double PiNumber;
-static const long double PiNumberLong;
-static const long double PiNumberDivBy2Long;
-static const double DegreesToRadiansAsDouble;
-static const double RadiansToDegreesAsDouble;
+/**
+ *  Constant declarations.
+ *  \todo Use constants from <numbers> header when upgrading to C++20.
+ */
+static constexpr double PiNumber = 3.14159265358979323846;                                  // pi
+static constexpr long double PiNumberDivBy2Long = 1.5707963267948966192313216916397514L;    // pi/2
+static constexpr double RadiansToDegreesAsDouble = 57.29577951308232;
 /// Epsilon, nombre extremadament petit
 static constexpr double Epsilon = 1e-9;
 /// Valor màxim d'un tipus double
-static const double DoubleMaximumValue;
+static constexpr double DoubleMaximumValue = std::numeric_limits<double>::max();
 
 ///
 /// Operacions aritmètiques
@@ -92,24 +91,15 @@ static bool isInsideRange(T value, T min, T max)
 static bool isOdd(int x);
 static bool isEven(int x);
 
-/// Ens retorna el valor truncat
-static double truncate(double x);
-
 /// Arrodoneix un nombre real a l'enter més proper
 static int roundToNearestInteger(double x);
 
 /// Transforma el valor passat per paràmetre de graus a radians i vice-versa
-static float degreesToRadians(float degrees);
-static float radiansToDegrees(float radians);
+static constexpr float degreesToRadians(float degrees);
+static constexpr float radiansToDegrees(float radians);
 
-/// Calcula el logaritme en base 2
-/// @param x Valor del que es calcula el logaritme
-/// @param zero Si cert, en cas que x sigui 0, ens retornarà 0, altrament
-///             farà el càlcul igualment del logaritme sense fer aquesta comprovació
-static double logTwo(double x, bool zero = true);
-
-/// Arrel cúbica
-static double cubeRoot(double x);
+/// Returns log2 of x. Special case: if x is 0 returns 0.
+static double logTwo(double x);
 
 /// Determina si podem considerar pràcticament iguals els dos
 /// valors passats per paràmetre si la seva diferència és menor al valor d'Epsilon
@@ -138,7 +128,7 @@ static bool almostEqual(const Vector3 &v1, const Vector3 &v2, double absoluteEps
                         double relativeEpsilon = Epsilon);
 
 /// Distància entre punts 3D
-static double getDistance3D(const double firstPoint[3], const double secondPoint[3]);
+static double getDistance3D(const Vector3 &firstPoint, const Vector3 &secondPoint);
 
 /// Random number generation helpers
 
@@ -213,6 +203,38 @@ private:
     /// Initializes random seed if needed
     static void initializeRandomSeed();
 };
+
+inline bool MathTools::isOdd(int x)
+{
+    return (x % 2);
+}
+
+inline bool MathTools::isEven(int x)
+{
+    return !isOdd(x);
+}
+
+inline int MathTools::roundToNearestInteger(double x)
+{
+    return static_cast<int>(std::lround(x));
+}
+
+inline constexpr float MathTools::degreesToRadians(float degrees)
+{
+    return static_cast<float>((static_cast<double>(degrees) * PiNumber) / 180.0);
+}
+
+inline constexpr float MathTools::radiansToDegrees(float radians)
+{
+    return static_cast<float>((static_cast<double>(radians) * 180.0) / PiNumber);
+}
+
+inline bool MathTools::almostEqual(const Vector3 &v1, const Vector3 &v2, double absoluteEpsilon, double relativeEpsilon)
+{
+    return almostEqual(v1.x, v2.x, absoluteEpsilon, relativeEpsilon) &&
+            almostEqual(v1.y, v2.y, absoluteEpsilon, relativeEpsilon) &&
+            almostEqual(v1.z, v2.z, absoluteEpsilon, relativeEpsilon);
+}
 
 } // End namespace udg
 
