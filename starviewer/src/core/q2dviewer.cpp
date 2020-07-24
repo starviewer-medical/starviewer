@@ -870,12 +870,17 @@ void Q2DViewer::updateCamera()
 
         if (m_applyFlip)
         {
-            // Alternativa 1)
             // TODO Així movem la càmera, però faltaria que la imatge no es mogués de lloc
             // potser implementant a la nostra manera el metode Azimuth i prenent com a centre
             // el centre de la imatge. Una altra possibilitat es contrarestar el desplaçament de la
             // camera en l'eix en que s'ha produit
-            camera->Azimuth(180);
+            // Calculate a point reflection through the focal point
+            Vector3 position = camera->GetPosition();
+            Vector3 direction = camera->GetDirectionOfProjection();
+            double distance = camera->GetDistance();
+            Vector3 newPosition = position + direction * distance * 2;
+            camera->SetPosition(newPosition.x, newPosition.y, newPosition.z);
+
             switch (getCurrentViewPlane())
             {
                 // HACK Aquest hack esta relacionat amb els de getCurrentDisplayedImageOrientationLabels()
