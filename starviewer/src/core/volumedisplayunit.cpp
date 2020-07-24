@@ -44,6 +44,7 @@ VolumeDisplayUnit::VolumeDisplayUnit(QObject *parent)
     m_mapper->SliceFacesCameraOn();
     m_mapper->JumpToNearestSliceOn();
     m_mapper->StreamingOn();
+    m_mapper->BorderOn();   // without this an ugly line may appear at the border
     m_imageSlice->SetMapper(m_mapper);
     m_imageSlice->GetProperty()->SetInterpolationTypeToCubic();
     m_imageStack = vtkImageStack::New();
