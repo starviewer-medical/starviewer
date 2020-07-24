@@ -174,7 +174,6 @@ SliceOrientedVolumePixelData VolumeDisplayUnit::getCurrentPixelData()
     
     if (isThickSlabActive())
     {
-        m_mapper->ResampleToScreenPixelsOff();
         m_mapper->Update();
         delete m_auxiliarCurrentVolumePixelData;
         m_auxiliarCurrentVolumePixelData = new VolumePixelData();
@@ -198,7 +197,10 @@ SliceOrientedVolumePixelData VolumeDisplayUnit::getCurrentPixelData()
 
 void VolumeDisplayUnit::restoreRenderingQuality()
 {
-    m_mapper->ResampleToScreenPixelsOn();
+    if (!isThickSlabActive())
+    {
+        m_mapper->ResampleToScreenPixelsOn();
+    }
 }
 
 Image* VolumeDisplayUnit::getCurrentDisplayedImage() const
@@ -280,7 +282,17 @@ double VolumeDisplayUnit::getSlabThickness() const
 
 void VolumeDisplayUnit::setSlabThickness(double thickness)
 {
-    m_mapper->SetSlabThickness(thickness);
+    if (thickness > 0)
+    {
+        m_mapper->ResampleToScreenPixelsOff();
+        m_mapper->SetSlabThickness(thickness);
+    }
+    else
+    {
+        m_mapper->SetSlabThickness(thickness);
+        m_mapper->ResampleToScreenPixelsOn();
+    }
+
     m_sliceHandler->setSlabThickness(thickness);
 }
 
