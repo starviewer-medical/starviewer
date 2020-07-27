@@ -178,6 +178,10 @@ void DrawerLine::updateVtkActorProperties()
     QColor color = this->getColor();
     properties->SetColor(color.redF(), color.greenF(), color.blueF());
     propertiesBackground->SetColor(0.0, 0.0, 0.0);
+
+    // Needed for 3D cursor to work properly (#2876)
+    m_vtkActor->Modified();
+    m_vtkBackgroundActor->Modified();
 }
 
 double DrawerLine::getDistanceToPoint(double *point3D, double closestPoint[3])
