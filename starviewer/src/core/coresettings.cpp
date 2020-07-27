@@ -147,8 +147,8 @@ void CoreSettings::init()
 
     settingsRegistry->addSetting(ScaleFactor, "0");
 
-    settingsRegistry->addSetting(CrosshairInnerDiameter, 20);
-    settingsRegistry->addSetting(CrosshairOuterDiameter, 60);
+    settingsRegistry->addSetting(CrosshairInnerDiameter, 10);
+    settingsRegistry->addSetting(CrosshairOuterDiameter, 30);
 }
 
 } // End namespace udg
