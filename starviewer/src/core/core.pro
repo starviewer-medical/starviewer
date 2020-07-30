@@ -50,6 +50,7 @@ HEADERS += extensionfactory.h \
     itkQtAdaptor.h \
     harddiskinformation.h \
     logging.h \
+    stipplingvtkopenglpolydatamapper2d.h \
     volume.h \
     volumehelper.h \
     volumereader.h \
@@ -438,6 +439,7 @@ SOURCES += extensionmediator.cpp \
     harddiskinformation.cpp \
     logging.cpp \
     qdiagnosistestsresultsitem.cpp \
+    stipplingvtkopenglpolydatamapper2d.cpp \
     volume.cpp \
     volumehelper.cpp \
     volumereader.cpp \

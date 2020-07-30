@@ -22,10 +22,11 @@ class vtkPolyData;
 class vtkPoints;
 class vtkCellArray;
 class vtkActor2D;
-class vtkPolyDataMapper2D;
 class vtkPropAssembly;
 
 namespace udg {
+
+class StipplingVtkOpenGLPolyDataMapper2D;
 
 /**
     Primitiva de polilínia pel Drawer
@@ -95,7 +96,7 @@ private:
     vtkCellArray *m_vtkCellArray;
     vtkActor2D *m_vtkActor;
     vtkActor2D *m_vtkBackgroundActor;
-    vtkPolyDataMapper2D *m_vtkMapper;
+    StipplingVtkOpenGLPolyDataMapper2D *m_vtkMapper;
 
     /// vtkProp per agrupar l'actor i el background per simular el contorn
     vtkPropAssembly *m_vtkPropAssembly;
