@@ -125,84 +125,91 @@ void StipplingVtkOpenGLPolyDataMapper2D::BuildShaders(std::string &vertexCode, s
 {
     this->Superclass::BuildShaders(vertexCode, fragmentCode, geometryCode, renderer, actor);
 
-    vtkShaderProgram::Substitute(fragmentCode, "//VTK::TCoord::Dec", FragmentTCoordDec, false);
-    vtkShaderProgram::Substitute(fragmentCode, "//VTK::TCoord::Impl", FragmentTCoordImpl, false);
-
-    if (geometryCode.empty())
+    if (actor->GetProperty()->GetLineStipplePattern() != 0xFFFF)
     {
-        geometryCode = BasicGeometryShader;
+        vtkShaderProgram::Substitute(fragmentCode, "//VTK::TCoord::Dec", FragmentTCoordDec, false);
+        vtkShaderProgram::Substitute(fragmentCode, "//VTK::TCoord::Impl", FragmentTCoordImpl, false);
 
-        // Repeat substitutions that the superclass does if it uses a geometry shader
-        if (!this->HaveCellScalars)
+        if (geometryCode.empty())
         {
-            if (this->Colors && this->Colors->GetNumberOfComponents())
-                {
-                    vtkShaderProgram::Substitute(geometryCode, "//VTK::Color::Dec",
-                                                 "in vec4 fcolorVSOutput[];\n"
-                                                 "out vec4 fcolorGSOutput;");
-                    vtkShaderProgram::Substitute(geometryCode, "//VTK::Color::Impl",
-                                                 "fcolorGSOutput = fcolorVSOutput[i];");
-                }
-        }
+            geometryCode = BasicGeometryShader;
 
-        int numTCoordComps = this->VBOs->GetNumberOfComponents("tcoordMC");
-        if (numTCoordComps == 1 || numTCoordComps == 2)
-        {
-            if (numTCoordComps == 1)
+            // Repeat substitutions that the superclass does if it uses a geometry shader
+            if (!this->HaveCellScalars)
             {
-                vtkShaderProgram::Substitute(geometryCode, "//VTK::TCoord::Dec",
-                                             "in float tcoordVCVSOutput[];\n"
-                                             "out float tcoordVCGSOutput;");
-                vtkShaderProgram::Substitute(geometryCode, "//VTK::TCoord::Impl",
-                                             "tcoordVCGSOutput = tcoordVCVSOutput[i];");
+                if (this->Colors && this->Colors->GetNumberOfComponents())
+                    {
+                        vtkShaderProgram::Substitute(geometryCode, "//VTK::Color::Dec",
+                                                     "in vec4 fcolorVSOutput[];\n"
+                                                     "out vec4 fcolorGSOutput;");
+                        vtkShaderProgram::Substitute(geometryCode, "//VTK::Color::Impl",
+                                                     "fcolorGSOutput = fcolorVSOutput[i];");
+                    }
+            }
+
+            int numTCoordComps = this->VBOs->GetNumberOfComponents("tcoordMC");
+            if (numTCoordComps == 1 || numTCoordComps == 2)
+            {
+                if (numTCoordComps == 1)
+                {
+                    vtkShaderProgram::Substitute(geometryCode, "//VTK::TCoord::Dec",
+                                                 "in float tcoordVCVSOutput[];\n"
+                                                 "out float tcoordVCGSOutput;");
+                    vtkShaderProgram::Substitute(geometryCode, "//VTK::TCoord::Impl",
+                                                 "tcoordVCGSOutput = tcoordVCVSOutput[i];");
+                }
+                else
+                {
+                    vtkShaderProgram::Substitute(geometryCode, "//VTK::TCoord::Dec",
+                                                 "in vec2 tcoordVCVSOutput[];\n"
+                                                 "out vec2 tcoordVCGSOutput;");
+                    vtkShaderProgram::Substitute(geometryCode, "//VTK::TCoord::Impl",
+                                                 "tcoordVCGSOutput = tcoordVCVSOutput[i];");
+                }
+            }
+
+            // are we handling the apple bug?
+            if (!this->AppleBugPrimIDs.empty())
+            {
+                vtkShaderProgram::Substitute(geometryCode, "//VTK::PrimID::Dec",
+                                             "in  vec4 applePrimIDVSOutput[];\n"
+                                             "out vec4 applePrimIDGSOutput;");
+                vtkShaderProgram::Substitute(geometryCode, "//VTK::PrimID::Impl",
+                                             "applePrimIDGSOutput = applePrimIDVSOutput[i];");
             }
             else
             {
-                vtkShaderProgram::Substitute(geometryCode, "//VTK::TCoord::Dec",
-                                             "in vec2 tcoordVCVSOutput[];\n"
-                                             "out vec2 tcoordVCGSOutput;");
-                vtkShaderProgram::Substitute(geometryCode, "//VTK::TCoord::Impl",
-                                             "tcoordVCGSOutput = tcoordVCVSOutput[i];");
+                if (this->HaveCellScalars)
+                {
+                    vtkShaderProgram::Substitute(geometryCode, "//VTK::PrimID::Impl",
+                                                 "gl_PrimitiveID = gl_PrimitiveIDIn;");
+                }
             }
         }
 
-        // are we handling the apple bug?
-        if (!this->AppleBugPrimIDs.empty())
-        {
-            vtkShaderProgram::Substitute(geometryCode, "//VTK::PrimID::Dec",
-                                         "in  vec4 applePrimIDVSOutput[];\n"
-                                         "out vec4 applePrimIDGSOutput;");
-            vtkShaderProgram::Substitute(geometryCode, "//VTK::PrimID::Impl",
-                                         "applePrimIDGSOutput = applePrimIDVSOutput[i];");
-        }
-        else
-        {
-            if (this->HaveCellScalars)
-            {
-                vtkShaderProgram::Substitute(geometryCode, "//VTK::PrimID::Impl",
-                                             "gl_PrimitiveID = gl_PrimitiveIDIn;");
-            }
-        }
+        vtkShaderProgram::Substitute(geometryCode, "//VTK::PositionVC::Dec", GeometryPositionVCDec, false);
+        vtkShaderProgram::Substitute(geometryCode, "//VTK::Output::Dec", GeometryOutputDec, false);
+        vtkShaderProgram::Substitute(geometryCode, "//VTK::PositionVC::Impl", GeometryPositionVCImpl, false);
     }
-
-    vtkShaderProgram::Substitute(geometryCode, "//VTK::PositionVC::Dec", GeometryPositionVCDec, false);
-    vtkShaderProgram::Substitute(geometryCode, "//VTK::Output::Dec", GeometryOutputDec, false);
-    vtkShaderProgram::Substitute(geometryCode, "//VTK::PositionVC::Impl", GeometryPositionVCImpl, false);
 }
 
 void StipplingVtkOpenGLPolyDataMapper2D::SetMapperShaderParameters(vtkOpenGLHelper &cellBO, vtkViewport *renderer, vtkActor2D *actor)
 {
     this->Superclass::SetMapperShaderParameters(cellBO, renderer, actor);
 
-    vtkShaderProgram *program = cellBO.Program;
-
-    // The proper place to do this would be SetPropertyShaderParameters, but it is not virtual
     int stipplePattern = actor->GetProperty()->GetLineStipplePattern();
-    program->SetUniformi("StipplePattern", stipplePattern);
 
-    int *size = renderer->GetSize();
-    float viewportSize[2] = { static_cast<float>(size[0]), static_cast<float>(size[1]) };
-    program->SetUniform2f("ViewportSize", viewportSize);
+    if (stipplePattern != 0xFFFF)
+    {
+        vtkShaderProgram *program = cellBO.Program;
+
+        // The proper place to do this would be SetPropertyShaderParameters, but it is not virtual
+        program->SetUniformi("StipplePattern", stipplePattern);
+
+        int *size = renderer->GetSize();
+        float viewportSize[2] = { static_cast<float>(size[0]), static_cast<float>(size[1]) };
+        program->SetUniform2f("ViewportSize", viewportSize);
+    }
 }
 
 } // namespace udg
