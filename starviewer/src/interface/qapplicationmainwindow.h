@@ -187,6 +187,9 @@ private slots:
     /// Mostra el diàleg que executa els diagnosis test
     void showDiagnosisTestDialog();
 
+    /// Shows or hides patient identifying information in the window title according to m_showPatientIdentificationInWindowTitleAction state.
+    void updateWindowTitle();
+
     /// @brief External applications submenu with the defined external applications.
     ///
     /// When called multiple times, deletes the previous menu and regenerates a new one.
@@ -237,6 +240,7 @@ private:
 #endif // STARVIEWER_CE
     QAction *m_openReleaseNotesAction;
     QAction *m_runDiagnosisTestsAction;
+    QAction *m_showPatientIdentificationInWindowTitleAction;
 
     QLabel *m_betaVersionMenuText;
 

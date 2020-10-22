@@ -123,7 +123,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     readSettings();
     // Icona de l'aplicació
     this->setWindowIcon(QIcon(":/images/logo/logo.ico"));
-    this->setWindowTitle(ApplicationNameString);
+    updateWindowTitle();
 
 // Amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE
@@ -349,7 +349,15 @@ void QApplicationMainWindow::createActions()
     m_runDiagnosisTestsAction = new QAction(this);
     m_runDiagnosisTestsAction->setText(tr("&Run Diagnosis Tests"));
     m_runDiagnosisTestsAction->setStatusTip(tr("Run %1 diagnosis tests").arg(ApplicationNameString));
-    connect(m_runDiagnosisTestsAction, SIGNAL(triggered()), SLOT(showDiagnosisTestDialog()));}
+    connect(m_runDiagnosisTestsAction, SIGNAL(triggered()), SLOT(showDiagnosisTestDialog()));
+
+    m_showPatientIdentificationInWindowTitleAction = new QAction(this);
+    m_showPatientIdentificationInWindowTitleAction->setText(tr("Show &patient identification in window title"));
+    m_showPatientIdentificationInWindowTitleAction->setStatusTip(tr("Show patient identification in window title"));
+    m_showPatientIdentificationInWindowTitleAction->setCheckable(true);
+    m_showPatientIdentificationInWindowTitleAction->setChecked(true);
+    connect(m_showPatientIdentificationInWindowTitleAction, &QAction::toggled, this, &QApplicationMainWindow::updateWindowTitle);
+}
 
 void QApplicationMainWindow::maximizeMultipleScreens()
 {
@@ -419,6 +427,7 @@ void QApplicationMainWindow::createMenus()
     m_externalApplicationsMenu = 0;
     createExternalApplicationsMenu();
     connect(ExternalApplicationsManager::instance(), SIGNAL(onApplicationsChanged()), this, SLOT(createExternalApplicationsMenu()));
+    m_toolsMenu->addAction(m_showPatientIdentificationInWindowTitleAction);
 
     // Menú 'window'
     m_windowMenu = menuBar()->addMenu(tr("&Window"));
@@ -610,7 +619,7 @@ void QApplicationMainWindow::setPatient(Patient *patient)
     m_patient = patient;
     connectPatientVolumesToNotifier(patient);
 
-    this->setWindowTitle(m_patient->getID() + " : " + m_patient->getFullName());
+    updateWindowTitle();
     enableExtensions();
     m_extensionHandler->getContext().setPatient(patient);
     m_extensionHandler->openDefaultExtensions();
@@ -866,6 +875,18 @@ void QApplicationMainWindow::showDiagnosisTestDialog()
 {
     QDiagnosisTest qDiagnosisTest;
     qDiagnosisTest.execAndRunDiagnosisTest();
+}
+
+void QApplicationMainWindow::updateWindowTitle()
+{
+    if (m_patient && m_showPatientIdentificationInWindowTitleAction->isChecked())
+    {
+        this->setWindowTitle(m_patient->getID() + " : " + m_patient->getFullName());
+    }
+    else
+    {
+        this->setWindowTitle(ApplicationNameString);
+    }
 }
 
 void QApplicationMainWindow::openReleaseNotes()
