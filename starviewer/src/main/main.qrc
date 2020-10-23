@@ -26,6 +26,10 @@
         <file>cluts/2d/pet20step.xml</file>
         <file>cluts/2d/rainbow.xml</file>
         <file>cluts/2d/petosirix.xml</file>
+        <file>cluts/2d/spring.xml</file>
+        <file>cluts/2d/summer.xml</file>
+        <file>cluts/2d/fall.xml</file>
+        <file>cluts/2d/winter.xml</file>
         <file>css/mainwindowbackground.css</file>
         <file>../../COPYRIGHT</file>
         <file>../../LICENSE</file>
