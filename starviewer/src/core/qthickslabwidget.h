@@ -30,7 +30,7 @@ class QThickSlabWidget : public QWidget, private Ui::QThickSlabWidgetBase {
 
 public:
     explicit QThickSlabWidget(QWidget *parent = nullptr);
-    virtual ~QThickSlabWidget();
+    ~QThickSlabWidget() override;
 
     /// Links this widget to the given viewer, i.e. makes this widget control the thick slab properties of that viewer.
     /// If there is already a linked viewer, it is automatically unlinked first.
@@ -42,8 +42,18 @@ public:
 signals:
     /// Emitted when the maximum thickness checkbox changes its status.
     void maximumThicknessModeToggled(bool checked);
+    /// Emitted when it should be ensured that the whole widget is visible in a scroll area.
+    void ensureVisible();
+
+protected:
+    void showEvent(QShowEvent *event) override;
 
 private:
+    /// Shows the options widget. If the parameter is true, ensureVisible() is emitted.
+    void showOptions(bool emitEnsureVisible);
+    /// Hides the options widget.
+    void hideOptions();
+
     /// Creates the signal-slot connections.
     void createConnections();
     /// Removes the signal-slot connections.
@@ -77,6 +87,10 @@ private slots:
 private:
     /// The linked viewer.
     Q2DViewer *m_viewer;
+    /// True if this widget is being shown for the first time. Used to adjust the height of the arrow button the first time.
+    bool m_firstShow;
+    /// True if the options widget is being shown for the first time.
+    bool m_firstOptionsShow;
 
 };
 

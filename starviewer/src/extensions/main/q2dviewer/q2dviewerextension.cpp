@@ -226,6 +226,8 @@ void Q2DViewerExtension::createConnections()
 #endif
 
     connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
+    connect(m_thickSlabWidget, &QThickSlabWidget::ensureVisible, this, [this] { m_toolBarScrollArea->ensureWidgetVisible(m_thickSlabWidget); },
+            Qt::QueuedConnection);
 
     connect(m_workingArea, SIGNAL(fusionLayout2x1FirstRequested(QList<Volume*>,AnatomicalPlane)),
             SLOT(setFusionLayout2x1First(QList<Volume*>,AnatomicalPlane)));

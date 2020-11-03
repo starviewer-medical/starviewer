@@ -23,15 +23,22 @@
 namespace udg {
 
 QThickSlabWidget::QThickSlabWidget(QWidget *parent)
- : QWidget(parent), m_viewer(nullptr)
+ : QWidget(parent), m_viewer(nullptr), m_firstShow(true), m_firstOptionsShow(true)
 {
     setupUi(this);
 
-    QMenu *menu = new QMenu(this);
-    QWidgetAction *widgetAction = new QWidgetAction(this);
-    widgetAction->setDefaultWidget(m_menuWidget);
-    menu->addAction(widgetAction);
-    m_toolButton->setMenu(menu);
+    m_optionsWidget->hide();
+
+    connect(m_arrowToolButton, &QToolButton::clicked, [this] {
+        if (m_optionsWidget->isVisible())
+        {
+            hideOptions();
+        }
+        else
+        {
+            showOptions(true);
+        }
+    });
 
     m_projectionModeComboBox->addItem(tr("MIP"), VolumeDisplayUnit::Max);
     m_projectionModeComboBox->addItem(tr("MinIP"), VolumeDisplayUnit::Min);
@@ -80,7 +87,7 @@ void QThickSlabWidget::link(Q2DViewer *viewer)
     m_viewer = viewer;
 
     updateMaximumThickness();
-    m_toolButton->setChecked(m_viewer->isThickSlabActive());
+    m_mainToolButton->setChecked(m_viewer->isThickSlabActive());
     m_projectionModeComboBox->setCurrentIndex(m_projectionModeComboBox->findData(m_viewer->getSlabProjectionMode()));
     m_slabThicknessDoubleSpinBox->setValue(m_viewer->getSlabThickness());
     setMaximumThicknessEnabled(m_maximumThicknessCheckBox->isChecked());
@@ -98,11 +105,39 @@ void QThickSlabWidget::unlink()
     this->setEnabled(false);
 }
 
+void QThickSlabWidget::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+
+    if (m_firstShow)
+    {
+        m_arrowToolButton->setMinimumHeight(m_mainToolButton->height());
+        m_firstShow = false;
+    }
+}
+
+void QThickSlabWidget::showOptions(bool emitEnsureVisible)
+{
+    m_optionsWidget->show();
+    m_arrowToolButton->setArrowType(Qt::LeftArrow);
+    if (emitEnsureVisible)
+    {
+        emit ensureVisible();
+    }
+    m_firstOptionsShow = false;
+}
+
+void QThickSlabWidget::hideOptions()
+{
+    m_optionsWidget->hide();
+    m_arrowToolButton->setArrowType(Qt::RightArrow);
+}
+
 void QThickSlabWidget::createConnections()
 {
     Q_ASSERT(m_viewer);
 
-    connect(m_toolButton, &QToolButton::toggled, this, &QThickSlabWidget::setThickSlabEnabled);
+    connect(m_mainToolButton, &QToolButton::toggled, this, &QThickSlabWidget::setThickSlabEnabled);
     connect(m_projectionModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &QThickSlabWidget::applyProjectionMode);
     connect(m_slabThicknessDoubleSpinBox, static_cast<void(QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &QThickSlabWidget::applyThickness);
     connect(m_maximumThicknessCheckBox, &QCheckBox::toggled, this, &QThickSlabWidget::setMaximumThicknessEnabled);
@@ -114,7 +149,7 @@ void QThickSlabWidget::removeConnections()
 {
     Q_ASSERT(m_viewer);
 
-    m_toolButton->disconnect();
+    m_mainToolButton->disconnect();
     m_projectionModeComboBox->disconnect();
     m_slabThicknessDoubleSpinBox->disconnect(this);
     m_maximumThicknessCheckBox->disconnect();
@@ -132,7 +167,7 @@ void QThickSlabWidget::updateMaximumThickness()
 
 bool QThickSlabWidget::isThickSlabEnabled() const
 {
-    return m_toolButton->isChecked();
+    return m_mainToolButton->isChecked();
 }
 
 void QThickSlabWidget::setThickSlabEnabled(bool enabled)
@@ -143,6 +178,7 @@ void QThickSlabWidget::setThickSlabEnabled(bool enabled)
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
+        showOptions(m_firstOptionsShow);
         m_viewer->setSlabProjectionMode(static_cast<VolumeDisplayUnit::SlabProjectionMode>(m_projectionModeComboBox->currentData().toInt()));
         m_viewer->setSlabThickness(m_slabThicknessDoubleSpinBox->value());
 
@@ -151,6 +187,7 @@ void QThickSlabWidget::setThickSlabEnabled(bool enabled)
     else
     {
         m_viewer->disableThickSlab();
+        hideOptions();
     }
 }
 
