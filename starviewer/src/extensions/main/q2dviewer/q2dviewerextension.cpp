@@ -59,6 +59,7 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 #include <QListView>
+#include <QScrollBar>
 
 #include "layoutmanager.h"
 
@@ -409,6 +410,28 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 void Q2DViewerExtension::setCurrentStudy(const QString &studyUID)
 {
     m_relatedStudiesWidget->setCurrentStudy(studyUID);
+}
+
+void Q2DViewerExtension::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    int toolBarWidth = m_toolBarScrollArea->width();
+    int thickSlabStart = m_thickSlabWidget->x();
+    int thickSlabFixedWidth = m_thickSlabWidget->getFixedWidth();
+
+    m_thickSlabWidget->setFoldable(thickSlabStart + thickSlabFixedWidth > toolBarWidth);    // foldable if with its fixed width it doesn't fit
+}
+
+void Q2DViewerExtension::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+
+    int toolBarWidth = m_toolBarScrollArea->width();
+    int thickSlabStart = m_thickSlabWidget->x();
+    int thickSlabFixedWidth = m_thickSlabWidget->getFixedWidth();
+
+    m_thickSlabWidget->setFoldable(thickSlabStart + thickSlabFixedWidth > toolBarWidth);    // foldable if with its fixed width it doesn't fit
 }
 
 void Q2DViewerExtension::initializeTools()

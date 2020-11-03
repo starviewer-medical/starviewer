@@ -23,11 +23,9 @@
 namespace udg {
 
 QThickSlabWidget::QThickSlabWidget(QWidget *parent)
- : QWidget(parent), m_viewer(nullptr), m_firstShow(true), m_firstOptionsShow(true)
+ : QWidget(parent), m_viewer(nullptr), m_firstShow(true), m_firstOptionsShow(true), m_fixedWidth(0), m_foldable(false)
 {
     setupUi(this);
-
-    m_optionsWidget->hide();
 
     connect(m_arrowToolButton, &QToolButton::clicked, [this] {
         if (m_optionsWidget->isVisible())
@@ -105,14 +103,49 @@ void QThickSlabWidget::unlink()
     this->setEnabled(false);
 }
 
+void QThickSlabWidget::setFoldable(bool foldable)
+{
+    bool change = m_foldable != foldable;
+    m_foldable = foldable;
+
+    if (m_foldable)
+    {
+        m_arrowToolButton->show();
+
+        if (change)
+        {
+            if (m_mainToolButton->isChecked())
+            {
+                showOptions(false);
+            }
+            else
+            {
+                hideOptions();
+            }
+        }
+    }
+    else
+    {
+        m_arrowToolButton->hide();
+        m_optionsWidget->show();
+    }
+}
+
+int QThickSlabWidget::getFixedWidth() const
+{
+    return m_fixedWidth;
+}
+
 void QThickSlabWidget::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
 
     if (m_firstShow)
     {
-        m_arrowToolButton->setMinimumHeight(m_mainToolButton->height());
         m_firstShow = false;
+        m_arrowToolButton->setMinimumHeight(m_mainToolButton->height());
+        m_fixedWidth = m_mainToolButton->sizeHint().width() + m_optionsWidget->sizeHint().width();
+        setFoldable(m_foldable);
     }
 }
 
@@ -178,7 +211,11 @@ void QThickSlabWidget::setThickSlabEnabled(bool enabled)
     {
         QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        showOptions(m_firstOptionsShow);
+        if (m_foldable)
+        {
+            showOptions(m_firstOptionsShow);
+        }
+
         m_viewer->setSlabProjectionMode(static_cast<VolumeDisplayUnit::SlabProjectionMode>(m_projectionModeComboBox->currentData().toInt()));
         m_viewer->setSlabThickness(m_slabThicknessDoubleSpinBox->value());
 
@@ -187,7 +224,11 @@ void QThickSlabWidget::setThickSlabEnabled(bool enabled)
     else
     {
         m_viewer->disableThickSlab();
-        hideOptions();
+
+        if (m_foldable)
+        {
+            hideOptions();
+        }
     }
 }
 

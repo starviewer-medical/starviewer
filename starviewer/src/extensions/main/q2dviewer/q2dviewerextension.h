@@ -74,6 +74,12 @@ public:
     /// Sets the study from the current patient with the given studyUID as the current patient.
     void setCurrentStudy(const QString &studyUID);
 
+protected:
+    /// Reimplemented to decided whether the thick slab widget should be foldable.
+    void resizeEvent(QResizeEvent *event) override;
+    /// Reimplemented to decided whether the thick slab widget should be foldable.
+    void showEvent(QShowEvent *event) override;
+
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
