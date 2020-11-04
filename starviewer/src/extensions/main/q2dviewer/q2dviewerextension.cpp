@@ -59,6 +59,7 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 #include <QListView>
+#include <QScrollBar>
 
 #include "layoutmanager.h"
 
@@ -226,6 +227,8 @@ void Q2DViewerExtension::createConnections()
 #endif
 
     connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
+    connect(m_thickSlabWidget, &QThickSlabWidget::ensureVisible, this, [this] { m_toolBarScrollArea->ensureWidgetVisible(m_thickSlabWidget); },
+            Qt::QueuedConnection);
 
     connect(m_workingArea, SIGNAL(fusionLayout2x1FirstRequested(QList<Volume*>,AnatomicalPlane)),
             SLOT(setFusionLayout2x1First(QList<Volume*>,AnatomicalPlane)));
@@ -407,6 +410,28 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 void Q2DViewerExtension::setCurrentStudy(const QString &studyUID)
 {
     m_relatedStudiesWidget->setCurrentStudy(studyUID);
+}
+
+void Q2DViewerExtension::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    int toolBarWidth = m_toolBarScrollArea->width();
+    int thickSlabStart = m_thickSlabWidget->x();
+    int thickSlabFixedWidth = m_thickSlabWidget->getFixedWidth();
+
+    m_thickSlabWidget->setFoldable(thickSlabStart + thickSlabFixedWidth > toolBarWidth);    // foldable if with its fixed width it doesn't fit
+}
+
+void Q2DViewerExtension::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+
+    int toolBarWidth = m_toolBarScrollArea->width();
+    int thickSlabStart = m_thickSlabWidget->x();
+    int thickSlabFixedWidth = m_thickSlabWidget->getFixedWidth();
+
+    m_thickSlabWidget->setFoldable(thickSlabStart + thickSlabFixedWidth > toolBarWidth);    // foldable if with its fixed width it doesn't fit
 }
 
 void Q2DViewerExtension::initializeTools()

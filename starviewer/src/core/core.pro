@@ -36,6 +36,7 @@ HEADERS += extensionfactory.h \
     genericfactory.h \
     maininputsynccriterion.h \
     qdiagnosistestsresultsitem.h \
+    qscrollareawithbettersizehint.h \
     singleton.h \
     genericsingletonfactoryregister.h \
     extensionfactoryregister.h \
@@ -439,6 +440,7 @@ SOURCES += extensionmediator.cpp \
     harddiskinformation.cpp \
     logging.cpp \
     qdiagnosistestsresultsitem.cpp \
+    qscrollareawithbettersizehint.cpp \
     stipplingvtkopenglpolydatamapper2d.cpp \
     volume.cpp \
     volumehelper.cpp \
