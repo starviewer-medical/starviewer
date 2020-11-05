@@ -51,6 +51,7 @@ INITIALIZE_EASYLOGGINGPP
 #include <QScreen>
 #include <qtsingleapplication.h>
 
+#include <QVTKOpenGLNativeWidget.h>
 #include <vtkNew.h>
 #include <vtkOutputWindow.h>
 #include <vtkOverrideInformation.h>
@@ -132,6 +133,9 @@ int main(int argc, char *argv[])
             QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
         }
     }
+
+    // This is required to use QVTKOpenGLNativewidget and it must be set before initializing QApplication
+    QSurfaceFormat::setDefaultFormat(QVTKOpenGLNativeWidget::defaultFormat());
 
     // Utilitzem QtSingleApplication en lloc de QtApplication, ja que ens permet tenir executant sempre una sola instància d'Starviewer, si l'usuari executa
     // una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
