@@ -244,6 +244,7 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
             if (vtkEvent == vtkCommand::LeftButtonPressEvent && getInteractor()->GetRepeatCount() == 1)
             {
                 emit doubleClicked();
+                return; // avoid accidental gestures when doing a double click
             }
             break;
 
