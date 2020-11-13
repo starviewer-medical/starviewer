@@ -87,19 +87,21 @@ bool upgradeDatabase(const UpgradeDatabaseXMLParser &upgradeDatabaseXmlParser)
         return false;
     }
 
-    DatabaseConnection databaseConnection;
-    QSqlQuery query(databaseConnection.getConnection());
-
-    foreach (const QString &sqlUpgradeCommand, upgradeDatabaseRevisionCommands.getSqlUpgradeCommands())
     {
-        if (query.exec(sqlUpgradeCommand))
+        DatabaseConnection databaseConnection;
+        QSqlQuery query(databaseConnection.getConnection());
+
+        foreach (const QString &sqlUpgradeCommand, upgradeDatabaseRevisionCommands.getSqlUpgradeCommands())
         {
-            INFO_LOG("Database upgrade command applied successfully: " + query.lastQuery());
-        }
-        else
-        {
-            ERROR_LOG(QString("Database upgrade command failed: %1. Error: %2") .arg(query.lastQuery()).arg(query.lastError().text()));
-            return false;
+            if (query.exec(sqlUpgradeCommand))
+            {
+                INFO_LOG("Database upgrade command applied successfully: " + query.lastQuery());
+            }
+            else
+            {
+                ERROR_LOG(QString("Database upgrade command failed: %1. Error: %2") .arg(query.lastQuery()).arg(query.lastError().text()));
+                return false;
+            }
         }
     }
 
