@@ -134,8 +134,12 @@ int main(int argc, char *argv[])
         }
     }
 
-    // This is required to use QVTKOpenGLNativewidget and it must be set before initializing QApplication
+// WARNING This should be done on all platforms but it causes rendering issues with the combination of Qt 5.12-5.14, VTK 8.2, X.org and amdgpu
+// TODO This problem must be reviewed when upgrading libraries and tested with other settings
+#ifndef Q_OS_LINUX
+    // This is required to use QVTKOpenGLNativeWidget and it must be set before initializing QApplication
     QSurfaceFormat::setDefaultFormat(QVTKOpenGLNativeWidget::defaultFormat());
+#endif
 
     // Utilitzem QtSingleApplication en lloc de QtApplication, ja que ens permet tenir executant sempre una sola instància d'Starviewer, si l'usuari executa
     // una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
