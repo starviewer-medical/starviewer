@@ -244,7 +244,11 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
             if (vtkEvent == vtkCommand::LeftButtonPressEvent && getInteractor()->GetRepeatCount() == 1)
             {
                 emit doubleClicked();
-                return; // avoid accidental gestures when doing a double click
+
+                if (getToolProxy()->isToolActive("ZoomTool"))
+                {
+                    return; // avoid accidental pan when doing a double click (#2854)
+                }
             }
             break;
 
