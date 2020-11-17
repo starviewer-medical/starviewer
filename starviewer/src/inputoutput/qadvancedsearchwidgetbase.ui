@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>771</width>
-    <height>156</height>
+    <width>576</width>
+    <height>184</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -38,7 +38,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="m_advancedSearchPatient">
       <attribute name="title">
@@ -191,50 +191,57 @@
       <attribute name="title">
        <string>Study</string>
       </attribute>
-      <layout class="QGridLayout">
-       <property name="leftMargin">
-        <number>9</number>
-       </property>
-       <property name="topMargin">
-        <number>9</number>
-       </property>
-       <property name="rightMargin">
-        <number>9</number>
-       </property>
-       <property name="bottomMargin">
-        <number>9</number>
-       </property>
-       <property name="spacing">
-        <number>6</number>
-       </property>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="m_studyModalityText"/>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <layout class="QFormLayout" name="formLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>Study Time</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="m_studyTimeLineEdit">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>Modalities in Study</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="m_modalitiesInStudyLineEdit"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>Referring Physician's Name</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="m_referringPhysiciansNameLineEdit"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>Study Description</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="m_studyDescriptionLineEdit"/>
+         </item>
+        </layout>
        </item>
-       <item row="0" column="4">
-        <widget class="QLineEdit" name="m_studyUIDText"/>
-       </item>
-       <item row="0" column="3">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Study UID</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_studyUIDText</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_13">
-         <property name="text">
-          <string>Time</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_studyTimeText</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <spacer>
+       <item>
+        <spacer name="horizontalSpacer_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -246,8 +253,42 @@
          </property>
         </spacer>
        </item>
-       <item row="1" column="5">
-        <spacer>
+       <item>
+        <layout class="QFormLayout" name="formLayout_3">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>Accession Number</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="m_accessionNumberLineEdit"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Study Instance UID</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="m_studyInstanceUidLineEdit"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="textLabel5_3">
+           <property name="text">
+            <string>Study ID</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="m_studyIdLineEdit"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
@@ -258,62 +299,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="1" column="4">
-        <widget class="QLineEdit" name="m_accessionNumberText"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_12">
-         <property name="text">
-          <string>Study Modalities</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_studyModalityText</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>Referring Physician's Name</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_referringPhysiciansNameText</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="m_studyIDText"/>
-       </item>
-       <item row="2" column="4">
-        <widget class="QLineEdit" name="m_referringPhysiciansNameText"/>
-       </item>
-       <item row="1" column="3">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Accession Number</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_accessionNumberText</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="textLabel5_3">
-         <property name="text">
-          <string>Study ID</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_studyIDText</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="m_studyTimeText">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -348,18 +333,12 @@
          <property name="text">
           <string>Series Number</string>
          </property>
-         <property name="buddy">
-          <cstring>m_seriesNumberText</cstring>
-         </property>
         </widget>
        </item>
        <item row="0" column="3">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Requested Procedure ID</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_requestedProcedureIDText</cstring>
          </property>
         </widget>
        </item>
@@ -379,9 +358,6 @@
         <widget class="QLabel" name="label_5">
          <property name="text">
           <string>Scheduled Procedure Step ID</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_scheduledProcedureStepIDText</cstring>
          </property>
         </widget>
        </item>
@@ -403,9 +379,6 @@
          <property name="text">
           <string>Series UID</string>
          </property>
-         <property name="buddy">
-          <cstring>m_seriesUIDText</cstring>
-         </property>
         </widget>
        </item>
        <item row="2" column="0">
@@ -413,18 +386,12 @@
          <property name="text">
           <string>Time</string>
          </property>
-         <property name="buddy">
-          <cstring>m_PPStartTimeText</cstring>
-         </property>
         </widget>
        </item>
        <item row="2" column="3">
         <widget class="QLabel" name="label_6">
          <property name="text">
           <string>Performed Procedure Step Start Date</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_PPStartDateText</cstring>
          </property>
         </widget>
        </item>
@@ -468,18 +435,12 @@
          <property name="text">
           <string>Instance Number</string>
          </property>
-         <property name="buddy">
-          <cstring>m_instanceNumberText</cstring>
-         </property>
         </widget>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_7">
          <property name="text">
           <string>SOP Instance UID</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_SOPInstanceUIDText</cstring>
          </property>
         </widget>
        </item>
@@ -509,12 +470,6 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>m_studyTimeText</tabstop>
-  <tabstop>m_studyUIDText</tabstop>
-  <tabstop>m_studyIDText</tabstop>
-  <tabstop>m_accessionNumberText</tabstop>
-  <tabstop>m_studyModalityText</tabstop>
-  <tabstop>m_referringPhysiciansNameText</tabstop>
   <tabstop>m_seriesUIDText</tabstop>
   <tabstop>m_requestedProcedureIDText</tabstop>
   <tabstop>m_seriesNumberText</tabstop>

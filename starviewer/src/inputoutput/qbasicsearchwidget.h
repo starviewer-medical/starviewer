@@ -46,6 +46,9 @@ public:
     /// Ens marca les flags de cerca per data per defecte
     void setDefaultDate(DefaultDateFlags flag);
 
+    /// Adds wildcards both front and back to the given string. If the string is empty it's not modified.
+    static void addWildCards(QString &string);
+
 private slots:
     /// Checkeig de les dates que canvien els QDateEdit per mantenir consistència
     /// @param date
@@ -67,9 +70,6 @@ private:
 
     /// S'executa quan es mostra el widget, fa que la primera vegada que es mostri es doni el focus al lineEdit PatientName
     void showEvent(QShowEvent *event);
-
-    /// Adds wildcards both front and back to the given string
-    void addWildCards(QString &string);
 
 private:
     /// Indica si s'ha mostra el widget
