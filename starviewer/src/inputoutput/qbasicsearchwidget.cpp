@@ -103,6 +103,7 @@ DicomMask QBasicSearchWidget::buildDicomMask()
     mask.setPatientID(patientID);
 
     QString patientName = m_patientNameText->text().trimmed();
+    addWildCards(patientName);
     mask.setPatientName(patientName);
 
     setStudyDateToDICOMMask(&mask);
@@ -229,6 +230,21 @@ void QBasicSearchWidget::showEvent(QShowEvent *event)
         // en primer lloc està enfocant al PatientName, ja que és pel camp que més cerquen.
         m_patientNameText->setFocus();
         m_widgetHasBeenShowed = true;
+    }
+}
+
+void QBasicSearchWidget::addWildCards(QString &string)
+{
+    if (!string.isEmpty())
+    {
+        if (!string.startsWith("*"))
+        {
+            string = "*" + string;
+        }
+        if (!string.endsWith("*"))
+        {
+            string = string + "*";
+        }
     }
 }
 

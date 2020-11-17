@@ -38,7 +38,6 @@ class QLogViewer;
 class Patient;
 class StatsWatcher;
 class ExternalApplication;
-class ExternalApplication;
 
 class QApplicationMainWindow : public QMainWindow {
 Q_OBJECT
