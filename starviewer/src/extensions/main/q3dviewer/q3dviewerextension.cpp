@@ -336,8 +336,20 @@ void Q3DViewerExtension::setScalarRange(double min, double max)
     int maximum = qRound(max);
     m_gradientEditor->setMinimum(minimum);
     m_gradientEditor->setMaximum(maximum);
-    m_editorByValues->setMinimum(minimum);
-    m_editorByValues->setMaximum(maximum);
+
+    // Workaround for #2824: the editor by values doesn't support such small ranges
+    if (static_cast<int>(min) == static_cast<int>(max))
+    {
+        m_editorsStackedWidget->setCurrentIndex(0);
+        m_switchEditorPushButton->setEnabled(false);
+    }
+    else
+    {
+        m_switchEditorPushButton->setEnabled(true);
+        m_editorByValues->setMinimum(minimum);
+        m_editorByValues->setMaximum(maximum);
+    }
+
     m_isoValueSpinBox->setMinimum(minimum);
     m_isoValueSpinBox->setMaximum(maximum);
 
