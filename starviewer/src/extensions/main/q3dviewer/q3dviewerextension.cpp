@@ -534,9 +534,7 @@ void Q3DViewerExtension::updateUiForBlendMode(int blendModeIndex)
     m_shadingGroupBox->setVisible(blendMode == Q3DViewer::BlendMode::Composite);
     m_rayCastingOptionsWidget->setVisible(blendMode != Q3DViewer::BlendMode::Isosurface);
     m_isosurfaceOptionsWidget->setVisible(blendMode == Q3DViewer::BlendMode::Isosurface);
-    m_transferFunctionsWidget->setVisible(blendMode == Q3DViewer::BlendMode::Composite ||
-                                          blendMode == Q3DViewer::BlendMode::MaximumIntensity ||
-                                          blendMode == Q3DViewer::BlendMode::MinimumIntensity);
+    m_transferFunctionsWidget->setVisible(blendMode != Q3DViewer::BlendMode::Isosurface);
     m_noTransferFunctionsWidget->setVisible(m_transferFunctionsWidget->isHidden());
 }
 
