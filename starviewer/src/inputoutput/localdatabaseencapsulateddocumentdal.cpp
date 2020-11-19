@@ -145,6 +145,14 @@ int LocalDatabaseEncapsulatedDocumentDAL::count(const DicomMask &mask)
     }
 }
 
+bool LocalDatabaseEncapsulatedDocumentDAL::exists(const QString &sopInstanceUid)
+{
+    QSqlQuery query = getNewQuery();
+    query.prepare("SELECT SOPInstanceUID FROM EncapsulatedDocument WHERE SOPInstanceUID = :sopInstanceUid");
+    query.bindValue(":sopInstanceUid", sopInstanceUid);
+    return executeQueryAndLogError(query) && query.next();
+}
+
 void LocalDatabaseEncapsulatedDocumentDAL::bindValues(QSqlQuery &query, const EncapsulatedDocument *document)
 {
     query.bindValue(":sopInstanceUID", document->getSopInstanceUid());
