@@ -46,6 +46,9 @@ public:
     /// Returns how many series in the database match the given mask (only StudyUID and SeriesUID are considered). Returns -1 in case of error.
     int count(const DicomMask &mask);
 
+    /// Returns true if there's a series with the given instance UID in the database, and false otherwise.
+    bool exists(const QString &seriesInstanceUid);
+
 private:
     /// Creates and returns a series with the information of the current row of the given query.
     static Series* getSeries(const QSqlQuery &query);

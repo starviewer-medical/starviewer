@@ -267,6 +267,15 @@ int LocalDatabaseImageDAL::count(const DicomMask &mask)
     }
 }
 
+bool LocalDatabaseImageDAL::exists(const QString &sopInstanceUid, int frameNumber)
+{
+    QSqlQuery query = getNewQuery();
+    query.prepare("SELECT SOPInstanceUID, FrameNumber FROM Image WHERE SOPInstanceUID = :sopInstanceUid AND FrameNumber = :frameNumber");
+    query.bindValue(":sopInstanceUid", sopInstanceUid);
+    query.bindValue(":frameNumber", frameNumber);
+    return executeQueryAndLogError(query) && query.next();
+}
+
 void LocalDatabaseImageDAL::bindValues(QSqlQuery &query, const Image *image)
 {
     query.bindValue(":sopInstanceUID", image->getSOPInstanceUID());

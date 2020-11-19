@@ -53,6 +53,9 @@ public:
     /// Returns -1 in case of error.
     int count(const DicomMask &mask);
 
+    /// Returns true if there's an encapsulated document with the given SOP Instance UID in the database, and false otherwise.
+    bool exists(const QString &sopInstanceUid);
+
 private:
 
     /// Binds the necessary values of the given query with the information of the given encapsulated document.
