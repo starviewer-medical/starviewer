@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>505</width>
-    <height>465</height>
+    <width>585</width>
+    <height>565</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -253,6 +253,16 @@
            </widget>
           </item>
          </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="m_showViewersTextualInformationCheckBox">
+         <property name="text">
+          <string>Show viewers textual information by default</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
        <item>

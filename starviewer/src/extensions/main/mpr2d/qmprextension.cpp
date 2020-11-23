@@ -14,6 +14,7 @@
 
 #include "qmprextension.h"
 
+#include "coresettings.h"
 #include "drawer.h"
 #include "drawerpoint.h"
 #include "logging.h"
@@ -79,7 +80,7 @@ QMPRExtension::QMPRExtension(QWidget *parent)
     m_mipToolButton->setVisible(visible);
 
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
-    m_viewerInformationToolButton->setToolTip(tr("Show/Hide viewer's textual information"));
+    m_viewerInformationToolButton->setToolTip(tr("Show/hide viewers textual information"));
     m_voiLutComboBox->setToolTip(tr("Choose a VOI LUT preset"));
 }
 
@@ -156,6 +157,8 @@ void QMPRExtension::init()
     // Configurem les annotacions que volem veure
     m_sagital2DView->removeAnnotation(PatientOrientationAnnotation | MainInformationAnnotation | SliceAnnotation);
     m_coronal2DView->removeAnnotation(PatientOrientationAnnotation | MainInformationAnnotation | SliceAnnotation);
+    Settings settings;
+    m_viewerInformationToolButton->setChecked(settings.getValue(CoreSettings::ShowViewersTextualInformation).toBool());
     showViewerInformation(m_viewerInformationToolButton->isChecked());
 
     m_sagital2DView->disableContextMenu();

@@ -142,6 +142,9 @@ public:
     /// Horizontal and vertical span of the DrawerCrosshair in pixels.
     static const QString CrosshairOuterDiameter;
 
+    /// Default state of viewers textual information (annotations): visible or invisible.
+    static const QString ShowViewersTextualInformation;
+
 };
 
 } // End namespace udg

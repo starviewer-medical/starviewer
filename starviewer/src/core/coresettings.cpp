@@ -98,6 +98,8 @@ const QString CoreSettings::ScaleFactor("scaleFactor");
 const QString CoreSettings::CrosshairInnerDiameter("CrosshairInnerDiameter");
 const QString CoreSettings::CrosshairOuterDiameter("CrosshairOuterDiameter");
 
+const QString CoreSettings::ShowViewersTextualInformation("ShowViewersTextualInformation");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -149,6 +151,8 @@ void CoreSettings::init()
 
     settingsRegistry->addSetting(CrosshairInnerDiameter, 10);
     settingsRegistry->addSetting(CrosshairOuterDiameter, 30);
+
+    settingsRegistry->addSetting(ShowViewersTextualInformation, true);
 }
 
 } // End namespace udg
