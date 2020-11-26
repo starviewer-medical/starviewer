@@ -222,5 +222,6 @@
         <file>images/icons/send-dicom.svg</file>
         <file>images/icons/kmag.svg</file>
         <file>images/icons/draw-arrow.svg</file>
+        <file>images/icons/NMreport.svg</file>
     </qresource>
 </RCC>
