@@ -48,6 +48,7 @@
 #include "magnifyingglasstool.h"
 #include "circletool.h"
 #include "perpendiculardistancetool.h"
+#include "arrowtool.h"
 
 #include "shortcutmanager.h"
 #include "shortcuts.h"
@@ -191,6 +192,10 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     else if (toolName == "PerpendicularDistanceTool")
     {
         tool = new PerpendicularDistanceTool(viewer);
+    }
+    else if (toolName == "ArrowTool")
+    {
+        tool = new ArrowTool(viewer);
     }
     else
     {
@@ -445,6 +450,13 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolAction->setText(tr("TA-GT"));
         toolAction->setIcon(QIcon(":/images/icons/ta-gt.svg"));
         statusTip = tr("Enable/Disable TA-GT distance tool");
+        toolTip = toolAction->text();
+    }
+    else if (toolName == "ArrowTool")
+    {
+        toolAction->setText(tr("Arrow"));
+        toolAction->setIcon(QIcon(":/images/icons/draw-arrow.svg"));
+        statusTip = tr("Enable/disable arrow tool");
         toolTip = toolAction->text();
     }
     else

@@ -60,6 +60,12 @@ const PixelSpacing2D& ImagePlane::getSpacing() const
 void ImagePlane::setSpacing(PixelSpacing2D spacing)
 {
     m_spacing = std::move(spacing);
+
+    if (!m_spacing.isValid())
+    {
+        m_spacing.setX(1);
+        m_spacing.setY(1);
+    }
 }
 
 double ImagePlane::getRowLength() const

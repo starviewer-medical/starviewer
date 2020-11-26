@@ -566,6 +566,13 @@ VoiLut QViewer::getCurrentVoiLut() const
     return VoiLut();
 }
 
+Vector3 QViewer::getViewPlaneNormal()
+{
+    Vector3 normal;
+    getActiveCamera()->GetViewPlaneNormal(normal.x, normal.y, normal.z);
+    return normal;
+}
+
 bool QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate)
 {
     if (!hasInput())

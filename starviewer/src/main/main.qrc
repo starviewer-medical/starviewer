@@ -221,5 +221,6 @@
         <file>images/icons/tools-media-optical-burn.svg</file>
         <file>images/icons/send-dicom.svg</file>
         <file>images/icons/kmag.svg</file>
+        <file>images/icons/draw-arrow.svg</file>
     </qresource>
 </RCC>

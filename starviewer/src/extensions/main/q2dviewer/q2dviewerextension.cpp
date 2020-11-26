@@ -467,6 +467,8 @@ void Q2DViewerExtension::initializeTools()
     m_drawingToolButton->addAction(m_toolManager->registerTool("AngleTool"));
     m_drawingToolButton->addAction(m_toolManager->registerTool("NonClosedAngleTool"));
 
+    m_drawingToolButton->addAction(m_toolManager->registerTool("ArrowTool"));
+
     m_automaticSynchronizationToolButton->setDefaultAction(m_toolManager->registerTool("AutomaticSynchronizationTool"));
 #endif
 
@@ -510,7 +512,7 @@ void Q2DViewerExtension::initializeTools()
 #else
     leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "TranslateLeftTool" << "WindowLevelLeftTool" << "PolylineROITool" << "DistanceTool"
                              << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool" << "EllipticalROITool"
-                             << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
+                             << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool" << "ArrowTool";
 #endif
 
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
@@ -1014,7 +1016,7 @@ void Q2DViewerExtension::handleViewerDoubleClick(Q2DViewerWidget *viewerWidget)
 {
     QSet<QString> toolsIncompatibleWithDoubleClickMaximization;
     toolsIncompatibleWithDoubleClickMaximization << "AngleTool" << "NonClosedAngleTool" << "DistanceTool" << "PerpendicularDistanceTool"
-                                                 << "MagicROITool" << "PolylineROITool";
+                                                 << "MagicROITool" << "PolylineROITool" << "ArrowTool";
 
     foreach (const QString &tool, toolsIncompatibleWithDoubleClickMaximization)
     {

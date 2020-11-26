@@ -32,7 +32,9 @@ TRANSLATIONS += core_ca_ES.ts \
     core_en_GB.ts
 HEADERS += extensionfactory.h \
     anyinputsynccriterion.h \
+    arrowtool.h \
     dicomentityflags.h \
+    drawerarrow.h \
     genericfactory.h \
     maininputsynccriterion.h \
     qdiagnosistestsresultsitem.h \
@@ -434,7 +436,9 @@ HEADERS += extensionfactory.h \
 
 SOURCES += extensionmediator.cpp \
     anyinputsynccriterion.cpp \
+    arrowtool.cpp \
     displayableid.cpp \
+    drawerarrow.cpp \
     maininputsynccriterion.cpp \
     mathtools.cpp \
     harddiskinformation.cpp \
