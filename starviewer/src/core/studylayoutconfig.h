@@ -24,7 +24,7 @@ class StudyLayoutConfig {
 public:
     enum UnfoldType { UnfoldImages, UnfoldSeries, DefaultUnfoldType = UnfoldSeries };
     enum UnfoldDirectionType { LeftToRightFirst, TopToBottomFirst, DefaultUnfoldDirection = LeftToRightFirst };
-    enum ExclusionCriteriaType { Survey, Localizer };
+    enum ExclusionCriteriaType { Survey, Localizer, CTAttenuationCorrection };
     
     StudyLayoutConfig();
     /// Constructor amb paràmetres més habituals

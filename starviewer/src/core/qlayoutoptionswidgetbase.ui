@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>302</width>
-    <height>338</height>
+    <width>386</width>
+    <height>353</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -85,18 +85,25 @@
         <property name="title">
          <string>Exclude from layout</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="m_surveyCheckBox">
+           <property name="text">
+            <string>MR Surveys</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
           <widget class="QCheckBox" name="m_localizerCheckBox">
            <property name="text">
             <string>CT Localizers</string>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QCheckBox" name="m_surveyCheckBox">
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="m_ctAttenuationCorrectionCheckBox">
            <property name="text">
-            <string>MR Surveys</string>
+            <string>CT attenuation correction (B08s)</string>
            </property>
           </widget>
          </item>
@@ -167,7 +174,7 @@
            <string>Restore defaults</string>
           </property>
           <property name="icon">
-           <iconset resource="../main/main.qrc">
+           <iconset>
             <normaloff>:/images/icons/edit-clear.svg</normaloff>:/images/icons/edit-clear.svg</iconset>
           </property>
          </widget>
@@ -179,9 +186,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../main/main.qrc"/>
-  <include location="../main/main.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

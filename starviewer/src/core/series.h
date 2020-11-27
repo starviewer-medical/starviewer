@@ -260,6 +260,9 @@ public:
     /// Ens indica si la sèrie és un localizer de CT
     bool isCTLocalizer() const;
 
+    /// Returns true if this series is a CT series used for attenuation correction.
+    bool isCTAttenuationCorrection() const;
+
     /// Ens indica si la sèrie és un survey d'MR
     bool isMRSurvey() const;
     
