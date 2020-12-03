@@ -1,0 +1,10 @@
+--- a/Rendering/OpenGL2/CMakeLists.txt
++++ b/Rendering/OpenGL2/CMakeLists.txt
+@@ -345,3 +345,7 @@
+       )
+   target_link_libraries(vtkTestOpenGLVersion opengl32)
+ endif()
++
++if (WIN32)
++  add_compile_definitions(NO_TIMESTAMP_QUERIES)
++endif()
