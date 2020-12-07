@@ -134,9 +134,10 @@ int main(int argc, char *argv[])
         }
     }
 
-// WARNING This should be done on all platforms but it causes rendering issues with the combination of Qt 5.12-5.14, VTK 8.2, X.org and amdgpu
+// WARNING This should be done on all platforms but it causes rendering problems (#2903) with the combination of Qt 5.12-5.14, VTK 8.2, and Windows or Linux,
+//         thus for the moment we limit it to Mac where it's required to avoid a crash and it doesn't present any known problem.
 // TODO This problem must be reviewed when upgrading libraries and tested with other settings
-#ifndef Q_OS_LINUX
+#ifdef Q_OS_MACOS
     // This is required to use QVTKOpenGLNativeWidget and it must be set before initializing QApplication
     QSurfaceFormat::setDefaultFormat(QVTKOpenGLNativeWidget::defaultFormat());
 #endif
