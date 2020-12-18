@@ -242,6 +242,7 @@
     <t>2772</t>
     <t>2858</t>
     <t>2860</t>
+    <t>2909</t>
    </fx>
    <rm>
     <d>S'ha eliminat algunes opcions de visualització en 3D que havien quedat obsoletes: textures 2D, textures 3D, obscurances, contorns.</d>

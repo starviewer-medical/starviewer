@@ -17,13 +17,6 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Window Width</string>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
@@ -37,6 +30,13 @@
      </property>
     </spacer>
    </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QDialogButtonBox" name="m_buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
@@ -44,16 +44,10 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QDoubleSpinBox" name="m_windowSpinBox">
-     <property name="decimals">
-      <number>5</number>
-     </property>
-     <property name="minimum">
-      <double>-1000000000.000000000000000</double>
-     </property>
-     <property name="maximum">
-      <double>1000000000.000000000000000</double>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Window Width</string>
      </property>
     </widget>
    </item>
@@ -70,80 +64,21 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_cancelButton">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="m_okButton">
-       <property name="text">
-        <string>OK</string>
-       </property>
-       <property name="icon">
-        <iconset>
-         <normaloff>:/images/icons/dialog-ok-apply.svg</normaloff>:/images/icons/dialog-ok-apply.svg</iconset>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="0" column="1">
+    <widget class="QDoubleSpinBox" name="m_windowSpinBox">
+     <property name="decimals">
+      <number>5</number>
+     </property>
+     <property name="minimum">
+      <double>-1000000000.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>1000000000.000000000000000</double>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>m_okButton</sender>
-   <signal>clicked()</signal>
-   <receiver>udg::QCustomWindowLevelDialogBase</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>278</x>
-     <y>253</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>96</x>
-     <y>254</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>m_cancelButton</sender>
-   <signal>clicked()</signal>
-   <receiver>udg::QCustomWindowLevelDialogBase</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>369</x>
-     <y>253</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>179</x>
-     <y>282</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
