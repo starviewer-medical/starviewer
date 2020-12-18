@@ -80,17 +80,20 @@ void PatientFiller::finishFilesProcessing()
 {
     foreach (Patient *patient, m_patientFillerInput->getPatientList())
     {
-        foreach (Series *series, patient->getStudies().first()->getSeries())
+        foreach (Study *study, patient->getStudies())
         {
-            m_patientFillerInput->setCurrentSeries(series);
-
-            foreach (const QList<Image*> &currentImages, m_patientFillerInput->getCurrentImagesHistory())
+            foreach (Series *series, study->getSeries())
             {
-                m_patientFillerInput->setCurrentImages(currentImages, false);
+                m_patientFillerInput->setCurrentSeries(series);
 
-                foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
+                foreach (const QList<Image*> &currentImages, m_patientFillerInput->getCurrentImagesHistory())
                 {
-                    fillerStep->fillIndividually();
+                    m_patientFillerInput->setCurrentImages(currentImages, false);
+
+                    foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
+                    {
+                        fillerStep->fillIndividually();
+                    }
                 }
             }
         }
