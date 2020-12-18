@@ -1,3 +1,8 @@
+/*@
+    "name": "test_QMruSortedToolButtonWithMenu",
+    "requirements": []
+ */
+
 #include "autotest.h"
 #include "qmrusortedtoolbuttonwithmenu.h"
 
