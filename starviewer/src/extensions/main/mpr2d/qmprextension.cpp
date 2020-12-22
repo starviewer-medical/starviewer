@@ -269,6 +269,7 @@ void QMPRExtension::initializeTools()
     initializeROITools();
     initializeDistanceTools();
     initializeAngleTools();
+    m_arrowToolButton->setDefaultAction(m_toolManager->registerTool("ArrowTool"));
     m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingMouseTool"));
     m_toolManager->registerTool("TranslateTool");
     m_toolManager->registerTool("WindowLevelTool");
@@ -283,8 +284,9 @@ void QMPRExtension::initializeTools()
 
     // Definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" 
-        << "NonClosedAngleTool" << "Cursor3DTool" << "EllipticalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "ArrowTool"
+                             << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool" << "EllipticalROITool" << "MagicROITool" << "CircleTool"
+                             << "MagnifyingGlassTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
