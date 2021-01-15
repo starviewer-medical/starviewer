@@ -64,157 +64,137 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="577"/>
-        <source>Rendering Method</source>
+        <location filename="q3dviewerextensionbase.ui" line="562"/>
+        <source>Blend mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q3dviewerextensionbase.ui" line="570"/>
+        <source>Composite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q3dviewerextensionbase.ui" line="575"/>
+        <source>Maximum intensity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q3dviewerextensionbase.ui" line="580"/>
+        <source>Minimum intensity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="q3dviewerextensionbase.ui" line="585"/>
-        <source>Ray Casting</source>
+        <source>Average intensity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="q3dviewerextensionbase.ui" line="590"/>
-        <source>Ray Casting with Obscurances</source>
+        <source>Additive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="q3dviewerextensionbase.ui" line="595"/>
-        <source>GPU Ray Casting</source>
+        <source>Isosurface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="600"/>
-        <source>MIP</source>
+        <location filename="q3dviewerextensionbase.ui" line="638"/>
+        <source>Render mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="605"/>
-        <source>Iso Surface</source>
+        <location filename="q3dviewerextensionbase.ui" line="646"/>
+        <source>Smart ray casting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="610"/>
-        <source>Contouring</source>
+        <location filename="q3dviewerextensionbase.ui" line="651"/>
+        <source>CPU ray casting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="620"/>
-        <source>Shading</source>
+        <location filename="q3dviewerextensionbase.ui" line="656"/>
+        <source>GPU ray casting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="632"/>
+        <location filename="q3dviewerextensionbase.ui" line="667"/>
+        <source>Color image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q3dviewerextensionbase.ui" line="674"/>
+        <source>Shadi&amp;ng</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="q3dviewerextensionbase.ui" line="686"/>
         <source>Ambient coefficient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="652"/>
+        <location filename="q3dviewerextensionbase.ui" line="706"/>
         <source>Diffuse coefficient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="672"/>
+        <location filename="q3dviewerextensionbase.ui" line="726"/>
         <source>Specular coefficient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="692"/>
+        <location filename="q3dviewerextensionbase.ui" line="746"/>
         <source>Specular power</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="736"/>
-        <source>Contour</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextensionbase.ui" line="746"/>
-        <source>Threshold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextensionbase.ui" line="807"/>
-        <source>Obscurance quality</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextensionbase.ui" line="815"/>
-        <source>Low</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextensionbase.ui" line="820"/>
-        <source>Medium</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextensionbase.ui" line="825"/>
-        <source>High</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextensionbase.ui" line="833"/>
-        <source>Compute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextensionbase.ui" line="875"/>
-        <source>Obscurance</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextensionbase.ui" line="885"/>
-        <source>Brightness</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextensionbase.ui" line="937"/>
+        <location filename="q3dviewerextensionbase.ui" line="790"/>
         <source>Iso-value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="995"/>
+        <location filename="q3dviewerextensionbase.ui" line="850"/>
         <source>Load transfer function</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="998"/>
+        <location filename="q3dviewerextensionbase.ui" line="853"/>
         <source>Load...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="1005"/>
+        <location filename="q3dviewerextensionbase.ui" line="860"/>
         <source>Save transfer function</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="1008"/>
+        <location filename="q3dviewerextensionbase.ui" line="863"/>
         <source>Save...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="1015"/>
+        <location filename="q3dviewerextensionbase.ui" line="870"/>
         <source>Switch editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="1069"/>
+        <location filename="q3dviewerextensionbase.ui" line="924"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="1101"/>
+        <location filename="q3dviewerextensionbase.ui" line="969"/>
         <source>Screen Shot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="1124"/>
+        <location filename="q3dviewerextensionbase.ui" line="992"/>
         <source>Exporter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextensionbase.ui" line="1149"/>
+        <location filename="q3dviewerextensionbase.ui" line="1017"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
@@ -222,90 +202,78 @@
 <context>
     <name>udg::Q3DViewerExtension</name>
     <message>
-        <location filename="q3dviewerextension.cpp" line="63"/>
+        <location filename="q3dviewerextension.cpp" line="60"/>
         <source>Export viewer image to DICOM and send it to a PACS server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="64"/>
+        <location filename="q3dviewerextension.cpp" line="61"/>
         <source>Show/Hide advanced colour options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="161"/>
+        <location filename="q3dviewerextension.cpp" line="158"/>
         <source>Spine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="176"/>
+        <location filename="q3dviewerextension.cpp" line="171"/>
         <source>Thorax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="191"/>
+        <location filename="q3dviewerextension.cpp" line="184"/>
         <source>Pelvis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="206"/>
+        <location filename="q3dviewerextension.cpp" line="197"/>
         <source>Circle of Willis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="220"/>
+        <location filename="q3dviewerextension.cpp" line="209"/>
         <source>Carotids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="235"/>
+        <location filename="q3dviewerextension.cpp" line="222"/>
         <source>Bones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="250"/>
+        <location filename="q3dviewerextension.cpp" line="235"/>
         <source>Bones 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="264"/>
+        <location filename="q3dviewerextension.cpp" line="247"/>
         <source>Abdomen bones</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="279"/>
+        <location filename="q3dviewerextension.cpp" line="260"/>
         <source>Abdomen run-off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="294"/>
+        <location filename="q3dviewerextension.cpp" line="273"/>
         <source>Abdomen slab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="437"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextension.cpp" line="460"/>
-        <location filename="q3dviewerextension.cpp" line="474"/>
-        <location filename="q3dviewerextension.cpp" line="481"/>
-        <source>Compute</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="q3dviewerextension.cpp" line="515"/>
+        <location filename="q3dviewerextension.cpp" line="420"/>
         <source>Load CLUT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="516"/>
-        <location filename="q3dviewerextension.cpp" line="537"/>
+        <location filename="q3dviewerextension.cpp" line="421"/>
+        <location filename="q3dviewerextension.cpp" line="441"/>
         <source>Transfer function files (*.tf);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="537"/>
+        <location filename="q3dviewerextension.cpp" line="441"/>
         <source>Save CLUT</source>
         <translation type="unfinished"></translation>
     </message>

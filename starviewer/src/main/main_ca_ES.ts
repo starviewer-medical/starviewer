@@ -9,7 +9,7 @@
         <translation>L&apos;%1 ja s&apos;està executant però no respon. Per obrir l&apos;%1, primer heu de tancar el procés de l&apos;%1 existent o reiniciar el sistema.</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="222"/>
+        <location filename="main.cpp" line="231"/>
         <source>There were errors invoking %1 from the command line with the following call:
 
 %2</source>
@@ -18,9 +18,17 @@
 %2</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="224"/>
+        <location filename="main.cpp" line="233"/>
         <source>Detected errors: </source>
         <translation>Errors detectats: </translation>
+    </message>
+</context>
+<context>
+    <name>qmlpatientbrowsermenu</name>
+    <message>
+        <location filename="../qml/qmlpatientbrowsermenu.qml" line="31"/>
+        <source>Fusion</source>
+        <translation>Fusió</translation>
     </message>
 </context>
 </TS>

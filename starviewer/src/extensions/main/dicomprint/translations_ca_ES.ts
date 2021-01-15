@@ -404,7 +404,7 @@
 <context>
     <name>udg::QDicomAddPrinterWidget</name>
     <message>
-        <location filename="qdicomaddprinterwidget.cpp" line="85"/>
+        <location filename="qdicomaddprinterwidget.cpp" line="86"/>
         <source>Unable to add the printer %1 because a printer with the same AE Title already exists.</source>
         <oldsource>%1 cannot add the printer %2 because a printer with the same AE Title already exists.</oldsource>
         <translation>No es pot afegir la impressora %1 perquè ja n&apos;existeix una altra amb el mateix AE Title.</translation>

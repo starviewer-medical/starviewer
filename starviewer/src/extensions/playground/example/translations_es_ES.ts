@@ -6,12 +6,15 @@
     <message>
         <location filename="qexampleextensionbase.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
+</context>
+<context>
+    <name>udg::ExampleExtensionMediator</name>
     <message>
-        <location filename="qexampleextensionbase.ui" line="26"/>
+        <location filename="exampleextensionmediator.cpp" line="42"/>
         <source>Example</source>
-        <translation type="unfinished"></translation>
+        <translation>Ejemplo</translation>
     </message>
 </context>
 </TS>

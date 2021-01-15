@@ -83,12 +83,12 @@
     <message>
         <location filename="qdifuperfuextensionbase.ui" line="539"/>
         <source>Save Matrix</source>
-        <translation type="unfinished"></translation>
+        <translation>Desa la matriu</translation>
     </message>
     <message>
         <location filename="qdifuperfuextensionbase.ui" line="549"/>
         <source>Save Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Desa el volum</translation>
     </message>
     <message>
         <location filename="qdifuperfuextensionbase.ui" line="566"/>
@@ -197,67 +197,67 @@
 <context>
     <name>udg::QDifuPerfuSegmentationExtension</name>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="135"/>
+        <location filename="qdifuperfuextension.cpp" line="137"/>
         <source>Lesion Overlay</source>
         <translation>Capa de la lesió</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="136"/>
+        <location filename="qdifuperfuextension.cpp" line="138"/>
         <source>Enable/disable lesion view overlay</source>
         <translation>Activar/Desactivar la visualització de la capa de la lesió</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="142"/>
+        <location filename="qdifuperfuextension.cpp" line="144"/>
         <source>Ventricles Overlay</source>
         <translation>Capa dels ventricles</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="143"/>
+        <location filename="qdifuperfuextension.cpp" line="145"/>
         <source>Enable/disable ventricles view overlay</source>
         <translation>Activar/Desactivar la visualització de la capa dels ventricles</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="981"/>
+        <location filename="qdifuperfuextension.cpp" line="983"/>
         <source>Save Diffusion Mask Volume file</source>
-        <translation type="unfinished"></translation>
+        <translation>Desa el fitxer del volum de la màscara de difusió</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="981"/>
-        <location filename="qdifuperfuextension.cpp" line="1013"/>
-        <location filename="qdifuperfuextension.cpp" line="1045"/>
-        <location filename="qdifuperfuextension.cpp" line="1069"/>
-        <location filename="qdifuperfuextension.cpp" line="1093"/>
+        <location filename="qdifuperfuextension.cpp" line="983"/>
+        <location filename="qdifuperfuextension.cpp" line="1015"/>
+        <location filename="qdifuperfuextension.cpp" line="1047"/>
+        <location filename="qdifuperfuextension.cpp" line="1071"/>
+        <location filename="qdifuperfuextension.cpp" line="1095"/>
         <source>MetaImage Files (*.mhd)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxers MetaImage (*.mhd)</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1013"/>
+        <location filename="qdifuperfuextension.cpp" line="1015"/>
         <source>Save Perfusion Mask Volume file</source>
-        <translation type="unfinished"></translation>
+        <translation>Desa el fitxer del volum de la màscara de perfusió</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1045"/>
+        <location filename="qdifuperfuextension.cpp" line="1047"/>
         <source>Save Diffusion Volume file</source>
-        <translation type="unfinished"></translation>
+        <translation>Desa el fitxer del volum de difusió</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1069"/>
-        <location filename="qdifuperfuextension.cpp" line="1093"/>
+        <location filename="qdifuperfuextension.cpp" line="1071"/>
+        <location filename="qdifuperfuextension.cpp" line="1095"/>
         <source>Save Perfusion Volume file</source>
-        <translation type="unfinished"></translation>
+        <translation>Desa el fitxer del volum de perfusió</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1117"/>
+        <location filename="qdifuperfuextension.cpp" line="1119"/>
         <source>Save Transform file</source>
-        <translation type="unfinished"></translation>
+        <translation>Desa el fitxer de transformació</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="1117"/>
+        <location filename="qdifuperfuextension.cpp" line="1119"/>
         <source>Transform Files (*.tf)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fitxers de transformació (*.tf)</translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="713"/>
+        <location filename="qdifuperfuextension.cpp" line="715"/>
         <source>Registration failed!</source>
         <translation>Ha fallat el procés de registre!</translation>
     </message>

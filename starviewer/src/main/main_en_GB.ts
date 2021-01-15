@@ -9,15 +9,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.cpp" line="222"/>
+        <location filename="main.cpp" line="231"/>
         <source>There were errors invoking %1 from the command line with the following call:
 
 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.cpp" line="224"/>
+        <location filename="main.cpp" line="233"/>
         <source>Detected errors: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>qmlpatientbrowsermenu</name>
+    <message>
+        <location filename="../qml/qmlpatientbrowsermenu.qml" line="31"/>
+        <source>Fusion</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
