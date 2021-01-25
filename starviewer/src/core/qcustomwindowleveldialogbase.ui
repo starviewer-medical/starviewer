@@ -17,6 +17,46 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Window Width</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QDoubleSpinBox" name="m_windowSpinBox">
+     <property name="decimals">
+      <number>5</number>
+     </property>
+     <property name="minimum">
+      <double>-1000000000.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>1000000000.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Window Level</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QDoubleSpinBox" name="m_levelSpinBox">
+     <property name="decimals">
+      <number>5</number>
+     </property>
+     <property name="minimum">
+      <double>-1000000000.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>1000000000.000000000000000</double>
+     </property>
+    </widget>
+   </item>
    <item row="2" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
@@ -34,46 +74,6 @@
     <widget class="QDialogButtonBox" name="m_buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Window Level</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Window Width</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QDoubleSpinBox" name="m_levelSpinBox">
-     <property name="decimals">
-      <number>5</number>
-     </property>
-     <property name="minimum">
-      <double>-1000000000.000000000000000</double>
-     </property>
-     <property name="maximum">
-      <double>1000000000.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QDoubleSpinBox" name="m_windowSpinBox">
-     <property name="decimals">
-      <number>5</number>
-     </property>
-     <property name="minimum">
-      <double>-1000000000.000000000000000</double>
-     </property>
-     <property name="maximum">
-      <double>1000000000.000000000000000</double>
      </property>
     </widget>
    </item>
