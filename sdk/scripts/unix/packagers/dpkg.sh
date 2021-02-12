@@ -29,8 +29,8 @@ Version=$PACKAGER_PROD_VERSION
 Type=Application
 Name=$PACKAGER_PROD_NAME (${PACKAGER_PROD_VERSION})
 Comment=Medical imaging DICOM image viewer.
-Exec=../../../opt/starviewer/starviewer.sh
-Icon=../../../opt/starviewer/logo/64.svg
+Exec=/opt/starviewer/starviewer.sh
+Icon=/opt/starviewer/logo/64.svg
 Categories=Graphics;Science;Biology;Medical;
 " > data/usr/share/applications/starviewer.desktop
 

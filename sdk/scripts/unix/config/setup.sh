@@ -142,11 +142,13 @@ QTBINDIR=${QTBINDIR:-$QTDIR/bin}
 QTLIBDIR=${QTLIBDIR:-$QTDIR/lib}
 QTPLUGINSDIR=${QTPLUGINSDIR:-$QTDIR/plugins}
 QTQMLDIR=${QTQMLDIR:-$QTDIR/qml}
+QTTRANSLATIONSDIR=${QTTRANSLATIONSDIR:-$QTDIR/translations}
 
 VARS_TO_EXPORT+=("QTBINDIR")
 VARS_TO_EXPORT+=("QTLIBDIR")
 VARS_TO_EXPORT+=("QTPLUGINSDIR")
 VARS_TO_EXPORT+=("QTQMLDIR")
+VARS_TO_EXPORT+=("QTTRANSLATIONSDIR")
 
 # List of libs to build. Possible values: qt, dcmtk, vtk, gdcm, itk, ecm, threadweaver.
 LIBS=${LIBS:-"qt dcmtk vtk gdcm itk ecm threadweaver"}
@@ -236,8 +238,15 @@ STARVIEWER_INSTALL_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-install
 # Temporary directory for package creation
 STARVIEWER_PACKAGING_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-packaging
 
+# Starviewer deployment repository locaion
+STARVIEWER_DEPLOYMENT_DIR_BASE=$SCRIPTS_ROOT/../../../../starviewer-deployment
+
 # Starviewer QMake arguments composition
 STARVIEWER_QMAKE_ARGUMENTS=()
+# For betas
+STARVIEWER_QMAKE_ARGUMENTS+=("CONFIG+=official_release" "DEFINES+=CORPORATE_VERSION" "DEFINES+=BETA_VERSION")
+# For final version
+#STARVIEWER_QMAKE_ARGUMENTS+=("CONFIG+=official_release" "CONFIG+=ce_marking" "DEFINES+=CORPORATE_VERSION")
 STARVIEWER_QMAKE_ARGUMENTS+=( "CONFIG+=$STARVIEWER_BUILD_TYPE" )
 if [[ $STARVIEWER_DEBUGINFO ]]
 then
