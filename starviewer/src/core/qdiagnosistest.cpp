@@ -285,7 +285,8 @@ void QDiagnosisTest::updateWidgetToRunDiagnosisTest()
 
 void QDiagnosisTest::saveDiagnosisTestResultsAsFile()
 {
-    QString pathFile = QFileDialog::getSaveFileName(this, tr("Save diagnosis tests results"), QDir::homePath(), tr("JSON files (*.json)"));
+    QString pathFile = QFileDialog::getSaveFileName(this, tr("Save diagnosis tests results"), QDir::homePath() + "/diagnosistestsresults.json",
+                                                    tr("JSON files (*.json)"));
 
     if (!pathFile.isEmpty())
     {
