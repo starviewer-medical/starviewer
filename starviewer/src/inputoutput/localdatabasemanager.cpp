@@ -1049,7 +1049,11 @@ void LocalDatabaseManager::setLastError(const QSqlError &error)
 {
     int sqliteLastError = error.nativeErrorCode().toInt();
 
-    if (sqliteLastError == DatabaseConnection::SqliteOk)
+    if (error.isValid() && error.nativeErrorCode().isEmpty())
+    {
+        m_lastError = DatabaseError;
+    }
+    else if (sqliteLastError == DatabaseConnection::SqliteOk)
     {
         m_lastError = Ok;
     }
