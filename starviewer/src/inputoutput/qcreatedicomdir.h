@@ -33,7 +33,7 @@ class QCreateDicomdir : public QDialog, private Ui::QCreateDicomdirBase {
 Q_OBJECT
 public:
     QCreateDicomdir(QWidget *parent = 0);
-    ~QCreateDicomdir();
+    ~QCreateDicomdir() override;
 
     /// Afegeix una llista d'estudis per convertir a DICOMDIR
     /// @param studies Llista d'estudis per convertir a DICOMDIR
@@ -58,9 +58,11 @@ public slots:
     void createDicomdir();
 
 protected:
+    /// Reimplemented to update the "copy content from folder" checkbox when the dialog is activated.
+    void changeEvent(QEvent *event) override;
     /// Event que s'activa al tancar al rebren un event de tancament
     /// @param event de tancament
-    void closeEvent(QCloseEvent *ce);
+    void closeEvent(QCloseEvent *ce) override;
 
 private:
     /// Inicialitza els controls de la interfície
