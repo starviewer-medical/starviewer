@@ -1,3 +1,8 @@
+/*@
+    "name": "test_SliceOrientedVolumePixelData",
+    "requirements": ["visualization.mpr"]
+ */
+
 #include "autotest.h"
 #include "sliceorientedvolumepixeldata.h"
 

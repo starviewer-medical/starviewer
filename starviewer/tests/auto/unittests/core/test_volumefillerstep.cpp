@@ -1,3 +1,8 @@
+/*@
+    "name": "test_VolumeFillerStep",
+    "requirements": ["archive.dicom_format", "archive.other_formats"]
+ */
+
 #include "autotest.h"
 #include "volumefillerstep.h"
 

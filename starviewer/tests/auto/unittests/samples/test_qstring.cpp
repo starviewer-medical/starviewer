@@ -1,7 +1,10 @@
 /*@
     "name": "test_QString",
-    "requirements": []
+    "requirements": ["technical.platforms"]
  */
+// The requirement listed above allows to avoid a red flag for platforms that do not have a specific test. In fact, technically, all tests should list this
+// requirement or one for a specific platform, because these are always implicitly tested but it's easier to just add this here to have a good graphic without
+// all the repetition.
 
 #include "autotest.h"
 #include <QString>
