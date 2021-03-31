@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<office:document xmlns:officeooo="http://openoffice.org/2009/office" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ooo="http://openoffice.org/2004/office" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.text">
- <office:meta><meta:creation-date>2021-01-12T17:56:19.261429357</meta:creation-date><meta:generator>LibreOffice/6.4.7.2$Linux_X86_64 LibreOffice_project/40$Build-2</meta:generator><meta:editing-duration>PT2H10M37S</meta:editing-duration><meta:editing-cycles>13</meta:editing-cycles><dc:title>Guia ràpida</dc:title><dc:subject>Starviewer 1.1</dc:subject><meta:keyword>🅿</meta:keyword><dc:date>2021-01-13T15:30:50.776318422</dc:date><meta:document-statistic meta:table-count="8" meta:image-count="48" meta:object-count="0" meta:page-count="4" meta:paragraph-count="81" meta:word-count="651" meta:character-count="4018" meta:non-whitespace-character-count="3391"/></office:meta>
+<office:document xmlns:officeooo="http://openoffice.org/2009/office" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rpt="http://openoffice.org/2005/report" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:xforms="http://www.w3.org/2002/xforms" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta><meta:creation-date>2021-01-12T17:56:19.261429357</meta:creation-date><meta:generator>LibreOffice/7.0.5.2$Linux_X86_64 LibreOffice_project/00$Build-2</meta:generator><meta:editing-duration>PT2H14M52S</meta:editing-duration><meta:editing-cycles>14</meta:editing-cycles><dc:title>Guia ràpida</dc:title><dc:subject>Starviewer 1.1</dc:subject><meta:keyword>🅿</meta:keyword><dc:date>2021-03-31T13:30:35.862495033</dc:date><meta:document-statistic meta:table-count="8" meta:image-count="48" meta:object-count="0" meta:page-count="4" meta:paragraph-count="81" meta:word-count="651" meta:character-count="4021" meta:non-whitespace-character-count="3394"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
-   <config:config-item config:name="ViewAreaTop" config:type="long">83326</config:config-item>
-   <config:config-item config:name="ViewAreaLeft" config:type="long">0</config:config-item>
-   <config:config-item config:name="ViewAreaWidth" config:type="long">24185</config:config-item>
-   <config:config-item config:name="ViewAreaHeight" config:type="long">22068</config:config-item>
+   <config:config-item config:name="ViewAreaTop" config:type="long">0</config:config-item>
+   <config:config-item config:name="ViewAreaLeft" config:type="long">3175</config:config-item>
+   <config:config-item config:name="ViewAreaWidth" config:type="long">39504</config:config-item>
+   <config:config-item config:name="ViewAreaHeight" config:type="long">20719</config:config-item>
    <config:config-item config:name="ShowRedlineChanges" config:type="boolean">true</config:config-item>
    <config:config-item config:name="InBrowseMode" config:type="boolean">false</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view2</config:config-item>
-     <config:config-item config:name="ViewLeft" config:type="long">16796</config:config-item>
-     <config:config-item config:name="ViewTop" config:type="long">98100</config:config-item>
-     <config:config-item config:name="VisibleLeft" config:type="long">0</config:config-item>
-     <config:config-item config:name="VisibleTop" config:type="long">83326</config:config-item>
-     <config:config-item config:name="VisibleRight" config:type="long">24183</config:config-item>
-     <config:config-item config:name="VisibleBottom" config:type="long">105392</config:config-item>
+     <config:config-item config:name="ViewLeft" config:type="long">31097</config:config-item>
+     <config:config-item config:name="ViewTop" config:type="long">23899</config:config-item>
+     <config:config-item config:name="VisibleLeft" config:type="long">3175</config:config-item>
+     <config:config-item config:name="VisibleTop" config:type="long">0</config:config-item>
+     <config:config-item config:name="VisibleRight" config:type="long">42677</config:config-item>
+     <config:config-item config:name="VisibleBottom" config:type="long">20717</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
-     <config:config-item config:name="ViewLayoutColumns" config:type="short">1</config:config-item>
-     <config:config-item config:name="ViewLayoutBookMode" config:type="boolean">false</config:config-item>
+     <config:config-item config:name="ViewLayoutColumns" config:type="short">2</config:config-item>
+     <config:config-item config:name="ViewLayoutBookMode" config:type="boolean">true</config:config-item>
      <config:config-item config:name="ZoomFactor" config:type="short">100</config:config-item>
      <config:config-item config:name="IsSelectedFrame" config:type="boolean">false</config:config-item>
      <config:config-item config:name="AnchoredTextOverflowLegacy" config:type="boolean">false</config:config-item>
@@ -40,6 +40,8 @@
    <config:config-item config:name="PrintBlackFonts" config:type="boolean">false</config:config-item>
    <config:config-item config:name="PrintAnnotationMode" config:type="short">0</config:config-item>
    <config:config-item config:name="PrintTextPlaceholder" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ProtectFields" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ProtectBookmarks" config:type="boolean">false</config:config-item>
    <config:config-item config:name="EmptyDbFieldHidesPara" config:type="boolean">true</config:config-item>
    <config:config-item config:name="DisableOffPagePositioning" config:type="boolean">true</config:config-item>
    <config:config-item config:name="SubtractFlysAnchoredAtFlys" config:type="boolean">false</config:config-item>
@@ -90,9 +92,9 @@
      <config:config-item config:name="EndLine" config:type="string"/>
     </config:config-item-map-entry>
    </config:config-item-map-indexed>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">pwH+/1Bob3Rvc21hcnQtQzQxMDAtc2VyaWVzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpQaG90b3NtYXJ0LUM0MTAwLXNlcmllcwAAAAAWAAMAyAAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9UGhvdG9zbWFydC1DNDEwMC1zZXJpZXMKb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhClBhZ2VTaXplOkE0AER1cGxleDpOb25lAAASAENPTVBBVF9EVVBMRVhfTU9ERQ8ARHVwbGV4TW9kZTo6T2Zm</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">pwH+/1Bob3Rvc21hcnQtQzQxMDAtc2VyaWVzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpQaG90b3NtYXJ0LUM0MTAwLXNlcmllcwAAAAAWAAMAyAAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9UGhvdG9zbWFydC1DNDEwMC1zZXJpZXMKb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5kYWp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXhEYXRhCkR1cGxleDpOb25lAFBhZ2VTaXplOkE0AAASAENPTVBBVF9EVVBMRVhfTU9ERQ8ARHVwbGV4TW9kZTo6T2Zm</config:config-item>
    <config:config-item config:name="AddParaTableSpacingAtStart" config:type="boolean">true</config:config-item>
-   <config:config-item config:name="Rsid" config:type="int">87870762</config:config-item>
+   <config:config-item config:name="Rsid" config:type="int">87880689</config:config-item>
    <config:config-item config:name="EmbeddedDatabaseName" config:type="string"/>
    <config:config-item config:name="FieldAutoUpdate" config:type="boolean">true</config:config-item>
    <config:config-item config:name="OutlineLevelYieldsNumbering" config:type="boolean">false</config:config-item>
@@ -161,20 +163,20 @@
   <style:font-face style:name="Noto Sans CJK TC" svg:font-family="&apos;Noto Sans CJK TC&apos;" style:font-adornments="Light" style:font-family-generic="swiss" style:font-pitch="variable"/>
  </office:font-face-decls>
  <office:styles>
-  <draw:gradient draw:name="block.start" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#84170b" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="95%"/>
-  <draw:gradient draw:name="callable.start" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#16a085" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="95%"/>
-  <draw:gradient draw:name="section" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#7f8c8d" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="95%"/>
-  <draw:opacity draw:name="Transparency_20_1" draw:display-name="Transparency 1" draw:style="linear" draw:start="100%" draw:end="0%" draw:angle="1800" draw:border="0%"/>
+  <draw:gradient draw:name="block.start" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#84170b" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0deg" draw:border="95%"/>
+  <draw:gradient draw:name="callable.start" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#16a085" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0deg" draw:border="95%"/>
+  <draw:gradient draw:name="section" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#7f8c8d" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0deg" draw:border="95%"/>
+  <draw:opacity draw:name="Transparency_20_1" draw:display-name="Transparency 1" draw:style="linear" draw:start="100%" draw:end="0%" draw:angle="180deg" draw:border="0%"/>
   <style:default-style style:family="graphic">
    <style:graphic-properties svg:stroke-color="#3465a4" draw:fill-color="#729fcf" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:start-line-spacing-horizontal="0.283cm" draw:start-line-spacing-vertical="0.283cm" draw:end-line-spacing-horizontal="0.283cm" draw:end-line-spacing-vertical="0.283cm" style:flow-with-text="false"/>
-   <style:paragraph-properties fo:line-height="110%" style:text-autospace="ideograph-alpha" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="false">
+   <style:paragraph-properties fo:line-height="110%" style:text-autospace="ideograph-alpha" style:line-break="strict" style:font-independent-line-spacing="false">
     <style:tab-stops/>
    </style:paragraph-properties>
-   <style:text-properties style:use-window-font-color="true" style:font-name="Roboto Condensed Light" fo:font-size="12pt" fo:language="en" fo:country="GB" fo:font-weight="250" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK TC" style:font-size-asian="10.5pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="250" style:font-name-complex="Noto Sans Arabic UI" style:font-size-complex="12pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="250" fo:hyphenate="false"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Roboto Condensed Light" fo:font-size="12pt" fo:language="en" fo:country="GB" fo:font-weight="250" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK TC" style:font-size-asian="10.5pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="250" style:font-name-complex="Noto Sans Arabic UI" style:font-size-complex="12pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="250" fo:hyphenate="false"/>
   </style:default-style>
   <style:default-style style:family="paragraph">
    <style:paragraph-properties fo:line-height="110%" fo:orphans="2" fo:widows="2" fo:hyphenation-ladder-count="no-limit" style:text-autospace="ideograph-alpha" style:punctuation-wrap="hanging" style:line-break="strict" style:tab-stop-distance="1.27cm" style:writing-mode="lr-tb"/>
-   <style:text-properties style:use-window-font-color="true" style:font-name="Roboto Condensed Light" fo:font-size="12pt" fo:language="en" fo:country="GB" fo:font-weight="250" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK TC" style:font-size-asian="10.5pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="250" style:font-name-complex="Noto Sans Arabic UI" style:font-size-complex="12pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="250" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Roboto Condensed Light" fo:font-size="12pt" fo:language="en" fo:country="GB" fo:font-weight="250" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK TC" style:font-size-asian="10.5pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="250" style:font-name-complex="Noto Sans Arabic UI" style:font-size-complex="12pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="250" fo:hyphenate="false" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false"/>
   </style:default-style>
   <style:default-style style:family="table">
    <style:table-properties table:border-model="collapsing"/>
@@ -187,18 +189,18 @@
    <style:text-properties fo:language="ca" fo:country="ES"/>
   </style:style>
   <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="First_20_line_20_indent" style:class="text">
-   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.25cm" loext:contextual-spacing="false" fo:line-height="100%" fo:keep-with-next="always"/>
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.25cm" style:contextual-spacing="false" fo:line-height="100%" fo:keep-with-next="always"/>
    <style:text-properties fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text" style:master-page-name="">
-   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.25cm" loext:contextual-spacing="false" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" style:page-number="auto"/>
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.25cm" style:contextual-spacing="false" fo:text-align="justify" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" style:page-number="auto"/>
    <style:text-properties fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false"/>
   </style:style>
   <style:style style:name="List" style:family="paragraph" style:parent-style-name="Text_20_body" style:class="list">
-   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.25cm" loext:contextual-spacing="true" fo:line-height="100%"/>
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.25cm" style:contextual-spacing="true" fo:line-height="100%"/>
   </style:style>
   <style:style style:name="Caption" style:family="paragraph" style:parent-style-name="Standard" style:class="extra" style:master-page-name="">
-   <style:paragraph-properties fo:margin-top="0.21cm" fo:margin-bottom="0.21cm" loext:contextual-spacing="false" fo:text-align="center" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" style:page-number="auto" text:number-lines="false" text:line-number="0"/>
+   <style:paragraph-properties fo:margin-top="0.21cm" fo:margin-bottom="0.21cm" style:contextual-spacing="false" fo:text-align="center" style:justify-single-word="false" fo:hyphenation-ladder-count="no-limit" style:page-number="auto" text:number-lines="false" text:line-number="0"/>
    <style:text-properties fo:font-size="10pt" fo:font-style="italic" style:font-size-asian="8.75pt" style:font-size-complex="10pt" fo:hyphenate="true" fo:hyphenation-remain-char-count="2" fo:hyphenation-push-char-count="2" loext:hyphenation-no-caps="false"/>
   </style:style>
   <style:style style:name="Index" style:family="paragraph" style:parent-style-name="Standard" style:class="index"/>
@@ -207,7 +209,7 @@
   </style:style>
   <style:style style:name="Preformatted_20_Text" style:display-name="Preformatted Text" style:family="paragraph" style:parent-style-name="Standard" style:class="html" style:master-page-name="">
    <loext:graphic-properties draw:fill="none" draw:fill-color="#729fcf"/>
-   <style:paragraph-properties fo:margin-left="1.251cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.019cm" loext:contextual-spacing="false" fo:line-height="100%" fo:text-indent="0cm" style:auto-text-indent="false" style:page-number="auto" fo:background-color="transparent" fo:padding-left="0.109cm" fo:padding-right="0cm" fo:padding-top="0.041cm" fo:padding-bottom="0cm" fo:border-left="2.01pt solid #ffffff" fo:border-right="none" fo:border-top="none" fo:border-bottom="none"/>
+   <style:paragraph-properties fo:margin-left="1.251cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.019cm" style:contextual-spacing="false" fo:line-height="100%" fo:text-indent="0cm" style:auto-text-indent="false" style:page-number="auto" fo:background-color="transparent" fo:padding-left="0.109cm" fo:padding-right="0cm" fo:padding-top="0.041cm" fo:padding-bottom="0cm" fo:border-left="2.01pt solid #ffffff" fo:border-right="none" fo:border-top="none" fo:border-bottom="none"/>
    <style:text-properties style:font-name="Fira Code" fo:font-family="&apos;Fira Code&apos;" style:font-style-name="Light" style:font-pitch="fixed" fo:font-size="9pt" style:font-size-asian="7.90000009536743pt" style:font-size-complex="9pt"/>
   </style:style>
   <style:style style:name="Frame_20_contents" style:display-name="Frame contents" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"/>
@@ -248,12 +250,12 @@
    </style:paragraph-properties>
   </style:style>
   <style:style style:name="Footer" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
-   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" loext:contextual-spacing="true" text:number-lines="false" text:line-number="0"/>
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="true" text:number-lines="false" text:line-number="0"/>
    <style:text-properties fo:font-size="8pt" style:font-size-asian="7pt" style:font-size-complex="8pt"/>
   </style:style>
   <style:style style:name="Quotations" style:family="paragraph" style:parent-style-name="Standard" style:class="html" style:master-page-name="">
    <loext:graphic-properties draw:fill="solid" draw:fill-color="#eff0f1"/>
-   <style:paragraph-properties fo:margin-left="1cm" fo:margin-right="1cm" fo:margin-top="0cm" fo:margin-bottom="0.25cm" loext:contextual-spacing="false" fo:text-align="start" style:justify-single-word="false" fo:text-indent="0cm" style:auto-text-indent="false" style:page-number="auto" fo:background-color="#eff0f1" style:border-line-width-left="0.071cm 0.071cm 0.071cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" fo:padding-top="0.349cm" fo:padding-bottom="0.349cm" fo:border-left="6.01pt double #95a5a6" fo:border-right="none" fo:border-top="none" fo:border-bottom="none" style:shadow="none"/>
+   <style:paragraph-properties fo:margin-left="1cm" fo:margin-right="1cm" fo:margin-top="0cm" fo:margin-bottom="0.25cm" style:contextual-spacing="false" fo:text-align="start" style:justify-single-word="false" fo:text-indent="0cm" style:auto-text-indent="false" style:page-number="auto" fo:background-color="#eff0f1" style:border-line-width-left="0.071cm 0.071cm 0.071cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" fo:padding-top="0.349cm" fo:padding-bottom="0.349cm" fo:border-left="6.01pt double #95a5a6" fo:border-right="none" fo:border-top="none" fo:border-bottom="none" style:shadow="none"/>
    <style:text-properties style:font-name="Jura1" fo:font-family="Jura" style:font-style-name="Light" style:font-pitch="variable" fo:font-style="normal" fo:font-weight="normal"/>
   </style:style>
   <style:style style:name="Marginalia" style:family="paragraph" style:parent-style-name="Text_20_body" style:class="text">
@@ -277,10 +279,10 @@
    <style:paragraph-properties fo:margin-left="1.3cm" fo:margin-right="0cm" fo:text-indent="-0.651cm" style:auto-text-indent="false"/>
   </style:style>
   <style:style style:name="Salutation" style:family="paragraph" style:parent-style-name="Letter" style:class="text">
-   <style:paragraph-properties fo:margin-top="0.499cm" fo:margin-bottom="0.25cm" loext:contextual-spacing="true"/>
+   <style:paragraph-properties fo:margin-top="0.499cm" fo:margin-bottom="0.25cm" style:contextual-spacing="true"/>
   </style:style>
   <style:style style:name="Signature" style:family="paragraph" style:parent-style-name="Letter" style:class="text">
-   <style:paragraph-properties fo:margin-top="1.251cm" fo:margin-bottom="0cm" loext:contextual-spacing="true"/>
+   <style:paragraph-properties fo:margin-top="1.251cm" fo:margin-bottom="0cm" style:contextual-spacing="true"/>
   </style:style>
   <style:style style:name="Letter_20_date" style:display-name="Letter date" style:family="paragraph" style:parent-style-name="Letter" style:class="text" style:master-page-name="">
    <style:paragraph-properties fo:text-align="end" style:justify-single-word="false" style:page-number="auto"/>
@@ -314,7 +316,7 @@
    <style:text-properties fo:font-size="10pt" style:font-size-asian="8.75pt" style:font-size-complex="10pt"/>
   </style:style>
   <style:style style:name="Header" style:family="paragraph" style:parent-style-name="Standard" style:class="extra" style:master-page-name="">
-   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" loext:contextual-spacing="true" fo:text-align="start" style:justify-single-word="false" style:page-number="auto" text:number-lines="false" text:line-number="0"/>
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" style:contextual-spacing="true" fo:text-align="start" style:justify-single-word="false" style:page-number="auto" text:number-lines="false" text:line-number="0"/>
    <style:text-properties fo:font-size="8pt" style:font-size-asian="7pt" style:font-size-complex="8pt"/>
   </style:style>
   <style:style style:name="Contents_20_1" style:display-name="Contents 1" style:family="paragraph" style:parent-style-name="Index" style:class="index">
@@ -346,7 +348,7 @@
    </style:paragraph-properties>
   </style:style>
   <style:style style:name="Horizontal_20_Line" style:display-name="Horizontal Line" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="html" style:master-page-name="">
-   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.499cm" loext:contextual-spacing="false" fo:text-align="center" style:justify-single-word="false" style:page-number="auto" style:border-line-width-bottom="0cm 0.004cm 0.002cm" fo:padding="0cm" fo:border-left="none" fo:border-right="none" fo:border-top="none" fo:border-bottom="0.14pt double #4d4d4d" text:number-lines="false" text:line-number="0" style:join-border="false"/>
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.499cm" style:contextual-spacing="false" fo:text-align="center" style:justify-single-word="false" style:page-number="auto" style:border-line-width-bottom="0cm 0.004cm 0.002cm" fo:padding="0cm" fo:border-left="none" fo:border-right="none" fo:border-top="none" fo:border-bottom="0.14pt double #4d4d4d" text:number-lines="false" text:line-number="0" style:join-border="false"/>
    <style:text-properties fo:font-size="6pt" style:font-size-asian="6pt" style:font-size-complex="6pt"/>
   </style:style>
   <style:style style:name="Code.plain" style:family="paragraph" style:parent-style-name="Preformatted_20_Text">
@@ -354,25 +356,25 @@
   </style:style>
   <style:style style:name="Code.procedural.comment" style:family="paragraph" style:parent-style-name="Code.procedural" style:master-page-name="">
    <style:paragraph-properties style:page-number="auto"/>
-   <style:text-properties fo:color="#7f8c8d"/>
+   <style:text-properties fo:color="#7f8c8d" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Code.procedural.jump" style:family="paragraph" style:parent-style-name="Code.procedural" style:master-page-name="">
    <style:paragraph-properties style:page-number="auto"/>
-   <style:text-properties fo:color="#da4453" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#da4453" loext:opacity="100%" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Code.command" style:family="paragraph" style:parent-style-name="Preformatted_20_Text" style:master-page-name="">
    <style:paragraph-properties style:page-number="auto" fo:padding-left="0.109cm" fo:padding-right="0cm" fo:padding-top="0.041cm" fo:padding-bottom="0cm" fo:border-left="2.01pt solid #9b59b6" fo:border-right="none" fo:border-top="none" fo:border-bottom="none"/>
   </style:style>
   <style:style style:name="Code.procedural.declaration" style:family="paragraph" style:parent-style-name="Code.procedural" style:master-page-name="">
    <style:paragraph-properties style:page-number="auto"/>
-   <style:text-properties fo:color="#8e44ad"/>
+   <style:text-properties fo:color="#8e44ad" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Code.procedural.callable" style:family="paragraph" style:parent-style-name="Code.procedural">
-   <style:text-properties fo:color="#16a085"/>
+   <style:text-properties fo:color="#16a085" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Code.procedural.flow" style:family="paragraph" style:parent-style-name="Code.procedural" style:master-page-name="">
    <style:paragraph-properties style:page-number="auto"/>
-   <style:text-properties fo:color="#2980b9"/>
+   <style:text-properties fo:color="#2980b9" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Code.code" style:family="paragraph" style:parent-style-name="Preformatted_20_Text" style:master-page-name="">
    <loext:graphic-properties draw:fill="none" draw:fill-color="#729fcf"/>
@@ -380,10 +382,10 @@
   </style:style>
   <style:style style:name="Code.output" style:family="paragraph" style:parent-style-name="Preformatted_20_Text" style:master-page-name="">
    <style:paragraph-properties style:page-number="auto" fo:padding-left="0.109cm" fo:padding-right="0cm" fo:padding-top="0.041cm" fo:padding-bottom="0cm" fo:border-left="2.01pt solid #9b59b6" fo:border-right="none" fo:border-top="none" fo:border-bottom="none"/>
-   <style:text-properties fo:color="#7f8c8d"/>
+   <style:text-properties fo:color="#7f8c8d" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Code.wrappers.bottom" style:family="paragraph" style:parent-style-name="Code.wrappers">
-   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.25cm" loext:contextual-spacing="false" fo:padding-left="0.109cm" fo:padding-right="0cm" fo:padding-top="0.041cm" fo:padding-bottom="0cm" fo:border-left="2.01pt solid #ffffff" fo:border-right="none" fo:border-top="2.01pt solid #eff0f1" fo:border-bottom="none"/>
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.25cm" style:contextual-spacing="false" fo:padding-left="0.109cm" fo:padding-right="0cm" fo:padding-top="0.041cm" fo:padding-bottom="0cm" fo:border-left="2.01pt solid #ffffff" fo:border-right="none" fo:border-top="2.01pt solid #eff0f1" fo:border-bottom="none"/>
   </style:style>
   <style:style style:name="Code.wrappers.top" style:family="paragraph" style:parent-style-name="Code.wrappers">
    <style:paragraph-properties fo:padding-left="0.109cm" fo:padding-right="0cm" fo:padding-top="0.041cm" fo:padding-bottom="0.041cm" fo:border-left="2.01pt solid #ffffff" fo:border-right="none" fo:border-top="none" fo:border-bottom="2.01pt solid #eff0f1"/>
@@ -407,7 +409,7 @@
   <style:style style:name="Footer_20_left" style:display-name="Footer left" style:family="paragraph" style:parent-style-name="Footer" style:class="extra"/>
   <style:style style:name="Footer_20_right" style:display-name="Footer right" style:family="paragraph" style:parent-style-name="Footer" style:class="extra"/>
   <style:style style:name="Letter" style:family="paragraph" style:parent-style-name="Standard">
-   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.75cm" loext:contextual-spacing="true"/>
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.75cm" style:contextual-spacing="true"/>
   </style:style>
   <style:style style:name="Figure" style:family="paragraph" style:parent-style-name="Caption" style:class="extra"/>
   <style:style style:name="Tabulated" style:family="paragraph" style:parent-style-name="Text_20_body">
@@ -500,18 +502,18 @@
   </style:style>
   <style:style style:name="Code.procedural.flow.start" style:family="paragraph" style:parent-style-name="Code.procedural" style:master-page-name="">
    <style:paragraph-properties style:page-number="auto"/>
-   <style:text-properties fo:color="#2980b9" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#2980b9" loext:opacity="100%" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Code.procedural.callable.start" style:family="paragraph" style:parent-style-name="Code.procedural">
    <loext:graphic-properties draw:fill="gradient" draw:fill-gradient-name="callable.start" draw:gradient-step-count="2" draw:opacity-name="Transparency_20_1"/>
    <style:paragraph-properties fo:background-color="#8bd0c2"/>
-   <style:text-properties fo:color="#16a085" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#16a085" loext:opacity="100%" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Code.procedural.callable.end" style:family="paragraph" style:parent-style-name="Code.procedural">
-   <style:text-properties fo:color="#16a085" fo:font-size="8pt" fo:font-style="italic" fo:font-weight="bold" style:font-size-asian="7pt" style:font-weight-asian="normal" style:font-size-complex="8pt" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#16a085" loext:opacity="100%" fo:font-size="8pt" fo:font-style="italic" fo:font-weight="bold" style:font-size-asian="7pt" style:font-weight-asian="normal" style:font-size-complex="8pt" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Code.procedural.flow.end" style:family="paragraph" style:parent-style-name="Code.procedural">
-   <style:text-properties fo:color="#2980b9" fo:font-size="8pt" fo:font-style="italic" fo:font-weight="bold" style:font-size-asian="7pt" style:font-weight-asian="normal" style:font-size-complex="8pt" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#2980b9" loext:opacity="100%" fo:font-size="8pt" fo:font-style="italic" fo:font-weight="bold" style:font-size-asian="7pt" style:font-weight-asian="normal" style:font-size-complex="8pt" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="User_20_Index_20_3" style:display-name="User Index 3" style:family="paragraph" style:parent-style-name="Index" style:class="index">
    <style:paragraph-properties fo:margin-left="0.998cm" fo:margin-right="0cm" fo:text-indent="0cm" style:auto-text-indent="false">
@@ -529,7 +531,7 @@
   <style:style style:name="Code.procedural.section" style:family="paragraph" style:parent-style-name="Code.procedural">
    <loext:graphic-properties draw:fill="gradient" draw:fill-gradient-name="section" draw:gradient-step-count="2" draw:opacity-name="Transparency_20_1"/>
    <style:paragraph-properties fo:background-color="#bfc6c6"/>
-   <style:text-properties fo:color="#7f8c8d" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#7f8c8d" loext:opacity="100%" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="List_20_Heading" style:display-name="List Heading" style:family="paragraph" style:parent-style-name="Text_20_body" style:next-style-name="List_20_Contents" style:class="html">
    <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-indent="0.651cm" style:auto-text-indent="false"/>
@@ -539,16 +541,16 @@
    <style:paragraph-properties fo:margin-left="2.6cm" fo:margin-right="0cm" fo:text-indent="0cm" style:auto-text-indent="false"/>
   </style:style>
   <style:style style:name="Code.procedural.var" style:family="paragraph" style:parent-style-name="Code.procedural">
-   <style:text-properties fo:color="#d35400"/>
+   <style:text-properties fo:color="#d35400" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Code.procedural.block.start" style:family="paragraph" style:parent-style-name="Code.procedural" style:master-page-name="">
    <loext:graphic-properties draw:fill="gradient" draw:fill-gradient-name="block.start" draw:gradient-step-count="2" draw:opacity-name="Transparency_20_1"/>
    <style:paragraph-properties style:page-number="auto" fo:background-color="#c28b85"/>
-   <style:text-properties fo:color="#84170b" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#84170b" loext:opacity="100%" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Code.procedural.block.end" style:family="paragraph" style:parent-style-name="Code.procedural" style:master-page-name="">
    <style:paragraph-properties style:page-number="auto"/>
-   <style:text-properties fo:color="#c0392b" fo:font-size="8pt" fo:font-style="italic" fo:font-weight="bold" style:font-size-asian="7pt" style:font-weight-asian="normal" style:font-size-complex="8pt" style:font-weight-complex="normal"/>
+   <style:text-properties fo:color="#c0392b" loext:opacity="100%" fo:font-size="8pt" fo:font-style="italic" fo:font-weight="bold" style:font-size-asian="7pt" style:font-weight-asian="normal" style:font-size-complex="8pt" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="User_20_Index_20_9" style:display-name="User Index 9" style:family="paragraph" style:parent-style-name="Index" style:class="index">
    <style:paragraph-properties fo:margin-left="3.993cm" fo:margin-right="0cm" fo:text-indent="0cm" style:auto-text-indent="false">
@@ -565,7 +567,7 @@
    </style:paragraph-properties>
   </style:style>
   <style:style style:name="Card" style:family="paragraph" style:parent-style-name="Standard">
-   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.25cm" loext:contextual-spacing="true" fo:line-height="100%">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.25cm" style:contextual-spacing="true" fo:line-height="100%">
     <style:tab-stops>
      <style:tab-stop style:position="0.25cm"/>
     </style:tab-stops>
@@ -579,13 +581,13 @@
    <style:text-properties fo:font-size="6pt"/>
   </style:style>
   <style:style style:name="Line_20_numbering" style:display-name="Line numbering" style:family="text" style:parent-style-name="Numbering_20_Symbols">
-   <style:text-properties fo:color="#7f8c8d" fo:font-size="10pt" style:font-size-asian="8.75pt" style:font-size-complex="10pt"/>
+   <style:text-properties fo:color="#7f8c8d" loext:opacity="100%" fo:font-size="10pt" style:font-size-asian="8.75pt" style:font-size-complex="10pt"/>
   </style:style>
   <style:style style:name="Caption_20_characters" style:display-name="Caption characters" style:family="text" style:parent-style-name="Formatting">
-   <style:text-properties fo:color="#2980b9"/>
+   <style:text-properties fo:color="#2980b9" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Emphasis" style:family="text" style:parent-style-name="Formatting">
-   <style:text-properties fo:color="#2980b9"/>
+   <style:text-properties fo:color="#2980b9" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Bullet_20_Symbols" style:display-name="Bullet Symbols" style:family="text" style:parent-style-name="Numbering_20_Symbols">
    <style:text-properties style:font-name="Symbola" fo:font-family="Symbola" style:font-style-name="Italic" style:font-pitch="variable" fo:font-style="normal" fo:font-weight="bold" style:font-weight-asian="800" style:font-weight-complex="800"/>
@@ -594,49 +596,49 @@
    <style:text-properties fo:font-style="italic" fo:font-weight="250" style:font-weight-asian="250" style:font-weight-complex="250"/>
   </style:style>
   <style:style style:name="Visited_20_Internet_20_Link" style:display-name="Visited Internet Link" style:family="text" style:parent-style-name="Internet_20_link">
-   <style:text-properties fo:color="#8e44ad"/>
+   <style:text-properties fo:color="#8e44ad" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Source_20_Text" style:display-name="Source Text" style:family="text" style:parent-style-name="Formatting">
-   <style:text-properties fo:color="#2980b9" style:font-name="Fira Code1" fo:font-family="&apos;Fira Code&apos;" style:font-style-name="Regular" style:font-pitch="fixed" fo:font-size="11pt" fo:font-weight="250" style:font-size-asian="9.60000038146973pt" style:font-size-complex="11pt"/>
+   <style:text-properties fo:color="#2980b9" loext:opacity="100%" style:font-name="Fira Code1" fo:font-family="&apos;Fira Code&apos;" style:font-style-name="Regular" style:font-pitch="fixed" fo:font-size="11pt" fo:font-weight="250" style:font-size-asian="9.60000038146973pt" style:font-size-complex="11pt"/>
   </style:style>
   <style:style style:name="Citation" style:family="text" style:parent-style-name="Formatting">
-   <style:text-properties fo:color="#4d4d4d" style:font-name="Jura2" fo:font-family="Jura" style:font-style-name="Regular" style:font-pitch="variable"/>
+   <style:text-properties fo:color="#4d4d4d" loext:opacity="100%" style:font-name="Jura2" fo:font-family="Jura" style:font-style-name="Regular" style:font-pitch="variable"/>
   </style:style>
   <style:style style:name="Numbering_20_Symbols" style:display-name="Numbering Symbols" style:family="text">
-   <style:text-properties fo:color="#2980b9" fo:font-style="italic" fo:font-weight="250" style:font-weight-asian="250" style:font-weight-complex="250"/>
+   <style:text-properties fo:color="#2980b9" loext:opacity="100%" fo:font-style="italic" fo:font-weight="250" style:font-weight-asian="250" style:font-weight-complex="250"/>
   </style:style>
   <style:style style:name="Internet_20_link" style:display-name="Internet link" style:family="text">
-   <style:text-properties fo:color="#2980b9" style:font-name="Jura2" fo:font-family="Jura" style:font-style-name="Regular" style:font-pitch="variable" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
+   <style:text-properties fo:color="#2980b9" loext:opacity="100%" style:font-name="Jura2" fo:font-family="Jura" style:font-style-name="Regular" style:font-pitch="variable" style:text-underline-style="solid" style:text-underline-width="auto" style:text-underline-color="font-color"/>
   </style:style>
   <style:style style:name="Footnote_20_anchor" style:display-name="Footnote anchor" style:family="text">
-   <style:text-properties fo:color="#4d4d4d" style:text-position="super 58%" fo:font-style="italic" fo:font-weight="bold"/>
+   <style:text-properties fo:color="#4d4d4d" loext:opacity="100%" style:text-position="super 58%" fo:font-style="italic" fo:font-weight="bold"/>
   </style:style>
   <style:style style:name="Footnote_20_Symbol" style:display-name="Footnote Symbol" style:family="text" style:parent-style-name="Numbering_20_Symbols"/>
   <style:style style:name="Endnote_20_Symbol" style:display-name="Endnote Symbol" style:family="text" style:parent-style-name="Numbering_20_Symbols"/>
   <style:style style:name="Endnote_20_anchor" style:display-name="Endnote anchor" style:family="text" style:parent-style-name="Footnote_20_anchor">
-   <style:text-properties fo:color="#2980b9"/>
+   <style:text-properties fo:color="#2980b9" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Strong_20_Emphasis" style:display-name="Strong Emphasis" style:family="text" style:parent-style-name="Emphasis">
    <style:text-properties fo:font-style="normal" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Index_20_Link" style:display-name="Index Link" style:family="text" style:parent-style-name="Indexing"/>
   <style:style style:name="Teletype" style:family="text" style:parent-style-name="Formatting">
-   <style:text-properties fo:color="#4d4d4d" style:font-name="Jura2" fo:font-family="Jura" style:font-style-name="Regular" style:font-pitch="variable" style:text-underline-style="dot-dash" style:text-underline-width="auto" style:text-underline-color="font-color" style:font-size-asian="12pt" style:font-size-complex="12pt" style:text-overline-style="dot-dash" style:text-overline-width="auto" style:text-overline-color="font-color"/>
+   <style:text-properties fo:color="#4d4d4d" loext:opacity="100%" style:font-name="Jura2" fo:font-family="Jura" style:font-style-name="Regular" style:font-pitch="variable" style:text-underline-style="dot-dash" style:text-underline-width="auto" style:text-underline-color="font-color" style:font-size-asian="12pt" style:font-size-complex="12pt" style:text-overline-style="dot-dash" style:text-overline-width="auto" style:text-overline-color="font-color"/>
   </style:style>
   <style:style style:name="Placeholder" style:family="text" style:parent-style-name="Example">
-   <style:text-properties fo:font-variant="small-caps" fo:color="#2980b9"/>
+   <style:text-properties fo:font-variant="small-caps" fo:color="#2980b9" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Code_20_numbering" style:display-name="Code numbering" style:family="text" style:parent-style-name="Numbering_20_Symbols">
-   <style:text-properties fo:color="#4d4d4d" style:text-position="10% 100%" style:font-name="Roboto Condensed Light" fo:font-family="&apos;Roboto Condensed Light&apos;" style:font-style-name="Light" style:font-pitch="variable" fo:font-size="8pt" fo:font-style="normal" fo:font-weight="250" style:font-size-asian="7pt" style:font-weight-asian="250" style:font-size-complex="8pt" style:font-weight-complex="250"/>
+   <style:text-properties fo:color="#4d4d4d" loext:opacity="100%" style:text-position="10% 100%" style:font-name="Roboto Condensed Light" fo:font-family="&apos;Roboto Condensed Light&apos;" style:font-style-name="Light" style:font-pitch="variable" fo:font-size="8pt" fo:font-style="normal" fo:font-weight="250" style:font-size-asian="7pt" style:font-weight-asian="250" style:font-size-complex="8pt" style:font-weight-complex="250"/>
   </style:style>
   <style:style style:name="Rubies" style:family="text" style:parent-style-name="Vertical_20_Numbering_20_Symbols">
    <style:text-properties fo:font-size="6pt" style:text-underline-style="none" style:font-size-asian="6pt" style:font-size-complex="6pt" style:text-emphasize="none"/>
   </style:style>
   <style:style style:name="Variable" style:family="text" style:parent-style-name="Source_20_Text">
-   <style:text-properties fo:color="#16a085"/>
+   <style:text-properties fo:color="#16a085" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Example" style:family="text" style:parent-style-name="Formatting">
-   <style:text-properties style:use-window-font-color="true" style:text-underline-style="dotted" style:text-underline-width="auto" style:text-underline-color="#000000"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-underline-style="dotted" style:text-underline-width="auto" style:text-underline-color="#000000"/>
   </style:style>
   <style:style style:name="Drop_20_Caps" style:display-name="Drop Caps" style:family="text"/>
   <style:style style:name="Formatting" style:family="text"/>
@@ -647,7 +649,7 @@
    <style:text-properties style:font-name="Linux Biolinum Keyboard O" fo:font-family="&apos;Linux Biolinum Keyboard O&apos;" style:font-style-name="Regular" style:font-pitch="variable" fo:font-weight="bold"/>
   </style:style>
   <style:style style:name="Display" style:family="text" style:parent-style-name="Formatting">
-   <style:text-properties fo:color="#4d4d4d" style:font-name="Jura" fo:font-family="Jura" style:font-style-name="Bold" style:font-pitch="variable" fo:font-size="10pt" fo:font-weight="bold" fo:background-color="#eff0f1" style:font-size-asian="8.75pt" style:font-weight-asian="800" style:font-size-complex="10pt" style:font-weight-complex="800" style:font-relief="embossed" loext:padding="0.049cm" loext:border="0.06pt solid #7f8c8d" loext:shadow="none"/>
+   <style:text-properties fo:color="#4d4d4d" loext:opacity="100%" style:font-name="Jura" fo:font-family="Jura" style:font-style-name="Bold" style:font-pitch="variable" fo:font-size="10pt" fo:font-weight="bold" fo:background-color="#eff0f1" style:font-size-asian="8.75pt" style:font-weight-asian="800" style:font-size-complex="10pt" style:font-weight-complex="800" style:font-relief="embossed" loext:padding="0.049cm" loext:border="0.06pt solid #7f8c8d" loext:shadow="none"/>
   </style:style>
   <style:style style:name="DSEG7" style:family="text" style:parent-style-name="Display">
    <style:text-properties style:font-name="DSEG7 Modern" fo:font-family="&apos;DSEG7 Modern&apos;" style:font-style-name="Italic" style:font-pitch="variable" fo:font-style="italic" fo:font-weight="normal"/>
@@ -659,29 +661,29 @@
    <style:text-properties style:font-name="Symbola1" fo:font-family="Symbola" style:font-style-name="Regular" style:font-pitch="variable" fo:font-style="normal" fo:font-weight="bold" style:font-weight-asian="800" style:font-weight-complex="800"/>
   </style:style>
   <style:style style:name="Page_20_Number" style:display-name="Page Number" style:family="text" style:parent-style-name="Numbering_20_Symbols">
-   <style:text-properties style:use-window-font-color="true" fo:font-size="10pt" style:font-size-asian="7.90000009536743pt" style:font-size-complex="10pt"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" fo:font-size="10pt" style:font-size-asian="7.90000009536743pt" style:font-size-complex="10pt"/>
   </style:style>
   <style:style style:name="Definition" style:family="text" style:parent-style-name="Formatting">
    <style:text-properties fo:font-style="italic"/>
   </style:style>
   <style:style style:name="User_20_Entry" style:display-name="User Entry" style:family="text" style:parent-style-name="Source_20_Text">
-   <style:text-properties fo:color="#8e44ad"/>
+   <style:text-properties fo:color="#8e44ad" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Symbol_20_font" style:display-name="Symbol font" style:family="text">
    <style:text-properties style:font-name="Symbola2" fo:font-family="Symbola"/>
   </style:style>
   <style:style style:name="Marks" style:family="text" style:parent-style-name="Numbering_20_Symbols">
-   <style:text-properties style:use-window-font-color="true" style:text-position="15% 100%" style:font-name="Symbola2" fo:font-family="Symbola" fo:font-size="9pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="8.69999980926514pt" style:font-weight-asian="normal" style:font-size-complex="9pt" style:font-weight-complex="normal"/>
+   <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-position="15% 100%" style:font-name="Symbola2" fo:font-family="Symbola" fo:font-size="9pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="8.69999980926514pt" style:font-weight-asian="normal" style:font-size-complex="9pt" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Highlighted_20_marks" style:display-name="Highlighted marks" style:family="text" style:parent-style-name="Marks">
-   <style:text-properties fo:color="#2980b9"/>
+   <style:text-properties fo:color="#2980b9" loext:opacity="100%"/>
   </style:style>
   <style:style style:name="Main_20_index_20_entry" style:display-name="Main index entry" style:family="text" style:parent-style-name="Indexing">
    <style:text-properties fo:font-style="normal" fo:font-weight="bold" style:font-weight-asian="normal" style:font-weight-complex="normal"/>
   </style:style>
   <style:style style:name="Indexing" style:family="text"/>
   <style:style style:name="Index_20_dots" style:display-name="Index dots" style:family="text" style:parent-style-name="Indexing">
-   <style:text-properties fo:color="#4d4d4d" style:font-name="Symbola" fo:font-family="Symbola" style:font-style-name="Italic" style:font-pitch="variable" fo:font-size="8pt"/>
+   <style:text-properties fo:color="#4d4d4d" loext:opacity="100%" style:font-name="Symbola" fo:font-family="Symbola" style:font-style-name="Italic" style:font-pitch="variable" fo:font-size="8pt"/>
   </style:style>
   <style:style style:name="Graphics" style:family="graphic">
    <style:graphic-properties text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" style:wrap="dynamic" style:number-wrapped-paragraphs="no-limit" style:wrap-contour="false" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph"/>
@@ -724,7 +726,7 @@
    <style:graphic-properties svg:x="0cm" svg:y="0cm" fo:margin-top="0.499cm" fo:margin-bottom="0.499cm" style:wrap="none" style:vertical-pos="bottom" style:vertical-rel="paragraph-content" style:horizontal-pos="center" style:horizontal-rel="paragraph-content" style:flow-with-text="true" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true"/>
   </style:style>
   <style:style style:name="Small_20_tool_20_icon" style:display-name="Small tool icon" style:family="graphic" style:parent-style-name="Graphics">
-   <style:graphic-properties svg:width="0.499cm" svg:height="0.499cm" svg:x="0cm" svg:y="-0.4cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" fo:background-color="transparent" draw:fill="none" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true">
+   <style:graphic-properties svg:width="0.499cm" svg:height="0.499cm" svg:x="0cm" svg:y="-0.4cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:vertical-pos="from-top" style:vertical-rel="paragraph" style:horizontal-pos="center" style:horizontal-rel="paragraph" fo:background-color="transparent" draw:fill="none" draw:fill-color="#729fcf" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true">
     <style:columns fo:column-count="1" fo:column-gap="0cm"/>
    </style:graphic-properties>
   </style:style>
@@ -2263,7 +2265,19 @@
   <style:style style:name="P33" style:family="paragraph" style:parent-style-name="First_20_line_20_indent">
    <style:text-properties fo:language="ca" fo:country="ES" officeooo:rsid="0533e3fa" officeooo:paragraph-rsid="0533e3fa"/>
   </style:style>
-  <style:style style:name="P34" style:family="paragraph" style:parent-style-name="Tabulated">
+  <style:style style:name="P34" style:family="paragraph" style:parent-style-name="First_20_line_20_indent">
+   <style:text-properties fo:language="ca" fo:country="ES" officeooo:rsid="05348b2d" officeooo:paragraph-rsid="05348b2d"/>
+  </style:style>
+  <style:style style:name="P35" style:family="paragraph" style:parent-style-name="First_20_line_20_indent">
+   <style:text-properties officeooo:paragraph-rsid="05348b2d"/>
+  </style:style>
+  <style:style style:name="P36" style:family="paragraph" style:parent-style-name="First_20_line_20_indent">
+   <style:text-properties officeooo:rsid="0533e3fa" officeooo:paragraph-rsid="0533e3fa"/>
+  </style:style>
+  <style:style style:name="P37" style:family="paragraph" style:parent-style-name="First_20_line_20_indent">
+   <style:text-properties officeooo:rsid="05348b2d" officeooo:paragraph-rsid="05348b2d"/>
+  </style:style>
+  <style:style style:name="P38" style:family="paragraph" style:parent-style-name="Tabulated">
    <style:paragraph-properties>
     <style:tab-stops>
      <style:tab-stop style:position="0cm"/>
@@ -2277,23 +2291,23 @@
     </style:tab-stops>
    </style:paragraph-properties>
   </style:style>
-  <style:style style:name="P35" style:family="paragraph" style:parent-style-name="Text_20_body_20_indent" style:master-page-name="Portrait_20_logo_20__2b__20_header_20__2b__20_footer">
+  <style:style style:name="P39" style:family="paragraph" style:parent-style-name="Tabulated">
+   <style:paragraph-properties>
+    <style:tab-stops>
+     <style:tab-stop style:position="0cm"/>
+     <style:tab-stop style:position="2.011cm" style:type="right"/>
+     <style:tab-stop style:position="2.487cm"/>
+     <style:tab-stop style:position="8.38cm" style:type="right"/>
+     <style:tab-stop style:position="8.631cm"/>
+     <style:tab-stop style:position="12.629cm" style:type="right"/>
+     <style:tab-stop style:position="12.88cm"/>
+     <style:tab-stop style:position="17cm" style:type="right"/>
+    </style:tab-stops>
+   </style:paragraph-properties>
+   <style:text-properties officeooo:paragraph-rsid="0539104d"/>
+  </style:style>
+  <style:style style:name="P40" style:family="paragraph" style:parent-style-name="Text_20_body_20_indent" style:master-page-name="">
    <style:paragraph-properties style:page-number="auto"/>
-  </style:style>
-  <style:style style:name="P36" style:family="paragraph" style:parent-style-name="First_20_line_20_indent" style:list-style-name="Numbering_20_123">
-   <style:text-properties officeooo:paragraph-rsid="05348b2d"/>
-  </style:style>
-  <style:style style:name="P37" style:family="paragraph" style:parent-style-name="First_20_line_20_indent" style:list-style-name="Numbering_20_123">
-   <style:text-properties fo:language="ca" fo:country="ES" officeooo:rsid="0533e3fa" officeooo:paragraph-rsid="0533e3fa"/>
-  </style:style>
-  <style:style style:name="P38" style:family="paragraph" style:parent-style-name="First_20_line_20_indent" style:list-style-name="Numbering_20_123">
-   <style:text-properties fo:language="ca" fo:country="ES" officeooo:rsid="05348b2d" officeooo:paragraph-rsid="05348b2d"/>
-  </style:style>
-  <style:style style:name="P39" style:family="paragraph" style:parent-style-name="First_20_line_20_indent" style:list-style-name="Numbering_20_123">
-   <style:text-properties officeooo:rsid="0533e3fa" officeooo:paragraph-rsid="0533e3fa"/>
-  </style:style>
-  <style:style style:name="P40" style:family="paragraph" style:parent-style-name="First_20_line_20_indent" style:list-style-name="Numbering_20_123">
-   <style:text-properties officeooo:rsid="05348b2d" officeooo:paragraph-rsid="05348b2d"/>
   </style:style>
   <style:style style:name="P41" style:family="paragraph" style:parent-style-name="Heading_20_1">
    <style:text-properties fo:language="ca" fo:country="ES"/>
@@ -2308,34 +2322,36 @@
    <style:paragraph-properties fo:break-before="page"/>
    <style:text-properties officeooo:rsid="05348b2d" officeooo:paragraph-rsid="05348b2d"/>
   </style:style>
-  <style:style style:name="P45" style:family="paragraph" style:parent-style-name="Tabulated">
-   <style:paragraph-properties>
-    <style:tab-stops>
-     <style:tab-stop style:position="0cm"/>
-     <style:tab-stop style:position="2.011cm" style:type="right"/>
-     <style:tab-stop style:position="2.487cm"/>
-     <style:tab-stop style:position="8.38cm" style:type="right"/>
-     <style:tab-stop style:position="8.631cm"/>
-     <style:tab-stop style:position="12.629cm" style:type="right"/>
-     <style:tab-stop style:position="12.88cm"/>
-     <style:tab-stop style:position="17cm" style:type="right"/>
-    </style:tab-stops>
-   </style:paragraph-properties>
+  <style:style style:name="P45" style:family="paragraph" style:parent-style-name="First_20_line_20_indent" style:list-style-name="Numbering_20_123">
+   <style:text-properties officeooo:paragraph-rsid="05348b2d"/>
   </style:style>
-  <style:style style:name="P46" style:family="paragraph" style:parent-style-name="Tabulated">
-   <style:paragraph-properties>
-    <style:tab-stops>
-     <style:tab-stop style:position="0cm"/>
-     <style:tab-stop style:position="2.011cm" style:type="right"/>
-     <style:tab-stop style:position="2.487cm"/>
-     <style:tab-stop style:position="8.38cm" style:type="right"/>
-     <style:tab-stop style:position="8.631cm"/>
-     <style:tab-stop style:position="12.629cm" style:type="right"/>
-     <style:tab-stop style:position="12.88cm"/>
-     <style:tab-stop style:position="17cm" style:type="right"/>
-    </style:tab-stops>
-   </style:paragraph-properties>
-   <style:text-properties officeooo:paragraph-rsid="0539104d"/>
+  <style:style style:name="P46" style:family="paragraph" style:parent-style-name="First_20_line_20_indent" style:list-style-name="Numbering_20_123">
+   <style:text-properties fo:language="ca" fo:country="ES" officeooo:rsid="0533e3fa" officeooo:paragraph-rsid="0533e3fa"/>
+  </style:style>
+  <style:style style:name="P47" style:family="paragraph" style:parent-style-name="First_20_line_20_indent" style:list-style-name="Numbering_20_123">
+   <style:text-properties fo:language="ca" fo:country="ES" officeooo:rsid="05348b2d" officeooo:paragraph-rsid="05348b2d"/>
+  </style:style>
+  <style:style style:name="P48" style:family="paragraph" style:parent-style-name="First_20_line_20_indent" style:list-style-name="Numbering_20_123">
+   <style:text-properties officeooo:rsid="0533e3fa" officeooo:paragraph-rsid="0533e3fa"/>
+  </style:style>
+  <style:style style:name="P49" style:family="paragraph" style:parent-style-name="First_20_line_20_indent" style:list-style-name="Numbering_20_123">
+   <style:text-properties officeooo:rsid="05348b2d" officeooo:paragraph-rsid="05348b2d"/>
+  </style:style>
+  <style:style style:name="P50" style:family="paragraph" style:parent-style-name="First_20_line_20_indent" style:master-page-name="Portrait_20_logo_20__2b__20_header_20__2b__20_footer">
+   <style:paragraph-properties style:page-number="auto"/>
+  </style:style>
+  <style:style style:name="P51" style:family="paragraph" style:parent-style-name="Heading_20_1">
+   <style:text-properties fo:language="ca" fo:country="ES"/>
+  </style:style>
+  <style:style style:name="P52" style:family="paragraph" style:parent-style-name="Heading_20_1">
+   <style:text-properties officeooo:paragraph-rsid="05348b2d"/>
+  </style:style>
+  <style:style style:name="P53" style:family="paragraph" style:parent-style-name="Heading_20_1">
+   <style:text-properties officeooo:rsid="05348b2d" officeooo:paragraph-rsid="05348b2d"/>
+  </style:style>
+  <style:style style:name="P54" style:family="paragraph" style:parent-style-name="Heading_20_1">
+   <style:paragraph-properties fo:break-before="page"/>
+   <style:text-properties officeooo:rsid="05348b2d" officeooo:paragraph-rsid="05348b2d"/>
   </style:style>
   <style:style style:name="T1" style:family="text">
    <style:text-properties fo:language="en" fo:country="GB"/>
@@ -2380,39 +2396,45 @@
    <style:text-properties fo:language="ca" fo:country="ES" officeooo:rsid="053b796b"/>
   </style:style>
   <style:style style:name="T15" style:family="text">
-   <style:text-properties officeooo:rsid="05348b2d"/>
+   <style:text-properties fo:language="ca" fo:country="ES" officeooo:rsid="053cf3f1"/>
   </style:style>
   <style:style style:name="T16" style:family="text">
-   <style:text-properties officeooo:rsid="0541980a"/>
+   <style:text-properties officeooo:rsid="05348b2d"/>
   </style:style>
   <style:style style:name="T17" style:family="text">
-   <style:text-properties officeooo:rsid="0600b572"/>
+   <style:text-properties officeooo:rsid="0541980a"/>
   </style:style>
   <style:style style:name="T18" style:family="text">
-   <style:text-properties officeooo:rsid="0536f7a8"/>
+   <style:text-properties officeooo:rsid="0600b572"/>
   </style:style>
   <style:style style:name="T19" style:family="text">
-   <style:text-properties officeooo:rsid="0537c45b"/>
+   <style:text-properties officeooo:rsid="0536f7a8"/>
   </style:style>
   <style:style style:name="T20" style:family="text">
-   <style:text-properties officeooo:rsid="0539104d"/>
+   <style:text-properties officeooo:rsid="0537c45b"/>
   </style:style>
   <style:style style:name="T21" style:family="text">
-   <style:text-properties officeooo:rsid="0539d03c"/>
+   <style:text-properties officeooo:rsid="0539104d"/>
   </style:style>
   <style:style style:name="T22" style:family="text">
-   <style:text-properties style:font-name="Roboto Condensed Light1" officeooo:rsid="0539d03c"/>
+   <style:text-properties officeooo:rsid="0539d03c"/>
   </style:style>
   <style:style style:name="T23" style:family="text">
-   <style:text-properties style:font-name="Roboto Condensed Light" officeooo:rsid="0539d03c"/>
+   <style:text-properties style:font-name="Roboto Condensed Light1" officeooo:rsid="0539d03c"/>
   </style:style>
   <style:style style:name="T24" style:family="text">
-   <style:text-properties officeooo:rsid="053b796b"/>
+   <style:text-properties style:font-name="Roboto Condensed Light" officeooo:rsid="0539d03c"/>
   </style:style>
   <style:style style:name="T25" style:family="text">
+   <style:text-properties officeooo:rsid="053b796b"/>
+  </style:style>
+  <style:style style:name="T26" style:family="text">
    <style:text-properties officeooo:rsid="053ccd2a"/>
   </style:style>
-  <style:style style:name="T26" style:family="text"/>
+  <style:style style:name="T27" style:family="text">
+   <style:text-properties officeooo:rsid="053cf3f1"/>
+  </style:style>
+  <style:style style:name="T28" style:family="text"/>
   <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
    <style:graphic-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" style:protect="none" style:vertical-pos="from-top" style:vertical-rel="paragraph-content" style:horizontal-pos="from-left" style:horizontal-rel="page-content" fo:padding="0cm" fo:border="none" draw:textarea-vertical-align="middle">
     <style:columns fo:column-count="1" fo:column-gap="0cm"/>
@@ -2425,27 +2447,21 @@
    <style:graphic-properties style:run-through="foreground" style:wrap="none" style:vertical-pos="bottom" style:vertical-rel="paragraph-content" style:horizontal-pos="center" style:horizontal-rel="paragraph" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true" loext:rel-width-rel="paragraph"/>
   </style:style>
   <style:style style:name="fr4" style:family="graphic" style:parent-style-name="Small_20_tool_20_icon">
-   <style:graphic-properties style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard"/>
-  </style:style>
-  <style:style style:name="fr5" style:family="graphic" style:parent-style-name="Small_20_tool_20_icon">
-   <style:graphic-properties style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard"/>
-  </style:style>
-  <style:style style:name="fr6" style:family="graphic" style:parent-style-name="Small_20_tool_20_icon">
-   <style:graphic-properties style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true"/>
-  </style:style>
-  <style:style style:name="fr7" style:family="graphic" style:parent-style-name="Small_20_tool_20_icon">
    <style:graphic-properties style:vertical-pos="from-top" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard"/>
   </style:style>
-  <style:style style:name="fr8" style:family="graphic" style:parent-style-name="Graphics">
+  <style:style style:name="fr5" style:family="graphic" style:parent-style-name="Small_20_tool_20_icon">
+   <style:graphic-properties style:vertical-pos="from-top" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard" draw:wrap-influence-on-position="once-concurrent" loext:allow-overlap="true"/>
+  </style:style>
+  <style:style style:name="fr6" style:family="graphic" style:parent-style-name="Graphics">
    <style:graphic-properties style:run-through="foreground" style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="left" style:horizontal-rel="paragraph" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard"/>
   </style:style>
-  <style:style style:name="fr9" style:family="graphic" style:parent-style-name="Graphics">
+  <style:style style:name="fr7" style:family="graphic" style:parent-style-name="Graphics">
    <style:graphic-properties style:run-through="foreground" style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph" style:horizontal-pos="right" style:horizontal-rel="paragraph" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard"/>
   </style:style>
-  <style:style style:name="fr10" style:family="graphic" style:parent-style-name="Captionless_20_image">
+  <style:style style:name="fr8" style:family="graphic" style:parent-style-name="Captionless_20_image">
    <style:graphic-properties style:vertical-pos="bottom" style:vertical-rel="paragraph-content" style:horizontal-pos="center" style:horizontal-rel="paragraph-content" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard"/>
   </style:style>
-  <style:style style:name="fr11" style:family="graphic" style:parent-style-name="Captionless_20_image">
+  <style:style style:name="fr9" style:family="graphic" style:parent-style-name="Captionless_20_image">
    <style:graphic-properties style:vertical-pos="bottom" style:vertical-rel="paragraph-content" style:mirror="none" fo:clip="rect(0cm, 0cm, 0cm, 0cm)" draw:luminance="0%" draw:contrast="0%" draw:red="0%" draw:green="0%" draw:blue="0%" draw:gamma="100%" draw:color-inversion="false" draw:image-opacity="100%" draw:color-mode="standard" style:flow-with-text="false"/>
   </style:style>
   <style:page-layout style:name="pm1">
@@ -2641,6 +2657,9 @@
     <style:header-footer-properties svg:height="0.501cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.25cm" fo:background-color="#202020" style:dynamic-spacing="false" draw:fill="solid" draw:fill-color="#202020" draw:opacity="100%"/>
    </style:footer-style>
   </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none" draw:fill-color="#729fcf"/>
+  </style:style>
   <number:date-style style:name="N84">
    <number:year number:style="long"/>
    <number:text>-</number:text>
@@ -2655,7 +2674,7 @@
     <text:p text:style-name="P1"/>
    </style:header>
   </style:master-page>
-  <style:master-page style:name="First_20_Page" style:display-name="First Page" style:page-layout-name="pm2" style:next-style-name="Standard">
+  <style:master-page style:name="First_20_Page" style:display-name="First Page" style:page-layout-name="pm2" draw:style-name="dp1" style:next-style-name="Standard">
    <style:header>
     <text:p text:style-name="P1"/>
    </style:header>
@@ -2670,14 +2689,14 @@
     <text:p text:style-name="P1"/>
    </style:header>
   </style:master-page>
-  <style:master-page style:name="Portrait_20_logo_20__2b__20_header_20__2b__20_footer" style:display-name="Portrait logo + header + footer" style:page-layout-name="pm4">
+  <style:master-page style:name="Portrait_20_logo_20__2b__20_header_20__2b__20_footer" style:display-name="Portrait logo + header + footer" style:page-layout-name="pm4" draw:style-name="dp1">
    <style:header>
     <text:p text:style-name="P2"><draw:frame draw:style-name="fr1" draw:name="tpl_portraitHeaderFooter_txt" text:anchor-type="paragraph" svg:x="2.05cm" svg:y="0.6cm" svg:width="3.002cm" svg:height="1.191cm" draw:z-index="3">
       <draw:text-box>
        <text:p text:style-name="P3">Starviewer</text:p>
        <text:p text:style-name="P4">Medical Imaging Software</text:p>
       </draw:text-box>
-     </draw:frame><draw:frame draw:style-name="fr2" draw:name="tpl_portraitHeaderFooter_img" text:anchor-type="paragraph" svg:y="0.6cm" svg:width="1.81cm" svg:height="1.18cm" draw:z-index="7"><draw:image loext:mime-type="image/png">
+     </draw:frame><draw:frame draw:style-name="fr2" draw:name="tpl_portraitHeaderFooter_img" text:anchor-type="paragraph" svg:y="0.6cm" svg:width="1.81cm" svg:height="1.18cm" draw:z-index="7"><draw:image draw:mime-type="image/png">
        <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAa0AAAEXCAQAAAC0DtOvAAAAAmJLR0QA/4ePzL8AAAAJcEhZ
         cwAAXF8AAFxfAatNuQoAABMVSURBVHja7Z19fBTVvYef2YTXAFYgQMAXVCCxFsWiIgKtUEBB
         rKAfwQYFVES9qJXra72KoLW96BVB671UKuALoL3KiwhcUUArYgXrGypJFkUQCRCMvCQBAsnc
@@ -2773,7 +2792,7 @@
         AElFTkSuQmCC
        </office:binary-data>
       </draw:image>
-     </draw:frame><text:span text:style-name="T1"><text:modification-date style:data-style-name="N84">2021-01-13</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>13</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
+     </draw:frame><text:span text:style-name="T1"><text:modification-date style:data-style-name="N84">2021-03-31</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>14</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
     <table:table table:name="tpl_headerPortraitLogoHeaderFooter_table" table:style-name="tpl_5f_headerPortraitLogoHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_headerPortraitLogoHeaderFooter_5f_table.A"/>
      <table:table-header-rows>
@@ -2795,24 +2814,24 @@
     <table:table table:name="tpl_footerPortraitLogoHeaderFooter_table" table:style-name="tpl_5f_footerPortraitLogoHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_footerPortraitLogoHeaderFooter_5f_table.A"/>
      <table:table-column table:style-name="tpl_5f_footerPortraitLogoHeaderFooter_5f_table.B"/>
-     <table:table-row table:style-name="TableLine94676888924608">
+     <table:table-row table:style-name="TableLine94763116500592">
       <table:table-cell table:style-name="tpl_5f_footerPortraitLogoHeaderFooter_5f_table.A1" office:value-type="string">
        <text:p text:style-name="P11"><text:file-name text:display="name">[ca] Quick start guide</text:file-name></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="tpl_5f_footerPortraitLogoHeaderFooter_5f_table.B1" office:value-type="string">
-       <text:p text:style-name="P25"><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:page-number text:select-page="current">4</text:page-number></text:span></text:span><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:s/>• </text:span></text:span><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:page-count>4</text:page-count></text:span></text:span></text:p>
+       <text:p text:style-name="P25"><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:page-number text:select-page="current">1</text:page-number></text:span></text:span><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:s/>• </text:span></text:span><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:page-count>4</text:page-count></text:span></text:span></text:p>
       </table:table-cell>
      </table:table-row>
     </table:table>
     <text:p text:style-name="P6"/>
    </style:footer>
   </style:master-page>
-  <style:master-page style:name="Left_20_Page" style:hidden="true" style:display-name="Left Page" style:page-layout-name="pm5" style:next-style-name="Right_20_Page">
+  <style:master-page style:name="Left_20_Page" loext:hidden="true" style:hidden="true" style:display-name="Left Page" style:page-layout-name="pm5" style:next-style-name="Right_20_Page">
    <style:header>
     <text:p text:style-name="P1"/>
    </style:header>
   </style:master-page>
-  <style:master-page style:name="Right_20_Page" style:hidden="true" style:display-name="Right Page" style:page-layout-name="pm6" style:next-style-name="Left_20_Page">
+  <style:master-page style:name="Right_20_Page" loext:hidden="true" style:hidden="true" style:display-name="Right Page" style:page-layout-name="pm6" style:next-style-name="Left_20_Page">
    <style:header>
     <text:p text:style-name="P1"/>
    </style:header>
@@ -2833,14 +2852,14 @@
    </style:header>
   </style:master-page>
   <style:master-page style:name="Landscape" style:page-layout-name="pm10"/>
-  <style:master-page style:name="Portrait_20_logo" style:display-name="Portrait logo" style:page-layout-name="pm11">
+  <style:master-page style:name="Portrait_20_logo" style:display-name="Portrait logo" style:page-layout-name="pm11" draw:style-name="dp1">
    <style:header>
     <text:p text:style-name="P7"><draw:frame draw:style-name="fr1" draw:name="tpl_portraitHeader_txt" text:anchor-type="paragraph" svg:x="2.05cm" svg:y="0.049cm" svg:width="3.002cm" svg:height="1.191cm" draw:z-index="0">
       <draw:text-box>
        <text:p text:style-name="P3">Starviewer</text:p>
        <text:p text:style-name="P4">Medical Imaging Software</text:p>
       </draw:text-box>
-     </draw:frame><draw:frame draw:style-name="fr2" draw:name="tpl_portraitHeader_img" text:anchor-type="paragraph" svg:y="0.049cm" svg:width="1.81cm" svg:height="1.18cm" draw:z-index="0"><draw:image loext:mime-type="image/png">
+     </draw:frame><draw:frame draw:style-name="fr2" draw:name="tpl_portraitHeader_img" text:anchor-type="paragraph" svg:y="0.049cm" svg:width="1.81cm" svg:height="1.18cm" draw:z-index="0"><draw:image draw:mime-type="image/png">
        <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAa0AAAEXCAQAAAC0DtOvAAAAAmJLR0QA/4ePzL8AAAAJcEhZ
         cwAAXF8AAFxfAatNuQoAABMVSURBVHja7Z19fBTVvYef2YTXAFYgQMAXVCCxFsWiIgKtUEBB
         rKAfwQYFVES9qJXra72KoLW96BVB671UKuALoL3KiwhcUUArYgXrGypJFkUQCRCMvCQBAsnc
@@ -2949,7 +2968,7 @@
        <text:p text:style-name="P3">Starviewer</text:p>
        <text:p text:style-name="P4">Medical Imaging Software</text:p>
       </draw:text-box>
-     </draw:frame><draw:frame draw:style-name="fr2" draw:name="tpl_landscapeHeader_img" text:anchor-type="paragraph" svg:y="0.049cm" svg:width="1.81cm" svg:height="1.18cm" draw:z-index="0"><draw:image loext:mime-type="image/png">
+     </draw:frame><draw:frame draw:style-name="fr2" draw:name="tpl_landscapeHeader_img" text:anchor-type="paragraph" svg:y="0.049cm" svg:width="1.81cm" svg:height="1.18cm" draw:z-index="0"><draw:image draw:mime-type="image/png">
        <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAa0AAAEXCAQAAAC0DtOvAAAAAmJLR0QA/4ePzL8AAAAJcEhZ
         cwAAXF8AAFxfAatNuQoAABMVSURBVHja7Z19fBTVvYef2YTXAFYgQMAXVCCxFsWiIgKtUEBB
         rKAfwQYFVES9qJXra72KoLW96BVB671UKuALoL3KiwhcUUArYgXrGypJFkUQCRCMvCQBAsnc
@@ -3058,7 +3077,7 @@
        <text:p text:style-name="P3">Starviewer</text:p>
        <text:p text:style-name="P4">Medical Imaging Software</text:p>
       </draw:text-box>
-     </draw:frame><draw:frame draw:style-name="fr2" draw:name="tpl_landscapeHeaderFooter_img" text:anchor-type="paragraph" svg:y="0.6cm" svg:width="1.81cm" svg:height="1.18cm" draw:z-index="0"><draw:image loext:mime-type="image/png">
+     </draw:frame><draw:frame draw:style-name="fr2" draw:name="tpl_landscapeHeaderFooter_img" text:anchor-type="paragraph" svg:y="0.6cm" svg:width="1.81cm" svg:height="1.18cm" draw:z-index="0"><draw:image draw:mime-type="image/png">
        <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAa0AAAEXCAQAAAC0DtOvAAAAAmJLR0QA/4ePzL8AAAAJcEhZ
         cwAAXF8AAFxfAatNuQoAABMVSURBVHja7Z19fBTVvYef2YTXAFYgQMAXVCCxFsWiIgKtUEBB
         rKAfwQYFVES9qJXra72KoLW96BVB671UKuALoL3KiwhcUUArYgXrGypJFkUQCRCMvCQBAsnc
@@ -3154,7 +3173,7 @@
         AElFTkSuQmCC
        </office:binary-data>
       </draw:image>
-     </draw:frame><text:span text:style-name="T1"><text:modification-date style:data-style-name="N84">2021-01-13</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>13</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
+     </draw:frame><text:span text:style-name="T1"><text:modification-date style:data-style-name="N84">2021-03-31</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>14</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
     <table:table table:name="tpl_headerLandscapeLogoHeaderFooter_table" table:style-name="tpl_5f_headerLandscapeLogoHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_headerLandscapeLogoHeaderFooter_5f_table.A"/>
      <table:table-header-rows>
@@ -3176,7 +3195,7 @@
     <table:table table:name="tpl_footerLandscapeLogoHeaderFooter_table" table:style-name="tpl_5f_footerLandscapeLogoHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_footerLandscapeLogoHeaderFooter_5f_table.A"/>
      <table:table-column table:style-name="tpl_5f_footerLandscapeLogoHeaderFooter_5f_table.B"/>
-     <table:table-row table:style-name="TableLine94676889566624">
+     <table:table-row table:style-name="TableLine94763117625200">
       <table:table-cell table:style-name="tpl_5f_footerLandscapeLogoHeaderFooter_5f_table.A1" office:value-type="string">
        <text:p text:style-name="P24"><text:file-name text:display="name">[ca] Quick start guide</text:file-name></text:p>
       </table:table-cell>
@@ -3190,7 +3209,7 @@
   </style:master-page>
   <style:master-page style:name="Portrait_20_header_20__2b__20_footer" style:display-name="Portrait header + footer" style:page-layout-name="pm14">
    <style:header>
-    <text:p text:style-name="P9"><text:span text:style-name="T1"><text:modification-date style:data-style-name="N84">2021-01-13</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>13</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
+    <text:p text:style-name="P9"><text:span text:style-name="T1"><text:modification-date style:data-style-name="N84">2021-03-31</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>14</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
     <table:table table:name="tpl_headerPortraitHeaderFooter_table" table:style-name="tpl_5f_headerPortraitHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_headerPortraitHeaderFooter_5f_table.A"/>
      <table:table-header-rows>
@@ -3207,7 +3226,7 @@
     <table:table table:name="tpl_footerPortraitHeaderFooter_table" table:style-name="tpl_5f_footerPortraitHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_footerPortraitHeaderFooter_5f_table.A"/>
      <table:table-column table:style-name="tpl_5f_footerPortraitHeaderFooter_5f_table.B"/>
-     <table:table-row table:style-name="TableLine94676889613616">
+     <table:table-row table:style-name="TableLine94763117907952">
       <table:table-cell table:style-name="tpl_5f_footerPortraitHeaderFooter_5f_table.A1" office:value-type="string">
        <text:p text:style-name="P24"><text:file-name text:display="name">[ca] Quick start guide</text:file-name></text:p>
       </table:table-cell>
@@ -3219,9 +3238,9 @@
     <text:p text:style-name="P11"/>
    </style:footer>
   </style:master-page>
-  <style:master-page style:name="Landscape_20_header_20__2b__20_footer" style:display-name="Landscape header + footer" style:page-layout-name="pm15">
+  <style:master-page style:name="Landscape_20_header_20__2b__20_footer" style:display-name="Landscape header + footer" style:page-layout-name="pm15" draw:style-name="dp1">
    <style:header>
-    <text:p text:style-name="P9"><text:span text:style-name="T1"><text:modification-date style:data-style-name="N84">2021-01-13</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>13</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
+    <text:p text:style-name="P9"><text:span text:style-name="T1"><text:modification-date style:data-style-name="N84">2021-03-31</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>14</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
     <table:table table:name="tpl_headerLandscapeHeaderFooter_table" table:style-name="tpl_5f_headerLandscapeHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_headerLandscapeHeaderFooter_5f_table.A"/>
      <table:table-header-rows>
@@ -3238,7 +3257,7 @@
     <table:table table:name="tpl_footerLandscapeHeaderFooter_table" table:style-name="tpl_5f_footerLandscapeHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_footerLandscapeHeaderFooter_5f_table.A"/>
      <table:table-column table:style-name="tpl_5f_footerLandscapeHeaderFooter_5f_table.B"/>
-     <table:table-row table:style-name="TableLine94676889636608">
+     <table:table-row table:style-name="TableLine94763117937264">
       <table:table-cell table:style-name="tpl_5f_footerLandscapeHeaderFooter_5f_table.A1" office:value-type="string">
        <text:p text:style-name="P24"><text:file-name text:display="name">[ca] Quick start guide</text:file-name></text:p>
       </table:table-cell>
@@ -3251,11 +3270,11 @@
    </style:footer>
   </style:master-page>
   <style:master-page style:name="Portrait" style:page-layout-name="pm16"/>
-  <style:master-page style:name="Continuous_20_stationery_20_1x" style:display-name="Continuous stationery 1x" style:page-layout-name="pm17"/>
+  <style:master-page style:name="Continuous_20_stationery_20_1x" style:display-name="Continuous stationery 1x" style:page-layout-name="pm17" draw:style-name="dp1"/>
   <style:master-page style:name="Continuous_20_stationery_20_2x" style:display-name="Continuous stationery 2x" style:page-layout-name="pm18"/>
   <style:master-page style:name="Continuous_20_stationery_20_3x" style:display-name="Continuous stationery 3x" style:page-layout-name="pm19"/>
   <style:master-page style:name="Continuous_20_stationery_20_4x" style:display-name="Continuous stationery 4x" style:page-layout-name="pm20"/>
-  <style:master-page style:name="Card" style:page-layout-name="pm21">
+  <style:master-page style:name="Card" style:page-layout-name="pm21" draw:style-name="dp1">
    <style:header>
     <text:p text:style-name="Header"/>
    </style:header>
@@ -3274,9 +3293,9 @@
     <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
     <text:sequence-decl text:display-outline-level="0" text:name="Figure"/>
    </text:sequence-decls>
-   <text:p text:style-name="P35">Starviewer és una aplicació per a la visualització i navegació d’imatges mèdiques utilitzant el protocol DICOM. Admet diverses modalitats: radiografia, TAC, ressonància magnètica, mamografia, RF, ecografia i altres. Es pot comunicar amb qualsevol PACS o obtenir imatges des de fitxers externs.</text:p>
+   <text:p text:style-name="P50">Starviewer és una aplicació per a la visualització i navegació d’imatges mèdiques utilitzant el protocol DICOM. Admet diverses modalitats: radiografia, <text:span text:style-name="T15">CT</text:span>, ressonància magnètica, mamografia, RF, ecografia i altres. Es pot comunicar amb qualsevol PACS o obtenir imatges des de fitxers externs.</text:p>
    <text:h text:style-name="P41" text:outline-level="2">Com trobar un estudi al PACS</text:h>
-   <text:p text:style-name="P32"><draw:frame draw:style-name="fr11" draw:name="Imatge1" text:anchor-type="paragraph" svg:width="17cm" svg:height="9.888cm" draw:z-index="8"><draw:image loext:mime-type="image/png">
+   <text:p text:style-name="P32"><draw:frame draw:style-name="fr9" draw:name="Imatge1" text:anchor-type="paragraph" svg:width="17cm" svg:height="9.888cm" draw:z-index="8"><draw:image draw:mime-type="image/png">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAABxkAAAQhCAYAAADxtDEzAAABhWlDQ1BJQ0MgcHJvZmlsZQAA
        KJF9kT1Iw1AUhU9TRdGKFDuIOGSoThZERRy1CkWoEGqFVh1MXvoHTRqSFBdHwbXg4M9i1cHF
        WVcHV0EQ/AFxc3NSdJES70sKLWK88Hgf591zeO8+QKiXmWZ1jAOabpupRFzMZFfFrlcEEEIY
@@ -12619,39 +12638,39 @@
      </draw:image>
     </draw:frame><text:span text:style-name="T10">Per cercar un estudi al PACS cal anar al menú </text:span><text:span text:style-name="Display"><text:span text:style-name="T11">Fitxer &gt; PACS…</text:span></text:span><text:span text:style-name="T10"> o bé utilitzar la drecera </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T11">Ctrl</text:span></text:span><text:span text:style-name="T11">+</text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T11">P</text:span></text:span><text:span text:style-name="T10">. Amb això apareix una finestra com la següent:</text:span></text:p>
    <text:p text:style-name="P33">Llavors es pot dur a terme les accions següents:</text:p>
-   <text:list xml:id="list807124779" text:style-name="Numbering_20_123">
+   <text:list xml:id="list989915107" text:style-name="Numbering_20_123">
     <text:list-item>
-     <text:p text:style-name="P37">Comprovar que tenim seleccionada la pestanya <text:span text:style-name="Display">Servidor PACS</text:span>.</text:p>
+     <text:p text:style-name="P46">Comprovar que tenim seleccionada la pestanya <text:span text:style-name="Display">Servidor PACS</text:span>.</text:p>
     </text:list-item>
     <text:list-item>
-     <text:p text:style-name="P37">Introduir els paràmetres de cerca: nom del pacient, data de l’estudi, etc.</text:p>
+     <text:p text:style-name="P46">Introduir els paràmetres de cerca: nom del pacient, data de l’estudi, etc.</text:p>
     </text:list-item>
     <text:list-item>
-     <text:p text:style-name="P37">Prémer el botó <text:span text:style-name="Display">Cerca</text:span> o la tecla <text:span text:style-name="Keyboard">Enter</text:span>.</text:p>
+     <text:p text:style-name="P46">Prémer el botó <text:span text:style-name="Display">Cerca</text:span> o la tecla <text:span text:style-name="Keyboard">Enter</text:span>.</text:p>
     </text:list-item>
     <text:list-item>
-     <text:p text:style-name="P37">Seleccionar un o més estudis de la llista.</text:p>
+     <text:p text:style-name="P46">Seleccionar un o més estudis de la llista.</text:p>
     </text:list-item>
     <text:list-item>
-     <text:p text:style-name="P39"><text:span text:style-name="T10">Prémer el botó </text:span><text:span text:style-name="Display"><text:span text:style-name="T10">Descarrega i visualitza</text:span></text:span><text:span text:style-name="T10"> perquè l’estudi es baixi i s’obri automàticmaent.</text:span></text:p>
+     <text:p text:style-name="P48"><text:span text:style-name="T10">Prémer el botó </text:span><text:span text:style-name="Display"><text:span text:style-name="T10">Descarrega i visualitza</text:span></text:span><text:span text:style-name="T10"> perquè l’estudi es baixi i s’obri automàticament.</text:span></text:p>
     </text:list-item>
     <text:list-item>
-     <text:p text:style-name="P39"><text:span text:style-name="T10">Alternativament, si només es vol descarregar l’estudi sense visualitzar-lo cal prémer el botó </text:span><text:span text:style-name="Display"><text:span text:style-name="T10">Descarrega</text:span></text:span><text:span text:style-name="T10">.</text:span></text:p>
+     <text:p text:style-name="P48"><text:span text:style-name="T10">Alternativament, si només es vol descarregar l’estudi sense visualitzar-lo cal prémer el botó </text:span><text:span text:style-name="Display"><text:span text:style-name="T10">Descarrega</text:span></text:span><text:span text:style-name="T10">.</text:span></text:p>
     </text:list-item>
     <text:list-item>
-     <text:p text:style-name="P39"><text:span text:style-name="T10">Per cancel·lar la cerca abans que acabi es pot prémer el botó </text:span><text:span text:style-name="Display"><text:span text:style-name="T10">Cancel·la la cerca</text:span></text:span><text:span text:style-name="T10">.</text:span></text:p>
+     <text:p text:style-name="P48"><text:span text:style-name="T10">Per cancel·lar la cerca abans que acabi es pot prémer el botó </text:span><text:span text:style-name="Display"><text:span text:style-name="T10">Cancel·la la cerca</text:span></text:span><text:span text:style-name="T10">.</text:span></text:p>
     </text:list-item>
     <text:list-item>
-     <text:p text:style-name="P38">El botó <text:span text:style-name="Display">Llista de peticions</text:span> permet comprovar l’estat de les baixades.</text:p>
+     <text:p text:style-name="P47">El botó <text:span text:style-name="Display">Llista de peticions</text:span> permet comprovar l’estat de les baixades.</text:p>
     </text:list-item>
    </text:list>
-   <text:h text:style-name="P42" text:outline-level="2"><text:soft-page-break/><text:span text:style-name="T9">Triar</text:span><text:span text:style-name="T15"> sèrie de l’estudi</text:span></text:h>
-   <text:list xml:id="list153053068361186" text:continue-list="list807124779" text:style-name="Numbering_20_123">
+   <text:h text:style-name="P42" text:outline-level="2"><text:soft-page-break/><text:span text:style-name="T9">Triar</text:span><text:span text:style-name="T16"> sèrie de l’estudi</text:span></text:h>
+   <text:list xml:id="list133037149378819" text:continue-list="list989915107" text:style-name="Numbering_20_123">
     <text:list-item text:start-value="1">
-     <text:p text:style-name="P40">Fer clic amb el botó dret <text:span text:style-name="Keyboard"><text:span text:style-name="T16"></text:span></text:span> del ratolí dins d’un visor.</text:p>
+     <text:p text:style-name="P49">Fer clic amb el botó dret <text:span text:style-name="Keyboard"><text:span text:style-name="T17"></text:span></text:span> del ratolí dins d’un visor.</text:p>
     </text:list-item>
     <text:list-item>
-     <text:p text:style-name="P40"><draw:frame draw:style-name="fr10" draw:name="Imatge2" text:anchor-type="paragraph" svg:width="14cm" svg:height="6.14cm" draw:z-index="9"><draw:image loext:mime-type="image/png">
+     <text:p text:style-name="P49"><draw:frame draw:style-name="fr8" draw:name="Imatge2" text:anchor-type="paragraph" svg:width="14cm" svg:height="6.14cm" draw:z-index="9"><draw:image draw:mime-type="image/png">
         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAhEAAADoCAIAAADe/iG9AAAgAElEQVR42uxdd5wU9fl+Z3d2
          Z3Zn+/WjKSgCikasUQHBgopiSdTEgrFHDQl2E2OLvcdulMSu2GIP9hYVu4iASBGk3MGVrbM7
          O7M7M78/Hu51uds7DuIPr8z7B59jb3Z25jt77/N93+d9n1egvmuiKJZ93bbtzl4XBKHdAR1f
@@ -13313,14 +13332,14 @@
     </text:list-item>
    </text:list>
    <text:h text:style-name="P43" text:outline-level="2">Contrast i brillantor (finestra)</text:h>
-   <text:list xml:id="list153053081498761" text:continue-list="list153053068361186" text:style-name="Numbering_20_123">
+   <text:list xml:id="list133036993928752" text:continue-list="list133037149378819" text:style-name="Numbering_20_123">
     <text:list-item text:start-value="1">
-     <text:p text:style-name="P40">Mantenir el botó dret <text:span text:style-name="Keyboard"><text:span text:style-name="T16"></text:span></text:span> del ratolí dins d’un visor.</text:p>
+     <text:p text:style-name="P49">Mantenir el botó dret <text:span text:style-name="Keyboard"><text:span text:style-name="T17"></text:span></text:span> del ratolí dins d’un visor.</text:p>
     </text:list-item>
     <text:list-item>
-     <text:p text:style-name="P36"><draw:frame draw:style-name="fr3" draw:name="Marc7" text:anchor-type="paragraph" svg:width="17cm" style:rel-width="100%" draw:z-index="10">
+     <text:p text:style-name="P45"><draw:frame draw:style-name="fr3" draw:name="Marc7" text:anchor-type="paragraph" svg:width="17cm" style:rel-width="100%" draw:z-index="10">
        <draw:text-box fo:min-height="0.041cm">
-        <text:p text:style-name="Figure"><draw:frame draw:style-name="fr9" draw:name="Imatge57" text:anchor-type="paragraph" svg:width="7.999cm" svg:height="8.11cm" draw:z-index="11"><draw:image loext:mime-type="image/jpeg">
+        <text:p text:style-name="Figure"><draw:frame draw:style-name="fr7" draw:name="Imatge57" text:anchor-type="paragraph" svg:width="7.999cm" svg:height="8.11cm" draw:z-index="11"><draw:image draw:mime-type="image/jpeg">
            <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
             DAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsN
             FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgAR
@@ -15129,7 +15148,7 @@
             tYigpCHznpfSx6X0sPypSjHyf/qv/9k=
            </office:binary-data>
           </draw:image>
-         </draw:frame><draw:frame draw:style-name="fr8" draw:name="Imatge58" text:anchor-type="paragraph" svg:width="7.999cm" svg:height="8.11cm" draw:z-index="12"><draw:image loext:mime-type="image/jpeg">
+         </draw:frame><draw:frame draw:style-name="fr6" draw:name="Imatge58" text:anchor-type="paragraph" svg:width="7.999cm" svg:height="8.11cm" draw:z-index="12"><draw:image draw:mime-type="image/jpeg">
            <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
             DAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsN
             FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgAR
@@ -16739,14 +16758,14 @@
             VKmnyf8A6r//2Q==
            </office:binary-data>
           </draw:image>
-         </draw:frame><text:span text:style-name="Caption_20_characters">Figur</text:span><text:span text:style-name="Caption_20_characters"><text:span text:style-name="T17">a</text:span></text:span><text:span text:style-name="Caption_20_characters"> </text:span><text:span text:style-name="Caption_20_characters"><text:sequence text:ref-name="refFigure0" text:name="Figure" text:formula="ooow:Figure+1" style:num-format="1">1</text:sequence></text:span><text:span text:style-name="Caption_20_characters">: </text:span><text:span text:style-name="T5">E</text:span><text:span text:style-name="T6">squerra: f</text:span><text:span text:style-name="T7">inestra original del DICOM</text:span><text:span text:style-name="T6">. D</text:span><text:span text:style-name="T7">reta</text:span><text:span text:style-name="T6">: f</text:span><text:span text:style-name="T7">inestra modificada</text:span><text:span text:style-name="T8">.</text:span></text:p>
+         </draw:frame><text:span text:style-name="Caption_20_characters">Figur</text:span><text:span text:style-name="Caption_20_characters"><text:span text:style-name="T18">a</text:span></text:span><text:span text:style-name="Caption_20_characters"> </text:span><text:span text:style-name="Caption_20_characters"><text:sequence text:ref-name="refFigure0" text:name="Figure" text:formula="ooow:Figure+1" style:num-format="1">1</text:sequence></text:span><text:span text:style-name="Caption_20_characters">: </text:span><text:span text:style-name="T5">E</text:span><text:span text:style-name="T6">squerra: f</text:span><text:span text:style-name="T7">inestra original del DICOM</text:span><text:span text:style-name="T6">. D</text:span><text:span text:style-name="T7">reta</text:span><text:span text:style-name="T6">: f</text:span><text:span text:style-name="T7">inestra modificada</text:span><text:span text:style-name="T8">.</text:span></text:p>
        </draw:text-box>
-      </draw:frame><text:span text:style-name="T15">Arrossegar el ratolí </text:span><text:span text:style-name="T12">horitzontalment (amplada/contrast) o vertical (centre/brillantor).</text:span></text:p>
+      </draw:frame><text:span text:style-name="T16">Arrossegar el ratolí </text:span><text:span text:style-name="T12">horitzontalment (amplada/contrast) o vertical (centre/brillantor).</text:span></text:p>
     </text:list-item>
    </text:list>
    <text:p text:style-name="First_20_line_20_indent"/>
    <text:h text:style-name="P44" text:outline-level="2">Les eines</text:h>
-   <text:p text:style-name="P34"><text:tab/><draw:frame draw:style-name="fr7" draw:name="Imatge3" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="13"><draw:image loext:mime-type="image/svg+xml">
+   <text:p text:style-name="P38"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge3" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="13"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -16762,8 +16781,8 @@
        ICAgLz4KPC9zdmc+Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T18">Canvi de tall i de fase (arrossegant el ratolí amb el botó esquerre o girant la rodeta).</text:span></text:p>
-   <text:p text:style-name="P34"><text:tab/><draw:frame draw:style-name="fr6" draw:name="Imatge4" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="14"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T19">Canvi de tall i de fase (arrossegant el ratolí amb el botó esquerre o girant la rodeta).</text:span></text:p>
+   <text:p text:style-name="P38"><text:tab/><draw:frame draw:style-name="fr5" draw:name="Imatge4" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="14"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -16779,8 +16798,8 @@
        cz0iQ29sb3JTY2hlbWUtVGV4dCIKICAgICAvPgo8L3N2Zz4K
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T18">Zoom (arrossegant amb el botó esquerre).</text:span></text:p>
-   <text:p text:style-name="P34"><text:tab/><draw:frame draw:style-name="fr5" draw:name="Imatge5" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="15"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T19">Zoom (arrossegant amb el botó esquerre).</text:span></text:p>
+   <text:p text:style-name="P38"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge5" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="15"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -16794,8 +16813,8 @@
        ICBjbGFzcz0iQ29sb3JTY2hlbWUtVGV4dCIKICAgICAvPgo8L3N2Zz4K
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T18">Desplaçament de la imatge (arrossegant amb la rodeta).</text:span></text:p>
-   <text:p text:style-name="P34"><text:tab/><draw:frame draw:style-name="fr6" draw:name="Imatge6" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="16"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T19">Desplaçament de la imatge (arrossegant amb la rodeta).</text:span></text:p>
+   <text:p text:style-name="P38"><text:tab/><draw:frame draw:style-name="fr5" draw:name="Imatge6" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="16"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAy
        MiAyMiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -16816,8 +16835,8 @@
        ICAgIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T19">Ajust de finestra (arrossegant amb el botó dret).</text:span></text:p>
-   <text:p text:style-name="P34"><text:tab/><draw:frame draw:style-name="fr5" draw:name="Imatge7" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="17"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T20">Ajust de finestra (arrossegant amb el botó dret).</text:span></text:p>
+   <text:p text:style-name="P38"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge7" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="17"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -16884,8 +16903,8 @@
        ICAgICBjeT0iMTAuMDI1MDc5IiAvPgo8L3N2Zz4K
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T19">Lupa: amplia una regió de la imatge (arrossegant amb el botó esquerre).</text:span></text:p>
-   <text:p text:style-name="P34"><text:tab/><draw:frame draw:style-name="fr5" draw:name="Imatge8" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="18"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T20">Lupa: amplia una regió de la imatge (arrossegant amb el botó esquerre).</text:span></text:p>
+   <text:p text:style-name="P38"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge8" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="18"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -16898,8 +16917,8 @@
        clNjaGVtZS1UZXh0IgogICAgIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T19">Distància: </text:span><text:span text:style-name="T20">permet calcular la distància entre dos punts.</text:span></text:p>
-   <text:p text:style-name="P34"><text:tab/><draw:frame draw:style-name="fr5" draw:name="Imatge9" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="19"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T20">Distància: </text:span><text:span text:style-name="T21">permet calcular la distància entre dos punts.</text:span></text:p>
+   <text:p text:style-name="P38"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge9" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="19"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -16942,8 +16961,8 @@
        IHNvZGlwb2RpOm5vZGV0eXBlcz0iY2NjY2MiIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T19">TA-GT.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><text:span text:style-name="T19"><draw:frame draw:style-name="fr5" draw:name="Imatge10" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="20"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T20">TA-GT.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><text:span text:style-name="T20"><draw:frame draw:style-name="fr4" draw:name="Imatge10" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="20"><draw:image draw:mime-type="image/svg+xml">
        <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
         CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
         ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -17038,8 +17057,8 @@
         aDQyMjkiIC8+Cjwvc3ZnPgo=
        </office:binary-data>
       </draw:image>
-     </draw:frame></text:span><text:span text:style-name="T19"><text:tab/></text:span><text:span text:style-name="T20">Angle: permet mesurar un angle marcant tres punts.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><text:span text:style-name="T20"><draw:frame draw:style-name="fr5" draw:name="Imatge11" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="21"><draw:image loext:mime-type="image/svg+xml">
+     </draw:frame></text:span><text:span text:style-name="T20"><text:tab/></text:span><text:span text:style-name="T21">Angle: permet mesurar un angle marcant tres punts.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><text:span text:style-name="T21"><draw:frame draw:style-name="fr4" draw:name="Imatge11" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="21"><draw:image draw:mime-type="image/svg+xml">
        <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
         CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
         ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -17133,8 +17152,8 @@
         bGw6Y3VycmVudENvbG9yO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lIiAvPgo8L3N2Zz4K
        </office:binary-data>
       </draw:image>
-     </draw:frame></text:span><text:span text:style-name="T20"><text:tab/>Angle de Cobb: permet mesurar un angle dibuixant dues línies que no es toquin.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge12" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="22"><draw:image loext:mime-type="image/svg+xml">
+     </draw:frame></text:span><text:span text:style-name="T21"><text:tab/>Angle de Cobb: permet mesurar un angle dibuixant dues línies que no es toquin.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge12" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="22"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17146,8 +17165,8 @@
        IDQgeiAiCiAgICAgY2xhc3M9IkNvbG9yU2NoZW1lLVRleHQiCiAgICAgLz4KPC9zdmc+Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T20">ROI el·líptica: </text:span><text:span text:style-name="T21">permet </text:span><text:span text:style-name="T13">fer</text:span><text:span text:style-name="T21"> una ROI el·líptica i calcular-ne l’àrea, la mitjana i altres dades.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge13" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="23"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T21">ROI el·líptica: </text:span><text:span text:style-name="T22">permet </text:span><text:span text:style-name="T13">fer</text:span><text:span text:style-name="T22"> una ROI el·líptica i calcular-ne l’àrea, la mitjana i altres dades.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge13" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="23"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17158,8 +17177,8 @@
        ZXh0IgogICAgIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">ROI poligonal: una ROI marcant els punts manualment.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge14" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="24"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">ROI poligonal: una ROI marcant els punts manualment.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge14" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="24"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAy
        MiAyMiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17179,8 +17198,8 @@
        L3N2Zz4K
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">ROI màgica: una ROI que s’adapta a les formes automàticament.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge15" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="25"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">ROI màgica: una ROI que s’adapta a les formes automàticament.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge15" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="25"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -17217,8 +17236,8 @@
        dW5kOmFjY3VtdWxhdGUiIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">Cercle: permet dibuixar un cercle i n’indica el centre.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge16" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="26"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">Cercle: permet dibuixar un cercle i n’indica el centre.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge16" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="26"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -17243,8 +17262,8 @@
        LVRleHQiCiAgICAgaWQ9InBhdGg0IiAvPgo8L3N2Zz4K
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">Fletxa.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge17" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="27"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">Fletxa.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge17" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="27"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17255,7 +17274,7 @@
        IGNsYXNzPSJDb2xvclNjaGVtZS1UZXh0IgogICAgIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame> <draw:frame draw:style-name="fr4" draw:name="Imatge18" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="28"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame> <draw:frame draw:style-name="fr4" draw:name="Imatge18" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="28"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -17297,8 +17316,8 @@
        Lz4KPC9zdmc+Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">Esborra/Esborra-ho tot: permeten esborrar els dibuixos fets amb les eines anteriors.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge19" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="29"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">Esborra/Esborra-ho tot: permeten esborrar els dibuixos fets amb les eines anteriors.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge19" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="29"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAy
        MiAyMiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17312,7 +17331,7 @@
        clNjaGVtZS1UZXh0IgogICAgIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame> <draw:frame draw:style-name="fr4" draw:name="Imatge20" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="30"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame> <draw:frame draw:style-name="fr4" draw:name="Imatge20" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="30"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAy
        MiAyMiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17327,8 +17346,8 @@
        Lz4KPC9zdmc+Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">Distribució regular/Hanging protocols: permeten canviar la distribució de visors.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge21" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="31"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">Distribució regular/Hanging protocols: permeten canviar la distribució de visors.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge21" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="31"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAy
        MiAyMiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17348,8 +17367,8 @@
        b3JTY2hlbWUtVGV4dCIKICAgIC8+ICAKPC9zdmc+Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">Estudis relacionats: permet accedir directament als altres estudis del pacient.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge22" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="32"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">Estudis relacionats: permet accedir directament als altres estudis del pacient.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge22" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="32"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -17535,7 +17554,7 @@
        Zz4K
       </office:binary-data>
      </draw:image>
-    </draw:frame> <draw:frame draw:style-name="fr4" draw:name="Imatge23" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="33"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame> <draw:frame draw:style-name="fr4" draw:name="Imatge23" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="33"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -17707,7 +17726,7 @@
        dHJva2U6bm9uZSIgLz4KICA8L2c+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:s/><draw:frame draw:style-name="fr4" draw:name="Imatge24" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="34"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:s/><draw:frame draw:style-name="fr4" draw:name="Imatge24" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="34"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -17893,8 +17912,8 @@
        YmxlLWJhY2tncm91bmQ6YWNjdW11bGF0ZSIgLz4KPC9zdmc+Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">Axial/Sagital/Coronal: permeten canviar la reconstrucció de la imatge.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge25" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="35"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">Axial/Sagital/Coronal: permeten canviar la reconstrucció de la imatge.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge25" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="35"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17920,7 +17939,7 @@
        aGVtZS1UZXh0IgogICAgIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame> <draw:frame draw:style-name="fr4" draw:name="Imatge26" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="36"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame> <draw:frame draw:style-name="fr4" draw:name="Imatge26" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="36"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17945,8 +17964,8 @@
        IGNsYXNzPSJDb2xvclNjaGVtZS1UZXh0IgogICAgIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">Rotacions en increments de 90</text:span><text:span text:style-name="T22">°</text:span><text:span text:style-name="T23">.</text:span></text:p>
-   <text:p text:style-name="P46"><text:span text:style-name="T23"><text:tab/></text:span><text:span text:style-name="T23"><draw:frame draw:style-name="fr4" draw:name="Imatge27" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="37"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">Rotacions en increments de 90</text:span><text:span text:style-name="T23">°</text:span><text:span text:style-name="T24">.</text:span></text:p>
+   <text:p text:style-name="P39"><text:span text:style-name="T24"><text:tab/></text:span><text:span text:style-name="T24"><draw:frame draw:style-name="fr4" draw:name="Imatge27" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="37"><draw:image draw:mime-type="image/svg+xml">
        <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
         NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
         cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17963,7 +17982,7 @@
         ICAgIC8+Cjwvc3ZnPgo=
        </office:binary-data>
       </draw:image>
-     </draw:frame></text:span><text:span text:style-name="T23"> </text:span><text:span text:style-name="T23"><draw:frame draw:style-name="fr4" draw:name="Imatge28" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="38"><draw:image loext:mime-type="image/svg+xml">
+     </draw:frame></text:span><text:span text:style-name="T24"> </text:span><text:span text:style-name="T24"><draw:frame draw:style-name="fr4" draw:name="Imatge28" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="38"><draw:image draw:mime-type="image/svg+xml">
        <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
         NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
         cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17980,8 +17999,8 @@
         ICAgIC8+Cjwvc3ZnPgo=
        </office:binary-data>
       </draw:image>
-     </draw:frame></text:span><text:span text:style-name="T23"><text:tab/>Inversió horitzontal i vertical.</text:span></text:p>
-   <text:p text:style-name="P46"><text:span text:style-name="T23"><text:tab/></text:span><draw:frame draw:style-name="fr4" draw:name="Imatge29" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="39"><draw:image loext:mime-type="image/svg+xml">
+     </draw:frame></text:span><text:span text:style-name="T24"><text:tab/>Inversió horitzontal i vertical.</text:span></text:p>
+   <text:p text:style-name="P39"><text:span text:style-name="T24"><text:tab/></text:span><draw:frame draw:style-name="fr4" draw:name="Imatge29" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="39"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -17996,8 +18015,8 @@
        IgogICAgIGNsYXNzPSJDb2xvclNjaGVtZS1UZXh0IgogICAgIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">Inversió de l’escala de colors.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge30" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="40"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">Inversió de l’escala de colors.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge30" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="40"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -18068,8 +18087,8 @@
        Y2l0eToxO3N0cm9rZTpub25lIiAvPgo8L3N2Zz4K
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">Restableix el visor a l’estat inicial.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge33" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="43"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">Restableix el visor a l’estat inicial.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge33" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="41"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -18298,8 +18317,8 @@
        IC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T24">Línies de referència: mostra la localització de la imatge actual als altres visors.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge34" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="44"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T25">Línies de referència: mostra la localització de la imatge actual als altres visors.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge34" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="42"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAy
        MiAyMiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -18327,8 +18346,8 @@
        ZS1UZXh0IgogICAgIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T24">Cursor 3D: permet marcar un punt en un visor i trobar el mateix punt als altres.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge35" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="45"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T25">Cursor 3D: permet marcar un punt en un visor i trobar el mateix punt als altres.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge35" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="43"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -18395,8 +18414,8 @@
        IiAvPgogIDwvZz4KPC9zdmc+Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T24">Informació del vòxel: permet veure el valor del vòxel sota el punter.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge36" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="46"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T25">Informació del vòxel: permet veure el valor del vòxel sota el punter.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge36" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="44"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -18439,8 +18458,8 @@
        Lz4KPC9zdmc+Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T24">Permet mostrar o amagar informació </text:span><text:span text:style-name="T14">textual de la imatge al visor.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge31" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="41"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T25">Permet mostrar o amagar informació </text:span><text:span text:style-name="T14">textual de la imatge al visor.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge31" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="45"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -18455,8 +18474,8 @@
        Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">Captura de pantalla d’una imatge o tota la sèrie en format d’imatge.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge32" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="42"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">Captura de pantalla d’una imatge o tota la sèrie en format d’imatge.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge32" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="46"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -18474,8 +18493,8 @@
        PSJDb2xvclNjaGVtZS1UZXh0IgogICAgIC8+Cjwvc3ZnPgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T21">Crea una sèrie nova a l’estudi amb el contingut del visor i permet enviar-la al PACS.</text:span></text:p>
-   <text:p text:style-name="P46"><text:soft-page-break/><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge37" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="47"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T22">Crea una sèrie nova a l’estudi amb el contingut del visor i permet enviar-la al PACS.</text:span></text:p>
+   <text:p text:style-name="P39"><text:soft-page-break/><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge37" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="47"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -18551,8 +18570,8 @@
        MDA5OCwwLjg5MzQzMDczLDAsLTYpIiAvPgo8L3N2Zz4K
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T24">Informació DICOM: permet veure tota la informació del DICOM en una finestra flotant.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge38" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="48"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T25">Informació DICOM: permet veure tota la informació del DICOM en una finestra flotant.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge38" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="48"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -18574,8 +18593,8 @@
        dmc+Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T24">Sincronització automàtica: sincronitza a la mateixa posició de l’espai els visors que pot.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge39" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="49"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T25">Sincronització automàtica: sincronitza a la mateixa posició de l’espai els visors que pot.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge39" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="49"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -18591,7 +18610,7 @@
        Pgo=
       </office:binary-data>
      </draw:image>
-    </draw:frame> <draw:frame draw:style-name="fr4" draw:name="Imatge40" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="50"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame> <draw:frame draw:style-name="fr4" draw:name="Imatge40" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="50"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -18610,8 +18629,8 @@
        Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T24">Sincronització manual: els visors sincronitzats es desplacen la mateixa distància.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge41" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="51"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T25">Sincronització manual: els visors sincronitzats es desplacen la mateixa distància.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge41" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="51"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAy
        MiAyMiI+CiAgPGRlZnMgaWQ9ImRlZnMzMDUxIj4KICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2Nz
        cyIgaWQ9ImN1cnJlbnQtY29sb3Itc2NoZW1lIj4KICAgICAgLkNvbG9yU2NoZW1lLVRleHQg
@@ -18626,8 +18645,8 @@
        ICAgIC8+ICAKPC9zdmc+Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T24">Propagació: permet sincronitzar algunes propietats dels visors.</text:span></text:p>
-   <text:p text:style-name="P46"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge42" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="52"><draw:image loext:mime-type="image/svg+xml">
+    </draw:frame><text:tab/><text:span text:style-name="T25">Propagació: permet sincronitzar algunes propietats dels visors.</text:span></text:p>
+   <text:p text:style-name="P39"><text:tab/><draw:frame draw:style-name="fr4" draw:name="Imatge42" text:anchor-type="as-char" svg:y="-0.4cm" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="52"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
        CjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgog
        ICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpy
@@ -18867,7 +18886,7 @@
        MCIgLz4KPC9zdmc+Cg==
       </office:binary-data>
      </draw:image>
-    </draw:frame><text:tab/><text:span text:style-name="T24">Gruix de tall: </text:span><text:span text:style-name="T25">permet visualitzar un MIP amb el gruix que es vulgui.</text:span></text:p>
+    </draw:frame><text:tab/><text:span text:style-name="T25">Gruix de tall: </text:span><text:span text:style-name="T26">permet visualitzar un MIP amb el gruix que es vulgui.</text:span></text:p>
   </office:text>
  </office:body>
 </office:document>
