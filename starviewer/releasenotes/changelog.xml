@@ -247,6 +247,10 @@
    <rm>
     <d>S'ha eliminat algunes opcions de visualització en 3D que havien quedat obsoletes: textures 2D, textures 3D, obscurances, contorns.</d>
    </rm>
+   <pr>
+    <d>La funcionalitat d'obrir fitxers d'un directori pot fallar si el directori conté algun fitxer que no sigui DICOM ni imatge estàndard.</d>
+    <t>2910</t>
+   </pr>
   </changes>
  </release>
 
