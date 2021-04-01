@@ -844,31 +844,33 @@ void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
     m_progressDialog->setValue(progress);
 }
 
-void QApplicationMainWindow::openUserGuide()
+namespace {
+
+QString getLocalePrefix()
 {
     Settings settings;
     QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
-    QString prefix = defaultLocale.left(2).toUpper();
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_User_guide.pdf";
-    QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
+    return "[" + defaultLocale.left(2).toLower() + "] ";
+}
+
+}
+
+void QApplicationMainWindow::openUserGuide()
+{
+    QString filePath = QCoreApplication::applicationDirPath() + "/" + getLocalePrefix() + "User guide.pdf";
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 }
 
 void QApplicationMainWindow::openQuickStartGuide()
 {
-    Settings settings;
-    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
-    QString prefix = defaultLocale.left(2).toUpper();
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_Quick_start_guide.pdf";
-    QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
+    QString filePath = QCoreApplication::applicationDirPath() + "/" + getLocalePrefix() + "Quick start guide.pdf";
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 }
 
 void QApplicationMainWindow::openShortcutsGuide()
 {
-    Settings settings;
-    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
-    QString prefix = defaultLocale.left(2).toUpper();
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_Shortcuts_guide.pdf";
-    QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
+    QString filePath = QCoreApplication::applicationDirPath() + "/" + getLocalePrefix() + "Shortcuts guide.pdf";
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 }
 
 void QApplicationMainWindow::showDiagnosisTestDialog()
