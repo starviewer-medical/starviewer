@@ -3,7 +3,7 @@
 
  <release magnitude="major">
   <version>1.1.0</version>
-  <date>YYYY-MM-DD</date>
+  <date>2021-04-09</date>
   <changes>
    <nw>
     <d>Es pot crear hanging protocols de fusió.</d>
