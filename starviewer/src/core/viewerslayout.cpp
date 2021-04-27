@@ -207,7 +207,7 @@ namespace {
 QRectF remapGeometry(const QRectF &viewerGeometry, const QRectF &oldGeometry, const QRectF &newGeometry)
 {
     double incWidth = newGeometry.width() / oldGeometry.width();
-    double incHeight = newGeometry.height() / newGeometry.height();
+    double incHeight = newGeometry.height() / oldGeometry.height();
     double incX = newGeometry.x() - oldGeometry.x();
     double incY = newGeometry.y() - oldGeometry.y();
 
