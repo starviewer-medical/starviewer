@@ -145,6 +145,12 @@ public:
     /// Default state of viewers textual information (annotations): visible or invisible.
     static const QString ShowViewersTextualInformation;
 
+    /// Layout division for viewers to apply when comparision mode is enabled.
+    static const QString ComparisonModeDivision;
+    enum ComparisonModeDivisionType { CurrentLeftPriorRight, CurrentRightPriorLeft, CurrentTopPriorBottom, CurrentBottomPriorTop };
+    static ComparisonModeDivisionType comparisonModeDivisionTypeFromString(const QString &string);
+    static QString comparisonModeDivisionTypeToString(ComparisonModeDivisionType division);
+
 };
 
 } // End namespace udg
