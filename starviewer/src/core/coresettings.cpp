@@ -20,8 +20,15 @@
 // Pel LanguageLocale
 #include <QLocale>
 #include <QStringList>
+#include <QVector>
 
 namespace udg {
+
+namespace {
+
+const QVector<QString> ComparisonModeDivisionStrings{"CurrentLeftPriorRight", "CurrentRightPriorLeft", "CurrentTopPriorBottom", "CurrentBottomPriorTop"};
+
+}
 
 // Definició de les claus
 const QString ScreenShotToolBase("ScreenshotTool/");
@@ -100,6 +107,8 @@ const QString CoreSettings::CrosshairOuterDiameter("CrosshairOuterDiameter");
 
 const QString CoreSettings::ShowViewersTextualInformation("ShowViewersTextualInformation");
 
+const QString CoreSettings::ComparisonModeDivision("ComparisionModeDivision");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -153,6 +162,19 @@ void CoreSettings::init()
     settingsRegistry->addSetting(CrosshairOuterDiameter, 30);
 
     settingsRegistry->addSetting(ShowViewersTextualInformation, true);
+
+    settingsRegistry->addSetting(ComparisonModeDivision, ComparisonModeDivisionStrings[0]);
+}
+
+CoreSettings::ComparisonModeDivisionType CoreSettings::comparisonModeDivisionTypeFromString(const QString &string)
+{
+    int index = ComparisonModeDivisionStrings.indexOf(string);
+    return index >= 0 ? static_cast<ComparisonModeDivisionType>(index) : CurrentLeftPriorRight;
+}
+
+QString CoreSettings::comparisonModeDivisionTypeToString(ComparisonModeDivisionType division)
+{
+    return ComparisonModeDivisionStrings[division];
 }
 
 } // End namespace udg
