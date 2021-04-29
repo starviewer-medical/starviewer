@@ -215,7 +215,7 @@ HangingProtocol* LayoutManager::applyProperLayoutChoice(Study *study, const QLis
 
 HangingProtocol* LayoutManager::applyBestHangingProtocol(const QList<HangingProtocol*> hangingProtocols, const QRectF &geometry)
 {
-    if (m_currentStudyHangingProtocolCandidates.size() > 0)
+    if (hangingProtocols.size() > 0)
     {
         return m_hangingProtocolManager->setBestHangingProtocol(m_patient, hangingProtocols, m_layout, geometry);
     }
