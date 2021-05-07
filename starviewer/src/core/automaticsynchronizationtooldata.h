@@ -31,7 +31,7 @@ public:
     ~AutomaticSynchronizationToolData();
 
     /// Retorna la posició referent al frameOfReferenceUID i la vista view. Si no 
-    double* getPosition(QString frameOfReferenceUID, QString view) const;
+    std::array<double, 3> getPosition(const QString &frameOfReferenceUID, const QString &view) const;
 
     /// Retorna cert, si existeix una posició pel frameOfReferenceUID i la vista view
     bool hasPosition(QString frameOfReference, QString view);
@@ -65,11 +65,11 @@ public:
 
 public slots:
     /// Posa la posició pel frameOfReferenceUID i la vista view. Si existeix el sobreescriu, altrament l'afegeix.
-    void setPosition(QString frameOfReferenceUID, QString view, double position[3], double displacement);
+    void setPosition(const QString &frameOfReferenceUID, const QString &view, const std::array<double, 3> &position, double displacement);
 
 private:
     /// Taula hash que guarda per cada frame of reference UID un altre hash, que guarda per cada vista la posició on es troba.
-    QHash<QString, QHash <QString, double*> > m_positionForEachFrameOfReferenceAndReconstruction;
+    QHash<QString, QHash<QString, std::array<double, 3>>> m_positionForEachFrameOfReferenceAndReconstruction;
 
     /// Taula hash que guarda per cada frame of reference UID el grup al qual pertany
     QHash<QString, int> m_UIDgroup;
