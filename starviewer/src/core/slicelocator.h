@@ -39,7 +39,7 @@ public:
     /// Returns the nearest slice to the given point or ImagePlane.
     /// The nearest slice will be computed against the given volume and plane from setVolume() and setPlane() methods.
     /// If no slice is found to be considered near, -1 will be returned
-    int getNearestSlice(double point[3]);
+    int getNearestSlice(const double point[3]);
     int getNearestSlice(ImagePlane *imagePlane);
 
 private:

@@ -140,7 +140,7 @@ void AutomaticSynchronizationTool::setPositionToToolData()
     double increment = (slice - m_lastSlice) * currentSpacingBetweenSlices;
     m_lastSlice = slice;
 
-    m_toolData->setPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel(), center.toArray().data(), increment);
+    m_toolData->setPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel(), center.toArray(), increment);
 }
 
 void AutomaticSynchronizationTool::updatePosition()
@@ -159,9 +159,9 @@ void AutomaticSynchronizationTool::updatePosition()
                 if (m_toolData->getSelectedUID() == frameOfReference)
                 {
                     // Actualitzem per posició
-                    double *position = m_toolData->getPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel());
+                    const std::array<double, 3> &position = m_toolData->getPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel());
                     
-                    int nearestSlice = m_sliceLocator->getNearestSlice(position);
+                    int nearestSlice = m_sliceLocator->getNearestSlice(position.data());
                     if (nearestSlice != -1)
                     {
                         m_2DViewer->setSlice(nearestSlice);
