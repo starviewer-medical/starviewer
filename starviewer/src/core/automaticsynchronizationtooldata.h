@@ -57,15 +57,12 @@ public:
     /// Obté el grup actiu
     int getSelectedGroup();
 
-    /// Obté el desplaçament que s'ha realitzat en l'ultim canvi de llesca
-    double getDisplacement();
-
     /// Actualitza la el frameOfReferenceUID i la vista activa
     void updateActiveViewer(QString uid, QString view);
 
 public slots:
     /// Posa la posició pel frameOfReferenceUID i la vista view. Si existeix el sobreescriu, altrament l'afegeix.
-    void setPosition(const QString &frameOfReferenceUID, const QString &view, const std::array<double, 3> &position, double displacement);
+    void setPosition(const QString &frameOfReferenceUID, const QString &view, const std::array<double, 3> &position);
 
 private:
     /// Taula hash que guarda per cada frame of reference UID un altre hash, que guarda per cada vista la posició on es troba.
@@ -82,9 +79,6 @@ private:
 
     /// Vista activa
     QString m_selectedView;
-
-    /// Ultim desplaçament realitzat
-    double m_lastDisplacement;
 };
 
 }

@@ -28,15 +28,13 @@ AutomaticSynchronizationToolData::~AutomaticSynchronizationToolData()
 {
 }
 
-void AutomaticSynchronizationToolData::setPosition(const QString &frameOfReferenceUID, const QString &view, const std::array<double, 3> &position,
-                                                   double displacement)
+void AutomaticSynchronizationToolData::setPosition(const QString &frameOfReferenceUID, const QString &view, const std::array<double, 3> &position)
 {
     // This will return the existing entry or create a new one and return it if it does not exist. Then we only need to update it in either case.
     QHash<QString, std::array<double, 3>> &valuesForThisFrameOfReferenceUID = m_positionForEachFrameOfReferenceAndReconstruction[frameOfReferenceUID];
     valuesForThisFrameOfReferenceUID[view] = position;
 
     m_selectedView = view;
-    m_lastDisplacement = displacement;
     m_selectedUID = frameOfReferenceUID;
 
     emit changed();
@@ -106,15 +104,9 @@ int AutomaticSynchronizationToolData::getSelectedGroup()
     return m_UIDgroup.value(m_selectedUID);
 }
 
-double AutomaticSynchronizationToolData::getDisplacement()
-{
-    return m_lastDisplacement;
-}
-
 void AutomaticSynchronizationToolData::updateActiveViewer(QString uid, QString view)
 {
     m_selectedView = view;
-    m_lastDisplacement = 0;
     m_selectedUID = uid;
 }
 
