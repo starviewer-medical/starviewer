@@ -71,12 +71,6 @@ private:
     /// Viewer 2D sobre el qual treballem
     Q2DViewer *m_2DViewer;
 
-    /// Ultima llesca a partir de la qual calcular l'increment
-    int m_lastSlice;
-
-    /// Espai entre llesques perdut per arrodoniment
-    double m_roundLostSpacingBetweenSlices;
-
     /// Class to locate the corresponding slice to synchronize
     SliceLocator *m_sliceLocator;
 };
