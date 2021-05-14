@@ -43,6 +43,15 @@ public:
     /// Per obtenir les dades (per compartir)
     virtual ToolData* getToolData() const override;
 
+    /// Connects viewer's signals to this tool's slots.
+    void connectToViewer();
+    /// Disconnects viewer's signals from this tool's slots.
+    void disconnectFromViewer();
+
+    /// Computes the slice that viewer should be put in (given its volume and view plane) to be synchronized to the corresponding position stored in the tool
+    /// data. If it can be computed it is stored in \a slice and true is returned; otherwise false is returned.
+    bool getSynchronizedSlice(int &slice);
+
 public slots:
     /// Actualitza les dades si el visor està actiu
     void changePositionIfActive();
