@@ -34,14 +34,11 @@ AutomaticSynchronizationTool::AutomaticSynchronizationTool(QViewer *viewer, QObj
     m_hasSharedData = true;
 
     m_2DViewer = Q2DViewer::castFromQViewer(viewer);
+    m_2DViewer->setAutomaticSynchronizationTool(this);
 
     m_sliceLocator = new SliceLocator;
 
-    connect(m_2DViewer, SIGNAL(selected()), SLOT(changePositionIfActive()));
-    connect(m_2DViewer, SIGNAL(sliceChanged(int)), SLOT(changePositionIfActive()));
-    
-    connect(m_2DViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
-    connect(m_2DViewer, SIGNAL(viewChanged(int)), SLOT(reset()));
+    connectToViewer();
 
     setToolData(new AutomaticSynchronizationToolData());
 }
@@ -49,6 +46,7 @@ AutomaticSynchronizationTool::AutomaticSynchronizationTool(QViewer *viewer, QObj
 AutomaticSynchronizationTool::~AutomaticSynchronizationTool()
 {
     delete m_sliceLocator;
+    m_2DViewer->setAutomaticSynchronizationTool(nullptr);
 }
 
 void AutomaticSynchronizationTool::reset()
@@ -103,6 +101,59 @@ ToolData* AutomaticSynchronizationTool::getToolData() const
     return this->m_toolData;
 }
 
+void AutomaticSynchronizationTool::connectToViewer()
+{
+    connect(m_2DViewer, &Q2DViewer::selected, this, &AutomaticSynchronizationTool::changePositionIfActive);
+    connect(m_2DViewer, &Q2DViewer::sliceChanged, this, &AutomaticSynchronizationTool::changePositionIfActive);
+    connect(m_2DViewer, &Q2DViewer::volumeChanged, this, &AutomaticSynchronizationTool::reset);
+    connect(m_2DViewer, &Q2DViewer::viewChanged, this, &AutomaticSynchronizationTool::reset);
+    connect(m_2DViewer, &Q2DViewer::restored, this, &AutomaticSynchronizationTool::changePositionIfActive);
+}
+
+void AutomaticSynchronizationTool::disconnectFromViewer()
+{
+    disconnect(m_2DViewer, &Q2DViewer::selected, this, &AutomaticSynchronizationTool::changePositionIfActive);
+    disconnect(m_2DViewer, &Q2DViewer::sliceChanged, this, &AutomaticSynchronizationTool::changePositionIfActive);
+    disconnect(m_2DViewer, &Q2DViewer::volumeChanged, this, &AutomaticSynchronizationTool::reset);
+    disconnect(m_2DViewer, &Q2DViewer::viewChanged, this, &AutomaticSynchronizationTool::reset);
+    disconnect(m_2DViewer, &Q2DViewer::restored, this, &AutomaticSynchronizationTool::changePositionIfActive);
+}
+
+bool AutomaticSynchronizationTool::getSynchronizedSlice(int &slice)
+{
+    if (m_2DViewer->hasInput())
+    {
+        updateSliceLocator();
+
+        QString frameOfReference = m_2DViewer->getMainInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
+        int activeGroup = m_toolData->getGroupForUID(m_toolData->getSelectedUID());
+        int groupOfActualViewer = m_toolData->getGroupForUID(frameOfReference);
+
+        if (groupOfActualViewer != -1)
+        {
+            if (groupOfActualViewer == activeGroup)
+            {
+                if (m_toolData->getSelectedUID() == frameOfReference)
+                {
+                    if (m_toolData->hasPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel()))
+                    {
+                        const std::array<double, 3> &position = m_toolData->getPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel());
+                        int nearestSlice = m_sliceLocator->getNearestSlice(position.data());
+
+                        if (nearestSlice != -1)
+                        {
+                            slice = nearestSlice;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
 void AutomaticSynchronizationTool::handleEvent(unsigned long eventID)
 {
     Q_UNUSED(eventID);
@@ -125,29 +176,13 @@ void AutomaticSynchronizationTool::setPositionToToolData()
 
 void AutomaticSynchronizationTool::updatePosition()
 {
-    if (m_2DViewer->hasInput() && !m_2DViewer->isActive())
+    if (!m_2DViewer->isActive() && m_2DViewer->getCurrentAnatomicalPlaneLabel() == m_toolData->getSelectedView())
     {
-        QString frameOfReference = m_2DViewer->getMainInput()->getImage(0)->getParentSeries()->getFrameOfReferenceUID();
+        int slice;
 
-        int activeGroup = m_toolData->getGroupForUID(m_toolData->getSelectedUID());
-        int groupOfActualViewer = m_toolData->getGroupForUID(frameOfReference);
-
-        if (groupOfActualViewer != -1)
+        if (getSynchronizedSlice(slice))
         {
-            if (groupOfActualViewer == activeGroup && m_2DViewer->getCurrentAnatomicalPlaneLabel() == m_toolData->getSelectedView()) //Actualitzem la llesca
-            {
-                if (m_toolData->getSelectedUID() == frameOfReference)
-                {
-                    // Actualitzem per posició
-                    const std::array<double, 3> &position = m_toolData->getPosition(frameOfReference, m_2DViewer->getCurrentAnatomicalPlaneLabel());
-                    
-                    int nearestSlice = m_sliceLocator->getNearestSlice(position.data());
-                    if (nearestSlice != -1)
-                    {
-                        m_2DViewer->setSlice(nearestSlice);
-                    }
-                }
-            }
+            m_2DViewer->setSlice(slice);
         }
     }
 }
