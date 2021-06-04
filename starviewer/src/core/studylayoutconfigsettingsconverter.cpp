@@ -26,6 +26,7 @@ const QString StudyLayoutConfigSettingsConverter::UnfoldDirectionKey("Direction"
 const QString StudyLayoutConfigSettingsConverter::StringListSeparator(";");
 const QString StudyLayoutConfigSettingsConverter::Survey("Survey");
 const QString StudyLayoutConfigSettingsConverter::Localizer("Localizer");
+const QString StudyLayoutConfigSettingsConverter::CTAttenuationCorrection("CTAttenuationCorrection");
 const QString StudyLayoutConfigSettingsConverter::LeftToRight("LeftToRight");
 const QString StudyLayoutConfigSettingsConverter::TopToBottom("TopToBottom");
 const QString StudyLayoutConfigSettingsConverter::Images("Images");
@@ -92,6 +93,10 @@ QString StudyLayoutConfigSettingsConverter::getAsSettingsStringValue(const Study
         case StudyLayoutConfig::Survey:
             criteriaString = Survey;
             break;
+
+        case StudyLayoutConfig::CTAttenuationCorrection:
+            criteriaString = CTAttenuationCorrection;
+            break;
     }
 
     return criteriaString;
@@ -144,6 +149,10 @@ QList<StudyLayoutConfig::ExclusionCriteriaType> StudyLayoutConfigSettingsConvert
         else if (string == Survey)
         {
             criteriaList << StudyLayoutConfig::Survey;
+        }
+        else if (string == CTAttenuationCorrection)
+        {
+            criteriaList << StudyLayoutConfig::CTAttenuationCorrection;
         }
     }
 

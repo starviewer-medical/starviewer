@@ -96,7 +96,7 @@ public:
             {
                 theObject = regEntry.value()(parent);
             }
-            catch (std::bad_alloc)
+            catch (const std::bad_alloc&)
             {
                 theObject = NULL;
             }

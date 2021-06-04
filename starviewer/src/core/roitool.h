@@ -26,6 +26,7 @@ class DrawerPolygon;
 class DrawerText;
 class ROIData;
 class AbstractROIDataPrinter;
+class SliceOrientedVolumePixelData;
 
 /**
     Tool pare per totes aquelles tools destinades a crear ROIs.
@@ -37,13 +38,11 @@ class AbstractROIDataPrinter;
 class ROITool : public MeasurementTool {
 Q_OBJECT
 public:
-    ROITool(QViewer *viewer, QObject *parent = 0);
-    ~ROITool();
-
-    virtual void handleEvent(long unsigned eventID) = 0;
+    explicit ROITool(QViewer *viewer, QObject *parent = nullptr);
+    ~ROITool() override;
 
 protected:
-    MeasureComputer* getMeasureComputer();
+    MeasureComputer* getMeasureComputer() const override;
     
     /// Mètode per escriure a pantalla les dades calculades.
     void printData();
@@ -74,7 +73,7 @@ private:
     QList<double*> getIntersectionPoints(const QList<Line3D> &polygonSegments, const Line3D &sweepLine, const OrthogonalPlane &view);
 
     /// Adds the voxels that are in the path of the intersection points to the given ROIData
-    void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, double currentZDepth, const OrthogonalPlane &view, VolumePixelData *pixelData, int phaseIndex, ROIData &roiData);
+    void addVoxelsFromIntersections(const QList<double*> &intersectionPoints, const OrthogonalPlane &view, SliceOrientedVolumePixelData &pixelData, ROIData &roiData);
 
     /// Returns the appropiate ROIDataPrinter for the given roi data
     AbstractROIDataPrinter* getROIDataPrinter(const QMap<int, ROIData> &roiDataMap);

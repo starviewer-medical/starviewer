@@ -33,10 +33,10 @@ public:
     /// Possibles estats de la tool
     enum { CenterFixed, FirstPointFixed, None };
 
-    AngleTool(QViewer *viewer, QObject *parent = 0);
-    ~AngleTool();
+    explicit AngleTool(QViewer *viewer, QObject *parent = nullptr);
+    ~AngleTool() override;
 
-    void handleEvent(long unsigned eventID);
+    void handleEvent(long unsigned eventID) override;
 
 private:
 

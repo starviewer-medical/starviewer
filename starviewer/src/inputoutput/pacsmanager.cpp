@@ -14,26 +14,12 @@
 
 #include "pacsmanager.h"
 
-#include <QThread>
-#include <QTime>
-
-#include "dicommask.h"
-#include "pacsdevice.h"
-#include "logging.h"
-#include "querypacsjob.h"
-#include "pacsjob.h"
 #include "inputoutputsettings.h"
+#include "logging.h"
+
+#include <ThreadWeaver/Queue>
 
 namespace udg {
-
-/// Classe utilitza per adormir el Thread al mètode waitForAllPACSJobsFinished, m'entre s'espera que hagin finalitzat totes les operacions.
-class Sleeper : public QThread {
-public:
-    static void msleep(unsigned long msecs)
-    {
-        QThread::msleep(msecs);
-    }
-};
 
 PacsManager::PacsManager()
 {
@@ -141,22 +127,30 @@ void PacsManager::requestCancelAllPACSJobs()
     m_queryQueue->requestAbort();
 }
 
-bool PacsManager::waitForAllPACSJobsFinished(int msec)
+void PacsManager::retrieveStudy(void *requester, PacsDevice pacsDevice, RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob priority, Study *study)
 {
-    if (!isExecutingPACSJob())
-    {
-        return true;
-    }
+    PACSJobPointer job(new RetrieveDICOMFilesFromPACSJob(std::move(pacsDevice), priority, study));
 
-    QTime timer;
-    timer.start();
+    connect(job.data(), &PACSJob::PACSJobStarted, [this, requester](PACSJobPointer pacsJob) {
+        emit studyRetrieveStarted(requester, pacsJob);
+    });
 
-    while (isExecutingPACSJob() && timer.elapsed() < msec)
-    {
-        Sleeper().msleep(50);
-    }
+    connect(job.data(), &PACSJob::PACSJobFinished, [this, requester](PACSJobPointer pacsJob) {
+        // This logic mimics that from QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished
+        auto retrieveJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
+        if (retrieveJob->getStatus() != PACSRequestStatus::RetrieveOk && retrieveJob->getStatus() != PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
+        {
+            emit studyRetrieveFailed(requester, pacsJob);
+            return;
+        }
+        emit studyRetrieveFinished(requester, pacsJob);
+    });
 
-    return !isExecutingPACSJob();
+    connect(job.data(), &PACSJob::PACSJobCancelled, [this, requester](PACSJobPointer pacsJob) {
+        emit studyRetrieveCancelled(requester, pacsJob);
+    });
+
+    enqueuePACSJob(job);
 }
 
 }; // End udg namespace

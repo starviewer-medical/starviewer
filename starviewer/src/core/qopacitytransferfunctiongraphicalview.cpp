@@ -219,9 +219,9 @@ QOpacityTransferFunctionGraphicalViewNode* QOpacityTransferFunctionGraphicalView
     // Filtrem per quedar-nos només amb els nodes
     QtConcurrent::blockingFilter(items, isNode);
     // Ordenem per x
-    qSort(items.begin(), items.end(), lessThan);
+    std::sort(items.begin(), items.end(), lessThan);
     // Busquem el nou node (ja l'hem inserit abans)
-    QList<QGraphicsItem*>::const_iterator it = qBinaryFind(items.begin(), items.end(), node, lessThan);
+    QList<QGraphicsItem*>::const_iterator it = std::lower_bound(items.begin(), items.end(), node, lessThan);
     Q_ASSERT(it != items.end());
     Q_ASSERT(*it == node);
     // (ln)
@@ -311,12 +311,12 @@ void QOpacityTransferFunctionGraphicalView::removeNode(const QPoint &position)
     else
     {
         // Ordenem per x
-        qSort(items.begin(), items.end(), lessThan);
+        std::sort(items.begin(), items.end(), lessThan);
         // Node auxiliar per fer la cerca
         QOpacityTransferFunctionGraphicalViewNode *auxiliarNode = new QOpacityTransferFunctionGraphicalViewNode();
         auxiliarNode->setPos(mapToScene(position));
         // Busquem el node més proper a x
-        QList<QGraphicsItem*>::const_iterator it = qLowerBound(items.begin(), items.end(), auxiliarNode, lessThan);
+        QList<QGraphicsItem*>::const_iterator it = std::lower_bound(items.begin(), items.end(), auxiliarNode, lessThan);
         delete auxiliarNode;
         if (it == items.begin())
         {

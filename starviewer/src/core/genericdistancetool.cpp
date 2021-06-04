@@ -67,7 +67,7 @@ void GenericDistanceTool::handleKeyPress()
     }
 }
 
-MeasureComputer* GenericDistanceTool::getMeasureComputer()
+MeasureComputer* GenericDistanceTool::getMeasureComputer() const
 {
     return new DistanceMeasureComputer(m_distanceLine);
 }

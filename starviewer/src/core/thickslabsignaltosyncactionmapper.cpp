@@ -46,8 +46,8 @@ void ThickSlabSignalToSyncActionMapper::mapSignal()
 
     if (viewer2D)
     {
-        connect(viewer2D, SIGNAL(slabProjectionModeChanged(int)), SLOT(mapProjectionModeToSyncAction(int)));
-        connect(viewer2D, SIGNAL(slabThicknessChanged(int)), SLOT(mapThicknessToSyncAction(int)));
+        connect(viewer2D, &Q2DViewer::slabProjectionModeChanged, this, &ThickSlabSignalToSyncActionMapper::mapProjectionModeToSyncAction);
+        connect(viewer2D, &Q2DViewer::slabThicknessChanged, this, &ThickSlabSignalToSyncActionMapper::mapThicknessToSyncAction);
     }
 }
 
@@ -57,12 +57,12 @@ void ThickSlabSignalToSyncActionMapper::unmapSignal()
 
     if (viewer2D)
     {
-        disconnect(viewer2D, SIGNAL(slabProjectionModeChanged(int)), this, SLOT(mapProjectionModeToSyncAction(int)));
-        disconnect(viewer2D, SIGNAL(slabThicknessChanged(int)), this, SLOT(mapThicknessToSyncAction(int)));
+        disconnect(viewer2D, &Q2DViewer::slabProjectionModeChanged, this, &ThickSlabSignalToSyncActionMapper::mapProjectionModeToSyncAction);
+        disconnect(viewer2D, &Q2DViewer::slabThicknessChanged, this, &ThickSlabSignalToSyncActionMapper::mapThicknessToSyncAction);
     }
 }
 
-void ThickSlabSignalToSyncActionMapper::mapProjectionModeToSyncAction(int slabProjectionMode)
+void ThickSlabSignalToSyncActionMapper::mapProjectionModeToSyncAction(VolumeDisplayUnit::SlabProjectionMode slabProjectionMode)
 {
     ThickSlabSyncAction *action = static_cast<ThickSlabSyncAction*>(m_mappedSyncAction);
     action->setVolume(m_viewer->getMainInput());
@@ -71,7 +71,7 @@ void ThickSlabSignalToSyncActionMapper::mapProjectionModeToSyncAction(int slabPr
     emit actionMapped(m_mappedSyncAction);
 }
 
-void ThickSlabSignalToSyncActionMapper::mapThicknessToSyncAction(int slabThickness)
+void ThickSlabSignalToSyncActionMapper::mapThicknessToSyncAction(double slabThickness)
 {
     ThickSlabSyncAction *action = static_cast<ThickSlabSyncAction*>(m_mappedSyncAction);
     action->setVolume(m_viewer->getMainInput());

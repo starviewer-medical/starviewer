@@ -15,11 +15,11 @@
 #include "drawerpolyline.h"
 #include "logging.h"
 #include "mathtools.h"
+#include "stipplingvtkopenglpolydatamapper2d.h"
 // Vtk
 #include <vtkPolyData.h>
 #include <vtkCellArray.h>
 #include <vtkActor2D.h>
-#include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
 #include <vtkPropAssembly.h>
 // Qt
@@ -131,7 +131,7 @@ vtkProp* DrawerPolyline::getAsVtkProp()
         // Creem el pipeline de l'm_vtkActor
         m_vtkActor = vtkActor2D::New();
         m_vtkBackgroundActor = vtkActor2D::New();
-        m_vtkMapper = vtkPolyDataMapper2D::New();
+        m_vtkMapper = StipplingVtkOpenGLPolyDataMapper2D::New();
 
         m_vtkActor->SetMapper(m_vtkMapper);
         m_vtkBackgroundActor->SetMapper(m_vtkMapper);
@@ -221,7 +221,7 @@ void DrawerPolyline::updateVtkActorProperties()
     // Assignem color
     QColor color = this->getColor();
     m_vtkActor->GetProperty()->SetColor(color.redF(), color.greenF(), color.blueF());
-    m_vtkBackgroundActor->GetProperty()->SetColor(255.0, 255.0, 255.0);
+    m_vtkBackgroundActor->GetProperty()->SetColor(0.0, 0.0, 0.0);
 }
 
 int DrawerPolyline::getNumberOfPoints()

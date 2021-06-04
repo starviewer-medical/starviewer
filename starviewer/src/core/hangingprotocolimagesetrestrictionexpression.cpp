@@ -53,7 +53,7 @@ bool HangingProtocolImageSetRestrictionExpression::test(const Series *series) co
     return evaluate(results);
 }
 
-bool HangingProtocolImageSetRestrictionExpression::test(const Image *image) const
+bool HangingProtocolImageSetRestrictionExpression::test(Image *image) const
 {
     QList<bool> results;
 
@@ -63,6 +63,11 @@ bool HangingProtocolImageSetRestrictionExpression::test(const Image *image) cons
     }
 
     return evaluate(results);
+}
+
+bool HangingProtocolImageSetRestrictionExpression::operator==(const HangingProtocolImageSetRestrictionExpression &that) const
+{
+    return this->m_expression == that.m_expression && this->m_restrictions == that.m_restrictions;
 }
 
 void HangingProtocolImageSetRestrictionExpression::sanitize()

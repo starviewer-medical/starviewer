@@ -31,10 +31,10 @@ class Volume;
 class VoxelInformationTool : public Tool {
 Q_OBJECT
 public:
-    VoxelInformationTool(QViewer *viewer, QObject *parent = 0);
-    ~VoxelInformationTool();
+    explicit VoxelInformationTool(QViewer *viewer, QObject *parent = nullptr);
+    ~VoxelInformationTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
 private slots:
     /// Actualitza la informació de voxel que ha de mostrar el caption

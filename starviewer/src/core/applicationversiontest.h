@@ -35,7 +35,7 @@ public:
     /// i Error si hi ha hagut algun error.
     DiagnosisTestResult run();
     /// Retorna la descripció del test
-    QString getDescription();
+    QString getDescription() const override;
 
 signals:
     void startCheckForUpdates();

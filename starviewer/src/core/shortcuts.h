@@ -27,7 +27,7 @@ public:
     void init();
 
     /// Declaració de claus
-    static const QString SlicingTool;
+    static const QString SlicingMouseTool;
     static const QString SlicingWheelTool;
     static const QString WindowLevelTool;
     static const QString ZoomTool;

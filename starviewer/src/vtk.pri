@@ -2,17 +2,20 @@ include(defaultdirectories.pri)
 
 INCLUDEPATH += $${VTKINCLUDEDIR}
 
-VTKLIBSUFFIX = -6.1
+VTKLIBSUFFIX = -8.2
 VTKLIBS = \
     vtkCommonCore \
     vtkCommonDataModel \
     vtkCommonExecutionModel \
     vtkCommonMath \
     vtkCommonMisc \
+    vtkCommonSystem \
     vtkCommonTransforms \
     vtkFiltersCore \
+    vtkFiltersGeneral \
     vtkFiltersSources \
     vtkGUISupportQt \
+    vtkGUISupportQtOpenGL \
     vtkImagingCore \
     vtkImagingGeneral \
     vtkImagingHybrid \
@@ -24,9 +27,9 @@ VTKLIBS = \
     vtkRenderingCore \
     vtkRenderingFreeType \
     vtkRenderingImage \
-    vtkRenderingOpenGL \
+    vtkRenderingOpenGL2 \
     vtkRenderingVolume \
-    vtkRenderingVolumeOpenGL
+    vtkRenderingVolumeOpenGL2
 
 LIBS += -L$${VTKLIBDIR}
 

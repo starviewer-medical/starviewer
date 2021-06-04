@@ -17,6 +17,7 @@
 #include "dicomvaluerepresentationconverter.h"
 #include "logging.h"
 #include "mathtools.h"
+#include "pixelspacing2d.h"
 #include "voilut.h"
 
 #include <QColor>
@@ -148,12 +149,31 @@ VoiLut DICOMFormattedValuesConverter::parseVoiLut(const QString &lutDescriptor, 
         inputValue++;
     }
 
+    lut = lut.simplify();
+
     // Explicitly set first and last points
     lut.setColor(0.0, lut.getColor(firstValueMapped));
     lut.setColor(lutMaximum, lut.getColor(inputValue - 1));
     lut.setOpacity(0.0, 1.0);
 
     return lut;
+}
+
+PixelSpacing2D DICOMFormattedValuesConverter::parsePixelSpacing(const QString &pixelSpacingString)
+{
+    QStringList values = pixelSpacingString.split(DICOMValueRepresentationConverter::ValuesSeparator);
+
+    if (values.size() == 2)
+    {
+        // Pixel spacing is rowSpacing\columnSpacing -> ySpacing\xSpacing
+        double rowSpacing = values.at(0).toDouble();
+        double columnSpacing = values.at(1).toDouble();
+        return PixelSpacing2D(columnSpacing, rowSpacing);
+    }
+    else
+    {
+        return PixelSpacing2D();
+    }
 }
 
 }

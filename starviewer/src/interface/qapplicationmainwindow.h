@@ -24,7 +24,6 @@ class QAction;
 class QMenu;
 class QCloseEvent;
 class QShowEvent;
-class QSignalMapper;
 class QLabel;
 class QProgressDialog;
 class QWidgetAction;
@@ -38,7 +37,6 @@ class ExtensionContext;
 class QLogViewer;
 class Patient;
 class StatsWatcher;
-class ApplicationVersionChecker;
 class ExternalApplication;
 
 class QApplicationMainWindow : public QMainWindow {
@@ -48,6 +46,9 @@ public:
     QApplicationMainWindow(QWidget *parent = 0);
 
     ~QApplicationMainWindow();
+
+    /// Checks for a new version and shows release notes, if applicable.
+    void checkNewVersionAndShowReleaseNotes();
 
     /// Assigna un pacient a la finestra.
     /// Farà les accions pertinents segons si ja es tenia un pacient o bé és el primer pacient que s'assigna
@@ -91,8 +92,6 @@ protected:
 
     virtual void resizeEvent(QResizeEvent *event);
 
-    virtual void showEvent(QShowEvent *event);
-
 private:
     /// Crea i inicialitza les accions de l'aplicació
     void createActions();
@@ -132,9 +131,6 @@ private:
     /// Envia una petició per descarregar un estudi a través del seu accession number
     void sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber);
 
-    /// Calcula el tamany de la lletra del text de les tools si CoreSettings::AutoToolTextSize es true.
-    /// Altrament s'agafarà el valor que ja hi havia a CoreSettings::DefalutToolTextSize.
-    void computeDefaultToolTextSize();
 
 private slots:
     /// Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
@@ -190,6 +186,9 @@ private slots:
     /// Mostra el diàleg que executa els diagnosis test
     void showDiagnosisTestDialog();
 
+    /// Shows or hides patient identifying information in the window title according to m_showPatientIdentificationInWindowTitleAction state.
+    void updateWindowTitle();
+
     /// @brief External applications submenu with the defined external applications.
     ///
     /// When called multiple times, deletes the previous menu and regenerates a new one.
@@ -240,11 +239,10 @@ private:
 #endif // STARVIEWER_CE
     QAction *m_openReleaseNotesAction;
     QAction *m_runDiagnosisTestsAction;
+    QAction *m_showPatientIdentificationInWindowTitleAction;
 
     QLabel *m_betaVersionMenuText;
 
-    /// Mapeig de signals
-    QSignalMapper *m_signalMapper;
     QList<QAction*> m_actionsList;
 
     /// Per veure els logs
@@ -261,8 +259,6 @@ private:
     /// Estadístiques d'usabilitat
     StatsWatcher *m_statsWatcher;
 
-    /// Les Release Notes o les notes de la nova versió
-    ApplicationVersionChecker *m_applicationVersionChecker;
 };
 
 }; // fi namespace udg

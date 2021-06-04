@@ -19,15 +19,25 @@ HEADERS += applicationtranslationsloader.h \
            syncactionsregister.h \
            diagnosistests.h \
            vtkinit.h
+TRANSLATIONS += main_ca_ES.ts \
+                main_es_ES.ts \
+                main_en_GB.ts
+
 RESOURCES = main.qrc ../qml/qml.qrc
 
 ce_marking:RESOURCES += ../external/external.qrc
+
+official_release {
+    win32:RESOURCES += qtconf/win/qtconf.qrc
+    #macx:RESOURCES += qtconf/mac/qtconf.qrc    # For future use
+    #linux:RESOURCES += qtconf/linux/qtconf.qrc # For future use
+}
 
 win32{
 RC_FILE = starviewer.rc
 }
 macx {
-    ICON = images/starviewer.icns
+    ICON = images/logo/logo.icns
 }
 
 # Definim que per sistemes de compilació windows basats en visual studio 
@@ -38,15 +48,25 @@ win32-msvc2013:QMAKE_LFLAGS += /LARGEADDRESSAWARE
 include(../../sourcelibsdependencies.pri)
 
 # Thirdparty libraries
-DUMMY = $$addLibraryDependency(../thirdparty, breakpad)
+addLibraryDependency($$PWD/../thirdparty, $$OUT_PWD/../thirdparty, breakpad)
 
 include(../corelibsconfiguration.pri)
 include(../thirdparty/qtsingleapplication/src/qtsingleapplication.pri)
-include(../breakpad.pri)
 
 include(installextensions.pri)
 
-QT += xml opengl network webkit xmlpatterns qml declarative concurrent webkitwidgets
+QT += xml opengl network xmlpatterns qml concurrent quick quickwidgets sql
 
 #TODO: Qt 4.5.3 no afegeix la informacio de UI_DIR com a include a l'hora de compilar el main.cpp
 INCLUDEPATH += ../../tmp/ui
+
+# Generate release notes HTML files
+unix {
+    RELNOTESDIR = $$PWD/../../releasenotes/
+    releasenoteshtml.target = releasenoteshtml
+    releasenoteshtml.commands = xsltproc $$RELNOTESDIR/changelog.xsl $$RELNOTESDIR/changelog.xml > $$RELNOTESDIR/changelog.html ; \
+                                xsltproc --stringparam fullChangelog changelog.html $$RELNOTESDIR/recentchangelog.xsl $$RELNOTESDIR/changelog.xml > $$RELNOTESDIR/recentchangelog.html
+
+    QMAKE_EXTRA_TARGETS += releasenoteshtml
+    POST_TARGETDEPS += releasenoteshtml
+}

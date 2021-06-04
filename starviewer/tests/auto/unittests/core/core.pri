@@ -23,7 +23,6 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_displayshutter.cpp \
            $$PWD/test_firewallaccesstest.cpp \
            $$PWD/test_dicomtagreader.cpp \
-           $$PWD/test_patientfillerinput.cpp \
            $$PWD/test_automaticsynchronizationtooldata.cpp \
            $$PWD/test_volumepixeldata.cpp \
            $$PWD/test_drawertext.cpp \
@@ -31,7 +30,6 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_applicationversiontest.cpp \
            $$PWD/test_imageoverlayregionfinder.cpp \
            $$PWD/test_hangingprotocolmanager.cpp \
-           $$PWD/test_systemrequerimentstest.cpp \
            $$PWD/test_drawerpolygon.cpp \
            $$PWD/test_drawerline.cpp \
            $$PWD/test_diagnosistestresultwriter.cpp \
@@ -61,8 +59,6 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_patientcomparer.cpp \
            $$PWD/test_syncactionsconfiguration.cpp \
            $$PWD/test_dicomserviceresponsestatus.cpp \
-           $$PWD/test_vtkdcmtkbydefaultvolumepixeldatareaderselector.cpp \
-           $$PWD/test_itkgdcmbydefaultvolumepixeldatareaderselector.cpp \
            $$PWD/test_filter.cpp \
            $$PWD/test_filteroutput.cpp \
            $$PWD/test_orthogonalplane.cpp \
@@ -85,7 +81,13 @@ SOURCES += $$PWD/test_image.cpp \
            $$PWD/test_voilut.cpp \
            $$PWD/test_hangingprotocolimagesetrestriction.cpp \
            $$PWD/test_hangingprotocolimagesetrestrictionexpression.cpp \
-           $$PWD/test_externalapplication.cpp
+           $$PWD/test_volumefillerstep.cpp \
+           $$PWD/test_patientfillerinput.cpp \
+           $$PWD/test_externalapplication.cpp \
+           $$PWD/test_sliceorientedvolumepixeldata.cpp \
+           $$PWD/test_applicationversionchecker.cpp \
+           $$PWD/test_systemrequirementstest.cpp \
+           $$PWD/test_orderimagesfillerstep.cpp
 
 win32 {
     SOURCES += $$PWD/test_windowsfirewallaccess.cpp \

@@ -31,7 +31,7 @@ public:
     DiagnosisTestResult run();
 
     ///Retorna descripcio del test
-    virtual QString getDescription();
+    virtual QString getDescription() const override;
 
 protected:
     PortInUseTest(QObject *parent = 0);

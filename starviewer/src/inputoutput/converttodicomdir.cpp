@@ -63,7 +63,7 @@ void ConvertToDicomdir::addStudy(const QString &studyUID)
     LocalDatabaseManager localDatabaseManager;
     DicomMask studyMask;
     studyMask.setStudyInstanceUID(studyUID);
-    QList<Patient*> patientList = localDatabaseManager.queryPatientStudy(studyMask);
+    QList<Patient*> patientList = localDatabaseManager.queryPatientsAndStudies(studyMask);
     if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
     {
         ERROR_LOG(QString("Error al afegir un study per generar un DICOMDIR; Error: %1; StudyUID: %2")

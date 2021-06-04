@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>548</width>
+    <width>917</width>
     <height>632</height>
    </rect>
   </property>
@@ -59,28 +59,16 @@
      <item>
       <widget class="QLabel" name="logoLabel">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>65</width>
-         <height>65</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>65</width>
-         <height>65</height>
-        </size>
        </property>
        <property name="text">
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../main/main.qrc">:/images/starviewer.png</pixmap>
+        <pixmap resource="../main/main.qrc">:/images/logo/128.svg</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -196,29 +184,50 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="m_sendReportAnimation">
-       <property name="text">
-        <string/>
+      <widget class="QProgressBar" name="m_sendProgressBar">
+       <property name="value">
+        <number>0</number>
        </property>
       </widget>
      </item>
      <item>
-      <spacer>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QLabel" name="m_sendError">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>20</height>
-        </size>
+       <property name="styleSheet">
+        <string notr="true">color: white;
+background-color: red;</string>
        </property>
-      </spacer>
+       <property name="text">
+        <string>Crash report could not be sent.</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="m_sendSuccess">
+       <property name="text">
+        <string>Crash report sent.</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="m_quitPushButton">
        <property name="text">
         <string>Quit Starviewer</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/icons/application-exit.svg</normaloff>:/images/icons/application-exit.svg</iconset>
        </property>
       </widget>
      </item>
@@ -227,8 +236,23 @@
        <property name="text">
         <string>Restart Starviewer</string>
        </property>
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/logo/logo.ico</normaloff>:/images/logo/logo.ico</iconset>
+       </property>
        <property name="default">
         <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="m_abortSendPushButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
        </property>
       </widget>
      </item>
@@ -237,6 +261,7 @@
   </layout>
  </widget>
  <resources>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
  <connections>

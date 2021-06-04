@@ -13,10 +13,8 @@ LIBS += -L$${GDCMLIBDIR} \
         -lgdcmjpeg12 \
         -lgdcmjpeg16 \
         -lgdcmMSFF \
-        -lgdcmopenjpeg \
-        -lgdcmzlib \
         -lvtkgdcm
 
 win32 {
-    LIBS += -lgdcmgetopt
+    LIBS += -lgdcmgetopt -lgdcmzlib
 }

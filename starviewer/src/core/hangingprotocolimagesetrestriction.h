@@ -46,10 +46,25 @@ public:
     int getSelectorValueNumber() const;
     void setSelectorValueNumber(int selectorValueNumber);
 
-    /// Returns true if the given series satisfies this restriction, and false otherwise.
+    /// Returns true if the given series satisfies this restriction, and false otherwise. It also tests the first image for image attributes.
     bool test(const Series *series) const;
+    /// Returns true if the given image satisfies this restriction, and false otherwise. It also tests the parent series for series attributes.
+    bool test(Image *image) const;
+
+    /// Returns true if all member are equal and false otherwise.
+    bool operator==(const HangingProtocolImageSetRestriction &that) const;
+
+private:
+    /// Represents a test result: Pass means that the restriction is recognized and satisfied; Fail means that the restriction is recognized and not satisfied;
+    /// Undecided means that the restriction is not recognized.
+    enum class TestResult { Pass, Fail, Undecided };
+    /// Returns true if the given series satisfies this restriction, and false otherwise.
+    TestResult testSeries(const Series *series) const;
     /// Returns true if the given image satisfies this restriction, and false otherwise.
-    bool test(const Image *image) const;
+    TestResult testImage(Image *image) const;
+    /// Tests the given image for a custom selector attribute of the form "(xxxx,yyyy)". If the selector attribute does not match this syntax, returns true.
+    /// Otherwise it returns true if the attribute is found and matches the selector value, and false otherwise.
+    TestResult testCustomAttribute(Image *image) const;
 
 private:
     /// Identifier of this restriction. Must be unique in a hanging protocol.

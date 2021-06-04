@@ -74,6 +74,12 @@ public:
     /// Sets the study from the current patient with the given studyUID as the current patient.
     void setCurrentStudy(const QString &studyUID);
 
+protected:
+    /// Reimplemented to decided whether the thick slab widget should be foldable.
+    void resizeEvent(QResizeEvent *event) override;
+    /// Reimplemented to decided whether the thick slab widget should be foldable.
+    void showEvent(QShowEvent *event) override;
+
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
@@ -93,9 +99,6 @@ private:
 
     /// Sets up layout manager and its connections properly
     void setupLayoutManager();
-    
-    /// Col·loca i ordena les icones i el menú de les eines del botó donat segons l'última eina seleccionada
-    void rearrangeToolsMenu(QToolButton *menuButton);
 
     /// Shows the given widget below the button, as if it was the button's menu
     void showWidgetBelowButton(QWidget *widget, QAbstractButton *button);
@@ -104,23 +107,6 @@ private:
     void updateTransferFunctionComboBox(TransferFunctionModel *transferFunctionModel);
 
 private slots:
-#ifndef STARVIEWER_LITE
-    /// Comprova si el nou volum té fases i per tant hem d'activar/descativar la vista coronal+sagital
-    void validePhases();
-
-    /// Col·loca i ordena les icones i el menú de les eines de ROI segons l'última tool de ROI seleccionada
-    void rearrangeROIToolsMenu();
-
-    /// Col·loca i ordena les icones i el menu de les eines d'angles segons l'última tool d'angles seleccionada
-    void rearrangeAngleToolsMenu();
-
-    /// Col·loca i ordena les icones i el menu de les eines de zoom segons l'última tool de Zoom seleccionada
-    void rearrangeZoomToolsMenu();
-#endif
-
-    /// Col·loca i ordena les icones i el menú de les eines de distància segons l'última eina de distància seleccionada
-    void rearrangeDistanceToolsMenu();
-
     /// Habilita o deshabilita el botó de Dump d'info DICOM segons en la vista en la que es trobi
     /// l'actual visor seleccionat. Si no hi ha cap visor actiu, dehsabilitarà el botó.
     void updateDICOMInformationButton();
@@ -221,6 +207,8 @@ private slots:
     void setFusionLayout2x3Second(const QList<Volume*> &volumes);
     /// Sets a 3x3 fusion layout with the given volumes.
     void setFusionLayout3x3(const QList<Volume*> &volumes);
+    /// Sets a MPR R fusion layout with the given volumes.
+    void setFusionLayoutMprRight(const QList<Volume*> &volumes);
 
 private:
     /// Accions

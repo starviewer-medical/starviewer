@@ -11,12 +11,22 @@ macx {
 
 HEADERS = ../core/starviewerapplication.h
 
-SOURCES = starviewersapwrapper.cpp 
+SOURCES = starviewersapwrapper.cpp \
+    ../core/logging.cpp \
+    ../core/starviewerapplication.cpp
 
 INCLUDEPATH += ../core
 
+include(../../addlibrarydependency.pri)
+addLibraryDependency(../thirdparty, ../thirdparty, easylogging++)
+
+official_release {
+    win32:RESOURCES += ../main/qtconf/win/qtconf.qrc
+    #macx:RESOURCES += ../main/qtconf/mac/qtconf.qrc    # For future use
+    #linux:RESOURCES += ../main/qtconf/linux/qtconf.qrc # For future use
+}
+
 include(../corelibsconfiguration.pri)
 include(../compilationtype.pri)
-include(../log4cxx.pri)
 
 QT += widgets

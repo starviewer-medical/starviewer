@@ -17,52 +17,33 @@
 
 #include "localdatabasebasedal.h"
 
-#include <QtGlobal>
-
 namespace udg {
 
-class DatabaseConnection;
 class PacsDevice;
 
 /**
-  Classe DAL que gestionar la taula PACSRetrievedImages
-  */
-class LocalDatabasePACSRetrievedImagesDAL : public LocalDatabaseBaseDAL
-{
+ * @brief The LocalDatabasePACSRetrievedImagesDAL class is the Data Access Layer class for PACS devices (PACSRetrievedImages table in the database).
+ */
+class LocalDatabasePACSRetrievedImagesDAL : public LocalDatabaseBaseDAL {
 
 public:
+    LocalDatabasePACSRetrievedImagesDAL(DatabaseConnection &databaseConnection);
 
-    /// Constructor de la classe
-    LocalDatabasePACSRetrievedImagesDAL(DatabaseConnection *dbConnection);
-
-    /// Retorna un PacsDevice a partir del seu ID a la base de dades
-    PacsDevice query(const qlonglong &IDPacsInDatabase);
-
-    /// Retorna un PacsDevice amb el AETitle, address i queryPort passats per paràmetre
-    PacsDevice query(const QString AETitle, const QString address, int queryPort);
-
-    /// Inserta el pacs a la base de dades, Si el PACS ja existeix o s'ha produït algun error al inserir retorna -1.
+    /// Inserts to the database the given PACS device. Returns the id of the inserted row if successful and -1 otherwise.
     qlonglong insert(const PacsDevice &pacsDevice);
 
+    /// Returns the PACS with the given id in the database. If there's no PACS with the given id, returns a default PacsDevice.
+    PacsDevice query(qlonglong pacsId);
+
+    /// Returns the PACS with the given AETitle, address and query port in the database. If there's no PACS with that data, returns a default PacsDevice.
+    PacsDevice query(const QString &aeTitle, const QString &address, int queryPort);
+
 private:
+    /// Executes the given prepared query and creates and returns the PacsDevice from the result, or a default PacsDevice if there's an error.
+    PacsDevice query(QSqlQuery &query);
 
-    /// Retorna el PACSDevice que consulti el select passat per paràmetre
-    PacsDevice query(const QString &sqlQuerySentence);
-
-    /// A partir de les dades retornades d'una consulta s'emplena un objecte PACSDevice
-    PacsDevice fillPACSDevice(char **reply, int row, int columns);
-
-    /// Construeix sentència per inserir el PACS passat per paràmetre
-    QString buildSqlInsert(const PacsDevice &pacsDevice);
-
-    /// Construeix sentència per consultar els PACS de la base de dades sense cap clausula where.
-    QString buildSqlSelect();
-
-    /// Construeix sentència per consultar el PACS amb l'ID passat per paràmetre
-    QString buildSqlSelect(const qlonglong &IDPACSInDatabase);
-
-    /// Construeix sentència per consultar un PACS a partir dels paràmetres passats
-    QString buildSqlSelect(const QString AETitle, const QString address, int queryPort);
 };
+
 }
+
 #endif // LOCALDATABASEPACSDEVICEDAL_H

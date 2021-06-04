@@ -19,7 +19,6 @@
 #include <QProgressDialog>
 #include <QProcess>
 #include <QCloseEvent>
-#include <QSignalMapper>
 #include <QTimer>
 
 #include "converttodicomdir.h"
@@ -77,26 +76,6 @@ void QCreateDicomdir::initializeControls()
     // Conte l'UID de l'estudi
     m_dicomdirStudiesList->setColumnHidden(7, true);
 
-    if (!settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString().isEmpty())
-    {
-        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setEnabled(true);
-        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setEnabled(true);
-        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setText(tr("Copy the content of \"%1\" to DICOMDIR.")
-            .arg(QDir::toNativeSeparators(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString())));
-        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setText(tr("Copy the content of \"%1\" to DICOMDIR.")
-            .arg(QDir::toNativeSeparators(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString())));
-        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIROnCDOrDVD).toBool());
-        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIROnUSBOrHardDisk)
-                                                                     .toBool());
-
-    }
-    else
-    {
-        // Si no ens han especificat Path a copiar descativem els checkbox
-        m_copyFolderContentToDICOMDIRCdDvdCheckBox->setEnabled(false);
-        m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setEnabled(false);
-    }
-
     // Per defecte creem els dicomdir al discdur
     m_hardDiskAction->trigger();
 
@@ -106,43 +85,36 @@ void QCreateDicomdir::initializeControls()
 
 void QCreateDicomdir::createActions()
 {
-    m_signalMapper = new QSignalMapper;
-    connect(m_signalMapper, SIGNAL(mapped(int)), this, SLOT(deviceChanged(int)));
-
     m_cdromAction = new QAction(0);
     m_cdromAction->setText(tr("CD-ROM"));
     m_cdromAction->setStatusTip(tr("Record DICOMDIR on a CD-ROM"));
-    m_cdromAction->setIcon(QIcon(":/images/cdrom.png"));
+    m_cdromAction->setIcon(QIcon(":/images/icons/media-optical.svg"));
     m_cdromAction->setCheckable(true);
-    m_signalMapper->setMapping(m_cdromAction, CreateDicomdir::CdRom);
-    connect(m_cdromAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_cdromAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::CdRom); });
     m_cdromDeviceToolButton->setDefaultAction(m_cdromAction);
 
     m_dvdromAction = new QAction(0);
     m_dvdromAction->setText(tr("DVD-ROM"));
     m_dvdromAction->setStatusTip(tr("Record DICOMDIR on a DVD-ROM"));
-    m_dvdromAction->setIcon(QIcon(":/images/dvd.png"));
+    m_dvdromAction->setIcon(QIcon(":/images/icons/media-optical-dvd.svg"));
     m_dvdromAction->setCheckable(true);
-    m_signalMapper->setMapping(m_dvdromAction, CreateDicomdir::DvdRom);
-    connect(m_dvdromAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_dvdromAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::DvdRom); });
     m_dvdromDeviceToolButton->setDefaultAction(m_dvdromAction);
 
     m_hardDiskAction = new QAction(0);
     m_hardDiskAction->setText(tr("Hard Disk"));
     m_hardDiskAction->setStatusTip(tr("Record DICOMDIR on the Hard Disk"));
-    m_hardDiskAction->setIcon(QIcon(":/images/harddrive.png"));
+    m_hardDiskAction->setIcon(QIcon(":/images/icons/drive-harddisk.svg"));
     m_hardDiskAction->setCheckable(true);
-    m_signalMapper->setMapping(m_hardDiskAction, CreateDicomdir::HardDisk);
-    connect(m_hardDiskAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_hardDiskAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::HardDisk); });
     m_hardDiskDeviceToolButton->setDefaultAction(m_hardDiskAction);
 
     m_pendriveAction = new QAction(0);
     m_pendriveAction->setText(tr("USB Flash Drive"));
     m_pendriveAction->setStatusTip(tr("Record DICOMDIR on a USB Flash Drive"));
-    m_pendriveAction->setIcon(QIcon(":/images/usbpendrive.png"));
+    m_pendriveAction->setIcon(QIcon(":/images/icons/drive-removable-media.svg"));
     m_pendriveAction->setCheckable(true);
-    m_signalMapper->setMapping(m_pendriveAction, CreateDicomdir::UsbPen);
-    connect(m_pendriveAction, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    connect(m_pendriveAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::UsbPen); });
     m_pendriveDeviceToolButton->setDefaultAction(m_pendriveAction);
 
     m_devicesActionGroup = new QActionGroup(0);
@@ -840,6 +812,35 @@ bool QCreateDicomdir::dicomdirPathIsADicomdir(QString dicomdirPath)
     }
 }
 
+void QCreateDicomdir::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::ActivationChange)
+    {
+        Settings settings;
+
+        if (!settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString().isEmpty())
+        {
+            m_copyFolderContentToDICOMDIRCdDvdCheckBox->setEnabled(true);
+            m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setEnabled(true);
+            m_copyFolderContentToDICOMDIRCdDvdCheckBox->setText(tr("Copy the content of \"%1\" to DICOMDIR.")
+                .arg(QDir::toNativeSeparators(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString())));
+            m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setText(tr("Copy the content of \"%1\" to DICOMDIR.")
+                .arg(QDir::toNativeSeparators(settings.getValue(InputOutputSettings::DICOMDIRFolderPathToCopy).toString())));
+            m_copyFolderContentToDICOMDIRCdDvdCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIROnCDOrDVD).toBool());
+            m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setChecked(settings.getValue(InputOutputSettings::CopyFolderContentToDICOMDIROnUSBOrHardDisk)
+                                                                         .toBool());
+        }
+        else
+        {
+            // Si no ens han especificat Path a copiar descativem els checkbox
+            m_copyFolderContentToDICOMDIRCdDvdCheckBox->setEnabled(false);
+            m_copyFolderContentToDICOMDIRUsbHardDiskCheckBox->setEnabled(false);
+        }
+    }
+
+    QDialog::changeEvent(event);
+}
+
 void QCreateDicomdir::closeEvent(QCloseEvent *ce)
 {
     Settings settings;
@@ -919,7 +920,7 @@ quint64 QCreateDicomdir::getStudySizeInBytes(bool transferSyntaxInLittleEndian, 
         imageMask.setStudyInstanceUID(studyInstanceUID);
 
         // Agafem les imatges de l'estudi per fer l'estimació del que ocuparà el dicomdir
-        QList<Image*> imagesOfStudy = localDatabaseManager.queryImage(imageMask);
+        QList<Image*> imagesOfStudy = localDatabaseManager.queryImages(imageMask);
 
         foreach (Image *image, imagesOfStudy)
         {

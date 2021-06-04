@@ -60,4 +60,9 @@ QString Tool::toolName()
     return m_toolName;
 }
 
+void Tool::handleEvent(unsigned long eventID)
+{
+    Q_UNUSED(eventID)
+}
+
 }

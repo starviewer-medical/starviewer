@@ -18,16 +18,16 @@
 #include "study.h"
 #include "patient.h"
 #include "relatedstudiesmanager.h"
-#include "queryscreen.h"
 #include "singleton.h"
-#include "screenmanager.h"
 #include "qtreewidgetwithseparatorline.h"
 
+#include <QGuiApplication>
+#include <QHeaderView>
 #include <QVBoxLayout>
 #include <QMovie>
+#include <QScreen>
 #include <QTreeWidgetItem>
 #include <QScrollBar>
-#include "applicationstylehelper.h"
 
 namespace udg {
 
@@ -43,15 +43,7 @@ QRelatedStudiesWidget::QRelatedStudiesWidget(RelatedStudiesManager *relatedStudi
 
     m_lookingForStudiesWidget = new QWidget(this);
     m_relatedStudiesTree = new QTreeWidgetWithSeparatorLine(this);
-    m_signalMapper = new QSignalMapper(this);
-    m_currentStudySignalMapper = new QSignalMapper(this);
-    m_priorStudySignalMapper = new QSignalMapper(this);
-    m_queryScreen = SingletonPointer<QueryScreen>::instance();
     m_numberOfDownloadingStudies = 0;
-
-    ApplicationStyleHelper style;
-    style.setScaledFontSizeTo(this);
-    style.setScaledSizeToRadioButtons(this);
 
     initializeLookingForStudiesWidget();
     initializeTree();
@@ -72,7 +64,6 @@ QRelatedStudiesWidget::~QRelatedStudiesWidget()
         delete m_infomationPerStudy.take(key);
     }
     delete m_lookingForStudiesWidget;
-    delete m_signalMapper;
 }
 
 void QRelatedStudiesWidget::updateList()
@@ -90,7 +81,7 @@ void QRelatedStudiesWidget::updateList()
                     this->decreaseNumberOfDownladingStudies();
                 }
                 studyInfo->status = Finished;
-                studyInfo->statusIcon->setPixmap(QPixmap(":/images/button_ok.png"));
+                studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-ok-apply.svg"));
                 studyInfo->downloadButton->setEnabled(false);
             }
         }
@@ -261,13 +252,11 @@ void QRelatedStudiesWidget::initializeSearch()
 void QRelatedStudiesWidget::createConnections()
 {
     connect(m_relatedStudiesManager, SIGNAL(queryStudiesFinished(QList<Study*>)), SLOT(queryStudiesFinished(QList<Study*>)));
-    connect(m_signalMapper, SIGNAL(mapped(const QString&)), SLOT(retrieveAndLoadStudy(const QString&)));
-    connect(m_currentStudySignalMapper, SIGNAL(mapped(const QString&)), SLOT(currentStudyRadioButtonClicked(const QString&)));
-    connect(m_priorStudySignalMapper, SIGNAL(mapped(const QString&)), SLOT(priorStudyRadioButtonClicked(const QString&)));
-    connect(m_queryScreen, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStarted(QString)));
-    connect(m_queryScreen, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinished(QString)));
-    connect(m_queryScreen, SIGNAL(studyRetrieveFailed(QString)), SLOT(studyRetrieveFailed(QString)));
-    connect(m_queryScreen, SIGNAL(studyRetrieveCancelled(QString)), SLOT(studyRetrieveCancelled(QString)));
+    connect(m_relatedStudiesManager, &RelatedStudiesManager::studyRetrieveStarted, this, &QRelatedStudiesWidget::studyRetrieveStarted);
+    connect(m_relatedStudiesManager, &RelatedStudiesManager::studyRetrieveFinished, this, &QRelatedStudiesWidget::studyRetrieveFinished);
+    connect(m_relatedStudiesManager, &RelatedStudiesManager::studyRetrieveFailed, this, &QRelatedStudiesWidget::studyRetrieveFailed);
+    connect(m_relatedStudiesManager, &RelatedStudiesManager::studyRetrieveCancelled, this, &QRelatedStudiesWidget::studyRetrieveCancelled);
+    connect(m_relatedStudiesManager, &RelatedStudiesManager::studyLoaded, this, &QRelatedStudiesWidget::addLoadedStudy);
 }
 
 void QRelatedStudiesWidget::initializeTree()
@@ -303,7 +292,7 @@ void QRelatedStudiesWidget::initializeLookingForStudiesWidget()
 
     QLabel *downloadigAnimation = new QLabel();
     QMovie *operationAnimation = new QMovie();
-    operationAnimation->setFileName(":/images/loader.gif");
+    operationAnimation->setFileName(":/images/animations/loader.gif");
     downloadigAnimation->setMovie(operationAnimation);
     operationAnimation->start();
 
@@ -315,6 +304,7 @@ void QRelatedStudiesWidget::initializeLookingForStudiesWidget()
 
 void QRelatedStudiesWidget::insertStudyToTree(Study *study)
 {
+    const QString &studyInstanceUid = study->getInstanceUID();
     QTreeWidgetItem *item = new QTreeWidgetItem();
 
     // Afegim l'item al widget
@@ -336,8 +326,7 @@ void QRelatedStudiesWidget::insertStudyToTree(Study *study)
     currentStudyLayout->setMargin(0);
     m_currentStudyRadioGroup.addButton(currentRadioButton);
     m_relatedStudiesTree->setItemWidget(item, CurrentStudy, currentStudyWidget);
-    connect(currentRadioButton, SIGNAL(clicked()), m_currentStudySignalMapper, SLOT(map()));
-    m_currentStudySignalMapper->setMapping(currentRadioButton, study->getInstanceUID());
+    connect(currentRadioButton, &QRadioButton::clicked, [=] { currentStudyRadioButtonClicked(studyInstanceUid); });
 
     // Add Radio Button to select prior study
     QWidget *priorStudyWidget = new QWidget(m_relatedStudiesTree);
@@ -349,8 +338,7 @@ void QRelatedStudiesWidget::insertStudyToTree(Study *study)
     priorStudyLayout->setMargin(0);
     m_priorStudyRadioGroup.addButton(priorRadioButton);
     m_relatedStudiesTree->setItemWidget(item, PriorStudy, priorStudyWidget);
-    connect(priorRadioButton, SIGNAL(clicked()), m_priorStudySignalMapper, SLOT(map()));
-    m_priorStudySignalMapper->setMapping(priorRadioButton, study->getInstanceUID());
+    connect(priorRadioButton, &QRadioButton::clicked, [=] { priorStudyRadioButtonClicked(studyInstanceUid); });
 
     QWidget *statusWidget = new QWidget(m_relatedStudiesTree);
     QHBoxLayout *statusLayout = new QHBoxLayout(statusWidget);
@@ -363,7 +351,7 @@ void QRelatedStudiesWidget::insertStudyToTree(Study *study)
     m_relatedStudiesTree->setItemWidget(item, DownloadingStatus, statusWidget);
 
     // Posem el botó en un Layout amb Margin 2 per a que els Items del QTreeWidget no estiguin tant junts i el control sigui més llegible
-    QIcon dowloadIcon(QString(":/images/view.png"));
+    QIcon dowloadIcon(QString(":/images/icons/visibility.svg"));
     QPushButton *downloadButton = new QPushButton(dowloadIcon, QString(""));
     QWidget *downloadButtonWidget = new QWidget(m_relatedStudiesTree);
     QVBoxLayout *downloadButtonLayout = new QVBoxLayout(downloadButtonWidget);
@@ -371,8 +359,7 @@ void QRelatedStudiesWidget::insertStudyToTree(Study *study)
     downloadButtonLayout->setContentsMargins(0, 2, 0, 1);
     downloadButtonLayout->addWidget(downloadButton);
 
-    connect(downloadButton, SIGNAL(clicked()), m_signalMapper, SLOT(map()));
-    m_signalMapper->setMapping(downloadButton, study->getInstanceUID());
+    connect(downloadButton, &QPushButton::clicked, [=] { retrieveAndLoadStudy(studyInstanceUid); });
 
     if (hasToHighlightStudy(study))
     {
@@ -414,8 +401,14 @@ void QRelatedStudiesWidget::updateWidgetWidth()
 
 void QRelatedStudiesWidget::updateWidgetHeight()
 {
-    ScreenManager screen;
-    int screenAvailableHeight = screen.getScreenLayout().getScreen(screen.getScreenID(this)).getAvailableGeometry().height();
+    QScreen *screen = QGuiApplication::screenAt(this->mapToGlobal(QPoint(0, 0)));
+
+    if (!screen)    // screen may be null if the widget is not visible
+    {
+        return;
+    }
+
+    int screenAvailableHeight = screen->availableSize().height();
     int topAndMargins = this->geometry().top() + m_relatedStudiesTree->geometry().top() * 2; // Es multiplica per 2 pel marge inferior.
     int maxHeight = screenAvailableHeight - topAndMargins;
     int minHeight = m_relatedStudiesTree->sizeHint().height();
@@ -454,9 +447,6 @@ void QRelatedStudiesWidget::insertStudiesToTree(const QList<Study*> &studiesList
 
         m_relatedStudiesTree->setVisible(true);
 
-        ApplicationStyleHelper style;
-        style.setScaledFontSizeTo(m_relatedStudiesTree);
-
         updateWidgetWidth();
         updateWidgetHeight();
     }
@@ -480,13 +470,13 @@ void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID
     {
         case RelatedStudiesManager::Loaded:
             studyInfo->status = Finished;
-            studyInfo->statusIcon->setPixmap(QPixmap(":/images/button_ok.png"));
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-ok-apply.svg"));
             notifyWorkingStudiesChangedIfReady();
             break;
 
         case RelatedStudiesManager::Failed:
             studyInfo->status = Failed;
-            studyInfo->statusIcon->setPixmap(QPixmap(":/images/cancel.png"));
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-cancel.svg"));
             studyInfo->downloadButton->setEnabled(true);
             break;
 
@@ -496,7 +486,7 @@ void QRelatedStudiesWidget::retrieveAndLoadStudy(const QString &studyInstanceUID
 
             QMovie *statusAnimation = new QMovie();
             studyInfo->statusIcon->setMovie(statusAnimation);
-            statusAnimation->setFileName(":/images/loader.gif");
+            statusAnimation->setFileName(":/images/animations/loader.gif");
             statusAnimation->start();
 
             this->increaseNumberOfDownladingStudies();
@@ -528,7 +518,7 @@ void QRelatedStudiesWidget::studyRetrieveFinished(QString studyInstanceUID)
         if (studyInfo->status == Downloading)
         {
             studyInfo->status = Finished;
-            studyInfo->statusIcon->setPixmap(QPixmap(":/images/button_ok.png"));
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-ok-apply.svg"));
 
             this->decreaseNumberOfDownladingStudies();
         }
@@ -546,7 +536,7 @@ void QRelatedStudiesWidget::studyRetrieveFailed(QString studyInstanceUID)
         if (studyInfo->status == Downloading)
         {
             studyInfo->status = Failed;
-            studyInfo->statusIcon->setPixmap(QPixmap(":/images/cancel.png"));
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-cancel.svg"));
             studyInfo->downloadButton->setEnabled(true);
 
             this->decreaseNumberOfDownladingStudies();
@@ -564,12 +554,17 @@ void QRelatedStudiesWidget::studyRetrieveCancelled(QString studyInstanceUID)
         if (studyInfo->status == Downloading || studyInfo->status == Pending)
         {
             studyInfo->status = Cancelled;
-            studyInfo->statusIcon->setPixmap(QPixmap(":/images/cancel.png"));
+            studyInfo->statusIcon->setPixmap(QPixmap(":/images/icons/dialog-cancel.svg"));
             studyInfo->downloadButton->setEnabled(true);
 
             this->decreaseNumberOfDownladingStudies();
         }
     }
+}
+
+void QRelatedStudiesWidget::addLoadedStudy(Study *study)
+{
+    m_patient->addStudy(study);
 }
 
 void QRelatedStudiesWidget::currentStudyRadioButtonClicked(const QString &studyInstanceUID)

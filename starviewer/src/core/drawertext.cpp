@@ -16,26 +16,26 @@
 #include "logging.h"
 #include "mathtools.h"
 #include "applicationstylehelper.h"
-#include "vtktextactorwithbackground.h"
-// Vtk
+
+#include <vtkTextActor.h>
 #include <vtkTextProperty.h>
+#include <vtkViewport.h>
 
 namespace udg {
 
 DrawerText::DrawerText(QObject *parent)
- : DrawerPrimitive(parent)
+    : DrawerPrimitive(parent), m_vtkActor(nullptr)
 {
     m_horizontalJustification = "Centered";
     m_verticalJustification = "Centered";
     m_fontFamily = "Arial";
-    m_fontSize = ApplicationStyleHelper().getToolsFontSize();
+    m_fontSize = ApplicationStyleHelper(true).getToolsFontSize();
     m_shadow = false;
     m_italic = false;
     m_bold = true;
     m_height = 0.05;
     m_width = 0.09;
     m_scaled = false;
-    m_vtkActor = 0;
     m_backgroundColor = QColor(0, 0, 0);
     m_backgroundOpacity = 0.85;
 }
@@ -65,8 +65,7 @@ vtkProp* DrawerText::getAsVtkProp()
     if (!m_vtkActor)
     {
         // Creem el pipeline de l'm_vtkActor
-        m_vtkActor = VtkTextActorWithBackground::New();
-        m_vtkActor->SetMargin(2);
+        m_vtkActor = vtkTextActor::New();
 
         // Assignem el text
         if (!m_text.isEmpty())
@@ -158,10 +157,10 @@ void DrawerText::updateVtkActorProperties()
     properties->SetColor(m_color.redF(), m_color.greenF(), m_color.blueF());
 
     // Mirem l'opacitat
-    m_vtkActor->SetBackgroundOpacity(m_backgroundOpacity);
+    properties->SetBackgroundOpacity(m_backgroundOpacity);
 
     // Assignem color
-    m_vtkActor->SetBackgroundColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF());
+    properties->SetBackgroundColor(m_backgroundColor.redF(), m_backgroundColor.greenF(), m_backgroundColor.blueF());
 
     m_vtkActor->SetHeight(m_height);
     m_vtkActor->SetWidth(m_width);
@@ -452,9 +451,72 @@ bool DrawerText::isInside(const double *point3D)
 
 void DrawerText::getBounds(double bounds[6])
 {
-    if (m_vtkActor)
+    if (m_vtkActor && m_vtkActor->GetNumberOfConsumers() > 0)
     {
-        m_vtkActor->GetWorldBounds(bounds);
+        vtkViewport *viewport = vtkViewport::SafeDownCast(m_vtkActor->GetConsumer(0));
+
+        if (viewport)
+        {
+            double attachPointDisplay[3];
+            viewport->SetWorldPoint(m_attachPoint[0], m_attachPoint[1], m_attachPoint[2], 1);
+            viewport->WorldToDisplay();
+            viewport->GetDisplayPoint(attachPointDisplay);
+
+            double size[2];
+            m_vtkActor->GetSize(viewport, size);
+
+            auto displayToWorld = [=](double x, double y, double z) -> Vector3 {
+                double homogeneousWorldPoint[4];
+                viewport->SetDisplayPoint(x, y, z);
+                viewport->DisplayToWorld();
+                viewport->GetWorldPoint(homogeneousWorldPoint);
+                double divisor = 1.0;
+                if (homogeneousWorldPoint[3] != 0.0)
+                {
+                    divisor = homogeneousWorldPoint[3];
+                }
+                Vector3 worldPoint(homogeneousWorldPoint[0] / divisor,
+                                   homogeneousWorldPoint[1] / divisor,
+                                   homogeneousWorldPoint[2] / divisor);
+                return worldPoint;
+            };
+
+            double left = 0;
+            switch (m_vtkActor->GetTextProperty()->GetJustification())
+            {
+                case VTK_TEXT_LEFT: left = attachPointDisplay[0]; break;
+                case VTK_TEXT_CENTERED: left = attachPointDisplay[0] - size[0] / 2; break;
+                case VTK_TEXT_RIGHT: left = attachPointDisplay[0] - size[0]; break;
+            }
+            double right = left + size[0];
+            double top = 0;
+            switch (m_vtkActor->GetTextProperty()->GetVerticalJustification())
+            {
+                case VTK_TEXT_BOTTOM: top = attachPointDisplay[1] + size[1]; break;
+                case VTK_TEXT_CENTERED: top = attachPointDisplay[1] + size[1] / 2; break;
+                case VTK_TEXT_TOP: top = attachPointDisplay[1]; break;
+            }
+            double bottom = top - size[1];
+
+            Vector3 corners[4] = { displayToWorld(left,  top,    attachPointDisplay[2]),
+                                   displayToWorld(right, top,    attachPointDisplay[2]),
+                                   displayToWorld(right, bottom, attachPointDisplay[2]),
+                                   displayToWorld(left,  bottom, attachPointDisplay[2]) };
+
+            bounds[0] = bounds[1] = corners[0].x;
+            bounds[2] = bounds[3] = corners[0].y;
+            bounds[4] = bounds[5] = corners[0].z;
+
+            for (int i = 1; i < 4; i++)
+            {
+                bounds[0] = std::min(bounds[0], corners[i].x);
+                bounds[1] = std::max(bounds[1], corners[i].x);
+                bounds[2] = std::min(bounds[2], corners[i].y);
+                bounds[3] = std::max(bounds[3], corners[i].y);
+                bounds[4] = std::min(bounds[4], corners[i].z);
+                bounds[5] = std::max(bounds[5], corners[i].z);
+            }
+        }
     }
 }
 
@@ -479,6 +541,5 @@ double DrawerText::getBackgroundOpacity() const
 {
     return m_backgroundOpacity;
 }
-
 
 }

@@ -53,6 +53,8 @@ signals:
     void layout2x3SecondRequested();
     /// Emitted when a 3x3 layout is requested.
     void layout3x3Requested();
+    /// Emitted when a MPR R layout is requested.
+    void layoutMprRightRequested();
 
 };
 

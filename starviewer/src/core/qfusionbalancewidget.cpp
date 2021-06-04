@@ -37,7 +37,7 @@ QFusionBalanceWidget::QFusionBalanceWidget(QWidget *parent)
     m_firstVolumeLabel->setAlignment(Qt::AlignCenter);
     m_firstVolumePercentLabel = new QLabel(this);
     m_firstVolumePercentLabel->setAlignment(Qt::AlignCenter);
-    m_firstVolumePercentLabel->setMinimumWidth(m_firstVolumePercentLabel->fontMetrics().width("100%"));
+    m_firstVolumePercentLabel->setMinimumWidth(m_firstVolumePercentLabel->fontMetrics().horizontalAdvance("100%"));
     QVBoxLayout *firstVolumeLayout = new QVBoxLayout();
     firstVolumeLayout->addWidget(m_firstVolumeLabel);
     firstVolumeLayout->addWidget(m_firstVolumePercentLabel);
@@ -46,7 +46,7 @@ QFusionBalanceWidget::QFusionBalanceWidget(QWidget *parent)
     m_secondVolumeLabel->setAlignment(Qt::AlignCenter);
     m_secondVolumePercentLabel = new QLabel(this);
     m_secondVolumePercentLabel->setAlignment(Qt::AlignCenter);
-    m_secondVolumePercentLabel->setMinimumWidth(m_secondVolumePercentLabel->fontMetrics().width("100%"));
+    m_secondVolumePercentLabel->setMinimumWidth(m_secondVolumePercentLabel->fontMetrics().horizontalAdvance("100%"));
     QVBoxLayout *secondVolumeLayout = new QVBoxLayout();
     secondVolumeLayout->addWidget(m_secondVolumeLabel);
     secondVolumeLayout->addWidget(m_secondVolumePercentLabel);

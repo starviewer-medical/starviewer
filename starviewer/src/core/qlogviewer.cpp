@@ -32,8 +32,6 @@ QLogViewer::QLogViewer(QWidget *parent)
 {
     setupUi(this);
     readSettings();
-//  Carreguem l'arxiu de log
-//  updateData();
     createConnections();
 }
 
@@ -54,9 +52,9 @@ void QLogViewer::updateData()
     }
     else
     {
-        INFO_LOG("S'ha obert amb èxit l'arxiu de logs [" + QString(QString::fromLocal8Bit(qgetenv("logFilePath"))) + "]");
-        m_logBrowser->setReadOnly(true);
+        INFO_LOG("S'ha obert amb èxit l'arxiu de logs [" + udg::getLogFilePath() + "]");
         m_logBrowser->setPlainText(logFile.readAll());
+        m_logBrowser->moveCursor(QTextCursor::End);
     }
 }
 

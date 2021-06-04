@@ -108,8 +108,8 @@ void RetrieveDICOMFilesFromPACSJob::run(ThreadWeaver::JobPointer self, ThreadWea
         connect(m_retrieveDICOMFilesFromPACS, SIGNAL(DICOMFileRetrieved(DICOMTagReader*, int)), this, SLOT(DICOMFileRetrieved(DICOMTagReader*, int)),
                 Qt::DirectConnection);
         // Connectem amb els signals del patientFiller per processar els fitxers descarregats
-        connect(this, SIGNAL(DICOMTagReaderReadyForProcess(DICOMTagReader*)), &patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));
-        connect(this, SIGNAL(DICOMFilesRetrieveFinished()), &patientFiller, SLOT(finishDICOMFilesProcess()));
+        connect(this, &RetrieveDICOMFilesFromPACSJob::DICOMTagReaderReadyForProcess, &patientFiller, &PatientFiller::processDICOMFile);
+        connect(this, &RetrieveDICOMFilesFromPACSJob::DICOMFilesRetrieveFinished, &patientFiller, &PatientFiller::finishFilesProcessing);
         // Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
         // el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan surt
         // d'aquí perquè els fillers ja han acabat ja s'ha inserit el pacient a la base de dades.
@@ -117,7 +117,7 @@ void RetrieveDICOMFilesFromPACSJob::run(ThreadWeaver::JobPointer self, ThreadWea
         // Connexions per finalitzar els threads
         connect(&patientFiller, SIGNAL(patientProcessed(Patient*)), &fillersThread, SLOT(quit()), Qt::DirectConnection);
 
-        localDatabaseManager.setStudyRetrieving(m_studyToRetrieveDICOMFiles->getInstanceUID());
+        localDatabaseManager.setStudyBeingRetrieved(m_studyToRetrieveDICOMFiles->getInstanceUID());
         fillersThread.start();
 
         m_retrieveRequestStatus = m_retrieveDICOMFilesFromPACS->retrieve(m_studyToRetrieveDICOMFiles->getInstanceUID(), m_seriesInstanceUIDToRetrieve,
@@ -160,7 +160,7 @@ void RetrieveDICOMFilesFromPACSJob::run(ThreadWeaver::JobPointer self, ThreadWea
             deleteRetrievedDICOMFilesIfStudyNotExistInDatabase();
         }
 
-        localDatabaseManager.setStudyRetrieveFinished();
+        localDatabaseManager.setNoStudyBeingRetrieved();
     }
 }
 
@@ -229,7 +229,7 @@ void RetrieveDICOMFilesFromPACSJob::deleteRetrievedDICOMFilesIfStudyNotExistInDa
 {
     // Comprovem si l'estudi està inserit a la base de dades, si és així vol dir que anteriorment s'havia descarregat un part o tot l'estudi,
     // com que ja tenim altres elements d'aquest estudi inserits a la base de dades no esborrem el directori de l'estudi
-    if (!LocalDatabaseManager().existsStudy(m_studyToRetrieveDICOMFiles))
+    if (!LocalDatabaseManager().studyExists(m_studyToRetrieveDICOMFiles->getInstanceUID()))
     {
         // Si l'estudi no existeix a la base de dades esborrem el contingut del directori, en principi segons la normativa DICO; si rebem un status de
         // tipus error per part de MoveSCP indicaria s'ha pogut descarregar cap objecte dicom amb èxit

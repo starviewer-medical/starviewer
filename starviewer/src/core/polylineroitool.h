@@ -28,13 +28,13 @@ class DrawerPolygon;
 class PolylineROITool : public ROITool {
 Q_OBJECT
 public:
-    PolylineROITool(QViewer *viewer, QObject *parent = 0);
-    ~PolylineROITool();
+    explicit PolylineROITool(QViewer *viewer, QObject *parent = nullptr);
+    ~PolylineROITool() override;
 
-    void handleEvent(long unsigned eventID);
+    void handleEvent(long unsigned eventID) override;
 
 protected:
-    virtual void setTextPosition(DrawerText *text);
+    void setTextPosition(DrawerText *text) override;
 
 private slots:
     /// Inicialitza l'estat de la tool

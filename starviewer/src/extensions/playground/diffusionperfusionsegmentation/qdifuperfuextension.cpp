@@ -20,6 +20,8 @@
 // Qt
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QAction>
+#include <QActionGroup>
 // VTK
 #include <vtkActor.h>
 #include <vtkImageActor.h>
@@ -46,7 +48,7 @@ const double QDifuPerfuSegmentationExtension::RegistrationMinimumStep = 0.001;
 const int QDifuPerfuSegmentationExtension::RegistrationNumberOfIterations = 300;
 
 QDifuPerfuSegmentationExtension::QDifuPerfuSegmentationExtension(QWidget * parent)
- : QWidget(parent), m_diffusionInputVolume(0), m_perfusionInputVolume(0), m_diffusionMainVolume(0), m_perfusionMainVolume(0), m_diffusionRescaledVolume(0), m_perfusionRescaledVolume(0), m_activedMaskVolume(0), m_strokeMaskVolume(0), m_ventriclesMaskVolume(0), m_blackpointEstimatedVolume(0), m_penombraMaskVolume(0), m_penombraMaskMinValue(0), m_penombraMaskMaxValue(254), m_perfusionOverlay(0), m_strokeSegmentationMethod(0), m_strokeVolume(0.0), m_registerTransform(0), m_penombraVolume(0.0)
+ : QWidget(parent), m_diffusionInputVolume(0), m_perfusionInputVolume(0), m_diffusionMainVolume(0), m_perfusionMainVolume(0), m_diffusionRescaledVolume(0), m_perfusionRescaledVolume(0), m_activedMaskVolume(0), m_strokeMaskVolume(0), m_ventriclesMaskVolume(0), m_blackpointEstimatedVolume(0), m_penombraMaskVolume(0), m_penombraMaskMinValue(0), m_penombraMaskMaxValue(254), m_perfusionOverlay(0), m_strokeSegmentationMethod(0), m_strokeVolume(0.0), m_registerTransform(nullptr), m_penombraVolume(0.0)
 {
     setupUi(this);
     DiffusionPerfusionSegmentationSettings().init();
@@ -87,7 +89,7 @@ void QDifuPerfuSegmentationExtension::initializeTools()
     m_toolManager = new ToolManager(this);
     // obtenim les accions de cada tool que volem
     m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
-    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
+    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingMouseTool"));
     m_moveToolButton->setDefaultAction(m_toolManager->registerTool("TranslateTool"));
     m_windowLevelToolButton->setDefaultAction(m_toolManager->registerTool("WindowLevelTool"));
     m_seedToolButton->setDefaultAction(m_toolManager->registerTool("SeedTool"));
@@ -98,12 +100,12 @@ void QDifuPerfuSegmentationExtension::initializeTools()
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "TranslateTool" << "WindowLevelTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingMouseTool" << "TranslateTool" << "WindowLevelTool";
     m_toolManager->triggerTools(defaultTools);
 
     // definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "SeedTool" << "EditorTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "SeedTool" << "EditorTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     QStringList rightButtonExclusiveTools;
@@ -127,9 +129,9 @@ void QDifuPerfuSegmentationExtension::initializeTools()
 void QDifuPerfuSegmentationExtension::createActions()
 {
     // TODO el nom tant dels botons com de les icones, s'ahurien de millorar
-    m_splitterLeftButton->setIcon(QIcon(":/images/back.png"));
-    m_splitterCenterButton->setIcon(QIcon(":/images/view_left_right.png"));
-    m_splitterRightButton->setIcon(QIcon(":/images/play.png"));
+    m_splitterLeftButton->setIcon(QIcon(":/images/icons/media-playback-backwards.svg"));
+    m_splitterCenterButton->setIcon(QIcon(":/images/icons/view-split-left-right.svg"));
+    m_splitterRightButton->setIcon(QIcon(":/images/icons/media-playback-start.svg"));
 
     m_lesionViewAction = new QAction(this);
     m_lesionViewAction->setText(tr("Lesion Overlay"));
@@ -383,8 +385,8 @@ void QDifuPerfuSegmentationExtension::setPerfusionLut(int threshold)
 
     vtkUnsignedCharArray * table = m_perfusionHueLut->GetTable();
     unsigned char tuple[4] = { 0, 0, 0, 0 };
-    table->SetTupleValue(0, tuple);
-    table->SetTupleValue(table->GetNumberOfTuples() - 1, tuple);
+    table->SetTypedTuple(0, tuple);
+    table->SetTypedTuple(table->GetNumberOfTuples() - 1, tuple);
 
     // Transformem la vtkLookupTable a TransferFunction
     TransferFunction transferFunction(m_perfusionHueLut);
@@ -673,8 +675,8 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
 
         vtkUnsignedCharArray * table = hueLut->GetTable();
         unsigned char tuple[4] = { 0, 0, 0, 0 };
-        table->SetTupleValue(0, tuple);
-        table->SetTupleValue(table->GetNumberOfTuples() - 1, tuple);
+        table->SetTypedTuple(0, tuple);
+        table->SetTypedTuple(table->GetNumberOfTuples() - 1, tuple);
 
         TransferFunction hueTransferFunction(hueLut);
         m_perfusion2DView->setTransferFunction(hueTransferFunction);

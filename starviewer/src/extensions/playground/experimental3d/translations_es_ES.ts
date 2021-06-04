@@ -1796,26 +1796,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qexperimental3dextension.cpp" line="807"/>
-        <source>Load %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qexperimental3dextension.cpp" line="821"/>
-        <source>Can&apos;t load %1 from file </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qexperimental3dextension.cpp" line="863"/>
-        <source>Save %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="qexperimental3dextension.cpp" line="883"/>
-        <source>Can&apos;t save %1 to file </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="qexperimental3dextension.cpp" line="1330"/>
         <source>Load color transfer function</source>
         <translation type="unfinished"></translation>
@@ -1968,6 +1948,29 @@
     <message>
         <location filename="qviewpointdistributionwidget.cpp" line="146"/>
         <source>%1 viewpoints</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>udg::T</name>
+    <message>
+        <location filename="qexperimental3dextension.cpp" line="807"/>
+        <source>Load %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexperimental3dextension.cpp" line="821"/>
+        <source>Can&apos;t load %1 from file </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexperimental3dextension.cpp" line="863"/>
+        <source>Save %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qexperimental3dextension.cpp" line="883"/>
+        <source>Can&apos;t save %1 to file </source>
         <translation type="unfinished"></translation>
     </message>
 </context>

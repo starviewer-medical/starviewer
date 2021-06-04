@@ -58,7 +58,7 @@ DiagnosisTestResult FirewallAccessTest::run()
     return result;
 }
 
-QString FirewallAccessTest::getDescription()
+QString FirewallAccessTest::getDescription() const
 {
     return tr("%1 has access through firewall").arg(ApplicationNameString);
 }

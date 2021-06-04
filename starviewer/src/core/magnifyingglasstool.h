@@ -35,10 +35,10 @@ class Q2DViewer;
 class MagnifyingGlassTool : public Tool {
 Q_OBJECT
 public:
-    MagnifyingGlassTool(QViewer *viewer, QObject *parent = 0);
-    ~MagnifyingGlassTool();
+    explicit MagnifyingGlassTool(QViewer *viewer, QObject *parent = nullptr);
+    ~MagnifyingGlassTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
 protected:
     /// Viewer 2D sobre el qual treballem

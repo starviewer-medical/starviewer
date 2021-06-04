@@ -153,6 +153,8 @@ protected:
     /// Mostra el menu contextual
     void contextMenuEvent(QContextMenuEvent *event);
 
+    void keyPressEvent(QKeyEvent*) override;
+
 private:
     /// Crea les connexions dels signals i slots
     void createConnections();
@@ -237,7 +239,7 @@ private:
     bool m_useDICOMSourceToDiscriminateStudies;
 
     /// Icones utilitzades com a root al TreeWidget
-    QIcon m_openFolder, m_closeFolder, m_iconSeries;
+    QIcon m_iconOpenStudy, m_iconCloseStudy, m_iconOpenSeries, m_iconCloseSeries, m_iconDicomFile;
 
     QStudyTreeWidget::ItemTreeLevels m_maximumExpandTreeItemsLevel;
 };

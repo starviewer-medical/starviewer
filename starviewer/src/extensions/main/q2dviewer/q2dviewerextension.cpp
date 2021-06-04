@@ -59,6 +59,7 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 #include <QListView>
+#include <QScrollBar>
 
 #include "layoutmanager.h"
 
@@ -73,15 +74,14 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     setupUi(this);
     Q2DViewerSettings().init();
 
+    // We set a minimum size in the .ui file to see the widget and unset it here to avoid the button being too small if the window doesn't fit in the screen
+    m_thickSlabWidget->setMinimumSize(0, 0);
+
 #ifdef STARVIEWER_LITE
-    m_roiButton->hide();
-    m_angleToolButton->hide();
-    m_openAngleToolButton->hide();
     m_axialViewToolButton->hide();
     m_coronalViewToolButton->hide();
     m_sagitalViewToolButton->hide();
     m_orientationButtonsLabel->hide();
-    m_thickSlabLabel->hide();
     m_thickSlabWidget->hide();
     m_referenceLinesToolButton->hide();
     m_cursor3DToolButton->hide();
@@ -112,13 +112,14 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 
     m_showViewersTextualInformationAction = new QAction(this);
     m_showViewersTextualInformationAction->setCheckable(true);
-    m_showViewersTextualInformationAction->setChecked(true);
+    Settings settings;
+    m_showViewersTextualInformationAction->setChecked(settings.getValue(CoreSettings::ShowViewersTextualInformation).toBool());
     m_showViewersTextualInformationAction->setText(tr("Text"));
     m_showViewersTextualInformationAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ToggleViewersTextualInformation));
-    m_showViewersTextualInformationAction->setToolTip(tr("Show/hide viewer's textual information (%1)")
+    m_showViewersTextualInformationAction->setToolTip(tr("Show/hide viewers textual information (%1)")
                                                       .arg(m_showViewersTextualInformationAction->shortcut().toString()));
     m_showViewersTextualInformationAction->setStatusTip(m_showViewersTextualInformationAction->toolTip());
-    m_showViewersTextualInformationAction->setIcon(QIcon(":/images/showViewersInformation.png"));
+    m_showViewersTextualInformationAction->setIcon(QIcon(":/images/icons/annotations.svg"));
     connect(m_showViewersTextualInformationAction, SIGNAL(toggled(bool)), SLOT(showViewersTextualInformation(bool)));
     
     m_showOverlaysAction = new QAction(this);
@@ -127,7 +128,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_showOverlaysAction->setText(tr("Overlays"));
     m_showOverlaysAction->setToolTip(tr("Show/Hide image overlays"));
     m_showOverlaysAction->setStatusTip(m_showOverlaysAction->toolTip());
-    m_showOverlaysAction->setIcon(QIcon(":/images/showOverlays.png"));
+    m_showOverlaysAction->setIcon(QIcon(":/images/icons/overlays.svg"));
     connect(m_showOverlaysAction, SIGNAL(toggled(bool)), SLOT(showImageOverlays(bool)));
 
     m_showDisplayShuttersAction = new QAction(this);
@@ -136,7 +137,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_showDisplayShuttersAction->setText(tr("Shutters"));
     m_showDisplayShuttersAction->setToolTip(tr("Show/Hide shutter layer"));
     m_showDisplayShuttersAction->setStatusTip(m_showDisplayShuttersAction->toolTip());
-    m_showDisplayShuttersAction->setIcon(QIcon(":/images/showDisplayShutters.png"));
+    m_showDisplayShuttersAction->setIcon(QIcon(":/images/icons/shutter.svg"));
     connect(m_showDisplayShuttersAction, SIGNAL(toggled(bool)), SLOT(showDisplayShutters(bool)));
     
     m_viewerLayersToolButton->setDefaultAction(m_showViewersTextualInformationAction);
@@ -158,9 +159,7 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
     m_statsWatcher = new StatsWatcher("2D Extension", this);
     m_statsWatcher->addClicksCounter(m_slicingToolButton);
     m_statsWatcher->addClicksCounter(m_zoomToolButton);
-    m_statsWatcher->addClicksCounter(m_roiButton);
-    m_statsWatcher->addClicksCounter(m_distanceToolButton);
-    m_statsWatcher->addClicksCounter(m_angleToolButton);
+    m_statsWatcher->addClicksCounter(m_drawingToolButton);
     m_statsWatcher->addClicksCounter(m_eraserToolButton);
 
     m_statsWatcher->addClicksCounter(m_axialViewToolButton);
@@ -229,6 +228,8 @@ void Q2DViewerExtension::createConnections()
 #endif
 
     connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
+    connect(m_thickSlabWidget, &QThickSlabWidget::ensureVisible, this, [this] { m_toolBarScrollArea->ensureWidgetVisible(m_thickSlabWidget); },
+            Qt::QueuedConnection);
 
     connect(m_workingArea, SIGNAL(fusionLayout2x1FirstRequested(QList<Volume*>,AnatomicalPlane)),
             SLOT(setFusionLayout2x1First(QList<Volume*>,AnatomicalPlane)));
@@ -238,6 +239,7 @@ void Q2DViewerExtension::createConnections()
     connect(m_workingArea, SIGNAL(fusionLayout2x3FirstRequested(QList<Volume*>)), SLOT(setFusionLayout2x3First(QList<Volume*>)));
     connect(m_workingArea, SIGNAL(fusionLayout2x3SecondRequested(QList<Volume*>)), SLOT(setFusionLayout2x3Second(QList<Volume*>)));
     connect(m_workingArea, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SLOT(setFusionLayout3x3(QList<Volume*>)));
+    connect(m_workingArea, &ViewersLayout::fusionLayoutMprRightRequested, this, &Q2DViewerExtension::setFusionLayoutMprRight);
 }
 
 #ifdef STARVIEWER_LITE
@@ -258,8 +260,8 @@ void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modal
     Settings settings;
     bool enableReferenceLinesForMR = settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForMR).toBool();
     bool enableReferenceLinesForCT = settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForCT).toBool();
-    
-    if (modalities.contains("MR") && enableReferenceLinesForMR || modalities.contains("CT") && enableReferenceLinesForCT)
+
+    if ((modalities.contains("MR") && enableReferenceLinesForMR) || (modalities.contains("CT") && enableReferenceLinesForCT))
     {
         m_referenceLinesToolButton->defaultAction()->setChecked(true);
     }
@@ -270,8 +272,8 @@ void Q2DViewerExtension::setupDefaultToolsForModalities(const QStringList &modal
 
     bool enableAutomaticSynchronizationForMR = settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForMR).toBool();
     bool enableAutomaticSynchronizationForCT = settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT).toBool();
-    
-    if (modalities.contains("MR") && enableAutomaticSynchronizationForMR || modalities.contains("CT") && enableAutomaticSynchronizationForCT)
+
+    if ((modalities.contains("MR") && enableAutomaticSynchronizationForMR) || (modalities.contains("CT") && enableAutomaticSynchronizationForCT))
     {
         m_automaticSynchronizationToolButton->defaultAction()->setChecked(true);
     }
@@ -411,63 +413,61 @@ void Q2DViewerExtension::setCurrentStudy(const QString &studyUID)
     m_relatedStudiesWidget->setCurrentStudy(studyUID);
 }
 
+void Q2DViewerExtension::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    int toolBarWidth = m_toolBarScrollArea->width();
+    int thickSlabStart = m_thickSlabWidget->x();
+    int thickSlabFixedWidth = m_thickSlabWidget->getFixedWidth();
+
+    m_thickSlabWidget->setFoldable(thickSlabStart + thickSlabFixedWidth > toolBarWidth);    // foldable if with its fixed width it doesn't fit
+}
+
+void Q2DViewerExtension::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+
+    int toolBarWidth = m_toolBarScrollArea->width();
+    int thickSlabStart = m_thickSlabWidget->x();
+    int thickSlabFixedWidth = m_thickSlabWidget->getFixedWidth();
+
+    m_thickSlabWidget->setFoldable(thickSlabStart + thickSlabFixedWidth > toolBarWidth);    // foldable if with its fixed width it doesn't fit
+}
+
 void Q2DViewerExtension::initializeTools()
 {
     // Creem el tool manager
     m_toolManager = new ToolManager(this);
     // Obtenim les accions de cada tool que volem
     m_zoomToolButton->setDefaultAction(m_toolManager->registerTool("ZoomTool"));
-    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingTool"));
+    m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingMouseTool"));
+    m_slicingToolButton->addAction(m_toolManager->registerTool("TranslateLeftTool"));
+    m_slicingToolButton->addAction(m_toolManager->registerTool("WindowLevelLeftTool"));
     m_toolManager->registerTool("TranslateTool");
     m_toolManager->registerTool("WindowLevelTool");
     m_referenceLinesToolButton->setDefaultAction(m_toolManager->registerTool("ReferenceLinesTool"));
 
-    m_distanceToolButton->setDefaultAction(m_toolManager->registerTool("DistanceTool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("DistanceTool"));
 
     m_eraserToolButton->setDefaultAction(m_toolManager->registerTool("EraserTool"));
 
 #ifndef STARVIEWER_LITE
-    // Afegim un menú al botó de zoom per incorporar la tool de zoom focalitzat
-    m_zoomToolButton->setPopupMode(QToolButton::MenuButtonPopup);
-    QMenu *zoomToolMenu = new QMenu(this);
-    m_zoomToolButton->setMenu(zoomToolMenu);
-    zoomToolMenu->addAction(m_toolManager->registerTool("MagnifyingGlassTool"));
+    m_zoomToolButton->addAction(m_toolManager->registerTool("MagnifyingGlassTool"));
 
-    connect(m_toolManager->getRegisteredToolAction("ZoomTool"), SIGNAL(triggered()), SLOT(rearrangeZoomToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("MagnifyingGlassTool"), SIGNAL(triggered()), SLOT(rearrangeZoomToolsMenu()));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("PerpendicularDistanceTool"));
 
-    // Afegim un menú al botó de distància per incorporar l'eina de distància perpendicular
-    m_distanceToolButton->setPopupMode(QToolButton::MenuButtonPopup);
-    QMenu *distanceToolMenu = new QMenu(this);
-    m_distanceToolButton->setMenu(distanceToolMenu);
-    distanceToolMenu->addAction(m_toolManager->registerTool("PerpendicularDistanceTool"));
-    connect(m_toolManager->getRegisteredToolAction("DistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("PerpendicularDistanceTool"), SIGNAL(triggered()), SLOT(rearrangeDistanceToolsMenu()));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("EllipticalROITool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("MagicROITool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("PolylineROITool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("CircleTool"));
 
-    m_roiButton->setDefaultAction(m_toolManager->registerTool("EllipticalROITool"));
-    // Afegim un menú al botó de PolylineROI per incorporar la tool de ROI el·líptica
-    m_roiButton->setPopupMode(QToolButton::MenuButtonPopup);
-    QMenu *roiToolMenu = new QMenu(this);
-    m_roiButton->setMenu(roiToolMenu);
-    roiToolMenu->addAction(m_toolManager->registerTool("MagicROITool"));
-    roiToolMenu->addAction(m_toolManager->registerTool("PolylineROITool"));
-    roiToolMenu->addAction(m_toolManager->registerTool("CircleTool"));
-    
-    connect(m_toolManager->getRegisteredToolAction("EllipticalROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("MagicROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("PolylineROITool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("CircleTool"), SIGNAL(triggered()), SLOT(rearrangeROIToolsMenu()));
-    
     m_cursor3DToolButton->setDefaultAction(m_toolManager->registerTool("Cursor3DTool"));
-    
-    m_angleToolButton->setDefaultAction(m_toolManager->registerTool("AngleTool"));
-    // Afegim un menú al botó d'angle per incorporar la tool d'angles oberts
-    m_angleToolButton->setPopupMode(QToolButton::MenuButtonPopup);
-    QMenu *angleToolMenu = new QMenu(this);
-    m_angleToolButton->setMenu(angleToolMenu);
-    angleToolMenu->addAction(m_toolManager->registerTool("NonClosedAngleTool"));
-    connect(m_toolManager->getRegisteredToolAction("AngleTool"), SIGNAL(triggered()), SLOT(rearrangeAngleToolsMenu()));
-    connect(m_toolManager->getRegisteredToolAction("NonClosedAngleTool"), SIGNAL(triggered()), SLOT(rearrangeAngleToolsMenu()));
+
+    m_drawingToolButton->addAction(m_toolManager->registerTool("AngleTool"));
+    m_drawingToolButton->addAction(m_toolManager->registerTool("NonClosedAngleTool"));
+
+    m_drawingToolButton->addAction(m_toolManager->registerTool("ArrowTool"));
 
     m_automaticSynchronizationToolButton->setDefaultAction(m_toolManager->registerTool("AutomaticSynchronizationTool"));
 #endif
@@ -507,17 +507,19 @@ void Q2DViewerExtension::initializeTools()
     QStringList leftButtonExclusiveTools;
 
 #ifdef STARVIEWER_LITE
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "TranslateLeftTool" << "WindowLevelLeftTool" << "DistanceTool" << "PerpendicularDistanceTool"
+                             << "EraserTool";
 #else
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool"
-                             << "Cursor3DTool" << "EllipticalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "TranslateLeftTool" << "WindowLevelLeftTool" << "PolylineROITool" << "DistanceTool"
+                             << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool" << "EllipticalROITool"
+                             << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool" << "ArrowTool";
 #endif
 
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
     QStringList defaultTools;
-    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";
+    defaultTools << "VoiLutPresetsTool" << "SlicingKeyboardTool" << "SlicingMouseTool" << "SlicingWheelTool" << "WindowLevelTool" << "TranslateTool";
     m_toolManager->triggerTools(defaultTools);
 
     //
@@ -532,7 +534,7 @@ void Q2DViewerExtension::initializeTools()
     m_synchronizeAllAction = new QAction(this);
     m_synchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SynchronizeAllViewers));
     m_synchronizeAllAction->setToolTip(tr("Activate manual synchronization in all viewers (%1)").arg(m_synchronizeAllAction->shortcut().toString()));
-    m_synchronizeAllAction->setIcon(QIcon(":/images/linkAll.png"));
+    m_synchronizeAllAction->setIcon(QIcon(":/images/icons/insert-link.svg"));
     m_synchronizeAllAction->setText(tr("All"));
 
     m_synchronizeAllViewersButton->setIcon(m_synchronizeAllAction->icon());
@@ -545,7 +547,7 @@ void Q2DViewerExtension::initializeTools()
     m_desynchronizeAllAction = new QAction(this);
     m_desynchronizeAllAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::DesynchronizeAllViewers));
     m_desynchronizeAllAction->setToolTip(tr("Deactivate manual synchronization in all viewers (%1)").arg(m_desynchronizeAllAction->shortcut().toString()));
-    m_desynchronizeAllAction->setIcon(QIcon(":/images/unlinkAll.png"));
+    m_desynchronizeAllAction->setIcon(QIcon(":/images/icons/remove-link.svg"));
     m_desynchronizeAllAction->setText(tr("None"));
 
     m_desynchronizeAllViewersButton->setIcon(m_desynchronizeAllAction->icon());
@@ -561,7 +563,7 @@ void Q2DViewerExtension::initializeTools()
     m_propagationAction = new QAction(this);
     m_propagationAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::Propagation));
     m_propagationAction->setToolTip(tr("Propagate properties between viewers (%1)").arg(m_propagationAction->shortcut().toString()));
-    m_propagationAction->setIcon(QIcon(":/images/propagate.png"));
+    m_propagationAction->setIcon(QIcon(":/images/icons/feed-subscribe.svg"));
     m_propagationAction->setText(tr("Propagate"));
     m_propagationAction->setCheckable(true);
     m_propagateToolButton->setDefaultAction(m_propagationAction);
@@ -634,11 +636,6 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
         // enviin el senyal al visualitzador que toca.
         if (m_lastSelectedViewer)
         {
-
-#ifndef STARVIEWER_LITE
-            disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(volumeChanged(Volume*)), this, SLOT(validePhases()));
-#endif
-
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewChanged(int)), this, SLOT(updateDICOMInformationButton()));
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(viewerStatusChanged()), this, SLOT(updateExporterToolButton()));
             disconnect(m_lastSelectedViewer->getViewer(), SIGNAL(volumeChanged(Volume*)), this, SLOT(updateTransferFunctionComboBoxWithCurrentViewerModel()));
@@ -659,10 +656,6 @@ void Q2DViewerExtension::changeSelectedViewer(Q2DViewerWidget *viewerWidget)
         {
             Q2DViewer *selected2DViewer = viewerWidget->getViewer();
 
-#ifndef STARVIEWER_LITE
-            validePhases();
-            connect(viewerWidget->getViewer(), SIGNAL(volumeChanged(Volume*)), SLOT(validePhases()));
-#endif
             connect(viewerWidget->getViewer(), SIGNAL(viewChanged(int)), SLOT(updateDICOMInformationButton()));
             connect(m_lastSelectedViewer->getViewer(), SIGNAL(viewerStatusChanged()), this, SLOT(updateExporterToolButton()));
             connect(selected2DViewer, SIGNAL(volumeChanged(Volume*)), this, SLOT(updateTransferFunctionComboBoxWithCurrentViewerModel()));
@@ -728,7 +721,7 @@ void Q2DViewerExtension::enableMaximumThicknessMode(bool enable)
         Q2DViewer *viewer = m_workingArea->getViewerWidget(viewerNumber)->getViewer();
         if (viewer->isThickSlabActive() && !viewer->isActive())
         {
-            viewer->setSlabThickness(viewer->getNumberOfSlices());
+            viewer->setSlabThickness(viewer->getMaximumSlabThickness());
         }
     }
     QApplication::restoreOverrideCursor();
@@ -774,30 +767,6 @@ void Q2DViewerExtension::showDicomDumpCurrentDisplayedImage()
     }
 }
 
-void Q2DViewerExtension::rearrangeToolsMenu(QToolButton *menuButton)
-{
-    QList<QAction*> actions;
-    actions << menuButton->defaultAction() << menuButton->menu()->actions();
-
-    bool found = false;
-    int i = 0;
-    while (!found && i < actions.count())
-    {
-        if (actions.at(i)->isChecked())
-        {
-            found = true;
-        }
-        ++i;
-    }
-
-    if (found)
-    {
-        menuButton->setDefaultAction(actions.takeAt(i - 1));
-        menuButton->menu()->clear();
-        menuButton->menu()->addActions(actions);
-    }
-}
-
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::showScreenshotsExporterDialog()
 {
@@ -815,44 +784,7 @@ void Q2DViewerExtension::showScreenshotsExporterDialog()
         }
     }
 }
-
-void Q2DViewerExtension::rearrangeROIToolsMenu()
-{
-    rearrangeToolsMenu(m_roiButton);
-}
-
-void Q2DViewerExtension::rearrangeAngleToolsMenu()
-{
-    rearrangeToolsMenu(m_angleToolButton);
-}
-
-void Q2DViewerExtension::rearrangeZoomToolsMenu()
-{
-    rearrangeToolsMenu(m_zoomToolButton);
-}
-
-void Q2DViewerExtension::validePhases()
-{
-    m_axialViewToolButton->setEnabled(true);
-    if (m_workingArea->getSelectedViewer()->hasPhases())
-    {
-        m_axialViewToolButton->setEnabled(false);
-        m_sagitalViewToolButton->setEnabled(false);
-        m_coronalViewToolButton->setEnabled(false);
-    }
-    else
-    {
-        m_axialViewToolButton->setEnabled(true);
-        m_sagitalViewToolButton->setEnabled(true);
-        m_coronalViewToolButton->setEnabled(true);
-    }
-}
 #endif
-
-void Q2DViewerExtension::rearrangeDistanceToolsMenu()
-{
-    rearrangeToolsMenu(m_distanceToolButton);
-}
 
 void Q2DViewerExtension::updateDICOMInformationButton()
 {
@@ -926,12 +858,12 @@ void Q2DViewerExtension::disableSynchronization()
 #ifndef STARVIEWER_LITE
 void Q2DViewerExtension::changeToRelatedStudiesDownloadingIcon()
 {
-    m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/cal_downloading.png")));
+    m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/icons/view-calendar-download.svg")));
 }
 
 void Q2DViewerExtension::changeToRelatedStudiesDefaultIcon()
 {
-    m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/cal.png")));
+    m_relatedStudiesToolButton->setIcon(QIcon(QString(":images/icons/view-calendar.svg")));
 }
 
 void Q2DViewerExtension::enableAutomaticSynchronizationToViewer(bool enable)
@@ -986,7 +918,7 @@ void Q2DViewerExtension::manualSynchronizationActivated(bool activated)
         //             we enable the slicing tool to disable cursor 3D.
         if (m_cursor3DToolButton->isChecked())
         {
-            m_toolManager->triggerTool("SlicingTool");
+            m_toolManager->triggerTool("SlicingMouseTool");
         }
     }
 }
@@ -1084,7 +1016,7 @@ void Q2DViewerExtension::handleViewerDoubleClick(Q2DViewerWidget *viewerWidget)
 {
     QSet<QString> toolsIncompatibleWithDoubleClickMaximization;
     toolsIncompatibleWithDoubleClickMaximization << "AngleTool" << "NonClosedAngleTool" << "DistanceTool" << "PerpendicularDistanceTool"
-                                                 << "MagicROITool" << "PolylineROITool";
+                                                 << "MagicROITool" << "PolylineROITool" << "ArrowTool";
 
     foreach (const QString &tool, toolsIncompatibleWithDoubleClickMaximization)
     {
@@ -1211,6 +1143,23 @@ void Q2DViewerExtension::setFusionLayout3x3(const QList<Volume*> &volumes)
     }
 
     m_layoutManager->setFusionLayout3x3(volumes);
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(true);
+    }
+}
+
+void Q2DViewerExtension::setFusionLayoutMprRight(const QList<Volume *> &volumes)
+{
+    bool propagationEnabled = m_syncActionManager->isEnabled();
+
+    if (propagationEnabled)
+    {
+        m_syncActionManager->enable(false);
+    }
+
+    m_layoutManager->setFusionLayoutMprRight(volumes);
 
     if (propagationEnabled)
     {

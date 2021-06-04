@@ -91,18 +91,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>#m_noSupportedSeriesFrame {
-background-color: #dc8a8a;
-border-radius: 4px;
-border: 1px solid  #680000;
-}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>margin-right: 5px;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>This series cannot be printed.</source>
         <translation type="unfinished"></translation>
     </message>

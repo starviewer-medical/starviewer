@@ -38,7 +38,6 @@ class QCreateDicomdir;
 class Study;
 class QWidgetSelectPacsToStoreDicomImage;
 class SendDICOMFilesToPACSJob;
-class PacsManager;
 
 /**
     Widget en el que controla les operacions d'entrada/sortida de la base de dades local
@@ -49,9 +48,6 @@ Q_OBJECT
 public:
     QInputOutputLocalDatabaseWidget(QWidget *parent = 0);
     ~QInputOutputLocalDatabaseWidget();
-
-    /// Especifiquem l'instància de PacsManager utilitza per les operacions amb el PACS
-    void setPacsManager(PacsManager *pacsManager);
 
     /// Consulta els estudis al dicomdir obert que compleixin la màscara de cerca
     void queryStudy(DicomMask queryMask);
@@ -158,7 +154,7 @@ private:
     QCreateDicomdir *m_qcreateDicomdir;
     StatsWatcher *m_statsWatcher;
     QWidgetSelectPacsToStoreDicomImage *m_qwidgetSelectPacsToStoreDicomImage;
-    PacsManager *m_pacsManager;
+
 };
 
 };// end namespace udg

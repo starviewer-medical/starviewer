@@ -283,41 +283,31 @@ QString DisplayShutter::getPointsAsString() const
 
 QImage DisplayShutter::getAsQImage(int width, int height) const
 {
-    QImage shutterImage(width, height, QImage::Format_RGB32);
-    shutterImage.fill(Qt::black);
-    
-    QPainter shutterPainter(&shutterImage);
-    shutterPainter.setPen(Qt::white);
-    shutterPainter.setBrush(Qt::white);
-    shutterPainter.drawPolygon(getAsQPolygon());
-    shutterImage.invertPixels();
+    QImage shutterImage(width, height, QImage::Format_ARGB32_Premultiplied);
 
-    return shutterImage;
+    if (m_shape == UndefinedShape)
+    {
+        shutterImage.fill(Qt::transparent);
+    }
+    else
+    {
+        shutterImage.fill(Qt::black);
+        QPainter shutterPainter(&shutterImage);
+        shutterPainter.setPen(Qt::transparent);
+        shutterPainter.setBrush(Qt::transparent);
+        shutterPainter.setCompositionMode(QPainter::CompositionMode_Source);
+        shutterPainter.drawPolygon(getAsQPolygon());
+    }
+
+    return shutterImage.convertToFormat(QImage::Format_RGBA8888);
 }
 
-vtkSmartPointer<vtkImageData> DisplayShutter::getAsVtkImageData(int width, int height, int slice) const
+vtkSmartPointer<vtkImageData> DisplayShutter::getAsVtkImageData(int width, int height) const
 {
     // Create shutter mask as QImage
     QImage shutterImage = this->getAsQImage(width, height);
-    
-    // Convert QImage to needed raw format
-    unsigned char *data = new unsigned char[width * height];
-    for (int i = 0; i < height; ++i)
-    {
-        QRgb *currentPixel = reinterpret_cast<QRgb*>(shutterImage.scanLine(i));
-        for (int j = 0; j < width; ++j)
-        {
-            data[j + i * width] = qGray(*currentPixel);
-            ++currentPixel;
-        }
-    }
 
-    VtkImageDataCreator imageDataCreator;
-    vtkSmartPointer<vtkImageData> shutterData = imageDataCreator.createVtkImageData(width, height, 1, data);
-    shutterData->SetExtent(0, width - 1, 0, height - 1, slice, slice);
-    delete[] data;
-
-    return shutterData;
+    return VtkImageDataCreator().setDimensions({{width, height, 1}}).setNumberOfComponents(4).create(shutterImage.constBits());
 }
 
 DisplayShutter DisplayShutter::intersection(const QList<DisplayShutter> &shuttersList)

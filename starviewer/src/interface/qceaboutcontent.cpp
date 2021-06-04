@@ -16,6 +16,8 @@
 
 #include "starviewerapplication.h"
 
+#include <QRegularExpression>
+
 namespace udg {
 
 QCeAboutContent::QCeAboutContent(QWidget *parent)

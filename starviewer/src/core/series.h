@@ -25,6 +25,7 @@
 
 namespace udg {
 
+class EncapsulatedDocument;
 class Volume;
 class Image;
 class Study;
@@ -103,9 +104,9 @@ public:
     bool setTime(int hour, int minute, int second = 0);
     bool setTime(QString time);
     bool setTime(QTime time);
-    QDate getDate();
+    QDate getDate() const;
     QString getDateAsString();
-    QTime getTime();
+    QTime getTime() const;
     QString getTimeAsString();
 
     /// Assignar/Obtenir la institució on s'ha realitzat l'estudi
@@ -127,8 +128,8 @@ public:
     /// Assignar/Obtenir la data i hora en que la sèrie s'ha descarregat a la base de dades Local
     void setRetrievedDate(QDate date);
     void setRetrievedTime(QTime time);
-    QDate getRetrievedDate();
-    QTime getRetrievedTime();
+    QDate getRetrievedDate() const;
+    QTime getRetrievedTime() const;
 
     /// Assigna l'estudi pare de la sèrie
     void setParentStudy(Study *study);
@@ -161,6 +162,21 @@ public:
     /// Indica si una sèrie té imatges
     bool hasImages() const;
 
+    /// Adds the given encapsulated document to this series and sets this series as the parent of the document.
+    /// Returns true if the encapsulated document is added and false if it's not added because it was already in this series.
+    bool addEncapsulatedDocument(EncapsulatedDocument *document);
+    /// Returns true if this series contains an encapsulated document with the given key and false otherwise.
+    bool encapsulatedDocumentExists(const QString &key) const;
+    /// Returns the list of all the encapsulated documents in this series.
+    const QList<EncapsulatedDocument*>& getEncapsulatedDocuments() const;
+    /// Returns the number of encapsulated documents in this series.
+    int getNumberOfEncapsulatedDocuments() const;
+    /// Sets the number of encapsulated documents that is returned when there are no documents.
+    /// It's used when querying the database to avoid retrieving the documents themselves.
+    void setNumberOfEncapsulatedDocuments(int numberOfEncapsulatedDocuments);
+    /// Returns true if this series contains at least one encapsulated document and false otherwise.
+    bool hasEncapsulatedDocuments() const;
+
     /// Assignar/Obtenir el path de les imatges de la sèrie
     void setImagesPath(QString imagesPath);
     QString getImagesPath() const;
@@ -190,8 +206,6 @@ public:
     ///Retorna un DICOMSource que aglutina els diferents DICOMSource de les imatges que conté la sèrie i el de la sèrie si se n'hi ha assignat un.
     DICOMSource getDICOMSource() const;
 
-    /// Retorna el nombre de volums dels que es composa la sèrie.
-    int getNumberOfVolumes();
 
     /// Retorna el Volume amb identificador id
     /// Retorna NULL en cas que no hi hagi cap volum amb aquest id.
@@ -206,8 +220,11 @@ public:
     /// de volums.
     Identifier addVolume(Volume *volume);
 
-    /// Retorna una llista amb tots els volums de la sèrie.
+    /// Returns a list of volumes that compose the series.
     QList<Volume*> getVolumesList();
+
+    /// Returns the number of volumes that compose the series.
+    int getNumberOfVolumes();
 
     /// Retorna la llista d'identificadors de volum
     QList<Identifier> getVolumesIDList() const;
@@ -242,6 +259,9 @@ public:
 
     /// Ens indica si la sèrie és un localizer de CT
     bool isCTLocalizer() const;
+
+    /// Returns true if this series is a CT series used for attenuation correction.
+    bool isCTAttenuationCorrection() const;
 
     /// Ens indica si la sèrie és un survey d'MR
     bool isMRSurvey() const;
@@ -326,6 +346,9 @@ private:
     /// TODO falta definir quina és l'estrategia d'ordenació per defecte
     QList<Image*> m_imageSet;
 
+    /// List of encapsulated documents contained in this series.
+    QList<EncapsulatedDocument*> m_encapsulatedDocumentSet;
+
     /// Estudi pare
     Study *m_parentStudy;
 
@@ -344,6 +367,9 @@ private:
 
     /// Número d'imatges de la sèrie. Fem el recompte manualment per quan consultem de la BDD
     int m_numberOfImages;
+
+    /// Number of encapsulated documents in the series. It's used when querying the database to avoid querying the full document set.
+    int m_numberOfEncapsulatedDocuments;
 
     /// Guarda el thumbnail de la sèrie
     QPixmap m_seriesThumbnail;

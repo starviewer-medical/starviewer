@@ -14,40 +14,47 @@
 
 #include "patientfiller.h"
 
-#include <QTime>
-#include <QtAlgorithms>
-
-#include "patientfillerinput.h"
-#include "logging.h"
-#include "dicomtagreader.h"
-
-// TODO Include's temporals mentre no tenim un registre:
-#include "imagefillerstep.h"
 #include "dicomfileclassifierfillerstep.h"
-#include "temporaldimensionfillerstep.h"
-#include "mhdfileclassifierstep.h"
+#include "dicomtagreader.h"
+#include "encapsulateddocumentfillerstep.h"
+#include "imagefillerstep.h"
+//#include "keyimagenotefillerstep.h"       // future use
+#include "logging.h"
+#include "nondicomfileclassifierfillerstep.h"
 #include "orderimagesfillerstep.h"
-// TODO encara no hi ha suport a KINs i Presentation States, per tant
-// fins que no tinguem suport i implementem correctament els respectius
-// filler steps no caldrà afegir-los dins del pipeline
-//#include "keyimagenotefillerstep.h"
-//#include "presentationstatefillerstep.h"
+#include "patient.h"
+#include "patientfillerinput.h"
+#include "patientfillerstep.h"
+//#include "presentationstatefillerstep.h"  // future use
+#include "temporaldimensionfillerstep.h"
+#include "volumefillerstep.h"
 
 namespace udg {
 
-PatientFiller::PatientFiller(DICOMSource dicomSource, QObject *parent)
- : QObject(parent)
-{
-    registerSteps();
-    m_patientFillerInput = new PatientFillerInput();
-    m_imageCounter = 0;
+namespace {
 
-    m_patientFillerInput->setDICOMSource(dicomSource);
+// Returns true if the given file is a DICOM file.
+bool isDicom(const QString& fileName)
+{
+    return DICOMTagReader(fileName).canReadFile();
+}
+
+}
+
+PatientFiller::PatientFiller(DICOMSource dicomSource, QObject *parent)
+ : QObject(parent), m_dicomMode(true), m_numberOfProcessedFiles(0)
+{
+    m_patientFillerInput = new PatientFillerInput();
+    m_patientFillerInput->setDICOMSource(std::move(dicomSource));
 }
 
 PatientFiller::~PatientFiller()
 {
-    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
+    foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
+    {
+        delete fillerStep;
+    }
+    foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
     {
         delete fillerStep;
     }
@@ -55,155 +62,126 @@ PatientFiller::~PatientFiller()
     delete m_patientFillerInput;
 }
 
-// Mètode intern per poder realitzar l'ordenació dels patientfiller
-bool patientFillerMorePriorityFirst(const PatientFillerStep *s1, const PatientFillerStep *s2)
-{
-    return (*s1) < (*s2);
-}
-
-void PatientFiller::registerSteps()
-{
-    m_registeredSteps.append(new ImageFillerStep());
-    m_registeredSteps.append(new DICOMFileClassifierFillerStep());
-    m_registeredSteps.append(new OrderImagesFillerStep());
-    // \TODO Donat que al postProcessing no tenim política d'etiquetes, s'ha posat el Temporal al final
-    // perquè necessita que s'hagi executat l'Order abans. S'hauria de millorar.
-    m_registeredSteps.append(new TemporalDimensionFillerStep());
-
-    // TODO encara no hi ha suport a KINs i Presentation States, per tant
-    // fins que no tinguem suport i implementem correctament els respectius
-    // filler steps no caldrà afegir-los dins del pipeline
-    //m_registeredSteps.append(new KeyImageNoteFillerStep());
-    //m_registeredSteps.append(new PresentationStateFillerStep());
-}
-
-void PatientFiller::processDICOMFile(DICOMTagReader *dicomTagReader)
+void PatientFiller::processDICOMFile(const DICOMTagReader *dicomTagReader)
 {
     Q_ASSERT(dicomTagReader);
 
+    if (m_firstStageSteps.isEmpty())
+    {
+        createSteps();
+    }
+
     m_patientFillerInput->setDICOMFile(dicomTagReader);
 
-    QList<PatientFillerStep*> processedFillerSteps;
-    QList<PatientFillerStep*> candidatesFillerSteps = m_registeredSteps;
-    bool continueIterating = true;
+    processCurrentFile();
+}
 
-    while (!candidatesFillerSteps.isEmpty() && continueIterating)
+void PatientFiller::finishFilesProcessing()
+{
+    foreach (Patient *patient, m_patientFillerInput->getPatientList())
     {
-        QList<PatientFillerStep*> fillerStepsToProcess;
-        QList<PatientFillerStep*> newCandidatesFillerSteps;
-        continueIterating = false;
-
-        for (int i = 0; i < candidatesFillerSteps.size(); ++i)
+        foreach (Study *study, patient->getStudies())
         {
-            if (m_patientFillerInput->hasAllLabels(candidatesFillerSteps.at(i)->getRequiredLabels()))
+            foreach (Series *series, study->getSeries())
             {
-                fillerStepsToProcess.append(candidatesFillerSteps.at(i));
-                continueIterating = true;
-            }
-            else
-            {
-                newCandidatesFillerSteps.append(candidatesFillerSteps.at(i));
-            }
-        }
-        candidatesFillerSteps = newCandidatesFillerSteps;
+                m_patientFillerInput->setCurrentSeries(series);
 
-        // Ordenem segons la seva prioritat
-        qSort(fillerStepsToProcess.begin(), fillerStepsToProcess.end(), patientFillerMorePriorityFirst);
+                foreach (const QList<Image*> &currentImages, m_patientFillerInput->getCurrentImagesHistory())
+                {
+                    m_patientFillerInput->setCurrentImages(currentImages, false);
 
-        foreach (PatientFillerStep *fillerStep, fillerStepsToProcess)
-        {
-            fillerStep->setInput(m_patientFillerInput);
-            fillerStep->fillIndividually();
+                    foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
+                    {
+                        fillerStep->fillIndividually();
+                    }
+                }
+            }
         }
     }
 
-    m_patientFillerInput->initializeAllLabels();
-
-    emit progress(++m_imageCounter);
-}
-
-void PatientFiller::finishDICOMFilesProcess()
-{
-    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
+    foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
     {
         fillerStep->postProcessing();
     }
 
     emit patientProcessed(m_patientFillerInput->getPatient());
-
-    // Al acabar hem de reiniciar el comptador d'imatges
-    m_imageCounter = 0;
 }
 
 QList<Patient*> PatientFiller::processFiles(const QStringList &files)
 {
-    // HACK per fer el cas especial dels mhd. Això està així perquè perquè el mètode
-    // processDICOMFile s'espera un DICOMTagReader, que no podem crear a partir d'un mhd.
-    // El filler d'mhd realment no s'està utilitzant a dintre del process de fillers com la resta.
-    if (containsMHDFiles(files))
+    if (files.isEmpty())
     {
-        return processMHDFiles(files);
+        return QList<Patient*>();
     }
-    else
-    {
-        return processDICOMFiles(files);
-    }
-}
 
-bool PatientFiller::containsMHDFiles(const QStringList &files)
-{
-    if (!files.isEmpty())
-    {
-        return files.first().endsWith(".mhd", Qt::CaseInsensitive);
-    }
-    else
-    {
-        return false;
-    }
-}
+    m_dicomMode = isDicom(files.first());
 
-QList<Patient*> PatientFiller::processMHDFiles(const QStringList &files)
-{
-    PatientFillerInput patientFillerInput;
-    m_imageCounter = 0;
+    createSteps();
+
     foreach (const QString &file, files)
     {
-        patientFillerInput.setFile(file);
-
-        MHDFileClassifierStep mhdFileClassiferStep;
-        mhdFileClassiferStep.setInput(&patientFillerInput);
-        if (!mhdFileClassiferStep.fillIndividually())
+        if (m_dicomMode)
         {
-            DEBUG_LOG("No s'ha pogut processar el fitxer MHD: " + file);
-            ERROR_LOG("No s'ha pogut processar el fitxer MHD: " + file);
+            // The DICOMTagReader is deleted by the PatientFillerInput
+            DICOMTagReader *dicomTagReader = new DICOMTagReader(file);
+            m_patientFillerInput->setDICOMFile(dicomTagReader);
         }
-        emit progress(++m_imageCounter);
+        else
+        {
+            m_patientFillerInput->setFile(file);
+        }
+
+        processCurrentFile();
     }
 
-    return patientFillerInput.getPatientsList();
+    this->finishFilesProcessing();
+
+    return m_patientFillerInput->getPatientList();
 }
 
-QList<Patient*> PatientFiller::processDICOMFiles(const QStringList &files)
+void PatientFiller::createSteps()
 {
-    m_imageCounter = 0;
-
-    foreach (const QString &dicomFile, files)
+    if (m_dicomMode)
     {
-        DICOMTagReader *dicomTagReader = new DICOMTagReader(dicomFile);
-        if (dicomTagReader->canReadFile())
+        m_firstStageSteps << new DICOMFileClassifierFillerStep() << new ImageFillerStep() << new EncapsulatedDocumentFillerStep();
+        m_secondStageSteps << new VolumeFillerStep() << new OrderImagesFillerStep() << new TemporalDimensionFillerStep();
+    }
+    else
+    {
+        m_firstStageSteps << new NonDicomFileClassifierFillerStep();
+        m_secondStageSteps << new VolumeFillerStep(true);
+    }
+
+    foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
+    {
+        fillerStep->setInput(m_patientFillerInput);
+    }
+
+    foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
+    {
+        fillerStep->setInput(m_patientFillerInput);
+    }
+}
+
+void PatientFiller::processCurrentFile()
+{
+    foreach (PatientFillerStep *fillerStep, m_firstStageSteps)
+    {
+        // If some step fails to fill we can skip the rest of steps.
+        // This is done in order to skip further processing of files when some error is found
+        // (e.g. trying to process thumbnails as DICOM when opening files from a directory or finding an unrecognized file type in non-DICOM mode).
+        // Note: this works as long as the first step is used to determine the file type, as is now the case;
+        // the condition may have to change if this circumstance changes.
+        if (!fillerStep->fillIndividually())
         {
-            this->processDICOMFile(dicomTagReader);
+            WARN_LOG(QString("Can't process file %1 as %2")
+                     .arg(m_dicomMode ? m_patientFillerInput->getDICOMFile()->getFileName() : m_patientFillerInput->getFile())
+                     .arg(m_dicomMode ? "DICOM" : "non-DICOM"));
+            break;
         }
-
-        emit progress(++m_imageCounter);
     }
 
-    foreach (PatientFillerStep *fillerStep, m_registeredSteps)
-    {
-        fillerStep->postProcessing();
-    }
-
-    return m_patientFillerInput->getPatientsList();
+    emit progress(++m_numberOfProcessedFiles);
 }
 
 }

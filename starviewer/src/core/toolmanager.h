@@ -20,7 +20,6 @@
 #include <QPair>
 
 class QAction;
-class QSignalMapper;
 class QActionGroup;
 
 namespace udg {
@@ -158,9 +157,6 @@ private:
     /// Una mateixa tool pot tenir més d'un parell <QViewer *,ToolConfiguration *>, és a dir, la mateixa tool pot
     /// estar en diferents viewers amb diverses configuracions
     QMultiMap<QString, ViewerToolConfigurationPairType> m_toolViewerMap;
-
-    /// Signal mapper encarregat de mapejar les senyals de les accions de les tools
-    QSignalMapper *m_toolsActionSignalMapper;
 
     /// Mapa que associa el nom del grup amb les accions agrupades de les tools exclusives
     QMap<QString, QActionGroup*> m_toolsGroups;

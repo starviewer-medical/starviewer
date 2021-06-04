@@ -14,122 +14,67 @@
 
 #include "localdatabasepacsretrievedimagesdal.h"
 
-#include <sqlite3.h>
-#include <QString>
-#include "databaseconnection.h"
 #include "pacsdevice.h"
-#include "logging.h"
+
+#include <QSqlQuery>
+#include <QVariant>
 
 namespace udg {
 
-LocalDatabasePACSRetrievedImagesDAL::LocalDatabasePACSRetrievedImagesDAL(DatabaseConnection *dbConnect):LocalDatabaseBaseDAL(dbConnect)
+LocalDatabasePACSRetrievedImagesDAL::LocalDatabasePACSRetrievedImagesDAL(DatabaseConnection &databaseConnection)
+    : LocalDatabaseBaseDAL(databaseConnection)
 {
 }
 
 qlonglong LocalDatabasePACSRetrievedImagesDAL::insert(const PacsDevice &pacsDevice)
 {
-    m_lastSqliteError = sqlite3_exec(m_dbConnection->getConnection(), buildSqlInsert(pacsDevice).toUtf8().constData(), 0, 0, 0);
+    QSqlQuery query = getNewQuery();
+    query.prepare("INSERT INTO PACSRetrievedImages (AETitle, Address, QueryPort) VALUES (:aeTitle, :address, :queryPort)");
+    query.bindValue(":aeTitle", pacsDevice.getAETitle());
+    query.bindValue(":address", pacsDevice.getAddress());
+    query.bindValue(":queryPort", pacsDevice.getQueryRetrieveServicePort());
 
-    if (getLastError() != SQLITE_OK)
+    if (executeQueryAndLogError(query))
     {
-        logError(buildSqlInsert(pacsDevice));
-        return -1;
+        return query.lastInsertId().toLongLong();
     }
     else
     {
-        // El mètode retorna un tipus sqlite3_int64 aquest en funció de l'entorn de compilació equival a un determinat tipus
-        // http://www.sqlite.org/c3ref/int64.html __int64 per windows i long long int per la resta, qlonglong de qt
-        // http://doc.qt.nokia.com/4.1/qtglobal.html#qlonglong-typedef equival als mateixos tipus pel mateix entorn de compilació per això retornem el
-        // ID com un qlonglong.
-        return sqlite3_last_insert_rowid(m_dbConnection->getConnection());
+        return -1;
     }
 }
 
-PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const qlonglong &IDPacsInDatabase)
+PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(qlonglong pacsId)
 {
-    return query(buildSqlSelect(IDPacsInDatabase));
+    QSqlQuery query = getNewQuery();
+    query.prepare("SELECT ID, AETitle, Address, QueryPort FROM PACSRetrievedImages WHERE ID = :id");
+    query.bindValue(":id", pacsId);
+    return this->query(query);
 }
 
-PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString AETitle, const QString address, int queryPort)
+PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString &aeTitle, const QString &address, int queryPort)
 {
-    return query(buildSqlSelect(AETitle, address, queryPort));
+    QSqlQuery query = getNewQuery();
+    query.prepare("SELECT ID, AETitle, Address, QueryPort FROM PACSRetrievedImages WHERE AETitle = :aeTitle AND Address = :address AND QueryPort = :queryPort");
+    query.bindValue(":aeTitle", aeTitle);
+    query.bindValue(":address", address);
+    query.bindValue(":queryPort", queryPort);
+    return this->query(query);
 }
 
-PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString &sqlQuerySentence)
+PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(QSqlQuery &query)
 {
-    int columns;
-    int rows;
-    char **reply = NULL;
-    char **error = NULL;
-
-    m_lastSqliteError = sqlite3_get_table(m_dbConnection->getConnection(), sqlQuerySentence.toUtf8().constData(), &reply, &rows, &columns, error);
-
-    if (getLastError() != SQLITE_OK)
-    {
-        logError (sqlQuerySentence);
-        return PacsDevice();
-    }
-
     PacsDevice pacsDevice;
 
-    if (rows >= 1)
+    if (executeQueryAndLogError(query) && query.next())
     {
-        // la primera columna és la capçalera
-        pacsDevice = fillPACSDevice(reply, 1, columns);
+        pacsDevice.setID(query.value("ID").toString());
+        pacsDevice.setAETitle(query.value("AETitle").toString());
+        pacsDevice.setAddress(query.value("Address").toString());
+        pacsDevice.setQueryRetrieveServicePort(query.value("QueryPort").toInt());
     }
-
-    sqlite3_free_table(reply);
 
     return pacsDevice;
 }
 
-PacsDevice LocalDatabasePACSRetrievedImagesDAL::fillPACSDevice(char **reply, int row, int columns)
-{
-    PacsDevice pacsDevice;
-
-    pacsDevice.setID(reply[0 + row * columns]);
-    pacsDevice.setAETitle(reply[1 + row * columns]);
-    pacsDevice.setAddress(reply[2 + row * columns]);
-    pacsDevice.setQueryRetrieveServicePort(QString(reply[3 + row * columns]).toInt());
-
-    return pacsDevice;
-}
-
-QString LocalDatabasePACSRetrievedImagesDAL::buildSqlInsert(const PacsDevice &pacsDevice)
-{
-    QString insertSentence = QString ("Insert into PACSRetrievedImages  (AETitle, Address, QueryPort) "
-                                                   "values ('%1', '%2', %3)")
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(pacsDevice.getAETitle()))
-                                    .arg(DatabaseConnection::formatTextToValidSQLSyntax(pacsDevice.getAddress()))
-                                    .arg(pacsDevice.getQueryRetrieveServicePort());
-    return insertSentence;
-}
-
-QString LocalDatabasePACSRetrievedImagesDAL::buildSqlSelect()
-{
-    QString selectSentence = "Select ID, AETitle, Address, QueryPort "
-                             "From PACSRetrievedImages ";
-
-    return selectSentence;
-}
-
-QString LocalDatabasePACSRetrievedImagesDAL::buildSqlSelect(const qlonglong &IDPACSInDatabase)
-{
-    QString whereSentence = QString(" Where ID = %1 ").arg(IDPACSInDatabase);
-
-    return buildSqlSelect() + whereSentence;
-
-}
-
-QString LocalDatabasePACSRetrievedImagesDAL::buildSqlSelect(const QString AETitle, const QString address, int queryPort)
-{
-    QString whereSentence = QString(" Where AETitle = '%1' and "
-                                   "Address = '%2' and "
-                                   "QueryPort = %3")
-            .arg(DatabaseConnection::formatTextToValidSQLSyntax(AETitle))
-            .arg(DatabaseConnection::formatTextToValidSQLSyntax(address))
-            .arg(queryPort);
-
-    return buildSqlSelect() + whereSentence;
-}
 }

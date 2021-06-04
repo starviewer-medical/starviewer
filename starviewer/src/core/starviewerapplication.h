@@ -25,13 +25,23 @@ namespace udg {
     #define CE_SUFFIX ""
 #endif
 
-const QString StarviewerVersionString("1.0.1" CE_SUFFIX);
-const QString StarviewerBuildID("2020071400");
+const QString StarviewerVersionString("1.1.0" CE_SUFFIX);
+const QString StarviewerBuildID("2021040900");
 
 #undef CE_SUFFIX
 
+#ifdef Q_OS_WIN
+const QString StarviewerBuildPlatform("Windows");
+#endif
+#ifdef Q_OS_OSX
+const QString StarviewerBuildPlatform("Mac");
+#endif
+#ifdef Q_OS_LINUX
+const QString StarviewerBuildPlatform("Linux");
+#endif
+
 // Indica per aquesta versió d'starviewer quina és la revisió de bd necessària
-const int StarviewerDatabaseRevisionRequired(9592);
+const int StarviewerDatabaseRevisionRequired(9595);
 
 const QString OrganizationNameString("GILab");
 const QString OrganizationDomainString("starviewer.udg.edu");
@@ -53,8 +63,13 @@ const QString UserLogsPath(UserDataRootPath + "log/");
 /// Ruta absoluta del fitxer de log
 const QString UserLogsFile(UserLogsPath + "starviewer.log");
 
-// TODO const QString LogConfigurationFileLocation();
+// Note: the following two are methods because they depend on QApplication being initialized.
 
-}; // End namespace udg
+/// Returns the base directory where the application is installed.
+QString installationPath();
+/// Returns the root source directory (the one containing src).
+QString sourcePath();
+
+}
 
 #endif

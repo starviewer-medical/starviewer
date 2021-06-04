@@ -82,24 +82,73 @@ template <> int getDataType<double>()
 namespace udg {
 
 VtkImageDataCreator::VtkImageDataCreator()
+ : m_dimensions{{1, 2, 3}}, m_numberOfComponents(1)
 {
     m_origin[0] = m_origin[1] = m_origin[2] = 0.0;
     m_spacing[0] = m_spacing[1] = m_spacing[2] = 1.0;
 }
 
-void VtkImageDataCreator::setOrigin(double origin[3])
+VtkImageDataCreator& VtkImageDataCreator::setOrigin(double origin[3])
 {
     m_origin[0] = origin[0];
     m_origin[1] = origin[1];
     m_origin[2] = origin[2];
+    return *this;
 }
 
-void VtkImageDataCreator::setSpacing(double spacing[3])
+VtkImageDataCreator& VtkImageDataCreator::setSpacing(double spacing[3])
 {
     m_spacing[0] = spacing[0];
     m_spacing[1] = spacing[1];
     m_spacing[2] = spacing[2];
+    return *this;
 }
+
+VtkImageDataCreator& VtkImageDataCreator::setDimensions(std::array<int, 3> dimensions)
+{
+    m_dimensions = std::move(dimensions);
+    return *this;
+}
+
+VtkImageDataCreator& VtkImageDataCreator::setNumberOfComponents(int numberOfComponents)
+{
+    m_numberOfComponents = numberOfComponents;
+    return *this;
+}
+
+template <class T>
+vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const T *data)
+{
+    vtkSmartPointer<vtkImageData> imageData;
+
+    if (!data)
+    {
+        return imageData;
+    }
+
+    imageData = vtkSmartPointer<vtkImageData>::New();
+    imageData->SetOrigin(m_origin);
+    imageData->SetSpacing(m_spacing);
+    imageData->SetDimensions(m_dimensions.data());
+    imageData->AllocateScalars(getDataType<T>(), m_numberOfComponents);
+
+    memcpy(imageData->GetScalarPointer(), data, static_cast<size_t>(m_dimensions[0] * m_dimensions[1] * m_dimensions[2] * m_numberOfComponents) * sizeof(T));
+
+    return imageData;
+}
+
+// Instantiate create() for all numeric types.
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const char *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const signed char *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const unsigned char *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const short *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const unsigned short *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const int *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const unsigned int *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const long *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const unsigned long *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const float *data);
+template vtkSmartPointer<vtkImageData> VtkImageDataCreator::create(const double *data);
 
 template <class T> vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkImageData(int width, int height, int depth, const T *data)
 {
@@ -117,7 +166,9 @@ template <class T> vtkSmartPointer<vtkImageData> VtkImageDataCreator::createVtkI
     imageData->SetSpacing(m_spacing);
     imageData->SetExtent(0, width - 1, 0, height - 1, 0, depth - 1);
     imageData->AllocateScalars(getDataType<T>(), 1);
-    memcpy(imageData->GetScalarPointer(), data, width * height * depth * sizeof(T));
+
+    memcpy(imageData->GetScalarPointer(), data, static_cast<size_t>(width * height * depth) * sizeof(T));
+
     return imageData;
 }
 

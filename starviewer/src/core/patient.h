@@ -48,13 +48,13 @@ public:
 
     /// Assigna/Obté el ID de pacient a la BD d'Starviewer
     void setDatabaseID(qlonglong databaseID);
-    qlonglong getDatabaseID();
+    qlonglong getDatabaseID() const;
 
     /// Assigna/Obté data de naixement
     void setBirthDate(int day, int month, int year);
     void setBirthDate(const QString &date);
     QString getBirthDateAsString();
-    QDate getBirthDate();
+    QDate getBirthDate() const;
     int getDayOfBirth();
     int getMonthOfBirth();
     int getYearOfBirth();
@@ -93,6 +93,12 @@ public:
 
     /// Ens retorna una llista amb les sèries que estiguin seleccionades
     QList<Series*> getSelectedSeries();
+    
+    /// Returns a list of volumes that compose the patient.
+    QList<Volume*> getVolumesList();
+
+    /// Returns the number of volumes that compose the patient.
+    int getNumberOfVolumes();
 
     /// Ens diu si aquest arxiu pertany a alguna series del pacient
     bool hasFile(const QString &filename);

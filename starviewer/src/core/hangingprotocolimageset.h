@@ -17,6 +17,8 @@
 
 #include "hangingprotocolimagesetrestrictionexpression.h"
 
+#include <QVector>
+
 namespace udg {
 
 class Series;
@@ -26,6 +28,9 @@ class HangingProtocol;
 class HangingProtocolImageSet {
 
 public:
+    /// Possible content types of an image set.
+    enum class Type { Series, Image, Fusion };
+
     HangingProtocolImageSet();
     ~HangingProtocolImageSet();
 
@@ -41,16 +46,19 @@ public:
     /// Obtenir el hanging protocol al que pertany
     HangingProtocol* getHangingProtocol() const;
 
-    /// Returns the restriction expression of this image set.
-    const HangingProtocolImageSetRestrictionExpression& getRestrictionExpression() const;
-    /// Sets the restrction expression of this image set.
-    void setRestrictionExpression(const HangingProtocolImageSetRestrictionExpression &restrictionExpression);
+    /// Returns the restriction expressions of this image set.
+    const QVector<HangingProtocolImageSetRestrictionExpression>& getRestrictionExpressions() const;
+    /// Replaces the current restriction expressions with the given ones.
+    void setRestrictionExpressions(const QVector<HangingProtocolImageSetRestrictionExpression> &restrictionExpressions);
+    /// Adds a restriction expression to this image set.
+    void addRestrictionExpression(const HangingProtocolImageSetRestrictionExpression &restrictionExpression);
+    /// Returns the number of restriction expression in this image set.
+    int getNumberOfRestrictionExpressions() const;
 
-    /// Posar el tipus d'element
-    void setTypeOfItem(QString);
-
-    /// Obtenir el tipus d'element
-    QString getTypeOfItem() const;
+    /// Sets the type of image set.
+    void setType(Type type);
+    /// Returns the type of image set.
+    Type getType() const;
 
     /// Posar el número de la imatge a mostrar
     void setImageToDisplay(int imageNumber);
@@ -58,11 +66,14 @@ public:
     /// Obtenir el número de la imatge a mostrar
     int getImageToDisplay() const;
 
-    /// Assignar la sèrie que es representa
-    void setSeriesToDisplay(Series *series);
-
-    /// Obtenir la sèrie que es representa
-    Series* getSeriesToDisplay() const;
+    /// Adds a series to display to this image set.
+    void addSeriesToDisplay(Series *series);
+    /// Removes all the series from the series to display.
+    void clearSeriesToDisplay();
+    /// Returns all the series to display of this image set.
+    const QVector<Series*>& getSeriesToDisplay() const;
+    /// Returns the number of series to display in this image set.
+    int getNumberOfSeriesToDisplay() const;
 
     /// Mètode per mostrar els valors
     void show();
@@ -90,9 +101,12 @@ public:
     /// Posa l'índex de la imatge a mostar del pacient
     void setImageNumberInStudyModality(int imageNumberInStudyModality);
 
+    /// Returns true if the image set is filled and false otherwise. It is considered filled if it has a series to display for each restriction.
+    bool isFilled() const;
+
 private:
-    /// The restriction expression that this image set must satisfy.
-    HangingProtocolImageSetRestrictionExpression m_restrictionExpression;
+    /// The restriction expressions that this image set must satisfy, one for each selected series or volume.
+    QVector<HangingProtocolImageSetRestrictionExpression> m_restrictionExpressions;
 
     /// Identificador únic de l'Image Set
     int m_identifier;
@@ -100,11 +114,11 @@ private:
     /// Hanging Protocol al que pertany
     HangingProtocol *m_hangingProtocol;
 
-    /// Per saber si s'ha de tractar a nivell d'imatge o de sèrie.
-    QString m_typeOfItem;
+    /// Type of this image set.
+    Type m_type;
 
-    /// Serie que s'ajusta a les restriccions
-    Series *m_serieToDisplay;
+    /// Series to display in this image set, one for each restriction expression.
+    QVector<Series*> m_seriesToDisplay;
 
     /// Número d'imatge a mostrar, es coneix aquest número un cop
     /// trobada la imatge que compleix les restriccions

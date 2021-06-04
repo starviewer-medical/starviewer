@@ -14,16 +14,15 @@
 
 #include "patientbrowsermenulist.h"
 
-#include <QLabel>
-#include <QGridLayout>
-#include "patientbrowsermenugroup.h"
-
 #include "patientbrowsermenubasicitem.h"
 #include "patientbrowsermenufusionitem.h"
+#include "patientbrowsermenugroup.h"
 
-#include <QDeclarativeItem>
-#include <QDeclarativeContext>
-#include "applicationstylehelper.h"
+#include <QGridLayout>
+#include <QLabel>
+#include <QQmlContext>
+#include <QQuickItem>
+#include <QQuickWidget>
 
 namespace udg {
 
@@ -32,16 +31,16 @@ PatientBrowserMenuList::PatientBrowserMenuList(QWidget *parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(10);
-    m_qmlView = new QDeclarativeView(this);
-    QDeclarativeContext *context = m_qmlView->rootContext();
+    m_qmlView = new QQuickWidget(this);
+    QQmlContext *context = m_qmlView->rootContext();
     context->setContextProperty("browserModel", QVariant::fromValue(m_groups));
-    context->setContextProperty("applicationFontSize", QVariant::fromValue(ApplicationStyleHelper().getApplicationScaledFontSize()));
+    context->setContextProperty("applicationFontSize", QVariant::fromValue(this->font().pointSizeF()));
 
     layout->addWidget(m_qmlView);
 
     m_qmlView->setSource(QUrl("qrc:///qmlpatientbrowsermenu.qml"));
 
-    QDeclarativeItem *object = qobject_cast<QDeclarativeItem*>(m_qmlView->rootObject());
+    QQuickItem *object = m_qmlView->rootObject();
     object->setProperty("fusionLabelText", QVariant::fromValue(tr("Fusion")));
 
     connect(object, SIGNAL(isActive(QString)), this, SIGNAL(isActive(QString)));

@@ -30,6 +30,7 @@
 #include "localdatabasemanager.h"
 #include "localdatabasemanager.h"
 #include "directoryutilities.h"
+#include "patient.h"
 
 namespace udg {
 
@@ -287,8 +288,8 @@ QString DICOMDIRImporter::getDicomdirImagePath(Image *image)
 void DICOMDIRImporter::createConnections(PatientFiller *patientFiller, LocalDatabaseManager *localDatabaseManager, QThread *fillersThread)
 {
     // Connexions entre la descarrega i el processat dels fitxers
-    connect(this, SIGNAL(imageImportedToDisk(DICOMTagReader*)), patientFiller, SLOT(processDICOMFile(DICOMTagReader*)));
-    connect(this, SIGNAL(importFinished()), patientFiller, SLOT(finishDICOMFilesProcess()));
+    connect(this, &DICOMDIRImporter::imageImportedToDisk, patientFiller, &PatientFiller::processDICOMFile);
+    connect(this, &DICOMDIRImporter::importFinished, patientFiller, &PatientFiller::finishFilesProcessing);
 
     // Connexió entre el processat dels fitxers DICOM i l'inserció al a BD, és important que aquest signal sigui un Qt:DirectConnection perquè així el
     // el processa els thread dels fillers, d'aquesta manera el thread de descarrega que està esperant a fillersThread.wait() quan en surt

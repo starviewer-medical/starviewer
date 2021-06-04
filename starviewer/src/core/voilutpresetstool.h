@@ -31,15 +31,15 @@ class VoiLutPresetsToolData;
 class VoiLutPresetsTool : public Tool {
 Q_OBJECT
 public:
-    VoiLutPresetsTool(QViewer *viewer, QObject *parent = 0);
-    ~VoiLutPresetsTool();
+    explicit VoiLutPresetsTool(QViewer *viewer, QObject *parent = nullptr);
+    ~VoiLutPresetsTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
     /// Ens retorna el nombre de presets que té carregats
     int getNumberOfPresets() const;
 
-    void setToolData(ToolData *toolData);
+    void setToolData(ToolData *toolData) override;
 
 private:
     /// Aplica el window level predeterminat per la tecla donada

@@ -17,6 +17,8 @@
 
 #include "signaltosyncactionmapper.h"
 
+#include "volumedisplayunit.h"
+
 namespace udg {
 
 /**
@@ -42,9 +44,9 @@ protected:
 
 private slots:
     /// Updates the mapped sync action with the given slab projection mode and the viewer's main volume and emits the actionMapped(SyncAction*) signal.
-    void mapProjectionModeToSyncAction(int slabProjectionMode);
+    void mapProjectionModeToSyncAction(VolumeDisplayUnit::SlabProjectionMode slabProjectionMode);
     /// Updates the mapped sync action with the given slab thickness and the viewer's main volume and emits the actionMapped(SyncAction*) signal.
-    void mapThicknessToSyncAction(int slabThickness);
+    void mapThicknessToSyncAction(double slabThickness);
 
 };
 

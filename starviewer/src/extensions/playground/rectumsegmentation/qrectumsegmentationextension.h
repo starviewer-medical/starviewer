@@ -13,6 +13,7 @@
 
 // FWD declarations
 class QAction;
+class QActionGroup;
 class QToolBar;
 class vtkImageMask;
 class vtkImageThreshold;

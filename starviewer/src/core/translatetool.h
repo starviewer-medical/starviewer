@@ -26,16 +26,12 @@ class TranslateTool : public Tool {
 Q_OBJECT
 public:
     enum { None, Translating };
-    TranslateTool(QViewer *viewer, QObject *parent = 0);
-    ~TranslateTool();
+    explicit TranslateTool(QViewer *viewer, QObject *parent = nullptr);
+    ~TranslateTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
-private:
-    /// Realitza la feina de desplaçament
-    void pan();
-
-private slots:
+protected slots:
     /// Comença el translate
     void startTranslate();
 
@@ -44,6 +40,10 @@ private slots:
 
     /// Atura l'estat de translate
     void endTranslate();
+
+private:
+    /// Realitza la feina de desplaçament
+    void pan();
 
 private:
     /// Estat de la tool

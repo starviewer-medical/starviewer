@@ -26,7 +26,6 @@ SyncActionsConfigurationMenu::SyncActionsConfigurationMenu(SyncActionsConfigurat
     Q_ASSERT(config);
     
     m_syncActionsConfig = config;
-    m_signalMapper = new QSignalMapper(this);
     
     foreach (const SyncActionMetaData &syncActionMetaData, SignalToSyncActionMapperFactory::instance()->getFactoryIdentifiersList())
     {
@@ -38,12 +37,8 @@ SyncActionsConfigurationMenu::SyncActionsConfigurationMenu(SyncActionsConfigurat
         
         // Then we configure the mapping of the sync actions and the corresponding QActions to enable/disable them when toggled
         m_syncActionsMap.insert(syncActionMetaData, enableSyncAction);
-        connect(enableSyncAction, SIGNAL(toggled(bool)), m_signalMapper, SLOT(map()));
-        m_signalMapper->setMapping(enableSyncAction, syncActionMetaData.getName());
+        connect(enableSyncAction, &QAction::toggled, [=] { this->toggled(syncActionMetaData.getName()); });
     }
-
-    // Finally, we configure the signal mapper
-    connect(m_signalMapper, SIGNAL(mapped(const QString&)), SLOT(toggled(const QString&)));
 }
 
 SyncActionsConfigurationMenu::~SyncActionsConfigurationMenu()

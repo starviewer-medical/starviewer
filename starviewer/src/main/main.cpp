@@ -11,10 +11,12 @@
   may be copied, modified, propagated, or distributed except according to the
   terms contained in the LICENSE file.
  *************************************************************************************/
+#include "logging.h"
+#include "easylogging++.h"
+INITIALIZE_EASYLOGGINGPP
 
 #include "qapplicationmainwindow.h"
 
-#include "logging.h"
 #include "statswatcher.h"
 #include "extensions.h"
 #include "extensionmediatorfactory.h"
@@ -41,51 +43,21 @@
 
 #include <QApplication>
 #include <QLabel>
-#include <QDesktopWidget>
 #include <QLocale>
 #include <QTextCodec>
 #include <QDir>
 #include <QMessageBox>
 #include <QLibraryInfo>
+#include <QScreen>
 #include <qtsingleapplication.h>
 
+#include <QVTKOpenGLNativeWidget.h>
 #include <vtkNew.h>
 #include <vtkOutputWindow.h>
 #include <vtkOverrideInformation.h>
 #include <vtkOverrideInformationCollection.h>
 
 typedef udg::SingletonPointer<udg::StarviewerApplicationCommandLine> StarviewerSingleApplicationCommandLineSingleton;
-
-void configureLogging()
-{
-    // Primer comprovem que existeixi el direcotori ~/.starviewer/log/ on guradarem els logs
-    QDir logDir = udg::UserLogsPath;
-    if (!logDir.exists())
-    {
-        // Creem el directori
-        logDir.mkpath(udg::UserLogsPath);
-    }
-    // TODO donem per fet que l'arxiu es diu així i es troba a la localització que indiquem. S'hauria de fer una mica més flexible o genèric;
-    // està així perquè de moment volem anar per feina i no entretenir-nos però s'ha de fer bé.
-    QString configurationFile = "/etc/starviewer/log.conf";
-    if (!QFile::exists(configurationFile))
-    {
-        configurationFile = qApp->applicationDirPath() + "/log.conf";
-    }
-    // Afegim localització per Mac OS X en desenvolupament
-    if (!QFile::exists(configurationFile))
-    {
-        configurationFile = qApp->applicationDirPath() + "/../../../log.conf";
-    }
-
-    LOGGER_INIT(configurationFile.toStdString());
-    DEBUG_LOG("Arxiu de configuració del log: " + configurationFile);
-
-    // Redirigim els missatges de VTK cap al log.
-    udg::LoggingOutputWindow *loggingOutputWindow = udg::LoggingOutputWindow::New();
-    vtkOutputWindow::SetInstance(loggingOutputWindow);
-    loggingOutputWindow->Delete();
-}
 
 void initializeTranslations(QApplication &app)
 {
@@ -98,6 +70,7 @@ void initializeTranslations(QApplication &app)
     translationsLoader.loadTranslation(":/core/core_" + defaultLocale.name());
     translationsLoader.loadTranslation(":/interface/interface_" + defaultLocale.name());
     translationsLoader.loadTranslation(":/inputoutput/inputoutput_" + defaultLocale.name());
+    translationsLoader.loadTranslation(":/main_" + defaultLocale.name());
 
     initExtensionsResources();
     INFO_LOG("Locales = " + defaultLocale.name());
@@ -149,28 +122,60 @@ void sendToFirstStarviewerInstanceCommandLineOptions(QtSingleApplication &app)
 
 int main(int argc, char *argv[])
 {
+    // Applying scale factor
+    {
+        QVariant cfgValue = udg::Settings().getValue(udg::CoreSettings::ScaleFactor);
+        bool exists;
+        int scaleFactor = cfgValue.toInt(&exists);
+        if (exists && scaleFactor != 1) { // Setting exists and is different than one
+            QString envVar = QString::number(1 + (scaleFactor * 0.125),'f', 3);
+            qputenv("QT_SCALE_FACTOR", envVar.toUtf8());
+            QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+        }
+    }
+
+// WARNING This should be done on all platforms but it causes rendering problems (#2903) with the combination of Qt 5.12-5.14, VTK 8.2, and Windows or Linux,
+//         thus for the moment we limit it to Mac where it's required to avoid a crash and it doesn't present any known problem.
+// TODO This problem must be reviewed when upgrading libraries and tested with other settings
+#ifdef Q_OS_MACOS
+    // This is required to use QVTKOpenGLNativeWidget and it must be set before initializing QApplication
+    QSurfaceFormat::setDefaultFormat(QVTKOpenGLNativeWidget::defaultFormat());
+#endif
+
     // Utilitzem QtSingleApplication en lloc de QtApplication, ja que ens permet tenir executant sempre una sola instància d'Starviewer, si l'usuari executa
     // una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
 
     QtSingleApplication app(argc, argv);
+    // TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en una classe dedicada a tal efecte
+
+    udg::beginLogging();
+    // Marquem l'inici de l'aplicació al log
+    INFO_LOG("==================================================== BEGIN STARVIEWER ====================================================");
+    INFO_LOG(QString("%1 Version %2 BuildID %3").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString).arg(udg::StarviewerBuildID));
+    
+    // Redirigim els missatges de VTK cap al log.
+    udg::LoggingOutputWindow *loggingOutputWindow = udg::LoggingOutputWindow::New();
+    vtkOutputWindow::SetInstance(loggingOutputWindow);
+    loggingOutputWindow->Delete();
+
 
     QPixmap splashPixmap;
     #ifdef STARVIEWER_LITE
-    splashPixmap.load(":/images/splashLite.png");
+    splashPixmap.load(":/images/splash-lite.svg");
     #else
-    splashPixmap.load(":/images/splash.png");
+    splashPixmap.load(":/images/splash.svg");
     #endif
-    QLabel splash(0, Qt::SplashScreen|Qt::FramelessWindowHint);
+    // Note: We use Qt::Tool instead of Qt::SplashScreen because in Mac with the latter if a message box was shown it appeared under the splash.
+    QLabel splash(0, Qt::Tool|Qt::FramelessWindowHint);
     splash.setAttribute(Qt::WA_TranslucentBackground);
     splash.setPixmap(splashPixmap);
     splash.resize(splashPixmap.size());
-    splash.move(QApplication::desktop()->screenGeometry().center() - splash.rect().center());
+    splash.move(QGuiApplication::primaryScreen()->geometry().center() - splash.rect().center());
 
     if (!app.isRunning())
     {
         splash.show();
     }
-
     app.setOrganizationName(udg::OrganizationNameString);
     app.setOrganizationDomain(udg::OrganizationDomainString);
     app.setApplicationName(udg::ApplicationNameString);
@@ -183,14 +188,7 @@ int main(int argc, char *argv[])
     Q_UNUSED(crashHandler);
 #endif
 
-    // TODO tot aquest proces inicial de "setups" hauria d'anar encapsulat en
-    // una classe dedicada a tal efecte
 
-    configureLogging();
-
-    // Marquem l'inici de l'aplicació al log
-    INFO_LOG("==================================================== BEGIN ====================================================");
-    INFO_LOG(QString("%1 Version %2 BuildID %3").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString).arg(udg::StarviewerBuildID));
 
     // Inicialitzem els settings
     udg::CoreSettings coreSettings;
@@ -259,37 +257,48 @@ int main(int argc, char *argv[])
     else
     {
         // Instància principal, no n'hi ha cap més executant-se
-        udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
-        // Fem el connect per rebre els arguments de les altres instàncies
-        QObject::connect(&app, SIGNAL(messageReceived(QString)), StarviewerSingleApplicationCommandLineSingleton::instance(), SLOT(parseAndRun(QString)));
+        try
+        {
+            udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
+            // Fem el connect per rebre els arguments de les altres instàncies
+            QObject::connect(&app, SIGNAL(messageReceived(QString)), StarviewerSingleApplicationCommandLineSingleton::instance(), SLOT(parseAndRun(QString)));
 
-        INFO_LOG("Creada finestra principal");
+            INFO_LOG("Creada finestra principal");
 
-        mainWin->show();
+            mainWin->show();
+            mainWin->checkNewVersionAndShowReleaseNotes();
 
 #ifdef STARVIEWER_CE
         mainWin->showMedicalDeviceInformationDialog();
 #endif // STARVIEWER_CE
 
-        QObject::connect(&app, SIGNAL(lastWindowClosed()),
-                         &app, SLOT(quit()));
-        splash.close();
+            QObject::connect(&app, SIGNAL(lastWindowClosed()),
+                             &app, SLOT(quit()));
+            splash.close();
 
-        // S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun
-        // QMessageBox, ja es llança mostrant-se la MainWindow.
-        if (commandLineArgumentsList.count() > 1)
-        {
-            QString errorInvalidCommanLineArguments;
-            StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(commandLineArgumentsList, errorInvalidCommanLineArguments);
+            // S'ha esperat a tenir-ho tot carregat per processar els aguments rebuts per línia de comandes, d'aquesta manera per exemoke si en llança algun
+            // QMessageBox, ja es llança mostrant-se la MainWindow.
+            if (commandLineArgumentsList.count() > 1)
+            {
+                QString errorInvalidCommanLineArguments;
+                StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(commandLineArgumentsList, errorInvalidCommanLineArguments);
+            }
+
+            returnValue = app.exec();
         }
-
-        returnValue = app.exec();
+        // Handle special case when the database is newer than expected and the users prefers to quit. In that case an int is thrown and catched here.
+        // TODO Find a cleaner way to handle this case (this is already cleaner than the exit(0) that there was before).
+        catch (int i)
+        {
+            returnValue = i;
+        }
     }
+
 
     // Marquem el final de l'aplicació al log
     INFO_LOG(QString("%1 Version %2 BuildID %3, returnValue %4").arg(udg::ApplicationNameString).arg(udg::StarviewerVersionString)
              .arg(udg::StarviewerBuildID).arg(returnValue));
-    INFO_LOG("===================================================== END =====================================================");
+    INFO_LOG("===================================================== END STARVIEWER =====================================================");
 
     return returnValue;
 }

@@ -40,8 +40,8 @@ private:
     void fillImageSet(HangingProtocolImageSet *imageSet, Study *currentStudy, const QList<Study*> &priorStudies);
     /// Fills the given image set with images and series from the given study.
     void fillImageSetWithStudyPrivate(HangingProtocolImageSet *imageSet, const Study *study);
-    /// Tries to fill the given image set with the given series. Returns true if successful and false otherwise.
-    bool fillImageSetWithSeries(HangingProtocolImageSet *imageSet, Series *series);
+    /// Tries to fill the given image set with the given series.
+    void fillImageSetWithSeries(HangingProtocolImageSet *imageSet, Series *series);
 
     /// Finds and saves in m_usedSeries all the series used by the given hanging protocol.
     void findUsedSeries(HangingProtocol *hangingProtocol);

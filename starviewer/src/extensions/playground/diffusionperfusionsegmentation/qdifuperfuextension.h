@@ -17,6 +17,7 @@
 class vtkActor;
 class vtkImageActor;
 class vtkLookupTable;
+class QActionGroup;
 
 namespace udg {
 

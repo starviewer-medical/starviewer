@@ -15,106 +15,74 @@
 #ifndef UDGDATABASEINSTALLATION_H
 #define UDGDATABASEINSTALLATION_H
 
-#include <QObject>
-#include <QProgressDialog>
+#include <QString>
 
 namespace udg {
 
+class DatabaseConnection;
+
 /**
-    Aquesta classe comprova que els directoris i la base de dades de la cache estiguin correctament creats si no es aquest el cas, els crea, per a que
-    l'aplicacio pugui funcionar correctament
-  */
-class DatabaseInstallation : public QObject {
-Q_OBJECT
+ * @brief The DatabaseInstallation class has methods to check that the cache directories and the database are properly created, and if that's not the case to
+ *        create them.
+ */
+class DatabaseInstallation {
+
 public:
     DatabaseInstallation();
     ~DatabaseInstallation();
 
-    /// Comprova que el directori on es guarda la base dades, les imatges i la base de dades existeixin sinó l'intenta crear.
-    /// També comprova que la base de dades estigui en la revisió que necessita la compilació actual de l'starviewer i sinó la
-    /// intenta actualitzar
-    /// @return indica si la base de dades existeix
-    bool checkStarviewerDatabase();
+    /// Checks that the directory where images are stored exists and is writable, that the database file exists and is writable,
+    /// and that the database revision is the expected one. For every check that fails, the method tries to correct it.
+    /// Returns true if all the checks have passed or have been corrected, and false otherwise.
+    bool checkDatabase();
 
-    /// Comprova si existeix el directori de la base de dades
-    /// @return indica si el directori existeix
-    bool existsDatabasePath();
-
-    /// Comprova si existeix el directori on es guarden les imatges descarregades
-    /// @return indica si el directori existeix
-    bool existsLocalImagePath();
-
-    /// Comprova si existeix el fitxer de la base de dades
-    /// @return indica si el directori existeix
-    bool existsDatabaseFile();
-
-    /// Esborra la base de dades actual i torna a crear-ne una de nova
+    /// Deletes the database and creates it again. Returns true if successful and false otherwise.
     bool reinstallDatabase();
 
-    /// Reinstal·lar la base de dades i esborra les imatges descarregades o importades a la base de dades local. Mostra un QProgressDialog mentre es neteja
-    /// la cache.
-    bool removeCacheAndReinstallDatabase();
+    /// Runs the database creation script in the given connection. Returns true if successful and false otherwise.
+    bool createDatabase(DatabaseConnection &databaseConnection);
 
-    /// Aplica els canvis a fets a la última revisió de la base de dades a la base de dades locals
-    bool recreateDatabase();
-
-    /// Retorna els errors que s'han trobat
-    QString getErrorMessage();
-
-private slots:
-    /// Fa avançar la barra de progrés
-    void setValueProgressBar();
+    /// Returns the last error message.
+    const QString& getErrorMessage() const;
 
 private:
-    /// Comprova que el directori on es guarden les imatges descarregades existeixi si no l'intenta crear
-    /// @return indicat si el directori existeix o no
+    /// Checks that the directory where images are stored exists and is writable. If the directory doesn't exist the method tries to create it.
+    /// Returns true if the directory exists and is writable or if it has been created, and false otherwise.
     bool checkLocalImagePath();
 
-    /// Comprova que existeix el path de la base de dades i sinó existeix el crea
+    /// Checks that the directory that contains the database file exists and is writable. If the directory doesn't exist the method tries to create it.
+    /// Returns true if the directory exists and is writable of if it has been created, and false otherwise.
     bool checkDatabasePath();
 
-    /// Comprova si la revisió de la base de dades és la necessària per l'actual compilació de l'starviewer i sinó l'intenta actualitzar
+    /// Checks that the database file exists and is writable. If the file doesn't exist the method tries to create it.
+    /// Returns true if the file exists and is writable or if it has been created, and false otherwise.
+    bool checkDatabaseFile();
+
+    /// Checks that the database revision is the expected one.
+    /// If the database revision is not the expected one, the method tries to upgrade or (if the user agrees) reinstall the database.
+    /// Returns true if the database revision is the expected one or if it has been upgraded or reinstalled, and false otherwise.
     bool checkDatabaseRevision();
 
-    /// Retorna cert si tenim permisos d'escriptura a la base de dades, fals altrament
-    bool isDatabaseFileWritable();
+    /// Creates the directory where images are stored. Returns true if successful and false otherwise.
+    bool createLocalImagePath();
 
-    /// Crea el directori per guardar les imatges de la cache
-    /// @return indica si s'ha pogut crear el directori
-    bool createLocalImageDir();
+    /// Creates the directory that contains the database file. Returns true if successful and false otherwise.
+    bool createDatabasePath();
 
-    /// Crea el directori per guardar la base de dades
-    /// @return indica si s'ha pogut crear el directori
-    bool createDatabaseDirectory();
-
-    /// Crea la base de dades
-    /// @return indica si s'ha pogut crear la base de dades
+    /// Creates the database file. Returns true if successful and false otherwise.
     bool createDatabaseFile();
 
-    /// Intenta actualitzar la base de dades sinó és possible esborra la caché actual i crea una bd nova buid
-    bool tryToUpgradeDatabaseIfNotRecreateDatabase();
+    /// Deletes all local images and the database and creates the database again.
+    /// Returns true if the database has been created successfully and false otherwise.
+    bool deleteLocalImagesAndReinstallDatabase();
 
-    /// Comprova si la versió actual de la base de dades es pot actualitzar, sense necessitat d'haver d'esborrar la caché i tornar-la a crear
-    bool canBeUpgradedDatabase();
-
-    /// Aplica els canvis necessaris a la base de dades per poder funcionar amb la versió actual de Starviewer, sempre i quan la BD sigui actualitzable
-    bool upgradeDatabase();
-
-    /// Ens aplica la comanda d'actualització a la base de dades
-    bool applySqlUpgradeCommandToDatabase(QString sqlUpgradeCommand);
-
-    /// Retorna el XML a aplicar per actualitzar la base de dades
-    QString getUpgradeDatabaseRevisionXmlData();
-
-    /// Pregunta l'usuari si vol fer un Donwgrade de la base dades, això implicar esborrar la caché actuai tornar a crear la BD
-    bool askToUserIfDowngradeDatabase();
+    /// Asks the user if he wants to delete local studies and reinstall de database. Returns true if the user says yes and false if the user says no.
+    bool userWantsToReinstallDatabase() const;
 
 private:
-    /// Diàleg de progrés per les operacions costoses
-    QProgressDialog *m_qprogressDialog;
-
-    /// Missatges d'errors que s'han anat produint
+    /// Last error message.
     QString m_errorMessage;
+
 };
 
 } // End namespace udg

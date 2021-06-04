@@ -16,23 +16,54 @@
 
 #include "q2dviewer.h"
 #include "volume.h"
-#include "logging.h"
+
+#include <QMenu>
+#include <QWidgetAction>
 
 namespace udg {
 
 QThickSlabWidget::QThickSlabWidget(QWidget *parent)
- : QWidget(parent), m_currentViewer(0)
+ : QWidget(parent), m_viewer(nullptr), m_firstShow(true), m_firstOptionsShow(true), m_fixedWidth(0), m_foldable(false)
 {
     setupUi(this);
-    // Omplim el combo amb els valors que volem
-    m_projectionModeComboBox->clear();
-    QStringList items;
-    items << tr("Disabled") << tr("MIP") << tr("MinIP") << tr("Average");
-    m_projectionModeComboBox->addItems(items);
-    m_slabThicknessSlider->setEnabled(false);
-    m_slabThicknessLabel->setEnabled(false);
-    m_maximumThicknessCheckBox->setEnabled(false);
-    m_projectionModeComboBox->setEnabled(false);
+
+    connect(m_arrowToolButton, &QToolButton::clicked, [this] {
+        if (m_optionsWidget->isVisible())
+        {
+            hideOptions();
+        }
+        else
+        {
+            showOptions(true);
+        }
+    });
+
+    m_projectionModeComboBox->addItem(tr("MIP"), VolumeDisplayUnit::Max);
+    m_projectionModeComboBox->addItem(tr("MinIP"), VolumeDisplayUnit::Min);
+    m_projectionModeComboBox->addItem(tr("Average"), VolumeDisplayUnit::Mean);
+//    m_projectionModeComboBox->addItem(tr("Sum"), VolumeDisplayUnit::Sum);
+
+    this->setEnabled(false);
+
+    connect(m_slabThicknessSlider, &QSlider::valueChanged, [this](int value) {
+        if (value != qRound(m_slabThicknessDoubleSpinBox->value()))
+        {
+            m_slabThicknessDoubleSpinBox->setValue(value);
+        }
+    });
+    connect(m_slabThicknessDoubleSpinBox, static_cast<void(QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), [this](double value) {
+        m_slabThicknessSlider->setValue(qRound(value));
+    });
+
+    connect(m_slabThicknessSlider, &QSlider::sliderPressed, [this] {
+        disconnect(m_slabThicknessDoubleSpinBox, static_cast<void(QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+                   this, &QThickSlabWidget::applyThickness);
+    });
+    connect(m_slabThicknessSlider, &QSlider::sliderReleased, [this] {
+        connect(m_slabThicknessDoubleSpinBox, static_cast<void(QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
+                this, &QThickSlabWidget::applyThickness);
+        applyThickness(m_slabThicknessDoubleSpinBox->value());
+    });
 }
 
 QThickSlabWidget::~QThickSlabWidget()
@@ -43,263 +74,228 @@ void QThickSlabWidget::link(Q2DViewer *viewer)
 {
     if (!viewer)
     {
-        DEBUG_LOG("Al tanto, ens passen un viewer NUL! Sortida immediata!");
         return;
     }
 
-    if (!m_currentViewer)
+    if (m_viewer)
     {
-        m_currentViewer = viewer;
-        // Si no teníem cap viewer fins ara creem les connexions necessàries
-        connect(m_projectionModeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(applyProjectionMode(int)));
-        connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(updateThicknessLabel(int)));
-        connect(m_maximumThicknessCheckBox, SIGNAL(toggled(bool)), this, SLOT(enableVolumeMode(bool)));
+        removeConnections();
     }
-    else
-    {
-        // Primer deslinkem qualsevol altre viewer que tinguéssim linkat anteriorment
-        disconnectSignalsAndSlots();
-    }
-    // Posem a punt el widget d'acord amb les dades del viewer
-    m_currentViewer = viewer;
-    // Aquests seran els valors per defecte si el thickslab no està activat
-    int slabThickness = 2, projectionMode = 0;
-    // Llavors cal reflexar els valors adequats
-    if (m_currentViewer->isThickSlabActive())
-    {
-        slabThickness = m_currentViewer->getSlabThickness();
-        projectionMode = m_currentViewer->getSlabProjectionMode() + 1;
-    }
+
+    m_viewer = viewer;
+
     updateMaximumThickness();
-    m_slabThicknessSlider->setValue(slabThickness);
-    m_projectionModeComboBox->setCurrentIndex(projectionMode);
+    m_mainToolButton->setChecked(m_viewer->isThickSlabActive());
+    m_projectionModeComboBox->setCurrentIndex(m_projectionModeComboBox->findData(m_viewer->getSlabProjectionMode()));
+    m_slabThicknessDoubleSpinBox->setValue(m_viewer->getSlabThickness());
+    setMaximumThicknessEnabled(m_maximumThicknessCheckBox->isChecked());
 
-    // Creem els vincles
-    connect(m_currentViewer, SIGNAL(volumeChanged(Volume*)), SLOT(reset()));
-    connect(m_currentViewer, SIGNAL(viewChanged(int)), SLOT(onViewChanged()));
-    connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(applyThickSlab()));
+    createConnections();
 
-    // Enable the combo if the viewer has input and more than one slice; disable it otherwise
-    if (m_currentViewer->hasInput() && m_currentViewer->getNumberOfSlices() > 1)
-    {
-        m_projectionModeComboBox->setEnabled(true);
-    }
-    else
-    {
-        m_projectionModeComboBox->setEnabled(false);
-    }
+    // Enable this widget if the viewer has input and more than one slice; disable it otherwise
+    this->setEnabled(m_viewer->hasInput() && m_viewer->getNumberOfSlices() > 1);
 }
 
 void QThickSlabWidget::unlink()
 {
-    disconnectSignalsAndSlots();
-    disconnect(m_projectionModeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(applyProjectionMode(int)));
-    m_slabThicknessSlider->setValue(2);
-    m_projectionModeComboBox->setCurrentIndex(0);
-    m_projectionModeComboBox->setEnabled(false);
-    m_slabThicknessSlider->setEnabled(false);
-    m_slabThicknessLabel->setEnabled(false);
-    m_maximumThicknessCheckBox->setChecked(false);
-    m_maximumThicknessCheckBox->setEnabled(false);
-    m_currentViewer = 0;
+    removeConnections();
+    m_viewer = nullptr;
+    this->setEnabled(false);
 }
 
-void QThickSlabWidget::setProjectionMode(int mode)
+void QThickSlabWidget::setFoldable(bool foldable)
 {
-    m_projectionModeComboBox->setCurrentIndex(mode);
-}
+    bool change = m_foldable != foldable;
+    m_foldable = foldable;
 
-void QThickSlabWidget::applyProjectionMode(int comboItem)
-{
-    emit projectionModeChanged(comboItem);
-    QString projectionType = m_projectionModeComboBox->itemText(comboItem);
-    if (projectionType == tr("Disabled"))
+    if (m_foldable)
     {
-        // Desconnectem qualsevol possible connexió
-        disconnect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), this, SLOT(applyThickSlab()));
-        disconnect(m_slabThicknessSlider, SIGNAL(sliderPressed()), this, SLOT(turnOnDelayedUpdate()));
-        disconnect(m_slabThicknessSlider, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
+        m_arrowToolButton->show();
 
-        m_currentViewer->disableThickSlab();
-        m_slabThicknessSlider->setEnabled(false);
-        m_slabThicknessLabel->setEnabled(false);
-        m_maximumThicknessCheckBox->setEnabled(false);
-        // Restaurem manualment els valors per defecte
-        m_slabThicknessSlider->setValue(2);
-        updateThicknessLabel(2);
+        if (change)
+        {
+            if (m_mainToolButton->isChecked())
+            {
+                showOptions(false);
+            }
+            else
+            {
+                hideOptions();
+            }
+        }
     }
     else
     {
-        updateMaximumThickness();
-        m_slabThicknessSlider->setEnabled(true);
-        m_maximumThicknessCheckBox->setEnabled(true);
-
-        if (!m_maximumThicknessCheckBox->isChecked())
-        {
-            m_slabThicknessLabel->setEnabled(true);
-        }
-        else
-        {
-            m_slabThicknessLabel->setEnabled(false);
-        }
-
-        // Fem que si avancem d'un en un el valor d'slab (amb teclat o amb la roda del ratolí)
-        // s'actualitzi amb el signal valueChanged()
-        // Si el valor es canvia arrossegant l'slider, canviem el comportament i no apliquem el nou
-        // valor de thickness fins que no fem el release
-        // Ho fem així, ja que al arrossegar es van enviant senyals de valueChanged i això feia que
-        // la resposta de l'interfície fos una mica lenta, ja que calcular el nou slab és costós
-        // TODO si el procés de l'slab anés amb threads no tindríem aquest problema
-        turnOffDelayedUpdate();
-        connect(m_slabThicknessSlider, SIGNAL(sliderPressed()), SLOT(turnOnDelayedUpdate()));
-
-        // TODO ara fem la conversió a id d'enter, però en un futur anirà tot amb Strings
-        int projectionModeID = -1;
-        if (projectionType == tr("MIP"))
-        {
-            projectionModeID = 0;
-        }
-        else if (projectionType == tr("MinIP"))
-        {
-            projectionModeID = 1;
-        }
-        else if (projectionType == tr("Average"))
-        {
-            projectionModeID = 2;
-        }
-
-        // TODO per a donar sensació d'espera, canviem el cursor abans d'aplicar el thickslab i el restaurem quan s'acaba el procés. S'hauria de fer de manera
-        // més centralizada per tal de que si es crida des de qualsevol lloc, es facin aquestes accions sobre el cursor, és a dir, que no calgui programar això
-        // en cada lloc on s'apliqui thickslab.
-        // Al canviar de mode de projecció haurem de recalcular
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-        m_currentViewer->setSlabProjectionMode(projectionModeID);
-        if (m_maximumThicknessCheckBox->isChecked())
-        {
-            m_slabThicknessSlider->setValue(m_currentViewer->getNumberOfSlices());
-        }
-        else
-        {
-            m_currentViewer->setSlabThickness(m_slabThicknessSlider->value());
-        }
-
-        QApplication::restoreOverrideCursor();
-
-        // Cal mantenir l'slider disabled si el checkbox de màxim thickness està habilitat,
-        // ja que al aplicar una projecció nova es pot tornar a habilitar al fer el setValue()
-        if (m_maximumThicknessCheckBox->isChecked())
-        {
-            m_slabThicknessSlider->setEnabled(false);
-        }
+        m_arrowToolButton->hide();
+        m_optionsWidget->show();
     }
 }
 
-void QThickSlabWidget::applyThickSlab()
+int QThickSlabWidget::getFixedWidth() const
 {
-    // TODO per a donar sensació d'espera, canviem el cursor abans d'aplicar el thickslab i el restaurem quan s'acaba el procés. S'hauria de fer de manera més
-    // centralizada per tal de que si es crida des de qualsevol lloc, es facin aquestes accions sobre el cursor, és a dir, que no calgui programar això en cada
-    // lloc on s'apliqui thickslab.
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    m_currentViewer->setSlabThickness(m_slabThicknessSlider->value());
-    QApplication::restoreOverrideCursor();
+    return m_fixedWidth;
 }
 
-void QThickSlabWidget::turnOnDelayedUpdate()
+void QThickSlabWidget::showEvent(QShowEvent *event)
 {
-    disconnect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), this, SLOT(applyThickSlab()));
-    connect(m_slabThicknessSlider, SIGNAL(sliderReleased()), SLOT(onSliderReleased()));
+    QWidget::showEvent(event);
+
+    if (m_firstShow)
+    {
+        m_firstShow = false;
+        m_arrowToolButton->setMinimumHeight(m_mainToolButton->height());
+        m_fixedWidth = m_mainToolButton->sizeHint().width() + m_optionsWidget->sizeHint().width();
+        setFoldable(m_foldable);
+    }
 }
 
-void QThickSlabWidget::turnOffDelayedUpdate()
+void QThickSlabWidget::showOptions(bool emitEnsureVisible)
 {
-    disconnect(m_slabThicknessSlider, SIGNAL(sliderReleased()), this, SLOT(onSliderReleased()));
-    connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(applyThickSlab()));
+    m_optionsWidget->show();
+    m_arrowToolButton->setArrowType(Qt::LeftArrow);
+    if (emitEnsureVisible)
+    {
+        emit ensureVisible();
+    }
+    m_firstOptionsShow = false;
 }
 
-void QThickSlabWidget::onSliderReleased()
+void QThickSlabWidget::hideOptions()
 {
-    applyThickSlab();
-    turnOffDelayedUpdate();
+    m_optionsWidget->hide();
+    m_arrowToolButton->setArrowType(Qt::RightArrow);
+}
+
+void QThickSlabWidget::createConnections()
+{
+    Q_ASSERT(m_viewer);
+
+    connect(m_mainToolButton, &QToolButton::toggled, this, &QThickSlabWidget::setThickSlabEnabled);
+    connect(m_projectionModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &QThickSlabWidget::applyProjectionMode);
+    connect(m_slabThicknessDoubleSpinBox, static_cast<void(QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &QThickSlabWidget::applyThickness);
+    connect(m_maximumThicknessCheckBox, &QCheckBox::toggled, this, &QThickSlabWidget::setMaximumThicknessEnabled);
+    connect(m_viewer, &Q2DViewer::volumeChanged, this, &QThickSlabWidget::onVolumeChanged);
+    connect(m_viewer, &Q2DViewer::viewChanged, this, &QThickSlabWidget::onViewChanged);
+}
+
+void QThickSlabWidget::removeConnections()
+{
+    Q_ASSERT(m_viewer);
+
+    m_mainToolButton->disconnect();
+    m_projectionModeComboBox->disconnect();
+    m_slabThicknessDoubleSpinBox->disconnect(this);
+    m_maximumThicknessCheckBox->disconnect();
+    m_viewer->disconnect(this);
 }
 
 void QThickSlabWidget::updateMaximumThickness()
 {
-    m_slabThicknessSlider->setRange(2, m_currentViewer->getNumberOfSlices());
+    Q_ASSERT(m_viewer);
+
+    m_slabThicknessDoubleSpinBox->setMinimum(0.1);  // Set it every time because it will be set to 0 if this is linked to an empty viewer
+    m_slabThicknessDoubleSpinBox->setMaximum(m_viewer->getMaximumSlabThickness());
+    m_slabThicknessSlider->setMaximum(qRound(m_slabThicknessDoubleSpinBox->maximum()));
 }
 
-void QThickSlabWidget::updateThicknessLabel(int value)
+bool QThickSlabWidget::isThickSlabEnabled() const
 {
-    m_slabThicknessLabel->setText(QString::number(value));
+    return m_mainToolButton->isChecked();
 }
 
-void QThickSlabWidget::reset()
+void QThickSlabWidget::setThickSlabEnabled(bool enabled)
 {
-    m_currentViewer->disableThickSlab();
-    this->link(m_currentViewer);
+    Q_ASSERT(m_viewer);
+
+    if (enabled)
+    {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+
+        if (m_foldable)
+        {
+            showOptions(m_firstOptionsShow);
+        }
+
+        m_viewer->setSlabProjectionMode(static_cast<VolumeDisplayUnit::SlabProjectionMode>(m_projectionModeComboBox->currentData().toInt()));
+        m_viewer->setSlabThickness(m_slabThicknessDoubleSpinBox->value());
+
+        QApplication::restoreOverrideCursor();
+    }
+    else
+    {
+        m_viewer->disableThickSlab();
+
+        if (m_foldable)
+        {
+            hideOptions();
+        }
+    }
 }
 
-void QThickSlabWidget::onViewChanged()
+void QThickSlabWidget::applyProjectionMode(int index)
 {
-    // Si no tenim cap projecció aplicada, no cal fer res
-    if (m_projectionModeComboBox->currentText() == tr("Disabled"))
+    Q_ASSERT(m_viewer);
+
+    if (!isThickSlabEnabled())
     {
         return;
     }
 
-    // Disconnect valueChanged from applyThickSlab while changing the maximum because if it's reduced it can change the slider value, leading to an undesired
-    // thickness (see #1982)
-    disconnect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), this, SLOT(applyThickSlab()));
-    updateMaximumThickness();
-    connect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), SLOT(applyThickSlab()));
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    // Quan canviem de vista, sempre que tinguem la opció marcada, mantenim el thickness màxim per aquella vista
-    if (m_maximumThicknessCheckBox->isChecked())
-    {
-        // Cal forçar que es faci el thickSlab des del viewer, ja que si canviem de vista i el nombre de llesques
-        // a renderitzar és el mateix, no s'emetrà la senyal "valueChanged()" de l'slider i no s'aplicarà el thickSlab
-        m_currentViewer->setSlabThickness(m_currentViewer->getNumberOfSlices());
-        m_slabThicknessSlider->setValue(m_currentViewer->getNumberOfSlices());
-    }
-    else
-    {
-        int currentSlabThickness = m_currentViewer->getSlabThickness();
-        if (currentSlabThickness > 1)
-        {
-            // Update the value of the slider with the current slab thickness
-            m_slabThicknessSlider->setValue(m_currentViewer->getSlabThickness());
-        }
-        else
-        {
-            m_projectionModeComboBox->setCurrentIndex(0);
-        }
-    }
+    m_viewer->setSlabProjectionMode(static_cast<VolumeDisplayUnit::SlabProjectionMode>(m_projectionModeComboBox->itemData(index).toInt()));
+
+    QApplication::restoreOverrideCursor();
 }
 
-void QThickSlabWidget::enableVolumeMode(bool enable)
+void QThickSlabWidget::applyThickness(double thickness)
 {
-    if (enable)
+    Q_ASSERT(m_viewer);
+
+    if (!isThickSlabEnabled())
     {
-        m_slabThicknessSlider->setValue(m_currentViewer->getNumberOfSlices());
+        return;
+    }
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    m_viewer->setSlabThickness(thickness);
+
+    QApplication::restoreOverrideCursor();
+}
+
+void QThickSlabWidget::setMaximumThicknessEnabled(bool enabled)
+{
+    Q_ASSERT(m_viewer);
+
+    if (enabled)
+    {
         m_slabThicknessSlider->setEnabled(false);
-        m_slabThicknessLabel->setEnabled(false);
+        m_slabThicknessDoubleSpinBox->setEnabled(false);
+        m_slabThicknessDoubleSpinBox->setValue(m_slabThicknessDoubleSpinBox->maximum());
     }
     else
     {
         m_slabThicknessSlider->setEnabled(true);
-        m_slabThicknessLabel->setEnabled(true);
+        m_slabThicknessDoubleSpinBox->setEnabled(true);
     }
 
-    emit maximumThicknessModeToggled(enable);
+    emit maximumThicknessModeToggled(enabled);
 }
 
-void QThickSlabWidget::disconnectSignalsAndSlots()
+void QThickSlabWidget::onVolumeChanged()
 {
-    if (m_currentViewer)
-    {
-        disconnect(m_currentViewer, 0, this, 0);
-        disconnect(m_currentViewer, 0, m_slabThicknessSlider, 0);
-        disconnect(m_slabThicknessSlider, SIGNAL(valueChanged(int)), this, SLOT(applyThickSlab()));
-    }
+    Q_ASSERT(m_viewer);
+
+    this->link(m_viewer);
+}
+
+void QThickSlabWidget::onViewChanged()
+{
+    Q_ASSERT(m_viewer);
+
+    this->link(m_viewer);
+    setThickSlabEnabled(isThickSlabEnabled());
 }
 
 }

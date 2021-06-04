@@ -26,7 +26,7 @@ namespace udg {
 class NMROIDataPrinter : public AbstractROIDataPrinter
 {
 public:
-    NMROIDataPrinter(const QMap<int, ROIData> &roiDataMap, const QString &areaString, Q2DViewer *viewer);
+    NMROIDataPrinter(const QMap<int, ROIData> &roiDataMap, double areaInMm2, const QString &areaString, Q2DViewer *viewer);
     ~NMROIDataPrinter();
 
 protected:
@@ -36,6 +36,9 @@ protected:
 private:
     /// Formatted strings with the values of the maximum data
     QString m_maxString;
+    QString m_sumString;
+    QString m_countsPerMm2String;
+    double m_areaInMm2;
 };
 
 } // namespace udg

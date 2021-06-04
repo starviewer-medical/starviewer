@@ -47,6 +47,7 @@ private:
     /// Constants per definir els valors d'string amb que es guarden els valors enumerats
     static const QString Survey;
     static const QString Localizer;
+    static const QString CTAttenuationCorrection;
     static const QString LeftToRight;
     static const QString TopToBottom;
     static const QString Images;

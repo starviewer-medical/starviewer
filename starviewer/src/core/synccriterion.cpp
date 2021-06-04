@@ -26,17 +26,17 @@ SyncCriterion::~SyncCriterion()
 {
 }
 
-bool SyncCriterion::isCriterionSatisfied(QViewer *viewer1, QViewer *viewer2)
+bool SyncCriterion::isCriterionSatisfied(QViewer *sourceViewer, QViewer *targetViewer)
 {
-    if (viewer1 && viewer2)
+    if (sourceViewer && targetViewer)
     {
-        if (!viewer1->hasInput() || !viewer2->hasInput())
+        if (!sourceViewer->hasInput() || !targetViewer->hasInput())
         {
             return false;
         }
         else
         {
-            return criterionIsMet(viewer1, viewer2);
+            return criterionIsMet(sourceViewer, targetViewer);
         }
     }
     else

@@ -19,7 +19,6 @@
 #include "screenlayout.h"
 
 class QWidget;
-class QDesktopWidget;
 class QRect;
 
 namespace udg {
@@ -83,9 +82,6 @@ private:
     QRect getGeometryToMaximizeToMulipleScreens(QWidget *window);
 
 private:
-    /// Gestor d'escriptori on es fan les crides referents al múltiples escriptoris o pantalles
-    QDesktopWidget *m_applicationDesktop;
-
     /// Distribució de pantalles
     ScreenLayout m_screenLayout;
 };

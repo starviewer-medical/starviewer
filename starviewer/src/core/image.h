@@ -23,6 +23,7 @@
 #include <QPixmap>
 
 #include "dicomsource.h"
+#include "dicomtagreader.h"
 #include "imageorientation.h"
 #include "patientorientation.h"
 #include "photometricinterpretation.h"
@@ -137,7 +138,7 @@ public:
     void setVoiLutList(const QList<VoiLut> &voiLutList);
     
     /// Ens retorna el nombre de window levels que tenim
-    int getNumberOfVoiLuts();
+    int getNumberOfVoiLuts() const;
 
     /// Li indiquem quina és la sèrie pare a la qual pertany
     void setParentSeries(Series *series);
@@ -154,8 +155,13 @@ public:
     /// Assignar/Obtenir la data i hora en que la sèrie s'ha descarregat a la base de dades Local
     void setRetrievedDate(QDate date);
     void setRetrievedTime(QTime time);
-    QDate getRetrievedDate();
-    QTime getRetrievedTime();
+    QDate getRetrievedDate() const;
+    QTime getRetrievedTime() const;
+
+    /// Returns the Acquisition Number (0020,0012).
+    const QString& getAcquisitionNumber() const;
+    /// Sets the Acquisition Number (0020,0012).
+    void setAcquisitionNumber(QString acquisitionNumber);
 
     /// Assignar/Obtenir la descripció del tipus d'imatge
     void setImageType(const QString &imageType);
@@ -201,9 +207,19 @@ public:
     /// Returns the transfer syntax UID.
     const QString& getTransferSyntaxUID() const;
 
+    /// Sets the stack id.
+    void setStackId(QString stackId);
+    /// Returns the stack id.
+    const QString& getStackId() const;
+
+    /// Sets the dimension index values.
+    void setDimensionIndexValues(QVector<uint> dimensionIndexValues);
+    /// Returns the dimension index values.
+    const QVector<uint>& getDimensionIndexValues() const;
+
     /// Ens retorna la distància de l'orígen de la imatge passada per paràmetre respecte a un orígen 0, 0, 0, segons la normal del pla
     /// TODO Assignar-li un nom més entenedor
-    static double distance(Image *image);
+    static double distance(const Image *image);
     
     /// Mètodes per obtenir/assignar el número d'overlays que té la imatge
     bool hasOverlays() const;
@@ -234,9 +250,8 @@ public:
     DisplayShutter getDisplayShutterForDisplay();
 
     /// Returns display shutter for display in vtkImageData format, with the same dimensions as the image.
-    /// The z value of the extent can be specified with zSlice.
     /// The vtkImageData object is created only the first time, subsequent calls return the same object.
-    vtkImageData* getDisplayShutterForDisplayAsVtkImageData(int zSlice = 0);
+    vtkImageData* getDisplayShutterForDisplayAsVtkImageData();
 
     /// Assingar/Obtenir el DICOMSource de la imatge. Indica quin és l'origen dels fitxers DICOM que conté la imatge
     void setDICOMSource(const DICOMSource &imageDICOMSource);
@@ -251,6 +266,9 @@ public:
     /// @param resolution La resolució amb la que volem el thumbnail
     /// @return Un QPixmap amb el thumbnail
     QPixmap getThumbnail(bool getFromCache = false, int resolution = 100);
+
+    /// Returns a DICOMTagReader initialized with this image's file. It is initialized on the first call of this method, that's why it's not const.
+    const DICOMTagReader& getDicomTagReader();
 
     /// Ens retorna una llista amb les modalitats que suportem com a Image
     static QStringList getSupportedModalities();
@@ -397,6 +415,12 @@ private:
     /// Transfer syntax defines how DICOM objects are serialized.
     QString m_transferSyntaxUID;
 
+    /// Stack ID (0020,9056).
+    QString m_stackId;
+
+    /// Dimension Index Values (0020,9157).
+    QVector<uint> m_dimensionIndexValues;
+
     /// Atributs NO-DICOM
 
     /// El path absolut de la imatge
@@ -406,6 +430,10 @@ private:
     QDate m_retrievedDate;
     QTime m_retrieveTime;
 
+    /// Acquisition Number (0020,0012). Type 3 in C.7.6.1 General Image Module (type 1 or 2 in other modules).
+    /// A number identifying the single continuous gathering of data over a period of time that resulted in this image.
+    QString m_acquisitionNumber;
+
     /// Atribut que ens dirà quants overlays té la imatge
     unsigned short m_numberOfOverlays;
     
@@ -414,6 +442,8 @@ private:
 
     /// Llista que conté la partició en regions òptimes de la fusió de tots els overlays
     QList<ImageOverlay> m_overlaysSplit;
+    /// Remembers if m_overlaysSplit has been calculated.
+    bool m_overlaysSplitComputed;
 
     /// Llista de display shutters
     QList<DisplayShutter> m_shuttersList;
@@ -435,6 +465,9 @@ private:
 
     //Indica quin és l'origen de les imatges DICOM
     DICOMSource m_imageDICOMSource;
+
+    /// It will be initialized with this image's corresponding file on first use.
+    DICOMTagReader m_dicomTagReader;
 };
 
 }

@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>581</width>
-    <height>736</height>
+    <height>455</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -19,92 +19,70 @@
     <height>0</height>
    </size>
   </property>
-  <property name="font">
-   <font>
-    <weight>50</weight>
-    <bold>false</bold>
-   </font>
-  </property>
   <property name="windowTitle">
    <string>Diagnosis Tests</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_7">
-   <property name="margin">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
     <number>0</number>
    </property>
-   <property name="spacing">
+   <property name="topMargin">
     <number>0</number>
    </property>
-   <item row="0" column="0">
-    <widget class="QFrame" name="m_progressBarFrame">
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QWidget" name="m_progressBarWidget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLabel" name="m_animationInProgressLabel">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
+         <widget class="QLabel" name="m_animationInProgressLabel"/>
         </item>
         <item>
          <widget class="QLabel" name="m_executingTestLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="font">
            <font>
             <weight>75</weight>
             <bold>true</bold>
            </font>
           </property>
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
          </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_5">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>392</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
-       <widget class="QProgressBar" name="m_testsProgressBar">
-        <property name="value">
-         <number>24</number>
-        </property>
-       </widget>
+      <item>
+       <widget class="QProgressBar" name="m_testsProgressBar"/>
       </item>
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QFrame" name="m_someTestsFailedFrame">
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <item>
+    <widget class="QWidget" name="m_resultsWidget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_5">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="../main/main.qrc">:/images/round-warning.png</pixmap>
-          </property>
-          <property name="scaledContents">
-           <bool>false</bool>
-          </property>
-         </widget>
+         <widget class="QLabel" name="m_resultsIconLabel"/>
         </item>
         <item>
-         <widget class="QLabel" name="label_5">
+         <widget class="QLabel" name="m_resultsTitleLabel">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="font">
            <font>
             <pointsize>14</pointsize>
@@ -117,92 +95,12 @@
           </property>
          </widget>
         </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QFrame" name="m_allTestSuccededFrame">
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="label_3">
-          <property name="minimumSize">
-           <size>
-            <width>32</width>
-            <height>32</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>32</width>
-            <height>32</height>
-           </size>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="pixmap">
-           <pixmap resource="../main/main.qrc">:/images/checkOkBigger.png</pixmap>
-          </property>
-          <property name="scaledContents">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_6">
-          <property name="font">
-           <font>
-            <pointsize>14</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Tests completed successfully</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="m_viewTestsLabel">
-          <property name="styleSheet">
-           <string notr="true">#m_viewTestsLabel  {
+       <widget class="QLabel" name="m_viewTestsLabel">
+        <property name="styleSheet">
+         <string notr="true">#m_viewTestsLabel  {
 	border-radius: 4px;
 	border: 1px solid  #BBBBBB;
     background-color: #E4E4E4;
@@ -215,9 +113,176 @@
 	text-decoration: none;
 }
 </string>
-          </property>
+        </property>
+        <property name="text">
+         <string>&lt;a href=&quot;ok&quot; style=&quot;color:#333333&quot;&gt;View tests&lt;/a&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="m_buttonsAndScrollAreaWidget" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QPushButton" name="m_informationPushButton">
+             <property name="text">
+              <string>Show information (%1)</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../main/main.qrc">
+               <normaloff>:/images/icons/emblem-information.svg</normaloff>:/images/icons/emblem-information.svg</iconset>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_correctPushButton">
+             <property name="text">
+              <string>Show correct (%1)</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../main/main.qrc">
+               <normaloff>:/images/icons/emblem-success.svg</normaloff>:/images/icons/emblem-success.svg</iconset>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_warningsPushButton">
+             <property name="text">
+              <string>Show warnings (%1)</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../main/main.qrc">
+               <normaloff>:/images/icons/emblem-warning.svg</normaloff>:/images/icons/emblem-warning.svg</iconset>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="m_errorsPushButton">
+             <property name="text">
+              <string>Show errors (%1)</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../main/main.qrc">
+               <normaloff>:/images/icons/emblem-error.svg</normaloff>:/images/icons/emblem-error.svg</iconset>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QScrollArea" name="m_diagnosisTestsResultsScrollArea">
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="sizeAdjustPolicy">
+            <enum>QAbstractScrollArea::AdjustToContents</enum>
+           </property>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="m_diagnosisTestsResults">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>563</width>
+              <height>235</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QPushButton" name="m_saveResultsButton">
           <property name="text">
-           <string>&lt;a href=&quot;ok&quot; style=&quot;color:#333333&quot;&gt;View tests&lt;/a&gt;</string>
+           <string>Save Results</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../main/main.qrc">
+            <normaloff>:/images/icons/document-save.svg</normaloff>:/images/icons/document-save.svg</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>338</width>
+            <height>21</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="m_closeButton">
+          <property name="text">
+           <string>Close</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../main/main.qrc">
+            <normaloff>:/images/icons/window-close.svg</normaloff>:/images/icons/window-close.svg</iconset>
           </property>
          </widget>
         </item>
@@ -226,76 +291,9 @@
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QWebView" name="m_diagnosisTestsResults">
-     <property name="autoFillBackground">
-      <bool>true</bool>
-     </property>
-     <property name="url">
-      <url>
-       <string>about:blank</string>
-      </url>
-     </property>
-     <property name="renderHints">
-      <set>QPainter::Antialiasing|QPainter::HighQualityAntialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QFrame" name="m_closeButtonFrame">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_6">
-      <item row="0" column="1">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>479</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="2">
-       <widget class="QPushButton" name="m_closeButton">
-        <property name="text">
-         <string>OK</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QPushButton" name="m_saveResultsButton">
-        <property name="text">
-         <string>Save Results</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../main/main.qrc">
-          <normaloff>:/images/filesave.png</normaloff>:/images/filesave.png</iconset>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QWebView</class>
-   <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
-  </customwidget>
- </customwidgets>
  <resources>
-  <include location="../main/main.qrc"/>
-  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
  <connections/>

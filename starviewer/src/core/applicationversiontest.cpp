@@ -64,7 +64,7 @@ DiagnosisTestResult ApplicationVersionTest::run()
     return result;
 }
 
-QString ApplicationVersionTest::getDescription()
+QString ApplicationVersionTest::getDescription() const
 {
     return tr("%1 is updated to the last version").arg(ApplicationNameString);
 }

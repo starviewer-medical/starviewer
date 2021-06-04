@@ -38,8 +38,8 @@ QThumbnailsPreviewWidget::QThumbnailsPreviewWidget(QWidget *parent)
 
 void QThumbnailsPreviewWidget::createConnections()
 {
-    connect(m_thumbnailsPreviewWidget, SIGNAL(itemClicked (QListWidgetItem*)), SLOT(itemClicked(QListWidgetItem*)));
-    connect(m_thumbnailsPreviewWidget, SIGNAL(itemDoubleClicked (QListWidgetItem*)), SLOT(itemDoubleClicked(QListWidgetItem*)));
+    connect(m_thumbnailsPreviewWidget, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(itemClicked(QListWidgetItem*)));
+    connect(m_thumbnailsPreviewWidget, SIGNAL(itemActivated(QListWidgetItem*)), SLOT(itemDoubleClicked(QListWidgetItem*)));
 }
 
 void QThumbnailsPreviewWidget::append(QString IDThumbnail, const QPixmap &thumbnail, QString thumbnailDescription)

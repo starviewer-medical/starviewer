@@ -128,7 +128,7 @@ void Patient::setDatabaseID(qlonglong databaseID)
     m_databaseID = databaseID;
 }
 
-qlonglong Patient::getDatabaseID()
+qlonglong Patient::getDatabaseID() const
 {
     return m_databaseID;
 }
@@ -148,7 +148,7 @@ QString Patient::getBirthDateAsString()
     return m_birthDate.toString(Qt::LocaleDate);
 }
 
-QDate Patient::getBirthDate()
+QDate Patient::getBirthDate() const
 {
     return m_birthDate;
 }
@@ -310,6 +310,27 @@ QList<Series*> Patient::getSelectedSeries()
     }
     return selectedSeries;
 }
+
+QList<Volume*> Patient::getVolumesList()
+{
+    QList<Volume*> volumesList;
+    foreach (Study* study, m_studiesList)
+    {
+        volumesList << study->getVolumesList();
+    }
+    return volumesList;
+}
+
+int Patient::getNumberOfVolumes()
+{
+    int sum = 0;
+    foreach (Study* study, m_studiesList)
+    {
+        sum += study->getNumberOfVolumes();
+    }
+    return sum;
+}
+
 
 bool Patient::hasFile(const QString &filename)
 {

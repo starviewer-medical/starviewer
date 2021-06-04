@@ -17,74 +17,68 @@
 
 #include <QString>
 
-class QSemaphore;
-struct sqlite3;
+class QSqlDatabase;
+class QSqlError;
 
 namespace udg {
 
-class Status;
-
 /**
-    Classe que proporciona la connexió a la base dades. Utilitzant aquesta classe no cal preocupar-se d'obrir o tancar la connexió a la BD, ja que es fa
-    automàticament per aquest classe, quan s'invoca el mètode getConnection() si no hi ha cap connexió oberta l'obre i quan es destrueix l'objecte es tanca
-    la connexió (és important recordar que cal sempre DESTRUIR l'objecte DatabaseConnection perquè sinó no es tancarà la connexió.
-  */
+ * @brief The DatabaseConnection class provides the connection to the database.
+ *
+ * This class automatically opens the database connection when getConnection() is called and closes it in its destructor.
+ */
 class DatabaseConnection {
-public:
-    /// Constructor de la classe
-    DatabaseConnection();
 
-    /// Destructor de la classe
+public:
+    /// SQLite error codes.
+    enum SqliteError { SqliteOk = 0, SqliteError = 1, SqliteBusy = 5, SqliteLocked = 6, SqliteCorrupt = 11, SqliteEmpty = 16, SqliteSchema = 17,
+                       SqliteConstraint = 19, SqliteMismatch = 20, SqliteNotADb = 26 };
+
+    DatabaseConnection();
     ~DatabaseConnection();
 
-     /// Establei el path de la base de dades, per defecte, si no s'estableix, el va a buscar a la classe StarviewerSettings
-     /// @param path de la base de dades
+    /// Sets the path to the database. If not set, it's read from settings.
     void setDatabasePath(const QString &databasePath);
 
-    /// Retorna la connexió a la base de dades
-    // @return connexio a la base de dades, si el punter és nul, és que hi hagut error alhora de connectar, o que el path no és correcte
-    sqlite3* getConnection();
+    /// Returns the connection to the database. It opens the connection if it's not already open.
+    QSqlDatabase getConnection();
 
-    /// Retorna l'últim missatge d'error produït a la base de dades
+    /// Returns the last error in the database.
+    QSqlError getLastError();
+    /// Returns the text of the last error in the database.
     QString getLastErrorMessage();
 
-    /// Retorna l'últim codi d'error produït a la base de dades
-    int getLastErrorCode();
-
-    /// Comença/finalitza/Fa rollback una transacció a la base de dades. Només pot haver una transacció a la vegada amb
-    /// la mateixa connexió, per això aquests mètodes tenen implantat un semàfor, qeu control l'accés a les transaccions. Si es fa una transacció
-    /// i no s'arriba mai a invocar endTransaction() quan es tanqui la connexió amb la base de dades sqlite automàticament fa un rollback dels canvis.
-    // TODO: S'hauria de repassar l'ubicació ja que no semblaria gaire correcte com a responsabilitat de la connexió. Quan es faci refactoring...
+    /// Begins a trasaction in the database.
     void beginTransaction();
+    /// Commits the current transaction in the database.
     void commitTransaction();
+    /// Rolls back the current transaction in the database. If the connexion is closed, the current transaction is rolled back automatically.
     void rollbackTransaction();
 
-    /// Formata l'string de forma que no contingui caràcters extranys que puguin fer
-    /// que l'execució d'una comanda SQL sigui incorrecta
-    static QString formatTextToValidSQLSyntax(QString string);
-
-    /// Formata un qchar perquè no contingui caràcters estranys o Nulls que pugin fer que la sentència sql sigui incorrecte
-    static QString formatTextToValidSQLSyntax(QChar qchar);
-
 private:
-    /// Connecta amb la base de dades segons el path
+    /// Opens the connection to the database specified in the database path.
     void open();
 
-    /// Tanca la connexió de la base de dades
+    /// Closes the connection to the database.
     void close();
 
-    /// Indica s'esta connectat a la base de dades
-    /// @return indica si s'esta connectat a la base de dades
+    /// Returns true if the connection is open and false otherwise.
     bool isConnected();
 
-private:
-    sqlite3 *m_databaseConnection;
-    /// Sqlite només permet una transacció a la vegada amb la mateixa connexió, en un futur tenen previst permetre-ho però ara mateix
-    /// no per tant per assegurar que no tenim dos transaccions a la vegada implantem aquests semàfor
-    QSemaphore *m_transactionLock;
+    // Disable copy and move
+    DatabaseConnection(const DatabaseConnection&) = delete;
+    DatabaseConnection(DatabaseConnection&&) = delete;
+    DatabaseConnection& operator =(const DatabaseConnection&) = delete;
+    DatabaseConnection&& operator =(DatabaseConnection&&) = delete;
 
+private:
+    /// Path to the database file.
     QString m_databasePath;
+    /// Auto-generated connection name, different for each instance.
+    QString m_connectionName;
+
 };
-}; // End namespace
+
+} // End namespace
 
 #endif

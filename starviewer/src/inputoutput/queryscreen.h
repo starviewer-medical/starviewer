@@ -26,7 +26,6 @@ class QOperationStateScreen;
 class StatsWatcher;
 class RISRequestManager;
 class PacsDevice;
-class PacsManager;
 
 /**
     Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
@@ -171,7 +170,7 @@ private:
     DicomMask buildDicomMask();
 
     /// Comprova els requeriments necessaris per poder utilitzar la QueryScreen
-    void checkRequeriments();
+    void checkRequirements();
 
     /// Es comprova la integritat de la base de dades i les imatges, comprovant que la última vegada l'starviewer
     /// no s'hagués tancat amb un estudi a mig baixar, i si és així esborra l'estudi a mig descarregar i deixa la base de dades en un estat integre
@@ -200,7 +199,6 @@ private:
 #ifndef STARVIEWER_LITE
     QOperationStateScreen *m_operationStateScreen;
     RISRequestManager *m_risRequestManager;
-    PacsManager *m_pacsManager;
 #endif
 
     /// Indica quans jobs tenim pendents de finalitzar (s'estan esperant per executar o s'estan executant)

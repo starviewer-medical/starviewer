@@ -13,21 +13,16 @@
  *************************************************************************************/
 
 #include "dicomfileclassifierfillerstep.h"
-#include "logging.h"
-#include "dicomtagreader.h"
-#include "patientfillerinput.h"
-#include "patient.h"
-#include "study.h"
-#include "series.h"
-#include "image.h"
+
 #include "createinformationmodelobject.h"
+#include "dicomtagreader.h"
+#include "patient.h"
+#include "patientfillerinput.h"
 
 namespace udg {
 
 DICOMFileClassifierFillerStep::DICOMFileClassifierFillerStep()
- : PatientFillerStep()
 {
-    m_dicomReader = new DICOMTagReader;
 }
 
 DICOMFileClassifierFillerStep::~DICOMFileClassifierFillerStep()
@@ -38,51 +33,47 @@ bool DICOMFileClassifierFillerStep::fillIndividually()
 {
     Q_ASSERT(m_input);
 
-    m_dicomReader = m_input->getDICOMFile();
-    classifyFile();
+    const DICOMTagReader *dicomReader = m_input->getDICOMFile();
 
-    m_input->addLabel("DICOMFileClassifierFillerStep");
+    Q_ASSERT(dicomReader);
 
-    return true;
-}
+    // Don't generate anything for invalid DICOM files
+    if (!dicomReader->canReadFile())
+    {
+        return false;
+    }
 
-void DICOMFileClassifierFillerStep::classifyFile()
-{
-    Q_ASSERT(m_dicomReader);
+    QString patientID = dicomReader->getValueAttributeAsQString(DICOMPatientID);
+    QString studyUID = dicomReader->getValueAttributeAsQString(DICOMStudyInstanceUID);
+    QString seriesUID = dicomReader->getValueAttributeAsQString(DICOMSeriesInstanceUID);
 
-    // Pprimer recopilem tota la informació que ens permet ubicar l'arxiu dins de l'estructura
-    QString patientID = m_dicomReader->getValueAttributeAsQString(DICOMPatientID);
-    QString studyUID = m_dicomReader->getValueAttributeAsQString(DICOMStudyInstanceUID);
-    QString seriesUID = m_dicomReader->getValueAttributeAsQString(DICOMSeriesInstanceUID);
-
-    // Fem una classificació top-down. Comencem mirant a quin pacient pertany,després estudi, serie fins arribar al nivell
-    // d'imatge/kin/PS. TODO potser seria més eficient començar directament per imatge? En cas de descartar aniríem més
-    // ràpid o no? o és ben igual?
-    // Obtenim el pacient si ja existeix, altrament el creem
     Patient *patient = m_input->getPatientByID(patientID);
+
     if (!patient)
     {
-        patient = CreateInformationModelObject::createPatient(m_dicomReader);
+        patient = CreateInformationModelObject::createPatient(dicomReader);
         m_input->addPatient(patient);
     }
 
-    // Obtenim l'estudi corresponent si ja existeix, altrament el creem
     Study *study = patient->getStudy(studyUID);
+
     if (!study)
     {
-        study = CreateInformationModelObject::createStudy(m_dicomReader);
+        study = CreateInformationModelObject::createStudy(dicomReader);
         patient->addStudy(study);
     }
 
-    // Obtenim la serie corresponent si ja existeix, altrament la creem
     Series *series = study->getSeries(seriesUID);
+
     if (!series)
     {
-        series = CreateInformationModelObject::createSeries(m_dicomReader);
+        series = CreateInformationModelObject::createSeries(dicomReader);
         study->addSeries(series);
     }
 
     m_input->setCurrentSeries(series);
+
+    return true;
 }
 
 }

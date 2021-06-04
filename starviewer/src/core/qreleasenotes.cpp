@@ -13,13 +13,12 @@
  *************************************************************************************/
 
 #include "qreleasenotes.h"
+
 #include "coresettings.h"
 #include "logging.h"
 
 #include <QCloseEvent>
 #include <QUrl>
-#include <QNetworkReply>
-#include <QWebHistory>
 
 namespace udg {
 
@@ -27,6 +26,7 @@ QReleaseNotes::QReleaseNotes(QWidget *parent)
  : QWidget(parent)
 {
     setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
 
     // No cal fer un metode a part per les connexions si només en tenim una
     connect(m_closePushButton, SIGNAL(clicked()), this, SLOT(close()));
@@ -34,8 +34,7 @@ QReleaseNotes::QReleaseNotes(QWidget *parent)
     // Fer que la finestra sempre quedi davant i no es pugui fer res fins que no es tanqui
     setWindowModality(Qt::ApplicationModal);
 
-    m_viewWebView->setContextMenuPolicy(Qt::NoContextMenu);
-    m_viewWebView->history()->setMaximumItemCount(0);
+    m_textBrowser->setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 QReleaseNotes::~QReleaseNotes()
@@ -54,8 +53,8 @@ void QReleaseNotes::setDontShowVisible(bool visible)
 
 void QReleaseNotes::showIfUrlLoadsSuccessfully(const QUrl &url)
 {
-    connect(m_viewWebView->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(loadFinished(QNetworkReply*)));
-    m_viewWebView->setUrl(url);
+    connect(m_textBrowser, &QTextBrowser::sourceChanged, this, &QReleaseNotes::loadFinished);
+    m_textBrowser->setSource(url);
 }
 
 void QReleaseNotes::closeEvent(QCloseEvent *event)
@@ -71,22 +70,13 @@ void QReleaseNotes::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
-void QReleaseNotes::loadFinished(QNetworkReply *reply)
+void QReleaseNotes::loadFinished()
 {
     // Desconectar el manager
-    disconnect(m_viewWebView->page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)), this, SLOT(loadFinished(QNetworkReply*)));
+    disconnect(m_textBrowser, &QTextBrowser::sourceChanged, this, &QReleaseNotes::loadFinished);
 
-    if (reply->error() == QNetworkReply::NoError)
-    {
-        // Si no hi ha hagut error, mostrar
-        show();
-    }
-    else
-    {
-        ERROR_LOG(QString("Error en carregar la url, tipus ") + QString::number(reply->error())+
-                  QString(": ") + reply->errorString());
-    }
-    reply->deleteLater();
+    m_textBrowser->clearHistory();
+    show();
 }
 
-}; // End namespace udg
+} // End namespace udg

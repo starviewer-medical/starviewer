@@ -47,12 +47,17 @@ QFusionLayoutWidget::QFusionLayoutWidget(QWidget *parent)
     m_gridIcon3x3_8->setIconType("sagital");
     m_gridIcon3x3_9->setIconType("sagital");
 
+    m_gridIconMprRight_1->setIconType("axial");
+    m_gridIconMprRight_2->setIconType("sagital");
+    m_gridIconMprRight_3->setIconType("coronal");
+
     connect(m_item2x1First, &ItemMenu::isSelected, this, &QFusionLayoutWidget::layout2x1FirstRequested);
     connect(m_item2x1Second, &ItemMenu::isSelected, this, &QFusionLayoutWidget::layout2x1SecondRequested);
     connect(m_item3x1, &ItemMenu::isSelected, this, &QFusionLayoutWidget::layout3x1Requested);
     connect(m_item2x3First, &ItemMenu::isSelected, this, &QFusionLayoutWidget::layout2x3FirstRequested);
     connect(m_item2x3Second, &ItemMenu::isSelected, this, &QFusionLayoutWidget::layout2x3SecondRequested);
     connect(m_item3x3, &ItemMenu::isSelected, this, &QFusionLayoutWidget::layout3x3Requested);
+    connect(m_itemMprRight, &ItemMenu::isSelected, this, &QFusionLayoutWidget::layoutMprRightRequested);
 }
 
 QFusionLayoutWidget::~QFusionLayoutWidget()

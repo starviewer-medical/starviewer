@@ -30,12 +30,12 @@ public:
     /// Estats de la tool
     enum { None, WindowLevelling, Burning };
 
-    WindowLevelTool(QViewer *viewer, QObject *parent = 0);
-    ~WindowLevelTool();
+    explicit WindowLevelTool(QViewer *viewer, QObject *parent = nullptr);
+    ~WindowLevelTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
-private slots:
+protected slots:
     /// Resets the tool to a valid initial state.
     void reset();
 
@@ -62,7 +62,7 @@ private:
     /// Computes the new window level from each delta. deltaX sets the window, and deltaY the level.
     void computeWindowLevelValuesWithDefaultBehaviour(double deltaX, double deltaY, double &window, double &level);
 
-private:
+protected:
 
     /// If the tool is linked to a Q2DViewer this field will point to it, otherwise it will be null.
     Q2DViewer *m_2DViewer;

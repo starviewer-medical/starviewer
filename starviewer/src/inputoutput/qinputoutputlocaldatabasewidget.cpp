@@ -100,17 +100,19 @@ void QInputOutputLocalDatabaseWidget::createConnections()
     /// Si movem el QSplitter capturem el signal per guardar la seva posició
     connect(m_StudyTreeSeriesListQSplitter, SIGNAL(splitterMoved (int, int)), SLOT(qSplitterPositionChanged()));
     connect(m_qwidgetSelectPacsToStoreDicomImage, SIGNAL(selectedPacsToStore()), SLOT(sendSelectedStudiesToSelectedPacs()));
+
+    connect(PacsManagerSingleton::instance(), &PacsManager::newPACSJobEnqueued, this, &QInputOutputLocalDatabaseWidget::newPACSJobEnqueued);
 }
 
 void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
 {
     QAction *action;
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/view.png"), tr("&View"), this, SLOT(viewFromQStudyTreeWidget()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/icons/visibility.svg"), tr("&View"), this, SLOT(viewFromQStudyTreeWidget()));
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ViewSelectedStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(viewFromQStudyTreeWidget()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/databaseRemove.png"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromLocalDatabase()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/icons/edit-delete.svg"), tr("&Delete"), this, SLOT(deleteSelectedItemsFromLocalDatabase()));
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::DeleteSelectedLocalDatabaseStudies));
     (void) new QShortcut(action->shortcut(), this, SLOT(deleteSelectedItemsFromLocalDatabase()));
 
@@ -119,7 +121,7 @@ void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::SendSelectedStudiesToDICOMDIRList));
     (void) new QShortcut(action->shortcut(), this, SLOT(addSelectedStudiesToCreateDicomdirList()));
 
-    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/store.png"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()));
+    action = m_contextMenuQStudyTreeWidget.addAction(QIcon(":/images/icons/upload-media.svg"), tr("Send to PACS"), this, SLOT(selectedStudiesStoreToPacs()));
     action->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::StoreSelectedStudiesToPACS));
     (void) new QShortcut(action->shortcut(), this, SLOT(selectedStudiesStoreToPacs()));
 #endif
@@ -139,12 +141,6 @@ void QInputOutputLocalDatabaseWidget::clear()
     m_seriesThumbnailPreviewWidget->clear();
 }
 
-void QInputOutputLocalDatabaseWidget::setPacsManager(PacsManager *pacsManager)
-{
-    m_pacsManager = pacsManager;
-    connect(pacsManager, SIGNAL(newPACSJobEnqueued(PACSJobPointer)), SLOT(newPACSJobEnqueued(PACSJobPointer)));
-}
-
 void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
 {
     LocalDatabaseManager localDatabaseManager;
@@ -155,7 +151,7 @@ void QInputOutputLocalDatabaseWidget::queryStudy(DicomMask queryMask)
 
     clear();
 
-    patientStudyList = localDatabaseManager.queryPatientStudy(queryMask);
+    patientStudyList = localDatabaseManager.queryPatientsAndStudies(queryMask);
 
     if (showDatabaseManagerError(localDatabaseManager.getLastError()))
     {
@@ -189,7 +185,7 @@ void QInputOutputLocalDatabaseWidget::addStudyToQStudyTreeWidget(QString studyUI
     QList<Patient*> patientList;
 
     studyMask.setStudyInstanceUID(studyUID);
-    patientList = localDatabaseManager.queryPatientStudy(studyMask);
+    patientList = localDatabaseManager.queryPatientsAndStudies(studyMask);
     if (showDatabaseManagerError(localDatabaseManager.getLastError()))
     {
         return;
@@ -461,7 +457,7 @@ void QInputOutputLocalDatabaseWidget::addSelectedStudiesToCreateDicomdirList()
     for (int index = 0; index < selectedDICOMItemsFromQStudyTreeWidget.count(); index++)
     {
         studyMask.setStudyInstanceUID(selectedDICOMItemsFromQStudyTreeWidget.at(index).first.getStudyInstanceUID());
-        patientList = localDatabaseManager.queryPatientStudy(studyMask);
+        patientList = localDatabaseManager.queryPatientsAndStudies(studyMask);
         if (showDatabaseManagerError(localDatabaseManager.getLastError()))
         {
             return;
@@ -555,7 +551,7 @@ void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACS(PacsDevice pacsDevice
 {
     PACSJobPointer sendDICOMFilesToPACSJob(new SendDICOMFilesToPACSJob(pacsDevice, images));
     connect(sendDICOMFilesToPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(sendDICOMFilesToPACSJobFinished(PACSJobPointer)));
-    m_pacsManager->enqueuePACSJob(sendDICOMFilesToPACSJob);
+    PacsManagerSingleton::instance()->enqueuePACSJob(sendDICOMFilesToPACSJob);
 }
 
 void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJobPointer pacsJob)

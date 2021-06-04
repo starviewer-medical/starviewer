@@ -30,7 +30,7 @@ public:
     DiagnosisTestResult run();
 
     ///Retorna descripcio del test
-    QString getDescription();
+    QString getDescription() const override;
 
 protected:
     virtual unsigned int getFreeSpace(const QString &cachePath);

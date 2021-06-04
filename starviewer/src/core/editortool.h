@@ -34,13 +34,13 @@ public:
     /// Estats de la tool
     enum { NoEditor, Paint, Erase, EraseSlice, EraseRegion };
 
-    EditorTool(QViewer *viewer, QObject *parent = 0);
-    ~EditorTool();
+    explicit EditorTool(QViewer *viewer, QObject *parent = nullptr);
+    ~EditorTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
     /// Retorna les dades de la tool
-    ToolData* getToolData() const;
+    ToolData* getToolData() const override;
 
 private:
     /// Pinta el quadrat vert si fa falta (estats Paint i Erase) a la posició del cursor

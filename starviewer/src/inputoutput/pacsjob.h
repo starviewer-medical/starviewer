@@ -95,7 +95,7 @@ private:
     virtual void requestCancelJob() = 0;
 
 private:
-    static int m_jobIDCounter;
+    static QAtomicInt m_jobIDCounter;
     int m_jobID;
     PacsDevice m_pacsDevice;
     bool m_abortIsRequested;

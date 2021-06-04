@@ -35,7 +35,7 @@ public:
     DiagnosisTestResult run();
 
     /// Retorna la descripció del test
-    QString getDescription();
+    QString getDescription() const override;
 
 protected:
     virtual FirewallAccess* createFirewall();

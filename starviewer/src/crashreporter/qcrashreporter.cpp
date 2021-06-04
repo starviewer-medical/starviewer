@@ -15,22 +15,35 @@
 #include <QDateTime>
 
 #include "qcrashreporter.h"
-#include "crashreportersender.h"
 #include "../core/starviewerapplication.h"
 #include "logging.h"
 #include "executablesnames.h"
-#include <QMovie>
+#include <QTimer>
 #include <QNetworkInterface>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
+#include <QHttpMultiPart>
+#include <QHttpPart>
+#include <QUrl>
 #include <QProcess>
+#include <QMessageBox>
 
 namespace udg {
 
 QCrashReporter::QCrashReporter(const QStringList &args, QWidget *parent)
     : QWidget(parent)
 {
-    setWindowIcon(QIcon(":/images/starviewer.png"));
+    m_reply = nullptr;
+    m_multipart = nullptr;
+    m_dumpQFile = nullptr;
+
+    m_crashTime = QDateTime::currentDateTimeUtc();
+    m_manager = new QNetworkAccessManager();
+    m_closeTimer = new QTimer();
+    m_closeTimer->setInterval(1500);
 
     setupUi(this);
+    setWindowIcon(QIcon(":/images/logo/logo.ico"));
 
     setWindowTitle(tr("%1").arg(ApplicationNameString));
     m_quitPushButton->setText(tr("Quit %1").arg(ApplicationNameString));
@@ -38,16 +51,16 @@ QCrashReporter::QCrashReporter(const QStringList &args, QWidget *parent)
     m_sendReportCheckBox->setText(tr("Tell %1 about this crash").arg(ApplicationNameString));
     m_informationLabel->setText(tr("We're sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix "
                                    "the problem. Your personal information is not sent with this report.  ").arg(ApplicationNameString));
+    m_sendReportLabel->setVisible(false);
+    m_sendProgressBar->setVisible(false);
+    m_sendError->setVisible(false);
+    m_sendSuccess->setVisible(false);
+    m_abortSendPushButton->setVisible(false);
 
-    m_minidumpPath = args[1] + "/" + args[2] + ".dmp";
 
-    QMovie *sendReportAnimation = new QMovie(this);
-    sendReportAnimation->setFileName(":/images/loader.gif");
-    m_sendReportAnimation->setMovie(sendReportAnimation);
-    sendReportAnimation->start();
-
-    m_sendReportLabel->hide();
-    m_sendReportAnimation->hide();
+    m_minidumpUUID = args[2];
+    m_minidumpFilename = m_minidumpUUID + ".dmp";
+    m_minidumpPath = args[1] + "/" + m_minidumpFilename;
 
     // Busquem les adreces IP del host.
     QString ipAddresses("");
@@ -85,20 +98,186 @@ QCrashReporter::QCrashReporter(const QStringList &args, QWidget *parent)
 
     m_hostInformationTextEdit->setPlainText(hostInformation);
 
-    connect(m_quitPushButton, SIGNAL(clicked()), this, SLOT(quitButtonClickedSlot()));
-    connect(m_restartPushButton, SIGNAL(clicked()), this, SLOT(restartButtonClickedSlot()));
+    connect(this, SIGNAL(resendReport()), this, SLOT(maybeSendReport()));
+    connect(m_closeTimer, SIGNAL(timeout()), this, SLOT(close()));
+
+    connect(m_quitPushButton, SIGNAL(clicked(bool)), this, SLOT(onQuitPushButtonClicked()));
+    connect(m_restartPushButton, SIGNAL(clicked(bool)), this, SLOT(onRestartPushButtonClicked()));
+    connect(m_abortSendPushButton, SIGNAL(clicked(bool)), this, SLOT(onAbortSendPushButtonClicked()));
+
 }
 
-void QCrashReporter::quitButtonClickedSlot()
+QCrashReporter::~QCrashReporter()
+{
+    if (m_dumpQFile || m_reply || m_multipart)
+    {
+        delete m_reply;
+        delete m_multipart;
+        delete m_dumpQFile;
+    }
+    delete m_manager;
+    delete m_closeTimer;
+}
+
+void QCrashReporter::closeEvent(QCloseEvent* event)
+{
+    if (!m_sendReportCheckBox->isChecked())
+    {
+        if (m_doRestart)
+        {
+            restart();
+        }
+        return QWidget::closeEvent(event);
+    }
+
+    if (!m_acceptClose)
+    {
+        emit maybeSendReport();
+        event->ignore();
+    }
+    else if (!m_timerStarted)
+    {
+        m_sendReportLabel->setVisible(false);
+        m_sendProgressBar->setVisible(false);
+        m_abortSendPushButton->setVisible(false);
+        if (m_successful)
+        {
+            m_sendSuccess->setVisible(true);
+        }
+        else {
+            m_sendError->setVisible(true);
+        }
+        m_closeTimer->start();
+        m_timerStarted = true;
+        event->ignore();
+    }
+    else {
+        if (m_doRestart)
+        {
+            restart();
+        }
+        return QWidget::closeEvent(event);
+    }
+
+}
+
+void QCrashReporter::onQuitPushButtonClicked()
 {
     maybeSendReport();
+}
+
+void QCrashReporter::onRestartPushButtonClicked()
+{
+    m_doRestart = true;
+    maybeSendReport();
+}
+
+void QCrashReporter::onAbortSendPushButtonClicked()
+{
+    m_sendReportCheckBox->setChecked(false);
     close();
 }
 
-void QCrashReporter::restartButtonClickedSlot()
+void QCrashReporter::maybeSendReport()
 {
-    maybeSendReport();
+    if (m_sendReportCheckBox->isChecked())
+    {
+        m_restartPushButton->setVisible(false);
+        m_quitPushButton->setVisible(false);
+        sendReport();
+    }
+    else {
+        m_acceptClose = true;
+        close();
+    }
+}
 
+void QCrashReporter::sendReport()
+{
+    if (m_dumpQFile || m_reply || m_multipart)
+    {
+        delete m_reply;
+        delete m_multipart;
+        delete m_dumpQFile;
+        m_reply = nullptr;
+        m_multipart = nullptr;
+        m_dumpQFile = nullptr;
+    }
+
+    auto createHttpPart = [] (const QString& name, const QString& value) -> QHttpPart {
+        QHttpPart part;
+        part.setHeader(QNetworkRequest::KnownHeaders::ContentDispositionHeader, QVariant(QString("form-data; name=\"%1\"").arg(name)));
+        part.setBody(value.toUtf8());
+        return part;
+    };
+
+    QString product = ApplicationNameString;
+    QString version = StarviewerVersionString;
+    QString guid = m_minidumpUUID;
+    QString ptime = QString::number(m_crashTime.toUTC().toMSecsSinceEpoch() / 1000) ;
+    QString ctime = m_crashTime.toLocalTime().toTimeSpec(Qt::TimeSpec::OffsetFromUTC).toString(Qt::DateFormat::ISODate);
+    QString email = m_emailLineEdit->text();
+    QString comments = m_descriptionTextEdit->toPlainText();
+    QString minidump_filename = m_minidumpFilename;
+
+    if (m_hostInformationCheckBox->isChecked())
+    {
+        comments += QString("\n// %1:\n").arg(tr("Host information"));
+        comments += m_hostInformationTextEdit->toPlainText();
+    }
+
+    m_dumpQFile = new QFile(m_minidumpPath);
+    if (!m_dumpQFile->open(QFile::OpenModeFlag::ReadOnly))
+    {
+        ERROR_LOG(QString("Error opening the dump file %1 because [%2]").arg(m_minidumpPath).arg(m_dumpQFile->errorString()));
+        delete m_dumpQFile;
+        m_dumpQFile = nullptr;
+        m_acceptClose = true;
+        close();
+        return;
+    }
+
+
+    m_multipart = new QHttpMultiPart(QHttpMultiPart::ContentType::FormDataType);
+    m_multipart->append(createHttpPart("prod",product));
+    m_multipart->append(createHttpPart("ver",version));
+    m_multipart->append(createHttpPart("guid",guid));
+    m_multipart->append(createHttpPart("ptime",ptime));
+    m_multipart->append(createHttpPart("ctime",ctime));
+    m_multipart->append(createHttpPart("email",email));
+    m_multipart->append(createHttpPart("comments",comments));
+
+    QHttpPart dumpPart;
+    dumpPart.setHeader(QNetworkRequest::KnownHeaders::ContentTypeHeader, "application/octet-stream");
+    dumpPart.setHeader(QNetworkRequest::KnownHeaders::ContentDispositionHeader,
+                       QVariant("form-data; name=\"upload_file_minidump\"; filename=\"" + minidump_filename + "\"")
+                       );
+    dumpPart.setBodyDevice(m_dumpQFile);
+    m_multipart->append(dumpPart);
+
+    QUrl url("http://localhost:8080/receive");
+    QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::Attribute::CacheLoadControlAttribute, QNetworkRequest::CacheLoadControl::AlwaysNetwork);
+    request.setAttribute(QNetworkRequest::Attribute::CacheSaveControlAttribute, false);
+    request.setHeader(QNetworkRequest::KnownHeaders::UserAgentHeader, QString("%1 (%2)").arg(ApplicationNameString, StarviewerBuildPlatform));
+
+
+    this->connect(m_manager,SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)),this,SLOT(onManagerSslErrors(QNetworkReply*,QList<QSslError>)));
+    m_reply = m_manager->post(request, m_multipart);
+
+
+    m_sendReportLabel->setVisible(true);
+    m_sendProgressBar->setVisible(true);
+    m_abortSendPushButton->setVisible(true);
+    m_sendProgressBar->setValue(0);
+
+    this->connect(m_reply,SIGNAL(error(QNetworkReply::NetworkError)),SLOT(onReplyError(QNetworkReply::NetworkError)));
+    this->connect(m_reply,SIGNAL(finished()),SLOT(onReplyFinished()));
+    this->connect(m_reply,SIGNAL(uploadProgress(qint64,qint64)),SLOT(onReplyUploadProgress(qint64,qint64)));
+}
+
+bool QCrashReporter::restart()
+{
     QString starviewerPath = QCoreApplication::applicationDirPath() + "/" + STARVIEWER_EXE;
 #ifdef WIN32
     // En windows per poder executar l'starviewer hem de tenir en compte que si està en algun directori que conte espais
@@ -109,68 +288,61 @@ void QCrashReporter::restartButtonClickedSlot()
      starviewerPath = "\"" + starviewerPath + "\"";
 #endif
 
-    restart(starviewerPath);
-
-    close();
-}
-
-void QCrashReporter::maybeSendReport()
-{
-    if (m_sendReportCheckBox->isChecked())
-    {
-        m_sendReportAnimation->show();
-        m_sendReportLabel->show();
-        qApp->processEvents();
-        sendReport();
-    }
-}
-
-void QCrashReporter::sendReport()
-{
-    QHash<QString, QString> options;
-    options.insert("BuildID", StarviewerBuildID);
-    options.insert("ProductName", ApplicationNameString);
-    options.insert("Version", StarviewerVersionString);
-    options.insert("Email", m_emailLineEdit->text());
-
-    QString comments(m_descriptionTextEdit->toPlainText());
-    if (m_hostInformationCheckBox->isChecked())
-    {
-        comments += QString("\n// %1:\n").arg(tr("Host information"));
-        comments += m_hostInformationTextEdit->toPlainText();
-    }
-
-    options.insert("Comments", comments);
-    options.insert("CrashTime", QByteArray::number(QDateTime::currentDateTime().toTime_t()));
-    // El valor 1 significa que es tindran en compte les condicions d'acceptacio programades al fitxer
-    // de configuracio del "collector".
-    // El valor 0 significa que s'acceptaran tots els reports. Les condicions d'acceptacio no es tenen en compte.
-    options.insert("Throttleable", "1");
-
-    // Enviem el report només en cas de release.
-#ifdef QT_NO_DEBUG
-    bool success = CrashReporterSender::sendReport("http://starviewer.udg.edu/crashreporter/submit", m_minidumpPath, options);
-
-    if (success)
-    {
-        INFO_LOG(QString("Crash report enviat: %1").arg(m_minidumpPath));
-    }
-    else
-    {
-        ERROR_LOG(QString("Error al enviar el crash report: %1").arg(m_minidumpPath));
-    }
-#endif
-
-    m_sendReportAnimation->hide();
-    m_sendReportLabel->hide();
-}
-
-bool QCrashReporter::restart(const QString &path)
-{
     QProcess process;
-    process.startDetached(path);
+    process.startDetached(starviewerPath);
 
     return true;
+}
+
+void QCrashReporter::onReplyError(QNetworkReply::NetworkError code)
+{
+    ERROR_LOG(QString("Error sending the crash report %1 because of [%2]").arg(m_minidumpPath).arg(m_reply->errorString()));
+    m_reply->close();
+}
+
+void QCrashReporter::onReplyFinished()
+{
+    if (m_reply->error() == QNetworkReply::NetworkError::NoError)
+    {
+        INFO_LOG(QString("Crash report sent: %1").arg(m_minidumpPath));
+
+        QMessageBox successMsgbox(QMessageBox::Icon::Information,tr("Success"), tr("The crash report has been sent."));
+        m_enableMsgboxes && successMsgbox.exec();
+        m_acceptClose = true;
+        m_successful = true;
+        close();
+    }
+    else {
+        QMessageBox confirmMsgbox(QMessageBox::Icon::Warning,
+                                  tr("Send error"),
+                                  tr("The crash report could not be sent to Starviewer developers because [%1] error happened, do you want to try it again?").arg(m_reply->errorString())
+                                  );
+        confirmMsgbox.addButton(QMessageBox::StandardButton::Yes);
+        confirmMsgbox.addButton(QMessageBox::StandardButton::No);
+
+        if (m_enableMsgboxes && confirmMsgbox.exec() == QMessageBox::Yes)
+        {
+            emit resendReport();
+        }
+        else {
+            m_acceptClose = true;
+            close();
+        }
+    }
+}
+
+void QCrashReporter::onReplyUploadProgress(qint64 bytesReceived, qint64 bytesTotal)
+{
+    if (bytesTotal > 0)
+    {
+        m_sendProgressBar->setValue((bytesTotal / bytesReceived)*100);
+
+    }
+}
+
+void QCrashReporter::onManagerSslErrors(QNetworkReply *reply, const QList<QSslError> &errors)
+{
+    reply->ignoreSslErrors();
 }
 
 };

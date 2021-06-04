@@ -28,13 +28,13 @@ class DrawerText;
 class EllipticalROITool : public ROITool {
 Q_OBJECT
 public:
-    EllipticalROITool(QViewer *viewer, QObject *parent = 0);
-    ~EllipticalROITool();
+    explicit EllipticalROITool(QViewer *viewer, QObject *parent = nullptr);
+    ~EllipticalROITool() override;
 
-    void handleEvent(long unsigned eventID);
+    void handleEvent(long unsigned eventID) override;
 
 protected:
-    virtual void setTextPosition(DrawerText *text);
+    void setTextPosition(DrawerText *text) override;
 
 private:
     /// Estats de la Tool

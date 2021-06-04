@@ -19,7 +19,6 @@
 #include <QDesktopWidget>
 
 #include "settings.h"
-#include "applicationstylehelper.h"
 #include "systeminformation.h"
 
 namespace udg {
@@ -130,12 +129,6 @@ void QNotificationPopup::showEvent(QShowEvent *)
 
     this->move(QApplication::desktop()->screenGeometry(&fakeMainWindow).center() - this->rect().center());
 
-    // TODO We have to do this here because, as it stands now, if this is done in the constructor, this is done before
-    // ApplicationStyleHelper::recomputeStyleToScreenOfWidget  is called
-    ApplicationStyleHelper style;
-    style.setScaledFontSizeTo(this);
-    style.setScaledSizeTo(m_progressAnimationLabel->movie());
-
     startMoveAnimation(true);
 }
 
@@ -161,7 +154,7 @@ bool QNotificationPopup::eventFilter(QObject *, QEvent *event)
 void QNotificationPopup::setupOngoingOperationAnimation()
 {
     m_ongoingOperationAnimationMovie = new QMovie(this);
-    m_ongoingOperationAnimationMovie->setFileName(":/images/loader.gif");
+    m_ongoingOperationAnimationMovie->setFileName(":/images/animations/loader.gif");
     m_progressAnimationLabel->setMovie(m_ongoingOperationAnimationMovie);
     
     hideOngoingOperationAnimation();

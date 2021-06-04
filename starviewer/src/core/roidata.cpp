@@ -14,8 +14,10 @@
 
 #include "roidata.h"
 
-#include <QtCore/qmath.h>
 #include <cfloat>
+
+#include <QtCore/qmath.h>
+#include <QList>
 
 namespace udg {
 
@@ -66,6 +68,12 @@ double ROIData::getMaximum()
     return m_maximum;
 }
 
+double ROIData::getSum()
+{
+    computeStatistics();
+    return m_sum;
+}
+
 void ROIData::setUnits(const QString &units)
 {
     m_units = units;
@@ -96,6 +104,7 @@ void ROIData::computeStatistics()
     computeMean();
     computeStandardDeviation();
     computeMaximum();
+    computeSum();
 
     m_statisticsAreOutdated = false;
 }
@@ -141,6 +150,15 @@ void ROIData::computeMaximum()
         {
             m_maximum = value;
         }
+    }
+}
+
+void ROIData::computeSum()
+{
+    m_sum = 0.0;
+    foreach (const Voxel &voxel, m_voxels)
+    {
+        m_sum += voxel.getComponent(0);
     }
 }
 

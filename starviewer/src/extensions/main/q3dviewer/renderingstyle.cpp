@@ -88,56 +88,6 @@ void RenderingStyle::setTransferFunction(const TransferFunction &transferFunctio
     m_transferFunction = transferFunction;
 }
 
-bool RenderingStyle::getContour() const
-{
-    return m_contour;
-}
-
-void RenderingStyle::setContour(bool contour)
-{
-    m_contour = contour;
-}
-
-double RenderingStyle::getContourThreshold() const
-{
-    return m_contourThreshold;
-}
-
-void RenderingStyle::setContourThreshold(double contourThreshold)
-{
-    m_contourThreshold = contourThreshold;
-}
-
-bool RenderingStyle::getObscurance() const
-{
-    return m_obscurance;
-}
-
-void RenderingStyle::setObscurance(bool obscurance)
-{
-    m_obscurance = obscurance;
-}
-
-RenderingStyle::ObscuranceQuality RenderingStyle::getObscuranceQuality() const
-{
-    return m_obscuranceQuality;
-}
-
-void RenderingStyle::setObscuranceQuality(ObscuranceQuality obscuranceQuality)
-{
-    m_obscuranceQuality = obscuranceQuality;
-}
-
-double RenderingStyle::getObscuranceFactor() const
-{
-    return m_obscuranceFactor;
-}
-
-void RenderingStyle::setObscuranceFactor(double obscuranceFactor)
-{
-    m_obscuranceFactor = obscuranceFactor;
-}
-
 double RenderingStyle::getIsoValue() const
 {
     return m_isoValue;
@@ -158,11 +108,6 @@ QVariant RenderingStyle::toVariant() const
     map["specularCoefficient"] = m_specularCoefficient;
     map["specularPower"] = m_specularPower;
     map["transferFunction"] = m_transferFunction.toVariant();
-    map["contour"] = m_contour;
-    map["contourThreshold"] = m_contourThreshold;
-    map["obscurance"] = m_obscurance;
-    map["obscuranceQuality"] = m_obscuranceQuality;
-    map["obscuranceFactor"] = m_obscuranceFactor;
     map["isoValue"] = m_isoValue;
 
     return map;
@@ -180,11 +125,6 @@ RenderingStyle RenderingStyle::fromVariant(const QVariant &variant)
     renderingStyle.m_specularCoefficient = map["specularCoefficient"].toDouble();
     renderingStyle.m_specularPower = map["specularPower"].toDouble();
     renderingStyle.m_transferFunction = TransferFunction::fromVariant(map["transferFunction"]);
-    renderingStyle.m_contour = map["contour"].toBool();
-    renderingStyle.m_contourThreshold = map["contourThreshold"].toDouble();
-    renderingStyle.m_obscurance = map["obscurance"].toBool();
-    renderingStyle.m_obscuranceQuality = static_cast<ObscuranceQuality>(map["obscuranceQuality"].toInt());
-    renderingStyle.m_obscuranceFactor = map["obscuranceFactor"].toDouble();
     renderingStyle.m_isoValue = map["isoValue"].toDouble();
 
     return renderingStyle;

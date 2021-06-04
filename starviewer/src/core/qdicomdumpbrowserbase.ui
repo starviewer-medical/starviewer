@@ -33,13 +33,13 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../main/main.qrc">
-    <normaloff>:/images/dicomDump.png</normaloff>:/images/dicomDump.png</iconset>
+    <normaloff>:/images/icons/dicom-tags.svg</normaloff>:/images/icons/dicom-tags.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="m_dumpTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="m_defaultTagsTab">
       <attribute name="title">
@@ -155,6 +155,13 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>m_searchTagLineEdit</tabstop>
+  <tabstop>m_highlightOnlyCheckBox</tabstop>
+  <tabstop>m_tagsListQTree</tabstop>
+  <tabstop>m_dumpTabWidget</tabstop>
+  <tabstop>m_defaultTagsQTree</tabstop>
+ </tabstops>
  <resources>
   <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>

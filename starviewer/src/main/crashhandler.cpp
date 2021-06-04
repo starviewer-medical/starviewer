@@ -16,28 +16,63 @@
 
 #include "crashhandler.h"
 #include "executablesnames.h"
+#include "../core/starviewerapplication.h"
 
 #include <QString>
 #include <QDir>
 #include <QCoreApplication>
 
-#ifdef __APPLE__
-    #include <client/mac/handler/exception_handler.h>
-#elif defined WIN32
-    #include <client/windows/handler/exception_handler.h>
-#elif defined __linux__
-    #include <client/linux/handler/exception_handler.h>
-#endif
+#ifdef Q_OS_LINUX
 
-#include "../core/starviewerapplication.h"
+#include "client/linux/handler/exception_handler.h"
 
-#ifndef WIN32
+static bool launchCrashReporter(const google_breakpad::MinidumpDescriptor &minidumpDescriptor, void *crashHandler, bool succeeded)
+{
+    // DON'T USE THE HEAP!!!
+    // So crashHandler indeed means, no QStrings, no qDebug(), no QAnything, seriously!
+
+    if (!succeeded)
+    {
+        return false;
+    }
+
+    pid_t pid = fork();
+
+    if (pid == -1)
+    {
+        // Fork failed
+        return false;
+    }
+    if (pid == 0)
+    {
+        std::string path(minidumpDescriptor.path());
+        // substring starting after "directory/" of length = total - dir.length - 5 ("/" + ".dmp")
+        std::string minidumpId = path.substr(minidumpDescriptor.directory().length() + 1, path.length() - minidumpDescriptor.directory().length() - 5);
+
+        // We are the fork
+        execl(static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
+              static_cast<CrashHandler*>(crashHandler)->getCrashReporterPath(),
+              minidumpDescriptor.directory().c_str(),
+              minidumpId.c_str(),
+              (char *) 0);
+        // execl replaces this process, so no more code will be executed
+        // unless it failed. If it failed, then we should return false.
+        return false;
+    }
+
+    // We called fork()
+    return true;
+}
+
+#elif defined Q_OS_MAC
+
+#include "client/mac/handler/exception_handler.h"
 
 #include <unistd.h>
 #include <string>
 #include <iostream>
 
-bool launchCrashReporter(const char *dumpDirPath, const char *minidumpId, void *crashHandler, bool succeeded)
+static bool launchCrashReporter(const char *dumpDirPath, const char *minidumpId, void *crashHandler, bool succeeded)
 {
     // DON'T USE THE HEAP!!!
     // So crashHandler indeed means, no QStrings, no qDebug(), no QAnything, seriously!
@@ -71,7 +106,10 @@ bool launchCrashReporter(const char *dumpDirPath, const char *minidumpId, void *
     return true;
 }
 
-#else
+#elif defined Q_OS_WIN32
+
+#include "client/windows/handler/exception_handler.h"
+
 static bool launchCrashReporter(const wchar_t *dumpDirPath, const wchar_t *minidumpId, void *crashHandler, EXCEPTION_POINTERS *exinfo,
                                 MDRawAssertionInfo *assertion, bool succeeded)
 {
@@ -125,7 +163,7 @@ static bool launchCrashReporter(const wchar_t *dumpDirPath, const wchar_t *minid
     return false;
 }
 
-#endif // WIN32
+#endif // Q_OS_*
 
 CrashHandler::CrashHandler()
 {
@@ -145,12 +183,15 @@ CrashHandler::CrashHandler()
 
     this->setCrashReporterPath(crashReporterPathCString);
 
-#ifndef WIN32
-    exceptionHandler = new google_breakpad::ExceptionHandler(dumpsDir.absolutePath().toStdString(), 0, launchCrashReporter, this, true);
-#else
+#ifdef Q_OS_LINUX
+    exceptionHandler = new google_breakpad::ExceptionHandler(google_breakpad::MinidumpDescriptor(dumpsDir.absolutePath().toStdString()), nullptr,
+                                                             launchCrashReporter, this, true, -1);
+#elif defined Q_OS_MAC
+    exceptionHandler = new google_breakpad::ExceptionHandler(dumpsDir.absolutePath().toStdString(), 0, launchCrashReporter, this, true, nullptr);
+#elif defined Q_OS_WIN32
     exceptionHandler = new google_breakpad::ExceptionHandler(dumpsDir.absolutePath().toStdWString(), 0, launchCrashReporter, this,
                                                              google_breakpad::ExceptionHandler::HANDLER_ALL);
-#endif // WIN32
+#endif // Q_OS_*
 
 #endif // NO_CRASH_REPORTER
 }

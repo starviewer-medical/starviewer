@@ -51,19 +51,12 @@ public slots:
     /// Aplica la funció de transferència passada a la visualització.
     void applyClut(const TransferFunction &clut, bool preset = false);
 
-    /// Comença a calcular les obscurances, i si ja s'estan calculant ho cancel·la.
-    void computeOrCancelObscurance();
-    void endComputeObscurance();
-
     void setScalarRange(double min, double max);
 
-    void updateUiForRenderingMethod(int index);
+    void updateUiForBlendMode(int blendModeIndex);
 
     /// Actualitza la vista d'acord amb tots els paràmetres actuals de la interfície.
     void updateView(bool fast = true);
-
-signals:
-    void newTransferFunction();
 
 private:
     /// Posa a punt les tools que es poden fer servir en l'extensió
@@ -78,8 +71,6 @@ private:
     /// Estableix les connexions de signals i slots
     void createConnections();
 
-    void enableObscuranceRendering(bool on);
-
     /// Fa que es cridi updateView() quan canvia qualsevol element de la interfície.
     void enableAutoUpdate();
     /// Fa que no es cridi updateView() quan canvia qualsevol element de la interfície.
@@ -87,7 +78,6 @@ private:
 
 private slots:
     void render();
-    void autoCancelObscurance();
     void loadClut();
     void saveClut();
     void switchEditor();
@@ -114,9 +104,6 @@ private:
 
     /// Última clut aplicada.
     TransferFunction m_currentClut;
-
-    /// Ens indica si en aquests moments s'estan calculant les obscurances.
-    bool m_computingObscurance;
 
     /// Serà cert abans d'entrar el primer input.
     bool m_firstInput;

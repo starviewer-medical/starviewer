@@ -17,6 +17,8 @@
 
 #include <QString>
 
+class vtkLookupTable;
+
 namespace udg {
 
 /**
@@ -51,6 +53,9 @@ public:
 
     /// Compara que tots els membres de la classe siguin iguals
     bool operator==(const WindowLevel &windowLevelToCompare) const;
+
+    /// Returns a vtkLookupTable representing this WindowLevel.
+    vtkLookupTable* toVtkLookupTable() const;
 
 private:
     QString m_name;

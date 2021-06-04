@@ -52,10 +52,7 @@ Q3DViewerExtension::Q3DViewerExtension(QWidget *parent)
     loadClutPresets();
     loadRenderingStyles();
     createConnections();
-    updateUiForRenderingMethod(m_renderingMethodComboBox->currentIndex());
-    m_obscuranceCheckBox->hide(); m_obscuranceFactorLabel->hide(); m_obscuranceFactorDoubleSpinBox->hide();
-
-    m_computingObscurance = false;
+    updateUiForBlendMode(m_blendModeComboBox->currentIndex());
 
     m_firstInput = true;
 
@@ -168,8 +165,6 @@ void Q3DViewerExtension::loadRenderingStyles()
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/spine2.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.setContour(false);
-    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
@@ -183,8 +178,6 @@ void Q3DViewerExtension::loadRenderingStyles()
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/thorax1.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.setContour(false);
-    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
@@ -198,8 +191,6 @@ void Q3DViewerExtension::loadRenderingStyles()
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/pelvis2.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.setContour(false);
-    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
@@ -212,8 +203,6 @@ void Q3DViewerExtension::loadRenderingStyles()
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/cow1.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.setContour(false);
-    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
@@ -227,8 +216,6 @@ void Q3DViewerExtension::loadRenderingStyles()
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/carotids2.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.setContour(false);
-    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
@@ -242,8 +229,6 @@ void Q3DViewerExtension::loadRenderingStyles()
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/bones4.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.setContour(false);
-    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
@@ -256,8 +241,6 @@ void Q3DViewerExtension::loadRenderingStyles()
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/bonehires.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.setContour(false);
-    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
@@ -271,8 +254,6 @@ void Q3DViewerExtension::loadRenderingStyles()
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/abdomenbones.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.setContour(false);
-    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
@@ -286,8 +267,6 @@ void Q3DViewerExtension::loadRenderingStyles()
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/abdomenrunoff1.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.setContour(false);
-    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
@@ -301,8 +280,6 @@ void Q3DViewerExtension::loadRenderingStyles()
     transferFunction = TransferFunctionIO::fromXmlFile(":/extensions/Q3DViewerExtension/renderingstyles/abdomenslab.xml");
     renderingStyle.setTransferFunction(*transferFunction);
     delete transferFunction;
-    renderingStyle.setContour(false);
-    renderingStyle.setObscurance(false);
     item->setData(renderingStyle.toVariant());
     m_renderingStyleModel->appendRow(item);
 
@@ -312,19 +289,8 @@ void Q3DViewerExtension::loadRenderingStyles()
 void Q3DViewerExtension::createConnections()
 {
     // Actualització del mètode de rendering
-    connect(m_renderingMethodComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateUiForRenderingMethod(int)));
-
-    // Contorns
-    connect(m_contourCheckBox, SIGNAL(toggled(bool)), m_contourThresholdLabel, SLOT(setEnabled(bool)));
-    connect(m_contourCheckBox, SIGNAL(toggled(bool)), m_contourThresholdDoubleSpinBox, SLOT(setEnabled(bool)));
-
-    // Obscurances
-    connect(m_obscuranceComputeCancelPushButton, SIGNAL(clicked()), this, SLOT(computeOrCancelObscurance()));
-    connect(m_3DView, SIGNAL(obscuranceProgress(int)), m_obscuranceProgressBar, SLOT(setValue(int)));
-    connect(m_3DView, SIGNAL(obscuranceComputed()), this, SLOT(endComputeObscurance()));
-    connect(m_3DView, SIGNAL(obscuranceCancelledByProgram()), this, SLOT(autoCancelObscurance()));
-    connect(m_obscuranceCheckBox, SIGNAL(toggled(bool)), m_obscuranceFactorLabel, SLOT(setEnabled(bool)));
-    connect(m_obscuranceCheckBox, SIGNAL(toggled(bool)), m_obscuranceFactorDoubleSpinBox, SLOT(setEnabled(bool)));
+    connect(m_blendModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateUiForBlendMode);
+    connect(m_renderModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateUiForBlendMode);
 
     enableAutoUpdate();
 
@@ -337,10 +303,11 @@ void Q3DViewerExtension::createConnections()
     connect(m_customStyleToolButton, SIGNAL(clicked()), SLOT(toggleClutEditor()));
 
     connect(m_3DView, SIGNAL(transferFunctionChanged()), SLOT(changeViewerTransferFunction()));
-    connect(this, SIGNAL(newTransferFunction()), m_3DView, SLOT(setNewTransferFunction()));
-
-    // Visor 3d
-    connect(m_3DView, SIGNAL(scalarRange(double, double)), SLOT(setScalarRange(double, double)));
+    connect(m_3DView, &Q3DViewer::volumeChanged, [this](Volume *volume) {
+        double range[2];
+        volume->getScalarRange(range);
+        this->setScalarRange(range[0], range[1]);
+    });
 
     // Rendering styles
     connect(m_renderingStyleListView, SIGNAL(activated(const QModelIndex&)), SLOT(applyRenderingStyle(const QModelIndex&)));
@@ -352,7 +319,6 @@ void Q3DViewerExtension::createConnections()
 
     // Per mostrar exportació
     connect(m_screenshotsExporterToolButton, SIGNAL(clicked()), SLOT(showScreenshotsExporterDialog()));
-
 }
 
 void Q3DViewerExtension::setInput(Volume *input)
@@ -366,9 +332,25 @@ void Q3DViewerExtension::setInput(Volume *input)
 
 void Q3DViewerExtension::setScalarRange(double min, double max)
 {
-    unsigned short maximum = static_cast<unsigned short>(qRound(max));
+    int minimum = qRound(min);
+    int maximum = qRound(max);
+    m_gradientEditor->setMinimum(minimum);
     m_gradientEditor->setMaximum(maximum);
-    m_editorByValues->setMaximum(maximum);
+
+    // Workaround for #2824: the editor by values doesn't support such small ranges
+    if (static_cast<int>(min) == static_cast<int>(max))
+    {
+        m_editorsStackedWidget->setCurrentIndex(0);
+        m_switchEditorPushButton->setEnabled(false);
+    }
+    else
+    {
+        m_switchEditorPushButton->setEnabled(true);
+        m_editorByValues->setMinimum(minimum);
+        m_editorByValues->setMaximum(maximum);
+    }
+
+    m_isoValueSpinBox->setMinimum(minimum);
     m_isoValueSpinBox->setMaximum(maximum);
 
     if (m_firstInput)
@@ -376,7 +358,6 @@ void Q3DViewerExtension::setScalarRange(double min, double max)
         m_currentClut.set(min, Qt::black, 0.0);
         m_currentClut.set(max, Qt::white, 1.0);
         m_firstInput = false;
-        emit newTransferFunction();
     }
 }
 
@@ -412,7 +393,6 @@ void Q3DViewerExtension::applyClut(const TransferFunction &clut, bool preset)
     m_gradientEditor->setTransferFunction(m_currentClut);
     m_editorByValues->setTransferFunction(m_currentClut);
     m_3DView->setTransferFunction(m_currentClut);
-    emit newTransferFunction();
 //     this->render();
 }
 
@@ -421,81 +401,6 @@ void Q3DViewerExtension::changeViewerTransferFunction()
     // Actualitzem l'editor de cluts quan es canvia per la funció pel w/l del visor
     m_gradientEditor->setTransferFunction(m_3DView->getTransferFunction());
     m_editorByValues->setTransferFunction(m_3DView->getTransferFunction());
-}
-
-void Q3DViewerExtension::computeOrCancelObscurance()
-{
-    this->setCursor(QCursor(Qt::WaitCursor));
-
-    if (!m_computingObscurance)
-    {
-        // No s'estan calculant -> comencem
-        m_computingObscurance = true;
-
-        enableObscuranceRendering(false);
-
-        m_obscuranceComputeCancelPushButton->setText(tr("Cancel"));
-        m_obscuranceProgressBar->setValue(0);
-
-        switch (m_obscuranceQualityComboBox->currentIndex())
-        {
-            case 0:
-                m_3DView->computeObscurance(Q3DViewer::Low);
-                break;
-            case 1:
-                m_3DView->computeObscurance(Q3DViewer::Medium);
-                break;
-            case 2:
-                m_3DView->computeObscurance(Q3DViewer::High);
-                break;
-            default:
-                ERROR_LOG(QString("Valor inesperat per a la qualitat de les obscurances: %1").arg(m_obscuranceQualityComboBox->currentIndex()));
-        }
-    }
-    else
-    {
-        // S'estan calculant -> aturem-ho
-        m_computingObscurance = false;
-
-        m_obscuranceComputeCancelPushButton->setText(tr("Compute"));
-
-        m_3DView->cancelObscurance();
-    }
-
-    this->unsetCursor();
-}
-
-void Q3DViewerExtension::autoCancelObscurance()
-{
-    Q_ASSERT(m_computingObscurance);
-
-    this->setCursor(QCursor(Qt::WaitCursor));
-    m_computingObscurance = false;
-    m_obscuranceComputeCancelPushButton->setText(tr("Compute"));
-    this->unsetCursor();
-}
-
-void Q3DViewerExtension::endComputeObscurance()
-{
-    m_computingObscurance = false;
-    m_obscuranceComputeCancelPushButton->setText(tr("Compute"));
-    enableObscuranceRendering(true);
-    // Les activem automàticament quan acaba el càlcul
-    m_obscuranceCheckBox->setChecked(true);
-}
-
-void Q3DViewerExtension::enableObscuranceRendering(bool on)
-{
-    if (!on)
-    {
-        m_obscuranceCheckBox->setChecked(false);
-    }
-
-    m_obscuranceCheckBox->setEnabled(on);
-    m_obscuranceCheckBox->setVisible(on);
-    m_obscuranceFactorLabel->setVisible(on);
-    m_obscuranceFactorDoubleSpinBox->setVisible(on);
-    m_obscuranceProgressBar->setVisible(!on);
 }
 
 void Q3DViewerExtension::render()
@@ -521,7 +426,6 @@ void Q3DViewerExtension::loadClut()
         QTransferFunctionEditor *currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());
         currentEditor->setTransferFunction(*transferFunction);
         delete transferFunction;
-        emit newTransferFunction();
 
         QFileInfo transferFunctionFileInfo(transferFunctionFileName);
         settings.setValue(Q3DViewerExtensionSettings::CustomClutsDirPath, transferFunctionFileInfo.absolutePath());
@@ -601,21 +505,7 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
     switch (renderingStyle.getMethod())
     {
         case RenderingStyle::RayCasting:
-        case RenderingStyle::Texture3D:
-        case RenderingStyle::Texture2D:
-            if (renderingStyle.getMethod() == RenderingStyle::RayCasting)
-            {
-                m_renderingMethodComboBox->setCurrentIndex(renderingStyle.getObscurance() ? 1 : 0);
-            }
-            else if (renderingStyle.getMethod() == RenderingStyle::Texture3D)
-            {
-                m_renderingMethodComboBox->setCurrentIndex(3);
-            }
-            else
-            {
-                m_renderingMethodComboBox->setCurrentIndex(4);
-            }
-
+            m_blendModeComboBox->setCurrentIndex(0);
             applyClut(renderingStyle.getTransferFunction());
             m_shadingGroupBox->setChecked(renderingStyle.getShading());
 
@@ -627,55 +517,16 @@ void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
                 m_specularPowerDoubleSpinBox->setValue(renderingStyle.getSpecularPower());
             }
 
-            if (renderingStyle.getMethod() == RenderingStyle::RayCasting)
-            {
-                m_contourCheckBox->setChecked(renderingStyle.getContour());
-                if (renderingStyle.getContour())
-                {
-                    m_contourThresholdDoubleSpinBox->setValue(renderingStyle.getContourThreshold());
-                }
-
-                if (renderingStyle.getObscurance())
-                {
-                    // Si s'estan calculant no toquem res
-                    if (!m_computingObscurance)
-                    {
-                        /// \todo fer una comprovació més ben feta (amb un booleà)
-                        if (!m_obscuranceCheckBox->isVisible())
-                        {
-                            // Si no hi ha obscurances calcular-les
-                            m_obscuranceQualityComboBox->setCurrentIndex(static_cast<int>(renderingStyle.getObscuranceQuality()));
-                            m_obscuranceComputeCancelPushButton->click();
-                        }
-                        else
-                        {
-                            // Altrament aplicar-les i ja està
-                            m_obscuranceCheckBox->setChecked(true);
-                        }
-                    }
-
-                    m_obscuranceFactorDoubleSpinBox->setValue(renderingStyle.getObscuranceFactor());
-                }
-            }
-
             break;
 
         case RenderingStyle::MIP:
-            m_renderingMethodComboBox->setCurrentIndex(2);
+            m_blendModeComboBox->setCurrentIndex(1);
             break;
 
         case RenderingStyle::IsoSurface:
-            m_renderingMethodComboBox->setCurrentIndex(5);
+            m_blendModeComboBox->setCurrentIndex(5);
             m_isoValueSpinBox->setValue(static_cast<int>(qRound(renderingStyle.getIsoValue())));
             break;
-
-        case RenderingStyle::Contouring:
-            m_renderingMethodComboBox->setCurrentIndex(6);
-            break;
-
-        default:
-            enableAutoUpdate();
-            return;
     }
 
     updateView(false);
@@ -688,56 +539,15 @@ void Q3DViewerExtension::showScreenshotsExporterDialog()
     exporter.exec();
 }
 
-void Q3DViewerExtension::updateUiForRenderingMethod(int index)
+void Q3DViewerExtension::updateUiForBlendMode(int blendModeIndex)
 {
-    m_shadingGroupBox->hide();
-    m_contourOptionsWidget->hide();
-    m_obscuranceOptionsWidget->hide();
-    m_isosurfaceOptionsWidget->hide();
+    auto blendMode = Q3DViewer::BlendMode(blendModeIndex);
 
-    switch (index)
-    {
-        case 0:
-            // Ray casting
-            m_shadingGroupBox->show();
-            m_contourOptionsWidget->show();
-            break;
-
-        case 1:
-            // Ray casting + obscurances
-            m_shadingGroupBox->show();
-            m_contourOptionsWidget->show();
-            m_obscuranceOptionsWidget->show();
-            break;
-
-        case 2:
-            // GPU ray casting
-            m_shadingGroupBox->show();
-            break;
-
-        case 3:
-            // Mip
-            break;
-
-        case 4:
-            // Textures 3d
-            m_shadingGroupBox->show();
-            break;
-
-        case 5:
-            // Textures 2d
-            m_shadingGroupBox->show();
-            break;
-
-        case 6:
-            // Isosuperfícies
-            m_isosurfaceOptionsWidget->show();
-            break;
-
-        case 7:
-            // Contouring
-            break;
-    }
+    m_shadingGroupBox->setVisible(blendMode == Q3DViewer::BlendMode::Composite);
+    m_rayCastingOptionsWidget->setVisible(blendMode != Q3DViewer::BlendMode::Isosurface);
+    m_isosurfaceOptionsWidget->setVisible(blendMode == Q3DViewer::BlendMode::Isosurface);
+    m_transferFunctionsWidget->setVisible(blendMode != Q3DViewer::BlendMode::Isosurface);
+    m_noTransferFunctionsWidget->setVisible(m_transferFunctionsWidget->isHidden());
 }
 
 void Q3DViewerExtension::updateView(bool fast)
@@ -746,52 +556,14 @@ void Q3DViewerExtension::updateView(bool fast)
 
     this->setCursor(QCursor(Qt::WaitCursor));
 
-    switch (m_renderingMethodComboBox->currentIndex())
-    {
-        case 0:
-            m_3DView->setRenderFunctionToRayCasting();
-            break;
-
-        case 1:
-            m_3DView->setRenderFunctionToRayCastingObscurance();
-            break;
-
-        case 2:
-            m_3DView->setRenderFunctionToGpuRayCasting();
-            break;
-
-        case 3:
-            m_3DView->setRenderFunctionToMIP3D();
-            break;
-
-        case 4:
-            m_3DView->setRenderFunctionToTexture3D();
-            break;
-
-        case 5:
-            m_3DView->setRenderFunctionToTexture2D();
-            break;
-
-        case 6:
-            // Necessari per la primera vegada
-            m_3DView->setIsoValue(m_isoValueSpinBox->value());
-            m_3DView->setRenderFunctionToIsoSurface();
-            break;
-
-        case 7:
-            m_3DView->setRenderFunctionToContouring();
-            break;
-    }
-
+    m_3DView->setBlendMode(Q3DViewer::BlendMode(m_blendModeComboBox->currentIndex()));
+    m_3DView->setRenderMode(Q3DViewer::RenderMode(m_renderModeComboBox->currentIndex()));
+    m_3DView->setIndependentComponents(!m_colorImageCheckBox->isChecked());
     m_3DView->setShading(m_shadingGroupBox->isChecked());
     m_3DView->setAmbientCoefficient(m_ambientCoefficientDoubleSpinBox->value());
     m_3DView->setDiffuseCoefficient(m_diffuseCoefficientDoubleSpinBox->value());
     m_3DView->setSpecularCoefficient(m_specularCoefficientDoubleSpinBox->value());
     m_3DView->setSpecularPower(m_specularPowerDoubleSpinBox->value());
-    m_3DView->setContour(m_contourCheckBox->isChecked());
-    m_3DView->setContourThreshold(m_contourThresholdDoubleSpinBox->value());
-    m_3DView->setObscurance(m_obscuranceCheckBox->isChecked());
-    m_3DView->setObscuranceFactor(m_obscuranceFactorDoubleSpinBox->value());
     m_3DView->setIsoValue(m_isoValueSpinBox->value());
 
     if (fast)
@@ -813,8 +585,9 @@ void Q3DViewerExtension::updateView(bool fast)
 
 void Q3DViewerExtension::enableAutoUpdate()
 {
-    // Actualització del mètode de rendering
-    connect(m_renderingMethodComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateView()));
+    connect(m_blendModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateView);
+    connect(m_renderModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateView);
+    connect(m_colorImageCheckBox, &QCheckBox::toggled, this, &Q3DViewerExtension::updateView);
 
     // Shading
     connect(m_shadingGroupBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
@@ -823,22 +596,15 @@ void Q3DViewerExtension::enableAutoUpdate()
     connect(m_specularCoefficientDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
     connect(m_specularPowerDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
 
-    // Contorns
-    connect(m_contourCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
-    connect(m_contourThresholdDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
-
-    // Obscurances
-    connect(m_obscuranceCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
-    connect(m_obscuranceFactorDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
-
     // Isosuperfícies
     connect(m_isoValueSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateView()));
 }
 
 void Q3DViewerExtension::disableAutoUpdate()
 {
-    // Actualització del mètode de rendering
-    disconnect(m_renderingMethodComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateView()));
+    disconnect(m_blendModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateView);
+    disconnect(m_renderModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateView);
+    disconnect(m_colorImageCheckBox, &QCheckBox::toggled, this, &Q3DViewerExtension::updateView);
 
     // Shading
     disconnect(m_shadingGroupBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
@@ -846,14 +612,6 @@ void Q3DViewerExtension::disableAutoUpdate()
     disconnect(m_diffuseCoefficientDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
     disconnect(m_specularCoefficientDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
     disconnect(m_specularPowerDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
-
-    // Contorns
-    disconnect(m_contourCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
-    disconnect(m_contourThresholdDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
-
-    // Obscurances
-    disconnect(m_obscuranceCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateView()));
-    disconnect(m_obscuranceFactorDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateView()));
 
     // Isosuperfícies
     disconnect(m_isoValueSpinBox, SIGNAL(valueChanged(int)), this, SLOT(updateView()));

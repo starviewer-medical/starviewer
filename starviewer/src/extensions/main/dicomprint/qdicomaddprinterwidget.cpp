@@ -13,6 +13,7 @@
  *************************************************************************************/
 
 #include <QMessageBox>
+#include <QIntValidator>
 #include "qdicomaddprinterwidget.h"
 #include "starviewerapplication.h"
 #include "dicomprinter.h"

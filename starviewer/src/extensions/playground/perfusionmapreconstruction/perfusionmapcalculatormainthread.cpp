@@ -569,7 +569,7 @@ void PerfusionMapCalculatorMainThread::findAIF()
             }
         }
     }
-    qSort(sortedMoment0);    // sort in ascending order
+    std::sort(sortedMoment0.begin(), sortedMoment0.end());    // sort in ascending order
     DEBUG_LOG(QString("sortedMoment 0 size: %1").arg(sortedMoment0.size()));
     DEBUG_LOG(QString("A sorted moments0 hi ha %1 voxels").arg(contm0));
 
@@ -585,7 +585,7 @@ void PerfusionMapCalculatorMainThread::findAIF()
         }
     }
     ///TODO: search if it's possible to sort descending
-    qSort(sortedMoment1);    // sort in ascending order
+    std::sort(sortedMoment1.begin(), sortedMoment1.end());    // sort in ascending order
     DEBUG_LOG(QString("sortedMoment 1 size: %1").arg(sortedMoment1.size()));
 
 /*    for (i=0;i<sortedMoment1.size();i++)

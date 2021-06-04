@@ -14,279 +14,94 @@
 
 #include "databaseinstallation.h"
 
-#include <QDir>
-#include <QFile>
-#include <QString>
-#include <QMessageBox>
-#include <sqlite3.h>
-
 #include "databaseconnection.h"
-#include "logging.h"
 #include "directoryutilities.h"
 #include "localdatabasemanager.h"
+#include "logging.h"
 #include "starviewerapplication.h"
-#include "upgradedatabasexmlparser.h"
 #include "upgradedatabaserevisioncommands.h"
+#include "upgradedatabasexmlparser.h"
+
+#include <QDir>
+#include <QFile>
+#include <QMessageBox>
+#include <QProgressDialog>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QTextStream>
 
 namespace udg {
 
-DatabaseInstallation::DatabaseInstallation()
- : m_qprogressDialog(0)
+namespace {
+
+// Returns the UpgradeDatabaseXMLParser filled with the upgrade XML.
+UpgradeDatabaseXMLParser getUpgradeDatabaseXmlParser()
 {
-}
+    QFile file(":cache/upgradeDatabase.xml");
 
-DatabaseInstallation::~DatabaseInstallation()
-{
-}
-
-bool DatabaseInstallation::checkStarviewerDatabase()
-{
-    LocalDatabaseManager localDatabaseManager;
-    m_errorMessage = "";
-    bool isCorrect;
-
-    // Comprovem que existeix el path on s'importen les imatges, sinó existeix l'intentarà crear
-    isCorrect = checkLocalImagePath();
-
-    if (!existsDatabaseFile())
+    if (!file.open(QFile::ReadOnly | QFile::Text))
     {
-        if (!createDatabaseFile())
-        {
-            ERROR_LOG("Error no s'ha pogut crear la base de dades a " + LocalDatabaseManager::getDatabaseFilePath());
-            m_errorMessage += "\n";
-            m_errorMessage += tr("Unable to create database, be sure you have write permission on the database directory.");
-            isCorrect = false;
-        }
-    }
-    else
-    {
-        // Comprovar que tenim permisos d'escriptura a la BDD
-        if (!isDatabaseFileWritable())
-        {
-            // TODO què fem? cal retornar fals? Avisar a l'usuari?
-            ERROR_LOG("L'arxiu de base de dades [" + LocalDatabaseManager::getDatabaseFilePath() + "] no es pot obrir amb permisos d'escriptura, " +
-                      "no podrem guardar estudis nous ni modificar els ja existents.");
-            m_errorMessage += "\n";
-            m_errorMessage += tr("You don't have write permission on %1 database. Retrieval or importing of new studies will fail.").arg(ApplicationNameString);
-        }
-
-        isCorrect = checkDatabaseRevision();
-        if (!isCorrect)
-        {
-            m_errorMessage += "\n";
-            m_errorMessage += tr("Unable to upgrade database file, be sure you have write permission on the database directory.");
-        }
+        ERROR_LOG("Can't read database upgrade file.");
+        return UpgradeDatabaseXMLParser(QString());
     }
 
-    if (!isCorrect)
+    QTextStream stream(&file);
+    QString upgradeXml = stream.readAll();
+    file.close();
+
+    return UpgradeDatabaseXMLParser(upgradeXml);
+}
+
+// Returns true if the database can be upgraded to the required revision and fals otherwise.
+bool databaseCanBeUpgraded(const UpgradeDatabaseXMLParser &upgradeDatabaseXmlParser)
+{
+    int minimumDatabaseRevisionRequired = upgradeDatabaseXmlParser.getMinimumDatabaseRevisionRequiredToUpgrade();
+
+    if (minimumDatabaseRevisionRequired < 0)
     {
+        ERROR_LOG("Could not get the minimum required version to upgrade the database.");
         return false;
     }
 
-    INFO_LOG("Estat de la base de dades correcte ");
-    INFO_LOG("Base de dades utilitzada : " + LocalDatabaseManager::getDatabaseFilePath() + " revisio " +
-             QString().setNum(localDatabaseManager.getDatabaseRevision()));
-    return true;
-}
-
-bool DatabaseInstallation::checkLocalImagePath()
-{
-    if (!existsLocalImagePath())
+    if (LocalDatabaseManager().getDatabaseRevision() >= minimumDatabaseRevisionRequired)
     {
-        if (!createLocalImageDir())
-        {
-            ERROR_LOG("Error el path de la cache d'imatges no s'ha pogut crear " + LocalDatabaseManager::getCachePath());
-            m_errorMessage += "\n";
-            m_errorMessage += tr("Unable to create the cache image directory. Please check user permissions.");
-            return false;
-        }
-    }
-    else
-    {
-        // Comprovar que tenim permisos d'escriptura al directori local d'imatges
-        QFileInfo imagePathInfo(LocalDatabaseManager::getCachePath());
-        if (!imagePathInfo.isWritable())
-        {
-            ERROR_LOG("El directori de la cache d'imatges no te permisos d'escriptura: " + LocalDatabaseManager::getCachePath());
-            m_errorMessage += "\n";
-            m_errorMessage += tr("You don't have write permission on cache image directory. Retrieval or importing of new studies will fail.");
-            return false;
-        }
-    }
-
-    INFO_LOG("Estat de la cache d'imatges correcte ");
-    INFO_LOG("Cache d'imatges utilitzada : " + LocalDatabaseManager::getCachePath());
-
-    return true;
-}
-
-bool DatabaseInstallation::checkDatabasePath()
-{
-    if (!existsDatabasePath())
-    {
-        if (!createDatabaseDirectory())
-        {
-            ERROR_LOG("Error el path de la base de dades no s'ha pogut crear " + LocalDatabaseManager::getDatabaseFilePath());
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool DatabaseInstallation::checkDatabaseRevision()
-{
-    LocalDatabaseManager localDatabaseManager;
-
-    if (localDatabaseManager.getDatabaseRevision() == StarviewerDatabaseRevisionRequired)
-    {
-        return true;
-    }
-    else if (StarviewerDatabaseRevisionRequired  <localDatabaseManager.getDatabaseRevision())
-    {
-        INFO_LOG(QString("La base de dades es de la versio %1 una versio mes nova que la necessaria la %2, aquesta versio es incomptabile"
-                         " amb la versio d'%3 que s'esta executant, es demanara a l'usuari si vol abandonar %3, o reinstal.lar la base de dades.")
-                 .arg(QString::number(localDatabaseManager.getDatabaseRevision()), QString::number(StarviewerDatabaseRevisionRequired), ApplicationNameString));
-
-        if (askToUserIfDowngradeDatabase())
-        {
-            INFO_LOG("L'usuari ha indicat que vol reinstal.lar la base de dades");
-            recreateDatabase();
-        }
-        else
-        {
-            INFO_LOG(QString("L'usuari ha indicat que no vol reinstal.lar la base de dades per tant es tancara %1").arg(ApplicationNameString));
-            exit(0);
-        }
-    }
-    else if (localDatabaseManager.getDatabaseRevision() < StarviewerDatabaseRevisionRequired)
-    {
-        INFO_LOG("La revisio actual de la base de dades es " + QString().setNum(localDatabaseManager.getDatabaseRevision()) + " per aquesta versio d'" +
-                 ApplicationNameString + " es necessaria la " + QString().setNum(StarviewerDatabaseRevisionRequired) +
-                 ", es procedira a actualitzar la base de dades");
-
-        return tryToUpgradeDatabaseIfNotRecreateDatabase();
-    }
-
-    return true;
-}
-
-bool DatabaseInstallation::isDatabaseFileWritable()
-{
-    QFileInfo databaseFilePath(LocalDatabaseManager::getDatabaseFilePath());
-
-    return databaseFilePath.isWritable();
-}
-
-bool DatabaseInstallation::reinstallDatabase()
-{
-    // Si existeix l'esborrem la base de dades
-    if (existsDatabaseFile())
-    {
-        if (!QFile().remove(LocalDatabaseManager::getDatabaseFilePath()))
-        {
-            ERROR_LOG("Reinstal.lant la base de dades no s'ha pogut esborrar el fitxer de la base de dades " + LocalDatabaseManager::getDatabaseFilePath());
-            return false;
-        }
-    }
-
-    if (!createDatabaseFile())
-    {
-        return false;
-    }
-    else
-    {
-        return existsDatabaseFile();
-    }
-}
-
-bool DatabaseInstallation::removeCacheAndReinstallDatabase()
-{
-    DirectoryUtilities *deleteDirectory = new DirectoryUtilities();
-
-    if (m_qprogressDialog == NULL)
-    {
-        // Si nó existeix creem barra de progrés per donar feedback
-        m_qprogressDialog = new QProgressDialog(tr ("Reinstalling database"), "", 0, 0);
-        m_qprogressDialog->setCancelButton(0);
-        m_qprogressDialog->setValue(1);
-        m_qprogressDialog->setModal(true);
-    }
-
-    // Esborrem les imatges que tenim a la base de dades local, al reinstal·lar la bd ja no té sentit mantenir-les, i per cada directori esborrat movem
-    // la barra de progrés
-    connect(deleteDirectory, SIGNAL(directoryDeleted()), this, SLOT(setValueProgressBar()));
-    deleteDirectory->deleteDirectory(LocalDatabaseManager::getCachePath(), false);
-    delete deleteDirectory;
-
-    m_qprogressDialog->close();
-
-    return reinstallDatabase();
-}
-
-bool DatabaseInstallation::recreateDatabase()
-{
-    bool status;
-
-    // Creem barra de progrés per donar feedback
-    m_qprogressDialog = new QProgressDialog(tr ("Updating database"), "", 0, 0);
-    m_qprogressDialog->setCancelButton(0);
-    m_qprogressDialog->setValue(1);
-
-    // Per aquesta versió degut a que s'ha tornat a reimplementar i a reestructurar tota la base de dades fent importants
-    // canvis, no s'ha fet cap codi per transformar la bd antiga amb la nova, per això es reinstal·la la BD
-    status = removeCacheAndReinstallDatabase();
-
-    if (!status)
-    {
-        ERROR_LOG("HA FALLAT L'ACTUALITZACIO DE LA BASE DE DADES");
-    }
-
-    return status;
-}
-
-bool DatabaseInstallation::tryToUpgradeDatabaseIfNotRecreateDatabase()
-{
-    LocalDatabaseManager localDatabaseManager;
-
-    if (canBeUpgradedDatabase())
-    {
-        if (!upgradeDatabase())
-        {
-            ERROR_LOG("S'ha produit un error al actualtizar la base de dades, es procedira a reinstal.lar la base de dades");
-            return recreateDatabase();
-        }
-
         return true;
     }
     else
     {
-        UpgradeDatabaseXMLParser upgradeDatabaseXMLParser(getUpgradeDatabaseRevisionXmlData());
-        INFO_LOG("La base de dades actual no es actualitzable. Versio minima necessaria : " +
-                 QString::number(upgradeDatabaseXMLParser.getMinimumDatabaseRevisionRequiredToUpgrade())
-                  + ", versio de la base de dades actual: " + QString::number(localDatabaseManager.getDatabaseRevision()));
-        INFO_LOG("Es procedira a reinstal.lar la base de dades");
-
-        return recreateDatabase();
+        INFO_LOG(QString("Database is too old to be upgraded. Current version: %1. Minimum version to upgrade: %2.")
+                 .arg(LocalDatabaseManager().getDatabaseRevision()).arg(minimumDatabaseRevisionRequired));
+        return false;
     }
 }
 
-bool DatabaseInstallation::upgradeDatabase()
+// Upgrades the database to the required revision. Returns true if successful and false otherwise.
+bool upgradeDatabase(const UpgradeDatabaseXMLParser &upgradeDatabaseXmlParser)
 {
-    UpgradeDatabaseXMLParser upgradeDatabaseXMLParser(getUpgradeDatabaseRevisionXmlData());
-    UpgradeDatabaseRevisionCommands upgradeDatabaseRevisionCommands = upgradeDatabaseXMLParser.getUpgradeDatabaseRevisionCommands(LocalDatabaseManager().getDatabaseRevision());
+    UpgradeDatabaseRevisionCommands upgradeDatabaseRevisionCommands =
+            upgradeDatabaseXmlParser.getUpgradeDatabaseRevisionCommands(LocalDatabaseManager().getDatabaseRevision());
 
-    if (upgradeDatabaseRevisionCommands.getSqlUpgradeCommands().count() == 0)
+    if (upgradeDatabaseRevisionCommands.getSqlUpgradeCommands().isEmpty())
     {
-        ERROR_LOG("No s'ha pogut llegir cap comanda d'actualitzacio de la base de dades");
+        ERROR_LOG("Could not read any database upgrade command.");
         return false;
     }
 
-    foreach(QString sqlUpgradeCommand, upgradeDatabaseRevisionCommands.getSqlUpgradeCommands())
     {
-        if (!applySqlUpgradeCommandToDatabase(sqlUpgradeCommand))
+        DatabaseConnection databaseConnection;
+        QSqlQuery query(databaseConnection.getConnection());
+
+        foreach (const QString &sqlUpgradeCommand, upgradeDatabaseRevisionCommands.getSqlUpgradeCommands())
         {
-            return false;
+            if (query.exec(sqlUpgradeCommand))
+            {
+                INFO_LOG("Database upgrade command applied successfully: " + query.lastQuery());
+            }
+            else
+            {
+                ERROR_LOG(QString("Database upgrade command failed: %1. Error: %2") .arg(query.lastQuery()).arg(query.lastError().text()));
+                return false;
+            }
         }
     }
 
@@ -295,170 +110,301 @@ bool DatabaseInstallation::upgradeDatabase()
 
     if (localDatabaseManager.getLastError() == LocalDatabaseManager::Ok)
     {
-        INFO_LOG(QString("Base de dades actualitzada a la revisio %1").arg(upgradeDatabaseRevisionCommands.getUpgradeToDatabaseRevision()));
-    }
-    else
-    {
-        ERROR_LOG(QString("Error al actualitzar la nase de dades a la revisio %1").arg(upgradeDatabaseRevisionCommands.getUpgradeToDatabaseRevision()));
-        return false;
-    }
-
-    return true;
-}
-
-bool DatabaseInstallation::applySqlUpgradeCommandToDatabase(QString sqlUpgradeCommand)
-{
-    DatabaseConnection databaseConnection;
-
-    sqlite3_exec(databaseConnection.getConnection(), sqlUpgradeCommand.toUtf8().constData(), 0, 0, 0);
-
-    if (databaseConnection.getLastErrorCode() != SQLITE_OK)
-    {
-        ERROR_LOG(QString("No s'ha pogut aplicar la comanda d'actualitzacio %1, Descripcio error: %2") .arg(sqlUpgradeCommand, databaseConnection.getLastErrorMessage()));
-        return false;
-    }
-
-    INFO_LOG("S'ha aplicat la comanda d'actualitzacio a la base de dades : " + sqlUpgradeCommand);
-
-    return true;
-}
-
-bool DatabaseInstallation::existsLocalImagePath()
-{
-    QDir cacheImageDir;
-
-    return cacheImageDir.exists(LocalDatabaseManager::getCachePath());
-}
-
-bool DatabaseInstallation::existsDatabasePath()
-{
-    QDir databaseDir;
-
-    return databaseDir.exists(LocalDatabaseManager::getDatabaseFilePath());
-}
-
-bool DatabaseInstallation::existsDatabaseFile()
-{
-    QFile databaseFile;
-
-    return databaseFile.exists(LocalDatabaseManager::getDatabaseFilePath());
-}
-
-bool DatabaseInstallation::createLocalImageDir()
-{
-    QDir cacheImageDir;
-
-    if (cacheImageDir.mkpath(LocalDatabaseManager::getCachePath()))
-    {
-        INFO_LOG("S'ha creat el directori de la cache d'imatges " + LocalDatabaseManager::getCachePath());
+        INFO_LOG(QString("Database upgraded to revision %1.").arg(upgradeDatabaseRevisionCommands.getUpgradeToDatabaseRevision()));
         return true;
     }
     else
     {
-        ERROR_LOG("No s'ha pogut crear el directori de la cache d'imatges " + LocalDatabaseManager::getCachePath());
+        ERROR_LOG(QString("Error upgrading database to revision %1.").arg(upgradeDatabaseRevisionCommands.getUpgradeToDatabaseRevision()));
         return false;
     }
 }
 
-bool DatabaseInstallation::createDatabaseDirectory()
-{
-    QDir databaseDir;
+}
 
-    QFileInfo databaseFilePath(LocalDatabaseManager::getDatabaseFilePath());
-    QString databasePath = databaseFilePath.path();
+DatabaseInstallation::DatabaseInstallation()
+{
+}
+
+DatabaseInstallation::~DatabaseInstallation()
+{
+}
+
+bool DatabaseInstallation::checkDatabase()
+{
+    m_errorMessage = "";
+
+    return checkLocalImagePath() && checkDatabaseFile() && checkDatabaseRevision();
+}
+
+bool DatabaseInstallation::reinstallDatabase()
+{
+    QString dbFileName = LocalDatabaseManager::getDatabaseFilePath();
+    QString walFileName = dbFileName + "-wal";
+    QString shmFileName = dbFileName + "-shm";
+    bool ok = true;
+
+    for (const QString &fileName : { dbFileName, walFileName, shmFileName })
+    {
+        QFileInfo databaseFileInfo(fileName);
+
+        if (databaseFileInfo.exists())
+        {
+            if (!QFile::remove(fileName))
+            {
+                ERROR_LOG(QString("Can't remove database file %1").arg(fileName));
+                m_errorMessage = QObject::tr("Can't reinstall database because the current database can't be removed.");
+                ok = false;
+            }
+        }
+    }
+
+    return ok && createDatabaseFile();  // Database will only be created if ok is true
+}
+
+bool DatabaseInstallation::createDatabase(DatabaseConnection &databaseConnection)
+{
+    QFile sqlTablesScriptFile(":cache/database.sql");
+
+    if (!sqlTablesScriptFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        ERROR_LOG("Can't read database creation script.");
+        m_errorMessage = QObject::tr("Can't read database creation script. Can't create the database.");
+        return false;
+    }
+
+    QTextStream stream(&sqlTablesScriptFile);
+    QString sqlTablesScript = stream.readAll();
+    sqlTablesScriptFile.close();
+
+    // Trimmed to remove newline at end of file
+    QStringList sqlCommands = sqlTablesScript.trimmed().split(';', QString::SkipEmptyParts);
+
+    QSqlQuery query(databaseConnection.getConnection());
+
+    foreach (const QString &command, sqlCommands)
+    {
+        if (!query.exec(command))
+        {
+            ERROR_LOG(QString("Database creation SQL command failed: %1. Error: %2").arg(query.lastQuery()).arg(query.lastError().text()));
+            m_errorMessage = QObject::tr("Database creation script failed.");
+            return false;
+        }
+    }
+
+    INFO_LOG("Database created successfully.");
+
+    return true;
+}
+
+const QString& DatabaseInstallation::getErrorMessage() const
+{
+    return m_errorMessage;
+}
+
+bool DatabaseInstallation::checkLocalImagePath()
+{
+    QFileInfo imagePathInfo(LocalDatabaseManager::getCachePath());
+
+    if (!imagePathInfo.exists())
+    {
+        if (!createLocalImagePath())
+        {
+            return false;
+        }
+    }
+
+    if (!imagePathInfo.isWritable())
+    {
+        ERROR_LOG("Local image cache directory doesn't have write permission: " + LocalDatabaseManager::getCachePath());
+        m_errorMessage = QObject::tr("You don't have write permission on cache image directory. Retrieval or importing of new studies will fail.");
+        return false;
+    }
+
+    INFO_LOG("Local image cache check OK.");
+    INFO_LOG("Local image path: " + LocalDatabaseManager::getCachePath());
+
+    return true;
+}
+
+bool DatabaseInstallation::checkDatabasePath()
+{
+    QFileInfo databasePathInfo(QFileInfo(LocalDatabaseManager::getDatabaseFilePath()).path());
+
+    if (!databasePathInfo.exists())
+    {
+        if (!createDatabasePath())
+        {
+            return false;
+        }
+    }
+
+    if (!databasePathInfo.isWritable())
+    {
+        ERROR_LOG("Database directory doesn't have write permission: " + databasePathInfo.path());
+        m_errorMessage = QObject::tr("You don't have write permission on the database directory. Can't create the database.");
+        return false;
+    }
+
+    return true;
+}
+
+bool DatabaseInstallation::checkDatabaseFile()
+{
+    QFileInfo databaseFileInfo(LocalDatabaseManager::getDatabaseFilePath());
+
+    if (!databaseFileInfo.exists())
+    {
+        if (!createDatabaseFile())
+        {
+            return false;
+        }
+    }
+
+    if (!databaseFileInfo.isWritable())
+    {
+        ERROR_LOG("Database file doesn't have write permission: " + LocalDatabaseManager::getDatabaseFilePath());
+        m_errorMessage = QObject::tr("You don't have write permission on %1 database. Retrieval or importing of new studies will fail.")
+                .arg(ApplicationNameString);
+        return false;
+    }
+
+    INFO_LOG("Database file check OK.");
+    INFO_LOG("Database file: " + LocalDatabaseManager::getDatabaseFilePath());
+
+    return true;
+}
+
+bool DatabaseInstallation::checkDatabaseRevision()
+{
+    LocalDatabaseManager localDatabaseManager;
+    int databaseRevision = localDatabaseManager.getDatabaseRevision();
+
+    if (databaseRevision < StarviewerDatabaseRevisionRequired)
+    {
+        INFO_LOG(QString("Current database revision %1 is older than the required revision %2 for this version of %3.")
+                 .arg(databaseRevision).arg(StarviewerDatabaseRevisionRequired).arg(ApplicationNameString));
+
+        UpgradeDatabaseXMLParser upgradeDatabaseXmlParser = getUpgradeDatabaseXmlParser();
+        bool canUpgrade = databaseCanBeUpgraded(upgradeDatabaseXmlParser);
+
+        if (canUpgrade)
+        {
+            INFO_LOG("Database will be upgraded.");
+
+            if (!upgradeDatabase(upgradeDatabaseXmlParser))
+            {
+                canUpgrade = false;
+            }
+        }
+
+        if (!canUpgrade)
+        {
+            INFO_LOG("Database will be reinstalled.");
+
+            if (!deleteLocalImagesAndReinstallDatabase())
+            {
+                return false;
+            }
+        }
+    }
+    else if (databaseRevision > StarviewerDatabaseRevisionRequired)
+    {
+        INFO_LOG(QString("Current database revision %1 is newer than the required revision %2 for this version of %3. "
+                         "Asking user to choose between quitting or deleting studies and reinstalling the database.")
+                 .arg(databaseRevision).arg(StarviewerDatabaseRevisionRequired).arg(ApplicationNameString));
+
+        if (userWantsToReinstallDatabase())
+        {
+            INFO_LOG("Database will be reinstalled.");
+
+            if (!deleteLocalImagesAndReinstallDatabase())
+            {
+                return false;
+            }
+        }
+        else
+        {
+            INFO_LOG(QString("User doesn't want to reinstall the database. %1 will close.").arg(ApplicationNameString));
+            // TODO find a cleaner way to exit
+            throw 0;
+        }
+    }
+
+    INFO_LOG("Database revision check OK.");
+    INFO_LOG(QString("Database revision: %1").arg(localDatabaseManager.getDatabaseRevision()));
+
+    return true;
+}
+
+bool DatabaseInstallation::createLocalImagePath()
+{
+    QDir localImageDir;
+
+    if (localImageDir.mkpath(LocalDatabaseManager::getCachePath()))
+    {
+        INFO_LOG("Created local image cache directory: " + LocalDatabaseManager::getCachePath());
+        return true;
+    }
+    else
+    {
+        ERROR_LOG("Could not create local image cache directory: " + LocalDatabaseManager::getCachePath());
+        m_errorMessage = QObject::tr("Unable to create the cache image directory. Please check user permissions.");
+        return false;
+    }
+}
+
+bool DatabaseInstallation::createDatabasePath()
+{
+    QString databasePath = QFileInfo(LocalDatabaseManager::getDatabaseFilePath()).path();
+    QDir databaseDir;
 
     if (databaseDir.mkpath(databasePath))
     {
-        INFO_LOG("S'ha creat el directori de la base de dades " + databasePath);
+        INFO_LOG("Created database directory: " + databasePath);
         return true;
     }
     else
     {
-        ERROR_LOG("No s'ha pogut crear el directori de la base de dades " + databasePath);
+        ERROR_LOG("Could not create database directory: " + databasePath);
+        m_errorMessage = QObject::tr("Unable to create the database directory. Please check user permissions.");
         return false;
     }
 }
 
 bool DatabaseInstallation::createDatabaseFile()
 {
-    QFile sqlTablesScriptFile(":cache/database.sql");
-    QByteArray sqlTablesScript;
-    // Obrim la bdd
-    DatabaseConnection DBConnect;
-    int status;
-
-    // Comprovem que existeixi el path on s'ha de crear la base de dades, sinó el crea
     if (!checkDatabasePath())
     {
         return false;
     }
 
-    // Obrim el fitxer
-    sqlTablesScriptFile.open(QIODevice::ReadOnly);
-
-    // El llegim
-    sqlTablesScript = sqlTablesScriptFile.read(sqlTablesScriptFile.size());
-
-    // Creem les taules i els registres
-    status = sqlite3_exec(DBConnect.getConnection(), sqlTablesScript.constData(), 0, 0, 0);
-
-    // Tanquem el fitxer
-    sqlTablesScriptFile.close();
-
-    if (status == 0)
-    {
-        INFO_LOG("S'ha creat correctament la base de dades");
-        return true;
-    }
-    else
-    {
-        ERROR_LOG("No s'ha pogut crear la base de dades");
-        return false;
-    }
+    DatabaseConnection databaseConnection;
+    return createDatabase(databaseConnection);
 }
 
-bool DatabaseInstallation::canBeUpgradedDatabase()
+bool DatabaseInstallation::deleteLocalImagesAndReinstallDatabase()
 {
-    int minimumDatabaseRevisionRequired = UpgradeDatabaseXMLParser(getUpgradeDatabaseRevisionXmlData()).getMinimumDatabaseRevisionRequiredToUpgrade();
+    QProgressDialog progressDialog(QObject::tr("Reinstalling database"), QString(), 0, 0);
+    progressDialog.setCancelButton(0);
+    progressDialog.setModal(true);
+    progressDialog.show();
 
-    if (minimumDatabaseRevisionRequired < 0)
-    {
-        ERROR_LOG("No s'ha pogut obtenir quina és la versió mínima requerida de base de dades");
-        return false;
-    }
+    // Return value is ignored
+    DirectoryUtilities directoryUtilities;
+    directoryUtilities.deleteDirectory(LocalDatabaseManager::getCachePath(), false);
 
-    return minimumDatabaseRevisionRequired <= LocalDatabaseManager().getDatabaseRevision();
+    progressDialog.close();
+
+    return reinstallDatabase();
 }
 
-QString DatabaseInstallation::getUpgradeDatabaseRevisionXmlData()
+bool DatabaseInstallation::userWantsToReinstallDatabase() const
 {
-    QFile file(":cache/upgradeDatabase.xml");
+    QString questionMessage = QObject::tr("Current database is from a newer version. In order to run %1 local studies will be deleted and the database will be "
+                                          "reinstalled. Do you want to continue?").arg(ApplicationNameString);
 
-    if (!file.open(QFile::ReadOnly | QFile::Text))
-    {
-        ERROR_LOG("No s'ha trobat el fitxer per actualitzar la base de dades");
-        return NULL;
-    }
-
-    return file.readAll();
-}
-
-void DatabaseInstallation::setValueProgressBar()
-{
-    m_qprogressDialog->setValue(m_qprogressDialog->value() + 1);
-}
-
-QString DatabaseInstallation::getErrorMessage()
-{
-    return m_errorMessage;
-}
-
-bool DatabaseInstallation::askToUserIfDowngradeDatabase()
-{
-    QString questionMessage = tr("Current database is from a newer version. In order to run %1 local studies will be deleted and the database will be "
-                                 "reinstalled. Do you want to continue?").arg(ApplicationNameString);
-
-    return QMessageBox::question(NULL, ApplicationNameString, questionMessage, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes ;
+    return QMessageBox::question(0, ApplicationNameString, questionMessage, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes;
 }
 
 }

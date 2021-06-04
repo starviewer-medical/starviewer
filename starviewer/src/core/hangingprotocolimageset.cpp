@@ -22,11 +22,10 @@
 namespace udg {
 
 HangingProtocolImageSet::HangingProtocolImageSet()
- : m_abstractPriorValue(0)
+ : m_type(Type::Series), m_abstractPriorValue(0)
 {
     m_hangingProtocol = NULL;
     m_previousStudyToDisplay = NULL;
-    m_serieToDisplay = NULL;
     m_downloaded = true;
     m_imageNumberInStudyModality = -1;
 }
@@ -55,24 +54,34 @@ HangingProtocol* HangingProtocolImageSet::getHangingProtocol() const
     return m_hangingProtocol;
 }
 
-const HangingProtocolImageSetRestrictionExpression& HangingProtocolImageSet::getRestrictionExpression() const
+const QVector<HangingProtocolImageSetRestrictionExpression>& HangingProtocolImageSet::getRestrictionExpressions() const
 {
-    return m_restrictionExpression;
+    return m_restrictionExpressions;
 }
 
-void HangingProtocolImageSet::setRestrictionExpression(const HangingProtocolImageSetRestrictionExpression &restrictionExpression)
+void HangingProtocolImageSet::setRestrictionExpressions(const QVector<HangingProtocolImageSetRestrictionExpression> &restrictionExpressions)
 {
-    m_restrictionExpression = restrictionExpression;
+    m_restrictionExpressions = restrictionExpressions;
 }
 
-void HangingProtocolImageSet::setTypeOfItem(QString type)
+void HangingProtocolImageSet::addRestrictionExpression(const HangingProtocolImageSetRestrictionExpression &restrictionExpression)
 {
-    m_typeOfItem = type;
+    m_restrictionExpressions.append(restrictionExpression);
 }
 
-QString HangingProtocolImageSet::getTypeOfItem() const
+int HangingProtocolImageSet::getNumberOfRestrictionExpressions() const
 {
-    return m_typeOfItem;
+    return m_restrictionExpressions.size();
+}
+
+void HangingProtocolImageSet::setType(Type type)
+{
+    m_type = type;
+}
+
+HangingProtocolImageSet::Type HangingProtocolImageSet::getType() const
+{
+    return m_type;
 }
 
 void HangingProtocolImageSet::setImageToDisplay(int imageNumber)
@@ -85,14 +94,24 @@ int HangingProtocolImageSet::getImageToDisplay() const
     return m_imageToDisplay;
 }
 
-void HangingProtocolImageSet::setSeriesToDisplay(Series *series)
+void HangingProtocolImageSet::addSeriesToDisplay(Series *series)
 {
-    m_serieToDisplay = series;
+    m_seriesToDisplay.append(series);
 }
 
-Series* HangingProtocolImageSet::getSeriesToDisplay() const
+void HangingProtocolImageSet::clearSeriesToDisplay()
 {
-    return m_serieToDisplay;
+    m_seriesToDisplay.clear();
+}
+
+const QVector<Series*>& HangingProtocolImageSet::getSeriesToDisplay() const
+{
+    return m_seriesToDisplay;
+}
+
+int HangingProtocolImageSet::getNumberOfSeriesToDisplay() const
+{
+    return m_seriesToDisplay.size();
 }
 
 void HangingProtocolImageSet::show()
@@ -138,6 +157,11 @@ int HangingProtocolImageSet::getImageNumberInStudyModality()
 void HangingProtocolImageSet::setImageNumberInStudyModality(int imageNumberInStudyModality)
 {
     m_imageNumberInStudyModality = imageNumberInStudyModality;
+}
+
+bool HangingProtocolImageSet::isFilled() const
+{
+    return getNumberOfSeriesToDisplay() == getNumberOfRestrictionExpressions();
 }
 
 }

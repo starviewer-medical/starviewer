@@ -16,67 +16,74 @@
 #define _LOGGING_
 
 #include <QString>
-#include <QtGlobal> // Pel qpuntenv()
-/*!
-    Aquest arxiu conté totes les macros per a fer logs en l'aplicació.
-*/
 
-// Include log4cxx header files.
-#include <log4cxx/logger.h>
-#include <log4cxx/basicconfigurator.h>
-#include <log4cxx/propertyconfigurator.h>
-#include <log4cxx/helpers/exception.h>
 
-/// Macro per a inicialitzar els logger
-/// Definim la variable d'entorn que indica la localització
-/// dels fitxers de log i llavors llegim la configuració dels logs
-#define LOGGER_INIT(file) \
-    if (true) \
-    { \
-        QByteArray logFilePathValue = (QDir::toNativeSeparators(udg::UserLogsFile)).toLatin1(); \
-        qputenv("logFilePath", logFilePathValue); \
-        log4cxx::PropertyConfigurator::configure(file); \
-    } else (void)0
+/// Macro per a inicialitzar els loggers
+/// Assegurar que només es crida una sola vegada, preferiblement crideu-la
+/// just després d'incloure el fitxer logging.h al main.cpp.
+
+namespace udg {
+    void beginLogging();
+    /**
+     * Returns the path where the log should be outputted to.
+     * @return Log file path
+     */
+    QString getLogFilePath();
+    /**
+     * Location of log.conf file.
+     * 
+     * This function tries to locate the logging configuration file, trying
+     * different fallback alternatives.
+     * 
+     * @return Path where log.conf is expected to be found
+     */
+    QString getLogConfFilePath();
+    
+
+    void debugLog(const QString &msg, const QString &file, int line, const QString &function);
+    void infoLog(const QString &msg, const QString &file, int line, const QString &function);
+    void warnLog(const QString &msg, const QString &file, int line, const QString &function);
+    void errorLog(const QString &msg, const QString &file, int line, const QString &function);
+    void fatalLog(const QString &msg, const QString &file, int line, const QString &function);
+    void verboseLog(int vLevel, const QString &msg, const QString &file, int line, const QString &function);
+    void traceLog(const QString &msg, const QString &file, int line, const QString &function);
+}
+
+
+//Taken from easylogging++.h
+#if _MSC_VER  // Visual C++
+    #define LOG_FUNC __FUNCSIG__
+#elif __GNUC__  // GCC
+    #define LOG_FUNC __PRETTY_FUNCTION__
+#elif defined(__clang__) && (__clang__ == 1)  // Clang++
+    #define LOG_FUNC __PRETTY_FUNCTION__
+#elif __INTEL_COMPILER  // Intel C++
+    #define LOG_FUNC __PRETTY_FUNCTION__
+#else
+    #if defined(__func__)
+        #define LOG_FUNC __func__
+    #else
+        #define LOG_FUNC ""
+    #endif
+#endif
+
 
 /// Macro per a missatges de debug. \TODO de moment fem servir aquesta variable de qmake i funciona bé, però podria ser més adequat troba la forma d'afegir
 /// una variable pròpia, com per exemple DEBUG
 #ifdef QT_NO_DEBUG
-#define DEBUG_LOG(msg) (void)0
+    #define DEBUG_LOG(msg) while (false)
 #else
-#define DEBUG_LOG(msg) \
-    if (true) \
-    { \
-        LOG4CXX_DEBUG(log4cxx::Logger::getLogger("development"), qPrintable(QString(msg))) \
-    } else (void)0
-
+    #define DEBUG_LOG(msg) udg::debugLog(msg,__FILE__,__LINE__,LOG_FUNC)
 #endif
 
-/// Macro per a missatges d'informació general
-#define INFO_LOG(msg) \
-    if (true) \
-    { \
-        LOG4CXX_INFO(log4cxx::Logger::getLogger("info.release"), QString(msg).toUtf8().constData()) \
-    } else (void)0
+#define INFO_LOG(msg) udg::infoLog(msg,__FILE__,__LINE__,LOG_FUNC)
+#define WARN_LOG(msg) udg::warnLog(msg,__FILE__,__LINE__,LOG_FUNC)
+#define ERROR_LOG(msg) udg::errorLog(msg,__FILE__,__LINE__,LOG_FUNC)
+#define FATAL_LOG(msg) udg::fatalLog(msg,__FILE__,__LINE__,LOG_FUNC)
+#define VERBOSE_LOG(vLevel, msg) udg::verboseLog(vLevel, msg,__FILE__,__LINE__,LOG_FUNC)
+#define TRACE_LOG(msg) udg::traceLog(msg,__FILE__,__LINE__,LOG_FUNC)
 
-/// Macro per a missatges de warning
-#define WARN_LOG(msg) \
-    if (true) \
-    { \
-        LOG4CXX_WARN(log4cxx::Logger::getLogger("info.release"), QString(msg).toUtf8().constData()) \
-    } else (void)0
 
-/// Macro per a missatges d'error
-#define ERROR_LOG(msg) \
-    if (true) \
-    { \
-        LOG4CXX_ERROR(log4cxx::Logger::getLogger("errors.release"), QString(msg).toUtf8().constData()) \
-    } else (void)0
 
-/// Macro per a missatges d'error fatals/crítics
-#define FATAL_LOG(msg) \
-    if (true) \
-    { \
-        LOG4CXX_FATAL(log4cxx::Logger::getLogger("errors.release"), QString(msg).toUtf8().constData()) \
-    } else (void)0
 
-#endif
+#endif //_LOGGING_

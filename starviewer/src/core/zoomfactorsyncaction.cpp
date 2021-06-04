@@ -35,11 +35,16 @@ void ZoomFactorSyncAction::setZoomFactor(double factor)
     m_zoomFactor = factor;
 }
 
+void ZoomFactorSyncAction::setZoomCenter(QPoint zoomCenter)
+{
+    m_zoomCenter = zoomCenter;
+}
+
 void ZoomFactorSyncAction::run(QViewer *viewer)
 {
     if (viewer)
     {
-        viewer->absoluteZoom(m_zoomFactor);
+        viewer->absoluteZoom(m_zoomFactor, m_zoomCenter);
     }
 }
 

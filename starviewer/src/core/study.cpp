@@ -91,65 +91,72 @@ QString Study::getPatientAge() const
     
     if (age.trimmed().isEmpty())
     {
-        if (getParentPatient())
+        age = getCalculatedPatientAge();
+    }
+
+    return age;
+}
+
+QString Study::getCalculatedPatientAge() const
+{
+    if (getParentPatient())
+    {
+        QDate birthDate = getParentPatient()->getBirthDate();
+
+        if (birthDate.isValid() && m_date.isValid())
         {
-            QDate birthDate = getParentPatient()->getBirthDate();
+            int ageInDays = birthDate.daysTo(m_date);
 
-            if (birthDate.isValid() && m_date.isValid())
+            if (ageInDays > 0)
             {
-                int ageInDays = birthDate.daysTo(m_date);
+                QDate dateInDays(1, 1, 1);
+                dateInDays = dateInDays.addDays(ageInDays);
 
-                if (ageInDays > 0)
+                // If age is > 24 months, age is displayed in years as "xY" where x is the age in years
+                // If age is between 3 to 24 months it is displayed as "xM" where x is the age in months
+                // If age is between 1 to 3 months it is displayed as "xW" where x is the age in weeks
+                // If it is less that 1 month it is displayed as "xD" where x is the age in days.
+                int quantity = 0;
+                QString unit;
+                if (dateInDays.year() - 1 < 2)
                 {
-                    QDate dateInDays(1, 1, 1);
-                    dateInDays = dateInDays.addDays(ageInDays);
-
-                    // If age is > 24 months, age is displayed in years as "xY" where x is the age in years
-                    // If age is between 3 to 24 months it is displayed as "xM" where x is the age in months
-                    // If age is between 1 to 3 months it is displayed as "xW" where x is the age in weeks
-                    // If it is less that 1 month it is displayed as "xD" where x is the age in days. 
-                    int quantity = 0;
-                    QString unit;
-                    if (dateInDays.year() - 1 < 2)
+                    if (ageInDays < 31)
                     {
-                        if (ageInDays < 31)
-                        {
-                            quantity = ageInDays;
-                            unit = "D";
-                        }
-                        else
-                        {
-                            int months = dateInDays.month() - 1;
-                            if (dateInDays.year() - 1 == 1)
-                            {
-                                months += 12;
-                            }
-                        
-                            if (months < 3)
-                            {
-                                quantity = dateInDays.weekNumber();
-                                unit = "W";
-                            }
-                            else
-                            {
-                                quantity = months;
-                                unit = "M";
-                            }
-                        }
+                        quantity = ageInDays;
+                        unit = "D";
                     }
                     else
                     {
-                        quantity = dateInDays.year() - 1;
-                        unit = "Y";
-                    }
+                        int months = dateInDays.month() - 1;
+                        if (dateInDays.year() - 1 == 1)
+                        {
+                            months += 12;
+                        }
 
-                    age = QString("%1").arg(quantity, 3, 10, QChar('0')) + unit;
+                        if (months < 3)
+                        {
+                            quantity = dateInDays.weekNumber();
+                            unit = "W";
+                        }
+                        else
+                        {
+                            quantity = months;
+                            unit = "M";
+                        }
+                    }
                 }
+                else
+                {
+                    quantity = dateInDays.year() - 1;
+                    unit = "Y";
+                }
+
+                return QString("%1").arg(quantity, 3, 10, QChar('0')) + unit;
             }
         }
     }
-    
-    return age;
+
+    return QString();
 }
 
 void Study::setWeight(double weight)
@@ -195,7 +202,7 @@ void Study::setReferringPhysiciansName(QString referringPhysiciansName)
     m_referringPhysiciansName = referringPhysiciansName;
 }
 
-QString Study::getReferringPhysiciansName()
+QString Study::getReferringPhysiciansName() const
 {
     return m_referringPhysiciansName;
 }
@@ -272,7 +279,7 @@ bool Study::setTime(QTime time)
     }
 }
 
-QDate Study::getDate()
+QDate Study::getDate() const
 {
     return m_date;
 }
@@ -282,7 +289,7 @@ QString Study::getDateAsString()
     return m_date.toString(Qt::LocaleDate);
 }
 
-QTime Study::getTime()
+QTime Study::getTime() const
 {
     return m_time;
 }
@@ -307,12 +314,12 @@ void Study::setRetrievedTime(QTime retrievedTime)
     m_retrieveTime = retrievedTime;
 }
 
-QDate Study::getRetrievedDate()
+QDate Study::getRetrievedDate() const
 {
     return m_retrievedDate;
 }
 
-QTime Study::getRetrievedTime()
+QTime Study::getRetrievedTime() const
 {
     return m_retrieveTime;
 }
@@ -420,6 +427,26 @@ QList<Series*> Study::getViewableSeries()
     return result;
 }
 
+QList<Volume*> Study::getVolumesList()
+{
+    QList<Volume*> volumesList;
+    foreach (Series* serie, m_seriesSet)
+    {
+        volumesList << serie->getVolumesList();
+    }
+    return volumesList;
+}
+
+int Study::getNumberOfVolumes()
+{
+    int sum = 0;
+    foreach (Series* serie, m_seriesSet)
+    {
+        sum += serie->getNumberOfVolumes();
+    }
+    return sum;
+}
+
 void Study::setDICOMSource(const DICOMSource &studyDICOMSource)
 {
     m_studyDICOMSource = studyDICOMSource;
@@ -465,16 +492,6 @@ bool Study::operator>(const Study &study)
     return getDateTime() > study.getDateTime();
 }
 
-bool studyIsLessThan(Study *study1, Study *study2)
-{
-    return *study1 < *study2;
-}
-
-bool studyIsGreaterThan(Study *study1, Study *study2)
-{
-    return *study1 > *study2;
-}
-
 QList<Study*> Study::sortStudies(const QList<Study*> &studiesList, StudySortType sortCriteria)
 {
     QList<Study*> sortedStudies = studiesList;
@@ -482,11 +499,15 @@ QList<Study*> Study::sortStudies(const QList<Study*> &studiesList, StudySortType
     switch (sortCriteria)
     {
         case RecentStudiesFirst:
-            qSort(sortedStudies.begin(), sortedStudies.end(), studyIsGreaterThan);
+            std::sort(sortedStudies.begin(), sortedStudies.end(), [](Study *study1, Study *study2) {
+                return *study1 > *study2;
+            });
             break;
 
         case OlderStudiesFirst:
-            qSort(sortedStudies.begin(), sortedStudies.end(), studyIsLessThan);
+            std::sort(sortedStudies.begin(), sortedStudies.end(), [](Study *study1, Study *study2) {
+                return *study1 < *study2;
+            });
             break;
     }
 

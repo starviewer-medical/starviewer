@@ -29,9 +29,6 @@ Q_OBJECT
 private slots:
     void getBoundedValue_ReturnsExpectedValue_data();
     void getBoundedValue_ReturnsExpectedValue();
-    
-    void truncate_ShouldReturnTruncatedValue_data();
-    void truncate_ShouldReturnTruncatedValue();
 
     void roundToNearestInteger_ShouldReturnRoundedValue_data();
     void roundToNearestInteger_ShouldReturnRoundedValue();
@@ -42,26 +39,23 @@ private slots:
     void radiansToDegrees_ShouldReturnExpectedValue_data();
     void radiansToDegrees_ShouldReturnExpectedValue();
 
-    void logTwo_WithDefaultSecondParameterShouldReturnExpectedValue_data();
-    void logTwo_WithDefaultSecondParameterShouldReturnExpectedValue();
+    void logTwo_ShouldReturnExpectedValue_data();
+    void logTwo_ShouldReturnExpectedValue();
 
-    void logTwo_WithExplicitSecondParameterShouldReturnExpectedValue_data();
-    void logTwo_WithExplicitSecondParameterShouldReturnExpectedValue();
-
-    void logTwo_WithDefaultSecondParameterShouldReturnNaN_data();
-    void logTwo_WithDefaultSecondParameterShouldReturnNaN();
-
-    void logTwo_WithExplicitSecondParameterShouldReturnNaN_data();
-    void logTwo_WithExplicitSecondParameterShouldReturnNaN();
-
-    void cubeRoot_ShouldReturnExpectedValue_data();
-    void cubeRoot_ShouldReturnExpectedValue();
-
-    void cubeRoot_ShouldReturnNaN_data();
-    void cubeRoot_ShouldReturnNaN();
+    void logTwo_ShouldReturnNaN_data();
+    void logTwo_ShouldReturnNaN();
 
     void closeEnough_ShouldReturnExpectedValue_data();
     void closeEnough_ShouldReturnExpectedValue();
+
+    void almostEqual_float_ShouldReturnExpectedValue_data();
+    void almostEqual_float_ShouldReturnExpectedValue();
+
+    void almostEqual_double_ShouldReturnExpectedValue_data();
+    void almostEqual_double_ShouldReturnExpectedValue();
+
+    void almostEqual_Vector3_ShouldReturnExpectedValue_data();
+    void almostEqual_Vector3_ShouldReturnExpectedValue();
 
     void angleInRadians_QVector2D_ShouldComputeAngleInRadians_data();
     void angleInRadians_QVector2D_ShouldComputeAngleInRadians();
@@ -126,15 +120,6 @@ private slots:
     void isNaN_ShouldReturnExpectedValue_data();
     void isNaN_ShouldReturnExpectedValue();
 
-    void copySign_ShouldReturnExpectedValue_data();
-    void copySign_ShouldReturnExpectedValue();
-
-    void copySign_ShouldReturnZeroWithExpectedSign_data();
-    void copySign_ShouldReturnZeroWithExpectedSign();
-
-    void copySign_ShouldReturnNaNWithExpectedSign_data();
-    void copySign_ShouldReturnNaNWithExpectedSign();
-
 private:
     void setupRadiansAndDegreesConversionData();
     void setupComputeAngleOfAVectorData();
@@ -190,25 +175,6 @@ void test_MathTools::getBoundedValue_ReturnsExpectedValue()
     QFETCH(int, expectedBoundedValue);
     
     QCOMPARE(MathTools::getBoundedValue(value, min, max, loop), expectedBoundedValue);
-}
-
-void test_MathTools::truncate_ShouldReturnTruncatedValue_data()
-{
-    QTest::addColumn<double>("value");
-    QTest::addColumn<double>("truncated");
-
-    QTest::newRow("negative") << -32.14 << -32.0;
-    QTest::newRow("positive") << 77.97 << 77.0;
-    QTest::newRow("+zero") << 0.0 << 0.0;
-    QTest::newRow("-zero") << -0.0 << -0.0;
-}
-
-void test_MathTools::truncate_ShouldReturnTruncatedValue()
-{
-    QFETCH(double, value);
-    QFETCH(double, truncated);
-
-    QCOMPARE(MathTools::truncate(value), truncated);
 }
 
 void test_MathTools::roundToNearestInteger_ShouldReturnRoundedValue_data()
@@ -269,7 +235,7 @@ void test_MathTools::radiansToDegrees_ShouldReturnExpectedValue()
              qPrintable(QString("actual: %1, expected: %2, difference: %3").arg(result).arg(degrees).arg(result - degrees)));
 }
 
-void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnExpectedValue_data()
+void test_MathTools::logTwo_ShouldReturnExpectedValue_data()
 {
     QTest::addColumn<double>("x");
     QTest::addColumn<double>("expectedResult");
@@ -282,7 +248,7 @@ void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnExpectedValue_
     QTest::newRow("random") << 45.2426428941 << 5.499611303146188;
 }
 
-void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnExpectedValue()
+void test_MathTools::logTwo_ShouldReturnExpectedValue()
 {
     QFETCH(double, x);
     QFETCH(double, expectedResult);
@@ -293,34 +259,7 @@ void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnExpectedValue(
              qPrintable(QString("actual: %1, expected: %2, difference: %3").arg(result).arg(expectedResult).arg(result - expectedResult)));
 }
 
-void test_MathTools::logTwo_WithExplicitSecondParameterShouldReturnExpectedValue_data()
-{
-    QTest::addColumn<double>("x");
-    QTest::addColumn<bool>("zero");
-    QTest::addColumn<double>("expectedResult");
-
-    QTest::newRow("0 false") << 0.0 << false << -std::numeric_limits<double>::infinity();
-    QTest::newRow("0 true") << 0.0 << true << 0.0;
-    QTest::newRow("< 1 false") << 0.8442696986 << false << -0.2442241591313752;
-    QTest::newRow("1 true") << 1.0 << true << 0.0;
-    QTest::newRow("2 false") << 2.0 << false << 1.0;
-    QTest::newRow("e true") << 2.718281828459045 << true << 1.4426950408889634;
-    QTest::newRow("random false") << 45.2426428941 << false << 5.499611303146188;
-}
-
-void test_MathTools::logTwo_WithExplicitSecondParameterShouldReturnExpectedValue()
-{
-    QFETCH(double, x);
-    QFETCH(bool, zero);
-    QFETCH(double, expectedResult);
-
-    double result = MathTools::logTwo(x, zero);
-
-    QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(result, expectedResult),
-             qPrintable(QString("actual: %1, expected: %2, difference: %3").arg(result).arg(expectedResult).arg(result - expectedResult)));
-}
-
-void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnNaN_data()
+void test_MathTools::logTwo_ShouldReturnNaN_data()
 {
     QTest::addColumn<double>("x");
 
@@ -328,72 +267,11 @@ void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnNaN_data()
     QTest::newRow("random") << -45.2426428941;
 }
 
-void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnNaN()
+void test_MathTools::logTwo_ShouldReturnNaN()
 {
     QFETCH(double, x);
 
     double result = MathTools::logTwo(x);
-
-    QVERIFY2(MathTools::isNaN(result), qPrintable(QString("actual: %1, expected: nan").arg(result)));
-}
-
-void test_MathTools::logTwo_WithExplicitSecondParameterShouldReturnNaN_data()
-{
-    QTest::addColumn<double>("x");
-    QTest::addColumn<bool>("zero");
-
-    QTest::newRow("-1 false") << -1.0 << false;
-    QTest::newRow("random true") << -45.2426428941 << true;
-}
-
-void test_MathTools::logTwo_WithExplicitSecondParameterShouldReturnNaN()
-{
-    QFETCH(double, x);
-    QFETCH(bool, zero);
-
-    double result = MathTools::logTwo(x, zero);
-
-    QVERIFY2(MathTools::isNaN(result), qPrintable(QString("actual: %1, expected: nan").arg(result)));
-}
-
-void test_MathTools::cubeRoot_ShouldReturnExpectedValue_data()
-{
-    QTest::addColumn<double>("x");
-    QTest::addColumn<double>("expectedResult");
-
-    QTest::newRow("0") << 0.0 << 0.0;
-    QTest::newRow("-0") << -0.0 << 0.0;
-    QTest::newRow("1") << 1.0 << 1.0;
-    QTest::newRow("8") << 8.0 << 2.0;
-    QTest::newRow("random #1") << 70.71 << 4.135172323084713;
-    QTest::newRow("random #2") << 63.62 << 3.9920676130411104;
-}
-
-void test_MathTools::cubeRoot_ShouldReturnExpectedValue()
-{
-    QFETCH(double, x);
-    QFETCH(double, expectedResult);
-
-    double result = MathTools::cubeRoot(x);
-
-    QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(result, expectedResult),
-             qPrintable(QString("actual: %1, expected: %2, difference: %3").arg(result).arg(expectedResult).arg(result - expectedResult)));
-}
-
-void test_MathTools::cubeRoot_ShouldReturnNaN_data()
-{
-    QTest::addColumn<double>("x");
-
-    QTest::newRow("-1") << -1.0;
-    QTest::newRow("-8") << -8.0;
-    QTest::newRow("random #1") << -67.94;
-}
-
-void test_MathTools::cubeRoot_ShouldReturnNaN()
-{
-    QFETCH(double, x);
-
-    double result = MathTools::cubeRoot(x);
 
     QVERIFY2(MathTools::isNaN(result), qPrintable(QString("actual: %1, expected: nan").arg(result)));
 }
@@ -436,6 +314,154 @@ void test_MathTools::closeEnough_ShouldReturnExpectedValue()
     QFETCH(bool, expectedResult);
 
     QCOMPARE(MathTools::closeEnough(value1, value2), expectedResult);
+}
+
+void test_MathTools::almostEqual_float_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<float>("x");
+    QTest::addColumn<float>("y");
+    QTest::addColumn<float>("absoluteEpsilon");
+    QTest::addColumn<float>("relativeEpsilon");
+    QTest::addColumn<bool>("expectedResult");
+
+    constexpr float DefaultAbsoluteEpsilon = std::numeric_limits<float>::epsilon();
+    constexpr float DefaultRelativeEpsilon = static_cast<float>(MathTools::Epsilon);
+
+    QTest::newRow("equal (positive)") << 36.29f << 36.29f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (negative)") << -49.4f << -49.4f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (+0)") << 0.0f << 0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (-0)") << -0.0f << -0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (+0, -0)") << 0.0f << -0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (-0, +0)") << -0.0f << 0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (1)") << 0.0f << DefaultAbsoluteEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (2)") << DefaultAbsoluteEpsilon << 0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (3)") << 0.0f << -DefaultAbsoluteEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (4)") << -DefaultAbsoluteEpsilon << 0.0f << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (5)") << -DefaultAbsoluteEpsilon / 2.0f << DefaultAbsoluteEpsilon / 2.0f
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (6)") << DefaultAbsoluteEpsilon / 2.0f << -DefaultAbsoluteEpsilon / 2.0f
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("not almost equal (absolute) (1)") << 0.0f << std::nextafter(DefaultAbsoluteEpsilon, 1.0f)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (2)") << std::nextafter(DefaultAbsoluteEpsilon, 1.0f) << 0.0f
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (3)") << 0.0f << -std::nextafter(DefaultAbsoluteEpsilon, 1.0f)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (4)") << -std::nextafter(DefaultAbsoluteEpsilon, 1.0f) << 0.0f
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (5)") << std::nextafter(-DefaultAbsoluteEpsilon / 2.0f, -1.0f)
+                                                     << std::nextafter(DefaultAbsoluteEpsilon / 2.0f, 1.0f)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (6)") << std::nextafter(DefaultAbsoluteEpsilon / 2.0f, 1.0f)
+                                                     << std::nextafter(-DefaultAbsoluteEpsilon / 2.0f, -1.0f)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    constexpr float BigNumber = 19660.652f;
+    constexpr float BigNumberEpsilon = BigNumber * DefaultRelativeEpsilon;
+    QTest::newRow("almost equal (relative) (1)") << BigNumber << BigNumber - BigNumberEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (relative) (2)") << BigNumber - BigNumberEpsilon << BigNumber << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("not almost equal (relative) (1)") << BigNumber << std::nextafter(BigNumber + BigNumberEpsilon, 20000.0f)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (relative) (2)") << std::nextafter(BigNumber + BigNumberEpsilon, 20000.0f) << BigNumber
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+}
+
+void test_MathTools::almostEqual_float_ShouldReturnExpectedValue()
+{
+    QFETCH(float, x);
+    QFETCH(float, y);
+    QFETCH(float, absoluteEpsilon);
+    QFETCH(float, relativeEpsilon);
+    QFETCH(bool, expectedResult);
+
+    QCOMPARE(MathTools::almostEqual(x, y, absoluteEpsilon, relativeEpsilon), expectedResult);
+}
+
+void test_MathTools::almostEqual_double_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<double>("x");
+    QTest::addColumn<double>("y");
+    QTest::addColumn<double>("absoluteEpsilon");
+    QTest::addColumn<double>("relativeEpsilon");
+    QTest::addColumn<bool>("expectedResult");
+
+    constexpr double DefaultAbsoluteEpsilon = std::numeric_limits<double>::epsilon();
+    constexpr double DefaultRelativeEpsilon = MathTools::Epsilon;
+
+    QTest::newRow("equal (positive)") << 36.29 << 36.29 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (negative)") << -49.4 << -49.4 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (+0)") << 0.0 << 0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (-0)") << -0.0 << -0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (+0, -0)") << 0.0 << -0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("equal (-0, +0)") << -0.0 << 0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (1)") << 0.0 << DefaultAbsoluteEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (2)") << DefaultAbsoluteEpsilon << 0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (3)") << 0.0 << -DefaultAbsoluteEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (4)") << -DefaultAbsoluteEpsilon << 0.0 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (5)") << -DefaultAbsoluteEpsilon / 2.0 << DefaultAbsoluteEpsilon / 2.0
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (absolute) (6)") << DefaultAbsoluteEpsilon / 2.0 << -DefaultAbsoluteEpsilon / 2.0
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("not almost equal (absolute) (1)") << 0.0 << std::nextafter(DefaultAbsoluteEpsilon, 1.0)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (2)") << std::nextafter(DefaultAbsoluteEpsilon, 1.0) << 0.0
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (3)") << 0.0 << -std::nextafter(DefaultAbsoluteEpsilon, 1.0)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (4)") << -std::nextafter(DefaultAbsoluteEpsilon, 1.0) << 0.0
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (5)") << std::nextafter(-DefaultAbsoluteEpsilon / 2.0, -1.0) << std::nextafter(DefaultAbsoluteEpsilon / 2.0, 1.0)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (absolute) (6)") << std::nextafter(DefaultAbsoluteEpsilon / 2.0, 1.0) << std::nextafter(-DefaultAbsoluteEpsilon / 2.0, -1.0)
+                                                     << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    constexpr double BigNumber = 19660.652;
+    constexpr double BigNumberEpsilon = BigNumber * DefaultRelativeEpsilon;
+    QTest::newRow("almost equal (relative) (1)") << BigNumber << std::nextafter(BigNumber - BigNumberEpsilon, BigNumber)
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("almost equal (relative) (2)") << std::nextafter(BigNumber - BigNumberEpsilon, BigNumber) << BigNumber
+                                                 << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("not almost equal (relative) (1)") << BigNumber << BigNumber + BigNumberEpsilon << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("not almost equal (relative) (2)") << BigNumber + BigNumberEpsilon << BigNumber << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+}
+
+void test_MathTools::almostEqual_double_ShouldReturnExpectedValue()
+{
+    QFETCH(double, x);
+    QFETCH(double, y);
+    QFETCH(double, absoluteEpsilon);
+    QFETCH(double, relativeEpsilon);
+    QFETCH(bool, expectedResult);
+
+    QCOMPARE(MathTools::almostEqual(x, y, absoluteEpsilon, relativeEpsilon), expectedResult);
+}
+
+void test_MathTools::almostEqual_Vector3_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<Vector3>("v1");
+    QTest::addColumn<Vector3>("v2");
+    QTest::addColumn<double>("absoluteEpsilon");
+    QTest::addColumn<double>("relativeEpsilon");
+    QTest::addColumn<bool>("expectedResult");
+
+    constexpr double DefaultAbsoluteEpsilon = std::numeric_limits<double>::epsilon();
+    constexpr double DefaultRelativeEpsilon = MathTools::Epsilon;
+
+    QTest::newRow("equal vectors") << Vector3(0, -1, 0) << Vector3(0, -1, 0) << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+    QTest::newRow("one different component") << Vector3(0, -1, 0) << Vector3(0, 1, 0) << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("two different components") << Vector3(0, -1, 0) << Vector3(0, 0, 1) << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("three different components") << Vector3(0, -1, 0) << Vector3(1, 0, 1) << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << false;
+    QTest::newRow("almost equal") << Vector3(3.748e-40, 1.2117287631178519e216, 7.728e-216) << Vector3(5.748e-152, 1.211728763221107e216, 1.94e-210)
+                                  << DefaultAbsoluteEpsilon << DefaultRelativeEpsilon << true;
+}
+
+void test_MathTools::almostEqual_Vector3_ShouldReturnExpectedValue()
+{
+    QFETCH(Vector3, v1);
+    QFETCH(Vector3, v2);
+    QFETCH(double, absoluteEpsilon);
+    QFETCH(double, relativeEpsilon);
+    QFETCH(bool, expectedResult);
+
+    QCOMPARE(MathTools::almostEqual(v1, v2, absoluteEpsilon, relativeEpsilon), expectedResult);
 }
 
 void test_MathTools::angleInRadians_QVector2D_ShouldComputeAngleInRadians_data()
@@ -675,28 +701,25 @@ void test_MathTools::crossProduct_ShouldReturnExpectedValues()
 
 void test_MathTools::getDistance3D_ShouldComputeDistanceCorrectly_data()
 {
-    QTest::addColumn<QVector3D>("vector1");
-    QTest::addColumn<QVector3D>("vector2");
+    QTest::addColumn<Vector3>("vector1");
+    QTest::addColumn<Vector3>("vector2");
     QTest::addColumn<double>("distance3D");
 
-    QTest::newRow("Same vectors") << QVector3D(1, 2, 1) << QVector3D(1, 2, 1) << 0.0;
-    QTest::newRow("null vectors") << QVector3D(0, 0, 0) << QVector3D(0, 0, 0) << 0.0;
-    QTest::newRow("random coronal") << QVector3D(-89.9476, 49.8371, 599.893) << QVector3D(-79.0086, 207.671, 599.893) << 158.213;
-    QTest::newRow("random sagital") << QVector3D(7.68421, -11.8899, 695.178) << QVector3D(7.68421, 144.381, 831.915) << 207.648;
-    QTest::newRow("random coronal") << QVector3D(-96.9798, 99.4654, 838.166) << QVector3D(-50.0985, 99.4654, 709.242) << 137.183;
-    QTest::newRow("random") << QVector3D(35.44, 12.61, -85.28) << QVector3D(92.56, -95.19, 28.85) << 167.060;
+    QTest::newRow("Same vectors") << Vector3(1, 2, 1) << Vector3(1, 2, 1) << 0.0;
+    QTest::newRow("null vectors") << Vector3(0, 0, 0) << Vector3(0, 0, 0) << 0.0;
+    QTest::newRow("random coronal") << Vector3(-89.9476, 49.8371, 599.893) << Vector3(-79.0086, 207.671, 599.893) << 158.213;
+    QTest::newRow("random sagital") << Vector3(7.68421, -11.8899, 695.178) << Vector3(7.68421, 144.381, 831.915) << 207.648;
+    QTest::newRow("random coronal") << Vector3(-96.9798, 99.4654, 838.166) << Vector3(-50.0985, 99.4654, 709.242) << 137.183;
+    QTest::newRow("random") << Vector3(35.44, 12.61, -85.28) << Vector3(92.56, -95.19, 28.85) << 167.060;
 }
 
 void test_MathTools::getDistance3D_ShouldComputeDistanceCorrectly()
 {
-    QFETCH(QVector3D, vector1);
-    QFETCH(QVector3D, vector2);
+    QFETCH(Vector3, vector1);
+    QFETCH(Vector3, vector2);
     QFETCH(double, distance3D);
 
-    double v1[3] = { vector1.x(), vector1.y(), vector1.z() };
-    double v2[3] = { vector2.x(), vector2.y(), vector2.z() };
-
-    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::getDistance3D(v1, v2), distance3D, distance3DEpsion));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::getDistance3D(vector1, vector2), distance3D, distance3DEpsion));
 }
 
 void test_MathTools::infiniteLinesIntersection_ShouldComputeExpectedIntersectionAndState_data()
@@ -1095,141 +1118,6 @@ void test_MathTools::isNaN_ShouldReturnExpectedValue()
     QCOMPARE(MathTools::isNaN(x), isNaN);
 }
 
-void test_MathTools::copySign_ShouldReturnExpectedValue_data()
-{
-    QTest::addColumn<double>("value");
-    QTest::addColumn<double>("sign");
-    QTest::addColumn<double>("expectedResult");
-
-    QTest::newRow("+,+") << 7.78 << 18.61 << 7.78;
-    QTest::newRow("+,-") << 71.78 << -23.27 << -71.78;
-    QTest::newRow("-,+") << -83.84 << 81.16 << 83.84;
-    QTest::newRow("-,-") << -78.51 << -36.61 << -78.51;
-    QTest::newRow("+,+0") << 7.78 << 0.0 << 7.78;
-    QTest::newRow("+,-0") << 71.78 << -0.0 << 71.78;
-    QTest::newRow("-,+0") << -83.84 << 0.0 << -83.84;
-    QTest::newRow("-,-0") << -78.51 << -0.0 << -78.51;
-    QTest::newRow("+,+qNaN") << 7.78 << std::numeric_limits<double>::quiet_NaN() << -7.78;
-    QTest::newRow("+,-qNaN") << 71.78 << -std::numeric_limits<double>::quiet_NaN() << -71.78;
-    QTest::newRow("-,+qNaN") << -83.84 << std::numeric_limits<double>::quiet_NaN() << 83.84;
-    QTest::newRow("-,-qNaN") << -78.51 << -std::numeric_limits<double>::quiet_NaN() << 78.51;
-    QTest::newRow("+,+sNaN") << 7.78 << std::numeric_limits<double>::signaling_NaN() << -7.78;
-    QTest::newRow("+,-sNaN") << 71.78 << -std::numeric_limits<double>::signaling_NaN() << -71.78;
-    QTest::newRow("-,+sNaN") << -83.84 << std::numeric_limits<double>::signaling_NaN() << 83.84;
-    QTest::newRow("-,-sNaN") << -78.51 << -std::numeric_limits<double>::signaling_NaN() << 78.51;
-}
-
-void test_MathTools::copySign_ShouldReturnExpectedValue()
-{
-    QFETCH(double, value);
-    QFETCH(double, sign);
-    QFETCH(double, expectedResult);
-
-    double result = MathTools::copySign(value, sign);
-
-    QCOMPARE(result, expectedResult);
-}
-
-void test_MathTools::copySign_ShouldReturnZeroWithExpectedSign_data()
-{
-    QTest::addColumn<double>("inputZero");
-    QTest::addColumn<double>("sign");
-    QTest::addColumn<double>("zeroWithExpectedSign");
-
-    QTest::newRow("+0,+") << 0.0 << 18.61 << 0.0;
-    QTest::newRow("+0,-") << 0.0 << -23.27 << 0.0;
-    QTest::newRow("-0,+") << -0.0 << 81.16 << -0.0;
-    QTest::newRow("-0,-") << -0.0 << -36.61 << -0.0;
-    QTest::newRow("+0,+0") << 0.0 << 0.0 << 0.0;
-    QTest::newRow("+0,-0") << 0.0 << -0.0 << 0.0;
-    QTest::newRow("-0,+0") << -0.0 << 0.0 << -0.0;
-    QTest::newRow("-0,-0") << -0.0 << -0.0 << -0.0;
-    QTest::newRow("+0,+qNaN") << 0.0 << std::numeric_limits<double>::quiet_NaN() << -0.0;
-    QTest::newRow("+0,-qNaN") << 0.0 << -std::numeric_limits<double>::quiet_NaN() << -0.0;
-    QTest::newRow("-0,+qNaN") << -0.0 << std::numeric_limits<double>::quiet_NaN() << 0.0;
-    QTest::newRow("-0,-qNaN") << -0.0 << -std::numeric_limits<double>::quiet_NaN() << 0.0;
-    QTest::newRow("+0,+sNaN") << 0.0 << std::numeric_limits<double>::signaling_NaN() << -0.0;
-    QTest::newRow("+0,-sNaN") << 0.0 << -std::numeric_limits<double>::signaling_NaN() << -0.0;
-    QTest::newRow("-0,+sNaN") << -0.0 << std::numeric_limits<double>::signaling_NaN() << 0.0;
-    QTest::newRow("-0,-sNaN") << -0.0 << -std::numeric_limits<double>::signaling_NaN() << 0.0;
-}
-
-void test_MathTools::copySign_ShouldReturnZeroWithExpectedSign()
-{
-    QFETCH(double, inputZero);
-    QFETCH(double, sign);
-    QFETCH(double, zeroWithExpectedSign);
-
-    // Hem de distingir +0 de -0. Una de les maneres, d'acord amb la Wikipedia (http://en.wikipedia.org/wiki/Signed_zero#Comparisons) és comprovar el el patró
-    // de bits. Per tant, agafem punters a les dues variables i comparem que siguin exactament els mateixos bits.
-    double zero = MathTools::copySign(inputZero, sign);
-    void *pZero = &zero;
-    void *pZeroWithExpectedSign = &zeroWithExpectedSign;
-    QVERIFY(memcmp(pZero, pZeroWithExpectedSign, sizeof(double)) == 0);
-}
-
-void test_MathTools::copySign_ShouldReturnNaNWithExpectedSign_data()
-{
-    QTest::addColumn<double>("inputNaN");
-    QTest::addColumn<double>("sign");
-    QTest::addColumn<bool>("expectedSign");
-    // Interpretem true = +, false = -
-
-    QTest::newRow("+qNaN,+") << std::numeric_limits<double>::quiet_NaN() << 18.61 << false;
-    QTest::newRow("+qNaN,-") << std::numeric_limits<double>::quiet_NaN() << -23.27 << false;
-    QTest::newRow("-qNaN,+") << -std::numeric_limits<double>::quiet_NaN() << 81.16 << true;
-    QTest::newRow("-qNaN,-") << -std::numeric_limits<double>::quiet_NaN() << -36.61 << true;
-    QTest::newRow("+qNaN,+0") << std::numeric_limits<double>::quiet_NaN() << 0.0 << false;
-    QTest::newRow("+qNaN,-0") << std::numeric_limits<double>::quiet_NaN() << -0.0 << false;
-    QTest::newRow("-qNaN,+0") << -std::numeric_limits<double>::quiet_NaN() << 0.0 << true;
-    QTest::newRow("-qNaN,-0") << -std::numeric_limits<double>::quiet_NaN() << -0.0 << true;
-    QTest::newRow("+qNaN,+qNaN") << std::numeric_limits<double>::quiet_NaN() << std::numeric_limits<double>::quiet_NaN() << false;
-    QTest::newRow("+qNaN,-qNaN") << std::numeric_limits<double>::quiet_NaN() << -std::numeric_limits<double>::quiet_NaN() << false;
-    QTest::newRow("-qNaN,+qNaN") << -std::numeric_limits<double>::quiet_NaN() << std::numeric_limits<double>::quiet_NaN() << true;
-    QTest::newRow("-qNaN,-qNaN") << -std::numeric_limits<double>::quiet_NaN() << -std::numeric_limits<double>::quiet_NaN() << true;
-    QTest::newRow("+qNaN,+sNaN") << std::numeric_limits<double>::quiet_NaN() << std::numeric_limits<double>::signaling_NaN() << false;
-    QTest::newRow("+qNaN,-sNaN") << std::numeric_limits<double>::quiet_NaN() << -std::numeric_limits<double>::signaling_NaN() << false;
-    QTest::newRow("-qNaN,+sNaN") << -std::numeric_limits<double>::quiet_NaN() << std::numeric_limits<double>::signaling_NaN() << true;
-    QTest::newRow("-qNaN,-sNaN") << -std::numeric_limits<double>::quiet_NaN() << -std::numeric_limits<double>::signaling_NaN() << true;
-    QTest::newRow("+sNaN,+") << std::numeric_limits<double>::signaling_NaN() << 18.61 << false;
-    QTest::newRow("+sNaN,-") << std::numeric_limits<double>::signaling_NaN() << -23.27 << false;
-    QTest::newRow("-sNaN,+") << -std::numeric_limits<double>::signaling_NaN() << 81.16 << true;
-    QTest::newRow("-sNaN,-") << -std::numeric_limits<double>::signaling_NaN() << -36.61 << true;
-    QTest::newRow("+sNaN,+0") << std::numeric_limits<double>::signaling_NaN() << 0.0 << false;
-    QTest::newRow("+sNaN,-0") << std::numeric_limits<double>::signaling_NaN() << -0.0 << false;
-    QTest::newRow("-sNaN,+0") << -std::numeric_limits<double>::signaling_NaN() << 0.0 << true;
-    QTest::newRow("-sNaN,-0") << -std::numeric_limits<double>::signaling_NaN() << -0.0 << true;
-    QTest::newRow("+sNaN,+qNaN") << std::numeric_limits<double>::signaling_NaN() << std::numeric_limits<double>::quiet_NaN() << false;
-    QTest::newRow("+sNaN,-qNaN") << std::numeric_limits<double>::signaling_NaN() << -std::numeric_limits<double>::quiet_NaN() << false;
-    QTest::newRow("-sNaN,+qNaN") << -std::numeric_limits<double>::signaling_NaN() << std::numeric_limits<double>::quiet_NaN() << true;
-    QTest::newRow("-sNaN,-qNaN") << -std::numeric_limits<double>::signaling_NaN() << -std::numeric_limits<double>::quiet_NaN() << true;
-    QTest::newRow("+sNaN,+sNaN") << std::numeric_limits<double>::signaling_NaN() << std::numeric_limits<double>::signaling_NaN() << false;
-    QTest::newRow("+sNaN,-sNaN") << std::numeric_limits<double>::signaling_NaN() << -std::numeric_limits<double>::signaling_NaN() << false;
-    QTest::newRow("-sNaN,+sNaN") << -std::numeric_limits<double>::signaling_NaN() << std::numeric_limits<double>::signaling_NaN() << true;
-    QTest::newRow("-sNaN,-sNaN") << -std::numeric_limits<double>::signaling_NaN() << -std::numeric_limits<double>::signaling_NaN() << true;
-}
-
-void test_MathTools::copySign_ShouldReturnNaNWithExpectedSign()
-{
-    QFETCH(double, inputNaN);
-    QFETCH(double, sign);
-    QFETCH(bool, expectedSign);
-
-    double NaN = MathTools::copySign(inputNaN, sign);
-    QVERIFY2(MathTools::isNaN(NaN), qPrintable(QString("actual: %1, expected: nan").arg(NaN)));
-
-    // Hem de distingir +NaN de -NaN. Aquest cop no podem comparar tot el patró de bits com amb els zeros, perquè hi ha bits que poden tenir diferents valors
-    // que representen NaN (http://en.wikipedia.org/wiki/NaN). El que sí podem fer és comprovar el bit més significatiu, el de més a l'esquerra, que és el del
-    // signe. Si el bit és zero vol dir positiu, i si és 1 vol dir negatiu (http://en.wikipedia.org/wiki/Sign_bit). Per fer-ho, llegim aquest float com si fos
-    // un unsigned long long per crear un bitset. D'aquest bitset n'hem de consultar l'últim bit, perquè estan ordenats de dreta a esquerra. Abans de tot
-    // comprovem que el format dels doubles sigui IEC 559 / IEEE 754. Sinó, tota la resta no té sentit.
-    QVERIFY(std::numeric_limits<double>::is_iec559);
-    unsigned long long *pNaN = reinterpret_cast<unsigned long long*>(&NaN);
-    std::bitset<8*sizeof(unsigned long long)> fNaNBits(*pNaN);
-    bool signBit = fNaNBits.test(fNaNBits.size() - 1);
-    QCOMPARE(!signBit, expectedSign);
-}
-
 void test_MathTools::setupRadiansAndDegreesConversionData()
 {
     QTest::addColumn<float>("radians");
@@ -1283,7 +1171,7 @@ void test_MathTools::setupComputeAngleOfAVectorData()
     QTest::newRow("+X+Y / pi/4 rad / 45º") << QVector2D(1.0, 1.0) << MathTools::PiNumber / 4.0;
     QTest::newRow("+Y / pi/2 rad / 90º") << QVector2D(0.0, 1.0) << MathTools::PiNumber / 2.0;
     QTest::newRow("-X+Y / 3pi/4 rad / 135º") << QVector2D(-1.0, 1.0) << 3.0 * MathTools::PiNumber / 4.0;
-    QTest::newRow("-X / pi rad / 180º") << QVector2D(-1.0, 0.0) << MathTools::PiNumber;
+    QTest::newRow("-X / pi rad / 180º") << QVector2D(-1.0, 0.0) << +MathTools::PiNumber;
 
     QTest::newRow("random Q1") << QVector2D(1.1, 4.0) << 1.30243;
     QTest::newRow("random Q2") << QVector2D(-9.7, 4.2) << 2.73297;
@@ -1291,7 +1179,7 @@ void test_MathTools::setupComputeAngleOfAVectorData()
     QTest::newRow("random Q4") << QVector2D(9.4, -9.3) << -0.78005;
 
     QTest::newRow("+0+0") << QVector2D(+0.0, +0.0) << +0.0;
-    QTest::newRow("-0+0") << QVector2D(-0.0, +0.0) << MathTools::PiNumber;
+    QTest::newRow("-0+0") << QVector2D(-0.0, +0.0) << +MathTools::PiNumber;
     QTest::newRow("-0-0") << QVector2D(-0.0, -0.0) << -MathTools::PiNumber;
     QTest::newRow("+0-0") << QVector2D(+0.0, -0.0) << -0.0;
 }

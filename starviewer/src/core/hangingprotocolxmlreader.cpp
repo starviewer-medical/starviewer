@@ -207,11 +207,39 @@ HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QMap<int, 
         if (m_xmlReader.name() == "restrictionExpression")
         {
             HangingProtocolImageSetRestrictionExpression restrictionExpression(m_xmlReader.readElementText(), restrictions);
-            imageSet->setRestrictionExpression(restrictionExpression);
+
+            if (imageSet->getType() != HangingProtocolImageSet::Type::Fusion && imageSet->getNumberOfRestrictionExpressions() > 0)
+            {
+                WARN_LOG("Non-fusion image set with more than one restriction expression: this expression will be ignored.");
+            }
+            else
+            {
+                imageSet->addRestrictionExpression(restrictionExpression);
+            }
         }
         else if (m_xmlReader.name() == "type")
         {
-            imageSet->setTypeOfItem(m_xmlReader.readElementText());
+            QString typeString = m_xmlReader.readElementText().toLower();
+            HangingProtocolImageSet::Type type;
+
+            if (typeString == "series")
+            {
+                type = HangingProtocolImageSet::Type::Series;
+            }
+            else if (typeString == "image")
+            {
+                type = HangingProtocolImageSet::Type::Image;
+            }
+            else if (typeString == "fusion")
+            {
+                type = HangingProtocolImageSet::Type::Fusion;
+            }
+            else
+            {
+                type = HangingProtocolImageSet::Type::Series;
+            }
+
+            imageSet->setType(type);
         }
         else if (m_xmlReader.name() == "abstractPriorValue")
         {
@@ -227,6 +255,29 @@ HangingProtocolImageSet* HangingProtocolXMLReader::readImageSet(const QMap<int, 
             m_xmlReader.skipCurrentElement();
         }
     }
+
+    // Sanitize image set
+    switch (imageSet->getType())
+    {
+        case HangingProtocolImageSet::Type::Series:
+        case HangingProtocolImageSet::Type::Image:
+            if (imageSet->getNumberOfRestrictionExpressions() == 0)
+            {
+                imageSet->addRestrictionExpression(HangingProtocolImageSetRestrictionExpression()); // add empty expression
+            }
+            else if (imageSet->getNumberOfRestrictionExpressions() > 1)
+            {
+                imageSet->setRestrictionExpressions({imageSet->getRestrictionExpressions().first()});   // keep only the first expression
+            }
+            break;
+        case HangingProtocolImageSet::Type::Fusion:
+            while (imageSet->getNumberOfRestrictionExpressions() < 2)
+            {
+                imageSet->addRestrictionExpression(HangingProtocolImageSetRestrictionExpression()); // add empty expression
+            }
+            break;
+    }
+
     return imageSet;
 }
 

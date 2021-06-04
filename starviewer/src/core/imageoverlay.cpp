@@ -160,7 +160,7 @@ ImageOverlay ImageOverlay::fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay)
             gdcmOverlay.GetUnpackBuffer(reinterpret_cast<char*>(buffer), bufferSize);
             imageOverlay.setData(buffer);
         }
-        catch (std::bad_alloc)
+        catch (const std::bad_alloc&)
         {
             imageOverlay.setData(0);
             
@@ -240,7 +240,7 @@ ImageOverlay ImageOverlay::mergeOverlays(const QList<ImageOverlay> &overlaysList
     {
         data = new unsigned char[outColumns * outRows];
     }
-    catch (std::bad_alloc)
+    catch (const std::bad_alloc&)
     {
         ERROR_LOG(QString("No hi ha memòria suficient per crear el buffer per l'overlay fusionat [%1*%2] = %3 bytes")
             .arg(outRows).arg(outColumns).arg((unsigned long)outRows * outColumns));

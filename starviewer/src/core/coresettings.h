@@ -35,25 +35,6 @@ public:
     static const QString UserDICOMDumpDefaultTagsPath;
     static const QString UserCustomWindowLevelsPath;
     static const QString RegisterStatLogs;
-    // Mida per defecte de la font de les annotacions, si no s'especifica, s'autocalcula.
-    static const QString ToolsFontSize;
-    // Mida per defecte del text dels widgets que s'autoescalen: PatientBrowserMenu, WorInProgress, Popup RIS... si no s'especifica, s'autocalcula.
-    static const QString ScaledUserInterfaceFontSize;
-
-    static const QString NumberOfDirectionsForLowQualityObscurances;
-    static const QString FunctionForLowQualityObscurances;
-    static const QString VariantForLowQualityObscurances;
-    static const QString GradientRadiusForLowQualityObscurances;
-
-    static const QString NumberOfDirectionsForMediumQualityObscurances;
-    static const QString FunctionForMediumQualityObscurances;
-    static const QString VariantForMediumQualityObscurances;
-    static const QString GradientRadiusForMediumQualityObscurances;
-
-    static const QString NumberOfDirectionsForHighQualityObscurances;
-    static const QString FunctionForHighQualityObscurances;
-    static const QString VariantForHighQualityObscurances;
-    static const QString GradientRadiusForHighQualityObscurances;
 
     static const QString LanguageLocale;
 
@@ -67,9 +48,6 @@ public:
     /// Cada modalitat anirà separada per '\'
     static const QString ForceITKImageReaderForSpecifiedModalities;
     static const QString ForceVTKImageReaderForSpecifiedModalities;
-
-    /// If true, the ITK-GDCM image reader will be the default, instead of the new VTK-DCMTK.
-    static const QString UseItkGdcmImageReaderByDefault;
 
     /// La última versió comprobada de les Release Notes
     static const QString LastReleaseNotesVersionShown;
@@ -119,6 +97,9 @@ public:
     static const QString EnableQ2DViewerSliceScrollLoop;
     static const QString EnableQ2DViewerPhaseScrollLoop;
 
+    static const QString EnableQ2DViewerWheelVolumeScroll;
+    static const QString EnableQ2DViewerMouseWraparound;
+
     /// Defineix si habilitem per defecte el reference lines per modalitats MR i/o CT
     static const QString EnableQ2DViewerReferenceLinesForMR;
     static const QString EnableQ2DViewerReferenceLinesForCT;
@@ -149,6 +130,21 @@ public:
 
     /// Corresponding key to the enabled sync actions
     static const QString EnabledSyncActionsKey;
+
+    /// Multi-sampling is forced to 8 multi-samples in QViewer unless this is true.
+    static const QString DontForceMultiSampling;
+
+    /// Force a DPI scaling when not equal to 1.
+    static const QString ScaleFactor;
+
+    /// Empty horizontal and vertical space in the center of the DrawerCrosshair in pixels.
+    static const QString CrosshairInnerDiameter;
+    /// Horizontal and vertical span of the DrawerCrosshair in pixels.
+    static const QString CrosshairOuterDiameter;
+
+    /// Default state of viewers textual information (annotations): visible or invisible.
+    static const QString ShowViewersTextualInformation;
+
 };
 
 } // End namespace udg

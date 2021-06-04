@@ -42,31 +42,23 @@ PolylineROITool::~PolylineROITool()
 
 void PolylineROITool::deleteTemporalRepresentation()
 {
-    bool hasToRefresh = false;
     // Cal decrementar el reference count perquè
     // l'annotació s'esborri si "matem" l'eina
     if (!m_mainPolyline.isNull())
     {
         m_mainPolyline->decreaseReferenceCount();
         delete m_mainPolyline;
-        hasToRefresh = true;
     }
 
     if (!m_closingPolyline.isNull())
     {
         m_closingPolyline->decreaseReferenceCount();
         delete m_closingPolyline;
-        hasToRefresh = true;
     }
 
     if (!m_roiPolygon.isNull())
     {
         delete m_roiPolygon;
-    }
-
-    if (hasToRefresh)
-    {
-        m_2DViewer->render();
     }
 }
 
@@ -335,11 +327,10 @@ void PolylineROITool::initialize()
 
 void PolylineROITool::equalizeDepth()
 {
-    // Assignem a tots els punts la z de l'últim
     int zIndex = m_2DViewer->getView().getZIndex();
+    double z = m_2DViewer->getCurrentDisplayedImageDepth();
     int n = m_roiPolygon->getNumberOfPoints();
-    double z = m_roiPolygon->getVertix(n - 1)[zIndex];
-    for (int i = 0; i < n - 1; i++)
+    for (int i = 0; i < n; i++)
     {
         const double *constPoint = m_roiPolygon->getVertix(i);
         double point[3] = { constPoint[0], constPoint[1], constPoint[2] };

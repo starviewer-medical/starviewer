@@ -2,43 +2,31 @@ include(defaultdirectories.pri)
 
 INCLUDEPATH += $${ITKINCLUDEDIR}
 
-ITKLIBSUFFIX = -4.7
+ITKLIBSUFFIX = -5.0
 ITKLIBS = \
         ITKCommon \
-        ITKDICOMParser \
-        ITKEXPAT \
-        ITKFEM \
         ITKMetaIO \
         ITKNrrdIO \
         ITKSpatialObjects \
         ITKStatistics \
         itkjpeg \
         itksys \
-        itkvcl \
-        itkvnl \
         itkvnl_algo \
+        itkvnl \
+        itkvcl \
+        itkv3p_netlib \
         ITKVNLInstantiation \
         ITKniftiio \
         ITKznz \
         ITKOptimizers \
-        ITKIOImageBase \
         ITKVTK \
         ITKIOGDCM \
+        ITKIOImageBase \
         itksys \
-        itkdouble-conversion
+        itkdouble-conversion \
+        ITKTransform
 
-win32 {
- ITKLIBS += itktiff \
-         itkpng \
-         itkv3p_netlib \
-         itkzlib
-
- LIBS += -lShell32
-}
-
-macx {
- ITKLIBS += itkv3p_netlib
-}
+macx:official_release:ITKLIBS += itkzlib
 
 LIBS += -L$${ITKLIBDIR}
 
@@ -46,4 +34,5 @@ for(lib, ITKLIBS) {
     LIBS += -l$${lib}$${ITKLIBSUFFIX}
 }
 
-
+win32:LIBS += -lShell32
+unix:LIBS += -ldl

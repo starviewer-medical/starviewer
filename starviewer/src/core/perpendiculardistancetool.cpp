@@ -383,14 +383,11 @@ void PerpendicularDistanceTool::equalizeDepth()
 
 void PerpendicularDistanceTool::reset()
 {
-    bool hasToRender = false;
-
     if (m_referenceLine)
     {
         // Així alliberem la primitiva perquè pugui ser esborrada
         m_referenceLine->decreaseReferenceCount();
         delete m_referenceLine;
-        hasToRender &= true;
     }
 
     if (m_firstPerpendicularLine)
@@ -398,7 +395,6 @@ void PerpendicularDistanceTool::reset()
         // Així alliberem la primitiva perquè pugui ser esborrada
         m_firstPerpendicularLine->decreaseReferenceCount();
         delete m_firstPerpendicularLine;
-        hasToRender &= true;
     }
 
     if (m_secondPerpendicularLine)
@@ -406,12 +402,6 @@ void PerpendicularDistanceTool::reset()
         // Així alliberem la primitiva perquè pugui ser esborrada
         m_secondPerpendicularLine->decreaseReferenceCount();
         delete m_secondPerpendicularLine;
-        hasToRender &= true;
-    }
-
-    if (hasToRender)
-    {
-        m_2DViewer->render();
     }
 
     m_state = NotDrawing;

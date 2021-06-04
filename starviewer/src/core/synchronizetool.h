@@ -28,16 +28,16 @@ class SynchronizeToolData;
 class SynchronizeTool : public Tool {
 Q_OBJECT
 public:
-    SynchronizeTool(QViewer *viewer, QObject *parent = 0);
-    ~SynchronizeTool();
+    explicit SynchronizeTool(QViewer *viewer, QObject *parent = nullptr);
+    ~SynchronizeTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
     /// Per posar dades (compartides)
-    virtual void setToolData(ToolData *data);
+    void setToolData(ToolData *data) override;
 
     /// Per obtenir les dades (per compartir)
-    virtual ToolData* getToolData() const;
+    ToolData* getToolData() const override;
 
     /// Habilita o deshabilita la tool
     /// En estat habilitat, rebrà els signals de sincronització

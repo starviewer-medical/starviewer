@@ -20,7 +20,7 @@ vtkSmartPointer<vtkActor2D> DrawerPolygonTestHelper::createDefaultBackgroundActo
     backgroundActor->GetProperty()->SetLineStipplePattern(0xFFFF);
     backgroundActor->GetProperty()->SetLineWidth(4.0);
     backgroundActor->GetProperty()->SetOpacity(1.0);
-    backgroundActor->GetProperty()->SetColor(255.0, 255.0, 255.0);
+    backgroundActor->GetProperty()->SetColor(0.0, 0.0, 0.0);
     return backgroundActor;
 }
 

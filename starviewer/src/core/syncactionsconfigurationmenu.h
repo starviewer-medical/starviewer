@@ -15,7 +15,6 @@
 #ifndef UDGSYNCACTIONSCONFIGURATIONMENU_H
 #define UDGSYNCACTIONSCONFIGURATIONMENU_H
 
-#include <QSignalMapper>
 #include <QMenu>
 #include <QAction>
 
@@ -44,9 +43,6 @@ private slots:
 private:
     /// The SyncActionsConfiguration to handle in the menu
     SyncActionsConfiguration *m_syncActionsConfig;
-    
-    /// Signal mapper to map the toggle signal to the corresponding sync action string identifier
-    QSignalMapper *m_signalMapper;
 
     /// Map to bind sync actions to their corresponding QAction in the menu
     QMap<SyncActionMetaData, QAction*> m_syncActionsMap;

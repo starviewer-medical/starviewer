@@ -1,125 +1,73 @@
 @charset "UTF-8";
-/* CSS Document */
-body 
-{
-    background-color:#F5F5F5;
-    font-family: sans-serif;
+
+/* Global */
+
+body {
+  font-family: sans-serif;
+  margin: 24px;
 }
 
-h1 
-{
-    background-image: url(starviewer.png);
-    background-repeat: no-repeat;
-    padding-left: 80px;
-    height: 70px;
-    line-height: 70px;
-    vertical-align: middle;
+/* Main title */
+
+.title {
+  vertical-align: middle;
 }
 
-div.majorRelease, div.minorRelease, #previousReleases
-{
-    border: 1px;
-    border-radius: 5px;
-    border-style: solid;
-    border-color: #BBBBBB;
-    background-color:#FFFFFF;
-    margin-bottom: 15px;
+h1 {
+  font-weight: normal;
+  margin-left: 24px;
 }
 
-#previousReleases a
-{
-    padding-left: 20px;
-    color: #555555;
-    line-height: 40px;
-    margin-bottom: 10px;
-    font-size:14px;
+/* Releases */
+
+h2 {
+  font-weight: normal;
+  background-color: #dedede;
 }
 
-#previousReleases a:hover
-{
-    color: #333333;
+.programDate {
+  font-size: small;
+  font-style: italic;
 }
 
-.version 
-{
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-color: #BBBBBB;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    background-color: #E0E0E0;
-    padding-left: 20px;
-    color: #555555;
-    line-height: 30px;
-    margin-bottom: 10px;
+/* Changes */
+
+.changes {
+  margin-top: 10px;
 }
 
-.version .versionNumber
-{
-    font-weight:bold;
-    font-size:15px;
+.changes > tr > td {
+  padding-bottom: 5px;
 }
 
-.version .versionDate
-{
-    font-size:12px;
-    margin: 0px 10px;
+/* Tag styling */
+
+.tagContainer {
+  padding-right: 12px;
+  font-size: small;
 }
 
-ul
-{
-    list-style: none;
-    margin: 0px 20px;
-    padding: 0;
-    font-size:13px;
+.new .tag {
+  color: #3daee9;
+  background-color: #c9edfa;
 }
 
-li 
-{
-    padding: 4px 0 3px 100px;
-    margin: 0 0 6px 0;
-    position: relative;
+.improved .tag {
+  color: #27ae60;
+  background-color: #a2f8d3;
 }
 
-li:before
-{
-    border-radius: 3px;
-    color: white;
-    font-size: 11px;
-    font-weight: bold;
-    width: 90px;
-    margin-right: 10px;
-    text-align: center;
-    float: left;
-    padding-top: 5px;
-    padding-bottom: 2px;
-    position: absolute;
-    top: 0px;
-    left: 0px;
+.fixed .tag {
+  color: #f57400;
+  background-color: #fae3c6;
 }
 
-div.new li:before
-{
-    content: "NOVETAT";
-    background-color: #BCB901;
-}
-div.improved li:before
-{
-    content: "MILLORA";
-    background-color: #0486BC;
-}
-div.fixed li:before
-{
-    content: "CORRECCIÓ";
-    background-color: #00A825;
-}
-div.removed li:before
-{
-    content: "ELIMINAT";
-    background-color: #BC0E00;
+.removed .tag {
+  color: #7f8c8d;
+  background-color: #e1e6e7;
 }
 
-span.ticket
-{
-    display: none;
+.problem .tag {
+  color: #c4414e;
+  background-color: #fcdbe3;
 }

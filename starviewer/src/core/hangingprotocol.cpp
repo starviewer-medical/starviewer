@@ -247,7 +247,7 @@ int HangingProtocol::countFilledImageSets() const
     int count = 0;
     foreach (HangingProtocolImageSet *imageSet, this->getImageSets())
     {
-        if (imageSet->getSeriesToDisplay() || imageSet->getPreviousStudyToDisplay())
+        if (imageSet->isFilled() || imageSet->getPreviousStudyToDisplay())
         {
             count++;
         }
@@ -261,7 +261,7 @@ int HangingProtocol::countFilledImageSetsWithPriors() const
     int count = 0;
     foreach (HangingProtocolImageSet *imageSet, this->getImageSets())
     {
-        if (imageSet->getAbstractPriorValue() != 0 && (imageSet->getSeriesToDisplay() || imageSet->getPreviousStudyToDisplay()))
+        if (imageSet->getAbstractPriorValue() != 0 && (imageSet->isFilled() || imageSet->getPreviousStudyToDisplay()))
         {
             count++;
         }
@@ -275,11 +275,11 @@ int HangingProtocol::countFilledDisplaySets() const
     int count = 0;
     foreach (HangingProtocolDisplaySet *displaySet, this->getDisplaySets())
     {
-        if (displaySet->getImageSet() && displaySet->getImageSet()->getSeriesToDisplay())
+        if (displaySet->getImageSet() && displaySet->getImageSet()->isFilled())
         {
             if (displaySet->getSlice() != -1)
             {
-                if (displaySet->getImageSet()->getSeriesToDisplay()->getNumberOfImages() > displaySet->getSlice())
+                if (displaySet->getImageSet()->getSeriesToDisplay().first()->getNumberOfImages() > displaySet->getSlice())
                 {
                     count++;
                 }
@@ -371,7 +371,8 @@ bool HangingProtocol::compareTo(const HangingProtocol &hangingProtocol) const
         HangingProtocolImageSet *imageSetToCompare = hangingProtocol.getImageSets().at(imageSetNumber);
 
         hasSameAttributes = imageSet->getIdentifier() == imageSetToCompare->getIdentifier()
-            && imageSet->getTypeOfItem() == imageSetToCompare->getTypeOfItem()
+            && imageSet->getRestrictionExpressions() == imageSetToCompare->getRestrictionExpressions()
+            && imageSet->getType() == imageSetToCompare->getType()
             && imageSet->getSeriesToDisplay() == imageSetToCompare->getSeriesToDisplay()
             && imageSet->getImageToDisplay() == imageSetToCompare->getImageToDisplay()
             && imageSet->isDownloaded() == imageSetToCompare->isDownloaded()

@@ -34,11 +34,11 @@ class Q3DViewer;
 class ClippingPlanesTool : public Tool {
 Q_OBJECT
 public:
-    ClippingPlanesTool(QViewer *viewer, QObject *parent = 0);
-    ~ClippingPlanesTool();
+    explicit ClippingPlanesTool(QViewer *viewer, QObject *parent = nullptr);
+    ~ClippingPlanesTool() override;
 
     /// Gestiona els events del visor
-    void handleEvent(long unsigned eventID);
+    void handleEvent(long unsigned eventID) override;
 
 private slots:
     /// Es connectarà als events emesos pel widget per saber quan s'ha interactuat i així aplicar els plans de tall sobre el visor

@@ -25,6 +25,7 @@
 #include "logging.h"
 #include "mathtools.h"
 #include "starviewerapplication.h"
+#include "coresettings.h"
 
 // TODO: Ouch! SuperGuarrada (tm). Per poder fer sortir el menú i tenir accés al Patient principal. S'ha d'arreglar en quan es tregui les dependències de
 // interface, pacs, etc.etc.!!
@@ -35,10 +36,12 @@
 #include <QContextMenuEvent>
 #include <QMessageBox>
 #include <QDir>
+#include <QScreen>
 
 // Include's vtk
-#include <QVTKWidget.h>
-#include <vtkRenderWindow.h>
+#include <QVTKOpenGLNativeWidget.h>
+#include <QVTKInteractor.h>
+#include <vtkGenericOpenGLRenderWindow.h>
 #include <vtkRenderer.h>
 #include <vtkBMPWriter.h>
 #include <vtkPNGWriter.h>
@@ -56,8 +59,9 @@ QViewer::QViewer(QWidget *parent)
  : QWidget(parent), m_mainVolume(0), m_contextMenuActive(true), m_mouseHasMoved(false), m_voiLutData(0),
    m_isRenderingEnabled(true), m_isActive(false)
 {
+    m_lastAngleDelta = QPoint();
     m_defaultFitIntoViewportMarginRate = 0.0;
-    m_vtkWidget = new QVTKWidget(this);
+    m_vtkWidget = new QVTKOpenGLNativeWidget(this);
     m_vtkWidget->setFocusPolicy(Qt::WheelFocus);
     m_renderer = vtkRenderer::New();
 
@@ -92,6 +96,8 @@ QViewer::QViewer(QWidget *parent)
 
     this->setMouseTracking(false);
     m_patientBrowserMenu = new PatientBrowserMenu(0);
+    // We do not want Qt to generate context menu events, we do our own detection through VTK events and then we call the overridable method QWidget::contextMenuEvent()
+    this->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
     // Ara mateix el comportament per defecte serà que un cop seleccionat un volum li assignem immediatament com a input
     this->setAutomaticallyLoadPatientBrowserMenuSelectedInput(true);
 }
@@ -101,7 +107,7 @@ QViewer::~QViewer()
     // Cal que la eliminació del vtkWidget sigui al final ja que els altres
     // objectes que eliminem en poden fer ús durant la seva destrucció
     delete m_toolProxy;
-    delete m_patientBrowserMenu;
+    m_patientBrowserMenu->deleteLater();
     m_windowToImageFilter->Delete();
     delete m_vtkWidget;
     m_vtkQtConnections->Delete();
@@ -110,7 +116,7 @@ QViewer::~QViewer()
 
 vtkRenderWindowInteractor* QViewer::getInteractor() const
 {
-    return m_vtkWidget->GetRenderWindow()->GetInteractor();
+    return m_vtkWidget->GetInteractor();
 }
 
 vtkRenderer* QViewer::getRenderer() const
@@ -159,12 +165,22 @@ QSize QViewer::getRenderWindowSize() const
 
 QPoint QViewer::getEventPosition() const
 {
-    return QPoint(this->getInteractor()->GetEventPosition()[0], this->getInteractor()->GetEventPosition()[1]);
+    QPoint point(this->getInteractor()->GetEventPosition()[0], this->getInteractor()->GetEventPosition()[1]);
+    point *= this->devicePixelRatioF();
+    return point;
+
 }
 
 QPoint QViewer::getLastEventPosition() const
 {
-    return QPoint(this->getInteractor()->GetLastEventPosition()[0], this->getInteractor()->GetLastEventPosition()[1]);
+    QPoint point(this->getInteractor()->GetLastEventPosition()[0], this->getInteractor()->GetLastEventPosition()[1]);
+    point *= this->devicePixelRatioF();
+    return point;
+}
+
+QPoint QViewer::getWheelAngleDelta() const
+{
+    return m_lastAngleDelta;
 }
 
 bool QViewer::isActive() const
@@ -192,7 +208,7 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
         case vtkCommand::MouseWheelForwardEvent:
         case vtkCommand::MouseWheelBackwardEvent:
         {
-            QWheelEvent *e = (QWheelEvent*)callData;
+            QWheelEvent *e = (QWheelEvent*)callData; //WARNING: I don't like that casting here, may become dangerous.
             if (e)
             {
                 if (e->delta() == 0 || e->orientation() == Qt::Horizontal)
@@ -204,11 +220,20 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
     }
 #endif
 
+    if (vtkEvent == vtkCommand::MouseWheelForwardEvent || vtkEvent == vtkCommand::MouseWheelBackwardEvent)
+    {
+        QWheelEvent *event = (QWheelEvent*)callData; //WARNING: I don't like that casting here, may become dangerous.
+        if (event)
+        {
+            m_lastAngleDelta = event->angleDelta();
+        }
+    }
+
     // Quan la finestra sigui "seleccionada" s'emetrà un senyal indicant-ho. Entenem seleccionada quan s'ha clicat o mogut la rodeta per sobre del visor.
     // TODO Ara resulta ineficient perquè un cop seleccionat no caldria re-enviar aquesta senyal. Cal millorar el sistema
     switch (vtkEvent)
     {
-        case QVTKWidget::ContextMenuEvent:
+        case QVTKInteractor::vtkCustomEvents::ContextMenuEvent:
         case vtkCommand::LeftButtonPressEvent:
         case vtkCommand::RightButtonPressEvent:
         case vtkCommand::MiddleButtonPressEvent:
@@ -219,6 +244,11 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
             if (vtkEvent == vtkCommand::LeftButtonPressEvent && getInteractor()->GetRepeatCount() == 1)
             {
                 emit doubleClicked();
+
+                if (getToolProxy()->isToolActive("ZoomTool"))
+                {
+                    return; // avoid accidental pan when doing a double click (#2854)
+                }
             }
             break;
 
@@ -433,11 +463,11 @@ void QViewer::render()
     }
 }
 
-void QViewer::absoluteZoom(double factor)
+void QViewer::absoluteZoom(double factor, QPoint zoomCenter)
 {
     double currentFactor = getCurrentZoomFactor();
 
-    zoom(currentFactor / (factor * getRenderWindowSize().height()));
+    zoom(currentFactor / (factor * getRenderWindowSize().height()), zoomCenter);
 }
 
 double QViewer::getCurrentZoomFactor()
@@ -456,14 +486,27 @@ double QViewer::getCurrentZoomFactor()
     return zoomFactor;
 }
 
-void QViewer::zoom(double factor)
+void QViewer::zoom(double factor, QPoint zoomCenter)
 {
+    double worldCenter1[3];
+    computeDisplayToWorld(zoomCenter.x(), zoomCenter.y(), 0, worldCenter1);
+
     if (adjustCameraScaleFactor(factor))
     {
+        double worldCenter2[3];
+        computeDisplayToWorld(zoomCenter.x(), zoomCenter.y(), 0, worldCenter2);
+        Vector3 difference = Vector3(worldCenter1) - Vector3(worldCenter2);
+        Vector3 position(getActiveCamera()->GetPosition());
+        Vector3 focalPoint(getActiveCamera()->GetFocalPoint());
+        position += difference;
+        focalPoint += difference;
+        getActiveCamera()->SetPosition(position.x, position.y, position.z);
+        getActiveCamera()->SetFocalPoint(focalPoint.x, focalPoint.y, focalPoint.z);
+
         double zoomFactor = getCurrentZoomFactor();
 
         emit cameraChanged();
-        emit zoomFactorChanged(zoomFactor / getRenderWindowSize().height());
+        emit zoomChanged(zoomFactor / getRenderWindowSize().height(), zoomCenter);
         this->render();
     }
 }
@@ -521,6 +564,13 @@ bool QViewer::getCurrentFocalPoint(double focalPoint[3])
 VoiLut QViewer::getCurrentVoiLut() const
 {
     return VoiLut();
+}
+
+Vector3 QViewer::getViewPlaneNormal()
+{
+    Vector3 normal;
+    getActiveCamera()->GetViewPlaneNormal(normal.x, normal.y, normal.z);
+    return normal;
 }
 
 bool QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate)
@@ -664,10 +714,14 @@ void QViewer::contextMenuRelease()
 
     // Obtenim la posició de l'event
     QPoint point = this->getEventPosition();
+    point /= this->devicePixelRatioF(); // Vtk pixels are real pixels, Qt wants logical pixels.
 
     // Remember to flip y
     QSize size = this->getRenderWindowSize();
+    size /= this->devicePixelRatioF(); // Vtk pixels are real pixels, Qt wants logical pixels.
     point.setY(size.height() - point.y());
+
+
 
     // Map to global
     QPoint globalPoint = this->mapToGlobal(point);
@@ -916,13 +970,21 @@ void QViewer::handleNotEnoughMemoryForVisualizationError()
 
 void QViewer::setupRenderWindow()
 {
-    vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
+    vtkSmartPointer<vtkGenericOpenGLRenderWindow> renderWindow = vtkSmartPointer<vtkGenericOpenGLRenderWindow>::New();
     // TODO getInteractor() forces m_vtkWiget to create a render window the first time just to return the interactor, that render window is unused afterwards.
     //      Could this be improved?
     renderWindow->SetInteractor(getInteractor());
     renderWindow->AddRenderer(getRenderer());
     renderWindow->DoubleBufferOn();
     renderWindow->LineSmoothingOn();
+    renderWindow->SetDPI(QGuiApplication::primaryScreen()->logicalDotsPerInch());
+
+    if (!Settings().getValue(CoreSettings::DontForceMultiSampling).toBool())
+    {
+        // This is the default of VTK except on Mac due to some alleged problems in some models, and is needed to get smooth lines
+        // The setting will allow to avoid those problems if they arise, at the cost of getting aliased lines
+        renderWindow->SetMultiSamples(8);
+    }
 
     // TODO This is needed for the rendering process to work correctly if coming from handleNotEnoughMemoryForVisualizationError().
     //      Alternatively the rendering process also works correctly after a Q2DViewer::restore().

@@ -17,6 +17,8 @@
 
 #include "tool.h"
 
+#include <QPoint>
+
 namespace udg {
 
 class QViewer;
@@ -26,10 +28,10 @@ Q_OBJECT
 public:
     enum { None, Zooming };
 
-    ZoomTool(QViewer *viewer, QObject *parent = 0);
-    ~ZoomTool();
+    explicit ZoomTool(QViewer *viewer, QObject *parent = nullptr);
+    ~ZoomTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
 private slots:
     /// Comença el zoom
@@ -43,9 +45,9 @@ private slots:
 
 private:
     int m_state;
+    /// Point around which zoom is centered.
+    QPoint m_zoomCenter;
 
-    /// Sets if we need to call render or not when zoom action is ended
-    bool m_mustRenderOnEnd;
 };
 
 }

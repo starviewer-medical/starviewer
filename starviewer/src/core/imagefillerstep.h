@@ -16,67 +16,40 @@
 #define UDGIMAGEFILLERSTEP_H
 
 #include "patientfillerstep.h"
-#include "dicomtag.h"
 
-class QVector3D;
+#include "dicomtag.h"
 
 namespace udg {
 
-class Patient;
-class Series;
-class Image;
-class DICOMTagReader;
 class DICOMSequenceItem;
-class ImageOrientation;
+class DICOMTagReader;
+class Image;
 
 /**
-    Mòdul que s'encarrega d'omplir la informació general d'objectes DICOM que són imatges. Un dels seus requisits és que es tingui l'etiqueta de
-    DICOMClassified i que la Series a tractar sigui d'imatges
-  */
+ * @brief The ImageFillerStep class creates and fills Image objects from DICOM files.
+ */
 class ImageFillerStep : public PatientFillerStep {
+
 public:
     ImageFillerStep();
-    ~ImageFillerStep();
+    virtual ~ImageFillerStep();
 
-    bool fillIndividually();
-
-    void postProcessing() {}
-
-    QString name()
-    {
-        return "ImageFillerStep";
-    }
+    virtual bool fillIndividually() override;
 
 private:
     /// Mètode per processar la informació específica de pacient,series i imatge
-    bool processImage(Image *image, DICOMTagReader *dicomReader);
+    void processImage(Image *image, const DICOMTagReader *dicomReader);
 
     /// Mètode encarregat de processar el fitxer DICOM per extreure'n el conjunt de les imatges
     /// que el conformen, omplint la informació necessària
-    QList<Image*> processDICOMFile(DICOMTagReader *dicomReader);
+    QList<Image*> processDICOMFile(const DICOMTagReader *dicomReader);
 
     /// Mètode específic per processar els arxius que siguin de tipus Enhanced
-    QList<Image*> processEnhancedDICOMFile(DICOMTagReader *dicomReader);
-
-    /// Mètode encarregat de processar el fitxer DICOM per extreure'n el conjunt de les imatges
-    /// que el conformen, omplint la informació necessària
-    /// HACK Hitachi
-    QList<Image*> processDICOMFileHitachi(DICOMTagReader *dicomReader);
-
-    /// Mètode específic per processar els arxius que siguin de tipus Enhanced
-    /// HACK Hitachi
-    QList<Image*> processEnhancedDICOMFileHitachi(DICOMTagReader *dicomReader);
-
-    /// Donat un dicomReader guardem a la cache el corresponent thumbnail.
-    /// La intenció d'aquest mètode és estalviar temps en la càrrega de thumbnails per arxius
-    /// multiframe i enhanced ja que actualment és molt costós perquè hem de carregar tot el volum
-    /// a memòria i aquí podem aprofitar que el dataset està a memòria evitant la càrrega posterior
-    /// Tot i així es pot fer servir en altres casos que es cregui necessari avançar la creació del thumbnail
-    void saveThumbnail(DICOMTagReader *dicomReader);
+    QList<Image*> processEnhancedDICOMFile(const DICOMTagReader *dicomReader);
 
     /// Omple la informació comú a totes les imatges.
     /// Image i dicomReader han de ser objectes vàlids.
-    bool fillCommonImageInformation(Image *image, DICOMTagReader *dicomReader);
+    void fillCommonImageInformation(Image *image, const DICOMTagReader *dicomReader);
 
     /// Omple l'image donat amb la informació dels functional groups continguts en l'ítem proporcionat
     /// Aquest mètode està pensat per fer-se servir amb els ítems obtinguts
@@ -84,28 +57,15 @@ private:
     void fillFunctionalGroupsInformation(Image *image, DICOMSequenceItem *frameItem);
 
     /// Retorna quants overlays hi ha en el dataset proporcionat
-    unsigned short getNumberOfOverlays(DICOMTagReader *dicomReader);
-    
-    /// Afegeix la informació de shutters a la imatge, si n'hi ha
-    void fillDisplayShutterInformation(Image *image, DICOMTagReader *dicomReader);
-    void fillDisplayShutterInformation(Image *image, DICOMSequenceItem *displayShutterItems);
+    unsigned short getNumberOfOverlays(const DICOMTagReader *dicomReader);
     
     /// Calcula el pixel spacing i se l'assigna a l'image donada en cas de que aquest es pugui calcular
     /// @param image Image a la que li assignarem el pixel spacing
     /// @param dicomReader Reader de DICOM que conté la font de dades de la Image associada
-    void computePixelSpacing(Image *image, DICOMTagReader *dicomReader);
+    void computePixelSpacing(Image *image, const DICOMTagReader *dicomReader);
 
     /// Checks and sets the Estimated Radiographic Magnification Factor tag for the corresponding modalities
-    void checkAndSetEstimatedRadiographicMagnificationFactor(Image *image, DICOMTagReader *dicomReader);
-
-    /// Ens diu si les imatges són de mides diferents
-    bool areOfDifferentSize(Image *firstImage, Image *secondImage);
-
-    /// Ens diu si les imatges tenen photometric interpretations diferents
-    bool areOfDifferentPhotometricInterpretation(Image *firstImage, Image *secondImage);
-
-    /// Ens diu si les imatges tenen pixel spacing diferents
-    bool areOfDifferentPixelSpacing(Image *firstImage, Image *secondImage);
+    void checkAndSetEstimatedRadiographicMagnificationFactor(Image *image, const DICOMTagReader *dicomReader);
 
     /// Ens diu si el SOP Class UID es correspon amb el d'una imatge enhanced
     bool isEnhancedImageSOPClass(const QString &sopClassUID);
@@ -114,7 +74,8 @@ private:
     /// If no pixel spacing tag is specified, Pixel Spacing will be used by default
     /// PixelSpacing and ImagerPixelSpacing tags are the only tags supported currently
     /// Returns true on success, false otherwise
-    bool validateAndSetSpacingAttribute(Image *image, const QString &spacing, const DICOMTag &tag = DICOMTag(0x0028, 0x0030));
+    void validateAndSetSpacingAttribute(Image *image, const QString &spacing, const DICOMTag &tag = DICOMTag(0x0028, 0x0030));
+
 };
 
 }

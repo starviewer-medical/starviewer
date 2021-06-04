@@ -63,6 +63,9 @@ public:
     /// Gets the age of the patient at study date. If it's not set, it will be computed from birth and study date if both are valid.
     QString getPatientAge() const;
 
+    /// Returns the patient's age calculated from the patient's birth date and study date. Returns a null string if it can't be calculated.
+    QString getCalculatedPatientAge() const;
+
     /// Assignar/Obtenir el pes del pacient
     void setWeight(double weight);
     double getWeight() const;
@@ -84,7 +87,7 @@ public:
 
     /// Assigna/Obtenir el referring physician's name de l'estudi
     void setReferringPhysiciansName(QString referringPhysiciansName);
-    QString getReferringPhysiciansName();
+    QString getReferringPhysiciansName() const;
 
     /// Assignar/Obtenir la data i hora d'adquisició de l'estudi. El format de la data serà YYYYMMDD i el del
     /// time hhmmss.frac on frac és una fracció de segon de rang 000000-999999
@@ -97,17 +100,17 @@ public:
     bool setTime(int hour, int minute, int second = 0);
     bool setTime(QString time);
     bool setTime(QTime time);
-    QDate getDate();
+    QDate getDate() const;
     QString getDateAsString();
-    QTime getTime();
+    QTime getTime() const;
     QString getTimeAsString();
     QDateTime getDateTime() const;
 
     /// Assignar/Obtenir la data i hora en que l'estudi s'ha descarregat a la base de dades Local
     void setRetrievedDate(QDate date);
     void setRetrievedTime(QTime time);
-    QDate getRetrievedDate();
-    QTime getRetrievedTime();
+    QDate getRetrievedDate() const;
+    QTime getRetrievedTime() const;
 
     /// Assigna/Obté la institució de la qual s'ha obtingut l'estudi
     void setInstitutionName(const QString &institution);
@@ -138,6 +141,12 @@ public:
 
     /// Ens retorna la llista de Series que es poden visualitzar en un viewer
     QList<Series*> getViewableSeries();
+    
+    /// Returns a list of volumes that compose the study.
+    QList<Volume*> getVolumesList();
+
+    /// Returns the number of volumes that compose the study.
+    int getNumberOfVolumes();
 
     ///Retorna un DICOMSource que aglutina els diferents DICOMSource de les sèries que conté l'estudi i el de l'estudi si se n'hi ha assignat un.
     DICOMSource getDICOMSource() const;

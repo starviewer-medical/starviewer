@@ -2,6 +2,10 @@
 
 #include <iostream>
 
+#include "logging.h"
+#include "easylogging++.h"
+INITIALIZE_EASYLOGGINGPP
+
 #include <QDir>
 
 /// A part dels paràmetres que QTest defineix de cada test, se n'han afegint més:
@@ -149,5 +153,6 @@ inline int run()
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+    udg::beginLogging();
     return AutoTest::run();
 }

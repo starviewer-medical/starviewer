@@ -41,6 +41,7 @@ public:
     double getMean();
     double getStandardDeviation();
     double getMaximum();
+    double getSum();
 
     /// Sets/gets the units of the voxels of this ROI
     void setUnits(const QString &units);
@@ -63,6 +64,9 @@ private:
     /// Computes voxels maximum value
     void computeMaximum();
 
+    /// Computes the sum of the voxel values.
+    void computeSum();
+
 private:
     /// The container of the ROI voxels
     QVector<Voxel> m_voxels;
@@ -71,6 +75,7 @@ private:
     double m_mean;
     double m_standardDeviation;
     double m_maximum;
+    double m_sum;
 
     /// Used to control whether the statistics data has to be computed or not when requested
     bool m_statisticsAreOutdated;

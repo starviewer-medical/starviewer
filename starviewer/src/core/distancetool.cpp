@@ -39,19 +39,12 @@ DistanceTool::~DistanceTool()
 
 void DistanceTool::deleteTemporalRepresentation()
 {
-    bool hasToRefresh = false;
     // Cal decrementar el reference count perquè
     // l'annotació s'esborri si "matem" l'eina
     if (m_distanceLine)
     {
         m_distanceLine->decreaseReferenceCount();
         delete m_distanceLine;
-        hasToRefresh = true;
-    }
-
-    if (hasToRefresh)
-    {
-        m_2DViewer->render();
     }
 
     m_lineState = NoPointFixed;

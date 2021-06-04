@@ -1,10 +1,11 @@
 
 # Cal afegir el directori de l'extensió a la variable SUBDIRS tant si es compila com si no.
 
-SUBDIRS = mpr \
+SUBDIRS = mpr2d \
           dicomprint \
           q2dviewer \
-          q3dviewer
+          q3dviewer \
+          pdf
 
 include(../../extensions.pri)
 

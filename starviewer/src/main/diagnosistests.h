@@ -21,7 +21,7 @@
 #include "echotopacstest.h"
 #include "dicomdirburningapplicationtest.h"
 #include "applicationversiontest.h"
-#include "systemrequerimentstest.h"
+#include "systemrequirementstest.h"
 #include "cachetest.h"
 
 #endif

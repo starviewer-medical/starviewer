@@ -45,7 +45,7 @@ public slots:
 
 signals:
     /// Quan seleccionem una sèrie emeiteix una signal per a que el QStudyTreeWidget, tingui seleccionada la mateixa sèrie
-    void seriesThumbnailClicked(const QString studyInstanceUID, const QString seriesInstanceUID);
+    void seriesThumbnailClicked(const QString &studyInstanceUID, const QString &seriesInstanceUID);
 
     /// Quan es fa doble click emiteix un signal, perquè la sèrie sigui visualitzada
     void seriesThumbnailDoubleClicked(QString studyInstanceUID, QString seriesInstanceUID);

@@ -22,7 +22,7 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderWindow.h>
 
-static const double MinimumWindowWidth = 0.0001;
+static constexpr double MinimumWindowWidth = 0.0001;
 
 namespace udg {
 
@@ -101,7 +101,7 @@ void WindowLevelTool::startWindowLevel()
 
 void WindowLevelTool::doWindowLevel()
 {
-    m_viewer->setCursor(QCursor(QPixmap(":/images/windowLevel.png")));
+    m_viewer->setCursor(QCursor(QPixmap(":/images/cursors/contrast.svg")));
     m_windowLevelCurrentPosition = m_viewer->getEventPosition();
 
     QSize size = m_viewer->getRenderWindowSize();
@@ -136,6 +136,10 @@ void WindowLevelTool::doWindowLevel()
         double newX2 = newLevel + newWindow / 2.0;
         voiLut = VoiLut(m_initialLut.toNewRange(oldX1, oldX2, newX1, newX2), m_initialLut.name());
     }
+
+    // This is really only needed when burning (because in the other case it's eventually set in another place) but it's more consistent to do it in both cases.
+    // It ensures that the new VOI LUT is detected as custom.
+    voiLut.setExplanation(VoiLutPresetsToolData::getCustomPresetName());
 
     if (m_state == WindowLevelling)
     {

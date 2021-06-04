@@ -31,17 +31,17 @@ class AutomaticSynchronizationTool : public Tool {
 Q_OBJECT
 public:
     /// Constructor i destructor
-    AutomaticSynchronizationTool(QViewer *viewer, QObject *parent = 0);
-    ~AutomaticSynchronizationTool();
+    explicit AutomaticSynchronizationTool(QViewer *viewer, QObject *parent = nullptr);
+    ~AutomaticSynchronizationTool() override;
 
     /// Processament dels events
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
     /// Per posar les dades de  (compartides)
-    virtual void setToolData(ToolData *data);
+    virtual void setToolData(ToolData *data) override;
 
     /// Per obtenir les dades (per compartir)
-    virtual ToolData* getToolData() const;
+    virtual ToolData* getToolData() const override;
 
 public slots:
     /// Actualitza les dades si el visor està actiu

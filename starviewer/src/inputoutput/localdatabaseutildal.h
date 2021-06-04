@@ -12,39 +12,32 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-
 #ifndef UDGLOCALDATABASEUTILDAL_H
 #define UDGLOCALDATABASEUTILDAL_H
 
 #include "localdatabasebasedal.h"
 
-class QString;
-
 namespace udg {
 
 /**
-    Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
-  */
+ * @brief The LocalDatabaseUtilDAL class contains several methods to interact with the database not related to any specific class.
+ */
 class LocalDatabaseUtilDAL : public LocalDatabaseBaseDAL {
+
 public:
-    LocalDatabaseUtilDAL(DatabaseConnection *dbConnection);
+    LocalDatabaseUtilDAL(DatabaseConnection &databaseConnection);
 
-    /// Compacta la BD
-    void compact();
+    /// Compacts the database. Returns true if successful and false otherwise.
+    bool compact();
 
-    /// Retorna la revisió de la BD a la que està connectada, si no troba a quina revisió pertany retorna -1
+    /// Returns the database revision. If the database revision cannot be determined, returns -1.
     int getDatabaseRevision();
 
-    /// Ens actualitza la versió de la base de dades
-    void updateDatabaseRevision(int databaseRevision);
+    /// Updates the database revision. Returns true if successful and false otherwise.
+    bool updateDatabaseRevision(int databaseRevision);
 
-private:
-    /// Ens retorna un string amb el select a executar per retorna la revisió de la base de dades sobre la qual estem connectats
-    QString buildSqlGetDatabaseRevision();
-
-    /// Ens retorna QString amb update a executar per actualitzar la revisió d'estudis de la BD
-    QString buildSqlUpdateDatabaseRevision(int databaseRevision);
 };
+
 }
 
 #endif

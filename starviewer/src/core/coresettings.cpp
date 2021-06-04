@@ -36,38 +36,13 @@ const QString CoreSettings::UserCustomWindowLevelsPath("CustomWindowLevels/path"
 const QString CoreSettings::RegisterStatLogs("LoggingPolicy/registerStatistics");
 
 const QString ToolsBase("Tools/");
-const QString CoreSettings::ToolsFontSize(ToolsBase + "ToolsFontSize");
-const QString CoreSettings::ScaledUserInterfaceFontSize("ScaledUserInterfaceFontSize");
-
 const QString CoreSettings::MagnifyingGlassZoomFactor(ToolsBase + "MagnifyingGlassZoomFactor");
-
-// Paràmetres d'obscurances
-const QString ObscurancesBase("3DViewer/obscurances/");
-const QString LowQualityObscurancesBase(ObscurancesBase + "low/");
-const QString MediumQualityObscurancesBase(ObscurancesBase + "medium/");
-const QString HighQualityObscurancesBase(ObscurancesBase + "high/");
-
-const QString CoreSettings::NumberOfDirectionsForLowQualityObscurances(LowQualityObscurancesBase + "numberOfDirections");
-const QString CoreSettings::FunctionForLowQualityObscurances(LowQualityObscurancesBase + "function");
-const QString CoreSettings::VariantForLowQualityObscurances(LowQualityObscurancesBase + "variant");
-const QString CoreSettings::GradientRadiusForLowQualityObscurances(LowQualityObscurancesBase + "gradientRadius");
-
-const QString CoreSettings::NumberOfDirectionsForMediumQualityObscurances(MediumQualityObscurancesBase + "numberOfDirections");
-const QString CoreSettings::FunctionForMediumQualityObscurances(MediumQualityObscurancesBase + "function");
-const QString CoreSettings::VariantForMediumQualityObscurances(MediumQualityObscurancesBase + "variant");
-const QString CoreSettings::GradientRadiusForMediumQualityObscurances(MediumQualityObscurancesBase + "gradientRadius");
-
-const QString CoreSettings::NumberOfDirectionsForHighQualityObscurances(HighQualityObscurancesBase + "numberOfDirections");
-const QString CoreSettings::FunctionForHighQualityObscurances(HighQualityObscurancesBase + "function");
-const QString CoreSettings::VariantForHighQualityObscurances(HighQualityObscurancesBase + "variant");
-const QString CoreSettings::GradientRadiusForHighQualityObscurances(HighQualityObscurancesBase + "gradientRadius");
 
 const QString CoreSettings::LanguageLocale("Starviewer-Language/languageLocale");
 
 const QString CoreSettings::ForcedImageReaderLibrary("Input/ForcedImageReaderLibrary");
 const QString CoreSettings::ForceITKImageReaderForSpecifiedModalities("Input/ForceITKImageReaderForSpecifiedModalities");
 const QString CoreSettings::ForceVTKImageReaderForSpecifiedModalities("Input/ForceVTKImageReaderForSpecifiedModalities");
-const QString CoreSettings::UseItkGdcmImageReaderByDefault("Input/UseItkGdcmImageReaderByDefault");
 
 // Release Notes
 const QString CoreSettings::LastReleaseNotesVersionShown("LastReleaseNotesVersionShown");
@@ -100,6 +75,8 @@ const QString CoreSettings::ExternalApplicationsConfigurationSectionName = "Exte
 const QString Q2DViewerBase("2DViewer/");
 const QString CoreSettings::EnableQ2DViewerSliceScrollLoop(Q2DViewerBase + "enable2DViewerSliceScrollLoop");
 const QString CoreSettings::EnableQ2DViewerPhaseScrollLoop(Q2DViewerBase + "enable2DViewerPhaseScrollLoop");
+const QString CoreSettings::EnableQ2DViewerWheelVolumeScroll(Q2DViewerBase + "enable2DViewerWheelVolumeScroll");
+const QString CoreSettings::EnableQ2DViewerMouseWraparound(Q2DViewerBase + "enable2DViewerMouseWraparound");
 const QString CoreSettings::EnableQ2DViewerReferenceLinesForMR(Q2DViewerBase + "enable2DViewerReferenceLinesForMR");
 const QString CoreSettings::EnableQ2DViewerReferenceLinesForCT(Q2DViewerBase + "enable2DViewerReferenceLinesForCT");
 const QString CoreSettings::ModalitiesWithZoomToolByDefault(Q2DViewerBase + "ModalitiesWithZoomToolByDefault");
@@ -113,6 +90,15 @@ const QString CoreSettings::MeasurementDisplayVerbosity(Q2DViewerBase + "Measure
 const QString CoreSettings::SUVMeasurementNormalizationType(Q2DViewerBase + "Measurement/SUVMeasurementNormalizationType");
 
 const QString CoreSettings::EnabledSyncActionsKey("enabledSyncActions");
+
+const QString CoreSettings::DontForceMultiSampling("DontForceMultiSampling");
+
+const QString CoreSettings::ScaleFactor("scaleFactor");
+
+const QString CoreSettings::CrosshairInnerDiameter("CrosshairInnerDiameter");
+const QString CoreSettings::CrosshairOuterDiameter("CrosshairOuterDiameter");
+
+const QString CoreSettings::ShowViewersTextualInformation("ShowViewersTextualInformation");
 
 CoreSettings::CoreSettings()
 {
@@ -144,10 +130,12 @@ void CoreSettings::init()
 #endif
     settingsRegistry->addSetting(MammographyAutoOrientationExceptions, (QStringList() << "BAV" << "BAG" << "estereot"));
     settingsRegistry->addSetting(AllowAsynchronousVolumeLoading, true);
-    settingsRegistry->addSetting(MaximumNumberOfVolumesLoadingConcurrently, 1);
+    settingsRegistry->addSetting(MaximumNumberOfVolumesLoadingConcurrently, 3);
     settingsRegistry->addSetting(MaximumNumberOfVisibleVoiLutComboItems, 50);
     settingsRegistry->addSetting(EnableQ2DViewerSliceScrollLoop, false);
     settingsRegistry->addSetting(EnableQ2DViewerPhaseScrollLoop, false);
+    settingsRegistry->addSetting(EnableQ2DViewerWheelVolumeScroll, false);
+    settingsRegistry->addSetting(EnableQ2DViewerMouseWraparound, true);
     settingsRegistry->addSetting(EnableQ2DViewerReferenceLinesForMR, true);
     settingsRegistry->addSetting(EnableQ2DViewerReferenceLinesForCT, false);
     settingsRegistry->addSetting(ModalitiesWithZoomToolByDefault, "MG;CR;RF;OP;DX;MR");
@@ -157,6 +145,14 @@ void CoreSettings::init()
     settingsRegistry->addSetting(ModalitiesToApplyHangingProtocolsAsFirstOption, "CR;CT;MG;MR;US");
     settingsRegistry->addSetting(ModalitiesWithPropagationEnabledByDefault, "CT;MR;PT");
     settingsRegistry->addSetting(SUVMeasurementNormalizationType, "BodyWeight");
+    settingsRegistry->addSetting(DontForceMultiSampling, false);
+
+    settingsRegistry->addSetting(ScaleFactor, "0");
+
+    settingsRegistry->addSetting(CrosshairInnerDiameter, 10);
+    settingsRegistry->addSetting(CrosshairOuterDiameter, 30);
+
+    settingsRegistry->addSetting(ShowViewersTextualInformation, true);
 }
 
 } // End namespace udg

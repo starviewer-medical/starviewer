@@ -47,10 +47,15 @@ private:
     /// Updates which SUV measurement type radio button should be checked
     void initializeSUVMeasurementType();
 
+    /// Initializes the current crosshair size according to settings.
+    void initializeCrosshairSize();
+
 private slots:
     /// Es cridaran quan es modifiquin els check box actualitzant els corresponents settings
     void updateSliceScrollLoopSetting(bool enable);
     void updatePhaseScrollLoopSetting(bool enable);
+    void updateWheelVolumeScrollSetting(bool enable);
+    void updateMouseWraparoundSetting(bool enable);
     void updateReferenceLinesForMRSetting(bool enable);
     void updateReferenceLinesForCTSetting(bool enable);
     void updateModalitiesWithZoomByDefaultSetting(const QStringList &modalities);
@@ -60,6 +65,14 @@ private slots:
     void updateSUVMeasurementTypeSetting();
     void updateAutomaticSynchronizationForMRSetting(bool enable);
     void updateAutomaticSynchronizationForCTSetting(bool enable);
+    /// Updates crosshair inner diameter in settings and the preview.
+    void updateCrosshairInnerDiameter(int value);
+    /// Updates crosshair outer diameter in settings and the preview.
+    void updateCrosshairOuterDiameter(int value);
+
+private:
+    /// Updates crosshair preview.
+    void updateCrosshairPreview();
 };
 
 }

@@ -14,22 +14,26 @@
 
 #include "databaseconnection.h"
 
-#include <sqlite3.h>
-// Per les traduccions: tr()
-#include <QObject>
-#include <QSemaphore>
-#include <QDir>
-#include <QString>
 #include "localdatabasemanager.h"
 #include "logging.h"
+
+#include <QSqlDatabase>
+#include <QSqlError>
 
 namespace udg {
 
 DatabaseConnection::DatabaseConnection()
-    : m_databaseConnection(NULL)
 {
+    static QAtomicInt connectionNumber = 0;
+
     m_databasePath = LocalDatabaseManager::getDatabaseFilePath();
-    m_transactionLock = new QSemaphore(1);
+    m_connectionName = QString("starviewer%1").arg(connectionNumber++);
+}
+
+DatabaseConnection::~DatabaseConnection()
+{
+    // If there is an active transaction it is automatically rolled back on close according to sqlite documentation
+    close();
 }
 
 void DatabaseConnection::setDatabasePath(const QString &path)
@@ -37,91 +41,70 @@ void DatabaseConnection::setDatabasePath(const QString &path)
     m_databasePath = path;
 }
 
-void DatabaseConnection::open()
+QSqlDatabase DatabaseConnection::getConnection()
 {
-    // Cal obrir amb UTF8 perquè l'sqlite3 nomes treballa amb aquesta codificació i sinó no troba la base de dades.
-    sqlite3_open(qPrintable(QDir::toNativeSeparators(QString(m_databasePath.toUtf8()))), &m_databaseConnection);
-    // En el moment que es fa el commit de les dades inserides o updates a la base de dades, sqlite bloqueja tota la base
-    // de dades, per tant no es pot fer cap consulta. Indicant el busy_timeout a 10000 ms el que fem, és que si tenim una
-    // setència contra sqlite que es troba la bd o una taula bloquejada, va fent intents cada x temps per mirar si continua
-    // bloqueja fins a 15000ms una vegada passat aquest temps dona errora de taula o base de dades bloquejada
+    if (!isConnected())
+    {
+        open();
+    }
 
-    sqlite3_busy_timeout(m_databaseConnection, 15000);
+    return QSqlDatabase::database(m_connectionName);
+}
+
+QSqlError DatabaseConnection::getLastError()
+{
+    return getConnection().lastError();
+}
+
+QString DatabaseConnection::getLastErrorMessage()
+{
+    return getLastError().text();
 }
 
 void DatabaseConnection::beginTransaction()
 {
-    if (!isConnected())
-    {
-        open();
-    }
-
-    m_transactionLock->acquire();
-    sqlite3_exec(m_databaseConnection, "BEGIN IMMEDIATE", 0, 0, 0);
+    getConnection().transaction();
 }
 
 void DatabaseConnection::commitTransaction()
 {
-    sqlite3_exec(m_databaseConnection, "END", 0, 0, 0);
-    m_transactionLock->release();
+    getConnection().commit();
 }
 
 void DatabaseConnection::rollbackTransaction()
 {
-    sqlite3_exec(m_databaseConnection, "ROLLBACK", 0, 0, 0);
-    m_transactionLock->release();
-    INFO_LOG("S'ha cancel.lat transaccio de la BD");
+    getConnection().rollback();
+    INFO_LOG("Transaction in the database rolled back.");
 }
 
-QString DatabaseConnection::formatTextToValidSQLSyntax(QString string)
+void DatabaseConnection::open()
 {
-    return string.isNull() ? "" : string.replace("'", "''");
-}
-
-QString DatabaseConnection::formatTextToValidSQLSyntax(QChar qchar)
-{
-    // Retornem un QString perquè si retornem QChar('') si qchar és null al converti-lo a QString(QChar('')) el QString s'inicialitza incorrectament agafant
-    // com a valor un caràcter estrany en comptes de QString("")
-    return qchar.isNull() ? "" : QString(qchar);
-}
-
-sqlite3* DatabaseConnection::getConnection()
-{
-    if (!isConnected())
+    if (isConnected())
     {
-        open();
+        return;
     }
 
-    return m_databaseConnection;
-}
+    QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
+    database.setDatabaseName(m_databasePath);
+    database.setConnectOptions("QSQLITE_BUSY_TIMEOUT=20000");
 
-bool DatabaseConnection::isConnected()
-{
-    return m_databaseConnection != NULL;
+    if (!database.open())
+    {
+        ERROR_LOG(database.lastError().text());
+    }
 }
 
 void DatabaseConnection::close()
 {
     if (isConnected())
     {
-        sqlite3_close(m_databaseConnection);
-        m_databaseConnection = NULL;
+        QSqlDatabase::removeDatabase(m_connectionName);
     }
 }
 
-QString DatabaseConnection::getLastErrorMessage()
+bool DatabaseConnection::isConnected()
 {
-    return sqlite3_errmsg(m_databaseConnection);
+    return QSqlDatabase::database(m_connectionName).isOpen();
 }
 
-int DatabaseConnection::getLastErrorCode()
-{
-    return sqlite3_errcode(m_databaseConnection);
 }
-
-DatabaseConnection::~DatabaseConnection()
-{
-    close();
-}
-
-};

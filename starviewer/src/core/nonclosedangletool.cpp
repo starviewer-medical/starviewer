@@ -44,26 +44,18 @@ NonClosedAngleTool::~NonClosedAngleTool()
 
 void NonClosedAngleTool::deleteTemporalRepresentation()
 {
-    bool hasToRefresh = false;
     // Cal decrementar el reference count perquè
     // l'annotació s'esborri si "matem" l'eina
     if (m_firstLine)
     {
         m_firstLine->decreaseReferenceCount();
         delete m_firstLine;
-        hasToRefresh = true;
     }
 
     if (m_secondLine)
     {
         m_secondLine->decreaseReferenceCount();
         delete m_secondLine;
-        hasToRefresh = true;
-    }
-
-    if (hasToRefresh)
-    {
-        m_2DViewer->render();
     }
 
     m_state = None;
@@ -200,7 +192,8 @@ void NonClosedAngleTool::computeAngle()
         // Així evitem que la primitiva pugui ser esborrada durant l'edició per events externs
         m_middleLine->increaseReferenceCount();
     }
-    m_middleLine->setLinePattern(DrawerPrimitive::DiscontinuousLinePattern);
+    m_middleLine->setColor(QColor(191, 147, 64));
+    m_middleLine->setOpacity(0.5);
 
     double *point1 = m_firstLine->getFirstPoint();
     double *point2 = m_firstLine->getSecondPoint();

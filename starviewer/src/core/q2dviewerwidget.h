@@ -51,6 +51,7 @@ public:
 
     void setInput(Volume *input);
     void setInputAsynchronously(Volume *input, QViewerCommand *command = 0);
+    void setInputAsynchronously(const QList<Volume*> &inputList, QViewerCommand *command = nullptr);
 
     /// Habilita o deshabilita el botó que permet activar o desactivar l'eina de sincronització
     void enableSynchronizationButton(bool enable);
@@ -84,6 +85,8 @@ signals:
     void fusionLayout2x3SecondRequested(const QList<Volume*> &volumes);
     /// Emitted when one of the options of the fusion layout tool button has been selected to request a 3x3 fusion layout with the given volumes.
     void fusionLayout3x3Requested(const QList<Volume*> &volumes);
+    /// Emitted when one of the options of the fusion layout tool button has been selected to request a MPR R fusion layout with the given volumes.
+    void fusionLayoutMprRightRequested(const QList<Volume*> &volumes);
 
 protected:
     /// Sobrecàrrega de l'event que s'emet quan el mouse fa un clic dins l'àmbit del widget
@@ -110,9 +113,6 @@ private slots:
     
     /// Quan el visualitzador s'ha seleccionat, emet el senyal amb aquest widget
     void emitSelectedViewer();
-
-    /// Actualitza correctament el valor de l'slider quan hi ha thick slab
-    void updateSlider();
 
     /// Assigna el rang i el valor corresponent de l'slider segons l'input del viewer
     void resetSliderRangeAndValue();
@@ -143,6 +143,8 @@ private slots:
     void requestFusionLayout2x3Second();
     /// Emits the fusionLayout3x3Requested() signal if the contained viewer has 2 volumes.
     void requestFusionLayout3x3();
+    /// Emits the fusionLayoutMprRightRequested() signal if the contained viewer has 2 volumes.
+    void requestFusionLayoutMprRight();
 
 private:
     /// Acció del boto de sincronitzar

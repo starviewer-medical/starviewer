@@ -33,7 +33,7 @@ Volume::Volume(QObject *parent)
     m_numberOfPhases = 1;
     m_numberOfSlicesPerPhase = 1;
 
-    m_volumePixelData = new VolumePixelData(this);
+    m_volumePixelData = new VolumePixelData();
 }
 
 Volume::~Volume()
@@ -65,6 +65,7 @@ void Volume::setData(vtkImageData *vtkImage)
 void Volume::setPixelData(VolumePixelData *pixelData)
 {
     Q_ASSERT(pixelData != 0);
+    delete m_volumePixelData;
     m_volumePixelData = pixelData;
     // Set the number of phases to the new pixel data
     m_volumePixelData->setNumberOfPhases(m_numberOfPhases);
@@ -239,9 +240,7 @@ void Volume::addImage(Image *image)
         // Si tenim dades carregades passen a ser invàlides
         if (isPixelDataLoaded())
         {
-            // WARNING Possible memory leak temporal: el VolumePixelData anterior quedarà penjat sense destruir fins que es destruixi el seu pare (si en té,
-            // sinó per sempre).
-            m_volumePixelData = new VolumePixelData(this);
+            setPixelData(new VolumePixelData());
         }
 
         m_checkedImagesAnatomicalPlane = false;
@@ -255,9 +254,7 @@ void Volume::setImages(const QList<Image*> &imageList)
     // Si tenim dades carregades passen a ser invàlides
     if (isPixelDataLoaded())
     {
-        // WARNING Possible memory leak temporal: el VolumePixelData anterior quedarà penjat sense destruir fins que es destruixi el seu pare (si en té, sinó
-        // per sempre).
-        m_volumePixelData = new VolumePixelData(this);
+        setPixelData(new VolumePixelData());
     }
 
     m_checkedImagesAnatomicalPlane = false;
@@ -533,8 +530,8 @@ ImagePlane* Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane,
                 imagePlane->setImageOrientation(ImageOrientation(sagittalRowVector, sagittalColumnVector));
                 imagePlane->setSpacing(PixelSpacing2D(spacing[1], spacing[2]));
                 imagePlane->setThickness(spacing[0]);
-                imagePlane->setRows(dimensions[2]);
-                imagePlane->setColumns(dimensions[1]);
+                imagePlane->setRowLength(dimensions[1] * spacing[1]);
+                imagePlane->setColumnLength(dimensions[2] * spacing[2]);
 
                 QVector3D sagittalNormalVector = image->getImageOrientationPatient().getRowVector();
                 imagePlane->setOrigin(origin[0] + sliceNumber * sagittalNormalVector.x() * spacing[0],
@@ -570,8 +567,8 @@ ImagePlane* Volume::getImagePlane(int sliceNumber, const OrthogonalPlane &plane,
                 imagePlane->setImageOrientation(ImageOrientation(coronalRowVector, coronalColumnVector));
                 imagePlane->setSpacing(PixelSpacing2D(spacing[0], spacing[2]));
                 imagePlane->setThickness(spacing[1]);
-                imagePlane->setRows(dimensions[2]);
-                imagePlane->setColumns(dimensions[0]);
+                imagePlane->setRowLength(dimensions[0] * spacing[0]);
+                imagePlane->setColumnLength(dimensions[2] * spacing[2]);
 
                 QVector3D coronalNormalVector = image->getImageOrientationPatient().getColumnVector();
                 imagePlane->setOrigin(origin[0] + coronalNormalVector.x() * sliceNumber * spacing[1],

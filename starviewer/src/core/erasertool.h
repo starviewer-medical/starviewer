@@ -36,10 +36,10 @@ public:
     /// Possibles estats de la tool
     enum { StartClick, None };
 
-    EraserTool(QViewer *viewer, QObject *parent = 0);
-    ~EraserTool();
+    explicit EraserTool(QViewer *viewer, QObject *parent = nullptr);
+    ~EraserTool() override;
 
-    void handleEvent(unsigned long eventID);
+    void handleEvent(unsigned long eventID) override;
 
 private:
     /// Inicia el procés de determinació de la zona d'esborrat

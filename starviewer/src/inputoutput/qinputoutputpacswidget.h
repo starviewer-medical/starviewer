@@ -14,7 +14,7 @@
 
 
 #ifndef UDGQINPUTOUTPUTPACSWIDGET_H
-#define UDGQINPUTOUTPUCPACSWIDGET_H
+#define UDGQINPUTOUTPUTPACSWIDGET_H
 
 #include "ui_qinputoutputpacswidgetbase.h"
 
@@ -36,7 +36,6 @@ class StatsWatcher;
 class Status;
 class Study;
 class QOperationStateScreen;
-class PacsManager;
 class QueryPacsJob;
 
 /**
@@ -51,9 +50,6 @@ public:
     /// Constructor de la classe
     QInputOutputPacsWidget(QWidget *parent = 0);
     ~QInputOutputPacsWidget();
-
-    /// Especifiquem l'instància de PacsManager utilitza per les operacions amb el PACS
-    void setPacsManager(PacsManager *pacsManager);
 
     /// Consulta els estudis al dicomdir obert que compleixin la màscara de cerca
     void queryStudy(DicomMask queryMask, QList<PacsDevice> pacsToQuery);
@@ -153,7 +149,7 @@ private slots:
 
 private:
     QMenu m_contextMenuQStudyTreeWidget;
-    PacsManager *m_pacsManager;
+
     /// Per cada job de descàrrega guardem quina acció hem de fer quan ha acabat la descàrrega
     QHash<int, ActionsAfterRetrieve> m_actionsWhenRetrieveJobFinished;
 

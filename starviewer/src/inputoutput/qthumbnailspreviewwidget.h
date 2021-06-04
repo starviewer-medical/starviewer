@@ -63,7 +63,7 @@ signals:
     /// Signal que s'emet quan han clickat un thumbnail
     void thumbnailClicked(const QString &IDThumbnail);
     /// Signal que s'emet quan han fet doble click sobre un thumbnail
-    void thumbnailDoubleClicked(const QString IDThumbnail);
+    void thumbnailDoubleClicked(const QString &IDThumbnail);
 
 private:
     /// Ens crea un QListWidgetItem a partir de les dades passades

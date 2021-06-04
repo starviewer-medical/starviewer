@@ -53,7 +53,7 @@ QueryScreen::QueryScreen(QWidget *parent)
     // Connectem signals i slots
     createConnections();
     // Fa les comprovacions necessaries per poder executar la QueryScreen de forma correcte
-    checkRequeriments();
+    checkRequirements();
 
     readSettings();
     // Fem que per defecte mostri els estudis de la cache
@@ -61,10 +61,10 @@ QueryScreen::QueryScreen(QWidget *parent)
 
     // Configuració per Starviewer Lite
 #ifdef STARVIEWER_LITE
-    m_showPACSNodesToolButton->hide();
-    m_operationListToolButton->hide();
-    m_createDICOMDIRToolButton->hide();
-    m_advancedSearchToolButton->hide();
+    m_showPACSNodesPushButton->hide();
+    m_operationListPushButton->hide();
+    m_createDICOMDIRPushButton->hide();
+    m_advancedSearchPushButton->hide();
     // Tab de "PACS" fora
     m_tab->removeTab(1);
 #else
@@ -78,15 +78,12 @@ QueryScreen::QueryScreen(QWidget *parent)
 #endif
 
     m_statsWatcher = new StatsWatcher("QueryScreen", this);
-    m_statsWatcher->addClicksCounter(m_operationListToolButton);
-    m_statsWatcher->addClicksCounter(m_showPACSNodesToolButton);
-    m_statsWatcher->addClicksCounter(m_createDICOMDIRToolButton);
-    m_statsWatcher->addClicksCounter(m_advancedSearchToolButton);
-    m_statsWatcher->addClicksCounter(m_clearToolButton);
-    m_statsWatcher->addClicksCounter(m_createDICOMDIRToolButton);
-
-    //HACK: Per traduir el botó Yes dels QMessageBox, aquesta no és la solució bona, s'hauria d'agafar les traduccions de sistema de Qt,
-    QT_TRANSLATE_NOOP("QDialogButtonBox", "&Yes");
+    m_statsWatcher->addClicksCounter(m_operationListPushButton);
+    m_statsWatcher->addClicksCounter(m_showPACSNodesPushButton);
+    m_statsWatcher->addClicksCounter(m_createDICOMDIRPushButton);
+    m_statsWatcher->addClicksCounter(m_advancedSearchPushButton);
+    m_statsWatcher->addClicksCounter(m_clearPushButton);
+    m_statsWatcher->addClicksCounter(m_createDICOMDIRPushButton);
 }
 
 QueryScreen::~QueryScreen()
@@ -94,16 +91,15 @@ QueryScreen::~QueryScreen()
 #ifndef STARVIEWER_LITE
 
     Settings settings;
-    settings.setValue(InputOutputSettings::QueryScreenPACSListIsVisible, m_showPACSNodesToolButton->isChecked());
+    settings.setValue(InputOutputSettings::QueryScreenPACSListIsVisible, m_showPACSNodesPushButton->isChecked());
 
-    if (m_pacsManager->isExecutingPACSJob())
+    if (PacsManagerSingleton::instance()->isExecutingPACSJob())
     {
         // Si hi ha PacsJob executant-se demanem cancel·lar
-        m_pacsManager->requestCancelAllPACSJobs();
+        PacsManagerSingleton::instance()->requestCancelAllPACSJobs();
     }
 
     delete m_risRequestManager;
-    delete m_pacsManager;
 #endif
 
     // Sinó fem un this.close i tenim la finestra queryscreen oberta al tancar l'starviewer, l'starviewer no finalitza
@@ -120,16 +116,13 @@ void QueryScreen::initialize()
 {
     m_qcreateDicomdir = new udg::QCreateDicomdir(this);
 #ifndef STARVIEWER_LITE
-    m_pacsManager = new PacsManager();
     // Posem com a pare el pare de la queryscreen, d'aquesta manera quan es tanqui el pare de la queryscreen
     // el QOperationStateScreen també es tancarà
     m_operationStateScreen = new udg::QOperationStateScreen(this);
-    m_qInputOutputLocalDatabaseWidget->setPacsManager(m_pacsManager);
-    m_qInputOutputPacsWidget->setPacsManager(m_pacsManager);
-    m_operationStateScreen->setPacsManager(m_pacsManager);
+
     if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool())
     {
-        m_risRequestManager = new RISRequestManager(m_pacsManager);
+        m_risRequestManager = new RISRequestManager();
     }
     else
     {
@@ -140,7 +133,7 @@ void QueryScreen::initialize()
     m_qInputOutputLocalDatabaseWidget->setQCreateDicomdir(m_qcreateDicomdir);
 
     QMovie *operationAnimation = new QMovie(this);
-    operationAnimation->setFileName(":/images/loader.gif");
+    operationAnimation->setFileName(":/images/animations/loader.gif");
     m_operationAnimation->setMovie(operationAnimation);
     operationAnimation->start();
 
@@ -156,11 +149,11 @@ void QueryScreen::createConnections()
 {
     // Connectem els butons
     connect(m_searchButton, SIGNAL(clicked()), SLOT(searchStudy()));
-    connect(m_clearToolButton, SIGNAL(clicked()), SLOT(clearTexts()));
+    connect(m_clearPushButton, SIGNAL(clicked()), SLOT(clearTexts()));
 #ifndef STARVIEWER_LITE
-    connect(m_operationListToolButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
-    connect(m_showPACSNodesToolButton, SIGNAL(toggled(bool)), SLOT(updatePACSNodesVisibility()));
-    connect(m_pacsManager, SIGNAL(newPACSJobEnqueued(PACSJobPointer)), SLOT(newPACSJobEnqueued(PACSJobPointer)));
+    connect(m_operationListPushButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
+    connect(m_showPACSNodesPushButton, SIGNAL(toggled(bool)), SLOT(updatePACSNodesVisibility()));
+    connect(PacsManagerSingleton::instance(), &PacsManager::newPACSJobEnqueued, this, &QueryScreen::newPACSJobEnqueued);
     if (m_risRequestManager != NULL)
     {
         // Potser que no tinguem activat escoltar peticions del RIS
@@ -168,13 +161,13 @@ void QueryScreen::createConnections()
         connect(m_risRequestManager, SIGNAL(loadStudyRetrievedFromRISRequest(QString)), SLOT(loadStudyFromDatabase(QString)));
     }
 #endif
-    connect(m_createDICOMDIRToolButton, SIGNAL(clicked()), m_qcreateDicomdir, SLOT(show()));
+    connect(m_createDICOMDIRPushButton, SIGNAL(clicked()), m_qcreateDicomdir, SLOT(show()));
 
     // Es canvia de pestanya del TAB
     connect(m_tab, SIGNAL(currentChanged(int)), SLOT(refreshTab(int)));
 
     // Amaga o ensenya la cerca avançada
-    connect(m_advancedSearchToolButton, SIGNAL(toggled(bool)), SLOT(setAdvancedSearchVisible(bool)));
+    connect(m_advancedSearchPushButton, SIGNAL(toggled(bool)), SLOT(setAdvancedSearchVisible(bool)));
 
     connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
     connect(m_qInputOutputDicomdirWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
@@ -194,7 +187,7 @@ void QueryScreen::createConnections()
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveCancelled(QString)), SLOT(studyRetrieveCancelledSlot(QString)));
 }
 
-void QueryScreen::checkRequeriments()
+void QueryScreen::checkRequirements()
 {
     // Comprova que la base de dades d'imatges estigui consistent, comprovant que no haguessin quedat estudis a mig descarregar l'última
     // vegada que es va tancar l'starviewer, i si és així esborra les imatges i deixa la base de dades en un estat consistent
@@ -222,7 +215,7 @@ void QueryScreen::checkDatabaseImageIntegrity()
 {
     LocalDatabaseManager localDatabaseManager;
 
-    localDatabaseManager.checkNoStudiesRetrieving();
+    localDatabaseManager.deleteStudyBeingRetrieved();
 
     if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
     {
@@ -236,12 +229,12 @@ void QueryScreen::setAdvancedSearchVisible(bool visible)
 
     if (visible)
     {
-        m_advancedSearchToolButton->setText(m_advancedSearchToolButton->text().replace(">>", "<<"));
+        m_advancedSearchPushButton->setText(m_advancedSearchPushButton->text().replace(">>", "<<"));
     }
     else
     {
         m_qadvancedSearchWidget->clear();
-        m_advancedSearchToolButton->setText(m_advancedSearchToolButton->text().replace("<<", ">>"));
+        m_advancedSearchPushButton->setText(m_advancedSearchPushButton->text().replace("<<", ">>"));
     }
 }
 
@@ -354,12 +347,12 @@ void QueryScreen::updatePACSNodesVisibility()
 {
     if (m_tab->currentIndex() == PACSQueryTab)
     {
-        m_showPACSNodesToolButton->show();
-        m_PACSNodes->setVisible(m_showPACSNodesToolButton->isChecked());
+        m_showPACSNodesPushButton->show();
+        m_PACSNodes->setVisible(m_showPACSNodesPushButton->isChecked());
     }
     else
     {
-        m_showPACSNodesToolButton->hide();
+        m_showPACSNodesPushButton->hide();
         m_PACSNodes->hide();
     }
 }
@@ -436,7 +429,7 @@ void QueryScreen::readSettings()
     // TODO fer neteja d'aquestes claus antigues amb la migració de dades
 
 #ifndef STARVIEWER_LITE
-    m_showPACSNodesToolButton->setChecked(settings.getValue(InputOutputSettings::QueryScreenPACSListIsVisible).toBool());
+    m_showPACSNodesPushButton->setChecked(settings.getValue(InputOutputSettings::QueryScreenPACSListIsVisible).toBool());
 #endif
 }
 

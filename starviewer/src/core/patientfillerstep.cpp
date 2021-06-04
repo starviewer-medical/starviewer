@@ -13,13 +13,14 @@
  *************************************************************************************/
 
 #include "patientfillerstep.h"
-#include "patientfillerinput.h"
-#include "series.h"
+
 #include "image.h"
+#include "series.h"
 
 namespace udg {
 
-PatientFillerStep::PatientFillerStep() : m_input(0), m_priority(NormalPriority)
+PatientFillerStep::PatientFillerStep()
+    : m_input(nullptr)
 {
 }
 
@@ -32,24 +33,26 @@ void PatientFillerStep::setInput(PatientFillerInput *input)
     m_input = input;
 }
 
-bool PatientFillerStep::operator<(const PatientFillerStep &patientFillerStep) const
+bool PatientFillerStep::fillIndividually()
 {
-    return m_priority < patientFillerStep.getPriority();
+    return false;
 }
 
-bool PatientFillerStep::isImageSeries(Series *series)
+void PatientFillerStep::postProcessing()
 {
-    QStringList supportedModalitiesAsImage = Image::getSupportedModalities();
-
-    return supportedModalitiesAsImage.contains(series->getModality());
 }
 
-bool PatientFillerStep::isKeyImageNoteSeries(Series *series)
+bool PatientFillerStep::isImageSeries(const Series *series)
+{
+    return Image::getSupportedModalities().contains(series->getModality());
+}
+
+bool PatientFillerStep::isKeyImageNoteSeries(const Series *series)
 {
     return series->getModality() == "KO";
 }
 
-bool PatientFillerStep::isPresentationStateSeries(Series *series)
+bool PatientFillerStep::isPresentationStateSeries(const Series *series)
 {
     return series->getModality() == "PR";
 }

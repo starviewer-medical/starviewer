@@ -24,8 +24,11 @@ namespace udg {
     Maximum number of inputs will be two.
 */
 class PETCTVolumeDisplayUnitHandler : public PairedVolumeDisplayUnitHandler {
+
+    Q_OBJECT
+
 public:
-    PETCTVolumeDisplayUnitHandler();
+    PETCTVolumeDisplayUnitHandler(QObject *parent = nullptr);
     virtual ~PETCTVolumeDisplayUnitHandler();
 
 protected:

@@ -297,7 +297,7 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     binaryDilate->SetBackgroundValue(m_outsideMaskValue);
     binaryDilatePre->SetBackgroundValue(m_outsideMaskValue);
 
-    unsigned long radiusDilatePre[3];
+    StructuringElementType::SizeType radiusDilatePre;
     radiusDilatePre[0] = 1;
     radiusDilatePre[1] = 1;
     radiusDilatePre[2] = 1;
@@ -311,7 +311,7 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     //binaryDilatePre->SetInput(m_Mask->getItkData());
     binaryDilatePre->SetInput(resampleFilter->GetOutput());
 
-    unsigned long radiusErode[3];
+    StructuringElementType::SizeType radiusErode;
     radiusErode[0] = 6;
     radiusErode[1] = 6;
     radiusErode[2] = 1;
@@ -326,7 +326,7 @@ double StrokeSegmentationMethod::applyCleanSkullMethod()
     //binaryErode->SetInput(m_Mask->getItkData());
     binaryErode->SetInput(binaryDilatePre->GetOutput());
 
-    unsigned long radiusDilate[3];
+    StructuringElementType::SizeType radiusDilate;
     radiusDilate[0] = 8;
     radiusDilate[1] = 8;
     radiusDilate[2] = 2;
@@ -553,7 +553,7 @@ double StrokeSegmentationMethod::applyMethodEdema(Volume *lesionMask)
    // Ampliem la màscara per evitar el partial volume effect
    DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
 
-    unsigned long radiusDilate[3];
+    StructuringElementType::SizeType radiusDilate;
     radiusDilate[0] = 2;
     radiusDilate[1] = 2;
     radiusDilate[2] = 1;
@@ -1009,7 +1009,7 @@ double StrokeSegmentationMethod::applyMethodEdema2(Volume *lesionMask)
 
     DilateFilterType::Pointer binaryDilate = DilateFilterType::New();
 
-    unsigned long radiusDilate[3];
+    StructuringElementType::SizeType radiusDilate;
     radiusDilate[0] = 2;
     radiusDilate[1] = 2;
     radiusDilate[2] = 1;

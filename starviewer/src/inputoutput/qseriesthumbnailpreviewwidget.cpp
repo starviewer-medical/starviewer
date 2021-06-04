@@ -105,6 +105,11 @@ QString QSeriesThumbnailPreviewWidget::getSeriesThumbnailDescription(Series *ser
         }
     }
 
+    if (series->getNumberOfEncapsulatedDocuments() > 0)
+    {
+        thumbnailDescription += QString(tr("%1 Encapsulated Document(s)")).arg(series->getNumberOfEncapsulatedDocuments());
+    }
+
     return thumbnailDescription;
 }
 

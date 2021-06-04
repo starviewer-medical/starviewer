@@ -57,12 +57,15 @@ StudyLayoutConfig::UnfoldDirectionType StudyLayoutConfig::getUnfoldDirection() c
 
 void StudyLayoutConfig::addExclusionCriteria(ExclusionCriteriaType criteria)
 {
-    m_exclusionCriteria << criteria;
+    if (!m_exclusionCriteria.contains(criteria))
+    {
+        m_exclusionCriteria << criteria;
+    }
 }
 
 QList<StudyLayoutConfig::ExclusionCriteriaType> StudyLayoutConfig::getExclusionCriteria() const
 {
-    return m_exclusionCriteria.toList();
+    return m_exclusionCriteria;
 }
 
 void StudyLayoutConfig::setModality(const QString &modality)

@@ -16,49 +16,63 @@
 
 #include "imagepipeline.h"
 #include "slicehandler.h"
+#include "sliceorientedvolumepixeldata.h"
 #include "volume.h"
 #include "voilutpresetstooldata.h"
 #include "volumepixeldata.h"
 #include "image.h"
 #include "voiluthelper.h"
+#include "vtkimagereslicemapper2.h"
 
 #include <vtkCamera.h>
-#include <vtkImageResliceMapper.h>
-#include <vtkImageSlice.h>
-#include <vtkPropPicker.h>
 #include <vtkImageProperty.h>
+#include <vtkImageSlice.h>
+#include <vtkImageSliceMapper.h>
+#include <vtkImageStack.h>
+#include <vtkLookupTable.h>
+#include <vtkPropPicker.h>
 
 namespace udg {
 
-VolumeDisplayUnit::VolumeDisplayUnit()
- : m_volume(0)
+VolumeDisplayUnit::VolumeDisplayUnit(QObject *parent)
+ : QObject(parent), m_volume(nullptr), m_shutterImageSlice(nullptr), m_auxiliarCurrentVolumePixelData(nullptr)
 {
     m_imagePipeline = new ImagePipeline();
     m_imageSlice = vtkImageSlice::New();
-    vtkImageResliceMapper *mapper = vtkImageResliceMapper::New();
-    mapper->SliceAtFocalPointOn();
-    mapper->SliceFacesCameraOn();
-    mapper->JumpToNearestSliceOn();
-    m_imageSlice->SetMapper(mapper);
-    mapper->Delete();
+    m_mapper = VtkImageResliceMapper2::New();
+    m_mapper->SliceAtFocalPointOn();
+    m_mapper->SliceFacesCameraOn();
+    m_mapper->JumpToNearestSliceOn();
+    m_mapper->StreamingOn();
+    m_mapper->BorderOn();   // without this an ugly line may appear at the border
+    m_imageSlice->SetMapper(m_mapper);
     m_imageSlice->GetProperty()->SetInterpolationTypeToCubic();
+    m_imageStack = vtkImageStack::New();
+    m_imageStack->AddImage(m_imageSlice);
     m_sliceHandler = new SliceHandler();
     m_imagePointPicker =  0;
     m_voiLutData = 0;
-    m_currentThickSlabPixelData = 0;
 }
 
 VolumeDisplayUnit::~VolumeDisplayUnit()
 {
     delete m_imagePipeline;
     m_imageSlice->Delete();
+    m_mapper->Delete();
+    m_imageStack->Delete();
+
+    if (m_shutterImageSlice)
+    {
+        m_shutterImageSlice->Delete();
+    }
+
     delete m_sliceHandler;
     
     if (m_imagePointPicker)
     {
         m_imagePointPicker->Delete();
     }
-    delete m_currentThickSlabPixelData;
+    delete m_auxiliarCurrentVolumePixelData;
 }
 
 Volume* VolumeDisplayUnit::getVolume() const
@@ -97,6 +111,11 @@ vtkImageSlice* VolumeDisplayUnit::getImageSlice() const
     return m_imageSlice;
 }
 
+vtkImageStack* VolumeDisplayUnit::getImageStack() const
+{
+    return m_imageStack;
+}
+
 vtkPropPicker* VolumeDisplayUnit::getImagePointPicker()
 {
     if (!m_imagePointPicker)
@@ -115,7 +134,6 @@ const OrthogonalPlane& VolumeDisplayUnit::getViewPlane() const
 void VolumeDisplayUnit::setViewPlane(const OrthogonalPlane &viewPlane)
 {
     m_sliceHandler->setViewPlane(viewPlane);
-    m_imagePipeline->setProjectionAxis(viewPlane);
 }
 
 double VolumeDisplayUnit::getCurrentSpacingBetweenSlices() const
@@ -148,27 +166,41 @@ double VolumeDisplayUnit::getCurrentDisplayedImageDepth() const
     }
 }
 
-VolumePixelData* VolumeDisplayUnit::getCurrentPixelData()
+SliceOrientedVolumePixelData VolumeDisplayUnit::getCurrentPixelData()
 {
     if (!m_volume)
     {
-        return 0;
+        return SliceOrientedVolumePixelData();
     }
     
     if (isThickSlabActive())
     {
-        if (!m_currentThickSlabPixelData)
-        {
-            m_currentThickSlabPixelData = new VolumePixelData;
-            m_currentThickSlabPixelData->setNumberOfPhases(m_volume->getNumberOfPhases());
-            m_currentThickSlabPixelData->setData(getImagePipeline()->getSlabProjectionOutput());
-        }
+        m_mapper->Update();
+        delete m_auxiliarCurrentVolumePixelData;
+        m_auxiliarCurrentVolumePixelData = new VolumePixelData();
+        m_auxiliarCurrentVolumePixelData->setData(m_mapper->getResliceOutput());
 
-        return m_currentThickSlabPixelData;
+        return SliceOrientedVolumePixelData().setVolumePixelData(m_auxiliarCurrentVolumePixelData).setDataToWorldMatrix(m_mapper->getSliceToWorldMatrix());
+    }
+    else if (m_sliceHandler->getNumberOfPhases() > 1)
+    {
+        delete m_auxiliarCurrentVolumePixelData;
+        m_auxiliarCurrentVolumePixelData = new VolumePixelData();
+        m_auxiliarCurrentVolumePixelData->setData(m_imagePipeline->getPhaseOutput());
+
+        return SliceOrientedVolumePixelData().setVolumePixelData(m_auxiliarCurrentVolumePixelData).setOrthogonalPlane(getViewPlane());
     }
     else
     {
-        return m_volume->getPixelData();
+        return SliceOrientedVolumePixelData().setVolumePixelData(m_volume->getPixelData()).setOrthogonalPlane(getViewPlane());
+    }
+}
+
+void VolumeDisplayUnit::restoreRenderingQuality()
+{
+    if (!isThickSlabActive())
+    {
+        m_mapper->ResampleToScreenPixelsOn();
     }
 }
 
@@ -191,7 +223,7 @@ void VolumeDisplayUnit::updateImageSlice(vtkCamera *camera)
         return;
     }
 
-    int imageIndex = m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase());
+    int imageIndex = getSlice();
     int zIndex = this->getViewPlane().getZIndex();
     double origin[3];
     m_volume->getOrigin(origin);
@@ -211,7 +243,6 @@ int VolumeDisplayUnit::getSlice() const
 void VolumeDisplayUnit::setSlice(int slice)
 {
     m_sliceHandler->setSlice(slice);
-    m_imagePipeline->setSlice(m_volume->getImageIndex(getSlice(), getPhase()));
 }
 
 int VolumeDisplayUnit::getMinimumSlice() const
@@ -237,7 +268,7 @@ int VolumeDisplayUnit::getPhase() const
 void VolumeDisplayUnit::setPhase(int phase)
 {
     m_sliceHandler->setPhase(phase);
-    m_imagePipeline->setSlice(m_volume->getImageIndex(getSlice(), getPhase()));
+    m_imagePipeline->setPhase(getPhase());
 }
 
 int VolumeDisplayUnit::getNumberOfPhases() const
@@ -245,24 +276,35 @@ int VolumeDisplayUnit::getNumberOfPhases() const
     return m_sliceHandler->getNumberOfPhases();
 }
 
-int VolumeDisplayUnit::getSlabThickness() const
+double VolumeDisplayUnit::getSlabThickness() const
 {
-    return m_sliceHandler->getSlabThickness();
+    return m_mapper->GetSlabThickness();
 }
 
-void VolumeDisplayUnit::setSlabThickness(int thickness)
+void VolumeDisplayUnit::setSlabThickness(double thickness)
 {
-    // Make sure thickness is within valid bounds. Must be between 1 and the maximum number of slices on the curren view.
-    int admittedThickness = qBound(1, thickness, getNumberOfSlices());
-    
-    m_sliceHandler->setSlabThickness(admittedThickness);
-    m_imagePipeline->setSlice(m_volume->getImageIndex(getSlice(), getPhase()));
-    m_imagePipeline->setSlabThickness(admittedThickness);
+    if (thickness > 0)
+    {
+        m_mapper->ResampleToScreenPixelsOff();
+        m_mapper->SetSlabThickness(thickness);
+    }
+    else
+    {
+        m_mapper->SetSlabThickness(thickness);
+        m_mapper->ResampleToScreenPixelsOn();
+    }
+
+    m_sliceHandler->setSlabThickness(thickness);
+}
+
+double VolumeDisplayUnit::getMaximumSlabThickness() const
+{
+    return m_sliceHandler->getMaximumSlabThickness();
 }
 
 bool VolumeDisplayUnit::isThickSlabActive() const
 {
-    return getSlabThickness() > 1;
+    return getSlabThickness() > 0.0;
 }
 
 double VolumeDisplayUnit::getSliceThickness() const
@@ -275,10 +317,9 @@ void VolumeDisplayUnit::resetThickSlab()
     if (m_volume)
     {
         m_imagePipeline->setInput(m_volume->getVtkData());
-        m_imagePipeline->setProjectionAxis(this->getViewPlane());
-        m_imagePipeline->setSlice(m_volume->getImageIndex(m_sliceHandler->getCurrentSlice(), m_sliceHandler->getCurrentPhase()));
-        m_imagePipeline->setSlabThickness(m_sliceHandler->getSlabThickness());
-        m_imagePipeline->setSlabStride(m_sliceHandler->getNumberOfPhases());
+        m_imagePipeline->setNumberOfPhases(getNumberOfPhases());
+        m_mapper->SetSlabThickness(0.0);
+        m_mapper->SetSlabTypeToMax();
     }
 }
 
@@ -310,14 +351,42 @@ void VolumeDisplayUnit::updateCurrentImageDefaultPresets()
 }
 
 void VolumeDisplayUnit::setVoiLut(const VoiLut &voiLut)
-{
+{    
     if (m_volume->getImage(0) && m_volume->getImage(0)->getPhotometricInterpretation() == PhotometricInterpretation::Monochrome1)
     {
-        m_imagePipeline->setVoiLut(voiLut.inverse());
+        m_voiLut = voiLut.inverse();
     }
     else
     {
-        m_imagePipeline->setVoiLut(voiLut);
+        m_voiLut = voiLut;
+    }
+
+    applyVoiLut();
+}
+
+void VolumeDisplayUnit::applyVoiLut()
+{
+    if (m_volume && m_volume->getNumberOfScalarComponents() == 3)
+    {
+        m_imagePipeline->enableColorMapping(true);
+        m_imagePipeline->setVoiLut(m_voiLut);
+    }
+    else
+    {
+        m_imagePipeline->enableColorMapping(false);
+        m_imageSlice->GetProperty()->SetColorWindow(qAbs(m_voiLut.getWindowLevel().getWidth()));
+        m_imageSlice->GetProperty()->SetColorLevel(m_voiLut.getWindowLevel().getCenter());
+
+        if (!m_transferFunction.isEmpty())
+        {
+            applyTransferFunction();
+        }
+        else
+        {
+            vtkLookupTable *lut = m_voiLut.toVtkLookupTable();
+            m_imageSlice->GetProperty()->SetLookupTable(lut);
+            lut->Delete();
+        }
     }
 }
 
@@ -337,22 +406,9 @@ void VolumeDisplayUnit::setTransferFunction(const TransferFunction &transferFunc
     }
     else
     {
-        double newRange[2];
-        m_volume->getScalarRange(newRange);
-
-        // Scale transfer function before applying (only if the volume has at least 2 distinct values and the transfer function has at least 2 points)
-        if (newRange[0] < newRange[1] && transferFunction.keys().size() > 1)
-        {
-            double originalRange[2] = { transferFunction.keys().first(), transferFunction.keys().last() };
-            m_transferFunction = transferFunction.toNewRange(originalRange[0], originalRange[1], newRange[0], newRange[1]);
-            m_transferFunction.setName(transferFunction.name());
-        }
-        else
-        {
-            m_transferFunction = transferFunction;
-        }
-
+        m_transferFunction = transferFunction;
         m_imagePipeline->setTransferFunction(m_transferFunction);
+        applyTransferFunction();
     }
 }
 
@@ -365,16 +421,115 @@ void VolumeDisplayUnit::clearTransferFunction()
 {
     m_transferFunction.clear();
     m_imagePipeline->clearTransferFunction();
+    applyVoiLut();  // we must reapply the current VOI LUT without transfer function
 }
 
-void VolumeDisplayUnit::setSlabProjectionMode(AccumulatorFactory::AccumulatorType accumulatorType)
+void VolumeDisplayUnit::applyTransferFunction()
 {
-    m_imagePipeline->setSlabProjectionMode(accumulatorType);
+    if (!(m_volume && m_volume->getNumberOfScalarComponents() == 3))
+    {
+        TransferFunction scaledTransferFunction;
+
+        // Scale transfer function before applying (only if the volume has at least 2 distinct values and the transfer function has at least 2 points)
+        if (m_transferFunction.keys().size() > 1)
+        {
+            double oldX1 = m_transferFunction.keys().first();
+            double oldX2 = m_transferFunction.keys().last();
+            double windowLevel = m_voiLut.getWindowLevel().getCenter();
+            double windowWidth = m_voiLut.getWindowLevel().getWidth();
+
+            if (qAbs(windowWidth) < 1)
+            {
+                // The minimum width is restricted to 1 (absolute value) to avoid glitches
+                windowWidth = std::copysign(1.0, windowWidth);
+            }
+
+            if (m_voiLut.isLut())
+            {
+                auto lut = m_voiLut.getLut();
+                int leftValue = lut.getColor(lut.keys().first()).value();
+                int rightValue = lut.getColor(lut.keys().last()).value();
+
+                // If the LUT goes from light to dark, invert the window width to invert the transfer function
+                if (leftValue > rightValue)
+                {
+                    windowWidth = -windowWidth;
+                }
+            }
+
+            double newX1 = windowLevel - windowWidth / 2.0;
+            double newX2 = windowLevel + windowWidth / 2.0;
+            scaledTransferFunction = m_transferFunction.toNewRange(oldX1, oldX2, newX1, newX2);
+            scaledTransferFunction.setName(m_transferFunction.name());
+        }
+        else
+        {
+            scaledTransferFunction = m_transferFunction;
+        }
+
+        m_imageSlice->GetProperty()->SetLookupTable(scaledTransferFunction.toVtkLookupTable());
+    }
+}
+
+void VolumeDisplayUnit::setSlabProjectionMode(SlabProjectionMode mode)
+{
+    m_mapper->SetSlabType(mode);
 }
 
 void VolumeDisplayUnit::setShutterData(vtkImageData *shutterData)
 {
-    m_imagePipeline->setShutterData(shutterData);
+    if (shutterData)
+    {
+        if (!m_shutterImageSlice)
+        {
+            m_shutterImageSlice = vtkImageSlice::New();
+            m_shutterImageSlice->GetProperty()->SetLayerNumber(1);
+            auto *mapper = vtkImageSliceMapper::New();
+            m_shutterImageSlice->SetMapper(mapper);
+            mapper->Delete();
+        }
+
+        shutterData->SetSpacing(m_volume->getSpacing());
+        m_shutterImageSlice->GetMapper()->SetInputData(shutterData);
+
+        if (!m_imageStack->HasImage(m_shutterImageSlice))
+        {
+            m_imageStack->AddImage(m_shutterImageSlice);
+            emit imageStackChanged();
+        }
+    }
+    else
+    {
+        if (m_imageStack->HasImage(m_shutterImageSlice))
+        {
+            m_imageStack->RemoveImage(m_shutterImageSlice);
+            emit imageStackChanged();
+        }
+    }
+}
+
+bool VolumeDisplayUnit::isVisible() const
+{
+    return m_imageStack->GetVisibility() || m_imageSlice->GetVisibility() || (m_shutterImageSlice && m_shutterImageSlice->GetVisibility());
+}
+
+void VolumeDisplayUnit::setVisible(bool visible)
+{
+    m_imageStack->SetVisibility(visible);
+    m_imageSlice->SetVisibility(visible);
+    if (m_shutterImageSlice)
+    {
+        m_shutterImageSlice->SetVisibility(visible);
+    }
+}
+
+void VolumeDisplayUnit::setOpacity(double opacity)
+{
+    m_imageSlice->GetProperty()->SetOpacity(opacity);
+    if (m_shutterImageSlice)
+    {
+        m_shutterImageSlice->GetProperty()->SetOpacity(opacity);
+    }
 }
 
 }

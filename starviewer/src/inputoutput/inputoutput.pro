@@ -98,7 +98,8 @@ HEADERS += databaseconnection.h \
     cachetest.h \
     usermessage.h \
     portinusebyanotherapplication.h \
-    localdatabasevoilutdal.h
+    localdatabasevoilutdal.h \
+    localdatabaseencapsulateddocumentdal.h
 SOURCES += databaseconnection.cpp \
     pacsdevicemanager.cpp \
     pacsconnection.cpp \
@@ -173,13 +174,13 @@ SOURCES += databaseconnection.cpp \
     cachetest.cpp \
     usermessage.cpp \
     portinusebyanotherapplication.cpp \
-    localdatabasevoilutdal.cpp
+    localdatabasevoilutdal.cpp \
+    localdatabaseencapsulateddocumentdal.cpp
 win32 {
     HEADERS += windowsportinusebyanotherapplication.h
     SOURCES += windowsportinusebyanotherapplication.cpp
 }
 INCLUDEPATH += ../core
-DEPENDPATH += ../core
 TEMPLATE = lib
 DESTDIR = ./
 CONFIG += staticlib
@@ -188,9 +189,9 @@ include(../vtk.pri)
 include(../gdcm.pri)
 include(../itk.pri)
 include(../dcmtk.pri)
-include(../log4cxx.pri)
 include(../compilationtype.pri)
 include(../threadweaver.pri)
 QT += xml \
     network \
-    widgets
+    widgets \
+    sql

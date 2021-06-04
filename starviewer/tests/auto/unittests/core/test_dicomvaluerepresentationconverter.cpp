@@ -33,6 +33,9 @@ private slots:
     void decimalStringTo2DDoubleVector_ShouldReturnExpectedValues_data();
     void decimalStringTo2DDoubleVector_ShouldReturnExpectedValues();
 
+    void unsignedLongStringToUintVector_ShouldReturnExpectedValues_data();
+    void unsignedLongStringToUintVector_ShouldReturnExpectedValues();
+
     void timeToQTime_ShouldReturnExpectedValues_data();
     void timeToQTime_ShouldReturnExpectedValues();
 };
@@ -140,6 +143,30 @@ void test_DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector_Shoul
     QCOMPARE(ok, expectedOk);
 }
 
+void test_DICOMValueRepresentationConverter::unsignedLongStringToUintVector_ShouldReturnExpectedValues_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QVector<uint>>("expectedOutput");
+
+    QTest::newRow("null string") << QString() << QVector<uint>{};
+    QTest::newRow("empty string") << QString("") << QVector<uint>{};
+    QTest::newRow("one value") << QString("78") << QVector<uint>{78};
+    QTest::newRow("two values") << QString("38\\47") << QVector<uint>{38, 47};
+    QTest::newRow("three values") << QString("56\\94\\71") << QVector<uint>{56, 94, 71};
+    QTest::newRow("bad input (not a number)") << QString("asdf\\41") << QVector<uint>{0, 41};
+    QTest::newRow("bad input (wrong separator)") << QString("98/37\\60\\21") << QVector<uint>{0, 60, 21};
+    QTest::newRow("bad input (negative int)") << QString("28\\-80\\84") << QVector<uint>{28, 0, 84};
+    QTest::newRow("bad input (floating point)") << QString("37.87\\65") << QVector<uint>{0, 65};
+}
+
+void test_DICOMValueRepresentationConverter::unsignedLongStringToUintVector_ShouldReturnExpectedValues()
+{
+    QFETCH(QString, input);
+    QFETCH(QVector<uint>, expectedOutput);
+
+    QCOMPARE(DICOMValueRepresentationConverter::unsignedLongStringToUintVector(input), expectedOutput);
+}
+
 void test_DICOMValueRepresentationConverter::timeToQTime_ShouldReturnExpectedValues_data()
 {
     QTest::addColumn<QString>("timeString");
@@ -149,7 +176,7 @@ void test_DICOMValueRepresentationConverter::timeToQTime_ShouldReturnExpectedVal
 
     int randomHour = MathTools::randomInt(0, 23);
     int randomMinute = MathTools::randomInt(0, 59);
-    int randomSecond = MathTools::randomInt(0, 60);
+    int randomSecond = MathTools::randomInt(0, 59);
     int randomMicroSecond = MathTools::randomInt(0, 999999);
 
     QString randomHourString = QString("%1").arg(randomHour, 2, 10, QChar('0'));
@@ -160,6 +187,7 @@ void test_DICOMValueRepresentationConverter::timeToQTime_ShouldReturnExpectedVal
     QTest::newRow("2 digits (HH)") << randomHourString << QTime(randomHour, 0);
     QTest::newRow("4 digits (HHMM") << randomHourString + randomMinuteString << QTime(randomHour, randomMinute);
     QTest::newRow("6 digits (HHMMSS)") << randomHourString + randomMinuteString + randomSecondString << QTime(randomHour, randomMinute, randomSecond);
+    QTest::newRow("6 digits (HHMMSS) leap second") << randomHourString + randomMinuteString + "60" << QTime(randomHour, randomMinute, 59);
     
     QString precisionString = "F";
     for (int i = 1; i < 7; ++i)
@@ -199,7 +227,7 @@ void test_DICOMValueRepresentationConverter::timeToQTime_ShouldReturnExpectedVal
     QFETCH(QString, timeString);
     QFETCH(QTime, expectedTime);
     
-    QCOMPARE(expectedTime, DICOMValueRepresentationConverter::timeToQTime(timeString));
+    QCOMPARE(DICOMValueRepresentationConverter::timeToQTime(timeString), expectedTime);
 }
 
 DECLARE_TEST(test_DICOMValueRepresentationConverter)

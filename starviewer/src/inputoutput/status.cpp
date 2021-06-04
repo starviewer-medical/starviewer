@@ -39,7 +39,7 @@ int Status::code() const
     return m_numberError;
 }
 
-Status Status::setStatus(const OFCondition status)
+Status Status::setStatus(const OFCondition &status)
 {
     m_descText = status.text();
     m_success = status.good();

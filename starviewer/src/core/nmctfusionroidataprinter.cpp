@@ -19,8 +19,8 @@
 
 namespace udg {
 
-NMCTFusionROIDataPrinter::NMCTFusionROIDataPrinter(const QMap<int, ROIData> &roiDataMap, const QString &areaString, Q2DViewer *viewer)
- : AbstractROIDataPrinter(roiDataMap, areaString, viewer)
+NMCTFusionROIDataPrinter::NMCTFusionROIDataPrinter(const QMap<int, ROIData> &roiDataMap, double areaInMm2, const QString &areaString, Q2DViewer *viewer)
+ : AbstractROIDataPrinter(roiDataMap, areaString, viewer), m_areaInMm2(areaInMm2)
 {
 }
 
@@ -44,6 +44,16 @@ void NMCTFusionROIDataPrinter::gatherData()
         m_maxString += getFormattedValueString(roiData.getMaximum(), roiData.getUnits());
         m_meanString += getFormattedValueString(roiData.getMean(), roiData.getUnits());
         m_standardDeviationString += getFormattedValueString(roiData.getStandardDeviation(), roiData.getUnits());
+
+        if (roiData.getModality() == "NM")
+        {
+            m_sumString = getFormattedValueString(roiData.getSum(), roiData.getUnits());
+
+            if (m_areaInMm2 > 0)
+            {
+                m_countsPerMm2String = getFormattedValueString(roiData.getSum() / m_areaInMm2, roiData.getUnits() + "/mm²");
+            }
+        }
     }
 }
 
@@ -60,6 +70,14 @@ QString NMCTFusionROIDataPrinter::getFormattedDataString() const
         dataString += QObject::tr("Mean: %1").arg(m_meanString);
         dataString += "\n";
         dataString += QObject::tr("Std.Dev.: %1").arg(m_standardDeviationString);
+        dataString += "\n";
+        dataString += QObject::tr("Total: %1").arg(m_sumString);
+
+        if (!m_countsPerMm2String.isEmpty())
+        {
+            dataString += "\n";
+            dataString += m_countsPerMm2String;
+        }
     }
 
     return dataString;

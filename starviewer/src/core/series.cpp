@@ -13,6 +13,8 @@
  *************************************************************************************/
 
 #include "series.h"
+
+#include "encapsulateddocument.h"
 #include "study.h"
 #include "image.h"
 #include "logging.h"
@@ -25,7 +27,7 @@
 namespace udg {
 
 Series::Series(QObject *parent)
- : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfImages(0)
+ : QObject(parent), m_modality("OT"), m_selected(false), m_parentStudy(NULL), m_numberOfImages(0), m_numberOfEncapsulatedDocuments(0)
 {
 }
 
@@ -131,7 +133,63 @@ int Series::getNumberOfItems()
 
 bool Series::hasImages() const
 {
-    return !m_imageSet.isEmpty();
+    return m_numberOfImages > 0;
+}
+
+bool Series::addEncapsulatedDocument(EncapsulatedDocument *document)
+{
+    QString key = document->getKeyIdentifier();
+
+    if (key.isEmpty())
+    {
+        DEBUG_LOG("Empty key identifier. The encapsulated document can't be added to the series.");
+        return false;
+    }
+
+    if (this->encapsulatedDocumentExists(key))
+    {
+        DEBUG_LOG("Encapsulated document not added to the series because there's already a document with the key " + key);
+        return false;
+    }
+
+    document->setParentSeries(this);
+    m_encapsulatedDocumentSet.append(document);
+    m_numberOfEncapsulatedDocuments++;
+
+    return true;
+}
+
+bool Series::encapsulatedDocumentExists(const QString &key) const
+{
+    foreach (EncapsulatedDocument *document, m_encapsulatedDocumentSet)
+    {
+        if (document->getKeyIdentifier() == key)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+const QList<EncapsulatedDocument*>& Series::getEncapsulatedDocuments() const
+{
+    return m_encapsulatedDocumentSet;
+}
+
+int Series::getNumberOfEncapsulatedDocuments() const
+{
+    return m_numberOfEncapsulatedDocuments;
+}
+
+void Series::setNumberOfEncapsulatedDocuments(int numberOfEncapsulatedDocuments)
+{
+    m_numberOfEncapsulatedDocuments = numberOfEncapsulatedDocuments;
+}
+
+bool Series::hasEncapsulatedDocuments() const
+{
+    return m_numberOfEncapsulatedDocuments > 0;
 }
 
 void Series::setSOPClassUID(QString sopClassUID)
@@ -296,7 +354,7 @@ bool Series::setTime(QTime time)
     }
 }
 
-QDate Series::getDate()
+QDate Series::getDate() const
 {
     return m_date;
 }
@@ -306,7 +364,7 @@ QString Series::getDateAsString()
     return m_date.toString(Qt::LocaleDate);
 }
 
-QTime Series::getTime()
+QTime Series::getTime() const
 {
     return m_time;
 }
@@ -396,10 +454,6 @@ QChar Series::getLaterality() const
     return m_laterality;
 }
 
-int Series::getNumberOfVolumes()
-{
-    return m_volumesList.size();
-}
 
 void Series::setDICOMSource(const DICOMSource &seriesDICOMSource)
 {
@@ -447,6 +501,11 @@ QList<Volume*> Series::getVolumesList()
         volumesList << VolumeRepository::getRepository()->getVolume(id);
     }
     return volumesList;
+}
+
+int Series::getNumberOfVolumes()
+{
+    return m_volumesList.size();
 }
 
 QList<Identifier> Series::getVolumesIDList() const
@@ -578,6 +637,27 @@ bool Series::isCTLocalizer() const
     return isLocalizer;
 }
 
+bool Series::isCTAttenuationCorrection() const
+{
+    if (getModality() != "CT")
+    {
+        return false;
+    }
+
+    // Test only first image. Hopefully there won't be mixed images of different types.
+    Image *image = getImageByIndex(0);
+    const DICOMTagReader &dicomTagReader = image->getDicomTagReader();
+
+    if (dicomTagReader.hasAttribute(DICOMConvolutionKernel) && dicomTagReader.getValueAttributeAsQString(DICOMConvolutionKernel).contains("B08s"))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 bool Series::isMRSurvey() const
 {
     bool isSurvey = false;
@@ -618,12 +698,12 @@ void Series::setRetrievedTime(QTime retrievedTime)
     m_retrieveTime = retrievedTime;
 }
 
-QDate Series::getRetrievedDate()
+QDate Series::getRetrievedDate() const
 {
     return m_retrievedDate;
 }
 
-QTime Series::getRetrievedTime()
+QTime Series::getRetrievedTime() const
 {
     return m_retrieveTime;
 }

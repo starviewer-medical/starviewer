@@ -171,6 +171,11 @@ bool DICOMTagReader::tagExists(const DICOMTag &tag) const
     return existsInDataset || existsInHeader;
 }
 
+bool DICOMTagReader::hasAttribute(const DICOMTag &tag) const
+{
+    return tagExists(tag);
+}
+
 QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
 {
     if (!m_dicomData && !m_dicomHeader)
@@ -200,6 +205,41 @@ QString DICOMTagReader::getValueAttributeAsQString(const DICOMTag &tag) const
                 {
                     result = value.c_str();
                 }
+                break;
+            }
+            else
+            {
+                logStatusForTagOperation(tag, status);
+            }
+        }
+    }
+
+    return result;
+}
+
+QByteArray DICOMTagReader::getValueAttributeAsByteArray(const DICOMTag &tag) const
+{
+    if (!m_dicomData && !m_dicomHeader)
+    {
+        DEBUG_LOG("No dataset nor header is loaded. Returning default QByteArray.");
+        return QByteArray();
+    }
+
+    // Look for the attribute in the dataset first; if not found, then look in the header
+    DcmItem *dcmItems[2] = { m_dicomData, m_dicomHeader };
+    QByteArray result;
+
+    for (int i = 0; i < 2; i++)
+    {
+        if (dcmItems[i])
+        {
+            const Uint8 *value;
+            unsigned long size;
+            OFCondition status = dcmItems[i]->findAndGetUint8Array(DcmTagKey(tag.getGroup(), tag.getElement()), value, &size);
+
+            if (status.good())
+            {
+                result = QByteArray(reinterpret_cast<const char*>(value), size);
                 break;
             }
             else
@@ -276,6 +316,23 @@ DICOMSequenceAttribute* DICOMTagReader::getSequenceAttribute(const DICOMTag &seq
         m_sequencesCache[sequenceTag] = NULL;
         return NULL;
     }
+}
+
+DICOMSequenceItem* DICOMTagReader::getFirstSequenceItem(const DICOMTag &sequenceTag, ReturnValueOfTags returnValueOfTags) const
+{
+    DICOMSequenceAttribute *sequence = getSequenceAttribute(sequenceTag, returnValueOfTags);
+
+    if (sequence)
+    {
+        const QList<DICOMSequenceItem*> &items = sequence->getItems();
+
+        if (!items.isEmpty())
+        {
+            return items.first();
+        }
+    }
+
+    return nullptr;
 }
 
 void DICOMTagReader::initialize()

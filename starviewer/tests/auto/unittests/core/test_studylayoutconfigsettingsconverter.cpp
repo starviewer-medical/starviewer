@@ -100,11 +100,12 @@ void test_StudyLayoutConfigSettingsConverter::toSettingsListItem_ReturnExpectedV
     config = StudyLayoutConfig("DX", StudyLayoutConfig::UnfoldImages, StudyLayoutConfig::TopToBottomFirst);
     config.addExclusionCriteria(StudyLayoutConfig::Survey);
     config.addExclusionCriteria(StudyLayoutConfig::Localizer);
+    config.addExclusionCriteria(StudyLayoutConfig::CTAttenuationCorrection);
     config.setMaximumNumberOfViewers(11);
 
     item.clear();
     item["Modality"] = "DX";
-    item["ExclusionCriteria"] = "Survey;Localizer";
+    item["ExclusionCriteria"] = "Survey;Localizer;CTAttenuationCorrection";
     item["MaxNumberOfViewers"] = 11;
     item["Direction"] = "TopToBottom";
     item["UnfoldBy"] = "Images";

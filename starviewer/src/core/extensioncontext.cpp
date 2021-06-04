@@ -80,12 +80,41 @@ Volume *ExtensionContext::getDefaultVolume() const
         }
         if (!ok)
         {
-            DEBUG_LOG("No hi ha cap serie de l'actual pacient que sigui visualitzable. Retornem volum NUL.");
             ERROR_LOG("No hi ha cap serie de l'actual pacient que sigui visualitzable. Retornem volum NUL.");
         }
     }
 
     return defaultVolume;
+}
+
+DicomEntityFlags ExtensionContext::getDicomEntities(QList<Study*> studies) const
+{
+    if (studies.isEmpty())
+    {
+        if (m_patient)
+        {
+            studies = m_patient->getStudies();
+        }
+    }
+
+    DicomEntityFlags entities;
+
+    foreach (Study *study, studies)
+    {
+        foreach (Series *series, study->getSeries())
+        {
+            if (series->hasImages())
+            {
+                entities.setFlag(DicomEntity::Image);
+            }
+            if (series->hasEncapsulatedDocuments())
+            {
+                entities.setFlag(DicomEntity::EncapsulatedDocument);
+            }
+        }
+    }
+
+    return entities;
 }
 
 }

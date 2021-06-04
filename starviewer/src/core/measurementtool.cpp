@@ -41,6 +41,17 @@ QString MeasurementTool::getMeasurementString()
     return measurementString;
 }
 
+double MeasurementTool::getMeasurement() const
+{
+    QScopedPointer<MeasureComputer> measureComputer(getMeasureComputer());
+    return measureComputer->computeMeasure(getImageForMeasurement(), m_2DViewer->getMainInput()->getSpacing());
+}
+
+MeasurementManager::MeasurementUnitsType MeasurementTool::getMeasurementUnits() const
+{
+    return MeasurementManager::getMeasurementUnits(getImageForMeasurement());
+}
+
 Image* MeasurementTool::getImageForMeasurement() const
 {
     if (!m_2DViewer)

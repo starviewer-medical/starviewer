@@ -16,7 +16,16 @@
      <property name="spacing">
       <number>14</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -24,7 +33,16 @@
        <property name="spacing">
         <number>6</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -34,7 +52,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/axial.png</normaloff>:/images/axial.png</iconset>
+           <normaloff>:/images/icons/axial.svg</normaloff>:/images/icons/axial.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -63,7 +81,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/sagital.png</normaloff>:/images/sagital.png</iconset>
+           <normaloff>:/images/icons/sagittal.svg</normaloff>:/images/icons/sagittal.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -92,7 +110,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/coronal.png</normaloff>:/images/coronal.png</iconset>
+           <normaloff>:/images/icons/coronal.svg</normaloff>:/images/icons/coronal.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -155,7 +173,16 @@
      <property name="spacing">
       <number>14</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -163,7 +190,16 @@
        <property name="spacing">
         <number>6</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -173,7 +209,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/zoom.png</normaloff>:/images/zoom.png</iconset>
+           <normaloff>:/images/icons/edit-find.svg</normaloff>:/images/icons/edit-find.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -202,7 +238,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/rotate3d.png</normaloff>:/images/rotate3d.png</iconset>
+           <normaloff>:/images/icons/swivel.svg</normaloff>:/images/icons/swivel.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -231,7 +267,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/windowLevel.png</normaloff>:/images/windowLevel.png</iconset>
+           <normaloff>:/images/icons/contrast.svg</normaloff>:/images/icons/contrast.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -298,7 +334,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/clippingBox.png</normaloff>:/images/clippingBox.png</iconset>
+         <normaloff>:/images/icons/node.svg</normaloff>:/images/icons/node.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -356,7 +392,16 @@
      <property name="spacing">
       <number>6</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -364,7 +409,16 @@
        <property name="spacing">
         <number>6</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -423,7 +477,7 @@
        </property>
        <property name="icon">
         <iconset resource="../../../main/main.qrc">
-         <normaloff>:/images/clutEdit.png</normaloff>:/images/clutEdit.png</iconset>
+         <normaloff>:/images/icons/adjustrgb.svg</normaloff>:/images/icons/adjustrgb.svg</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -471,72 +525,74 @@
        <property name="spacing">
         <number>6</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
-        <layout class="QVBoxLayout">
+        <layout class="QVBoxLayout" stretch="0,0,0">
          <property name="spacing">
           <number>6</number>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
-          <layout class="QHBoxLayout">
-           <property name="spacing">
-            <number>6</number>
-           </property>
-           <property name="margin">
-            <number>0</number>
-           </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QLabel" name="m_renderingMethodLabel">
+            <widget class="QLabel" name="label_6">
              <property name="text">
-              <string>Rendering Method</string>
+              <string>Blend mode</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="m_renderingMethodComboBox">
+            <widget class="QComboBox" name="m_blendModeComboBox">
              <item>
               <property name="text">
-               <string>Ray Casting</string>
+               <string>Composite</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Ray Casting with Obscurances</string>
+               <string>Maximum intensity</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>GPU Ray Casting</string>
+               <string>Minimum intensity</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>MIP</string>
+               <string>Average intensity</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Texture 3D</string>
+               <string>Additive</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Texture 2D</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Iso Surface</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Contouring</string>
+               <string>Isosurface</string>
               </property>
              </item>
             </widget>
@@ -544,258 +600,165 @@
           </layout>
          </item>
          <item>
-          <widget class="QGroupBox" name="m_shadingGroupBox">
-           <property name="title">
-            <string>Shading</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-           <layout class="QFormLayout" name="formLayout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="m_ambientCoefficientLabel">
-              <property name="text">
-               <string>Ambient coefficient</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="m_ambientCoefficientDoubleSpinBox">
-              <property name="maximum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.010000000000000</double>
-              </property>
-              <property name="value">
-               <double>0.100000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="m_diffuseCoefficientLabel">
-              <property name="text">
-               <string>Diffuse coefficient</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QDoubleSpinBox" name="m_diffuseCoefficientDoubleSpinBox">
-              <property name="maximum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.010000000000000</double>
-              </property>
-              <property name="value">
-               <double>0.700000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="m_specularCoefficientLabel">
-              <property name="text">
-               <string>Specular coefficient</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="m_specularCoefficientDoubleSpinBox">
-              <property name="maximum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.010000000000000</double>
-              </property>
-              <property name="value">
-               <double>0.200000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="m_specularPowerLabel">
-              <property name="text">
-               <string>Specular power</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QDoubleSpinBox" name="m_specularPowerDoubleSpinBox">
-              <property name="maximum">
-               <double>128.000000000000000</double>
-              </property>
-              <property name="value">
-               <double>10.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QWidget" name="m_contourOptionsWidget" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <layout class="QHBoxLayout">
+          <widget class="QWidget" name="m_rayCastingOptionsWidget" native="true">
+           <layout class="QVBoxLayout" name="verticalLayout_3">
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
-             <widget class="QCheckBox" name="m_contourCheckBox">
+             <widget class="QWidget" name="m_renderModeWidget" native="true">
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label_7">
+                 <property name="text">
+                  <string>Render mode</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="m_renderModeComboBox">
+                 <item>
+                  <property name="text">
+                   <string>Smart ray casting</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>CPU ray casting</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>GPU ray casting</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="m_colorImageCheckBox">
               <property name="text">
-               <string>Contour</string>
+               <string>Color image</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="m_contourThresholdLabel">
-              <property name="enabled">
+             <widget class="QGroupBox" name="m_shadingGroupBox">
+              <property name="title">
+               <string>Shadi&amp;ng</string>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="checked">
                <bool>false</bool>
               </property>
-              <property name="text">
-               <string>Threshold</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QDoubleSpinBox" name="m_contourThresholdDoubleSpinBox">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="decimals">
-               <number>2</number>
-              </property>
-              <property name="maximum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.100000000000000</double>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QWidget" name="m_obscuranceOptionsWidget" native="true">
-           <layout class="QVBoxLayout">
-            <property name="spacing">
-             <number>6</number>
-            </property>
-            <property name="margin">
-             <number>0</number>
-            </property>
-            <item>
-             <layout class="QHBoxLayout">
-              <property name="spacing">
-               <number>6</number>
-              </property>
-              <property name="margin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QLabel" name="m_obscuranceQualityLabel">
-                <property name="text">
-                 <string>Obscurance quality</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="m_obscuranceQualityComboBox">
-                <item>
+              <layout class="QFormLayout" name="formLayout">
+               <item row="0" column="0">
+                <widget class="QLabel" name="m_ambientCoefficientLabel">
                  <property name="text">
-                  <string>Low</string>
+                  <string>Ambient coefficient</string>
                  </property>
-                </item>
-                <item>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QDoubleSpinBox" name="m_ambientCoefficientDoubleSpinBox">
+                 <property name="maximum">
+                  <double>1.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="m_diffuseCoefficientLabel">
                  <property name="text">
-                  <string>Medium</string>
+                  <string>Diffuse coefficient</string>
                  </property>
-                </item>
-                <item>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QDoubleSpinBox" name="m_diffuseCoefficientDoubleSpinBox">
+                 <property name="maximum">
+                  <double>1.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.700000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="m_specularCoefficientLabel">
                  <property name="text">
-                  <string>High</string>
+                  <string>Specular coefficient</string>
                  </property>
-                </item>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="m_obscuranceComputeCancelPushButton">
-                <property name="text">
-                 <string>Compute</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="QProgressBar" name="m_obscuranceProgressBar">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="value">
-               <number>0</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QDoubleSpinBox" name="m_specularCoefficientDoubleSpinBox">
+                 <property name="maximum">
+                  <double>1.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>0.200000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="m_specularPowerLabel">
+                 <property name="text">
+                  <string>Specular power</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QDoubleSpinBox" name="m_specularPowerDoubleSpinBox">
+                 <property name="maximum">
+                  <double>128.000000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>10.000000000000000</double>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout">
-              <property name="spacing">
-               <number>6</number>
-              </property>
-              <property name="margin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QCheckBox" name="m_obscuranceCheckBox">
-                <property name="text">
-                 <string>Obscurance</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="m_obscuranceFactorLabel">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>Brightness</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QDoubleSpinBox" name="m_obscuranceFactorDoubleSpinBox">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="maximum">
-                 <double>2.000000000000000</double>
-                </property>
-                <property name="singleStep">
-                 <double>0.100000000000000</double>
-                </property>
-                <property name="value">
-                 <double>1.300000000000000</double>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </item>
            </layout>
           </widget>
@@ -809,10 +772,16 @@
             </sizepolicy>
            </property>
            <layout class="QHBoxLayout">
-            <property name="spacing">
-             <number>6</number>
+            <property name="leftMargin">
+             <number>0</number>
             </property>
-            <property name="margin">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -835,108 +804,141 @@
            </layout>
           </widget>
          </item>
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>0</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
         </layout>
        </item>
        <item>
-        <widget class="QComboBox" name="m_clutPresetsComboBox"/>
-       </item>
-       <item>
-        <layout class="QHBoxLayout">
-         <property name="spacing">
-          <number>6</number>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QPushButton" name="m_loadClutPushButton">
-           <property name="toolTip">
-            <string>Load transfer function</string>
-           </property>
-           <property name="text">
-            <string>Load...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_saveClutPushButton">
-           <property name="toolTip">
-            <string>Save transfer function</string>
-           </property>
-           <property name="text">
-            <string>Save...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_switchEditorPushButton">
-           <property name="text">
-            <string>Switch editor</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QStackedWidget" name="m_editorsStackedWidget">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>1</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <widget class="udg::QTransferFunctionEditorByGradient" name="m_gradientEditor"/>
-         <widget class="udg::QTransferFunctionEditorByValues" name="m_editorByValues"/>
+        <widget class="QWidget" name="m_transferFunctionsWidget" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QComboBox" name="m_clutPresetsComboBox"/>
+          </item>
+          <item>
+           <layout class="QHBoxLayout">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="m_loadClutPushButton">
+              <property name="toolTip">
+               <string>Load transfer function</string>
+              </property>
+              <property name="text">
+               <string>Load...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_saveClutPushButton">
+              <property name="toolTip">
+               <string>Save transfer function</string>
+              </property>
+              <property name="text">
+               <string>Save...</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_switchEditorPushButton">
+              <property name="text">
+               <string>Switch editor</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QStackedWidget" name="m_editorsStackedWidget">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="udg::QTransferFunctionEditorByGradient" name="m_gradientEditor"/>
+            <widget class="udg::QTransferFunctionEditorByValues" name="m_editorByValues"/>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <spacer>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="m_applyPushButton">
+              <property name="text">
+               <string>Apply</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout">
-         <property name="spacing">
-          <number>6</number>
+        <widget class="QWidget" name="m_noTransferFunctionsWidget" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <spacer>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="m_applyPushButton">
-           <property name="text">
-            <string>Apply</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -947,7 +949,16 @@
      <property name="spacing">
       <number>14</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -959,7 +970,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/photo.png</normaloff>:/images/photo.png</iconset>
+           <normaloff>:/images/icons/camera-photo.svg</normaloff>:/images/icons/camera-photo.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -982,7 +993,7 @@
          </property>
          <property name="icon">
           <iconset resource="../../../main/main.qrc">
-           <normaloff>:/images/store.png</normaloff>:/images/store.png</iconset>
+           <normaloff>:/images/icons/upload-media.svg</normaloff>:/images/icons/upload-media.svg</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -1046,7 +1057,6 @@
  </customwidgets>
  <resources>
   <include location="../../../main/main.qrc"/>
-  <include location="q3dviewer.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>
  <connections/>

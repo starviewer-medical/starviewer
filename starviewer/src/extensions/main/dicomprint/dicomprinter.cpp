@@ -414,9 +414,9 @@ QString DicomPrinter::getAnnotationDisplayFormatID() const
     return m_annotationDisplayFormatID;
 }
 
-void DicomPrinter::setDefaultConfigurationInformation(const QString configurationInformation)
+void DicomPrinter::setDefaultConfigurationInformation(QString configurationInformation)
 {
-    m_configurationInformation = configurationInformation;
+    m_configurationInformation = std::move(configurationInformation);
 }
 
 QString DicomPrinter::getDefaultConfigurationInformation() const

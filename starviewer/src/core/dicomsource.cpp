@@ -56,7 +56,7 @@ bool DICOMSource::operator==(const DICOMSource &DICOMSourceToAdd)
         return false;
     }
 
-    foreach(PacsDevice pacsDevice, DICOMSourceToAdd.getRetrievePACS())
+    foreach(const PacsDevice &pacsDevice, DICOMSourceToAdd.getRetrievePACS())
     {
         if (!isAddedSamePacsDevice(pacsDevice))
         {
@@ -67,9 +67,9 @@ bool DICOMSource::operator==(const DICOMSource &DICOMSourceToAdd)
     return true;
 }
 
-bool DICOMSource::isAddedSamePacsDevice(const PacsDevice pacsDevice) const
+bool DICOMSource::isAddedSamePacsDevice(const PacsDevice &pacsDevice) const
 {
-    foreach (PacsDevice pacsDeviceInList, m_retrievePACS)
+    foreach (const PacsDevice &pacsDeviceInList, m_retrievePACS)
     {
         if (pacsDeviceInList.isSamePacsDevice(pacsDevice))
         {

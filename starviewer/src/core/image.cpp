@@ -30,7 +30,7 @@ namespace udg {
 Image::Image(QObject *parent)
  : QObject(parent), m_sliceThickness(0.0), m_samplesPerPixel(1), m_photometricInterpretation("MONOCHROME2"), m_rows(0), m_columns(0), m_bitsAllocated(16),
  m_bitsStored(16), m_pixelRepresentation(0), m_rescaleSlope(1), m_rescaleIntercept(0), m_frameNumber(0), m_phaseNumber(0), m_volumeNumberInSeries(0),
- m_orderNumberInVolume(0), m_parentSeries(NULL)
+ m_orderNumberInVolume(0), m_overlaysSplitComputed(false), m_parentSeries(NULL)
 {
     m_estimatedRadiographicMagnificationFactor = 1.0;
     
@@ -299,7 +299,7 @@ void Image::setVoiLutList(const QList<VoiLut> &voiLutList)
     }
 }
 
-int Image::getNumberOfVoiLuts()
+int Image::getNumberOfVoiLuts() const
 {
     return m_voiLutList.size();
 }
@@ -314,14 +314,24 @@ void Image::setRetrievedTime(QTime retrievedTime)
     m_retrieveTime = retrievedTime;
 }
 
-QDate Image::getRetrievedDate()
+QDate Image::getRetrievedDate() const
 {
     return m_retrievedDate;
 }
 
-QTime Image::getRetrievedTime()
+QTime Image::getRetrievedTime() const
 {
     return m_retrieveTime;
+}
+
+const QString& Image::getAcquisitionNumber() const
+{
+    return m_acquisitionNumber;
+}
+
+void Image::setAcquisitionNumber(QString acquisitionNumber)
+{
+    m_acquisitionNumber = std::move(acquisitionNumber);
 }
 
 void Image::setImageType(const QString &imageType)
@@ -447,7 +457,27 @@ const QString& Image::getTransferSyntaxUID() const
     return m_transferSyntaxUID;
 }
 
-double Image::distance(Image *image)
+void Image::setStackId(QString stackId)
+{
+    m_stackId = std::move(stackId);
+}
+
+const QString& Image::getStackId() const
+{
+    return m_stackId;
+}
+
+void Image::setDimensionIndexValues(QVector<uint> dimensionIndexValues)
+{
+    m_dimensionIndexValues = std::move(dimensionIndexValues);
+}
+
+const QVector<uint>& Image::getDimensionIndexValues() const
+{
+    return m_dimensionIndexValues;
+}
+
+double Image::distance(const Image *image)
 {
     // Càlcul de la distància (basat en l'algorisme de Jolinda Smith)
     double distance = 0.0;
@@ -495,9 +525,10 @@ QList<ImageOverlay> Image::getOverlaysSplit()
 {
     if (hasOverlays())
     {
-        if (m_overlaysSplit.isEmpty())
+        if (!m_overlaysSplitComputed)
         {
             readOverlays(true);
+            m_overlaysSplitComputed = true;
         }
     }
 
@@ -569,7 +600,7 @@ DisplayShutter Image::getDisplayShutterForDisplay()
     return m_displayShutterForDisplay;
 }
 
-vtkImageData* Image::getDisplayShutterForDisplayAsVtkImageData(int zSlice)
+vtkImageData* Image::getDisplayShutterForDisplayAsVtkImageData()
 {
     if (!hasDisplayShutters())
     {
@@ -581,15 +612,13 @@ vtkImageData* Image::getDisplayShutterForDisplayAsVtkImageData(int zSlice)
         DisplayShutter shutter = this->getDisplayShutterForDisplay();
         if (shutter.getShape() != DisplayShutter::UndefinedShape)
         {
-            m_displayShutterForDisplayVtkImageData = shutter.getAsVtkImageData(m_columns, m_rows, zSlice);
+            m_displayShutterForDisplayVtkImageData = shutter.getAsVtkImageData(m_columns, m_rows);
             if (m_displayShutterForDisplayVtkImageData)
             {
                 m_displayShutterForDisplayVtkImageData->SetOrigin(m_imagePositionPatient);
-                m_displayShutterForDisplayVtkImageData->SetSpacing(m_pixelSpacing.x(), m_pixelSpacing.y(), 1);
             }
         }
     }
-    // TODO Assuming that all calls to this method on the same Image object have all the same zSlice. What should we do otherwise?
 
     return m_displayShutterForDisplayVtkImageData;
 }
@@ -671,6 +700,15 @@ QPixmap Image::getThumbnail(bool getFromCache, int resolution)
         }
     }
     return m_thumbnail;
+}
+
+const DICOMTagReader& Image::getDicomTagReader()
+{
+    if (m_dicomTagReader.getFileName().isNull())
+    {
+        m_dicomTagReader.setFile(m_path);
+    }
+    return m_dicomTagReader;
 }
 
 QStringList Image::getSupportedModalities()

@@ -28,43 +28,6 @@
 
 #include <QApplication>
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-namespace {
-
-bool is32BitWindows()
-{
-#if defined(_WIN64)
-    return false;  // 64-bit programs run only on Win64
-#elif defined(_WIN32)
-    // 32-bit programs run on both 32-bit and 64-bit Windows
-    // so must sniff
-    BOOL f64 = false;
-    typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
-    LPFN_ISWOW64PROCESS fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(GetModuleHandle(TEXT("kernel32")),"IsWow64Process");
-
-    return !(fnIsWow64Process(GetCurrentProcess(), &f64) && f64);
-#else
-    return false; // Win64 does not support Win16
-#endif
-}
-
-bool is32BitProgramOnWindows()
-{
-#if defined(_WIN64)
-    return false;  // 64-bit programs run only on Win64
-#elif defined(_WIN32)
-    // 32-bit programs run on both 32-bit and 64-bit Windows
-    return true;
-#else
-    return false; // Win64 does not support Win16
-#endif
-}
-
-}
-
 namespace udg {
 
 VolumeReaderJobFactory::VolumeReaderJobFactory(QObject *parent)
@@ -75,6 +38,7 @@ VolumeReaderJobFactory::VolumeReaderJobFactory(QObject *parent)
 VolumeReaderJobFactory::~VolumeReaderJobFactory()
 {
     m_volumesLoading.clear();
+    m_volumeRequesters.clear();
 
     this->getWeaverInstance()->dequeue();
     this->getWeaverInstance()->requestAbort();
@@ -88,137 +52,101 @@ VolumeReaderJobFactory::~VolumeReaderJobFactory()
     DEBUG_LOG("VolumeReaderJobFactory is closed");
 }
 
-QSharedPointer<VolumeReaderJob> VolumeReaderJobFactory::read(Volume *volume)
+void VolumeReaderJobFactory::read(void *requester, Volume *volume)
 {
-    DEBUG_LOG(QString("AsynchronousVolumeReader::read Begin volume: %1").arg(volume->getIdentifier().getValue()));
+    int id = volume->getIdentifier().getValue();
+    DEBUG_LOG(QString("Begin reading volume: %1").arg(id));
 
     if (this->isVolumeLoading(volume))
     {
-        DEBUG_LOG(QString("AsynchronousVolumeReader::read Volume already loading: %1").arg(volume->getIdentifier().getValue()));
+        // If the volume is already loading we just add the new requester to the hash.
+        // Since the connections are queued because the signals are emitted from another thread, there's no risk that the onJobDone slot is called before the
+        // new requester is added; it can't be called until the next iteration of the event loop.
+        DEBUG_LOG(QString("Volume already loading: %1").arg(id));
+        m_volumeRequesters.insert(id, requester);
+    }
+    else
+    {
+        VolumeReaderJob *volumeReaderJob = new VolumeReaderJob(volume);
+        QSharedPointer<VolumeReaderJob> jobPointer(volumeReaderJob);
+        assignResourceRestrictionPolicy(volumeReaderJob);
 
-        return this->getVolumeReaderJob(volume);
+        connect(volumeReaderJob, &VolumeReaderJob::progress, this, &VolumeReaderJobFactory::onJobProgress);
+        connect(volumeReaderJob, &VolumeReaderJob::done, this, &VolumeReaderJobFactory::onJobDone);
+        // These connections are undone when the job is destroyed
+
+        m_volumesLoading.insert(id, jobPointer);
+        m_volumeRequesters.insert(id, requester);
+
+        ThreadWeaver::Queue *queue = this->getWeaverInstance();
+        queue->enqueue(jobPointer);
+    }
+}
+
+void VolumeReaderJobFactory::cancelRead(void *requester, Volume *volume)
+{
+    int id = volume->getIdentifier().getValue();
+    DEBUG_LOG(QString("A requester is not interested anymore in reading volume: %1").arg(id));
+
+    if (!this->isVolumeLoading(volume))
+    {
+        DEBUG_LOG(QString("The volume %1 is not loading. Maybe it has already finished or the caller is trolling me").arg(id));
+        return;
     }
 
-    VolumeReaderJob *volumeReaderJob = new VolumeReaderJob(volume);
-    QSharedPointer<VolumeReaderJob> jobPointer(volumeReaderJob);
-    assignResourceRestrictionPolicy(volumeReaderJob);
+    m_volumeRequesters.remove(id, requester);
 
-    connect(volumeReaderJob, SIGNAL(done(ThreadWeaver::JobPointer)), SLOT(unmarkVolumeFromJobAsLoading(ThreadWeaver::JobPointer)));
-
-    this->markVolumeAsLoadingByJob(volume, jobPointer);
-
-    // TODO Permetre escollir quants jobs alhora volem
-    ThreadWeaver::Queue *queue = this->getWeaverInstance();
-    queue->enqueue(jobPointer);
-
-    return jobPointer;
+    if (!m_volumeRequesters.contains(id))
+    {
+        DEBUG_LOG(QString("No requesters left for volume %1").arg(id));
+        // TODO Now it would be the time to call requestAbort() on the job, but the volume would be perpetually converted to a neutral volume and we don't want
+        //      that. Until that is fixed, better do nothing.
+        // m_volumesLoading[id]->requestAbort();
+    }
 }
 
 void VolumeReaderJobFactory::assignResourceRestrictionPolicy(VolumeReaderJob *volumeReaderJob)
 {
-    QSettings settings;
-    if (settings.contains(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently))
+    Settings settings;
+    int maximumNumberOfVolumesLoadingConcurrently = settings.getValue(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently).toInt();
+
+    if (maximumNumberOfVolumesLoadingConcurrently <= 0)
     {
-        int maximumNumberOfVolumesLoadingConcurrently = Settings().getValue(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently).toInt();
-        if (maximumNumberOfVolumesLoadingConcurrently > 0)
-        {
-            m_resourceRestrictionPolicy.setCap(maximumNumberOfVolumesLoadingConcurrently);
-            volumeReaderJob->assignQueuePolicy(&m_resourceRestrictionPolicy);
-            INFO_LOG(QString("Limitem a %1 la quantitat de volums carregant-se simultàniament.").arg(m_resourceRestrictionPolicy.cap()));
-        }
-        else
-        {
-            ERROR_LOG("El valor per limitar la quantitat de volums carregant-se simultàniament ha de ser més gran de 0.");
-        }
+        WARN_LOG(QString("Invalid value in \"%1\" setting: %2. Resetting it to default.").arg(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently)
+                                                                                         .arg(maximumNumberOfVolumesLoadingConcurrently));
+        settings.remove(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently);
+        maximumNumberOfVolumesLoadingConcurrently = settings.getValue(CoreSettings::MaximumNumberOfVolumesLoadingConcurrently).toInt();
+        DEBUG_LOG(QString("Default maximumNumberOfVolumesLoadingConcurrently: %1").arg(maximumNumberOfVolumesLoadingConcurrently));
     }
-    else 
+
+    m_resourceRestrictionPolicy.setCap(maximumNumberOfVolumesLoadingConcurrently);
+    volumeReaderJob->assignQueuePolicy(&m_resourceRestrictionPolicy);
+    INFO_LOG(QString("Limitem a %1 la quantitat de volums carregant-se simultàniament.").arg(m_resourceRestrictionPolicy.cap()));
+}
+
+void VolumeReaderJobFactory::onJobProgress(ThreadWeaver::JobPointer job, int progress)
+{
+    VolumeReaderJob *volumeReaderJob = static_cast<VolumeReaderJob*>(job.get());
+    int id = volumeReaderJob->getVolumeIdentifier().getValue();
+
+    foreach (void *requester, m_volumeRequesters.values(id))
     {
-        QStringList allowedModalities;
-        bool checkMultiframeImages = false;
-
-        // If it's a 32 bit build, concurrence is disabled on multiframe volumes.
-        // Moreover, if it's running on a 32bit Win, concurrence is only allowed for CT and MR volumes.
-        if (is32BitProgramOnWindows())
-        {
-            checkMultiframeImages = true;
-
-            if (is32BitWindows())
-            {
-                allowedModalities << QString("CT") << QString("MR");
-            }
-        }
-        
-        bool foundRestrictions = checkForResourceRestrictions(checkMultiframeImages, allowedModalities);
-        
-        int numberOfVolumesLoadingConcurrently;
-        if (foundRestrictions)
-        {
-            numberOfVolumesLoadingConcurrently = 1;
-            if (is32BitWindows())
-            {
-                INFO_LOG(QString("Windows 32 bits amb volums que poden requerir molta memòria. Limitem a %1 la quantitat de volums carregant-se simultàniament.")
-                    .arg(numberOfVolumesLoadingConcurrently));
-            }
-            else
-            {
-                INFO_LOG(QString("Windows 64 bits amb volums multiframe que poden requerir molta memòria. Limitem a %1 la quantitat de volums carregant-se "
-                    "simultàniament.").arg(numberOfVolumesLoadingConcurrently));
-            }
-        }
-        else
-        {
-            numberOfVolumesLoadingConcurrently = getWeaverInstance()->maximumNumberOfThreads();
-        }
-        m_resourceRestrictionPolicy.setCap(numberOfVolumesLoadingConcurrently);
-        volumeReaderJob->assignQueuePolicy(&m_resourceRestrictionPolicy);
+        emit volumeReadingProgress(requester, volumeReaderJob->getVolume(), progress);
     }
 }
 
-bool VolumeReaderJobFactory::checkForResourceRestrictions(bool checkMultiframeImages, const QStringList &modalitiesWithoutRestriction)
+void VolumeReaderJobFactory::onJobDone(ThreadWeaver::JobPointer job)
 {
-    if (!checkMultiframeImages && modalitiesWithoutRestriction.isEmpty())
-    {
-        return false;
-    }
-    
-    bool foundRestriction = false;
-    QListIterator<Volume*> iterator(VolumeRepository::getRepository()->getItems());
-    while (iterator.hasNext() && !foundRestriction)
-    {
-        Volume *currentVolume = iterator.next();
-        // Mirem si és multiframe
-        if (checkMultiframeImages)
-        {
-            if (currentVolume->isMultiframe())
-            {
-                foundRestriction = true;
-            }
-        }
+    VolumeReaderJob *volumeReaderJob = static_cast<VolumeReaderJob*>(job.get());
+    int id = volumeReaderJob->getVolumeIdentifier().getValue();
+    m_volumesLoading.remove(id);
 
-        // Mirem si és una modalitat a la que cal aplicar restricció o no
-        if (!modalitiesWithoutRestriction.isEmpty())
-        {
-            QString modality = currentVolume->getModality();
-            if (!modalitiesWithoutRestriction.contains(modality))
-            {
-                foundRestriction = true;
-            }
-        }
+    foreach (void *requester, m_volumeRequesters.values(id))
+    {
+        emit volumeReadingFinished(requester, volumeReaderJob);
     }
 
-    return foundRestriction;
-}
-
-void VolumeReaderJobFactory::unmarkVolumeFromJobAsLoading(ThreadWeaver::JobPointer job)
-{
-    // TODO Aquí és el lloc més correcte per desmarcar el volume?? Així tenim el problema de que no podem destruïr aquest objecte
-    // fins que s'ha finalitzat el job, si no, no es marcaria mai com a carregat. Si no es fa aquí, hem de tenir en compte
-    // problemes de concurrència.
-    QSharedPointer<VolumeReaderJob> volumeReaderJob = job.dynamicCast<VolumeReaderJob>();
-    if (volumeReaderJob)
-    {
-        this->unmarkVolumeAsLoading(volumeReaderJob->getVolumeIdentifier());
-    }
+    m_volumeRequesters.remove(id);  // this removes all the items with id
 }
 
 bool VolumeReaderJobFactory::isVolumeLoading(Volume *volume) const
@@ -242,12 +170,15 @@ void VolumeReaderJobFactory::cancelLoadingAndDeleteVolume(Volume *volume)
 
     if (this->isVolumeLoading(volume))
     {
-        DEBUG_LOG(QString("Volume %1 isLoading, trying dequeue").arg(volume->getIdentifier().getValue()));
+        int id = volume->getIdentifier().getValue();
+        DEBUG_LOG(QString("Volume %1 isLoading, trying dequeue").arg(id));
         ThreadWeaver::JobPointer job = this->getVolumeReaderJob(volume);
         ThreadWeaver::Queue *queue = this->getWeaverInstance();
         if (queue->dequeue(job))
         {
             delete volume;
+            m_volumesLoading.remove(id);
+            m_volumeRequesters.remove(id);
         }
         else
         {
@@ -262,18 +193,6 @@ void VolumeReaderJobFactory::cancelLoadingAndDeleteVolume(Volume *volume)
     {
         delete volume;
     }
-}
-
-void VolumeReaderJobFactory::markVolumeAsLoadingByJob(Volume *volume, QSharedPointer<VolumeReaderJob> volumeReaderJob)
-{
-    DEBUG_LOG(QString("markVolumeAsLoading: Volume %1").arg(volume->getIdentifier().getValue()));
-    m_volumesLoading.insert(volume->getIdentifier().getValue(), volumeReaderJob);
-}
-
-void VolumeReaderJobFactory::unmarkVolumeAsLoading(const Identifier &volumeIdentifier)
-{
-    DEBUG_LOG(QString("unmarkVolumeAsLoading: Volume %1").arg(volumeIdentifier.getValue()));
-    m_volumesLoading.remove(volumeIdentifier.getValue());
 }
 
 ThreadWeaver::Queue* VolumeReaderJobFactory::getWeaverInstance() const

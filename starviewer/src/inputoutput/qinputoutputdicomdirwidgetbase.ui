@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>udg::QInputOutputDicomdirWidgetBase</class>
- <widget class="QWidget" name="udg::QInputOutputDicomdirWidgetBase" >
-  <property name="geometry" >
+ <widget class="QWidget" name="udg::QInputOutputDicomdirWidgetBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,90 +10,62 @@
     <height>430</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" >
-   <property name="leftMargin" >
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
     <number>0</number>
    </property>
-   <property name="topMargin" >
+   <property name="topMargin">
     <number>0</number>
    </property>
-   <property name="rightMargin" >
+   <property name="rightMargin">
     <number>0</number>
    </property>
-   <property name="bottomMargin" >
+   <property name="bottomMargin">
     <number>0</number>
    </property>
-   <property name="horizontalSpacing" >
-    <number>0</number>
-   </property>
-   <property name="verticalSpacing" >
-    <number>0</number>
-   </property>
-   <item row="0" column="0" >
-    <widget class="udg::QStudyTreeWidget" native="1" name="m_studyTreeWidget" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+   <item>
+    <widget class="udg::QStudyTreeWidget" name="m_studyTreeWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <property name="topMargin" >
-      <number>6</number>
-     </property>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QToolButton" name="m_viewButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="m_viewButton">
+       <property name="text">
         <string>View</string>
        </property>
-       <property name="icon" >
-        <iconset resource="../main/main.qrc" >:/images/view.png</iconset>
-       </property>
-       <property name="iconSize" >
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle" >
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/icons/visibility.svg</normaloff>:/images/icons/visibility.svg</iconset>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="m_retrieveButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="m_retrieveButton">
+       <property name="text">
         <string>Import</string>
        </property>
-       <property name="icon" >
-        <iconset resource="../main/main.qrc" >:/images/retrieve.png</iconset>
-       </property>
-       <property name="iconSize" >
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle" >
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/icons/document-import.svg</normaloff>:/images/icons/document-import.svg</iconset>
        </property>
       </widget>
      </item>
      <item>
-      <spacer>
-       <property name="orientation" >
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -101,21 +74,13 @@
       </spacer>
      </item>
      <item>
-      <widget class="QToolButton" name="m_openDICOMDIRToolButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="m_openDICOMDIRPushButton">
+       <property name="text">
         <string>Open DICOMDIR</string>
        </property>
-       <property name="icon" >
-        <iconset resource="../main/main.qrc" >:/images/openDICOMDIR.png</iconset>
-       </property>
-       <property name="iconSize" >
-        <size>
-         <width>32</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="toolButtonStyle" >
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       <property name="icon">
+        <iconset resource="../main/main.qrc">
+         <normaloff>:/images/icons/document-open-dicomdir.svg</normaloff>:/images/icons/document-open-dicomdir.svg</iconset>
        </property>
       </widget>
      </item>
@@ -130,6 +95,9 @@
    <header>qstudytreewidget.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../main/main.qrc"/>
+  <include location="../main/main.qrc"/>
+ </resources>
  <connections/>
 </ui>

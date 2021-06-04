@@ -4,85 +4,43 @@
  */
 
 #include "autotest.h"
-#include "diagnosistest.h"
-#include "diagnosistestresult.h"
 #include "diagnosistestresultwriter.h"
 
-#include <QObject>
-#include <QStringList>
-#include <QFile>
-#include <QTextStream>
+#include "diagnosistest.h"
+#include "diagnosistestresult.h"
+
+#include <QBuffer>
 
 using namespace udg;
 
-typedef QList<DiagnosisTestResult> DiagnosisTestResultList;
-
-class TestingDiagnosisTestResultWriter : public DiagnosisTestResultWriter {
+class TestingDiagnosisTest : public DiagnosisTest
+{
 public:
-    QString *m_testingFile;
-
-public:
-    TestingDiagnosisTestResultWriter()
-        : DiagnosisTestResultWriter()
-    {
-        m_testingFile = new QString();
-    }
-    ~TestingDiagnosisTestResultWriter()
-    {
-        delete m_testingFile;
-    }
-
-protected:
-    QFile* createFile(const QString &pathFile)
-    {
-        Q_UNUSED(pathFile);
-        // Fem que no ho guardi a cap fitxer
-        return new QFile();
-    }
-    QTextStream* createTextStream(QFile *file)
-    {
-        // Enlloc d'escriure un fitxer, ho escrivim a un QString
-        Q_UNUSED(file);
-        return new QTextStream(m_testingFile);
-    }
-
-    void writeHead(QXmlStreamWriter &writer)
-    {
-        writer.writeEmptyElement("head");
-    }
-
-    void writeSystemInformation(QXmlStreamWriter &writer)
-    {
-        Q_UNUSED(writer);
-    }
-};
-
-class TestingDiagnosisTest : public DiagnosisTest {
-public:
-    QString m_description;
-
-public:
-    TestingDiagnosisTest(QObject *parent = 0)
-        : DiagnosisTest(parent)
+    TestingDiagnosisTest(QString description, QObject *parent = nullptr)
+        : DiagnosisTest(parent), m_description(std::move(description))
     {
     }
 
-    ~TestingDiagnosisTest()
+    ~TestingDiagnosisTest() override
     {
     }
 
-    DiagnosisTestResult run()
+    DiagnosisTestResult run() override
     {
         return DiagnosisTestResult();
     }
 
-    QString getDescription()
+    QString getDescription() const override
     {
         return m_description;
     }
+
+private:
+    QString m_description;
+
 };
 
-Q_DECLARE_METATYPE(DiagnosisTestResultList)
+Q_DECLARE_METATYPE(DiagnosisTestResultWriter)
 
 class test_DiagnosisTestResultWriter : public QObject {
 Q_OBJECT
@@ -94,69 +52,177 @@ private slots:
 
 void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice_data()
 {
-    QTest::addColumn<QStringList>("diagnosisTestDescriptions");
-    QTest::addColumn<DiagnosisTestResultList>("diagnosisTestResults");
-    QTest::addColumn<QString>("result");
+    QTest::addColumn<DiagnosisTestResultWriter>("writer");
+    QTest::addColumn<QString>("expectedOutput");
 
-    QStringList descriptions;
-    descriptions << "Diagnosis test: OK" << "Diagnosis test: 1 Warning" << "Diagnosis test: 1 Error" << "Diagnosis test: 1 Error & 1 Warning";
-    
-    DiagnosisTestResultList testsResults;
-    //Succeeded DiagnosisTestResult
-    testsResults << DiagnosisTestResult();
+    {
+        DiagnosisTestResultWriter writer;
+        QString expectedOutput("[\n"
+                               "]\n"
+                               "");
+        QTest::newRow("no informations and no tests") << writer << expectedOutput;
+    }
 
-    // DiagnosisTestResult with one warning
-    DiagnosisTestResult warningResult;
-    warningResult.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "Warning during the course of the test", "Try to solve the warning"));
-    testsResults << warningResult;
+    {
+        DiagnosisTestResultWriter writer;
+        writer.setInformations({QPair<QString, QStringList>("Info 1", {"Whatever"}),
+                                QPair<QString, QStringList>("Info 2", {"Lorem ipsum", "dolor sit amet"})});
+        QString expectedOutput(R"([)""\n"
+                               R"(    {)""\n"
+                               R"(        "description": "Info 1",)""\n"
+                               R"(        "details": [)""\n"
+                               R"(            "Whatever")""\n"
+                               R"(        ],)""\n"
+                               R"(        "state": "info")""\n"
+                               R"(    },)""\n"
+                               R"(    {)""\n"
+                               R"(        "description": "Info 2",)""\n"
+                               R"(        "details": [)""\n"
+                               R"(            "Lorem ipsum",)""\n"
+                               R"(            "dolor sit amet")""\n"
+                               R"(        ],)""\n"
+                               R"(        "state": "info")""\n"
+                               R"(    })""\n"
+                               R"(])""\n"
+                               R"()");
+        QTest::newRow("only informations") << writer << expectedOutput;
+    }
 
-    // DiagnosisTestResult with one error
-    DiagnosisTestResult errorResult;
-    errorResult.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Error during the course of the test", "No solution available"));
-    testsResults << errorResult;
+    {
+        TestingDiagnosisTest *test1 = new TestingDiagnosisTest("Test 1", this);
+        DiagnosisTestResult result1;
+        result1.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "Self-destruct sequence activated", "Run for your life!"));
+        TestingDiagnosisTest *test2 = new TestingDiagnosisTest("Test 2", this);
+        DiagnosisTestResult result2;
+        result2.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "404 Not found", "Go somewhere else"));
+        TestingDiagnosisTest *test3 = new TestingDiagnosisTest("Test 3", this);
+        DiagnosisTestResult result3;
+        DiagnosisTestResultWriter writer;
+        writer.setDiagnosisTests({qMakePair(test1, result1),
+                                  qMakePair(test2, result2),
+                                  qMakePair(test3, result3)});
+        QString expectedOutput(R"([)""\n"
+                               R"(    {)""\n"
+                               R"(        "description": "Test 1",)""\n"
+                               R"(        "problems": [)""\n"
+                               R"(            {)""\n"
+                               R"(                "description": "Self-destruct sequence activated",)""\n"
+                               R"(                "solution": "Run for your life!",)""\n"
+                               R"(                "state": "warning")""\n"
+                               R"(            })""\n"
+                               R"(        ],)""\n"
+                               R"(        "state": "warning")""\n"
+                               R"(    },)""\n"
+                               R"(    {)""\n"
+                               R"(        "description": "Test 2",)""\n"
+                               R"(        "problems": [)""\n"
+                               R"(            {)""\n"
+                               R"(                "description": "404 Not found",)""\n"
+                               R"(                "solution": "Go somewhere else",)""\n"
+                               R"(                "state": "error")""\n"
+                               R"(            })""\n"
+                               R"(        ],)""\n"
+                               R"(        "state": "error")""\n"
+                               R"(    },)""\n"
+                               R"(    {)""\n"
+                               R"(        "description": "Test 3",)""\n"
+                               R"(        "state": "correct")""\n"
+                               R"(    })""\n"
+                               R"(])""\n"
+                               R"()");
+        QTest::newRow("only test results") << writer << expectedOutput;
+    }
 
-    // DiagnosisTestResult with one error and one warning
-    DiagnosisTestResult errorAndWarningResult;
-    errorAndWarningResult.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "Warning during the course of the test", "Try to solve the warning"));
-    errorAndWarningResult.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Error during the course of the test", "No solution available"));
-    testsResults << errorAndWarningResult;
-
-    QString result = "<?xml version=\"1.0\"?><!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\"><html><head/><body><div class=\"buttons\"><span id=\"succeededButton\" class=\"button\"><span class=\"buttonDescription\">1 succeeded</span></span><span id=\"errorButton\" class=\"button\"><span class=\"buttonDescription\">2 errors</span></span><span id=\"warningButton\" class=\"button\"><span class=\"buttonDescription\">1 warnings</span></span></div><div class=\"tests\"><div class=\"succeededTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: OK</div></div></div><div class=\"warningTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: 1 Warning</div></div><div class=\"problems\"><ul class=\"error\"/><ul class=\"warning\"><li><strong>Warning during the course of the test</strong><br/>Try to solve the warning</li></ul></div></div><div class=\"errorTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: 1 Error</div></div><div class=\"problems\"><ul class=\"error\"><li><strong>Error during the course of the test</strong><br/>No solution available</li></ul><ul class=\"warning\"/></div></div><div class=\"errorTest\"><div class=\"result\"><div class=\"description\">Diagnosis test: 1 Error &amp; 1 Warning</div></div><div class=\"problems\"><ul class=\"error\"><li><strong>Error during the course of the test</strong><br/>No solution available</li></ul><ul class=\"warning\"><li><strong>Warning during the course of the test</strong><br/>Try to solve the warning</li></ul></div></div></div></body></html>";
-    
-    QTest::newRow("ok") << descriptions << testsResults << result;
+    {
+        TestingDiagnosisTest *test1 = new TestingDiagnosisTest("Test 1", this);
+        DiagnosisTestResult result1;
+        TestingDiagnosisTest *test2 = new TestingDiagnosisTest("Test 2", this);
+        DiagnosisTestResult result2;
+        result2.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "Disk almost full", "Delete junk"));
+        TestingDiagnosisTest *test3 = new TestingDiagnosisTest("Test 3", this);
+        DiagnosisTestResult result3;
+        result3.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "Biohazard", "Quarantine"));
+        result3.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Monarchy", "Guillotine"));
+        result3.addError(DiagnosisTestProblem(DiagnosisTestProblem::Error, "Spain", "Republic of Catalonia"));
+        result3.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "Danger", "Keep out"));
+        DiagnosisTestResultWriter writer;
+        writer.setDiagnosisTests({qMakePair(test1, result1),
+                                  qMakePair(test2, result2),
+                                  qMakePair(test3, result3)});
+        writer.setInformations({QPair<QString, QStringList>("Info 1", {"L'all ho és tot pels anglesos", "https://www.wikipedia.org/", "꽲 한글 조선글"})});
+        QString expectedOutput(R"([)""\n"
+                               R"(    {)""\n"
+                               R"(        "description": "Info 1",)""\n"
+                               R"(        "details": [)""\n"
+                               R"(            "L'all ho és tot pels anglesos",)""\n"
+                               R"(            "https://www.wikipedia.org/",)""\n"
+                               R"(            "꽲 한글 조선글")""\n"
+                               R"(        ],)""\n"
+                               R"(        "state": "info")""\n"
+                               R"(    },)""\n"
+                               R"(    {)""\n"
+                               R"(        "description": "Test 1",)""\n"
+                               R"(        "state": "correct")""\n"
+                               R"(    },)""\n"
+                               R"(    {)""\n"
+                               R"(        "description": "Test 2",)""\n"
+                               R"(        "problems": [)""\n"
+                               R"(            {)""\n"
+                               R"(                "description": "Disk almost full",)""\n"
+                               R"(                "solution": "Delete junk",)""\n"
+                               R"(                "state": "warning")""\n"
+                               R"(            })""\n"
+                               R"(        ],)""\n"
+                               R"(        "state": "warning")""\n"
+                               R"(    },)""\n"
+                               R"(    {)""\n"
+                               R"(        "description": "Test 3",)""\n"
+                               R"(        "problems": [)""\n"
+                               R"(            {)""\n"
+                               R"(                "description": "Monarchy",)""\n"
+                               R"(                "solution": "Guillotine",)""\n"
+                               R"(                "state": "error")""\n"
+                               R"(            },)""\n"
+                               R"(            {)""\n"
+                               R"(                "description": "Spain",)""\n"
+                               R"(                "solution": "Republic of Catalonia",)""\n"
+                               R"(                "state": "error")""\n"
+                               R"(            },)""\n"
+                               R"(            {)""\n"
+                               R"(                "description": "Biohazard",)""\n"
+                               R"(                "solution": "Quarantine",)""\n"
+                               R"(                "state": "warning")""\n"
+                               R"(            },)""\n"
+                               R"(            {)""\n"
+                               R"(                "description": "Danger",)""\n"
+                               R"(                "solution": "Keep out",)""\n"
+                               R"(                "state": "warning")""\n"
+                               R"(            })""\n"
+                               R"(        ],)""\n"
+                               R"(        "state": "error")""\n"
+                               R"(    })""\n"
+                               R"(])""\n"
+                               R"()");
+        QTest::newRow("mixed") << writer << expectedOutput;
+    }
 }
 
 void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice()
 {
-    QFETCH(QStringList, diagnosisTestDescriptions);
-    QFETCH(DiagnosisTestResultList, diagnosisTestResults);
-    QFETCH(QString, result);
-    
-    TestingDiagnosisTestResultWriter writer;
-    QList<QPair<DiagnosisTest*, DiagnosisTestResult> > diagnosisTestsToWrite;
+    QFETCH(DiagnosisTestResultWriter, writer);
+    QFETCH(QString, expectedOutput);
 
-    for (int i = 0; i < diagnosisTestDescriptions.count(); i++)
-    {
-        TestingDiagnosisTest *test = new TestingDiagnosisTest();
-        test->m_description = diagnosisTestDescriptions.at(i);
-        diagnosisTestsToWrite << QPair<DiagnosisTest*, DiagnosisTestResult>(test, diagnosisTestResults.at(i));
-    }
+#ifdef Q_OS_WIN
+    expectedOutput.replace("\n", "\r\n");
+#endif
 
-    writer.setDiagnosisTests(diagnosisTestsToWrite);
-    writer.write("");
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+    writer.write(buffer);
 
-    QRegExp enters("\\s*\n\\s*");
-    QString writerResult = writer.m_testingFile->remove(enters);
-    QCOMPARE(writerResult, result);
-
-    // Eliminem els DiagnosisTests que hem creat.
-    for (int i = 0; i < diagnosisTestsToWrite.count(); i++)
-    {
-        delete diagnosisTestsToWrite[i].first;
-    }
+    QCOMPARE(QString(byteArray), expectedOutput);
 }
 
 DECLARE_TEST(test_DiagnosisTestResultWriter)
 
 #include "test_diagnosistestresultwriter.moc"
-

@@ -79,7 +79,7 @@ void PrintDicomSpool::printBasicGrayscale(DicomPrinter dicomPrinter, DicomPrintJ
 
 }
 
-void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &printerConnection, const QString storedPrintDcmtkFilePath,
+void PrintDicomSpool::printStoredPrintDcmtkContent(DVPSPrintMessageHandler &printerConnection, const QString &storedPrintDcmtkFilePath,
                                                    const QString &spoolDirectoryPath)
 {
     OFCondition result;

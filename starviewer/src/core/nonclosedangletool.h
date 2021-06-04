@@ -33,10 +33,10 @@ public:
     /// Possibles estats de la tool
     enum { None, FirstLineFixed, SecondLineFixed };
 
-    NonClosedAngleTool(QViewer *viewer, QObject *parent = 0);
-    ~NonClosedAngleTool();
+    explicit NonClosedAngleTool(QViewer *viewer, QObject *parent = nullptr);
+    ~NonClosedAngleTool() override;
 
-    void handleEvent(long unsigned eventID);
+    void handleEvent(long unsigned eventID) override;
 
 private:
     /// Gestiona quin punt de l'angle estem dibuixant. Es cridarà cada cop que

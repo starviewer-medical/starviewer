@@ -78,7 +78,7 @@ bool ItemMenu::event(QEvent *event)
     }
     else
     {
-        return QWidget::event(event);
+        return QFrame::event(event);
     }
 }
 

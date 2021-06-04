@@ -120,7 +120,7 @@ void QTransferFunctionEditorByGradient::setTransferFunction(const TransferFuncti
 
     foreach (double x, points)
     {
-        gradientStops << QGradientStop(x / m_maximum, transferFunction.get(x));
+        gradientStops << QGradientStop((x - m_minimum) / (m_maximum - m_minimum), transferFunction.get(x));
     }
 
     setGradientStops(gradientStops);
@@ -130,11 +130,6 @@ void QTransferFunctionEditorByGradient::setTransferFunction(const TransferFuncti
 const TransferFunction &QTransferFunctionEditorByGradient::getTransferFunction() const
 {
     return m_transferFunction;
-}
-
-inline static bool x_less_than(const QPointF &p1, const QPointF &p2)
-{
-    return p1.x() < p2.x();
 }
 
 void QTransferFunctionEditorByGradient::pointsUpdated()
@@ -150,7 +145,9 @@ void QTransferFunctionEditorByGradient::pointsUpdated()
     points += m_blue_shade->points();
     points += m_alpha_shade->points();
 
-    qSort(points.begin(), points.end(), x_less_than);
+    std::sort(points.begin(), points.end(), [](const QPointF &p1, const QPointF &p2) {
+        return p1.x() < p2.x();
+    });
 
     for (int i = 0; i < points.size(); ++i)
     {
@@ -219,7 +216,7 @@ void QTransferFunctionEditorByGradient::setTransferFunction(const QGradientStops
 
     for (int i = 0; i < stops.size(); i++)
     {
-        m_transferFunction.set(stops.at(i).first * m_maximum, stops.at(i).second, stops.at(i).second.alphaF());
+        m_transferFunction.set(m_minimum + stops.at(i).first * (m_maximum - m_minimum), stops.at(i).second, stops.at(i).second.alphaF());
     }
 }
 

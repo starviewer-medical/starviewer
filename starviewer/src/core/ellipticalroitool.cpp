@@ -45,7 +45,6 @@ void EllipticalROITool::deleteTemporalRepresentation()
     {
         m_roiPolygon->decreaseReferenceCount();
         delete m_roiPolygon;
-        m_2DViewer->render();
     }
 
     m_roiPolygon = 0;
@@ -252,11 +251,8 @@ void EllipticalROITool::initialize()
 
 void EllipticalROITool::equalizeDepth()
 {
-    // Ens quedem amb la z de la llesca actual
-    double currentPoint[3];
-    m_2DViewer->getEventWorldCoordinate(currentPoint);
     int zIndex = m_2DViewer->getView().getZIndex();
-    double z = currentPoint[zIndex];
+    double z = m_2DViewer->getCurrentDisplayedImageDepth();
     m_firstPoint[zIndex] = z;
     m_secondPoint[zIndex] = z;
     updatePolygonPoints();

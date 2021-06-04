@@ -32,7 +32,7 @@ public:
     DiagnosisTestResult run();
 
     ///Retorna descripcio del test
-    QString getDescription();
+    QString getDescription() const override;
 
 protected:
     virtual QList<PacsDevice> getPacsDeviceList();

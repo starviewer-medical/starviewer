@@ -18,6 +18,7 @@
 #include <QObject>
 
 #include <QCommandLineParser>
+#include <QMutex>
 
 class QStringList;
 

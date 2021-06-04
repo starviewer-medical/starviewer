@@ -29,7 +29,6 @@ namespace udg {
 // Fordward declarations
 class Status;
 class Operation;
-class PacsManager;
 class RetrieveDICOMFilesFromPACSJob;
 class SendDICOMFilesToPACSJob;
 class Study;
@@ -42,9 +41,6 @@ public:
 
     QOperationStateScreen(QWidget *parent = 0);
     ~QOperationStateScreen();
-
-    /// Estableix instància de PacsManager que s'encarrega de fer les peticions als PACS
-    void setPacsManager(PacsManager *pacsManager);
 
 protected:
     /// Event que s'activa al tancar al rebren un event de tancament
@@ -84,7 +80,6 @@ private slots:
 
 private:
     QString m_currentProcessingStudyUID;
-    PacsManager *m_pacsManager;
     QHash<int, PACSJobPointer> m_PACSJobPendingToFinish;
 
 private:

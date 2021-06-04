@@ -27,7 +27,7 @@ namespace udg {
 class NMCTFusionROIDataPrinter : public AbstractROIDataPrinter
 {
 public:
-    NMCTFusionROIDataPrinter(const QMap<int, ROIData> &roiDataMap, const QString &areaString, Q2DViewer *viewer);
+    NMCTFusionROIDataPrinter(const QMap<int, ROIData> &roiDataMap, double areaInMm2, const QString &areaString, Q2DViewer *viewer);
     virtual ~NMCTFusionROIDataPrinter();
 
 protected:
@@ -37,6 +37,9 @@ protected:
 private:
     /// Formatted strings with the values of the maximum data
     QString m_maxString;
+    QString m_sumString;
+    QString m_countsPerMm2String;
+    double m_areaInMm2;
 };
 
 } // namespace udg

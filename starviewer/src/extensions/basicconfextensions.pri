@@ -2,11 +2,9 @@ TRANSLATIONS += $$EXTENSION_DIR/translations_ca_ES.ts \
                 $$EXTENSION_DIR/translations_es_ES.ts \
                 $$EXTENSION_DIR/translations_en_GB.ts
 
-DESTDIR = ./
+DESTDIR = $$OUT_PWD
 
 INCLUDEPATH += ../../../core \
-               ../../../inputoutput
-DEPENDPATH += ../../../core \
                ../../../inputoutput
 MOC_DIR = ../../../../tmp/moc
 UI_DIR = ../../../../tmp/ui
@@ -31,7 +29,6 @@ include(../vtk.pri)
 include(../itk.pri)
 include(../gdcm.pri)
 include(../dcmtk.pri)
-include(../log4cxx.pri)
 include(../threadweaver.pri)
 include(../compilationtype.pri)
 

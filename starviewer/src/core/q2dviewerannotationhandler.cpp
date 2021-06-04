@@ -16,6 +16,7 @@
 
 #include "q2dviewer.h"
 #include "mathtools.h"
+#include "applicationstylehelper.h"
 #include "mammographyimagehelper.h"
 #include "image.h"
 #include "study.h"
@@ -111,6 +112,13 @@ void Q2DViewerAnnotationHandler::updateMainInformationAnnotation()
         QString institutionName = series->getInstitutionName();
         QString patientName = patient->getFullName();
         QString age = study->getPatientAge();
+        QString calculatedAge = study->getCalculatedPatientAge();
+
+        if (!calculatedAge.isEmpty() && age != calculatedAge)
+        {
+            age = QString(QObject::tr("WARNING: age mismatch\n%1 (stored) / %2 (calculated)\n").arg(age).arg(calculatedAge));
+        }
+
         QString sex = patient->getSex();
         QString patientId = patient->getID();
         QString accessionNumber = study->getAccessionNumber();
@@ -220,15 +228,8 @@ void Q2DViewerAnnotationHandler::updateSliceAnnotation()
     {
         QString locationInfo = getSliceLocationString();
 
-        // Setup the slice/slab annotation
+        // Setup the slice annotation
         QString sliceInfo = QObject::tr("Slice: %1").arg(m_2DViewer->getCurrentSlice() + 1);
-
-        if (m_2DViewer->isThickSlabActive())
-        {
-            // TODO We need a getLastSlabSlice() method on Q2Dviewer to avoid doing this computing
-            sliceInfo += QString("-%1").arg(m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness());
-        }
-
         sliceInfo += QString("/%1").arg(m_2DViewer->getNumberOfSlices());
         
         QString phaseInfo;
@@ -318,13 +319,22 @@ QString Q2DViewerAnnotationHandler::getStandardAdditionalInformation() const
             fusionBalance = QObject::tr("Fusion: ") + QString("%1% %2 + %3% %4").arg(100 - balance).arg(modality0).arg(balance).arg(modality1);
             seriesLabel += " +\n" + getSeriesDescriptiveLabel(m_2DViewer->getInput(1)->getSeries());
         }
+        
+        Study *study = m_2DViewer->getMainInput()->getStudy();
+        QString physicianName = study->getReferringPhysiciansName();
+        if (!physicianName.isEmpty())
+        {
+            physicianName = QString(QObject::tr("Physician: %1")).arg(physicianName);
+        }
 
         return QString("%1\n"
                        "%2\n"
-                       "%3")
+                       "%3\n"
+                       "%4")
                 .arg(lateralityString)
                 .arg(fusionBalance)
                 .arg(seriesLabel)
+                .arg(physicianName)
                 .trimmed();
     }
     else
@@ -427,18 +437,16 @@ QString Q2DViewerAnnotationHandler::getSliceLocationString() const
             QString location = image->getSliceLocation();
             if (!location.isEmpty())
             {
-                sliceLocation = QObject::tr("Loc: %1").arg(location.toDouble(), 0, 'f', 2);
+                double loc = location.toDouble();
                 if (m_2DViewer->isThickSlabActive())
                 {
-                    // TODO We should have high level methods to get consecutive images according to current thickness, phase, etc.
-                    Image *secondImage = m_2DViewer->getMainInput()->getImage(
-                        // TODO We need a getLastSlabSlice() method on Q2Dviewer to avoid doing this computing
-                        m_2DViewer->getCurrentSlice() + m_2DViewer->getSlabThickness() - 1,
-                        m_2DViewer->getCurrentPhase());
-                    if (secondImage)
-                    {
-                        sliceLocation += QObject::tr("-%1").arg(secondImage->getSliceLocation().toDouble(), 0, 'f', 2);
-                    }
+                    double halfThickness = m_2DViewer->getSlabThickness() / 2.0;
+                    sliceLocation = QObject::tr("Loc: %1-%2").arg(loc - halfThickness, 0, 'f', 2)
+                                                             .arg(loc + halfThickness, 0, 'f', 2);
+                }
+                else
+                {
+                    sliceLocation = QObject::tr("Loc: %1").arg(loc, 0, 'f', 2);
                 }
             }
         }
@@ -506,12 +514,13 @@ void Q2DViewerAnnotationHandler::setCornerAnnotation(AnnotationFlag annotation, 
         text = text.replace(QRegularExpression("\n+"), "\n");
     }
 
-    m_cornerAnnotations->SetText(getCornerForAnnotationType(annotation), text.toLatin1().constData());
+    m_cornerAnnotations->SetText(getCornerForAnnotationType(annotation), text.toUtf8().constData());
 }
 
 void Q2DViewerAnnotationHandler::createAnnotations()
 {
     m_cornerAnnotations = vtkCornerAnnotation::New();
+    m_cornerAnnotations->SetMaximumFontSize(ApplicationStyleHelper(true).getCornerAnnotationFontSize());
     m_cornerAnnotations->GetTextProperty()->SetFontFamilyToArial();
     m_cornerAnnotations->GetTextProperty()->ShadowOn();
 
@@ -524,7 +533,7 @@ void Q2DViewerAnnotationHandler::createOrientationAnnotations()
     {
         m_patientOrientationTextActor[i] = vtkTextActor::New();
         m_patientOrientationTextActor[i]->SetTextScaleModeToNone();
-        m_patientOrientationTextActor[i]->GetTextProperty()->SetFontSize(18);
+        m_patientOrientationTextActor[i]->GetTextProperty()->SetFontSize(ApplicationStyleHelper(true).getOrientationAnnotationFontSize());
         m_patientOrientationTextActor[i]->GetTextProperty()->BoldOn();
         m_patientOrientationTextActor[i]->GetTextProperty()->SetFontFamilyToArial();
         m_patientOrientationTextActor[i]->GetTextProperty()->ShadowOn();

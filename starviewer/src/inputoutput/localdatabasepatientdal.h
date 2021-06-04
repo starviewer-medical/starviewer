@@ -15,50 +15,35 @@
 #ifndef UDGLOCALDATABASEPATIENTDAL_H
 #define UDGLOCALDATABASEPATIENTDAL_H
 
-#include <QList>
-
 #include "localdatabasebasedal.h"
-#include "patient.h"
 
 namespace udg {
 
 class DicomMask;
+class Patient;
 
 /**
-    Aquesta classe s'encarrega de dur a terme les operacions relacionades amb l'objecte estudi de la cache de l'aplicació.
-  */
+ * @brief The LocalDatabasePatientDAL class is the Data Access Layer class for patients.
+ */
 class LocalDatabasePatientDAL : public LocalDatabaseBaseDAL {
+
 public:
-    LocalDatabasePatientDAL(DatabaseConnection *dbConnection);
+    LocalDatabasePatientDAL(DatabaseConnection &databaseConnection);
 
-    /// Insereix el nou pacient, i emplena el camp DatabaseID de Patient amb el ID de Pacient de la BD.
-    void insert(Patient *newPatient);
+    /// Inserts to the database the given patient. Returns true if successful and false otherwise.
+    bool insert(Patient *patient);
 
-    /// Updata el pacient
-    void update(Patient *patientToUpdate);
+    /// Updates in the database the given patient. Returns true if successful and false otherwise.
+    bool update(const Patient *patient);
 
-    /// Esborra els estudis pacients que compleixen amb els criteris de la màscara, només té en compte el Patient Id
-    void del(qlonglong patientID);
+    /// Deletes from the database the patient with the given id. Returns true if successful and false otherwise.
+    bool del(qlonglong patientID);
 
-    /// Cerca els pacients que compleixen amb els criteris de la màscara de cerca, només té en compte el Patient Id
-    QList<Patient*> query(const DicomMask &patientMaskToQuery);
+    /// Retrieves from the database the patients that match the given mask (only PatientId is considered) and returns them in a list.
+    QList<Patient*> query(const DicomMask &mask);
 
-private:
-    /// Construeix la sentència sql per inserir el nou pacient
-    QString buildSqlInsert(Patient *newPatient);
-
-    /// Construeix la sentència updatar el pacient
-    QString buildSqlUpdate(Patient *patientToUpdate);
-
-    /// Construeix la setència per fer select de pacients a partir de la màscara, només té en compte el PatientID
-    QString buildSqlSelect(const DicomMask &patientMaskToSelect);
-
-    /// Construeix la setència per esborrar pacients a partir de la màscara, només té en compte el Patient Id
-    QString buildSqlDelete(qlonglong patientID);
-
-    /// Emplena un l'objecte series de la fila passada per paràmetre
-    Patient* fillPatient(char **reply, int row, int columns);
 };
+
 }
 
 #endif

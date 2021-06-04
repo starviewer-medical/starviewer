@@ -74,9 +74,6 @@ private:
     ///Retorna el Widgets del control que he afegit nosaltres a la UI
     QList<QObject*> getMemberWidgets();
 
-private:
-
-    static const QRegExp regExpGetMemberWidgets;
 };
 
 }

@@ -256,7 +256,7 @@ public:
     /// Especifica/retorna el valor de ConfigurationInformation per la impressora, depén de la impressora, per exemple per agfa permet afegir
     /// anotacions a les imatges, aplicar LUT's, ... s'ha de mirar al dicom confomance de cada impressora per mirar quin valor pot agafar aquest camp
     /// El configuration Information no té AvailableConfiguration mètodes, perquè per cada impressora el valor és diferent.
-    void setDefaultConfigurationInformation(const QString configurationInformation);
+    void setDefaultConfigurationInformation(QString configurationInformation);
     QString getDefaultConfigurationInformation() const;
 
     /// Especifica si la impressora és la impressora per defecte del sistema.

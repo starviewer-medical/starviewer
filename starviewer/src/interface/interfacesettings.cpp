@@ -29,7 +29,10 @@ const QString InterfaceSettings::ApplicationMainWindowGeometry("geometry");
 
 const QString ExtensionsBase("Extensions/");
 const QString InterfaceSettings::AllowMultipleInstancesPerExtension(ExtensionsBase + "allowMultipleExtensionInstances");
-const QString InterfaceSettings::DefaultExtension(ExtensionsBase + "defaultExtension");
+
+const QString InterfaceSettings::DefaultImageExtension(ExtensionsBase + "defaultImageExtension");
+const QString InterfaceSettings::DefaultEncapsulatedDocumentExtension(ExtensionsBase + "defaultEncapsulatedDocumentExtension");
+
 const QString InterfaceSettings::DontShowMedicalDeviceInformationDialog(ExtensionsBase + "dontShowMedicalDeviceInformationDialog");
 
 InterfaceSettings::InterfaceSettings()
@@ -47,7 +50,8 @@ void InterfaceSettings::init()
     settingsRegistry->addSetting(OpenDirectoryLastPath, QDir::homePath());
     settingsRegistry->addSetting(OpenFileLastFileExtension, "MetaIO Image (*.mhd)");
     settingsRegistry->addSetting(AllowMultipleInstancesPerExtension, false);
-    settingsRegistry->addSetting(DefaultExtension, "Q2DViewerExtension");
+    settingsRegistry->addSetting(DefaultImageExtension, "Q2DViewerExtension");
+    settingsRegistry->addSetting(DefaultEncapsulatedDocumentExtension, "PdfExtension");
     settingsRegistry->addSetting(DontShowMedicalDeviceInformationDialog, false);
 }
 

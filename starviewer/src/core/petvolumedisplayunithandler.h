@@ -24,8 +24,10 @@ namespace udg {
 */
 class PETVolumeDisplayUnitHandler : public SingleVolumeDisplayUnitHandler {
 
+    Q_OBJECT
+
 public:
-    PETVolumeDisplayUnitHandler();
+    PETVolumeDisplayUnitHandler(QObject *parent = nullptr);
     virtual ~PETVolumeDisplayUnitHandler();
 
 protected:

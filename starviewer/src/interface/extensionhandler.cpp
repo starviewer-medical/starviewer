@@ -15,8 +15,6 @@
 #include "extensionhandler.h"
 
 // Qt
-#include <QFileInfo>
-#include <QDir>
 #include <QProgressDialog>
 #include <QMessageBox>
 // Recursos
@@ -26,12 +24,14 @@
 #include "volume.h"
 #include "extensionmediatorfactory.h"
 #include "extensionfactory.h"
-#include "extensioncontext.h"
 #include "singleton.h"
 #include "starviewerapplication.h"
 #include "interfacesettings.h"
 #include "screenmanager.h"
 #include "patientcomparer.h"
+#include "patient.h"
+#include "image.h"
+#include "volumehelper.h"
 
 // PACS --------------------------------------------
 #include "queryscreen.h"
@@ -311,51 +311,62 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
 
 void ExtensionHandler::processInput(QList<Patient*> patientsList, bool loadOnly)
 {
-    QList<Patient*> mergedPatientsList = mergePatients(patientsList);
-    // Si de tots els pacients que es carreguen intentem carregar-ne un d'igual al que ja tenim carregat, el mantenim
-    bool canReplaceActualPatient = true;
-    if (m_mainApp->getCurrentPatient())
+    if (patientsList.isEmpty())
     {
-        QListIterator<Patient*> patientsIterator(mergedPatientsList);
-        while (canReplaceActualPatient && patientsIterator.hasNext())
+        return;
+    }
+
+    // First merge Patients so that all studies from the same real patient are in the same Patient object
+    patientsList = mergePatients(patientsList);
+
+    // Now assign the patients to windows. One will be assigned to this window and the others to new windows, we don't care about other existing windows.
+    // If one patient in the list matches the current one in this window it will be merged into it.
+    // Otherwise the current patient in this window will be replaced by the first one in the list.
+    // We assume that loadOnly can only be true if there's a match.
+
+    // Check if the list contains the same patient as the current one in this ExtensionsHandler's window;
+    // if that's the case, it will be moved to the beginning of the list so it gets assigned to this window
+    bool merge = false;
+
+    for (int i = 0; i < patientsList.size(); i++)
+    {
+        if (PatientComparerSingleton::instance()->areSamePatient(m_mainApp->getCurrentPatient(), patientsList[i]))  // this works if current patient is null
         {
-            Patient *patient = patientsIterator.next();
-            QListIterator<QApplicationMainWindow*> mainAppsIterator(QApplicationMainWindow::getQApplicationMainWindows());
-            while (canReplaceActualPatient && mainAppsIterator.hasNext())
-            {
-                QApplicationMainWindow *mainApp = mainAppsIterator.next();
-                m_patientComparerMutex.lock();
-                canReplaceActualPatient = !PatientComparerSingleton::instance()->areSamePatient(mainApp->getCurrentPatient(), patient);
-                m_patientComparerMutex.unlock();
-            }
+            patientsList.move(i, 0);
+            merge = true;
+            break;
         }
     }
 
-    bool firstPatient = true;
-
-    // Afegim els pacients carregats correctament
-    foreach (Patient *patient, mergedPatientsList)
+    for (int i = 0; i < patientsList.size(); i++)
     {
-        generatePatientVolumes(patient, QString());
-        QApplicationMainWindow *mainApp = this->addPatientToWindow(patient, canReplaceActualPatient, loadOnly);
+        Patient *patient = patientsList[i];
+        VolumeHelper::generatePatientVolumes(patient);
 
-        if (mainApp)
+        if (i == 0)
         {
-            if (mainApp->isMinimized())
+            if (merge)
             {
-                //Si la finestra d'Starviewer està minimitzada la tornem al seu estat original al visualitzar l'estudi
-                ScreenManager().restoreFromMinimized(mainApp);
+                mergeIntoCurrentPatient(patient, loadOnly);
+                delete patient; // the studies are now under the current patient, we can delete this one
+            }
+            else
+            {
+                // Replace current patient
+                m_mainApp->setPatient(patient);
             }
 
-            if (firstPatient)
+            if (m_mainApp->isMinimized())
             {
-                mainApp->activateWindow();
+                ScreenManager().restoreFromMinimized(m_mainApp);
             }
+
+            m_mainApp->activateWindow();
         }
-        firstPatient = false;
-
-        // Un cop carregat un pacient, ja no el podem reemplaçar
-        canReplaceActualPatient = false;
+        else
+        {
+            m_mainApp->setPatientInNewWindow(patient);
+        }
     }
 }
 
@@ -382,148 +393,90 @@ QList<Patient*> ExtensionHandler::mergePatients(const QList<Patient*> &patientLi
     return mergedList;
 }
 
-void ExtensionHandler::generatePatientVolumes(Patient *patient, const QString &defaultSeriesUID)
+void ExtensionHandler::mergeIntoCurrentPatient(Patient *patient, bool loadOnly)
 {
-    Q_UNUSED(defaultSeriesUID);
-    foreach (Study *study, patient->getStudies())
+    m_mainApp->connectPatientVolumesToNotifier(patient);
+    *m_mainApp->getCurrentPatient() += *patient;
+
+    openDefaultExtensions(patient->getStudies());
+
+    if (!loadOnly)
     {
-        // Per cada sèrie, si les seves imatges són multiframe o de mides diferents entre sí aniran en volums separats
-        foreach (Series *series, study->getViewableSeries())
+        // Notify open extensions about the new studies
+        // TODO This should be merged with the request for newly instanced extensions to improve performance, but it would be too much rework for now, so it's
+        //      left as future work
+        QList<Study*> newStudies = patient->getStudies();
+        DicomEntityFlags newDicomEntities = m_extensionContext.getDicomEntities(newStudies);
+        QMap<QWidget*, QString> extensions = m_mainApp->getExtensionWorkspace()->getActiveExtensions();
+        QMapIterator<QWidget*, QString> iterator(extensions);
+
+        while (iterator.hasNext())
         {
-            int currentVolumeNumber;
-            QMap<int, QList<Image*> > volumesImages;
-            foreach (Image *image, series->getImages())
+            iterator.next();
+            std::unique_ptr<ExtensionMediator> mediator(ExtensionMediatorFactory::instance()->create(iterator.value()));
+            DicomEntityFlags supportedDicomEntities = mediator->getSupportedDicomEntities();
+            DicomEntityFlags matchedEntities = newDicomEntities & supportedDicomEntities;
+
+            if (matchedEntities)  // if any entity matches
             {
-                currentVolumeNumber = image->getVolumeNumberInSeries();
-                if (volumesImages.contains(currentVolumeNumber))
-                {
-                    volumesImages[currentVolumeNumber] << image;
-                }
-                else
-                {
-                    QList<Image*> newImageList;
-                    newImageList << image;
-                    volumesImages.insert(currentVolumeNumber, newImageList);
-                }
-            }
-            typedef QList<Image*> ImageListType;
-            foreach (ImageListType imageList, volumesImages)
-            {
-                int numberOfPhases = 1;
+                // Find the first of the new studies to assign to the extension
                 bool found = false;
-                int i = 0;
-                while (!found && i<imageList.count() - 1)
+
+                for (int i = 0; !found && i < newStudies.size(); i++)
                 {
-                    if (imageList.at(i + 1)->getPhaseNumber() > imageList.at(i)->getPhaseNumber())
+                    Study *study = newStudies[i];
+                    DicomEntityFlags studyEntities = m_extensionContext.getDicomEntities({study});
+
+                    if (matchedEntities & studyEntities)    // if this study is supported by this extension
                     {
-                        numberOfPhases++;
-                    }
-                    else
-                    {
+                        mediator->viewNewStudiesFromSamePatient(iterator.key(), study->getInstanceUID());
                         found = true;
                     }
-                    i++;
-                }
-                int numberOfSlicesPerPhase = imageList.count() / numberOfPhases;
-
-                Volume *volume = new Volume;
-                volume->setImages(imageList);
-                volume->setNumberOfPhases(numberOfPhases);
-                volume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
-                volume->setThumbnail(imageList.at(imageList.count() / 2)->getThumbnail(true));
-                series->addVolume(volume);
-            }
-        }
-    }
-    DEBUG_LOG(QString("Patient:\n%1").arg(patient->toString()));
-}
-
-QApplicationMainWindow* ExtensionHandler::addPatientToWindow(Patient *patient, bool canReplaceActualPatient, bool loadOnly)
-{
-    QApplicationMainWindow *usedMainApp = NULL;
-
-    if (canReplaceActualPatient && !loadOnly)
-    {
-        m_mainApp->setPatient(patient);
-        usedMainApp = m_mainApp;
-    }
-    else
-    {
-        QApplicationMainWindow *mainApp;
-        bool found = false;
-
-        QListIterator<QApplicationMainWindow*> mainAppsIterator(QApplicationMainWindow::getQApplicationMainWindows());
-        while (!found && mainAppsIterator.hasNext())
-        {
-            mainApp = mainAppsIterator.next();
-            m_patientComparerMutex.lock();
-            found = PatientComparerSingleton::instance()->areSamePatient(mainApp->getCurrentPatient(), patient);
-            m_patientComparerMutex.unlock();
-        }
-
-        if (found)
-        {
-            mainApp->connectPatientVolumesToNotifier(patient);
-            *(mainApp->getCurrentPatient()) += *patient;
-            DEBUG_LOG("Ja teníem dades d'aquest pacient. Fusionem informació");
-
-            // Mirem si hi ha alguna extensió oberta, sinó obrim la de per defecte
-            if (mainApp->getExtensionWorkspace()->count() == 0)
-            {
-                openDefaultExtension();
-            }
-
-            if (!loadOnly)
-            {
-                QMap<QWidget*, QString> extensions = mainApp->getExtensionWorkspace()->getActiveExtensions();
-                QMapIterator<QWidget*, QString> iterator(extensions);
-
-                while (iterator.hasNext())
-                {
-                    iterator.next();
-                    ExtensionMediator *mediator = ExtensionMediatorFactory::instance()->create(iterator.value());
-                    mediator->viewNewStudiesFromSamePatient(iterator.key(), patient->getStudies().first()->getInstanceUID());
                 }
             }
-
-            usedMainApp = mainApp;
-        }
-        else
-        {
-            if (!loadOnly)
-            {
-                usedMainApp = m_mainApp->setPatientInNewWindow(patient);
-                DEBUG_LOG("Tenim pacient i no ens deixen substituir-lo. L'obrim en una finestra nova.");
-            }
-            else
-            {
-                // \TODO Tenint en compte els problemes explicats al tiquet #1087, eliminar els objectes aquí pot fer petar l'aplicació en cas de demanar estudis
-                //       sense passar explícitament per la QueryScreen. Donat que en aquest punt encara no s'ha carregat cap volum a memòria,
-                //       per tant no hi haurà fugues importants de memòria si no ho eliminem, obtem per no esborrar cap objecte i així minimitzem el problema.
-            }
         }
     }
-
-    return usedMainApp;
 }
 
-void ExtensionHandler::openDefaultExtension()
+void ExtensionHandler::openDefaultExtensions(QList<Study*> newStudies)
 {
-    if (m_mainApp->getCurrentPatient())
+    if (newStudies.isEmpty() && (!m_mainApp->getCurrentPatient() || m_mainApp->getCurrentPatient()->getNumberOfStudies() == 0))
     {
-        Settings settings;
-        QString defaultExtension = settings.getValue(InterfaceSettings::DefaultExtension).toString();
+        DEBUG_LOG("No studies or patient to visualize");
+        return;
+    }
+
+    DicomEntityFlags dicomEntities = newStudies.isEmpty() ? m_extensionContext.getDicomEntities() : m_extensionContext.getDicomEntities(newStudies);
+    Settings settings;
+
+    if (dicomEntities.testFlag(DicomEntity::EncapsulatedDocument))
+    {
+        QString defaultExtension = settings.getValue(InterfaceSettings::DefaultEncapsulatedDocumentExtension).toString();
+
         if (!request(defaultExtension))
         {
-            WARN_LOG("Ha fallat la petició per la default extension anomenada: " + defaultExtension + ". Engeguem extensió 2D per defecte(hardcoded)");
-            DEBUG_LOG("Ha fallat la petició per la default extension anomenada: " + defaultExtension + ". Engeguem extensió 2D per defecte(hardcoded)");
+            WARN_LOG(QString("Request for default encapsulated document extension '%1' failed. Requesting hardcoded default.").arg(defaultExtension));
+            request("PdfExtension");
+        }
+    }
+
+    // Images are done the last so that their extension gets the focus if requested, so that they have priority over other entities
+    if (dicomEntities.testFlag(DicomEntity::Image))
+    {
+        QString defaultExtension = settings.getValue(InterfaceSettings::DefaultImageExtension).toString();
+
+        if (!request(defaultExtension))
+        {
+            WARN_LOG(QString("Request for default image extension '%1' failed. Requesting hardcoded default.").arg(defaultExtension));
             request("Q2DViewerExtension");
         }
     }
-    else
+
+    if (m_mainApp->getExtensionWorkspace()->count() == 0)
     {
-        DEBUG_LOG("No hi ha dades de pacient!");
+        WARN_LOG(QString("No extension has been open yet. Requesting 2d viewer extension by default."));
+        request("Q2DViewerExtension");
     }
 }
 
-};  // end namespace udg
+}   // end namespace udg

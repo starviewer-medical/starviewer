@@ -32,6 +32,7 @@ namespace udg {
 class DICOMTag;
 class DICOMAttribute;
 class DICOMSequenceAttribute;
+class DICOMSequenceItem;
 class DICOMValueAttribute;
 
 /**
@@ -75,9 +76,16 @@ public:
     /// Ens diu si el tag és present al fitxer o no. Cal haver fet un ús correcte de l'objecte m_dicomData.
     virtual bool tagExists(const DICOMTag &tag) const;
 
+    /// Returns true if this reader contains the given tag and false otherwise.
+    bool hasAttribute(const DICOMTag &tag) const;
+
     /// Obté el valor de l'atribut demanat i ens el retorna com a QString
     /// Si no es troba el tag es retornarà un QString buit
     virtual QString getValueAttributeAsQString(const DICOMTag &tag) const;
+
+    /// Obtains the value at the given tag and returns it as a QByteArray with binary data (not text).
+    /// Returns an empty QByteArray if the tag is not found or there is an error.
+    QByteArray getValueAttributeAsByteArray(const DICOMTag &tag) const;
 
     /// Ens torna un atribut DICOM que estigui al primer nivell (que no estigui contingut en seqüències)
     /// Retorna nul en cas que no s'hagi trobat el tag o que aquest no es correspongui amb un atribut (p.ex. és una seqüència)
@@ -88,6 +96,10 @@ public:
     /// Returns an object that includes the whole sequence. If it doesn't exist or the tag doesn't correspond to a sequence, it returns null.
     /// By default it returns OverlayData and PixelData with their values, but they are returned without value if the second parameter is ExcludeHeavyTags.
     virtual DICOMSequenceAttribute* getSequenceAttribute(const DICOMTag &sequenceTag, DICOMTagReader::ReturnValueOfTags returnValueOfTags = AllTags) const;
+
+    /// Returns the first item of the specified sequence, or null if the sequence does not exist or is empty.
+    /// By default it returns OverlayData and PixelData with their values, but they are returned without value if the second parameter is ExcludeHeavyTags.
+    DICOMSequenceItem* getFirstSequenceItem(const DICOMTag &sequenceTag, ReturnValueOfTags returnValueOfTags = AllTags) const;
 
     /// Retorna una llista de DICOMAttribute que inclou tots els Tags d'un DcmDataset (Es dóna per suposat que el dataset serà vàlid)
     /// Per defecte retorna el tag OverlayData i PixelData amb el seu valor, però si volem que ens el retornin amb el seu
