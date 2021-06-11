@@ -31,6 +31,7 @@ class vtkImageSlice;
 namespace udg {
 
 // Fordward declarations
+class AutomaticSynchronizationTool;
 class Image;
 class ImageOverlay;
 class Drawer;
@@ -290,6 +291,9 @@ public:
 
     /// Moves the camera based on the absolute motion vector
     void absolutePan(double motionVector[3]);
+
+    /// Sets the AutomaticSynchronizationTool instance linked to this viewer. Can be \c nullptr.
+    void setAutomaticSynchronizationTool(AutomaticSynchronizationTool *tool);
 
 public slots:
     virtual void setInput(Volume *volume);
@@ -606,6 +610,9 @@ private:
 
     /// Fusion balance stored as a value in the range [0, 100] representing the weight of the second input.
     int m_fusionBalance;
+
+    /// AutomaticSynchronizationTool instance that is used to keep synchronized when changing view plane.
+    AutomaticSynchronizationTool *m_automaticSynchronizationTool;   // Bad coupling, but there's no better way to do this right now.
 
 };
 
