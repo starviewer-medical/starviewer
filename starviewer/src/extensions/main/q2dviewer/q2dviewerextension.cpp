@@ -413,6 +413,36 @@ void Q2DViewerExtension::setCurrentStudy(const QString &studyUID)
     m_relatedStudiesWidget->setCurrentStudy(studyUID);
 }
 
+bool Q2DViewerExtension::eventFilter(QObject *watched, QEvent *event)
+{
+    if ((watched == m_axialViewToolButton || watched == m_sagitalViewToolButton || watched == m_coronalViewToolButton) &&
+            (event->type() == QEvent::MouseButtonDblClick || event->type() == QEvent::MouseButtonPress))
+    {
+        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+
+        if (mouseEvent && mouseEvent->button() == Qt::LeftButton &&
+                (event->type() == QEvent::MouseButtonDblClick || mouseEvent->modifiers() == Qt::ShiftModifier))
+        {
+            if (watched == m_axialViewToolButton)
+            {
+                m_allViewersAxialAction->trigger();
+            }
+            else if (watched == m_sagitalViewToolButton)
+            {
+                m_allViewersSagittalAction->trigger();
+            }
+            else if (watched == m_coronalViewToolButton)
+            {
+                m_allViewersCoronalAction->trigger();
+            }
+
+            return true;
+        }
+    }
+
+    return QWidget::eventFilter(watched, event);
+}
+
 void Q2DViewerExtension::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
@@ -485,11 +515,23 @@ void Q2DViewerExtension::initializeTools()
 
     // Registrem les "Action Tool"
 #ifndef STARVIEWER_LITE
-    m_sagitalViewAction = m_toolManager->registerActionTool("SagitalViewActionTool");
-    m_coronalViewAction = m_toolManager->registerActionTool("CoronalViewActionTool");
     m_axialViewToolButton->setDefaultAction(m_toolManager->registerActionTool("AxialViewActionTool"));
-    m_sagitalViewToolButton->setDefaultAction(m_sagitalViewAction);
-    m_coronalViewToolButton->setDefaultAction(m_coronalViewAction);
+    m_sagitalViewToolButton->setDefaultAction(m_toolManager->registerActionTool("SagitalViewActionTool"));
+    m_coronalViewToolButton->setDefaultAction(m_toolManager->registerActionTool("CoronalViewActionTool"));
+
+    m_axialViewToolButton->installEventFilter(this);
+    m_sagitalViewToolButton->installEventFilter(this);
+    m_coronalViewToolButton->installEventFilter(this);
+
+    m_allViewersAxialAction = new QAction(this);
+    m_allViewersAxialAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::AllViewersAxial));
+    connect(m_allViewersAxialAction, &QAction::triggered, this, &Q2DViewerExtension::resetAllViewersToAxial);
+    m_allViewersSagittalAction = new QAction(this);
+    m_allViewersSagittalAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::AllViewersSagittal));
+    connect(m_allViewersSagittalAction, &QAction::triggered, this, &Q2DViewerExtension::resetAllViewersToSagittal);
+    m_allViewersCoronalAction = new QAction(this);
+    m_allViewersCoronalAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::AllViewersCoronal));
+    connect(m_allViewersCoronalAction, &QAction::triggered, this, &Q2DViewerExtension::resetAllViewersToCoronal);
 #endif
     m_rotateClockWiseToolButton->setDefaultAction(m_toolManager->registerActionTool("RotateClockWiseActionTool"));
     m_rotateCounterClockWiseToolButton->setDefaultAction(m_toolManager->registerActionTool("RotateCounterClockWiseActionTool"));
@@ -781,6 +823,51 @@ void Q2DViewerExtension::showScreenshotsExporterDialog()
         {
             QExporterTool exporter(selectedViewerWidget->getViewer());
             exporter.exec();
+        }
+    }
+}
+
+void Q2DViewerExtension::resetAllViewersToAxial()
+{
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int i = 0; i < numberOfViewers; i++)
+    {
+        Q2DViewerWidget *widget = m_workingArea->getViewerWidget(i);
+
+        if (widget->getViewer()->hasInput())
+        {
+            widget->getViewer()->resetViewToAxial();
+        }
+    }
+}
+
+void Q2DViewerExtension::resetAllViewersToSagittal()
+{
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int i = 0; i < numberOfViewers; i++)
+    {
+        Q2DViewerWidget *widget = m_workingArea->getViewerWidget(i);
+
+        if (widget->getViewer()->hasInput())
+        {
+            widget->getViewer()->resetViewToSagital();
+        }
+    }
+}
+
+void Q2DViewerExtension::resetAllViewersToCoronal()
+{
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int i = 0; i < numberOfViewers; i++)
+    {
+        Q2DViewerWidget *widget = m_workingArea->getViewerWidget(i);
+
+        if (widget->getViewer()->hasInput())
+        {
+            widget->getViewer()->resetViewToCoronal();
         }
     }
 }

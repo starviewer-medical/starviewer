@@ -51,6 +51,9 @@ public:
     static const QString AxialViewTool;
     static const QString SagitalViewTool;
     static const QString CoronalViewTool;
+    static const QString AllViewersAxial;
+    static const QString AllViewersSagittal;
+    static const QString AllViewersCoronal;
     static const QString RotateClockWiseTool;
     static const QString RotateCounterClockWiseTool;
     static const QString HorizontalFlipTool;
