@@ -82,7 +82,13 @@ find_package(GDCM REQUIRED)
 include(${GDCM_USE_FILE})
 target_link_libraries(starviewer vtkgdcm)
 
-target_link_libraries(starviewer "-framework Cocoa" "-framework OpenGL")
+if(APPLE)
+    target_link_libraries(starviewer "-framework Cocoa" "-framework OpenGL")
+elseif(UNIX)
+    target_link_libraries(starviewer GLU)
+elseif(WIN32)
+    target_link_libraries(starviewer opengl32.lib glu32.lib gdi32.lib WSock32)
+endif()
 
 
 ################ Other things ################
