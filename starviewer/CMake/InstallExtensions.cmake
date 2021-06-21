@@ -8,6 +8,26 @@ set(MAIN_EXTENSIONS
     pdf
 )
 
+set(CONTRIB_EXTENSIONS
+)
+
+set(PLAYGROUND_EXTENSIONS
+    angiosubstraction
+    diffusionperfusionsegmentation
+    edemasegmentation
+    example
+    experimental3d
+    perfusionmapreconstruction
+    rectumsegmentation
+)
+
+# TODO make this variable include all enabled extensions (using CMake options…)
+set(ALL_EXTENSIONS
+    ${MAIN_EXTENSIONS}
+    ${CONTRIB_EXTENSIONS}
+    ${PLAYGROUND_EXTENSIONS}
+)
+
 set(EXTENSIONS_HEADER ${CMAKE_CURRENT_BINARY_DIR}/extensions.h)
 
 file(WRITE ${EXTENSIONS_HEADER}
@@ -16,8 +36,8 @@ file(WRITE ${EXTENSIONS_HEADER}
 
 ")
 
-foreach(EXTENSION ${MAIN_EXTENSIONS})
-    file(APPEND ${EXTENSIONS_HEADER} "#include \"../extensions/main/${EXTENSION}/${EXTENSION}extensionmediator.h\"\n")
+foreach(EXTENSION ${ALL_EXTENSIONS})
+    file(APPEND ${EXTENSIONS_HEADER} "#include \"${EXTENSION}extensionmediator.h\"\n")
 endforeach()
 
 file(APPEND ${EXTENSIONS_HEADER}
@@ -26,7 +46,7 @@ void initExtensionsResources()
 {
 ")
 
-foreach(EXTENSION ${MAIN_EXTENSIONS})
+foreach(EXTENSION ${ALL_EXTENSIONS})
     file(APPEND ${EXTENSIONS_HEADER} "    Q_INIT_RESOURCE(${EXTENSION});\n")
 endforeach()
 
@@ -38,9 +58,9 @@ file(APPEND ${EXTENSIONS_HEADER}
 
 # Add include directories of each extension globally
 # TODO Probably there's a better way
-foreach(EXTENSION ${MAIN_EXTENSIONS})
+foreach(EXTENSION ${ALL_EXTENSIONS})
     get_target_includes(${EXTENSION}_INCLUDES ${EXTENSION} YES)
     include_directories(${${EXTENSION}_INCLUDES})
 endforeach()
 
-target_link_libraries(starviewer ${MAIN_EXTENSIONS})
+target_link_libraries(starviewer ${ALL_EXTENSIONS})

@@ -1,3 +1,3 @@
 add_subdirectory(main)
-#add_subdirectory(contrib)
-#add_subdirectory(playground)
+add_subdirectory(contrib)
+add_subdirectory(playground)

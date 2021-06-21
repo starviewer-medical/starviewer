@@ -1,0 +1,7 @@
+add_subdirectory(angiosubstraction)
+add_subdirectory(diffusionperfusionsegmentation)
+add_subdirectory(edemasegmentation)
+add_subdirectory(example)
+add_subdirectory(experimental3d)
+add_subdirectory(perfusionmapreconstruction)
+add_subdirectory(rectumsegmentation)
