@@ -13,7 +13,7 @@ set(RESOURCES
     q3dviewer.qrc
 )
 
-add_translations(QM_FILES translations)
+add_translations(QM_FILES q3dviewer translations)
 
 add_library(q3dviewer ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 

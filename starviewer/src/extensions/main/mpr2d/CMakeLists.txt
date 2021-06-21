@@ -12,7 +12,7 @@ set(RESOURCES
     mpr2d.qrc
 )
 
-add_translations(QM_FILES translations)
+add_translations(QM_FILES mpr2d translations)
 
 add_library(mpr2d ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 

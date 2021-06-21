@@ -9,7 +9,7 @@ set(RESOURCES
     main.qrc
 )
 
-add_translations(QM_FILES main)
+add_translations(QM_FILES main main)
 
 add_executable(starviewer MACOSX_BUNDLE ${SOURCES} ${RESOURCES} ${QM_FILES})
 

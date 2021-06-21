@@ -410,7 +410,7 @@ set(FORMS
     qviewerworkinprogresswidget.ui
 )
 
-add_translations(QM_FILES core)
+add_translations(QM_FILES core core)
 
 add_library(core ${SOURCES} ${FORMS} ${QM_FILES})
 

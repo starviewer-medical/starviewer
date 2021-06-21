@@ -104,7 +104,7 @@ set(FORMS
     qwidgetselectpacstostoredicomimagebase.ui
 )
 
-add_translations(QM_FILES inputoutput)
+add_translations(QM_FILES inputoutput inputoutput)
 
 add_library(inputoutput ${SOURCES} ${FORMS} ${QM_FILES})
 

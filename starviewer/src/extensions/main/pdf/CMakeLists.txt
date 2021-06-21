@@ -11,7 +11,7 @@ set(RESOURCES
     pdf.qrc
 )
 
-add_translations(QM_FILES translations)
+add_translations(QM_FILES pdf translations)
 
 add_library(pdf ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 

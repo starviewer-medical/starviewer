@@ -20,7 +20,7 @@ set(FORMS
     qmedicaldeviceinformationdialogbase.ui
 )
 
-add_translations(QM_FILES interface)
+add_translations(QM_FILES interface interface)
 
 add_library(interface ${SOURCES} ${FORMS} ${QM_FILES})
 
