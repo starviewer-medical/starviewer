@@ -7,4 +7,5 @@ add_subdirectory(interface)
 add_subdirectory(extensions)
 
 add_subdirectory(main)
-#add_subdirectory(crashreporter)
+add_subdirectory(starviewersapwrapper)
+add_subdirectory(crashreporter)
