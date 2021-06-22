@@ -14,6 +14,6 @@ include(GetTargetIncludes)
 include(Translations)
 
 add_subdirectory(src)
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 add_translation_targets()
