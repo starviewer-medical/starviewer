@@ -15,6 +15,8 @@ add_compile_definitions(ELPP_THREAD_SAFE ELPP_NO_DEFAULT_LOG_FILE ELPP_DISABLE_D
 
 if(UNIX)
     if(APPLE)
+        set(CMAKE_OSX_SYSROOT /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk)
+
         # Use libc++ in macOS
         add_compile_options(-stdlib=libc++)
         add_link_options(-stdlib=libc++)
