@@ -1,11 +1,5 @@
-if(APPLE)
-    set(STARVIEWER_EXE ../../../$<TARGET_FILE_NAME:starviewer>)
-    #set(CRASHREPORTER_EXE $<TARGET_FILE:starviewer_crashreporter>)
-    set(CRASHREPORTER_EXE starviewer_crashreporter.app/Contents/MacOS/starviewer_crashreporter)
-else()
-    set(STARVIEWER_EXE $<TARGET_FILE_NAME:starviewer>)
-    set(CRASHREPORTER_EXE $<TARGET_FILE:starviewer_crashreporter>)
-endif()
+set(STARVIEWER_EXE starviewer${CMAKE_EXECUTABLE_SUFFIX})
+set(CRASHREPORTER_EXE starviewer_crashreporter${CMAKE_EXECUTABLE_SUFFIX})
 
 file(GENERATE OUTPUT executablesnames.h CONTENT
 "#ifndef EXECUTABLESNAMES_H
