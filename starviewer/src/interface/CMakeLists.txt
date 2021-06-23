@@ -5,20 +5,27 @@ set(SOURCES
     interfacesettings.cpp
     qaboutdialog.cpp
     qapplicationmainwindow.cpp
-    qceaboutcontent.cpp
     qconfigurationdialog.cpp
     qlicensedialog.cpp
-    qmedicaldeviceinformationdialog.cpp
     starviewerapplicationcommandline.cpp
 )
 
 set(FORMS
     qaboutdialogbase.ui
-    qceaboutcontentbase.ui
     qconfigurationdialogbase.ui
     qlicensedialogbase.ui
-    qmedicaldeviceinformationdialogbase.ui
 )
+
+if(STARVIEWER_CE)
+    list(APPEND SOURCES
+        qceaboutcontent.cpp
+        qmedicaldeviceinformationdialog.cpp
+    )
+    list(APPEND FORMS
+        qceaboutcontentbase.ui
+        qmedicaldeviceinformationdialogbase.ui
+    )
+endif()
 
 add_translations(QM_FILES interface interface)
 

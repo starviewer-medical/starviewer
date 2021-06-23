@@ -34,14 +34,28 @@ elseif(WIN32)
     endif()
 endif()
 
-# TODO make this the CMake way® (with configurable CMake variables, etc.). Draft below
-# https://cmake.org/cmake/help/v3.20/command/option.html
-#[[
-if(LITE_VERSION)
+# Optional things
+
+if(STARVIEWER_BETA)
+    add_compile_definitions(BETA_VERSION)
+endif()
+
+if(STARVIEWER_CE)
+    add_compile_definitions(STARVIEWER_CE)
+endif()
+
+if(STARVIEWER_LITE)
     add_compile_definitions(STARVIEWER_LITE)
 endif()
 
-if(CE_MARKING)
-    add_compile_definitions(STARVIEWER_CE)
+if(SEND_HOST_DATA)
+    add_compile_definitions(CORPORATE_VERSION)
 endif()
-]]
+
+if(NOT USE_CRASH_REPORTER)
+    add_compile_definitions(NO_CRASH_REPORTER)
+endif()
+
+if(USE_PACS_COMPRESSION)
+    add_compile_definitions(DISABLE_COMPRESSION_EXTENSION)
+endif()

@@ -12,8 +12,9 @@ add_subdirectory(extensions)
 add_subdirectory(main)
 
 if(APPLE)
+    include(ApplicationsTargetNames)    # needed to know the actual name (different for Starviewer Lite)
     # In macOS, sapwrapper and crashreporter will go besides starviewer in the app bundle
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../bin/starviewer.app/Contents/MacOS)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../bin/${STARVIEWER_NAME}.app/Contents/MacOS)
 endif()
 
 add_subdirectory(crashreporter)

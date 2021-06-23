@@ -44,7 +44,7 @@ set(SOURCES
 )
 
 #[[ Untested draft for optional CUDA support
-if(CUDA)
+if(USE_CUDA)
     list(APPEND SOURCES
         cudafiltering.cu
         cudaviewpointinformationchannel.cu

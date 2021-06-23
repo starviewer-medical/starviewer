@@ -21,12 +21,21 @@ set(PLAYGROUND_EXTENSIONS
     rectumsegmentation
 )
 
-# TODO make this variable include all enabled extensions (using CMake options…)
-set(ALL_EXTENSIONS
-    ${MAIN_EXTENSIONS}
-    ${CONTRIB_EXTENSIONS}
-    ${PLAYGROUND_EXTENSIONS}
-)
+if(STARVIEWER_CE)
+    set(ALL_EXTENSIONS
+        ${MAIN_EXTENSIONS}
+    )
+elseif(STARVIEWER_LITE)
+    set(ALL_EXTENSIONS
+        q2dviewer
+    )
+else()
+    set(ALL_EXTENSIONS
+        ${MAIN_EXTENSIONS}
+        ${CONTRIB_EXTENSIONS}
+        ${PLAYGROUND_EXTENSIONS}
+    )
+endif()
 
 set(EXTENSIONS_HEADER ${CMAKE_CURRENT_BINARY_DIR}/extensions.h)
 

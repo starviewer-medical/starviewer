@@ -7,7 +7,20 @@ set(SOURCES
 
 set(RESOURCES
     main.qrc
+    ../qml/qml.qrc
 )
+
+if(STARVIEWER_CE)
+    list(APPEND RESOURCES
+        ../external/external.qrc
+    )
+endif()
+
+if(USE_QTCONF AND WIN32)
+    list(APPEND RESOURCES
+        qtconf/win/qtconf.qrc
+    )
+endif()
 
 add_translations(QM_FILES main main)
 
@@ -95,3 +108,5 @@ endif()
 
 include(ApplicationsTargetNames)
 include(InstallExtensions)
+
+set_target_properties(starviewer PROPERTIES OUTPUT_NAME ${STARVIEWER_NAME}) # Change name for Starviewer Lite
