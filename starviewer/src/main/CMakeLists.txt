@@ -24,7 +24,9 @@ endif()
 
 add_translations(QM_FILES main main)
 
-add_executable(starviewer MACOSX_BUNDLE ${SOURCES} ${RESOURCES} ${QM_FILES})
+include(ReleaseNotes)   # included here to have RELEASE_NOTES_DIR defined
+
+add_executable(starviewer MACOSX_BUNDLE ${SOURCES} ${RESOURCES} ${QM_FILES} ${RELEASE_NOTES_DIR}/changelog.html)
 
 
 ################ Internal library dependencies ################
