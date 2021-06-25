@@ -109,6 +109,7 @@ endif()
 ################ Other things ################
 
 include(ApplicationsTargetNames)
-include(InstallExtensions)
 
 set_target_properties(starviewer PROPERTIES OUTPUT_NAME ${STARVIEWER_NAME}) # Change name for Starviewer Lite
+
+generate_extensions_header()

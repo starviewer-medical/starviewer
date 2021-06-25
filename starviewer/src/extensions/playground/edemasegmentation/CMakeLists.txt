@@ -16,6 +16,8 @@ add_translations(QM_FILES edemasegmentation translations)
 
 add_library(edemasegmentation ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(edemasegmentation)
+
 
 ################ Internal library dependencies ################
 

@@ -20,6 +20,8 @@ add_translations(QM_FILES perfusionmapreconstruction translations)
 
 add_library(perfusionmapreconstruction ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(perfusionmapreconstruction)
+
 
 ################ Internal library dependencies ################
 

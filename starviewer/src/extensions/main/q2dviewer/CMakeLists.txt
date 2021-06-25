@@ -24,6 +24,8 @@ add_translations(QM_FILES q2dviewer translations)
 
 add_library(q2dviewer ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(q2dviewer)
+
 
 ################ Internal library dependencies ################
 

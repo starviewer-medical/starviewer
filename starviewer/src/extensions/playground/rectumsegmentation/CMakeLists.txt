@@ -17,6 +17,8 @@ add_translations(QM_FILES rectumsegmentation translations)
 
 add_library(rectumsegmentation ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(rectumsegmentation)
+
 
 ################ Internal library dependencies ################
 

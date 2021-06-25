@@ -15,6 +15,8 @@ add_translations(QM_FILES pdf translations)
 
 add_library(pdf ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(pdf)
+
 
 ################ Internal library dependencies ################
 

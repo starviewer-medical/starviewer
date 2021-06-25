@@ -29,6 +29,8 @@ add_translations(QM_FILES dicomprint translations)
 
 add_library(dicomprint ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(dicomprint)
+
 
 ################ Internal library dependencies ################
 

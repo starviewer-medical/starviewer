@@ -16,6 +16,8 @@ add_translations(QM_FILES mpr2d translations)
 
 add_library(mpr2d ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(mpr2d)
+
 
 ################ Internal library dependencies ################
 

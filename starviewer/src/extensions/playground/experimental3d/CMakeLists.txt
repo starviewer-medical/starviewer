@@ -68,6 +68,8 @@ add_translations(QM_FILES experimental3d translations)
 
 add_library(experimental3d ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(experimental3d)
+
 
 ################ Internal library dependencies ################
 

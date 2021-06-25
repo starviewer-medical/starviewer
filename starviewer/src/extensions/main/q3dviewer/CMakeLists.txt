@@ -17,6 +17,8 @@ add_translations(QM_FILES q3dviewer translations)
 
 add_library(q3dviewer ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(q3dviewer)
+
 
 ################ Internal library dependencies ################
 

@@ -15,6 +15,8 @@ add_translations(QM_FILES example translations)
 
 add_library(example ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(example)
+
 
 ################ Internal library dependencies ################
 

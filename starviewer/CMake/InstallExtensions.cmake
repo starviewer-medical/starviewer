@@ -1,75 +1,28 @@
-# TODO Do it with configure_file (example: https://stackoverflow.com/a/60644020)
+# Adds an extension to the extensions list that is later used to configure the extensions header.
+function(add_extension EXTENSION)
+    set_property(GLOBAL APPEND PROPERTY EXTENSIONS ${EXTENSION})
+endfunction()
 
-set(MAIN_EXTENSIONS
-    q2dviewer
-    q3dviewer
-    mpr2d
-    dicomprint
-    pdf
-)
+# Configures the extensions header used in main.cpp.
+function(generate_extensions_header)
+    get_property(EXTENSIONS GLOBAL PROPERTY EXTENSIONS)
 
-set(CONTRIB_EXTENSIONS
-)
+    list(TRANSFORM EXTENSIONS PREPEND "#include \"" OUTPUT_VARIABLE EXTENSIONS_INCLUDES)
+    list(TRANSFORM EXTENSIONS_INCLUDES APPEND "extensionmediator.h\"")
+    string(REPLACE ";" "\n" EXTENSIONS_INCLUDES "${EXTENSIONS_INCLUDES}")
 
-set(PLAYGROUND_EXTENSIONS
-    angiosubstraction
-    diffusionperfusionsegmentation
-    edemasegmentation
-    example
-    experimental3d
-    perfusionmapreconstruction
-    rectumsegmentation
-)
+    list(TRANSFORM EXTENSIONS PREPEND "    Q_INIT_RESOURCE(" OUTPUT_VARIABLE INIT_EXTENSIONS_RESOURCES)
+    list(TRANSFORM INIT_EXTENSIONS_RESOURCES APPEND ");")
+    string(REPLACE ";;" ";\n" INIT_EXTENSIONS_RESOURCES "${INIT_EXTENSIONS_RESOURCES}")
 
-if(STARVIEWER_CE)
-    set(ALL_EXTENSIONS
-        ${MAIN_EXTENSIONS}
-    )
-elseif(STARVIEWER_LITE)
-    set(ALL_EXTENSIONS
-        q2dviewer
-    )
-else()
-    set(ALL_EXTENSIONS
-        ${MAIN_EXTENSIONS}
-        ${CONTRIB_EXTENSIONS}
-        ${PLAYGROUND_EXTENSIONS}
-    )
-endif()
+    configure_file(extensions.h.in extensions.h)
 
-set(EXTENSIONS_HEADER ${CMAKE_CURRENT_BINARY_DIR}/extensions.h)
+    # Add include directories of each extension globally
+    # TODO Probably there's a better way
+    foreach(EXTENSION ${EXTENSIONS})
+        get_target_includes(${EXTENSION}_INCLUDES ${EXTENSION} YES)
+        include_directories(${${EXTENSION}_INCLUDES})
+    endforeach()
 
-file(WRITE ${EXTENSIONS_HEADER}
-"#ifndef EXTENSIONS_H
-#define EXTENSIONS_H
-
-")
-
-foreach(EXTENSION ${ALL_EXTENSIONS})
-    file(APPEND ${EXTENSIONS_HEADER} "#include \"${EXTENSION}extensionmediator.h\"\n")
-endforeach()
-
-file(APPEND ${EXTENSIONS_HEADER}
-"
-void initExtensionsResources()
-{
-")
-
-foreach(EXTENSION ${ALL_EXTENSIONS})
-    file(APPEND ${EXTENSIONS_HEADER} "    Q_INIT_RESOURCE(${EXTENSION});\n")
-endforeach()
-
-file(APPEND ${EXTENSIONS_HEADER}
-"}
-
-#endif
-")
-
-# Add include directories of each extension globally
-# TODO Probably there's a better way
-foreach(EXTENSION ${ALL_EXTENSIONS})
-    get_target_includes(${EXTENSION}_INCLUDES ${EXTENSION} YES)
-    include_directories(${${EXTENSION}_INCLUDES})
-endforeach()
-
-target_link_libraries(starviewer ${ALL_EXTENSIONS})
+    target_link_libraries(starviewer ${EXTENSIONS})
+endfunction()

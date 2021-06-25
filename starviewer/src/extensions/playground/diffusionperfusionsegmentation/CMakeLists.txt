@@ -17,6 +17,8 @@ add_translations(QM_FILES diffusionperfusionsegmentation translations)
 
 add_library(diffusionperfusionsegmentation ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(diffusionperfusionsegmentation)
+
 
 ################ Internal library dependencies ################
 

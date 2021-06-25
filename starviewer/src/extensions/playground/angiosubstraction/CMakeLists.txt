@@ -16,6 +16,8 @@ add_translations(QM_FILES angiosubstraction translations)
 
 add_library(angiosubstraction ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
+add_extension(angiosubstraction)
+
 
 ################ Internal library dependencies ################
 
