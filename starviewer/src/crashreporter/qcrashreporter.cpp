@@ -17,7 +17,7 @@
 #include "qcrashreporter.h"
 #include "../core/starviewerapplication.h"
 #include "logging.h"
-#include "executablesnames.h"
+
 #include <QTimer>
 #include <QNetworkInterface>
 #include <QNetworkRequest>
