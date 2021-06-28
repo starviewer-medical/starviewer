@@ -26,7 +26,7 @@ add_translations(QM_FILES main main)
 
 include(ReleaseNotes)   # included here to have RELEASE_NOTES_DIR defined
 
-add_executable(starviewer MACOSX_BUNDLE ${SOURCES} ${RESOURCES} ${QM_FILES} ${RELEASE_NOTES_DIR}/changelog.html)
+add_executable(starviewer WIN32 MACOSX_BUNDLE ${SOURCES} ${RESOURCES} ${QM_FILES} ${RELEASE_NOTES_DIR}/changelog.html)
 
 
 ################ Internal library dependencies ################
@@ -102,7 +102,7 @@ if(APPLE)
 elseif(UNIX)
     target_link_libraries(starviewer GLU)
 elseif(WIN32)
-    target_link_libraries(starviewer opengl32.lib glu32.lib gdi32.lib WSock32)
+    target_link_libraries(starviewer glu32.lib gdi32.lib WSock32)
 endif()
 
 

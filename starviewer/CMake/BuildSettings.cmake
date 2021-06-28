@@ -26,7 +26,7 @@ if(UNIX)
     endif()
 elseif(WIN32)
     # Static GLEW and avoid definition of min and max macros by windows.h
-    add_compile_definitions(GLEW_STATIC NOMINMAX)
+    add_compile_definitions(GLEW_STATIC NOMINMAX UNICODE)
 
     if(MSVC)
         # Multi-core compilation and generate multi-threaded DLL

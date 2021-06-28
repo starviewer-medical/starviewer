@@ -29,7 +29,7 @@ endif()
 
 add_translations(QM_FILES crashreporter crashreporter)
 
-add_executable(starviewer_crashreporter ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
+add_executable(starviewer_crashreporter WIN32 ${SOURCES} ${FORMS} ${RESOURCES} ${QM_FILES})
 
 
 ################ Internal library dependencies ################

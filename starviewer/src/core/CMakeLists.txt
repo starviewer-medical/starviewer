@@ -470,3 +470,7 @@ include(${GDCM_USE_FILE})
 
 find_package(KF5ThreadWeaver REQUIRED)
 target_link_libraries(core KF5::ThreadWeaver)
+
+if(WIN32)
+    target_link_libraries(core opengl32.lib wbemuuid.lib)
+endif()
