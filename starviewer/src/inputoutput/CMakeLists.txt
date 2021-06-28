@@ -114,6 +114,10 @@ add_library(inputoutput ${SOURCES} ${FORMS} ${QM_FILES})
 get_target_includes(CORE_INCLUDES core YES)
 target_include_directories(inputoutput PRIVATE ${CORE_INCLUDES})
 
+# Circular dependency between both libraries. (Specified here because both targets must be already defined.)
+target_link_libraries(core inputoutput)
+target_link_libraries(inputoutput core)
+
 
 ################ External library dependencies ################
 

@@ -446,7 +446,9 @@ target_link_libraries(core ${VTK_LIBRARIES})
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon
+    ITKIOGDCM
     ITKIOImageBase
+    ITKVTK
 )
 set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
 include(${ITK_USE_FILE})

@@ -42,6 +42,8 @@ target_include_directories(starviewer_crashreporter PRIVATE ${EASYLOGGING_INCLUD
 
 target_link_libraries(starviewer_crashreporter easylogging++)
 
+add_dependencies(starviewer_crashreporter starviewer)   # needed to release main translations before compiling main.qrc
+
 
 ################ External library dependencies ################
 

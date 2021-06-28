@@ -35,6 +35,8 @@ target_include_directories(q2dviewer PUBLIC ${CORE_INCLUDES})
 get_target_includes(INPUTOUTPUT_INCLUDES inputoutput YES)
 target_include_directories(q2dviewer PRIVATE ${INPUTOUTPUT_INCLUDES})
 
+target_link_libraries(q2dviewer core)
+
 
 ################ External library dependencies ################
 

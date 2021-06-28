@@ -40,6 +40,8 @@ target_include_directories(interface PUBLIC ${CORE_INCLUDES})
 get_target_includes(INPUTOUTPUT_INCLUDES inputoutput YES)
 target_include_directories(interface PRIVATE ${INPUTOUTPUT_INCLUDES})
 
+target_link_libraries(interface core)
+
 
 ################ External library dependencies ################
 
