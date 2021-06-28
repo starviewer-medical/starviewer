@@ -10,6 +10,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMake)
 
 include(Options)
 include(BuildSettings)
+include(DefaultSdkDirectories)
 
 include(GetTargetIncludes)
 include(Translations)
