@@ -34,37 +34,23 @@ add_extension(dicomprint)
 
 ################ Internal library dependencies ################
 
-get_target_includes(CORE_INCLUDES core NO)
-target_include_directories(dicomprint PUBLIC ${CORE_INCLUDES})
-
 get_target_includes(INPUTOUTPUT_INCLUDES inputoutput YES)
 target_include_directories(dicomprint PUBLIC ${INPUTOUTPUT_INCLUDES})
+
+target_link_libraries(dicomprint core inputoutput)
 
 
 ################ External library dependencies ################
 
 find_package(Qt5 REQUIRED COMPONENTS
     Core
+    Gui
     Widgets
 )
-target_link_libraries(dicomprint Qt5::Core Qt5::Widgets)
-
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonDataModel
-)
-include(${VTK_USE_FILE})
-target_link_libraries(dicomprint ${VTK_LIBRARIES})
-
-find_package(ITK REQUIRED COMPONENTS
-    ITKCommon
-)
-set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
-include(${ITK_USE_FILE})
-target_link_libraries(dicomprint ${ITK_LIBRARIES})
+target_link_libraries(dicomprint Qt5::Core Qt5::Gui Qt5::Widgets)
 
 find_package(DCMTK REQUIRED)
-target_include_directories(dicomprint PUBLIC
-    ${DCMTK_INCLUDE_DIRS}
+target_include_directories(dicomprint SYSTEM PRIVATE
     ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmimgle
     ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmpstat
 )

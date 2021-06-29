@@ -24,3 +24,20 @@ get_target_includes(INPUTOUTPUT_INCLUDES inputoutput YES)
 target_include_directories(test_inputoutput PRIVATE ${INPUTOUTPUT_INCLUDES})
 
 target_link_libraries(test_inputoutput core inputoutput)
+
+
+################ External library dependencies ################
+
+find_package(Qt5 REQUIRED COMPONENTS
+    Core
+    Network
+    Sql
+    Widgets
+)
+target_link_libraries(test_inputoutput Qt5::Core Qt5::Network Qt5::Sql Qt5::Widgets)
+
+find_package(DCMTK REQUIRED)
+target_include_directories(test_inputoutput SYSTEM PRIVATE
+    ${DCMTK_INCLUDE_DIRS}/dcmtk/ofstd
+)
+target_link_libraries(test_inputoutput ${DCMTK_LIBRARIES})

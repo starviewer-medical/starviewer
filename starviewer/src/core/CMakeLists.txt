@@ -418,7 +418,9 @@ add_library(core ${SOURCES} ${FORMS} ${QM_FILES})
 ################ Internal library dependencies ################
 
 get_target_includes(EASYLOGGING_INCLUDES easylogging++ NO)
-target_include_directories(core PUBLIC ${EASYLOGGING_INCLUDES})
+target_include_directories(core PRIVATE ${EASYLOGGING_INCLUDES})
+
+target_link_libraries(core easylogging++)
 
 
 ################ External library dependencies ################
@@ -439,19 +441,36 @@ find_package(Qt5 REQUIRED COMPONENTS
 target_link_libraries(core Qt5::Concurrent Qt5::Core Qt5::Gui Qt5::Network Qt5::OpenGL Qt5::Qml Qt5::Quick Qt5::QuickWidgets Qt5::Widgets Qt5::Xml Qt5::XmlPatterns)
 
 find_package(VTK REQUIRED COMPONENTS
+    vtkCommonCore
     vtkCommonDataModel
+    vtkCommonExecutionModel
+    vtkCommonMath
+    vtkCommonTransforms
+    vtkFiltersCore
+    vtkFiltersGeneral
+    vtkFiltersSources
+    vtkGUISupportQt
+    vtkImagingCore
+    vtkInteractionWidgets
+    vtkIOImage
+    vtkRenderingAnnotation
+    vtkRenderingCore
+    vtkRenderingImage
+    vtkRenderingOpenGL2
+    vtkRenderingVolume
+    vtkRenderingVolumeOpenGL2
 )
-include(${VTK_USE_FILE})
 target_link_libraries(core ${VTK_LIBRARIES})
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon
     ITKIOGDCM
     ITKIOImageBase
+    ITKStatistics
+    ITKTransform
     ITKVTK
 )
 set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
-include(${ITK_USE_FILE})
 target_link_libraries(core ${ITK_LIBRARIES})
 
 find_package(DCMTK REQUIRED)
@@ -466,11 +485,15 @@ target_include_directories(core SYSTEM PUBLIC
 target_link_libraries(core ${DCMTK_LIBRARIES})
 
 find_package(GDCM REQUIRED)
-include(${GDCM_USE_FILE})
+target_link_libraries(core gdcmCommon gdcmMSFF vtkgdcm)
 
 find_package(KF5ThreadWeaver REQUIRED)
 target_link_libraries(core KF5::ThreadWeaver)
 
 if(WIN32)
-    target_link_libraries(core opengl32.lib wbemuuid.lib)
+    target_link_libraries(core glu32.lib opengl32.lib wbemuuid.lib)
+elseif(APPLE)
+    target_link_libraries(core "-framework OpenGL")
+elseif(UNIX)
+    target_link_libraries(core GLU)
 endif()

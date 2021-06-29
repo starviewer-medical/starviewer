@@ -20,14 +20,14 @@ add_extension(pdf)
 
 ################ Internal library dependencies ################
 
-get_target_includes(CORE_INCLUDES core NO)
-target_include_directories(pdf PUBLIC ${CORE_INCLUDES})
+target_link_libraries(pdf core)
 
 
 ################ External library dependencies ################
 
 find_package(Qt5 REQUIRED COMPONENTS
     Core
+    Gui
     Widgets
 )
-target_link_libraries(pdf Qt5::Core Qt5::Widgets)
+target_link_libraries(pdf Qt5::Core Qt5::Gui Qt5::Widgets)

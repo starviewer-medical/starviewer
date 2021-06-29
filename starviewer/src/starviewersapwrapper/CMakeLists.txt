@@ -19,9 +19,6 @@ if(NOT STARVIEWER_LITE)
     get_target_includes(CORE_INCLUDES core NO)
     target_include_directories(starviewer_sapwrapper PRIVATE ${CORE_INCLUDES})
 
-    get_target_includes(EASYLOGGING_INCLUDES easylogging++ NO)
-    target_include_directories(starviewer_sapwrapper PRIVATE ${EASYLOGGING_INCLUDES})
-
     target_link_libraries(starviewer_sapwrapper easylogging++)
 
 

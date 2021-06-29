@@ -22,27 +22,23 @@ add_extension(diffusionperfusionsegmentation)
 
 ################ Internal library dependencies ################
 
-get_target_includes(CORE_INCLUDES core YES)
-target_include_directories(diffusionperfusionsegmentation PUBLIC ${CORE_INCLUDES})
+target_link_libraries(diffusionperfusionsegmentation core)
 
 
 ################ External library dependencies ################
 
 find_package(Qt5 REQUIRED COMPONENTS
     Core
+    Gui
     Widgets
 )
-target_link_libraries(diffusionperfusionsegmentation Qt5::Core Qt5::Widgets)
+target_link_libraries(diffusionperfusionsegmentation Qt5::Core Qt5::Gui Qt5::Widgets)
 
 find_package(VTK REQUIRED COMPONENTS
-    vtkCommonDataModel
+    vtkCommonCore
+    vtkImagingCore
+    vtkIOImage
+    vtkRenderingCore
 )
-include(${VTK_USE_FILE})
+target_link_libraries(diffusionperfusionsegmentation ${VTK_LIBRARIES})
 
-find_package(ITK REQUIRED COMPONENTS
-    ITKCommon
-    ITKStatistics
-)
-set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
-include(${ITK_USE_FILE})
-target_link_libraries(diffusionperfusionsegmentation ${ITK_LIBRARIES})

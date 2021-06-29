@@ -37,9 +37,6 @@ add_executable(starviewer_crashreporter WIN32 ${SOURCES} ${FORMS} ${RESOURCES} $
 get_target_includes(CORE_INCLUDES core NO)
 target_include_directories(starviewer_crashreporter PRIVATE ${CORE_INCLUDES})
 
-get_target_includes(EASYLOGGING_INCLUDES easylogging++ NO)
-target_include_directories(starviewer_crashreporter PRIVATE ${EASYLOGGING_INCLUDES})
-
 target_link_libraries(starviewer_crashreporter easylogging++)
 
 add_dependencies(starviewer_crashreporter starviewer)   # needed to release main translations before compiling main.qrc
@@ -49,10 +46,11 @@ add_dependencies(starviewer_crashreporter starviewer)   # needed to release main
 
 find_package(Qt5 REQUIRED COMPONENTS
     Core
+    Gui
     Network
     Widgets
 )
-target_link_libraries(starviewer_crashreporter Qt5::Core Qt5::Network Qt5::Widgets)
+target_link_libraries(starviewer_crashreporter Qt5::Core Qt5::Gui Qt5::Network Qt5::Widgets)
 
 
 ################ Other things ################

@@ -8,4 +8,4 @@ add_library(test_interface OBJECT ${SOURCES})
 
 ################ Internal library dependencies ################
 
-target_link_libraries(test_interface interface inputoutput)
+target_link_libraries(test_interface core inputoutput interface)

@@ -13,25 +13,26 @@ set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)  # add source and binary director
 # EasyLogging++ is set to be thread safe, to not have a default log file, and to not handle crashes
 add_compile_definitions(ELPP_THREAD_SAFE ELPP_NO_DEFAULT_LOG_FILE ELPP_DISABLE_DEFAULT_CRASH_HANDLING)
 
-if(UNIX)
-    if(APPLE)
-        set(CMAKE_OSX_SYSROOT /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk)
+# Build GLEW as static library
+add_compile_definitions(GLEW_STATIC)
 
-        # Use libc++ in macOS
-        add_compile_options(-stdlib=libc++)
-        add_link_options(-stdlib=libc++)
-    else()
-        # Use gold linker in Linux
-        add_link_options(-fuse-ld=gold)
-    endif()
-elseif(WIN32)
-    # Static GLEW and avoid definition of min and max macros by windows.h
-    add_compile_definitions(GLEW_STATIC NOMINMAX UNICODE)
+if(WIN32)
+    # Avoid definition of min and max macros by windows.h, and enable UNICODE
+    add_compile_definitions(NOMINMAX UNICODE)
 
     if(MSVC)
-        # Multi-core compilation and generate multi-threaded DLL
-        add_compile_options(/MP -MD)
+        # Multi-core compilation
+        add_compile_options(/MP)
     endif()
+elseif(APPLE)
+    set(CMAKE_OSX_SYSROOT /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk)
+
+    # Use libc++ in macOS
+    add_compile_options(-stdlib=libc++)
+    add_link_options(-stdlib=libc++)
+elseif(UNIX)
+    # Use gold linker in Linux
+    add_link_options(-fuse-ld=gold)
 endif()
 
 # Optional things

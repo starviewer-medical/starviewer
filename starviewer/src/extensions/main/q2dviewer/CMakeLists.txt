@@ -35,7 +35,7 @@ target_include_directories(q2dviewer PUBLIC ${CORE_INCLUDES})
 get_target_includes(INPUTOUTPUT_INCLUDES inputoutput YES)
 target_include_directories(q2dviewer PRIVATE ${INPUTOUTPUT_INCLUDES})
 
-target_link_libraries(q2dviewer core)
+target_link_libraries(q2dviewer core inputoutput)
 
 
 ################ External library dependencies ################
@@ -46,19 +46,3 @@ find_package(Qt5 REQUIRED COMPONENTS
     Widgets
 )
 target_link_libraries(q2dviewer Qt5::Core Qt5::Gui Qt5::Widgets)
-
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonDataModel
-)
-include(${VTK_USE_FILE})
-target_link_libraries(q2dviewer ${VTK_LIBRARIES})
-
-find_package(ITK REQUIRED COMPONENTS
-    ITKCommon
-)
-set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
-include(${ITK_USE_FILE})
-target_link_libraries(q2dviewer ${ITK_LIBRARIES})
-
-find_package(KF5ThreadWeaver REQUIRED)
-target_link_libraries(q2dviewer KF5::ThreadWeaver)

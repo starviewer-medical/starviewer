@@ -112,10 +112,8 @@ add_library(inputoutput ${SOURCES} ${FORMS} ${QM_FILES})
 ################ Internal library dependencies ################
 
 get_target_includes(CORE_INCLUDES core YES)
-target_include_directories(inputoutput PRIVATE ${CORE_INCLUDES})
+target_include_directories(inputoutput PUBLIC ${CORE_INCLUDES})
 
-# Circular dependency between both libraries. (Specified here because both targets must be already defined.)
-target_link_libraries(core inputoutput)
 target_link_libraries(inputoutput core)
 
 
@@ -123,28 +121,23 @@ target_link_libraries(inputoutput core)
 
 find_package(Qt5 REQUIRED COMPONENTS
     Core
+    Gui
     Network
     Sql
     Widgets
 )
-target_link_libraries(inputoutput Qt5::Core Qt5::Network Qt5::Sql Qt5::Widgets)
+target_link_libraries(inputoutput Qt5::Core Qt5::Gui Qt5::Network Qt5::Sql Qt5::Widgets)
 
 find_package(VTK REQUIRED COMPONENTS
     vtkCommonCore
+    vtkCommonDataModel
+    vtkIOImage
+    vtkRenderingCore
 )
-include(${VTK_USE_FILE})
 target_link_libraries(inputoutput ${VTK_LIBRARIES})
 
-find_package(ITK REQUIRED COMPONENTS
-    ITKCommon
-)
-set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
-include(${ITK_USE_FILE})
-target_link_libraries(inputoutput ${ITK_LIBRARIES})
-
 find_package(DCMTK REQUIRED)
-target_include_directories(inputoutput PUBLIC
-    ${DCMTK_INCLUDE_DIRS}
+target_include_directories(inputoutput SYSTEM PUBLIC
     ${DCMTK_INCLUDE_DIRS}/dcmtk/config
     ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmdata
     ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmnet
@@ -153,7 +146,7 @@ target_include_directories(inputoutput PUBLIC
 target_link_libraries(inputoutput ${DCMTK_LIBRARIES})
 
 find_package(GDCM REQUIRED)
-include(${GDCM_USE_FILE})
+target_link_libraries(inputoutput gdcmCommon gdcmDICT gdcmDSED gdcmIOD gdcmMSFF)
 
 find_package(KF5ThreadWeaver REQUIRED)
 target_link_libraries(inputoutput KF5::ThreadWeaver)

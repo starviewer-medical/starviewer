@@ -22,8 +22,7 @@ add_extension(rectumsegmentation)
 
 ################ Internal library dependencies ################
 
-get_target_includes(CORE_INCLUDES core YES)
-target_include_directories(rectumsegmentation PUBLIC ${CORE_INCLUDES})
+target_link_libraries(rectumsegmentation core)
 
 
 ################ External library dependencies ################
@@ -35,12 +34,21 @@ find_package(Qt5 REQUIRED COMPONENTS
 target_link_libraries(rectumsegmentation Qt5::Core Qt5::Widgets)
 
 find_package(VTK REQUIRED COMPONENTS
+    vtkCommonCore
     vtkCommonDataModel
+    vtkFiltersCore
+    vtkFiltersSources
+    vtkImagingCore
+    vtkIOImage
+    vtkRenderingCore
 )
-include(${VTK_USE_FILE})
+target_link_libraries(rectumsegmentation ${VTK_LIBRARIES})
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon
+    ITKIOImageBase
+    ITKStatistics
+    ITKTransform
 )
 set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
-include(${ITK_USE_FILE})
+target_link_libraries(rectumsegmentation ${ITK_LIBRARIES})

@@ -102,55 +102,40 @@ add_library(test_core OBJECT ${SOURCES})
 
 ################ Internal library dependencies ################
 
-target_link_libraries(test_core core inputoutput interface q2dviewer q3dviewer mpr2d)
+target_link_libraries(test_core core)
 
 
 ################ External library dependencies ################
 
 find_package(Qt5 REQUIRED COMPONENTS
+    Core
+    Gui
     Network
-    OpenGL
 )
-target_link_libraries(test_core Qt5::Network Qt5::OpenGL)
+target_link_libraries(test_core Qt5::Core Qt5::Gui Qt5::Network)
 
 find_package(VTK REQUIRED COMPONENTS
+    vtkCommonCore
     vtkCommonDataModel
-    vtkGUISupportQt
-    vtkIOImage
+    vtkCommonExecutionModel
+    vtkCommonMath
     vtkImagingCore
-    vtkInteractionWidgets
-    vtkRenderingAnnotation
+    vtkImagingHybrid
     vtkRenderingCore
-    vtkRenderingImage
-    vtkRenderingOpenGL2
-    vtkRenderingVolumeOpenGL2
 )
-include(${VTK_USE_FILE})
 target_link_libraries(test_core ${VTK_LIBRARIES})
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon
-    ITKIOGDCM
-    ITKVTK
 )
 set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
-include(${ITK_USE_FILE})
 target_link_libraries(test_core ${ITK_LIBRARIES})
 
 find_package(DCMTK REQUIRED)
 target_include_directories(test_core SYSTEM PRIVATE
-    ${DCMTK_INCLUDE_DIRS}
     ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmdata
 )
+target_link_libraries(test_core ${DCMTK_LIBRARIES})
 
 find_package(GDCM REQUIRED)
-include(${GDCM_USE_FILE})
-target_link_libraries(test_core vtkgdcm)
-
-if(APPLE)
-    target_link_libraries(test_core "-framework OpenGL")
-elseif(UNIX)
-    target_link_libraries(test_core GLU)
-elseif(WIN32)
-    target_link_libraries(test_core glu32.lib)
-endif()
+target_link_libraries(test_core gdcmMSFF)

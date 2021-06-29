@@ -76,9 +76,7 @@ add_extension(experimental3d)
 get_target_includes(CORE_INCLUDES core YES)
 target_include_directories(experimental3d PUBLIC ${CORE_INCLUDES})
 
-get_target_includes(GLEW_INCLUDES glew YES)
-target_include_directories(experimental3d PUBLIC ${GLEW_INCLUDES})
-target_link_libraries(experimental3d glew)
+target_link_libraries(experimental3d core glew)
 
 
 ################ External library dependencies ################
@@ -86,17 +84,24 @@ target_link_libraries(experimental3d glew)
 find_package(Qt5 REQUIRED COMPONENTS
     Concurrent
     Core
+    Gui
+    OpenGL
     Widgets
 )
-target_link_libraries(experimental3d Qt5::Concurrent Qt5::Core Qt5::Widgets)
+target_link_libraries(experimental3d Qt5::Concurrent Qt5::Core Qt5::Gui Qt5::OpenGL Qt5::Widgets)
 
 find_package(VTK REQUIRED COMPONENTS
+    vtkCommonCore
     vtkCommonDataModel
+    vtkCommonMath
+    vtkGUISupportQt
+    vtkImagingCore
+    vtkImagingGeneral
+    vtkImagingMath
+    vtkInteractionStyle
+    vtkRenderingCore
+    vtkRenderingOpenGL2
+    vtkRenderingVolume
+    vtkRenderingVolumeOpenGL2
 )
-include(${VTK_USE_FILE})
-
-find_package(ITK REQUIRED COMPONENTS
-    ITKCommon
-)
-set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
-include(${ITK_USE_FILE})
+target_link_libraries(experimental3d ${VTK_LIBRARIES})

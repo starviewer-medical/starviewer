@@ -24,19 +24,17 @@ add_extension(angiosubstraction)
 get_target_includes(CORE_INCLUDES core YES)
 target_include_directories(angiosubstraction PUBLIC ${CORE_INCLUDES})
 
+target_link_libraries(angiosubstraction core)
+
 
 ################ External library dependencies ################
 
 find_package(Qt5 REQUIRED COMPONENTS
     Core
+    Gui
     Widgets
 )
-target_link_libraries(angiosubstraction Qt5::Core Qt5::Widgets)
-
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonDataModel
-)
-include(${VTK_USE_FILE})
+target_link_libraries(angiosubstraction Qt5::Core Qt5::Gui Qt5::Widgets)
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon
@@ -44,5 +42,4 @@ find_package(ITK REQUIRED COMPONENTS
     ITKTransform
 )
 set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
-include(${ITK_USE_FILE})
 target_link_libraries(angiosubstraction ${ITK_LIBRARIES})

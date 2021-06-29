@@ -23,6 +23,8 @@ add_extension(example)
 get_target_includes(CORE_INCLUDES core YES)
 target_include_directories(example PUBLIC ${CORE_INCLUDES})
 
+target_link_libraries(example core)
+
 
 ################ External library dependencies ################
 
@@ -31,8 +33,3 @@ find_package(Qt5 REQUIRED COMPONENTS
     Widgets
 )
 target_link_libraries(example Qt5::Core Qt5::Widgets)
-
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonDataModel
-)
-include(${VTK_USE_FILE})
