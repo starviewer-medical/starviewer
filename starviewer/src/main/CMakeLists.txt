@@ -31,9 +31,6 @@ add_executable(starviewer WIN32 MACOSX_BUNDLE ${SOURCES} ${RESOURCES} ${QM_FILES
 
 ################ Internal library dependencies ################
 
-get_target_includes(QTSINGLEAPPLICATION_INCLUDES qtsingleapplication NO)
-target_include_directories(starviewer PRIVATE ${QTSINGLEAPPLICATION_INCLUDES}/src)  # HACK because QtSingleApplication has a different structure
-
 target_link_libraries(starviewer core inputoutput interface breakpad easylogging++ qtsingleapplication)
 
 
