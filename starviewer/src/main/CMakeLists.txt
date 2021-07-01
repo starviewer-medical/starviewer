@@ -10,6 +10,12 @@ set(RESOURCES
     ../qml/qml.qrc
 )
 
+if(WIN32)
+    list(APPEND RESOURCES
+        starviewer.rc
+    )
+endif()
+
 if(STARVIEWER_CE)
     list(APPEND RESOURCES
         ../external/external.qrc
