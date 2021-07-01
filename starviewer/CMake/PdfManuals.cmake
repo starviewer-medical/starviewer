@@ -26,3 +26,5 @@ add_custom_command(
     DEPENDS ${FODT_MANUALS}
     VERBATIM
 )
+
+set_property(GLOBAL PROPERTY PDF_MANUALS ${PDF_MANUALS})
