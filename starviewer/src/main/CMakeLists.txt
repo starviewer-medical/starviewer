@@ -24,9 +24,11 @@ endif()
 
 add_translations(QM_FILES main main)
 
-include(ReleaseNotes)   # included here to have RELEASE_NOTES_DIR defined
+# These must be included here for the dependencies of the custom commands to work
+include(ReleaseNotes)
+include(PdfManuals)
 
-add_executable(starviewer WIN32 MACOSX_BUNDLE ${SOURCES} ${RESOURCES} ${QM_FILES} ${RELEASE_NOTES_DIR}/changelog.html)
+add_executable(starviewer WIN32 MACOSX_BUNDLE ${SOURCES} ${RESOURCES} ${QM_FILES} ${RELEASE_NOTES_DIR}/changelog.html ${PDF_MANUALS})
 
 
 ################ Internal library dependencies ################
