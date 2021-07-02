@@ -20,6 +20,8 @@ if(STARVIEWER_CE)
     list(APPEND RESOURCES
         ../external/external.qrc
     )
+
+    file(COPY ${DEPLOYMENT_REPO_DIR}/celabelsymbols DESTINATION ${CMAKE_SOURCE_DIR}/src/external)
 endif()
 
 if(USE_QTCONF AND WIN32)

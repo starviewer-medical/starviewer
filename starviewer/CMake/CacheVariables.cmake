@@ -1,0 +1,11 @@
+set(SDK_INSTALL_DIR "${CMAKE_SOURCE_DIR}/../sdk-install" CACHE PATH "Directory where the Starviewer SDK is installed.")
+if(WIN32)
+    set(QT_LAST_DIR msvc2017_64)
+elseif(APPLE)
+    set(QT_LAST_DIR clang_64)
+elseif(UNIX)
+    set(QT_LAST_DIR gcc_64)
+endif()
+set(QT_DIR ${SDK_INSTALL_DIR}/qt/5.12.6/${QT_LAST_DIR} CACHE PATH "Directory where Qt is installed.")
+
+set(DEPLOYMENT_REPO_DIR "${CMAKE_SOURCE_DIR}/../../starviewer-deployment" CACHE PATH "Directory of the deployment repository.")

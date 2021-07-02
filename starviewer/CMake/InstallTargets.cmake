@@ -1,11 +1,16 @@
 if(WIN32)
     # Targets
     install(TARGETS starviewer starviewer_crashreporter qtsingleapplication RUNTIME DESTINATION .)
-    install(TARGETS starviewer_sapwrapper RUNTIME DESTINATION . OPTIONAL)   # optional because it won't be built with Starviewer Lite
+    if(NOT STARVIEWER_LITE)
+        install(TARGETS starviewer_sapwrapper RUNTIME DESTINATION .)
+    endif()
 
     # Other files and directories
     install(DIRECTORY dicomdumpdefaulttags DESTINATION .)
     install(DIRECTORY hangingprotocols/Default/ DESTINATION hangingprotocols)
+    if(USE_SPECIFIC_HANGING_PROTOCOLS)
+        install(DIRECTORY ${DEPLOYMENT_REPO_DIR}/hangingprotocols/IDI/ DESTINATION hangingprotocols/Specific)
+    endif()
     install(DIRECTORY releasenotes DESTINATION . FILES_MATCHING PATTERN "*.html" PATTERN "*.css" PATTERN "*.svg")
     install(FILES bin/log.conf bin/mkisofs.exe bin/Part3.xml DESTINATION .)
     get_property(PDF_MANUALS GLOBAL PROPERTY PDF_MANUALS)

@@ -9,6 +9,7 @@ project(Starviewer
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMake)
 
 include(Options)
+include(CacheVariables)
 include(BuildSettings)
 include(DefaultSdkDirectories)
 
