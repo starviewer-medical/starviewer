@@ -22,3 +22,4 @@ add_subdirectory(tests)
 add_translation_targets()
 
 include(InstallTargets)
+include(Installers)
