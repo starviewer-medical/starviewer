@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=@CPACK_PACKAGE_NAME@
+Exec=/opt/starviewer/starviewer.sh
+Icon=/opt/starviewer/logo/64.svg
+Type=Application
+Categories=Graphics;Science;Biology;MedicalSoftware;
+Comment=Medical imaging DICOM image viewer

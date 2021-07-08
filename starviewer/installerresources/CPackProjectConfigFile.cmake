@@ -1,0 +1,5 @@
+if(${CPACK_GENERATOR} MATCHES "DEB|RPM")
+    set(CPACK_PACKAGING_INSTALL_PREFIX /opt/starviewer)
+    list(GET CPACK_BUILD_SOURCE_DIRS 0 SOURCE_DIR)
+    set(CPACK_INSTALL_SCRIPTS "${SOURCE_DIR}/installerresources/DebRpmCPackInstallScript.cmake")
+endif()
