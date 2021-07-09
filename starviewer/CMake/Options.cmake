@@ -9,7 +9,7 @@ option(STARVIEWER_CE "Build Starviewer with CE marking. Requires the deployment 
 option(STARVIEWER_LITE "Build Starviewer Lite instead of full Starviewer." OFF)
 
 option(SEND_HOST_DATA "Starviewer will send hashed MAC and work group id when checking for updates." OFF)
-option(USE_QTCONF "Include a qt.conf file in resources." OFF)
+option(USE_QTCONF "Include a qt.conf file in resources." ON)
 option(USE_SPECIFIC_HANGING_PROTOCOLS "Include institution-specific hanging protocols from the deployment repository." OFF)
 
 option(USE_CRASH_REPORTER "Enable the crash reporter." ON)
