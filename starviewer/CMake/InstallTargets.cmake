@@ -35,7 +35,13 @@ endif()
 
 ################ Libraries ################
 
-# TODO all Qt dlls in Windows are only for release, names are different for debug
+string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
+if(WIN32 AND ${BUILD_TYPE} STREQUAL debug)
+    set(DEBUG_LIBRARY_SUFFIX d)
+else()
+    set(DEBUG_LIBRARY_SUFFIX "")
+endif()
+
 set(PLUGINS
     iconengines/qsvgicon
     imageformats/qgif
@@ -83,13 +89,14 @@ endif()
 foreach(PLUGIN ${PLUGINS})
     # TODO use cmake_path from CMake 3.20
     string(REGEX MATCH "([^/]+)/([^/]+)" _ ${PLUGIN})
-    install(PROGRAMS "${QT_DIR}/plugins/${CMAKE_MATCH_1}/${CMAKE_SHARED_LIBRARY_PREFIX}${CMAKE_MATCH_2}${CMAKE_SHARED_LIBRARY_SUFFIX}" DESTINATION "plugins/${CMAKE_MATCH_1}")
+    set(FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${CMAKE_MATCH_2}${DEBUG_LIBRARY_SUFFIX}${CMAKE_SHARED_LIBRARY_SUFFIX})
+    install(PROGRAMS "${QT_DIR}/plugins/${CMAKE_MATCH_1}/${FILENAME}" DESTINATION "plugins/${CMAKE_MATCH_1}")
 endforeach()
 
 set(QMLS
     plugins.qmltypes
     qmldir
-    ${CMAKE_SHARED_LIBRARY_PREFIX}qtquick2plugin${CMAKE_SHARED_LIBRARY_SUFFIX}
+    ${CMAKE_SHARED_LIBRARY_PREFIX}qtquick2plugin${DEBUG_LIBRARY_SUFFIX}${CMAKE_SHARED_LIBRARY_SUFFIX}
 )
 foreach(QML ${QMLS})
     install(PROGRAMS "${QT_DIR}/qml/QtQuick.2/${QML}" DESTINATION qml/QtQuick.2)
@@ -137,7 +144,7 @@ if(UNIX AND NOT APPLE)
     )
 endif()
 foreach(LIB ${QT_LIBS})
-    set(FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${LIB}${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${LIB}${DEBUG_LIBRARY_SUFFIX}${CMAKE_SHARED_LIBRARY_SUFFIX})
     if(WIN32)
         install(PROGRAMS "${QT_DIR}/bin/${FILENAME}" DESTINATION .)
     elseif(UNIX AND NOT APPLE)
