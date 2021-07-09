@@ -24,10 +24,16 @@ if(STARVIEWER_CE)
     file(COPY ${DEPLOYMENT_REPO_DIR}/celabelsymbols DESTINATION ${CMAKE_SOURCE_DIR}/src/external)
 endif()
 
-if(USE_QTCONF AND WIN32)
-    list(APPEND RESOURCES
-        qtconf/win/qtconf.qrc
-    )
+if(USE_QTCONF)
+    if(WIN32)
+        list(APPEND RESOURCES
+            qtconf/win/qtconf.qrc
+        )
+    elseif(UNIX AND NOT APPLE)
+        list(APPEND RESOURCES
+            qtconf/linux/qtconf.qrc
+        )
+    endif()
 endif()
 
 add_translations(QM_FILES main main)
