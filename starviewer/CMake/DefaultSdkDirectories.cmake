@@ -1,0 +1,4 @@
+set(CMAKE_PREFIX_PATH
+    ${SDK_INSTALL_DIR}
+    ${QT_DIR}
+)

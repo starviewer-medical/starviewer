@@ -60,6 +60,7 @@
 #include <QMessageBox>
 #include <QListView>
 #include <QScrollBar>
+#include <QMouseEvent>
 
 #include "layoutmanager.h"
 

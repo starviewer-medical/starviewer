@@ -23,7 +23,7 @@ namespace udg {
 /**
     Vista gràfica d'una funció de transferència.
   */
-class QTransferFunctionGraphicalView : public QTransferFunctionView, private Ui::QTransferFunctionGraphicalViewBase {
+class QTransferFunctionGraphicalView : public QTransferFunctionView, private ::Ui::QTransferFunctionGraphicalViewBase {
 Q_OBJECT
 
 public:

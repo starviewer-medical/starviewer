@@ -15,7 +15,6 @@
 #ifndef NO_CRASH_REPORTER
 
 #include "crashhandler.h"
-#include "executablesnames.h"
 #include "../core/starviewerapplication.h"
 
 #include <QString>
