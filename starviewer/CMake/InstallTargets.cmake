@@ -1,8 +1,10 @@
 ################ Targets ################
 
-install(TARGETS starviewer starviewer_crashreporter qtsingleapplication RUNTIME DESTINATION .)
-if(NOT STARVIEWER_LITE)
-    install(TARGETS starviewer_sapwrapper RUNTIME DESTINATION .)
+if(NOT APPLE)
+    install(TARGETS starviewer starviewer_crashreporter qtsingleapplication RUNTIME DESTINATION .)
+    if(NOT STARVIEWER_LITE)
+        install(TARGETS starviewer_sapwrapper RUNTIME DESTINATION .)
+    endif()
 endif()
 
 
