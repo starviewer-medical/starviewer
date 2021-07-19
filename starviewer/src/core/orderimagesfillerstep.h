@@ -23,6 +23,7 @@
 namespace udg {
 
 class Image;
+class ImageOrientation;
 
 /**
  * @brief The OrderImagesFillerStep class orders images inside each volume.
@@ -57,9 +58,15 @@ public:
     /// used as the comparator function of std::sort. It's public to allow testing.
     static bool lesserAbstractValues(const Image *image1, const Image *image2);
 
+    /// Tries to detect stacks in \a images and sort them appropriately.
+    /// Precondition: \a images must be already spatially sorted and there are no phases.
+    /// Postcondition: The first and last images will remain the same and images will be sorted in stacks. If no stacks are detected nothing is changed.
+    /// It's public to allow testing.
+    static void autodetectStacksAndSort(QList<Image*> &images);
+
 private:
     /// Sorts spatially the given list of images. See class description or qms://doc/065875b1 for criteria.
-    static void spatialSort(QList<Image*> &images);
+    static void spatialSort(QList<Image*> &images, bool severalOrientations);
 
     /// Sorts the given list images according to lesserAbstractValues.
     static void basicSort(QList<Image*> &images);
@@ -82,6 +89,8 @@ private:
     QHash<Series*, QHash<int, SampleImagePerPosition>> m_sampleImagePerPositionPerVolume;
     /// Stores the list of images in each series and volume, for easy access. The inner one is a map to have volume numbers ordered.
     QHash<Series*, QMap<int, QList<Image*>>> m_imagesPerVolume;
+    /// Stores the set of different orientations in each series and volume.
+    QHash<Series*, QMap<int, QSet<ImageOrientation>>> m_orientationsPerVolume;
 
 };
 
