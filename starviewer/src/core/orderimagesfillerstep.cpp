@@ -129,6 +129,10 @@ bool OrderImagesFillerStep::canBeSpatiallySorted(Series *series, int volume) con
     // Here we check for "spatial consistence". Two consecutive images are considered spatially consistent if a line perpendicular to the first image and
     // passing through its center intersects the rectangle of the second image.
 
+    bool mayBeRotational = m_orientationsPerVolume[series][volume].size() == sampleImages.size();
+    double minimumSpacing = std::min(imagePlanes.first().getSpacing().x(), imagePlanes.first().getSpacing().y());
+    double absoluteEpsilon = minimumSpacing / 4;
+
     for (int i = 0; i < imagePlanes.size() - 1; i++)
     {
         const ImagePlane &imagePlane1 = imagePlanes[i];
@@ -139,7 +143,7 @@ bool OrderImagesFillerStep::canBeSpatiallySorted(Series *series, int volume) con
         Vector3 planeNormal = imagePlane2.getImageOrientation().getNormalVector();
         Vector3 planeP0 = imagePlane2.getCenter();
 
-        if (MathTools::almostEqual(lineP1, planeP0, std::numeric_limits<double>::epsilon(), 1e-7))
+        if (mayBeRotational && MathTools::almostEqual(lineP1, planeP0, absoluteEpsilon, 1e-5))
         {
             DEBUG_LOG("Two planes with same center, probably rotational");
             return false;
