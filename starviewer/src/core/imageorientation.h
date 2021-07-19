@@ -72,6 +72,8 @@ private:
     QVector3D m_normalVector;
 };
 
+uint qHash(const ImageOrientation &imageOrientation);
+
 } // End namespace udg
 
 #endif

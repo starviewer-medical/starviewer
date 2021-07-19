@@ -22,6 +22,7 @@
 #include "series.h"
 
 #include <functional>
+#include <unordered_map>
 
 #include <QtConcurrent>
 
@@ -47,11 +48,13 @@ bool OrderImagesFillerStep::fillIndividually()
         // it. Thus the first time each series and volume are processed new entries will be created but the next times they will be reused.
         SampleImagePerPosition &sampleImagePerPosition = m_sampleImagePerPositionPerVolume[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
         QList<Image*> &volumeImages = m_imagesPerVolume[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
+        QSet<ImageOrientation> &volumeOrientations = m_orientationsPerVolume[m_input->getCurrentSeries()][m_input->getCurrentVolumeNumber()];
 
         foreach (Image *image, m_input->getCurrentImages())
         {
             sampleImagePerPosition.add(image);
             volumeImages.append(image);
+            volumeOrientations.insert(image->getImageOrientationPatient());
         }
     }
 
@@ -70,7 +73,8 @@ void OrderImagesFillerStep::postProcessing()
 
             if (canBeSpatiallySorted(series, volume))
             {
-                spatialSort(volumeImages);
+                bool severalOrientations = m_orientationsPerVolume[series][volume].size() > 1;
+                spatialSort(volumeImages, severalOrientations);
             }
             else
             {
@@ -245,7 +249,66 @@ bool OrderImagesFillerStep::lesserAbstractValues(const Image *image1, const Imag
     return image1->getFrameNumber() < image2->getFrameNumber();
 }
 
-void OrderImagesFillerStep::spatialSort(QList<Image*> &images)
+void OrderImagesFillerStep::autodetectStacksAndSort(QList<Image*> &images)
+{
+    // We need at least 2 stacks of 2 images to consider stacks
+    if (images.size() < 4)
+    {
+        return;
+    }
+
+    QHash<ImageOrientation, int> orientationToStack;
+    std::multimap<int, Image*> stackToImages;
+    int nextStackNumber = 0;
+
+    foreach (Image *image, images)
+    {
+        const ImageOrientation &orientation = image->getImageOrientationPatient();
+
+        int stackNumber;
+        bool detectedNewStack = !orientationToStack.contains(orientation);
+
+        if (!detectedNewStack)  // existing stack
+        {
+            stackNumber = orientationToStack[orientation];
+
+            if (stackToImages.count(stackNumber) >= 2)  // check if distance between slices is maintained
+            {
+                auto it = stackToImages.upper_bound(stackNumber);
+                --it;
+                Image *image2 = it->second;
+                --it;
+                Image *image1 = it->second;
+
+                double d1 = Image::distance(image1);
+                double d2 = Image::distance(image2);
+                double d3 = Image::distance(image);
+                double previousDistance = d2 - d1;
+                double currentDistance = d3 - d2;
+
+                // Since images are pre-sorted by distance with this order of subtraction both values will be positive
+                // Warning: this will fail if there are unidentified stacks combined with phases, but we have never seen any such series yet
+                detectedNewStack = !MathTools::almostEqual(previousDistance, currentDistance, MathTools::Epsilon, 1e-5); // different distance -> new stack
+            }
+        }
+
+        if (detectedNewStack)
+        {
+            stackNumber = nextStackNumber;
+            nextStackNumber++;
+            orientationToStack[orientation] = stackNumber;
+            // If there are several stacks with the same orientation we only need to keep the last one because they are pre-sorted
+        }
+
+        stackToImages.insert({stackNumber, image});
+    }
+
+    Q_ASSERT(images.size() == stackToImages.size());
+
+    std::transform(stackToImages.begin(), stackToImages.end(), images.begin(), [](std::pair<int, Image*> pair) -> Image* { return pair.second; });
+}
+
+void OrderImagesFillerStep::spatialSort(QList<Image*> &images, bool severalOrientations)
 {
     // Used to use the first image of each group as map key
     struct ImageWrapper
@@ -279,6 +342,11 @@ void OrderImagesFillerStep::spatialSort(QList<Image*> &images)
             QList<Image*> &localImages = imagesPerStackAndAcquisition[acquisitionNumber][stackId];
             std::sort(localImages.begin(), localImages.end(), lesserSpatialPosition);
             sortedStacksPerAcquisition[acquisitionNumber].insert(localImages.first(), stackId);
+
+            if (severalOrientations && stackId.isEmpty())
+            {
+                autodetectStacksAndSort(localImages);
+            }
         }
 
         sortedAcquisitions.insert(sortedStacksPerAcquisition[acquisitionNumber].firstKey(), acquisitionNumber);

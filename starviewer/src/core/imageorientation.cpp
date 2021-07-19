@@ -139,4 +139,9 @@ void ImageOrientation::setVectorValuesToDefault()
     m_normalVector = EmptyVector;
 }
 
+uint qHash(const ImageOrientation &imageOrientation)
+{
+    return qHash(imageOrientation.getDICOMFormattedImageOrientation());
+}
+
 } // End namespace udg
