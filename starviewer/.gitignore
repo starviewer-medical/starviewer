@@ -25,6 +25,7 @@ src/external/celabelsymbols
 
 # QtCreator generated files
 *.pro.user*
+CMakeLists.txt.user*
 
 # Visual Studio generated files
 *.ib_pdb_index
