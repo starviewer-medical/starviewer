@@ -82,7 +82,7 @@
         <translation>Previsualización no disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="115"/>
+        <location filename="coresettings.cpp" line="124"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
@@ -945,11 +945,49 @@
     </message>
 </context>
 <context>
+    <name>udg::Q2DViewerLayoutConfigurationScreen</name>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreen.cpp" line="33"/>
+        <source>Settings change</source>
+        <translation>Cambio de configuración</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreen.cpp" line="34"/>
+        <source>This change will take effect the next time the 2D viewer extension is opened or when another patient is loaded.</source>
+        <translation>Este cambio tendrá efecto la próxima vez que se abra la extensión del visor 2D o cuando se cargue otro paciente.</translation>
+    </message>
+</context>
+<context>
     <name>udg::Q2DViewerLayoutConfigurationScreenBase</name>
     <message>
         <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="14"/>
         <source>2D Viewer Layout Configuration</source>
         <translation>Configuración de la distribución de los visores 2D</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="42"/>
+        <source>Division when comparing studies</source>
+        <translation>División cuando se comparan estudios</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="50"/>
+        <source>Current left, prior right</source>
+        <translation>Actual izquierda, previo derecha</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="55"/>
+        <source>Current right, prior left</source>
+        <translation>Actual derecha, previo izquierda</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="60"/>
+        <source>Current top, prior bottom</source>
+        <translation>Actual arriba, previo abajo</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerlayoutconfigurationscreenbase.ui" line="65"/>
+        <source>Current bottom, prior top</source>
+        <translation>Actual abajo, previo arriba</translation>
     </message>
 </context>
 <context>
@@ -1005,7 +1043,7 @@
 <context>
     <name>udg::QCustomWindowLevelDialogBase</name>
     <message>
-        <location filename="qcustomwindowleveldialogbase.ui" line="50"/>
+        <location filename="qcustomwindowleveldialogbase.ui" line="23"/>
         <source>Window Width</source>
         <translation>Contraste</translation>
     </message>
@@ -1107,6 +1145,19 @@
     </message>
 </context>
 <context>
+    <name>udg::QDPIConfigurationScreen</name>
+    <message>
+        <location filename="qdpiconfigurationscreen.cpp" line="77"/>
+        <source>Restart required</source>
+        <translation>Reinicio necesario</translation>
+    </message>
+    <message>
+        <location filename="qdpiconfigurationscreen.cpp" line="77"/>
+        <source>In order to see the magnification changes you must restart Starviewer.</source>
+        <translation>Para ver los cambios en la magnificación debe reiniciar Starviewer.</translation>
+    </message>
+</context>
+<context>
     <name>udg::QDPIConfigurationScreenBase</name>
     <message>
         <location filename="qdpiconfigurationscreenbase.ui" line="14"/>
@@ -1189,27 +1240,27 @@ Tendrá que reiniciar Starviewer para ver los cambios.</translation>
         <translation>Algunos tests han fallado</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="205"/>
+        <location filename="qdiagnosistest.cpp" line="206"/>
         <source>Timestamp: %1</source>
         <translation>Marca temporal: %1</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="206"/>
+        <location filename="qdiagnosistest.cpp" line="207"/>
         <source>Test details</source>
         <translation>Detalles de los tests</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="207"/>
+        <location filename="qdiagnosistest.cpp" line="208"/>
         <source>System information</source>
         <translation>Información del sistema</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="287"/>
+        <location filename="qdiagnosistest.cpp" line="288"/>
         <source>Save diagnosis tests results</source>
         <translation>Guardar resultados de tests de diagnóstico</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="287"/>
+        <location filename="qdiagnosistest.cpp" line="289"/>
         <source>JSON files (*.json)</source>
         <translation>Archivos JSON (*.json)</translation>
     </message>

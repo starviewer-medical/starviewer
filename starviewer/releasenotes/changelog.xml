@@ -1,6 +1,40 @@
 <?xml version="1.0"?>
 <releasenotes version="1">
 
+ <release magnitude="minor">
+  <version>1.1.1</version>
+  <date>2021-07-22</date>
+  <changes>
+   <nw>
+    <d>Es pot canviar el pla de reconstrucció (axial, sagital, coronal) de tots els visors alhora amb doble clic o Shift+clic al botó corresponent o bé amb les
+       dreceres Ctrl+Shift+1, 2 o 3.</d>
+    <t>2111</t>
+   </nw>
+   <nw>
+    <d>Es pot configurar la divisió entre l'estudi actual i el previ.</d>
+    <t>2117</t>
+   </nw>
+   <im>
+    <d>No es modifica la posició d'altres visors quan es canvia la projecció d'un visor, encara que estigui la sincronització automàtica activada.</d>
+    <t>2962</t>
+   </im>
+   <fx>
+    <d>S'ha solucionat un problema que feia que aplicant un reset a un visor coronal o sagital amb la sincronització automàtica activada l'axial tornés al
+       primer tall.</d>
+    <t>2045</t>
+   </fx>
+   <fx>
+    <d>S'han resolt alguns problemes d'ordenació d'imatges en sèries de RM lumbars i MIPs rotacionals.</d>
+    <t>2968</t>
+    <t>2970</t>
+    <t>2971</t>
+   </fx>
+   <fx>
+    <d>Diverses correccions menors.</d>
+   </fx>
+  </changes>
+ </release>
+
  <release magnitude="major">
   <version>1.1.0</version>
   <date>2021-04-09</date>
