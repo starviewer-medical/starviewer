@@ -28,61 +28,21 @@ AutomaticSynchronizationToolData::~AutomaticSynchronizationToolData()
 {
 }
 
-void AutomaticSynchronizationToolData::setPosition(QString frameOfReferenceUID, QString view, double position[3], double displacement)
+void AutomaticSynchronizationToolData::setPosition(const QString &frameOfReferenceUID, const QString &view, const std::array<double, 3> &position)
 {
-    double *newPosition = new double[3];
-
-    if (m_positionForEachFrameOfReferenceAndReconstruction.contains(frameOfReferenceUID))
-    {
-        QHash<QString, double*> valuesForThisFrameOfReferenceUID = m_positionForEachFrameOfReferenceAndReconstruction.value(frameOfReferenceUID);
-
-        if (valuesForThisFrameOfReferenceUID.contains(view))
-        {
-            newPosition = valuesForThisFrameOfReferenceUID.take(view);
-            newPosition[0] = position[0];
-            newPosition[1] = position[1];
-            newPosition[2] = position[2];
-            valuesForThisFrameOfReferenceUID.insert(view,newPosition);
-        }
-        else
-        {
-            newPosition[0] = position[0];
-            newPosition[1] = position[1];
-            newPosition[2] = position[2];
-
-            valuesForThisFrameOfReferenceUID.insert(view, newPosition);
-        }
-        
-        m_positionForEachFrameOfReferenceAndReconstruction.insert(frameOfReferenceUID,valuesForThisFrameOfReferenceUID);
-    }
-    else
-    {
-        newPosition[0] = position[0];
-        newPosition[1] = position[1];
-        newPosition[2] = position[2];
-        
-        QHash<QString, double*> newPositionForReconstruction;
-        newPositionForReconstruction.insert(view, newPosition);
-        m_positionForEachFrameOfReferenceAndReconstruction.insert(frameOfReferenceUID, newPositionForReconstruction);
-    }
+    // This will return the existing entry or create a new one and return it if it does not exist. Then we only need to update it in either case.
+    QHash<QString, std::array<double, 3>> &valuesForThisFrameOfReferenceUID = m_positionForEachFrameOfReferenceAndReconstruction[frameOfReferenceUID];
+    valuesForThisFrameOfReferenceUID[view] = position;
 
     m_selectedView = view;
-    m_lastDisplacement = displacement;
     m_selectedUID = frameOfReferenceUID;
 
     emit changed();
 }
 
-double* AutomaticSynchronizationToolData::getPosition(QString frameOfReferenceUID, QString view) const
+std::array<double, 3> AutomaticSynchronizationToolData::getPosition(const QString &frameOfReferenceUID, const QString &view) const
 {
-    double *position;
-    
-    if (m_positionForEachFrameOfReferenceAndReconstruction.contains(frameOfReferenceUID))
-    {
-        position = m_positionForEachFrameOfReferenceAndReconstruction.value(frameOfReferenceUID).value(view);
-    }
-
-    return position;
+    return m_positionForEachFrameOfReferenceAndReconstruction[frameOfReferenceUID].value(view, {0.0, 0.0, 0.0});
 }
 
 bool AutomaticSynchronizationToolData::hasPosition(QString frameOfReferenceUID, QString view)
@@ -144,15 +104,9 @@ int AutomaticSynchronizationToolData::getSelectedGroup()
     return m_UIDgroup.value(m_selectedUID);
 }
 
-double AutomaticSynchronizationToolData::getDisplacement()
-{
-    return m_lastDisplacement;
-}
-
 void AutomaticSynchronizationToolData::updateActiveViewer(QString uid, QString view)
 {
     m_selectedView = view;
-    m_lastDisplacement = 0;
     m_selectedUID = uid;
 }
 

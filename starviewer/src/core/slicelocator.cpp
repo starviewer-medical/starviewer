@@ -43,7 +43,7 @@ void SliceLocator::setPlane(const OrthogonalPlane &plane)
     m_volumePlane = plane;
 }
 
-int SliceLocator::getNearestSlice(double point[3])
+int SliceLocator::getNearestSlice(const double point[3])
 {
     if (!m_volume)
     {

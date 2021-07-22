@@ -45,6 +45,9 @@ const QString Shortcuts::InvertVoiLutTool(ShortcutsBase + "InvertVoiLutTool");
 const QString Shortcuts::AxialViewTool(ShortcutsBase + "AxialViewTool");
 const QString Shortcuts::SagitalViewTool(ShortcutsBase + "SagitalViewTool");
 const QString Shortcuts::CoronalViewTool(ShortcutsBase + "CoronalViewTool");
+const QString Shortcuts::AllViewersAxial(ShortcutsBase + "AllViewersAxial");
+const QString Shortcuts::AllViewersSagittal(ShortcutsBase + "AllViewersSagittal");
+const QString Shortcuts::AllViewersCoronal(ShortcutsBase + "AllViewersCoronal");
 const QString Shortcuts::RotateClockWiseTool(ShortcutsBase + "RotateClockWiseTool");
 const QString Shortcuts::RotateCounterClockWiseTool(ShortcutsBase + "RotateCounterClockWiseTool");
 const QString Shortcuts::HorizontalFlipTool(ShortcutsBase + "HorizontalFlipTool");
@@ -211,6 +214,18 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("Ctrl+3"));
     settingsRegistry->addSetting(CoronalViewTool, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+1"));
+    settingsRegistry->addSetting(AllViewersAxial, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+2"));
+    settingsRegistry->addSetting(AllViewersSagittal, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Ctrl+Shift+3"));
+    settingsRegistry->addSetting(AllViewersCoronal, shortcutsList);
 
     shortcutsList.clear();
     shortcutsList.append(QString("G"));

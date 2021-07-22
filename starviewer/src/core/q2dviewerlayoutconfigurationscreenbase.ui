@@ -14,7 +14,7 @@
    <string>2D Viewer Layout Configuration</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../main/main.qrc">
+   <iconset>
     <normaloff>:/images/icons/preferences-layout.svg</normaloff>:/images/icons/preferences-layout.svg</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -35,6 +35,41 @@
     </widget>
    </item>
    <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Division when comparing studies</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="m_comparisonModeDivisionComboBox">
+       <item>
+        <property name="text">
+         <string>Current left, prior right</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Current right, prior left</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Current top, prior bottom</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Current bottom, prior top</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -52,9 +87,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../main/main.qrc"/>
-  <include location="../main/main.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
