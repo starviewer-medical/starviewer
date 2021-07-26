@@ -1,6 +1,7 @@
 # Notes:
 # - STARVIEWER_CE shall not be used with STARVIEWER_BETA or STARVIEWER_LITE.
-# - CE should be combined with SEND_HOST_DATA and USE_QTCONF.
+# - STARVIEWER_CE should be combined with SEND_HOST_DATA and USE_QTCONF.
+# - USE_QTCONF should be disabled for development, otherwise Qt plugins are not found in Qt folder.
 # - USE_CRASH_REPORTER and USE_PACS_COMPRESSION should always be left ON under normal circumstances.
 # - USE_CUDA is totally untested, probably would not work without changes.
 
@@ -9,7 +10,7 @@ option(STARVIEWER_CE "Build Starviewer with CE marking. Requires the deployment 
 option(STARVIEWER_LITE "Build Starviewer Lite instead of full Starviewer." OFF)
 
 option(SEND_HOST_DATA "Starviewer will send hashed MAC and work group id when checking for updates." OFF)
-option(USE_QTCONF "Include a qt.conf file in resources." ON)
+option(USE_QTCONF "Include a qt.conf file in resources. Enable if you intend to install Starviewer." OFF)
 option(USE_SPECIFIC_HANGING_PROTOCOLS "Include institution-specific hanging protocols from the deployment repository." OFF)
 
 option(USE_CRASH_REPORTER "Enable the crash reporter." ON)
