@@ -21,21 +21,6 @@
 using namespace testing;
 using namespace udg;
 
-class TestingVolumePixelDataReaderFactory : public VolumePixelDataReaderFactory {
-
-public:
-
-    TestingSettings m_testingSettings;
-
-private:
-
-    virtual SettingsInterface* getSettings() const
-    {
-        return new TestingSettings(m_testingSettings);
-    }
-
-};
-
 class test_VolumePixelDataReaderFactory : public QObject {
 
     Q_OBJECT
@@ -45,6 +30,7 @@ private slots:
     void getReader_ShouldReturnExpectedReaderType_data();
     void getReader_ShouldReturnExpectedReaderType();
 
+    void cleanupTestCase();
 };
 
 Q_DECLARE_METATYPE(Volume*)
@@ -145,8 +131,9 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
     QFETCH(TestingSettings, testingSettings);
     QFETCH(QString, expectedReaderType);
 
-    TestingVolumePixelDataReaderFactory factory;
-    factory.m_testingSettings = testingSettings;
+    Settings::setStaticTestingSettings(&testingSettings);
+
+    VolumePixelDataReaderFactory factory;
     factory.setVolume(volume);
     VolumePixelDataReader *reader = factory.getReader();
 
@@ -154,6 +141,11 @@ void test_VolumePixelDataReaderFactory::getReader_ShouldReturnExpectedReaderType
 
     delete reader;
     VolumeTestHelper::cleanUp(volume);
+}
+
+void test_VolumePixelDataReaderFactory::cleanupTestCase()
+{
+    Settings::setStaticTestingSettings(nullptr);
 }
 
 DECLARE_TEST(test_VolumePixelDataReaderFactory)

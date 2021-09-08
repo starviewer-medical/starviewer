@@ -131,7 +131,6 @@ QQueue< QSharedPointer<Postprocessor> > VolumePixelDataReaderFactory::getPostpro
 
 VolumePixelDataReaderFactory::PixelDataReaderType VolumePixelDataReaderFactory::getSuitableReader(Volume *volume) const
 {
-    QScopedPointer<SettingsInterface> settings(this->getSettings());
     PixelDataReaderType readerType;
 
     // Start by checking if reader type is forced by settings
@@ -164,10 +163,10 @@ bool VolumePixelDataReaderFactory::mustForceReaderLibraryBackdoor(Volume *volume
     Q_ASSERT(volume);
 
     bool forceLibrary = false;
-    QScopedPointer<SettingsInterface> settings(this->getSettings());
+    Settings settings;
 
     // First check setting to force read everything with the same implementation
-    QString forceReadingWithSpecfiedLibrary = settings->getValue(CoreSettings::ForcedImageReaderLibrary).toString().trimmed();
+    QString forceReadingWithSpecfiedLibrary = settings.getValue(CoreSettings::ForcedImageReaderLibrary).toString().trimmed();
     if (forceReadingWithSpecfiedLibrary == "vtk")
     {
         INFO_LOG("Force read everything with VTK-GDCM");
@@ -200,7 +199,7 @@ bool VolumePixelDataReaderFactory::mustForceReaderLibraryBackdoor(Volume *volume
         QString modality = volume->getModality();
 
         // Check for modalities to force read with ITK-GDCM
-        QStringList forceITKForModalities = settings->getValue(CoreSettings::ForceITKImageReaderForSpecifiedModalities).toString().trimmed().split("\\");
+        QStringList forceITKForModalities = settings.getValue(CoreSettings::ForceITKImageReaderForSpecifiedModalities).toString().trimmed().split("\\");
         if (forceITKForModalities.contains(modality))
         {
             INFO_LOG("Force read current volume with ITK-GDCM because its modality is " + modality);
@@ -211,7 +210,7 @@ bool VolumePixelDataReaderFactory::mustForceReaderLibraryBackdoor(Volume *volume
         // If not forced read with ITK-GDCM, then check for VTK-GDCM
         if (!forceLibrary)
         {
-            QStringList forceVTKForModalities = settings->getValue(CoreSettings::ForceVTKImageReaderForSpecifiedModalities).toString().trimmed().split("\\");
+            QStringList forceVTKForModalities = settings.getValue(CoreSettings::ForceVTKImageReaderForSpecifiedModalities).toString().trimmed().split("\\");
             if (forceVTKForModalities.contains(modality))
             {
                 INFO_LOG("Force read current volume with VTK-GDCM because its modality is " + modality);
@@ -222,11 +221,6 @@ bool VolumePixelDataReaderFactory::mustForceReaderLibraryBackdoor(Volume *volume
     }
 
     return forceLibrary;
-}
-
-SettingsInterface* VolumePixelDataReaderFactory::getSettings() const
-{
-    return new Settings();
 }
 
 } // namespace udg
