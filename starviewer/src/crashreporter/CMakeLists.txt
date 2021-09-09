@@ -4,8 +4,10 @@ set(SOURCES
     ../core/coresettings.cpp
     ../core/defaultsettings.cpp
     ../core/logging.cpp
+    ../core/persistentsettings.cpp
     ../core/settings.cpp
     ../core/settingsaccesslevelfilereader.cpp
+    ../core/settingsinterface.cpp
     ../core/settingsparser.cpp
     ../core/settingsregistry.cpp
     ../core/starviewerapplication.cpp

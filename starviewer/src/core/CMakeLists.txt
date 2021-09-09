@@ -176,6 +176,7 @@ set(SOURCES
     patientfillerinput.cpp
     patientfillerstep.cpp
     patientorientation.cpp
+    persistentsettings.cpp
     perpendiculardistancetool.cpp
     petctfusionroidataprinter.cpp
     petctvolumedisplayunithandler.cpp
@@ -260,6 +261,7 @@ set(SOURCES
     series.cpp
     settings.cpp
     settingsaccesslevelfilereader.cpp
+    settingsinterface.cpp
     settingsparser.cpp
     settingsregistry.cpp
     shadewidget.cpp
