@@ -159,13 +159,17 @@ void PersistentSettings::addListItem(const QString &key, const Settings::Setting
 
 void PersistentSettings::setListItem(int index, const QString &key, const Settings::SettingsListItemType &item)
 {
-    // TODO according to history, a previous implementation that just modified the corresponding item was wrong (no more details)
-    Settings::SettingListType list = getList(key);
+    QSettings *qsettings = getSettingsObject(key);
 
-    if (index >= 0 && index < list.size())
+    int arraySize = qsettings->beginReadArray(key);
+    qsettings->endArray();
+
+    if (index >= 0 && index < arraySize)
     {
-        list[index] = item;
-        setList(key, list);
+        qsettings->beginWriteArray(key, arraySize);
+        qsettings->setArrayIndex(index);
+        dumpSettingsListItem(item, qsettings);
+        qsettings->endArray();
     }
     else
     {
