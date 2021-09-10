@@ -16,14 +16,17 @@
 
 #include "screenmanager.h"
 
-#ifdef WIN32
+#if defined Q_OS_WIN32
 #include "windowssysteminformation.h"
+#elif defined Q_OS_LINUX
+#include "linuxsysteminformation.h"
 #endif
 
 // Qt
 #include <QDesktopWidget>
 #include <QRect>
 #include <QSize>
+#include <QThread>
 
 namespace udg {
 
@@ -37,8 +40,10 @@ SystemInformation::~SystemInformation()
 
 SystemInformation* SystemInformation::newInstance()
 {
-#ifdef WIN32
+#if defined Q_OS_WIN32
     return new WindowsSystemInformation();
+#elif defined Q_OS_LINUX
+    return new LinuxSystemInformation();
 #else
     return new SystemInformation();
 #endif
@@ -51,7 +56,8 @@ SystemInformation::OperatingSystem SystemInformation::getOperatingSystem()
 
 QString SystemInformation::getOperatingSystemAsString()
 {
-    return "Unknown";
+    return QString("%1 %2 (%3 %4)").arg(QSysInfo::prettyProductName()).arg(QSysInfo::currentCpuArchitecture())
+                                   .arg(QSysInfo::kernelType()).arg(QSysInfo::kernelVersion());
 }
 
 QString SystemInformation::getOperatingSystemAsShortString()
@@ -91,7 +97,7 @@ QList<unsigned int> SystemInformation::getRAMModulesFrequency()
 
 unsigned int SystemInformation::getCPUNumberOfCores()
 {
-    return 0;
+    return QThread::idealThreadCount();
 }
 
 QList<unsigned int> SystemInformation::getCPUFrequencies()
@@ -185,6 +191,11 @@ bool SystemInformation::isDesktopCompositionAvailable()
 bool SystemInformation::isDesktopCompositionEnabled()
 {
     return false;
+}
+
+QString SystemInformation::getDesktopInformation() const
+{
+    return QObject::tr("N/A");
 }
 
 }

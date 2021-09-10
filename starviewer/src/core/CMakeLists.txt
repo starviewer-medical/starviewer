@@ -384,6 +384,10 @@ if(WIN32)
         windowsfirewallaccess.cpp
         windowssysteminformation.cpp
     )
+elseif(UNIX AND NOT APPLE)
+    list(APPEND SOURCES
+        linuxsysteminformation.cpp
+    )
 endif()
 
 set(FORMS

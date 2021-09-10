@@ -85,6 +85,9 @@ public:
     /// For systems with desktop composition feature, tells if this feature is enabled or not
     virtual bool isDesktopCompositionEnabled();
 
+    /// Returns information about the desktop environment and compositor on Linux. Irrelevant on other platforms.
+    virtual QString getDesktopInformation() const;
+
 protected:
     SystemInformation();
 };

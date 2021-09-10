@@ -39,6 +39,8 @@ QStringList getSystemInformation()
 {
     std::unique_ptr<SystemInformation> systemInformation(SystemInformation::newInstance());
     QStringList systemDetails{QObject::tr("Operating system: %1").arg(systemInformation->getOperatingSystemAsString())};
+
+#ifdef Q_OS_WIN32
     QString desktopComposition(QObject::tr("Desktop composition: %1"));
 
     if (systemInformation->isDesktopCompositionAvailable())
@@ -57,8 +59,14 @@ QStringList getSystemInformation()
         desktopComposition = desktopComposition.arg(QObject::tr("Not available"));
     }
 
-    systemDetails << desktopComposition
-                  << QObject::tr("RAM memory: %1 MB").arg(systemInformation->getRAMTotalAmount());
+    systemDetails << desktopComposition;
+#endif
+
+#ifdef Q_OS_LINUX
+    systemDetails << QObject::tr("Desktop: %1").arg(systemInformation->getDesktopInformation());
+#endif
+
+    systemDetails << QObject::tr("RAM memory: %1 MB").arg(systemInformation->getRAMTotalAmount());
     QStringList cpus;
 
     foreach (unsigned int frequency, systemInformation->getCPUFrequencies())
