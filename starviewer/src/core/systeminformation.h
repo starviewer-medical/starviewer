@@ -33,9 +33,6 @@ public:
 
     virtual OperatingSystem getOperatingSystem();
     
-    // Arquitectura de 32-bits o 64-bits
-    virtual bool isOperatingSystem64BitArchitecture();
-    
     virtual QString getOperatingSystemVersion();
     
     /// Retorna la versió de service pack instal·lat, només en windows

@@ -66,11 +66,6 @@ QString SystemInformation::getOperatingSystemAsShortString()
     return QString("%1_%2_%3").arg(QSysInfo::productType()).arg(QSysInfo::productVersion()).arg(QSysInfo::currentCpuArchitecture());
 }
 
-bool SystemInformation::isOperatingSystem64BitArchitecture()
-{
-    return true;
-}
-
 QString SystemInformation::getOperatingSystemVersion()
 {
     return "";
