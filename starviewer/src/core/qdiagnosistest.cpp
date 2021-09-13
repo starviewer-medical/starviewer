@@ -193,7 +193,7 @@ void QDiagnosisTest::finishedRunningDiagnosisTest()
         m_resultsTitleLabel->setText(tr("Some tests have failed"));
         m_viewTestsLabel->hide();
         m_correctPushButton->setChecked(false);
-        this->resize(640, 540); // hardcoded default size to show results (don't worry, used only here and below)
+        this->resize(768, 576); // hardcoded default size to show results (don't worry, used only here and below)
     }
 
     m_progressBarWidget->hide();
@@ -204,7 +204,7 @@ void QDiagnosisTest::viewTestsLabelClicked()
 {
     m_buttonsAndScrollAreaWidget->show();
     m_viewTestsLabel->hide();
-    this->resize(640, 540); // hardcoded default size to show results (don't worry, used only here and above)
+    this->resize(768, 576); // hardcoded default size to show results (don't worry, used only here and above)
 }
 
 void QDiagnosisTest::fillDiagnosisTestsResultTable()

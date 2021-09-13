@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>581</width>
-    <height>455</height>
+    <width>768</width>
+    <height>576</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -225,8 +225,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>563</width>
-              <height>235</height>
+              <width>756</width>
+              <height>336</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -294,6 +294,8 @@
   </layout>
  </widget>
  <resources>
+  <include location="../main/main.qrc"/>
+  <include location="../main/main.qrc"/>
   <include location="../main/main.qrc"/>
  </resources>
  <connections/>
