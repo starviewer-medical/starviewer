@@ -15,6 +15,8 @@ set(SOURCES
     dimsecservice.cpp
     echotopacs.cpp
     echotopacstest.cpp
+    firewallaccess.cpp
+    firewallaccesstest.cpp
     gdcmanonymizerstarviewer.cpp
     incomingdicomconnectionsportinusetest.cpp
     inputoutputsettings.cpp
@@ -79,7 +81,12 @@ set(SOURCES
 
 if(WIN32)
     list(APPEND SOURCES
+        windowsfirewallaccess.cpp
         windowsportinusebyanotherapplication.cpp
+    )
+elseif(UNIX AND NOT APPLE)
+    list(APPEND SOURCES
+        linuxfirewallaccess.cpp
     )
 endif()
 

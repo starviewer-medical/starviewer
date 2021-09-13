@@ -92,8 +92,6 @@ set(SOURCES
     externalapplicationsmanager.cpp
     filter.cpp
     filteroutput.cpp
-    firewallaccess.cpp
-    firewallaccesstest.cpp
     formula.cpp
     formulacalculator.cpp
     frameofreferencesynccriterion.cpp
@@ -381,7 +379,6 @@ set(SOURCES
 
 if(WIN32)
     list(APPEND SOURCES
-        windowsfirewallaccess.cpp
         windowssysteminformation.cpp
     )
 elseif(UNIX AND NOT APPLE)
