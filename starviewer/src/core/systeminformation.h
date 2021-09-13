@@ -73,7 +73,8 @@ public:
 
     virtual QStringList getHardDiskDevices();
     virtual unsigned int getHardDiskCapacity(const QString &device);
-    virtual unsigned int getHardDiskFreeSpace(const QString &device);
+    /// Returns free space in MiB in the filesystem containing the given path.
+    virtual quint64 getHardDiskFreeSpace(const QString &path);
     virtual bool doesOpticalDriveHaveWriteCapabilities();
 
     virtual unsigned int getNetworkAdapterSpeed();

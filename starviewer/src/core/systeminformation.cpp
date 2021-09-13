@@ -14,6 +14,7 @@
 
 #include "systeminformation.h"
 
+#include "harddiskinformation.h"
 #include "screenmanager.h"
 
 #if defined Q_OS_WIN32
@@ -167,10 +168,10 @@ unsigned int SystemInformation::getHardDiskCapacity(const QString &device)
     return 0;
 }
 
-unsigned int SystemInformation::getHardDiskFreeSpace(const QString &device)
+quint64 SystemInformation::getHardDiskFreeSpace(const QString &path)
 {
-    Q_UNUSED(device);
-    return 0;
+    HardDiskInformation hardDiskInformation;
+    return hardDiskInformation.getNumberOfFreeMBytes(path);
 }
 
 bool SystemInformation::doesOpticalDriveHaveWriteCapabilities()

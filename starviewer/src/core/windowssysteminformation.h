@@ -59,7 +59,6 @@ public:
 
     QStringList getHardDiskDevices();
     unsigned int getHardDiskCapacity(const QString &device); // Del disc dur que conté la carpeta de la cache de Starviewer
-    unsigned int getHardDiskFreeSpace(const QString &device);
     bool doesOpticalDriveHaveWriteCapabilities();
 
     unsigned int getNetworkAdapterSpeed();

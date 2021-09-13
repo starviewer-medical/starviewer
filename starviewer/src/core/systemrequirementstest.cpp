@@ -48,8 +48,7 @@ DiagnosisTestResult SystemRequirementsTest::run()
     const unsigned int MinimumScreenWidth = requirements->getMinimumScreenWidth();
     const unsigned int MinimumDiskSpace = requirements->getMinimumHardDiskFreeSpace();
 
-    // TODO Temporal, s'ha de treure i veure com obtenir la unitat on està starviewer
-    const QString whichHardDisk = "C:";
+    const QString whichHardDisk = QCoreApplication::applicationDirPath();
 
     SystemInformation *system = SystemInformation::newInstance();
     DiagnosisTestResult result;

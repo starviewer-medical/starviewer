@@ -159,6 +159,28 @@ QStringList LinuxSystemInformation::getGPUDriverVersion()
     return {parseGlxinfo(R"(Version: (.*)\n)")};
 }
 
+bool LinuxSystemInformation::doesOpticalDriveHaveWriteCapabilities()
+{
+    QFile cdromInfoFile("/proc/sys/dev/cdrom/info");
+
+    if (!cdromInfoFile.exists())
+    {
+        return false;
+    }
+
+    if (cdromInfoFile.open(QFile::ReadOnly | QFile::Text))
+    {
+        QString cdromInfo = cdromInfoFile.readAll();
+        cdromInfoFile.close();
+        return cdromInfo.contains(QRegularExpression("Can write.*1"));
+    }
+    else
+    {
+        WARN_LOG(QString("Can't read file %1").arg(cdromInfoFile.fileName()));
+        return false;
+    }
+}
+
 QString LinuxSystemInformation::getDesktopInformation() const
 {
     QString desktop, display;

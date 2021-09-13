@@ -40,6 +40,9 @@ public:
     /// Returns driver version for each GPU.
     QStringList getGPUDriverVersion() override;
 
+    /// Returns true if an optical drive in the system can write any media, and false otherwise.
+    bool doesOpticalDriveHaveWriteCapabilities() override;
+
     /// Returns information about the desktop environment and compositor on Linux.
     QString getDesktopInformation() const override;
 };
