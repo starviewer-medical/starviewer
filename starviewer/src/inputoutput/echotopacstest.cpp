@@ -46,6 +46,11 @@ DiagnosisTestResult EchoToPACSTest::run()
     
     for (int i = 0; i < pacsList.count(); i++)
     {
+        if (QThread::currentThread()->isInterruptionRequested())
+        {
+            break;
+        }
+
         EchoToPACS::EchoRequestStatus status = echo(pacsList.at(i));
 
         if (status != EchoToPACS::EchoOk)

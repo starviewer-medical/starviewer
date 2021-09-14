@@ -5,6 +5,7 @@ set(SOURCES
     test_dicommask.cpp
     test_echotopacs.cpp
     test_echotopacstest.cpp
+    test_firewallaccesstest.cpp
     test_localdatabasebasedal.cpp
     test_pacsdevice.cpp
     test_pacsdevicemanager.cpp

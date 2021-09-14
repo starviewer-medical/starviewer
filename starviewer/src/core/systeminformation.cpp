@@ -14,16 +14,20 @@
 
 #include "systeminformation.h"
 
+#include "harddiskinformation.h"
 #include "screenmanager.h"
 
-#ifdef WIN32
+#if defined Q_OS_WIN32
 #include "windowssysteminformation.h"
+#elif defined Q_OS_LINUX
+#include "linuxsysteminformation.h"
 #endif
 
 // Qt
 #include <QDesktopWidget>
 #include <QRect>
 #include <QSize>
+#include <QThread>
 
 namespace udg {
 
@@ -37,8 +41,10 @@ SystemInformation::~SystemInformation()
 
 SystemInformation* SystemInformation::newInstance()
 {
-#ifdef WIN32
+#if defined Q_OS_WIN32
     return new WindowsSystemInformation();
+#elif defined Q_OS_LINUX
+    return new LinuxSystemInformation();
 #else
     return new SystemInformation();
 #endif
@@ -51,17 +57,13 @@ SystemInformation::OperatingSystem SystemInformation::getOperatingSystem()
 
 QString SystemInformation::getOperatingSystemAsString()
 {
-    return "Unknown";
+    return QString("%1 %2 (%3 %4)").arg(QSysInfo::prettyProductName()).arg(QSysInfo::currentCpuArchitecture())
+                                   .arg(QSysInfo::kernelType()).arg(QSysInfo::kernelVersion());
 }
 
 QString SystemInformation::getOperatingSystemAsShortString()
 {
-    return "Unknown";
-}
-
-bool SystemInformation::isOperatingSystem64BitArchitecture()
-{
-    return true;
+    return QString("%1_%2_%3").arg(QSysInfo::productType()).arg(QSysInfo::productVersion()).arg(QSysInfo::currentCpuArchitecture());
 }
 
 QString SystemInformation::getOperatingSystemVersion()
@@ -91,7 +93,7 @@ QList<unsigned int> SystemInformation::getRAMModulesFrequency()
 
 unsigned int SystemInformation::getCPUNumberOfCores()
 {
-    return 0;
+    return QThread::idealThreadCount();
 }
 
 QList<unsigned int> SystemInformation::getCPUFrequencies()
@@ -161,10 +163,10 @@ unsigned int SystemInformation::getHardDiskCapacity(const QString &device)
     return 0;
 }
 
-unsigned int SystemInformation::getHardDiskFreeSpace(const QString &device)
+quint64 SystemInformation::getHardDiskFreeSpace(const QString &path)
 {
-    Q_UNUSED(device);
-    return 0;
+    HardDiskInformation hardDiskInformation;
+    return hardDiskInformation.getNumberOfFreeMBytes(path);
 }
 
 bool SystemInformation::doesOpticalDriveHaveWriteCapabilities()
@@ -185,6 +187,11 @@ bool SystemInformation::isDesktopCompositionAvailable()
 bool SystemInformation::isDesktopCompositionEnabled()
 {
     return false;
+}
+
+QString SystemInformation::getDesktopInformation() const
+{
+    return QObject::tr("N/A");
 }
 
 }

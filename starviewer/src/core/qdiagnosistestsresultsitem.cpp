@@ -104,6 +104,7 @@ QDiagnosisTestsResultsItem::QDiagnosisTestsResultsItem(const QString &title, con
     {
         m_contentGridLayout->setColumnMinimumWidth(0, 16 + m_contentGridLayout->spacing());
         QLabel *label = new QLabel(content.join("<p>"));
+        label->setWordWrap(true);
         label->setTextInteractionFlags(Qt::TextSelectableByMouse);
         m_contentGridLayout->addWidget(label, 0, 1);
     }

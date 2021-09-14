@@ -48,8 +48,7 @@ DiagnosisTestResult SystemRequirementsTest::run()
     const unsigned int MinimumScreenWidth = requirements->getMinimumScreenWidth();
     const unsigned int MinimumDiskSpace = requirements->getMinimumHardDiskFreeSpace();
 
-    // TODO Temporal, s'ha de treure i veure com obtenir la unitat on està starviewer
-    const QString whichHardDisk = "C:";
+    const QString whichHardDisk = QCoreApplication::applicationDirPath();
 
     SystemInformation *system = SystemInformation::newInstance();
     DiagnosisTestResult result;
@@ -145,16 +144,6 @@ DiagnosisTestResult SystemRequirementsTest::run()
         result.addError(problem);
     }
 
-    // Arquitectura de la màquina (32 o 64 bits)
-    if (requirements->doesOperatingSystemNeedToBe64BitArchitecutre() && !isOperatingSystem64BitArchitecture(system))
-    {
-        DiagnosisTestProblem problem;
-        problem.setState(DiagnosisTestProblem::Error);
-        problem.setDescription(tr("Operating system is not 64-bit"));
-        problem.setSolution(tr("Update operating system to a 64-bit version"));
-        result.addError(problem);
-    }
-
     // Versió del sistema operatiu
     QString version;
     QString servicePack;
@@ -171,20 +160,11 @@ DiagnosisTestResult SystemRequirementsTest::run()
                 problem.setSolution(tr("Update operating system to a newer version"));
                 result.addError(problem);
             }
-            // Si és windows XP (versió 5.xx), s'ha de comprovar el service pack
-            if (version.split(".").at(0).toInt() == 5)
+            if (version.split(".").at(0).toInt() == 6)  // check service pack for Windows 7 (6.1) // TODO this is a hack, it needs to be improved a lot
             {
                 servicePack = getOperatingSystemServicePackVersion(system);
-                unsigned int minimumServicePackVersion;
-                if (isOperatingSystem64BitArchitecture(system))
-                {
-                    minimumServicePackVersion = requirements->getMinimum64bitOperatingSystemServicePackVersion();
-                }
-                else
-                {
-                    minimumServicePackVersion = requirements->getMinimum32bitOperatingSystemServicePackVersion();
-                }
-                
+                unsigned int minimumServicePackVersion = requirements->getMinimumOperatingSystemServicePackVersion();
+                // Note: servicePack is a string of the form "Service Pack 1". This operation below omits the first 13 characters, i.e. "Service Pack ".
                 if (servicePack.right(servicePack.count() - 13).toUInt() < minimumServicePackVersion)
                 {
                     DiagnosisTestProblem problem;
@@ -367,11 +347,6 @@ QString SystemRequirementsTest::getOperatingSystemVersion(SystemInformation *sys
 QString SystemRequirementsTest::getOperatingSystemServicePackVersion(SystemInformation *system)
 {
     return system->getOperatingSystemServicePackVersion();
-}
-
-bool SystemRequirementsTest::isOperatingSystem64BitArchitecture(SystemInformation *system)
-{
-    return system->isOperatingSystem64BitArchitecture();
 }
 
 unsigned int SystemRequirementsTest::getRAMTotalAmount(SystemInformation *system)

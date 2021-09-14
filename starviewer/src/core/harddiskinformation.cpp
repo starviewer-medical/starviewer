@@ -34,6 +34,7 @@ HardDiskInformation::~HardDiskInformation()
 {
 }
 
+// TODO implement everything with C++17: https://en.cppreference.com/w/cpp/filesystem/space
 quint64 HardDiskInformation::getTotalNumberOfBytes(const QString &path)
 {
     return getTotalBytesPlataformEspecific(path);

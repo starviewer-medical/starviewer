@@ -636,36 +636,6 @@ unsigned int WindowsSystemInformation::getHardDiskCapacity(const QString &device
     return hardDiskCapacity;
 }
 
-unsigned int WindowsSystemInformation::getHardDiskFreeSpace(const QString &device)
-{
-    unsigned int hardDiskFreeSpace = 0;
-    IEnumWbemClassObject* enumerator = executeQuery(QString("SELECT * FROM Win32_LogicalDisk WHERE DeviceID LIKE '%1'").arg(device));
-    IWbemClassObject* object = getNextObject(enumerator);
-
-    while (object)
-    {
-        VARIANT variantProperty;
-        VariantInit(&variantProperty);
-
-        if (getProperty(object, "FreeSpace", &variantProperty))
-        {
-            QString string = QString::fromWCharArray(variantProperty.bstrVal);
-            unsigned long long size = string.toULongLong();
-            VariantClear(&variantProperty);
-            hardDiskFreeSpace = size / (1024.0 * 1024.0);
-        }
-
-        object->Release();
-        object = getNextObject(enumerator);
-    }
-
-    if (enumerator)
-    {
-        enumerator->Release();
-    }
-    return hardDiskFreeSpace;
-}
-
 bool WindowsSystemInformation::doesOpticalDriveHaveWriteCapabilities()
 {
     bool canWrite = false;

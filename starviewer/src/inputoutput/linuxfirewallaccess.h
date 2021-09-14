@@ -12,45 +12,19 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "firewallaccess.h"
+#ifndef UDG_LINUXFIREWALLACCESS_H
+#define UDG_LINUXFIREWALLACCESS_H
 
-#ifdef WIN32
-#include "windowsfirewallaccess.h"
-#endif
+#include "firewallaccess.h"
 
 namespace udg {
 
-FirewallAccess::FirewallAccess()
+class LinuxFirewallAccess : public FirewallAccess
 {
-    m_status = FirewallAccess::FirewallUnknownStatus;
-}
+public:
+    bool doesStarviewerHaveAccesThroughFirewall() override;
+};
 
-FirewallAccess::~FirewallAccess()
-{
-}
+} // namespace udg
 
-FirewallAccess* FirewallAccess::newInstance()
-{
-#ifdef WIN32
-    return new WindowsFirewallAccess();
-#else
-    return new FirewallAccess();
-#endif
-}
-
-bool FirewallAccess::doesStarviewerHaveAccesThroughFirewall()
-{
-    return true;   
-}
-
-QString FirewallAccess::getErrorString()
-{
-    return m_errorString;
-}
-
-FirewallAccess::FirewallStatus FirewallAccess::getStatus()
-{
-    return m_status;
-}
-
-}
+#endif // UDG_LINUXFIREWALLACCESS_H
