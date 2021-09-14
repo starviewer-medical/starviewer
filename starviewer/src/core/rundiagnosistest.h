@@ -35,6 +35,7 @@ Q_OBJECT
 
 public:
     RunDiagnosisTest(QList<DiagnosisTest*> diagnosisTestToRun);
+    ~RunDiagnosisTest() override;
 
     /// Retorna els testos executats amb el seu resultat
     QList<QPair<DiagnosisTest *,DiagnosisTestResult> > getRunTests();

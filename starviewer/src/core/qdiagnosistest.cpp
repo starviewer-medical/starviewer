@@ -130,15 +130,9 @@ QDiagnosisTest::QDiagnosisTest(QWidget *parent)
 
 QDiagnosisTest::~QDiagnosisTest()
 {
-    // TODO Should finish in a cleaner way. Calling terminate() is dangerous.
-    //      Instead, should stop running the tests (in particular, cancel PACS echoes) and call m_threadRunningDiagnosisTest->quit()
-    //      And should not need to wait for the thread to finish: just connect to the finished() signal and destroy thread and tests there
-    //      Exception: if the application quits, should the thread be terminated?
-    m_threadRunningDiagnosisTest->terminate();
-    m_threadRunningDiagnosisTest->wait();
-    qDeleteAll(m_runDiagnosisTest->getDiagnosisTestToRun());
-    delete m_runDiagnosisTest;
-    delete m_threadRunningDiagnosisTest;
+    m_threadRunningDiagnosisTest->requestInterruption();
+    m_threadRunningDiagnosisTest->quit();
+    // The test runner (and tests) and the thread will be deleted via connections when the thread finishes
 }
 
 void QDiagnosisTest::execAndRunDiagnosisTest()
@@ -158,6 +152,9 @@ void QDiagnosisTest::createConnections()
     connect(this, SIGNAL(start()), m_runDiagnosisTest, SLOT(run()));
     connect(m_runDiagnosisTest, SIGNAL(runningDiagnosisTest(DiagnosisTest*)), this, SLOT(updateRunningDiagnosisTestProgress(DiagnosisTest*)));
     connect(m_runDiagnosisTest, SIGNAL(finished()), this, SLOT(finishedRunningDiagnosisTest()));
+
+    connect(m_threadRunningDiagnosisTest, &QThread::finished, m_runDiagnosisTest, &QObject::deleteLater);
+    connect(m_threadRunningDiagnosisTest, &QThread::finished, m_threadRunningDiagnosisTest, &QObject::deleteLater);
 }
 
 void QDiagnosisTest::runDiagnosisTest()
