@@ -126,7 +126,7 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(IncomingDICOMConnectionsPort, 4006);
     // TODO podríem definir-lo directament amb %HOSTNAME%
     settingsRegistry->addSetting(LocalAETitle, QHostInfo::localHostName(), Settings::Parseable);
-    settingsRegistry->addSetting(PACSConnectionTimeout, 20);
+    settingsRegistry->addSetting(PACSConnectionTimeout, 10);
     settingsRegistry->addSetting(MaximumPACSConnections, 3);
 
     settingsRegistry->addSetting(ConvertDICOMDIRImagesToLittleEndianKey, false);
