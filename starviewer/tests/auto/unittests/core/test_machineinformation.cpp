@@ -27,37 +27,9 @@ class test_MachineInformation : public QObject {
 Q_OBJECT
 
 private slots:
-    void getMACAddress_CheckIfItsAValidMACAddress();
-
     void getDomain_ShouldReturnUserDomainInWindows_data();
     void getDomain_ShouldReturnUserDomainInWindows();
 };
-
-
-void test_MachineInformation::getMACAddress_CheckIfItsAValidMACAddress()
-{
-    QString macAddress = MachineInformation().getMACAddress();
-    QVERIFY(!macAddress.isEmpty());
-
-    QRegExp macExpression("^([0-9a-f]{2}([:-]|$)){6}$", Qt::CaseInsensitive);
-    QVERIFY2(macExpression.exactMatch(macAddress), qPrintable(QString("Obtained MAC Address: %1").arg(macAddress)));
-
-    //Comprovem que hi hagi alguna interfície amb aquesta adreça MAC
-    bool foundInterface = false;
-    QNetworkInterface interface;
-    QListIterator<QNetworkInterface> iterator(QNetworkInterface::allInterfaces());
-    while (!foundInterface && iterator.hasNext())
-    {
-        interface = iterator.next();
-        foundInterface = interface.hardwareAddress() == macAddress;
-    }
-
-    QVERIFY(foundInterface);
-    QVERIFY(interface.flags().testFlag(QNetworkInterface::IsUp));
-    QVERIFY(interface.flags().testFlag(QNetworkInterface::IsRunning));
-    QVERIFY(!interface.flags().testFlag(QNetworkInterface::IsLoopBack));
-    QVERIFY(!interface.humanReadableName().toLower().contains("bluetooth"));
-}
 
 void test_MachineInformation::getDomain_ShouldReturnUserDomainInWindows_data()
 {
