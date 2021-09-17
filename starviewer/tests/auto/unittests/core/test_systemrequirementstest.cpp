@@ -69,9 +69,9 @@ protected:
         Q_UNUSED(system);
         return m_testingGPUOpenGLCompatibilities;
     }
-    QString getGPUOpenGLVersion(SystemInformation *system)
+    QString getGPUOpenGLVersion(SystemRequirements *requirements)
     {
-        Q_UNUSED(system);
+        Q_UNUSED(requirements);
         return m_testingGPUOpenGLVersion;
     }
     QList<unsigned int> getGPURAM(SystemInformation *system)

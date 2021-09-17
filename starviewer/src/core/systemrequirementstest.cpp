@@ -18,10 +18,12 @@
 #include "starviewerapplication.h"
 
 // Qt
-#include <QString>
 #include <QList>
-#include <QStringList>
+#include <QOpenGLContext>
 #include <QSize>
+#include <QString>
+#include <QStringList>
+#include <QSurfaceFormat>
 
 namespace udg {
 
@@ -89,7 +91,7 @@ DiagnosisTestResult SystemRequirementsTest::run()
     }
 
     // Comprovar si la versió d'openGL del sistema és suficient
-    QString openGLVersion = getGPUOpenGLVersion(system);
+    QString openGLVersion = getGPUOpenGLVersion(requirements);
     if (compareVersions(openGLVersion, MinimumGPUOpenGLVersion) == SystemRequirementsTest::Older)
     {
         DiagnosisTestProblem problem;
@@ -255,6 +257,8 @@ DiagnosisTestResult SystemRequirementsTest::run()
     }
 
     delete system;
+    delete requirements;
+
     return result;
 }
 
@@ -314,9 +318,24 @@ QStringList SystemRequirementsTest::getGPUOpenGLCompatibilities(SystemInformatio
     return system->getGPUOpenGLCompatibilities();
 }
 
-QString SystemRequirementsTest::getGPUOpenGLVersion(SystemInformation *system)
+QString SystemRequirementsTest::getGPUOpenGLVersion(SystemRequirements *requirements)
 {
-    return system->getGPUOpenGLVersion();
+    QStringList minimumVersionParts = requirements->getMinimumGPUOpenGLVersion().split('.');
+    QPair<int, int> minimumVersion(minimumVersionParts[0].toInt(), minimumVersionParts[1].toInt());
+    QSurfaceFormat format;
+    format.setVersion(minimumVersion.first, minimumVersion.second);
+    QOpenGLContext context;
+    context.setFormat(format);
+
+    if (context.create())
+    {
+        QPair<int, int> obtainedVersion = context.format().version();
+        return QString("%1.%2").arg(obtainedVersion.first).arg(obtainedVersion.second);
+    }
+    else
+    {
+        return "0.0";
+    }
 }
 
 QList<unsigned int> SystemRequirementsTest::getGPURAM(SystemInformation *system)
