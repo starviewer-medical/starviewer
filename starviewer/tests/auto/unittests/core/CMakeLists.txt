@@ -91,7 +91,6 @@ set(SOURCES
 
 if(WIN32)
     list(APPEND SOURCES
-        test_windowsfirewallaccess.cpp
         test_windowssysteminformation.cpp
     )
 endif()

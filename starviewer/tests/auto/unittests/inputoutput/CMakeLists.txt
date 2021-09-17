@@ -16,6 +16,12 @@ set(SOURCES
     test_upgradedatabasexmlparser.cpp
 )
 
+if(WIN32)
+    list(APPEND SOURCES
+        test_windowsfirewallaccess.cpp
+    )
+endif()
+
 add_library(test_inputoutput OBJECT ${SOURCES})
 
 
