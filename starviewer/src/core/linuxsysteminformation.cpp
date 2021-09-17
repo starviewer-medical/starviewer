@@ -149,11 +149,6 @@ QList<unsigned int> LinuxSystemInformation::getGPURAM()
     return {parseGlxinfo(R"(Video memory: (\d+)MB\n)").toUInt()};
 }
 
-QString LinuxSystemInformation::getGPUOpenGLVersion()
-{
-    return parseGlxinfo(R"(Max core profile version: (.*)\n)");
-}
-
 QStringList LinuxSystemInformation::getGPUDriverVersion()
 {
     return {parseGlxinfo(R"(Version: (.*)\n)")};

@@ -19,8 +19,6 @@
 // Qt
 #include <QList>
 #include <QByteArray>
-// Qt openGL
-#include <QtOpenGL/QGLWidget>
 
 // Windows
 #include <windows.h>
@@ -508,17 +506,6 @@ QList<unsigned int> WindowsSystemInformation::getGPURAM()
     return GPURAM;
 }
 
-QStringList WindowsSystemInformation::getGPUOpenGLCompatibilities()
-{
-    QString extensions = createOpenGLContextAndGetExtensions();
-    return extensions.split(" ");
-}
-
-QString WindowsSystemInformation::getGPUOpenGLVersion()
-{
-    return createOpenGLContextAndGetVersion();
-}
-
 QStringList WindowsSystemInformation::getGPUDriverVersion()
 {
     QStringList driverVersion;
@@ -884,28 +871,6 @@ void WindowsSystemInformation::uninitializeAPI(IWbemServices *services)
         services = NULL;
     }
     CoUninitialize();
-}
-
-QString WindowsSystemInformation::createOpenGLContextAndGetExtensions()
-{
-    /// Per tal de fer servir el QGLWidget, cal afegir en el core.pro QT += opengl
-    /// TODO: Cal comprovar si això afecte al rendiment, compilació, etc.
-    /// La llibreria QtOpenGL semble que quan es carrega, deixa en memòria uns 4Mb, per poder-la segir utilitzant.
-    QGLWidget window;
-    window.makeCurrent();
-
-    return QString((const char*)glGetString(GL_EXTENSIONS));
-}
-
-QString WindowsSystemInformation::createOpenGLContextAndGetVersion()
-{
-    /// Per tal de fer servir el QGLWidget, cal afegir en el core.pro QT += opengl
-    /// TODO: Cal comprovar si això afecte al rendiment, compilació, etc.
-    /// La llibreria QtOpenGL semble que quan es carrega, deixa en memòria uns 4Mb, per poder-la segir utilitzant.
-    QGLWidget window;
-    window.makeCurrent();
-
-    return QString((const char*)glGetString(GL_VERSION));
 }
 
 HMODULE WindowsSystemInformation::getDesktopWindowManagerDLL()

@@ -50,8 +50,6 @@ public:
     QStringList getGPUBrand();
     QStringList getGPUModel();
     QList<unsigned int> getGPURAM();
-    QStringList getGPUOpenGLCompatibilities();
-    QString getGPUOpenGLVersion();
     QStringList getGPUDriverVersion();
 
     // Screen, Display, Monitor, Desktop, ...
@@ -82,8 +80,6 @@ protected:
     virtual bool getProperty(IWbemClassObject *object, QString propertyName, VARIANT *propertyVariant);
     IWbemServices* initializeAPI();
     virtual void uninitializeAPI(IWbemServices *services);
-    virtual QString createOpenGLContextAndGetExtensions();
-    virtual QString createOpenGLContextAndGetVersion();
 
 protected:
     IWbemServices* m_api;

@@ -35,8 +35,6 @@ public:
     QStringList getGPUModel() override;
     /// Returns amount of RAM in MiB for each GPU.
     QList<unsigned int> getGPURAM() override;
-    /// Returns maximum supported OpenGL version.
-    QString getGPUOpenGLVersion() override;
     /// Returns driver version for each GPU.
     QStringList getGPUDriverVersion() override;
 

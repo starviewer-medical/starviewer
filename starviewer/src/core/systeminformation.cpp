@@ -24,10 +24,51 @@
 #endif
 
 // Qt
+#include <QCoreApplication>
 #include <QDesktopWidget>
+#include <QOffscreenSurface>
+#include <QOpenGLFunctions>
 #include <QRect>
 #include <QSize>
 #include <QThread>
+
+namespace {
+
+// Auxiliar class to obtain OpenGL information. On some platforms, can only be safely used in the main thread.
+class OpenGLInformation : public QOffscreenSurface, protected QOpenGLFunctions
+{
+public:
+    OpenGLInformation()
+    {
+        create();
+        QOpenGLContext context;
+        context.create();
+        context.makeCurrent(this);
+
+        if (context.isValid())
+        {
+            initializeOpenGLFunctions();
+            m_version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+            m_extensions = QString(reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS))).split(' ');
+        }
+    }
+
+    const QString& getVersion() const
+    {
+        return m_version;
+    }
+
+    const QStringList& getExtensions() const
+    {
+        return m_extensions;
+    }
+
+private:
+    QString m_version;
+    QStringList m_extensions;
+};
+
+}
 
 namespace udg {
 
@@ -123,12 +164,28 @@ QList<unsigned int> SystemInformation::getGPURAM()
 
 QStringList SystemInformation::getGPUOpenGLCompatibilities()
 {
-    return QStringList();
+#ifdef Q_OS_WIN32
+    // In Windows OpenGLInformation can only be safely created in the main thread
+    if (QThread::currentThread() != qApp->thread())
+    {
+        return QStringList();
+    }
+#endif
+
+    return OpenGLInformation().getExtensions();
 }
 
 QString SystemInformation::getGPUOpenGLVersion()
 {
-    return "0.0";
+#ifdef Q_OS_WIN32
+    // In Windows OpenGLInformation can only be safely created in the main thread
+    if (QThread::currentThread() != qApp->thread())
+    {
+        return "0.0";
+    }
+#endif
+
+    return OpenGLInformation().getVersion();
 }
 
 QStringList SystemInformation::getGPUDriverVersion()
