@@ -1,3 +1,5 @@
+include(Theme)
+
 set(SOURCES
     applicationtranslationsloader.cpp
     crashhandler.cpp
@@ -8,11 +10,12 @@ set(SOURCES
 set(RESOURCES
     main.qrc
     ../qml/qml.qrc
+    themes/${THEME}/${THEME}.qrc
 )
 
 if(WIN32)
     list(APPEND RESOURCES
-        starviewer.rc
+        themes/${THEME}/${THEME}.rc
     )
 endif()
 
