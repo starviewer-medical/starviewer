@@ -18,10 +18,9 @@ function(generate_extensions_header)
     configure_file(extensions.h.in extensions.h)
 
     # Add include directories of each extension globally
-    # TODO Probably there's a better way
     foreach(EXTENSION ${EXTENSIONS})
         get_target_includes(${EXTENSION}_INCLUDES ${EXTENSION} YES)
-        include_directories(${${EXTENSION}_INCLUDES})
+        target_include_directories(starviewer PRIVATE ${${EXTENSION}_INCLUDES})
     endforeach()
 
     target_link_libraries(starviewer ${EXTENSIONS})
