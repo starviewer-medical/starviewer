@@ -43,7 +43,6 @@ set(SOURCES
     portinusetest.cpp
     qadvancedsearchwidget.cpp
     qbasicsearchwidget.cpp
-    qconfigurationscreen.cpp
     qcreatedicomdir.cpp
     qdeleteoldstudiesthread.cpp
     qdicomdirconfigurationscreen.cpp
@@ -54,6 +53,7 @@ set(SOURCES
     qlistenrisrequestsconfigurationscreen.cpp
     qlocaldatabaseconfigurationscreen.cpp
     qoperationstatescreen.cpp
+    qpacsconfigurationscreen.cpp
     qpacslist.cpp
     qpopuprisrequestsscreen.cpp
     qrelatedstudieswidget.cpp
@@ -93,7 +93,6 @@ endif()
 set(FORMS
     qadvancedsearchwidgetbase.ui
     qbasicsearchwidgetbase.ui
-    qconfigurationscreenbase.ui
     qcreatedicomdirbase.ui
     qdicomdirconfigurationscreenbase.ui
     qexporterbase.ui
@@ -103,6 +102,7 @@ set(FORMS
     qlistenrisrequestsconfigurationscreenbase.ui
     qlocaldatabaseconfigurationscreenbase.ui
     qoperationstatescreenbase.ui
+    qpacsconfigurationscreenbase.ui
     qpacslistbase.ui
     qseriesthumbnailpreviewwidgetbase.ui
     qstudytreewidgetbase.ui

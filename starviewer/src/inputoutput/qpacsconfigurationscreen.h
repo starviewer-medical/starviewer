@@ -12,10 +12,10 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGQCONFIGURATIONSCREEN_H
-#define UDGQCONFIGURATIONSCREEN_H
+#ifndef UDGPACSQCONFIGURATIONSCREEN_H
+#define UDGPACSQCONFIGURATIONSCREEN_H
 
-#include "ui_qconfigurationscreenbase.h"
+#include "ui_qpacsconfigurationscreenbase.h"
 
 namespace udg {
 
@@ -24,14 +24,14 @@ class PacsDevice;
 /**
     Interfície que permet configurar els paràmetres del PACS
   */
-class QConfigurationScreen : public QWidget, private Ui::QConfigurationScreenBase {
+class QPacsConfigurationScreen : public QWidget, private ::Ui::QPacsConfigurationScreenBase {
 Q_OBJECT
 public:
     /// Constructor de la classe
-    QConfigurationScreen(QWidget *parent = 0);
+    QPacsConfigurationScreen(QWidget *parent = 0);
 
     /// Destructor de classe
-    ~QConfigurationScreen();
+    ~QPacsConfigurationScreen();
 
 private slots:
     /// Neteja els line edit de la pantalla

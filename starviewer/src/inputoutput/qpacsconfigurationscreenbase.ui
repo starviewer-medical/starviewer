@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>udg::QConfigurationScreenBase</class>
- <widget class="QWidget" name="udg::QConfigurationScreenBase">
+ <class>QPacsConfigurationScreenBase</class>
+ <widget class="QWidget" name="QPacsConfigurationScreenBase">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>522</width>
-    <height>435</height>
+    <width>600</width>
+    <height>501</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>PACS Configuration</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../main/main.qrc">
+   <iconset resource="../main/themes/starviewer/starviewer.qrc">
     <normaloff>:/images/icons/preferences-system-network.svg</normaloff>:/images/icons/preferences-system-network.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -256,7 +256,7 @@
               <string>Add</string>
              </property>
              <property name="icon">
-              <iconset resource="../main/main.qrc">
+              <iconset resource="../main/themes/starviewer/starviewer.qrc">
                <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
              </property>
             </widget>
@@ -270,7 +270,7 @@
               <string>Update</string>
              </property>
              <property name="icon">
-              <iconset resource="../main/main.qrc">
+              <iconset resource="../main/themes/starviewer/starviewer.qrc">
                <normaloff>:/images/icons/document-save.svg</normaloff>:/images/icons/document-save.svg</iconset>
              </property>
             </widget>
@@ -284,7 +284,7 @@
               <string>Delete</string>
              </property>
              <property name="icon">
-              <iconset resource="../main/main.qrc">
+              <iconset resource="../main/themes/starviewer/starviewer.qrc">
                <normaloff>:/images/icons/edit-delete.svg</normaloff>:/images/icons/edit-delete.svg</iconset>
              </property>
             </widget>
@@ -577,8 +577,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../main/main.qrc"/>
-  <include location="../main/main.qrc"/>
+  <include location="../main/themes/starviewer/starviewer.qrc"/>
  </resources>
  <connections/>
 </ui>

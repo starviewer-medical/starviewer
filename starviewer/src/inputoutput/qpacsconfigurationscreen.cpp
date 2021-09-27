@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "qconfigurationscreen.h"
+#include "qpacsconfigurationscreen.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -33,7 +33,7 @@ namespace udg {
 
 typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 
-QConfigurationScreen::QConfigurationScreen(QWidget *parent)
+QPacsConfigurationScreen::QPacsConfigurationScreen(QWidget *parent)
  : QWidget(parent)
 {
     setupUi(this);
@@ -58,12 +58,12 @@ QConfigurationScreen::QConfigurationScreen(QWidget *parent)
     checkIncomingConnectionsPortNotInUse();
 }
 
-QConfigurationScreen::~QConfigurationScreen()
+QPacsConfigurationScreen::~QPacsConfigurationScreen()
 {
     Settings().saveColumnsWidths(InputOutputSettings::ConfigurationScreenPACSList, m_PacsTreeView);
 }
 
-void QConfigurationScreen::createConnections()
+void QPacsConfigurationScreen::createConnections()
 {
     connect(m_checkBoxQueryRetrieveEnabled, SIGNAL(stateChanged(int)), SLOT(queryRetrieveServiceEnabledChanged()));
     connect(m_checkBoxStoreEnabled, SIGNAL(stateChanged(int)), SLOT(storeServiceEnabledChanged()));
@@ -78,7 +78,7 @@ void QConfigurationScreen::createConnections()
     connect(m_PacsTreeView, SIGNAL(itemSelectionChanged()), SLOT(updateSelectedPACSInformation()));
 }
 
-void QConfigurationScreen::createLocalConfigurationTabConnections()
+void QPacsConfigurationScreen::createLocalConfigurationTabConnections()
 {
     // Local config
     connect(m_textAETitleMachine, SIGNAL(editingFinished()), SLOT(updateAETitleSetting()));
@@ -96,7 +96,7 @@ void QConfigurationScreen::createLocalConfigurationTabConnections()
     connect(m_textInstitutionPhoneNumber, SIGNAL(editingFinished()), SLOT(updateInstitutionPhoneNumberSetting()));
 }
 
-void QConfigurationScreen::configureInputValidator()
+void QPacsConfigurationScreen::configureInputValidator()
 {
     m_textQueryRetrieveServicePort->setValidator(new QIntValidator(0, 65535, m_textQueryRetrieveServicePort));
     m_textStoreServicePort->setValidator(new QIntValidator(0, 65535, m_textStoreServicePort));
@@ -105,7 +105,7 @@ void QConfigurationScreen::configureInputValidator()
     m_textMaxConnections->setValidator(new QIntValidator(1, 15, m_textMaxConnections));
 }
 
-void QConfigurationScreen::loadPacsDefaults()
+void QPacsConfigurationScreen::loadPacsDefaults()
 {
     Settings settings;
 
@@ -115,7 +115,7 @@ void QConfigurationScreen::loadPacsDefaults()
     m_textMaxConnections->setText(settings.getValue(InputOutputSettings::MaximumPACSConnections).toString());
 }
 
-void QConfigurationScreen::loadInstitutionInformation()
+void QPacsConfigurationScreen::loadInstitutionInformation()
 {
     Settings settings;
 
@@ -128,7 +128,7 @@ void QConfigurationScreen::loadInstitutionInformation()
     m_textInstitutionPhoneNumber->setText(settings.getValue(InputOutputSettings::InstitutionPhoneNumber).toString());
 }
 
-void QConfigurationScreen:: clear()
+void QPacsConfigurationScreen:: clear()
 {
     m_textAETitle->clear();
     m_textAddress->clear();
@@ -143,7 +143,7 @@ void QConfigurationScreen:: clear()
     m_checkBoxStoreEnabled->setChecked(true);
 }
 
-void QConfigurationScreen::addPacs()
+void QPacsConfigurationScreen::addPacs()
 {
     if (validatePacsDeviceToSave())
     {
@@ -165,7 +165,7 @@ void QConfigurationScreen::addPacs()
     }
 }
 
-void QConfigurationScreen::updateSelectedPACSInformation()
+void QPacsConfigurationScreen::updateSelectedPACSInformation()
 {
     QTreeWidgetItem *selectedItem = 0;
     if (!m_PacsTreeView->selectedItems().isEmpty())
@@ -207,7 +207,7 @@ void QConfigurationScreen::updateSelectedPACSInformation()
     }
 }
 
-void QConfigurationScreen::updatePacs()
+void QPacsConfigurationScreen::updatePacs()
 {
     if (m_selectedPacsID == "")
     {
@@ -229,7 +229,7 @@ void QConfigurationScreen::updatePacs()
     }
 }
 
-void QConfigurationScreen::deletePacs()
+void QPacsConfigurationScreen::deletePacs()
 {
     if (m_selectedPacsID == "")
     {
@@ -246,7 +246,7 @@ void QConfigurationScreen::deletePacs()
     QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
 }
 
-void QConfigurationScreen::fillPacsListView()
+void QPacsConfigurationScreen::fillPacsListView()
 {
     m_PacsTreeView->clear();
 
@@ -266,7 +266,7 @@ void QConfigurationScreen::fillPacsListView()
     }
 }
 
-void QConfigurationScreen::test()
+void QPacsConfigurationScreen::test()
 {
     if (validatePacsDeviceToEcho())
     {
@@ -307,7 +307,7 @@ void QConfigurationScreen::test()
     }
 }
 
-bool QConfigurationScreen::validatePacsDeviceToEcho()
+bool QPacsConfigurationScreen::validatePacsDeviceToEcho()
 {
     if (m_textAETitle->text().length() == 0)
     {
@@ -342,7 +342,7 @@ bool QConfigurationScreen::validatePacsDeviceToEcho()
     return true;
 }
 
-bool QConfigurationScreen::validatePacsDeviceToSave()
+bool QPacsConfigurationScreen::validatePacsDeviceToSave()
 {
     if (validatePacsDeviceToEcho())
     {
@@ -361,7 +361,7 @@ bool QConfigurationScreen::validatePacsDeviceToSave()
     }
 }
 
-void QConfigurationScreen::updateAETitleSetting()
+void QPacsConfigurationScreen::updateAETitleSetting()
 {
     if (m_textAETitleMachine->isModified())
     {
@@ -371,7 +371,7 @@ void QConfigurationScreen::updateAETitleSetting()
     }
 }
 
-void QConfigurationScreen::updateTimeoutSetting()
+void QPacsConfigurationScreen::updateTimeoutSetting()
 {
     if (m_textTimeout->isModified())
     {
@@ -381,7 +381,7 @@ void QConfigurationScreen::updateTimeoutSetting()
     }
 }
 
-void QConfigurationScreen::updateLocalPortSetting()
+void QPacsConfigurationScreen::updateLocalPortSetting()
 {
     if (m_textLocalPort->isModified())
     {
@@ -391,7 +391,7 @@ void QConfigurationScreen::updateLocalPortSetting()
     }
 }
 
-void QConfigurationScreen::updateMaxConnectionsSetting()
+void QPacsConfigurationScreen::updateMaxConnectionsSetting()
 {
     if (m_textMaxConnections->isModified())
     {
@@ -401,7 +401,7 @@ void QConfigurationScreen::updateMaxConnectionsSetting()
     }
 }
 
-void QConfigurationScreen::updateInstitutionNameSetting()
+void QPacsConfigurationScreen::updateInstitutionNameSetting()
 {
     if (m_textInstitutionName->isModified())
     {
@@ -410,7 +410,7 @@ void QConfigurationScreen::updateInstitutionNameSetting()
     }
 }
 
-void QConfigurationScreen::updateInstitutionAddressSetting()
+void QPacsConfigurationScreen::updateInstitutionAddressSetting()
 {
     if (m_textInstitutionAddress->isModified())
     {
@@ -419,7 +419,7 @@ void QConfigurationScreen::updateInstitutionAddressSetting()
     }
 }
 
-void QConfigurationScreen::updateInstitutionTownSetting()
+void QPacsConfigurationScreen::updateInstitutionTownSetting()
 {
     if (m_textInstitutionTown->isModified())
     {
@@ -428,7 +428,7 @@ void QConfigurationScreen::updateInstitutionTownSetting()
     }
 }
 
-void QConfigurationScreen::updateInstitutionZipCodeSetting()
+void QPacsConfigurationScreen::updateInstitutionZipCodeSetting()
 {
     if (m_textInstitutionZipCode->isModified())
     {
@@ -437,7 +437,7 @@ void QConfigurationScreen::updateInstitutionZipCodeSetting()
     }
 }
 
-void QConfigurationScreen::updateInstitutionCountrySetting()
+void QPacsConfigurationScreen::updateInstitutionCountrySetting()
 {
     if (m_textInstitutionCountry->isModified())
     {
@@ -446,7 +446,7 @@ void QConfigurationScreen::updateInstitutionCountrySetting()
     }
 }
 
-void QConfigurationScreen::updateInstitutionEmailSetting()
+void QPacsConfigurationScreen::updateInstitutionEmailSetting()
 {
     if (m_textInstitutionEmail->isModified())
     {
@@ -455,7 +455,7 @@ void QConfigurationScreen::updateInstitutionEmailSetting()
     }
 }
 
-void QConfigurationScreen::updateInstitutionPhoneNumberSetting()
+void QPacsConfigurationScreen::updateInstitutionPhoneNumberSetting()
 {
     if (m_textInstitutionPhoneNumber->isModified())
     {
@@ -464,19 +464,19 @@ void QConfigurationScreen::updateInstitutionPhoneNumberSetting()
     }
 }
 
-bool QConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
+bool QPacsConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
 {
     // Comprovem que el port estigui o no en ús i que en el cas que estigui en ús, no sigui utilitzat per l'Starviewer
     return PortInUse().isPortInUse(m_textLocalPort->text().toInt()) && !LocalDatabaseManager().isAStudyBeingRetrieved();
 }
 
-void QConfigurationScreen::checkIncomingConnectionsPortNotInUse()
+void QPacsConfigurationScreen::checkIncomingConnectionsPortNotInUse()
 {
     // Si està en ús el frame que conté el warning es fa visible
     m_warningFrameIncomingConnectionsPortInUse->setVisible(isIncomingConnectionsPortInUseByAnotherApplication());
 }
 
-void QConfigurationScreen::queryRetrieveServiceEnabledChanged()
+void QPacsConfigurationScreen::queryRetrieveServiceEnabledChanged()
 {
     m_textQueryRetrieveServicePort->setEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());
     m_textQueryRetrieveServicePort->setText("");
@@ -489,7 +489,7 @@ void QConfigurationScreen::queryRetrieveServiceEnabledChanged()
     }
 }
 
-void QConfigurationScreen::storeServiceEnabledChanged()
+void QPacsConfigurationScreen::storeServiceEnabledChanged()
 {
     m_textStoreServicePort->setEnabled(m_checkBoxStoreEnabled->isChecked());
     // Si ens indiquen que el servei d'Store està permés li donem el mateix port que del Query/Retrieve, ja que la majoria de
@@ -497,7 +497,7 @@ void QConfigurationScreen::storeServiceEnabledChanged()
     m_textStoreServicePort->setText(m_checkBoxStoreEnabled->isChecked() ? m_textQueryRetrieveServicePort->text() : "");
 }
 
-void QConfigurationScreen::onQueryRetrieveServicePortChanged()
+void QPacsConfigurationScreen::onQueryRetrieveServicePortChanged()
 {
     if (!m_textQueryRetrieveServicePort->text().isEmpty())
     {
@@ -509,7 +509,7 @@ void QConfigurationScreen::onQueryRetrieveServicePortChanged()
     }
 }
 
-PacsDevice QConfigurationScreen::getPacsDeviceFromControls()
+PacsDevice QPacsConfigurationScreen::getPacsDeviceFromControls()
 {
     PacsDevice pacsDevice;
 
