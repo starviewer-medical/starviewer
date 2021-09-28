@@ -14,20 +14,18 @@
 
 #include "qpacsconfigurationscreen.h"
 
-#include <QMessageBox>
-#include <QDir>
-
-#include "pacsconnection.h"
+#include "inputoutputsettings.h"
+#include "localdatabasemanager.h"
+#include "logging.h"
 #include "pacsdevice.h"
 #include "pacsdevicemanager.h"
-#include "starviewerapplication.h"
-#include "logging.h"
-#include "localdatabasemanager.h"
-#include "inputoutputsettings.h"
-#include "echotopacs.h"
 #include "portinuse.h"
-#include "singleton.h"
+#include "qpacsdialog.h"
 #include "queryscreen.h"
+#include "singleton.h"
+#include "starviewerapplication.h"
+
+#include <QMessageBox>
 
 namespace udg {
 
@@ -65,17 +63,10 @@ QPacsConfigurationScreen::~QPacsConfigurationScreen()
 
 void QPacsConfigurationScreen::createConnections()
 {
-    connect(m_checkBoxQueryRetrieveEnabled, SIGNAL(stateChanged(int)), SLOT(queryRetrieveServiceEnabledChanged()));
-    connect(m_checkBoxStoreEnabled, SIGNAL(stateChanged(int)), SLOT(storeServiceEnabledChanged()));
-
-    connect(m_textQueryRetrieveServicePort, SIGNAL(editingFinished()), SLOT(onQueryRetrieveServicePortChanged()));
-
     // Manteniment PACS
     connect(m_buttonAddPacs, SIGNAL(clicked()), SLOT(addPacs()));
     connect(m_buttonDeletePacs, SIGNAL(clicked()), SLOT(deletePacs()));
-    connect(m_buttonUpdatePacs, SIGNAL(clicked()), SLOT(updatePacs()));
-    connect(m_buttonTestPacs, SIGNAL(clicked()), SLOT(test()));
-    connect(m_PacsTreeView, SIGNAL(itemSelectionChanged()), SLOT(updateSelectedPACSInformation()));
+    connect(m_buttonEditPacs, &QPushButton::clicked, this, &QPacsConfigurationScreen::editPacs);
 }
 
 void QPacsConfigurationScreen::createLocalConfigurationTabConnections()
@@ -98,8 +89,6 @@ void QPacsConfigurationScreen::createLocalConfigurationTabConnections()
 
 void QPacsConfigurationScreen::configureInputValidator()
 {
-    m_textQueryRetrieveServicePort->setValidator(new QIntValidator(0, 65535, m_textQueryRetrieveServicePort));
-    m_textStoreServicePort->setValidator(new QIntValidator(0, 65535, m_textStoreServicePort));
     m_textLocalPort->setValidator(new QIntValidator(0, 65535, m_textLocalPort));
     m_textTimeout->setValidator(new QIntValidator(0, 99, m_textTimeout));
     m_textMaxConnections->setValidator(new QIntValidator(1, 15, m_textMaxConnections));
@@ -128,121 +117,56 @@ void QPacsConfigurationScreen::loadInstitutionInformation()
     m_textInstitutionPhoneNumber->setText(settings.getValue(InputOutputSettings::InstitutionPhoneNumber).toString());
 }
 
-void QPacsConfigurationScreen:: clear()
-{
-    m_textAETitle->clear();
-    m_textAddress->clear();
-    m_textInstitution->clear();
-    m_textLocation->clear();
-    m_textDescription->clear();
-    m_checkDefault->setChecked(false);
-    m_selectedPacsID = "";
-    m_textQueryRetrieveServicePort->clear();
-    m_textStoreServicePort->clear();
-    m_checkBoxQueryRetrieveEnabled->setChecked(true);
-    m_checkBoxStoreEnabled->setChecked(true);
-}
-
 void QPacsConfigurationScreen::addPacs()
 {
-    if (validatePacsDeviceToSave())
-    {
-        PacsDeviceManager pacsDeviceManager;
-        PacsDevice pacs = getPacsDeviceFromControls();
+    QPacsDialog *dialog = new QPacsDialog(this);
 
-        INFO_LOG("Afegir PACS " + pacs.getAETitle());
+    connect(dialog, &QDialog::finished, [=] {
+        // Update always independently of the result because the dialog has an apply button
+        fillPacsListView();
+        QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
+        delete dialog;
+    });
 
-        if (!pacsDeviceManager.addPACS(pacs))
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("This PACS already exists."));
-        }
-        else
-        {
-            fillPacsListView();
-            clear();
-            QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
-        }
-    }
+    dialog->open();
 }
 
-void QPacsConfigurationScreen::updateSelectedPACSInformation()
+void QPacsConfigurationScreen::editPacs()
 {
-    QTreeWidgetItem *selectedItem = 0;
-    if (!m_PacsTreeView->selectedItems().isEmpty())
+    if (m_PacsTreeView->selectedItems().isEmpty())
     {
-        // Només en podem tenir un de seleccionat
-        selectedItem = m_PacsTreeView->selectedItems().first();
-        // TODO en comptes d'obtenir del manager, potser es podria obtenir la informació directament del tree widget i estalviar aquest pas de "query"
-        // selectedItem->text(0) --> ID del pacs seleccionat al TreeWidget
-        PacsDevice selectedPacs = PacsDeviceManager().getPACSDeviceByID(selectedItem->text(0));
-        if (selectedPacs.isEmpty())
-        {
-            ERROR_LOG("No s'ha trobat cap PACS configurat amb l'ID: " + selectedItem->text(0));
-            DEBUG_LOG("No s'ha trobat cap PACS configurat amb l'ID: " + selectedItem->text(0));
-            clear();
-        }
-        else
-        {
-            // Emplenem els textos
-            m_textAETitle->setText(selectedPacs.getAETitle());
-            m_textAddress->setText(selectedPacs.getAddress());
-            m_textInstitution->setText(selectedPacs.getInstitution());
-            m_textLocation->setText(selectedPacs.getLocation());
-            m_textDescription->setText(selectedPacs.getDescription());
-            m_checkDefault->setChecked(selectedPacs.isDefault());
-            m_checkBoxQueryRetrieveEnabled->setChecked(selectedPacs.isQueryRetrieveServiceEnabled());
-            m_textQueryRetrieveServicePort->setText(selectedPacs.isQueryRetrieveServiceEnabled() ?
-                                                    QString().setNum(selectedPacs.getQueryRetrieveServicePort()) : "");
-            m_textQueryRetrieveServicePort->setEnabled(selectedPacs.isQueryRetrieveServiceEnabled());
-            m_checkBoxStoreEnabled->setChecked(selectedPacs.isStoreServiceEnabled());
-            m_textStoreServicePort->setText(selectedPacs.isStoreServiceEnabled() ? QString().setNum(selectedPacs.getStoreServicePort()) : "");
-            m_textStoreServicePort->setEnabled(selectedPacs.isStoreServiceEnabled());
-        }
-        // Indiquem quin és l'ID del PACS seleccionat
-        m_selectedPacsID = selectedPacs.getID();
-    }
-    else
-    {
-        m_selectedPacsID = "";
-    }
-}
-
-void QPacsConfigurationScreen::updatePacs()
-{
-    if (m_selectedPacsID == "")
-    {
-        QMessageBox::warning(this, ApplicationNameString, tr("Select a PACS to update."));
+        QMessageBox::warning(this, ApplicationNameString, tr("Select a PACS to edit."), QMessageBox::Ok);
         return;
     }
 
-    if (validatePacsDeviceToSave())
-    {
-        PacsDevice pacs = getPacsDeviceFromControls();
+    QString pacsId = m_PacsTreeView->selectedItems().first()->text(0);
 
-        INFO_LOG("Actualitzant dades del PACS: " + pacs.getAETitle());
+    QPacsDialog *dialog = new QPacsDialog(pacsId, this);
 
-        PacsDeviceManager().updatePACS(pacs);
-
+    connect(dialog, &QDialog::finished, [=] {
+        // Update always independently of the result because the dialog has an apply button
         fillPacsListView();
-        clear();
         QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
-    }
+        delete dialog;
+    });
+
+    dialog->open();
 }
 
 void QPacsConfigurationScreen::deletePacs()
 {
-    if (m_selectedPacsID == "")
+    if (m_PacsTreeView->selectedItems().isEmpty())
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Select a PACS to delete."));
+        QMessageBox::warning(this, ApplicationNameString, tr("Select a PACS to delete."), QMessageBox::Ok);
         return;
     }
 
-    INFO_LOG("Esborrant el PACS: " + m_textAETitle->text());
+    QString pacsId = m_PacsTreeView->selectedItems().first()->text(0);
 
-    PacsDeviceManager().deletePACS(m_selectedPacsID);
+    INFO_LOG(QString("Deleting PACS with ID %1.").arg(pacsId));
+    PacsDeviceManager().deletePACS(pacsId);
 
     fillPacsListView();
-    clear();
     QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
 }
 
@@ -263,101 +187,6 @@ void QPacsConfigurationScreen::fillPacsListView()
         item->setText(4, pacs.isQueryRetrieveServiceEnabled() ? QString().setNum(pacs.getQueryRetrieveServicePort()) : "Disabled");
         item->setText(5, pacs.isStoreServiceEnabled() ? QString().setNum(pacs.getStoreServicePort()) : "Disabled");
         item->setText(6, pacs.isDefault() ? tr("Yes") : tr("No"));
-    }
-}
-
-void QPacsConfigurationScreen::test()
-{
-    if (validatePacsDeviceToEcho())
-    {
-        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
-        // Agafem les dades del PACS que estan el textbox per testejar
-        PacsDevice pacsDevice = getPacsDeviceFromControls();
-        EchoToPACS echoToPACS;
-
-        INFO_LOG("Es fa echoSCU al PACS amb AE Title " + pacsDevice.getAETitle());
-
-        if (echoToPACS.echo(pacsDevice))
-        {
-            QApplication::restoreOverrideCursor();
-            QMessageBox::information(this, ApplicationNameString, tr("Test of PACS \"%1\" is correct").arg(pacsDevice.getAETitle()));
-        }
-        else
-        {
-            QApplication::restoreOverrideCursor();
-            QString message;
-
-            switch (echoToPACS.getLastError())
-            {
-                case EchoToPACS::EchoFailed:
-                    message = tr("PACS \"%1\" did not respond correctly.\nMake sure its IP and AE Title are correct.").arg(pacsDevice.getAETitle());
-                    break;
-                case EchoToPACS::EchoCanNotConnectToPACS:
-                    message = tr("PACS \"%1\" did not respond.\nMake sure its IP and AE Title are correct.").arg(pacsDevice.getAETitle());
-                    break;
-                default:
-                    // No hauria de passar mai
-                    message = tr("PACS \"%1\" did not respond as expected, an unknown error has occurred.").arg(pacsDevice.getAETitle());
-                    break;
-            }
-
-            QMessageBox::information(this, ApplicationNameString, message);
-        }
-    }
-}
-
-bool QPacsConfigurationScreen::validatePacsDeviceToEcho()
-{
-    if (m_textAETitle->text().length() == 0)
-    {
-        QMessageBox::warning(this, ApplicationNameString, tr("AE Title field cannot be empty."));
-        return false;
-    }
-
-    if (m_textAddress->text().length() == 0)
-    {
-        QMessageBox::warning(this, ApplicationNameString, tr ("Incorrect server address."));
-        return false;
-    }
-
-    if (!m_checkBoxQueryRetrieveEnabled->isChecked() && !m_checkBoxStoreEnabled->isChecked())
-    {
-        QMessageBox::warning(this, ApplicationNameString, tr("At least one of the services Query/Retrieve or Send has to be enabled."));
-        return false;
-    }
-
-    if (m_checkBoxQueryRetrieveEnabled->isChecked() && m_textQueryRetrieveServicePort->text().isEmpty())
-    {
-        QMessageBox::warning(this, ApplicationNameString, tr("Query/Retrieve port value has to be between 0 and 65535."));
-        return false;
-    }
-
-    if (m_checkBoxStoreEnabled->isChecked() && m_textStoreServicePort->text().isEmpty())
-    {
-        QMessageBox::warning(this, ApplicationNameString, tr("Send port value has to be between 0 and 65535."));
-        return false;
-    }
-
-    return true;
-}
-
-bool QPacsConfigurationScreen::validatePacsDeviceToSave()
-{
-    if (validatePacsDeviceToEcho())
-    {
-        // La institució no pot estar en blanc
-        if (m_textInstitution->text().length() == 0)
-        {
-            QMessageBox::warning(this, ApplicationNameString, tr("Institution field cannot be empty."));
-            return false;
-        }
-
-        return true;
-    }
-    else
-    {
-        return false;
     }
 }
 
@@ -474,58 +303,6 @@ void QPacsConfigurationScreen::checkIncomingConnectionsPortNotInUse()
 {
     // Si està en ús el frame que conté el warning es fa visible
     m_warningFrameIncomingConnectionsPortInUse->setVisible(isIncomingConnectionsPortInUseByAnotherApplication());
-}
-
-void QPacsConfigurationScreen::queryRetrieveServiceEnabledChanged()
-{
-    m_textQueryRetrieveServicePort->setEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());
-    m_textQueryRetrieveServicePort->setText("");
-    // "Default query PACS" no té sentit que estigui activat si no es pot fer query en el PACS
-    m_checkDefault->setEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());
-
-    if (!m_checkBoxQueryRetrieveEnabled->isChecked())
-    {
-        m_checkDefault->setChecked(false);
-    }
-}
-
-void QPacsConfigurationScreen::storeServiceEnabledChanged()
-{
-    m_textStoreServicePort->setEnabled(m_checkBoxStoreEnabled->isChecked());
-    // Si ens indiquen que el servei d'Store està permés li donem el mateix port que del Query/Retrieve, ja que la majoria de
-    // PACS utilitzen el mateix port per Q/R que per store
-    m_textStoreServicePort->setText(m_checkBoxStoreEnabled->isChecked() ? m_textQueryRetrieveServicePort->text() : "");
-}
-
-void QPacsConfigurationScreen::onQueryRetrieveServicePortChanged()
-{
-    if (!m_textQueryRetrieveServicePort->text().isEmpty())
-    {
-        if (m_checkBoxStoreEnabled->isChecked() && m_textStoreServicePort->text().isEmpty())
-        {
-            // Si s'ha indicat que el servei d'store està permés i aquest no té el port configurat li donem per defecte el valor del port de Q/R
-            m_textStoreServicePort->setText(m_textQueryRetrieveServicePort->text());
-        }
-    }
-}
-
-PacsDevice QPacsConfigurationScreen::getPacsDeviceFromControls()
-{
-    PacsDevice pacsDevice;
-
-    pacsDevice.setAETitle(m_textAETitle->text());
-    pacsDevice.setAddress(m_textAddress->text());
-    pacsDevice.setInstitution(m_textInstitution->text());
-    pacsDevice.setLocation(m_textLocation->text());
-    pacsDevice.setDescription(m_textDescription->text());
-    pacsDevice.setID(m_selectedPacsID);
-    pacsDevice.setQueryRetrieveServiceEnabled(m_checkBoxQueryRetrieveEnabled->isChecked());
-    pacsDevice.setQueryRetrieveServicePort(m_textQueryRetrieveServicePort->text().toInt());
-    pacsDevice.setStoreServiceEnabled(m_checkBoxStoreEnabled->isChecked());
-    pacsDevice.setStoreServicePort(m_textStoreServicePort->text().toInt());
-    pacsDevice.setDefault(m_checkDefault->isChecked());
-
-    return pacsDevice;
 }
 
 };

@@ -54,6 +54,7 @@ set(SOURCES
     qlocaldatabaseconfigurationscreen.cpp
     qoperationstatescreen.cpp
     qpacsconfigurationscreen.cpp
+    qpacsdialog.cpp
     qpacslist.cpp
     qpopuprisrequestsscreen.cpp
     qrelatedstudieswidget.cpp
@@ -103,6 +104,7 @@ set(FORMS
     qlocaldatabaseconfigurationscreenbase.ui
     qoperationstatescreenbase.ui
     qpacsconfigurationscreenbase.ui
+    qpacsdialogbase.ui
     qpacslistbase.ui
     qseriesthumbnailpreviewwidgetbase.ui
     qstudytreewidgetbase.ui
