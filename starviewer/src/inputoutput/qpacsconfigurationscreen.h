@@ -19,6 +19,8 @@
 
 namespace udg {
 
+class PacsDeviceModel;
+
 /**
     Interfície que permet configurar els paràmetres del PACS
   */
@@ -68,9 +70,6 @@ private:
     /// Crea els input validators necessaris pels diferents camps d'edició.
     void configureInputValidator();
 
-    /// Emplena el ListView amb les dades dels PACS que tenim guardades a la bd
-    void fillPacsListView();
-
     /// Emplena els textboxs amb les dades del PACS
     void loadPacsDefaults();
 
@@ -79,6 +78,13 @@ private:
 
     /// Indica si el port per Connexions Entrans del PACS és utilitzat per una altra aplicació
     bool isIncomingConnectionsPortInUseByAnotherApplication();
+
+    /// Refreshes the PACS list in this configuration screen and in the query screen.
+    void refreshPacsList();
+
+private:
+    /// The model for the table view.
+    PacsDeviceModel *m_pacsDeviceModel;
 };
 
 };// end namespace udg

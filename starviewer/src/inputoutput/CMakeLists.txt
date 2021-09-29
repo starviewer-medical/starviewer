@@ -35,6 +35,7 @@ set(SOURCES
     localdatabasevoilutdal.cpp
     pacsconnection.cpp
     pacsdevicemanager.cpp
+    pacsdevicemodel.cpp
     pacsjob.cpp
     pacsmanager.cpp
     parsexmlrispierrequest.cpp

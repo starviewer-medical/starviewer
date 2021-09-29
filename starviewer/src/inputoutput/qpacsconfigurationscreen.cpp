@@ -19,6 +19,7 @@
 #include "logging.h"
 #include "pacsdevice.h"
 #include "pacsdevicemanager.h"
+#include "pacsdevicemodel.h"
 #include "portinuse.h"
 #include "qpacsdialog.h"
 #include "queryscreen.h"
@@ -26,6 +27,7 @@
 #include "starviewerapplication.h"
 
 #include <QMessageBox>
+#include <QSortFilterProxyModel>
 
 namespace udg {
 
@@ -36,8 +38,11 @@ QPacsConfigurationScreen::QPacsConfigurationScreen(QWidget *parent)
 {
     setupUi(this);
 
-    // Emplena el listview amb les dades dels pacs, que tenim configurats
-    fillPacsListView();
+    m_pacsDeviceModel = new PacsDeviceModel(m_pacsTableView);
+    QSortFilterProxyModel *filterModel = new QSortFilterProxyModel(m_pacsTableView);
+    filterModel->setSourceModel(m_pacsDeviceModel);
+    m_pacsTableView->setModel(filterModel);
+
     loadPacsDefaults();
     loadInstitutionInformation();
 
@@ -46,19 +51,19 @@ QPacsConfigurationScreen::QPacsConfigurationScreen(QWidget *parent)
 
     configureInputValidator();
 
-    Settings().restoreColumnsWidths(InputOutputSettings::ConfigurationScreenPACSList, m_PacsTreeView);
+    Settings().restoreColumnsWidths(InputOutputSettings::ConfigurationScreenPACSList, m_pacsTableView);
 
     // Amaguem la columna amb l'ID del PACS que és irrellevant per l'usuari
-    m_PacsTreeView->setColumnHidden(0, true);
+    m_pacsTableView->setColumnHidden(0, true);
     // Ordenem per AETitle
-    m_PacsTreeView->sortByColumn(1, Qt::AscendingOrder);
+    m_pacsTableView->sortByColumn(1, Qt::AscendingOrder);
 
     checkIncomingConnectionsPortNotInUse();
 }
 
 QPacsConfigurationScreen::~QPacsConfigurationScreen()
 {
-    Settings().saveColumnsWidths(InputOutputSettings::ConfigurationScreenPACSList, m_PacsTreeView);
+    Settings().saveColumnsWidths(InputOutputSettings::ConfigurationScreenPACSList, m_pacsTableView);
 }
 
 void QPacsConfigurationScreen::createConnections()
@@ -123,8 +128,7 @@ void QPacsConfigurationScreen::addPacs()
 
     connect(dialog, &QDialog::finished, [=] {
         // Update always independently of the result because the dialog has an apply button
-        fillPacsListView();
-        QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
+        refreshPacsList();
         delete dialog;
     });
 
@@ -133,21 +137,22 @@ void QPacsConfigurationScreen::addPacs()
 
 void QPacsConfigurationScreen::editPacs()
 {
-    if (m_PacsTreeView->selectedItems().isEmpty())
+    if (!m_pacsTableView->selectionModel()->hasSelection())
     {
         QMessageBox::warning(this, ApplicationNameString, tr("Select a PACS to edit."), QMessageBox::Ok);
         return;
     }
 
-    QString pacsId = m_PacsTreeView->selectedItems().first()->text(0);
+    QModelIndex index = m_pacsTableView->selectionModel()->selectedRows(0).first();
+    QString pacsId = m_pacsTableView->model()->data(index).toString();
 
     QPacsDialog *dialog = new QPacsDialog(pacsId, this);
 
     connect(dialog, &QDialog::finished, [=] {
         // Update always independently of the result because the dialog has an apply button
-        fillPacsListView();
-        QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
+        refreshPacsList();
         delete dialog;
+        m_pacsTableView->selectRow(index.row());    // reselect the same row because it's deselected by the refresh
     });
 
     dialog->open();
@@ -155,39 +160,19 @@ void QPacsConfigurationScreen::editPacs()
 
 void QPacsConfigurationScreen::deletePacs()
 {
-    if (m_PacsTreeView->selectedItems().isEmpty())
+    if (!m_pacsTableView->selectionModel()->hasSelection())
     {
         QMessageBox::warning(this, ApplicationNameString, tr("Select a PACS to delete."), QMessageBox::Ok);
         return;
     }
 
-    QString pacsId = m_PacsTreeView->selectedItems().first()->text(0);
+    QModelIndex index = m_pacsTableView->selectionModel()->selectedRows(0).first();
+    QString pacsId = m_pacsTableView->model()->data(index).toString();
 
     INFO_LOG(QString("Deleting PACS with ID %1.").arg(pacsId));
     PacsDeviceManager().deletePACS(pacsId);
 
-    fillPacsListView();
-    QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
-}
-
-void QPacsConfigurationScreen::fillPacsListView()
-{
-    m_PacsTreeView->clear();
-
-    QList<PacsDevice> pacsList = PacsDeviceManager().getPACSList();
-
-    foreach (PacsDevice pacs, pacsList)
-    {
-        QTreeWidgetItem *item = new QTreeWidgetItem(m_PacsTreeView);
-
-        item->setText(0, pacs.getID());
-        item->setText(1, pacs.getAETitle());
-        item->setText(2, pacs.getAddress());
-        item->setText(3, pacs.getInstitution());
-        item->setText(4, pacs.isQueryRetrieveServiceEnabled() ? QString().setNum(pacs.getQueryRetrieveServicePort()) : "Disabled");
-        item->setText(5, pacs.isStoreServiceEnabled() ? QString().setNum(pacs.getStoreServicePort()) : "Disabled");
-        item->setText(6, pacs.isDefault() ? tr("Yes") : tr("No"));
-    }
+    refreshPacsList();
 }
 
 void QPacsConfigurationScreen::updateAETitleSetting()
@@ -303,6 +288,12 @@ void QPacsConfigurationScreen::checkIncomingConnectionsPortNotInUse()
 {
     // Si està en ús el frame que conté el warning es fa visible
     m_warningFrameIncomingConnectionsPortInUse->setVisible(isIncomingConnectionsPortInUseByAnotherApplication());
+}
+
+void QPacsConfigurationScreen::refreshPacsList()
+{
+    m_pacsDeviceModel->refresh();
+    QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
 }
 
 };
