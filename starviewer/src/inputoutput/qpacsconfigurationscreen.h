@@ -43,6 +43,9 @@ private slots:
     /// Slot que esborra el pacs seleccionat
     void deletePacs();
 
+    /// Enables or disables Edit and Delete buttons depending on whether a PACS is selected or not.
+    void updateButtonsState();
+
     /// Si el port que s'indica per les connexions entrants del Pacs canvia, comprovem si està en ús per un altra aplicació que no sigui
     ///  l'Starviewer, si està en ús es mostrar un warning al cantó del TextBox
     void checkIncomingConnectionsPortNotInUse();

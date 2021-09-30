@@ -74,6 +74,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="m_buttonEditPacs">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="toolTip">
             <string>Edit parameters of the selected PACS</string>
            </property>
@@ -88,6 +91,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="m_buttonDeletePacs">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="toolTip">
             <string>Delete selected PACS</string>
            </property>

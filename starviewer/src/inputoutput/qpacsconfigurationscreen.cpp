@@ -26,7 +26,6 @@
 #include "singleton.h"
 #include "starviewerapplication.h"
 
-#include <QMessageBox>
 #include <QSortFilterProxyModel>
 
 namespace udg {
@@ -70,8 +69,10 @@ void QPacsConfigurationScreen::createConnections()
 {
     // Manteniment PACS
     connect(m_buttonAddPacs, SIGNAL(clicked()), SLOT(addPacs()));
-    connect(m_buttonDeletePacs, SIGNAL(clicked()), SLOT(deletePacs()));
     connect(m_buttonEditPacs, &QPushButton::clicked, this, &QPacsConfigurationScreen::editPacs);
+    connect(m_buttonDeletePacs, SIGNAL(clicked()), SLOT(deletePacs()));
+    connect(m_pacsTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &QPacsConfigurationScreen::updateButtonsState);
+    connect(m_pacsDeviceModel, &QAbstractItemModel::modelReset, this, &QPacsConfigurationScreen::updateButtonsState);
 }
 
 void QPacsConfigurationScreen::createLocalConfigurationTabConnections()
@@ -139,7 +140,7 @@ void QPacsConfigurationScreen::editPacs()
 {
     if (!m_pacsTableView->selectionModel()->hasSelection())
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Select a PACS to edit."), QMessageBox::Ok);
+        WARN_LOG("editPacs() called with no PACS selected. It should be impossible.");
         return;
     }
 
@@ -162,7 +163,7 @@ void QPacsConfigurationScreen::deletePacs()
 {
     if (!m_pacsTableView->selectionModel()->hasSelection())
     {
-        QMessageBox::warning(this, ApplicationNameString, tr("Select a PACS to delete."), QMessageBox::Ok);
+        WARN_LOG("deletePacs() called with no PACS selected. It should be impossible.");
         return;
     }
 
@@ -173,6 +174,13 @@ void QPacsConfigurationScreen::deletePacs()
     PacsDeviceManager().deletePACS(pacsId);
 
     refreshPacsList();
+}
+
+void QPacsConfigurationScreen::updateButtonsState()
+{
+    bool pacsSelected = m_pacsTableView->selectionModel()->hasSelection();
+    m_buttonEditPacs->setEnabled(pacsSelected);
+    m_buttonDeletePacs->setEnabled(pacsSelected);
 }
 
 void QPacsConfigurationScreen::updateAETitleSetting()
