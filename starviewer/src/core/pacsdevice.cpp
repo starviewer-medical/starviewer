@@ -217,33 +217,7 @@ QStringList PacsDevice::getDefaultPACSKeyNamesList() const
 
     if (pacsList.isEmpty())
     {
-        // Migració de dades. Si encara no tenim definits els PACS per defecte en el nou format, obtenim els PACS per defecte
-        // del format antic, és a dir, a partir dels elements amb els valors "default" = "S" de la llista de PACS
-        // Un cop llegits, els escrivim en el nou format
-        Settings::SettingListType list = settings.getList(CoreSettings::PacsListConfigurationSectionName);
-        foreach (Settings::SettingsListItemType item, list)
-        {
-            // El camp "default" té aquesta clau
-            if (item.contains("."))
-            {
-                if (item.value(".").toString() == "S")
-                {
-                    // Hem de fer servir els mateixos camps i format que al mètode PacsDevice::getKeyName()
-                    pacsList << item.value("AETitle").toString() + item.value("PacsHostname").toString() + ":" + item.value("PacsPort").toString();
-                }
-            }
-        }
-        if (pacsList.isEmpty())
-        {
-            INFO_LOG("No hi ha PACS per defecte definits en el nou format i tampoc s'han trobat de definits en l'antic format");
-        }
-        else
-        {
-            INFO_LOG("No hi ha PACS per defecte definits en el nou format. Els obtenim del format antic i els migrem al nou format. Són aquests: " +
-                     pacsList.join("//") + "//");
-            Settings settings;
-            settings.setValue(CoreSettings::DefaultPACSListToQuery, pacsList.join("//") + "//");
-        }
+        INFO_LOG("No default PACS.");
     }
 
     return pacsList;
