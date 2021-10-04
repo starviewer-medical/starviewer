@@ -20,7 +20,7 @@
 namespace udg {
 
 PacsDevice::PacsDevice()
-    : m_isQueryRetrieveServiceEnabled(false), m_queryRetrieveServicePort(-1), m_isStoreServiceEnabled(false), m_storeServicePort(-1)
+    : m_type(Type::Dimse), m_isQueryRetrieveServiceEnabled(false), m_queryRetrieveServicePort(-1), m_isStoreServiceEnabled(false), m_storeServicePort(-1)
 {
 }
 
@@ -32,6 +32,16 @@ const QString& PacsDevice::getID() const
 void PacsDevice::setID(QString id)
 {
     m_id = std::move(id);
+}
+
+PacsDevice::Type PacsDevice::getType() const
+{
+    return m_type;
+}
+
+void PacsDevice::setType(Type type)
+{
+    m_type = type;
 }
 
 const QString& PacsDevice::getAETitle() const
@@ -92,6 +102,16 @@ int PacsDevice::getStoreServicePort() const
 void PacsDevice::setStoreServicePort(int port)
 {
     m_storeServicePort = port;
+}
+
+const QUrl& PacsDevice::getBaseUri() const
+{
+    return m_baseUri;
+}
+
+void PacsDevice::setBaseUri(QUrl baseUri)
+{
+    m_baseUri = std::move(baseUri);
 }
 
 const QString& PacsDevice::getInstitution() const
@@ -163,20 +183,25 @@ bool PacsDevice::isEmpty() const
 
 bool PacsDevice::isSamePacsDevice(const PacsDevice &pacsDevice) const
 {
-    return m_AETitle == pacsDevice.getAETitle()
-        && m_address == pacsDevice.getAddress()
-        && m_queryRetrieveServicePort == pacsDevice.getQueryRetrieveServicePort();
+    return (m_type == Type::Dimse
+            && m_AETitle == pacsDevice.getAETitle()
+            && m_address == pacsDevice.getAddress()
+            && m_queryRetrieveServicePort == pacsDevice.getQueryRetrieveServicePort())
+        || (m_type == Type::Wado
+            && m_baseUri == pacsDevice.getBaseUri());
 }
 
 bool PacsDevice::operator==(const PacsDevice &pacsDevice) const
 {
     return m_id == pacsDevice.m_id
+        && m_type == pacsDevice.m_type
         && m_AETitle == pacsDevice.m_AETitle
         && m_address == pacsDevice.m_address
         && m_isQueryRetrieveServiceEnabled == pacsDevice.m_isQueryRetrieveServiceEnabled
         && m_queryRetrieveServicePort == pacsDevice.m_queryRetrieveServicePort
         && m_isStoreServiceEnabled == pacsDevice.m_isStoreServiceEnabled
         && m_storeServicePort == pacsDevice.m_storeServicePort
+        && m_baseUri == pacsDevice.m_baseUri
         && m_location == pacsDevice.m_location
         && m_institution == pacsDevice.m_institution
         && m_description == pacsDevice.m_description;
@@ -184,7 +209,14 @@ bool PacsDevice::operator==(const PacsDevice &pacsDevice) const
 
 QString PacsDevice::getKeyName() const
 {
-    return m_AETitle + m_address + ":" + QString::number(m_queryRetrieveServicePort);
+    if (m_type == Type::Dimse)
+    {
+        return m_AETitle + m_address + ":" + QString::number(m_queryRetrieveServicePort);
+    }
+    else // m_type == Type::Wado
+    {
+        return m_baseUri.toString(QUrl::RemoveScheme);  // remove scheme because it contains "//"
+    }
 }
 
 QStringList PacsDevice::getDefaultPACSKeyNamesList() const

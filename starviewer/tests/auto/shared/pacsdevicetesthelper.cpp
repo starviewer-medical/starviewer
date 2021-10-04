@@ -34,4 +34,13 @@ PacsDevice PACSDeviceTestHelper::createPACSDevice(QString ID, QString AETitle, Q
     return pacsDevice;
 }
 
+PacsDevice PACSDeviceTestHelper::createWadoPacsDevice(QString id, const QString &baseUri)
+{
+    PacsDevice pacsDevice;
+    pacsDevice.setID(std::move(id));
+    pacsDevice.setType(PacsDevice::Type::Wado);
+    pacsDevice.setBaseUri(baseUri);
+    return pacsDevice;
+}
+
 }

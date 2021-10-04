@@ -16,6 +16,9 @@ public:
 
     /// Retorna una PacsDevice amb el ID, AETitle, address i queryPort passat per paràmetre, la resta de camps obligatoris agafen el valor del ID
     static udg::PacsDevice createPACSDevice(QString ID, QString AETitle, QString address, int queryPort);
+
+    /// Creates and returns a WADO PacsDevice the given ID and base URI.
+    static udg::PacsDevice createWadoPacsDevice(QString id, const QString &baseUri);
 };
 }
 
