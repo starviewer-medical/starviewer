@@ -14,40 +14,10 @@
 
 #include "settingsinterface.h"
 
-#include <stdexcept>
-
-#include <QList>
-#include <QMap>
-
 namespace udg {
 
 SettingsInterface::~SettingsInterface()
 {
-}
-
-Settings::SettingListType SettingsInterface::getList(const QString&)
-{
-    throw std::runtime_error("Not implemented");
-}
-
-void SettingsInterface::setList(const QString&, const Settings::SettingListType&)
-{
-    throw std::runtime_error("Not implemented");
-}
-
-void SettingsInterface::addListItem(const QString&, const Settings::SettingsListItemType&)
-{
-    throw std::runtime_error("Not implemented");
-}
-
-void SettingsInterface::setListItem(int, const QString&, const Settings::SettingsListItemType&)
-{
-    throw std::runtime_error("Not implemented");
-}
-
-void SettingsInterface::removeListItem(const QString&, int)
-{
-    throw std::runtime_error("Not implemented");
 }
 
 }
