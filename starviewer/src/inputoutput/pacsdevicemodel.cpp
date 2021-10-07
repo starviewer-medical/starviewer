@@ -14,6 +14,7 @@
 
 #include "pacsdevicemodel.h"
 
+#include "pacsdevice.h"
 #include "pacsdevicemanager.h"
 
 namespace udg {
@@ -31,7 +32,7 @@ int PacsDeviceModel::rowCount(const QModelIndex &parent) const
     }
     else
     {
-        return PacsDeviceManager().getPACSList().size();
+        return PacsDeviceManager::getPacsList().size();
     }
 }
 
@@ -56,7 +57,7 @@ QVariant PacsDeviceModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole)
     {
-        PacsDevice pacsDevice = PacsDeviceManager().getPACSList().at(index.row());
+        PacsDevice pacsDevice = PacsDeviceManager::getPacsList().at(index.row());
 
         switch (index.column())
         {

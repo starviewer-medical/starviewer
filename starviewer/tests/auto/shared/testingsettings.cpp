@@ -93,4 +93,9 @@ void TestingSettings::removeListItem(const QString &key, int index)
     setList(key, list);
 }
 
+bool TestingSettings::operator==(const TestingSettings &that) const
+{
+    return this->m_settings == that.m_settings;
+}
+
 }

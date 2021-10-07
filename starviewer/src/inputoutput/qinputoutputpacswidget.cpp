@@ -27,7 +27,6 @@
 #include "statswatcher.h"
 #include "pacsdevice.h"
 #include "querypacs.h"
-#include "pacsdevicemanager.h"
 #include "study.h"
 #include "localdatabasemanager.h"
 #include "pacsmanager.h"

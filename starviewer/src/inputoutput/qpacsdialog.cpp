@@ -167,7 +167,7 @@ bool QPacsDialog::save()
     {
         INFO_LOG(QString("Adding new PACS with AE Title %1.").arg(pacsDevice.getAETitle()));
 
-        if (PacsDeviceManager().addPACS(pacsDevice))
+        if (PacsDeviceManager::addPacs(pacsDevice))
         {
             m_pacsId = pacsDevice.getID();
             return true;
@@ -181,7 +181,7 @@ bool QPacsDialog::save()
     else
     {
         INFO_LOG(QString("Updating PACS with AE Title %1.").arg(pacsDevice.getAETitle()));
-        PacsDeviceManager().updatePACS(pacsDevice);
+        PacsDeviceManager::updatePacs(pacsDevice);
         return true;
     }
 }
@@ -203,7 +203,7 @@ void QPacsDialog::reset()
     }
     else
     {
-        PacsDevice pacsDevice = PacsDeviceManager().getPACSDeviceByID(m_pacsId);
+        PacsDevice pacsDevice = PacsDeviceManager::getPacsDeviceById(m_pacsId);
         m_aeTitleLineEdit->setText(pacsDevice.getAETitle());
         m_addressLineEdit->setText(pacsDevice.getAddress());
         m_qrServiceEnabledCheckBox->setChecked(pacsDevice.isQueryRetrieveServiceEnabled());

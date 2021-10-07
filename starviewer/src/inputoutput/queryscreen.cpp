@@ -20,7 +20,6 @@
 
 #include "qpacslist.h"
 #include "inputoutputsettings.h"
-#include "pacsdevicemanager.h"
 #include "logging.h"
 #include "qcreatedicomdir.h"
 #include "dicommask.h"

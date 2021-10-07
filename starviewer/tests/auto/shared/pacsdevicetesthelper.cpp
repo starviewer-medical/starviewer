@@ -14,7 +14,6 @@ PacsDevice PACSDeviceTestHelper::createPACSDeviceByID(QString ID)
     pacsDevice.setQueryRetrieveServiceEnabled(true);
     pacsDevice.setQueryRetrieveServicePort(4006);
     pacsDevice.setInstitution(ID);
-    pacsDevice.setDefault(true);
     pacsDevice.setDescription("");
     pacsDevice.setLocation("");
     pacsDevice.setStoreServiceEnabled(false);

@@ -82,7 +82,7 @@ QString EchoToPACSTest::getDescription() const
 
 QList<PacsDevice> EchoToPACSTest::getPacsDeviceList()
 {
-    return PacsDeviceManager().getPACSList();
+    return PacsDeviceManager::getPacsList();
 }
 
 EchoToPACS::EchoRequestStatus EchoToPACSTest::echo(const PacsDevice &pacs)

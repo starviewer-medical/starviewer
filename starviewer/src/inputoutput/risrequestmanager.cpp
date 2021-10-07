@@ -121,7 +121,8 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
     // fes aquesta comprovació i ens retornes algun codi que pugui descriure com ha anat la consulta i així poder actuar en conseqüència mostrant
     // un message box, fent un log o el que calgui segons la ocasió.
-    QList<PacsDevice> queryablePACS = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
+    QList<PacsDevice> queryablePACS =
+            PacsDeviceManager::getPacsList(PacsDeviceManager::DimseWithQueryRetrieveService | PacsDeviceManager::Wado | PacsDeviceManager::OnlyDefault);
     if (queryablePACS.isEmpty())
     {
         QMessageBox::information(0, ApplicationNameString, tr("Cannot retrieve the studies requested from RIS because there is no configured default "

@@ -171,7 +171,7 @@ void QPacsConfigurationScreen::deletePacs()
     QString pacsId = m_pacsTableView->model()->data(index).toString();
 
     INFO_LOG(QString("Deleting PACS with ID %1.").arg(pacsId));
-    PacsDeviceManager().deletePACS(pacsId);
+    PacsDeviceManager::deletePacs(pacsId);
 
     refreshPacsList();
 }

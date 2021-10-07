@@ -47,6 +47,8 @@ public:
     /// Removes the settings list item (a map) at the given index from the list stored with the given key.
     void removeListItem(const QString &key, int index) override;
 
+    bool operator==(const TestingSettings &that) const;
+
 private:
     /// A map that stores the settings to memory.
     QMap<QString, QVariant> m_settings;

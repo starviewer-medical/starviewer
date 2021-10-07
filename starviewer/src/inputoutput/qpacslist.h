@@ -44,8 +44,8 @@ public:
     ~QPacsList();
 
     /// Especifica/Retorna per quin Filtre es filtren els PACS mostrats, per defecte si no s'especifica no es filtra.
-    void setFilterPACSByService(PacsDeviceManager::FilterPACSByService);
-    PacsDeviceManager::FilterPACSByService getFilterPACSByService();
+    void setFilterPACSByService(PacsDeviceManager::PacsFilter);
+    PacsDeviceManager::PacsFilter getFilterPACSByService();
 
     /// Especifica/Retorna si els PACS que estan marcats com a PACS per cercar per defecte s'han de mostrar ressaltats. Per defecte s'hi mostren
     void setShowQueryPacsDefaultHighlighted(bool showHighlighted);
@@ -65,7 +65,7 @@ private slots:
     void setDefaultPACS(QTreeWidgetItem *item);
 
 private:
-    PacsDeviceManager::FilterPACSByService m_filterPacsByService;
+    PacsDeviceManager::PacsFilter m_pacsFilter;
     bool m_showQueryPacsDefaultHighlighted;
 };
 

@@ -14,176 +14,224 @@
 
 #include "pacsdevicemanager.h"
 
-#include <QString>
-#include "pacsdevice.h"
-#include "logging.h"
 #include "inputoutputsettings.h"
+#include "logging.h"
+#include "pacsdevice.h"
 
 namespace udg {
 
-PacsDeviceManager::PacsDeviceManager()
-{
-}
+namespace {
 
-PacsDeviceManager::~PacsDeviceManager()
+// Returns true if the given PACS is already configured and false otherwise.
+bool isPacsConfigured(const PacsDevice &pacs)
 {
-}
+    QList<PacsDevice> pacsList = PacsDeviceManager::getPacsList();
 
-bool PacsDeviceManager::addPACS(PacsDevice &pacs)
-{
-    // Si el PACS ja existeix no l'afegim
-    bool ok = !this->isPACSConfigured(pacs);
-    if (ok)
+    foreach (PacsDevice pacsDevice, pacsList)
     {
-        // En cas que existeixi, li assignarem l'ID
-        QList<PacsDevice> pacsList = getPACSList();
-        if (pacsList.isEmpty())
+        if (pacsDevice.isSamePacsDevice(pacs))
         {
-            // Si encara no teníem cap PACS, l'ID inicial serà 0
-            pacs.setID(QString::number(0));
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// Converts a PacsDevice instance to a Settings::SettingsListItemType instance.
+Settings::SettingsListItemType pacsDeviceToSettingsListItem(const PacsDevice &pacsDevice)
+{
+    Settings::SettingsListItemType item;
+    item["ID"] = pacsDevice.getID();
+
+    switch (pacsDevice.getType())
+    {
+        case PacsDevice::Type::Dimse:
+            item["Type"] = "DIMSE";
+            item["AETitle"] = pacsDevice.getAETitle();
+            item["PacsHostname"] = pacsDevice.getAddress();
+            item["QueryRetrieveServiceEnabled"] = pacsDevice.isQueryRetrieveServiceEnabled();
+            item["PacsPort"] = pacsDevice.getQueryRetrieveServicePort();
+            item["StoreServiceEnabled"] = pacsDevice.isStoreServiceEnabled();
+            item["StoreServicePort"] = pacsDevice.getStoreServicePort();
+            break;
+
+        case PacsDevice::Type::Wado:
+            item["Type"] = "WADO";
+            item["BaseUri"] = pacsDevice.getBaseUri();
+            break;
+    }
+
+    item["Institution"] = pacsDevice.getInstitution();
+    item["Location"] = pacsDevice.getLocation();
+    item["Description"] = pacsDevice.getDescription();
+
+    return item;
+}
+
+// Converts a Settings::SettingsListItemType instance to a PacsDevice instance.
+PacsDevice settingsListItemToPacsDevice(const Settings::SettingsListItemType &item)
+{
+    PacsDevice pacsDevice;
+    pacsDevice.setID(item["ID"].toString());
+
+    if (!item.contains("Type") || item["Type"].toString() == "DIMSE")
+    {
+        pacsDevice.setType(PacsDevice::Type::Dimse);
+        pacsDevice.setAETitle(item["AETitle"].toString());
+        pacsDevice.setAddress(item["PacsHostname"].toString());
+        pacsDevice.setQueryRetrieveServiceEnabled(item.value("QueryRetrieveServiceEnabled", true).toBool());
+        pacsDevice.setQueryRetrieveServicePort(item["PacsPort"].toInt());
+
+        if (!item.contains("StoreServiceEnabled"))
+        {
+            pacsDevice.setStoreServiceEnabled(true);
+            pacsDevice.setStoreServicePort(item["PacsPort"].toInt());
         }
         else
         {
-            // En cas que ja en tinguem de configurats, l'ID serà
-            // l'ID més alt dels configurats + 1
-            int highestID = 0;
-            foreach (PacsDevice pacs, pacsList)
-            {
-                if (pacs.getID().toInt() > highestID)
-                {
-                    highestID = pacs.getID().toInt();
-                }
-            }
-            pacs.setID(QString::number(highestID + 1));
+            pacsDevice.setStoreServiceEnabled(item["StoreServiceEnabled"].toBool());
+            pacsDevice.setStoreServicePort(item["StoreServicePort"].toInt());
         }
-
-        Settings settings;
-        settings.addListItem(InputOutputSettings::PacsListConfigurationSectionName, pacsDeviceToSettingsListItem(pacs));
+    }
+    else if (item["Type"].toString() == "WADO")
+    {
+        pacsDevice.setType(PacsDevice::Type::Wado);
+        pacsDevice.setBaseUri(item["BaseUri"].toUrl());
     }
 
-    return ok;
+    pacsDevice.setInstitution(item["Institution"].toString());
+    pacsDevice.setLocation(item["Location"].toString());
+    pacsDevice.setDescription(item["Description"].toString());
+
+    return pacsDevice;
 }
 
-void PacsDeviceManager::updatePACS(PacsDevice &pacsToUpdate)
-{
-    // Obtenim la llista completa de PACS
-    QList<PacsDevice> pacsList = getPACSList();
-    // Eliminem tots els PACS que tinguem guardats a disc
-    Settings settings;
-    settings.remove(InputOutputSettings::PacsListConfigurationSectionName);
-
-    // Recorrem tota la llista de PACS i els afegim de nou
-    // Si trobem el que volem fer update, afegim l'actualitzat
-    foreach (PacsDevice device, pacsList)
-    {
-        if (pacsToUpdate.getID() == device.getID())
-        {
-            addPACS(pacsToUpdate);
-        }
-        else
-        {
-            addPACS(device);
-        }
-    }
 }
 
-bool PacsDeviceManager::deletePACS(const QString &pacsIDString)
+bool PacsDeviceManager::addPacs(PacsDevice &pacs)
 {
-    // Obtenim la llista completa de PACS
-    QList<PacsDevice> pacsList = getPACSList();
-    // Eliminem tots els PACS que tinguem guardats a disc
-    Settings settings;
-    settings.remove(InputOutputSettings::PacsListConfigurationSectionName);
-
-    // Recorrem tota la llista de PACS i els afegim de nou
-    // excepte el que volem esborrar
-    foreach (PacsDevice device, pacsList)
+    if (isPacsConfigured(pacs))
     {
-        if (pacsIDString != device.getID())
+        return false;   // PACS already exists
+    }
+
+    QList<PacsDevice> pacsList = getPacsList();
+
+    // Assign ID. It will be 0 if there is no other PACS and the highest ID + 1 otherwise.
+    int newId = pacsList.size();    // initialize directly to the size; it will probably be the final id
+
+    for (const PacsDevice &pacs : pacsList)
+    {
+        int id = pacs.getID().toInt();
+
+        if (id >= newId)
         {
-            addPACS(device);
+            newId = id + 1;
         }
     }
+
+    pacs.setID(QString::number(newId));
+
+    Settings().addListItem(InputOutputSettings::PacsListConfigurationSectionName, pacsDeviceToSettingsListItem(pacs));
+
     return true;
 }
 
-QList<PacsDevice> PacsDeviceManager::getPACSList(FilterPACSByService filter, bool onlyDefault)
+void PacsDeviceManager::updatePacs(PacsDevice &pacsToUpdate)
 {
-    QList<PacsDevice> configuredPacsList;
-    Settings settings;
-    Settings::SettingListType list = settings.getList(InputOutputSettings::PacsListConfigurationSectionName);
-    foreach (Settings::SettingsListItemType item, list)
+    PacsDevice oldPacs = getPacsDeviceById(pacsToUpdate.getID());
+
+    if (oldPacs.isEmpty())
     {
-        PacsDevice pacs;
-        pacs = settingsListItemToPacsDevice(item);
-        // Depenent del paràmetre "onlyDefault" afegirem o no els pacs
-        if ((onlyDefault && pacs.isDefault()) || !onlyDefault)
+        return; // PACS does not exist
+    }
+
+    QList<PacsDevice> pacsList = getPacsList();
+
+    // Delete all PACS and then add them again with one of them updated
+    Settings().remove(InputOutputSettings::PacsListConfigurationSectionName);
+
+    for (PacsDevice &device : pacsList)
+    {
+        if (pacsToUpdate.getID() == device.getID())
         {
-            // Filtrem per servei si ens ho han demanat
-            if (filter == PacsDeviceManager::AllPacs ||
-                (filter == PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled && pacs.isQueryRetrieveServiceEnabled()) ||
-                (filter == PacsDeviceManager::PacsWithStoreServiceEnabled && pacs.isStoreServiceEnabled()))
-            {
-                configuredPacsList << pacs;
-            }
+            addPacs(pacsToUpdate);
+        }
+        else
+        {
+            addPacs(device);
+        }
+    }
+}
+
+void PacsDeviceManager::deletePacs(const QString &pacsID)
+{
+    PacsDevice pacsToDelete = getPacsDeviceById(pacsID);
+
+    if (pacsToDelete.isEmpty())
+    {
+        return; // PACS does not exist
+    }
+
+    QList<PacsDevice> pacsList = getPacsList();
+
+    // Delete all PACS and then add them again except for the deleted one
+    Settings().remove(InputOutputSettings::PacsListConfigurationSectionName);
+
+    for (PacsDevice &device : pacsList)
+    {
+        if (pacsID != device.getID())
+        {
+            addPacs(device);
+        }
+    }
+}
+
+QList<PacsDevice> PacsDeviceManager::getPacsList(PacsFilter filter)
+{
+    Settings::SettingListType list = Settings().getList(InputOutputSettings::PacsListConfigurationSectionName);
+    QList<PacsDevice> configuredPacsList;
+
+    for (const Settings::SettingsListItemType &item : list)
+    {
+        PacsDevice pacs = settingsListItemToPacsDevice(item);
+        bool include = filter.testFlag(DimseWithQueryRetrieveService) && pacs.getType() == PacsDevice::Type::Dimse && pacs.isQueryRetrieveServiceEnabled();
+        include |= filter.testFlag(DimseWithStoreService) && pacs.getType() == PacsDevice::Type::Dimse && pacs.isStoreServiceEnabled();
+        include |= filter.testFlag(Wado) && pacs.getType() == PacsDevice::Type::Wado;
+        include &= filter.testFlag(OnlyDefault) ? pacs.isDefault() : true;
+
+        if (include)
+        {
+            configuredPacsList.append(pacs);
         }
     }
 
     return configuredPacsList;
 }
 
-PacsDevice PacsDeviceManager::getPACSDeviceByID(const QString &pacsIDString)
+PacsDevice PacsDeviceManager::getPacsDeviceById(const QString &pacsID)
 {
-    QList<PacsDevice> pacsList = getPACSList();
-    PacsDevice pacs;
+    QList<PacsDevice> pacsList = getPacsList();
 
-    bool found = false;
-    int i = 0;
-    int count = pacsList.count();
-    while (!found && i < count)
+    for (const PacsDevice &pacs : pacsList)
     {
-        if (pacsIDString == pacsList.at(i).getID())
+        if (pacs.getID() == pacsID)
         {
-            found = true;
-            pacs = pacsList.at(i);
-        }
-        i++;
-    }
-
-    if (!found)
-    {
-        DEBUG_LOG("No existeix cap PACS amb aquest ID: " + pacsIDString);
-        ERROR_LOG("No existeix cap PACS amb aquest ID: " + pacsIDString);
-    }
-    return pacs;
-}
-
-PacsDevice PacsDeviceManager::getPACSDeviceByAddressAndQueryPort(QString address, int queryRetrieveServicePort)
-{
-    PacsDevice pacsDeviceToReturn;
-
-    foreach(PacsDevice pacs, getPACSList())
-    {
-        if (address == pacs.getAddress() && queryRetrieveServicePort == pacs.getQueryRetrieveServicePort())
-        {
-            pacsDeviceToReturn = pacs;
-            break;
+            return pacs;
         }
     }
 
-    if (pacsDeviceToReturn.isEmpty())
-    {
-        ERROR_LOG(QString("No existeix cap PACS amb aquest adreca: %1, port query: %2").arg(address, queryRetrieveServicePort));
-    }
+    WARN_LOG(QString("PACS with ID %1 not found.").arg(pacsID));
 
-    return pacsDeviceToReturn;
+    return PacsDevice();
 }
 
-QList<PacsDevice> PacsDeviceManager::removeDuplicateSamePACS(QList<PacsDevice> pacsDeviceList)
+QList<PacsDevice> PacsDeviceManager::removeDuplicatePacsFromList(const QList<PacsDevice> &pacsDeviceList)
 {
     QList<PacsDevice> pacsDeviceListWithoutDuplicates;
 
-    foreach (PacsDevice pacsDevice, pacsDeviceList)
+    for (const PacsDevice &pacsDevice : pacsDeviceList)
     {
         if (!isAddedSamePacsDeviceInList(pacsDeviceListWithoutDuplicates, pacsDevice))
         {
@@ -194,9 +242,9 @@ QList<PacsDevice> PacsDeviceManager::removeDuplicateSamePACS(QList<PacsDevice> p
     return pacsDeviceListWithoutDuplicates;
 }
 
-bool PacsDeviceManager::isAddedSamePacsDeviceInList(QList<PacsDevice> pacsDeviceList, PacsDevice pacsDevice)
+bool PacsDeviceManager::isAddedSamePacsDeviceInList(const QList<PacsDevice> &pacsDeviceList, const PacsDevice &pacsDevice)
 {
-    foreach (PacsDevice pacsDeviceInList, pacsDeviceList)
+    for (const PacsDevice &pacsDeviceInList : pacsDeviceList)
     {
         if (pacsDeviceInList.isSamePacsDevice(pacsDevice))
         {
@@ -207,89 +255,4 @@ bool PacsDeviceManager::isAddedSamePacsDeviceInList(QList<PacsDevice> pacsDevice
     return false;
 }
 
-bool PacsDeviceManager::isPACSConfigured(const PacsDevice &pacs)
-{
-    QList<PacsDevice> pacsList = getPACSList();
-
-    foreach (PacsDevice pacsDevice, pacsList)
-    {
-        if (pacsDevice.getAETitle() == pacs.getAETitle() &&
-            pacsDevice.getQueryRetrieveServicePort() == pacs.getQueryRetrieveServicePort() &&
-            pacsDevice.getAddress() == pacs.getAddress())
-        {
-            return true;
-        }
-    }
-
-    return false;
 }
-
-Settings::SettingsListItemType PacsDeviceManager::pacsDeviceToSettingsListItem(const PacsDevice &pacsDevice)
-{
-    Settings::SettingsListItemType item;
-
-    item["ID"] = pacsDevice.getID();
-    item["AETitle"] = pacsDevice.getAETitle();
-    item["PacsPort"] = QString::number(pacsDevice.getQueryRetrieveServicePort());
-    item["Location"] = pacsDevice.getLocation();
-    item["Institution"] = pacsDevice.getInstitution();
-    item["PacsHostname"] = pacsDevice.getAddress();
-    item["Description"] = pacsDevice.getDescription();
-    item["QueryRetrieveServiceEnabled"] = pacsDevice.isQueryRetrieveServiceEnabled();
-    item["StoreServiceEnabled"] = pacsDevice.isStoreServiceEnabled();
-    item["StoreServicePort"] = QString::number(pacsDevice.getStoreServicePort());
-
-    return item;
-}
-
-PacsDevice PacsDeviceManager::settingsListItemToPacsDevice(const Settings::SettingsListItemType &item)
-{
-    PacsDevice pacsDevice;
-    // TODO cal comprovar que hi ha les claus que volem? sinó quedarà amb valors empty
-    pacsDevice.setID(item.value("ID").toString());
-    pacsDevice.setAETitle(item.value("AETitle").toString());
-    pacsDevice.setLocation(item.value("Location").toString());
-    pacsDevice.setInstitution(item.value("Institution").toString());
-    pacsDevice.setAddress(item.value("PacsHostname").toString());
-    pacsDevice.setDescription(item.value("Description").toString());
-
-    // A partir d'Starviewer 0.9 s'ofereix la possibilitat d'enviar imatges a PACS, aquest canvi implicar que s'ha de poder indicar
-    // a quin port del PACS s'han d'enviar les imatges per guardar-les, per mantenir la comptabilitat amb PACS que han estat guardats al
-    // settings amb versions anteriors s'executa el codi que hi ha a continuació
-
-    if (!item.contains("QueryRetrieveServiceEnabled"))
-    {
-        // Si no està guardat als settings si està activat el servei de Query/Retrieve per defecte li indiquem que està activat
-        pacsDevice.setQueryRetrieveServiceEnabled(true);
-        pacsDevice.setQueryRetrieveServicePort(item.value("PacsPort").toInt());
-    }
-    else
-    {
-        pacsDevice.setQueryRetrieveServiceEnabled(item.value("QueryRetrieveServiceEnabled").toBool());
-
-        if (pacsDevice.isQueryRetrieveServiceEnabled())
-        {
-            pacsDevice.setQueryRetrieveServicePort(item.value("PacsPort").toInt());
-        }
-    }
-
-    if (!item.contains("StoreServiceEnabled"))
-    {
-        // Si no està guardat als settings si està activat el servei de Store Query/Retrieve per defecte li indique, que està activat i li
-        // donem el mateix port que el servei de Query/Retrieve
-        pacsDevice.setStoreServiceEnabled(true);
-        pacsDevice.setStoreServicePort(item.value("PacsPort").toInt());
-    }
-    else
-    {
-        pacsDevice.setStoreServiceEnabled (item.value("StoreServiceEnabled").toBool());
-
-        if (pacsDevice.isStoreServiceEnabled())
-        {
-            pacsDevice.setStoreServicePort(item.value("StoreServicePort").toInt());
-        }
-    }
-
-    return pacsDevice;
-}
-};

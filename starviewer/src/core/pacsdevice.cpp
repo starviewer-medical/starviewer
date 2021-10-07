@@ -215,7 +215,7 @@ QString PacsDevice::getKeyName() const
     }
     else // m_type == Type::Wado
     {
-        return m_baseUri.toString(QUrl::RemoveScheme);  // remove scheme because it contains "//"
+        return m_baseUri.toString().replace('/', '.');  // replace slashes to avoid coincidence with separator
     }
 }
 
