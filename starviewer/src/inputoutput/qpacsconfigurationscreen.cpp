@@ -67,10 +67,10 @@ QPacsConfigurationScreen::~QPacsConfigurationScreen()
 
 void QPacsConfigurationScreen::createConnections()
 {
-    // Manteniment PACS
-    connect(m_buttonAddPacs, SIGNAL(clicked()), SLOT(addPacs()));
-    connect(m_buttonEditPacs, &QPushButton::clicked, this, &QPacsConfigurationScreen::editPacs);
-    connect(m_buttonDeletePacs, SIGNAL(clicked()), SLOT(deletePacs()));
+    connect(m_addDimsePacsPushButton, &QPushButton::clicked, this, &QPacsConfigurationScreen::addDimsePacs);
+    connect(m_addWadoPacsPushButton, &QPushButton::clicked, this, &QPacsConfigurationScreen::addWadoPacs);
+    connect(m_editPushButton, &QPushButton::clicked, this, &QPacsConfigurationScreen::editPacs);
+    connect(m_deletePushButton, &QPushButton::clicked, this, &QPacsConfigurationScreen::deletePacs);
     connect(m_pacsTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &QPacsConfigurationScreen::updateButtonsState);
     connect(m_pacsDeviceModel, &QAbstractItemModel::modelReset, this, &QPacsConfigurationScreen::updateButtonsState);
 }
@@ -123,9 +123,22 @@ void QPacsConfigurationScreen::loadInstitutionInformation()
     m_textInstitutionPhoneNumber->setText(settings.getValue(InputOutputSettings::InstitutionPhoneNumber).toString());
 }
 
-void QPacsConfigurationScreen::addPacs()
+void QPacsConfigurationScreen::addDimsePacs()
 {
-    QPacsDialog *dialog = new QPacsDialog(this);
+    QPacsDialog *dialog = new QPacsDialog(PacsDevice::Type::Dimse, this);
+
+    connect(dialog, &QDialog::finished, [=] {
+        // Update always independently of the result because the dialog has an apply button
+        refreshPacsList();
+        delete dialog;
+    });
+
+    dialog->open();
+}
+
+void QPacsConfigurationScreen::addWadoPacs()
+{
+    QPacsDialog *dialog = new QPacsDialog(PacsDevice::Type::Wado, this);
 
     connect(dialog, &QDialog::finished, [=] {
         // Update always independently of the result because the dialog has an apply button
@@ -179,8 +192,8 @@ void QPacsConfigurationScreen::deletePacs()
 void QPacsConfigurationScreen::updateButtonsState()
 {
     bool pacsSelected = m_pacsTableView->selectionModel()->hasSelection();
-    m_buttonEditPacs->setEnabled(pacsSelected);
-    m_buttonDeletePacs->setEnabled(pacsSelected);
+    m_editPushButton->setEnabled(pacsSelected);
+    m_deletePushButton->setEnabled(pacsSelected);
 }
 
 void QPacsConfigurationScreen::updateAETitleSetting()

@@ -62,7 +62,7 @@ QVariant PacsDeviceModel::data(const QModelIndex &index, int role) const
         switch (index.column())
         {
             case PacsId: return pacsDevice.getID();
-            case AeTitle: return pacsDevice.getAETitle();
+            case AeTitleOrBaseUri: return pacsDevice.getType() == PacsDevice::Type::Dimse ? pacsDevice.getAETitle() : pacsDevice.getBaseUri().toString();
             case Institution: return pacsDevice.getInstitution();
             case Description: return pacsDevice.getDescription();
             case Default: return pacsDevice.isDefault() ? tr("Yes") : tr("No");
@@ -82,7 +82,7 @@ QVariant PacsDeviceModel::headerData(int section, Qt::Orientation orientation, i
     switch (section)
     {
         case PacsId: return tr("PacsId");
-        case AeTitle: return tr("AE Title");
+        case AeTitleOrBaseUri: return tr("AE Title / Base URI");
         case Institution: return tr("Institution");
         case Description: return tr("Description");
         case Default: return tr("Default query PACS");

@@ -59,12 +59,12 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QPushButton" name="m_buttonAddPacs">
+          <widget class="QPushButton" name="m_addDimsePacsPushButton">
            <property name="toolTip">
             <string>Add a new PACS to the list</string>
            </property>
            <property name="text">
-            <string>Add</string>
+            <string>Add DIMSE PACS</string>
            </property>
            <property name="icon">
             <iconset resource="../main/themes/starviewer/starviewer.qrc">
@@ -73,7 +73,18 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_buttonEditPacs">
+          <widget class="QPushButton" name="m_addWadoPacsPushButton">
+           <property name="text">
+            <string>Add WADO PACS</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../main/themes/starviewer/starviewer.qrc">
+             <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="m_editPushButton">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -90,7 +101,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="m_buttonDeletePacs">
+          <widget class="QPushButton" name="m_deletePushButton">
            <property name="enabled">
             <bool>false</bool>
            </property>

@@ -34,8 +34,11 @@ public:
     ~QPacsConfigurationScreen();
 
 private slots:
-    /// Shows a dialog to add a new PACS.
-    void addPacs();
+    /// Shows a dialog to add a new DIMSE PACS.
+    void addDimsePacs();
+
+    /// Shows a dialog to add a new WADO PACS.
+    void addWadoPacs();
 
     /// Shows a dialog to edit the selected PACS.
     void editPacs();

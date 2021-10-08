@@ -26,7 +26,7 @@ class PacsDeviceModel : public QAbstractTableModel
 {
 public:
     /// Columns of this model.
-    enum Columns { PacsId, AeTitle, Institution, Description, Default, NumberOfColumns };
+    enum Columns { PacsId, AeTitleOrBaseUri, Institution, Description, Default, NumberOfColumns };
 
     explicit PacsDeviceModel(QObject *parent = nullptr);
 

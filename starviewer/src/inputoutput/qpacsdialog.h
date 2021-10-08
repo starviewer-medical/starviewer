@@ -18,9 +18,9 @@
 #include <QDialog>
 #include "ui_qpacsdialogbase.h"
 
-namespace udg {
+#include "pacsdevice.h"
 
-class PacsDevice;
+namespace udg {
 
 /**
  * @brief The QPacsDialog class allows the user to edit the settings of a PACS server.
@@ -29,12 +29,21 @@ class QPacsDialog : public QDialog, private ::Ui::QPacsDialogBase
 {
     Q_OBJECT
 public:
-    /// Creates the dialog with empty fields, to add a new PACS.
-    explicit QPacsDialog(QWidget *parent = nullptr);
+    /// Creates the dialog with empty fields, to add a new PACS of the given type.
+    explicit QPacsDialog(PacsDevice::Type type, QWidget *parent = nullptr);
     /// Creates the dialog and fills it with the information of the PACS with the given id.
     explicit QPacsDialog(QString pacsId, QWidget *parent = nullptr);
 
 private:
+    /// Common initialization for both constructors.
+    void initialize();
+
+    /// Leaves the dialog ready to configure a DIMSE PACS.
+    void setupDimse();
+
+    /// Leaves the dialog ready to configure a WADO PACS.
+    void setupWado();
+
     /// Creates the needed connections.
     void createConnections();
 
@@ -58,6 +67,8 @@ private slots:
     void reset();
 
 private:
+    /// Type for a new PACS.
+    PacsDevice::Type m_pacsType;
     /// Id of the edited PACS, if any.
     QString m_pacsId;
 };
