@@ -19,6 +19,12 @@
 
 namespace udg {
 
+namespace {
+
+const QString DefaultPacsListSeparator("\\\\");
+
+}
+
 PacsDevice::PacsDevice()
     : m_type(Type::Dimse), m_isQueryRetrieveServiceEnabled(false), m_queryRetrieveServicePort(-1), m_isStoreServiceEnabled(false), m_storeServicePort(-1)
 {
@@ -162,7 +168,7 @@ void PacsDevice::setDefault(bool isDefault)
         {
             Settings settings;
             QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
-            value += keyName + "//";
+            value += keyName + DefaultPacsListSeparator;
             settings.setValue(CoreSettings::DefaultPACSListToQuery, value);
         }
     }
@@ -171,7 +177,7 @@ void PacsDevice::setDefault(bool isDefault)
         // Eliminar
         Settings settings;
         QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
-        value.remove(keyName + "//");
+        value.remove(keyName + DefaultPacsListSeparator);
         settings.setValue(CoreSettings::DefaultPACSListToQuery, value);
     }
 }
@@ -215,15 +221,25 @@ QString PacsDevice::getKeyName() const
     }
     else // m_type == Type::Wado
     {
-        return m_baseUri.toString().replace('/', '.');  // replace slashes to avoid coincidence with separator
+        return m_baseUri.toString();
     }
 }
 
 QStringList PacsDevice::getDefaultPACSKeyNamesList() const
 {
+    const static QString OldSeparator("//");
+
     Settings settings;
-    QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
-    QStringList pacsList = value.split("//", QString::SkipEmptyParts);
+    QString listString = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
+
+    // Migrate from old format to new if needed
+    if (listString.endsWith(OldSeparator))
+    {
+        listString = listString.split(OldSeparator).join(DefaultPacsListSeparator);
+        settings.setValue(CoreSettings::DefaultPACSListToQuery, listString);
+    }
+
+    QStringList pacsList = listString.split(DefaultPacsListSeparator, QString::SkipEmptyParts);
 
     if (pacsList.isEmpty())
     {
