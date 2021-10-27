@@ -1,0 +1,88 @@
+/*************************************************************************************
+  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Institut de Diagnòstic per la Imatge.
+  Girona 2014. All rights reserved.
+  http://starviewer.udg.edu
+
+  This file is part of the Starviewer (Medical Imaging Software) open source project.
+  It is subject to the license terms in the LICENSE file found in the top-level
+  directory of this distribution and at http://starviewer.udg.edu/license. No part of
+  the Starviewer (Medical Imaging Software) open source project, including this file,
+  may be copied, modified, propagated, or distributed except according to the
+  terms contained in the LICENSE file.
+ *************************************************************************************/
+
+#include "dimsequerystudyoperationresult.h"
+
+#include "logging.h"
+#include "pacsmanager.h"
+#include "querypacsjob.h"
+
+namespace udg {
+
+DimseQueryStudyOperationResult::DimseQueryStudyOperationResult(PACSJobPointer job, PacsManager *pacsManager, QObject *parent)
+    : StudyOperationResult(parent), m_pacsManager(pacsManager)
+{
+    m_job = job.objectCast<QueryPacsJob>();
+
+    if (m_job.isNull())
+    {
+        ERROR_LOG("DimseQueryStudyOperationResult created with a job that is not a QueryPacsJob");
+        Q_ASSERT(false);    // fail in debug; just log and return in release
+        return;
+    }
+
+    // Slot will be executed in the same thread that executes the job (checked)
+    connect(m_job.data(), &PACSJob::PACSJobFinished, this, &DimseQueryStudyOperationResult::onJobFinished, Qt::DirectConnection);
+    connect(m_job.data(), &PACSJob::PACSJobCancelled, this, &DimseQueryStudyOperationResult::onJobCancelled, Qt::DirectConnection);
+}
+
+QString DimseQueryStudyOperationResult::getStudyInstanceUid() const
+{
+    return m_job->getDicomMask().getStudyInstanceUID();
+}
+
+QString DimseQueryStudyOperationResult::getSeriesInstanceUid() const
+{
+    return m_job->getDicomMask().getSeriesInstanceUID();
+}
+
+void DimseQueryStudyOperationResult::cancel()
+{
+    m_pacsManager->requestCancelPACSJob(m_job);
+}
+
+void DimseQueryStudyOperationResult::onJobFinished()
+{
+    if (m_job->getStatus() == PACSRequestStatus::QueryOk)
+    {
+        switch (m_job->getQueryLevel())
+        {
+            case QueryPacsJob::study:
+                setStudies(m_job->getPatientStudyList());
+                break;
+            case QueryPacsJob::series:
+                setSeries(m_job->getSeriesList());
+                break;
+            case QueryPacsJob::image:
+                setInstances(m_job->getImageList());
+                break;
+        }
+    }
+    else if (m_job->getStatus() == PACSRequestStatus::QueryCancelled)
+    {
+        onJobCancelled();   // TODO not sure if really needed
+    }
+    else
+    {
+        setErrorText(m_job->getStatusDescription());
+    }
+}
+
+// TODO can a job be cancelled externally? maybe on application exit?
+void DimseQueryStudyOperationResult::onJobCancelled()
+{
+    setCancelled();
+}
+
+} // namespace udg

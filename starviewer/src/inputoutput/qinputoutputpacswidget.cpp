@@ -14,28 +14,62 @@
 
 #include "qinputoutputpacswidget.h"
 
-#include <QMessageBox>
-#include <QShortcut>
-#include <QMovie>
-#include <QPair>
-
+#include "dicommask.h"
 #include "inputoutputsettings.h"
 #include "logging.h"
-#include "starviewerapplication.h"
-#include "dicommask.h"
-#include "patient.h"
-#include "statswatcher.h"
-#include "pacsdevice.h"
-#include "querypacs.h"
-#include "study.h"
-#include "localdatabasemanager.h"
 #include "pacsmanager.h"
-#include "harddiskinformation.h"
-#include "retrievedicomfilesfrompacsjob.h"
-#include "shortcutmanager.h"
+#include "pacsrequeststatus.h"
 #include "querypacsjob.h"
+#include "settings.h"
+#include "shortcutmanager.h"
+#include "starviewerapplication.h"
+#include "statswatcher.h"
+#include "study.h"
+#include "studyoperationresult.h"
+#include "studyoperationsservice.h"
+
+#include <QMessageBox>
+#include <QMovie>
+#include <QShortcut>
 
 namespace udg {
+
+namespace {
+
+// Returns a DicomMask to search for all series in the study with the given Study Instance UID.
+DicomMask buildSeriesDicomMask(QString studyInstanceUID)
+{
+    DicomMask mask;
+
+    mask.setStudyInstanceUID(studyInstanceUID);
+    mask.setSeriesDate(QDate(), QDate());
+    mask.setSeriesTime(QTime(), QTime());
+    mask.setSeriesModality("");
+    mask.setSeriesNumber("");
+    mask.setSeriesInstanceUID("");
+    mask.setPPSStartDate(QDate(), QDate());
+    mask.setPPStartTime(QTime(), QTime());
+    mask.setRequestAttributeSequence("", "");
+    mask.setSeriesDescription("");
+    mask.setSeriesProtocolName("");
+
+    return mask;
+}
+
+// Returns a DicomMask to search for all instances in the series with the given Series Instance UID in the study with the given Study Instance UID.
+DicomMask buildImageDicomMask(QString studyInstanceUID, QString seriesInstanceUID)
+{
+    DicomMask mask;
+
+    mask.setStudyInstanceUID(studyInstanceUID);
+    mask.setSeriesInstanceUID(seriesInstanceUID);
+    mask.setImageNumber("");
+    mask.setSOPInstanceUID("");
+
+    return mask;
+}
+
+}
 
 QInputOutputPacsWidget::QInputOutputPacsWidget(QWidget *parent)
  : QWidget(parent)
@@ -74,6 +108,13 @@ QInputOutputPacsWidget::~QInputOutputPacsWidget()
     // Guardem per quin columna està ordenada la llista d'estudis i en quin ordre
     settings.setValue(InputOutputSettings::PACSStudyListSortByColumn, m_studyTreeWidget->getSortColumn());
     settings.setValue(InputOutputSettings::PACSStudyListSortOrder, m_studyTreeWidget->getSortOrderColumn());
+
+    // Cancel and schedule deletion of current queries
+    for (StudyOperationResult *result : m_pendingQueryResults)
+    {
+        result->cancel();
+        result->deleteLater();
+    }
 }
 
 void QInputOutputPacsWidget::createConnections()
@@ -116,7 +157,7 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> p
         return;
     }
 
-    if (AreValidQueryParameters(&queryMask, pacsToQueryList))
+    if (areValidQueryParameters(&queryMask, pacsToQueryList))
     {
         cancelCurrentQueriesToPACS();
 
@@ -124,87 +165,34 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> p
 
         foreach (const PacsDevice &pacsDeviceToQuery, pacsToQueryList)
         {
-            enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer(new QueryPacsJob(pacsDeviceToQuery, queryMask, QueryPacsJob::study)));
+            StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDeviceToQuery, queryMask,
+                                                                                          StudyOperationsService::TargetResource::Studies);
+            addPendingQuery(result);
         }
     }
 }
 
-void QInputOutputPacsWidget::enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPACSJob)
+void QInputOutputPacsWidget::addPendingQuery(StudyOperationResult *result)
 {
-    connect(queryPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(queryPACSJobFinished(PACSJobPointer)));
-    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(queryPACSJobCancelled(PACSJobPointer)));
+    // This connections will be deleted when result is destroyed
+    connect(result, &StudyOperationResult::finishedSuccessfully, this, &QInputOutputPacsWidget::showQueryResult);
+    connect(result, &StudyOperationResult::finishedWithError, this, &QInputOutputPacsWidget::showQueryError);
+    connect(result, &StudyOperationResult::cancelled, this, &QInputOutputPacsWidget::onQueryCancelled);
 
-    PacsManagerSingleton::instance()->enqueuePACSJob(queryPACSJob);
-    m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
+    m_pendingQueryResults.insert(result);
     setQueryInProgress(true);
 }
 
-void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
+void QInputOutputPacsWidget::showQueryResult(StudyOperationResult *result)
 {
-    foreach (PACSJobPointer queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
+    if (result->getResultType() == StudyOperationResult::ResultType::Studies)
     {
-        PacsManagerSingleton::instance()->requestCancelPACSJob(queryPACSJob);
-        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
+        m_studyTreeWidget->insertPatientList(result->getStudies());
     }
-
-    // Les consultes al PACS poden tarda variis segons a cancel·lar-se, ja que com està documentat hi ha PACS que una vegada un PACS rep l'orde de cancel·lació
-    // envien els resultats que havien trobat fins aquell moment i després tanquen la connexió, per fer transparent això a l'usuari, ja que ell no ho notarà en
-    // quin moment es cancel·len, ja amaguem el gif indicant que s'ha cancel·lat la consulta, perquè tingui la sensació que s'han cancel·lat immediatament
-    setQueryInProgress(false);
-}
-
-void QInputOutputPacsWidget::queryPACSJobCancelled(PACSJobPointer pacsJob)
-{
-    // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre, d'aquesta manera ens n'assabentem
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
-
-    if (queryPACSJob.isNull())
+    else if (result->getResultType() == StudyOperationResult::ResultType::Series)
     {
-        ERROR_LOG("El PACSJob que s'ha cancel·lat no és un QueryPACSJob");
-    }
-    else
-    {
-        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
-        setQueryInProgress(!m_queryPACSJobPendingExecuteOrExecuting.isEmpty());
-    }
-}
-
-void QInputOutputPacsWidget::queryPACSJobFinished(PACSJobPointer pacsJob)
-{
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
-
-    if (queryPACSJob.isNull())
-    {
-        ERROR_LOG("El PACSJob que ha finalitzat no és un QueryPACSJob");
-    }
-    else
-    {
-        if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk)
-        {
-            showErrorQueringPACS(pacsJob);
-        }
-        else
-        {
-            showQueryPACSJobResults(pacsJob);
-        }
-
-        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
-        setQueryInProgress(!m_queryPACSJobPendingExecuteOrExecuting.isEmpty());
-    }
-}
-
-void QInputOutputPacsWidget::showQueryPACSJobResults(PACSJobPointer pacsJob)
-{
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
-
-    if (queryPACSJob->getQueryLevel() == QueryPacsJob::study)
-    {
-        m_studyTreeWidget->insertPatientList(queryPACSJob->getPatientStudyList());
-    }
-    else if (queryPACSJob->getQueryLevel() == QueryPacsJob::series)
-    {
-        QList<Series*> seriesList = queryPACSJob->getSeriesList();
-        QString studyInstanceUID = queryPACSJob->getDicomMask().getStudyInstanceUID();
+        QList<Series*> seriesList = result->getSeries();
+        QString studyInstanceUID = result->getStudyInstanceUid();
 
         if (seriesList.isEmpty())
         {
@@ -215,11 +203,11 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(PACSJobPointer pacsJob)
             m_studyTreeWidget->insertSeriesList(studyInstanceUID, seriesList);
         }
     }
-    else if (queryPACSJob->getQueryLevel() == QueryPacsJob::image)
+    else if (result->getResultType() == StudyOperationResult::ResultType::Instances)
     {
-        QList<Image*> imageList = queryPACSJob->getImageList();
-        QString studyInstanceUID = queryPACSJob->getDicomMask().getStudyInstanceUID();
-        QString seriesInstanceUID = queryPACSJob->getDicomMask().getSeriesInstanceUID();
+        QList<Image*> imageList = result->getInstances();
+        QString studyInstanceUID = result->getStudyInstanceUid();
+        QString seriesInstanceUID = result->getSeriesInstanceUid();
 
         if (imageList.isEmpty())
         {
@@ -230,25 +218,48 @@ void QInputOutputPacsWidget::showQueryPACSJobResults(PACSJobPointer pacsJob)
             m_studyTreeWidget->insertImageList(studyInstanceUID, seriesInstanceUID, imageList);
         }
     }
+
+    m_pendingQueryResults.erase(result);
+    setQueryInProgress(!m_pendingQueryResults.empty());
+    result->deleteLater();
 }
 
-void QInputOutputPacsWidget::showErrorQueringPACS(PACSJobPointer pacsJob)
+void QInputOutputPacsWidget::showQueryError(StudyOperationResult *result)
 {
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
-
-    if (queryPACSJob->getStatus() != PACSRequestStatus::QueryOk && queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
+    // Warning if requested series or instances from a study, critical if requestes studies
+    if (result->getStudyInstanceUid().isEmpty())
     {
-        switch (queryPACSJob->getQueryLevel())
-        {
-            case QueryPacsJob::study:
-                QMessageBox::critical(this, ApplicationNameString, queryPACSJob->getStatusDescription());
-                break;
-            case QueryPacsJob::series:
-            case QueryPacsJob::image:
-                QMessageBox::warning(this, ApplicationNameString, queryPACSJob->getStatusDescription());
-                break;
-        }
+        QMessageBox::warning(this, ApplicationNameString, result->getErrorText());
     }
+    else
+    {
+        QMessageBox::critical(this, ApplicationNameString, result->getErrorText());
+    }
+
+    m_pendingQueryResults.erase(result);
+    setQueryInProgress(!m_pendingQueryResults.empty());
+    result->deleteLater();
+}
+
+void QInputOutputPacsWidget::onQueryCancelled(StudyOperationResult *result)
+{
+    m_pendingQueryResults.erase(result);
+    setQueryInProgress(!m_pendingQueryResults.empty());
+    result->deleteLater();
+}
+
+void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
+{
+    for (auto it = m_pendingQueryResults.begin(); it != m_pendingQueryResults.end(); )
+    {
+        (*it)->cancel();
+        it = m_pendingQueryResults.erase(it);
+    }
+
+    // Les consultes al PACS poden tarda variis segons a cancel·lar-se, ja que com està documentat hi ha PACS que una vegada un PACS rep l'orde de cancel·lació
+    // envien els resultats que havien trobat fins aquell moment i després tanquen la connexió, per fer transparent això a l'usuari, ja que ell no ho notarà en
+    // quin moment es cancel·len, ja amaguem el gif indicant que s'ha cancel·lat la consulta, perquè tingui la sensació que s'han cancel·lat immediatament
+    setQueryInProgress(false);
 }
 
 void QInputOutputPacsWidget::clear()
@@ -269,8 +280,9 @@ void QInputOutputPacsWidget::requestedSeriesOfStudy(Study *study)
 
     INFO_LOG("Cercant informacio de les series de l'estudi" + study->getInstanceUID() + " del PACS " + pacsDescription);
 
-    enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer(new QueryPacsJob(pacsDevice, buildSeriesDicomMask(study->getInstanceUID()),
-                                                                                      QueryPacsJob::series)));
+    DicomMask mask = buildSeriesDicomMask(study->getInstanceUID());
+    StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDevice, mask, StudyOperationsService::TargetResource::Series);
+    addPendingQuery(result);
 }
 
 void QInputOutputPacsWidget::requestedImagesOfSeries(Series *series)
@@ -284,10 +296,12 @@ void QInputOutputPacsWidget::requestedImagesOfSeries(Series *series)
     PacsDevice pacsDevice = series->getDICOMSource().getRetrievePACS().at(0);
     QString pacsDescription = pacsDevice.getAETitle() + " Institució" + pacsDevice.getInstitution() + " IP:" + pacsDevice.getAddress();
 
-    INFO_LOG("Cercant informacio de les imatges de la serie" + series->getInstanceUID() + " de l'estudi" + series->getParentStudy()->getInstanceUID() + " del PACS " + pacsDescription);
+    INFO_LOG("Cercant informacio de les imatges de la serie" + series->getInstanceUID() + " de l'estudi" + series->getParentStudy()->getInstanceUID() +
+             " del PACS " + pacsDescription);
 
-    enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer(new QueryPacsJob(pacsDevice, buildImageDicomMask(series->getParentStudy()->getInstanceUID(), series->getInstanceUID()),
-        QueryPacsJob::image)));
+    DicomMask mask = buildImageDicomMask(series->getParentStudy()->getInstanceUID(), series->getInstanceUID());
+    StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDevice, mask, StudyOperationsService::TargetResource::Instances);
+    addPendingQuery(result);
 }
 
 void QInputOutputPacsWidget::retrieveSelectedItemsFromQStudyTreeWidget()
@@ -394,7 +408,7 @@ void QInputOutputPacsWidget::retrieve(const PacsDevice &pacsDevice, ActionsAfter
     m_actionsWhenRetrieveJobFinished.insert(retrieveDICOMFilesFromPACSJob->getPACSJobID(), actionAfterRetrieve);
 }
 
-bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery)
+bool QInputOutputPacsWidget::areValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery)
 {
     // Es comprova que hi hagi pacs seleccionats
     if (pacsToQuery.isEmpty())
@@ -416,41 +430,11 @@ bool QInputOutputPacsWidget::AreValidQueryParameters(DicomMask *maskToQuery, QLi
     }
 }
 
-DicomMask QInputOutputPacsWidget::buildSeriesDicomMask(QString studyInstanceUID)
-{
-    DicomMask mask;
-
-    mask.setStudyInstanceUID(studyInstanceUID);
-    mask.setSeriesDate(QDate(), QDate());
-    mask.setSeriesTime(QTime(), QTime());
-    mask.setSeriesModality("");
-    mask.setSeriesNumber("");
-    mask.setSeriesInstanceUID("");
-    mask.setPPSStartDate(QDate(), QDate());
-    mask.setPPStartTime(QTime(), QTime());
-    mask.setRequestAttributeSequence("", "");
-    mask.setSeriesDescription("");
-    mask.setSeriesProtocolName("");
-
-    return mask;
-}
-
-DicomMask QInputOutputPacsWidget::buildImageDicomMask(QString studyInstanceUID, QString seriesInstanceUID)
-{
-    DicomMask mask;
-
-    mask.setStudyInstanceUID(studyInstanceUID);
-    mask.setSeriesInstanceUID(seriesInstanceUID);
-    mask.setImageNumber("");
-    mask.setSOPInstanceUID("");
-
-    return mask;
-}
-
 void QInputOutputPacsWidget::setQueryInProgress(bool queryInProgress)
 {
     m_queryAnimationLabel->setVisible(queryInProgress);
     m_queryInProgressLabel->setVisible(queryInProgress);
     m_cancelQueryButton->setEnabled(queryInProgress);
 }
-};
+
+}

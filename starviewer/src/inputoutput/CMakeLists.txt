@@ -13,6 +13,7 @@ set(SOURCES
     dicommask.cpp
     dicommasktodcmdataset.cpp
     dimsecservice.cpp
+    dimsequerystudyoperationresult.cpp
     echotopacs.cpp
     echotopacstest.cpp
     firewallaccess.cpp
@@ -75,6 +76,8 @@ set(SOURCES
     senddicomfilestopacs.cpp
     senddicomfilestopacsjob.cpp
     status.cpp
+    studyoperationresult.cpp
+    studyoperationsservice.cpp
     upgradedatabaserevisioncommands.cpp
     upgradedatabasexmlparser.cpp
     usermessage.cpp
