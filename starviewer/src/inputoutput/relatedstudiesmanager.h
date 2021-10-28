@@ -16,20 +16,20 @@
 #define UDGRELATEDSTUDIESMANAGER_H
 
 #include <QObject>
-#include <QHash>
-#include <QStringList>
-#include <QDate>
 
-#include "pacsdevice.h"
 #include "pacsjob.h"
+
+#include <unordered_set>
+
+#include <QDate>
 
 namespace udg {
 
-class Patient;
-class Study;
 class DicomMask;
 class PacsManager;
-class QueryPacsJob;
+class Patient;
+class Study;
+class StudyOperationResult;
 
 /**
     Aquesta classe donat un Study demana els estudis relacionats o previs en els PACS configurats per defecte, degut a que
@@ -45,7 +45,7 @@ class RelatedStudiesManager : public QObject {
 Q_OBJECT
 public:
     RelatedStudiesManager();
-    ~RelatedStudiesManager();
+    ~RelatedStudiesManager() override;
 
     /// Enum to know if loadStudy method was able to load the study from database, it's being retrieved or failed.
     enum LoadStatus { Loaded, Retrieving, Failed };
@@ -78,9 +78,6 @@ public:
 signals:
     /// Signal que s'emet quan ha finalitzat la consulta d'estudis. La llista amb els resultats s'esborrarà quan es demani una altra cerca.
     void queryStudiesFinished(QList<Study*>);
-
-    /// Signal que s'emet per indicar que s'ha produït un error a la consulta d'estudis d'un PACS
-    void errorQueryingStudies(PacsDevice pacs);
 
     /// Signal que s'emet per indicar que s'ha produït un error durant la descarrega d'un estudi (pot ser previ o no)
     void errorDownloadingStudy(QString studyUID);
@@ -117,16 +114,8 @@ private:
     /// Inicialitza les variables per realitzar una nova consulta
     void initializeQuery();
 
-    /// Ens encua el QueryPACSJob al PACSManager i ens connecta amb els seus signals per poder processar els resultats. També afegeix el Job en una taula
-    /// de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
-    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPACSJob);
-
-    /// Ens afegeix els estudis trobats en una llista, si algun dels estudis ja existeix a la llista perquè s'ha trobat en algun altre PACS no
-    /// se li afegeix
-    void mergeFoundStudiesInQuery(PACSJobPointer queryPACSJob);
-
-    /// Emet signal indicant que la consulta a un PACS ha fallat
-    void errorQueringPACS(PACSJobPointer queryPACSJob);
+    /// Adds the given StudyOperationResult representing a query to the list of pending queries and creates the needed connections to it.
+    void addPendingQuery(StudyOperationResult *result);
 
     /// Emet signal indicant la la consulta ha acabat
     void queryFinished();
@@ -142,11 +131,12 @@ private:
     QList<DicomMask> getDicomMasks(Patient *patient);
 
 private slots:
-    /// Slot que s'activa quan finalitza un job de consulta al PACS
-    void queryPACSJobFinished(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan un job de consulta al PACS és cancel·lat
-    void queryPACSJobCancelled(PACSJobPointer pacsJob);
+    /// Adds the studies from the query to the list of related studies found, avoiding duplicates.
+    void mergeStudiesFromQuery(StudyOperationResult *result);
+    /// Called when the given query has finished with error.
+    void onQueryError(StudyOperationResult *result);
+    /// Called when the given query is cancelled.
+    void onQueryCancelled(StudyOperationResult *result);
 
     /// Called when PacsManager successfully starts to retrieve a requested study.
     void onStudyRetrieveStarted(void *requester, PACSJobPointer pacsJob);
@@ -163,13 +153,9 @@ private:
 
     /// Study instance UID de l'estudi a partir del qual hem de trobar estudis relacionats
     QString m_studyInstanceUIDOfStudyToFindRelated;
-    
-    /// Com fem una consulta dos consultes al mateix PACS si falla una segurament també fallarà la segona per això
-    /// en aquesta llista registrarem l'ID dels Pacs pel quals hem emés el signal d'error i si rebem un segon error
-    /// com ja el tindrem aquesta llista ja no en farem signal
-    QStringList m_pacsDeviceIDErrorEmited;
-    /// Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
-    QHash<int, PACSJobPointer> m_queryPACSJobPendingExecuteOrExecuting;
+
+    /// Contains StudyOperationResults that represent queries in progress.
+    std::unordered_set<StudyOperationResult*> m_pendingQueryResults;
     /// Boolea per saber si s'ha de cercar estudis relacionats a partir del nom del pacient.
     bool m_searchRelatedStudiesByName;
 };
