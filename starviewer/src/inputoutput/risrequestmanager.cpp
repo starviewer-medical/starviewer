@@ -14,24 +14,21 @@
 
 #include "risrequestmanager.h"
 
-#include <QString>
-#include <QMessageBox>
-#include <QHash>
-#include <QThread>
-
 #include "inputoutputsettings.h"
-#include "starviewerapplication.h"
-#include "pacsmanager.h"
-#include "pacsdevicemanager.h"
-#include "patient.h"
-#include "study.h"
-#include "logging.h"
-#include "qpopuprisrequestsscreen.h"
-#include "querypacsjob.h"
-#include "retrievedicomfilesfrompacsjob.h"
 #include "localdatabasemanager.h"
+#include "logging.h"
+#include "pacsdevicemanager.h"
+#include "pacsmanager.h"
+#include "patient.h"
 #include "qmessageboxautoclose.h"
+#include "qpopuprisrequestsscreen.h"
+#include "retrievedicomfilesfrompacsjob.h"
+#include "starviewerapplication.h"
+#include "studyoperationresult.h"
+#include "studyoperationsservice.h"
 #include "usermessage.h"
+
+#include <QMessageBox>
 
 namespace udg {
 
@@ -139,111 +136,27 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 
     foreach (const PacsDevice &pacsDevice, queryablePACS)
     {
-        enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer(new QueryPacsJob(pacsDevice, maskRISRequest, QueryPacsJob::study)));
+        StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDevice, maskRISRequest,
+                                                                                      StudyOperationsService::TargetResource::Studies);
+        addPendingQuery(result);
     }
 }
 
-void RISRequestManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPACSJob)
+void RISRequestManager::addPendingQuery(StudyOperationResult *result)
 {
-    connect(queryPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(queryPACSJobFinished(PACSJobPointer)));
-    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(queryPACSJobCancelled(PACSJobPointer)));
-    m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
+    // This connections will be deleted when result is destroyed
+    connect(result, &StudyOperationResult::finishedSuccessfully, this, &RISRequestManager::addFoundStudiesToRetrieveQueue);
+    connect(result, &StudyOperationResult::finishedWithError, this, &RISRequestManager::onQueryError);
+    connect(result, &StudyOperationResult::cancelled, this, &RISRequestManager::onQueryCancelled);
 
-    PacsManagerSingleton::instance()->enqueuePACSJob(queryPACSJob);
+    m_pendingQueryResults.insert(result);
 }
 
-void RISRequestManager::queryPACSJobFinished(PACSJobPointer pacsJob)
+void RISRequestManager::addFoundStudiesToRetrieveQueue(StudyOperationResult *result)
 {
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
-
-    if (queryPACSJob.isNull())
+    for (Patient *patient : result->getStudies())
     {
-        ERROR_LOG("El PACSJob que ha finalitzat no és un QueryPACSJob");
-    }
-    else
-    {
-        if (queryPACSJob->getStatus() == PACSRequestStatus::QueryOk)
-        {
-            addFoundStudiesToRetrieveQueue(pacsJob);
-        }
-        else if (queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
-        {
-            ERROR_LOG(QString("S'ha produit un error al cercar estudis al PACS %1 per la sol.licitud del RIS")
-                         .arg(queryPACSJob->getPacsDevice().getAETitle()));
-            errorQueryingStudy(pacsJob);
-        }
-
-        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
-
-        if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
-        {
-            queryRequestRISFinished();
-        }
-    }
-}
-
-void RISRequestManager::queryPACSJobCancelled(PACSJobPointer pacsJob)
-{
-    // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
-
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
-
-    if (queryPACSJob.isNull())
-    {
-        ERROR_LOG("El PACSJob que s'ha cancel·lat no és un QueryPACSJob");
-    }
-    else
-    {
-        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
-
-        if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
-        {
-            queryRequestRISFinished();
-        }
-    }
-}
-
-void RISRequestManager::queryRequestRISFinished()
-{
-    DicomMask dicomMaskRISRequest = m_queueRISRequests.dequeue();
-
-    INFO_LOG("Ha acabat la cerca dels estudis sol·licitats pel RIS amb l'Accession number " + dicomMaskRISRequest.getAccessionNumber());
-
-    if (m_numberOfStudiesAddedToRetrieveForCurrentRisRequest == 0)
-    {
-        INFO_LOG("No s'ha trobat cap estudi sol·licitat pel RIS amb l'accession number " + dicomMaskRISRequest.getAccessionNumber());
-        // Si no hem trobat cap estudi que coincideix llancem MessageBox
-        QString message = tr("Unable to execute the RIS request. The study with accession number %1 was not found in the default PACS.")
-                        .arg(dicomMaskRISRequest.getAccessionNumber());
-
-        m_qpopUpRISRequestsScreen->showNotStudiesFoundMessage();
-        QMessageBox::information(NULL, ApplicationNameString, message);
-    }
-
-    if (m_queueRISRequests.count() > 0)
-    {
-        INFO_LOG("Hi ha més sol·licituts de RIS pendent d'executar");
-        // Tenim altres sol·licituds del RIS per descarregar, les processem
-        queryPACSRISStudyRequest(m_queueRISRequests.head());
-    }
-}
-
-void RISRequestManager::errorQueryingStudy(PACSJobPointer queryPACSJob)
-{
-    QString errorMessage = tr("RIS request error: cannot query PACS %1 from %2.\nMake sure its IP and AE Title are correct.")
-        .arg(queryPACSJob->getPacsDevice().getAETitle())
-        .arg(queryPACSJob->getPacsDevice().getInstitution());
-
-    QMessageBox::critical(NULL, ApplicationNameString, errorMessage);
-}
-
-void RISRequestManager::addFoundStudiesToRetrieveQueue(PACSJobPointer pacsJob)
-{
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
-
-    foreach (Patient *patient, queryPACSJob->getPatientStudyList())
-    {
-        foreach (Study *study, patient->getStudies())
+        for (Study *study : patient->getStudies())
         {
             if (!m_studiesInstancesUIDRequestedToRetrieve.contains(study->getInstanceUID()))
             {
@@ -273,6 +186,62 @@ void RISRequestManager::addFoundStudiesToRetrieveQueue(PACSJobPointer pacsJob)
                         .arg(study->getInstanceUID(), study->getDICOMSource().getRetrievePACS().at(0).getID()));
             }
         }
+    }
+
+    m_pendingQueryResults.erase(result);
+
+    if (m_pendingQueryResults.empty())
+    {
+        queryRequestRISFinished();
+    }
+}
+
+void RISRequestManager::onQueryError(StudyOperationResult *result)
+{
+    QString errorMessage = tr("RIS request error: %1").arg(result->getErrorText());
+    ERROR_LOG(errorMessage);
+    QMessageBox::critical(NULL, ApplicationNameString, errorMessage);
+
+    m_pendingQueryResults.erase(result);
+
+    if (m_pendingQueryResults.empty())
+    {
+        queryRequestRISFinished();
+    }
+}
+
+void RISRequestManager::onQueryCancelled(StudyOperationResult *result)
+{
+    m_pendingQueryResults.erase(result);
+
+    if (m_pendingQueryResults.empty())
+    {
+        queryRequestRISFinished();
+    }
+}
+
+void RISRequestManager::queryRequestRISFinished()
+{
+    DicomMask dicomMaskRISRequest = m_queueRISRequests.dequeue();
+
+    INFO_LOG("Ha acabat la cerca dels estudis sol·licitats pel RIS amb l'Accession number " + dicomMaskRISRequest.getAccessionNumber());
+
+    if (m_numberOfStudiesAddedToRetrieveForCurrentRisRequest == 0)
+    {
+        INFO_LOG("No s'ha trobat cap estudi sol·licitat pel RIS amb l'accession number " + dicomMaskRISRequest.getAccessionNumber());
+        // Si no hem trobat cap estudi que coincideix llancem MessageBox
+        QString message = tr("Unable to execute the RIS request. The study with accession number %1 was not found in the default PACS.")
+                        .arg(dicomMaskRISRequest.getAccessionNumber());
+
+        m_qpopUpRISRequestsScreen->showNotStudiesFoundMessage();
+        QMessageBox::information(NULL, ApplicationNameString, message);
+    }
+
+    if (m_queueRISRequests.count() > 0)
+    {
+        INFO_LOG("Hi ha més sol·licituts de RIS pendent d'executar");
+        // Tenim altres sol·licituds del RIS per descarregar, les processem
+        queryPACSRISStudyRequest(m_queueRISRequests.head());
     }
 }
 
