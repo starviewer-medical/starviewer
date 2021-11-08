@@ -215,7 +215,7 @@ void QOperationStateScreen::insertNewPACSJob(PACSJobPointer pacsJob)
     Q_ASSERT(pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType);
 
     QTreeWidgetItem *item = new QTreeWidgetItem();
-    Study *study = getStudyFromPACSJob(pacsJob);
+    const Study *study = getStudyFromPACSJob(pacsJob);
 
     item->setText(QOperationStateScreen::Status, tr("PENDING"));
     item->setText(QOperationStateScreen::Direction, pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType ? tr("Server") : tr("Local"));
@@ -232,9 +232,9 @@ void QOperationStateScreen::insertNewPACSJob(PACSJobPointer pacsJob)
     m_treeRetrieveStudy->addTopLevelItem(item);
 }
 
-Study* QOperationStateScreen::getStudyFromPACSJob(PACSJobPointer pacsJob)
+const Study *QOperationStateScreen::getStudyFromPACSJob(PACSJobPointer pacsJob)
 {
-    Study *study = NULL;
+    const Study *study = NULL;
 
     if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType)
     {

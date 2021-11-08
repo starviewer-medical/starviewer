@@ -192,7 +192,7 @@ void QInputOutputPacsWidget::showQueryResult(StudyOperationResult *result)
     else if (result->getResultType() == StudyOperationResult::ResultType::Series)
     {
         QList<Series*> seriesList = result->getSeries();
-        QString studyInstanceUID = result->getStudyInstanceUid();
+        QString studyInstanceUID = result->getRequestStudyInstanceUid();
 
         if (seriesList.isEmpty())
         {
@@ -206,8 +206,8 @@ void QInputOutputPacsWidget::showQueryResult(StudyOperationResult *result)
     else if (result->getResultType() == StudyOperationResult::ResultType::Instances)
     {
         QList<Image*> imageList = result->getInstances();
-        QString studyInstanceUID = result->getStudyInstanceUid();
-        QString seriesInstanceUID = result->getSeriesInstanceUid();
+        QString studyInstanceUID = result->getRequestStudyInstanceUid();
+        QString seriesInstanceUID = result->getRequestSeriesInstanceUid();
 
         if (imageList.isEmpty())
         {
@@ -226,14 +226,14 @@ void QInputOutputPacsWidget::showQueryResult(StudyOperationResult *result)
 
 void QInputOutputPacsWidget::showQueryError(StudyOperationResult *result)
 {
-    // Warning if requested series or instances from a study, critical if requestes studies
-    if (result->getStudyInstanceUid().isEmpty())
+    // Critical if requested studies, warning if requested series or instances from a study
+    if (result->getRequestLevel() == StudyOperationResult::RequestLevel::Studies)
     {
-        QMessageBox::warning(this, ApplicationNameString, result->getErrorText());
+        QMessageBox::critical(this, ApplicationNameString, result->getErrorText());
     }
     else
     {
-        QMessageBox::critical(this, ApplicationNameString, result->getErrorText());
+        QMessageBox::warning(this, ApplicationNameString, result->getErrorText());
     }
 
     m_pendingQueryResults.erase(result);

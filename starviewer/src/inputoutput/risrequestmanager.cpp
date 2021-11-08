@@ -341,7 +341,7 @@ void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pac
     doActionsAfterRetrieve(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
 }
 
-void RISRequestManager::doActionsAfterRetrieve(Study *study)
+void RISRequestManager::doActionsAfterRetrieve(const Study *study)
 {
     //Les descarregues d'altres peticions que no siguin l'actual les ignorem. (Per exemple cas en que el metge primer demana descarregar uns estudis i llavors se n'adona
     //que no era aquells que volia, doncs els estudis descarregats de la primera petició s'ignoraran i no se'n farà res)

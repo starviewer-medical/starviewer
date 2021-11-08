@@ -33,19 +33,37 @@ DimseRetrieveStudyOperationResult::DimseRetrieveStudyOperationResult(PACSJobPoin
         return;
     }
 
+    m_requestStudyInstanceUid = m_job->getStudyToRetrieveDICOMFiles()->getInstanceUID();
+    m_requestSeriesInstanceUid = m_job->getSeriesInstanceUidToRetrieve();
+    m_requestSopInstanceUid = m_job->getSopInstanceUidToRetrieve();
+
+    if (!m_requestSopInstanceUid.isEmpty())
+    {
+        m_requestLevel = RequestLevel::Instances;
+    }
+    else if (!m_requestSeriesInstanceUid.isEmpty())
+    {
+        m_requestLevel = RequestLevel::Series;
+    }
+    else
+    {
+        m_requestLevel = RequestLevel::Studies;
+    }
+
     // Slot will be executed in the same thread that executes the job (checked)
+    connect(m_job.data(), &PACSJob::PACSJobStarted, this, &DimseRetrieveStudyOperationResult::onJobStarted, Qt::DirectConnection);
     connect(m_job.data(), &PACSJob::PACSJobFinished, this, &DimseRetrieveStudyOperationResult::onJobFinished, Qt::DirectConnection);
     connect(m_job.data(), &PACSJob::PACSJobCancelled, this, &DimseRetrieveStudyOperationResult::onJobCancelled, Qt::DirectConnection);
-}
-
-QString DimseRetrieveStudyOperationResult::getSeriesInstanceUid() const
-{
-    return QString();
 }
 
 void DimseRetrieveStudyOperationResult::cancel()
 {
     m_pacsManager->requestCancelPACSJob(m_job);
+}
+
+void DimseRetrieveStudyOperationResult::onJobStarted()
+{
+    emit started(this);
 }
 
 void DimseRetrieveStudyOperationResult::onJobFinished()

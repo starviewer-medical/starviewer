@@ -17,8 +17,6 @@
 
 #include <QObject>
 
-#include "pacsjob.h"
-
 #include <unordered_set>
 
 #include <QDate>
@@ -26,7 +24,7 @@
 namespace udg {
 
 class DicomMask;
-class PacsManager;
+class PacsDevice;
 class Patient;
 class Study;
 class StudyOperationResult;
@@ -138,17 +136,16 @@ private slots:
     /// Called when the given query is cancelled.
     void onQueryCancelled(StudyOperationResult *result);
 
-    /// Called when PacsManager successfully starts to retrieve a requested study.
-    void onStudyRetrieveStarted(void *requester, PACSJobPointer pacsJob);
-    /// Called when PacsManager successfully retrieves a requested study.
-    void onStudyRetrieveFinished(void *requester, PACSJobPointer pacsJob);
-    /// Called when PacsManager fails to retrieve a requested study.
-    void onStudyRetrieveFailed(void *requester, PACSJobPointer pacsJob);
-    /// Called when PacsManager cancels the request of a study.
-    void onStudyRetrieveCancelled(void *requester, PACSJobPointer pacsJob);
+    /// Called when a requested study retrieve is started.
+    void onStudyRetrieveStarted(StudyOperationResult *result);
+    /// Called when a requested study retrieve finishes with success or partial success.
+    void onStudyRetrieveFinished(StudyOperationResult *result);
+    /// Called when a requested study retrieve finishes with error.
+    void onStudyRetrieveFailed(StudyOperationResult *result);
+    /// Called when a requested study retreive is cancelled.
+    void onStudyRetrieveCancelled(StudyOperationResult *result);
 
 private:
-    PacsManager *m_pacsManager;
     QList<Study*> m_mergedStudyList;
 
     /// Study instance UID de l'estudi a partir del qual hem de trobar estudis relacionats

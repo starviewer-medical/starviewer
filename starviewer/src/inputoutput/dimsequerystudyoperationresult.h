@@ -33,17 +33,14 @@ class DimseQueryStudyOperationResult : public StudyOperationResult
 
 public:
     /// Stores references to the job and PacsManager and creates the needed connections to the jobs signals.
-    explicit DimseQueryStudyOperationResult(PACSJobPointer job, PacsManager *pacsManager, QObject *parent = nullptr);
-
-    /// Returns the Study Instance UID of the study to which series or instances belong, retrieved from the job's mask.
-    QString getStudyInstanceUid() const override;
-    /// Returns the Series Instance UID of the series to which instances belong, retrieved from the job's mask.
-    QString getSeriesInstanceUid() const override;
+    DimseQueryStudyOperationResult(PACSJobPointer job, PacsManager *pacsManager, QObject *parent = nullptr);
 
     /// Requests to the PacsManger that the job is cancelled.
     void cancel() override;
 
 private slots:
+    /// Emits the started signal.
+    void onJobStarted();
     /// Gets the results or errors from the job.
     void onJobFinished();
     /// Called when the job is finally cancelled.

@@ -32,19 +32,27 @@ DimseQueryStudyOperationResult::DimseQueryStudyOperationResult(PACSJobPointer jo
         return;
     }
 
+    switch (m_job->getQueryLevel())
+    {
+        case QueryPacsJob::study:
+            m_requestLevel = RequestLevel::Studies;
+            break;
+        case QueryPacsJob::series:
+            m_requestLevel = RequestLevel::Series;
+            break;
+        case QueryPacsJob::image:
+            m_requestLevel = RequestLevel::Instances;
+            break;
+    }
+
+    m_requestStudyInstanceUid = m_job->getDicomMask().getStudyInstanceUID();
+    m_requestSeriesInstanceUid = m_job->getDicomMask().getSeriesInstanceUID();
+    m_requestSopInstanceUid = m_job->getDicomMask().getSOPInstanceUID();
+
     // Slot will be executed in the same thread that executes the job (checked)
+    connect(m_job.data(), &PACSJob::PACSJobStarted, this, &DimseQueryStudyOperationResult::onJobStarted, Qt::DirectConnection);
     connect(m_job.data(), &PACSJob::PACSJobFinished, this, &DimseQueryStudyOperationResult::onJobFinished, Qt::DirectConnection);
     connect(m_job.data(), &PACSJob::PACSJobCancelled, this, &DimseQueryStudyOperationResult::onJobCancelled, Qt::DirectConnection);
-}
-
-QString DimseQueryStudyOperationResult::getStudyInstanceUid() const
-{
-    return m_job->getDicomMask().getStudyInstanceUID();
-}
-
-QString DimseQueryStudyOperationResult::getSeriesInstanceUid() const
-{
-    return m_job->getDicomMask().getSeriesInstanceUID();
 }
 
 void DimseQueryStudyOperationResult::cancel()
@@ -52,19 +60,24 @@ void DimseQueryStudyOperationResult::cancel()
     m_pacsManager->requestCancelPACSJob(m_job);
 }
 
+void DimseQueryStudyOperationResult::onJobStarted()
+{
+    emit started(this);
+}
+
 void DimseQueryStudyOperationResult::onJobFinished()
 {
     if (m_job->getStatus() == PACSRequestStatus::QueryOk)
     {
-        switch (m_job->getQueryLevel())
+        switch (m_requestLevel)
         {
-            case QueryPacsJob::study:
+            case RequestLevel::Studies:
                 setStudies(m_job->getPatientStudyList());
                 break;
-            case QueryPacsJob::series:
+            case RequestLevel::Series:
                 setSeries(m_job->getSeriesList());
                 break;
-            case QueryPacsJob::image:
+            case RequestLevel::Instances:
                 setInstances(m_job->getImageList());
                 break;
         }

@@ -14,11 +14,11 @@
 
 #include "relatedstudiesmanager.h"
 
+#include "dicommask.h"
 #include "inputoutputsettings.h"
 #include "localdatabasemanager.h"
 #include "logging.h"
 #include "pacsdevicemanager.h"
-#include "pacsmanager.h"
 #include "patient.h"
 #include "settings.h"
 #include "studyoperationresult.h"
@@ -29,7 +29,6 @@ namespace udg {
 
 RelatedStudiesManager::RelatedStudiesManager()
 {
-    m_pacsManager = new PacsManager();
     m_studyInstanceUIDOfStudyToFindRelated = "invalid";
 
     Settings settings;
@@ -229,38 +228,29 @@ void RelatedStudiesManager::onQueryCancelled(StudyOperationResult *result)
     result->deleteLater();
 }
 
-void RelatedStudiesManager::onStudyRetrieveStarted(void *requester, PACSJobPointer pacsJob)
+void RelatedStudiesManager::onStudyRetrieveStarted(StudyOperationResult *result)
 {
-    if (requester == this)
-    {
-        emit studyRetrieveStarted(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-    }
+    emit studyRetrieveStarted(result->getRequestStudyInstanceUid());
 }
 
-void RelatedStudiesManager::onStudyRetrieveFinished(void *requester, PACSJobPointer pacsJob)
+void RelatedStudiesManager::onStudyRetrieveFinished(StudyOperationResult *result)
 {
-    if (requester == this)
-    {
-        emit studyRetrieveFinished(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-        // Now that the study is downloaded and saved in the database this should go through the first branch
-        loadStudy(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles());
-    }
+    emit studyRetrieveFinished(result->getRequestStudyInstanceUid());
+    // Now that the study is downloaded and saved in the database this should go through the first branch
+    Study *study = new Study();
+    study->setInstanceUID(result->getRequestStudyInstanceUid());
+    loadStudy(study);
+    delete study;
 }
 
-void RelatedStudiesManager::onStudyRetrieveFailed(void *requester, PACSJobPointer pacsJob)
+void RelatedStudiesManager::onStudyRetrieveFailed(StudyOperationResult *result)
 {
-    if (requester == this)
-    {
-        emit studyRetrieveFailed(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-    }
+    emit studyRetrieveFailed(result->getRequestStudyInstanceUid());
 }
 
-void RelatedStudiesManager::onStudyRetrieveCancelled(void *requester, PACSJobPointer pacsJob)
+void RelatedStudiesManager::onStudyRetrieveCancelled(StudyOperationResult *result)
 {
-    if (requester == this)
-    {
-        emit studyRetrieveCancelled(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-    }
+    emit studyRetrieveCancelled(result->getRequestStudyInstanceUid());
 }
 
 void RelatedStudiesManager::queryFinished()
@@ -344,15 +334,14 @@ RelatedStudiesManager::LoadStatus RelatedStudiesManager::loadStudy(Study *study)
 
 void RelatedStudiesManager::retrieveAndLoad(Study *study, const PacsDevice &pacsDevice)
 {
-    // We defer the connections until the first request to avoid unnecessary connections before
-    // We use private slots so that we can specify Qt::UniqueConnection to avoid duplicate connections
-    // They will be automatically disconnected when this RelatedStudiesManager is destroyed
-    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveStarted, this, &RelatedStudiesManager::onStudyRetrieveStarted, Qt::UniqueConnection);
-    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveFinished, this, &RelatedStudiesManager::onStudyRetrieveFinished, Qt::UniqueConnection);
-    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveFailed, this, &RelatedStudiesManager::onStudyRetrieveFailed, Qt::UniqueConnection);
-    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveCancelled, this, &RelatedStudiesManager::onStudyRetrieveCancelled, Qt::UniqueConnection);
+    StudyOperationResult *result = StudyOperationsService::instance()->retrieveFromPacs(pacsDevice, study);
 
-    PacsManagerSingleton::instance()->retrieveStudy(this, pacsDevice, RetrieveDICOMFilesFromPACSJob::Medium, study);
+    // These connections will be deleted when result is destroyed
+    connect(result, &StudyOperationResult::started, this, &RelatedStudiesManager::onStudyRetrieveStarted);
+    connect(result, &StudyOperationResult::finishedSuccessfully, this, &RelatedStudiesManager::onStudyRetrieveFinished);
+    connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &RelatedStudiesManager::onStudyRetrieveFinished);
+    connect(result, &StudyOperationResult::finishedWithError, this, &RelatedStudiesManager::onStudyRetrieveFailed);
+    connect(result, &StudyOperationResult::cancelled, this, &RelatedStudiesManager::onStudyRetrieveCancelled);
 }
 
 void RelatedStudiesManager::deleteQueryResults()

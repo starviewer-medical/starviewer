@@ -40,11 +40,22 @@ class StudyOperationResult : public QObject
     Q_OBJECT
 
 public:
+    /// Levels at which the request can been performed.
+    enum class RequestLevel { Studies, Series, Instances };
     /// Types of result that can be represented by StudyOperationResult.
     enum class ResultType { Studies, Series, Instances, StudyInstanceUid, Error, Nothing };
 
     /// Creates an unfinished result. Most getters will block if it's not finished.
     explicit StudyOperationResult(QObject *parent = nullptr);
+
+    /// Returns the level at which the request has been performed.
+    RequestLevel getRequestLevel() const;
+    /// Returns the Study Instance UID in the request, if any.
+    const QString& getRequestStudyInstanceUid() const;
+    /// Returns the Series Instance UID in the request, if any.
+    const QString& getRequestSeriesInstanceUid() const;
+    /// Returns the SOP Instance UID in the request, if any.
+    const QString& getRequestSopInstanceUid() const;
 
     /// Returns the type of result contained by this object, which determines which getters make sense.
     ResultType getResultType() const;
@@ -56,20 +67,18 @@ public:
     /// Returns a list of instances. The Image class is used due to the program structure but it does not imply that they are actually images.
     const QList<Image*>& getInstances() const;
 
-    /// If result type is Studies or Instances returns the Study Instance UID of the study to which they belong.
-    /// If result type is StudyInstanceUid returns that.
-    virtual QString getStudyInstanceUid() const;
+    /// Returns the resulting Study Instance UID if result type is StudyInstanceUid, an empty string otherwise.
+    const QString& getStudyInstanceUid() const;
 
     /// Returns the description of an encountered error, if any.
     const QString& getErrorText() const;
-
-    /// Returns the Series Instance UID of the series to which instances belong.
-    virtual QString getSeriesInstanceUid() const = 0;
 
     /// Requests to cancel the underlying operation.
     virtual void cancel() = 0;
 
 signals:
+    /// Emitted when the operation starts.
+    void started(StudyOperationResult *result);
     /// Emitted when the operation has finished without errors.
     void finishedSuccessfully(StudyOperationResult *result);
     /// Emitted when the operation has finished with a valid result but with some error too.
@@ -97,6 +106,16 @@ protected:
 
     /// Must be called by subclasses to mark the operation as cancelled.
     void setCancelled();
+
+protected:
+    /// Level at which the request has been performed.
+    RequestLevel m_requestLevel;
+    /// Study Instance UID in the request, if any.
+    QString m_requestStudyInstanceUid;
+    /// Series Instance UID in the request, if any.
+    QString m_requestSeriesInstanceUid;
+    /// SOP Instance UID in the request, if any.
+    QString m_requestSopInstanceUid;
 
 private:
     /// Type of result contained.

@@ -51,7 +51,11 @@ public:
     PACSJob::PACSJobType getPACSJobType();
 
     /// Retorna l'estudi del qual s'han de descarregar els fitxers. Aquest objecte s'esborra quan es destrueixi el Job
-    Study* getStudyToRetrieveDICOMFiles();
+    const Study* getStudyToRetrieveDICOMFiles() const;
+    /// Returns the Series Instance UID of the specific series to retrieve.
+    const QString& getSeriesInstanceUidToRetrieve() const;
+    /// Returns the SOP Instance UID of the specific instance to retrieve.
+    const QString& getSopInstanceUidToRetrieve() const;
 
     /// Codi que executar el job
     virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread);

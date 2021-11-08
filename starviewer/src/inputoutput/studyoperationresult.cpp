@@ -35,9 +35,29 @@ void moveAllItemsToThread(const QList<T*> list, QThread *thread)
 }
 
 StudyOperationResult::StudyOperationResult(QObject *parent)
-    : QObject(parent), m_resultType(ResultType::Nothing)
+    : QObject(parent), m_requestLevel(RequestLevel::Studies), m_resultType(ResultType::Nothing)
 {
     m_future = m_promise.get_future();
+}
+
+StudyOperationResult::RequestLevel StudyOperationResult::getRequestLevel() const
+{
+    return m_requestLevel;
+}
+
+const QString& StudyOperationResult::getRequestStudyInstanceUid() const
+{
+    return m_requestStudyInstanceUid;
+}
+
+const QString& StudyOperationResult::getRequestSeriesInstanceUid() const
+{
+    return m_requestSeriesInstanceUid;
+}
+
+const QString& StudyOperationResult::getRequestSopInstanceUid() const
+{
+    return m_requestSopInstanceUid;
 }
 
 StudyOperationResult::ResultType StudyOperationResult::getResultType() const
@@ -75,7 +95,7 @@ const QList<Image*>& StudyOperationResult::getInstances() const
     return m_instances;
 }
 
-QString StudyOperationResult::getStudyInstanceUid() const
+const QString& StudyOperationResult::getStudyInstanceUid() const
 {
     if (m_future.valid())
     {

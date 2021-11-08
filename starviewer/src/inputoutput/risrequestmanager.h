@@ -110,7 +110,7 @@ private:
     void retrieveStudyFromDatabase(Study *study);
 
     /// Una vegada s'ha descarregat fa les accions pertinents amb aquell estudi. Emet signal per visualitzar/load o no fa res
-    void doActionsAfterRetrieve(Study *study);
+    void doActionsAfterRetrieve(const Study *study);
 
     /// Indica de quina font hem d'obtenir l'estudi.
     /// Comprova si l'estudi existeix a la base de dades, si existeix es pregunta a l'usuari si s'ha de tornar a descarregar-lo del PACS, i es guarda la resposta

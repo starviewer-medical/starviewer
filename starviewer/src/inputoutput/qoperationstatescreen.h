@@ -90,7 +90,7 @@ private:
     void insertNewPACSJob(PACSJobPointer pacsJob);
 
     /// Retorna l'objecte Study relatiu a PACSJob, només funciona amb PACSJob de tipus RetrieveDICOMFilesFromPACSJob i SendDICOMFilesToPACSJob
-    Study* getStudyFromPACSJob(PACSJobPointer pacsJob);
+    const Study* getStudyFromPACSJob(PACSJobPointer pacsJob);
 
     /// Retorna un QString per mostrar-lo per la QOperationStateScreen indicant com ha finalitzat un PACSJob
     /// Per RetrieveDICOMFilesFromPACS pot retornar : RETRIEVED, CANCELLED, ERROR

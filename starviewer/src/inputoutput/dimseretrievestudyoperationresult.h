@@ -35,13 +35,12 @@ public:
     /// Stores references to the job and PacsManager and creates the needed connections to the job's signals.
     DimseRetrieveStudyOperationResult(PACSJobPointer job, PacsManager *manager, QObject *parent = nullptr);
 
-    /// Returns a null QString.
-    QString getSeriesInstanceUid() const override;
-
     /// Requests to the PacsManger that the job is cancelled.
     void cancel() override;
 
 private slots:
+    /// Emits the started signal.
+    void onJobStarted();
     /// Gets the results or errors from the job.
     void onJobFinished();
     /// Called when the job is finally cancelled.

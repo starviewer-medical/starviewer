@@ -92,9 +92,19 @@ PACSJob::PACSJobType RetrieveDICOMFilesFromPACSJob::getPACSJobType()
     return PACSJob::RetrieveDICOMFilesFromPACSJobType;
 }
 
-Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles()
+const Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles() const
 {
     return m_studyToRetrieveDICOMFiles;
+}
+
+const QString& RetrieveDICOMFilesFromPACSJob::getSeriesInstanceUidToRetrieve() const
+{
+    return m_seriesInstanceUIDToRetrieve;
+}
+
+const QString& RetrieveDICOMFilesFromPACSJob::getSopInstanceUidToRetrieve() const
+{
+    return m_SOPInstanceUIDToRetrieve;
 }
 
 void RetrieveDICOMFilesFromPACSJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread)
