@@ -21,7 +21,6 @@
 
 #include <unordered_set>
 
-#include <QHash>
 #include <QList>
 #include <QMenu>
 
@@ -62,18 +61,8 @@ signals:
     /// Signal que s'emet per indicar que un cop descarregat l'estudi s'ha de carregar únicament
     void loadRetrievedStudy(QString studyInstanceUID);
 
-    // TODO: Els mètodes studyRetrieved han de desapareixer cada tool ha de començar a utilitzar la PACSManager
-    /// Signal que s'emet per indicar que un estudi s'ha començat a descarregar
-    void studyRetrieveStarted(QString studyInstanceUID);
-
-    /// Signal que indica que s'ha produït un error descarregant l'estudi indicat
-    void studyRetrieveFailed(QString studyInstanceUID);
-
     /// Signal que s'emet per indica que un estudi ha estat descarregat
     void studyRetrieveFinished(QString studyInstanceUID);
-
-    /// Signal que s'emet per indicar que la descàrrgea d'un estudi s'ha cencel·lat
-    void studyRetrieveCancelled(QString studyInstanceUID);
 
 private:
     /// Crea les connexions entre signals i slots
@@ -130,20 +119,15 @@ private slots:
     /// que s'estan realitzant.
     void cancelCurrentQueriesToPACS();
 
-    /// Fa signal de studyRetrieveStarted, Important!!! aquest mètode una vegada cada Tool utiltizi la PacsManager ha de desapareixer
-    void retrieveDICOMFilesFromPACSJobStarted(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan finalitza un job de descàrrega d'imatges
-    void retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan es cancel·la un job de descàrrega d'imatges
-    void retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob);
+    /// Called when a retrieve operation finishes successfully.
+    void onRetrieveSuccess(StudyOperationResult *result, ActionsAfterRetrieve action);
+    /// Called when a retrieve operation finishes with partial success.
+    void onRetrievePartialSuccess(StudyOperationResult *result, ActionsAfterRetrieve action);
+    /// Called when a retrieve operation finishes with error.
+    void onRetrieveError(StudyOperationResult *result);
 
 private:
     QMenu m_contextMenuQStudyTreeWidget;
-
-    /// Per cada job de descàrrega guardem quina acció hem de fer quan ha acabat la descàrrega
-    QHash<int, ActionsAfterRetrieve> m_actionsWhenRetrieveJobFinished;
 
     /// Contains StudyOperationResults that represent queries in progress.
     std::unordered_set<StudyOperationResult*> m_pendingQueryResults;

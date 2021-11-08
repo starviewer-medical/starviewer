@@ -14,6 +14,7 @@ set(SOURCES
     dicommasktodcmdataset.cpp
     dimsecservice.cpp
     dimsequerystudyoperationresult.cpp
+    dimseretrievestudyoperationresult.cpp
     echotopacs.cpp
     echotopacstest.cpp
     firewallaccess.cpp

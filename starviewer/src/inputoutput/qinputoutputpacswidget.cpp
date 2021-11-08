@@ -346,66 +346,49 @@ void QInputOutputPacsWidget::retrieveSelectedItemsFromQStudyTreeWidget(ActionsAf
     }
 }
 
-void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobStarted(PACSJobPointer pacsJob)
+void QInputOutputPacsWidget::onRetrieveSuccess(StudyOperationResult *result, ActionsAfterRetrieve action)
 {
-    emit studyRetrieveStarted(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-}
+    emit studyRetrieveFinished(result->getStudyInstanceUid());
 
-void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
-{
-    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
-
-    if (retrieveDICOMFilesFromPACSJob->getStatus() != PACSRequestStatus::RetrieveOk)
-    {
-        if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
-        {
-            QMessageBox::warning(this, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
-        }
-        else
-        {
-            QMessageBox::critical(this, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
-            emit studyRetrieveFailed(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-            return;
-        }
-    }
-
-    emit studyRetrieveFinished(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-
-    switch (m_actionsWhenRetrieveJobFinished.take(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
+    switch (action)
     {
         case Load:
-            emit loadRetrievedStudy(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());;
+            emit loadRetrievedStudy(result->getStudyInstanceUid());
             break;
         case View:
-            emit viewRetrievedStudy(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+            emit viewRetrievedStudy(result->getStudyInstanceUid());
             break;
         default:
             break;
     }
 }
 
-void QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
+void QInputOutputPacsWidget::onRetrievePartialSuccess(StudyOperationResult *result, ActionsAfterRetrieve action)
 {
-    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
-    
-    emit studyRetrieveCancelled(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID());
+    QMessageBox::warning(this, ApplicationNameString, result->getErrorText());
+    onRetrieveSuccess(result, action);
+}
+
+void QInputOutputPacsWidget::onRetrieveError(StudyOperationResult *result)
+{
+    QMessageBox::critical(this, ApplicationNameString, result->getErrorText());
 }
 
 void QInputOutputPacsWidget::retrieve(const PacsDevice &pacsDevice, ActionsAfterRetrieve actionAfterRetrieve, Study *studyToRetrieve,
     const QString &seriesInstanceUIDToRetrieve, const QString &sopInstanceUIDToRetrieve)
 {
-    RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob retrievePriorityJob = actionAfterRetrieve == View ? RetrieveDICOMFilesFromPACSJob::High
-        : RetrieveDICOMFilesFromPACSJob::Medium;
+    auto priority = actionAfterRetrieve == View ? StudyOperationsService::RetrievePriority::High : StudyOperationsService::RetrievePriority::Medium;
+    StudyOperationResult *result = StudyOperationsService::instance()->retrieveFromPacs(pacsDevice, studyToRetrieve, seriesInstanceUIDToRetrieve,
+                                                                                        sopInstanceUIDToRetrieve, priority);
 
-    PACSJobPointer retrieveDICOMFilesFromPACSJob(new RetrieveDICOMFilesFromPACSJob(pacsDevice, retrievePriorityJob, studyToRetrieve,
-        seriesInstanceUIDToRetrieve, sopInstanceUIDToRetrieve));
-
-    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobStarted(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobStarted(PACSJobPointer)));
-    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer)));
-    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer)));
-    PacsManagerSingleton::instance()->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
-
-    m_actionsWhenRetrieveJobFinished.insert(retrieveDICOMFilesFromPACSJob->getPACSJobID(), actionAfterRetrieve);
+    // This connections will be deleted when result is destroyed
+    connect(result, &StudyOperationResult::finishedSuccessfully, this, [=](StudyOperationResult *result) {
+        onRetrieveSuccess(result, actionAfterRetrieve);
+    });
+    connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, [=](StudyOperationResult *result) {
+        onRetrievePartialSuccess(result, actionAfterRetrieve);
+    });
+    connect(result, &StudyOperationResult::finishedWithError, this, &QInputOutputPacsWidget::onRetrieveError);
 }
 
 bool QInputOutputPacsWidget::areValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery)

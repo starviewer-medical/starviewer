@@ -75,6 +75,16 @@ const QList<Image*>& StudyOperationResult::getInstances() const
     return m_instances;
 }
 
+QString StudyOperationResult::getStudyInstanceUid() const
+{
+    if (m_future.valid())
+    {
+        m_future.wait();
+    }
+
+    return m_studyInstanceUid;
+}
+
 const QString& StudyOperationResult::getErrorText() const
 {
     if (m_future.valid())
@@ -121,6 +131,26 @@ void StudyOperationResult::setInstances(QList<Image*> instances)
         m_promise.set_value();
 
         emit finishedSuccessfully(this);
+    }
+}
+
+void StudyOperationResult::setStudyInstanceUid(QString studyInstanceUid, QString errorText)
+{
+    if (m_future.valid())
+    {
+        m_resultType = ResultType::StudyInstanceUid;
+        m_studyInstanceUid = std::move(studyInstanceUid);
+        m_errorText = std::move(errorText);
+        m_promise.set_value();
+
+        if (m_errorText.isNull())
+        {
+            emit finishedSuccessfully(this);
+        }
+        else
+        {
+            emit finishedWithPartialSuccess(this);
+        }
     }
 }
 

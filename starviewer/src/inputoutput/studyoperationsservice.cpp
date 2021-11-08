@@ -15,9 +15,11 @@
 #include "studyoperationsservice.h"
 
 #include "dimsequerystudyoperationresult.h"
+#include "dimseretrievestudyoperationresult.h"
 #include "pacsdevice.h"
 #include "pacsmanager.h"
 #include "querypacsjob.h"
+#include "retrievedicomfilesfrompacsjob.h"
 
 namespace udg {
 
@@ -41,6 +43,39 @@ StudyOperationResult* StudyOperationsService::searchPacs(const PacsDevice &pacs,
 
         PACSJobPointer job(new QueryPacsJob(pacs, mask, queryLevel));
         StudyOperationResult *result = new DimseQueryStudyOperationResult(job, m_pacsManager);
+
+        // TODO connects from result to this
+
+        m_pacsManager->enqueuePACSJob(job);
+
+        return result;
+    }
+
+    return nullptr;
+}
+
+StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice &pacs, const Study *study, const QString &seriesInstanceUid,
+                                                               const QString &sopInstanceUid, RetrievePriority priority)
+{
+    if (pacs.getType() == PacsDevice::Type::Dimse)
+    {
+        RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob jobPriority;
+
+        switch (priority)
+        {
+            case RetrievePriority::Low:
+                jobPriority = RetrieveDICOMFilesFromPACSJob::Low;
+                break;
+            case RetrievePriority::Medium:
+                jobPriority = RetrieveDICOMFilesFromPACSJob::Medium;
+                break;
+            case RetrievePriority::High:
+                jobPriority = RetrieveDICOMFilesFromPACSJob::High;
+                break;
+        }
+
+        PACSJobPointer job(new RetrieveDICOMFilesFromPACSJob(pacs, jobPriority, study, seriesInstanceUid, sopInstanceUid));
+        StudyOperationResult *result = new DimseRetrieveStudyOperationResult(job, m_pacsManager);
 
         // TODO connects from result to this
 

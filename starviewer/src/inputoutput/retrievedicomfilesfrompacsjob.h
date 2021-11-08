@@ -43,7 +43,7 @@ public:
     /// Constructor/Destructor de la classe. Si seriesInstanceUID est buit descarregar tot l'estudi, si t valor noms aquella srie, i si tamb especifiquem el SOPInstanceUID
     /// noms descarregar la imatge amb el SOPInstanceUID de la srie especificada, de l'estudi especificat. L'Objecte Study que se li passa se'n fa copia, per evitar que si a
     /// fora destrueixen l'Study quan aquesta classe encara el necessiti peti l'aplicacio
-    RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, RetrievePriorityJob, Study *studyToRetrieveDICOMFiles, const QString &seriesInstanceUID = "" , 
+    RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, RetrievePriorityJob, const Study *studyToRetrieveDICOMFiles, const QString &seriesInstanceUID = "" ,
         const QString &sopInstanceUID = "");
     ~RetrieveDICOMFilesFromPACSJob();
 
@@ -103,9 +103,6 @@ private:
 
     /// Demana que es cancelli la descarrega del job
     void requestCancelJob();
-
-    /// Copia la informacio basica de l'estudi en un nou objecte Study
-    Study* copyBasicStudyInformation(Study *studyToCopy);
 
     /// Retorna un DICOMSource amb el PACS del qual es descarreguen els fitxers demanats
     DICOMSource getDICOMSourceRetrieveFiles();

@@ -23,6 +23,7 @@ namespace udg {
 class DicomMask;
 class PacsDevice;
 class PacsManager;
+class Study;
 class StudyOperationResult;
 
 /**
@@ -38,9 +39,17 @@ public:
     /// Target resource for the search operations.
     enum class TargetResource { Studies, Series, Instances };
 
+    /// Priority for retrieve operations.
+    enum class RetrievePriority { Low, Medium, High };
+
     /// Starts an asynchronous search on the given PACS with the given mask and searching for the given target resource. Returns a result that can be used
     /// to observe the progress and obtain the final values.
     StudyOperationResult* searchPacs(const PacsDevice &pacs, const DicomMask &mask, TargetResource targetResource);
+
+    /// Starts an asynchronous retrieve request on the given PACS for the given study, or the series or instance identified by the given UIDs. Returns a result
+    /// that can be used to observe the progres and obtain the final values.
+    StudyOperationResult* retrieveFromPacs(const PacsDevice &pacs, const Study *study, const QString &seriesInstanceUid = QString(),
+                                           const QString &sopInstanceUid = QString(), RetrievePriority priority = RetrievePriority::Medium);
 
 private:
     explicit StudyOperationsService(QObject *parent = nullptr);

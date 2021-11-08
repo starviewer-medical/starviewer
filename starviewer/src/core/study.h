@@ -101,9 +101,9 @@ public:
     bool setTime(QString time);
     bool setTime(QTime time);
     QDate getDate() const;
-    QString getDateAsString();
+    QString getDateAsString() const;
     QTime getTime() const;
-    QString getTimeAsString();
+    QString getTimeAsString() const;
     QDateTime getDateTime() const;
 
     /// Assignar/Obtenir la data i hora en que l'estudi s'ha descarregat a la base de dades Local

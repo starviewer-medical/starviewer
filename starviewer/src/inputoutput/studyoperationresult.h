@@ -41,7 +41,7 @@ class StudyOperationResult : public QObject
 
 public:
     /// Types of result that can be represented by StudyOperationResult.
-    enum class ResultType { Studies, Series, Instances, Error, Nothing };
+    enum class ResultType { Studies, Series, Instances, StudyInstanceUid, Error, Nothing };
 
     /// Creates an unfinished result. Most getters will block if it's not finished.
     explicit StudyOperationResult(QObject *parent = nullptr);
@@ -56,11 +56,13 @@ public:
     /// Returns a list of instances. The Image class is used due to the program structure but it does not imply that they are actually images.
     const QList<Image*>& getInstances() const;
 
+    /// If result type is Studies or Instances returns the Study Instance UID of the study to which they belong.
+    /// If result type is StudyInstanceUid returns that.
+    virtual QString getStudyInstanceUid() const;
+
     /// Returns the description of an encountered error, if any.
     const QString& getErrorText() const;
 
-    /// Returns the Study Instance UID of the study to which series or instances belong.
-    virtual QString getStudyInstanceUid() const = 0;
     /// Returns the Series Instance UID of the series to which instances belong.
     virtual QString getSeriesInstanceUid() const = 0;
 
@@ -70,10 +72,14 @@ public:
 signals:
     /// Emitted when the operation has finished without errors.
     void finishedSuccessfully(StudyOperationResult *result);
+    /// Emitted when the operation has finished with a valid result but with some error too.
+    void finishedWithPartialSuccess(StudyOperationResult *result);
     /// Emitted when the operation has finished with some error.
     void finishedWithError(StudyOperationResult *result);
     /// Emitted when the operation has been cancelled.
     void cancelled(StudyOperationResult *result);
+    /// Emitted when all operations have finished.
+    void finished(StudyOperationResult *result);
 
 protected:
     /// Must be called by subclasses to set the given studies as the result.
@@ -82,8 +88,13 @@ protected:
     void setSeries(QList<Series*> series);
     /// Must be called by subclasses to set the given instances as the result.
     void setInstances(QList<Image*> instances);
+
+    /// Must be called by subclasses to set the given Study Instance UID as the result. An optional error text can be given to indicate some non-critical error.
+    void setStudyInstanceUid(QString studyInstanceUid, QString errorText = QString());
+
     /// Must be called by subclasses to set the given error as the result.
     void setErrorText(QString text);
+
     /// Must be called by subclasses to mark the operation as cancelled.
     void setCancelled();
 
@@ -97,6 +108,9 @@ private:
     QList<Series*> m_series;
     /// Resulting instances.
     QList<Image*> m_instances;
+
+    /// Resulting Study Instance UID.
+    QString m_studyInstanceUid;
 
     /// Error description, if any.
     QString m_errorText;
