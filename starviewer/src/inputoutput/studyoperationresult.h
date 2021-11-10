@@ -17,6 +17,8 @@
 
 #include <QObject>
 
+#include "pacsdevice.h"
+
 #include <future>
 
 namespace udg {
@@ -48,6 +50,8 @@ public:
     /// Creates an unfinished result. Most getters will block if it's not finished.
     explicit StudyOperationResult(QObject *parent = nullptr);
 
+    /// Returns the PACS where the request is performed.
+    const PacsDevice& getRequestPacsDevice() const;
     /// Returns the level at which the request has been performed.
     RequestLevel getRequestLevel() const;
     /// Returns the Study Instance UID in the request, if any.
@@ -108,6 +112,8 @@ protected:
     void setCancelled();
 
 protected:
+    /// PACS where the request is performed.
+    PacsDevice m_requestPacsDevice;
     /// Level at which the request has been performed.
     RequestLevel m_requestLevel;
     /// Study Instance UID in the request, if any.

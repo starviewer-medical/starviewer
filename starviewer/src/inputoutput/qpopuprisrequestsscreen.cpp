@@ -14,13 +14,9 @@
 
 #include "qpopuprisrequestsscreen.h"
 
-#include "qpopuprisrequestsscreen.h"
 #include "logging.h"
 #include "starviewerapplication.h"
-#include "retrievedicomfilesfrompacsjob.h"
-#include "study.h"
-#include "pacsrequeststatus.h"
-#include "patient.h"
+#include "studyoperationresult.h"
 
 namespace udg {
 
@@ -30,7 +26,11 @@ QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent)
     setOngoingOperationText(tr("%1 will proceed to retrieve it.").arg(ApplicationNameString));
 }
 
-void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
+QPopUpRISRequestsScreen::~QPopUpRISRequestsScreen()
+{
+}
+
+void QPopUpRISRequestsScreen::queryStudiesStarted()
 {
     // Si arriba una altra petició mentre hi ha activat el timer per amagar el PopUp o s'està amagant, hem de fer que aquest no s'amagui per
     // mostrar la nova petició
@@ -40,101 +40,88 @@ void QPopUpRISRequestsScreen::queryStudiesByAccessionNumberStarted()
     setOngoingOperationText(tr("Querying PACS..."));
     showOngoingOperationAnimation();
 
-    m_pacsJobIDOfStudiesToRetrieve.clear();
+    m_resultsOfStudiesToRetrieve.clear();
     m_numberOfStudiesRetrieved = 0;
     m_numberOfStudiesToRetrieve = 0;
     m_numberOfStudiesFailedToRetrieve = 0;
 }
 
-void QPopUpRISRequestsScreen::addStudyToRetrieveFromPACSByAccessionNumber(PACSJobPointer retrieveDICOMFilesFromPACSJob)
+void QPopUpRISRequestsScreen::addStudyToRetrieveFromPacs(StudyOperationResult *result)
 {
     m_numberOfStudiesToRetrieve++;
 
-    m_pacsJobIDOfStudiesToRetrieve.append(retrieveDICOMFilesFromPACSJob->getPACSJobID());
-    refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles());
+    m_resultsOfStudiesToRetrieve.append(result);
+    refreshScreenRetrieveStatus();
 
-    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer)));
-    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer)));
+    connect(result, &StudyOperationResult::finishedSuccessfully, this, &QPopUpRISRequestsScreen::onStudyRetrieveFinished);
+    connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &QPopUpRISRequestsScreen::onStudyRetrieveFinished);
+    connect(result, &StudyOperationResult::finishedWithError, this, &QPopUpRISRequestsScreen::onStudyRetrieveFailed);
+    connect(result, &StudyOperationResult::cancelled, this, &QPopUpRISRequestsScreen::onStudyRetrieveCancelled);
 }
 
-void QPopUpRISRequestsScreen::addStudyRetrievedFromDatabaseByAccessionNumber(Study *study)
+void QPopUpRISRequestsScreen::addStudyRetrievedFromDatabase(Study *study)
 {
     m_numberOfStudiesToRetrieve++;
     m_numberOfStudiesRetrieved++;
-    refreshScreenRetrieveStatus(study);
+    refreshScreenRetrieveStatus();
 }
 
-void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
+void QPopUpRISRequestsScreen::onStudyRetrieveFinished(StudyOperationResult *result)
 {
-    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
+    ensureEndPosition();
 
-    if (retrieveDICOMFilesFromPACSJob.isNull())
+    // If the result is not in the list it means that it is from an old RIS petition that must be ignored
+    if (m_resultsOfStudiesToRetrieve.contains(result))
     {
-        ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
-    }
-    else
-    {
-        // Si quan s'ha descarregat l'estudi el PopUp encara no s'ha mogut a baix a l'esquerre, el que fem es forçar-los a moures sense espera
-        // el timeout del Timer, sinó podria passar que ja tinguem els visors amb l'estudi carregat i el PopUp encara aparagués al centre de pantalla molestant
-        // a l'usuari
-        if (isMoveAnimationOnDelayPeriod())
-        {
-            cancelTriggeredAnimations();
-            startMoveAnimation();
-        }
-
-        if (m_pacsJobIDOfStudiesToRetrieve.contains(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
-        {
-            // Si no està a la llista de PACSJob per descarregar vol dir que és d'una altra petició de RIS que ha estat matxacada per l'actual
-            // Com que el QPopUpRisRequestScreen només segueix l'última petició del RIS les ignorem
-            if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveOk ||
-                retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
-            {
-                m_numberOfStudiesRetrieved++;
-            }
-            else
-            {
-                m_numberOfStudiesFailedToRetrieve++;
-            }
-
-            refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
-        }
+        m_numberOfStudiesRetrieved++;
+        refreshScreenRetrieveStatus();
     }
 }
 
-void QPopUpRISRequestsScreen::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
+void QPopUpRISRequestsScreen::onStudyRetrieveFailed(StudyOperationResult *result)
 {
-    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
+    ensureEndPosition();
 
-    if (retrieveDICOMFilesFromPACSJob.isNull())
+    // If the result is not in the list it means that it is from an old RIS petition that must be ignored
+    if (m_resultsOfStudiesToRetrieve.contains(result))
     {
-        ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
-    }
-    else
-    {
-        // Si ha fallat o s'ha cancel·lat la descarrega l'estudi el treiem de la llista d'estudis a descarregar
-        if (m_pacsJobIDOfStudiesToRetrieve.removeOne(retrieveDICOMFilesFromPACSJob->getPACSJobID()))
-        {
-            m_numberOfStudiesToRetrieve--;
-            // Si no està a la llista de PACSJob per descarregar vol dir que és d'una altra petició de RIS que ha estat matxacada per l'actual
-            // Com que el QPopUpRisRequestScreen només segueix l'última petició del RIS les ignorem
-            refreshScreenRetrieveStatus(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
-        }
+        m_numberOfStudiesFailedToRetrieve++;
+        refreshScreenRetrieveStatus();
     }
 }
 
-void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus(Study *study)
+void QPopUpRISRequestsScreen::onStudyRetrieveCancelled(StudyOperationResult *result)
 {
-    Q_UNUSED(study)
+    // On cancellation, remove the result from the list
+    // If the result is not in the list it means that it is from an old RIS petition that must be ignored
+    if (m_resultsOfStudiesToRetrieve.removeOne(result))
+    {
+        m_numberOfStudiesToRetrieve--;
+        refreshScreenRetrieveStatus();
+    }
+}
 
+void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus()
+{
     if (m_numberOfStudiesRetrieved + m_numberOfStudiesFailedToRetrieve < m_numberOfStudiesToRetrieve)
     {
-        setOngoingOperationText(tr("Retrieving study %1 of %2.").arg(m_numberOfStudiesRetrieved + m_numberOfStudiesFailedToRetrieve + 1).arg(m_numberOfStudiesToRetrieve));
+        setOngoingOperationText(tr("Retrieving study %1 of %2.").arg(m_numberOfStudiesRetrieved + m_numberOfStudiesFailedToRetrieve + 1)
+                                .arg(m_numberOfStudiesToRetrieve));
     }
     else
     {
         showRetrieveFinished();
         hideWithDelay();
+    }
+}
+
+void QPopUpRISRequestsScreen::ensureEndPosition()
+{
+    // When the study has finished downloading, if the pop-up is not yet in the corner we force it to move there without delay so it does not bother the user
+    if (isMoveAnimationOnDelayPeriod())
+    {
+        cancelTriggeredAnimations();
+        startMoveAnimation();
     }
 }
 
@@ -178,12 +165,9 @@ void QPopUpRISRequestsScreen::showRetrieveFinished()
     }
     else
     {
-        setOngoingOperationText(tr("%1 studies retrieved, %2 failed.").arg(QString::number(m_numberOfStudiesRetrieved), QString::number(m_numberOfStudiesFailedToRetrieve)));
+        setOngoingOperationText(tr("%1 studies retrieved, %2 failed.").arg(QString::number(m_numberOfStudiesRetrieved),
+                                                                           QString::number(m_numberOfStudiesFailedToRetrieve)));
     }
 }
 
-QPopUpRISRequestsScreen::~QPopUpRISRequestsScreen()
-{
 }
-
-};

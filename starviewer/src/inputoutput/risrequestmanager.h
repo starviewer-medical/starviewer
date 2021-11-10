@@ -18,7 +18,6 @@
 #include <QObject>
 
 #include "listenrisrequests.h"
-#include "pacsjob.h"
 
 #include <unordered_set>
 
@@ -68,11 +67,14 @@ private slots:
     /// Called when the given query is cancelled.
     void onQueryCancelled(StudyOperationResult *result);
 
-    /// Slot que s'activa quan s'ha cancel·lat la descàrre d'una petició del RIS
-    void retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
-    void retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob);
+    /// Called when a study retrieve finished with success.
+    void onStudyRetrieveSucceeded(StudyOperationResult *result);
+    /// Called when a study retrieve finished with partial success.
+    void onStudyRetrieveFinishedWithPartialSuccess(StudyOperationResult *result);
+    /// Called when a study retrieve finished with error.
+    void onStudyRetrieveFailed(StudyOperationResult *result);
+    /// Called when a study retrieve is cancelled.
+    void onStudyRetrieveCancelled(StudyOperationResult *result);
 
     /// Mostrar un missatge indicant que s'ha produït un error escoltant peticions del RIS
     void showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error);
@@ -104,13 +106,13 @@ private:
     void retrieveStudyFoundInQueryPACS(Study *study);
 
     /// Sol·licita descarregar l'estudi passat utilitzant el PACSManager
-    PACSJobPointer retrieveStudyFromPACS(Study *study);
+    void retrieveStudyFromPACS(Study *study);
 
     /// Obté l'estudi de la base de dades
     void retrieveStudyFromDatabase(Study *study);
 
     /// Una vegada s'ha descarregat fa les accions pertinents amb aquell estudi. Emet signal per visualitzar/load o no fa res
-    void doActionsAfterRetrieve(const Study *study);
+    void doActionsAfterRetrieve(const QString &studyInstanceUid);
 
     /// Indica de quina font hem d'obtenir l'estudi.
     /// Comprova si l'estudi existeix a la base de dades, si existeix es pregunta a l'usuari si s'ha de tornar a descarregar-lo del PACS, i es guarda la resposta
@@ -159,9 +161,6 @@ private:
     static const int secondsTimeOutToHidePopUpAndAutoCloseQMessageBox;
 
     QQueue<Study*> m_studiesToRetrieveQueue;
-
-    ///Guarda l'accessionnumber de la última petició del RIS
-    QString m_accessionNumberOfLastRequest;
 
     /// Indica si per l'útlima petició del RIS s'ha emés signal per visualitzar un estudi
     bool m_signalViewStudyEmittedForLastRISRequest;

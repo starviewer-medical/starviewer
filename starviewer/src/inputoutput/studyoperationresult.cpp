@@ -40,6 +40,11 @@ StudyOperationResult::StudyOperationResult(QObject *parent)
     m_future = m_promise.get_future();
 }
 
+const PacsDevice& StudyOperationResult::getRequestPacsDevice() const
+{
+    return m_requestPacsDevice;
+}
+
 StudyOperationResult::RequestLevel StudyOperationResult::getRequestLevel() const
 {
     return m_requestLevel;

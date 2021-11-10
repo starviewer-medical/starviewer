@@ -33,6 +33,7 @@ DimseRetrieveStudyOperationResult::DimseRetrieveStudyOperationResult(PACSJobPoin
         return;
     }
 
+    m_requestPacsDevice = m_job->getPacsDevice();
     m_requestStudyInstanceUid = m_job->getStudyToRetrieveDICOMFiles()->getInstanceUID();
     m_requestSeriesInstanceUid = m_job->getSeriesInstanceUidToRetrieve();
     m_requestSopInstanceUid = m_job->getSopInstanceUidToRetrieve();

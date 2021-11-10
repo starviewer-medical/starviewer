@@ -18,11 +18,9 @@
 #include "localdatabasemanager.h"
 #include "logging.h"
 #include "pacsdevicemanager.h"
-#include "pacsmanager.h"
 #include "patient.h"
 #include "qmessageboxautoclose.h"
 #include "qpopuprisrequestsscreen.h"
-#include "retrievedicomfilesfrompacsjob.h"
 #include "starviewerapplication.h"
 #include "studyoperationresult.h"
 #include "studyoperationsservice.h"
@@ -31,6 +29,42 @@
 #include <QMessageBox>
 
 namespace udg {
+
+namespace {
+
+// Returns a translated string with the used query parameter in the given mask, to be used with logs and message boxes.
+QString getQueryParameterString(const DicomMask &mask)
+{
+    if (!mask.getAccessionNumber().isEmpty())
+    {
+        return QObject::tr("Accession Number %1").arg(mask.getAccessionNumber());
+    }
+    else
+    {
+        return QObject::tr("Study Instance UID %1").arg(mask.getStudyInstanceUID());
+    }
+}
+
+// Returns a string to be used in logs to identify the given PACS.
+QString getPacsIdentificationString(const PacsDevice &pacs)
+{
+    QString id = QString("[ID %1] ").arg(pacs.getID());
+
+    if (!pacs.getDescription().isEmpty())
+    {
+        return id + pacs.getDescription();
+    }
+    else if (pacs.getType() == PacsDevice::Type::Dimse)
+    {
+        return id + pacs.getAETitle();
+    }
+    else
+    {
+        return id + pacs.getBaseUri().toDisplayString();
+    }
+}
+
+}
 
 const int RISRequestManager::secondsTimeOutToHidePopUpAndAutoCloseQMessageBox = 5;
 
@@ -89,11 +123,11 @@ void RISRequestManager::listen()
 
 void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 {
-    INFO_LOG("Encuem sol·licitud de descàrrega d'un estudi del RIS amb accession number " + dicomMaskRISRequest.getAccessionNumber());
+    INFO_LOG(QString("[SAP/RIS/command line] Queuing request for study with %1.").arg(getQueryParameterString(dicomMaskRISRequest)));
+
     // Per anar atenent les descàrregues a mesura que ens arriben encuem les peticions, només fem una cerca al PACS a la vegada, una
     // vegada hem trobat l'estudi en algun PACS, es posa a descarregar i s'aten una altra petició
     m_queueRISRequests.enqueue(dicomMaskRISRequest);
-    m_accessionNumberOfLastRequest = dicomMaskRISRequest.getAccessionNumber();
     m_signalViewStudyEmittedForLastRISRequest = false;
 
     // Si tenim més d'un element ja hi ha un altre consulta d'un RIS Executant-se per tant no fem res
@@ -105,7 +139,8 @@ void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 
 void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 {
-    INFO_LOG("Comencem a cercar l'estudi sol·licitat pel RIS amb accession number " + maskRISRequest.getAccessionNumber());
+    INFO_LOG(QString("[SAP/RIS/command line] Starting query for study with %1.").arg(getQueryParameterString(maskRISRequest)));
+
     m_numberOfStudiesAddedToRetrieveForCurrentRisRequest = 0;
     // Al iniciar una nova consulta netegem la llista UID d'estudis demanats per descarregar i pendents de descarregar
     // TODO:Si ens arriba una altre petició del RIS mentre encara descarreguem l'anterior petició no es farà seguiment de la descarrega actual, sinó de la
@@ -122,15 +157,15 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
             PacsDeviceManager::getPacsList(PacsDeviceManager::DimseWithQueryRetrieveService | PacsDeviceManager::Wado | PacsDeviceManager::OnlyDefault);
     if (queryablePACS.isEmpty())
     {
-        QMessageBox::information(0, ApplicationNameString, tr("Cannot retrieve the studies requested from RIS because there is no configured default "
-                                                              "PACS to query.") + "\n\n" + tr("Please, check your PACS settings."));
-        INFO_LOG("No s'ha pogut processar la peticio del RIS perque no hi ha PACS configurats per cercar per defecte");
+        QMessageBox::information(nullptr, ApplicationNameString, tr("Cannot retrieve the studies requested from SAP, RIS or command line because there is no "
+                                                                    "configured default PACS to query.\n\nPlease, check your PACS settings."));
+        INFO_LOG("[SAP/RIS/command line] Can't process request because there are no default PACS.");
         m_queueRISRequests.dequeue();
         return;
     }
 
     // Mostrem el popUP amb l'accession number
-    m_qpopUpRISRequestsScreen->queryStudiesByAccessionNumberStarted();
+    m_qpopUpRISRequestsScreen->queryStudiesStarted();
     m_qpopUpRISRequestsScreen->activateWindow();
     m_qpopUpRISRequestsScreen->show();
 
@@ -160,8 +195,8 @@ void RISRequestManager::addFoundStudiesToRetrieveQueue(StudyOperationResult *res
         {
             if (!m_studiesInstancesUIDRequestedToRetrieve.contains(study->getInstanceUID()))
             {
-                INFO_LOG(QString("S'ha trobat estudi que compleix criteri de cerca del RIS. Estudi UID %1, PacsId %2")
-                    .arg(study->getInstanceUID(), study->getDICOMSource().getRetrievePACS().at(0).getID()));
+                INFO_LOG(QString("[SAP/RIS/command line] Found a study that matches the search criterion. Study Instance UID %1. PACS %2")
+                         .arg(study->getInstanceUID()).arg(getPacsIdentificationString(study->getDICOMSource().getRetrievePACS().at(0))));
 
                 //Quan es posa un estudi a descarregar es comprova si aquest existeix a la BD, si existeix es pregunta al usuari si vol tornar a descarregar els estudis
                 //que ja estan en local. Mentre es mostra el QMessageBox preguntant a l'usuari el thread que executa aquesta classe (és el thread de la UI) es continua execuant
@@ -181,9 +216,9 @@ void RISRequestManager::addFoundStudiesToRetrieveQueue(StudyOperationResult *res
             else
             {
                 //Ja hem trobat l'estudi en un altra PACS pel qual ja s'ha demanat descarregar-lo, no cal tornar-hi.
-                WARN_LOG(QString("S'ha trobat l'estudi UID %1 del PACS Id %2 que coincidieix amb els parametres del cerca del RIS, pero ja s'ha demanat "
-                             "descarregar-lo d'un altre PACS.")
-                        .arg(study->getInstanceUID(), study->getDICOMSource().getRetrievePACS().at(0).getID()));
+                WARN_LOG(QString("[SAP/RIS/command line] Found study with Study Instance UID %1 in PACS %2 that matches the search criterion but it is already "
+                                 "being retrieved from another PACS.")
+                         .arg(study->getInstanceUID()).arg(getPacsIdentificationString(study->getDICOMSource().getRetrievePACS().at(0))));
             }
         }
     }
@@ -198,9 +233,8 @@ void RISRequestManager::addFoundStudiesToRetrieveQueue(StudyOperationResult *res
 
 void RISRequestManager::onQueryError(StudyOperationResult *result)
 {
-    QString errorMessage = tr("RIS request error: %1").arg(result->getErrorText());
-    ERROR_LOG(errorMessage);
-    QMessageBox::critical(NULL, ApplicationNameString, errorMessage);
+    ERROR_LOG(QString("[SAP/RIS/command line] Request error: %1").arg(result->getErrorText()));
+    QMessageBox::critical(nullptr, ApplicationNameString, tr("SAP, RIS or command line request error: %1").arg(result->getErrorText()));
 
     m_pendingQueryResults.erase(result);
 
@@ -223,23 +257,23 @@ void RISRequestManager::onQueryCancelled(StudyOperationResult *result)
 void RISRequestManager::queryRequestRISFinished()
 {
     DicomMask dicomMaskRISRequest = m_queueRISRequests.dequeue();
-
-    INFO_LOG("Ha acabat la cerca dels estudis sol·licitats pel RIS amb l'Accession number " + dicomMaskRISRequest.getAccessionNumber());
+    INFO_LOG(QString("[SAP/RIS/command line] Query for study with %1 has finished.").arg(getQueryParameterString(dicomMaskRISRequest)));
 
     if (m_numberOfStudiesAddedToRetrieveForCurrentRisRequest == 0)
     {
-        INFO_LOG("No s'ha trobat cap estudi sol·licitat pel RIS amb l'accession number " + dicomMaskRISRequest.getAccessionNumber());
+        INFO_LOG(QString("[SAP/RIS/command line] No study found with %1.").arg(getQueryParameterString(dicomMaskRISRequest)));
+
         // Si no hem trobat cap estudi que coincideix llancem MessageBox
-        QString message = tr("Unable to execute the RIS request. The study with accession number %1 was not found in the default PACS.")
-                        .arg(dicomMaskRISRequest.getAccessionNumber());
+        QString message = tr("Unable to execute the SAP, RIS or command line request. The study with %1 was not found in the default PACS.")
+                .arg(getQueryParameterString(dicomMaskRISRequest));
 
         m_qpopUpRISRequestsScreen->showNotStudiesFoundMessage();
-        QMessageBox::information(NULL, ApplicationNameString, message);
+        QMessageBox::information(nullptr, ApplicationNameString, message);
     }
 
     if (m_queueRISRequests.count() > 0)
     {
-        INFO_LOG("Hi ha més sol·licituts de RIS pendent d'executar");
+        INFO_LOG("[SAP/RIS/command line] There are more requests pending to execute.");
         // Tenim altres sol·licituds del RIS per descarregar, les processem
         queryPACSRISStudyRequest(m_queueRISRequests.head());
     }
@@ -262,12 +296,12 @@ void RISRequestManager::retrieveStudyFoundInQueryPACS(Study *study)
     switch (getDICOMSouceFromRetrieveStudy(study))
     {
         case PACS:
-            INFO_LOG(QString("L'estudi sol.licitat pel RIS %1 s'obtindra del PACS").arg(study->getInstanceUID())); 
+            INFO_LOG(QString("[SAP/RIS/command line] Study %1 will be retrieved from PACS.").arg(study->getInstanceUID()));
             retrieveStudyFromPACS(study);
             break;
         
         case Database:
-            INFO_LOG(QString("L'estudi sol.licitat pel RIS %1 s'obtindra de la base de dades local").arg(study->getInstanceUID())); 
+            INFO_LOG(QString("[SAP/RIS/command line] Study %1 will be retrieved from local database.").arg(study->getInstanceUID()));
             retrieveStudyFromDatabase(study);
             break;
     }
@@ -275,87 +309,64 @@ void RISRequestManager::retrieveStudyFoundInQueryPACS(Study *study)
     m_numberOfStudiesAddedToRetrieveForCurrentRisRequest++;
 }
 
-PACSJobPointer RISRequestManager::retrieveStudyFromPACS(Study *study)
+void RISRequestManager::retrieveStudyFromPACS(Study *study)
 {
     PacsDevice pacsDevice = study->getDICOMSource().getRetrievePACS().at(0);
 
-    PACSJobPointer retrieveDICOMFilesFromPACSJob(new RetrieveDICOMFilesFromPACSJob(pacsDevice, RetrieveDICOMFilesFromPACSJob::Medium, study));
+    StudyOperationResult *result = StudyOperationsService::instance()->retrieveFromPacs(pacsDevice, study);
 
-    m_qpopUpRISRequestsScreen->addStudyToRetrieveFromPACSByAccessionNumber(retrieveDICOMFilesFromPACSJob);
-    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer)));
-    connect(retrieveDICOMFilesFromPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer)));
-
-    PacsManagerSingleton::instance()->enqueuePACSJob(retrieveDICOMFilesFromPACSJob);
-
-    return retrieveDICOMFilesFromPACSJob;
+    m_qpopUpRISRequestsScreen->addStudyToRetrieveFromPacs(result);
+    connect(result, &StudyOperationResult::finishedSuccessfully, this, &RISRequestManager::onStudyRetrieveSucceeded);
+    connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &RISRequestManager::onStudyRetrieveFinishedWithPartialSuccess);
+    connect(result, &StudyOperationResult::finishedWithError, this, &RISRequestManager::onStudyRetrieveFailed);
+    connect(result, &StudyOperationResult::cancelled, this, &RISRequestManager::onStudyRetrieveCancelled);
 }
 
 void RISRequestManager::retrieveStudyFromDatabase(Study *study)
 {
-    m_qpopUpRISRequestsScreen->addStudyRetrievedFromDatabaseByAccessionNumber(study);
+    m_qpopUpRISRequestsScreen->addStudyRetrievedFromDatabase(study);
 
     //Ara mateix no cal descarregar un estudi de la base de dades si ja li tenim, per això invoquem directament el mètode doActionsAfterRetrieve
-    doActionsAfterRetrieve(study);
+    doActionsAfterRetrieve(study->getInstanceUID());
 }
 
-void RISRequestManager::retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob)
+void RISRequestManager::onStudyRetrieveSucceeded(StudyOperationResult *result)
 {
-    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
-
-    if (retrieveDICOMFilesFromPACSJob.isNull())
-    {
-        ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
-    }
-    else
-    {
-        INFO_LOG(QString("La descarrega de l'estudi %1 del PACS %2 sol.licitada pel RIS ha estat cancel.lada")
-            .arg(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles()->getInstanceUID())
-            .arg(retrieveDICOMFilesFromPACSJob->getPacsDevice().getAETitle()));
-    }
+    doActionsAfterRetrieve(result->getRequestStudyInstanceUid());
 }
 
-/// Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
-void RISRequestManager::retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob)
+void RISRequestManager::onStudyRetrieveFinishedWithPartialSuccess(StudyOperationResult *result)
 {
-    QSharedPointer<RetrieveDICOMFilesFromPACSJob> retrieveDICOMFilesFromPACSJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
-
-    if (retrieveDICOMFilesFromPACSJob.isNull())
-    {
-        ERROR_LOG("El PACSJob que ha finalitzat no és un RetrieveDICOMFilesFromPACSJob");
-        return;
-    }
-
-    if (retrieveDICOMFilesFromPACSJob->getStatus() != PACSRequestStatus::RetrieveOk)
-    {
-        if (retrieveDICOMFilesFromPACSJob->getStatus() == PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
-        {
-            QMessageBox::warning(NULL, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
-        }
-        else
-        {
-            QMessageBox::critical(NULL, ApplicationNameString, retrieveDICOMFilesFromPACSJob->getStatusDescription());
-            return;
-        }
-    }
-
-    doActionsAfterRetrieve(retrieveDICOMFilesFromPACSJob->getStudyToRetrieveDICOMFiles());
+    QMessageBox::warning(nullptr, ApplicationNameString, result->getErrorText());
+    onStudyRetrieveSucceeded(result);
 }
 
-void RISRequestManager::doActionsAfterRetrieve(const Study *study)
+void RISRequestManager::onStudyRetrieveFailed(StudyOperationResult *result)
+{
+    QMessageBox::critical(nullptr, ApplicationNameString, result->getErrorText());
+}
+
+void RISRequestManager::onStudyRetrieveCancelled(StudyOperationResult *result)
+{
+    INFO_LOG(QString("[SAP/RIS/command line] Download of study %1 from PACS %2 has been cancelled.").arg(result->getRequestStudyInstanceUid())
+             .arg(getPacsIdentificationString(result->getRequestPacsDevice())));
+}
+
+void RISRequestManager::doActionsAfterRetrieve(const QString &studyInstanceUid)
 {
     //Les descarregues d'altres peticions que no siguin l'actual les ignorem. (Per exemple cas en que el metge primer demana descarregar uns estudis i llavors se n'adona
     //que no era aquells que volia, doncs els estudis descarregats de la primera petició s'ignoraran i no se'n farà res)
-    if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool() && study->getAccessionNumber() == m_accessionNumberOfLastRequest)
+    if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool() && m_studiesInstancesUIDRequestedToRetrieve.contains(studyInstanceUid))
     {
         if (!m_signalViewStudyEmittedForLastRISRequest)
         {
             m_signalViewStudyEmittedForLastRISRequest = true;
-            emit viewStudyRetrievedFromRISRequest(study->getInstanceUID());
+            emit viewStudyRetrievedFromRISRequest(studyInstanceUid);
         }
         else
         {
             //Si ja s'ha emés un view per veure un estudi d'aquesta petició, pels altres de la petició emetrem un load
-            emit loadStudyRetrievedFromRISRequest(study->getInstanceUID());
+            emit loadStudyRetrievedFromRISRequest(studyInstanceUid);
         }
     }
 }
@@ -368,17 +379,18 @@ RISRequestManager::DICOMSourcesFromRetrieveStudy RISRequestManager::getDICOMSouc
     {
         if (!m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain)
         {
-            INFO_LOG("S'han trobat estudis sol.licitats pel RIS a la base de dades local, es preguntara l'usuari si vol tornar-los a descarregar del PACS");
+            INFO_LOG("[SAP/RIS/command line] Some requested studies have been found in the local database. "
+                     "The user will be asked if they should be downloaded again from PACS.");
             m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain = true;
             m_studiesInDatabaseHaveToBeenRetrievedAgain = askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(study->getParentPatient()->getFullName());
 
             if (m_studiesInDatabaseHaveToBeenRetrievedAgain)
             {
-                INFO_LOG("L'usuari ha indicat que s'han de tornar a descarregar del PACS els estudis sol.licitats del RIS trobats a la base de dades local");
+                INFO_LOG("[SAP/RIS/command line] The user has decided to download again from PACS the studies found in the local database.");
             }
             else
             {
-                INFO_LOG("L'usuari ha indicat que no s'han de tornar a descarregar del PACS els estudis sol.licitats del RIS trobats a la base de dades local");
+                INFO_LOG("[SAP/RIS/command line] The user has decided to not download again from PACS the studies found in the local database.");
             }
         }
 
@@ -399,7 +411,9 @@ bool RISRequestManager::askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(con
     //Necessari indicar que estigui a sobre de tots els elements perquè sinó es mostra a sota del QPopUpRISRequestScreen impedint que l'usuari pugui llegir-ne el contingut
     //Hack: El SetWindowFlags s'ha de fer abans de setButtonToShowAutoCloseTimer, ja que sinó el botó que mostra el comptador endarrera no queda seleccionat per defecte
     qmessageBoxAutoClose.setWindowFlags(qmessageBoxAutoClose.windowFlags() | Qt::WindowStaysOnTopHint);
-    qmessageBoxAutoClose.setText(tr("Some studies of patient %1 requested from RIS exist in the local database. Do you want to retrieve them again?") .arg(fullPatientName));
+    QString question = tr("Some studies of patient %1 requested from SAP, RIS or command line exist in the local database. Do you want to retrieve them again?")
+            .arg(fullPatientName);
+    qmessageBoxAutoClose.setText(question);
     qmessageBoxAutoClose.setWindowTitle(ApplicationNameString);
     qmessageBoxAutoClose.setIcon(QMessageBox::Question);
     qmessageBoxAutoClose.addButton(QMessageBox::Yes);
@@ -428,7 +442,7 @@ void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISR
             break;
     }
 
-    QMessageBox::critical(NULL, ApplicationNameString, message);
+    QMessageBox::critical(nullptr, ApplicationNameString, message);
 }
 
 }

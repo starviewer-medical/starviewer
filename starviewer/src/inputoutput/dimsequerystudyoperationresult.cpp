@@ -32,6 +32,8 @@ DimseQueryStudyOperationResult::DimseQueryStudyOperationResult(PACSJobPointer jo
         return;
     }
 
+    m_requestPacsDevice = m_job->getPacsDevice();
+
     switch (m_job->getQueryLevel())
     {
         case QueryPacsJob::study:
