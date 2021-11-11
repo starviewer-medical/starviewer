@@ -15,6 +15,7 @@ set(SOURCES
     dimsecservice.cpp
     dimsequerystudyoperationresult.cpp
     dimseretrievestudyoperationresult.cpp
+    dimsestorestudyoperationresult.cpp
     echotopacs.cpp
     echotopacstest.cpp
     firewallaccess.cpp

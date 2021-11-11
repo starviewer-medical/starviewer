@@ -23,6 +23,7 @@ namespace udg {
 class DicomMask;
 class PacsDevice;
 class PacsManager;
+class Series;
 class Study;
 class StudyOperationResult;
 
@@ -50,6 +51,14 @@ public:
     /// that can be used to observe the progres and obtain the final values.
     StudyOperationResult* retrieveFromPacs(const PacsDevice &pacs, const Study *study, const QString &seriesInstanceUid = QString(),
                                            const QString &sopInstanceUid = QString(), RetrievePriority priority = RetrievePriority::Medium);
+
+    /// Starts an asynchronous store request on the given PACS for the given study. Returns a result that can be used to observe the progress and obtain any
+    /// errors.
+    StudyOperationResult* storeInPacs(const PacsDevice &pacs, const Study *study);
+
+    /// Starts an asynchronous store request on the given PACS for the given list of series; all series must belong to the same study. Returns a result that can
+    /// be used to observe the progress and obtain any errors.
+    StudyOperationResult* storeInPacs(const PacsDevice &pacs, const QList<Series*> &series);
 
 private:
     explicit StudyOperationsService(QObject *parent = nullptr);

@@ -16,10 +16,13 @@
 
 #include "dimsequerystudyoperationresult.h"
 #include "dimseretrievestudyoperationresult.h"
+#include "dimsestorestudyoperationresult.h"
 #include "pacsdevice.h"
 #include "pacsmanager.h"
 #include "querypacsjob.h"
 #include "retrievedicomfilesfrompacsjob.h"
+#include "senddicomfilestopacsjob.h"
+#include "study.h"
 
 namespace udg {
 
@@ -76,6 +79,37 @@ StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice 
 
         PACSJobPointer job(new RetrieveDICOMFilesFromPACSJob(pacs, jobPriority, study, seriesInstanceUid, sopInstanceUid));
         StudyOperationResult *result = new DimseRetrieveStudyOperationResult(job, m_pacsManager);
+
+        // TODO connects from result to this
+
+        m_pacsManager->enqueuePACSJob(job);
+
+        return result;
+    }
+
+    return nullptr;
+}
+
+StudyOperationResult* StudyOperationsService::storeInPacs(const PacsDevice &pacs, const Study *study)
+{
+    return storeInPacs(pacs, study->getSeries());
+}
+
+StudyOperationResult* StudyOperationsService::storeInPacs(const PacsDevice &pacs, const QList<Series*> &seriesList)
+{
+    if (pacs.getType() == PacsDevice::Type::Dimse)
+    {
+        QList<Image*> imageList;
+
+        for (Series *series : seriesList)
+        {
+            imageList.append(series->getImages());
+        }
+
+        // TODO SendDICOMFilesToPACSJob and its internal SendDICOMFilesToPACS can only send images. They can't send encapsulated documents, nor presentation
+        // states nor any other kind of instance. This should be addressed some time.
+        PACSJobPointer job(new SendDICOMFilesToPACSJob(pacs, imageList));
+        StudyOperationResult *result = new DimseStoreStudyOperationResult(job, m_pacsManager);
 
         // TODO connects from result to this
 

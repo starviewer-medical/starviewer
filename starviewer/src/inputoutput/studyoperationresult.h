@@ -108,6 +108,10 @@ protected:
     /// Must be called by subclasses to set the given error as the result.
     void setErrorText(QString text);
 
+    /// Must be called by subclasses to indicate that the operation has finished with nothing as a result.
+    /// An optional error text can be given to indicate some non-critical error.
+    void setNothing(QString errorText = QString());
+
     /// Must be called by subclasses to mark the operation as cancelled.
     void setCancelled();
 

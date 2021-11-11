@@ -60,10 +60,6 @@ public slots:
     /// Neteja els LineEdit del formulari
     void clearTexts();
 
-    /// Guarda els objectes que compleixien la màscara passada per paràmetres de l'estudi
-    /// passat per paràmetre al primer PACS que es troba com a PACS per defecte
-    void sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image*> images);
-
     /// Es comunica amb el widget de la base de dades i visualitzar un estudi descarregat del PACS
     void viewStudyFromDatabase(QString studyInstanceUID);
 

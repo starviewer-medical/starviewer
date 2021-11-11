@@ -191,6 +191,24 @@ void StudyOperationResult::setErrorText(QString text)
     }
 }
 
+void StudyOperationResult::setNothing(QString errorText)
+{
+    if (m_future.valid())
+    {
+        m_errorText = std::move(errorText);
+        m_promise.set_value();
+
+        if (m_errorText.isNull())
+        {
+            emit finishedSuccessfully(this);
+        }
+        else
+        {
+            emit finishedWithPartialSuccess(this);
+        }
+    }
+}
+
 void StudyOperationResult::setCancelled()
 {
     if (m_future.valid())

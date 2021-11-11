@@ -310,11 +310,6 @@ void QueryScreen::loadStudyFromDatabase(QString studyInstanceUID)
     m_qInputOutputLocalDatabaseWidget->view(studyInstanceUID, true);
 }
 
-void QueryScreen::sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image*> images)
-{
-    m_qInputOutputLocalDatabaseWidget->sendDICOMFilesToPACS(pacsDevice, images);
-}
-
 void QueryScreen::refreshTab(int index)
 {
     switch (index)
