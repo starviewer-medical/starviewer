@@ -130,7 +130,7 @@ void QPacsConfigurationScreen::addDimsePacs()
     connect(dialog, &QDialog::finished, [=] {
         // Update always independently of the result because the dialog has an apply button
         refreshPacsList();
-        delete dialog;
+        dialog->deleteLater();
     });
 
     dialog->open();
@@ -143,7 +143,7 @@ void QPacsConfigurationScreen::addWadoPacs()
     connect(dialog, &QDialog::finished, [=] {
         // Update always independently of the result because the dialog has an apply button
         refreshPacsList();
-        delete dialog;
+        dialog->deleteLater();
     });
 
     dialog->open();
@@ -165,7 +165,7 @@ void QPacsConfigurationScreen::editPacs()
     connect(dialog, &QDialog::finished, [=] {
         // Update always independently of the result because the dialog has an apply button
         refreshPacsList();
-        delete dialog;
+        dialog->deleteLater();
         m_pacsTableView->selectRow(index.row());    // reselect the same row because it's deselected by the refresh
     });
 
