@@ -101,6 +101,8 @@ signals:
     void finished(StudyOperationResult *result);
     /// Emitted when the operation has been cancelled.
     void cancelled(StudyOperationResult *result);
+    /// Emitted when the operation has ended in any way, including cancelled.
+    void ended(StudyOperationResult *result);
 
     /// Emitted after an instance is transferred. The second parameter is the total number of instances transferred until now.
     void instanceTransferred(StudyOperationResult *result, int totalInstancesTransferred);

@@ -251,6 +251,7 @@ void QExporterTool::generateAndStoreNewSeries()
             {
                 INFO_LOG(QString("Sending images to PACS %1 (%2)").arg(pacsDevice.getAETitle()).arg(pacsDevice.getDescription()));
                 StudyOperationResult *result = StudyOperationsService::instance()->storeInPacs(pacsDevice, {generetedVolume->getSeries()});
+                connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
             }
         }
 

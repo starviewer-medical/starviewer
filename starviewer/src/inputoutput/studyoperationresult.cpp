@@ -136,6 +136,7 @@ void StudyOperationResult::setStudies(QList<Patient*> studies)
 
         emit finishedSuccessfully(this);
         emit finished(this);
+        emit ended(this);
     }
 }
 
@@ -150,6 +151,7 @@ void StudyOperationResult::setSeries(QList<Series*> series)
 
         emit finishedSuccessfully(this);
         emit finished(this);
+        emit ended(this);
     }
 }
 
@@ -164,6 +166,7 @@ void StudyOperationResult::setInstances(QList<Image*> instances)
 
         emit finishedSuccessfully(this);
         emit finished(this);
+        emit ended(this);
     }
 }
 
@@ -186,6 +189,7 @@ void StudyOperationResult::setStudyInstanceUid(QString studyInstanceUid, QString
         }
 
         emit finished(this);
+        emit ended(this);
     }
 }
 
@@ -199,6 +203,7 @@ void StudyOperationResult::setErrorText(QString text)
 
         emit finishedWithError(this);
         emit finished(this);
+        emit ended(this);
     }
 }
 
@@ -219,6 +224,7 @@ void StudyOperationResult::setNothing(QString errorText)
         }
 
         emit finished(this);
+        emit ended(this);
     }
 }
 
@@ -229,6 +235,7 @@ void StudyOperationResult::setCancelled()
         m_promise.set_value();
 
         emit cancelled(this);
+        emit ended(this);
     }
 }
 

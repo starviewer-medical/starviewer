@@ -183,6 +183,7 @@ void RISRequestManager::addPendingQuery(StudyOperationResult *result)
     connect(result, &StudyOperationResult::finishedSuccessfully, this, &RISRequestManager::addFoundStudiesToRetrieveQueue);
     connect(result, &StudyOperationResult::finishedWithError, this, &RISRequestManager::onQueryError);
     connect(result, &StudyOperationResult::cancelled, this, &RISRequestManager::onQueryCancelled);
+    connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
 
     m_pendingQueryResults.insert(result);
 }
@@ -320,6 +321,7 @@ void RISRequestManager::retrieveStudyFromPACS(Study *study)
     connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &RISRequestManager::onStudyRetrieveFinishedWithPartialSuccess);
     connect(result, &StudyOperationResult::finishedWithError, this, &RISRequestManager::onStudyRetrieveFailed);
     connect(result, &StudyOperationResult::cancelled, this, &RISRequestManager::onStudyRetrieveCancelled);
+    connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
 }
 
 void RISRequestManager::retrieveStudyFromDatabase(Study *study)

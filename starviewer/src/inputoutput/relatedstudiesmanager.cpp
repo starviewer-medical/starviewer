@@ -157,6 +157,7 @@ void RelatedStudiesManager::addPendingQuery(StudyOperationResult *result)
     connect(result, &StudyOperationResult::finishedSuccessfully, this, &RelatedStudiesManager::mergeStudiesFromQuery);
     connect(result, &StudyOperationResult::finishedWithError, this, &RelatedStudiesManager::onQueryError);
     connect(result, &StudyOperationResult::cancelled, this, &RelatedStudiesManager::onQueryCancelled);
+    connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
 
     m_pendingQueryResults.insert(result);
 }
@@ -342,6 +343,7 @@ void RelatedStudiesManager::retrieveAndLoad(Study *study, const PacsDevice &pacs
     connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &RelatedStudiesManager::onStudyRetrieveFinished);
     connect(result, &StudyOperationResult::finishedWithError, this, &RelatedStudiesManager::onStudyRetrieveFailed);
     connect(result, &StudyOperationResult::cancelled, this, &RelatedStudiesManager::onStudyRetrieveCancelled);
+    connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
 }
 
 void RelatedStudiesManager::deleteQueryResults()

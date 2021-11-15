@@ -178,6 +178,7 @@ void QInputOutputPacsWidget::addPendingQuery(StudyOperationResult *result)
     connect(result, &StudyOperationResult::finishedSuccessfully, this, &QInputOutputPacsWidget::showQueryResult);
     connect(result, &StudyOperationResult::finishedWithError, this, &QInputOutputPacsWidget::showQueryError);
     connect(result, &StudyOperationResult::cancelled, this, &QInputOutputPacsWidget::onQueryCancelled);
+    connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
 
     m_pendingQueryResults.insert(result);
     setQueryInProgress(true);
@@ -389,6 +390,7 @@ void QInputOutputPacsWidget::retrieve(const PacsDevice &pacsDevice, ActionsAfter
         onRetrievePartialSuccess(result, actionAfterRetrieve);
     });
     connect(result, &StudyOperationResult::finishedWithError, this, &QInputOutputPacsWidget::onRetrieveError);
+    connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
 }
 
 bool QInputOutputPacsWidget::areValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery)

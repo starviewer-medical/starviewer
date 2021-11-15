@@ -543,6 +543,7 @@ void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
                 // These connections will be deleted when result is destroyed
                 connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &QInputOutputLocalDatabaseWidget::onStorePartialSuccess);
                 connect(result, &StudyOperationResult::finishedWithError, this, &QInputOutputLocalDatabaseWidget::onStoreError);
+                connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
             }
         }
     }
