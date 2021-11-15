@@ -24,6 +24,8 @@
 #include "senddicomfilestopacsjob.h"
 #include "study.h"
 
+#include <QCoreApplication>
+
 namespace udg {
 
 StudyOperationResult* StudyOperationsService::searchPacs(const PacsDevice &pacs, const DicomMask &mask, TargetResource targetResource)
@@ -127,10 +129,22 @@ StudyOperationResult* StudyOperationsService::storeInPacs(const PacsDevice &pacs
     return nullptr;
 }
 
+void StudyOperationsService::cancelAllOperations()
+{
+    m_pacsManager->requestCancelAllPACSJobs();
+}
+
 StudyOperationsService::StudyOperationsService(QObject *parent)
     : QObject(parent), m_pacsManager(nullptr)
 {
     m_pacsManager = new PacsManager();
+
+    connect(qApp, &QCoreApplication::aboutToQuit, this, &StudyOperationsService::cancelAllOperations);
+}
+
+StudyOperationsService::~StudyOperationsService()
+{
+//    delete m_pacsManager; // Can't delete PacsManager safely. See comment on its destructor.
 }
 
 } // namespace udg

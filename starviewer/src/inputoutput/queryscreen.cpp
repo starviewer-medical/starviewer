@@ -18,7 +18,6 @@
 #include "inputoutputsettings.h"
 #include "localdatabasemanager.h"
 #include "logging.h"
-#include "pacsmanager.h"
 #include "portinuse.h"
 #include "qcreatedicomdir.h"
 #include "qoperationstatescreen.h"
@@ -85,12 +84,6 @@ QueryScreen::~QueryScreen()
 
     Settings settings;
     settings.setValue(InputOutputSettings::QueryScreenPACSListIsVisible, m_showPACSNodesPushButton->isChecked());
-
-    if (PacsManagerSingleton::instance()->isExecutingPACSJob())
-    {
-        // Si hi ha PacsJob executant-se demanem cancel·lar
-        PacsManagerSingleton::instance()->requestCancelAllPACSJobs();
-    }
 
     delete m_risRequestManager;
 #endif

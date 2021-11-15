@@ -60,12 +60,17 @@ public:
     /// be used to observe the progress and obtain any errors.
     StudyOperationResult* storeInPacs(const PacsDevice &pacs, const QList<Series*> &series);
 
+public slots:
+    /// Requests to call all current operations.
+    void cancelAllOperations();
+
 signals:
     /// Emitted when any operation is requested.
     void operationRequested(StudyOperationResult *result);
 
 private:
     explicit StudyOperationsService(QObject *parent = nullptr);
+    ~StudyOperationsService() override;
     friend Singleton<StudyOperationsService>;
 
 private:
