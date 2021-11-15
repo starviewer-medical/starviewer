@@ -68,6 +68,9 @@ signals:
     /// Emitted when any operation is requested.
     void operationRequested(StudyOperationResult *result);
 
+    /// Emitted when a retrieve operation is going to delete a local study to free space.
+    void localStudyAboutToBeDeleted(QString studyInstanceUid);
+
 private:
     explicit StudyOperationsService(QObject *parent = nullptr);
     ~StudyOperationsService() override;

@@ -85,6 +85,8 @@ StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice 
         StudyOperationResult *result = new DimseRetrieveStudyOperationResult(job, m_pacsManager);
 
         // TODO connects from result to this
+        connect(job.objectCast<RetrieveDICOMFilesFromPACSJob>().data(), &RetrieveDICOMFilesFromPACSJob::studyFromCacheWillBeDeleted,
+                this, &StudyOperationsService::localStudyAboutToBeDeleted);
 
         m_pacsManager->enqueuePACSJob(job);
 

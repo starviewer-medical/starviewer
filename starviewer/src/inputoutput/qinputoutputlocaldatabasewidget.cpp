@@ -99,6 +99,11 @@ void QInputOutputLocalDatabaseWidget::createConnections()
     /// Si movem el QSplitter capturem el signal per guardar la seva posició
     connect(m_StudyTreeSeriesListQSplitter, SIGNAL(splitterMoved (int, int)), SLOT(qSplitterPositionChanged()));
     connect(m_qwidgetSelectPacsToStoreDicomImage, SIGNAL(selectedPacsToStore()), SLOT(sendSelectedStudiesToSelectedPacs()));
+
+    // TODO This is only a hack. It should be resolved better with a cache manager. See the original signal in RetrieveDICOMFilesFromPACSJob and the previous
+    //      implementation (look at the full changeset in this commit) for more information.
+    connect(StudyOperationsService::instance(), &StudyOperationsService::localStudyAboutToBeDeleted,
+            this, &QInputOutputLocalDatabaseWidget::removeStudyFromQStudyTreeWidget);
 }
 
 void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
@@ -558,20 +563,6 @@ void QInputOutputLocalDatabaseWidget::onStoreError(StudyOperationResult *result)
 {
     QMessageBox::critical(this, ApplicationNameString, result->getErrorText());
 }
-
-//void QInputOutputLocalDatabaseWidget::newPACSJobEnqueued(PACSJobPointer pacsJob)
-//{
-//    // Connectem amb el signal RetrieveDICOMFilesFromPACSJob de que s'esborrarà un estudi de la caché per treure'ls de la QStudyTreeWidget quan se
-//    // n'esborrin
-//    // TODO: RetrieveDICOMFilesFromPACS no hauria d'emetre aquest signal, hauria de ser una CacheManager d'aquesta manera treuriem la responsabilitat
-//    //       de RetrieveDICOMFilesFromPACS de fer-ho, i a més no caldria connectar el signal cada vegada que fan un nou Job. Una vegada s'hagi implementar la
-//    //       CacheManager aquest mètode HA DE DESAPAREIXER, quan es tregui aquest mètode recordar a treure l'include a "retrievedicomfilesfrompacsjob.h"
-//    if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
-//    {
-//        connect(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(studyFromCacheWillBeDeleted(QString)),
-//                SLOT(removeStudyFromQStudyTreeWidget(QString)));
-//    }
-//}
 
 bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)
 {
