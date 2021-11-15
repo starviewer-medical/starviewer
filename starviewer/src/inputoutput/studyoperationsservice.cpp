@@ -49,8 +49,6 @@ StudyOperationResult* StudyOperationsService::searchPacs(const PacsDevice &pacs,
         PACSJobPointer job(new QueryPacsJob(pacs, mask, queryLevel));
         StudyOperationResult *result = new DimseQueryStudyOperationResult(job, m_pacsManager);
 
-        // TODO connects from result to this
-
         m_pacsManager->enqueuePACSJob(job);
 
         emit operationRequested(result);
@@ -84,7 +82,6 @@ StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice 
         PACSJobPointer job(new RetrieveDICOMFilesFromPACSJob(pacs, jobPriority, study, seriesInstanceUid, sopInstanceUid));
         StudyOperationResult *result = new DimseRetrieveStudyOperationResult(job, m_pacsManager);
 
-        // TODO connects from result to this
         connect(job.objectCast<RetrieveDICOMFilesFromPACSJob>().data(), &RetrieveDICOMFilesFromPACSJob::studyFromCacheWillBeDeleted,
                 this, &StudyOperationsService::localStudyAboutToBeDeleted);
 
@@ -119,8 +116,6 @@ StudyOperationResult* StudyOperationsService::storeInPacs(const PacsDevice &pacs
         PACSJobPointer job(new SendDICOMFilesToPACSJob(pacs, imageList));
         StudyOperationResult *result = new DimseStoreStudyOperationResult(job, m_pacsManager);
 
-        // TODO connects from result to this
-
         m_pacsManager->enqueuePACSJob(job);
 
         emit operationRequested(result);
@@ -146,7 +141,7 @@ StudyOperationsService::StudyOperationsService(QObject *parent)
 
 StudyOperationsService::~StudyOperationsService()
 {
-//    delete m_pacsManager; // Can't delete PacsManager safely. See comment on its destructor.
+//    delete m_pacsManager; // TODO Can't delete PacsManager safely. See comment on its destructor.
 }
 
 } // namespace udg

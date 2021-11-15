@@ -91,7 +91,7 @@ void DimseQueryStudyOperationResult::onJobFinished()
     }
     else if (m_job->getStatus() == PACSRequestStatus::QueryCancelled)
     {
-        onJobCancelled();   // TODO not sure if really needed
+        onJobCancelled();
     }
     else
     {
@@ -99,7 +99,6 @@ void DimseQueryStudyOperationResult::onJobFinished()
     }
 }
 
-// TODO can a job be cancelled externally? maybe on application exit?
 void DimseQueryStudyOperationResult::onJobCancelled()
 {
     setCancelled();
