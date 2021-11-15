@@ -17,8 +17,6 @@
 
 #include "ui_qinputoutputpacswidgetbase.h"
 
-#include "pacsjob.h"
-
 #include <unordered_set>
 
 #include <QList>
@@ -77,12 +75,6 @@ private:
 
     /// Adds the given StudyOperationResult representing a query to the list of pending queries and creates the needed connections to it.
     void addPendingQuery(StudyOperationResult *result);
-
-    /// Mostra per pantalla els resultats de la consulta al PACS d'un Job
-    void showQueryPACSJobResults(PACSJobPointer queryPACSJob);
-
-    /// Mostrar un QMessageBox indicant que s'ha produït un error consultant a un PACS
-    void showErrorQueringPACS(PACSJobPointer queryPACSJob);
 
     /// Amaga/mostra que hi ha una query en progress i habilitat/deshabilitat el botó de cancel·lar la query actual
     void setQueryInProgress(bool queryInProgress);
