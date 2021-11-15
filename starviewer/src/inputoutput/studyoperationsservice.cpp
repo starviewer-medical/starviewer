@@ -51,6 +51,8 @@ StudyOperationResult* StudyOperationsService::searchPacs(const PacsDevice &pacs,
 
         m_pacsManager->enqueuePACSJob(job);
 
+        emit operationRequested(result);
+
         return result;
     }
 
@@ -84,6 +86,8 @@ StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice 
 
         m_pacsManager->enqueuePACSJob(job);
 
+        emit operationRequested(result);
+
         return result;
     }
 
@@ -114,6 +118,8 @@ StudyOperationResult* StudyOperationsService::storeInPacs(const PacsDevice &pacs
         // TODO connects from result to this
 
         m_pacsManager->enqueuePACSJob(job);
+
+        emit operationRequested(result);
 
         return result;
     }

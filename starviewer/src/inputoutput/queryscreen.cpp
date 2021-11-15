@@ -14,30 +14,24 @@
 
 #include "queryscreen.h"
 
-#include <QMessageBox>
-#include <QCloseEvent>
-#include <QMovie>
-
-#include "qpacslist.h"
-#include "inputoutputsettings.h"
-#include "logging.h"
-#include "qcreatedicomdir.h"
 #include "dicommask.h"
-#include "qoperationstatescreen.h"
+#include "inputoutputsettings.h"
 #include "localdatabasemanager.h"
-#include "patient.h"
+#include "logging.h"
+#include "pacsmanager.h"
+#include "portinuse.h"
+#include "qcreatedicomdir.h"
+#include "qoperationstatescreen.h"
+#include "qpacslist.h"
+#include "risrequestmanager.h"
 #include "starviewerapplication.h"
 #include "statswatcher.h"
-#include "pacsdevice.h"
-#include "risrequestmanager.h"
-#include "pacsmanager.h"
-#include "retrievedicomfilesfrompacsjob.h"
-#include "portinuse.h"
+#include "studyoperationresult.h"
+#include "studyoperationsservice.h"
 
-#ifdef _WIN32
-#include <windows.h>
-#include <winbase.h>
-#endif
+#include <QCloseEvent>
+#include <QMessageBox>
+#include <QMovie>
 
 namespace udg {
 
@@ -141,7 +135,7 @@ void QueryScreen::initialize()
     m_labelOperation->hide();
     refreshTab(LocalDataBaseTab);
 
-    m_PACSJobsPendingToFinish = 0;
+    m_pacsOperationsRunning = 0;
 }
 
 void QueryScreen::createConnections()
@@ -152,7 +146,7 @@ void QueryScreen::createConnections()
 #ifndef STARVIEWER_LITE
     connect(m_operationListPushButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
     connect(m_showPACSNodesPushButton, SIGNAL(toggled(bool)), SLOT(updatePACSNodesVisibility()));
-    connect(PacsManagerSingleton::instance(), &PacsManager::newPACSJobEnqueued, this, &QueryScreen::newPACSJobEnqueued);
+    connect(StudyOperationsService::instance(), &StudyOperationsService::operationRequested, this, &QueryScreen::onPacsOperationRequested);
     if (m_risRequestManager != NULL)
     {
         // Potser que no tinguem activat escoltar peticions del RIS
@@ -434,33 +428,27 @@ void QueryScreen::writeSettings()
     }
 }
 
-void QueryScreen::newPACSJobEnqueued(PACSJobPointer pacsJob)
+void QueryScreen::onPacsOperationRequested(StudyOperationResult *result)
 {
-    if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
+    if (result->getOperationType() == StudyOperationResult::OperationType::Retrieve || result->getOperationType() == StudyOperationResult::OperationType::Store)
     {
+        m_pacsOperationsRunning++;
         m_operationAnimation->show();
         m_labelOperation->show();
-        connect(pacsJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(pacsJobFinishedOrCancelled(PACSJobPointer)));
-        connect(pacsJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(pacsJobFinishedOrCancelled(PACSJobPointer)));
 
-        // Indiquem que tenim un PACSJob més pendent de finalitzar
-        m_PACSJobsPendingToFinish++;
+        connect(result, &StudyOperationResult::finished, this, &QueryScreen::onPacsOperationFinishedOrCancelled);
+        connect(result, &StudyOperationResult::cancelled, this, &QueryScreen::onPacsOperationFinishedOrCancelled);
     }
 }
 
-void QueryScreen::pacsJobFinishedOrCancelled(PACSJobPointer) {
-    // No podem utilitzar isExecutingPACSJob per controlar si hi ha jobs pendents d'executar, perquè algunes vegades ens
-    // hem trobat que tot i no tenir cap job pendent d'executar, el mètode respón que hi ha algun job executant-se.
-    // Això passa algunes vegades quan s'aten el signal PACSJobFinished d'un job de seguida i es pregunta al mètode isExecutingPACSJob
-    // si hi ha jobs executant-se, semblaria que tot i haver finalitzar l'últim job pendent ThreadWeaver està acabant de fer
-    // alguna acció i per això indica que hi ha jobs executant-se
-    m_PACSJobsPendingToFinish--;
+void QueryScreen::onPacsOperationFinishedOrCancelled() {
+    m_pacsOperationsRunning--;
 
-    if (m_PACSJobsPendingToFinish == 0)
+    if (m_pacsOperationsRunning == 0)
     {
         m_operationAnimation->hide();
         m_labelOperation->hide();
     }
 }
 
-};
+}

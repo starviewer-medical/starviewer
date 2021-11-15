@@ -19,13 +19,12 @@
 
 namespace udg {
 
-class Status;
-class QCreateDicomdir;
 class DicomMask;
+class QCreateDicomdir;
 class QOperationStateScreen;
-class StatsWatcher;
 class RISRequestManager;
-class PacsDevice;
+class StatsWatcher;
+class StudyOperationResult;
 
 /**
     Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
@@ -33,8 +32,8 @@ class PacsDevice;
 class QueryScreen : public QDialog, private Ui::QueryScreenBase {
 Q_OBJECT
 public:
-    QueryScreen(QWidget *parent = 0);
-    ~QueryScreen();
+    explicit QueryScreen(QWidget *parent = nullptr);
+    ~QueryScreen() override;
 
     // TODO Ugly shortcut for #2643. Major refactoring needed to clean this (see #2764).
     RISRequestManager* getRISRequestManager() const;
@@ -77,7 +76,7 @@ signals:
 protected:
     ///  Event que s'activa al tancar al rebren un event de tancament
     ///  @param event de tancament
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
 
 private slots:
     /// Escull a on fer la cerca, si a nivell local o PACS
@@ -99,13 +98,11 @@ private slots:
     /// Afegim un segon paràmetre per indicar si volem fer view o únicament carregar les dades.
     void viewPatients(QList<Patient*>, bool loadOnly = false);
 
-    /// Slot que s'activa quan s'ha encuat un nou PACSJob si aquest és d'enviament o descarrega de fitxers es mostra el gif animat que indica que
-    /// s'estan processant peticions
-    void newPACSJobEnqueued(PACSJobPointer pacsJob);
+    /// Called when a retrieve or store operation is requested from anywhere. It starts the animation.
+    void onPacsOperationRequested(StudyOperationResult *result);
 
-    /// Slot que s'activa quan un PACSJob ha finalitzat, es comprova si la PacsManager està executant més jobs de descàrrega o enviament
-    /// si no n'està executant cap més s'amaga el gif animat que indica que s'està processant una petició
-    void pacsJobFinishedOrCancelled(PACSJobPointer pacsJob);
+    /// Called when an operation has finished. If it is the last operation stops the animation.
+    void onPacsOperationFinishedOrCancelled();
 
     /// Actualitza segons el tab en el que ens trobem la visibilitat del llistat de PACS
     /// El llistat només es podrà habilitar o deshabilitar quan estem en la pestanya PACS
@@ -157,7 +154,7 @@ private:
 #endif
 
     /// Indica quans jobs tenim pendents de finalitzar (s'estan esperant per executar o s'estan executant)
-    int m_PACSJobsPendingToFinish;
+    int m_pacsOperationsRunning;
 };
 
 };

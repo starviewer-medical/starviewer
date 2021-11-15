@@ -36,11 +36,25 @@ DimseStoreStudyOperationResult::DimseStoreStudyOperationResult(PACSJobPointer jo
     m_requestPacsDevice = m_job->getPacsDevice();
     m_requestLevel = RequestLevel::Studies;
     m_requestStudyInstanceUid = m_job->getStudyOfDICOMFilesToSend()->getInstanceUID();
+    m_requestStudy = m_job->getStudyOfDICOMFilesToSend();
 
     // Slot will be executed in the same thread that executes the job (checked)
     connect(m_job.data(), &PACSJob::PACSJobStarted, this, &DimseStoreStudyOperationResult::onJobStarted, Qt::DirectConnection);
     connect(m_job.data(), &PACSJob::PACSJobFinished, this, &DimseStoreStudyOperationResult::onJobFinished, Qt::DirectConnection);
     connect(m_job.data(), &PACSJob::PACSJobCancelled, this, &DimseStoreStudyOperationResult::onJobCancelled, Qt::DirectConnection);
+    connect(m_job.data(), static_cast<void(SendDICOMFilesToPACSJob::*)(PACSJobPointer,int)>(&SendDICOMFilesToPACSJob::DICOMFileSent),
+            [this](PACSJobPointer, int numberOfDICOMFilesSent) {
+                emit instanceTransferred(this, numberOfDICOMFilesSent);
+            }
+    );
+    connect(m_job.data(), &SendDICOMFilesToPACSJob::DICOMSeriesSent, [this](PACSJobPointer, int numberOfSeriesSent) {
+        emit seriesTransferred(this, numberOfSeriesSent);
+    });
+}
+
+StudyOperationResult::OperationType DimseStoreStudyOperationResult::getOperationType() const
+{
+    return OperationType::Store;
 }
 
 void DimseStoreStudyOperationResult::cancel()

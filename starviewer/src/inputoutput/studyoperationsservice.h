@@ -60,6 +60,10 @@ public:
     /// be used to observe the progress and obtain any errors.
     StudyOperationResult* storeInPacs(const PacsDevice &pacs, const QList<Series*> &series);
 
+signals:
+    /// Emitted when any operation is requested.
+    void operationRequested(StudyOperationResult *result);
+
 private:
     explicit StudyOperationsService(QObject *parent = nullptr);
     friend Singleton<StudyOperationsService>;

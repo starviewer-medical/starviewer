@@ -57,6 +57,11 @@ DimseQueryStudyOperationResult::DimseQueryStudyOperationResult(PACSJobPointer jo
     connect(m_job.data(), &PACSJob::PACSJobCancelled, this, &DimseQueryStudyOperationResult::onJobCancelled, Qt::DirectConnection);
 }
 
+StudyOperationResult::OperationType DimseQueryStudyOperationResult::getOperationType() const
+{
+    return OperationType::Query;
+}
+
 void DimseQueryStudyOperationResult::cancel()
 {
     m_pacsManager->requestCancelPACSJob(m_job);

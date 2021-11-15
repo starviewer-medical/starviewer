@@ -37,6 +37,7 @@ DimseRetrieveStudyOperationResult::DimseRetrieveStudyOperationResult(PACSJobPoin
     m_requestStudyInstanceUid = m_job->getStudyToRetrieveDICOMFiles()->getInstanceUID();
     m_requestSeriesInstanceUid = m_job->getSeriesInstanceUidToRetrieve();
     m_requestSopInstanceUid = m_job->getSopInstanceUidToRetrieve();
+    m_requestStudy = m_job->getStudyToRetrieveDICOMFiles();
 
     if (!m_requestSopInstanceUid.isEmpty())
     {
@@ -55,6 +56,19 @@ DimseRetrieveStudyOperationResult::DimseRetrieveStudyOperationResult(PACSJobPoin
     connect(m_job.data(), &PACSJob::PACSJobStarted, this, &DimseRetrieveStudyOperationResult::onJobStarted, Qt::DirectConnection);
     connect(m_job.data(), &PACSJob::PACSJobFinished, this, &DimseRetrieveStudyOperationResult::onJobFinished, Qt::DirectConnection);
     connect(m_job.data(), &PACSJob::PACSJobCancelled, this, &DimseRetrieveStudyOperationResult::onJobCancelled, Qt::DirectConnection);
+    connect(m_job.data(), static_cast<void(RetrieveDICOMFilesFromPACSJob::*)(PACSJobPointer,int)>(&RetrieveDICOMFilesFromPACSJob::DICOMFileRetrieved),
+            [this](PACSJobPointer, int numberOfImagesRetrieved) {
+                emit instanceTransferred(this, numberOfImagesRetrieved);
+            }
+    );
+    connect(m_job.data(), &RetrieveDICOMFilesFromPACSJob::DICOMSeriesRetrieved, [this](PACSJobPointer, int numberOfSeriesRetrieved) {
+        emit seriesTransferred(this, numberOfSeriesRetrieved);
+    });
+}
+
+StudyOperationResult::OperationType DimseRetrieveStudyOperationResult::getOperationType() const
+{
+    return OperationType::Retrieve;
 }
 
 void DimseRetrieveStudyOperationResult::cancel()

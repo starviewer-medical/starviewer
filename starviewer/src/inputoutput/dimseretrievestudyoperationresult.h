@@ -35,6 +35,9 @@ public:
     /// Stores references to the job and PacsManager and creates the needed connections to the job's signals.
     DimseRetrieveStudyOperationResult(PACSJobPointer job, PacsManager *manager, QObject *parent = nullptr);
 
+    /// Returns the operation type.
+    OperationType getOperationType() const override;
+
     /// Requests to the PacsManger that the job is cancelled.
     void cancel() override;
 

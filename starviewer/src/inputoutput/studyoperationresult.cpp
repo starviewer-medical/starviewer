@@ -35,7 +35,7 @@ void moveAllItemsToThread(const QList<T*> list, QThread *thread)
 }
 
 StudyOperationResult::StudyOperationResult(QObject *parent)
-    : QObject(parent), m_requestLevel(RequestLevel::Studies), m_resultType(ResultType::Nothing)
+    : QObject(parent), m_requestLevel(RequestLevel::Studies), m_requestStudy(nullptr), m_resultType(ResultType::Nothing)
 {
     m_future = m_promise.get_future();
 }
@@ -63,6 +63,11 @@ const QString& StudyOperationResult::getRequestSeriesInstanceUid() const
 const QString& StudyOperationResult::getRequestSopInstanceUid() const
 {
     return m_requestSopInstanceUid;
+}
+
+const Study* StudyOperationResult::getRequestStudy() const
+{
+    return m_requestStudy;
 }
 
 StudyOperationResult::ResultType StudyOperationResult::getResultType() const
@@ -130,6 +135,7 @@ void StudyOperationResult::setStudies(QList<Patient*> studies)
         m_promise.set_value();
 
         emit finishedSuccessfully(this);
+        emit finished(this);
     }
 }
 
@@ -143,6 +149,7 @@ void StudyOperationResult::setSeries(QList<Series*> series)
         m_promise.set_value();
 
         emit finishedSuccessfully(this);
+        emit finished(this);
     }
 }
 
@@ -156,6 +163,7 @@ void StudyOperationResult::setInstances(QList<Image*> instances)
         m_promise.set_value();
 
         emit finishedSuccessfully(this);
+        emit finished(this);
     }
 }
 
@@ -176,6 +184,8 @@ void StudyOperationResult::setStudyInstanceUid(QString studyInstanceUid, QString
         {
             emit finishedWithPartialSuccess(this);
         }
+
+        emit finished(this);
     }
 }
 
@@ -188,6 +198,7 @@ void StudyOperationResult::setErrorText(QString text)
         m_promise.set_value();
 
         emit finishedWithError(this);
+        emit finished(this);
     }
 }
 
@@ -206,6 +217,8 @@ void StudyOperationResult::setNothing(QString errorText)
         {
             emit finishedWithPartialSuccess(this);
         }
+
+        emit finished(this);
     }
 }
 

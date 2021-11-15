@@ -26,6 +26,7 @@ namespace udg {
 class Image;
 class Patient;
 class Series;
+class Study;
 
 /**
  * @brief The StudyOperationResult class is the base class used for representing a StudyOperationsService's result.
@@ -42,6 +43,8 @@ class StudyOperationResult : public QObject
     Q_OBJECT
 
 public:
+    /// Possible operation types.
+    enum class OperationType { Query, Retrieve, Store };
     /// Levels at which the request can been performed.
     enum class RequestLevel { Studies, Series, Instances };
     /// Types of result that can be represented by StudyOperationResult.
@@ -49,6 +52,9 @@ public:
 
     /// Creates an unfinished result. Most getters will block if it's not finished.
     explicit StudyOperationResult(QObject *parent = nullptr);
+
+    /// Returns the operation type.
+    virtual OperationType getOperationType() const = 0;
 
     /// Returns the PACS where the request is performed.
     const PacsDevice& getRequestPacsDevice() const;
@@ -60,6 +66,8 @@ public:
     const QString& getRequestSeriesInstanceUid() const;
     /// Returns the SOP Instance UID in the request, if any.
     const QString& getRequestSopInstanceUid() const;
+    /// Returns the study used for the request, if any.
+    const Study* getRequestStudy() const;
 
     /// Returns the type of result contained by this object, which determines which getters make sense.
     ResultType getResultType() const;
@@ -89,10 +97,15 @@ signals:
     void finishedWithPartialSuccess(StudyOperationResult *result);
     /// Emitted when the operation has finished with some error.
     void finishedWithError(StudyOperationResult *result);
+    /// Emitted when the operation has finished in any way except cancelled.
+    void finished(StudyOperationResult *result);
     /// Emitted when the operation has been cancelled.
     void cancelled(StudyOperationResult *result);
-    /// Emitted when all operations have finished.
-    void finished(StudyOperationResult *result);
+
+    /// Emitted after an instance is transferred. The second parameter is the total number of instances transferred until now.
+    void instanceTransferred(StudyOperationResult *result, int totalInstancesTransferred);
+    /// Emitted after an instance of a new series is transferred. The second parameter is the total number of distinct series transferred until now.
+    void seriesTransferred(StudyOperationResult *result, int totalSeriesTransferred);
 
 protected:
     /// Must be called by subclasses to set the given studies as the result.
@@ -126,6 +139,8 @@ protected:
     QString m_requestSeriesInstanceUid;
     /// SOP Instance UID in the request, if any.
     QString m_requestSopInstanceUid;
+    /// Study used for the request, if any.
+    const Study *m_requestStudy;
 
 private:
     /// Type of result contained.
