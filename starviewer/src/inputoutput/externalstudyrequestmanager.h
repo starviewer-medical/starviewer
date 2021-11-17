@@ -43,7 +43,7 @@ public:
 
 public slots:
     /// Processa una petició del RIS per descarregar l'estudi que compleixi la màscara de cerca
-    void processRISRequest(DicomMask mask);
+    void processRequest(DicomMask mask);
 
 signals:
     /// Signal que s'emet per indicar que ja es pot començar a escoltar peticions a través de la classe ListenRISRequests que s'executa en un altre Thread
@@ -53,10 +53,10 @@ signals:
     void stopListenRISRequests();
 
     /// Signal que s'emet per indicar que s'ha de visualitzar l'estudi
-    void viewStudyRetrievedFromRISRequest(QString studyInstanceUID);
+    void viewStudyRetrievedFromRequest(QString studyInstanceUID);
 
     /// Signal que s'emet per indicar que s'ha de fer un load de l'estudi
-    void loadStudyRetrievedFromRISRequest(QString studyInstanceUID);
+    void loadStudyRetrievedFromRequest(QString studyInstanceUID);
 
 private:
     explicit ExternalStudyRequestManager(QObject *parent = nullptr);
@@ -94,13 +94,13 @@ private:
     void createConnections();
 
     /// Cerca en els PACS marcats per defecte la màscara que ens ha indicat el RIS
-    void queryPACSRISStudyRequest(DicomMask mask);
+    void queryPacsForRequest(DicomMask mask);
 
     /// Adds the given StudyOperationResult representing a query to the list of pending queries and creates the needed connections to it.
     void addPendingQuery(StudyOperationResult *result);
 
     /// S'activa quan ha finalitzat la consulta de la cerca del l'estudi sol·licitat pel RIS, comprova si s'han trobat estudis i si és així es descarrega
-    void queryRequestRISFinished();
+    void onQueryFinished();
 
     /// Descarrega els estudis trobats a partir d'una queryPACSJob
     void retrieveFoundStudiesInQueue();
@@ -136,10 +136,10 @@ private:
     /// Necessitem saber si per un determinada sol·licitud hem trobat un estudi que compleixi el criteri de cerca, controls
     /// d'errors, etc.. si processim més d'una sol·licitud a la vegada, no sabríem de quina sol·licitud són els resultats o error,
     /// dificultant el control de les sol·licituds
-    QQueue<DicomMask> m_queueRISRequests;
+    QQueue<DicomMask> m_requestsQueue;
     ListenRISRequests *m_listenRISRequests;
 
-    QPopUpExternalStudyRequestsScreen *m_qpopUpRISRequestsScreen;
+    QPopUpExternalStudyRequestsScreen *m_qpopUpExternalStudyRequestsScreen;
 
     /// QThread que s'encarrega d'executar la classe escolta si arriben peticions del RIS
     QThread *m_listenRISRequestsQThread;
@@ -151,23 +151,17 @@ private:
     /// Contains StudyOperationResults that represent queries in progress.
     std::unordered_set<StudyOperationResult*> m_pendingQueryResults;
 
-    int m_numberOfStudiesAddedToRetrieveForCurrentRisRequest;
+    int m_numberOfStudiesAddedToRetrieveForCurrentRequest;
 
     /// Guarda a l'usuari si per una petició del RIS se li ha preguntat si els estudis que ja existeixen descarregats a la base de dades s'han de tornar a desgarregar
-    bool m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain;
+    bool m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeRetrievedAgain;
     /// Guarda la resposta de l'usuari a la pregunta de si s'han de tornar a descarregar els estudis ja existents a la BD
-    bool m_studiesInDatabaseHaveToBeenRetrievedAgain;
-
-    /// Segons que ha de tardar a amagar-se el PopUp QPopUpRisRequestScreen quan han acabat totes les descàrregues i temps que ha de tadar el QMessageBox a tancar-se automàticament
-    /// Tots dos han de tenir el mateix temps perquè imaginem el cas que descarreguem un primer estudi del PACS llavor el segon el trobem a la BD, si el primer estudi s'ha acabat
-    /// de descarregar el PopUp es pot tancar abans que l'usuari hagi pogut prèmer un del botons del QMessageBox preguntant si s'ha de tornar a descarregar l'estudi del PACS,
-    /// fent que llavors no es pugui seguir la descarrega dels següents estudis a través de QPopUpRISRequestScree
-    static const int secondsTimeOutToHidePopUpAndAutoCloseQMessageBox;
+    bool m_studiesInDatabaseHaveToBeRetrievedAgain;
 
     QQueue<Study*> m_studiesToRetrieveQueue;
 
     /// Indica si per l'útlima petició del RIS s'ha emés signal per visualitzar un estudi
-    bool m_signalViewStudyEmittedForLastRISRequest;
+    bool m_signalViewStudyEmittedForLastRequest;
 };
 
 }

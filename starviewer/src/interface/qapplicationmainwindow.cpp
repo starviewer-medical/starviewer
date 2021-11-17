@@ -805,7 +805,7 @@ void QApplicationMainWindow::sendRequestRetrieveStudyByUidToLocalStarviewer(QStr
 {
     DicomMask mask;
     mask.setStudyInstanceUID(studyInstanceUid);
-    ExternalStudyRequestManager::instance()->processRISRequest(mask);
+    ExternalStudyRequestManager::instance()->processRequest(mask);
 }
 
 void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber)
@@ -813,7 +813,7 @@ void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalS
     DicomMask mask;
     mask.setStudyInstanceUID("");   // this is required for a DIMSE query to return the Study Instance UID
     mask.setAccessionNumber(accessionNumber);
-    ExternalStudyRequestManager::instance()->processRISRequest(mask);
+    ExternalStudyRequestManager::instance()->processRequest(mask);
 }
 
 void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)

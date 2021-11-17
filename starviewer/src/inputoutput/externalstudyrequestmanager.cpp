@@ -32,6 +32,12 @@ namespace udg {
 
 namespace {
 
+// Time in seconds until the pop-up notification is hidden after all downloads have finished. Also time until the the auto-closing message box is closed.
+// Both must be the same because it could happen that first a study is downloaded from PACS and then a second study is found in the database; in this case the
+// user must have time to choose an option in the message box, thus the notification must not be closed before the message box.
+// Or at least this is what I understood from the original comment.
+constexpr int SecondsTimeOutToHidePopUpAndAutoCloseQMessageBox = 5;
+
 // Returns a translated string with the used query parameter in the given mask, to be used with logs and message boxes.
 QString getQueryParameterString(const DicomMask &mask)
 {
@@ -66,18 +72,16 @@ QString getPacsIdentificationString(const PacsDevice &pacs)
 
 }
 
-const int ExternalStudyRequestManager::secondsTimeOutToHidePopUpAndAutoCloseQMessageBox = 5;
-
 ExternalStudyRequestManager::ExternalStudyRequestManager(QObject *parent)
     : QObject(parent), m_listenRISRequests(nullptr)
 {
-    m_qpopUpRISRequestsScreen = new QPopUpExternalStudyRequestsScreen();
-    m_qpopUpRISRequestsScreen->setTimeOutToHidePopUpAfterStudiesHaveBeenRetrieved(secondsTimeOutToHidePopUpAndAutoCloseQMessageBox * 1000);
+    m_qpopUpExternalStudyRequestsScreen = new QPopUpExternalStudyRequestsScreen();
+    m_qpopUpExternalStudyRequestsScreen->setTimeOutToHidePopUpAfterStudiesHaveBeenRetrieved(SecondsTimeOutToHidePopUpAndAutoCloseQMessageBox * 1000);
 }
 
 ExternalStudyRequestManager::~ExternalStudyRequestManager()
 {
-    delete m_qpopUpRISRequestsScreen;
+    delete m_qpopUpExternalStudyRequestsScreen;
 
     if (m_listenRISRequests)
     {
@@ -108,7 +112,7 @@ void ExternalStudyRequestManager::initializeListener()
 
 void ExternalStudyRequestManager::createConnections()
 {
-    connect(m_listenRISRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(processRISRequest(DicomMask)));
+    connect(m_listenRISRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(processRequest(DicomMask)));
     connect(m_listenRISRequests, SIGNAL(errorListening(ListenRISRequests::ListenRISRequestsError)),
             SLOT(showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError)));
     // Hem d'indica a la classe ListenRISRequests que pot començar a escoltar/parar peticions a través d'un signal, perquè si ho fèssim invocant el mètode
@@ -127,34 +131,34 @@ void ExternalStudyRequestManager::listen()
     }
 }
 
-void ExternalStudyRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
+void ExternalStudyRequestManager::processRequest(DicomMask dicomMaskRISRequest)
 {
     INFO_LOG(QString("[SAP/RIS/command line] Queuing request for study with %1.").arg(getQueryParameterString(dicomMaskRISRequest)));
 
     // Per anar atenent les descàrregues a mesura que ens arriben encuem les peticions, només fem una cerca al PACS a la vegada, una
     // vegada hem trobat l'estudi en algun PACS, es posa a descarregar i s'aten una altra petició
-    m_queueRISRequests.enqueue(dicomMaskRISRequest);
-    m_signalViewStudyEmittedForLastRISRequest = false;
+    m_requestsQueue.enqueue(dicomMaskRISRequest);
+    m_signalViewStudyEmittedForLastRequest = false;
 
     // Si tenim més d'un element ja hi ha un altre consulta d'un RIS Executant-se per tant no fem res
-    if (m_queueRISRequests.count() == 1)
+    if (m_requestsQueue.count() == 1)
     {
-        queryPACSRISStudyRequest(m_queueRISRequests.head());
+        queryPacsForRequest(m_requestsQueue.head());
     }
 }
 
-void ExternalStudyRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
+void ExternalStudyRequestManager::queryPacsForRequest(DicomMask maskRISRequest)
 {
     INFO_LOG(QString("[SAP/RIS/command line] Starting query for study with %1.").arg(getQueryParameterString(maskRISRequest)));
 
-    m_numberOfStudiesAddedToRetrieveForCurrentRisRequest = 0;
+    m_numberOfStudiesAddedToRetrieveForCurrentRequest = 0;
     // Al iniciar una nova consulta netegem la llista UID d'estudis demanats per descarregar i pendents de descarregar
     // TODO:Si ens arriba una altre petició del RIS mentre encara descarreguem l'anterior petició no es farà seguiment de la descarrega actual, sinó de la
     // última que ha arribat
     m_studiesInstancesUIDRequestedToRetrieve.clear();
 
-    m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain = false;
-    m_studiesInDatabaseHaveToBeenRetrievedAgain = false;
+    m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeRetrievedAgain = false;
+    m_studiesInDatabaseHaveToBeRetrievedAgain = false;
 
     // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
     // fes aquesta comprovació i ens retornes algun codi que pugui descriure com ha anat la consulta i així poder actuar en conseqüència mostrant
@@ -166,14 +170,14 @@ void ExternalStudyRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequ
         QMessageBox::information(nullptr, ApplicationNameString, tr("Cannot retrieve the studies requested from SAP, RIS or command line because there is no "
                                                                     "configured default PACS to query.\n\nPlease, check your PACS settings."));
         INFO_LOG("[SAP/RIS/command line] Can't process request because there are no default PACS.");
-        m_queueRISRequests.dequeue();
+        m_requestsQueue.dequeue();
         return;
     }
 
     // Mostrem el popUP amb l'accession number
-    m_qpopUpRISRequestsScreen->queryStudiesStarted();
-    m_qpopUpRISRequestsScreen->activateWindow();
-    m_qpopUpRISRequestsScreen->show();
+    m_qpopUpExternalStudyRequestsScreen->queryStudiesStarted();
+    m_qpopUpExternalStudyRequestsScreen->activateWindow();
+    m_qpopUpExternalStudyRequestsScreen->show();
 
     foreach (const PacsDevice &pacsDevice, queryablePACS)
     {
@@ -234,7 +238,7 @@ void ExternalStudyRequestManager::addFoundStudiesToRetrieveQueue(StudyOperationR
 
     if (m_pendingQueryResults.empty())
     {
-        queryRequestRISFinished();
+        onQueryFinished();
     }
 }
 
@@ -247,7 +251,7 @@ void ExternalStudyRequestManager::onQueryError(StudyOperationResult *result)
 
     if (m_pendingQueryResults.empty())
     {
-        queryRequestRISFinished();
+        onQueryFinished();
     }
 }
 
@@ -257,16 +261,16 @@ void ExternalStudyRequestManager::onQueryCancelled(StudyOperationResult *result)
 
     if (m_pendingQueryResults.empty())
     {
-        queryRequestRISFinished();
+        onQueryFinished();
     }
 }
 
-void ExternalStudyRequestManager::queryRequestRISFinished()
+void ExternalStudyRequestManager::onQueryFinished()
 {
-    DicomMask dicomMaskRISRequest = m_queueRISRequests.dequeue();
+    DicomMask dicomMaskRISRequest = m_requestsQueue.dequeue();
     INFO_LOG(QString("[SAP/RIS/command line] Query for study with %1 has finished.").arg(getQueryParameterString(dicomMaskRISRequest)));
 
-    if (m_numberOfStudiesAddedToRetrieveForCurrentRisRequest == 0)
+    if (m_numberOfStudiesAddedToRetrieveForCurrentRequest == 0)
     {
         INFO_LOG(QString("[SAP/RIS/command line] No study found with %1.").arg(getQueryParameterString(dicomMaskRISRequest)));
 
@@ -274,15 +278,15 @@ void ExternalStudyRequestManager::queryRequestRISFinished()
         QString message = tr("Unable to execute the SAP, RIS or command line request. The study with %1 was not found in the default PACS.")
                 .arg(getQueryParameterString(dicomMaskRISRequest));
 
-        m_qpopUpRISRequestsScreen->showNotStudiesFoundMessage();
+        m_qpopUpExternalStudyRequestsScreen->showNotStudiesFoundMessage();
         QMessageBox::information(nullptr, ApplicationNameString, message);
     }
 
-    if (m_queueRISRequests.count() > 0)
+    if (m_requestsQueue.count() > 0)
     {
         INFO_LOG("[SAP/RIS/command line] There are more requests pending to execute.");
         // Tenim altres sol·licituds del RIS per descarregar, les processem
-        queryPACSRISStudyRequest(m_queueRISRequests.head());
+        queryPacsForRequest(m_requestsQueue.head());
     }
 }
 
@@ -313,7 +317,7 @@ void ExternalStudyRequestManager::retrieveStudyFoundInQueryPACS(Study *study)
             break;
     }
 
-    m_numberOfStudiesAddedToRetrieveForCurrentRisRequest++;
+    m_numberOfStudiesAddedToRetrieveForCurrentRequest++;
 }
 
 void ExternalStudyRequestManager::retrieveStudyFromPACS(Study *study)
@@ -322,7 +326,7 @@ void ExternalStudyRequestManager::retrieveStudyFromPACS(Study *study)
 
     StudyOperationResult *result = StudyOperationsService::instance()->retrieveFromPacs(pacsDevice, study);
 
-    m_qpopUpRISRequestsScreen->addStudyToRetrieveFromPacs(result);
+    m_qpopUpExternalStudyRequestsScreen->addStudyToRetrieveFromPacs(result);
     connect(result, &StudyOperationResult::finishedSuccessfully, this, &ExternalStudyRequestManager::onStudyRetrieveSucceeded);
     connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &ExternalStudyRequestManager::onStudyRetrieveFinishedWithPartialSuccess);
     connect(result, &StudyOperationResult::finishedWithError, this, &ExternalStudyRequestManager::onStudyRetrieveFailed);
@@ -332,7 +336,7 @@ void ExternalStudyRequestManager::retrieveStudyFromPACS(Study *study)
 
 void ExternalStudyRequestManager::retrieveStudyFromDatabase(Study *study)
 {
-    m_qpopUpRISRequestsScreen->addStudyRetrievedFromDatabase(study);
+    m_qpopUpExternalStudyRequestsScreen->addStudyRetrievedFromDatabase(study);
 
     //Ara mateix no cal descarregar un estudi de la base de dades si ja li tenim, per això invoquem directament el mètode doActionsAfterRetrieve
     doActionsAfterRetrieve(study->getInstanceUID());
@@ -366,15 +370,15 @@ void ExternalStudyRequestManager::doActionsAfterRetrieve(const QString &studyIns
     //que no era aquells que volia, doncs els estudis descarregats de la primera petició s'ignoraran i no se'n farà res)
     if (Settings().getValue(InputOutputSettings::RISRequestViewOnceRetrieved).toBool() && m_studiesInstancesUIDRequestedToRetrieve.contains(studyInstanceUid))
     {
-        if (!m_signalViewStudyEmittedForLastRISRequest)
+        if (!m_signalViewStudyEmittedForLastRequest)
         {
-            m_signalViewStudyEmittedForLastRISRequest = true;
-            emit viewStudyRetrievedFromRISRequest(studyInstanceUid);
+            m_signalViewStudyEmittedForLastRequest = true;
+            emit viewStudyRetrievedFromRequest(studyInstanceUid);
         }
         else
         {
             //Si ja s'ha emés un view per veure un estudi d'aquesta petició, pels altres de la petició emetrem un load
-            emit loadStudyRetrievedFromRISRequest(studyInstanceUid);
+            emit loadStudyRetrievedFromRequest(studyInstanceUid);
         }
     }
 }
@@ -385,14 +389,14 @@ ExternalStudyRequestManager::DICOMSourcesFromRetrieveStudy ExternalStudyRequestM
 
     if (LocalDatabaseManager().studyExists(study->getInstanceUID()))
     {
-        if (!m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain)
+        if (!m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeRetrievedAgain)
         {
             INFO_LOG("[SAP/RIS/command line] Some requested studies have been found in the local database. "
                      "The user will be asked if they should be downloaded again from PACS.");
-            m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain = true;
-            m_studiesInDatabaseHaveToBeenRetrievedAgain = askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(study->getParentPatient()->getFullName());
+            m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeRetrievedAgain = true;
+            m_studiesInDatabaseHaveToBeRetrievedAgain = askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(study->getParentPatient()->getFullName());
 
-            if (m_studiesInDatabaseHaveToBeenRetrievedAgain)
+            if (m_studiesInDatabaseHaveToBeRetrievedAgain)
             {
                 INFO_LOG("[SAP/RIS/command line] The user has decided to download again from PACS the studies found in the local database.");
             }
@@ -402,7 +406,7 @@ ExternalStudyRequestManager::DICOMSourcesFromRetrieveStudy ExternalStudyRequestM
             }
         }
 
-        DICOMSourceFromRetrieveStudy = m_studiesInDatabaseHaveToBeenRetrievedAgain ? PACS : Database;
+        DICOMSourceFromRetrieveStudy = m_studiesInDatabaseHaveToBeRetrievedAgain ? PACS : Database;
     }
     else
     {
@@ -414,7 +418,7 @@ ExternalStudyRequestManager::DICOMSourcesFromRetrieveStudy ExternalStudyRequestM
 
 bool ExternalStudyRequestManager::askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(const QString &fullPatientName) const
 {
-    QMessageBoxAutoClose qmessageBoxAutoClose(secondsTimeOutToHidePopUpAndAutoCloseQMessageBox);
+    QMessageBoxAutoClose qmessageBoxAutoClose(SecondsTimeOutToHidePopUpAndAutoCloseQMessageBox);
 
     //Necessari indicar que estigui a sobre de tots els elements perquè sinó es mostra a sota del QPopUpRISRequestScreen impedint que l'usuari pugui llegir-ne el contingut
     //Hack: El SetWindowFlags s'ha de fer abans de setButtonToShowAutoCloseTimer, ja que sinó el botó que mostra el comptador endarrera no queda seleccionat per defecte
