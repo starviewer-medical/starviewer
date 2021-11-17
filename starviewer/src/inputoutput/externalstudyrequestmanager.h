@@ -88,7 +88,7 @@ private:
 
     /// Inicialitza les variables globals per escoltar i executar peticions del RIS.
     /// No inicialitzem al construtor perquè si no ens indiquen que hem d'escoltar no cal, inicialitzar les variables i ocupar memòria
-    void initialize();
+    void initializeListener();
 
     /// Crea les connexions entre Signals i Slots
     void createConnections();

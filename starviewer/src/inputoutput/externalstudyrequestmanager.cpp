@@ -69,25 +69,31 @@ QString getPacsIdentificationString(const PacsDevice &pacs)
 const int ExternalStudyRequestManager::secondsTimeOutToHidePopUpAndAutoCloseQMessageBox = 5;
 
 ExternalStudyRequestManager::ExternalStudyRequestManager(QObject *parent)
-    : QObject(parent)
+    : QObject(parent), m_listenRISRequests(nullptr)
 {
+    m_qpopUpRISRequestsScreen = new QPopUpExternalStudyRequestsScreen();
+    m_qpopUpRISRequestsScreen->setTimeOutToHidePopUpAfterStudiesHaveBeenRetrieved(secondsTimeOutToHidePopUpAndAutoCloseQMessageBox * 1000);
 }
 
 ExternalStudyRequestManager::~ExternalStudyRequestManager()
 {
-    // Com que la classe que escolta les peticions del RIS s'executa en un thread li emetem un signal indicant-li que s'ha de parar.
-    emit stopListenRISRequests();
-
-    m_listenRISRequestsQThread->exit();
-    m_listenRISRequestsQThread->wait();
-
-    m_listenRISRequests->deleteLater();
-
-    delete m_listenRISRequestsQThread;
     delete m_qpopUpRISRequestsScreen;
+
+    if (m_listenRISRequests)
+    {
+        // Com que la classe que escolta les peticions del RIS s'executa en un thread li emetem un signal indicant-li que s'ha de parar.
+        emit stopListenRISRequests();
+
+        m_listenRISRequestsQThread->exit();
+        m_listenRISRequestsQThread->wait();
+
+        m_listenRISRequests->deleteLater();
+
+        delete m_listenRISRequestsQThread;
+    }
 }
 
-void ExternalStudyRequestManager::initialize()
+void ExternalStudyRequestManager::initializeListener()
 {
     m_listenRISRequestsQThread = new QThread();
     m_listenRISRequests = new ListenRISRequests();
@@ -96,9 +102,6 @@ void ExternalStudyRequestManager::initialize()
     // Starviewer quedaria congelada només escoltant peticions del RIS
     m_listenRISRequests->moveToThread(m_listenRISRequestsQThread);
     m_listenRISRequestsQThread->start();
-
-    m_qpopUpRISRequestsScreen = new QPopUpExternalStudyRequestsScreen();
-    m_qpopUpRISRequestsScreen->setTimeOutToHidePopUpAfterStudiesHaveBeenRetrieved(secondsTimeOutToHidePopUpAndAutoCloseQMessageBox * 1000);
 
     createConnections();
 }
@@ -119,7 +122,7 @@ void ExternalStudyRequestManager::listen()
 {
     if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool())
     {
-        initialize();
+        initializeListener();
         emit listenRISRequests();
     }
 }
@@ -182,7 +185,7 @@ void ExternalStudyRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequ
 
 void ExternalStudyRequestManager::addPendingQuery(StudyOperationResult *result)
 {
-    // This connections will be deleted when result is destroyed
+    // These connections will be deleted when result is destroyed
     connect(result, &StudyOperationResult::finishedSuccessfully, this, &ExternalStudyRequestManager::addFoundStudiesToRetrieveQueue);
     connect(result, &StudyOperationResult::finishedWithError, this, &ExternalStudyRequestManager::onQueryError);
     connect(result, &StudyOperationResult::cancelled, this, &ExternalStudyRequestManager::onQueryCancelled);

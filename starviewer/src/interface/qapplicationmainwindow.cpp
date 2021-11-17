@@ -29,7 +29,6 @@
 #include "databaseinstallation.h"
 #include "interfacesettings.h"
 #include "starviewerapplicationcommandline.h"
-#include "risrequestwrapper.h"
 #include "qaboutdialog.h"
 #include "externalapplication.h"
 #include "externalapplicationsmanager.h"
@@ -804,36 +803,17 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
 
 void QApplicationMainWindow::sendRequestRetrieveStudyByUidToLocalStarviewer(QString studyInstanceUid)
 {
-    Settings settings;
-    if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool())
-    {
-        // TODO Ugly shortcut for #2643. Major refactoring needed to clean this (see #2764).
-        DicomMask mask;
-        mask.setStudyInstanceUID(studyInstanceUid);
-        ExternalStudyRequestManager::instance()->processRISRequest(mask);
-    }
-    else
-    {
-        QMessageBox::information(this, ApplicationNameString,
-                                 tr("Please activate \"Listen to RIS requests\" option in %1 configuration to retrieve studies from SAP.")
-                                 .arg(ApplicationNameString));
-    }
+    DicomMask mask;
+    mask.setStudyInstanceUID(studyInstanceUid);
+    ExternalStudyRequestManager::instance()->processRISRequest(mask);
 }
 
 void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber)
 {
-    Settings settings;
-    if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool())
-    {
-        RISRequestWrapper().sendRequestToLocalStarviewer(accessionNumber);
-    }
-    else
-    {
-        // TODO:S'hauria de fer un missatge més genèric
-        QMessageBox::information(this, ApplicationNameString,
-                                 tr("Please activate \"Listen to RIS requests\" option in %1 configuration to retrieve studies from SAP.")
-                               .arg(ApplicationNameString));
-    }
+    DicomMask mask;
+    mask.setStudyInstanceUID("");   // this is required for a DIMSE query to return the Study Instance UID
+    mask.setAccessionNumber(accessionNumber);
+    ExternalStudyRequestManager::instance()->processRISRequest(mask);
 }
 
 void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
