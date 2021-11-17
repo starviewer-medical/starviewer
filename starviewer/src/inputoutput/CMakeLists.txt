@@ -74,7 +74,6 @@ set(SOURCES
     retrievedicomfilesfrompacs.cpp
     retrievedicomfilesfrompacsjob.cpp
     risrequestsportinusetest.cpp
-    risrequestwrapper.cpp
     senddicomfilestopacs.cpp
     senddicomfilestopacsjob.cpp
     status.cpp
