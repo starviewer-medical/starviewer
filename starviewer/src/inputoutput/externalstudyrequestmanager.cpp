@@ -68,7 +68,8 @@ QString getPacsIdentificationString(const PacsDevice &pacs)
 
 const int ExternalStudyRequestManager::secondsTimeOutToHidePopUpAndAutoCloseQMessageBox = 5;
 
-ExternalStudyRequestManager::ExternalStudyRequestManager()
+ExternalStudyRequestManager::ExternalStudyRequestManager(QObject *parent)
+    : QObject(parent)
 {
 }
 
@@ -116,9 +117,11 @@ void ExternalStudyRequestManager::createConnections()
 
 void ExternalStudyRequestManager::listen()
 {
-    initialize();
-
-    emit listenRISRequests();
+    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool())
+    {
+        initialize();
+        emit listenRISRequests();
+    }
 }
 
 void ExternalStudyRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)

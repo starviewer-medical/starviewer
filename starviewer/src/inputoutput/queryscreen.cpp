@@ -15,6 +15,7 @@
 #include "queryscreen.h"
 
 #include "dicommask.h"
+#include "externalstudyrequestmanager.h"
 #include "inputoutputsettings.h"
 #include "localdatabasemanager.h"
 #include "logging.h"
@@ -22,7 +23,6 @@
 #include "qcreatedicomdir.h"
 #include "qoperationstatescreen.h"
 #include "qpacslist.h"
-#include "externalstudyrequestmanager.h"
 #include "starviewerapplication.h"
 #include "statswatcher.h"
 #include "studyoperationresult.h"
@@ -59,14 +59,6 @@ QueryScreen::QueryScreen(QWidget *parent)
     m_advancedSearchPushButton->hide();
     // Tab de "PACS" fora
     m_tab->removeTab(1);
-#else
-    // L'engeguem després d'haver fet els connects, no es pot fer abans, perquè per exemple en el cas que tinguem un error
-    // perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut
-    // temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
-    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool())
-    {
-        m_risRequestManager->listen();
-    }
 #endif
 
     m_statsWatcher = new StatsWatcher("QueryScreen", this);
@@ -84,18 +76,11 @@ QueryScreen::~QueryScreen()
 
     Settings settings;
     settings.setValue(InputOutputSettings::QueryScreenPACSListIsVisible, m_showPACSNodesPushButton->isChecked());
-
-    delete m_risRequestManager;
 #endif
 
     // Sinó fem un this.close i tenim la finestra queryscreen oberta al tancar l'starviewer, l'starviewer no finalitza
     // desapareixen les finestres, però el procés continua viu
     this->close();
-}
-
-ExternalStudyRequestManager* QueryScreen::getRISRequestManager() const
-{
-    return m_risRequestManager;
 }
 
 void QueryScreen::initialize()
@@ -105,15 +90,6 @@ void QueryScreen::initialize()
     // Posem com a pare el pare de la queryscreen, d'aquesta manera quan es tanqui el pare de la queryscreen
     // el QOperationStateScreen també es tancarà
     m_operationStateScreen = new udg::QOperationStateScreen(this);
-
-    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool())
-    {
-        m_risRequestManager = new ExternalStudyRequestManager();
-    }
-    else
-    {
-        m_risRequestManager = NULL;
-    }
 #endif
     // Indiquem quin és la intefície encara de crear dicomdir per a que es puguin comunicar
     m_qInputOutputLocalDatabaseWidget->setQCreateDicomdir(m_qcreateDicomdir);
@@ -140,12 +116,9 @@ void QueryScreen::createConnections()
     connect(m_operationListPushButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
     connect(m_showPACSNodesPushButton, SIGNAL(toggled(bool)), SLOT(updatePACSNodesVisibility()));
     connect(StudyOperationsService::instance(), &StudyOperationsService::operationRequested, this, &QueryScreen::onPacsOperationRequested);
-    if (m_risRequestManager != NULL)
-    {
-        // Potser que no tinguem activat escoltar peticions del RIS
-        connect(m_risRequestManager, SIGNAL(viewStudyRetrievedFromRISRequest(QString)), SLOT(viewStudyFromDatabase(QString)));
-        connect(m_risRequestManager, SIGNAL(loadStudyRetrievedFromRISRequest(QString)), SLOT(loadStudyFromDatabase(QString)));
-    }
+
+    connect(ExternalStudyRequestManager::instance(), &ExternalStudyRequestManager::viewStudyRetrievedFromRISRequest, this, &QueryScreen::viewStudyFromDatabase);
+    connect(ExternalStudyRequestManager::instance(), &ExternalStudyRequestManager::loadStudyRetrievedFromRISRequest, this, &QueryScreen::loadStudyFromDatabase);
 #endif
     connect(m_createDICOMDIRPushButton, SIGNAL(clicked()), m_qcreateDicomdir, SLOT(show()));
 

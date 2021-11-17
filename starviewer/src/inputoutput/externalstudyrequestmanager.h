@@ -16,6 +16,7 @@
 #define UDGRISREQUESTMANAGER_H
 
 #include <QObject>
+#include "singleton.h"
 
 #include "listenrisrequests.h"
 
@@ -32,14 +33,12 @@ class StudyOperationResult;
 /**
  * @brief The ExternalStudyRequestManager class is meant to process external study requests, e.g. from command line, RIS, SAP, etc.
  */
-class ExternalStudyRequestManager : public QObject {
-Q_OBJECT
-public:
-    ExternalStudyRequestManager();
-    /// Destructor de la classe
-    ~ExternalStudyRequestManager() override;
+class ExternalStudyRequestManager : public QObject, public Singleton<ExternalStudyRequestManager>
+{
+    Q_OBJECT
 
-    /// Iniciem l'escolta de les peticions del RIS pel port especificat a la configuració
+public:
+    /// Starts listenin on the RIS port if enabled in settings.
     void listen();
 
 public slots:
@@ -58,6 +57,11 @@ signals:
 
     /// Signal que s'emet per indicar que s'ha de fer un load de l'estudi
     void loadStudyRetrievedFromRISRequest(QString studyInstanceUID);
+
+private:
+    explicit ExternalStudyRequestManager(QObject *parent = nullptr);
+    ~ExternalStudyRequestManager() override;
+    friend Singleton<ExternalStudyRequestManager>;
 
 private slots:
     /// Posa els estudis d'un QueryPacsJob a la cua d'estudis trobats per processa
