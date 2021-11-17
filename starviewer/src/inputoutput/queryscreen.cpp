@@ -22,7 +22,7 @@
 #include "qcreatedicomdir.h"
 #include "qoperationstatescreen.h"
 #include "qpacslist.h"
-#include "risrequestmanager.h"
+#include "externalstudyrequestmanager.h"
 #include "starviewerapplication.h"
 #include "statswatcher.h"
 #include "studyoperationresult.h"
@@ -93,7 +93,7 @@ QueryScreen::~QueryScreen()
     this->close();
 }
 
-RISRequestManager* QueryScreen::getRISRequestManager() const
+ExternalStudyRequestManager* QueryScreen::getRISRequestManager() const
 {
     return m_risRequestManager;
 }
@@ -108,7 +108,7 @@ void QueryScreen::initialize()
 
     if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool())
     {
-        m_risRequestManager = new RISRequestManager();
+        m_risRequestManager = new ExternalStudyRequestManager();
     }
     else
     {

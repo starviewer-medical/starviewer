@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "qpopuprisrequestsscreen.h"
+#include "qpopupexternalstudyrequestsscreen.h"
 
 #include "logging.h"
 #include "starviewerapplication.h"
@@ -20,17 +20,17 @@
 
 namespace udg {
 
-QPopUpRISRequestsScreen::QPopUpRISRequestsScreen(QWidget *parent)
+QPopUpExternalStudyRequestsScreen::QPopUpExternalStudyRequestsScreen(QWidget *parent)
  : QNotificationPopup(parent)
 {
     setOngoingOperationText(tr("%1 will proceed to retrieve it.").arg(ApplicationNameString));
 }
 
-QPopUpRISRequestsScreen::~QPopUpRISRequestsScreen()
+QPopUpExternalStudyRequestsScreen::~QPopUpExternalStudyRequestsScreen()
 {
 }
 
-void QPopUpRISRequestsScreen::queryStudiesStarted()
+void QPopUpExternalStudyRequestsScreen::queryStudiesStarted()
 {
     // Si arriba una altra petició mentre hi ha activat el timer per amagar el PopUp o s'està amagant, hem de fer que aquest no s'amagui per
     // mostrar la nova petició
@@ -46,27 +46,27 @@ void QPopUpRISRequestsScreen::queryStudiesStarted()
     m_numberOfStudiesFailedToRetrieve = 0;
 }
 
-void QPopUpRISRequestsScreen::addStudyToRetrieveFromPacs(StudyOperationResult *result)
+void QPopUpExternalStudyRequestsScreen::addStudyToRetrieveFromPacs(StudyOperationResult *result)
 {
     m_numberOfStudiesToRetrieve++;
 
     m_resultsOfStudiesToRetrieve.append(result);
     refreshScreenRetrieveStatus();
 
-    connect(result, &StudyOperationResult::finishedSuccessfully, this, &QPopUpRISRequestsScreen::onStudyRetrieveFinished);
-    connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &QPopUpRISRequestsScreen::onStudyRetrieveFinished);
-    connect(result, &StudyOperationResult::finishedWithError, this, &QPopUpRISRequestsScreen::onStudyRetrieveFailed);
-    connect(result, &StudyOperationResult::cancelled, this, &QPopUpRISRequestsScreen::onStudyRetrieveCancelled);
+    connect(result, &StudyOperationResult::finishedSuccessfully, this, &QPopUpExternalStudyRequestsScreen::onStudyRetrieveFinished);
+    connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &QPopUpExternalStudyRequestsScreen::onStudyRetrieveFinished);
+    connect(result, &StudyOperationResult::finishedWithError, this, &QPopUpExternalStudyRequestsScreen::onStudyRetrieveFailed);
+    connect(result, &StudyOperationResult::cancelled, this, &QPopUpExternalStudyRequestsScreen::onStudyRetrieveCancelled);
 }
 
-void QPopUpRISRequestsScreen::addStudyRetrievedFromDatabase(Study *study)
+void QPopUpExternalStudyRequestsScreen::addStudyRetrievedFromDatabase(Study *study)
 {
     m_numberOfStudiesToRetrieve++;
     m_numberOfStudiesRetrieved++;
     refreshScreenRetrieveStatus();
 }
 
-void QPopUpRISRequestsScreen::onStudyRetrieveFinished(StudyOperationResult *result)
+void QPopUpExternalStudyRequestsScreen::onStudyRetrieveFinished(StudyOperationResult *result)
 {
     ensureEndPosition();
 
@@ -78,7 +78,7 @@ void QPopUpRISRequestsScreen::onStudyRetrieveFinished(StudyOperationResult *resu
     }
 }
 
-void QPopUpRISRequestsScreen::onStudyRetrieveFailed(StudyOperationResult *result)
+void QPopUpExternalStudyRequestsScreen::onStudyRetrieveFailed(StudyOperationResult *result)
 {
     ensureEndPosition();
 
@@ -90,7 +90,7 @@ void QPopUpRISRequestsScreen::onStudyRetrieveFailed(StudyOperationResult *result
     }
 }
 
-void QPopUpRISRequestsScreen::onStudyRetrieveCancelled(StudyOperationResult *result)
+void QPopUpExternalStudyRequestsScreen::onStudyRetrieveCancelled(StudyOperationResult *result)
 {
     // On cancellation, remove the result from the list
     // If the result is not in the list it means that it is from an old RIS petition that must be ignored
@@ -101,7 +101,7 @@ void QPopUpRISRequestsScreen::onStudyRetrieveCancelled(StudyOperationResult *res
     }
 }
 
-void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus()
+void QPopUpExternalStudyRequestsScreen::refreshScreenRetrieveStatus()
 {
     if (m_numberOfStudiesRetrieved + m_numberOfStudiesFailedToRetrieve < m_numberOfStudiesToRetrieve)
     {
@@ -115,7 +115,7 @@ void QPopUpRISRequestsScreen::refreshScreenRetrieveStatus()
     }
 }
 
-void QPopUpRISRequestsScreen::ensureEndPosition()
+void QPopUpExternalStudyRequestsScreen::ensureEndPosition()
 {
     // When the study has finished downloading, if the pop-up is not yet in the corner we force it to move there without delay so it does not bother the user
     if (isMoveAnimationOnDelayPeriod())
@@ -125,19 +125,19 @@ void QPopUpRISRequestsScreen::ensureEndPosition()
     }
 }
 
-void QPopUpRISRequestsScreen::setTimeOutToHidePopUpAfterStudiesHaveBeenRetrieved(int timeOutms)
+void QPopUpExternalStudyRequestsScreen::setTimeOutToHidePopUpAfterStudiesHaveBeenRetrieved(int timeOutms)
 {
     setHideDelay(timeOutms);
 }
 
-void QPopUpRISRequestsScreen::showNotStudiesFoundMessage()
+void QPopUpExternalStudyRequestsScreen::showNotStudiesFoundMessage()
 {
     setOngoingOperationText(tr("No studies found."));
     hideOngoingOperationAnimation();
     hideWithDelay();
 }
 
-void QPopUpRISRequestsScreen::showRetrieveFinished()
+void QPopUpExternalStudyRequestsScreen::showRetrieveFinished()
 {
     hideOngoingOperationAnimation();
 

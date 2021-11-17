@@ -26,18 +26,18 @@
 namespace udg {
 
 class DicomMask;
-class QPopUpRISRequestsScreen;
+class QPopUpExternalStudyRequestsScreen;
 class StudyOperationResult;
 
 /**
-    Classe manager que ens permet rebre peticions del RIS i processar-les
-  */
-class RISRequestManager : public QObject {
+ * @brief The ExternalStudyRequestManager class is meant to process external study requests, e.g. from command line, RIS, SAP, etc.
+ */
+class ExternalStudyRequestManager : public QObject {
 Q_OBJECT
 public:
-    RISRequestManager();
+    ExternalStudyRequestManager();
     /// Destructor de la classe
-    ~RISRequestManager() override;
+    ~ExternalStudyRequestManager() override;
 
     /// Iniciem l'escolta de les peticions del RIS pel port especificat a la configuració
     void listen();
@@ -135,7 +135,7 @@ private:
     QQueue<DicomMask> m_queueRISRequests;
     ListenRISRequests *m_listenRISRequests;
 
-    QPopUpRISRequestsScreen *m_qpopUpRISRequestsScreen;
+    QPopUpExternalStudyRequestsScreen *m_qpopUpRISRequestsScreen;
 
     /// QThread que s'encarrega d'executar la classe escolta si arriben peticions del RIS
     QThread *m_listenRISRequestsQThread;

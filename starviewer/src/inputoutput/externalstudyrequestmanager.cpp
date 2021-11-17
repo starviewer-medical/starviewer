@@ -12,7 +12,7 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "risrequestmanager.h"
+#include "externalstudyrequestmanager.h"
 
 #include "inputoutputsettings.h"
 #include "localdatabasemanager.h"
@@ -20,7 +20,7 @@
 #include "pacsdevicemanager.h"
 #include "patient.h"
 #include "qmessageboxautoclose.h"
-#include "qpopuprisrequestsscreen.h"
+#include "qpopupexternalstudyrequestsscreen.h"
 #include "starviewerapplication.h"
 #include "studyoperationresult.h"
 #include "studyoperationsservice.h"
@@ -66,13 +66,13 @@ QString getPacsIdentificationString(const PacsDevice &pacs)
 
 }
 
-const int RISRequestManager::secondsTimeOutToHidePopUpAndAutoCloseQMessageBox = 5;
+const int ExternalStudyRequestManager::secondsTimeOutToHidePopUpAndAutoCloseQMessageBox = 5;
 
-RISRequestManager::RISRequestManager()
+ExternalStudyRequestManager::ExternalStudyRequestManager()
 {
 }
 
-RISRequestManager::~RISRequestManager()
+ExternalStudyRequestManager::~ExternalStudyRequestManager()
 {
     // Com que la classe que escolta les peticions del RIS s'executa en un thread li emetem un signal indicant-li que s'ha de parar.
     emit stopListenRISRequests();
@@ -86,7 +86,7 @@ RISRequestManager::~RISRequestManager()
     delete m_qpopUpRISRequestsScreen;
 }
 
-void RISRequestManager::initialize()
+void ExternalStudyRequestManager::initialize()
 {
     m_listenRISRequestsQThread = new QThread();
     m_listenRISRequests = new ListenRISRequests();
@@ -96,13 +96,13 @@ void RISRequestManager::initialize()
     m_listenRISRequests->moveToThread(m_listenRISRequestsQThread);
     m_listenRISRequestsQThread->start();
 
-    m_qpopUpRISRequestsScreen = new QPopUpRISRequestsScreen();
+    m_qpopUpRISRequestsScreen = new QPopUpExternalStudyRequestsScreen();
     m_qpopUpRISRequestsScreen->setTimeOutToHidePopUpAfterStudiesHaveBeenRetrieved(secondsTimeOutToHidePopUpAndAutoCloseQMessageBox * 1000);
 
     createConnections();
 }
 
-void RISRequestManager::createConnections()
+void ExternalStudyRequestManager::createConnections()
 {
     connect(m_listenRISRequests, SIGNAL(requestRetrieveStudy(DicomMask)), SLOT(processRISRequest(DicomMask)));
     connect(m_listenRISRequests, SIGNAL(errorListening(ListenRISRequests::ListenRISRequestsError)),
@@ -114,14 +114,14 @@ void RISRequestManager::createConnections()
     connect(this, SIGNAL(stopListenRISRequests()), m_listenRISRequests, SLOT(stopListen()));
 }
 
-void RISRequestManager::listen()
+void ExternalStudyRequestManager::listen()
 {
     initialize();
 
     emit listenRISRequests();
 }
 
-void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
+void ExternalStudyRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
 {
     INFO_LOG(QString("[SAP/RIS/command line] Queuing request for study with %1.").arg(getQueryParameterString(dicomMaskRISRequest)));
 
@@ -137,7 +137,7 @@ void RISRequestManager::processRISRequest(DicomMask dicomMaskRISRequest)
     }
 }
 
-void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
+void ExternalStudyRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
 {
     INFO_LOG(QString("[SAP/RIS/command line] Starting query for study with %1.").arg(getQueryParameterString(maskRISRequest)));
 
@@ -177,18 +177,18 @@ void RISRequestManager::queryPACSRISStudyRequest(DicomMask maskRISRequest)
     }
 }
 
-void RISRequestManager::addPendingQuery(StudyOperationResult *result)
+void ExternalStudyRequestManager::addPendingQuery(StudyOperationResult *result)
 {
     // This connections will be deleted when result is destroyed
-    connect(result, &StudyOperationResult::finishedSuccessfully, this, &RISRequestManager::addFoundStudiesToRetrieveQueue);
-    connect(result, &StudyOperationResult::finishedWithError, this, &RISRequestManager::onQueryError);
-    connect(result, &StudyOperationResult::cancelled, this, &RISRequestManager::onQueryCancelled);
+    connect(result, &StudyOperationResult::finishedSuccessfully, this, &ExternalStudyRequestManager::addFoundStudiesToRetrieveQueue);
+    connect(result, &StudyOperationResult::finishedWithError, this, &ExternalStudyRequestManager::onQueryError);
+    connect(result, &StudyOperationResult::cancelled, this, &ExternalStudyRequestManager::onQueryCancelled);
     connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
 
     m_pendingQueryResults.insert(result);
 }
 
-void RISRequestManager::addFoundStudiesToRetrieveQueue(StudyOperationResult *result)
+void ExternalStudyRequestManager::addFoundStudiesToRetrieveQueue(StudyOperationResult *result)
 {
     for (Patient *patient : result->getStudies())
     {
@@ -232,7 +232,7 @@ void RISRequestManager::addFoundStudiesToRetrieveQueue(StudyOperationResult *res
     }
 }
 
-void RISRequestManager::onQueryError(StudyOperationResult *result)
+void ExternalStudyRequestManager::onQueryError(StudyOperationResult *result)
 {
     ERROR_LOG(QString("[SAP/RIS/command line] Request error: %1").arg(result->getErrorText()));
     QMessageBox::critical(nullptr, ApplicationNameString, tr("SAP, RIS or command line request error: %1").arg(result->getErrorText()));
@@ -245,7 +245,7 @@ void RISRequestManager::onQueryError(StudyOperationResult *result)
     }
 }
 
-void RISRequestManager::onQueryCancelled(StudyOperationResult *result)
+void ExternalStudyRequestManager::onQueryCancelled(StudyOperationResult *result)
 {
     m_pendingQueryResults.erase(result);
 
@@ -255,7 +255,7 @@ void RISRequestManager::onQueryCancelled(StudyOperationResult *result)
     }
 }
 
-void RISRequestManager::queryRequestRISFinished()
+void ExternalStudyRequestManager::queryRequestRISFinished()
 {
     DicomMask dicomMaskRISRequest = m_queueRISRequests.dequeue();
     INFO_LOG(QString("[SAP/RIS/command line] Query for study with %1 has finished.").arg(getQueryParameterString(dicomMaskRISRequest)));
@@ -280,7 +280,7 @@ void RISRequestManager::queryRequestRISFinished()
     }
 }
 
-void RISRequestManager::retrieveFoundStudiesInQueue()
+void ExternalStudyRequestManager::retrieveFoundStudiesInQueue()
 {
     while (!m_studiesToRetrieveQueue.isEmpty())
     {
@@ -292,7 +292,7 @@ void RISRequestManager::retrieveFoundStudiesInQueue()
     }
 }
 
-void RISRequestManager::retrieveStudyFoundInQueryPACS(Study *study)
+void ExternalStudyRequestManager::retrieveStudyFoundInQueryPACS(Study *study)
 {
     switch (getDICOMSouceFromRetrieveStudy(study))
     {
@@ -310,21 +310,21 @@ void RISRequestManager::retrieveStudyFoundInQueryPACS(Study *study)
     m_numberOfStudiesAddedToRetrieveForCurrentRisRequest++;
 }
 
-void RISRequestManager::retrieveStudyFromPACS(Study *study)
+void ExternalStudyRequestManager::retrieveStudyFromPACS(Study *study)
 {
     PacsDevice pacsDevice = study->getDICOMSource().getRetrievePACS().at(0);
 
     StudyOperationResult *result = StudyOperationsService::instance()->retrieveFromPacs(pacsDevice, study);
 
     m_qpopUpRISRequestsScreen->addStudyToRetrieveFromPacs(result);
-    connect(result, &StudyOperationResult::finishedSuccessfully, this, &RISRequestManager::onStudyRetrieveSucceeded);
-    connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &RISRequestManager::onStudyRetrieveFinishedWithPartialSuccess);
-    connect(result, &StudyOperationResult::finishedWithError, this, &RISRequestManager::onStudyRetrieveFailed);
-    connect(result, &StudyOperationResult::cancelled, this, &RISRequestManager::onStudyRetrieveCancelled);
+    connect(result, &StudyOperationResult::finishedSuccessfully, this, &ExternalStudyRequestManager::onStudyRetrieveSucceeded);
+    connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &ExternalStudyRequestManager::onStudyRetrieveFinishedWithPartialSuccess);
+    connect(result, &StudyOperationResult::finishedWithError, this, &ExternalStudyRequestManager::onStudyRetrieveFailed);
+    connect(result, &StudyOperationResult::cancelled, this, &ExternalStudyRequestManager::onStudyRetrieveCancelled);
     connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
 }
 
-void RISRequestManager::retrieveStudyFromDatabase(Study *study)
+void ExternalStudyRequestManager::retrieveStudyFromDatabase(Study *study)
 {
     m_qpopUpRISRequestsScreen->addStudyRetrievedFromDatabase(study);
 
@@ -332,29 +332,29 @@ void RISRequestManager::retrieveStudyFromDatabase(Study *study)
     doActionsAfterRetrieve(study->getInstanceUID());
 }
 
-void RISRequestManager::onStudyRetrieveSucceeded(StudyOperationResult *result)
+void ExternalStudyRequestManager::onStudyRetrieveSucceeded(StudyOperationResult *result)
 {
     doActionsAfterRetrieve(result->getRequestStudyInstanceUid());
 }
 
-void RISRequestManager::onStudyRetrieveFinishedWithPartialSuccess(StudyOperationResult *result)
+void ExternalStudyRequestManager::onStudyRetrieveFinishedWithPartialSuccess(StudyOperationResult *result)
 {
     QMessageBox::warning(nullptr, ApplicationNameString, result->getErrorText());
     onStudyRetrieveSucceeded(result);
 }
 
-void RISRequestManager::onStudyRetrieveFailed(StudyOperationResult *result)
+void ExternalStudyRequestManager::onStudyRetrieveFailed(StudyOperationResult *result)
 {
     QMessageBox::critical(nullptr, ApplicationNameString, result->getErrorText());
 }
 
-void RISRequestManager::onStudyRetrieveCancelled(StudyOperationResult *result)
+void ExternalStudyRequestManager::onStudyRetrieveCancelled(StudyOperationResult *result)
 {
     INFO_LOG(QString("[SAP/RIS/command line] Download of study %1 from PACS %2 has been cancelled.").arg(result->getRequestStudyInstanceUid())
              .arg(getPacsIdentificationString(result->getRequestPacsDevice())));
 }
 
-void RISRequestManager::doActionsAfterRetrieve(const QString &studyInstanceUid)
+void ExternalStudyRequestManager::doActionsAfterRetrieve(const QString &studyInstanceUid)
 {
     //Les descarregues d'altres peticions que no siguin l'actual les ignorem. (Per exemple cas en que el metge primer demana descarregar uns estudis i llavors se n'adona
     //que no era aquells que volia, doncs els estudis descarregats de la primera petició s'ignoraran i no se'n farà res)
@@ -373,7 +373,7 @@ void RISRequestManager::doActionsAfterRetrieve(const QString &studyInstanceUid)
     }
 }
 
-RISRequestManager::DICOMSourcesFromRetrieveStudy RISRequestManager::getDICOMSouceFromRetrieveStudy(Study *study)
+ExternalStudyRequestManager::DICOMSourcesFromRetrieveStudy ExternalStudyRequestManager::getDICOMSouceFromRetrieveStudy(Study *study)
 {
     DICOMSourcesFromRetrieveStudy DICOMSourceFromRetrieveStudy;
 
@@ -406,7 +406,7 @@ RISRequestManager::DICOMSourcesFromRetrieveStudy RISRequestManager::getDICOMSouc
     return DICOMSourceFromRetrieveStudy;
 }
 
-bool RISRequestManager::askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(const QString &fullPatientName) const
+bool ExternalStudyRequestManager::askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(const QString &fullPatientName) const
 {
     QMessageBoxAutoClose qmessageBoxAutoClose(secondsTimeOutToHidePopUpAndAutoCloseQMessageBox);
 
@@ -427,7 +427,7 @@ bool RISRequestManager::askToUserIfRetrieveFromPACSStudyWhenExistsInDatabase(con
     return (qobject_cast<QPushButton*>(qmessageBoxAutoClose.clickedButton())) != pushButtonNo;
 }
 
-void RISRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error)
+void ExternalStudyRequestManager::showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error)
 {
     QString message;
     int risPort = Settings().getValue(InputOutputSettings::RISRequestsPort).toInt();

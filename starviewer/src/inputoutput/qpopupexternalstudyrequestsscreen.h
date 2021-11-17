@@ -25,14 +25,14 @@ class StudyOperationResult;
 /**
     Classe que mostra un PopUp indicant que s'ha rebut una petició del RIS per descarregar un estudi
   */
-class QPopUpRISRequestsScreen : public QNotificationPopup {
+class QPopUpExternalStudyRequestsScreen : public QNotificationPopup {
 Q_OBJECT
 public:
     /// Constructor
-    explicit QPopUpRISRequestsScreen(QWidget *parent = nullptr);
+    explicit QPopUpExternalStudyRequestsScreen(QWidget *parent = nullptr);
 
     /// Destructor
-    ~QPopUpRISRequestsScreen();
+    ~QPopUpExternalStudyRequestsScreen();
 
     /// S'indica que s'està cercant als PACS els estudis amb un determinat accessionnumber
     void queryStudiesStarted();

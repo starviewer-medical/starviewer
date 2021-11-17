@@ -22,7 +22,7 @@ namespace udg {
 class DicomMask;
 class QCreateDicomdir;
 class QOperationStateScreen;
-class RISRequestManager;
+class ExternalStudyRequestManager;
 class StatsWatcher;
 class StudyOperationResult;
 
@@ -36,7 +36,7 @@ public:
     ~QueryScreen() override;
 
     // TODO Ugly shortcut for #2643. Major refactoring needed to clean this (see #2764).
-    RISRequestManager* getRISRequestManager() const;
+    ExternalStudyRequestManager* getRISRequestManager() const;
 
 public slots:
     /// Obre un dicomdir
@@ -150,7 +150,7 @@ private:
 
 #ifndef STARVIEWER_LITE
     QOperationStateScreen *m_operationStateScreen;
-    RISRequestManager *m_risRequestManager;
+    ExternalStudyRequestManager *m_risRequestManager;
 #endif
 
     /// Indica quans jobs tenim pendents de finalitzar (s'estan esperant per executar o s'estan executant)

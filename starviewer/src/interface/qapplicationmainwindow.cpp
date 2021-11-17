@@ -34,7 +34,7 @@
 #include "externalapplication.h"
 #include "externalapplicationsmanager.h"
 #include "queryscreen.h"
-#include "risrequestmanager.h"
+#include "externalstudyrequestmanager.h"
 
 // Pel LanguageLocale
 #include "coresettings.h"

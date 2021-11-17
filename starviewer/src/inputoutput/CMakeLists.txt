@@ -18,6 +18,7 @@ set(SOURCES
     dimsestorestudyoperationresult.cpp
     echotopacs.cpp
     echotopacstest.cpp
+    externalstudyrequestmanager.cpp
     firewallaccess.cpp
     firewallaccesstest.cpp
     gdcmanonymizerstarviewer.cpp
@@ -60,7 +61,7 @@ set(SOURCES
     qpacsconfigurationscreen.cpp
     qpacsdialog.cpp
     qpacslist.cpp
-    qpopuprisrequestsscreen.cpp
+    qpopupexternalstudyrequestsscreen.cpp
     qrelatedstudieswidget.cpp
     qseriesthumbnailpreviewwidget.cpp
     qstudytreewidget.cpp
@@ -72,7 +73,6 @@ set(SOURCES
     relatedstudiesmanager.cpp
     retrievedicomfilesfrompacs.cpp
     retrievedicomfilesfrompacsjob.cpp
-    risrequestmanager.cpp
     risrequestsportinusetest.cpp
     risrequestwrapper.cpp
     senddicomfilestopacs.cpp
