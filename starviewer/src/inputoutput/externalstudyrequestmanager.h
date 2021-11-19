@@ -12,46 +12,38 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-
 #ifndef UDGRISREQUESTMANAGER_H
 #define UDGRISREQUESTMANAGER_H
 
-#include <QQueue>
-#include <QHash>
-#include <QStringList>
-#include <QQueue>
+#include <QObject>
+#include "singleton.h"
 
 #include "listenrisrequests.h"
-#include "pacsdevice.h"
-#include "pacsjob.h"
 
-class QThread;
+#include <unordered_set>
+
+#include <QQueue>
 
 namespace udg {
 
 class DicomMask;
-class Patient;
-class Study;
-class QPopUpRISRequestsScreen;
-class QueryPacsJob;
-class RetrieveDICOMFilesFromPACSJob;
+class QPopUpExternalStudyRequestsScreen;
+class StudyOperationResult;
 
 /**
-    Classe manager que ens permet rebre peticions del RIS i processar-les
-  */
-class RISRequestManager : public QObject {
-Q_OBJECT
-public:
-    RISRequestManager();
-    /// Destructor de la classe
-    ~RISRequestManager();
+ * @brief The ExternalStudyRequestManager class is meant to process external study requests, e.g. from command line, RIS, SAP, etc.
+ */
+class ExternalStudyRequestManager : public QObject, public Singleton<ExternalStudyRequestManager>
+{
+    Q_OBJECT
 
-    /// Iniciem l'escolta de les peticions del RIS pel port especificat a la configuració
+public:
+    /// Starts listenin on the RIS port if enabled in settings.
     void listen();
 
 public slots:
     /// Processa una petició del RIS per descarregar l'estudi que compleixi la màscara de cerca
-    void processRISRequest(DicomMask mask);
+    void processRequest(DicomMask mask);
 
 signals:
     /// Signal que s'emet per indicar que ja es pot començar a escoltar peticions a través de la classe ListenRISRequests que s'executa en un altre Thread
@@ -61,24 +53,32 @@ signals:
     void stopListenRISRequests();
 
     /// Signal que s'emet per indicar que s'ha de visualitzar l'estudi
-    void viewStudyRetrievedFromRISRequest(QString studyInstanceUID);
+    void viewStudyRetrievedFromRequest(QString studyInstanceUID);
 
     /// Signal que s'emet per indicar que s'ha de fer un load de l'estudi
-    void loadStudyRetrievedFromRISRequest(QString studyInstanceUID);
+    void loadStudyRetrievedFromRequest(QString studyInstanceUID);
+
+private:
+    explicit ExternalStudyRequestManager(QObject *parent = nullptr);
+    ~ExternalStudyRequestManager() override;
+    friend Singleton<ExternalStudyRequestManager>;
 
 private slots:
+    /// Posa els estudis d'un QueryPacsJob a la cua d'estudis trobats per processa
+    void addFoundStudiesToRetrieveQueue(StudyOperationResult *result);
+    /// Called when the given query has finished with error.
+    void onQueryError(StudyOperationResult *result);
+    /// Called when the given query is cancelled.
+    void onQueryCancelled(StudyOperationResult *result);
 
-    /// Slot que s'activa quan finalitza un job de consulta al PACS
-    void queryPACSJobFinished(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan un job de consulta al PACS és cancel·lat
-    void queryPACSJobCancelled(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan s'ha cancel·lat la descàrre d'una petició del RIS
-    void retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan un job de descarrega d'una petició del RIS ha finalitzat
-    void retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob);
+    /// Called when a study retrieve finished with success.
+    void onStudyRetrieveSucceeded(StudyOperationResult *result);
+    /// Called when a study retrieve finished with partial success.
+    void onStudyRetrieveFinishedWithPartialSuccess(StudyOperationResult *result);
+    /// Called when a study retrieve finished with error.
+    void onStudyRetrieveFailed(StudyOperationResult *result);
+    /// Called when a study retrieve is cancelled.
+    void onStudyRetrieveCancelled(StudyOperationResult *result);
 
     /// Mostrar un missatge indicant que s'ha produït un error escoltant peticions del RIS
     void showListenRISRequestsError(ListenRISRequests::ListenRISRequestsError error);
@@ -88,26 +88,19 @@ private:
 
     /// Inicialitza les variables globals per escoltar i executar peticions del RIS.
     /// No inicialitzem al construtor perquè si no ens indiquen que hem d'escoltar no cal, inicialitzar les variables i ocupar memòria
-    void initialize();
+    void initializeListener();
 
     /// Crea les connexions entre Signals i Slots
     void createConnections();
 
     /// Cerca en els PACS marcats per defecte la màscara que ens ha indicat el RIS
-    void queryPACSRISStudyRequest(DicomMask mask);
+    void queryPacsForRequest(DicomMask mask);
 
-    /// Ens encua el QueryPACSJob al PACSManager i ens connecta amb els seus signals per poder processar els resultats. També afegeix el Job en una taula
-    /// de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
-    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPacsJob);
+    /// Adds the given StudyOperationResult representing a query to the list of pending queries and creates the needed connections to it.
+    void addPendingQuery(StudyOperationResult *result);
 
     /// S'activa quan ha finalitzat la consulta de la cerca del l'estudi sol·licitat pel RIS, comprova si s'han trobat estudis i si és així es descarrega
-    void queryRequestRISFinished();
-
-    /// Mostra un missatge indicant que s'ha produït un error al fer la consulta a un PACS
-    void errorQueryingStudy(PACSJobPointer queryPACSJob);
-
-    /// Posa els estudis d'un QueryPacsJob a la cua d'estudis trobats per processa
-    void addFoundStudiesToRetrieveQueue(PACSJobPointer queryPACSJob);
+    void onQueryFinished();
 
     /// Descarrega els estudis trobats a partir d'una queryPACSJob
     void retrieveFoundStudiesInQueue();
@@ -117,13 +110,13 @@ private:
     void retrieveStudyFoundInQueryPACS(Study *study);
 
     /// Sol·licita descarregar l'estudi passat utilitzant el PACSManager
-    PACSJobPointer retrieveStudyFromPACS(Study *study);
+    void retrieveStudyFromPACS(Study *study);
 
     /// Obté l'estudi de la base de dades
     void retrieveStudyFromDatabase(Study *study);
 
     /// Una vegada s'ha descarregat fa les accions pertinents amb aquell estudi. Emet signal per visualitzar/load o no fa res
-    void doActionsAfterRetrieve(Study *study);
+    void doActionsAfterRetrieve(const QString &studyInstanceUid);
 
     /// Indica de quina font hem d'obtenir l'estudi.
     /// Comprova si l'estudi existeix a la base de dades, si existeix es pregunta a l'usuari si s'ha de tornar a descarregar-lo del PACS, i es guarda la resposta
@@ -143,10 +136,10 @@ private:
     /// Necessitem saber si per un determinada sol·licitud hem trobat un estudi que compleixi el criteri de cerca, controls
     /// d'errors, etc.. si processim més d'una sol·licitud a la vegada, no sabríem de quina sol·licitud són els resultats o error,
     /// dificultant el control de les sol·licituds
-    QQueue<DicomMask> m_queueRISRequests;
+    QQueue<DicomMask> m_requestsQueue;
     ListenRISRequests *m_listenRISRequests;
 
-    QPopUpRISRequestsScreen *m_qpopUpRISRequestsScreen;
+    QPopUpExternalStudyRequestsScreen *m_qpopUpExternalStudyRequestsScreen;
 
     /// QThread que s'encarrega d'executar la classe escolta si arriben peticions del RIS
     QThread *m_listenRISRequestsQThread;
@@ -155,31 +148,22 @@ private:
     /// llista quins són els estudis descarregats per una mateixa petició.
     QStringList m_studiesInstancesUIDRequestedToRetrieve;
 
-    /// Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
-    QHash<int, PACSJobPointer> m_queryPACSJobPendingExecuteOrExecuting;
+    /// Contains StudyOperationResults that represent queries in progress.
+    std::unordered_set<StudyOperationResult*> m_pendingQueryResults;
 
-    int m_numberOfStudiesAddedToRetrieveForCurrentRisRequest;
+    int m_numberOfStudiesAddedToRetrieveForCurrentRequest;
 
     /// Guarda a l'usuari si per una petició del RIS se li ha preguntat si els estudis que ja existeixen descarregats a la base de dades s'han de tornar a desgarregar
-    bool m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeenRetrievedAgain;
+    bool m_hasBeenAskedToUserIfExistingStudiesInDatabaseHaveToBeRetrievedAgain;
     /// Guarda la resposta de l'usuari a la pregunta de si s'han de tornar a descarregar els estudis ja existents a la BD
-    bool m_studiesInDatabaseHaveToBeenRetrievedAgain;
-
-    /// Segons que ha de tardar a amagar-se el PopUp QPopUpRisRequestScreen quan han acabat totes les descàrregues i temps que ha de tadar el QMessageBox a tancar-se automàticament
-    /// Tots dos han de tenir el mateix temps perquè imaginem el cas que descarreguem un primer estudi del PACS llavor el segon el trobem a la BD, si el primer estudi s'ha acabat
-    /// de descarregar el PopUp es pot tancar abans que l'usuari hagi pogut prèmer un del botons del QMessageBox preguntant si s'ha de tornar a descarregar l'estudi del PACS,
-    /// fent que llavors no es pugui seguir la descarrega dels següents estudis a través de QPopUpRISRequestScree
-    static const int secondsTimeOutToHidePopUpAndAutoCloseQMessageBox;
+    bool m_studiesInDatabaseHaveToBeRetrievedAgain;
 
     QQueue<Study*> m_studiesToRetrieveQueue;
 
-    ///Guarda l'accessionnumber de la última petició del RIS
-    QString m_accessionNumberOfLastRequest;
-
     /// Indica si per l'útlima petició del RIS s'ha emés signal per visualitzar un estudi
-    bool m_signalViewStudyEmittedForLastRISRequest;
+    bool m_signalViewStudyEmittedForLastRequest;
 };
 
-};  // end namespace udg
+}
 
 #endif

@@ -20,24 +20,15 @@
 
 #include "localdatabasemanager.h"
 #include "qdeleteoldstudiesthread.h"
-#include "dicommask.h"
-#include "pacsdevice.h"
-#include "pacsjob.h"
 
 #include <QMenu>
 
-// Fordward declarations
-class QString;
-
 namespace udg {
 
-// Fordward declarations
-class Patient;
-class StatsWatcher;
 class QCreateDicomdir;
-class Study;
 class QWidgetSelectPacsToStoreDicomImage;
-class SendDICOMFilesToPACSJob;
+class StatsWatcher;
+class StudyOperationResult;
 
 /**
     Widget en el que controla les operacions d'entrada/sortida de la base de dades local
@@ -46,7 +37,7 @@ class QInputOutputLocalDatabaseWidget : public QWidget, private Ui::QInputOutput
 Q_OBJECT
 
 public:
-    QInputOutputLocalDatabaseWidget(QWidget *parent = 0);
+    explicit QInputOutputLocalDatabaseWidget(QWidget *parent = nullptr);
     ~QInputOutputLocalDatabaseWidget();
 
     /// Consulta els estudis al dicomdir obert que compleixin la màscara de cerca
@@ -60,9 +51,6 @@ public:
 
     /// Neteja els resultats que es mostren de la cerca
     void clear();
-
-    /// Envia les imatges passades per paràmetre al PACS especificat
-    void sendDICOMFilesToPACS(PacsDevice pacsDevice, QList<Image*> images);
 
 public slots:
 
@@ -141,12 +129,10 @@ private slots:
     /// Guarda els estudis seleccionats al PACS que l'usuari ha seleccionat
     void sendSelectedStudiesToSelectedPacs();
 
-    /// Slot que s'activa quan un SendDICOMFilesToPACSJob acaba
-    void sendDICOMFilesToPACSJobFinished(PACSJobPointer);
-
-    /// Cada vegada que encuem un nou Job comprovem si és un RetrieveDICOMFileFromPACSJob i si és així connectem amb el Signal StudyFromCacheWillBeDeleted
-    /// per si s'esborren estudis de la caché poder-los treure de la QStudyTreeWidget
-    void newPACSJobEnqueued(PACSJobPointer);
+    /// Called when a store operation finishes with partial success.
+    void onStorePartialSuccess(StudyOperationResult *result);
+    /// Called when a store operation finishes with error.
+    void onStoreError(StudyOperationResult *result);
 
 private:
     QMenu m_contextMenuQStudyTreeWidget;

@@ -13,8 +13,12 @@ set(SOURCES
     dicommask.cpp
     dicommasktodcmdataset.cpp
     dimsecservice.cpp
+    dimsequerystudyoperationresult.cpp
+    dimseretrievestudyoperationresult.cpp
+    dimsestorestudyoperationresult.cpp
     echotopacs.cpp
     echotopacstest.cpp
+    externalstudyrequestmanager.cpp
     firewallaccess.cpp
     firewallaccesstest.cpp
     gdcmanonymizerstarviewer.cpp
@@ -57,7 +61,7 @@ set(SOURCES
     qpacsconfigurationscreen.cpp
     qpacsdialog.cpp
     qpacslist.cpp
-    qpopuprisrequestsscreen.cpp
+    qpopupexternalstudyrequestsscreen.cpp
     qrelatedstudieswidget.cpp
     qseriesthumbnailpreviewwidget.cpp
     qstudytreewidget.cpp
@@ -69,12 +73,12 @@ set(SOURCES
     relatedstudiesmanager.cpp
     retrievedicomfilesfrompacs.cpp
     retrievedicomfilesfrompacsjob.cpp
-    risrequestmanager.cpp
     risrequestsportinusetest.cpp
-    risrequestwrapper.cpp
     senddicomfilestopacs.cpp
     senddicomfilestopacsjob.cpp
     status.cpp
+    studyoperationresult.cpp
+    studyoperationsservice.cpp
     upgradedatabaserevisioncommands.cpp
     upgradedatabasexmlparser.cpp
     usermessage.cpp

@@ -127,30 +127,4 @@ void PacsManager::requestCancelAllPACSJobs()
     m_queryQueue->requestAbort();
 }
 
-void PacsManager::retrieveStudy(void *requester, PacsDevice pacsDevice, RetrieveDICOMFilesFromPACSJob::RetrievePriorityJob priority, Study *study)
-{
-    PACSJobPointer job(new RetrieveDICOMFilesFromPACSJob(std::move(pacsDevice), priority, study));
-
-    connect(job.data(), &PACSJob::PACSJobStarted, [this, requester](PACSJobPointer pacsJob) {
-        emit studyRetrieveStarted(requester, pacsJob);
-    });
-
-    connect(job.data(), &PACSJob::PACSJobFinished, [this, requester](PACSJobPointer pacsJob) {
-        // This logic mimics that from QInputOutputPacsWidget::retrieveDICOMFilesFromPACSJobFinished
-        auto retrieveJob = pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>();
-        if (retrieveJob->getStatus() != PACSRequestStatus::RetrieveOk && retrieveJob->getStatus() != PACSRequestStatus::RetrieveSomeDICOMFilesFailed)
-        {
-            emit studyRetrieveFailed(requester, pacsJob);
-            return;
-        }
-        emit studyRetrieveFinished(requester, pacsJob);
-    });
-
-    connect(job.data(), &PACSJob::PACSJobCancelled, [this, requester](PACSJobPointer pacsJob) {
-        emit studyRetrieveCancelled(requester, pacsJob);
-    });
-
-    enqueuePACSJob(job);
 }
-
-}; // End udg namespace

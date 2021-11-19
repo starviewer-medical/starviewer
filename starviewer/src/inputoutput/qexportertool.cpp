@@ -12,34 +12,29 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-
 #include "qexportertool.h"
 
-#include "qviewer.h"
-#include "q2dviewer.h"
-#include "volume.h"
-#include "volumebuilderfromcaptures.h"
 #include "dicomimagefilegenerator.h"
 #include "image.h"
-#include "series.h"
-#include "study.h"
-#include "patient.h"
 #include "inputoutputsettings.h"
 #include "localdatabasemanager.h"
-#include "dicommask.h"
-#include "queryscreen.h"
-#include "singleton.h"
 #include "logging.h"
-#include <vtkWindowToImageFilter.h>
-#include <vtkImageData.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderer.h>
-#include <vtkPNGWriter.h>
+#include "q2dviewer.h"
+#include "series.h"
+#include "study.h"
+#include "studyoperationresult.h"
+#include "studyoperationsservice.h"
+#include "volume.h"
+#include "volumebuilderfromcaptures.h"
 
-#include <QDateTime>
 #include <QMessageBox>
 #include <QPixmap>
 #include <QProgressDialog>
+
+#include <vtkImageData.h>
+#include <vtkPNGWriter.h>
+#include <vtkRenderWindow.h>
+#include <vtkWindowToImageFilter.h>
 
 namespace udg {
 
@@ -251,13 +246,12 @@ void QExporterTool::generateAndStoreNewSeries()
             progress.setLabelText(tr("Sending to PACS..."));
             progress.setValue(progress.value() + 1);
             qApp->processEvents();
-            QueryScreen *queryScreen = SingletonPointer<QueryScreen>::instance();
 
             foreach (PacsDevice pacsDevice, m_pacsList->getSelectedPacs())
             {
-                DEBUG_LOG(QString("Sending images to PACS %1 (%2)").arg(pacsDevice.getAETitle()).arg(pacsDevice.getDescription()));
                 INFO_LOG(QString("Sending images to PACS %1 (%2)").arg(pacsDevice.getAETitle()).arg(pacsDevice.getDescription()));
-                queryScreen->sendDicomObjectsToPacs(pacsDevice, generetedVolume->getImages());
+                StudyOperationResult *result = StudyOperationsService::instance()->storeInPacs(pacsDevice, {generetedVolume->getSeries()});
+                connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
             }
         }
 
