@@ -164,7 +164,7 @@ void QInputOutputPacsWidget::queryStudy(DicomMask queryMask, QList<PacsDevice> p
         foreach (const PacsDevice &pacsDeviceToQuery, pacsToQueryList)
         {
             StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDeviceToQuery, queryMask,
-                                                                                          StudyOperationsService::TargetResource::Studies);
+                                                                                          StudyOperations::TargetResource::Studies);
             addPendingQuery(result);
         }
     }
@@ -280,7 +280,7 @@ void QInputOutputPacsWidget::requestedSeriesOfStudy(Study *study)
     INFO_LOG("Cercant informacio de les series de l'estudi" + study->getInstanceUID() + " del PACS " + pacsDescription);
 
     DicomMask mask = buildSeriesDicomMask(study->getInstanceUID());
-    StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDevice, mask, StudyOperationsService::TargetResource::Series);
+    StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDevice, mask, StudyOperations::TargetResource::Series);
     addPendingQuery(result);
 }
 
@@ -299,7 +299,7 @@ void QInputOutputPacsWidget::requestedImagesOfSeries(Series *series)
              " del PACS " + pacsDescription);
 
     DicomMask mask = buildImageDicomMask(series->getParentStudy()->getInstanceUID(), series->getInstanceUID());
-    StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDevice, mask, StudyOperationsService::TargetResource::Instances);
+    StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDevice, mask, StudyOperations::TargetResource::Instances);
     addPendingQuery(result);
 }
 
@@ -376,7 +376,7 @@ void QInputOutputPacsWidget::onRetrieveError(StudyOperationResult *result)
 void QInputOutputPacsWidget::retrieve(const PacsDevice &pacsDevice, ActionsAfterRetrieve actionAfterRetrieve, Study *studyToRetrieve,
     const QString &seriesInstanceUIDToRetrieve, const QString &sopInstanceUIDToRetrieve)
 {
-    auto priority = actionAfterRetrieve == View ? StudyOperationsService::RetrievePriority::High : StudyOperationsService::RetrievePriority::Medium;
+    auto priority = actionAfterRetrieve == View ? StudyOperations::RetrievePriority::High : StudyOperations::RetrievePriority::Medium;
     StudyOperationResult *result = StudyOperationsService::instance()->retrieveFromPacs(pacsDevice, studyToRetrieve, seriesInstanceUIDToRetrieve,
                                                                                         sopInstanceUIDToRetrieve, priority);
 

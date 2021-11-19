@@ -28,20 +28,20 @@
 
 namespace udg {
 
-StudyOperationResult* StudyOperationsService::searchPacs(const PacsDevice &pacs, const DicomMask &mask, TargetResource targetResource)
+StudyOperationResult* StudyOperationsService::searchPacs(const PacsDevice &pacs, const DicomMask &mask, StudyOperations::TargetResource targetResource)
 {
     if (pacs.getType() == PacsDevice::Type::Dimse)
     {
         QueryPacsJob::QueryLevel queryLevel = QueryPacsJob::study;
 
         switch (targetResource) {
-            case TargetResource::Studies:
+            case StudyOperations::TargetResource::Studies:
                 queryLevel = QueryPacsJob::study;
                 break;
-            case TargetResource::Series:
+            case StudyOperations::TargetResource::Series:
                 queryLevel = QueryPacsJob::series;
                 break;
-            case TargetResource::Instances:
+            case StudyOperations::TargetResource::Instances:
                 queryLevel = QueryPacsJob::image;
                 break;
         }
@@ -60,7 +60,7 @@ StudyOperationResult* StudyOperationsService::searchPacs(const PacsDevice &pacs,
 }
 
 StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice &pacs, const Study *study, const QString &seriesInstanceUid,
-                                                               const QString &sopInstanceUid, RetrievePriority priority)
+                                                               const QString &sopInstanceUid, StudyOperations::RetrievePriority priority)
 {
     if (pacs.getType() == PacsDevice::Type::Dimse)
     {
@@ -68,13 +68,13 @@ StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice 
 
         switch (priority)
         {
-            case RetrievePriority::Low:
+            case StudyOperations::RetrievePriority::Low:
                 jobPriority = RetrieveDICOMFilesFromPACSJob::Low;
                 break;
-            case RetrievePriority::Medium:
+            case StudyOperations::RetrievePriority::Medium:
                 jobPriority = RetrieveDICOMFilesFromPACSJob::Medium;
                 break;
-            case RetrievePriority::High:
+            case StudyOperations::RetrievePriority::High:
                 jobPriority = RetrieveDICOMFilesFromPACSJob::High;
                 break;
         }

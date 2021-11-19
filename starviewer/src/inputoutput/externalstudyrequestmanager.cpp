@@ -181,8 +181,7 @@ void ExternalStudyRequestManager::queryPacsForRequest(DicomMask maskRISRequest)
 
     foreach (const PacsDevice &pacsDevice, queryablePACS)
     {
-        StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDevice, maskRISRequest,
-                                                                                      StudyOperationsService::TargetResource::Studies);
+        StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDevice, maskRISRequest, StudyOperations::TargetResource::Studies);
         addPendingQuery(result);
     }
 }

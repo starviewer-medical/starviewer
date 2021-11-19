@@ -96,7 +96,7 @@ void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate
             foreach (DicomMask queryDicomMask, queryDicomMasksList)
             {
                 StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDevice, queryDicomMask,
-                                                                                              StudyOperationsService::TargetResource::Studies);
+                                                                                              StudyOperations::TargetResource::Studies);
                 addPendingQuery(result);
             }
         }
