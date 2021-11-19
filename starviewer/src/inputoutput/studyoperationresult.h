@@ -44,7 +44,7 @@ class StudyOperationResult : public QObject
 
 public:
     /// Possible operation types.
-    enum class OperationType { Query, Retrieve, Store };
+    enum class OperationType { Search, Retrieve, Store };
     /// Levels at which the request can been performed.
     enum class RequestLevel { Studies, Series, Instances };
     /// Types of result that can be represented by StudyOperationResult.

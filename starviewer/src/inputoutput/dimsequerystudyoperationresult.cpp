@@ -59,7 +59,7 @@ DimseQueryStudyOperationResult::DimseQueryStudyOperationResult(PACSJobPointer jo
 
 StudyOperationResult::OperationType DimseQueryStudyOperationResult::getOperationType() const
 {
-    return OperationType::Query;
+    return OperationType::Search;
 }
 
 void DimseQueryStudyOperationResult::cancel()
