@@ -10,6 +10,7 @@ set(SOURCES
     dicomdirburningapplicationtest.cpp
     dicomdirimporter.cpp
     dicomdirreader.cpp
+    dicomjsondecoder.cpp
     dicommask.cpp
     dicommasktodcmdataset.cpp
     dimsecservice.cpp
