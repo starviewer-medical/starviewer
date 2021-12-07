@@ -84,6 +84,10 @@ set(SOURCES
     upgradedatabasexmlparser.cpp
     usermessage.cpp
     utils.cpp
+    wadorequest.cpp
+    wadorequestmanager.cpp
+    wadosearchrequest.cpp
+    wadosearchstudyoperationresult.cpp
 )
 
 if(WIN32)

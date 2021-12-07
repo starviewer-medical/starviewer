@@ -23,6 +23,9 @@
 #include "retrievedicomfilesfrompacsjob.h"
 #include "senddicomfilestopacsjob.h"
 #include "study.h"
+#include "wadorequestmanager.h"
+#include "wadosearchrequest.h"
+#include "wadosearchstudyoperationresult.h"
 
 #include <QCoreApplication>
 
@@ -50,6 +53,17 @@ StudyOperationResult* StudyOperationsService::searchPacs(const PacsDevice &pacs,
         StudyOperationResult *result = new DimseQueryStudyOperationResult(job, m_pacsManager);
 
         m_pacsManager->enqueuePACSJob(job);
+
+        emit operationRequested(result);
+
+        return result;
+    }
+    else if (pacs.getType() == PacsDevice::Type::Wado)
+    {
+        WadoSearchRequest *request = new WadoSearchRequest(pacs, mask, targetResource);
+        StudyOperationResult *result = new WadoSearchStudyOperationResult(request);
+
+        m_wadoRequestManager->start(request);
 
         emit operationRequested(result);
 
@@ -132,16 +146,22 @@ void StudyOperationsService::cancelAllOperations()
 }
 
 StudyOperationsService::StudyOperationsService(QObject *parent)
-    : QObject(parent), m_pacsManager(nullptr)
+    : QObject(parent), m_pacsManager(nullptr), m_wadoRequestManager(nullptr)
 {
     m_pacsManager = new PacsManager();
+    m_wadoRequestManager = new WadoRequestManager();
+    m_wadoRequestManager->moveToThread(&m_wadoThread);
+    m_wadoThread.start();
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &StudyOperationsService::cancelAllOperations);
+    connect(qApp, &QCoreApplication::aboutToQuit, &m_wadoThread, &QThread::quit);
+    connect(&m_wadoThread, &QThread::finished, m_wadoRequestManager, &QObject::deleteLater);
 }
 
 StudyOperationsService::~StudyOperationsService()
 {
 //    delete m_pacsManager; // TODO Can't delete PacsManager safely. See comment on its destructor.
+    m_wadoThread.wait();
 }
 
 } // namespace udg

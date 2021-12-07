@@ -28,6 +28,7 @@ class PacsManager;
 class Series;
 class Study;
 class StudyOperationResult;
+class WadoRequestManager;
 
 /**
  * @brief The StudyOperationsService class is a singleton that allows to search local and remote studies and transfer studies from or to PACS.
@@ -76,6 +77,10 @@ private:
 private:
     /// Used to perform DIMSE operations.
     PacsManager *m_pacsManager;
+    /// Thread where WADO operations are initiated.
+    QThread m_wadoThread;
+    /// Used to perform WADO operations.
+    WadoRequestManager *m_wadoRequestManager;
 };
 
 } // namespace udg

@@ -174,6 +174,7 @@ void QInputOutputPacsWidget::addPendingQuery(StudyOperationResult *result)
 {
     // This connections will be deleted when result is destroyed
     connect(result, &StudyOperationResult::finishedSuccessfully, this, &QInputOutputPacsWidget::showQueryResult);
+    connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &QInputOutputPacsWidget::showQueryResultAndWarning);
     connect(result, &StudyOperationResult::finishedWithError, this, &QInputOutputPacsWidget::showQueryError);
     connect(result, &StudyOperationResult::cancelled, this, &QInputOutputPacsWidget::onQueryCancelled);
     connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
@@ -220,6 +221,12 @@ void QInputOutputPacsWidget::showQueryResult(StudyOperationResult *result)
 
     m_pendingQueryResults.erase(result);
     setQueryInProgress(!m_pendingQueryResults.empty());
+}
+
+void QInputOutputPacsWidget::showQueryResultAndWarning(StudyOperationResult *result)
+{
+    showQueryResult(result);
+    QMessageBox::warning(this, ApplicationNameString, result->getErrorText());
 }
 
 void QInputOutputPacsWidget::showQueryError(StudyOperationResult *result)

@@ -125,46 +125,73 @@ const QString& StudyOperationResult::getErrorText() const
     return m_errorText;
 }
 
-void StudyOperationResult::setStudies(QList<Patient*> studies)
+void StudyOperationResult::setStudies(QList<Patient*> studies, QString errorText)
 {
     if (m_future.valid())
     {
         m_resultType = ResultType::Studies;
         m_studies = std::move(studies);
         moveAllItemsToThread(m_studies, this->thread());
+        m_errorText = std::move(errorText);
         m_promise.set_value();
 
-        emit finishedSuccessfully(this);
+        if (m_errorText.isNull())
+        {
+            emit finishedSuccessfully(this);
+        }
+        else
+        {
+            emit finishedWithPartialSuccess(this);
+        }
+
         emit finished(this);
         emit ended(this);
     }
 }
 
-void StudyOperationResult::setSeries(QList<Series*> series)
+void StudyOperationResult::setSeries(QList<Series*> series, QString errorText)
 {
     if (m_future.valid())
     {
         m_resultType = ResultType::Series;
         m_series = std::move(series);
         moveAllItemsToThread(m_series, this->thread());
+        m_errorText = std::move(errorText);
         m_promise.set_value();
 
-        emit finishedSuccessfully(this);
+        if (m_errorText.isNull())
+        {
+            emit finishedSuccessfully(this);
+        }
+        else
+        {
+            emit finishedWithPartialSuccess(this);
+        }
+
         emit finished(this);
         emit ended(this);
     }
 }
 
-void StudyOperationResult::setInstances(QList<Image*> instances)
+void StudyOperationResult::setInstances(QList<Image*> instances, QString errorText)
 {
     if (m_future.valid())
     {
         m_resultType = ResultType::Instances;
         m_instances = std::move(instances);
         moveAllItemsToThread(m_instances, this->thread());
+        m_errorText = std::move(errorText);
         m_promise.set_value();
 
-        emit finishedSuccessfully(this);
+        if (m_errorText.isNull())
+        {
+            emit finishedSuccessfully(this);
+        }
+        else
+        {
+            emit finishedWithPartialSuccess(this);
+        }
+
         emit finished(this);
         emit ended(this);
     }

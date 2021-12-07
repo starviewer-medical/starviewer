@@ -85,6 +85,8 @@ private:
 private slots:
     /// Updates the study tree widget with the results from the given query.
     void showQueryResult(StudyOperationResult *result);
+    /// Updates the study tree widget with the results from the given query and showns the warning(s) produced in the query.
+    void showQueryResultAndWarning(StudyOperationResult *result);
     /// Shows the error produced in the given query.
     void showQueryError(StudyOperationResult *result);
     /// Called when the given query is cancelled.

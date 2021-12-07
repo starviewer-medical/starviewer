@@ -110,12 +110,12 @@ signals:
     void seriesTransferred(StudyOperationResult *result, int totalSeriesTransferred);
 
 protected:
-    /// Must be called by subclasses to set the given studies as the result.
-    void setStudies(QList<Patient*> studies);
-    /// Must be called by subclasses to set the given series as the result.
-    void setSeries(QList<Series*> series);
-    /// Must be called by subclasses to set the given instances as the result.
-    void setInstances(QList<Image*> instances);
+    /// Must be called by subclasses to set the given studies as the result. An optional error text can be given to indicate some non-critical error.
+    void setStudies(QList<Patient*> studies, QString errorText = QString());
+    /// Must be called by subclasses to set the given series as the result. An optional error text can be given to indicate some non-critical error.
+    void setSeries(QList<Series*> series, QString errorText = QString());
+    /// Must be called by subclasses to set the given instances as the result. An optional error text can be given to indicate some non-critical error.
+    void setInstances(QList<Image*> instances, QString errorText = QString());
 
     /// Must be called by subclasses to set the given Study Instance UID as the result. An optional error text can be given to indicate some non-critical error.
     void setStudyInstanceUid(QString studyInstanceUid, QString errorText = QString());
