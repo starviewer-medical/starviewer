@@ -220,7 +220,6 @@ void QInputOutputPacsWidget::showQueryResult(StudyOperationResult *result)
 
     m_pendingQueryResults.erase(result);
     setQueryInProgress(!m_pendingQueryResults.empty());
-    result->deleteLater();
 }
 
 void QInputOutputPacsWidget::showQueryError(StudyOperationResult *result)
@@ -237,14 +236,12 @@ void QInputOutputPacsWidget::showQueryError(StudyOperationResult *result)
 
     m_pendingQueryResults.erase(result);
     setQueryInProgress(!m_pendingQueryResults.empty());
-    result->deleteLater();
 }
 
 void QInputOutputPacsWidget::onQueryCancelled(StudyOperationResult *result)
 {
     m_pendingQueryResults.erase(result);
     setQueryInProgress(!m_pendingQueryResults.empty());
-    result->deleteLater();
 }
 
 void QInputOutputPacsWidget::cancelCurrentQueriesToPACS()
