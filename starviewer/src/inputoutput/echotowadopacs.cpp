@@ -12,34 +12,32 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGECHOTOPACSTEST_H
-#define UDGECHOTOPACSTEST_H
+#include "echotowadopacs.h"
 
-#include "diagnosistest.h"
-#include "diagnosistestfactoryregister.h"
+#include "dicommask.h"
+#include "studyoperationresult.h"
+#include "studyoperationsservice.h"
 
 namespace udg {
 
-class PacsDevice;
+EchoToWadoPacs::EchoToWadoPacs()
+{
+}
 
-class EchoToPACSTest : public DiagnosisTest {
-Q_OBJECT
-public:
-    EchoToPACSTest(QObject *parent = 0);
-    ~EchoToPACSTest() override;
+bool EchoToWadoPacs::echo(const PacsDevice &pacs)
+{
+    DicomMask mask;
+    mask.setStudyDate(QDate::currentDate().addYears(1), QDate::currentDate().addYears(1));
+    StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacs, mask, StudyOperations::TargetResource::Studies);
+    m_errors = result->getErrorText();
+    bool success = result->getResultType() != StudyOperationResult::ResultType::Error;
+    delete result;
+    return success;
+}
 
-    DiagnosisTestResult run() override;
+const QString& EchoToWadoPacs::getErrors() const
+{
+    return m_errors;
+}
 
-    ///Retorna descripcio del test
-    QString getDescription() const override;
-
-protected:
-    virtual QList<PacsDevice> getPacsDeviceList();
-    virtual DiagnosisTestProblem echo(const PacsDevice &pacs);
-};
-
-static DiagnosisTestFactoryRegister<EchoToPACSTest> registerEchoToPACSTest("EchoToPACSTest");
-
-} // end namespace udg
-
-#endif
+} // namespace udg

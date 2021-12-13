@@ -13,10 +13,11 @@
  *************************************************************************************/
 
 #include "echotopacstest.h"
-#include "pacsdevicemanager.h"
 
-#include <QStringList>
-#include <QList>
+#include "echotopacs.h"
+#include "echotowadopacs.h"
+#include "pacsdevice.h"
+#include "pacsdevicemanager.h"
 
 namespace udg {
 
@@ -51,23 +52,10 @@ DiagnosisTestResult EchoToPACSTest::run()
             break;
         }
 
-        EchoToPACS::EchoRequestStatus status = echo(pacsList.at(i));
+        DiagnosisTestProblem problem = echo(pacsList.at(i));
 
-        if (status != EchoToPACS::EchoOk)
+        if (problem.getState() != DiagnosisTestProblem::Ok)
         {
-            DiagnosisTestProblem problem;
-            problem.setState(DiagnosisTestProblem::Error);
-
-            if (status == EchoToPACS::EchoFailed)
-            {
-                problem.setDescription(tr("Echo to PACS with AE Title '%1' failed").arg(pacsList.at(i).getAETitle()));
-                problem.setSolution(tr("Check PACS configuration at Tools > Configuration > PACS"));
-            }
-            else
-            {
-                problem.setDescription(tr("Unable to connect to PACS with AE Title '%1'").arg(pacsList.at(i).getAETitle()));
-                problem.setSolution(tr("Check internet connection and PACS configuration at Tools > Configuration > PACS"));
-            }
             testResults.addError(problem);
         }
     }
@@ -85,12 +73,48 @@ QList<PacsDevice> EchoToPACSTest::getPacsDeviceList()
     return PacsDeviceManager::getPacsList();
 }
 
-EchoToPACS::EchoRequestStatus EchoToPACSTest::echo(const PacsDevice &pacs)
+DiagnosisTestProblem EchoToPACSTest::echo(const PacsDevice &pacs)
 {
-    EchoToPACS echoToPACS;
-    echoToPACS.echo(pacs);
+    if (pacs.getType() == PacsDevice::Type::Dimse)
+    {
+        EchoToPACS echoToPACS;
 
-    return echoToPACS.getLastError();
+        if (echoToPACS.echo(pacs))
+        {
+            return DiagnosisTestProblem(DiagnosisTestProblem::Ok);
+        }
+        else
+        {
+            if (echoToPACS.getLastError() == EchoToPACS::EchoFailed)
+            {
+                return DiagnosisTestProblem(DiagnosisTestProblem::Error, tr("Echo to PACS with AE Title '%1' failed").arg(pacs.getAETitle()),
+                                            tr("Check PACS configuration at Tools > Configuration > PACS"));
+            }
+            else
+            {
+                return DiagnosisTestProblem(DiagnosisTestProblem::Error, tr("Unable to connect to PACS with AE Title '%1'").arg(pacs.getAETitle()),
+                                            tr("Check internet connection and PACS configuration at Tools > Configuration > PACS"));
+            }
+        }
+    }
+    else if (pacs.getType() == PacsDevice::Type::Wado)
+    {
+        EchoToWadoPacs echoToWadoPacs;
+
+        if (echoToWadoPacs.echo(pacs))
+        {
+            return DiagnosisTestProblem(DiagnosisTestProblem::Ok);
+        }
+        else
+        {
+            return DiagnosisTestProblem(DiagnosisTestProblem::Error, tr("Connection to PACS with base URI '%1' failed").arg(pacs.getBaseUri().toString()),
+                                        tr("Check internet connection and PACS configuration at Tools > Configuration > PACS"));
+        }
+    }
+    else
+    {
+        return DiagnosisTestProblem();
+    }
 }
 
 } // end namespace udg

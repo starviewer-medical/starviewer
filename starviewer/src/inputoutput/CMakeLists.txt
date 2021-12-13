@@ -19,6 +19,7 @@ set(SOURCES
     dimsestorestudyoperationresult.cpp
     echotopacs.cpp
     echotopacstest.cpp
+    echotowadopacs.cpp
     externalstudyrequestmanager.cpp
     firewallaccess.cpp
     firewallaccesstest.cpp

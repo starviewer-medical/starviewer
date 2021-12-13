@@ -12,34 +12,34 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGECHOTOPACSTEST_H
-#define UDGECHOTOPACSTEST_H
+#ifndef UDG_ECHOTOWADOPACS_H
+#define UDG_ECHOTOWADOPACS_H
 
-#include "diagnosistest.h"
-#include "diagnosistestfactoryregister.h"
+#include <QString>
 
 namespace udg {
 
 class PacsDevice;
 
-class EchoToPACSTest : public DiagnosisTest {
-Q_OBJECT
+/**
+ * @brief The EchoToWadoPacs tests if a WADO PACS responds to WADO requests.
+ */
+class EchoToWadoPacs
+{
 public:
-    EchoToPACSTest(QObject *parent = 0);
-    ~EchoToPACSTest() override;
+    EchoToWadoPacs();
 
-    DiagnosisTestResult run() override;
+    /// Sends a search request to the given PACS and returns true if successful and false otherwise. In case of failure errors are recorded.
+    bool echo(const PacsDevice &pacs);
 
-    ///Retorna descripcio del test
-    QString getDescription() const override;
+    /// Returns the errors produced in the request, if any.
+    const QString& getErrors() const;
 
-protected:
-    virtual QList<PacsDevice> getPacsDeviceList();
-    virtual DiagnosisTestProblem echo(const PacsDevice &pacs);
+private:
+    /// Stores the errors produced in the request.
+    QString m_errors;
 };
 
-static DiagnosisTestFactoryRegister<EchoToPACSTest> registerEchoToPACSTest("EchoToPACSTest");
+} // namespace udg
 
-} // end namespace udg
-
-#endif
+#endif // UDG_ECHOTOWADOPACS_H

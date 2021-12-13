@@ -1,41 +1,33 @@
 /*@
     "name": "test_EchoToPACSTest",
-    "requirements": ["archive.dimse"]
+    "requirements": ["archive.dimse", "archive.wado"]
  */
 
 #include "autotest.h"
-#include "echotopacs.h"
 #include "echotopacstest.h"
-#include "diagnosistestresult.h"
 
-#include <QList>
-#include <QHash>
+#include "pacsdevice.h"
 
 using namespace udg;
 
-typedef QHash<QString, EchoToPACS::EchoRequestStatus> EchoRequestStatusHash;
+typedef QHash<QString, DiagnosisTestProblem> EchoResultHash;
 
 class TestingEchoToPACSTest : public EchoToPACSTest {
 public:
     QList<PacsDevice> m_pacsDevices;
-    EchoRequestStatusHash m_statusHash;
+    EchoResultHash m_resultHash;
 
 protected:
-    virtual QList<PacsDevice> getPacsDeviceList()
+    QList<PacsDevice> getPacsDeviceList() override
     {
         return m_pacsDevices;
     }
 
-    virtual EchoToPACS::EchoRequestStatus echo(const PacsDevice &pacs)
+    DiagnosisTestProblem echo(const PacsDevice &pacs) override
     {
-        return m_statusHash[pacs.getAETitle()];
+        return m_resultHash[pacs.getID()];
     }
 };
-
-Q_DECLARE_METATYPE(EchoToPACS::EchoRequestStatus)
-Q_DECLARE_METATYPE(DiagnosisTestResult)
-Q_DECLARE_METATYPE(QList<PacsDevice>)
-Q_DECLARE_METATYPE(EchoRequestStatusHash)
 
 class test_EchoToPACSTest : public QObject {
 Q_OBJECT
@@ -43,101 +35,104 @@ Q_OBJECT
 private slots:
     void run_ShouldTestIfPACSAreAccessible_data();
     void run_ShouldTestIfPACSAreAccessible();
-
-private:
-    void fillPacsListAndHash(QList<PacsDevice> *list, EchoRequestStatusHash *hash,
-                             const QStringList &AETitles, const QList<EchoToPACS::EchoRequestStatus> &statuses);
 };
+
+Q_DECLARE_METATYPE(QList<PacsDevice>)
+Q_DECLARE_METATYPE(EchoResultHash)
+Q_DECLARE_METATYPE(DiagnosisTestResult)
 
 void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
 {
-    /// Entrada
-    QTest::addColumn<QList<PacsDevice> >("testingPacsDevices");
-    QTest::addColumn<EchoRequestStatusHash>("testingEchoRequestStatusHash");
+    QTest::addColumn<QList<PacsDevice>>("pacsDevices");
+    QTest::addColumn<EchoResultHash>("echoResultHash");
+    QTest::addColumn<DiagnosisTestResult>("expectedDiagnosisTestResult");
 
-    /// Sortida
-    QTest::addColumn<DiagnosisTestResult>("testingDiagnosisTestResult");
+    {
+        DiagnosisTestResult result;
+        result.addWarning(DiagnosisTestProblem(DiagnosisTestProblem::Warning, "There are no PACS defined",
+                                               "New PACS can be defined at Tools > Configuration > PACS"));
 
-    /// Variables unused
-    QString unusedString = "";
-    QList<PacsDevice> unusedPacsList;
-    EchoRequestStatusHash unusedHash;
+        QTest::newRow("no pacs") << QList<PacsDevice>{} << EchoResultHash{} << result;
+    }
 
-    /// Dades dels tests
-    // Dades del text 1
-    DiagnosisTestResult noPacsResult;
-    DiagnosisTestProblem noPacsProblem(DiagnosisTestProblem::Warning, "There are no PACS defined", "New PACS can be defined at Tools > Configuration > PACS");
-    noPacsResult.addWarning(noPacsProblem);
+    {
+        PacsDevice pacs;
+        pacs.setID("0");
+        pacs.setType(PacsDevice::Type::Dimse);
+        pacs.setAETitle("PACS");
 
-    // Dades del test 2
-    QStringList AETitlesTest2;
-    QList<EchoToPACS::EchoRequestStatus> statusesTest2;
-    QList<PacsDevice> pacsListTest2;
-    EchoRequestStatusHash hashTest2;
+        QTest::newRow("one pacs working") << QList<PacsDevice>{pacs} << EchoResultHash{{"0", DiagnosisTestProblem(DiagnosisTestProblem::Ok)}}
+                                          << DiagnosisTestResult();
+    }
 
-    AETitlesTest2 << "PACS";
-    statusesTest2 << EchoToPACS::EchoOk;
-    fillPacsListAndHash(&pacsListTest2, &hashTest2, AETitlesTest2, statusesTest2);
+    {
+        PacsDevice pacs;
+        pacs.setID("0");
+        pacs.setType(PacsDevice::Type::Dimse);
+        pacs.setAETitle("PACS");
+        DiagnosisTestProblem problem(DiagnosisTestProblem::Error, "Echo to PACS with AE Title 'PACS' failed",
+                                     "Check PACS configuration at Tools > Configuration > PACS");
+        DiagnosisTestResult result;
+        result.addError(problem);
 
-    // Dades del test 3
-    QStringList AETitlesTest3;
-    QList<EchoToPACS::EchoRequestStatus> statusesTest3;
-    QList<PacsDevice> pacsListTest3;
-    EchoRequestStatusHash hashTest3;
-    
-    AETitlesTest3 << "RS_HUAV";
-    statusesTest3 << EchoToPACS::EchoFailed;
-    fillPacsListAndHash(&pacsListTest3, &hashTest3, AETitlesTest3, statusesTest3);
-    
-    DiagnosisTestResult pacsFailResult;
-    DiagnosisTestProblem pacsFailProblem(DiagnosisTestProblem::Error, QString("Echo to PACS with AE Title '%1' failed").arg(AETitlesTest3[0]), "Check PACS configuration at Tools > Configuration > PACS");
-    pacsFailResult.addError(pacsFailProblem);
+        QTest::newRow("one pacs fail") << QList<PacsDevice>{pacs} << EchoResultHash{{"0", problem}} << result;
+    }
 
-    // Dades del test 4
-    QStringList AETitlesTest4;
-    QList<EchoToPACS::EchoRequestStatus> statusesTest4;
-    QList<PacsDevice> pacsListTest4;
-    EchoRequestStatusHash hashTest4;
-    
-    AETitlesTest4 << "PACSGUELL" << "PACSLLEIDA" << "RS_HGJT";
-    statusesTest4 << EchoToPACS::EchoFailed << EchoToPACS::EchoOk << EchoToPACS::EchoCanNotConnectToPACS;
-    fillPacsListAndHash(&pacsListTest4, &hashTest4, AETitlesTest4, statusesTest4);
+    {
+        PacsDevice pacs0;
+        pacs0.setID("0");
+        pacs0.setType(PacsDevice::Type::Dimse);
+        pacs0.setAETitle("PACS0");
+        PacsDevice pacs1;
+        pacs1.setID("1");
+        pacs1.setType(PacsDevice::Type::Dimse);
+        pacs1.setAETitle("PACS1");
+        PacsDevice pacs2;
+        pacs2.setID("2");
+        pacs2.setType(PacsDevice::Type::Dimse);
+        pacs2.setAETitle("PACS2");
+        PacsDevice pacs3;
+        pacs3.setID("3");
+        pacs3.setType(PacsDevice::Type::Wado);
+        pacs3.setBaseUri(QUrl("http://example.com"));
+        DiagnosisTestProblem problem0(DiagnosisTestProblem::Error, "Echo to PACS with AE Title 'PACS0' failed",
+                                      "Check PACS configuration at Tools > Configuration > PACS");
+        DiagnosisTestProblem problem1(DiagnosisTestProblem::Ok);
+        DiagnosisTestProblem problem2(DiagnosisTestProblem::Error, "Unable to connect to PACS with AE Title 'PACS2'",
+                                      "Check internet connection and PACS configuration at Tools > Configuration > PACS");
+        DiagnosisTestProblem problem3(DiagnosisTestProblem::Error, "Connection to PACS with base URI 'http://example.com' failed",
+                                      "Check internet connection and PACS configuration at Tools > Configuration > PACS");
+        DiagnosisTestResult result;
+        result.addError(problem0);
+        result.addError(problem2);
+        result.addError(problem3);
 
-    DiagnosisTestResult test4Result;
-    DiagnosisTestProblem failProblem(DiagnosisTestProblem::Error, QString("Echo to PACS with AE Title '%1' failed").arg(AETitlesTest4[0]), "Check PACS configuration at Tools > Configuration > PACS");
-    test4Result.addError(failProblem);
-    DiagnosisTestProblem failProblem2(DiagnosisTestProblem::Error, QString("Unable to connect to PACS with AE Title '%1'").arg(AETitlesTest4[2]), "Check internet connection and PACS configuration at Tools > Configuration > PACS");
-    test4Result.addError(failProblem2);
-
-    /// Tests
-    QTest::newRow("no pacs") << unusedPacsList << unusedHash << noPacsResult;
-    QTest::newRow("one pacs working") << pacsListTest2 << hashTest2 << DiagnosisTestResult();
-    QTest::newRow("one pacs fail") << pacsListTest3 << hashTest3 << pacsFailResult;
-    QTest::newRow("3 pacs: fail, ok, connect error") << pacsListTest4 << hashTest4 << test4Result;
+        QTest::newRow("4 pacs: fail, ok, connect error, wado error") << QList<PacsDevice>{pacs0, pacs1, pacs2, pacs3}
+                                                                     << EchoResultHash{{"0", problem0}, {"1", problem1}, {"2", problem2}, {"3", problem3}}
+                                                                     << result;
+    }
 }
 
 void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible()
 {
-    QFETCH(QList<PacsDevice>, testingPacsDevices);
-    QFETCH(EchoRequestStatusHash, testingEchoRequestStatusHash);
- 
-    QFETCH(DiagnosisTestResult, testingDiagnosisTestResult);
+    QFETCH(QList<PacsDevice>, pacsDevices);
+    QFETCH(EchoResultHash, echoResultHash);
+    QFETCH(DiagnosisTestResult, expectedDiagnosisTestResult);
 
     TestingEchoToPACSTest echoToPACSTest;
-    
-    echoToPACSTest.m_pacsDevices = testingPacsDevices;
-    echoToPACSTest.m_statusHash = testingEchoRequestStatusHash;
+    echoToPACSTest.m_pacsDevices = pacsDevices;
+    echoToPACSTest.m_resultHash = echoResultHash;
 
     DiagnosisTestResult result = echoToPACSTest.run();
 
-    QCOMPARE(result.getState(), testingDiagnosisTestResult.getState());
+    QCOMPARE(result.getState(), expectedDiagnosisTestResult.getState());
     if (result.getState() != DiagnosisTestResult::Ok)
     {
-        QCOMPARE(result.getErrors().size(), testingDiagnosisTestResult.getErrors().size());
-        QCOMPARE(result.getWarnings().size(), testingDiagnosisTestResult.getWarnings().size());
+        QCOMPARE(result.getErrors().size(), expectedDiagnosisTestResult.getErrors().size());
+        QCOMPARE(result.getWarnings().size(), expectedDiagnosisTestResult.getWarnings().size());
 
         QListIterator<DiagnosisTestProblem> resultIterator(result.getErrors() + result.getWarnings());
-        QListIterator<DiagnosisTestProblem> testingResultIterator(testingDiagnosisTestResult.getErrors() + testingDiagnosisTestResult.getWarnings());
+        QListIterator<DiagnosisTestProblem> testingResultIterator(expectedDiagnosisTestResult.getErrors() + expectedDiagnosisTestResult.getWarnings());
         while (resultIterator.hasNext() && testingResultIterator.hasNext())
         {
             DiagnosisTestProblem problem = resultIterator.next();
@@ -146,24 +141,6 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible()
             QCOMPARE(problem.getDescription(), testingProblem.getDescription());
             QCOMPARE(problem.getSolution(), testingProblem.getSolution());
         }
-    }
-}
-
-void test_EchoToPACSTest::fillPacsListAndHash(QList<PacsDevice> *list, EchoRequestStatusHash *hash,
-                                              const QStringList &AETitles, const QList<EchoToPACS::EchoRequestStatus> &statuses)
-{
-    if (AETitles.count() != statuses.count())
-    {
-        return;
-    }
-
-    for (int i = 0; i < AETitles.count(); i++)
-    {
-        PacsDevice pacs;
-        pacs.setAETitle(AETitles[i]);
-        list->append(pacs);
-
-        hash->insert(AETitles[i], statuses[i]);
     }
 }
 

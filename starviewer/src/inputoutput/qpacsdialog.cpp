@@ -15,6 +15,7 @@
 #include "qpacsdialog.h"
 
 #include "echotopacs.h"
+#include "echotowadopacs.h"
 #include "logging.h"
 #include "pacsdevicemanager.h"
 #include "starviewerapplication.h"
@@ -192,36 +193,62 @@ void QPacsDialog::test()
 
     // Agafem les dades del PACS que estan el textbox per testejar
     PacsDevice pacsDevice = getPacsDevice();
-    EchoToPACS echoToPACS;
 
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-    INFO_LOG(QString("Doing C-ECHO to PACS with AE Title %1.").arg(pacsDevice.getAETitle()));
-    bool success = echoToPACS.echo(pacsDevice);
-    QApplication::restoreOverrideCursor();
-
-    if (success)
+    if (pacsDevice.getType() == PacsDevice::Type::Dimse)
     {
-        QMessageBox::information(this, ApplicationNameString, tr("Test of PACS \"%1\" is correct").arg(pacsDevice.getAETitle()), QMessageBox::Ok);
+        EchoToPACS echoToPACS;
+
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        INFO_LOG(QString("Doing C-ECHO to PACS with AE Title %1.").arg(pacsDevice.getAETitle()));
+        bool success = echoToPACS.echo(pacsDevice);
+        QApplication::restoreOverrideCursor();
+
+        if (success)
+        {
+            QMessageBox::information(this, ApplicationNameString, tr("Test of PACS \"%1\" is correct").arg(pacsDevice.getAETitle()), QMessageBox::Ok);
+        }
+        else
+        {
+            QString message;
+
+            switch (echoToPACS.getLastError())
+            {
+                case EchoToPACS::EchoFailed:
+                    message = tr("PACS \"%1\" did not respond correctly.\nMake sure its address and AE Title are correct.").arg(pacsDevice.getAETitle());
+                    break;
+                case EchoToPACS::EchoCanNotConnectToPACS:
+                    message = tr("PACS \"%1\" did not respond.\nMake sure its address and AE Title are correct.").arg(pacsDevice.getAETitle());
+                    break;
+                default:
+                    // Should never happen
+                    message = tr("PACS \"%1\" did not respond as expected, an unknown error has occurred.").arg(pacsDevice.getAETitle());
+                    break;
+            }
+
+            QMessageBox::information(this, ApplicationNameString, message, QMessageBox::Ok);
+        }
+    }
+    else if (pacsDevice.getType() == PacsDevice::Type::Wado)
+    {
+        EchoToWadoPacs echoToWadoPacs;
+
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        INFO_LOG(QString("Doing ECHO to PACS with base URI %1.").arg(pacsDevice.getBaseUri().toString()));
+        bool success = echoToWadoPacs.echo(pacsDevice);
+        QApplication::restoreOverrideCursor();
+
+        if (success)
+        {
+            QMessageBox::information(this, ApplicationNameString, tr("Test is correct."));
+        }
+        else
+        {
+            QMessageBox::warning(this, ApplicationNameString, echoToWadoPacs.getErrors());
+        }
     }
     else
     {
-        QString message;
-
-        switch (echoToPACS.getLastError())
-        {
-            case EchoToPACS::EchoFailed:
-                message = tr("PACS \"%1\" did not respond correctly.\nMake sure its address and AE Title are correct.").arg(pacsDevice.getAETitle());
-                break;
-            case EchoToPACS::EchoCanNotConnectToPACS:
-                message = tr("PACS \"%1\" did not respond.\nMake sure its address and AE Title are correct.").arg(pacsDevice.getAETitle());
-                break;
-            default:
-                // Should never happen
-                message = tr("PACS \"%1\" did not respond as expected, an unknown error has occurred.").arg(pacsDevice.getAETitle());
-                break;
-        }
-
-        QMessageBox::information(this, ApplicationNameString, message, QMessageBox::Ok);
+        QMessageBox::warning(this, ApplicationNameString, tr("Unknown PACS type."));
     }
 }
 
