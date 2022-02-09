@@ -17,6 +17,7 @@ set(SOURCES
     dimsequerystudyoperationresult.cpp
     dimseretrievestudyoperationresult.cpp
     dimsestorestudyoperationresult.cpp
+    downloadedfilesprocessor.cpp
     echotopacs.cpp
     echotopacstest.cpp
     echotowadopacs.cpp
@@ -85,8 +86,11 @@ set(SOURCES
     upgradedatabasexmlparser.cpp
     usermessage.cpp
     utils.cpp
+    wadoinstancedownloader.cpp
     wadorequest.cpp
     wadorequestmanager.cpp
+    wadoretrieverequest.cpp
+    wadoretrievestudyoperationresult.cpp
     wadosearchrequest.cpp
     wadosearchstudyoperationresult.cpp
 )

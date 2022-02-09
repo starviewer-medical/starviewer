@@ -24,6 +24,8 @@
 #include "senddicomfilestopacsjob.h"
 #include "study.h"
 #include "wadorequestmanager.h"
+#include "wadoretrieverequest.h"
+#include "wadoretrievestudyoperationresult.h"
 #include "wadosearchrequest.h"
 #include "wadosearchstudyoperationresult.h"
 
@@ -100,6 +102,20 @@ StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice 
                 this, &StudyOperationsService::localStudyAboutToBeDeleted);
 
         m_pacsManager->enqueuePACSJob(job);
+
+        emit operationRequested(result);
+
+        return result;
+    }
+    else if (pacs.getType() == PacsDevice::Type::Wado)
+    {
+        WadoRetrieveRequest *request = new WadoRetrieveRequest(pacs, study->getInstanceUID(), seriesInstanceUid, sopInstanceUid);
+        WadoRetrieveStudyOperationResult *result = new WadoRetrieveStudyOperationResult(request);
+        result->setRequestStudy(study);
+
+        connect(request, &WadoRetrieveRequest::studyFromCacheWillBeDeleted, this, &StudyOperationsService::localStudyAboutToBeDeleted);
+
+        m_wadoRequestManager->start(request);
 
         emit operationRequested(result);
 
