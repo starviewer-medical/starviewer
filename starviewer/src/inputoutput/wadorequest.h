@@ -61,7 +61,7 @@ signals:
     void started();
     /// Emitted when the operation is finished.
     void finished();
-    /// Emitted when the operaiton is cancelled.
+    /// Emitted when the operation is cancelled.
     void cancelled();
 
 protected:

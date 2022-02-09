@@ -38,7 +38,7 @@ public:
     /// Returns the operation type.
     OperationType getOperationType() const override;
 
-    /// Requests to the PacsManger that the job is cancelled.
+    /// Requests to the PacsManager that the job is cancelled.
     void cancel() override;
 
 private slots:
