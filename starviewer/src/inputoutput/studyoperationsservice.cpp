@@ -17,6 +17,8 @@
 #include "dimsequerystudyoperationresult.h"
 #include "dimseretrievestudyoperationresult.h"
 #include "dimsestorestudyoperationresult.h"
+#include "inputoutputsettings.h"
+#include "logging.h"
 #include "pacsdevice.h"
 #include "pacsmanager.h"
 #include "querypacsjob.h"
@@ -30,6 +32,7 @@
 #include "wadosearchstudyoperationresult.h"
 
 #include <QCoreApplication>
+#include <QDir>
 
 namespace udg {
 
@@ -154,6 +157,64 @@ StudyOperationResult* StudyOperationsService::storeInPacs(const PacsDevice &pacs
     }
 
     return nullptr;
+}
+
+void StudyOperationsService::setStudyBeingRetrieved(const QString &studyInstanceUid)
+{
+    QMutexLocker locker(&m_mutex);
+    Settings settings;
+    QStringList studies = settings.getValue(InputOutputSettings::RetrievingStudy).toStringList();
+    studies.append(studyInstanceUid);
+    settings.setValue(InputOutputSettings::RetrievingStudy, studies);
+}
+
+void StudyOperationsService::setStudyNotBeingRetrieved(const QString &studyInstanceUid)
+{
+    QMutexLocker locker(&m_mutex);
+    Settings settings;
+    QStringList studies = settings.getValue(InputOutputSettings::RetrievingStudy).toStringList();
+    studies.removeOne(studyInstanceUid);
+    settings.setValue(InputOutputSettings::RetrievingStudy, studies);
+}
+
+bool StudyOperationsService::areStudiesBeingRetrieved()
+{
+    QMutexLocker locker(&m_mutex);
+    return !Settings().getValue(InputOutputSettings::RetrievingStudy).toStringList().isEmpty();
+}
+
+void StudyOperationsService::deleteStudiesBeingRetrieved()
+{
+    if (areStudiesBeingRetrieved())
+    {
+        QMutexLocker locker(&m_mutex);
+        Settings settings;
+        QStringList studies = settings.getValue(InputOutputSettings::RetrievingStudy).toStringList();
+        LocalDatabaseManager localDatabaseManager;
+
+        for (const QString &studyInstanceUid : studies)
+        {
+            INFO_LOG(QString("Study %1 was being downloaded when Starviewer finished. Its images will be deleted to maintain local cache integrity.")
+                     .arg(studyInstanceUid));
+
+            // The study could have really been fully downloaded and the application have finished just before clearing the setting,
+            // so we must delete the study if it exists in the database.
+            if (localDatabaseManager.studyExists(studyInstanceUid))
+            {
+                localDatabaseManager.deleteStudy(studyInstanceUid);
+            }
+            else
+            {
+                // Check if the directory really exists. It might not exist if not a single image was downloaded.
+                if (QDir().exists(localDatabaseManager.getStudyPath(studyInstanceUid)))
+                {
+                    localDatabaseManager.deleteStudyFromHardDisk(studyInstanceUid);
+                }
+            }
+        }
+
+        settings.remove(InputOutputSettings::RetrievingStudy);
+    }
 }
 
 void StudyOperationsService::cancelAllOperations()

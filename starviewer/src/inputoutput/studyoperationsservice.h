@@ -20,6 +20,8 @@
 
 #include "studyoperations.h"
 
+#include <QMutex>
+
 namespace udg {
 
 class DicomMask;
@@ -58,6 +60,18 @@ public:
     /// be used to observe the progress and obtain any errors.
     StudyOperationResult* storeInPacs(const PacsDevice &pacs, const QList<Series*> &series);
 
+    /// Saves a setting to know that a study with the given UID is being retrieved. This is saved in order to delete a half-downloaded study in case the
+    /// application crashes in the middle of a download.
+    void setStudyBeingRetrieved(const QString &studyInstanceUid);
+    /// Removes the given Study Instance UID from the setting set in the above method to indicate that it is no longer being retrieved.
+    void setStudyNotBeingRetrieved(const QString &studyInstanceUid);
+    /// Returns true if one or more studies are being retrieved and false otherwise.
+    bool areStudiesBeingRetrieved();
+    /// If there are studies marked as being retrieved, this method will delete their images and leave the database in a consistent state. This method is
+    /// intended to delete half-downloaded studies in case the application crashes in the middle of a download. It should be called at the start of the
+    /// application.
+    void deleteStudiesBeingRetrieved();
+
 public slots:
     /// Requests to call all current operations.
     void cancelAllOperations();
@@ -81,6 +95,8 @@ private:
     QThread m_wadoThread;
     /// Used to perform WADO operations.
     WadoRequestManager *m_wadoRequestManager;
+    /// Mutex used when modifying the studies being retrieved.
+    QMutex m_mutex;
 };
 
 } // namespace udg

@@ -15,7 +15,6 @@
 #include "qpacsconfigurationscreen.h"
 
 #include "inputoutputsettings.h"
-#include "localdatabasemanager.h"
 #include "logging.h"
 #include "pacsdevice.h"
 #include "pacsdevicemanager.h"
@@ -302,7 +301,8 @@ void QPacsConfigurationScreen::updateInstitutionPhoneNumberSetting()
 bool QPacsConfigurationScreen::isIncomingConnectionsPortInUseByAnotherApplication()
 {
     // Comprovem que el port estigui o no en ús i que en el cas que estigui en ús, no sigui utilitzat per l'Starviewer
-    return PortInUse().isPortInUse(m_textLocalPort->text().toInt()) && !LocalDatabaseManager().isAStudyBeingRetrieved();
+    PortInUse portInUse;
+    return portInUse.isPortInUse(m_textLocalPort->text().toInt()) && portInUse.getOwner() != PortInUse::PortUsedByStarviewer;
 }
 
 void QPacsConfigurationScreen::checkIncomingConnectionsPortNotInUse()

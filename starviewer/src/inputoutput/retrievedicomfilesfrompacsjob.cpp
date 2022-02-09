@@ -34,6 +34,7 @@
 #include "portinuse.h"
 #include "dicomsource.h"
 #include "usermessage.h"
+#include "studyoperationsservice.h"
 
 namespace udg {
 
@@ -157,7 +158,7 @@ void RetrieveDICOMFilesFromPACSJob::run(ThreadWeaver::JobPointer self, ThreadWea
         // Connexions per finalitzar els threads
         connect(&patientFiller, SIGNAL(patientProcessed(Patient*)), &fillersThread, SLOT(quit()), Qt::DirectConnection);
 
-        localDatabaseManager.setStudyBeingRetrieved(m_studyToRetrieveDICOMFiles->getInstanceUID());
+        StudyOperationsService::instance()->setStudyBeingRetrieved(m_studyToRetrieveDICOMFiles->getInstanceUID());
         fillersThread.start();
 
         m_retrieveRequestStatus = m_retrieveDICOMFilesFromPACS->retrieve(m_studyToRetrieveDICOMFiles->getInstanceUID(), m_seriesInstanceUIDToRetrieve,
@@ -200,7 +201,7 @@ void RetrieveDICOMFilesFromPACSJob::run(ThreadWeaver::JobPointer self, ThreadWea
             deleteRetrievedDICOMFilesIfStudyNotExistInDatabase();
         }
 
-        localDatabaseManager.setNoStudyBeingRetrieved();
+        StudyOperationsService::instance()->setStudyNotBeingRetrieved(m_studyToRetrieveDICOMFiles->getInstanceUID());
     }
 }
 

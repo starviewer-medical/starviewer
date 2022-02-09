@@ -17,8 +17,6 @@
 #include "dicommask.h"
 #include "externalstudyrequestmanager.h"
 #include "inputoutputsettings.h"
-#include "localdatabasemanager.h"
-#include "logging.h"
 #include "portinuse.h"
 #include "qcreatedicomdir.h"
 #include "qoperationstatescreen.h"
@@ -167,14 +165,7 @@ void QueryScreen::checkIncomingConnectionsPacsPortNotInUse()
 
 void QueryScreen::checkDatabaseImageIntegrity()
 {
-    LocalDatabaseManager localDatabaseManager;
-
-    localDatabaseManager.deleteStudyBeingRetrieved();
-
-    if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-    {
-        ERROR_LOG("S'ha produït un error esborrant un estudi que no s'havia acabat de descarregar en la última execució");
-    }
+    StudyOperationsService::instance()->deleteStudiesBeingRetrieved();
 }
 
 void QueryScreen::setAdvancedSearchVisible(bool visible)

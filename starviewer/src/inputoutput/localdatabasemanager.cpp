@@ -891,52 +891,6 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
     }
 }
 
-void LocalDatabaseManager::setStudyBeingRetrieved(const QString &studyInstanceUID)
-{
-    Settings().setValue(InputOutputSettings::RetrievingStudy, studyInstanceUID);
-}
-
-void LocalDatabaseManager::setNoStudyBeingRetrieved()
-{
-    Settings().remove(InputOutputSettings::RetrievingStudy);
-}
-
-bool LocalDatabaseManager::isAStudyBeingRetrieved() const
-{
-    return Settings().contains(InputOutputSettings::RetrievingStudy);
-}
-
-void LocalDatabaseManager::deleteStudyBeingRetrieved()
-{
-    m_lastError = Ok;
-
-    if (isAStudyBeingRetrieved())
-    {
-        Settings settings;
-        QString studyInstanceUID = settings.getValue(InputOutputSettings::RetrievingStudy).toString();
-
-        INFO_LOG(QString("Study %1 was being downloaded when Starviewer finished. Its images will be deleted to maintain local cache integrity.")
-                 .arg(studyInstanceUID));
-
-        // The study could have really been fully downloaded and the application have finished just before clearing the setting,
-        // so we must delete the study if it exists in the database.
-        if (studyExists(studyInstanceUID))
-        {
-            deleteStudy(studyInstanceUID);
-        }
-        else
-        {
-            // Check if the directory really exists. It might not exist if not a single image was downloaded.
-            if (QDir().exists(getStudyPath(studyInstanceUID)))
-            {
-                deleteStudyFromHardDisk(studyInstanceUID);
-            }
-        }
-
-        setNoStudyBeingRetrieved();
-    }
-}
-
 LocalDatabaseManager::LastError LocalDatabaseManager::getLastError() const
 {
     return m_lastError;

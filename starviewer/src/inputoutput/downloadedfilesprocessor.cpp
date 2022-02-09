@@ -18,6 +18,7 @@
 #include "directoryutilities.h"
 #include "logging.h"
 #include "patient.h"
+#include "studyoperationsservice.h"
 
 namespace udg {
 
@@ -44,7 +45,7 @@ DownloadedFilesProcessor::~DownloadedFilesProcessor()
 void DownloadedFilesProcessor::beginDownloadStudy(const QString &studyInstanceUid)
 {
     m_studyInstanceUid = studyInstanceUid;
-    m_localDatabaseManager.setStudyBeingRetrieved(studyInstanceUid);
+    StudyOperationsService::instance()->setStudyBeingRetrieved(studyInstanceUid);
 }
 
 void DownloadedFilesProcessor::processFile(const QString &path)
@@ -61,7 +62,7 @@ LocalDatabaseManager::LastError DownloadedFilesProcessor::finishDownloadStudy()
 {
     emit finishDownloadStudyCalled();
     m_thread.wait();
-    m_localDatabaseManager.setNoStudyBeingRetrieved();
+    StudyOperationsService::instance()->setStudyNotBeingRetrieved(m_studyInstanceUid);
 
     return m_localDatabaseManager.getLastError();
 }
@@ -71,7 +72,7 @@ void DownloadedFilesProcessor::cancelDownloadStudy()
     m_thread.quit();
     m_thread.wait();
     deletePartiallyDownloadedStudy();
-    m_localDatabaseManager.setNoStudyBeingRetrieved();
+    StudyOperationsService::instance()->setStudyNotBeingRetrieved(m_studyInstanceUid);
 }
 
 void DownloadedFilesProcessor::deletePartiallyDownloadedStudy()
