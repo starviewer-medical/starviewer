@@ -219,8 +219,6 @@ void WadoSearchRequest::startInternal()
     fullUrl.setQuery(buildQueryString(m_mask));
 
     QNetworkRequest request(fullUrl);
-    request.setRawHeader("Accept", "application/json");
-
     m_reply = m_networkAccessManager->get(request);
 
     emit started();
