@@ -52,6 +52,7 @@ WadoRetrieveStudyOperationResult::WadoRetrieveStudyOperationResult(WadoRetrieveR
 
 WadoRetrieveStudyOperationResult::~WadoRetrieveStudyOperationResult()
 {
+    delete m_request;
 }
 
 StudyOperationResult::OperationType WadoRetrieveStudyOperationResult::getOperationType() const

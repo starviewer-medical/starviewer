@@ -30,6 +30,8 @@
 #include "wadoretrievestudyoperationresult.h"
 #include "wadosearchrequest.h"
 #include "wadosearchstudyoperationresult.h"
+#include "wadostorerequest.h"
+#include "wadostorestudyoperationresult.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -150,6 +152,17 @@ StudyOperationResult* StudyOperationsService::storeInPacs(const PacsDevice &pacs
         StudyOperationResult *result = new DimseStoreStudyOperationResult(job, m_pacsManager);
 
         m_pacsManager->enqueuePACSJob(job);
+
+        emit operationRequested(result);
+
+        return result;
+    }
+    else if (pacs.getType() == PacsDevice::Type::Wado)
+    {
+        WadoStoreRequest *request = new WadoStoreRequest(pacs, seriesList);
+        StudyOperationResult *result = new WadoStoreStudyOperationResult(request);
+
+        m_wadoRequestManager->start(request);
 
         emit operationRequested(result);
 

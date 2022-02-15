@@ -93,6 +93,8 @@ set(SOURCES
     wadoretrievestudyoperationresult.cpp
     wadosearchrequest.cpp
     wadosearchstudyoperationresult.cpp
+    wadostorerequest.cpp
+    wadostorestudyoperationresult.cpp
 )
 
 if(WIN32)
