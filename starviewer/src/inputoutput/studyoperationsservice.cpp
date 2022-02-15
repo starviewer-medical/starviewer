@@ -233,6 +233,8 @@ void StudyOperationsService::deleteStudiesBeingRetrieved()
 void StudyOperationsService::cancelAllOperations()
 {
     m_pacsManager->requestCancelAllPACSJobs();
+    // TODO This method is currently only called when Starviewer is closed. Aparently all Qt network operations are correctly closed then, thus there is no need
+    //      for the moment to cancel WADO requests. This could change in the future, though, if this method is called from another place.
 }
 
 StudyOperationsService::StudyOperationsService(QObject *parent)
