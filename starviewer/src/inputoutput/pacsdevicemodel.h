@@ -17,6 +17,8 @@
 
 #include <QAbstractTableModel>
 
+#include "pacsdevicemanager.h"
+
 namespace udg {
 
 /**
@@ -43,6 +45,13 @@ public:
 
     /// Refreshes the model metadata to update views associated to it.
     void refresh();
+
+    /// Sets a filter to include only some PACS in the model.
+    void setPacsFilter(PacsDeviceManager::PacsFilter filter);
+
+private:
+    /// Filter to include only some PACS in the model.
+    PacsDeviceManager::PacsFilter m_pacsFilter;
 };
 
 } // namespace udg

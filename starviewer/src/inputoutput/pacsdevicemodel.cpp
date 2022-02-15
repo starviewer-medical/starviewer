@@ -15,12 +15,11 @@
 #include "pacsdevicemodel.h"
 
 #include "pacsdevice.h"
-#include "pacsdevicemanager.h"
 
 namespace udg {
 
 PacsDeviceModel::PacsDeviceModel(QObject *parent)
-    : QAbstractTableModel(parent)
+    : QAbstractTableModel(parent), m_pacsFilter(PacsDeviceManager::AllTypes)
 {
 }
 
@@ -32,7 +31,7 @@ int PacsDeviceModel::rowCount(const QModelIndex &parent) const
     }
     else
     {
-        return PacsDeviceManager::getPacsList().size();
+        return PacsDeviceManager::getPacsList(m_pacsFilter).size();
     }
 }
 
@@ -55,9 +54,9 @@ QVariant PacsDeviceModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole || role == Qt::UserRole)
     {
-        PacsDevice pacsDevice = PacsDeviceManager::getPacsList().at(index.row());
+        PacsDevice pacsDevice = PacsDeviceManager::getPacsList(m_pacsFilter).at(index.row());
 
         switch (index.column())
         {
@@ -65,7 +64,15 @@ QVariant PacsDeviceModel::data(const QModelIndex &index, int role) const
             case AeTitleOrBaseUri: return pacsDevice.getType() == PacsDevice::Type::Dimse ? pacsDevice.getAETitle() : pacsDevice.getBaseUri().toString();
             case Institution: return pacsDevice.getInstitution();
             case Description: return pacsDevice.getDescription();
-            case Default: return pacsDevice.isDefault() ? tr("Yes") : tr("No");
+            case Default:
+                if (role == Qt::DisplayRole)
+                {
+                    return pacsDevice.isDefault() ? tr("Yes") : tr("No");
+                }
+                else    // role == Qt::UserRole
+                {
+                    return pacsDevice.isDefault();
+                }
         }
     }
 
@@ -94,6 +101,11 @@ void PacsDeviceModel::refresh()
 {
     beginResetModel();
     endResetModel();
+}
+
+void PacsDeviceModel::setPacsFilter(PacsDeviceManager::PacsFilter filter)
+{
+    m_pacsFilter = filter;
 }
 
 } // namespace udg

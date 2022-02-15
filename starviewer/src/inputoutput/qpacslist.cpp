@@ -14,77 +14,51 @@
 
 #include "qpacslist.h"
 
-#include <QTreeView>
-#include <QList>
-
-#include "pacsdevicemanager.h"
+#include "inputoutputsettings.h"
 #include "pacsdevice.h"
+#include "pacsdevicemodel.h"
+
+#include <QSortFilterProxyModel>
 
 namespace udg {
 
 QPacsList::QPacsList(QWidget *parent)
- : QWidget(parent)
+    : QWidget(parent), m_showQueryPacsDefaultHighlighted(true)
 {
     setupUi(this);
 
-    // La columna PacsId està amagada
-    m_PacsTreeView->setColumnHidden(0, true);
-    // La columna PACSAddress està amagada
-    m_PacsTreeView->setColumnHidden(4, true);
-    // Ordenem per la columna AETitle
-    m_PacsTreeView->sortByColumn(1, Qt::AscendingOrder);
+    m_pacsDeviceModel = new PacsDeviceModel(m_pacsTableView);
+    QSortFilterProxyModel *filterModel = new QSortFilterProxyModel(m_pacsTableView);
+    filterModel->setSourceModel(m_pacsDeviceModel);
+    m_pacsTableView->setModel(filterModel);
 
-    m_pacsFilter = PacsDeviceManager::AllTypes;
-    m_showQueryPacsDefaultHighlighted = true;
+    Settings().restoreColumnsWidths(InputOutputSettings::PacsListColumnWidths, m_pacsTableView);
 
-    connect(m_PacsTreeView, SIGNAL(itemSelectionChanged()), SIGNAL(pacsSelectionChanged()));
+    // Hide PacsId and Default columns
+    m_pacsTableView->setColumnHidden(PacsDeviceModel::PacsId, true);
+    m_pacsTableView->setColumnHidden(PacsDeviceModel::Default, true);
+    // Order by AE Title / Base URI
+    m_pacsTableView->sortByColumn(PacsDeviceModel::AeTitleOrBaseUri, Qt::AscendingOrder);
+
+    connect(m_pacsTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &QPacsList::pacsSelectionChanged);
 
     refresh();
 }
 
 QPacsList::~QPacsList()
 {
+    Settings().saveColumnsWidths(InputOutputSettings::PacsListColumnWidths, m_pacsTableView);
 }
 
-void QPacsList::refresh()
-{
-    QList<PacsDevice> pacsList;
-
-    m_PacsTreeView->clear();
-
-    pacsList = PacsDeviceManager::getPacsList(m_pacsFilter);
-
-    foreach (PacsDevice pacs, pacsList)
-    {
-        QTreeWidgetItem *item = new QTreeWidgetItem(m_PacsTreeView);
-
-        item->setText(0, pacs.getID());
-        item->setText(1, pacs.getAETitle());
-        item->setText(2, pacs.getInstitution());
-        item->setText(3, pacs.getDescription());
-        item->setText(4, pacs.getAddress());
-
-        if (getShowQueryPacsDefaultHighlighted())
-        {
-            item->setSelected(pacs.isDefault());
-        }
-    }
-}
-
-QList<PacsDevice> QPacsList::getSelectedPacs()
+QList<PacsDevice> QPacsList::getSelectedPacs() const
 {
     QList<PacsDevice> selectedPacsList;
-    QList<QTreeWidgetItem*> qPacsList(m_PacsTreeView->selectedItems());
+    QModelIndexList selectedRows = m_pacsTableView->selectionModel()->selectedRows(PacsDeviceModel::PacsId);
 
-    QTreeWidgetItem *item;
-    for (int i = 0; i < qPacsList.count(); i++)
+    for (const QModelIndex &index : selectedRows)
     {
-        PacsDevice pacs;
-        item = qPacsList.at(i);
-        // Fem el query per cercar la informació del PACS
-        pacs = PacsDeviceManager::getPacsDeviceById(item->text(0));
-        // Inserim a la llista
-        selectedPacsList.append(pacs);
+        QString pacsId = m_pacsTableView->model()->data(index).toString();
+        selectedPacsList.append(PacsDeviceManager::getPacsDeviceById(pacsId));
     }
 
     return selectedPacsList;
@@ -92,17 +66,12 @@ QList<PacsDevice> QPacsList::getSelectedPacs()
 
 void QPacsList::clearSelection()
 {
-    m_PacsTreeView->clearSelection();
+    m_pacsTableView->clearSelection();
 }
 
 void QPacsList::setFilterPACSByService(PacsDeviceManager::PacsFilter filter)
 {
-    m_pacsFilter = filter;
-}
-
-PacsDeviceManager::PacsFilter QPacsList::getFilterPACSByService()
-{
-    return m_pacsFilter;
+    m_pacsDeviceModel->setPacsFilter(filter);
 }
 
 void QPacsList::setShowQueryPacsDefaultHighlighted(bool showHighlighted)
@@ -110,17 +79,27 @@ void QPacsList::setShowQueryPacsDefaultHighlighted(bool showHighlighted)
     m_showQueryPacsDefaultHighlighted = showHighlighted;
 }
 
-bool QPacsList::getShowQueryPacsDefaultHighlighted()
+bool QPacsList::getShowQueryPacsDefaultHighlighted() const
 {
     return m_showQueryPacsDefaultHighlighted;
 }
 
-void QPacsList::setDefaultPACS(QTreeWidgetItem *item)
+void QPacsList::refresh()
 {
-    Q_ASSERT(item);
+    m_pacsDeviceModel->refresh();
 
-    PacsDevice pacs = PacsDeviceManager::getPacsDeviceById(item->text(0));
-    pacs.setDefault(item->isSelected());
+    if (getShowQueryPacsDefaultHighlighted())
+    {
+        for (int i = 0; i < m_pacsTableView->model()->rowCount(); i++)
+        {
+            QModelIndex index = m_pacsTableView->model()->index(i, PacsDeviceModel::Default);
+
+            if (m_pacsTableView->model()->data(index, Qt::UserRole).toBool())
+            {
+                m_pacsTableView->selectRow(i);
+            }
+        }
+    }
 }
 
-};
+}

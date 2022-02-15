@@ -50,6 +50,7 @@ const QString InputOutputSettings::CreateDICOMDIRStudyListColumnsWidth(Interface
 const QString InputOutputSettings::CreateDICOMDIRGeometry(InterfaceBase + "qCreateDicomdir/geometry");
 const QString InputOutputSettings::OperationStateColumnsWidth(InterfaceBase + "qOperationState/");
 const QString InputOutputSettings::PACSStudyListColumnsWidth(InterfaceBase + "studyPacsList/");
+const QString InputOutputSettings::PacsListColumnWidths(InterfaceBase + "qPacsList/");
 const QString InputOutputSettings::ConfigurationScreenPACSList(InterfaceBase + "qConfigurationPacsDevice/");
 const QString InputOutputSettings::LocalDatabaseStudyList(InterfaceBase + "studyCacheList/");
 const QString InputOutputSettings::LocalDatabaseSplitterState(InterfaceBase + "queryscreen/StudyTreeSeriesListQSplitterState");
@@ -70,7 +71,6 @@ const QString InputOutputSettings::LocalAETitle(PACSParametersBase + "AETitle");
 const QString InputOutputSettings::PACSConnectionTimeout(PACSParametersBase + "timeout");
 const QString InputOutputSettings::MaximumPACSConnections(PACSParametersBase + "MaxConnects");
 
-//TODO: Clau duplicada a CoreSettings
 const QString InputOutputSettings::PacsListConfigurationSectionName = "PacsList";
 
 const QString DICOMDIRBaseKey("DICOMDIR/");

@@ -96,8 +96,10 @@ void QExporterTool::initialize()
     // Tenim el botó de capturar la image actual clicat
     this->currentImageRadioButtonClicked();
 
-    // No PACS selected by default
-    m_pacsList->clearSelection();
+    // No PACS selected by default and only PACS that accept uploads
+    m_pacsList->setFilterPACSByService(PacsDeviceManager::DimseWithStoreService | PacsDeviceManager::Wado);
+    m_pacsList->setShowQueryPacsDefaultHighlighted(false);
+    m_pacsList->refresh();
 }
 
 void QExporterTool::generateAndStoreNewSeries()
