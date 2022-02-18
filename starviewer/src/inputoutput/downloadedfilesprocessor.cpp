@@ -18,28 +18,34 @@
 #include "directoryutilities.h"
 #include "logging.h"
 #include "patient.h"
+#include "patientfiller.h"
 #include "studyoperationsservice.h"
 
 namespace udg {
 
-DownloadedFilesProcessor::DownloadedFilesProcessor(QObject *parent)
+DownloadedFilesProcessor::DownloadedFilesProcessor(const PacsDevice &pacsDevice, QObject *parent)
     : QObject(parent)
 {
-    m_patientFiller.moveToThread(&m_thread);
+    DICOMSource dicomSource;
+    dicomSource.addRetrievePACS(pacsDevice);
+
+    m_patientFiller = new PatientFiller(dicomSource);
+    m_patientFiller->moveToThread(&m_thread);
     m_thread.start();
 
-    connect(this, &DownloadedFilesProcessor::processFileCalled, &m_patientFiller, &PatientFiller::processDICOMFile);
-    connect(this, &DownloadedFilesProcessor::finishDownloadStudyCalled, &m_patientFiller, &PatientFiller::finishFilesProcessing);
+    connect(this, &DownloadedFilesProcessor::processFileCalled, m_patientFiller, &PatientFiller::processDICOMFile);
+    connect(this, &DownloadedFilesProcessor::finishDownloadStudyCalled, m_patientFiller, &PatientFiller::finishFilesProcessing);
 
-    connect(&m_patientFiller, &PatientFiller::patientProcessed,
+    connect(m_patientFiller, &PatientFiller::patientProcessed,
             &m_localDatabaseManager, static_cast<void(LocalDatabaseManager::*)(Patient*)>(&LocalDatabaseManager::save), Qt::DirectConnection);
-    connect(&m_patientFiller, &PatientFiller::patientProcessed, &m_thread, &QThread::quit, Qt::DirectConnection);
+    connect(m_patientFiller, &PatientFiller::patientProcessed, &m_thread, &QThread::quit, Qt::DirectConnection);
 }
 
 DownloadedFilesProcessor::~DownloadedFilesProcessor()
 {
     m_thread.quit();
     m_thread.wait();
+    delete m_patientFiller;
 }
 
 void DownloadedFilesProcessor::beginDownloadStudy(const QString &studyInstanceUid)

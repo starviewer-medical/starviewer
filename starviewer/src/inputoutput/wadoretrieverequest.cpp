@@ -293,7 +293,7 @@ void WadoRetrieveRequest::onReadyRead()
         }
 
         m_readingState = ReadingState::Empty;
-        m_downloadedFilesProcessor.reset(new DownloadedFilesProcessor());
+        m_downloadedFilesProcessor.reset(new DownloadedFilesProcessor(getPacsDevice()));
         m_downloadedFilesProcessor->beginDownloadStudy(m_studyInstanceUid);
     }
 

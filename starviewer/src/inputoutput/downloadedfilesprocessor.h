@@ -16,11 +16,14 @@
 #define UDG_DOWNLOADEDFILESPROCESSOR_H
 
 #include "localdatabasemanager.h"
-#include "patientfiller.h"
 
 #include <QThread>
 
 namespace udg {
+
+class DICOMTagReader;
+class PacsDevice;
+class PatientFiller;
 
 /**
  * @brief The DownloadedFilesProcessor class does all the processing needed with each file of a study that is downloaded. It runs each file through the
@@ -32,7 +35,7 @@ class DownloadedFilesProcessor : public QObject
 
 public:
     /// Creates the worker thread and the necessary connections.
-    explicit DownloadedFilesProcessor(QObject *parent = nullptr);
+    explicit DownloadedFilesProcessor(const PacsDevice &pacsDevice, QObject *parent = nullptr);
     ~DownloadedFilesProcessor() override;
 
     /// Notifies to this that the study with the given Study Instance UID is being downloaded.
@@ -60,7 +63,7 @@ private:
     void deletePartiallyDownloadedStudy();
 
 private:
-    PatientFiller m_patientFiller;
+    PatientFiller *m_patientFiller;
     LocalDatabaseManager m_localDatabaseManager;
     /// The worker thread where the PatientFiller and the database operations are run.
     QThread m_thread;

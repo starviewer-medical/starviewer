@@ -41,7 +41,7 @@ const QString StarviewerBuildPlatform("Linux");
 #endif
 
 // Indica per aquesta versió d'starviewer quina és la revisió de bd necessària
-const int StarviewerDatabaseRevisionRequired(9595);
+const int StarviewerDatabaseRevisionRequired(9596);
 
 const QString OrganizationNameString("GILab");
 const QString OrganizationDomainString("starviewer.udg.edu");
