@@ -287,7 +287,7 @@ public:
     QString getFilledMaskFields() const;
 
     /// Ens diu si la màscara està buida o no
-    bool isEmpty();
+    bool isEmpty() const;
 
     ///Mètode que a partir d'un estudi/series/image ens retornen la DICOMMask per descarregar o consultar els fills d'aquell objecte. És important que si hem de construir
     ///un DICOMMask a partir d'una imatge aquesta inclogui la informació de la sèrie pare i estudi pare per construir, i en el cas de series contingui l'estudi pare, sinó
