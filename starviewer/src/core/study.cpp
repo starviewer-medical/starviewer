@@ -284,7 +284,7 @@ QDate Study::getDate() const
     return m_date;
 }
 
-QString Study::getDateAsString()
+QString Study::getDateAsString() const
 {
     return m_date.toString(Qt::LocaleDate);
 }
@@ -294,7 +294,7 @@ QTime Study::getTime() const
     return m_time;
 }
 
-QString Study::getTimeAsString()
+QString Study::getTimeAsString() const
 {
     return m_time.toString("HH:mm:ss");
 }

@@ -35,13 +35,8 @@ public:
     /// Returns the PACS with the given id in the database. If there's no PACS with the given id, returns a default PacsDevice.
     PacsDevice query(qlonglong pacsId);
 
-    /// Returns the PACS with the given AETitle, address and query port in the database. If there's no PACS with that data, returns a default PacsDevice.
-    PacsDevice query(const QString &aeTitle, const QString &address, int queryPort);
-
-private:
-    /// Executes the given prepared query and creates and returns the PacsDevice from the result, or a default PacsDevice if there's an error.
-    PacsDevice query(QSqlQuery &query);
-
+    /// Returns the id of the given PACS in the database. If this PACS is not in the database, returns a null QVariant.
+    QVariant queryId(const PacsDevice &pacsDevice);
 };
 
 }

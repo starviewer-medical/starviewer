@@ -14,22 +14,21 @@
 
 #include "qinputoutputlocaldatabasewidget.h"
 
+#include "dicommask.h"
+#include "inputoutputsettings.h"
+#include "logging.h"
+#include "patient.h"
+#include "qcreatedicomdir.h"
+#include "qwidgetselectpacstostoredicomimage.h"
+#include "shortcutmanager.h"
+#include "starviewerapplication.h"
+#include "statswatcher.h"
+#include "studyoperationresult.h"
+#include "studyoperationsservice.h"
+#include "usermessage.h"
+
 #include <QMessageBox>
 #include <QShortcut>
-
-#include "logging.h"
-#include "starviewerapplication.h"
-#include "dicommask.h"
-#include "patient.h"
-#include "statswatcher.h"
-#include "qcreatedicomdir.h"
-#include "inputoutputsettings.h"
-#include "qwidgetselectpacstostoredicomimage.h"
-#include "pacsmanager.h"
-#include "senddicomfilestopacsjob.h"
-#include "retrievedicomfilesfrompacsjob.h"
-#include "shortcutmanager.h"
-#include "usermessage.h"
 
 namespace udg {
 
@@ -101,7 +100,10 @@ void QInputOutputLocalDatabaseWidget::createConnections()
     connect(m_StudyTreeSeriesListQSplitter, SIGNAL(splitterMoved (int, int)), SLOT(qSplitterPositionChanged()));
     connect(m_qwidgetSelectPacsToStoreDicomImage, SIGNAL(selectedPacsToStore()), SLOT(sendSelectedStudiesToSelectedPacs()));
 
-    connect(PacsManagerSingleton::instance(), &PacsManager::newPACSJobEnqueued, this, &QInputOutputLocalDatabaseWidget::newPACSJobEnqueued);
+    // TODO This is only a hack. It should be resolved better with a cache manager. See the original signal in RetrieveDICOMFilesFromPACSJob and the previous
+    //      implementation (look at the full changeset in this commit) for more information.
+    connect(StudyOperationsService::instance(), &StudyOperationsService::localStudyAboutToBeDeleted,
+            this, &QInputOutputLocalDatabaseWidget::removeStudyFromQStudyTreeWidget);
 }
 
 void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
@@ -515,75 +517,51 @@ void QInputOutputLocalDatabaseWidget::qSplitterPositionChanged()
 
 void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
 {
-    foreach (PacsDevice pacsDevice, m_qwidgetSelectPacsToStoreDicomImage->getSelectedPacsToStoreDicomImages())
+    QList<QPair<DicomMask, DICOMSource>> dicomObjectsToSendToPACS = m_studyTreeWidget->getDicomMaskOfSelectedItems();
+
+    for (int index = 0; index < dicomObjectsToSendToPACS.count(); index++)
     {
-        QList<QPair<DicomMask, DICOMSource> > dicomObjectsToSendToPACS = m_studyTreeWidget->getDicomMaskOfSelectedItems();
+        DicomMask dicomMaskToSend = dicomObjectsToSendToPACS.at(index).first;
+        LocalDatabaseManager localDatabaseManager;
+        Patient *patient = localDatabaseManager.retrieve(dicomMaskToSend);
 
-        for (int index = 0; index < dicomObjectsToSendToPACS.count(); index++)
+        if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
         {
-            DicomMask dicomMaskToSend = dicomObjectsToSendToPACS.at(index).first;
-            LocalDatabaseManager localDatabaseManager;
-            Patient *patient = localDatabaseManager.retrieve(dicomMaskToSend);
+            ERROR_LOG(QString("Error a la base de dades intentar obtenir els estudis que s'han d'enviar al PACS, Error: %1; StudyUID: %2")
+                              .arg(localDatabaseManager.getLastError())
+                              .arg(dicomMaskToSend.getStudyInstanceUID()));
 
-            if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-            {
-                ERROR_LOG(QString("Error a la base de dades intentar obtenir els estudis que s'han d'enviar al PACS, Error: %1; StudyUID: %2")
-                                  .arg(localDatabaseManager.getLastError())
-                                  .arg(dicomMaskToSend.getStudyInstanceUID()));
-
-                QString message = tr("There has been a database error while preparing the DICOM files to send to PACS %1. The DICOM files won't be sent.")
-                    .arg(pacsDevice.getAETitle());
-                message += "\n";
-                message += UserMessage::getCloseWindowsAndTryAgainAdvice();
-                message += "\n\n";
-                message += UserMessage::getProblemPersistsAdvice();
-                QMessageBox::critical(this, ApplicationNameString, message);
-            }
-            else
-            {
-                sendDICOMFilesToPACS(pacsDevice, getAllImagesFromPatient(patient));
-            }
-        }
-    }
-}
-
-void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACS(PacsDevice pacsDevice, QList<Image*> images)
-{
-    PACSJobPointer sendDICOMFilesToPACSJob(new SendDICOMFilesToPACSJob(pacsDevice, images));
-    connect(sendDICOMFilesToPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(sendDICOMFilesToPACSJobFinished(PACSJobPointer)));
-    PacsManagerSingleton::instance()->enqueuePACSJob(sendDICOMFilesToPACSJob);
-}
-
-void QInputOutputLocalDatabaseWidget::sendDICOMFilesToPACSJobFinished(PACSJobPointer pacsJob)
-{
-    QSharedPointer<SendDICOMFilesToPACSJob> sendDICOMFilesToPACSJob = pacsJob.objectCast<SendDICOMFilesToPACSJob>();
-
-    if (sendDICOMFilesToPACSJob->getStatus() != PACSRequestStatus::SendOk)
-    {
-        if (sendDICOMFilesToPACSJob->getStatus() == PACSRequestStatus::SendWarningForSomeImages ||
-            sendDICOMFilesToPACSJob->getStatus() == PACSRequestStatus::SendSomeDICOMFilesFailed)
-        {
-            QMessageBox::warning(this, ApplicationNameString, sendDICOMFilesToPACSJob->getStatusDescription());
+            QString message = tr("There has been a database error while preparing the DICOM files to send. The DICOM files won't be sent.");
+            message += "\n";
+            message += UserMessage::getCloseWindowsAndTryAgainAdvice();
+            message += "\n\n";
+            message += UserMessage::getProblemPersistsAdvice();
+            QMessageBox::critical(this, ApplicationNameString, message);
+            delete patient;
         }
         else
         {
-            QMessageBox::critical(this, ApplicationNameString, sendDICOMFilesToPACSJob->getStatusDescription());
+            for (const PacsDevice &pacs : m_qwidgetSelectPacsToStoreDicomImage->getSelectedPacsToStoreDicomImages())
+            {
+                StudyOperationResult *result = StudyOperationsService::instance()->storeInPacs(pacs, patient->getStudies().first());
+
+                // These connections will be deleted when result is destroyed
+                connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &QInputOutputLocalDatabaseWidget::onStorePartialSuccess);
+                connect(result, &StudyOperationResult::finishedWithError, this, &QInputOutputLocalDatabaseWidget::onStoreError);
+                connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
+            }
         }
     }
 }
 
-void QInputOutputLocalDatabaseWidget::newPACSJobEnqueued(PACSJobPointer pacsJob)
+void QInputOutputLocalDatabaseWidget::onStorePartialSuccess(StudyOperationResult *result)
 {
-    // Connectem amb el signal RetrieveDICOMFilesFromPACSJob de que s'esborrarà un estudi de la caché per treure'ls de la QStudyTreeWidget quan se
-    // n'esborrin
-    // TODO: RetrieveDICOMFilesFromPACS no hauria d'emetre aquest signal, hauria de ser una CacheManager d'aquesta manera treuriem la responsabilitat
-    //       de RetrieveDICOMFilesFromPACS de fer-ho, i a més no caldria connectar el signal cada vegada que fan un nou Job. Una vegada s'hagi implementar la
-    //       CacheManager aquest mètode HA DE DESAPAREIXER, quan es tregui aquest mètode recordar a treure l'include a "retrievedicomfilesfrompacsjob.h"
-    if (pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
-    {
-        connect(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>().data(), SIGNAL(studyFromCacheWillBeDeleted(QString)),
-                SLOT(removeStudyFromQStudyTreeWidget(QString)));
-    }
+    QMessageBox::warning(this, ApplicationNameString, result->getErrorText());
+}
+
+void QInputOutputLocalDatabaseWidget::onStoreError(StudyOperationResult *result)
+{
+    QMessageBox::critical(this, ApplicationNameString, result->getErrorText());
 }
 
 bool QInputOutputLocalDatabaseWidget::showDatabaseManagerError(LocalDatabaseManager::LastError error, const QString &doingWhat)

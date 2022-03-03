@@ -12,59 +12,46 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#ifndef UDGQCONFIGURATIONSCREEN_H
-#define UDGQCONFIGURATIONSCREEN_H
+#ifndef UDGPACSQCONFIGURATIONSCREEN_H
+#define UDGPACSQCONFIGURATIONSCREEN_H
 
-#include "ui_qconfigurationscreenbase.h"
+#include "ui_qpacsconfigurationscreenbase.h"
 
 namespace udg {
 
-class PacsDevice;
+class PacsDeviceModel;
 
 /**
     Interfície que permet configurar els paràmetres del PACS
   */
-class QConfigurationScreen : public QWidget, private Ui::QConfigurationScreenBase {
+class QPacsConfigurationScreen : public QWidget, private ::Ui::QPacsConfigurationScreenBase {
 Q_OBJECT
 public:
     /// Constructor de la classe
-    QConfigurationScreen(QWidget *parent = 0);
+    QPacsConfigurationScreen(QWidget *parent = 0);
 
     /// Destructor de classe
-    ~QConfigurationScreen();
+    ~QPacsConfigurationScreen();
 
 private slots:
-    /// Neteja els line edit de la pantalla
-    void clear();
+    /// Shows a dialog to add a new DIMSE PACS.
+    void addDimsePacs();
 
-    /// Slot que dona d'alta el PACS a la la base de dades
-    void addPacs();
+    /// Shows a dialog to add a new WADO PACS.
+    void addWadoPacs();
 
-    /// Slot que s'activa quant seleccionem un Pacs del PacsListView, omplint les caixes de texts amb les dades del Pacs seleccionat
-    void updateSelectedPACSInformation();
-
-    /// Slot que updata les dades d'un pacs
-    void updatePacs();
+    /// Shows a dialog to edit the selected PACS.
+    void editPacs();
 
     /// Slot que esborra el pacs seleccionat
     void deletePacs();
 
-    /// Fa un echo a les dades del PACS que estan als textbox
-    void test();
+    /// Enables or disables Edit and Delete buttons depending on whether a PACS is selected or not.
+    void updateButtonsState();
 
     /// Si el port que s'indica per les connexions entrants del Pacs canvia, comprovem si està en ús per un altra aplicació que no sigui
     ///  l'Starviewer, si està en ús es mostrar un warning al cantó del TextBox
     void checkIncomingConnectionsPortNotInUse();
-
-    /// Slot que s'activa quan es prem els radioButton per indica si està disponible en el PACS el servei de Query/Retrieve
-    void queryRetrieveServiceEnabledChanged();
-
-    /// Slot que s'activa quan es prem els radioButton per indica si està disponible en el PACS el servei de Store
-    void storeServiceEnabledChanged();
-
-    /// Si s'ha indicat que el servei d'store està permés i aquest no té el port configurat al editar el valor del port de Q/R
-    /// li donem per defecte el valor d'aquest
-    void onQueryRetrieveServicePortChanged();
 
     /// Updates for local DICOM configuration settings
     void updateAETitleSetting();
@@ -89,16 +76,6 @@ private:
     /// Crea els input validators necessaris pels diferents camps d'edició.
     void configureInputValidator();
 
-    /// Comprova que ens hagin entrat les dades bàsiques per poguer fer un echo a un PACS.
-    /// Aquestes dades són: que tingui AETitle, que tingui adreça, que tingui un servei activat i un port entre 0 i 65535
-    bool validatePacsDeviceToEcho();
-
-    /// Valida que tinguis les dades per fer un echo invocant el mètode validateBasicPacsDeviceToEcho() i a més comprova que la institució no estigui buida
-    bool validatePacsDeviceToSave();
-
-    /// Emplena el ListView amb les dades dels PACS que tenim guardades a la bd
-    void fillPacsListView();
-
     /// Emplena els textboxs amb les dades del PACS
     void loadPacsDefaults();
 
@@ -108,12 +85,12 @@ private:
     /// Indica si el port per Connexions Entrans del PACS és utilitzat per una altra aplicació
     bool isIncomingConnectionsPortInUseByAnotherApplication();
 
-    /// A partir dels controls de la interfície retorna emplenat un objecte PacsDevice.
-    PacsDevice getPacsDeviceFromControls();
+    /// Refreshes the PACS list in this configuration screen and in the query screen.
+    void refreshPacsList();
 
 private:
-    /// Conté el ID del pacs seleccionat en aquell moment
-    QString m_selectedPacsID;
+    /// The model for the table view.
+    PacsDeviceModel *m_pacsDeviceModel;
 };
 
 };// end namespace udg

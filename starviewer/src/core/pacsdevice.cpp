@@ -14,31 +14,70 @@
 
 #include "pacsdevice.h"
 
-#include "logging.h"
 #include "coresettings.h"
-#include <QStringList>
+#include "logging.h"
 
 namespace udg {
 
+namespace {
+
+const QString DefaultPacsListSeparator("\\\\");
+
+}
+
 PacsDevice::PacsDevice()
+    : m_type(Type::Dimse), m_isQueryRetrieveServiceEnabled(false), m_queryRetrieveServicePort(-1), m_isStoreServiceEnabled(false), m_storeServicePort(-1)
 {
-    m_queryRetrieveServicePort = -1;
-    m_storeServicePort = -1;
 }
 
-void PacsDevice::setAddress(const QString &address)
+const QString& PacsDevice::getID() const
 {
-    m_address = address;
+    return m_id;
 }
 
-QString PacsDevice::getAddress() const
+void PacsDevice::setID(QString id)
+{
+    m_id = std::move(id);
+}
+
+PacsDevice::Type PacsDevice::getType() const
+{
+    return m_type;
+}
+
+void PacsDevice::setType(Type type)
+{
+    m_type = type;
+}
+
+const QString& PacsDevice::getAETitle() const
+{
+    return m_AETitle;
+}
+
+void PacsDevice::setAETitle(QString aeTitle)
+{
+    m_AETitle = std::move(aeTitle);
+}
+
+const QString& PacsDevice::getAddress() const
 {
     return m_address;
 }
 
-void PacsDevice::setQueryRetrieveServicePort(int queryRetrieveServicePort)
+void PacsDevice::setAddress(QString address)
 {
-    m_queryRetrieveServicePort = queryRetrieveServicePort;
+    m_address = std::move(address);
+}
+
+bool PacsDevice::isQueryRetrieveServiceEnabled() const
+{
+    return m_isQueryRetrieveServiceEnabled;
+}
+
+void PacsDevice::setQueryRetrieveServiceEnabled(bool enabled)
+{
+    m_isQueryRetrieveServiceEnabled = enabled;
 }
 
 int PacsDevice::getQueryRetrieveServicePort() const
@@ -46,44 +85,75 @@ int PacsDevice::getQueryRetrieveServicePort() const
     return m_queryRetrieveServicePort;
 }
 
-void PacsDevice::setAETitle(const QString &AETitle)
+void PacsDevice::setQueryRetrieveServicePort(int port)
 {
-    m_AETitle = AETitle;
+    m_queryRetrieveServicePort = port;
 }
 
-QString PacsDevice::getAETitle() const
+bool PacsDevice::isStoreServiceEnabled() const
 {
-    return m_AETitle;
+    return m_isStoreServiceEnabled;
 }
 
-void PacsDevice::setInstitution(const QString &institution)
+void PacsDevice::setStoreServiceEnabled(bool enabled)
 {
-    m_institution = institution;
+    m_isStoreServiceEnabled = enabled;
 }
 
-QString PacsDevice::getInstitution() const
+int PacsDevice::getStoreServicePort() const
+{
+    return m_storeServicePort;
+}
+
+void PacsDevice::setStoreServicePort(int port)
+{
+    m_storeServicePort = port;
+}
+
+const QUrl& PacsDevice::getBaseUri() const
+{
+    return m_baseUri;
+}
+
+void PacsDevice::setBaseUri(QUrl baseUri)
+{
+    m_baseUri = std::move(baseUri);
+}
+
+const QString& PacsDevice::getInstitution() const
 {
     return m_institution;
 }
 
-void PacsDevice::setLocation(const QString &location)
+void PacsDevice::setInstitution(QString institution)
 {
-    m_location = location;
+    m_institution = std::move(institution);
 }
 
-QString PacsDevice::getLocation() const
+const QString& PacsDevice::getLocation() const
 {
     return m_location;
 }
 
-void PacsDevice::setDescription(const QString &description)
+void PacsDevice::setLocation(QString location)
 {
-    m_description = description;
+    m_location = std::move(location);
 }
 
-QString PacsDevice::getDescription() const
+const QString& PacsDevice::getDescription() const
 {
     return m_description;
+}
+
+void PacsDevice::setDescription(QString description)
+{
+    m_description = std::move(description);
+}
+
+bool PacsDevice::isDefault() const
+{
+    QStringList pacsList = getDefaultPACSKeyNamesList();
+    return pacsList.contains(getKeyName());
 }
 
 void PacsDevice::setDefault(bool isDefault)
@@ -98,7 +168,7 @@ void PacsDevice::setDefault(bool isDefault)
         {
             Settings settings;
             QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
-            value += keyName + "//";
+            value += keyName + DefaultPacsListSeparator;
             settings.setValue(CoreSettings::DefaultPACSListToQuery, value);
         }
     }
@@ -107,143 +177,73 @@ void PacsDevice::setDefault(bool isDefault)
         // Eliminar
         Settings settings;
         QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
-        value.remove(keyName + "//");
+        value.remove(keyName + DefaultPacsListSeparator);
         settings.setValue(CoreSettings::DefaultPACSListToQuery, value);
     }
 }
 
-bool PacsDevice::isDefault() const
-{
-    QStringList pacsList = getDefaultPACSKeyNamesList();
-    if (pacsList.contains(getKeyName()))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void PacsDevice::setID(const QString &id)
-{
-    m_id = id;
-}
-
-QString PacsDevice::getID() const
-{
-    return m_id;
-}
-
-/// Assigna/Retorna si podem fer consultes/descarregues al PACS
-void PacsDevice::setQueryRetrieveServiceEnabled(bool isQueryRetrieveServiceEnabled)
-{
-    m_isQueryRetrieveServiceEnabled = isQueryRetrieveServiceEnabled;
-}
-
-bool PacsDevice::isQueryRetrieveServiceEnabled() const
-{
-    return m_isQueryRetrieveServiceEnabled;
-}
-
-void PacsDevice::setStoreServiceEnabled(bool isStoreServiceEnabled)
-{
-    m_isStoreServiceEnabled = isStoreServiceEnabled;
-}
-
-bool PacsDevice::isStoreServiceEnabled() const
-{
-    return m_isStoreServiceEnabled;
-}
-
-void PacsDevice::setStoreServicePort(int storeServicePort)
-{
-    m_storeServicePort = storeServicePort;
-}
-
-int PacsDevice::getStoreServicePort() const
-{
-    return m_storeServicePort;
-}
-
 bool PacsDevice::isEmpty() const
 {
-    if (m_AETitle.isEmpty() &&
-        m_address.isEmpty() &&
-        m_description.isEmpty() &&
-        m_institution.isEmpty() &&
-        m_location.isEmpty() &&
-        m_id.isEmpty())
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return *this == PacsDevice();
 }
 
 bool PacsDevice::isSamePacsDevice(const PacsDevice &pacsDevice) const
 {
-    return m_AETitle == pacsDevice.getAETitle()
-        && m_address == pacsDevice.getAddress()
-        && m_queryRetrieveServicePort == pacsDevice.getQueryRetrieveServicePort();
+    return (m_type == Type::Dimse
+            && m_AETitle == pacsDevice.getAETitle()
+            && m_address == pacsDevice.getAddress()
+            && m_queryRetrieveServicePort == pacsDevice.getQueryRetrieveServicePort())
+        || (m_type == Type::Wado
+            && m_baseUri == pacsDevice.getBaseUri());
 }
 
-bool PacsDevice::operator ==(const PacsDevice &device) const
+bool PacsDevice::operator==(const PacsDevice &pacsDevice) const
 {
-    return m_AETitle == device.m_AETitle
-        && m_address == device.m_address
-        && m_description == device.m_description
-        && m_institution == device.m_institution
-        && m_location == device.m_location
-        && m_id == device.m_id
-        && m_isQueryRetrieveServiceEnabled == device.m_isQueryRetrieveServiceEnabled
-        && m_queryRetrieveServicePort == device.m_queryRetrieveServicePort
-        && m_isStoreServiceEnabled == device.m_isStoreServiceEnabled
-        && m_storeServicePort == device.m_storeServicePort;
+    return m_id == pacsDevice.m_id
+        && m_type == pacsDevice.m_type
+        && m_AETitle == pacsDevice.m_AETitle
+        && m_address == pacsDevice.m_address
+        && m_isQueryRetrieveServiceEnabled == pacsDevice.m_isQueryRetrieveServiceEnabled
+        && m_queryRetrieveServicePort == pacsDevice.m_queryRetrieveServicePort
+        && m_isStoreServiceEnabled == pacsDevice.m_isStoreServiceEnabled
+        && m_storeServicePort == pacsDevice.m_storeServicePort
+        && m_baseUri == pacsDevice.m_baseUri
+        && m_location == pacsDevice.m_location
+        && m_institution == pacsDevice.m_institution
+        && m_description == pacsDevice.m_description;
 }
 
 QString PacsDevice::getKeyName() const
 {
-    return m_AETitle + m_address + ":" + QString::number(m_queryRetrieveServicePort);
+    if (m_type == Type::Dimse)
+    {
+        return m_AETitle + m_address + ":" + QString::number(m_queryRetrieveServicePort);
+    }
+    else // m_type == Type::Wado
+    {
+        return m_baseUri.toString();
+    }
 }
 
 QStringList PacsDevice::getDefaultPACSKeyNamesList() const
 {
+    const static QString OldSeparator("//");
+
     Settings settings;
-    QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
-    QStringList pacsList = value.split("//", QString::SkipEmptyParts);
+    QString listString = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
+
+    // Migrate from old format to new if needed
+    if (listString.endsWith(OldSeparator))
+    {
+        listString = listString.split(OldSeparator).join(DefaultPacsListSeparator);
+        settings.setValue(CoreSettings::DefaultPACSListToQuery, listString);
+    }
+
+    QStringList pacsList = listString.split(DefaultPacsListSeparator, QString::SkipEmptyParts);
 
     if (pacsList.isEmpty())
     {
-        // Migració de dades. Si encara no tenim definits els PACS per defecte en el nou format, obtenim els PACS per defecte
-        // del format antic, és a dir, a partir dels elements amb els valors "default" = "S" de la llista de PACS
-        // Un cop llegits, els escrivim en el nou format
-        Settings::SettingListType list = settings.getList(CoreSettings::PacsListConfigurationSectionName);
-        foreach (Settings::SettingsListItemType item, list)
-        {
-            // El camp "default" té aquesta clau
-            if (item.contains("."))
-            {
-                if (item.value(".").toString() == "S")
-                {
-                    // Hem de fer servir els mateixos camps i format que al mètode PacsDevice::getKeyName()
-                    pacsList << item.value("AETitle").toString() + item.value("PacsHostname").toString() + ":" + item.value("PacsPort").toString();
-                }
-            }
-        }
-        if (pacsList.isEmpty())
-        {
-            INFO_LOG("No hi ha PACS per defecte definits en el nou format i tampoc s'han trobat de definits en l'antic format");
-        }
-        else
-        {
-            INFO_LOG("No hi ha PACS per defecte definits en el nou format. Els obtenim del format antic i els migrem al nou format. Són aquests: " +
-                     pacsList.join("//") + "//");
-            Settings settings;
-            settings.setValue(CoreSettings::DefaultPACSListToQuery, pacsList.join("//") + "//");
-        }
+        INFO_LOG("No default PACS.");
     }
 
     return pacsList;

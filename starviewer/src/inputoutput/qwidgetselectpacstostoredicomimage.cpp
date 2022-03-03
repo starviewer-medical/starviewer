@@ -28,7 +28,7 @@ QWidgetSelectPacsToStoreDicomImage::QWidgetSelectPacsToStoreDicomImage(QWidget *
     createConnections();
 
     /// Indiquem que només volem que es mostrin els PACS que tinguin configurat el servei Store
-    m_pacsNodeList->setFilterPACSByService(PacsDeviceManager::PacsWithStoreServiceEnabled);
+    m_pacsNodeList->setFilterPACSByService(PacsDeviceManager::DimseWithStoreService | PacsDeviceManager::Wado);
     m_pacsNodeList->setShowQueryPacsDefaultHighlighted(false);
 }
 

@@ -18,7 +18,6 @@
 
 #include <QHeaderView>
 #include <QSplitter>
-#include <QTreeWidget>
 #include <QVariant>
 
 namespace udg {
@@ -90,40 +89,6 @@ void Settings::setListItem(int index, const QString &key, const SettingsListItem
 void Settings::removeListItem(const QString &key, int index)
 {
     m_settings->removeListItem(key, index);
-}
-
-void Settings::saveColumnsWidths(const QString &key, const QTreeWidget *treeWidget)
-{
-    Q_ASSERT(treeWidget);
-
-    int columnCount = treeWidget->columnCount();
-
-    for (int column = 0; column < columnCount; column++)
-    {
-        QString columnKey = key + "/columnWidth" + QString::number(column);
-        this->setValue(columnKey, treeWidget->columnWidth(column));
-    }
-}
-
-void Settings::restoreColumnsWidths(const QString &key, QTreeWidget *treeWidget)
-{
-    Q_ASSERT(treeWidget);
-
-    int columnCount = treeWidget->columnCount();
-
-    for (int column = 0; column < columnCount; column++)
-    {
-        QString columnKey = key + "/columnWidth" + QString::number(column);
-
-        if (!this->contains(columnKey))
-        {
-            treeWidget->resizeColumnToContents(column);
-        }
-        else
-        {
-            treeWidget->header()->resizeSection(column, this->getValue(columnKey).toInt());
-        }
-    }
 }
 
 void Settings::saveGeometry(const QString &key, const QWidget *widget)

@@ -95,23 +95,11 @@ public:
     /// Returns true if at the end there's enough space and false otherwise.
     bool thereIsAvailableSpaceOnHardDisk();
 
-    /// Saves a setting to know that a study with the given UID is being retrieved. This is saved in order to delete a half-downloaded study in case the
-    /// application crashes in the middle of a download. Note: only one study at a time can be marked as being retrieved.
-    /// TODO should this really be here?
-    void setStudyBeingRetrieved(const QString &studyInstanceUID);
-    /// Clears the setting set in the above method to indicated that no study is being retrieved.
-    /// TODO should this really be here?
-    void setNoStudyBeingRetrieved();
-    /// Return true if a study is being retrieved.
-    /// TODO should this really be here?
-    bool isAStudyBeingRetrieved() const;
-    /// If there is a study marked as being retrieved, this method will delete its images and leave the database in a consistent state. This method is intended
-    /// to delete a half-downloaded study in case the application crashes in the middle of a download. It should be called at the start of the application.
-    /// TODO should this really be here?
-    void deleteStudyBeingRetrieved();
-
     /// Returns the last error encountered.
     LastError getLastError() const;
+
+    /// Deletes the study with the given UID from the disk.
+    void deleteStudyFromHardDisk(const QString &studyInstanceUID);
 
 public slots:
     /// Saves the given patient to the database, inserting or updating also the associated studies, series and images.
@@ -128,8 +116,6 @@ private:
     /// Returns all the studies sorted by last access date.
     QList<Study*> getAllStudiesOrderedByLastAccessDate();
 
-    /// Deletes the study with the given UID from the disk.
-    void deleteStudyFromHardDisk(const QString &studyInstanceUID);
     /// Deletes the series with the given UID from the study with the given UID from the disk.
     void deleteSeriesFromHardDisk(const QString &studyInstanceUID, const QString &seriesInstanceUID);
 

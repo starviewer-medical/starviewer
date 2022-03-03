@@ -1,6 +1,6 @@
 /*@
     "name": "test_PacsDevice",
-    "requirements": ["archive.dimse"]
+    "requirements": ["archive.dimse", "archive.wado"]
  */
 
 #include "autotest.h"
@@ -42,6 +42,15 @@ void test_PacsDevice::isSamePacsDevice_ShouldCheckIfIsSamePacs_data()
         << PACSDeviceTestHelper::createPACSDevice("1", "DCM4CHE", "9.9.9.9", 4006) << false;
     QTest::newRow("PACS with same address, queryPort, ID and different AETtitle")  << PACSDeviceTestHelper::createPACSDevice("1", "DCM4CHE", "1.1.1.1", 4006)
         << PACSDeviceTestHelper::createPACSDevice("1", "TEST", "1.1.1.1", 4006) << false;
+
+    QTest::newRow("WADO PACS with same ID and base URI") << PACSDeviceTestHelper::createWadoPacsDevice("1", "https://example.com/wado/")
+                                                         << PACSDeviceTestHelper::createWadoPacsDevice("1", "https://example.com/wado/") << true;
+    QTest::newRow("WADO PACS with same ID and different base URI") << PACSDeviceTestHelper::createWadoPacsDevice("1", "https://example.com/wado/")
+                                                                   << PACSDeviceTestHelper::createWadoPacsDevice("1", "https://exemple.cat/wado/") << false;
+    QTest::newRow("WADO PACS with different ID and same base URI") << PACSDeviceTestHelper::createWadoPacsDevice("1", "https://example.com/wado/")
+                                                                   << PACSDeviceTestHelper::createWadoPacsDevice("2", "https://example.com/wado/") << true;
+    QTest::newRow("WADO PACS with different ID and base URI") << PACSDeviceTestHelper::createWadoPacsDevice("1", "https://example.com/wado/")
+                                                              << PACSDeviceTestHelper::createWadoPacsDevice("2", "https://exemple.cat/wado/") << false;
 }
 
 void test_PacsDevice::isSamePacsDevice_ShouldCheckIfIsSamePacs()

@@ -30,6 +30,7 @@ INITIALIZE_EASYLOGGINGPP
 #include "applicationtranslationsloader.h"
 
 #include "coresettings.h"
+#include "externalstudyrequestmanager.h"
 #include "inputoutputsettings.h"
 #include "interfacesettings.h"
 #include "shortcuts.h"
@@ -262,6 +263,11 @@ int main(int argc, char *argv[])
             udg::QApplicationMainWindow *mainWin = new udg::QApplicationMainWindow;
             // Fem el connect per rebre els arguments de les altres instàncies
             QObject::connect(&app, SIGNAL(messageReceived(QString)), StarviewerSingleApplicationCommandLineSingleton::instance(), SLOT(parseAndRun(QString)));
+
+#ifndef STARVIEWER_LITE
+            // Start the RIS listener
+            udg::ExternalStudyRequestManager::instance()->listen();
+#endif
 
             INFO_LOG("Creada finestra principal");
 

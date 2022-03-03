@@ -100,4 +100,10 @@
         <upgradeCommand>COMMIT;</upgradeCommand>
         <upgradeCommand>PRAGMA foreign_keys=ON;</upgradeCommand>
     </upgradeDatabaseToRevision>
+    <upgradeDatabaseToRevision updateToRevision="9596">
+        <upgradeCommand>ALTER TABLE PACSRetrievedImages ADD COLUMN Type TEXT;</upgradeCommand>
+        <upgradeCommand>ALTER TABLE PACSRetrievedImages ADD COLUMN BaseUri TEXT;</upgradeCommand>
+        <upgradeCommand>UPDATE PACSRetrievedImages SET Type = 'DIMSE';</upgradeCommand>
+        <upgradeCommand>CREATE UNIQUE INDEX IndexPacsDevice_BaseUri ON PACSRetrievedImages(BaseUri);</upgradeCommand>
+    </upgradeDatabaseToRevision>
 </upgradeDatabase>

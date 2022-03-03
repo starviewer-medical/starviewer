@@ -74,8 +74,6 @@ const QString CoreSettings::QDICOMDumpBrowserGeometry("QDICOMDumpBrowserGeometry
 
 //Llista de PACS per defecte
 const QString CoreSettings::DefaultPACSListToQuery("PACS/defaultPACSListToQuery");
-//TODO:Aquesta clau està duplicada a InputOutputSettings
-const QString CoreSettings::PacsListConfigurationSectionName = "PacsList";
 
 const QString CoreSettings::ExternalApplicationsConfigurationSectionName = "ExternalApplications";
 

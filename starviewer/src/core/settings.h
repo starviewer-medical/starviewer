@@ -20,7 +20,6 @@
 #include <QVariant> // included for convenience: any class that reads or writes settings will need to include it anyway
 
 class QSplitter;
-class QTreeWidget;
 class QWidget;
 
 namespace udg {
@@ -82,11 +81,13 @@ public:
 
     // Methods to save and restore geometry of some widgets
 
-    /// Saves column widths from the given QTreeWidget under the given key. The width of each column is stored under the subkey columnWidthX, with X being the
-    /// column number.
-    void saveColumnsWidths(const QString &key, const QTreeWidget *treeWidget);
-    /// Restores column widths to the given QTreeWidget from values under the given key.
-    void restoreColumnsWidths(const QString &key, QTreeWidget *treeWidget);
+    /// Saves column widths from the given widget (QTableView/Widget or QTreeView/Widget) under the given key. The width of each column is stored under the
+    /// subkey columnWidthX, with X being the column number.
+    template<class C>
+    void saveColumnsWidths(const QString &key, const C *widget);
+    /// Restores column widths to the given widget (QTableView/Widget or QTreeView/Widget) from values under the given key.
+    template<class C>
+    void restoreColumnsWidths(const QString &key, C *widget);
 
     /// Saves the geometry of the given widget under the given key.
     void saveGeometry(const QString &key, const QWidget *widget);
@@ -112,5 +113,7 @@ private:
 } // End namespace udg
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(udg::Settings::Properties)
+
+#include "settings.tpp"
 
 #endif

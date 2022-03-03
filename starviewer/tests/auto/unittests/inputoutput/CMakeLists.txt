@@ -2,6 +2,7 @@ set(SOURCES
     test_cachetest.cpp
     test_databaseconnection.cpp
     test_dicomdirburningapplicationtest.cpp
+    test_dicomjsondecoder.cpp
     test_dicommask.cpp
     test_echotopacs.cpp
     test_echotopacstest.cpp

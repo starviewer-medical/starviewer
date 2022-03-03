@@ -34,10 +34,41 @@
 #include "portinuse.h"
 #include "dicomsource.h"
 #include "usermessage.h"
+#include "studyoperationsservice.h"
 
 namespace udg {
 
-RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, RetrievePriorityJob retrievePriorityJob, Study *studyToRetrieveDICOMFiles, 
+namespace {
+
+// Copies basic information from the given Study to a new Study instance.
+Study* copyBasicStudyInformation(const Study *studyToCopy)
+{
+    Study *copiedStudy = new Study();
+    Patient *copiedPatient = new Patient();
+
+    copiedPatient->setID(studyToCopy->getParentPatient()->getID());
+    copiedPatient->setFullName(studyToCopy->getParentPatient()->getFullName());
+
+    copiedStudy->setParentPatient(copiedPatient);
+    copiedStudy->setInstanceUID(studyToCopy->getInstanceUID());
+    copiedStudy->setID(studyToCopy->getID());
+    copiedStudy->setDateTime(studyToCopy->getDateAsString(), studyToCopy->getTimeAsString());
+    copiedStudy->setDescription(studyToCopy->getDescription());
+    copiedStudy->setAccessionNumber(studyToCopy->getAccessionNumber());
+
+    foreach(QString modality, studyToCopy->getModalities())
+    {
+        copiedStudy->addModality(modality);
+    }
+
+    copiedStudy->setDICOMSource(studyToCopy->getDICOMSource());
+
+    return copiedStudy;
+}
+
+}
+
+RetrieveDICOMFilesFromPACSJob::RetrieveDICOMFilesFromPACSJob(PacsDevice pacsDevice, RetrievePriorityJob retrievePriorityJob, const Study *studyToRetrieveDICOMFiles,
     const QString &seriesInstanceUIDToRetrieve, const QString &sopInstanceUIDToRetrieve)
  : PACSJob(pacsDevice)
 {
@@ -62,9 +93,19 @@ PACSJob::PACSJobType RetrieveDICOMFilesFromPACSJob::getPACSJobType()
     return PACSJob::RetrieveDICOMFilesFromPACSJobType;
 }
 
-Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles()
+const Study* RetrieveDICOMFilesFromPACSJob::getStudyToRetrieveDICOMFiles() const
 {
     return m_studyToRetrieveDICOMFiles;
+}
+
+const QString& RetrieveDICOMFilesFromPACSJob::getSeriesInstanceUidToRetrieve() const
+{
+    return m_seriesInstanceUIDToRetrieve;
+}
+
+const QString& RetrieveDICOMFilesFromPACSJob::getSopInstanceUidToRetrieve() const
+{
+    return m_SOPInstanceUIDToRetrieve;
 }
 
 void RetrieveDICOMFilesFromPACSJob::run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread)
@@ -117,7 +158,7 @@ void RetrieveDICOMFilesFromPACSJob::run(ThreadWeaver::JobPointer self, ThreadWea
         // Connexions per finalitzar els threads
         connect(&patientFiller, SIGNAL(patientProcessed(Patient*)), &fillersThread, SLOT(quit()), Qt::DirectConnection);
 
-        localDatabaseManager.setStudyBeingRetrieved(m_studyToRetrieveDICOMFiles->getInstanceUID());
+        StudyOperationsService::instance()->setStudyBeingRetrieved(m_studyToRetrieveDICOMFiles->getInstanceUID());
         fillersThread.start();
 
         m_retrieveRequestStatus = m_retrieveDICOMFilesFromPACS->retrieve(m_studyToRetrieveDICOMFiles->getInstanceUID(), m_seriesInstanceUIDToRetrieve,
@@ -160,7 +201,7 @@ void RetrieveDICOMFilesFromPACSJob::run(ThreadWeaver::JobPointer self, ThreadWea
             deleteRetrievedDICOMFilesIfStudyNotExistInDatabase();
         }
 
-        localDatabaseManager.setNoStudyBeingRetrieved();
+        StudyOperationsService::instance()->setStudyNotBeingRetrieved(m_studyToRetrieveDICOMFiles->getInstanceUID());
     }
 }
 
@@ -350,31 +391,6 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
     }
 
     return message;
-}
-
-Study* RetrieveDICOMFilesFromPACSJob::copyBasicStudyInformation(Study *studyToCopy)
-{
-    Study *copiedStudy = new Study();
-    Patient *copiedPatient = new Patient();
-
-    copiedPatient->setID(studyToCopy->getParentPatient()->getID());
-    copiedPatient->setFullName(studyToCopy->getParentPatient()->getFullName());
-
-    copiedStudy->setParentPatient(copiedPatient);
-    copiedStudy->setInstanceUID(studyToCopy->getInstanceUID());
-    copiedStudy->setID(studyToCopy->getID());
-    copiedStudy->setDateTime(studyToCopy->getDateAsString(), studyToCopy->getTimeAsString());
-    copiedStudy->setDescription(studyToCopy->getDescription());
-    copiedStudy->setAccessionNumber(studyToCopy->getAccessionNumber());
-
-    foreach(QString modality, studyToCopy->getModalities())
-    {
-        copiedStudy->addModality(modality);
-    }
-
-    copiedStudy->setDICOMSource(studyToCopy->getDICOMSource());
-
-    return copiedStudy;
 }
 
 DICOMSource RetrieveDICOMFilesFromPACSJob::getDICOMSourceRetrieveFiles()

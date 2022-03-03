@@ -16,27 +16,26 @@
 #define UDGECHOTOPACSTEST_H
 
 #include "diagnosistest.h"
-#include "diagnosistestresult.h"
 #include "diagnosistestfactoryregister.h"
-#include "pacsdevice.h"
-#include "echotopacs.h"
 
 namespace udg {
+
+class PacsDevice;
 
 class EchoToPACSTest : public DiagnosisTest {
 Q_OBJECT
 public:
     EchoToPACSTest(QObject *parent = 0);
-    ~EchoToPACSTest();
+    ~EchoToPACSTest() override;
 
-    DiagnosisTestResult run();
+    DiagnosisTestResult run() override;
 
     ///Retorna descripcio del test
     QString getDescription() const override;
 
 protected:
     virtual QList<PacsDevice> getPacsDeviceList();
-    virtual EchoToPACS::EchoRequestStatus echo(const PacsDevice &pacs);
+    virtual DiagnosisTestProblem echo(const PacsDevice &pacs);
 };
 
 static DiagnosisTestFactoryRegister<EchoToPACSTest> registerEchoToPACSTest("EchoToPACSTest");

@@ -19,17 +19,16 @@
 #include "localdatabasemanager.h"
 #include "logging.h"
 #include "pacsdevicemanager.h"
-#include "pacsmanager.h"
 #include "patient.h"
-#include "querypacsjob.h"
-#include "study.h"
+#include "settings.h"
+#include "studyoperationresult.h"
+#include "studyoperationsservice.h"
 #include "volumehelper.h"
 
 namespace udg {
 
 RelatedStudiesManager::RelatedStudiesManager()
 {
-    m_pacsManager = new PacsManager();
     m_studyInstanceUIDOfStudyToFindRelated = "invalid";
 
     Settings settings;
@@ -63,8 +62,9 @@ void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate
 {
     initializeQuery();
 
-    QList<PacsDevice> pacsDeviceListToQuery = PacsDeviceManager().getPACSList(PacsDeviceManager::PacsWithQueryRetrieveServiceEnabled, true);
-    pacsDeviceListToQuery = PacsDeviceManager::removeDuplicateSamePACS(pacsDeviceListToQuery + getPACSRetrievedStudiesOfPatient(patient));
+    QList<PacsDevice> pacsDeviceListToQuery =
+            PacsDeviceManager::getPacsList(PacsDeviceManager::DimseWithQueryRetrieveService | PacsDeviceManager::Wado | PacsDeviceManager::OnlyDefault);
+    pacsDeviceListToQuery = PacsDeviceManager::removeDuplicatePacsFromList(pacsDeviceListToQuery + getPACSRetrievedStudiesOfPatient(patient));
 
     if (pacsDeviceListToQuery.count() == 0)
     {
@@ -95,7 +95,9 @@ void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate
         {
             foreach (DicomMask queryDicomMask, queryDicomMasksList)
             {
-                enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer(new QueryPacsJob(pacsDevice, queryDicomMask, QueryPacsJob::study)));
+                StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(pacsDevice, queryDicomMask,
+                                                                                              StudyOperations::TargetResource::Studies);
+                addPendingQuery(result);
             }
         }
     }
@@ -147,24 +149,25 @@ void RelatedStudiesManager::initializeQuery()
 
     /// Fem neteja de consultes anteriors
     deleteQueryResults();
-    m_pacsDeviceIDErrorEmited.clear();
 }
 
-void RelatedStudiesManager::enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPACSJob)
+void RelatedStudiesManager::addPendingQuery(StudyOperationResult *result)
 {
-    connect(queryPACSJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(queryPACSJobFinished(PACSJobPointer)));
-    connect(queryPACSJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(queryPACSJobCancelled(PACSJobPointer)));
+    // This connections will be deleted when result is destroyed
+    connect(result, &StudyOperationResult::finishedSuccessfully, this, &RelatedStudiesManager::mergeStudiesFromQuery);
+    connect(result, &StudyOperationResult::finishedWithError, this, &RelatedStudiesManager::onQueryError);
+    connect(result, &StudyOperationResult::cancelled, this, &RelatedStudiesManager::onQueryCancelled);
+    connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
 
-    m_pacsManager->enqueuePACSJob(queryPACSJob);
-    m_queryPACSJobPendingExecuteOrExecuting.insert(queryPACSJob->getPACSJobID(), queryPACSJob);
+    m_pendingQueryResults.insert(result);
 }
 
 void RelatedStudiesManager::cancelCurrentQuery()
 {
-    foreach (PACSJobPointer queryPACSJob, m_queryPACSJobPendingExecuteOrExecuting)
+    for (auto it = m_pendingQueryResults.begin(); it != m_pendingQueryResults.end(); )
     {
-        m_pacsManager->requestCancelPACSJob(queryPACSJob);
-        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
+        (*it)->cancel();
+        it = m_pendingQueryResults.erase(it);
     }
 
     m_studyInstanceUIDOfStudyToFindRelated = "invalid";
@@ -172,102 +175,14 @@ void RelatedStudiesManager::cancelCurrentQuery()
 
 bool RelatedStudiesManager::isExecutingQueries()
 {
-    return !m_queryPACSJobPendingExecuteOrExecuting.isEmpty();
+    return !m_pendingQueryResults.empty();
 }
 
-void RelatedStudiesManager::queryPACSJobCancelled(PACSJobPointer pacsJob)
+void RelatedStudiesManager::mergeStudiesFromQuery(StudyOperationResult *result)
 {
-    // Aquest slot també serveix per si alguna altre classe ens cancel·la un PACSJob nostre per a que ens n'assabentem
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
-
-    if (queryPACSJob.isNull())
+    for (Patient *patient : result->getStudies())
     {
-        ERROR_LOG("El PACSJob que s'ha cancel·lat no es un QueryPACSJob");
-    }
-    else
-    {
-        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
-
-        if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
-        {
-            queryFinished();
-        }
-    }
-}
-
-void RelatedStudiesManager::queryPACSJobFinished(PACSJobPointer pacsJob)
-{
-    QSharedPointer<QueryPacsJob> queryPACSJob = pacsJob.objectCast<QueryPacsJob>();
-
-    if (queryPACSJob.isNull())
-    {
-        ERROR_LOG("El PACSJob que ha finalitzat no es un QueryPACSJob");
-    }
-    else
-    {
-        if (queryPACSJob->getStatus() == PACSRequestStatus::QueryOk)
-        {
-            mergeFoundStudiesInQuery(pacsJob);
-        }
-        else if (queryPACSJob->getStatus() != PACSRequestStatus::QueryCancelled)
-        {
-            errorQueringPACS(pacsJob);
-        }
-
-        m_queryPACSJobPendingExecuteOrExecuting.remove(queryPACSJob->getPACSJobID());
-
-        if (m_queryPACSJobPendingExecuteOrExecuting.isEmpty())
-        {
-            queryFinished();
-        }
-    }
-}
-
-void RelatedStudiesManager::onStudyRetrieveStarted(void *requester, PACSJobPointer pacsJob)
-{
-    if (requester == this)
-    {
-        emit studyRetrieveStarted(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-    }
-}
-
-void RelatedStudiesManager::onStudyRetrieveFinished(void *requester, PACSJobPointer pacsJob)
-{
-    if (requester == this)
-    {
-        emit studyRetrieveFinished(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-        // Now that the study is downloaded and saved in the database this should go through the first branch
-        loadStudy(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles());
-    }
-}
-
-void RelatedStudiesManager::onStudyRetrieveFailed(void *requester, PACSJobPointer pacsJob)
-{
-    if (requester == this)
-    {
-        emit studyRetrieveFailed(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-    }
-}
-
-void RelatedStudiesManager::onStudyRetrieveCancelled(void *requester, PACSJobPointer pacsJob)
-{
-    if (requester == this)
-    {
-        emit studyRetrieveCancelled(pacsJob.objectCast<RetrieveDICOMFilesFromPACSJob>()->getStudyToRetrieveDICOMFiles()->getInstanceUID());
-    }
-}
-
-void RelatedStudiesManager::mergeFoundStudiesInQuery(PACSJobPointer queryPACSJob)
-{
-    if (queryPACSJob.objectCast<QueryPacsJob>()->getQueryLevel() != QueryPacsJob::study)
-    {
-        /// Si la consulta no era d'estudis no ens interessa, només cerquem estudis
-        return;
-    }
-
-    foreach (Patient *patient, queryPACSJob.objectCast<QueryPacsJob>()->getPatientStudyList())
-    {
-        foreach (Study *study, patient->getStudies())
+        for (Study *study : patient->getStudies())
         {
             if (!isStudyInMergedStudyList(study) && !isMainStudy(study))
             {
@@ -277,23 +192,66 @@ void RelatedStudiesManager::mergeFoundStudiesInQuery(PACSJobPointer queryPACSJob
             }
         }
     }
+
+    m_pendingQueryResults.erase(result);
+
+    if (m_pendingQueryResults.empty())
+    {
+        queryFinished();
+    }
+
+    result->deleteLater();
 }
 
-void RelatedStudiesManager::errorQueringPACS(PACSJobPointer queryPACSJob)
+void RelatedStudiesManager::onQueryError(StudyOperationResult *result)
 {
-    if (queryPACSJob.objectCast<QueryPacsJob>()->getStatus() != PACSRequestStatus::QueryOk &&
-            queryPACSJob.objectCast<QueryPacsJob>()->getStatus() != PACSRequestStatus::QueryCancelled)
+    ERROR_LOG(QString("Error when searching for related studies: %1").arg(result->getErrorText()));
+
+    m_pendingQueryResults.erase(result);
+
+    if (m_pendingQueryResults.empty())
     {
-        // Com que fem dos cerques al mateix pacs si una falla, l'altra segurament també fallarà per evitar enviar
-        // dos signals d'error si les dos fallen, ja que per des de fora ha de ser transparent el número de consultes
-        // que es fa al PACS, i han de rebre un sol error comprovem si tenim l'ID del PACS a la llista de signals
-        // d'errors en PACS emesos
-        if (!m_pacsDeviceIDErrorEmited.contains(queryPACSJob->getPacsDevice().getID()))
-        {
-            m_pacsDeviceIDErrorEmited.append(queryPACSJob->getPacsDevice().getID());
-            emit errorQueryingStudies(queryPACSJob->getPacsDevice());
-        }
+        queryFinished();
     }
+
+    result->deleteLater();
+}
+
+void RelatedStudiesManager::onQueryCancelled(StudyOperationResult *result)
+{
+    m_pendingQueryResults.erase(result);
+
+    if (m_pendingQueryResults.empty())
+    {
+        queryFinished();
+    }
+
+    result->deleteLater();
+}
+
+void RelatedStudiesManager::onStudyRetrieveStarted(StudyOperationResult *result)
+{
+    emit studyRetrieveStarted(result->getRequestStudyInstanceUid());
+}
+
+void RelatedStudiesManager::onStudyRetrieveFinished(StudyOperationResult *result)
+{
+    emit studyRetrieveFinished(result->getRequestStudyInstanceUid());
+    // Now that the study is downloaded and saved in the database this should go through the first branch
+    Study *study = new Study();
+    study->setInstanceUID(result->getRequestStudyInstanceUid());
+    loadStudy(study);
+    delete study;
+}
+
+void RelatedStudiesManager::onStudyRetrieveFailed(StudyOperationResult *result)
+{
+    emit studyRetrieveFailed(result->getRequestStudyInstanceUid());
+}
+
+void RelatedStudiesManager::onStudyRetrieveCancelled(StudyOperationResult *result)
+{
+    emit studyRetrieveCancelled(result->getRequestStudyInstanceUid());
 }
 
 void RelatedStudiesManager::queryFinished()
@@ -377,15 +335,15 @@ RelatedStudiesManager::LoadStatus RelatedStudiesManager::loadStudy(Study *study)
 
 void RelatedStudiesManager::retrieveAndLoad(Study *study, const PacsDevice &pacsDevice)
 {
-    // We defer the connections until the first request to avoid unnecessary connections before
-    // We use private slots so that we can specify Qt::UniqueConnection to avoid duplicate connections
-    // They will be automatically disconnected when this RelatedStudiesManager is destroyed
-    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveStarted, this, &RelatedStudiesManager::onStudyRetrieveStarted, Qt::UniqueConnection);
-    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveFinished, this, &RelatedStudiesManager::onStudyRetrieveFinished, Qt::UniqueConnection);
-    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveFailed, this, &RelatedStudiesManager::onStudyRetrieveFailed, Qt::UniqueConnection);
-    connect(PacsManagerSingleton::instance(), &PacsManager::studyRetrieveCancelled, this, &RelatedStudiesManager::onStudyRetrieveCancelled, Qt::UniqueConnection);
+    StudyOperationResult *result = StudyOperationsService::instance()->retrieveFromPacs(pacsDevice, study);
 
-    PacsManagerSingleton::instance()->retrieveStudy(this, pacsDevice, RetrieveDICOMFilesFromPACSJob::Medium, study);
+    // These connections will be deleted when result is destroyed
+    connect(result, &StudyOperationResult::started, this, &RelatedStudiesManager::onStudyRetrieveStarted);
+    connect(result, &StudyOperationResult::finishedSuccessfully, this, &RelatedStudiesManager::onStudyRetrieveFinished);
+    connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &RelatedStudiesManager::onStudyRetrieveFinished);
+    connect(result, &StudyOperationResult::finishedWithError, this, &RelatedStudiesManager::onStudyRetrieveFailed);
+    connect(result, &StudyOperationResult::cancelled, this, &RelatedStudiesManager::onStudyRetrieveCancelled);
+    connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
 }
 
 void RelatedStudiesManager::deleteQueryResults()
@@ -409,7 +367,7 @@ QList<PacsDevice> RelatedStudiesManager::getPACSRetrievedStudiesOfPatient(Patien
 
     foreach (Study *studyPatient, patient->getStudies())
     {
-        pacsDeviceRetrievedStudies = PacsDeviceManager::removeDuplicateSamePACS(pacsDeviceRetrievedStudies + studyPatient->getDICOMSource().getRetrievePACS());
+        pacsDeviceRetrievedStudies = PacsDeviceManager::removeDuplicatePacsFromList(pacsDeviceRetrievedStudies + studyPatient->getDICOMSource().getRetrievePACS());
     }
 
     return pacsDeviceRetrievedStudies;

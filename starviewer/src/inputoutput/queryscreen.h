@@ -19,13 +19,11 @@
 
 namespace udg {
 
-class Status;
-class QCreateDicomdir;
 class DicomMask;
+class QCreateDicomdir;
 class QOperationStateScreen;
 class StatsWatcher;
-class RISRequestManager;
-class PacsDevice;
+class StudyOperationResult;
 
 /**
     Aquesta classe crea la interfície princial de cerca, i connecta amb el PACS i la bd dades local per donar els resultats finals
@@ -33,26 +31,8 @@ class PacsDevice;
 class QueryScreen : public QDialog, private Ui::QueryScreenBase {
 Q_OBJECT
 public:
-    QueryScreen(QWidget *parent = 0);
-    ~QueryScreen();
-
-    // TODO Ugly shortcut for #2643. Major refactoring needed to clean this (see #2764).
-    RISRequestManager* getRISRequestManager() const;
-
-    /// Descarrega l'estudi sol·licitat en el PACS Indicat.
-    /// Mitjançant signal s'indica l'estat del la descarregar
-    ///     signal: studyRetrieveStarted(QString studyInstanceUID) -> Indica que ha començat la descàrrega de l'estudi
-    ///        signal: studyRetrieveFinished(QString studyInstanceUID) -> Indica que ha finalitzat la dèscarrega de l'estudi
-    ///        signal: errorRetrievingStudy(QString studyInstanceUID) -> Indica que s'ha produït un error en la descàrrega
-    ///
-    ///     ATENCIÓ!! Degut a aquesta classe és un singleton hi ha la possibilitat de que es facin signals d'estudis sol·licitats per altres
-    ///               classes, per tant cada classe que utiltizi aquest mètode i connecti amb els signals descrits anteriorment ha de mantenir de manera
-    ///               interna una llista de les sol·licituds que ha fet per saber si aquell signal l'afecta o no.
-    ///
-    /// @param actionAfterRetrieve Indica l'acció a prendre un cop descarregat l'estudi
-    /// @param pacsDevice PACS des d'on es descarrega l'estudi
-    /// @param study Objecte Study amb la informació de l'estudi que volem descarregar
-    void retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, const PacsDevice &pacsDevice, Study *study);
+    explicit QueryScreen(QWidget *parent = nullptr);
+    ~QueryScreen() override;
 
 public slots:
     /// Obre un dicomdir
@@ -75,10 +55,6 @@ public slots:
     /// Neteja els LineEdit del formulari
     void clearTexts();
 
-    /// Guarda els objectes que compleixien la màscara passada per paràmetres de l'estudi
-    /// passat per paràmetre al primer PACS que es troba com a PACS per defecte
-    void sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image*> images);
-
     /// Es comunica amb el widget de la base de dades i visualitzar un estudi descarregat del PACS
     void viewStudyFromDatabase(QString studyInstanceUID);
 
@@ -90,25 +66,13 @@ signals:
     /// Afegim un segon paràmetre per indicar si aquests pacients s'han de carregar únicament i si s'han de visualitzar
     void selectedPatients(QList<Patient*> selectedPatients, bool loadOnly = false);
 
-    /// Indica que s'ha produït un error en la descarrega d'un estudi sol·licitat a través del mètode public retrieveStudy
-    void studyRetrieveFailed(QString studyInstanceUID);
-
-    /// Indica que ha finalitzat la descarrega d'un estudi sol·licitat a través del mètode public retrieveStudy
-    void studyRetrieveFinished(QString studyInstanceUID);
-
-    /// Indica que ha comença la descarrega d'un estudi sol·licitat a través del mètode public retrieveStudy
-    void studyRetrieveStarted(QString studyInstanceUID);
-
-    /// Indica que s'ha cancel·lat la descàrrega d'un estudi sol·licitat a través del mètode public retrieveStudy
-    void studyRetrieveCancelled(QString studyInstanceUID);
-
     /// S'emet quan la finestra es tanca
     void closed();
 
 protected:
     ///  Event que s'activa al tancar al rebren un event de tancament
     ///  @param event de tancament
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
 
 private slots:
     /// Escull a on fer la cerca, si a nivell local o PACS
@@ -130,25 +94,11 @@ private slots:
     /// Afegim un segon paràmetre per indicar si volem fer view o únicament carregar les dades.
     void viewPatients(QList<Patient*>, bool loadOnly = false);
 
-    /// Slot que s'activa quan s'ha produït un error al descarregar un estudi
-    void studyRetrieveFailedSlot(QString studyInstanceUID);
+    /// Called when a retrieve or store operation is requested from anywhere. It starts the animation.
+    void onPacsOperationRequested(StudyOperationResult *result);
 
-    /// Slot que s'activa quan ha finalitzat la descàrrega d'un estudi
-    void studyRetrieveFinishedSlot(QString studyInstanceUID);
-
-    /// Slot que s'activa quan s'inicia la descàrrega d'un estudi
-    void studyRetrieveStartedSlot(QString studyInstanceUID);
-
-    /// Slot que s'activa quan es cancel·la la descàrrega d'un estudi
-    void studyRetrieveCancelledSlot(QString studyInstanceUID);
-
-    /// Slot que s'activa quan s'ha encuat un nou PACSJob si aquest és d'enviament o descarrega de fitxers es mostra el gif animat que indica que
-    /// s'estan processant peticions
-    void newPACSJobEnqueued(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan un PACSJob ha finalitzat, es comprova si la PacsManager està executant més jobs de descàrrega o enviament
-    /// si no n'està executant cap més s'amaga el gif animat que indica que s'està processant una petició
-    void pacsJobFinishedOrCancelled(PACSJobPointer pacsJob);
+    /// Called when an operation has finished. If it is the last operation stops the animation.
+    void onPacsOperationFinishedOrCancelled();
 
     /// Actualitza segons el tab en el que ens trobem la visibilitat del llistat de PACS
     /// El llistat només es podrà habilitar o deshabilitar quan estem en la pestanya PACS
@@ -194,15 +144,12 @@ private:
 
     StatsWatcher *m_statsWatcher;
 
-    /// Llista per controlar la descarrega de quins estudis ha estat sol·licitada
-    QStringList m_studyRequestedToRetrieveFromPublicMethod;
 #ifndef STARVIEWER_LITE
     QOperationStateScreen *m_operationStateScreen;
-    RISRequestManager *m_risRequestManager;
 #endif
 
     /// Indica quans jobs tenim pendents de finalitzar (s'estan esperant per executar o s'estan executant)
-    int m_PACSJobsPendingToFinish;
+    int m_pacsOperationsRunning;
 };
 
 };

@@ -29,12 +29,10 @@
 #include "databaseinstallation.h"
 #include "interfacesettings.h"
 #include "starviewerapplicationcommandline.h"
-#include "risrequestwrapper.h"
 #include "qaboutdialog.h"
 #include "externalapplication.h"
 #include "externalapplicationsmanager.h"
-#include "queryscreen.h"
-#include "risrequestmanager.h"
+#include "externalstudyrequestmanager.h"
 
 // Pel LanguageLocale
 #include "coresettings.h"
@@ -73,8 +71,6 @@
 #include "shortcutmanager.h"
 
 namespace udg {
-
-typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 
 // Per processar les opcions entrades per línia de comandes hem d'utilitzar un Singleton de StarviewerApplicationCommandLine, això ve degut a que
 // d'instàncies de QApplicationMainWindow en tenim tantes com finestres obertes d'Starviewer tinguem. Instàncies deQApplicationMainWindow es crees
@@ -807,36 +803,17 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
 
 void QApplicationMainWindow::sendRequestRetrieveStudyByUidToLocalStarviewer(QString studyInstanceUid)
 {
-    Settings settings;
-    if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool())
-    {
-        // TODO Ugly shortcut for #2643. Major refactoring needed to clean this (see #2764).
-        DicomMask mask;
-        mask.setStudyInstanceUID(studyInstanceUid);
-        QueryScreenSingleton::instance()->getRISRequestManager()->processRISRequest(mask);
-    }
-    else
-    {
-        QMessageBox::information(this, ApplicationNameString,
-                                 tr("Please activate \"Listen to RIS requests\" option in %1 configuration to retrieve studies from SAP.")
-                                 .arg(ApplicationNameString));
-    }
+    DicomMask mask;
+    mask.setStudyInstanceUID(studyInstanceUid);
+    ExternalStudyRequestManager::instance()->processRequest(mask);
 }
 
 void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber)
 {
-    Settings settings;
-    if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool())
-    {
-        RISRequestWrapper().sendRequestToLocalStarviewer(accessionNumber);
-    }
-    else
-    {
-        // TODO:S'hauria de fer un missatge més genèric
-        QMessageBox::information(this, ApplicationNameString,
-                                 tr("Please activate \"Listen to RIS requests\" option in %1 configuration to retrieve studies from SAP.")
-                               .arg(ApplicationNameString));
-    }
+    DicomMask mask;
+    mask.setStudyInstanceUID("");   // this is required for a DIMSE query to return the Study Instance UID
+    mask.setAccessionNumber(accessionNumber);
+    ExternalStudyRequestManager::instance()->processRequest(mask);
 }
 
 void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)

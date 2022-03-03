@@ -53,6 +53,7 @@ public:
     static const QString CreateDICOMDIRGeometry;
     static const QString OperationStateColumnsWidth;
     static const QString PACSStudyListColumnsWidth;
+    static const QString PacsListColumnWidths;
     static const QString ConfigurationScreenPACSList;
     static const QString LocalDatabaseStudyList;
     static const QString LocalDatabaseSplitterState;
@@ -72,7 +73,6 @@ public:
     static const QString MaximumPACSConnections;
 
     /// Llista de PACS
-    //TODO: Clau duplicada a CoreSettings
     static const QString PacsListConfigurationSectionName;
 
     /// Paràmetres de la configuració DICOMDIR

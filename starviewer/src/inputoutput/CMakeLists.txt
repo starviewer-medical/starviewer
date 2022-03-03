@@ -10,11 +10,18 @@ set(SOURCES
     dicomdirburningapplicationtest.cpp
     dicomdirimporter.cpp
     dicomdirreader.cpp
+    dicomjsondecoder.cpp
     dicommask.cpp
     dicommasktodcmdataset.cpp
     dimsecservice.cpp
+    dimsequerystudyoperationresult.cpp
+    dimseretrievestudyoperationresult.cpp
+    dimsestorestudyoperationresult.cpp
+    downloadedfilesprocessor.cpp
     echotopacs.cpp
     echotopacstest.cpp
+    echotowadopacs.cpp
+    externalstudyrequestmanager.cpp
     firewallaccess.cpp
     firewallaccesstest.cpp
     gdcmanonymizerstarviewer.cpp
@@ -35,6 +42,7 @@ set(SOURCES
     localdatabasevoilutdal.cpp
     pacsconnection.cpp
     pacsdevicemanager.cpp
+    pacsdevicemodel.cpp
     pacsjob.cpp
     pacsmanager.cpp
     parsexmlrispierrequest.cpp
@@ -43,7 +51,6 @@ set(SOURCES
     portinusetest.cpp
     qadvancedsearchwidget.cpp
     qbasicsearchwidget.cpp
-    qconfigurationscreen.cpp
     qcreatedicomdir.cpp
     qdeleteoldstudiesthread.cpp
     qdicomdirconfigurationscreen.cpp
@@ -54,8 +61,10 @@ set(SOURCES
     qlistenrisrequestsconfigurationscreen.cpp
     qlocaldatabaseconfigurationscreen.cpp
     qoperationstatescreen.cpp
+    qpacsconfigurationscreen.cpp
+    qpacsdialog.cpp
     qpacslist.cpp
-    qpopuprisrequestsscreen.cpp
+    qpopupexternalstudyrequestsscreen.cpp
     qrelatedstudieswidget.cpp
     qseriesthumbnailpreviewwidget.cpp
     qstudytreewidget.cpp
@@ -67,16 +76,25 @@ set(SOURCES
     relatedstudiesmanager.cpp
     retrievedicomfilesfrompacs.cpp
     retrievedicomfilesfrompacsjob.cpp
-    risrequestmanager.cpp
     risrequestsportinusetest.cpp
-    risrequestwrapper.cpp
     senddicomfilestopacs.cpp
     senddicomfilestopacsjob.cpp
     status.cpp
+    studyoperationresult.cpp
+    studyoperationsservice.cpp
     upgradedatabaserevisioncommands.cpp
     upgradedatabasexmlparser.cpp
     usermessage.cpp
     utils.cpp
+    wadoinstancedownloader.cpp
+    wadorequest.cpp
+    wadorequestmanager.cpp
+    wadoretrieverequest.cpp
+    wadoretrievestudyoperationresult.cpp
+    wadosearchrequest.cpp
+    wadosearchstudyoperationresult.cpp
+    wadostorerequest.cpp
+    wadostorestudyoperationresult.cpp
 )
 
 if(WIN32)
@@ -93,7 +111,6 @@ endif()
 set(FORMS
     qadvancedsearchwidgetbase.ui
     qbasicsearchwidgetbase.ui
-    qconfigurationscreenbase.ui
     qcreatedicomdirbase.ui
     qdicomdirconfigurationscreenbase.ui
     qexporterbase.ui
@@ -103,6 +120,8 @@ set(FORMS
     qlistenrisrequestsconfigurationscreenbase.ui
     qlocaldatabaseconfigurationscreenbase.ui
     qoperationstatescreenbase.ui
+    qpacsconfigurationscreenbase.ui
+    qpacsdialogbase.ui
     qpacslistbase.ui
     qseriesthumbnailpreviewwidgetbase.ui
     qstudytreewidgetbase.ui

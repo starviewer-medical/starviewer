@@ -16,7 +16,7 @@
 #include "qconfigurationdialog.h"
 
 #ifndef STARVIEWER_LITE
-#include "qconfigurationscreen.h"
+#include "qpacsconfigurationscreen.h"
 #endif
 
 #include "qlocaldatabaseconfigurationscreen.h"
@@ -47,7 +47,7 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
 
 #ifndef STARVIEWER_LITE
     // No mostrem configuració del PACS
-    QConfigurationScreen *pacsConfigurationScreen = new QConfigurationScreen(this);
+    QPacsConfigurationScreen *pacsConfigurationScreen = new QPacsConfigurationScreen(this);
     this->addConfigurationWidget(pacsConfigurationScreen, tr("PACS"), AdvancedConfiguration);
 #endif
 

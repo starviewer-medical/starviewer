@@ -12,31 +12,20 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-
 #ifndef UDGQINPUTOUTPUTPACSWIDGET_H
 #define UDGQINPUTOUTPUTPACSWIDGET_H
 
 #include "ui_qinputoutputpacswidgetbase.h"
 
+#include <unordered_set>
+
+#include <QList>
 #include <QMenu>
-#include <QHash>
-
-#include "pacsdevice.h"
-#include "pacsjob.h"
-
-// Fordward declarations
-class QString;
 
 namespace udg {
 
-// Fordward declarations
-class DicomMask;
-class Patient;
 class StatsWatcher;
-class Status;
-class Study;
-class QOperationStateScreen;
-class QueryPacsJob;
+class StudyOperationResult;
 
 /**
     Widget en el que controla les operacions d'entrada/sortida del PACS
@@ -48,8 +37,8 @@ public:
     enum ActionsAfterRetrieve { None = 0, View = 1, Load = 2 };
 
     /// Constructor de la classe
-    QInputOutputPacsWidget(QWidget *parent = 0);
-    ~QInputOutputPacsWidget();
+    explicit QInputOutputPacsWidget(QWidget *parent = nullptr);
+    ~QInputOutputPacsWidget() override;
 
     /// Consulta els estudis al dicomdir obert que compleixin la màscara de cerca
     void queryStudy(DicomMask queryMask, QList<PacsDevice> pacsToQuery);
@@ -70,18 +59,8 @@ signals:
     /// Signal que s'emet per indicar que un cop descarregat l'estudi s'ha de carregar únicament
     void loadRetrievedStudy(QString studyInstanceUID);
 
-    // TODO: Els mètodes studyRetrieved han de desapareixer cada tool ha de començar a utilitzar la PACSManager
-    /// Signal que s'emet per indicar que un estudi s'ha començat a descarregar
-    void studyRetrieveStarted(QString studyInstanceUID);
-
-    /// Signal que indica que s'ha produït un error descarregant l'estudi indicat
-    void studyRetrieveFailed(QString studyInstanceUID);
-
     /// Signal que s'emet per indica que un estudi ha estat descarregat
     void studyRetrieveFinished(QString studyInstanceUID);
-
-    /// Signal que s'emet per indicar que la descàrrgea d'un estudi s'ha cencel·lat
-    void studyRetrieveCancelled(QString studyInstanceUID);
 
 private:
     /// Crea les connexions entre signals i slots
@@ -92,25 +71,27 @@ private:
 
     /// Comprova que els paràmetres per la cerca siguin correctes, que no es tractir d'un consulta pesada i que ens hagin seleccionat
     /// algun PACS per consultar
-    bool AreValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery);
+    bool areValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery);
 
-    /// Construeix la màscara de cerca per cercar les sèries d'un estudi
-    DicomMask buildSeriesDicomMask(QString studyInstanceUID);
+    /// Adds the given StudyOperationResult representing a query to the list of pending queries and creates the needed connections to it.
+    void addPendingQuery(StudyOperationResult *result);
 
-    /// Construeix la màscara de cerca per cercar les imatges d'una sèrie
-    DicomMask buildImageDicomMask(QString studyInstanceUID, QString seriesInstanceUID);
+    /// Amaga/mostra que hi ha una query en progress i habilitat/deshabilitat el botó de cancel·lar la query actual
+    void setQueryInProgress(bool queryInProgress);
 
-    /// Mostra per pantalla els resultats de la consulta al PACS d'un Job
-    void showQueryPACSJobResults(PACSJobPointer queryPACSJob);
-
-    /// Mostrar un QMessageBox indicant que s'ha produït un error consultant a un PACS
-    void showErrorQueringPACS(PACSJobPointer queryPACSJob);
-
-    /// Ens encua el QueryPACSJob al PACSManager i ens connecta amb els seus signals per poder processar els resultats. També afegeix el Job en una taula
-    /// de hash on es guarden tots els QueryPACSJobs demanats per aquesta classe que estant pendents d'executar-se o s'estan executant
-    void enqueueQueryPACSJobToPACSManagerAndConnectSignals(PACSJobPointer queryPacsJob);
+    /// Descarrega els estudis seleccionats dels QStudyTreeWidget, i una vegada descarregats por a terme l'acció passada per paràmetre
+    void retrieveSelectedItemsFromQStudyTreeWidget(ActionsAfterRetrieve _actionsAfterRetrieve);
 
 private slots:
+    /// Updates the study tree widget with the results from the given query.
+    void showQueryResult(StudyOperationResult *result);
+    /// Updates the study tree widget with the results from the given query and showns the warning(s) produced in the query.
+    void showQueryResultAndWarning(StudyOperationResult *result);
+    /// Shows the error produced in the given query.
+    void showQueryError(StudyOperationResult *result);
+    /// Called when the given query is cancelled.
+    void onQueryCancelled(StudyOperationResult *result);
+
     /// Mostra les sèries d'un estudi, les consulta al dicomdir i les mostra al tree widget
     void requestedSeriesOfStudy(Study *study);
 
@@ -132,40 +113,22 @@ private slots:
     /// que s'estan realitzant.
     void cancelCurrentQueriesToPACS();
 
-    /// Fa signal de studyRetrieveStarted, Important!!! aquest mètode una vegada cada Tool utiltizi la PacsManager ha de desapareixer
-    void retrieveDICOMFilesFromPACSJobStarted(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan finalitza un job de descàrrega d'imatges
-    void retrieveDICOMFilesFromPACSJobFinished(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan es cancel·la un job de descàrrega d'imatges
-    void retrieveDICOMFilesFromPACSJobCancelled(PACSJobPointer pacsJob);
-    
-    /// Slot que s'activa quan finalitza un job de consulta al PACS
-    void queryPACSJobFinished(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan un job de consulta al PACS és cancel·lat
-    void queryPACSJobCancelled(PACSJobPointer pacsJob);
+    /// Called when a retrieve operation finishes successfully.
+    void onRetrieveSuccess(StudyOperationResult *result, ActionsAfterRetrieve action);
+    /// Called when a retrieve operation finishes with partial success.
+    void onRetrievePartialSuccess(StudyOperationResult *result, ActionsAfterRetrieve action);
+    /// Called when a retrieve operation finishes with error.
+    void onRetrieveError(StudyOperationResult *result);
 
 private:
     QMenu m_contextMenuQStudyTreeWidget;
 
-    /// Per cada job de descàrrega guardem quina acció hem de fer quan ha acabat la descàrrega
-    QHash<int, ActionsAfterRetrieve> m_actionsWhenRetrieveJobFinished;
-
-    /// Hash que ens guarda tots els QueryPACSJob pendent d'executar o que s'estan executant llançats des d'aquesta classe
-    QHash<int, PACSJobPointer> m_queryPACSJobPendingExecuteOrExecuting;
+    /// Contains StudyOperationResults that represent queries in progress.
+    std::unordered_set<StudyOperationResult*> m_pendingQueryResults;
 
     StatsWatcher *m_statsWatcher;
-
-    /// Amaga/mostra que hi ha una query en progress i habilitat/deshabilitat el botó de cancel·lar la query actual
-    void setQueryInProgress(bool queryInProgress);
-
-    /// Descarrega els estudis seleccionats dels QStudyTreeWidget, i una vegada descarregats por a terme l'acció passada per paràmetre
-    void retrieveSelectedItemsFromQStudyTreeWidget(ActionsAfterRetrieve _actionsAfterRetrieve);
-
 };
 
-};// end namespace udg
+}
 
 #endif
