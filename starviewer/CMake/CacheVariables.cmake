@@ -23,3 +23,9 @@ endif()
 set(QT_DIR ${SDK_INSTALL_RELEASE_DIR}/qt/5.12.6/${QT_LAST_DIR} CACHE PATH "Directory where Qt is installed.")
 
 set(DEPLOYMENT_REPO_DIR "${CMAKE_SOURCE_DIR}/../../starviewer-deployment" CACHE PATH "Directory of the deployment repository.")
+
+if(WIN32)
+    set(LIBREOFFICE "C:/Program Files/LibreOffice/program/soffice.exe" CACHE PATH "Call to LibreOffice.")
+else()
+    set(LIBREOFFICE soffice CACHE PATH "Call to LibreOffice.")
+endif()
