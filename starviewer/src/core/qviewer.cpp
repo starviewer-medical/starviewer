@@ -97,7 +97,7 @@ QViewer::QViewer(QWidget *parent)
     this->setMouseTracking(false);
     m_patientBrowserMenu = new PatientBrowserMenu(0);
     // We do not want Qt to generate context menu events, we do our own detection through VTK events and then we call the overridable method QWidget::contextMenuEvent()
-    this->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
+    m_vtkWidget->setContextMenuPolicy(Qt::PreventContextMenu);
     // Ara mateix el comportament per defecte serà que un cop seleccionat un volum li assignem immediatament com a input
     this->setAutomaticallyLoadPatientBrowserMenuSelectedInput(true);
 }
