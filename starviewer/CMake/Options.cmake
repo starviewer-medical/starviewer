@@ -18,6 +18,8 @@ option(USE_CRASH_REPORTER "Enable the crash reporter." ON)
 option(USE_PACS_COMPRESSION "Enable lossless compression when requesting studies from PACS." ON)
 #option(USE_CUDA "Use CUDA." OFF)   # untested
 
+option(BUILD_PDF_MANUALS "Convert manuals to PDF when building." ON)
+
 if(MSVC)
     option(STARVIEWER_BUILD_DEBUG_WITH_RELEASE_LIBS "Use release libraries with debug build of Starviewer." OFF)
 endif()
