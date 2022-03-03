@@ -23,6 +23,10 @@ if(WIN32)
     if(MSVC)
         # Multi-core compilation
         add_compile_options(/MP)
+
+        if(STARVIEWER_BUILD_DEBUG_WITH_RELEASE_LIBS)
+            set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreadedDLL)
+        endif()
     endif()
 elseif(APPLE)
     set(CMAKE_OSX_SYSROOT /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk)

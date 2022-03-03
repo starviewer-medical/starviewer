@@ -29,12 +29,11 @@ target_link_libraries(mpr2d core inputoutput)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(mpr2d
     Core
     Gui
     Widgets
 )
-target_link_libraries(mpr2d Qt5::Core Qt5::Gui Qt5::Widgets)
 
 find_package(VTK REQUIRED COMPONENTS
     vtkCommonCore

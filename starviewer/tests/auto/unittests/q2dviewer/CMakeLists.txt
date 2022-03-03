@@ -12,7 +12,6 @@ target_link_libraries(test_q2dviewer q2dviewer)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(test_q2dviewer
     Widgets
 )
-target_link_libraries(test_q2dviewer Qt5::Widgets)

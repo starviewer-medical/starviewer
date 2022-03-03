@@ -4,6 +4,7 @@
 # - USE_QTCONF should be disabled for development, otherwise Qt plugins are not found in Qt folder.
 # - USE_CRASH_REPORTER and USE_PACS_COMPRESSION should always be left ON under normal circumstances.
 # - USE_CUDA is totally untested, probably would not work without changes.
+# - STARVIEWER_BUILD_DEBUG_WITH_RELEASE_LIBS can be used when building in debug mode with MSVC to link against release libraries.
 
 option(STARVIEWER_BETA "Build Starviewer with a beta warning." OFF)
 option(STARVIEWER_CE "Build Starviewer with CE marking. Requires the deployment repository." OFF)
@@ -16,3 +17,7 @@ option(USE_SPECIFIC_HANGING_PROTOCOLS "Include institution-specific hanging prot
 option(USE_CRASH_REPORTER "Enable the crash reporter." ON)
 option(USE_PACS_COMPRESSION "Enable lossless compression when requesting studies from PACS." ON)
 #option(USE_CUDA "Use CUDA." OFF)   # untested
+
+if(MSVC)
+    option(STARVIEWER_BUILD_DEBUG_WITH_RELEASE_LIBS "Use release libraries with debug build of Starviewer." OFF)
+endif()

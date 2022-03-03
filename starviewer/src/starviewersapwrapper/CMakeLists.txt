@@ -24,9 +24,8 @@ if(NOT STARVIEWER_LITE)
 
     ################ External library dependencies ################
 
-    find_package(Qt5 REQUIRED COMPONENTS
+    target_link_qt(starviewer_sapwrapper
         Core
         Widgets
     )
-    target_link_libraries(starviewer_sapwrapper Qt5::Core Qt5::Widgets)
 endif()

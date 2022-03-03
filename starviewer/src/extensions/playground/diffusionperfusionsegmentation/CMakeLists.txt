@@ -27,12 +27,11 @@ target_link_libraries(diffusionperfusionsegmentation core)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(diffusionperfusionsegmentation
     Core
     Gui
     Widgets
 )
-target_link_libraries(diffusionperfusionsegmentation Qt5::Core Qt5::Gui Qt5::Widgets)
 
 find_package(VTK REQUIRED COMPONENTS
     vtkCommonCore

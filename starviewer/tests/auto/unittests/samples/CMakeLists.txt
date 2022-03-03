@@ -7,7 +7,6 @@ add_library(test_samples OBJECT ${SOURCES})
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(test_samples
     Core
 )
-target_link_libraries(test_samples Qt5::Core)

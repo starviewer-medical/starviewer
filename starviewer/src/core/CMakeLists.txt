@@ -428,7 +428,7 @@ target_link_libraries(core easylogging++)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(core
     Concurrent
     Core
     Gui
@@ -441,7 +441,6 @@ find_package(Qt5 REQUIRED COMPONENTS
     Xml
     XmlPatterns
 )
-target_link_libraries(core Qt5::Concurrent Qt5::Core Qt5::Gui Qt5::Network Qt5::OpenGL Qt5::Qml Qt5::Quick Qt5::QuickWidgets Qt5::Widgets Qt5::Xml Qt5::XmlPatterns)
 
 find_package(VTK REQUIRED COMPONENTS
     vtkCommonCore

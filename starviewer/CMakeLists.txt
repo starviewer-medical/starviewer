@@ -14,6 +14,7 @@ include(BuildSettings)
 include(DefaultSdkDirectories)
 
 include(GetTargetIncludes)
+include(LinkQt)
 include(Translations)
 
 add_subdirectory(src)

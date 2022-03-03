@@ -37,13 +37,12 @@ target_link_libraries(test_shared core inputoutput interface q2dviewer q3dviewer
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(test_shared
     Core
     Gui
     Network
     Test
 )
-target_link_libraries(test_shared Qt5::Core Qt5::Gui Qt5::Network Qt5::Test)
 
 find_package(VTK REQUIRED COMPONENTS
     vtkCommonCore

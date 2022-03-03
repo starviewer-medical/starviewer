@@ -46,13 +46,12 @@ add_dependencies(starviewer_crashreporter starviewer)   # needed to release main
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(starviewer_crashreporter
     Core
     Gui
     Network
     Widgets
 )
-target_link_libraries(starviewer_crashreporter Qt5::Core Qt5::Gui Qt5::Network Qt5::Widgets)
 
 
 ################ Other things ################

@@ -36,13 +36,12 @@ target_link_libraries(test_inputoutput core inputoutput)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(test_inputoutput
     Core
     Network
     Sql
     Widgets
 )
-target_link_libraries(test_inputoutput Qt5::Core Qt5::Network Qt5::Sql Qt5::Widgets)
 
 find_package(DCMTK REQUIRED)
 target_include_directories(test_inputoutput SYSTEM PRIVATE

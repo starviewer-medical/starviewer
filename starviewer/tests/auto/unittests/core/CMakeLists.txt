@@ -105,12 +105,11 @@ target_link_libraries(test_core core)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(test_core
     Core
     Gui
     Network
 )
-target_link_libraries(test_core Qt5::Core Qt5::Gui Qt5::Network)
 
 find_package(VTK REQUIRED COMPONENTS
     vtkCommonCore

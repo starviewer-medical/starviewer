@@ -14,9 +14,8 @@ endif()
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(qtsingleapplication
     Core
     Network
     Widgets
 )
-target_link_libraries(qtsingleapplication Qt5::Core Qt5::Network Qt5::Widgets)

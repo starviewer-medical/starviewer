@@ -42,12 +42,11 @@ target_link_libraries(dicomprint core inputoutput)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(dicomprint
     Core
     Gui
     Widgets
 )
-target_link_libraries(dicomprint Qt5::Core Qt5::Gui Qt5::Widgets)
 
 find_package(DCMTK REQUIRED)
 target_include_directories(dicomprint SYSTEM PRIVATE

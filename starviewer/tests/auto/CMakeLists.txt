@@ -2,13 +2,11 @@
 
 include_directories(shared)
 
-find_package(Qt5 REQUIRED COMPONENTS
+link_qt(
     Core
     Test
     Widgets
 )
-
-link_libraries(Qt5::Core Qt5::Test Qt5::Widgets)
 
 
 ########################### Targets ###########################

@@ -38,7 +38,7 @@ endif()
 ################ Libraries ################
 
 string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
-if(WIN32 AND ${BUILD_TYPE} STREQUAL debug)
+if(MSVC AND ${BUILD_TYPE} STREQUAL debug AND NOT STARVIEWER_BUILD_DEBUG_WITH_RELEASE_LIBS)
     set(DEBUG_LIBRARY_SUFFIX d)
 else()
     set(DEBUG_LIBRARY_SUFFIX "")

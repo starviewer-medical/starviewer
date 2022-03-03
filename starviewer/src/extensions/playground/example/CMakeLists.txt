@@ -28,8 +28,7 @@ target_link_libraries(example core)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(example
     Core
     Widgets
 )
-target_link_libraries(example Qt5::Core Qt5::Widgets)

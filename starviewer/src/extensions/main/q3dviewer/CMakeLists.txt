@@ -33,12 +33,11 @@ target_link_libraries(q3dviewer core inputoutput)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(q3dviewer
     Core
     Gui
     Widgets
 )
-target_link_libraries(q3dviewer Qt5::Core Qt5::Gui Qt5::Widgets)
 
 find_package(VTK REQUIRED COMPONENTS
     vtkCommonDataModel

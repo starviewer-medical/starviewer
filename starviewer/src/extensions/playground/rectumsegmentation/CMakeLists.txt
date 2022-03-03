@@ -27,11 +27,10 @@ target_link_libraries(rectumsegmentation core)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(rectumsegmentation
     Core
     Widgets
 )
-target_link_libraries(rectumsegmentation Qt5::Core Qt5::Widgets)
 
 find_package(VTK REQUIRED COMPONENTS
     vtkCommonCore

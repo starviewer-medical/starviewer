@@ -81,14 +81,13 @@ target_link_libraries(experimental3d core glew)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(experimental3d
     Concurrent
     Core
     Gui
     OpenGL
     Widgets
 )
-target_link_libraries(experimental3d Qt5::Concurrent Qt5::Core Qt5::Gui Qt5::OpenGL Qt5::Widgets)
 
 find_package(VTK REQUIRED COMPONENTS
     vtkCommonCore

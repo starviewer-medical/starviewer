@@ -29,12 +29,11 @@ target_link_libraries(angiosubstraction core)
 
 ################ External library dependencies ################
 
-find_package(Qt5 REQUIRED COMPONENTS
+target_link_qt(angiosubstraction
     Core
     Gui
     Widgets
 )
-target_link_libraries(angiosubstraction Qt5::Core Qt5::Gui Qt5::Widgets)
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon
