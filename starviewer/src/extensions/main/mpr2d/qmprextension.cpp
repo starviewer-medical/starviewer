@@ -183,13 +183,13 @@ void QMPRExtension::init()
 
 void QMPRExtension::createActions()
 {
-    m_horizontalLayoutAction = new QAction(0);
+    m_horizontalLayoutAction = new QAction(m_horizontalLayoutToolButton);
     m_horizontalLayoutAction->setText(tr("Switch horizontal layout"));
     m_horizontalLayoutAction->setStatusTip(tr("Switch horizontal layout"));
     m_horizontalLayoutAction->setIcon(QIcon(":/images/icons/view-split-left-right.svg"));
     m_horizontalLayoutToolButton->setDefaultAction(m_horizontalLayoutAction);
 
-    m_mipAction = new QAction(0);
+    m_mipAction = new QAction(m_mipToolButton);
     m_mipAction->setText(tr("&MIP"));
     m_mipAction->setShortcut(tr("Ctrl+M"));
     m_mipAction->setStatusTip(tr("Maximum Intensity Projection"));

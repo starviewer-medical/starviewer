@@ -508,7 +508,7 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
     while (i.hasNext())
     {
         const ExternalApplication& extApp = i.next();
-        QAction* action = new QAction(extApp.getName(),0); //When added to a QMenu, that menu becomes the parent.
+        QAction* action = new QAction(extApp.getName(), m_externalApplicationsMenu);
         if (position < shortcutVector.size())
         {
             action->setShortcuts(shortcutVector[position]);

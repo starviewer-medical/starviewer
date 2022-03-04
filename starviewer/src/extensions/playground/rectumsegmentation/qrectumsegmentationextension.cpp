@@ -93,7 +93,7 @@ QRectumSegmentationExtension::~QRectumSegmentationExtension()
 
 void QRectumSegmentationExtension::initializeTools()
 {
-    m_regionAction = new QAction(0);
+    m_regionAction = new QAction(m_regionToolButton);
     m_regionAction->setText(tr("RegionTool"));
     m_regionAction->setStatusTip(tr("Enable/Disable region tool"));
     m_regionAction->setCheckable(true);

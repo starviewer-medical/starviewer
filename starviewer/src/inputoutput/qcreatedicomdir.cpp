@@ -85,7 +85,7 @@ void QCreateDicomdir::initializeControls()
 
 void QCreateDicomdir::createActions()
 {
-    m_cdromAction = new QAction(0);
+    m_cdromAction = new QAction(m_cdromDeviceToolButton);
     m_cdromAction->setText(tr("CD-ROM"));
     m_cdromAction->setStatusTip(tr("Record DICOMDIR on a CD-ROM"));
     m_cdromAction->setIcon(QIcon(":/images/icons/media-optical.svg"));
@@ -93,7 +93,7 @@ void QCreateDicomdir::createActions()
     connect(m_cdromAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::CdRom); });
     m_cdromDeviceToolButton->setDefaultAction(m_cdromAction);
 
-    m_dvdromAction = new QAction(0);
+    m_dvdromAction = new QAction(m_dvdromDeviceToolButton);
     m_dvdromAction->setText(tr("DVD-ROM"));
     m_dvdromAction->setStatusTip(tr("Record DICOMDIR on a DVD-ROM"));
     m_dvdromAction->setIcon(QIcon(":/images/icons/media-optical-dvd.svg"));
@@ -101,7 +101,7 @@ void QCreateDicomdir::createActions()
     connect(m_dvdromAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::DvdRom); });
     m_dvdromDeviceToolButton->setDefaultAction(m_dvdromAction);
 
-    m_hardDiskAction = new QAction(0);
+    m_hardDiskAction = new QAction(m_hardDiskDeviceToolButton);
     m_hardDiskAction->setText(tr("Hard Disk"));
     m_hardDiskAction->setStatusTip(tr("Record DICOMDIR on the Hard Disk"));
     m_hardDiskAction->setIcon(QIcon(":/images/icons/drive-harddisk.svg"));
@@ -109,7 +109,7 @@ void QCreateDicomdir::createActions()
     connect(m_hardDiskAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::HardDisk); });
     m_hardDiskDeviceToolButton->setDefaultAction(m_hardDiskAction);
 
-    m_pendriveAction = new QAction(0);
+    m_pendriveAction = new QAction(m_pendriveDeviceToolButton);
     m_pendriveAction->setText(tr("USB Flash Drive"));
     m_pendriveAction->setStatusTip(tr("Record DICOMDIR on a USB Flash Drive"));
     m_pendriveAction->setIcon(QIcon(":/images/icons/drive-removable-media.svg"));
@@ -117,7 +117,7 @@ void QCreateDicomdir::createActions()
     connect(m_pendriveAction, &QAction::triggered, [this] { deviceChanged(CreateDicomdir::UsbPen); });
     m_pendriveDeviceToolButton->setDefaultAction(m_pendriveAction);
 
-    m_devicesActionGroup = new QActionGroup(0);
+    m_devicesActionGroup = new QActionGroup(this);
     m_devicesActionGroup->setExclusive(true);
     m_devicesActionGroup->addAction(m_cdromAction);
     m_devicesActionGroup->addAction(m_dvdromAction);

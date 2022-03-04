@@ -36,7 +36,7 @@ Q2DViewerWidget::Q2DViewerWidget(QWidget *parent)
     setAutoFillBackground(true);
 
     // Creació de l'acció del boto de sincronitzar.
-    m_synchronizeButtonAction = new QAction(0);
+    m_synchronizeButtonAction = new QAction(m_synchronizeButton);
     m_synchronizeButtonAction->setIcon(QIcon(":/images/icons/emblem-symbolic-link.svg"));
     m_synchronizeButtonAction->setText(tr("Enable manual synchronization in this viewer"));
     m_synchronizeButtonAction->setStatusTip(m_synchronizeButtonAction->text());

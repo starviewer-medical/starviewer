@@ -206,7 +206,7 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
 
 QAction* ToolRegistry::getToolAction(const QString &toolName)
 {
-    QAction *toolAction = new QAction(0);
+    QAction *toolAction = new QAction(this);
     toolAction->setCheckable(true);
     QString statusTip;
     QString toolTip;
@@ -478,7 +478,7 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
 QPair<QAction*, QString> ToolRegistry::getActionToolPair(const QString &actionToolName)
 {
     QPair<QAction*, QString> pair;
-    QAction *action = new QAction(0);
+    QAction *action = new QAction(this);
     QString slot;
     QString statusTip;
     QString toolTip;

@@ -71,28 +71,28 @@ QEdemaSegmentationExtension::~QEdemaSegmentationExtension()
 
 void QEdemaSegmentationExtension::createActions()
 {
-    m_lesionViewAction = new QAction(0);
+    m_lesionViewAction = new QAction(m_lesionViewToolButton);
     m_lesionViewAction->setText(tr("Lesion Overlay"));
     m_lesionViewAction->setStatusTip(tr("Enable/Disable lesion View Overlay"));
     m_lesionViewAction->setCheckable(true);
     m_lesionViewAction->setEnabled(false);
     m_lesionViewToolButton->setDefaultAction(m_lesionViewAction);
 
-    m_edemaViewAction = new QAction(0);
+    m_edemaViewAction = new QAction(m_edemaViewToolButton);
     m_edemaViewAction->setText(tr("Edema Overlay"));
     m_edemaViewAction->setStatusTip(tr("Enable/Disable edema View Overlay"));
     m_edemaViewAction->setCheckable(true);
     m_edemaViewAction->setEnabled(false);
     m_edemaViewToolButton->setDefaultAction(m_edemaViewAction);
 
-    m_ventriclesViewAction = new QAction(0);
+    m_ventriclesViewAction = new QAction(m_ventriclesViewToolButton);
     m_ventriclesViewAction->setText(tr("Ventricles Overlay"));
     m_ventriclesViewAction->setStatusTip(tr("Enable/Disable ventricles View Overlay"));
     m_ventriclesViewAction->setCheckable(true);
     m_ventriclesViewAction->setEnabled(false);
     m_ventriclesViewToolButton->setDefaultAction(m_ventriclesViewAction);
 
-    m_viewOverlayActionGroup = new QActionGroup(0);
+    m_viewOverlayActionGroup = new QActionGroup(this);
     m_viewOverlayActionGroup->setExclusive(true);
     m_viewOverlayActionGroup->addAction(m_ventriclesViewAction);
     m_viewOverlayActionGroup->addAction(m_edemaViewAction);
