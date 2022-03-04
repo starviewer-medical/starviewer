@@ -369,11 +369,10 @@ void QDifuPerfuSegmentationExtension::setPerfusionLut(int threshold)
     m_perfusionHueLut->SetRampToLinear();
     m_perfusionHueLut->ForceBuild();    //effective built
     int nvalues=m_perfusionHueLut->GetNumberOfTableValues();
-    double* tvalue= new double[4];
 
     for(int i=0;i<((threshold*nvalues)/255);i++)
     {
-        tvalue=m_perfusionHueLut->GetTableValue(i);
+        double *tvalue = m_perfusionHueLut->GetTableValue(i);
         tvalue[0]=0.0;  //Posem els valors transparents
         tvalue[1]=0.0;  //Posem els valors transparents
         tvalue[2]=0.0;  //Posem els valors transparents
@@ -659,11 +658,10 @@ void QDifuPerfuSegmentationExtension::applyRegistration()
         hueLut->SetRampToLinear();
         hueLut->Build();    //effective built
         int nvalues=hueLut->GetNumberOfTableValues();
-        double* tvalue= new double[4];
 
         for(int i=0;i<(m_perfusionThresholdViewerSlider->value()*nvalues)/255;i++)
         {
-            tvalue=hueLut->GetTableValue(i);
+            double *tvalue = hueLut->GetTableValue(i);
             tvalue[0]=0.0;  //Posem els valors transparents
             tvalue[1]=0.0;  //Posem els valors transparents
             tvalue[2]=0.0;  //Posem els valors transparents

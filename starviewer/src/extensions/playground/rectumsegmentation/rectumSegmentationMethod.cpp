@@ -258,25 +258,25 @@ double rectumSegmentationMethod::applyMethod()
         mapWriter3->SetFileName("distanceMap2.jpg");
         mapWriter3->Update();*/
 
-    itk::ImageRegionIteratorWithIndex< InternalImageType > itDist(distanceFilter->GetOutput(), distanceFilter->GetOutput()->GetLargestPossibleRegion());
-    itDist.GoToBegin();
-    int value,max,min, xmax, ymax;
-    max=itDist.Get();
-    min=max;
-    while(!itDist.IsAtEnd())
-    {
-        value=itDist.Get();
-        if(value<min)
-        {
-            min=value;
-        }
-        if(value>max){
-            max=value;
-            xmax=itDist.GetIndex()[0];
-            ymax=itDist.GetIndex()[1];
-        }
-        ++itDist;
-    }
+//    itk::ImageRegionIteratorWithIndex< InternalImageType > itDist(distanceFilter->GetOutput(), distanceFilter->GetOutput()->GetLargestPossibleRegion());
+//    itDist.GoToBegin();
+//    int value,max,min, xmax, ymax;
+//    max=itDist.Get();
+//    min=max;
+//    while(!itDist.IsAtEnd())
+//    {
+//        value=itDist.Get();
+//        if(value<min)
+//        {
+//            min=value;
+//        }
+//        if(value>max){
+//            max=value;
+//            xmax=itDist.GetIndex()[0];
+//            ymax=itDist.GetIndex()[1];
+//        }
+//        ++itDist;
+//    }
     //std::cout<<"Max="<<max<<", min="<<min<<std::endl;
     //std::cout<<"PosMax= ["<<xmax<<", "<<ymax<<"]"<<std::endl;
 

@@ -233,7 +233,7 @@ int DicomPrinterManager::indexOfPrinterInSettings(DicomPrinter &printer)
 
         i = i + 1;
     }
-    return i = -1;
+    return -1;
 }
 
 QStringList DicomPrinterManager::getAvailableMediumTypeValues()
