@@ -290,7 +290,6 @@ void Q3DViewerExtension::createConnections()
 {
     // Actualització del mètode de rendering
     connect(m_blendModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateUiForBlendMode);
-    connect(m_renderModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateUiForBlendMode);
 
     enableAutoUpdate();
 
