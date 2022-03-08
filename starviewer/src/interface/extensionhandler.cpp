@@ -55,32 +55,28 @@ ExtensionHandler::~ExtensionHandler()
     delete m_queryScreen;
 }
 
-void ExtensionHandler::request(int who)
+void ExtensionHandler::request(Request request)
 {
-    // \TODO: crear l'extensió amb el factory ::createExtension, no com està ara
-    // \TODO la numeració és completament temporal!!! s'haurà de canviar aquest sistema
-    INFO_LOG("Request d'extensió amb ID: " + QString::number(who));
-    switch (who)
+    switch (request)
     {
-        case 1:
-            m_importFileApp.open();
+        case Request::LocalDatabase:
+            m_queryScreen->showLocalExams();
             break;
 
-        case 6:
-            m_importFileApp.openDirectory();
-            break;
-
-        case 7:
+        case Request::Pacs:
             m_queryScreen->showPACSTab();
             break;
 
-        case 8:
+        case Request::Dicomdir:
             m_queryScreen->openDicomdir();
             break;
 
-        case 10:
-            // Mostrar local
-            m_queryScreen->showLocalExams();
+        case Request::OpenFiles:
+            m_importFileApp.open();
+            break;
+
+        case Request::OpenDirectory:
+            m_importFileApp.openDirectory();
             break;
     }
 }

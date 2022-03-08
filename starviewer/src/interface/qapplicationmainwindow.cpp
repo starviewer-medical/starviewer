@@ -192,14 +192,14 @@ void QApplicationMainWindow::createActions()
     m_openAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenFile));
     m_openAction->setStatusTip(tr("Open one or several existing volume files"));
     m_openAction->setIcon(QIcon(":/images/icons/document-open.svg"));
-    connect(m_openAction, &QAction::triggered, [this] { m_extensionHandler->request(1); });
+    connect(m_openAction, &QAction::triggered, [this] { m_extensionHandler->request(ExtensionHandler::Request::OpenFiles); });
 
     m_openDirAction = new QAction(this);
     m_openDirAction->setText(tr("Open Files from a Directory..."));
     m_openDirAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenDirectory));
     m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
     m_openDirAction->setIcon(QIcon(":/images/icons/document-open.svg"));
-    connect(m_openDirAction, &QAction::triggered, [this] { m_extensionHandler->request(6); });
+    connect(m_openDirAction, &QAction::triggered, [this] { m_extensionHandler->request(ExtensionHandler::Request::OpenDirectory); });
 
     m_pacsAction = new QAction(this);
 #ifdef STARVIEWER_LITE
@@ -217,18 +217,18 @@ void QApplicationMainWindow::createActions()
     m_localDatabaseAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenLocalDatabaseStudies));
     m_localDatabaseAction->setStatusTip(tr("Browse local database studies"));
     m_localDatabaseAction->setIcon(QIcon(":/images/icons/database-local.svg"));
-    connect(m_localDatabaseAction, &QAction::triggered, [this] { m_extensionHandler->request(10); });
+    connect(m_localDatabaseAction, &QAction::triggered, [this] { m_extensionHandler->request(ExtensionHandler::Request::LocalDatabase); });
 #endif
     // TODO potser almenys per la versió Lite caldria canviar la icona
     m_pacsAction->setIcon(QIcon(":/images/icons/document-open-remote.svg"));
-    connect(m_pacsAction, &QAction::triggered, [this] { m_extensionHandler->request(7); });
+    connect(m_pacsAction, &QAction::triggered, [this] { m_extensionHandler->request(ExtensionHandler::Request::Pacs); });
 
     m_openDICOMDIRAction = new QAction(this);
     m_openDICOMDIRAction->setText(tr("Open DICOMDIR..."));
     m_openDICOMDIRAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenDICOMDIR));
     m_openDICOMDIRAction->setStatusTip(tr("Open DICOMDIR from CD, DVD, USB flash drive or hard disk"));
     m_openDICOMDIRAction->setIcon(QIcon(":/images/icons/document-open-dicomdir.svg"));
-    connect(m_openDICOMDIRAction, &QAction::triggered, [this] { m_extensionHandler->request(8); });
+    connect(m_openDICOMDIRAction, &QAction::triggered, [this] { m_extensionHandler->request(ExtensionHandler::Request::Dicomdir); });
 
     QStringList extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryIdentifiersList();
     foreach (const QString &name, extensionsMediatorNames)
