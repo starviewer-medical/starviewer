@@ -84,11 +84,6 @@ QueryScreen::~QueryScreen()
 void QueryScreen::initialize()
 {
     m_qcreateDicomdir = new udg::QCreateDicomdir(this);
-#ifndef STARVIEWER_LITE
-    // Posem com a pare el pare de la queryscreen, d'aquesta manera quan es tanqui el pare de la queryscreen
-    // el QOperationStateScreen també es tancarà
-    m_operationStateScreen = new udg::QOperationStateScreen(this);
-#endif
     // Indiquem quin és la intefície encara de crear dicomdir per a que es puguin comunicar
     m_qInputOutputLocalDatabaseWidget->setQCreateDicomdir(m_qcreateDicomdir);
 
@@ -313,14 +308,14 @@ void QueryScreen::viewPatients(QList<Patient*> listPatientsToView, bool loadOnly
 #ifndef STARVIEWER_LITE
 void QueryScreen::showOperationStateScreen()
 {
-    if (!m_operationStateScreen->isVisible())
+    if (!QOperationStateScreen::instance()->isVisible())
     {
-        m_operationStateScreen->setVisible(true);
+        QOperationStateScreen::instance()->setVisible(true);
     }
     else
     {
-        m_operationStateScreen->raise();
-        m_operationStateScreen->activateWindow();
+        QOperationStateScreen::instance()->raise();
+        QOperationStateScreen::instance()->activateWindow();
     }
 }
 #endif
@@ -351,7 +346,7 @@ void QueryScreen::closeEvent(QCloseEvent *event)
     // des de la QueryScreen perquè Starviewer es tanqui en cas que no hi ha hagi cap visor QApplicationMainWindow.
 #ifndef STARVIEWER_LITE
     // Tanquem la QOperationStateScreen al tancar la QueryScreen
-    m_operationStateScreen->close();
+    QOperationStateScreen::instance()->close();
 #endif
     m_qcreateDicomdir->close();
 

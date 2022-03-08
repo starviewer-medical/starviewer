@@ -21,7 +21,6 @@ namespace udg {
 
 class DicomMask;
 class QCreateDicomdir;
-class QOperationStateScreen;
 class StatsWatcher;
 class StudyOperationResult;
 
@@ -143,10 +142,6 @@ private:
     QCreateDicomdir *m_qcreateDicomdir;
 
     StatsWatcher *m_statsWatcher;
-
-#ifndef STARVIEWER_LITE
-    QOperationStateScreen *m_operationStateScreen;
-#endif
 
     /// Indica quans jobs tenim pendents de finalitzar (s'estan esperant per executar o s'estan executant)
     int m_pacsOperationsRunning;
