@@ -16,20 +16,17 @@
 
 #include "inputoutputsettings.h"
 #include "logging.h"
+#include "messagebus.h"
 #include "pacsdevice.h"
 #include "pacsdevicemanager.h"
 #include "pacsdevicemodel.h"
 #include "portinuse.h"
 #include "qpacsdialog.h"
-#include "queryscreen.h"
-#include "singleton.h"
 #include "starviewerapplication.h"
 
 #include <QSortFilterProxyModel>
 
 namespace udg {
-
-typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 
 QPacsConfigurationScreen::QPacsConfigurationScreen(QWidget *parent)
  : QWidget(parent)
@@ -314,7 +311,7 @@ void QPacsConfigurationScreen::checkIncomingConnectionsPortNotInUse()
 void QPacsConfigurationScreen::refreshPacsList()
 {
     m_pacsDeviceModel->refresh();
-    QueryScreenSingleton::instance()->updateConfiguration("Pacs/ListChanged");
+    MessageBus::instance()->send("Pacs/ListChanged");
 }
 
 };

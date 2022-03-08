@@ -146,6 +146,7 @@ set(SOURCES
     measurecomputer.cpp
     measurementmanager.cpp
     measurementtool.cpp
+    messagebus.cpp
     modalitysynccriterion.cpp
     nmctfusionroidataprinter.cpp
     nmctvolumedisplayunithandler.cpp

@@ -17,6 +17,7 @@
 #include "dicommask.h"
 #include "externalstudyrequestmanager.h"
 #include "inputoutputsettings.h"
+#include "messagebus.h"
 #include "portinuse.h"
 #include "qcreatedicomdir.h"
 #include "qoperationstatescreen.h"
@@ -132,6 +133,8 @@ void QueryScreen::createConnections()
 
     /// Ens informa quan hi hagut un canvi d'estat en alguna de les operacions
     connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
+
+    connect(MessageBus::instance(), &MessageBus::message, this, &QueryScreen::updateConfiguration);
 }
 
 void QueryScreen::checkRequirements()
