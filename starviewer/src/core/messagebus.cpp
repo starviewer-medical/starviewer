@@ -16,9 +16,9 @@
 
 namespace udg {
 
-void MessageBus::send(const QString &message)
+void MessageBus::send(const QString &key, const QVariant &value)
 {
-    emit this->message(message);
+    emit message(key, value);
 }
 
 } // namespace udg

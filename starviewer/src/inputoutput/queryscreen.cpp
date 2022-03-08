@@ -124,17 +124,13 @@ void QueryScreen::createConnections()
 
     connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
     connect(m_qInputOutputDicomdirWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
-    connect(m_qInputOutputDicomdirWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
 
     connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>, bool)), SLOT(viewPatients(QList<Patient*>, bool)));
 
     connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewStudyFromDatabase(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(loadRetrievedStudy(QString)), SLOT(loadStudyFromDatabase(QString)));
 
-    /// Ens informa quan hi hagut un canvi d'estat en alguna de les operacions
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
-
-    connect(MessageBus::instance(), &MessageBus::message, this, &QueryScreen::updateConfiguration);
+    connect(MessageBus::instance(), &MessageBus::message, this, &QueryScreen::onMessage);
 }
 
 void QueryScreen::checkRequirements()
@@ -187,15 +183,19 @@ void QueryScreen::clearTexts()
     m_qadvancedSearchWidget->clear();
 }
 
-void QueryScreen::updateConfiguration(const QString &configuration)
+void QueryScreen::onMessage(const QString &key, const QVariant &value)
 {
-    if (configuration == "Pacs/ListChanged")
+    if (key == "Pacs/ListChanged")
     {
         m_PACSNodes->refresh();
     }
-    else if (configuration == "Pacs/CacheCleared")
+    else if (key == "Pacs/CacheCleared")
     {
         m_qInputOutputLocalDatabaseWidget->clear();
+    }
+    else if (key == "Database/StudyInserted")
+    {
+        m_qInputOutputLocalDatabaseWidget->addStudyToQStudyTreeWidget(value.toString());
     }
 }
 

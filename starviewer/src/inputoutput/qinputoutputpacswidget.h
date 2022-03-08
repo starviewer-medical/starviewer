@@ -59,9 +59,6 @@ signals:
     /// Signal que s'emet per indicar que un cop descarregat l'estudi s'ha de carregar únicament
     void loadRetrievedStudy(QString studyInstanceUID);
 
-    /// Signal que s'emet per indica que un estudi ha estat descarregat
-    void studyRetrieveFinished(QString studyInstanceUID);
-
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();

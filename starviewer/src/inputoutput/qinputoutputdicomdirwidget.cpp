@@ -14,23 +14,23 @@
 
 #include "qinputoutputdicomdirwidget.h"
 
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QShortcut>
-#include <QPair>
-
-#include "status.h"
-#include "logging.h"
-#include "starviewerapplication.h"
 #include "dicommask.h"
-#include "patient.h"
-#include "statswatcher.h"
-#include "inputoutputsettings.h"
 #include "harddiskinformation.h"
+#include "inputoutputsettings.h"
 #include "localdatabasemanager.h"
+#include "logging.h"
+#include "messagebus.h"
+#include "patient.h"
 #include "shortcutmanager.h"
-#include "dicomsource.h"
+#include "starviewerapplication.h"
+#include "statswatcher.h"
+#include "status.h"
+#include "study.h"
 #include "usermessage.h"
+
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QShortcut>
 
 namespace udg {
 
@@ -246,13 +246,11 @@ void QInputOutputDicomdirWidget::retrieveSelectedStudies()
         }
         else
         {
-            emit studyRetrieved(dicomMaskToRetrieve.getStudyInstanceUID());
+            MessageBus::instance()->send("Database/StudyInserted", dicomMaskToRetrieve.getStudyInstanceUID());
         }
     }
 
     QApplication::restoreOverrideCursor();
-
-    // queryStudy("Cache"); //Actualitzem la llista tenint en compte el criteri de cerca
 }
 
 void QInputOutputDicomdirWidget::view()

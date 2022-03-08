@@ -18,10 +18,12 @@
 #include <QObject>
 #include "singleton.h"
 
+#include <QVariant>
+
 namespace udg {
 
 /**
- * @brief The MessageBus class implements a global message bus to communicate simple messages between unrelated classes.
+ * @brief The MessageBus class implements a global message bus to communicate simple messages with a key and a value between unrelated classes.
  */
 class MessageBus : public QObject, public Singleton<MessageBus>
 {
@@ -29,11 +31,11 @@ class MessageBus : public QObject, public Singleton<MessageBus>
 
 public:
     /// Sends the given message through the bus.
-    void send(const QString &message);
+    void send(const QString &key, const QVariant &value = QVariant());
 
 signals:
     /// Emitted when a message is sent.
-    void message(const QString &message);
+    void message(const QString &key, const QVariant &value);
 
 private:
     friend Singleton<MessageBus>;

@@ -17,6 +17,7 @@
 #include "dicommask.h"
 #include "inputoutputsettings.h"
 #include "logging.h"
+#include "messagebus.h"
 #include "pacsrequeststatus.h"
 #include "settings.h"
 #include "shortcutmanager.h"
@@ -351,7 +352,7 @@ void QInputOutputPacsWidget::retrieveSelectedItemsFromQStudyTreeWidget(ActionsAf
 
 void QInputOutputPacsWidget::onRetrieveSuccess(StudyOperationResult *result, ActionsAfterRetrieve action)
 {
-    emit studyRetrieveFinished(result->getStudyInstanceUid());
+    MessageBus::instance()->send("Database/StudyInserted", result->getStudyInstanceUid());
 
     switch (action)
     {
