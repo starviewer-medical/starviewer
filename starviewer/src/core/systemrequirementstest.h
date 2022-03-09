@@ -33,10 +33,10 @@ class SystemRequirements;
 class SystemRequirementsTest : public DiagnosisTest {
 Q_OBJECT
 public:
-    SystemRequirementsTest(QObject *parent = 0);
-    ~SystemRequirementsTest();
+    explicit SystemRequirementsTest(QObject *parent = nullptr);
+    ~SystemRequirementsTest() override;
 
-    DiagnosisTestResult run();
+    DiagnosisTestResult run() override;
 
     /// Retorna la descripció del test
     QString getDescription() const override;

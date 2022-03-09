@@ -20,27 +20,27 @@ public:
     HRESULT m_initializeWindowsFirewallLibraryResult;
 
 protected:
-    virtual HRESULT initializeWindowsFirewall(INetFwProfile **firewallProfile)
+    HRESULT initializeWindowsFirewall(INetFwProfile **firewallProfile) override
     {
         Q_UNUSED(firewallProfile);
         return m_initializeWindowsFirewallResult;
     }
 
-    virtual HRESULT windowsFirewallIsOn(INetFwProfile *firewallProfile, bool *firewallOn)
+    HRESULT windowsFirewallIsOn(INetFwProfile *firewallProfile, bool *firewallOn) override
     {
         Q_UNUSED(firewallProfile);
         *firewallOn = m_firewallOn;
         return m_windowsFirewallIsOnResult;
     }
 
-    virtual HRESULT doesWindowsFirewallAllowExceptions(INetFwProfile *firewallProfile, bool *exceptionsAllowed)
+    HRESULT doesWindowsFirewallAllowExceptions(INetFwProfile *firewallProfile, bool *exceptionsAllowed) override
     {
         Q_UNUSED(firewallProfile);
         *exceptionsAllowed = m_exceptionsAllowed;
         return m_doesWindowsFirewallAllowExceptionsResult;
     }
 
-    virtual HRESULT isApplicationEnabledAtFirewall(INetFwProfile *firewallProfile, BSTR firewallProcessImageFileName, bool *firewallApplicationEnabled)
+    HRESULT isApplicationEnabledAtFirewall(INetFwProfile *firewallProfile, BSTR firewallProcessImageFileName, bool *firewallApplicationEnabled) override
     {
         Q_UNUSED(firewallProfile);
         Q_UNUSED(firewallProcessImageFileName);
@@ -48,16 +48,16 @@ protected:
         return m_isApplicationEnabledAtFirewallResult;
     }
 
-    virtual HRESULT initializeWindowsFirewallLibrary(LPVOID pvReserved, DWORD dwCoInit)
+    HRESULT initializeWindowsFirewallLibrary(LPVOID pvReserved, DWORD dwCoInit) override
     {
         Q_UNUSED(pvReserved);
         Q_UNUSED(dwCoInit);
         return m_initializeWindowsFirewallLibraryResult;
     }
 
-    virtual void UninitializeWindowsFirewallLibrary(){}
+    void UninitializeWindowsFirewallLibrary() override {}
 
-    virtual void CleanupWindowsFirewall(INetFwProfile *firewallProfile)
+    void CleanupWindowsFirewall(INetFwProfile *firewallProfile) override
     {
         Q_UNUSED(firewallProfile);
     }

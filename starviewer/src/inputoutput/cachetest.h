@@ -24,10 +24,10 @@ namespace udg {
 class CacheTest : public DiagnosisTest {
 Q_OBJECT
 public:
-    CacheTest(QObject *parent = 0);
-    ~CacheTest();
+    explicit CacheTest(QObject *parent = nullptr);
+    ~CacheTest() override;
 
-    DiagnosisTestResult run();
+    DiagnosisTestResult run() override;
 
     ///Retorna descripcio del test
     QString getDescription() const override;

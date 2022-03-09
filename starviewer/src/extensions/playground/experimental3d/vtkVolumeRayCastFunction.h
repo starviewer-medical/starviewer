@@ -134,7 +134,7 @@ class vtkVolumeRayCastFunction : public vtkObject
 {
 public:
   vtkTypeMacro(vtkVolumeRayCastFunction,vtkObject);
-  virtual void PrintSelf(ostream& os, vtkIndent indent);
+  void PrintSelf(ostream& os, vtkIndent indent) override;
 
 //BTX
   // Description:
@@ -161,7 +161,7 @@ protected:
     {
     VTK_LEGACY_BODY(vtkVolumeRayCastMapper::vtkVolumeRayCastMapper,"VTK 7.0");
     }
-  ~vtkVolumeRayCastFunction() {}
+  ~vtkVolumeRayCastFunction() override {}
 
 //BTX
   // Description:

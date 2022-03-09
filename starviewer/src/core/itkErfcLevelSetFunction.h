@@ -89,9 +89,9 @@ public:
   FeatureScalarType GetLowerThreshold() const
   { return m_LowerThreshold; }
 
-  virtual void CalculateSpeedImage();
+  virtual void CalculateSpeedImage() override;
 
-  virtual void Initialize(const RadiusType &r)
+  virtual void Initialize(const RadiusType &r) override
   {
     Superclass::Initialize(r);
 
@@ -193,12 +193,12 @@ protected:
     this->SetAlpha(1.0);
     this->SetMaskInsideValue(255);
   }
-  virtual ~ErfcLevelSetFunction(){}
+  ~ErfcLevelSetFunction() override {}
 
   ErfcLevelSetFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  void PrintSelf(std::ostream& os, Indent indent) const
+  void PrintSelf(std::ostream& os, Indent indent) const override
   {
     //Superclass::PrintSelf(os, indent );
     os << indent << "UpperThreshold: " << m_UpperThreshold << std::endl;

@@ -78,7 +78,7 @@ public:
     QString m_testingAPIHardDiskFreeSpace;
 
 protected:
-    IWbemClassObject* getNextObject(IEnumWbemClassObject *enumerator)
+    IWbemClassObject* getNextObject(IEnumWbemClassObject *enumerator) override
     {
         Q_UNUSED(enumerator);
         if (m_getNextObjectIndex <= 0)
@@ -92,7 +92,7 @@ protected:
         }
     }
 
-    IEnumWbemClassObject* executeQuery(QString query)
+    IEnumWbemClassObject* executeQuery(QString query) override
     {
         Q_UNUSED(query);
         return NULL;
@@ -106,7 +106,7 @@ protected:
         return resultBSTR;
     }
 
-    bool getProperty(IWbemClassObject *object, QString propertyName, VARIANT *propertyVariant)
+    bool getProperty(IWbemClassObject *object, QString propertyName, VARIANT *propertyVariant) override
     {
         Q_UNUSED(object);
         if (propertyName == "TotalPhysicalMemory")
@@ -152,7 +152,7 @@ protected:
         return m_getPropertyWorksProperly;
     }
 
-    void uninitializeAPI(IWbemServices *services)
+    void uninitializeAPI(IWbemServices *services) override
     {
         Q_UNUSED(services);
     }
@@ -162,7 +162,7 @@ protected:
         return m_testingAPIGPUOpenGLCompatibilities.toLocal8Bit();
     }
     
-    unsigned int getCPUNumberOfCoresFromEnvironmentVar()
+    unsigned int getCPUNumberOfCoresFromEnvironmentVar() override
     {
         return m_testingEnvironmentCPUNumberOfCores;
     }

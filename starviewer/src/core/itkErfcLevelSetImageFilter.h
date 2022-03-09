@@ -234,10 +234,10 @@ public:
 
 
 protected:
-  ~ErfcLevelSetImageFilter() {}
+  ~ErfcLevelSetImageFilter() override {}
   ErfcLevelSetImageFilter();
 
-  virtual void PrintSelf(std::ostream &os, Indent indent) const;
+  void PrintSelf(std::ostream &os, Indent indent) const override;
 
   ErfcLevelSetImageFilter(const Self &); // purposely not impl.
   void operator=(const Self&); //purposely not implemented

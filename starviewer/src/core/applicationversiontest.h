@@ -27,13 +27,13 @@ class ApplicationVersionTest : public DiagnosisTest {
 Q_OBJECT
 public:
     /// Constructor per defecte
-    ApplicationVersionTest(QObject *parent = 0);
+    explicit ApplicationVersionTest(QObject *parent = nullptr);
     /// Destructor
-    ~ApplicationVersionTest();
+    ~ApplicationVersionTest() override;
     /// Mètode implementat de la interfície DiagnosisTest.
     /// DiagnosisTestResult valdrà OK quan l'aplicació estigui actualitzada, Warning si hi ha alguna actualització disponible,
     /// i Error si hi ha hagut algun error.
-    DiagnosisTestResult run();
+    DiagnosisTestResult run() override;
     /// Retorna la descripció del test
     QString getDescription() const override;
 

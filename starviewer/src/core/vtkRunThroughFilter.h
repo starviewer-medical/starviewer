@@ -40,7 +40,7 @@ class  vtkRunThroughFilter : public vtkDataSetAlgorithm
 {
 public:
   vtkTypeMacro(vtkRunThroughFilter,vtkDataSetAlgorithm);
-  void PrintSelf(ostream& os, vtkIndent indent);
+  void PrintSelf(ostream& os, vtkIndent indent) override;
 
   // Description:
   // Create a new vtkRunThroughFilter.
@@ -50,9 +50,9 @@ public:
 protected:
 
   vtkRunThroughFilter() {};
-  virtual ~vtkRunThroughFilter() {};
+  ~vtkRunThroughFilter() override {};
 
-  int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
+  int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
 
 private:
   vtkRunThroughFilter(const vtkRunThroughFilter&);  // Not implemented.

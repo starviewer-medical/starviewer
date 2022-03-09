@@ -55,7 +55,7 @@ public:
     DICOMItemID = 7, Institution = 8, UID = 9, StudyID = 10, ProtocolName = 11, AccNumber = 12, Type = 13,
     RefPhysName = 14, PPStartDate = 15, PPStartTime = 16, ReqProcID = 17, SchedProcStep = 18, PatientBirth = 19 };
 
-    QStudyTreeWidget(QWidget *parent = 0);
+    explicit QStudyTreeWidget(QWidget *parent = nullptr);
 
     /// Indica si s'ha d'utilitzar el DICOMSource a part del InstanceUID per discriminar els estudis i considerar-lo dusplicats. Per defecte s'utilitza el DICOMSource per
     /// discrimnar els estudis
@@ -151,7 +151,7 @@ signals:
 
 protected:
     /// Mostra el menu contextual
-    void contextMenuEvent(QContextMenuEvent *event);
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
     void keyPressEvent(QKeyEvent*) override;
 

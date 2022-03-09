@@ -37,10 +37,10 @@ public:
 
 protected:
     Vtk4DLinearRegressionGradientEstimator();
-    virtual ~Vtk4DLinearRegressionGradientEstimator();
+    ~Vtk4DLinearRegressionGradientEstimator() override;
 
     /// Recalcula les normals codificades i les magnituds del gradient.
-    virtual void UpdateNormals(void);
+    void UpdateNormals(void) override;
 
 private:
     // Not implemented

@@ -41,8 +41,8 @@ Q_OBJECT
 
 public:
     /// Crea l'editor amb un sol interval de 0 a 255 amb RGBA = (0,0,0,0).
-    QTransferFunctionEditorByValues(QWidget *parent = 0);
-    virtual ~QTransferFunctionEditorByValues();
+    explicit QTransferFunctionEditorByValues(QWidget *parent = nullptr);
+    ~QTransferFunctionEditorByValues() override;
 
     /// Sets the minimum input value mapped by this editor.
     void setMinimum(int minimum) override;
@@ -50,9 +50,9 @@ public:
     void setMaximum(int maximum) override;
 
     /// Assigna una funció de transferència a l'editor.
-    virtual void setTransferFunction(const TransferFunction &transferFunction);
+    void setTransferFunction(const TransferFunction &transferFunction) override;
     /// Retorna la funció de transferència de l'editor.
-    virtual const TransferFunction& getTransferFunction() const;
+    const TransferFunction& getTransferFunction() const override;
 
 public slots:
     /// Afegeix un interval a l'editor (al final). Si ja n'hi ha el màxim no fa res.

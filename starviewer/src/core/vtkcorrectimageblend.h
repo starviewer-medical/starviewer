@@ -33,12 +33,12 @@ public:
 
 protected:
     VtkCorrectImageBlend();
-    virtual ~VtkCorrectImageBlend();
+    ~VtkCorrectImageBlend() override;
 
-    virtual int FillInputPortInformation(int port, vtkInformation *info);
-    virtual int RequestUpdateExtent(vtkInformation *request, vtkInformationVector **inputVector, vtkInformationVector *outputVector);
-    virtual void ThreadedRequestData(vtkInformation *request, vtkInformationVector **inputVector, vtkInformationVector *outputVector,
-                                     vtkImageData ***inputData, vtkImageData **outputData, int outputExtent[6], int threadId);
+    int FillInputPortInformation(int port, vtkInformation *info) override;
+    int RequestUpdateExtent(vtkInformation *request, vtkInformationVector **inputVector, vtkInformationVector *outputVector) override;
+    void ThreadedRequestData(vtkInformation *request, vtkInformationVector **inputVector, vtkInformationVector *outputVector,
+                             vtkImageData ***inputData, vtkImageData **outputData, int outputExtent[6], int threadId) override;
 
 private:
     VtkCorrectImageBlend(const VtkCorrectImageBlend&);  // Not implemented.

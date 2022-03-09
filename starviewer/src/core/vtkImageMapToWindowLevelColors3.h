@@ -54,7 +54,7 @@ class VTK_EXPORT vtkImageMapToWindowLevelColors3 : public vtkImageMapToColors
 public:
   static vtkImageMapToWindowLevelColors3 *New();
   vtkTypeMacro(vtkImageMapToWindowLevelColors3,vtkImageMapToColors)
-  void PrintSelf(ostream& os, vtkIndent indent);
+  void PrintSelf(ostream& os, vtkIndent indent) override;
 
   // Description:
   // Set / Get the Window to use -> modulation will be performed on the
@@ -72,17 +72,17 @@ public:
 
 protected:
   vtkImageMapToWindowLevelColors3();
-  ~vtkImageMapToWindowLevelColors3();
+  ~vtkImageMapToWindowLevelColors3() override;
 
-  virtual int RequestInformation (vtkInformation *, vtkInformationVector **, vtkInformationVector *);
+  virtual int RequestInformation (vtkInformation *, vtkInformationVector **, vtkInformationVector *) override;
   void ThreadedRequestData(vtkInformation *request,
                            vtkInformationVector **inputVector,
                            vtkInformationVector *outputVector,
                            vtkImageData ***inData, vtkImageData **outData,
-                           int extent[6], int id);
-  virtual int RequestData(vtkInformation *request,
-                          vtkInformationVector **inputVector,
-                          vtkInformationVector *outputVector);
+                           int extent[6], int id) override;
+  int RequestData(vtkInformation *request,
+                  vtkInformationVector **inputVector,
+                  vtkInformationVector *outputVector) override;
 
   double Window;
   double Level;

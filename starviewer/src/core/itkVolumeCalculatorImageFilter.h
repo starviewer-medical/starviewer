@@ -95,17 +95,17 @@ public:
 
 protected:
   VolumeCalculatorImageFilter();
-  virtual ~VolumeCalculatorImageFilter() {}
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  ~VolumeCalculatorImageFilter() override {}
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
   /** Pass the input through unmodified. Do this by Grafting in the AllocateOutputs method. */
-  void AllocateOutputs();      
+  void AllocateOutputs() override;
 
   /** Initialize some accumulators before the threads run. */
-  void BeforeThreadedGenerateData ();
+  void BeforeThreadedGenerateData() override;
   
   /** Do final mean and variance computation from data accumulated in threads. */
-  void AfterThreadedGenerateData ();
+  void AfterThreadedGenerateData() override;
   
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData (const RegionType& 
@@ -113,10 +113,10 @@ protected:
                               int threadId) ;
 
   // Override since the filter needs all the data for the algorithm
-  void GenerateInputRequestedRegion();
+  void GenerateInputRequestedRegion() override;
 
   // Override since the filter produces all of its output
-  void EnlargeOutputRequestedRegion(DataObject *data);
+  void EnlargeOutputRequestedRegion(DataObject *data) override;
 
 private:
   VolumeCalculatorImageFilter(const Self&); //purposely not implemented

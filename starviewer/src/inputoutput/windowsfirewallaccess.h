@@ -28,9 +28,9 @@ namespace udg {
 class WindowsFirewallAccess : public FirewallAccess {
 public:
     WindowsFirewallAccess();
-    ~WindowsFirewallAccess();
+    ~WindowsFirewallAccess() override;
 
-    bool doesStarviewerHaveAccesThroughFirewall();
+    bool doesStarviewerHaveAccesThroughFirewall() override;
 
 protected:
     /// Inicialitza el Firewall de windows per tal de poder-lo utilitzar.

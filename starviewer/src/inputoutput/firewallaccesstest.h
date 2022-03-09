@@ -29,10 +29,10 @@ class FirewallAccess;
 class FirewallAccessTest : public DiagnosisTest {
 Q_OBJECT
 public:
-    FirewallAccessTest(QObject *parent = 0);
-    ~FirewallAccessTest();
+    explicit FirewallAccessTest(QObject *parent = nullptr);
+    ~FirewallAccessTest() override;
 
-    DiagnosisTestResult run();
+    DiagnosisTestResult run() override;
 
     /// Retorna la descripció del test
     QString getDescription() const override;
