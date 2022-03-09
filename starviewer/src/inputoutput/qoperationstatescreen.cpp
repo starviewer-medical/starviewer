@@ -181,7 +181,8 @@ void QOperationStateScreen::insertIntoTree(StudyOperationResult *result)
 
     item->setText(QOperationStateScreen::Status, tr("PENDING"));
     item->setText(QOperationStateScreen::Direction, result->getOperationType() == StudyOperationResult::OperationType::Store ? tr("Server") : tr("Local"));
-    item->setText(QOperationStateScreen::FromTo, result->getRequestPacsDevice().getAETitle());  // TODO what for WADO?
+    const PacsDevice &pacs = result->getRequestPacsDevice();
+    item->setText(QOperationStateScreen::FromTo, pacs.getType() == PacsDevice::Type::Dimse ? pacs.getAETitle() : pacs.getBaseUri().toString());
     item->setText(QOperationStateScreen::PatientID, result->getRequestStudy()->getParentPatient()->getID());
     item->setText(QOperationStateScreen::PatientName, result->getRequestStudy()->getParentPatient()->getFullName());
     item->setText(QOperationStateScreen::Date, QDate::currentDate().toString(Qt::ISODate) + "   " + QTime::currentTime().toString("hh:mm"));
