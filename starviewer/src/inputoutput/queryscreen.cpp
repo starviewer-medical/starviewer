@@ -99,6 +99,10 @@ void QueryScreen::initialize()
     refreshTab(LocalDataBaseTab);
 
     m_pacsOperationsRunning = 0;
+
+#ifndef STARVIEWER_LITE
+    QOperationStateScreen::instance();  // force instantiation so it can create the needed connections
+#endif
 }
 
 void QueryScreen::createConnections()
