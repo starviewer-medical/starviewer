@@ -16,6 +16,7 @@
 #define UDGQOPERATIONSTATESCREEN_H
 
 #include "ui_qoperationstatescreenbase.h"
+#include "singleton.h"
 
 #include <QHash>
 
@@ -28,13 +29,10 @@ class StudyOperationResult;
  *
  * It allows to cancel current and pending operations.
  */
-class QOperationStateScreen : public QDialog, private Ui::QOperationStateScreenBase {
+class QOperationStateScreen : public QWidget, private Ui::QOperationStateScreenBase, public Singleton<QOperationStateScreen> {
 Q_OBJECT
 public:
     enum ColumnIndex { Status = 0, Direction = 1, FromTo = 2, PatientID = 3, PatientName = 4, Date = 5, Started = 6, Series = 7, Files = 8, Result = 9 };
-
-    explicit QOperationStateScreen(QWidget *parent = nullptr);
-    ~QOperationStateScreen() override;
 
 protected:
     /// Event que s'activa al tancar al rebren un event de tancament
@@ -67,6 +65,11 @@ private slots:
     void cancelSelectedRequests();
 
 private:
+    friend Singleton<QOperationStateScreen>;
+
+    explicit QOperationStateScreen(QWidget *parent = nullptr);
+    ~QOperationStateScreen() override;
+
     /// Crea les connexions pels signals i slots
     void createConnections();
 

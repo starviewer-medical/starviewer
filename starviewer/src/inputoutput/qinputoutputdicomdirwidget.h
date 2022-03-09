@@ -62,9 +62,6 @@ signals:
     /// Signal que s'emet per indicar que s'ha demanat visualitzar un estudi
     void viewPatients(QList<Patient*>);
 
-    /// Signal que s'emet per indica que un estudi ha estat descarregat
-    void studyRetrieved(QString studyInstanceUID);
-
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();

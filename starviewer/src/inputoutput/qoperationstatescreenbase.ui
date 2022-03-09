@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>udg::QOperationStateScreenBase</class>
- <widget class="QDialog" name="udg::QOperationStateScreenBase">
+ <widget class="QWidget" name="udg::QOperationStateScreenBase">
   <property name="geometry">
    <rect>
     <x>0</x>

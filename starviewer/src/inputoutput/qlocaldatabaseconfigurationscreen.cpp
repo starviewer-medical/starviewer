@@ -14,24 +14,22 @@
 
 #include "qlocaldatabaseconfigurationscreen.h"
 
-#include <QIntValidator>
-#include <QDir>
-#include <QMessageBox>
-#include <QFileDialog>
-
-#include "localdatabasemanager.h"
-#include "starviewerapplication.h"
-#include "inputoutputsettings.h"
-#include "logging.h"
 #include "databaseinstallation.h"
 #include "directoryutilities.h"
-#include "singleton.h"
-#include "queryscreen.h"
+#include "inputoutputsettings.h"
+#include "localdatabasemanager.h"
+#include "logging.h"
+#include "messagebus.h"
+#include "starviewerapplication.h"
 #include "usermessage.h"
 
-namespace udg {
+#include <QDir>
+#include <QFileDialog>
+#include <QIntValidator>
+#include <QMessageBox>
+#include <QProgressDialog>
 
-typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
+namespace udg {
 
 QLocalDatabaseConfigurationScreen::QLocalDatabaseConfigurationScreen(QWidget *parent)
  : QWidget(parent)
@@ -337,7 +335,7 @@ void QLocalDatabaseConfigurationScreen::deleteStudies()
         INFO_LOG("Neteja de la cache");
 
         clearCache();
-        QueryScreenSingleton::instance()->updateConfiguration("Pacs/CacheCleared");
+        MessageBus::instance()->send("Pacs/CacheCleared");
     }
 }
 

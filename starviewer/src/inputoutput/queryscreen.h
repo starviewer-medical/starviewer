@@ -21,7 +21,6 @@ namespace udg {
 
 class DicomMask;
 class QCreateDicomdir;
-class QOperationStateScreen;
 class StatsWatcher;
 class StudyOperationResult;
 
@@ -38,8 +37,8 @@ public slots:
     /// Obre un dicomdir
     void openDicomdir();
 
-    /// Actualitza la configuració que l'usuari hagi pogut canviar des del diàleg de configuració
-    void updateConfiguration(const QString &configuration);
+    /// Reacts to certain messages from MessageBus.
+    void onMessage(const QString &key, const QVariant &value);
 
     /// Si la finestra no és visible o està radera d'una altra, la fa visible i la porta al davant de les finestres.
     void bringToFront();
@@ -143,10 +142,6 @@ private:
     QCreateDicomdir *m_qcreateDicomdir;
 
     StatsWatcher *m_statsWatcher;
-
-#ifndef STARVIEWER_LITE
-    QOperationStateScreen *m_operationStateScreen;
-#endif
 
     /// Indica quans jobs tenim pendents de finalitzar (s'estan esperant per executar o s'estan executant)
     int m_pacsOperationsRunning;

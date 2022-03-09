@@ -17,6 +17,7 @@
 #include "dicommask.h"
 #include "externalstudyrequestmanager.h"
 #include "inputoutputsettings.h"
+#include "messagebus.h"
 #include "portinuse.h"
 #include "qcreatedicomdir.h"
 #include "qoperationstatescreen.h"
@@ -84,11 +85,6 @@ QueryScreen::~QueryScreen()
 void QueryScreen::initialize()
 {
     m_qcreateDicomdir = new udg::QCreateDicomdir(this);
-#ifndef STARVIEWER_LITE
-    // Posem com a pare el pare de la queryscreen, d'aquesta manera quan es tanqui el pare de la queryscreen
-    // el QOperationStateScreen també es tancarà
-    m_operationStateScreen = new udg::QOperationStateScreen(this);
-#endif
     // Indiquem quin és la intefície encara de crear dicomdir per a que es puguin comunicar
     m_qInputOutputLocalDatabaseWidget->setQCreateDicomdir(m_qcreateDicomdir);
 
@@ -128,15 +124,13 @@ void QueryScreen::createConnections()
 
     connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
     connect(m_qInputOutputDicomdirWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
-    connect(m_qInputOutputDicomdirWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
 
     connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>, bool)), SLOT(viewPatients(QList<Patient*>, bool)));
 
     connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewStudyFromDatabase(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(loadRetrievedStudy(QString)), SLOT(loadStudyFromDatabase(QString)));
 
-    /// Ens informa quan hi hagut un canvi d'estat en alguna de les operacions
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
+    connect(MessageBus::instance(), &MessageBus::message, this, &QueryScreen::onMessage);
 }
 
 void QueryScreen::checkRequirements()
@@ -189,15 +183,19 @@ void QueryScreen::clearTexts()
     m_qadvancedSearchWidget->clear();
 }
 
-void QueryScreen::updateConfiguration(const QString &configuration)
+void QueryScreen::onMessage(const QString &key, const QVariant &value)
 {
-    if (configuration == "Pacs/ListChanged")
+    if (key == "Pacs/ListChanged")
     {
         m_PACSNodes->refresh();
     }
-    else if (configuration == "Pacs/CacheCleared")
+    else if (key == "Pacs/CacheCleared")
     {
         m_qInputOutputLocalDatabaseWidget->clear();
+    }
+    else if (key == "Database/StudyInserted")
+    {
+        m_qInputOutputLocalDatabaseWidget->addStudyToQStudyTreeWidget(value.toString());
     }
 }
 
@@ -313,14 +311,14 @@ void QueryScreen::viewPatients(QList<Patient*> listPatientsToView, bool loadOnly
 #ifndef STARVIEWER_LITE
 void QueryScreen::showOperationStateScreen()
 {
-    if (!m_operationStateScreen->isVisible())
+    if (!QOperationStateScreen::instance()->isVisible())
     {
-        m_operationStateScreen->setVisible(true);
+        QOperationStateScreen::instance()->setVisible(true);
     }
     else
     {
-        m_operationStateScreen->raise();
-        m_operationStateScreen->activateWindow();
+        QOperationStateScreen::instance()->raise();
+        QOperationStateScreen::instance()->activateWindow();
     }
 }
 #endif
@@ -351,7 +349,7 @@ void QueryScreen::closeEvent(QCloseEvent *event)
     // des de la QueryScreen perquè Starviewer es tanqui en cas que no hi ha hagi cap visor QApplicationMainWindow.
 #ifndef STARVIEWER_LITE
     // Tanquem la QOperationStateScreen al tancar la QueryScreen
-    m_operationStateScreen->close();
+    QOperationStateScreen::instance()->close();
 #endif
     m_qcreateDicomdir->close();
 

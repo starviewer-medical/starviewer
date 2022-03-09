@@ -39,89 +39,44 @@
 
 namespace udg {
 
-typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
 typedef Singleton<PatientComparer> PatientComparerSingleton;
 
 ExtensionHandler::ExtensionHandler(QApplicationMainWindow *mainApp, QObject *parent)
  : QObject(parent)
 {
     m_mainApp = mainApp;
+    m_queryScreen = new QueryScreen();
 
     createConnections();
-
-    // Cada cop que creem una nova finestra tancarem qualsevol instància de QueryScreen. Així queda més clar que 
-    // la finestra que la invoca és la que rep el resultat d'aquesta
-    // TODO Cal millorar el disseny de la interacció amb la QueryScreen per tal de no tenir problemes com els que s'exposen als tickets
-    // #1858, #1018. De moment ho solventem amb aquests hacks, però no són una bona solució
-    // TODO:xapussa per a que l'starviewer escolti les peticions del RIS, com que tot el codi d'escoltar les peticions del ris està a la
-    // queryscreen l'hem d'instanciar ja a l'inici perquè ja escolti les peticions
-    disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), 0, 0);
-    connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
-
-    connect(QueryScreenSingleton::instance(), SIGNAL(closed()), SLOT(queryScreenIsClosed()));
-    m_haveToCloseQueryScreen = false;
 }
 
 ExtensionHandler::~ExtensionHandler()
 {
-    // Cada cop que tanquem una finestra forçarem el tancament de la queryscreen. Això es fa perquè quedi clar que
-    // QueryScreen <-> finestra on s'obren els estudis, estan lligats segons qui l'ha invocat
-    // TODO Tot això precisa d'un millor disseny, però de moment evita problemes com els del ticket #1858
-    if (m_haveToCloseQueryScreen)
-    {
-        QueryScreenSingleton::instance()->close();
-    }
+    delete m_queryScreen;
 }
 
-void ExtensionHandler::queryScreenIsClosed()
+void ExtensionHandler::request(Request request)
 {
-    m_haveToCloseQueryScreen = false;
-}
-
-void ExtensionHandler::request(int who)
-{
-    // \TODO: crear l'extensió amb el factory ::createExtension, no com està ara
-    // \TODO la numeració és completament temporal!!! s'haurà de canviar aquest sistema
-    INFO_LOG("Request d'extensió amb ID: " + QString::number(who));
-    switch (who)
+    switch (request)
     {
-        case 1:
+        case Request::LocalDatabase:
+            m_queryScreen->showLocalExams();
+            break;
+
+        case Request::Pacs:
+            m_queryScreen->showPACSTab();
+            break;
+
+        case Request::Dicomdir:
+            m_queryScreen->openDicomdir();
+            break;
+
+        case Request::OpenFiles:
             m_importFileApp.open();
             break;
 
-        case 6:
+        case Request::OpenDirectory:
             m_importFileApp.openDirectory();
-            break;
-
-        case 7:
-            // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
-            // dues finestres (mirar ticket #542). Fem aquest petit hack perquè això no passi.
-            // Queda pendent resoldre-ho de la forma adequada
-            disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), 0, 0);
-            QueryScreenSingleton::instance()->showPACSTab();
-            connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
-            m_haveToCloseQueryScreen = true;
-            break;
-
-        case 8:
-            // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
-            // dues finestres (mirar ticket #542). Fem aquest petit hack perquè això no passi.
-            // Queda pendent resoldre-ho de la forma adequada
-            disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), 0, 0);
-            QueryScreenSingleton::instance()->openDicomdir();
-            connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
-            m_haveToCloseQueryScreen = true;
-            break;
-
-        case 10:
-            // Mostrar local
-            // HACK degut a que la QueryScreen és un singleton, això provoca efectes colaterals quan teníem
-            // dues finestres (mirar ticket #542). Fem aquest petit hack perquè això no passi.
-            // Queda pendent resoldre-ho de la forma adequada
-            disconnect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), 0, 0);
-            QueryScreenSingleton::instance()->showLocalExams();
-            connect(QueryScreenSingleton::instance(), SIGNAL(selectedPatients(QList<Patient*>, bool)), SLOT(processInput(QList<Patient*>, bool)));
-            m_haveToCloseQueryScreen = true;
             break;
     }
 }
@@ -204,6 +159,7 @@ ExtensionContext &ExtensionHandler::getContext()
 
 void ExtensionHandler::createConnections()
 {
+    connect(m_queryScreen, &QueryScreen::selectedPatients, this, static_cast<void(ExtensionHandler::*)(QList<Patient*>,bool)>(&ExtensionHandler::processInput));
     connect(&m_importFileApp, SIGNAL(selectedFiles(QStringList)), SLOT(processInput(QStringList)));
 }
 

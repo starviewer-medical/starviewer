@@ -27,10 +27,9 @@
 namespace udg {
 
 QOperationStateScreen::QOperationStateScreen(QWidget *parent)
- : QDialog(parent)
+ : QWidget(parent)
 {
     setupUi(this);
-    setWindowFlags((this->windowFlags() | Qt::WindowMaximizeButtonHint) ^ Qt::WindowContextHelpButtonHint);
 
     createConnections();
 
