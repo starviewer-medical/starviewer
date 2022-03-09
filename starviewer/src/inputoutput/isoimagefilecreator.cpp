@@ -190,7 +190,7 @@ void IsoImageFileCreator::finishCreationProcess(int exitCode)
         m_lastErrorDescription = QObject::tr("An error occurred during the ISO image file creation process.");
         m_lastError = InternalError;
 
-        ERROR_LOG("Error al crear ISO; Exit code qprocess: " + exitCode);
+        ERROR_LOG(QString("Error al crear ISO; Exit code qprocess: %1").arg(exitCode));
         emit finishedCreateIsoImageFile(false);
     }
     else

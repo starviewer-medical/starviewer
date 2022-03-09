@@ -249,7 +249,7 @@ void VolumePixelData::convertToNeutralPixelData()
         for (int j = 0; j < 10; j++)
         {
             *scalarPointer = value;
-            *scalarPointer++;
+            scalarPointer++;
         }
     }
     m_loaded = true;

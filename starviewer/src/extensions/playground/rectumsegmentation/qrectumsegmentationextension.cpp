@@ -593,7 +593,6 @@ void QRectumSegmentationExtension::viewLesionOverlay()
 {
     if(m_lesionMaskVolume != 0)
     {
-        m_lesionMaskVolume = m_lesionMaskVolume;
         m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlapMethod(Q2DViewer::Blend);
         m_2DView->setOverlayInput(m_lesionMaskVolume);
