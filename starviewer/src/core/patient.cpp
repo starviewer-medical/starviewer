@@ -180,26 +180,25 @@ QString Patient::getSex() const
 
 bool Patient::addStudy(Study *study)
 {
-    bool ok = true;
-    QString uid = study->getInstanceUID();
+    const QString &uid = study->getInstanceUID();
+
     if (uid.isEmpty())
     {
-        ok = false;
-        DEBUG_LOG("L'uid de l'estudi està buit! No el podem insertar per inconsistent");
+        ERROR_LOG("Study has empty Study Instance UID. It can't be added to the patient.");
+        return false;
     }
     else if (this->studyExists(uid))
     {
-        ok = false;
-        DEBUG_LOG("Ja existeix un estudi amb aquest mateix UID:: " + uid);
+        DEBUG_LOG(QString("There is already another study with the same Study Instance UID: %1. This one won't be added to the patient.").arg(uid));
+        return false;
     }
     else
     {
         study->setParentPatient(this);
         this->insertStudy(study);
         emit studyAdded(study);
+        return true;
     }
-
-    return ok;
 }
 
 void Patient::removeStudy(const QString &uid)
