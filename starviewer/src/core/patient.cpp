@@ -364,16 +364,20 @@ void Patient::patientFusionLogMessage(const Patient &patient)
     switch (compareTo(&patient))
     {
         case SamePatients:
-            INFO_LOG("Fusionem dos pacients iguals: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
+            INFO_LOG("Merging equal patients.");
+            DEBUG_LOG(">>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
         case SamePatientIDsDifferentPatientNames:
-            INFO_LOG("Fusionem dos pacients amb IDs iguals i noms diferents: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
+            INFO_LOG("Merging patients with same ID but different name.");
+            DEBUG_LOG(">>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
         case SamePatientNamesDifferentPatientIDs:
-            INFO_LOG("Fusionem dos pacients amb noms iguals i IDs diferents: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
+            INFO_LOG("Merging patients with same name but different ID.");
+            DEBUG_LOG(">>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
         case DifferentPatients:
-            INFO_LOG("Fusionem dos pacients diferents: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
+            INFO_LOG("Merging different patients.");
+            DEBUG_LOG(">>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
     }
 }

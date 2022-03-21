@@ -220,14 +220,13 @@ void ExtensionHandler::processInput(const QStringList &inputFiles)
             }
             else
             {
-                ERROR_LOG(patientsList.at(i)->toString());
-                ERROR_LOG("Error carregant aquest pacient. La serie retornada és null.");
+                ERROR_LOG(QString("Error loading study %1 from patient %2. It does not have any series.")
+                          .arg(study->getInstanceUID(), patientsList.at(i)->getID()));
             }
         }
         else
         {
-            ERROR_LOG(patientsList.at(i)->toString());
-            ERROR_LOG("Error carregant aquest pacient. L'study retornat és null.");
+            ERROR_LOG(QString("Error loading patient %1. It does not have any study.").arg(patientsList.at(i)->getID()));
         }
 
         if (!error)

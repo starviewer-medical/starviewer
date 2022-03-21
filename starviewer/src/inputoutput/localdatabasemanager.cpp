@@ -273,9 +273,9 @@ void saveStudies(DatabaseConnection &databaseConnection, const QList<Study*> &st
 {
     foreach (Study *study, studyList)
     {
-        INFO_LOG(QString("Inserting to the database study %1 of modality %2 from %3 of patient %4").arg(study->getInstanceUID())
-                 .arg(study->getModalitiesAsSingleString()).arg(study->getDateTime().toString("dd/MM/yyyy hh:mm:ss"))
-                 .arg(study->getParentPatient()->getFullName()));
+        INFO_LOG(QString("Inserting to the database study %1 of modality %2 from %3 of patient %4.")
+                 .arg(study->getInstanceUID(), study->getModalitiesAsSingleString(), study->getDateTime().toString("yyyy-MM-dd hh:mm:ss"),
+                      study->getParentPatient()->getID()));
 
         saveSeries(databaseConnection, study->getSeries(), currentDate, currentTime);
 

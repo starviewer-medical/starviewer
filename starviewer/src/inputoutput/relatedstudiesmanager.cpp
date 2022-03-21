@@ -43,15 +43,15 @@ RelatedStudiesManager::~RelatedStudiesManager()
 
 void RelatedStudiesManager::queryMergedStudies(Patient *patient)
 {
-    INFO_LOG("Es buscaran els estudis del pacient " + patient->getFullName() + " amb ID " + patient->getID());
+    INFO_LOG(QString("Searching studies of patient with ID %1.").arg(patient->getID()));
 
     this->makeAsynchronousStudiesQuery(patient);
 }
 
 void RelatedStudiesManager::queryMergedPreviousStudies(Study *study)
 {
-    INFO_LOG("Es buscaran els estudis previs del pacient " + study->getParentPatient()->getFullName() + " amb ID " + study->getParentPatient()->getID() +
-    " de l'estudi " + study->getInstanceUID() + " fet a la data " + study->getDate().toString());
+    INFO_LOG(QString("Searching previous studies of study %1 from date %2, of patient with ID %3.")
+             .arg(study->getInstanceUID(), study->getDate().toString(), study->getParentPatient()->getID()));
 
     m_studyInstanceUIDOfStudyToFindRelated = study->getInstanceUID();
 
