@@ -1,5 +1,3 @@
-include(Theme)
-
 set(SOURCES
     applicationtranslationsloader.cpp
     crashhandler.cpp

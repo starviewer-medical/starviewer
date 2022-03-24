@@ -31,7 +31,7 @@ if(WIN32)
     install(PROGRAMS bin/mkisofs.exe DESTINATION .)
 elseif(UNIX AND NOT APPLE)
     install(PROGRAMS bin/starviewer.sh DESTINATION .)
-    install(DIRECTORY src/main/images/logo DESTINATION .)
+    install(DIRECTORY src/main/themes/${THEME}/images/logo DESTINATION .)
 endif()
 
 

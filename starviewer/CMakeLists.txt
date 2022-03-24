@@ -12,6 +12,7 @@ include(Options)
 include(CacheVariables)
 include(BuildSettings)
 include(DefaultSdkDirectories)
+include(Theme)
 
 include(GetTargetIncludes)
 include(LinkQt)
