@@ -20,7 +20,7 @@ set(FORMS
 
 set(RESOURCES
     crashreporter.qrc
-    ../main/main.qrc
+    ../main/themes/${THEME}/${THEME}.qrc
 )
 
 if(USE_QTCONF AND WIN32)
