@@ -47,17 +47,29 @@ void TestingSettings::remove(const QString &key)
     m_settings.remove(key);
 }
 
+bool TestingSettings::containsList(const QString &key) const
+{
+    return m_settings.contains(key) && m_settings.value(key).canConvert(QMetaType::QVariantList);
+}
+
 Settings::SettingListType TestingSettings::getList(const QString &key)
 {
-    QList<QVariant> variantsList = m_settings.value(key).toList();  // empty list if the key does not exist or does not contain a list
-    Settings::SettingListType list;
-
-    for (const QVariant &item : variantsList)
+    if (this->containsList(key))
     {
-        list.append(item.toMap());
-    }
+        const QList<QVariant> &variantsList = m_settings.value(key).toList();  // empty list if the key does not exist or does not contain a list
+        Settings::SettingListType list;
 
-    return list;
+        for (const QVariant &item : variantsList)
+        {
+            list.append(item.toMap());
+        }
+
+        return list;
+    }
+    else
+    {
+        return SettingsRegistry::instance()->getDefaultListValue(key);
+    }
 }
 
 void TestingSettings::setList(const QString &key, const Settings::SettingListType &list)

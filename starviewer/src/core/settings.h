@@ -64,6 +64,9 @@ public:
     typedef QMap<QString, QVariant> SettingsListItemType;
     typedef QList<SettingsListItemType> SettingListType;
 
+    /// Returns true if there is a list under the given key, and false otherwise.
+    bool containsList(const QString &key) const;
+
     /// Returns a list stored with the given key.
     SettingListType getList(const QString &key);
 

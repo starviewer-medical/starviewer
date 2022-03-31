@@ -27,9 +27,13 @@ class SettingsRegistry : public Singleton<SettingsRegistry> {
 public:
     /// Afegeix un setting al registre. Li donem la clau i valor que té per defecte
     void addSetting(const QString &key, const QVariant &defaultValue, Settings::Properties properties = Settings::None);
+    /// Adds a setting with a list to the registry.
+    void addListSetting(const QString &key, const Settings::SettingListType &defaultList);
 
     /// Retorna el valor que tingui per defecte el setting amb clau "key"
-    QVariant getDefaultValue(const QString &key);
+    QVariant getDefaultValue(const QString &key) const;
+    /// Returns the default list value for the given key.
+    Settings::SettingListType getDefaultListValue(const QString &key) const;
 
     /// Obté el nivell d'accés que té una determinada clau.
     /// Si no troba la definició per aquest clau, el valor

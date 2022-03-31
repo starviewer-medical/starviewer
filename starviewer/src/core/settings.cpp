@@ -66,6 +66,11 @@ QStringList Settings::getValueAsQStringList(const QString &key, const QString &s
     return getValue(key).toString().split(separator, QString::SkipEmptyParts);
 }
 
+bool Settings::containsList(const QString &key) const
+{
+    return m_settings->containsList(key);
+}
+
 Settings::SettingListType Settings::getList(const QString &key)
 {
     return m_settings->getList(key);

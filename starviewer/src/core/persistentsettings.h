@@ -50,6 +50,9 @@ public:
 
     // Methods to manage settings representing lists
 
+    /// Returns true if there is a list under the given key, and false otherwise.
+    bool containsList(const QString &key) const override;
+
     /// Returns a list stored with the given key.
     Settings::SettingListType getList(const QString &key) override;
 
