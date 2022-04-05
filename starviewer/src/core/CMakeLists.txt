@@ -197,6 +197,9 @@ set(SOURCES
     presentationstatefillerstep.cpp
     q2dviewer.cpp
     q2dviewerannotationhandler.cpp
+    q2dviewerannotationsconfigurationscreen.cpp
+    q2dviewerannotationsconfigurationwidget.cpp
+    q2dviewerannotationssettingshelper.cpp
     q2dviewerconfigurationscreen.cpp
     q2dviewerlayoutconfigurationscreen.cpp
     q2dviewerwidget.cpp
@@ -224,6 +227,7 @@ set(SOURCES
     qopacitytransferfunctiongraphicalview.cpp
     qopacitytransferfunctiongraphicalviewline.cpp
     qopacitytransferfunctiongraphicalviewnode.cpp
+    qplaintextedit2.cpp
     qreleasenotes.cpp
     qscreendistribution.cpp
     qscrollareawithbettersizehint.cpp
@@ -389,6 +393,8 @@ elseif(UNIX AND NOT APPLE)
 endif()
 
 set(FORMS
+    q2dviewerannotationsconfigurationscreenbase.ui
+    q2dviewerannotationsconfigurationwidgetbase.ui
     q2dviewerconfigurationscreenbase.ui
     q2dviewerlayoutconfigurationscreenbase.ui
     q2dviewerwidgetbase.ui

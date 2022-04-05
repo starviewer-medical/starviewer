@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Q2DViewerAnnotationsConfigurationScreenBase</class>
+ <widget class="QWidget" name="Q2DViewerAnnotationsConfigurationScreenBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>2D Viewer Annotations Configuration</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../main/themes/starviewer/starviewer.qrc">
+    <normaloff>:/images/icons/annotations.svg</normaloff>:/images/icons/annotations.svg</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QCheckBox" name="m_showViewersTextualInformationCheckBox">
+     <property name="text">
+      <string>Show viewers textual information by default</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="m_tabWidget">
+     <property name="tabsClosable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../main/themes/starviewer/starviewer.qrc"/>
+ </resources>
+ <connections/>
+</ui>

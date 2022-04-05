@@ -143,6 +143,9 @@ public:
     /// Default state of viewers textual information (annotations): visible or invisible.
     static const QString ShowViewersTextualInformation;
 
+    /// 2D viewer annotations settings for each modality.
+    static const QString Q2DViewerAnnotations;
+
     /// Layout division for viewers to apply when comparision mode is enabled.
     static const QString ComparisonModeDivision;
     enum ComparisonModeDivisionType { CurrentLeftPriorRight, CurrentRightPriorLeft, CurrentTopPriorBottom, CurrentBottomPriorTop };

@@ -11,22 +11,25 @@
   may be copied, modified, propagated, or distributed except according to the
   terms contained in the LICENSE file.
  *************************************************************************************/
-#include <QCloseEvent>
-#include <QScrollBar>
+
 #include "qconfigurationdialog.h"
 
+#include "q2dviewerannotationsconfigurationscreen.h"
+#include "q2dviewerconfigurationscreen.h"
+#include "q2dviewerlayoutconfigurationscreen.h"
+#include "qdicomdirconfigurationscreen.h"
+#include "qdpiconfigurationscreen.h"
+#include "qexternalapplicationconfigurationscreen.h"
+#include "qlocaldatabaseconfigurationscreen.h"
+#include "starviewerapplication.h"
+
 #ifndef STARVIEWER_LITE
+#include "qlistenrisrequestsconfigurationscreen.h"
 #include "qpacsconfigurationscreen.h"
 #endif
 
-#include "qlocaldatabaseconfigurationscreen.h"
-#include "qlistenrisrequestsconfigurationscreen.h"
-#include "qdicomdirconfigurationscreen.h"
-#include "q2dviewerconfigurationscreen.h"
-#include "q2dviewerlayoutconfigurationscreen.h"
-#include "qexternalapplicationconfigurationscreen.h"
-#include "qdpiconfigurationscreen.h"
-#include "starviewerapplication.h"
+#include <QCloseEvent>
+#include <QScrollBar>
 
 namespace udg {
 
@@ -44,6 +47,8 @@ QConfigurationDialog::QConfigurationDialog(QWidget *parent, Qt::WindowFlags f)
     // Configuració del layout del visor 2D
     Q2DViewerLayoutConfigurationScreen *q2dviewerLayoutScreen = new Q2DViewerLayoutConfigurationScreen(this);
     this->addConfigurationWidget(q2dviewerLayoutScreen, tr("2D Viewer Layout"), BasicConfiguration);
+
+    this->addConfigurationWidget(new Q2DViewerAnnotationsConfigurationScreen(this), tr("2D Viewer Annotations"), AdvancedConfiguration);
 
 #ifndef STARVIEWER_LITE
     // No mostrem configuració del PACS
