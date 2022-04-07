@@ -16,7 +16,6 @@
 #define UDGQ2DVIEWER_H
 
 #include "qviewer.h"
-#include "annotationflags.h"
 #include "anatomicalplane.h"
 #include "volumedisplayunit.h"
 
@@ -328,9 +327,8 @@ public slots:
     /// Indica el tipu de solapament dels volums, per defecte blending
     void setOverlapMethod(OverlapMethod method);
 
-    /// Afegir o treure la visibilitat d'una anotació textual/gràfica
-    void enableAnnotation(AnnotationFlags annotation, bool enable = true);
-    void removeAnnotation(AnnotationFlags annotation);
+    /// Enables or disables annotations in this viewer according to the given boolean.
+    void enableAnnotations(bool enable);
 
     /// Sets the VOI LUT for this viewer.
     virtual void setVoiLut(const VoiLut &voiLut);

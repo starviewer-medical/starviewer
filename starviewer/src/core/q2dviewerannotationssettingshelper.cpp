@@ -38,7 +38,7 @@ const Q2DViewerAnnotationsSettings DefaultDefaultSettings{
     // top left
     "{%imageWidth%} x {%imageHeight%}\n"
     "{%lutName%} WW: {%windowWidth%} WL: {%windowCenter%}\n" +
-    QString("{%threshold:%1: $&%}").arg(QObject::tr("Threshold")),
+    QString("{%threshold:%1: $&%%}").arg(QObject::tr("Threshold")),
     // top right
     "{%InstitutionName%}\n"
     "{%PatientName%}\n"

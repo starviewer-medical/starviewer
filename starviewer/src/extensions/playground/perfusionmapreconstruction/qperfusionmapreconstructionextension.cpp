@@ -978,7 +978,7 @@ void QPerfusionMapReconstructionExtension::applyFilterMapImage()
         //m_mapVolume->getVtkData()->Update();
         m_2DView->getViewer()->setInput(mapVolume);
         //m_2DView->removeAnnotation(Q2DViewer::AllAnnotation);
-        m_2DView->getViewer()->removeAnnotation(NoAnnotation);
+        m_2DView->getViewer()->enableAnnotations(false);
         this->createColorMap(auxImage, m_2DView->getViewer());
         QApplication::restoreOverrideCursor();
 
