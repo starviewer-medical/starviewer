@@ -352,6 +352,26 @@ const QHash<QString, decltype(&getDicomPatientID)> VariableGetters{
     {"thickness", &getVariableThickness}
 };
 
+// Gets the value from the given DICOM tag in "ggggeeee" format, if present, and returns it.
+QString getCustomDicomTag(const Q2DViewer *viewer, const QString &dicomTag)
+{
+    Image *image = viewer->getCurrentDisplayedImage();
+
+    if (!image)
+    {
+        image = viewer->getMainInput()->getImage(0);    // if we don't have a current image, use the first image
+
+        if (!image)
+        {
+            return {};
+        }
+    }
+
+    int group = dicomTag.left(4).toInt(nullptr, 16);
+    int element = dicomTag.right(4).toInt(nullptr, 16);
+    return image->getDicomTagReader().getValueAttributeAsQString(DICOMTag(group, element));
+}
+
 }
 
 Q2DViewerAnnotationHandler::Q2DViewerAnnotationHandler(Q2DViewer *viewer)
@@ -450,12 +470,13 @@ void Q2DViewerAnnotationHandler::addActors()
 
 void Q2DViewerAnnotationHandler::updateCornerAnnotation(CornerAnnotationIndexType corner)
 {
-    static const QRegularExpression RegularExpression("{%([a-z]+)(?::(.*?))?%}", QRegularExpression::CaseInsensitiveOption);
+    static const QRegularExpression VariableRegularExpression("{%([a-z]+)(?::(.*?))?%}", QRegularExpression::CaseInsensitiveOption);
+    static const QRegularExpression DicomTagRegularExpression("{%([0-9a-f]{8})(?::(.*?))?%}", QRegularExpression::CaseInsensitiveOption);
 
     if (m_annotationsEnabled && m_2DViewer->hasInput())
     {
         QString annotation = getAnnotationTemplateForCorner(corner);
-        QRegularExpressionMatchIterator it = RegularExpression.globalMatch(annotation);
+        QRegularExpressionMatchIterator it = VariableRegularExpression.globalMatch(annotation);
 
         while (it.hasNext())
         {
@@ -475,6 +496,24 @@ void Q2DViewerAnnotationHandler::updateCornerAnnotation(CornerAnnotationIndexTyp
 
                 annotation.replace(matchedString, value);
             }
+        }
+
+        it = DicomTagRegularExpression.globalMatch(annotation);
+
+        while (it.hasNext())
+        {
+            QRegularExpressionMatch match = it.next();
+            QString matchedString = match.captured(0);
+            QString dicomTag = match.captured(1);
+            QString format = match.captured(2); // null if not specified
+            QString value = getCustomDicomTag(m_2DViewer, dicomTag);
+
+            if (!format.isNull() && !value.isEmpty())
+            {
+                value = format.replace("$&", value);
+            }
+
+            annotation.replace(matchedString, value);
         }
 
         setCornerAnnotation(corner, annotation);
