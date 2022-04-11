@@ -33,59 +33,69 @@ const QString LeftOrientation("LeftOrientation");
 const QString RightOrientation("RightOrientation");
 const QString InvertSidesMG("InvertSidesMG");
 
-// Default settings for the "Default" modality.
-const Q2DViewerAnnotationsSettings DefaultDefaultSettings{
-    // top left
-    "{%imageWidth%} x {%imageHeight%}\n"
-    "{%lutName%} WW: {%windowWidth%} WL: {%windowCenter%}\n" +
-    QString("{%threshold:%1: $&%%}").arg(QObject::tr("Threshold")),
-    // top right
-    "{%InstitutionName%}\n"
-    "{%PatientName%}\n"
-    "{%patientAge%} {%PatientSex%} {%PatientID%}\n" +
-                                                //: accession number
-    QString("{%AccessionNumber:%1: $&%}\n").arg(QObject::tr("Acc")) +
-    "{%studyDate%}\n"
-    "{%seriesTime%}\n"
-    "{%imageTime%}",
-    // bottom left
-                                         //: location
-    QString("{%location:%1: $&%}\n").arg(QObject::tr("Loc")) +
-    QString("{%slice:%1: $&%} {%phase:%2: $&%} {%thickness:%3: $& mm%}").arg(QObject::tr("Slice"), QObject::tr("Phase"), QObject::tr("Thickness")),
-    // bottom right
-                                           //: laterality
-    QString("{%laterality:%1: $&%}\n").arg(QObject::tr("Lat")) +
-    QString("{%fusionBalance:%1: $&%}\n").arg(QObject::tr("Fusion")) +
-    "{%seriesLabel%}\n" +
-    QString("{%ReferringPhysicianName:%1: $&%}").arg(QObject::tr("Physician")),
-    // top/bottom/left/right orientation
-    true, true, true, true,
-    // invert sides MG
-    false
-};
+// Returns default settings for the "Default" modality. Can't be a static map directly because some strings are translated.
+Q2DViewerAnnotationsSettings getDefaultDefaultSettings()
+{
+    static const Q2DViewerAnnotationsSettings DefaultDefaultSettings{
+        // top left
+        "{%imageWidth%} x {%imageHeight%}\n"
+        "{%lutName%} WW: {%windowWidth%} WL: {%windowCenter%}\n" +
+        QString("{%threshold:%1: $&%%}").arg(QObject::tr("Threshold")),
+        // top right
+        "{%InstitutionName%}\n"
+        "{%PatientName%}\n"
+        "{%patientAge%} {%PatientSex%} {%PatientID%}\n" +
+                                                    //: accession number
+        QString("{%AccessionNumber:%1: $&%}\n").arg(QObject::tr("Acc")) +
+        "{%studyDate%}\n"
+        "{%seriesTime%}\n"
+        "{%imageTime%}",
+        // bottom left
+                                             //: location
+        QString("{%location:%1: $&%}\n").arg(QObject::tr("Loc")) +
+        QString("{%slice:%1: $&%} {%phase:%2: $&%} {%thickness:%3: $& mm%}").arg(QObject::tr("Slice"), QObject::tr("Phase"), QObject::tr("Thickness")),
+        // bottom right
+                                               //: laterality
+        QString("{%laterality:%1: $&%}\n").arg(QObject::tr("Lat")) +
+        QString("{%fusionBalance:%1: $&%}\n").arg(QObject::tr("Fusion")) +
+        "{%seriesLabel%}\n" +
+        QString("{%ReferringPhysicianName:%1: $&%}").arg(QObject::tr("Physician")),
+        // top/bottom/left/right orientation
+        true, true, true, true,
+        // invert sides MG
+        false
+    };
 
-// Default settings for "MG" modality.
-const Q2DViewerAnnotationsSettings DefaultMGSettings{
-    // top left
-    "",
-    // top right
-    "{%InstitutionName%}\n"
-    "{%PatientName%}\n"
-    "{%patientAge%} {%PatientSex%} {%PatientID%}\n" +
-                                                //: accession number
-    QString("{%AccessionNumber:%1: $&%}\n").arg(QObject::tr("Acc")) +
-    "{%studyDate%}\n"
-    "{%seriesTime%}\n"
-    "{%imageTime%}",
-    // bottom left
-    "",
-    // bottom right
-    "{%ImageLaterality%} {%mgProjection%}",
-    // top/bottom/left/right orientation
-    true, true, false, true,
-    // invert sides MG
-    true
-};
+    return DefaultDefaultSettings;
+}
+
+// Returns default settings for "MG" modality.  Can't be a static map directly because some strings are translated.
+Q2DViewerAnnotationsSettings getDefaultMGSettings()
+{
+    static const Q2DViewerAnnotationsSettings DefaultMGSettings{
+        // top left
+        "",
+        // top right
+        "{%InstitutionName%}\n"
+        "{%PatientName%}\n"
+        "{%patientAge%} {%PatientSex%} {%PatientID%}\n" +
+                                                    //: accession number
+        QString("{%AccessionNumber:%1: $&%}\n").arg(QObject::tr("Acc")) +
+        "{%studyDate%}\n"
+        "{%seriesTime%}\n"
+        "{%imageTime%}",
+        // bottom left
+        "",
+        // bottom right
+        "{%ImageLaterality%} {%mgProjection%}",
+        // top/bottom/left/right orientation
+        true, true, false, true,
+        // invert sides MG
+        true
+    };
+
+    return DefaultMGSettings;
+}
 
 // Returns a struct instance with values corresponding to the given map.
 Q2DViewerAnnotationsSettings mapToStruct(const Settings::SettingsListItemType &map)
@@ -132,7 +142,7 @@ bool Q2DViewerAnnotationsSettings::operator!=(const Q2DViewerAnnotationsSettings
 
 Settings::SettingListType Q2DViewerAnnotationsSettingsHelper::getSettingsDefaultValue()
 {
-    return {structToMap(Default, DefaultDefaultSettings), structToMap("MG", DefaultMGSettings)};
+    return {structToMap(Default, getDefaultDefaultSettings()), structToMap("MG", getDefaultMGSettings())};
 }
 
 Q2DViewerAnnotationsSettingsHelper::Q2DViewerAnnotationsSettingsHelper()
@@ -160,13 +170,13 @@ Q2DViewerAnnotationsSettingsHelper::Q2DViewerAnnotationsSettingsHelper()
     // Create missing entries if needed
     if (!m_settingsPerModality.contains(Default))
     {
-        settings.addListItem(CoreSettings::Q2DViewerAnnotations, structToMap(Default, DefaultDefaultSettings));
-        m_settingsPerModality[Default] = DefaultDefaultSettings;
+        settings.addListItem(CoreSettings::Q2DViewerAnnotations, structToMap(Default, getDefaultDefaultSettings()));
+        m_settingsPerModality[Default] = getDefaultDefaultSettings();
     }
     if (!m_settingsPerModality.contains("MG"))
     {
-        settings.addListItem(CoreSettings::Q2DViewerAnnotations, structToMap("MG", DefaultMGSettings));
-        m_settingsPerModality["MG"] = DefaultMGSettings;
+        settings.addListItem(CoreSettings::Q2DViewerAnnotations, structToMap("MG", getDefaultMGSettings()));
+        m_settingsPerModality["MG"] = getDefaultMGSettings();
     }
 }
 
@@ -192,11 +202,11 @@ Q2DViewerAnnotationsSettings Q2DViewerAnnotationsSettingsHelper::getDefaultSetti
 {
     if (modality == "MG")
     {
-        return DefaultMGSettings;
+        return getDefaultMGSettings();
     }
     else
     {
-        return DefaultDefaultSettings;
+        return getDefaultDefaultSettings();
     }
 }
 

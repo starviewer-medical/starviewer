@@ -189,7 +189,8 @@ int main(int argc, char *argv[])
     Q_UNUSED(crashHandler);
 #endif
 
-
+    initQtPluginsDirectory();
+    initializeTranslations(app);
 
     // Inicialitzem els settings
     udg::CoreSettings coreSettings;
@@ -201,9 +202,6 @@ int main(int argc, char *argv[])
     inputoutputSettings.init();
     interfaceSettings.init();
     shortcuts.init();
-
-    initQtPluginsDirectory();
-    initializeTranslations(app);
 
     // Registering the available sync actions
     udg::SyncActionsRegister::registerSyncActions();

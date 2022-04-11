@@ -19,8 +19,6 @@
 #include "starviewerapplication.h"
 
 #include <QDir>
-// Pel LanguageLocale
-#include <QLocale>
 #include <QStringList>
 #include <QVector>
 
@@ -129,7 +127,6 @@ void CoreSettings::init()
     settingsRegistry->addSetting(UserCustomWindowLevelsPath, UserDataRootPath + "customwindowlevels/customwindowlevels.xml");
     settingsRegistry->addSetting(RegisterStatLogs, false);
     settingsRegistry->addSetting(MagnifyingGlassZoomFactor, "4");
-    settingsRegistry->addSetting(LanguageLocale, QLocale::system().name());
     settingsRegistry->addSetting(LastReleaseNotesVersionShown, "");
     settingsRegistry->addSetting(NeverShowNewVersionReleaseNotes, false);
     settingsRegistry->addSetting(LastVersionChecked, "");
