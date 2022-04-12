@@ -198,6 +198,7 @@ set(SOURCES
     q2dviewer.cpp
     q2dviewerannotationhandler.cpp
     q2dviewerannotationsconfigurationscreen.cpp
+    q2dviewerannotationsconfigurationscreenhelp.cpp
     q2dviewerannotationsconfigurationwidget.cpp
     q2dviewerannotationssettingshelper.cpp
     q2dviewerconfigurationscreen.cpp
@@ -394,6 +395,7 @@ endif()
 
 set(FORMS
     q2dviewerannotationsconfigurationscreenbase.ui
+    q2dviewerannotationsconfigurationscreenhelpbase.ui
     q2dviewerannotationsconfigurationwidgetbase.ui
     q2dviewerconfigurationscreenbase.ui
     q2dviewerlayoutconfigurationscreenbase.ui

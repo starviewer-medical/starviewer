@@ -374,6 +374,40 @@ QString getCustomDicomTag(const Q2DViewer *viewer, const QString &dicomTag)
 
 }
 
+const QVector<QPair<QString, QString>>& Q2DViewerAnnotationHandler::getSupportedAnnotations()
+{
+    static QVector<QPair<QString, QString>> SupportedAnnotations{
+        {"PatientID", tr("Patient ID, directly extracted from the DICOM tag.")},
+        {"PatientName", tr("Patient’s name, directly extracted from the DICOM tag.")},
+        {"PatientSex", tr("Patient’s sex, directly extracted from the DICOM tag.")},
+        {"patientAge", tr("Patient’s age, either from the DICOM tag or calculated. If both differ, a warning is shown.")},
+        {"AccessionNumber", tr("Accession number, directly extracted from the DICOM tag.")},
+        {"InstitutionName", tr("Institution name, directly extracted from the DICOM tag.")},
+        {"ReferringPhysicianName", tr("Referring physician’s name, directly extracted from the DICOM tag.")},
+        {"studyDate", tr("Study date, in ISO 8601 format.")},
+        {"seriesTime", tr("Series time, in “hh:mm:ss” format. If not available, “--:--” is shown.")},
+        {"imageTime", tr("Image time, in “hh:mm:ss” format. If not available, “--:--” is shown. In reconstructions nothing is shown.")},
+        {"seriesLabel", tr("Descriptive label for the series, including the protocol name and the series description if this is different than the protocol "
+                           "name. When viewing a fusion of two series, descriptive labels for both series are shown separated by a “+”.")},
+        {"ImageLaterality", tr("Image laterality, directly extracted from the DICOM tag.")},
+        {"laterality", tr("Image laterality or, if not found, series laterality, directly extracted from the DICOM tag.")},
+        {"mgProjection", tr("Mammography projection label using standardised values.")},
+        {"fusionBalance", tr("Fusion balance, showing the contribution of each image. Only shown if there is a fusion.")},
+        {"imageWidth", tr("Image width in pixels with the current projection.")},
+        {"imageHeight", tr("Image height in pixels with the current projection.")},
+        {"lutName", tr("Name of the applied VOI LUT, if any, usually extracted from the DICOM tag “LUT Explanation”. Does not change with the VOI LUT tool.")},
+        {"windowWidth", tr("Current window width.")},
+        {"windowCenter", tr("Current window center.")},
+        {"threshold", tr("Current threshold in PET and SPECT images. Not shown for other image types.")},
+        {"location", tr("Slice location with 2 decimals. When thick slab is active, a range is shown. In reconstructions nothing is shown.")},
+        {"slice", tr("Current slice and number of slices in “current/total” format.")},
+        {"phase", tr("Current phase and number of phases in “current/total” format. If there is only one phase nothing is shown.")},
+        {"thickness", tr("Thickness of the current slice or the slab. If thickness is 0, nothing is shown.")}
+    };
+
+    return SupportedAnnotations;
+}
+
 Q2DViewerAnnotationHandler::Q2DViewerAnnotationHandler(Q2DViewer *viewer)
     : m_2DViewer(viewer), m_annotationsEnabled(true)
 {

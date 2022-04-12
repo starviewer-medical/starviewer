@@ -15,7 +15,7 @@
 #ifndef UDGQ2DVIEWERANNOTATIONHANDLER_H
 #define UDGQ2DVIEWERANNOTATIONHANDLER_H
 
-class QString;
+#include <QCoreApplication> // for Q_DECLARE_TR_FUNCTIONS
 
 class vtkCornerAnnotation;
 class vtkTextActor;
@@ -29,7 +29,12 @@ class Q2DViewer;
     It setups and adds all the needed actors to the viewer since it's been created.
  */
 class Q2DViewerAnnotationHandler {
+    Q_DECLARE_TR_FUNCTIONS(Q2DViewerAnnotationHandler)
+
 public:
+    /// Returns a list of supported annotation variables with their corresponding descriptions.
+    static const QVector<QPair<QString, QString>>& getSupportedAnnotations();
+
     explicit Q2DViewerAnnotationHandler(Q2DViewer *viewer);
     ~Q2DViewerAnnotationHandler();
 

@@ -19,6 +19,7 @@
 
 namespace udg {
 
+class Q2DViewerAnnotationsConfigurationScreenHelp;
 class Q2DViewerAnnotationsConfigurationWidget;
 
 /**
@@ -38,16 +39,26 @@ private:
     void initialize();
     /// Creates signal/slot connections for static widgets.
     void createConnections();
+    /// Adds a tab with the given modality, creating the needed connections.
+    Q2DViewerAnnotationsConfigurationWidget* addTab(const QString &modality);
 
     /// In practice, a private slot. It is called when the given tab changes its modality and checks if the new modality is acceptable. The modality is
     /// acceptable if it's not empty, not called "Default" and not equal to another modality. If the modality is acceptable, updates the tab name and calls
     /// updateModality() on the tab to accept the change, and otherwise calls restoreModality() to revert it.
     void validateModalityChange(Q2DViewerAnnotationsConfigurationWidget *tab, const QString &newModality);
 
+private slots:
+    /// Adds a new tab, creating the needed connections, and leaves it ready for the user to edit its modality.
+    void addNewTab();
+    /// Shows the help window.
+    void showHelp();
+
 private:
     /// Tab index that must be forced in the tab widget (-1 if none). Used when a modality change is rejected to ensure that the tab that was changed and is
     /// reverted is the current one.
     int m_forceTabIndex;
+    /// The help window.
+    Q2DViewerAnnotationsConfigurationScreenHelp *m_help;
 };
 
 } // namespace udg

@@ -44,6 +44,8 @@ public:
 signals:
     /// Emitted when the modality has been changed. Either updateModality() or restoreModality() must be called afterwards.
     void modalityChanged(QString modality);
+    /// Emitted when the help button is clicked.
+    void helpRequested();
 
 protected:
     /// If the key pressed is Enter/Return or Escape and m_modalityValidated is false, eats the key press. Otherwise, calls QWidget's implementation.

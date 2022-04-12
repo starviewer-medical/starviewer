@@ -15,11 +15,14 @@
 #include "q2dviewerannotationsconfigurationscreen.h"
 
 #include "coresettings.h"
+#include "q2dviewerannotationhandler.h"
+#include "q2dviewerannotationsconfigurationscreenhelp.h"
 #include "q2dviewerannotationsconfigurationwidget.h"
 #include "q2dviewerannotationssettingshelper.h"
 #include "starviewerapplication.h"
 
 #include <QAction>
+#include <QDesktopWidget>
 #include <QMessageBox>
 #include <QTabBar>
 #include <QToolButton>
@@ -27,7 +30,7 @@
 namespace udg {
 
 Q2DViewerAnnotationsConfigurationScreen::Q2DViewerAnnotationsConfigurationScreen(QWidget *parent)
-    : QWidget(parent), m_forceTabIndex(-1)
+    : QWidget(parent), m_forceTabIndex(-1), m_help(nullptr)
 {
     setupUi(this);
 
@@ -52,10 +55,11 @@ void Q2DViewerAnnotationsConfigurationScreen::initialize()
     m_showViewersTextualInformationCheckBox->setChecked(settings.getValue(CoreSettings::ShowViewersTextualInformation).toBool());
 
     Q2DViewerAnnotationsSettingsHelper helper;
-    m_tabWidget->addTab(new Q2DViewerAnnotationsConfigurationWidget("Default"), tr("Default"));
+    addTab("Default");
+    m_tabWidget->setTabText(0, tr("Default"));
     m_tabWidget->tabBar()->setTabButton(0, QTabBar::LeftSide, nullptr); // hide close button (both sides)
     m_tabWidget->tabBar()->setTabButton(0, QTabBar::RightSide, nullptr);
-    m_tabWidget->addTab(new Q2DViewerAnnotationsConfigurationWidget("MG"), "MG");
+    addTab("MG");
     m_tabWidget->tabBar()->setTabButton(1, QTabBar::LeftSide, nullptr);
     m_tabWidget->tabBar()->setTabButton(1, QTabBar::RightSide, nullptr);
 
@@ -64,25 +68,14 @@ void Q2DViewerAnnotationsConfigurationScreen::initialize()
 
     for (const QString &modality : qAsConst(otherModalities))
     {
-        auto tab = new Q2DViewerAnnotationsConfigurationWidget(modality);
-        m_tabWidget->addTab(tab, modality);
-        connect(tab, &Q2DViewerAnnotationsConfigurationWidget::modalityChanged, [=](const QString &newModality) {
-            validateModalityChange(tab, newModality);
-        });
+        addTab(modality);
     }
 
     QToolButton *addTabButton = new QToolButton();
     addTabButton->setDefaultAction(new QAction("+"));
     m_tabWidget->setCornerWidget(addTabButton); // button to add a new tab
 
-    connect(addTabButton, &QToolButton::clicked, [=] {
-        auto tab = new Q2DViewerAnnotationsConfigurationWidget("XX");
-        m_tabWidget->setCurrentIndex(m_tabWidget->addTab(tab, "XX"));
-        tab->editModality();
-        connect(tab, &Q2DViewerAnnotationsConfigurationWidget::modalityChanged, [=](const QString &newModality) {
-            validateModalityChange(tab, newModality);
-        });
-    });
+    connect(addTabButton, &QToolButton::clicked, this, &Q2DViewerAnnotationsConfigurationScreen::addNewTab);
 }
 
 void Q2DViewerAnnotationsConfigurationScreen::createConnections()
@@ -106,6 +99,19 @@ void Q2DViewerAnnotationsConfigurationScreen::createConnections()
         helper.deleteSettings(m_tabWidget->tabText(index));
         m_tabWidget->removeTab(index);
     });
+}
+
+Q2DViewerAnnotationsConfigurationWidget *Q2DViewerAnnotationsConfigurationScreen::addTab(const QString &modality)
+{
+    auto tab = new Q2DViewerAnnotationsConfigurationWidget(modality);
+    m_tabWidget->addTab(tab, modality);
+
+    connect(tab, &Q2DViewerAnnotationsConfigurationWidget::modalityChanged, [=](const QString &newModality) {
+        validateModalityChange(tab, newModality);
+    });
+    connect(tab, &Q2DViewerAnnotationsConfigurationWidget::helpRequested, this, &Q2DViewerAnnotationsConfigurationScreen::showHelp);
+
+    return tab;
 }
 
 void Q2DViewerAnnotationsConfigurationScreen::validateModalityChange(Q2DViewerAnnotationsConfigurationWidget *tab, const QString &newModality)
@@ -147,6 +153,40 @@ void Q2DViewerAnnotationsConfigurationScreen::validateModalityChange(Q2DViewerAn
         m_forceTabIndex = m_tabWidget->indexOf(tab);
         tab->restoreModality();
         tab->editModality();
+    }
+}
+
+void Q2DViewerAnnotationsConfigurationScreen::addNewTab()
+{
+    auto tab = addTab("XX");
+    m_tabWidget->setCurrentWidget(tab);
+    tab->editModality();
+}
+
+void Q2DViewerAnnotationsConfigurationScreen::showHelp()
+{
+    bool firstShow = false;
+
+    // The help window is created the first time. Afterwards, if the user closes the window and then requests help again, the same window is shown.
+    if (!m_help)
+    {
+        firstShow = true;
+        m_help = new Q2DViewerAnnotationsConfigurationScreenHelp(this);
+        m_help->setWindowFlags(Qt::Tool);
+
+        for (const QPair<QString, QString> &pair : Q2DViewerAnnotationHandler::getSupportedAnnotations())
+        {
+            m_help->addVariable("{%" + pair.first + "%}", pair.second);
+        }
+    }
+
+    m_help->show();
+
+    // Move window to top right of the screen on first show
+    if (firstShow)
+    {
+        const QRect &screenRect = qApp->desktop()->availableGeometry(m_help);
+        m_help->move(screenRect.width() - m_help->frameGeometry().width(), 0);
     }
 }
 

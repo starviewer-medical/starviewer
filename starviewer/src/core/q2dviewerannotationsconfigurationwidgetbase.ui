@@ -43,6 +43,17 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QPushButton" name="m_helpPushButton">
+       <property name="text">
+        <string>Help</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../main/themes/starviewer/starviewer.qrc">
+         <normaloff>:/images/icons/help-about.svg</normaloff>:/images/icons/help-about.svg</iconset>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

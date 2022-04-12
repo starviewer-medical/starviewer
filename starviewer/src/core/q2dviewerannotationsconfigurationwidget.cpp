@@ -56,6 +56,8 @@ Q2DViewerAnnotationsConfigurationWidget::Q2DViewerAnnotationsConfigurationWidget
         }
     });
 
+    connect(m_helpPushButton, &QPushButton::clicked, this, &Q2DViewerAnnotationsConfigurationWidget::helpRequested);
+
     connect(m_restoreDefaultsPushButton, &QPushButton::clicked, [this] {
         Q2DViewerAnnotationsSettingsHelper helper;
         populate(helper.getDefaultSettings(m_modality));
