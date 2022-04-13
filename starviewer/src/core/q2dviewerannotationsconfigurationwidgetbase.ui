@@ -170,28 +170,28 @@
       </layout>
      </item>
      <item row="1" column="0">
-      <widget class="udg::QPlainTextEdit2" name="m_topLeftPlainTextEdit">
+      <widget class="QPlainTextEdit" name="m_topLeftPlainTextEdit">
        <property name="lineWrapMode">
         <enum>QPlainTextEdit::NoWrap</enum>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="udg::QPlainTextEdit2" name="m_topRightPlainTextEdit">
-       <property name="lineWrapMode">
-        <enum>QPlainTextEdit::NoWrap</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="udg::QPlainTextEdit2" name="m_bottomLeftPlainTextEdit">
+      <widget class="QPlainTextEdit" name="m_topRightPlainTextEdit">
        <property name="lineWrapMode">
         <enum>QPlainTextEdit::NoWrap</enum>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="udg::QPlainTextEdit2" name="m_bottomRightPlainTextEdit">
+      <widget class="QPlainTextEdit" name="m_bottomRightPlainTextEdit">
+       <property name="lineWrapMode">
+        <enum>QPlainTextEdit::NoWrap</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QPlainTextEdit" name="m_bottomLeftPlainTextEdit">
        <property name="lineWrapMode">
         <enum>QPlainTextEdit::NoWrap</enum>
        </property>
@@ -236,13 +236,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>udg::QPlainTextEdit2</class>
-   <extends>QPlainTextEdit</extends>
-   <header>qplaintextedit2.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../main/themes/starviewer/starviewer.qrc"/>
  </resources>

@@ -23,10 +23,11 @@ Q2DViewerAnnotationsConfigurationWidget::Q2DViewerAnnotationsConfigurationWidget
 {
     setupUi(this);
 
-    m_topLeftPlainTextEdit->setAlignment(Qt::AlignLeft);
-    m_topRightPlainTextEdit->setAlignment(Qt::AlignRight);
-    m_bottomLeftPlainTextEdit->setAlignment(Qt::AlignLeft);
-    m_bottomRightPlainTextEdit->setAlignment(Qt::AlignRight);
+    // Set text right-aligned in right text edits
+    QTextOption option = m_topRightPlainTextEdit->document()->defaultTextOption();
+    option.setAlignment(Qt::AlignRight);
+    m_topRightPlainTextEdit->document()->setDefaultTextOption(option);
+    m_bottomRightPlainTextEdit->document()->setDefaultTextOption(option);
 
     m_modalityLabel->setVisible(modality != "Default");
     m_modalityLineEdit->setVisible(modality != "Default");

@@ -228,7 +228,6 @@ set(SOURCES
     qopacitytransferfunctiongraphicalview.cpp
     qopacitytransferfunctiongraphicalviewline.cpp
     qopacitytransferfunctiongraphicalviewnode.cpp
-    qplaintextedit2.cpp
     qreleasenotes.cpp
     qscreendistribution.cpp
     qscrollareawithbettersizehint.cpp
