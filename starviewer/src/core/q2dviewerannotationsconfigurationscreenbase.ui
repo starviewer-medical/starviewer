@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../main/themes/starviewer/starviewer.qrc">
-    <normaloff>:/images/icons/annotations.svg</normaloff>:/images/icons/annotations.svg</iconset>
+    <normaloff>:/images/icons/preferences-annotations.svg</normaloff>:/images/icons/preferences-annotations.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
