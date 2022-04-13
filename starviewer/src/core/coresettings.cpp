@@ -13,12 +13,12 @@
  *************************************************************************************/
 
 #include "coresettings.h"
-#include "settingsregistry.h"
 
+#include "q2dviewerannotationssettingshelper.h"
+#include "settingsregistry.h"
 #include "starviewerapplication.h"
+
 #include <QDir>
-// Pel LanguageLocale
-#include <QLocale>
 #include <QStringList>
 #include <QVector>
 
@@ -105,6 +105,8 @@ const QString CoreSettings::CrosshairOuterDiameter("CrosshairOuterDiameter");
 
 const QString CoreSettings::ShowViewersTextualInformation("ShowViewersTextualInformation");
 
+const QString CoreSettings::Q2DViewerAnnotations(Q2DViewerBase + "Annotations");
+
 const QString CoreSettings::ComparisonModeDivision("ComparisionModeDivision");
 
 CoreSettings::CoreSettings()
@@ -125,7 +127,6 @@ void CoreSettings::init()
     settingsRegistry->addSetting(UserCustomWindowLevelsPath, UserDataRootPath + "customwindowlevels/customwindowlevels.xml");
     settingsRegistry->addSetting(RegisterStatLogs, false);
     settingsRegistry->addSetting(MagnifyingGlassZoomFactor, "4");
-    settingsRegistry->addSetting(LanguageLocale, QLocale::system().name());
     settingsRegistry->addSetting(LastReleaseNotesVersionShown, "");
     settingsRegistry->addSetting(NeverShowNewVersionReleaseNotes, false);
     settingsRegistry->addSetting(LastVersionChecked, "");
@@ -160,6 +161,8 @@ void CoreSettings::init()
     settingsRegistry->addSetting(CrosshairOuterDiameter, 30);
 
     settingsRegistry->addSetting(ShowViewersTextualInformation, true);
+
+    settingsRegistry->addListSetting(Q2DViewerAnnotations, Q2DViewerAnnotationsSettingsHelper::getSettingsDefaultValue());
 
     settingsRegistry->addSetting(ComparisonModeDivision, ComparisonModeDivisionStrings[0]);
 }

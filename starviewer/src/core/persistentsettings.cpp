@@ -109,22 +109,41 @@ void PersistentSettings::remove(const QString &key)
     getSettingsObject(key)->remove(key);
 }
 
+bool PersistentSettings::containsList(const QString &key) const
+{
+    QSettings *settings = getSettingsObject(key);
+    settings->beginReadArray(key);
+    bool contains = settings->contains("size");
+    settings->endArray();
+    return contains;
+    // An alternative could be:
+    // return getSettingsObject(key)->childGroups().contains(key);
+    // But it's very slow
+}
+
 Settings::SettingListType PersistentSettings::getList(const QString &key)
 {
-    Settings::SettingListType list;
-    QSettings *qsettings = getSettingsObject(key);
-    int size = qsettings->beginReadArray(key);
-
-    for (int i = 0; i < size; ++i)
+    if (this->containsList(key))
     {
-        qsettings->setArrayIndex(i);
-        // Each list item is a map with several keys and values
-        list.append(fillSettingsListItemFromKeysList(qsettings->allKeys(), qsettings));
+        Settings::SettingListType list;
+        QSettings *qsettings = getSettingsObject(key);
+        int size = qsettings->beginReadArray(key);
+
+        for (int i = 0; i < size; ++i)
+        {
+            qsettings->setArrayIndex(i);
+            // Each list item is a map with several keys and values
+            list.append(fillSettingsListItemFromKeysList(qsettings->allKeys(), qsettings));
+        }
+
+        qsettings->endArray();
+
+        return list;
     }
-
-    qsettings->endArray();
-
-    return list;
+    else
+    {
+        return SettingsRegistry::instance()->getDefaultListValue(key);
+    }
 }
 
 void PersistentSettings::setList(const QString &key, const Settings::SettingListType &list)

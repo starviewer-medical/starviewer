@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Q2DViewerAnnotationsConfigurationScreenHelpBase</class>
+ <widget class="QWidget" name="Q2DViewerAnnotationsConfigurationScreenHelpBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>628</width>
+        <height>468</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;All supported variables are listed here. You can click on any variable to select it and then copy and paste or drag and drop as needed. If a variable is not found in the viewed image, nothing is printed.&lt;/p&gt;&lt;p&gt;The output format of any variable can be customized by adding “:” and the custom format after the variable name, where the placeholder “$&amp;amp;” will be replaced by the variable value. For example, &lt;span style=&quot; font-weight:600;&quot;&gt;{%PatientID:ID: $&amp;amp;%}&lt;/span&gt; would be printed as &lt;span style=&quot; font-weight:600;&quot;&gt;ID: 1234&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;In addition any DICOM tag can be speficied using its number. For example, DICOM tag (0040,0005) can be specified as &lt;span style=&quot; font-weight:600;&quot;&gt;{%00400005%}&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="m_gridLayout"/>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

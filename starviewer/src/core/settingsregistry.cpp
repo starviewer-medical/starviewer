@@ -36,9 +36,34 @@ void SettingsRegistry::addSetting(const QString &key, const QVariant &defaultVal
     m_keyDefaultValueAndPropertiesMap.insert(key, qMakePair(defaultValue, properties));
 }
 
-QVariant SettingsRegistry::getDefaultValue(const QString &key)
+void SettingsRegistry::addListSetting(const QString &key, const Settings::SettingListType &defaultList)
+{
+    QList<QVariant> variantsList;
+
+    for (const Settings::SettingsListItemType &item : defaultList)
+    {
+        variantsList.append(item);
+    }
+
+    m_keyDefaultValueAndPropertiesMap.insert(key, qMakePair(variantsList, Settings::None));
+}
+
+QVariant SettingsRegistry::getDefaultValue(const QString &key) const
 {
     return m_keyDefaultValueAndPropertiesMap.value(key).first;
+}
+
+Settings::SettingListType SettingsRegistry::getDefaultListValue(const QString &key) const
+{
+    const QList<QVariant> &variantsList = m_keyDefaultValueAndPropertiesMap.value(key).first.toList();
+    Settings::SettingListType defaultList;
+
+    for (const QVariant &item : variantsList)
+    {
+        defaultList.append(item.toMap());
+    }
+
+    return defaultList;
 }
 
 Settings::AccessLevel SettingsRegistry::getAccessLevel(const QString &key) const

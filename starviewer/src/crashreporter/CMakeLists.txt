@@ -5,6 +5,7 @@ set(SOURCES
     ../core/defaultsettings.cpp
     ../core/logging.cpp
     ../core/persistentsettings.cpp
+    ../core/q2dviewerannotationssettingshelper.cpp
     ../core/settings.cpp
     ../core/settingsaccesslevelfilereader.cpp
     ../core/settingsinterface.cpp

@@ -47,7 +47,6 @@ void Q2DViewerConfigurationScreen::initialize()
     m_referenceLinesCTCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerReferenceLinesForCT).toBool());
     m_automaticSynchronizationMRCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForMR).toBool());
     m_automaticSynchronizationCTCheckBox->setChecked(settings.getValue(CoreSettings::EnableQ2DViewerAutomaticSynchronizationForCT).toBool());
-    m_showViewersTextualInformationCheckBox->setChecked(settings.getValue(CoreSettings::ShowViewersTextualInformation).toBool());
 
     initializeModalitiesGroupBox(CoreSettings::ModalitiesWithZoomToolByDefault, m_zoomByDefaultModalitiesGroupBox);
     initializeModalitiesGroupBox(CoreSettings::ModalitiesWithPropagationEnabledByDefault, m_propagationModalitiesByDefaultGroupBox);
@@ -85,11 +84,6 @@ void Q2DViewerConfigurationScreen::createConnections()
     connect(m_bodyWeightRadioButton, SIGNAL(clicked()), SLOT(updateSUVMeasurementTypeSetting()));
     connect(m_leanBodyMassRadioButton, SIGNAL(clicked()), SLOT(updateSUVMeasurementTypeSetting()));
     connect(m_bodySurfaceAreaRadioButton, SIGNAL(clicked()), SLOT(updateSUVMeasurementTypeSetting()));
-
-    connect(m_showViewersTextualInformationCheckBox, &QCheckBox::toggled, [](bool checked) {
-        Settings settings;
-        settings.setValue(CoreSettings::ShowViewersTextualInformation, checked);
-    });
 
     connect(m_crosshairInnerDiameterSpinBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &Q2DViewerConfigurationScreen::updateCrosshairInnerDiameter);

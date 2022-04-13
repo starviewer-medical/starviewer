@@ -44,6 +44,9 @@ public:
 
     // Methods to manage settings representing lists
 
+    /// Returns true if there is a list under the given key, and false otherwise.
+    virtual bool containsList(const QString &key) const = 0;
+
     /// Returns a list stored with the given key.
     virtual Settings::SettingListType getList(const QString &key) = 0;
 

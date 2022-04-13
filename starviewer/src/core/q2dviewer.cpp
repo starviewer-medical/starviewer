@@ -614,7 +614,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
 
     printVolumeInformation();
 
-    m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation);
+    m_annotationsHandler->updateAnnotations();
 
     loadOverlays(volumes.first());
 
@@ -788,7 +788,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     double slabThickness = getSlabThickness();
 
     setCurrentViewPlane(view);
-    m_annotationsHandler->updateAnnotations(VoiLutAnnotation);
+    m_annotationsHandler->updateAnnotations();
     
     // Reiniciem valors per defecte de la càmera
     m_rotateFactor = 0;
@@ -994,7 +994,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         }
 
         updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
-        m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation | SliceAnnotation);
+        m_annotationsHandler->updateAnnotations();
         updatePreferredImageOrientation();
 
         // Finally we emit the signal of the changed value and render the scene
@@ -1406,26 +1406,14 @@ void Q2DViewer::updateImageSlices()
     getRenderer()->ResetCameraClippingRange();
 }
 
-void Q2DViewer::enableAnnotation(AnnotationFlags annotation, bool enable)
+void Q2DViewer::enableAnnotations(bool enable)
 {
-    if (enable)
-    {
-        m_annotationsHandler->enableAnnotations(annotation);
-    }
-    else
-    {
-        m_annotationsHandler->disableAnnotations(annotation);
-    }
+    m_annotationsHandler->enableAnnotations(enable);
 
     if (hasInput())
     {
         render();
     }
-}
-
-void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
-{
-    enableAnnotation(annotation, false);
 }
 
 void Q2DViewer::setVoiLut(const VoiLut &voiLut)
@@ -1445,7 +1433,7 @@ void Q2DViewer::setVoiLut(const VoiLut &voiLut)
     else
     {
         getMainDisplayUnit()->setVoiLut(voiLut);
-        m_annotationsHandler->updateAnnotations(VoiLutAnnotation);
+        m_annotationsHandler->updateAnnotations();
         render();
     }
 }
@@ -1545,7 +1533,7 @@ void Q2DViewer::setSlabThickness(double thickness)
         updateImageSlices();
 
         updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
-        m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation | SliceAnnotation);
+        m_annotationsHandler->updateAnnotations();
         render();
 
         if (mainDisplayUnit->getSlabThickness() != oldThickness)
@@ -2064,7 +2052,7 @@ void Q2DViewer::setFusionBalance(int balance)
         this->setVolumeOpacity(1, 1.0);
     }
 
-    m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation);
+    m_annotationsHandler->updateAnnotations();
     this->render();
 }
 
