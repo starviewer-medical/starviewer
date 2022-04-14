@@ -37,7 +37,7 @@ if(USE_QTCONF)
     endif()
 endif()
 
-add_translations(QM_FILES main main)
+add_translations(QM_FILES main main ../qml)
 
 # These must be included here for the dependencies of the custom commands to work
 include(ReleaseNotes)

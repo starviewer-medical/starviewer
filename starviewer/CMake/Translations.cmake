@@ -1,6 +1,6 @@
 find_package(Qt5 COMPONENTS Core LinguistTools)
 
-# Creates rules to call lupdate and lrelease for a folder
+# Creates rules to call lupdate and lrelease for a folder. Additional directories can be given as optional parameters.
 function(add_translations OUT_VAR TARGET TRANSLATION_BASE_NAME)
     set(LOCALES ca_ES en_GB es_ES)
 
@@ -11,10 +11,12 @@ function(add_translations OUT_VAR TARGET TRANSLATION_BASE_NAME)
     qt5_add_translation(QM_FILES ${TS_FILES})
 
     list(TRANSFORM TS_FILES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
+    set(ADDITIONAL_DIRECTORIES ${ARGN})
+    list(TRANSFORM ADDITIONAL_DIRECTORIES PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/")
 
     # Add custom command to call lupdate
     add_custom_target(${TARGET}_i18n_update
-        COMMAND ${Qt5_LUPDATE_EXECUTABLE} -no-obsolete ${CMAKE_CURRENT_SOURCE_DIR} -ts ${TS_FILES}
+        COMMAND ${Qt5_LUPDATE_EXECUTABLE} -no-obsolete ${CMAKE_CURRENT_SOURCE_DIR} ${ADDITIONAL_DIRECTORIES} -ts ${TS_FILES}
         VERBATIM
     )
 
