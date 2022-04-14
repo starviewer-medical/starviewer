@@ -26,6 +26,8 @@ namespace udg {
  */
 class PacsDeviceModel : public QAbstractTableModel
 {
+    Q_OBJECT    // for tr()
+
 public:
     /// Columns of this model.
     enum Columns { PacsId, AeTitleOrBaseUri, Institution, Description, Default, NumberOfColumns };
