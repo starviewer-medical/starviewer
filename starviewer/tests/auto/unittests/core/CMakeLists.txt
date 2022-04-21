@@ -37,7 +37,6 @@ set(SOURCES
     test_imageorientation.cpp
     test_imageorientationoperationsmapper.cpp
     test_imageoverlay.cpp
-    test_imageoverlayreader.cpp
     test_imageoverlayregionfinder.cpp
     test_imageplane.cpp
     test_leanbodymassformula.cpp
@@ -133,6 +132,3 @@ target_include_directories(test_core SYSTEM PRIVATE
     ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmdata
 )
 target_link_libraries(test_core ${DCMTK_LIBRARIES})
-
-find_package(GDCM REQUIRED)
-target_link_libraries(test_core gdcmMSFF)
