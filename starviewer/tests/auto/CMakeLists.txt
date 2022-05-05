@@ -20,6 +20,7 @@ set(SOURCES
 
 set(RESOURCES
     ../../src/main/main.qrc
+    ../../src/main/themes/${THEME}/${THEME}.qrc
 )
 
 add_executable(autotests ${SOURCES} ${RESOURCES})
