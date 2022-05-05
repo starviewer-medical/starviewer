@@ -21,7 +21,7 @@ Volume* VolumeTestHelper::createVolume(int numberOfImages, int numberOfPhases, i
     testVolume->setNumberOfPhases(numberOfPhases);
     testVolume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
     Patient *patient = PatientTestHelper::create(1, 1, numberOfImages);
-    testVolume->setImages(patient->getStudies().first()->getSeries().first()->getImages());
+    testVolume->setImages(patient->getStudies().constFirst()->getSeries().constFirst()->getImages());
 
     for (int index = 0; index < numberOfImages; index++)
     {
@@ -51,7 +51,7 @@ Volume* VolumeTestHelper::createVolumeWithParameters(int numberOfImages, int num
     testVolume->setNumberOfPhases(numberOfPhases);
     testVolume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
     Patient *patient = PatientTestHelper::create(1, 1, numberOfImages);
-    testVolume->setImages(patient->getStudies().first()->getSeries().first()->getImages());
+    testVolume->setImages(patient->getStudies().constFirst()->getSeries().constFirst()->getImages());
 
     for (int index = 0; index < numberOfImages; index++)
     {
@@ -71,7 +71,7 @@ Volume* VolumeTestHelper::createMultiframeVolume(int numberOfImages, int numberO
     testVolume->setNumberOfPhases(numberOfPhases);
     testVolume->setNumberOfSlicesPerPhase(numberOfSlicesPerPhase);
     Patient *patient = PatientTestHelper::create(1, 1, numberOfImages);
-    testVolume->setImages(patient->getStudies().first()->getSeries().first()->getImages());
+    testVolume->setImages(patient->getStudies().constFirst()->getSeries().constFirst()->getImages());
 
     for (int index = 0; index < numberOfImages; index++)
     {

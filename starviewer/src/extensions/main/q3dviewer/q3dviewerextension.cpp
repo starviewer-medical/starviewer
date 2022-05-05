@@ -443,7 +443,7 @@ void Q3DViewerExtension::saveClut()
 
     if (saveDialog.exec() == QDialog::Accepted)
     {
-        QString transferFunctionFileName = saveDialog.selectedFiles().first();
+        QString transferFunctionFileName = saveDialog.selectedFiles().constFirst();
         QTransferFunctionEditor *currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());
         TransferFunctionIO::toFile(transferFunctionFileName, currentEditor->getTransferFunction());
 
@@ -470,7 +470,7 @@ void Q3DViewerExtension::applyEditorClut()
 
 void Q3DViewerExtension::toggleClutEditor()
 {
-    if (m_editorSplitter->sizes()[1] == 0)
+    if (m_editorSplitter->sizes().at(1) == 0)
     {
         // Show
         m_editorSplitter->setSizes(QList<int>() << 1 << 1);
@@ -491,7 +491,7 @@ void Q3DViewerExtension::hideClutEditor()
 
 void Q3DViewerExtension::setCustomStyleButtonStateBySplitter()
 {
-    m_customStyleToolButton->setChecked(m_editorSplitter->sizes()[1] != 0);
+    m_customStyleToolButton->setChecked(m_editorSplitter->sizes().at(1) != 0);
 }
 
 void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)

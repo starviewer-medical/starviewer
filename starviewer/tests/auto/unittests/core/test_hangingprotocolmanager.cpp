@@ -94,11 +94,11 @@ void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHan
     // PET-CT
     Patient *petCtPatient = PatientTestHelper::create(1, 2, 1);
     {
-        Study *study = petCtPatient->getStudies().first();
+        Study *study = petCtPatient->getStudies().constFirst();
         study->addModality("CT");
         study->addModality("PT");
-        study->getSeries()[0]->setModality("CT");
-        study->getSeries()[1]->setModality("PT");
+        study->getSeries().at(0)->setModality("CT");
+        study->getSeries().at(1)->setModality("PT");
     }
 
     QList<HangingProtocol*> repositoryHangingProtocolsMG = getHangingProtocolsRepository();
@@ -135,7 +135,7 @@ void test_HangingProtocolManager::searchHangingProtocols_ShouldReturnExpectedHan
         testHangingProtocolManager.addHangingProtocolToRepository(hangingProtocol);
     }
 
-    QList<HangingProtocol *> hangingProtocolsCandidates = testHangingProtocolManager.searchHangingProtocols(patient->getStudies().first());
+    QList<HangingProtocol *> hangingProtocolsCandidates = testHangingProtocolManager.searchHangingProtocols(patient->getStudies().constFirst());
     QCOMPARE(hangingProtocolsCandidates.count(), expectedHangingProtocols.count());
 
     for (int i = 0; i < expectedHangingProtocols.count(); i++)

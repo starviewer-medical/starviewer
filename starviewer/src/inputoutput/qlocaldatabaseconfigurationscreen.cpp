@@ -304,7 +304,7 @@ void QLocalDatabaseConfigurationScreen::examinateDataBaseRoot()
     {
         if (!dialog->selectedFiles().empty())
         {
-            m_textDatabaseRoot->setText(dialog->selectedFiles().takeFirst());
+            m_textDatabaseRoot->setText(dialog->selectedFiles().constFirst());
             // Indiquem que m_textDatabaseRoot ha modificat el seu valor
             m_textDatabaseRoot->setModified(true);
         }

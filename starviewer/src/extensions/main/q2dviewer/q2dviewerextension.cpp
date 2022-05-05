@@ -393,7 +393,7 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 
     if (m_patient)
     {
-        m_currentStudyUID = m_patient->getStudies().first()->getInstanceUID();
+        m_currentStudyUID = m_patient->getStudies().constFirst()->getInstanceUID();
         setupLayoutManager();
         setupDefaultToolsForModalities(m_patient->getModalities());
     }

@@ -186,7 +186,7 @@ QVariant LocalDatabaseEncapsulatedDocumentDAL::getDatabasePacsId(const DICOMSour
         return QVariant(QVariant::LongLong);
     }
 
-    return getDatabasePacsId(dicomSource.getRetrievePACS().first());
+    return getDatabasePacsId(dicomSource.getRetrievePACS().constFirst());
 }
 
 QVariant LocalDatabaseEncapsulatedDocumentDAL::getDatabasePacsId(const PacsDevice &pacsDevice)

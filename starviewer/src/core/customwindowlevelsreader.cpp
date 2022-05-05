@@ -60,7 +60,7 @@ QList<WindowLevel*> CustomWindowLevelsReader::readFile(const QString &path)
                 if (reader.name() == "CustomWindowLevel")
                 {
                     WindowLevel *customWindowLevel = new WindowLevel();
-                    QString name = reader.attributes().first().value().toString();
+                    QString name = reader.attributes().constFirst().value().toString();
                     customWindowLevel->setName(name);
 
                     while (reader.readNextStartElement())

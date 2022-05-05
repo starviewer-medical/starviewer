@@ -101,11 +101,11 @@ void PatientBrowserMenu::setPatient(Patient *patient)
                         if (acquisitionPlane != AnatomicalPlane::NotAvailable)
                         {
                             int zIndex = volume->getCorrespondingOrthogonalPlane(acquisitionPlane).getZIndex();
-                            double margin = series->getImages().first()->getSliceThickness() * 5;
+                            double margin = series->getImages().constFirst()->getSliceThickness() * 5;
 
                             double range1[2];
-                            range1[0] = volume->getImages().first()->getImagePositionPatient()[zIndex];
-                            range1[1] = volume->getImages().last()->getImagePositionPatient()[zIndex];
+                            range1[0] = volume->getImages().constFirst()->getImagePositionPatient()[zIndex];
+                            range1[1] = volume->getImages().constLast()->getImagePositionPatient()[zIndex];
                             
                             foreach (Series * secondSeries, study->getViewableSeries())
                             {
@@ -116,8 +116,8 @@ void PatientBrowserMenu::setPatient(Patient *patient)
                                         if (secondVolume->getAcquisitionPlane() == acquisitionPlane)
                                         {
                                             double range2[2];
-                                            range2[0] = secondVolume->getImages().first()->getImagePositionPatient()[zIndex];
-                                            range2[1] = secondVolume->getImages().last()->getImagePositionPatient()[zIndex];
+                                            range2[0] = secondVolume->getImages().constFirst()->getImagePositionPatient()[zIndex];
+                                            range2[1] = secondVolume->getImages().constLast()->getImagePositionPatient()[zIndex];
                                             
                                             if ((range1[0] + margin > range2[0] && range1[1] - margin < range2[1]) || (range2[0] + margin > range1[0] && range2[1] - margin < range1[1]))
                                             {

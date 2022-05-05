@@ -210,7 +210,7 @@ void QDICOMDIRConfigurationScreen::examinateDICOMDIRBurningApplicationPath()
     {
         if (!dialog->selectedFiles().empty())
         {
-            QString burningApplicationPath = dialog->selectedFiles().takeFirst();
+            QString burningApplicationPath = dialog->selectedFiles().constFirst();
             QFileInfo infoBurningApplicationFile(burningApplicationPath);
             // Es comprova si es tracta d'una aplicació de Mac i en cas afirmatiu es modifica el path per tal d'indicar exactament on és l'executable
             if (infoBurningApplicationFile.isBundle())

@@ -543,7 +543,7 @@ void QInputOutputLocalDatabaseWidget::sendSelectedStudiesToSelectedPacs()
         {
             for (const PacsDevice &pacs : m_qwidgetSelectPacsToStoreDicomImage->getSelectedPacsToStoreDicomImages())
             {
-                StudyOperationResult *result = StudyOperationsService::instance()->storeInPacs(pacs, patient->getStudies().first());
+                StudyOperationResult *result = StudyOperationsService::instance()->storeInPacs(pacs, patient->getStudies().constFirst());
 
                 // These connections will be deleted when result is destroyed
                 connect(result, &StudyOperationResult::finishedWithPartialSuccess, this, &QInputOutputLocalDatabaseWidget::onStorePartialSuccess);

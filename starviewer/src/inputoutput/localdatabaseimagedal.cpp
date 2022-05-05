@@ -386,7 +386,7 @@ QVariant LocalDatabaseImageDAL::getDatabasePacsId(const DICOMSource &dicomSource
         return QVariant(QVariant::LongLong);
     }
 
-    return getDatabasePacsId(dicomSource.getRetrievePACS().first());
+    return getDatabasePacsId(dicomSource.getRetrievePACS().constFirst());
 }
 
 QVariant LocalDatabaseImageDAL::getDatabasePacsId(const PacsDevice &pacsDevice)

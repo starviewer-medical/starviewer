@@ -107,7 +107,7 @@ void DecayCorrectionFactorFormulaCalculator::gatherRequiredParameters(DICOMTagRe
         if (!radiopharmaceuticalInfoSequence->getItems().isEmpty())
         {
             // TODO It could be more than one item!
-            DICOMSequenceItem *item = radiopharmaceuticalInfoSequence->getItems().first();
+            DICOMSequenceItem *item = radiopharmaceuticalInfoSequence->getItems().constFirst();
             DICOMValueAttribute *radioPharmaceuticalStartDateTimeAttribute = item->getValueAttribute(DICOMRadiopharmaceuticalStartDateTime);
             if (radioPharmaceuticalStartDateTimeAttribute)
             {

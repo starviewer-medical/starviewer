@@ -237,12 +237,14 @@ void QPerfusionMapReconstructionExtension::computePerfusionMap()
             //QVector<int> aifpos (m_seedToolData->getSeedPosition());
             int index[3];
             Volume* inputVolume = m_2DView->getViewer()->getMainInput();
-            index[0] = (int)((m_seedToolData->getSeedPosition()[0]- inputVolume->getOrigin()[0])/inputVolume->getSpacing()[0]);
-            index[1] = (int)((m_seedToolData->getSeedPosition()[1]- inputVolume->getOrigin()[1])/inputVolume->getSpacing()[1]);
-            index[2] = (int)((m_seedToolData->getSeedPosition()[2]- inputVolume->getOrigin()[2])/inputVolume->getSpacing()[2])/inputVolume->getNumberOfPhases();
+            index[0] = (int)((m_seedToolData->getSeedPosition().at(0) - inputVolume->getOrigin()[0]) / inputVolume->getSpacing()[0]);
+            index[1] = (int)((m_seedToolData->getSeedPosition().at(1) - inputVolume->getOrigin()[1]) / inputVolume->getSpacing()[1]);
+            index[2] = (int)((m_seedToolData->getSeedPosition().at(2) -
+                              inputVolume->getOrigin()[2]) / inputVolume->getSpacing()[2]) / inputVolume->getNumberOfPhases();
             m_mapCalculator->setAIFIndex(index[0], index[1], index[2]);
             DEBUG_LOG(QString("SetAIFIndex [%1,%2,%3]").arg(index[0]).arg(index[1]).arg(index[2]));
-            DEBUG_LOG(QString("SetAIFPos [%1,%2,%3]").arg(m_seedToolData->getSeedPosition()[0]).arg(m_seedToolData->getSeedPosition()[1]).arg(m_seedToolData->getSeedPosition()[2]));
+            DEBUG_LOG(QString("SetAIFPos [%1,%2,%3]").arg(m_seedToolData->getSeedPosition().at(0)).arg(m_seedToolData->getSeedPosition().at(1))
+                      .arg(m_seedToolData->getSeedPosition().at(2)));
         }
     }
     m_mapCalculator->setDSCVolume(m_DSCVolume);

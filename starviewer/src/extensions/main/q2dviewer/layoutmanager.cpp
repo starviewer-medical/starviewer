@@ -329,7 +329,7 @@ StudyLayoutConfig LayoutManager::getBestLayoutCandidate(const QList<StudyLayoutC
     {
         // If no candidate found, we choose a default configuration.
         // This default configuration is not yet configurable through settings, could be done in a future enhancement.
-        bestLayout = StudyLayoutConfigsLoader::getDefaultConfigForModality(study->getModalities().first());
+        bestLayout = StudyLayoutConfigsLoader::getDefaultConfigForModality(study->getModalities().constFirst());
     }
 
     return bestLayout;

@@ -1275,7 +1275,7 @@ QString QExperimental3DExtension::getFileNameToSave(const QString &settingsDirKe
 
     if (saveDialog.exec() == QDialog::Accepted)
     {
-        fileName = saveDialog.selectedFiles().first();
+        fileName = saveDialog.selectedFiles().constFirst();
         QFileInfo fileInfo(fileName);
         settings.setValue(settingsDirKey, fileInfo.absolutePath());
     }

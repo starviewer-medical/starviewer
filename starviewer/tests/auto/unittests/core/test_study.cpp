@@ -613,7 +613,7 @@ void test_Study::getPatientAge_ReturnExpectedValues()
     QFETCH(QString, expectedAge);
 
     Patient *patient = PatientTestHelper::create(1);
-    Study *study = patient->getStudies().first();
+    Study *study = patient->getStudies().constFirst();
 
     patient->setBirthDate(birthDate.day(), birthDate.month(), birthDate.year());
     study->setDate(studyDate);
@@ -662,7 +662,7 @@ void test_Study::getCalculatedPatientAge_ReturnsExpectedValues()
     QFETCH(QString, expectedAge);
 
     Patient *patient = PatientTestHelper::create(1);
-    Study *study = patient->getStudies().first();
+    Study *study = patient->getStudies().constFirst();
 
     patient->setBirthDate(birthDate.day(), birthDate.month(), birthDate.year());
     study->setDate(studyDate);

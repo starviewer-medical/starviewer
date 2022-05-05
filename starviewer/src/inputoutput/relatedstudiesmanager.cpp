@@ -312,7 +312,7 @@ RelatedStudiesManager::LoadStatus RelatedStudiesManager::loadStudy(Study *study)
         if (patient && patient->getNumberOfStudies() > 0)
         {
             VolumeHelper::generatePatientVolumes(patient);
-            emit studyLoaded(patient->getStudies().first());
+            emit studyLoaded(patient->getStudies().constFirst());
             return Loaded;
         }
         else

@@ -49,7 +49,7 @@ void DICOMWriterDCMTK::addValueAttribute(DICOMValueAttribute *attribute)
 
     if (attribute->getValueRepresentation() == DICOMValueAttribute::ByteArray)
     {
-        dataset->putAndInsertUint8Array(tag, static_cast<Uint8*>((void*)attribute->getValueAsByteArray().data()),
+        dataset->putAndInsertUint8Array(tag, reinterpret_cast<const Uint8*>(attribute->getValueAsByteArray().constData()),
                                         static_cast<unsigned long>(attribute->getValueAsByteArray().length()), true);
     }
     else
@@ -99,7 +99,7 @@ DcmSequenceOfItems* DICOMWriterDCMTK::generateDcmSequenceOfItems(DICOMSequenceAt
 
                 if (valueAttribute->getValueRepresentation() == DICOMValueAttribute::ByteArray)
                 {
-                    OFCondition cond = item->putAndInsertUint8Array(itemTag, static_cast<Uint8*>((void*)valueAttribute->getValueAsByteArray().data()),
+                    OFCondition cond = item->putAndInsertUint8Array(itemTag, reinterpret_cast<const Uint8*>(valueAttribute->getValueAsByteArray().constData()),
                                                                     static_cast<unsigned long>(valueAttribute->getValueAsByteArray().length()), true);
 
                     if (cond.bad())
