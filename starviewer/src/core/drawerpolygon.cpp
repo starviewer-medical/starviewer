@@ -36,8 +36,6 @@ DrawerPolygon::DrawerPolygon(QObject *parent)
 
 DrawerPolygon::~DrawerPolygon()
 {
-    emit dying(this);
-
     if (m_vtkPropAssembly)
     {
         m_vtkPolyData->Delete();
@@ -137,7 +135,7 @@ QList<Line3D> DrawerPolygon::getSegments()
 vtkProp* DrawerPolygon::getAsVtkProp()
 {
     updateVtkProp();
-    return m_vtkPropAssembly;
+    return DrawerPrimitive::getAsVtkProp();
 }
 
 void DrawerPolygon::update()
@@ -190,6 +188,7 @@ void DrawerPolygon::buildVtkPipeline()
     m_vtkPropAssembly = vtkPropAssembly::New();
     m_vtkPropAssembly->AddPart(m_vtkBackgroundActor);
     m_vtkPropAssembly->AddPart(m_vtkActor);
+    m_vtkProp = m_vtkPropAssembly;
 }
 
 void DrawerPolygon::buildVtkPoints()

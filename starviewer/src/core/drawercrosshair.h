@@ -36,8 +36,6 @@ public:
     /// Afegim el primer punt de la línia
     void setCentrePoint(double x, double y, double z);
 
-    vtkPropAssembly* getAsVtkPropAssembly();
-
     vtkProp* getAsVtkProp();
 
     double getDistanceToPoint(double *point3D, double closestPoint[3]);

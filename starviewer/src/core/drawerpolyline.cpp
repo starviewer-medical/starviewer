@@ -35,8 +35,6 @@ DrawerPolyline::DrawerPolyline(QObject *parent)
 
 DrawerPolyline::~DrawerPolyline()
 {
-    emit dying(this);
-
     if (m_vtkPolydata)
     {
         m_vtkPolydata->Delete();
@@ -141,8 +139,9 @@ vtkProp* DrawerPolyline::getAsVtkProp()
 
         m_vtkPropAssembly->AddPart(m_vtkBackgroundActor);
         m_vtkPropAssembly->AddPart(m_vtkActor);
+        m_vtkProp = m_vtkPropAssembly;
     }
-    return m_vtkPropAssembly;
+    return DrawerPrimitive::getAsVtkProp();
 }
 
 void DrawerPolyline::update()

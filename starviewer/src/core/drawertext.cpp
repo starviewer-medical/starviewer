@@ -42,8 +42,6 @@ DrawerText::DrawerText(QObject *parent)
 
 DrawerText::~DrawerText()
 {
-    emit dying(this);
-
     if (m_vtkActor)
     {
         m_vtkActor->Delete();
@@ -87,8 +85,10 @@ vtkProp* DrawerText::getAsVtkProp()
 
         // Li donem els atributs
         updateVtkActorProperties();
+
+        m_vtkProp = m_vtkActor;
     }
-    return m_vtkActor;
+    return DrawerPrimitive::getAsVtkProp();
 }
 
 void DrawerText::update()

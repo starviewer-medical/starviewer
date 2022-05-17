@@ -46,8 +46,6 @@ DrawerCrossHair::DrawerCrossHair(QObject *parent)
 
 DrawerCrossHair::~DrawerCrossHair()
 {
-    emit dying(this);
-
     m_worldCoordinate->Delete();
 
     if (m_vtkPropAssembly)
@@ -87,7 +85,7 @@ void DrawerCrossHair::setCentrePoint(double x, double y, double z)
     emit changed();
 }
 
-vtkPropAssembly* DrawerCrossHair::getAsVtkPropAssembly()
+vtkProp* DrawerCrossHair::getAsVtkProp()
 {
     if (!m_vtkPropAssembly)
     {
@@ -100,13 +98,10 @@ vtkPropAssembly* DrawerCrossHair::getAsVtkPropAssembly()
         m_vtkPropAssembly->AddPart(m_lineDown->getAsVtkProp());
         m_vtkPropAssembly->AddPart(m_lineLeft->getAsVtkProp());
         m_vtkPropAssembly->AddPart(m_lineRight->getAsVtkProp());
+        m_vtkProp = m_vtkPropAssembly;
     }
-    return m_vtkPropAssembly;
-}
 
-vtkProp* DrawerCrossHair::getAsVtkProp()
-{
-    return (vtkProp*)getAsVtkPropAssembly();
+    return DrawerPrimitive::getAsVtkProp();
 }
 
 void DrawerCrossHair::update()

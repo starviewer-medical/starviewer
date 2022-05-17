@@ -185,6 +185,9 @@ protected:
     /// Indica si alguna de les propietats s'han modificat
     bool m_modified;
 
+    /// Stores the \c vtkProp representing this primitive.
+    vtkProp* m_vtkProp;
+
 private:
     /// Propietat d'esborrabilitat de la primitiva
     bool m_isErasable;

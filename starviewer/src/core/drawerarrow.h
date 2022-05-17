@@ -54,7 +54,6 @@ public:
     /// Sets the view plane normal needed to draw the tip lines with the correct orientation.
     void setViewPlaneNormal(const Vector3 &normal);
 
-    vtkProp* getAsVtkProp() override;
     double getDistanceToPoint(double *point3D, double closestPoint[3]) override;
     void getBounds(double bounds[6]) override;
 

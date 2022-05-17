@@ -44,11 +44,11 @@ DrawerArrow::DrawerArrow(QObject *parent)
     m_propAssembly->AddPart(m_tipBottomActor);
     m_propAssembly->AddPart(m_tipTopActor);
     m_propAssembly->AddPart(m_lineActor);
+    m_vtkProp = m_propAssembly;
 }
 
 DrawerArrow::~DrawerArrow()
 {
-    emit dying(this);
 }
 
 const Vector3& DrawerArrow::getStartPoint() const
@@ -86,11 +86,6 @@ void DrawerArrow::setViewPlaneNormal(const Vector3 &normal)
 {
     m_viewPlaneNormal = normal;
     emit changed();
-}
-
-vtkProp* DrawerArrow::getAsVtkProp()
-{
-    return m_propAssembly;
 }
 
 double DrawerArrow::getDistanceToPoint(double *point3D, double closestPoint[3])

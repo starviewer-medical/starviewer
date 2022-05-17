@@ -20,7 +20,8 @@ namespace udg {
 
 DrawerPrimitive::DrawerPrimitive(QObject *parent)
 : QObject(parent), m_internalRepresentation(VTKRepresentation), m_isVisible(true), m_coordinateSystem(WorldCoordinateSystem), m_color(QColor(255, 165, 0)),
-  m_isFilled(false), m_linePattern(ContinuousLinePattern), m_lineWidth(2.0), m_opacity(1.0), m_modified(false), m_referenceCount(0), m_coordinate(0)
+  m_isFilled(false), m_linePattern(ContinuousLinePattern), m_lineWidth(2.0), m_opacity(1.0), m_modified(false), m_vtkProp(nullptr), m_referenceCount(0),
+  m_coordinate(0)
 {
     m_isErasable = true;
     connect(this, SIGNAL(changed()), SLOT(setModified()));
@@ -28,6 +29,8 @@ DrawerPrimitive::DrawerPrimitive(QObject *parent)
 
 DrawerPrimitive::~DrawerPrimitive()
 {
+    emit dying(this);
+
     if (m_coordinate)
     {
         m_coordinate->Delete();
@@ -133,7 +136,7 @@ bool DrawerPrimitive::isErasable() const
 
 vtkProp* DrawerPrimitive::getAsVtkProp()
 {
-    return 0;
+    return m_vtkProp;
 }
 
 bool DrawerPrimitive::isModified() const

@@ -42,7 +42,6 @@ DrawerBitmap::DrawerBitmap(QObject *parent)
 
 DrawerBitmap::~DrawerBitmap()
 {
-    emit dying(this);
 }
 
 void DrawerBitmap::setOrigin(double origin[3])
@@ -109,6 +108,7 @@ vtkProp* DrawerBitmap::getAsVtkProp()
             m_imageActor->SetInputData(mapTransparency->GetOutput());
             m_imageActor->SetDisplayExtent(0, m_width - 1, 0, m_height - 1, 0, 0);
             m_imageActor->SetVisibility(this->isVisible());
+            m_vtkProp = m_imageActor;
         }
         else
         {
@@ -116,7 +116,7 @@ vtkProp* DrawerBitmap::getAsVtkProp()
         }
     }
 
-    return m_imageActor;
+    return DrawerPrimitive::getAsVtkProp();
 }
 
 double DrawerBitmap::getDistanceToPoint(double *point3D, double closestPoint[3])

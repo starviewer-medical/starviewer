@@ -31,8 +31,6 @@ DrawerLine::DrawerLine(QObject *parent)
 
 DrawerLine::~DrawerLine()
 {
-    emit dying(this);
-
     if (m_vtkActor)
     {
         m_vtkActor->Delete();
@@ -107,8 +105,9 @@ vtkProp* DrawerLine::getAsVtkProp()
 
         m_vtkPropAssembly->AddPart(m_vtkBackgroundActor);
         m_vtkPropAssembly->AddPart(m_vtkActor);
+        m_vtkProp = m_vtkPropAssembly;
     }
-    return m_vtkPropAssembly;
+    return DrawerPrimitive::getAsVtkProp();
 }
 
 double* DrawerLine::getFirstPoint()
