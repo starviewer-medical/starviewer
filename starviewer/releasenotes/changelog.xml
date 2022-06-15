@@ -32,6 +32,10 @@
    <fx>
     <d>Diverses correccions menors.</d>
    </fx>
+   <pr>
+    <d>La funcionalitat d'obrir fitxers d'un directori pot fallar si el directori conté algun fitxer que no sigui DICOM ni imatge estàndard.</d>
+    <t>2910</t>
+   </pr>
   </changes>
  </release>
 
