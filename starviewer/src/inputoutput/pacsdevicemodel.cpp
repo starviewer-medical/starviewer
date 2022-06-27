@@ -21,6 +21,7 @@ namespace udg {
 PacsDeviceModel::PacsDeviceModel(QObject *parent)
     : QAbstractTableModel(parent), m_pacsFilter(PacsDeviceManager::AllTypes)
 {
+    m_cachedPacsList = PacsDeviceManager::getPacsList(m_pacsFilter);
 }
 
 int PacsDeviceModel::rowCount(const QModelIndex &parent) const
@@ -31,7 +32,7 @@ int PacsDeviceModel::rowCount(const QModelIndex &parent) const
     }
     else
     {
-        return PacsDeviceManager::getPacsList(m_pacsFilter).size();
+        return m_cachedPacsList.size();
     }
 }
 
@@ -56,7 +57,7 @@ QVariant PacsDeviceModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole || role == Qt::UserRole)
     {
-        PacsDevice pacsDevice = PacsDeviceManager::getPacsList(m_pacsFilter).at(index.row());
+        PacsDevice pacsDevice = m_cachedPacsList.at(index.row());
 
         switch (index.column())
         {
@@ -100,6 +101,7 @@ QVariant PacsDeviceModel::headerData(int section, Qt::Orientation orientation, i
 void PacsDeviceModel::refresh()
 {
     beginResetModel();
+    m_cachedPacsList = PacsDeviceManager::getPacsList(m_pacsFilter);
     endResetModel();
 }
 

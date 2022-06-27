@@ -54,6 +54,8 @@ public:
 private:
     /// Filter to include only some PACS in the model.
     PacsDeviceManager::PacsFilter m_pacsFilter;
+    /// Cached PACS list used to avoid expensive (in Windows) calls to PacsDeviceManager::getPacsList.
+    QList<PacsDevice> m_cachedPacsList;
 };
 
 } // namespace udg
