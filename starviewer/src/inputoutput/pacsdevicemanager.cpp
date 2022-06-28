@@ -60,6 +60,16 @@ Settings::SettingsListItemType pacsDeviceToSettingsListItem(const PacsDevice &pa
             item["Type"] = "WADO";
             item["BaseUri"] = pacsDevice.getBaseUri();
             break;
+
+        case PacsDevice::Type::WadoUriDimse:
+            item["Type"] = "WADO-URI+DIMSE";
+            item["AETitle"] = pacsDevice.getAETitle();
+            item["PacsHostname"] = pacsDevice.getAddress();
+            item["QueryRetrieveServiceEnabled"] = pacsDevice.isQueryRetrieveServiceEnabled();
+            item["PacsPort"] = pacsDevice.getQueryRetrieveServicePort();
+            item["StoreServiceEnabled"] = pacsDevice.isStoreServiceEnabled();
+            item["StoreServicePort"] = pacsDevice.getStoreServicePort();
+            item["BaseUri"] = pacsDevice.getBaseUri();
     }
 
     item["Institution"] = pacsDevice.getInstitution();
@@ -97,6 +107,27 @@ PacsDevice settingsListItemToPacsDevice(const Settings::SettingsListItemType &it
     else if (item["Type"].toString() == "WADO")
     {
         pacsDevice.setType(PacsDevice::Type::Wado);
+        pacsDevice.setBaseUri(item["BaseUri"].toUrl());
+    }
+    else if (item["Type"].toString() == "WADO-URI+DIMSE")
+    {
+        pacsDevice.setType(PacsDevice::Type::WadoUriDimse);
+        pacsDevice.setAETitle(item["AETitle"].toString());
+        pacsDevice.setAddress(item["PacsHostname"].toString());
+        pacsDevice.setQueryRetrieveServiceEnabled(item.value("QueryRetrieveServiceEnabled", true).toBool());
+        pacsDevice.setQueryRetrieveServicePort(item["PacsPort"].toInt());
+
+        if (!item.contains("StoreServiceEnabled"))
+        {
+            pacsDevice.setStoreServiceEnabled(true);
+            pacsDevice.setStoreServicePort(item["PacsPort"].toInt());
+        }
+        else
+        {
+            pacsDevice.setStoreServiceEnabled(item["StoreServiceEnabled"].toBool());
+            pacsDevice.setStoreServicePort(item["StoreServicePort"].toInt());
+        }
+
         pacsDevice.setBaseUri(item["BaseUri"].toUrl());
     }
 
@@ -196,9 +227,14 @@ QList<PacsDevice> PacsDeviceManager::getPacsList(PacsFilter filter)
     for (const Settings::SettingsListItemType &item : list)
     {
         PacsDevice pacs = settingsListItemToPacsDevice(item);
-        bool include = filter.testFlag(DimseWithQueryRetrieveService) && pacs.getType() == PacsDevice::Type::Dimse && pacs.isQueryRetrieveServiceEnabled();
-        include |= filter.testFlag(DimseWithStoreService) && pacs.getType() == PacsDevice::Type::Dimse && pacs.isStoreServiceEnabled();
-        include |= filter.testFlag(Wado) && pacs.getType() == PacsDevice::Type::Wado;
+        bool include = filter.testFlag(CanRetrieve) && (
+                    ((pacs.getType() == PacsDevice::Type::Dimse || pacs.getType() == PacsDevice::Type::WadoUriDimse) && pacs.isQueryRetrieveServiceEnabled())
+                    || pacs.getType() == PacsDevice::Type::Wado
+                    );
+        include |= filter.testFlag(CanStore) && (
+                    ((pacs.getType() == PacsDevice::Type::Dimse || pacs.getType() == PacsDevice::Type::WadoUriDimse) && pacs.isStoreServiceEnabled())
+                    || pacs.getType() == PacsDevice::Type::Wado
+                    );
         include &= filter.testFlag(OnlyDefault) ? pacs.isDefault() : true;
 
         if (include)

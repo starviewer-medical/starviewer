@@ -85,8 +85,9 @@ void test_EchoToPACSTest::run_ShouldTestIfPACSAreAccessible_data()
         pacs0.setAETitle("PACS0");
         PacsDevice pacs1;
         pacs1.setID("1");
-        pacs1.setType(PacsDevice::Type::Dimse);
+        pacs1.setType(PacsDevice::Type::WadoUriDimse);
         pacs1.setAETitle("PACS1");
+        pacs1.setBaseUri(QUrl("http://pacs1.local/wado-uri"));
         PacsDevice pacs2;
         pacs2.setID("2");
         pacs2.setType(PacsDevice::Type::Dimse);

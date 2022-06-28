@@ -49,7 +49,7 @@ public:
     /// To be called from the thread where QNetworkAccessManager lives. Assigns the given QNetworkAccessManager and calls startInternal().
     void start(QNetworkAccessManager *networkAccessManager);
     /// Cancels the request.
-    void cancel();
+    virtual void cancel();
 
     /// Returns the status of the request.
     Status getStatus() const;

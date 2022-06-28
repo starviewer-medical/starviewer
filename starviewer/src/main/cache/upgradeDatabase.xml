@@ -106,4 +106,10 @@
         <upgradeCommand>UPDATE PACSRetrievedImages SET Type = 'DIMSE';</upgradeCommand>
         <upgradeCommand>CREATE UNIQUE INDEX IndexPacsDevice_BaseUri ON PACSRetrievedImages(BaseUri);</upgradeCommand>
     </upgradeDatabaseToRevision>
+    <upgradeDatabaseToRevision updateToRevision="9597">
+        <upgradeCommand>DROP INDEX IndexPacsDevice_AETitleAddressQueryPort;</upgradeCommand>
+        <upgradeCommand>DROP INDEX IndexPacsDevice_BaseUri;</upgradeCommand>
+        <upgradeCommand>CREATE UNIQUE INDEX IndexPacsDevice_AETitleAddressQueryPortType ON PACSRetrievedImages(AETitle, Address, QueryPort, Type);</upgradeCommand>
+        <upgradeCommand>CREATE UNIQUE INDEX IndexPacsDevice_BaseUriType ON PACSRetrievedImages(BaseUri, Type);</upgradeCommand>
+    </upgradeDatabaseToRevision>
 </upgradeDatabase>

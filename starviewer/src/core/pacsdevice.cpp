@@ -189,12 +189,20 @@ bool PacsDevice::isEmpty() const
 
 bool PacsDevice::isSamePacsDevice(const PacsDevice &pacsDevice) const
 {
-    return (m_type == Type::Dimse
-            && m_AETitle == pacsDevice.getAETitle()
-            && m_address == pacsDevice.getAddress()
-            && m_queryRetrieveServicePort == pacsDevice.getQueryRetrieveServicePort())
-        || (m_type == Type::Wado
-            && m_baseUri == pacsDevice.getBaseUri());
+    return m_type == pacsDevice.getType()
+            && (
+                    (   m_type == Type::Dimse
+                     && m_AETitle == pacsDevice.getAETitle()
+                     && m_address == pacsDevice.getAddress()
+                     && m_queryRetrieveServicePort == pacsDevice.getQueryRetrieveServicePort())
+                 || (   m_type == Type::Wado
+                     && m_baseUri == pacsDevice.getBaseUri())
+                 || (   m_type == Type::WadoUriDimse
+                     && m_AETitle == pacsDevice.getAETitle()
+                     && m_address == pacsDevice.getAddress()
+                     && m_queryRetrieveServicePort == pacsDevice.getQueryRetrieveServicePort()
+                     && m_baseUri == pacsDevice.getBaseUri())
+               );
 }
 
 bool PacsDevice::operator==(const PacsDevice &pacsDevice) const
@@ -219,9 +227,13 @@ QString PacsDevice::getKeyName() const
     {
         return m_AETitle + m_address + ":" + QString::number(m_queryRetrieveServicePort);
     }
-    else // m_type == Type::Wado
+    else if (m_type == Type::Wado)
     {
         return m_baseUri.toString();
+    }
+    else // m_type == Type::WadoUriDimse
+    {
+        return m_baseUri.toString() + "𒉖" + m_AETitle + m_address + ":" + QString::number(m_queryRetrieveServicePort);
     }
 }
 

@@ -31,12 +31,10 @@ class PacsDeviceManager {
 public:
     /// Flags to filter PACS by different properties.
     enum PacsFilterFlag {
-        DimseWithQueryRetrieveService = 0x1,
-        DimseWithStoreService         = 0x2,
-        Dimse                         = DimseWithQueryRetrieveService | DimseWithStoreService,
-        Wado                          = 0x4,
-        AllTypes                      = Dimse | Wado,
-        OnlyDefault                   = 0x8
+        CanRetrieve = 0x1,
+        CanStore    = 0x2,
+        All         = CanRetrieve | CanStore,
+        OnlyDefault = 0x4
     };
     Q_DECLARE_FLAGS(PacsFilter, PacsFilterFlag)
 
@@ -58,7 +56,7 @@ public:
     /// Returns a list of PACS stored in settings, filtered by the given flags.
     /// \param[in] filter Combination of flags to filter the returned PACS.
     /// \return Filtered list of PACS.
-    static QList<PacsDevice> getPacsList(PacsFilter filter = AllTypes);
+    static QList<PacsDevice> getPacsList(PacsFilter filter = All);
 
     /// Retrieves and returns the PACS device stored with the given ID in settings.
     /// \param[in] pacsID ID of the PACS that must be returned.

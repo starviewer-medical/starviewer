@@ -65,6 +65,7 @@ void QPacsConfigurationScreen::createConnections()
 {
     connect(m_addDimsePacsPushButton, &QPushButton::clicked, this, &QPacsConfigurationScreen::addDimsePacs);
     connect(m_addWadoPacsPushButton, &QPushButton::clicked, this, &QPacsConfigurationScreen::addWadoPacs);
+    connect(m_addWadoUriDimsePacsPushButton, &QPushButton::clicked, this, &QPacsConfigurationScreen::addWadoUriDimsePacs);
     connect(m_editPushButton, &QPushButton::clicked, this, &QPacsConfigurationScreen::editPacs);
     connect(m_deletePushButton, &QPushButton::clicked, this, &QPacsConfigurationScreen::deletePacs);
     connect(m_pacsTableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &QPacsConfigurationScreen::updateButtonsState);
@@ -135,6 +136,19 @@ void QPacsConfigurationScreen::addDimsePacs()
 void QPacsConfigurationScreen::addWadoPacs()
 {
     QPacsDialog *dialog = new QPacsDialog(PacsDevice::Type::Wado, this);
+
+    connect(dialog, &QDialog::finished, [=] {
+        // Update always independently of the result because the dialog has an apply button
+        refreshPacsList();
+        dialog->deleteLater();
+    });
+
+    dialog->open();
+}
+
+void QPacsConfigurationScreen::addWadoUriDimsePacs()
+{
+    QPacsDialog *dialog = new QPacsDialog(PacsDevice::Type::WadoUriDimse, this);
 
     connect(dialog, &QDialog::finished, [=] {
         // Update always independently of the result because the dialog has an apply button

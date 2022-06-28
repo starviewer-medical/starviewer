@@ -32,6 +32,8 @@
 #include "wadosearchstudyoperationresult.h"
 #include "wadostorerequest.h"
 #include "wadostorestudyoperationresult.h"
+#include "wadourirequest.h"
+#include "wadouristudyoperationresult.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -40,7 +42,7 @@ namespace udg {
 
 StudyOperationResult* StudyOperationsService::searchPacs(const PacsDevice &pacs, const DicomMask &mask, StudyOperations::TargetResource targetResource)
 {
-    if (pacs.getType() == PacsDevice::Type::Dimse)
+    if (pacs.getType() == PacsDevice::Type::Dimse || pacs.getType() == PacsDevice::Type::WadoUriDimse)
     {
         QueryPacsJob::QueryLevel queryLevel = QueryPacsJob::study;
 
@@ -126,6 +128,20 @@ StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice 
 
         return result;
     }
+    else if (pacs.getType() == PacsDevice::Type::WadoUriDimse)
+    {
+        WadoUriRequest *request = new WadoUriRequest(pacs, study->getInstanceUID(), seriesInstanceUid, sopInstanceUid);
+        WadoUriStudyOperationResult *result = new WadoUriStudyOperationResult(request);
+        result->setRequestStudy(study);
+
+        connect(request, &WadoUriRequest::studyFromCacheWillBeDeleted, this, &StudyOperationsService::localStudyAboutToBeDeleted);
+
+        m_wadoRequestManager->start(request);
+
+        emit operationRequested(result);
+
+        return result;
+    }
 
     return nullptr;
 }
@@ -137,7 +153,7 @@ StudyOperationResult* StudyOperationsService::storeInPacs(const PacsDevice &pacs
 
 StudyOperationResult* StudyOperationsService::storeInPacs(const PacsDevice &pacs, const QList<Series*> &seriesList)
 {
-    if (pacs.getType() == PacsDevice::Type::Dimse)
+    if (pacs.getType() == PacsDevice::Type::Dimse || pacs.getType() == PacsDevice::Type::WadoUriDimse)
     {
         QList<Image*> imageList;
 

@@ -44,6 +44,9 @@ private:
     /// Leaves the dialog ready to configure a WADO PACS.
     void setupWado();
 
+    /// Leaves the dialog ready to configure a WADO-URI + DIMSE PACS.
+    void setupWadoUriDimse();
+
     /// Creates the needed connections.
     void createConnections();
 
