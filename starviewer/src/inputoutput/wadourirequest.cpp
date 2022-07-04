@@ -103,9 +103,6 @@ void WadoUriRequest::startInternal()
         connect(reply, &QNetworkReply::finished, this, [=] {
             onReplyFinished(reply);
         }, Qt::DirectConnection);
-        connect(reply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, [=] {
-            onReplyError(reply);
-        }, Qt::DirectConnection);
     }
 }
 
@@ -181,6 +178,15 @@ bool WadoUriRequest::obtainSopInstanceUids()
 
     delete result;
 
+    // With Raïmserver in some cases we can receive an empty response without error because of a 10 minute limit (see #2982).
+    if (m_instancesToDownload.isEmpty())
+    {
+        m_status = Status::Errored;
+        m_errorsDescription = tr("Could not obtain the list of files in the study.");
+        ERROR_LOG(m_errorsDescription);
+        ok = false;
+    }
+
     return ok;
 }
 
@@ -222,8 +228,20 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
     else
     {
         m_status = Status::Warnings;
-        m_errorsDescription += '\n' + reply->errorString();
-        ERROR_LOG(reply->errorString());
+
+        if (m_errorsDescription.size() < 1000)  // avoid excessive errors accumulation
+        {
+            m_errorsDescription += '\n' + reply->errorString();
+        }
+        else if (!m_errorsDescription.endsWith("…"))
+        {
+            m_errorsDescription += "\n…";
+        }
+
+        ERROR_LOG(QString("QNetworkReply::NetworkError %1: %2. (HTTP %3: %4)")
+                  .arg(reply->error()).arg(reply->errorString())
+                  .arg(reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt())
+                  .arg(reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString()));
     }
 
     reply->deleteLater();
@@ -251,10 +269,19 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
 
                 ERROR_LOG(m_errorsDescription);
             }
+            else
+            {
+                if (!m_errorsDescription.isEmpty())
+                {
+                    m_errorsDescription = tr("Some images have been downloaded. However there have been some errors:\n\n") + m_errorsDescription;
+                    // TODO unify error messages with WADO-RS and DIMSE
+                }
+            }
         }
         else if (m_status != Status::Cancelled)
         {
             m_status = Status::Errored;
+            m_errorsDescription = tr("Could not download any image. Errors:\n\n") + m_errorsDescription;
         }
 
         m_errorsDescription = m_errorsDescription.trimmed();    // trim possible extra \n
@@ -268,12 +295,6 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
             emit finished();
         }
     }
-}
-
-// This is run in the WADO thread.
-void WadoUriRequest::onReplyError(QNetworkReply *reply)
-{
-    WARN_LOG(QString("Network error: %1. %2.").arg(reply->error()).arg(reply->errorString()));
 }
 
 } // namespace udg

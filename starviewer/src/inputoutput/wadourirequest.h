@@ -69,9 +69,6 @@ private slots:
     /// Called when a QNetworkReply finishes.
     void onReplyFinished(QNetworkReply *reply);
 
-    /// Called when a QNetworkReply has an error.
-    void onReplyError(QNetworkReply *reply);
-
 private:
     /// Study Instance UID of the requested study, series or instance.
     QString m_studyInstanceUid;

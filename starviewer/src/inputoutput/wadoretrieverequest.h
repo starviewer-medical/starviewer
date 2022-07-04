@@ -83,8 +83,6 @@ private slots:
     /// Called when the download finishes for any reason, including cancellation. If the download has finished successfully, finishes processing with
     /// DownloadedFilesProcessor. In any case it sets the appropriate status and errors description and emits the appropriate signal.
     void onReplyFinished();
-    /// Called when the reply emits an error signal. Only logs the error. The rest is handled in the onReplyFinished() slot.
-    void onReplyError();
 
 private:
     /// Study Instance UID of the requested study, series or instance.
