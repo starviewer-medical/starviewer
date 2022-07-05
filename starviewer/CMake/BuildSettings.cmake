@@ -23,6 +23,8 @@ if(WIN32)
     if(MSVC)
         # Multi-core compilation
         add_compile_options(/MP)
+        # Put all used libraries paths in a file to avoid surpassing the command length limit in Windows
+        set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_LIBRARIES ON)
 
         if(STARVIEWER_BUILD_DEBUG_WITH_RELEASE_LIBS)
             set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreadedDLL)
