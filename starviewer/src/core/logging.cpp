@@ -76,7 +76,7 @@ QString getLogConfFilePath()
 
 void debugLog(const QString &msg, const QString &file, int line, const QString &function)
 {
-    LOG(DEBUG) << qPrintable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
+    LOG(DEBUG) << qPrintable(QString("%1 [ %2:%3 %4 ]").arg(msg, file, QString::number(line), function));
 }
 
 void infoLog(const QString &msg, const QString&, int, const QString&)
@@ -86,17 +86,17 @@ void infoLog(const QString &msg, const QString&, int, const QString&)
 
 void warnLog(const QString &msg, const QString &file, int line, const QString &function)
 {
-    LOG(WARNING) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
+    LOG(WARNING) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg, file, QString::number(line), function));
 }
 
 void errorLog(const QString &msg, const QString &file, int line, const QString &function)
 {
-    LOG(ERROR) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
+    LOG(ERROR) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg, file, QString::number(line), function));
 }
 
 void fatalLog(const QString &msg, const QString &file, int line, const QString &function)
 {
-    LOG(FATAL) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg).arg(file).arg(line).arg(function));
+    LOG(FATAL) << qUtf8Printable(QString("%1 [ %2:%3 %4 ]").arg(msg, file, QString::number(line), function));
 }
 
 void verboseLog(int vLevel, const QString &msg, const QString&, int, const QString&)
