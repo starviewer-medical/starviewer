@@ -40,6 +40,9 @@ private slots:
     /// Shows a dialog to add a new WADO PACS.
     void addWadoPacs();
 
+    /// Shows a dialog to add a new WADO-URI + DIMSE PACS.
+    void addWadoUriDimsePacs();
+
     /// Shows a dialog to edit the selected PACS.
     void editPacs();
 

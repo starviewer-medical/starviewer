@@ -23,13 +23,17 @@ namespace udg {
 /**
  * @brief The PacsDevice class stores data about a PACS server.
  *
- * This data includes connexion data (AE Title, address, query/retrieve port and store port for DIMSE PACS, base URI for WADO PACS) and other descriptive data
- * (institution, location and description).
+ * This data includes connexion data and other descriptive data (institution, location and description).
+ *
+ * There are three types of PACS according to the protocols they use to search, download and upload studies:
+ * - DIMSE: C-FIND + C-MOVE + C-STORE
+ * - WADO: QIDO-RS + WADO-RS + STOW-RS
+ * - Hybrid WADO-URI + DIMSE: C-FIND + WADO-URI + C-STORE
  */
 class PacsDevice {
 public:
     /// Type of PACS.
-    enum class Type { Dimse, Wado };
+    enum class Type { Dimse, Wado, WadoUriDimse };
 
     /// Creates an invalid or empty PACS.
     PacsDevice();
@@ -44,39 +48,39 @@ public:
     /// Sets the type of this PACS.
     void setType(Type type);
 
-    /// Returns the AE title. Only applicable to DIMSE PACS.
+    /// Returns the AE title. Not applicable to WADO PACS.
     const QString& getAETitle() const;
-    /// Sets the AE title. Only applicable to DIMSE PACS.
+    /// Sets the AE title. Not applicable to WADO PACS.
     void setAETitle(QString aeTitle);
 
-    /// Returns the address (IP or hostname). Only applicable to DIMSE PACS.
+    /// Returns the address (IP or hostname). Not applicable to WADO PACS.
     const QString& getAddress() const;
-    /// Sets the address (IP or hostname). Only applicable to DIMSE PACS.
+    /// Sets the address (IP or hostname). Not applicable to WADO PACS.
     void setAddress(QString address);
 
-    /// Returns true if this PACS has the query/retrieve service enabled and false otherwise. Only applicable to DIMSE PACS.
+    /// Returns true if this PACS has the query/retrieve service enabled and false otherwise. Not applicable to WADO PACS.
     bool isQueryRetrieveServiceEnabled() const;
-    /// Sets whether this PACS has the query/retrieve service enabled or not. Only applicable to DIMSE PACS.
+    /// Sets whether this PACS has the query/retrieve service enabled or not. Not applicable to WADO PACS.
     void setQueryRetrieveServiceEnabled(bool enabled);
 
-    /// Returns the port for the query/retrieve service. Only applicable to DIMSE PACS.
+    /// Returns the port for the query/retrieve service. Not applicable to WADO PACS.
     int getQueryRetrieveServicePort() const;
-    /// Sets the port for the query/retrieve service. Only applicable to DIMSE PACS.
+    /// Sets the port for the query/retrieve service. Not applicable to WADO PACS.
     void setQueryRetrieveServicePort(int port);
 
-    /// Returns true if this PACS has the store service enabled and false otherwise. Only applicable to DIMSE PACS.
+    /// Returns true if this PACS has the store service enabled and false otherwise. Not applicable to WADO PACS.
     bool isStoreServiceEnabled() const;
-    /// Sets whether this PACS has the store service enabled or not. Only applicable to DIMSE PACS.
+    /// Sets whether this PACS has the store service enabled or not. Not applicable to WADO PACS.
     void setStoreServiceEnabled(bool enabled);
 
-    /// Returns the port for the store service. Only applicable to DIMSE PACS.
+    /// Returns the port for the store service. Not applicable to WADO PACS.
     int getStoreServicePort() const;
-    /// Sets the port for the store service. Only applicable to DIMSE PACS.
+    /// Sets the port for the store service. Not applicable to WADO PACS.
     void setStoreServicePort(int port);
 
-    /// Returns the base URI. Only applicable to WADO PACS.
+    /// Returns the base URI. Not applicable to DIMSE PACS.
     const QUrl& getBaseUri() const;
-    /// Sets the base URI. Only applicable to WADO PACS.
+    /// Sets the base URI. Not applicable to DIMSE PACS.
     void setBaseUri(QUrl baseUri);
 
     /// Returns the institution that owns or manages this PACS.
@@ -102,8 +106,7 @@ public:
     /// Returns true if this PACS is empty (default constructed) and false otherwise.
     bool isEmpty() const;
 
-    /// Returns true if this PACS represents the same as the given one, i.e. same AE Title, address and Q/R port for DIMSE PACS and same base URI for WADO PACS,
-    /// and false otherwise.
+    /// Returns true if this PACS represents the same as the given one and false otherwise, comparing only type and query and download connection settings.
     bool isSamePacsDevice(const PacsDevice &pacsDevice) const;
 
     /// Returns true if this PacsDevice instance is exactly equal to the given one.
@@ -121,19 +124,19 @@ private:
     QString m_id;
     /// Type of this PACS.
     Type m_type;
-    /// AE Title. Only applicable to DIMSE PACS.
+    /// AE Title. Only applicable to DIMSE and hybrid PACS.
     QString m_AETitle;
-    /// Address (IP or hostname). Only applicable to DIMSE PACS.
+    /// Address (IP or hostname). Only applicable to DIMSE and hybrid PACS.
     QString m_address;
-    /// Whether the query/retrieve service is enabled or not. Only applicable to DIMSE PACS.
+    /// Whether the query/retrieve service is enabled or not. Only applicable to DIMSE and hybrid PACS.
     bool m_isQueryRetrieveServiceEnabled;
-    /// Port for the query/retrieve service. Only applicable to DIMSE PACS.
+    /// Port for the query/retrieve service. Only applicable to DIMSE and hybrid PACS.
     int m_queryRetrieveServicePort;
-    /// Whether the store service is enabled or not. Only applicable to DIMSE PACS.
+    /// Whether the store service is enabled or not. Only applicable to DIMSE and hybrid PACS.
     bool m_isStoreServiceEnabled;
-    /// Port for the store service. Only applicable to DIMSE PACS.
+    /// Port for the store service. Only applicable to DIMSE and hybrid PACS.
     int m_storeServicePort;
-    /// Base URI. Only applicable to WADO PACS.
+    /// Base URI. Only applicable to WADO and hybrid PACS.
     QUrl m_baseUri;
     /// Institution that owns or manages this PACS.
     QString m_institution;

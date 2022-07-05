@@ -97,7 +97,7 @@ void QExporterTool::initialize()
     this->currentImageRadioButtonClicked();
 
     // No PACS selected by default and only PACS that accept uploads
-    m_pacsList->setFilterPACSByService(PacsDeviceManager::DimseWithStoreService | PacsDeviceManager::Wado);
+    m_pacsList->setFilterPACSByService(PacsDeviceManager::CanStore);
     m_pacsList->setShowQueryPacsDefaultHighlighted(false);
     m_pacsList->refresh();
 }

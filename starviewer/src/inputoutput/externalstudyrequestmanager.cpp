@@ -64,9 +64,13 @@ QString getPacsIdentificationString(const PacsDevice &pacs)
     {
         return id + pacs.getAETitle();
     }
-    else
+    else if (pacs.getType() == PacsDevice::Type::Wado)
     {
         return id + pacs.getBaseUri().toDisplayString();
+    }
+    else // pacs.getType() == PacsDevice::Type::WadoUriDimse
+    {
+        return id + "(hybrid) " + pacs.getBaseUri().toDisplayString() + " / " + pacs.getAETitle();
     }
 }
 
@@ -163,8 +167,7 @@ void ExternalStudyRequestManager::queryPacsForRequest(DicomMask maskRISRequest)
     // TODO Ara mateix cal que nosaltres mateixos fem aquesta comprovació però potser seria interessant que el mètode PACSDevicemanager::queryStudy()
     // fes aquesta comprovació i ens retornes algun codi que pugui descriure com ha anat la consulta i així poder actuar en conseqüència mostrant
     // un message box, fent un log o el que calgui segons la ocasió.
-    QList<PacsDevice> queryablePACS =
-            PacsDeviceManager::getPacsList(PacsDeviceManager::DimseWithQueryRetrieveService | PacsDeviceManager::Wado | PacsDeviceManager::OnlyDefault);
+    QList<PacsDevice> queryablePACS = PacsDeviceManager::getPacsList(PacsDeviceManager::CanRetrieve | PacsDeviceManager::OnlyDefault);
     if (queryablePACS.isEmpty())
     {
         QMessageBox::information(nullptr, ApplicationNameString, tr("Cannot retrieve the studies requested from SAP, RIS or command line because there is no "

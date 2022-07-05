@@ -75,7 +75,7 @@ QList<PacsDevice> EchoToPACSTest::getPacsDeviceList()
 
 DiagnosisTestProblem EchoToPACSTest::echo(const PacsDevice &pacs)
 {
-    if (pacs.getType() == PacsDevice::Type::Dimse)
+    if (pacs.getType() == PacsDevice::Type::Dimse || pacs.getType() == PacsDevice::Type::WadoUriDimse)
     {
         EchoToPACS echoToPACS;
 

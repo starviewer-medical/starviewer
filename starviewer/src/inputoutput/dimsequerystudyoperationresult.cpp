@@ -85,7 +85,7 @@ void DimseQueryStudyOperationResult::onJobFinished()
                 setSeries(m_job->getSeriesList());
                 break;
             case RequestLevel::Instances:
-                setInstances(m_job->getImageList());
+                setInstances(m_job->getImageList(), m_job->getSeriesList());
                 break;
         }
     }

@@ -62,8 +62,7 @@ void RelatedStudiesManager::makeAsynchronousStudiesQuery(Patient *patient, QDate
 {
     initializeQuery();
 
-    QList<PacsDevice> pacsDeviceListToQuery =
-            PacsDeviceManager::getPacsList(PacsDeviceManager::DimseWithQueryRetrieveService | PacsDeviceManager::Wado | PacsDeviceManager::OnlyDefault);
+    QList<PacsDevice> pacsDeviceListToQuery = PacsDeviceManager::getPacsList(PacsDeviceManager::CanRetrieve | PacsDeviceManager::OnlyDefault);
     pacsDeviceListToQuery = PacsDeviceManager::removeDuplicatePacsFromList(pacsDeviceListToQuery + getPACSRetrievedStudiesOfPatient(patient));
 
     if (pacsDeviceListToQuery.count() == 0)

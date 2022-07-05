@@ -182,7 +182,16 @@ void QOperationStateScreen::insertIntoTree(StudyOperationResult *result)
     item->setText(QOperationStateScreen::Status, tr("PENDING"));
     item->setText(QOperationStateScreen::Direction, result->getOperationType() == StudyOperationResult::OperationType::Store ? tr("Server") : tr("Local"));
     const PacsDevice &pacs = result->getRequestPacsDevice();
-    item->setText(QOperationStateScreen::FromTo, pacs.getType() == PacsDevice::Type::Dimse ? pacs.getAETitle() : pacs.getBaseUri().toString());
+    QString remoteEnd;
+    if (result->getOperationType() == StudyOperationResult::OperationType::Retrieve)
+    {
+        remoteEnd = pacs.getType() == PacsDevice::Type::Dimse ? pacs.getAETitle() : pacs.getBaseUri().toString();
+    }
+    else if (result->getOperationType() == StudyOperationResult::OperationType::Store)
+    {
+        remoteEnd = pacs.getType() == PacsDevice::Type::Wado ? pacs.getBaseUri().toString() : pacs.getAETitle();
+    }
+    item->setText(QOperationStateScreen::FromTo, remoteEnd);
     item->setText(QOperationStateScreen::PatientID, result->getRequestStudy()->getParentPatient()->getID());
     item->setText(QOperationStateScreen::PatientName, result->getRequestStudy()->getParentPatient()->getFullName());
     item->setText(QOperationStateScreen::Date, QDate::currentDate().toString(Qt::ISODate) + "   " + QTime::currentTime().toString("hh:mm"));

@@ -41,6 +41,11 @@ QPacsDialog::QPacsDialog(PacsDevice::Type type, QWidget *parent)
             setWindowTitle(tr("New WADO PACS server"));
             setupWado();
             break;
+
+        case PacsDevice::Type::WadoUriDimse:
+            setWindowTitle(tr("New WADO-URI + DIMSE PACS server"));
+            setupWadoUriDimse();
+            break;
     }
 
     adjustSize();
@@ -97,6 +102,26 @@ void QPacsDialog::setupWado()
     m_sendServiceEnabledCheckBox->hide();
     m_sendServicePortLabel->hide();
     m_sendServicePortSpinBox->hide();
+    m_baseUriLabel->show();
+    m_baseUriLineEdit->show();
+}
+
+void QPacsDialog::setupWadoUriDimse()
+{
+    m_aeTitleLabel->show();
+    m_aeTitleLineEdit->show();
+    m_addressLabel->show();
+    m_addressLineEdit->show();
+    m_qrServiceLabel->show();
+    m_qrServiceEnabledCheckBox->show();
+    m_qrServiceEnabledCheckBox->setChecked(true);   // force Q/R service enabled in WADO-URI to allow queries
+    m_qrServiceEnabledCheckBox->setEnabled(false);
+    m_qrServicePortLabel->show();
+    m_qrServicePortSpinBox->show();
+    m_sendServiceLabel->show();
+    m_sendServiceEnabledCheckBox->show();
+    m_sendServicePortLabel->show();
+    m_sendServicePortSpinBox->show();
     m_baseUriLabel->show();
     m_baseUriLineEdit->show();
 }
@@ -160,6 +185,32 @@ bool QPacsDialog::arePacsSettingsValid()
             return false;
         }
     }
+    else if (m_pacsType == PacsDevice::Type::WadoUriDimse)
+    {
+        if (!m_aeTitleLineEdit->hasAcceptableInput() || m_aeTitleLineEdit->text().trimmed().isEmpty())
+        {
+            QMessageBox::warning(this, ApplicationNameString, tr("AE Title is empty or has an invalid value."), QMessageBox::Ok);
+            return false;
+        }
+
+        if (m_addressLineEdit->text().trimmed().isEmpty())
+        {
+            QMessageBox::warning(this, ApplicationNameString, tr("Address cannot be empty."), QMessageBox::Ok);
+            return false;
+        }
+
+        if (m_baseUriLineEdit->text().trimmed().isEmpty())
+        {
+            QMessageBox::warning(this, ApplicationNameString, tr("Base URI cannot be empty."), QMessageBox::Ok);
+            return false;
+        }
+
+        if (!QUrl(m_baseUriLineEdit->text()).isValid())
+        {
+            QMessageBox::warning(this, ApplicationNameString, tr("Base URI is not a valid URI."), QMessageBox::Ok);
+            return false;
+        }
+    }
 
     return true;
 }
@@ -194,7 +245,7 @@ void QPacsDialog::test()
     // Agafem les dades del PACS que estan el textbox per testejar
     PacsDevice pacsDevice = getPacsDevice();
 
-    if (pacsDevice.getType() == PacsDevice::Type::Dimse)
+    if (pacsDevice.getType() == PacsDevice::Type::Dimse || pacsDevice.getType() == PacsDevice::Type::WadoUriDimse)
     {
         EchoToPACS echoToPACS;
 
@@ -279,6 +330,11 @@ bool QPacsDialog::save()
         {
             INFO_LOG(QString("Adding new WADO PACS with base URI %1.").arg(pacsDevice.getBaseUri().toString()));
         }
+        else if (m_pacsType == PacsDevice::Type::WadoUriDimse)
+        {
+            INFO_LOG(QString("Adding new WADO-URI + DIMSE PACS with base URI %1 and AE Title %2.").arg(pacsDevice.getBaseUri().toString())
+                                                                                                  .arg(pacsDevice.getAETitle()));
+        }
 
         if (PacsDeviceManager::addPacs(pacsDevice))
         {
@@ -338,6 +394,10 @@ void QPacsDialog::reset()
         else if (m_pacsType == PacsDevice::Type::Wado)
         {
             setupWado();
+        }
+        else if (m_pacsType == PacsDevice::Type::WadoUriDimse)
+        {
+            setupWadoUriDimse();
         }
     }
 }

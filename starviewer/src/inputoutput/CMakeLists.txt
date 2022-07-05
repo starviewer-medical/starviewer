@@ -95,6 +95,8 @@ set(SOURCES
     wadosearchstudyoperationresult.cpp
     wadostorerequest.cpp
     wadostorestudyoperationresult.cpp
+    wadourirequest.cpp
+    wadouristudyoperationresult.cpp
 )
 
 if(WIN32)

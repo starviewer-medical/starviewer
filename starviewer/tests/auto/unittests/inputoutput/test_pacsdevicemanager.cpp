@@ -63,7 +63,7 @@ void test_PacsDeviceManager::addPacs_ShouldAddThePacs_data()
     QTest::addColumn<QString>("expectedId");
     QTest::addColumn<TestingSettings>("settingsAfter");
 
-    TestingSettings settings0, settings1, settings2, settings3, settings4;
+    TestingSettings settings0, settings1, settings2, settings3, settings4, settings5;
 
     {
         PacsDevice pacsDevice;
@@ -122,24 +122,26 @@ void test_PacsDeviceManager::addPacs_ShouldAddThePacs_data()
     {
         PacsDevice pacsDevice;
         pacsDevice.setID("10");
-        pacsDevice.setType(PacsDevice::Type::Dimse);
+        pacsDevice.setType(PacsDevice::Type::WadoUriDimse);
         pacsDevice.setAETitle("^_^");
-        pacsDevice.setAddress("0.0.0.0");
-        pacsDevice.setQueryRetrieveServiceEnabled(false);
-        pacsDevice.setQueryRetrieveServicePort(0);
+        pacsDevice.setAddress("0.0.0.1");
+        pacsDevice.setQueryRetrieveServiceEnabled(true);
+        pacsDevice.setQueryRetrieveServicePort(11111);
         pacsDevice.setStoreServiceEnabled(true);
         pacsDevice.setStoreServicePort(1312);
+        pacsDevice.setBaseUri(QUrl("https://example.com/wado-uri"));
         pacsDevice.setLocation("L2");
 
         Settings::SettingsListItemType item;
         item["ID"] = "2";
-        item["Type"] = "DIMSE";
+        item["Type"] = "WADO-URI+DIMSE";
         item["AETitle"] = pacsDevice.getAETitle();
         item["PacsHostname"] = pacsDevice.getAddress();
         item["QueryRetrieveServiceEnabled"] = pacsDevice.isQueryRetrieveServiceEnabled();
         item["PacsPort"] = pacsDevice.getQueryRetrieveServicePort();
         item["StoreServiceEnabled"] = pacsDevice.isStoreServiceEnabled();
         item["StoreServicePort"] = pacsDevice.getStoreServicePort();
+        item["BaseUri"] = pacsDevice.getBaseUri();
         item["Institution"] = pacsDevice.getInstitution();
         item["Location"] = pacsDevice.getLocation();
         item["Description"] = pacsDevice.getDescription();
@@ -178,6 +180,39 @@ void test_PacsDeviceManager::addPacs_ShouldAddThePacs_data()
         settings4.addListItem(InputOutputSettings::PacsListConfigurationSectionName, item);
 
         QTest::newRow("DIMSE repeated everything equal except Q/R port") << settings3 << pacsDevice << "3" << settings4;
+    }
+
+    settings5 = settings4;
+
+    {
+        PacsDevice pacsDevice;
+        pacsDevice.setID("10");
+        pacsDevice.setType(PacsDevice::Type::WadoUriDimse);
+        pacsDevice.setAETitle("^_^");
+        pacsDevice.setAddress("0.0.0.1");
+        pacsDevice.setQueryRetrieveServiceEnabled(true);
+        pacsDevice.setQueryRetrieveServicePort(1111);
+        pacsDevice.setStoreServiceEnabled(true);
+        pacsDevice.setStoreServicePort(1312);
+        pacsDevice.setBaseUri(QUrl("https://example.com:1312/wado-uri"));
+        pacsDevice.setLocation("L2");
+
+        Settings::SettingsListItemType item;
+        item["ID"] = "4";
+        item["Type"] = "WADO-URI+DIMSE";
+        item["AETitle"] = pacsDevice.getAETitle();
+        item["PacsHostname"] = pacsDevice.getAddress();
+        item["QueryRetrieveServiceEnabled"] = pacsDevice.isQueryRetrieveServiceEnabled();
+        item["PacsPort"] = pacsDevice.getQueryRetrieveServicePort();
+        item["StoreServiceEnabled"] = pacsDevice.isStoreServiceEnabled();
+        item["StoreServicePort"] = pacsDevice.getStoreServicePort();
+        item["BaseUri"] = pacsDevice.getBaseUri();
+        item["Institution"] = pacsDevice.getInstitution();
+        item["Location"] = pacsDevice.getLocation();
+        item["Description"] = pacsDevice.getDescription();
+        settings5.addListItem(InputOutputSettings::PacsListConfigurationSectionName, item);
+
+        QTest::newRow("Hybrid PACS with some key field different") << settings4 << pacsDevice << "4" << settings5;
     }
 }
 
@@ -224,6 +259,19 @@ void test_PacsDeviceManager::addPacs_ShouldNotAddThePacs_data()
         item["BaseUri"] = "https://127.0.0.1:9996/wado/";
         testingSettings.addListItem(InputOutputSettings::PacsListConfigurationSectionName, item);
     }
+    {
+        Settings::SettingsListItemType item;
+        item["ID"] = "2";
+        item["Type"] = "WADO-URI+DIMSE";
+        item["AETitle"] = "WUD";
+        item["PacsHostname"] = "4.7.89.111";
+        item["QueryRetrieveServiceEnabled"] = true;
+        item["PacsPort"] = 1234;
+        item["StoreServiceEnabled"] = true;
+        item["StoreServicePort"] = 5678;
+        item["BaseUri"] = "https://127.0.0.1:9999";
+        testingSettings.addListItem(InputOutputSettings::PacsListConfigurationSectionName, item);
+    }
 
     {
         PacsDevice pacsDevice;
@@ -238,9 +286,12 @@ void test_PacsDeviceManager::addPacs_ShouldNotAddThePacs_data()
         QTest::newRow("Same DIMSE") << testingSettings << pacsDevice;
     }
 
-    QTest::newRow("Same DIMSE Q/R different Store") << testingSettings << PACSDeviceTestHelper::createPACSDevice("2", "||*||", "cat", 1714);
+    QTest::newRow("Same DIMSE Q/R different Store") << testingSettings << PACSDeviceTestHelper::createDimsePacsDevice("3", "||*||", "cat", 1714);
 
-    QTest::newRow("Same WADO") << testingSettings << PACSDeviceTestHelper::createWadoPacsDevice("3", "https://127.0.0.1:9996/wado/");
+    QTest::newRow("Same WADO") << testingSettings << PACSDeviceTestHelper::createWadoPacsDevice("4", "https://127.0.0.1:9996/wado/");
+
+    QTest::newRow("Same hybrid") << testingSettings
+                                 << PACSDeviceTestHelper::createWadoUriDimsePacsDevice("5", "WUD", "4.7.89.111", 1234, "https://127.0.0.1:9999");
 }
 
 void test_PacsDeviceManager::addPacs_ShouldNotAddThePacs()
@@ -293,6 +344,22 @@ void test_PacsDeviceManager::updatePacs_ShouldUpdateThePacs_data()
         item["Institution"] = "I1";
         item["Location"] = "L1";
         item["Description"] = "D1";
+        initialSettings.addListItem(InputOutputSettings::PacsListConfigurationSectionName, item);
+    }
+    {
+        Settings::SettingsListItemType item;
+        item["ID"] = "2";
+        item["Type"] = "WADO-URI+DIMSE";
+        item["AETitle"] = "||*||";
+        item["PacsHostname"] = "cat";
+        item["QueryRetrieveServiceEnabled"] = true;
+        item["PacsPort"] = 1714;
+        item["StoreServiceEnabled"] = true;
+        item["StoreServicePort"] = 2017;
+        item["BaseUri"] = "https://example.com/wado-uri/";
+        item["Institution"] = "I2";
+        item["Location"] = "L2";
+        item["Description"] = "D2";
         initialSettings.addListItem(InputOutputSettings::PacsListConfigurationSectionName, item);
     }
 
@@ -348,6 +415,40 @@ void test_PacsDeviceManager::updatePacs_ShouldUpdateThePacs_data()
         updatedSettings.setListItem(1, InputOutputSettings::PacsListConfigurationSectionName, item);
 
         QTest::newRow("Update WADO") << initialSettings << pacsDevice << "1" << updatedSettings;
+    }
+
+    {
+        PacsDevice pacsDevice;
+        pacsDevice.setID("2");
+        pacsDevice.setType(PacsDevice::Type::WadoUriDimse);
+        pacsDevice.setAETitle("//*//");
+        pacsDevice.setAddress("1.7.1.4");
+        pacsDevice.setQueryRetrieveServiceEnabled(true);
+        pacsDevice.setQueryRetrieveServicePort(1207);
+        pacsDevice.setStoreServiceEnabled(false);
+        pacsDevice.setStoreServicePort(2017);
+        pacsDevice.setBaseUri(QUrl("https://localhost:9999/"));
+        pacsDevice.setInstitution("Consell");
+        pacsDevice.setLocation("UE");
+        pacsDevice.setDescription("PE");
+
+        Settings::SettingsListItemType item;
+        item["ID"] = "2";
+        item["Type"] = "WADO-URI+DIMSE";
+        item["AETitle"] = pacsDevice.getAETitle();
+        item["PacsHostname"] = pacsDevice.getAddress();
+        item["QueryRetrieveServiceEnabled"] = pacsDevice.isQueryRetrieveServiceEnabled();
+        item["PacsPort"] = pacsDevice.getQueryRetrieveServicePort();
+        item["StoreServiceEnabled"] = pacsDevice.isStoreServiceEnabled();
+        item["StoreServicePort"] = pacsDevice.getStoreServicePort();
+        item["BaseUri"] = pacsDevice.getBaseUri();
+        item["Institution"] = pacsDevice.getInstitution();
+        item["Location"] = pacsDevice.getLocation();
+        item["Description"] = pacsDevice.getDescription();
+        TestingSettings updatedSettings(initialSettings);
+        updatedSettings.setListItem(2, InputOutputSettings::PacsListConfigurationSectionName, item);
+
+        QTest::newRow("Update hybrid") << initialSettings << pacsDevice << "2" << updatedSettings;
     }
 
     {
@@ -512,13 +613,14 @@ void test_PacsDeviceManager::deletePacs_ShouldDeleteThePacs_data()
     {
         Settings::SettingsListItemType item;
         item["ID"] = "2";
-        item["Type"] = "DIMSE";
+        item["Type"] = "WADO-URI+DIMSE";
         item["AETitle"] = "@.@";
         item["PacsHostname"] = "10.6.222.5";
         item["QueryRetrieveServiceEnabled"] = true;
         item["PacsPort"] = 2446;
         item["StoreServiceEnabled"] = true;
         item["StoreServicePort"] = 2447;
+        item["BaseUri"] = "https://127.0.0.1:9996/wado-uri/";
         item["Institution"] = "I2";
         item["Location"] = "L2";
         item["Description"] = "D2";
@@ -599,36 +701,36 @@ void test_PacsDeviceManager::getPacsList_ShouldReturnPacsAccordingToFilter_data(
     Settings::setStaticTestingSettings(&settings);  // needed for calls to setDefault
 
     // DIMSE Q/R No default
-    PacsDevice pacs0 = PACSDeviceTestHelper::createPACSDevice("0", "pacs0", "1.0.0.0", 2000);
+    PacsDevice pacs0 = PACSDeviceTestHelper::createDimsePacsDevice("0", "pacs0", "1.0.0.0", 2000);
     PacsDeviceManager::addPacs(pacs0);
 
     // DIMSE Q/R Default
-    PacsDevice pacs1 = PACSDeviceTestHelper::createPACSDevice("1", "pacs1", "1.0.0.1", 2001);
+    PacsDevice pacs1 = PACSDeviceTestHelper::createDimsePacsDevice("1", "pacs1", "1.0.0.1", 2001);
     pacs1.setDefault(true);
     PacsDeviceManager::addPacs(pacs1);
 
     // DIMSE Q/R Store No default
-    PacsDevice pacs2 = PACSDeviceTestHelper::createPACSDevice("2", "pacs2", "1.0.0.2", 2002);
+    PacsDevice pacs2 = PACSDeviceTestHelper::createDimsePacsDevice("2", "pacs2", "1.0.0.2", 2002);
     pacs2.setStoreServiceEnabled(true);
     pacs2.setStoreServicePort(2012);
     PacsDeviceManager::addPacs(pacs2);
 
     // DIMSE Q/R Store Default
-    PacsDevice pacs3 = PACSDeviceTestHelper::createPACSDevice("3", "pacs3", "1.0.0.3", 2003);
+    PacsDevice pacs3 = PACSDeviceTestHelper::createDimsePacsDevice("3", "pacs3", "1.0.0.3", 2003);
     pacs3.setStoreServiceEnabled(true);
     pacs3.setStoreServicePort(2013);
     pacs3.setDefault(true);
     PacsDeviceManager::addPacs(pacs3);
 
     // DIMSE Store No default
-    PacsDevice pacs4 = PACSDeviceTestHelper::createPACSDevice("4", "pacs4", "1.0.0.4", 2004);
+    PacsDevice pacs4 = PACSDeviceTestHelper::createDimsePacsDevice("4", "pacs4", "1.0.0.4", 2004);
     pacs4.setQueryRetrieveServiceEnabled(false);
     pacs4.setStoreServiceEnabled(true);
     pacs4.setStoreServicePort(2014);
     PacsDeviceManager::addPacs(pacs4);
 
     // DIMSE Store Default
-    PacsDevice pacs5 = PACSDeviceTestHelper::createPACSDevice("5", "pacs5", "1.0.0.5", 2005);
+    PacsDevice pacs5 = PACSDeviceTestHelper::createDimsePacsDevice("5", "pacs5", "1.0.0.5", 2005);
     pacs5.setQueryRetrieveServiceEnabled(false);
     pacs5.setStoreServiceEnabled(true);
     pacs5.setStoreServicePort(2015);
@@ -644,6 +746,28 @@ void test_PacsDeviceManager::getPacsList_ShouldReturnPacsAccordingToFilter_data(
     pacs7.setDefault(true);
     PacsDeviceManager::addPacs(pacs7);
 
+    // Hybrid No default
+    PacsDevice pacs8 = PACSDeviceTestHelper::createWadoUriDimsePacsDevice("8", "pacs8", "1.0.0.8", 2008, "http://pacs8.net");
+    PacsDeviceManager::addPacs(pacs8);
+
+    // Hybrid Default
+    PacsDevice pacs9 = PACSDeviceTestHelper::createWadoUriDimsePacsDevice("9", "pacs9", "1.0.0.9", 2009, "http://pacs9.net");
+    pacs9.setDefault(true);
+    PacsDeviceManager::addPacs(pacs9);
+
+    // Hybrid Store No default
+    PacsDevice pacs10 = PACSDeviceTestHelper::createWadoUriDimsePacsDevice("10", "pacs10", "1.0.0.10", 2010, "http://pacs10.net");
+    pacs10.setStoreServiceEnabled(true);
+    pacs10.setStoreServicePort(2020);
+    PacsDeviceManager::addPacs(pacs10);
+
+    // Hybrid Store Default
+    PacsDevice pacs11 = PACSDeviceTestHelper::createWadoUriDimsePacsDevice("11", "pacs11", "1.0.0.11", 2011, "http://pacs11.net");
+    pacs11.setStoreServiceEnabled(true);
+    pacs11.setStoreServicePort(2021);
+    pacs11.setDefault(true);
+    PacsDeviceManager::addPacs(pacs11);
+
     Settings::setStaticTestingSettings(nullptr);
 
     using PDM = PacsDeviceManager;
@@ -652,25 +776,15 @@ void test_PacsDeviceManager::getPacsList_ShouldReturnPacsAccordingToFilter_data(
 
     QTest::newRow("Null filter") << settings << PacsFilter(0) << List{};
 
-    QTest::newRow("Q/R") << settings << PacsFilter(PDM::DimseWithQueryRetrieveService) << List{pacs0, pacs1, pacs2, pacs3};
-    QTest::newRow("Store") << settings << PacsFilter(PDM::DimseWithStoreService) << List{pacs2, pacs3, pacs4, pacs5};
-    QTest::newRow("DIMSE (Q/R | Store)") << settings << PacsFilter(PDM::Dimse) << List{pacs0, pacs1, pacs2, pacs3, pacs4, pacs5};
-    QTest::newRow("WADO") << settings << PacsFilter(PDM::Wado) << List{pacs6, pacs7};
-    QTest::newRow("All types (DIMSE | WADO)") << settings << PacsFilter(PDM::AllTypes) << List{pacs0, pacs1, pacs2, pacs3, pacs4, pacs5, pacs6, pacs7};
+    QTest::newRow("Can retrieve") << settings << PacsFilter(PDM::CanRetrieve) << List{pacs0, pacs1, pacs2, pacs3, pacs6, pacs7, pacs8, pacs9, pacs10, pacs11};
+    QTest::newRow("Can store") << settings << PacsFilter(PDM::CanStore) << List{pacs2, pacs3, pacs4, pacs5, pacs6, pacs7, pacs10, pacs11};
+    QTest::newRow("All (can retrieve | can store)") << settings << PacsFilter(PDM::All)
+                                                    << List{pacs0, pacs1, pacs2, pacs3, pacs4, pacs5, pacs6, pacs7, pacs8, pacs9, pacs10, pacs11};
     QTest::newRow("Only default") << settings << PacsFilter(PDM::OnlyDefault) << List{};
 
-    QTest::newRow("Q/R only default") << settings << PacsFilter(PDM::DimseWithQueryRetrieveService | PDM::OnlyDefault) << List{pacs1, pacs3};
-    QTest::newRow("Store only default") << settings << PacsFilter(PDM::DimseWithStoreService | PDM::OnlyDefault) << List{pacs3, pacs5};
-    QTest::newRow("DIMSE only default") << settings << PacsFilter(PDM::Dimse | PDM::OnlyDefault) << List{pacs1, pacs3, pacs5};
-    QTest::newRow("WADO only default") << settings << PacsFilter(PDM::Wado | PDM::OnlyDefault) << List{pacs7};
-    QTest::newRow("All types only default") << settings << PacsFilter(PDM::AllTypes | PDM::OnlyDefault) << List{pacs1, pacs3, pacs5, pacs7};
-    QTest::newRow("Q/R | WADO") << settings << PacsFilter(PDM::DimseWithQueryRetrieveService | PDM::Wado) << List{pacs0, pacs1, pacs2, pacs3, pacs6, pacs7};
-    QTest::newRow("Store | WADO") << settings << PacsFilter(PDM::DimseWithStoreService | PDM::Wado) << List{pacs2, pacs3, pacs4, pacs5, pacs6, pacs7};
-
-    QTest::newRow("Q/R | WADO only default") << settings << PacsFilter(PDM::DimseWithQueryRetrieveService | PDM::Wado | PDM::OnlyDefault)
-                                             << List{pacs1, pacs3, pacs7};
-    QTest::newRow("Store | WADO only default") << settings << PacsFilter(PDM::DimseWithStoreService | PDM::Wado | PDM::OnlyDefault)
-                                               << List{pacs3, pacs5, pacs7};
+    QTest::newRow("Can retrieve only default") << settings << PacsFilter(PDM::CanRetrieve | PDM::OnlyDefault) << List{pacs1, pacs3, pacs7, pacs9, pacs11};
+    QTest::newRow("Can store only default") << settings << PacsFilter(PDM::CanStore | PDM::OnlyDefault) << List{pacs3, pacs5, pacs7, pacs11};
+    QTest::newRow("All only default") << settings << PacsFilter(PDM::All | PDM::OnlyDefault) << List{pacs1, pacs3, pacs5, pacs7, pacs9, pacs11};
 }
 
 void test_PacsDeviceManager::getPacsList_ShouldReturnPacsAccordingToFilter()
@@ -729,9 +843,9 @@ void test_PacsDeviceManager::removeDuplicatePacsFromList_ShouldReturnListWithout
     QTest::addColumn<QList<PacsDevice> >("input");
     QTest::addColumn<QList<PacsDevice> >("result");
 
-    PacsDevice pacsDeviceOne = PACSDeviceTestHelper::createPACSDevice("1", "TESTPACSONE", "1.1.1.1", 4006);
-    PacsDevice pacsDeviceTwo = PACSDeviceTestHelper::createPACSDevice("2", "TESTPACSONE", "1.1.1.1", 4006);
-    PacsDevice pacsDeviceThree = PACSDeviceTestHelper::createPACSDevice("3", "TESTPACSTHREE", "3.3.3.3", 4006);
+    PacsDevice pacsDeviceOne = PACSDeviceTestHelper::createDimsePacsDevice("1", "TESTPACSONE", "1.1.1.1", 4006);
+    PacsDevice pacsDeviceTwo = PACSDeviceTestHelper::createDimsePacsDevice("2", "TESTPACSONE", "1.1.1.1", 4006);
+    PacsDevice pacsDeviceThree = PACSDeviceTestHelper::createDimsePacsDevice("3", "TESTPACSTHREE", "3.3.3.3", 4006);
 
     QTest::newRow("Empty input list") << QList<PacsDevice>() << QList<PacsDevice>();
     QTest::newRow("Input list without duplicate PACS") << (QList<PacsDevice>() << pacsDeviceOne << pacsDeviceThree)
@@ -758,10 +872,10 @@ void test_PacsDeviceManager::isAddedSamePacsDeviceInList_ShouldReturnIsSamePacsD
     QTest::addColumn<PacsDevice>("inputPacsDevice");
     QTest::addColumn<bool>("result");
 
-    PacsDevice pacsDeviceOne = PACSDeviceTestHelper::createPACSDevice("1", "TESTPACSONE", "1.1.1.1", 4006);
-    PacsDevice pacsDeviceTwo = PACSDeviceTestHelper::createPACSDevice("2", "TESTPACSONE", "1.1.1.1", 4006);
-    PacsDevice pacsDeviceThree = PACSDeviceTestHelper::createPACSDevice("3", "TESTPACSTHREE", "3.3.3.3", 4006);
-    PacsDevice pacsDeviceFour = PACSDeviceTestHelper::createPACSDevice("4", "TESTPACSFOUR", "4.4.4.4", 4006);
+    PacsDevice pacsDeviceOne = PACSDeviceTestHelper::createDimsePacsDevice("1", "TESTPACSONE", "1.1.1.1", 4006);
+    PacsDevice pacsDeviceTwo = PACSDeviceTestHelper::createDimsePacsDevice("2", "TESTPACSONE", "1.1.1.1", 4006);
+    PacsDevice pacsDeviceThree = PACSDeviceTestHelper::createDimsePacsDevice("3", "TESTPACSTHREE", "3.3.3.3", 4006);
+    PacsDevice pacsDeviceFour = PACSDeviceTestHelper::createDimsePacsDevice("4", "TESTPACSFOUR", "4.4.4.4", 4006);
 
     QTest::newRow("Empty input list") << QList<PacsDevice>() << pacsDeviceOne << false;
     QTest::newRow("Input list without duplicate PACS") << (QList<PacsDevice>() <<  pacsDeviceThree << pacsDeviceFour)

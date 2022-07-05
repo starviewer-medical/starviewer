@@ -116,6 +116,9 @@ protected:
     void setSeries(QList<Series*> series, QString errorText = QString());
     /// Must be called by subclasses to set the given instances as the result. An optional error text can be given to indicate some non-critical error.
     void setInstances(QList<Image*> instances, QString errorText = QString());
+    /// Must be called by subclasses to set the given instances as the result, in addition to the same number of series (one series object for each instance).
+    /// An optional error text can be given to indicate some non-critical error.
+    void setInstances(QList<Image*> instances, QList<Series*> series, QString errorText = QString());
 
     /// Must be called by subclasses to set the given Study Instance UID as the result. An optional error text can be given to indicate some non-critical error.
     void setStudyInstanceUid(QString studyInstanceUid, QString errorText = QString());

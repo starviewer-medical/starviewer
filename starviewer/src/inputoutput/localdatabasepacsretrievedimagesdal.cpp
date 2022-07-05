@@ -39,10 +39,19 @@ qlonglong LocalDatabasePACSRetrievedImagesDAL::insert(const PacsDevice &pacsDevi
         query.bindValue(":address", pacsDevice.getAddress());
         query.bindValue(":queryPort", pacsDevice.getQueryRetrieveServicePort());
     }
-    else    // WADO
+    else if (pacsDevice.getType() == PacsDevice::Type::Wado)
     {
         query.prepare("INSERT INTO PACSRetrievedImages (Type, BaseUri) VALUES (:type, :baseUri)");
         query.bindValue(":type", "WADO");
+        query.bindValue(":baseUri", pacsDevice.getBaseUri());
+    }
+    else    // WADO-URI + DIMSE
+    {
+        query.prepare("INSERT INTO PACSRetrievedImages (Type, AETitle, Address, QueryPort, BaseUri) VALUES (:type, :aeTitle, :address, :queryPort, :baseUri)");
+        query.bindValue(":type", "WADO-URI+DIMSE");
+        query.bindValue(":aeTitle", pacsDevice.getAETitle());
+        query.bindValue(":address", pacsDevice.getAddress());
+        query.bindValue(":queryPort", pacsDevice.getQueryRetrieveServicePort());
         query.bindValue(":baseUri", pacsDevice.getBaseUri());
     }
 
@@ -81,6 +90,15 @@ PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(qlonglong pacsId)
             pacsDevice.setType(PacsDevice::Type::Wado);
             pacsDevice.setBaseUri(query.value("BaseUri").toUrl());
         }
+        else if (type == "WADO-URI+DIMSE")
+        {
+            pacsDevice.setID(query.value("ID").toString());
+            pacsDevice.setType(PacsDevice::Type::WadoUriDimse);
+            pacsDevice.setAETitle(query.value("AETitle").toString());
+            pacsDevice.setAddress(query.value("Address").toString());
+            pacsDevice.setQueryRetrieveServicePort(query.value("QueryPort").toInt());
+            pacsDevice.setBaseUri(query.value("BaseUri").toUrl());
+        }
         else
         {
             WARN_LOG(QString("Found PACS in database with unexpected type: %1").arg(type));
@@ -101,9 +119,17 @@ QVariant LocalDatabasePACSRetrievedImagesDAL::queryId(const PacsDevice &pacsDevi
         query.bindValue(":address", pacsDevice.getAddress());
         query.bindValue(":queryPort", pacsDevice.getQueryRetrieveServicePort());
     }
-    else    // WADO
+    else if (pacsDevice.getType() == PacsDevice::Type::Wado)
     {
         query.prepare("SELECT ID FROM PACSRetrievedImages WHERE BaseUri = :baseUri");
+        query.bindValue(":baseUri", pacsDevice.getBaseUri());
+    }
+    else    // WADO-URI + DIMSE
+    {
+        query.prepare("SELECT ID FROM PACSRetrievedImages WHERE AETitle = :aeTitle AND Address = :address AND QueryPort = :queryPort AND BaseUri = :baseUri");
+        query.bindValue(":aeTitle", pacsDevice.getAETitle());
+        query.bindValue(":address", pacsDevice.getAddress());
+        query.bindValue(":queryPort", pacsDevice.getQueryRetrieveServicePort());
         query.bindValue(":baseUri", pacsDevice.getBaseUri());
     }
 

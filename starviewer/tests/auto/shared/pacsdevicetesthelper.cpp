@@ -22,7 +22,7 @@ PacsDevice PACSDeviceTestHelper::createPACSDeviceByID(QString ID)
     return pacsDevice;
 }
 
-PacsDevice PACSDeviceTestHelper::createPACSDevice(QString ID, QString AETitle, QString address, int queryPort)
+PacsDevice PACSDeviceTestHelper::createDimsePacsDevice(QString ID, QString AETitle, QString address, int queryPort)
 {
     PacsDevice pacsDevice = createPACSDeviceByID(ID);
 
@@ -38,6 +38,17 @@ PacsDevice PACSDeviceTestHelper::createWadoPacsDevice(QString id, const QString 
     PacsDevice pacsDevice;
     pacsDevice.setID(std::move(id));
     pacsDevice.setType(PacsDevice::Type::Wado);
+    pacsDevice.setBaseUri(baseUri);
+    return pacsDevice;
+}
+
+PacsDevice PACSDeviceTestHelper::createWadoUriDimsePacsDevice(QString id, QString aeTitle, QString address, int queryPort, const QString &baseUri)
+{
+    PacsDevice pacsDevice = createPACSDeviceByID(std::move(id));
+    pacsDevice.setType(PacsDevice::Type::WadoUriDimse);
+    pacsDevice.setAETitle(std::move(aeTitle));
+    pacsDevice.setAddress(std::move(address));
+    pacsDevice.setQueryRetrieveServicePort(queryPort);
     pacsDevice.setBaseUri(baseUri);
     return pacsDevice;
 }

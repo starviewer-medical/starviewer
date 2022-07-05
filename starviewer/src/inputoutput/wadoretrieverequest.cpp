@@ -76,8 +76,6 @@ void WadoRetrieveRequest::startInternal()
 
     connect(m_reply, &QNetworkReply::readyRead, this, &WadoRetrieveRequest::onReadyRead, Qt::DirectConnection);
     connect(m_reply, &QNetworkReply::finished, this, &WadoRetrieveRequest::onReplyFinished, Qt::DirectConnection);
-    connect(m_reply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &WadoRetrieveRequest::onReplyError,
-            Qt::DirectConnection);
 }
 
 bool WadoRetrieveRequest::ensureEnoughHardDiskSpace()
@@ -351,7 +349,10 @@ void WadoRetrieveRequest::onReplyFinished()
     {
         errors = true;
         m_errorsDescription = m_reply->errorString();
-        WARN_LOG(m_errorsDescription);
+        WARN_LOG(QString("QNetworkReply::NetworkError %1: %2. (HTTP %3: %4)")
+                  .arg(m_reply->error()).arg(m_reply->errorString())
+                  .arg(m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt())
+                  .arg(m_reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString()));
     }
     else
     {
@@ -405,11 +406,6 @@ void WadoRetrieveRequest::onReplyFinished()
     }
 
     emit finished();
-}
-
-void WadoRetrieveRequest::onReplyError()
-{
-    WARN_LOG(QString("Network error: %1. %2.").arg(m_reply->error()).arg(m_reply->errorString()));
 }
 
 } // namespace udg

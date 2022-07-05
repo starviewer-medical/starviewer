@@ -197,6 +197,32 @@ void StudyOperationResult::setInstances(QList<Image*> instances, QString errorTe
     }
 }
 
+void StudyOperationResult::setInstances(QList<Image*> instances, QList<Series*> series, QString errorText)
+{
+    if (m_future.valid())
+    {
+        m_resultType = ResultType::Instances;
+        m_instances = std::move(instances);
+        m_series = std::move(series);
+        moveAllItemsToThread(m_instances, this->thread());
+        moveAllItemsToThread(m_series, this->thread());
+        m_errorText = std::move(errorText);
+        m_promise.set_value();
+
+        if (m_errorText.isNull())
+        {
+            emit finishedSuccessfully(this);
+        }
+        else
+        {
+            emit finishedWithPartialSuccess(this);
+        }
+
+        emit finished(this);
+        emit ended(this);
+    }
+}
+
 void StudyOperationResult::setStudyInstanceUid(QString studyInstanceUid, QString errorText)
 {
     if (m_future.valid())
