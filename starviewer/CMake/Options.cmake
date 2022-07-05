@@ -1,6 +1,7 @@
 # Notes:
 # - STARVIEWER_CE shall not be used with STARVIEWER_BETA or STARVIEWER_LITE.
 # - STARVIEWER_CE should be combined with SEND_HOST_DATA and USE_QTCONF.
+# - Playground extensions will be disabled if STARVIEWER_CE or STARVIEWER_LITE are ON, disregarding the value of ENABLE_PLAYGROUND_EXTENSIONS.
 # - USE_QTCONF should be disabled for development, otherwise Qt plugins are not found in Qt folder.
 # - USE_CRASH_REPORTER and USE_PACS_COMPRESSION should always be left ON under normal circumstances.
 # - USE_CUDA is totally untested, probably would not work without changes.
@@ -9,6 +10,8 @@
 option(STARVIEWER_BETA "Build Starviewer with a beta warning." OFF)
 option(STARVIEWER_CE "Build Starviewer with CE marking. Requires the deployment repository." OFF)
 option(STARVIEWER_LITE "Build Starviewer Lite instead of full Starviewer." OFF)
+
+option(ENABLE_PLAYGROUND_EXTENSIONS "Enable extensions in the playground directory." ON)
 
 option(SEND_HOST_DATA "Starviewer will send hashed MAC and work group id when checking for updates." OFF)
 option(USE_QTCONF "Include a qt.conf file in resources. Enable if you intend to install Starviewer." OFF)
