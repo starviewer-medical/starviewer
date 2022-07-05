@@ -41,7 +41,7 @@ else()
     set(CPACK_WIX_UPGRADE_GUID 86A85188-E570-467A-B5CB-2F7691311436)
 endif()
 
-set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/src/main/images/logo/logo.ico")
+set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/src/main/themes/${THEME}/images/logo/logo.ico")
 set(CPACK_WIX_UI_BANNER "${CMAKE_SOURCE_DIR}/installerresources/wix-banner.bmp")
 set(CPACK_WIX_UI_DIALOG "${CMAKE_SOURCE_DIR}/installerresources/wix-dialog.bmp")
 set(CPACK_WIX_PATCH_FILE "${CMAKE_SOURCE_DIR}/installerresources/wixshortcuts.xml")
