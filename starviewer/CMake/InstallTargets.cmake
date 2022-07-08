@@ -283,3 +283,17 @@ elseif(UNIX AND NOT APPLE)
     install(PROGRAMS "${SDK_INSTALL_DIR}/${LIBDIR}/${FILENAME}.5" TYPE LIB)
     install(PROGRAMS "${SDK_INSTALL_DIR}/${LIBDIR}/${FILENAME}.5.64.0" TYPE LIB)
 endif()
+
+# OpenSSL
+# TODO With a newer version of CMake (3.18) it could be directly downloaded and extracted from here.
+#      However for now we assume the dlls are in the sdk-install folder.
+if(WIN32)
+    set(OPENSSL_LIBS
+        libcrypto-1_1-x64
+        libssl-1_1-x64
+    )
+    foreach(LIB ${OPENSSL_LIBS})
+        set(FILENAME ${LIB}${CMAKE_SHARED_LIBRARY_SUFFIX})
+        install(PROGRAMS "${SDK_INSTALL_DIR}/bin/${FILENAME}" DESTINATION .)
+    endforeach()
+endif()

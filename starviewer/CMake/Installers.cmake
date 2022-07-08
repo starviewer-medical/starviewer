@@ -48,6 +48,7 @@ set(CPACK_WIX_PATCH_FILE "${CMAKE_SOURCE_DIR}/installerresources/wixshortcuts.xm
 
 # DEB
 # TODO specify versions. Example: set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.1-6), libc6 (< 2.4)")
+# TODO add openssl dependency for WADO
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libatk1.0-0, libatk-bridge2.0-0, libatspi2.0-0, libblkid1, libbsd0, libc6, libcairo2, libcairo-gobject2, libdatrie1,
     libdbus-1-3, libdrm2, libegl1, libepoxy0, libexpat1, libffi7, libfontconfig1, libfreetype6, libfribidi0, libgcc-s1, libgcrypt20, libgdk-pixbuf2.0-0,
     libgl1, libglib2.0-0, libglu1-mesa, libglvnd0, libglx0, libgpg-error0, libgraphite2-3, libgtk-3-0, libharfbuzz0b, libice6, liblz4-1, liblzma5, libmount1,
