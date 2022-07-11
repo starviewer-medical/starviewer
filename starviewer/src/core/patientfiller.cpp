@@ -39,6 +39,20 @@ bool isDicom(const QString& fileName)
     return DICOMTagReader(fileName).canReadFile();
 }
 
+// Returns true if any of the files is a DICOM file and false otherwise.
+bool containsDicom(const QStringList &files)
+{
+    for (const QString &fileName : files)
+    {
+        if (isDicom(fileName))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 }
 
 PatientFiller::PatientFiller(DICOMSource dicomSource, QObject *parent)
@@ -114,7 +128,7 @@ QList<Patient*> PatientFiller::processFiles(const QStringList &files)
         return QList<Patient*>();
     }
 
-    m_dicomMode = isDicom(files.first());
+    m_dicomMode = containsDicom(files);
 
     createSteps();
 
