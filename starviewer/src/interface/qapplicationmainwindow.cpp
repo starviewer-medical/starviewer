@@ -32,7 +32,8 @@
 #include "qaboutdialog.h"
 #include "externalapplication.h"
 #include "externalapplicationsmanager.h"
-#include "externalstudyrequestmanager.h"
+#include "externalstudyrequestmediator.h"
+#include "queryscreen.h"
 
 // Pel LanguageLocale
 #include "coresettings.h"
@@ -72,6 +73,8 @@
 
 namespace udg {
 
+QList<QApplicationMainWindow*> QApplicationMainWindow::m_lastActiveMainWindows;
+
 // Per processar les opcions entrades per línia de comandes hem d'utilitzar un Singleton de StarviewerApplicationCommandLine, això ve degut a que
 // d'instàncies de QApplicationMainWindow en tenim tantes com finestres obertes d'Starviewer tinguem. Instàncies deQApplicationMainWindow es crees
 // i es destrueixen a mesura que s'obre una nova finestra o es tanca una finestra d'Starviewer per tant no podem responsabilitzar a cap
@@ -94,6 +97,10 @@ typedef SingletonPointer<StarviewerApplicationCommandLine> StarviewerSingleAppli
 QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     : QMainWindow(parent), m_patient(0), m_isBetaVersion(false)
 {
+    // Add this window to the beginning of the list because it has never been active yet.
+    // This ensures that all existent windows are on the list, thus the list is not empty as long as there is any window.
+    m_lastActiveMainWindows.prepend(this);
+
     connect(StarviewerSingleApplicationCommandLineSingleton::instance(), SIGNAL(newOptionsToRun()), SLOT(newCommandLineOptionsToRun()));
 
     this->setAttribute(Qt::WA_DeleteOnClose);
@@ -167,6 +174,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
 
 QApplicationMainWindow::~QApplicationMainWindow()
 {
+    m_lastActiveMainWindows.removeOne(this);
     writeSettings();
     this->killBill();
     delete m_extensionWorkspace;
@@ -642,21 +650,18 @@ unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
 
 QList<QApplicationMainWindow*> QApplicationMainWindow::getQApplicationMainWindows()
 {
-    QList<QApplicationMainWindow*> mainApps;
-    foreach (QWidget *widget, qApp->topLevelWidgets())
-    {
-        QApplicationMainWindow *window = qobject_cast<QApplicationMainWindow*>(widget);
-        if (window)
-        {
-            mainApps << window;
-        }
-    }
-    return mainApps;
+    return m_lastActiveMainWindows;
 }
 
 QApplicationMainWindow* QApplicationMainWindow::getActiveApplicationMainWindow()
 {
     return qobject_cast<QApplicationMainWindow*>(QApplication::activeWindow());
+}
+
+QApplicationMainWindow* QApplicationMainWindow::getLastActiveApplicationMainWindow()
+{
+    Q_ASSERT(!m_lastActiveMainWindows.isEmpty());
+    return m_lastActiveMainWindows.last();
 }
 
 ExtensionWorkspace* QApplicationMainWindow::getExtensionWorkspace()
@@ -679,6 +684,19 @@ void QApplicationMainWindow::resizeEvent(QResizeEvent *event)
         updateBetaVersionTextPosition();
     }
     QMainWindow::resizeEvent(event);
+}
+
+bool QApplicationMainWindow::event(QEvent *event)
+{
+    if (event->type() == QEvent::WindowActivate)
+    {
+        // No mutex needed because this always runs in the main thread
+        // Move this window to the end of the list
+        m_lastActiveMainWindows.removeOne(this);
+        m_lastActiveMainWindows.append(this);
+    }
+
+    return QMainWindow::event(event);
 }
 
 void QApplicationMainWindow::about()
@@ -755,6 +773,16 @@ void QApplicationMainWindow::connectPatientVolumesToNotifier(Patient *patient)
     }
 }
 
+void QApplicationMainWindow::viewStudy(const QString &studyInstanceUid)
+{
+    m_extensionHandler->getQueryScreen()->viewStudyFromDatabase(studyInstanceUid);
+}
+
+void QApplicationMainWindow::loadStudy(const QString &studyInstanceUid)
+{
+    m_extensionHandler->getQueryScreen()->loadStudyFromDatabase(studyInstanceUid);
+}
+
 #ifdef STARVIEWER_CE
 void QApplicationMainWindow::showMedicalDeviceInformationDialog()
 {
@@ -788,32 +816,17 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
                 break;
             case StarviewerApplicationCommandLine::RetrieveStudyByUid:
                 INFO_LOG("Received command line argument to retrieve a study by its UID");
-                sendRequestRetrieveStudyByUidToLocalStarviewer(optionValue.second);
+                ExternalStudyRequestMediator::instance()->requestStudyByUid(optionValue.second);
                 break;
             case StarviewerApplicationCommandLine::RetrieveStudyByAccessionNumber:
                 INFO_LOG("Rebut argument de linia de comandes per descarregar un estudi a traves del seu accession number");
-                sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(optionValue.second);
+                ExternalStudyRequestMediator::instance()->requestStudyByAccessionNumber(optionValue.second);
                 break;
             default:
                 INFO_LOG("Argument de linia de comandes invalid");
                 break;
         }
     }
-}
-
-void QApplicationMainWindow::sendRequestRetrieveStudyByUidToLocalStarviewer(QString studyInstanceUid)
-{
-    DicomMask mask;
-    mask.setStudyInstanceUID(studyInstanceUid);
-    ExternalStudyRequestManager::instance()->processRequest(mask);
-}
-
-void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber)
-{
-    DicomMask mask;
-    mask.setStudyInstanceUID("");   // this is required for a DIMSE query to return the Study Instance UID
-    mask.setAccessionNumber(accessionNumber);
-    ExternalStudyRequestManager::instance()->processRequest(mask);
 }
 
 void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)

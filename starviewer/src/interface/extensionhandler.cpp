@@ -55,6 +55,11 @@ ExtensionHandler::~ExtensionHandler()
     delete m_queryScreen;
 }
 
+QueryScreen* ExtensionHandler::getQueryScreen() const
+{
+    return m_queryScreen;
+}
+
 void ExtensionHandler::request(Request request)
 {
     switch (request)

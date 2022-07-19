@@ -40,6 +40,9 @@ public:
 
     ~ExtensionHandler();
 
+    /// Returns the query screen.
+    QueryScreen* getQueryScreen() const;
+
 public slots:
     /// Rep la petició d'un servei/mini-aplicació i fa el que calgui
     void request(Request request);

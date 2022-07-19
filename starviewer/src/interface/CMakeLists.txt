@@ -2,6 +2,7 @@ set(SOURCES
     appimportfile.cpp
     extensionhandler.cpp
     extensionworkspace.cpp
+    externalstudyrequestmediator.cpp
     interfacesettings.cpp
     qaboutdialog.cpp
     qapplicationmainwindow.cpp

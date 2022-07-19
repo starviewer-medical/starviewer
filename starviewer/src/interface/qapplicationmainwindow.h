@@ -71,11 +71,20 @@ public:
     /// Retorna la finestra activa actual
     static QApplicationMainWindow* getActiveApplicationMainWindow();
 
+    /// Returns the last application main window that has been active at some some point. If one is currently active it will be that.
+    static QApplicationMainWindow* getLastActiveApplicationMainWindow();
+
     /// Mètode que retorna el workspace a on poder afegir extensions
     ExtensionWorkspace* getExtensionWorkspace();
 
     /// Connecta els volums d'un pacient al mètode que notifica la càrrega de volums
     void connectPatientVolumesToNotifier(Patient *patient);
+
+    /// Requests to load and view the study with the given Study Instance UID from the database in this window.
+    void viewStudy(const QString &studyInstanceUid);
+    /// Requests to load the study with the given Study Instance UID from the database in this window. The study is not visualized unless it is from a different
+    /// patient than the current one.
+    void loadStudy(const QString &studyInstanceUid);
 
 #ifdef STARVIEWER_CE
     /// Shows the information regarding the use of the application as a medical device (if not disabled by the user).
@@ -91,6 +100,9 @@ protected:
     virtual void closeEvent(QCloseEvent *event);
 
     virtual void resizeEvent(QResizeEvent *event);
+
+    /// Reimplemented to keep track of the latest active window.
+    bool event(QEvent *event) override;
 
 private:
     /// Crea i inicialitza les accions de l'aplicació
@@ -124,13 +136,6 @@ private:
 
     /// Actualitza la informació que es mostra a l'usuari en el menú com a versió beta.
     void updateBetaVersionTextPosition();
-
-    /// Sents a request to retrieve a study given its Study Instance UID.
-    void sendRequestRetrieveStudyByUidToLocalStarviewer(QString studyInstanceUid);
-
-    /// Envia una petició per descarregar un estudi a través del seu accession number
-    void sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber);
-
 
 private slots:
     /// Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
@@ -197,6 +202,9 @@ private slots:
     void createExternalApplicationsMenu();
 
 private:
+    /// List of all open main windows ordered from least to most recently active.
+    static QList<QApplicationMainWindow*> m_lastActiveMainWindows;
+
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
 

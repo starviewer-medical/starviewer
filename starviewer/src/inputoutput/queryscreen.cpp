@@ -15,7 +15,6 @@
 #include "queryscreen.h"
 
 #include "dicommask.h"
-#include "externalstudyrequestmanager.h"
 #include "inputoutputsettings.h"
 #include "messagebus.h"
 #include "portinuse.h"
@@ -114,9 +113,6 @@ void QueryScreen::createConnections()
     connect(m_operationListPushButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
     connect(m_showPACSNodesPushButton, SIGNAL(toggled(bool)), SLOT(updatePACSNodesVisibility()));
     connect(StudyOperationsService::instance(), &StudyOperationsService::operationRequested, this, &QueryScreen::onPacsOperationRequested);
-
-    connect(ExternalStudyRequestManager::instance(), &ExternalStudyRequestManager::viewStudyRetrievedFromRequest, this, &QueryScreen::viewStudyFromDatabase);
-    connect(ExternalStudyRequestManager::instance(), &ExternalStudyRequestManager::loadStudyRetrievedFromRequest, this, &QueryScreen::loadStudyFromDatabase);
 #endif
     connect(m_createDICOMDIRPushButton, SIGNAL(clicked()), m_qcreateDicomdir, SLOT(show()));
 
