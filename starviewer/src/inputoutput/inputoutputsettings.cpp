@@ -37,6 +37,7 @@ const QString InputOutputSettings::MinimumFreeGigaBytesForCache(CacheBase + "min
 const QString InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull(CacheBase + "GbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable");
 
 const QString InputOutputSettings::RetrievingStudy("/PACS/RetrievingStudy");
+const QString InputOutputSettings::StudiesBeingRetrieved("/PACS/StudiesBeingRetrieved");
 
 const QString RISBase("PACS/risRequests/");
 const QString InputOutputSettings::ListenToRISRequests(RISBase + "listen");

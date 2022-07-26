@@ -192,33 +192,46 @@ void StudyOperationsService::setStudyBeingRetrieved(const QString &studyInstance
 {
     QMutexLocker locker(&m_mutex);
     Settings settings;
-    QStringList studies = settings.getValue(InputOutputSettings::RetrievingStudy).toStringList();
+    QStringList studies = settings.getValue(InputOutputSettings::StudiesBeingRetrieved).toStringList();
     studies.append(studyInstanceUid);
-    settings.setValue(InputOutputSettings::RetrievingStudy, studies);
+    settings.setValue(InputOutputSettings::StudiesBeingRetrieved, studies);
 }
 
 void StudyOperationsService::setStudyNotBeingRetrieved(const QString &studyInstanceUid)
 {
     QMutexLocker locker(&m_mutex);
     Settings settings;
-    QStringList studies = settings.getValue(InputOutputSettings::RetrievingStudy).toStringList();
+    QStringList studies = settings.getValue(InputOutputSettings::StudiesBeingRetrieved).toStringList();
     studies.removeOne(studyInstanceUid);
-    settings.setValue(InputOutputSettings::RetrievingStudy, studies);
+    settings.setValue(InputOutputSettings::StudiesBeingRetrieved, studies);
 }
 
 bool StudyOperationsService::areStudiesBeingRetrieved()
 {
     QMutexLocker locker(&m_mutex);
-    return !Settings().getValue(InputOutputSettings::RetrievingStudy).toStringList().isEmpty();
+    return !Settings().getValue(InputOutputSettings::StudiesBeingRetrieved).toStringList().isEmpty();
 }
 
 void StudyOperationsService::deleteStudiesBeingRetrieved()
 {
+    if (Settings().contains(InputOutputSettings::RetrievingStudy))  // check old key just in case Starviewer has just been upgraded
+    {
+        // A study was half downloaded. Add it to the new key, remove the old key and then continue normal operation with the new key.
+        Settings settings;
+        QString studyInstanceUid = settings.getValue(InputOutputSettings::RetrievingStudy).toString();
+        settings.remove(InputOutputSettings::RetrievingStudy);  // delete old key
+
+        if (!studyInstanceUid.isEmpty())
+        {
+            setStudyBeingRetrieved(studyInstanceUid);
+        }
+    }
+
     if (areStudiesBeingRetrieved())
     {
         QMutexLocker locker(&m_mutex);
         Settings settings;
-        QStringList studies = settings.getValue(InputOutputSettings::RetrievingStudy).toStringList();
+        QStringList studies = settings.getValue(InputOutputSettings::StudiesBeingRetrieved).toStringList();
         LocalDatabaseManager localDatabaseManager;
 
         for (const QString &studyInstanceUid : studies)
@@ -242,7 +255,7 @@ void StudyOperationsService::deleteStudiesBeingRetrieved()
             }
         }
 
-        settings.remove(InputOutputSettings::RetrievingStudy);
+        settings.remove(InputOutputSettings::StudiesBeingRetrieved);
     }
 }
 
