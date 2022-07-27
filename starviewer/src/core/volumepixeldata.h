@@ -88,14 +88,7 @@ public:
     /// Si la coordenada està dins del volum retorna true, false altrament.
     /// TODO S'espera que la coordenada sigui dins del món VTK!
     /// Caldria determinar si ha de ser així o hauria de ser DICOM o en un altre sistema.
-    /// HACK El paràmetre phaseNumber és necessari per poder calcular l'índex correcte dins del volum corresponent a la fase actual
-    bool computeCoordinateIndex(const double coordinate[3], int index[3], int phaseNumber = 0);
-
-    /// Donada una coordenada de món, ens dóna el valor del vòxel corresponent.
-    /// TODO S'espera que la coordenada sigui dins del món VTK!
-    /// Caldria determinar si ha de ser així o hauria de ser DICOM o en un altre sistema.
-    /// HACK El paràmetre phaseNumber és necessari per poder calcular l'índex correcte dins del volum corresponent a la fase actual
-    Voxel getVoxelValue(double coordinate[3], int phaseNumber = 0);
+    bool computeCoordinateIndex(const double coordinate[3], int index[3]);
 
     /// Returns the voxel corresponding to the given index. If index is out of range, a default constructed value will be returned.
     Voxel getVoxelValue(int index[3]);

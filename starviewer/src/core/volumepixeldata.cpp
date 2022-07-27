@@ -147,7 +147,7 @@ VolumePixelDataIterator VolumePixelData::getIterator()
     return VolumePixelDataIterator(this);
 }
 
-bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int index[3], int phaseNumber)
+bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int index[3])
 {
     if (!this->getVtkData())
     {
@@ -163,43 +163,12 @@ bool VolumePixelData::computeCoordinateIndex(const double coordinate[3], int ind
         index[i] = qRound((coordinate[i] - origin[i]) / spacing[i]);
     }
 
-    // Apply phase correction (Safety check, phaseNumber and numberOfPhases must be coherent to apply it)
-    if (MathTools::isInsideRange(phaseNumber, 0, m_numberOfPhases - 1))
-    {
-        // HACK Aquest càlcul és necessari per pal·liar la manca de coneixement de la fase
-        // TODO Cal resoldre això d'una forma més elegant, el qual comporta un redisseny del tractament de fases i volums
-        // Calculem l'índex correcte en cas que tinguem fases
-        index[2] = index[2] * m_numberOfPhases + phaseNumber;
-    }
-
     int *extent = this->getVtkData()->GetExtent();
     bool inside = index[0] >= extent[0] && index[0] <= extent[1] &&
                   index[1] >= extent[2] && index[1] <= extent[3] &&
                   index[2] >= extent[4] && index[2] <= extent[5];
 
     return inside;
-}
-
-Voxel VolumePixelData::getVoxelValue(double coordinate[3], int phaseNumber)
-{
-    if (!this->getVtkData())
-    {
-        DEBUG_LOG("Dades VTK nul·les!");
-        
-        return Voxel();
-    }
-
-    int voxelIndex[3];
-    bool inside = this->computeCoordinateIndex(coordinate, voxelIndex, phaseNumber);
-
-    if (inside)
-    {
-        return getVoxelValue(voxelIndex);
-    }
-    else
-    {
-        return Voxel();
-    }
 }
 
 Voxel VolumePixelData::getVoxelValue(int index[3])
