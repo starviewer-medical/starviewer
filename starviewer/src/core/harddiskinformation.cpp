@@ -20,6 +20,7 @@
 #ifdef _WIN32
     #include <windows.h>
 #else
+    #include <cerrno>
     // Per statvfs
     #include <sys/statvfs.h>
 #endif // _WIN32
