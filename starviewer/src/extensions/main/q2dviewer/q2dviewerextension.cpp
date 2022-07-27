@@ -533,6 +533,7 @@ void Q2DViewerExtension::initializeTools()
     m_allViewersCoronalAction = new QAction(this);
     m_allViewersCoronalAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::AllViewersCoronal));
     connect(m_allViewersCoronalAction, &QAction::triggered, this, &Q2DViewerExtension::resetAllViewersToCoronal);
+    this->addActions({m_allViewersAxialAction, m_allViewersSagittalAction, m_allViewersCoronalAction}); // needed for the shortcuts to work
 #endif
     m_rotateClockWiseToolButton->setDefaultAction(m_toolManager->registerActionTool("RotateClockWiseActionTool"));
     m_rotateCounterClockWiseToolButton->setDefaultAction(m_toolManager->registerActionTool("RotateCounterClockWiseActionTool"));
