@@ -838,8 +838,7 @@ namespace {
 
 QString getLocalePrefix()
 {
-    Settings settings;
-    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
+    QString defaultLocale = QLocale().name();
     return "[" + defaultLocale.left(2).toLower() + "] ";
 }
 
