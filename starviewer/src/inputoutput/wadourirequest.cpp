@@ -278,10 +278,15 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
                 }
             }
         }
-        else if (m_status != Status::Cancelled)
+        else
         {
-            m_status = Status::Errored;
-            m_errorsDescription = tr("Could not download any image. Errors:\n\n") + m_errorsDescription;
+            m_downloadedFilesProcessor->cancelDownloadStudy();
+
+            if (m_status != Status::Cancelled)
+            {
+                m_status = Status::Errored;
+                m_errorsDescription = tr("Could not download any image. Errors:\n\n") + m_errorsDescription;
+            }
         }
 
         m_errorsDescription = m_errorsDescription.trimmed();    // trim possible extra \n
