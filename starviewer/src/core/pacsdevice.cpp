@@ -167,18 +167,18 @@ void PacsDevice::setDefault(bool isDefault)
         if (!pacsList.contains(keyName))
         {
             Settings settings;
-            QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
+            QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery2).toString();
             value += keyName + DefaultPacsListSeparator;
-            settings.setValue(CoreSettings::DefaultPACSListToQuery, value);
+            settings.setValue(CoreSettings::DefaultPACSListToQuery2, value);
         }
     }
     else
     {
         // Eliminar
         Settings settings;
-        QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
+        QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery2).toString();
         value.remove(keyName + DefaultPacsListSeparator);
-        settings.setValue(CoreSettings::DefaultPACSListToQuery, value);
+        settings.setValue(CoreSettings::DefaultPACSListToQuery2, value);
     }
 }
 
@@ -239,16 +239,16 @@ QString PacsDevice::getKeyName() const
 
 QStringList PacsDevice::getDefaultPACSKeyNamesList() const
 {
-    const static QString OldSeparator("//");
-
     Settings settings;
-    QString listString = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
+    QString oldListString = settings.getValue(CoreSettings::DefaultPACSListToQuery).toString();
+    QString listString = settings.getValue(CoreSettings::DefaultPACSListToQuery2).toString();
 
     // Migrate from old format to new if needed
-    if (listString.endsWith(OldSeparator))
+    if (!oldListString.isEmpty() && listString.isEmpty())
     {
-        listString = listString.split(OldSeparator).join(DefaultPacsListSeparator);
-        settings.setValue(CoreSettings::DefaultPACSListToQuery, listString);
+        const static QString OldSeparator("//");
+        listString = oldListString.split(OldSeparator).join(DefaultPacsListSeparator);
+        settings.setValue(CoreSettings::DefaultPACSListToQuery2, listString);
     }
 
     QStringList pacsList = listString.split(DefaultPacsListSeparator, QString::SkipEmptyParts);

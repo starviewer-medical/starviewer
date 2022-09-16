@@ -87,6 +87,9 @@ public:
     /// Conjunt de PACS que tenim seleccionats per defecte per consultar.
     /// La llista consistirà en un string on cada PACS s'identificarà pel seu camp clau, els quals estaran delimitats per "//"
     static const QString DefaultPACSListToQuery;
+    /// Key to store the default PACS since the introduction of WADO PACS.
+    /// We don't reuse the same key to avoid problems for users alternating between the new and the old version.
+    static const QString DefaultPACSListToQuery2;
 
     /// List containing the external applications.
     static const QString ExternalApplicationsConfigurationSectionName;

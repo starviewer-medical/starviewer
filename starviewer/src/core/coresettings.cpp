@@ -74,6 +74,7 @@ const QString CoreSettings::QDICOMDumpBrowserGeometry("QDICOMDumpBrowserGeometry
 
 //Llista de PACS per defecte
 const QString CoreSettings::DefaultPACSListToQuery("PACS/defaultPACSListToQuery");
+const QString CoreSettings::DefaultPACSListToQuery2("PACS/defaultPACSListToQuery2");
 
 const QString CoreSettings::ExternalApplicationsConfigurationSectionName = "ExternalApplications";
 
