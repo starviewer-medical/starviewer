@@ -16,6 +16,8 @@
 
 #include "logging.h"
 
+#include <cmath>
+
 #include <QFile>
 #include <QProcess>
 #include <QRegularExpression>
@@ -128,6 +130,33 @@ QList<unsigned int> LinuxSystemInformation::getCPUFrequencies()
         {
             WARN_LOG(QString("Can't read file %1").arg(frequencyFile.fileName()));
             break;
+        }
+    }
+
+    if (frequencies.isEmpty())
+    {
+        // The above files may not exist in some environments, so let's try with an alternative solution
+        QProcess dmesg;
+        dmesg.start("dmesg", QIODevice::ReadOnly | QIODevice::Text);
+
+        if (dmesg.waitForFinished())
+        {
+            QString dmesgOutput = dmesg.readAll();
+            QRegularExpression regexp(R"(tsc: Detected (\d+\.\d+) MHz processor)");
+            QRegularExpressionMatch match = regexp.match(dmesgOutput);
+
+            if (match.hasMatch())
+            {
+                frequencies.append(static_cast<unsigned int>(std::round(match.captured(1).toDouble())));
+            }
+            else
+            {
+                WARN_LOG("Can't find CPU speed information in dmesg.");
+            }
+        }
+        else
+        {
+            WARN_LOG("dmesg failed.");
         }
     }
 
