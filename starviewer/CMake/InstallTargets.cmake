@@ -139,7 +139,9 @@ set(QT_LIBS
 )
 if(UNIX AND NOT APPLE)
     list(APPEND QT_LIBS
+        Qt5DBus
         Qt5X11Extras
+        Qt5XcbQpa
         icudata
         icui18n
         icuuc
