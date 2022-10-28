@@ -33,7 +33,11 @@ QLicenseDialog::QLicenseDialog(QWidget *parent) :
         copyrightFile.close();
     }
 
+#ifdef STARVIEWER_CE
+    QFile licenseFile(":/LICENSE-CE");
+#else
     QFile licenseFile(":/LICENSE");
+#endif
 
     if (licenseFile.open(QFile::ReadOnly | QFile::Text))
     {

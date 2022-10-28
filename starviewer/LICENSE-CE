@@ -4,18 +4,11 @@ The Starviewer (Medical Imaging Software) open source project is
 Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona
 & Institut de Diagnòstic per la Imatge.
 Girona 2014. All rights reserved.
-https://starviewer.udg.edu
+https://starviewer.org
 
-THIS SOFTWARE IS NOT INTENDED FOR PRIMARY DIAGNOSIS, ONLY FOR SCIENTIFIC USAGE.
-THIS VERSION OF STARVIEWER IS NOT CERTIFIED AS A MEDICAL DEVICE FOR PRIMARY
-DIAGNOSIS. IT IS STRONGLY DISCOURAGED AND ILLEGAL IN MANY JURISDICTIONS TO USE
-IT AS SUCH.
-
-All calculations, measurements and images provided by this software are intended
-only for scientific research. Any other use is entirely at the discretion and
-risk of the user. If you use this software for scientific research please
-consider giving appropriate credit in publications. See
-https://starviewer.udg.edu/how-to-cite for more details.
+If you use this software for scientific research please consider giving
+appropriate credit in publications. See https://starviewer.org/how-to-cite
+for more details.
 
 The Starviewer (Medical Imaging Software) open source project is free software:
 you can redistribute it and/or modify it under the terms of the GNU General

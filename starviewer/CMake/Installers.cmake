@@ -8,7 +8,11 @@ set(CPACK_PACKAGE_VENDOR Starviewer)
 set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/installerresources\\\\package-icon.bmp")
 set(CPACK_PACKAGE_CHECKSUM SHA256)
 set(CPACK_PROJECT_CONFIG_FILE "${CMAKE_SOURCE_DIR}/installerresources/CPackProjectConfigFile.cmake")
-configure_file(LICENSE LICENSE.txt COPYONLY)
+if(STARVIEWER_CE)
+    configure_file(LICENSE-CE LICENSE.txt COPYONLY)
+else()
+    configure_file(LICENSE LICENSE.txt COPYONLY)
+endif()
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_BINARY_DIR}/LICENSE.txt")  # WiX requires a RTF or TXT
 
 if(STARVIEWER_LITE)

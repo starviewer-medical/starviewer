@@ -31,6 +31,7 @@
         <file>css/mainwindowbackground.css</file>
         <file>../../COPYRIGHT</file>
         <file>../../LICENSE</file>
+        <file>../../LICENSE-CE</file>
         <file>../../NOTICE</file>
     </qresource>
 </RCC>
