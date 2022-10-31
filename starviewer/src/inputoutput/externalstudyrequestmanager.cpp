@@ -85,7 +85,7 @@ ExternalStudyRequestManager::ExternalStudyRequestManager(QObject *parent)
 
 ExternalStudyRequestManager::~ExternalStudyRequestManager()
 {
-    delete m_qpopUpExternalStudyRequestsScreen;
+    //delete m_qpopUpExternalStudyRequestsScreen;   // TODO avoid a crash if Starviewer is closed while popup is visible
 
     if (m_listenRISRequests)
     {
