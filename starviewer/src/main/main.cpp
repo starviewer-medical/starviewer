@@ -284,8 +284,7 @@ int main(int argc, char *argv[])
             // QMessageBox, ja es llança mostrant-se la MainWindow.
             if (commandLineArgumentsList.count() > 1)
             {
-                QString errorInvalidCommanLineArguments;
-                StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(commandLineArgumentsList, errorInvalidCommanLineArguments);
+                StarviewerSingleApplicationCommandLineSingleton::instance()->runParsedArguments();
             }
 
             returnValue = app.exec();
