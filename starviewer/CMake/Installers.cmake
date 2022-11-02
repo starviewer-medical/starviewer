@@ -48,7 +48,7 @@ endif()
 set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/src/main/themes/${THEME}/images/logo/logo.ico")
 set(CPACK_WIX_UI_BANNER "${CMAKE_SOURCE_DIR}/installerresources/wix-banner.bmp")
 set(CPACK_WIX_UI_DIALOG "${CMAKE_SOURCE_DIR}/installerresources/wix-dialog.bmp")
-set(CPACK_WIX_PATCH_FILE "${CMAKE_SOURCE_DIR}/installerresources/wixshortcuts.xml")
+set(CPACK_WIX_PATCH_FILE "${CMAKE_SOURCE_DIR}/installerresources/wixpatch.xml")
 
 # DEB
 # TODO specify versions. Example: set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.1-6), libc6 (< 2.4)")
