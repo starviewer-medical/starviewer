@@ -37,6 +37,10 @@ set(CPACK_NSIS_MENU_LINKS
     "[en] User guide.pdf" "User manual (en)"
     "[es] User guide.pdf" "Manual de usuario (es)"
 )
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+    WriteRegStr HKCR 'starviewer' 'URL Protocol' ''
+    WriteRegStr HKCR 'starviewer\\\\shell\\\\open\\\\command' '' '\\\"$INSTDIR\\\\starviewer.exe\\\" --url \\\"%1\\\"'
+")
 
 # WiX
 if(STARVIEWER_LITE)
