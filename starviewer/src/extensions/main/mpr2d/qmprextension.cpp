@@ -1202,9 +1202,9 @@ void QMPRExtension::initOrientation()
 
 void QMPRExtension::createActors()
 {
-    QColor axialColor = QColor::fromRgbF(1.0, 1.0, 0.0);
-    QColor sagitalColor = QColor::fromRgbF(1.0, 0.6, 0.0);
-    QColor coronalColor = QColor::fromRgbF(0.0, 1.0, 1.0);
+    QColor axialColor(0xbf, 0xff, 0x7f);
+    QColor sagitalColor(0xff, 0x7f, 0xbf);
+    QColor coronalColor(0x7f, 0xbf, 0xff);
 
     // Creem els axis actors
     m_sagitalOverAxialAxisActor = vtkAxisActor2D::New();

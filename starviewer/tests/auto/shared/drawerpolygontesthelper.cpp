@@ -31,7 +31,7 @@ vtkSmartPointer<vtkActor2D> DrawerPolygonTestHelper::createDefaultForegroundActo
     foregroundActor->GetProperty()->SetLineStipplePattern(0xFFFF);
     foregroundActor->GetProperty()->SetLineWidth(2.0);
     foregroundActor->GetProperty()->SetOpacity(1.0);
-    QColor color(255, 165, 0);
+    QColor color(0xe4, 0xc1, 0x7c);
     foregroundActor->GetProperty()->SetColor(color.redF(), color.greenF(), color.blueF());
     return foregroundActor;
 }
