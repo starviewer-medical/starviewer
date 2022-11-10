@@ -14,15 +14,25 @@
     <d>Implementació de tota la família de protocols WADO (WADO-URI, WADO-RS, QIDO-RS i STOW-RS).</d>
     <t>2866</t>
    </nw>
+   <nw>
+    <d>S'afegeix una nova opció de línia d'ordres per descarregar un estudi a partir d'un URL especial.</d>
+    <t>3028</t>
+   </nw>
    <im>
     <d>Finestres de consulta independents per cada finestra principal.</d>
     <t>2734</t>
+   </im>
+   <im>
+    <d>Nous colors per les eines de mesura i dibuix i les línies de referència que en permeten la visibilitat fins i tot en pantalles en blanc i negre mal
+       configurades.</d>
+    <t>3031</t>
    </im>
    <im>
     <d>Millores internes.</d>
     <t>2764</t>
     <t>2920</t>
     <t>2983</t>
+    <t>3032</t>
    </im>
    <fx>
     <d>S'ha solucionat un problema de rendiment a l'hora de llegir overlays en imatges multiframe.</d>
