@@ -125,7 +125,8 @@
     </message>
     <message>
         <location filename="q3dviewerextensionbase.ui" line="674"/>
-        <source>Shadi&amp;ng</source>
+        <source>Shading</source>
+        <oldsource>Shadi&amp;ng</oldsource>
         <translation>Sombreado</translation>
     </message>
     <message>
@@ -262,18 +263,18 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="420"/>
+        <location filename="q3dviewerextension.cpp" line="419"/>
         <source>Load CLUT</source>
         <translation>Cargar CLUT</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="421"/>
-        <location filename="q3dviewerextension.cpp" line="441"/>
+        <location filename="q3dviewerextension.cpp" line="420"/>
+        <location filename="q3dviewerextension.cpp" line="440"/>
         <source>Transfer function files (*.tf);;All files (*)</source>
         <translation>Archivos de funciones de transferencia (*.tf);;Todos los archivos (*)</translation>
     </message>
     <message>
-        <location filename="q3dviewerextension.cpp" line="441"/>
+        <location filename="q3dviewerextension.cpp" line="440"/>
         <source>Save CLUT</source>
         <translation>Guardar CLUT</translation>
     </message>

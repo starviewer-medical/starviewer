@@ -32,116 +32,116 @@
 <context>
     <name>udg::Q2DViewerExtension</name>
     <message>
-        <location filename="q2dviewerextension.cpp" line="109"/>
+        <location filename="q2dviewerextension.cpp" line="110"/>
         <source>Search related studies</source>
         <oldsource>Search prior studies</oldsource>
         <translation>Cerca estudis relacionats</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="110"/>
+        <location filename="q2dviewerextension.cpp" line="111"/>
         <source>Export viewer image(s) to DICOM and send them to a PACS server</source>
         <translation>Exporta les imatges del visor a DICOM i envia-les a un servidor PACS</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="117"/>
+        <location filename="q2dviewerextension.cpp" line="118"/>
         <source>Text</source>
         <translation>Text</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="128"/>
+        <location filename="q2dviewerextension.cpp" line="129"/>
         <source>Overlays</source>
         <translation>Overlays</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="129"/>
+        <location filename="q2dviewerextension.cpp" line="130"/>
         <source>Show/Hide image overlays</source>
         <translation>Mostra/amaga els overlays de les imatges</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="137"/>
+        <location filename="q2dviewerextension.cpp" line="138"/>
         <source>Shutters</source>
         <translation>Shutters</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="138"/>
+        <location filename="q2dviewerextension.cpp" line="139"/>
         <source>Show/Hide shutter layer</source>
         <translation>Mostra/amaga els shutters</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="151"/>
+        <location filename="q2dviewerextension.cpp" line="152"/>
         <source>Dump DICOM information of the current image</source>
         <translation>Bolca la informació DICOM de la imatge actual</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="607"/>
+        <location filename="q2dviewerextension.cpp" line="609"/>
         <source>Propagate properties between viewers (%1)</source>
         <translation>Propaga les propietats entre els visors (%1)</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="609"/>
+        <location filename="q2dviewerextension.cpp" line="611"/>
         <source>Propagate</source>
         <translation>Propaga</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="631"/>
+        <location filename="q2dviewerextension.cpp" line="633"/>
         <source>Save current series image...</source>
         <translation>Desa la imatge de la sèrie actual...</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="636"/>
+        <location filename="q2dviewerextension.cpp" line="638"/>
         <source>Save all images of the current series...</source>
         <oldsource>Save all images from current series...</oldsource>
         <translation>Desa totes les imatges de la sèrie actual...</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="580"/>
+        <location filename="q2dviewerextension.cpp" line="582"/>
         <source>All</source>
         <translation>Tots</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="119"/>
+        <location filename="q2dviewerextension.cpp" line="120"/>
         <source>Show/hide viewers textual information (%1)</source>
         <translation>Mostra/amaga la informació textual dels visors (%1)</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="152"/>
+        <location filename="q2dviewerextension.cpp" line="153"/>
         <source>Choose a VOI LUT preset</source>
         <oldsource>Choose VOI LUT Presets</oldsource>
         <translation>Escull una VOI LUT predeterminada</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="591"/>
+        <location filename="q2dviewerextension.cpp" line="593"/>
         <source>Deactivate manual synchronization in all viewers (%1)</source>
         <translation>Desactiva la sincronització manual a tots els visors (%1)</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="593"/>
+        <location filename="q2dviewerextension.cpp" line="595"/>
         <source>None</source>
         <translation>Cap</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="633"/>
+        <location filename="q2dviewerextension.cpp" line="635"/>
         <source>Save the current image in a standard image format</source>
         <translation>Desa la imatge actual en un format estàndard</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="637"/>
+        <location filename="q2dviewerextension.cpp" line="639"/>
         <source>Save all the images in the selected viewer in a standard image format</source>
         <translation>Desa totes les imatges del visualitzador seleccionat en un format estàndard</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="578"/>
+        <location filename="q2dviewerextension.cpp" line="580"/>
         <source>Activate manual synchronization in all viewers (%1)</source>
         <oldsource>Activate manual synchronization all viewers</oldsource>
         <translation>Activa la sincronització manual a tots els visors (%1)</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="820"/>
+        <location filename="q2dviewerextension.cpp" line="822"/>
         <source>Export to DICOM</source>
         <translation>Exporta a DICOM</translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="820"/>
+        <location filename="q2dviewerextension.cpp" line="822"/>
         <source>This action is not allowed because the selected viewer is empty.</source>
         <translation>No es permet aquesta acció perque el visor és buit.</translation>
     </message>

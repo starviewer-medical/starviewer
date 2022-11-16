@@ -154,14 +154,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="646"/>
-        <location filename="qrectumsegmentationextension.cpp" line="674"/>
+        <location filename="qrectumsegmentationextension.cpp" line="645"/>
+        <location filename="qrectumsegmentationextension.cpp" line="673"/>
         <source>Save Volume file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="646"/>
-        <location filename="qrectumsegmentationextension.cpp" line="674"/>
+        <location filename="qrectumsegmentationextension.cpp" line="645"/>
+        <location filename="qrectumsegmentationextension.cpp" line="673"/>
         <source>MetaImage Files (*.mhd)</source>
         <translation type="unfinished"></translation>
     </message>

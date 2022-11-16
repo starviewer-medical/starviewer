@@ -108,7 +108,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="m_baseUriLabel">
        <property name="text">
-        <string>Base URI</string>
+        <string>Base URI:</string>
        </property>
       </widget>
      </item>

@@ -8,10 +8,6 @@
         <translation>La aplicación Starviewer ha terminado inesperadamente</translation>
     </message>
     <message>
-        <source>We&apos;re sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
-        <translation>Starviewer tuvo algun problema y terminó inesperadamente. Dedique un momento para enviar un informe de incidencias que ayudará al equipo de desarrollo a diagnosticar y arreglar el problema. Su información personal no se enviará con el informe.</translation>
-    </message>
-    <message>
         <source>Tell Starviewer about this crash</source>
         <translation>Informar de la incidencia</translation>
     </message>
@@ -55,12 +51,9 @@
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>PNG (*.png)</source>
-        <translation>PNG (*.png)</translation>
+        <source>We&apos;re sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.</source>
+        <translation>Starviewer tuvo algun problema y terminó inesperadamente. Dedique un momento para enviar un informe de incidencias que ayudará al equipo de desarrollo a diagnosticar y arreglar el problema. Su información personal no se enviará con el informe.</translation>
     </message>
 </context>
 <context>
@@ -80,10 +73,6 @@
     <message>
         <source>Tell %1 about this crash</source>
         <translation>Informar a %1 sobre el problema</translation>
-    </message>
-    <message>
-        <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
-        <translation>%1 tuvo algun problema y terminó inesperadamente. Dedique un momento para enviar un informe de incidencias que ayudará al equipo de desarrollo a diagnosticar y arreglar el problema. Su información personal no se enviará con el informe.</translation>
     </message>
     <message>
         <source>IP</source>
@@ -114,6 +103,10 @@
     <message>
         <source>The crash report has been sent.</source>
         <translation>Informe de error enviado.</translation>
+    </message>
+    <message>
+        <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.</source>
+        <translation>%1 tuvo algun problema y terminó inesperadamente. Dedique un momento para enviar un informe de incidencias que ayudará al equipo de desarrollo a diagnosticar y arreglar el problema. Su información personal no se enviará con el informe.</translation>
     </message>
 </context>
 </TS>

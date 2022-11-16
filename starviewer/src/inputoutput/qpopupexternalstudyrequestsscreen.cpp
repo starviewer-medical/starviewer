@@ -36,7 +36,7 @@ void QPopUpExternalStudyRequestsScreen::queryStudiesStarted()
     // mostrar la nova petició
     cancelTriggeredAnimations();
 
-    setHeadline(tr("%1 has received a request from RIS to retrieve studies.").arg(ApplicationNameString));
+    setHeadline(tr("%1 has received a request from SAP, RIS or command line to retrieve studies.").arg(ApplicationNameString));
     setOngoingOperationText(tr("Querying PACS..."));
     showOngoingOperationAnimation();
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>917</width>
+    <width>966</width>
     <height>632</height>
    </rect>
   </property>
@@ -38,7 +38,7 @@
           <enum>QFrame::Plain</enum>
          </property>
          <property name="text">
-          <string>We're sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </string>
+          <string>We're sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -68,7 +68,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="../main/main.qrc">:/images/logo/128.svg</pixmap>
+        <pixmap resource="../main/themes/starviewer/starviewer.qrc">:/images/logo/128.svg</pixmap>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -226,7 +226,7 @@ background-color: red;</string>
         <string>Quit Starviewer</string>
        </property>
        <property name="icon">
-        <iconset resource="../main/main.qrc">
+        <iconset resource="../main/themes/starviewer/starviewer.qrc">
          <normaloff>:/images/icons/application-exit.svg</normaloff>:/images/icons/application-exit.svg</iconset>
        </property>
       </widget>
@@ -237,7 +237,7 @@ background-color: red;</string>
         <string>Restart Starviewer</string>
        </property>
        <property name="icon">
-        <iconset resource="../main/main.qrc">
+        <iconset resource="../main/themes/starviewer/starviewer.qrc">
          <normaloff>:/images/logo/logo.ico</normaloff>:/images/logo/logo.ico</iconset>
        </property>
        <property name="default">
@@ -251,7 +251,7 @@ background-color: red;</string>
         <string>Cancel</string>
        </property>
        <property name="icon">
-        <iconset resource="../main/main.qrc">
+        <iconset resource="../main/themes/starviewer/starviewer.qrc">
          <normaloff>:/images/icons/dialog-cancel.svg</normaloff>:/images/icons/dialog-cancel.svg</iconset>
        </property>
       </widget>
@@ -261,8 +261,9 @@ background-color: red;</string>
   </layout>
  </widget>
  <resources>
-  <include location="../main/main.qrc"/>
-  <include location="../main/main.qrc"/>
+  <include location="../main/themes/starviewer/starviewer.qrc"/>
+  <include location="../main/themes/starviewer/starviewer.qrc"/>
+  <include location="../main/themes/starviewer/starviewer.qrc"/>
  </resources>
  <connections>
   <connection>

@@ -32,116 +32,116 @@
 <context>
     <name>udg::Q2DViewerExtension</name>
     <message>
-        <location filename="q2dviewerextension.cpp" line="109"/>
+        <location filename="q2dviewerextension.cpp" line="110"/>
         <source>Search related studies</source>
         <oldsource>Search prior studies</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="110"/>
+        <location filename="q2dviewerextension.cpp" line="111"/>
         <source>Export viewer image(s) to DICOM and send them to a PACS server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="117"/>
+        <location filename="q2dviewerextension.cpp" line="118"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="128"/>
+        <location filename="q2dviewerextension.cpp" line="129"/>
         <source>Overlays</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="129"/>
+        <location filename="q2dviewerextension.cpp" line="130"/>
         <source>Show/Hide image overlays</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="137"/>
+        <location filename="q2dviewerextension.cpp" line="138"/>
         <source>Shutters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="138"/>
+        <location filename="q2dviewerextension.cpp" line="139"/>
         <source>Show/Hide shutter layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="151"/>
+        <location filename="q2dviewerextension.cpp" line="152"/>
         <source>Dump DICOM information of the current image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="607"/>
+        <location filename="q2dviewerextension.cpp" line="609"/>
         <source>Propagate properties between viewers (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="609"/>
+        <location filename="q2dviewerextension.cpp" line="611"/>
         <source>Propagate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="631"/>
+        <location filename="q2dviewerextension.cpp" line="633"/>
         <source>Save current series image...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="636"/>
+        <location filename="q2dviewerextension.cpp" line="638"/>
         <source>Save all images of the current series...</source>
         <oldsource>Save all images from current series...</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="580"/>
+        <location filename="q2dviewerextension.cpp" line="582"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="119"/>
+        <location filename="q2dviewerextension.cpp" line="120"/>
         <source>Show/hide viewers textual information (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="152"/>
+        <location filename="q2dviewerextension.cpp" line="153"/>
         <source>Choose a VOI LUT preset</source>
         <oldsource>Choose VOI LUT Presets</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="591"/>
+        <location filename="q2dviewerextension.cpp" line="593"/>
         <source>Deactivate manual synchronization in all viewers (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="593"/>
+        <location filename="q2dviewerextension.cpp" line="595"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="633"/>
+        <location filename="q2dviewerextension.cpp" line="635"/>
         <source>Save the current image in a standard image format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="637"/>
+        <location filename="q2dviewerextension.cpp" line="639"/>
         <source>Save all the images in the selected viewer in a standard image format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="578"/>
+        <location filename="q2dviewerextension.cpp" line="580"/>
         <source>Activate manual synchronization in all viewers (%1)</source>
         <oldsource>Activate manual synchronization all viewers</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="820"/>
+        <location filename="q2dviewerextension.cpp" line="822"/>
         <source>Export to DICOM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="q2dviewerextension.cpp" line="820"/>
+        <location filename="q2dviewerextension.cpp" line="822"/>
         <source>This action is not allowed because the selected viewer is empty.</source>
         <translation type="unfinished"></translation>
     </message>

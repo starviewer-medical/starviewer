@@ -2,6 +2,198 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ca">
 <context>
+    <name>Q2DViewerAnnotationHandler</name>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="380"/>
+        <source>Patient ID, directly extracted from the DICOM tag.</source>
+        <translation>ID del pacient, extret directament de l’etiqueta DICOM.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="381"/>
+        <source>Patient’s name, directly extracted from the DICOM tag.</source>
+        <translation>Nom del pacient, extret directament de l’etiqueta DICOM.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="382"/>
+        <source>Patient’s sex, directly extracted from the DICOM tag.</source>
+        <translation>Sexe del pacient, extret directament de l’etiqueta DICOM.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="383"/>
+        <source>Patient’s age, either from the DICOM tag or calculated. If both differ, a warning is shown.</source>
+        <translation>Edat del pacient, o bé de l’etiqueta DICOM o bé calculada. Si són diferents es mostra un avís.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="384"/>
+        <source>Accession number, directly extracted from the DICOM tag.</source>
+        <translation>Número d’inventari, extret directament de l’etiqueta DICOM.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="385"/>
+        <source>Institution name, directly extracted from the DICOM tag.</source>
+        <translation>Nom de la institució, extret directament de l’etiqueta DICOM.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="386"/>
+        <source>Referring physician’s name, directly extracted from the DICOM tag.</source>
+        <translation>Nom del metge de referència, extret directament de l’etiqueta DICOM.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="387"/>
+        <source>Study date, in ISO 8601 format.</source>
+        <translation>Data de l’estudi, en format ISO 8601.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="388"/>
+        <source>Series time, in “hh:mm:ss” format. If not available, “--:--” is shown.</source>
+        <translation>Hora de la sèrie, en format «hh:mm:ss». Si no està disponible es mostra «--:--».</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="389"/>
+        <source>Image time, in “hh:mm:ss” format. If not available, “--:--” is shown. In reconstructions nothing is shown.</source>
+        <translation>Hora de la imatge, en format «hh:mm:ss». Si no està disponible es mostra «--:--». En reconstruccions no es mostra res.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="390"/>
+        <source>Descriptive label for the series, including the protocol name and the series description if this is different than the protocol name. When viewing a fusion of two series, descriptive labels for both series are shown separated by a “+”.</source>
+        <translation>Etiqueta descriptiva per la sèrie, que inclou el nom del protocol i la descripció de la sèrie si aquesta és diferent del nom del protocol. Quan es visualitza una fusió de dues sèries es mostren les etiquetes descriptives d’ambdues separades per un «+».</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="392"/>
+        <source>Image laterality, directly extracted from the DICOM tag.</source>
+        <translation>Lateralitat de la imatge, extreta directament de l’etiqueta DICOM.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="393"/>
+        <source>Image laterality or, if not found, series laterality, directly extracted from the DICOM tag.</source>
+        <translation>Lateralitat de la imatge o, si no es troba, lateralitat de la sèrie, extreta directament de l’etiqueta DICOM.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="394"/>
+        <source>Mammography projection label using standardised values.</source>
+        <translation>Etiqueta de projecció de mamografia usant valors estandarditzats.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="395"/>
+        <source>Fusion balance, showing the contribution of each image. Only shown if there is a fusion.</source>
+        <translation>Balanç de fusió, que mostra la contribució de cada imatge. Només es mostra si hi ha una fusió.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="396"/>
+        <source>Image width in pixels with the current projection.</source>
+        <translation>Amplada de la imatge en píxels amb la projecció actual.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="397"/>
+        <source>Image height in pixels with the current projection.</source>
+        <translation>Altura de la imatge en píxels amb la projecció actual.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="398"/>
+        <source>Name of the applied VOI LUT, if any, usually extracted from the DICOM tag “LUT Explanation”. Does not change with the VOI LUT tool.</source>
+        <translation>Nom de la VOI LUT aplicada, si n’hi ha cap, normalment extret directament de l’etiqueta DICOM «LUT Explanation». No canvia amb l’eina de VOI LUT.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="399"/>
+        <source>Current window width.</source>
+        <translation>Amplada de la finestra actual.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="400"/>
+        <source>Current window center.</source>
+        <translation>Centre de la finestra actual.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="401"/>
+        <source>Current threshold in PET and SPECT images. Not shown for other image types.</source>
+        <translation>Llindar actual en imatges PET i SPECT. No es mostra per altres tipus d’imatge.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="402"/>
+        <source>Slice location with 2 decimals. When thick slab is active, a range is shown. In reconstructions nothing is shown.</source>
+        <translation>Ubicació del tall amb 2 decimals. Quan està actiu el gruix de tall es mostra un rang. En reconstruccions no es mostra res.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="403"/>
+        <source>Current slice and number of slices in “current/total” format.</source>
+        <translation>Tall actual i nombre de talls en format «actual/total».</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="404"/>
+        <source>Current phase and number of phases in “current/total” format. If there is only one phase nothing is shown.</source>
+        <translation>Fase actual i nombre de fases en format «actual/total». Si només hi ha una fase no es mostra res.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationhandler.cpp" line="405"/>
+        <source>Thickness of the current slice or the slab. If thickness is 0, nothing is shown.</source>
+        <translation>Gruix del tall actual o del tall gruixut aplicat. Si el gruix és 0 no es mostra res.</translation>
+    </message>
+</context>
+<context>
+    <name>Q2DViewerAnnotationsConfigurationScreenBase</name>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationscreenbase.ui" line="14"/>
+        <source>2D Viewer Annotations Configuration</source>
+        <translation>Configuració de la anotacions del visor 2D</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationscreenbase.ui" line="24"/>
+        <source>Show viewers textual information by default</source>
+        <translation>Mostra la informació textual dels visors per defecte</translation>
+    </message>
+</context>
+<context>
+    <name>Q2DViewerAnnotationsConfigurationScreenHelpBase</name>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationscreenhelpbase.ui" line="38"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;All supported variables are listed here. You can click on any variable to select it and then copy and paste or drag and drop as needed. If a variable is not found in the viewed image, nothing is printed.&lt;/p&gt;&lt;p&gt;The output format of any variable can be customized by adding “:” and the custom format after the variable name, where the placeholder “$&amp;amp;” will be replaced by the variable value. For example, &lt;span style=&quot; font-weight:600;&quot;&gt;{%PatientID:ID: $&amp;amp;%}&lt;/span&gt; would be printed as &lt;span style=&quot; font-weight:600;&quot;&gt;ID: 1234&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;In addition any DICOM tag can be speficied using its number. For example, DICOM tag (0040,0005) can be specified as &lt;span style=&quot; font-weight:600;&quot;&gt;{%00400005%}&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Aquí es llisten totes les variables admeses. Podeu fer clic en qualsevol variable per seleccionar-la i llavors copiar-la i enganxar-la o arrossegar-la i deixar-la anar on calgui. Si una variable no es troba a la imatge visualitzada no s’escriu res.&lt;/p&gt;&lt;p&gt;El format de sortida de qualsevol variable es pot personalitzar afegint «:» i el format personalitzat després del nom de la variable, on el text variable «$&amp;amp;» se substituirà pel valor de la variable. Per exemple, &lt;span style=&quot; font-weight:600;&quot;&gt;{%PatientID:ID: $&amp;amp;%}&lt;/span&gt; s’escriuria com &lt;span style=&quot; font-weight:600;&quot;&gt;ID: 1234&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;També es pot especificar qualsevol etiqueta DICOM amb el seu número. Per exemple, l’etiqueta DICOM (0040,0005) es pot especificar com &lt;span style=&quot; font-weight:600;&quot;&gt;{%00400005%}&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>Q2DViewerAnnotationsConfigurationWidgetBase</name>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationwidgetbase.ui" line="19"/>
+        <source>Modality</source>
+        <translation>Modalitat</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationwidgetbase.ui" line="49"/>
+        <source>Help</source>
+        <translation>Ajuda</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationwidgetbase.ui" line="85"/>
+        <source>Top orientation</source>
+        <translation>Orientació superior</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationwidgetbase.ui" line="107"/>
+        <source>Left orientation</source>
+        <translation>Orientació esquerra</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationwidgetbase.ui" line="129"/>
+        <source>Right orientation</source>
+        <translation>Orientació dreta</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationwidgetbase.ui" line="153"/>
+        <source>Bottom orientation</source>
+        <translation>Orientació inferior</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationwidgetbase.ui" line="207"/>
+        <source>Invert sides to avoid covering MG image</source>
+        <translation>Inverteix els costats per evitar cobrir la imatge de MG</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationwidgetbase.ui" line="227"/>
+        <source>Restore defaults</source>
+        <translation>Restaura els valors predeterminats</translation>
+    </message>
+</context>
+<context>
     <name>Q2DViewerWidgetBase</name>
     <message>
         <location filename="q2dviewerwidgetbase.ui" line="14"/>
@@ -82,7 +274,7 @@
         <translation>La previsualització no està disponible</translation>
     </message>
     <message>
-        <location filename="coresettings.cpp" line="124"/>
+        <location filename="coresettings.cpp" line="125"/>
         <source>PNG (*.png)</source>
         <translation></translation>
     </message>
@@ -115,45 +307,11 @@
         <location filename="anatomicalplane.cpp" line="45"/>
         <location filename="measurementmanager.cpp" line="111"/>
         <location filename="qdicomdumpbrowser.cpp" line="34"/>
+        <location filename="systeminformation.cpp" line="251"/>
         <location filename="voxel.cpp" line="70"/>
         <source>N/A</source>
         <translatorcomment>No disponible</translatorcomment>
         <translation>N/D</translation>
-    </message>
-    <message>
-        <location filename="windowsfirewallaccess.cpp" line="84"/>
-        <source>Application is not in the firewall exceptions list</source>
-        <translation>L&apos;aplicació no és a la llista d&apos;excepcions del tallafocs</translation>
-    </message>
-    <message>
-        <location filename="windowsfirewallaccess.cpp" line="90"/>
-        <source>Unable to check if application is in the firewall exceptions list</source>
-        <translation>No es pot comprovar si l&apos;aplicació és a la llista d&apos;excepcions del tallafocs</translation>
-    </message>
-    <message>
-        <location filename="windowsfirewallaccess.cpp" line="97"/>
-        <source>Windows firewall does not allow exceptions</source>
-        <translation>El tallafocs de Windows no permet excepcions</translation>
-    </message>
-    <message>
-        <location filename="windowsfirewallaccess.cpp" line="103"/>
-        <source>Unable to check if firewall allows exceptions</source>
-        <translation>No es pot comprovar si el tallafocs permet excepcions</translation>
-    </message>
-    <message>
-        <location filename="windowsfirewallaccess.cpp" line="116"/>
-        <source>Unable to check if firewall is enabled</source>
-        <translation>No es pot comprovar si el tallafocs està habilitat</translation>
-    </message>
-    <message>
-        <location filename="windowsfirewallaccess.cpp" line="122"/>
-        <source>Unable to initialize firewall</source>
-        <translation>No es pot inicialitzar el tallafocs</translation>
-    </message>
-    <message>
-        <location filename="windowsfirewallaccess.cpp" line="128"/>
-        <source>Error initializing firewall library</source>
-        <translation>S&apos;ha produït un error en inicialitzar la biblioteca del tallafocs</translation>
     </message>
     <message>
         <location filename="qdiagnosistest.cpp" line="41"/>
@@ -161,67 +319,72 @@
         <translation>Sistema operatiu: %1</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="42"/>
+        <location filename="qdiagnosistest.cpp" line="44"/>
         <source>Desktop composition: %1</source>
         <translation>Composició d&apos;escriptori: %1</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="48"/>
+        <location filename="qdiagnosistest.cpp" line="50"/>
         <source>Available and enabled</source>
         <translation>Disponible i activada</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="52"/>
+        <location filename="qdiagnosistest.cpp" line="54"/>
         <source>Available but disabled</source>
         <translation>Disponible però desactivada</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="57"/>
+        <location filename="qdiagnosistest.cpp" line="59"/>
         <source>Not available</source>
         <translation>No disponible</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="61"/>
+        <location filename="qdiagnosistest.cpp" line="66"/>
+        <source>Desktop: %1</source>
+        <translation>Escriptori: %1</translation>
+    </message>
+    <message>
+        <location filename="qdiagnosistest.cpp" line="69"/>
         <source>RAM memory: %1 MB</source>
         <translation>Memòria RAM: %1 MB</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="66"/>
+        <location filename="qdiagnosistest.cpp" line="74"/>
         <source>%1 MHz</source>
         <translation>%1 MHz</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="69"/>
+        <location filename="qdiagnosistest.cpp" line="77"/>
         <source>CPU clock speed: %1</source>
         <translation>Velocitat de rellotge de la CPU: %1</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="77"/>
+        <location filename="qdiagnosistest.cpp" line="85"/>
         <source>GPU %1: %2 %3 MB. Driver: %4.</source>
         <translation>GPU %1: %2 %3 MB. Controlador: %4.</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="88"/>
+        <location filename="qdiagnosistest.cpp" line="96"/>
         <source>Screen %1: %2×%3%4</source>
         <translation>Pantalla %1: %2×%3%4</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="89"/>
+        <location filename="qdiagnosistest.cpp" line="97"/>
         <source> Primary</source>
         <translation> Primària</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="70"/>
+        <location filename="qdiagnosistest.cpp" line="78"/>
         <source>Number of cores: %1</source>
         <translation>Nombre de nuclis: %1</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="80"/>
+        <location filename="qdiagnosistest.cpp" line="88"/>
         <source>OpenGL: %1</source>
         <translation>OpenGL: %1</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="92"/>
+        <location filename="qdiagnosistest.cpp" line="100"/>
         <source>MAC address: %1</source>
         <translation>Adreça MAC: %1</translation>
     </message>
@@ -384,73 +547,18 @@
     </message>
     <message>
         <location filename="phasesyncaction.cpp" line="54"/>
+        <location filename="q2dviewerannotationssettingshelper.cpp" line="56"/>
         <source>Phase</source>
         <translation>Fase</translation>
     </message>
     <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="128"/>
-        <source>Acc: %1</source>
-        <translation>Acc: %1</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="319"/>
-        <source>Fusion: </source>
-        <translation>Fusió: </translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="232"/>
-        <source>Slice: %1</source>
-        <translation>Tall: %1</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="240"/>
-        <source> Phase: %1/%2</source>
-        <translation> Fase: %1/%2</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="248"/>
-        <source> Thickness: %1 mm</source>
-        <translation> Gruix: %1 mm</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="206"/>
-        <source>%1 x %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="119"/>
+        <location filename="q2dviewerannotationhandler.cpp" line="67"/>
         <source>WARNING: age mismatch
 %1 (stored) / %2 (calculated)
 </source>
         <translation>AVÍS: l&apos;edat no coincideix
 %1 (desada) / %2 (calculada)
 </translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="327"/>
-        <source>Physician: %1</source>
-        <oldsource>Phyisician: %1</oldsource>
-        <translation>Metge: %1</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="405"/>
-        <source>WW: %1 WL: %2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="421"/>
-        <source>Threshold: %1%</source>
-        <translation>Llindar: %1%</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="444"/>
-        <source>Loc: %1-%2</source>
-        <translation>Loc: %1-%2</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerannotationhandler.cpp" line="449"/>
-        <source>Loc: %1</source>
-        <translation>Loc: %1</translation>
     </message>
     <message>
         <location filename="thickslabsyncaction.cpp" line="61"/>
@@ -587,6 +695,60 @@
         <source>%1 Study</source>
         <translation>Estudi %1</translation>
     </message>
+    <message>
+        <location filename="linuxsysteminformation.cpp" line="248"/>
+        <source>desktop environment not detected</source>
+        <translation>no s’ha pogut detectar l’entorn d’escriptori</translation>
+    </message>
+    <message>
+        <location filename="linuxsysteminformation.cpp" line="267"/>
+        <source>display type not detected</source>
+        <translation>no s’ha pogut detectar el tipus de servidor gràfic</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationssettingshelper.cpp" line="43"/>
+        <source>Threshold</source>
+        <translation>Llindar</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationssettingshelper.cpp" line="49"/>
+        <location filename="q2dviewerannotationssettingshelper.cpp" line="83"/>
+        <source>Acc</source>
+        <extracomment>accession number</extracomment>
+        <translation>Acc</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationssettingshelper.cpp" line="55"/>
+        <source>Loc</source>
+        <extracomment>location</extracomment>
+        <translation>Loc</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationssettingshelper.cpp" line="56"/>
+        <source>Slice</source>
+        <translation>Tall</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationssettingshelper.cpp" line="56"/>
+        <source>Thickness</source>
+        <translation>Gruix</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationssettingshelper.cpp" line="59"/>
+        <source>Lat</source>
+        <extracomment>laterality</extracomment>
+        <translation>Lat</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationssettingshelper.cpp" line="60"/>
+        <source>Fusion</source>
+        <translation>Fusió</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationssettingshelper.cpp" line="62"/>
+        <source>Physician</source>
+        <translation>Metge</translation>
+    </message>
 </context>
 <context>
     <name>QTransferFunctionEditor2Base</name>
@@ -709,37 +871,19 @@
     </message>
 </context>
 <context>
-    <name>udg::FirewallAccessTest</name>
-    <message>
-        <location filename="firewallaccesstest.cpp" line="44"/>
-        <source>Add %1 to the list of applications that have access through firewall</source>
-        <translation>Afegiu l&apos;%1 a la llista d&apos;aplicacions que tenen accés a través del tallafocs</translation>
-    </message>
-    <message>
-        <location filename="firewallaccesstest.cpp" line="52"/>
-        <source>Contact technical service to evaluate the problem</source>
-        <translation>Poseu-vos en contacte amb el servei tècnic per avaluar el problema</translation>
-    </message>
-    <message>
-        <location filename="firewallaccesstest.cpp" line="63"/>
-        <source>%1 has access through firewall</source>
-        <translation>L&apos;%1 té accés a través del tallafocs</translation>
-    </message>
-</context>
-<context>
     <name>udg::NonClosedAngleTool</name>
     <message>
-        <location filename="nonclosedangletool.cpp" line="314"/>
+        <location filename="nonclosedangletool.cpp" line="313"/>
         <source>%1 degrees</source>
         <translation>%1 graus</translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="305"/>
+        <location filename="nonclosedangletool.cpp" line="304"/>
         <source>0.0 degrees</source>
         <translation>0.0 graus</translation>
     </message>
     <message>
-        <location filename="nonclosedangletool.cpp" line="310"/>
+        <location filename="nonclosedangletool.cpp" line="309"/>
         <source>Skew lines</source>
         <translation>Línies creuades</translation>
     </message>
@@ -775,6 +919,30 @@
         <location filename="patientbrowsermenulist.cpp" line="44"/>
         <source>Fusion</source>
         <translation>Fusió</translation>
+    </message>
+</context>
+<context>
+    <name>udg::Q2DViewerAnnotationsConfigurationScreen</name>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationscreen.cpp" line="59"/>
+        <location filename="q2dviewerannotationsconfigurationscreen.cpp" line="125"/>
+        <source>Default</source>
+        <translation>Per defecte</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationscreen.cpp" line="123"/>
+        <source>Modality can&apos;t be empty.</source>
+        <translation>La modalitat no pot ser buida.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationscreen.cpp" line="127"/>
+        <source>The modality name “%1” is reserved.</source>
+        <translation>El nom de modalitat «%1» està reservat.</translation>
+    </message>
+    <message>
+        <location filename="q2dviewerannotationsconfigurationscreen.cpp" line="135"/>
+        <source>Modality “%1” is already specified.</source>
+        <translation>La modalitat «%1» ja està especificada.</translation>
     </message>
 </context>
 <context>
@@ -899,27 +1067,22 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="261"/>
-        <source>Show viewers textual information by default</source>
-        <translation>Mostra la informació textual dels visors per defecte</translation>
-    </message>
-    <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="286"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="276"/>
         <source>Crosshair size</source>
         <translation>Mida de la creu</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="294"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="284"/>
         <source>Inner diameter</source>
         <translation>Diàmetre intern</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="311"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="301"/>
         <source>Outer diameter</source>
         <translation>Diàmetre extern</translation>
     </message>
     <message>
-        <location filename="q2dviewerconfigurationscreenbase.ui" line="332"/>
+        <location filename="q2dviewerconfigurationscreenbase.ui" line="322"/>
         <source>Preview</source>
         <translation>Previsualització</translation>
     </message>
@@ -1225,42 +1388,42 @@ Haureu de reiniciar l&apos;Starviewer per veure els canvis.</translation>
 <context>
     <name>udg::QDiagnosisTest</name>
     <message>
-        <location filename="qdiagnosistest.cpp" line="167"/>
+        <location filename="qdiagnosistest.cpp" line="172"/>
         <source>Running test: </source>
         <translation>S&apos;està executant el test: </translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="179"/>
+        <location filename="qdiagnosistest.cpp" line="184"/>
         <source>All tests completed successfully</source>
         <translation>S&apos;han completat tots els tests amb èxit</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="185"/>
+        <location filename="qdiagnosistest.cpp" line="190"/>
         <source>Some tests have failed</source>
         <translation>Alguns tests han fallat</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="206"/>
+        <location filename="qdiagnosistest.cpp" line="211"/>
         <source>Timestamp: %1</source>
         <translation>Marca temporal: %1</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="207"/>
+        <location filename="qdiagnosistest.cpp" line="212"/>
         <source>Test details</source>
         <translation>Detalls dels tests</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="208"/>
+        <location filename="qdiagnosistest.cpp" line="213"/>
         <source>System information</source>
         <translation>Informació del sistema</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="288"/>
+        <location filename="qdiagnosistest.cpp" line="293"/>
         <source>Save diagnosis tests results</source>
         <translation>Desa els resultats dels tests de diagnosi</translation>
     </message>
     <message>
-        <location filename="qdiagnosistest.cpp" line="289"/>
+        <location filename="qdiagnosistest.cpp" line="294"/>
         <source>JSON files (*.json)</source>
         <translation>Fitxers JSON (*.json)</translation>
     </message>
@@ -1877,134 +2040,124 @@ Es recomana que les deseu en una carpeta buida.</translation>
 <context>
     <name>udg::SystemRequirementsTest</name>
     <message>
-        <location filename="systemrequirementstest.cpp" line="64"/>
+        <location filename="systemrequirementstest.cpp" line="65"/>
         <source>The computer has %1 cores, and the minimum required is %2</source>
         <translation>L&apos;ordinador té %1 nuclis, però en calen %2 com a mínim</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="65"/>
-        <location filename="systemrequirementstest.cpp" line="87"/>
+        <location filename="systemrequirementstest.cpp" line="66"/>
+        <location filename="systemrequirementstest.cpp" line="88"/>
         <source>Update computer&apos;s hardware</source>
         <translation>Actualitzeu el maquinari</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="86"/>
+        <location filename="systemrequirementstest.cpp" line="87"/>
         <source>The fastest CPU runs at %1 MHz, and the minimum required is %2 MHz</source>
         <translation>La CPU més ràpida va a %1 MHz, però la velocitat mínima requerida és de %2 MHz</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="98"/>
+        <location filename="systemrequirementstest.cpp" line="99"/>
         <source>Current OpenGL version is %1, and the minimum required is %2</source>
         <translation>La versió actual d&apos;OpenGL és %1, però la mínima requerida és %2</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="100"/>
-        <location filename="systemrequirementstest.cpp" line="119"/>
+        <location filename="systemrequirementstest.cpp" line="101"/>
+        <location filename="systemrequirementstest.cpp" line="120"/>
         <source>Update your graphics card driver</source>
         <translation>Actualitzeu el controlador de la targeta gràfica</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="118"/>
+        <location filename="systemrequirementstest.cpp" line="119"/>
         <source>Current OpenGL version does not support these extensions: %1</source>
         <translation>La versió actual d&apos;OpenGL no suporta les següents extensions: %1</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="132"/>
+        <location filename="systemrequirementstest.cpp" line="133"/>
         <source>The graphics card %1 has %2 MB of RAM, and the minimum required is %3 MB</source>
         <translation>La targeta gràfica %1 té %2 MB de memòria RAM, però calen %3 MB com a mínim</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="133"/>
+        <location filename="systemrequirementstest.cpp" line="134"/>
         <source>Change the graphics card</source>
         <translation>Canvieu la targeta gràfica</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="143"/>
+        <location filename="systemrequirementstest.cpp" line="144"/>
         <source>There is not enough disk space to run %1 properly</source>
         <translation>No hi ha prou espai al disc per executar correctament l&apos;%1</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="144"/>
+        <location filename="systemrequirementstest.cpp" line="145"/>
         <source>Free some space in the hard disk</source>
         <translation>Allibereu espai al disc</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="153"/>
-        <source>Operating system is not 64-bit</source>
-        <translation>El sistema operatiu no és de 64 bits</translation>
-    </message>
-    <message>
-        <location filename="systemrequirementstest.cpp" line="154"/>
-        <source>Update operating system to a 64-bit version</source>
-        <translation>Actualitzeu el sistema operatiu a una versió de 64 bits</translation>
-    </message>
-    <message>
-        <location filename="systemrequirementstest.cpp" line="170"/>
+        <location filename="systemrequirementstest.cpp" line="161"/>
         <source>Current operating system version is %1, and the minimum required is %2</source>
         <translation>La versió actual del sistema operatiu és %1, però la mínima requerida és %2</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="171"/>
+        <location filename="systemrequirementstest.cpp" line="162"/>
         <source>Update operating system to a newer version</source>
         <translation>Actualitzeu el sistema operatiu a una versió més recent</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="192"/>
+        <location filename="systemrequirementstest.cpp" line="174"/>
         <source>Current Service Pack version is %1, and the minimum required is Service Pack %2</source>
         <translation>La versió actual del Service Pack és %1, però el Service Pack mínim requerit és el %2</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="193"/>
+        <location filename="systemrequirementstest.cpp" line="175"/>
         <source>Install a newer Service Pack</source>
         <translation>Instal·leu el Service Pack més recent</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="214"/>
+        <location filename="systemrequirementstest.cpp" line="196"/>
         <source>The total amount of RAM memory is %1 MB, and the minimum required is %2 MB</source>
         <translation>La memòria RAM total és de %1 MB, però calen %2 MB com a mínim</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="215"/>
+        <location filename="systemrequirementstest.cpp" line="197"/>
         <source>Upgrade computer&apos;s RAM memory</source>
         <translation>Afegiu més memòria RAM</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="243"/>
+        <location filename="systemrequirementstest.cpp" line="225"/>
         <source>One of the screens is too small. Keep in mind that %1 won&apos;t fit in that screen</source>
         <translation>Una de les pantalles té una resolució massa petita. L&apos;%1 no es mostrarà bé en aquesta pantalla</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="244"/>
+        <location filename="systemrequirementstest.cpp" line="226"/>
         <source>Avoid placing %1 on the screen or screens %2, or increase their resolution if possible</source>
         <translation>Eviteu utilitzar l&apos;%1 a la pantalla o pantalles %2, o augmenteu la resolució d&apos;aquestes si és possible</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="255"/>
+        <location filename="systemrequirementstest.cpp" line="237"/>
         <source>Increase screen resolution</source>
         <translation>Augmenteu la resolució de pantalla</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="258"/>
+        <location filename="systemrequirementstest.cpp" line="240"/>
         <source>The screen is too small to fit %1 application</source>
         <translation>La resolució de la pantalla és massa petita per mostrar l&apos;%1 correctament</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="262"/>
+        <location filename="systemrequirementstest.cpp" line="244"/>
         <source>The screens are too small to fit %1 application</source>
         <translation>La resolució de les pantalles és massa petita per mostrar l&apos;%1 correctament</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="272"/>
+        <location filename="systemrequirementstest.cpp" line="254"/>
         <source>The optical drive does not have burning capabilities</source>
         <translation>La unitat de disc òptic no permet enregistrar</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="273"/>
+        <location filename="systemrequirementstest.cpp" line="255"/>
         <source>Change the optical drive to a CD-RW/DVD-RW</source>
         <translation>Canvieu la unitat de disc òptic per una CD-RW/DVD-RW</translation>
     </message>
     <message>
-        <location filename="systemrequirementstest.cpp" line="283"/>
+        <location filename="systemrequirementstest.cpp" line="267"/>
         <source>Hardware meets %1&apos;s minimum system requirements</source>
         <translation>El maquinari compleix els requeriments mínims de l&apos;%1</translation>
     </message>
@@ -2697,7 +2850,7 @@ Es recomana que les deseu en una carpeta buida.</translation>
 <context>
     <name>udg::VoxelInformationTool</name>
     <message>
-        <location filename="voxelinformationtool.cpp" line="155"/>
+        <location filename="voxelinformationtool.cpp" line="163"/>
         <source>SUV (%1)</source>
         <translation>SUV (%1)</translation>
     </message>

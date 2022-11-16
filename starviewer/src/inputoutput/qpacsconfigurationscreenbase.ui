@@ -61,7 +61,7 @@
          <item>
           <widget class="QPushButton" name="m_addDimsePacsPushButton">
            <property name="toolTip">
-            <string>Add a new PACS to the list</string>
+            <string>Add a new DIMSE PACS to the list</string>
            </property>
            <property name="text">
             <string>Add DIMSE PACS</string>
@@ -74,6 +74,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="m_addWadoPacsPushButton">
+           <property name="toolTip">
+            <string>Add a new WADO-RS PACS to the list</string>
+           </property>
            <property name="text">
             <string>Add WADO PACS</string>
            </property>
@@ -85,6 +88,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="m_addWadoUriDimsePacsPushButton">
+           <property name="toolTip">
+            <string>Add a new hybrid WADO-URI + DIMSE PACS to the list</string>
+           </property>
            <property name="text">
             <string>Add WADO-URI + DIMSE PACS</string>
            </property>
@@ -417,6 +423,8 @@
   </layout>
  </widget>
  <resources>
+  <include location="../main/themes/starviewer/starviewer.qrc"/>
+  <include location="../main/themes/starviewer/starviewer.qrc"/>
   <include location="../main/themes/starviewer/starviewer.qrc"/>
  </resources>
  <connections/>
