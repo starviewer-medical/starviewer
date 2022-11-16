@@ -122,7 +122,7 @@ void Q2DViewerAnnotationsConfigurationScreen::validateModalityChange(Q2DViewerAn
     {
         errorMessage = tr("Modality can't be empty.");
     }
-    else if (newModality.compare("Default", Qt::CaseInsensitive) == 0)
+    else if (newModality.compare("Default", Qt::CaseInsensitive) == 0 || newModality.compare(tr("Default"), Qt::CaseInsensitive) == 0)
     {
         errorMessage = tr("The modality name “%1” is reserved.").arg(newModality);
     }
