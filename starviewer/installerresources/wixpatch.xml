@@ -2,6 +2,7 @@
 
 <CPackWiXPatch>
     <CPackWiXFragment Id="CM_SHORTCUT">
+        <Shortcut Id="howto" Name="How to access instructions for use" Target="[#CM_FP_How_to_access_IFU.pdf]"/>
         <Shortcut Id="ca_manual" Name="Manual d'usuari (ca)" Target="[#CM_FP__ca__User_guide.pdf]"/>
         <Shortcut Id="en_manual" Name="User manual (en)" Target="[#CM_FP__en__User_guide.pdf]"/>
         <Shortcut Id="es_manual" Name="Manual de usuario (es)" Target="[#CM_FP__es__User_guide.pdf]"/>
