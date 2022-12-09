@@ -18,6 +18,7 @@ set(SOURCES
     test_dicomsource.cpp
     test_dicomtagreader.cpp
     test_dicomvaluerepresentationconverter.cpp
+    test_directoryutilities.cpp
     test_displayshutter.cpp
     test_distancemeasurecomputer.cpp
     test_drawerbitmap.cpp

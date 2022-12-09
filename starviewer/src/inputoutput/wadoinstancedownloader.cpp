@@ -15,6 +15,7 @@
 #include "wadoinstancedownloader.h"
 
 #include "dicomtagreader.h"
+#include "directoryutilities.h"
 #include "localdatabasemanager.h"
 #include "logging.h"
 
@@ -50,6 +51,7 @@ WadoInstanceDownloader::WadoInstanceDownloader()
 void WadoInstanceDownloader::setStudyInstanceUid(const QString &studyInstanceUid)
 {
     m_studyInstanceUid = studyInstanceUid;
+    DirectoryUtilities::sanitizeFilename(m_studyInstanceUid);
 }
 
 const QString& WadoInstanceDownloader::getStudyInstanceUid() const
@@ -60,6 +62,7 @@ const QString& WadoInstanceDownloader::getStudyInstanceUid() const
 void WadoInstanceDownloader::setSeriesInstanceUid(const QString &seriesInstanceUid)
 {
     m_seriesInstanceUid = seriesInstanceUid;
+    DirectoryUtilities::sanitizeFilename(m_seriesInstanceUid);
 }
 
 const QString& WadoInstanceDownloader::getSeriesInstanceUid() const
@@ -70,6 +73,7 @@ const QString& WadoInstanceDownloader::getSeriesInstanceUid() const
 void WadoInstanceDownloader::setSopInstanceUid(const QString &sopInstanceUid)
 {
     m_sopInstanceUid = sopInstanceUid;
+    DirectoryUtilities::sanitizeFilename(m_sopInstanceUid);
 }
 
 const QString& WadoInstanceDownloader::getSopInstanceUid() const
@@ -175,10 +179,10 @@ void WadoInstanceDownloader::moveFileToFinalDestination()
 
         if (m_seriesInstanceUid.isEmpty())
         {
-            m_seriesInstanceUid = dicomTagReader.getValueAttributeAsQString(DICOMSeriesInstanceUID);
+            setSeriesInstanceUid(dicomTagReader.getValueAttributeAsQString(DICOMSeriesInstanceUID));
         }
 
-        m_sopInstanceUid = dicomTagReader.getValueAttributeAsQString(DICOMSOPInstanceUID);
+        setSopInstanceUid(dicomTagReader.getValueAttributeAsQString(DICOMSOPInstanceUID));
     }
 
     QString path = LocalDatabaseManager::getCachePath() + m_studyInstanceUid + "/" + m_seriesInstanceUid + "/" + m_sopInstanceUid;

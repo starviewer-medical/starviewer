@@ -104,6 +104,14 @@ bool DirectoryUtilities::isDirectoryEmpty(const QString &path)
     return dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files).count() == 0;
 }
 
+void DirectoryUtilities::sanitizeFilename(QString &name)
+{
+    name.replace(QDir::separator(), '_');
+#ifdef Q_OS_WIN
+    name.replace('/', '_');
+#endif
+}
+
 bool DirectoryUtilities::removeDirectory(const QDir &dir, bool deleteRootDirectory)
 {
     bool ok = true;
