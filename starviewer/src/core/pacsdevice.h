@@ -32,6 +32,8 @@ namespace udg {
  */
 class PacsDevice {
 public:
+    static const QString DefaultPacsListSeparator;
+
     /// Type of PACS.
     enum class Type { Dimse, Wado, WadoUriDimse };
 
@@ -112,10 +114,10 @@ public:
     /// Returns true if this PacsDevice instance is exactly equal to the given one.
     bool operator==(const PacsDevice &pacsDevice) const;
 
-private:
     /// Returns the key name to be used in the default PACS list.
     QString getKeyName() const;
 
+private:
     /// Returns a list of key names for all the default PACS.
     QStringList getDefaultPACSKeyNamesList() const;
 

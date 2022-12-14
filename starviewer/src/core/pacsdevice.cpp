@@ -17,13 +17,11 @@
 #include "coresettings.h"
 #include "logging.h"
 
+#include <QRegularExpression>
+
 namespace udg {
 
-namespace {
-
-const QString DefaultPacsListSeparator("\\\\");
-
-}
+const QString PacsDevice::DefaultPacsListSeparator("\\\\");
 
 PacsDevice::PacsDevice()
     : m_type(Type::Dimse), m_isQueryRetrieveServiceEnabled(false), m_queryRetrieveServicePort(-1), m_isStoreServiceEnabled(false), m_storeServicePort(-1)
@@ -174,10 +172,11 @@ void PacsDevice::setDefault(bool isDefault)
     }
     else
     {
+        static const QString EscapedSeparator(QString(DefaultPacsListSeparator).replace("\\", "\\\\"));
         // Eliminar
         Settings settings;
         QString value = settings.getValue(CoreSettings::DefaultPACSListToQuery2).toString();
-        value.remove(keyName + DefaultPacsListSeparator);
+        value.remove(QRegularExpression("(?<=^|" + EscapedSeparator + ")" + keyName + EscapedSeparator));
         settings.setValue(CoreSettings::DefaultPACSListToQuery2, value);
     }
 }

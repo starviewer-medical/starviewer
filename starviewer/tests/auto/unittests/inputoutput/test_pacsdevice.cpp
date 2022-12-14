@@ -4,9 +4,11 @@
  */
 
 #include "autotest.h"
-
 #include "pacsdevice.h"
+
+#include "coresettings.h"
 #include "pacsdevicetesthelper.h"
+#include "testingsettings.h"
 
 using namespace udg;
 using namespace testing;
@@ -15,11 +17,98 @@ class test_PacsDevice : public QObject {
 Q_OBJECT
 
 private slots:
+    void initTestCase();
+
+    void setDefault_BehavesAsExpected_data();
+    void setDefault_BehavesAsExpected();
+
     void isSamePacsDevice_ShouldCheckIfIsSamePacs_data();
     void isSamePacsDevice_ShouldCheckIfIsSamePacs();
+
+    void cleanupTestCase();
+
+private:
+    std::unique_ptr<TestingSettings> testingSettings;   // pointer because it crashes in constructor if declared in "stack"
 };
 
 Q_DECLARE_METATYPE(PacsDevice)
+
+void test_PacsDevice::initTestCase()
+{
+    testingSettings = std::make_unique<TestingSettings>();
+    Settings::setStaticTestingSettings(testingSettings.get());
+}
+
+void test_PacsDevice::setDefault_BehavesAsExpected_data()
+{
+    QTest::addColumn<QString>("settingBefore");
+    QTest::addColumn<PacsDevice>("pacsDevice");
+    QTest::addColumn<bool>("setDefault");
+    QTest::addColumn<QString>("expectedSettingAfter");
+
+    PacsDevice dimse, wado, hybrid;
+
+    dimse.setType(PacsDevice::Type::Dimse);
+    dimse.setAETitle("PACS");
+    dimse.setAddress("1.2.3.4");
+    dimse.setQueryRetrieveServicePort(1234);
+    QString dimseDefault = dimse.getKeyName() + PacsDevice::DefaultPacsListSeparator;
+
+    wado.setType(PacsDevice::Type::Wado);
+    wado.setBaseUri(QUrl("http://example.com/"));
+    QString wadoDefault = wado.getKeyName() + PacsDevice::DefaultPacsListSeparator;
+
+    hybrid.setType(PacsDevice::Type::WadoUriDimse);
+    hybrid.setAETitle(dimse.getAETitle());  // using same values as above in all fields to catch possible "aliasing" problems
+    hybrid.setAddress(dimse.getAddress());
+    hybrid.setQueryRetrieveServicePort(dimse.getQueryRetrieveServicePort());
+    hybrid.setBaseUri(wado.getBaseUri());
+    QString hybridDefault = hybrid.getKeyName() + PacsDevice::DefaultPacsListSeparator;
+
+    QString empty;
+
+    QTest::newRow("empty, add dimse") << empty << dimse << true << dimseDefault;
+    QTest::newRow("empty, add wado") << empty << wado << true << wadoDefault;
+    QTest::newRow("empty, add hybrid") << empty << hybrid << true << hybridDefault;
+
+    QTest::newRow("dimse, add dimse") << dimseDefault << dimse << true << dimseDefault;
+    QTest::newRow("wado, add wado") << wadoDefault << wado << true << wadoDefault;
+    QTest::newRow("hybrid, add hybrid") << hybridDefault << hybrid << true << hybridDefault;
+
+    QTest::newRow("hybrid, add wado") << hybridDefault << wado << true << hybridDefault + wadoDefault;
+    QTest::newRow("wado + dimse, add hybrid") << wadoDefault + dimseDefault << hybrid << true << wadoDefault + dimseDefault + hybridDefault;
+    QTest::newRow("hybrid + wado + dimse, add wado") << hybridDefault + wadoDefault + dimseDefault << wado << true
+                                                     << hybridDefault + wadoDefault + dimseDefault;
+
+    QTest::newRow("empty, remove dimse") << empty << dimse << false << empty;
+    QTest::newRow("empty, remove wado") << empty << wado << false << empty;
+    QTest::newRow("empty, remove hybrid") << empty << hybrid << false << empty;
+
+    QTest::newRow("dimse, remove dimse") << dimseDefault << dimse << false << empty;
+    QTest::newRow("wado, remove wado") << wadoDefault << wado << false << empty;
+    QTest::newRow("hybrid, remove hybrid") << hybridDefault << hybrid << false << empty;
+
+    QTest::newRow("wado + dimse + hybrid -> remove hybrid (last)") << wadoDefault + dimseDefault + hybridDefault << hybrid << false
+                                                                   << wadoDefault + dimseDefault;
+    QTest::newRow("wado + dimse + hybrid -> remove wado (first)") << wadoDefault + dimseDefault + hybridDefault << wado << false
+                                                                  << dimseDefault + hybridDefault;
+    QTest::newRow("wado + dimse + hybrid -> remove dimse (middle)") << wadoDefault + dimseDefault + hybridDefault << dimse << false
+                                                                    << wadoDefault + hybridDefault;
+}
+
+void test_PacsDevice::setDefault_BehavesAsExpected()
+{
+    QFETCH(QString, settingBefore);
+    QFETCH(PacsDevice, pacsDevice);
+    QFETCH(bool, setDefault);
+    QFETCH(QString, expectedSettingAfter);
+
+    testingSettings->setValue(CoreSettings::DefaultPACSListToQuery2, settingBefore);
+    pacsDevice.setDefault(setDefault);
+    QString settingAfter = testingSettings->getValue(CoreSettings::DefaultPACSListToQuery2).toString();
+
+    QCOMPARE(settingAfter, expectedSettingAfter);
+}
 
 void test_PacsDevice::isSamePacsDevice_ShouldCheckIfIsSamePacs_data()
 {
@@ -115,6 +204,11 @@ void test_PacsDevice::isSamePacsDevice_ShouldCheckIfIsSamePacs()
     QFETCH(bool, result);
 
     QCOMPARE(inputPacsDeviceA.isSamePacsDevice(inputPacsDeviceB), result);
+}
+
+void test_PacsDevice::cleanupTestCase()
+{
+    Settings::setStaticTestingSettings(nullptr);
 }
 
 DECLARE_TEST(test_PacsDevice)
