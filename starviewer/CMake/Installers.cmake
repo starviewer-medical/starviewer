@@ -56,14 +56,13 @@ set(CPACK_WIX_PATCH_FILE "${CMAKE_SOURCE_DIR}/installerresources/wixpatch.xml")
 
 # DEB
 # TODO specify versions. Example: set(CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.3.1-6), libc6 (< 2.4)")
-# TODO add openssl dependency for WADO
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libatk1.0-0, libatk-bridge2.0-0, libatspi2.0-0, libblkid1, libbsd0, libc6, libcairo2, libcairo-gobject2, libdatrie1,
     libdbus-1-3, libdrm2, libegl1, libepoxy0, libexpat1, libffi7, libfontconfig1, libfreetype6, libfribidi0, libgcc-s1, libgcrypt20, libgdk-pixbuf2.0-0,
     libgl1, libglib2.0-0, libglu1-mesa, libglvnd0, libglx0, libgpg-error0, libgraphite2-3, libgtk-3-0, libharfbuzz0b, libice6, liblz4-1, liblzma5, libmount1,
     libopengl0, libpango-1.0-0, libpangocairo-1.0-0, libpangoft2-1.0-0, libpcre2-8-0, libpcre3, libpixman-1-0, libpng16-16, libselinux1, libsm6, libstdc++6,
     libsystemd0, libthai0, libuuid1, libwayland-client0, libwayland-cursor0, libwayland-egl1, libwayland-server0, libx11-6, libx11-xcb1, libxau6, libxcb1,
     libxcb-glx0, libxcb-render0, libxcb-shm0, libxcb-xkb1, libxcomposite1, libxcursor1, libxdamage1, libxdmcp6, libxext6, libxfixes3, libxi6, libxinerama1,
-    libxkbcommon0, libxkbcommon-x11-0, libxrandr2, libxrender1, libxt6, zlib1g")
+    libxkbcommon0, libxkbcommon-x11-0, libxrandr2, libxrender1, libxt6, openssl, zlib1g")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Starviewer Team <support@starviewer.udg.edu>")
 
 include(CPack)
