@@ -5,10 +5,16 @@ if(NOT STARVIEWER_LITE)
         ../core/starviewerapplication.cpp
     )
 
-    if(USE_QTCONF AND WIN32)
-        set(RESOURCES
-            ../main/qtconf/win/qtconf.qrc
-        )
+    if(USE_QTCONF)
+        if(WIN32)
+            list(APPEND RESOURCES
+                ../main/qtconf/win/qtconf.qrc
+            )
+        elseif(UNIX AND NOT APPLE)
+            list(APPEND RESOURCES
+                ../main/qtconf/linux/qtconf.qrc
+            )
+        endif()
     endif()
 
     add_executable(starviewer_sapwrapper ${SOURCES} ${RESOURCES})

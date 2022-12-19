@@ -24,10 +24,16 @@ set(RESOURCES
     ../main/themes/${THEME}/${THEME}.qrc
 )
 
-if(USE_QTCONF AND WIN32)
-    list(APPEND RESOURCES
-        ../main/qtconf/win/qtconf.qrc
-    )
+if(USE_QTCONF)
+    if(WIN32)
+        list(APPEND RESOURCES
+            ../main/qtconf/win/qtconf.qrc
+        )
+    elseif(UNIX AND NOT APPLE)
+        list(APPEND RESOURCES
+            ../main/qtconf/linux/qtconf.qrc
+        )
+    endif()
 endif()
 
 add_translations(QM_FILES crashreporter crashreporter)
