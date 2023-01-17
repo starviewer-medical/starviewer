@@ -57,16 +57,17 @@
 
 // Qt
 #include <QAction>
-#include <QMenuBar>
-#include <QCloseEvent>
-#include <QMessageBox>
 #include <QApplication>
-#include <QLocale>
-#include <QProgressDialog>
+#include <QCloseEvent>
 #include <QDesktopServices>
+#include <QLocale>
+#include <QMenuBar>
+#include <QMessageBox>
 #include <QPair>
-#include <QWidgetAction>
+#include <QProgressDialog>
 #include <QShortcut>
+#include <QTimer>
+#include <QWidgetAction>
 // Shortucts
 #include "shortcuts.h"
 #include "shortcutmanager.h"
@@ -160,7 +161,6 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
 
 #ifdef BETA_VERSION
     markAsBetaVersion();
-    showBetaVersionDialog();
 #endif
 
     m_statsWatcher = new StatsWatcher("Menu triggering", this);
@@ -684,6 +684,20 @@ void QApplicationMainWindow::resizeEvent(QResizeEvent *event)
         updateBetaVersionTextPosition();
     }
     QMainWindow::resizeEvent(event);
+}
+
+void QApplicationMainWindow::showEvent(QShowEvent *event)
+{
+    QMainWindow::showEvent(event);
+
+    // Show the beta warning automatically only the first time the first window is shown
+    static bool betaVersionDialogShown = false;
+
+    if (m_isBetaVersion && !betaVersionDialogShown)
+    {
+        betaVersionDialogShown = true;
+        QTimer::singleShot(100, this, &QApplicationMainWindow::showBetaVersionDialog);  // short delay to ensure that the window is already visible
+    }
 }
 
 bool QApplicationMainWindow::event(QEvent *event)
