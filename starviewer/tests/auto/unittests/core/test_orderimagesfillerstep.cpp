@@ -7,8 +7,10 @@
 #include "orderimagesfillerstep.h"
 
 #include "image.h"
-#include "patient.h"
 #include "patientfillerinput.h"
+#include "series.h"
+
+#include <random>
 
 using namespace udg;
 
@@ -129,7 +131,9 @@ QList<QList<Image*>> imagesOneByOne(const QList<QList<Image*>> &allImages)
 
 Series* shuffleAndCreateSeries(QList<QList<Image*>> &arrivingImages)
 {
-    std::random_shuffle(arrivingImages.begin(), arrivingImages.end());
+    std::random_device rng;
+    std::minstd_rand prng(rng());
+    std::shuffle(arrivingImages.begin(), arrivingImages.end(), prng);
 
     Series *series = new Series();
 
@@ -461,6 +465,9 @@ void test_OrderImagesFillerStep::setupData()
     QTest::addColumn<QList<QList<int>>>("orderNumbers");            // for each series (outer list) and image in it (inner list), order number in volume
     QTest::addColumn<QList<QList<bool>>>("canBeSpatiallySorted");   // for each series (outer list) and volume (inner), expected result of canBeSpatiallySorted
 
+    std::random_device rng;
+    std::minstd_rand prng(rng());
+
     // Note: image attributes are set in a clever way so that only the expected sorting criteria produce the correct order, thus if images are accidentally
     // sorted with different criteria they will be in a completely different and wrong order.
     // E.g. if it must be sorted by 'distance' then instance numbers will be set so that they produce a different order.
@@ -728,7 +735,7 @@ void test_OrderImagesFillerStep::setupData()
                                            ImageBuilder().uid(0).frame(4).position(Vector3(10, 0, 1)).size(10, 10).get(),
                                            ImageBuilder().uid(0).frame(5).position(Vector3(0, 0, 2)).size(10, 10).get()}};
         QList<QList<Image*>> arrivingImages(sortedImages);
-        std::random_shuffle(arrivingImages[0].begin(), arrivingImages[0].end());
+        std::shuffle(arrivingImages[0].begin(), arrivingImages[0].end(), prng);
         Series *series = new Series();
 
         foreach (const QList<Image*> &images, arrivingImages)
@@ -771,7 +778,7 @@ void test_OrderImagesFillerStep::setupData()
 
         QList<Image*> multiframeImages;
         std::copy(it, images.end(), std::back_inserter(multiframeImages));
-        std::random_shuffle(multiframeImages.begin(), multiframeImages.end());
+        std::shuffle(multiframeImages.begin(), multiframeImages.end(), prng);
         arrivingImages.append(multiframeImages);
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
@@ -827,9 +834,9 @@ void test_OrderImagesFillerStep::setupData()
         }
 
         QList<QList<Image*>> sortedImages{{file1 + file3}, {file2}};
-        std::random_shuffle(file1.begin(), file1.end());
-        std::random_shuffle(file2.begin(), file2.end());
-        std::random_shuffle(file3.begin(), file3.end());
+        std::shuffle(file1.begin(), file1.end(), prng);
+        std::shuffle(file2.begin(), file2.end(), prng);
+        std::shuffle(file3.begin(), file3.end(), prng);
         QList<QList<Image*>> arrivingImages{file3, file1, file2};
         Series *series1 = new Series();
 
@@ -1009,7 +1016,7 @@ void test_OrderImagesFillerStep::setupData()
                               .orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).dimensionIndexValues({3, 3, 9}).get()
         }};
         QList<QList<Image*>> arrivingImages(sortedImages);
-        std::random_shuffle(arrivingImages[0].begin(), arrivingImages[0].end());
+        std::shuffle(arrivingImages[0].begin(), arrivingImages[0].end(), prng);
         Series *series = new Series();
 
         foreach (Image *image, arrivingImages[0])
@@ -1075,7 +1082,7 @@ void test_OrderImagesFillerStep::setupData()
                               .orientation(QVector3D(0, 1, 0), QVector3D(-0.0031330608762f, 0, -0.9999951124191f)).dimensionIndexValues({3, 5, 15}).get()
         }};
         QList<QList<Image*>> arrivingImages(sortedImages);
-        std::random_shuffle(arrivingImages[0].begin(), arrivingImages[0].end());
+        std::shuffle(arrivingImages[0].begin(), arrivingImages[0].end(), prng);
         Series *series = new Series();
 
         foreach (Image *image, arrivingImages[0])
@@ -1114,7 +1121,7 @@ void test_OrderImagesFillerStep::setupData()
                                            ImageBuilder().instance(3).position(Vector3(0, 0, 1)).orientation(QVector3D(1, 0, 0), QVector3D(0, 0, 1)).get()}};
         QList<QList<Image*>> arrivingImages = imagesOneByOne(sortedImages);
         // Preserve the first image at the beginning because it defines angle 0
-        std::random_shuffle(arrivingImages.begin() + 1, arrivingImages.end());
+        std::shuffle(arrivingImages.begin() + 1, arrivingImages.end(), prng);
         Series *series = new Series();
 
         foreach (const QList<Image*> &images, arrivingImages)
