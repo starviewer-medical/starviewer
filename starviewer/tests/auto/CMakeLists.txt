@@ -24,6 +24,7 @@ set(RESOURCES
 )
 
 add_executable(autotests ${SOURCES} ${RESOURCES})
+add_test(NAME autotests COMMAND autotests)
 
 
 ################ Internal library dependencies ################

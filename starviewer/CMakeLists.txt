@@ -8,6 +8,8 @@ project(Starviewer
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMake)
 
+include(CTest)
+
 include(Options)
 include(CacheVariables)
 include(BuildSettings)
@@ -19,7 +21,10 @@ include(LinkQt)
 include(Translations)
 
 add_subdirectory(src)
-add_subdirectory(tests)
+
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 add_translation_targets()
 
