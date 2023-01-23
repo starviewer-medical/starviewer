@@ -35,6 +35,12 @@ public slots:
     /// Overridden to avoid closing the dialog just after showing the crash button.
     void reject() override;
 
+#ifdef STARVIEWER_CE
+signals:
+    /// Emitted when the show label button is clicked.
+    void requestedShowLabel();
+#endif
+
 private slots:
     /// Shows a dialog with the license information.
     void showLicenseInformation();

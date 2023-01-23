@@ -6,5 +6,11 @@
         <file>celabelsymbols/manufacturer.svg</file>
         <file>celabelsymbols/md.svg</file>
         <file>celabelsymbols/ref.svg</file>
+        <file>labels/[ca] Linux.pdf</file>
+        <file>labels/[ca] Windows.pdf</file>
+        <file>labels/[en] Linux.pdf</file>
+        <file>labels/[en] Windows.pdf</file>
+        <file>labels/[es] Linux.pdf</file>
+        <file>labels/[es] Windows.pdf</file>
     </qresource>
 </RCC>

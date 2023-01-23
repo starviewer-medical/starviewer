@@ -54,6 +54,12 @@ QAboutDialog::QAboutDialog(QWidget *parent)
     m_crashButton->setAutoDefault(false);
     connect(m_crashButton, &QPushButton::clicked, this, &QAboutDialog::crash);
 
+#ifdef STARVIEWER_CE
+    QPushButton *showLabelButton = m_buttonBox->addButton(tr("Show label"), QDialogButtonBox::ActionRole);
+    showLabelButton->setAutoDefault(false);
+    connect(showLabelButton, &QPushButton::clicked, this, &QAboutDialog::requestedShowLabel);
+#endif
+
     QPushButton *licenseButton = m_buttonBox->addButton(tr("License information"), QDialogButtonBox::ActionRole);
     licenseButton->setAutoDefault(false);
     connect(licenseButton, &QPushButton::clicked, this, &QAboutDialog::showLicenseInformation);

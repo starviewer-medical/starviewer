@@ -93,6 +93,9 @@ public:
 public slots:
     /// Shows the information regarding the use of the application as a medical device (always).
     void showMedicalDeviceInformationDialogUnconditionally();
+
+    /// Shows the medical device label.
+    void showLabel();
 #endif // STARVIEWER_CE
 
 protected:
@@ -246,6 +249,7 @@ private:
     QAction *m_openShortcutsGuideAction;
 #ifdef STARVIEWER_CE
     QAction *m_showMedicalDeviceInformationAction;
+    QAction *m_showLabelAction;
 #endif // STARVIEWER_CE
     QAction *m_openReleaseNotesAction;
     QAction *m_runDiagnosisTestsAction;

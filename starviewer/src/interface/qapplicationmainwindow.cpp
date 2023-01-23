@@ -309,6 +309,11 @@ void QApplicationMainWindow::createActions()
     m_showMedicalDeviceInformationAction = new QAction(this);
     m_showMedicalDeviceInformationAction->setText(tr("Information about use as medical device"));
     connect(m_showMedicalDeviceInformationAction, &QAction::triggered, this, &QApplicationMainWindow::showMedicalDeviceInformationDialogUnconditionally);
+
+    m_showLabelAction = new QAction(this);
+    m_showLabelAction->setText(tr("Show label"));
+    m_showLabelAction->setIcon(QIcon(":/celabelsymbols/ce.svg"));
+    connect(m_showLabelAction, &QAction::triggered, this, &QApplicationMainWindow::showLabel);
 #endif // STARVIEWER_CE
 
     m_logViewerAction = new QAction(this);
@@ -457,6 +462,9 @@ void QApplicationMainWindow::createMenus()
     m_helpMenu->addSeparator();
     m_helpMenu->addAction(m_openReleaseNotesAction);
     m_helpMenu->addSeparator();
+#ifdef STARVIEWER_CE
+    m_helpMenu->addAction(m_showLabelAction);
+#endif // STARVIEWER_CE
     m_helpMenu->addAction(m_aboutAction);
 }
 
@@ -716,6 +724,9 @@ bool QApplicationMainWindow::event(QEvent *event)
 void QApplicationMainWindow::about()
 {
     QAboutDialog *about = new QAboutDialog(this);
+#ifdef STARVIEWER_CE
+    connect(about, &QAboutDialog::requestedShowLabel, this, &QApplicationMainWindow::showLabel);
+#endif
     about->exec();
 }
 
@@ -797,7 +808,18 @@ void QApplicationMainWindow::loadStudy(const QString &studyInstanceUid)
     m_extensionHandler->getQueryScreen()->loadStudyFromDatabase(studyInstanceUid);
 }
 
+namespace {
+
+QString getLocalePrefix()
+{
+    QString defaultLocale = QLocale().name();
+    return "[" + defaultLocale.left(2).toLower() + "] ";
+}
+
+}
+
 #ifdef STARVIEWER_CE
+
 void QApplicationMainWindow::showMedicalDeviceInformationDialog()
 {
     Settings settings;
@@ -813,6 +835,23 @@ void QApplicationMainWindow::showMedicalDeviceInformationDialogUnconditionally()
     QMedicalDeviceInformationDialog *dialog = new QMedicalDeviceInformationDialog(this);
     dialog->exec();
 }
+
+void QApplicationMainWindow::showLabel()
+{
+    // Extract label from resources and show open it with the system default PDF viewer
+    QString resourcePath = ":/labels/" + getLocalePrefix() + StarviewerBuildPlatform + ".pdf";
+    QString tempPath = QDir::tempPath() + "/label.pdf";
+
+    if (QFile::exists(tempPath))
+    {
+        QFile::remove(tempPath);
+    }
+
+    QFile::copy(resourcePath, tempPath);
+    QFile::setPermissions(tempPath, QFileDevice::ReadUser | QFileDevice::WriteUser);    // write required in Windows, otherwise Starviewer can't delete it later
+    QDesktopServices::openUrl(QUrl::fromLocalFile(tempPath));
+}
+
 #endif // STARVIEWER_CE
 
 void QApplicationMainWindow::newCommandLineOptionsToRun()
@@ -846,16 +885,6 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
 void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
 {
     m_progressDialog->setValue(progress);
-}
-
-namespace {
-
-QString getLocalePrefix()
-{
-    QString defaultLocale = QLocale().name();
-    return "[" + defaultLocale.left(2).toLower() + "] ";
-}
-
 }
 
 void QApplicationMainWindow::openUserGuide()
