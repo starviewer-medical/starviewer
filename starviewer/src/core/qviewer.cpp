@@ -97,7 +97,7 @@ QViewer::QViewer(QWidget *parent)
     this->setMouseTracking(false);
     m_patientBrowserMenu = new PatientBrowserMenu(0);
     // We do not want Qt to generate context menu events, we do our own detection through VTK events and then we call the overridable method QWidget::contextMenuEvent()
-    this->setContextMenuPolicy(Qt::ContextMenuPolicy::NoContextMenu);
+    m_vtkWidget->setContextMenuPolicy(Qt::PreventContextMenu);
     // Ara mateix el comportament per defecte serà que un cop seleccionat un volum li assignem immediatament com a input
     this->setAutomaticallyLoadPatientBrowserMenuSelectedInput(true);
 }
@@ -244,6 +244,11 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
             if (vtkEvent == vtkCommand::LeftButtonPressEvent && getInteractor()->GetRepeatCount() == 1)
             {
                 emit doubleClicked();
+
+                if (getToolProxy()->isToolActive("ZoomTool"))
+                {
+                    return; // avoid accidental pan when doing a double click (#2854)
+                }
             }
             break;
 
@@ -559,6 +564,13 @@ bool QViewer::getCurrentFocalPoint(double focalPoint[3])
 VoiLut QViewer::getCurrentVoiLut() const
 {
     return VoiLut();
+}
+
+Vector3 QViewer::getViewPlaneNormal()
+{
+    Vector3 normal;
+    getActiveCamera()->GetViewPlaneNormal(normal.x, normal.y, normal.z);
+    return normal;
 }
 
 bool QViewer::scaleToFit3D(double topCorner[3], double bottomCorner[3], double marginRate)

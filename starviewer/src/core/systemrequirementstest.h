@@ -33,10 +33,10 @@ class SystemRequirements;
 class SystemRequirementsTest : public DiagnosisTest {
 Q_OBJECT
 public:
-    SystemRequirementsTest(QObject *parent = 0);
-    ~SystemRequirementsTest();
+    explicit SystemRequirementsTest(QObject *parent = nullptr);
+    ~SystemRequirementsTest() override;
 
-    DiagnosisTestResult run();
+    DiagnosisTestResult run() override;
 
     /// Retorna la descripció del test
     QString getDescription() const override;
@@ -50,14 +50,13 @@ protected:
     virtual unsigned int getCPUNumberOfCores(SystemInformation *system);
     virtual QList<unsigned int> getCPUFrequencies(SystemInformation *system);
     virtual QStringList getGPUOpenGLCompatibilities(SystemInformation *system);
-    virtual QString getGPUOpenGLVersion(SystemInformation *system);
+    virtual QString getGPUOpenGLVersion(SystemRequirements *requirements);
     virtual QList<unsigned int> getGPURAM(SystemInformation *system);
     virtual QStringList getGPUModel(SystemInformation *system);
     virtual unsigned int getHardDiskFreeSpace(SystemInformation *system, const QString &device);
     virtual SystemInformation::OperatingSystem getOperatingSystem(SystemInformation *system);
     virtual QString getOperatingSystemVersion(SystemInformation *system);
     virtual QString getOperatingSystemServicePackVersion(SystemInformation *system);
-    virtual bool isOperatingSystem64BitArchitecture(SystemInformation *system);
     virtual unsigned int getRAMTotalAmount(SystemInformation *system);
     virtual QList<QSize> getScreenResolutions(SystemInformation *system);
     virtual bool doesOpticalDriveHaveWriteCapabilities(SystemInformation *system);

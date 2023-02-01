@@ -17,7 +17,7 @@
 #include "qcrashreporter.h"
 #include "../core/starviewerapplication.h"
 #include "logging.h"
-#include "executablesnames.h"
+
 #include <QTimer>
 #include <QNetworkInterface>
 #include <QNetworkRequest>
@@ -50,7 +50,7 @@ QCrashReporter::QCrashReporter(const QStringList &args, QWidget *parent)
     m_restartPushButton->setText(tr("Restart %1").arg(ApplicationNameString));
     m_sendReportCheckBox->setText(tr("Tell %1 about this crash").arg(ApplicationNameString));
     m_informationLabel->setText(tr("We're sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix "
-                                   "the problem. Your personal information is not sent with this report.  ").arg(ApplicationNameString));
+                                   "the problem. Your personal information is not sent with this report.").arg(ApplicationNameString));
     m_sendReportLabel->setVisible(false);
     m_sendProgressBar->setVisible(false);
     m_sendError->setVisible(false);

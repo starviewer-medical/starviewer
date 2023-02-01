@@ -8,10 +8,6 @@
         <translation>The application Starviewer crashed</translation>
     </message>
     <message>
-        <source>We&apos;re sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
-        <translation>We&apos;re sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </translation>
-    </message>
-    <message>
         <source>Tell Starviewer about this crash</source>
         <translation>Tell Starviewer about this crash</translation>
     </message>
@@ -55,12 +51,9 @@
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>PNG (*.png)</source>
-        <translation>PNG (*.png)</translation>
+        <source>We&apos;re sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -80,10 +73,6 @@
     <message>
         <source>Tell %1 about this crash</source>
         <translation>Tell %1 about this crash</translation>
-    </message>
-    <message>
-        <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
-        <translation>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </translation>
     </message>
     <message>
         <source>IP</source>
@@ -113,6 +102,10 @@
     </message>
     <message>
         <source>The crash report has been sent.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

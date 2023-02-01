@@ -38,7 +38,8 @@ public:
     static const QString MinimumFreeGigaBytesForCache;
     static const QString MinimumDaysUnusedToDeleteStudy;
     /// Controlar quin estudi està baixant-se
-    static const QString RetrievingStudy;
+    static const QString RetrievingStudy;   // previous key, used until Starviewer 1.1 to hold only one Study UID; should be deleted some day in the future
+    static const QString StudiesBeingRetrieved; // current key, used to hold several Study UIDs
 
     /// Paràmetres del RIS
     static const QString RISRequestsPort;
@@ -53,6 +54,7 @@ public:
     static const QString CreateDICOMDIRGeometry;
     static const QString OperationStateColumnsWidth;
     static const QString PACSStudyListColumnsWidth;
+    static const QString PacsListColumnWidths;
     static const QString ConfigurationScreenPACSList;
     static const QString LocalDatabaseStudyList;
     static const QString LocalDatabaseSplitterState;
@@ -72,7 +74,6 @@ public:
     static const QString MaximumPACSConnections;
 
     /// Llista de PACS
-    //TODO: Clau duplicada a CoreSettings
     static const QString PacsListConfigurationSectionName;
 
     /// Paràmetres de la configuració DICOMDIR

@@ -1,0 +1,14 @@
+<transferfunction version="0">
+ <name>Summer</name>
+ <color>
+  <point value="0" r="0" g="1" b="0"/>
+  <point value="127" r="0" g="0.7519569396386005" b="0"/>
+  <point value="255" r="0" g="0.5019607843137255" b="0.996078431372549"/>
+ </color>
+ <opacity>
+  <point value="0" a="1"/>
+ </opacity>
+ <gradientopacity>
+  <point gradient="0" a="0"/>
+ </gradientopacity>
+</transferfunction>

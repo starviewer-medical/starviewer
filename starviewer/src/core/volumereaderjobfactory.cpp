@@ -120,7 +120,10 @@ void VolumeReaderJobFactory::assignResourceRestrictionPolicy(VolumeReaderJob *vo
     }
 
     m_resourceRestrictionPolicy.setCap(maximumNumberOfVolumesLoadingConcurrently);
-    volumeReaderJob->assignQueuePolicy(&m_resourceRestrictionPolicy);
+    {
+        QMutexLocker lock(volumeReaderJob->mutex());
+        volumeReaderJob->assignQueuePolicy(&m_resourceRestrictionPolicy);
+    }
     INFO_LOG(QString("Limitem a %1 la quantitat de volums carregant-se simultàniament.").arg(m_resourceRestrictionPolicy.cap()));
 }
 

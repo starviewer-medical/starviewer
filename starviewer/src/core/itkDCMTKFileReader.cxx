@@ -1161,7 +1161,7 @@ int getFromFunctionalGroupsSequence(DCMTKSequence &functionalGroupsSequence, int
 
         if (rval == EXIT_SUCCESS)
         {
-            rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
+            pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
             rval = pixelValueTransformationSequence.GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
         }
     }
@@ -1178,8 +1178,8 @@ DCMTKFileReader
     slope = 1.0;
     intercept = 0.0;
 
-    int rval = this->GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
-    rval = this->GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
+    this->GetElementDS<double>(0x0028, 0x1053, 1, &slope, false);
+    int rval = this->GetElementDS<double>(0x0028, 0x1052, 1, &intercept, false);
 
     if (rval != EXIT_SUCCESS)
     {
@@ -1377,7 +1377,7 @@ DCMTKFileReader
         if (rval != EXIT_SUCCESS)
         {
             // Nominal Scanned PixelSpacing
-            rval = this->GetElementDS<double>(0x0018, 0x2010, 2, _spacing,false);
+            this->GetElementDS<double>(0x0018, 0x2010, 2, _spacing,false);
         }
     }
 

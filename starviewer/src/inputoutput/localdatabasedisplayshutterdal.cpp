@@ -117,30 +117,6 @@ bool LocalDatabaseDisplayShutterDAL::insert(const DisplayShutter &shutter, const
     return executeQueryAndLogError(query);
 }
 
-bool LocalDatabaseDisplayShutterDAL::update(const QList<DisplayShutter> &shuttersList, const Image *shuttersImage)
-{
-    // We have to delete existing shutters and insert the new ones because the
-    // DisplayShutter class doesn't have the ID of the DisplayShutter record in the database
-    DicomMask mask;
-    mask.setImageNumber(QString::number(shuttersImage->getFrameNumber()));
-    mask.setSOPInstanceUID(shuttersImage->getSOPInstanceUID());
-
-    if (!del(mask))
-    {
-        return false;
-    }
-
-    foreach (const DisplayShutter &shutter, shuttersList)
-    {
-        if (!insert(shutter, shuttersImage))
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 bool LocalDatabaseDisplayShutterDAL::del(const DicomMask &mask)
 {
     QSqlQuery query = getNewQuery();

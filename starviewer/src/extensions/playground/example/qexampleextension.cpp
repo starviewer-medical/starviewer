@@ -48,8 +48,8 @@ void QExampleExtension::setPatient(Patient *patient)
         return;
     }
 
-    m_2DViewer->setInputAsynchronously(patient->getVolumesList().first());
-    m_3DViewer->setInput(patient->getVolumesList().first());
+    m_2DViewer->setInputAsynchronously(patient->getVolumesList().constFirst());
+    m_3DViewer->setInput(patient->getVolumesList().constFirst());
 }
 
 } // namespace udg

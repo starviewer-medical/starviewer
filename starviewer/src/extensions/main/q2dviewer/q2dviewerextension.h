@@ -74,6 +74,14 @@ public:
     /// Sets the study from the current patient with the given studyUID as the current patient.
     void setCurrentStudy(const QString &studyUID);
 
+protected:
+    /// Reimplemented to add extra funciontality to some tool buttons.
+    bool eventFilter(QObject *watched, QEvent *event) override;
+    /// Reimplemented to decided whether the thick slab widget should be foldable.
+    void resizeEvent(QResizeEvent *event) override;
+    /// Reimplemented to decided whether the thick slab widget should be foldable.
+    void showEvent(QShowEvent *event) override;
+
 private:
     /// Crea les connexions entre signals i slots
     void createConnections();
@@ -138,6 +146,13 @@ private slots:
 #ifndef STARVIEWER_LITE
     /// Mostrar el diàleg per exportar la sèrie del visor seleccionat.
     void showScreenshotsExporterDialog();
+
+    /// Resets all viewers with input to axial.
+    void resetAllViewersToAxial();
+    /// Resets all viewers with input to sagittal.
+    void resetAllViewersToSagittal();
+    /// Resets all viewers with input to coronal.
+    void resetAllViewersToCoronal();
 #endif
 
     /// TODO Mètode per solucionar problemes perquè la sincronització
@@ -217,8 +232,9 @@ private:
     QAction *m_propagationAction;
 
 #ifndef STARVIEWER_LITE
-    QAction *m_sagitalViewAction;
-    QAction *m_coronalViewAction;
+    QAction *m_allViewersAxialAction;
+    QAction *m_allViewersSagittalAction;
+    QAction *m_allViewersCoronalAction;
 #endif
 
     /// El diàleg per escollir un window level ajustat per l'usuari

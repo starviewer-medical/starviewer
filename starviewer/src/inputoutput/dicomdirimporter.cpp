@@ -36,6 +36,10 @@ namespace udg {
 
 void DICOMDIRImporter::import(QString dicomdirPath, QString studyUID, QString seriesUID, QString sopInstanceUID)
 {
+    DirectoryUtilities::sanitizeFilename(studyUID);
+    DirectoryUtilities::sanitizeFilename(seriesUID);
+    DirectoryUtilities::sanitizeFilename(sopInstanceUID);
+
     m_lastError = Ok;
     LocalDatabaseManager localDatabaseManager;
     PatientFiller patientFiller;

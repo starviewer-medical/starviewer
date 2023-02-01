@@ -174,6 +174,29 @@
       </widget>
      </item>
      <item>
+      <widget class="QToolButton" name="m_arrowToolButton">
+       <property name="text">
+        <string>Arrow</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../../main/main.qrc">
+         <normaloff>:/images/icons/draw-arrow.svg</normaloff>:/images/icons/draw-arrow.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>32</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextUnderIcon</enum>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="m_eraserToolButton">
        <property name="text">
         <string>Angle</string>
@@ -547,7 +570,6 @@ Series with multiple phases so it won't work properly.</string>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../main/main.qrc"/>
   <include location="../../../main/main.qrc"/>
  </resources>
  <connections/>

@@ -15,14 +15,9 @@
 #ifndef UDGIMAGEOVERLAY_H
 #define UDGIMAGEOVERLAY_H
 
-#include <QString>
 #include <QSharedPointer>
 
 class QRect;
-
-namespace gdcm {
-class Overlay;
-}
 
 namespace udg {
 
@@ -65,9 +60,6 @@ public:
 
     /// Compara aquest overlay amb un altre i diu si són iguals.
     bool operator ==(const ImageOverlay &overlay) const;
-
-    /// Construeix un ImageOverlay a partir d'un gdcm::Overlay
-    static ImageOverlay fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay);
 
     /// Fusiona una llista d'overlays en un únic overlay
     /// Només fusionarà aquells overlays que reuneixin les condicions necessàries per considerar-se vàlids, és a dir, 

@@ -16,6 +16,7 @@
 #define UDGLAYOUTMANAGER_H
 
 #include <QObject>
+#include <QRectF>
 #include <QSet>
 
 namespace udg {
@@ -175,6 +176,11 @@ private:
     HangingProtocol *m_priorHangingProtocolApplied;
     /// Combined hanging protocol applied. Don't change its value directly, use setCombinedHangingProtocolApplied() instead.
     HangingProtocol *m_combinedHangingProtocolApplied;
+
+    /// Geometry of the area reserved for the current study in comparison mode.
+    QRectF m_currentStudyGeometry;
+    /// Geometry of the area reserved for the prior study in comparison mode.
+    QRectF m_priorStudyGeometry;
 
 };
 

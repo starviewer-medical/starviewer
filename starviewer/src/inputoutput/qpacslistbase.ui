@@ -14,14 +14,23 @@
    <string>Form1</string>
   </property>
   <layout class="QGridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <property name="spacing">
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="QTreeWidget" name="m_PacsTreeView">
+    <widget class="QTableView" name="m_pacsTableView">
      <property name="palette">
       <palette>
        <active>
@@ -92,35 +101,21 @@
      <property name="selectionMode">
       <enum>QAbstractItemView::MultiSelection</enum>
      </property>
-     <property name="rootIsDecorated">
-      <bool>false</bool>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
      </property>
-     <property name="uniformRowHeights">
-      <bool>true</bool>
+     <property name="showGrid">
+      <bool>false</bool>
      </property>
      <property name="sortingEnabled">
       <bool>true</bool>
      </property>
-     <column>
-      <property name="text">
-       <string>PacsId</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>PACS</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Institution</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Description</string>
-      </property>
-     </column>
+     <attribute name="horizontalHeaderHighlightSections">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
     </widget>
    </item>
   </layout>

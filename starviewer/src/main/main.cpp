@@ -30,6 +30,7 @@ INITIALIZE_EASYLOGGINGPP
 #include "applicationtranslationsloader.h"
 
 #include "coresettings.h"
+#include "externalstudyrequestmanager.h"
 #include "inputoutputsettings.h"
 #include "interfacesettings.h"
 #include "shortcuts.h"
@@ -51,6 +52,7 @@ INITIALIZE_EASYLOGGINGPP
 #include <QScreen>
 #include <qtsingleapplication.h>
 
+#include <QVTKOpenGLNativeWidget.h>
 #include <vtkNew.h>
 #include <vtkOutputWindow.h>
 #include <vtkOverrideInformation.h>
@@ -125,6 +127,14 @@ int main(int argc, char *argv[])
         }
     }
 
+// WARNING This should be done on all platforms but it causes rendering problems (#2903) with the combination of Qt 5.12-5.14, VTK 8.2, and Windows or Linux,
+//         thus for the moment we limit it to Mac where it's required to avoid a crash and it doesn't present any known problem.
+// TODO This problem must be reviewed when upgrading libraries and tested with other settings
+#ifdef Q_OS_MACOS
+    // This is required to use QVTKOpenGLNativeWidget and it must be set before initializing QApplication
+    QSurfaceFormat::setDefaultFormat(QVTKOpenGLNativeWidget::defaultFormat());
+#endif
+
     // Utilitzem QtSingleApplication en lloc de QtApplication, ja que ens permet tenir executant sempre una sola instància d'Starviewer, si l'usuari executa
     // una nova instància d'Starviewer aquesta ho detecta i envia la línia de comandes amb que l'usuari ha executat la nova instància principal.
 
@@ -171,7 +181,7 @@ int main(int argc, char *argv[])
     Q_UNUSED(crashHandler);
 #endif
 
-
+    initializeTranslations(app);
 
     // Inicialitzem els settings
     udg::CoreSettings coreSettings;
@@ -183,8 +193,6 @@ int main(int argc, char *argv[])
     inputoutputSettings.init();
     interfaceSettings.init();
     shortcuts.init();
-
-    initializeTranslations(app);
 
     // Registering the available sync actions
     udg::SyncActionsRegister::registerSyncActions();
@@ -245,6 +253,11 @@ int main(int argc, char *argv[])
             // Fem el connect per rebre els arguments de les altres instàncies
             QObject::connect(&app, SIGNAL(messageReceived(QString)), StarviewerSingleApplicationCommandLineSingleton::instance(), SLOT(parseAndRun(QString)));
 
+#ifndef STARVIEWER_LITE
+            // Start the RIS listener
+            udg::ExternalStudyRequestManager::instance()->listen();
+#endif
+
             INFO_LOG("Creada finestra principal");
 
             mainWin->show();
@@ -262,8 +275,7 @@ int main(int argc, char *argv[])
             // QMessageBox, ja es llança mostrant-se la MainWindow.
             if (commandLineArgumentsList.count() > 1)
             {
-                QString errorInvalidCommanLineArguments;
-                StarviewerSingleApplicationCommandLineSingleton::instance()->parseAndRun(commandLineArgumentsList, errorInvalidCommanLineArguments);
+                StarviewerSingleApplicationCommandLineSingleton::instance()->runParsedArguments();
             }
 
             returnValue = app.exec();

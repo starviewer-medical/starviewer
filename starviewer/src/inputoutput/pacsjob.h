@@ -38,7 +38,7 @@ typedef QSharedPointer<PACSJob> PACSJobPointer;
     Aquesta classe hereda de ThreadWeaver::Job per així tenir automàticament la gestió de les cues que implementa, i permetre que les operacions
     amb el PACS s'executin en un thread independent.
   */
-class PACSJob : public QObject, public ThreadWeaver::Job {
+class PACSJob : public QObject, public QEnableSharedFromThis<PACSJob>, public ThreadWeaver::Job {
 Q_OBJECT
 public:
     enum PACSJobType { SendDICOMFilesToPACSJobType, RetrieveDICOMFilesFromPACSJobType, QueryPACS };
@@ -67,9 +67,6 @@ public:
     /// des d'aquest mètode emetem el signal PACSJobCancelled
     void aboutToBeDequeued(ThreadWeaver::QueueAPI *weaver);
 
-    /// Sets the self pointer reference of this job.
-    void setSelfPointer(const PACSJobPointer &self);
-
 signals:
     /// Signal que s'emet quan un PACSJob ha començat a executar-se
     void PACSJobStarted(PACSJobPointer);
@@ -83,12 +80,6 @@ signals:
 protected:
     virtual void defaultBegin(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread);
     virtual void defaultEnd(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread);
-
-protected:
-    /// Weak reference to a shared pointer of the job itself. It is needed to emit the PACSJobCancelled() signal with a shared pointer from aboutToBeDequeued().
-    /// Since it's a weak pointer it won't keep the job alive.
-    /// TODO This should be removed by redesigning the PACS jobs architecture.
-    QWeakPointer<PACSJob> m_selfPointer;
 
 private:
     /// Mètode que han de reimplementar les classes filles per cancel·lar l'execució del job actual

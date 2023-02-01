@@ -45,7 +45,7 @@ public:
 
     static vtkVolumeRayCastVoxelShaderCompositeFunction* New();
     vtkTypeMacro(vtkVolumeRayCastVoxelShaderCompositeFunction, vtkVolumeRayCastFunction)
-    void PrintSelf(ostream &os, vtkIndent indent);
+    void PrintSelf(ostream &os, vtkIndent indent) override;
 
     void SetCompositeMethod(CompositeMethod compositeMethod) { m_compositeMethod = qBound(ClassifyInterpolate, compositeMethod, InterpolateClassify); }
     CompositeMethod GetCompositeMethod() const { return m_compositeMethod; }
@@ -54,9 +54,9 @@ public:
     const char* GetCompositeMethodAsString() const;
 
     //BTX
-    void CastRay(vtkVolumeRayCastDynamicInfo *dynamicInfo, vtkVolumeRayCastStaticInfo *staticInfo);
+    void CastRay(vtkVolumeRayCastDynamicInfo *dynamicInfo, vtkVolumeRayCastStaticInfo *staticInfo) override;
 
-    float GetZeroOpacityThreshold(vtkVolume *volume);
+    float GetZeroOpacityThreshold(vtkVolume *volume) override;
     //ETX
 
     void AddVoxelShader(VoxelShader *voxelShader);
@@ -68,10 +68,10 @@ public:
 
 protected:
     vtkVolumeRayCastVoxelShaderCompositeFunction();
-    ~vtkVolumeRayCastVoxelShaderCompositeFunction();
+    ~vtkVolumeRayCastVoxelShaderCompositeFunction() override;
 
     //BTX
-    void SpecificFunctionInitialize(vtkRenderer *renderer, vtkVolume *volume, vtkVolumeRayCastStaticInfo *staticInfo, vtkVolumeRayCastMapper *mapper);
+    void SpecificFunctionInitialize(vtkRenderer *renderer, vtkVolume *volume, vtkVolumeRayCastStaticInfo *staticInfo, vtkVolumeRayCastMapper *mapper) override;
     //ETX
 
     CompositeMethod m_compositeMethod;

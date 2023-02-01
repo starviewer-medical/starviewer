@@ -44,6 +44,10 @@ public:
     /// ok will be false and a 0 initialized vector will be returned. It's an specific merthod for decimal strings with two values
     static QVector2D decimalStringTo2DDoubleVector(const QString &decimalString, bool *ok = 0);
 
+    /// Given a string containing multiple DICOM 64-bit signed integers (DICOM VR SV), converts it to a vector of C++ 64-bit signed integers (int64_t).
+    /// Works also for smaller types.
+    static QVector<int64_t> signed64BitVeryLongToInt64Vector(const QString &signed64BitVeryLongString);
+
     /// Given a string containing multiple unsigned longs (DICOM VR UL), converts it to a vector of unsigned ints.
     static QVector<uint> unsignedLongStringToUintVector(const QString &unsignedLongString);
 

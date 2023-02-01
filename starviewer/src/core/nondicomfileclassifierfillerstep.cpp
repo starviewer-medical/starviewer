@@ -167,7 +167,7 @@ bool NonDicomFileClassifierFillerStep::fillIndividually()
     // Origin correction when reading multiple files from a directory
     if (series->hasImages())
     {
-        Image *previousImage = series->getImages().last();
+        Image *previousImage = series->getImages().constLast();
         origin.z = previousImage->getImagePositionPatient()[2] + previousImage->getSliceThickness();
     }
 

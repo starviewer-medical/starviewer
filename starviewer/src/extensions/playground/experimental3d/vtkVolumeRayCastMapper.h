@@ -64,7 +64,7 @@ class vtkVolumeRayCastMapper : public vtkVolumeMapper
 public:
   static vtkVolumeRayCastMapper *New();
   vtkTypeMacro(vtkVolumeRayCastMapper,vtkVolumeMapper);
-  void PrintSelf( ostream& os, vtkIndent indent );
+  void PrintSelf( ostream& os, vtkIndent indent ) override;
 
   // Description:
   // Set/Get the distance between samples.  This variable is only
@@ -134,14 +134,14 @@ public:
   // Description:
   // WARNING: INTERNAL METHOD - NOT INTENDED FOR GENERAL USE
   // Initialize rendering for this volume.
-  void Render( vtkRenderer *, vtkVolume * );
+  void Render( vtkRenderer *, vtkVolume * ) override;
 
   // Description:
   // WARNING: INTERNAL METHOD - NOT INTENDED FOR GENERAL USE
   // Release any graphics resources that are being consumed by this mapper.
   // The parameter window could be used to determine which graphic
   // resources to release.
-  void ReleaseGraphicsResources(vtkWindow *);
+  void ReleaseGraphicsResources(vtkWindow *) override;
 
   // Description:
   // WARNING: INTERNAL METHOD - NOT INTENDED FOR GENERAL USE
@@ -151,25 +151,25 @@ public:
   // Description:
   // WARNING: INTERNAL METHOD - NOT INTENDED FOR GENERAL USE
   // Values needed by the volume
-  virtual float GetGradientMagnitudeScale();
-  virtual float GetGradientMagnitudeBias();
-  virtual float GetGradientMagnitudeScale(int)
+  virtual float GetGradientMagnitudeScale() override;
+  virtual float GetGradientMagnitudeBias() override;
+  virtual float GetGradientMagnitudeScale(int) override
     {return this->GetGradientMagnitudeScale();};
-  virtual float GetGradientMagnitudeBias(int)
+  virtual float GetGradientMagnitudeBias(int) override
     {return this->GetGradientMagnitudeBias();};
 
 //ETX
 
 protected:
   vtkVolumeRayCastMapper();
-  ~vtkVolumeRayCastMapper();
+  ~vtkVolumeRayCastMapper() override;
 
   vtkVolumeRayCastFunction     *VolumeRayCastFunction;
   vtkEncodedGradientEstimator  *GradientEstimator;
   vtkEncodedGradientShader     *GradientShader;
   vtkRayCastImageDisplayHelper *ImageDisplayHelper;
 
-  virtual void ReportReferences(vtkGarbageCollector*);
+  virtual void ReportReferences(vtkGarbageCollector*) override;
 
   // The distance between sample points along the ray
   double                       SampleDistance;

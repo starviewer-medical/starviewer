@@ -17,6 +17,7 @@
 #include <QCalendarWidget>
 
 #include "dicommask.h"
+#include "qbasicsearchwidget.h"
 
 namespace udg {
 
@@ -70,12 +71,13 @@ void QAdvancedSearchWidget::clear()
     m_patientAge->clear();
     
     // Camps estudi
-    m_studyIDText->clear();
-    m_studyUIDText->clear();
-    m_accessionNumberText->clear();
-    m_referringPhysiciansNameText->clear();
-    m_studyModalityText->clear();
-    m_studyTimeText->clear();
+    m_studyTimeLineEdit->clear();
+    m_modalitiesInStudyLineEdit->clear();
+    m_referringPhysiciansNameLineEdit->clear();
+    m_studyDescriptionLineEdit->clear();
+    m_accessionNumberLineEdit->clear();
+    m_studyInstanceUidLineEdit->clear();
+    m_studyIdLineEdit->clear();
 
     // Camps sèries
     m_seriesUIDText->clear();
@@ -105,13 +107,15 @@ DicomMask QAdvancedSearchWidget::buildDicomMask()
     mask.setPatientID("");
     mask.setPatientName("");
 
-    mask.setStudyID(m_studyIDText->text());
-    mask.setStudyDescription("");
-    mask.setStudyInstanceUID(m_studyUIDText->text());
-    mask.setStudyModality(m_studyModalityText->text());
-    mask.setAccessionNumber(m_accessionNumberText->text());
-    mask.setReferringPhysiciansName(m_referringPhysiciansNameText->text());
-    QPair<QTime, QTime> studyTimeRange = getTimeRangeToSearchFromString(m_studyTimeText->text());
+    mask.setStudyID(m_studyIdLineEdit->text());
+    QString studyDescription = m_studyDescriptionLineEdit->text();
+    QBasicSearchWidget::addWildCards(studyDescription);
+    mask.setStudyDescription(studyDescription);
+    mask.setStudyInstanceUID(m_studyInstanceUidLineEdit->text());
+    mask.setStudyModality(m_modalitiesInStudyLineEdit->text());
+    mask.setAccessionNumber(m_accessionNumberLineEdit->text());
+    mask.setReferringPhysiciansName(m_referringPhysiciansNameLineEdit->text());
+    QPair<QTime, QTime> studyTimeRange = getTimeRangeToSearchFromString(m_studyTimeLineEdit->text());
     mask.setStudyTime(studyTimeRange.first, studyTimeRange.second);
 
 
@@ -237,7 +241,7 @@ QPair<QTime, QTime> QAdvancedSearchWidget::getTimeRangeToSearchFromString(QStrin
 
 bool QAdvancedSearchWidget::isQLineEditEnabledAndIsNotEmpty(QObject *qObject)
 {
-    if (qobject_cast<QLineEdit*>(qObject) != NULL)
+    if (qobject_cast<QLineEdit*>(qObject) != nullptr)
     {
         QLineEdit *lineEdit = qobject_cast<QLineEdit*>(qObject);
         return !lineEdit->text().isEmpty() && lineEdit->isEnabled();
@@ -250,7 +254,7 @@ bool QAdvancedSearchWidget::isQLineEditEnabledAndIsNotEmpty(QObject *qObject)
 
 bool QAdvancedSearchWidget::isQCheckboxAndIsChecked(QObject *qObject)
 {
-    if (qobject_cast<QCheckBox*>(qObject) != NULL)
+    if (qobject_cast<QCheckBox*>(qObject) != nullptr)
     {
         return (qobject_cast<QCheckBox*>(qObject))->isChecked();
     }

@@ -125,7 +125,7 @@ void StandardizedUptakeValueFormulaCalculator::gatherRequiredCommonFormulaCompon
         {
             // TODO It could be more than one item!
             // Radionuclide Total Dose is a type 3 tag
-            m_injectedDoseInBq = radiopharmaceuticalInfoSequence->getItems().first()->getValueAttribute(DICOMRadionuclideTotalDose)->getValueAsDouble();
+            m_injectedDoseInBq = radiopharmaceuticalInfoSequence->getItems().constFirst()->getValueAttribute(DICOMRadionuclideTotalDose)->getValueAsDouble();
         }
     }
 

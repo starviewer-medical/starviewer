@@ -51,12 +51,8 @@ QString LocalDatabaseBaseDAL::convertToQString(const QVariant &text)
 
 void LocalDatabaseBaseDAL::logError(const QSqlQuery &query)
 {
-    // Ignore duplicate key error
-    if (query.lastError().nativeErrorCode().toInt() != DatabaseConnection::SqliteConstraint)
-    {
-        ERROR_LOG(QString("SQLite error %1: \"%2\", when executing \"%3\"")
-                  .arg(query.lastError().nativeErrorCode()).arg(query.lastError().text()).arg(query.lastQuery()));
-    }
+    ERROR_LOG(QString("SQLite error %1: \"%2\", when executing \"%3\"")
+              .arg(query.lastError().nativeErrorCode()).arg(query.lastError().text()).arg(query.lastQuery()));
 }
 
 QSqlQuery LocalDatabaseBaseDAL::getNewQuery()

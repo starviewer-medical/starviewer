@@ -76,6 +76,9 @@ private slots:
     void getPatientAge_ReturnExpectedValues_data();
     void getPatientAge_ReturnExpectedValues();
 
+    void getCalculatedPatientAge_ReturnsExpectedValues_data();
+    void getCalculatedPatientAge_ReturnsExpectedValues();
+
 private:
     /// Prepara les dades comunes de testing per els operadors > i <.
     void setupUpOperatorsLessThanGreaterThanData();
@@ -610,13 +613,61 @@ void test_Study::getPatientAge_ReturnExpectedValues()
     QFETCH(QString, expectedAge);
 
     Patient *patient = PatientTestHelper::create(1);
-    Study *study = patient->getStudies().first();
+    Study *study = patient->getStudies().constFirst();
 
     patient->setBirthDate(birthDate.day(), birthDate.month(), birthDate.year());
     study->setDate(studyDate);
     study->setPatientAge(hardCodedAge);
     
     QCOMPARE(study->getPatientAge(), expectedAge);
+
+    StudyTestHelper::cleanUp(study);
+}
+
+void test_Study::getCalculatedPatientAge_ReturnsExpectedValues_data()
+{
+    QTest::addColumn<QDate>("studyDate");
+    QTest::addColumn<QDate>("birthDate");
+    QTest::addColumn<QString>("expectedAge");
+
+    QDate invalidStudyDate;
+    QDate invalidBirthDate;
+    QTest::newRow("invalid dates") << invalidStudyDate << invalidBirthDate << QString();
+
+    QDate validStudyDate(2014, 2, 3);
+    QDate validBirthDate(1958, 2, 3);
+
+    QTest::newRow("invalid date - valid date") << invalidStudyDate << validBirthDate << QString();
+    QTest::newRow("valid date - invalid date") << validStudyDate << invalidBirthDate << QString();
+
+    QTest::newRow("valid dates") << validStudyDate << validBirthDate << "056Y";
+    QTest::newRow("valid dates (study day after, same year)") << validStudyDate.addDays(1) << validBirthDate << "056Y";
+    QTest::newRow("valid dates (study day before, -1 year)") << validStudyDate.addDays(-1) << validBirthDate << "055Y";
+    QTest::newRow("study date is prior to birth date") << validStudyDate << validBirthDate.addYears(200) << QString();
+
+    QDate validStudyDateMonths(1959, 6, 3);
+    QTest::newRow("valid dates (months result)") << validStudyDateMonths << validBirthDate << "016M";
+
+    QDate validStudyDateWeeks(1958, 5, 2);
+    QTest::newRow("valid dates (weeks result)") << validStudyDateWeeks << validBirthDate << "013W";
+
+    QDate validStudyDateDays(1958, 3, 1);
+    QTest::newRow("valid dates (days result)") << validStudyDateDays << validBirthDate << "026D";
+}
+
+void test_Study::getCalculatedPatientAge_ReturnsExpectedValues()
+{
+    QFETCH(QDate, studyDate);
+    QFETCH(QDate, birthDate);
+    QFETCH(QString, expectedAge);
+
+    Patient *patient = PatientTestHelper::create(1);
+    Study *study = patient->getStudies().constFirst();
+
+    patient->setBirthDate(birthDate.day(), birthDate.month(), birthDate.year());
+    study->setDate(studyDate);
+
+    QCOMPARE(study->getCalculatedPatientAge(), expectedAge);
 
     StudyTestHelper::cleanUp(study);
 }

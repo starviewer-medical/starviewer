@@ -6,6 +6,6 @@ sdk-download*
 sdk-build*
 sdk-install*
 starviewer-build*
-starviewer-install*
 starviewer-packaging*
 build-starviewer*
+starviewer-install*

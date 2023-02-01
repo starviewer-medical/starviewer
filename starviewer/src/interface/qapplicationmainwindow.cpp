@@ -29,12 +29,11 @@
 #include "databaseinstallation.h"
 #include "interfacesettings.h"
 #include "starviewerapplicationcommandline.h"
-#include "risrequestwrapper.h"
 #include "qaboutdialog.h"
 #include "externalapplication.h"
 #include "externalapplicationsmanager.h"
+#include "externalstudyrequestmediator.h"
 #include "queryscreen.h"
-#include "risrequestmanager.h"
 
 // Pel LanguageLocale
 #include "coresettings.h"
@@ -58,23 +57,24 @@
 
 // Qt
 #include <QAction>
-#include <QMenuBar>
-#include <QCloseEvent>
-#include <QMessageBox>
 #include <QApplication>
-#include <QLocale>
-#include <QProgressDialog>
+#include <QCloseEvent>
 #include <QDesktopServices>
+#include <QLocale>
+#include <QMenuBar>
+#include <QMessageBox>
 #include <QPair>
-#include <QWidgetAction>
+#include <QProgressDialog>
 #include <QShortcut>
+#include <QTimer>
+#include <QWidgetAction>
 // Shortucts
 #include "shortcuts.h"
 #include "shortcutmanager.h"
 
 namespace udg {
 
-typedef SingletonPointer<QueryScreen> QueryScreenSingleton;
+QList<QApplicationMainWindow*> QApplicationMainWindow::m_lastActiveMainWindows;
 
 // Per processar les opcions entrades per línia de comandes hem d'utilitzar un Singleton de StarviewerApplicationCommandLine, això ve degut a que
 // d'instàncies de QApplicationMainWindow en tenim tantes com finestres obertes d'Starviewer tinguem. Instàncies deQApplicationMainWindow es crees
@@ -98,6 +98,10 @@ typedef SingletonPointer<StarviewerApplicationCommandLine> StarviewerSingleAppli
 QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     : QMainWindow(parent), m_patient(0), m_isBetaVersion(false)
 {
+    // Add this window to the beginning of the list because it has never been active yet.
+    // This ensures that all existent windows are on the list, thus the list is not empty as long as there is any window.
+    m_lastActiveMainWindows.prepend(this);
+
     connect(StarviewerSingleApplicationCommandLineSingleton::instance(), SIGNAL(newOptionsToRun()), SLOT(newCommandLineOptionsToRun()));
 
     this->setAttribute(Qt::WA_DeleteOnClose);
@@ -123,7 +127,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
     readSettings();
     // Icona de l'aplicació
     this->setWindowIcon(QIcon(":/images/logo/logo.ico"));
-    this->setWindowTitle(ApplicationNameString);
+    updateWindowTitle();
 
 // Amb starviewer lite no hi haurà hanging protocols, per tant no els carregarem
 #ifndef STARVIEWER_LITE
@@ -157,7 +161,6 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
 
 #ifdef BETA_VERSION
     markAsBetaVersion();
-    showBetaVersionDialog();
 #endif
 
     m_statsWatcher = new StatsWatcher("Menu triggering", this);
@@ -171,6 +174,7 @@ QApplicationMainWindow::QApplicationMainWindow(QWidget *parent)
 
 QApplicationMainWindow::~QApplicationMainWindow()
 {
+    m_lastActiveMainWindows.removeOne(this);
     writeSettings();
     this->killBill();
     delete m_extensionWorkspace;
@@ -196,14 +200,14 @@ void QApplicationMainWindow::createActions()
     m_openAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenFile));
     m_openAction->setStatusTip(tr("Open one or several existing volume files"));
     m_openAction->setIcon(QIcon(":/images/icons/document-open.svg"));
-    connect(m_openAction, &QAction::triggered, [this] { m_extensionHandler->request(1); });
+    connect(m_openAction, &QAction::triggered, [this] { m_extensionHandler->request(ExtensionHandler::Request::OpenFiles); });
 
     m_openDirAction = new QAction(this);
     m_openDirAction->setText(tr("Open Files from a Directory..."));
     m_openDirAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenDirectory));
     m_openDirAction->setStatusTip(tr("Open an existing DICOM folder"));
     m_openDirAction->setIcon(QIcon(":/images/icons/document-open.svg"));
-    connect(m_openDirAction, &QAction::triggered, [this] { m_extensionHandler->request(6); });
+    connect(m_openDirAction, &QAction::triggered, [this] { m_extensionHandler->request(ExtensionHandler::Request::OpenDirectory); });
 
     m_pacsAction = new QAction(this);
 #ifdef STARVIEWER_LITE
@@ -221,18 +225,18 @@ void QApplicationMainWindow::createActions()
     m_localDatabaseAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenLocalDatabaseStudies));
     m_localDatabaseAction->setStatusTip(tr("Browse local database studies"));
     m_localDatabaseAction->setIcon(QIcon(":/images/icons/database-local.svg"));
-    connect(m_localDatabaseAction, &QAction::triggered, [this] { m_extensionHandler->request(10); });
+    connect(m_localDatabaseAction, &QAction::triggered, [this] { m_extensionHandler->request(ExtensionHandler::Request::LocalDatabase); });
 #endif
     // TODO potser almenys per la versió Lite caldria canviar la icona
     m_pacsAction->setIcon(QIcon(":/images/icons/document-open-remote.svg"));
-    connect(m_pacsAction, &QAction::triggered, [this] { m_extensionHandler->request(7); });
+    connect(m_pacsAction, &QAction::triggered, [this] { m_extensionHandler->request(ExtensionHandler::Request::Pacs); });
 
     m_openDICOMDIRAction = new QAction(this);
     m_openDICOMDIRAction->setText(tr("Open DICOMDIR..."));
     m_openDICOMDIRAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::OpenDICOMDIR));
     m_openDICOMDIRAction->setStatusTip(tr("Open DICOMDIR from CD, DVD, USB flash drive or hard disk"));
     m_openDICOMDIRAction->setIcon(QIcon(":/images/icons/document-open-dicomdir.svg"));
-    connect(m_openDICOMDIRAction, &QAction::triggered, [this] { m_extensionHandler->request(8); });
+    connect(m_openDICOMDIRAction, &QAction::triggered, [this] { m_extensionHandler->request(ExtensionHandler::Request::Dicomdir); });
 
     QStringList extensionsMediatorNames = ExtensionMediatorFactory::instance()->getFactoryIdentifiersList();
     foreach (const QString &name, extensionsMediatorNames)
@@ -349,7 +353,15 @@ void QApplicationMainWindow::createActions()
     m_runDiagnosisTestsAction = new QAction(this);
     m_runDiagnosisTestsAction->setText(tr("&Run Diagnosis Tests"));
     m_runDiagnosisTestsAction->setStatusTip(tr("Run %1 diagnosis tests").arg(ApplicationNameString));
-    connect(m_runDiagnosisTestsAction, SIGNAL(triggered()), SLOT(showDiagnosisTestDialog()));}
+    connect(m_runDiagnosisTestsAction, SIGNAL(triggered()), SLOT(showDiagnosisTestDialog()));
+
+    m_showPatientIdentificationInWindowTitleAction = new QAction(this);
+    m_showPatientIdentificationInWindowTitleAction->setText(tr("Show &patient identification in window title"));
+    m_showPatientIdentificationInWindowTitleAction->setStatusTip(tr("Show patient identification in window title"));
+    m_showPatientIdentificationInWindowTitleAction->setCheckable(true);
+    m_showPatientIdentificationInWindowTitleAction->setChecked(true);
+    connect(m_showPatientIdentificationInWindowTitleAction, &QAction::toggled, this, &QApplicationMainWindow::updateWindowTitle);
+}
 
 void QApplicationMainWindow::maximizeMultipleScreens()
 {
@@ -419,6 +431,7 @@ void QApplicationMainWindow::createMenus()
     m_externalApplicationsMenu = 0;
     createExternalApplicationsMenu();
     connect(ExternalApplicationsManager::instance(), SIGNAL(onApplicationsChanged()), this, SLOT(createExternalApplicationsMenu()));
+    m_toolsMenu->addAction(m_showPatientIdentificationInWindowTitleAction);
 
     // Menú 'window'
     m_windowMenu = menuBar()->addMenu(tr("&Window"));
@@ -503,7 +516,7 @@ void QApplicationMainWindow::createExternalApplicationsMenu()
     while (i.hasNext())
     {
         const ExternalApplication& extApp = i.next();
-        QAction* action = new QAction(extApp.getName(),0); //When added to a QMenu, that menu becomes the parent.
+        QAction* action = new QAction(extApp.getName(), m_externalApplicationsMenu);
         if (position < shortcutVector.size())
         {
             action->setShortcuts(shortcutVector[position]);
@@ -610,7 +623,7 @@ void QApplicationMainWindow::setPatient(Patient *patient)
     m_patient = patient;
     connectPatientVolumesToNotifier(patient);
 
-    this->setWindowTitle(m_patient->getID() + " : " + m_patient->getFullName());
+    updateWindowTitle();
     enableExtensions();
     m_extensionHandler->getContext().setPatient(patient);
     m_extensionHandler->openDefaultExtensions();
@@ -637,21 +650,18 @@ unsigned int QApplicationMainWindow::getCountQApplicationMainWindow()
 
 QList<QApplicationMainWindow*> QApplicationMainWindow::getQApplicationMainWindows()
 {
-    QList<QApplicationMainWindow*> mainApps;
-    foreach (QWidget *widget, qApp->topLevelWidgets())
-    {
-        QApplicationMainWindow *window = qobject_cast<QApplicationMainWindow*>(widget);
-        if (window)
-        {
-            mainApps << window;
-        }
-    }
-    return mainApps;
+    return m_lastActiveMainWindows;
 }
 
 QApplicationMainWindow* QApplicationMainWindow::getActiveApplicationMainWindow()
 {
     return qobject_cast<QApplicationMainWindow*>(QApplication::activeWindow());
+}
+
+QApplicationMainWindow* QApplicationMainWindow::getLastActiveApplicationMainWindow()
+{
+    Q_ASSERT(!m_lastActiveMainWindows.isEmpty());
+    return m_lastActiveMainWindows.last();
 }
 
 ExtensionWorkspace* QApplicationMainWindow::getExtensionWorkspace()
@@ -674,6 +684,33 @@ void QApplicationMainWindow::resizeEvent(QResizeEvent *event)
         updateBetaVersionTextPosition();
     }
     QMainWindow::resizeEvent(event);
+}
+
+void QApplicationMainWindow::showEvent(QShowEvent *event)
+{
+    QMainWindow::showEvent(event);
+
+    // Show the beta warning automatically only the first time the first window is shown
+    static bool betaVersionDialogShown = false;
+
+    if (m_isBetaVersion && !betaVersionDialogShown)
+    {
+        betaVersionDialogShown = true;
+        QTimer::singleShot(100, this, &QApplicationMainWindow::showBetaVersionDialog);  // short delay to ensure that the window is already visible
+    }
+}
+
+bool QApplicationMainWindow::event(QEvent *event)
+{
+    if (event->type() == QEvent::WindowActivate)
+    {
+        // No mutex needed because this always runs in the main thread
+        // Move this window to the end of the list
+        m_lastActiveMainWindows.removeOne(this);
+        m_lastActiveMainWindows.append(this);
+    }
+
+    return QMainWindow::event(event);
 }
 
 void QApplicationMainWindow::about()
@@ -750,6 +787,16 @@ void QApplicationMainWindow::connectPatientVolumesToNotifier(Patient *patient)
     }
 }
 
+void QApplicationMainWindow::viewStudy(const QString &studyInstanceUid)
+{
+    m_extensionHandler->getQueryScreen()->viewStudyFromDatabase(studyInstanceUid);
+}
+
+void QApplicationMainWindow::loadStudy(const QString &studyInstanceUid)
+{
+    m_extensionHandler->getQueryScreen()->loadStudyFromDatabase(studyInstanceUid);
+}
+
 #ifdef STARVIEWER_CE
 void QApplicationMainWindow::showMedicalDeviceInformationDialog()
 {
@@ -783,11 +830,11 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
                 break;
             case StarviewerApplicationCommandLine::RetrieveStudyByUid:
                 INFO_LOG("Received command line argument to retrieve a study by its UID");
-                sendRequestRetrieveStudyByUidToLocalStarviewer(optionValue.second);
+                ExternalStudyRequestMediator::instance()->requestStudyByUid(optionValue.second);
                 break;
             case StarviewerApplicationCommandLine::RetrieveStudyByAccessionNumber:
                 INFO_LOG("Rebut argument de linia de comandes per descarregar un estudi a traves del seu accession number");
-                sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(optionValue.second);
+                ExternalStudyRequestMediator::instance()->requestStudyByAccessionNumber(optionValue.second);
                 break;
             default:
                 INFO_LOG("Argument de linia de comandes invalid");
@@ -796,76 +843,55 @@ void QApplicationMainWindow::newCommandLineOptionsToRun()
     }
 }
 
-void QApplicationMainWindow::sendRequestRetrieveStudyByUidToLocalStarviewer(QString studyInstanceUid)
-{
-    Settings settings;
-    if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool())
-    {
-        // TODO Ugly shortcut for #2643. Major refactoring needed to clean this (see #2764).
-        DicomMask mask;
-        mask.setStudyInstanceUID(studyInstanceUid);
-        QueryScreenSingleton::instance()->getRISRequestManager()->processRISRequest(mask);
-    }
-    else
-    {
-        QMessageBox::information(this, ApplicationNameString,
-                                 tr("Please activate \"Listen to RIS requests\" option in %1 configuration to retrieve studies from SAP.")
-                                 .arg(ApplicationNameString));
-    }
-}
-
-void QApplicationMainWindow::sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber)
-{
-    Settings settings;
-    if (settings.getValue(udg::InputOutputSettings::ListenToRISRequests).toBool())
-    {
-        RISRequestWrapper().sendRequestToLocalStarviewer(accessionNumber);
-    }
-    else
-    {
-        // TODO:S'hauria de fer un missatge més genèric
-        QMessageBox::information(this, ApplicationNameString,
-                                 tr("Please activate \"Listen to RIS requests\" option in %1 configuration to retrieve studies from SAP.")
-                               .arg(ApplicationNameString));
-    }
-}
-
 void QApplicationMainWindow::updateVolumeLoadProgressNotification(int progress)
 {
     m_progressDialog->setValue(progress);
 }
 
+namespace {
+
+QString getLocalePrefix()
+{
+    QString defaultLocale = QLocale().name();
+    return "[" + defaultLocale.left(2).toLower() + "] ";
+}
+
+}
+
 void QApplicationMainWindow::openUserGuide()
 {
-    Settings settings;
-    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
-    QString prefix = defaultLocale.left(2).toUpper();
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_User_guide.pdf";
-    QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
+    QString filePath = QCoreApplication::applicationDirPath() + "/" + getLocalePrefix() + "User guide.pdf";
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 }
 
 void QApplicationMainWindow::openQuickStartGuide()
 {
-    Settings settings;
-    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
-    QString prefix = defaultLocale.left(2).toUpper();
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_Quick_start_guide.pdf";
-    QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
+    QString filePath = QCoreApplication::applicationDirPath() + "/" + getLocalePrefix() + "Quick start guide.pdf";
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 }
 
 void QApplicationMainWindow::openShortcutsGuide()
 {
-    Settings settings;
-    QString defaultLocale = settings.getValue(CoreSettings::LanguageLocale).toString();
-    QString prefix = defaultLocale.left(2).toUpper();
-    QString userGuideFilePath = QCoreApplication::applicationDirPath() + "/" + prefix + "_Starviewer_Shortcuts_guide.pdf";
-    QDesktopServices::openUrl(QUrl::fromLocalFile(userGuideFilePath));
+    QString filePath = QCoreApplication::applicationDirPath() + "/" + getLocalePrefix() + "Shortcuts guide.pdf";
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 }
 
 void QApplicationMainWindow::showDiagnosisTestDialog()
 {
     QDiagnosisTest qDiagnosisTest;
     qDiagnosisTest.execAndRunDiagnosisTest();
+}
+
+void QApplicationMainWindow::updateWindowTitle()
+{
+    if (m_patient && m_showPatientIdentificationInWindowTitleAction->isChecked())
+    {
+        this->setWindowTitle(m_patient->getID() + " : " + m_patient->getFullName());
+    }
+    else
+    {
+        this->setWindowTitle(ApplicationNameString);
+    }
 }
 
 void QApplicationMainWindow::openReleaseNotes()

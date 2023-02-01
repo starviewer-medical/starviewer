@@ -82,7 +82,7 @@ QString CacheTest::getDescription() const
 unsigned int CacheTest::getFreeSpace(const QString &cachePath)
 {
     SystemInformation *system = SystemInformation::newInstance();
-    unsigned int freeSpace = system->getHardDiskFreeSpace(cachePath.left(2));
+    unsigned int freeSpace = system->getHardDiskFreeSpace(cachePath);
     delete system;
 
     return freeSpace;

@@ -21,13 +21,12 @@ SystemRequirements::SystemRequirements()
 {
     m_minimumNumberOfCores = 4;
     m_minimumCoreSpeed = 2100; //2.1GHz
-    m_minimumGPURAM = 256; // Mbytes
+    m_minimumGPURAM = 1024; // Mbytes
     m_minimumGPUOpenGLVersion = "3.2";
     m_minimumOSVersion = "6.1"; // 7
-    m_minimum32bitServicePackVersion = 1; // 7 SP1
-    m_minimum64bitServicePackVersion = 1; // 7 SP1
+    m_minimumServicePackVersion = 1; // 7 SP1
     m_minimumRAM = 4000; // 4Gb
-    m_minimumScreenWidth = 1280; // La mínima amplada que pot tenir starviewer (si s'afageixen controls a la pantalla, s'ha de modificar)
+    m_minimumScreenWidth = 1440;
 
     // Quan s'estableixin quines són les extensions d'openGL que es necessiten per cada cosa, es poden afegir aquí
     //m_minimumOpenGLExtensions << "GL_ARB_flux_capacitor";
@@ -76,19 +75,9 @@ QString SystemRequirements::getMinimumOperatingSystemVersion()
     return m_minimumOSVersion;
 }
 
-unsigned int SystemRequirements::getMinimum32bitOperatingSystemServicePackVersion()
+unsigned int SystemRequirements::getMinimumOperatingSystemServicePackVersion()
 {
-    return m_minimum32bitServicePackVersion;
-}
-
-unsigned int SystemRequirements::getMinimum64bitOperatingSystemServicePackVersion()
-{
-    return m_minimum64bitServicePackVersion;
-}
-
-bool SystemRequirements::doesOperatingSystemNeedToBe64BitArchitecutre()
-{
-    return m_doesOperatingSystemNeedToBe64BitArchitecutre;
+    return m_minimumServicePackVersion;
 }
 
 unsigned int SystemRequirements::getMinimumRAMTotalAmount()

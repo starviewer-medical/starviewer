@@ -603,7 +603,7 @@ DicomMask DicomMask::operator +(const DicomMask &mask)
 
 }
 
-bool DicomMask::isEmpty()
+bool DicomMask::isEmpty() const
 {
     bool empty = m_patientID.isEmpty() && m_patientName.isEmpty() && m_patientBirthMinimum.isEmpty() && m_patientBirthMaximum.isEmpty() && m_patientSex.isEmpty() &&
                  m_patientAge.isEmpty() && m_studyID.isEmpty() && m_studyDateMinimum.isEmpty() && m_studyDateMaximum.isEmpty() && m_studyTimeMinimum.isEmpty() &&

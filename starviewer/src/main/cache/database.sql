@@ -14,17 +14,20 @@ CREATE TABLE DatabaseRevision
 -- IMPORTANT!!! Cal canviar el número de revisió per un de superior cada vegada que es faci un canvi a aquest fitxer i calgui
 -- que la BD s'actualitzi
 
-INSERT INTO DatabaseRevision (Revision) VALUES ('9594');
+INSERT INTO DatabaseRevision (Revision) VALUES ('9597');
 
 CREATE TABLE PACSRetrievedImages
 (
     ID                          INTEGER PRIMARY KEY AUTOINCREMENT,
     AETitle                     TEXT,
     Address                     TEXT,
-    QueryPort                   INTEGER
+    QueryPort                   INTEGER,
+    Type                        TEXT,
+    BaseUri                     TEXT
 );
 
-CREATE UNIQUE INDEX IndexPacsDevice_AETitleAddressQueryPort ON PACSRetrievedImages(AETitle, Address, QueryPort);
+CREATE UNIQUE INDEX IndexPacsDevice_AETitleAddressQueryPortType ON PACSRetrievedImages(AETitle, Address, QueryPort, Type);
+CREATE UNIQUE INDEX IndexPacsDevice_BaseUriType ON PACSRetrievedImages(BaseUri, Type);
 
 CREATE TABLE Patient
 ( 
@@ -40,7 +43,7 @@ CREATE TABLE Study
 (
   InstanceUID                   TEXT PRIMARY KEY,
   PatientID                     TEXT NOT NULL,
-  ID                            TEXT NOT NULL,
+  ID                            TEXT,
   PatientAge                    TEXT,
   PatientWeigth                 REAL,
   PatientHeigth                 REAL,

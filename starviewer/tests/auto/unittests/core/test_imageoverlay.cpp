@@ -8,9 +8,6 @@
 
 #include "imageoverlaytesthelper.h"
 #include "drawerbitmap.h"
-#include "mathtools.h"
-
-#include <gdcmOverlay.h>
 
 #include <vtkImageActor.h>
 #include <vtkImageData.h>
@@ -63,9 +60,6 @@ private slots:
     void operatorEquals_ShouldReturnCorrectResults_data();
     void operatorEquals_ShouldReturnCorrectResults();
 
-    void fromGDCMOverlay_ReturnsExpectedValues_data();
-    void fromGDCMOverlay_ReturnsExpectedValues();
-
     void mergeOverlays_ReturnsExpectedImageOverlay_data();
     void mergeOverlays_ReturnsExpectedImageOverlay();
 
@@ -74,7 +68,6 @@ private slots:
 
 };
 
-Q_DECLARE_METATYPE(gdcm::Overlay)
 Q_DECLARE_METATYPE(ImageOverlay)
 Q_DECLARE_METATYPE(QList<ImageOverlay>)
 Q_DECLARE_METATYPE(DrawerBitmap*)
@@ -291,49 +284,6 @@ void test_ImageOverlay::operatorEquals_ShouldReturnCorrectResults()
     QFETCH(bool, result);
 
     QCOMPARE(overlay1 == overlay2, result);
-}
-
-void test_ImageOverlay::fromGDCMOverlay_ReturnsExpectedValues_data()
-{
-    QTest::addColumn<gdcm::Overlay>("gdcmOverlay");
-    QTest::addColumn<ImageOverlay>("imageOverlay");
-
-    gdcm::Overlay emptyGDCMOverlay;
-    ImageOverlay imageOverlayLikeEmptyGDCMOverlay;
-    imageOverlayLikeEmptyGDCMOverlay.setOrigin(0, 0);
-    QTest::newRow("empty gdcm overlay") << emptyGDCMOverlay << imageOverlayLikeEmptyGDCMOverlay;
-
-    int rows = 5;
-    int columns = 7;
-    short origin[2] = { 22, -12 };
-   
-    const char *gdcmBuffer = new char[rows * columns];
-    
-    gdcm::Overlay overlayWithData;
-    overlayWithData.SetColumns(columns);
-    overlayWithData.SetRows(rows);
-    overlayWithData.SetOrigin(origin);
-    overlayWithData.SetOverlay(gdcmBuffer, rows * columns);
-
-    size_t bufferSize = overlayWithData.GetUnpackBufferLength();
-    unsigned char *imageOverlayBuffer = new unsigned char[bufferSize];
-    overlayWithData.GetUnpackBuffer(reinterpret_cast<char*>(imageOverlayBuffer), bufferSize);
-    
-    ImageOverlay imageOverlay;
-    imageOverlay.setRows(rows);
-    imageOverlay.setColumns(columns);
-    imageOverlay.setOrigin(origin[0], origin[1]);
-    imageOverlay.setData(imageOverlayBuffer);
-
-    QTest::newRow("gdcm overlay with data") << overlayWithData << imageOverlay;
-}
-
-void test_ImageOverlay::fromGDCMOverlay_ReturnsExpectedValues()
-{
-    QFETCH(gdcm::Overlay, gdcmOverlay);
-    QFETCH(ImageOverlay, imageOverlay);
-
-    QVERIFY(ImageOverlayTestHelper::areEqual(ImageOverlay::fromGDCMOverlay(gdcmOverlay), imageOverlay));
 }
 
 void test_ImageOverlay::mergeOverlays_ReturnsExpectedImageOverlay_data()

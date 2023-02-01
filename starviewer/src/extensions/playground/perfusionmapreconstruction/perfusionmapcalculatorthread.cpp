@@ -176,7 +176,6 @@ void PerfusionMapCalculatorThread::runDeltaRImage()
     int slice;
     QVector<signed int> timeseries(tend);
     double meanbl;
-    double min;
     //std::ofstream fout("rcbv.dat", ios::out);
     double value;
 
@@ -207,7 +206,7 @@ void PerfusionMapCalculatorThread::runDeltaRImage()
             for (i=iinit;i<iend;i++)
             {
                 index[0]=i;
-                min=10e6;
+
                 //if(m_checkImage->GetPixel(indexVoxel))
                 if(boolIter.Get())
                 {

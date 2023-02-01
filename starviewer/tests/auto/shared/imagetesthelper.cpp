@@ -23,26 +23,26 @@ Image* ImageTestHelper::createImageByUID(QString SOPInstanceUID)
 Image *ImageTestHelper::createImageWithSexAndHeightAndWeight(QString sex, double height, int weight)
 {
     Patient *patient = PatientTestHelper::create(1, 1, 1);
-    Study *study = patient->getStudies().first();
-    Series *series = study->getSeries().first();
+    Study *study = patient->getStudies().constFirst();
+    Series *series = study->getSeries().constFirst();
 
     patient->setSex(sex);
     study->setHeight(height);
     study->setWeight(weight);
 
-    return series->getImages().first();
+    return series->getImages().constFirst();
 }
 
 Image* ImageTestHelper::createImageWithHeightAndWeight(double height, int weight)
 {
     Patient *patient = PatientTestHelper::create(1, 1, 1);
-    Study *study = patient->getStudies().first();
-    Series *series = study->getSeries().first();
+    Study *study = patient->getStudies().constFirst();
+    Series *series = study->getSeries().constFirst();
 
     study->setHeight(height);
     study->setWeight(weight);
 
-    return series->getImages().first();
+    return series->getImages().constFirst();
 }
 
 void ImageTestHelper::cleanUp(Image *image)

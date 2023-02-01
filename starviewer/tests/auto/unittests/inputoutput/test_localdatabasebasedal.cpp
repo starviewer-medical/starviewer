@@ -1,3 +1,8 @@
+/*@
+    "name": "test_LocalDatabaseBaseDAL",
+    "requirements": ["archive.local_storage"]
+ */
+
 #include "autotest.h"
 #include "localdatabasebasedal.h"
 

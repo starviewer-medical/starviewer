@@ -16,11 +16,18 @@
 
 #include "diagnosistest.h"
 
+#include <QThread>
+
 namespace udg {
 
 RunDiagnosisTest::RunDiagnosisTest(QList<DiagnosisTest *> diagnosisTestsToRun)
 {
     m_diagnosisTestsToRun = diagnosisTestsToRun;
+}
+
+RunDiagnosisTest::~RunDiagnosisTest()
+{
+    qDeleteAll(m_diagnosisTestsToRun);
 }
 
 QList<QPair<DiagnosisTest *, DiagnosisTestResult> > RunDiagnosisTest::getRunTests()
@@ -39,6 +46,11 @@ void RunDiagnosisTest::run()
 
     foreach(DiagnosisTest *diagnosisTest, m_diagnosisTestsToRun)
     {
+        if (QThread::currentThread()->isInterruptionRequested())
+        {
+            return;
+        }
+
         emit runningDiagnosisTest(diagnosisTest);
 
         DiagnosisTestResult diagnosisTestResult = diagnosisTest->run();

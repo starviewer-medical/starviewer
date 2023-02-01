@@ -2,15 +2,138 @@
 <releasenotes version="1">
 
  <release magnitude="major">
-  <version>1.1.0</version>
-  <date>YYYY-MM-DD</date>
+  <version>2.0.0</version>
+  <date>202x-yy-zz</date>
   <changes>
+   <nw>
+    <d>Anotacions personalitzables per cada modalitat.</d>
+    <t>2153</t>
+    <t>1774</t>
+   </nw>
+   <nw>
+    <d>Implementació de tota la família de protocols WADO (WADO-URI, WADO-RS, QIDO-RS i STOW-RS).</d>
+    <t>2866</t>
+   </nw>
+   <nw>
+    <d>S'afegeix una nova opció de línia d'ordres per descarregar un estudi a partir d'un URL especial.</d>
+    <t>3028</t>
+   </nw>
+   <im>
+    <d>Finestres de consulta independents per cada finestra principal.</d>
+    <t>2734</t>
+   </im>
+   <im>
+    <d>Nous colors per les eines de mesura i dibuix i les línies de referència que en permeten la visibilitat fins i tot en pantalles en blanc i negre mal
+       configurades.</d>
+    <t>3031</t>
+   </im>
+   <im>
+    <d>Millores internes.</d>
+    <t>2764</t>
+    <t>2920</t>
+    <t>2983</t>
+    <t>3032</t>
+   </im>
+   <fx>
+    <d>S'ha solucionat un problema de rendiment a l'hora de llegir overlays en imatges multiframe.</d>
+    <t>2154</t>
+   </fx>
+   <fx>
+    <d>S'ha solucionat un problema de visualització d'overlays en imatges multiframe.</d>
+    <t>2155</t>
+   </fx>
+   <fx>
+    <d>S'ha solucionat un problema amb la posició dels overlays sobre la imatge.</d>
+    <t>2986</t>
+   </fx>
+   <fx>
+    <d>S'ha resolt un problema pel qual la funcionalitat d'obrir fitxers d'un directori podia fallar si el directori contenia algun fitxer que no fos DICOM ni
+       imatge estàndard.</d>
+    <t>2910</t>
+   </fx>
+   <fx>
+    <d>S'ha arreglat un problema que impedia obrir el menú de seleccio d'estudis en un visor mentre estava carregant una sèrie.</d>
+    <t>2978</t>
+   </fx>
+   <fx>
+    <d>S'ha resolt un problema amb la propagació del desplaçament amb fases i reconstruccions.</d>
+    <t>3010</t>
+   </fx>
+   <fx>
+    <d>S'ha solucionat un problema amb les dreceres per canviar la projecció de tots els visors alhora.</d>
+    <t>3011</t>
+   </fx>
+   <fx>
+    <d>S'ha arreglat un problema pel qual no es podien obrir els manuals des del menú d'ajuda si no s'havia canviat mai l'idioma de l'Starviewer.</d>
+    <t>3013</t>
+   </fx>
+   <fx>
+    <d>Altres correccions menors.</d>
+    <t>2911</t>
+    <t>2984</t>
+    <t>3000</t>
+    <t>3033</t>
+    <t>3034</t>
+    <t>3035</t>
+   </fx>
+  </changes>
+ </release>
+
+ <release magnitude="minor">
+  <version>1.1.1</version>
+  <date>2021-07-22</date>
+  <changes>
+   <nw>
+    <d>Es pot canviar el pla de reconstrucció (axial, sagital, coronal) de tots els visors alhora amb doble clic o Shift+clic al botó corresponent o bé amb les
+       dreceres Ctrl+Shift+1, 2 o 3.</d>
+    <t>2111</t>
+   </nw>
+   <nw>
+    <d>Es pot configurar la divisió entre l'estudi actual i el previ.</d>
+    <t>2117</t>
+   </nw>
+   <im>
+    <d>No es modifica la posició d'altres visors quan es canvia la projecció d'un visor, encara que estigui la sincronització automàtica activada.</d>
+    <t>2962</t>
+   </im>
+   <fx>
+    <d>S'ha solucionat un problema que feia que aplicant un reset a un visor coronal o sagital amb la sincronització automàtica activada l'axial tornés al
+       primer tall.</d>
+    <t>2045</t>
+   </fx>
+   <fx>
+    <d>S'han resolt alguns problemes d'ordenació d'imatges en sèries de RM lumbars i MIPs rotacionals.</d>
+    <t>2968</t>
+    <t>2970</t>
+    <t>2971</t>
+   </fx>
+   <fx>
+    <d>Diverses correccions menors.</d>
+   </fx>
+   <pr>
+    <d>La funcionalitat d'obrir fitxers d'un directori pot fallar si el directori conté algun fitxer que no sigui DICOM ni imatge estàndard.</d>
+    <t>2910</t>
+   </pr>
+  </changes>
+ </release>
+
+ <release magnitude="major">
+  <version>1.1.0</version>
+  <date>2021-04-09</date>
+  <changes>
+   <nw>
+    <d>Es pot crear hanging protocols de fusió.</d>
+    <t>2086</t>
+   </nw>
    <nw>
     <d>Es poden obrir PDFs encapsulats amb el visor de PDF per defecte del sistema.</d>
     <t>2121</t>
    </nw>
    <nw>
     <d>Noves icones.</d>
+    <t>1594</t>
+    <t>1595</t>
+    <t>2735</t>
    </nw>
    <nw>
     <d>Es poden ampliar els texts i les icones de tota l'aplicació en pantalles grans. El nivell d'ampliació és configurable.</d>
@@ -39,7 +162,8 @@
     <t>1247</t>
    </nw>
    <nw>
-    <d>Nova interfície per definir el gruix de tall en un menú desplegable per poder ser més ampla i per poder-lo activar i desactivar amb un sol clic.</d>
+    <d>Nova interfície per definir el gruix de tall per poder ser més ampla i per poder-lo activar i desactivar amb un sol clic.</d>
+    <t>2896</t>
    </nw>
    <nw>
     <d>El gruix de tall es defineix en mm en lloc de talls.</d>
@@ -53,7 +177,8 @@
     <t>2138</t>
    </nw>
    <nw>
-    <d>Nova escala de color disponible.</d>
+    <d>Noves escales de color disponibles.</d>
+    <t>2859</t>
    </nw>
    <nw>
     <d>En imatges NM es mostren els counts totals i els counts per mm² de les ROIs.</d>
@@ -63,10 +188,42 @@
     <d>Nova distribució de fusió MPR R.</d>
    </nw>
    <nw>
+    <d>Nova eina per dibuixar fletxes.</d>
+    <t>1614</t>
+   </nw>
+   <nw>
     <d>Es canvia l'aparença de les línies de referència.</d>
    </nw>
    <nw>
     <d>Es canvia lleugerament l'aparença de l'angle obert.</d>
+   </nw>
+   <nw>
+    <d>L'angle obert passa a anomenar-se «angle de Cobb».</d>
+    <t>1616</t>
+   </nw>
+   <nw>
+    <d>Nou menú per amagar la informació del pacient a la barra de títol.</d>
+    <t>2864</t>
+   </nw>
+   <nw>
+    <d>Nova opció de configuració per tenir les anotacions amagades per defecte.</d>
+    <t>2727</t>
+   </nw>
+   <nw>
+    <d>Nova opció de configuració per ignorar les sèries CT de correcció d'atenuació en les distribucions automàtiques.</d>
+    <t>2728</t>
+   </nw>
+   <nw>
+    <d>Les pestanyes es mostren a dalt perquè es vegi més fàcilment quan n'hi ha més d'una.</d>
+    <t>2733</t>
+   </nw>
+   <nw>
+    <d>Es pot cercar estudis per descripció de l'estudi al PACS.</d>
+    <t>2862</t>
+   </nw>
+   <nw>
+    <d>Diversos canvis a la interfície d'usuari del visor 3D.</d>
+    <t>2825</t>
    </nw>
    <im>
     <d>L'eina de canvi de tall permet canviar talls o fases segons la direcció del desplaçament.</d>
@@ -89,6 +246,10 @@
     <t>741</t>
     <t>2028</t>
     <t>2700</t>
+   </im>
+   <im>
+    <d>Els hanging protocols ara admeten diversos nous atributs predeterminats i qualsevol atribut especificat amb els valors de grup i element.</d>
+    <t>2086</t>
    </im>
    <im>
     <d>Es mostren traduïts alguns textos que fins ara sortien en anglès.</d>
@@ -124,9 +285,33 @@
     <t>2752</t>
    </im>
    <im>
+    <d>Millora de la gestió d'extensions quan s'obren estudis, permetent entre altres coses que si l'usuari està visualitzant un estudi amb PDFs encapsulats i
+       llavors obre un estudi previ amb imatges s'obri automàticament el visor 2D.</d>
+    <t>2732</t>
+   </im>
+   <im>
+    <d>Es mostra un avís quan l'edat del pacient guardada a l'estudi és diferent de la calculada.</d>
+    <t>2870</t>
+   </im>
+   <im>
     <d>Diverses millores internes.</d>
+    <t>25</t>
     <t>261</t>
     <t>1958</t>
+    <t>1371</t>
+    <t>1433</t>
+    <t>1978</t>
+    <t>2132</t>
+    <t>2140</t>
+    <t>2144</t>
+    <t>2620</t>
+    <t>2764</t>
+    <t>2769</t>
+    <t>2822</t>
+    <t>2823</t>
+    <t>2844</t>
+    <t>2855</t>
+    <t>2879</t>
    </im>
    <fx>
     <d>Se soluciona un problema que feia algunes sèries es dividissin en moltes parts segons l'ordre en què es llegissin els fitxers.</d>
@@ -137,9 +322,51 @@
     <t>2009</t>
    </fx>
    <fx>
+    <d>Se soluciona un problema que feia que les línies de referència no s'actualitzessin en alguns casos.</d>
+    <t>2145</t>
+   </fx>
+   <fx>
+    <d>Se soluciona un problema que no permetia avançar per les fases amb + i - en sèries que només tenen fases.</d>
+    <t>1499</t>
+   </fx>
+   <fx>
+    <d>Es pot propagar el cremat des d'un visor fusionat als altres.</d>
+    <t>2151</t>
+   </fx>
+   <fx>
+    <d>S'ha solucionat un problema que impedia que es desessin estudis que no tenen l'atribut DICOM Study ID (0020,0010) sense donar cap error.</d>
+    <t>2757</t>
+   </fx>
+   <fx>
+    <d>S'ha corregit un error al visor 3D que provocava que el programa es tanqués inesperadament quan s'obrien alguns estudis de PET sense correcció
+       d'atenuació.</d>
+    <t>2824</t>
+   </fx>
+   <fx>
+    <d>S'ha solucionat un problema que feia que no es pogués ajustar la brillantor i el contrast al visor 3D quan hi havia un MIP.</d>
+    <t>1104</t>
+   </fx>
+   <fx>
     <d>Se soluciona un problema a Mac que feia que si es mostrava una finestra de missatge a l'inici quedés amagada darrere de la pantalla de presentació.</d>
     <t>2127</t>
    </fx>
+   <fx>
+    <d>Diverses correccions menors.</d>
+    <t>1897</t>
+    <t>2125</t>
+    <t>2126</t>
+    <t>2772</t>
+    <t>2858</t>
+    <t>2860</t>
+    <t>2909</t>
+   </fx>
+   <rm>
+    <d>S'ha eliminat algunes opcions de visualització en 3D que havien quedat obsoletes: textures 2D, textures 3D, obscurances, contorns.</d>
+   </rm>
+   <pr>
+    <d>La funcionalitat d'obrir fitxers d'un directori pot fallar si el directori conté algun fitxer que no sigui DICOM ni imatge estàndard.</d>
+    <t>2910</t>
+   </pr>
   </changes>
  </release>
 

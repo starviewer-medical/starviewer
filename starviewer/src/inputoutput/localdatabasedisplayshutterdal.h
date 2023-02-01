@@ -34,10 +34,6 @@ public:
     /// Inserts to the database the given display shutter that corresponds to the given image. Returns true if successful and false otherwise.
     bool insert(const DisplayShutter &shutter, const Image *shuttersImage);
 
-    /// Updates in the database the display shutters that belong to the given image, which are the ones given in the list.
-    /// The existing shutters are deleted and the given ones are inserted. Returns true if successful and false otherwise.
-    bool update(const QList<DisplayShutter> &shuttersList, const Image *shuttersImage);
-
     /// Deletes from the database the display shutters that match the given mask. Returns true if successful and false otherwise.
     bool del(const DicomMask &mask);
 

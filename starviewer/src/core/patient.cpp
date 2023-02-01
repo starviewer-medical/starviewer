@@ -180,26 +180,25 @@ QString Patient::getSex() const
 
 bool Patient::addStudy(Study *study)
 {
-    bool ok = true;
-    QString uid = study->getInstanceUID();
+    const QString &uid = study->getInstanceUID();
+
     if (uid.isEmpty())
     {
-        ok = false;
-        DEBUG_LOG("L'uid de l'estudi està buit! No el podem insertar per inconsistent");
+        ERROR_LOG("Study has empty Study Instance UID. It can't be added to the patient.");
+        return false;
     }
     else if (this->studyExists(uid))
     {
-        ok = false;
-        DEBUG_LOG("Ja existeix un estudi amb aquest mateix UID:: " + uid);
+        DEBUG_LOG(QString("There is already another study with the same Study Instance UID: %1. This one won't be added to the patient.").arg(uid));
+        return false;
     }
     else
     {
         study->setParentPatient(this);
         this->insertStudy(study);
         emit studyAdded(study);
+        return true;
     }
-
-    return ok;
 }
 
 void Patient::removeStudy(const QString &uid)
@@ -365,16 +364,20 @@ void Patient::patientFusionLogMessage(const Patient &patient)
     switch (compareTo(&patient))
     {
         case SamePatients:
-            INFO_LOG("Fusionem dos pacients iguals: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
+            INFO_LOG("Merging equal patients.");
+            DEBUG_LOG(">>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
         case SamePatientIDsDifferentPatientNames:
-            INFO_LOG("Fusionem dos pacients amb IDs iguals i noms diferents: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
+            INFO_LOG("Merging patients with same ID but different name.");
+            DEBUG_LOG(">>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
         case SamePatientNamesDifferentPatientIDs:
-            INFO_LOG("Fusionem dos pacients amb noms iguals i IDs diferents: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
+            INFO_LOG("Merging patients with same name but different ID.");
+            DEBUG_LOG(">>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
         case DifferentPatients:
-            INFO_LOG("Fusionem dos pacients diferents: >>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
+            INFO_LOG("Merging different patients.");
+            DEBUG_LOG(">>" + m_patientID + ":" + m_fullName + " >>" + patient.m_patientID + ":" + patient.m_fullName);
             break;
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>udg::QOperationStateScreenBase</class>
- <widget class="QDialog" name="udg::QOperationStateScreenBase">
+ <widget class="QWidget" name="udg::QOperationStateScreenBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -35,7 +35,7 @@
       <string>Cancel All</string>
      </property>
      <property name="icon">
-      <iconset resource="../main/main.qrc">
+      <iconset resource="../main/themes/starviewer/starviewer.qrc">
        <normaloff>:/images/icons/process-stop.svg</normaloff>:/images/icons/process-stop.svg</iconset>
      </property>
     </widget>
@@ -107,12 +107,7 @@
      </column>
      <column>
       <property name="text">
-       <string>PACSJobID</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string/>
+       <string>Result</string>
       </property>
      </column>
     </widget>
@@ -123,7 +118,7 @@
       <string>Cancel Selected</string>
      </property>
      <property name="icon">
-      <iconset resource="../main/main.qrc">
+      <iconset resource="../main/themes/starviewer/starviewer.qrc">
        <normaloff>:/images/icons/process-stop.svg</normaloff>:/images/icons/process-stop.svg</iconset>
      </property>
     </widget>
@@ -140,7 +135,7 @@
       <string>Clear</string>
      </property>
      <property name="icon">
-      <iconset resource="../main/main.qrc">
+      <iconset resource="../main/themes/starviewer/starviewer.qrc">
        <normaloff>:/images/icons/edit-clear.svg</normaloff>:/images/icons/edit-clear.svg</iconset>
      </property>
     </widget>
@@ -165,8 +160,7 @@
   <tabstop>m_treeRetrieveStudy</tabstop>
  </tabstops>
  <resources>
-  <include location="../main/main.qrc"/>
-  <include location="../main/main.qrc"/>
+  <include location="../main/themes/starviewer/starviewer.qrc"/>
  </resources>
  <connections/>
 </ui>

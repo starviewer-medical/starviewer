@@ -214,7 +214,7 @@ void QViewerCINEController::handleCINETimerEvent()
         }
     }
     // Si estem a l'inici de l'interval
-    else if ((currentImageIndex == m_firstSliceInterval))
+    else if (currentImageIndex == m_firstSliceInterval)
     {
         // Si tenim algun tipus de repeat activat
         if (m_loopEnabled /*|| m_boomerangEnabled*/)

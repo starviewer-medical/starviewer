@@ -290,7 +290,6 @@ void Q3DViewerExtension::createConnections()
 {
     // Actualització del mètode de rendering
     connect(m_blendModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateUiForBlendMode);
-    connect(m_renderModeComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Q3DViewerExtension::updateUiForBlendMode);
 
     enableAutoUpdate();
 
@@ -336,8 +335,20 @@ void Q3DViewerExtension::setScalarRange(double min, double max)
     int maximum = qRound(max);
     m_gradientEditor->setMinimum(minimum);
     m_gradientEditor->setMaximum(maximum);
-    m_editorByValues->setMinimum(minimum);
-    m_editorByValues->setMaximum(maximum);
+
+    // Workaround for #2824: the editor by values doesn't support such small ranges
+    if (static_cast<int>(min) == static_cast<int>(max))
+    {
+        m_editorsStackedWidget->setCurrentIndex(0);
+        m_switchEditorPushButton->setEnabled(false);
+    }
+    else
+    {
+        m_switchEditorPushButton->setEnabled(true);
+        m_editorByValues->setMinimum(minimum);
+        m_editorByValues->setMaximum(maximum);
+    }
+
     m_isoValueSpinBox->setMinimum(minimum);
     m_isoValueSpinBox->setMaximum(maximum);
 
@@ -432,7 +443,7 @@ void Q3DViewerExtension::saveClut()
 
     if (saveDialog.exec() == QDialog::Accepted)
     {
-        QString transferFunctionFileName = saveDialog.selectedFiles().first();
+        QString transferFunctionFileName = saveDialog.selectedFiles().constFirst();
         QTransferFunctionEditor *currentEditor = qobject_cast<QTransferFunctionEditor*>(m_editorsStackedWidget->currentWidget());
         TransferFunctionIO::toFile(transferFunctionFileName, currentEditor->getTransferFunction());
 
@@ -459,7 +470,7 @@ void Q3DViewerExtension::applyEditorClut()
 
 void Q3DViewerExtension::toggleClutEditor()
 {
-    if (m_editorSplitter->sizes()[1] == 0)
+    if (m_editorSplitter->sizes().at(1) == 0)
     {
         // Show
         m_editorSplitter->setSizes(QList<int>() << 1 << 1);
@@ -480,7 +491,7 @@ void Q3DViewerExtension::hideClutEditor()
 
 void Q3DViewerExtension::setCustomStyleButtonStateBySplitter()
 {
-    m_customStyleToolButton->setChecked(m_editorSplitter->sizes()[1] != 0);
+    m_customStyleToolButton->setChecked(m_editorSplitter->sizes().at(1) != 0);
 }
 
 void Q3DViewerExtension::applyRenderingStyle(const QModelIndex &index)
@@ -534,9 +545,7 @@ void Q3DViewerExtension::updateUiForBlendMode(int blendModeIndex)
     m_shadingGroupBox->setVisible(blendMode == Q3DViewer::BlendMode::Composite);
     m_rayCastingOptionsWidget->setVisible(blendMode != Q3DViewer::BlendMode::Isosurface);
     m_isosurfaceOptionsWidget->setVisible(blendMode == Q3DViewer::BlendMode::Isosurface);
-    m_transferFunctionsWidget->setVisible(blendMode == Q3DViewer::BlendMode::Composite ||
-                                          blendMode == Q3DViewer::BlendMode::MaximumIntensity ||
-                                          blendMode == Q3DViewer::BlendMode::MinimumIntensity);
+    m_transferFunctionsWidget->setVisible(blendMode != Q3DViewer::BlendMode::Isosurface);
     m_noTransferFunctionsWidget->setVisible(m_transferFunctionsWidget->isHidden());
 }
 

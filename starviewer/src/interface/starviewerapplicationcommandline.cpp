@@ -17,12 +17,15 @@
 #include "logging.h"
 #include "starviewerapplication.h"
 
+#include <QRegularExpression>
+
 namespace udg {
 
 namespace {
 
 const QString StudyInstanceUidOption("studyinstanceuid");
 const QString AccessionNumberOption("accessionnumber");
+const QString UrlOption("url");
 
 }
 
@@ -33,14 +36,18 @@ StarviewerApplicationCommandLine::StarviewerApplicationCommandLine(QObject *pare
     m_parser.setApplicationDescription(ApplicationNameString);
 
 #ifndef STARVIEWER_LITE
+    // Starviewer Lite can't connect to PACS so it won't have these options
     QCommandLineOption studyInstanceUidOption(StudyInstanceUidOption, tr("Retrieve the study with the given Study Instance UID from the query default PACS."),
                                               "studyInstanceUid");
     m_parser.addOption(studyInstanceUidOption);
 
-    // Starviewer Lite can't connect to PACS so it won't have these options
     QCommandLineOption accessionNumberOption(AccessionNumberOption, tr("Retrieve the study with the given Accession Number from the query default PACS."),
                                              "accessionNumber");
     m_parser.addOption(accessionNumberOption);
+
+    QCommandLineOption urlOption(UrlOption, tr("Retrieve the study specified by the given URL from the query default PACS. "
+                                               "Read the help for the supported URL formats."), "url");
+    m_parser.addOption(urlOption);
 #endif
 }
 
@@ -51,40 +58,117 @@ const QCommandLineParser& StarviewerApplicationCommandLine::getStarviewerApplica
 
 bool StarviewerApplicationCommandLine::parse(QStringList arguments, QString &errorText)
 {
-    if (m_parser.parse(arguments))
-    {
-        return true;
-    }
-    else
-    {
-        errorText = m_parser.errorText();
-        return false;
-    }
-}
+    bool ok;
 
-bool StarviewerApplicationCommandLine::parseAndRun(QStringList arguments, QString &errorText)
-{
-    if (m_parser.parse(arguments))
+    if ((ok = m_parser.parse(arguments)))   // assign and check in this and other ifs below
     {
+        auto parseStudyInstanceUid = [&](const QString &studyInstanceUid) -> bool {
+            static const QRegularExpression StudyInstanceUidRegex("^[0-9.]{1,64}$");
+            QRegularExpressionMatch match = StudyInstanceUidRegex.match(studyInstanceUid);
+
+            if (match.hasMatch())
+            {
+                return true;
+            }
+            else
+            {
+                errorText = tr("Invalid Study Instance UID: “%1”").arg(studyInstanceUid);
+                return false;
+            }
+        };
+
+        auto parseAccessionNumber = [&](const QString &accessionNumber) -> bool {
+            static const QRegularExpression AccessionNumberRegex(R"(^[^\\]{1,16}$)");
+            QRegularExpressionMatch match = AccessionNumberRegex.match(accessionNumber);
+
+            if (match.hasMatch())
+            {
+                return true;
+            }
+            else
+            {
+                errorText = tr("Invalid Accession Number: “%1”").arg(accessionNumber);
+                return false;
+            }
+        };
+
         if (m_parser.isSet(StudyInstanceUidOption))
         {
-            addOptionToListToProcess(qMakePair(RetrieveStudyByUid, m_parser.value(StudyInstanceUidOption)));
+            QString studyInstanceUid = m_parser.value(StudyInstanceUidOption);
+
+            if ((ok = parseStudyInstanceUid(studyInstanceUid)))
+            {
+                addOptionToListToProcess(qMakePair(RetrieveStudyByUid, studyInstanceUid));
+            }
         }
         else if (m_parser.isSet(AccessionNumberOption))
         {
-            addOptionToListToProcess(qMakePair(RetrieveStudyByAccessionNumber, m_parser.value(AccessionNumberOption)));
+            QString accessionNumber = m_parser.value(AccessionNumberOption);
+
+            if ((ok = parseAccessionNumber(accessionNumber)))
+            {
+                addOptionToListToProcess(qMakePair(RetrieveStudyByAccessionNumber, accessionNumber));
+            }
+        }
+        else if (m_parser.isSet(UrlOption))
+        {
+            static const QRegularExpression StudyInstanceUidUrlRegex("^starviewer://studyinstanceuid/([^/?#]+)/?(?:[?#]|$)");
+            static const QRegularExpression AccessionNumberUrlRegex("^starviewer://accessionnumber/([^/?#]+)/?(?:[?#]|$)");
+            QString url = m_parser.value(UrlOption);
+            QRegularExpressionMatch studyInstanceUidMatch = StudyInstanceUidUrlRegex.match(url);
+            QRegularExpressionMatch accessionNumberMatch = AccessionNumberUrlRegex.match(url);
+
+            if (studyInstanceUidMatch.hasMatch())
+            {
+                QString studyInstanceUid = studyInstanceUidMatch.captured(1);
+
+                if ((ok = parseStudyInstanceUid(studyInstanceUid)))
+                {
+                    addOptionToListToProcess(qMakePair(RetrieveStudyByUid, studyInstanceUid));
+                }
+            }
+            else if (accessionNumberMatch.hasMatch())
+            {
+                QString accessionNumber = accessionNumberMatch.captured(1);
+
+                if ((ok = parseAccessionNumber(accessionNumber)))
+                {
+                    addOptionToListToProcess(qMakePair(RetrieveStudyByAccessionNumber, accessionNumber));
+                }
+            }
+            else
+            {
+                errorText = tr("Invalid URL: “%1”").arg(url);
+                ok = false;
+            }
         }
         else // no option
         {
             addOptionToListToProcess(qMakePair(OpenBlankWindow, QString()));
         }
-
-        emit newOptionsToRun();
-        return true;
     }
     else
     {
         errorText = m_parser.errorText();
+    }
+
+    return ok;
+}
+
+void StarviewerApplicationCommandLine::runParsedArguments()
+{
+    emit newOptionsToRun();
+}
+
+bool StarviewerApplicationCommandLine::parseAndRun(QStringList arguments, QString &errorText)
+{
+    if (parse(arguments, errorText))
+    {
+        runParsedArguments();
+        return true;
+    }
+    else
+    {
         return false;
     }
 }

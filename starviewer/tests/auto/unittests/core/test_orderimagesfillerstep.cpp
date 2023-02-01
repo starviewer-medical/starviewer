@@ -7,8 +7,10 @@
 #include "orderimagesfillerstep.h"
 
 #include "image.h"
-#include "patient.h"
 #include "patientfillerinput.h"
+#include "series.h"
+
+#include <random>
 
 using namespace udg;
 
@@ -129,7 +131,9 @@ QList<QList<Image*>> imagesOneByOne(const QList<QList<Image*>> &allImages)
 
 Series* shuffleAndCreateSeries(QList<QList<Image*>> &arrivingImages)
 {
-    std::random_shuffle(arrivingImages.begin(), arrivingImages.end());
+    std::random_device rng;
+    std::minstd_rand prng(rng());
+    std::shuffle(arrivingImages.begin(), arrivingImages.end(), prng);
 
     Series *series = new Series();
 
@@ -164,6 +168,9 @@ private slots:
 
     void lesserAbstractValues_ShouldReturnExpectedValue_data();
     void lesserAbstractValues_ShouldReturnExpectedValue();
+
+    void autodetectStacksAndSort_ShouldUpdateOrderAsExpected_data();
+    void autodetectStacksAndSort_ShouldUpdateOrderAsExpected();
 
 private:
 
@@ -370,6 +377,86 @@ void test_OrderImagesFillerStep::lesserAbstractValues_ShouldReturnExpectedValue(
     delete image2;
 }
 
+void test_OrderImagesFillerStep::autodetectStacksAndSort_ShouldUpdateOrderAsExpected_data()
+{
+    QTest::addColumn<QList<Image*>>("images");
+    QTest::addColumn<QList<Image*>>("expectedOutputOrder");
+
+    {
+        QTest::newRow("empty list") << QList<Image*>{} << QList<Image*>{};
+    }
+
+    {
+        QList<Image*> images{new Image(), new Image(), new Image()};
+        QTest::newRow("less than 4 images") << images << images;
+    }
+
+    {
+        QList<Image*> images{ImageBuilder().position(Vector3(0, 0, 0)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 1)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 2)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 3)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get()};
+        QTest::newRow("one stack regular spacing (||||)") << images << images;
+    }
+
+    {
+        QList<Image*> images{ImageBuilder().position(Vector3(0, 0, 0)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 1)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 3)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 4)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get()};
+        QTest::newRow("one stack irregular spacing (|| ||)") << images << images;
+    }
+
+    {
+        QList<Image*> images{ImageBuilder().position(Vector3(0, 0, 0)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 1)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 2)).orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                                                                   QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 3)).orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                                                                   QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get()};
+        QTest::newRow("two separated stacks (||//)") << images << images;
+    }
+
+    {
+        QList<Image*> images{ImageBuilder().position(Vector3(0, 0, 0)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 1)).orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                                                                   QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 2)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 3)).orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                                                                   QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get()};
+        QList<Image*> expectedOutputOrder{images[0], images[2], images[1], images[3]};
+        QTest::newRow("two intersecting stacks (|/|/)") << images << expectedOutputOrder;
+    }
+
+    {
+        QList<Image*> images{ImageBuilder().position(Vector3(0, 0, 0)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 1)).orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                                                                   QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 2)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 3)).orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                                                                   QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 5)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get(),
+                             ImageBuilder().position(Vector3(0, 0, 6)).orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).get()};
+        QList<Image*> expectedOutputOrder{images[0], images[2], images[1], images[3], images[4], images[5]};
+        QTest::newRow("three stacks, two with same orientation (|/|/ ||)") << images << expectedOutputOrder;
+    }
+}
+
+void test_OrderImagesFillerStep::autodetectStacksAndSort_ShouldUpdateOrderAsExpected()
+{
+    QFETCH(QList<Image*>, images);
+    QFETCH(QList<Image*>, expectedOutputOrder);
+
+    OrderImagesFillerStep::autodetectStacksAndSort(images);
+
+    QCOMPARE(images, expectedOutputOrder);
+
+    foreach (Image *image, images)
+    {
+        delete image;
+    }
+}
+
 void test_OrderImagesFillerStep::setupData()
 {
     QTest::addColumn<QList<QList<Image*>>>("arrivingImages");       // for each processed file (outer list), list of generated images (inner list)
@@ -377,6 +464,9 @@ void test_OrderImagesFillerStep::setupData()
     QTest::addColumn<QList<QList<Image*>>>("sortedImages");         // for each series (outer list), list of sorted images (inner list)
     QTest::addColumn<QList<QList<int>>>("orderNumbers");            // for each series (outer list) and image in it (inner list), order number in volume
     QTest::addColumn<QList<QList<bool>>>("canBeSpatiallySorted");   // for each series (outer list) and volume (inner), expected result of canBeSpatiallySorted
+
+    std::random_device rng;
+    std::minstd_rand prng(rng());
 
     // Note: image attributes are set in a clever way so that only the expected sorting criteria produce the correct order, thus if images are accidentally
     // sorted with different criteria they will be in a completely different and wrong order.
@@ -645,7 +735,7 @@ void test_OrderImagesFillerStep::setupData()
                                            ImageBuilder().uid(0).frame(4).position(Vector3(10, 0, 1)).size(10, 10).get(),
                                            ImageBuilder().uid(0).frame(5).position(Vector3(0, 0, 2)).size(10, 10).get()}};
         QList<QList<Image*>> arrivingImages(sortedImages);
-        std::random_shuffle(arrivingImages[0].begin(), arrivingImages[0].end());
+        std::shuffle(arrivingImages[0].begin(), arrivingImages[0].end(), prng);
         Series *series = new Series();
 
         foreach (const QList<Image*> &images, arrivingImages)
@@ -688,7 +778,7 @@ void test_OrderImagesFillerStep::setupData()
 
         QList<Image*> multiframeImages;
         std::copy(it, images.end(), std::back_inserter(multiframeImages));
-        std::random_shuffle(multiframeImages.begin(), multiframeImages.end());
+        std::shuffle(multiframeImages.begin(), multiframeImages.end(), prng);
         arrivingImages.append(multiframeImages);
         Series *series = shuffleAndCreateSeries(arrivingImages);
         QList<Series*> seriesList{series};
@@ -744,9 +834,9 @@ void test_OrderImagesFillerStep::setupData()
         }
 
         QList<QList<Image*>> sortedImages{{file1 + file3}, {file2}};
-        std::random_shuffle(file1.begin(), file1.end());
-        std::random_shuffle(file2.begin(), file2.end());
-        std::random_shuffle(file3.begin(), file3.end());
+        std::shuffle(file1.begin(), file1.end(), prng);
+        std::shuffle(file2.begin(), file2.end(), prng);
+        std::shuffle(file3.begin(), file3.end(), prng);
         QList<QList<Image*>> arrivingImages{file3, file1, file2};
         Series *series1 = new Series();
 
@@ -926,7 +1016,7 @@ void test_OrderImagesFillerStep::setupData()
                               .orientation(QVector3D(1, 0, 0), QVector3D(0, 1, 0)).dimensionIndexValues({3, 3, 9}).get()
         }};
         QList<QList<Image*>> arrivingImages(sortedImages);
-        std::random_shuffle(arrivingImages[0].begin(), arrivingImages[0].end());
+        std::shuffle(arrivingImages[0].begin(), arrivingImages[0].end(), prng);
         Series *series = new Series();
 
         foreach (Image *image, arrivingImages[0])
@@ -992,7 +1082,7 @@ void test_OrderImagesFillerStep::setupData()
                               .orientation(QVector3D(0, 1, 0), QVector3D(-0.0031330608762f, 0, -0.9999951124191f)).dimensionIndexValues({3, 5, 15}).get()
         }};
         QList<QList<Image*>> arrivingImages(sortedImages);
-        std::random_shuffle(arrivingImages[0].begin(), arrivingImages[0].end());
+        std::shuffle(arrivingImages[0].begin(), arrivingImages[0].end(), prng);
         Series *series = new Series();
 
         foreach (Image *image, arrivingImages[0])
@@ -1031,7 +1121,7 @@ void test_OrderImagesFillerStep::setupData()
                                            ImageBuilder().instance(3).position(Vector3(0, 0, 1)).orientation(QVector3D(1, 0, 0), QVector3D(0, 0, 1)).get()}};
         QList<QList<Image*>> arrivingImages = imagesOneByOne(sortedImages);
         // Preserve the first image at the beginning because it defines angle 0
-        std::random_shuffle(arrivingImages.begin() + 1, arrivingImages.end());
+        std::shuffle(arrivingImages.begin() + 1, arrivingImages.end(), prng);
         Series *series = new Series();
 
         foreach (const QList<Image*> &images, arrivingImages)
@@ -1210,6 +1300,209 @@ void test_OrderImagesFillerStep::setupData()
 
         QTest::newRow("Case 28: multiple acquisitions and stacks with intersection "
                       "-> order images spatially in each stack, then stacks spatially in each acquistion, then acquisitions spatially")
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
+    }
+
+    {
+        // Recreation of series 801 of first study from #2968
+        QList<QList<Image*>> sortedImages{{
+                ImageBuilder().uid(55).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-96.557516426157, -35.189993438954, -458.14321481946))
+                              .orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                           QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get(),
+                ImageBuilder().uid(34).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-96.548456043314, -37.208792267079, -454.2336994386))
+                              .orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                           QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get(),
+                ImageBuilder().uid(37).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-96.539395660471, -39.227591095204, -450.32415354016))
+                              .orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                           QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get(),
+                ImageBuilder().uid(52).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-96.530335277628, -41.246389923329, -446.4146381593))
+                              .orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                           QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get(),
+                ImageBuilder().uid(36).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-96.521274894785, -43.265188751454, -442.50512277844))
+                              .orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                           QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get(),
+                ImageBuilder().uid(69).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-96.512214511942, -45.283987579579, -438.59557688001))
+                              .orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                           QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get(),
+                ImageBuilder().uid(21).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-96.503154129099, -47.302786407704, -434.68606149915))
+                              .orientation(QVector3D(0.99999767541885f, 0.00150616886094f, -0.0015397614333f),
+                                           QVector3D(-0.0006318031810f, 0.88852906227111f, 0.45881986618041f)).get(),
+
+                ImageBuilder().uid(90).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.358643890754, -58.852513345146, -394.9181777122))
+                              .orientation(QVector3D(0.99953323602676f, 0.02515283972024f, 0.01733772829174f),
+                                           QVector3D(-0.0266517568379f, 0.99535870552062f, 0.09246993064880f)).get(),
+                ImageBuilder().uid(84).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.424341560737, -59.261223824882, -390.53768454814))
+                              .orientation(QVector3D(0.99953323602676f, 0.02515283972024f, 0.01733772829174f),
+                                           QVector3D(-0.0266517568379f, 0.99535870552062f, 0.09246993064880f)).get(),
+                ImageBuilder().uid(46).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.490039707557, -59.669934304618, -386.15722190166))
+                              .orientation(QVector3D(0.99953323602676f, 0.02515283972024f, 0.01733772829174f),
+                                           QVector3D(-0.0266517568379f, 0.99535870552062f, 0.09246993064880f)).get(),
+                ImageBuilder().uid(64).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.555737854377, -60.078644784355, -381.77672873759))
+                              .orientation(QVector3D(0.99953323602676f, 0.02515283972024f, 0.01733772829174f),
+                                           QVector3D(-0.0266517568379f, 0.99535870552062f, 0.09246993064880f)).get(),
+                ImageBuilder().uid(82).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.621436001197, -60.487355264091, -377.39623557353))
+                              .orientation(QVector3D(0.99953323602676f, 0.02515283972024f, 0.01733772829174f),
+                                           QVector3D(-0.0266517568379f, 0.99535870552062f, 0.09246993064880f)).get(),
+                ImageBuilder().uid(45).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.687134148017, -60.896065743827, -373.01577292705))
+                              .orientation(QVector3D(0.99953323602676f, 0.02515283972024f, 0.01733772829174f),
+                                           QVector3D(-0.0266517568379f, 0.99535870552062f, 0.09246993064880f)).get(),
+                ImageBuilder().uid(62).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.752831818, -61.304776223564, -368.63527976299))
+                              .orientation(QVector3D(0.99953323602676f, 0.02515283972024f, 0.01733772829174f),
+                                           QVector3D(-0.0266517568379f, 0.99535870552062f, 0.09246993064880f)).get(),
+
+                ImageBuilder().uid(53).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-91.850712101613, -61.030395164618, -338.71371172648))
+                              .orientation(QVector3D(0.99935358762741f, 0.03404841944575f, 0.01153932325541f),
+                                           QVector3D(-0.0323478654026f, 0.99167668819427f, -0.1246234104037f)).get(),
+                ImageBuilder().uid(31).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-91.919732372915, -60.484050407538, -334.34829424601))
+                              .orientation(QVector3D(0.99935358762741f, 0.03404841944575f, 0.01153932325541f),
+                                           QVector3D(-0.0323478654026f, 0.99167668819427f, -0.1246234104037f)).get(),
+                ImageBuilder().uid(7).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-91.988753121053, -59.93770183576, -329.98290728312))
+                              .orientation(QVector3D(0.99935358762741f, 0.03404841944575f, 0.01153932325541f),
+                                           QVector3D(-0.0323478654026f, 0.99167668819427f, -0.1246234104037f)).get(),
+                ImageBuilder().uid(13).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.057773869191, -59.39135707868, -325.61748980265))
+                              .orientation(QVector3D(0.99935358762741f, 0.03404841944575f, 0.01153932325541f),
+                                           QVector3D(-0.0323478654026f, 0.99167668819427f, -0.1246234104037f)).get(),
+                ImageBuilder().uid(44).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.12679461733, -58.8450123216, -321.25207232218))
+                              .orientation(QVector3D(0.99935358762741f, 0.03404841944575f, 0.01153932325541f),
+                                           QVector3D(-0.0323478654026f, 0.99167668819427f, -0.1246234104037f)).get(),
+                ImageBuilder().uid(48).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.195815365468, -58.298663749823, -316.88668535929))
+                              .orientation(QVector3D(0.99935358762741f, 0.03404841944575f, 0.01153932325541f),
+                                           QVector3D(-0.0323478654026f, 0.99167668819427f, -0.1246234104037f)).get(),
+                ImageBuilder().uid(1).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.26483563677, -57.752318992743, -312.52126787882))
+                              .orientation(QVector3D(0.99935358762741f, 0.03404841944575f, 0.01153932325541f),
+                                           QVector3D(-0.0323478654026f, 0.99167668819427f, -0.1246234104037f)).get(),
+
+                ImageBuilder().uid(0).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.112488214085, -37.410457172356, -255.45636625813))
+                              .orientation(QVector3D(0.99936103820800f, 0.03504495322704f, 0.00702517898753f),
+                                           QVector3D(-0.0318509601056f, 0.96237462759017f, -0.2698529362678f)).get(),
+                ImageBuilder().uid(59).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.18384689481, -36.2248492622, -251.21970243977))
+                              .orientation(QVector3D(0.99936103820800f, 0.03504495322704f, 0.00702517898753f),
+                                           QVector3D(-0.0318509601056f, 0.96237462759017f, -0.2698529362678f)).get(),
+                ImageBuilder().uid(72).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.255205098698, -35.039237537347, -246.98306913899))
+                              .orientation(QVector3D(0.99936103820800f, 0.03504495322704f, 0.00702517898753f),
+                                           QVector3D(-0.0318509601056f, 0.96237462759017f, -0.2698529362678f)).get(),
+                ImageBuilder().uid(3).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.326563779423, -33.85362962719, -242.74640532063))
+                              .orientation(QVector3D(0.99936103820800f, 0.03504495322704f, 0.00702517898753f),
+                                           QVector3D(-0.0318509601056f, 0.96237462759017f, -0.2698529362678f)).get(),
+                ImageBuilder().uid(94).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.397922460148, -32.668021717034, -238.50974150227))
+                              .orientation(QVector3D(0.99936103820800f, 0.03504495322704f, 0.00702517898753f),
+                                           QVector3D(-0.0318509601056f, 0.96237462759017f, -0.2698529362678f)).get(),
+                ImageBuilder().uid(79).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.469280664036, -31.482413806878, -234.27310820149))
+                              .orientation(QVector3D(0.99936103820800f, 0.03504495322704f, 0.00702517898753f),
+                                           QVector3D(-0.0318509601056f, 0.96237462759017f, -0.2698529362678f)).get(),
+                ImageBuilder().uid(66).size(336, 336).spacing(0.59523808956146, 0.59523808956146)
+                              .position(Vector3(-92.540639344761, -30.296798267327, -230.03644438313))
+                              .orientation(QVector3D(0.99936103820800f, 0.03504495322704f, 0.00702517898753f),
+                                           QVector3D(-0.0318509601056f, 0.96237462759017f, -0.2698529362678f)).get()
+        }};
+        QList<QList<Image*>> arrivingImages = imagesOneByOne(sortedImages);
+        Series *series = shuffleAndCreateSeries(arrivingImages);
+        QList<Series*> seriesList{series};
+        QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27}};
+        QList<QList<bool>> canBeSpatiallySorted{{true}};
+
+        QTest::newRow("Case 29: 4 stacks of 7 slices each without Stack ID -> autodetect stacks, order images spatially in each stack, then stacks spatially")
+                << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
+    }
+
+    {
+        // Recreation of series 804 of second study from #2968
+        QList<QList<Image*>> sortedImages{{
+                ImageBuilder().instance(1).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-87.658302576679, 56.1007309145412, 16.360040622074))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(0.04523437498606f, -0.9915398616171f, 0.12166574761957f)).get(),
+                ImageBuilder().instance(2).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-87.007849719656, 56.4349929100172, 34.0751259402468))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(0.03756486899984f, -0.9954811532074f, -0.0872132686336f)).get(),
+                ImageBuilder().instance(3).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-86.21815833055, 53.0793888636512, 51.466945190255))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(0.02825359798209f, -0.9559151415540f, -0.2922806465518f)).get(),
+                ImageBuilder().instance(4).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-85.323741712425, 46.1805747742441, 67.7753924156652))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(0.01770750915672f, -0.8745710512249f, -0.4845739576976f)).get(),
+                ImageBuilder().instance(5).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-84.363690163379, 36.0400619216858, 82.2877102161148))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(0.00638751721114f, -0.7550040092997f, -0.6556890616482f)).get(),
+                ImageBuilder().instance(6).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-83.379962542946, 23.1010393772125, 94.3696406658971))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(-0.0052116398872f, -0.6024396692570f, -0.7981474072595f)).get(),
+                ImageBuilder().instance(7).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-82.415552468586, 7.92900451433644, 103.493145428822))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(-0.0165830233143f, -0.4235458248414f, -0.9057228812374f)).get(),
+                ImageBuilder().instance(8).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-81.512609288302, -8.812951939934, 109.259483567317))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(-0.0272296490484f, -0.2261409954820f, -0.9737139191647f)).get(),
+                ImageBuilder().instance(9).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-80.710595951874, -26.393126151727, 111.416638434769))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(-0.0366862084568f, -0.0188527194750f, -0.9991489864266f)).get(),
+                ImageBuilder().instance(10).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-80.044564290592, -44.043180148951, 109.870332012293))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(-0.0445394045156f, 0.18925951083828f, -0.9809164485330f)).get(),
+                ImageBuilder().instance(11).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-79.543623084027, -60.991721877573, 104.688145310553))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(-0.0504460148733f, 0.38910019236013f, -0.9198131548791f)).get(),
+                ImageBuilder().instance(12).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-79.22966586669, -76.498018735925, 96.0965647553049))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(-0.0541478923142f, 0.57193532836596f, -0.8185096126038f)).get(),
+                ImageBuilder().instance(13).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-79.116414075512, -89.88437114383, 84.4710836437915))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(-0.0554832470305f, 0.72977414607201f, -0.6814332726128f)).get(),
+                ImageBuilder().instance(14).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-79.208817357209, -100.56573126621, 70.3197912858332))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(-0.0543937176135f, 0.85571833174983f, -0.5145750287290f)).get(),
+                ImageBuilder().instance(15).size(448, 448).spacing(0.37946428571428, 0.37946428571428)
+                              .position(Vector3(-79.502837244972, -108.07527241088, 54.2611670629077))
+                              .orientation(QVector3D(0.99845944324668f, 0.04095679052361f, -0.0374336947352f),
+                                           QVector3D(-0.0509269217267f, 0.94426352013806f, -0.3252273868847f)).get()
+        }};
+        QList<QList<Image*>> arrivingImages = imagesOneByOne(sortedImages);
+        Series *series = shuffleAndCreateSeries(arrivingImages);
+        QList<Series*> seriesList{series};
+        QList<QList<int>> orderNumbers{{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}};
+        QList<QList<bool>> canBeSpatiallySorted{{false}};
+
+        QTest::newRow("Case 30: rotational with more variation in centers -> order by instance number")
                 << arrivingImages << seriesList << sortedImages << orderNumbers << canBeSpatiallySorted;
     }
 }

@@ -74,7 +74,7 @@ void QDPIConfigurationScreen::closeEvent(QCloseEvent *event)
     udg::Settings settings;
     settings.setValue(udg::CoreSettings::ScaleFactor, m_factor);
     if (m_factor != m_initialFactor) {
-        QMessageBox::information(this,"Restart required", "In order to see the magnification changes you must restart Starviewer.");
+        QMessageBox::information(this, tr("Restart required"), tr("In order to see the magnification changes you must restart Starviewer."));
     }
 
     event->accept();

@@ -38,7 +38,6 @@ class QLogViewer;
 class Patient;
 class StatsWatcher;
 class ExternalApplication;
-class ExternalApplication;
 
 class QApplicationMainWindow : public QMainWindow {
 Q_OBJECT
@@ -72,11 +71,20 @@ public:
     /// Retorna la finestra activa actual
     static QApplicationMainWindow* getActiveApplicationMainWindow();
 
+    /// Returns the last application main window that has been active at some some point. If one is currently active it will be that.
+    static QApplicationMainWindow* getLastActiveApplicationMainWindow();
+
     /// Mètode que retorna el workspace a on poder afegir extensions
     ExtensionWorkspace* getExtensionWorkspace();
 
     /// Connecta els volums d'un pacient al mètode que notifica la càrrega de volums
     void connectPatientVolumesToNotifier(Patient *patient);
+
+    /// Requests to load and view the study with the given Study Instance UID from the database in this window.
+    void viewStudy(const QString &studyInstanceUid);
+    /// Requests to load the study with the given Study Instance UID from the database in this window. The study is not visualized unless it is from a different
+    /// patient than the current one.
+    void loadStudy(const QString &studyInstanceUid);
 
 #ifdef STARVIEWER_CE
     /// Shows the information regarding the use of the application as a medical device (if not disabled by the user).
@@ -89,9 +97,14 @@ public slots:
 
 protected:
     /// Aquest event ocurreix quanes tanca la finestra. És el moment en que es realitzen algunes tasques com desar la configuració
-    virtual void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
 
-    virtual void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
+
+    void showEvent(QShowEvent *event) override;
+
+    /// Reimplemented to keep track of the latest active window.
+    bool event(QEvent *event) override;
 
 private:
     /// Crea i inicialitza les accions de l'aplicació
@@ -125,13 +138,6 @@ private:
 
     /// Actualitza la informació que es mostra a l'usuari en el menú com a versió beta.
     void updateBetaVersionTextPosition();
-
-    /// Sents a request to retrieve a study given its Study Instance UID.
-    void sendRequestRetrieveStudyByUidToLocalStarviewer(QString studyInstanceUid);
-
-    /// Envia una petició per descarregar un estudi a través del seu accession number
-    void sendRequestRetrieveStudyWithAccessionNumberToLocalStarviewer(QString accessionNumber);
-
 
 private slots:
     /// Mètode genèric que s'assabenta del progrés de càrrega d'un volum i el notifica d'alguna manera en l'interfície
@@ -187,6 +193,9 @@ private slots:
     /// Mostra el diàleg que executa els diagnosis test
     void showDiagnosisTestDialog();
 
+    /// Shows or hides patient identifying information in the window title according to m_showPatientIdentificationInWindowTitleAction state.
+    void updateWindowTitle();
+
     /// @brief External applications submenu with the defined external applications.
     ///
     /// When called multiple times, deletes the previous menu and regenerates a new one.
@@ -195,6 +204,9 @@ private slots:
     void createExternalApplicationsMenu();
 
 private:
+    /// List of all open main windows ordered from least to most recently active.
+    static QList<QApplicationMainWindow*> m_lastActiveMainWindows;
+
     /// L'àrea de mini-aplicacions
     ExtensionWorkspace *m_extensionWorkspace;
 
@@ -237,6 +249,7 @@ private:
 #endif // STARVIEWER_CE
     QAction *m_openReleaseNotesAction;
     QAction *m_runDiagnosisTestsAction;
+    QAction *m_showPatientIdentificationInWindowTitleAction;
 
     QLabel *m_betaVersionMenuText;
 

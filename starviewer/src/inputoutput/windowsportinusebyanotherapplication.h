@@ -29,9 +29,9 @@ namespace udg {
 class WindowsPortInUseByAnotherApplication : public PortInUseByAnotherApplication {
 public:
     WindowsPortInUseByAnotherApplication();
-    ~WindowsPortInUseByAnotherApplication();
+    ~WindowsPortInUseByAnotherApplication() override;
 
-    bool isPortInUseByAnotherApplication(int port, bool &error);
+    bool isPortInUseByAnotherApplication(int port, bool &error) override;
 
 protected:
     PMIB_TCPTABLE_OWNER_MODULE getTCPTables();

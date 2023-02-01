@@ -80,7 +80,7 @@ QString getTagValueFromFunctionalGroupsSequence(DICOMSequenceAttribute *function
             {
                 if (!sequence->getItems().isEmpty())
                 {
-                    DICOMSequenceItem *sequenceItem = sequence->getItems().first();
+                    DICOMSequenceItem *sequenceItem = sequence->getItems().constFirst();
                     DICOMValueAttribute *valueAttribute = sequenceItem->getValueAttribute(tag);
 
                     if (valueAttribute)
@@ -406,8 +406,7 @@ void VtkDcmtkImageReader::readExtent(const DICOMTagReader &dicomTagReader)
         frames = dicomTagReader.getValueAttributeAsQString(DICOMNumberOfFrames).toInt();
         m_isMultiframe = true;
     }
-    // HACK Hitachi
-    if (frames == 1 && this->FileNames && this->FileNames->GetNumberOfValues() > 1)
+    else if (this->FileNames && this->FileNames->GetNumberOfValues() > 1)
     {
         frames = this->FileNames->GetNumberOfValues();
     }
@@ -501,7 +500,7 @@ void VtkDcmtkImageReader::readOrigin(const DICOMTagReader &dicomTagReader)
 
             if (detectorsSequence->getItems().size() == 1)
             {
-                DICOMSequenceItem *firstDetectorItem = detectorsSequence->getItems().first();
+                DICOMSequenceItem *firstDetectorItem = detectorsSequence->getItems().constFirst();
                 QString imageOrientationString = firstDetectorItem->getValueAttribute(DICOMImageOrientationPatient)->getValueAsQString();
                 QString imagePositionPatientString = firstDetectorItem->getValueAttribute(DICOMImagePositionPatient)->getValueAsQString();
                 double spacingBetweenSlices = dicomTagReader.getValueAttributeAsQString(DICOMSpacingBetweenSlices).toDouble();
@@ -580,7 +579,7 @@ void VtkDcmtkImageReader::readPerFrameRescale(const DICOMTagReader &dicomTagRead
             {
                 if (!subSequence->getItems().isEmpty())
                 {
-                    DICOMSequenceItem *subSequenceItem = subSequence->getItems().first();
+                    DICOMSequenceItem *subSequenceItem = subSequence->getItems().constFirst();
                     DICOMValueAttribute *interceptValue = subSequenceItem->getValueAttribute(DICOMRescaleIntercept);
                     DICOMValueAttribute *slopeValue = subSequenceItem->getValueAttribute(DICOMRescaleSlope);
 

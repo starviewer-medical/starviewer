@@ -14,6 +14,8 @@
 
 #include "retrievedicomfilesfrompacs.h"
 
+#include "directoryutilities.h"
+
 // Make sure OS specific configuration is included first
 #include <osconfig.h>
 #include <diutil.h>
@@ -537,6 +539,7 @@ QString RetrieveDICOMFilesFromPACS::getAbsoluteFilePathCompositeInstance(DcmData
     const char *instanceUID;
     OFCondition dicomQueryStatus;
 
+    // WARN In case of missing UIDs files are created in upper directories
     dicomQueryStatus = imageDataset->findAndGetString(DCM_StudyInstanceUID, instanceUID, false);
     if (dicomQueryStatus.bad())
     {
@@ -544,7 +547,9 @@ QString RetrieveDICOMFilesFromPACS::getAbsoluteFilePathCompositeInstance(DcmData
     }
     else
     {
-        absoluteFilePath += QString(instanceUID) + "/";
+        QString uid(instanceUID);
+        DirectoryUtilities::sanitizeFilename(uid);
+        absoluteFilePath += uid + "/";
     }
 
     // Comprovem, si el directori de l'estudi ja està creat
@@ -560,7 +565,9 @@ QString RetrieveDICOMFilesFromPACS::getAbsoluteFilePathCompositeInstance(DcmData
     }
     else
     {
-        absoluteFilePath += QString(instanceUID) + "/";
+        QString uid(instanceUID);
+        DirectoryUtilities::sanitizeFilename(uid);
+        absoluteFilePath += QString(uid) + "/";
     }
 
     // Comprovem, si el directori de la sèrie ja està creat, sinó el creem
@@ -568,6 +575,8 @@ QString RetrieveDICOMFilesFromPACS::getAbsoluteFilePathCompositeInstance(DcmData
     {
         directory.mkdir(absoluteFilePath);
     }
+
+    DirectoryUtilities::sanitizeFilename(fileName);
 
     return absoluteFilePath + fileName;
 }

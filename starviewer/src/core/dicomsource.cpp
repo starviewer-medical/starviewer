@@ -49,7 +49,7 @@ void DICOMSource::addPACSDeviceFromDICOMSource(const DICOMSource &DICOMSourceToA
     }
 }
 
-bool DICOMSource::operator==(const DICOMSource &DICOMSourceToAdd)
+bool DICOMSource::operator==(const DICOMSource &DICOMSourceToAdd) const
 {
     if (DICOMSourceToAdd.getRetrievePACS().count() != this->getRetrievePACS().count())
     {

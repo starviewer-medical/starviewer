@@ -137,6 +137,13 @@ QList<QPair<Volume*, int> > StudyLayoutMapper::getImagesToPlace(const StudyLayou
                                 matchesExclusionCriteria = true;
                             }
                             break;
+
+                        case StudyLayoutConfig::CTAttenuationCorrection:
+                            if (series->isCTAttenuationCorrection())
+                            {
+                                matchesExclusionCriteria = true;
+                            }
+                            break;
                     }
                 }
             }

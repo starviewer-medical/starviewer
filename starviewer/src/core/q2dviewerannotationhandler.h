@@ -15,8 +15,7 @@
 #ifndef UDGQ2DVIEWERANNOTATIONHANDLER_H
 #define UDGQ2DVIEWERANNOTATIONHANDLER_H
 
-#include <QString>
-#include "annotationflags.h"
+#include <QCoreApplication> // for Q_DECLARE_TR_FUNCTIONS
 
 class vtkCornerAnnotation;
 class vtkTextActor;
@@ -24,25 +23,26 @@ class vtkTextActor;
 namespace udg {
 
 class Q2DViewer;
-class Series;
 
 /**
     Class to handle the annotations on a Q2DViewer.
-    The AnnotationFlags lets select which information will be displayed on each cornner of the viewer and the image orientation labels.
     It setups and adds all the needed actors to the viewer since it's been created.
  */
 class Q2DViewerAnnotationHandler {
+    Q_DECLARE_TR_FUNCTIONS(Q2DViewerAnnotationHandler)
+
 public:
-    Q2DViewerAnnotationHandler(Q2DViewer *viewer);
+    /// Returns a list of supported annotation variables with their corresponding descriptions.
+    static const QVector<QPair<QString, QString>>& getSupportedAnnotations();
+
+    explicit Q2DViewerAnnotationHandler(Q2DViewer *viewer);
     ~Q2DViewerAnnotationHandler();
 
-    /// Enables the specified annotations. Unspecified annotations keep their current state.
-    void enableAnnotations(AnnotationFlags annotations);
-    /// Disables the specified annotations. Unspecified annotations keep their current state.
-    void disableAnnotations(AnnotationFlags annotations);
+    /// Enables or disables annotations according to the given boolean.
+    void enableAnnotations(bool enable);
 
-    /// Updates the specified annotations.
-    void updateAnnotations(AnnotationFlags annotations = AllAnnotations);
+    /// Updates all annotations.
+    void updateAnnotations();
 
 private:
     /// Enumerated values to distinguish the corresponding index of each annotation
@@ -50,42 +50,25 @@ private:
     enum OrientationLabelIndexType { LeftOrientationLabelIndex = 0, BottomOrientationLabelIndex = 1, RightOrientationLabelIndex = 2, TopOrientationLabelIndex = 3 };
 
 private:
-    /// Updates the main information annotation.
-    void updateMainInformationAnnotation();
-    /// Updates the additional information annotation.
-    void updateAdditionalInformationAnnotation();
-    /// Updates the VOI LUT annotation.
-    void updateVoiLutAnnotation();
-    /// Updates the slice annotation.
-    void updateSliceAnnotation();
+    /// Creates all the annotation actors
+    void createAnnotations();
+
+    /// Creates image orientation annotation actors
+    void createOrientationAnnotations();
+
+    /// Adds the text actors to the viewer
+    void addActors();
+
+    /// Updates the annotation in the specified corner.
+    void updateCornerAnnotation(CornerAnnotationIndexType corner);
     /// Updates the image orientation labels.
     void updatePatientOrientationAnnotation();
 
-    /// Returns the additional information in the general case.
-    QString getStandardAdditionalInformation() const;
-    /// Returns the additional information in the specific case of a MG image.
-    QString getMammographyAdditionalInformation() const;
-    /// Returns a label that describes the given series. Protocol and description information is used.
-    QString getSeriesDescriptiveLabel(Series *series) const;
-    /// Returns the current VOI LUT string.
-    QString getVoiLutString() const;
-    /// Returns the current slice location string, if any.
-    QString getSliceLocationString() const;
+    /// Returns the annotation template for the specified corner, retrieved from settings.
+    QString getAnnotationTemplateForCorner(CornerAnnotationIndexType corner) const;
 
-    /// Returns the corner where the annotation should go, depending on the annotation type and the current image.
-    CornerAnnotationIndexType getCornerForAnnotationType(AnnotationFlag annotation) const;
-
-    /// Sets the given text to the given annotation. The given annotation must be one of the defined corner annotations.
-    void setCornerAnnotation(AnnotationFlag annotation, QString text);
-
-    /// Creates all the annotation actors
-    void createAnnotations();
-    
-    /// Creates image orientation annotation actors
-    void createOrientationAnnotations();
-    
-    /// Adds the text actors to the viewer
-    void addActors();
+    /// Sets the specified text to the specified corner.
+    void setCornerAnnotation(CornerAnnotationIndexType corner, QString text);
 
 private:
     /// Viewer we are handling
@@ -97,8 +80,8 @@ private:
     /// Image orientation text actors
     vtkTextActor *m_patientOrientationTextActor[4];
 
-    /// Flags to keep which annotations are enabled
-    AnnotationFlags m_enabledAnnotations;
+    /// Indicates whether annotations are enabled or not.
+    bool m_annotationsEnabled;
 };
 
 } // End namespace udg

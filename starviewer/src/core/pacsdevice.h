@@ -16,105 +16,136 @@
 #define PACSDEVICE
 
 #include <QString>
+#include <QUrl>
 
 namespace udg {
 
 /**
-    Classe que encapsula els paràmetres necessaris per definir un servidor PACS al qual connectar-nos
-    Aquests paràmetres són:
-
-    Dades de connexió (imprescindibles)
-       - AETitle del PACS
-       - IP del servidor PACS
-       - Port de connexió del PACS
-
-    Dades Descriptives (opcionals)
-       - Institució a la que pertany el PACS
-       - Descripció del PACS
-       - Ubicació del PACS
-
-    Altres dades
-       - AETitle de la màquina local
-       - Nombre màxim de connexions simultànies
-       - Timeout de la connexió
-       - Port Local de Query/Retrieve
-    TODO aquestes dades s'haurien de reubicar en un lloc més adient ja que són
-    les mateixes per a qualsevol connexió amb un PACS i per tant no haurien de formar part d'aquesta classe
-  */
+ * @brief The PacsDevice class stores data about a PACS server.
+ *
+ * This data includes connexion data and other descriptive data (institution, location and description).
+ *
+ * There are three types of PACS according to the protocols they use to search, download and upload studies:
+ * - DIMSE: C-FIND + C-MOVE + C-STORE
+ * - WADO: QIDO-RS + WADO-RS + STOW-RS
+ * - Hybrid WADO-URI + DIMSE: C-FIND + WADO-URI + C-STORE
+ */
 class PacsDevice {
 public:
+    static const QString DefaultPacsListSeparator;
+
+    /// Type of PACS.
+    enum class Type { Dimse, Wado, WadoUriDimse };
+
+    /// Creates an invalid or empty PACS.
     PacsDevice();
 
-    /// Assigna/Retorna l'adreça al PACS al qual ens volem connectar
-    void setAddress(const QString &address);
-    QString getAddress() const;
+    /// Returns the internal id of this PACS, assigned by the application.
+    const QString& getID() const;
+    /// Sets the internal id of this PACS, assigned by the application.
+    void setID(QString id);
 
-    /// Assigna/Retorna el port del PACS al qual ens volem connectar
-    void setQueryRetrieveServicePort(int port);
-    int getQueryRetrieveServicePort() const;
+    /// Returns the type of this PACS.
+    Type getType() const;
+    /// Sets the type of this PACS.
+    void setType(Type type);
 
-    /// Assigna/Retorna l'AETitle del PACS al qual ens volem connectar
-    void setAETitle(const QString &AETitle);
-    QString getAETitle() const;
+    /// Returns the AE title. Not applicable to WADO PACS.
+    const QString& getAETitle() const;
+    /// Sets the AE title. Not applicable to WADO PACS.
+    void setAETitle(QString aeTitle);
 
-    /// Assigna/Retorna la descripció del PACS
-    void setDescription(const QString &description);
-    QString getDescription() const;
+    /// Returns the address (IP or hostname). Not applicable to WADO PACS.
+    const QString& getAddress() const;
+    /// Sets the address (IP or hostname). Not applicable to WADO PACS.
+    void setAddress(QString address);
 
-    /// Assigna/Retorna la institucio a la qual pertany el PACS
-    void setInstitution(const QString &institution);
-    QString getInstitution() const;
-
-    /// Assigna/Retorna la ubicació del PACS
-    void setLocation(const QString &location);
-    QString getLocation() const;
-
-    /// Assigna/Retorna si aquest PACS és un de predeterminat per fer les consultes.
-    void setDefault(bool isDefault);
-    bool isDefault() const;
-
-    /// Assigna/Retorna l'ID del PACS. Camp clau assignat per l'aplicació.
-    void setID(const QString &id);
-    QString getID() const;
-
-    /// Assigna/Retorna si podem fer consultes/descarregues al PACS
-    void setQueryRetrieveServiceEnabled(bool isQueryRetrieveServiceEnabled);
+    /// Returns true if this PACS has the query/retrieve service enabled and false otherwise. Not applicable to WADO PACS.
     bool isQueryRetrieveServiceEnabled() const;
+    /// Sets whether this PACS has the query/retrieve service enabled or not. Not applicable to WADO PACS.
+    void setQueryRetrieveServiceEnabled(bool enabled);
 
-    /// Assigna/Retorna si podem enviar imatges al PACS
-    void setStoreServiceEnabled(bool isStoreServiceEnabled);
+    /// Returns the port for the query/retrieve service. Not applicable to WADO PACS.
+    int getQueryRetrieveServicePort() const;
+    /// Sets the port for the query/retrieve service. Not applicable to WADO PACS.
+    void setQueryRetrieveServicePort(int port);
+
+    /// Returns true if this PACS has the store service enabled and false otherwise. Not applicable to WADO PACS.
     bool isStoreServiceEnabled() const;
+    /// Sets whether this PACS has the store service enabled or not. Not applicable to WADO PACS.
+    void setStoreServiceEnabled(bool enabled);
 
-    /// Assigna/Retorna el port pel qual hem d'enviar imatges al PACS
-    void setStoreServicePort(int storeServicePort);
+    /// Returns the port for the store service. Not applicable to WADO PACS.
     int getStoreServicePort() const;
+    /// Sets the port for the store service. Not applicable to WADO PACS.
+    void setStoreServicePort(int port);
 
-    /// Ens diu si aquest objecte conté dades o no
+    /// Returns the base URI. Not applicable to DIMSE PACS.
+    const QUrl& getBaseUri() const;
+    /// Sets the base URI. Not applicable to DIMSE PACS.
+    void setBaseUri(QUrl baseUri);
+
+    /// Returns the institution that owns or manages this PACS.
+    const QString& getInstitution() const;
+    /// Sets the institution that owns or manages this PACS.
+    void setInstitution(QString institution);
+
+    /// Returns the location of this PACS.
+    const QString& getLocation() const;
+    /// Sets the location of this PACS.
+    void setLocation(QString location);
+
+    /// Returns a description for this PACS.
+    const QString& getDescription() const;
+    /// Sets a description for this PACS.
+    void setDescription(QString description);
+
+    /// Returns true if this PACS is marked as default for queries and false otherwise.
+    bool isDefault() const;
+    /// Sets whether this PACS is marked as default for queries.
+    void setDefault(bool isDefault);
+
+    /// Returns true if this PACS is empty (default constructed) and false otherwise.
     bool isEmpty() const;
 
-    /// Ens indica si el PACS passat és el mateix que l'objecte actual. Ho serà quan tinguin el mateix AETitle, Address i QueryPort
+    /// Returns true if this PACS represents the same as the given one and false otherwise, comparing only type and query and download connection settings.
     bool isSamePacsDevice(const PacsDevice &pacsDevice) const;
 
-    bool operator ==(const PacsDevice &device) const;
+    /// Returns true if this PacsDevice instance is exactly equal to the given one.
+    bool operator==(const PacsDevice &pacsDevice) const;
 
-private:
-    /// Ens retorna el KeyName que identifica el PACS
+    /// Returns the key name to be used in the default PACS list.
     QString getKeyName() const;
 
-    /// Ens retorna la llista de noms claus de PACS seleccionats per defecte
+private:
+    /// Returns a list of key names for all the default PACS.
     QStringList getDefaultPACSKeyNamesList() const;
 
 private:
-    QString m_AETitle;
-    int m_queryRetrieveServicePort;
-    QString m_address;
-    QString m_description;
-    QString m_institution;
-    QString m_location;
+    /// Internal id of this PACS, assigned by the application.
     QString m_id;
+    /// Type of this PACS.
+    Type m_type;
+    /// AE Title. Only applicable to DIMSE and hybrid PACS.
+    QString m_AETitle;
+    /// Address (IP or hostname). Only applicable to DIMSE and hybrid PACS.
+    QString m_address;
+    /// Whether the query/retrieve service is enabled or not. Only applicable to DIMSE and hybrid PACS.
     bool m_isQueryRetrieveServiceEnabled;
+    /// Port for the query/retrieve service. Only applicable to DIMSE and hybrid PACS.
+    int m_queryRetrieveServicePort;
+    /// Whether the store service is enabled or not. Only applicable to DIMSE and hybrid PACS.
     bool m_isStoreServiceEnabled;
+    /// Port for the store service. Only applicable to DIMSE and hybrid PACS.
     int m_storeServicePort;
+    /// Base URI. Only applicable to WADO and hybrid PACS.
+    QUrl m_baseUri;
+    /// Institution that owns or manages this PACS.
+    QString m_institution;
+    /// Location of this PACS.
+    QString m_location;
+    /// A description for this PACS.
+    QString m_description;
 };
 
 }

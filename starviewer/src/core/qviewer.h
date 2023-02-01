@@ -17,6 +17,7 @@
 
 #include "orthogonalplane.h"
 #include "anatomicalplane.h"
+#include "vector3.h"
 
 #include <QWidget>
 // Llista de captures de pantalla
@@ -174,6 +175,9 @@ public:
 
     /// Returns the VOI LUT that is currently applied to the image in this viewer. The default implementation returns a default VoiLut.
     virtual VoiLut getCurrentVoiLut() const;
+
+    /// Returns the view plane normal from the camera.
+    Vector3 getViewPlaneNormal();
 
 public slots:
     /// Indiquem les dades d'entrada

@@ -24,23 +24,28 @@
 
 namespace udg {
 
-// Fordward Declarations
 class QApplicationMainWindow;
-class Study;
+class QueryScreen;
 
 /**
     Gestor de mini-aplicacions i serveis de l'aplicació principal
   */
 class ExtensionHandler : public QObject {
-Q_OBJECT
+    Q_OBJECT
+
 public:
+    enum class Request { LocalDatabase, Pacs, Dicomdir, OpenFiles, OpenDirectory };
+
     ExtensionHandler(QApplicationMainWindow *mainApp, QObject *parent = 0);
 
     ~ExtensionHandler();
 
+    /// Returns the query screen.
+    QueryScreen* getQueryScreen() const;
+
 public slots:
     /// Rep la petició d'un servei/mini-aplicació i fa el que calgui
-    void request(int who);
+    void request(Request request);
     bool request(const QString &who);
 
     /// Opens the default extensions for the studies in the patient in the current context.
@@ -69,9 +74,6 @@ private slots:
     /// Afegim un segon paràmetre que ens indica si els pacients a processar només cal carregar-los o fer-ne un "view"
     void processInput(QList<Patient*> patientsList, bool loadOnly = false);
 
-    /// Es cridarà quan la QueryScreen es tanqui
-    void queryScreenIsClosed();
-
 private:
     /// Crea les connexions de signals i slots
     void createConnections();
@@ -88,15 +90,14 @@ private:
     /// Punter a l'aplicació principal
     QApplicationMainWindow *m_mainApp;
 
+    /// QueryScreen instance for the owning main window.
+    QueryScreen *m_queryScreen;
+
     /// Importar models del sistema de fitxers al repositori de volums
     AppImportFile m_importFileApp;
 
     /// Contexte de l'extensió
     ExtensionContext m_extensionContext;
-
-    /// Indica si a aquesta finestra li pertoca o no tancar la QueryScreen
-    bool m_haveToCloseQueryScreen;
-
 };
 
 };  // end namespace udg

@@ -8,10 +8,6 @@
         <translation>L&apos;aplicació Starviewer s&apos;ha tancat inesperadament</translation>
     </message>
     <message>
-        <source>We&apos;re sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
-        <translation>L&apos;Starviewer ha tingut algun problema i s&apos;ha tancat inesperadament. Dediqueu un moment per enviar un informe de la incidència per ajudar l&apos;equip de desenvolupament a diagnosticar i arreglar el problema. La vostra informació personal no s&apos;enviarà en aquest informe.</translation>
-    </message>
-    <message>
         <source>Tell Starviewer about this crash</source>
         <translation>Informa d&apos;aquesta incidència</translation>
     </message>
@@ -55,12 +51,9 @@
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>PNG (*.png)</source>
-        <translation>PNG (*.png)</translation>
+        <source>We&apos;re sorry Starviewer had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.</source>
+        <translation>L’Starviewer ha tingut algun problema i s‘ha tancat inesperadament. Dediqueu un moment per enviar un informe de la incidència per ajudar l’equip de desenvolupament a diagnosticar i arreglar el problema. La vostra informació personal no s’enviarà en aquest informe.</translation>
     </message>
 </context>
 <context>
@@ -80,10 +73,6 @@
     <message>
         <source>Tell %1 about this crash</source>
         <translation>Notifica l&apos;%1 sobre aquest problema</translation>
-    </message>
-    <message>
-        <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.  </source>
-        <translation>L&apos;%1 ha tingut algun problema i s&apos;ha tancat inesperadament. Dediqueu un moment per enviar un informe de la incidència per ajudar l&apos;equip de desenvolupament a diagnosticar i arreglar el problema. La vostra informació personal no s&apos;enviarà en aquest informe.</translation>
     </message>
     <message>
         <source>IP</source>
@@ -114,6 +103,10 @@
     <message>
         <source>The crash report has been sent.</source>
         <translation>S&apos;ha enviat l&apos;informe de fallada.</translation>
+    </message>
+    <message>
+        <source>We&apos;re sorry %1 had a problem and crashed. Please take a moment to send us a crash report to help us diagnose and fix the problem. Your personal information is not sent with this report.</source>
+        <translation>L’%1 ha tingut algun problema i s’ha tancat inesperadament. Dediqueu un moment per enviar un informe de la incidència per ajudar l’equip de desenvolupament a diagnosticar i arreglar el problema. La vostra informació personal no s’enviarà en aquest informe.</translation>
     </message>
 </context>
 </TS>

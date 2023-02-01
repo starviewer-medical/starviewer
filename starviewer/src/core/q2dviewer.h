@@ -16,7 +16,6 @@
 #define UDGQ2DVIEWER_H
 
 #include "qviewer.h"
-#include "annotationflags.h"
 #include "anatomicalplane.h"
 #include "volumedisplayunit.h"
 
@@ -31,6 +30,7 @@ class vtkImageSlice;
 namespace udg {
 
 // Fordward declarations
+class AutomaticSynchronizationTool;
 class Image;
 class ImageOverlay;
 class Drawer;
@@ -291,6 +291,9 @@ public:
     /// Moves the camera based on the absolute motion vector
     void absolutePan(double motionVector[3]);
 
+    /// Sets the AutomaticSynchronizationTool instance linked to this viewer. Can be \c nullptr.
+    void setAutomaticSynchronizationTool(AutomaticSynchronizationTool *tool);
+
 public slots:
     virtual void setInput(Volume *volume);
 
@@ -324,9 +327,8 @@ public slots:
     /// Indica el tipu de solapament dels volums, per defecte blending
     void setOverlapMethod(OverlapMethod method);
 
-    /// Afegir o treure la visibilitat d'una anotació textual/gràfica
-    void enableAnnotation(AnnotationFlags annotation, bool enable = true);
-    void removeAnnotation(AnnotationFlags annotation);
+    /// Enables or disables annotations in this viewer according to the given boolean.
+    void enableAnnotations(bool enable);
 
     /// Sets the VOI LUT for this viewer.
     virtual void setVoiLut(const VoiLut &voiLut);
@@ -606,6 +608,9 @@ private:
 
     /// Fusion balance stored as a value in the range [0, 100] representing the weight of the second input.
     int m_fusionBalance;
+
+    /// AutomaticSynchronizationTool instance that is used to keep synchronized when changing view plane.
+    AutomaticSynchronizationTool *m_automaticSynchronizationTool;   // Bad coupling, but there's no better way to do this right now.
 
 };
 

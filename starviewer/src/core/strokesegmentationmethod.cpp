@@ -525,7 +525,7 @@ void StrokeSegmentationMethod::computeSpeedMap(itk::Image<float, 3>* speedMap)
         ++maskIt;
     }
 
-    speedMap = auxVolume;
+//    speedMap = auxVolume; // useless assignation (maybe it was intended as an output parameter?)
 
     return;
 }

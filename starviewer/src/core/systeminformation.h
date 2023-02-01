@@ -33,9 +33,6 @@ public:
 
     virtual OperatingSystem getOperatingSystem();
     
-    // Arquitectura de 32-bits o 64-bits
-    virtual bool isOperatingSystem64BitArchitecture();
-    
     virtual QString getOperatingSystemVersion();
     
     /// Retorna la versió de service pack instal·lat, només en windows
@@ -73,7 +70,8 @@ public:
 
     virtual QStringList getHardDiskDevices();
     virtual unsigned int getHardDiskCapacity(const QString &device);
-    virtual unsigned int getHardDiskFreeSpace(const QString &device);
+    /// Returns free space in MiB in the filesystem containing the given path.
+    virtual quint64 getHardDiskFreeSpace(const QString &path);
     virtual bool doesOpticalDriveHaveWriteCapabilities();
 
     virtual unsigned int getNetworkAdapterSpeed();
@@ -84,6 +82,9 @@ public:
 
     /// For systems with desktop composition feature, tells if this feature is enabled or not
     virtual bool isDesktopCompositionEnabled();
+
+    /// Returns information about the desktop environment and compositor on Linux. Irrelevant on other platforms.
+    virtual QString getDesktopInformation() const;
 
 protected:
     SystemInformation();

@@ -13,15 +13,22 @@
  *************************************************************************************/
 
 #include "coresettings.h"
-#include "settingsregistry.h"
 
+#include "q2dviewerannotationssettingshelper.h"
+#include "settingsregistry.h"
 #include "starviewerapplication.h"
+
 #include <QDir>
-// Pel LanguageLocale
-#include <QLocale>
 #include <QStringList>
+#include <QVector>
 
 namespace udg {
+
+namespace {
+
+const QVector<QString> ComparisonModeDivisionStrings{"CurrentLeftPriorRight", "CurrentRightPriorLeft", "CurrentTopPriorBottom", "CurrentBottomPriorTop"};
+
+}
 
 // Definició de les claus
 const QString ScreenShotToolBase("ScreenshotTool/");
@@ -67,8 +74,7 @@ const QString CoreSettings::QDICOMDumpBrowserGeometry("QDICOMDumpBrowserGeometry
 
 //Llista de PACS per defecte
 const QString CoreSettings::DefaultPACSListToQuery("PACS/defaultPACSListToQuery");
-//TODO:Aquesta clau està duplicada a InputOutputSettings
-const QString CoreSettings::PacsListConfigurationSectionName = "PacsList";
+const QString CoreSettings::DefaultPACSListToQuery2("PACS/defaultPACSListToQuery2");
 
 const QString CoreSettings::ExternalApplicationsConfigurationSectionName = "ExternalApplications";
 
@@ -98,6 +104,12 @@ const QString CoreSettings::ScaleFactor("scaleFactor");
 const QString CoreSettings::CrosshairInnerDiameter("CrosshairInnerDiameter");
 const QString CoreSettings::CrosshairOuterDiameter("CrosshairOuterDiameter");
 
+const QString CoreSettings::ShowViewersTextualInformation("ShowViewersTextualInformation");
+
+const QString CoreSettings::Q2DViewerAnnotations(Q2DViewerBase + "Annotations");
+
+const QString CoreSettings::ComparisonModeDivision("ComparisionModeDivision");
+
 CoreSettings::CoreSettings()
 {
 }
@@ -116,7 +128,6 @@ void CoreSettings::init()
     settingsRegistry->addSetting(UserCustomWindowLevelsPath, UserDataRootPath + "customwindowlevels/customwindowlevels.xml");
     settingsRegistry->addSetting(RegisterStatLogs, false);
     settingsRegistry->addSetting(MagnifyingGlassZoomFactor, "4");
-    settingsRegistry->addSetting(LanguageLocale, QLocale::system().name());
     settingsRegistry->addSetting(LastReleaseNotesVersionShown, "");
     settingsRegistry->addSetting(NeverShowNewVersionReleaseNotes, false);
     settingsRegistry->addSetting(LastVersionChecked, "");
@@ -147,8 +158,25 @@ void CoreSettings::init()
 
     settingsRegistry->addSetting(ScaleFactor, "0");
 
-    settingsRegistry->addSetting(CrosshairInnerDiameter, 20);
-    settingsRegistry->addSetting(CrosshairOuterDiameter, 60);
+    settingsRegistry->addSetting(CrosshairInnerDiameter, 10);
+    settingsRegistry->addSetting(CrosshairOuterDiameter, 30);
+
+    settingsRegistry->addSetting(ShowViewersTextualInformation, true);
+
+    settingsRegistry->addListSetting(Q2DViewerAnnotations, Q2DViewerAnnotationsSettingsHelper::getSettingsDefaultValue());
+
+    settingsRegistry->addSetting(ComparisonModeDivision, ComparisonModeDivisionStrings[0]);
+}
+
+CoreSettings::ComparisonModeDivisionType CoreSettings::comparisonModeDivisionTypeFromString(const QString &string)
+{
+    int index = ComparisonModeDivisionStrings.indexOf(string);
+    return index >= 0 ? static_cast<ComparisonModeDivisionType>(index) : CurrentLeftPriorRight;
+}
+
+QString CoreSettings::comparisonModeDivisionTypeToString(ComparisonModeDivisionType division)
+{
+    return ComparisonModeDivisionStrings[division];
 }
 
 } // End namespace udg

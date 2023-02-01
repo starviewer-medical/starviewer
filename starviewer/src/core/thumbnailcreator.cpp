@@ -57,7 +57,7 @@ QImage ThumbnailCreator::getThumbnail(const Series *series, int resolution)
         int numberOfImages = series->getImages().size();
         if (numberOfImages > 0)
         {
-            thumbnail = createImageThumbnail(series->getImages()[numberOfImages / 2]->getPath(), resolution);
+            thumbnail = createImageThumbnail(series->getImages().at(numberOfImages / 2)->getPath(), resolution);
         }
         else
         {

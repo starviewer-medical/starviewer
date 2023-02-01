@@ -67,4 +67,49 @@
     <upgradeDatabaseToRevision updateToRevision="9594">
         <upgradeCommand>PRAGMA journal_mode=WAL;</upgradeCommand>
     </upgradeDatabaseToRevision>
+    <upgradeDatabaseToRevision updateToRevision="9595">
+        <!-- The intent goal is to remove the NOT NULL constraint from Study.ID. To achieve it we need to use the "12-step generalized ALTER TABLE procedure
+             described in the SQLite documentation: https://www.sqlite.org/lang_altertable.html#otheralter
+             The simpler 9-step procedure should in fact be enough but it can't be applied without changing C++ code. -->
+        <upgradeCommand>PRAGMA foreign_keys=OFF;</upgradeCommand>
+        <upgradeCommand>BEGIN TRANSACTION;</upgradeCommand>
+        <upgradeCommand>
+            CREATE TABLE new_Study
+            (
+                InstanceUID             TEXT PRIMARY KEY,
+                PatientID               TEXT NOT NULL,
+                ID                      TEXT,
+                PatientAge              TEXT,
+                PatientWeigth           REAL,
+                PatientHeigth           REAL,
+                Modalities              TEXT,
+                Date                    TEXT,
+                Time                    TEXT,
+                AccessionNumber         TEXT,
+                Description             TEXT,
+                ReferringPhysicianName  TEXT,
+                LastAccessDate          TEXT,
+                RetrievedDate           TEXT,
+                RetrievedTime           TEXT,
+                State                   INTEGER
+            );
+        </upgradeCommand>
+        <upgradeCommand>INSERT INTO new_Study SELECT * FROM Study;</upgradeCommand>
+        <upgradeCommand>DROP TABLE Study;</upgradeCommand>
+        <upgradeCommand>ALTER TABLE new_Study RENAME TO Study;</upgradeCommand>
+        <upgradeCommand>COMMIT;</upgradeCommand>
+        <upgradeCommand>PRAGMA foreign_keys=ON;</upgradeCommand>
+    </upgradeDatabaseToRevision>
+    <upgradeDatabaseToRevision updateToRevision="9596">
+        <upgradeCommand>ALTER TABLE PACSRetrievedImages ADD COLUMN Type TEXT;</upgradeCommand>
+        <upgradeCommand>ALTER TABLE PACSRetrievedImages ADD COLUMN BaseUri TEXT;</upgradeCommand>
+        <upgradeCommand>UPDATE PACSRetrievedImages SET Type = 'DIMSE';</upgradeCommand>
+        <upgradeCommand>CREATE UNIQUE INDEX IndexPacsDevice_BaseUri ON PACSRetrievedImages(BaseUri);</upgradeCommand>
+    </upgradeDatabaseToRevision>
+    <upgradeDatabaseToRevision updateToRevision="9597">
+        <upgradeCommand>DROP INDEX IndexPacsDevice_AETitleAddressQueryPort;</upgradeCommand>
+        <upgradeCommand>DROP INDEX IndexPacsDevice_BaseUri;</upgradeCommand>
+        <upgradeCommand>CREATE UNIQUE INDEX IndexPacsDevice_AETitleAddressQueryPortType ON PACSRetrievedImages(AETitle, Address, QueryPort, Type);</upgradeCommand>
+        <upgradeCommand>CREATE UNIQUE INDEX IndexPacsDevice_BaseUriType ON PACSRetrievedImages(BaseUri, Type);</upgradeCommand>
+    </upgradeDatabaseToRevision>
 </upgradeDatabase>

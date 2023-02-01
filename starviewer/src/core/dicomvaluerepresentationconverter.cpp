@@ -125,6 +125,25 @@ QVector2D DICOMValueRepresentationConverter::decimalStringTo2DDoubleVector(const
     return vector2DValue;
 }
 
+QVector<int64_t> DICOMValueRepresentationConverter::signed64BitVeryLongToInt64Vector(const QString &signed64BitVeryLongString)
+{
+    // This is necessary because splitRef on an empty string returns a vector with an empty string
+    if (signed64BitVeryLongString.isEmpty())
+    {
+        return {};
+    }
+
+    QVector<QStringRef> strings = signed64BitVeryLongString.splitRef(ValuesSeparator);
+    QVector<int64_t> values(strings.size());
+
+    for (int i = 0; i < strings.size(); i++)
+    {
+        values[i] = strings[i].toLongLong();
+    }
+
+    return values;
+}
+
 QVector<uint> DICOMValueRepresentationConverter::unsignedLongStringToUintVector(const QString &unsignedLongString)
 {
     // This is necessary because splitRef on an empty string returns a vector with an empty string

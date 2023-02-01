@@ -14,6 +14,7 @@
 
 #include "qmprextension.h"
 
+#include "coresettings.h"
 #include "drawer.h"
 #include "drawerpoint.h"
 #include "logging.h"
@@ -79,7 +80,7 @@ QMPRExtension::QMPRExtension(QWidget *parent)
     m_mipToolButton->setVisible(visible);
 
     m_screenshotsExporterToolButton->setToolTip(tr("Export viewer image(s) to DICOM and send them to a PACS server"));
-    m_viewerInformationToolButton->setToolTip(tr("Show/Hide viewer's textual information"));
+    m_viewerInformationToolButton->setToolTip(tr("Show/hide viewers textual information"));
     m_voiLutComboBox->setToolTip(tr("Choose a VOI LUT preset"));
 }
 
@@ -154,8 +155,10 @@ void QMPRExtension::init()
     m_coronalReslice = 0;
 
     // Configurem les annotacions que volem veure
-    m_sagital2DView->removeAnnotation(PatientOrientationAnnotation | MainInformationAnnotation | SliceAnnotation);
-    m_coronal2DView->removeAnnotation(PatientOrientationAnnotation | MainInformationAnnotation | SliceAnnotation);
+    m_sagital2DView->enableAnnotations(false);
+    m_coronal2DView->enableAnnotations(false);
+    Settings settings;
+    m_viewerInformationToolButton->setChecked(settings.getValue(CoreSettings::ShowViewersTextualInformation).toBool());
     showViewerInformation(m_viewerInformationToolButton->isChecked());
 
     m_sagital2DView->disableContextMenu();
@@ -180,13 +183,13 @@ void QMPRExtension::init()
 
 void QMPRExtension::createActions()
 {
-    m_horizontalLayoutAction = new QAction(0);
+    m_horizontalLayoutAction = new QAction(m_horizontalLayoutToolButton);
     m_horizontalLayoutAction->setText(tr("Switch horizontal layout"));
     m_horizontalLayoutAction->setStatusTip(tr("Switch horizontal layout"));
     m_horizontalLayoutAction->setIcon(QIcon(":/images/icons/view-split-left-right.svg"));
     m_horizontalLayoutToolButton->setDefaultAction(m_horizontalLayoutAction);
 
-    m_mipAction = new QAction(0);
+    m_mipAction = new QAction(m_mipToolButton);
     m_mipAction->setText(tr("&MIP"));
     m_mipAction->setShortcut(tr("Ctrl+M"));
     m_mipAction->setStatusTip(tr("Maximum Intensity Projection"));
@@ -266,6 +269,7 @@ void QMPRExtension::initializeTools()
     initializeROITools();
     initializeDistanceTools();
     initializeAngleTools();
+    m_arrowToolButton->setDefaultAction(m_toolManager->registerTool("ArrowTool"));
     m_slicingToolButton->setDefaultAction(m_toolManager->registerTool("SlicingMouseTool"));
     m_toolManager->registerTool("TranslateTool");
     m_toolManager->registerTool("WindowLevelTool");
@@ -280,8 +284,9 @@ void QMPRExtension::initializeTools()
 
     // Definim els grups exclusius
     QStringList leftButtonExclusiveTools;
-    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" 
-        << "NonClosedAngleTool" << "Cursor3DTool" << "EllipticalROITool" << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
+    leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "PolylineROITool" << "DistanceTool" << "PerpendicularDistanceTool" << "ArrowTool"
+                             << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool" << "EllipticalROITool" << "MagicROITool" << "CircleTool"
+                             << "MagnifyingGlassTool";
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
 
     // Activem les tools que volem tenir per defecte, això és com si clickéssim a cadascun dels ToolButton
@@ -464,9 +469,7 @@ void QMPRExtension::showScreenshotsExporterDialog()
 
 void QMPRExtension::showViewerInformation(bool show)
 {
-    m_axial2DView->enableAnnotation(VoiLutAnnotation | PatientOrientationAnnotation | SliceAnnotation | MainInformationAnnotation, show);
-    m_sagital2DView->enableAnnotation(VoiLutAnnotation, show);
-    m_coronal2DView->enableAnnotation(VoiLutAnnotation, show);
+    m_axial2DView->enableAnnotations(show);
 }
 
 void QMPRExtension::updateProjectionLabel()
@@ -1199,9 +1202,9 @@ void QMPRExtension::initOrientation()
 
 void QMPRExtension::createActors()
 {
-    QColor axialColor = QColor::fromRgbF(1.0, 1.0, 0.0);
-    QColor sagitalColor = QColor::fromRgbF(1.0, 0.6, 0.0);
-    QColor coronalColor = QColor::fromRgbF(0.0, 1.0, 1.0);
+    QColor axialColor(0xbf, 0xff, 0x7f);
+    QColor sagitalColor(0xff, 0x7f, 0xbf);
+    QColor coronalColor(0x7f, 0xbf, 0xff);
 
     // Creem els axis actors
     m_sagitalOverAxialAxisActor = vtkAxisActor2D::New();

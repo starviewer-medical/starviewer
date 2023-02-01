@@ -26,46 +26,43 @@ namespace udg {
 class WindowsSystemInformation : public SystemInformation {
 public:
     WindowsSystemInformation();
-    ~WindowsSystemInformation();
+    ~WindowsSystemInformation() override;
     
-    OperatingSystem getOperatingSystem();
+    OperatingSystem getOperatingSystem() override;
     bool isOperatingSystem64BitArchitecture();
-    QString getOperatingSystemVersion();
-    QString getOperatingSystemServicePackVersion();
+    QString getOperatingSystemVersion() override;
+    QString getOperatingSystemServicePackVersion() override;
     QString getOperatingSystemName();
-    QString getOperatingSystemAsString();
-    QString getOperatingSystemAsShortString();
+    QString getOperatingSystemAsString() override;
+    QString getOperatingSystemAsShortString() override;
 
     /// Retorna la quantitat total de memòria RAM en MegaBytes
-    unsigned int getRAMTotalAmount();
-    QList<unsigned int> getRAMModulesCapacity();
-    QList<unsigned int> getRAMModulesFrequency();
+    unsigned int getRAMTotalAmount() override;
+    QList<unsigned int> getRAMModulesCapacity() override;
+    QList<unsigned int> getRAMModulesFrequency() override;
 
-    unsigned int getCPUNumberOfCores();
+    unsigned int getCPUNumberOfCores() override;
     
     /// Retorna una llista amb la freqüència de cada processador 
-    QList<unsigned int> getCPUFrequencies();
-    unsigned int getCPUL2CacheSize();
+    QList<unsigned int> getCPUFrequencies() override;
+    unsigned int getCPUL2CacheSize() override;
 
-    QStringList getGPUBrand();
-    QStringList getGPUModel();
-    QList<unsigned int> getGPURAM();
-    QStringList getGPUOpenGLCompatibilities();
-    QString getGPUOpenGLVersion();
-    QStringList getGPUDriverVersion();
+    QStringList getGPUBrand() override;
+    QStringList getGPUModel() override;
+    QList<unsigned int> getGPURAM() override;
+    QStringList getGPUDriverVersion() override;
 
     // Screen, Display, Monitor, Desktop, ...
-    QStringList getScreenVendors();
+    QStringList getScreenVendors() override;
 
-    QStringList getHardDiskDevices();
-    unsigned int getHardDiskCapacity(const QString &device); // Del disc dur que conté la carpeta de la cache de Starviewer
-    unsigned int getHardDiskFreeSpace(const QString &device);
-    bool doesOpticalDriveHaveWriteCapabilities();
+    QStringList getHardDiskDevices() override;
+    unsigned int getHardDiskCapacity(const QString &device) override; // Del disc dur que conté la carpeta de la cache de Starviewer
+    bool doesOpticalDriveHaveWriteCapabilities() override;
 
-    unsigned int getNetworkAdapterSpeed();
+    unsigned int getNetworkAdapterSpeed() override;
 
-    bool isDesktopCompositionAvailable();
-    bool isDesktopCompositionEnabled();
+    bool isDesktopCompositionAvailable() override;
+    bool isDesktopCompositionEnabled() override;
 
 protected:
     /// Mètode alternatiu per si no podem obtenir el nombre de nuclis via WMI
@@ -83,8 +80,6 @@ protected:
     virtual bool getProperty(IWbemClassObject *object, QString propertyName, VARIANT *propertyVariant);
     IWbemServices* initializeAPI();
     virtual void uninitializeAPI(IWbemServices *services);
-    virtual QString createOpenGLContextAndGetExtensions();
-    virtual QString createOpenGLContextAndGetVersion();
 
 protected:
     IWbemServices* m_api;

@@ -74,6 +74,7 @@ void QLayoutOptionsWidget::setupConnections()
     connect(m_topToBottomRadioButton, SIGNAL(clicked()), SLOT(updateAutomaticLayoutSettings()));
     connect(m_localizerCheckBox, SIGNAL(clicked()), SLOT(updateAutomaticLayoutSettings()));
     connect(m_surveyCheckBox, SIGNAL(clicked()), SLOT(updateAutomaticLayoutSettings()));
+    connect(m_ctAttenuationCorrectionCheckBox, &QCheckBox::clicked, this, &QLayoutOptionsWidget::updateAutomaticLayoutSettings);
     connect(m_maxViewersComboBox, SIGNAL(currentIndexChanged(int)), SLOT(updateAutomaticLayoutSettings()));
 
     connect(m_applyHangingProtocolAsFirstOptionCheckBox, SIGNAL(clicked(bool)), SLOT(updateHangingProtocolSetting(bool)));
@@ -106,6 +107,7 @@ void QLayoutOptionsWidget::setStudyLayoutConfig(const StudyLayoutConfig &config)
     QList<StudyLayoutConfig::ExclusionCriteriaType> criteria = config.getExclusionCriteria();
     m_localizerCheckBox->setChecked(config.getExclusionCriteria().contains(StudyLayoutConfig::Localizer));
     m_surveyCheckBox->setChecked(config.getExclusionCriteria().contains(StudyLayoutConfig::Survey));
+    m_ctAttenuationCorrectionCheckBox->setChecked(config.getExclusionCriteria().contains(StudyLayoutConfig::CTAttenuationCorrection));
 
     int maxNumberOfViewers = config.getMaximumNumberOfViewers();
     if (maxNumberOfViewers == 0)
@@ -175,6 +177,10 @@ void QLayoutOptionsWidget::updateAutomaticLayoutSettings()
     if (m_surveyCheckBox->isChecked())
     {
         currentConfig.addExclusionCriteria(StudyLayoutConfig::Survey);
+    }
+    if (m_ctAttenuationCorrectionCheckBox->isChecked())
+    {
+        currentConfig.addExclusionCriteria(StudyLayoutConfig::CTAttenuationCorrection);
     }
     
     currentConfig.setMaximumNumberOfViewers(m_maxViewersComboBox->currentText().toInt());

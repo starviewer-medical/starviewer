@@ -197,22 +197,22 @@
 <context>
     <name>udg::QDifuPerfuSegmentationExtension</name>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="135"/>
+        <location filename="qdifuperfuextension.cpp" line="137"/>
         <source>Lesion Overlay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="136"/>
+        <location filename="qdifuperfuextension.cpp" line="138"/>
         <source>Enable/disable lesion view overlay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="142"/>
+        <location filename="qdifuperfuextension.cpp" line="144"/>
         <source>Ventricles Overlay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qdifuperfuextension.cpp" line="143"/>
+        <location filename="qdifuperfuextension.cpp" line="145"/>
         <source>Enable/disable ventricles view overlay</source>
         <translation type="unfinished"></translation>
     </message>

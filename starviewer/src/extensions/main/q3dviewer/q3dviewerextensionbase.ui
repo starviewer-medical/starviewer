@@ -51,7 +51,7 @@
           <string>Axial</string>
          </property>
          <property name="icon">
-          <iconset resource="../../../main/main.qrc">
+          <iconset resource="../../../main/themes/starviewer/starviewer.qrc">
            <normaloff>:/images/icons/axial.svg</normaloff>:/images/icons/axial.svg</iconset>
          </property>
          <property name="iconSize">
@@ -80,7 +80,7 @@
           <string>Sagital</string>
          </property>
          <property name="icon">
-          <iconset resource="../../../main/main.qrc">
+          <iconset resource="../../../main/themes/starviewer/starviewer.qrc">
            <normaloff>:/images/icons/sagittal.svg</normaloff>:/images/icons/sagittal.svg</iconset>
          </property>
          <property name="iconSize">
@@ -109,7 +109,7 @@
           <string>Coronal</string>
          </property>
          <property name="icon">
-          <iconset resource="../../../main/main.qrc">
+          <iconset resource="../../../main/themes/starviewer/starviewer.qrc">
            <normaloff>:/images/icons/coronal.svg</normaloff>:/images/icons/coronal.svg</iconset>
          </property>
          <property name="iconSize">
@@ -208,7 +208,7 @@
           <string>Zoom</string>
          </property>
          <property name="icon">
-          <iconset resource="../../../main/main.qrc">
+          <iconset resource="../../../main/themes/starviewer/starviewer.qrc">
            <normaloff>:/images/icons/edit-find.svg</normaloff>:/images/icons/edit-find.svg</iconset>
          </property>
          <property name="iconSize">
@@ -237,7 +237,7 @@
           <string>Rotate</string>
          </property>
          <property name="icon">
-          <iconset resource="../../../main/main.qrc">
+          <iconset resource="../../../main/themes/starviewer/starviewer.qrc">
            <normaloff>:/images/icons/swivel.svg</normaloff>:/images/icons/swivel.svg</iconset>
          </property>
          <property name="iconSize">
@@ -266,7 +266,7 @@
           <string>W/L</string>
          </property>
          <property name="icon">
-          <iconset resource="../../../main/main.qrc">
+          <iconset resource="../../../main/themes/starviewer/starviewer.qrc">
            <normaloff>:/images/icons/contrast.svg</normaloff>:/images/icons/contrast.svg</iconset>
          </property>
          <property name="iconSize">
@@ -333,7 +333,7 @@
         <string>Clip Planes</string>
        </property>
        <property name="icon">
-        <iconset resource="../../../main/main.qrc">
+        <iconset resource="../../../main/themes/starviewer/starviewer.qrc">
          <normaloff>:/images/icons/node.svg</normaloff>:/images/icons/node.svg</iconset>
        </property>
        <property name="iconSize">
@@ -476,7 +476,7 @@
         <string>Custom style</string>
        </property>
        <property name="icon">
-        <iconset resource="../../../main/main.qrc">
+        <iconset resource="../../../main/themes/starviewer/starviewer.qrc">
          <normaloff>:/images/icons/adjustrgb.svg</normaloff>:/images/icons/adjustrgb.svg</iconset>
        </property>
        <property name="iconSize">
@@ -671,7 +671,7 @@
             <item>
              <widget class="QGroupBox" name="m_shadingGroupBox">
               <property name="title">
-               <string>Shadi&amp;ng</string>
+               <string>Shading</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -969,7 +969,7 @@
           <string>Screen Shot</string>
          </property>
          <property name="icon">
-          <iconset resource="../../../main/main.qrc">
+          <iconset resource="../../../main/themes/starviewer/starviewer.qrc">
            <normaloff>:/images/icons/camera-photo.svg</normaloff>:/images/icons/camera-photo.svg</iconset>
          </property>
          <property name="iconSize">
@@ -992,7 +992,7 @@
           <string>Exporter</string>
          </property>
          <property name="icon">
-          <iconset resource="../../../main/main.qrc">
+          <iconset resource="../../../main/themes/starviewer/starviewer.qrc">
            <normaloff>:/images/icons/upload-media.svg</normaloff>:/images/icons/upload-media.svg</iconset>
          </property>
          <property name="iconSize">
@@ -1056,8 +1056,9 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../../../main/main.qrc"/>
-  <include location="../../../main/main.qrc"/>
+  <include location="../../../main/themes/starviewer/starviewer.qrc"/>
+  <include location="../../../main/themes/starviewer/starviewer.qrc"/>
+  <include location="../../../main/themes/starviewer/starviewer.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -48,6 +48,7 @@
 #include "magnifyingglasstool.h"
 #include "circletool.h"
 #include "perpendiculardistancetool.h"
+#include "arrowtool.h"
 
 #include "shortcutmanager.h"
 #include "shortcuts.h"
@@ -192,6 +193,10 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     {
         tool = new PerpendicularDistanceTool(viewer);
     }
+    else if (toolName == "ArrowTool")
+    {
+        tool = new ArrowTool(viewer);
+    }
     else
     {
         DEBUG_LOG(toolName + "> Tool no registrada!");
@@ -201,7 +206,7 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
 
 QAction* ToolRegistry::getToolAction(const QString &toolName)
 {
-    QAction *toolAction = new QAction(0);
+    QAction *toolAction = new QAction(this);
     toolAction->setCheckable(true);
     QString statusTip;
     QString toolTip;
@@ -447,6 +452,13 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         statusTip = tr("Enable/Disable TA-GT distance tool");
         toolTip = toolAction->text();
     }
+    else if (toolName == "ArrowTool")
+    {
+        toolAction->setText(tr("Arrow"));
+        toolAction->setIcon(QIcon(":/images/icons/draw-arrow.svg"));
+        statusTip = tr("Enable/disable arrow tool");
+        toolTip = toolAction->text();
+    }
     else
     {
         DEBUG_LOG(toolName + "> Tool no registrada!");
@@ -466,7 +478,7 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
 QPair<QAction*, QString> ToolRegistry::getActionToolPair(const QString &actionToolName)
 {
     QPair<QAction*, QString> pair;
-    QAction *action = new QAction(0);
+    QAction *action = new QAction(this);
     QString slot;
     QString statusTip;
     QString toolTip;

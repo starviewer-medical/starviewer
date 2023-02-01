@@ -44,6 +44,9 @@ public:
     /// Ens indica si un directori està buit
     bool isDirectoryEmpty(const QString &directoryPath);
 
+    /// Sanitizes the given filename replacing directory separators.
+    static void sanitizeFilename(QString &name);
+
 signals:
     void directoryDeleted();
 

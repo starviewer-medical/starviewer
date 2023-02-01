@@ -76,6 +76,7 @@ vtkProp* DrawerPoint::getAsVtkProp()
         m_pointMapper = vtkPolyDataMapper::New();
         m_pointMapper->SetInputConnection(m_pointSphere->GetOutputPort());
         m_pointActor->SetMapper(m_pointMapper);
+        m_vtkProp = m_pointActor;
     }
 
     // Li donem els atributs
@@ -83,7 +84,7 @@ vtkProp* DrawerPoint::getAsVtkProp()
 
     updateVtkActorProperties();
 
-    return m_pointActor;
+    return DrawerPrimitive::getAsVtkProp();
 }
 
 void DrawerPoint::update()

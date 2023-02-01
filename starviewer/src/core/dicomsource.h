@@ -43,7 +43,7 @@ public:
     //Afegeix el DICOMSource el PACS d'un altre DICOMSource
     void addPACSDeviceFromDICOMSource(const DICOMSource &DICOMSourceToAdd);
 
-    bool operator==(const DICOMSource &DICOMSourceToCompare);
+    bool operator==(const DICOMSource &DICOMSourceToCompare) const;
 
 private:
     /// Indica si està afegit ja un mateix PACS, docs pacs són el mateix quan tenen el mateix AETitle, Address i QueryPort

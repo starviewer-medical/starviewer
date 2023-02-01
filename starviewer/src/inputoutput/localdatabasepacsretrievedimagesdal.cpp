@@ -14,6 +14,7 @@
 
 #include "localdatabasepacsretrievedimagesdal.h"
 
+#include "logging.h"
 #include "pacsdevice.h"
 
 #include <QSqlQuery>
@@ -29,10 +30,30 @@ LocalDatabasePACSRetrievedImagesDAL::LocalDatabasePACSRetrievedImagesDAL(Databas
 qlonglong LocalDatabasePACSRetrievedImagesDAL::insert(const PacsDevice &pacsDevice)
 {
     QSqlQuery query = getNewQuery();
-    query.prepare("INSERT INTO PACSRetrievedImages (AETitle, Address, QueryPort) VALUES (:aeTitle, :address, :queryPort)");
-    query.bindValue(":aeTitle", pacsDevice.getAETitle());
-    query.bindValue(":address", pacsDevice.getAddress());
-    query.bindValue(":queryPort", pacsDevice.getQueryRetrieveServicePort());
+
+    if (pacsDevice.getType() == PacsDevice::Type::Dimse)
+    {
+        query.prepare("INSERT INTO PACSRetrievedImages (Type, AETitle, Address, QueryPort) VALUES (:type, :aeTitle, :address, :queryPort)");
+        query.bindValue(":type", "DIMSE");
+        query.bindValue(":aeTitle", pacsDevice.getAETitle());
+        query.bindValue(":address", pacsDevice.getAddress());
+        query.bindValue(":queryPort", pacsDevice.getQueryRetrieveServicePort());
+    }
+    else if (pacsDevice.getType() == PacsDevice::Type::Wado)
+    {
+        query.prepare("INSERT INTO PACSRetrievedImages (Type, BaseUri) VALUES (:type, :baseUri)");
+        query.bindValue(":type", "WADO");
+        query.bindValue(":baseUri", pacsDevice.getBaseUri());
+    }
+    else    // WADO-URI + DIMSE
+    {
+        query.prepare("INSERT INTO PACSRetrievedImages (Type, AETitle, Address, QueryPort, BaseUri) VALUES (:type, :aeTitle, :address, :queryPort, :baseUri)");
+        query.bindValue(":type", "WADO-URI+DIMSE");
+        query.bindValue(":aeTitle", pacsDevice.getAETitle());
+        query.bindValue(":address", pacsDevice.getAddress());
+        query.bindValue(":queryPort", pacsDevice.getQueryRetrieveServicePort());
+        query.bindValue(":baseUri", pacsDevice.getBaseUri());
+    }
 
     if (executeQueryAndLogError(query))
     {
@@ -46,35 +67,80 @@ qlonglong LocalDatabasePACSRetrievedImagesDAL::insert(const PacsDevice &pacsDevi
 
 PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(qlonglong pacsId)
 {
-    QSqlQuery query = getNewQuery();
-    query.prepare("SELECT ID, AETitle, Address, QueryPort FROM PACSRetrievedImages WHERE ID = :id");
-    query.bindValue(":id", pacsId);
-    return this->query(query);
-}
-
-PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(const QString &aeTitle, const QString &address, int queryPort)
-{
-    QSqlQuery query = getNewQuery();
-    query.prepare("SELECT ID, AETitle, Address, QueryPort FROM PACSRetrievedImages WHERE AETitle = :aeTitle AND Address = :address AND QueryPort = :queryPort");
-    query.bindValue(":aeTitle", aeTitle);
-    query.bindValue(":address", address);
-    query.bindValue(":queryPort", queryPort);
-    return this->query(query);
-}
-
-PacsDevice LocalDatabasePACSRetrievedImagesDAL::query(QSqlQuery &query)
-{
     PacsDevice pacsDevice;
+    QSqlQuery query = getNewQuery();
+    query.prepare("SELECT ID, Type, AETitle, Address, QueryPort, BaseUri FROM PACSRetrievedImages WHERE ID = :id");
+    query.bindValue(":id", pacsId);
 
     if (executeQueryAndLogError(query) && query.next())
     {
-        pacsDevice.setID(query.value("ID").toString());
-        pacsDevice.setAETitle(query.value("AETitle").toString());
-        pacsDevice.setAddress(query.value("Address").toString());
-        pacsDevice.setQueryRetrieveServicePort(query.value("QueryPort").toInt());
+        QString type = query.value("Type").toString();
+
+        if (type == "DIMSE")
+        {
+            pacsDevice.setID(query.value("ID").toString());
+            pacsDevice.setType(PacsDevice::Type::Dimse);
+            pacsDevice.setAETitle(query.value("AETitle").toString());
+            pacsDevice.setAddress(query.value("Address").toString());
+            pacsDevice.setQueryRetrieveServicePort(query.value("QueryPort").toInt());
+        }
+        else if (type == "WADO")
+        {
+            pacsDevice.setID(query.value("ID").toString());
+            pacsDevice.setType(PacsDevice::Type::Wado);
+            pacsDevice.setBaseUri(query.value("BaseUri").toUrl());
+        }
+        else if (type == "WADO-URI+DIMSE")
+        {
+            pacsDevice.setID(query.value("ID").toString());
+            pacsDevice.setType(PacsDevice::Type::WadoUriDimse);
+            pacsDevice.setAETitle(query.value("AETitle").toString());
+            pacsDevice.setAddress(query.value("Address").toString());
+            pacsDevice.setQueryRetrieveServicePort(query.value("QueryPort").toInt());
+            pacsDevice.setBaseUri(query.value("BaseUri").toUrl());
+        }
+        else
+        {
+            WARN_LOG(QString("Found PACS in database with unexpected type: %1").arg(type));
+        }
     }
 
     return pacsDevice;
+}
+
+QVariant LocalDatabasePACSRetrievedImagesDAL::queryId(const PacsDevice &pacsDevice)
+{
+    QSqlQuery query = getNewQuery();
+
+    if (pacsDevice.getType() == PacsDevice::Type::Dimse)
+    {
+        query.prepare("SELECT ID FROM PACSRetrievedImages WHERE AETitle = :aeTitle AND Address = :address AND QueryPort = :queryPort");
+        query.bindValue(":aeTitle", pacsDevice.getAETitle());
+        query.bindValue(":address", pacsDevice.getAddress());
+        query.bindValue(":queryPort", pacsDevice.getQueryRetrieveServicePort());
+    }
+    else if (pacsDevice.getType() == PacsDevice::Type::Wado)
+    {
+        query.prepare("SELECT ID FROM PACSRetrievedImages WHERE BaseUri = :baseUri");
+        query.bindValue(":baseUri", pacsDevice.getBaseUri());
+    }
+    else    // WADO-URI + DIMSE
+    {
+        query.prepare("SELECT ID FROM PACSRetrievedImages WHERE AETitle = :aeTitle AND Address = :address AND QueryPort = :queryPort AND BaseUri = :baseUri");
+        query.bindValue(":aeTitle", pacsDevice.getAETitle());
+        query.bindValue(":address", pacsDevice.getAddress());
+        query.bindValue(":queryPort", pacsDevice.getQueryRetrieveServicePort());
+        query.bindValue(":baseUri", pacsDevice.getBaseUri());
+    }
+
+    if (executeQueryAndLogError(query) && query.next())
+    {
+        return query.value("ID");
+    }
+    else
+    {
+        return QVariant(QVariant::LongLong);
+    }
 }
 
 }

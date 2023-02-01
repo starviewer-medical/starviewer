@@ -1,3 +1,8 @@
+/*@
+    "name": "test_ApplicationVersionChecker",
+    "requirements": ["technical.update_checking"]
+ */
+
 #include "autotest.h"
 #include "applicationversionchecker.h"
 

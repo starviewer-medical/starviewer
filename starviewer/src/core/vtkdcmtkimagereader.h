@@ -45,7 +45,7 @@ public:
 
     /// Methods invoked by print to print information about the object including superclasses. Typically not called by the user (use Print() instead) but used
     /// in the hierarchical print process to combine the output of several classes.
-    virtual void PrintSelf(std::ostream &os, vtkIndent indent);
+    void PrintSelf(std::ostream &os, vtkIndent indent) override;
 
     /// Sets the list of frame numbers in the order they must be read from a multiframe file. No need to specify for single-frame files.
     void setFrameNumbers(const QList<int> &frameNumbers);
@@ -55,9 +55,9 @@ protected:
     VtkDcmtkImageReader();
 
     /// Reads image information from the first file and fills data properties (extent, spacing, origin).
-    virtual int RequestInformation(vtkInformation *request, vtkInformationVector **inputVector, vtkInformationVector *outputVector);
+    int RequestInformation(vtkInformation *request, vtkInformationVector **inputVector, vtkInformationVector *outputVector) override;
     /// Reads image data from the file(s).
-    virtual int RequestData(vtkInformation *request, vtkInformationVector **inputVector, vtkInformationVector *outputVector);
+    int RequestData(vtkInformation *request, vtkInformationVector **inputVector, vtkInformationVector *outputVector) override;
 
 private:
 

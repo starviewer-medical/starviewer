@@ -732,6 +732,9 @@ bool Image::readOverlays(bool splitOverlays)
 {
     ImageOverlayReader reader;
     reader.setFilename(this->getPath());
+    reader.setNumberOfOverlays(m_numberOfOverlays);
+    reader.setFrameNumber(m_frameNumber);
+
     if (reader.read())
     {
         if (splitOverlays)
@@ -741,7 +744,6 @@ bool Image::readOverlays(bool splitOverlays)
             if (!mergeOk)
             {
                 ERROR_LOG("Ha fallat el merge d'overlays! Possible causa: falta de memòria");
-                DEBUG_LOG("Ha fallat el merge d'overlays! Possible causa: falta de memòria");
                 return false;
             }
 
@@ -757,7 +759,6 @@ bool Image::readOverlays(bool splitOverlays)
     else
     {
         ERROR_LOG("Ha fallat la lectura de l'overlay de la imatge amb path: " + this->getPath());
-        DEBUG_LOG("Ha fallat la lectura de l'overlay de la imatge amb path: " + this->getPath());
         return false;
     }
 }

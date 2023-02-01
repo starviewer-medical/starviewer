@@ -372,7 +372,7 @@ void test_VolumePixelData::getVoxelValue_IndexVariant_ShouldReturnExpectedSingle
             for (int k = 0; k < 10; k++)
             {
                 *scalarPointer = value;
-                *scalarPointer++;
+                scalarPointer++;
             }
         }
     }

@@ -26,10 +26,10 @@ namespace udg {
 class DICOMDIRBurningApplicationTest : public DiagnosisTest {
 Q_OBJECT
 public:
-    DICOMDIRBurningApplicationTest(QObject *parent = 0);
-    ~DICOMDIRBurningApplicationTest();
+    explicit DICOMDIRBurningApplicationTest(QObject *parent = nullptr);
+    ~DICOMDIRBurningApplicationTest() override;
 
-    DiagnosisTestResult run();
+    DiagnosisTestResult run() override;
 
     ///Retorna descripcio del test
     QString getDescription() const override;

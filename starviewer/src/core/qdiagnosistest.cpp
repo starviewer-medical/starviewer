@@ -39,6 +39,8 @@ QStringList getSystemInformation()
 {
     std::unique_ptr<SystemInformation> systemInformation(SystemInformation::newInstance());
     QStringList systemDetails{QObject::tr("Operating system: %1").arg(systemInformation->getOperatingSystemAsString())};
+
+#ifdef Q_OS_WIN32
     QString desktopComposition(QObject::tr("Desktop composition: %1"));
 
     if (systemInformation->isDesktopCompositionAvailable())
@@ -57,8 +59,14 @@ QStringList getSystemInformation()
         desktopComposition = desktopComposition.arg(QObject::tr("Not available"));
     }
 
-    systemDetails << desktopComposition
-                  << QObject::tr("RAM memory: %1 MB").arg(systemInformation->getRAMTotalAmount());
+    systemDetails << desktopComposition;
+#endif
+
+#ifdef Q_OS_LINUX
+    systemDetails << QObject::tr("Desktop: %1").arg(systemInformation->getDesktopInformation());
+#endif
+
+    systemDetails << QObject::tr("RAM memory: %1 MB").arg(systemInformation->getRAMTotalAmount());
     QStringList cpus;
 
     foreach (unsigned int frequency, systemInformation->getCPUFrequencies())
@@ -122,15 +130,9 @@ QDiagnosisTest::QDiagnosisTest(QWidget *parent)
 
 QDiagnosisTest::~QDiagnosisTest()
 {
-    // TODO Should finish in a cleaner way. Calling terminate() is dangerous.
-    //      Instead, should stop running the tests (in particular, cancel PACS echoes) and call m_threadRunningDiagnosisTest->quit()
-    //      And should not need to wait for the thread to finish: just connect to the finished() signal and destroy thread and tests there
-    //      Exception: if the application quits, should the thread be terminated?
-    m_threadRunningDiagnosisTest->terminate();
-    m_threadRunningDiagnosisTest->wait();
-    qDeleteAll(m_runDiagnosisTest->getDiagnosisTestToRun());
-    delete m_runDiagnosisTest;
-    delete m_threadRunningDiagnosisTest;
+    m_threadRunningDiagnosisTest->requestInterruption();
+    m_threadRunningDiagnosisTest->quit();
+    // The test runner (and tests) and the thread will be deleted via connections when the thread finishes
 }
 
 void QDiagnosisTest::execAndRunDiagnosisTest()
@@ -150,6 +152,9 @@ void QDiagnosisTest::createConnections()
     connect(this, SIGNAL(start()), m_runDiagnosisTest, SLOT(run()));
     connect(m_runDiagnosisTest, SIGNAL(runningDiagnosisTest(DiagnosisTest*)), this, SLOT(updateRunningDiagnosisTestProgress(DiagnosisTest*)));
     connect(m_runDiagnosisTest, SIGNAL(finished()), this, SLOT(finishedRunningDiagnosisTest()));
+
+    connect(m_threadRunningDiagnosisTest, &QThread::finished, m_runDiagnosisTest, &QObject::deleteLater);
+    connect(m_threadRunningDiagnosisTest, &QThread::finished, m_threadRunningDiagnosisTest, &QObject::deleteLater);
 }
 
 void QDiagnosisTest::runDiagnosisTest()
@@ -185,17 +190,18 @@ void QDiagnosisTest::finishedRunningDiagnosisTest()
         m_resultsTitleLabel->setText(tr("Some tests have failed"));
         m_viewTestsLabel->hide();
         m_correctPushButton->setChecked(false);
+        this->resize(768, 576); // hardcoded default size to show results (don't worry, used only here and below)
     }
 
     m_progressBarWidget->hide();
     m_resultsWidget->show();
-    this->resize(640, 540); // hardcoded default size to show results (don't worry, used only here)
 }
 
 void QDiagnosisTest::viewTestsLabelClicked()
 {
     m_buttonsAndScrollAreaWidget->show();
-    m_viewTestsLabel->show();
+    m_viewTestsLabel->hide();
+    this->resize(768, 576); // hardcoded default size to show results (don't worry, used only here and above)
 }
 
 void QDiagnosisTest::fillDiagnosisTestsResultTable()
@@ -284,7 +290,8 @@ void QDiagnosisTest::updateWidgetToRunDiagnosisTest()
 
 void QDiagnosisTest::saveDiagnosisTestResultsAsFile()
 {
-    QString pathFile = QFileDialog::getSaveFileName(this, tr("Save diagnosis tests results"), QDir::homePath(), tr("JSON files (*.json)"));
+    QString pathFile = QFileDialog::getSaveFileName(this, tr("Save diagnosis tests results"), QDir::homePath() + "/diagnosistestsresults.json",
+                                                    tr("JSON files (*.json)"));
 
     if (!pathFile.isEmpty())
     {

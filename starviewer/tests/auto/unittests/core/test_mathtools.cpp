@@ -29,9 +29,6 @@ Q_OBJECT
 private slots:
     void getBoundedValue_ReturnsExpectedValue_data();
     void getBoundedValue_ReturnsExpectedValue();
-    
-    void truncate_ShouldReturnTruncatedValue_data();
-    void truncate_ShouldReturnTruncatedValue();
 
     void roundToNearestInteger_ShouldReturnRoundedValue_data();
     void roundToNearestInteger_ShouldReturnRoundedValue();
@@ -42,23 +39,11 @@ private slots:
     void radiansToDegrees_ShouldReturnExpectedValue_data();
     void radiansToDegrees_ShouldReturnExpectedValue();
 
-    void logTwo_WithDefaultSecondParameterShouldReturnExpectedValue_data();
-    void logTwo_WithDefaultSecondParameterShouldReturnExpectedValue();
+    void logTwo_ShouldReturnExpectedValue_data();
+    void logTwo_ShouldReturnExpectedValue();
 
-    void logTwo_WithExplicitSecondParameterShouldReturnExpectedValue_data();
-    void logTwo_WithExplicitSecondParameterShouldReturnExpectedValue();
-
-    void logTwo_WithDefaultSecondParameterShouldReturnNaN_data();
-    void logTwo_WithDefaultSecondParameterShouldReturnNaN();
-
-    void logTwo_WithExplicitSecondParameterShouldReturnNaN_data();
-    void logTwo_WithExplicitSecondParameterShouldReturnNaN();
-
-    void cubeRoot_ShouldReturnExpectedValue_data();
-    void cubeRoot_ShouldReturnExpectedValue();
-
-    void cubeRoot_ShouldReturnNaN_data();
-    void cubeRoot_ShouldReturnNaN();
+    void logTwo_ShouldReturnNaN_data();
+    void logTwo_ShouldReturnNaN();
 
     void closeEnough_ShouldReturnExpectedValue_data();
     void closeEnough_ShouldReturnExpectedValue();
@@ -192,25 +177,6 @@ void test_MathTools::getBoundedValue_ReturnsExpectedValue()
     QCOMPARE(MathTools::getBoundedValue(value, min, max, loop), expectedBoundedValue);
 }
 
-void test_MathTools::truncate_ShouldReturnTruncatedValue_data()
-{
-    QTest::addColumn<double>("value");
-    QTest::addColumn<double>("truncated");
-
-    QTest::newRow("negative") << -32.14 << -32.0;
-    QTest::newRow("positive") << 77.97 << 77.0;
-    QTest::newRow("+zero") << 0.0 << 0.0;
-    QTest::newRow("-zero") << -0.0 << -0.0;
-}
-
-void test_MathTools::truncate_ShouldReturnTruncatedValue()
-{
-    QFETCH(double, value);
-    QFETCH(double, truncated);
-
-    QCOMPARE(MathTools::truncate(value), truncated);
-}
-
 void test_MathTools::roundToNearestInteger_ShouldReturnRoundedValue_data()
 {
     QTest::addColumn<double>("value");
@@ -269,7 +235,7 @@ void test_MathTools::radiansToDegrees_ShouldReturnExpectedValue()
              qPrintable(QString("actual: %1, expected: %2, difference: %3").arg(result).arg(degrees).arg(result - degrees)));
 }
 
-void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnExpectedValue_data()
+void test_MathTools::logTwo_ShouldReturnExpectedValue_data()
 {
     QTest::addColumn<double>("x");
     QTest::addColumn<double>("expectedResult");
@@ -282,7 +248,7 @@ void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnExpectedValue_
     QTest::newRow("random") << 45.2426428941 << 5.499611303146188;
 }
 
-void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnExpectedValue()
+void test_MathTools::logTwo_ShouldReturnExpectedValue()
 {
     QFETCH(double, x);
     QFETCH(double, expectedResult);
@@ -293,34 +259,7 @@ void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnExpectedValue(
              qPrintable(QString("actual: %1, expected: %2, difference: %3").arg(result).arg(expectedResult).arg(result - expectedResult)));
 }
 
-void test_MathTools::logTwo_WithExplicitSecondParameterShouldReturnExpectedValue_data()
-{
-    QTest::addColumn<double>("x");
-    QTest::addColumn<bool>("zero");
-    QTest::addColumn<double>("expectedResult");
-
-    QTest::newRow("0 false") << 0.0 << false << -std::numeric_limits<double>::infinity();
-    QTest::newRow("0 true") << 0.0 << true << 0.0;
-    QTest::newRow("< 1 false") << 0.8442696986 << false << -0.2442241591313752;
-    QTest::newRow("1 true") << 1.0 << true << 0.0;
-    QTest::newRow("2 false") << 2.0 << false << 1.0;
-    QTest::newRow("e true") << 2.718281828459045 << true << 1.4426950408889634;
-    QTest::newRow("random false") << 45.2426428941 << false << 5.499611303146188;
-}
-
-void test_MathTools::logTwo_WithExplicitSecondParameterShouldReturnExpectedValue()
-{
-    QFETCH(double, x);
-    QFETCH(bool, zero);
-    QFETCH(double, expectedResult);
-
-    double result = MathTools::logTwo(x, zero);
-
-    QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(result, expectedResult),
-             qPrintable(QString("actual: %1, expected: %2, difference: %3").arg(result).arg(expectedResult).arg(result - expectedResult)));
-}
-
-void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnNaN_data()
+void test_MathTools::logTwo_ShouldReturnNaN_data()
 {
     QTest::addColumn<double>("x");
 
@@ -328,72 +267,11 @@ void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnNaN_data()
     QTest::newRow("random") << -45.2426428941;
 }
 
-void test_MathTools::logTwo_WithDefaultSecondParameterShouldReturnNaN()
+void test_MathTools::logTwo_ShouldReturnNaN()
 {
     QFETCH(double, x);
 
     double result = MathTools::logTwo(x);
-
-    QVERIFY2(MathTools::isNaN(result), qPrintable(QString("actual: %1, expected: nan").arg(result)));
-}
-
-void test_MathTools::logTwo_WithExplicitSecondParameterShouldReturnNaN_data()
-{
-    QTest::addColumn<double>("x");
-    QTest::addColumn<bool>("zero");
-
-    QTest::newRow("-1 false") << -1.0 << false;
-    QTest::newRow("random true") << -45.2426428941 << true;
-}
-
-void test_MathTools::logTwo_WithExplicitSecondParameterShouldReturnNaN()
-{
-    QFETCH(double, x);
-    QFETCH(bool, zero);
-
-    double result = MathTools::logTwo(x, zero);
-
-    QVERIFY2(MathTools::isNaN(result), qPrintable(QString("actual: %1, expected: nan").arg(result)));
-}
-
-void test_MathTools::cubeRoot_ShouldReturnExpectedValue_data()
-{
-    QTest::addColumn<double>("x");
-    QTest::addColumn<double>("expectedResult");
-
-    QTest::newRow("0") << 0.0 << 0.0;
-    QTest::newRow("-0") << -0.0 << 0.0;
-    QTest::newRow("1") << 1.0 << 1.0;
-    QTest::newRow("8") << 8.0 << 2.0;
-    QTest::newRow("random #1") << 70.71 << 4.135172323084713;
-    QTest::newRow("random #2") << 63.62 << 3.9920676130411104;
-}
-
-void test_MathTools::cubeRoot_ShouldReturnExpectedValue()
-{
-    QFETCH(double, x);
-    QFETCH(double, expectedResult);
-
-    double result = MathTools::cubeRoot(x);
-
-    QVERIFY2(FuzzyCompareTestHelper::fuzzyCompare(result, expectedResult),
-             qPrintable(QString("actual: %1, expected: %2, difference: %3").arg(result).arg(expectedResult).arg(result - expectedResult)));
-}
-
-void test_MathTools::cubeRoot_ShouldReturnNaN_data()
-{
-    QTest::addColumn<double>("x");
-
-    QTest::newRow("-1") << -1.0;
-    QTest::newRow("-8") << -8.0;
-    QTest::newRow("random #1") << -67.94;
-}
-
-void test_MathTools::cubeRoot_ShouldReturnNaN()
-{
-    QFETCH(double, x);
-
-    double result = MathTools::cubeRoot(x);
 
     QVERIFY2(MathTools::isNaN(result), qPrintable(QString("actual: %1, expected: nan").arg(result)));
 }
@@ -823,28 +701,25 @@ void test_MathTools::crossProduct_ShouldReturnExpectedValues()
 
 void test_MathTools::getDistance3D_ShouldComputeDistanceCorrectly_data()
 {
-    QTest::addColumn<QVector3D>("vector1");
-    QTest::addColumn<QVector3D>("vector2");
+    QTest::addColumn<Vector3>("vector1");
+    QTest::addColumn<Vector3>("vector2");
     QTest::addColumn<double>("distance3D");
 
-    QTest::newRow("Same vectors") << QVector3D(1, 2, 1) << QVector3D(1, 2, 1) << 0.0;
-    QTest::newRow("null vectors") << QVector3D(0, 0, 0) << QVector3D(0, 0, 0) << 0.0;
-    QTest::newRow("random coronal") << QVector3D(-89.9476, 49.8371, 599.893) << QVector3D(-79.0086, 207.671, 599.893) << 158.213;
-    QTest::newRow("random sagital") << QVector3D(7.68421, -11.8899, 695.178) << QVector3D(7.68421, 144.381, 831.915) << 207.648;
-    QTest::newRow("random coronal") << QVector3D(-96.9798, 99.4654, 838.166) << QVector3D(-50.0985, 99.4654, 709.242) << 137.183;
-    QTest::newRow("random") << QVector3D(35.44, 12.61, -85.28) << QVector3D(92.56, -95.19, 28.85) << 167.060;
+    QTest::newRow("Same vectors") << Vector3(1, 2, 1) << Vector3(1, 2, 1) << 0.0;
+    QTest::newRow("null vectors") << Vector3(0, 0, 0) << Vector3(0, 0, 0) << 0.0;
+    QTest::newRow("random coronal") << Vector3(-89.9476, 49.8371, 599.893) << Vector3(-79.0086, 207.671, 599.893) << 158.213;
+    QTest::newRow("random sagital") << Vector3(7.68421, -11.8899, 695.178) << Vector3(7.68421, 144.381, 831.915) << 207.648;
+    QTest::newRow("random coronal") << Vector3(-96.9798, 99.4654, 838.166) << Vector3(-50.0985, 99.4654, 709.242) << 137.183;
+    QTest::newRow("random") << Vector3(35.44, 12.61, -85.28) << Vector3(92.56, -95.19, 28.85) << 167.060;
 }
 
 void test_MathTools::getDistance3D_ShouldComputeDistanceCorrectly()
 {
-    QFETCH(QVector3D, vector1);
-    QFETCH(QVector3D, vector2);
+    QFETCH(Vector3, vector1);
+    QFETCH(Vector3, vector2);
     QFETCH(double, distance3D);
 
-    double v1[3] = { vector1.x(), vector1.y(), vector1.z() };
-    double v2[3] = { vector2.x(), vector2.y(), vector2.z() };
-
-    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::getDistance3D(v1, v2), distance3D, distance3DEpsion));
+    QVERIFY(FuzzyCompareTestHelper::fuzzyCompare(MathTools::getDistance3D(vector1, vector2), distance3D, distance3DEpsion));
 }
 
 void test_MathTools::infiniteLinesIntersection_ShouldComputeExpectedIntersectionAndState_data()
@@ -1296,7 +1171,7 @@ void test_MathTools::setupComputeAngleOfAVectorData()
     QTest::newRow("+X+Y / pi/4 rad / 45º") << QVector2D(1.0, 1.0) << MathTools::PiNumber / 4.0;
     QTest::newRow("+Y / pi/2 rad / 90º") << QVector2D(0.0, 1.0) << MathTools::PiNumber / 2.0;
     QTest::newRow("-X+Y / 3pi/4 rad / 135º") << QVector2D(-1.0, 1.0) << 3.0 * MathTools::PiNumber / 4.0;
-    QTest::newRow("-X / pi rad / 180º") << QVector2D(-1.0, 0.0) << MathTools::PiNumber;
+    QTest::newRow("-X / pi rad / 180º") << QVector2D(-1.0, 0.0) << +MathTools::PiNumber;
 
     QTest::newRow("random Q1") << QVector2D(1.1, 4.0) << 1.30243;
     QTest::newRow("random Q2") << QVector2D(-9.7, 4.2) << 2.73297;
@@ -1304,7 +1179,7 @@ void test_MathTools::setupComputeAngleOfAVectorData()
     QTest::newRow("random Q4") << QVector2D(9.4, -9.3) << -0.78005;
 
     QTest::newRow("+0+0") << QVector2D(+0.0, +0.0) << +0.0;
-    QTest::newRow("-0+0") << QVector2D(-0.0, +0.0) << MathTools::PiNumber;
+    QTest::newRow("-0+0") << QVector2D(-0.0, +0.0) << +MathTools::PiNumber;
     QTest::newRow("-0-0") << QVector2D(-0.0, -0.0) << -MathTools::PiNumber;
     QTest::newRow("+0-0") << QVector2D(+0.0, -0.0) << -0.0;
 }

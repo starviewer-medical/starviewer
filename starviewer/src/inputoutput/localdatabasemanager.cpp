@@ -17,6 +17,7 @@
 #include "databaseconnection.h"
 #include "dicommask.h"
 #include "directoryutilities.h"
+#include "encapsulateddocument.h"
 #include "harddiskinformation.h"
 #include "image.h"
 #include "inputoutputsettings.h"
@@ -37,18 +38,39 @@ namespace udg {
 
 namespace {
 
-// Saves all the display shutters in the given list from the given image to the database.
-void insertDisplayShutters(DatabaseConnection &databaseConnection, const QList<DisplayShutter> &shuttersList, const Image *image)
+// Inserts to the database all the display shutters in the given image.
+void insertDisplayShutters(DatabaseConnection &databaseConnection, const Image *image)
 {
     LocalDatabaseDisplayShutterDAL displayShutterDAL(databaseConnection);
+    const QList<DisplayShutter> &shutterList = image->getDisplayShutters();
 
-    foreach (const DisplayShutter &shutter, shuttersList)
+    foreach (const DisplayShutter &shutter, shutterList)
     {
         if (!displayShutterDAL.insert(shutter, image))
         {
             throw displayShutterDAL.getLastError();
         }
     }
+}
+
+// Deletes from the database all the display shutters that match the given mask.
+void deleteDisplayShutters(DatabaseConnection &databaseConnection, const DicomMask &mask)
+{
+    LocalDatabaseDisplayShutterDAL displayShutterDAL(databaseConnection);
+
+    if (!displayShutterDAL.del(mask))
+    {
+        throw displayShutterDAL.getLastError();
+    }
+}
+
+// Deletes from the database all the display shutters from the given image.
+void deleteDisplayShutters(DatabaseConnection &databaseConnection, const Image *image)
+{
+    DicomMask mask;
+    mask.setSOPInstanceUID(image->getSOPInstanceUID());
+    mask.setImageNumber(QString::number(image->getFrameNumber()));
+    deleteDisplayShutters(databaseConnection, mask);
 }
 
 // Inserts to the database all the VOI LUTs that are LUTs in the given image.
@@ -94,35 +116,31 @@ void deleteVoiLuts(DatabaseConnection &databaseConnection, const Image *image)
 void saveImage(DatabaseConnection &databaseConnection, const Image *image)
 {
     LocalDatabaseImageDAL imageDAL(databaseConnection);
+    bool update = imageDAL.exists(image->getSOPInstanceUID(), image->getFrameNumber());
+    bool ok;
 
-    if (!imageDAL.insert(image))
+    if (update)
     {
-        if (imageDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
-        {
-            // The image already exists, let's update it
-            if (!imageDAL.update(image))
-            {
-                throw imageDAL.getLastError();
-            }
-
-            // Update shutters
-            LocalDatabaseDisplayShutterDAL shutterDAL(databaseConnection);
-
-            if (!shutterDAL.update(image->getDisplayShutters(), image))
-            {
-                throw shutterDAL.getLastError();
-            }
-
-            // Delete existing VOI LUTs from the image. The new ones (or the same ones) are inserted below.
-            deleteVoiLuts(databaseConnection, image);
-        }
-        else
-        {
-            throw imageDAL.getLastError();
-        }
+        ok = imageDAL.update(image);
+    }
+    else
+    {
+        ok = imageDAL.insert(image);
     }
 
-    insertDisplayShutters(databaseConnection, image->getDisplayShutters(), image);
+    if (!ok)
+    {
+        throw imageDAL.getLastError();
+    }
+
+    if (update)
+    {
+        // Delete existing shutters and VOI LUTs because they can't be updated. They are reinserted below.
+        deleteDisplayShutters(databaseConnection, image);
+        deleteVoiLuts(databaseConnection, image);
+    }
+
+    insertDisplayShutters(databaseConnection, image);
     insertVoiLuts(databaseConnection, image);
 }
 
@@ -141,21 +159,20 @@ void saveImages(DatabaseConnection &databaseConnection, const QList<Image*> &ima
 void saveEncapsulatedDocument(DatabaseConnection &databaseConnection, const EncapsulatedDocument *document)
 {
     LocalDatabaseEncapsulatedDocumentDAL encapsulatedDocumentDAL(databaseConnection);
+    bool ok;
 
-    if (!encapsulatedDocumentDAL.insert(document))
+    if (encapsulatedDocumentDAL.exists(document->getSopInstanceUid()))
     {
-        if (encapsulatedDocumentDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
-        {
-            // The encapsulated document already exists, let's update it
-            if (!encapsulatedDocumentDAL.update(document))
-            {
-                throw encapsulatedDocumentDAL.getLastError();
-            }
-        }
-        else
-        {
-            throw encapsulatedDocumentDAL.getLastError();
-        }
+        ok = encapsulatedDocumentDAL.update(document);
+    }
+    else
+    {
+        ok = encapsulatedDocumentDAL.insert(document);
+    }
+
+    if (!ok)
+    {
+        throw encapsulatedDocumentDAL.getLastError();
     }
 }
 
@@ -172,21 +189,20 @@ void saveEncapsulatedDocuments(DatabaseConnection &databaseConnection, const QLi
 void saveSeries(DatabaseConnection &databaseConnection, const Series *series)
 {
     LocalDatabaseSeriesDAL seriesDAL(databaseConnection);
+    bool ok;
 
-    if (!seriesDAL.insert(series))
+    if (seriesDAL.exists(series->getInstanceUID()))
     {
-        if (seriesDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
-        {
-            // The image already exists, let's update it
-            if (!seriesDAL.update(series))
-            {
-                throw seriesDAL.getLastError();
-            }
-        }
-        else
-        {
-            throw seriesDAL.getLastError();
-        }
+        ok = seriesDAL.update(series);
+    }
+    else
+    {
+        ok = seriesDAL.insert(series);
+    }
+
+    if (!ok)
+    {
+        throw seriesDAL.getLastError();
     }
 }
 
@@ -235,13 +251,15 @@ void savePatientOfStudy(DatabaseConnection &databaseConnection, const Study *stu
 void saveStudy(DatabaseConnection &databaseConnection, const Study *study)
 {
     LocalDatabaseStudyDAL studyDAL(databaseConnection);
+    bool ok;
 
-    bool ok = studyDAL.insert(study, QDate::currentDate());
-
-    // If the study already exists, update it
-    if (!ok && studyDAL.getLastError().nativeErrorCode().toInt() == DatabaseConnection::SqliteConstraint)
+    if (studyDAL.exists(study->getInstanceUID()))
     {
         ok = studyDAL.update(study, QDate::currentDate());
+    }
+    else
+    {
+        ok = studyDAL.insert(study, QDate::currentDate());
     }
 
     if (!ok)
@@ -255,9 +273,9 @@ void saveStudies(DatabaseConnection &databaseConnection, const QList<Study*> &st
 {
     foreach (Study *study, studyList)
     {
-        INFO_LOG(QString("Inserting to the database study %1 of modality %2 from %3 of patient %4").arg(study->getInstanceUID())
-                 .arg(study->getModalitiesAsSingleString()).arg(study->getDateTime().toString("dd/MM/yyyy hh:mm:ss"))
-                 .arg(study->getParentPatient()->getFullName()));
+        INFO_LOG(QString("Inserting to the database study %1 of modality %2 from %3 of patient %4.")
+                 .arg(study->getInstanceUID(), study->getModalitiesAsSingleString(), study->getDateTime().toString("yyyy-MM-dd hh:mm:ss"),
+                      study->getParentPatient()->getID()));
 
         saveSeries(databaseConnection, study->getSeries(), currentDate, currentTime);
 
@@ -326,12 +344,7 @@ void deleteSeriesFromDatabase(DatabaseConnection &databaseConnection, const Dico
 void deleteImagesFromDatabase(DatabaseConnection &databaseConnection, const DicomMask &mask)
 {
     // Delete shutters first
-    LocalDatabaseDisplayShutterDAL shutterDAL(databaseConnection);
-
-    if (!shutterDAL.del(mask))
-    {
-        throw shutterDAL.getLastError();
-    }
+    deleteDisplayShutters(databaseConnection, mask);
 
     // Then delete VOI LUTs
     deleteVoiLuts(databaseConnection, mask);
@@ -878,52 +891,6 @@ bool LocalDatabaseManager::thereIsAvailableSpaceOnHardDisk()
     }
 }
 
-void LocalDatabaseManager::setStudyBeingRetrieved(const QString &studyInstanceUID)
-{
-    Settings().setValue(InputOutputSettings::RetrievingStudy, studyInstanceUID);
-}
-
-void LocalDatabaseManager::setNoStudyBeingRetrieved()
-{
-    Settings().remove(InputOutputSettings::RetrievingStudy);
-}
-
-bool LocalDatabaseManager::isAStudyBeingRetrieved() const
-{
-    return Settings().contains(InputOutputSettings::RetrievingStudy);
-}
-
-void LocalDatabaseManager::deleteStudyBeingRetrieved()
-{
-    m_lastError = Ok;
-
-    if (isAStudyBeingRetrieved())
-    {
-        Settings settings;
-        QString studyInstanceUID = settings.getValue(InputOutputSettings::RetrievingStudy).toString();
-
-        INFO_LOG(QString("Study %1 was being downloaded when Starviewer finished. Its images will be deleted to maintain local cache integrity.")
-                 .arg(studyInstanceUID));
-
-        // The study could have really been fully downloaded and the application have finished just before clearing the setting,
-        // so we must delete the study if it exists in the database.
-        if (studyExists(studyInstanceUID))
-        {
-            deleteStudy(studyInstanceUID);
-        }
-        else
-        {
-            // Check if the directory really exists. It might not exist if not a single image was downloaded.
-            if (QDir().exists(getStudyPath(studyInstanceUID)))
-            {
-                deleteStudyFromHardDisk(studyInstanceUID);
-            }
-        }
-
-        setNoStudyBeingRetrieved();
-    }
-}
-
 LocalDatabaseManager::LastError LocalDatabaseManager::getLastError() const
 {
     return m_lastError;
@@ -1036,7 +1003,11 @@ void LocalDatabaseManager::setLastError(const QSqlError &error)
 {
     int sqliteLastError = error.nativeErrorCode().toInt();
 
-    if (sqliteLastError == DatabaseConnection::SqliteOk)
+    if (error.isValid() && error.nativeErrorCode().isEmpty())
+    {
+        m_lastError = DatabaseError;
+    }
+    else if (sqliteLastError == DatabaseConnection::SqliteOk)
     {
         m_lastError = Ok;
     }

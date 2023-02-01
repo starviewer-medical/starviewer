@@ -76,11 +76,11 @@ public:
   ExporterFilterType * GetExporter() const;
 
   /** This call delegate the update to the importer */
-  void Update();
+  void Update() override;
 
 protected:
   ImageToVTKImageFilter();
-  virtual ~ImageToVTKImageFilter();
+  ~ImageToVTKImageFilter() override;
 
 private:
   ImageToVTKImageFilter(const Self&); //purposely not implemented

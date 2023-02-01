@@ -14,31 +14,21 @@
 
 #include "queryscreen.h"
 
-#include <QMessageBox>
-#include <QCloseEvent>
-#include <QMovie>
-
-#include "qpacslist.h"
-#include "inputoutputsettings.h"
-#include "pacsdevicemanager.h"
-#include "logging.h"
-#include "qcreatedicomdir.h"
 #include "dicommask.h"
+#include "inputoutputsettings.h"
+#include "messagebus.h"
+#include "portinuse.h"
+#include "qcreatedicomdir.h"
 #include "qoperationstatescreen.h"
-#include "localdatabasemanager.h"
-#include "patient.h"
+#include "qpacslist.h"
 #include "starviewerapplication.h"
 #include "statswatcher.h"
-#include "pacsdevice.h"
-#include "risrequestmanager.h"
-#include "pacsmanager.h"
-#include "retrievedicomfilesfrompacsjob.h"
-#include "portinuse.h"
+#include "studyoperationresult.h"
+#include "studyoperationsservice.h"
 
-#ifdef _WIN32
-#include <windows.h>
-#include <winbase.h>
-#endif
+#include <QCloseEvent>
+#include <QMessageBox>
+#include <QMovie>
 
 namespace udg {
 
@@ -67,14 +57,6 @@ QueryScreen::QueryScreen(QWidget *parent)
     m_advancedSearchPushButton->hide();
     // Tab de "PACS" fora
     m_tab->removeTab(1);
-#else
-    // L'engeguem després d'haver fet els connects, no es pot fer abans, perquè per exemple en el cas que tinguem un error
-    // perquè el port ja està en us, si l'engeguem abans es faria signal indicant error de port en ús i no hi hauria hagut
-    // temps d'haver fet el connect del signal d'error, per tant el signal s'hauria perdut sense poder avisar de l'error
-    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool())
-    {
-        m_risRequestManager->listen();
-    }
 #endif
 
     m_statsWatcher = new StatsWatcher("QueryScreen", this);
@@ -84,9 +66,6 @@ QueryScreen::QueryScreen(QWidget *parent)
     m_statsWatcher->addClicksCounter(m_advancedSearchPushButton);
     m_statsWatcher->addClicksCounter(m_clearPushButton);
     m_statsWatcher->addClicksCounter(m_createDICOMDIRPushButton);
-
-    //HACK: Per traduir el botó Yes dels QMessageBox, aquesta no és la solució bona, s'hauria d'agafar les traduccions de sistema de Qt,
-    QT_TRANSLATE_NOOP("QDialogButtonBox", "&Yes");
 }
 
 QueryScreen::~QueryScreen()
@@ -95,14 +74,6 @@ QueryScreen::~QueryScreen()
 
     Settings settings;
     settings.setValue(InputOutputSettings::QueryScreenPACSListIsVisible, m_showPACSNodesPushButton->isChecked());
-
-    if (PacsManagerSingleton::instance()->isExecutingPACSJob())
-    {
-        // Si hi ha PacsJob executant-se demanem cancel·lar
-        PacsManagerSingleton::instance()->requestCancelAllPACSJobs();
-    }
-
-    delete m_risRequestManager;
 #endif
 
     // Sinó fem un this.close i tenim la finestra queryscreen oberta al tancar l'starviewer, l'starviewer no finalitza
@@ -110,28 +81,9 @@ QueryScreen::~QueryScreen()
     this->close();
 }
 
-RISRequestManager* QueryScreen::getRISRequestManager() const
-{
-    return m_risRequestManager;
-}
-
 void QueryScreen::initialize()
 {
     m_qcreateDicomdir = new udg::QCreateDicomdir(this);
-#ifndef STARVIEWER_LITE
-    // Posem com a pare el pare de la queryscreen, d'aquesta manera quan es tanqui el pare de la queryscreen
-    // el QOperationStateScreen també es tancarà
-    m_operationStateScreen = new udg::QOperationStateScreen(this);
-
-    if (Settings().getValue(InputOutputSettings::ListenToRISRequests).toBool())
-    {
-        m_risRequestManager = new RISRequestManager();
-    }
-    else
-    {
-        m_risRequestManager = NULL;
-    }
-#endif
     // Indiquem quin és la intefície encara de crear dicomdir per a que es puguin comunicar
     m_qInputOutputLocalDatabaseWidget->setQCreateDicomdir(m_qcreateDicomdir);
 
@@ -145,7 +97,11 @@ void QueryScreen::initialize()
     m_labelOperation->hide();
     refreshTab(LocalDataBaseTab);
 
-    m_PACSJobsPendingToFinish = 0;
+    m_pacsOperationsRunning = 0;
+
+#ifndef STARVIEWER_LITE
+    QOperationStateScreen::instance();  // force instantiation so it can create the needed connections
+#endif
 }
 
 void QueryScreen::createConnections()
@@ -156,13 +112,7 @@ void QueryScreen::createConnections()
 #ifndef STARVIEWER_LITE
     connect(m_operationListPushButton, SIGNAL(clicked()), SLOT(showOperationStateScreen()));
     connect(m_showPACSNodesPushButton, SIGNAL(toggled(bool)), SLOT(updatePACSNodesVisibility()));
-    connect(PacsManagerSingleton::instance(), &PacsManager::newPACSJobEnqueued, this, &QueryScreen::newPACSJobEnqueued);
-    if (m_risRequestManager != NULL)
-    {
-        // Potser que no tinguem activat escoltar peticions del RIS
-        connect(m_risRequestManager, SIGNAL(viewStudyRetrievedFromRISRequest(QString)), SLOT(viewStudyFromDatabase(QString)));
-        connect(m_risRequestManager, SIGNAL(loadStudyRetrievedFromRISRequest(QString)), SLOT(loadStudyFromDatabase(QString)));
-    }
+    connect(StudyOperationsService::instance(), &StudyOperationsService::operationRequested, this, &QueryScreen::onPacsOperationRequested);
 #endif
     connect(m_createDICOMDIRPushButton, SIGNAL(clicked()), m_qcreateDicomdir, SLOT(show()));
 
@@ -174,20 +124,13 @@ void QueryScreen::createConnections()
 
     connect(m_qInputOutputDicomdirWidget, SIGNAL(clearSearchTexts()), SLOT(clearTexts()));
     connect(m_qInputOutputDicomdirWidget, SIGNAL(viewPatients(QList<Patient*>)), SLOT(viewPatients(QList<Patient*>)));
-    connect(m_qInputOutputDicomdirWidget, SIGNAL(studyRetrieved(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
 
     connect(m_qInputOutputLocalDatabaseWidget, SIGNAL(viewPatients(QList<Patient*>, bool)), SLOT(viewPatients(QList<Patient*>, bool)));
 
     connect(m_qInputOutputPacsWidget, SIGNAL(viewRetrievedStudy(QString)), SLOT(viewStudyFromDatabase(QString)));
     connect(m_qInputOutputPacsWidget, SIGNAL(loadRetrievedStudy(QString)), SLOT(loadStudyFromDatabase(QString)));
 
-    /// Ens informa quan hi hagut un canvi d'estat en alguna de les operacions
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), m_qInputOutputLocalDatabaseWidget, SLOT(addStudyToQStudyTreeWidget(QString)));
-
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFinished(QString)), SLOT(studyRetrieveFinishedSlot(QString)));
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveFailed(QString)), SLOT(studyRetrieveFailedSlot(QString)));
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveStarted(QString)), SLOT(studyRetrieveStartedSlot(QString)));
-    connect(m_qInputOutputPacsWidget, SIGNAL(studyRetrieveCancelled(QString)), SLOT(studyRetrieveCancelledSlot(QString)));
+    connect(MessageBus::instance(), &MessageBus::message, this, &QueryScreen::onMessage);
 }
 
 void QueryScreen::checkRequirements()
@@ -216,14 +159,7 @@ void QueryScreen::checkIncomingConnectionsPacsPortNotInUse()
 
 void QueryScreen::checkDatabaseImageIntegrity()
 {
-    LocalDatabaseManager localDatabaseManager;
-
-    localDatabaseManager.deleteStudyBeingRetrieved();
-
-    if (localDatabaseManager.getLastError() != LocalDatabaseManager::Ok)
-    {
-        ERROR_LOG("S'ha produït un error esborrant un estudi que no s'havia acabat de descarregar en la última execució");
-    }
+    StudyOperationsService::instance()->deleteStudiesBeingRetrieved();
 }
 
 void QueryScreen::setAdvancedSearchVisible(bool visible)
@@ -247,15 +183,19 @@ void QueryScreen::clearTexts()
     m_qadvancedSearchWidget->clear();
 }
 
-void QueryScreen::updateConfiguration(const QString &configuration)
+void QueryScreen::onMessage(const QString &key, const QVariant &value)
 {
-    if (configuration == "Pacs/ListChanged")
+    if (key == "Pacs/ListChanged")
     {
         m_PACSNodes->refresh();
     }
-    else if (configuration == "Pacs/CacheCleared")
+    else if (key == "Pacs/CacheCleared")
     {
         m_qInputOutputLocalDatabaseWidget->clear();
+    }
+    else if (key == "Database/StudyInserted")
+    {
+        m_qInputOutputLocalDatabaseWidget->addStudyToQStudyTreeWidget(value.toString());
     }
 }
 
@@ -319,11 +259,6 @@ void QueryScreen::loadStudyFromDatabase(QString studyInstanceUID)
     m_qInputOutputLocalDatabaseWidget->view(studyInstanceUID, true);
 }
 
-void QueryScreen::sendDicomObjectsToPacs(PacsDevice pacsDevice, QList<Image*> images)
-{
-    m_qInputOutputLocalDatabaseWidget->sendDICOMFilesToPACS(pacsDevice, images);
-}
-
 void QueryScreen::refreshTab(int index)
 {
     switch (index)
@@ -376,14 +311,14 @@ void QueryScreen::viewPatients(QList<Patient*> listPatientsToView, bool loadOnly
 #ifndef STARVIEWER_LITE
 void QueryScreen::showOperationStateScreen()
 {
-    if (!m_operationStateScreen->isVisible())
+    if (!QOperationStateScreen::instance()->isVisible())
     {
-        m_operationStateScreen->setVisible(true);
+        QOperationStateScreen::instance()->setVisible(true);
     }
     else
     {
-        m_operationStateScreen->raise();
-        m_operationStateScreen->activateWindow();
+        QOperationStateScreen::instance()->raise();
+        QOperationStateScreen::instance()->activateWindow();
     }
 }
 #endif
@@ -414,7 +349,7 @@ void QueryScreen::closeEvent(QCloseEvent *event)
     // des de la QueryScreen perquè Starviewer es tanqui en cas que no hi ha hagi cap visor QApplicationMainWindow.
 #ifndef STARVIEWER_LITE
     // Tanquem la QOperationStateScreen al tancar la QueryScreen
-    m_operationStateScreen->close();
+    QOperationStateScreen::instance()->close();
 #endif
     m_qcreateDicomdir->close();
 
@@ -448,85 +383,27 @@ void QueryScreen::writeSettings()
     }
 }
 
-void QueryScreen::retrieveStudy(QInputOutputPacsWidget::ActionsAfterRetrieve actionAfterRetrieve, const PacsDevice &pacsDevice, Study *study)
+void QueryScreen::onPacsOperationRequested(StudyOperationResult *result)
 {
-    // QueryScreen rep un signal cada vegada que qualsevol estudis en el procés de descàrrega canvia d'estat,
-    // en principi només ha de reemetre aquests signals cap a fora quan és un signal que afecta un estudi
-    // sol·licitat a través d'aquest mètode públic, per això mantenim aquesta llista que ens indica els estudis
-    // pendents de descarregar sol·licitats a partir d'aquest mètode
-    m_studyRequestedToRetrieveFromPublicMethod.append(study->getInstanceUID());
-
-    m_qInputOutputPacsWidget->retrieve(pacsDevice, actionAfterRetrieve, study);
-}
-
-void QueryScreen::studyRetrieveFailedSlot(QString studyInstanceUID)
-{
-    if (m_studyRequestedToRetrieveFromPublicMethod.contains(studyInstanceUID))
+    if (result->getOperationType() == StudyOperationResult::OperationType::Retrieve || result->getOperationType() == StudyOperationResult::OperationType::Store)
     {
-        // És un estudi dels que ens han demanat des del mètode públic
-        m_studyRequestedToRetrieveFromPublicMethod.removeOne(studyInstanceUID);
-
-        emit studyRetrieveFailed(studyInstanceUID);
-    }
-}
-
-void QueryScreen::studyRetrieveFinishedSlot(QString studyInstanceUID)
-{
-    if (m_studyRequestedToRetrieveFromPublicMethod.contains(studyInstanceUID))
-    {
-        // És un estudi dels que ens han demanat des del mètode públic
-        m_studyRequestedToRetrieveFromPublicMethod.removeOne(studyInstanceUID);
-
-        emit studyRetrieveFinished(studyInstanceUID);
-    }
-}
-
-void QueryScreen::studyRetrieveStartedSlot(QString studyInstanceUID)
-{
-    if (m_studyRequestedToRetrieveFromPublicMethod.contains(studyInstanceUID))
-    {
-        // És un estudi dels que ens han demanat des del mètode públic
-        emit studyRetrieveStarted(studyInstanceUID);
-    }
-}
-
-void QueryScreen::studyRetrieveCancelledSlot(QString studyInstanceUID)
-{
-    if (m_studyRequestedToRetrieveFromPublicMethod.contains(studyInstanceUID))
-    {
-        // És un estudi dels que ens han demanat des del mètode públic
-        m_studyRequestedToRetrieveFromPublicMethod.removeOne(studyInstanceUID);
-
-        emit studyRetrieveCancelled(studyInstanceUID);
-    }
-}
-void QueryScreen::newPACSJobEnqueued(PACSJobPointer pacsJob)
-{
-    if (pacsJob->getPACSJobType() == PACSJob::SendDICOMFilesToPACSJobType || pacsJob->getPACSJobType() == PACSJob::RetrieveDICOMFilesFromPACSJobType)
-    {
+        m_pacsOperationsRunning++;
         m_operationAnimation->show();
         m_labelOperation->show();
-        connect(pacsJob.data(), SIGNAL(PACSJobFinished(PACSJobPointer)), SLOT(pacsJobFinishedOrCancelled(PACSJobPointer)));
-        connect(pacsJob.data(), SIGNAL(PACSJobCancelled(PACSJobPointer)), SLOT(pacsJobFinishedOrCancelled(PACSJobPointer)));
 
-        // Indiquem que tenim un PACSJob més pendent de finalitzar
-        m_PACSJobsPendingToFinish++;
+        connect(result, &StudyOperationResult::finished, this, &QueryScreen::onPacsOperationFinishedOrCancelled);
+        connect(result, &StudyOperationResult::cancelled, this, &QueryScreen::onPacsOperationFinishedOrCancelled);
     }
 }
 
-void QueryScreen::pacsJobFinishedOrCancelled(PACSJobPointer) {
-    // No podem utilitzar isExecutingPACSJob per controlar si hi ha jobs pendents d'executar, perquè algunes vegades ens
-    // hem trobat que tot i no tenir cap job pendent d'executar, el mètode respón que hi ha algun job executant-se.
-    // Això passa algunes vegades quan s'aten el signal PACSJobFinished d'un job de seguida i es pregunta al mètode isExecutingPACSJob
-    // si hi ha jobs executant-se, semblaria que tot i haver finalitzar l'últim job pendent ThreadWeaver està acabant de fer
-    // alguna acció i per això indica que hi ha jobs executant-se
-    m_PACSJobsPendingToFinish--;
+void QueryScreen::onPacsOperationFinishedOrCancelled() {
+    m_pacsOperationsRunning--;
 
-    if (m_PACSJobsPendingToFinish == 0)
+    if (m_pacsOperationsRunning == 0)
     {
         m_operationAnimation->hide();
         m_labelOperation->hide();
     }
 }
 
-};
+}

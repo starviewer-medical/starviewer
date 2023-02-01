@@ -145,6 +145,14 @@ int LocalDatabaseEncapsulatedDocumentDAL::count(const DicomMask &mask)
     }
 }
 
+bool LocalDatabaseEncapsulatedDocumentDAL::exists(const QString &sopInstanceUid)
+{
+    QSqlQuery query = getNewQuery();
+    query.prepare("SELECT SOPInstanceUID FROM EncapsulatedDocument WHERE SOPInstanceUID = :sopInstanceUid");
+    query.bindValue(":sopInstanceUid", sopInstanceUid);
+    return executeQueryAndLogError(query) && query.next();
+}
+
 void LocalDatabaseEncapsulatedDocumentDAL::bindValues(QSqlQuery &query, const EncapsulatedDocument *document)
 {
     query.bindValue(":sopInstanceUID", document->getSopInstanceUid());
@@ -178,12 +186,12 @@ QVariant LocalDatabaseEncapsulatedDocumentDAL::getDatabasePacsId(const DICOMSour
         return QVariant(QVariant::LongLong);
     }
 
-    return getDatabasePacsId(dicomSource.getRetrievePACS().first());
+    return getDatabasePacsId(dicomSource.getRetrievePACS().constFirst());
 }
 
 QVariant LocalDatabaseEncapsulatedDocumentDAL::getDatabasePacsId(const PacsDevice &pacsDevice)
 {
-    QString key = pacsDevice.getAddress() + QString::number(pacsDevice.getQueryRetrieveServicePort());
+    QString key = QString("%1ᛉ%2ᚡ%3").arg(pacsDevice.getAddress()).arg(pacsDevice.getQueryRetrieveServicePort()).arg(pacsDevice.getBaseUri().toString());
 
     if (m_databasePacsIdCache.contains(key))
     {
@@ -191,14 +199,13 @@ QVariant LocalDatabaseEncapsulatedDocumentDAL::getDatabasePacsId(const PacsDevic
     }
 
     LocalDatabasePACSRetrievedImagesDAL localDatabasePACSRetrievedImagesDAL(m_databaseConnection);
-    PacsDevice pacsDeviceRetrievedFromDatabase = localDatabasePACSRetrievedImagesDAL.query(pacsDevice.getAETitle(), pacsDevice.getAddress(),
-                                                                                           pacsDevice.getQueryRetrieveServicePort());
+    QVariant pacsId = localDatabasePACSRetrievedImagesDAL.queryId(pacsDevice);
 
-    if (!pacsDeviceRetrievedFromDatabase.getID().isEmpty())
+    if (!pacsId.isNull())
     {
         // PACS is in the database
-        m_databasePacsIdCache[key] = pacsDeviceRetrievedFromDatabase.getID().toLongLong();
-        return pacsDeviceRetrievedFromDatabase.getID();
+        m_databasePacsIdCache[key] = pacsId;
+        return pacsId;
     }
     else
     {

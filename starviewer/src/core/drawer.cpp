@@ -164,7 +164,7 @@ void Drawer::removeAllPrimitives()
         if (!primitive->hasOwners())
         {
             m_2DViewer->getRenderer()->RemoveViewProp(primitive->getAsVtkProp());
-            delete primitive;
+            delete primitive; // automatically deleted from primitive containers by means of signals and slots
         }
     }
 }

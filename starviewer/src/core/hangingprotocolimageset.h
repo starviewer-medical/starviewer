@@ -17,6 +17,8 @@
 
 #include "hangingprotocolimagesetrestrictionexpression.h"
 
+#include <QVector>
+
 namespace udg {
 
 class Series;

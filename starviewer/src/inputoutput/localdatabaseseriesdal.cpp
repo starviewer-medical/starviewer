@@ -160,6 +160,14 @@ int LocalDatabaseSeriesDAL::count(const DicomMask &mask)
     }
 }
 
+bool LocalDatabaseSeriesDAL::exists(const QString &seriesInstanceUID)
+{
+    QSqlQuery query = getNewQuery();
+    query.prepare("SELECT InstanceUID FROM Series WHERE InstanceUID = :instanceUID");
+    query.bindValue(":instanceUID", seriesInstanceUID);
+    return executeQueryAndLogError(query) && query.next();
+}
+
 Series* LocalDatabaseSeriesDAL::getSeries(const QSqlQuery &query)
 {
     Series *series = new Series();

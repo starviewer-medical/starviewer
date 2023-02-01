@@ -17,13 +17,8 @@
 #include "logging.h"
 #include "drawerbitmap.h"
 #include "imageoverlayregionfinder.h"
-#include "mathtools.h"
 
 #include <QRect>
-#include <QRegExp>
-#include <QStringList>
-
-#include <gdcmOverlay.h>
 
 namespace udg {
 
@@ -139,41 +134,6 @@ bool ImageOverlay::operator ==(const udg::ImageOverlay &overlay) const
     return equal;
 }
 
-ImageOverlay ImageOverlay::fromGDCMOverlay(const gdcm::Overlay &gdcmOverlay)
-{
-    ImageOverlay imageOverlay;
-    imageOverlay.setRows(gdcmOverlay.GetRows());
-    imageOverlay.setColumns(gdcmOverlay.GetColumns());
-    const signed short *origin = gdcmOverlay.GetOrigin();
-    imageOverlay.setOrigin(static_cast<int>(origin[0]), static_cast<int>(origin[1]));
-    
-    if (imageOverlay.getColumns() == 0 || imageOverlay.getRows() == 0)
-    {
-        imageOverlay.setData(0);
-    }
-    else
-    {
-        try
-        {
-            size_t bufferSize = gdcmOverlay.GetUnpackBufferLength();
-            unsigned char *buffer = new unsigned char[bufferSize];
-            gdcmOverlay.GetUnpackBuffer(reinterpret_cast<char*>(buffer), bufferSize);
-            imageOverlay.setData(buffer);
-        }
-        catch (const std::bad_alloc&)
-        {
-            imageOverlay.setData(0);
-            
-            ERROR_LOG(QString("No hi ha memòria suficient per carregar l'overlay [%1*%2] = %3 bytes")
-                .arg(imageOverlay.getRows()).arg(imageOverlay.getColumns()).arg((unsigned long)imageOverlay.getRows() * imageOverlay.getColumns()));
-            DEBUG_LOG(QString("No hi ha memòria suficient per carregar l'overlay [%1*%2] = %3 bytes")
-                .arg(imageOverlay.getRows()).arg(imageOverlay.getColumns()).arg((unsigned long)imageOverlay.getRows() * imageOverlay.getColumns()));
-        }
-    }
-
-    return imageOverlay;
-}
-
 ImageOverlay ImageOverlay::mergeOverlays(const QList<ImageOverlay> &overlaysList, bool &ok)
 {
     // Fem tria dels overlays que es puguin considerar vàlids
@@ -243,8 +203,6 @@ ImageOverlay ImageOverlay::mergeOverlays(const QList<ImageOverlay> &overlaysList
     catch (const std::bad_alloc&)
     {
         ERROR_LOG(QString("No hi ha memòria suficient per crear el buffer per l'overlay fusionat [%1*%2] = %3 bytes")
-            .arg(outRows).arg(outColumns).arg((unsigned long)outRows * outColumns));
-        DEBUG_LOG(QString("No hi ha memòria suficient per crear el buffer per l'overlay fusionat [%1*%2] = %3 bytes")
             .arg(outRows).arg(outColumns).arg((unsigned long)outRows * outColumns));
 
         ok = false;

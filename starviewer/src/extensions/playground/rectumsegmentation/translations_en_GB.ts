@@ -4,13 +4,13 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="259"/>
+        <location filename="qrectumsegmentationextension.cpp" line="260"/>
         <location filename="rectumSegmentationMethod.cpp" line="110"/>
         <source>Starviewer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="259"/>
+        <location filename="qrectumsegmentationextension.cpp" line="260"/>
         <source>undefined ROI</source>
         <translation type="unfinished"></translation>
     </message>
@@ -149,7 +149,7 @@
 <context>
     <name>udg::QRectumSegmentationExtension</name>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="254"/>
+        <location filename="qrectumsegmentationextension.cpp" line="255"/>
         <source>StarViewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -166,17 +166,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="254"/>
+        <location filename="qrectumsegmentationextension.cpp" line="255"/>
         <source>ERROR: seed or mask undefined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="96"/>
+        <location filename="qrectumsegmentationextension.cpp" line="97"/>
         <source>RegionTool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="97"/>
+        <location filename="qrectumsegmentationextension.cpp" line="98"/>
         <source>Enable/Disable region tool</source>
         <translation type="unfinished"></translation>
     </message>

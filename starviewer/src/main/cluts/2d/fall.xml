@@ -1,0 +1,13 @@
+<transferfunction version="0">
+ <name>Fall</name>
+ <color>
+  <point value="0" r="1" g="1" b="0"/>
+  <point value="255" r="1" g="0" b="0"/>
+ </color>
+ <opacity>
+  <point value="0" a="1"/>
+ </opacity>
+ <gradientopacity>
+  <point gradient="0" a="0"/>
+ </gradientopacity>
+</transferfunction>

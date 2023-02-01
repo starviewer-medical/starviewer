@@ -19,8 +19,6 @@
 // Qt
 #include <QList>
 #include <QByteArray>
-// Qt openGL
-#include <QtOpenGL/QGLWidget>
 
 // Windows
 #include <windows.h>
@@ -508,17 +506,6 @@ QList<unsigned int> WindowsSystemInformation::getGPURAM()
     return GPURAM;
 }
 
-QStringList WindowsSystemInformation::getGPUOpenGLCompatibilities()
-{
-    QString extensions = createOpenGLContextAndGetExtensions();
-    return extensions.split(" ");
-}
-
-QString WindowsSystemInformation::getGPUOpenGLVersion()
-{
-    return createOpenGLContextAndGetVersion();
-}
-
 QStringList WindowsSystemInformation::getGPUDriverVersion()
 {
     QStringList driverVersion;
@@ -634,36 +621,6 @@ unsigned int WindowsSystemInformation::getHardDiskCapacity(const QString &device
         enumerator->Release();
     }
     return hardDiskCapacity;
-}
-
-unsigned int WindowsSystemInformation::getHardDiskFreeSpace(const QString &device)
-{
-    unsigned int hardDiskFreeSpace = 0;
-    IEnumWbemClassObject* enumerator = executeQuery(QString("SELECT * FROM Win32_LogicalDisk WHERE DeviceID LIKE '%1'").arg(device));
-    IWbemClassObject* object = getNextObject(enumerator);
-
-    while (object)
-    {
-        VARIANT variantProperty;
-        VariantInit(&variantProperty);
-
-        if (getProperty(object, "FreeSpace", &variantProperty))
-        {
-            QString string = QString::fromWCharArray(variantProperty.bstrVal);
-            unsigned long long size = string.toULongLong();
-            VariantClear(&variantProperty);
-            hardDiskFreeSpace = size / (1024.0 * 1024.0);
-        }
-
-        object->Release();
-        object = getNextObject(enumerator);
-    }
-
-    if (enumerator)
-    {
-        enumerator->Release();
-    }
-    return hardDiskFreeSpace;
 }
 
 bool WindowsSystemInformation::doesOpticalDriveHaveWriteCapabilities()
@@ -914,28 +871,6 @@ void WindowsSystemInformation::uninitializeAPI(IWbemServices *services)
         services = NULL;
     }
     CoUninitialize();
-}
-
-QString WindowsSystemInformation::createOpenGLContextAndGetExtensions()
-{
-    /// Per tal de fer servir el QGLWidget, cal afegir en el core.pro QT += opengl
-    /// TODO: Cal comprovar si això afecte al rendiment, compilació, etc.
-    /// La llibreria QtOpenGL semble que quan es carrega, deixa en memòria uns 4Mb, per poder-la segir utilitzant.
-    QGLWidget window;
-    window.makeCurrent();
-
-    return QString((const char*)glGetString(GL_EXTENSIONS));
-}
-
-QString WindowsSystemInformation::createOpenGLContextAndGetVersion()
-{
-    /// Per tal de fer servir el QGLWidget, cal afegir en el core.pro QT += opengl
-    /// TODO: Cal comprovar si això afecte al rendiment, compilació, etc.
-    /// La llibreria QtOpenGL semble que quan es carrega, deixa en memòria uns 4Mb, per poder-la segir utilitzant.
-    QGLWidget window;
-    window.makeCurrent();
-
-    return QString((const char*)glGetString(GL_VERSION));
 }
 
 HMODULE WindowsSystemInformation::getDesktopWindowManagerDLL()

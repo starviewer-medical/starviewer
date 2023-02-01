@@ -93,7 +93,7 @@ QRectumSegmentationExtension::~QRectumSegmentationExtension()
 
 void QRectumSegmentationExtension::initializeTools()
 {
-    m_regionAction = new QAction(0);
+    m_regionAction = new QAction(m_regionToolButton);
     m_regionAction->setText(tr("RegionTool"));
     m_regionAction->setStatusTip(tr("Enable/Disable region tool"));
     m_regionAction->setCheckable(true);
@@ -181,7 +181,7 @@ void QRectumSegmentationExtension::setInput(Volume *input)
     m_mainVolume = input;
     m_2DView->setInput(input);
     this->updateInputFeatures(input);
-    m_2DView->removeAnnotation(AllAnnotations);
+    m_2DView->enableAnnotations(false);
     m_2DView->setOverlapMethod(Q2DViewer::Blend);
 }
 
@@ -593,7 +593,6 @@ void QRectumSegmentationExtension::viewLesionOverlay()
 {
     if(m_lesionMaskVolume != 0)
     {
-        m_lesionMaskVolume = m_lesionMaskVolume;
         m_2DView->setOverlayOpacity(((double)m_opacitySlider->value())/100.0);
         m_2DView->setOverlapMethod(Q2DViewer::Blend);
         m_2DView->setOverlayInput(m_lesionMaskVolume);

@@ -56,9 +56,6 @@ QDicomPrintExtension::QDicomPrintExtension(QWidget *parent)
     createConnections();
     configureInputValidator();
     initializeViewerTools();
-    // Posem a punt les annotacions que volem veure al viewer
-    m_2DView->removeAnnotation(AllAnnotations);
-    m_2DView->enableAnnotation(VoiLutAnnotation | PatientOrientationAnnotation | SliceAnnotation | MainInformationAnnotation, true);
 
     m_lastIDGroupedDICOMImagesToPrint = 0;
     m_thumbnailsPreviewWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -232,7 +229,7 @@ void QDicomPrintExtension::addSelectedImagesToGroupedDICOMImagesToPrint()
     selectedGroupedDICOMImagesToPrint.dicomPrintPresentationStateImage = getDICOMPrintPresentationStateImageForCurrentSelectedImages();
     m_groupedDICOMImagesToPrintList.append(selectedGroupedDICOMImagesToPrint);
 
-    Image *firstSelectedImage = getSelectedImagesToAddToPrint().first();
+    Image *firstSelectedImage = getSelectedImagesToAddToPrint().constFirst();
     m_thumbnailsPreviewWidget->append(QString::number(m_lastIDGroupedDICOMImagesToPrint), firstSelectedImage->getThumbnail(), getThumbnailPreviewDescriptionOfSelectedGroupedDICOMImagesToPrint());
 
     updateNumberOfDicomPrintPagesToPrint();

@@ -212,6 +212,10 @@ void test_DiagnosisTestResultWriter::write_ShouldWriteTestResultsToAnIODevice()
     QFETCH(DiagnosisTestResultWriter, writer);
     QFETCH(QString, expectedOutput);
 
+#ifdef Q_OS_WIN
+    expectedOutput.replace("\n", "\r\n");
+#endif
+
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
     writer.write(buffer);

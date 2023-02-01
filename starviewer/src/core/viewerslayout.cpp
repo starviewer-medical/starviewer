@@ -117,7 +117,7 @@ Q2DViewerWidget* ViewersLayout::getNewQ2DViewerWidget()
     connect(newViewer, SIGNAL(fusionLayout3x3Requested(QList<Volume*>)), SIGNAL(fusionLayout3x3Requested(QList<Volume*>)));
     connect(newViewer, SIGNAL(fusionLayoutMprRightRequested(QList<Volume*>)), SIGNAL(fusionLayoutMprRightRequested(QList<Volume*>)));
     // Per defecte no li posem cap annotació
-    newViewer->getViewer()->removeAnnotation(AllAnnotations);
+    newViewer->getViewer()->enableAnnotations(false);
     newViewer->getViewer()->getPatientBrowserMenu()->setShowFusionOptions(true);
 
     emit viewerAdded(newViewer);
@@ -207,12 +207,12 @@ namespace {
 QRectF remapGeometry(const QRectF &viewerGeometry, const QRectF &oldGeometry, const QRectF &newGeometry)
 {
     double incWidth = newGeometry.width() / oldGeometry.width();
-    double incHeight = newGeometry.height() / newGeometry.height();
-    double incX = newGeometry.x() - oldGeometry.x();
-    double incY = newGeometry.y() - oldGeometry.y();
+    double incHeight = newGeometry.height() / oldGeometry.height();
 
-    return QRectF(viewerGeometry.x() * incWidth + incX, viewerGeometry.y() * incHeight + incY,
-                  viewerGeometry.width() * incWidth, viewerGeometry.height() * incHeight);
+    return QRectF((viewerGeometry.x() - oldGeometry.x()) * incWidth + newGeometry.x(),
+                  (viewerGeometry.y() - oldGeometry.y()) * incHeight + newGeometry.y(),
+                  viewerGeometry.width() * incWidth,
+                  viewerGeometry.height() * incHeight);
 }
 
 }

@@ -25,8 +25,8 @@ namespace udg {
     #define CE_SUFFIX ""
 #endif
 
-const QString StarviewerVersionString("1.1.0-devel" CE_SUFFIX);
-const QString StarviewerBuildID("2020071400");
+const QString StarviewerVersionString("1.2.0-devel" CE_SUFFIX);
+const QString StarviewerBuildID("2021072200");
 
 #undef CE_SUFFIX
 
@@ -41,7 +41,7 @@ const QString StarviewerBuildPlatform("Linux");
 #endif
 
 // Indica per aquesta versió d'starviewer quina és la revisió de bd necessària
-const int StarviewerDatabaseRevisionRequired(9594);
+const int StarviewerDatabaseRevisionRequired(9597);
 
 const QString OrganizationNameString("GILab");
 const QString OrganizationDomainString("starviewer.udg.edu");

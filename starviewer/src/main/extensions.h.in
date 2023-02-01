@@ -1,0 +1,11 @@
+#ifndef EXTENSIONS_H
+#define EXTENSIONS_H
+
+@EXTENSIONS_INCLUDES@
+
+void initExtensionsResources()
+{
+@INIT_EXTENSIONS_RESOURCES@
+}
+
+#endif

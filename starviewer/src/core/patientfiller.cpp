@@ -39,6 +39,20 @@ bool isDicom(const QString& fileName)
     return DICOMTagReader(fileName).canReadFile();
 }
 
+// Returns true if any of the files is a DICOM file and false otherwise.
+bool containsDicom(const QStringList &files)
+{
+    for (const QString &fileName : files)
+    {
+        if (isDicom(fileName))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 }
 
 PatientFiller::PatientFiller(DICOMSource dicomSource, QObject *parent)
@@ -80,17 +94,20 @@ void PatientFiller::finishFilesProcessing()
 {
     foreach (Patient *patient, m_patientFillerInput->getPatientList())
     {
-        foreach (Series *series, patient->getStudies().first()->getSeries())
+        foreach (Study *study, patient->getStudies())
         {
-            m_patientFillerInput->setCurrentSeries(series);
-
-            foreach (const QList<Image*> &currentImages, m_patientFillerInput->getCurrentImagesHistory())
+            foreach (Series *series, study->getSeries())
             {
-                m_patientFillerInput->setCurrentImages(currentImages, false);
+                m_patientFillerInput->setCurrentSeries(series);
 
-                foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
+                foreach (const QList<Image*> &currentImages, m_patientFillerInput->getCurrentImagesHistory())
                 {
-                    fillerStep->fillIndividually();
+                    m_patientFillerInput->setCurrentImages(currentImages, false);
+
+                    foreach (PatientFillerStep *fillerStep, m_secondStageSteps)
+                    {
+                        fillerStep->fillIndividually();
+                    }
                 }
             }
         }
@@ -111,7 +128,7 @@ QList<Patient*> PatientFiller::processFiles(const QStringList &files)
         return QList<Patient*>();
     }
 
-    m_dicomMode = isDicom(files.first());
+    m_dicomMode = containsDicom(files);
 
     createSteps();
 

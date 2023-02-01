@@ -13,6 +13,8 @@
  *************************************************************************************/
 
 #include "q2dviewer.h"
+
+#include "automaticsynchronizationtool.h"
 #include "drawer.h"
 #include "volume.h"
 #include "logging.h"
@@ -64,7 +66,7 @@ const QString Q2DViewer::DummyVolumeObjectName("Dummy Volume");
 
 Q2DViewer::Q2DViewer(QWidget *parent)
 : QViewer(parent), m_overlayVolume(0), m_blender(0), m_overlapMethod(Q2DViewer::Blend), m_rotateFactor(0), m_applyFlip(false),
-  m_isImageFlipped(false), m_slabProjectionMode(VolumeDisplayUnit::Max), m_fusionBalance(50)
+  m_isImageFlipped(false), m_slabProjectionMode(VolumeDisplayUnit::Max), m_fusionBalance(50), m_automaticSynchronizationTool(nullptr)
 {
     m_displayUnitsFactory = new VolumeDisplayUnitHandlerFactory;
     initializeDummyDisplayUnit();
@@ -162,6 +164,11 @@ PatientOrientation Q2DViewer::getCurrentDisplayedImagePatientOrientation() const
     // Si no estem a la vista axial (adquisició original) obtindrem 
     // la orientació a través de la primera imatge
     int index = (getCurrentViewPlane() == OrthogonalPlane::XYPlane) ? getCurrentSlice() : 0;
+
+    if (index > getMaximumSlice())
+    {
+        index = 0;
+    }
 
     PatientOrientation originalOrientation;
     Image *image = getMainInput()->getImage(index);
@@ -607,7 +614,7 @@ void Q2DViewer::setNewVolumes(const QList<Volume*> &volumes, bool setViewerStatu
 
     printVolumeInformation();
 
-    m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation);
+    m_annotationsHandler->updateAnnotations();
 
     loadOverlays(volumes.first());
 
@@ -781,7 +788,7 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
     double slabThickness = getSlabThickness();
 
     setCurrentViewPlane(view);
-    m_annotationsHandler->updateAnnotations(VoiLutAnnotation);
+    m_annotationsHandler->updateAnnotations();
     
     // Reiniciem valors per defecte de la càmera
     m_rotateFactor = 0;
@@ -799,10 +806,18 @@ void Q2DViewer::resetView(const OrthogonalPlane &view)
         getRenderer()->ResetCamera(bounds);
 
         // Calculem la llesca que cal mostrar segons la vista escollida
-        int initialSliceIndex = this->getMinimumSlice();
-        if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
+        int initialSliceIndex;
+        if (m_automaticSynchronizationTool && m_automaticSynchronizationTool->getSynchronizedSlice(initialSliceIndex))
         {
-            initialSliceIndex = (getMinimumSlice() + getMaximumSlice()) / 2;
+            // Slice is already decided, nothing to do here
+        }
+        else
+        {
+            initialSliceIndex = this->getMinimumSlice();
+            if (getCurrentViewPlane() == OrthogonalPlane::YZPlane || getCurrentViewPlane() == OrthogonalPlane::XZPlane)
+            {
+                initialSliceIndex = (getMinimumSlice() + getMaximumSlice()) / 2;
+            }
         }
         setSlice(initialSliceIndex);
 
@@ -870,12 +885,17 @@ void Q2DViewer::updateCamera()
 
         if (m_applyFlip)
         {
-            // Alternativa 1)
             // TODO Així movem la càmera, però faltaria que la imatge no es mogués de lloc
             // potser implementant a la nostra manera el metode Azimuth i prenent com a centre
             // el centre de la imatge. Una altra possibilitat es contrarestar el desplaçament de la
             // camera en l'eix en que s'ha produit
-            camera->Azimuth(180);
+            // Calculate a point reflection through the focal point
+            Vector3 position = camera->GetPosition();
+            Vector3 direction = camera->GetDirectionOfProjection();
+            double distance = camera->GetDistance();
+            Vector3 newPosition = position + direction * distance * 2;
+            camera->SetPosition(newPosition.x, newPosition.y, newPosition.z);
+
             switch (getCurrentViewPlane())
             {
                 // HACK Aquest hack esta relacionat amb els de getCurrentDisplayedImageOrientationLabels()
@@ -974,7 +994,7 @@ void Q2DViewer::updateSliceToDisplay(int value, SliceDimension dimension)
         }
 
         updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
-        m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation | SliceAnnotation);
+        m_annotationsHandler->updateAnnotations();
         updatePreferredImageOrientation();
 
         // Finally we emit the signal of the changed value and render the scene
@@ -1259,6 +1279,11 @@ void Q2DViewer::absolutePan(double motionVector[3])
     pan(relativeMotionVector);
 }
 
+void Q2DViewer::setAutomaticSynchronizationTool(AutomaticSynchronizationTool *tool)
+{
+    m_automaticSynchronizationTool = tool;
+}
+
 Drawer* Q2DViewer::getDrawer() const
 {
     return m_drawer;
@@ -1381,26 +1406,14 @@ void Q2DViewer::updateImageSlices()
     getRenderer()->ResetCameraClippingRange();
 }
 
-void Q2DViewer::enableAnnotation(AnnotationFlags annotation, bool enable)
+void Q2DViewer::enableAnnotations(bool enable)
 {
-    if (enable)
-    {
-        m_annotationsHandler->enableAnnotations(annotation);
-    }
-    else
-    {
-        m_annotationsHandler->disableAnnotations(annotation);
-    }
+    m_annotationsHandler->enableAnnotations(enable);
 
     if (hasInput())
     {
         render();
     }
-}
-
-void Q2DViewer::removeAnnotation(AnnotationFlags annotation)
-{
-    enableAnnotation(annotation, false);
 }
 
 void Q2DViewer::setVoiLut(const VoiLut &voiLut)
@@ -1420,7 +1433,7 @@ void Q2DViewer::setVoiLut(const VoiLut &voiLut)
     else
     {
         getMainDisplayUnit()->setVoiLut(voiLut);
-        m_annotationsHandler->updateAnnotations(VoiLutAnnotation);
+        m_annotationsHandler->updateAnnotations();
         render();
     }
 }
@@ -1520,7 +1533,7 @@ void Q2DViewer::setSlabThickness(double thickness)
         updateImageSlices();
 
         updateCurrentImageDefaultPresetsInAllInputsOnOriginalAcquisitionPlane();
-        m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation | SliceAnnotation);
+        m_annotationsHandler->updateAnnotations();
         render();
 
         if (mainDisplayUnit->getSlabThickness() != oldThickness)
@@ -1622,6 +1635,15 @@ void Q2DViewer::restore()
         return;
     }
 
+    // Temporarily avoid synchronization both ways to allow slice reset without disturbing other viewers
+    AutomaticSynchronizationTool *keep = nullptr;
+    if (m_automaticSynchronizationTool)
+    {
+        m_automaticSynchronizationTool->disconnectFromViewer();
+        keep = m_automaticSynchronizationTool;
+        m_automaticSynchronizationTool = nullptr;
+    }
+
     // HACK
     // Desactivem el rendering per tal de millorar l'eficiència de tornar a executar el pipeline,
     // ja que altrament es renderitza múltiples vegades i provoca efectes indesitjats com el flickering
@@ -1643,6 +1665,13 @@ void Q2DViewer::restore()
     enableRendering(true);
     // Apliquem el command
     executeInputFinishedCommand();
+
+    // Restore synchronization if applicable
+    if (keep)
+    {
+        m_automaticSynchronizationTool = keep;
+        m_automaticSynchronizationTool->connectToViewer();
+    }
 
     emit restored();
 }
@@ -2023,7 +2052,7 @@ void Q2DViewer::setFusionBalance(int balance)
         this->setVolumeOpacity(1, 1.0);
     }
 
-    m_annotationsHandler->updateAnnotations(MainInformationAnnotation | AdditionalInformationAnnotation);
+    m_annotationsHandler->updateAnnotations();
     this->render();
 }
 

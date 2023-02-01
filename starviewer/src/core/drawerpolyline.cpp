@@ -15,11 +15,11 @@
 #include "drawerpolyline.h"
 #include "logging.h"
 #include "mathtools.h"
+#include "stipplingvtkopenglpolydatamapper2d.h"
 // Vtk
 #include <vtkPolyData.h>
 #include <vtkCellArray.h>
 #include <vtkActor2D.h>
-#include <vtkPolyDataMapper2D.h>
 #include <vtkProperty2D.h>
 #include <vtkPropAssembly.h>
 // Qt
@@ -35,8 +35,6 @@ DrawerPolyline::DrawerPolyline(QObject *parent)
 
 DrawerPolyline::~DrawerPolyline()
 {
-    emit dying(this);
-
     if (m_vtkPolydata)
     {
         m_vtkPolydata->Delete();
@@ -131,7 +129,7 @@ vtkProp* DrawerPolyline::getAsVtkProp()
         // Creem el pipeline de l'm_vtkActor
         m_vtkActor = vtkActor2D::New();
         m_vtkBackgroundActor = vtkActor2D::New();
-        m_vtkMapper = vtkPolyDataMapper2D::New();
+        m_vtkMapper = StipplingVtkOpenGLPolyDataMapper2D::New();
 
         m_vtkActor->SetMapper(m_vtkMapper);
         m_vtkBackgroundActor->SetMapper(m_vtkMapper);
@@ -141,8 +139,9 @@ vtkProp* DrawerPolyline::getAsVtkProp()
 
         m_vtkPropAssembly->AddPart(m_vtkBackgroundActor);
         m_vtkPropAssembly->AddPart(m_vtkActor);
+        m_vtkProp = m_vtkPropAssembly;
     }
-    return m_vtkPropAssembly;
+    return DrawerPrimitive::getAsVtkProp();
 }
 
 void DrawerPolyline::update()

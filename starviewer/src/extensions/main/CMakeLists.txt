@@ -1,0 +1,8 @@
+add_subdirectory(q2dviewer)
+
+if(NOT STARVIEWER_LITE)
+    add_subdirectory(q3dviewer)
+    add_subdirectory(mpr2d)
+    add_subdirectory(dicomprint)
+    add_subdirectory(pdf)
+endif()

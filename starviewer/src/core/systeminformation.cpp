@@ -14,16 +14,61 @@
 
 #include "systeminformation.h"
 
+#include "harddiskinformation.h"
 #include "screenmanager.h"
 
-#ifdef WIN32
+#if defined Q_OS_WIN32
 #include "windowssysteminformation.h"
+#elif defined Q_OS_LINUX
+#include "linuxsysteminformation.h"
 #endif
 
 // Qt
+#include <QCoreApplication>
 #include <QDesktopWidget>
+#include <QOffscreenSurface>
+#include <QOpenGLFunctions>
 #include <QRect>
 #include <QSize>
+#include <QThread>
+
+namespace {
+
+// Auxiliar class to obtain OpenGL information. On some platforms, can only be safely used in the main thread.
+class OpenGLInformation : public QOffscreenSurface, protected QOpenGLFunctions
+{
+public:
+    OpenGLInformation()
+    {
+        create();
+        QOpenGLContext context;
+        context.create();
+        context.makeCurrent(this);
+
+        if (context.isValid())
+        {
+            initializeOpenGLFunctions();
+            m_version = reinterpret_cast<const char*>(glGetString(GL_VERSION));
+            m_extensions = QString(reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS))).split(' ');
+        }
+    }
+
+    const QString& getVersion() const
+    {
+        return m_version;
+    }
+
+    const QStringList& getExtensions() const
+    {
+        return m_extensions;
+    }
+
+private:
+    QString m_version;
+    QStringList m_extensions;
+};
+
+}
 
 namespace udg {
 
@@ -37,8 +82,10 @@ SystemInformation::~SystemInformation()
 
 SystemInformation* SystemInformation::newInstance()
 {
-#ifdef WIN32
+#if defined Q_OS_WIN32
     return new WindowsSystemInformation();
+#elif defined Q_OS_LINUX
+    return new LinuxSystemInformation();
 #else
     return new SystemInformation();
 #endif
@@ -51,17 +98,13 @@ SystemInformation::OperatingSystem SystemInformation::getOperatingSystem()
 
 QString SystemInformation::getOperatingSystemAsString()
 {
-    return "Unknown";
+    return QString("%1 %2 (%3 %4)").arg(QSysInfo::prettyProductName()).arg(QSysInfo::currentCpuArchitecture())
+                                   .arg(QSysInfo::kernelType()).arg(QSysInfo::kernelVersion());
 }
 
 QString SystemInformation::getOperatingSystemAsShortString()
 {
-    return "Unknown";
-}
-
-bool SystemInformation::isOperatingSystem64BitArchitecture()
-{
-    return true;
+    return QString("%1_%2_%3").arg(QSysInfo::productType()).arg(QSysInfo::productVersion()).arg(QSysInfo::currentCpuArchitecture());
 }
 
 QString SystemInformation::getOperatingSystemVersion()
@@ -91,7 +134,7 @@ QList<unsigned int> SystemInformation::getRAMModulesFrequency()
 
 unsigned int SystemInformation::getCPUNumberOfCores()
 {
-    return 0;
+    return QThread::idealThreadCount();
 }
 
 QList<unsigned int> SystemInformation::getCPUFrequencies()
@@ -121,12 +164,28 @@ QList<unsigned int> SystemInformation::getGPURAM()
 
 QStringList SystemInformation::getGPUOpenGLCompatibilities()
 {
-    return QStringList();
+#ifdef Q_OS_WIN32
+    // In Windows OpenGLInformation can only be safely created in the main thread
+    if (QThread::currentThread() != qApp->thread())
+    {
+        return QStringList();
+    }
+#endif
+
+    return OpenGLInformation().getExtensions();
 }
 
 QString SystemInformation::getGPUOpenGLVersion()
 {
-    return "0.0";
+#ifdef Q_OS_WIN32
+    // In Windows OpenGLInformation can only be safely created in the main thread
+    if (QThread::currentThread() != qApp->thread())
+    {
+        return "0.0";
+    }
+#endif
+
+    return OpenGLInformation().getVersion();
 }
 
 QStringList SystemInformation::getGPUDriverVersion()
@@ -161,10 +220,10 @@ unsigned int SystemInformation::getHardDiskCapacity(const QString &device)
     return 0;
 }
 
-unsigned int SystemInformation::getHardDiskFreeSpace(const QString &device)
+quint64 SystemInformation::getHardDiskFreeSpace(const QString &path)
 {
-    Q_UNUSED(device);
-    return 0;
+    HardDiskInformation hardDiskInformation;
+    return hardDiskInformation.getNumberOfFreeMBytes(path);
 }
 
 bool SystemInformation::doesOpticalDriveHaveWriteCapabilities()
@@ -185,6 +244,11 @@ bool SystemInformation::isDesktopCompositionAvailable()
 bool SystemInformation::isDesktopCompositionEnabled()
 {
     return false;
+}
+
+QString SystemInformation::getDesktopInformation() const
+{
+    return QObject::tr("N/A");
 }
 
 }

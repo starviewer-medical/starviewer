@@ -63,6 +63,7 @@ StudyLayoutConfig StudyLayoutConfigsLoader::getDefaultConfigForModality(const QS
     {
         StudyLayoutConfig config(modality, StudyLayoutConfig::UnfoldSeries, StudyLayoutConfig::LeftToRightFirst);
         config.addExclusionCriteria(StudyLayoutConfig::Localizer);
+        config.addExclusionCriteria(StudyLayoutConfig::CTAttenuationCorrection);
         return config;
     }
     else if (modality == "MR")

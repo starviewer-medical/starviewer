@@ -33,6 +33,9 @@ class ApplicationCommandLineOptions;
  *
  * -studyinstanceuid <studyInstanceUid>:    Queries default PACS servers with the given Study Instance UID and downloads the study if found.
  * -accessionnumber <accessionNumberValue>: Queries default PACS servers with the given Accession Number and downloads the study if found.
+ * -url <url>:                              Alternative way to specify a Study Instance UID or Accession Number to query. Accepted URL formats:
+ *                                          - starviewer://studyinstanceuid/1.3.449.28373623
+ *                                          - starviewer://accessionnumber/30563404640574
  * <blank>:                                 Opens a new Starviewer window.
  */
 class StarviewerApplicationCommandLine : public QObject {
@@ -52,6 +55,9 @@ public:
     /// Parses the given argument list and returns true if they are valid and false otherwise.
     /// If there is a parse error an explanation is returned in \a errorText.
     bool parse(QStringList arguments, QString &errorText);
+
+    /// Runs previously parsed arguments.
+    void runParsedArguments();
 
     /// Parses the given argument list and returns true if they are valid and false otherwise.
     /// If there is a parse error an explanation is returned in \a errorText.

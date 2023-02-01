@@ -4,25 +4,25 @@ The Starviewer (Medical Imaging Software) open source project is
 Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona
 & Institut de Diagnòstic per la Imatge.
 Girona 2014. All rights reserved.
-http://starviewer.udg.edu
+https://starviewer.udg.edu
 
-THIS SOFTWARE IS NOT INTENDED FOR PRIMARY DIAGNOSTIC, ONLY FOR SCIENTIFIC USAGE.
+THIS SOFTWARE IS NOT INTENDED FOR PRIMARY DIAGNOSIS, ONLY FOR SCIENTIFIC USAGE.
 THIS VERSION OF STARVIEWER IS NOT CERTIFIED AS A MEDICAL DEVICE FOR PRIMARY
-DIAGNOSIS. THERE ARE NO CERTIFICATIONS. YOU CAN ONLY USE STARVIEWER AS A
-REVIEWING AND SCIENTIFIC SOFTWARE, NOT FOR PRIMARY DIAGNOSTIC.
+DIAGNOSIS. IT IS STRONGLY DISCOURAGED AND ILLEGAL IN MANY JURISDICTIONS TO USE
+IT AS SUCH.
 
-All calculations, measurements and images provided by this software are
-intended only for scientific research. Any other use is entirely at the
-discretion and risk of the user. If you do use this software for scientific
-research please consider giving appropriate credit in publications.
-See http://starviewer.udg.edu/how-to-cite for more details.
+All calculations, measurements and images provided by this software are intended
+only for scientific research. Any other use is entirely at the discretion and
+risk of the user. If you use this software for scientific research please
+consider giving appropriate credit in publications. See
+https://starviewer.udg.edu/how-to-cite for more details.
 
 The Starviewer (Medical Imaging Software) open source project is free software:
 you can redistribute it and/or modify it under the terms of the GNU General
-Public License as published by the Free Software Foundation, either version 3
-of the License (which is displayed below), or (at your option) any later version.
+Public License as published by the Free Software Foundation, either version 3 of
+the License (which is displayed below), or (at your option) any later version.
 
-----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007

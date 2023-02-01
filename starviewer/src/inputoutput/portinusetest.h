@@ -26,15 +26,15 @@ class PortInUse;
 class PortInUseTest : public DiagnosisTest {
 Q_OBJECT
 public:
-    virtual ~PortInUseTest();
+    ~PortInUseTest() override;
 
-    DiagnosisTestResult run();
+    DiagnosisTestResult run() override;
 
     ///Retorna descripcio del test
     virtual QString getDescription() const override;
 
 protected:
-    PortInUseTest(QObject *parent = 0);
+    explicit PortInUseTest(QObject *parent = nullptr);
     virtual PortInUse* createPortInUse();
     virtual void checkIfPortIsInUse(PortInUse *portInUse);
 

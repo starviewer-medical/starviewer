@@ -37,6 +37,7 @@ const QString InputOutputSettings::MinimumFreeGigaBytesForCache(CacheBase + "min
 const QString InputOutputSettings::MinimumGigaBytesToFreeIfCacheIsFull(CacheBase + "GbytesOfOldStudiesToDeleteIfNotEnoughSapaceAvailable");
 
 const QString InputOutputSettings::RetrievingStudy("/PACS/RetrievingStudy");
+const QString InputOutputSettings::StudiesBeingRetrieved("/PACS/StudiesBeingRetrieved");
 
 const QString RISBase("PACS/risRequests/");
 const QString InputOutputSettings::ListenToRISRequests(RISBase + "listen");
@@ -50,6 +51,7 @@ const QString InputOutputSettings::CreateDICOMDIRStudyListColumnsWidth(Interface
 const QString InputOutputSettings::CreateDICOMDIRGeometry(InterfaceBase + "qCreateDicomdir/geometry");
 const QString InputOutputSettings::OperationStateColumnsWidth(InterfaceBase + "qOperationState/");
 const QString InputOutputSettings::PACSStudyListColumnsWidth(InterfaceBase + "studyPacsList/");
+const QString InputOutputSettings::PacsListColumnWidths(InterfaceBase + "qPacsList/");
 const QString InputOutputSettings::ConfigurationScreenPACSList(InterfaceBase + "qConfigurationPacsDevice/");
 const QString InputOutputSettings::LocalDatabaseStudyList(InterfaceBase + "studyCacheList/");
 const QString InputOutputSettings::LocalDatabaseSplitterState(InterfaceBase + "queryscreen/StudyTreeSeriesListQSplitterState");
@@ -70,7 +72,6 @@ const QString InputOutputSettings::LocalAETitle(PACSParametersBase + "AETitle");
 const QString InputOutputSettings::PACSConnectionTimeout(PACSParametersBase + "timeout");
 const QString InputOutputSettings::MaximumPACSConnections(PACSParametersBase + "MaxConnects");
 
-//TODO: Clau duplicada a CoreSettings
 const QString InputOutputSettings::PacsListConfigurationSectionName = "PacsList";
 
 const QString DICOMDIRBaseKey("DICOMDIR/");
@@ -126,7 +127,7 @@ void InputOutputSettings::init()
     settingsRegistry->addSetting(IncomingDICOMConnectionsPort, 4006);
     // TODO podríem definir-lo directament amb %HOSTNAME%
     settingsRegistry->addSetting(LocalAETitle, QHostInfo::localHostName(), Settings::Parseable);
-    settingsRegistry->addSetting(PACSConnectionTimeout, 20);
+    settingsRegistry->addSetting(PACSConnectionTimeout, 10);
     settingsRegistry->addSetting(MaximumPACSConnections, 3);
 
     settingsRegistry->addSetting(ConvertDICOMDIRImagesToLittleEndianKey, false);

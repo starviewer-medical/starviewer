@@ -108,7 +108,7 @@ void QRelatedStudiesWidget::searchStudiesOf(Patient *patient)
     // Initially check most recent study as the CurrentStudy and the second one as the PriorStudy
     if (m_patient->getStudies().size() > 0)
     {
-        Study *study = m_patient->getStudies().first();
+        Study *study = m_patient->getStudies().constFirst();
         m_studyInstanceUIDOfCurrentStudy = study->getInstanceUID();
         m_infomationPerStudy.value(m_studyInstanceUIDOfCurrentStudy)->currentRadioButton->setChecked(true);
 

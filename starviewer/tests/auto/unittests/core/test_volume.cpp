@@ -777,10 +777,7 @@ void test_Volume::getOrigin_ShouldReturnExpectedOrigin_data()
      origin[2] = 12;
      Volume *volumeWithOrigin = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent);
 
-     double nullOrigin[3];
-     nullOrigin[0] = NULL;
-     nullOrigin[1] = NULL;
-     nullOrigin[2] = NULL;
+     double nullOrigin[3] = { 0, 0 ,0 };
      Volume *volumeWithNullOrigin = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, nullOrigin, spacing, extent);
 
      QTest::newRow("Volume with origin") << volumeWithOrigin << origin[0] << origin[1] << origin[2];
@@ -849,10 +846,7 @@ void test_Volume::getSpacing_ShouldReturnExpectedSpacing_data()
     spacing[2] = 2.5;
     Volume *volumeWithSpacing = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent);
 
-    double nullSpacing[3];
-    nullSpacing[0] = NULL;
-    nullSpacing[1] = NULL;
-    nullSpacing[2] = NULL;
+    double nullSpacing[3] = { 0, 0, 0 };
     Volume *volumeWithNullSpacing = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, nullSpacing, extent);
 
     QTest::newRow("Volume with spacing") << volumeWithSpacing << spacing[0] << spacing[1] << spacing[2];
@@ -895,14 +889,7 @@ void test_Volume::getExtent_ShouldReturnExpectedExtent_data()
 
     Volume *volumeWithExtent = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, extent);
 
-    int nullExtent[6];
-    nullExtent[0] = NULL;
-    nullExtent[1] = NULL;
-    nullExtent[2] = NULL;
-    nullExtent[3] = NULL;
-    nullExtent[4] = NULL;
-    nullExtent[5] = NULL;
-    
+    int nullExtent[6] = { 0, 0, 0, 0, 0, 0 };
     Volume *volumeWithNullExtent = VolumeTestHelper::createVolumeWithParameters(1, 1, 1, origin, spacing, nullExtent);
 
     QTest::newRow("Volume with extent") << volumeWithExtent << extent[0] << extent[1] << extent[2] << extent[3] << extent[4] << extent[5];

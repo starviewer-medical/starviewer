@@ -80,11 +80,11 @@ public:
   ImporterFilterType * GetImporter() const;
 
   /** This call delegate the update to the importer */
-  void Update();
+  void Update() override;
 
 protected:
   VTKImageToImageFilter();
-  virtual ~VTKImageToImageFilter();
+  ~VTKImageToImageFilter() override;
 
 private:
   VTKImageToImageFilter(const Self&); //purposely not implemented

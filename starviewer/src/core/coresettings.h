@@ -87,8 +87,9 @@ public:
     /// Conjunt de PACS que tenim seleccionats per defecte per consultar.
     /// La llista consistirà en un string on cada PACS s'identificarà pel seu camp clau, els quals estaran delimitats per "//"
     static const QString DefaultPACSListToQuery;
-    //TODO: Aquesta clau està duplicada a InputOutputSettings
-    static const QString PacsListConfigurationSectionName;
+    /// Key to store the default PACS since the introduction of WADO PACS.
+    /// We don't reuse the same key to avoid problems for users alternating between the new and the old version.
+    static const QString DefaultPACSListToQuery2;
 
     /// List containing the external applications.
     static const QString ExternalApplicationsConfigurationSectionName;
@@ -141,6 +142,18 @@ public:
     static const QString CrosshairInnerDiameter;
     /// Horizontal and vertical span of the DrawerCrosshair in pixels.
     static const QString CrosshairOuterDiameter;
+
+    /// Default state of viewers textual information (annotations): visible or invisible.
+    static const QString ShowViewersTextualInformation;
+
+    /// 2D viewer annotations settings for each modality.
+    static const QString Q2DViewerAnnotations;
+
+    /// Layout division for viewers to apply when comparision mode is enabled.
+    static const QString ComparisonModeDivision;
+    enum ComparisonModeDivisionType { CurrentLeftPriorRight, CurrentRightPriorLeft, CurrentTopPriorBottom, CurrentBottomPriorTop };
+    static ComparisonModeDivisionType comparisonModeDivisionTypeFromString(const QString &string);
+    static QString comparisonModeDivisionTypeToString(ComparisonModeDivisionType division);
 
 };
 

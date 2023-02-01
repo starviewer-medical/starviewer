@@ -59,6 +59,8 @@
 #include <QProgressDialog>
 #include <QMessageBox>
 #include <QListView>
+#include <QScrollBar>
+#include <QMouseEvent>
 
 #include "layoutmanager.h"
 
@@ -111,10 +113,11 @@ Q2DViewerExtension::Q2DViewerExtension(QWidget *parent)
 
     m_showViewersTextualInformationAction = new QAction(this);
     m_showViewersTextualInformationAction->setCheckable(true);
-    m_showViewersTextualInformationAction->setChecked(true);
+    Settings settings;
+    m_showViewersTextualInformationAction->setChecked(settings.getValue(CoreSettings::ShowViewersTextualInformation).toBool());
     m_showViewersTextualInformationAction->setText(tr("Text"));
     m_showViewersTextualInformationAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ToggleViewersTextualInformation));
-    m_showViewersTextualInformationAction->setToolTip(tr("Show/hide viewer's textual information (%1)")
+    m_showViewersTextualInformationAction->setToolTip(tr("Show/hide viewers textual information (%1)")
                                                       .arg(m_showViewersTextualInformationAction->shortcut().toString()));
     m_showViewersTextualInformationAction->setStatusTip(m_showViewersTextualInformationAction->toolTip());
     m_showViewersTextualInformationAction->setIcon(QIcon(":/images/icons/annotations.svg"));
@@ -226,6 +229,8 @@ void Q2DViewerExtension::createConnections()
 #endif
 
     connect(m_thickSlabWidget, SIGNAL(maximumThicknessModeToggled(bool)), SLOT(enableMaximumThicknessMode(bool)));
+    connect(m_thickSlabWidget, &QThickSlabWidget::ensureVisible, this, [this] { m_toolBarScrollArea->ensureWidgetVisible(m_thickSlabWidget); },
+            Qt::QueuedConnection);
 
     connect(m_workingArea, SIGNAL(fusionLayout2x1FirstRequested(QList<Volume*>,AnatomicalPlane)),
             SLOT(setFusionLayout2x1First(QList<Volume*>,AnatomicalPlane)));
@@ -388,7 +393,7 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 
     if (m_patient)
     {
-        m_currentStudyUID = m_patient->getStudies().first()->getInstanceUID();
+        m_currentStudyUID = m_patient->getStudies().constFirst()->getInstanceUID();
         setupLayoutManager();
         setupDefaultToolsForModalities(m_patient->getModalities());
     }
@@ -407,6 +412,58 @@ void Q2DViewerExtension::setPatient(Patient *patient)
 void Q2DViewerExtension::setCurrentStudy(const QString &studyUID)
 {
     m_relatedStudiesWidget->setCurrentStudy(studyUID);
+}
+
+bool Q2DViewerExtension::eventFilter(QObject *watched, QEvent *event)
+{
+    if ((watched == m_axialViewToolButton || watched == m_sagitalViewToolButton || watched == m_coronalViewToolButton) &&
+            (event->type() == QEvent::MouseButtonDblClick || event->type() == QEvent::MouseButtonPress))
+    {
+        QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent*>(event);
+
+        if (mouseEvent && mouseEvent->button() == Qt::LeftButton &&
+                (event->type() == QEvent::MouseButtonDblClick || mouseEvent->modifiers() == Qt::ShiftModifier))
+        {
+            if (watched == m_axialViewToolButton)
+            {
+                m_allViewersAxialAction->trigger();
+            }
+            else if (watched == m_sagitalViewToolButton)
+            {
+                m_allViewersSagittalAction->trigger();
+            }
+            else if (watched == m_coronalViewToolButton)
+            {
+                m_allViewersCoronalAction->trigger();
+            }
+
+            return true;
+        }
+    }
+
+    return QWidget::eventFilter(watched, event);
+}
+
+void Q2DViewerExtension::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    int toolBarWidth = m_toolBarScrollArea->width();
+    int thickSlabStart = m_thickSlabWidget->x();
+    int thickSlabFixedWidth = m_thickSlabWidget->getFixedWidth();
+
+    m_thickSlabWidget->setFoldable(thickSlabStart + thickSlabFixedWidth > toolBarWidth);    // foldable if with its fixed width it doesn't fit
+}
+
+void Q2DViewerExtension::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+
+    int toolBarWidth = m_toolBarScrollArea->width();
+    int thickSlabStart = m_thickSlabWidget->x();
+    int thickSlabFixedWidth = m_thickSlabWidget->getFixedWidth();
+
+    m_thickSlabWidget->setFoldable(thickSlabStart + thickSlabFixedWidth > toolBarWidth);    // foldable if with its fixed width it doesn't fit
 }
 
 void Q2DViewerExtension::initializeTools()
@@ -441,6 +498,8 @@ void Q2DViewerExtension::initializeTools()
     m_drawingToolButton->addAction(m_toolManager->registerTool("AngleTool"));
     m_drawingToolButton->addAction(m_toolManager->registerTool("NonClosedAngleTool"));
 
+    m_drawingToolButton->addAction(m_toolManager->registerTool("ArrowTool"));
+
     m_automaticSynchronizationToolButton->setDefaultAction(m_toolManager->registerTool("AutomaticSynchronizationTool"));
 #endif
 
@@ -457,11 +516,24 @@ void Q2DViewerExtension::initializeTools()
 
     // Registrem les "Action Tool"
 #ifndef STARVIEWER_LITE
-    m_sagitalViewAction = m_toolManager->registerActionTool("SagitalViewActionTool");
-    m_coronalViewAction = m_toolManager->registerActionTool("CoronalViewActionTool");
     m_axialViewToolButton->setDefaultAction(m_toolManager->registerActionTool("AxialViewActionTool"));
-    m_sagitalViewToolButton->setDefaultAction(m_sagitalViewAction);
-    m_coronalViewToolButton->setDefaultAction(m_coronalViewAction);
+    m_sagitalViewToolButton->setDefaultAction(m_toolManager->registerActionTool("SagitalViewActionTool"));
+    m_coronalViewToolButton->setDefaultAction(m_toolManager->registerActionTool("CoronalViewActionTool"));
+
+    m_axialViewToolButton->installEventFilter(this);
+    m_sagitalViewToolButton->installEventFilter(this);
+    m_coronalViewToolButton->installEventFilter(this);
+
+    m_allViewersAxialAction = new QAction(this);
+    m_allViewersAxialAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::AllViewersAxial));
+    connect(m_allViewersAxialAction, &QAction::triggered, this, &Q2DViewerExtension::resetAllViewersToAxial);
+    m_allViewersSagittalAction = new QAction(this);
+    m_allViewersSagittalAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::AllViewersSagittal));
+    connect(m_allViewersSagittalAction, &QAction::triggered, this, &Q2DViewerExtension::resetAllViewersToSagittal);
+    m_allViewersCoronalAction = new QAction(this);
+    m_allViewersCoronalAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::AllViewersCoronal));
+    connect(m_allViewersCoronalAction, &QAction::triggered, this, &Q2DViewerExtension::resetAllViewersToCoronal);
+    this->addActions({m_allViewersAxialAction, m_allViewersSagittalAction, m_allViewersCoronalAction}); // needed for the shortcuts to work
 #endif
     m_rotateClockWiseToolButton->setDefaultAction(m_toolManager->registerActionTool("RotateClockWiseActionTool"));
     m_rotateCounterClockWiseToolButton->setDefaultAction(m_toolManager->registerActionTool("RotateCounterClockWiseActionTool"));
@@ -484,7 +556,7 @@ void Q2DViewerExtension::initializeTools()
 #else
     leftButtonExclusiveTools << "ZoomTool" << "SlicingMouseTool" << "TranslateLeftTool" << "WindowLevelLeftTool" << "PolylineROITool" << "DistanceTool"
                              << "PerpendicularDistanceTool" << "EraserTool" << "AngleTool" << "NonClosedAngleTool" << "Cursor3DTool" << "EllipticalROITool"
-                             << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool";
+                             << "MagicROITool" << "CircleTool" << "MagnifyingGlassTool" << "ArrowTool";
 #endif
 
     m_toolManager->addExclusiveToolsGroup("LeftButtonGroup", leftButtonExclusiveTools);
@@ -584,7 +656,7 @@ void Q2DViewerExtension::activateNewViewer(Q2DViewerWidget *newViewerWidget)
 
     // Activem/Desactivem les capes d'annotacions segons l'estat del botó
     // Informació de l'estudi
-    newViewerWidget->getViewer()->enableAnnotation(AllAnnotations, m_showViewersTextualInformationAction->isChecked());
+    newViewerWidget->getViewer()->enableAnnotations(m_showViewersTextualInformationAction->isChecked());
     // Overlays
     newViewerWidget->getViewer()->showImageOverlays(m_showOverlaysAction->isChecked());
     // Shutters
@@ -725,7 +797,7 @@ void Q2DViewerExtension::showViewersTextualInformation(bool show)
 
     for (int viewerNumber = 0; viewerNumber < numberOfViewers; ++viewerNumber)
     {
-        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotation(AllAnnotations, show);
+        m_workingArea->getViewerWidget(viewerNumber)->getViewer()->enableAnnotations(show);
     }
 }
 
@@ -753,6 +825,51 @@ void Q2DViewerExtension::showScreenshotsExporterDialog()
         {
             QExporterTool exporter(selectedViewerWidget->getViewer());
             exporter.exec();
+        }
+    }
+}
+
+void Q2DViewerExtension::resetAllViewersToAxial()
+{
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int i = 0; i < numberOfViewers; i++)
+    {
+        Q2DViewerWidget *widget = m_workingArea->getViewerWidget(i);
+
+        if (widget->getViewer()->hasInput())
+        {
+            widget->getViewer()->resetViewToAxial();
+        }
+    }
+}
+
+void Q2DViewerExtension::resetAllViewersToSagittal()
+{
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int i = 0; i < numberOfViewers; i++)
+    {
+        Q2DViewerWidget *widget = m_workingArea->getViewerWidget(i);
+
+        if (widget->getViewer()->hasInput())
+        {
+            widget->getViewer()->resetViewToSagital();
+        }
+    }
+}
+
+void Q2DViewerExtension::resetAllViewersToCoronal()
+{
+    int numberOfViewers = m_workingArea->getNumberOfViewers();
+
+    for (int i = 0; i < numberOfViewers; i++)
+    {
+        Q2DViewerWidget *widget = m_workingArea->getViewerWidget(i);
+
+        if (widget->getViewer()->hasInput())
+        {
+            widget->getViewer()->resetViewToCoronal();
         }
     }
 }
@@ -988,7 +1105,7 @@ void Q2DViewerExtension::handleViewerDoubleClick(Q2DViewerWidget *viewerWidget)
 {
     QSet<QString> toolsIncompatibleWithDoubleClickMaximization;
     toolsIncompatibleWithDoubleClickMaximization << "AngleTool" << "NonClosedAngleTool" << "DistanceTool" << "PerpendicularDistanceTool"
-                                                 << "MagicROITool" << "PolylineROITool";
+                                                 << "MagicROITool" << "PolylineROITool" << "ArrowTool";
 
     foreach (const QString &tool, toolsIncompatibleWithDoubleClickMaximization)
     {

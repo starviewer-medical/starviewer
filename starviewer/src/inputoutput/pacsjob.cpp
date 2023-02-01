@@ -45,7 +45,7 @@ void PACSJob::aboutToBeDequeued(ThreadWeaver::QueueAPI *)
 {
     // Si ens desenqueuen de la cua de jobs pendents d'executar, vol dir que aquest Job no s'executarà, per tant emetem signal indicant que
     // ens han cancel·lat
-    emit PACSJobCancelled(m_selfPointer.toStrongRef());
+    emit PACSJobCancelled(sharedFromThis());
 }
 
 void PACSJob::requestAbort()
@@ -57,11 +57,6 @@ void PACSJob::requestAbort()
 bool PACSJob::isAbortRequested()
 {
     return m_abortIsRequested;
-}
-
-void PACSJob::setSelfPointer(const PACSJobPointer &self)
-{
-    m_selfPointer = self;
 }
 
 void PACSJob::defaultBegin(const ThreadWeaver::JobPointer &job, ThreadWeaver::Thread *thread)

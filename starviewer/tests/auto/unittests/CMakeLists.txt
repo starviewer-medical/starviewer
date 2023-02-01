@@ -1,0 +1,6 @@
+add_subdirectory(core)
+add_subdirectory(inputoutput)
+add_subdirectory(interface)
+add_subdirectory(q2dviewer)
+add_subdirectory(q3dviewer)
+add_subdirectory(samples)

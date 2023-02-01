@@ -1,0 +1,14 @@
+<transferfunction version="0">
+ <name>Winter</name>
+ <color>
+  <point value="0" r="0" g="0" b="1"/>
+  <point value="127" r="0" g="0.4980392156862745" b="0.7519569396386005"/>
+  <point value="255" r="0.4980392156862745" g="1" b="0.5019607843137255"/>
+ </color>
+ <opacity>
+  <point value="0" a="1"/>
+ </opacity>
+ <gradientopacity>
+  <point gradient="0" a="0"/>
+ </gradientopacity>
+</transferfunction>

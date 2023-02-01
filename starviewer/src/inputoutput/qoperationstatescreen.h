@@ -16,55 +16,44 @@
 #define UDGQOPERATIONSTATESCREEN_H
 
 #include "ui_qoperationstatescreenbase.h"
+#include "singleton.h"
 
 #include <QHash>
 
-#include "pacsjob.h"
-
-// Fordward declarations
-class QString;
-
 namespace udg {
 
-// Fordward declarations
-class Status;
-class Operation;
-class RetrieveDICOMFilesFromPACSJob;
-class SendDICOMFilesToPACSJob;
-class Study;
+class StudyOperationResult;
 
-/// Interfície que implementa la llista d'operacions realitzades cap a un PACS
-class QOperationStateScreen : public QDialog, private Ui::QOperationStateScreenBase {
+/**
+ * @brief The QOperationStateScreen class shows a list of all the study retrieve and store operations performed in Starviewer, past, current and pending.
+ *
+ * It allows to cancel current and pending operations.
+ */
+class QOperationStateScreen : public QWidget, private Ui::QOperationStateScreenBase, public Singleton<QOperationStateScreen> {
 Q_OBJECT
 public:
-    enum ColumnIndex { Status = 0, Direction = 1, FromTo = 2, PatientID = 3, PatientName = 4, Date = 5, Started = 6, Series = 7, Files = 8, PACSJobID = 9 };
-
-    QOperationStateScreen(QWidget *parent = 0);
-    ~QOperationStateScreen();
+    enum ColumnIndex { Status = 0, Direction = 1, FromTo = 2, PatientID = 3, PatientName = 4, Date = 5, Started = 6, Series = 7, Files = 8, Result = 9 };
 
 protected:
     /// Event que s'activa al tancar al rebren un event de tancament
     /// @param event de tancament
-    void closeEvent(QCloseEvent *ce);
+    void closeEvent(QCloseEvent *ce) override;
 
 private slots:
-    /// Slot que s'activa quan s'ha encuat un nou PACSJob insereix al QTreeWidget la informació del nou job i la posa com a Pedent de realitzar
-    void newPACSJobEnqueued(PACSJobPointer);
+    /// Adds the operation to the list and creates the necessary connections.
+    void registerOperation(StudyOperationResult *result);
 
-    /// Slot que s'activa quan job comença, al QTreeWidget es marca aquell job com començat
-    void PACSJobStarted(PACSJobPointer);
+    /// Called when an operation starts. Marks it as started in the widget.
+    void onOperationStarted(StudyOperationResult *result);
+    /// Called when an operation finishes. Marks it as finished in the widget and removes it from the map.
+    void onOperationFinished(StudyOperationResult *result);
+    /// Called when an operation is cancelled. Marks it as cancelled in the widget and removes it from the map.
+    void onOperationCancelled(StudyOperationResult *result);
 
-    /// Slot que s'activa quan el job ha acabat, es marca aquell Job al QTreeWidget amb l'estatus en el que ha finalitzat
-    void PACSJobFinished(PACSJobPointer);
-
-    /// Slot que s'activa quan el job ha estat cancel·lat, es marca aquell job com ha cancel·lat
-    void PACSJobCancelled(PACSJobPointer pacsJob);
-
-    /// Slot que s'activa quan job ha fet una acció amb una imatge, s'augmenta pel job al QTreeWidget el número de d'imatges
-    void DICOMFileCommit(PACSJobPointer pacsJob, int numberOfImages);
-
-    /// Slot que s'activa quan job ha fer una acció amb una sèrie completa, s'augmenta pel job al QTreeWidget el número de sèries
-    void DICOMSeriesCommit(PACSJobPointer pacsJob, int numberOfSeries);
+    /// Called when an instance is transferred. Updates the file counter.
+    void onInstanceTransferred(StudyOperationResult *result, int totalInstancesTransferred);
+    /// Called when a series is transferred. Updates the series counter.
+    void onSeriesTransferred(StudyOperationResult *result, int totalSeriesTransferred);
 
     /// Neteja la llista d'estudis excepte dels que s'estant descarregant en aquells moments
     void clearList();
@@ -75,32 +64,23 @@ private slots:
     /// Cancel·la les peticions seleccionades al PACS que s'estan executant o estant pendents
     void cancelSelectedRequests();
 
-    /// Slot que s'activa quan rebem SIGNAL que s'ha demanat cancel·lar un Job
-    void requestedCancelPACSJob(PACSJobPointer);
-
 private:
-    QString m_currentProcessingStudyUID;
-    QHash<int, PACSJobPointer> m_PACSJobPendingToFinish;
+    friend Singleton<QOperationStateScreen>;
 
-private:
+    explicit QOperationStateScreen(QWidget *parent = nullptr);
+    ~QOperationStateScreen() override;
+
     /// Crea les connexions pels signals i slots
     void createConnections();
 
-    /// Afegeix al QTreeWidget el nou job encuat, i el mostra
-    void insertNewPACSJob(PACSJobPointer pacsJob);
+    /// Inserts an item into the tree for the given result.
+    void insertIntoTree(StudyOperationResult *result);
 
-    /// Retorna l'objecte Study relatiu a PACSJob, només funciona amb PACSJob de tipus RetrieveDICOMFilesFromPACSJob i SendDICOMFilesToPACSJob
-    Study* getStudyFromPACSJob(PACSJobPointer pacsJob);
-
-    /// Retorna un QString per mostrar-lo per la QOperationStateScreen indicant com ha finalitzat un PACSJob
-    /// Per RetrieveDICOMFilesFromPACS pot retornar : RETRIEVED, CANCELLED, ERROR
-    /// Per SendDICOMFilesToPACS pot retornar : SENT, CANCELLED, ERROR
-    QString getPACSJobStatusResume(PACSJobPointer pacsJob);
-
-    /// Ens retorna un QTreeWidgetItem a partir del seu pacsJobID si no el trobem es retorna null;
-    QTreeWidgetItem* getQTreeWidgetItemByPACSJobId(int pacsJobID);
+private:
+    /// Map from result to tree widget item for all current and pending operations.
+    QHash<StudyOperationResult*, QTreeWidgetItem*> m_resultToItemMap;
 };
 
-};
+}
 
 #endif

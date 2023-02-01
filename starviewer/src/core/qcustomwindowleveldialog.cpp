@@ -36,8 +36,8 @@ void QCustomWindowLevelDialog::setDefaultWindowLevel(double window, double level
 
 void QCustomWindowLevelDialog::createConnections()
 {
-    connect(m_okButton, SIGNAL(clicked()), this, SLOT(confirmWindowLevel()));
-    connect(m_cancelButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QCustomWindowLevelDialog::confirmWindowLevel);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QCustomWindowLevelDialog::close);
 }
 
 void QCustomWindowLevelDialog::confirmWindowLevel()

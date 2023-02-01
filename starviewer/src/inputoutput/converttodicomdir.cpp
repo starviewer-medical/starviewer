@@ -152,7 +152,7 @@ Status ConvertToDicomdir::convert(const QString &dicomdirPath, CreateDicomdir::r
 
         // \TODO Això de patient->getStudies().first s'ha de fer perquè queryPatientStudy retorna llista de Patients
         // Nosaltres, en realitat només en volem un sol study.
-        Study *study = patient->getStudies().first();
+        Study *study = patient->getStudies().constFirst();
         studyList.append(study);
         foreach (Series *series, study->getSeries())
         {

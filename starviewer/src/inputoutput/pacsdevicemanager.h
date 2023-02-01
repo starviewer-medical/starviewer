@@ -15,72 +15,66 @@
 #ifndef UDGPACSDEVICEMANAGER_H
 #define UDGPACSDEVICEMANAGER_H
 
-#include <QList>
-#include "pacsdevice.h"
 #include "settings.h"
+
+#include <QList>
 
 namespace udg {
 
+class PacsDevice;
+
 /**
-    Aquesta classe gestiona els servidors PACS configurats per l'aplicació. Permet afegir, eliminar, modificar i consultar
-    les dades dels PACS configurats, que es guardaran com a Settings de l'aplicació.
-  */
+ * @brief The PacsDeviceManager class allows to read and write PacsDevice objects from and to settings.
+ */
 class PacsDeviceManager {
 
 public:
-    enum FilterPACSByService { AllPacs, PacsWithQueryRetrieveServiceEnabled, PacsWithStoreServiceEnabled };
+    /// Flags to filter PACS by different properties.
+    enum PacsFilterFlag {
+        CanRetrieve = 0x1,
+        CanStore    = 0x2,
+        All         = CanRetrieve | CanStore,
+        OnlyDefault = 0x4
+    };
+    Q_DECLARE_FLAGS(PacsFilter, PacsFilterFlag)
 
-    PacsDeviceManager();
-    ~PacsDeviceManager();
+    /// Saves the given PACS to settings as a new PACS and an ID is assigned to it.
+    /// \param[in,out] pacs PacsDevice instance with the PACS data.
+    /// \return \c false if an equivalent PACS is already saved, \c true otherwise.
+    static bool addPacs(PacsDevice &pacs);
 
-    /// Afegeix un nou servidor PACS. En un alta, el camp PacsID, s'assigna automàticament per l'aplicació.
-    /// @param Objecte PacsDevice amb les dades del PACS
-    /// @return True en el cas que s'hagi afegit correctament, false si el PACS ja existia.
-    bool addPACS(PacsDevice &pacs);
+    /// Updates the given PACS in settings. If a PACS with the ID of the given one does not exist the method does nothing.
+    /// \param[in,out] pacs PacsDevice instance with the updated PACS data.
+    /// \warning The ID of the given PACS and other ones may change.
+    static void updatePacs(PacsDevice &pacs);
 
-    /// Actualitza les dades del PACS passat per paràmetre. TODO què fem amb el camp ID?
-    /// @param pacs Objecte PacsDevice amb les noves dades del PACS
-    void updatePACS(PacsDevice &pacs);
+    /// Deletes the PACS with the given ID from settings. If a PACS with the ID of the given one does not exist the method does nothing.
+    /// \param[in] pacsID ID of the PACS that must be deleted.
+    /// \warning The ID of other PACS will probably change.
+    static void deletePacs(const QString &pacsID);
 
-    /// Elimina de la llista de PACS configurats el PACS amb l'ID passat per paràmetre.
-    /// @param pacsID Identificador del PACS a donar de baixa
-    /// @return True en cas d'eliminar-se el PACS amb èxit, false, si no existeix cap PACS a eliminar amb tal ID
-    bool deletePACS(const QString &pacsID);
+    /// Returns a list of PACS stored in settings, filtered by the given flags.
+    /// \param[in] filter Combination of flags to filter the returned PACS.
+    /// \return Filtered list of PACS.
+    static QList<PacsDevice> getPacsList(PacsFilter filter = All);
 
-    /// Ens retorna la llista de PACS configurats
-    /// @param onlyDefault Amb valor true, només inclou els que estiguin marcats a consultar per defecte
-    /// @return Llista de PACS configurats
-    QList<PacsDevice> getPACSList(FilterPACSByService filter = AllPacs, bool onlyDefault = false);
+    /// Retrieves and returns the PACS device stored with the given ID in settings.
+    /// \param[in] pacsID ID of the PACS that must be returned.
+    /// \return PacsDevice instance read from settings with the given ID. Empty PacsDevice if not found.
+    static PacsDevice getPacsDeviceById(const QString &pacsID);
 
-    /// Donat un ID de PACS, ens retorna el corresponent PacsDevice amb la seva informació
-    /// @param pacsID ID del PACS a cercar
-    /// @return Les dades del PACS si existeix algun amb aquest ID, sinó tindrem un objecte buit
-    PacsDevice getPACSDeviceByID(const QString &pacsID);
+    /// Returns the given list without duplicate PACS.
+    /// \param[in] pacsDeviceList List with possibly duplicate PACS.
+    /// \return The same list with duplicate PACS removed.
+    static QList<PacsDevice> removeDuplicatePacsFromList(const QList<PacsDevice> &pacsDeviceList);
 
-    /// Retorna un PACS a partir de la seva adreça i port.
-    /// Si en trobar més d'un retorna el primer que troba. En teoria no s'hauria de donar aquest cas
-    PacsDevice getPACSDeviceByAddressAndQueryPort(QString address, int queryPort);
-
-    /// Retorna la llista sense PACS duplicats
-    static QList<PacsDevice> removeDuplicateSamePACS(QList<PacsDevice> pacsDeviceList);
-
-    /// Mètode helper que indica si el mateix pacs està insertat (té el mateix AETitle, Address i QueryPort) a la llista.
     //TODO: Aquest codi està duplicat a DICOMSource, però com DICOMSource està al core no pot utilitzar aquest mètode, sinó tindríem dependència ciclica
-    static bool isAddedSamePacsDeviceInList(QList<PacsDevice> pacsDeviceList, PacsDevice pacsDevice);
-
-private:
-    /// Comprova si el PACS passat per paràmetre es troba o no dins de la llista de PACS configurats
-    /// @param pacs PACS a comprovar
-    /// @return True si existeix, false en cas contrari
-    bool isPACSConfigured(const PacsDevice &pacs);
-
-    /// Donat un objecte PacsDevice el transformem en un conjunt de claus-valor per una manipulació de settings més còmode
-    Settings::SettingsListItemType pacsDeviceToSettingsListItem(const PacsDevice &parameters);
-
-    /// Donat un conjunt de claus-valor omple i retorna un objecte PacsDevice
-    PacsDevice settingsListItemToPacsDevice(const Settings::SettingsListItemType &item);
+    /// Returns true if an equivalent PACS to the given one is contained in the given list, and false otherwise.
+    static bool isAddedSamePacsDeviceInList(const QList<PacsDevice> &pacsDeviceList, const PacsDevice &pacsDevice);
 };
 
-};
+Q_DECLARE_OPERATORS_FOR_FLAGS(PacsDeviceManager::PacsFilter)
+
+}
 
 #endif

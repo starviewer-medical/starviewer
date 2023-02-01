@@ -20,6 +20,7 @@
 #ifdef _WIN32
     #include <windows.h>
 #else
+    #include <cerrno>
     // Per statvfs
     #include <sys/statvfs.h>
 #endif // _WIN32
@@ -34,6 +35,7 @@ HardDiskInformation::~HardDiskInformation()
 {
 }
 
+// TODO implement everything with C++17: https://en.cppreference.com/w/cpp/filesystem/space
 quint64 HardDiskInformation::getTotalNumberOfBytes(const QString &path)
 {
     return getTotalBytesPlataformEspecific(path);
@@ -160,8 +162,21 @@ void HardDiskInformation::logLastError(const QString &additionalInformation)
 #endif
 
 #else
-    // TODO implementar per altres sistemes (MAC, LINUX)
-    qtErrorMessage = "TODO! No tenim implementat l'obtenció del missatge d'error en aquest sistema operatiu";
+    char errorMessage[512];
+
+    if (std::is_same<decltype(strerror_r(0, nullptr, 0)), int>::value)  // if strerror_r returns int (XSI-compliant version)
+    {
+        strerror_r(errno, errorMessage, sizeof(errorMessage));
+        qtErrorMessage = QString("%1").arg(errorMessage);
+    }
+    else if (std::is_same<decltype(strerror_r(0, nullptr, 0)), char*>::value)   // if strerror_r returns char* (GNU-specific version)
+    {
+        qtErrorMessage = QString("%1").arg(strerror_r(errno, errorMessage, sizeof(errorMessage)));
+    }
+    else
+    {
+        Q_ASSERT(false);
+    }
 #endif // Q_OS_WIN32
     ERROR_LOG("Error: " + qtErrorMessage + ". " + additionalInformation);
 }

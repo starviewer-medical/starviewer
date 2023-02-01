@@ -39,7 +39,7 @@ class vtkVolumeRayCastCompositeFunction : public vtkVolumeRayCastFunction
 public:
   static vtkVolumeRayCastCompositeFunction *New();
   vtkTypeMacro(vtkVolumeRayCastCompositeFunction,vtkVolumeRayCastFunction);
-  void PrintSelf( ostream& os, vtkIndent indent );
+  void PrintSelf( ostream& os, vtkIndent indent ) override;
 
   // Description:
   // Set the CompositeMethod to either Classify First or Interpolate First
@@ -54,20 +54,20 @@ public:
 
 //BTX
   void CastRay( vtkVolumeRayCastDynamicInfo *dynamicInfo,
-                vtkVolumeRayCastStaticInfo *staticInfo);
+                vtkVolumeRayCastStaticInfo *staticInfo) override;
 
-  float GetZeroOpacityThreshold( vtkVolume *vol );
+  float GetZeroOpacityThreshold( vtkVolume *vol ) override;
 //ETX
 
 protected:
   vtkVolumeRayCastCompositeFunction();
-  ~vtkVolumeRayCastCompositeFunction();
+  ~vtkVolumeRayCastCompositeFunction() override;
 
 //BTX
   void SpecificFunctionInitialize( vtkRenderer *ren,
                                    vtkVolume   *vol,
                                    vtkVolumeRayCastStaticInfo *staticInfo,
-                                   vtkVolumeRayCastMapper *mapper );
+                                   vtkVolumeRayCastMapper *mapper ) override;
 //ETX
 
   int           CompositeMethod;

@@ -4,13 +4,13 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="259"/>
+        <location filename="qrectumsegmentationextension.cpp" line="260"/>
         <location filename="rectumSegmentationMethod.cpp" line="110"/>
         <source>Starviewer</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="259"/>
+        <location filename="qrectumsegmentationextension.cpp" line="260"/>
         <source>undefined ROI</source>
         <translation>ROI indefinida</translation>
     </message>
@@ -149,7 +149,7 @@
 <context>
     <name>udg::QRectumSegmentationExtension</name>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="254"/>
+        <location filename="qrectumsegmentationextension.cpp" line="255"/>
         <source>StarViewer</source>
         <translation></translation>
     </message>
@@ -166,17 +166,17 @@
         <translation>Ficheros MetaImage (*.mhd)</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="254"/>
+        <location filename="qrectumsegmentationextension.cpp" line="255"/>
         <source>ERROR: seed or mask undefined</source>
         <translation>ERROR: semilla o máscara no definida</translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="96"/>
+        <location filename="qrectumsegmentationextension.cpp" line="97"/>
         <source>RegionTool</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="qrectumsegmentationextension.cpp" line="97"/>
+        <location filename="qrectumsegmentationextension.cpp" line="98"/>
         <source>Enable/Disable region tool</source>
         <translation>Activar/Desactivar la herramienta de región</translation>
     </message>

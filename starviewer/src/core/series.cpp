@@ -637,6 +637,27 @@ bool Series::isCTLocalizer() const
     return isLocalizer;
 }
 
+bool Series::isCTAttenuationCorrection() const
+{
+    if (getModality() != "CT")
+    {
+        return false;
+    }
+
+    // Test only first image. Hopefully there won't be mixed images of different types.
+    Image *image = getImageByIndex(0);
+    const DICOMTagReader &dicomTagReader = image->getDicomTagReader();
+
+    if (dicomTagReader.hasAttribute(DICOMConvolutionKernel) && dicomTagReader.getValueAttributeAsQString(DICOMConvolutionKernel).contains("B08s"))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 bool Series::isMRSurvey() const
 {
     bool isSurvey = false;

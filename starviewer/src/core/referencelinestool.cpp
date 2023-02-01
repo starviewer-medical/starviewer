@@ -388,7 +388,7 @@ DrawerLine* ReferenceLinesTool::createNewLine(bool isBackgroundLine)
     }
     else
     {
-        line->setColor(QColor(33, 202, 79));
+        line->setColor(QColor(0x5a, 0xf7, 0x80));
     }
 
     return line;
