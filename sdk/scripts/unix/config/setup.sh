@@ -116,8 +116,8 @@ VARS_TO_EXPORT+=("SDK_SOURCE_DIR_BASE")
 SDK_INSTALL_PREFIX=${SDK_INSTALL_PREFIX:-"$SDK_BASE_PREFIX/sdk-install"}
 VARS_TO_EXPORT+=("SDK_INSTALL_PREFIX")
 
-# List of build types to use. Possible values: Debug, Release, RelWithDebInfo.
-SDK_BUILD_TYPE=${SDK_BUILD_TYPE:-"RelWithDebInfo"}
+# List of build types to use. Possible values: Debug, Release, RelWithDebInfo, MinSizeRel.
+SDK_BUILD_TYPE=${SDK_BUILD_TYPE:-"Release"}
 VARS_TO_EXPORT+=("SDK_BUILD_TYPE")
 
 # Where the user will be asked to install Qt.
@@ -153,7 +153,7 @@ VARS_TO_EXPORT+=("QTTRANSLATIONSDIR")
 # List of libs to build. Possible values: qt, dcmtk, vtk, gdcm, itk, ecm, threadweaver.
 LIBS=${LIBS:-"qt dcmtk vtk gdcm itk ecm threadweaver"}
 
-# CMake, QMake and make
+# CMake and make
 if [[ $(uname) == 'MSYS_NT'* ]]
 then
     # jom path in PATH needed by CMake
@@ -165,8 +165,6 @@ then
     PATH=$JOM_PATH${PATH:+:${PATH}}
     MAKE=${MAKE:-jom}
     CMAKE=${CMAKE:-/mingw64/bin/cmake}
-    QMAKE_SPEC=${QMAKE_SPEC:-msvc-win32}
-    VARS_TO_EXPORT+=("QMAKE_SPEC")
 fi
 CMAKE=${CMAKE:-cmake}
 MAKE=${MAKE:-make}
@@ -220,11 +218,8 @@ then
 fi
 
 
-# Build type specified when compiling starviewer. Can be: debug release
-STARVIEWER_BUILD_TYPE=${STARVIEWER_BUILD_TYPE:-release}
-
-# If set with something, then generate the equivalent of CMake's RelWithDebInfo
-STARVIEWER_DEBUGINFO=${STARVIEWER_DEBUGINFO:-1}
+# Build type specified when compiling starviewer. Possible values: Debug, Release, RelWithDebInfo, MinSizeRel.
+STARVIEWER_BUILD_TYPE=${STARVIEWER_BUILD_TYPE:-Release}
 
 # Starviewer source code location
 STARVIEWER_SOURCE_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer
@@ -235,28 +230,8 @@ STARVIEWER_BUILD_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-build
 # Starviwer install prefix directory
 STARVIEWER_INSTALL_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-install
 
-# Temporary directory for package creation
-STARVIEWER_PACKAGING_DIR_BASE=$SCRIPTS_ROOT/../../../starviewer-packaging
-
-# Starviewer deployment repository locaion
-STARVIEWER_DEPLOYMENT_DIR_BASE=$SCRIPTS_ROOT/../../../../starviewer-deployment
-
-# Starviewer QMake arguments composition
-STARVIEWER_QMAKE_ARGUMENTS=()
-# For betas
-STARVIEWER_QMAKE_ARGUMENTS+=("CONFIG+=official_release" "DEFINES+=CORPORATE_VERSION" "DEFINES+=BETA_VERSION")
-# For final version
-#STARVIEWER_QMAKE_ARGUMENTS+=("CONFIG+=official_release" "CONFIG+=ce_marking" "DEFINES+=CORPORATE_VERSION")
-STARVIEWER_QMAKE_ARGUMENTS+=( "CONFIG+=$STARVIEWER_BUILD_TYPE" )
-if [[ $STARVIEWER_DEBUGINFO ]]
-then
-    STARVIEWER_QMAKE_ARGUMENTS+=( "CONFIG+=force_debug_info" )
-fi
-if [[ $(uname) == 'MSYS_NT'* && ${SDK_BUILD_TYPE,,} == "debug" && ${STARVIEWER_BUILD_TYPE,,} == "debug" ]]
-then
-    # On Windows if your SDK is compiled in debug mode, you must NOT apply fixdebug.
-    STARVIEWER_QMAKE_ARGUMENTS+=( "CONFIG+=nofixdebug" )
-fi
+# Starviewer CMake arguments, intended to generate an installer
+STARVIEWER_CMAKE_ARGUMENTS="-DCMAKE_BUILD_TYPE:STRING=${STARVIEWER_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX:PATH=${STARVIEWER_INSTALL_DIR_BASE} -DUSE_QTCONF:BOOL=ON"
 
 # PATH-like and exportable Variables
 # ==================================

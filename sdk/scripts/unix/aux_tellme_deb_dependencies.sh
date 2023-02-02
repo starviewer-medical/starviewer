@@ -13,7 +13,7 @@ This script will print all the system dependencies (package names) for the curre
 - The script assumes your system libraries have paths with no spaces.
 - The script will probably output -dev dependencies too, which are unecessary for binary distribution.
 - It will take a while to execute (several minutes).
-- This script has no brain; use yours. Review the result before using it to fill starviewer_packaging.sh
+- This script has no brain; use yours. Review the result.
 '
 
 sudo apt-get install apt-file

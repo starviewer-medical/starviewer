@@ -8,7 +8,7 @@ This script will print all the system dependencies (package names) for the curre
 - This script shall work in any Red Hat based distribution.
 - The script assumes your system libraries have paths with no spaces.
 - The script will probably output -devel dependencies too, which are unecessary for binary distribution.
-- This script has no brain; use yours. Review the result before using it to fill starviewer_packaging.sh
+- This script has no brain; use yours. Review the result.
 '
 
 pushd $STARVIEWER_INSTALL_DIR_BASE

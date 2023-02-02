@@ -5,8 +5,15 @@ SCRIPTS_ROOT=$(readlink -f $(dirname $BASH_SOURCE))
 mkdir -p $STARVIEWER_BUILD_DIR_BASE
 pushd $STARVIEWER_BUILD_DIR_BASE
 
-echo "Invoking QMake with the following extra arguments: ${STARVIEWER_QMAKE_ARGUMENTS[@]}"
-$QTDIR/bin/qmake -r ${STARVIEWER_QMAKE_ARGUMENTS[@]} $STARVIEWER_SOURCE_DIR_BASE/starviewer.pro
+if [[ $(uname) == 'MSYS_NT'* ]]
+then
+    CMAKE_GENERATOR="NMake Makefiles JOM"
+else
+    CMAKE_GENERATOR="Unix Makefiles"
+fi
+
+echo "Invoking CMake with the following extra arguments: $STARVIEWER_CMAKE_ARGUMENTS"
+$CMAKE -G "$CMAKE_GENERATOR" $STARVIEWER_CMAKE_ARGUMENTS $CMAKE_DISTCC $CMAKE_COMPILER "$STARVIEWER_SOURCE_DIR_BASE"
 
 if [[ $? -ne 0 ]]
 then

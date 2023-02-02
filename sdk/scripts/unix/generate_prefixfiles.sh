@@ -13,8 +13,8 @@ echo "#!/bin/bash
 # Environment variables to compile with the SDK
 # To enter inside the environment run this file using 'source' command.
 # Better avoid manually editing this file. Rerun the sdk_build.sh script instead.
-echo 'Remember, invoke QMake with the following extra arguments when compiling Starviewer:'
-echo '$STARVIEWER_QMAKE_ARGUMENTS'
+echo 'Remember, invoke CMake with the following extra arguments when compiling Starviewer:'
+echo '$STARVIEWER_CMAKE_ARGUMENTS'
 " > $SDK_ENVIRONMENT_FILE
 
 if [[ $(uname) == 'MSYS_NT'* ]]
@@ -23,8 +23,8 @@ then
     echo "
 :: Environment variables to compile with the SDK
 :: Better avoid manually editing this file. Rerun the sdk_build.sh script instead.
-echo Remember, invoke QMake with the following extra arguments when compiling Starviewer:
-echo $STARVIEWER_QMAKE_ARGUMENTS
+echo Remember, invoke CMake with the following extra arguments when compiling Starviewer:
+echo $STARVIEWER_CMAKE_ARGUMENTS
     " > $SDK_WINDOWS_ENVIRONMENT_FILE
 fi
 
@@ -87,7 +87,3 @@ set PATH=%PREPEND_TO_PATH%;%PATH%
 set LD_LIBRARY_PATH=%PREPEND_TO_LD_LIBRARY_PATH%;%LD_LIBRARY_PATH%
     " >> $SDK_WINDOWS_ENVIRONMENT_FILE
 fi
-
-# TODO: tell the user to add qmake extra arguments
-
-
