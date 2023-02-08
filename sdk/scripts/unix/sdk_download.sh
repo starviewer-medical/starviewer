@@ -42,9 +42,9 @@ do
                                 'https://github.com/Kitware/VTK/archive/v8.2.0.tar.gz'
             ;;
         gdcm)
-            download_and_verify 9e460e5aae0082e5bb0cb4e6cb1293f4ea902394406e2260cc92674f7bd481b2 \
-                                'GDCM-3.0.4.tar.gz' \
-                                'https://github.com/malaterre/GDCM/archive/v3.0.4.tar.gz'
+            download_and_verify 7c456162a2de722cc90e3bdc46900302b1c367540a7131268d7bfd2a819cb5ed \
+                                'GDCM-3.0.21.tar.gz' \
+                                'https://github.com/malaterre/GDCM/archive/refs/tags/v3.0.21.tar.gz'
             ;;
         itk)
             download_and_verify 613b125cbf58481e8d1e36bdeacf7e21aba4b129b4e524b112f70c4d4e6d15a6 \

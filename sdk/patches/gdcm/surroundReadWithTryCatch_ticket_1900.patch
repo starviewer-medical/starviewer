@@ -1,22 +1,17 @@
 --- a/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx
 +++ b/Source/MediaStorageAndFileFormat/gdcmImageCodec.cxx
-@@ -406,30 +406,50 @@ bool ImageCodec::DoOverlayCleanup(std::i
+@@ -521,18 +521,28 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
        nmask = (int16_t)(nmask >> ( PF.GetBitsAllocated() - PF.GetBitsStored() - 1 ));
  
        uint16_t c;
 -      while( is.read((char*)&c,2) )
--        {
++      try
+         {
 -        c = (uint16_t)(c >> (PF.GetBitsStored() - PF.GetHighBit() - 1));
 -        if ( c & smask )
--          {
--          c = (uint16_t)(c | nmask);
--          }
--        else
-+      try
-+      {
 +        while( is.read((char*)&c,2) )
            {
--          c = c & pmask;
+-          c = (uint16_t)(c | nmask);
 +          c = (uint16_t)(c >> (PF.GetBitsStored() - PF.GetHighBit() - 1));
 +          if ( c & smask )
 +            {
@@ -28,40 +23,50 @@
 +            }
 +          os.write((char*)&c, 2 );
            }
--        os.write((char*)&c, 2 );
-+      }
+-        else
++        }
 +      catch (std::ios_base::failure &f)
-+      {
-+        if (!is.eof())
 +        {
++        if (!is.eof())
+           {
+-          c = c & pmask;
 +          throw f;
+           }
+-        os.write((char*)&c, 2 );
          }
        }
-+      }
      else // Pixel are unsigned
-       {
- #if 1
-       uint16_t c;
--      while( is.read((char*)&c,2) )
+@@ -543,16 +553,26 @@ bool ImageCodec::DoOverlayCleanup(std::istream &is, std::ostream &os)
+       // Therefore we read/mask/write 1000 values at once.
+       const unsigned int bufferSize = 1000;
+       std::vector<uint16_t> buffer(bufferSize);
+-      while (is)
 +      try
-+      {
-+        while( is.read((char*)&c,2) )
++        {
++        while (is)
 +          {
-+          c = (uint16_t)(
-+            (c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask);
-+          os.write((char*)&c, 2 );
++          is.read((char *)&buffer[0], bufferSize * sizeof(uint16_t));
++          std::streamsize bytesRead = is.gcount();
++          std::vector<uint16_t>::iterator validBufferEnd = buffer.begin() + bytesRead / sizeof(uint16_t);
++          for (std::vector<uint16_t>::iterator it = buffer.begin(); it != validBufferEnd; ++it)
++            {
++            *it = ((*it >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask);
++            }
++          os.write((char *)&buffer[0], bytesRead);
 +          }
-+      }
++        }
 +      catch (std::ios_base::failure &f)
-+      {
-+        if (!is.eof())
          {
--        c = (uint16_t)(
--          (c >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask);
--        os.write((char*)&c, 2 );
+-        is.read((char *)&buffer[0], bufferSize * sizeof(uint16_t));
+-        std::streamsize bytesRead = is.gcount();
+-        std::vector<uint16_t>::iterator validBufferEnd = buffer.begin() + bytesRead / sizeof(uint16_t);
+-        for (std::vector<uint16_t>::iterator it = buffer.begin(); it != validBufferEnd; ++it)
++        if (!is.eof())
+           {
+-          *it = ((*it >> (PF.GetBitsStored() - PF.GetHighBit() - 1)) & pmask);
 +          throw f;
+           }
+-        os.write((char *)&buffer[0], bytesRead);
          }
-+      }
-       //os.rdbuf( is.rdbuf() );
  #else
        //std::ostreambuf_iterator<char> end_of_stream_iterator;
