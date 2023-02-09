@@ -33,7 +33,7 @@ do
             tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/dcmtk-DCMTK-3.6.5.tar.gz"
             ;;
         vtk)
-            tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/VTK-8.2.0.tar.gz"
+            tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/VTK-9.2.5.tar.gz"
             ;;
         gdcm)
             tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/GDCM-3.0.21.tar.gz"

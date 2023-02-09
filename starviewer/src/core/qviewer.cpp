@@ -116,7 +116,7 @@ QViewer::~QViewer()
 
 vtkRenderWindowInteractor* QViewer::getInteractor() const
 {
-    return m_vtkWidget->GetInteractor();
+    return m_vtkWidget->interactor();
 }
 
 vtkRenderer* QViewer::getRenderer() const
@@ -155,7 +155,7 @@ bool QViewer::hasInput() const
 
 vtkRenderWindow* QViewer::getRenderWindow() const
 {
-    return m_vtkWidget->GetRenderWindow();
+    return m_vtkWidget->renderWindow();
 }
 
 QSize QViewer::getRenderWindowSize() const
@@ -991,7 +991,7 @@ void QViewer::setupRenderWindow()
     //      Why?
     getRenderWindow()->RemoveRenderer(getRenderer());
 
-    m_vtkWidget->SetRenderWindow(renderWindow);
+    m_vtkWidget->setRenderWindow(renderWindow);
     m_windowToImageFilter->SetInput(renderWindow);
 }
 

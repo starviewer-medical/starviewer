@@ -32,9 +32,8 @@ target_link_qt(edemasegmentation
     Widgets
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkImagingCore
-    vtkIOImage
+target_link_vtk(edemasegmentation
+    CommonCore
+    ImagingCore
+    IOImage
 )
-target_link_libraries(edemasegmentation ${VTK_LIBRARIES})

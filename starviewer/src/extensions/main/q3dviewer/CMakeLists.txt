@@ -39,8 +39,7 @@ target_link_qt(q3dviewer
     Widgets
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonDataModel
-    vtkRenderingCore
+target_link_vtk(q3dviewer
+    CommonDataModel
+    RenderingCore
 )
-target_link_libraries(q3dviewer ${VTK_LIBRARIES})

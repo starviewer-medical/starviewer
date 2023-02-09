@@ -155,13 +155,12 @@ target_link_qt(inputoutput
     Widgets
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkCommonDataModel
-    vtkIOImage
-    vtkRenderingCore
+target_link_vtk(inputoutput
+    CommonCore
+    CommonDataModel
+    IOImage
+    RenderingCore
 )
-target_link_libraries(inputoutput ${VTK_LIBRARIES})
 
 find_package(DCMTK REQUIRED)
 target_include_directories(inputoutput SYSTEM PUBLIC

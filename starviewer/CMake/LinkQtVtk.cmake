@@ -27,3 +27,10 @@ function(target_link_qt TARGET)
         endforeach()
     endif()
 endfunction()
+
+# Adds VTK dependencies to the given target
+function(target_link_vtk TARGET)
+    find_package(VTK REQUIRED COMPONENTS ${ARGN})
+    list(TRANSFORM ARGN PREPEND VTK:: OUTPUT_VARIABLE VTK_TARGETS)
+    target_link_libraries(${TARGET} ${VTK_TARGETS})
+endfunction()

@@ -1122,7 +1122,7 @@ void QDifuPerfuSegmentationExtension::saveTransform()
                 fileName += ".tf";
             }
             m_savingMaskDirectory = QFileInfo(fileName).absolutePath();
-            ofstream fout(qPrintable(fileName));
+            std::ofstream fout(qPrintable(fileName));
             //DEBUG_LOG(qPrintable(fileName));
     /*
             //old fashion

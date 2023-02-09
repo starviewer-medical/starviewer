@@ -35,12 +35,11 @@ target_link_qt(mpr2d
     Widgets
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkCommonTransforms
-    vtkFiltersSources
-    vtkImagingCore
-    vtkRenderingAnnotation
-    vtkRenderingCore
+target_link_vtk(mpr2d
+    CommonCore
+    CommonTransforms
+    FiltersSources
+    ImagingCore
+    RenderingAnnotation
+    RenderingCore
 )
-target_link_libraries(mpr2d ${VTK_LIBRARIES})

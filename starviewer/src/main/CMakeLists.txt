@@ -59,11 +59,10 @@ target_link_qt(starviewer
     Widgets
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkGUISupportQt
+target_link_vtk(starviewer
+    CommonCore
+    GUISupportQt
 )
-target_link_libraries(starviewer ${VTK_LIBRARIES})
 
 find_package(DCMTK REQUIRED)
 target_include_directories(starviewer PRIVATE

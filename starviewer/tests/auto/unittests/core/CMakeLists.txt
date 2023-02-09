@@ -111,16 +111,15 @@ target_link_qt(test_core
     Network
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkCommonDataModel
-    vtkCommonExecutionModel
-    vtkCommonMath
-    vtkImagingCore
-    vtkImagingHybrid
-    vtkRenderingCore
+target_link_vtk(test_core
+    CommonCore
+    CommonDataModel
+    CommonExecutionModel
+    CommonMath
+    ImagingCore
+    ImagingHybrid
+    RenderingCore
 )
-target_link_libraries(test_core ${VTK_LIBRARIES})
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon

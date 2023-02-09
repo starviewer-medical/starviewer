@@ -128,10 +128,10 @@ bool DrawerPolygonTestHelper::compareCells(const QString &type, vtkCellArray *ac
     for (int i = 0; i < numberOfCells; i++)
     {
         vtkIdType actualCellNumberOfPoints;
-        vtkIdType *actualCellPoints;
+        vtkIdType const*actualCellPoints;
         actualCells->GetNextCell(actualCellNumberOfPoints, actualCellPoints);
         vtkIdType expectedCellNumberOfPoints;
-        vtkIdType *expectedCellPoints;
+        vtkIdType const*expectedCellPoints;
         expectedCells->GetNextCell(expectedCellNumberOfPoints, expectedCellPoints);
         if (actualCellNumberOfPoints != expectedCellNumberOfPoints)
         {

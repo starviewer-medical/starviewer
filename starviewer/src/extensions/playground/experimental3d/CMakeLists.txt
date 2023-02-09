@@ -89,18 +89,18 @@ target_link_qt(experimental3d
     Widgets
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkCommonDataModel
-    vtkCommonMath
-    vtkGUISupportQt
-    vtkImagingCore
-    vtkImagingGeneral
-    vtkImagingMath
-    vtkInteractionStyle
-    vtkRenderingCore
-    vtkRenderingOpenGL2
-    vtkRenderingVolume
-    vtkRenderingVolumeOpenGL2
+target_link_vtk(experimental3d
+    CommonCore
+    CommonDataModel
+    CommonMath
+    CommonSystem
+    GUISupportQt
+    ImagingCore
+    ImagingGeneral
+    ImagingMath
+    InteractionStyle
+    RenderingCore
+    RenderingOpenGL2
+    RenderingVolume
+    RenderingVolumeOpenGL2
 )
-target_link_libraries(experimental3d ${VTK_LIBRARIES})

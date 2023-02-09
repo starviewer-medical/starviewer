@@ -33,11 +33,9 @@ target_link_qt(diffusionperfusionsegmentation
     Widgets
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkImagingCore
-    vtkIOImage
-    vtkRenderingCore
+target_link_vtk(diffusionperfusionsegmentation
+    CommonCore
+    ImagingCore
+    IOImage
+    RenderingCore
 )
-target_link_libraries(diffusionperfusionsegmentation ${VTK_LIBRARIES})
-

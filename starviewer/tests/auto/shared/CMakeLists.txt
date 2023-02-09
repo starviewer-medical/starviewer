@@ -44,12 +44,11 @@ target_link_qt(test_shared
     Test
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkCommonDataModel
-    vtkRenderingCore
+target_link_vtk(test_shared
+    CommonCore
+    CommonDataModel
+    RenderingCore
 )
-target_link_libraries(test_shared ${VTK_LIBRARIES})
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon

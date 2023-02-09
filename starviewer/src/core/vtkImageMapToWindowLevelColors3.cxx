@@ -41,6 +41,8 @@
 #include "vtkScalarsToColors.h"
 #include "vtkPointData.h"
 
+#include <cmath>
+
 vtkStandardNewMacro(vtkImageMapToWindowLevelColors3)
 
 // Constructor sets default values

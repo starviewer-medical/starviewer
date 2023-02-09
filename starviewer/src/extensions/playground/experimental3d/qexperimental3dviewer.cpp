@@ -29,7 +29,7 @@ QExperimental3DViewer::QExperimental3DViewer(QWidget *parent)
 
     // avortar render
     AbortRenderCommand *abortRenderCommand = AbortRenderCommand::New();
-    m_vtkWidget->GetRenderWindow()->AddObserver(vtkCommand::AbortCheckEvent, abortRenderCommand);
+    m_vtkWidget->renderWindow()->AddObserver(vtkCommand::AbortCheckEvent, abortRenderCommand);
     abortRenderCommand->Delete();
 }
 
@@ -105,7 +105,7 @@ void QExperimental3DViewer::screenshot(const QString &fileName)
 
 void QExperimental3DViewer::render()
 {
-    m_vtkWidget->GetRenderWindow()->Render();
+    m_vtkWidget->renderWindow()->Render();
 }
 
 void QExperimental3DViewer::reset()
