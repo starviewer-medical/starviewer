@@ -15,7 +15,7 @@
 #include "imageoverlayreader.h"
 
 #include "dicomtagreader.h"
-//#include "dicomvaluerepresentationconverter.h"
+#include "dicomvaluerepresentationconverter.h"
 #include "imageoverlay.h"
 #include "logging.h"
 
@@ -80,21 +80,15 @@ bool ImageOverlayReader::read()
             }
         }
 
-        // TODO Use the below code after upgrading to DCMTK 3.6.6 or later
-        //      The below code gets the full uncropped overlay but crashes causes a segmentation fault in DCMTK 3.6.5 if overlay origin is not (0,0).
-//        DICOMTag overlayOriginTag(DICOMOverlayOrigin);
-//        overlayOriginTag.setGroup(dicomImage.getOverlayGroupNumber(plane));
-//        QString overlayOrigin = dicomReader.getValueAttributeAsQString(overlayOriginTag);
-//        const QVector<int64_t> &origin = DICOMValueRepresentationConverter::signed64BitVeryLongToInt64Vector(overlayOrigin);
-//        int x = origin[1];  // column
-//        int y = origin[0];  // row
+        DICOMTag overlayOriginTag(DICOMOverlayOrigin);
+        overlayOriginTag.setGroup(dicomImage.getOverlayGroupNumber(plane));
+        QString overlayOrigin = dicomReader.getValueAttributeAsQString(overlayOriginTag);
+        const QVector<int64_t> &origin = DICOMValueRepresentationConverter::signed64BitVeryLongToInt64Vector(overlayOrigin);
+        int x = origin[1];  // column
+        int y = origin[0];  // row
 
-//        uint width, height;
-//        const void *data = dicomImage.getFullOverlayData(plane, width, height, frameToRead);
-
-        uint x, y, width, height;
-        EM_Overlay mode;
-        const void *data = dicomImage.getOverlayData(plane, x, y, width, height, mode, frameToRead);
+        uint width, height;
+        const void *data = dicomImage.getFullOverlayData(plane, width, height, frameToRead);
 
         if (!data)
         {
