@@ -36,7 +36,6 @@ INITIALIZE_EASYLOGGINGPP
 #include "shortcuts.h"
 #include "starviewerapplicationcommandline.h"
 #include "loggingoutputwindow.h"
-#include "vtkinit.h"
 
 #ifndef NO_CRASH_REPORTER
 #include "crashhandler.h"
