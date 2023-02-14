@@ -28,13 +28,13 @@ do
         dcmtk)
             if [[ $(uname) == 'MSYS_NT'* ]]
             then
-                download_and_verify b43b3863e96e8d4612c2d26c3d37e644c44917b380dd229f24cc446f7f4c5b77 \
-                                    'dcmtk-3.6.5-win64-support-MD-iconv-msvc-15.8.zip' \
-                                    'https://dicom.offis.de/download/dcmtk/dcmtk365/support/dcmtk-3.6.5-win64-support-MD-iconv-msvc-15.8.zip'
+                download_and_verify 512042d1e385868e48c589bccc4cac629a8723407bfe13d79df1f3bfff319513 \
+                                    'dcmtk-3.6.7-win64-support-MD-iconv-msvc-15.9.zip' \
+                                    'https://dicom.offis.de/download/dcmtk/dcmtk367/support/dcmtk-3.6.7-win64-support-MD-iconv-msvc-15.9.zip'
             fi
-            download_and_verify 37dad355d5513b4de4a86b5b7b0c3e9ec059860d88781b80916bba2a04e6d5b8 \
-                                'dcmtk-DCMTK-3.6.5.tar.gz' \
-                                'https://github.com/DCMTK/dcmtk/archive/DCMTK-3.6.5.tar.gz'
+            download_and_verify 17705dcdb2047d1266bb4e92dbf4aa6d4967819e8e3e94f39b7df697661b4860 \
+                                'dcmtk-DCMTK-3.6.7.tar.gz' \
+                                'https://github.com/DCMTK/dcmtk/archive/refs/tags/DCMTK-3.6.7.tar.gz'
             ;;
         vtk)
             download_and_verify 1ec54e992cdb1d36472aa2cc24f5b69c500e0a1c254c26e59ff17710e52a477e \

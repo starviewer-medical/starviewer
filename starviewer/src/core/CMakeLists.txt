@@ -468,16 +468,12 @@ target_link_vtk(core
     RenderingVolumeOpenGL2
 )
 
-find_package(DCMTK REQUIRED)
-target_include_directories(core SYSTEM PUBLIC
-    ${DCMTK_INCLUDE_DIRS}
-    ${DCMTK_INCLUDE_DIRS}/dcmtk
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmdata
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmimage
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmimgle
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/ofstd
+target_link_dcmtk(core
+    dcmdata
+    dcmimage
+    dcmimgle
+    ofstd
 )
-target_link_libraries(core ${DCMTK_LIBRARIES})
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon

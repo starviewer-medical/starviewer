@@ -64,12 +64,9 @@ target_link_vtk(starviewer
     GUISupportQt
 )
 
-find_package(DCMTK REQUIRED)
-target_include_directories(starviewer PRIVATE
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmdata
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmjpeg
+target_link_dcmtk(starviewer
+    dcmjpeg
 )
-target_link_libraries(starviewer ${DCMTK_LIBRARIES})
 
 
 ################ Other things ################

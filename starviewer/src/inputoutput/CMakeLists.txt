@@ -162,14 +162,10 @@ target_link_vtk(inputoutput
     RenderingCore
 )
 
-find_package(DCMTK REQUIRED)
-target_include_directories(inputoutput SYSTEM PUBLIC
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/config
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmdata
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmnet
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/ofstd
+target_link_dcmtk(inputoutput
+    config
+    dcmnet
 )
-target_link_libraries(inputoutput ${DCMTK_LIBRARIES})
 
 find_package(GDCM REQUIRED)
 target_link_libraries(inputoutput gdcmCommon gdcmDICT gdcmDSED gdcmIOD gdcmMSFF)

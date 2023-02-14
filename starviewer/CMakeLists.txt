@@ -17,7 +17,7 @@ include(DefaultSdkDirectories)
 include(Theme)
 
 include(GetTargetIncludes)
-include(LinkQtVtk)
+include(LinkLibraries)
 include(Translations)
 
 add_subdirectory(src)

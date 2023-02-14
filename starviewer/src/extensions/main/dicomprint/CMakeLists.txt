@@ -48,9 +48,6 @@ target_link_qt(dicomprint
     Widgets
 )
 
-find_package(DCMTK REQUIRED)
-target_include_directories(dicomprint SYSTEM PRIVATE
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmimgle
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmpstat
+target_link_dcmtk(dicomprint
+    dcmpstat
 )
-target_link_libraries(dicomprint ${DCMTK_LIBRARIES})
