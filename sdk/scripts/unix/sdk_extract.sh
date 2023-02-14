@@ -39,7 +39,7 @@ do
             tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/GDCM-3.0.21.tar.gz"
             ;;
         itk)
-            tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-5.0.1.tar.gz"
+            tar -C $SDK_SOURCE_DIR_BASE -xvf "${DOWNLOAD_PREFIX}/InsightToolkit-5.3.0.tar.gz"
             ;;
         ecm)
             mkdir -p $SDK_SOURCE_DIR_BASE/threadweaver-5.64.0

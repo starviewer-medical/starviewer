@@ -121,14 +121,14 @@ target_link_vtk(test_core
     RenderingCore
 )
 
-find_package(ITK REQUIRED COMPONENTS
-    ITKCommon
-)
-set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
-target_link_libraries(test_core ${ITK_LIBRARIES})
-
 find_package(DCMTK REQUIRED)
 target_include_directories(test_core SYSTEM PRIVATE
     ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmdata
 )
 target_link_libraries(test_core ${DCMTK_LIBRARIES})
+
+find_package(ITK REQUIRED COMPONENTS
+    ITKCommon
+)
+set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
+target_link_libraries(test_core ${ITK_LIBRARIES})

@@ -21,7 +21,7 @@
 
 #include <itkImageSeriesReader.h>
 #include <itkImageFileReader.h>
-#include "itkDCMTKImageIO.h"
+#include <itkDCMTKImageIO.h>
 // Per notificar el progrés de lectura
 #include "itkQtAdaptor.h"
 

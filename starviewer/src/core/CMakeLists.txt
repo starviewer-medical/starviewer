@@ -127,9 +127,6 @@ set(SOURCES
     imagepipeline.cpp
     imageplane.cpp
     itemmenu.cpp
-    itkDCMTKFileReader.cxx
-    itkDCMTKImageIO.cxx
-    itkDCMTKImageIOFactory.cxx
     keyimagenotefillerstep.cpp
     leanbodymassformula.cpp
     leanbodymassformulacalculator.cpp
@@ -471,17 +468,6 @@ target_link_vtk(core
     RenderingVolumeOpenGL2
 )
 
-find_package(ITK REQUIRED COMPONENTS
-    ITKCommon
-    ITKIOGDCM
-    ITKIOImageBase
-    ITKStatistics
-    ITKTransform
-    ITKVTK
-)
-set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
-target_link_libraries(core ${ITK_LIBRARIES})
-
 find_package(DCMTK REQUIRED)
 target_include_directories(core SYSTEM PUBLIC
     ${DCMTK_INCLUDE_DIRS}
@@ -492,6 +478,21 @@ target_include_directories(core SYSTEM PUBLIC
     ${DCMTK_INCLUDE_DIRS}/dcmtk/ofstd
 )
 target_link_libraries(core ${DCMTK_LIBRARIES})
+
+find_package(ITK REQUIRED COMPONENTS
+    ITKCommon
+    ITKIODCMTK
+    ITKIOGDCM
+    ITKIOImageBase
+    ITKRegionGrowing
+    ITKSmoothing
+    ITKStatistics
+    ITKTransform
+    ITKVTK
+    ITKVtkGlue
+)
+set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
+target_link_libraries(core ${ITK_LIBRARIES})
 
 find_package(GDCM REQUIRED)
 target_link_libraries(core gdcmCommon gdcmMSFF GDCM::vtkgdcm)
