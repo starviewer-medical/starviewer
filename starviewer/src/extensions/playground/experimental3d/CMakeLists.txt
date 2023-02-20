@@ -76,7 +76,7 @@ add_extension(experimental3d)
 get_target_includes(CORE_INCLUDES core YES)
 target_include_directories(experimental3d PUBLIC ${CORE_INCLUDES})
 
-target_link_libraries(experimental3d core glew)
+target_link_libraries(experimental3d core)
 
 
 ################ External library dependencies ################
