@@ -64,12 +64,22 @@ void PolylineROITool::deleteTemporalRepresentation()
 
 void PolylineROITool::handleEvent(long unsigned eventID)
 {
+    if (!m_2DViewer->hasInput())
+    {
+        return;
+    }
+
     switch (eventID)
     {
         case vtkCommand::LeftButtonPressEvent:
-            handlePointAddition();
+            annotateNewPoint();
             break;
-
+        case vtkCommand::LeftButtonDoubleClickEvent:
+            if (m_mainPolyline->getNumberOfPoints() > 2)
+            {
+                closeForm();
+            }
+            break;
         case vtkCommand::MouseMoveEvent:
             simulateClosingPolyline();
             break;
@@ -80,27 +90,6 @@ void PolylineROITool::handleEvent(long unsigned eventID)
                 deleteTemporalRepresentation();
             }
             break;
-    }
-}
-
-void PolylineROITool::handlePointAddition()
-{
-    if (m_2DViewer->hasInput())
-    {
-        switch (m_2DViewer->getInteractor()->GetRepeatCount())
-        {
-            // Single-click o primer click d'un doble click. Afegim un nou punt a la ROI
-            case 0:
-                annotateNewPoint();
-                break;
-            // Doble-click, si tenim més de 2 punts, llavors tanquem la ROI
-            case 1:
-                if (m_mainPolyline->getNumberOfPoints() > 2)
-                {
-                    closeForm();
-                }
-                break;
-        }
     }
 }
 

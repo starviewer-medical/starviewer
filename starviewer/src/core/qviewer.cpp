@@ -241,15 +241,11 @@ void QViewer::eventHandler(vtkObject *object, unsigned long vtkEvent, void *clie
         case vtkCommand::MouseWheelBackwardEvent:
             m_mouseHasMoved = false;
             setActive(true);
-            if (vtkEvent == vtkCommand::LeftButtonPressEvent && getInteractor()->GetRepeatCount() == 1)
-            {
-                emit doubleClicked();
+            break;
 
-                if (getToolProxy()->isToolActive("ZoomTool"))
-                {
-                    return; // avoid accidental pan when doing a double click (#2854)
-                }
-            }
+        case vtkCommand::LeftButtonDoubleClickEvent:
+            setActive(true);
+            emit doubleClicked();
             break;
 
         case vtkCommand::MouseMoveEvent:
