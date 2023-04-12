@@ -12,17 +12,17 @@ do
             then
                 download_and_verify b5ae1ad8f0bd288b0d5b239669dc077725c5d919bc7f217c67b709a4e9702e6e \
                                     'qt-opensource-linux-x64-5.12.6.run' \
-                                    'https://download.qt.io/official_releases/qt/5.12/5.12.6/qt-opensource-linux-x64-5.12.6.run'
+                                    'https://download.qt.io/archive/qt/5.12/5.12.6/qt-opensource-linux-x64-5.12.6.run'
             elif [[ $(uname) == 'Darwin' ]]
             then
                 download_and_verify 7eb75902fac1ebea0a31e4a3b6988f454c410427dafb522797ba09d4a5688a22 \
                                     'qt-opensource-mac-x64-5.12.6.dmg' \
-                                    'https://download.qt.io/official_releases/qt/5.12/5.12.6/qt-opensource-mac-x64-5.12.6.dmg'
+                                    'https://download.qt.io/archive/qt/5.12/5.12.6/qt-opensource-mac-x64-5.12.6.dmg'
             elif [[ $(uname) == 'MSYS_NT'* ]]
             then
                 download_and_verify 7e7fd6bea5b1992771eb705188061acdf2121a59e9b2ccfc355016e22dded7a3 \
                                     'qt-opensource-windows-x86-5.12.6.exe' \
-                                    'https://download.qt.io/official_releases/qt/5.12/5.12.6/qt-opensource-windows-x86-5.12.6.exe'
+                                    'https://download.qt.io/archive/qt/5.12/5.12.6/qt-opensource-windows-x86-5.12.6.exe'
             fi
             ;;
         dcmtk)
