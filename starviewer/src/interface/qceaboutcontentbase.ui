@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>373</width>
-    <height>411</height>
+    <width>459</width>
+    <height>501</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -117,17 +117,24 @@
      </item>
      <item>
       <widget class="QLabel" name="label_6">
+       <property name="toolTip">
+        <string>Consult instructions</string>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="../external/external.qrc">:/celabelsymbols/instruction.svg</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="toolTip">
-        <string>Consult instructions</string>
-       </property>
-       <property name="pixmap">
-        <pixmap resource="../external/external.qrc">:/celabelsymbols/instruction.svg</pixmap>
+       <property name="text">
+        <string>eIFU</string>
        </property>
       </widget>
      </item>
