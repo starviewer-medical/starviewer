@@ -18,6 +18,10 @@
     <d>S'afegeix una nova opció de línia d'ordres per descarregar un estudi a partir d'un URL especial.</d>
     <t>3028</t>
    </nw>
+   <nw>
+    <d>Es pot mostrar l'etiqueta de dispositiu mèdic des de la finestra de «Quant a».</d>
+    <t>3053</t>
+   </nw>
    <im>
     <d>Finestres de consulta independents per cada finestra principal.</d>
     <t>2734</t>
@@ -70,6 +74,7 @@
    <fx>
     <d>Altres correccions menors.</d>
     <t>2911</t>
+    <t>2941</t>
     <t>2984</t>
     <t>3000</t>
     <t>3033</t>
