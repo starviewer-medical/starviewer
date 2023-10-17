@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
- <office:meta><meta:creation-date>2019-12-03T12:20:08.435000000</meta:creation-date><meta:generator>LibreOffice/7.5.6.2$Linux_X86_64 LibreOffice_project/50$Build-2</meta:generator><meta:editing-duration>P6DT9H59M14S</meta:editing-duration><meta:editing-cycles>475</meta:editing-cycles><dc:title>User guide</dc:title><dc:subject>Starviewer 2.0</dc:subject><meta:keyword>🅿</meta:keyword><dc:date>2023-10-03T13:56:52.115100375</dc:date><meta:document-statistic meta:table-count="28" meta:image-count="220" meta:object-count="5" meta:page-count="146" meta:paragraph-count="1779" meta:word-count="23834" meta:character-count="140251" meta:non-whitespace-character-count="118643"/></office:meta>
+ <office:meta><meta:creation-date>2019-12-03T12:20:08.435000000</meta:creation-date><meta:generator>LibreOffice/7.5.7.1$Linux_X86_64 LibreOffice_project/50$Build-1</meta:generator><meta:editing-duration>P6DT9H59M50S</meta:editing-duration><meta:editing-cycles>476</meta:editing-cycles><dc:title>User guide</dc:title><dc:subject>Starviewer 2.0</dc:subject><meta:keyword>🅿</meta:keyword><dc:date>2023-10-17T18:06:16.154369810</dc:date><meta:document-statistic meta:table-count="28" meta:image-count="220" meta:object-count="5" meta:page-count="146" meta:paragraph-count="1779" meta:word-count="23838" meta:character-count="140268" meta:non-whitespace-character-count="118656"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
-   <config:config-item config:name="ViewAreaTop" config:type="long">353060</config:config-item>
+   <config:config-item config:name="ViewAreaTop" config:type="long">333587</config:config-item>
    <config:config-item config:name="ViewAreaLeft" config:type="long">0</config:config-item>
-   <config:config-item config:name="ViewAreaWidth" config:type="long">39848</config:config-item>
-   <config:config-item config:name="ViewAreaHeight" config:type="long">19687</config:config-item>
+   <config:config-item config:name="ViewAreaWidth" config:type="long">50193</config:config-item>
+   <config:config-item config:name="ViewAreaHeight" config:type="long">21751</config:config-item>
    <config:config-item config:name="ShowRedlineChanges" config:type="boolean">true</config:config-item>
    <config:config-item config:name="InBrowseMode" config:type="boolean">false</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view2</config:config-item>
-     <config:config-item config:name="ViewLeft" config:type="long">11867</config:config-item>
-     <config:config-item config:name="ViewTop" config:type="long">356036</config:config-item>
+     <config:config-item config:name="ViewLeft" config:type="long">14942</config:config-item>
+     <config:config-item config:name="ViewTop" config:type="long">339843</config:config-item>
      <config:config-item config:name="VisibleLeft" config:type="long">0</config:config-item>
-     <config:config-item config:name="VisibleTop" config:type="long">353060</config:config-item>
-     <config:config-item config:name="VisibleRight" config:type="long">39846</config:config-item>
-     <config:config-item config:name="VisibleBottom" config:type="long">372745</config:config-item>
+     <config:config-item config:name="VisibleTop" config:type="long">333587</config:config-item>
+     <config:config-item config:name="VisibleRight" config:type="long">50191</config:config-item>
+     <config:config-item config:name="VisibleBottom" config:type="long">355335</config:config-item>
      <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
      <config:config-item config:name="ViewLayoutColumns" config:type="short">1</config:config-item>
      <config:config-item config:name="ViewLayoutBookMode" config:type="boolean">false</config:config-item>
@@ -89,7 +89,7 @@
     </config:config-item-map-entry>
    </config:config-item-map-indexed>
    <config:config-item config:name="LoadReadonly" config:type="boolean">false</config:config-item>
-   <config:config-item config:name="Rsid" config:type="int">126645597</config:config-item>
+   <config:config-item config:name="Rsid" config:type="int">126704401</config:config-item>
    <config:config-item config:name="FootnoteInColumnToPageEnd" config:type="boolean">true</config:config-item>
    <config:config-item config:name="ProtectFields" config:type="boolean">false</config:config-item>
    <config:config-item config:name="SaveGlobalDocumentLinks" config:type="boolean">false</config:config-item>
@@ -108,7 +108,7 @@
    <config:config-item config:name="SaveVersionOnClose" config:type="boolean">false</config:config-item>
    <config:config-item config:name="ChartAutoUpdate" config:type="boolean">true</config:config-item>
    <config:config-item config:name="ImagePreferredDPI" config:type="int">0</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">CQL+/1Bob3Rvc21hcnQtQzQxMDAtc2VyaWVzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpQaG90b3NtYXJ0LUM0MTAwLXNlcmllcwAAAAAWAAMA2AAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9UGhvdG9zbWFydC1DNDEwMC1zZXJpZXMKb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5hZGp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXh0RGF0YQpJbnB1dFNsb3Q6QXV0bwBQYWdlU2l6ZTpBNABEdXBsZXg6Tm9uZQAAEgBDT01QQVRfRFVQTEVYX01PREUPAER1cGxleE1vZGU6Ok9mZgwAUFJJTlRFUl9OQU1FFwBQaG90b3NtYXJ0LUM0MTAwLXNlcmllcwsARFJJVkVSX05BTUUcAENVUFM6UGhvdG9zbWFydC1DNDEwMC1zZXJpZXM=</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">CQL+/1Bob3Rvc21hcnQtQzQxMDAtc2VyaWVzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ1VQUzpQaG90b3NtYXJ0LUM0MTAwLXNlcmllcwAAAAAWAAMA2AAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9UGhvdG9zbWFydC1DNDEwMC1zZXJpZXMKb3JpZW50YXRpb249UG9ydHJhaXQKY29waWVzPTEKY29sbGF0ZT1mYWxzZQptYXJnaW5hZGp1c3RtZW50PTAsMCwwLDAKY29sb3JkZXB0aD0yNApwc2xldmVsPTAKcGRmZGV2aWNlPTEKY29sb3JkZXZpY2U9MApQUERDb250ZXh0RGF0YQpEdXBsZXg6Tm9uZQBQYWdlU2l6ZTpBNABJbnB1dFNsb3Q6QXV0bwAAEgBDT01QQVRfRFVQTEVYX01PREUPAER1cGxleE1vZGU6Ok9mZgwAUFJJTlRFUl9OQU1FFwBQaG90b3NtYXJ0LUM0MTAwLXNlcmllcwsARFJJVkVSX05BTUUcAENVUFM6UGhvdG9zbWFydC1DNDEwMC1zZXJpZXM=</config:config-item>
    <config:config-item config:name="SmallCapsPercentage66" config:type="boolean">false</config:config-item>
    <config:config-item config:name="AlignTabStopPosition" config:type="boolean">true</config:config-item>
    <config:config-item config:name="DropCapPunctuation" config:type="boolean">false</config:config-item>
@@ -202,7 +202,7 @@
   <draw:stroke-dash draw:name="Dashed_20__28_var_29__20_2" draw:display-name="Dashed (var) 2" draw:style="rect" draw:dots1="1" draw:dots1-length="0.011cm" draw:dots2="1" draw:dots2-length="0.011cm" draw:distance="0.011cm"/>
   <style:default-style style:family="graphic">
    <style:graphic-properties svg:stroke-color="#3465a4" draw:fill-color="#729fcf" fo:wrap-option="no-wrap" draw:shadow-offset-x="0.3cm" draw:shadow-offset-y="0.3cm" draw:start-line-spacing-horizontal="0.283cm" draw:start-line-spacing-vertical="0.283cm" draw:end-line-spacing-horizontal="0.283cm" draw:end-line-spacing-vertical="0.283cm" style:writing-mode="lr-tb" style:flow-with-text="false"/>
-   <style:paragraph-properties fo:line-height="110%" style:text-autospace="ideograph-alpha" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="false">
+   <style:paragraph-properties fo:line-height="110%" style:text-autospace="ideograph-alpha" style:line-break="strict" style:font-independent-line-spacing="false">
     <style:tab-stops/>
    </style:paragraph-properties>
    <style:text-properties style:use-window-font-color="true" loext:opacity="0%" loext:color-lum-mod="100%" loext:color-lum-off="0%" style:font-name="Roboto Condensed Light1" fo:font-size="12pt" fo:language="en" fo:country="GB" fo:font-weight="250" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK TC" style:font-size-asian="10.5pt" style:language-asian="zxx" style:country-asian="none" style:font-weight-asian="250" style:font-name-complex="Noto Sans Arabic UI" style:font-size-complex="12pt" style:language-complex="zxx" style:country-complex="none" style:font-weight-complex="250" fo:hyphenate="false"/>
@@ -17032,7 +17032,7 @@
         ODYiIC8+PC9mbG93Um9vdD48L3N2Zz4NCg==
        </office:binary-data>
       </draw:image>
-     </draw:frame><text:span text:style-name="T1"><text:modification-date style:data-style-name="N49">2023-10-03</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>475</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
+     </draw:frame><text:span text:style-name="T1"><text:modification-date style:data-style-name="N49">2023-10-17</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>476</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
     <table:table table:name="tpl_headerPortraitLogoHeaderFooter_table" table:style-name="tpl_5f_headerPortraitLogoHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_headerPortraitLogoHeaderFooter_5f_table.A"/>
      <table:table-header-rows>
@@ -17059,7 +17059,7 @@
        <text:p text:style-name="P8"><text:file-name text:display="name">[en] User guide</text:file-name></text:p>
       </table:table-cell>
       <table:table-cell table:style-name="tpl_5f_footerPortraitLogoHeaderFooter_5f_table.B1" office:value-type="string">
-       <text:p text:style-name="P9"><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:page-number text:select-page="current">7</text:page-number></text:span></text:span><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:s/>• </text:span></text:span><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:page-count>146</text:page-count></text:span></text:span></text:p>
+       <text:p text:style-name="P9"><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:page-number text:select-page="current">12</text:page-number></text:span></text:span><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:s/>• </text:span></text:span><text:span text:style-name="Page_20_Number"><text:span text:style-name="T1"><text:page-count>146</text:page-count></text:span></text:span></text:p>
       </table:table-cell>
      </table:table-row>
     </table:table>
@@ -17248,7 +17248,7 @@
         5+F95JqhUOhGrVZrpDWp3X1xcXFGoqPVaDR/U59Oae//AHBlDm2cEW7lAAAAAElFTkSuQmCC
        </office:binary-data>
       </draw:image>
-     </draw:frame><text:span text:style-name="T1"><text:modification-date style:data-style-name="N49">2023-10-03</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>475</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
+     </draw:frame><text:span text:style-name="T1"><text:modification-date style:data-style-name="N49">2023-10-17</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>476</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
     <table:table table:name="tpl_headerLandscapeLogoHeaderFooter_table" table:style-name="tpl_5f_headerLandscapeLogoHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_headerLandscapeLogoHeaderFooter_5f_table.A"/>
      <table:table-header-rows>
@@ -17284,7 +17284,7 @@
   </style:master-page>
   <style:master-page style:name="Portrait_20_header_20__2b__20_footer" style:display-name="Portrait header + footer" style:page-layout-name="pm14" draw:style-name="dp1">
    <style:header>
-    <text:p text:style-name="P13"><text:span text:style-name="T1"><text:modification-date style:data-style-name="N49">2023-10-03</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>475</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
+    <text:p text:style-name="P13"><text:span text:style-name="T1"><text:modification-date style:data-style-name="N49">2023-10-17</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>476</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
     <table:table table:name="tpl_headerPortraitHeaderFooter_table" table:style-name="tpl_5f_headerPortraitHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_headerPortraitHeaderFooter_5f_table.A"/>
      <table:table-header-rows>
@@ -17315,7 +17315,7 @@
   </style:master-page>
   <style:master-page style:name="Landscape_20_header_20__2b__20_footer" style:display-name="Landscape header + footer" style:page-layout-name="pm15" draw:style-name="dp2">
    <style:header>
-    <text:p text:style-name="P13"><text:span text:style-name="T1"><text:modification-date style:data-style-name="N49">2023-10-03</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>475</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
+    <text:p text:style-name="P13"><text:span text:style-name="T1"><text:modification-date style:data-style-name="N49">2023-10-17</text:modification-date></text:span><text:span text:style-name="T1"><text:s/>• №</text:span><text:span text:style-name="T1"><text:editing-cycles>476</text:editing-cycles></text:span><text:span text:style-name="T1"> • </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T2"><text:keywords>🅿</text:keywords></text:span></text:span></text:p>
     <table:table table:name="tpl_headerLandscapeHeaderFooter_table" table:style-name="tpl_5f_headerLandscapeHeaderFooter_5f_table">
      <table:table-column table:style-name="tpl_5f_headerLandscapeHeaderFooter_5f_table.A"/>
      <table:table-header-rows>
@@ -17687,7 +17687,7 @@
    <text:p text:style-name="P2275">This version of Starviewer does not have any known issue.</text:p>
    <text:h text:style-name="P2234" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc49343_3061264314"/>Intended purpose<text:bookmark-end text:name="__RefHeading___Toc49343_3061264314"/></text:h>
    <text:h text:style-name="Heading_20_2" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc49345_3061264314"/>Intended use<text:bookmark-end text:name="__RefHeading___Toc49345_3061264314"/></text:h>
-   <text:p text:style-name="P2281">Starviewer is intended for use as a medical device software application to aid healthcare professionals in visualising, analysing, and assessing medical images stored in DICOM (Digital <text:span text:style-name="T1453">I</text:span>maging and Communication<text:span text:style-name="T1453">s</text:span> in Medicine) format and obtained through diagnostic and imaging procedures.</text:p>
+   <text:p text:style-name="P2281">Starviewer is a medical software platform intended to provide support for diagnosis and clinical decision from medical images by healthcare professionals. It is an application for the visualisation and processing of medical images stored in DICOM (Digital Imaging and Communications in Medicine) format.</text:p>
    <text:h text:style-name="P2282" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc117296_3263537209"/>Intended users<text:bookmark-end text:name="__RefHeading___Toc117296_3263537209"/></text:h>
    <text:p text:style-name="First_20_line_20_indent">Starviewer primary intended users are: (i) Radiologists or specialized medical doctors who interpret and diagnose medical images, such as X-rays, CT scans, MRIs, and ultrasound. They use DICOM viewers as essential tools to review, analyse, and interpret medical images, make clinical assessments, and issue diagnostic reports; (ii) Clinical physicians and specialists including cardiologists, orthopaedic surgeons, neurologists, and oncologists, among others, that use Starviewer to review relevant medical images within their respective fields. (iii) Medical imaging technologists or radiologic technologists responsible for acquiring medical images using imaging equipment, such as X-ray machines, CT scanners, and MRI machines that can use the device to review the images they have acquired to ensure quality and completeness. (iv) Nuclear medicine technologists that work with imaging techniques involving the use of radioactive materials. They can use the device to review images from nuclear medicine studies, such as positron emission tomography (PET) and single-photon emission computed tomography (SPECT) scans; <text:s/>(v) Surgeons that may use the device to review preoperative images for surgical planning and guidance, particularly for procedures requiring precise anatomical knowledge.</text:p>
    <text:p text:style-name="First_20_line_20_indent">In addition, other healthcare professionals involved in patient care, such as nurses, nurse practitioners, and physician assistants, may use the device to gain insights from medical images relevant to their roles. In all the cases, to use the device it is required to follow its indications for use.</text:p>
@@ -17698,7 +17698,7 @@
    <text:p text:style-name="P2227">There are no contra-indications.</text:p>
    <text:h text:style-name="P2235" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc49349_3061264314"/>Expected clinical benefits<text:bookmark-end text:name="__RefHeading___Toc49349_3061264314"/></text:h>
    <text:p text:style-name="P2227">The <text:span text:style-name="T1454">expected</text:span> clinical benefits that derive from the use of Starviewer are:</text:p>
-   <text:list xml:id="list3950800744" text:style-name="List_20_1">
+   <text:list xml:id="list2427682498" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2287">Accurate diagnosis and treatment by providing tools that enable healthcare professionals to accurately interpret and analyse medical images, leading to precise diagnoses, effective treatment planning and disease progression monitoring.</text:p>
     </text:list-item>
@@ -17800,7 +17800,7 @@
    </table:table>
    <text:h text:style-name="P2229" text:outline-level="4"><text:bookmark-start text:name="__RefHeading___Toc2436_16928061171"/><text:span text:style-name="T1087">Obser</text:span>va<text:span text:style-name="T1434">t</text:span>ions<text:bookmark-end text:name="__RefHeading___Toc2436_16928061171"/></text:h>
    <text:p text:style-name="P2243">These specifications are generic. This does not mean that Starviewer cannot work with other setups. It will greatly depend on the type and quantity of studies desired to handle and open at the same time. In case of doubt with a specific setup please contact the Starviewer team.</text:p>
-   <text:list xml:id="list135653459868492" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180616928507499" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2315"><text:span text:style-name="Emphasis">CPU:</text:span> <text:span text:style-name="T1434">We recommend a mid rage or high end CPU to obtain a pleasant user experience</text:span>. <text:span text:style-name="T1434">Starviewer can run on any x86_64 CPU but if it is not powerful enough some features may perform sluggishly</text:span>. <text:span text:style-name="T1434">Starviewer can take advantage from several CPU cores to speed up certain tasks.</text:span></text:p>
     </text:list-item>
@@ -18038,7 +18038,7 @@
    </text:list>
    <text:p text:style-name="List_20_Contents"><text:span text:style-name="T1">Men</text:span><text:span text:style-name="T163">u</text:span><text:span text:style-name="T1">: </text:span><text:span text:style-name="Display"><text:span text:style-name="T59">Fi</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T779">le</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T59"> &gt; PACS…</text:span></text:span></text:p>
    <text:p text:style-name="P1614"><text:span text:style-name="T163">Shortcut</text:span><text:span text:style-name="T1">: </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T1">Ctrl</text:span></text:span><text:span text:style-name="T1">+</text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T1">P</text:span></text:span></text:p>
-   <text:list xml:id="list135653277718386" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180616588838755" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2319"><text:bookmark-ref text:reference-format="text" text:ref-name="__RefHeading___Toc8344_2613969985">DICOMDIR</text:bookmark-ref>: <text:span text:style-name="T1182">It allows users to search for studies that are stored in a DICOMDIR on the computer or any other device (USB, CD, DVD).</text:span></text:p>
     </text:list-item>
@@ -20092,7 +20092,7 @@
       </office:binary-data>
      </draw:image>
     </draw:frame><text:span text:style-name="T166">By </text:span><text:span text:style-name="T355">right-</text:span><text:span text:style-name="T166">clicking</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T62"></text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T166">on a study or a series, different actions can also be performed:</text:span></text:p>
-   <text:list xml:id="list135652901032143" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180616720807219" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2289"><text:span text:style-name="Display"><text:span text:style-name="T63">Vi</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T781">ew</text:span></text:span><text:span text:style-name="T63">: </text:span><text:span text:style-name="T166">It performs the same operation as the</text:span><text:span text:style-name="T63"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T63">Vi</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T781">ew</text:span></text:span><text:span text:style-name="T166"> button: it visualises the selected studies, organising the viewers and the series automatically with an</text:span><text:span text:style-name="T63"> </text:span><text:a xlink:type="simple" xlink:href="#1.8.1.1.2.Distribució automàtica|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T166">automatic layout</text:span></text:a><text:span text:style-name="T63"> </text:span><text:span text:style-name="T166">or a </text:span><text:a xlink:type="simple" xlink:href="#1.8.1.1.1.Hanging protocols|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T63">hanging protocol</text:span></text:a><text:span text:style-name="T63">.</text:span></text:p>
     </text:list-item>
@@ -20867,7 +20867,7 @@
    <text:p text:style-name="P2027"><text:span text:style-name="T65">D</text:span><text:span text:style-name="T1">ifferent filters can be applied to perform the </text:span><text:span text:style-name="T171">query</text:span><text:span text:style-name="T1"> such as: patient name, patient ID, date of the study, and modality of the series. By selecting the</text:span><text:span text:style-name="T65"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T1">Ad</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T777">vanced</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T65"> </text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T777">search</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T65"> </text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T66">&gt;&gt;</text:span></text:span><text:span text:style-name="T65"> </text:span><text:span text:style-name="T1">button, users can apply other criteria such as: patient birth date, study time, study UID, study modality, series UID, SOP Instance UID…</text:span></text:p>
    <text:p text:style-name="P2028"><text:span text:style-name="T65">O</text:span><text:span text:style-name="T1">nce the parameters have been specified, </text:span><text:span text:style-name="T171">the query can be performed by clicking the</text:span><text:span text:style-name="T66"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T171">S</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T66">e</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T171">a</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T66">rc</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T785">h</text:span></text:span><text:span text:style-name="T66"> </text:span><text:span text:style-name="T171">button, and then all the results that match the chosen options are displayed. The query can be cancelled before it ends by using the</text:span><text:span text:style-name="T66"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T66">Cancel </text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T171">query</text:span></text:span><text:span text:style-name="T171"> button.</text:span></text:p>
    <text:p text:style-name="P2029"><text:span text:style-name="T66">O</text:span><text:span text:style-name="T1">nce the query results are received, different actions can be performed when selecting one or more studies, series or files:</text:span></text:p>
-   <text:list xml:id="list135654669516611" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180617123814918" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2377"><text:span text:style-name="Display"><text:span text:style-name="T171">R</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T1">e</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T171">trieve &amp; View</text:span></text:span><text:span text:style-name="T1">: </text:span><text:span text:style-name="T171">It retrieves the selected elements, stores them in the local database, and visualises them automatically. This operation can also be performed directly by </text:span><text:span text:style-name="T355">right-</text:span><text:span text:style-name="T171">clicking</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T1"></text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T171">on </text:span><text:soft-page-break/><text:span text:style-name="T171">the study that has to be visualised and selecting </text:span><text:span text:style-name="T172">the</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T172">Re</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T786">trieve &amp; View</text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T173">option,</text:span><text:span text:style-name="T172"> or by using the</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T1">Ctrl</text:span></text:span><text:span text:style-name="T1">+</text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T1">V</text:span></text:span><text:span text:style-name="T172"> keys.</text:span></text:p>
     </text:list-item>
@@ -21285,7 +21285,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P650">There are also different operations available to perform with the elements of the list:</text:p>
-   <text:list xml:id="list135654412445254" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180616818107646" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2378"><text:span text:style-name="Display"><text:span text:style-name="T1">Cancel </text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T788">All</text:span></text:span><text:span text:style-name="T1">: </text:span><text:span text:style-name="T174">It cancels all the pending operations and the ones that are being executed.</text:span></text:p>
     </text:list-item>
@@ -22448,7 +22448,7 @@
      </draw:image>
     </draw:frame><text:span text:style-name="T174">A dialogue box is shown that allows users to choose the DICOMDIR file from the hard disk, USB or optical dis</text:span><text:span text:style-name="T348">c</text:span><text:span text:style-name="T174"> and open it. Once opened, the</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T1">DICOMDIR</text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T174">tab is shown with all the studies that it contains, as in the following image:</text:span></text:p>
    <text:p text:style-name="P650"><text:soft-page-break/>One or more elements of the list can be selected and different actions <text:span text:style-name="T1187">can be performed:</text:span></text:p>
-   <text:list xml:id="list135653469884505" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180617504841959" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2379"><text:span text:style-name="Display"><text:span text:style-name="T1">Vi</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T789">ew</text:span></text:span><text:span text:style-name="T1">: </text:span><text:span text:style-name="T175">Visualises the selected elements. This operation can also be performed directly by </text:span><text:span text:style-name="T355">right-</text:span><text:span text:style-name="T175">clicking </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T66"></text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T175">and selecting the</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T1">Vi</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T789">ew</text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T175">option, or by pressing the</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T1">Ctrl</text:span></text:span><text:span text:style-name="T1">+</text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T1">V</text:span></text:span><text:span text:style-name="T175"> keys.</text:span></text:p>
     </text:list-item>
@@ -23607,7 +23607,7 @@
      </draw:image>
     </draw:frame><text:span text:style-name="T178">Later, by clicking the</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T1">Crea</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T178">te</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T1"> DICOMDIR</text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T178">button, the following window appears:</text:span></text:p>
    <text:p text:style-name="P737">This window allows us to select where we want to create the DICOMDIR:</text:p>
-   <text:list xml:id="list135654325323731" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180616734295045" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2380"><text:a xlink:type="simple" xlink:href="#1.6.2.2.Gravació a CD o DVD|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:soft-page-break/><text:span text:style-name="T1">CD/DVD</text:span></text:a></text:p>
     </text:list-item>
@@ -24669,7 +24669,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P905">Advanced functions</text:p>
-   <text:list xml:id="list135653686258608" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180617115571774" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2296"><text:a xlink:type="simple" xlink:href="#1.9.1.Reconstruccions|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T183">Orthogonal reconstructions: axial, sagittal, coronal</text:span></text:a></text:p>
     </text:list-item>
@@ -29744,7 +29744,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P665">Starviewer provides a default configuration for each modality according to the following criteria:</text:p>
-   <text:list xml:id="list135654662329616" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180616724041093" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2324">For plain X-ray images (CR, DX, ES, MG, OP, RF, US, XC) the distribution is done by images; for the rest of modalities (CT, MR, NM, PT, SC, XA, etc.) the distribution is done by series</text:p>
     </text:list-item>
@@ -29762,7 +29762,7 @@
    <text:h text:style-name="P438" text:outline-level="5"><text:bookmark-start text:name="__RefHeading___Toc11968_489146314"/><text:soft-page-break/>Criteri<text:span text:style-name="T1095">a for the selection of the layout mechanism</text:span><text:bookmark-end text:name="__RefHeading___Toc11968_489146314"/></text:h>
    <text:p text:style-name="P2035"><text:span text:style-name="T74">S</text:span><text:span text:style-name="T185">tarviewer allows configuring, in the</text:span><text:span text:style-name="T74"> </text:span><text:a xlink:type="simple" xlink:href="#1.13.2.Distribució dels visors 2D|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T185">2D viewers layout</text:span></text:a><text:span text:style-name="T74"> </text:span><text:span text:style-name="T185">configuration options for each modality, whether </text:span><text:span text:style-name="T187">a hanging protocol has to be applied when a study is opened, if any is applicable, or an automatic layout, re</text:span><text:span text:style-name="T188">gardless of whether there are applicable hanging protocols or not. By default, priority is given to hanging protocols in the CR, CT, MG, MR and US modalities.</text:span></text:p>
    <text:p text:style-name="P2036"><text:span text:style-name="T75">F</text:span><text:span text:style-name="T188">or each loaded study, Starviewer checks the </text:span><text:span text:style-name="T189">internal library of </text:span><text:span text:style-name="T188">hanging protocols and, according to the study properties, </text:span><text:span text:style-name="T189">filters </text:span><text:span text:style-name="T188">those that are applicable according to the restrictions defined in each hanging protocol. </text:span><text:span text:style-name="T189">If there is a hanging protocol preference and several of them are applicable, the winner is chosen according to the following criteria:</text:span></text:p>
-   <text:list xml:id="list1255962994" text:style-name="Numbering_20_123">
+   <text:list xml:id="list1608375325" text:style-name="Numbering_20_123">
     <text:list-item>
      <text:p text:style-name="P2328">The one with the highest priority (defined in the hanging protocol)</text:p>
     </text:list-item>
@@ -29778,7 +29778,7 @@
    </text:list>
    <text:p text:style-name="P1300"><text:span text:style-name="T1">Regardless of the applied layout mechanism, users can apply at any moment a regular layout or one of the applicable hanging protocols by using the</text:span><text:span text:style-name="T75"> </text:span><text:a xlink:type="simple" xlink:href="#1.8.1.4.1.Eines de manipulació de la distribució|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T1">viewers layout</text:span></text:a><text:span text:style-name="T1"> tool.</text:span></text:p>
    <text:p text:style-name="P439">If <text:span text:style-name="T1238">a study with multiple modalities is loaded,</text:span> the best <text:span text:style-name="T1238">h</text:span>anging <text:span text:style-name="T1238">p</text:span>rotocol <text:span text:style-name="T1238">is applied</text:span> from those modalities that have <text:span text:style-name="T1238">the hanging protocol option</text:span> as a <text:span text:style-name="T1238">preference</text:span>. <text:span text:style-name="T1238">If</text:span> no <text:span text:style-name="T1238">h</text:span>anging <text:span text:style-name="T1238">p</text:span>rotocols <text:span text:style-name="T1238">are applicable or no modality prioritises the hanging protocols</text:span>, <text:span text:style-name="T1238">an</text:span> automatic layout <text:span text:style-name="T1238">is</text:span> applied <text:span text:style-name="T1238">by</text:span> combin<text:span text:style-name="T1238">ing</text:span> the automatic layout <text:span text:style-name="T1238">preferences</text:span> of each modality <text:span text:style-name="T1238">with the following criteria</text:span>:</text:p>
-   <text:list xml:id="list135653603576626" text:continue-list="list135654662329616" text:style-name="List_20_1">
+   <text:list xml:id="list180617230365996" text:continue-list="list180616724041093" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2331"><text:span text:style-name="T1238">If distribution </text:span><text:span text:style-name="T1239">is </text:span><text:span text:style-name="T1238">by series in some cases and by images in others, </text:span><text:span text:style-name="T1239">by </text:span><text:span text:style-name="T1238">series is applied</text:span></text:p>
     </text:list-item>
@@ -29828,11 +29828,11 @@
    <text:p text:style-name="P443">It shows the list of related studies of the current patient that <text:span text:style-name="T1242">are</text:span> in the local database, in the PACS selected by default, and in the PACS where the study comes from, and allows <text:span text:style-name="T1242">changing</text:span> <text:span text:style-name="T1242">the </text:span>current and prior studies.</text:p>
    <text:p text:style-name="P878">Mode <text:span text:style-name="T1097">of operation</text:span></text:p>
    <text:p text:style-name="P2038"><text:span text:style-name="T78">When clicking</text:span><text:span text:style-name="T77"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T78"> </text:span><text:span text:style-name="T192">the button</text:span><text:span text:style-name="T78">, the list of related studies that have been found appears. From this list, the displayed study </text:span><text:span text:style-name="T192">can be changed </text:span><text:span text:style-name="T78">and the </text:span><text:a xlink:type="simple" xlink:href="#1.8.1.2.Comparació d’estudis|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T192">comparison</text:span></text:a><text:span text:style-name="T78"> with a prior study </text:span><text:span text:style-name="T192">can be enabled or disabled</text:span><text:span text:style-name="T78">. The selection buttons of the </text:span><text:span text:style-name="Display"><text:span text:style-name="T193">C</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T794">urrent</text:span></text:span><text:span text:style-name="T78"> and </text:span><text:span text:style-name="Display"><text:span text:style-name="T78">Pr</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T794">ior</text:span></text:span><text:span text:style-name="T78"> columns allow </text:span><text:span text:style-name="T193">changing,</text:span><text:span text:style-name="T78"> respectively, the current and prior studies that are displayed at every moment. Only a more recent study than the </text:span><text:span text:style-name="T193">selected </text:span><text:span text:style-name="T78">prior one can be chosen as the current study, and only an older study than the </text:span><text:span text:style-name="T193">selected </text:span><text:span text:style-name="T78">current one can be chosen as the prior one; in any other case the selection button does not appear.</text:span></text:p>
-   <text:p text:style-name="P2039"><text:span text:style-name="T78">To change the current study, click </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T78"> on the selection button corresponding to the new study in the </text:span><text:span text:style-name="Display"><text:span text:style-name="T194">C</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T795">urrent</text:span></text:span><text:span text:style-name="T78"> column. To add or change a prior study to compare, click </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T78"> on the selection button corresponding to the new study in the </text:span><text:span text:style-name="Display"><text:span text:style-name="T79">Pr</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T194">ior</text:span></text:span><text:span text:style-name="T78"> column. When a study is selected as current or prior, if it is not in memory, it is automatically retrieved from the PACS or it is loaded from the local database. To disable the comparison and view only the current study, click on the </text:span><text:span text:style-name="T196">checked</text:span><text:span text:style-name="T78"> selection button </text:span><text:span text:style-name="T195">of</text:span><text:span text:style-name="T78"> the</text:span><text:span text:style-name="T79"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T79">Pr</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T195">ior</text:span></text:span><text:span text:style-name="T78"> </text:span><text:span text:style-name="T78">column. To load a study from the list to memory without viewing it, </text:span><text:span text:style-name="T195">click</text:span><text:span text:style-name="T79"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T195"></text:span></text:span><text:span text:style-name="T79"> </text:span><text:span text:style-name="T195">the</text:span><text:span text:style-name="T79"> </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T80">👁</text:span></text:span><text:span text:style-name="T79"> </text:span><text:span text:style-name="T195">button </text:span><text:span text:style-name="T78">of the desired study.</text:span></text:p>
+   <text:p text:style-name="P2039"><text:span text:style-name="T78">To change the current study, click </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T78"> on the selection button corresponding to the new study in the </text:span><text:span text:style-name="Display"><text:span text:style-name="T194">C</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T795">urrent</text:span></text:span><text:span text:style-name="T78"> column. To add or change a prior study to compare, click </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T78"> on the selection button corresponding to the new study in the </text:span><text:span text:style-name="Display"><text:span text:style-name="T79">Pr</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T194">ior</text:span></text:span><text:span text:style-name="T78"> column. When a study is selected as current or prior, if it is not in memory, it is automatically retrieved from the PACS or it is loaded from the local database. To disable the comparison and view only the current study, click on the </text:span><text:span text:style-name="T196">checked</text:span><text:span text:style-name="T78"> selection button </text:span><text:span text:style-name="T195">of</text:span><text:span text:style-name="T78"> the</text:span><text:span text:style-name="T79"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T79">Pr</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T195">ior</text:span></text:span><text:span text:style-name="T78"> column. To load a study from the list to memory without viewing it, </text:span><text:span text:style-name="T195">click</text:span><text:span text:style-name="T79"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T195"></text:span></text:span><text:span text:style-name="T79"> </text:span><text:span text:style-name="T195">the</text:span><text:span text:style-name="T79"> </text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T80">👁</text:span></text:span><text:span text:style-name="T79"> </text:span><text:span text:style-name="T195">button </text:span><text:span text:style-name="T78">of the desired study.</text:span></text:p>
    <text:p text:style-name="P1698">The list is sorted by study date in descending order (from newest to oldest). The order can be changed by clicking on the desired column <text:span text:style-name="T1">(</text:span><text:span text:style-name="Display"><text:span text:style-name="T1">N</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T796">a</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T1">m</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T196">e</text:span></text:span><text:span text:style-name="T1">, </text:span><text:span text:style-name="Display"><text:span text:style-name="T1">Modalit</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T796">y</text:span></text:span><text:span text:style-name="T1">, </text:span><text:span text:style-name="Display"><text:span text:style-name="T1">Descrip</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T796">t</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T1">i</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T796">on</text:span></text:span><text:span text:style-name="T1">…)</text:span>.</text:p>
    <text:p text:style-name="P447">The search for related studies is performed in the local database, in the PACS selected by default, and in the PACS where the study comes from (see section<text:span text:style-name="T1001"> </text:span><text:span text:style-name="T1001"><text:bookmark-ref text:reference-format="chapter" text:ref-name="__RefHeading___Toc41286_573806592">16.4</text:bookmark-ref></text:span><text:span text:style-name="T1001"><text:s/></text:span><text:span text:style-name="T1001"><text:bookmark-ref text:reference-format="text" text:ref-name="__RefHeading___Toc41286_573806592">PACS</text:bookmark-ref></text:span>). All the studies that have the <text:soft-page-break/>same patient ID are considered <text:span text:style-name="T1243">to be</text:span> related studies. It is possible to change the configuration by including also the studies with the same patient name, <text:span text:style-name="T1243">but</text:span> in this case <text:span text:style-name="T1243">it is necessary</text:span> to contact the Starviewer administrator in order to <text:span text:style-name="T1243">enable</text:span> this <text:span text:style-name="T1243">option</text:span>.</text:p>
    <text:p text:style-name="P669">The studies from the list may be in different states:</text:p>
-   <text:list xml:id="list135652631914052" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180617700989382" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2383"><text:span text:style-name="T196">Selected as current or prior: selection button checked in the</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T196">Current</text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T196">or</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T1">Pr</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T196">ior</text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T196">column </text:span><text:span text:style-name="T1">(</text:span><text:span text:style-name="Symbol_20_font"><text:span text:style-name="T1">🔘</text:span></text:span><text:span text:style-name="T1">)</text:span></text:p>
     </text:list-item>
@@ -50440,7 +50440,7 @@
    <text:p text:style-name="P1966"><text:span text:style-name="Keyboard"><text:span text:style-name="T83">F11</text:span></text:span><text:span text:style-name="T83"> </text:span><text:span text:style-name="T201">and</text:span><text:span text:style-name="T83"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T83">F12</text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T84">(</text:span><text:span text:style-name="T201">to explore the different </text:span><text:span text:style-name="T84">hanging protocols)</text:span></text:p>
    <text:p text:style-name="P449">Mode <text:span text:style-name="T1249">of operation</text:span></text:p>
    <text:p text:style-name="P448"><text:span text:style-name="T1249">Mouse</text:span>:</text:p>
-   <text:list xml:id="list135653245212168" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618880730408" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2301"><text:soft-page-break/><text:span text:style-name="T201">Custom regular layouts: click</text:span><text:span text:style-name="T83"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T83"> </text:span><text:span text:style-name="T201">on the</text:span><text:span text:style-name="T83"> </text:span><text:span text:style-name="T85"><draw:frame draw:style-name="fr48" draw:name="Image1" text:anchor-type="as-char" svg:width="0.499cm" svg:height="0.499cm" draw:z-index="538"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAy
@@ -50481,7 +50481,7 @@
    <text:p text:style-name="P455">Vi<text:span text:style-name="T1250">ewer where it is applied</text:span></text:p>
    <text:p text:style-name="P454">When only one study is displayed, <text:span text:style-name="T1250">all viewers are affect</text:span><text:span text:style-name="T1251">e</text:span><text:span text:style-name="T1250">d</text:span>; <text:span text:style-name="T1251">the whole current layout is replaced by the selected one</text:span>. When two studies are compared, <text:span text:style-name="T1251">and</text:span> a combined <text:span text:style-name="T1251">h</text:span>anging <text:span text:style-name="T1251">p</text:span>rotocol is applied or <text:span text:style-name="T1251">one</text:span> was already applied, <text:span text:style-name="T1251">all viewers are also affected. When two studies are compared, no hanging protocol w</text:span><text:span text:style-name="T1252">as</text:span><text:span text:style-name="T1251"> applied, and</text:span> a regular layout or a <text:span text:style-name="T1251">h</text:span>anging <text:span text:style-name="T1251">p</text:span>rotocol <text:span text:style-name="T1251">is applied for a single study,</text:span> <text:span text:style-name="T1251">then </text:span>only half of the window corresponding to the study in question is affected.</text:p>
    <text:p text:style-name="P55">Ex<text:span text:style-name="T1099">a</text:span>mple <text:span text:style-name="T1253">of a custom regular layout</text:span></text:p>
-   <text:list text:continue-list="list1255962994" text:style-name="Numbering_20_123">
+   <text:list text:continue-list="list1608375325" text:style-name="Numbering_20_123">
     <text:list-item text:start-value="1">
      <text:p text:style-name="P2334"><draw:frame draw:style-name="fr27" draw:name="Imatge29" text:anchor-type="paragraph" svg:width="17cm" style:rel-width="100%" svg:height="10.22cm" style:rel-height="scale" draw:z-index="323"><draw:image draw:mime-type="image/jpeg">
         <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
@@ -56360,7 +56360,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P58"/>
-   <text:list xml:id="list135653586166335" text:continue-numbering="true" text:style-name="Numbering_20_123">
+   <text:list xml:id="list180618136436420" text:continue-numbering="true" text:style-name="Numbering_20_123">
     <text:list-item>
      <text:p text:style-name="P2336"><draw:frame draw:style-name="fr28" draw:name="Imatge30" text:anchor-type="paragraph" svg:width="4.233cm" svg:height="4.736cm" draw:z-index="324"><draw:image draw:mime-type="image/png">
         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAKAAAACzCAYAAAAOjRcYAAAXSXpUWHRSYXcgcHJvZmlsZSB0
@@ -63293,7 +63293,7 @@
    </text:list>
    <text:p text:style-name="P340"/>
    <text:p text:style-name="P53">Ex<text:span text:style-name="T1099">a</text:span>mple <text:span text:style-name="T1253">of a layout with hanging protocols</text:span></text:p>
-   <text:list text:continue-list="list135653586166335" text:style-name="Numbering_20_123">
+   <text:list text:continue-list="list180618136436420" text:style-name="Numbering_20_123">
     <text:list-item text:start-value="1">
      <text:p text:style-name="P2334"><draw:frame draw:style-name="fr28" draw:name="Imatge32" text:anchor-type="paragraph" svg:width="17cm" svg:height="10.209cm" draw:z-index="326"><draw:image draw:mime-type="image/jpeg">
         <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
@@ -67466,7 +67466,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P58"/>
-   <text:list xml:id="list135654220127303" text:continue-numbering="true" text:style-name="Numbering_20_123">
+   <text:list xml:id="list180616922596761" text:continue-numbering="true" text:style-name="Numbering_20_123">
     <text:list-item>
      <text:p text:style-name="P2386"><draw:frame draw:style-name="fr46" draw:name="Imatge33" text:anchor-type="paragraph" svg:width="17cm" svg:height="10.209cm" draw:z-index="327"><draw:image draw:mime-type="image/jpeg">
         <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
@@ -82906,7 +82906,7 @@
       </office:binary-data>
      </draw:image>
     </draw:frame><text:span text:style-name="T1">In order to change the series displayed </text:span><text:span text:style-name="T205">by</text:span><text:span text:style-name="T1"> a viewer, </text:span><text:span text:style-name="T356">right-</text:span><text:span text:style-name="T1">click </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T66"></text:span></text:span><text:span text:style-name="T1"> inside </text:span><text:span text:style-name="T204">a</text:span><text:span text:style-name="T1"> viewer, </text:span><text:span text:style-name="T204">and then select by clicking</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T204">on one of the series from the menu that appears. The element shown in bold indicates the series that is currently displayed in the selected viewer.</text:span></text:p>
-   <text:p text:style-name="P2040"><text:soft-page-break/><text:span text:style-name="T1">If </text:span><text:span text:style-name="T205">another</text:span><text:span text:style-name="T1"> study from the same patient </text:span><text:span text:style-name="T205">is loaded</text:span><text:span text:style-name="T1">, either from a PACS, from local studies, or from the </text:span><text:a xlink:type="simple" xlink:href="#1.8.1.3.Estudis relacionats|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T205">related studies</text:span></text:a><text:span text:style-name="T1"> tool, </text:span><text:span text:style-name="T205">its series </text:span><text:span text:style-name="T1">automatically appear in the list of available series. </text:span><text:span text:style-name="T205">Series are dis</text:span><text:span text:style-name="T205">played grouped by study and sorted by series number, with studies sorted from newest to oldest.</text:span></text:p>
+   <text:p text:style-name="P2040"><text:soft-page-break/><text:span text:style-name="T1">If </text:span><text:span text:style-name="T205">another</text:span><text:span text:style-name="T1"> study from the same patient </text:span><text:span text:style-name="T205">is loaded</text:span><text:span text:style-name="T1">, either from a PACS, from local studies, or from the </text:span><text:a xlink:type="simple" xlink:href="#1.8.1.3.Estudis relacionats|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T205">related studies</text:span></text:a><text:span text:style-name="T1"> tool, </text:span><text:span text:style-name="T205">its series </text:span><text:span text:style-name="T1">automatically appear in the list of available series. </text:span><text:span text:style-name="T205">Series are displayed grouped by study and sorted by series number, with studies sorted from newest to oldest.</text:span></text:p>
    <text:p text:style-name="P2041"><draw:frame draw:style-name="fr11" draw:name="Imatge39" text:anchor-type="paragraph" svg:width="17cm" svg:height="7.172cm" draw:z-index="333"><draw:image draw:mime-type="image/png">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAABEAAAAHLCAYAAADIsO3zAAAAAXNSR0IArs4c6QAAAARnQU1B
        AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAP+lSURBVHhe7J1nlBXVFq1Fcs45ZxAQ
@@ -85395,7 +85395,7 @@
    <text:p text:style-name="P1707"><text:span text:style-name="T87">This functionality is always available except when the distance, TA-GT, angle, </text:span><text:span text:style-name="T208">Cobb</text:span><text:span text:style-name="T87"> angle, poly</text:span><text:span text:style-name="T302">line</text:span><text:span text:style-name="T87"> ROI, magic</text:span><text:span text:style-name="T253">al</text:span><text:span text:style-name="T87"> ROI </text:span><text:span text:style-name="T208">and arrow</text:span><text:span text:style-name="T87"> measurement tools are enabled.</text:span></text:p>
    <text:p text:style-name="P320"/>
    <text:p text:style-name="P318">Ex<text:span text:style-name="T1100">a</text:span>mple</text:p>
-   <text:list text:continue-list="list135654220127303" text:style-name="Numbering_20_123">
+   <text:list text:continue-list="list180616922596761" text:style-name="Numbering_20_123">
     <text:list-item text:start-value="1">
      <text:p text:style-name="P2338"><draw:frame draw:style-name="fr28" draw:name="Imatge40" text:anchor-type="paragraph" svg:width="17cm" svg:height="10.209cm" draw:z-index="334"><draw:image draw:mime-type="image/jpeg">
         <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
@@ -91457,7 +91457,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P321"/>
-   <text:list xml:id="list135654914523097" text:continue-numbering="true" text:style-name="Numbering_20_123">
+   <text:list xml:id="list180617135748180" text:continue-numbering="true" text:style-name="Numbering_20_123">
     <text:list-item>
      <text:p text:style-name="P2339"><draw:frame draw:style-name="fr28" draw:name="Imatge41" text:anchor-type="paragraph" svg:width="17cm" svg:height="10.209cm" draw:z-index="335"><draw:image draw:mime-type="image/jpeg">
         <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
@@ -109053,7 +109053,7 @@
      </draw:text-box>
     </draw:frame><text:soft-page-break/>Ex<text:span text:style-name="T1107">a</text:span>mple</text:p>
    <text:h text:style-name="P985" text:outline-level="4"><text:bookmark-start text:name="__RefHeading___Toc11384_253678565"/>Windowing <text:span text:style-name="T1420">(WW/WL)</text:span><text:bookmark-end text:name="__RefHeading___Toc11384_253678565"/></text:h>
-   <text:p text:style-name="P464"><draw:frame draw:style-name="fr23" draw:name="Imatge56" text:anchor-type="paragraph" svg:width="1cm" svg:height="1cm" draw:z-index="353"><draw:image draw:mime-type="image/svg+xml">
+   <text:p text:style-name="P464"><draw:frame draw:style-name="fr23" draw:name="Imatge56" text:anchor-type="paragraph" svg:width="1cm" svg:height="1cm" draw:z-index="364"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAy
        MiAyMiI+DQogIDxkZWZzIGlkPSJkZWZzMzA1MSI+DQogICAgPHN0eWxlIHR5cGU9InRleHQv
        Y3NzIiBpZD0iY3VycmVudC1jb2xvci1zY2hlbWUiPg0KICAgICAgLkNvbG9yU2NoZW1lLVRl
@@ -109089,9 +109089,9 @@
     </office:annotation><text:span text:style-name="T91">«</text:span><text:span text:style-name="T217">burn</text:span><text:span text:style-name="T352">ing</text:span><text:span text:style-name="T91">»</text:span><office:annotation-end office:name="__Annotation__106255_113917041"/><text:span text:style-name="T91">. </text:span><text:span text:style-name="T218">In this case, an additional annotation</text:span><text:span text:style-name="T91">, </text:span><text:span text:style-name="Citation"><text:span text:style-name="T219">Threshold</text:span></text:span><text:span text:style-name="T218">, is displayed, which </text:span><text:span text:style-name="T219">indicates what percentage of the values contained in the series are within the width of the current window.</text:span></text:p>
    <text:p text:style-name="P754">This tool also works with images that contain a VOI LUT. In this case, the tool scales and moves the function defined in the DICOM file but does not alter its shape. The name of the VOI LUT is displayed next to the annotation of the window values.</text:p>
    <text:p text:style-name="P677"><text:soft-page-break/>The default window of each image before using the tool is the one indicated in the DICOM file, which may be different for each image of the series. If the DICOM file does not provide a window, an automatic one is computed which allows seeing the full range of the series’ values. Once the tool has been used, all images of the series are displayed with the same window, regardless of what the DICOM file says.</text:p>
-   <text:p text:style-name="P1036"><draw:frame draw:style-name="fr7" draw:name="Marc7" text:anchor-type="paragraph" svg:width="17cm" style:rel-width="100%" draw:z-index="354">
+   <text:p text:style-name="P1036"><draw:frame draw:style-name="fr7" draw:name="Marc7" text:anchor-type="paragraph" svg:width="17cm" style:rel-width="100%" draw:z-index="365">
      <draw:text-box fo:min-height="0.041cm">
-      <text:p text:style-name="Figure"><draw:frame draw:style-name="fr30" draw:name="Imatge57" text:anchor-type="paragraph" svg:width="7.999cm" svg:height="8.11cm" draw:z-index="355"><draw:image draw:mime-type="image/jpeg">
+      <text:p text:style-name="Figure"><draw:frame draw:style-name="fr30" draw:name="Imatge57" text:anchor-type="paragraph" svg:width="7.999cm" svg:height="8.11cm" draw:z-index="366"><draw:image draw:mime-type="image/jpeg">
          <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
           DAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsN
           FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgAR
@@ -110900,7 +110900,7 @@
           tYigpCHznpfSx6X0sPypSjHyf/qv/9k=
          </office:binary-data>
         </draw:image>
-       </draw:frame><draw:frame draw:style-name="fr35" draw:name="Imatge58" text:anchor-type="paragraph" svg:width="7.999cm" svg:height="8.11cm" draw:z-index="356"><draw:image draw:mime-type="image/jpeg">
+       </draw:frame><draw:frame draw:style-name="fr35" draw:name="Imatge58" text:anchor-type="paragraph" svg:width="7.999cm" svg:height="8.11cm" draw:z-index="367"><draw:image draw:mime-type="image/jpeg">
          <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
           DAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsN
           FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgAR
@@ -112514,7 +112514,7 @@
      </draw:text-box>
     </draw:frame>Ex<text:span text:style-name="T1109">a</text:span>mple</text:p>
    <text:h text:style-name="P467" text:outline-level="4"><text:bookmark-start text:name="__RefHeading___Toc11386_253678565"/>Selec<text:span text:style-name="T1018">t</text:span>i<text:span text:style-name="T1018">on of default windows </text:span><text:span text:style-name="T1033">(VOI LUT)</text:span><text:bookmark-end text:name="__RefHeading___Toc11386_253678565"/></text:h>
-   <text:p text:style-name="P468"><draw:frame draw:style-name="fr31" draw:name="Imatge60" text:anchor-type="paragraph" svg:width="4.551cm" svg:height="7.121cm" draw:z-index="358"><draw:image draw:mime-type="image/png">
+   <text:p text:style-name="P468"><draw:frame draw:style-name="fr31" draw:name="Imatge60" text:anchor-type="paragraph" svg:width="4.551cm" svg:height="7.121cm" draw:z-index="369"><draw:image draw:mime-type="image/png">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAKwAAAENCAYAAACSBo4nAAAorXpUWHRSYXcgcHJvZmlsZSB0
        eXBlIGV4aWYAAHjarZxpkhw3koX/4xR9BOzLcQA4YDY3mOPP95BFiqIotrptVCIrmUsEAnB/
        i8Mj3fnf/7nuX//6V/A+VZdL63XU6vkvjzzi5EH3n/8+v4PP7+/339xfr4U/P++8fT2M/E78
@@ -112894,7 +112894,7 @@
      <dc:date>2019-12-04T17:50:37.165818910</dc:date>
      <text:p text:style-name="P2558"><text:span text:style-name="T1455">Abans deia shift+1 i shift+2, però en realitat és això tal com està implementat</text:span></text:p>
     </office:annotation><text:span text:style-name="Keyboard"><text:span text:style-name="T95">!</text:span></text:span><text:span text:style-name="T95">, </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T95">&quot;</text:span></text:span><office:annotation-end office:name="__Annotation__7611_253678565"/><text:span text:style-name="T95"><text:tab/></text:span><text:span text:style-name="T223">Eleventh and twelfth Starviewer default functions</text:span></text:p>
-   <text:p text:style-name="P1738"><draw:frame draw:style-name="fr11" draw:name="Imatge61" text:anchor-type="paragraph" svg:width="13.522cm" svg:height="3.81cm" draw:z-index="359"><draw:image draw:mime-type="image/png">
+   <text:p text:style-name="P1738"><draw:frame draw:style-name="fr11" draw:name="Imatge61" text:anchor-type="paragraph" svg:width="13.522cm" svg:height="3.81cm" draw:z-index="370"><draw:image draw:mime-type="image/png">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAf8AAACQCAYAAAAGJGKFAAAAAXNSR0IArs4c6QAAAARnQU1B
        AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABKuSURBVHhe7Z3LjyRFfsfrYtlH/gPP
        2rvSroUl2F6XpbKlZdcPeaWV4IBsMyC55ENZPnAADQIjRAOXlu0DtYs52D4wF9DINQhpDW0J
@@ -112997,7 +112997,7 @@
    <text:p text:style-name="P472"><text:soft-page-break/>Vi<text:span text:style-name="T1111">ewer where it is applied</text:span></text:p>
    <text:p text:style-name="P471"><text:span text:style-name="T1271">The active viewer (with the blue frame)</text:span>.</text:p>
    <text:h text:style-name="P986" text:outline-level="4"><text:bookmark-start text:name="__RefHeading___Toc11388_253678565"/>User defined windows<text:bookmark-end text:name="__RefHeading___Toc11388_253678565"/></text:h>
-   <text:p text:style-name="P474"><draw:frame draw:style-name="fr23" draw:name="Imatge62" text:anchor-type="paragraph" svg:width="4.551cm" svg:height="7.121cm" draw:z-index="360"><draw:image draw:mime-type="image/png">
+   <text:p text:style-name="P474"><draw:frame draw:style-name="fr23" draw:name="Imatge62" text:anchor-type="paragraph" svg:width="4.551cm" svg:height="7.121cm" draw:z-index="371"><draw:image draw:mime-type="image/png">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAKwAAAENCAYAAACSBo4nAAAm33pUWHRSYXcgcHJvZmlsZSB0
        eXBlIGV4aWYAAHjarZxpllw3joX/cxW9BM4El8PxnN5BL7+/y0hZkkt2yV0tWcpUZMQbCOAO
        IJ7d+Z//vu6/+NVzry6XZrXX6vmVeSUOvjH/+fX5Gnx+f79fY339LPz8uvP769vI18TX9PlB
@@ -115162,7 +115162,7 @@
      </draw:text-box>
     </draw:frame>Ex<text:span text:style-name="T1114">a</text:span>mple</text:p>
    <text:h text:style-name="P987" text:outline-level="4"><text:bookmark-start text:name="__RefHeading___Toc11392_253678565"/><text:soft-page-break/>Window or colour inversion<text:bookmark-end text:name="__RefHeading___Toc11392_253678565"/></text:h>
-   <text:p text:style-name="P475"><draw:frame draw:style-name="fr23" draw:name="Imatge59" text:anchor-type="paragraph" svg:width="1cm" svg:height="1cm" draw:z-index="357"><draw:image draw:mime-type="image/svg+xml">
+   <text:p text:style-name="P475"><draw:frame draw:style-name="fr23" draw:name="Imatge59" text:anchor-type="paragraph" svg:width="1cm" svg:height="1cm" draw:z-index="368"><draw:image draw:mime-type="image/svg+xml">
       <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
        NiAxNiI+DQogIDxkZWZzIGlkPSJkZWZzMzA1MSI+DQogICAgPHN0eWxlIHR5cGU9InRleHQv
        Y3NzIiBpZD0iY3VycmVudC1jb2xvci1zY2hlbWUiPg0KICAgICAgLkNvbG9yU2NoZW1lLVRl
@@ -129667,7 +129667,7 @@
    <text:p text:style-name="P336"><text:span text:style-name="T1294">Currently, </text:span><text:span text:style-name="T913">t</text:span><text:span text:style-name="T1294">his feature is the only way to save annotations.</text:span></text:p>
    <text:p text:style-name="P507">Mode <text:span text:style-name="T1129">of operation</text:span></text:p>
    <text:p text:style-name="P681">Select the viewer that contains the series to be exported and press the <text:span text:style-name="T1294">toolbar button. The</text:span> window <text:span text:style-name="T1294">in Figure</text:span><text:span text:style-name="T1045"> </text:span><text:span text:style-name="T1045"><text:sequence-ref text:reference-format="value" text:ref-name="refFigure12">13</text:sequence-ref></text:span><text:span text:style-name="T882"><text:s/></text:span>is opened <text:span text:style-name="T1294">with</text:span> different options:</text:p>
-   <text:list xml:id="list135655002137449" text:continue-list="list135653245212168" text:style-name="List_20_1">
+   <text:list xml:id="list180617520539553" text:continue-list="list180618880730408" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2303"><text:span text:style-name="Display"><text:span text:style-name="T803">S</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T242">eries d</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T101">escrip</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T803">t</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T101">i</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T803">on</text:span></text:span><text:span text:style-name="T101">: </text:span><text:span text:style-name="T242">it is the name the new series will have</text:span><text:span text:style-name="T101">.</text:span></text:p>
     </text:list-item>
@@ -130103,7 +130103,7 @@
    <text:p text:style-name="P760">The active viewer (with the blue frame).</text:p>
    <text:p text:style-name="P338"/>
    <text:p text:style-name="P334">Ex<text:span text:style-name="T1130">a</text:span>mple</text:p>
-   <text:list text:continue-list="list135654914523097" text:style-name="Numbering_20_123">
+   <text:list text:continue-list="list180617135748180" text:style-name="Numbering_20_123">
     <text:list-item text:start-value="1">
      <text:p text:style-name="P2391"><draw:frame draw:style-name="fr28" draw:name="Imatge87" text:anchor-type="paragraph" svg:width="15.134cm" svg:height="11.515cm" draw:z-index="405"><draw:image draw:mime-type="image/jpeg">
         <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
@@ -131561,7 +131561,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P339"/>
-   <text:list xml:id="list135653987274865" text:continue-numbering="true" text:style-name="Numbering_20_123">
+   <text:list xml:id="list180618674936207" text:continue-numbering="true" text:style-name="Numbering_20_123">
     <text:list-item>
      <text:p text:style-name="P2392"><draw:frame draw:style-name="fr28" draw:name="Imatge89" text:anchor-type="paragraph" svg:width="15.134cm" svg:height="11.515cm" draw:z-index="407"><draw:image draw:mime-type="image/jpeg">
         <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
@@ -141119,7 +141119,7 @@
    <text:p text:style-name="P536"><text:soft-page-break/><text:span text:style-name="T1314">All geometric measurements are always displayed together with their corresponding unit, </text:span><text:span text:style-name="T916">be they</text:span><text:span text:style-name="T1314"> pixels (px) or millimetres (mm).</text:span></text:p>
    <text:h text:style-name="P542" text:outline-level="5"><text:bookmark-start text:name="__RefHeading___Toc14121_2856793398"/>Me<text:span text:style-name="T1314">a</text:span>sure<text:span text:style-name="T1314">ment</text:span>s <text:span text:style-name="T1145">i</text:span>n p<text:span text:style-name="T1145">i</text:span>xels<text:bookmark-end text:name="__RefHeading___Toc14121_2856793398"/></text:h>
    <text:p text:style-name="P540">The measurements are displayed in pixels (px) when it is not possible to determine the physical space between two consecutive pixels. This occurs <text:span text:style-name="T1315">in the absence of</text:span> the following attributes <text:span text:style-name="T1315">in the image</text:span>:</text:p>
-   <text:list xml:id="list135653414572864" text:continue-list="list135655002137449" text:style-name="List_20_1">
+   <text:list xml:id="list180617851265377" text:continue-list="list180617520539553" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2341">Pixel Spacing (0028,0030)</text:p>
     </text:list-item>
@@ -141129,7 +141129,7 @@
    </text:list>
    <text:h text:style-name="P542" text:outline-level="5"><text:bookmark-start text:name="__RefHeading___Toc14123_2856793398"/>Me<text:span text:style-name="T1315">a</text:span>sure<text:span text:style-name="T1315">ment</text:span>s <text:span text:style-name="T1146">i</text:span>n mill<text:span text:style-name="T1146">i</text:span>metres<text:bookmark-end text:name="__RefHeading___Toc14123_2856793398"/></text:h>
    <text:p text:style-name="P541"><text:span text:style-name="T1315">F</text:span>or the measurements to be shown in millimetres, at least one of the following attributes <text:span text:style-name="T1315">must be</text:span> present in the image:</text:p>
-   <text:list xml:id="list135654717820858" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618710656208" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2341">Pixel Spacing (0028,0030)</text:p>
     </text:list-item>
@@ -141140,7 +141140,7 @@
    <text:p text:style-name="P541">In this case, additionally, depending on the modality, the present attributes and the corresponding values, more than one value may be <text:span text:style-name="T1315">calculated</text:span> in the same measurement where each <text:span text:style-name="T1315">value</text:span> <text:span text:style-name="T1315">has</text:span> a specific meaning. The different types of measurement values that may <text:span text:style-name="T1315">be given</text:span> and their possible conditions are detailed below.</text:p>
    <text:h text:style-name="P543" text:outline-level="6"><text:bookmark-start text:name="__RefHeading___Toc14125_2856793398"/><text:span text:style-name="T1315">Physical </text:span><text:span text:style-name="T1146">m</text:span>e<text:span text:style-name="T1315">a</text:span>sure<text:span text:style-name="T1315">ment</text:span>s<text:bookmark-end text:name="__RefHeading___Toc14125_2856793398"/></text:h>
    <text:p text:style-name="P540">Measurements <text:span text:style-name="T1315">are</text:span> considered <text:span text:style-name="T1315">to be</text:span> physical when the following conditions are met:</text:p>
-   <text:list xml:id="list135655057559956" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180617736552387" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2341"><text:span text:style-name="T1315">The image modality is </text:span>CT, MR, PT, SC, US o<text:span text:style-name="T1315">r</text:span> NM</text:p>
     </text:list-item>
@@ -141186,7 +141186,7 @@
    <text:p text:style-name="P765">If a magnified measurement is displayed, it is always explicitly stated that it is magnified, regardless of whether it is the only one displayed or whether there is also that of the detector.</text:p>
    <text:p text:style-name="P764"><text:soft-page-break/>Unknown meaning measurement</text:p>
    <text:p text:style-name="P544">This scenario occurs when, according to the modality and the present attributes, the meaning of the measurement cannot be determined due to the lack of information. <text:span text:style-name="T1320">A measure is considered to be of unknown meaning when</text:span> the following conditions <text:span text:style-name="T1320">are</text:span> met:</text:p>
-   <text:list xml:id="list135654402285686" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618207649182" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2342"><text:span text:style-name="T1320">The image modality is a projection radiography modality </text:span><text:span text:style-name="T929">(</text:span>CR, DX, RF, XA, XC, MG, IO, OP o<text:span text:style-name="T1320">r</text:span> ES<text:span text:style-name="T929">)</text:span></text:p>
     </text:list-item>
@@ -141198,7 +141198,7 @@
    <text:p text:style-name="P549"><text:span text:style-name="T1321">The fact that such a measurement is given is not normal and may indicate that there is an error or a problem in the generation of data of the acquired image. This problem should be reported to the modality’s technical team </text:span><text:span text:style-name="T917">to correct it and properly generate the data.</text:span></text:p>
    <text:h text:style-name="P157" text:outline-level="5"><text:bookmark-start text:name="__RefHeading___Toc14129_2856793398"/>Priority of measurements<text:bookmark-end text:name="__RefHeading___Toc14129_2856793398"/></text:h>
    <text:p text:style-name="P693">As in some cases different types of measurements can be given, there must be clear criteria on what priorities are established between them according to each case.</text:p>
-   <text:list xml:id="list135654951912352" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618533469148" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2344"><text:span text:style-name="T1321">If </text:span><text:span text:style-name="T1322">the image</text:span><text:span text:style-name="T1321"> is a projection radiography image:</text:span></text:p>
      <text:list>
@@ -141219,7 +141219,7 @@
    </text:list>
    <text:h text:style-name="P158" text:outline-level="5"><text:bookmark-start text:name="__RefHeading___Toc14131_2856793398"/>Measurements verbosity<text:bookmark-end text:name="__RefHeading___Toc14131_2856793398"/></text:h>
    <text:p text:style-name="P547"><text:span text:style-name="T1323">Given that</text:span> <text:span text:style-name="T1323">Starviewer can </text:span>sometimes <text:span text:style-name="T1323">calculate</text:span> more than one result for the same measurement, <text:span text:style-name="T1323">users</text:span> might want to have more or less information depending on the<text:span text:style-name="T1323">ir</text:span> <text:span text:style-name="T1323">preferences</text:span>. <text:span text:style-name="T1323">Starviewer allows choosing the verbosity of the measurements:</text:span></text:p>
-   <text:list xml:id="list135654242637780" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618030524374" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2344">M<text:span text:style-name="T1323">i</text:span>nim<text:span text:style-name="T1323">al</text:span>: <text:span text:style-name="T1324">A</text:span> single measurement <text:span text:style-name="T1323">is</text:span> displayed <text:span text:style-name="T1323">(the </text:span><text:span text:style-name="T1324">one with highest priority if more than one can be calculated). The label for the measurements in the detector is not displayed</text:span>. This is the <text:span text:style-name="T1324">default </text:span>option.</text:p>
     </text:list-item>
@@ -141246,7 +141246,7 @@
    <text:p text:style-name="P547">Accuracy has been verified with several measur<text:span text:style-name="T1327">ement</text:span> tests, including test<text:span text:style-name="T1327">s</text:span> with reference images<text:note text:id="ftn9" text:note-class="footnote"><text:note-citation>9</text:note-citation><text:note-body>
       <text:p text:style-name="Footnote"><text:a xlink:type="simple" xlink:href="http://www.dclunie.com/" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T1">http://www.dclunie.com/</text:span></text:a></text:p></text:note-body></text:note>.</text:p>
    <text:p text:style-name="P547">Num<text:span text:style-name="T1328">eric values</text:span> in Starviewer are displayed with the following precisions:</text:p>
-   <text:list xml:id="list135655040290085" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180619274589462" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2347">Distances, areas, statistical values and SUV are rounded to 2 decimal places</text:p>
     </text:list-item>
@@ -146584,7 +146584,7 @@
    <text:p text:style-name="P1487"><text:span text:style-name="Keyboard"><text:span text:style-name="T1">L</text:span></text:span></text:p>
    <text:p text:style-name="P557">Mode <text:span text:style-name="T1154">of operation</text:span></text:p>
    <text:p text:style-name="P2073"><text:span text:style-name="T113">C</text:span><text:span text:style-name="T269">lick</text:span><text:span text:style-name="T113"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T113"> </text:span><text:span text:style-name="T269">on the toolbar button or press the shortcut to enable or disable the reference lines. While enabled, the image plane </text:span><text:span text:style-name="T268">visible </text:span><text:span text:style-name="T269">in the active viewer </text:span><text:span text:style-name="T268">will be displayed in the form of two parallel lines in all the other viewers that meet the following conditions:</text:span></text:p>
-   <text:list xml:id="list135654388489197" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180617707518000" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2349"><text:span text:style-name="T1332">That contains a series of the same study with the same </text:span>Frame of Reference UID <text:span text:style-name="T933">(0020,0052). </text:span><text:span text:style-name="T1332">This is usually the case if the patient has not moved between the series’ generation.</text:span></text:p>
     </text:list-item>
@@ -152347,7 +152347,7 @@
     </draw:frame><text:span text:style-name="T1">Mode </text:span><text:span text:style-name="T186">of operation</text:span></text:p>
    <text:p text:style-name="P2075"><text:span text:style-name="T1">Select the viewer where the images have to be automatically scrolled through and click</text:span><text:span text:style-name="T117"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T117"> </text:span><text:span text:style-name="T1">the toolbar button.</text:span></text:p>
    <text:p text:style-name="P699">If the button’s submenu <text:span text:style-name="T1047">(Figur</text:span><text:span text:style-name="T1336">e</text:span><text:span text:style-name="T1047"> </text:span><text:span text:style-name="T1047"><text:sequence-ref text:reference-format="value" text:ref-name="refFigure16">17</text:sequence-ref></text:span><text:span text:style-name="T1047">)</text:span> is opened, different options <text:span text:style-name="T1336">that affect playback </text:span>can be chosen:</text:p>
-   <text:list xml:id="list135653848813848" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180617592122438" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2351">Scrolling speed</text:p>
     </text:list-item>
@@ -154935,7 +154935,7 @@
    <text:p text:style-name="P901">Mode <text:span text:style-name="T1165">of operation</text:span></text:p>
    <text:p text:style-name="P2081"><text:span text:style-name="T123">C</text:span><text:span text:style-name="T281">lick</text:span><text:span text:style-name="T123"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T123"> </text:span><text:span text:style-name="T356">on </text:span><text:span text:style-name="T281">the toolbar button or press the shortcut to enable or disable the propagation. When enabled, an initial propagation of the properties is carried out between all viewers giving priority to the active viewer at that time, so that the properties are synchronised from the beginning.</text:span></text:p>
    <text:p text:style-name="P710">The toolbar button has a submenu that allows choosing what properties are propagated (by default they are all propagated):</text:p>
-   <text:list xml:id="list135655246265504" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618078492919" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2402"><text:span text:style-name="Display"><text:span text:style-name="T281">Image o</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T1">rienta</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T809">t</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T1">i</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T809">on</text:span></text:span><text:span text:style-name="T1">: </text:span><text:span text:style-name="T282">image </text:span><text:span text:style-name="T281">orientation (rotation and horizontal or vertical </text:span><text:span text:style-name="T282">flip</text:span><text:span text:style-name="T281">) </text:span><text:span text:style-name="T282">is propagated</text:span><text:span text:style-name="T124">.</text:span></text:p>
      <text:p text:style-name="P2352">Synchronised viewers: those that have the same anatomical plane and the same modality as the active viewer, or between the PET-CT and SPECT-CT modality pairs.</text:p>
@@ -175670,7 +175670,7 @@
    <text:p text:style-name="P1280"><text:span text:style-name="T1">In a PET-CT or SPECT-CT fusion, the CT series is seen as the </text:span><text:span text:style-name="Emphasis"><text:span text:style-name="T286">main</text:span></text:span><text:span text:style-name="T1"> series over which the PET or SPECT series is superimposed as the </text:span><text:span text:style-name="Emphasis"><text:span text:style-name="T1">sec</text:span></text:span><text:span text:style-name="Emphasis"><text:span text:style-name="T1227">o</text:span></text:span><text:span text:style-name="Emphasis"><text:span text:style-name="T1">nd</text:span></text:span><text:span text:style-name="Emphasis"><text:span text:style-name="T1227">a</text:span></text:span><text:span text:style-name="Emphasis"><text:span text:style-name="T1">r</text:span></text:span><text:span text:style-name="Emphasis"><text:span text:style-name="T1227">y</text:span></text:span><text:span text:style-name="T1"> one, partially transparent and with a colour function. Both series are permanently synchronised to show the same region of </text:span><text:span text:style-name="T286">the</text:span><text:span text:style-name="T1"> space. If an area only available in the CT is explored, the PET or SPECT </text:span><text:span text:style-name="T286">secondary series</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T286">is not </text:span><text:span text:style-name="T1">displayed.</text:span></text:p>
    <text:p text:style-name="P1886"><text:span text:style-name="T1">The contribution of each series to the final </text:span><text:span text:style-name="T286">fusion</text:span><text:span text:style-name="T1"> image is, by default, 50% of each series, but it can be adjusted </text:span><text:span text:style-name="T287">with</text:span><text:span text:style-name="T1"> the </text:span><text:a xlink:type="simple" xlink:href="#1.9.11.2.Balanç de fusió|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T288">fusion balance</text:span></text:a><text:span text:style-name="T1"> tool, which is displayed at the bottom of the viewer, next to the </text:span><text:a xlink:type="simple" xlink:href="#1.9.8.Sincronització manual|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T288">manual synchronisation</text:span></text:a><text:span text:style-name="T1"> button. The current balance can be seen at all times in the </text:span><text:span text:style-name="T288">bottom</text:span><text:span text:style-name="T1">-right corner of the viewer.</text:span></text:p>
    <text:p text:style-name="P713">When a PET-CT or SPECT-CT fusion is displayed, some tools behave differently than when a single series is displayed:</text:p>
-   <text:list xml:id="list135654212009242" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618865790345" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2405"><text:span text:style-name="T289">The</text:span><text:span text:style-name="T1"> </text:span><text:a xlink:type="simple" xlink:href="#1.8.2.8.Selecció de funcions de color|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T289">selection of a colour function</text:span></text:a><text:span text:style-name="T1"> </text:span><text:span text:style-name="T289">changes the colour of the PET or SPECT series instead of that of the main series.</text:span></text:p>
     </text:list-item>
@@ -179557,7 +179557,7 @@
    <text:p text:style-name="P902">Mode <text:span text:style-name="T1167">of operation</text:span></text:p>
    <text:p text:style-name="P1890"><text:span text:style-name="T293">Click</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T293">on the button and then click</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T293">on one of the provided layouts. The selected layout replaces the current window layout.</text:span></text:p>
    <text:p text:style-name="P781">The following layouts are available:</text:p>
-   <text:list xml:id="list135654502603623" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618065414979" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2359">2×1 CT: <text:span text:style-name="T1353">one viewer with the CT and one with the fusion, with the reconstruction of the original combined viewer</text:span></text:p>
     </text:list-item>
@@ -179583,7 +179583,7 @@
    <text:p text:style-name="P902">Vi<text:span text:style-name="T1168">ewer where it is applied</text:span></text:p>
    <text:p text:style-name="P782">All of them: the selected layout replaces the current window layout.</text:p>
    <text:p text:style-name="P327">Ex<text:span text:style-name="T1168">a</text:span>mple</text:p>
-   <text:list text:continue-list="list135653987274865" text:style-name="Numbering_20_123">
+   <text:list text:continue-list="list180618674936207" text:style-name="Numbering_20_123">
     <text:list-item text:start-value="1">
      <text:p text:style-name="P2361"><draw:frame draw:style-name="fr27" draw:name="Imatge143" text:anchor-type="paragraph" svg:width="17cm" style:rel-width="100%" svg:height="8.62cm" style:rel-height="scale" draw:z-index="471"><draw:image draw:mime-type="image/jpeg">
         <office:binary-data>/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoM
@@ -182464,7 +182464,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P329"/>
-   <text:list xml:id="list135655448644184" text:continue-numbering="true" text:style-name="Numbering_20_123">
+   <text:list xml:id="list180618475526153" text:continue-numbering="true" text:style-name="Numbering_20_123">
     <text:list-item>
      <text:p text:style-name="P2362"><draw:frame draw:style-name="fr28" draw:name="Imatge144" text:anchor-type="paragraph" svg:width="13.921cm" svg:height="3.81cm" draw:z-index="472"><draw:image draw:mime-type="image/png">
         <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAg4AAACQCAIAAADvKnR0AAAgAElEQVR42u2deVxTV9rHz81K
@@ -187378,7 +187378,7 @@
    <text:p text:style-name="P1897"><text:span text:style-name="T295">The </text:span><text:span text:style-name="T1">SUV is a value commonly used in the PET modality image analysis. It is commonly defined as the </text:span><text:span text:style-name="T296">ratio</text:span><text:span text:style-name="T1"> of the radioactive concentration </text:span><text:span text:style-name="Citation"><text:span text:style-name="T1">C</text:span></text:span><text:span text:style-name="T1"> of the tissue [Bq/ml] </text:span><text:span text:style-name="T296">at time</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Citation"><text:span text:style-name="T1">t</text:span></text:span><text:span text:style-name="T1"> and the injected </text:span><text:span text:style-name="T353">radio</text:span><text:span text:style-name="T1">activity, multiplied by a normalisation factor such as the body weight.</text:span></text:p>
    <text:p text:style-name="P2085"><text:span text:style-name="T1">The SUV is computed when a</text:span><text:span text:style-name="T130"> </text:span><text:a xlink:type="simple" xlink:href="#1.8.3.5.Regions d’interès (ROI)|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T130">ROI</text:span></text:a><text:span text:style-name="T130"> </text:span><text:span text:style-name="T1">is drawn or the </text:span><text:a xlink:type="simple" xlink:href="#1.9.6.Informació del vòxel|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T1">voxel information</text:span></text:a><text:span text:style-name="T130"> </text:span><text:span text:style-name="T1">tool is used on a PET image or a PET-CT fusion. In the case of the ROI, the maximum and average SUV </text:span><text:span text:style-name="T297">of the region </text:span><text:span text:style-name="T1">is computed.</text:span></text:p>
    <text:p text:style-name="P2085"><text:span text:style-name="T1">There are three normalisation methods </text:span><text:span text:style-name="T297">available</text:span><text:span text:style-name="T1">:</text:span></text:p>
-   <text:list text:continue-list="list135654502603623" text:style-name="List_20_1">
+   <text:list text:continue-list="list180618065414979" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2363">Body weight</text:p>
     </text:list-item>
@@ -187403,7 +187403,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P206">Each measurement <text:span text:style-name="T1357">is also</text:span> displayed together with the corresponding units, which <text:span text:style-name="T1357">depend on</text:span> the normalisation method:</text:p>
-   <text:list xml:id="list135655108704597" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180619249701879" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2407"><text:span text:style-name="Citation"><text:span text:style-name="T1">g/ml</text:span></text:span><text:span text:style-name="T1">: </text:span><text:span text:style-name="T297">for body weight and lean body mass</text:span></text:p>
     </text:list-item>
@@ -187644,7 +187644,7 @@
      <svg:desc>fórmula</svg:desc>
     </draw:frame></text:p>
    <text:p text:style-name="P598"><text:span text:style-name="T1358">Where</text:span>:</text:p>
-   <text:list xml:id="list135654306688814" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618208872116" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2408"><text:span text:style-name="Citation"><text:span text:style-name="T1">T</text:span></text:span><text:span text:style-name="Citation"><text:span text:style-name="T950">1/2</text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T299">is the half-life in seconds</text:span></text:p>
     </text:list-item>
@@ -187846,7 +187846,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P215"><text:span text:style-name="T1360">Where</text:span>:</text:p>
-   <text:list xml:id="list135654639752311" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618591394880" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2409"><text:span text:style-name="Citation"><text:span text:style-name="T1">W</text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T300">is the weight of the patient in</text:span><text:span text:style-name="T1"> kg</text:span></text:p>
     </text:list-item>
@@ -187929,7 +187929,7 @@
      <svg:desc>fórmula</svg:desc>
     </draw:frame></text:p>
    <text:p text:style-name="P215"><text:span text:style-name="T1360">Where</text:span>:</text:p>
-   <text:list xml:id="list135653686226243" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180619020336232" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2409"><text:span text:style-name="Citation"><text:span text:style-name="T1">W</text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T300">is the weight of the patient in</text:span><text:span text:style-name="T1"> kg</text:span></text:p>
     </text:list-item>
@@ -192332,7 +192332,7 @@
     </text:list-item>
    </text:list>
    <text:p text:style-name="P604"><text:span text:style-name="T1366">And also general tools</text:span>:</text:p>
-   <text:list xml:id="list135654285909782" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618368041543" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2410"><text:a xlink:type="simple" xlink:href="#1.8.2.1.Canvi de tall i de fase|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T1">Scroll</text:span></text:a></text:p>
     </text:list-item>
@@ -195895,7 +195895,7 @@
      </draw:image>
     </draw:frame><text:span text:style-name="T305">To apply one of these styles, double-click</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T67"></text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T305">on the corresponding image.</text:span></text:p>
    <text:p text:style-name="P721">The 3D viewer has different tools:</text:p>
-   <text:list xml:id="list135654465195482" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618339637219" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2310"><text:a xlink:type="simple" xlink:href="#1.9.1.Reconstruccions|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:soft-page-break/><text:span text:style-name="T305">Switching views (axial, sagittal, coronal)</text:span></text:a></text:p>
     </text:list-item>
@@ -199566,7 +199566,7 @@
      <text:p text:style-name="P2558"><text:span text:style-name="T1456">De fet això és el que es fa amb el dicom print</text:span></text:p>
      <text:p text:style-name="P2558"><text:span text:style-name="T1456">També mirar si falta quelcom més</text:span></text:p>
     </office:annotation>PDF<office:annotation-end office:name="__Annotation__16416_2479470819"/><text:bookmark-end text:name="__RefHeading___Toc16428_2479470819"/></text:h>
-   <text:p text:style-name="P615"><draw:frame draw:style-name="fr11" draw:name="Imatge164" text:anchor-type="paragraph" svg:width="17cm" svg:height="8.557cm" draw:z-index="495"><draw:image draw:mime-type="image/png">
+   <text:p text:style-name="P615"><draw:frame draw:style-name="fr11" draw:name="Imatge164" text:anchor-type="paragraph" svg:width="17cm" svg:height="8.557cm" draw:z-index="496"><draw:image draw:mime-type="image/png">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAu8AAAF6CAIAAAAmoiFrAAAR1ElEQVR42u3dfWyV9aHA8d95
        6wuthSECyouIBY0bLK74BiMqXjBVQxazEEOyu5ncsCwxw2whWeLd/nAzWbJ4I2Y3y7wm241L
        s7mEuO3O+rIRF1fCkLKhzCpU7WQRVIalhbanPT3P/aNvp29AqYXztJ9P+kfPOc9zzuHpk/DN
@@ -199660,7 +199660,7 @@
    <text:h text:style-name="P1370" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc4886_1692806117"/>Diagnosis tests<text:bookmark-end text:name="__RefHeading___Toc4886_1692806117"/></text:h>
    <text:p text:style-name="P1039">Diagnosis tests allow to check if Starviewer and its environment are properly configured and the hardware meets the minimum requirements.</text:p>
    <text:p text:style-name="P2088"><text:span text:style-name="T1">To access the diagnosis tests, </text:span><text:span text:style-name="T311">go to</text:span><text:span text:style-name="T1"> the</text:span><text:span text:style-name="T135"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T311">T</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T812">ools</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T135"> &gt; </text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T311">Run diagnosis tests</text:span></text:span><text:span text:style-name="T1"> menu. Its functionality is to verify a series of system parameters and run a </text:span><text:span text:style-name="T311">set</text:span><text:span text:style-name="T1"> of tests that allow </text:span><text:span text:style-name="T311">evaluating</text:span><text:span text:style-name="T1"> whether the system is well configured </text:span><text:span text:style-name="T354">and</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T311">meets</text:span><text:span text:style-name="T1"> the recommended requirements, and diagnos</text:span><text:span text:style-name="T354">ing</text:span><text:span text:style-name="T1"> errors and possible problems.</text:span></text:p>
-   <text:p text:style-name="P611"><draw:frame draw:style-name="fr11" draw:name="Imatge165" text:anchor-type="paragraph" svg:width="13.284cm" svg:height="2.566cm" draw:z-index="496"><draw:image draw:mime-type="image/png">
+   <text:p text:style-name="P611"><draw:frame draw:style-name="fr11" draw:name="Imatge165" text:anchor-type="paragraph" svg:width="13.284cm" svg:height="2.566cm" draw:z-index="497"><draw:image draw:mime-type="image/png">
       <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAfYAAABhCAYAAAAk/4PzAAAAAXNSR0IArs4c6QAAAARnQU1B
        AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAABdrSURBVHhe7Z35mxzFecf3lwTHceI4
        zn0ZbMAChC0JMQiBDYhLEqcvLhszFmhlcZrYJnZ8Y5w1YMeKkl+S/AN+ss7z6NbuzoIOdIJY
@@ -199777,9 +199777,9 @@
       </office:binary-data>
      </draw:image>
     </draw:frame>When selecting the menu, a window is opened <text:span text:style-name="T1375">informing</text:span> that the tests are running <text:span text:style-name="T1375">and displaying a progress indicator</text:span>.</text:p>
-   <text:p text:style-name="P2089"><draw:frame draw:style-name="fr3" draw:name="Marc30" text:anchor-type="paragraph" svg:width="17cm" style:rel-width="100%" draw:z-index="497">
+   <text:p text:style-name="P2089"><draw:frame draw:style-name="fr3" draw:name="Marc30" text:anchor-type="paragraph" svg:width="17cm" style:rel-width="100%" draw:z-index="498">
      <draw:text-box fo:min-height="0.041cm">
-      <text:p text:style-name="Figure"><draw:frame draw:style-name="fr21" draw:name="Imatge166" text:anchor-type="paragraph" svg:width="7.98cm" svg:height="7.11cm" draw:z-index="498"><draw:image draw:mime-type="image/png">
+      <text:p text:style-name="Figure"><draw:frame draw:style-name="fr21" draw:name="Imatge166" text:anchor-type="paragraph" svg:width="7.98cm" svg:height="7.11cm" draw:z-index="499"><draw:image draw:mime-type="image/png">
          <office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAoIAAAI8CAYAAABlMMoQAAAAAXNSR0IArs4c6QAAAARnQU1B
           AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAACgMSURBVHhe7d1fjCXZfdDxfuHPO088
           kUD+onhDPJ0hniViE5wIi90HvCiWu2XYEGWXCAKEINbiZUbOw0IWiWUNyGtWykQDUshmncjE
@@ -202866,7 +202866,7 @@
     </draw:frame><text:span text:style-name="T317">This extension allows printing images in DICOM format in DICOM printers. It can be accessed from the</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T1">Vi</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T813">s</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T1">ualiza</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T813">t</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T1">i</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T813">on</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T1"> &gt; DICO</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T317">M Print</text:span></text:span><text:span text:style-name="T317"> menu.</text:span></text:p>
    <text:p text:style-name="P2091"><text:span text:style-name="T137">In this window, the printing preferences are displayed on the left, and the image to be printed on the right. The viewer allows </text:span><text:span text:style-name="T317">changing</text:span><text:span text:style-name="T137"> the image, the series and the patient study by using the </text:span><text:a xlink:type="simple" xlink:href="#1.8.1.4.2.Eines per seleccionar el contingut del visor|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T317">patient menu</text:span></text:a><text:span text:style-name="T137"> (right button </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T66"></text:span></text:span><text:span text:style-name="T137">). It also allows </text:span><text:span text:style-name="T317">changing</text:span><text:span text:style-name="T137"> the window of the images by using the </text:span><text:a xlink:type="simple" xlink:href="#1.8.2.5.Canvi de finestra|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T317">windowing</text:span></text:a><text:span text:style-name="T137"> tool </text:span><text:span text:style-name="T317">or</text:span><text:span text:style-name="T137"> the </text:span><text:a xlink:type="simple" xlink:href="#1.8.2.6.Selecció de finestres predeterminades|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T317">selection of default windows</text:span></text:a><text:span text:style-name="T137"> tool. </text:span><text:span text:style-name="T317">Finally, the image can be</text:span><text:span text:style-name="T137"> restore</text:span><text:span text:style-name="T317">d</text:span><text:span text:style-name="T137"> to the initial </text:span><text:span text:style-name="T317">state with the</text:span><text:span text:style-name="T137"> </text:span><text:a xlink:type="simple" xlink:href="#1.8.2.12.Restablir el visor a l’estat inicial|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="T318">restore</text:span></text:a><text:span text:style-name="T317"> tool</text:span><text:span text:style-name="T137">, </text:span><text:span text:style-name="T318">accessible through the toolbar button and the shortcut </text:span><text:span text:style-name="T137">(</text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T138">Ctrl</text:span></text:span><text:span text:style-name="T138">+</text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T138">R</text:span></text:span><text:span text:style-name="T137">).</text:span></text:p>
    <text:p text:style-name="P2091"><text:span text:style-name="T137">T</text:span><text:span text:style-name="T318">he left panel allows choosing different parameters such as:</text:span></text:p>
-   <text:list xml:id="list135654577895533" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180619254572253" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2366"><text:span text:style-name="T1380">Printer</text:span> (<text:span text:style-name="T1380">see</text:span> <text:bookmark-ref text:reference-format="chapter" text:ref-name="__RefHeading___Toc8430_1084088360">14.2</text:bookmark-ref><text:s/><text:bookmark-ref text:reference-format="text" text:ref-name="__RefHeading___Toc8430_1084088360">Add a printer</text:bookmark-ref>)</text:p>
     </text:list-item>
@@ -202891,7 +202891,7 @@
    </text:list>
    <text:h text:style-name="P1511" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc8428_1084088360"/><text:soft-page-break/>Selection of images to print<text:bookmark-end text:name="__RefHeading___Toc8428_1084088360"/></text:h>
    <text:p text:style-name="P724">The printing tool allows printing one or several images, even from different series, on the same film. <text:span text:style-name="T1381">One or more images can be added for printing</text:span> <text:span text:style-name="T1381">with the following steps:</text:span></text:p>
-   <text:list xml:id="list135655298874754" text:continue-list="list135655448644184" text:style-name="Numbering_20_123">
+   <text:list xml:id="list180619695568272" text:continue-list="list180618475526153" text:style-name="Numbering_20_123">
     <text:list-item text:start-value="1">
      <text:p text:style-name="P2367"><text:span text:style-name="T1381">Select the series that contains the images in the viewer on the right</text:span>.</text:p>
     </text:list-item>
@@ -202900,7 +202900,7 @@
      <text:p text:style-name="P2370">Images can be selected in different ways:</text:p>
     </text:list-item>
    </text:list>
-   <text:list xml:id="list135653944201575" text:continue-list="list135654577895533" text:style-name="List_20_1">
+   <text:list xml:id="list180618761621720" text:continue-list="list180619254572253" text:style-name="List_20_1">
     <text:list-item>
      <text:list>
       <text:list-item>
@@ -202923,7 +202923,7 @@
      </text:list>
     </text:list-item>
    </text:list>
-   <text:list text:continue-list="list135655298874754" text:style-name="Numbering_20_123">
+   <text:list text:continue-list="list180619695568272" text:style-name="Numbering_20_123">
     <text:list-item>
      <text:p text:style-name="P2397"><text:span text:style-name="T320">Click</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T134"></text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T320">on the</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T1">A</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T814">dd</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T1"> </text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T814">to</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T1"> </text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T814">print</text:span></text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T320">button.</text:span></text:p>
     </text:list-item>
@@ -204074,7 +204074,7 @@
       </draw:image>
      </draw:frame></text:span><text:span text:style-name="T139"> </text:span><text:span text:style-name="T323">icon)</text:span><text:span text:style-name="T1">. </text:span><text:span text:style-name="T323">The following window appears</text:span><text:span text:style-name="T1">:</text:span></text:p>
    <text:p text:style-name="P617"><text:soft-page-break/><text:span text:style-name="T1382">The main actions in this window are</text:span>:</text:p>
-   <text:list xml:id="list135654957332125" text:continue-list="list135653944201575" text:style-name="List_20_1">
+   <text:list xml:id="list180619793215925" text:continue-list="list180618761621720" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2414"><text:span text:style-name="Display"><text:span text:style-name="T1">A</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T323">dd new printer</text:span></text:span><text:span text:style-name="T1">: </text:span><text:span text:style-name="T324">it opens a small window </text:span><text:span text:style-name="T140">(Figur</text:span><text:span text:style-name="T324">e</text:span><text:span text:style-name="T140"> </text:span><text:span text:style-name="T140"><text:sequence-ref text:reference-format="value" text:ref-name="refFigure28">29</text:sequence-ref></text:span><text:span text:style-name="T140">)</text:span><text:span text:style-name="T1"> </text:span><text:span text:style-name="T324">that allows defining the main printer settings:</text:span></text:p>
      <text:list>
@@ -204214,7 +204214,7 @@
    <text:p text:style-name="P815"><text:span text:style-name="T920">For advanced printer settings, check the application’s administrator guide</text:span>.</text:p>
    <text:h text:style-name="P966" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc4864_1692806117"/>Men<text:span text:style-name="T1383">u</text:span>s<text:bookmark-end text:name="__RefHeading___Toc4864_1692806117"/></text:h>
    <text:p text:style-name="P727">In the menu bar the following elements are found:</text:p>
-   <text:list xml:id="list135654864201560" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180619671501790" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2398"><text:span text:style-name="Citation"><text:span text:style-name="T1"><text:bookmark-ref text:reference-format="text" text:ref-name="__RefHeading___Toc24538_1084088360">File</text:bookmark-ref></text:span></text:span></text:p>
     </text:list-item>
@@ -204233,7 +204233,7 @@
    </text:list>
    <text:h text:style-name="P992" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc24538_1084088360"/>Fi<text:span text:style-name="T1082">le</text:span><text:bookmark-end text:name="__RefHeading___Toc24538_1084088360"/></text:h>
    <text:p text:style-name="P726">From this menu, <text:span text:style-name="T1384">it is possible to manage the data sources to be consulted and carry out a basic management of the application.</text:span></text:p>
-   <text:list xml:id="list135655924500667" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618468175585" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2311"><text:span text:style-name="Citation"><text:span text:style-name="T326">N</text:span></text:span><text:span text:style-name="Citation"><text:span text:style-name="T826">ew window</text:span></text:span><text:span text:style-name="T142">: </text:span><text:span text:style-name="T326">it opens a new Starviewer empty window. Shortcut</text:span><text:span text:style-name="T142">: </text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T142">Ctrl</text:span></text:span><text:span text:style-name="T142">+</text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T142">N</text:span></text:span><text:span text:style-name="T142">.</text:span></text:p>
     </text:list-item>
@@ -204391,7 +204391,7 @@
    </text:list>
    <text:h text:style-name="P621" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc24540_1084088360"/><text:soft-page-break/>Visuali<text:span text:style-name="T1083">s</text:span>a<text:span text:style-name="T1083">t</text:span>i<text:span text:style-name="T1083">on</text:span><text:bookmark-end text:name="__RefHeading___Toc24540_1084088360"/></text:h>
    <text:p text:style-name="P787">Once a study has been opened, users can choose between different viewer types or extensions that provide different functionalities:</text:p>
-   <text:list xml:id="list135655576073276" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180617819842488" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2312"><text:a xlink:type="simple" xlink:href="#1.11.Impressió DICOM|outline" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link"><text:span text:style-name="Citation"><text:span text:style-name="T328">DICOM Print</text:span></text:span></text:a></text:p>
     </text:list-item>
@@ -204518,7 +204518,7 @@
     </draw:frame><text:span text:style-name="T1385">For each viewer or extension opened from this menu, a new tab appears. If the selected element is already open</text:span><text:span text:style-name="T1386">ed</text:span><text:span text:style-name="T1385">, </text:span><text:span text:style-name="T1386">the corresponding tab is activated; a new one is not opened.</text:span></text:p>
    <text:h text:style-name="P1508" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc24542_1084088360"/>Tools<text:bookmark-end text:name="__RefHeading___Toc24542_1084088360"/></text:h>
    <text:p text:style-name="P729">This menu includes several functionalities not related to opening or visualising images.</text:p>
-   <text:list xml:id="list135655753228392" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180619226229084" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2399"><text:span text:style-name="Citation"><text:span text:style-name="T329">L</text:span></text:span><text:span text:style-name="Citation"><text:span text:style-name="T829">anguage</text:span></text:span><text:span text:style-name="T1">: </text:span><text:span text:style-name="T329">it allows changing the language of the application. </text:span><text:span text:style-name="T330">After changing the language it is necessary to close and reopen Starviewer to implement the change</text:span><text:span text:style-name="T1">.</text:span></text:p>
     </text:list-item>
@@ -205073,7 +205073,7 @@
     </draw:frame><text:span text:style-name="T1390">This function moves the window to the next screen following a circular sequence as in Drawing</text:span><text:span text:style-name="T1061"> </text:span><text:span text:style-name="T1061"><text:sequence-ref text:reference-format="value" text:ref-name="refDrawing2">3</text:sequence-ref></text:span>.</text:p>
    <text:h text:style-name="P1510" text:outline-level="3"><text:bookmark-start text:name="__RefHeading___Toc24554_1084088360"/><text:soft-page-break/>Help<text:bookmark-end text:name="__RefHeading___Toc24554_1084088360"/></text:h>
    <text:p text:style-name="P733">This menu provides access to the guides, the log and <text:span text:style-name="T1391">information</text:span> concerning Starviewer.</text:p>
-   <text:list xml:id="list135654557723170" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180619374311456" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2417"><text:span text:style-name="Citation"><text:span text:style-name="T335">U</text:span></text:span><text:span text:style-name="Citation"><text:span text:style-name="T831">ser guide</text:span></text:span><text:span text:style-name="T1">: </text:span><text:span text:style-name="T335">it opens this user guide in PDF</text:span><text:span text:style-name="T1">.</text:span></text:p>
     </text:list-item>
@@ -205179,7 +205179,7 @@
    <text:p text:style-name="P627"><text:soft-page-break/></text:p>
    <text:h text:style-name="P966" text:outline-level="2"><text:bookmark-start text:name="__RefHeading___Toc89466_458067131"/>Configura<text:span text:style-name="T992">t</text:span>ions<text:bookmark-end text:name="__RefHeading___Toc89466_458067131"/></text:h>
    <text:p text:style-name="P2092"><text:span text:style-name="T337">The configuration window, accessible from the</text:span><text:span text:style-name="T146"> </text:span><text:span text:style-name="Display"><text:span text:style-name="T337">T</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T818">ool</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T146">s &gt; Configura</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T818">t</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T146">i</text:span></text:span><text:span text:style-name="Display"><text:span text:style-name="T818">on</text:span></text:span><text:span text:style-name="T146"> </text:span><text:span text:style-name="T337">menu, allows configuring various elements to fit the user’s preferences. Parameters are grouped into different sections which can be selected from the left panel of the window:</text:span></text:p>
-   <text:list xml:id="list135654726707675" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180619843553592" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2371"><text:bookmark-ref text:reference-format="text" text:ref-name="__RefHeading___Toc41282_573806592">2D viewer</text:bookmark-ref></text:p>
     </text:list-item>
@@ -207336,7 +207336,7 @@
     </table:table-row>
    </table:table>
    <text:p text:style-name="P2257">The last option, independent of modality, is <text:span text:style-name="Citation">Division when comparing studies</text:span> and allows to choose how the window is divided in two halves when the <text:bookmark-ref text:reference-format="text" text:ref-name="__RefHeading___Toc2921_831695085">Comparison of studies</text:bookmark-ref><text:s/>is activated. There are the following options:</text:p>
-   <text:list xml:id="list135654323041705" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180619691387620" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2419"><text:span text:style-name="Citation">Current left, prior right</text:span> (default)</text:p>
     </text:list-item>
@@ -209138,7 +209138,7 @@
       </office:binary-data>
      </draw:image>
     </draw:frame></text:p>
-   <text:list xml:id="list135655509643771" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180619753058708" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2421"><text:span text:style-name="T1443">Four checkboxes to show or hide each orientation annotation</text:span>.</text:p>
     </text:list-item>
@@ -210055,7 +210055,7 @@
     </draw:frame><text:bookmark-start text:name="__RefHeading___Toc41288_573806592"/>PACS <text:span text:style-name="T1404">servers</text:span><text:bookmark-end text:name="__RefHeading___Toc41288_573806592"/></text:h>
    <text:p text:style-name="P303">In this tab there is a list of the configured PACS servers, and <text:span text:style-name="T1444">to the right</text:span> <text:span text:style-name="T1444">several buttons to add, modify or delete them</text:span>.</text:p>
    <text:p text:style-name="P1043">Three types of servers can be added with the three corresponding buttons:</text:p>
-   <text:list xml:id="list135654697549233" text:continue-numbering="true" text:style-name="List_20_1">
+   <text:list xml:id="list180618261631859" text:continue-numbering="true" text:style-name="List_20_1">
     <text:list-item>
      <text:p text:style-name="P2423"><text:span text:style-name="Emphasis">DIMSE</text:span>: <text:span text:style-name="T1445">to connect with a PACS using the DIMSE-C family of protocols from DICOM</text:span> (C-FIND, C-MOVE, C-STORE), <text:span text:style-name="T1445">the oldest and most widely extended ones</text:span><text:span text:style-name="T629">.</text:span></text:p>
     </text:list-item>
@@ -224268,7 +224268,7 @@
     </table:table-header-rows>
     <table:table-row table:style-name="Taula14.1">
      <table:table-cell table:style-name="Taula14.A2" office:value-type="string">
-      <text:p text:style-name="P194"><draw:frame draw:style-name="fr10" draw:name="Imatge189" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="361"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P194"><draw:frame draw:style-name="fr10" draw:name="Imatge189" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="353"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
           DQo8c3ZnDQogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8i
           DQogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KICAgeG1s
@@ -224490,7 +224490,7 @@
     </table:table-row>
     <table:table-row table:style-name="Taula14.1">
      <table:table-cell table:style-name="Taula14.A3" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge190" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="362"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge190" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="354"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
           DQo8c3ZnDQogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8i
           DQogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KICAgeG1s
@@ -224704,7 +224704,7 @@
     <text:soft-page-break/>
     <table:table-row table:style-name="Taula14.1">
      <table:table-cell table:style-name="Taula14.A4" office:value-type="string">
-      <text:p text:style-name="P75"><draw:frame draw:style-name="fr10" draw:name="Imatge191" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="363"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P75"><draw:frame draw:style-name="fr10" draw:name="Imatge191" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="355"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
           DQo8c3ZnDQogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8i
           DQogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KICAgeG1s
@@ -224902,7 +224902,7 @@
       <text:p text:style-name="P2271"><text:span text:style-name="Keyboard">Ctrl</text:span>+<text:span text:style-name="Keyboard">Shift</text:span>+<text:span text:style-name="Keyboard">3</text:span></text:p>
      </table:table-cell>
      <table:table-cell table:style-name="Taula14.D4" office:value-type="string">
-      <text:p text:style-name="P75"><draw:frame draw:style-name="fr10" draw:name="Imatge202" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="549"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P75"><draw:frame draw:style-name="fr10" draw:name="Imatge202" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="550"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMiIgaGVp
           Z2h0PSIyMiI+DQogPHBhdGggZD0ibTMgM3Y0IDEyaDEgMTQgMXYtMS0xMi0zaC0xNS0xbTEg
           NGgxNHYxMWgtMTR2LTExbTQgNHYyaDZ2LTJoLTYiIHN0eWxlPSJmaWxsOiNkYTQ0NTMiLz4N
@@ -224920,7 +224920,7 @@
     </table:table-row>
     <table:table-row table:style-name="Taula14.1">
      <table:table-cell table:style-name="Taula14.A5" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge192" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="364"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge192" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="356"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
           NiAxNiI+DQogIDxkZWZzIGlkPSJkZWZzMzA1MSI+DQogICAgPHN0eWxlIHR5cGU9InRleHQv
           Y3NzIiBpZD0iY3VycmVudC1jb2xvci1zY2hlbWUiPg0KICAgICAgLkNvbG9yU2NoZW1lLVRl
@@ -224944,7 +224944,7 @@
       <text:p text:style-name="P1224"><text:span text:style-name="Keyboard"><text:span text:style-name="T1">Ctrl</text:span></text:span><text:span text:style-name="T1">+</text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T1">S</text:span></text:span></text:p>
      </table:table-cell>
      <table:table-cell table:style-name="Taula14.D5" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge203" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="550"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge203" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="551"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
           NiAxNiI+DQogIDxkZWZzIGlkPSJkZWZzMzA1MSI+DQogICAgPHN0eWxlIHR5cGU9InRleHQv
           Y3NzIiBpZD0iY3VycmVudC1jb2xvci1zY2hlbWUiPg0KICAgICAgLkNvbG9yU2NoZW1lLVRl
@@ -225024,7 +225024,7 @@
     </table:table-row>
     <table:table-row table:style-name="Taula14.1">
      <table:table-cell table:style-name="Taula14.A5" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge193" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="365"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge193" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="357"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
           DQo8c3ZnDQogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8i
           DQogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KICAgeG1s
@@ -225187,7 +225187,7 @@
     </table:table-row>
     <table:table-row table:style-name="Taula14.1">
      <table:table-cell table:style-name="Taula14.A5" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge194" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="366"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge194" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="358"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
           DQo8c3ZnDQogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8i
           DQogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KICAgeG1s
@@ -225268,7 +225268,7 @@
       <text:p text:style-name="P1226"><text:span text:style-name="Keyboard"><text:span text:style-name="T1">Ctrl</text:span></text:span><text:span text:style-name="T1">+</text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T1">R</text:span></text:span></text:p>
      </table:table-cell>
      <table:table-cell table:style-name="Taula14.D5" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge206" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="551"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge206" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="549"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
           NiAxNiI+DQogIDxkZWZzIGlkPSJkZWZzMzA1MSI+DQogICAgPHN0eWxlIHR5cGU9InRleHQv
           Y3NzIiBpZD0iY3VycmVudC1jb2xvci1zY2hlbWUiPg0KICAgICAgLkNvbG9yU2NoZW1lLVRl
@@ -225294,7 +225294,7 @@
     </table:table-row>
     <table:table-row table:style-name="Taula14.1">
      <table:table-cell table:style-name="Taula14.A5" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge195" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="367"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge195" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="359"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
           DQo8c3ZnDQogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8i
           DQogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KICAgeG1s
@@ -225399,7 +225399,7 @@
       <text:p text:style-name="P1226"><text:span text:style-name="Keyboard"><text:span text:style-name="T1">Shift</text:span></text:span><text:span text:style-name="T1">+</text:span><text:span text:style-name="Keyboard"><text:span text:style-name="T1">A</text:span></text:span></text:p>
      </table:table-cell>
      <table:table-cell table:style-name="Taula14.D5" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge207" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="499"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge207" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="495"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
           NiAxNiI+DQogIDxkZWZzIGlkPSJkZWZzMzA1MSI+DQogICAgPHN0eWxlIHR5cGU9InRleHQv
           Y3NzIiBpZD0iY3VycmVudC1jb2xvci1zY2hlbWUiPg0KICAgICAgLkNvbG9yU2NoZW1lLVRl
@@ -225425,7 +225425,7 @@
     </table:table-row>
     <table:table-row table:style-name="Taula14.1">
      <table:table-cell table:style-name="Taula14.A5" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge196" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="368"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge196" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="360"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
           NiAxNiI+DQogIDxkZWZzIGlkPSJkZWZzMzA1MSI+DQogICAgPHN0eWxlIHR5cGU9InRleHQv
           Y3NzIiBpZD0iY3VycmVudC1jb2xvci1zY2hlbWUiPg0KICAgICAgLkNvbG9yU2NoZW1lLVRl
@@ -225456,7 +225456,7 @@
     </table:table-row>
     <table:table-row table:style-name="Taula14.1">
      <table:table-cell table:style-name="Taula14.A5" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge197" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="369"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge197" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="361"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+
           DQo8c3ZnDQogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8i
           DQogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIg0KICAgeG1s
@@ -225544,7 +225544,7 @@
     </table:table-row>
     <table:table-row table:style-name="Taula14.1">
      <table:table-cell table:style-name="Taula14.A12" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge198" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="370"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge198" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="362"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
           NiAxNiI+DQogIDxkZWZzIGlkPSJkZWZzMzA1MSI+DQogICAgPHN0eWxlIHR5cGU9InRleHQv
           Y3NzIiBpZD0iY3VycmVudC1jb2xvci1zY2hlbWUiPg0KICAgICAgLkNvbG9yU2NoZW1lLVRl
@@ -225583,7 +225583,7 @@
     </table:table-row>
     <table:table-row table:style-name="Taula14.1">
      <table:table-cell table:style-name="Taula14.A13" office:value-type="string">
-      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge199" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="371"><draw:image draw:mime-type="image/svg+xml">
+      <text:p text:style-name="P219"><draw:frame draw:style-name="fr10" draw:name="Imatge199" text:anchor-type="as-char" svg:width="0.951cm" svg:height="0.951cm" draw:z-index="363"><draw:image draw:mime-type="image/svg+xml">
          <office:binary-data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAx
           NiAxNiI+DQogIDxkZWZzIGlkPSJkZWZzMzA1MSI+DQogICAgPHN0eWxlIHR5cGU9InRleHQv
           Y3NzIiBpZD0iY3VycmVudC1jb2xvci1zY2hlbWUiPg0KICAgICAgLkNvbG9yU2NoZW1lLVRl
