@@ -38,17 +38,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qceaboutcontentbase.ui" line="127"/>
+        <location filename="qceaboutcontentbase.ui" line="121"/>
         <source>Consult instructions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qceaboutcontentbase.ui" line="143"/>
+        <location filename="qceaboutcontentbase.ui" line="137"/>
+        <source>eIFU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qceaboutcontentbase.ui" line="150"/>
         <source>Manufacturer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qceaboutcontentbase.ui" line="156"/>
+        <location filename="qceaboutcontentbase.ui" line="163"/>
         <source>&lt;p&gt;Institut de Diagnòstic per la Imatge&lt;br&gt;
 Parc Sanitari Pere Virgili&lt;br&gt;
 Esteve Terradas, 30 — Edifici Mestral 2a planta&lt;br&gt;
@@ -60,7 +65,7 @@ Fax +34 93 259 41 85&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qceaboutcontentbase.ui" line="193"/>
+        <location filename="qceaboutcontentbase.ui" line="200"/>
         <source>&lt;h1&gt;2797&lt;/h1&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -220,17 +225,22 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="qaboutdialog.cpp" line="53"/>
-        <location filename="qaboutdialog.cpp" line="93"/>
+        <location filename="qaboutdialog.cpp" line="99"/>
         <source>Crash test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="57"/>
+        <location filename="qaboutdialog.cpp" line="58"/>
+        <source>Show label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qaboutdialog.cpp" line="63"/>
         <source>License information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qaboutdialog.cpp" line="93"/>
+        <location filename="qaboutdialog.cpp" line="99"/>
         <source>Are you sure you want to crash %1 on purpose?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -271,7 +281,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>udg::QApplicationMainWindow</name>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="333"/>
+        <location filename="qapplicationmainwindow.cpp" line="338"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -294,37 +304,37 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="327"/>
+        <location filename="qapplicationmainwindow.cpp" line="332"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="328"/>
+        <location filename="qapplicationmainwindow.cpp" line="333"/>
         <source>Show the application&apos;s About box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="340"/>
+        <location filename="qapplicationmainwindow.cpp" line="345"/>
         <source>E&amp;xit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="342"/>
+        <location filename="qapplicationmainwindow.cpp" line="347"/>
         <source>Exit the application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="399"/>
+        <location filename="qapplicationmainwindow.cpp" line="404"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="427"/>
+        <location filename="qapplicationmainwindow.cpp" line="432"/>
         <source>&amp;Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="447"/>
+        <location filename="qapplicationmainwindow.cpp" line="452"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -344,7 +354,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="417"/>
+        <location filename="qapplicationmainwindow.cpp" line="422"/>
         <source>&amp;Visualization</source>
         <translation type="unfinished"></translation>
     </message>
@@ -354,23 +364,23 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="571"/>
+        <location filename="qapplicationmainwindow.cpp" line="579"/>
         <source>Language Switch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="335"/>
+        <location filename="qapplicationmainwindow.cpp" line="340"/>
         <source>Close current extension page</source>
         <oldsource>Close the current extension page</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="316"/>
+        <location filename="qapplicationmainwindow.cpp" line="321"/>
         <source>Show log file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="437"/>
+        <location filename="qapplicationmainwindow.cpp" line="442"/>
         <source>&amp;Window</source>
         <translation type="unfinished"></translation>
     </message>
@@ -422,7 +432,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="qapplicationmainwindow.cpp" line="274"/>
-        <location filename="qapplicationmainwindow.cpp" line="438"/>
+        <location filename="qapplicationmainwindow.cpp" line="443"/>
         <source>Move to Screen</source>
         <oldsource>Move To Screen</oldsource>
         <translation type="unfinished"></translation>
@@ -495,113 +505,118 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="315"/>
+        <location filename="qapplicationmainwindow.cpp" line="314"/>
+        <source>Show label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qapplicationmainwindow.cpp" line="320"/>
         <source>Show Log File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="322"/>
+        <location filename="qapplicationmainwindow.cpp" line="327"/>
         <source>&amp;Release Notes</source>
         <oldsource>&amp;Release notes</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="323"/>
+        <location filename="qapplicationmainwindow.cpp" line="328"/>
         <source>Show the application&apos;s release notes for current version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="347"/>
+        <location filename="qapplicationmainwindow.cpp" line="352"/>
         <source>&amp;Configuration...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="354"/>
+        <location filename="qapplicationmainwindow.cpp" line="359"/>
         <source>&amp;Run Diagnosis Tests</source>
         <oldsource>&amp;Run diagnosis tests</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="355"/>
+        <location filename="qapplicationmainwindow.cpp" line="360"/>
         <source>Run %1 diagnosis tests</source>
         <oldsource>Run %1 diagnosis test</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="359"/>
+        <location filename="qapplicationmainwindow.cpp" line="364"/>
         <source>Show &amp;patient identification in window title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="360"/>
+        <location filename="qapplicationmainwindow.cpp" line="365"/>
         <source>Show patient identification in window title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="426"/>
+        <location filename="qapplicationmainwindow.cpp" line="431"/>
         <source>&amp;Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="466"/>
+        <location filename="qapplicationmainwindow.cpp" line="474"/>
         <source>Catalan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="467"/>
+        <location filename="qapplicationmainwindow.cpp" line="475"/>
         <source>Spanish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="468"/>
+        <location filename="qapplicationmainwindow.cpp" line="476"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="497"/>
+        <location filename="qapplicationmainwindow.cpp" line="505"/>
         <source>&amp;External applications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="538"/>
+        <location filename="qapplicationmainwindow.cpp" line="546"/>
         <source>Switch to %1 language</source>
         <oldsource>Switch to %1 Language</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="571"/>
+        <location filename="qapplicationmainwindow.cpp" line="579"/>
         <source>Changes will take effect the next time you start the application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="585"/>
+        <location filename="qapplicationmainwindow.cpp" line="593"/>
         <source>External application launch error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="585"/>
+        <location filename="qapplicationmainwindow.cpp" line="593"/>
         <source>There has been an error launching the external application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="739"/>
+        <location filename="qapplicationmainwindow.cpp" line="764"/>
         <source>Beta Version</source>
         <oldsource>Beta version</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="740"/>
+        <location filename="qapplicationmainwindow.cpp" line="765"/>
         <source>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 used exclusively for testing purposes.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our test-team members. Users of this version should not expect extensions to function properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve %1, please report any found bug or any feature request you may have by sending an e-mail to: &lt;a href=&quot;mailto:%2&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;We really appreciate your feedback!&lt;/h3&gt;</source>
         <oldsource>&lt;h2&gt;%1&lt;/h2&gt;&lt;p align=&apos;justify&apos;&gt;This is a preview release of %1 used exclusively for testing purposes.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;This version is intended for radiologists and our test-team members. Users of this version should not expect the extensions function properly.&lt;/p&gt;&lt;p align=&apos;justify&apos;&gt;If you want to help us to improve %1, please report any found bug or any feature request you may have by sending an e-mail to: &lt;a href=&quot;mailto:%2&quot;&gt;%2&lt;/a&gt;&lt;/p&gt;&lt;h3&gt;We really appreciate your feedback!&lt;/h3&gt;</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="156"/>
+        <location filename="qapplicationmainwindow.cpp" line="157"/>
         <source>Loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="157"/>
+        <location filename="qapplicationmainwindow.cpp" line="158"/>
         <source>Loading data, please wait...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -616,19 +631,19 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="349"/>
+        <location filename="qapplicationmainwindow.cpp" line="354"/>
         <source>Modify %1 configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="114"/>
+        <location filename="qapplicationmainwindow.cpp" line="115"/>
         <source>There have been some errors:</source>
         <oldsource>There have been some errors:
 </oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="qapplicationmainwindow.cpp" line="115"/>
+        <location filename="qapplicationmainwindow.cpp" line="116"/>
         <source>You can resolve this error at Tools &gt; Configuration &gt; Local Database.</source>
         <oldsource>
 

@@ -158,7 +158,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadoinstancedownloader.cpp" line="98"/>
+        <location filename="wadoinstancedownloader.cpp" line="102"/>
         <source>Can&apos;t save file to disk.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -483,25 +483,25 @@
 <context>
     <name>udg::DICOMDIRImporter</name>
     <message>
-        <location filename="dicomdirimporter.cpp" line="347"/>
+        <location filename="dicomdirimporter.cpp" line="351"/>
         <source>Importing image %1 of series %2 from study %3, %4</source>
         <oldsource>Importing Image %1 of Series %2 from Study %3, %4</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirimporter.cpp" line="352"/>
+        <location filename="dicomdirimporter.cpp" line="356"/>
         <source>Importing series %1 of study %2, %3</source>
         <oldsource>Importing Series %1 of Study %2, %3</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirimporter.cpp" line="357"/>
+        <location filename="dicomdirimporter.cpp" line="361"/>
         <source>Importing study %1, %2</source>
         <oldsource>Importing Study %1, %2</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dicomdirimporter.cpp" line="362"/>
+        <location filename="dicomdirimporter.cpp" line="366"/>
         <source>Importing images from DICOMDIR</source>
         <oldsource>Importing Images from DICOMDIR</oldsource>
         <translation type="unfinished"></translation>

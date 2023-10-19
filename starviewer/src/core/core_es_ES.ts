@@ -2847,7 +2847,7 @@ Se recomienda guardarlas en una carpeta vacía.</translation>
 <context>
     <name>udg::VoxelInformationTool</name>
     <message>
-        <location filename="voxelinformationtool.cpp" line="163"/>
+        <location filename="voxelinformationtool.cpp" line="155"/>
         <source>SUV (%1)</source>
         <translation>SUV (%1)</translation>
     </message>
