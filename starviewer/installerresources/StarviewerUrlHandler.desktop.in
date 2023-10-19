@@ -3,3 +3,4 @@ Name=@CPACK_PACKAGE_NAME@ URL handler
 Exec=/usr/bin/starviewer --url %u
 Type=Application
 MimeType=x-scheme-handler/starviewer
+NoDisplay=true

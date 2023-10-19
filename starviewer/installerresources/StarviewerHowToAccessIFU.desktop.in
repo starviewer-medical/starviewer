@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=How to access @CPACK_PACKAGE_NAME@ IFU
+Exec=xdg-open '/opt/starviewer/How to access IFU.pdf'
+Icon=/opt/starviewer/mime-pdf.svg
+Type=Application

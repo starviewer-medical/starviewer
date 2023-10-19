@@ -25,6 +25,7 @@ if(WIN32)
 elseif(UNIX AND NOT APPLE)
     install(PROGRAMS bin/starviewer.sh DESTINATION .)
     install(DIRECTORY src/main/themes/${THEME}/images/logo DESTINATION .)
+    install(FILES src/main/themes/${THEME}/images/icons/mime-pdf.svg DESTINATION .)
 endif()
 
 

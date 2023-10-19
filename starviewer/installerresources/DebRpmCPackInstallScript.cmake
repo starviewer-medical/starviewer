@@ -11,3 +11,7 @@ configure_file("${SOURCE_DIR}/installerresources/Starviewer.desktop.in" "${CMAKE
 # URL handler
 configure_file("${SOURCE_DIR}/installerresources/StarviewerUrlHandler.desktop.in"
                "${CMAKE_CURRENT_BINARY_DIR}/usr/share/applications/${OUTPUT_FILENAME}UrlHandler.desktop")
+
+# How to access IFU
+configure_file("${SOURCE_DIR}/installerresources/StarviewerHowToAccessIFU.desktop.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/usr/share/applications/${OUTPUT_FILENAME}HowToAccessIFU.desktop")
