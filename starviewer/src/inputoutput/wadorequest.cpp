@@ -14,6 +14,7 @@
 
 #include "wadorequest.h"
 
+#include <QApplication>
 #include <QNetworkReply>
 
 namespace udg {
@@ -25,7 +26,7 @@ WadoRequest::WadoRequest(const PacsDevice &pacs, QObject *parent)
 
 WadoRequest::~WadoRequest()
 {
-    if (m_reply)
+    if (m_reply && QApplication::activeWindow())    // if there is no active window, m_reply may have been deleted in another thread
     {
         m_reply->deleteLater();
     }
@@ -45,7 +46,7 @@ void WadoRequest::start(QNetworkAccessManager *networkAccessManager)
 
 void WadoRequest::cancel()
 {
-    if (m_reply)
+    if (m_reply && QApplication::activeWindow())    // if there is no active window, m_reply may have been deleted in another thread
     {
         m_reply->abort();
     }

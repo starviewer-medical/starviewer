@@ -17,6 +17,8 @@
 
 #include <QObject>
 
+#include <QPointer>
+
 #include "pacsdevice.h"
 
 class QNetworkAccessManager;
@@ -68,7 +70,7 @@ protected:
     /// QNetworkAccessManager instance that will be used to perform WADO (HTTP) communications.
     QNetworkAccessManager *m_networkAccessManager;
     /// The QNetworkReply returned by QNetworkAccessManager can be stored here.
-    QNetworkReply *m_reply;
+    QPointer<QNetworkReply> m_reply;
     /// Status of this request.
     Status m_status;
     /// A string containing a description of all encountered errors.
