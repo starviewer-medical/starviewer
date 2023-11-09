@@ -23,6 +23,8 @@
 
 namespace udg {
 
+class StudyOperationResult;
+
 /**
  * @brief The WadoUriRequest class implements a WADO-URI download (PS3.18§9) of a study, series or instance.
  *
@@ -55,7 +57,7 @@ signals:
     void seriesDownloaded(int totalSeriesDownloaded);
 
 private:
-    /// Starts the download.
+    /// Starts the request.
     void startInternal() override;
 
     /// Checks available space in the local cache and if needed deletes studies until there is enough.
@@ -63,9 +65,15 @@ private:
     bool ensureEnoughHardDiskSpace();
 
     /// Performs a query on the PACS to obtain the UIDs of all the instances in the requested study or series.
-    bool obtainSopInstanceUids();
+    void obtainSopInstanceUids();
+
+    /// Downloads the instances.
+    void downloadInstances();
 
 private slots:
+    /// Called when the search of instances in the PACS finishes.
+    void getSearchResults(StudyOperationResult *result);
+
     /// Called when a QNetworkReply finishes.
     void onReplyFinished(QNetworkReply *reply);
 

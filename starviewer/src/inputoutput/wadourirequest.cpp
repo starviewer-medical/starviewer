@@ -69,41 +69,7 @@ void WadoUriRequest::startInternal()
 
     emit started();
 
-    if (!obtainSopInstanceUids())
-    {
-        emit finished();
-        return;
-    }
-
-    QUrl baseUri = getPacsDevice().getBaseUri();
-    INFO_LOG(QString("Starting retrieve of %1 instances from WADO-URI PACS with base URI %2.").arg(m_instancesToDownload.size()).arg(baseUri.toString()));
-    QUrlQuery urlQuery;
-    urlQuery.addQueryItem("requestType", "WADO");
-    urlQuery.addQueryItem("contentType", "application/dicom");
-    urlQuery.addQueryItem("studyUID", m_studyInstanceUid);
-
-    m_downloadedFilesProcessor.reset(new DownloadedFilesProcessor(getPacsDevice()));
-    m_downloadedFilesProcessor->beginDownloadStudy(m_studyInstanceUid);
-
-    for (const auto &pair : qAsConst(m_instancesToDownload))
-    {
-        QUrlQuery specificQuery(urlQuery);
-        specificQuery.addQueryItem("seriesUID", pair.first);
-        specificQuery.addQueryItem("objectUID", pair.second);
-
-        QUrl url(baseUri);
-        url.setQuery(specificQuery);
-
-        QNetworkRequest request(url);
-        request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
-
-        QNetworkReply *reply = m_networkAccessManager->get(request);
-        m_pendingReplies.insert(reply);
-
-        connect(reply, &QNetworkReply::finished, this, [=] {
-            onReplyFinished(reply);
-        }, Qt::DirectConnection);
-    }
+    obtainSopInstanceUids();
 }
 
 // This is run in the WADO thread.
@@ -134,22 +100,75 @@ bool WadoUriRequest::ensureEnoughHardDiskSpace()
 }
 
 // This is run in the WADO thread.
-bool WadoUriRequest::obtainSopInstanceUids()
+void WadoUriRequest::obtainSopInstanceUids()
 {
     if (!m_sopInstanceUid.isEmpty())
     {
         m_instancesToDownload.insert({m_seriesInstanceUid, m_sopInstanceUid});
-        return true;
+        downloadInstances();
     }
+    else
+    {
+        INFO_LOG(QString("Asking PACS %1 about all instances to download.").arg(getPacsDevice().getAETitle()));
 
-    INFO_LOG(QString("Asking PACS %1 about all instances to download.").arg(getPacsDevice().getAETitle()));
+        DicomMask mask;
+        mask.setStudyInstanceUID(m_studyInstanceUid);
+        mask.setSeriesInstanceUID(m_seriesInstanceUid.isNull() ? "" : m_seriesInstanceUid);
+        mask.setSOPInstanceUID("");
+        StudyOperationResult *result = nullptr;
 
-    DicomMask mask;
-    mask.setStudyInstanceUID(m_studyInstanceUid);
-    mask.setSeriesInstanceUID(m_seriesInstanceUid.isNull() ? "" : m_seriesInstanceUid);
-    mask.setSOPInstanceUID("");
-    StudyOperationResult *result = StudyOperationsService::instance()->searchPacs(getPacsDevice(), mask, StudyOperations::TargetResource::Instances);
+        // This calls the given lambda in the StudyOperationsService's thread (the main thread) but blocks until the call has returned, so that we have a
+        // StudyOperationResult instance in result
+        QMetaObject::invokeMethod(StudyOperationsService::instance(), [=] {
+                return StudyOperationsService::instance()->searchPacs(getPacsDevice(), mask, StudyOperations::TargetResource::Instances);
+            }, Qt::BlockingQueuedConnection, &result);
 
+        Q_ASSERT(result);
+
+        // Network access manager provided as context object so that the lambda is called in the WADO thread.
+        connect(result, &StudyOperationResult::finished, m_networkAccessManager, [=] {
+            getSearchResults(result);
+        });
+    }
+}
+
+// This is run in the WADO thread.
+void WadoUriRequest::downloadInstances()
+{
+    QUrl baseUri = getPacsDevice().getBaseUri();
+    INFO_LOG(QString("Starting retrieve of %1 instances from WADO-URI PACS with base URI %2.").arg(m_instancesToDownload.size()).arg(baseUri.toString()));
+    QUrlQuery urlQuery;
+    urlQuery.addQueryItem("requestType", "WADO");
+    urlQuery.addQueryItem("contentType", "application/dicom");
+    urlQuery.addQueryItem("studyUID", m_studyInstanceUid);
+
+    m_downloadedFilesProcessor.reset(new DownloadedFilesProcessor(getPacsDevice()));
+    m_downloadedFilesProcessor->beginDownloadStudy(m_studyInstanceUid);
+
+    for (const auto &pair : qAsConst(m_instancesToDownload))
+    {
+        QUrlQuery specificQuery(urlQuery);
+        specificQuery.addQueryItem("seriesUID", pair.first);
+        specificQuery.addQueryItem("objectUID", pair.second);
+
+        QUrl url(baseUri);
+        url.setQuery(specificQuery);
+
+        QNetworkRequest request(url);
+        request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+
+        QNetworkReply *reply = m_networkAccessManager->get(request);
+        m_pendingReplies.insert(reply);
+
+        connect(reply, &QNetworkReply::finished, this, [=] {
+                onReplyFinished(reply);
+            }, Qt::DirectConnection);
+    }
+}
+
+// This is run in the WADO thread.
+void WadoUriRequest::getSearchResults(StudyOperationResult *result)
+{
     const QList<Series*> &series = result->getSeries();
     const QList<Image*> &instances = result->getInstances();
 
@@ -176,7 +195,7 @@ bool WadoUriRequest::obtainSopInstanceUids()
         WARN_LOG(m_errorsDescription);
     }
 
-    delete result;
+    result->deleteLater();
 
     // With Raïmserver in some cases we can receive an empty response without error because of a 10 minute limit (see #2982).
     if (m_instancesToDownload.isEmpty())
@@ -187,7 +206,14 @@ bool WadoUriRequest::obtainSopInstanceUids()
         ok = false;
     }
 
-    return ok;
+    if (ok)
+    {
+        downloadInstances();
+    }
+    else
+    {
+        emit finished();
+    }
 }
 
 // This is run in the WADO thread.
