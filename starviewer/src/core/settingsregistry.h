@@ -38,7 +38,7 @@ public:
     /// Obté el nivell d'accés que té una determinada clau.
     /// Si no troba la definició per aquest clau, el valor
     /// retornat per defecte és d'Usuari
-    Settings::AccessLevel getAccessLevel(const QString &key) const;
+    Settings::AccessLevel getAccessLevel(const QString &key);
 
     /// Ens retorna les propietats de la clau 'key'
     Settings::Properties getProperties(const QString &key);
@@ -52,7 +52,7 @@ protected:
 
 private:
     /// Carrega la taula de nivells d'accés. Aquesta taula només s'hauria de carregar un sol cop.
-    void loadAccesLevelTable();
+    void loadAccessLevelTable();
 
 private:
     /// Mapa que associa la clau del setting amb el seu valor per defecte i les seves propietats.
@@ -62,6 +62,8 @@ private:
 
     /// Mapa en el que guardem el nivell d'accés associat a cada setting
     QMap<QString, Settings::AccessLevel> m_accessLevelTable;
+    /// Whether the access level table has been already loaded or not.
+    bool m_accessLevelTableLoaded;
 
 };
 

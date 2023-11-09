@@ -23,8 +23,9 @@
 namespace udg {
 
 SettingsRegistry::SettingsRegistry()
+    : m_accessLevelTableLoaded(false)
 {
-    loadAccesLevelTable();
+    loadAccessLevelTable();
 }
 
 SettingsRegistry::~SettingsRegistry()
@@ -66,8 +67,13 @@ Settings::SettingListType SettingsRegistry::getDefaultListValue(const QString &k
     return defaultList;
 }
 
-Settings::AccessLevel SettingsRegistry::getAccessLevel(const QString &key) const
+Settings::AccessLevel SettingsRegistry::getAccessLevel(const QString &key)
 {
+    if (!m_accessLevelTableLoaded)
+    {
+        loadAccessLevelTable();
+    }
+
     Settings::AccessLevel accessLevel = Settings::UserLevel;
 
     if (m_accessLevelTable.contains(key))
@@ -83,7 +89,7 @@ Settings::Properties SettingsRegistry::getProperties(const QString &key)
     return m_keyDefaultValueAndPropertiesMap.value(key).second;
 }
 
-void SettingsRegistry::loadAccesLevelTable()
+void SettingsRegistry::loadAccessLevelTable()
 {
     // We can arrive here before creating QApplication due to the initial HDPI support, thus this check is needed
     if (!qApp)
@@ -91,17 +97,19 @@ void SettingsRegistry::loadAccesLevelTable()
         return;
     }
 
+    m_accessLevelTableLoaded = true;
+
     // Al directori on s'instal·la l'aplicació tindrem
     // un .ini que definirà els nivells d'accés de cada settings
     QString filePath = qApp->applicationDirPath() + "/settingsAccessLevel.ini";
     QFile file(filePath);
     if (!file.exists())
     {
-        DEBUG_LOG("L'arxiu [" + filePath + "] No existeix. No es poden carregar els nivells d'accés");
+        INFO_LOG(QString("Won't load settings access levels because file \"%1\" does not exist.").arg(filePath));
     }
     else
     {
-        DEBUG_LOG("Llegim arxiu d'Access Level de settings: [" + filePath + "]");
+        INFO_LOG(QString("Reading settings access levels from \"%1\".").arg(filePath));
         SettingsAccessLevelFileReader fileReader;
         if (fileReader.read(filePath))
         {
