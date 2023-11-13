@@ -39,6 +39,7 @@ public:
     /// Sets the request study.
     void setRequestStudy(const Study *requestStudy);
 
+public slots:
     /// Cancels the underlying request.
     void cancel() override;
 

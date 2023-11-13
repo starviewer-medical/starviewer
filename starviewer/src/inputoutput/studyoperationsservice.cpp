@@ -282,6 +282,7 @@ StudyOperationsService::StudyOperationsService(QObject *parent)
 StudyOperationsService::~StudyOperationsService()
 {
 //    delete m_pacsManager; // TODO Can't delete PacsManager safely. See comment on its destructor.
+    // WARN Starviewer may sometimes crash if closed during a C-FIND
     m_wadoThread.quit();    // needed for autotests, not harmful in the main application
     m_wadoThread.wait();
 }

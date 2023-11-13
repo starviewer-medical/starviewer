@@ -139,7 +139,6 @@ bool DirectoryUtilities::removeDirectory(const QDir &dir, bool deleteRootDirecto
                 else
                 {
                     emit directoryDeleted();
-                    QCoreApplication::processEvents();
                 }
             }
         }

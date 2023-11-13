@@ -53,10 +53,7 @@ const QString& WadoUriRequest::getSopInstanceUid() const
 
 void WadoUriRequest::cancel()
 {
-    for (QNetworkReply *reply : qAsConst(m_pendingReplies))
-    {
-        reply->abort();
-    }
+    emit cancelRequested();
 }
 
 // This is run in the WADO thread.
@@ -125,9 +122,18 @@ void WadoUriRequest::obtainSopInstanceUids()
 
         Q_ASSERT(result);
 
+        // A cancellation request may be received during this auxiliary query.
+        connect(this, &WadoUriRequest::cancelRequested, result, &StudyOperationResult::cancel);
         // Network access manager provided as context object so that the lambda is called in the WADO thread.
         connect(result, &StudyOperationResult::finished, m_networkAccessManager, [=] {
             getSearchResults(result);
+        });
+        // Network access manager provided as context object so that the lambda is called in the WADO thread.
+        connect(result, &StudyOperationResult::cancelled, m_networkAccessManager, [=] {
+            INFO_LOG(QString("Cancelled retrieve of study %1 (series %2, instance %3).").arg(m_studyInstanceUid, m_seriesInstanceUid, m_sopInstanceUid));
+            m_status = Status::Cancelled;
+            emit cancelled();
+            result->deleteLater();
         });
     }
 }
@@ -160,6 +166,7 @@ void WadoUriRequest::downloadInstances()
         QNetworkReply *reply = m_networkAccessManager->get(request);
         m_pendingReplies.insert(reply);
 
+        connect(this, &WadoUriRequest::cancelRequested, reply, &QNetworkReply::abort);
         connect(reply, &QNetworkReply::finished, this, [=] {
                 onReplyFinished(reply);
             }, Qt::DirectConnection);

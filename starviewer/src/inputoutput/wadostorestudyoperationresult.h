@@ -35,6 +35,7 @@ public:
     /// Returns the operation type.
     OperationType getOperationType() const override;
 
+public slots:
     /// Cancels the underlying request.
     void cancel() override;
 

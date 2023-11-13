@@ -55,6 +55,8 @@ signals:
     void instanceDownloaded(int totalInstancesDownloaded);
     /// Emitted each time a new series is downloaded, with the total number of different series downloaded until now.
     void seriesDownloaded(int totalSeriesDownloaded);
+    /// Internal signal used to call abort in the thread where the network replies live.
+    void cancelRequested();
 
 private:
     /// Starts the request.

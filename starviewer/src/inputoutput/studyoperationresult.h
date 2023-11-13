@@ -85,6 +85,7 @@ public:
     /// Returns the description of an encountered error, if any.
     const QString& getErrorText() const;
 
+public slots:
     /// Requests to cancel the underlying operation.
     virtual void cancel() = 0;
 

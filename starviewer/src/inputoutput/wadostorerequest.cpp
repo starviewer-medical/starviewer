@@ -260,6 +260,7 @@ void WadoStoreRequest::onReplyFinished()
      */
 }
 
+// This is run in the WADO thread.
 void WadoStoreRequest::onUploadProgress(qint64 bytesSent, qint64 bytesTotal)
 {
     Q_UNUSED(bytesTotal)

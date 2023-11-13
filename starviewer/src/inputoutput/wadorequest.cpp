@@ -37,6 +37,7 @@ const PacsDevice& WadoRequest::getPacsDevice() const
     return m_pacs;
 }
 
+// This is run in the WADO thread.
 void WadoRequest::start(QNetworkAccessManager *networkAccessManager)
 {
     Q_ASSERT(networkAccessManager);
@@ -48,7 +49,7 @@ void WadoRequest::cancel()
 {
     if (m_reply && QApplication::activeWindow())    // if there is no active window, m_reply may have been deleted in another thread
     {
-        m_reply->abort();
+        QMetaObject::invokeMethod(m_reply, &QNetworkReply::abort);  // indirect call because m_reply lives in another thread
     }
 }
 

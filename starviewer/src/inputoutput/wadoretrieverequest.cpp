@@ -78,6 +78,7 @@ void WadoRetrieveRequest::startInternal()
     connect(m_reply, &QNetworkReply::finished, this, &WadoRetrieveRequest::onReplyFinished, Qt::DirectConnection);
 }
 
+// This is run in the WADO thread.
 bool WadoRetrieveRequest::ensureEnoughHardDiskSpace()
 {
     // Copied and adapted from RetrieveDICOMFilesFromPACSJob::thereIsAvailableSpaceOnHardDisk
@@ -104,6 +105,7 @@ bool WadoRetrieveRequest::ensureEnoughHardDiskSpace()
     return true;
 }
 
+// This is run in the WADO thread.
 void WadoRetrieveRequest::initializeReading()
 {
     QVariant contentTypeVariant = m_reply->header(QNetworkRequest::ContentTypeHeader);
@@ -150,6 +152,7 @@ void WadoRetrieveRequest::initializeReading()
     }
 }
 
+// This is run in the WADO thread.
 bool WadoRetrieveRequest::readPartBoundary()
 {
     if (m_reply->canReadLine())
@@ -179,6 +182,7 @@ bool WadoRetrieveRequest::readPartBoundary()
     return false;
 }
 
+// This is run in the WADO thread.
 bool WadoRetrieveRequest::readPartHeader()
 {
     static const QString ContentType("Content-Type: application/dicom");
@@ -226,6 +230,7 @@ bool WadoRetrieveRequest::readPartHeader()
     return false;
 }
 
+// This is run in the WADO thread.
 bool WadoRetrieveRequest::readPartBody()
 {
     if (!m_wadoInstanceDownloader->hasFinished())
@@ -269,6 +274,7 @@ bool WadoRetrieveRequest::readPartBody()
     return false;
 }
 
+// This is run in the WADO thread.
 void WadoRetrieveRequest::error()
 {
     m_reply->abort();
