@@ -59,12 +59,13 @@ void WadoUriRequest::cancel()
 // This is run in the WADO thread.
 void WadoUriRequest::startInternal()
 {
+    emit started();
+
     if (!ensureEnoughHardDiskSpace())
     {
+        emit finished();
         return;
     }
-
-    emit started();
 
     obtainSopInstanceUids();
 }

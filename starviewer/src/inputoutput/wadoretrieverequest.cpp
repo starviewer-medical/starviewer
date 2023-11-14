@@ -48,8 +48,11 @@ const QString& WadoRetrieveRequest::getSopInstanceUid() const
 // This is run in the WADO thread.
 void WadoRetrieveRequest::startInternal()
 {
+    emit started();
+
     if (!ensureEnoughHardDiskSpace())
     {
+        emit finished();
         return;
     }
 
@@ -71,8 +74,6 @@ void WadoRetrieveRequest::startInternal()
     QUrl url(urlString);
     QNetworkRequest request(url);
     m_reply = m_networkAccessManager->get(request);
-
-    emit started();
 
     connect(m_reply, &QNetworkReply::readyRead, this, &WadoRetrieveRequest::onReadyRead, Qt::DirectConnection);
     connect(m_reply, &QNetworkReply::finished, this, &WadoRetrieveRequest::onReplyFinished, Qt::DirectConnection);
