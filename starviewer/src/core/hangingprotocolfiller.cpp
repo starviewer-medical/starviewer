@@ -203,6 +203,11 @@ void HangingProtocolFiller::fillImageSetWithStudyPrivate(HangingProtocolImageSet
 
 void HangingProtocolFiller::fillImageSetWithSeries(HangingProtocolImageSet *imageSet, Series *series)
 {
+    if (!series->hasImages())
+    {
+        return;
+    }
+
     if (imageSet->getHangingProtocol()->getAllDifferent() && m_usedSeries.contains(series))
     {
         return;
