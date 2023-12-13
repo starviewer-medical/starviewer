@@ -2,6 +2,7 @@
 #define STUDYTESTHELPER_H
 
 #include <QString>
+#include <QVector>
 
 namespace udg{
     class Study;
@@ -16,12 +17,15 @@ public:
     /// Torna un Study amb UID 1 amb el número de series i imatges en cada sèrie indicat.
     static udg::Study* createStudy(int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
 
+    /// Create a study with different number of images in each series.
+    static udg::Study* createStudy(int numberOfSeries, QVector<int> numberOfImagesInEachSeries);
+
     /// Torna un Study amb les dades passades per paràmetre, i el número de series Indicat.
     static udg::Study* createStudyByUID(QString instanceUID, int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
 
     /// Torna un Study amb les dades passades per paràmetre, i el número de series Indicat.
-    static udg::Study* createStudyWithDescriptionAndSeriesModality(QString description, QString modality, int numberOfSeriesToAddToStudy = 0, int numberOfImagesToAddToSeries = 0);
-
+    static udg::Study* createStudyWithDescriptionAndSeriesModality(QString description, QString modality, int numberOfSeriesToAddToStudy = 0,
+                                                                   int numberOfImagesToAddToSeries = 0);
 
     /// Elimina els objectes de l'estructura Patient/Study/Series/Image que pertany la serie
     static void cleanUp(udg::Study *study);

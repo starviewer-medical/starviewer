@@ -30,6 +30,7 @@ set(SOURCES
     test_filteroutput.cpp
     test_griditerator.cpp
     test_hangingprotocol.cpp
+    test_hangingprotocolfiller.cpp
     test_hangingprotocolimagesetrestriction.cpp
     test_hangingprotocolimagesetrestrictionexpression.cpp
     test_hangingprotocolmanager.cpp

@@ -13,6 +13,22 @@ Study* StudyTestHelper::createStudy(int numberOfSeriesToAddToStudy, int numberOf
     return createStudyByUID("1", numberOfSeriesToAddToStudy, numberOfImagesToAddToSeries);
 }
 
+Study* StudyTestHelper::createStudy(int numberOfSeries, QVector<int> numberOfImagesInEachSeries)
+{
+    Study *study = new Study();
+
+    study->setInstanceUID("1");
+
+    for (int index = 0; index < numberOfSeries; index++)
+    {
+        Series *series = SeriesTestHelper::createSeriesByUID(QString::number(index), numberOfImagesInEachSeries[index]);
+        series->setSeriesNumber(QString::number(index));
+        study->addSeries(series);
+    }
+
+    return study;
+}
+
 Study* StudyTestHelper::createStudyByUID(QString instanceUID, int numberOfSeriesToAddToStudy, int numberOfImagesToAddToSeries)
 {
     Study *study = new Study();
@@ -21,7 +37,9 @@ Study* StudyTestHelper::createStudyByUID(QString instanceUID, int numberOfSeries
 
     for (int index = 0; index < numberOfSeriesToAddToStudy; index++)
     {
-        study->addSeries(SeriesTestHelper::createSeriesByUID(QString::number(index), numberOfImagesToAddToSeries));
+        Series *series = SeriesTestHelper::createSeriesByUID(QString::number(index), numberOfImagesToAddToSeries);
+        series->setSeriesNumber(QString::number(index));
+        study->addSeries(series);
     }
 
     return study;
