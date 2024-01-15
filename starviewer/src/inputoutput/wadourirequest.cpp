@@ -231,24 +231,42 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
 
     if (reply->error() == QNetworkReply::NoError)
     {
-        QUrlQuery query(reply->url().query());
-        WadoInstanceDownloader wadoInstanceDownloader;
-        wadoInstanceDownloader.setStudyInstanceUid(m_studyInstanceUid);
-        wadoInstanceDownloader.setSeriesInstanceUid(query.queryItemValue("seriesUID"));
-        wadoInstanceDownloader.setSopInstanceUid(query.queryItemValue("objectUID"));
-        wadoInstanceDownloader.setInstanceSize(reply->bytesAvailable());
-        wadoInstanceDownloader.setDataSource(reply);
-        wadoInstanceDownloader.read();
-
-        emit instanceDownloaded(++m_numberOfInstancesDownloaded);
-
-        if (!m_downloadedSeriesUids.contains(wadoInstanceDownloader.getSeriesInstanceUid()))
+        try
         {
-            m_downloadedSeriesUids.insert(wadoInstanceDownloader.getSeriesInstanceUid());
-            emit seriesDownloaded(m_downloadedSeriesUids.size());
-        }
+            QUrlQuery query(reply->url().query());
+            WadoInstanceDownloader wadoInstanceDownloader;
+            wadoInstanceDownloader.setStudyInstanceUid(m_studyInstanceUid);
+            wadoInstanceDownloader.setSeriesInstanceUid(query.queryItemValue("seriesUID"));
+            wadoInstanceDownloader.setSopInstanceUid(query.queryItemValue("objectUID"));
+            wadoInstanceDownloader.setInstanceSize(reply->bytesAvailable());
+            wadoInstanceDownloader.setDataSource(reply);
+            wadoInstanceDownloader.read();
 
-        m_downloadedFilesProcessor->processFile(wadoInstanceDownloader.getPath());
+            emit instanceDownloaded(++m_numberOfInstancesDownloaded);
+
+            if (!m_downloadedSeriesUids.contains(wadoInstanceDownloader.getSeriesInstanceUid()))
+            {
+                m_downloadedSeriesUids.insert(wadoInstanceDownloader.getSeriesInstanceUid());
+                emit seriesDownloaded(m_downloadedSeriesUids.size());
+            }
+
+            m_downloadedFilesProcessor->processFile(wadoInstanceDownloader.getPath());
+        }
+        catch (const std::runtime_error &error)
+        {
+            m_status = Status::Warnings;
+
+            if (m_errorsDescription.size() < 1000)  // avoid excessive errors accumulation
+            {
+                m_errorsDescription += QString("\n") + error.what();
+            }
+            else if (!m_errorsDescription.endsWith("…"))
+            {
+                m_errorsDescription += "\n…";
+            }
+
+            ERROR_LOG(m_errorsDescription);
+        }
     }
     else if (reply->error() == QNetworkReply::OperationCanceledError)
     {
@@ -307,7 +325,7 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
             {
                 if (!m_errorsDescription.isEmpty())
                 {
-                    m_errorsDescription = tr("Some images have been downloaded. However there have been some errors:\n\n") + m_errorsDescription;
+                    m_errorsDescription = tr("Some images have been downloaded. However there have been some errors:\n") + m_errorsDescription;
                     // TODO unify error messages with WADO-RS and DIMSE
                 }
             }

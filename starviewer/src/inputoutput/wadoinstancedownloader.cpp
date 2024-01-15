@@ -99,7 +99,7 @@ void WadoInstanceDownloader::read()
 
         if (!m_file.isOpen())
         {
-            throw std::runtime_error(qPrintable(QObject::tr("Can't save file to disk.")));
+            throw std::runtime_error(qPrintable(QObject::tr("Can't save file %1 to disk.").arg(m_file.fileName())));
         }
     }
 
@@ -157,12 +157,12 @@ void WadoInstanceDownloader::createFile()
         path += randomFileName;
     }
 
+    m_file.setFileName(path);
+
     if (!createFileDirectory(path))
     {
         return;
     }
-
-    m_file.setFileName(path);
 
     if (!m_file.open(QIODevice::WriteOnly))
     {
