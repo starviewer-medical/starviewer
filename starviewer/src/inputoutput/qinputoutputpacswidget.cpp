@@ -365,6 +365,8 @@ void QInputOutputPacsWidget::onRetrieveSuccess(StudyOperationResult *result, Act
         default:
             break;
     }
+
+    result->deleteLater();
 }
 
 void QInputOutputPacsWidget::onRetrievePartialSuccess(StudyOperationResult *result, ActionsAfterRetrieve action)
@@ -376,6 +378,7 @@ void QInputOutputPacsWidget::onRetrievePartialSuccess(StudyOperationResult *resu
 void QInputOutputPacsWidget::onRetrieveError(StudyOperationResult *result)
 {
     QMessageBox::critical(this, ApplicationNameString, result->getErrorText());
+    result->deleteLater();
 }
 
 void QInputOutputPacsWidget::retrieve(const PacsDevice &pacsDevice, ActionsAfterRetrieve actionAfterRetrieve, Study *studyToRetrieve,
@@ -393,7 +396,7 @@ void QInputOutputPacsWidget::retrieve(const PacsDevice &pacsDevice, ActionsAfter
         onRetrievePartialSuccess(result, actionAfterRetrieve);
     });
     connect(result, &StudyOperationResult::finishedWithError, this, &QInputOutputPacsWidget::onRetrieveError);
-    connect(result, &StudyOperationResult::ended, result, &StudyOperationResult::deleteLater);
+    connect(result, &StudyOperationResult::cancelled, result, &StudyOperationResult::deleteLater);
 }
 
 bool QInputOutputPacsWidget::areValidQueryParameters(DicomMask *maskToQuery, QList<PacsDevice> pacsToQuery)
