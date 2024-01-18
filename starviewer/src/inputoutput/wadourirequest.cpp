@@ -325,7 +325,13 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
             {
                 if (!m_errorsDescription.isEmpty())
                 {
-                    m_errorsDescription = tr("Some images have been downloaded. However there have been some errors:\n") + m_errorsDescription;
+                    m_errorsDescription = tr("<p>Some images have been downloaded. However there have been some errors. Maybe those images are missing or "
+                                             "corrupted in PACS.")
+                                        + tr("<p><b>Be aware that if a series is missing some images, 3D reconstructions may not be accurate and measurements "
+                                             "on reconstructed planes may be wrong. Check the number of images in each series before using it for such "
+                                             "purposes. Refer to the user guide for more information.</b>")
+                                        + tr("<p>Details:")
+                                        + m_errorsDescription.replace('\n', "<br>");
                     // TODO unify error messages with WADO-RS and DIMSE
                 }
             }

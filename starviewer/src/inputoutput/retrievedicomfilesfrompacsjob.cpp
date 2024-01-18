@@ -376,8 +376,11 @@ QString RetrieveDICOMFilesFromPACSJob::getStatusDescription()
         case PACSRequestStatus::RetrieveSomeDICOMFilesFailed:
             message = tr("Unable to retrieve some images from study %1 of patient %2 from PACS %3. Maybe those images are missing or corrupted in PACS.")
                 .arg(studyID, patientName, pacsAETitle);
-            message += "\n";
-            message += errorDetails;
+            message += tr("<p><b>Be aware that if a series is missing some images, 3D reconstructions may not be accurate and measurements on reconstructed "
+                          "planes may be wrong. Check the number of images in each series before using it for such purposes. Refer to the user guide for more "
+                          "information.</b>");
+            message += errorDetails.replace('\n', "<br>");
+
             break;
         default:
             message = tr("Cannot retrieve images from study %1 of patient %2 from PACS %3 due to an unknown error.")
