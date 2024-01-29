@@ -159,8 +159,9 @@
     </message>
     <message>
         <location filename="wadoinstancedownloader.cpp" line="102"/>
-        <source>Can&apos;t save file to disk.</source>
-        <translation>No se puede guardar el archivo en disco.</translation>
+        <source>Can&apos;t save file %1 to disk.</source>
+        <oldsource>Can&apos;t save file to disk.</oldsource>
+        <translation>No se puede guardar el archivo %1 en disco.</translation>
     </message>
     <message>
         <location filename="windowsfirewallaccess.cpp" line="84"/>
@@ -1963,18 +1964,18 @@ Close all the others %1 windows and try again.</oldsource>
         <translation>Seleccione un estudio para descargar y visualizar.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="404"/>
+        <location filename="qinputoutputpacswidget.cpp" line="407"/>
         <source>Please select a PACS to query.</source>
         <oldsource>Please select a PACS to query</oldsource>
         <translation>Seleccione un PACS a consultar.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="411"/>
+        <location filename="qinputoutputpacswidget.cpp" line="414"/>
         <source>No search fields were filled.</source>
         <translation>No se han introducido criterios de búsqueda.</translation>
     </message>
     <message>
-        <location filename="qinputoutputpacswidget.cpp" line="412"/>
+        <location filename="qinputoutputpacswidget.cpp" line="415"/>
         <source>The query can take a long time.
 Do you want continue?</source>
         <translation>La consulta puede tardar bastante.
@@ -3074,7 +3075,12 @@ Error details:
         <translation>No se han podido descargar algunas de las imágenes del estudio %1 del paciente %2 del PACS %3. Puede ser que estas imágenes no existan en el PACS o que estén corruptas.</translation>
     </message>
     <message>
-        <location filename="retrievedicomfilesfrompacsjob.cpp" line="383"/>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="379"/>
+        <source>&lt;p&gt;&lt;b&gt;Be aware that if a series is missing some images, 3D reconstructions may not be accurate and measurements on reconstructed planes may be wrong. Check the number of images in each series before using it for such purposes. Refer to the user guide for more information.&lt;/b&gt;</source>
+        <translation>&lt;p&gt;&lt;b&gt;Tenga en cuenta que si a una serie le faltan algunas imágenes, las reconstrucciones en 3D podrían no ser correctas y les mediciones en planos reconstruidos pueden ser incorrectas. Compruebe el número de imágenes de cada serie antes de usarla con esta finalidad. Consulte el manual de usuario pera más información.&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="retrievedicomfilesfrompacsjob.cpp" line="386"/>
         <source>Cannot retrieve images from study %1 of patient %2 from PACS %3 due to an unknown error.</source>
         <oldsource>An unknown error has occurred and thus retrieval of images from study %1 of patient %2 from PACS %3 could not be performed.</oldsource>
         <translation>No se han podido descargar las imágenes del estudio %1 del paciente %2 del PACS %3 debido a un error desconocido.</translation>
@@ -3162,32 +3168,47 @@ Details:
 <context>
     <name>udg::WadoRetrieveRequest</name>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="94"/>
+        <location filename="wadoretrieverequest.cpp" line="96"/>
         <source>Not enough space to download studies.</source>
         <translation>No hay suficiente espacio para descargar estudios.</translation>
     </message>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="98"/>
+        <location filename="wadoretrieverequest.cpp" line="100"/>
         <source>Error when trying to delete studies to free up space in disk.</source>
         <translation>Error intentando borrar estudios para liberar espacio en disco.</translation>
     </message>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="276"/>
+        <location filename="wadoretrieverequest.cpp" line="283"/>
         <source>Invalid or unsupported server response.</source>
         <translation>Respuesta del servidor no válida o no soportada.</translation>
     </message>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="362"/>
+        <location filename="wadoretrieverequest.cpp" line="369"/>
         <source>Download ended prematurely for an unknown reason.</source>
         <translation>La descarga ha finalizado prematuramente por una razón desconocida.</translation>
     </message>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="386"/>
+        <location filename="wadoretrieverequest.cpp" line="385"/>
+        <source>&lt;p&gt;Some images have been downloaded. However there have been some errors. Maybe those images are missing or corrupted in PACS.</source>
+        <translation>&lt;p&gt;Se han descargado algunas imágenes pero ha habido algunos errores. Puede que estas no se encuentren en el PACs o estén corruptas.</translation>
+    </message>
+    <message>
+        <location filename="wadoretrieverequest.cpp" line="387"/>
+        <source>&lt;p&gt;&lt;b&gt;Be aware that if a series is missing some images, 3D reconstructions may not be accurate and measurements on reconstructed planes may be wrong. Check the number of images in each series before using it for such purposes. Refer to the user guide for more information.&lt;/b&gt;</source>
+        <translation>&lt;p&gt;&lt;b&gt;Tenga en cuenta que si a una serie le faltan algunas imágenes, las reconstrucciones en 3D podrían no ser correctas y les mediciones en planos reconstruidos pueden ser incorrectas. Compruebe el número de imágenes de cada serie antes de usarla con esta finalidad. Consulte el manual de usuario pera más información.&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="wadoretrieverequest.cpp" line="390"/>
+        <source>&lt;p&gt;Details:</source>
+        <translation>&lt;p&gt;Detalles:</translation>
+    </message>
+    <message>
+        <location filename="wadoretrieverequest.cpp" line="400"/>
         <source>Can&apos;t read correctly data from downloaded images. They may be corrupt.</source>
         <translation>No se pueden leer datos correctamente de las imágenes descargadas. Puede que estén corruptas.</translation>
     </message>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="390"/>
+        <location filename="wadoretrieverequest.cpp" line="404"/>
         <source>Database error when saving downloaded images.</source>
         <translation>Error en la base de datos al guardar las imágenes descargadas.</translation>
     </message>
@@ -3203,41 +3224,47 @@ Details:
 <context>
     <name>udg::WadoUriRequest</name>
     <message>
-        <location filename="wadourirequest.cpp" line="123"/>
+        <location filename="wadourirequest.cpp" line="88"/>
         <source>Not enough space to download studies.</source>
         <translation>No hay suficiente espacio para descargar estudios.</translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="127"/>
+        <location filename="wadourirequest.cpp" line="92"/>
         <source>Error when trying to delete studies to free up space in disk.</source>
         <translation>Error intentando borrar estudios para liberar espacio en disco.</translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="185"/>
+        <location filename="wadourirequest.cpp" line="213"/>
         <source>Could not obtain the list of files in the study.</source>
         <translation>No se ha podido obtener la lista de archivos del estudio.</translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="263"/>
+        <location filename="wadourirequest.cpp" line="320"/>
         <source>Can&apos;t read correctly data from downloaded images. They may be corrupt.</source>
         <translation>No se pueden leer datos correctamente de las imágenes descargadas. Puede que estén corruptas.</translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="267"/>
+        <location filename="wadourirequest.cpp" line="324"/>
         <source>Database error when saving downloaded images.</source>
         <translation>Error en la base de datos al guardar las imágenes descargadas.</translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="276"/>
-        <source>Some images have been downloaded. However there have been some errors:
-
-</source>
-        <translation>Se han descargado algunas imágenes, pero ha habido algunos errores:
-
-</translation>
+        <location filename="wadourirequest.cpp" line="333"/>
+        <source>&lt;p&gt;Some images have been downloaded. However there have been some errors. Maybe those images are missing or corrupted in PACS.</source>
+        <translation>&lt;p&gt;Se han descargado algunas imágenes pero ha habido algunos errores. Puede que estas no se encuentren en el PACs o estén corruptas.</translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="288"/>
+        <location filename="wadourirequest.cpp" line="335"/>
+        <source>&lt;p&gt;&lt;b&gt;Be aware that if a series is missing some images, 3D reconstructions may not be accurate and measurements on reconstructed planes may be wrong. Check the number of images in each series before using it for such purposes. Refer to the user guide for more information.&lt;/b&gt;</source>
+        <translation>&lt;p&gt;&lt;b&gt;Tenga en cuenta que si a una serie le faltan algunas imágenes, las reconstrucciones en 3D podrían no ser correctas y les mediciones en planos reconstruidos pueden ser incorrectas. Compruebe el número de imágenes de cada serie antes de usarla con esta finalidad. Consulte el manual de usuario pera más información.&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="wadourirequest.cpp" line="338"/>
+        <source>&lt;p&gt;Details:</source>
+        <translation>&lt;p&gt;Detalles:</translation>
+    </message>
+    <message>
+        <location filename="wadourirequest.cpp" line="352"/>
         <source>Could not download any image. Errors:
 
 </source>
