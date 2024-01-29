@@ -37,6 +37,7 @@
     <t>2920</t>
     <t>2983</t>
     <t>3032</t>
+    <t>3076</t>
    </im>
    <fx>
     <d>S'ha solucionat un problema de rendiment a l'hora de llegir overlays en imatges multiframe.</d>
@@ -56,7 +57,7 @@
     <t>2910</t>
    </fx>
    <fx>
-    <d>S'ha arreglat un problema que impedia obrir el menú de seleccio d'estudis en un visor mentre estava carregant una sèrie.</d>
+    <d>S'ha arreglat un problema que impedia obrir el menú de selecció d'estudis en un visor mentre estava carregant una sèrie.</d>
     <t>2978</t>
    </fx>
    <fx>
@@ -72,6 +73,10 @@
     <t>3013</t>
    </fx>
    <fx>
+    <d>S'ha resolt un problema pel qual un hanging protocol podia quedar buit.</d>
+    <t>3068</t>
+   </fx>
+   <fx>
     <d>Altres correccions menors.</d>
     <t>2911</t>
     <t>2941</t>
@@ -80,6 +85,7 @@
     <t>3033</t>
     <t>3034</t>
     <t>3035</t>
+    <t>3060</t>
    </fx>
   </changes>
  </release>
