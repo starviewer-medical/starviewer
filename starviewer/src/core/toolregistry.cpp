@@ -18,6 +18,7 @@
 #include "logging.h"
 // Tools registrades
 #include "zoomtool.h"
+#include "zoomwheeltool.h"
 #include "slicingwheeltool.h"
 #include "slicingmousetool.h"
 #include "slicingkeyboardtool.h"
@@ -72,6 +73,10 @@ Tool* ToolRegistry::getTool(const QString &toolName, QViewer *viewer)
     if (toolName == "ZoomTool")
     {
         tool = new ZoomTool(viewer);
+    }
+    else if (toolName == "ZoomWheelTool")
+    {
+        tool = new ZoomWheelTool(viewer);
     }
     else if (toolName == "SlicingMouseTool")
     {
@@ -249,6 +254,14 @@ QAction* ToolRegistry::getToolAction(const QString &toolName)
         toolAction->setIcon(QIcon(":/images/icons/edit-find.svg"));
         toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ZoomTool));
         statusTip = tr("Enable/Disable Zoom tool");
+        toolTip = toolAction->text();
+    }
+    else if (toolName == "ZoomWheelTool")
+    {
+        toolAction->setText(tr("Zoom"));
+        toolAction->setIcon(QIcon(":/images/icons/edit-find.svg"));
+        toolAction->setShortcuts(ShortcutManager::getShortcuts(Shortcuts::ZoomWheelTool));
+        statusTip = tr("Enable/Disable Zoom Wheel tool");
         toolTip = toolAction->text();
     }
     else if (toolName == "TranslateTool")

@@ -25,6 +25,7 @@ const QString Shortcuts::SlicingMouseTool(ShortcutsBase + "SlicingMouseTool");
 const QString Shortcuts::SlicingWheelTool(ShortcutsBase + "SlicingWheelTool");
 const QString Shortcuts::WindowLevelTool(ShortcutsBase + "WindowLevelTool");
 const QString Shortcuts::ZoomTool(ShortcutsBase + "ZoomTool");
+const QString Shortcuts::ZoomWheelTool(ShortcutsBase + "ZoomWheelTool");
 const QString Shortcuts::SeedTool(ShortcutsBase + "SeedTool");
 const QString Shortcuts::MagicROITool(ShortcutsBase + "MagicROITool");
 const QString Shortcuts::ScreenShotTool(ShortcutsBase + "ScreenShotTool");
@@ -132,6 +133,10 @@ void Shortcuts::init()
     shortcutsList.clear();
     shortcutsList.append(QString("Z"));
     settingsRegistry->addSetting(ZoomTool, shortcutsList);
+
+    shortcutsList.clear();
+    shortcutsList.append(QString("Z"));
+    settingsRegistry->addSetting(ZoomWheelTool, shortcutsList);
 
     shortcutsList.clear();
     shortcutsList.append(QString("X"));

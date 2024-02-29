@@ -183,6 +183,9 @@ void Drawer::erasePrimitive(DrawerPrimitive *primitive)
         return;
     }
 
+    // Notify that a primitive will be erased and send its pointer
+    emit primitiveUpdated(primitive, false);
+
     // Mirem si està en algun grup
     QMutableMapIterator<QString, DrawerPrimitive*> groupsIterator(m_primitiveGroups);
     while (groupsIterator.hasNext())
@@ -477,6 +480,9 @@ void Drawer::renderPrimitive(DrawerPrimitive *primitive)
         {
             m_2DViewer->render();
         }
+
+        // Notify that a primitive has been drawn and send its pointer
+        emit primitiveUpdated(primitive, true);
     }
 }
 

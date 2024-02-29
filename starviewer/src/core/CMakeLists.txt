@@ -379,6 +379,7 @@ set(SOURCES
     zoomfactorsignaltosyncactionmapper.cpp
     zoomfactorsyncaction.cpp
     zoomtool.cpp
+    zoomwheeltool.cpp
     itkQtAdaptor.h  # needed so that it is found by automoc
 )
 
@@ -389,6 +390,14 @@ if(WIN32)
 elseif(UNIX AND NOT APPLE)
     list(APPEND SOURCES
         linuxsysteminformation.cpp
+    )
+endif()
+
+if(USE_DEEPLEARNING)
+    list(APPEND SOURCES
+        deeplearningsegmentation.cpp
+        deeplearningtensorflowsegmentation.cpp
+        deeplearningtorchsegmentation.cpp
     )
 endif()
 
@@ -499,6 +508,19 @@ target_link_libraries(core gdcmCommon gdcmMSFF vtkgdcm)
 
 find_package(KF5ThreadWeaver REQUIRED)
 target_link_libraries(core KF5::ThreadWeaver)
+
+if(USE_DEEPLEARNING)
+    target_include_directories(core PUBLIC ${SDK_INSTALL_DIR}/tensorflow/include)
+    target_link_directories(core PUBLIC ${SDK_INSTALL_DIR}/tensorflow/lib)
+    target_link_libraries(core tensorflow)
+
+    # Needed here to avoid errors with "target_link_libraries(inputoutput core)" and similar
+    # Example error:
+    # Error evaluating generator expression: $<TARGET_PROPERTY:torch,INTERFACE_INCLUDE_DIRECTORIES> Target "torch" not found.
+    list(APPEND CMAKE_PREFIX_PATH ${SDK_INSTALL_DIR}/libtorch)
+    find_package(Torch REQUIRED)
+    target_link_libraries(core ${TORCH_LIBRARIES})
+endif()
 
 if(WIN32)
     target_link_libraries(core glu32.lib opengl32.lib wbemuuid.lib)

@@ -72,6 +72,11 @@ public:
     /// Ens diu el total de primitives dibuixades en totes les vistes
     int getNumberOfDrawnPrimitives();
 
+signals:
+    /// Notifies that a primitive has been drawn (boolean to true) or erased
+    /// (boolean to false) and sends its pointer
+    void primitiveUpdated(DrawerPrimitive*, bool);
+
 public slots:
     /// Deixa de mantenir la primitiva dins de la seva estructura interna
     /// i l'elimina de l'escena on s'estava pintant

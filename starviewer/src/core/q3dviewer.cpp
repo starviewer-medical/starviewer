@@ -142,6 +142,11 @@ vtkPlanes* Q3DViewer::getClippingPlanes() const
     return m_clippingPlanes;
 }
 
+vtkVolume* Q3DViewer::getVtkVolume() const
+{
+    return m_vtkVolume;
+}
+
 void Q3DViewer::setInput(Volume *volume)
 {
     setCursor(Qt::WaitCursor);

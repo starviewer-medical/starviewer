@@ -31,6 +31,7 @@ public:
     static const QString SlicingWheelTool;
     static const QString WindowLevelTool;
     static const QString ZoomTool;
+    static const QString ZoomWheelTool;
     static const QString SeedTool;
     static const QString MagicROITool;
     static const QString ScreenShotTool;

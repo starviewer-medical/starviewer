@@ -1,5 +1,6 @@
 if(NOT STARVIEWER_CE AND NOT STARVIEWER_LITE)
     add_subdirectory(angiosubstraction)
+    add_subdirectory(dlsegmentation)
     add_subdirectory(diffusionperfusionsegmentation)
     add_subdirectory(edemasegmentation)
     add_subdirectory(example)
