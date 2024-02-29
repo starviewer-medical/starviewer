@@ -57,6 +57,15 @@ Q_DECLARE_METATYPE(udg::DeepLearningSegmentation::ActivationFunction);
 
 namespace udg {
 
+struct QDLSegmentationExtension::ModelParameters {
+    QString path;
+    QVector<int> inputDimensions;
+    bool inputNormalised;
+    int inputChannels;
+    int outputLabels;
+    udg::DeepLearningSegmentation::ActivationFunction outputActivationFunction;
+};
+
 QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     : QWidget(parent)
 {
@@ -71,10 +80,19 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     m_viewersSplitter->setSizes({width, width});
 
     // Add predefined trained models
-    // m_predefinedTrainedModels.append({"Name", "path/to/model"});
-    m_predefinedTrainedModels.append({"Custom", ""}); // must be the last one
 
-    for (const QPair<QString, QString>& model : m_predefinedTrainedModels)
+    // m_predefinedTrainedModels.append({"Name", {
+    //     "path/to/model",
+    //     {inputDimX, inputDimY, inputDimZ},
+    //     inputNormalised,
+    //     inputChannels,
+    //     outputLabels,
+    //     outputActivationFunction
+    // }});
+
+    m_predefinedTrainedModels.append({"Custom", {}}); // must be the last one
+
+    for (const QPair<QString, ModelParameters>& model : m_predefinedTrainedModels)
     {
         m_trainedModelPredefinedCombo->addItem(model.first);
     }
@@ -91,8 +109,9 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     // Add activation functions
     m_outputParamFunctionCombo->addItem("Sigmoid", DeepLearningSegmentation::ActivationFunction::SIGMOID);
     m_outputParamFunctionCombo->addItem("Softmax", DeepLearningSegmentation::ActivationFunction::SOFTMAX);
-//    m_outputParamFunctionCombo->addItem("None");
-    m_outputParamFunctionCombo->setCurrentIndex(1); // softmax default
+
+    // Set interface parameters according to default predefined model
+    predefinedTrainedModelChanged(m_trainedModelPredefinedCombo->currentIndex());
 
     m_croppingArea = nullptr;
     m_sliceRange = {0, 0}; // only first by default
@@ -264,13 +283,23 @@ void QDLSegmentationExtension::browseCustomTrainedModel()
 void QDLSegmentationExtension::predefinedTrainedModelChanged(int index)
 {
     // If "custom" is selected, show text box to enter the trained model path;
-    // hide it otherwise
+    // otherwise, hide it and set the corresponding interface parameters
+    // according to the predefined trained model selected
     if (index == m_trainedModelPredefinedCombo->count()-1)
     {
         m_trainedModelCustomWidget->show();
     }
     else
     {
+        m_inputParamDimXSpinBox->setValue(m_predefinedTrainedModels.at(index).second.inputDimensions[0]);
+        m_inputParamDimYSpinBox->setValue(m_predefinedTrainedModels.at(index).second.inputDimensions[1]);
+        m_inputParamDimZSpinBox->setValue(m_predefinedTrainedModels.at(index).second.inputDimensions[2]);
+        m_inputParamNormalisationCheckBox->setChecked(m_predefinedTrainedModels.at(index).second.inputNormalised);
+        m_inputParamChannelsSpinBox->setValue(m_predefinedTrainedModels.at(index).second.inputChannels);
+        m_outputParamLabelsSpinBox->setValue(m_predefinedTrainedModels.at(index).second.outputLabels);
+        int comboId = m_outputParamFunctionCombo->findData(m_predefinedTrainedModels.at(index).second.outputActivationFunction);
+        m_outputParamFunctionCombo->setCurrentIndex(comboId);
+
         m_trainedModelCustomWidget->hide();
     }
 }
@@ -475,7 +504,7 @@ void QDLSegmentationExtension::apply()
     else
     {
         int index = m_trainedModelPredefinedCombo->currentIndex();
-        path = m_predefinedTrainedModels.at(index).second;
+        path = m_predefinedTrainedModels.at(index).second.path;
     }
 
     // Check the library used to train the deep-learning model and create the

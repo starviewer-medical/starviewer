@@ -79,6 +79,9 @@ public:
     void setPatient(Patient *patient);
 
 private:
+
+    struct ModelParameters; // needed to avoid include
+
     /// Create connections between signals and slots.
     void createConnections();
 
@@ -117,8 +120,8 @@ private:
     void initialize3DViewer(Volume* mainVolume);
 
 
-    /// Predefined trained models (name and path to model).
-    QVector<QPair<QString, QString>> m_predefinedTrainedModels;
+    /// Predefined trained models (name and model parameters).
+    QVector<QPair<QString, ModelParameters>> m_predefinedTrainedModels;
     /// Cropping area defined as a 2D polygon.
     QPointer<DrawerPolygon> m_croppingArea;
     /// Slice range to be segmented (both included).
