@@ -121,13 +121,11 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     m_resliceAxesCosines->Identity();
     m_DLSegmentation = nullptr;
 
-    // Create and set dummy voxel data for the mask with only 2 scalars (0 and
-    // 1), thus ensuring the transfer function will be correctly set later
+    // Create and set dummy voxel data for the mask with only 1 scalar, thus
+    // ensuring the transfer function will be correctly set later
     m_maskData = vtkSmartPointer<vtkImageData>::New();
-    m_maskData->SetDimensions(1, 1, 2); // only 2 scalars along Z axis
+    m_maskData->SetDimensions(1, 1, 1); // only 1 scalar
     m_maskData->AllocateScalars(VTK_SHORT, 1);
-    m_maskData->SetScalarComponentFromDouble(0, 0, 0, 0, 0); // scalar 0
-    m_maskData->SetScalarComponentFromDouble(0, 0, 1, 0, 0); // scalar 1
 
     createConnections();
     initializeTools();
@@ -377,13 +375,6 @@ void QDLSegmentationExtension::getCroppingBounds(QVector<int>& bounds) const
     }
 }
 
-void QDLSegmentationExtension::renderMask3D()
-{
-    // Render 3D mask volume
-    m_3DMask->SetVisibility(true);
-    m_3DViewer->render();
-}
-
 void QDLSegmentationExtension::renderMask2D()
 {
     // Get main volume from 2D viewer
@@ -417,6 +408,61 @@ void QDLSegmentationExtension::renderMask2D()
     m_2DViewer->getViewer()->render();
 }
 
+void QDLSegmentationExtension::createTransferFunction()
+{
+    // Get number of labels
+    int numLabels = m_outputParamLabelsSpinBox->value();
+
+    // Create a new LUT where 0 is transparent
+    vtkNew<vtkLookupTable> lut;
+    lut->SetNumberOfTableValues(numLabels);
+    lut->SetTableRange(0, numLabels - 1);
+    lut->SetTableValue(0, 0.0, 0.0, 0.0, 0.0); // 0: black, transparent
+
+    // Create a new transfer function where 0 is black
+    vtkNew<vtkColorTransferFunction> color;
+    color->AddRGBPoint(0, 0.0, 0.0, 0.0); // 0: black
+
+    // Assign a colour for each label (equally distributed along hue range)
+    for (int label = 1; label < numLabels; label++) {
+        // Compute HSV for current label (S = V = 1, i.e. max value)
+        double hue = (1.0 / (numLabels - 1)) * (label - 1);
+        double hsv[3] = {hue, 1.0, 1.0};
+
+        // Convert HSV to RGB values
+        double rgb[3];
+        vtkMath::HSVToRGB(hsv, rgb);
+
+        // Set colour to LUT and transfer function
+        lut->SetTableValue(label, rgb[0], rgb[1], rgb[2], 1.0); // 1.0 = opaque
+        color->AddRGBPoint(label, rgb[0], rgb[1], rgb[2]);
+    }
+
+    // Build LUT
+    lut->Build();
+
+    // Set transfer function to 2D mask volume (index 1)
+    TransferFunction transferFunction(lut);
+    m_2DViewer->getViewer()->setVolumeTransferFunction(1, transferFunction);
+
+    // Set fixed WW/WL to 2D mask volume (index 1), so that values > 0 are
+    // displayed (width = label range, level = half label range)
+    // 0: black / numLabels-1: white
+    WindowLevel windowLevel(numLabels - 1, (numLabels - 1) / 2.0);
+    VoiLut voiLut(windowLevel);
+    m_2DViewer->getViewer()->setVoiLutInVolume(1, voiLut);
+
+    // Set new transfer function for 3D mask volume
+    m_3DMask->GetProperty()->SetColor(color);
+}
+
+void QDLSegmentationExtension::renderMask3D()
+{
+    // Render 3D mask volume
+    m_3DMask->SetVisibility(true);
+    m_3DViewer->render();
+}
+
 void QDLSegmentationExtension::initialize2DViewer(Volume *mainVolume)
 {
     // Create a volume for the 2D mask
@@ -431,23 +477,6 @@ void QDLSegmentationExtension::initialize2DViewer(Volume *mainVolume)
     // Set two input volumes to the 2D viewer (fusion: mask can be faded)
     QList<Volume*> volumeList = {mainVolume, m_2DMask};
     m_2DViewer->setInputAsynchronously(volumeList);
-
-    // Create a new LUT where 0 is transparent and 1 is red
-    vtkNew<vtkLookupTable> lut;
-    lut->SetNumberOfTableValues(2);
-    lut->SetTableRange(0.0, 1.0); // only 0s and 1s
-    lut->SetTableValue(0, 0.0, 0.0, 0.0, 0.0); // 0: black, transparent
-    lut->SetTableValue(1, 1.0, 0.0, 0.0, 1.0); // 1: red, opaque
-    lut->Build();
-
-    // Set transfer function to mask volume (index 1), displayed in red
-    TransferFunction transferFunction(lut);
-    m_2DViewer->getViewer()->setVolumeTransferFunction(1, transferFunction);
-
-    // Set fixed WW/WL to mask volume (index 1), so that 1s are displayed
-    WindowLevel windowLevel(1.0, 0.5); // 0 = black, 1 = white
-    VoiLut voiLut(windowLevel);
-    m_2DViewer->getViewer()->setVoiLutInVolume(1, voiLut);
 }
 
 void QDLSegmentationExtension::initialize3DViewer(Volume *mainVolume)
@@ -468,19 +497,13 @@ void QDLSegmentationExtension::initialize3DViewer(Volume *mainVolume)
     // Create a new property for the volume rendering
     vtkNew<vtkVolumeProperty> volumeProperty;
     volumeProperty->ShadeOff();
-    volumeProperty->SetInterpolationTypeToLinear();
+    volumeProperty->SetInterpolationTypeToNearest(); // not linear for mask
 
     // Set opacity to 0 for non-mask voxels
     vtkNew<vtkPiecewiseFunction> compositeOpacity;
     compositeOpacity->AddPoint(0.0, 0.0);
-    compositeOpacity->AddPoint(1.0, 1.0);
+    compositeOpacity->AddPoint(1.0, 1.0); // values >= 1 are all opaque
     volumeProperty->SetScalarOpacity(compositeOpacity);
-
-    // Visualise mask voxels in red
-    vtkNew<vtkColorTransferFunction> color;
-    color->AddRGBPoint(0.0, 0.0, 0.0, 0.0); // 0 value => black
-    color->AddRGBPoint(1.0, 1.0, 0.0, 0.0); // 1 value => red
-    volumeProperty->SetColor(color);
 
     // Create the new volume and assign current volume's orientation
     m_3DMask = vtkSmartPointer<vtkVolume>::New();
@@ -590,6 +613,10 @@ void QDLSegmentationExtension::apply()
 
     // Copy mask voxels (deep copy to avoid losing mask pointer)
     m_maskData->DeepCopy(mask);
+
+    // Create a transfer function according to the number of output labels and
+    // assign it to 2D and 3D mask volumes
+    createTransferFunction();
 
     // Render the modified volume to the 2D and 3D viewers
     renderMask2D();

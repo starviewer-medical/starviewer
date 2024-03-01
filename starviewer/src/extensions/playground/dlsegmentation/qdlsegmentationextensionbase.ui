@@ -179,6 +179,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="m_inputParamDimXSpinBox">
+              <property name="minimum">
+               <number>1</number>
+              </property>
               <property name="maximum">
                <number>99999</number>
               </property>
@@ -196,6 +199,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="m_inputParamDimYSpinBox">
+              <property name="minimum">
+               <number>1</number>
+              </property>
               <property name="maximum">
                <number>99999</number>
               </property>
@@ -215,6 +221,9 @@
              <widget class="QSpinBox" name="m_inputParamDimZSpinBox">
               <property name="enabled">
                <bool>false</bool>
+              </property>
+              <property name="minimum">
+               <number>1</number>
               </property>
               <property name="maximum">
                <number>99999</number>
@@ -267,6 +276,9 @@
             </item>
             <item>
              <widget class="QSpinBox" name="m_inputParamChannelsSpinBox">
+              <property name="minimum">
+               <number>1</number>
+              </property>
               <property name="value">
                <number>3</number>
               </property>
@@ -308,7 +320,10 @@
             <item>
              <widget class="QSpinBox" name="m_outputParamLabelsSpinBox">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
+              </property>
+              <property name="minimum">
+               <number>2</number>
               </property>
               <property name="value">
                <number>2</number>

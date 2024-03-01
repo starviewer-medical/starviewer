@@ -73,6 +73,12 @@ void DeepLearningTensorFlowSegmentation::softmax()
     // Get number of pixels of the mask
     int numPixels = m_modelDims[0] * m_modelDims[1];
 
+    // Check if the number of elements of the tensor is valid
+    if (TF_TensorElementCount(outputValues[0]) < numPixels * m_numLabels) {
+        throw std::exception("ERROR: Failed softmax (the number of tensor"
+            " elements is less than expected; check number of labels)");
+    }
+
     // Get data from output value
     void* buff = TF_TensorData(outputValues[0]);
     float* offsets = (float*)buff;
@@ -81,18 +87,28 @@ void DeepLearningTensorFlowSegmentation::softmax()
     // (batch_size, height, width, channels)
     // When running inference, the label assigned to the pixel is the
     // channel with the highest value.
-    // There are 2 channels per pixel:
+    // There are as many channels per pixel as number of output labels:
     //  - 1st channel: probability for the mask's pixel to be 0
     //  - 2nd channel: probability for the mask's pixel to be 1
-    // Each pixel of the mask will take 0 or 1 depending on which is the
+    //  - 3rd channel: probability for the mask's pixel to be 2
+    //  - ...
+    // Each pixel of the mask will take 0, 1, 2... depending on which is the
     // largest probability. That's what the loop does: if the 1st channel
     // has the largest value, pixel takes 0; if the 2nd channel has the
-    // largest value, pixel takes 1.
+    // largest value, pixel takes 1; and so on.
 
-    // Create the mask from the offsets (values of the two channels)
+    // Create the mask from the offsets (values of the multiple channels)
     for (int i = 0; i < numPixels; i++) {
-        // Assign index of the channel (0/1) with highest value
-        *maskData++ = offsets[i*2] > offsets[i*2+1] ? 0 : 1;
+        // Look for channel (label) with highest probability
+        int maxLabel = 0;
+        for (int label = 1; label < m_numLabels; label++) {
+            if (offsets[i * m_numLabels + label] > offsets[i * m_numLabels + maxLabel]) {
+                maxLabel = label;
+            }
+        }
+
+        // Assign index of the channel (label) with highest value
+        *maskData++ = maxLabel;
     }
 }
 

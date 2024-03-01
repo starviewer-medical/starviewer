@@ -119,6 +119,10 @@ private:
     /// Initialise the 3D viewer with the main volume and the 3D mask.
     void initialize3DViewer(Volume* mainVolume);
 
+    /// Create and assign a transfer function to the 2D and 3D mask volumes
+    /// according to the number of output labels.
+    void createTransferFunction();
+
 
     /// Predefined trained models (name and model parameters).
     QVector<QPair<QString, ModelParameters>> m_predefinedTrainedModels;
