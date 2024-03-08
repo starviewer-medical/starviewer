@@ -123,6 +123,13 @@ private:
     /// according to the number of output labels.
     void createTransferFunction();
 
+    /// Fill mask data with a single value in the provided extent.
+    void fillMaskExtentWithValue(int* extent, short value);
+
+    /// Fill mask data from other image data in the provided extent (extents
+    /// must match).
+    void fillMaskExtentWithData(int* extent, vtkImageData* imageData);
+
 
     /// Predefined trained models (name and model parameters).
     QVector<QPair<QString, ModelParameters>> m_predefinedTrainedModels;
@@ -132,6 +139,8 @@ private:
     QVector<int> m_sliceRange;
     /// Mask data (stores voxel data).
     vtkSmartPointer<vtkImageData> m_maskData;
+    /// Current mask extent.
+    QVector<int> m_maskExtent;
     /// Mask volume for 2D viewer (stores image properties and voxel data).
     QPointer<Volume> m_2DMask;
     /// Mask volume for 3D viewer (stores voxel data).

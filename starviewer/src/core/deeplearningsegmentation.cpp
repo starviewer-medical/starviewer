@@ -218,21 +218,9 @@ void DeepLearningSegmentation::setupInputOutput(vtkImageReslice* reslicer)
     // **
 
     m_outputMask = vtkSmartPointer<vtkImageData>::New();
-    int maskDimZ = m_sliceRange[1] - m_sliceRange[0] + 1;
-    m_outputMask->SetDimensions(m_modelDims[0], m_modelDims[1], maskDimZ + 1); // + 1 = dummy slice
+    m_outputMask->SetDimensions(m_modelDims[0], m_modelDims[1], m_sliceRange[1] - m_sliceRange[0] + 1);
     m_outputMask->SetSpacing(outSpacing);
     m_outputMask->AllocateScalars(VTK_SHORT, 1);
-
-    // Get pointer to first voxel of last slice of output mask (dummy slice)
-    short* maskData = static_cast<short*>(m_outputMask->GetScalarPointer(0, 0, maskDimZ));
-
-    // Compute number of pixels of a single slice of output mask
-    int numPixels = m_modelDims[0] * m_modelDims[1];
-
-    // Initialise scalar values to 0 for last slice of output mask
-    for (int i = 0; i < numPixels; i++) {
-        *maskData++ = 0;
-    }
 }
 
 void DeepLearningSegmentation::resetOutput(vtkImageReslice* reslicer)

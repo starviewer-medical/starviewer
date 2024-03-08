@@ -120,12 +120,7 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     m_resliceAxesCosines = vtkSmartPointer<vtkMatrix4x4>::New();
     m_resliceAxesCosines->Identity();
     m_DLSegmentation = nullptr;
-
-    // Create and set dummy voxel data for the mask with only 1 scalar, thus
-    // ensuring the transfer function will be correctly set later
-    m_maskData = vtkSmartPointer<vtkImageData>::New();
-    m_maskData->SetDimensions(1, 1, 1); // only 1 scalar
-    m_maskData->AllocateScalars(VTK_SHORT, 1);
+    m_maskData = nullptr;
 
     createConnections();
     initializeTools();
@@ -260,8 +255,22 @@ void QDLSegmentationExtension::setPatient(Patient *patient)
 
     // Get patient volume (main volume) and initialize viewers
     Volume* patientVolume = patient->getVolumesList().constFirst();
+
+    // Create mask (same properties as patient volume) and allocate scalars
+    vtkImageData* imageData = patientVolume->getVtkData();
+    m_maskData = vtkSmartPointer<vtkImageData>::New();
+    m_maskData->SetDimensions(imageData->GetDimensions());
+    m_maskData->SetExtent(imageData->GetExtent());
+    m_maskData->SetSpacing(imageData->GetSpacing());
+    m_maskData->SetOrigin(imageData->GetOrigin());
+    m_maskData->AllocateScalars(VTK_SHORT, 1);
+
+    // Initialise viewers with the patient volume and the mask
     initialize2DViewer(patientVolume);
     initialize3DViewer(patientVolume);
+
+    // Add a transfer function to both viewers for the mask
+    createTransferFunction();
 }
 
 void QDLSegmentationExtension::browseCustomTrainedModel()
@@ -349,10 +358,8 @@ void QDLSegmentationExtension::getCroppingBounds(QVector<int>& bounds) const
     // Get input image data
     vtkImageData* imageData = m_3DViewer->getMainInput()->getVtkData();
 
-    // Initialise bounds to full image extent in slice range
+    // Initialise bounds to full image extent
     imageData->GetExtent(bounds.data());
-    bounds[4] = m_sliceRange[0];
-    bounds[5] = m_sliceRange[1];
 
     if (m_croppingArea) {
         // Find bounding box surrounding the cropping area, regardless of the
@@ -362,49 +369,63 @@ void QDLSegmentationExtension::getCroppingBounds(QVector<int>& bounds) const
         double minPoint[3] = {worldBounds[0], worldBounds[2], worldBounds[4]};
         double maxPoint[3] = {worldBounds[1], worldBounds[3], worldBounds[5]};
 
-        // Get voxel coordinates of the bounding box (Z axis coordinates are
-        // defined by the slice range)
-        int ijk[3];
+        // Get voxel coordinates of the minimum and maximum 3D point
+        int ijkMin[3], ijkMax[3];
         double pcoords[3];
-        imageData->ComputeStructuredCoordinates(minPoint, ijk, pcoords);
-        bounds[0] = ijk[0];
-        bounds[2] = ijk[1];
-        imageData->ComputeStructuredCoordinates(maxPoint, ijk, pcoords);
-        bounds[1] = ijk[0];
-        bounds[3] = ijk[1];
+        imageData->ComputeStructuredCoordinates(minPoint, ijkMin, pcoords);
+        imageData->ComputeStructuredCoordinates(maxPoint, ijkMax, pcoords);
+
+        // Assign bounds for each coordinate (ensuring it is in bounds with
+        // the main volume)
+        for (int i = 0; i < 3; i++) {
+            if (ijkMin[i] < bounds[2*i]) {
+                ijkMin[i] = bounds[2*i];
+            }
+            else if (ijkMin[i] > bounds[2*i + 1]) {
+                ijkMin[i] = bounds[2*i + 1];
+            }
+            bounds[2*i] = ijkMin[i];
+
+            if (ijkMax[i] < bounds[2*i]) {
+                ijkMax[i] = bounds[2*i];
+            }
+            else if (ijkMax[i] > bounds[2*i + 1]) {
+                ijkMax[i] = bounds[2*i + 1];
+            }
+            bounds[2*i + 1] = ijkMax[i];
+        }
     }
+
+    // Get current view plane
+    OrthogonalPlane orthogonalPlane = m_2DViewer->getViewer()->getView();
+
+    // The Z axis will differ depending on current view plane
+    int zAxis;
+    switch (orthogonalPlane)
+    {
+        case OrthogonalPlane::YZPlane:
+            zAxis = 0;
+            break;
+
+        case OrthogonalPlane::XZPlane:
+            zAxis = 1;
+            break;
+
+        case OrthogonalPlane::XYPlane:
+        default:
+            zAxis = 2;
+            break;
+    }
+
+    // Set the slice range to the current Z axis bounds
+    bounds[2 * zAxis] = m_sliceRange[0];
+    bounds[2 * zAxis + 1] = m_sliceRange[1];
 }
 
 void QDLSegmentationExtension::renderMask2D()
 {
-    // Get main volume from 2D viewer
-    Volume* mainVolume = m_2DViewer->getViewer()->getMainInput();
-
-    // Clear drawing primitives from the 2D viewer
+    // Clear drawing primitives from the 2D viewer and render 2D mask
     m_2DViewer->getViewer()->clearViewer();
-
-    // Set image properties (such as slice position) from main volume to mask
-    // volume; set only those images matching the mask volume, as the 2D viewer
-    // checks slice position to decide whether or not to display the volume,
-    // i.e. checks if the slice of the mask volume nearest to the current slice
-    // is close enough to be displayed, and the mask volume is considered to
-    // have as many slices as the value of the Z dimension (so its first slice
-    // corresponds to the first slice of the list).
-    QList<Image*> images;
-    for (int slice = m_sliceRange[0]; slice <= m_sliceRange[1]; slice++) {
-        images.append(mainVolume->getImage(slice));
-    }
-    m_2DMask->setImages(images);
-
-    // Set mask data again since setting images removes pixel data
-    m_2DMask->setData(m_maskData);
-
-    // Set same slice to make the 2D viewer know that mask should be visible
-    // (scrolling is responsible for visibility, but previous images had not
-    // been added to mask volume before scrolling to current slice)
-    m_2DViewer->getViewer()->setSlice(m_2DViewer->getViewer()->getCurrentSlice());
-
-    // Render 2D mask
     m_2DViewer->getViewer()->render();
 }
 
@@ -468,10 +489,10 @@ void QDLSegmentationExtension::initialize2DViewer(Volume *mainVolume)
     // Create a volume for the 2D mask
     m_2DMask = new Volume(); // QPointer automatically deleted
 
-    // Set first image (arbitrary) of the main volume to copy some properties
-    m_2DMask->setImages({mainVolume->getImage(0)});
+    // Set image properties from main volume to mask volume
+    m_2DMask->setImages(mainVolume->getImages());
 
-    // Set default mask data with only 2 scalars (0 and 1)
+    // Set mask data (voxel data)
     m_2DMask->setData(m_maskData);
 
     // Set two input volumes to the 2D viewer (fusion: mask can be faded)
@@ -514,6 +535,49 @@ void QDLSegmentationExtension::initialize3DViewer(Volume *mainVolume)
     // Add the new volume (initially hidden)
     m_3DMask->SetVisibility(false);
     m_3DViewer->getRenderer()->AddViewProp(m_3DMask);
+}
+
+void QDLSegmentationExtension::fillMaskExtentWithValue(int* extent, short value)
+{
+    int* maskDims = m_maskData->GetDimensions();
+    int fillDims[3] = {extent[1] - extent[0] + 1,
+                       extent[3] - extent[2] + 1,
+                       extent[5] - extent[4] + 1};
+    int incY = maskDims[0] - fillDims[0];
+    int incZ = (maskDims[1] - fillDims[1]) * maskDims[0];
+    short* maskData = static_cast<short*>(m_maskData->GetScalarPointer(extent[0], extent[2], extent[4]));
+
+    for (int z = extent[4]; z <= extent[5]; z++) {
+        for (int y = extent[2]; y <= extent[3]; y++) {
+            for (int x = extent[0]; x <= extent[1]; x++) {
+                *maskData++ = value;
+            }
+            maskData += incY;
+        }
+        maskData += incZ;
+    }
+}
+
+void QDLSegmentationExtension::fillMaskExtentWithData(int* extent, vtkImageData* imageData)
+{
+    int* maskDims = m_maskData->GetDimensions();
+    int fillDims[3] = {extent[1] - extent[0] + 1,
+                       extent[3] - extent[2] + 1,
+                       extent[5] - extent[4] + 1};
+    int incY = maskDims[0] - fillDims[0];
+    int incZ = (maskDims[1] - fillDims[1]) * maskDims[0];
+    short* maskData = static_cast<short*>(m_maskData->GetScalarPointer(extent[0], extent[2], extent[4]));
+    short* data = static_cast<short*>(imageData->GetScalarPointer());
+
+    for (int z = extent[4]; z <= extent[5]; z++) {
+        for (int y = extent[2]; y <= extent[3]; y++) {
+            for (int x = extent[0]; x <= extent[1]; x++) {
+                *maskData++ = *data++;
+            }
+            maskData += incY;
+        }
+        maskData += incZ;
+    }
 }
 
 void QDLSegmentationExtension::apply()
@@ -605,14 +669,25 @@ void QDLSegmentationExtension::apply()
     reslicer->SetInputData(mask);
     reslicer->GetResliceAxes()->Invert();
     reslicer->Update();
-
-    // Restore origin by setting minimum point of bounds
     mask = reslicer->GetOutput();
-    int ijk[3] = {bounds[0], bounds[2], bounds[4]};
-    mask->SetOrigin(imageData->GetPoint(imageData->ComputePointId(ijk)));
 
-    // Copy mask voxels (deep copy to avoid losing mask pointer)
-    m_maskData->DeepCopy(mask);
+
+    // Replace the previous mask (if any) with the current one
+
+    // Only scalars in previous mask extent are set to 0
+    if (!m_maskExtent.empty()) {
+        fillMaskExtentWithValue(m_maskExtent.data(), 0);
+    }
+
+//    // Alternative: all scalars to 0 (maybe less efficient?)
+//    vtkDataArray::SafeDownCast(m_maskData->GetPointData()->GetAbstractArray(0))->Fill(0);
+
+    // Set new scalars in current mask extent
+    fillMaskExtentWithData(bounds.data(), mask);
+
+    // Update current mask data and extent
+    m_maskData->Modified();
+    m_maskExtent = bounds;
 
     // Create a transfer function according to the number of output labels and
     // assign it to 2D and 3D mask volumes
