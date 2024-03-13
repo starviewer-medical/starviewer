@@ -20,7 +20,7 @@
 
 #include <vtkSmartPointer.h>
 #include <vtkVolume.h>
-#include <vtkMatrix4x4.h>
+#include <vtkTransform.h>
 
 #include "ui_qdlsegmentationextensionbase.h"
 #include "volume.h"
@@ -28,38 +28,6 @@
 #include "drawerpolygon.h"
 
 namespace udg {
-
-// Rotation matrix 90 deg. clockwise
-static constexpr double MATRIX_ROTATION_CW[16] = {
-     0.0,  1.0,  0.0,  0.0,
-    -1.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  1.0,  0.0,
-     0.0,  0.0,  0.0,  1.0
-};
-
-// Rotation matrix 90 deg. counterclockwise
-static constexpr double MATRIX_ROTATION_CCW[16] = {
-     0.0, -1.0,  0.0,  0.0,
-     1.0,  0.0,  0.0,  0.0,
-     0.0,  0.0,  1.0,  0.0,
-     0.0,  0.0,  0.0,  1.0
-};
-
-// Horizontal flip matrix
-static constexpr double MATRIX_FLIP_HORIZONTAL[16] = {
-    -1.0,  0.0,  0.0,  0.0,
-     0.0,  1.0,  0.0,  0.0,
-     0.0,  0.0,  1.0,  0.0,
-     0.0,  0.0,  0.0,  1.0
-};
-
-// Vertical flip matrix
-static constexpr double MATRIX_FLIP_VERTICAL[16] = {
-     1.0,  0.0,  0.0,  0.0,
-     0.0, -1.0,  0.0,  0.0,
-     0.0,  0.0,  1.0,  0.0,
-     0.0,  0.0,  0.0,  1.0
-};
 
 class Patient;
 class DeepLearningSegmentation; // needed to avoid include in header file
@@ -130,6 +98,10 @@ private:
     /// must match).
     void fillMaskExtentWithData(int* extent, vtkImageData* imageData);
 
+    /// Set the transform matrix according to the desired anatomical plane and
+    /// remove the cropping area (if any).
+    void setAnatomicalPlane(const AnatomicalPlane& desiredPlane);
+
 
     /// Predefined trained models (name and model parameters).
     QVector<QPair<QString, ModelParameters>> m_predefinedTrainedModels;
@@ -148,7 +120,7 @@ private:
     /// Mask volume for 3D viewer (stores voxel data).
     vtkSmartPointer<vtkVolume> m_3DMask;
     /// Transform matrix to orient image as displayed on the viewer.
-    vtkSmartPointer<vtkMatrix4x4> m_resliceAxesCosines;
+    vtkSmartPointer<vtkTransform> m_transform;
     /// Deep-learning segmentation module.
     std::unique_ptr<DeepLearningSegmentation> m_DLSegmentation;
 
