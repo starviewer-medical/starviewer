@@ -321,8 +321,14 @@ void QDLSegmentationExtension::primitiveUpdated(DrawerPrimitive *primitive, bool
         // Check whether polygon has to be added and drawing tool is selected
         if (add && m_drawingToolButton->isChecked())
         {
+            // Remove previous cropping area (if any) from viewer
+            if (m_croppingArea) {
+                m_2DViewer->getViewer()->getDrawer()->erasePrimitive(m_croppingArea);
+            }
+
             // Update the cropping area
             m_croppingArea = polygon;
+            m_croppingAreaSlice = m_2DViewer->getViewer()->getCurrentSlice();
         }
         else if (!add && m_croppingArea == polygon)
         {
@@ -640,6 +646,12 @@ void QDLSegmentationExtension::apply()
     // Get slice range to be segmented (currently restricted to current slice)
     int currentSlice = m_2DViewer->getViewer()->getCurrentSlice();
     m_sliceRange = {currentSlice, currentSlice};
+
+    // Remove cropping area if it is placed on a different slice
+    // (signal will set it to null pointer)
+    if (m_croppingArea && m_croppingAreaSlice != currentSlice) {
+        m_2DViewer->getViewer()->getDrawer()->erasePrimitive(m_croppingArea);
+    }
 
     // Get bounds according to cropping area and slice range
     QVector<int> bounds(6);

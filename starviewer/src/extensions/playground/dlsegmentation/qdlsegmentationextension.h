@@ -135,6 +135,8 @@ private:
     QVector<QPair<QString, ModelParameters>> m_predefinedTrainedModels;
     /// Cropping area defined as a 2D polygon.
     QPointer<DrawerPolygon> m_croppingArea;
+    /// Slice where the cropping area is defined.
+    int m_croppingAreaSlice;
     /// Slice range to be segmented (both included).
     QVector<int> m_sliceRange;
     /// Mask data (stores voxel data).
