@@ -539,14 +539,26 @@ void QDLSegmentationExtension::initialize3DViewer(Volume *mainVolume)
 
 void QDLSegmentationExtension::fillMaskExtentWithValue(int* extent, short value)
 {
+    // Get full mask dimensions and filling extent dimensions
     int* maskDims = m_maskData->GetDimensions();
     int fillDims[3] = {extent[1] - extent[0] + 1,
                        extent[3] - extent[2] + 1,
                        extent[5] - extent[4] + 1};
+
+    // Get increments for jumping to next value when last value of extent along
+    // X axis is reached (incY), and when last value of extent along Y axis is
+    // reached (incZ)
+    //  slice 1     slice 2
+    // ...xxxY...  ...Zxxx...  incY to jump from Y to Y
+    // ...Yxxx...  ...xxxx...  incZ to jump from Z to Z
+    // ...xxxZ...  ...xxxx...
     int incY = maskDims[0] - fillDims[0];
     int incZ = (maskDims[1] - fillDims[1]) * maskDims[0];
+
+    // Get pointer to mask scalars at the beginning of the filling extent
     short* maskData = static_cast<short*>(m_maskData->GetScalarPointer(extent[0], extent[2], extent[4]));
 
+    // Iterate extent and set scalars to the value
     for (int z = extent[4]; z <= extent[5]; z++) {
         for (int y = extent[2]; y <= extent[3]; y++) {
             for (int x = extent[0]; x <= extent[1]; x++) {
@@ -560,15 +572,29 @@ void QDLSegmentationExtension::fillMaskExtentWithValue(int* extent, short value)
 
 void QDLSegmentationExtension::fillMaskExtentWithData(int* extent, vtkImageData* imageData)
 {
+    // Get full mask dimensions and filling extent dimensions
     int* maskDims = m_maskData->GetDimensions();
     int fillDims[3] = {extent[1] - extent[0] + 1,
                        extent[3] - extent[2] + 1,
                        extent[5] - extent[4] + 1};
+
+    // Get increments for jumping to next value when last value of extent along
+    // X axis is reached (incY), and when last value of extent along Y axis is
+    // reached (incZ)
+    //  slice 1     slice 2
+    // ...xxxY...  ...Zxxx...  incY to jump from Y to Y
+    // ...Yxxx...  ...xxxx...  incZ to jump from Z to Z
+    // ...xxxZ...  ...xxxx...
     int incY = maskDims[0] - fillDims[0];
     int incZ = (maskDims[1] - fillDims[1]) * maskDims[0];
+
+    // Get pointers to mask scalars at the beginning of the filling extent and
+    // to filling data scalars
     short* maskData = static_cast<short*>(m_maskData->GetScalarPointer(extent[0], extent[2], extent[4]));
     short* data = static_cast<short*>(imageData->GetScalarPointer());
 
+    // Iterate extent and set scalars to the corresponding value in the filling
+    // data
     for (int z = extent[4]; z <= extent[5]; z++) {
         for (int y = extent[2]; y <= extent[3]; y++) {
             for (int x = extent[0]; x <= extent[1]; x++) {
