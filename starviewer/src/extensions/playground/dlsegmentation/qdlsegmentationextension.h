@@ -20,7 +20,6 @@
 
 #include <vtkSmartPointer.h>
 #include <vtkVolume.h>
-#include <vtkTransform.h>
 
 #include "ui_qdlsegmentationextensionbase.h"
 #include "volume.h"
@@ -98,9 +97,8 @@ private:
     /// must match).
     void fillMaskExtentWithData(int* extent, vtkImageData* imageData);
 
-    /// Set the transform matrix according to the desired anatomical plane and
-    /// remove the cropping area (if any).
-    void setAnatomicalPlane(const AnatomicalPlane& desiredPlane);
+    /// Remove the cropping area (if any) from the 2D viewer.
+    void removeCroppingArea();
 
 
     /// Predefined trained models (name and model parameters).
@@ -119,8 +117,6 @@ private:
     QPointer<Volume> m_2DMask;
     /// Mask volume for 3D viewer (stores voxel data).
     vtkSmartPointer<vtkVolume> m_3DMask;
-    /// Transform matrix to orient image as displayed on the viewer.
-    vtkSmartPointer<vtkTransform> m_transform;
     /// Deep-learning segmentation module.
     std::unique_ptr<DeepLearningSegmentation> m_DLSegmentation;
 

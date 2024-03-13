@@ -28,7 +28,8 @@
 #include <vtkPiecewiseFunction.h>
 #include <vtkColorTransferFunction.h>
 #include <vtkLookupTable.h>
-#include <vtkTransform.h>
+#include <vtkCamera.h>
+#include <vtkMatrix4x4.h>
 
 #include "qdlsegmentationextension.h"
 #include "deeplearningsegmentation.h"
@@ -40,9 +41,6 @@
 #include "drawer.h"
 #include "drawerpolygon.h"
 #include "drawertext.h"
-#include "patientorientation.h"
-#include "imageorientationoperationsmapper.h"
-#include "image.h"
 
 // Adding a Q_DECLARE_METATYPE() makes the type known to all template based
 // functions, including QVariant.
@@ -117,23 +115,12 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     predefinedTrainedModelChanged(m_trainedModelPredefinedCombo->currentIndex());
 
     m_croppingArea = nullptr;
+    m_croppingAreaSlice = -1; // no cropping area at the beginning
     m_sliceRange = {0, 0}; // only first by default
     m_2DMask = nullptr;
     m_3DMask = nullptr;
     m_DLSegmentation = nullptr;
     m_maskData = nullptr;
-
-    // Transform matrix is set to "post-multiply" (rotations multiplied from
-    // left: R T, where R is a rotation matrix and T the current transform), so
-    // that transformations are carried out considering fixed axes (extrinsic)
-    // Initial transform is scaled to follow initial view:
-    // 1  0  0  0
-    // 0 -1  0  0
-    // 0  0 -1  0
-    // 0  0  0  1
-    m_transform = vtkSmartPointer<vtkTransform>::New();
-    m_transform->PostMultiply();
-    m_transform->Scale(1, -1, -1);
 
     createConnections();
     initializeTools();
@@ -141,29 +128,8 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
 
 void QDLSegmentationExtension::createConnections()
 {
-    // Orientation tools (keep track of transform matrix)
-    // In lambda, class member `m_transform` is captured by reference and
-    // called `transform`
-    connect(m_rotateClockwiseToolButton, &QToolButton::clicked, [&transform = m_transform]() {
-        transform->RotateZ(-90);
-    });
-    connect(m_rotateCounterClockwiseToolButton, &QToolButton::clicked, [&transform = m_transform]() {
-        transform->RotateZ(90);
-    });
-    connect(m_flipHorizontalToolButton, &QToolButton::clicked, [&transform = m_transform]() {
-        transform->Scale(-1, 1, 1);
-    });
-    connect(m_flipVerticalToolButton, &QToolButton::clicked, [&transform = m_transform]() {
-        transform->Scale(1, -1, 1);
-    });
-    connect(m_restore2DToolButton, &QToolButton::clicked, [&transform = m_transform]() {
-        transform->Identity();
-        transform->Scale(1, -1, -1); // default view
-    });
-
-    // Set the transform matrix according to the new plane, and remove the
-    // cropping area (if any)
-    connect(m_2DViewer->getViewer(), &Q2DViewer::anatomicalViewChanged, this, &QDLSegmentationExtension::setAnatomicalPlane);
+    // Remove the cropping area (if any) if the anatomical plane is changed
+    connect(m_2DViewer->getViewer(), &Q2DViewer::anatomicalViewChanged, this, &QDLSegmentationExtension::removeCroppingArea);
 
     // Restore 3D viewer if restore button is clicked (removes 3D mask)
     // (should be an action tool, but here the generic behaviour of the 3D
@@ -339,10 +305,8 @@ void QDLSegmentationExtension::primitiveUpdated(DrawerPrimitive *primitive, bool
         // Check whether polygon has to be added and drawing tool is selected
         if (add && m_drawingToolButton->isChecked())
         {
-            // Remove previous cropping area (if any) from viewer
-            if (m_croppingArea) {
-                m_2DViewer->getViewer()->getDrawer()->erasePrimitive(m_croppingArea);
-            }
+            // Remove previous cropping area (if any) from 2D viewer
+            removeCroppingArea();
 
             // Update the cropping area
             m_croppingArea = polygon;
@@ -377,114 +341,12 @@ void QDLSegmentationExtension::restore3DViewer()
     m_3DViewer->render();
 }
 
-void QDLSegmentationExtension::setAnatomicalPlane(const AnatomicalPlane &desiredPlane)
+void QDLSegmentationExtension::removeCroppingArea()
 {
-    // Remove previous cropping area (if any) from viewer
-    // (signal will set it to null pointer)
+    // Remove previous cropping area (if any) from 2D viewer
     if (m_croppingArea) {
         m_2DViewer->getViewer()->getDrawer()->erasePrimitive(m_croppingArea);
-    }
-
-    // Set transform to identity (it will be changed later according to the
-    // desired anatomical plane)
-    m_transform->Identity();
-
-    // Get the orthogonal plane corresponding to the desired plane
-    const OrthogonalPlane &orthogonalPlane = m_2DViewer->getViewer()->getMainInput()->getCorrespondingOrthogonalPlane(desiredPlane);
-
-    // Get the original patient orientation from the first image (i.e. from
-    // the acquisition plane)
-    PatientOrientation originalOrientation;
-    Image *image = m_2DViewer->getViewer()->getMainInput()->getImage(0);
-    if (image) {
-        originalOrientation = image->getPatientOrientation();
-        if (originalOrientation.getDICOMFormattedPatientOrientation().isEmpty()) {
-            originalOrientation = PatientOrientation();
-        }
-    }
-
-    // New row and column labels
-    QString rowLabel;
-    QString columnLabel;
-
-    // 2D viewer applies different orientations depending on the selected
-    // orthogonal plane and the original patient orientation: here the new
-    // row and column labels and the transform matrix are set according to
-    // these orientations
-    switch (orthogonalPlane)
-    {
-        case OrthogonalPlane::XYPlane:
-            rowLabel = originalOrientation.getRowDirectionLabel();
-            columnLabel = originalOrientation.getColumnDirectionLabel();
-
-            // Transform matrix is set to:
-            // 1  0  0  0
-            // 0 -1  0  0
-            // 0  0 -1  0
-            // 0  0  0  1
-            m_transform->Scale(1, -1, -1);
-
-            break;
-
-        case OrthogonalPlane::YZPlane:
-            rowLabel = originalOrientation.getColumnDirectionLabel();
-            // Normal is "reversed"; should be the opposite
-            columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
-
-            // Transform matrix is set to:
-            // 0  1  0  0
-            // 0  0  1  0
-            // 1  0  0  0
-            // 0  0  0  1
-            m_transform->RotateY(-90);
-            m_transform->RotateZ(-90);
-
-            break;
-
-        case OrthogonalPlane::XZPlane:
-            rowLabel = originalOrientation.getRowDirectionLabel();
-            // Normal is "reversed"; should be the opposite
-            columnLabel = PatientOrientation::getOppositeOrientationLabel(originalOrientation.getNormalDirectionLabel());
-
-            // Transform matrix is set to:
-            // 1  0  0  0
-            // 0  0  1  0
-            // 0 -1  0  0
-            // 0  0  0  1
-            m_transform->RotateX(-90);
-
-            break;
-    }
-
-    // Initial orientation is now set to the orientation defined for the
-    // desired orthogonal plane
-    PatientOrientation initialOrientation;
-    initialOrientation.setLabels(rowLabel, columnLabel);
-
-    // However, each anatomical plane has a default radiological
-    // orientation that may differ from the initial orientation defined for
-    // that plane (which was obtained from the acquisition plane)
-    // Here the orientation for the desired anatomical plane is obtained
-    PatientOrientation desiredOrientation = desiredPlane.getDefaultRadiologicalOrienation();
-
-    // Without changing the plane, any desired orientation can be achieved
-    // by means of clockwise rotations (and an optional horizontal flip)
-    // Compute the clockwise rotations (turns) and need for a flip when
-    // changing from the initial to the desired orientation
-    ImageOrientationOperationsMapper omap;
-    omap.setInitialOrientation(initialOrientation);
-    omap.setDesiredOrientation(desiredOrientation);
-    int turns = omap.getNumberOfClockwiseTurnsToApply();
-    bool flip = omap.requiresHorizontalFlip();
-
-    // Apply clockwise rotations to the current plane (i.e. around Z axis)
-    for (int i = 0; i < turns; i++) {
-        m_transform->RotateZ(-90);
-    }
-
-    // Apply an horizontal flip (if needed)
-    if (flip) {
-        m_transform->Scale(-1, 1, 1);
+        m_croppingArea = nullptr;
     }
 }
 
@@ -776,10 +638,9 @@ void QDLSegmentationExtension::apply()
     int currentSlice = m_2DViewer->getViewer()->getCurrentSlice();
     m_sliceRange = {currentSlice, currentSlice};
 
-    // Remove cropping area if it is placed on a different slice
-    // (signal will set it to null pointer)
-    if (m_croppingArea && m_croppingAreaSlice != currentSlice) {
-        m_2DViewer->getViewer()->getDrawer()->erasePrimitive(m_croppingArea);
+    // Remove cropping area (if any) if it is placed on a different slice
+    if (m_croppingAreaSlice != currentSlice) {
+        removeCroppingArea();
     }
 
     // Get bounds according to cropping area and slice range
@@ -792,19 +653,22 @@ void QDLSegmentationExtension::apply()
     cropper->SetOutputOrigin(imageData->GetOrigin());
     cropper->SetOutputExtent(bounds.data());
 
+    // Get model-view transform matrix from camera
+    // (model-view transform matrix = concatenated transform matrix)
+    vtkNew<vtkMatrix4x4> transform;
+    transform->DeepCopy(m_2DViewer->getViewer()->getRenderer()->GetActiveCamera()->GetModelViewTransformMatrix());
+
     // Transform input data according to flips and rotations
-    // (`m_transform` = concatenated transform matrix)
+    // (transform matrix concatenates flips and rotations)
     vtkNew<vtkImageReslice> reslicer;
     reslicer->SetInputConnection(cropper->GetOutputPort());
-    reslicer->SetResliceAxes(m_transform->GetMatrix());
+    reslicer->SetResliceAxes(transform);
 
     // Matrix is inverted because reslicer's formula is:
     // c_in = A c_out
     // where A is the reslice axes matrix, c_out is the output data coords and
     // c_in is the input data coords. Then:
     // A^-1 c_in = c_out
-    // (matrix will be later inverted again to restore mask orientation,
-    // so it won't be affected)
     reslicer->GetResliceAxes()->Invert();
     reslicer->Update();
 
