@@ -63,6 +63,6 @@ if(NOT USE_CRASH_REPORTER)
     add_compile_definitions(NO_CRASH_REPORTER)
 endif()
 
-if(USE_PACS_COMPRESSION)
+if(NOT USE_PACS_COMPRESSION)
     add_compile_definitions(DISABLE_COMPRESSION_EXTENSION)
 endif()
