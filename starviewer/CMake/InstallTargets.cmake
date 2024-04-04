@@ -131,7 +131,13 @@ set(QT_LIBS
     Qt5Xml
     Qt5XmlPatterns
 )
-if(UNIX AND NOT APPLE)
+if(WIN32)
+    list(APPEND QT_LIBS
+        d3dcompiler_47
+        libEGL
+        libGLESv2
+    )
+elseif(UNIX AND NOT APPLE)
     list(APPEND QT_LIBS
         Qt5DBus
         Qt5X11Extras
