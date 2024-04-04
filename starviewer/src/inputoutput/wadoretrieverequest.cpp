@@ -356,10 +356,11 @@ void WadoRetrieveRequest::onReplyFinished()
     {
         errors = true;
         m_errorsDescription = m_reply->errorString();
-        WARN_LOG(QString("QNetworkReply::NetworkError %1: %2. (HTTP %3: %4)")
+        WARN_LOG(QString("QNetworkReply::NetworkError %1: %2. (HTTP %3: %4) [URL: %5]")
                   .arg(m_reply->error()).arg(m_reply->errorString())
                   .arg(m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt())
-                  .arg(m_reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString()));
+                  .arg(m_reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString())
+                  .arg(m_reply->url().toString()));
     }
     else
     {

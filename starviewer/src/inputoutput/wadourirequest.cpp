@@ -290,10 +290,11 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
             m_errorsDescription += "\n…";
         }
 
-        ERROR_LOG(QString("QNetworkReply::NetworkError %1: %2. (HTTP %3: %4)")
+        ERROR_LOG(QString("QNetworkReply::NetworkError %1: %2. (HTTP %3: %4) [URL: %5]")
                   .arg(reply->error()).arg(reply->errorString())
                   .arg(reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt())
-                  .arg(reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString()));
+                  .arg(reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString())
+                  .arg(reply->url().toString()));
     }
 
     reply->deleteLater();
