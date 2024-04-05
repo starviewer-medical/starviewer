@@ -31,6 +31,8 @@ public:
 
     /// Ens retorna la llista de configuracions desades a settings
     QList<StudyLayoutConfig> getConfigList() const;
+    /// Overwrites the whole study layout config list in settings.
+    void setConfigList(const QList<StudyLayoutConfig> &configList);
 
     /// Mètodes per afegir una nova configuració, actualitzar-la o esborrar-la. Retorna cert si l'operació es duu a terme amb èxit, fals altrament.
 

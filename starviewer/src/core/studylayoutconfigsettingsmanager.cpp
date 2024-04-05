@@ -45,6 +45,20 @@ QList<StudyLayoutConfig> StudyLayoutConfigSettingsManager::getConfigList() const
     return configList;
 }
 
+void StudyLayoutConfigSettingsManager::setConfigList(const QList<StudyLayoutConfig> &configList)
+{
+    Settings::SettingListType settingsList;
+    settingsList.reserve(configList.size());
+    StudyLayoutConfigSettingsConverter settingsConverter;
+
+    for (const StudyLayoutConfig &config : configList)
+    {
+        settingsList.append(settingsConverter.toSettingsListItem(config));
+    }
+
+    Settings().setList(CoreSettings::StudyLayoutConfigList, settingsList);
+}
+
 bool StudyLayoutConfigSettingsManager::addItem(const StudyLayoutConfig &config)
 {
     bool ok = true;
@@ -60,9 +74,8 @@ bool StudyLayoutConfigSettingsManager::addItem(const StudyLayoutConfig &config)
 
     if (ok)
     {
-        StudyLayoutConfigSettingsConverter settingsConverter;
-        Settings settings;
-        settings.addListItem(CoreSettings::StudyLayoutConfigList, settingsConverter.toSettingsListItem(config));
+        configsList.append(config);
+        setConfigList(configsList);
     }
     else
     {
@@ -77,23 +90,22 @@ bool StudyLayoutConfigSettingsManager::updateItem(const StudyLayoutConfig &confi
     bool updated = false;
     // Obtenim la llista completa de StudyLayoutConfigs
     QList<StudyLayoutConfig> configList = getConfigList();
-    // Eliminem totess les configuracions que tinguem guardades a settings
-    Settings settings;
-    settings.remove(CoreSettings::StudyLayoutConfigList);
 
-    // Recorrem tota la llista i les afegim de nou
-    // Si trobem el que volem fer update, afegim l'actualitzat
-    foreach (const StudyLayoutConfig &currentConfig, configList)
+    for (int i = 0; i < configList.size(); i++)
     {
+        const StudyLayoutConfig &currentConfig = configList[i];
+
         if (config.getModality() == currentConfig.getModality())
         {
-            addItem(config);
+            configList[i] = config;
             updated = true;
+            break;
         }
-        else
-        {
-            addItem(currentConfig);
-        }
+    }
+
+    if (updated)
+    {
+        setConfigList(configList);
     }
 
     return updated;
@@ -104,22 +116,22 @@ bool StudyLayoutConfigSettingsManager::deleteItem(const StudyLayoutConfig &confi
     bool deleted = false;
     // Obtenim la llista completa de PACS
     QList<StudyLayoutConfig> configList = getConfigList();
-    // Eliminem tots els PACS que tinguem guardats a disc
-    Settings settings;
-    settings.remove(CoreSettings::StudyLayoutConfigList);
 
-    // Recorrem tota la llista de configuracions i les afegim de nou
-    // excepte la que volem esborrar
-    foreach (const StudyLayoutConfig &currentConfig, configList)
+    for (int i = 0; i < configList.size(); i++)
     {
-        if (config.getModality() != currentConfig.getModality())
+        const StudyLayoutConfig &currentConfig = configList[i];
+
+        if (config.getModality() == currentConfig.getModality())
         {
-            addItem(currentConfig);
-        }
-        else
-        {
+            configList.removeAt(i);
             deleted = true;
+            break;
         }
+    }
+
+    if (deleted)
+    {
+        setConfigList(configList);
     }
     
     return deleted;
