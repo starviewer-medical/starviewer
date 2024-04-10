@@ -29,6 +29,8 @@
 #include "temporaldimensionfillerstep.h"
 #include "volumefillerstep.h"
 
+#include <QFile>
+
 namespace udg {
 
 namespace {
@@ -36,7 +38,37 @@ namespace {
 // Returns true if the given file is a DICOM file.
 bool isDicom(const QString& fileName)
 {
-    return DICOMTagReader(fileName).canReadFile();
+    // [1] https://www.dicomstandard.org/docs/librariesprovider2/dicomdocuments/wp-cotent/uploads/2019/05/faq-dicom-128-byte-preamble-posted1-1.pdf
+
+    constexpr quint32 dicomMagic = 0x4449434D; // In ascii = DICM
+
+    QFile file(fileName);
+
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QDataStream in(&file);
+
+        // DICOM magic bytes are always located after a preamble of 128 bytes. See [1]
+        if (in.skipRawData(128) == 128)
+        {
+            quint32 magic;
+            in >> magic;
+
+            if (magic == dicomMagic)
+            {
+                // We proceed by reading the full file "the DICOM way".
+                return DICOMTagReader(fileName).canReadFile();
+            }
+            // else // Not a DICOM, magic bytes do not match.
+        }
+        // else // Not a DICOM, file smaller than the preamble.
+    }
+    else
+    {
+        ERROR_LOG(QString("File %1 is unreadable.").arg(fileName));
+    }
+
+    return false;
 }
 
 // Returns true if any of the files is a DICOM file and false otherwise.
