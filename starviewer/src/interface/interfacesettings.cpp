@@ -33,6 +33,7 @@ const QString InterfaceSettings::AllowMultipleInstancesPerExtension(ExtensionsBa
 const QString InterfaceSettings::DefaultImageExtension(ExtensionsBase + "defaultImageExtension");
 const QString InterfaceSettings::DefaultEncapsulatedDocumentExtension(ExtensionsBase + "defaultEncapsulatedDocumentExtension");
 
+const QString InterfaceSettings::DontShowBetaMessage("dontShowBetaMessage");
 const QString InterfaceSettings::DontShowMedicalDeviceInformationDialog(ExtensionsBase + "dontShowMedicalDeviceInformationDialog");
 
 InterfaceSettings::InterfaceSettings()
@@ -52,6 +53,7 @@ void InterfaceSettings::init()
     settingsRegistry->addSetting(AllowMultipleInstancesPerExtension, false);
     settingsRegistry->addSetting(DefaultImageExtension, "Q2DViewerExtension");
     settingsRegistry->addSetting(DefaultEncapsulatedDocumentExtension, "PdfExtension");
+    settingsRegistry->addSetting(DontShowBetaMessage, false);
     settingsRegistry->addSetting(DontShowMedicalDeviceInformationDialog, false);
 }
 

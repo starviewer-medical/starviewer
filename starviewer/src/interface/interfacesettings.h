@@ -38,6 +38,7 @@ public:
     static const QString DefaultImageExtension;
     static const QString DefaultEncapsulatedDocumentExtension;
 
+    static const QString DontShowBetaMessage;
     static const QString DontShowMedicalDeviceInformationDialog;
 };
 

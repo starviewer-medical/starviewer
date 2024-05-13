@@ -701,7 +701,7 @@ void QApplicationMainWindow::showEvent(QShowEvent *event)
     // Show the beta warning automatically only the first time the first window is shown
     static bool betaVersionDialogShown = false;
 
-    if (m_isBetaVersion && !betaVersionDialogShown)
+    if (m_isBetaVersion && !betaVersionDialogShown && !Settings().getValue(InterfaceSettings::DontShowBetaMessage).toBool())
     {
         betaVersionDialogShown = true;
         QTimer::singleShot(100, this, &QApplicationMainWindow::showBetaVersionDialog);  // short delay to ensure that the window is already visible
