@@ -165,17 +165,13 @@ QSize QViewer::getRenderWindowSize() const
 
 QPoint QViewer::getEventPosition() const
 {
-    QPoint point(this->getInteractor()->GetEventPosition()[0], this->getInteractor()->GetEventPosition()[1]);
-    point *= this->devicePixelRatioF();
-    return point;
+    return {this->getInteractor()->GetEventPosition()[0], this->getInteractor()->GetEventPosition()[1]};
 
 }
 
 QPoint QViewer::getLastEventPosition() const
 {
-    QPoint point(this->getInteractor()->GetLastEventPosition()[0], this->getInteractor()->GetLastEventPosition()[1]);
-    point *= this->devicePixelRatioF();
-    return point;
+    return {this->getInteractor()->GetLastEventPosition()[0], this->getInteractor()->GetLastEventPosition()[1]};
 }
 
 QPoint QViewer::getWheelAngleDelta() const
