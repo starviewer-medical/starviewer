@@ -14,11 +14,12 @@
 
 #include "dicommasktodcmdataset.h"
 
-#include <dimse.h>
-#include <dcsequen.h>
-#include <dcdeftag.h>
-
 #include "dicommask.h"
+#include "studyoperations.h"
+
+#include <dcdatset.h>
+#include <dcdeftag.h>
+#include <dcsequen.h>
 
 namespace udg
 {
@@ -93,24 +94,16 @@ void DicomMaskToDcmDataset::addTagToDcmDatasetAsString(DcmDataset *dcmDataset, c
 
 QString DicomMaskToDcmDataset::getQueryLevelFromDICOMMask(const DicomMask &dicomMask) const
 {
-    bool isImageLevel = !dicomMask.getSOPInstanceUID().isNull() || !dicomMask.getImageNumber().isNull();
-    bool isSeriesLevel = !dicomMask.getSeriesDescription().isNull() || !dicomMask.getSeriesDateRangeAsDICOMFormat().isNull() || !dicomMask.getSeriesModality().isNull() ||
-                         !dicomMask.getSeriesNumber().isNull() || !dicomMask.getSeriesProtocolName().isNull() || !dicomMask.getSeriesTimeRangeAsDICOMFormat().isNull() ||
-                         !dicomMask.getSeriesInstanceUID().isNull() || !dicomMask.getRequestedProcedureID().isNull() || !dicomMask.getScheduledProcedureStepID().isNull() ||
-                         !dicomMask.getPPSStartDateAsRangeDICOMFormat().isNull() || !dicomMask.getPPSStartTimeAsRangeDICOMFormat().isNull();
+    StudyOperations::TargetResource targetResource = dicomMask.getTargetResource();
 
-    if (isImageLevel)
+    switch (targetResource)
     {
-        return "IMAGE";
-    }
-    else if (isSeriesLevel)
-    {
-        return "SERIES";
-    }
-    else
-    {
-        //Per defecte com a mínim són a nivell d'estudi
-        return "STUDY";
+        case StudyOperations::TargetResource::Studies:
+            return "STUDY";
+        case StudyOperations::TargetResource::Series:
+            return "SERIES";
+        case StudyOperations::TargetResource::Instances:
+            return "IMAGE";
     }
 }
 

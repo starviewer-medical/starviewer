@@ -32,6 +32,12 @@ class Study;
 class Series;
 class Image;
 
+namespace StudyOperations {
+
+enum class TargetResource;
+
+}
+
 class DicomMask {
 public:
     DicomMask();
@@ -288,6 +294,9 @@ public:
 
     /// Ens diu si la màscara està buida o no
     bool isEmpty() const;
+
+    /// Returns the target resource that must be requested to the PACS according to the filled fields of the mask.
+    StudyOperations::TargetResource getTargetResource() const;
 
     ///Mètode que a partir d'un estudi/series/image ens retornen la DICOMMask per descarregar o consultar els fills d'aquell objecte. És important que si hem de construir
     ///un DICOMMask a partir d'una imatge aquesta inclogui la informació de la sèrie pare i estudi pare per construir, i en el cas de series contingui l'estudi pare, sinó

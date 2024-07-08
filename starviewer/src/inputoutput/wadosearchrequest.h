@@ -41,7 +41,7 @@ public:
 
     /// Returns the mask with the query parameters.
     const DicomMask& getDicomMask() const;
-    /// Returns the target resource that will be requested.
+    /// Returns the target resource for Starviewer presentation.
     StudyOperations::TargetResource getTargetResource() const;
 
     /// Returns the studies obtained from the search, if any.
@@ -62,7 +62,7 @@ private slots:
 private:
     /// Mask with the query parameters.
     DicomMask m_mask;
-    /// Target resource that will be requested.
+    /// Target resource for Starviewer presentation.
     StudyOperations::TargetResource m_targetResource;
 
     /// Studies obtained from the search, if any.

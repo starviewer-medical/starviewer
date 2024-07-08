@@ -202,7 +202,9 @@ void WadoSearchRequest::startInternal()
 {
     QString urlString = getPacsDevice().getBaseUri().toString(QUrl::StripTrailingSlash);
 
-    switch (m_targetResource)
+    StudyOperations::TargetResource targetResourceForQuery = m_mask.getTargetResource();
+
+    switch (targetResourceForQuery)
     {
         case StudyOperations::TargetResource::Studies:
             urlString += "/studies";

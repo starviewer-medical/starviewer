@@ -14,11 +14,12 @@
 
 #include "dicommask.h"
 
-#include <QStringList>
-
-#include "study.h"
-#include "series.h"
 #include "image.h"
+#include "series.h"
+#include "study.h"
+#include "studyoperations.h"
+
+#include <QStringList>
 
 namespace udg {
 
@@ -615,6 +616,25 @@ bool DicomMask::isEmpty() const
                  m_PPSStartTimeMaximum.isEmpty() && m_SOPInstanceUID.isEmpty() && m_imageNumber.isEmpty();
 
     return empty;
+}
+
+StudyOperations::TargetResource DicomMask::getTargetResource() const
+{
+    if (!getSOPInstanceUID().isNull() || !getImageNumber().isNull())
+    {
+        return StudyOperations::TargetResource::Instances;
+    }
+    else if (!getSeriesInstanceUID().isNull() || !getSeriesNumber().isNull() || !getSeriesDateRangeAsDICOMFormat().isNull() ||
+             !getSeriesTimeRangeAsDICOMFormat().isNull() || !getSeriesModality().isNull() || !getSeriesDescription().isNull() ||
+             !getSeriesProtocolName().isNull() || !getRequestedProcedureID().isNull() || !getScheduledProcedureStepID().isNull() ||
+             !getPPSStartDateAsRangeDICOMFormat().isNull() || !getPPSStartTimeAsRangeDICOMFormat().isNull())
+    {
+        return StudyOperations::TargetResource::Series;
+    }
+    else
+    {
+        return StudyOperations::TargetResource::Studies;
+    }
 }
 
 DicomMask DicomMask::fromStudy(Study *study, bool &ok)

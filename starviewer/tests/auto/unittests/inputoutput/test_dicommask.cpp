@@ -5,16 +5,18 @@
 
 #include "autotest.h"
 
+#include "dicommask.h"
+#include "image.h"
+#include "series.h"
+#include "study.h"
+#include "studyoperations.h"
+
+#include "imagetesthelper.h"
+#include "seriestesthelper.h"
+#include "studytesthelper.h"
+
 #include <QDate>
 #include <QTime>
-
-#include "dicommask.h"
-#include "study.h"
-#include "series.h"
-#include "image.h"
-#include "studytesthelper.h"
-#include "seriestesthelper.h"
-#include "imagetesthelper.h"
 
 using namespace udg;
 using namespace testing;
@@ -35,6 +37,9 @@ private slots:
 
     void getStudyTimeRangeAsDICOMFormat_ShouldReturnDICOMTime_data();
     void getStudyTimeRangeAsDICOMFormat_ShouldReturnDICOMTime();
+
+    void getTargetResource_ShouldReturnExpectedValue_data();
+    void getTargetResource_ShouldReturnExpectedValue();
 
     void fromStudy_ShouldReturnValidDICOMMask_data();
     void fromStudy_ShouldReturnValidDICOMMask();
@@ -59,6 +64,7 @@ Q_DECLARE_METATYPE(DicomMask)
 Q_DECLARE_METATYPE(Study*)
 Q_DECLARE_METATYPE(Series*)
 Q_DECLARE_METATYPE(Image*)
+Q_DECLARE_METATYPE(StudyOperations::TargetResource)
 
 void test_DicomMask::getStudyDateRangeAsDICOMFormat_ShouldReturnEmptyQString_data()
 {
@@ -158,6 +164,317 @@ void test_DicomMask::getStudyTimeRangeAsDICOMFormat_ShouldReturnDICOMTime()
     dicomMask.setStudyTime(minimumTime, maximumTime);
 
     QCOMPARE(dicomMask.getStudyTimeRangeAsDICOMFormat(), timeRangeAsDICOMFormat);
+}
+
+void test_DicomMask::getTargetResource_ShouldReturnExpectedValue_data()
+{
+    QTest::addColumn<DicomMask>("dicomMask");
+    QTest::addColumn<StudyOperations::TargetResource>("expectedTargetResource");
+
+    // Empty
+
+    {
+        QTest::newRow("empty dicom mask") << DicomMask() << StudyOperations::TargetResource::Studies;
+    }
+
+    // Patient attributes
+
+    {
+        DicomMask mask;
+        mask.setPatientID("1234");
+        QTest::newRow("patient id") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPatientName("Anonymous");
+        QTest::newRow("patient name") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPatientBirth(QDate(1999, 12, 31), QDate());
+        QTest::newRow("patient birthdate min") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPatientBirth(QDate(), QDate::currentDate());
+        QTest::newRow("patient birthdate max") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPatientSex("F");
+        QTest::newRow("patient sex") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPatientAge("880Y");
+        QTest::newRow("patient age") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    // Study attributes
+
+    {
+        DicomMask mask;
+        mask.setStudyID("1");
+        QTest::newRow("study id") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setStudyDate(QDate(2000, 1, 1), QDate());
+        QTest::newRow("study date min") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setStudyDate(QDate(), QDate::currentDate());
+        QTest::newRow("study date max") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setStudyTime(QTime(0, 0, 0), QTime());
+        QTest::newRow("study time min") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setStudyTime(QTime(), QTime::currentTime());
+        QTest::newRow("study time max") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setStudyDescription("asdf");
+        QTest::newRow("study description") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setStudyModality("CT");
+        QTest::newRow("study modality") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setStudyInstanceUID("1.2");
+        QTest::newRow("study instance uid") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setAccessionNumber("1234567890");
+        QTest::newRow("accession number") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setReferringPhysiciansName("MD");
+        QTest::newRow("referring physician's name") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    // Series attributes
+
+    {
+        DicomMask mask;
+        mask.setSeriesNumber("5");
+        QTest::newRow("series number") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setSeriesDate(QDate(2020, 2, 20), QDate());
+        QTest::newRow("series date min") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setSeriesDate(QDate(), QDate::currentDate());
+        QTest::newRow("series date max") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setSeriesTime(QTime(12, 34, 56), QTime());
+        QTest::newRow("series time min") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setSeriesTime(QTime(), QTime::currentTime());
+        QTest::newRow("series time max") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setSeriesModality("OT");
+        QTest::newRow("series modality") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setSeriesDescription("qwerty");
+        QTest::newRow("series description") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setSeriesProtocolName("azerty");
+        QTest::newRow("series protocol name") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setSeriesInstanceUID("1.2.3");
+        QTest::newRow("series instance uid") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setRequestAttributeSequence("rpi", QString());
+        QTest::newRow("requested procedure id") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setRequestAttributeSequence(QString(), "spsi");
+        QTest::newRow("scheduled procedure step id") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPPSStartDate(QDate(1970, 1, 1), QDate());
+        QTest::newRow("pps start date min") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPPSStartDate(QDate(), QDate::currentDate());
+        QTest::newRow("pps start date max") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPPStartTime(QTime(15, 7, 33), QTime());
+        QTest::newRow("pps start time min") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPPStartTime(QTime(), QTime::currentTime());
+        QTest::newRow("pps start time max") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    // Instance attributes
+
+    {
+        DicomMask mask;
+        mask.setSOPInstanceUID("1.2.3.4");
+        QTest::newRow("sop instance uid") << mask << StudyOperations::TargetResource::Instances;
+    }
+
+    {
+        DicomMask mask;
+        mask.setImageNumber("10");
+        QTest::newRow("image number") << mask << StudyOperations::TargetResource::Instances;
+    }
+
+    // Combinations
+
+    {
+        DicomMask mask;
+        mask.setPatientID("PID1234");
+        mask.setStudyTime(QTime(1, 0), QTime(16, 0));
+        QTest::newRow("patient + study") << mask << StudyOperations::TargetResource::Studies;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPatientSex("M");
+        mask.setSeriesInstanceUID("1.5.78.3.23.34555.9909");
+        QTest::newRow("patient + series") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPatientID("ECTO1");
+        mask.setImageNumber("1");
+        QTest::newRow("patient + instance") << mask << StudyOperations::TargetResource::Instances;
+    }
+
+    {
+        DicomMask mask;
+        mask.setStudyDate(QDate::currentDate().addYears(-1), QDate::currentDate());
+        mask.setSeriesProtocolName("Link");
+        QTest::newRow("study + series") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setStudyDescription("Lorem ipsum");
+        mask.setSOPInstanceUID("4.7.8.232005.9586529885.8877");
+        QTest::newRow("study + instance") << mask << StudyOperations::TargetResource::Instances;
+    }
+
+    {
+        DicomMask mask;
+        mask.setSeriesInstanceUID("999999");
+        mask.setSOPInstanceUID("..................");
+        QTest::newRow("series + instance") << mask << StudyOperations::TargetResource::Instances;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPatientBirth(QDate(1923, 11, 29), QDate(1955, 2, 5));
+        mask.setStudyTime(QTime::currentTime(), QTime::currentTime());
+        mask.setSeriesInstanceUID("33.66.99.22.11.99.9888");
+        QTest::newRow("patient + study + series") << mask << StudyOperations::TargetResource::Series;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPatientBirth(QDate(1714, 9, 11), QDate(2017, 10, 1));
+        mask.setStudyModality("PT");
+        mask.setImageNumber("14");
+        QTest::newRow("patient + study + instance") << mask << StudyOperations::TargetResource::Instances;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPatientName("Smith*");
+        mask.setSeriesTime(QTime::currentTime().addSecs(-1), QTime::currentTime());
+        mask.setSOPInstanceUID("1312");
+        QTest::newRow("patient + series + instance") << mask << StudyOperations::TargetResource::Instances;
+    }
+
+    {
+        DicomMask mask;
+        mask.setReferringPhysiciansName("Dr. Who");
+        mask.setPPSStartDate(QDate::currentDate(), QDate::currentDate());
+        mask.setImageNumber("99");
+        QTest::newRow("study + series + instance") << mask << StudyOperations::TargetResource::Instances;
+    }
+
+    {
+        DicomMask mask;
+        mask.setPatientName("민주");
+        mask.setStudyID("18");
+        mask.setPPSStartDate(QDate::currentDate().addDays(-10), QDate::currentDate());
+        mask.setSOPInstanceUID("1.000.000");
+        QTest::newRow("patient + study + series + instance") << mask << StudyOperations::TargetResource::Instances;
+    }
+}
+
+void test_DicomMask::getTargetResource_ShouldReturnExpectedValue()
+{
+    QFETCH(DicomMask, dicomMask);
+    QFETCH(StudyOperations::TargetResource, expectedTargetResource);
+
+    QCOMPARE(dicomMask.getTargetResource(), expectedTargetResource);
 }
 
 void test_DicomMask::fromStudy_ShouldReturnValidDICOMMask_data()
