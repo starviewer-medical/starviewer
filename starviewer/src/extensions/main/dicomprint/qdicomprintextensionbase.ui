@@ -10,19 +10,7 @@
     <height>1008</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>16</width>
-    <height>16</height>
-   </size>
-  </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1">
    <item row="0" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
@@ -76,12 +64,6 @@
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QFrame" name="frame">
-       <property name="maximumSize">
-        <size>
-         <width>500</width>
-         <height>16777215</height>
-        </size>
-       </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
@@ -135,7 +117,6 @@
              <widget class="QLabel" name="label_17">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -161,7 +142,6 @@
              <widget class="QLabel" name="label_18">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -205,7 +185,7 @@
              <string>Configure DICOM printers</string>
             </property>
             <property name="icon">
-             <iconset resource="../../../main/main.qrc">
+             <iconset>
               <normaloff>:/images/icons/configure.svg</normaloff>:/images/icons/configure.svg</iconset>
             </property>
             <property name="popupMode">
@@ -286,24 +266,6 @@
           <property name="enabled">
            <bool>false</bool>
           </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>20</width>
-            <height>50</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>100000</width>
-            <height>100000</height>
-           </size>
-          </property>
          </widget>
         </item>
         <item>
@@ -358,7 +320,6 @@ margin-right: 5px;</string>
             <widget class="QLabel" name="m_noSupportedSeriesMissage">
              <property name="font">
               <font>
-               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -625,7 +586,7 @@ margin-right: 5px;</string>
              <string>Add to print</string>
             </property>
             <property name="icon">
-             <iconset resource="../../../main/main.qrc">
+             <iconset>
               <normaloff>:/images/icons/list-add.svg</normaloff>:/images/icons/list-add.svg</iconset>
             </property>
            </widget>
@@ -686,7 +647,7 @@ margin-right: 5px;</string>
              <string>Remove selection</string>
             </property>
             <property name="icon">
-             <iconset resource="../../../main/main.qrc">
+             <iconset>
               <normaloff>:/images/icons/edit-delete.svg</normaloff>:/images/icons/edit-delete.svg</iconset>
             </property>
            </widget>
@@ -697,7 +658,7 @@ margin-right: 5px;</string>
              <string>Clear</string>
             </property>
             <property name="icon">
-             <iconset resource="../../../main/main.qrc">
+             <iconset>
               <normaloff>:/images/icons/edit-clear.svg</normaloff>:/images/icons/edit-clear.svg</iconset>
             </property>
            </widget>
@@ -805,7 +766,7 @@ margin-right: 5px;</string>
              <string>Print</string>
             </property>
             <property name="icon">
-             <iconset resource="../../../main/main.qrc">
+             <iconset>
               <normaloff>:/images/icons/document-print.svg</normaloff>:/images/icons/document-print.svg</iconset>
             </property>
            </widget>
@@ -893,9 +854,6 @@ margin-right: 5px;</string>
    <header>qvoilutcombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../../../main/main.qrc"/>
-  <include location="../../../main/main.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
