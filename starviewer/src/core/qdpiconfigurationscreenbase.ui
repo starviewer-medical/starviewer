@@ -14,7 +14,7 @@
    <string>Magnification</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../main/main.qrc">
+   <iconset>
     <normaloff>:/images/icons/kmag.svg</normaloff>:/images/icons/kmag.svg</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -46,9 +46,6 @@ You will have to restart Starviewer in order to see the changes.</string>
     <widget class="QSlider" name="factorSlider">
      <property name="enabled">
       <bool>false</bool>
-     </property>
-     <property name="minimum">
-      <number>-4</number>
      </property>
      <property name="maximum">
       <number>16</number>
@@ -408,9 +405,6 @@ You will have to restart Starviewer in order to see the changes.</string>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../main/main.qrc"/>
-  <include location="../main/main.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
