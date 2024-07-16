@@ -3174,32 +3174,32 @@ Details:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="369"/>
+        <location filename="wadoretrieverequest.cpp" line="370"/>
         <source>Download ended prematurely for an unknown reason.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="385"/>
+        <location filename="wadoretrieverequest.cpp" line="386"/>
         <source>&lt;p&gt;Some images have been downloaded. However there have been some errors. Maybe those images are missing or corrupted in PACS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="387"/>
+        <location filename="wadoretrieverequest.cpp" line="388"/>
         <source>&lt;p&gt;&lt;b&gt;Be aware that if a series is missing some images, 3D reconstructions may not be accurate and measurements on reconstructed planes may be wrong. Check the number of images in each series before using it for such purposes. Refer to the user guide for more information.&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="390"/>
+        <location filename="wadoretrieverequest.cpp" line="391"/>
         <source>&lt;p&gt;Details:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="400"/>
+        <location filename="wadoretrieverequest.cpp" line="401"/>
         <source>Can&apos;t read correctly data from downloaded images. They may be corrupt.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadoretrieverequest.cpp" line="404"/>
+        <location filename="wadoretrieverequest.cpp" line="405"/>
         <source>Database error when saving downloaded images.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3215,47 +3215,53 @@ Details:
 <context>
     <name>udg::WadoUriRequest</name>
     <message>
-        <location filename="wadourirequest.cpp" line="88"/>
+        <location filename="wadourirequest.cpp" line="89"/>
         <source>Not enough space to download studies.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="92"/>
+        <location filename="wadourirequest.cpp" line="93"/>
         <source>Error when trying to delete studies to free up space in disk.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="213"/>
+        <location filename="wadourirequest.cpp" line="214"/>
         <source>Could not obtain the list of files in the study.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="320"/>
+        <location filename="wadourirequest.cpp" line="318"/>
+        <source>%2 (%1 times)
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wadourirequest.cpp" line="334"/>
         <source>Can&apos;t read correctly data from downloaded images. They may be corrupt.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="324"/>
+        <location filename="wadourirequest.cpp" line="338"/>
         <source>Database error when saving downloaded images.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="333"/>
+        <location filename="wadourirequest.cpp" line="347"/>
         <source>&lt;p&gt;Some images have been downloaded. However there have been some errors. Maybe those images are missing or corrupted in PACS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="335"/>
+        <location filename="wadourirequest.cpp" line="349"/>
         <source>&lt;p&gt;&lt;b&gt;Be aware that if a series is missing some images, 3D reconstructions may not be accurate and measurements on reconstructed planes may be wrong. Check the number of images in each series before using it for such purposes. Refer to the user guide for more information.&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="338"/>
+        <location filename="wadourirequest.cpp" line="352"/>
         <source>&lt;p&gt;Details:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wadourirequest.cpp" line="352"/>
+        <location filename="wadourirequest.cpp" line="365"/>
         <source>Could not download any image. Errors:
 
 </source>
