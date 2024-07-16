@@ -38,6 +38,11 @@
     <t>2983</t>
     <t>3032</t>
     <t>3076</t>
+    <t>3082</t>
+    <t>3086</t>
+    <t>3087</t>
+    <t>3088</t>
+    <t>3093</t>
    </im>
    <fx>
     <d>S'ha solucionat un problema de rendiment a l'hora de llegir overlays en imatges multiframe.</d>
@@ -77,8 +82,17 @@
     <t>3068</t>
    </fx>
    <fx>
+    <d>S'ha solucionat un problema d'usabilitat amb les eines quan hi havia activada la magnificació.</d>
+    <t>3092</t>
+   </fx>
+   <fx>
+    <d>Ja no es permet reduir la mida dels elements de la interfície amb la magnificació perquè donava problemes.</d>
+    <t>2949</t>
+   </fx>
+   <fx>
     <d>Altres correccions menors.</d>
     <t>2911</t>
+    <t>2934</t>
     <t>2941</t>
     <t>2984</t>
     <t>3000</t>
@@ -86,6 +100,10 @@
     <t>3034</t>
     <t>3035</t>
     <t>3060</t>
+    <t>3065</t>
+    <t>3081</t>
+    <t>3083</t>
+    <t>3085</t>
    </fx>
   </changes>
  </release>
