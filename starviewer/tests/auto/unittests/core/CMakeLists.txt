@@ -70,6 +70,7 @@ set(SOURCES
     test_standardizeduptakevaluebodysurfaceareaformulacalculator.cpp
     test_standardizeduptakevaluebodyweightformulacalculator.cpp
     test_standardizeduptakevalueleanbodymassformulacalculator.cpp
+    test_stringutils.cpp
     test_study.cpp
     test_studylayoutconfigsettingsconverter.cpp
     test_syncactionsconfiguration.cpp

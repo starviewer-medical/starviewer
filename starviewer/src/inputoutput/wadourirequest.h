@@ -100,6 +100,11 @@ private:
     uint m_numberOfInstancesDownloaded;
     /// Set with the distinct Series Instance UIDs found until now. Used to know the number of different series received.
     QSet<QString> m_downloadedSeriesUids;
+
+    /// Accumulates errors "statistics" to show a summary at the end.
+    /// The key is the error text with any HTTP or HTTPS URL reduced to the host and port so that variations in the URL are grouped.
+    /// The pair is the number of instances of this error and the common pattern in the error to show in the end summary.
+    QHash<QString, QPair<int, QString>> m_errors;
 };
 
 } // namespace udg

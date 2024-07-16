@@ -18,6 +18,7 @@
 #include "image.h"
 #include "localdatabasemanager.h"
 #include "series.h"
+#include "stringutils.h"
 #include "studyoperationresult.h"
 #include "studyoperationsservice.h"
 #include "wadoinstancedownloader.h"
@@ -25,6 +26,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QRegularExpression>
 #include <QUrlQuery>
 
 namespace udg {
@@ -227,6 +229,8 @@ void WadoUriRequest::getSearchResults(StudyOperationResult *result)
 // This is run in the WADO thread.
 void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
 {
+    static const QRegularExpression HttpUrlRegExp(R"((https?://[^/?#\s]*)[^?#\s]*(?:\?[^#\s]*)?(?:#.*)?)", QRegularExpression::UseUnicodePropertiesOption);
+
     m_pendingReplies.remove(reply);
 
     if (reply->error() == QNetworkReply::NoError)
@@ -256,13 +260,16 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
         {
             m_status = Status::Warnings;
 
-            if (m_errorsDescription.size() < 1000)  // avoid excessive errors accumulation
+            QString key = QString(error.what()).replace(HttpUrlRegExp, "\\1");
+
+            if (m_errors.contains(key))
             {
-                m_errorsDescription += QString("\n") + error.what();
+                m_errors[key].first++;
+                m_errors[key].second = StringUtils::findCommonPattern(m_errors[key].second, error.what());
             }
-            else if (!m_errorsDescription.endsWith("…"))
+            else
             {
-                m_errorsDescription += "\n…";
+                m_errors[key] = {1, error.what()};
             }
 
             ERROR_LOG(m_errorsDescription);
@@ -281,13 +288,16 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
     {
         m_status = Status::Warnings;
 
-        if (m_errorsDescription.size() < 1000)  // avoid excessive errors accumulation
+        QString key = reply->errorString().replace(HttpUrlRegExp, "\\1");
+
+        if (m_errors.contains(key))
         {
-            m_errorsDescription += '\n' + reply->errorString();
+            m_errors[key].first++;
+            m_errors[key].second = StringUtils::findCommonPattern(m_errors[key].second, reply->errorString());
         }
-        else if (!m_errorsDescription.endsWith("…"))
+        else
         {
-            m_errorsDescription += "\n…";
+            m_errors[key] = {1, reply->errorString()};
         }
 
         ERROR_LOG(QString("QNetworkReply::NetworkError %1: %2. (HTTP %3: %4) [URL: %5]")
@@ -301,6 +311,14 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
 
     if (m_pendingReplies.isEmpty())
     {
+        if (!m_errors.isEmpty())
+        {
+            foreach (const auto &pair, m_errors)
+            {
+                m_errorsDescription += tr("%2 (%1 times)\n").arg(pair.first).arg(pair.second);
+            }
+        }
+
         if (m_numberOfInstancesDownloaded > 0)
         {
             INFO_LOG(QString("Finished retrieve of study %1 (series %2, instance %3). %4 instance(s) downloaded.")

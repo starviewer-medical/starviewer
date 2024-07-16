@@ -290,6 +290,7 @@ set(SOURCES
     starviewerapplication.cpp
     statswatcher.cpp
     stipplingvtkopenglpolydatamapper2d.cpp
+    stringutils.cpp
     strokesegmentationmethod.cpp
     study.cpp
     studylayoutconfig.cpp
