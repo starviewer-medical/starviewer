@@ -336,7 +336,7 @@ void vtkVolumeRayCastMapper::Render( vtkRenderer *ren, vtkVolume *vol )
   this->UpdateShadingTables( ren, vol );
 
   // This is the input of this mapper
-  vtkImageData *input = this->GetInput();
+  vtkImageData *input = vtkImageData::SafeDownCast(this->GetInput());
 
   // Get the camera from the renderer
   vtkCamera *cam = ren->GetActiveCamera();
@@ -637,7 +637,7 @@ VTK_THREAD_RETURN_TYPE VolumeRayCastMapper_CastRays( void *arg )
   float bounds[6];
   int dim[3];
 
-  me->GetInput()->GetDimensions(dim);
+  vtkImageData::SafeDownCast(me->GetInput())->GetDimensions(dim);
   bounds[0] = bounds[2] = bounds[4] = 0.0;
   bounds[1] = dim[0]-1;
   bounds[3] = dim[1]-1;
@@ -1227,7 +1227,7 @@ int vtkVolumeRayCastMapper::ComputeRowBounds(vtkVolume   *vol,
   float bounds[6];
   int dim[3];
 
-  this->GetInput()->GetDimensions(dim);
+  vtkImageData::SafeDownCast(this->GetInput())->GetDimensions(dim);
   bounds[0] = bounds[2] = bounds[4] = 0.0;
   bounds[1] = static_cast<float>(dim[0]-1) - VTK_RAYCAST_FLOOR_TOL;
   bounds[3] = static_cast<float>(dim[1]-1) - VTK_RAYCAST_FLOOR_TOL;
@@ -1953,7 +1953,7 @@ void vtkVolumeRayCastMapper::UpdateShadingTables( vtkRenderer *ren,
 
   shading = volume_property->GetShade();
 
-  this->GradientEstimator->SetInputData( this->GetInput() );
+  this->GradientEstimator->SetInputData( vtkImageData::SafeDownCast(this->GetInput()) );
 
   if ( shading )
     {

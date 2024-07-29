@@ -1,5 +1,5 @@
 #!/bin/bash
-SOURCE_DIR="$SDK_SOURCE_DIR_BASE/dcmtk-DCMTK-3.6.5"
+SOURCE_DIR="$SDK_SOURCE_DIR_BASE/dcmtk-DCMTK-3.6.7"
 
 if [[ $(uname) == 'Linux' ]]
 then
@@ -13,15 +13,15 @@ then
     CMAKE_EXTRA_OPTIONS=-DCMAKE_PREFIX_PATH:PATH=/usr/local/opt/openssl
 elif [[ $(uname) == 'MSYS_NT'* ]]
 then
-    SUPPORT_LIBS_PATH="$SDK_SOURCE_DIR_BASE/dcmtk-3.6.5-win64-support-MD-iconv-msvc-15.8"
+    SUPPORT_LIBS_PATH="$SDK_SOURCE_DIR_BASE/dcmtk-3.6.7-win64-support-MD-iconv-msvc-15.9"
     mkdir -p "$SDK_INSTALL_PREFIX/lib"
-    cp "$SUPPORT_LIBS_PATH/libiconv-1.15/lib/charset_o.lib" "$SDK_INSTALL_PREFIX/lib"
-    cp "$SUPPORT_LIBS_PATH/libiconv-1.15/lib/libiconv_o.lib" "$SDK_INSTALL_PREFIX/lib"
+    cp "$SUPPORT_LIBS_PATH/libiconv-1.16/lib/charset_o.lib" "$SDK_INSTALL_PREFIX/lib"
+    cp "$SUPPORT_LIBS_PATH/libiconv-1.16/lib/libiconv_o.lib" "$SDK_INSTALL_PREFIX/lib"
 
     ICONV=TRUE
     STDLIBC_ICONV=FALSE
-    CMAKE_EXTRA_OPTIONS="-DWITH_ZLIBINC:PATH=$SUPPORT_LIBS_PATH/zlib-1.2.11 \
-                         -DWITH_LIBICONVINC:PATH=$SUPPORT_LIBS_PATH/libiconv-1.15"
+    CMAKE_EXTRA_OPTIONS="-DWITH_ZLIBINC:PATH=$SUPPORT_LIBS_PATH/zlib-1.2.12 \
+                         -DWITH_LIBICONVINC:PATH=$SUPPORT_LIBS_PATH/libiconv-1.16"
 fi
 
 CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$SDK_BUILD_TYPE \
@@ -40,8 +40,8 @@ CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$SDK_BUILD_TYPE \
                -DDCMTK_WITH_THREADS:BOOL=TRUE \
                -DDCMTK_WITH_DOXYGEN:BOOL=FALSE \
                -DDCMTK_ENABLE_CXX11:BOOL=TRUE \
-               -DDCMTK_ENABLE_BUILTIN_DICTIONARY:BOOL=TRUE \
-               -DDCMTK_ENABLE_EXTERNAL_DICTIONARY:BOOL=FALSE \
+               -DDCMTK_DEFAULT_DICT:STRING=builtin \
+               -DDCMTK_USE_DCMDICTPATH:BOOL=FALSE \
                $CMAKE_EXTRA_OPTIONS"
 
 DCMTKLIBDIR="$SDK_INSTALL_PREFIX/$LIB64DIR"

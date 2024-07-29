@@ -41,13 +41,13 @@ VolumePixelData::ItkImageTypePointer VolumePixelData::getItkData()
     m_vtkToItkFilter->SetInput(this->getVtkData());
     try
     {
-        m_vtkToItkFilter->GetImporter()->Update();
+        m_vtkToItkFilter->Update();
     }
     catch (itk::ExceptionObject &excep)
     {
         WARN_LOG(QString("Excepció en el filtre vtkToItk :: Volume::getItkData() -> ") + excep.GetDescription());
     }
-    return m_vtkToItkFilter->GetImporter()->GetOutput();
+    return m_vtkToItkFilter->GetOutput();
 }
 
 void VolumePixelData::setData(ItkImageTypePointer itkImage)

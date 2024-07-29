@@ -42,9 +42,3 @@ target_link_qt(test_inputoutput
     Sql
     Widgets
 )
-
-find_package(DCMTK REQUIRED)
-target_include_directories(test_inputoutput SYSTEM PRIVATE
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/ofstd
-)
-target_link_libraries(test_inputoutput ${DCMTK_LIBRARIES})

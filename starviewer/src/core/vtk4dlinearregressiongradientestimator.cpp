@@ -23,6 +23,8 @@
 #include "vtkObjectFactory.h"
 #include "vtkPointData.h"
 
+#include <cmath>
+
 namespace {
 
 // Aquest és el mètode que calcula realment les normals i les magnituds del gradient.

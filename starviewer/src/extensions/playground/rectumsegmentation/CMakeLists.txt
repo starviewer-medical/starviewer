@@ -32,16 +32,15 @@ target_link_qt(rectumsegmentation
     Widgets
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkCommonDataModel
-    vtkFiltersCore
-    vtkFiltersSources
-    vtkImagingCore
-    vtkIOImage
-    vtkRenderingCore
+target_link_vtk(rectumsegmentation
+    CommonCore
+    CommonDataModel
+    FiltersCore
+    FiltersSources
+    ImagingCore
+    IOImage
+    RenderingCore
 )
-target_link_libraries(rectumsegmentation ${VTK_LIBRARIES})
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon

@@ -2111,6 +2111,67 @@ http://www.medical.siemens.com/siemens/en_GLOBAL/rg_marcom_FBAs/files/brochures/
 -->
     <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
   </iod>
+<!--
+Totally made up, do not copy:
+-->
+  <iod table="FUJI.1" name="Fuji Private CR Image IOD Modules">
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
+    <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
+    <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
+    <entry ie="Series" name="CR Series" ref="C.8.1.1" usage="M"/>
+    <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
+    <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Contrast/bolus" ref="C.7.6.4" usage="C - Required if contrast media was used in this image"/>
+    <entry ie="Image" name="Display Shutter" ref="C.7.6.11" usage="U"/>
+    <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
+    <entry ie="Image" name="CR Image" ref="C.8.1.2" usage="M"/>
+    <entry ie="Image" name="Overlay Plane" ref="C.9.2" usage="U"/>
+    <entry ie="Image" name="Modality LUT" ref="C.11.1" usage="U"/>
+    <entry ie="Image" name="VOI LUT" ref="C.11.2" usage="U"/>
+    <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
+  </iod>
+  <iod table="FUJI.2" name="Fuji Private Mammo CR Image IOD Modules">
+    <entry ie="Patient" name="Patient" ref="C.7.1.1" usage="M"/>
+    <entry ie="Patient" name="Specimen Identification" ref="C.7.1.2" usage="U"/>
+    <entry ie="Patient" name="Clinical Trial Subject" ref="C.7.1.3" usage="U"/>
+    <entry ie="Study" name="General Study" ref="C.7.2.1" usage="M"/>
+    <entry ie="Study" name="Patient Study" ref="C.7.2.2" usage="U"/>
+    <entry ie="Study" name="Clinical Trial Study" ref="C.7.2.3" usage="U"/>
+    <entry ie="Series" name="General Series" ref="C.7.3.1" usage="M"/>
+    <entry ie="Series" name="Clinical Trial Series" ref="C.7.3.2" usage="U"/>
+    <entry ie="Series" name="DX Series" ref="C.8.11.1" usage="M"/>
+    <entry ie="Series" name="Mammography Series" ref="C.8.11.6" usage="M"/>
+    <entry ie="Frame of Reference" name="Frame of Reference" ref="C.7.4.1" usage="C - Required if multiple images are obtained without releasing breast compression"/>
+    <entry ie="Equipment" name="General Equipment" ref="C.7.5.1" usage="M"/>
+    <entry ie="Image" name="General Image" ref="C.7.6.1" usage="M"/>
+    <entry ie="Image" name="Image Pixel" ref="C.7.6.3" usage="M"/>
+    <entry ie="Image" name="Contrast/Bolus" ref="C.7.6.4" usage="U"/>
+    <entry ie="Image" name="Display Shutter" ref="C.7.6.11" usage="U"/>
+    <entry ie="Image" name="Device" ref="C.7.6.12" usage="U"/>
+    <entry ie="Image" name="Intervention" ref="C.7.6.13" usage="U"/>
+    <entry ie="Image" name="DX Anatomy Imaged" ref="C.8.11.2" usage="M"/>
+    <entry ie="Image" name="DX Image" ref="C.8.11.3" usage="M"/>
+    <entry ie="Image" name="DX Detector" ref="C.8.11.4" usage="M"/>
+    <entry ie="Image" name="X-Ray Collimator" ref="C.8.7.3" usage="U"/>
+    <entry ie="Image" name="DX Positioning" ref="C.8.11.5" usage="U"/>
+    <entry ie="Image" name="X-Ray Tomo Acquisition" ref="C.8.7.7" usage="U"/>
+    <entry ie="Image" name="X-Ray Acquisition Dose" ref="C.8.7.8" usage="U"/>
+    <entry ie="Image" name="X-Ray Generation" ref="C.8.7.9" usage="U"/>
+    <entry ie="Image" name="X-Ray Filtration" ref="C.8.7.10" usage="U"/>
+    <entry ie="Image" name="X-Ray Grid" ref="C.8.7.11" usage="U"/>
+    <entry ie="Image" name="Mammography Image" ref="C.8.11.7" usage="M"/>
+    <entry ie="Image" name="Overlay Plane" ref="C.9.2" usage="C - Required if graphic annotation is present - See A.27.3"/>
+    <entry ie="Image" name="VOI LUT" ref="C.11.2" usage="C - Required if Presentation Intent Type (0008,0068) is FOR PRESENTATION. Shall not be present otherwise."/>
+    <entry ie="Image" name="Image Histogram" ref="C.11.5" usage="U"/>
+    <entry ie="Image" name="Acquisition Context" ref="C.7.6.14" usage="M"/>
+    <entry ie="Image" name="SOP Common" ref="C.12.1" usage="M"/>
+  </iod>
+
   <module ref="C.2.1" table="C.2-1" name="Patient Relationship Module Attributes">
     <entry group="0008" element="1110" name="Referenced Study Sequence">
       <description>Uniquely identifies the Study SOP Instances associated with the Patient SOP Instance. One or more Items may be included in this Sequence.</description>
@@ -2200,7 +2261,7 @@ Zero or more Items may be included in the sequence. The sequence items are order
     </entry>
     <include ref="&gt; Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 5000 - Languages."/>
     <entry group="0010" element="0102" name="&gt; Patient's Primary Language Code Modifier Sequence">
-      <description>A modifer for a Patient's Primary Language. Can be used to specify a national language variant.
+      <description>A modifier for a Patient's Primary Language. Can be used to specify a national language variant.
 Exactly one Item may be included in the sequence.</description>
     </entry>
     <include ref="&gt;&gt; Include Code Sequence Macro Table 8.8-1" description="Baseline Context ID is CID 5001 - Countries."/>
@@ -3836,7 +3897,7 @@ The sequence may have one or more Items.</description>
     <entry group="0020" element="0011" name="Series Number" type="1">
       <description>A number that identifies this Series.
 Notes: 1. The value of this attribute should be unique for all series in a study created on the same equipment.
-2. Because series can be created on more than one equipment, it can not be guranteed that the value of Series Number (0020,0011) is unique in a study.</description>
+2. Because series can be created on more than one equipment, it can not be guaranteed that the value of Series Number (0020,0011) is unique in a study.</description>
     </entry>
     <entry group="0008" element="1111" name="Referenced Performed Procedure Step Sequence" type="1C">
       <description>Uniquely identifies the Performed Procedure Step SOP Instance to which the Series is related (e.g. a Modality or General-Purpose Performed Procedure Step SOP Instance). Only a single Item is permitted in this sequence.
@@ -5148,7 +5209,7 @@ Required if Concatenation UID (0020,9161) is present.</description>
 Required if a group of multi-frame image SOP Instances within a Series are part of a Concatenation.</description>
     </entry>
     <entry group="0020" element="9162" name="In-concatenation Number" type="1C">
-      <description>Identifier for one SOP Instance belonging to a concatenation. See C.7.6.16.2.2.4 for further specification. The first instance in a concatentation (that with the lowest Concatenation Frame Offset Number (0020,9228) value) shall have an In-concatenation Number (0020,9162) value of 1, and subsequent instances shall have values monotonically increasing by 1.
+      <description>Identifier for one SOP Instance belonging to a concatenation. See C.7.6.16.2.2.4 for further specification. The first instance in a concatenation (that with the lowest Concatenation Frame Offset Number (0020,9228) value) shall have an In-concatenation Number (0020,9162) value of 1, and subsequent instances shall have values monotonically increasing by 1.
 Required if Concatenation UID (0020,9161) is present.</description>
       <section ref="C.7.6.16.2.2.4" name="">Due to implementation specific reasons (such as maximum object size) the information of a multi-frame image may be split into more than one SOP Instance. These SOP Instances form together a Concatenation. This is a group of SOP Instances within a Series that is uniquely identified by the Concatenation UID (0020,9161).
 The Dimension Index Sequence (0020,9222) for each SOP Instance with the same Concatenation UID (0020,9161) shall contain exactly the same tags and values.
@@ -13009,7 +13070,7 @@ DOUBLE_SIDED = the Compensator has a shaped (i.e. non-flat) surface on both side
       <description>Compensator Linear Stopping Power Ratio, relative to water, at the beam energy specified by the Nominal Beam Energy (300A,0114) of the first Control Point of the Ion Control Point Sequence (300A,03A8).</description>
     </entry>
     <entry group="300A" element="02E8" name="&gt;&gt;Compensator Milling Tool Diameter" type="3">
-      <description>The diameter (in mm) of the milling tool to be used to create the compensator. The diameter is expressed as the actual physcial size and not a projected size at isocenter.</description>
+      <description>The diameter (in mm) of the milling tool to be used to create the compensator. The diameter is expressed as the actual physical size and not a projected size at isocenter.</description>
     </entry>
     <entry group="300A" element="00ED" name="&gt;Number of Boli" type="1">
       <description>Number of boli associated with current Beam.</description>
@@ -13100,7 +13161,7 @@ SOURCE_SIDE = the block is mounted on the side of the Block Tray that is towards
 
 Defined Terms:
 ION_SQUARE = square ion applicator
-ION_RECT = rectangluar ion applicator
+ION_RECT = rectangular ion applicator
 ION_CIRC = circular ion applicator
 ION_SHORT = short ion applicator
 ION_OPEN = open (dummy) ion applicator
@@ -13675,7 +13736,7 @@ Only a single item shall be permitted in this sequence.</description>
 
 Defined Terms:
 ION_SQUARE = square ion applicator
-ION_RECT = rectangluar ion applicator
+ION_RECT = rectangular ion applicator
 ION_CIRC = circular ion applicator
 ION_SHORT = short ion applicator
 ION_OPEN = open (dummy) ion applicator
@@ -14051,13 +14112,13 @@ c)   Table Angle moves from 170 degrees to 160 degrees, Table Rotation Direction
       <description>Introduces sequence of parameters that were overridden during the administration of the beam segment immediately prior to the current control point. The sequence may contain one or more items.</description>
     </entry>
     <entry group="3008" element="0061" name="&gt;&gt;&gt;Parameter Sequence Pointer" type="1">
-      <description>Contains the Data Element Tag of the parent sequence containing the attribute that was overriden. The value is limited in scope to the Treatment Session Ion Beam Sequence (3008,0021) and all nested sequences therein.</description>
+      <description>Contains the Data Element Tag of the parent sequence containing the attribute that was overridden. The value is limited in scope to the Treatment Session Ion Beam Sequence (3008,0021) and all nested sequences therein.</description>
     </entry>
     <entry group="3008" element="0062" name="&gt;&gt;&gt;Override Parameter Pointer" type="1">
       <description>Contains the Data Element Tag of the attribute that was overridden.</description>
     </entry>
     <entry group="3008" element="0063" name="&gt;&gt;&gt;Parameter Item Index" type="1">
-      <description>Contains the ones-based sequence item index of the overriden attributes within it's parent sequence. The value is limited in scope to the Treatment Session Ion Beam Sequence (3008,0021) and all nested sequences therein.</description>
+      <description>Contains the ones-based sequence item index of the overridden attributes within it's parent sequence. The value is limited in scope to the Treatment Session Ion Beam Sequence (3008,0021) and all nested sequences therein.</description>
     </entry>
     <entry group="0008" element="1070" name="&gt;&gt;&gt;Operators' Name" type="2">
       <description>Name of operator who authorized override.</description>
@@ -14931,7 +14992,7 @@ The application of the Window Center (0028,1050) and Window Width (0028,1051) sh
 Note:  If the Presentation LUT Shape (2050,0020) is IDENTITY, then the result of applying the Window Center (0028,1050) and Window Width (0028,1051) is P-Values.
 
 If multiple values are present, both Attributes shall have the same number of values and shall be considered as pairs. Multiple values indicate that multiple alternative views should be presented.
-The VOI LUT Sequence specifes a (potentially non-linear) conversion from the output of the (conceptual) Modality LUT values to the input to the (conceptual) Presentation LUT.
+The VOI LUT Sequence specifies a (potentially non-linear) conversion from the output of the (conceptual) Modality LUT values to the input to the (conceptual) Presentation LUT.
 If multiple items are present in VOI LUT Sequence (0028,3010), only one shall be applied. Multiple items indicate that multiple alternative views should be presented.
 If any VOI LUT Attributes are included by an Image, a Window Width and Window Center or the VOI LUT Table, but not both, shall be applied to the Image for display. Inclusion of both indicates that multiple alternative views should be presented.
 The three values of the LUT Descriptor (0028,3002) describe the format of the LUT Data (0028,3006).
@@ -14954,7 +15015,7 @@ The application of the Window Center (0028,1050) and Window Width (0028,1051) sh
 Note:  If the Presentation LUT Shape (2050,0020) is IDENTITY, then the result of applying the Window Center (0028,1050) and Window Width (0028,1051) is P-Values.
 
 If multiple values are present, both Attributes shall have the same number of values and shall be considered as pairs. Multiple values indicate that multiple alternative views should be presented.
-The VOI LUT Sequence specifes a (potentially non-linear) conversion from the output of the (conceptual) Modality LUT values to the input to the (conceptual) Presentation LUT.
+The VOI LUT Sequence specifies a (potentially non-linear) conversion from the output of the (conceptual) Modality LUT values to the input to the (conceptual) Presentation LUT.
 If multiple items are present in VOI LUT Sequence (0028,3010), only one shall be applied. Multiple items indicate that multiple alternative views should be presented.
 If any VOI LUT Attributes are included by an Image, a Window Width and Window Center or the VOI LUT Table, but not both, shall be applied to the Image for display. Inclusion of both indicates that multiple alternative views should be presented.
 The three values of the LUT Descriptor (0028,3002) describe the format of the LUT Data (0028,3006).
@@ -14984,7 +15045,7 @@ The application of the Window Center (0028,1050) and Window Width (0028,1051) sh
 Note:  If the Presentation LUT Shape (2050,0020) is IDENTITY, then the result of applying the Window Center (0028,1050) and Window Width (0028,1051) is P-Values.
 
 If multiple values are present, both Attributes shall have the same number of values and shall be considered as pairs. Multiple values indicate that multiple alternative views should be presented.
-The VOI LUT Sequence specifes a (potentially non-linear) conversion from the output of the (conceptual) Modality LUT values to the input to the (conceptual) Presentation LUT.
+The VOI LUT Sequence specifies a (potentially non-linear) conversion from the output of the (conceptual) Modality LUT values to the input to the (conceptual) Presentation LUT.
 If multiple items are present in VOI LUT Sequence (0028,3010), only one shall be applied. Multiple items indicate that multiple alternative views should be presented.
 If any VOI LUT Attributes are included by an Image, a Window Width and Window Center or the VOI LUT Table, but not both, shall be applied to the Image for display. Inclusion of both indicates that multiple alternative views should be presented.
 The three values of the LUT Descriptor (0028,3002) describe the format of the LUT Data (0028,3006).
@@ -15006,7 +15067,7 @@ The application of the Window Center (0028,1050) and Window Width (0028,1051) sh
 Note:  If the Presentation LUT Shape (2050,0020) is IDENTITY, then the result of applying the Window Center (0028,1050) and Window Width (0028,1051) is P-Values.
 
 If multiple values are present, both Attributes shall have the same number of values and shall be considered as pairs. Multiple values indicate that multiple alternative views should be presented.
-The VOI LUT Sequence specifes a (potentially non-linear) conversion from the output of the (conceptual) Modality LUT values to the input to the (conceptual) Presentation LUT.
+The VOI LUT Sequence specifies a (potentially non-linear) conversion from the output of the (conceptual) Modality LUT values to the input to the (conceptual) Presentation LUT.
 If multiple items are present in VOI LUT Sequence (0028,3010), only one shall be applied. Multiple items indicate that multiple alternative views should be presented.
 If any VOI LUT Attributes are included by an Image, a Window Width and Window Center or the VOI LUT Table, but not both, shall be applied to the Image for display. Inclusion of both indicates that multiple alternative views should be presented.
 The three values of the LUT Descriptor (0028,3002) describe the format of the LUT Data (0028,3006).
@@ -19991,7 +20052,7 @@ Required if present and have an equal value in the contributing SOP Instances.</
 Required if present and consistent in the contributing SOP Instances.</description>
     </entry>
   </module>
-  <macro table="C.8.21.3.1.1-1" name="X Ray 3D General Shared Acquisiton Macro">
+  <macro table="C.8.21.3.1.1-1" name="X Ray 3D General Shared Acquisition Macro">
     <entry group="0008" element="2112" name="Source Image Sequence" type="1C">
       <description>A Sequence that identifies the set of Images that constitute this acquisition context.
 Required if the reconstruction is created from DICOM SOP Instances.
@@ -20559,7 +20620,7 @@ Note: Values of 0\0 indicate that the overlay pixels start 1 row above and one c
     </entry>
     <entry group="60xx" element="0100" name="Overlay Bits Allocated" type="1">
       <description>Number of Bits Allocated in the Overlay.
-Tthe value of this Attribute shall be 1.
+The value of this Attribute shall be 1.
 Note: Formerly the standard described embedding the overlay data in the Image Pixel Data (7FE0,0010), in which case the value of this Attribute was required to be the same as Bits Allocated (0028,0100). This usage has been retired. See PS 3.3 2004.</description>
     </entry>
     <entry group="60xx" element="0102" name="Overlay Bit Position" type="1">
@@ -22611,7 +22672,7 @@ BASIC FILM BOX PRESENTATION MODULE ATTRIBUTES
       <description>Maximum density that can be printed, expressed in hundredths of OD.</description>
     </entry>
     <entry group="2000" element="00A4" name="&gt;Other Media Available Sequence">
-      <description>A sequence which specifies combinations of Medium Type and Film Size ID for which the printer will accept an N-CREATE of a Film Box, but are not physically installed in the printer at this time. It also specifies the Min and Max Densities supported by these media. User intervention may be required to instal these media in the printer.
+      <description>A sequence which specifies combinations of Medium Type and Film Size ID for which the printer will accept an N-CREATE of a Film Box, but are not physically installed in the printer at this time. It also specifies the Min and Max Densities supported by these media. User intervention may be required to install these media in the printer.
 One item for each Medium Type and Film Size ID available, but not installed shall be included.</description>
     </entry>
     <entry group="2000" element="0030" name="&gt;&gt;Medium Type">
@@ -27530,7 +27591,7 @@ Notes:  1. The following attributes from image IODs are examples of some possibl
     </entry>
     <entry group="0072" element="0600" name="&gt;Sorting Operations Sequence" type="2">
       <description>Sequence that defines sorting criteria to be applied to the result of filter and reformat operations, to define the order in which to present the images in the Image Boxes. Zero or more items shall be included in this sequence. See C.23.3.1.2.</description>
-      <section ref="C.23.3.1.2" name="">The Items in the Sorting Operations Sequence (0072,0600) define the order in which the images resulting from the filter and reformat operations on the Image Set are to be displayed in the associated Image Boxes of the Display Set. The sorting criteria may include the value of a numeric, date, or time Attribute that is expected to be present in each of the image objects in the filtered Image Set, and/or an abstract sorting category. A sorting direction shall be associated with each sorting criterion. If a textual Attribute is used for sorting, then the INCREASING sorting direction indicates alpabetical order, and DECREASING indicates reverse alphabetical order.
+      <section ref="C.23.3.1.2" name="">The Items in the Sorting Operations Sequence (0072,0600) define the order in which the images resulting from the filter and reformat operations on the Image Set are to be displayed in the associated Image Boxes of the Display Set. The sorting criteria may include the value of a numeric, date, or time Attribute that is expected to be present in each of the image objects in the filtered Image Set, and/or an abstract sorting category. A sorting direction shall be associated with each sorting criterion. If a textual Attribute is used for sorting, then the INCREASING sorting direction indicates alphabetical order, and DECREASING indicates reverse alphabetical order.
 If a code sequence Attribute is used for sorting, then the Code Meaning (0008,0104) shall be sorted alphabetically. If a string numeric Attribute is used for sorting (VR of IS or DS), then sorting shall be on the numeric value, and padding shall be ignored. When sorting by date or time Attribute, then sorting shall be on the temporal value, not the alphabetic string.
 If there are multiple Items in the Sorting Operations Sequence (0072,0600), then the sorting operations shall be applied in Item order. The least rapidly varying attribute for the sorting operation shall be the first Item in the sequence.
 Note:  For example, a Sorting Operations Sequence (0072,0600) with two Items:
@@ -27548,7 +27609,7 @@ Notes:  1. The following attributes from image IODs are examples of some possibl
     <entry group="0072" element="0026" name="&gt;&gt;Selector Attribute" type="1C">
       <description>Data Element Tag of an Attribute from an Image IOD to be used for sorting. See C.23.3.1.2 for potential attributes.
 Required if Sort-by Category (0072,0602) is not present.</description>
-      <section ref="C.23.3.1.2" name="">The Items in the Sorting Operations Sequence (0072,0600) define the order in which the images resulting from the filter and reformat operations on the Image Set are to be displayed in the associated Image Boxes of the Display Set. The sorting criteria may include the value of a numeric, date, or time Attribute that is expected to be present in each of the image objects in the filtered Image Set, and/or an abstract sorting category. A sorting direction shall be associated with each sorting criterion. If a textual Attribute is used for sorting, then the INCREASING sorting direction indicates alpabetical order, and DECREASING indicates reverse alphabetical order.
+      <section ref="C.23.3.1.2" name="">The Items in the Sorting Operations Sequence (0072,0600) define the order in which the images resulting from the filter and reformat operations on the Image Set are to be displayed in the associated Image Boxes of the Display Set. The sorting criteria may include the value of a numeric, date, or time Attribute that is expected to be present in each of the image objects in the filtered Image Set, and/or an abstract sorting category. A sorting direction shall be associated with each sorting criterion. If a textual Attribute is used for sorting, then the INCREASING sorting direction indicates alphabetical order, and DECREASING indicates reverse alphabetical order.
 If a code sequence Attribute is used for sorting, then the Code Meaning (0008,0104) shall be sorted alphabetically. If a string numeric Attribute is used for sorting (VR of IS or DS), then sorting shall be on the numeric value, and padding shall be ignored. When sorting by date or time Attribute, then sorting shall be on the temporal value, not the alphabetic string.
 If there are multiple Items in the Sorting Operations Sequence (0072,0600), then the sorting operations shall be applied in Item order. The least rapidly varying attribute for the sorting operation shall be the first Item in the sequence.
 Note:  For example, a Sorting Operations Sequence (0072,0600) with two Items:
@@ -27574,7 +27635,7 @@ Defined terms:
 ALONG_AXIS: for CT, MR, other cross-sectional image sets
 BY_ACQ_TIME
 Required if Selector Attribute (0072,0026) is not present.</description>
-      <section ref="C.23.3.1.2" name="">The Items in the Sorting Operations Sequence (0072,0600) define the order in which the images resulting from the filter and reformat operations on the Image Set are to be displayed in the associated Image Boxes of the Display Set. The sorting criteria may include the value of a numeric, date, or time Attribute that is expected to be present in each of the image objects in the filtered Image Set, and/or an abstract sorting category. A sorting direction shall be associated with each sorting criterion. If a textual Attribute is used for sorting, then the INCREASING sorting direction indicates alpabetical order, and DECREASING indicates reverse alphabetical order.
+      <section ref="C.23.3.1.2" name="">The Items in the Sorting Operations Sequence (0072,0600) define the order in which the images resulting from the filter and reformat operations on the Image Set are to be displayed in the associated Image Boxes of the Display Set. The sorting criteria may include the value of a numeric, date, or time Attribute that is expected to be present in each of the image objects in the filtered Image Set, and/or an abstract sorting category. A sorting direction shall be associated with each sorting criterion. If a textual Attribute is used for sorting, then the INCREASING sorting direction indicates alphabetical order, and DECREASING indicates reverse alphabetical order.
 If a code sequence Attribute is used for sorting, then the Code Meaning (0008,0104) shall be sorted alphabetically. If a string numeric Attribute is used for sorting (VR of IS or DS), then sorting shall be on the numeric value, and padding shall be ignored. When sorting by date or time Attribute, then sorting shall be on the temporal value, not the alphabetic string.
 If there are multiple Items in the Sorting Operations Sequence (0072,0600), then the sorting operations shall be applied in Item order. The least rapidly varying attribute for the sorting operation shall be the first Item in the sequence.
 Note:  For example, a Sorting Operations Sequence (0072,0600) with two Items:

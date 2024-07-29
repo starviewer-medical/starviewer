@@ -77,28 +77,6 @@ shall not be used in advertising or otherwise to promote the sale,
 use or other dealings in these Data Files or Software without prior
 written authorization of the copyright holder.
 
---------------------------------------------------------------------
-
-Copyright (c) 1996 - 2011, Daniel Stenberg, <daniel@haxx.se>.
-
-All rights reserved.
-
-Permission to use, copy, modify, and distribute this software for any purpose
-with or without fee is hereby granted, provided that the above copyright
-notice and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF THIRD PARTY RIGHTS. IN
-NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
-OR OTHER DEALINGS IN THE SOFTWARE.
-
-Except as contained in this notice, the name of a copyright holder shall not
-be used in advertising or otherwise to promote the sale, use or other dealings
-in this Software without prior written authorization of the copyright holder.
-
 
 GDCM (Grassroots DICOM). A DICOM library
 ========================================
@@ -157,24 +135,6 @@ Copyright (c) 1999-2008 Insight Software Consortium All rights reserved. Redistr
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS "AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-INSIGHT TOOLKIT (ITK)
-=====================
-
-Copyright Insight Software Consortium
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0.txt
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-
 VISUALIZATION TOOLKIT (VTK)
 ============================
 Copyright (c) 1993-2008 Ken Martin, Will Schroeder, Bill Lorensen
@@ -188,88 +148,28 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-GLEW
-====
-
-The OpenGL Extension Wrangler Library
-Copyright (C) 2002-2007, Milan Ikits <milan ikits[]ieee org>
-Copyright (C) 2002-2007, Marcelo E. Magallon <mmagallo[]debian org>
-Copyright (C) 2002, Lev Povalahev
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-* Redistributions of source code must retain the above copyright notice,
-  this list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
-* The name of the author may be used to endorse or promote products
-  derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
-THE POSSIBILITY OF SUCH DAMAGE.
-
-
 QTSINGLEAPPLICATION
 ===================
 
-Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
-Contact: http://www.qt-project.org/legal
-
-Commercial License Usage
-Licensees holding valid commercial Qt licenses may use this file in
-accordance with the commercial license agreement provided with the
-Software or, alternatively, in accordance with the terms contained in
-a written agreement between you and Digia.  For licensing terms and
-conditions see http://qt.digia.com/licensing.  For further information
-use the contact form at http://qt.digia.com/contact-us.
-
-GNU Lesser General Public License Usage
-Alternatively, this file may be used under the terms of the GNU Lesser
-General Public License version 2.1 as published by the Free Software
-Foundation and appearing in the file LICENSE.LGPL included in the
-packaging of this file.  Please review the following information to
-ensure the GNU Lesser General Public License version 2.1 requirements
-will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-
-In addition, as a special exception, Digia gives you certain additional
-rights.  These rights are described in the Digia Qt LGPL Exception
-version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
-
-GNU General Public License Usage
-Alternatively, this file may be used under the terms of the GNU
-General Public License version 3.0 as published by the Free Software
-Foundation and appearing in the file LICENSE.GPL included in the
-packaging of this file.  Please review the following information to
-ensure the GNU General Public License version 3.0 requirements will be
-met: http://www.gnu.org/copyleft/gpl.html.
+Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
+SPDX-License-Identifier: BSD-3-Clause
 
 
 EASYLOGGING++
 =============
 
+Bismillah ar-Rahmaan ar-Raheem
+
 Easylogging++ v9.96.7
 Single-header only, cross-platform logging library for C++ applications
 
-Copyright (c) 2012-2018 Muflihun Labs
+Copyright (c) 2012-2018 Amrayn Web Services
 Copyright (c) 2012-2018 @abumusamq
 
 This library is released under the MIT Licence.
-https://github.com/muflihun/easyloggingpp/blob/master/LICENSE
+https://github.com/amrayn/easyloggingpp/blob/master/LICENSE
 
-https://github.com/muflihun/easyloggingpp
-https://muflihun.github.io/easyloggingpp
+https://amrayn.com
 http://muflihun.com
 
 

@@ -168,22 +168,10 @@ void StipplingVtkOpenGLPolyDataMapper2D::BuildShaders(std::string &vertexCode, s
                 }
             }
 
-            // are we handling the apple bug?
-            if (!this->AppleBugPrimIDs.empty())
+            if (this->HaveCellScalars)
             {
-                vtkShaderProgram::Substitute(geometryCode, "//VTK::PrimID::Dec",
-                                             "in  vec4 applePrimIDVSOutput[];\n"
-                                             "out vec4 applePrimIDGSOutput;");
                 vtkShaderProgram::Substitute(geometryCode, "//VTK::PrimID::Impl",
-                                             "applePrimIDGSOutput = applePrimIDVSOutput[i];");
-            }
-            else
-            {
-                if (this->HaveCellScalars)
-                {
-                    vtkShaderProgram::Substitute(geometryCode, "//VTK::PrimID::Impl",
-                                                 "gl_PrimitiveID = gl_PrimitiveIDIn;");
-                }
+                                             "gl_PrimitiveID = gl_PrimitiveIDIn;");
             }
         }
 

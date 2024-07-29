@@ -103,7 +103,7 @@ void ObscuranceMainThread::run()
     QVector<ObscuranceThread*> threads(numberOfThreads);
 
     // Variables necessàries
-    vtkImageData *image = mapper->GetInput();
+    vtkImageData *image = vtkImageData::SafeDownCast(mapper->GetInput());
     unsigned short *data = reinterpret_cast<unsigned short*>(image->GetPointData()->GetScalars()->GetVoidPointer(0));
     int dataSize = image->GetPointData()->GetScalars()->GetSize();
     int dimensions[3];

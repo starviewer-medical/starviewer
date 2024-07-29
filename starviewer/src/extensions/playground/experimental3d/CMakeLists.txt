@@ -76,7 +76,7 @@ add_extension(experimental3d)
 get_target_includes(CORE_INCLUDES core YES)
 target_include_directories(experimental3d PUBLIC ${CORE_INCLUDES})
 
-target_link_libraries(experimental3d core glew)
+target_link_libraries(experimental3d core)
 
 
 ################ External library dependencies ################
@@ -89,18 +89,18 @@ target_link_qt(experimental3d
     Widgets
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkCommonDataModel
-    vtkCommonMath
-    vtkGUISupportQt
-    vtkImagingCore
-    vtkImagingGeneral
-    vtkImagingMath
-    vtkInteractionStyle
-    vtkRenderingCore
-    vtkRenderingOpenGL2
-    vtkRenderingVolume
-    vtkRenderingVolumeOpenGL2
+target_link_vtk(experimental3d
+    CommonCore
+    CommonDataModel
+    CommonMath
+    CommonSystem
+    GUISupportQt
+    ImagingCore
+    ImagingGeneral
+    ImagingMath
+    InteractionStyle
+    RenderingCore
+    RenderingOpenGL2
+    RenderingVolume
+    RenderingVolumeOpenGL2
 )
-target_link_libraries(experimental3d ${VTK_LIBRARIES})

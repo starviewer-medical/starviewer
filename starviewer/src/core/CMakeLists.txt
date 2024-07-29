@@ -127,9 +127,6 @@ set(SOURCES
     imagepipeline.cpp
     imageplane.cpp
     itemmenu.cpp
-    itkDCMTKFileReader.cxx
-    itkDCMTKImageIO.cxx
-    itkDCMTKImageIOFactory.cxx
     keyimagenotefillerstep.cpp
     leanbodymassformula.cpp
     leanbodymassformulacalculator.cpp
@@ -459,52 +456,51 @@ target_link_qt(core
     XmlPatterns
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkCommonDataModel
-    vtkCommonExecutionModel
-    vtkCommonMath
-    vtkCommonTransforms
-    vtkFiltersCore
-    vtkFiltersGeneral
-    vtkFiltersSources
-    vtkGUISupportQt
-    vtkImagingCore
-    vtkInteractionWidgets
-    vtkIOImage
-    vtkRenderingAnnotation
-    vtkRenderingCore
-    vtkRenderingImage
-    vtkRenderingOpenGL2
-    vtkRenderingVolume
-    vtkRenderingVolumeOpenGL2
+target_link_vtk(core
+    CommonCore
+    CommonDataModel
+    CommonExecutionModel
+    CommonMath
+    CommonTransforms
+    FiltersCore
+    FiltersGeneral
+    FiltersSources
+    GUISupportQt
+    ImagingCore
+    InteractionWidgets
+    IOImage
+    RenderingAnnotation
+    RenderingCore
+    RenderingImage
+    RenderingOpenGL2
+    RenderingVolume
+    RenderingVolumeOpenGL2
 )
-target_link_libraries(core ${VTK_LIBRARIES})
+
+target_link_dcmtk(core
+    dcmdata
+    dcmimage
+    dcmimgle
+    ofstd
+)
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon
+    ITKIODCMTK
     ITKIOGDCM
     ITKIOImageBase
+    ITKRegionGrowing
+    ITKSmoothing
     ITKStatistics
     ITKTransform
     ITKVTK
+    ITKVtkGlue
 )
 set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
 target_link_libraries(core ${ITK_LIBRARIES})
 
-find_package(DCMTK REQUIRED)
-target_include_directories(core SYSTEM PUBLIC
-    ${DCMTK_INCLUDE_DIRS}
-    ${DCMTK_INCLUDE_DIRS}/dcmtk
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmdata
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmimage
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmimgle
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/ofstd
-)
-target_link_libraries(core ${DCMTK_LIBRARIES})
-
 find_package(GDCM REQUIRED)
-target_link_libraries(core gdcmCommon gdcmMSFF vtkgdcm)
+target_link_libraries(core gdcmCommon gdcmMSFF GDCM::vtkgdcm)
 
 find_package(KF5ThreadWeaver REQUIRED)
 target_link_libraries(core KF5::ThreadWeaver)

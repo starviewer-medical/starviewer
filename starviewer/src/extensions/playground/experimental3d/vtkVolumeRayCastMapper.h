@@ -25,6 +25,7 @@
 #define vtkVolumeRayCastMapper_h
 
 #include "vtkRenderingVolumeModule.h" // For export macro
+#include <vtkThreads.h>
 #include "vtkVolumeMapper.h"
 #include "vtkVolumeRayCastFunction.h" // For vtkVolumeRayCastStaticInfo
                                       // and vtkVolumeRayCastDynamicInfo

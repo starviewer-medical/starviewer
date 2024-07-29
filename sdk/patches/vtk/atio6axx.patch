@@ -1,10 +1,14 @@
 --- a/Rendering/OpenGL2/CMakeLists.txt
 +++ b/Rendering/OpenGL2/CMakeLists.txt
-@@ -345,3 +345,7 @@
-       )
-   target_link_libraries(vtkTestOpenGLVersion opengl32)
- endif()
+@@ -398,3 +398,11 @@ if (NOT ANDROID AND
+     TARGETS vtkProbeOpenGLVersion
+     MODULES VTK::RenderingOpenGL2)
+ endif ()
 +
++# Avoid crash with some versions of atio6axx.dll
 +if (WIN32)
-+  add_compile_definitions(NO_TIMESTAMP_QUERIES)
++  set_property(SOURCE vtkOpenGLRenderTimer.cxx APPEND
++    PROPERTY
++      COMPILE_DEFINITIONS NO_TIMESTAMP_QUERIES
++  )
 +endif()

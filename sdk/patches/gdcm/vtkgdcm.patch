@@ -1,0 +1,13 @@
+--- a/CMake/ExportConfiguration/GDCMConfig.cmake.in
++++ b/CMake/ExportConfiguration/GDCMConfig.cmake.in
+@@ -37,6 +37,10 @@ get_filename_component(SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+ if(EXISTS ${SELF_DIR}/GDCMTargets.cmake)
+   # This is an install tree
+   include(${SELF_DIR}/GDCMTargets.cmake)
++  # Test also for GDCM-targets.cmake, which is where vtkgdcm goes
++  if(EXISTS ${SELF_DIR}/GDCM-targets.cmake)
++    include(${SELF_DIR}/GDCM-targets.cmake)
++  endif()
+   get_filename_component(GDCM_INCLUDE_ROOT "${SELF_DIR}/../../@GDCM_INSTALL_INCLUDE_DIR@" ABSOLUTE)
+   set(GDCM_INCLUDE_DIRS ${GDCM_INCLUDE_ROOT})
+   get_filename_component(GDCM_LIB_ROOT "${SELF_DIR}/../../@GDCM_INSTALL_LIB_DIR@" ABSOLUTE)

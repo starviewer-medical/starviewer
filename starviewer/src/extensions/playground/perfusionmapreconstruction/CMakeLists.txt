@@ -39,10 +39,9 @@ target_link_qt(perfusionmapreconstruction
     Widgets
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
+target_link_vtk(perfusionmapreconstruction
+    CommonCore
 )
-target_link_libraries(perfusionmapreconstruction ${VTK_LIBRARIES})
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon

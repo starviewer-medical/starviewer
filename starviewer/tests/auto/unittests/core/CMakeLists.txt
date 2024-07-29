@@ -111,25 +111,18 @@ target_link_qt(test_core
     Network
 )
 
-find_package(VTK REQUIRED COMPONENTS
-    vtkCommonCore
-    vtkCommonDataModel
-    vtkCommonExecutionModel
-    vtkCommonMath
-    vtkImagingCore
-    vtkImagingHybrid
-    vtkRenderingCore
+target_link_vtk(test_core
+    CommonCore
+    CommonDataModel
+    CommonExecutionModel
+    CommonMath
+    ImagingCore
+    ImagingHybrid
+    RenderingCore
 )
-target_link_libraries(test_core ${VTK_LIBRARIES})
 
 find_package(ITK REQUIRED COMPONENTS
     ITKCommon
 )
 set(ITK_NO_IO_FACTORY_REGISTER_MANAGER ON)
 target_link_libraries(test_core ${ITK_LIBRARIES})
-
-find_package(DCMTK REQUIRED)
-target_include_directories(test_core SYSTEM PRIVATE
-    ${DCMTK_INCLUDE_DIRS}/dcmtk/dcmdata
-)
-target_link_libraries(test_core ${DCMTK_LIBRARIES})

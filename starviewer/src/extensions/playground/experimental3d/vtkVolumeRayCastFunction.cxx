@@ -56,9 +56,10 @@ void vtkVolumeRayCastFunction::FunctionInitialize(
   staticInfo->InterpolationType = vol->GetProperty()->GetInterpolationType();
 
   // Get the size, spacing and origin of the scalar data
-  mapper->GetInput()->GetDimensions( staticInfo->DataSize );
-  mapper->GetInput()->GetSpacing( staticInfo->DataSpacing );
-  mapper->GetInput()->GetOrigin( staticInfo->DataOrigin );
+  vtkImageData *imageData = vtkImageData::SafeDownCast(mapper->GetInput());
+  imageData->GetDimensions( staticInfo->DataSize );
+  imageData->GetSpacing( staticInfo->DataSpacing );
+  imageData->GetOrigin( staticInfo->DataOrigin );
 
   // What are the data increments?
   // (One voxel, one row, and one slice offsets)

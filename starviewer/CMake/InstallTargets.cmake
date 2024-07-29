@@ -210,12 +210,18 @@ set(VTK_LIBS
     zlib
 )
 foreach(LIB ${VTK_LIBS})
-    set(FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}vtk${LIB}-8.2${CMAKE_SHARED_LIBRARY_SUFFIX})
+    set(FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}vtk${LIB}-9.2${CMAKE_SHARED_LIBRARY_SUFFIX})
     if(WIN32)
         install(PROGRAMS "${SDK_INSTALL_DIR}/bin/${FILENAME}" DESTINATION .)
     elseif(UNIX AND NOT APPLE)
-        install(PROGRAMS "${SDK_INSTALL_DIR}/lib/${FILENAME}" TYPE LIB)
-        install(PROGRAMS "${SDK_INSTALL_DIR}/lib/${FILENAME}.1" TYPE LIB)
+        if(EXISTS "${SDK_INSTALL_DIR}/lib64")
+            set(LIBDIR lib64)
+        else()
+            set(LIBDIR lib)
+        endif()
+        install(PROGRAMS "${SDK_INSTALL_DIR}/${LIBDIR}/${FILENAME}" TYPE LIB)
+        install(PROGRAMS "${SDK_INSTALL_DIR}/${LIBDIR}/${FILENAME}.1" TYPE LIB)
+        install(PROGRAMS "${SDK_INSTALL_DIR}/${LIBDIR}/${FILENAME}.9.2.5" TYPE LIB)
     endif()
 endforeach()
 
@@ -233,7 +239,7 @@ set(GDCM_LIBS
     gdcmMSFF
     gdcmopenjp2
     gdcmzlib
-    vtkgdcm
+    vtkgdcm-9.2
 )
 if(UNIX AND NOT APPLE)
     list(APPEND GDCM_LIBS
@@ -255,9 +261,13 @@ foreach(LIB ${GDCM_LIBS})
         elseif(${LIB} STREQUAL gdcmopenjp2)
             install(PROGRAMS "${SDK_INSTALL_DIR}/lib/${FILENAME}.2.3.0" TYPE LIB)
             install(PROGRAMS "${SDK_INSTALL_DIR}/lib/${FILENAME}.7" TYPE LIB)
+        elseif(${LIB} STREQUAL vtkgdcm-9.2)
+            install(PROGRAMS "${SDK_INSTALL_DIR}/lib/${FILENAME}" TYPE LIB)
+            install(PROGRAMS "${SDK_INSTALL_DIR}/lib/${FILENAME}.1" TYPE LIB)
+            install(PROGRAMS "${SDK_INSTALL_DIR}/lib/${FILENAME}.3.0.21" TYPE LIB)
         else()
             install(PROGRAMS "${SDK_INSTALL_DIR}/lib/${FILENAME}.3.0" TYPE LIB)
-            install(PROGRAMS "${SDK_INSTALL_DIR}/lib/${FILENAME}.3.0.4" TYPE LIB)
+            install(PROGRAMS "${SDK_INSTALL_DIR}/lib/${FILENAME}.3.0.21" TYPE LIB)
         endif()
     endif()
 endforeach()
