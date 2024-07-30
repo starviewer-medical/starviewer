@@ -91,9 +91,13 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     //     outputActivationFunction
     // }});
 
-    m_predefinedTrainedModels.append({"Custom", {}}); // must be the last one
+    // A pointer is needed as ModelParameters' size is not known when declaring
+    // the attribute
+    m_predefinedTrainedModels = new QVector<QPair<QString, ModelParameters>>();
 
-    for (const QPair<QString, ModelParameters>& model : m_predefinedTrainedModels)
+    m_predefinedTrainedModels->append({"Custom", {}}); // must be the last one
+
+    for (const QPair<QString, ModelParameters>& model : *m_predefinedTrainedModels)
     {
         m_trainedModelPredefinedCombo->addItem(model.first);
     }
@@ -103,7 +107,7 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     customFont.setItalic(true);
     m_trainedModelPredefinedCombo->setItemData(m_trainedModelPredefinedCombo->count()-1, customFont, Qt::FontRole);
 
-    if (m_predefinedTrainedModels.size() > 1) {
+    if (m_predefinedTrainedModels->size() > 1) {
         m_trainedModelCustomWidget->hide();
     }
 
@@ -124,6 +128,11 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
 
     createConnections();
     initializeTools();
+}
+
+QDLSegmentationExtension::~QDLSegmentationExtension()
+{
+    delete m_predefinedTrainedModels;
 }
 
 void QDLSegmentationExtension::createConnections()
@@ -248,6 +257,7 @@ void QDLSegmentationExtension::setPatient(Patient *patient)
     m_maskData->SetSpacing(imageData->GetSpacing());
     m_maskData->SetOrigin(imageData->GetOrigin());
     m_maskData->AllocateScalars(VTK_SHORT, 1);
+    fillMaskExtentWithValue(imageData->GetExtent(), 0);
 
     // Initialise viewers with the patient volume and the mask
     initialize2DViewer(patientVolume);
@@ -282,13 +292,13 @@ void QDLSegmentationExtension::predefinedTrainedModelChanged(int index)
     }
     else
     {
-        m_inputParamDimXSpinBox->setValue(m_predefinedTrainedModels.at(index).second.inputDimensions[0]);
-        m_inputParamDimYSpinBox->setValue(m_predefinedTrainedModels.at(index).second.inputDimensions[1]);
-        m_inputParamDimZSpinBox->setValue(m_predefinedTrainedModels.at(index).second.inputDimensions[2]);
-        m_inputParamNormalisationCheckBox->setChecked(m_predefinedTrainedModels.at(index).second.inputNormalised);
-        m_inputParamChannelsSpinBox->setValue(m_predefinedTrainedModels.at(index).second.inputChannels);
-        m_outputParamLabelsSpinBox->setValue(m_predefinedTrainedModels.at(index).second.outputLabels);
-        int comboId = m_outputParamFunctionCombo->findData(m_predefinedTrainedModels.at(index).second.outputActivationFunction);
+        m_inputParamDimXSpinBox->setValue(m_predefinedTrainedModels->at(index).second.inputDimensions[0]);
+        m_inputParamDimYSpinBox->setValue(m_predefinedTrainedModels->at(index).second.inputDimensions[1]);
+        m_inputParamDimZSpinBox->setValue(m_predefinedTrainedModels->at(index).second.inputDimensions[2]);
+        m_inputParamNormalisationCheckBox->setChecked(m_predefinedTrainedModels->at(index).second.inputNormalised);
+        m_inputParamChannelsSpinBox->setValue(m_predefinedTrainedModels->at(index).second.inputChannels);
+        m_outputParamLabelsSpinBox->setValue(m_predefinedTrainedModels->at(index).second.outputLabels);
+        int comboId = m_outputParamFunctionCombo->findData(m_predefinedTrainedModels->at(index).second.outputActivationFunction);
         m_outputParamFunctionCombo->setCurrentIndex(comboId);
 
         m_trainedModelCustomWidget->hide();
@@ -614,7 +624,7 @@ void QDLSegmentationExtension::apply()
     else
     {
         int index = m_trainedModelPredefinedCombo->currentIndex();
-        path = m_predefinedTrainedModels.at(index).second.path;
+        path = m_predefinedTrainedModels->at(index).second.path;
     }
 
     // Check the library used to train the deep-learning model and create the

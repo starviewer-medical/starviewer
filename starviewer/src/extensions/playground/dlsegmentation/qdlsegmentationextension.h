@@ -41,6 +41,7 @@ class QDLSegmentationExtension : public QWidget, private ::Ui::QDLSegmentationEx
 public:
 
     explicit QDLSegmentationExtension(QWidget *parent = nullptr);
+    virtual ~QDLSegmentationExtension();
 
     /// Set patient volume to viewers and initialise masks.
     void setPatient(Patient *patient);
@@ -102,7 +103,7 @@ private:
 
 
     /// Predefined trained models (name and model parameters).
-    QVector<QPair<QString, ModelParameters>> m_predefinedTrainedModels;
+    QVector<QPair<QString, ModelParameters>>* m_predefinedTrainedModels;
     /// Cropping area defined as a 2D polygon.
     QPointer<DrawerPolygon> m_croppingArea;
     /// Slice where the cropping area is defined.

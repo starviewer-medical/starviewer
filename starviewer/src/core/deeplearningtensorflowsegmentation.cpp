@@ -75,7 +75,7 @@ void DeepLearningTensorFlowSegmentation::softmax()
 
     // Check if the number of elements of the tensor is valid
     if (TF_TensorElementCount(outputValues[0]) < numPixels * m_numLabels) {
-        throw std::exception("ERROR: Failed softmax (the number of tensor"
+        throw std::runtime_error("ERROR: Failed softmax (the number of tensor"
             " elements is less than expected; check number of labels)");
     }
 
@@ -162,7 +162,7 @@ void DeepLearningTensorFlowSegmentation::loadModelParameters()
     );
 
     if (TF_GetCode(status) != TF_OK) {
-        throw std::exception(TF_Message(status));
+        throw std::runtime_error(TF_Message(status));
     }
 
 
@@ -212,7 +212,7 @@ void DeepLearningTensorFlowSegmentation::loadModelParameters()
     TF_Output t0 = {TF_GraphOperationByName(graph, "serving_default_input_2"), 0};
 
     if (t0.oper == NULL) {
-        throw std::exception("ERROR: Failed TF_GraphOperationByName serving_default_input_2");
+        throw std::runtime_error("ERROR: Failed TF_GraphOperationByName serving_default_input_2");
     }
 
     input[0] = t0;
@@ -222,7 +222,7 @@ void DeepLearningTensorFlowSegmentation::loadModelParameters()
     TF_Output t2 = {TF_GraphOperationByName(graph, "StatefulPartitionedCall"), 0};
 
     if (t2.oper == NULL) {
-        throw std::exception("ERROR: Failed TF_GraphOperationByName StatefulPartitionedCall");
+        throw std::runtime_error("ERROR: Failed TF_GraphOperationByName StatefulPartitionedCall");
     }
 
     output[0] = t2;
@@ -261,7 +261,7 @@ void DeepLearningTensorFlowSegmentation::run(float* data)
     );
 
     if (in_tensor == NULL) {
-        throw std::exception("ERROR: Failed TF_NewTensor");
+        throw std::runtime_error("ERROR: Failed TF_NewTensor");
     }
 
     // Set the input value
@@ -284,7 +284,7 @@ void DeepLearningTensorFlowSegmentation::run(float* data)
     );
 
     if (TF_GetCode(status) != TF_OK) {
-        throw std::exception(TF_Message(status));
+        throw std::runtime_error(TF_Message(status));
     }
 }
 
