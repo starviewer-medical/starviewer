@@ -73,11 +73,17 @@ void DeepLearningTensorFlowSegmentation::softmax()
     // Get number of pixels of the mask
     int numPixels = m_modelDims[0] * m_modelDims[1];
 
-    // Check if the number of elements of the tensor is valid
-    if (TF_TensorElementCount(outputValues[0]) < numPixels * m_numLabels) {
+    // Get number of elements of the output tensor
+    int numElements = TF_TensorElementCount(outputValues[0]);
+
+    // Check if the number of labels is valid (must be an integer)
+    if (numElements % numPixels > 0) {
         throw std::runtime_error("ERROR: Failed softmax (the number of tensor"
-            " elements is less than expected; check number of labels)");
+            " elements was not expected; number of labels do not match)");
     }
+
+    // Get number of output labels
+    m_numLabels = numElements / numPixels;
 
     // Get data from output value
     void* buff = TF_TensorData(outputValues[0]);

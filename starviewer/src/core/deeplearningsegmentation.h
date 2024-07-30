@@ -69,8 +69,8 @@ public:
     /// Specify the number of channels expected by the model.
     void setNumberOfChannels(int channels);
 
-    /// Set number of labels to be predicted (> 1).
-    void setNumberOfLabels(int labels);
+    /// Get the number of output labels computed from the model's output.
+    int getNumberOfLabels() const;
 
     /// Set activation function for probabilities.
     void setActivationFunction(ActivationFunction function);

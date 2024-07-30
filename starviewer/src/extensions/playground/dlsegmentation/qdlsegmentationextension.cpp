@@ -63,7 +63,6 @@ struct QDLSegmentationExtension::ModelParameters {
     QVector<int> inputDimensions;
     bool inputNormalised;
     int inputChannels;
-    int outputLabels;
     udg::DeepLearningSegmentation::ActivationFunction outputActivationFunction;
 };
 
@@ -87,7 +86,6 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     //     {inputDimX, inputDimY, inputDimZ},
     //     inputNormalised,
     //     inputChannels,
-    //     outputLabels,
     //     outputActivationFunction
     // }});
 
@@ -123,7 +121,7 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     m_sliceRange = {0, 0}; // only first by default
     m_2DMask = nullptr;
     m_3DMask = nullptr;
-    m_DLSegmentation = nullptr;
+    m_DLSegmentation = std::make_unique<DeepLearningSegmentation>();
     m_maskData = nullptr;
 
     createConnections();
@@ -297,7 +295,6 @@ void QDLSegmentationExtension::predefinedTrainedModelChanged(int index)
         m_inputParamDimZSpinBox->setValue(m_predefinedTrainedModels->at(index).second.inputDimensions[2]);
         m_inputParamNormalisationCheckBox->setChecked(m_predefinedTrainedModels->at(index).second.inputNormalised);
         m_inputParamChannelsSpinBox->setValue(m_predefinedTrainedModels->at(index).second.inputChannels);
-        m_outputParamLabelsSpinBox->setValue(m_predefinedTrainedModels->at(index).second.outputLabels);
         int comboId = m_outputParamFunctionCombo->findData(m_predefinedTrainedModels->at(index).second.outputActivationFunction);
         m_outputParamFunctionCombo->setCurrentIndex(comboId);
 
@@ -439,7 +436,7 @@ void QDLSegmentationExtension::renderMask2D()
 void QDLSegmentationExtension::createTransferFunction()
 {
     // Get number of labels
-    int numLabels = m_outputParamLabelsSpinBox->value();
+    int numLabels = m_DLSegmentation->getNumberOfLabels();
 
     // Create a new LUT where 0 is transparent
     vtkNew<vtkLookupTable> lut;
@@ -690,7 +687,6 @@ void QDLSegmentationExtension::apply()
                                              m_inputParamDimZSpinBox->value());
     m_DLSegmentation->setNormalisation(m_inputParamNormalisationCheckBox->isChecked());
     m_DLSegmentation->setNumberOfChannels(m_inputParamChannelsSpinBox->value());
-    m_DLSegmentation->setNumberOfLabels(m_outputParamLabelsSpinBox->value());
     m_DLSegmentation->setActivationFunction(m_outputParamFunctionCombo->currentData()
                 .value<DeepLearningSegmentation::ActivationFunction>());
     m_DLSegmentation->setSliceRange(m_sliceRange.data());

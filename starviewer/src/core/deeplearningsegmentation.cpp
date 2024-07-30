@@ -100,11 +100,9 @@ void DeepLearningSegmentation::setNumberOfChannels(int channels)
     }
 }
 
-void DeepLearningSegmentation::setNumberOfLabels(int labels)
+int DeepLearningSegmentation::getNumberOfLabels() const
 {
-    if (labels > 1) {
-        m_numLabels = labels;
-    }
+    return m_numLabels;
 }
 
 void DeepLearningSegmentation::setActivationFunction(ActivationFunction function)

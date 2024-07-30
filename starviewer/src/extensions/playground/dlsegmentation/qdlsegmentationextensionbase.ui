@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1150</width>
+    <width>1243</width>
     <height>801</height>
    </rect>
   </property>
@@ -295,43 +295,6 @@
           <string>Model output parameters</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_13">
-          <item>
-           <layout class="QHBoxLayout" name="m_outputParamLabelsHLayout">
-            <item>
-             <widget class="QLabel" name="m_outputParamLabelsLabel">
-              <property name="text">
-               <string>Number of labels</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="m_outputParamLabelsSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="m_outputParamLabelsSpinBox">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimum">
-               <number>2</number>
-              </property>
-              <property name="value">
-               <number>2</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
           <item>
            <layout class="QHBoxLayout" name="m_outputParamFunctionHLayout">
             <item>
@@ -911,6 +874,7 @@
   </customwidget>
  </customwidgets>
  <resources>
+  <include location="../../../main/themes/starviewer/starviewer.qrc"/>
   <include location="../../../main/themes/starviewer/starviewer.qrc"/>
   <include location="../../../main/themes/starviewer/starviewer.qrc"/>
  </resources>

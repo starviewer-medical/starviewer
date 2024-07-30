@@ -38,6 +38,9 @@ void DeepLearningTorchSegmentation::sigmoid()
     // Get number of pixels of the mask
     int numPixels = m_modelDims[0] * m_modelDims[1];
 
+    // Set number of output labels (always 2 for Sigmoid function)
+    m_numLabels = 2;
+
     // Fill the mask from the probabilities
     for (int i = 0; i < numPixels; i++) {
         // Is part of the mask if prob >= 0.5
