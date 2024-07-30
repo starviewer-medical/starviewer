@@ -18,6 +18,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QStandardPaths>
 #include <QFileDialog>
 #include <QDebug>
 
@@ -30,6 +31,8 @@
 #include <vtkLookupTable.h>
 #include <vtkCamera.h>
 #include <vtkMatrix4x4.h>
+#include <vtkXMLImageDataWriter.h>
+#include <vtkXMLImageDataReader.h>
 
 #include "qdlsegmentationextension.h"
 #include "deeplearningsegmentation.h"
@@ -169,6 +172,8 @@ void QDLSegmentationExtension::createConnections()
     connect(m_trainedModelPredefinedCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, &QDLSegmentationExtension::predefinedTrainedModelChanged);
     connect(m_trainedModelCustomBrowseButton, &QPushButton::clicked, this, &QDLSegmentationExtension::browseCustomTrainedModel);
     connect(m_applyPushButton, &QPushButton::clicked, this, &QDLSegmentationExtension::apply);
+    connect(m_loadPushButton, &QPushButton::clicked, this, &QDLSegmentationExtension::load);
+    connect(m_savePushButton, &QPushButton::clicked, this, &QDLSegmentationExtension::save);
 }
 
 void QDLSegmentationExtension::initializeTools()
@@ -262,7 +267,7 @@ void QDLSegmentationExtension::setPatient(Patient *patient)
     initialize3DViewer(patientVolume);
 
     // Add a transfer function to both viewers for the mask
-    createTransferFunction();
+    createTransferFunction(m_DLSegmentation->getNumberOfLabels());
 }
 
 void QDLSegmentationExtension::browseCustomTrainedModel()
@@ -433,11 +438,8 @@ void QDLSegmentationExtension::renderMask2D()
     m_2DViewer->getViewer()->render();
 }
 
-void QDLSegmentationExtension::createTransferFunction()
+void QDLSegmentationExtension::createTransferFunction(int numLabels)
 {
-    // Get number of labels
-    int numLabels = m_DLSegmentation->getNumberOfLabels();
-
     // Create a new LUT where 0 is transparent
     vtkNew<vtkLookupTable> lut;
     lut->SetNumberOfTableValues(numLabels);
@@ -737,14 +739,210 @@ void QDLSegmentationExtension::apply()
 
     // Create a transfer function according to the number of output labels and
     // assign it to 2D and 3D mask volumes
-    createTransferFunction();
+    createTransferFunction(m_DLSegmentation->getNumberOfLabels());
 
     // Render the modified volume to the 2D and 3D viewers
     renderMask2D();
     renderMask3D();
 
+    // Enable save button
+    m_savePushButton->setEnabled(true);
+
 
     qDebug() << "Segmentation done!";
+}
+
+void QDLSegmentationExtension::load()
+{
+    // Set dialog filters (i.e. available formats)
+    QMap<QString, QStringList> filters;
+    filters[tr("VTK ImageData")] << "vti";
+
+    // Set default extension and default selected filter (empty)
+    QString defaultFilter = "vti";
+    QString selectedFilter;
+
+    // Set valid extensions (map values) to force users choose valid formats
+    QStringList validExtensions;
+
+    // Get filters' strings for dialog
+    QStringList filtersStringList;
+    for (auto it = filters.begin(); it != filters.end(); it++) {
+        // Filter string starts with file format name
+        QString filterString = it.key();
+
+        if (!it.value().isEmpty()) {
+            // Build string in the format: "type (*.ext1 *.ext2 ...)"
+            filterString.append(" (*." + it.value().join(" *.") + ")");
+
+            // Insert extension into valid extensions
+            validExtensions.append(it.value());
+
+            // If the current file format allows the default extension, save
+            // the whole filter string (thus updating default selected filter)
+            if (it.value().contains(defaultFilter)) {
+                selectedFilter = filterString;
+            }
+        }
+
+        // Add filter string to the list of filters' strings
+        filtersStringList << filterString;
+    }
+
+    // Build a single string from all filter strings (needed for dialog)
+    QString filtersString = filtersStringList.join(";;");
+
+    // Open dialog and get filename and final selected filter
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open segmentation file"),
+                                                    "",
+                                                    qPrintable(filtersString),
+                                                    &selectedFilter,
+                                                    QFileDialog::DontUseNativeDialog);
+
+    if (!filename.isEmpty()) {
+        // Get actual filename extension
+        QFileInfo info(filename);
+        QString extension = info.suffix();
+
+        // If filename extension is empty or not valid, show an error and exit
+        if (extension.isEmpty() || !validExtensions.contains(extension)) {
+            qDebug() << QString("ERROR: Invalid extension for filename '%1'").arg(filename);
+            return;
+        }
+
+        // Load segmentation file depending of file format
+        if (filename.endsWith(".vti")) {
+            // Load a VTK ImageData file
+
+            // Read segmentation file
+            vtkNew<vtkXMLImageDataReader> reader;
+            reader->SetFileName(qPrintable(filename));
+            reader->Update();
+            vtkImageData* mask = reader->GetOutput();
+
+
+            // Replace the previous mask (if any) with the current one
+
+            // Only scalars in previous mask extent are set to 0
+            if (!m_maskExtent.empty()) {
+                fillMaskExtentWithValue(m_maskExtent.data(), 0);
+            }
+
+        //    // Alternative: all scalars to 0 (maybe less efficient?)
+        //    vtkDataArray::SafeDownCast(m_maskData->GetPointData()->GetAbstractArray(0))->Fill(0);
+
+            // Set current mask extent
+            m_maskExtent = QVector<int>(6);
+            mask->GetExtent(m_maskExtent.data());
+
+            // Set new scalars in current mask extent
+            fillMaskExtentWithData(m_maskExtent.data(), mask);
+
+            // Update current mask data
+            m_maskData->Modified();
+
+            // Create a transfer function according to the number of output labels and
+            // assign it to 2D and 3D mask volumes
+            double* scalarRange = mask->GetScalarRange();
+            int numLabels = scalarRange[1] - scalarRange[0] + 1;
+            createTransferFunction(numLabels);
+
+            // Render the modified volume to the 2D and 3D viewers
+            renderMask2D();
+            renderMask3D();
+
+            // Enable save button
+            m_savePushButton->setEnabled(true);
+        }
+    }
+}
+
+void QDLSegmentationExtension::save()
+{
+    // Save segmentation mask only if available
+    if (!m_maskData) {
+        return;
+    }
+
+    // Set dialog filters (i.e. available file formats)
+    QMap<QString, QStringList> filters;
+    filters[tr("VTK ImageData")] << "vti";
+
+    // Set default extension and default selected filter (empty)
+    QString defaultFilter = "vti";
+    QString selectedFilter;
+
+    // Set valid extensions (map values) to force users choose valid formats
+    QStringList validExtensions;
+
+    // Get filters' strings for dialog
+    QStringList filtersStringList;
+    for (auto it = filters.begin(); it != filters.end(); it++) {
+        // Filter string starts with file format name
+        QString filterString = it.key();
+
+        if (!it.value().isEmpty()) {
+            // Build string in the format: "type (*.ext1 *.ext2 ...)"
+            filterString.append(" (*." + it.value().join(" *.") + ")");
+
+            // Insert extension into valid extensions
+            validExtensions.append(it.value());
+
+            // If the current file format allows the default extension, save
+            // the whole filter string (thus updating default selected filter)
+            if (it.value().contains(defaultFilter)) {
+                selectedFilter = filterString;
+            }
+        }
+
+        // Add filter string to the list of filters' strings
+        filtersStringList << filterString;
+    }
+
+    // Build a single string from all filter strings (needed for dialog)
+    QString filtersString = filtersStringList.join(";;");
+
+    // Build default filename and default saving path
+    QString suggestedFilename = tr("segmentation");
+    QString suggestedPath = QStandardPaths::displayName(QStandardPaths::HomeLocation) +
+                            "/" + suggestedFilename + "." + defaultFilter;
+
+    // Open dialog and get final filename and selected filter
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save segmentation file"),
+                                                    suggestedPath,
+                                                    qPrintable(filtersString),
+                                                    &selectedFilter,
+                                                    QFileDialog::DontUseNativeDialog);
+
+    if (!filename.isEmpty()) {
+        // Update selected filter to store only the selected filter extension
+        selectedFilter = selectedFilter.mid(selectedFilter.lastIndexOf(".")).remove(")");
+
+        // Get actual filename extension
+        QFileInfo info(filename);
+        QString extension = info.suffix();
+
+        // If filename extension is empty or not valid, append the selected
+        // filter extension to the filename to get a valid filename
+        if (extension.isEmpty() || !validExtensions.contains(extension)) {
+            filename.append(selectedFilter);
+        }
+
+        // Save segmentation file depending on final format
+        if (filename.endsWith(".vti")) {
+            // Save a VTK ImageData file
+
+            // Write binary file (default: writer->SetDataModeToBinary())
+            // For an ASCII file (XML plain text): writer->SetDataModeToAscii()
+            vtkNew<vtkXMLImageDataWriter> writer;
+            writer->SetFileName(qPrintable(filename));
+            writer->SetInputData(m_maskData);
+
+            if (!writer->Write()) {
+                qDebug() << QString("ERROR: Could not write `vtkImageData`");
+            }
+        }
+    }
 }
 
 } // namespace udg

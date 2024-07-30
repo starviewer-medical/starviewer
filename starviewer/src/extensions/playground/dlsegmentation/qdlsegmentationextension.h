@@ -68,6 +68,12 @@ private:
     /// Apply the trained model based on interface parameters.
     void apply();
 
+    /// Load a segmentation mask from disk.
+    void load();
+
+    /// Save current segmentation mask to disk.
+    void save();
+
     /// Manage drawer primitives for cropping.
     void primitiveUpdated(DrawerPrimitive* primitive, bool add);
 
@@ -89,7 +95,7 @@ private:
 
     /// Create and assign a transfer function to the 2D and 3D mask volumes
     /// according to the number of output labels.
-    void createTransferFunction();
+    void createTransferFunction(int numLabels);
 
     /// Fill mask data with a single value in the provided extent.
     void fillMaskExtentWithValue(int* extent, short value);

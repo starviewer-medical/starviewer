@@ -469,6 +469,7 @@ target_link_vtk(core
     ImagingCore
     InteractionWidgets
     IOImage
+    IOXML
     RenderingAnnotation
     RenderingCore
     RenderingImage
