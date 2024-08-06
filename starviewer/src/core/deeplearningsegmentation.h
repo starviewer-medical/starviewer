@@ -31,6 +31,19 @@ namespace udg {
 class DeepLearningSegmentation
 {
 public:
+    enum ResamplingInterpolation
+    {
+        NEAREST,
+        LINEAR,
+        CUBIC
+    };
+
+    enum NormalisationApproach
+    {
+        SLICE,
+        VOLUME
+    };
+
     enum ActivationFunction
     {
         SIGMOID,
@@ -45,6 +58,9 @@ public:
 
     /// Set input image on which the segmentation will take place.
     void setInput(vtkImageData* image);
+
+    /// Set whole input image.
+    void setWholeInputImage(vtkImageData* wholeImage);
 
     /// Specify input dimension indices corresponding to the 3D axes.
     void setAxes(int x, int y, int z);
@@ -63,8 +79,14 @@ public:
     /// @copydoc setModelInputDimensions(int,int,int)
     void setModelInputDimensions(const int dims[3]);
 
+    /// Set resampling interpolation.
+    void setResamplingInterpolation(ResamplingInterpolation interpolation);
+
     /// Specify whether input image should be normalised.
     void setNormalisation(bool isNormalised);
+
+    /// Set normalisation approach.
+    void setNormalisationApproach(NormalisationApproach approach);
 
     /// Specify the number of channels expected by the model.
     void setNumberOfChannels(int channels);
@@ -92,6 +114,8 @@ public:
 protected:
     /// Input image on which the segmentation will take place.
     vtkImageData* m_inputVtkImage;
+    /// Whole input image (used for context purposes).
+    vtkImageData* m_inputVtkWholeImage;
     /// Input dimension indices corresponding to the 3D axes.
     QVector<int> m_axes;
     /// Input reslice axes direction cosines.
@@ -99,10 +123,14 @@ protected:
     /// Dimensions expected by the model to predict (in column-major order:
     /// rows, columns, slices).
     QVector<int> m_modelDims;
+    /// Resampling interpolation.
+    ResamplingInterpolation m_resamplingInterpolation;
     /// Number of channels expected by the model.
     int m_numChannels;
     /// Flag for normalisation.
     bool m_isNormalised;
+    /// Normalisation approach.
+    NormalisationApproach m_normalisationApproach;
     /// Number of output labels.
     int m_numLabels;
     /// Activation function for probabilities.

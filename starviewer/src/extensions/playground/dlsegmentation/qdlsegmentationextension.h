@@ -62,6 +62,9 @@ private:
     /// Open dialog to select a custom trained model.
     void browseCustomTrainedModel();
 
+    /// Perform action when the normalisation checkbox changes its state.
+    void normalisationCheckboxChanged(bool checked);
+
     /// Restore 3D viewer to initial visualisation (without 3D mask).
     void restore3DViewer();
 

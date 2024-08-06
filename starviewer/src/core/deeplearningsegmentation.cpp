@@ -43,9 +43,14 @@ QVector<int> DeepLearningSegmentation::getAxes() const
     return m_axes;
 }
 
-void DeepLearningSegmentation::setInput(vtkImageData *image)
+void DeepLearningSegmentation::setInput(vtkImageData* image)
 {
     m_inputVtkImage = image;
+}
+
+void DeepLearningSegmentation::setWholeInputImage(vtkImageData* wholeImage)
+{
+    m_inputVtkWholeImage = wholeImage;
 }
 
 void DeepLearningSegmentation::setAxes(int x, int y, int z)
@@ -88,9 +93,19 @@ void DeepLearningSegmentation::setModelInputDimensions(const int *dims)
     setModelInputDimensions(dims[0], dims[1], dims[2]);
 }
 
+void DeepLearningSegmentation::setResamplingInterpolation(ResamplingInterpolation interpolation)
+{
+    m_resamplingInterpolation = interpolation;
+}
+
 void DeepLearningSegmentation::setNormalisation(bool isNormalised)
 {
     m_isNormalised = isNormalised;
+}
+
+void DeepLearningSegmentation::setNormalisationApproach(NormalisationApproach approach)
+{
+    m_normalisationApproach = approach;
 }
 
 void DeepLearningSegmentation::setNumberOfChannels(int channels)
@@ -206,9 +221,9 @@ void DeepLearningSegmentation::setupInputOutput(vtkImageReslice* reslicer)
     // A different spacing between voxels forces image to resize
     reslicer->SetOutputSpacing(outSpacing);
 
-    // Set VTK linear interpolation
+    // Set VTK interpolation (0: NEAREST, 1: LINEAR, 2: CUBIC)
     // (careful: not typical linear interpolation)
-    reslicer->SetInterpolationModeToLinear();
+    reslicer->SetInterpolationMode(m_resamplingInterpolation);
 
 
     // **
@@ -270,9 +285,17 @@ void DeepLearningSegmentation::extractSlice(vtkImageReslice* reslicer, vtkImageD
 
     if (m_isNormalised) {
         // Normalise image (scalar values in [0, 1], where 0 = min and 1 = max)
-        // (reslicer must have been updated to get scalar range)
-        reslicer->Update();
-        double* scalarRange = reslicer->GetOutput()->GetScalarRange();
+        // depending on the normalisation approach
+        double* scalarRange;
+        if (m_normalisationApproach == SLICE) {
+            // Reslicer must have been updated to get scalar range
+            reslicer->Update();
+            scalarRange = reslicer->GetOutput()->GetScalarRange();
+        }
+        else {
+            scalarRange = m_inputVtkWholeImage->GetScalarRange();
+        }
+
         reslicer->SetScalarShift(-scalarRange[0]);
         reslicer->SetScalarScale(1 / (scalarRange[1] - scalarRange[0]));
     }

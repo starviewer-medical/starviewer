@@ -58,13 +58,17 @@
 // #include <torch/script.h>
 // #define slots Q_SLOTS
 Q_DECLARE_METATYPE(udg::DeepLearningSegmentation::ActivationFunction);
+Q_DECLARE_METATYPE(udg::DeepLearningSegmentation::ResamplingInterpolation);
+Q_DECLARE_METATYPE(udg::DeepLearningSegmentation::NormalisationApproach);
 
 namespace udg {
 
 struct QDLSegmentationExtension::ModelParameters {
     QString path;
     QVector<int> inputDimensions;
+    udg::DeepLearningSegmentation::ResamplingInterpolation inputInterpolation;
     bool inputNormalised;
+    udg::DeepLearningSegmentation::NormalisationApproach inputNormalisationApproach;
     int inputChannels;
     udg::DeepLearningSegmentation::ActivationFunction outputActivationFunction;
 };
@@ -87,7 +91,9 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     // m_predefinedTrainedModels.append({"Name", {
     //     "path/to/model",
     //     {inputDimX, inputDimY, inputDimZ},
+    //     inputInterpolation,
     //     inputNormalised,
+    //     inputNormalisationApproach,
     //     inputChannels,
     //     outputActivationFunction
     // }});
@@ -111,6 +117,15 @@ QDLSegmentationExtension::QDLSegmentationExtension(QWidget *parent)
     if (m_predefinedTrainedModels->size() > 1) {
         m_trainedModelCustomWidget->hide();
     }
+
+    // Add resampling interpolation options
+    m_inputParamInterpolationCombo->addItem("Nearest Neighbour", DeepLearningSegmentation::ResamplingInterpolation::NEAREST);
+    m_inputParamInterpolationCombo->addItem("Linear", DeepLearningSegmentation::ResamplingInterpolation::LINEAR);
+    m_inputParamInterpolationCombo->addItem("Cubic", DeepLearningSegmentation::ResamplingInterpolation::CUBIC);
+
+    // Add normalisation approaches
+    m_inputParamNormApproachCombo->addItem("Slice-wise", DeepLearningSegmentation::NormalisationApproach::SLICE);
+    m_inputParamNormApproachCombo->addItem("Volume-wise", DeepLearningSegmentation::NormalisationApproach::VOLUME);
 
     // Add activation functions
     m_outputParamFunctionCombo->addItem("Sigmoid", DeepLearningSegmentation::ActivationFunction::SIGMOID);
@@ -171,6 +186,7 @@ void QDLSegmentationExtension::createConnections()
     // Assign interface button actions
     connect(m_trainedModelPredefinedCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, &QDLSegmentationExtension::predefinedTrainedModelChanged);
     connect(m_trainedModelCustomBrowseButton, &QPushButton::clicked, this, &QDLSegmentationExtension::browseCustomTrainedModel);
+    connect(m_inputParamNormalisationCheckBox, &QCheckBox::toggled, this, &QDLSegmentationExtension::normalisationCheckboxChanged);
     connect(m_applyPushButton, &QPushButton::clicked, this, &QDLSegmentationExtension::apply);
     connect(m_loadPushButton, &QPushButton::clicked, this, &QDLSegmentationExtension::load);
     connect(m_savePushButton, &QPushButton::clicked, this, &QDLSegmentationExtension::save);
@@ -298,12 +314,28 @@ void QDLSegmentationExtension::predefinedTrainedModelChanged(int index)
         m_inputParamDimXSpinBox->setValue(m_predefinedTrainedModels->at(index).second.inputDimensions[0]);
         m_inputParamDimYSpinBox->setValue(m_predefinedTrainedModels->at(index).second.inputDimensions[1]);
         m_inputParamDimZSpinBox->setValue(m_predefinedTrainedModels->at(index).second.inputDimensions[2]);
+        int interpolationId = m_inputParamInterpolationCombo->findData(m_predefinedTrainedModels->at(index).second.inputInterpolation);
+        m_inputParamInterpolationCombo->setCurrentIndex(interpolationId);
         m_inputParamNormalisationCheckBox->setChecked(m_predefinedTrainedModels->at(index).second.inputNormalised);
+        int normApproachId = m_inputParamNormApproachCombo->findData(m_predefinedTrainedModels->at(index).second.inputNormalisationApproach);
+        m_inputParamNormApproachCombo->setCurrentIndex(normApproachId);
         m_inputParamChannelsSpinBox->setValue(m_predefinedTrainedModels->at(index).second.inputChannels);
-        int comboId = m_outputParamFunctionCombo->findData(m_predefinedTrainedModels->at(index).second.outputActivationFunction);
-        m_outputParamFunctionCombo->setCurrentIndex(comboId);
+        int functionId = m_outputParamFunctionCombo->findData(m_predefinedTrainedModels->at(index).second.outputActivationFunction);
+        m_outputParamFunctionCombo->setCurrentIndex(functionId);
 
         m_trainedModelCustomWidget->hide();
+    }
+}
+
+void QDLSegmentationExtension::normalisationCheckboxChanged(bool checked)
+{
+    if (checked)
+    {
+        m_inputParamNormApproachWidget->show();
+    }
+    else
+    {
+        m_inputParamNormApproachWidget->hide();
     }
 }
 
@@ -684,10 +716,15 @@ void QDLSegmentationExtension::apply()
 
     // Set input cropped image and other interface parameters
     m_DLSegmentation->setInput(reslicer->GetOutput());
+    m_DLSegmentation->setWholeInputImage(imageData);
     m_DLSegmentation->setModelInputDimensions(m_inputParamDimXSpinBox->value(),
                                              m_inputParamDimYSpinBox->value(),
                                              m_inputParamDimZSpinBox->value());
+    m_DLSegmentation->setResamplingInterpolation(m_inputParamInterpolationCombo->currentData()
+                .value<DeepLearningSegmentation::ResamplingInterpolation>());
     m_DLSegmentation->setNormalisation(m_inputParamNormalisationCheckBox->isChecked());
+    m_DLSegmentation->setNormalisationApproach(m_inputParamNormApproachCombo->currentData()
+                .value<DeepLearningSegmentation::NormalisationApproach>());
     m_DLSegmentation->setNumberOfChannels(m_inputParamChannelsSpinBox->value());
     m_DLSegmentation->setActivationFunction(m_outputParamFunctionCombo->currentData()
                 .value<DeepLearningSegmentation::ActivationFunction>());
