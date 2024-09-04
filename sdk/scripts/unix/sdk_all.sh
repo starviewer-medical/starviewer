@@ -1,9 +1,7 @@
 #!/bin/bash
-
 SCRIPTS_ROOT=$(cd $(dirname $BASH_SOURCE) && pwd)
 . "$SCRIPTS_ROOT/config/setup.sh"
 
-. "$SCRIPTS_ROOT/install_dependencies.sh"
 . "$SCRIPTS_ROOT/sdk_download.sh"
 . "$SCRIPTS_ROOT/sdk_extract.sh"
 . "$SCRIPTS_ROOT/sdk_build.sh"

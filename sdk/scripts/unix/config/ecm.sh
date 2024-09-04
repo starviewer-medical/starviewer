@@ -1,10 +1,7 @@
 #!/bin/bash
+SOURCE_DIR="$SDK_SOURCE_DIR_BASE/threadweaver-5.64.0/extra-cmake-modules-5.64.0"
 
-SOURCE_DIR="$SOURCE_DIR_BASE/threadweaver-5.64.0/extra-cmake-modules-5.64.0"
-
-################ Nothing should need to be changed below this line ################
-
-CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=Release \
+CMAKE_OPTIONS="-DCMAKE_BUILD_TYPE:STRING=$SDK_BUILD_TYPE \
                -DCMAKE_INSTALL_PREFIX:PATH=$SOURCE_DIR-install \
                -DBUILD_TESTING:BOOL=FALSE \
                -DBUILD_HTML_DOCS:BOOL=FALSE \

@@ -1,46 +1,12 @@
 #!/bin/bash
-
 SCRIPTS_ROOT=$(cd $(dirname $BASH_SOURCE) && pwd)
 . "$SCRIPTS_ROOT/config/setup.sh"
 
-download_and_verify()
-{
-    EXPECTED_HASH=$1
-    FILENAME=$2
-    URL=$3
-    if [ ! -e "${DOWNLOAD_PREFIX}/${FILENAME}" ]
-    then
-        wget -O "${DOWNLOAD_PREFIX}/${FILENAME}" -nc --directory-prefix="${DOWNLOAD_PREFIX}" "${URL}"
-    else
-	echo "The ${DOWNLOAD_PREFIX}/${FILENAME} exists, skipping the download."
-    fi
-    HASH=`shasum -a 256 "${DOWNLOAD_PREFIX}/${FILENAME}" | cut -f 1 -d " "`
-
-    if [ "${EXPECTED_HASH}" != "${HASH}" ]
-    then
-	echo "ERROR: Checksum verification failed for ${FILENAME}."
-	echo ''
-	echo '[!] WARNING [!]'
-	echo ''
-	echo 'If the download has been over HTTPS then:'
-	echo '   (i) the originating server has altered files that ought to be immutable;'
-	echo '  (ii) your system is affected by some sort of security bug;'
-	echo ' (iii) you have trusted bogus root certificates;'
-	echo '  (iv) some powerful attacker has control over the PKI (public key infraestructure); or'
-	echo '   (v) your computer has been hit by a cosmic ray.'
-	echo ''
-	echo 'DO NOT USE THE DOWNLOADED FILE; delete it.'
-	echo ''
-	rm -i "${DOWNLOAD_PREFIX}/${FILENAME}"
-	exit
-    fi
-}
-
 mkdir -p "${DOWNLOAD_PREFIX}"
-
-for LIB in $LIBS
+# ALIB instead of LIB to avoid an enviroment variable naming conflict with MSVC
+for ALIB in $LIBS
 do
-    case $LIB in
+    case $ALIB in
         qt)
             if [[ $(uname) == 'Linux' ]]
             then
@@ -62,9 +28,9 @@ do
         dcmtk)
             if [[ $(uname) == 'MSYS_NT'* ]]
             then
-                download_and_verify 4fa47885833d3fbe51173f40397eb7c92d84580ddd39be4e316d653dfb1449d1 \
-                                    'dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8.zip' \
-                                    'https://dicom.offis.de/download/dcmtk/dcmtk365/support/dcmtk-3.6.5-win64-support-MT-iconv-msvc-15.8.zip'
+                download_and_verify b43b3863e96e8d4612c2d26c3d37e644c44917b380dd229f24cc446f7f4c5b77 \
+                                    'dcmtk-3.6.5-win64-support-MD-iconv-msvc-15.8.zip' \
+                                    'https://dicom.offis.de/download/dcmtk/dcmtk365/support/dcmtk-3.6.5-win64-support-MD-iconv-msvc-15.8.zip'
             fi
             download_and_verify 37dad355d5513b4de4a86b5b7b0c3e9ec059860d88781b80916bba2a04e6d5b8 \
                                 'dcmtk-DCMTK-3.6.5.tar.gz' \
