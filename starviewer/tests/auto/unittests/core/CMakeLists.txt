@@ -70,13 +70,13 @@ set(SOURCES
     test_standardizeduptakevaluebodysurfaceareaformulacalculator.cpp
     test_standardizeduptakevaluebodyweightformulacalculator.cpp
     test_standardizeduptakevalueleanbodymassformulacalculator.cpp
-    test_stringutils.cpp
     test_study.cpp
     test_studylayoutconfigsettingsconverter.cpp
     test_syncactionsconfiguration.cpp
     test_systemrequirementstest.cpp
     test_temporaldimensionfillerstep.cpp
     test_transferfunction.cpp
+    test_utils.cpp
     test_vector3double.cpp
     test_vector3float.cpp
     test_voilut.cpp

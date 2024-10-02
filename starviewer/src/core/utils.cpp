@@ -1,5 +1,5 @@
 /*************************************************************************************
-  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Copyright (C) 2024 Laboratori de Gràfics i Imatge, Universitat de Girona &
   Institut de Diagnòstic per la Imatge.
   Girona 2014. All rights reserved.
   http://starviewer.udg.edu
@@ -12,11 +12,38 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
-#include "stringutils.h"
+#include "utils.h"
+
+#include <dcuid.h>
+
+#include <QVector>
 
 namespace udg {
 
-namespace StringUtils {
+namespace Utils {
+
+namespace {
+
+// Splits an UID to convert it to an uint vector.
+QVector<uint> uidToUintVector(const QString &uid) {
+    // This is necessary because splitRef on an empty string returns a vector with an empty string
+    if (uid.isEmpty())
+    {
+        return QVector<uint>();
+    }
+
+    QVector<QStringRef> strings = uid.splitRef('.');
+    QVector<uint> values(strings.size());
+
+    for (int i = 0; i < strings.size(); i++)
+    {
+        values[i] = strings[i].toUInt();
+    }
+
+    return values;
+}
+
+}
 
 QString findCommonPattern(const QString& string1, const QString& string2, const QString &patternString)
 {
@@ -55,6 +82,45 @@ QString findCommonPattern(const QString& string1, const QString& string2, const 
     return commonPattern;
 }
 
+int compareUintVectors(const QVector<uint> &vector1, const QVector<uint> &vector2) {
+    int size = std::min(vector1.size(), vector2.size());
+
+    for (int i = 0; i < size; i++)
+    {
+        if (vector1[i] < vector2[i])
+        {
+            return -1;
+        }
+        else if (vector1[i] > vector2[i])
+        {
+            return 1;
+        }
+    }
+
+    return vector1.size() - vector2.size();
+};
+
+int compareUids(const QString &uid1, const QString &uid2)
+{
+    return compareUintVectors(uidToUintVector(uid1), uidToUintVector(uid2));
 }
 
+QString generateUid(const QString &prefix)
+{
+    char uid[65];
+
+    if (prefix.isEmpty())
+    {
+        dcmGenerateUniqueIdentifier(uid);   // will use DCMTK prefix
+    }
+    else
+    {
+        dcmGenerateUniqueIdentifier(uid, qPrintable(prefix));
+    }
+
+    return QString(uid);
 }
+
+} // end namespace Utils
+
+} // end namespace udg

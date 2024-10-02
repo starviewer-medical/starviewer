@@ -20,9 +20,9 @@
 #include "mathtools.h"
 #include "patientfillerinput.h"
 #include "series.h"
+#include "utils.h"
 
 #include <functional>
-#include <unordered_map>
 
 #include <QtConcurrent>
 
@@ -195,43 +195,7 @@ bool OrderImagesFillerStep::lesserSpatialPosition(const Image *image1, const Ima
 
 bool OrderImagesFillerStep::lesserAbstractValues(const Image *image1, const Image *image2)
 {
-    auto uidToUintVector = [](const QString &uid) {
-        // This is necessary because splitRef on an empty string returns a vector with an empty string
-        if (uid.isEmpty())
-        {
-            return QVector<uint>();
-        }
-
-        QVector<QStringRef> strings = uid.splitRef('.');
-        QVector<uint> values(strings.size());
-
-        for (int i = 0; i < strings.size(); i++)
-        {
-            values[i] = strings[i].toUInt();
-        }
-
-        return values;
-    };
-
-    auto compareUintVector = [](const QVector<uint> &vector1, const QVector<uint> &vector2) {
-        int size = std::min(vector1.size(), vector2.size());
-
-        for (int i = 0; i < size; i++)
-        {
-            if (vector1[i] < vector2[i])
-            {
-                return -1;
-            }
-            else if (vector1[i] > vector2[i])
-            {
-                return 1;
-            }
-        }
-
-        return vector1.size() - vector2.size();
-    };
-
-    int dimensionIndexValuesComparison = compareUintVector(image1->getDimensionIndexValues(), image2->getDimensionIndexValues());
+    int dimensionIndexValuesComparison = Utils::compareUintVectors(image1->getDimensionIndexValues(), image2->getDimensionIndexValues());
 
     if (dimensionIndexValuesComparison != 0)
     {
@@ -243,7 +207,7 @@ bool OrderImagesFillerStep::lesserAbstractValues(const Image *image1, const Imag
         return image1->getInstanceNumber().toInt() < image2->getInstanceNumber().toInt();
     }
 
-    int sopInstanceUidComparison = compareUintVector(uidToUintVector(image1->getSOPInstanceUID()), uidToUintVector(image2->getSOPInstanceUID()));
+    int sopInstanceUidComparison = Utils::compareUids(image1->getSOPInstanceUID(), image2->getSOPInstanceUID());
 
     if (sopInstanceUidComparison != 0)
     {

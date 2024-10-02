@@ -18,9 +18,9 @@
 #include "image.h"
 #include "localdatabasemanager.h"
 #include "series.h"
-#include "stringutils.h"
 #include "studyoperationresult.h"
 #include "studyoperationsservice.h"
+#include "utils.h"
 #include "wadoinstancedownloader.h"
 
 #include <QNetworkAccessManager>
@@ -265,7 +265,7 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
             if (m_errors.contains(key))
             {
                 m_errors[key].first++;
-                m_errors[key].second = StringUtils::findCommonPattern(m_errors[key].second, error.what());
+                m_errors[key].second = Utils::findCommonPattern(m_errors[key].second, error.what());
             }
             else
             {
@@ -293,7 +293,7 @@ void WadoUriRequest::onReplyFinished(QNetworkReply *reply)
         if (m_errors.contains(key))
         {
             m_errors[key].first++;
-            m_errors[key].second = StringUtils::findCommonPattern(m_errors[key].second, reply->errorString());
+            m_errors[key].second = Utils::findCommonPattern(m_errors[key].second, reply->errorString());
         }
         else
         {

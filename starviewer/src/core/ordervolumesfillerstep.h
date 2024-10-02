@@ -1,5 +1,5 @@
 /*************************************************************************************
-  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Copyright (C) 2024 Laboratori de Gràfics i Imatge, Universitat de Girona &
   Institut de Diagnòstic per la Imatge.
   Girona 2014. All rights reserved.
   http://starviewer.udg.edu
@@ -12,23 +12,25 @@
   terms contained in the LICENSE file.
  *************************************************************************************/
 
+#ifndef UDG_ORDERVOLUMESFILLERSTEP_H
+#define UDG_ORDERVOLUMESFILLERSTEP_H
 
-#ifndef UDGUTILS_H
-#define UDGUTILS_H
-
-#include <QString>
+#include "patientfillerstep.h"
 
 namespace udg {
 
 /**
-    Classe que conté utilitats vàries utilitzades per la classe inputoutput
-  */
-class Utils {
-
+ * @brief The OrderVolumesFillerStep class orders volumes in a series deterministic manner.
+ */
+class OrderVolumesFillerStep : public PatientFillerStep
+{
 public:
-    static QString generateUID(const QString &prefix = QString());
+    /// In this class, it just returns true without doing anything.
+    bool fillIndividually() override;
+    /// Does all the work in this class.
+    void postProcessing() override;
 };
 
-};  // end namespace udg
+} // namespace udg
 
-#endif
+#endif // UDG_ORDERVOLUMESFILLERSTEP_H

@@ -85,7 +85,6 @@ set(SOURCES
     upgradedatabaserevisioncommands.cpp
     upgradedatabasexmlparser.cpp
     usermessage.cpp
-    utils.cpp
     wadoinstancedownloader.cpp
     wadorequest.cpp
     wadorequestmanager.cpp
