@@ -872,31 +872,59 @@ void ImageFillerStep::computePixelSpacing(Image *image, const DICOMTagReader *di
     }
     else if (modality == "US")
     {
+        // HACK This should not be treated as a spacing. In US there is no spacing as such, we only read this as a convenience because the measuring classes
+        //      rely on the spacing attributes in class Image. The correct approach would be to consider that there is no spacing in this case and in the
+        //      measuring classes take into account the attributes that must be used depending on the particularities of the image, going to the source DICOM
+        //      file if necessary.
         // En el cas de la modalitat US, hem de fer alguns càlculs extra per tal obtenir un pixel spacing aproximat
         DICOMSequenceAttribute *ultraSoundsRegionsSequence = dicomReader->getSequenceAttribute(DICOMSequenceOfUltrasoundRegions);
         // Ho hem de comprovar perquè és opcional.
         if (ultraSoundsRegionsSequence)
         {
-            // Aquesta seqüència pot tenir més d'un ítem. TODO Nosaltres només tractem el primer, però ho hauríem de fer per tots,
-            // ja que defineix més d'una regió i podríem estar obtenint informació equivocada
+            // Since there can be multiple items regions each with a different spacing, we will accept a "spacing" for the whole image only if all the regions
+            // that define a spatial (in cm) PhysicalDeltaX and PhysicalDeltaY, have almost equal values (almost equal instead of equal considering that
+            // variations in the order of e.g. nm or smaller are irrelevant in medicine).
             QList<DICOMSequenceItem*> items = ultraSoundsRegionsSequence->getItems();
-            if (!items.isEmpty())
+            double pseudoSpacingX, pseudoSpacingY;
+            double firstPhysicalDeltaX, firstPhysicalDeltaY;
+            bool initialized = false;
+            bool generalizable = false;
+
+            for (const DICOMSequenceItem *item : items)
             {
-                int physicalUnitsX = items.at(0)->getValueAttribute(DICOMPhysicalUnitsXDirection)->getValueAsInt();
-                int physicalUnitsY = items.at(0)->getValueAttribute(DICOMPhysicalUnitsYDirection)->getValueAsInt();
+                int physicalUnitsX = item->getValueAttribute(DICOMPhysicalUnitsXDirection)->getValueAsInt();
+                int physicalUnitsY = item->getValueAttribute(DICOMPhysicalUnitsYDirection)->getValueAsInt();
 
                 // 3 significa que les unitats son cm
                 if (physicalUnitsX == 3 && physicalUnitsY == 3)
                 {
-                    double physicalDeltaX = items.at(0)->getValueAttribute(DICOMPhysicalDeltaX)->getValueAsDouble();
-                    double physicalDeltaY = items.at(0)->getValueAttribute(DICOMPhysicalDeltaY)->getValueAsDouble();
+                    double physicalDeltaX = item->getValueAttribute(DICOMPhysicalDeltaX)->getValueAsDouble();
+                    double physicalDeltaY = item->getValueAttribute(DICOMPhysicalDeltaY)->getValueAsDouble();
 
-                    physicalDeltaX = qAbs(physicalDeltaX) * 10.;
-                    physicalDeltaY = qAbs(physicalDeltaY) * 10.;
-
-                    // Pixel spacing is rowSpacing\columnSpacing -> ySpacing\xSpacing
-                    pixelSpacing = QString("%1\\%2").arg(physicalDeltaY).arg(physicalDeltaX);
+                    if (!initialized)
+                    {
+                        firstPhysicalDeltaX = physicalDeltaX;
+                        firstPhysicalDeltaY = physicalDeltaY;
+                        pseudoSpacingX = qAbs(physicalDeltaX) * 10.;
+                        pseudoSpacingY = qAbs(physicalDeltaY) * 10.;
+                        initialized = true;
+                        generalizable = true;
+                    }
+                    else
+                    {
+                        if (!MathTools::almostEqual(firstPhysicalDeltaX, physicalDeltaX) || !MathTools::almostEqual(firstPhysicalDeltaY, physicalDeltaY))
+                        {
+                            generalizable = false;
+                            break;
+                        }
+                    }
                 }
+            }
+
+            if (generalizable)
+            {
+                // Pixel spacing is rowSpacing\columnSpacing -> ySpacing\xSpacing
+                pixelSpacing = QString("%1\\%2").arg(pseudoSpacingY).arg(pseudoSpacingX);
             }
         }
     }
@@ -908,6 +936,7 @@ void ImageFillerStep::computePixelSpacing(Image *image, const DICOMTagReader *di
 
         if (dicomReader->getValueAttributeAsQString(DICOMSOPClassUID) == UIDXRay3DAngiographicImageStorage)
         {
+            // TODO This scenario is also present with X-Ray 3D Craniofacial but it's not considered here. But read the TODOs below before doing any change.
             // In case it's a 3D XA, we should look for Imager Pixel Spacing in
             // X-Ray 3D Angiographic Image Contributing Sources Module (C.8.21.2.1), Contributing Sources Sequence
             DICOMSequenceAttribute *contributingSourcesSequence = dicomReader->getSequenceAttribute(DICOMContributingSourcesSequence);
@@ -921,6 +950,8 @@ void ImageFillerStep::computePixelSpacing(Image *image, const DICOMTagReader *di
                 else
                 {
                     // TODO What to do if we have more than one item? Meanwhile we only take into account the first item only.
+                    // TODO It is not clear if a value in this sequence should be picked as the imager pixel spacing in the image, because this refers to a
+                    //      characteristic of the "contributing source", not the resulting image.
                     DICOMValueAttribute *value = items.first()->getValueAttribute(DICOMImagerPixelSpacing);
                     if (value)
                     {
@@ -959,6 +990,7 @@ void ImageFillerStep::checkAndSetEstimatedRadiographicMagnificationFactor(Image 
     }
     else
     {
+        // TODO This could also appear in the XRayGeometrySequence, but it's not considered here. But read the TODOs below before doing any change.
         DICOMSequenceAttribute *xRay3DAcquisitionSequence = dicomReader->getSequenceAttribute(DICOMXRay3DAcquisitionSequence);
         if (xRay3DAcquisitionSequence)
         {
@@ -970,6 +1002,8 @@ void ImageFillerStep::checkAndSetEstimatedRadiographicMagnificationFactor(Image 
             else
             {
                 // TODO What to do if we have more than one item? Meanwhile we only take into account the first item only.
+                // TODO It is not clear if a value in this sequence should be picked as the estimated radiographic magnification factor in the image, because
+                //      this refers to a characteristic of the acquistion, not the resulting image.
                 DICOMValueAttribute *value = items.first()->getValueAttribute(DICOMEstimatedRadiographicMagnificationFactor);
                 if (value)
                 {
