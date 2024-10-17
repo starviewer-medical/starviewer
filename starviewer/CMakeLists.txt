@@ -6,6 +6,9 @@ project(Starviewer
     HOMEPAGE_URL https://starviewer.org/
     LANGUAGES C CXX)
 
+# Intended to represent the real version number with suffix (e.g. beta2) (except CE, that is added automatically)
+set(STARVIEWER_VERSION 2.0.0-devel)
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMake)
 
 include(Options)
