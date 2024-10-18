@@ -1,5 +1,5 @@
 /*************************************************************************************
-  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Copyright (C) 2024 Laboratori de Gràfics i Imatge, Universitat de Girona &
   Institut de Diagnòstic per la Imatge.
   Girona 2014. All rights reserved.
   http://starviewer.udg.edu
@@ -29,6 +29,7 @@
 #include "localdatabasestudydal.h"
 #include "localdatabaseutildal.h"
 #include "localdatabasevoilutdal.h"
+#include "messagebus.h"
 #include "patient.h"
 #include "thumbnailcreator.h"
 
@@ -949,6 +950,7 @@ void LocalDatabaseManager::freeUpSpaceDeletingStudies(quint64 megabytesToFreeUp)
     {
         Study *study = studyList.takeFirst();
         emit studyWillBeDeleted(study->getInstanceUID());
+        MessageBus::instance()->send("Database/StudyDeleted", study->getInstanceUID());
         megabytesErased += HardDiskInformation::getDirectorySizeInBytes(getCachePath() + study->getInstanceUID()) / 1024 / 1024;
         deleteStudy(study->getInstanceUID());
         delete study;

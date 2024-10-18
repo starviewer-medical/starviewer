@@ -1,5 +1,5 @@
 /*************************************************************************************
-  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Copyright (C) 2024 Laboratori de Gràfics i Imatge, Universitat de Girona &
   Institut de Diagnòstic per la Imatge.
   Girona 2014. All rights reserved.
   http://starviewer.udg.edu
@@ -49,8 +49,6 @@ public:
     void cancel() override;
 
 signals:
-    /// Emitted when a local study is deleted to free up space. The end goal is to update the local database view.
-    void studyFromCacheWillBeDeleted(const QString &studyInstanceUid);
     /// Emitted each time an instance is downloaded, with the total number of instances downloaded until now.
     void instanceDownloaded(int totalInstancesDownloaded);
     /// Emitted each time a new series is downloaded, with the total number of different series downloaded until now.

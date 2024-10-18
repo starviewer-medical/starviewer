@@ -1,5 +1,5 @@
 /*************************************************************************************
-  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Copyright (C) 2024 Laboratori de Gràfics i Imatge, Universitat de Girona &
   Institut de Diagnòstic per la Imatge.
   Girona 2014. All rights reserved.
   http://starviewer.udg.edu
@@ -80,12 +80,6 @@ signals:
     /// Signal que indica que la descrrega de fitxers DICOM ha finalitzat. Aquest signal es fa quan la descarrega de fitxers DICOM ha acabat per encara
     /// queda processar els fillers per obtenir l'objecte Patient a guardar a la base de dades. Aquest signal s d'us intern
     void DICOMFilesRetrieveFinished();
-
-    /// Abans de descarregar un estudi es comprova si hi ha espaci suficient, si no n'hi ha s'itentan esborrar estuis de la cach local per alliberar
-    /// espai, amb aquest signal s'indica que l'estudi amb instanceUID s'esborrar de la cach
-    /// TODO:Aquest signal no s'hauria de fer des d'aquesta classe sin des d'una CacheManager, per com de moment encara no est implementada
-    /// temporalment emetem el signal des d'aqu
-    void studyFromCacheWillBeDeleted(const QString &studyInstanceUID);
 
 private slots:
     /// Slot que s'activa quan s'ha descarregat una imatge, respn al signal DICOMFileRetrieved de RetrieveDICOMFilesFromPACS

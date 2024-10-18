@@ -1,5 +1,5 @@
 /*************************************************************************************
-  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Copyright (C) 2024 Laboratori de Gràfics i Imatge, Universitat de Girona &
   Institut de Diagnòstic per la Imatge.
   Girona 2014. All rights reserved.
   http://starviewer.udg.edu
@@ -105,9 +105,6 @@ StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice 
         PACSJobPointer job(new RetrieveDICOMFilesFromPACSJob(pacs, jobPriority, study, seriesInstanceUid, sopInstanceUid));
         StudyOperationResult *result = new DimseRetrieveStudyOperationResult(job, m_pacsManager);
 
-        connect(job.objectCast<RetrieveDICOMFilesFromPACSJob>().data(), &RetrieveDICOMFilesFromPACSJob::studyFromCacheWillBeDeleted,
-                this, &StudyOperationsService::localStudyAboutToBeDeleted);
-
         m_pacsManager->enqueuePACSJob(job);
 
         emit operationRequested(result);
@@ -120,8 +117,6 @@ StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice 
         WadoRetrieveStudyOperationResult *result = new WadoRetrieveStudyOperationResult(request);
         result->setRequestStudy(study);
 
-        connect(request, &WadoRetrieveRequest::studyFromCacheWillBeDeleted, this, &StudyOperationsService::localStudyAboutToBeDeleted);
-
         m_wadoRequestManager->start(request);
 
         emit operationRequested(result);
@@ -133,8 +128,6 @@ StudyOperationResult* StudyOperationsService::retrieveFromPacs(const PacsDevice 
         WadoUriRequest *request = new WadoUriRequest(pacs, study->getInstanceUID(), seriesInstanceUid, sopInstanceUid);
         WadoUriStudyOperationResult *result = new WadoUriStudyOperationResult(request);
         result->setRequestStudy(study);
-
-        connect(request, &WadoUriRequest::studyFromCacheWillBeDeleted, this, &StudyOperationsService::localStudyAboutToBeDeleted);
 
         m_wadoRequestManager->start(request);
 

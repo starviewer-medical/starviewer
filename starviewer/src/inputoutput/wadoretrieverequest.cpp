@@ -1,5 +1,5 @@
 /*************************************************************************************
-  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Copyright (C) 2024 Laboratori de Gràfics i Imatge, Universitat de Girona &
   Institut de Diagnòstic per la Imatge.
   Girona 2014. All rights reserved.
   http://starviewer.udg.edu
@@ -84,7 +84,6 @@ bool WadoRetrieveRequest::ensureEnoughHardDiskSpace()
 {
     // Copied and adapted from RetrieveDICOMFilesFromPACSJob::thereIsAvailableSpaceOnHardDisk
     LocalDatabaseManager localDatabaseManager;
-    connect(&localDatabaseManager, &LocalDatabaseManager::studyWillBeDeleted, this, &WadoRetrieveRequest::studyFromCacheWillBeDeleted);
 
     // This method will delete studies if configured in settings if there is not enough space. It returns whether there is enough space after that.
     if (!localDatabaseManager.thereIsAvailableSpaceOnHardDisk())

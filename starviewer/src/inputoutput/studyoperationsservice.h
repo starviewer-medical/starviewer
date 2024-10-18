@@ -1,5 +1,5 @@
 /*************************************************************************************
-  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Copyright (C) 2024 Laboratori de Gràfics i Imatge, Universitat de Girona &
   Institut de Diagnòstic per la Imatge.
   Girona 2014. All rights reserved.
   http://starviewer.udg.edu
@@ -79,9 +79,6 @@ public slots:
 signals:
     /// Emitted when any operation is requested.
     void operationRequested(StudyOperationResult *result);
-
-    /// Emitted when a retrieve operation is going to delete a local study to free space.
-    void localStudyAboutToBeDeleted(QString studyInstanceUid);
 
 private:
     explicit StudyOperationsService(QObject *parent = nullptr);

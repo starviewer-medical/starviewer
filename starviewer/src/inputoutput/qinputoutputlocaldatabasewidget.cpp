@@ -1,5 +1,5 @@
 /*************************************************************************************
-  Copyright (C) 2014 Laboratori de Gràfics i Imatge, Universitat de Girona &
+  Copyright (C) 2024 Laboratori de Gràfics i Imatge, Universitat de Girona &
   Institut de Diagnòstic per la Imatge.
   Girona 2014. All rights reserved.
   http://starviewer.udg.edu
@@ -17,6 +17,7 @@
 #include "dicommask.h"
 #include "inputoutputsettings.h"
 #include "logging.h"
+#include "messagebus.h"
 #include "patient.h"
 #include "qcreatedicomdir.h"
 #include "qwidgetselectpacstostoredicomimage.h"
@@ -100,10 +101,12 @@ void QInputOutputLocalDatabaseWidget::createConnections()
     connect(m_StudyTreeSeriesListQSplitter, SIGNAL(splitterMoved (int, int)), SLOT(qSplitterPositionChanged()));
     connect(m_qwidgetSelectPacsToStoreDicomImage, SIGNAL(selectedPacsToStore()), SLOT(sendSelectedStudiesToSelectedPacs()));
 
-    // TODO This is only a hack. It should be resolved better with a cache manager. See the original signal in RetrieveDICOMFilesFromPACSJob and the previous
-    //      implementation (look at the full changeset in this commit) for more information.
-    connect(StudyOperationsService::instance(), &StudyOperationsService::localStudyAboutToBeDeleted,
-            this, &QInputOutputLocalDatabaseWidget::removeStudyFromQStudyTreeWidget);
+    connect(MessageBus::instance(), &MessageBus::message, this, [this](const QString &key, const QVariant &value) {
+        if (key == "Database/StudyDeleted")
+        {
+            removeStudyFromQStudyTreeWidget(value.toString());
+        }
+    });
 }
 
 void QInputOutputLocalDatabaseWidget::createContextMenuQStudyTreeWidget()
