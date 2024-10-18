@@ -150,7 +150,6 @@ void CoreSettings::init()
     settingsRegistry->addSetting(ModalitiesWithZoomToolByDefault, "MG;CR;RF;OP;DX;MR");
     settingsRegistry->addSetting(EnableQ2DViewerAutomaticSynchronizationForMR, true);
     settingsRegistry->addSetting(EnableQ2DViewerAutomaticSynchronizationForCT, true);
-    // TODO Encara falta determinar quines seran les modalitats en les que posarem per defecte aplicar sempre hanging protocols
     settingsRegistry->addSetting(ModalitiesToApplyHangingProtocolsAsFirstOption, "CR;CT;MG;MR;US");
     settingsRegistry->addSetting(ModalitiesWithPropagationEnabledByDefault, "CT;MR;PT");
     settingsRegistry->addSetting(SUVMeasurementNormalizationType, "BodyWeight");
