@@ -20,6 +20,9 @@
 #include <QSpinBox>
 #include <QStandardPaths>
 #include <QFileDialog>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QDebug>
 
 #include <vtkRenderer.h>
@@ -185,6 +188,7 @@ void QDLSegmentationExtension::createConnections()
 
     // Assign interface button actions
     connect(m_trainedModelPredefinedCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, &QDLSegmentationExtension::predefinedTrainedModelChanged);
+    connect(m_trainedModelCustomLineEdit, &QLineEdit::textChanged, this, &QDLSegmentationExtension::customTrainedModelLineEditChanged);
     connect(m_trainedModelCustomBrowseButton, &QPushButton::clicked, this, &QDLSegmentationExtension::browseCustomTrainedModel);
     connect(m_inputParamNormalisationCheckBox, &QCheckBox::toggled, this, &QDLSegmentationExtension::normalisationCheckboxChanged);
     connect(m_applyPushButton, &QPushButton::clicked, this, &QDLSegmentationExtension::apply);
@@ -300,6 +304,134 @@ void QDLSegmentationExtension::browseCustomTrainedModel()
     }
 }
 
+void QDLSegmentationExtension::customTrainedModelLineEditChanged()
+{
+    QString path = m_trainedModelCustomLineEdit->text();
+
+    if (path.endsWith('/'))
+    {
+        path.chop(1);
+    }
+
+    path += ".json";
+
+    QFile paramFile(path);
+
+    if (paramFile.exists())
+    {
+        paramFile.open(QIODevice::ReadOnly|QIODevice::Text);
+        QByteArray data = paramFile.readAll();
+        paramFile.close();
+
+        QJsonParseError errorPtr;
+        QJsonDocument doc = QJsonDocument::fromJson(data, &errorPtr);
+
+        if (doc.isNull())
+        {
+            qDebug() << "Parsing of JSON parameter file failed.";
+            return;
+        }
+
+        QJsonObject rootObj = doc.object();
+
+        if (rootObj.isEmpty())
+        {
+            qDebug() << "JSON parameter file is empty.";
+            return;
+        }
+
+        QJsonArray inputs = rootObj.value("inputs").toArray();
+        QJsonObject input = inputs.at(0).toObject();
+
+        QJsonArray shape = input.value("shape").toArray();
+        if (shape.at(0).toInt(-1) != -1)
+        {
+            m_inputParamDimXSpinBox->setValue(shape.at(0).toInt());
+        }
+        if (shape.at(1).toInt(-1) != -1)
+        {
+            m_inputParamDimYSpinBox->setValue(shape.at(1).toInt());
+        }
+//        if (shape.at(2).toInt(-1) != -1)
+//        {
+//            m_inputParamDimZSpinBox->setValue(shape.at(2).toInt());
+//        }
+
+        QJsonObject preprocessing = rootObj.value("preprocessing").toObject();
+        QJsonArray steps = preprocessing.value("steps").toArray();
+
+        for (int i = 0; i < steps.size(); i++)
+        {
+            QJsonObject step = steps.at(i).toObject();
+
+            if (step.contains("resampling_interpolation"))
+            {
+                QString interpolation = step.value("resampling_interpolation").toString();
+                int interpolationId = m_inputParamInterpolationCombo->currentIndex();
+
+                if (interpolation == "nearest")
+                {
+                    interpolationId = m_inputParamInterpolationCombo->findData(udg::DeepLearningSegmentation::ResamplingInterpolation::NEAREST);
+                }
+                else if (interpolation == "linear")
+                {
+                    interpolationId = m_inputParamInterpolationCombo->findData(udg::DeepLearningSegmentation::ResamplingInterpolation::LINEAR);
+                }
+                else if (interpolation == "cubic")
+                {
+                    interpolationId = m_inputParamInterpolationCombo->findData(udg::DeepLearningSegmentation::ResamplingInterpolation::CUBIC);
+                }
+
+                m_inputParamInterpolationCombo->setCurrentIndex(interpolationId);
+            }
+            else if (step.contains("normalisation_approach"))
+            {
+                m_inputParamNormalisationCheckBox->setChecked(true);
+
+                QString normApproach = step.value("normalisation_approach").toString();
+                int normApproachId = m_inputParamNormApproachCombo->currentIndex();
+
+                if (normApproach == "slice-wise")
+                {
+                    normApproachId = m_inputParamNormApproachCombo->findData(udg::DeepLearningSegmentation::NormalisationApproach::SLICE);
+                }
+                else if (normApproach == "volume-wise")
+                {
+                    normApproachId = m_inputParamNormApproachCombo->findData(udg::DeepLearningSegmentation::NormalisationApproach::VOLUME);
+                }
+
+                m_inputParamNormApproachCombo->setCurrentIndex(normApproachId);
+            }
+            else if (step.contains("channels"))
+            {
+                int channels = step.value("channels").toInt(-1);
+
+                if (channels != -1)
+                {
+                    m_inputParamChannelsSpinBox->setValue(channels);
+                }
+            }
+        }
+
+        QJsonArray outputs = rootObj.value("outputs").toArray();
+        QJsonObject output = outputs.at(0).toObject();
+
+        QString function = output.value("activation").toString();
+        int functionId = m_outputParamFunctionCombo->currentIndex();
+
+        if (function == "sigmoid")
+        {
+            functionId = m_outputParamFunctionCombo->findData(udg::DeepLearningSegmentation::ActivationFunction::SIGMOID);
+        }
+        else if (function == "softmax")
+        {
+            functionId = m_outputParamFunctionCombo->findData(udg::DeepLearningSegmentation::ActivationFunction::SOFTMAX);
+        }
+
+        m_outputParamFunctionCombo->setCurrentIndex(functionId);
+    }
+}
+
 void QDLSegmentationExtension::predefinedTrainedModelChanged(int index)
 {
     // If "custom" is selected, show text box to enter the trained model path;
@@ -308,6 +440,7 @@ void QDLSegmentationExtension::predefinedTrainedModelChanged(int index)
     if (index == m_trainedModelPredefinedCombo->count()-1)
     {
         m_trainedModelCustomWidget->show();
+        m_trainedModelCustomLineEdit->textChanged(m_trainedModelCustomLineEdit->text());
     }
     else
     {

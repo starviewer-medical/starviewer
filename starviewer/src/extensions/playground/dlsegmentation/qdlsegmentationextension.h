@@ -59,6 +59,9 @@ private:
     /// Perform action when a new predefined trained model is selected.
     void predefinedTrainedModelChanged(int index);
 
+    /// Check if parameter file exists and fill interface values accordingly.
+    void customTrainedModelLineEditChanged();
+
     /// Open dialog to select a custom trained model.
     void browseCustomTrainedModel();
 
